@@ -193,7 +193,7 @@ extract_import_rsc(TweetId, UniqueName, #{ <<"user">> := User } = Tweet, Context
 first_link([Url|_], _) -> Url;
 first_link(_, Url) -> Url.
 
--spec first_media_props([#url_metadata{} | string() | binary()], z:context()) -> {error, nomedia} | {ok, pos_integer()}.
+-spec first_media_props([#url_metadata{} | string() | binary()], z:context()) -> {error, nomedia} | {ok, #media_import_props{}}.
 first_media_props([], _Context) ->
     {error, nomedia};
 first_media_props([ Url | Urls ], Context) ->

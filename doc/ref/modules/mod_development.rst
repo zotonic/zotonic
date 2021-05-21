@@ -74,8 +74,9 @@ If a changed file is detected then Zotonic will:
 
 * If an `.erl` file changes then the file is recompiled.
 
-* If a `.scss` or `.sass` file changes then ``sass`` is called to compile
-  it to its `.css` equivalent.
+* If a `.scss` or `.sass` file changes then ``sassc`` is called to compile
+  it to its `.css` equivalent. If the changed ``.sass`` file starts with a ``_`` then
+  all ``.sass`` files without a ``_`` will be compiled.
 
 * If a `.less` file changes then ``lessc`` is called to compile
   it to its `.css` equivalent.

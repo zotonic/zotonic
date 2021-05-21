@@ -39,6 +39,10 @@
     encode_autologon_token/2,
     decode_autologon_token/2,
 
+    encode_onetime_token/2,
+    encode_onetime_token/3,
+    decode_onetime_token/2,
+
     session_expires/1,
     autologon_expires/1
 ]).
@@ -52,6 +56,8 @@
 -define(AUTOLOGON_COOKIE, <<"z.autologon">>).
 -define(AUTOLOGON_SECRET_LENGTH, 32).
 -define(AUTOLOGON_EXPIRE, 3600*8*180).          % autologon is 180 days valid
+
+-define(ONETIME_TOKEN_EXPIRE, 30).              % onetime tokens are valid for 30 secs
 
 
 -spec reset_cookies( z:context() ) -> z:context().
@@ -82,8 +88,7 @@ req_auth_cookie(Context) ->
 
 -spec set_auth_cookie( m_rsc:resource_id() | undefined, map(), z:context() ) -> z:context().
 set_auth_cookie(UserId, AuthOptions, Context) ->
-    AuthOptions1 = ensure_sid(AuthOptions),
-    Cookie = encode_auth_token(UserId, AuthOptions1, Context),
+    Cookie = encode_auth_token(UserId, AuthOptions, Context),
     CookieOptions = [
         {path, <<"/">>},
         {http_only, true},
@@ -92,15 +97,7 @@ set_auth_cookie(UserId, AuthOptions, Context) ->
     ],
     Context1 = z_context:set_cookie(?AUTH_COOKIE, Cookie, CookieOptions, Context),
     Context2 = z_context:set(auth_expires, session_expires(Context1), Context1),
-    z_context:set(auth_options, AuthOptions1, Context2).
-
-%% @doc Always ensure that there is a sid in the auth options
-ensure_sid(#{ sid := Sid } = AuthOptions) when is_binary(Sid) ->
-    AuthOptions;
-ensure_sid(AuthOptions) ->
-    AuthOptions#{
-        sid => z_ids:id(20)
-    }.
+    z_context:set(auth_options, AuthOptions, Context2).
 
 -spec refresh_auth_cookie( map(), z:context() ) -> z:context().
 refresh_auth_cookie(RequestOptions, Context) ->
@@ -152,7 +149,9 @@ encode_auth_token(UserId, Options, Context) ->
     ExpTerm = termit:expiring(Term, session_expires(Context)),
     termit:encode_base64(ExpTerm, auth_secret(Context)).
 
--spec decode_auth_token( binary(), z:context() ) -> {ok, {m_rsc:resource_id() | undefined, map(), integer()}} | {error, term()}.
+-spec decode_auth_token( binary(), z:context() ) ->
+     {ok, {m_rsc:resource_id() | undefined, map(), integer()}}
+   | {error, term()}.
 decode_auth_token(AuthCookie, Context) ->
     case termit:decode_base64(AuthCookie, auth_secret(Context)) of
         {ok, ExpTerm} ->
@@ -164,6 +163,9 @@ decode_auth_token(AuthCookie, Context) ->
                         _ ->
                             {error, user_secret}
                     end;
+                {ok, _} ->
+                    % Illegal token - skip
+                    {error, token};
                 {error, _} = Error ->
                     Error
             end;
@@ -250,6 +252,51 @@ decode_autologon_token(AutoLogonCookie, Context) ->
     end.
 
 
+-spec encode_onetime_token( m_rsc:resource_id(), z:context() ) -> {ok, binary()} | {error, no_session}.
+encode_onetime_token(UserId, Context) ->
+    case z_context:session_id(Context) of
+        {ok, SId} ->
+            encode_onetime_token(UserId, SId, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+-spec encode_onetime_token( m_rsc:resource_id(), binary() | undefined, z:context() ) -> {ok, binary()} | {error, no_session}.
+encode_onetime_token(_UserId, undefined, _Context) ->
+    {error, no_session};
+encode_onetime_token(UserId, SId, Context) ->
+    Term = {onetime, UserId, user_secret(UserId, Context), user_autologon_secret(UserId, Context), SId},
+    ExpTerm = termit:expiring(Term, ?ONETIME_TOKEN_EXPIRE),
+    {ok, termit:encode_base64(ExpTerm, autologon_secret(Context))}.
+
+-spec decode_onetime_token( binary(), z:context() ) -> {ok, m_rsc:resource_id()} | {error, term()}.
+decode_onetime_token(OnetimeToken, Context) ->
+    case termit:decode_base64(OnetimeToken, autologon_secret(Context)) of
+        {ok, ExpTerm} ->
+            {ok, SId} = z_context:session_id(Context),
+            case termit:check_expired(ExpTerm) of
+                {ok, {onetime, UserId, UserSecret, AutoLogonSecret, SId}} ->
+                    US = user_secret(UserId, Context),
+                    AS = user_autologon_secret(UserId, Context),
+                    case {US, AS} of
+                        {UserSecret, AutoLogonSecret} when is_binary(UserSecret), is_binary(AutoLogonSecret) ->
+                            {ok, UserId};
+                        _ ->
+                            {error, user_secret}
+                    end;
+                {ok, Unexpected} ->
+                    lager:error("authentication: token from sid ~p mismatch ~p", [ SId, Unexpected ]),
+                    {error, mismatch};
+                {error, _} = Error ->
+                    lager:error("authentication: token expired error ~p", [ Error ]),
+                    Error
+            end;
+        {error, _}  = Error ->
+            lager:warning("authentication: token decode error ~p", [ Error ]),
+            Error
+    end.
+
+
 %% ---- Secrets, stored in site config and in user identities.
 
 -spec auth_secret( z:context() ) -> binary().
@@ -266,7 +313,7 @@ generate_auth_secret(Context) ->
     m_config:set_value(mod_authentication, auth_secret, Secret, Context),
     Secret.
 
--spec user_secret( m_rsc:resource_id() | undefined, z:context() ) -> binary().
+-spec user_secret( m_rsc:resource_id() | undefined, z:context() ) -> binary() | error.
 user_secret(undefined, Context) ->
     case m_config:get_value(mod_authentication, auth_anon_secret, Context) of
         <<>> -> generate_auth_anon_secret(Context);
@@ -286,9 +333,14 @@ user_secret_1(false, 1, Context) ->
             Secret
     end;
 user_secret_1(true, UserId, Context) ->
-    case m_identity:get_rsc(UserId, auth_secret, Context) of
-        undefined -> generate_user_secret(UserId, Context);
-        Idn -> proplists:get_value(prop1, Idn)
+    case m_rsc:exists(UserId, Context) of
+        true ->
+            case m_identity:get_rsc(UserId, auth_secret, Context) of
+                undefined -> generate_user_secret(UserId, Context);
+                Idn -> proplists:get_value(prop1, Idn)
+            end;
+        false ->
+            error
     end.
 
 -spec generate_auth_anon_secret( z:context() ) -> binary().
@@ -317,11 +369,16 @@ generate_autologon_secret(Context) ->
     m_config:set_value(mod_authentication, auth_autologon_secret, Secret, Context),
     Secret.
 
--spec user_autologon_secret( m_rsc:resource_id(), z:context() ) -> binary().
+-spec user_autologon_secret( m_rsc:resource_id(), z:context() ) -> binary() | error.
 user_autologon_secret(UserId, Context) ->
-    case m_identity:get_rsc(UserId, auth_autologon_secret, Context) of
-        undefined -> generate_user_autologon_secret(UserId, Context);
-        Idn -> proplists:get_value(prop1, Idn)
+    case m_rsc:exists(UserId, Context) of
+        true ->
+            case m_identity:get_rsc(UserId, auth_autologon_secret, Context) of
+                undefined -> generate_user_autologon_secret(UserId, Context);
+                Idn -> proplists:get_value(prop1, Idn)
+            end;
+        false ->
+            error
     end.
 
 -spec generate_user_autologon_secret( m_rsc:resource_id(), z:context() ) -> binary().

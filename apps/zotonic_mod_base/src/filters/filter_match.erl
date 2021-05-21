@@ -1,8 +1,8 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
-%% @copyright 2010 Maas-Maarten Zeeman
+%% @copyright 2011-2021 Maas-Maarten Zeeman
 %% @doc 'match' match a value. returns true if the value matches the regular expression.
 
-%% Copyright 2011 Maas-Maarten Zeeman
+%% Copyright 2011-2021 Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,10 +21,15 @@
 
 -author('mmzeeman@xs4all.nl').
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 match(undefined, _Re, _Context) ->
     false;
 match(_, undefined, _Context) ->
     false;
+match(#trans{} = Tr, Re, Context) ->
+    S = z_trans:lookup_fallback(Tr, Context),
+    match(S, Re, Context);
 match(S0, Re0, _Context) ->
     S = z_convert:to_binary(S0),
     Re = z_convert:to_binary(Re0),

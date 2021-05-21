@@ -4,6 +4,8 @@
 
 {% block bodyclass %}edit-page cg-{{ id.content_group_id.name }} {% for cat,_ in id.is_a %}cat-{{ cat }} {% endfor %} name-{{ id.name }}{% endblock %}
 
+{% block bodyattr %} data-rsc-id="{{ id.id }}" data-fileuploader="{{ %{ subject_id: id.id, predicate: "depiction" }|to_json|escape }}"{% endblock %}
+
 {% block content %}
 
     {% include "_admin_system_content_warning.tpl" category_id=id.category_id %}

@@ -41,13 +41,15 @@ force_escape(true, _Context) ->
 force_escape(false, _Context) ->
     filter_yesno:yesno(false, _Context);
 force_escape(Input, _Context) when is_atom(Input) ->
-    escape1(atom_to_list(Input), []);
+    escape1(atom_to_binary(Input, utf8), []);
 force_escape(Input, _Context) when is_list(Input) ->
     escape1(Input, []);
 force_escape(Input, _Context) when is_binary(Input) ->
     escape1(Input, 0);
 force_escape(Input, _Context) when is_integer(Input) ->
-    integer_to_list(Input);
+    integer_to_binary(Input);
+force_escape(Input, _Context) when is_float(Input) ->
+    z_convert:to_binary(Input);
 force_escape({{Y,M,D}, {_H,_I,_S}} = Input, Context) when is_integer(Y) andalso is_integer(M) andalso is_integer(D) ->
     filter_date:date(Input, "Y-m-d H:i:s", Context);
 force_escape({Y,M,D} = Input, Context) when is_integer(Y) andalso is_integer(M) andalso is_integer(D) ->

@@ -124,7 +124,7 @@ m_get([ <<"get_result">>, SurveyId, AnswerId | Rest ], _Msg, Context) ->
                     case (is_integer(UId) andalso z_acl:user(Context) =:= UId)
                         orelse z_acl:rsc_editable(RId, Context)
                     of
-                        true -> {ok, {Result, Context}};
+                        true -> {ok, {Result, Rest}};
                         false -> {error, eacces}
                     end
             end
@@ -164,10 +164,9 @@ m_get([ <<"did_survey_answers">>, SurveyId | Rest ], _Msg, Context) ->
         Result ->
             Answers = proplists:get_value(answers, Result, []),
             lists:map(
-                fun({_QName, Ans}) ->
-                    Block = proplists:get_value(block, Ans),
+                fun({QName, Ans}) ->
                     Answer = proplists:get_value(answer, Ans),
-                    {Block, Answer}
+                    {QName, Answer}
                 end,
                 Answers)
     end,
@@ -232,6 +231,8 @@ did_survey(SurveyId, Context) ->
 
 
 %% @doc Replace a survey answer
+-spec replace_survey_submission( integer(), {user, m_rsc:resource_id()} | integer(), list(), z:context() )
+     -> {ok, integer()} | {error, term()}.
 replace_survey_submission(SurveyId, {user, UserId}, Answers, Context) ->
     case z_db:q1("
         select id
@@ -246,43 +247,42 @@ replace_survey_submission(SurveyId, {user, UserId}, Answers, Context) ->
         AnswerId when is_integer(AnswerId) ->
             replace_survey_submission(SurveyId, AnswerId, Answers, Context)
     end;
-replace_survey_submission(SurveyId, AnswerId, Answers, Context) ->
+replace_survey_submission(SurveyId, AnswerId, Answers, Context) when is_integer(AnswerId) ->
     {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
-    case z_db:q("
-        update survey_answers
-        set props = $1,
-            points = $2,
-            modifier_id = $3,
-            modified = now()
-        where id = $4
-          and survey_id = $5
-        ",
-        [
-            ?DB_PROPS([{answers, AnswersPoints}]),
-            Points,
-            z_acl:user(Context),
-            AnswerId,
-            SurveyId
-        ],
+    case z_db:update(
+        survey_answers,
+        AnswerId,
+        #{
+            <<"modified">> => erlang:universaltime(),
+            <<"modifier_id">> => z_acl:user(Context),
+            <<"points">> => Points,
+            <<"answers">> => AnswersPoints
+        },
         Context)
     of
-        1 ->
-            {UserId,Persistent} = z_db:q_row("select user_id, persistent from survey_answers where id = $1", [AnswerId], Context),
+        {ok, 1} ->
+            {UserId,Persistent} = z_db:q_row("
+                select user_id, persistent
+                from survey_answers
+                where id = $1",
+                [AnswerId],
+                Context),
             publish(SurveyId, UserId, Persistent, Context),
             {ok, AnswerId};
-        0 ->
+        {error, Reason} ->
+            lager:error("update error: ~p", [Reason]),
             {error, enoent}
     end.
 
 publish(_SurveyId, undefined, _Persistent, _Context) ->
     ok;
 publish(SurveyId, UserId, _Persistent, Context) ->
-    Topic = iolist_to_binary([
-            <<"user/">>,
-            z_convert:to_binary(UserId),
-            <<"/survey-submission/">>,
-            z_convert:to_binary(SurveyId)
-        ]),
+    Topic = [
+        <<"user">>,
+        z_convert:to_binary(UserId),
+        <<"survey-submission">>,
+        z_convert:to_binary(SurveyId)
+    ],
     z_mqtt:publish(
         Topic,
         [
@@ -339,18 +339,20 @@ find_answer_id(SurveyId, UserId, _PersistendId, Context) ->
             [SurveyId, UserId],
             Context).
 
+-spec insert_survey_submission_1(m_rsc:resource_id(), undefined | m_rsc:resource_id(), binary(), list(), z:context() )
+    -> {ok, pos_integer()|undefined} | {error, term()}.
 insert_survey_submission_1(SurveyId, undefined, PersistentId, Answers, Context) ->
     {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
     Result = z_db:insert(
         survey_answers,
-        [
-            {survey_id, SurveyId},
-            {user_id, undefined},
-            {persistent, PersistentId},
-            {is_anonymous, z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context))},
-            {points, Points},
-            {answers, AnswersPoints}
-        ],
+        #{
+            <<"survey_id">> => SurveyId,
+            <<"user_id">> => undefined,
+            <<"persistent">> => PersistentId,
+            <<"is_anonymous">> => z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
+            <<"points">> => Points,
+            <<"answers">> => AnswersPoints
+        },
         Context),
     publish(SurveyId, undefined, PersistentId, Context),
     Result;
@@ -358,14 +360,14 @@ insert_survey_submission_1(SurveyId, UserId, _PersistentId, Answers, Context) ->
     {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
     Result = z_db:insert(
         survey_answers,
-        [
-            {survey_id, SurveyId},
-            {user_id, UserId},
-            {persistent, undefined},
-            {is_anonymous, z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context))},
-            {points, Points},
-            {answers, AnswersPoints}
-        ],
+        #{
+            <<"survey_id">> => SurveyId,
+            <<"user_id">> => UserId,
+            <<"persistent">> => undefined,
+            <<"is_anonymous">> => z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
+            <<"points">> => Points,
+            <<"answers">> => AnswersPoints
+        },
         Context),
     publish(SurveyId, UserId, undefined, Context),
     Result.
@@ -373,13 +375,7 @@ insert_survey_submission_1(SurveyId, UserId, _PersistentId, Answers, Context) ->
 %% @private
 prepare_results(SurveyId, Context) ->
     case m_rsc:p(SurveyId, blocks, Context) of
-        [] ->
-            undefined;
-        <<>> ->
-            undefined;
-        undefined ->
-            undefined;
-        Blocks ->
+        Blocks when is_list(Blocks) ->
             Stats = survey_stats(SurveyId, Context),
             [
                 begin
@@ -387,7 +383,9 @@ prepare_results(SurveyId, Context) ->
                     prepare_result(Block, proplists:get_value(Name, Stats), Context)
                 end
                 || Block <- Blocks
-            ]
+            ];
+        _ ->
+            undefined
     end.
 
 %% @private
@@ -444,9 +442,13 @@ survey_stats(SurveyId, Context) ->
         BDict),
     dict:to_list(FinalDict).
 
-count_answers([], Dict) -> Dict;
-count_answers([{Row}|Rows], Dict) ->
-    Answers = maps:get(<<"answers">>, Row),
+count_answers([], Dict) ->
+    Dict;
+count_answers([ {Row} | Rows ], Dict) when is_list(Row) ->
+    Map = z_props:from_props(Row),
+    count_answers([ {Map} | Rows ], Dict);
+count_answers([ {Row} | Rows ], Dict) when is_map(Row)->
+    Answers = maps:get(<<"answers">>, Row, []),
     Dict1 = lists:foldl(
         fun
             ({QName, QAnswer}, Acc) ->

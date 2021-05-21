@@ -103,7 +103,7 @@ do_convert(QueuePath, State) ->
     end.
 
 -spec insert_movie(file:filename_all(), #state{}) -> {ok, m_rsc:resource_id()} | {error, atom()}.
-insert_movie(Filename, State) ->
+insert_movie(TmpFile, State) ->
     Context = z_context:depickle(State#state.pickled_context),
     case is_current_upload(State, Context) of
         true ->
@@ -112,7 +112,7 @@ insert_movie(Filename, State) ->
                 <<"is_video_ok">> => true
             },
             m_media:replace_file(
-                #upload{filename=OrgFile, tmpfile=Filename},
+                #upload{filename=OrgFile, tmpfile=TmpFile},
                 State#state.id,
                 #{},
                 PropsMedia,
@@ -159,8 +159,8 @@ remove_task(State) ->
     mod_video:remove_task(State#state.queue_filename, Context).
 
 video_convert(QueuePath, Mime) ->
-    Info = mod_video:video_info(QueuePath),
-    video_convert_1(QueuePath, maps:get(orientation, Info), Mime).
+    Info = z_video_info:info(QueuePath),
+    video_convert_1(QueuePath, maps:get(<<"orientation">>, Info, 1), Mime).
 
 -define(CMDLINE,
         "ffmpeg -i "
@@ -186,7 +186,7 @@ video_convert_1(QueuePath, Orientation, Mime) ->
               end,
     jobs:run(video_jobs,
              fun() ->
-                TransposeOption = mod_video:orientation_to_transpose(Orientation),
+                TransposeOption = z_video_preview:orientation_to_transpose(Orientation),
                 case maybe_reset_metadata(TransposeOption, QueuePath, Mime) of
                     {ok, QueuePath1} ->
                         TmpFile = z_tempfile:new(),

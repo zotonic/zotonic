@@ -50,13 +50,8 @@ sort(Input, SortArg, Context) ->
     end.
 
 
-make_args_list(Args) when is_list(Args) ->
-    case z_string:is_string(Args) of
-        true -> [Args];
-        false -> Args
-    end;
-make_args_list(Arg) ->
-    [Arg].
+make_args_list(Args) when is_list(Args) -> Args;
+make_args_list(Arg) -> [Arg].
 
 make_input_list(L, _Context) when is_list(L) -> L;
 make_input_list(#rsc_list{ list = L }, _Context) -> L;
@@ -77,7 +72,7 @@ fetch_props(Ps, List, Context) ->
 
 fetch_prop(A, P, Context) when is_integer(A); is_atom(A); is_binary(A) ->
     case m_rsc:p(A, P, Context) of
-        {trans, _} = Tr ->
+        #trans{} = Tr ->
             z_string:to_lower(z_trans:lookup_fallback(Tr, Context));
         B when is_binary(B) ->
             z_string:to_lower(B);

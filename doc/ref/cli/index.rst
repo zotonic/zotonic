@@ -90,6 +90,21 @@ Currently, the following subcommands are implemented:
 ``zotonic siteconfigfiles <site_name>``
   List all configuration files for of site [site_name]
 
+``zotonic dispatch <url>``
+  Dispatch an URL. Finds the site matching the hostname and shows the dispatch information for the path.
+  Example::
+
+    bin/zotonic dispatch https://mysite.test:8443/en/page/1/foobar
+
+``zotonic dispatch <site_name> [detail]``
+  List all dispatch rules for a site. Add the ``detail`` option to show all controller options for each
+  dispatch rule.
+
+``zotonic dispatch <site_name> <path>``
+  Show the dispatch information for a specific path and site. Example::
+
+    bin/zotonic dispatch mysite /en/page/1/foobar
+
 ``zotonic etop``
   Show the processes that consume the most CPU. Stop with twice ctrl-C.
 

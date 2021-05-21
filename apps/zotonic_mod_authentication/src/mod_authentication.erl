@@ -33,8 +33,11 @@
     observe_request_context/3,
     observe_auth_options_update/3,
     observe_logon_submit/2,
+    observe_logon_options/3,
     observe_admin_menu/3,
-    observe_auth_validated/2
+    observe_auth_validated/2,
+    observe_auth_client_logon_user/2,
+    observe_auth_client_switch_user/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -98,28 +101,133 @@ observe_auth_options_update(#auth_options_update{ request_options = ROpts }, Acc
     end.
 
 %% @doc Check username/password against the identity tables.
-observe_logon_submit(#logon_submit{ payload = Args }, Context) ->
-    Username = maps:get(<<"username">>, Args, undefined),
-    Password = maps:get(<<"password">>, Args, undefined),
-    case is_binary(Username) andalso is_binary(Password) of
-        true ->
-            case m_identity:check_username_pw(Username, Password, Context) of
-                {ok, UserId} ->
-                    case Password of
-                        <<>> ->
-                            %% If empty password existed in identity table, prompt for a new password.
-                            {expired, UserId};
-                        _ ->
-                            {ok, UserId}
-                    end;
-                {error, {expired, UserId}} ->
+observe_logon_submit(#logon_submit{
+            payload = #{
+                <<"username">> := Username,
+                <<"password">> := Password
+            }
+        }, Context) when is_binary(Username), is_binary(Password) ->
+    case m_identity:check_username_pw(Username, Password, Context) of
+        {ok, UserId} ->
+            case Password of
+                <<>> ->
+                    %% If empty password existed in identity table, prompt for a new password.
                     {expired, UserId};
-                {error, _} = E ->
-                    E
+                _ ->
+                    {ok, UserId}
             end;
-        false ->
-            undefined
+        {error, {expired, UserId}} ->
+            {expired, UserId};
+        {error, _} = E ->
+            E
+    end;
+observe_logon_submit(#logon_submit{}, _Context) ->
+    undefined.
+
+observe_logon_options(#logon_options{
+            payload = #{
+                <<"username">> := Username,
+                <<"password">> := undefined
+            }
+        },
+        Acc,
+        Context) when is_binary(Username) ->
+    case z_string:to_lower( z_string:trim( Username ) ) of
+        <<>> ->
+            Acc;
+        UsernameOrEmail ->
+            IsUserLocal = is_user_local(UsernameOrEmail, Context)
+                   orelse is_user_local_email(UsernameOrEmail, Context)
+                   orelse maps:get(is_user_local, Acc, false),
+            Acc#{
+                is_username_checked => true,
+                is_user_local => IsUserLocal,
+                username => UsernameOrEmail
+            }
+    end;
+observe_logon_options(#logon_options{}, Acc, _Context) ->
+    Acc.
+
+
+%% @doc Send a request to the client to login an user. The zotonic.auth.worker.js will
+%% send a request to controller_authentication to exchange the one time token with
+%% a z,auth cookie for the given user. The client will redirect to the Url.
+observe_auth_client_logon_user(#auth_client_logon_user{ user_id = UserId, url = Url }, Context) ->
+    case z_context:client_topic(Context) of
+        {ok, ClientTopic} ->
+            case z_authentication_tokens:encode_onetime_token(UserId, Context) of
+                {ok, Token} ->
+                    z_mqtt:publish(
+                        ClientTopic ++ [ <<"model">>, <<"auth">>, <<"post">>, <<"onetime-token">> ],
+                        #{
+                            token => Token,
+                            url => Url
+                        },
+                        Context),
+                    ok;
+                {error, _} = Error ->
+                    Error
+            end;
+        {error, _} = Error ->
+            Error
     end.
+
+%% @doc Send a request to the client to switch users. The zotonic.auth.worker.js will
+%% send a request to controller_authentication to perform the switch.
+observe_auth_client_switch_user(#auth_client_switch_user{ user_id = UserId }, Context) ->
+    CurrentUser = z_acl:user(Context),
+    case UserId of
+        1 when CurrentUser =/= 1 ->
+            % Only the admin is allowed to switch back to admin
+            {error, eacces};
+        _ ->
+            case z_acl:is_admin(Context) of
+                true ->
+                    case z_context:client_topic(Context) of
+                        {ok, ClientTopic} ->
+                            z_mqtt:publish(
+                                    ClientTopic ++ [ <<"model">>, <<"auth">>, <<"post">>, <<"switch-user">> ],
+                                    #{ user_id => UserId },
+                                    Context),
+                            ok;
+                        {error, _} = Error ->
+                            Error
+                    end;
+                false ->
+                    {error, eacces}
+            end
+    end.
+
+is_user_local(<<"admin">>, _Context) ->
+    true;
+is_user_local(Handle, Context) ->
+    case m_identity:lookup_by_username(Handle, Context) of
+        undefined -> false;
+        _Row -> true
+    end.
+
+is_user_local_email(Handle, Context) ->
+    case binary:match(Handle, <<"@">>) of
+        nomatch ->
+            false;
+        _ ->
+            Rows = m_identity:lookup_by_type_and_key_multi(email, Handle, Context),
+            RscIds = lists:map(
+                fun(Row) ->
+                    proplists:get_value(rsc_id, Row)
+                end,
+                Rows),
+            lists:any(
+                fun (RscId) ->
+                    case m_identity:get_username(RscId, Context) of
+                        undefined -> false;
+                        <<"admin">> -> false;
+                        _ -> true
+                    end
+                end,
+                RscIds)
+    end.
+
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
@@ -142,7 +250,7 @@ observe_auth_validated(#auth_validated{} = Auth, Context) ->
 maybe_add_identity(undefined, Auth, Context) ->
     case auth_identity(Auth, Context) of
         undefined -> maybe_signup(Auth, Context);
-        Ps when is_list(Ps) -> logon_identity(Auth, Ps, Context)
+        Ps when is_list(Ps) -> update_identity(Auth, Ps, Context)
     end;
 maybe_add_identity(CurrUserId, Auth, Context) ->
     case auth_identity(Auth, Context) of
@@ -154,9 +262,9 @@ maybe_add_identity(CurrUserId, Auth, Context) ->
             {rsc_id, IdnRscId} = proplists:lookup(rsc_id, Ps),
             case {IdnRscId, Auth#auth_validated.is_connect} of
                 {CurrUserId, _} ->
-                    {ok, Context};
+                    {ok, CurrUserId};
                 {_UserId, false} ->
-                    logon_identity(Auth, Ps, Context);
+                    update_identity(Auth, Ps, Context);
                 {_UserId, true} ->
                     {error, duplicate}
             end
@@ -170,10 +278,9 @@ maybe_update_identity(_Ps, NewProps, IdnPs, Context) ->
     {key, Key} = proplists:lookup(key, IdnPs),
     {type, Type} = proplists:lookup(type, IdnPs),
     {rsc_id, UserId} = proplists:lookup(rsc_id, IdnPs),
-    m_identity:set_by_type(UserId, Key, Type, NewProps, Context).
+    m_identity:set_by_type(UserId, Type, Key, NewProps, Context).
 
-
-logon_identity(Auth, IdnPs, Context) ->
+update_identity(Auth, IdnPs, Context) ->
     {propb, IdnPropb} = proplists:lookup(propb, IdnPs),
     {rsc_id, UserId} = proplists:lookup(rsc_id, IdnPs),
     maybe_update_identity(
@@ -181,12 +288,10 @@ logon_identity(Auth, IdnPs, Context) ->
         Auth#auth_validated.service_props,
         IdnPs,
         Context),
-    Context1 = z_acl:logon_prefs(UserId, Context),
-    z_authentication_tokens:set_auth_cookie(UserId, #{}, Context1).
-
+    {ok, UserId}.
 
 maybe_signup(Auth, Context) ->
-    Email = proplists:get_value(email, Auth#auth_validated.props),
+    Email = maps:get(<<"email">>, Auth#auth_validated.props, undefined),
     case not Auth#auth_validated.is_connect
         andalso is_user_email_exists(Email, Context)
     of
@@ -214,12 +319,14 @@ try_signup(Auth, Context) ->
                         _ -> nop
                     end,
                     _ = m_identity:ensure_username_pw(NewUserId, z_acl:sudo(Context)),
-                    Context1 = z_acl:logon_prefs(NewUserId, Context),
-                    z_authentication_tokens:set_auth_cookie(NewUserId, #{}, Context1);
+                    {ok, NewUserId};
+                    % Context1 = z_acl:logon_prefs(NewUserId, Context),
+                    % z_authentication_tokens:set_auth_cookie(NewUserId, #{}, Context1);
                 {error, _Reason} = Error ->
                     Error;
                 undefined ->
                     % No signup accepted
+                    lager:info("Authentication not accepted because no signup handler defined for Auth ~p", [ Auth ]),
                     undefined
             end
     end.
@@ -233,9 +340,14 @@ is_user_email_exists(Email, Context) ->
     end.
 
 maybe_email_identity(Props) ->
-    case proplists:get_value(email, Props) of
+    case maps:get(<<"email">>, Props, undefined) of
         undefined -> [];
-        Email -> [ {identity, {email, Email, false, false}} ]
+        Email ->
+            IsVerified = true,
+            IsUnique = false,
+            [
+                {identity, {email, Email, IsUnique, IsVerified}}
+            ]
     end.
 
 insert_identity(UserId, Auth, Context) ->

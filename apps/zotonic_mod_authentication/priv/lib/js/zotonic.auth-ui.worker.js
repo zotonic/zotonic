@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Marc Worrell <marc@worrell.nl>
+ * Copyright 2019-2021 Marc Worrell <marc@worrell.nl>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@
 var model = {
     status: 'start',
     logon_view: '',
-    is_connected: false,
     is_error: false,
     error: undefined,
     email: undefined,
@@ -32,12 +31,8 @@ var model = {
     secret: undefined,
     need_passcode: false,
     is_expired: false,
-
-    // Depends on these models, wait for a ping
-    depends: {
-        "location": false,
-        "auth": false
-    }
+    is_location_provided: false,
+    options : {}
 };
 
 model.present = function(data) {
@@ -47,10 +42,6 @@ model.present = function(data) {
         self.subscribe(
             "model/auth-ui/post/view/+view",
             function(msg, bindings) { actions.view({ logon_view: bindings.view }); });
-
-        self.subscribe(
-            "$bridge/origin/status",
-            function(msg) { actions.setBridgeStatus(msg.payload); });
 
         self.subscribe(
             "model/auth/event/auth-error",
@@ -69,35 +60,34 @@ model.present = function(data) {
             function(msg) { actions.resetForm(msg.payload); });
 
         self.subscribe(
-            "model/+model/event/ping",
-            function(msg, bindings) {
-                actions.modelPing({ model: bindings.model, payload: msg.payload });
-            });
+            "model/auth-ui/post/form/change",
+            function(msg) { actions.changeForm(msg.payload); });
 
-        self.publish("model/auth-ui/event/ping", "pong", { retain: true });
-
-        model.logon_view = data.logon_view || 'logon';
-        model.secret = data.secret;
-        model.username = data.username;
         model.status = "waiting";
+
+        self.call("model/location/get/q")
+            .then(function(msg) {
+                let data = {};
+                data.is_location_provided = true;
+                data.logon_view = msg.payload.logon_view || "logon";
+                data.secret = msg.payload.secret || undefined;
+                data.username = msg.payload.u || undefined,
+                model.present(data);
+            });
+    }
+
+    if (data.is_location_provided) {
+        model.is_location_provided = true;
+        if (state.waiting(model)) {
+            model.status = 'active';
+        }
     }
 
     if ("is_error" in data) {
         model.is_error = data.is_error;
         model.error = data.error;
+        model.options = data.options || {};
         model.status = 'updated';
-    }
-
-    if ("model" in data) {
-        model.depends[data.model] = data.is_active;
-    }
-
-    if (typeof data.is_connected == "boolean") {
-        model.is_connected = data.is_connected;
-    }
-
-    if (model.status == 'waiting' && !state.waiting(model)) {
-        model.status = 'connected'
     }
 
     if (data.is_view_loaded) {
@@ -106,6 +96,9 @@ model.present = function(data) {
 
     if (typeof data.logon_view === "string") {
         model.logon_view = data.logon_view;
+        model.secret = data.secret || model.secret;
+        model.username = data.username || model.username;
+        model.options = data.options || {};
         model.error = data.error || undefined;
         if (state.loaded(model)) {
             model.status = 'updated';
@@ -141,6 +134,7 @@ model.present = function(data) {
         model.username = data.username;
         model.secret = data.secret;
         model.logon_view = 'reset_form';
+        model.options = data.options || {};
         model.status = 'updated';
     }
 
@@ -150,10 +144,12 @@ model.present = function(data) {
             model.error = undefined;
             model.need_passcode = data.need_passcode;
             model.username = data.username;
-            model.secret = data.secret
+            model.secret = data.secret;
+            model.options = data.options || {};
         } else {
             model.is_error = true;
-            model.error = data.error || "error"
+            model.error = data.error || "error";
+            model.options = data.options || {};
         }
         model.logon_view = 'reset_form';
     }
@@ -183,6 +179,33 @@ model.present = function(data) {
     if (data.auth_user_id && model.status == 'reset_wait') {
         model.is_expired = false;
         model.logon_view = 'reset_done';
+        model.status = 'updated';
+    }
+
+    if (data.change) {
+        if (data.is_password_equal) {
+            let change = {
+                passcode: data.passcode,
+                password: data.password,
+                password_reset: data.password_reset,
+                onauth: "#"
+            };
+            self.publish("model/auth/post/change", change);
+            model.status = 'change_wait';
+            // The error response comes async via the auth-error topic
+            //
+            // If change was done ok then we should show a 'success' screen with
+            // a link to the home page and/or the user's page.
+        } else {
+            model.is_error = true;
+            model.error = 'unequal';
+            model.logon_view = 'change';
+        }
+    }
+
+    if (data.auth_user_id && model.status == 'change_wait') {
+        model.is_expired = false;
+        model.logon_view = 'change_done';
         model.status = 'updated';
     }
 
@@ -242,7 +265,8 @@ state.representation = function(model) {
                     username: model.username,
                     secret: model.secret,
                     need_passcode: model.need_passcode,
-                    is_expired: model.is_expired
+                    is_expired: model.is_expired,
+                    options: model.options
                 }
             });
     }
@@ -253,8 +277,8 @@ state.start = function(model) {
     return model.status === 'start';
 };
 
-state.connected = function(model) {
-    return model.status === 'connected';
+state.active = function(model) {
+    return model.status === 'active';
 }
 
 state.updated = function(model) {
@@ -266,11 +290,11 @@ state.loaded = function(model) {
 }
 
 state.waiting = function(model) {
-    return !model.is_connected || !model.depends.auth;
+    return !model.is_location_provided;
 }
 
 state.running = function(model) {
-    return model.is_connected && model.depends.auth;
+    return model.is_location_provided;
 }
 
 
@@ -279,7 +303,7 @@ state.running = function(model) {
 // an action needs to be invoked
 
 state.nextAction = function (model) {
-    if (state.connected(model) || state.updated(model)) {
+    if (state.updated(model)) {
         actions.loaded()
     }
     if (state.running(model) && model.logon_view == 'reset') {
@@ -304,19 +328,7 @@ var actions = {} ;
 
 actions.start = function(data) {
     data = data || {};
-    // TODO: wait for location model to be up and running
-    self.call("model/location/get/q")
-        .then(function(msg) {
-            data.logon_view = msg.payload.logon_view || "logon";
-            data.secret = msg.payload.secret || undefined;
-            data.username = msg.payload.u || undefined,
-            model.present(data);
-        });
-};
-
-actions.setBridgeStatus = function(data) {
-    const is_connected = data.is_connected || false;
-    model.present({ is_connected: is_connected });
+    model.present(data);
 };
 
 actions.loaded = function(_data) {
@@ -325,7 +337,7 @@ actions.loaded = function(_data) {
 
 actions.view = function(data) {
     model.present(data);
-}
+};
 
 actions.reminderForm = function(data) {
     let dataReminder = {
@@ -333,7 +345,7 @@ actions.reminderForm = function(data) {
         email: data.value.email
     }
     model.present(dataReminder);
-}
+};
 
 actions.resetForm = function(data) {
     let dataReset = {
@@ -344,7 +356,18 @@ actions.resetForm = function(data) {
         setautologon: data.value.rememberme ? true : false
     }
     model.present(dataReset);
-}
+};
+
+actions.changeForm = function(data) {
+    let dataChange = {
+        change: true,
+        password: data.value.password,
+        password_reset: data.value.password_reset1,
+        is_password_equal: data.value.password_reset1 === data.value.password_reset2,
+        passcode: data.value.passcode || ""
+    }
+    model.present(dataChange);
+};
 
 actions.reminderResponse = function(data) {
     let payload = data.payload || {};
@@ -367,30 +390,32 @@ actions.reminderResponse = function(data) {
             console.log("Unkown reminderResponse payload", data);
             break;
     }
-}
+};
 
 actions.fetchError = function(_data) {
     model.present({ is_error: true, error: "timeout" });
-}
+};
 
 actions.authError = function(data) {
     if (data.error == "password_expired") {
         model.present({
             is_expired: true,
             username: data.data.username,
-            secret: data.data.secret
+            secret: data.data.secret,
+            options: data.data.options || {}
         });
     } else {
         model.present({
             is_error: true,
-            error: data.error
+            error: data.error,
+            options: data.data.options || {}
         });
     }
-}
+};
 
 actions.authUserId = function(data) {
     model.present({ auth_user_id: data });
-}
+};
 
 actions.resetCodeCheck = function(data) {
     self.call("model/auth/post/reset-code-check", { secret: data.secret, username: data.username } )
@@ -405,18 +430,16 @@ actions.resetCodeCheck = function(data) {
             };
             model.present(d)
         });
-}
+};
 
-actions.modelPing = function(data) {
-    model.present({ model: data.model, is_active: data.payload === "pong" });
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Worker Startup
 //
 
-self.on_connect = function() {
-    actions.start({});
-}
-
-self.connect();
+self.connect({
+    depends: [ "bridge/origin", "model/auth", "model/location", "model/sessionStorage" ],
+    provides: [ "model/auth-ui" ]
+}).then(
+    function() { actions.start({}); }
+);

@@ -55,7 +55,7 @@
                     <p>
                         {_ Only showing connections with: _}
                         {% if q.qhassubject %}
-                            {_ subject _} <a href="{% url admin_edit_rsc id=q.qhasubject %}">{{ m.rsc[q.qhassubject].title|default:_"Untitled" }}</a>
+                            {_ subject _} <a href="{% url admin_edit_rsc id=q.qhassubject %}">{{ m.rsc[q.qhassubject].title|default:_"Untitled" }}</a>
                         {% endif %}
                         {% if q.qhasobject %}
                             {_ object _} <a href="{% url admin_edit_rsc id=q.qhasobject %}">{{ m.rsc[q.qhasobject].title|default:_"Untitled" }}</a>

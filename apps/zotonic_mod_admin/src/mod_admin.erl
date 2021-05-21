@@ -86,49 +86,54 @@ class_to_opts(Class) ->
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
-     #menu_item{id=admin_dashboard,
-                label=?__("Dashboard", Context),
-                url={admin} },
+     #menu_item{id = admin_dashboard,
+                label = ?__("Dashboard", Context),
+                url = admin },
 
      %% CONTENT %%
-     #menu_item{id=admin_content,
-                label=?__("Content", Context)},
+     #menu_item{id = admin_content,
+                label = ?__("Content", Context)},
 
-     #menu_item{id=admin_overview,
+     #menu_item{id = admin_overview,
+                parent = admin_content,
+                label = ?__("Pages", Context),
+                url = admin_overview_rsc,
+                sort = 1},
+     #menu_item{id = admin_media,
+                parent = admin_content,
+                label = ?__("Media", Context),
+                url = admin_media,
+                sort = 2},
+     #menu_separator{
                 parent=admin_content,
-                label=?__("Pages", Context),
-                url={admin_overview_rsc}},
-     #menu_item{id=admin_media,
-                parent=admin_content,
-                label=?__("Media", Context),
-                url={admin_media}}
+                sort = 10}
     ]
     ++ admin_menu_content_queries(Context) ++
     [
 
      %% STRUCTURE %%
-     #menu_item{id=admin_structure,
-                label=?__("Structure", Context)},
+     #menu_item{id = admin_structure,
+                label = ?__("Structure", Context)},
 
 
      %% MODULES %%
-     #menu_item{id=admin_modules,
-                label=?__("Modules", Context)},
+     #menu_item{id = admin_modules,
+                label = ?__("Modules", Context)},
 
 
      %% AUTH %%
-     #menu_item{id=admin_auth,
-                label=?__("Auth", Context)},
+     #menu_item{id = admin_auth,
+                label = ?__("Auth", Context)},
 
      %% SYSTEM %%
-     #menu_item{id=admin_system,
-                label=?__("System", Context)},
+     #menu_item{id = admin_system,
+                label = ?__("System", Context)},
 
-     #menu_item{id=admin_status,
-                parent=admin_system,
-                visiblecheck={acl, use, mod_admin_config},
-                label=?__("Status", Context),
-                url={admin_status}}
+     #menu_item{id = admin_status,
+                parent = admin_system,
+                visiblecheck = {acl, use, mod_admin_config},
+                label = ?__("Status", Context),
+                url = admin_status}
 
      |Acc].
 
@@ -137,19 +142,28 @@ admin_menu_content_queries(Context) ->
     #search_result{result=Result} = z_search:search({all_bytitle, [{cat,admin_content_query}]}, Context),
     AdminOverviewQueryId = m_rsc:rid(admin_overview_query, Context),
     Result1 = lists:filter(
-                    fun({_Title,Id}) ->
-                        Id =/= AdminOverviewQueryId
-                    end,
-                    Result),
-    lists:map(fun({Title, Id}) ->
-                #menu_item{
-                    id={admin_query, Id},
-                    parent=admin_content,
-                    label=Title,
-                    url={admin_overview_rsc, [{qquery, Id}]}
-                }
-              end,
-              Result1).
+        fun({_Title,Id}) ->
+            z_acl:rsc_visible(Id, Context)
+            andalso Id =/= AdminOverviewQueryId
+        end,
+        Result),
+    CQ = lists:map(
+        fun({Title, Id}) ->
+            #menu_item{
+                id = {admin_query, Id},
+                parent = admin_content,
+                label = Title,
+                url = {admin_overview_rsc, [{qquery_id, Id}]},
+                sort = 10
+            }
+        end,
+        Result1),
+    case CQ of
+        [] ->
+            [];
+        _ ->
+            CQ ++ [ #menu_separator{ parent = admin_content, sort = 10 } ]
+    end.
 
 
 observe_admin_edit_blocks(#admin_edit_blocks{}, Menu, Context) ->
@@ -206,9 +220,9 @@ event(#postback_notify{message= <<"admin-insert-block">>}, Context) ->
 event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=TargetId}, Context)
     when Trigger =:= <<"dialog-new-rsc-tab">>; Trigger =:= <<"dialog-connect-find">> ->
     % Find pages matching the search criteria.
-    CreatorId = z_convert:to_integer(z_context:get_q(find_creator_id, Context)),
-    SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
-    ObjectId = z_convert:to_integer(z_context:get_q(object_id, Context)),
+    CreatorId = z_convert:to_integer(z_context:get_q(<<"find_creator_id">>, Context)),
+    SubjectId = z_convert:to_integer(z_context:get_q(<<"subject_id">>, Context)),
+    ObjectId = z_convert:to_integer(z_context:get_q(<<"object_id">>, Context)),
     Predicate = z_convert:to_binary(z_context:get_q(<<"predicate">>, Context, <<>>)),
     PredicateId = m_rsc:rid(Predicate, Context),
     TextL = lists:foldl(
@@ -223,25 +237,33 @@ event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=Targe
             end
         end,
         [],
-        [ find_text, title, new_rsc_title, name_first, name_surname, email ]),
+        [
+            <<"find_text">>, <<"title">>, <<"new_rsc_title">>,
+            <<"name_first">>, <<"name_surname">>, <<"email">>
+        ]),
     Text = iolist_to_binary(TextL),
-    Category = case z_context:get_q(find_category, Context) of
-        undefined -> z_context:get_q(category_id, Context);
-        <<>> -> z_context:get_q(category_id, Context);
+    Category = case z_context:get_q(<<"find_category">>, Context) of
+        undefined -> z_context:get_q(<<"category_id">>, Context);
+        <<>> -> z_context:get_q(<<"category_id">>, Context);
         Cat -> Cat
     end,
     Cats = case z_convert:to_binary(Category) of
-                <<"p:", Predicate/binary>> -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
-                <<>> when PredicateId =/= undefined -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
+                <<"p:", Predicate/binary>> ->
+                    feedback_categories(SubjectId, Predicate, ObjectId, Context);
+                <<>> when PredicateId =/= undefined ->
+                    feedback_categories(SubjectId, Predicate, ObjectId, Context);
                 <<>> -> [];
                 <<"*">> -> [];
-                CatId -> [ {m_rsc:rid(CatId, Context)} ]
+                CIds ->
+                    CatIds = binary:split(CIds, <<",">>, [ global ]),
+                    [ {m_rsc:rid(CatId, Context)} || CatId <- CatIds, CatId =/= <<>> ]
            end,
     Vars = [
+        {intent, z_context:get_q(<<"intent">>, Context)},
         {creator_id, CreatorId},
         {subject_id, SubjectId},
         {cat, Cats},
-        {cat_exclude, z_context:get_q(cat_exclude, Context)},
+        {cat_exclude, z_context:get_q(<<"cat_exclude">>, Context)},
         {predicate, Predicate},
         {text, Text},
         {is_multi_cat, length(Cats) > 1},
@@ -249,8 +271,8 @@ event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=Targe
             [{CId}] -> CId;
             _ -> undefined
         end},
-        {is_zlink, z_convert:to_bool( z_context:get_q(is_zlink, Context) )}
-    ] ++ case z_context:get_q(find_cg, Context) of
+        {is_zlink, z_convert:to_bool( z_context:get_q(<<"is_zlink">>, Context) )}
+    ] ++ case z_context:get_q(<<"find_cg">>, Context) of
         <<>> -> [];
         "" -> [];
         undefined -> [];
@@ -445,7 +467,10 @@ do_link_unlink_error(true, Context) ->
 
 do_link_unlink_feedback(IsNew, IsDelete, EdgeId, SubjectId, Predicate, ObjectId, Callback, Context) ->
     ContextP = context_language(Context),
-    Title = m_rsc:p(ObjectId, title, Context),
+    Title = case m_rsc:p(ObjectId, title, Context) of
+        undefined -> ?__("Untitled", Context);
+        T -> T
+    end,
     Context1 = case {IsNew, IsDelete} of
         {true,false} ->
             z_render:growl([

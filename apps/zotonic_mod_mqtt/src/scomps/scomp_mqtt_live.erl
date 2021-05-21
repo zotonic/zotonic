@@ -51,7 +51,7 @@ event_type_mqtt(#action_event_type{event={mqtt, Args}, postback_js = PostbackJS,
             "}",
         ");"
     ]),
-    {ok, Script, Context}.
+    {ok, <<"cotonic.ready.then( function() { ", Script/binary, " });">>, Context}.
 
 %% ---------------------------------------------------------------------
 %% Scomp API

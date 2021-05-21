@@ -90,7 +90,12 @@ handle_cmd(<<"copy">>, Data, Context) ->
             NewTitle = make_copy_title(m_rsc:p(FromId, title, Context), Context),
             case m_rsc:duplicate(FromId, [{title, NewTitle}], Context) of
                 {ok, NewId} ->
-                    {Html, Context1} = z_template:render_to_iolist({cat, "_menu_edit_item.tpl"}, [{id, NewId}, {editable, true}], Context),
+                    Template = case proplists:get_value(<<"template">>, Data) of
+                        undefined -> "_menu_edit_item.tpl";
+                        <<>> -> "_menu_edit_item.tpl";
+                        Tpl -> z_convert:to_list(Tpl)
+                    end,
+                    {Html, Context1} = z_template:render_to_iolist({cat, Template}, [{id, NewId}, {editable, true}], Context),
                     z_render:wire({script, [{script, [
                                     <<"window.zMenuInsertAfter(\"">>,
                                             integer_to_list(FromId), $",$,,
@@ -106,7 +111,12 @@ handle_cmd(<<"copy">>, Data, Context) ->
 handle_cmd(<<"menu-item-render">>, Data, Context) ->
     Id = z_convert:to_integer(proplists:get_value(<<"id">>, Data)),
     Callback = proplists:get_value(<<"callback">>, Data),
-    {Html, Context2} = z_template:render_to_iolist({cat, "_menu_edit_item.tpl"}, [{id, Id}, {editable, true}], Context),
+    Template = case proplists:get_value(<<"template">>, Data) of
+        undefined -> "_menu_edit_item.tpl";
+        <<>> -> "_menu_edit_item.tpl";
+        Tpl -> z_convert:to_list(Tpl)
+    end,
+    {Html, Context2} = z_template:render_to_iolist({cat, Template}, [{id, Id}, {editable, true}], Context),
     z_render:wire({script, [{script, [
                     Callback, $(,
                         $", integer_to_list(Id), $",$,,
@@ -125,11 +135,12 @@ handle_cmd(<<"delete">>, Data, Context) ->
     end.
 
 
-
+make_copy_title(undefined, _Context) ->
+    undefined;
 make_copy_title(Title, Context) when is_binary(Title) ->
-    iolist_to_binary([?__("COPY", Context), " ", Title]);
-make_copy_title({trans, Ts}, Context) ->
-    {trans, [
+    iolist_to_binary([?__("Copy of:", Context), " ", Title]);
+make_copy_title(#trans{ tr = Ts }, Context) ->
+    #trans{ tr = [
         {Lang, make_copy_title(Title, z_context:set_language(Lang, Context))}
         || {Lang,Title} <- Ts
     ]}.

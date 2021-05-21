@@ -70,6 +70,7 @@ dispatcher_args() ->
     [
         is_permanent, dispatch, q, qargs,
         zotonic_dispatch, ssl, protocol, session_id, set_session_id,
+        zotonic_dispatch_file, zotonic_dispatch_module,
         auth_options, auth_expires
     ].
 
@@ -150,8 +151,8 @@ abs_url(Url, Context) ->
     abs_url(Url, undefined, [], Context).
 
 %% @doc Fetch the dispatchlist for the site.
--spec dispatchinfo(#context{}|pid()|atom()) ->
-              {ok, atom(), binary()|string(), binary()|string(), list(), boolean(), list()}
+-spec dispatchinfo( z:context() | pid() | atom() ) ->
+              {ok, {atom(), binary()|string(), binary()|string(), list(), boolean(), list()}}
             | {error, noproc}.
 dispatchinfo(#context{dispatcher=Dispatcher}) ->
     dispatchinfo(Dispatcher);
@@ -392,14 +393,20 @@ reload_dispatch_list(#state{context=Context} = State) ->
 
 %% @doc Collect all dispatch lists.  Checks priv/dispatch for all dispatch list definitions.
 collect_dispatch_lists(Context) ->
-    ModDispOnPrio = lists:concat([ ModFiles || {_Mod, ModFiles} <- z_module_indexer:dispatch(Context) ]),
-    Dispatch   = lists:map(fun get_file_dispatch/1, ModDispOnPrio),
+    ModDispOnPrio = lists:concat(
+        lists:map(
+            fun({Mod, ModFiles}) ->
+                lists:sort( [ {F, Mod} || F <- ModFiles ] )
+            end,
+            z_module_indexer:dispatch(Context))
+        ),
+    Dispatch = lists:map(fun get_file_dispatch/1, ModDispOnPrio),
     lists:flatten(Dispatch).
 
 
 %% @doc Read a dispatch file, the file should contain a valid Erlang dispatch datastructure.
 %% @spec get_file_dispatch(filename()) -> DispatchList
-get_file_dispatch(File) ->
+get_file_dispatch({File, Mod}) ->
     try
         case filelib:is_regular(File)
             andalso not zotonic_filewatcher_handler:is_file_blocked(File)
@@ -411,7 +418,7 @@ get_file_dispatch(File) ->
                         [];
                     _Other  ->
                         {ok, Disp} = file:consult(File),
-                        Disp
+                        add_mod_to_options(Disp, Mod, filename:basename(File))
                 end;
             false ->
                 []
@@ -422,6 +429,22 @@ get_file_dispatch(File) ->
             throw({error, "Parse error in " ++ z_convert:to_list(File)})
     end.
 
+add_mod_to_options(Disp, Mod, Filename) ->
+    F = z_convert:to_binary(Filename),
+    lists:map(
+        fun(Ds) ->
+            lists:map(
+                fun({Name, Path, Controller, Opts}) ->
+                    Opts1 = [
+                        {zotonic_dispatch_module, Mod},
+                        {zotonic_dispatch_file, F}
+                        | Opts
+                    ],
+                    {Name, Path, Controller, Opts1}
+                end,
+                Ds)
+        end,
+        Disp).
 
 %% @doc Transform the dispatchlist into a datastructure for building uris from name/vars
 %% Datastructure needed is:   name -> [vars, pattern]
@@ -430,7 +453,8 @@ dispatch_for_uri_lookup(DispatchList) ->
 
 dispatch_for_uri_lookup1([], Dict) ->
     Dict;
-dispatch_for_uri_lookup1([{Name, Pattern, _Resource, DispatchOptions}|T], Dict) ->
+dispatch_for_uri_lookup1([{Name, Pattern, Controller, DispatchOptions}|T], Dict)
+    when is_atom(Name), is_list(Pattern), is_atom(Controller), is_list(DispatchOptions) ->
     Vars  = lists:foldl(fun(A, Acc) when is_atom(A) -> [A|Acc];
                            ({A,_RegExp}, Acc) when is_atom(A) -> [A|Acc];
                            (_, Acc) -> Acc
@@ -441,7 +465,11 @@ dispatch_for_uri_lookup1([{Name, Pattern, _Resource, DispatchOptions}|T], Dict) 
                 true  -> dict:append(Name, {length(Vars), Vars, Pattern, DispatchOptions}, Dict);
                 false -> dict:store(Name, [{length(Vars), Vars, Pattern, DispatchOptions}], Dict)
             end,
-    dispatch_for_uri_lookup1(T, Dict1).
+    dispatch_for_uri_lookup1(T, Dict1);
+dispatch_for_uri_lookup1([IllegalDispatch|T], Dict) ->
+    lager:error("Dropping malformed dispatch rule: ~p", [ IllegalDispatch ]),
+    dispatch_for_uri_lookup1(T, Dict).
+
 
 
 

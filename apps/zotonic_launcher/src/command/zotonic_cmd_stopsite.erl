@@ -20,9 +20,12 @@
 -author("Blaise").
 
 %% API
--export([run/1]).
+-export([info/0, run/1]).
 
 -include("../../include/zotonic_command.hrl").
+
+info() ->
+    "Stop a site.".
 
 run([ Site ]) ->
     case zotonic_command:net_start() of

@@ -49,6 +49,10 @@ init(SiteProps) ->
                 {mqtt_sessions_pool_sup, start_link, [Site]},
                 permanent, 5000, supervisor, dynamic},
 
+    MqttTicket = {mqtt_ticket,
+                {z_mqtt_ticket, start_link, [Site]},
+                permanent, 5000, worker, dynamic},
+
     Template = {z_template,
                 {z_template, start_link, [SiteProps]},
                 permanent, 5000, worker, dynamic},
@@ -74,7 +78,7 @@ init(SiteProps) ->
                 permanent, 5000, worker, dynamic},
 
     Processes = [
-        MqttPool, Template, MediaClass, Pivot, DropBox,
+        MqttPool, MqttTicket, Template, MediaClass, Pivot, DropBox,
         MediaCleanup, EdgeLog
     ],
     Processes1 = maybe_start_keyserver(Site, Processes),

@@ -1,10 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-04-07
-%%
+%% @copyright 2009-2021 Marc Worrell
 %% @doc Interface to database, uses database definition from Context
 
-%% Copyright 2009-2014 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -91,6 +89,7 @@
     flush/1,
 
     assert_table_name/1,
+    quoted_table_name/1,
     prepare_cols/2,
 
     ensure_database/2,
@@ -109,6 +108,7 @@
 
 -type transaction_fun() :: fun((z:context()) -> term()).
 -type table_name() :: atom() | string().
+-type schema_name() :: default | atom() | string().
 -type parameters() :: list( parameter() ).
 -type parameter() :: tuple()
                    | calendar:datetime()
@@ -117,9 +117,17 @@
                    | binary()
                    | integer()
                    | boolean()
-                   | float().
+                   | float()
+                   | list().
+
+-type qmap_options() :: list( qmap_option() ).
+-type qmap_option() :: {keys, binary|atom}
+                     | {timeout, non_neg_integer()}.
+
 -type props() :: proplists:proplist() | props_map().
--type props_map() :: #{ binary() => term() }.
+-type props_map() :: #{ prop_key() => term() }.
+-type prop_key() :: binary() | atom().
+
 -type id() :: pos_integer().
 
 -type query_result() :: {ok, Columns :: list(), Rows :: list()}
@@ -131,12 +139,20 @@
     sql/0,
     query_error/0,
     query_timeout/0,
+    query_result/0,
     transaction_fun/0,
     parameters/0,
     parameter/0,
     table_name/0,
+    schema_name/0,
     props/0,
-    id/0
+    props_map/0,
+    prop_key/0,
+
+    id/0,
+
+    qmap_options/0,
+    qmap_option/0
 ]).
 
 
@@ -207,7 +223,7 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                                R
                         end
                     catch
-                        ?WITH_STACKTRACE(_, Why, S)
+                        _:Why:S ->
                             DbDriver:squery(C, "ROLLBACK", ?TIMEOUT),
                             {rollback, {Why, S}}
                     end
@@ -245,16 +261,17 @@ has_connection(Context) ->
 
 
 %% @doc Transaction handler safe function for fetching a db connection
+-spec get_connection( z:context() ) -> {ok, pid()} | {error, nodatabase | none | full}.
 get_connection(#context{dbc=undefined} = Context) ->
     case has_connection(Context) of
         true ->
             set_dbtrace_flag(Context),
             z_db_pool:get_connection(Context);
         false ->
-            none
+            {error, nodatabase}
     end;
 get_connection(Context) ->
-    Context#context.dbc.
+    {ok, Context#context.dbc}.
 
 set_dbtrace_flag(Context) ->
     case erlang:get(is_dbtrace) of
@@ -281,13 +298,15 @@ return_connection(_C, _Context) ->
 with_connection(F, Context) ->
     with_connection(F, get_connection(Context), Context).
 
-with_connection(F, none, _Context) ->
+with_connection(F, {error, nodatabase}, _Context) ->
     F(none);
-with_connection(F, Connection, Context) when is_pid(Connection) ->
-    exometer:update([zotonic, z_context:site(Context), db, requests], 1),
+with_connection(_F, {error, _} = Error, _Context) ->
+    Error;
+with_connection(F, {ok, Connection}, Context) when is_pid(Connection) ->
+    z_stats:record_event(db, requests, Context),
     try
         {Time, Result} = timer:tc(F, [Connection]),
-        exometer:update([zotonic, z_context:site(Context), db, duration], Time),
+        z_stats:record_duration(db, request, Time, Context),
         Result
     after
         return_connection(Connection, Context)
@@ -381,7 +400,7 @@ qmap_row(Sql, Context) ->
 qmap_row(Sql, Args, Context) ->
     qmap_row(Sql, Args, [], Context).
 
--spec qmap_row( sql(), parameters(), list(), z:context()) -> {ok, map()} | {error, query_error()}.
+-spec qmap_row( sql(), parameters(), qmap_options(), z:context()) -> {ok, map()} | {error, query_error()}.
 qmap_row(Sql, Args, Options, Context) ->
     case qmap(Sql, Args, Options, Context) of
         {ok, [ M | _ ]} when is_map(M) ->
@@ -400,7 +419,7 @@ qmap_props_row(Sql, Context) ->
 qmap_props_row(Sql, Args, Context) ->
     qmap_props_row(Sql, Args, [], Context).
 
--spec qmap_props_row( sql(), parameters(), list(), z:context()) -> {ok, map()} | {error, query_error()}.
+-spec qmap_props_row( sql(), parameters(), qmap_options(), z:context()) -> {ok, map()} | {error, query_error()}.
 qmap_props_row(Sql, Args, Options, Context) ->
     case qmap_props(Sql, Args, Options, Context) of
         {ok, [ M | _ ]} when is_map(M) ->
@@ -419,7 +438,7 @@ qmap(Sql, Context) ->
 qmap(Sql, Args, Context) ->
     qmap(Sql, Args, [], Context).
 
--spec qmap( sql(), parameters(), list(), z:context() ) -> {ok, [ map() ]} | {error, query_error()}.
+-spec qmap( sql(), parameters(), qmap_options(), z:context() ) -> {ok, [ map() ]} | {error, query_error()}.
 qmap(Sql, Args, Options, Context) ->
     DbDriver = z_context:db_driver(Context),
     F = fun
@@ -612,16 +631,14 @@ equery(Sql, Parameters, Context, Timeout) ->
 
 %% @doc Insert a new row in a table, use only default values.
 -spec insert(table_name(), z:context()) -> {ok, pos_integer()|undefined} | {error, term()}.
-insert(Table, Context) when is_atom(Table) ->
-    insert(atom_to_list(Table), Context);
 insert(Table, Context) ->
-    assert_table_name(Table),
+    {_Schema, _Tab, QTab} = quoted_table_name(Table),
     with_connection(
-      fun(C) ->
-              DbDriver = z_context:db_driver(Context),
-              equery1(DbDriver, C, "insert into \""++Table++"\" default values returning id")
-      end,
-      Context).
+        fun(C) ->
+            DbDriver = z_context:db_driver(Context),
+            equery1(DbDriver, C, "insert into "++QTab++" default values returning id")
+        end,
+        Context).
 
 
 %% @doc Insert a row, setting the fields to the props. Unknown columns are
@@ -630,11 +647,9 @@ insert(Table, Context) ->
 -spec insert(table_name(), props(), z:context()) -> {ok, integer()|undefined} | {error, term()}.
 insert(Table, Parameters, Context) when is_list(Parameters) ->
     insert(Table, z_props:from_props(Parameters), Context);
-insert(Table, Parameters, Context) when is_atom(Table) ->
-    insert(atom_to_list(Table), Parameters, Context);
 insert(Table, Parameters, Context) ->
-    assert_table_name(Table),
-    Cols = column_names_bin(Table, Context),
+    {Schema, Tab, QTab} = quoted_table_name(Table),
+    Cols = column_names_bin(Schema, Tab, Context),
     BinParams = ensure_binary_keys(Parameters),
     case prepare_cols(Cols, BinParams) of
         {ok, InsertProps} ->
@@ -653,12 +668,18 @@ insert(Table, Parameters, Context) ->
                                    end;
                                HasProps ->
                                    #{<<"props">> := PropsCol} = InsertProps,
-                                   case is_map(PropsCol) of
-                                       true ->
-                                           InsertProps#{
+                               
+                                   case PropsCol of
+                                       M when is_map(M) ->
+                                         nsertProps#{
                                              <<"props">> => ?DB_PROPS(filter_empty_props(PropsCol))
                                             };
-                                       false ->
+                                       [ {_, _} | _ ] = PropsCol ->
+                                           Props1 = z_props:from_props(PropsCol),
+                                           InsertProps#{
+                                               <<"props">> => ?DB_PROPS(filter_empty_props(Props1))
+                                           };
+                                       _ ->
                                            InsertProps
                                    end;
                                not HasPropsJSON and not HasProps ->
@@ -668,7 +689,7 @@ insert(Table, Parameters, Context) ->
             %% Build the SQL insert statement
             {ColNames, ColParams} = lists:unzip( maps:to_list(InsertProps1) ),
             Sql = iolist_to_binary([
-                "insert into \"", Table, "\" (\"",
+                "insert into ", QTab, " (\"",
                     lists:join("\", \"", ColNames),
                 "\") values (",
                     lists:join(", ", [ [$$ | integer_to_list(N)] || N <- lists:seq(1, length(ColParams)) ]),
@@ -704,12 +725,10 @@ insert(Table, Parameters, Context) ->
 -spec update(table_name(), id(), props(), z:context()) -> {ok, RowsUpdated::integer()} | {error, term()}.
 update(Table, Id, Parameters, Context) when is_list(Parameters) ->
     update(Table, Id, z_props:from_props(Parameters), Context);
-update(Table, Id, Parameters, Context) when is_atom(Table) ->
-    update(atom_to_list(Table), Id, Parameters, Context);
-update(Table, Id, Parameters, Context) when is_map(Parameters), is_list(Table) ->
-    assert_table_name(Table),
+update(Table, Id, Parameters, Context) when is_map(Parameters) ->
+    {Schema, Tab, QTab} = quoted_table_name(Table),
     DbDriver = z_context:db_driver(Context),
-    Cols = column_names_bin(Table, Context),
+    Cols = column_names_bin(Schema, Tab, Context),
     BinParams = ensure_binary_keys(Parameters),
     case prepare_cols(Cols, BinParams) of
         {ok, UpdateProps} ->
@@ -743,13 +762,14 @@ update(Table, Id, Parameters, Context) when is_map(Parameters), is_list(Table) -
                                end,
 
                 {ColNames,Params} = lists:unzip( maps:to_list(UpdateProps1) ),
+
                 ColNamesNr = lists:zip(ColNames, lists:seq(2, length(ColNames)+1)),
                 ColAssigns = [
                     ["\"", ColName, "\" = $", integer_to_list(Nr)]
                     || {ColName, Nr} <- ColNamesNr
                 ],
                 Sql = iolist_to_binary([
-                    "update \"", Table, "\" set ",
+                    "update ", QTab, " set ",
                     lists:join(", ", ColAssigns),
                     " where id = $1"
                 ]),
@@ -825,6 +845,30 @@ get_current_props(DBDriver, Connection, true, true, Table, Id, _Context) ->
             {error, no_properties}
     end.
 
+update_map_atom_arrays(Props) ->
+    maps:map(
+        fun
+            (_K, [ A | _ ] = V) when is_atom(A) ->
+                [ atom_to_binary(X, utf8) || X <- V ];
+            (_K, V) ->
+                V
+        end,
+        Props).
+
+update_merge_props(DbDriver, C, QTab, Id, NewProps) when is_map(NewProps) ->
+    QTab1 = z_convert:to_list(QTab),
+    Merged = case equery1(DbDriver, C, "select props from "++QTab1++" where id = $1", [Id]) of
+        {ok, OldProps} when is_list(OldProps) ->
+            maps:merge(z_props:from_props(OldProps), NewProps);
+        {ok, OldProps} when is_map(OldProps) ->
+            maps:merge(OldProps, NewProps);
+        _ ->
+            NewProps
+    end,
+    filter_empty_props(Merged);
+update_merge_props(DbDriver, C, Table, Id, NewProps) when is_list(NewProps) ->
+    Props1 = z_props:from_props(NewProps),
+    update_merge_props(DbDriver, C, Table, Id, Props1).
 
 ensure_binary_keys(Ps) ->
     maps:fold(
@@ -861,18 +905,15 @@ filter_empty_props(Map) ->
 
 %% @doc Delete a row from a table, the row must have a column with the name 'id'
 -spec delete(Table::table_name(), Id::integer(), z:context()) -> {ok, RowsDeleted::non_neg_integer()} | {error, term()}.
-delete(Table, Id, Context) when is_atom(Table) ->
-    delete(atom_to_list(Table), Id, Context);
 delete(Table, Id, Context) ->
-    assert_table_name(Table),
-    Sql = "delete from \""++Table++"\" where id = $1",
+    {_Schema, _Tab, QTab} = quoted_table_name(Table),
+    Sql = "delete from "++QTab++" where id = $1",
     case equery(Sql, [Id], Context) of
         {ok, _} = Ok ->
             Ok;
         {error, _} = Error ->
             Error
     end.
-
 
 %% @doc Read a row from a table, the row must have a column with the name 'id'.
 %% The props column contents is merged with the other properties returned.
@@ -881,12 +922,10 @@ select(Table, Id, Context) ->
     select(Table, Id, [], Context).
 
 
--spec select(table_name(), any(), list(), z:context()) -> {ok, Row :: map()} | {error, term()}.
-select(Table, Id, Options, Context) when is_atom(Table) ->
-    select(atom_to_list(Table), Id, Options, Context);
+-spec select(table_name(), any(), qmap_options(), z:context()) -> {ok, Row :: map()} | {error, term()}.
 select(Table, Id, Options, Context) ->
-    assert_table_name(Table),
-    Sql = "select * from \""++Table++"\" where id = $1 limit 1",
+    {_Schema, _Tab, QTab} = quoted_table_name(Table),
+    Sql = "select * from "++QTab++" where id = $1 limit 1",
     qmap_props_row(Sql, [ Id ], Options, Context).
 
 
@@ -948,14 +987,21 @@ split_props(Props, Cols) ->
 
 
 %% @doc Return a property list with all columns of the table. (example: [{id,int4,modifier},...])
--spec columns(atom()|string(), z:context()) -> list( #column_def{} ).
-columns(Table, Context) when is_atom(Table) ->
-    columns(atom_to_list(Table), Context);
+-spec columns(table_name(), z:context()) -> list( #column_def{} ).
 columns(Table, Context) ->
+    {Schema, Table1, _QTab} = quoted_table_name(Table),
+    columns(Schema, Table1, Context).
+
+-spec columns(schema_name(), string(), z:context()) -> list( #column_def{} ).
+columns(Schema, Table, Context) when is_list(Table) ->
+    assert_table_name(Table),
     Options = z_db_pool:get_database_options(Context),
     Db = proplists:get_value(dbdatabase, Options),
-    Schema = proplists:get_value(dbschema, Options),
-    case z_depcache:get({columns, Db, Schema, Table}, Context) of
+    Schema1 = case Schema of
+        default -> proplists:get_value(dbschema, Options);
+        S when is_list(S) -> S
+    end,
+    case z_depcache:get({columns, Db, Schema1, Table}, Context) of
         {ok, Cols} ->
             Cols;
         _ ->
@@ -964,9 +1010,9 @@ columns(Table, Context) ->
                         where table_catalog = $1
                           and table_schema = $2
                           and table_name = $3
-                        order by ordinal_position", [Db, Schema, Table], Context),
+                        order by ordinal_position", [Db, Schema1, Table], Context),
             Cols1 = [ columns1(Col) || Col <- Cols ],
-            z_depcache:set({columns, Db, Schema, Table}, Cols1, ?YEAR, [{database, Db}], Context),
+            z_depcache:set({columns, Db, Schema1, Table}, Cols1, ?YEAR, [{database, Db}], Context),
             Cols1
     end.
 
@@ -993,11 +1039,17 @@ column_default(<<"nextval(", _/binary>>) -> undefined;
 column_default(Default) -> binary_to_list(Default).
 
 
--spec column( atom() | string(), atom() | string(), z:context()) ->
+-spec column( table_name(), atom() | string(), z:context()) ->
         {ok, #column_def{}} | {error, enoent}.
-column(Table, Column0, Context) ->
+column(Table, Column, Context) ->
+    {Schema, Table1, _QTab} = quoted_table_name(Table),
+    column(Schema, Table1, Column, Context).
+
+-spec column( schema_name(), table_name(), atom() | string(), z:context()) ->
+        {ok, #column_def{}} | {error, enoent}.
+column(Schema, Table, Column0, Context) ->
     Column = z_convert:to_atom(Column0),
-    Columns = columns(Table, Context),
+    Columns = columns(Schema, Table, Context),
     case lists:filter(
         fun
             (#column_def{ name = Name }) when Name =:= Column -> true;
@@ -1006,18 +1058,27 @@ column(Table, Column0, Context) ->
         Columns)
     of
         [] -> {error, enoent};
-        [#column_def{} = Col] -> {ok, Col}
+        [ #column_def{} = Col ] -> {ok, Col}
     end.
 
 %% @doc Return a list with the column names of a table.  The names are sorted.
 -spec column_names(table_name(), z:context()) -> list( atom() ).
 column_names(Table, Context) ->
-    Names = [ C#column_def.name || C <- columns(Table, Context)],
+    {Schema, Table1, _QTab} = quoted_table_name(Table),
+    column_names(Schema, Table1, Context).
+
+-spec column_names(schema_name(), table_name(), z:context()) -> list( atom() ).
+column_names(Schema, Table, Context) ->
+    Names = [ C#column_def.name || C <- columns(Schema, Table, Context)],
     lists:sort(Names).
 
 -spec column_names_bin(table_name(), z:context()) -> list( binary() ).
 column_names_bin(Table, Context) ->
     [ atom_to_binary(Col, utf8) || Col <- column_names(Table, Context) ].
+
+-spec column_names_bin(schema_name(), table_name(), z:context()) -> list( binary() ).
+column_names_bin(Schema, Table, Context) ->
+    [ atom_to_binary(Col, utf8) || Col <- column_names(Schema, Table, Context) ].
 
 
 %% @doc Flush all cached information about the database.
@@ -1030,22 +1091,20 @@ flush(Context) ->
 %% @doc Update the sequence of the ids in the table. They will be renumbered according to their position in the id list.
 %% @todo Make the steps of the sequence bigger, and try to keep the old sequence numbers in tact (needs a diff routine)
 -spec update_sequence(table_name(), list( integer() ), z:context()) -> any().
-update_sequence(Table, Ids, Context) when is_atom(Table) ->
-    update_sequence(atom_to_list(Table), Ids, Context);
 update_sequence(Table, Ids, Context) ->
-    assert_table_name(Table),
+    {_Schema, _Table, QTab} = quoted_table_name(Table),
     DbDriver = z_context:db_driver(Context),
     Args = lists:zip(Ids, lists:seq(1, length(Ids))),
     F = fun
         (none) ->
             [];
         (C) ->
-            [ {ok, _} = equery1(DbDriver, C, "update \""++Table++"\" set seq = $2 where id = $1", tuple_to_list(Arg)) || Arg <- Args ]
+            [ {ok, _} = equery1(DbDriver, C, "update "++QTab++" set seq = $2 where id = $1", tuple_to_list(Arg)) || Arg <- Args ]
     end,
     with_connection(F, Context).
 
 %% @doc Create database and schema if they do not yet exist
--spec prepare_database(#context{}) -> ok | {error, term()}.
+-spec prepare_database(z:context()) -> ok | {error, term()}.
 prepare_database(Context) ->
     Options = z_db_pool:get_database_options(Context),
     Site = z_context:site(Context),
@@ -1152,6 +1211,7 @@ database_exists(Connection, Database) ->
 create_database(_Site, Connection, Database) ->
     %% Use template0 to prevent ERROR: new encoding (UTF8) is incompatible with
     %% the encoding of the template database (SQL_ASCII)
+    assert_database_name(Database),
     case epgsql:equery(
         Connection,
         "CREATE DATABASE \"" ++ Database ++ "\" ENCODING = 'UTF8' TEMPLATE template0"
@@ -1174,6 +1234,7 @@ schema_exists_conn(Connection, Schema) ->
 %% @doc Create a schema
 -spec create_schema(atom(), epgsql:connection(), string()) -> ok | {error, term()}.
 create_schema(_Site, Connection, Schema) ->
+    assert_database_name(Schema),
     case epgsql:equery(
         Connection,
         "CREATE SCHEMA \"" ++ Schema ++ "\""
@@ -1191,15 +1252,23 @@ create_schema(_Site, Connection, Schema) ->
 %% @doc Check the information schema if a certain table exists in the context database.
 -spec table_exists(table_name(), z:context()) -> boolean().
 table_exists(Table, Context) ->
+    {Schema, Tab, _QTab} = quoted_table_name(Table),
+    table_exists(Schema, Tab, Context).
+
+-spec table_exists( schema_name(), table_name(), z:context() ) -> boolean().
+table_exists(Schema, Table, Context) ->
     Options = z_db_pool:get_database_options(Context),
     Db = proplists:get_value(dbdatabase, Options),
-    Schema = proplists:get_value(dbschema, Options),
+    Schema1 = case Schema of
+        default -> proplists:get_value(dbschema, Options);
+        S -> S
+    end,
     case q1("   select count(*)
                 from information_schema.tables
                 where table_catalog = $1
                   and table_name = $2
                   and table_schema = $3
-                  and table_type = 'BASE TABLE'", [Db, Table, Schema], Context) of
+                  and table_type = 'BASE TABLE'", [Db, Table, Schema1], Context) of
         1 -> true;
         0 -> false
     end.
@@ -1207,11 +1276,10 @@ table_exists(Table, Context) ->
 
 %% @doc Make sure that a table is dropped, only when the table exists
 -spec drop_table(table_name(), z:context()) -> ok.
-drop_table(Name, Context) when is_atom(Name) ->
-    drop_table(atom_to_list(Name), Context);
-drop_table(Name, Context) ->
-    case table_exists(Name, Context) of
-        true -> q("drop table \"" ++ Name ++ "\"", Context), ok;
+drop_table(Table, Context) ->
+    {_Schema, _Tab, QTab} = quoted_table_name(Table),
+    case table_exists(Table, Context) of
+        true -> q("drop table " ++ QTab, Context), ok;
         false -> ok
     end.
 
@@ -1220,12 +1288,10 @@ drop_table(Name, Context) ->
 %% to add, modify or drop columns.  The 'id' (with type serial) column _must_ be defined
 %% when creating the table.
 -spec create_table(table_name(), list(), z:context()) -> ok.
-create_table(Table, Cols, Context) when is_atom(Table)->
-    create_table(atom_to_list(Table), Cols, Context);
 create_table(Table, Cols, Context) ->
-    assert_table_name(Table),
+    {_Schema, _Tab, QTab} = quoted_table_name(Table),
     ColsSQL = ensure_table_create_cols(Cols, []),
-    z_db:q("CREATE TABLE \""++Table++"\" ("++string:join(ColsSQL, ",")
+    z_db:q("CREATE TABLE "++QTab++" ("++string:join(ColsSQL, ",")
         ++ table_create_primary_key(Cols) ++ ")", Context),
     ok.
 
@@ -1261,15 +1327,46 @@ column_spec_unique(false) -> "";
 column_spec_unique(true) -> " UNIQUE".
 
 %% @doc Check if a name is a valid SQL table name. Crashes when invalid
--spec assert_table_name(string()) -> true.
-assert_table_name([H|T]) when (H >= $a andalso H =< $z) orelse H == $_ ->
-    assert_table_name1(T).
-assert_table_name1([]) ->
-    true;
-assert_table_name1([H|T]) when (H >= $a andalso H =< $z) orelse (H >= $0 andalso H =< $9) orelse H == $_ ->
+-spec assert_table_name( table_name() ) -> true.
+assert_table_name(A) when is_atom(A) ->
+    assert_table_name1(atom_to_list(A));
+assert_table_name([ C | _ ] = Table) when C =/= $. ->
+    assert_table_name1(Table).
+
+assert_table_name1([]) -> true;
+assert_table_name1([$_|T]) -> assert_table_name1(T);
+assert_table_name1([$.|T]) -> assert_table_name1(T);
+assert_table_name1([H|T]) when (H >= $a andalso H =< $z) ->
+    assert_table_name1(T);
+assert_table_name1([H|T]) when (H >= $0 andalso H =< $9) ->
     assert_table_name1(T).
 
+%% @doc Check if a name is a valid SQL database name. Crashes when invalid
+-spec assert_database_name( string() ) -> true.
+assert_database_name([]) -> true;
+assert_database_name([$.|T]) -> assert_database_name(T);
+assert_database_name([H|T]) when (H >= $a andalso H =< $z) ->
+    assert_database_name(T);
+assert_database_name([H|T]) when (H >= $0 andalso H =< $9) ->
+    assert_database_name(T).
 
+-spec quoted_table_name( table_name() ) -> {default | string(), string(), string()}.
+quoted_table_name(TableName) ->
+    assert_table_name(TableName),
+    case binary:split(z_convert:to_binary(TableName), <<".">>, [ global ]) of
+        [ Schema, Table ] ->
+            QTab = binary_to_list(
+                iolist_to_binary([
+                    $", Schema, $", $., $", Table, $"
+                ])),
+            {binary_to_list(Schema), binary_to_list(Table), QTab};
+        [ Table ] ->
+            QTab = binary_to_list(
+                iolist_to_binary([
+                    $", Table, $"
+                ])),
+            {default, binary_to_list(Table), QTab}
+    end.
 
 %% @doc Merge the contents of the props column into the result rows
 -spec merge_props([proplists:proplist() | map()]) -> list() | undefined.

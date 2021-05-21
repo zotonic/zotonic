@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2018 Marc Worrell
+%% @copyright 2016-2021 Marc Worrell
 %%
 %% @doc Middleware for cowmachine, extra Context based initializations.
 %% This starts the https request processing after the site and dispatch rule
 %% have been selected by the z_sites_dispatcher middleware.
 
-%% Copyright 2016-2018 Marc Worrell
+%% Copyright 2016-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,18 +37,33 @@
 execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_options := ControllerOpts } = Env) ->
     Req1 = maybe_overrule_req_headers(Req),
     Context = maps:get(cowmachine_context, Env),
+    exometer:update([zotonic, z_context:site(Context), http, requests], 1),
     Context1 = z_context:set(ControllerOpts, Context),
     Context2 = z_context:set_controller_module(Controller, Context1),
     Context3 = z_context:init_cowdata(Req1, Env, Context2),
     Context4 = z_context:set_security_headers(Context3),
     Options = #{
         on_welformed => fun(Ctx) ->
-            z_context:lager_md(Ctx),
-            Ctx1 = z_context:ensure_qs(Ctx),
+            erlang:erase(is_dbtrace),
+            Ctx0 = case z_context:get_cookie(<<"cotonic-sid">>, Ctx) of
+                undefined -> Ctx;
+                Sid ->
+                    z_context:set_session_id(Sid, Ctx)
+            end,
+            z_context:lager_md(Ctx0),
+            Ctx1 = z_context:ensure_qs(Ctx0),
             case z_context:get_q(<<"zotonic_http_accept">>, Ctx1) of
                 undefined -> Ctx1;
                 HttpAccept -> set_accept_context(HttpAccept, Ctx1)
             end
+        end,
+        on_handled => fun(Ctx) ->
+            z_context:set_req_metrics(#{
+                    user_id => z_acl:user(Ctx),
+                    language => z_context:language(Ctx),
+                    timezone => z_context:tz(Ctx)
+                }, Ctx),
+            Ctx
         end
     },
     cowmachine:request(Context4, Options).

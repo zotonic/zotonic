@@ -43,7 +43,10 @@
     map_topic_filter/2,
 
     origin_topic/1,
-    flatten_topic/1
+    flatten_topic/1,
+
+    is_client_alive/1,
+    whereis_client/1
 ]).
 
 -type topic() :: mqtt_session:topic().
@@ -239,3 +242,27 @@ flatten_topic(T) when is_binary(T) ->
 flatten_topic(T) when is_list(T) ->
     T1 = lists:map(fun z_convert:to_binary/1, T),
     iolist_to_binary( z_utils:join_defined($/, T1) ).
+
+
+%% @doc Check if the MQTT client for this request context is alive.
+-spec is_client_alive( z:context() ) -> boolean().
+is_client_alive(Context) ->
+    case z_context:client_id(Context) of
+        {error, _} ->
+            false;
+        {ok, ClientId} ->
+            case mqtt_sessions_registry:find_session(z_context:site(Context), ClientId) of
+                {ok, Pid} when is_pid(Pid) -> erlang:is_process_alive(Pid);
+                {error, _} -> false
+            end
+    end.
+
+%% @doc Find the Pid of the MQTT client process for this request context.
+-spec whereis_client( z:context() ) -> {ok, pid()} | {error, term()}.
+whereis_client(Context) ->
+    case z_context:client_id(Context) of
+        {error, _} = Error ->
+            Error;
+        {ok, ClientId} ->
+            mqtt_sessions_registry:find_session(z_context:site(Context), ClientId)
+    end.

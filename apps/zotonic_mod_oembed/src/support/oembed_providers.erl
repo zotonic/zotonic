@@ -82,7 +82,7 @@ list() ->
 
      #oembed_provider{
        url_re="^https?://(www\\.)?vimeo\\.com/.*",
-       endpoint_url="https://www.vimeo.com/api/oembed.json",
+       endpoint_url="https://vimeo.com/api/oembed.json",
        title="Vimeo"
      },
 
@@ -132,6 +132,12 @@ list() ->
        url_re="^https?://(www\\.)?slideshare\\.net/.+/.+",
        endpoint_url="http://www.slideshare.net/api/oembed/2",
        title="Slideshare"
+     },
+
+     #oembed_provider{
+       url_re="^https?://(www\\.)?soundcloud\\.com/.+/.+",
+       endpoint_url="https://soundcloud.com/oembed",
+       title="Soundcloud"
      }
 
     ].

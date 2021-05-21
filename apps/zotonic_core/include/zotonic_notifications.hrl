@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2020 Marc Worrell
+%% @copyright 2011-2021 Marc Worrell
 %% @doc Notifications used in Zotonic core
 
-%% Copyright 2011-2020 Marc Worrell
+%% Copyright 2011-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -49,6 +49,17 @@
 %% Type: first
 -record(cors_headers, { headers :: list( {binary(), binary()} ) }).
 
+
+%% @doc Access log event for http. Called from the z_stats.
+%% Type: notify_sync
+-record(http_log_access, {
+    timestamp :: erlang:timestamp(),
+    status :: undefined | non_neg_integer(),
+    status_category :: 'xxx' | '1xx' | '2xx' | '3xx' | '4xx' | '5xx',
+    method :: binary(),
+    metrics :: map()
+}).
+
 % 'module_ready' - Sent when modules have changed, z_module_indexer reindexes all modules' templates, actions etc.
 
 %% @doc A module has been activated and started.
@@ -78,7 +89,7 @@
 %% Type: first
 %% Return: a URL or ``undefined``
 -record(logon_ready_page, {
-    request_page = [] :: string()
+    request_page = <<>> :: binary() | undefined
 }).
 
 
@@ -88,6 +99,16 @@
 -record(logon_submit, {
     payload = #{} :: map()
 }).
+
+%% @doc Check for logon options, called if logon_submit returns `undefined`.
+%% This is used to fetch external (or local) authentication links for an
+%% username.
+%% Type: foldl
+%% Return:: ``map()``
+-record(logon_options, {
+    payload = #{} :: map()
+}).
+
 
 %% @doc Request to send a verification to the user. Return ok or an error
 %% Type: first
@@ -104,11 +125,11 @@
 %% @doc Handle a signup of a user, return the follow on page for after the signup.
 %% Type: first
 %% Return ``{ok, Url}``
-%% 'props' is a proplist with properties for the person resource (email, name, etc)
+%% 'props' is a map with properties for the person resource (email, name, etc)
 %% 'signup_props' is a proplist with 'identity' definitions and optional follow on url 'ready_page'
 %% An identity definition is {Kind, Identifier, IsUnique, IsVerified}
 -record(signup_url, {
-    props = [] :: list(),
+    props = #{} :: map(),
     signup_props = [] :: list()
 }).
 
@@ -116,7 +137,7 @@
 %% Returns {ok, UserId} or {error, Reason}
 -record(signup, {
     id :: m_rsc:resource_id() | undefined,
-    props = [] :: list(),
+    props = #{} :: map(),
     signup_props = [] :: list(),
     request_confirm = false :: boolean()
 }).
@@ -134,7 +155,7 @@
 %% Type: foldl
 %% Return: ``{ok, Props, SignupProps}`` or ``{error, Reason}``
 -record(signup_check, {
-    props = [] :: list(),
+    props = #{} :: map(),
     signup_props = [] :: list()
 }).
 
@@ -143,7 +164,7 @@
 -record(signup_done, {
     id :: m_rsc:resource(),
     is_verified :: boolean(),
-    props :: list(),
+    props :: map(),
     signup_props :: list()
 }).
 
@@ -163,15 +184,22 @@
 %% @doc Notification to signal an inserted comment.
 %% 'comment_id' is the id of the inserted comment, 'id' is the id of the resource commented on.
 %% Type: notify
--record(comment_insert, {comment_id, id}).
+-record(comment_insert, {
+    comment_id :: integer(),
+    id :: m_rsc:resource_id()
+}).
 
 %% @doc Notify that the session's language has been changed
 %% Type: notify
--record(language, {language}).
+-record(language, {
+    language :: atom()
+}).
 
 %% @doc Set the language of the context to a user's prefered language
 %% Type: first
--record(set_user_language, {id}).
+-record(set_user_language, {
+    id :: m_rsc:resource_id()
+}).
 
 %% @doc Make a generated URL absolute, optionally called after url_rewrite by z_dispatcher
 %% Type: first
@@ -198,10 +226,15 @@
 
 %% @doc Used in the admin to fetch the possible blocks for display
 %% Type: foldl
--record(admin_edit_blocks, {id}).
+-record(admin_edit_blocks, {
+    id :: m_rsc:resource_id()
+}).
 
 %% @doc Used in the admin to process a submitted resource form
--record(admin_rscform, {id, is_a}).
+-record(admin_rscform, {
+    id :: m_rsc:resource_id(),
+    is_a :: list( atom() )
+}).
 
 %% @doc Used for fetching the menu in the admin.
 %% Type: foldl
@@ -218,7 +251,9 @@
 %%      Used when outputting a rendered HTML tree.
 %%      Folded accumulator is: { MixedHtml, Context }
 %% Type: foldl
--record(output_html, { html :: term() }).
+-record(output_html, {
+    html :: term()
+}).
 
 
 %% @doc An activity in Zotonic. When this is handled as a notification then return a list
@@ -386,11 +421,10 @@
 %% @doc An updated resource is about to be persisted.
 %% Observe this notification to change the resource properties before they are
 %% persisted.
-%% The props are the resource's props _before_ the update.
-%% The folded value is {IsChanged, UpdateProps} for the update itself.
-%% Set IsChanged to true if you modify the UpdateProps.
+%% The props are the resource's props _before_ the update, but _after_ filtering
+%% and sanitization.
 %% Type: foldr
-%% Return: ``{true, ChangedProps}`` or ``{false, Props}``
+%% Return: ``{ok, ChangedProps}`` or ``{error, term()}``
 -record(rsc_update, {
     action :: insert | update,
     id :: m_rsc:resource_id(),
@@ -499,13 +533,6 @@
     prop :: binary()
 }).
 
-%% @doc Filter the properties of a resource update, this is done on the raw data
-%% The fold argument is a property map
-%% Type: foldr
--record(acl_rsc_update_check, {
-    id :: m_rsc:resource_id() | 'insert_rsc'
-}).
-
 %% @doc Set the context to a typical authenticated user. Used by m_acl.erl
 %% Type: first
 %% Return: authenticated ``#context{}`` or ``undefined``
@@ -533,11 +560,15 @@
 %% @doc Confirm a user id.
 %% Type: foldl
 %% Return: ``z:context()``
--record(auth_confirm, {}).
+-record(auth_confirm, {
+    id :: m_rsc:resource_id()
+}).
 
 %% @doc A user id has been confirmed.
 %% Type: notify
--record(auth_confirm_done, {}).
+-record(auth_confirm_done, {
+    id :: m_rsc:resource_id()
+}).
 
 %% @doc First for logon of user with username, check for ratelimit, blocks etc.
 %%      Returns: 'undefined' | ok | {error, Reason}
@@ -588,8 +619,8 @@
 -record(auth_validated, {
     service :: atom(),
     service_uid :: binary(),
-    service_props = [] :: list(),
-    props = [] :: list({atom(), any()}),
+    service_props = #{} :: map(),
+    props = #{} :: m_rsc:props(),
     is_connect = false :: boolean(),
     is_signup_confirm = false :: boolean()
 }).
@@ -600,6 +631,24 @@
 %% Return: ``map()``
 -record(auth_options_update, {
         request_options = #{} :: map()
+    }).
+
+%% @doc Send a request to the client to login an user. The zotonic.auth.worker.js will
+%%      send a request to controller_authentication to exchange the one time token with
+%%      a z.auth cookie for the given user. The client will redirect to the Url.
+%% Type: first
+%% Return: ``ok | {error, term()}``
+-record(auth_client_logon_user, {
+        user_id :: m_rsc:resource_id(),
+        url = <<"#reload">> :: binary() | undefined
+    }).
+
+%% @doc Send a request to the client to switch users. The zotonic.auth.worker.js will
+%%      send a request to controller_authentication to perform the switch.
+%% Type: first
+%% Return: ``ok | {error, term()}``
+-record(auth_client_switch_user, {
+        user_id :: m_rsc:resource_id()
     }).
 
 %% @doc Called during different moments of the request.
@@ -617,7 +666,7 @@
     }).
 
 %% @doc Refresh the context or request process for the given request or action
-%%      Called for every request that is not anoymous and before every MQTT relay from
+%%      Called for every request that is not anonymous and before every MQTT relay from
 %%      the client.  Example: mod_development uses this to set flags in the process
 %%      dictionary.
 %% Type: foldl
@@ -627,6 +676,12 @@
         payload = undefined :: undefined | term()
     }).
 
+%% @doc Called just before validation of all query arguments by z_validation.
+%%      This is the moment to filter any illegal arguments or change query
+%%      arguments.
+%% Type: foldl
+%% Return: ``{ok, list( {binary(), z:qvalue()} )} | {error, term()}``
+-record(validate_query_args, {}).
 
 %% @doc Check if a user is enabled. Enabled users are allowed to log in.
 %% Type: first
@@ -750,10 +805,11 @@
 
 %% @doc Notification that a medium file has been uploaded.
 %% This is the moment to change properties, modify the file etc.
+%% The folded accumulator is the map with updated medium properties.
 %% Type: foldl
-%% Return: modified ``#media_upload_props{}``
+%% Return: modified medium properties map
 -record(media_upload_props, {
-    id :: integer() | 'insert_rsc',
+    id :: m_rsc:resource_id() | insert_rsc,
     mime :: binary(),
     archive_file :: file:filename_all() | undefined,
     options :: list()
@@ -761,10 +817,11 @@
 
 %% @doc Notification that a medium file has been uploaded.
 %% This is the moment to change resource properties, modify the file etc.
+%% The folded accumulator is the map with updated resource properties.
 %% Type: foldl
-%% Return: modified ``#media_upload_rsc_props{}``
+%% Return: modified resource properties map
 -record(media_upload_rsc_props, {
-    id :: integer() | 'insert_rsc',
+    id :: m_rsc:resource_id() | insert_rsc,
     mime :: binary(),
     archive_file,
     options :: list(),
@@ -779,14 +836,21 @@
 
 %% @doc Media update done notification. action is 'insert', 'update' or 'delete'
 %% Type: notify
--record(media_update_done, {action, id, pre_is_a, post_is_a, pre_props, post_props}).
+-record(media_update_done, {
+    action :: insert | update | delete,
+    id :: m_rsc:resource_id(),
+    pre_is_a :: list( atom() ),
+    post_is_a :: list( atom() ),
+    pre_props :: map() | undefined,
+    post_props :: map() | undefined
+}).
 
 
 %% @doc Send a notification that the resource 'id' is added to the query query_id.
 %% Type: notify
 -record(rsc_query_item, {
-    query_id,
-    match_id
+    query_id :: m_rsc:resource_id(),
+    match_id :: m_rsc:resource_id()
 }).
 
 
@@ -817,7 +881,10 @@
 %% @doc Find an import definition for a CSV file by checking the filename of the to be imported file.
 %% Type: first
 %% Return: ``#import_csv_definition{}`` or ``undefined`` (in which case the column headers are used as property names)
--record(import_csv_definition, {basename, filename}).
+-record(import_csv_definition, {
+    basename :: binary(),
+    filename :: file:filename_all()
+}).
 
 
 %% @doc Handle an uploaded file which is part of a multiple file upload from a user-agent.
@@ -895,16 +962,6 @@
 %% @doc Delete a value from the typed key/value store
 %% Type: notify
 -record(tkvstore_delete, {type, key}).
-
-%% @doc MQTT acl check, called via the normal acl notifications.
-%% Actions for these checks: subscribe, publish
-%% Type: first
--record(acl_mqtt, {
-    topic :: list( binary() ),
-    is_wildcard :: boolean(),
-    packet :: mqtt_packet_map:mqtt_packet()
-}).
-
 
 %% @doc Internal message of mod_development. Start a stream with debug information to the user agent.
 %% 'target' is the id of the HTML element where the information is inserted.

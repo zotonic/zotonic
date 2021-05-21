@@ -34,6 +34,13 @@ m_get([ <<"new_user_category">> | Rest ], _Msg, Context) ->
         C -> C
     end,
     {ok, {Cat, Rest}};
+m_get([ <<"new_user_contentgroup">> | Rest ], _Msg, Context) ->
+    CG = case m_config:get_value(mod_admin_identity, new_user_contentgroup, Context) of
+        undefined -> default_content_group;
+        <<>> -> default_content_group;
+        C -> C
+    end,
+    {ok, {CG, Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:debug("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.

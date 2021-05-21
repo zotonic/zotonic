@@ -37,7 +37,8 @@ start_link(Options) ->
         Options),
     z_config:init_app_env(),
     zotonic_core:setup(),
-    z_stats:init(),
+    zotonic_filewatcher_sup:start_watchers(),
+    z_stats:init_system(),
     z_tempfile_cleanup:start(),
     ensure_job_queues(),
     ensure_sidejobs(),
@@ -50,11 +51,21 @@ start_link(Options) ->
 init([]) ->
     spawn_delayed_status(),
     z_filehandler:start_observers(),
+    LogBufferSize = z_config:get(log_http_buffer_size),
     Processes = [
-        % Access Logger
-        {z_access_syslog,
-            {z_access_syslog, start_link, []},
-            permanent, 5000, worker, [z_access_syslog, z_buffered_worker]},
+        % Ring buffer for http request logs
+        {ringbuffer_normal,
+            {ringbuffer_process, start_link, [ zotonic_http_metrics_normal, LogBufferSize ]},
+            permanent, 5000, worker, [ ringbuffer_process ]},
+
+        {ringbuffer_prio,
+            {ringbuffer_process, start_link, [ zotonic_http_metrics_prio, LogBufferSize ]},
+            permanent, 5000, worker, [ ringbuffer_process ]},
+
+        % Http request metrics handling. Accepts priority list of buffers to consume.
+        {z_stats,
+            {z_stats, start_link, [ [ zotonic_http_metrics_prio, zotonic_http_metrics_normal ] ]},
+            permanent, 5000, worker, [z_stats]},
 
         % SMTP gen_server for sending emails
         {z_email_server,
@@ -152,7 +163,6 @@ ensure_job_queue(Name, Options) ->
 
 %% @doc The supervisor for websocket requests and other transient processes.
 ensure_sidejobs() ->
-    sidejob:new_resource(zotonic_sessionjobs, sidejob_supervisor, z_config:get(sessionjobs_limit)),
     sidejob:new_resource(zotonic_sidejobs, sidejob_supervisor, z_config:get(sidejobs_limit)).
 
 

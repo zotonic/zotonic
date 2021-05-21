@@ -202,11 +202,15 @@ insert(SubjectId, Pred, ObjectId, Opts, Context)
     {ok, PredId} = m_predicate:name_to_id(Pred, Context),
     insert1(SubjectId, PredId, ObjectId, Opts, Context);
 insert(SubjectId, Pred, Object, Opts, Context) when is_integer(SubjectId) ->
-    {ok, ObjectId} = m_rsc:name_to_id(Object, Context),
-    insert(SubjectId, Pred, ObjectId, Opts, Context);
+    case m_rsc:rid(Object, Context) of
+        undefined -> {error, object};
+        Id -> insert(SubjectId, Pred, Id, Opts, Context)
+    end;
 insert(Subject, Pred, Object, Opts, Context) ->
-    {ok, SubjectId} = m_rsc:name_to_id(Subject, Context),
-    insert(SubjectId, Pred, Object, Opts, Context).
+    case m_rsc:rid(Subject, Context) of
+        undefined -> {error, subject};
+        Id -> insert(Id, Pred, Object, Opts, Context)
+    end.
 
 insert1(SubjectId, PredId, ObjectId, Opts, Context) ->
     case z_db:q1("select id
@@ -294,39 +298,57 @@ delete(Id, Context) ->
             z_db:transaction(F, Context),
             z_edge_log_server:check(Context),
             ok;
-        AclError ->
-            {error, {acl, AclError}}
+        false ->
+            {error, eacces}
     end.
 
 %% @doc Delete an edge by subject, object and predicate id
--spec delete(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), any()) ->
-    ok | {error, atom()}.
+-spec delete(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), z:context()) -> ok | {error, atom()}.
 delete(SubjectId, Pred, ObjectId, Context) ->
     delete(SubjectId, Pred, ObjectId, [], Context).
 
-delete(SubjectId, Pred, ObjectId, Options, Context) ->
-    {ok, PredId} = m_predicate:name_to_id(Pred, Context),
-    {ok, PredName} = m_predicate:id_to_name(PredId, Context),
-    case z_acl:is_allowed(
-        delete,
-        #acl_edge{subject_id = SubjectId, predicate = PredName, object_id = ObjectId},
-        Context
-    ) of
-        true ->
-            F = fun(Ctx) ->
-                z_db:q(
-                    "delete from edge where subject_id = $1 and object_id = $2 and predicate_id = $3",
-                    [SubjectId, ObjectId, PredId],
-                    Ctx
-                )
-            end,
+-spec delete(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), list(), z:context()) -> ok | {error, atom()}.
+delete(SubjectId, Pred, ObjectId, _Options, Context) ->
+    case to_predicate(Pred, Context) of
+        {ok, PredId} ->
+            {ok, PredName} = m_predicate:id_to_name(PredId, Context),
+            case z_acl:is_allowed(
+                delete,
+                #acl_edge{ subject_id = SubjectId, predicate = PredName, object_id = ObjectId },
+                Context
+            ) of
+                true ->
+                    F = fun(Ctx) ->
+                        z_db:q(
+                            "delete from edge where subject_id = $1 and object_id = $2 and predicate_id = $3",
+                            [SubjectId, ObjectId, PredId],
+                            Ctx
+                        )
+                    end,
 
-            z_db:transaction(F, Context),
-            z_edge_log_server:check(Context),
-            ok;
-        AclError ->
-            {error, {acl, AclError}}
+                    z_db:transaction(F, Context),
+                    z_edge_log_server:check(Context),
+                    ok;
+                false ->
+                    {error, eacces}
+            end;
+        {error, _} = Error ->
+            Error
     end.
+
+to_predicate(Id, Context) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, enoent};
+        RId ->
+            case m_rsc:is_a(RId, predicate, Context) of
+                true ->
+                    {ok, RId};
+                false ->
+                    {error, predicate}
+            end
+    end.
+
 
 
 %% @doc Delete multiple edges between the subject and the object
@@ -630,25 +652,29 @@ subject(Id, Pred, N, Context) ->
 
 %% @doc Return all object ids of an id with a certain predicate. The order of the ids is deterministic.
 %% @spec objects(Id, Pred, Context) -> List
--spec objects(m_rsc:resource(), atom() | pos_integer(), #context{}) -> list().
+-spec objects(m_rsc:resource(), atom() | pos_integer(), z:context()) -> list( m_rsc:resource_id() ).
 objects(_Id, undefined, _Context) ->
     [];
 objects(Id, Pred, Context) when is_integer(Pred) ->
-    case z_depcache:get({objects, Pred, Id}, Context) of
-        {ok, Objects} ->
-            Objects;
+    case m_rsc:rid(Id, Context) of
         undefined ->
-            {ok, SubjectId} = m_rsc:name_to_id(Id, Context),
-            Ids = z_db:q(
-                "select object_id from edge "
-                "where subject_id = $1 and predicate_id = $2 "
-                "order by seq,id",
-                [SubjectId, Pred],
-                Context
-            ),
-            Objects = [ObjId || {ObjId} <- Ids],
-            z_depcache:set({objects, Pred, Id}, Objects, ?DAY, [Id], Context),
-            Objects
+            [];
+        SubjectId ->
+            case z_depcache:get({objects, Pred, SubjectId}, Context) of
+                {ok, Objects} ->
+                    Objects;
+                undefined ->
+                    Ids = z_db:q(
+                        "select object_id from edge "
+                        "where subject_id = $1 and predicate_id = $2 "
+                        "order by seq,id",
+                        [SubjectId, Pred],
+                        Context
+                    ),
+                    Objects = [ObjId || {ObjId} <- Ids],
+                    z_depcache:set({objects, Pred, SubjectId}, Objects, ?DAY, [SubjectId], Context),
+                    Objects
+            end
     end;
 objects(Id, Pred, Context) ->
     case m_predicate:name_to_id(Pred, Context) of
@@ -663,20 +689,25 @@ objects(Id, Pred, Context) ->
 subjects(_Id, undefined, _Context) ->
     [];
 subjects(Id, Pred, Context) when is_integer(Pred) ->
-    case z_depcache:get({subjects, Pred, Id}, Context) of
-        {ok, Objects} ->
-            Objects;
+    case m_rsc:rid(Id, Context) of
         undefined ->
-            Ids = z_db:q(
-                "select subject_id from edge "
-                "where object_id = $1 and predicate_id = $2 "
-                "order by id",
-                [Id, Pred],
-                Context
-            ),
-            Subjects = [SubjId || {SubjId} <- Ids],
-            z_depcache:set({subjects, Pred, Id}, Subjects, ?HOUR, [Id], Context),
-            Subjects
+            [];
+        ObjectId ->
+            case z_depcache:get({subjects, Pred, ObjectId}, Context) of
+                {ok, Objects} ->
+                    Objects;
+                undefined ->
+                    Ids = z_db:q(
+                        "select subject_id from edge "
+                        "where object_id = $1 and predicate_id = $2 "
+                        "order by id",
+                        [ObjectId, Pred],
+                        Context
+                    ),
+                    Subjects = [SubjId || {SubjId} <- Ids],
+                    z_depcache:set({subjects, Pred, ObjectId}, Subjects, ?HOUR, [ObjectId], Context),
+                    Subjects
+            end
     end;
 subjects(Id, Pred, Context) ->
     case m_predicate:name_to_id(Pred, Context) of
@@ -756,7 +787,7 @@ subject_edge_ids(Id, Predicate, Context) ->
 
 
 %% @doc Return all object ids with edge properties
--spec object_edge_props(integer(), binary()|list()|atom()|integer(), #context{}) -> list().
+-spec object_edge_props(m_rsc:resource_id(), binary()|string()|atom()|integer(), z:context()) -> list().
 object_edge_props(Id, Predicate, Context) ->
     case m_predicate:name_to_id(Predicate, Context) of
         {ok, PredId} ->
@@ -776,7 +807,7 @@ object_edge_props(Id, Predicate, Context) ->
     end.
 
 %% @doc Return all subject ids with the edge properties
--spec subject_edge_props(integer(), binary()|list()|atom()|integer(), #context{}) -> list().
+-spec subject_edge_props(m_rsc:resource_id(), binary()|string()|atom()|integer(), z:context()) -> list().
 subject_edge_props(Id, Predicate, Context) ->
     case m_predicate:name_to_id(Predicate, Context) of
         {ok, PredId} ->
@@ -798,7 +829,7 @@ subject_edge_props(Id, Predicate, Context) ->
 
 %% @doc Reorder the edges so that the mentioned ids are in front, in the listed order.
 %% @spec update_sequence(Id, Predicate, ObjectIds, Context) -> ok | {error, Reason}
-update_sequence(Id, Pred, ObjectIds, Context) ->
+update_sequence(Id, Pred, ObjectIds, Context) when is_integer(Id) ->
     case z_acl:rsc_editable(Id, Context) of
         true ->
             {ok, PredId} = m_predicate:name_to_id(Pred, Context),

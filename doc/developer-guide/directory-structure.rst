@@ -14,7 +14,7 @@ repository’s `apps/` directory::
             zotonic_site_status
             zotonic_site_testsandbox
             ...
-        apps/user
+        apps_user
             mysite
             ...
         bin/

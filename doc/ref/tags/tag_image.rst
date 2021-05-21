@@ -151,14 +151,14 @@ Make the image greyscale.
 lossless
 ^^^^^^^^
 
-Controls whether resized image should become JPG (``lossless=`false```) or
-PNG images (``lossless=`true```). When set to ``auto``, PNG images will stay
+Controls whether resized image should become JPG (``lossless=false``) or
+PNG images (``lossless=true``). When set to ``auto``, PNG images will stay
 PNG images when resized. This protects PNG graphics them from being encoded as
 JPEGs and becoming blurry. Defaults to ``false``. Examples::
 
-    lossless=`true`
+    lossless=true
     lossless=`auto`
-    lossless=`false`
+    lossless=false
 
 mono
 ^^^^

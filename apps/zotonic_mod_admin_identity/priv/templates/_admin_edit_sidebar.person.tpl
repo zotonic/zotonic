@@ -2,6 +2,8 @@
 
 {# editing rsc username and password #}
 
+{% block widget_id %}username-password{% endblock %}
+
 {% block widget_title %}
 {_ Username / password _}
 <div class="widget-header-tools">

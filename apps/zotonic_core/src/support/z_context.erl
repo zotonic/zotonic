@@ -22,6 +22,7 @@
 -export([
     new/1,
     new/2,
+    new/3,
 
     new_tests/0,
 
@@ -78,6 +79,7 @@
     get_q_all/2,
     get_q_all_noz/1,
     get_q_validated/2,
+    set_q_all/2,
 
     q_upload_keepalive/2,
 
@@ -88,8 +90,10 @@
 
     client_id/1,
     client_topic/1,
+    set_client_context/2,
 
     session_id/1,
+    set_session_id/2,
 
     set/3,
     set/2,
@@ -112,6 +116,8 @@
 
     get_req_path/1,
 
+    set_req_metrics/2,
+
     set_nocache_headers/1,
     set_noindex_header/1,
     set_noindex_header/2,
@@ -126,6 +132,7 @@
 
     set_state_cookie/2,
     get_state_cookie/1,
+    state_cookie_secret/1,
     reset_state_cookie/1,
 
     cookie_domain/1
@@ -170,6 +177,14 @@ new(Site, Lang) when is_atom(Site), is_atom(Lang) ->
     Context#context{
         language = [ Lang ],
         tz = tz_config(Context)
+    }.
+
+-spec new( Site :: atom(), Language :: atom(), Timezone :: binary() ) -> z:context().
+new(Site, Lang, Timezone) when is_atom(Site), is_atom(Lang), is_binary(Timezone) ->
+    Context = set_server_names(#context{ site = Site }),
+    Context#context{
+        language = [ Lang ],
+        tz = Timezone
     }.
 
 
@@ -296,9 +311,10 @@ is_request(#context{}) -> true.
 %% @doc Check if the current context has an active MQTT session.
 %%      This is never true for the first request.
 -spec is_session( z:context() ) -> boolean().
+is_session(#context{ client_topic = undefined }) ->
+    false;
 is_session(#context{ client_topic = ClientTopic }) ->
-    is_binary(ClientTopic).
-
+    is_list(ClientTopic).
 
 %% @doc Minimal prune, for ensuring that the context can safely used in two processes
 -spec prune_for_spawn( z:context() ) -> z:context().
@@ -465,14 +481,6 @@ depickle_site({pickled_context, Site, _UserId, _Language, _Tz, _VisitorId}) ->
     Site.
 
 
-% %% @doc After ensuring a session, try to log on from the user-id stored in the session
-% maybe_logon_from_session(#context{user_id=undefined} = Context) ->
-%     Context1 = z_auth:logon_from_session(Context),
-%     Context2 = z_notifier:foldl(#session_context{}, Context1, Context1),
-%     set_nocache_headers(Context2);
-% maybe_logon_from_session(Context) ->
-%     Context.
-
 -spec output( MixedHtml::term(), z:context() ) -> {iolist(), z:context()}.
 output(MixedHtml, Context) ->
     z_output_html:output(MixedHtml, Context).
@@ -548,7 +556,7 @@ set_render_state(RS, Context) ->
 
 %% @doc Set the value of a request parameter argument
 %%      Always filter the #upload{} arguments to prevent upload of non-temp files.
--spec set_q(binary() | string(), any(), z:context()) -> z:context().
+-spec set_q(binary()|string()|atom(), z:qvalue(), z:context()) -> z:context().
 set_q(Key, #upload{ tmpfile = TmpFile } = Upload, Context) when TmpFile =/= undefined ->
     set_q(Key, Upload#upload{ tmpfile = undefined }, Context);
 set_q(Key, Value, Context) when is_binary(Key) ->
@@ -559,7 +567,7 @@ set_q(Key, Value, Context) ->
     set_q(z_convert:to_binary(Key), Value, Context).
 
 %% @doc Set the value of multiple request parameter arguments
--spec set_q( list(), z:context() ) -> z:context().
+-spec set_q( list( {binary()|string()|atom(), z:qvalue()} ) | map(), z:context() ) -> z:context().
 set_q(KVs, Context) when is_map(KVs) ->
     maps:fold(
         fun(K, V, Ctx) ->
@@ -577,7 +585,7 @@ set_q(KVs, Context) when is_list(KVs) ->
 
 %% @doc Add the value of a request parameter argument
 %%      Always filter the #upload{} arguments to prevent upload of non-temp files.
--spec add_q(binary() | string(), any(), z:context()) -> z:context().
+-spec add_q(binary()|string()|atom(), z:qvalue(), z:context()) -> z:context().
 add_q(Key, #upload{ tmpfile = TmpFile } = Upload, Context) when TmpFile =/= undefined ->
     add_q(Key, Upload#upload{ tmpfile = undefined }, Context);
 add_q(Key, Value, Context) when is_binary(Key) ->
@@ -598,7 +606,7 @@ add_q(KVs, Context) ->
 
 %% @doc Get a request parameter, either from the query string or the post body.  Post body has precedence over the query string.
 %%      Note that this can also be populated from a JSON MQTT call, and as such contain arbitrary data.
--spec get_q(string()|atom()|binary()|list(), z:context()) -> undefined | binary() | string() | #upload{} | list() | term().
+-spec get_q(string()|atom()|binary()|list(), z:context()) -> undefined | z:qvalue().
 get_q([Key|_] = Keys, Context) when is_list(Key); is_atom(Key); is_binary(Key) ->
     lists:foldl(fun(K, Acc) ->
                     case get_q(K, Context) of
@@ -621,7 +629,7 @@ get_q(Key, #context{ props = Props }) ->
 
 
 %% @doc Get a request parameter, either from the query string or the post body.  Post body has precedence over the query string.
--spec get_q(binary()|string()|atom(), z:context(), term()) -> binary() | string() | #upload{} | term().
+-spec get_q(binary()|string()|atom(), z:context(), term()) -> z:qvalue().
 get_q(Key, Context, Default) when is_list(Key) ->
     case get_q(list_to_binary(Key), Context, Default) of
         Value when is_binary(Value) -> binary_to_list(Value);
@@ -635,16 +643,20 @@ get_q(Key, #context{ props = Props }, Default) ->
 
 
 %% @doc Get all parameters.
--spec get_q_all(z:context()) -> list({binary(), binary()|#upload{}}).
+-spec get_q_all(z:context()) -> list({binary(), z:qvalue()}).
 get_q_all(#context{ props = Props }) ->
     case maps:find(q, Props) of
         {ok, Qs} -> Qs;
         error -> []
     end.
 
+%% @doc Replace all parameters.
+-spec set_q_all(list({binary(), z:qvalue()}), z:context()) -> z:context().
+set_q_all(QArgs, #context{ props = Props } = Context) when is_list(QArgs) ->
+    Context#context{ props = Props#{ q => QArgs }}.
 
 %% @doc Get the all the parameters with the same name, returns the empty list when non found.
--spec get_q_all(string()|atom()|binary(), z:context()) -> list().
+-spec get_q_all(string()|atom()|binary(), z:context()) -> list( z:qvalue() ).
 get_q_all(Key, Context) when is_list(Key) ->
     Values = get_q_all(z_convert:to_binary(Key), Context),
     [
@@ -662,7 +674,7 @@ get_q_all(Key, #context{ props = Props }) ->
 
 
 %% @doc Get all query/post args, filter the zotonic internal args.
--spec get_q_all_noz(z:context()) -> list({binary(), term()}).
+-spec get_q_all_noz(z:context()) -> list({binary(), z:qvalue()}).
 get_q_all_noz(Context) ->
     lists:filter(fun({X,_}) -> not is_zotonic_arg(X) end, z_context:get_q_all(Context)).
 
@@ -671,10 +683,13 @@ is_zotonic_arg(<<"zotonic_site">>) -> true;
 is_zotonic_arg(<<"zotonic_dispatch">>) -> true;
 is_zotonic_arg(<<"zotonic_dispatch_path">>) -> true;
 is_zotonic_arg(<<"zotonic_dispatch_path_rewrite">>) -> true;
+is_zotonic_arg(<<"zotonic_ticket">>) -> true;
 is_zotonic_arg(<<"zotonic_http_", _/binary>>) -> true;
 is_zotonic_arg(<<"zotonic_topic_", _/binary>>) -> true;
 is_zotonic_arg(<<"postback">>) -> true;
 is_zotonic_arg(<<"triggervalue">>) -> true;
+is_zotonic_arg(<<"z_submitter">>) -> true;
+is_zotonic_arg(<<"z_postback">>) -> true;
 is_zotonic_arg(<<"z_trigger_id">>) -> true;
 is_zotonic_arg(<<"z_target_id">>) -> true;
 is_zotonic_arg(<<"z_delegate">>) -> true;
@@ -685,12 +700,12 @@ is_zotonic_arg(<<"z_pageid">>) -> true;
 is_zotonic_arg(<<"z_v">>) -> true;
 is_zotonic_arg(<<"z_msg">>) -> true;
 is_zotonic_arg(<<"z_comet">>) -> true;
-is_zotonic_arg(<<"z_submitter">>) -> true;
+is_zotonic_arg(<<"z_postback_data">>) -> true;
 is_zotonic_arg(_) -> false.
 
 %% @doc Fetch a query parameter and perform the validation connected to the parameter. An exception {not_validated, Key}
 %%      is thrown when there was no validator, when the validator is invalid or when the validation failed.
--spec get_q_validated(string()|atom()|binary(), z:context()) -> string() | term() | undefined.
+-spec get_q_validated(string()|atom()|binary(), z:context()) -> z:qvalue() | undefined.
 get_q_validated([Key|_] = Keys, Context) when is_list(Key); is_atom(Key) ->
     lists:foldl(fun (K, Acc) ->
                     case get_q_validated(K, Context) of
@@ -770,26 +785,63 @@ lager_md(MetaData, #context{} = Context) when is_list(MetaData) ->
 
 
 %% @doc Return the current client id (if any)
--spec client_id( z:context() ) -> binary() | undefined.
-client_id(#context{ client_id = ClientId }) ->
-    ClientId.
+-spec client_id( z:context() ) -> {ok, binary()} | {error, no_client}.
+client_id(#context{ client_id = ClientId }) when is_binary(ClientId) ->
+    {ok, ClientId};
+client_id(#context{}) ->
+    {error, no_client}.
 
 %% @doc Return the current client bridge topic (if any)
--spec client_topic( z:context() ) -> mqtt_sessions:topic() | undefined.
-client_topic(#context{ client_topic = ClientTopic }) ->
-    ClientTopic.
+-spec client_topic( z:context() ) -> {ok, mqtt_sessions:topic()} | {error, no_client}.
+client_topic(#context{ client_topic = ClientTopic, client_id = ClientId }) when is_binary(ClientId), is_binary(ClientTopic) ->
+    {ok, mqtt_packet_map_topic:normalize_topic(ClientTopic)};
+client_topic(#context{ client_topic = ClientTopic, client_id = ClientId }) when is_binary(ClientId), is_list(ClientTopic) ->
+    {ok, ClientTopic};
+client_topic(#context{}) ->
+    {error, no_client}.
+
+%% @doc Merge a context with client information into a request context.
+%% This is used to merge a client context obtained from a MQTT ticket into
+%% the contex of an out of band MQTT post.
+%%
+%% Access control, timezone, language and client information is copied over
+%% from the client context to the request context.
+-spec set_client_context( ClientContext::z:context(), ReqContext::z:context() ) -> z:context().
+set_client_context(ClientContext, RequestContext) ->
+    Ctx = RequestContext#context{
+        client_id = ClientContext#context.client_id,
+        client_topic = ClientContext#context.client_topic,
+        routing_id = ClientContext#context.routing_id,
+        user_id = ClientContext#context.user_id,
+        acl = ClientContext#context.acl,
+        acl_is_read_only = ClientContext#context.acl_is_read_only,
+        tz = ClientContext#context.tz,
+        language = ClientContext#context.language
+    },
+    case maps:find(auth_options, ClientContext#context.props) of
+        {ok, AuthOptions} ->
+            z_context:set(auth_options, AuthOptions, Ctx);
+        error ->
+            Ctx
+    end.
 
 %% @doc Return the unique random session id for the current client auth.
 %%      This session_id is re-assigned when the authentication of a client
 %%      changes.
 -spec session_id( z:context() ) -> {ok, binary()} | {error, no_session}.
 session_id(Context) ->
-    case get(auth_options, Context) of
-        #{ sid := Sid } ->
+    case get(session_id, Context) of
+        Sid when is_binary(Sid), Sid =/= <<>> ->
             {ok, Sid};
         _ ->
             {error, no_session}
     end.
+
+%% @doc Set the cotonic session id. Mostly used when on a request with
+%%      a cotonic session id in the cookie.
+-spec set_session_id( binary(), z:context() ) -> z:context().
+set_session_id(Sid, Context) ->
+    set(session_id, Sid, Context).
 
 %% @doc Set the value of the context variable Key to Value
 -spec set( atom(), term(), z:context() ) -> z:context().
@@ -924,6 +976,8 @@ set_tz(true, Context) ->
     Context#context{ tz = <<"UTC">> };
 set_tz(1, Context) ->
     Context#context{ tz = <<"UTC">> };
+set_tz(0, Context) ->
+    Context;
 set_tz(Tz, Context) ->
     lager:error("Unknown timezone ~p", [Tz]),
     Context.
@@ -954,6 +1008,13 @@ get_req_header(Header, #context{cowreq=Req} = Context) when is_map(Req) ->
 get_req_path(#context{cowreq=Req} = Context) when is_map(Req) ->
     cowmachine_req:raw_path(Context).
 
+%% @doc Add metrics data to the Cowboy request, will be added to the metrics notifications.
+-spec set_req_metrics( map(), z:context() ) -> ok.
+set_req_metrics(Metrics, #context{ cowreq = Req }) when is_map(Req), is_map(Metrics) ->
+    cowboy_req:cast({set_options, #{ metrics_user_data => Metrics }}, Req),
+    ok;
+set_req_metrics(_Metrics, _Context) ->
+    ok.
 
 %% @doc Fetch the cookie domain, defaults to 'undefined' which will equal the domain
 %% to the domain of the current request.
@@ -1002,7 +1063,7 @@ parse_post_body(Context) ->
 -spec set_nocache_headers(z:context()) -> z:context().
 set_nocache_headers(Context = #context{cowreq=Req}) when is_map(Req) ->
     cowmachine_req:set_resp_headers([
-            {<<"cache-control">>, <<"no-store, no-cache, must-revalidate, post-check=0, pre-check=0">>},
+            {<<"cache-control">>, <<"no-store, no-cache, must-revalidate, private, post-check=0, pre-check=0">>},
             {<<"expires">>, <<"Wed, 10 Dec 2008 14:30:00 GMT">>},
             {<<"p3p">>, <<"CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\"">>},
             {<<"pragma">>, <<"nocache">>}

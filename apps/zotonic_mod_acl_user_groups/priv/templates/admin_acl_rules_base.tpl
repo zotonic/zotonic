@@ -3,33 +3,6 @@
 {% block title %}{_ ACL rules _}{% endblock %}
 
 {% block content %}
-<style>
-    .acl-filter {
-        margin-top: 5px;
-    }
-    .acl-rule-row {
-        padding: 5px 0;
-    }
-    .acl {
-        padding: 10px 0;
-    }
-    div.acl .checkbox-inline {
-        margin-top: 5px;
-    }
-    div.sep {
-        border-top: 1px solid #eeeeee;
-        padding-top: 20px;
-        margin-top: 20px;
-    }
-    .row.header > div {
-        border-bottom: 1px solid #eeeeee;
-        margin-bottom: 10px;
-    }
-    form.is_block {
-        background-color: #fdd;
-    }
-</style>
-
 <div class="admin-header">
     <h2>{_ Access control rules _}</h2>
 </div>
@@ -56,12 +29,14 @@
             </li>
         </ul>
 
-        {% block filter %}
-        {% endblock %}
-
-        <div class="acl">
-            {% block content_acl %}
+        <div class="widget">
+            {% block filter %}
             {% endblock %}
+
+            <div class="acl">
+                {% block content_acl %}
+                {% endblock %}
+            </div>
         </div>
 
         {# these are needed for translation string generation #}

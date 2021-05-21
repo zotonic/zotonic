@@ -55,7 +55,7 @@
     > li.active > a,
     > li.active > a:hover,
     > li > a:hover {
-        background: @brand-primary;
+        background-color: @brand-primary;
         color: #fff;
         text-shadow: @lightOnDarkTextShadow;
     }
@@ -71,7 +71,10 @@
     
     &.z-button-row {
         padding: @_padding @_padding (@_padding - @_button_margin) @_padding;
-    
+        background-color: white;
+        border: 0;
+        border-radius: @radiusWidget;
+
         > .btn,
         > a[href],
         .btn + .btn {

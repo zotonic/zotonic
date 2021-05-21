@@ -160,7 +160,7 @@ If you want to *add* your template instead of overriding, you can use the
 Page templates
 ^^^^^^^^^^^^^^
 
-Most of your templates will :ref:`page <pages>` templates. When showing
+Most of your templates will be :ref:`page <pages>` templates. When showing
 a page, Zotonic’s :ref:`page controller <controller-page>` looks up the
 appropriate template in order of specificity and renders the first template it
 finds (assuming the name of the page ``page_name``):

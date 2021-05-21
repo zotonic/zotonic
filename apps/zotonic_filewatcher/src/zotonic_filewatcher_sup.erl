@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015-2018 Marc Worrell
+%% @copyright 2015-2020 Marc Worrell
 %% @doc Check for changed files, notify the zotonic_filehandler of any changes
 
-%% Copyright 2015-2018 Marc Worrell
+%% Copyright 2015-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@
 -export([
     start_link/0,
     init/1,
+    start_watchers/0,
     restart_watchers/0,
     watch_dirs/0,
     watch_dirs_expanded/0
@@ -38,7 +39,11 @@ start_link() ->
 
 %% @doc Return the filewatcher gen_server(s) to be used.
 init([]) ->
-    Children = children(z_config:get(filewatcher_enabled)),
+    Children = [
+        {zotonic_filewatcher_handler,
+          {zotonic_filewatcher_handler, start_link, []},
+          permanent, 5000, worker, [zotonic_filewatcher_handler]}
+    ],
     RestartStrategy = {one_for_all, 5, 10},
     {ok, {RestartStrategy, Children}}.
 
@@ -56,49 +61,59 @@ restart_watchers() ->
             ok
     end.
 
-children(true) ->
+start_watchers() ->
+    case z_config:get(filewatcher_enabled) of
+        true ->
+            Children = watcher_children(z_config:get(filewatcher_enabled)),
+            lists:foreach(
+                fun(ChildSpec) ->
+                    supervisor:start_child(?MODULE, ChildSpec)
+                end,
+                Children);
+        false ->
+            ok
+    end.
+
+watcher_children(true) ->
     Watchers = [
         zotonic_filewatcher_fswatch,
         zotonic_filewatcher_inotify
     ],
     which_watcher(Watchers);
-children(false) ->
+watcher_children(false) ->
     lager:debug("zotonic_filewatcher: disabled"),
     [
-        {zotonic_filewatcher_handler,
-          {zotonic_filewatcher_handler, start_link, []},
-          permanent, 5000, worker, [zotonic_filewatcher_handler]},
         {zotonic_filewatcher_beam_reloader,
           {zotonic_filewatcher_beam_reloader, start_link, [false]},
           permanent, 5000, worker, [zotonic_filewatcher_beam_reloader]}
     ].
 
 which_watcher([]) ->
-    IsScannerEnabled = z_config:get(filewatcher_scanner_enabled, false),
+    IsScannerEnabled = z_config:get(filewatcher_scanner_enabled),
     case IsScannerEnabled of
         true ->
             lager:warning("zotonic_filewatcher: please install fswatch or inotify-tools to improve automatic loading of changed files");
         false ->
             lager:warning("zotonic_filewatcher: please install fswatch or inotify-tools to automatically load changed files")
     end,
+    % Start the filewatcher process and the beam reloader.
+    % If the scanner is enabled then the beam reloader will tell the monitor which
+    % directories need to be watched.
+    MonitorOpts = [
+        {interval, z_config:get(filewatcher_scanner_interval)}
+    ],
     [
-        {zotonic_filewatcher_handler,
-          {zotonic_filewatcher_handler, start_link, []},
-          permanent, 5000, worker, [zotonic_filewatcher_handler]},
         {zotonic_filewatcher_monitor,
-          {zotonic_filewatcher_monitor, start_link, []},
+          {zotonic_filewatcher_monitor, start_link, [ MonitorOpts ]},
           permanent, 5000, worker, [zotonic_filewatcher_monitor]},
         {zotonic_filewatcher_beam_reloader,
-          {zotonic_filewatcher_beam_reloader, start_link, [IsScannerEnabled]},
+          {zotonic_filewatcher_beam_reloader, start_link, [ IsScannerEnabled ]},
           permanent, 5000, worker, [zotonic_filewatcher_beam_reloader]}
     ];
 which_watcher([M|Ms]) ->
     case M:is_installed() of
         true ->
             [
-                {zotonic_filewatcher_handler,
-                  {zotonic_filewatcher_handler, start_link, []},
-                  permanent, 5000, worker, [zotonic_filewatcher_handler]},
                 {zotonic_filewatcher_beam_reloader,
                   {zotonic_filewatcher_beam_reloader, start_link, [false]},
                   permanent, 5000, worker, [zotonic_filewatcher_beam_reloader]},

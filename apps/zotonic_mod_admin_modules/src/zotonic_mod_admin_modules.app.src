@@ -1,6 +1,6 @@
 {application, zotonic_mod_admin_modules, [
     {description, "Redirect custom domains and paths to any location."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

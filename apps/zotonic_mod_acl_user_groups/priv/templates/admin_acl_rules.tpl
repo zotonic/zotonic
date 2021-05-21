@@ -3,20 +3,18 @@
 {% block active1 %}active{% endblock %}
 
 {% block content_acl %}
-    <div class="acl-well">
-        <div id="acl-rules">
-            {% live template="_admin_acl_rules_list.tpl"
-                    topic="model/acl_user_groups/event/acl-rules/edit-rebuild"
-                    kind=kind
-                    group=q.g
-                    is_editable=is_editable
-            %}
-        </div>
+    <div id="acl-rules">
+        {% live template="_admin_acl_rules_list.tpl"
+                topic="bridge/origin/model/acl_user_groups/event/acl-rules/edit-rebuild"
+                kind=kind
+                group=q.g
+                is_editable=is_editable
+        %}
     </div>
 
     {#
         {% if is_editable %}
-            <div class="acl-well">
+            <div class="admin-padding">
                 <h4>{_ New rule _}</h4>
                 {% include "_admin_acl_rules_list_header.tpl" %}
                 {% include "_admin_acl_rule_row.tpl" is_new %}
@@ -27,7 +25,7 @@
 
 {% block filter %}
 {% if kind == `collab` %}
-<div class="acl">
+<div class="acl admin-padding">
     <div class="alert alert-info">
         {_ Collaboration groups are user groups where all content belongs to the group. _}
         {_ They are managed by their own manager and use the access rules below. _}<br/>
@@ -78,7 +76,7 @@
         <legend>{_ Content rules for collaboration group members and managers _}</legend>
 
 {% else %}
-    <div class="clearfix acl-filter">
+    <div class="clearfix acl-filter admin-padding">
         <div class="pull-right">
             <div class="btn-group">
                 <div class="btn-group">

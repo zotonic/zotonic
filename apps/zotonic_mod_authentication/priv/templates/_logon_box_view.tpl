@@ -15,7 +15,7 @@ Params:
 
 <div class="z-logon-form">
     {% if m.rsc.page_logon.body %}
-        <div class="alert">{{ m.rsc.page_logon.body }}</div>
+        <div class="logon-body">{{ m.rsc.page_logon.body|show_media }}</div>
     {% endif %}
 
     {% if form_extra_tpl %}
@@ -23,9 +23,11 @@ Params:
     {% endif %}
 
     {% if q.error and q.error != "unknown_code" %}
-        <div id="logon_error" class="alert alert-danger">
-            {% include "_logon_error.tpl" %}
-        </div>
+        {% if q.error != 'pw' or q.options.is_password_entered %}
+            <div id="logon_error" class="alert alert-danger">
+                {% include "_logon_error.tpl" %}
+            </div>
+        {% endif %}
     {% endif %}
 
     {% if form_form_tpl %}

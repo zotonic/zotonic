@@ -1,6 +1,6 @@
 .dashboard {
-	.widget { 
-  		border: 1px solid @borderColorMediumTransparent;
+	.widget {
+  		// border: 1px solid @borderColorMediumTransparent;
 
   		.widget-header {
   			.btn {
@@ -8,9 +8,11 @@
   			}
   		}
   	}
+
   	.table {
-  		margin: 0;
-  		
+      border-bottom: 0;
+      margin-bottom: 0 !important;
+
   		> thead > tr,
   		> tbody > tr {
   		    &:first-child {
@@ -19,10 +21,9 @@
   		        }
   		    }
   		}
-  		
+
   		> thead > tr > th,
   		> tbody > tr > td {
-  			
 
   			&:first-child {
   				width: 60%;
@@ -34,9 +35,6 @@
   		}
   		th {
   			display: none;
-  		}
-  		td {
-  			background: #fff;
   		}
   	}
  }

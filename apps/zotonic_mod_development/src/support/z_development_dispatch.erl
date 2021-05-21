@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2021 Marc Worrell
 %% @doc Match &amp; explain request dispatching.
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,16 +29,8 @@ event(#submit{message=explain_dispatch}, Context) ->
         true ->
             ReqPath = ensure_abs(z_string:trim(z_context:get_q(<<"explain_req">>, Context, <<>>))),
             Protocol = to_protocol(z_context:get_q(<<"explain_protocol">>, Context)),
-            TracerPid = erlang:spawn_link(fun tracer/0),
-            z_sites_dispatcher:dispatch(
-                    <<"GET">>,
-                    z_context:hostname(Context),
-                    ReqPath,
-                    Protocol =:= https,
-                    TracerPid),
-            TracerPid ! {fetch, self()},
-            receive
-                {trace, Trace} ->
+            case z_sites_dispatcher:dispatch_trace(Protocol, ReqPath, Context) of
+                {ok, Trace} ->
                     Vars = [
                         {trace, Trace},
                         {path, ReqPath},
@@ -48,8 +40,8 @@ event(#submit{message=explain_dispatch}, Context) ->
                                     "explain-dispatch-output",
                                     #render{template="_development_dispatch_trace.tpl", vars=Vars},
                                     Context),
-                    z_render:wire({fade_in, [{target, "explain-dispatch-output"}]}, Context1)
-                after 5000 ->
+                    z_render:wire({fade_in, [{target, "explain-dispatch-output"}]}, Context1);
+                {error, _} ->
                     z_render:growl(?__("Could not fetch tracer output, please try again.", Context), Context)
             end;
         false ->
@@ -62,23 +54,3 @@ ensure_abs(P) -> <<$/, P/binary>>.
 
 to_protocol(<<"http">>) -> http;
 to_protocol(<<"https">>) -> https.
-
-tracer() ->
-    tracer_loop([]).
-
-tracer_loop(Acc) ->
-    receive
-        {trace, Path, What, Args} ->
-            Trace = {trace, maybe_flatten(Path), What, Args},
-            tracer_loop([Trace|Acc]);
-        {fetch, Pid} ->
-            Acc1 = lists:reverse(Acc),
-            Pid ! {trace, Acc1}
-    end.
-
-maybe_flatten(undefined) -> undefined;
-maybe_flatten(Path) when is_binary(Path) -> Path;
-maybe_flatten([X|_] = Path) when is_binary(X) -> Path;
-maybe_flatten([X|_] = Path) when is_integer(X) -> z_convert:to_binary(Path);
-maybe_flatten([]) -> <<>>.
-

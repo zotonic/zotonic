@@ -60,6 +60,7 @@
     url_strip_language/1,
     valid_config_language/2,
 
+    available_translations/1,
     acceptable_languages/1,
 
     init/1,
@@ -107,20 +108,8 @@ init_config_languages(Context) ->
 
 %% @doc Return the list of available languages, enable the default language.
 default_languages(Context) ->
-    List = [
-        {ar, false},
-        {de, false},
-        {en, false},
-        {es, false},
-        {et, false},
-        {fr, false},
-        {nl, false},
-        {pl, false},
-        {'pt-br', false},
-        {ru, false},
-        {tr, false},
-        {zh, false}
-    ],
+    Codes = available_translations(Context),
+    List = [ {C, editable} || C <- Codes ],
     EnabledLang = case m_config:get_value(i18n, language, Context) of
         undefined -> en;
         <<>> -> en;
@@ -128,6 +117,16 @@ default_languages(Context) ->
     end,
     List1 = proplists:delete(EnabledLang, List),
     lists:sort( [ {EnabledLang, true} | List1 ]).
+
+
+%% @doc Fetch the available translations by checking for all .po files in zotonic_core
+-spec available_translations(z:context()) -> list( atom() ).
+available_translations(Context) ->
+    ModPoFiles = z_module_indexer:translations(Context),
+    PoFiles = proplists:get_value(zotonic_core, ModPoFiles, []),
+    lists:filter(
+        fun z_language:is_valid/1, lists:usort([ C || {C, _File} <- PoFiles ])
+    ).
 
 
 %% @doc Set the language of the context. Sets to the given language if the language exists
@@ -228,10 +227,13 @@ maybe_accept_header(Context) ->
         AcceptHeader ->
             Acceptable = acceptable_languages(Context),
             case cowmachine_accept_language:accept_header(Acceptable, AcceptHeader) of
-                {ok, Lang} -> set_language(binary_to_atom(Lang, utf8), Context);
+                {ok, Lang} -> accept_language(Lang, Context);
                 {error, _} -> Context
             end
     end.
+
+accept_language(Code, Context) ->
+    set_language(maps:get(code_atom, z_language:properties(Code)), Context).
 
 % Fetch the list of acceptable languages and their fallback languages.
 % Store this in the depcache (and memo) for quick(er) lookups.
@@ -240,12 +242,22 @@ acceptable_languages(Context) ->
     z_depcache:memo(
         fun() ->
             Enabled = enabled_languages(Context),
-            lists:map(
-                fun(Code) ->
+            lists:foldl(
+                fun(Code, Acc) ->
+                    LangProps = z_language:properties(Code),
                     Lang = atom_to_binary(Code, utf8),
                     Fs = z_language:fallback_language(Code),
-                    {Lang, [ atom_to_binary(F, utf8) || F <- Fs ]}
+                    FsAsBin = [ z_convert:to_binary(F) || F <- Fs ],
+                    Acc1 = [ {Lang, FsAsBin} | Acc ],
+                    lists:foldl(
+                        fun(Alias, AliasAcc) ->
+                            AliasBin = z_convert:to_binary(Alias),
+                            [ {AliasBin, FsAsBin} | AliasAcc ]
+                        end,
+                        Acc1,
+                        maps:get(alias, LangProps, []))
                 end,
+                [],
                 Enabled)
         end,
         acceptable_languages,
@@ -348,7 +360,10 @@ event(#postback{message={set_language, Args}}, Context) ->
         ArgCode -> ArgCode
     end,
     Context1 = set_user_language(LanguageCode, Context),
-    reload_page(Context1);
+    case m_rsc:rid( proplists:get_value(id, Args), Context1 ) of
+        undefined -> reload_page(Context1);
+        RscId -> z_render:wire({redirect, [ {id, RscId} ]}, Context1)
+    end;
 
 %% @doc Set the default language. Reloads the page to reflect the new setting.
 event(#postback{message={language_default, Args}}, Context) ->
@@ -385,7 +400,8 @@ event(#postback{message={language_delete, Args}}, Context) ->
         true ->
             {code, LanguageCode} = proplists:lookup(code, Args),
             Context1 = language_delete(LanguageCode, Context),
-            reload_table(Context1);
+            Context2 = reload_table(Context1),
+            z_render:dialog_close(Context2);
         false ->
             z_render:growl_error(?__(<<"Sorry, you don't have permission to change the language list.">>, Context), Context)
     end;
@@ -451,19 +467,19 @@ event(#postback{message={translation_reload, _Args}}, Context) ->
 
 %% @doc Strip the language code from the location (if the language code is recognized).
 %%      For instance: `<<"/nl-nl/admin/translation">>' becomes `<<"/admin/translation">>'
-url_strip_language(<<$/, A, B, $/, Rest/binary>> = Url) ->
-    url_strip_language1(Url, [A, B], Rest);
-url_strip_language(<<$/, A, B, $-, C, D, $/, Rest/binary>> = Url) ->
-    url_strip_language1(Url, [A, B, <<"-">>, C, D], Rest);
-url_strip_language(Url) ->
-    Url.
-
-url_strip_language1(Url, LanguageCode, Rest) when is_binary(Url) ->
-    case z_language:is_valid(LanguageCode) of
-        true -> <<$/, Rest/binary>>;
-        false -> Url
-    end.
-
+-spec url_strip_language(binary()) -> binary().
+url_strip_language(<<"/", Path/binary>> = Url) ->
+    case binary:split(Path, <<"/">>) of
+        [ MaybeLang, Rest ] ->
+            case z_language:is_valid(MaybeLang) of
+                true -> <<"/", Rest/binary>>;
+                false -> Url
+            end;
+        _ ->
+            Url
+    end;
+url_strip_language(Path) when is_binary(Path) ->
+    Path.
 
 %% @doc Set the language, as selected by the user. Persist this choice.
 -spec set_user_language(atom(), z:context()) -> z:context().
@@ -492,6 +508,7 @@ set_user_language(Code, Context) ->
 set_default_language(Code, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
+            ok = language_status(Code, true, Context),
             CodeB = z_convert:to_binary(Code),
             case m_config:get_value(i18n, language, Context) of
                 CodeB -> ok;
@@ -530,11 +547,12 @@ valid_config_language(Code, Context, Tries) ->
     end.
 
 %% @doc Set/reset the is_enabled flag of a language.
--spec language_status(atom(), boolean() | editable, z:context()) -> ok | {error, string()}.
+-spec language_status(atom(), boolean() | editable, z:context()) -> ok | {error, nolang|default}.
 language_status(Code, Status, Context) when is_atom(Code), is_atom(Status) ->
     case z_language:default_language(Context) of
         Code when Status =/= true ->
-            {error, ?__(<<"Sorry, you can't disable the default language.">>, Context)};
+            % Can't disable the default language
+            {error, default};
         Code ->
             ok;
         _ ->
@@ -549,8 +567,7 @@ language_status(Code, Status, Context) when is_atom(Code), is_atom(Status) ->
                     end,
                     set_language_config(CL2, Context);
                 false ->
-                    % Not a language - ignore
-                    ok
+                    {error, nolang}
             end
     end.
 
@@ -696,7 +713,9 @@ maybe_language_code(_) ->
 set_language_config(NewConfig, Context) ->
     case language_config(Context) of
         NewConfig -> ok;
-        _ ->  m_config:set_prop(i18n, languages, list, NewConfig, Context)
+        _ ->
+            SortedConfig = lists:sort(NewConfig),
+            m_config:set_prop(i18n, languages, list, SortedConfig, Context)
     end,
     z_memo:delete('mod_translation$enabled_languages'),
     ok.

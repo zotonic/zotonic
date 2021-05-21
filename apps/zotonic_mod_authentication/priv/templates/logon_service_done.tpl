@@ -1,6 +1,6 @@
 {% extends "base_simple.tpl" %}
 
-{# Template shown in popup window when redirecting to an external identity service #}
+{# Template shown in popup window after redirecting to an external identity service #}
 
 {% block title %}{_ Authenticated _}{% endblock %}
 

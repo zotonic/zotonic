@@ -17,4 +17,5 @@
     {% all catinclude "_admin_edit_sidebar.tpl" id languages=languages %}
 
     {% include "_admin_edit_content_page_connections.tpl" %}
+    {% include "_admin_edit_content_page_referrers.tpl"%}
 </div>

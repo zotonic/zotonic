@@ -15,157 +15,163 @@
 	</div>
 {% endwith %}
 
-	<!-- Block select dialog -->
+<!-- Block select dialog -->
 
-	<div id="modal-question" class="modal hide">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			<h3>{_ Add a question or block _}</h3>
-		</div>
-		<div class="modal-body">
-			<div class="row">
-				<div class="col-lg-4 col-md-4" data-block-type='survey_short_answer'>
-					<p>{_ Please enter your information. _}</p>
-					<p>
-						<input class="form-control" type="text" disabled />
-					</p>
-				</div>
-				<div class="col-lg-4 col-md-4" data-block-type='survey_long_answer'>
-					<p>{_ Please write an essay. _}</p>
-					<p>
-						<textarea class="form-control" rows="3" disabled></textarea>
-					</p>
-				</div>
-				<div class="col-lg-4 col-md-4" data-block-type='survey_yesno'>
-					<p>{_ Do you like pea soup? _}</p>
-					<p>
-						<input type="radio" disabled /> {_ Yes _}<br/>
-						<input type="radio" disabled /> {_ No _}
-					</p>
-				</div>
-				<!--
-				<div class="col-lg-4 col-md-4" data-block-type='survey_truefalse'>
-					<p>{_ The earth is flat. _}</p>
-					<p>
-						<input type="radio" disabled /> {_ True _}<br/>
-						<input type="radio" disabled /> {_ False _}
-					</p>
-				</div>
-				-->
+<div id="modal-question" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3>{_ Add a question or block _}</h3>
 			</div>
-			<hr/>
-			<div class="row">
-				<div class="col-lg-4 col-md-4" data-block-type='survey_likert'>
-					<p>{_ Weasels make great pets. _}</p>
-					<p>
-						{_ Disagree _}
-						<input type="radio" disabled />
-						<input type="radio" disabled />
-						<input type="radio" disabled />
-						<input type="radio" disabled />
-						<input type="radio" disabled />
-						{_ Agree _}
-					</p>
-				</div>
-				<div class="col-lg-4 col-md-4" data-block-type='survey_thurstone'>
-					<p>{_ Select which you agree with. _}
-					<p>
-						<input type="checkbox" disabled /> {_ I like Chinese restaurants _}<br/>
-						<input type="checkbox" disabled /> {_ Chinese food is best for money _}<br/>
-						<input type="checkbox" disabled /> {_ I always eat with others _}
-					</p>
-				</div>
-				<div class="col-lg-4 col-md-4" data-block-type='survey_matching'>
-					<p>{_ Match which answer fits best. _}</p>
-					<p>
-						Apple <select class="form-control" disabled><option>{_ Wagner _}</option></select><br/>
-						Milk <select class="form-control" disabled><option>{_ Red _}</option></select><br/>
-					</p>
-				</div>
-			</div>
-			<hr/>
-			<div class="row">
-				<div class="col-lg-4 col-md-4" data-block-type='survey_narrative'>
-					<p>
-						{_ I am _}
-						<input type="text" class="col-md-2 form-control" disabled />
-						{_ years old. I like _}
-						<select class="col-md-4 form-control" disabled><option>{_ chocolate _}</option></select>
-						{_ ice cream and my favorite color is _} <input type="text" class="col-md-2 form-control" disabled />.
-					</p>
-				</div>
-				<div class="col-lg-4 col-md-4" data-block-type='survey_country'>
-					<p>{_ Select your country _}</p>
-					<p>
-						<select class="form-control" disabled>
-							<option disabled>{_ Country _}</option>
-						</select>
-					</p>
-				</div>
-				<div class="col-lg-4 col-md-4" data-block-type='survey_button'>
-					<p>
-						<button class="btn btn-default disabled" disabled>{_ Button text _}</button>
-					</p>
-				</div>
-			</div>
-			<hr/>
-			<div class="row">
-				<div class="col-lg-4 col-md-4" data-block-type='header'>
-					<h4>{_ Header _}</h4>
-				</div>
-				<div class="col-lg-4 col-md-4" data-block-type='text'>
-					<p>{_ Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>. _}</p>
-				</div>
-			</div>
-			{% if m.acl.use.mod_admin %}
-			<hr/>
-			<div class="alert">
+			<div class="modal-body">
 				<div class="row">
-					<div class="col-lg-4 col-md-4" data-block-type='survey_category'>
-						<p>{_ Options from a page category _}</p>
+					<div class="col-lg-4 col-md-4" data-block-type='survey_short_answer'>
+						<p>{_ Please enter your information. _}</p>
 						<p>
-							<input type="checkbox" disabled /> {_ First page in category _}<br/>
-							<input type="checkbox" disabled /> {_ Second page in category _}<br/>
-							<input type="checkbox" disabled /> {_ Next page in category _}
+							<input class="form-control" type="text" disabled />
 						</p>
 					</div>
-					<div class="col-lg-4 col-md-4" data-block-type='survey_upload'>
-						<p>{_ Please upload your file. _}</p>
+					<div class="col-lg-4 col-md-4" data-block-type='survey_long_answer'>
+						<p>{_ Please write an essay. _}</p>
 						<p>
-							<input class="form-control" style="width:95%" type="file" disabled />
+							<textarea class="form-control" rows="3" disabled></textarea>
 						</p>
 					</div>
-					<div class="col-lg-4 col-md-4" data-block-type='page'>
-						{% image "lib/images/koe.jpg" mediaclass="admin-editor" grey %}
+					<div class="col-lg-4 col-md-4" data-block-type='survey_yesno'>
+						<p>{_ Do you like pea soup? _}</p>
+						<p>
+							<input type="radio" disabled /> {_ Yes _}<br/>
+							<input type="radio" disabled /> {_ No _}
+						</p>
+					</div>
+					<!--
+					<div class="col-lg-4 col-md-4" data-block-type='survey_truefalse'>
+						<p>{_ The earth is flat. _}</p>
+						<p>
+							<input type="radio" disabled /> {_ True _}<br/>
+							<input type="radio" disabled /> {_ False _}
+						</p>
+					</div>
+					-->
+				</div>
+				<hr/>
+				<div class="row">
+					<div class="col-lg-4 col-md-4" data-block-type='survey_likert'>
+						<p>{_ Weasels make great pets. _}</p>
+						<p>
+							{_ Disagree _}
+							<input type="radio" disabled />
+							<input type="radio" disabled />
+							<input type="radio" disabled />
+							<input type="radio" disabled />
+							<input type="radio" disabled />
+							{_ Agree _}
+						</p>
+					</div>
+					<div class="col-lg-4 col-md-4" data-block-type='survey_thurstone'>
+						<p>{_ Select which you agree with. _}</p>
+						<p>
+							<input type="checkbox" disabled /> {_ I like Chinese restaurants _}<br/>
+							<input type="checkbox" disabled /> {_ Chinese food is best for money _}<br/>
+							<input type="checkbox" disabled /> {_ I always eat with others _}
+						</p>
+					</div>
+					<div class="col-lg-4 col-md-4" data-block-type='survey_matching'>
+						<p>{_ Match which answer fits best. _}</p>
+						<p>
+							Apple <select class="form-control" disabled><option>{_ Wagner _}</option></select><br/>
+							Milk <select class="form-control" disabled><option>{_ Red _}</option></select><br/>
+						</p>
 					</div>
 				</div>
+				<hr/>
+				<div class="row">
+					<div class="col-lg-4 col-md-4" data-block-type='survey_narrative'>
+						<p>
+							{_ I am _}
+							<input type="text" class="col-md-2 form-control" style="display: inline; float: none;" disabled />
+							{_ years old. I like _}
+							<select class="col-md-4 form-control" style="display: inline; float: none;" disabled><option>{_ chocolate _}</option></select>
+							{_ ice cream and my favorite color is _} <input type="text" class="col-md-2 form-control" style="display: inline; float: none;" disabled />.
+						</p>
+					</div>
+					<div class="col-lg-4 col-md-4" data-block-type='survey_country'>
+						<p>{_ Select your country _}</p>
+						<p>
+							<select class="form-control" disabled>
+								<option disabled>{_ Country _}</option>
+							</select>
+						</p>
+					</div>
+					<div class="col-lg-4 col-md-4" data-block-type='survey_button'>
+						<p>
+							<button class="btn btn-default disabled" disabled>{_ Button text _}</button>
+						</p>
+					</div>
+				</div>
+				<hr/>
+				<div class="row">
+					<div class="col-lg-4 col-md-4" data-block-type='header'>
+						<h4>{_ Header _}</h4>
+					</div>
+					<div class="col-lg-4 col-md-4" data-block-type='text'>
+						<p>{_ Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>. _}</p>
+					</div>
+				</div>
+				{% if m.acl.use.mod_admin %}
+				<hr/>
+				<div class="alert">
+					<div class="row">
+						<div class="col-lg-4 col-md-4" data-block-type='survey_category'>
+							<p>{_ Options from a page category _}</p>
+							<p>
+								<input type="checkbox" disabled /> {_ First page in category _}<br/>
+								<input type="checkbox" disabled /> {_ Second page in category _}<br/>
+								<input type="checkbox" disabled /> {_ Next page in category _}
+							</p>
+						</div>
+						<div class="col-lg-4 col-md-4" data-block-type='survey_upload'>
+							<p>{_ Please upload your file. _}</p>
+							<p>
+								<input class="form-control" style="width:95%" type="file" disabled />
+							</p>
+						</div>
+						<div class="col-lg-4 col-md-4" data-block-type='page'>
+							{% image "lib/images/koe.jpg" mediaclass="admin-editor" grey %}
+						</div>
+					</div>
+				</div>
+				{% endif %}
 			</div>
-			{% endif %}
+			<div class="modal-footer">
+				<a href="#" class="btn btn-default" data-dismiss="modal">{_ Cancel _}</a>
+			</div>
 		</div>
-		<div class="modal-footer">
-			<a href="#" class="btn btn-default" data-dismiss="modal">{_ Cancel _}</a>
-		</div>
 	</div>
+</div>
 
-	<!-- Templates -->
+<!-- Templates -->
 
-	<div id="page-template" class="hide">
-		<ul>
-			{% include "_admin_survey_question_page.tpl" qs=[] js=[] nosubmit %}
-		</ul>
-	</div>
+<div id="page-template" class="hide">
+	<ul>
+		{% include "_admin_survey_question_page.tpl" qs=[] js=[] nosubmit %}
+	</ul>
+</div>
 
-	<div id="question-template" class="hide">
-		<ul>
-			{% include "_admin_survey_question_q.tpl" blk=[] nosubmit %}
-		</ul>
-	</div>
+<div id="question-template" class="hide">
+	<ul>
+		<li class="block" id="{{ #s }}">
+			<!-- The template _admin_survey_question_q.tpl will be inserted here -->
+		</li>
+	</ul>
+</div>
 
-	<div id="jump-template" class="hide">
-		<ul>
-			{% include "_admin_survey_question_j.tpl" blk=[] nosubmit %}
-		</ul>
-	</div>
+<div id="jump-template" class="hide">
+	<ul>
+		{% include "_admin_survey_question_j.tpl" blk=[] nosubmit %}
+	</ul>
+</div>
 
 {% javascript %}
 	$('#admin-survey-questions').on('click', '.block-page a.page-connect', function(event) {
@@ -195,6 +201,7 @@
 
 {% wire name="admin-q-block-connect"
         action={dialog_open
+        			intent="select"
                     subject_id=id
                     predicate=""
                     template="_action_dialog_connect.tpl"

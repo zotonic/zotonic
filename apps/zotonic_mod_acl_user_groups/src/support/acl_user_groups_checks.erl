@@ -36,8 +36,9 @@
         acl_logon/2,
         acl_logoff/2,
         acl_context_authenticated/1,
-        acl_rsc_update_check/3,
-        acl_add_sql_check/2
+        acl_add_sql_check/2,
+
+        rsc_update_check/3
     ]).
 
 -export([
@@ -208,17 +209,34 @@ acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_media{mime=Mime, size=
 acl_is_allowed(#acl_is_allowed{
         action = insert,
         object = #acl_rsc{
+            id = undefined,
             category = Cat,
-            props = #{ <<"content_group_id">> := CGId }
+            props = #{
+                <<"content_group_id">> := CGId
+            }
         }
     }, Context) when CGId =/= undefined ->
+    % (Pre-)check if user is allowed to insert the category in the content group
     can_insert_category(CGId, Cat, Context);
 acl_is_allowed(#acl_is_allowed{
         action = insert,
-        object = #acl_rsc{ category=Cat }
-    }, Context) ->
+        object = #acl_rsc{
+            id = undefined,
+            category = Cat
+        }
+    }, Context) when Cat =/= undefined ->
+    % (Pre-)check if user is allowed to insert the category in the content group
     % Check with default content group of the user.
     can_insert(Cat, Context);
+acl_is_allowed(#acl_is_allowed{
+        action = Action,
+        object = #acl_rsc{
+            id = Id,
+            props = Props
+        }
+    }, Context) when Action =:= insert; Action =:= update ->
+    % Final check just before db update, after sanitizer etc.
+    acl_update_check(Action, Id, Props, Context);
 acl_is_allowed(#acl_is_allowed{action=insert, object=Cat}, Context) when is_atom(Cat) ->
     can_insert(Cat, Context);
 acl_is_allowed(#acl_is_allowed{action=update, object=Id}, Context) ->
@@ -398,26 +416,45 @@ acl_context_authenticated(#context{user_id=undefined} = Context) ->
 acl_context_authenticated(#context{} = Context) ->
     Context.
 
+
+acl_update_check(insert, _Id, Props, Context) ->
+    #{
+        <<"category_id">> := CatId
+    } = Props,
+    CGId = maps:get(<<"content_group_id">>, Props, default_content_group),
+    case acl_rsc_update_check_1(insert_rsc, CGId, CatId, Context) of
+        true ->
+            true;
+        false ->
+            lager:debug("[acl_user_group] denied user ~p insert of category ~p in content-group ~p",
+                        [z_acl:user(Context), CatId, CGId]),
+            false
+    end;
+acl_update_check(update, Id, Props, Context) ->
+    #{
+        <<"category_id">> := CatId,
+        <<"content_group_id">> := CGId
+    } = Props,
+    case acl_rsc_update_check_1(Id, CGId, CatId, Context) of
+        true ->
+            true;
+        false ->
+            lager:debug("[acl_user_group] denied user ~p update on ~p of category ~p in content-group ~p",
+                        [z_acl:user(Context), Id, CatId, CGId]),
+            false
+    end.
+
 %% @doc Restrict the content group being updated, possible set default content group.
 %%      If the content-group or category is changed then we need insert permission.
 %%      If it is not changed (for existing rsc) then we need update permission.
-acl_rsc_update_check(#acl_rsc_update_check{}, {error, Reason}, _Context) ->
-    {error, Reason};
-acl_rsc_update_check(#acl_rsc_update_check{ id = Id }, Props, Context) when is_integer(Id); Id =:= insert_rsc ->
+rsc_update_check(Id, Props, Context) when is_integer(Id); Id =:= insert_rsc ->
     CatId = fetch_category_id(Id, Props, Context),
     CGId = fetch_content_group_id(Id, CatId, Props, Context),
-    case acl_rsc_update_check_1(Id, CGId, CatId, Context) of
-        true ->
-            Props1 = Props#{
-                <<"category_id">> => CatId,
-                <<"content_group_id">> => CGId
-            },
-            maybe_filter_acl_props(Props1, Context);
-        false ->
-            lager:debug("[acl_user_group] denied user ~p insert/update on ~p of category ~p in content-group ~p",
-                        [z_acl:user(Context), Id, CatId, CGId]),
-            {error, eacces}
-    end.
+    Props1 = Props#{
+        <<"category_id">> => CatId,
+        <<"content_group_id">> => CGId
+    },
+    {ok, maybe_filter_acl_props(Props1, Context)}.
 
 %% @doc Filter upload permissions from the user-group. Only "acl admins" are allowed to change these.
 maybe_filter_acl_props(Props, Context) ->
@@ -462,7 +499,7 @@ fetch_content_group_id(Id, CatId, Props, Context) ->
     end.
 
 fetch_category_id(Id, Props, Context) ->
-    case maps:get(<<"category_id">>, Props) of
+    case maps:get(<<"category_id">>, Props, undefined) of
         N when is_integer(N) ->
             N;
         undefined ->

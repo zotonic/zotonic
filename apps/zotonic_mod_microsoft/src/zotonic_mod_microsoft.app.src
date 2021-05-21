@@ -1,0 +1,11 @@
+{application, zotonic_mod_microsoft, [
+    {description, "Adds Microsoft login and other Microsoft and Azure related features."},
+    {vsn, {file, "../../VERSION"}},
+    {registered, []},
+    {applications, [kernel, stdlib, zotonic_core]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+]}.

@@ -10,7 +10,7 @@ Before running Zotonic, you must make sure your system meets the
 minimum requirements to do so. Zotonic needs the following software
 installed:
 
-1. Erlang/OTP version **18** or newer. Build it from source, or use
+1. Erlang/OTP version **22** or newer. Build it from source, or use
    packages.
 
 2. **ImageMagick** (version 6.5 or higher) for the ``convert`` and
@@ -41,13 +41,13 @@ command in a terminal::
 
 The output should be something like::
 
-  Erlang/OTP 19 [erts-8.3] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
-  Eshell V8.3  (abort with ^G)
+  Erlang/OTP 23 [erts-11.0] [source] [64-bit] [smp:12:12] [ds:12:12:10] [async-threads:1] [hipe]
+  Eshell V11.0  (abort with ^G)
   1>
 
 (Press ctrl+c twice to exit)
 
-If your version is below release **18**, you need to upgrade. If
+If your version is below release **22**, you need to upgrade. If
 you don't have Erlang installed, we recommend downloading a build for
 your operating system from the Erlang Solutions website:
 

@@ -1,6 +1,6 @@
 .block-add-block {
     margin: 0 0 9px 0;
-    
+
     .dropdown-menu {
         top: auto;
     }
@@ -18,31 +18,75 @@ ul.blocks.ui-sortable {
     .ui-sortable-placeholder {
         &:extend(.z-drag-drop-placeholder);
     }
-    
+
     .widget-header {
         position: relative;
-        cursor: move;
-        padding-left: 25px;
-        .extend_icon(icon-drag);
-            
-        &:before {
-             @_icon_size: 16px;
-            position: absolute;
-            width: @_icon_size;
-            height: @_icon_size;
-            font-size: @_icon_size;
-            line-height: @_icon_size;
-            left: @widgetSidePadding;
-            top: @widgetVerticalPadding;
-            color: @textColorMuted;
-        }
+        // cursor: move;
+        // padding-left: 25px;
+        // .extend_icon(icon-drag);
+
+        // &:before {
+        //     @_icon_size: 16px;
+        //     position: absolute;
+        //     width: @_icon_size;
+        //     height: @_icon_size;
+        //     font-size: @_icon_size;
+        //     line-height: @_icon_size;
+        //     left: @widgetSidePadding;
+        //     top: @widgetVerticalPadding;
+        //     color: @textColorMuted;
+        // }
     }
     .form-control.block-name {
         background-color: transparent;
         margin: 0 0 10px 0;
-        
+
         &:focus {
             background-color: #fff;
         }
     }
+
+    > li {
+        > .widget {
+            display: -ms-grid;
+            -ms-grid-columns: auto 1fr;
+            -ms-grid-rows: auto 1fr;
+
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-template-rows: auto 1fr;
+
+            > .drag-handle {
+                -ms-grid-column: 1;
+                -ms-grid-row: 1;
+                -ms-grid-row-span: 3;
+
+                grid-column: 1;
+                grid-row-start: 1;
+                grid-row-end: 3;
+
+                cursor: move;
+                background: repeat-y url("/lib/images/grippy2.png") 3px 0;
+                padding: 10px;
+                cursor: drag;
+            }
+
+            > .widget-header {
+                -ms-grid-column: 2;
+                -ms-grid-row: 1;
+                grid-column: 2;
+                grid-row: 1;
+
+                padding-left: 5px;
+            }
+
+            > .widget {
+                -ms-grid-column: 2;
+                -ms-grid-row: 2;
+                grid-column: 2;
+                grid-row: 2;
+            }
+        }
+    }
+
 }

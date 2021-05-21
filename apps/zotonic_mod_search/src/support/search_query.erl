@@ -54,7 +54,7 @@ qargs(Context) ->
     lists:filtermap(
                 fun
                     ({<<"qargs">>, _}) -> false;
-                    ({<<"qs">>, V}) -> {true, {"text", V}};
+                    ({<<"qs">>, V}) -> {true, {<<"text">>, V}};
                     ({<<"q", Term/binary>>, V}) -> {true, {Term, V}};
                     (_) -> false
                 end,
@@ -100,7 +100,6 @@ split_arg(B) ->
 
 
 % Convert known request arguments to atoms.
-request_arg(Arg) when is_list(Arg) -> request_arg(list_to_binary(Arg));
 request_arg(<<"content_group">>)       -> content_group;
 request_arg(<<"cat">>)                 -> cat;
 request_arg(<<"cat_exact">>)           -> cat_exact;
@@ -133,6 +132,7 @@ request_arg(<<"qargs">>)               -> qargs;
 request_arg(<<"query_id">>)            -> query_id;
 request_arg(<<"rsc_id">>)              -> rsc_id;
 request_arg(<<"name">>)                -> name;
+request_arg(<<"language">>)            -> language;
 request_arg(<<"sort">>)                -> sort;
 request_arg(<<"asort">>)               -> asort;
 request_arg(<<"zsort">>)               -> zsort;
@@ -386,21 +386,15 @@ parse_query([{qargs, Boolean}|Rest], Context, Result) ->
 %% query_id=<rsc id>
 %% Get the query terms from given resource ID, and use those terms.
 parse_query([{query_id, Id}|Rest], Context, Result) ->
-    case m_category:is_a(m_rsc:p(Id, category_id, Context), 'query', Context) of
-        true ->
-            QArgs = try
-                        parse_query_text(z_html:unescape(m_rsc:p(Id, 'query', Context)))
-                    catch
-                        throw:{error,{unknown_query_term,Term}} ->
-                            lager:error("[~p] Unknown query term in search query ~p: ~p",
-                                        [z_context:site(Context), Id, Term]),
-                            []
-                    end,
-            parse_query(QArgs ++ Rest, Context, Result);
-        false ->
-                                                % Fetch the id's haspart objects (assume a collection)
-            parse_query([{hassubject, [Id, haspart]} | Rest], Context, Result)
-    end;
+    QArgs = try
+                parse_query_text(z_html:unescape(m_rsc:p(Id, 'query', Context)))
+            catch
+                throw:{error,{unknown_query_term,Term}} ->
+                    lager:error("[~p] Unknown query term in search query ~p: ~p",
+                                [z_context:site(Context), Id, Term]),
+                    []
+            end,
+    parse_query(QArgs ++ Rest, Context, Result);
 
 %% rsc_id=<rsc id>
 %% Filter to *only* include the given rsc id. Can be used for resource existence check.
@@ -421,6 +415,19 @@ parse_query([{name, Name}|Rest], Context, Result) ->
             {Arg, Result1} = add_arg(Name2, Result),
             Result2 = add_where("rsc.name like " ++ Arg, Result1),
             parse_query(Rest, Context, Result2)
+    end;
+
+%% language=<iso-code>
+%% Filter on the presence of a translation
+parse_query([{language, Lang}|Rest], Context, Result) ->
+    case z_language:to_language_atom(Lang) of
+        {ok, Code} ->
+            {Arg, Result1} = add_arg([ z_convert:to_binary(Code) ], Result),
+            Result2 = add_where("rsc.language @> " ++ Arg, Result1),
+            parse_query(Rest, Context, Result2);
+        {error, _} ->
+            % Unknown iso code, ignore
+            parse_query(Rest, Context, Result)
     end;
 
 %% sort=fieldname
@@ -760,7 +767,9 @@ assure_cat_flatten(Names) ->
 assure_category(undefined, _) -> undefined;
 assure_category(null, _) -> undefined;
 assure_category("", _) -> undefined;
+assure_category("*", _) -> undefined;
 assure_category(<<>>, _) -> undefined;
+assure_category(<<"*">>, _) -> undefined;
 assure_category(<<$', _/binary>> = Name, Context) ->
     case binary:last(Name) of
         $' -> assure_category_1(z_string:trim(Name, $'), Context);

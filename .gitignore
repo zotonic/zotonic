@@ -54,5 +54,8 @@ _checkouts
 
 .DS_Store
 zotonic.tmproj
+.sass-cache
 
 docker-data
+
+VERSION

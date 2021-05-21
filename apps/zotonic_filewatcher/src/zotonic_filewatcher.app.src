@@ -1,7 +1,7 @@
 %% -*- mode: erlang -*-
 {application, zotonic_filewatcher,
  [{description, "Zotonic File Watcher"},
-  {vsn, "git"},
+  {vsn, {file, "../../VERSION"}},
   {registered, []},
   {env, []},
   {mod, {zotonic_filewatcher_app, []}},

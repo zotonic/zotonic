@@ -21,13 +21,12 @@ organized as one might hope.
 Assumptions
 -----------
 
-These commands have been tested on Debian Squeeze and Ubuntu 11.04.
+These commands have been tested on Ubuntu 16.04.
 
 Familiarity with SQL and relational databases advised.
 
 NOTE: The string “VERSION,” as used below, refers to your PostgreSQL
-version: E.g. 8.3 for Debian Lenny, 8.4 for Debian Squeeze and Ubuntu
-11.04
+version.
 
 How
 ---
@@ -36,9 +35,9 @@ How
 
 If PostreSQL is installed: :file:`/usr/share/doc/postgresql-common/README.Debian.gz`.
 
-For on-line documentation: http://www.postgresql.org/docs/VERSION/static/
+For on-line documentation: https://www.postgresql.org/docs/VERSION/static/
 
-For instance, in Debian Lenny, look for: http://www.postgresql.org/docs/8.3/static/
+For instance, in Ubuntu 18, look for: https://www.postgresql.org/docs/10/static/
 
 **Is PostgreSQL installed?**
 
@@ -67,7 +66,7 @@ In the shell::
   apt-get update
   apt-get install postgresql postgresql-client
 
-Or, from source: http://www.postgresql.org/docs/8.4/static/install-short.html
+Or, from source: http://www.postgresql.org/docs/9.4/static/install-short.html
 
 **Where are Postresql files located?**
 
@@ -83,7 +82,11 @@ In the shell::
 
 You should see something like::
 
-  Running clusters: 8.4/main
+    postgresql.service - PostgreSQL RDBMS
+     Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
+     Active: active (exited) since Fri 2021-04-02 10:24:08 CEST; 4 days ago
+    Process: 871 ExecStart=/bin/true (code=exited, status=0/SUCCESS)
+    Main PID: 871 (code=exited, status=0/SUCCESS)
 
 **How can I stop the PostgreSQ server?**
 
@@ -93,7 +96,7 @@ In the shell::
 
 You should see something like::
 
-  * Stopping PostgreSQL 8.4 database server     [ OK  ]
+  * Stopping PostgreSQL 10.16 database server     [ OK  ]
 
 **How can I start the Postgres server?**
 
@@ -103,7 +106,7 @@ In the shell::
 
 You should see something like::
 
-  * Starting PostgreSQL 8.4 database server      [ OK ]
+  * Starting PostgreSQL 10.16 database server      [ OK ]
 
 **How can I restart the PostgreSQL server?**
 
@@ -113,7 +116,7 @@ In the shell::
 
 You should see something like::
 
-  * Restarting PostgreSQL 8.4 database server
+  * Restarting PostgreSQL 10.16 database server
 
 **How can I switch to database ‘zotonic_blog’ in psql?**
 
@@ -143,7 +146,7 @@ You should now be on the interactive terminal:
 
 .. code-block:: bash
 
-  psql (8.4.8)
+  psql (10.14)
   Type “help” for help.
 
   postgres=#
@@ -196,7 +199,7 @@ If the database exists, you’ll see something like:
 
 .. code-block:: bash
 
-  psql (8.4.8)
+  psql (10.14)
   Type “help” for help.
 
   test=>
@@ -308,7 +311,7 @@ How to create a database user:
 
 .. code-block:: none
 
-  postgres=# CREATE USER myuser WITH PASSWORD ‘userpassword’;
+  postgres=# CREATE USER myuser WITH PASSWORD ‘userpassword’ LOGIN;
   CREATE ROLE
 
 How to create a database:
@@ -322,7 +325,7 @@ How to create a database:
 
 How to initialize a database:
 
-http://www.postgresql.org/docs/8.4/static/app-initdb.html
+http://www.postgresql.org/docs/10/static/app-initdb.html
 
 How can I back-up a database:
 
@@ -425,8 +428,8 @@ Note: For maximum security, correct configuration of pg_hba.conf is essential.
 
 See :ref:`psql-trust-authentication` in this manual, or look at the Postgresql docs:
 
-http://www.postgresql.org/docs/8.4/interactive/client-authentication.html
-http://www.postgresql.org/docs/8.4/interactive/auth-pg-hba-conf.html
+https://www.postgresql.org/docs/10/interactive/client-authentication.html
+https://www.postgresql.org/docs/10/interactive/auth-pg-hba-conf.html
 
 **Problem:**
 
@@ -434,7 +437,7 @@ In postgres, you get the following:
 
 .. code-block:: none
 
-  testdb=> CREATE USER testdb WITH PASSWORD ‘testdb’;
+  testdb=> CREATE USER testdb WITH PASSWORD ‘testdb’ LOGIN;
   ERROR:  permission denied to create role
 
 **Solution:**
@@ -447,7 +450,7 @@ And it will work:
 
 .. code-block:: none
 
-  postgres=# CREATE USER testdb  WITH PASSWORD ‘testb’;
+  postgres=# CREATE USER testdb  WITH PASSWORD ‘testb’ LOGIN;
   CREATE ROLE
 
 **Problem:**
@@ -499,14 +502,14 @@ http://www.cyberciti.biz/faq/psql-fatal-ident-authentication-failed-for-user/
 PostgreSQL for Beginners
 http://www.postgresqlforbeginners.com/2010/11/interacting-with-postgresql-psql.html
 
-PostgreSQL 8.4.8 Documentation
-http://www.postgresql.org/docs/8.4/static/index.html
-http://www.postgresql.org/docs/8.4/static/reference-client.html
+PostgreSQL 10 Documentation
+http://www.postgresql.org/docs/10/static/index.html
+http://www.postgresql.org/docs/10/static/reference-client.html
 
 Howto Backup PostgreSQL Databases Server With pg_dump command
 http://www.cyberciti.biz/tips/howto-backup-postgresql-databases.html
 
-How To Use pg_dump and pg_restore with Postgres Plus® Tutorial for Linux®
+How To Use pg_dump and pg_restore with Postgres Plus Tutorial for Linux
 http://www.enterprisedb.com/resources-community/tutorials-quickstarts/linux/how-use-pgdump-and-pgrestore-postgres-plus-tutorial-
 
 An almost idiot’s guide to Install and Upgrade to PostgreSQL 8.4 with Yum

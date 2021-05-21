@@ -101,8 +101,18 @@ to_md({<<"a">>, Args, Enclosed}, M, S) ->
             to_md(Enclosed, M, S);
         Href ->
             {EncText, M1} = to_md(Enclosed, M, S),
-            {M2,RefNr} = add_anchor(Href, M1),
-            {[ $[, trl(EncText), $],$[,integer_to_list(RefNr),$] ], M2}
+            case EncText of
+                [Href] ->
+                    {<<$<, Href/binary, $>>>, M1};
+                _ ->
+                    Link = [
+                        $[, trl(EncText), $],
+                        $(, Href, $)
+                    ],
+                    {Link, M1}
+                    % {M2,RefNr} = add_anchor(Href, M1),
+                    % {[ $[, trl(EncText), $],$[,integer_to_list(RefNr),$] ], M2}
+            end
     end;
 
 to_md({<<"code">>, _Args, Enclosed}, M, S) ->
@@ -243,19 +253,17 @@ trl(B) ->
     z_string:trim_left(B).
 
 
+% add_anchor(Href, M) ->
+%     case indexof(Href, M#md.a, 1) of
+%         undefined ->
+%             {M#md{a=M#md.a ++ [Href]}, length(M#md.a)+1};
+%         N ->
+%             {M, N}
+%     end.
 
-% @todo: check if the Href is already defined, if so return existing index
-add_anchor(Href, M) ->
-    case indexof(Href, M#md.a, 1) of
-        undefined ->
-            {M#md{a=M#md.a ++ [Href]}, length(M#md.a)+1};
-        N ->
-            {M, N}
-    end.
-
-    indexof(_A, [], _N) -> undefined;
-    indexof(A, [A|_], N) -> N;
-    indexof(A, [_|R], N) -> indexof(A, R, N+1).
+%     indexof(_A, [], _N) -> undefined;
+%     indexof(A, [A|_], N) -> N;
+%     indexof(A, [_|R], N) -> indexof(A, R, N+1).
 
 
 expand_anchors(#md{a = []}) ->

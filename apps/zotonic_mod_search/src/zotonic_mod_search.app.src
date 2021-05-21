@@ -1,6 +1,6 @@
 {application, zotonic_mod_search, [
     {description, "Defines PostgreSQL queries for basic content searches in Zotonic."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

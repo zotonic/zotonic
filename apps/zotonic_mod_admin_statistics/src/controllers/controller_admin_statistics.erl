@@ -1,8 +1,8 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
-%% @copyright 2015 Maas-Maarten Zeeman
+%% @copyright 2015-2021 Maas-Maarten Zeeman
 %% @doc View zotonic system statistics
 
-%% Copyright 2015 Maas-Maarten Zeeman
+%% Copyright 2015-2021 Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,9 +20,15 @@
 -author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl>").
 
 -export([
+    service_available/1,
     is_authorized/1,
     process/4
 ]).
+
+service_available(Context) ->
+    Context1 = z_context:set_noindex_header(Context),
+    Context2 = z_context:set_nocache_headers(Context1),
+    {true, Context2}.
 
 is_authorized(Context) ->
     z_controller_helper:is_authorized([ {use, z_context:get(acl_module, Context, mod_admin_statistics)} ], Context).

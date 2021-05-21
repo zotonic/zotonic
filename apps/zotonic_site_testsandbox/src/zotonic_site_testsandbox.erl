@@ -1,5 +1,5 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010 Arjan Scherpenisse
+%% @copyright 2010-2021 Arjan Scherpenisse
 %% @doc Module implementing a sandbox website for unit testing purposes.
 
 %% Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,3 +20,10 @@
 -mod_title("Test sandbox").
 -mod_description("Module implementing a sandbox website with database for testing purposes.").
 -mod_prio(10).
+-depends([ mod_translation ]).
+
+-export([ init/1 ]).
+
+init(Context) ->
+    mod_translation:language_add(<<"zh-hant">>, true, Context).
+

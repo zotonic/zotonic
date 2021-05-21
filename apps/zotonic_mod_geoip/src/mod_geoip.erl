@@ -33,7 +33,7 @@
     license_key/0
 ]).
 
--spec lookup( tuple() | string() | binary) -> {ok, map()} | {error, invalid_address|not_found}.
+-spec lookup( tuple() | string() | binary() ) -> {ok, map()} | {error, invalid_address|not_found}.
 lookup(IP) ->
     case locus:lookup(city, IP) of
         {ok, Info} ->

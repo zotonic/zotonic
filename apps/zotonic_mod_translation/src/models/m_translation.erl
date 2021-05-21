@@ -28,6 +28,7 @@
 
     language_list_configured/1,
     language_list_enabled/1,
+    language_list_editable/1,
     main_languages/0,
     all_languages/0,
 
@@ -69,6 +70,12 @@ m_get([ <<"language_stemmer">> | Rest ], _Msg, Context) ->
         St -> St
     end,
     {ok, {Stemmer, Rest}};
+m_get([ <<"name">>, Code | Rest ], _Msg, _Context) ->
+    {ok, {z_language:local_name(Code), Rest}};
+m_get([ <<"english_name">>, Code | Rest ], _Msg, _Context) ->
+    {ok, {z_language:english_name(Code), Rest}};
+m_get([ <<"properties">>, Code | Rest ], _Msg, _Context) ->
+    {ok, {z_language:properties(Code), Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.

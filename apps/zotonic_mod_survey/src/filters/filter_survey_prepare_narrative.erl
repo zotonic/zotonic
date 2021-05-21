@@ -78,6 +78,6 @@ split_select(I) ->
 
 split_name(Name) ->
     case binary:split(Name, <<"=">>, [ trim ]) of
-        [ Name, Options ] -> {Name, Options};
-        [ Name ] -> {Name, <<>>}
+        [ Name1, Options ] -> {Name1, Options};
+        [ Name1 ] -> {Name1, <<>>}
     end.

@@ -447,8 +447,7 @@ notify_observer(Msg, {_Prio, Pid, _OwnerPid}, true, ContextArg) when is_pid(Pid)
     try
         gen_server:call(Pid, {Msg, ContextArg}, ?TIMEOUT)
     catch
-        ?WITH_STACKTRACE(EM, E, Trace)
-            Trace = erlang:get_stacktrace(),
+        EM:E:Trace ->
             lager:error("Error notifying ~p with event ~p. Error ~p:~p. Trace:~p",
                         [Pid, Msg, EM, E, Trace]),
             {error, {notify_observer, Pid, Msg, EM, E}}
@@ -467,7 +466,7 @@ notify_observer_fold(Msg, {_Prio, Pid, _OwnerPid}, Acc, ContextArg) when is_pid(
     try
         gen_server:call(Pid, {Msg, Acc, ContextArg}, ?TIMEOUT)
     catch
-        ?WITH_STACKTRACE(EM, E, Trace)
+        EM:E:Trace ->
             lager:error("Error foloding ~p with event ~p. Error ~p:~p. Trace:~p",
                         [Pid, Msg, EM, E, Trace]),
             Acc

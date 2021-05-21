@@ -20,9 +20,12 @@
 -author("Blaise").
 
 %% API
--export([run/1]).
+-export([info/0, run/1]).
 
 -include("../../include/zotonic_command.hrl").
+
+info() ->
+    "Open an Erlang shell on the running Erlang VM.".
 
 run(_) ->
     case zotonic_command_nodename:nodename_target( list_to_atom(?DEFAULT_NODENAME) ) of

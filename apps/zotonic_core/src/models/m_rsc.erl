@@ -76,7 +76,7 @@
 
 -include_lib("zotonic.hrl").
 
--type resource() :: resource_id() | list(digits()) | resource_name().
+-type resource() :: resource_id() | list(digits()) | resource_name() | undefined.
 -type resource_id() :: integer().
 -type resource_name() :: string() | binary() | atom().
 -type resource_uri() :: binary().
@@ -229,8 +229,9 @@ get_cached_unsafe(Id, Context) when is_integer(Id) ->
             % Crash on database errors - we don't want errors to
             % be cached in the depcache.
             case get_raw(Id, false, Context) of
-                {ok, Props} ->
-                    z_notifier:foldr(#rsc_get{ id = Id }, Props, Context);
+                {ok, Map} ->
+                    MapDT = ensure_utc_dates(Map, Context),
+                    z_notifier:foldr(#rsc_get{ id = Id }, MapDT, Context);
                 {error, nodb} ->
                     undefined;
                 {error, enoent} ->
@@ -268,16 +269,17 @@ filter_props_acl(Id, Props, Context) when is_map(Props) ->
 
 %% @doc Get the resource from the database, do not fetch the pivot fields and
 %%      do not use the cached result. The properties are NOT filtered by the ACL.
--spec get_raw(resource_id(), z:context()) -> {ok, map()} | {error, term()}.
+-spec get_raw(resource(), z:context()) -> {ok, map()} | {error, term()}.
 get_raw(Id, Context) when is_integer(Id) ->
     get_raw(Id, false, Context).
 
 %% @doc Same as get_raw/2 but also lock the resource for update.
 %%      The properties are NOT filtered by the ACL.
--spec get_raw_lock(resource_id(), z:context()) -> {ok, map()} | {error, term()}.
-get_raw_lock(Id, Context) when is_integer(Id) ->
+-spec get_raw_lock(resource(), z:context()) -> {ok, map()} | {error, term()}.
+get_raw_lock(Id, Context) ->
     get_raw(Id, true, Context).
 
+-spec get_raw(resource(), boolean(), z:context()) -> {ok, map()} | {error, term()}.
 get_raw(Id, IsLock, Context) when is_integer(Id) ->
     SQL = case z_memo:get(rsc_raw_sql) of
         undefined ->
@@ -306,10 +308,29 @@ get_raw(Id, IsLock, Context) when is_integer(Id) ->
     end,
     case z_db:qmap_props_row(SQL1, [ Id ], [ {keys, binary} ], Context) of
         {ok, Map} ->
-            {ok, ensure_utc_dates(Map, Context)};
+            {ok, map_language_atoms(Map)};
         {error, _} = Error ->
             Error
-    end.
+    end;
+get_raw(undefined, _IsLock, _Context) ->
+    {error, enoent};
+get_raw(Id, IsLock, Context) ->
+    get_raw(rid(Id, Context), IsLock, Context).
+
+%% The languages are stored as a psql array, map to the internal atom
+%% representation. On update this is mapped to binaries in z_db:update/3.
+map_language_atoms(#{ <<"language">> := Lang } = Map) when is_list(Lang) ->
+    Lang1 = lists:filtermap(
+        fun(Iso) ->
+            case z_language:to_language_atom(Iso) of
+                {ok, IsoAtom} -> {true, IsoAtom};
+                {error, _} -> false
+            end
+        end,
+        Lang),
+    Map#{ <<"language">> => Lang1 };
+map_language_atoms(Map) ->
+    Map#{ <<"language">> => [] }.
 
 %% Fix old records which had serialized data in localtime and no date_is_all_day flag
 ensure_utc_dates(#{ <<"tz">> := _ } = Map, _Context) ->
@@ -787,6 +808,8 @@ rid(<<>>, _Context) ->
     undefined;
 rid([], _Context) ->
     undefined;
+rid([X|_], _Context) when not is_integer(X) ->
+    undefined;
 rid(#trans{} = Tr, Context) ->
     rid(z_trans:lookup_fallback(Tr, Context), Context);
 rid(UniqueName, Context) ->
@@ -799,19 +822,26 @@ rid(UniqueName, Context) ->
 %% @doc Return the id of the resource with a certain unique name.
 -spec name_lookup(resource_name(), z:context()) -> resource_id() | undefined.
 name_lookup(Name, Context) ->
-    Lower = z_string:to_name(Name),
-    case z_depcache:get({rsc_name, Lower}, Context) of
-        {ok, undefined} ->
-            undefined;
-        {ok, Id} ->
-            Id;
-        undefined ->
-            Id = case z_db:q1("select id from rsc where name = $1", [Lower], Context) of
-                undefined -> undefined;
-                Value -> Value
-            end,
-            z_depcache:set({rsc_name, Lower}, Id, ?DAY, [Id, {rsc_name, Lower}], Context),
-            Id
+    try
+        z_string:to_name(Name)
+    of
+        Lower ->
+            case z_depcache:get({rsc_name, Lower}, Context) of
+                {ok, undefined} ->
+                    undefined;
+                {ok, Id} ->
+                    Id;
+                undefined ->
+                    Id = case z_db:q1("select id from rsc where name = $1", [Lower], Context) of
+                        undefined -> undefined;
+                        Value -> Value
+                    end,
+                    z_depcache:set({rsc_name, Lower}, Id, ?DAY, [Id, {rsc_name, Lower}], Context),
+                    Id
+            end
+    catch
+        error:badarg ->
+            undefined
     end.
 
 

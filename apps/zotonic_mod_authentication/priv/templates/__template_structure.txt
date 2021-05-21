@@ -25,6 +25,12 @@ state::
 |       |-- _logon_reset_form.tpl
 |       |   `-- _logon_reset_form_fields.tpl
 |       `-- _logon_reset_support.tpl // backlink to logon form
+|== logon_change:
+|   `-- _logon_form.tpl
+|       |-- _logon_change_title.tpl
+|       |-- _logon_change_form.tpl
+|       |   `-- _logon_change_form_fields.tpl
+|       `-- _logon_change_support.tpl
 |== signup (logon_state only)
 |   `-- _logon_form.tpl
 |       |-- _signup_title.tpl

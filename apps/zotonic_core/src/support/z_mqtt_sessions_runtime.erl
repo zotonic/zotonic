@@ -23,12 +23,11 @@
     pool_default/0,
 
     new_user_context/3,
+    control_message/3,
     connect/4,
     reauth/2,
     is_allowed/4,
-    is_valid_message/3,
-
-    context_updates/3
+    is_valid_message/3
     ]).
 
 -behaviour(mqtt_sessions_runtime).
@@ -66,30 +65,33 @@ pool_default() ->
 
 -spec new_user_context( atom(), binary(), mqtt_sessions:session_options() ) -> z:context().
 new_user_context( Site, ClientId, SessionOptions ) ->
+    exometer:update([zotonic, Site, mqtt, connects], 1),
     Context = z_context:new(Site),
     Context1 = Context#context{
         client_topic = [ <<"bridge">>, ClientId ],
         client_id = ClientId,
-        routing_id = maps:get(routing_id, SessionOptions)
+        routing_id = maps:get(routing_id, SessionOptions, <<>>)
     },
-    mqtt_sessions:subscribe(
-        Site,
-        [ <<"client">>, ClientId, <<"config">> ],
-        {?MODULE, context_updates, [Site, ClientId]},
-        z_acl:sudo(Context1)),
-    Context1.
+    Prefs = maps:get(context_prefs, SessionOptions, #{}),
+    SessionId = maps:get(cotonic_sid, Prefs, undefined),
+    z_context:set_session_id(SessionId, Context1).
 
-context_updates(Site, ClientId, #{ message := #{ payload := Payload} }) ->
-    mqtt_sessions:update_user_context(Site, ClientId, fun(Ctx) -> update_context_fun(Payload, Ctx) end).
-
-update_context_fun(Payload, Context) ->
+-spec control_message( list(), mqtt_packet_map:mqtt_packet(), z:context() ) -> {ok, z:context()}.
+control_message([ <<"auth">> ], #{ payload := Payload }, Context) ->
     Context1 = maybe_set_language(Payload, Context),
     Context2 = maybe_set_timezone(Payload, Context1),
-    z_notifier:foldl(#request_context{ phase = refresh }, Context2, Context2).
+    Context3 = z_notifier:foldl(#request_context{ phase = refresh }, Context2, Context2),
+    {ok, Context3};
+control_message([ <<"sid">> ], #{ payload := Payload }, Context) ->
+    Context1 = maybe_set_sid(Payload, Context),
+    Context2 = z_notifier:foldl(#request_context{ phase = refresh }, Context1, Context1),
+    {ok, Context2};
+control_message(_Topic, _Packet, Context) ->
+    {ok, Context}.
 
-maybe_set_language(#{ <<"language">> := <<>> }, Context) ->
+maybe_set_language(#{ <<"preferences">> := #{ <<"language">> := <<>> } }, Context) ->
     Context;
-maybe_set_language(#{ <<"language">> := Lang }, Context) when is_binary(Lang) ->
+maybe_set_language(#{ <<"preferences">> := #{ <<"language">> := Lang } }, Context) when is_binary(Lang) ->
     try
         mod_translation:set_language(Lang, Context)
     catch
@@ -99,11 +101,18 @@ maybe_set_language(#{ <<"language">> := Lang }, Context) when is_binary(Lang) ->
 maybe_set_language(_Payload, Context) ->
     Context.
 
-maybe_set_timezone(#{ <<"timezone">> := <<>> }, Context) ->
+maybe_set_timezone(#{ <<"preferences">> := #{ <<"timezone">> := <<>> } }, Context) ->
     Context;
-maybe_set_timezone(#{ <<"timezone">> := Timezone }, Context) when is_binary(Timezone) ->
+maybe_set_timezone(#{ <<"preferences">> := #{ <<"timezone">> := Timezone } }, Context) when is_binary(Timezone) ->
     z_context:set_tz(Timezone, Context);
 maybe_set_timezone(_Payload, Context) ->
+    Context.
+
+maybe_set_sid(#{ <<"options">> := #{ <<"sid">> := <<>> } }, Context) ->
+    Context;
+maybe_set_sid(#{ <<"options">> := #{ <<"sid">> := Sid } }, Context) when is_binary(Sid) ->
+    z_context:set_session_id(Sid, Context);
+maybe_set_sid(_Payload, Context) ->
     Context.
 
 
@@ -118,24 +127,33 @@ set_connect_context_options(Options, Context) ->
         Tz -> z_context:set_tz(Tz, Context2)
     end,
     Context4 = z_context:set(auth_options, maps:get(auth_options, Prefs, #{}), Context3),
-    z_context:set(peer_ip, maps:get(peer_ip, Options, undefined), Context4).
+    Context5 = z_context:set(peer_ip, maps:get(peer_ip, Options, undefined), Context4),
+    Context6 = case maps:get(cotonic_sid, Prefs, undefined) of
+        undefined -> Context5;
+        Sid -> z_context:set_session_id(Sid, Context5)
+    end,
+    z_acl:logon_refresh(Context6).
 
 -spec connect( mqtt_packet_map:mqtt_packet(), boolean(), mqtt_session:msg_options(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.
-connect(#{ type := connect, username := U, password := P }, false,
+connect(#{ type := connect, username := U, password := P, properties := Props }, false,
         #{ context_prefs := #{ user_id := UserId } = Prefs } = Options,
         Context) when ?none(U), ?none(P) ->
     % No session, accept user from the mqtt controller
     AuthOptions = maps:get(auth_options, Prefs, #{}),
     Context1 = set_connect_context_options(Options, Context),
-    Context2 = case UserId of
+    Context2 = case maps:get(<<"cotonic_sid">>, Props, undefined) of
         undefined -> Context1;
-        _ -> z_acl:logon_prefs(UserId, AuthOptions, Context1)
+        Sid when Sid =/= <<>> -> z_context:set_session_id(Sid, Context1)
+    end,
+    Context3 = case UserId of
+        undefined -> Context2;
+        _ -> z_acl:logon_prefs(UserId, AuthOptions, Context2)
     end,
     ConnAck = #{
         type => connack,
         reason_code => ?MQTT_RC_SUCCESS
     },
-    {ok, ConnAck, Context2};
+    {ok, ConnAck, Context3};
 connect(#{ type := connect, username := U, password := P }, true,
         #{ context_prefs := #{ user_id := UserId } } = Options,
         Context) when ?none(U), ?none(P) ->
@@ -172,12 +190,12 @@ connect(#{ type := connect, username := U, password := P }, _IsSessionPresent, O
             },
             {ok, ConnAck, Context}
     end;
-connect(#{ type := connect, username := U, password := P }, IsSessionPresent, Options, Context) when not ?none(U), not ?none(P) ->
+connect(#{ type := connect, username := U, password := P, properties := Props }, IsSessionPresent, Options, Context) when not ?none(U), not ?none(P) ->
     % User login, and no user from the MQTT controller
     % The username might be something like: "example.com:localuser"
     Username = case binary:split(U, <<":">>) of
         [ _VHost, U1 ] -> U1;
-        U1 -> U1
+        _ -> U
     end,
     LogonArgs = #{
         <<"username">> => Username,
@@ -192,7 +210,11 @@ connect(#{ type := connect, username := U, password := P }, IsSessionPresent, Op
             case IsAuthOk of
                 true ->
                     Context1 = set_connect_context_options(Options, Context),
-                    Context2 = z_acl:logon(UserId, Context1),
+                    Context2 = case maps:get(<<"cotonic_sid">>, Props, undefined) of
+                        undefined -> Context1;
+                        Sid when Sid =/= <<>> -> z_context:set_session_id(Sid, Context1)
+                    end,
+                    Context3 = z_acl:logon(UserId, Context2),
                     ConnAck = #{
                         type => connack,
                         reason_code => ?MQTT_RC_SUCCESS,
@@ -201,7 +223,7 @@ connect(#{ type := connect, username := U, password := P }, IsSessionPresent, Op
                             % ... token ...
                         }
                     },
-                    {ok, ConnAck, Context2};
+                    {ok, ConnAck, Context3};
                 false ->
                     ConnAck = #{
                         type => connack,
@@ -249,7 +271,35 @@ reauth(#{ type := _auth }, _Context) ->
 
 -spec is_allowed( publish | subscribe, mqtt_sessions_runtime:topic(), mqtt_packet_map:mqtt_packet(), z:context()) -> boolean().
 is_allowed(Action, Topic, Packet, Context) when Action =:= subscribe; Action =:= publish ->
-    z_acl:is_admin(Context) orelse is_allowed_acl(Action, Topic, Packet, Context).
+    z_stats:record_event(broker, Action, Context), 
+    is_allowed(z_acl:is_admin(Context), Action, Topic, Packet, Context).
+
+is_allowed(true, publish, _Topic, _Packet, _Context) -> true;
+is_allowed(true, subscribe, Topic, _Packet, Context) ->
+    is_allowed_admin_subscribe(Topic, Context);
+is_allowed(false, Action, Topic, Packet, Context) ->
+    is_allowed_acl(Action, Topic, Packet, Context).
+
+% Check if it is allowed for the admin to subscribe to a topic.
+is_allowed_admin_subscribe([<<"$SYS">>, <<"site">>, Site | _], Context) ->
+    case z_context:site(Context) of
+        zotonic_status_site ->
+            % admin of the status site is allowed to subscribe to sys
+            % topics of all sites.
+            true;
+        Host ->
+            % A normal site admin is allowed to subscribe to site specific
+            % sys topics.
+            Site =:= z_convert:to_binary(Host)
+    end;
+is_allowed_admin_subscribe([<<"$SYS">>, <<"erlang">> | _], _Context) ->
+    % and to zotonic node wide erlang topics
+    true;
+is_allowed_admin_subscribe([<<"$SYS">> | _], _Context) ->
+    % other sys topics are disallowed
+    false;
+is_allowed_admin_subscribe(_, _Context) ->
+    true.
 
 is_allowed_acl(_Action, [ '#' ], _Packet, _Context) ->
     false;
@@ -265,15 +315,43 @@ is_allowed_acl(Action, Topic, Packet, Context) ->
         undefined -> is_allowed(Action, Topic, Context)
     end.
 
+
 is_allowed(_Action,   [ <<"test">> | _ ], _Context) -> true;
 is_allowed(_Action,   [ <<"public">> | _ ], _Context) -> true;
 is_allowed(_Action,   [ <<"reply">>, <<"call-", _/binary>>, _ ], _Context) -> true;
-%% TODO: change the model access to NOT allowed per default (ACL should allow/disallow access)
+% Models MUST implement their own access control for get/ post/ delete
 is_allowed(publish,   [ <<"model">>, _Model, <<"get">> | _ ], _Context) -> true;
 is_allowed(publish,   [ <<"model">>, _Model, <<"post">> | _ ], _Context) -> true;
 is_allowed(publish,   [ <<"model">>, _Model, <<"delete">> | _ ], _Context) -> true;
-is_allowed(subscribe, [ <<"model">>, _Model, <<"event">> | _ ], _Context) -> true;
-%% End todo.
+% End generic models ACL
+is_allowed(publish,   [ <<"model">>, Model,  <<"event">>, Id | _ ], Context)
+    when Model =:= <<"rsc">>;
+         Model =:= <<"media">>;
+         Model =:= <<"identity">> ->
+    z_acl:rsc_editable( m_rsc:rid(Id, Context), Context );
+is_allowed(subscribe, [ <<"model">>, Model,  <<"event">>, Id | _ ], Context)
+    when Model =:= <<"rsc">>;
+         Model =:= <<"media">>;
+         Model =:= <<"identity">> ->
+    case is_wildcard(Id) of
+        true -> false;
+        false -> z_acl:rsc_visible( m_rsc:rid(Id, Context), Context )
+    end;
+% Model events can be view iff the user has use permission on the module
+is_allowed(subscribe, [ <<"model">>, Model, <<"event">> | _ ], Context) ->
+    try
+        case z_module_indexer:find(model, Model, Context) of
+            {ok, #module_index{ module = zotonic_core }} ->
+                true;
+            {ok, #module_index{ module = Module }} ->
+                z_acl:is_allowed(use, Module, Context);
+            {error, enoent} ->
+                false
+        end
+    catch
+        _:_ ->
+            false
+    end;
 is_allowed(publish,   [ <<"bridge">>, _Remote, <<"reply">> | _ ], _Context) -> true;
 is_allowed(publish,   [ <<"bridge">>, _Remote, <<"public">> | _ ], _Context) -> true;
 is_allowed(_Action,   [ <<"bridge">>, Remote | _ ], Context) when is_binary(Remote) ->

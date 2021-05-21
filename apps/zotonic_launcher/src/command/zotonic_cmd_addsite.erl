@@ -20,9 +20,16 @@
 -author("Marc Worrell").
 
 %% API
--export([run/1]).
+-export([
+    info/0,
+    usage/0,
+    run/1
+]).
 
 -define(SKEL, blog).
+
+info() ->
+    "Add a site and install database".
 
 usage() ->
     io:format("Usage: zotonic addsite [options] <site_name> ~n~n"),
@@ -108,9 +115,6 @@ addsite(_Target, Sitename, Options0) ->
     Options = set_dbschema(Sitename, Options0),
     Context = z_context:new(zotonic_site_status),
     case zotonic_status_addsite:addsite( z_convert:to_binary(Sitename), maps:to_list(Options), Context ) of
-        {error, Reason} when is_list(Reason); is_binary(Reason) ->
-            io:format(standard_error, "Error: ~s~n", [ Reason ]),
-            halt(1);
         {ok, {Site, SiteOpts}} ->
             io:format("Created site ~p:~n - url \"~s\"~n - admin password \"~s\"~n",
                       [ Site,
@@ -132,7 +136,13 @@ addsite(_Target, Sitename, Options0) ->
                 {error, _} ->
                     io:format(standard_error, "Zotonic is not running, site is not compiled and not started.~n", []),
                     exit(1)
-            end
+            end;
+        {error, Reason} when is_binary(Reason) ->
+            io:format(standard_error, "Error: ~s~n", [ Reason ]),
+            halt(1);
+        {error, Reason} ->
+            io:format(standard_error, "Error: ~p~n", [ Reason ]),
+            halt(1)
     end.
 
 set_dbschema(Sitename, Options) ->

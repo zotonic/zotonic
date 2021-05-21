@@ -13,9 +13,9 @@ Params:
         {% sortable id=#unlink_wrapper tag=edge_id %}
     {% endif %}
     <li id="{{ #unlink_wrapper }}" class="menu-item">
-        <div>
+        <div class="menu-wrapper">
             {% if not is_list_truncated %}
-               <i class="z-icon z-icon-drag"></i>
+               <div class="menu-drag"></div>
             {% endif %}
             <a id="{{ #edit }}" href="{% url admin_edit_rsc id=object_id %}" title="{_ Edit _}">
                 {% catinclude "_rsc_edge_item.tpl" object_id %}

@@ -1,6 +1,6 @@
 {application, zotonic_mod_oembed, [
     {description, "Add external media in your site by their URL."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

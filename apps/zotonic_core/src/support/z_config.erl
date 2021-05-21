@@ -115,6 +115,18 @@ get(zotonic_apps) ->
         "" -> default(zotonic_apps);
         ZC -> ZC
     end;
+get(dbhost) ->
+    case os:getenv("ZOTONIC_DBHOST") of
+        false -> default(dbhost);
+        "" -> default(dbhost);
+        DBHost -> DBHost
+    end;
+get(dbport) ->
+    case os:getenv("ZOTONIC_DBPORT") of
+        false -> default(dbport);
+        "" -> default(dbport);
+        DBPort -> list_to_integer(DBPort)
+    end;
 get(Key) ->
     ?MODULE:get(Key, default(Key)).
 
@@ -231,6 +243,7 @@ default(smtp_spamd_port) -> 783;
 default(smtp_dns_blocklist) -> z_email_dnsbl:dns_blocklist();
 default(smtp_dns_allowlist) -> z_email_dnsbl:dns_allowlist();
 default(smtp_delete_sent_after) -> 240;
+default(smtp_is_blackhole) -> false;
 default(mqtt_listen_ip) -> ?MODULE:get(listen_ip);
 default(mqtt_listen_ip6) -> ?MODULE:get(listen_ip6);
 default(mqtt_listen_port) -> 1883;
@@ -249,11 +262,13 @@ default(dbpassword) -> "zotonic";
 default(dbdatabase) -> "zotonic";
 default(dbschema) -> "public";
 default(filewatcher_enabled) -> true;
-default(filewatcher_scanner_enabled) -> false;
+default(filewatcher_scanner_enabled) -> true;
+default(filewatcher_scanner_interval) -> 10000;
 default(syslog_ident) -> "zotonic";
 default(syslog_opts) -> [ndelay];
 default(syslog_facility) -> local0;
 default(syslog_level) -> info;
+default(log_http_metrics_buffer_size) -> 10000;
 default(zotonic_apps) -> filename:join([ z_path:get_path(), "apps_user" ]);
 default(proxy_allowlist) -> local;
 default(ip_allowlist) -> local;
@@ -329,6 +344,7 @@ all() ->
             ssl_dhfile,
             filewatcher_enabled,
             filewatcher_scanner_enabled,
+            filewatcher_scanner_interval,
             syslog_ident,
             syslog_opts,
             syslog_facility,
@@ -338,6 +354,7 @@ all() ->
             ip_allowlist_system_management,
             sessionjobs_limit,
             sidejobs_limit,
+            log_http_metrics_buffer_size,
             server_header,
             html_error_path
         ]).

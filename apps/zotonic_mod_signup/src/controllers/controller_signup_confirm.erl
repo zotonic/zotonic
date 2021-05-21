@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% Date: 2010-05-12
-%% @doc Display a form to sign up.
+%% @copyright 2010-2021 Marc Worrell
+%% @doc Handle the signup confirmation link
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,36 +28,24 @@
 
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
-    Context2 = z_context:ensure_qs(Context),
-    z_context:lager_md(Context2),
-    Key = z_context:get_q(<<"key">>, Context2, <<>>),
-    {Vars, ContextConfirm} = case Key of
-                                <<>> ->
-                                    {[], Context2};
-                                _ ->
-                                    case confirm(Key, Context2) of
-                                        {ok, UserId} ->
-                                            {ok, ContextUser} = z_auth:logon(UserId, Context2),
-                                            Location = confirm_location(UserId, ContextUser),
-                                            {[{user_id, UserId}, {location,Location}], ContextUser};
-                                        {error, _Reason} ->
-                                            {[{error, true}], Context2}
-                                    end
-                              end,
-    Rendered = z_template:render("signup_confirm.tpl", Vars, ContextConfirm),
-    z_context:output(Rendered, ContextConfirm).
+    z_context:lager_md(Context),
+    Rendered = z_template:render("signup_confirm.tpl", [], Context),
+    z_context:output(Rendered, Context).
 
 
 %% @doc Handle the submit of the signup form.
-event(#submit{}, Context) ->
-    Key = z_context:get_q(key, Context, []),
+event(#postback{ message={confirm, [ {key, Key} ]}}, Context) ->
     case confirm(Key, Context) of
         {ok, UserId} ->
             {ok, ContextUser} = z_auth:logon(UserId, Context),
-            Location = confirm_location(UserId, ContextUser),
-            z_render:wire({redirect, [{location, Location}]}, ContextUser);
+            Url = z_convert:to_binary( confirm_location(UserId, ContextUser) ),
+            ok = z_auth:logon_redirect(UserId, Url, ContextUser),
+            z_render:growl(?__("Redirecting...", Context), Context);
         {error, _Reason} ->
-            z_render:wire({show, [{target,"confirm_error"}]}, Context)
+            z_render:wire([
+                    {hide, [{target,"confirm_wait"}]},
+                    {show, [{target,"confirm_error"}]}
+                ], Context)
     end.
 
 
@@ -80,8 +67,8 @@ confirm(Key, Context) ->
             {ok, UserId}
     end.
 
-confirm_location(UserId, Context) ->
-    case z_notifier:first(#signup_confirm_redirect{id=UserId}, Context) of
-        undefined -> m_rsc:p(UserId, page_url, Context);
+confirm_location(UserId, ContextUser) ->
+    case z_convert:to_binary( z_notifier:first(#signup_confirm_redirect{ id = UserId }, ContextUser) ) of
+        <<>> -> m_rsc:p_no_acl(UserId, page_url, ContextUser);
         Loc -> Loc
     end.

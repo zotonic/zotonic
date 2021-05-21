@@ -16,49 +16,47 @@
 </div>
 
 {% if m.acl.insert.predicate %}
-<div class="well">
+<div class="well z-button-row">
     {% button class="btn btn-primary" text=_"Make a new predicate" action={dialog_predicate_new title=""} %}
 </div>
 {% endif %}
 
-<div>
-    <table class="table table-striped do_adminLinkedTable">
-        <thead>
-            <tr>
-                <th width="20%">{_ Title _}</th>
-                <th width="20%">{_ Name _}</th>
-                <th width="40%">{_ URI _}</th>
-                <th width="20%">&nbsp;</th>
-            </tr>
-        </thead>
+<table class="table table-striped do_adminLinkedTable">
+    <thead>
+        <tr>
+            <th width="20%">{_ Title _}</th>
+            <th width="20%">{_ Name _}</th>
+            <th width="40%">{_ URI _}</th>
+            <th width="20%">&nbsp;</th>
+        </tr>
+    </thead>
 
-        <tbody id="predicate-list">
-            {% for name,p in m.predicate %}
-            <tr id="{{ #li.name }}" data-href="{% url admin_edit_rsc id=p.id %}" data-id="{{ p.id }}">
-                <td>{{ p.title|default:"&nbsp;" }}</td>
-                <td>{{ p.name|default:"&nbsp;" }}</td>
-                <td>{{ p.uri|default:"&nbsp;" }}</td>
-                <td>
-                    <div class="pull-right buttons">
-                        {% if m.acl.is_allowed.delete[p.id] %}
-                            {% button class="btn btn-default btn-xs" disabled=p.is_protected text=_"delete" action={dialog_delete_rsc id=p.id} %}
-                        {% endif %}
-                        {% if m.acl.is_allowed.update[p.id] %}
-                            <a href="{% url admin_edit_rsc id=p.id %}" class="btn btn-default btn-xs">{_ edit _}</a>
-                        {% endif %}
-                    </div>
-                    {{ p.reversed|yesno:"reversed,&nbsp;" }}
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                {_ No predicates found. _}
-            </tr>
-            {% endfor %}
-        </tbody>
+    <tbody id="predicate-list">
+        {% for name,p in m.predicate %}
+        <tr id="{{ #li.name }}" data-href="{% url admin_edit_rsc id=p.id %}" data-id="{{ p.id }}">
+            <td>{{ p.title|default:"&nbsp;" }}</td>
+            <td>{{ p.name|default:"&nbsp;" }}</td>
+            <td>{{ p.uri|default:"&nbsp;" }}</td>
+            <td>
+                <div class="pull-right buttons">
+                    {% if m.acl.is_allowed.delete[p.id] %}
+                        {% button class="btn btn-default btn-xs" disabled=p.is_protected text=_"delete" action={dialog_delete_rsc id=p.id} %}
+                    {% endif %}
+                    {% if m.acl.is_allowed.update[p.id] %}
+                        <a href="{% url admin_edit_rsc id=p.id %}" class="btn btn-default btn-xs">{_ edit _}</a>
+                    {% endif %}
+                </div>
+                {{ p.reversed|yesno:"reversed,&nbsp;" }}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            {_ No predicates found. _}
+        </tr>
+        {% endfor %}
+    </tbody>
 
-    </table>
-</div>
+</table>
 {% endwith %}
 
 {% javascript %}

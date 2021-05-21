@@ -1,6 +1,6 @@
 {application, zotonic_mod_email_receive, [
     {description, "Handle received e-mails, notifies email observers depending on the recipient."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

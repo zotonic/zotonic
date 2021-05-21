@@ -20,7 +20,10 @@
 -author("Marc Worrell").
 
 %% API
--export([run/1]).
+-export([info/0, run/1]).
+
+info() ->
+    "Connect to PostgreSQL using the Zotonic database configuration.".
 
 run(_) ->
     case zotonic_command:get_target_node() of
@@ -40,8 +43,8 @@ run(_) ->
 
 try_connect(Cfg) ->
     Options = [
-        {dbhost, get_value(dbhost, Cfg, "localhost")},
-        {dbport, get_value(dbport, Cfg, 5432)},
+        {dbhost, get_value(dbhost, Cfg, default(dbhost))},
+        {dbport, get_value(dbport, Cfg, default(dbport))},
         {dbpassword, get_value(dbpassword, Cfg, "zotonic")},
         {dbuser, get_value(dbuser, Cfg, "zotonic")},
         {dbdatabase, get_value(dbdatabase, Cfg, "zotonic")},
@@ -53,6 +56,19 @@ try_connect(Cfg) ->
     DbDriver:ensure_all_started(),
     V = DbDriver:test_connection(Options),
     show_result(V, Options).
+
+default(dbhost) ->
+    case os:getenv("ZOTONIC_DBHOST") of
+        false -> "localhost";
+        "" -> "localhost";
+        DBHost -> DBHost
+    end;
+default(dbport) ->
+    case os:getenv("ZOTONIC_DBPORT") of
+        false -> 5432;
+        "" -> 5432;
+        DBPort -> list_to_integer(DBPort)
+    end.
 
 show_options(Options) ->
     io:format("Trying to connect using options:~n~n"),
@@ -70,6 +86,7 @@ show_result({error, noschema}, Options) ->
     halt(1);
 show_result(Error, _Options) ->
     zotonic_command:format_error(Error).
+
 
 get_value(K, Cfg, Default) ->
     case maps:get(K, Cfg, Default) of

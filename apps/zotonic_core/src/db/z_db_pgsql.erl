@@ -47,8 +47,9 @@
 -define(IDLE_TIMEOUT, 60000).
 
 -define(CONNECT_RETRIES, 50).
+-define(CONNECT_RETRY_SHORT,   100).
+-define(CONNECT_RETRY_MIDDLE, 1000).
 -define(CONNECT_RETRY_SLEEP, 10000).
--define(CONNECT_RETRY_SHORT, 10).
 
 %% @doc Threshold above which we do an automatic explain of traced queries.
  -define(DBTRACE_EXPLAIN_MSEC, 100).
@@ -244,8 +245,10 @@ handle_info(disconnect, #state{ busy_pid = undefined } = State) ->
     {noreply, cancel(State)};
 
 handle_info(disconnect, State) ->
+    Database = get_arg(dbdatabase, State#state.conn_args),
+    Schema = get_arg(dbschema, State#state.conn_args),
     lager:error("SQL disconnect from ~s/~s whilst busy with \"~s\"  ~p",
-                [ State#state.busy_sql, State#state.busy_params ]),
+                [ Database, Schema, State#state.busy_sql, State#state.busy_params ]),
     {noreply, State, cancel(State)};
 
 handle_info(timeout, #state{ busy_pid = undefined } = State) ->
@@ -295,6 +298,11 @@ handle_info({'DOWN', _Ref, process, Pid, _Reason}, #state{ conn = Pid } = State)
 
 handle_info({'DOWN', _Ref, process, _Pid, _Reason}, #state{ busy_pid = undefined } = State) ->
     % Might be a late down message from the busy pid, ignore.
+    {noreply, State, timeout(State)};
+
+handle_info({'DOWN', _Ref, process, Pid, _Reason}, State) ->
+    % Stray 'DOWN' message, might be a race condition.
+    lager:info("SQL got 'DOWN' message from unknown process ~p in state ~p", [ Pid, State ]),
     {noreply, State, timeout(State)};
 
 handle_info({'EXIT', _Pid, _Reason}, State) ->
@@ -432,7 +440,7 @@ maybe_close_connections(_) ->
 retry_delay(_, RetryCount) when RetryCount < 2 ->
     ?CONNECT_RETRY_SHORT;
 retry_delay(too_many_connections, _) ->
-    ?CONNECT_RETRY_SHORT;
+    ?CONNECT_RETRY_MIDDLE;
 retry_delay(_, _RetryCount)  ->
     ?CONNECT_RETRY_SLEEP.
 

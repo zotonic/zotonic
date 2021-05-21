@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
+%% @copyright 2009-2021 Marc Worrell
 %% @doc Model for the zotonic site configuration
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,6 +37,8 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"site">> | Rest ], _Msg, Context) ->
+    {ok, {z_context:site(Context), Rest}};
 m_get([ <<"environment">> | Rest ], _Msg, Context) ->
     {ok, {environment(Context), Rest}};
 m_get([ <<"hostname">> | Rest ], _Msg, Context) ->
@@ -57,6 +59,9 @@ m_get([ <<"title">> | Rest ], _Msg, Context) ->
 m_get([ <<"subtitle">> | Rest ], _Msg, Context) ->
     SubTitle = m_config:get_value(site, subtitle, Context),
     {ok, {SubTitle, Rest}};
+m_get([ <<"email_from">> | Rest ], _Msg, Context) ->
+    EmailFrom = z_email:get_email_from(Context),
+    {ok, {EmailFrom, Rest}};
 m_get([ <<"pagelen">> | Rest ], _Msg, Context) ->
     PageLen = case m_config:get_value(site, pagelen, Context) of
         undefined -> ?SEARCH_PAGELEN;

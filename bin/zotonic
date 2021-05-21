@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-readonly ZOTONIC=${ZOTONIC:=$(\cd `\dirname $0`/..;\pwd)}
+readonly ZOTONIC=${ZOTONIC:=$(\cd `\dirname -- "$0"`/..;\pwd)}
 export   ZOTONIC
 
 # Protect PATH and ZOTONIC environment variables to be changed at runtime

@@ -55,7 +55,7 @@
 %% @doc Insert a new resource. Crashes when insertion is not allowed.
 -spec insert(m_rsc:props_all(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
 insert(Props, Context) ->
-    insert(Props, [{escape_texts, true}], Context).
+    insert(Props, [{is_escape_texts, true}], Context).
 
 -spec insert(m_rsc:props_all(), list(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
 insert(Props, Options, Context) when is_list(Props) ->
@@ -87,9 +87,9 @@ delete(Id, FollowUpId, Context)
         {true, true} ->
             case m_rsc:is_a(Id, category, Context) of
                 true ->
-                    m_category:delete(Id, undefined, Context);
+                    m_category:delete(Id, FollowUpId, Context);
                 false ->
-                    delete_nocheck(Id, Context)
+                    delete_nocheck(Id, FollowUpId, Context)
             end;
         {false, _} ->
             {error, eacces};
@@ -355,7 +355,7 @@ flush(Id, CatList, Context) ->
 duplicate(Id, DupProps, Context) when is_list(DupProps) ->
     {ok, DupMap} = z_props:from_list(DupProps),
     duplicate(Id, DupMap, Context);
-duplicate(Id, DupProps, Context) ->
+duplicate(Id, DupProps, Context) when is_integer(Id) ->
     case z_acl:rsc_visible(Id, Context) of
         true ->
             case m_rsc:get_raw(Id, Context) of
@@ -376,12 +376,9 @@ duplicate(Id, DupProps, Context) ->
                             <<"uri">> => undefined,
                             <<"page_path">> => undefined,
                             <<"is_authoritative">> => true,
-                            <<"is_protected">> => false,
-                            <<"title_slug">> => undefined,
-                            <<"slug">> => undefined,
-                            <<"custom_slug">> => false
+                            <<"is_protected">> => false
                         }),
-                    case insert(InsProps, [{escape_texts, false}], Context) of
+                    case insert(InsProps, [{is_escape_texts, false}], Context) of
                         {ok, NewId} ->
                             m_edge:duplicate(Id, NewId, Context),
                             m_media:duplicate(Id, NewId, Context),
@@ -394,7 +391,11 @@ duplicate(Id, DupProps, Context) ->
             end;
         false ->
             {error, eacces}
-    end.
+    end;
+duplicate(undefined, _DupProps, _Context) ->
+    {error, enoent};
+duplicate(Id, DupProps, Context) ->
+    duplicate(m_rsc:rid(Id, Context), DupProps, Context).
 
 %% @doc Update a resource
 -spec update(
@@ -408,8 +409,8 @@ update(Id, Props, Context) ->
 
 %% @doc Update a resource.
 %% Options flags:
-%%      escape_texts    (default: true}
-%%      acl_check       (default: true)
+%%      is_escape_texts (default: true}
+%%      is_acl_check    (default: true)
 %%      no_touch        (default: false)
 %%      is_import       (default: false)
 %% Other options:
@@ -418,7 +419,7 @@ update(Id, Props, Context) ->
 %%                 are expected, fail if the properties
 %%                 are different.
 %%
-%% {escape_texts, false} checks if the texts are escaped, and if not then it
+%% {is_escape_texts, false} checks if the texts are escaped, and if not then it
 %% will escape. This prevents "double-escaping" of texts.
 -spec update(
         m_rsc:resource() | insert_rsc,
@@ -427,6 +428,10 @@ update(Id, Props, Context) ->
         z:context()
     ) ->
     {ok, m_rsc:resource_id()} | {error, term()}.
+update(Id, Props, false, Context) ->
+    update(Id, Props, [{is_escape_texts, false}], Context);
+update(Id, Props, true, Context) ->
+    update(Id, Props, [{is_escape_texts, true}], Context);
 update(Id, Props, Options, Context) when is_list(Props) ->
     {ok, Props1} = z_props:from_list(Props),
     OptionsTz = case proplists:lookup(tz, Options) of
@@ -451,21 +456,31 @@ update(Id, Props, Options, Context) when is_list(Props) ->
             end
     end,
     update(Id, Props1, OptionsTz, Context);
-update(Id, Props, false, Context) ->
-    update(Id, Props, [{escape_texts, false}], Context);
-update(Id, Props, true, Context) ->
-    update(Id, Props, [{escape_texts, true}], Context);
 update(Id, PropsOrFun, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
-    Tz = case is_map(PropsOrFun) of
+    Tz0 = case is_map(PropsOrFun) of
         true ->
-            proplists:get_value(tz, Options, maps:get(<<"tz">>, PropsOrFun, undefined));
+            % Timezone in the update props is leading over the timezone in the options
+            case maps:get(<<"tz">>, PropsOrFun, undefined) of
+                undefined -> proplists:get_value(tz, Options, <<"UTC">>);
+                <<>> -> proplists:get_value(tz, Options, <<"UTC">>);
+                PropTz -> PropTz
+            end;
         false ->
-            proplists:get_value(tz, Options)
+            proplists:get_value(tz, Options, <<"UTC">>)
     end,
+    % Sanity fallback for 'undefined' tz in the options
+    Tz = case Tz0 of
+        undefined -> <<"UTC">>;
+        <<>> -> <<"UTC">>;
+        _ -> Tz0
+    end,
+    % Also accept the old non "is_.." options
     RscUpd = #rscupd{
         id = Id,
-        is_escape_texts = proplists:get_value(escape_texts, Options, true),
-        is_acl_check = proplists:get_value(acl_check, Options, true),
+        is_escape_texts = proplists:get_value(is_escape_texts, Options,
+                                proplists:get_value(escape_texts, Options, true)),
+        is_acl_check = proplists:get_value(is_acl_check, Options,
+                                proplists:get_value(acl_check, Options, true)),
         is_import = proplists:get_value(is_import, Options, false),
         is_no_touch = proplists:get_value(no_touch, Options, false)
                       andalso z_acl:is_admin(Context),
@@ -502,7 +517,7 @@ update_editable_check(#rscupd{id = Id, is_acl_check = true} = RscUpd, PropsOrFun
         true ->
             update_normalize_props(RscUpd, PropsOrFun, Context);
         false ->
-            case m_rsc:p(Id, is_authoritative, Context) of
+            case m_rsc:p_no_acl(Id, is_authoritative, Context) of
                 false -> {error, non_authoritative};
                 true -> {error, eacces}
             end
@@ -550,7 +565,7 @@ update_transaction(RscUpd, Func, Context) ->
 
 update_result({ok, NewId, notchanged}, _RscUpd, _Context) ->
     {ok, NewId};
-update_result({ok, NewId, OldProps, NewProps, OldCatList, IsCatInsert}, #rscupd{id = Id}, Context) ->
+update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}}, #rscupd{id = Id}, Context) ->
     % Flush some low level caches
     case maps:get(<<"name">>, NewProps, undefined) of
         undefined -> nop;
@@ -625,7 +640,8 @@ update_transaction_fun_props_1(#rscupd{id = Id} = RscUpd, Raw, Func, Context) ->
     end.
 
 update_transaction_filter_props(#rscupd{id = Id} = RscUpd, UpdateProps, Raw, Context) ->
-    EditableProps = props_filter_protected( props_filter( props_trim(UpdateProps), Context), RscUpd),
+    {Edges, UpdateProps1} = split_edges(UpdateProps),
+    EditableProps = props_filter_protected( props_filter( props_trim(UpdateProps1), Context), RscUpd),
     SafeProps = escape_props(RscUpd#rscupd.is_escape_texts, EditableProps, Context),
     SafeSlugProps = generate_slug(Id, SafeProps, Context),
     DefaultProps = props_defaults(Id, SafeSlugProps, Context),
@@ -633,13 +649,77 @@ update_transaction_filter_props(#rscupd{id = Id} = RscUpd, UpdateProps, Raw, Con
         ok ->
             try
                 throw_if_category_not_allowed(Id, DefaultProps, RscUpd#rscupd.is_acl_check, Context),
-                update_transaction_fun_insert(RscUpd, DefaultProps, Raw, UpdateProps, Context)
+                Result = update_transaction_fun_insert(RscUpd, DefaultProps, Raw, UpdateProps, Context),
+                insert_edges(Result, Edges, Context)
             catch
                 throw:{error, _} = Error -> {rollback, Error}
             end;
         {error, _} = Error ->
             {rollback, Error}
     end.
+
+split_edges(Props) ->
+    maps:fold(
+        fun
+            (<<"s.", Pred/binary>>, E, {Es, Ps}) ->
+                Es1 = [ {subject, Pred, E}  | Es ],
+                {Es1, Ps};
+            (<<"o.", Pred/binary>>, E, {Es, Ps}) ->
+                Es1 = [ {object, Pred, E}  | Es ],
+                {Es1, Ps};
+            (<<"o">>, Map, {Es, Ps}) when is_map(Map) ->
+                Es1 = split_edges_map(object, Map, Es),
+                {Es1, Ps};
+            (<<"s">>, Map, {Es, Ps}) when is_map(Map) ->
+                Es1 = split_edges_map(subject, Map, Es),
+                {Es1, Ps};
+            (K, V, {Es, Ps}) ->
+                {Es, Ps#{ K => V }}
+        end,
+        {[], #{}},
+        Props).
+
+split_edges_map(What, Map, Acc) ->
+    maps:fold(
+        fun
+            (Pred, IdOrIds, PAcc) ->
+                [ {What, Pred, IdOrIds} | PAcc ]
+        end,
+        Acc,
+        Map).
+
+insert_edges({ok, Id, Res}, Edges, Context) ->
+    lists:foreach(
+        fun
+            ({_ ,<<>>, _}) ->
+                ok;
+            ({_ ,undefined, _}) ->
+                ok;
+            ({_ ,_, undefined}) ->
+                ok;
+            ({object, Pred, Es}) when is_list(Es) ->
+                Es1 = lists:filtermap(
+                    fun(EId) ->
+                        case m_rsc:rid(EId, Context) of
+                            undefined -> false;
+                            Rid -> {true, Rid}
+                        end
+                    end,
+                    Es),
+                m_edge:replace(Id, Pred, Es1, Context);
+            ({object, Pred, E}) ->
+                m_edge:insert(Id, Pred, E, Context);
+            ({subject, Pred, Es}) when is_list(Es) ->
+                lists:map(
+                    fun(E) -> m_edge:insert(E, Pred, Id, Context) end,
+                    Es);
+            ({subject, Pred, E}) ->
+                m_edge:insert(E, Pred, Id, Context)
+        end,
+        Edges),
+    {ok, Id, Res};
+insert_edges({error, _} = Error , _, _Context) ->
+    Error.
 
 escape_props(true, Props, Context) ->
     z_sanitize:escape_props(Props, Context);
@@ -657,26 +737,36 @@ update_transaction_fun_insert(#rscupd{id = insert_rsc} = RscUpd, Props, _Raw, Up
     % Allow the initial insertion props to be modified.
     CategoryId = z_convert:to_integer(maps:get(<<"category_id">>, Props)),
     InitProps = #{
+        <<"version">> => 0,
         <<"category_id">> => CategoryId,
-        <<"version">> => 0
+        <<"content_group_id">> => maps:get(<<"content_group_id">>, Props, undefined)
     },
     InsProps = z_notifier:foldr(#rsc_insert{ props = Props }, InitProps, Context),
 
-    % Check if the user is allowed to create the resource
+    % Create dummy resource with correct creator, category and content group.
+    % This resource will be updated with the other properties.
     InsertId = case maps:get(<<"creator_id">>, UpdateProps, undefined) of
                    self ->
-                       {ok, InsId} = z_db:insert(
+                        {ok, InsId} = z_db:insert(
                             rsc,
                             InsProps#{ <<"creator_id">> => undefined },
                             Context),
-                       1 = z_db:q("update rsc set creator_id = id where id = $1", [InsId], Context),
-                       InsId;
+                        1 = z_db:q("update rsc set creator_id = id where id = $1", [InsId], Context),
+                        InsId;
                    CreatorId when is_integer(CreatorId) ->
-                       {ok, InsId} = z_db:insert(
-                            rsc,
-                            InsProps#{ <<"creator_id">> => CreatorId },
-                            Context),
-                       InsId;
+                        {ok, InsId} = case z_acl:is_admin(Context) of
+                            true ->
+                                z_db:insert(
+                                    rsc,
+                                    InsProps#{ <<"creator_id">> => CreatorId },
+                                    Context);
+                            false ->
+                                z_db:insert(
+                                    rsc,
+                                    InsProps#{ <<"creator_id">> => z_acl:user(Context) },
+                                    Context)
+                        end,
+                        InsId;
                    undefined ->
                        {ok, InsId} = z_db:insert(
                             rsc,
@@ -737,12 +827,12 @@ update_transaction_fun_expected(#rscupd{expected = Expected} = RscUpd, Id, Props
 check_expected(_Raw, [], _Context) ->
     ok;
 check_expected(Raw, [{Key, F} | Es], Context) when is_function(F) ->
-    case F(Key, Raw, Context) of
+    case F(z_convert:to_binary(Key), Raw, Context) of
         true -> check_expected(Raw, Es, Context);
         false -> {error, {expected, Key, maps:get(Key, Raw, undefined)}}
     end;
 check_expected(Raw, [{Key, Value} | Es], Context) ->
-    case maps:get(Key, Raw, undefined) of
+    case maps:get(z_convert:to_binary(Key), Raw, undefined) of
         Value -> check_expected(Raw, Es, Context);
         Other -> {error, {expected, Key, Other}}
     end.
@@ -756,17 +846,22 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
     IsInsert = (RscUpd#rscupd.id =:= insert_rsc),
     UpdateProps1 = set_if_normal_update(RscUpd, <<"modified">>, erlang:universaltime(), UpdateProps),
     UpdateProps2 = set_if_normal_update(RscUpd, <<"modifier_id">>, z_acl:user(Context), UpdateProps1),
-    {IsForceUpdate, UpdatePropsN} = z_notifier:foldr(#rsc_update{
-                                            action = case IsInsert of
-                                                        true -> insert;
-                                                        false -> update
-                                                     end,
-                                            id = Id,
-                                            props = Raw
-                                        },
-                                        {IsInsert, UpdateProps2},
-                                        Context),
+    UpdResult = z_notifier:foldr(
+        #rsc_update{
+            action = case IsInsert of
+                        true -> insert;
+                        false -> update
+                     end,
+            id = Id,
+            props = Raw
+        },
+        {ok, UpdateProps2},
+        Context),
+    update_transaction_fun_db_1(UpdResult, Id, RscUpd, Raw, IsABefore, IsCatInsert, Context).
 
+update_transaction_fun_db_1({error, _} = Error, _Id, _RscUpd, _Raw, _IsABefore, _IsCatInsert, _Context) ->
+    Error;
+update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCatInsert, Context) ->
     % Pre-pivot of the category-id to the category sequence nr.
     UpdatePropsN1 = case maps:get(<<"category_id">>, UpdatePropsN, undefined) of
                         undefined ->
@@ -808,19 +903,39 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
     % 5. Diff the update
     NewPropsDiff = diff(NewPropsLangPruned, Raw),
 
-    % 6. Perform optional update, check diff
-    case       RscUpd#rscupd.id =:= insert_rsc
-        orelse IsForceUpdate
-        orelse is_changed(Raw, NewPropsDiff)
-    of
+    % 6. Ensure that there is a Timezone set in the saved resource
+    PropsTz = maps:get(<<"tz">>, NewPropsDiff, undefined),
+    MapsTz = maps:get(<<"tz">>, Raw, undefined),
+    NewPropsDiffTz = case {MapsTz, PropsTz} of
+        {undefined, undefined} ->
+            NewPropsDiff#{ <<"tz">> => RscUpd#rscupd.tz };
+        _ ->
+            NewPropsDiff
+    end,
+
+    % 7. Perform optional update, check diff
+    IsInsert = (RscUpd#rscupd.id =:= insert_rsc),
+    case is_update_allowed(IsInsert, Id, NewPropsLangPruned, Context) of
         true ->
-            UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, NewPropsDiff, Raw, Context),
-            {ok, 1} = z_db:update(rsc, Id, UpdatePropsPrePivoted, Context),
-            ok = update_page_path_log(Id, Raw, NewPropsDiff, Context),
-            {ok, Id, Raw, NewPropsDiff, IsABefore, IsCatInsert};
+            case (IsInsert orelse is_changed(Raw, NewPropsDiffTz)) of
+                true ->
+                    UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, NewPropsDiffTz, Raw, Context),
+                    {ok, 1} = z_db:update(rsc, Id, UpdatePropsPrePivoted, Context),
+                    ok = update_page_path_log(Id, Raw, NewPropsDiffTz, Context),
+                    NewPropsFinal = maps:merge(NewPropsLangPruned, UpdatePropsPrePivoted),
+                    {ok, Id, {Raw, NewPropsFinal, IsABefore, IsCatInsert}};
+                false ->
+                    {ok, Id, notchanged}
+            end;
         false ->
-            {ok, Id, notchanged}
+            {error, eacces}
     end.
+
+is_update_allowed(true, Id, NewProps, Context) ->
+    z_acl:is_allowed(insert, #acl_rsc{ id = Id, props = NewProps }, Context);
+is_update_allowed(false, Id, NewProps, Context) ->
+    z_acl:is_allowed(update, #acl_rsc{ id = Id, props = NewProps }, Context).
+
 
 maybe_set_langs(#{ <<"language">> := Langs } = Props, NewLangs) when is_list(Langs) ->
     case Langs of
@@ -939,18 +1054,13 @@ preflight_check_uri(Id, #{ <<"uri">> := Uri }, Context) when Uri =/= undefined -
 preflight_check_uri(_Id, _Props, _Context) ->
     ok.
 
-preflight_check_query(Id, #{ <<"query">> := Query }, Context) when Query =/= undefined ->
-    case m_rsc:is_a(Id, 'query', Context) of
-        true ->
-            try
-                SearchContext = z_context:new( Context ),
-                search_query:search(search_query:parse_query_text(z_html:unescape(Query)), SearchContext),
-                ok
-            catch
-                _: {error, {_, _}} ->
-                    {error, invalid_query}
-            end;
-        false ->
+preflight_check_query(_Id, #{ <<"query">> := Query }, Context) when Query =/= undefined ->
+    try
+        SearchContext = z_context:new( Context ),
+        search_query:search(search_query:parse_query_text(z_html:unescape(Query)), SearchContext),
+        ok
+    catch
+        _: {error, {_, _}} ->
             {error, invalid_query}
     end;
 preflight_check_query(_Id, _Props, _Context) ->
@@ -1183,10 +1293,8 @@ filter_languages([L | _] = Langs) when is_list(L); is_binary(L); is_atom(L) ->
 
 %% @doc If title is updating, check the rsc 'custom_slug' field to see if we need to update the slug or not.
 generate_slug(Id, Props, Context) ->
-    case maps:get(<<"title">>, Props, undefined) of
-         undefined ->
-            Props;
-         Title ->
+    case maps:find(<<"title">>, Props) of
+         {ok, Title} ->
             case {maps:get(<<"custom_slug">>, Props, false), m_rsc:p(Id, <<"custom_slug">>, Context)} of
                  {true, _} -> Props;
                  {_, true} -> Props;
@@ -1198,27 +1306,33 @@ generate_slug(Id, Props, Context) ->
                         <<"slug">> => SlugNoTr,
                         <<"title_slug">> => Slug
                     }
-            end
+            end;
+         error ->
+            Props
     end.
 
 
 %% @doc Fill in some defaults for empty props on insert.
 props_defaults(Props, Context) ->
     % Generate slug from the title (when there is a title)
-    Props1 = case maps:get(<<"title_slug">>, Props, undefined) of
-        undefined ->
-            case maps:get(<<"title">>, Props, undefined) of
-                undefined ->
-                    Props;
-                Title ->
+    Props1 = case maps:find(<<"title_slug">>, Props) of
+        error ->
+            case maps:find(<<"title">>, Props) of
+                {ok, Title} ->
                     Slug = to_slug(Title),
                     SlugNoTr = z_trans:lookup_fallback(Slug, en, Context),
                     Props#{
                         <<"slug">> => SlugNoTr,
                         <<"title_slug">> => Slug
-                    }
+                    };
+                error ->
+                    Props
             end;
-        _ ->
+        {ok, undefined} ->
+            Props#{
+                <<"title_slug">> => <<"-">>
+            };
+        {ok, _} ->
             Props
     end,
     % Assume content is authoritative, unless stated otherwise
@@ -1257,7 +1371,7 @@ props_filter_protected(Props, RscUpd) ->
 
 
 to_slug(undefined) ->
-    undefined;
+    <<>>;
 to_slug(#trans{ tr = Tr }) ->
     Tr1 = lists:map(
         fun({Lang, V}) -> {Lang, to_slug(V)} end,
@@ -1305,6 +1419,7 @@ is_protected(<<"page_url">>, _IsNormal) -> true;
 is_protected(<<"medium">>, _IsNormal) -> true;
 is_protected(<<"pivot_", _binary>>, _IsNormal) -> true;
 is_protected(<<"computed_", _/binary>>, _IsNormal) -> true;
+is_protected(<<"*", _/binary>>, _IsNormal) -> true;
 is_protected(_, _IsNormal) -> false.
 
 is_trimmable(_, V) when not is_binary(V) -> false;

@@ -1,29 +1,28 @@
 <li id="{{ #block }}" class="block do_adminwidget" data-minifier="1">
 
     <!-- New block entry -->
-    <input type="hidden" name="blocks[]." value="" />
+    <input type="hidden" name="blocks[]." value="">
+    <input type="hidden" class="block-type" name="blocks[].type" value="{{ blk.type }}">
 
     <!-- The widget with the name, includes the specific fields for the block type -->
     <div class="widget">
-        <div class="widget-header" title="{_ Drag to change position _}">
+        <div class="drag-handle"></div>
+
+        <div class="widget-header label-floating" title="{_ Drag to change position _}">
             &nbsp;
             <input type="text"
-                   class="block-name"
+                   class="block-name form-control form-control-small"
                    name="blocks[].name"
-                   id="block-{{ #s }}-name"
                    value="{{ blk.name|escape }}"
                    title="{_ Block name _}"
                    placeholder="{_ name _}"
-                   noautocomplete
+                   autocomplete="off"
             >
-            <input type="hidden" class="block-type" id="block-{{ #s }}-type" name="blocks[].type" value="{{ blk.type }}">
             &nbsp;
             {{ blk.type|make_list|capfirst|replace:"_":" " }} {_ block _}
             <a title="{_ Disconnect _}" class="z-btn-remove block-remove"></a>
         </div>
-        <div class="widget-contentx">
-            {% optional include ["blocks/_admin_edit_block_li_",blk.type,".tpl"]|join name=#s blk=blk id=id is_new=is_new %}
-        </div>
+        {% optional include ["blocks/_admin_edit_block_li_",blk.type,".tpl"]|join name=#s blk=blk id=id is_new=is_new %}
     </div>
     {% if is_new %}
         {% javascript %}

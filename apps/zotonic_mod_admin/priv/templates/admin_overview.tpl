@@ -97,28 +97,23 @@
                 {% all include "_admin_extra_buttons.tpl" %}
             </div>
 
-            {% with
-                q.qcat|replace:'\\*':'',
-                q.qcat_exclude
-                as
-                qcat,
-                qcat_exclude
-            %}
-                {% with q.qsort as qsort %}
-                    {% with m.rsc[q.qquery|default:`admin_overview_query`].id as qquery_id %}
-                          {% with (qquery_id.is_visible and not q.qcat)|
-                                    if:{query query_id=qquery_id cat=qcat cat_exclude=qcat_exclude content_group=q.qgroup text=q.qs is_published="all" page=q.page pagelen=qpagelen sort=qsort zsort="-modified" custompivot=q.qcustompivot}
-                                      :{query is_authoritative cat=qcat cat_exclude=qcat_exclude content_group=q.qgroup text=q.qs is_published="all" page=q.page pagelen=qpagelen sort=qsort zsort="-modified" custompivot=q.qcustompivot}
-                             as query
-                          %}
-                              {% with m.search.paged[query] as result %}
-                                  {% catinclude "_admin_overview_list.tpl" m.category[qcat].is_a result=result qsort=qsort qcat=qcat qcat_exclude=qcat_exclude custompivot=q.qcustompivot %}
-                                  {% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page %}
-                              {% endwith %}
-                          {% endwith %}
-                    {% endwith %}
+            {% if q.qquery_id and m.rsc[q.qquery_id].is_visible %}
+                {% with m.search.paged[{query qargs zsort="-modified" page=q.page pagelen=q.pagelen}] as result %}
+                    {% catinclude "_admin_overview_list.tpl"
+                                  m.category[q.qcat].is_a
+                                  result=result
+                    %}
+                    {% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page %}
                 {% endwith %}
-            {% endwith %}
+            {% else %}
+                {% with m.search.paged[{query query_id=`admin_overview_query` is_published="all" qargs zsort="-modified" page=q.page pagelen=q.pagelen}] as result %}
+                    {% catinclude "_admin_overview_list.tpl"
+                                  m.category[q.qcat].is_a
+                                  result=result
+                    %}
+                    {% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page %}
+                {% endwith %}
+            {% endif %}
         {% endwith %}
     {% endwith %}
 {% endblock %}

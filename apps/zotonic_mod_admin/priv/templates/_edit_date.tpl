@@ -4,6 +4,9 @@
         name="dt:ymd:{{ is_end|if:1:0 }}:{{ name }}"
         value="{{ date|date:'Y-m-d':date_is_all_day }}"
         class="do_datepicker {{ class }} {{ date_class }} form-control"
+        {% if placeholder %}
+            placeholder="{{ placeholder }}"
+        {% endif %}
     />
     <input
         type="text"

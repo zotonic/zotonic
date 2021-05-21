@@ -2,7 +2,7 @@
 
 {% with blocks|if_undefined:(m.admin_blocks.list[id]) as blocks %}
 <div id="edit-blocks-wrapper">
-    <input type="hidden" name="block" value="" />
+    <input type="hidden" name="blocks" value="">
     {% include "_admin_edit_block_addblock.tpl" %}
     <ul class="blocks ui-sortable" id="edit-blocks">
         {% block blocks %}
@@ -19,7 +19,7 @@
 {% javascript %}
 $('#edit-blocks').sortable({
     helper: 'clone',
-    handle: '.widget-header',
+    handle: '.drag-handle',
     revert: 'invalid',
     axis: 'y',
     start: function(event, ui) {
@@ -39,6 +39,7 @@ $('#edit-blocks').sortable({
         text: '<p>{_ Do you want to remove this block? _}</p>',
         cancel: '{_ Cancel _}',
         ok: '{_ Delete _}',
+        is_danger: true,
         on_confirm: function() {
             $block
                 .fadeTo('fast', 0.0)
@@ -100,6 +101,7 @@ $('#edit-blocks-wrapper').on('click', '.rsc-item h5 a', function(event) {
 
 {% wire name="admin-block-connect"
     action={dialog_open
+        intent="select"
         subject_id=id
         predicate=""
         template="_action_dialog_connect.tpl"

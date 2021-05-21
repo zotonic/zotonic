@@ -37,10 +37,6 @@
 -define(TASK_DELAY, 3600).
 
 
--define(FFPROBE_CMDLINE, "ffprobe -loglevel quiet -show_format -show_streams -print_format json ").
--define(PREVIEW_CMDLINE, "ffmpeg -itsoffset -~p -i ~s -vcodec png -vframes 1 -an -f rawvideo -loglevel error -y").
-
-
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -export([
@@ -52,12 +48,7 @@
          post_insert_fun/5,
          remove_task/2,
          convert_task/2,
-         queue_path/2,
-
-         video_info/1,
-         video_preview/2,
-
-         orientation_to_transpose/1
+         queue_path/2
         ]).
 
 %% @doc If a video file is uploaded, queue it for conversion to video/mp4
@@ -65,15 +56,46 @@ observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/mp4">>, 
     undefined;
 observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/x-mp4-broken">>}, Context) ->
     do_media_upload_broken(Context);
-observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/", _/binary>>, medium=Medium} = Upload, Context) ->
+observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/", _/binary>> = Mime, medium=Medium, file=File} = Upload, Context) ->
     case maps:get(<<"is_video_ok">>, Medium, undefined) of
         true ->
             undefined;
         undefined ->
-            do_media_upload_preprocess(Upload, Context)
+            case is_video_process_needed(Mime, File) of
+                true ->
+                    do_media_upload_preprocess(Upload, Context);
+                false ->
+                    undefined
+            end
     end;
 observe_media_upload_preprocess(#media_upload_preprocess{}, _Context) ->
     undefined.
+
+%% @doc Do not process landscape mp4 files with aac/h264 codecs.
+is_video_process_needed(<<"video/mp4">>, File) ->
+    Info = z_video_info:info(File),
+    not (
+                is_orientation_ok(Info)
+        andalso is_audio_ok(Info)
+        andalso is_video_ok(Info)
+    );
+is_video_process_needed(_Mime, _File) ->
+    true.
+
+is_orientation_ok(#{ <<"orientation">> := 1 }) -> true;
+is_orientation_ok(#{ <<"orientation">> := undefined }) -> true;
+is_orientation_ok(_) -> false.
+
+is_audio_ok(#{ <<"audio_codec">> := <<"aac">> }) -> true;
+is_audio_ok(#{ <<"audio_codec">> := undefined }) -> true;
+is_audio_ok(#{ <<"audio_codec">> := _ }) -> false;
+is_audio_ok(_) -> true.
+
+is_video_ok(#{ <<"video_codec">> := <<"h264">> }) -> true;
+is_video_ok(#{ <<"video_codec">> := undefined }) -> true;
+is_video_ok(#{ <<"video_codec">> := _ }) -> false;
+is_video_ok(_) -> true.
+
 
 do_media_upload_preprocess(Upload, Context) ->
     case z_module_indexer:find(lib, ?TEMP_IMAGE, Context) of
@@ -96,7 +118,8 @@ do_media_upload_preprocess(Upload, Context) ->
                     <<"height">> => maps:get(<<"height">>, MInfo, undefined),
                     <<"is_deletable_preview">> => false,
                     <<"is_video_processing">> => true,
-                    <<"video_processing_nr">> => ProcessNr
+                    <<"video_processing_nr">> => ProcessNr,
+                    <<"original_filename">> => Upload#media_upload_preprocess.original_filename
                 }
             };
         {error, enoent} ->
@@ -130,8 +153,8 @@ observe_media_upload_props(#media_upload_props{archive_file=undefined, mime= <<"
     Medium;
 observe_media_upload_props(#media_upload_props{id=Id, archive_file=File, mime= <<"video/", _/binary>>}, Medium, Context) ->
     FileAbs = z_media_archive:abspath(File, Context),
-    Info = video_info(FileAbs),
-    Info2 = case video_preview(FileAbs, Info) of
+    Info = z_video_info:info(FileAbs),
+    Info2 = case z_video_preview:preview(FileAbs, Info) of
         {ok, TmpFile} ->
             PreviewFilename = preview_filename(Id, Context),
             PreviewPath = z_media_archive:abspath(PreviewFilename, Context),
@@ -146,7 +169,7 @@ observe_media_upload_props(#media_upload_props{id=Id, archive_file=File, mime= <
         {error, _} ->
             Info
     end,
-    z_utils:props_merge(Info2, Medium);
+    maps:merge(Medium, Info2);
 observe_media_upload_props(#media_upload_props{}, Medium, _Context) ->
     Medium.
 
@@ -261,120 +284,6 @@ queue_path(Filename, Context) ->
     QueueDir = z_path:files_subdir("video_queue", Context),
     filename:join(QueueDir, Filename).
 
-
-video_info(Path) ->
-    Cmdline = case z_config:get(ffprobe_cmdline) of
-        undefined -> ?FFPROBE_CMDLINE;
-        <<>> -> ?FFPROBE_CMDLINE;
-        "" -> ?FFPROBE_CMDLINE;
-        CmdlineCfg -> z_convert:to_list(CmdlineCfg)
-    end,
-    FfprobeCmd = lists:flatten([
-           Cmdline, " ", z_utils:os_filename(Path)
-       ]),
-    lager:debug("Video info: ~p", [FfprobeCmd]),
-    JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
-    try
-        Ps = decode_json(JSONText),
-        {Width, Height, Orientation} = fetch_size(Ps),
-        #{
-            duration => fetch_duration(Ps),
-            width => Width,
-            height => Height,
-            orientation => Orientation
-        }
-    catch
-        error:E ->
-            lager:warning("Unexpected ffprobe return (~p) ~p", [E, JSONText]),
-            #{}
-    end.
-
-decode_json(JSONText) ->
-    z_json:decode(JSONText).
-
-fetch_duration(#{<<"format">> := #{<<"duration">> := Duration}}) ->
-    round(z_convert:to_float(Duration));
-fetch_duration(_) ->
-    0.
-
-fetch_size(#{<<"streams">> := Streams}) ->
-    [ Video | _ ] = lists:dropwhile(
-        fun( { #{<<"codec_type">> := CodecType} } ) ->
-           CodecType =/= <<"video">>
-        end,
-        Streams),
-    #{
-        <<"width">> := Width,
-        <<"height">> := Height,
-        <<"tags">> := Tags
-    } = Video,
-    Orientation = orientation(Tags),
-    case Orientation of
-        6 -> {Height, Width, Orientation};
-        8 -> {Height, Width, Orientation};
-        _ -> {Width, Height, Orientation}
-    end.
-
-
-orientation(#{<<"rotate">> := Angle}) ->
-    try
-        case z_convert:to_integer(Angle) of
-            90 -> 6;
-            180 -> 3;
-            270 -> 8;
-            _ -> 1
-        end
-    catch
-        _:_ ->
-            1
-    end;
-orientation(_) ->
-    1.
-
-video_preview(MovieFile, Props) ->
-    #{
-        duration := Duration,
-        orientation := Orientation
-    } = Props,
-    Start = case Duration of
-        N when N =< 1 -> 0;
-        N when N =< 30 -> 1;
-        _ -> 10
-    end,
-    Cmdline = case z_config:get(ffmpeg_preview_cmdline) of
-        undefined -> ?PREVIEW_CMDLINE;
-        <<>> -> ?PREVIEW_CMDLINE;
-        "" -> ?PREVIEW_CMDLINE;
-        CmdlineCfg -> z_convert:to_list(CmdlineCfg)
-    end,
-    TmpFile = z_tempfile:new(),
-    FfmpegCmd = z_convert:to_list(
-        iolist_to_binary([
-            case string:str(Cmdline, "-itsoffset") of
-                0 -> io_lib:format(Cmdline, [MovieFile]);
-                _ -> io_lib:format(Cmdline, [Start, MovieFile])
-            end,
-            " ",
-            orientation_to_transpose(Orientation),
-            z_utils:os_filename(TmpFile)
-        ])),
-    jobs:run(media_preview_jobs,
-        fun() ->
-            lager:info("Video preview: ~p", [FfmpegCmd]),
-            case os:cmd(FfmpegCmd) of
-                [] ->
-                   lager:info("Preview ok, file: ~p", [TmpFile]),
-                   {ok, TmpFile};
-                Other ->
-                   lager:warning("Video preview error: ~p", [Other]),
-                   {error, Other}
-            end
-        end).
-
-orientation_to_transpose(8) -> " -vf 'transpose=2' ";
-orientation_to_transpose(3) -> " -vf 'transpose=2,transpose=2' ";
-orientation_to_transpose(6) -> " -vf 'transpose=1' ";
-orientation_to_transpose(_) -> "".
 
 preview_filename(Id, Context) ->
     m_media:make_preview_unique(Id, <<".jpg">>, Context).

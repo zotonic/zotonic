@@ -13,7 +13,9 @@
 {% block widget_id %}sidebar-connections{% endblock %}
 
 {% block widget_content %}
+
 <div id="unlink-undo-message"></div>
+
 {% with predicate_ids|default:id.predicates_edit as pred_shown %}
     {% for name, p in m.predicate %}
         {% if p.id|member:pred_shown %}
@@ -32,16 +34,19 @@
                     unlink_action=unlink_action
                     undo_message_id="unlink-undo-message"
                     list_id=list_id
+                    tabs_enabled=tabs_enabled
                 %}
 
-                <hr />
+                <hr>
             {% endifnotequal %}
         {% endif %}
     {% endfor %}
 {% endwith %}
-{% if not hide_referrers %}
+
+{% if not hide_all_connections %}
     <div class="form-group">
-       <a class="btn btn-default btn-sm" href="{% url admin_edges qhasobject=id %}"><i class="glyphicon glyphicon-list"></i> {_ View all referrers _}</a>
+       <a class="btn btn-default btn-sm" href="{% url admin_edges qhassubject=id %}"><i class="glyphicon glyphicon-list"></i> {_ View all connections _}</a>
     </div>
 {% endif %}
+
 {% endblock %}

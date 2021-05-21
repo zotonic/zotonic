@@ -20,8 +20,11 @@
 -author("Marc Worrell").
 
 %% API
--export([run/1]).
 -export([pretty_print_value/2]).
+-export([info/0, run/1]).
+
+info() ->
+    "Show Zotonic and Erlang configuration.".
 
 run([ "all" ]) ->
     show(all);
@@ -38,9 +41,10 @@ run(_) ->
 show(What) ->
     case zotonic_command:get_target_node() of
         {ok, Target} ->
+		Len = string:len(erlang:atom_to_list(Target)),
             if
                 What =:= all; What =:= zotonic ->
-                    io:format("~nZotonic config for ~p:~n=================================~n", [Target]),
+                    io:format("~n# Zotonic config for ~p:~n# ===================~s=~n", [Target, string:copies("=", Len)]),
                     ZotonicConfigFiles = zotonic_launcher_config:zotonic_config_files(Target),
                     case zotonic_launcher_config:read_configs(ZotonicConfigFiles) of
                         {ok, ZCfg} ->
@@ -54,7 +58,7 @@ show(What) ->
             io:format("~n"),
             if
                 What =:= all; What =:= erlang ->
-                    io:format("~nErlang init for ~p:~n=================================~n", [Target]),
+                    io:format("~n# Erlang init for ~p:~n# ================~s=~n", [Target, string:copies("=", Len)]),
                     ErlangConfigFiles = zotonic_launcher_config:erlang_config_files(Target),
                     case zotonic_launcher_config:read_configs(ErlangConfigFiles) of
                         {ok, ECfg} ->

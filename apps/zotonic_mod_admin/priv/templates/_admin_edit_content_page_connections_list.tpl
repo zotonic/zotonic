@@ -11,11 +11,15 @@ Params:
 - unlink_action (optional) action to be called after succesful disconnecting
 - undo_message_id (opional) id of the div for the unlink message, defaults to "unlink-undo-message"
 - list_id (optional) (string) connection list identifier
+
+Config key:
+- mod_admin.edge_list_max_length -- max number of items shown per predicate
 #}
+{% with m.admin.edge_list_max_length|default:100 as edge_list_max_length %}
 {% with list_id|default:#list_id as list_id %}
 <div class="unlink-wrapper">
     {% with m.edge.o[id][predicate] as edges %}
-      {% with edges|length > 60 as is_list_truncated %}
+      {% with edges|length > edge_list_max_length as is_list_truncated %}
         {% if not is_list_truncated %}
           {% sorter id=list_id
                     tag={object_sorter predicate=predicate id=id}
@@ -27,11 +31,13 @@ Params:
           {% include "_rsc_edge_list.tpl" id=id predicate=predicate
                 unlink_action=unlink_action undo_message_id=undo_message_id
                 is_list_truncated=is_list_truncated
+                edge_list_max_length=edge_list_max_length
           %}
         </ul>
       {% endwith %}
     {% endwith %}
  </div>
+{% endwith %}
 {% endwith %}
 
 {% if m.acl.is_allowed.link[id] %}
@@ -40,6 +46,7 @@ Params:
        id=#connect.predicate
        action={
           dialog_open
+          intent="connect"
           template="_action_dialog_connect.tpl"
           title=dialog_title_add|default:[_"Add a connection:", " ", predicate.title]
           subject_id=id

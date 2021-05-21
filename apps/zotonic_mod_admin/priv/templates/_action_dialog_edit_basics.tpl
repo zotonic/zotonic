@@ -23,46 +23,40 @@
         {% endblock %}
         <div class="tab-content">
             {% block tab_content %}
-                <div class="tab-pane form-horizontal active" id="{{ #main }}">
+                <div class="tab-pane active" id="{{ #main }}">
 
                     {% catinclude "_admin_edit_basics.tpl" id in_dialog show_header %}
 
                     {% if id.is_a.meta %}
-                        <div class="form-group row">
-                            <label class="control-label col-md-3" for="{{ #unique }}">{_ Unique name _}</label>
-                            <div class="col-md-9">
-                                <input class="form-control" type="text" id="{{ #unique }}" name="name" value="{{ id.name }}" />
-                                {% if id.is_a.category or id.is_a.predicate %}
-                                    {% validate id=#unique
-                                                name="name"
-                                                type={presence}
-                                                type={format pattern="^[A-Za-z0-9_]*$"}
-                                    %}
-                                {% else %}
-                                    {% validate id=#unique
-                                                name="name"
-                                                type={format pattern="^[A-Za-z0-9_]*$"}
-                                    %}
-                                {% endif %}
-                            </div>
+                        <div class="form-group label-floating">
+                            <input class="form-control" type="text" id="{{ #unique }}" name="name" value="{{ id.name }}" placeholder="{_ Unique name _}">
+                            {% if id.is_a.category or id.is_a.predicate %}
+                                {% validate id=#unique
+                                            name="name"
+                                            type={presence}
+                                            type={format pattern="^[A-Za-z0-9_]*$"}
+                                %}
+                            {% else %}
+                                {% validate id=#unique
+                                            name="name"
+                                            type={format pattern="^[A-Za-z0-9_]*$"}
+                                %}
+                            {% endif %}
+                            <label class="control-label" for="{{ #unique }}">{_ Unique name _}</label>
                         </div>
                     {% endif %}
 
-                    <div class="form-group row">
-                        <label class="control-label col-md-3" for="{{ #published }}">{_ Published _}</label>
-                        <div class="col-md-9">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="{{ #published }}" name="is_published" value="1" {% if id.is_published %}checked="checked"{% endif %} />
-                                </label>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label class="checkbox">
+                            <input type="checkbox" id="{{ #published }}" name="is_published" value="1" {% if id.is_published %}checked="checked"{% endif %}>
+                            {_ Published _}
+                        </label>
                     </div>
                 </div>
             {% endblock %}
 
             {% block tab_visible_for %}
-                <div class="tab-pane form-horizontal" id="{{ #acl }}">
+                <div class="tab-pane" id="{{ #acl }}">
                     {% optional include "_admin_edit_visible_for.tpl" id=id %}
                 </div>
             {% endblock %}

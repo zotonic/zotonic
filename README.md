@@ -1,5 +1,7 @@
-[![Build Status](https://travis-ci.org/zotonic/zotonic.svg?branch=master)](https://travis-ci.org/zotonic/zotonic)
-[![GitHub release](https://img.shields.io/github/release/zotonic/zotonic.svg?maxAge=3600?style=flat-square)](../../releases)
+[![Test](https://github.com/zotonic/zotonic/workflows/Test/badge.svg)](https://github.com/zotonic/zotonic/actions?query=workflow%3ATest)
+[![Dialyzer](https://github.com/zotonic/zotonic/workflows/Dialyzer/badge.svg)](https://github.com/zotonic/zotonic/actions?query=workflow%3ADialyzer)
+[![Docs](https://github.com/zotonic/zotonic/workflows/Docs/badge.svg)](https://github.com/zotonic/zotonic/actions?query=workflow%3ADocs)
+[![GitHub release](https://img.shields.io/github/release/zotonic/zotonic.svg?maxAge=3600?style=flat-square)](https://github.com/zotonic/zotonic/releases)
 [![Docs](https://readthedocs.org/projects/zotonic/badge/?version=latest)](http://docs.zotonic.com/en/latest/)
 [![Join the chat at https://gitter.im/zotonic/zotonic](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zotonic/zotonic?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -53,5 +55,3 @@ Thanks
 Thanks to the following services for supporting Open Source:
 
 <a href="https://browserstack.com/"><img rel="Thanks to BrowserStack" src="https://raw.githubusercontent.com/zotonic/zotonic/master/doc/img/browserstack-logo.png" height="64" /></a>
-
-<a href="https://travis-ci.com/">&nbsp;&nbsp;<img rel="Thanks to Travis-CI" src="https://travis-ci.org/images/logos/TravisCI-Full-Color.png" height="40" style="padding-left: 20px"></a>

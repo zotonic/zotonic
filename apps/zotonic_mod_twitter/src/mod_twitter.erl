@@ -139,25 +139,6 @@ save_identity(Id, TwitterId, Context) ->
 %% Internal functions
 %%====================================================================
 
-% check_stream(#state{context=Context} = State) ->
-%     Consumer = oauth_twitter_client:get_consumer(Context),
-%     AccessToken = m_config:get_value(?MODULE, access_token, Context),
-%     AccessTokenSecret = m_config:get_value(?MODULE, access_token_secret, Context),
-%     case is_configured(Consumer, AccessToken, AccessTokenSecret) of
-%         true ->
-%             prepare_following(Consumer, AccessToken, AccessTokenSecret, State);
-%         false ->
-%             lager:info("Twitter: not configured for automatic tweet imports."),
-%             {ok, State}
-%     end.
-
-% is_configured(undefined, _AccessToken, _AccessTokenSecret) -> false;
-% is_configured(_Consumer, undefined, _AccessTokenSecret) -> false;
-% is_configured(_Consumer, <<>>, _AccessTokenSecret) -> false;
-% is_configured(_Consumer, _AccessToken, undefined) -> false;
-% is_configured(_Consumer, _AccessToken, <<>>) -> false;
-% is_configured(_Consumer, _AccessToken, _AccessTokenSecret) -> true.
-
 %%
 %% @doc The datamodel that is used in this module, installed the first time the module is started.
 %%
@@ -171,32 +152,3 @@ manage_schema(Version, Context) ->
             {from_twitter, keyword, [{title, <<"From Twitter">>}]}
         ]
     }.
-
-
-% %% Map all usernames to user-ids using https://dev.twitter.com/rest/reference/get/users/lookup
-% lookup_user_ids(Users, Context) ->
-%     {Ids,Names} = lists:partition(fun(U) -> z_utils:only_digits(U) end, Users),
-%     case fetch_user_ids(Names, Context) of
-%         {ok, Ids1} ->
-%             {ok, lists:usort(Ids++Ids1)};
-%         {error, _} = Error ->
-%             Error
-%     end.
-
-% fetch_user_ids(Names, Context) ->
-%     NamesArg = iolist_to_binary(lists:join(",", Names)),
-%     Args = [
-%         {"screen_name", z_convert:to_list(NamesArg)}
-%     ],
-%     Access = {
-%         z_convert:to_list(m_config:get_value(?MODULE, access_token, Context)),
-%         z_convert:to_list(m_config:get_value(?MODULE, access_token_secret, Context))
-%     },
-%     case oauth_twitter_client:request(get, "users/lookup", Args, Access, Context) of
-%         {ok, Users} ->
-%             {ok, [ proplists:get_value(id_str, UserProps) || UserProps <- Users ]};
-%         {error, notfound} ->
-%             {ok, []};
-%         {error, _} = Error ->
-%             Error
-%     end.

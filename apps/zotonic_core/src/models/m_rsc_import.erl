@@ -59,7 +59,7 @@ create_empty(Uri, Props, Context) ->
 
 %% @doc Import given resource. resource must already exist and be
 %% non-authoritative. URIs must match.
--spec import(m_rsc:props_all(), z:context()) -> {ok, m_rsc:resource_id()} | {error, atom()}.
+-spec import(map() | list(), z:context()) -> {ok, m_rsc:resource_id()} | {error, atom()}.
 import(RscImport, Context) when is_list(RscImport) ->
     {ok, RscMap} = z_props:from_list(RscImport),
     import(RscMap, Context);
@@ -87,14 +87,15 @@ import_1(Id, RscImport, Context) ->
                         _ -> Props#{ <<"is_published">> => true }
                     end,
                     Opts = [
-                        {escape_texts, false}
+                        {is_escape_texts, false},
+                        {is_import, true}
                     ],
                     case m_rsc_update:update(Id, Props1, Opts, Context) of
                         {ok, Id} ->
                             %% Import medium
                             {ok, Id} = case maps:find(<<"medium">>, RscImport) of
-                                {ok, #{ <<"url">> := Url } = MediumProps} ->
-                                    m_media:replace_url(Url, Id, MediumProps, Context);
+                                {ok, #{ <<"url">> := Url }} ->
+                                    m_media:replace_url(Url, Id, #{}, Context);
                                 _ ->
                                    {ok, Id}
                             end,

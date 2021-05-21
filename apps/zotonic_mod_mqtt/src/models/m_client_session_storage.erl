@@ -35,6 +35,8 @@
     delete_subkey/4
 ]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 -type key() :: binary() | atom().
 
 -type value() :: number()
@@ -49,7 +51,10 @@
 
 -spec get( key(), z:context() ) -> {ok, value()} | {error, error()}.
 get(Key, Context) ->
-    get(Key, z_context:client_topic(Context), Context).
+    case z_context:client_topic(Context) of
+        {ok, Topic} -> get(Key, Topic, Context);
+        {error, _} = Error -> Error
+    end.
 
 -spec get( key(), mqtt_sessions:topic(), z:context() ) -> {ok, value()} | {error, error()}.
 get(_Key, undefined, _Context) ->
@@ -61,7 +66,10 @@ get(Key, BridgeTopic, Context) ->
 
 -spec put( key(), value(), z:context() ) -> ok | {error, error()}.
 put(Key, Value, Context) ->
-    put(Key, Value, z_context:client_topic(Context), Context).
+    case z_context:client_topic(Context) of
+        {ok, Topic} -> put(Key, Value, Topic, Context);
+        {error, _} = Error -> Error
+    end.
 
 -spec put( key(), value(), mqtt_sessions:topic(), z:context() ) -> ok | {error, error()}.
 put(_Key, _Value, undefined, _Context) ->
@@ -74,7 +82,10 @@ put(Key, Value, BridgeTopic, Context) ->
 
 -spec delete( key(), z:context() ) -> ok | {error, error()}.
 delete(Key, Context) ->
-    delete(Key, z_context:client_topic(Context), Context).
+    case z_context:client_topic(Context) of
+        {ok, Topic} -> delete(Key, Topic, Context);
+        {error, _} = Error -> Error
+    end.
 
 -spec delete( key(), mqtt_sessions:topic(), z:context() ) -> ok | {error, error()}.
 delete(_Key, undefined, _Context) ->
@@ -88,7 +99,10 @@ delete(Key, BridgeTopic, Context) ->
 
 -spec get_subkey( key(), key(), z:context() ) -> {ok, value()} | {error, error()}.
 get_subkey(Key, SubKey, Context) ->
-    get_subkey(Key, SubKey, z_context:client_topic(Context), Context).
+    case z_context:client_topic(Context) of
+        {ok, Topic} -> get_subkey(Key, SubKey, Topic, Context);
+        {error, _} = Error -> Error
+    end.
 
 -spec get_subkey( key(), key(), mqtt_sessions:topic(), z:context() ) -> {ok, value()} | {error, error()}.
 get_subkey(_Key, _SubKey, undefined, _Context) ->
@@ -100,7 +114,10 @@ get_subkey(Key, SubKey, BridgeTopic, Context) ->
 
 -spec put_subkey( key(), key(), value(), z:context() ) -> ok | {error, error()}.
 put_subkey(Key, SubKey, Value, Context) ->
-    put_subkey(Key, SubKey, Value, z_context:client_topic(Context), Context).
+    case z_context:client_topic(Context) of
+        {ok, Topic} -> put_subkey(Key, SubKey, Value, Topic, Context);
+        {error, _} = Error -> Error
+    end.
 
 -spec put_subkey( key(), key(), value(), mqtt_sessions:topic(), z:context() ) -> ok | {error, error()}.
 put_subkey(_Key, _SubKey, _Value, undefined, _Context) ->
@@ -113,7 +130,10 @@ put_subkey(Key, SubKey, Value, BridgeTopic, Context) ->
 
 -spec delete_subkey( key(), key(), z:context() ) -> ok | {error, error()}.
 delete_subkey(Key, SubKey, Context) ->
-    delete_subkey(Key, SubKey, z_context:client_topic(Context), Context).
+    case z_context:client_topic(Context) of
+        {ok, Topic} -> delete_subkey(Key, SubKey, Topic, Context);
+        {error, _} = Error -> Error
+    end.
 
 -spec delete_subkey( key(), key(), mqtt_sessions:topic(), z:context() ) -> ok | {error, error()}.
 delete_subkey(_Key, _Subkey, undefined, _Context) ->

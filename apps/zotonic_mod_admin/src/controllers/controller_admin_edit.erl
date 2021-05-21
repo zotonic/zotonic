@@ -34,7 +34,9 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 service_available(Context) ->
-    {true, z_context:set_noindex_header(Context)}.
+    Context1 = z_context:set_noindex_header(Context),
+    Context2 = z_context:set_nocache_headers(Context1),
+    {true, Context2}.
 
 is_authorized(Context) ->
     Context1 = z_context:set_resp_header(<<"x-frame-options">>, <<"SAMEORIGIN">>, Context),

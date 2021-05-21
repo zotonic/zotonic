@@ -69,8 +69,9 @@ extract_filters(Path, OptFilters, Context) ->
                                 _ -> OptFilters
                             end,
                             {SafePath, z_convert:to_binary(OriginalFile), Filters1 ++ PreviewPropList};
-                        {error, _} ->
-                            {SafePath, SafePath, OptFilters}
+                        {error, Reason} ->
+                            lager:info("Dropping path ~p because error ~p", [ SafePath, Reason ]),
+                            part_missing(Path)
                     end
             end
     end.
@@ -92,6 +93,8 @@ locate_source([ModuleIndex|Roots], Path, OriginalFile, Filters, Context) when is
     case locate_source_module_indexer(ModuleIndex, Path, OriginalFile, Filters, Context) of
         {ok, Loc} ->
             Loc;
+        {error, checksum} ->
+            #part_missing{file = Path};
         {error, eacces} ->
             lager:info("No access to file '~s', original '~s'", [Path, OriginalFile]),
             locate_source(Roots, Path, OriginalFile, Filters, Context);
@@ -175,6 +178,7 @@ locate_source_uploaded_1(Medium, Path, OriginalFile, Filters, Context) ->
 locate_in_filestore(Path, InDir, Medium, Context) ->
     FSPath = z_convert:to_binary(filename:join(filename:basename(InDir), Path)),
     OptRscId = maps:get(<<"id">>, Medium, undefined),
+    OptMime = maps:get(<<"mime">>, Medium, undefined),
     case z_notifier:first(#filestore{action=lookup, path=FSPath}, Context) of
         {ok, {filezcache, Pid, #{ created := Created, size := Size }}} when is_pid(Pid) ->
             {ok, #part_cache{
@@ -182,18 +186,20 @@ locate_in_filestore(Path, InDir, Medium, Context) ->
                 cache_monitor = erlang:monitor(process, Pid),
                 modified = Created,
                 acl = OptRscId,
-                size = Size
+                size = Size,
+                mime = OptMime
             }};
         {ok, {filename, FoundFilename, #{ modified := Modified }}} ->
-            part_file(FoundFilename, [ {acl,OptRscId}, {modified, Modified} ]);
+            part_file(FoundFilename, [ {acl,OptRscId}, {modified, Modified}, {mime, OptMime} ]);
         {ok, {data, Data, #{ modified := Modified }}} ->
             {ok, #part_data{
                 data = Data,
                 modified = Modified,
-                acl = OptRscId
+                acl = OptRscId,
+                mime = OptMime
             }};
         undefined ->
-            part_file(filename:join(InDir, Path), [{acl,OptRscId}])
+            part_file(filename:join(InDir, Path), [{acl,OptRscId}, {mime, OptMime}])
     end.
 
 part_missing(Filename) ->
@@ -211,11 +217,12 @@ part_file(Filename, Opts) ->
             {error, eacces};
         {ok, #file_info{size=Size, type=regular, mtime=MTime}} ->
             {ok, #part_file{
-                    size=Size,
-                    filepath=z_convert:to_binary(Filename),
-                    modified=proplists:get_value(modified, Opts, MTime),
-                    mtime=MTime,
-                    acl=proplists:get_value(acl, Opts)
+                    size = Size,
+                    filepath = z_convert:to_binary(Filename),
+                    modified = proplists:get_value(modified, Opts, MTime),
+                    mtime = MTime,
+                    acl = proplists:get_value(acl, Opts),
+                    mime = proplists:get_value(mime, Opts)
             }};
         {ok, #file_info{type=_NotAFile}} ->
             % directories and/or devices don't count as files

@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2018 Marc Worrell
+%% @copyright 2018-2020 Marc Worrell
 %% @doc Start a Cotonic web-worker
 
-%% Copyright 2018 Marc Worrell
+%% Copyright 2018-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,17 +37,20 @@ render(Params, _Vars, Context) ->
             SrcUrl = z_lib_include:url([ Src ], Context1),
             BaseUrl = z_lib_include:url([ Base ], Context1),
             Name = proplists:get_value(name, Params, <<>>),
+            ArgsJSON = case proplists:get_value(args, Params) of
+                undefined -> <<"{}">>;
+                Args -> z_json:encode(Args)
+            end,
             Spawn = [
                 <<"cotonic.spawn_named(\"">>,
                     z_utils:js_escape(Name), "\", \"",
                     SrcUrl, "\", \"",
-                    BaseUrl, "\");"
+                    BaseUrl, "\",",
+                    ArgsJSON, ");"
             ],
             {ok, [
                 <<"<script type='text/javascript'>">>,
-                    <<"if (typeof cotonic === 'undefined') { ">>,
-                        <<"window.addEventListener('cotonic-ready', function() {">>, Spawn, <<"}, false); ">>,
-                    <<"} else { ">>, Spawn, <<" } ">>,
+                    <<"cotonic.ready.then(function() { ">>, Spawn, <<"});">>,
                 <<"</script>">>
             ]}
     end.

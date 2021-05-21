@@ -1,5 +1,6 @@
 
-.form-field-error {
+.form-field-error,
+.invalid {
     color: #B94A48;
 }
 
@@ -23,7 +24,8 @@ form.form-horizontal .z_validation_message {
 
 textarea,
 input {
-    &.form-field-error {
+    &.form-field-error,
+    &.invalid {
         background: #ffeeee;
     }
 }
@@ -43,4 +45,17 @@ option[value=""][disabled] {
 }
 option {
     color: black;
+}
+
+fieldset,
+.form-group {
+    > label,
+    > label.radio,
+    > label.checkbox {
+        > input[type="checkbox"],
+        > input[type="radio"] {
+            position: relative;
+            margin-left: 0;
+        }
+    }
 }

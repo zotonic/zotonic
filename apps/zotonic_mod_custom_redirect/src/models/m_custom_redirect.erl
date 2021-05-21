@@ -61,7 +61,18 @@ get(Id, Context) ->
     z_db:assoc_row("select * from custom_redirect where id=$1", [Id], Context).
 
 get(Host, Path, Context) ->
-    z_db:assoc_row("select * from custom_redirect where host=lower($1) and path=lower($2)", [Host, remove_slash(Path)], Context).
+    case z_string:is_string(Path) of
+        true ->
+            z_db:assoc_row("
+                select *
+                from custom_redirect
+                where host=lower($1)
+                  and path=lower($2)",
+                [Host, remove_slash(Path)],
+                Context);
+        false ->
+            undefined
+    end.
 
 insert(Props, Context) ->
     z_db:insert(custom_redirect, normalize_props(Props), Context).
@@ -82,20 +93,30 @@ list_ids(Context) ->
     [ Id || {Id} <- Ids ].
 
 list_dispatch_host(Host, Path, Context) ->
-    z_db:q("select path, redirect, is_permanent
-            from custom_redirect
-            where host = lower($1)
-              and (path = $2 or path = '')",
-           [Host, remove_slash(Path)],
-           Context).
+    case z_string:is_string(Path) of
+        true ->
+            z_db:q("select path, redirect, is_permanent
+                    from custom_redirect
+                    where host = lower($1)
+                      and (path = $2 or path = '')",
+                   [Host, remove_slash(Path)],
+                   Context);
+        false ->
+            []
+    end.
 
 get_dispatch(Path, Context) ->
-    z_db:q_row("select redirect, is_permanent
-                from custom_redirect
-                where host = ''
-                  and path = $1",
-               [remove_slash(Path)],
-               Context).
+    case z_string:is_string(Path) of
+        true ->
+            z_db:q_row("select redirect, is_permanent
+                        from custom_redirect
+                        where host = ''
+                          and path = $1",
+                       [remove_slash(Path)],
+                       Context);
+        false ->
+            undefined
+    end.
 
 normalize_props(Props) ->
     [

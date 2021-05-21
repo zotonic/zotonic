@@ -1,6 +1,6 @@
 {application, zotonic_mod_translation, [
     {description, "Handle user’s language and generate .pot files with translatable texts."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

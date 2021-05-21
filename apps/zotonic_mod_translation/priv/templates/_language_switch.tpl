@@ -6,15 +6,26 @@
                 {{ z_language|upper }} <b class="caret"></b>
             </a>
             <ul class="dropdown-menu mod_translation_menu-has-icons">
-                {% for code,lang in list %}
-                    <li>
-                        <a href="#" id="{{ #l.code }}">
-                            {% if z_language == code %}<i class="glyphicon glyphicon-ok"></i>{% endif %}
-                            {{ lang.name }}
-                        </a>
-                    </li>
-                    {% wire id=#l.code postback={set_language code=code} delegate="mod_translation" %}
-                {% endfor %}
+                {% if id %}
+                    {% for code,lang in list %}
+                        <li>
+                            <a href="{{ id.page_url with z_language = code }}">
+                                {% if z_language == code %}<i class="glyphicon glyphicon-ok"></i>{% endif %}
+                                {{ lang.name }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    {% for code,lang in list %}
+                        <li>
+                            <a href="#" id="{{ #l.code }}">
+                                {% if z_language == code %}<i class="glyphicon glyphicon-ok"></i>{% endif %}
+                                {{ lang.name }}
+                            </a>
+                        </li>
+                        {% wire id=#l.code postback={set_language code=code id=id} delegate="mod_translation" %}
+                    {% endfor %}
+                {% endif %}
             </ul>
         </li>
     {% else %}
@@ -24,6 +35,6 @@
        			<option {% if z_language == code %}selected="selected"{% endif %} value="{{ code }}">{{ lang.language }}</option>
         	{% endfor %}
     	</select>
-    	{% wire id=#lang type="change" postback={set_language} delegate="mod_translation" %}
+    	{% wire id=#lang type="change" postback={set_language id=id} delegate="mod_translation" %}
     {% endif %}
 {% endif %}

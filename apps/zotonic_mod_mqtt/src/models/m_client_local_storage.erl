@@ -23,6 +23,10 @@
     get/3,
     put/3,
     put/4,
+
+    get_secure/2,
+    put_secure/4,
+
     delete/2,
     delete/3,
 
@@ -39,11 +43,20 @@
 
 -type error() :: timeout
                | no_client
-               | invalid_topic.
+               | invalid_topic
+               | forged
+               | badarg
+               | expired.
+
+-define(SECRET_LENGTH, 32).
+
 
 -spec get( key(), z:context() ) -> {ok, value()} | {error, error()}.
 get(Key, Context) ->
-    get(Key, z_context:client_topic(Context), Context).
+    case z_context:client_topic(Context) of
+        {ok, Topic} -> get(Key, Topic, Context);
+        {error, _} = Error -> Error
+    end.
 
 -spec get( key(), mqtt_sessions:topic(), z:context() ) -> {ok, value()} | {error, error()}.
 get(_Key, undefined, _Context) ->
@@ -55,7 +68,44 @@ get(Key, BridgeTopic, Context) ->
 
 -spec put( key(), value(), z:context() ) -> ok | {error, error()}.
 put(Key, Value, Context) ->
-    put(Key, Value, z_context:client_topic(Context), Context).
+    case z_context:client_topic(Context) of
+        {ok, Topic} -> put(Key, Value, Topic, Context);
+        {error, _} = Error -> Error
+    end.
+
+-spec put_secure( key(), value(), pos_integer(), z:context() ) -> ok | {error, error()}.
+put_secure(Key, Value, TTL, Context) ->
+    ExpTerm = termit:expiring(Value, TTL),
+    Encoded = termit:encode_base64(ExpTerm, secret(Context)),
+    put(Key, Encoded, Context).
+
+-spec get_secure( key(), z:context() ) -> ok | {error, error()}.
+get_secure(Key, Context) ->
+    case get(Key, Context) of
+        {ok, Encoded} ->
+            case termit:decode_base64(Encoded, secret(Context)) of
+                {ok, ExpTerm} ->
+                    termit:check_expired(ExpTerm);
+                {error, _} = Error ->
+                    Error
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
+secret(Context) ->
+    case m_config:get_value(mod_mqtt, local_storage_secret, Context) of
+        <<>> -> generate_auth_anon_secret(Context);
+        undefined -> generate_auth_anon_secret(Context);
+        Secret -> Secret
+    end.
+
+-spec generate_auth_anon_secret( z:context() ) -> binary().
+generate_auth_anon_secret(Context) ->
+    Secret = z_ids:id(?SECRET_LENGTH),
+    m_config:set_value(mod_mqtt, local_storage_secret, Secret, Context),
+    Secret.
+
 
 -spec put( key(), value(), mqtt_sessions:topic(), z:context() ) -> ok | {error, error()}.
 put(_Key, _Value, undefined, _Context) ->
@@ -68,7 +118,10 @@ put(Key, Value, BridgeTopic, Context) ->
 
 -spec delete( key(), z:context() ) -> ok | {error, error()}.
 delete(Key, Context) ->
-    delete(Key, z_context:client_topic(Context), Context).
+    case z_context:client_topic(Context) of
+        {ok, Topic} -> delete(Key, Topic, Context);
+        {error, _} = Error -> Error
+    end.
 
 -spec delete( key(), mqtt_sessions:topic(), z:context() ) -> ok | {error, error()}.
 delete(_Key, undefined, _Context) ->

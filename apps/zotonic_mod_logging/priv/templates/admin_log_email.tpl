@@ -37,7 +37,7 @@
             <div class="widget">
                 <h3 class="widget-header">{_ Email status _}</h3>
                 <div class="widget-content" id="{{ #statuspanel }}">
-                    {% include "_email_status_view.tpl" email=q.to panel_id=#statuspanel %}
+                    {% optional include "_email_status_view.tpl" email=q.to panel_id=#statuspanel %}
                 </div>
             </div>
         </div>
@@ -127,6 +127,7 @@
                 <option value="">{_ All _}</option>
                 <option value="sending" {% if q.status == 'sending' %}selected="selected"{% endif %}>{_ Sending _}</option>
                 <option value="sent" {% if q.status == 'sent' %}selected="selected"{% endif %}>{_ Sent _}</option>
+                <option value="relayed" {% if q.status == 'relayed' %}selected="selected"{% endif %}>{_ Relayed _}</option>
                 <option value="bounce" {% if q.status == 'bounce' %}selected="selected"{% endif %}>{_ Bounce _}</option>
                 <option value="received" {% if q.status == 'received' %}selected="selected"{% endif %}>{_ Received _}</option>
                 <option value="failed" {% if q.status == 'failed' %}selected="selected"{% endif %}>{_ Failed _}</option>

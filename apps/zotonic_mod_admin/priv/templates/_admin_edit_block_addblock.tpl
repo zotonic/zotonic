@@ -1,11 +1,11 @@
 {% if id.is_editable %}
     <div class="clearfix">
-        <div class="pull-right block-add-block">
+        <div class="block-add-block">
             <a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" href="#">
                 {_ + add block _}
                 <span class="caret"></span>
             </a>
-            <ul class="dropdown-menu dropdown-menu-right">
+            <ul class="dropdown-menu">
                 {% for _order, title, items in blocks %}
                     {% if title %}
                         <li class="dropdown-header">{{ title }}</li>

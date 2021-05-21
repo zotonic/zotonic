@@ -17,13 +17,8 @@
         <p>{_ Here you find settings to configure the comment module to suit your needs. _}</p>
     </div>
 
-    <div class="well">
-        <button class="btn btn-primary" type="submit">{_ Save Comment Form settings _}</button>
-    </div>
-
     <div class="widget">
-
-        <h3 class="widget-header">{_ General Comment Form Settings _}</h3>
+        <div class="widget-header">{_ General Comment Form Settings _}</div>
         <div class="widget-content">
 
             <div class="form-group">
@@ -34,6 +29,8 @@
                     </label>
                 </div>
             </div>
+
+            <button class="btn btn-primary" type="submit">{_ Save Comment Form settings _}</button>
 
         </div>
     </div>

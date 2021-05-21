@@ -1,0 +1,59 @@
+# Run tests
+
+name: Test
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  linux:
+    name: Test on OTP ${{ matrix.otp_version }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        otp_version: [22,23.2.5]
+        os: [ubuntu-latest]
+
+    container:
+      image: erlang:${{ matrix.otp_version }}
+
+    # Start PostgreSQL wth 'zotonic' as the default user.
+    services:
+      postgres:
+        image: postgres:11
+        env:
+          POSTGRES_DB: zotonic
+          POSTGRES_USER: zotonic
+          POSTGRES_PASSWORD: zotonic
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Add user Zotonic
+        run: |
+          apt-get update
+          apt-get -y install sudo
+          adduser --disabled-login zotonic
+      - name: Compile
+        run: make
+      - name: Test
+        run: |
+          ZOTONIC_DBHOST=postgres bin/zotonic connectdb
+          chown -R zotonic .
+          sudo -u zotonic bash -c "ZOTONIC_DBHOST=postgres bin/zotonic runtests"
+      - name: XRef
+        run: make xref

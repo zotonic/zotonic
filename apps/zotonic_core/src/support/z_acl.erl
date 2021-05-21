@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2017 Marc Worrell
+%% @copyright 2010-2021 Marc Worrell
 %% @doc Access control for Zotonic.  Interfaces to modules implementing the ACL events.
 
-%% Copyright 2010-2017 Marc Worrell
+%% Copyright 2010-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -46,6 +46,7 @@
          logon/3,
          logon_prefs/2,
          logon_prefs/3,
+         logon_refresh/1,
          logoff/1
         ]).
 
@@ -281,14 +282,15 @@ sudo(Context) ->
 
 -spec set_admin(z:context()) -> z:context().
 set_admin(#context{ acl = undefined } = Context) ->
-    Context#context{acl = admin, user_id = ?ACL_ADMIN_USER_ID};
+    Context#context{ acl = admin, user_id = ?ACL_ADMIN_USER_ID };
 set_admin(Context) ->
-    Context#context{acl = admin}.
+    Context#context{ acl = admin }.
 
 %% @doc Check if the current user is an admin or a sudo action
 -spec is_admin( z:context() ) -> boolean().
-is_admin(#context{user_id = ?ACL_ADMIN_USER_ID}) -> true;
-is_admin(#context{acl = admin}) -> true;
+is_admin(#context{ user_id = ?ACL_ADMIN_USER_ID }) -> true;
+is_admin(#context{ acl = admin }) -> true;
+is_admin(#context{ acl = undefined, user_id = undefined }) -> false;
 is_admin(Context) -> is_allowed(use, mod_admin_config, Context).
 
 
@@ -309,8 +311,10 @@ anondo(Context) ->
     set_anonymous(Context).
 
 -spec set_anonymous( z:context() ) -> z:context().
+set_anonymous(#context{ acl = undefined, user_id = undefined } = Context) ->
+    Context;
 set_anonymous(Context) ->
-    Context#context{acl=undefined, user_id=undefined}.
+    Context#context{ acl = undefined, user_id = undefined }.
 
 
 %% @doc Log the user with the id on, fill the acl field of the context
@@ -332,6 +336,14 @@ logon(Id, Options, Context) ->
         #context{} = NewContext ->
             NewContext
     end.
+
+%% @doc Refresh the authentication of the current user
+-spec logon_refresh(z:context()) -> z:context().
+logon_refresh(#context{ user_id = Id } = Context) when is_integer(Id) ->
+    logon(Id, #{}, Context);
+logon_refresh(Context) ->
+    Context.
+
 
 %% @doc Log the user with the id on, fill acl and set all user preferences (like timezone and language)
 -spec logon_prefs(m_rsc:resource_id(), z:context()) -> z:context().

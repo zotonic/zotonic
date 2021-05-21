@@ -27,6 +27,7 @@
     bounce_domain/1,
 
 	get_admin_email/1,
+    get_email_from/1,
 	send_admin/3,
 
 	send_page/3,
@@ -54,9 +55,9 @@
 % The email domain depends on the site sending the e-mail
 -spec email_domain(z:context()) -> binary().
 email_domain(Context) ->
-    case m_config:get_value(site, smtphost, Context) of
-        undefined -> z_context:hostname(Context);
-        SmtpHost -> z_convert:to_binary(SmtpHost)
+    case z_convert:to_binary( m_config:get_value(site, smtphost, Context) ) of
+        <<>> -> z_context:hostname(Context);
+        SmtpHost -> SmtpHost
     end.
 
 % Ensure that the sites's domain is attached to the email address.
@@ -64,7 +65,7 @@ email_domain(Context) ->
 ensure_domain(Email, Context) when is_binary(Email) ->
     case binary:match(Email, <<"@">>) of
         {_,_} -> Email;
-        nomatch -> <<Email/binary, "$@", (email_domain(Context))/binary>>
+        nomatch -> <<Email/binary, $@, (email_domain(Context))/binary>>
     end;
 ensure_domain(Email, Context) ->
     ensure_domain(z_convert:to_binary(Email), Context).
@@ -97,6 +98,12 @@ get_admin_email(Context) ->
 		Email ->
             z_convert:to_binary(Email)
 	end.
+
+%% @doc Fetch the default From e-mail address. Defaults to noreply@hostname
+-spec get_email_from(z:context()) -> binary().
+get_email_from(Context) ->
+    z_email_server:get_email_from(Context).
+
 
 wwwadmin_email(Context) ->
     <<"wwwadmin@", (z_context:hostname(Context))/binary>>.

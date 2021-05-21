@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-04-27
+%% @copyright 2009-2020 Marc Worrell
 %% @doc Open a dialog with some fields to make a new page/resource.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -83,15 +82,18 @@ event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, R
     z_render:dialog(?__("Make a new page", Context), "_action_dialog_new_rsc.tpl", Vars, Context);
 
 event(#submit{message={new_page, Args}}, Context) ->
-    BaseProps = get_base_props(z_context:get_q(<<"new_rsc_title">>, Context), Context),
-    File = z_context:get_q(upload_file, Context),
+    Title = case z_context:get_q(<<"new_rsc_title">>, Context) of
+        undefined -> z_context:get_q(<<"title">>, Context);
+        T -> T
+    end,
+    BaseProps = get_base_props(Title, Context),
+    File = z_context:get_q(<<"upload_file">>, Context),
     Result = case File of
-        #upload{filename = OriginalFilename, tmpfile = TmpFile} ->
-            BaseProps1 = [
-                {original_filename, OriginalFilename}
-                | BaseProps
-            ],
-            m_media:insert_file(TmpFile, BaseProps1, Context);
+        #upload{filename = OriginalFilename} ->
+            BaseProps1 = BaseProps#{
+                <<"original_filename">> => OriginalFilename
+            },
+            m_media:insert_file(File, BaseProps1, Context);
         undefined ->
             m_rsc_update:insert(BaseProps, Context)
     end,
@@ -208,31 +210,29 @@ dispatch(Cond) ->
 
 
 get_base_props(undefined, Context) ->
-    z_context:get_q_all_noz(Context);
+    lists:foldl(
+        fun({Prop,Val}, Acc) ->
+            maybe_add_prop(Prop, Val, Acc)
+        end,
+        #{
+            <<"is_published">> => false
+        },
+        z_context:get_q_all_noz(Context));
 get_base_props(NewRscTitle, Context) ->
     Lang = z_context:language(Context),
     Props = lists:foldl(fun({Prop,Val}, Acc) ->
                             maybe_add_prop(Prop, Val, Acc)
                         end,
-                        #{},
+                        #{
+                            <<"is_published">> => false
+                        },
                         z_context:get_q_all_noz(Context)),
     Props#{
         <<"title">> => #trans{ tr = [ {Lang, NewRscTitle} ] },
         <<"language">> => [ Lang ]
     }.
 
-maybe_add_prop(_P, #upload{}, Acc) ->
-    Acc;
-maybe_add_prop(_P, undefined, Acc) ->
-    Acc;
-maybe_add_prop(<<"title">>, _, Acc) ->
-    Acc;
-maybe_add_prop(<<"new_rsc_title">>, _, Acc) ->
-    Acc;
-maybe_add_prop(<<"category_id">>, Cat, Acc) ->
-    Acc#{
-        <<"category_id">> => z_convert:to_integer(Cat)
-    };
+maybe_add_prop(_P, #upload{}, Acc) -> Acc;
 maybe_add_prop(<<"is_published">>, IsPublished, Acc) ->
     Acc#{
         <<"is_published">> => z_convert:to_bool(IsPublished)
@@ -240,6 +240,16 @@ maybe_add_prop(<<"is_published">>, IsPublished, Acc) ->
 maybe_add_prop(<<"is_dependent">>, IsDependent, Acc) ->
     Acc#{
         <<"is_dependent">> => z_convert:to_bool(IsDependent)
+    };
+maybe_add_prop(<<"title">>, _, Acc) -> Acc;
+maybe_add_prop(<<"new_rsc_title">>, _, Acc) -> Acc;
+maybe_add_prop(<<"cat_exclude">>, _V, Acc) -> Acc;
+maybe_add_prop(<<"find_category">>, _V, Acc) -> Acc;
+maybe_add_prop(<<"*">>, _V, Acc) -> Acc;
+maybe_add_prop(_P, undefined, Acc) -> Acc;
+maybe_add_prop(<<"category_id">>, Cat, Acc) ->
+    Acc#{
+        <<"category_id">> => z_convert:to_integer(Cat)
     };
 maybe_add_prop(P, V, Acc) ->
     Acc#{

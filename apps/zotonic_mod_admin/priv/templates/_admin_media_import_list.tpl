@@ -67,20 +67,24 @@
                         </p>
                     {% endif %}
 
-                    {% if not args.id %}
+                    {% if args.intent != 'update' %}
                         {% if args.subject_id %}
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="{{ #dependent.index }}" name="is_dependent" value="1">
-                                    {_ Delete after disconnecting from _}: {{ args.subject_id.title }}
-                                </label>
-                            </div>
+                            {% if m.admin.rsc_dialog_hide_dependent and not m.acl.is_admin %}
+                                <input type="hidden" name="is_dependent" value="{% if args.dependent %}1{% endif %}">
+                            {% else %}
+                                <div class="checkbox form__is_dependent">
+                                    <label>
+                                        <input type="checkbox" id="{{ #dependent.index }}" name="is_dependent" value="1" {% if args.dependent %}checked{% endif %}>
+                                        {_ Delete if not connected anymore _}
+                                    </label>
+                                </div>
+                            {% endif %}
                         {% endif %}
 
-                        <div class="checkbox">
+                        <div class="checkbox form__is_published">
                             <label>
                                 <input type="checkbox" id="{{ #published.index }}" name="is_published" value="1"
-                                    {% if args.subject_id or m.config.mod_admin.rsc_dialog_is_published.value %}
+                                    {% if args.subject_id or m.admin.rsc_dialog_is_published %}
                                         checked
                                     {% endif %}>
                                 {_ Published _}
@@ -91,13 +95,13 @@
 
                 <div class="panel-footer clearfix">
                     <a href="#" id="{{ #back.index }}" class="btn btn-default">{_ Back _}</a>
-                    {% wire id=#back.index 
+                    {% wire id=#back.index
                             action={hide target=discover_id}
                             action={fade_in target=form_id}
                     %}
 
                     {% with index-1,
-                            index+1 
+                            index+1
                          as prev,
                             next
                     %}
@@ -115,7 +119,7 @@
                         {% endif %}
                     {% endwith %}
 
-                    <button type="submit" class="btn btn-primary pull-right">{% if args.id %}{_ Replace _}{% else %}{_ Make _}{% endif %} {{ mi.description }}</button>
+                    <button type="submit" class="btn btn-primary pull-right">{% if args.intent == 'update' %}{_ Replace _}{% else %}{_ Make _}{% endif %} {{ mi.description }}</button>
                 </div>
             </form>
         </div>
@@ -130,11 +134,7 @@
             $('#media-import-wrapper').find('input[type=checkbox]').each(
                 function() {
                     if ($(this).attr('id') != id && $(this).attr('name') == name) {
-                        if (is_checked) {
-                            $(this).attr('checked', 'checked');
-                        } else {
-                            $(this).removeAttr('checked');
-                        }
+                        $(this).prop('checked', is_checked);
                     }
                 });
         });

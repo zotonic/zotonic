@@ -24,6 +24,7 @@
     exometer_cast/2,
     exometer_call/3,
     exometer_report/5,
+    exometer_report_bulk/3,
     exometer_subscribe/5,
     exometer_unsubscribe/4,
     exometer_terminate/2,
@@ -34,8 +35,15 @@
 -include("zotonic.hrl").
 -include_lib("exometer_core/include/exometer.hrl").
 
-exometer_init(_Opts) ->
-    {ok, []}.
+-record(state, {
+    topic_prefix = [],
+    context % The context
+}).
+
+exometer_init(Opts) ->
+    {context, Context} = proplists:lookup(context, Opts),
+    TopicPrefix = proplists:get_value(topic_prefix, Opts, []),
+    {ok, #state{topic_prefix=TopicPrefix, context=Context}}.
 
 exometer_subscribe(_Metric, _DataPoint, _Extra, _Interval, State) ->
     {ok, State}.
@@ -43,10 +51,17 @@ exometer_subscribe(_Metric, _DataPoint, _Extra, _Interval, State) ->
 exometer_unsubscribe(_Metric, _DataPoint, _Extra, State) ->
     {ok, State}.
 
-exometer_report(Metric, DataPoint, Extra, Value, State) ->
-    %% Map the exometer metric name to a mqtt topic.
-    Topic = make_topic(Metric, DataPoint),
-    z_mqtt:publish(Topic, Value, z_acl:sudo(get_context(Extra))),
+exometer_report(Metric, DataPoint, _Extra, Value, State) ->
+    Topic = make_topic(Metric, DataPoint, State#state.topic_prefix),
+    z_mqtt:publish(Topic, Value, State#state.context),
+    {ok, State}.
+
+exometer_report_bulk(Found, _Extra, State) ->
+    [ begin
+          Topic = make_topic(Metric, State#state.topic_prefix),
+          z_mqtt:publish(Topic, DataPoint, #{ retain => true, qos => 0 }, State#state.context)
+      end || {Metric, DataPoint} <- Found],
+
     {ok, State}.
 
 exometer_call(Unknown, From, State) ->
@@ -74,20 +89,15 @@ exometer_terminate(_, _State) ->
 %% Helpers
 %%
 
-get_context(undefined) ->
-    z_context:new(zotonic_site_status);
-get_context(Site) when is_atom(Site) ->
-    z_context:new(Site);
-get_context(#context{}=Context) ->
-    Context.
 
-make_topic([erlang|Metric], DataPoint) ->
-    Topic = [ <<"stats">>, <<"erlang">>, [z_convert:to_binary(M) || M <- Metric],
-        z_convert:to_binary(DataPoint)],
-    join_topic(Topic);
-make_topic(Metric, DataPoint) ->
-    Topic = [ <<"stats">>, <<"site">>, [z_convert:to_binary(M) || M <- Metric],
-        z_convert:to_binary(DataPoint)],
+make_topic(Metric, Prefix) ->
+    % io:format("~p~n", [ Metric ]),
+    Topic = [ Prefix, [z_convert:to_binary(M) || M <- Metric]],
+    join_topic(Topic).
+
+make_topic(Metric, DataPoint, Prefix) ->
+    Topic = [ Prefix, [z_convert:to_binary(M) || M <- Metric],
+              z_convert:to_binary(DataPoint)],
     join_topic(Topic).
 
 join_topic(Topic) ->
@@ -96,10 +106,10 @@ join_topic(Topic) ->
 join(L, Sep) ->
     join(L, Sep, <<>>).
 
-join([], _Sep, Acc) ->
-    Acc;
+join([], _Sep, Acc) -> Acc;
 join([B| Rest], Sep, <<>>) ->
     join(Rest, Sep, B);
 join([B| Rest], Sep, Acc) ->
     join(Rest, Sep, <<Acc/binary, Sep/binary, B/binary>>).
+
 

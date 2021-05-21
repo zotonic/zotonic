@@ -30,11 +30,11 @@
 
 	{% with js|survey_is_stop as is_stop %}
 	<div class="jumps">
-		<div class="form-group">
-			<div class="checkbox"><label>
+		<div class="form-group" style="padding-left: 15px">
+			<label class="checkbox">
 				<input type="checkbox" class="is_stop_page {% if nosubmit %}nosubmit{% endif %}" name="is_stop_page" {% if is_stop %}checked{% endif %} />
-				{_ Stop the survey after this page. No questions are submitted. _}
-			</label></div>
+				{_ Dead end. Remove Next button. No questions will be submitted unless you add a button jump to a next page. _}
+			</label>
 		</div>
 
 		<ul class="jump-list" {% if is_stop %}style="display:none"{% endif %}>

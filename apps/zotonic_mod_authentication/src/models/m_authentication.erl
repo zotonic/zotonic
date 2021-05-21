@@ -54,9 +54,26 @@ m_get([ <<"password_min_length">> | Rest ], _Msg, Context) ->
         N -> z_convert:to_integer(N)
     end,
     {ok, {Len, Rest}};
+m_get([ <<"is_one_step_logon">> | Rest ], _Msg, Context) ->
+    IsOneStep = z_convert:to_bool( m_config:get_value(mod_authenticaton, is_one_step_logon, Context) ),
+    {ok, {IsOneStep, Rest}};
 m_get([ <<"is_supported">>, <<"rememberme">> | Rest ], _Msg, Context) ->
     IsSupported = z_db:has_connection(Context),
     {ok, {IsSupported, Rest}};
+m_get([ <<"status">> | Rest ], _Msg, Context) ->
+    % Status similar to the one returned by controller_authentication
+    Status = #{
+        <<"status">> => <<"ok">>,
+        <<"is_authenticated">> => z_auth:is_auth(Context),
+        <<"user_id">> => z_acl:user(Context),
+        <<"username">> => m_identity:get_username(Context),
+        <<"preferences">> => #{
+            <<"language">> => z_context:language(Context),
+            <<"timezone">> => z_context:tz(Context)
+        },
+        <<"options">> => z_context:get(auth_options, Context, #{})
+    },
+    {ok, {Status, Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:debug("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
@@ -64,9 +81,50 @@ m_get(Vs, _Msg, _Context) ->
 -spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | {error, term()}.
 m_post([ <<"request-reminder">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
     request_reminder(Payload, Context);
+m_post([ <<"service-confirm">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
+    case maps:get(<<"value">>, Payload, undefined) of
+        #{ <<"auth">> := AuthEncoded } ->
+            Secret = z_context:state_cookie_secret(Context),
+            case termit:decode_base64(AuthEncoded, Secret) of
+                {ok, AuthExp} ->
+                    case termit:check_expired(AuthExp) of
+                        {ok, Auth} ->
+                            handle_auth_confirm(Auth, Context);
+                        {error, _} = Error ->
+                            Error
+                    end;
+                {error, _} ->
+                    {error, illegal_auth}
+            end;
+        _ ->
+            {error, missing_auth}
+    end;
 m_post(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p post: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
+
+
+handle_auth_confirm(Auth, Context) ->
+    Auth1 = Auth#auth_validated{ is_signup_confirm = true },
+    case z_notifier:first(Auth1, Context) of
+        undefined ->
+            lager:warning("mod_authentication: 'undefined' return for auth of ~p", [Auth]),
+            {error, nohandler};
+        {ok, UserId} ->
+            case z_authentication_tokens:encode_onetime_token(UserId, Context) of
+                {ok, Token} ->
+                    {ok, #{
+                        result => token,
+                        token => Token
+                    }};
+                {error, _} = Err ->
+                    lager:warning("mod_authentication: Error return of ~p for auth of ~p", [Err, Auth]),
+                    Err
+            end;
+        {error, _} = Err ->
+            lager:warning("mod_authentication: Error return of ~p for auth of ~p", [Err, Auth]),
+            {error, signup}
+    end.
 
 
 %% @doc Send password reminders to everybody with the given email address
@@ -224,7 +282,7 @@ decode_token(Token, Context) ->
         {Type, UserId, Timestamp} = decode_payload(Payload),
         SiteSecret = site_auth_key(Context),
         UserSecret = user_auth_key(UserId, Context),
-        HashCheck = crypto:hmac(sha256, <<SiteSecret/binary, UserSecret/binary>>, Payload),
+        HashCheck = z_utils:hmac(sha256, <<SiteSecret/binary, UserSecret/binary>>, Payload),
         true = equal(Hash, HashCheck),
         {ok, {Type, UserId, Timestamp}}
     catch
@@ -298,6 +356,6 @@ auth_token(UserId, UserSecret, Context) when is_integer(UserId) ->
 %%      For example: encrypt( [ hash(payload, UserSecret), payload ], server-secret )
 encode_payload_v1(Payload, UserSecret, Context) ->
     SiteSecret = site_auth_key(Context),
-    Hash = crypto:hmac(sha256, <<SiteSecret/binary, UserSecret/binary>>, Payload),
+    Hash = z_utils:hmac(sha256, <<SiteSecret/binary, UserSecret/binary>>, Payload),
     FinalPayload = <<1, Hash:32/binary, Payload/binary>>,
     base64:encode(FinalPayload).

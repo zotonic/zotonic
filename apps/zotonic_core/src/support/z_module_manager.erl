@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
+%% @copyright 2009-2020 Marc Worrell
 %% @doc Module manager, starts/restarts a site's modules.
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,6 +34,8 @@
     deactivate/2,
     activate/2,
     activate_await/2,
+    activate_precheck/2,
+    deactivate_precheck/2,
     restart/2,
     module_reloaded/2,
     active/1,
@@ -43,6 +45,8 @@
     module_to_app/1,
     is_provided/2,
     get_provided/1,
+    get_provided/0,
+    get_depending/0,
     get_modules/1,
     get_modules_status/1,
     get_upgrade_status/1,
@@ -168,6 +172,63 @@ deactivate(Module, Context) ->
         0 -> ok
     end.
 
+
+%% @doc Before activating a module, check if it depends on non-activated other modules.
+%% This checks the complete graph of all modules that are currently activated plus the new
+%% modules. All missing dependencies will be listed.
+%% This also shows the modules that have missing dependencies and can't run because of those
+%% missing dependencies.
+-spec activate_precheck( atom() | list( atom() ), z:context() ) ->
+          ok
+        | {error, #{ atom() => list( atom() ) }}
+        | {error, {cyclic, z_toposort:cycles()}}.
+activate_precheck(Module, Context) when is_atom(Module) ->
+    activate_precheck([ Module ], Context);
+activate_precheck(Modules, Context) when is_list(Modules) ->
+    Active = active(Context),
+    Active1 = Active ++ Modules,
+    case dependency_sort(Active1) of
+        {ok, Sorted} ->
+            activate_precheck_1(Sorted, [], #{});
+        {error, {cyclic, _}} = Error ->
+            Error
+    end.
+
+-spec activate_precheck_1(list( atom() ), list( atom() ), map() ) -> ok | {error, map()}.
+activate_precheck_1([], _Provided, Acc) ->
+    case maps:size(Acc) of
+        0 -> ok;
+        _ -> {error, Acc}
+    end;
+activate_precheck_1([ M | Ms ], Provided, Acc) ->
+    {M, MDep, MProv} = dependencies(M),
+    Missing = MDep -- Provided,
+    Provided1 = Provided ++ MProv,
+    Acc1 = case Missing of
+        [] -> Acc;
+        _ -> Acc#{ M => Missing }
+    end,
+    activate_precheck_1(Ms, Provided1, Acc1).
+
+
+%% @doc Before deactivating a module, check if active modules depend on the deactivated module.
+%% This checks the complete graph of all modules that are currently activated minus the deactivated
+%% module. All missing dependencies will be listed.
+%% This also shows the modules that have missing dependencies and can't run because of those
+%% missing dependencies.
+-spec deactivate_precheck( atom(), z:context() ) ->
+          ok
+        | {error, #{ atom() => list( atom() ) }}
+        | {error, {cyclic, z_toposort:cycles()}}.
+deactivate_precheck(Module, Context) when is_atom(Module) ->
+    Active = active(Context),
+    Active1 = Active -- [ Module ],
+    case dependency_sort(Active1) of
+        {ok, Sorted} ->
+            activate_precheck_1(Sorted, [], #{});
+        {error, {cyclic, _}} = Error ->
+            Error
+    end.
 
 %% @doc Activate a module. The module is marked as active and started as a child of the module supervisor.
 %% The module manager can be checked later to see if the module started or not.
@@ -357,8 +418,44 @@ is_provided(Service, Context) ->
     gen_server:call(name(Context), {is_provided, Service}).
 
 %% @doc Return the list of all provided functionalities in running modules.
+-spec get_provided( z:context() ) -> list( atom() ).
 get_provided(Context) ->
     gen_server:call(name(Context), get_provided).
+
+
+%% @doc Return a table with per provision which modules provide it.
+-spec get_provided() -> #{ atom() := [ atom() ]}.
+get_provided() ->
+    lists:foldl(
+        fun({Module, _App, _Dir}, Acc) ->
+            {_Mod, _Deps, Provs} = dependencies(Module),
+            lists:foldl(
+                fun(Prov, PAcc) ->
+                    ProvidedBy = maps:get(Prov, PAcc, []),
+                    PAcc#{ Prov => [ Module | ProvidedBy ]}
+                end,
+                Acc,
+                lists:usort( [ Module | Provs ] ))
+        end,
+        #{},
+        scan()).
+
+%% @doc Return a table with per dependeny which modules depend on it.
+-spec get_depending() -> #{ atom() := [ atom() ]}.
+get_depending() ->
+    lists:foldl(
+        fun({Module, _App, _Dir}, Acc) ->
+            {_Mod, Deps, _Provs} = dependencies(Module),
+            lists:foldl(
+                fun(Dep, DAcc) ->
+                    DepOn = maps:get(Dep, DAcc, []),
+                    DAcc#{ Dep => [ Module | DepOn ]}
+                end,
+                Acc,
+                lists:usort( Deps ))
+        end,
+        #{},
+        scan()).
 
 
 %% @doc Return the status of all running modules.
@@ -451,15 +548,11 @@ prio(Module) ->
 
 %% @doc Sort the results of a scan on module priority first, module name next.
 %% The list is made up of {module, Values} tuples
--spec prio_sort(list({atom(),term()})) -> list({atom(),term()}).
+-spec prio_sort(list( atom() | {atom(), term()} )) -> list( atom() | {atom(), term()}).
 prio_sort([{_,_}|_]=ModuleProps) ->
     WithPrio = [ {z_module_manager:prio(M), {M, X}} || {M, X} <- ModuleProps ],
     Sorted = lists:sort(WithPrio),
     [ X || {_Prio, X} <- Sorted ];
-
-%% @doc Sort the results of a scan on module priority first, module name next.
-%% The list is made up of module atoms.
-%% @spec prio_sort(proplist()) -> proplist()
 prio_sort(Modules) ->
     WithPrio = [ {z_module_manager:prio(M), M} || M <- Modules ],
     Sorted = lists:sort(WithPrio),
@@ -467,21 +560,27 @@ prio_sort(Modules) ->
 
 
 %% @doc Sort all modules on their dependencies (with sub sort the module's priority)
+-spec dependency_sort( z:context() | list( atom() ) ) ->
+        {ok, list( atom() )}
+        | {error, {cyclic, z_toposort:cycles()}}.
 dependency_sort(#context{} = Context) ->
-    dependency_sort(active(Context));
+    dependency_sort( active(Context) );
 dependency_sort(Modules) when is_list(Modules) ->
     Ms = [ dependencies(M) || M <- prio_sort(Modules) ],
     z_toposort:sort(Ms).
 
 
+
 %% @doc Return a module's dependencies as a tuple usable for z_toposort:sort/1.
-dependencies({M, X}) ->
+-spec dependencies( {atom(), term()} | atom() ) ->
+            {atom() | {atom(), term()}, Depends::list(atom()), Provides::list(atom())}.
+dependencies({M, X}) when is_atom(M) ->
     {_, Ds, Ps} = dependencies(M),
     {{M,X}, Ds, Ps};
 dependencies(M) when is_atom(M) ->
     try
         Info = erlang:get_module_info(M, attributes),
-        Depends = proplists:get_value(mod_depends, Info, [base]),
+        Depends = proplists:get_value(mod_depends, Info, []),
         Provides = [ M | proplists:get_value(mod_provides, Info, []) ],
         {M, Depends, Provides}
     catch

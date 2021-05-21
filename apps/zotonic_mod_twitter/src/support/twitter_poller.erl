@@ -54,7 +54,12 @@ poll(Context) ->
                         ok ->
                             ok;
                         {error, _} = Error ->
-                            lager:error("Twitter poller error for ~p: ~p", [ Sub, Error ]),
+                            lager:error("Twitter poller (~p) of \"~s\" error: ~p",
+                                        [
+                                            proplists:get_value(id, Sub),
+                                            proplists:get_value(key, Sub),
+                                            Error
+                                        ]),
                             Error;
                         {delay, _} = D ->
                             D
@@ -66,7 +71,7 @@ poll(Context) ->
             Subscriptions),
         determine_next_delay(Status, Context)
     catch
-        ?WITH_STACKTRACE(Type, E, Trace)
+        Type:E:Trace ->
             lager:error("Twitter poller error: ~p:~p at ~p", [ Type, E, Trace ]),
             {delay, ?DELAY_EXCEPTION}
     end.
@@ -91,7 +96,7 @@ poll_next(SubId, Next, Context) ->
                         D
                 end
             catch
-                ?WITH_STACKTRACE(Type, E, Trace)
+                Type:E:Trace ->
                     lager:error("Twitter (next) poller error: ~p:~p at ~p", [ Type, E, Trace ]),
                     {delay, ?DELAY_EXCEPTION}
             end;
@@ -258,4 +263,7 @@ determine_next_delay(ok, Context) ->
             {delay, max( min(?DELAY_MINIMUM, Secs - Now), ?DELAY_MAXIMUM )}
     end;
 determine_next_delay({delay, Secs}, _Context) ->
-    {delay, max( Secs, ?DELAY_MAXIMUM )}.
+    {delay, max( Secs, ?DELAY_MAXIMUM )};
+determine_next_delay({error, _}, _Context) ->
+    {delay, ?DELAY_MAXIMUM}.
+

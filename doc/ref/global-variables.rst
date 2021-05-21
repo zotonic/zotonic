@@ -42,15 +42,21 @@ The currently selected language. This an atom, for example: ``en``.
 q
 -
 
-A dictionary containing the current request's query variables. For GET requests, these are the arguments passed from the query string (e.g. ``?foo=bar``); for POST requests, these are the values posted in the POST form. For more access to the raw request data, look at the :ref:`model-req` model.
+A key/value list containing the current request's query variables. For GET requests, these are the arguments passed from the query string (e.g. ``?foo=bar``); for POST requests, these are also the values posted in the POST form. For more access to the raw request data, look at the :ref:`model-req` model.
 
 now
 ---
 
-The local date and time in Erlang tuple notation, for instance ``{{2014,4,17},{13,50,2}}``.
+The UTC date and time in Erlang tuple notation, for instance ``{{2014,4,17},{13,50,2}}``.
 
 m
 -
 
 ``m`` is not really a value, but it's an indicator to trigger a lookup in one of Zotonic's :ref:`models`. For instance the :ref:`model-rsc` model is always exposed and can be used like this ``{{ m.rsc[123].title }}``.
+
+true, false, and undefined
+--------------------------
+
+The values ``true``, ``false`` and ``undefined`` are predefined.
+
 

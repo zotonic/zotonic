@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2016 Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2021 Marc Worrell, Arjan Scherpenisse
 %%
 %% @doc Initialize the database with start data.
 
-%% Copyright 2009-2016 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2021 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -57,15 +57,15 @@ install_category(C) ->
 
     %% "http://purl.org/dc/terms/DCMIType" ?
     {ok, 1} = z_db:equery("
-            insert into rsc (id, is_protected, visible_for, category_id, name, uri, props)
-            values (116, true, 0, 116, 'category', $1, $2)
+            insert into rsc (id, is_protected, visible_for, category_id, name, uri, props, language)
+            values (116, true, 0, 116, 'category', $1, $2, '{nl,en}')
             ", [    undefined,
                     ?DB_PROPS([{title, {trans, [{en, <<"Category">>}, {nl, <<"Categorie">>}]}}])
                 ], C),
 
     {ok, 1} = z_db:equery("
-            insert into rsc (id, is_protected, visible_for, category_id, name, uri, props)
-            values (115, true, 0, 116, 'meta', $1, $2)
+            insert into rsc (id, is_protected, visible_for, category_id, name, uri, props, language)
+            values (115, true, 0, 116, 'meta', $1, $2, '{nl,en}')
             ", [    undefined,
                     ?DB_PROPS([{title, {trans, [{en, <<"Meta">>}, {nl, <<"Meta">>}]}}])
                 ], C),
@@ -108,8 +108,8 @@ install_category(C) ->
 
     InsertCatFun = fun({Id, ParentId, Nr, Lvl, Left, Right, Name, Protected, Uri, Props}) ->
         {ok, 1} = z_db:equery("
-                insert into rsc (id, visible_for, category_id, is_protected, name, uri, props)
-                values ($1, 0, 116, $2, $3, $4, $5)
+                insert into rsc (id, visible_for, category_id, is_protected, name, uri, props, language)
+                values ($1, 0, 116, $2, $3, $4, $5, '{nl,en}')
                 ", [ Id, Protected, Name, Uri, ?DB_PROPS(Props) ], C),
         {ok, 1} = z_db:equery("
                 insert into hierarchy (name, id, parent_id, nr, lvl, lft, rght)
@@ -128,10 +128,9 @@ install_rsc(C) ->
         % id  vsfr  cat   protect name,         props
         [   1,  0,  102,  true,    "administrator",   ?DB_PROPS([{title,<<"Site Administrator">>}]) ]
     ],
-
     [ {ok,1} = z_db:equery("
-            insert into rsc (id, visible_for, category_id, is_protected, name, props)
-            values ($1, $2, $3, $4, $5, $6)
+            insert into rsc (id, visible_for, category_id, is_protected, name, props, language)
+            values ($1, $2, $3, $4, $5, $6, '{nl,en}')
             ", R, C) || R <- Rsc ],
     {ok, _} = z_db:equery("update rsc set creator_id = 1, modifier_id = 1, is_published = true", C),
     ok.
@@ -166,8 +165,8 @@ install_predicate(C) ->
     CatId   = z_db:q1("select id from rsc where name = 'predicate'", C),
 
     [ {ok,1} = z_db:equery("
-            insert into rsc (id, visible_for, is_protected, name, uri, props, category_id, is_published, creator_id, modifier_id)
-            values ($1, 0, $2, $3, $4, $5, $6, true, 1, 1)
+            insert into rsc (id, visible_for, is_protected, name, uri, props, category_id, is_published, creator_id, modifier_id, language)
+            values ($1, 0, $2, $3, $4, $5, $6, true, 1, 1, '{nl,en}')
             ", R ++ [CatId], C) || R <- Preds],
 
     ObjSubj = [

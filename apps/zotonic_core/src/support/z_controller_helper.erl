@@ -27,7 +27,8 @@
     get_id/1,
     get_configured_id/1,
     decode_request/2,
-    encode_response/2
+    encode_response/2,
+    req_body/1
  ]).
 
 % Default max body length (32MB) for HTTP requests, this should be configurable.
@@ -153,7 +154,7 @@ from_json(Context) ->
 %% @doc Make a map from the query arguments.
 from_qs(Context) ->
     Context1 = z_context:ensure_qs(Context),
-    Qs = z_context:get_q_all_noz(Context1),
+    Qs = z_context:get_q_all(Context1),
     {ok, Props} = z_props:from_qs(Qs),
     {Props, Context1}.
 

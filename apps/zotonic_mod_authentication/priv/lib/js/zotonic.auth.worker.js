@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Marc Worrell <marc@worrell.nl>
+ * Copyright 2019-2021 Marc Worrell <marc@worrell.nl>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,25 +17,29 @@
 "use strict";
 
 // Period between checking with the server if the authentication is still valid.
-var AUTH_CHECK_PERIOD = 30000;
+var AUTH_CHECK_PERIOD = 30;
 
 // TODO:
 // - recheck auth after ws connect and no recent auth check (or failed check)
 //   this could be due to browser wakeup or server down time.
 
 function fetchWithUA( body ) {
-    return self.call("model/document/get/all")
-        .then( function(msg) {
-            body.document = msg.payload
-            return fetch( self.abs_url("/zotonic-auth"), {
-                method: "POST",
-                cache: "no-cache",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(body)
-            })
+    return self.call("model/sessionId/get")
+        .then( function(sid) {
+            return self.call("model/document/get/all")
+                .then( function(msg) {
+                    body.document = msg.payload;
+                    body.cotonic_sid = sid.payload;
+                    return fetch( self.abs_url("/zotonic-auth"), {
+                        method: "POST",
+                        cache: "no-cache",
+                        headers: {
+                            "Accept": "application/json",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(body)
+                    })
+                })
         });
 }
 
@@ -56,13 +60,41 @@ var model = {
             username: null,
             preferences: {
             }
-        }
+        },
+        auth_check_timer: null,
+        next_check: 0
     };
 
 model.present = function(data) {
     let previous_auth_user_id = model.auth.user_id;
 
-    if (state.start(model)) {
+    if (data.is_start && state.start(model)) {
+        if (data.auth) {
+            model.auth = data.auth;
+
+            if (model.auth.user_id) {
+                // User is known - broadcast this user
+                model.state_change('auth_known');
+            } else {
+                // User might be known after a refresh
+                // This because on initial load the SameSite=Strict session
+                // cookie is not passed to the page controller.
+                model.state_change('auth_unknown');
+
+                self.call("model/sessionStorage/get/auth-user-id")
+                    .then((msg) => {
+                        model.auth.user_id = msg.payload;
+                    });
+            }
+        } else {
+            model.state_change('auth_unknown');
+
+            self.call("model/sessionStorage/get/auth-user-id")
+                .then((msg) => {
+                    model.auth.user_id = msg.payload;
+                });
+        }
+
         // Handle auth changes forced by changes of the session storage
         self.subscribe("model/sessionStorage/event/auth-user-id", function(msg) {
             actions.setUserId({ user_id: msg.payload });
@@ -70,6 +102,11 @@ model.present = function(data) {
 
         // Synchronize tabs and windows of same user-agent
         self.subscribe("model/serviceWorker/event/broadcast/auth-sync", function(msg) {
+            actions.authCheck();
+        });
+
+        // Self or applicaton requested check on the cookie
+        self.subscribe("model/auth/post/check", function(msg) {
             actions.authCheck();
         });
 
@@ -93,6 +130,11 @@ model.present = function(data) {
             actions.switchUser(msg.payload);
         });
 
+        // Onetime token
+        self.subscribe("model/auth/post/onetime-token", function(msg) {
+            actions.onetimeToken(msg);
+        });
+
         // Check reset codes
         self.subscribe("model/auth/post/reset-code-check", function(msg) {
             actions.resetCodeCheck(msg);
@@ -102,6 +144,10 @@ model.present = function(data) {
             actions.resetPassword(msg);
         });
 
+        self.subscribe("model/auth/post/change", function(msg) {
+            actions.changePassword(msg);
+        });
+
         // Keep-alive ping for token refresh
         self.subscribe("model/ui/event/recent-activity", function(msg) {
             if (msg.payload.is_active) {
@@ -109,14 +155,21 @@ model.present = function(data) {
             }
         });
 
-       self.publish("model/auth/event/ping", "pong", { retain: true });
+        self.publish("model/auth/event/ping", "pong", { retain: true });
+
+        // Initial check on user status
+        fetchWithUA({ cmd: "status" })
+        .then(function(resp) { return resp.json(); })
+        .then(function(body) { actions.authResponse(body); })
+        .catch((e) => { actions.fetchError(); });
     }
 
     if ("is_fetch_error" in data) {
         model.is_fetch_error = data.is_fetch_error;
+        model.next_check = Math.floor(Math.random() * AUTH_CHECK_PERIOD);
     }
 
-    if (state.start(model) || ("user_id" in data && data.user_id !== model.auth.user_id)) {
+    if ("user_id" in data && data.user_id !== model.auth.user_id) {
         model.state_change('auth_unknown');
 
         // Refresh the current auth status by probing the server
@@ -132,6 +185,7 @@ model.present = function(data) {
             auth_check_cmd = 'refresh';
         }
         model.is_keep_alive = false;
+
         fetchWithUA({ cmd: auth_check_cmd })
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authResponse(body); })
@@ -176,6 +230,21 @@ model.present = function(data) {
         .catch((e) => { actions.fetchError(); });
     }
 
+    if (data.is_onetime_token) {
+        model.authentication_error = null;
+        model.onauth = null;
+        model.state_change('authenticating');
+
+        fetchWithUA({
+                    cmd: "onetime_token",
+                    token: data.token,
+                    url: data.url
+                })
+        .then(function(resp) { return resp.json(); })
+        .then(function(body) { actions.authLogonResponse(body); })
+        .catch((e) => { actions.fetchError(); });
+    }
+
     if (data.logoff) {
         model.authentication_error = null;
         model.onauth = data.onauth || null;
@@ -187,15 +256,43 @@ model.present = function(data) {
         .catch((e) => { actions.fetchError(); });
     }
 
-    if ("auth_response" in data && data.auth_response.status == 'ok') {
-        if (data.is_auth_error === false) {
-            model.authentication_error = null;
-        }
-        model.auth = data.auth_response;
-        if (model.auth.user_id == previous_auth_user_id) {
-            model.state_change('auth_known');
+    if ("auth_response" in data) {
+        if (data.auth_response.status == 'ok') {
+            if (data.is_auth_error === false) {
+                model.authentication_error = null;
+            }
+            model.auth = data.auth_response;
+            if (data.is_auth_error === false && data.auth_response.url) {
+                self.publish("model/location/post/redirect", {
+                    url: data.auth_response.url
+                });
+            }
+
+            if (model.auth.user_id == previous_auth_user_id) {
+                model.state_change('auth_known');
+            } else {
+                model.state_change('auth_changing');
+            }
+
+            model.next_check = AUTH_CHECK_PERIOD;
+            if (data.auth_response.expires) {
+                let timeout = data.auth_response.expires;
+
+                if (timeout < model.next_check) {
+                    timeout = Math.max(0, timeout - 1);
+                } else {
+                    // Check the status somewhere in the last quarter of the
+                    // expirarion period. Use random to prevent multiple tabs
+                    // checking at the same time.
+                    let t = Math.floor(Math.random() * Math.floor(timeout/4));
+                    timeout = Math.max(1, timeout - t - 4);
+                }
+                model.next_check = timeout;
+            } else {
+                model.next_check = Math.floor(Math.random() * AUTH_CHECK_PERIOD);
+            }
         } else {
-            model.state_change('auth_changing');
+            model.next_check = Math.floor(Math.random() * AUTH_CHECK_PERIOD);
         }
     }
 
@@ -236,6 +333,34 @@ model.present = function(data) {
         .catch((e) => { actions.fetchError(); });
     }
 
+    if (data.is_change) {
+        model.state_change('authenticating');
+        model.onauth = data.onauth || null;
+
+        fetchWithUA({
+            cmd: "change",
+            password: data.password,
+            password_reset: data.password_reset,
+            passcode: data.passcode
+        })
+        .then(function(resp) { return resp.json(); })
+        .then(function(body) { actions.authLogonResponse(body); })
+        .catch((e) => { actions.fetchError(); });
+    }
+
+    if (model.next_check > 0) {
+        if (model.auth_check_timer) {
+            clearTimeout(model.auth_check_timer);
+        }
+        model.auth_check_timer = setTimeout(
+            function() {
+                model.auth_check_timer = null;
+                self.publish("model/auth/post/check", {});
+            },
+            model.next_check * 1000);
+        model.next_check = 0;
+    }
+
     // console.log("AUTH state", model);
     state.render(model) ;
 }
@@ -244,6 +369,7 @@ model.state_change = function(status) {
     if (status != model.status) {
         switch (status) {
             case 'auth_changing':
+                self.publish("model/sessionId/post/reset");
                 self.call('model/sessionStorage/post/auth-user-id', model.auth.user_id)
                     .then(function() {
                         self.publish('model/auth/event/auth-changing', {
@@ -295,9 +421,9 @@ var state =  { view: view} ;
 
 model.state = state ;
 
-// Derive the state representation as a function of the systen control state
+// Derive the state representation as a function of the system control state
 state.representation = function(model) {
-    self.publish('model/auth/event/auth', model.auth);
+    self.publish('model/auth/event/auth', model.auth, { retain: true });
 
     // Publish the model's UI status
     let ui = {
@@ -382,12 +508,12 @@ var actions = {} ;
 // On startup we continue with the previous page user-id
 // todo: check the returned html for any included user-id (from the cookie
 //       when generating the page, should be data attribute in html tag).
-actions.start = function() {
-    self.call("model/sessionStorage/get/auth-user-id")
-        .then((msg) => {
-            model.auth.user_id = msg.payload;
-            model.present({});
-        });
+actions.start = function(init_args) {
+    let data = init_args || {};
+    model.present({
+        is_start: true,
+        auth: data.auth
+    });
 }
 
 actions.setUserId = function(data) {
@@ -456,11 +582,18 @@ actions.logon = function(data) {
 }
 
 actions.logonForm = function(data) {
+    let username;
+
+    if (data.message && data.message.username && data.message.username !== "") {
+        username = data.message.username;
+    } else {
+        username = data.value.username;
+    }
     let dataLogon = {
         logon: true,
-        username: data.value.username,
-        password: data.value.password,
-        passcode: data.value.passcode,
+        username: username,
+        password: data.value.password || null,
+        passcode: data.value.passcode || null,
         setautologon: data.value.rememberme ? true : false,
         onauth: data.value.onauth
     }
@@ -481,6 +614,15 @@ actions.logoff = function(data) {
 
 actions.keepAlive = function(_date) {
     model.present({ is_keep_alive: true });
+}
+
+actions.onetimeToken = function(msg) {
+    let onetime = {
+        is_onetime_token: true,
+        token: msg.payload.token,
+        url: msg.payload.url
+    }
+    model.present(onetime);
 }
 
 actions.resetCodeCheck = function(msg) {
@@ -530,13 +672,24 @@ actions.resetPassword = function(msg) {
     model.present(data);
 }
 
+actions.changePassword = function(msg) {
+    let data = {
+        is_change: true,
+        password: msg.payload.password,
+        password_reset: msg.payload.password_reset,
+        passcode: msg.payload.passcode,
+        onauth: msg.payload.onauth || null
+    };
+    model.present(data);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Worker Startup
 //
 
-self.on_connect = function() {
-    setTimeout(function() { actions.start(); }, 0);
-    setInterval(function() { actions.authCheck(); }, AUTH_CHECK_PERIOD);
-}
-
-self.connect();
+self.connect({
+    depends: [ "model/sessionStorage", "model/localStorage", "model/sessionId" ],
+    provides: [ "model/auth" ]
+}).then( function(args) {
+    actions.start(args[0]);
+});

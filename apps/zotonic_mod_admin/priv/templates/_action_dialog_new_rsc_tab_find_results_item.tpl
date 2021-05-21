@@ -30,9 +30,9 @@
                     <a href="#" class="btn btn-default action-edit">{_ Edit _}</a>
                 {% endif %}
 {% endcomment %}
-                {% if is_zlink %}
-                    <a href="#" class="btn btn-primary action-connect">{_ Link _}</a>
-                {% elseif predicate and is_linkable %}
+                {% if intent == "select" %}
+                    <a href="#" class="btn btn-primary action-connect">{_ Select _}</a>
+                {% elseif intent == "connect" and is_linkable %}
                     <a href="#" class="btn btn-primary action-connect">{_ Connect _}</a>
                 {% endif %}
             </p>

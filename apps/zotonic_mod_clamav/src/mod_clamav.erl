@@ -34,7 +34,7 @@
 
 
 %% @doc Check the uploaded file with clamav
-observe_media_upload_preprocess(#media_upload_preprocess{ file = File, mime = Mime, medium = Medium } = Pre, Context) ->
+observe_media_upload_preprocess(#media_upload_preprocess{ file = File, mime = Mime, medium = Medium } = Pre, Context) when is_binary(File) ->
     case maps:get(<<"is_av_sizelimit">>, Medium, false) of
         true ->
             % This is the second try, now with disabled av-scanner
@@ -62,7 +62,10 @@ observe_media_upload_preprocess(#media_upload_preprocess{ file = File, mime = Mi
                         Context),
                     Error
             end
-    end.
+    end;
+observe_media_upload_preprocess(#media_upload_preprocess{ file = undefined }, _Context) ->
+    undefined.
+
 
 scan_file(File, Mime, Context) ->
   MimeB = z_convert:to_binary(Mime),

@@ -31,6 +31,7 @@
     get/2,
     insert/6,
     delete/2,
+    is_deletable/2,
     toggle/2,
     gravatar_code/1,
     merge/3,
@@ -164,6 +165,12 @@ delete(CommentId, Context) ->
             Error
     end.
 
+%% @doc Check if a comment can be deleted
+is_deletable(CommentId, Context) ->
+    case check_editable(CommentId, Context) of
+        {ok, _} -> true;
+        {error, _} -> false
+    end.
 
 %% @doc Toggle the visibility of a comment, return the new visibility
 toggle(CommentId, Context) ->

@@ -1,7 +1,7 @@
 {% include "_js_include_jquery.tpl" %}
 
 {% lib
-    "admin-bootstrap3/js/bootstrap.min.js"
+    "js/bootstrap3/bootstrap.min.js"
 %}
 
 {% lib
@@ -34,11 +34,13 @@
     "js/modules/livevalidation-1.3.js"
     "js/modules/jquery.loadmask.js"
     "js/modules/jquery.timepicker.min.js"
+
+    minify
 %}
 
 {% all include "_admin_lib_js.tpl" %}
 
-{% worker name="auth" src="js/zotonic.auth.worker.js" %}
+{% worker name="auth" src="js/zotonic.auth.worker.js" args=%{  auth: m.authentication.status  } %}
 
 <script type="text/javascript">
 $(function()

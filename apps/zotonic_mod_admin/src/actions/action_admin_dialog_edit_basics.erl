@@ -1,9 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2011 Arjan Scherpenisse
-%% Date: 2011-06-25
+%% @copyright 2011-2021 Arjan Scherpenisse
 %% @doc Edit the basic properties of a rsc in a dialog.
 
-%% Copyright 2011 Arjan Scherpenisse
+%% Copyright 2011-2021 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -46,7 +45,7 @@ event(#postback{message={edit_basics, RscId, EdgeId, Template, Actions, Callback
                     undefined ->
                         case EdgeId of
                             undefined ->
-                                z_convert:to_integer(z_context:get_q("id", Context));
+                                z_convert:to_integer(z_context:get_q(<<"id">>, Context));
                             _ ->
                                 {_, _, OId} = m_edge:get_triple(EdgeId, Context),
                                 OId
@@ -66,10 +65,14 @@ event(#postback{message={edit_basics, RscId, EdgeId, Template, Actions, Callback
         {callback, Callback},
         {center, 0}
     ],
+    Title = case m_rsc:p(ObjectId, title, Context) of
+        undefined -> ?__("Untitled", Context);
+        T -> T
+    end,
     DialogTitle = iolist_to_binary([
         ?__("Edit:", Context),
         " ",
-        z_trans:lookup_fallback(m_rsc:p(ObjectId, title, Context), Context)
+        z_convert:to_binary( z_trans:lookup_fallback(Title, Context) )
     ]),
     z_render:dialog(DialogTitle, {cat, "_action_dialog_edit_basics.tpl"}, Vars, Context);
 
@@ -82,8 +85,6 @@ event(#submit{message={rsc_edit_basics, Args}}, Context) ->
     Post = z_context:get_q_all_noz(Context),
     Props = controller_admin_edit:filter_props(Post),
     Props1 = maybe_add_language(Id, proplists:delete(<<"id">>, Props), Context),
-
-io:format("~p~n", [ Props1 ]),
 
     case m_rsc:update(Id, Props1, Context) of
         {ok, _} ->
@@ -120,7 +121,10 @@ io:format("~p~n", [ Props1 ]),
                 "" -> Context2;
                 <<>> -> Context2;
                 Callback ->
-                    Title = m_rsc:p(Id, title, Context2),
+                    Title = case m_rsc:p(Id, title, Context2) of
+                        undefind -> ?__("Untitled", Context2);
+                        T -> T
+                    end,
                     z_render:wire({script, [{script, [
                                     z_sanitize:ensure_safe_js_callback(Callback),
                                     $(,$",integer_to_list(Id),$",$,,

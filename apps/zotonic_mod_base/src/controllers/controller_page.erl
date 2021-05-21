@@ -20,6 +20,7 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
+    service_available/1,
     content_types_provided/1,
     resource_exists/1,
     previously_existed/1,
@@ -28,6 +29,13 @@
     process/4
 ]).
 
+
+service_available(Context) ->
+    Context1 = case z_convert:to_bool(z_context:get(nocache, Context)) of
+        true -> z_context:set_nocache_headers(Context);
+        false -> Context
+    end,
+    {true, Context1}.
 
 content_types_provided(Context) ->
     CTs = case z_context:get(content_type, Context) of
@@ -82,9 +90,10 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 	%% This does not take into account any query args and vary headers.
 	%% @todo Add the 'vary' headers to the cache key
 	RenderArgs = [ {id, Id} | z_context:get_all(Context1) ],
+    RenderArgs1 = z_notifier:foldl(template_vars, RenderArgs, Context),
 	RenderFunc = fun() ->
 		Template = z_context:get(template, Context1, {cat, <<"page.tpl">>}),
-	    z_template:render(Template, RenderArgs, Context1)
+	    z_template:render(Template, RenderArgs1, Context1)
 	end,
 
 	MaxAge = z_context:get(cache_anonymous_max_age, Context1),

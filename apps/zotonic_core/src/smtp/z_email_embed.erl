@@ -93,7 +93,23 @@ create_attachment_part(Data, ContentType, Name, Headers) ->
       [
         {<<"transfer-encoding">>, <<"base64">>},
         {<<"disposition">>, <<"inline">>},
-        {<<"disposition-params">>, [{<<"filename">>, z_convert:to_binary(Name)}]}
+        {<<"disposition-params">>, [{<<"filename">>, z_convert:to_binary(unreserved_filename(Name))}]}
       ],
       Data
     }.
+
+%% @doc Remove all percent encoding from the path and remove any characters that might
+%%      give a problem.
+unreserved_filename(Name) ->
+    Unquoted = z_url:url_decode( z_convert:to_list(Name) ),
+    lists:map(
+        fun
+            ($~) -> $-;
+            (C) ->
+                case z_url:url_unreserved_char(C) of
+                    true -> C;
+                    false -> $-
+                end
+        end,
+        Unquoted).
+

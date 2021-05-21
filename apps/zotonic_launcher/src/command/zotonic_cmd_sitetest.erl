@@ -20,7 +20,10 @@
 -author("Blaise").
 
 %% API
--export([run/1]).
+-export([info/0, run/1]).
+
+info() ->
+    "Run the tests for a site.".
 
 run([ Site ]) ->
     case zotonic_command:net_start() of

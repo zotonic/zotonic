@@ -1,14 +1,18 @@
+{#
+    Video viewer template.
+
+    Used for {% media %} by mod_video to display media items with
+    the mime type "video/mp4"
+#}
 {% with props|default:(m.media[id]) as props %}
 {% if props.is_video_processing %}
 	<div id="{{ #video }}" class="video-processing">
 		<img src="/lib/images/processing.gif" />
 		<span>{_ Converting _} …</span>
 	</div>
-    {% javascript %}
-        {% wire type={mqtt topic=["model", "media", "event", props.id]}
-                action={replace template="_video_viewer.tpl" target=#video options=options id=props.id}
-        %}
-    {% endjavascript %}
+    {% wire type={mqtt topic=[ "bridge", "origin", "model", "media", "event", props.id, "update" ]}
+            action={replace template="_video_viewer.tpl" target=#video options=options id=props.id}
+    %}
 {% elseif props.is_video_broken %}
 	{% image props.preview_filename width=options.width height=options.height class=options.class %}
 {% elseif props.filename %}

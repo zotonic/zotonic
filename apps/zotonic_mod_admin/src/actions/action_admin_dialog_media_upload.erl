@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-04-27
+%% @copyright 2009-2021 Marc Worrell
 %% @doc Open a dialog with some fields to upload a new media.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,22 +30,27 @@
 render_action(TriggerId, TargetId, Args, Context) ->
     Title = proplists:get_value(title, Args),
     Id = proplists:get_value(id, Args),
+    Intent = case proplists:get_value(intent, Args) of
+        undefined when Id =:= undefined -> <<"connect">>;
+        _ -> <<"update">>
+    end,
     SubjectId = proplists:get_value(subject_id, Args),
     Predicate = proplists:get_value(predicate, Args, depiction),
     Actions = proplists:get_all_values(action, Args),
     Stay = proplists:get_value(stay, Args, false),
     Center = proplists:get_value(center, Args, 1),
     Callback = proplists:get_value(callback, Args),
-    Postback = {media_upload_dialog, Title, Id, SubjectId, Predicate, Stay, Center, Callback, Actions},
-        {PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
-        {PostbackMsgJS, Context}.
+    Postback = {media_upload_dialog, Title, Intent, Id, SubjectId, Predicate, Stay, Center, Callback, Actions},
+    {PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
+    {PostbackMsgJS, Context}.
 
 
 %% @doc Fill the dialog with the new page form. The form will be posted back to this module.
 %% @spec event(Event, Context1) -> Context2
-event(#postback{message={media_upload_dialog, Title, Id, SubjectId, Predicate, Stay, Center, Callback, Actions}}, Context) ->
+event(#postback{message={media_upload_dialog, Title, Intent, Id, SubjectId, Predicate, Stay, Center, Callback, Actions}}, Context) ->
     Vars = [
         {delegate, atom_to_list(?MODULE)},
+        {intent, Intent},
         {id, Id},
         {subject_id, SubjectId},
         {title, Title},
@@ -56,52 +60,66 @@ event(#postback{message={media_upload_dialog, Title, Id, SubjectId, Predicate, S
         {stay, Stay},
         {center, Center}
     ],
-    DTitle = case Id of undefined -> ?__("Add a new media file", Context); _ -> ?__("Replace current medium", Context) end,
+    DTitle = case Id of
+        undefined -> ?__("Add a new media file", Context);
+        _ -> ?__("Replace current medium", Context)
+    end,
     z_render:dialog(DTitle, "_action_dialog_media_upload.tpl", Vars, Context);
 
 
 event(#submit{message={media_upload, EventProps}}, Context) ->
-    File = z_context:get_q_validated("upload_file", Context),
-    case File of
-        #upload{filename=OriginalFilename, tmpfile=TmpFile} ->
-            Props = case proplists:get_value(id, EventProps) of
-                        undefined ->
-                            Lang = z_context:language(Context),
-                            Title = z_context:get_q(<<"new_media_title">>, Context),
-                            NewTitle = case z_utils:is_empty(Title) of
-                                           true -> OriginalFilename;
-                                           false -> Title
-                                       end,
-                            Props0 = [
-                                {title, {trans, [{Lang,NewTitle}]}},
-                                {language, [Lang]},
-                                {original_filename, OriginalFilename}
-                            ],
-                            add_content_group(EventProps, Props0, Context);
-                        _Id ->
-                            [{original_filename, OriginalFilename}]
-                    end,
-            handle_media_upload(EventProps, Context,
+    case z_context:get_q(<<"upload_file">>, Context) of
+        #upload{ filename = OriginalFilename } = Upload ->
+            Intent = proplists:get_value(intent, EventProps),
+            Props = case Intent of
+                <<"update">> ->
+                    #{
+                        <<"original_filename">> => OriginalFilename
+                    };
+                _ ->
+                    Lang = z_context:language(Context),
+                    Title = z_context:get_q(<<"new_media_title">>, Context),
+                    NewTitle = case z_utils:is_empty(Title) of
+                                   true -> OriginalFilename;
+                                   false -> Title
+                               end,
+                    IsDependent = z_convert:to_bool( z_context:get_q(<<"is_dependent">>, Context, false) ),
+                    IsPublished = z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) ),
+                    Props0 = #{
+                        <<"is_published">> => IsPublished,
+                        <<"is_dependent">> => IsDependent,
+                        <<"title">> =>  #trans{ tr = [{Lang,NewTitle}] },
+                        <<"language">> => [Lang],
+                        <<"original_filename">> => OriginalFilename
+                    },
+                    add_content_group(EventProps, Props0, Context)
+            end,
+            handle_media_upload(Intent, EventProps, Context,
                                 %% insert fun
-                                fun(Ctx) -> m_media:insert_file(TmpFile, Props, Ctx) end,
+                                fun(Ctx) -> m_media:insert_file(Upload, Props, Ctx) end,
                                 %% replace fun
-                                fun(Id, Ctx) -> m_media:replace_file(TmpFile, Id, Props, Ctx) end);
+                                fun(Id, Ctx) -> m_media:replace_file(Upload, Id, Props, Ctx) end);
         _ ->
-            z_render:growl("No file specified.", Context)
+            z_render:growl(?__("Add a new media file", Context), Context)
     end;
 
 event(#submit{message={media_url, EventProps}}, Context) ->
     Url = z_context:get_q(<<"url">>, Context),
-    Props = case proplists:get_value(id, EventProps) of
-                undefined ->
-                    Props0 = [
-                        {title, z_context:get_q_validated(<<"new_media_title_url">>, Context)}
-                    ],
-                    add_content_group(EventProps, Props0, Context);
-                _ ->
-                    []
-            end,
-    handle_media_upload(EventProps, Context,
+    Intent = proplists:get_value(intent, EventProps),
+    Props = case Intent of
+        <<"update">> ->
+            #{};
+        _ ->
+            IsDependent = z_convert:to_bool( z_context:get_q(<<"is_dependent">>, Context, false) ),
+            IsPublished = z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) ),
+            Props0 = #{
+                <<"is_published">> => IsPublished,
+                <<"is_dependent">> => IsDependent,
+                <<"title">> => z_context:get_q_validated(<<"new_media_title_url">>, Context)
+            },
+            add_content_group(EventProps, Props0, Context)
+    end,
+    handle_media_upload(Intent, EventProps, Context,
                         %% insert fun
                         fun(Ctx) -> m_media:insert_url(Url, Props, Ctx) end,
                         %% replace fun
@@ -117,7 +135,7 @@ add_content_group(EventProps, Props, Context) ->
         undefined ->
             Props;
         ContentGroupId ->
-            [{content_group_id, ContentGroupId} | Props]
+            Props#{ <<"content_group_id">> => ContentGroupId }
     end.
 
 content_group_id(undefined, SubjectId, Context) when is_integer(SubjectId) ->
@@ -126,31 +144,26 @@ content_group_id(ContentGroupId, _SubjectId, _Context) ->
     ContentGroupId.
 
 %% Handling the media upload.
-handle_media_upload(EventProps, Context, InsertFun, ReplaceFun) ->
+handle_media_upload(<<"update">>, EventProps, Context, _InsertFun, ReplaceFun) ->
     Actions = proplists:get_value(actions, EventProps, []),
     Id = proplists:get_value(id, EventProps),
-    case Id of
-        %% Create a new media page
-        undefined ->
-            case InsertFun(Context) of
-                {ok, MediaId} ->
-                    action_admin_dialog_new_rsc:do_new_page_actions(MediaId, EventProps, Context);
-                {error, R} ->
-                    z_render:growl_error(error_message(R, Context), Context)
-            end;
-
-        %% Replace attached medium with the uploaded file (skip any edge requests)
-        N when is_integer(N) ->
-            case ReplaceFun(Id, Context) of
-                {ok, _} ->
-                    z_render:wire([
-                            {growl, [{text, ?__("Media item created.", Context)}]},
-                            {dialog_close, []}
-                            | Actions], Context);
-                {error, R} ->
-                    z_render:growl_error(error_message(R, Context), Context)
-            end
+    case ReplaceFun(Id, Context) of
+        {ok, _} ->
+            z_render:wire([
+                    {growl, [{text, ?__("Media item created.", Context)}]},
+                    {dialog_close, []}
+                    | Actions], Context);
+        {error, R} ->
+            z_render:growl_error(error_message(R, Context), Context)
+    end;
+handle_media_upload(_Intent, EventProps, Context, InsertFun, _ReplaceFun) ->
+    case InsertFun(Context) of
+        {ok, MediaId} ->
+            action_admin_dialog_new_rsc:do_new_page_actions(MediaId, EventProps, Context);
+        {error, R} ->
+            z_render:growl_error(error_message(R, Context), Context)
     end.
+
 
 %% @doc Return a sane upload error message
 error_message(eacces, Context) ->

@@ -57,16 +57,16 @@ observe_identity_password_match(#identity_password_match{password=Password, hash
     end.
 
 
-observe_rsc_update(#rsc_update{action=Action, id=RscId, props=Pre}, {_Modified, Post} = Acc, Context)
+observe_rsc_update(#rsc_update{action=Action, id=RscId, props=Pre}, {ok, Post}, Context)
     when Action =:= insert; Action =:= update ->
     case z_context:get(is_m_identity_update, Context) of
         true ->
-            Acc;
+            {ok, Post};
         _false ->
             case {maps:get(<<"email">>, Pre, undefined), maps:get(<<"email">>, Post, undefined)} of
-                {A, A} -> Acc;
-                {_Old, undefined} -> Acc;
-                {_Old, <<>>} -> Acc;
+                {A, A} -> {ok, Post};
+                {_Old, undefined} -> {ok, Post};
+                {_Old, <<>>} -> {ok, Post};
                 {_Old, New} ->
                     case is_email_identity_category(Pre, Post, Context) of
                         true ->
@@ -75,7 +75,7 @@ observe_rsc_update(#rsc_update{action=Action, id=RscId, props=Pre}, {_Modified, 
                         false ->
                             ok
                     end,
-                    Acc
+                    {ok, Post}
             end
     end;
 observe_rsc_update(#rsc_update{}, Acc, _Context) ->
@@ -132,7 +132,7 @@ event(#postback{message={identity_verify_check, Args}}, Context) ->
     {verify_key, VerifyKey} = proplists:lookup(verify_key, Args),
     Context1 = z_render:wire({hide, [{target, "verify-checking"}]}, Context),
     case verify(IdnId, VerifyKey, Context1) of
-        {error, notfound} ->
+        {error, _} ->
             z_render:wire({fade_in, [{target, "verify-error"}]}, Context1);
         ok ->
             z_render:wire({fade_in, [{target, "verify-ok"}]}, Context1)
@@ -223,7 +223,13 @@ event(#postback{message={identity_add, Args}}, Context) ->
 
 %% Log on as this user
 event(#postback{message={switch_user, [{id, Id}]}}, Context) ->
-    case z_auth:switch_user(Id, Context) of
+    ContextSwitch = case z_context:get(auth_options, Context) of
+        #{ sudo_user_id := SUid } when is_integer(SUid) ->
+            z_acl:logon(SUid, Context);
+        _ ->
+            Context
+    end,
+    case z_auth:switch_user(Id, ContextSwitch) of
         ok ->
             % Changing the authenticated will force all connected pages to reload or change.
             % After this we can't send any replies any more, as the pages are disconnecting.

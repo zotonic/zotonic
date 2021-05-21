@@ -10,8 +10,8 @@
 {% block widget_header %}{% endblock %}
 
 {% block widget_content %}
-<fieldset class="form-vertical">
-    <div class="form-group">
+<fieldset class="form">
+    <div class="form-group label-floating">
     {% if id.is_editable %}
         <input class="form-control"
                type="text"
@@ -19,6 +19,7 @@
                name="blocks[].header{{ lang_code_with_dollar }}"
                value="{{ blk.header[lang_code] }}"
                placeholder="{_ Header _} ({{ lang_code }})">
+        <label>{_ Header _} ({{ lang_code }})</label>
     {% else %}
         <h3>{{ blk.header[lang_code]  }}</h3>
     {% endif %}

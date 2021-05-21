@@ -60,10 +60,10 @@ TinyMCE Zotonic options
 Zotonic provides extra init options:
 
 ``z_insert_dialog_enabled``
-  Set this to false to prevent the insert media dialog from showing. Default `true`.
+  Set this to false to prevent the insert media dialog from showing. Default ``true``.
 
 ``z_properties_dialog_enabled``
-  Set this to false to prevent the media properties dialog from showing. Default `true`.
+  Set this to false to prevent the media properties dialog from showing. Default ``true``.
 
 
 Writing admin widget templates
@@ -223,7 +223,7 @@ shown::
 	  <label class="checkbox">
           <input value="1" type="checkbox"
                  name="feature_show_geodata"
-                 {% if id.feature_show_geodata|if_undefined:`true` %}checked{% endif %}
+                 {% if id.is_feature_show_geodata|if_undefined:true %}checked{% endif %}
                  />
           {_ Show geo data on edit page _}
       </label>
@@ -231,25 +231,36 @@ shown::
 
 And on the edit page there is this check to conditionally include the geodata box::
 
-  {% if id.category_id.feature_show_geodata|if_undefined:`true` %}
+  {% if id.category_id.is_feature_show_geodata|if_undefined:true %}
 
-The ``if_undefined`` is used so that the default value can be true
+The filter :ref:`filter-if_undefined` is used so that the default value can be true
 when the checkbox has never been touched.
 
 
 Configuration keys
 ------------------
 
-For the admin there are two configuration keys: ``mod_admin.rsc_dialog_tabs`` and ``mod_admin.rsc_dialog_is_published``.
+For the admin there are the following configuration keys:
+
+ * ``mod_admin.rsc_dialog_tabs``
+ * ``mod_admin.rsc_dialog_is_published``
+ * ``mod_admin.rsc_dialog_is_dependent``
+ * ``mod_admin.rsc_dialog_hide_dependent``
 
 The ``mod_admin.rsc_dialog_tabs`` key defines which tabs are shown in the new resource, media-upload, and image-link dialogs.
 Per defauls these dialogs show all the possible tabs, with this configurarion key it is possible to change that.
 
-The tabs are: ``find,new,upload,url,embed,oembed,depiction``
+Available tabs are: ``find,new,upload,url,embed,oembed,depiction``. More can be defined by modules.
 
-The ``depiction`` is used for the TinyMCE image-link dialog; it shows all media connected using the ``depiction`` predicate.
+Tab ``depiction`` is used for the TinyMCE image-link dialog; it shows all media connected using the ``depiction`` predicate.
 
-The ``mod_admin.rsc_dialog_is_published`` defines the default *is_published* state for new resources being mad in the *new* tab.
+The configuration ``mod_admin.rsc_dialog_is_published`` defines the default *is_published* state for new resources.
 Setting this key to `1` will check the *is_published* checkbox.
 
-.. seealso:: :ref:`filter-if_undefined`
+The configuration ``mod_admin.edge_list_max_length`` defines the maximum number of connections shown per predicate in the
+connection list sidebar. If there are more connections then the list truncated, and the message _Too many connections, only the first and last are shown._ is displayed. The default is 100 connections.
+
+The configuration ``mod_admin.rsc_dialog_is_dependent`` defines the default *is_dependent* state for new resources.
+Setting this key to `1` will check the *is_dependent* checkbox.
+
+With the configuration ``mod_admin.rsc_dialog_hide_dependent`` the *dependent* checkbox can be hidden for non admin users.

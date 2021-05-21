@@ -49,6 +49,9 @@
     get_rsc_by_type/3,
     get_rsc/3,
 
+    is_email_verified/1,
+    is_email_verified/2,
+
     is_valid_key/3,
     normalize_key/2,
 
@@ -106,6 +109,8 @@ m_get([ <<"lookup">>, Type, Key | Rest ], _Msg, Context) ->
 m_get([ <<"generate_password">> | Rest ], _Msg, _Context) ->
     Password = iolist_to_binary([ z_ids:id(5), $-, z_ids:id(5), $-, z_ids:id(5) ]),
     {ok, {Password, Rest}};
+m_get([ <<"is_email_verified">> | Rest ], _Msg, Context) ->
+    {ok, {is_email_verified(Context), Rest}};
 m_get([ Id, <<"is_user">> | Rest ], _Msg, Context) ->
     IsUser = case z_acl:rsc_visible(Id, Context) of
         true -> is_user(Id, Context);
@@ -145,6 +150,17 @@ m_get([ <<"get">>, IdnId | Rest ], _Msg, Context) ->
                 true -> Idn;
                 false -> undefined
             end
+    end,
+    {ok, {Idn1, Rest}};
+m_get([ <<"verify">>, IdnId, VerifyKey | Rest ], _Msg, Context) ->
+    Idn1 = case get(IdnId, Context) of
+        Idn when is_list(Idn), is_binary(VerifyKey), VerifyKey =/= <<>> ->
+            case proplists:get_value(verify_key, Idn) of
+                VerifyKey -> Idn;
+                _ -> undefined
+            end;
+        _ ->
+            undefined
     end,
     {ok, {Idn1, Rest}};
 m_get([ Id, Type | Rest ], _Msg, Context) ->
@@ -220,7 +236,7 @@ delete_username(RscId, Context) when is_integer(RscId) ->
                     id => RscId,
                     type => <<"username_pw">>
                 },
-                Context),
+                z_acl:sudo(Context)),
             ok;
         false ->
             {error, eacces}
@@ -319,7 +335,7 @@ set_username(Id, Username, Context) when is_integer(Id) ->
                                     id => Id,
                                     type => <<"username_pw">>
                                 },
-                                Context),
+                                z_acl:sudo(Context)),
                             z_depcache:flush(Id, Context),
                             ok;
                         {rollback, {error, _} = Error, _Trace} ->
@@ -393,7 +409,7 @@ set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
                     id => Id,
                     type => <<"username_pw">>
                 },
-                Context),
+                z_acl:sudo(Context)),
             ok;
         {rollback, {{error, _} = Error, _Trace} = ErrTrace} ->
             lager:error("set_username_pw error for ~p, setting username. ~p: ~p",
@@ -733,7 +749,7 @@ get_rsc_types(Id, Context) ->
 -spec get_rsc_by_type(m_rsc:resource(), atom(), #context{}) -> list().
 get_rsc_by_type(Id, email, Context) ->
     Idns = get_rsc_by_type_1(Id, email, Context),
-    case normalize_key(email, m_rsc:p_no_acl(Id, email, Context)) of
+    case normalize_key(email, m_rsc:p_no_acl(Id, email_raw, Context)) of
         undefined ->
             Idns;
         Email ->
@@ -760,8 +776,10 @@ get_rsc_by_type_1(Id, Type, Context) ->
         Context
     ).
 
--spec get_rsc(m_rsc:resource_id(), atom(), #context{}) -> list() | undefined.
+-spec get_rsc(m_rsc:resource_id(), atom() | binary(), z:context()) -> list() | undefined.
 get_rsc(Id, Type, Context) when is_integer(Id), is_atom(Type) ->
+    get_rsc(Id, z_convert:to_binary(Type), Context);
+get_rsc(Id, Type, Context) when is_integer(Id), is_binary(Type) ->
     F = fun() ->
         get_rsc_1(Id, Type, Context)
     end,
@@ -774,6 +792,34 @@ get_rsc_1(Id, Type, Context) ->
         Context
     ).
 
+
+%% @doc Check if the primary email address of the user is verified.
+is_email_verified(Context) ->
+    is_email_verified(z_acl:user(Context), Context).
+
+is_email_verified(UserId, Context) ->
+    case m_rsc:p_no_acl(UserId, email_raw, Context) of
+        undefined -> false;
+        <<>> -> false;
+        Email ->
+            z_depcache:memo(
+                fun() ->
+                    E = normalize_key(email, Email),
+                    z_convert:to_bool(
+                        z_db:q1("
+                            select is_verified
+                            from identity
+                            where rsc_id = $1
+                              and type = $2
+                              and key = $3",
+                           [UserId, <<"email">>, E],
+                           Context) )
+                end,
+                {emaiL_verified, UserId},
+                3600,
+                [ UserId ],
+                Context)
+    end.
 
 %% @doc Hash a password, using bcrypt
 -spec hash(password()) -> bcrypt_hash().
@@ -802,7 +848,7 @@ needs_rehash({hash, _, _}) ->
 -spec insert_single(m_rsc:resource(), atom(), binary(), #context{}) ->
     {ok, pos_integer()} | {error, invalid_key}.
 insert_single(Rsc, Type, Key, Context) ->
-    insert(Rsc, Type, Key, [], Context).
+    insert_single(Rsc, Type, Key, [], Context).
 
 insert_single(Rsc, Type, Key, Props, Context) ->
     RscId = m_rsc:rid(Rsc, Context),
@@ -854,7 +900,7 @@ insert_1(Rsc, Type, Key, Props, Context) ->
                     id => RscId,
                     type => Type
                 },
-                Context),
+                z_acl:sudo(Context)),
             Result;
         IdnId ->
             case proplists:get_value(is_verified, Props, false) of
@@ -867,20 +913,25 @@ insert_1(Rsc, Type, Key, Props, Context) ->
                             id => RscId,
                             type => Type
                         },
-                        Context);
+                        z_acl:sudo(Context));
                 false ->
                     nop
             end,
             {ok, IdnId}
     end.
 
+-spec is_valid_key( binary() | atom(),  undefined | binary() | string(), z:context() ) -> boolean().
 is_valid_key(_Type, undefined, _Context) ->
     false;
 is_valid_key(email, Key, _Context) ->
     z_email_utils:is_email(Key);
 is_valid_key(username_pw, Key, _Context) ->
     not is_reserved_name(Key);
-is_valid_key(Type, _Key, _Context) when is_atom(Type) ->
+is_valid_key(<<"email">>, Key, Context) ->
+    is_valid_key(email, Key, Context);
+is_valid_key(<<"username_pw">>, Key, Context) ->
+    is_valid_key(username_pw, Key, Context);
+is_valid_key(Type, _Key, _Context) when is_atom(Type); is_binary(Type) ->
     true.
 
 normalize_key(_Type, undefined) -> undefined;
@@ -935,14 +986,14 @@ set_verified(Id, Context) ->
                     Context)
             of
                 1 ->
-                    flush(Id, Context),
+                    flush(RscId, Context),
                     z_mqtt:publish(
                         [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
                         #{
                             id => RscId,
                             type => Type
                         },
-                        Context),
+                        z_acl:sudo(Context)),
                     ok;
                 0 ->
                     {error, notfound}
@@ -954,12 +1005,13 @@ set_verified(Id, Context) ->
 
 %% @doc Set the verified flag on a record by rescource id, identity type and
 %% value (eg an user's email address).
--spec set_verified( m_rsc:resource_id(), string() | binary(), string() | binary(), z:context()) -> ok | {error, badarg}.
+-spec set_verified( m_rsc:resource_id(), string() | binary() | atom(), string() | binary(), z:context()) -> ok | {error, badarg}.
 set_verified(RscId, Type, Key, Context)
     when is_integer(RscId),
          Type =/= undefined,
          Key =/= undefined, Key =/= <<>>, Key =/= "" ->
-    Result = z_db:transaction(fun(Ctx) -> set_verified_trans(RscId, Type, Key, Ctx) end, Context),
+    KeyNorm = normalize_key(Type, Key),
+    Result = z_db:transaction(fun(Ctx) -> set_verified_trans(RscId, Type, KeyNorm, Ctx) end, Context),
     flush(RscId, Context),
     z_mqtt:publish(
         [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
@@ -967,7 +1019,7 @@ set_verified(RscId, Type, Key, Context)
             id => RscId,
             type => Type
         },
-        Context),
+        z_acl:sudo(Context)),
     Result;
 set_verified(_RscId, _Type, _Key, _Context) ->
     {error, badarg}.
@@ -1006,7 +1058,7 @@ is_verified(RscId, Context) ->
 set_by_type(RscId, Type, Key, Context) ->
     set_by_type(RscId, Type, Key, [], Context).
 
--spec set_by_type(m_rsc:resource_id(), string() | binary(), string() | binary(), list(), z:context()) -> ok.
+-spec set_by_type(m_rsc:resource_id(), string() | binary(), string() | binary(), term(), z:context()) -> ok.
 set_by_type(RscId, Type, Key, Props, Context) ->
     F = fun(Ctx) ->
         case z_db:q("
@@ -1046,7 +1098,7 @@ delete(IdnId, Context) ->
                                     id => RscId,
                                     type => Type
                                 },
-                                Context),
+                                z_acl:sudo(Context)),
                             maybe_reset_email_property(RscId, Type, Key, Context),
                             {ok, 1};
                         Other ->
@@ -1102,14 +1154,14 @@ merge(WinnerId, LoserId, Context) ->
                     id => LoserId,
                     type => all
                 },
-                Context),
+                z_acl:sudo(Context)),
             z_mqtt:publish(
                 [ <<"model">>, <<"identity">>, <<"event">>, WinnerId ],
                 #{
                     id => WinnerId,
                     type => all
                 },
-                Context),
+                z_acl:sudo(Context)),
             ok;
         false ->
             {error, eacces}
@@ -1154,7 +1206,7 @@ delete_by_type(Rsc, Type, Context) ->
                     id => RscId,
                     type => Type
                 },
-                Context),
+                z_acl:sudo(Context)),
             ok
     end.
 
@@ -1173,7 +1225,7 @@ delete_by_type_and_key(Rsc, Type, Key, Context) ->
                     id => RscId,
                     type => Type
                 },
-                Context),
+                z_acl:sudo(Context)),
             ok
     end.
 

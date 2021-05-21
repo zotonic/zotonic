@@ -20,10 +20,16 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
+    service_available/1,
     resource_exists/1,
     previously_existed/1,
     moved_temporarily/1
 ]).
+
+service_available(Context) ->
+    Context1 = z_context:set_noindex_header(Context),
+    Context2 = z_context:set_nocache_headers(Context1),
+    {true, Context2}.
 
 resource_exists(Context) ->
     {false, z_authentication_tokens:reset_cookies(Context)}.
@@ -33,4 +39,6 @@ previously_existed(Context) ->
 
 moved_temporarily(Context) ->
     Location = z_context:get_q(<<"p">>, Context, <<"/">>),
-    {{true, Location}, Context}.
+    LocationAbs = z_context:abs_url(Location, Context),
+    {{true, LocationAbs}, Context}.
+

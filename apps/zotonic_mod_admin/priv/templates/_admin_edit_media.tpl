@@ -13,83 +13,91 @@
 
     <p>
         {{ medium.mime }}
-        {% if medium.filename %}
-            {% if medium.width and medium.height %}
-                &ndash; {{ medium.width }} x {{ medium.height }} {_ pixels _}
-            {% endif %}
-            {% if medium.size %}
-                &ndash; {{ medium.size|filesizeformat }}
-            {% endif %}
-            &ndash; {{ medium.filename }}
+        {% if medium.width and medium.height %}
+            <span class="text-muted">&ndash;</span> {{ medium.width }} x {{ medium.height }} {_ pixels _}
         {% endif %}
-        &ndash; {_ uploaded on _} {{ medium.created|date:"Y-m-d H:i:s" }}
+        {% if medium.duration %}
+            <span class="text-muted">&ndash;</span> {{ medium.duration|format_duration }}
+        {% endif %}
+        {% if medium.size %}
+            <span class="text-muted">&ndash;</span> {{ medium.size|filesizeformat }}
+        {% endif %}
+        <span class="text-muted">
+            {% if medium.filename %}
+                &ndash; {{ medium.filename }}
+            {% endif %}
+            &ndash; {_ uploaded on _} {{ medium.created|date:"Y-m-d H:i:s" }}
+        </span>
     </p>
 
-    <div class="admin-edit-media {% if id.is_a.image %}do_cropcenter{% endif %}" id="rsc-image" data-original-width="{{ medium.width }}">
-        {% if medium.width < 597 and medium.height < 597 %}
-            {% media medium mediaclass="admin-media-cropcenter" %}
-        {% else %}
-            {% media medium mediaclass="admin-media" %}
-        {% endif %}
-    </div>
-
-    <div class="form-group clearfix">
-        {% if id.is_a.image %}
-            <input type="hidden" name="crop_center" id="crop_center" value="{{ id.crop_center }}" />
-            <a href="#" id="crop-center-remove" class="btn btn-default">
-                <i class="glyphicon glyphicon-remove"></i> {_ Remove crop center _}
-            </a>
-            <span id="crop-center-message" class="text-muted">{_ Click the image to set the cropping center. _}</span>
-        {% endif %}
-
-        <p class="text-right">
-            {% if medium.size > 0 %}
-                <a target="_blank" class="btn btn-default" href="{% url media_inline id=id %}" class="button">{_ View _}</a>
-                <a target="_blank" class="btn btn-default" href="{% url media_attachment id=id %}" class="button">{_ Download _}</a>
-                <input type="text" style="position: absolute; top:0; left:-9999px;" id="url-media-download" value="{% url media_attachment id=id absolute_url %}">
-                {% button
-                    text=_"Copy download link"
-                    class="btn btn-default"
-                    action={script
-                        script=["
-                            var copyText = document.getElementById('url-media-download');
-                            copyText.select();
-                            document.execCommand('copy');
-                            z_growl_add('", _"Copied download link to clipboard" ,"');
-                        "]
-                    }
-                %}
+    {% with medium.mime|match:"^image/" and medium.size > 0 as is_croppable %}
+        <div class="admin-edit-media {% if is_croppable %}do_cropcenter{% endif %}" id="rsc-image" data-original-width="{{ medium.width }}">
+            {% if medium.width < 597 and medium.height < 597 %}
+                {% media medium mediaclass="admin-media-cropcenter" %}
+            {% else %}
+                {% media medium mediaclass="admin-media" %}
             {% endif %}
-            {% button
-                text=_"Replace this media item"
-                class="btn btn-primary"
-                element="a"
-        	    action={dialog_media_upload
-                    id=id
-                    action={update
-                        target="media-edit-view"
-                        template="_admin_edit_media_all.tpl"
+        </div>
+
+        <div class="form-group clearfix">
+            {% if is_croppable %}
+                <input type="hidden" name="crop_center" id="crop_center" value="{{ id.crop_center }}" />
+                <a href="#" id="crop-center-remove" class="btn btn-default">
+                    <i class="glyphicon glyphicon-remove"></i> {_ Remove crop center _}
+                </a>
+                <span id="crop-center-message" class="text-muted">{_ Click the image to set the cropping center. _}</span>
+            {% endif %}
+
+            <p class="text-right">
+                {% if medium.size > 0 %}
+                    <a target="_blank" class="btn btn-default" href="{% url media_inline id=id %}" class="button">{_ View _}</a>
+                    <a target="_blank" class="btn btn-default" href="{% url media_attachment id=id %}" class="button">{_ Download _}</a>
+                    <input type="text" style="position: absolute; top:0; left:-9999px;" id="url-media-download" value="{% url media_attachment id=id absolute_url %}">
+                    {% button
+                        text=_"Copy download link"
+                        class="btn btn-default"
+                        action={script
+                            script=["
+                                var copyText = document.getElementById('url-media-download');
+                                copyText.select();
+                                document.execCommand('copy');
+                                z_growl_add('", _"Copied download link to clipboard" ,"');
+                            "]
+                        }
+                    %}
+                {% endif %}
+                {% button
+                    text=_"Replace this media item"
+                    class="btn btn-primary"
+                    element="a"
+            	    action={dialog_media_upload
                         id=id
-                    }
-    	            center=0
-    	        }
-    	        disabled=not id.is_editable
-    	    %}
-        </p>
-        {% if medium.is_av_sizelimit %}
-            <p class="text-danger text-right">
-                <span class="glyphicon glyphicon-alert"></span> {_ This file has not been scanned for viruses because it is too large. _}
+                        intent="update"
+                        action={update
+                            target="media-edit-view"
+                            template="_admin_edit_media_all.tpl"
+                            id=id
+                        }
+        	            center=0
+        	        }
+        	        disabled=not id.is_editable
+        	    %}
             </p>
-        {% elseif medium.is_av_scanned %}
-            <p class="text-muted text-right">
-                <span class="glyphicon glyphicon-ok-sign"></span> {_ This file has been scanned for viruses. _}
-            </p>
-        {% elseif m.modules.active.mod_clamav %}
-            <p class="text-danger text-right">
-                <span class="glyphicon glyphicon-alert"></span> {_ This file has not been scanned for viruses. _}
-            </p>
-        {% endif %}
-    </div>
+            {% if medium.is_av_sizelimit %}
+                <p class="text-danger text-right">
+                    <span class="glyphicon glyphicon-alert"></span> {_ This file has not been scanned for viruses because it is too large. _}
+                </p>
+            {% elseif medium.is_av_scanned %}
+                <p class="text-muted text-right">
+                    <span class="glyphicon glyphicon-ok-sign"></span> {_ This file has been scanned for viruses. _}
+                </p>
+            {% elseif m.modules.active.mod_clamav %}
+                <p class="text-muted text-right">
+                    <span class="glyphicon glyphicon-alert"></span> {_ This file has not been scanned for viruses. _}
+                </p>
+            {% endif %}
+        </div>
+    {% endwith %}
 {% else %}
     {% if medium.created %}
         <p>
@@ -103,6 +111,7 @@
                 element="a"
     	        action={dialog_media_upload
     	            id=id
+                    intent="update"
     	            action={update
     	                target="media-edit-view"
     	                template="_admin_edit_media_all.tpl"

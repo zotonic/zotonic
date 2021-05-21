@@ -19,7 +19,7 @@
       <p><strong>{{ error_erlang|escape }}</strong></p>
   {% endif %}
 
-  {% if error_table %}
+  {% if error_table and m.site.environment /= `production` %}
       <h2>{_ Stack trace _}</h2>
 
       <style type="text/css">

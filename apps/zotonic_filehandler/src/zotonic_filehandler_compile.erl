@@ -32,6 +32,7 @@
     run_cmd/1,
     run_cmd/3,
     run_cmd_task/3,
+    run_cmd_task_buffalo/3,
 
     ld/0,
     ld/1,
@@ -111,7 +112,7 @@ code_path_to_appvsn() ->
 
 %% @doc Check if a new application (with optional vsn) directory needs to be added to the code path.
 %%      Return 'true' if the code path has been changed.
--spec maybe_add_path( file:filename_all(), list( binary )) -> boolean().
+-spec maybe_add_path( file:filename_all(), list( binary() )) -> false | {true, binary()}.
 maybe_add_path(AppDir, Paths) ->
     AppVsn = z_convert:to_binary(filename:basename(AppDir)),
     case lists:member(AppVsn, Paths) of
@@ -182,7 +183,11 @@ run_cmd(Cmd, RunOpts, Opts) ->
         deadline => 2000,
         is_drop_running => true
     },
-    buffalo:queue({?MODULE, run_cmd_task, [ Cmd, RunOpts, Opts ]}, QueueOptions).
+    buffalo:queue({?MODULE, run_cmd_task_buffalo, [ Cmd, RunOpts, Opts ]}, QueueOptions).
+
+run_cmd_task_buffalo(Cmd, RunOpts, Opts) ->
+    run_cmd_task(Cmd, RunOpts, Opts),
+    ok.
 
 run_cmd_task(Cmd, RunOpts, Opts) ->
     try

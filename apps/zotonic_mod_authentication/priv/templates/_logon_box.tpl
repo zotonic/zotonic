@@ -2,9 +2,10 @@
     Render the logon_box contents with the correct sub-template.
     This template is rendered by the zotonic.auth-ui.worker.js
 #}
+
 {% with q.error == 'passcode' or q.error == 'need_passcode' as is_show_passcode %}
 
-{% if q.logon_view == 'reminder' %}
+{% if q.logon_view == 'reminder' or (q.logon_view == 'change' and not m.acl.user) %}
 
     {% include "_logon_box_view.tpl"
         form_title_tpl="_logon_reminder_title.tpl"
@@ -13,6 +14,36 @@
         form_support_tpl="_logon_reminder_support.tpl"
         style_boxed=style_boxed
     %}
+
+{% elseif q.logon_view == 'change' %}
+
+    {% include "_logon_box_view.tpl"
+        form_title_tpl="_logon_change_title.tpl"
+        form_form_tpl="_logon_change_form.tpl"
+        form_fields_tpl="_logon_change_form_fields.tpl"
+        form_support_tpl="_logon_change_support.tpl"
+        style_boxed=style_boxed
+    %}
+
+{% elseif q.logon_view == 'change_done' %}
+
+    <h2 class="z-logon-title">{_ Your password has been changed _}</h2>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="{% url home %}">{_ Go to the home page _}</a>
+        </li>
+        {% if m.acl.user %}
+            <li>
+                <a href="{{ m.acl.user.page_url }}">{_ Go to the your profile page _}</a>
+            </li>
+        {% endif %}
+        {% if m.acl.is_allowed.use.mod_admin %}
+            <li>
+                <a href="{% url admin %}">{_ Go to the admin _}</a>
+            </li>
+        {% endif %}
+    </ul>
 
 {% elseif q.logon_view == 'reset' %}
 

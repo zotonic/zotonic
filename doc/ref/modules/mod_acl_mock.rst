@@ -1,4 +1,6 @@
 
 .. include:: meta-mod_acl_mock.rst
 
-.. todo:: Not yet documented.
+Mocking module for access control during tests.
+
+**Do not use in production.**

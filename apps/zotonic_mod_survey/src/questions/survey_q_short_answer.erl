@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2012 Marc Worrell
+%% @copyright 2011-2020 Marc Worrell
 
-%% Copyright 2011-2012 Marc Worrell
+%% Copyright 2011-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@
     prep_answer_header/2,
     prep_answer/3,
     prep_block/2,
+    prep_totals/3,
     to_block/1
 ]).
 
@@ -36,8 +37,8 @@ answer(Block, Answers, _Context) ->
             {error, missing};
         Value ->
             case z_string:trim(Value) of
-                [] -> {error, missing};
-                V -> {ok, [{Name, z_convert:to_binary(V)}]}
+                <<>> -> {error, missing};
+                V -> {ok, [{Name, V}]}
             end
     end.
 
@@ -66,3 +67,17 @@ to_block(Q) ->
     }.
 
 
+prep_totals(#{ <<"validation">> := <<"numericality">> }, [ {_, Vals} ], _) ->
+    lists:foldl(
+      fun({K, V}, Sum) ->
+              try
+                  (z_convert:to_integer(K) * z_convert:to_integer(V)) + Sum
+              catch
+                  error:badarith ->
+                      Sum
+              end
+      end,
+      0,
+      Vals);
+prep_totals(_, _, _) ->
+    undefined.

@@ -41,9 +41,9 @@ Create a site
 2. Now that there is a database Zotonic can be started. We do this in debug mode
    so that all console output is visible::
 
-    $ bin/zotonic debug
+     $ bin/zotonic debug
 
-3. In a new terminal window, Edit your ``/etc/hosts`` file, adding an entry for ``yoursite.test`` (the
+3. In a new terminal window, edit your ``/etc/hosts`` file, adding an entry for ``yoursite.test`` (the
    site hostname) to point at your local host::
 
      127.0.0.1   yoursite.test
@@ -54,14 +54,19 @@ Create a site
 
    .. note:: Zotonic has to be running for the ``addsite`` command to succeed.
 
+5. Finally, point your browser to https://yoursite.test:8443 to see your new site.
+   The browser will ask to accept a self-signed certificate. Zotonic generates a
+   self-signed certificate for every site. These are stored in :file:`~/.zotonic/security`.
 
-5. Finally, point your browser to http://yoursite:8000 to see your new site.
-   You can log into the admin at http://yoursite:8000/admin with the password
-   that you can find in your site’s configuration file:
-   :file:`yoursite/priv/zotonic_site.config` in the :term:`zotonic user directory`.
+   You can log into the admin at https://yoursite.test:8443/admin using the username ``admin``
+   with the password that you can find in your site’s configuration. Use for this the command::
+
+      $ bin/zotonic siteconfig yoursite
+
+   The configuration is stored in the file :file:`apps_user/yoursite/priv/zotonic_site.config`
+   in the :term:`zotonic user directory`.
 
    .. note:: If anything goes wrong, see the :ref:`ref-troubleshooting-installation`.
-
 
 You can stop Zotonic by typing twice Ctrl-C at the Erlang command prompt.
 

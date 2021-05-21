@@ -146,7 +146,7 @@ take([Id|L], N, Acc) ->
 
 %% @doc Check if the update contains information for a predicate.  If so then update
 %% the predicate information in the db and remove it from the update props.
-observe_rsc_update(#rsc_update{id=Id}, {Changed, Props}, Context) ->
+observe_rsc_update(#rsc_update{id=Id}, {ok, Props}, Context) ->
     case       maps:is_key(<<"predicate_subject_list">>, Props)
         orelse maps:is_key(<<"predicate_object_list">>, Props) of
 
@@ -159,10 +159,12 @@ observe_rsc_update(#rsc_update{id=Id}, {Changed, Props}, Context) ->
                     <<"predicate_subject_list">>,
                     <<"predicate_object_list">>
                 ], Props),
-            {true, Props1};
+            {ok, Props1};
         false ->
-            {Changed, Props}
-    end.
+            {ok, Props}
+    end;
+observe_rsc_update(#rsc_update{}, {error, _} = Error, _Context) ->
+    Error.
 
 %% @doc Whenever a predicate has been updated we have to flush the predicate cache.
 observe_rsc_update_done(#rsc_update_done{pre_is_a=BeforeCatList, post_is_a=CatList}, Context) ->
@@ -186,15 +188,16 @@ observe_rsc_delete(#rsc_delete{id=Id, is_a=IsA}, Context) ->
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
-     #menu_item{id=admin_predicate,
-                parent=admin_structure,
-                label=?__("Predicates", Context),
-                url={admin_predicate},
-                visiblecheck={acl, use, mod_admin_predicate}},
-     #menu_item{id=admin_edges,
-                parent=admin_content,
-                label=?__("Page connections", Context),
-                url={admin_edges}}
+     #menu_item{id = admin_predicate,
+                parent = admin_structure,
+                label = ?__("Predicates", Context),
+                url = admin_predicate,
+                visiblecheck = {acl, use, mod_admin_predicate}},
+     #menu_item{id = admin_edges,
+                parent = admin_content,
+                label = ?__("Page connections", Context),
+                url = admin_edges,
+                sort = 3}
      |Acc].
 
 observe_search_query({search_query, {edges, Args}, _OffsetLimit}, Context) ->

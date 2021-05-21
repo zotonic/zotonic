@@ -20,9 +20,12 @@
 -author("Blaise").
 
 %% API
--export([run/1]).
+-export([info/0, run/1]).
 
 -include("../../include/zotonic_command.hrl").
+
+info() ->
+    "Wait for a max timeout till Zotonc is running and responding to a ping.".
 
 run([ Timeout ]) ->
     try

@@ -5,7 +5,7 @@
 @Author:    Tim Benniks <tim@timbenniks.nl>
 @Author:    Marc Worrell <marc@worrell.nl>
 
-Copyright 2009-2019 Tim Benniks, Marc Worrell
+Copyright 2009-2021 Tim Benniks, Marc Worrell
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -43,11 +43,7 @@ var z_transport_queue       = [];
 /* Startup
 ---------------------------------------------------------- */
 
-if (typeof cotonic === 'undefined') {
-    window.addEventListener('cotonic-ready', function() { zotonic_startup()() });
-} else {
-    zotonic_startup();
-}
+cotonic.ready.then(function() { zotonic_startup() });
 
 function zotonic_startup() {
     // Initialize the wires if the bridge is starting up
@@ -77,9 +73,18 @@ function zotonic_startup() {
     cotonic.broker.subscribe(
         "zotonic-transport/progress",
         function(msg) {
-            z_progress(msg.payload.form_id, msg.payload.percentage);
+            if (msg.payload.is_auto_unmask && msg.payload.percentage >= 100) {
+                z_unmask(msg.payload.form_id);
+            } else {
+                z_progress(msg.payload.form_id, msg.payload.percentage);
+            }
         }, { wid: 'zotonicprogress'});
 
+    cotonic.broker.subscribe(
+        "model/alert/post",
+        function(msg) {
+            z_dialog_alert(msg.payload);
+        }, { wid: 'zotonicalert'});
 
     // Register the client-id to reuse on subsequent pages
     cotonic.broker.subscribe(
@@ -121,19 +126,23 @@ function z_dialog_close()
 function z_dialog_confirm(options)
 {
     var html,
-        backdrop;
+        backdrop,
+        is_danger,
+        btn_class;
 
     if (typeof options.backdrop == 'undefined') {
         backdrop = options.backdrop
     } else {
         backdrop = true;
     }
+    is_danger = options.is_danger || false;
+    btn_class = is_danger ? "btn-danger" : "btn-primary";
     html = '<div class="confirm">' + options.text + '</div>'
          + '<div class="modal-footer">'
          + '<button class="btn btn-default z-dialog-cancel-button">'
          + (options.cancel||z_translate('Cancel'))
          + '</button>'
-         + '<button class="btn btn-primary z-dialog-ok-button">'
+         + '<button class="btn '+btn_class+' z-dialog-ok-button">'
          + (options.ok||z_translate('OK'))
          + '</button>'
          + '</div>';
@@ -281,22 +290,33 @@ function z_event(name, extraParams)
 function z_notify(message, extraParams)
 {
     var trigger_id = '';
+    var target_id;
     var params = extraParams || [];
+    var delegate = params.z_delegate || 'notify';
 
-    if (typeof params == 'object' && params.z_trigger_id !== undefined) {
-        trigger_id = params.z_trigger_id;
-        delete params.z_trigger_id;
+    if (typeof params == 'object') {
+        if (params.z_trigger_id !== undefined) {
+            trigger_id = params.z_trigger_id;
+            delete params.z_trigger_id;
+        }
+        target_id = params.z_target_id || undefined;
     }
+    params = ensure_name_value(params);
+
+    var postbackAttr = document.body.getAttribute("data-wired-postback");
+    if (postbackAttr) {
+        params.push({ name: "z_postback_data", value: JSON.parse(postbackAttr) });
+    }
+
     var notify = {
         _type: "postback_notify",
         message: message,
         trigger: trigger_id,
-        target: params.z_target_id || undefined,
+        target: target_id,
         data: {
-            q: ensure_name_value(params) || []
+            q: params
         }
     };
-    var delegate = params.z_delegate || 'notify';
     var options = {
         trigger_id: trigger_id
     };
@@ -331,25 +351,55 @@ function z_notify(message, extraParams)
 function z_transport(delegate, content_type, data, options)
 {
     options = options || {};
-    if ($('html').hasClass('ui-state-bridge-connected')) {
-        if (options.transport == 'form') {
-            let prefix = window.sessionStorage.getItem("mqtt$clientBridgeTopic");
-            prefix = JSON.parse(prefix);
-            z_transport_form({
-                url: "/mqtt-transport/zotonic-transport/" + delegate,
-                postback: data,
-                options: options,
-                progress_topic: prefix + "zotonic-transport/progress",
-                reply_topic: prefix + "zotonic-transport/eval"
-            });
-        } else {
-            cotonic.broker.publish(
-                "bridge/origin/zotonic-transport/" + delegate,
-                data,
-                { qos: 1 });
+    if (options.transport == 'fileuploader' && cotonic.whereis("fileuploader")) {
+        // Post via the fileuploader worker
+        let fileInputs = $('input:file', options.post_form);
+        let files = [];
+
+        fileInputs.each(function() {
+            let fs = $(this).get(0).files;
+            for (let i = 0; i < fs.length; i++) {
+                files.push({
+                    name: $(this).attr('name'),
+                    file: fs[i]
+                })
+            }
+        });
+        // TODO: fill in failure topic and progress
+        data.data.q = data.data.q.concat($(options.post_form).formToArray());
+        let msg = {
+            files: files,
+            ready_msg: data,
+            ready_topic: "$promised/bridge/origin/zotonic-transport/" + delegate,
+            progress_topic: "zotonic-transport/progress",
+            progress_msg: { form_id: data.trigger },
+            failure_topic: "model/alert/post",
+            failure_msg: { text: "Error during upload" }
         }
+        cotonic.broker.publish("model/fileuploader/post/new", msg);
+    } else if (options.transport == 'form' || options.transport == 'fileuploader') {
+        cotonic.broker.call("$promised/bridge/origin/model/mqtt_ticket/post/new")
+            .then( function(msg) {
+                if (msg.payload.status == 'ok') {
+                    const ticket = msg.payload.result;
+                    z_transport_form({
+                        url: "/mqtt-transport/" + ticket + "/zotonic-transport/" + delegate,
+                        postback: data,
+                        options: options,
+                        progress_topic: "~client/zotonic-transport/progress",
+                        reply_topic: "~client/zotonic-transport/eval"
+                    });
+
+                } else {
+                    console.error("z_transport: could not obtain MQTT ticket for form post", [ msg.payload ]);
+                    z_transport_queue_add(delegate, content_type, data, options);
+                }
+            });
     } else {
-        z_transport_queue_add(delegate, content_type, data, options);
+        cotonic.broker.publish(
+            "$promised/bridge/origin/zotonic-transport/" + delegate,
+            data,
+            { qos: 1 });
     }
 }
 
@@ -365,32 +415,30 @@ function z_transport_queue_add( delegate, content_type, data, options )
 
 function z_transport_queue_check()
 {
-    if (z_transport_queue.length > 0 && $('html').hasClass('ui-state-bridge-connected')) {
-        var trans = z_transport_queue.shift();
+    let authState = $('html').attr('data-ui-state-auth-auth');
+
+    if (    z_transport_queue.length > 0
+        &&  $('html').hasClass('ui-state-bridge-connected')
+        &&  (authState === 'anonymous' || authState === 'user')) {
+        let trans = z_transport_queue.shift();
         z_transport(trans.delegate, trans.content_type, trans.data, trans.options);
     }
 }
 
-// TODO: Use WebWorker for uploading files.
-//       1. Fetch key/value pairs and file-inputs from form
-//       2. Start webworker
-//       3. Pass form and file-inputs, start upload.
-//
-// For the upload:
-//       1. Request server side upload handler (one per file)
-//       2. Send file data to upload handler using FileReader and MQTT
-//       3. Register upload handler ref in form post
-//
 // Queue form data to be transported to the server
 // This is called by the server generated javascript and jquery triggered postback events.
-// 'transport' is one of: '', 'ajax', 'form'
+// 'transport' is one of: '', 'form', 'fileuploader'
 function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, transport, optPostForm)
 {
     var triggervalue = '';
     var trigger;
+    var target_id;
 
+    if (typeof extraParams == 'object') {
+        target_id = extraParams.z_target_id || undefined;
+    }
     if (transport === true) {
-        transport = 'ajax';
+        transport = '';
     }
     if (trigger_id) {
         trigger = $('#'+trigger_id).get(0);
@@ -407,17 +455,22 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
             }
         }
     }
-    extraParams = extraParams || [];
-    // extraParams.push({name: 'triggervalue', value: triggervalue});
+    params = extraParams || [];
+    params = ensure_name_value(params);
+
+    var postbackAttr = document.body.getAttribute("data-wired-postback");
+    if (postbackAttr) {
+        params.push({ name: "z_postback_data", value: JSON.parse(postbackAttr) });
+    }
 
     var pb_event = {
         _type: "postback_event",
         postback: postback,
         trigger: trigger_id,
-        target: extraParams.target_id || undefined,
+        target: target_id,
         triggervalue: triggervalue,
         data: {
-            q: ensure_name_value(extraParams) || []
+            q: params
         }
     };
 
@@ -449,13 +502,27 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
 // }
 
 
+function z_mask(id)
+{
+    if (id && typeof id == "string")
+    {
+        var trigger;
+        if (id.charAt(0) == ' ') {
+            trigger = $(id);
+        } else {
+            trigger = $('#'+id);
+        }
+        trigger.each(function() { try { $(this).mask(); } catch (e) {}});
+    }
+}
+
 
 function z_unmask(id)
 {
     if (id && typeof id == "string")
     {
         var trigger;
-        if (id.charAt(0) == ' ') {
+        if (id == "body" || id.charAt(0) == ' ') {
             trigger = $(id);
         } else {
             trigger = $('#'+id);
@@ -470,7 +537,7 @@ function z_unmask_error(id)
     if (id && typeof id == "string")
     {
         var trigger;
-        if (id.charAt(0) == ' ') {
+        if (id == "body" || id.charAt(0) == ' ') {
             trigger = $(id);
         } else {
             trigger = $('#'+id);
@@ -485,11 +552,27 @@ function z_progress(id, value)
 {
     if (id)
     {
-        var trigger = $('#'+id).get(0);
+        var trigger;
+        if (id == "body" || id.charAt(0) == ' ') {
+            trigger = $(id);
+        } else {
+            trigger = $('#'+id);
+        }
+        trigger = trigger.get(0);
 
-        if (trigger.nodeName.toLowerCase() == 'form')
-        {
-            try { $(trigger).maskProgress(value); } catch (e) {}
+        if (trigger) {
+            switch (trigger.nodeName.toLowerCase()) {
+                case 'input':
+                case 'button':
+                    break;
+                case 'form':
+                case 'body':
+                case 'div':
+                    try { $(trigger).maskProgress(value); } catch (e) {};
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
@@ -948,21 +1031,23 @@ function z_init_postback_forms()
                 setTimeout(action, 10);
             }
 
-            for (var j=0; j < files.length && !is_file_form; j++) {
+            for (var j=0; j < files.length; j++) {
                 if (files[j]) {
                     is_file_form = true;
                     break;
                 }
             }
-            if (is_file_form) {
+
+            if (   $(theForm).hasClass("z_cookie_form")
+                || $(theForm).hasClass("z_logon_form")
+                || (typeof(z_only_post_forms) != "undefined" && z_only_post_forms)) {
                 transport = 'form';
                 args = validations;
+            } else if (is_file_form) {
+                transport = 'fileuploader';
+                args = validations;
             } else {
-                if ($(theForm).hasClass("z_cookie_form") ||
-                    $(theForm).hasClass("z_logon_form") ||
-                    (typeof(z_only_post_forms) != "undefined" && z_only_post_forms)) {
-                    transport = 'form';
-                }
+                transport = '';
                 args = validations.concat($(theForm).formToArray());
             }
 
@@ -980,7 +1065,7 @@ function z_init_postback_forms()
                 }
             }
 
-            // Queue the postback, or use a post to an iframe (if files present)
+            // Queue the postback, or use a post to an iframe (if requested)
             z_queue_postback(form_id, postback, args, false, transport, theForm);
 
             theForm.clk   = null;

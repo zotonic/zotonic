@@ -42,6 +42,10 @@
     shell_startsite/1,
     shell_restartsite/1,
 
+    dispatch_url/1,
+    dispatch_path/2,
+    dispatch_list/1,
+
     debug_msg/3,
 
     log/3,
@@ -71,8 +75,9 @@
                     | backup.
 
 -type context() :: #context{}.
--type validation_error() :: invalid | novalue | {script, string()} | novalidator | string().
+-type validation_error() :: invalid | novalue | {script, iodata()} | novalidator | string().
 -type trans() :: #trans{}.
+-type qvalue() :: binary() | string() | #upload{} | term().
 
 -type severity() :: debug | info | warning | error | fatal.
 
@@ -81,7 +86,8 @@
     trans/0,
     environment/0,
     validation_error/0,
-    severity/0
+    severity/0,
+    qvalue/0
 ]).
 
 % @doc Return a new context
@@ -172,6 +178,67 @@ shell_stopsite(Site) ->
 shell_restartsite(Site) ->
     z_sites_manager:stop(Site),
     shell_startsite(Site).
+
+%% @doc Dispatch an URL - find matching site and dispatch the path
+dispatch_url(Url) ->
+    case uri_string:parse(Url) of
+        #{ host := Host, path := Path } ->
+            case z_sites_dispatcher:get_site_for_hostname(Host) of
+                {ok, Site} ->
+                    dispatch_path(Path, Site);
+                undefined ->
+                    case z_sites_dispatcher:get_fallback_site() of
+                        {ok, FallbackSite} ->
+                            dispatch_path(Path, FallbackSite);
+                        undefined ->
+                            {error, unknown_host}
+                    end
+            end;
+        _ ->
+            {error, url}
+    end.
+
+%% @doc Shell command: dispatch a path, return trace
+dispatch_path(Path, Site) when is_atom(Site), is_binary(Path) ->
+    case z_sites_manager:get_site_status(Site) of
+        {ok, running} ->
+            dispatch_path(Path, z_context:new(Site));
+        {ok, Status} ->
+            {error, Status};
+        {error, bad_name} ->
+            {error, bad_name}
+    end;
+dispatch_path(Path, #context{} = Context) when is_binary(Path) ->
+    z_sites_dispatcher:dispatch_trace(Path, Context).
+
+%% @doc Return the complete dispatch information for the site.
+dispatch_list(SiteOrContext) ->
+    case z_sites_dispatcher:fetch_dispatchinfo(SiteOrContext) of
+        {ok, #site_dispatch_list{
+                site=Site, hostname=Hostname, smtphost=SmtpHost, hostalias=Hostalias,
+                redirect=Redirect, dispatch_list=DispatchList
+            }} ->
+            DL = lists:map(
+                fun({Disp, Path, Controller, Opts}) ->
+                    #{
+                        dispatch => Disp,
+                        path => Path,
+                        controller => Controller,
+                        controller_options => Opts
+                    }
+                end,
+                DispatchList),
+            {ok, #{
+                site => Site,
+                hostname => Hostname,
+                smtphost => SmtpHost,
+                hostalias => Hostalias,
+                is_redirect => Redirect,
+                dispatch_list => DL
+            }};
+        {error, _} = Error ->
+            Error
+    end.
 
 %% @doc Echo and return a debugging value
 debug_msg(Module, Line, Msg) ->

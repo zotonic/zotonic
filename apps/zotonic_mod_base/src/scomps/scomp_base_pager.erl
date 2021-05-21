@@ -205,9 +205,9 @@ pages(Page, Pages) ->
 
 
 urls(Start, Middle, End, Dispatch, DispatchArgs, Context) ->
-    UrlStart  = [ {N, z_dispatcher:url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- Start ],
-    UrlMiddle = [ {N, z_dispatcher:url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- Middle ],
-    UrlEnd    = [ {N, z_dispatcher:url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- End ],
+    UrlStart  = [ {N, url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- Start ],
+    UrlMiddle = [ {N, url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- Middle ],
+    UrlEnd    = [ {N, url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- End ],
     {Part1,Next} = case Middle of
         [] ->
             {UrlStart, max(Start) + 1};

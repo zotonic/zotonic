@@ -12,7 +12,7 @@
 event(#postback{message={insert_block, Args}}, Context) ->
     {id, QId} = proplists:lookup(id, Args),
     Id = m_rsc:rid(QId, Context),
-    Block = z_context:get_q(<<"block">>, Context),
+    Block = z_string:to_name( z_context:get_q(<<"block">>, Context) ),
     Element = z_context:get_q(<<"element">>, Context),
     Vars = [
         {element_id, Element},
@@ -24,8 +24,8 @@ event(#postback{message={insert_block, Args}}, Context) ->
         is_new
     ],
     z_render:update(
-        <<" #", Element/binary, " .block-options">>,
-        #render{template="_admin_survey_edit_block.tpl", vars=Vars},
+        <<" #", Element/binary>>,
+        #render{template="_admin_survey_question_q.tpl", vars=Vars},
         Context).
 
 edit_language(Context) ->
@@ -59,11 +59,11 @@ admin_rscform(Args) ->
 
 combine_conditions([], Acc) ->
     lists:reverse(Acc);
-combine_conditions([{<<"is_stop_page">>, []}], Acc) ->
+combine_conditions([{<<"is_stop_page">>, <<>>}], Acc) ->
     combine_conditions([], Acc);
-combine_conditions([{<<"is_stop_page">>, []}, {<<"jump-condition-", _/binary>>, _} = JC|Bs], Acc) ->
+combine_conditions([{<<"is_stop_page">>, <<>>}, {<<"jump-condition-", _/binary>>, _} = JC|Bs], Acc) ->
     combine_conditions([JC|Bs], Acc);
-combine_conditions([{<<"is_stop_page">>, []}|Bs], Acc) ->
+combine_conditions([{<<"is_stop_page">>, <<>>}|Bs], Acc) ->
     combine_conditions(Bs, break_block(<<>>,<<>>,<<>>,<<>>)++Acc);
 combine_conditions([{"is_stop_page", _IsChecked}|Bs], Acc) ->
     combine_conditions(Bs, stop_block()++Acc);
@@ -80,17 +80,19 @@ combine_conditions([B|Bs], Acc) ->
 stop_block() ->
     Id = z_ids:id(),
     [
-        {<<"block-", Id/binary, "-s-name">>, Id},
-        {<<"block-", Id/binary, "-s-type">>, <<"survey_stop">>}
+        {<<"blocks[].type">>, <<"survey_stop">>},
+        {<<"blocks[].name">>, Id},
+        {<<"blocks[].">>, <<>>}
     ].
 
 break_block(Cond1, Target1, Cond2, Target2) ->
     Id = z_ids:id(),
     [
-        {<<"block-", Id/binary, "-s-name">>, Id},
-        {<<"block-", Id/binary, "-s-type">>, <<"survey_page_break">>},
-        {<<"block-", Id/binary, "-s-condition1">>, Cond1},
-        {<<"block-", Id/binary, "-s-target1">>, Target1},
-        {<<"block-", Id/binary, "-s-condition2">>, Cond2},
-        {<<"block-", Id/binary, "-s-target2">>, Target2}
+        {<<"blocks[].target2">>, Target2},
+        {<<"blocks[].condition2">>, Cond2},
+        {<<"blocks[].target1">>, Target1},
+        {<<"blocks[].condition1">>, Cond1},
+        {<<"blocks[].type">>, <<"survey_page_break">>},
+        {<<"blocks[].name">>, Id},
+        {<<"blocks[].">>, <<>>}
     ].

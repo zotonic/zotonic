@@ -31,7 +31,7 @@ function ZSurveyEditor() {
 
 	this.set_page_sorters($(".pages"));
 
-	$('#modal-question .span4').hover(
+	$('#modal-question .col-md-4').hover(
 		function () {
 			$(this).addClass("hover");
 		},
@@ -39,10 +39,10 @@ function ZSurveyEditor() {
 			$(this).removeClass("hover");
 		});
 
-	$('#modal-question .span4').on('click', function(e) {
+	$('#modal-question .col-md-4').on('click', function(e) {
 		$('#modal-question').modal('hide');
 		$('#modal-question .hover').removeClass('hover');
-		self.question_add_select($(this).data('block-type'));
+		self.question_add_select($(this).attr('data-block-type'));
 	});
 
 	this._unique_id = 1;
@@ -131,6 +131,7 @@ ZSurveyEditor.prototype.question_add_select = function(block) {
 				.attr('id', id);
 	$(".nosubmit", q).removeClass('nosubmit');
 	$("label.block-type", q).text(block.split("_").pop());
+	$("input.block-type", q).val(block);
 	switch (this._event_where) {
 		case 'above':
 			q.insertBefore($(this._event_target).closest(".block"));
@@ -205,7 +206,7 @@ ZSurveyEditor.prototype.page_new = function(e, where) {
 ZSurveyEditor.prototype.set_page_sorters = function(p) {
 	$(".question-list", p).sortable({
 		//helper: 'clone',
-		//handle: '.widget-header',
+		handle: '.drag-handle',
 		revert: 'invalid',
 		axis: 'y',
 		connectWith: ".question-list",
@@ -219,7 +220,7 @@ ZSurveyEditor.prototype.set_page_sorters = function(p) {
 	});
 	$(".jump-list", p).sortable({
 		helper: 'clone',
-		//handle: '.widget-header',
+		handle: '.drag-handle',
 		revert: 'invalid',
 		connectWith: ".jump-list",
 		axis: 'y'

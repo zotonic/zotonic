@@ -1,6 +1,6 @@
 {application, zotonic_mod_admin_merge, [
     {description, "User interface to merge resources in the admin."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

@@ -22,7 +22,6 @@
 
 -define(DEFAULT_DB_DRIVER, z_db_pgsql).
 -define(DEFAULT_DB_MAX_CONNECTIONS, 20).
--define(DB_POOL_HIGH_USAGE, 0.8).
 
 -export([
     status/0,
@@ -146,13 +145,11 @@ child_spec(Site, SiteProps) ->
             undefined;
         true ->
             %% Add a db pool to the site's processes
-            PoolSize  = proplists:get_value(db_max_connections, SiteProps, ?DEFAULT_DB_MAX_CONNECTIONS),
-
             Name = db_pool_name(Site),
-
             WorkerModule = db_driver(SiteProps),
             WorkerArgs = database_options(Site, SiteProps),
 
+            PoolSize = proplists:get_value(db_max_connections, SiteProps, ?DEFAULT_DB_MAX_CONNECTIONS),
             PoolArgs = [{name, {local, Name}},
                         {worker_module, WorkerModule},
                         {size, PoolSize},
@@ -223,26 +220,29 @@ is_empty(0) -> true;
 is_empty(null) -> true;
 is_empty(_) -> false.
 
-get_connection(#context{db={Pool,_}}) ->
-    poolboy:checkout(Pool).
+-spec get_connection( z:context() ) -> {ok, pid()} | {error, full | nodatabase}.
+get_connection(#context{db={Pool,_}} = Context) ->
+    case timer:tc(fun() -> poolboy:checkout(Pool) end) of
+        {Time, full} ->
+            % No connections for > 5secs, really full
+            z_stats:record_event(db, pool_full, Context),
+            z_stats:record_duration(db, connection_wait, Time, Context),
+            {error, full};
+        {Time, Pid} when is_pid(Pid), Time > 10000 ->
+            % Start warning if we have to wait > 10 msec for a connection
+            z_stats:record_event(db, pool_high_usage, Context),
+            z_stats:record_duration(db, connection_wait, Time, Context),
+            {ok, Pid};
+        {Time, Pid} when is_pid(Pid) ->
+            % All ok, we quickly got a connection, so no overload.
+            z_stats:record_duration(db, connection_wait, Time, Context),
+            {ok, Pid}
+    end;
+get_connection(_Context) ->
+    {error, nodatabase}.
 
-return_connection(Worker, #context{db={Pool,_}}=Context) ->
-    poolboy:checkin(Pool, Worker),
-    check_pool_health(Context).
-
-check_pool_health(#context{db={Pool,_}}=Context) ->
-    case poolboy:status(Pool) of
-        {ready, Ready, _, Working} ->
-            case Working / (Ready + Working) of
-                Usage when Usage >= ?DB_POOL_HIGH_USAGE ->
-                    z_stats:count_db_event(pool_high_usage, Context);
-                _Usage ->
-                    %% Everything is fine
-                    ok
-            end;
-        {overflow, _, _, _} ->
-            %% We don't really use the pool overflow mechanism of poolboy.
-            z_stats:count_db_event(pool_full, Context);
-        {full, _, _, _} ->
-            z_stats:count_db_event(pool_full, Context)
-    end.
+-spec return_connection( pid(), z:context() ) -> ok | {error, term()}.
+return_connection(Worker, #context{db={Pool,_}}) when is_pid(Worker) ->
+    poolboy:checkin(Pool, Worker);
+return_connection(_Worker, _Context) ->
+    {error, nodatabase}.

@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2018 Marc Worrell
+%% @copyright 2018-2021 Marc Worrell
 %% @doc MQTT WebSocket connections
 
-%% Copyright 2018 Marc Worrell
+%% Copyright 2018-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@
 -export([
     allowed_methods/1,
     content_types_accepted/1,
+    malformed_request/1,
     upgrades_provided/1,
     process/4,
     websocket_start/1,
@@ -39,7 +40,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% Connect should been done before this timeout (msec)
--define(MQTT_CONNECT_TIMEOUT, 4000).
+-define(MQTT_CONNECT_TIMEOUT, 30000).
 
 %% Maximum size for the connect packet
 -define(MQTT_CONNECT_MAXSIZE, 1024).
@@ -64,6 +65,31 @@ content_types_accepted(Context) ->
 
 allowed_methods(Context) ->
     {[<<"GET">>, <<"POST">>], Context}.
+
+%% @doc On out-of-band POSTs there MUST be valid ticket. Check this ticket before
+%% accepting and parsing the 'multipart/form-data' request body.
+%%
+%% A ticket can be requested with m_mqtt_ticket.
+malformed_request(Context) ->
+    case cowmachine_req:method(Context) of
+        <<"POST">> ->
+            PathInfo = cowmachine_req:path_info(Context),
+            case maps:find(zotonic_ticket, PathInfo) of
+                {ok, Ticket} ->
+                    case m_mqtt_ticket:exchange_ticket(Ticket, Context) of
+                        {ok, TicketContext} ->
+                            Context1 = z_context:set_client_context(TicketContext, Context),
+                            {false, Context1};
+                        {error, enoent} ->
+                            lager:warning("MQTT transport with an unknown ticket from ~p", [ m_req:get(peer, Context) ]),
+                            {true, Context}
+                    end;
+                error ->
+                    {true, Context}
+            end;
+        _ ->
+            {false, Context}
+    end.
 
 process(<<"POST">>, AcceptedCT, _ProvidedCT, Context) ->
     Topic = z_context:get_q(<<"*">>, Context),
@@ -218,7 +244,11 @@ handle_connect_data_1(NewData, Context) ->
             user_id => z_acl:user(Context),
             language => z_context:language(Context),
             timezone => z_context:tz(Context),
-            auth_options => z_context:get(auth_options, Context, #{})
+            auth_options => z_context:get(auth_options, Context, #{}),
+            cotonic_sid => case z_context:session_id(Context) of
+                {ok, Sid} -> Sid;
+                {error, _} -> undefined
+            end
         }
     },
     case mqtt_sessions:incoming_connect(MqttPool, NewData, Options) of

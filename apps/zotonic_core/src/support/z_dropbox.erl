@@ -1,5 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2020 Marc Worrell
 %%
 %% @doc Simple dropbox handler, monitors a directory and signals new files.
 %% @todo Make this into a module
@@ -8,7 +8,7 @@
 %% 1. An user uploads/moves a file to the dropbox
 %% 2. Dropbox handler sees the file, moves it so a safe place, and notifies the file handler of it existance.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -189,14 +189,20 @@ scan_directory(Dir) ->
     filelib:fold_files(Dir, "", true, fun(F,Acc) -> append_file(F, Acc) end, []).
 
 
-%% @todo Check if this is a file we are interested in, should not be part of a .svn or other directory
-append_file([$.|_Rest], Acc) ->
-    Acc;
-append_file(File, Acc) ->
-    case string:str(File, "/.") of
-        0 -> [File|Acc];
-        _ -> Acc
+%% @doc Check if this is a file we are interested in, should not be part of a .svn or other directory
+-spec append_file( file:filename_all(), list( file:filename_all() ) ) -> list( file:filename_all() ).
+append_file(Filename, Acc) ->
+    Parts = filename:split(Filename),
+    case lists:any(fun is_dotfile/1, Parts) of
+        true -> Acc;
+        false -> [ Filename | Acc ]
     end.
+
+is_dotfile(<<"..">>) -> false;
+is_dotfile(<<".", _/binary>>) -> true;
+is_dotfile("..") -> false;
+is_dotfile("." ++ _) -> true;
+is_dotfile(_) -> false.
 
 
 min_age_check(File, MinAge, Acc) ->

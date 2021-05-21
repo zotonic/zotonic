@@ -57,6 +57,23 @@ m_get([ <<"provided">>, Service | Rest ], _Msg, Context) ->
     M = safe_to_atom(Service),
     IsProvided = z_module_manager:is_provided(M, Context),
     {ok, {IsProvided, Rest}};
+m_get([ <<"provided">> ], _Msg, Context) ->
+    Provided = z_module_manager:get_provided(Context),
+    {ok, {Provided, []}};
+m_get([ <<"get_provided">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            {ok, {z_module_manager:get_provided(), Rest}};
+        false ->
+            {error, eacces}
+    end;
+m_get([ <<"get_depending">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            {ok, {z_module_manager:get_depending(), Rest}};
+        false ->
+            {error, eacces}
+    end;
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.

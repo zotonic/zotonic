@@ -75,8 +75,18 @@ content_types_provided(Context) ->
                 provide_image();
             controller_letsencrypt_challenge ->
                 provide_text();
-            _ ->
-                provide_any()
+            Controller ->
+                case erlang:function_exported(Controller, content_types_provided, 1) of
+                    true ->
+                        try
+                            {Provided, _} = Controller:content_types_provided(Context),
+                            Provided
+                        catch _:_ ->
+                            provide_any()
+                        end;
+                    false ->
+                        provide_any()
+                end
         end,
     {Ms, Context}.
 

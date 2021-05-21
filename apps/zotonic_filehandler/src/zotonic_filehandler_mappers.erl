@@ -219,29 +219,71 @@ compile_yecc(Filename) ->
 %% @doc SCSS / SASS files from priv/lib-src/css/.../foo.sass -> priv/lib/css/.../foo.css
 compile_sass(Application, SrcPath) ->
     AppPriv = code:priv_dir(Application),
-    InPath = filename:join([AppPriv, "lib-src", SrcPath]),
-    DstPath = unicode:characters_to_list(filename:rootname(SrcPath)) ++ ".css",
-    OutPath = filename:join([ AppPriv, "lib", DstPath ]),
-    case is_newer(InPath, OutPath) of
-        true ->
-            case z_filelib:ensure_dir(OutPath) of
-                ok ->
-                    zotonic_filehandler:terminal_notifier("Sass: " ++ filename:basename(InPath)),
-                    Cmd = [
-                        "sass -C --sourcemap=none --update ",
-                        z_utils:os_escape(InPath),
-                        ":",
-                        z_utils:os_escape(OutPath)
-                    ],
-                    zotonic_filehandler_compile:run_cmd(Cmd);
-                {error, _} = Error ->
-                    lager:error("Could not create directory for ~p", [OutPath]),
-                    Error
-            end;
+    SrcFile = filename:join([ AppPriv, "lib-src", SrcPath]),
+    SassExt = z_convert:to_list( filename:extension(SrcPath) ),
+    MainScss = case filename:basename(SrcPath) of
+        <<"_", _/binary>> ->
+            find_main_sass_files(AppPriv, filename:dirname(SrcPath), SassExt);
+        <<_/binary>> ->
+            [ SrcPath ]
+    end,
+    lists:map(
+        fun(MainFile) ->
+            InFile = filename:join([ AppPriv, "lib-src", MainFile]),
+            OutPath = filename:join([ AppPriv, "lib", MainFile]),
+            OutFile = iolist_to_binary([ filename:rootname(OutPath), ".css" ]),
+            case is_newer(SrcFile, OutFile) of
+                true ->
+                    case z_filelib:ensure_dir(OutPath) of
+                        ok ->
+                            zotonic_filehandler:terminal_notifier("Sass: " ++ MainFile),
+                            Cmd = [
+                                sass_command(),
+                                z_utils:os_escape(InFile),
+                                " ",
+                                z_utils:os_escape(OutFile)
+                            ],
+                            zotonic_filehandler_compile:run_cmd(Cmd);
+                        {error, _} = Error ->
+                            lager:error("Could not create directory for ~p", [OutPath]),
+                            Error
+                    end;
+                false ->
+                    ok
+            end
+       end,
+       MainScss).
+
+sass_command() ->
+    case os:find_executable("sassc") of
         false ->
-            ok
+            "sass --sourcemap=none --unix-newlines ";
+        _Sassc ->
+            "sassc --omit-map-comment "
     end.
 
+find_main_sass_files(AppPriv, SrcPath, SassExt) when is_binary(SrcPath) ->
+    InPath = filename:join([AppPriv, "lib-src", SrcPath]),
+    {ok, Files} = file:list_dir(InPath),
+    MainScss = lists:filter(
+        fun
+            ([$_|_]) -> false;
+            (E) -> lists:suffix(SassExt, E)
+        end,
+        Files),
+    case MainScss of
+        [] ->
+            case SrcPath of
+                <<".">> -> [];
+                _ -> find_main_sass_files(AppPriv, filename:dirname(SrcPath), SassExt)
+            end;
+        _ ->
+            lists:map(
+                fun(File) ->
+                    filename:join(SrcPath, File)
+                end,
+                MainScss)
+    end.
 
 %% @doc LESS files from priv/lib-src/css/.../foo.less -> priv/lib/css/.../foo.css
 %%      Check for a 'config' file on the path, if present then that file is used
@@ -345,19 +387,19 @@ build_command(Application, SrcPath) ->
             false
     end.
 
-find_build(_LibSrcDir, []) ->
-    false;
 find_build(LibSrcDir, Dir) ->
     case lists:member(<<"dist">>, Dir) of
         true -> false;
         false ->
             Dirname = filename:join([LibSrcDir] ++ Dir),
-            Makefile = filename:join(Dirname, "Makefile"),
+            Makefile = filename:join(Dirname, <<"Makefile">>),
             case filelib:is_file(Makefile) of
                 true ->
                     {ok, {make, Makefile}};
-                false ->
+                false when Dir =/= [] ->
                     Up = lists:reverse(tl(lists:reverse(Dir))),
-                    find_build(LibSrcDir, Up)
+                    find_build(LibSrcDir, Up);
+                false ->
+                    false
             end
     end.

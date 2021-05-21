@@ -84,14 +84,17 @@ process(_Method, _AcceptedCT, ProvidedCT, Context) ->
 
 set_filename(Id, ProvidedCT, Dispatch, Context) ->
     Mime = cowmachine_util:format_content_type(ProvidedCT),
-    Extension = hd( mimetypes:mime_to_exts(Mime) ),
-    {ok, Disposition} = z_notifier:first(
+    Extension = z_media_identify:extension(Mime),
+    Disposition = case z_notifier:first(
             #export_resource_content_disposition{
                 id = Id,
                 dispatch = Dispatch,
                 content_type = Mime
-            },
-            Context),
+            }, Context)
+    of
+        {ok, Disp} -> Disp;
+        undefined -> <<"attachment">>
+    end,
     Filename = case z_notifier:first(
             #export_resource_filename{
                 id = Id,

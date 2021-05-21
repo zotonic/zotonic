@@ -47,9 +47,6 @@ query_hooks_test() ->
 
 
 
-
-
-
 search_query_notify_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
@@ -84,3 +81,17 @@ search_query_notify_test() ->
     m_rsc:delete(Query1, C),
     ok.
 
+
+language_search_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    {ok, Id} = m_rsc:insert([
+        {is_published, true},
+        {category, other},
+        {language, [ en ]},
+        {title, #trans{ tr = [ {en, <<"Blah">>} ]}}
+    ], C),
+    #search_result{ result = Ids } = z_search:search({query, [ {language, en}, {sort, <<"-id">>} ]}, C),
+    ?assertEqual( Id, hd(Ids) ),
+    m_rsc:delete(Id, C),
+    ok.

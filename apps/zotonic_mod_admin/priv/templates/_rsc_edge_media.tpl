@@ -14,15 +14,15 @@
     {% else %}
         <figure>
     {% endif %}
-        {% image object_id mediaclass="admin-rsc-edge-media" %}
+        {% image object_id mediaclass="admin-rsc-edge-media" alt=object_id.title title=object_id.title %}
     </figure>
+    <a id="{{ #unlink.object_id }}" class="z-btn-remove" title="{_ Disconnect _} {{ object_id.title }}"></a>
     <div class="bottom clearfix">
         <div class="caption">
             {% with m.rsc[object_id].title|striptags|default:_"untitled" as title %}
-                <a href="#" id="{{ #edit }}">{{ object_id.cropcenter }} {{ title }}</a>
+                <a href="#" id="{{ #edit }}" title="{{ object_id.title }}">{{ object_id.cropcenter }} {{ title }}</a>
             {% endwith %}
 	    </div>
-	    <a id="{{ #unlink.object_id }}" class="z-btn-remove" title="{_ Disconnect _} {{ object_id.title }}"></a>
     </div>
 </li>
 {% endwith %}

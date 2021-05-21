@@ -30,16 +30,16 @@
                  | #postback_notify{}.
 
 %% @doc Send JS to the client, client will evaluate the JS.
--spec reply(binary(), z:context()) -> ok | {error, term()}.
-reply(JavaScript, #context{ client_id = ClientId } = Context) when is_binary(ClientId), is_binary(JavaScript) ->
+-spec reply(iodata(), z:context()) -> ok | {error, term()}.
+reply(JavaScript, #context{ client_id = ClientId } = Context) when is_binary(ClientId) ->
     Topic = [ <<"bridge">>, ClientId, <<"zotonic-transport">>, <<"eval">> ],
-    z_mqtt:publish(Topic, JavaScript, #{ qos => 1 }, Context);
-reply(JavaScript, Context) when is_binary(JavaScript) ->
+    z_mqtt:publish(Topic, iolist_to_binary(JavaScript), #{ qos => 1 }, Context);
+reply(JavaScript, Context) ->
     case z_context:get_q(<<"zotonic_topic_reply">>, Context) of
         undefined ->
             {error, no_route};
         Topic ->
-            z_mqtt:publish(Topic, JavaScript, #{ qos => 1 }, Context)
+            z_mqtt:publish(Topic, iolist_to_binary(JavaScript), #{ qos => 1 }, Context)
     end.
 
 %% @doc Handle incoming transport messages, call event handlers of delegates.

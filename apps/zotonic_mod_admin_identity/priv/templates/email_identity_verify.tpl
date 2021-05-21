@@ -1,11 +1,11 @@
 {% extends "email_base.tpl" %}
 
-{% block title %}{_ Please verify your e-mail address _} [{{ m.site.title|default:m.site.hostname }}]{% endblock %}
+{% block title %}{_ Please verify your email address _} [{{ m.site.title|default:m.site.hostname }}]{% endblock %}
 
 {% block body %}
 <p>{_ Hello _} {{ m.rsc[id].name_first|default:m.rsc[id].title }},</p>
 
-<p>{_ This e-mail address was added to your personal information on _} {{ m.site.title|default:m.site.hostname }}: {{ idn.key }}.</p>
+<p>{_ This email address was added to your personal information on _} {{ m.site.title|default:m.site.hostname }}: {{ idn.key }}.</p>
 
 {% with m.identity[id].username as username %}
 {% if username %}
@@ -13,14 +13,14 @@
 {% endif %}
 {% endwith %}
 
-<p>{_ Click on the link below to confirm that this e-mail address is correct, when clicking doesn't work then you can copy and paste the complete address to your browser. _}</p>
+<p>{_ Click on the link to confirm your email address. Copy the whole link and paste it in your browser if this doesn't work. _}</p>
 
 <p><a href="{% url identity_verify idn_id=idn.id verify_key=verify_key absolute_url %}">{% url identity_verify idn_id=idn.id verify_key=verify_key absolute_url %}</a></p>
 
-<p>{_ If you don't know this site then you can ignore this e-mail. Maybe someone made an error typing his or her e-mail address. _}</p>
+<p>{_ If you don't know this site, please ignore this email. Maybe someone made an error. _}</p>
 {% endblock %}
 
 {% block disclaimer %}
 <p style="color: #666; font-size: 80%;">--<br/>
-{_ You receive this e-mail because you or someone else requested verification of your e-mail address. You or the someone else either entered your e-mail address. You will not receive any additional e-mails because of this request. _}</p>
+{_ You received this email because you verified your email address. You will not receive any additional emails because of this request. _}</p>
 {% endblock %}

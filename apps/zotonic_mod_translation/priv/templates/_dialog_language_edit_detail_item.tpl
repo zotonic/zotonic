@@ -42,28 +42,27 @@ languages
                 </tr>
             {% endif %}
             {% with
-                m.translation.default_language,
-                language.language|as_atom
+                m.translation.default_language
                 as
-                default_language,
-                fallback_language
+                default_language
             %}
                 {% if (fallback_language != code) or (default_language != code) %}
                     <tr>
                         <td>{_ Fallback language _}</td>
                         <td>
-                            {% if fallback_language != code %}
+                            {% for fallback_language in language.fallback %}
                                 {{ fallback_language }}
                                 {% if not fallback_language|member:m.translation.enabled_language_codes %}
-                                    <em class="mod_translation-warning">{_ not enabled _}</em>, {{ default_language }}
+                                    <em class="mod_translation-warning">{_ not enabled _}</em>
                                 {% endif %}
-                            {% else %}
+                                <br>
+                            {% endfor %}
+                            {% if default_language != language.language %}
                                 {{ default_language }}
                                 {% if not default_language|member:m.translation.enabled_language_codes %}
                                     <em class="mod_translation-warning">{_ not enabled _}</em>
                                 {% endif %}
                             {% endif %}
-
                         </td>
                     </tr>
                 {% endif %}

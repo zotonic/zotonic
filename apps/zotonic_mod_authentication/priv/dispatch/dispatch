@@ -1,21 +1,23 @@
 %% -*- mode: erlang -*-
 [
- {logoff,           ["logoff"], controller_logoff,   []},
- {logon,            ["logon"],                            controller_template, [ {template, "logon.tpl"} ]},
+ {logoff,           ["logoff"],                           controller_logoff,   []},
+ {logon,            ["logon"],                            controller_template, [ {template, "logon.tpl"}, noindex, is_logon ]},
 
- {logon_reminder,   ["logon", {logon_view, "reminder"}],  controller_template, [ {template, "logon.tpl"} ]},
- {logon_reset,      ["logon", {logon_view, "reset"}],     controller_template, [ {template, "logon.tpl"} ]},
+ % Handles the redirect after a logon from the logon page
+ {logon_done,       ["logon", "done"],                    controller_logon_done, []},
+
+ {logon_change,     ["logon", {logon_view, "change"}],    controller_template, [ {template, "logon.tpl"}, noindex, is_logon ]},
+
+ {logon_reminder,   ["logon", {logon_view, "reminder"}],  controller_template, [ {template, "logon.tpl"}, noindex, is_logon ]},
+ {logon_reset,      ["logon", {logon_view, "reset"}],     controller_template, [ {template, "logon.tpl"}, noindex, is_logon ]},
 
  % For simple dispatching in the templates (without the "logon_view")
- {logon_reset,      ["logon", "reset"],                   controller_template, [ {template, "logon.tpl"} ]},
- {logon_reminder,   ["logon", "reminder"],                controller_template, [ {template, "logon.tpl"} ]},
+ {logon_change,     ["logon", "change"],                  controller_template, [ {template, "logon.tpl"}, noindex, is_logon ]},
+ {logon_reset,      ["logon", "reset"],                   controller_template, [ {template, "logon.tpl"}, noindex, is_logon ]},
+ {logon_reminder,   ["logon", "reminder"],                controller_template, [ {template, "logon.tpl"}, noindex, is_logon ]},
 
  % Authentication API used by zotonic.auth.worker.js
  {logon_auth,       [ "zotonic-auth" ],     controller_authentication, []},
-
- % To be checked
- {logon_service,    ["logon", "service", service ], controller_template, [{template, "logon_service.tpl"}]},
-
 
  {admin_authentication_services, ["admin", "authentication-services"],  controller_admin, [{template, "admin_authentication_services.tpl"}]}
 ].

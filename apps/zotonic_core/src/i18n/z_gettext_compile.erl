@@ -106,7 +106,12 @@ wrap(Parts, Length) ->
         {<<>>, <<>>},
         Parts
     ),
-    <<Acc/binary, " \"\n\"", Line/binary, "\"\n">>.
+    case Acc of
+        <<>> ->
+            <<Line/binary, "\"\n">>;
+        _ ->
+            <<Acc/binary, " \"\n\"", Line/binary, "\"\n">>
+    end.
 
 fmt_fileinfo(Finfo, LibDir) ->
     F = fun({Fname0,LineNo}, Acc) ->

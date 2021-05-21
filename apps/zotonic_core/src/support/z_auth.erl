@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2021 Marc Worrell
 %% Date: 2009-04-24
 %%
 %% @doc Handle authentication of zotonic users.  Also shows the logon screen when authentication is required.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,6 +27,8 @@
 
     logon/2,
     logon_switch/2,
+    logon_switch/3,
+    logon_redirect/3,
     confirm/2,
     logon_pw/3,
     logoff/1,
@@ -64,15 +66,14 @@ confirm(UserId, Context) ->
     % check if auth_user_id == userId??
     case is_enabled(UserId, Context) of
         true ->
-            Context1 = z_notifier:foldl(#auth_confirm{}, Context, Context),
-            z_notifier:notify(#auth_confirm_done{}, Context1),
+            Context1 = z_notifier:foldl(#auth_confirm{ id = UserId }, Context, Context),
+            z_notifier:notify(#auth_confirm_done{ id = UserId }, Context1),
             {ok, Context1};
         false ->
             {error, user_not_enabled}
     end.
 
-%% @doc Logon an user whose id we know, invalidate the current session id.
-%%      This sets a cookie with the new session id in the Context.
+%% @doc Logon an user whose id we know, set all user prefs in the context.
 -spec logon( m_rsc:resource_id(), z:context() ) -> {ok, z:context()} | {error, user_not_enabled}.
 logon(UserId, Context) ->
     case is_enabled(UserId, Context) of
@@ -96,23 +97,42 @@ logon_switch(UserId, Context) ->
             {error, eacces}
     end.
 
-
-%% @doc Request the client's auth worker to re-authenticate as a new user
--spec switch_user( m_rsc:resource_id(), z:context() ) -> ok | {error, eacces}.
-switch_user(1, _Context) ->
-    {error, eacces};
-switch_user(UserId, Context) when is_integer(UserId) ->
-    case z_acl:is_admin(Context) of
+%% @doc Allow an admin user to switch to another user account.
+-spec logon_switch( m_rsc:resource_id(), m_rsc:resource_id(), z:context() ) -> {ok, z:context()} | {error, eacces}.
+logon_switch(UserId, SudoUserId, Context) ->
+    case m_rsc:exists(UserId, Context) andalso z_acl:is_admin( z_acl:logon(SudoUserId, Context) ) of
         true ->
-            z_mqtt:publish(
-                    [ <<"~client">>, <<"model">>, <<"auth">>, <<"post">>, <<"switch-user">> ],
-                    #{ user_id => UserId },
-                    Context),
-            ok;
+            Context1 = z_acl:logon_prefs(UserId, Context),
+            Context2 = z_notifier:foldl(#auth_logon{ id = UserId }, Context1, Context1),
+            {ok, Context2};
         false ->
             {error, eacces}
     end.
 
+%% @doc Logon an user and redirect the user agent. The MQTT websocket MUST be connected.
+-spec logon_redirect( m_rsc:resource_id(), binary() | undefined, z:context() ) -> ok | {error, term()}.
+logon_redirect(UserId, Url, Context) ->
+    case z_notifier:first(#auth_client_logon_user{
+            user_id = UserId,
+            url = Url
+        }, Context)
+    of
+        undefined -> {error, no_handler};
+        ok -> ok;
+        {error, _} = Error -> Error
+    end.
+
+%% @doc Request the client's auth worker to re-authenticate as a new user
+-spec switch_user( m_rsc:resource_id(), z:context() ) -> ok | {error, eacces}.
+switch_user(UserId, Context) when is_integer(UserId) ->
+    case z_notifier:first(#auth_client_switch_user{
+            user_id = UserId
+        }, Context)
+    of
+        undefined -> {error, no_handler};
+        ok -> ok;
+        {error, _} = Error -> Error
+    end.
 
 %% @doc Forget about the user being logged on.
 -spec logoff(z:context()) -> z:context().

@@ -27,6 +27,7 @@
 %% interface functions
 -export([
     poll/1,
+    status/1,
     pivot/2,
     pivot_delay/1,
     pivot_resource_update/4,
@@ -47,6 +48,8 @@
     get_task/4,
     delete_task/3,
     delete_task/4,
+    list_tasks/1,
+    delete_tasks/1,
 
     stemmer_language/1,
     stemmer_language_config/1,
@@ -94,6 +97,10 @@
 poll(Context) ->
     gen_server:cast(Context#context.pivot_server, poll).
 
+
+-spec status( z:context() ) -> {ok, map()} | {error, term()}.
+status(Context) ->
+    gen_server:call(Context#context.pivot_server, status).
 
 %% @doc An immediate pivot request for a resource
 -spec pivot(integer(), #context{}) -> ok.
@@ -205,7 +212,7 @@ insert_task_after(SecondsOrDate, Module, Function, UniqueKey, ArgsFun, Context) 
                 Ctx),
             New = case OldTask of
                 {OldProps, OldDue} ->
-                    OldArgs = maps:get(<<"args">>, OldProps),
+                    OldArgs = get_args(OldProps),
                     ArgsFun(OldDue, OldArgs, Due, Ctx);
                 undefined ->
                     ArgsFun(undefined, undefined, Due, Ctx)
@@ -318,6 +325,14 @@ delete_task(Module, Function, UniqueKey, Context) ->
            [Module, Function, UniqueKeyBin],
            Context).
 
+-spec list_tasks( z:context() ) -> {ok, list( map() )} | {error, term()}.
+list_tasks(Context) ->
+    z_db:qmap("select * from pivot_task_queue", Context).
+
+-spec delete_tasks( z:context() ) -> non_neg_integer().
+delete_tasks(Context) ->
+    z_db:q("delete from pivot_task_queue", Context).
+
 
 %%====================================================================
 %% API
@@ -362,6 +377,16 @@ handle_call({task_done, TaskId, _TaskPid}, _From, State) ->
                 [ TaskId ]),
     {reply, {error, unknown_task, State}};
 
+handle_call(status, _From, State) ->
+    Status = #{
+        site => State#state.site,
+        is_initial_delay => State#state.is_initial_delay,
+        is_pivot_delay => State#state.is_pivot_delay,
+        task_pid => State#state.task_pid,
+        task_id => State#state.task_id
+    },
+    {reply, {ok, Status}, State};
+
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
@@ -375,7 +400,7 @@ handle_cast(poll, State) ->
         {_IsPivoting, State1} = do_poll(State),
         {noreply, State1}
     catch
-        ?WITH_STACKTRACE(Type, Err, Stack)
+        Type:Err:Stack ->
             lager:error("Poll error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
             {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
     end;
@@ -422,7 +447,7 @@ handle_info(poll, State) ->
         end,
         {noreply, State1#state{ is_initial_delay = false }}
     catch
-        ?WITH_STACKTRACE(Type, Err, Stack)
+        Type:Err:Stack ->
             lager:error("Pivot error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
             timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
             {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
@@ -598,8 +623,8 @@ get_args(Props) when is_map(Props) ->
 get_args(Props) when is_list(Props) ->
     % deprecated task queue entries
     proplists:get_value(args, Props, []);
-get_args(_) ->
-    undefined.
+get_args(undefined) ->
+    [].
 
 get_error_ct(Props) when is_map(Props) ->
     maps:get(<<"error_ct">>, Props, 0);

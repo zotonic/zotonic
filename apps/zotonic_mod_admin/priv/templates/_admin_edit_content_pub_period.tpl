@@ -15,7 +15,7 @@
 {% block widget_content %}
 <fieldset>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-sm-6">
             <div class="form-group">
                 <label class="control-label">{_ Visible from _}</label>
                 <div>
@@ -23,7 +23,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-sm-6">
             <div class="form-group">
                 <label class="control-label">{_ Visible till _}</label>
                 <div>
@@ -32,12 +32,11 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <label class="control-label">{_ Publication date of original article _}</label>
-            <div>
-                {% include "_edit_date.tpl" date=id.org_pubdate name="org_pubdate" is_end=0 is_editable=id.is_editable %}
-            </div>
+
+    <div class="form-group">
+        <label class="control-label">{_ Publication date of original article _}</label>
+        <div>
+            {% include "_edit_date.tpl" date=id.org_pubdate name="org_pubdate" is_end=0 is_editable=id.is_editable %}
         </div>
     </div>
 </fieldset>

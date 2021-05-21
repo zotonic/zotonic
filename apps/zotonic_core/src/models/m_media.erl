@@ -250,7 +250,7 @@ replace(Id, Props, Context) ->
             Depicts = depicts(Id, Context),
             F = fun(Ctx) ->
                 {ok, _} = medium_delete(Id, Ctx),
-                {ok, Id} = medium_insert(Id, Props#{ id => Id }, Ctx)
+                {ok, Id} = medium_insert(Id, Props#{ <<"id">> => Id }, Ctx)
             end,
             case z_db:transaction(F, Context) of
                 {ok, _} ->
@@ -303,7 +303,7 @@ merge(WinnerId, LoserId, Context) ->
 duplicate(FromId, ToId, Context) ->
     FromId1 = m_rsc:rid(FromId, Context),
     ToId1 = m_rsc:rid(ToId, Context),
-    case z_db:qmap_row("select * from medium where id = $1", [FromId1], Context) of
+    case z_db:qmap_props_row("select * from medium where id = $1", [FromId1], Context) of
         {ok, Ms} ->
             {ok, Ms1} = maybe_duplicate_file(Ms, Context),
             {ok, Ms2} = maybe_duplicate_preview(Ms1, Context),
@@ -494,16 +494,7 @@ insert_file_mime_ok(File, RscProps, MediaProps, Options, Context) ->
     RscProps1 = RscProps#{
         <<"is_published">> => IsPublished
     },
-    RscProps2 = case z_utils:is_empty(maps:get(<<"title">>, RscProps1, <<>>)) of
-        true ->
-            OriginalFilename = maps:get(<<"original_filename">>, MediaProps, undefined),
-            RscProps1#{
-                <<"title">> => filename_basename(OriginalFilename)
-            };
-        false ->
-            RscProps1
-    end,
-    replace_file_mime_ok(File, insert_rsc, RscProps2, MediaProps, Options, Context).
+    replace_file_mime_ok(File, insert_rsc, RscProps1, MediaProps, Options, Context).
 
 filename_basename(undefined) -> <<>>;
 filename_basename(Filename) ->
@@ -559,19 +550,43 @@ replace_file(File, RscId, RscProps, MInfo, Opts, Context) ->
 
 replace_file_mime_check(File, RscId, RscProps, MediaProps, Opts, Context) ->
     Mime = maps:get(<<"mime">>, MediaProps, undefined),
-    case z_acl:is_allowed(insert, #acl_rsc{category = mime_to_category(Mime), props = RscProps}, Context) andalso
-        z_acl:is_allowed(insert, #acl_media{mime = Mime, size = filelib:file_size(File)}, Context) of
+    case z_acl:is_allowed(insert, #acl_media{ mime = Mime, size = filelib:file_size(File) }, Context) of
         true ->
             replace_file_mime_ok(File, RscId, RscProps, MediaProps, Opts, Context);
         false ->
             {error, file_not_allowed}
     end.
 
-%% @doc Replace the file, no mime check needed.
+%% @doc Check the ACL for the category/content-group combination.
+replace_file_mime_ok(File, insert_rsc, RscProps, MediaProps, Opts, Context) ->
+    % The category/content-group is also checked during the m_rsc:insert/2 call.
+    % This is an early check to prevent preprocessing files for resources that
+    % are not allowed to be created.
+    CatId = case maps:find(<<"category_id">>, RscProps) of
+        {ok, CId} ->
+            CId;
+        error ->
+            case maps:find(<<"category">>, RscProps) of
+                {ok, CName} ->
+                    m_rsc:rid(CName, Context);
+                error ->
+                    Mime = maps:get(<<"mime">>, MediaProps, undefined),
+                    m_rsc:rid(mime_to_category(Mime), Context)
+            end
+    end,
+    case m_category:id_to_name(CatId, Context) of
+        undefined ->
+            {error, eacces};
+        Cat ->
+            case z_acl:is_allowed(insert, #acl_rsc{ category = Cat, props = RscProps }, Context) of
+                true ->
+                    replace_file_acl_ok(File, insert_rsc, RscProps, MediaProps, Opts, Context);
+                false ->
+                    {error, eacces}
+            end
+    end;
 replace_file_mime_ok(File, RscId, RscProps, MediaProps, Opts, Context) ->
-    case RscId =:= insert_rsc
-        orelse z_acl:rsc_editable(RscId, Context)
-        orelse not(m_rsc:p(RscId, is_authoritative, Context)) of
+    case z_acl:rsc_editable(RscId, Context) of
         true ->
             replace_file_acl_ok(File, RscId, RscProps, MediaProps, Opts, Context);
         false ->
@@ -630,6 +645,8 @@ replace_file_sanitize(RscId, PreProc, Props, Opts, Context) ->
     PreProc1 = z_media_sanitize:sanitize(PreProc, Context),
     replace_file_db(RscId, PreProc1, Props, Opts, Context).
 
+-spec replace_file_db( m_rsc:resource_id() | insert_rsc, #media_upload_preprocess{}, map(), list(), z:context() ) ->
+    {ok, m_rsc:resource_id()} | {error, term()}.
 replace_file_db(RscId, PreProc, Props, Opts, Context) ->
     SafeRootName = z_string:to_rootname(PreProc#media_upload_preprocess.original_filename),
     PreferExtension = z_convert:to_binary(
@@ -662,6 +679,7 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
         },
         Medium,
         Context),
+
     PropsM = z_notifier:foldl(
         #media_upload_rsc_props{
             id = RscId,
@@ -673,39 +691,45 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
         Props,
         Context),
 
-    IsImport = proplists:is_defined(is_import, Opts),
-    NoTouch = proplists:is_defined(no_touch, Opts),
+    PropsM1 = case RscId =:= insert_rsc andalso z_utils:is_empty(maps:get(<<"title">>, PropsM, <<>>)) of
+        true ->
+            OriginalFilename = maps:get(<<"original_filename">>, Medium1, undefined),
+            PropsM#{
+                <<"title">> => filename_basename(OriginalFilename)
+            };
+        false ->
+            PropsM
+    end,
 
     F = fun(Ctx) ->
         %% If the resource is in the media category, then move it to the correct sub-category depending
         %% on the mime type of the uploaded file.
-        Props1 = case maps:is_key(<<"category">>, PropsM)
-            orelse maps:is_key(<<"category_id">>, PropsM)
+        PropsCat = case maps:is_key(<<"category">>, PropsM1)
+            orelse maps:is_key(<<"category_id">>, PropsM1)
         of
             true ->
-                PropsM;
+                PropsM1;
             false ->
-                PropsM#{
+                PropsM1#{
                     <<"category">> => mime_to_category(Mime)
                 }
         end,
         {ok, Id} = case RscId of
             insert_rsc ->
-                m_rsc_update:insert(Props1, Opts, Ctx);
+                m_rsc_update:insert(PropsCat, Opts, Ctx);
             _ ->
                 case rsc_is_media_cat(RscId, Context) of
                     true ->
-                        {ok, RscId} = m_rsc_update:update(RscId, Props1, Opts, Ctx);
+                        {ok, RscId} = m_rsc_update:update(RscId, PropsCat, Opts, Ctx);
+                    false when map_size(Props) > 0 ->
+                        {ok, RscId} = m_rsc_update:update(RscId, Props, Opts, Ctx);
                     false ->
-                        case IsImport orelse NoTouch of
-                            true -> nop;
-                            false -> {ok, RscId} = m_rsc:touch(RscId, Ctx)
-                        end
+                        ok
                 end,
                 medium_delete(RscId, Ctx),
                 {ok, RscId}
         end,
-        Medium2 = Medium#{ <<"id">> => Id },
+        Medium2 = Medium1#{ <<"id">> => Id },
         case medium_insert(Id, Medium2, Ctx) of
             {ok, _MediaId} ->
                 {ok, Id};
@@ -746,8 +770,8 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
                 mqtt_event_info(NewMedium),
                 Context),
             {ok, Id};
-        {rollback, {{error, not_allowed}, _StackTrace}} ->
-            {error, not_allowed}
+        {rollback, {{error, Reason}, _StackTrace}} ->
+            {error, Reason}
     end.
 
 is_deletable_file(undefined, _Context) ->

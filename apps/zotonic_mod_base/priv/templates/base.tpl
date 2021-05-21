@@ -1,6 +1,7 @@
 {% extends "base_noscript.tpl" %}
 
 {% block _html_head %}
+  {% all include "_html_head.tpl" %}
   {% lib
       "bootstrap/css/bootstrap.css"
       "css/jquery.loadmask.css"

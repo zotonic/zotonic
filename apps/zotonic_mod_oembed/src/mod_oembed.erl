@@ -43,15 +43,17 @@
 %% @doc Check if the update contains video embed information.  If so
 %% then try to get the oembed information from the provider and update
 %% the attached medium item.
--spec observe_rsc_update(#rsc_update{}, {boolean(), m_rsc:props()}, z:context()) -> {boolean(), m_rsc:props()}.
-observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context) ->
+-spec observe_rsc_update(#rsc_update{}, {ok, m_rsc:props()} | {error, term()}, z:context()) ->
+          {ok, m_rsc:props()}
+        | {error, term()}.
+observe_rsc_update(#rsc_update{action=insert, id=Id}, {ok, Props}, Context) ->
     case maps:get(<<"oembed_url">>, Props, undefined) of
         undefined ->
-            {Changed, Props};
+            {ok, Props};
         "" ->
-            {true, maps:remove(<<"oembed_url">>, Props)};
+            {ok, maps:remove(<<"oembed_url">>, Props)};
         <<>> ->
-            {true, maps:remove(<<"oembed_url">>, Props)};
+            {ok, maps:remove(<<"oembed_url">>, Props)};
         EmbedUrl ->
             case z_acl:is_allowed(insert, #acl_media{mime=?OEMBED_MIME}, Context) of
                 true ->
@@ -61,7 +63,7 @@ observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context)
                     },
                     case preview_create_from_medium(Id, MediaProps, z_acl:sudo(Context)) of
                         undefined ->
-                            {true, maps:remove(<<"oembed_url">>, Props)};
+                            {ok, maps:remove(<<"oembed_url">>, Props)};
                         OEmbedTitle ->
                             Title = z_trans:lookup_fallback( maps:get(<<"title">>, Props, <<>>), Context ),
                             Props1 = case z_utils:is_empty(Title) of
@@ -72,13 +74,13 @@ observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context)
                                         false ->
                                             Props
                                      end,
-                            {true, maps:remove(<<"oembed_url">>, Props1)}
+                            {ok, maps:remove(<<"oembed_url">>, Props1)}
                     end;
                 false ->
-                    {true, maps:remove(<<"oembed_url">>, Props)}
+                    {ok, maps:remove(<<"oembed_url">>, Props)}
             end
     end;
-observe_rsc_update(#rsc_update{action=update, id=Id, props=CurrProps}, {Changed, UpdateProps}, Context) ->
+observe_rsc_update(#rsc_update{action=update, id=Id, props=CurrProps}, {ok, UpdateProps}, Context) ->
     case maps:is_key(<<"oembed_url">>, UpdateProps) of
         true ->
             OldMediaProps = m_media:get(Id, Context),
@@ -132,10 +134,13 @@ observe_rsc_update(#rsc_update{action=update, id=Id, props=CurrProps}, {Changed,
                 false ->
                     UpdateProps
             end,
-            {Changed or EmbedChanged, maps:remove(<<"oembed_url">>, UpdateProps1)};
+            {ok, maps:remove(<<"oembed_url">>, UpdateProps1)};
         false ->
-            {Changed, UpdateProps}
-    end.
+            {ok, UpdateProps}
+    end;
+observe_rsc_update(#rsc_update{}, {error, _} = Error, _Context) ->
+    Error.
+
 
 
 %% @doc Return the media viewer for the embedded video (that is, when
@@ -222,14 +227,16 @@ observe_media_import(#media_import{url=Url, metadata=MD}, Context) ->
                 module = ?MODULE,
                 description = ?__("Embedded Content", Context),
                 rsc_props = #{
-                    <<"title">> => first([
-                            maps:get(<<"title">>, Json, undefined),
-                            z_url_metadata:p(title, MD)
-                        ]),
-                    <<"summary">> => first([
-                            maps:get(<<"description">>, Json, undefined),
-                            z_url_metadata:p(summary, MD)
-                        ]),
+                    <<"title">> => z_html:unescape(
+                            first([
+                                maps:get(<<"title">>, Json, undefined),
+                                z_url_metadata:p(title, MD)
+                            ])),
+                    <<"summary">> => z_html:unescape(
+                            first([
+                                maps:get(<<"description">>, Json, undefined),
+                                z_url_metadata:p(summary, MD)
+                            ])),
                     <<"website">> => Url
                 },
                 medium_props = #{

@@ -20,9 +20,12 @@
 -author("Blaise").
 
 %% API
--export([run/1]).
+-export([info/0, run/1]).
 
 -include("../../include/zotonic_command.hrl").
+
+info() ->
+    "Update the server. Compiles and loads any new code, flushes caches and rescans all modules.".
 
 run(_) ->
     case zotonic_command:net_start() of

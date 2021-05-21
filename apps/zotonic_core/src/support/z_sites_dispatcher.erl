@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
+%% @copyright 2009-2021 Marc Worrell
 %% @doc Server for matching the request path to correct site and dispatch rule.
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,6 +34,8 @@
 -export([
     dispatch/2,
     dispatch/5,
+    dispatch_trace/2,
+    dispatch_trace/3,
     get_fallback_site/0,
     get_site_for_hostname/1,
     update_hosts/0,
@@ -91,12 +93,30 @@
 -type redirect_protocol() :: {redirect_protocol, http|https, Host :: binary(), IsPermanent :: boolean()}.
 -type stop_request() :: {stop_request, pos_integer()}.
 
+-type trace_step() :: undefined
+                    | match
+                    | try_match
+                    | dispatch_rewrite
+                    | forced_protocol_switch
+                    | notify_dispatch
+                    | rewrite_id
+                    | rewrite_match
+                    | rewrite_nomatch.
+
+-type trace() :: #{
+    path := binary() | [ binary() ] | undefined,
+    step := trace_step(),
+    args := proplists:proplist()
+}.
+
 -export_type([
     dispatch_rule/0,
     redirect/0,
     redirect_protocol/0,
     stop_request/0,
-    hostname/0
+    hostname/0,
+    trace_step/0,
+    trace/0
 ]).
 
 %%====================================================================
@@ -135,6 +155,14 @@ execute(Req, Env) ->
         #dispatch_controller{} = Match ->
             Context = Match#dispatch_controller.context,
             BindingsMap = maps:from_list( Match#dispatch_controller.bindings ),
+            Metrics = #{
+                site => z_context:site(Context),
+                peer_ip => m_req:get(peer_ip, Context),
+                controller => Match#dispatch_controller.controller,
+                controller_options => Match#dispatch_controller.controller_options,
+                dispatch_rule => Match#dispatch_controller.dispatch_rule
+            },
+            cast_metrics_data(Metrics, Req),
             {ok, Req#{
                 bindings => BindingsMap
             }, Env#{
@@ -148,8 +176,16 @@ execute(Req, Env) ->
                 bindings => BindingsMap
             }};
         #dispatch_nomatch{site = Site, bindings = Bindings, context = Context} ->
+            Metrics = #{
+                site => z_context:site(Context)
+            },
+            cast_metrics_data(Metrics, Req),
             handle_error(404, cowboy_req:method(Req), Site, Req, Env, Bindings, Context);
         {redirect, Site, undefined, IsPermanent} ->
+            Metrics = #{
+                site => Site
+            },
+            cast_metrics_data(Metrics, Req),
             case z_sites_manager:wait_for_running(Site) of
                 ok ->
                     Uri = z_context:abs_url(raw_path(Req), z_context:new(Site)),
@@ -158,6 +194,11 @@ execute(Req, Env) ->
                     {stop_request, 503}
             end;
         {redirect, Site, NewPathOrURI, IsPermanent} ->
+            Metrics = #{
+                site => Site,
+                peer_ip => maps:get(cowmachine_remote_ip, Env)
+            },
+            cast_metrics_data(Metrics, Req),
             case z_sites_manager:wait_for_running(Site) of
                 ok ->
                     Uri = z_context:abs_url(NewPathOrURI, z_context:new(Site)),
@@ -175,6 +216,9 @@ execute(Req, Env) ->
         {stop_request, RespCode} ->
             stop_request(RespCode, Req, Env)
     end.
+
+cast_metrics_data(Metrics, Req) ->
+    cowboy_req:cast({set_options, #{ metrics_user_data => Metrics }}, Req).
 
 %% @doc Match the host and path to a dispatch rule.
 -spec dispatch(cowboy_req:req(), cowboy_middleware:env()) -> dispatch().
@@ -211,6 +255,23 @@ dispatch(Method, Host, Path, IsSsl, OptTracerPid) when is_boolean(IsSsl) ->
     dispatch_1(DispReq, undefined, undefined).
 
 
+-spec dispatch_trace( binary(), z:context() ) -> {ok, [ trace() ]} | {error, timeout}.
+dispatch_trace(Path, Context) ->
+    dispatch_trace(https, Path, Context).
+
+-spec dispatch_trace( http | https, binary(), z:context() ) -> {ok, [ trace() ]} | {error, timeout}.
+dispatch_trace(Protocol, Path, Context) ->
+    TracerPid = erlang:spawn_link(fun tracer/0),
+    AbsPath = ensure_abs(Path),
+    dispatch(<<"GET">>, z_context:hostname(Context), AbsPath, Protocol =:= https, TracerPid),
+    TracerPid ! {fetch, self()},
+    receive
+        {final_trace, Traces} ->
+            {ok, Traces}
+        after 5000 ->
+            {error, timeout}
+    end.
+
 %% @doc Retrieve the fallback site.
 -spec get_fallback_site() -> {ok, atom()} | undefined.
 get_fallback_site() ->
@@ -230,6 +291,32 @@ get_site_for_hostname(Hostname) ->
 %%====================================================================
 %% Internal functions
 %%====================================================================
+
+ensure_abs(<<>>) -> <<"/">>;
+ensure_abs(<<$/, _/binary>> = P) -> P;
+ensure_abs(P) -> <<$/, P/binary>>.
+
+tracer() ->
+    tracer_loop([]).
+
+tracer_loop(Acc) ->
+    receive
+        #{ path := Path } = Trace when is_map(Trace) ->
+            TraceFlatten = Trace#{
+                path => maybe_flatten(Path)
+            },
+            tracer_loop([TraceFlatten|Acc]);
+        {fetch, Pid} ->
+            Acc1 = lists:reverse(Acc),
+            Pid ! {final_trace, Acc1}
+    end.
+
+maybe_flatten(undefined) -> undefined;
+maybe_flatten(Path) when is_binary(Path) -> Path;
+maybe_flatten([X|_] = Path) when is_binary(X) -> Path;
+maybe_flatten([X|_] = Path) when is_integer(X) -> z_convert:to_binary(Path);
+maybe_flatten([]) -> <<>>.
+
 
 set_server_header(Req) ->
     cowboy_req:set_resp_header(<<"server">>, cowmachine_response:server_header(), Req).
@@ -300,16 +387,25 @@ send_static_response(RespCode, Req) ->
 
 %% Always redirect to https
 -spec dispatch_1( #dispatch{}, undefined | cowboy_req:req(), undefined | cowboy_middleware:env() ) -> dispatch().
-dispatch_1(#dispatch{ protocol = http, host = Hostname } = DispReq, _OptReq, _OptEnv) when Hostname =/= undefined ->
-    #dispatch{ tracer_pid = TracerPid } = DispReq,
-    redirect_protocol(Hostname, TracerPid, []);
+dispatch_1(#dispatch{ protocol = http, host = Hostname } = DispReq, OptReq, OptEnv) when Hostname =/= undefined ->
+    % If we redirect to https, then first check if we also have to change the hostname.
+    % Otherwise we might have a mismatch between the certs and the requested hostname.
+    case ets:lookup(?MODULE, DispReq#dispatch.host) of
+        [] ->
+            case find_no_host_match(DispReq, OptReq, OptEnv) of
+                {fallback, _Site} ->
+                    redirect_protocol(Hostname, DispReq#dispatch.tracer_pid, []);
+                Other ->
+                    Other
+            end;
+        _ ->
+            redirect_protocol(Hostname, DispReq#dispatch.tracer_pid, [])
+    end;
 dispatch_1(DispReq, OptReq, OptEnv) ->
     case ets:lookup(?MODULE, DispReq#dispatch.host) of
         [] ->
             % Check for fallback sites or other site handling this hostname
             case find_no_host_match(DispReq, OptReq, OptEnv) of
-                {ok, Site} ->
-                    dispatch_site_if_running(DispReq, OptReq, OptEnv, Site, []);
                 {fallback, Site} ->
                     dispatch_site_if_running(DispReq, OptReq, OptEnv, Site, [{http_status_code, 400}]);
                 Other ->
@@ -354,7 +450,6 @@ dispatch_site_if_running(DispReq, OptReq, OptEnv, Site, ExtraBindings) ->
 
 -spec dispatch_site(#dispatch{}, z:context(), list()) -> dispatch().
 dispatch_site(#dispatch{tracer_pid = TracerPid, path = Path, host = Hostname} = DispReq, Context, ExtraBindings) ->
-    count_request(z_context:site(Context)),
     try
         {Tokens, IsDir} = split_path(Path),
         {TokensRewritten, Bindings} = dispatch_rewrite(Hostname, Path, Tokens, IsDir, TracerPid, Context),
@@ -824,8 +919,8 @@ collect_dispatchrules(Site) ->
     end.
 
 %% @doc Fetch dispatch rules for a specific site.
-fetch_dispatchinfo(Site) ->
-    Name = z_utils:name_for_site(z_dispatcher, Site),
+fetch_dispatchinfo(SiteOrContext) ->
+    Name = z_utils:name_for_site(z_dispatcher, SiteOrContext),
     case z_dispatcher:dispatchinfo(Name) of
         {ok, {Site, Hostname, SmtpHost, Hostalias, Redirect, DispatchList}} ->
             {ok, #site_dispatch_list{
@@ -866,7 +961,12 @@ filter_rules(Rules, Site) ->
 trace(undefined, _PathTokens, _What, _Args) ->
     ok;
 trace(TracerPid, PathTokens, What, Args) ->
-    TracerPid ! {trace, PathTokens, What, Args},
+    Trace = #{
+        path => PathTokens,
+        step => What,
+        args => Args
+    },
+    TracerPid ! Trace,
     ok.
 
 trace_final(TracerPid, #dispatch_controller{
@@ -895,5 +995,3 @@ add_port(_, Hostname, Port) ->
     PortBin = z_convert:to_binary(Port),
     <<Hostname/binary, $:, PortBin/binary>>.
 
-count_request(Site) ->
-    exometer:update([zotonic, Site, webzmachine, requests], 1).

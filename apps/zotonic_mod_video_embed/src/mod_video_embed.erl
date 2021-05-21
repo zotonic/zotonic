@@ -50,15 +50,17 @@
 -define(EMBED_MIME, <<"text/html-video-embed">>).
 
 %% @doc Check if the update contains video embed information.  If so then update the attached medium item.
--spec observe_rsc_update(#rsc_update{}, {boolean(), list()}, #context{}) -> {boolean(), list()}.
-observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context) ->
+-spec observe_rsc_update(#rsc_update{}, {ok, m_rsc:props()} | {error, term()}, z:context()) ->
+          {ok, m_rsc:props()}
+        | {error, term()}.
+observe_rsc_update(#rsc_update{action=insert, id=Id}, {ok, Props}, Context) ->
     case maps:get(<<"video_embed_code">>, Props, undefined) of
         undefined ->
-            {Changed, Props};
+            {ok, Props};
         "" ->
-            {true, maps:remove(<<"video_embed_code">>, Props)};
+            {ok, maps:remove(<<"video_embed_code">>, Props)};
         <<>> ->
-            {true, maps:remove(<<"video_embed_code">>, Props)};
+            {ok, maps:remove(<<"video_embed_code">>, Props)};
         EmbedCodeRaw ->
             case z_acl:is_allowed(insert, #acl_media{ mime = ?EMBED_MIME }, Context) of
                 true ->
@@ -81,19 +83,18 @@ observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context)
             end,
             Props1 = maps:remove(<<"video_embed_code">>,
                         maps:remove(<<"video_embed_service">>, Props)),
-            {true, Props1}
+            {ok, Props1}
     end;
-observe_rsc_update(#rsc_update{action=update, id=Id}, {Changed, #{ <<"video_embed_code">> := EmbedCodeRaw } = Props}, Context) ->
+observe_rsc_update(#rsc_update{action=update, id=Id}, {ok, #{ <<"video_embed_code">> := EmbedCodeRaw } = Props}, Context) ->
     OldMediaProps = m_media:get(Id, Context),
-    EmbedChanged = case EmbedCodeRaw of
+    case EmbedCodeRaw of
         Empty when Empty =:= undefined; Empty =:= <<>>; Empty =:= "" ->
             % Delete the media record iff the media mime type is our mime type
             case OldMediaProps of
                 #{ <<"mime">> := ?EMBED_MIME } ->
-                    m_media:delete(Id, Context),
-                    true;
+                    m_media:delete(Id, Context);
                 _ ->
-                    false
+                    ok
             end;
         _ ->
             EmbedCode = z_sanitize:html(z_html:unescape(EmbedCodeRaw), Context),
@@ -111,23 +112,23 @@ observe_rsc_update(#rsc_update{action=update, id=Id}, {Changed, #{ <<"video_embe
                         andalso z_utils:are_equal(maps:get(<<"video_embed_service">>, OldMediaProps, undefined), EmbedService)
                     of
                         true ->
-                            false;
+                            ok;
                         false ->
                             ok = m_media:replace(Id, MediaProps, Context),
-                            spawn_preview_create(Id, MediaProps, Context),
-                            true
+                            spawn_preview_create(Id, MediaProps, Context)
                     end;
                 _ ->
                     ok = m_media:replace(Id, MediaProps, Context),
-                    spawn_preview_create(Id, MediaProps, Context),
-                    true
+                    spawn_preview_create(Id, MediaProps, Context)
             end
     end,
     Props1 = maps:remove(<<"video_embed_code">>,
                 maps:remove(<<"video_embed_service">>, Props)),
-    {Changed or EmbedChanged, Props1};
-observe_rsc_update(#rsc_update{}, {Changed, Props}, _Context) ->
-    {Changed, Props}.
+    {ok, Props1};
+observe_rsc_update(#rsc_update{}, {ok, Props}, _Context) ->
+    {ok, Props};
+observe_rsc_update(#rsc_update{}, {error, _} = Error, _Context) ->
+    Error.
 
 
 %% @doc Return the media viewer for the embedded video (that is, when it is an embedded media).

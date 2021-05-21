@@ -141,7 +141,7 @@ fetch([K|Ks], MapA, MapB, Acc, Context) ->
     end.
 
 normalize(_K, #trans{ tr = Tr }) -> #trans{ tr = lists:sort(Tr) };
-normalize(language, L) when is_list(L) -> lists:sort(L);
+normalize(<<"language">>, L) when is_list(L) -> lists:sort(L);
 normalize(_K, V) -> V.
 
 format_value(_K, undefined, _Context) ->
@@ -184,8 +184,14 @@ format_value(_K, V, Context) when is_list(V) ->
         lists:join(
             ", ",
             [ format_value(none, A, Context) || A <- V ]));
+format_value(_K, M, _Context) when is_map(M) ->
+    iolist_to_binary(io_lib:format("~p", [ M ]));
 format_value(_K, A, _Context) ->
-    z_convert:to_binary(A).
+    try
+        z_convert:to_binary(A)
+    catch
+        _:_ -> iolist_to_binary(io_lib:format("~p", [ A ]))
+    end.
 
 
 by_id(Id, Context) when is_integer(Id) ->

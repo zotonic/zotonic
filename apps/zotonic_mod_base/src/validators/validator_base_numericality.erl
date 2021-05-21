@@ -41,7 +41,6 @@ render_validator(numericality, TriggerId, _TargetId, Args, _Context)  ->
 %%          Error = invalid | novalue | {script, Script}
 validate(numericality, Id, Value, [IsFloat,Min,Max], Context) ->
     Result = case z_string:trim(Value) of
-                 [] -> {ok, <<>>};
                  <<>> -> {ok, <<>>};
                  Trimmed ->
                      ConvertFun = case IsFloat of

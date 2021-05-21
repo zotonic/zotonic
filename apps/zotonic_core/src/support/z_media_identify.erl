@@ -138,8 +138,8 @@ identify_file_direct_1(File, OriginalFilename) ->
             identify_file_imagemagick(OsFamily, File, Mime);
         {ok, #{ <<"mime">> := <<"application/postscript">> = Mime }} ->
             identify_file_imagemagick(OsFamily, File, Mime);
-        {ok, Props} ->
-            Props
+        {ok, Props} = OK when is_map(Props) ->
+            OK
     end.
 
 -spec os_family() -> os_family().
@@ -183,7 +183,7 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
     case re:run(Mime, "^[a-zA-Z0-9_\\-\\.]+/[a-zA-Z0-9\\.\\-_]+$") of
         nomatch ->
             case Mime of
-                "CDF V2 Document, corrupt:" ++ _ ->
+                <<"CDF V2 Document, corrupt:", _/binary>> ->
                     % Probably just a semi-illegal variation on a MS Office file, use the extension
                     case guess_mime(OriginalFilename) of
                         <<"application/msword">> -> {ok, #{ <<"mime">> => <<"application/msword">>}};
@@ -282,6 +282,12 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
                         _ -> <<"audio/wav">>
                     end,
                     {ok, #{ <<"mime">> => MWav }};
+                <<"audio/x-", _/binary>> ->
+                    MAudio = case guess_mime(OriginalFilename) of
+                        <<"audio/", _/binary>> = M -> M;
+                        _ -> Mime
+                    end,
+                    {ok, #{ <<"mime">> => MAudio }};
                 <<"video/x-ms-asf">> ->
                     MAsf = case guess_mime(OriginalFilename) of
                         <<"audio/", _/binary>> = M -> M;
@@ -362,7 +368,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                 end,
                 {ok, Props2}
             catch
-                ?WITH_STACKTRACE(X, B, Stacktrace)
+                X:B:Stacktrace ->
                     lager:info("identify of \"~s\" failed - ~p with ~p:~p in ~p",
                               [CleanedImageFile, CmdOutput, X, B, Stacktrace]),
                     {error, identify}
@@ -471,6 +477,11 @@ extension(<<"image/jpeg">>, _PreferExtension) -> <<".jpg">>;
 extension(<<"application/vnd.ms-excel">>, _) -> <<".xls">>;
 extension(<<"text/plain">>, _PreferExtension) -> <<".txt">>;
 extension(<<"audio/wav">>, _PreferExtension) -> <<".wav">>;
+extension(<<"audio/x-m4a">>, _PreferExtension) -> <<".m4a">>;
+extension(<<"audio/mp4">>, _PreferExtension) -> <<".m4a">>;
+extension(<<"audio/mp4a-latm">>, _PreferExtension) -> <<".m4a">>;
+extension(<<"application/pgp-keys">>, _PreferExtension) -> <<".asc">>;
+extension(<<"application/x-bert">>, _PreferExtension) -> <<".bert">>;
 extension(Mime, undefined) ->
     Extensions = mimetypes:extensions(Mime),
     first_extension(Extensions);
@@ -496,10 +507,17 @@ first_extension([ Ext | _ ]) ->
 %% @doc  Guess the mime type of a file by the extension of its filename.
 -spec guess_mime( file:filename_all() ) -> mime_type().
 guess_mime(File) ->
-    [Mime|_] = mimetypes:path_to_mimes(z_string:to_lower(File)),
-    maybe_map_mime(Mime).
+    case filename:extension( z_string:to_lower(File) ) of
+        <<".bert">> -> <<"application/x-bert">>;
+        <<".", Ext/binary>> ->
+            [Mime|_] = mimetypes:ext_to_mimes(Ext),
+            maybe_map_mime(Mime);
+        _ ->
+            <<"application/octet-stream">>
+    end.
 
 maybe_map_mime(<<"audio/x-wav">>) -> <<"audio/wav">>;
+maybe_map_mime(<<"audio/mp4a-latm">>) -> <<"audio/mp4">>;
 maybe_map_mime(Mime) -> Mime.
 
 % Fetch the EXIF information from the file, we remove the maker_note as it can be huge
@@ -521,7 +539,7 @@ exif(File) ->
                 #{}
         end
     catch
-        ?WITH_STACKTRACE(A, B, Stacktrace)
+        A:B:Stacktrace ->
             lager:error("Error reading exif ~p:~p in ~p", [A,B,Stacktrace]),
             #{}
     end.

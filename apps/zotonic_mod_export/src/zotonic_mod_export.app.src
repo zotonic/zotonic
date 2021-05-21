@@ -1,6 +1,6 @@
 {application, zotonic_mod_export, [
     {description, "Exports data as CSV and other formats."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

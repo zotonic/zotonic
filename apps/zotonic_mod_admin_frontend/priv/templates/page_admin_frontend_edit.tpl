@@ -5,8 +5,9 @@
 {% block html_head_extra %}
 	{% lib
 			"css/zp-menuedit.css"
+			"css/z.icons.css"
 			"css/zotonic-admin.css"
-			"admin-bootstrap3/css/bootstrap.css"
+			"css/admin-bootstrap3.css"
 			"css/admin-frontend.css"
 			"css/jquery-ui.datepicker.css"
             "css/jquery.timepicker.css"
@@ -29,9 +30,6 @@
 				{% block editcol %}
 					{% if id %}
 						<p><img src="/lib/images/spinner.gif" width="16" /> {_ Loading ... _}</p>
-						{% javascript %}
-							document.z_default_edit_id = {{ id }};
-						{% endjavascript %}
 					{% else %}
 						{% include "_admin_frontend_nopage.tpl" tree_id=tree_id %}
 					{% endif %}
@@ -40,16 +38,20 @@
 			{% elseif id %}
 				<div class="col-lg-12 col-md-12" id="editcol">
 					<p><img src="/lib/images/spinner.gif" width="16" /> {_ Loading ... _}</p>
-					{% javascript %}
-						document.z_default_edit_id = {{ id }};
-					{% endjavascript %}
 				</div>
 			{% endif %}
+
+            {% include "_admin_edit_js.tpl" %}
+            {% javascript %}
+            	cotonic.ready.then( function() {
+	                cotonic.broker.publish("$promised/menu/edit-default", { id: {{ id|default:"undefined" }} });
+	            });
+            {% endjavascript %}
+
 		{% endwith %}
 	</div>
 	{% endwith %}
 	{% endwith %}
-	{% include "_admin_edit_js.tpl" %}
 {% endblock %}
 
 {% block navbar %}
@@ -72,7 +74,7 @@
 			{% else %}
 				<div class="col-lg-12 col-md-12" id="save-buttons" style="display:none">
 			{% endif %}
-				<span class="navbar-brand visible-desktop">{_ This page _}</span>
+				<span class="navbar-brand visible-lg visible-md">{_ This page _}</span>
 
 				{% button class="btn btn-primary" text=_"Save" title=_"Save this page."
 						  action={script script="$('#save_stay').click();"}
@@ -119,7 +121,10 @@
 	{% all include "_admin_lib_js.tpl" %}
 	{% include "_editor.tpl" is_editor_include %}
 
+	{% optional include "_fileuploader_worker.tpl" %}
+
 	{% javascript %}
+		window.z_translations = window.z_translations || {};
 	    window.z_translations["Yes, discard changes"] = "{_ Yes, discard changes _}";
 	    window.z_translations["There are unsaved changes. Are you sure you want to leave without saving?"]
 	    	= "{_ There are unsaved changes. Are you sure you want to leave without saving? _}";

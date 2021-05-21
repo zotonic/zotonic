@@ -1,99 +1,118 @@
-/* zp-menuedit.css
-----------------------------------------------------------
-
-@author Marc Worrell <marc@worrell.nl>
-
-Copyright 2011 Marc Worrell
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
- 
-http://www.apache.org/licenses/LICENSE-2.0
- 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
----------------------------------------------------------- */
-
+/* zp-menuedit.css */
 ul.tree-list {
-    padding: 0; margin: 0;
+  padding: 0;
+  margin: 0;
+}
+ul.tree-list > li:last-child {
+  margin-bottom: 10px;
+}
+ul.tree-list li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  line-height: 34px;
+  border: none;
 }
 ul.tree-list li.placeholder {
-    background: #aaa;
-    border-radius: 4px;
+  background: #aaa;
+  border-radius: 4px;
 }
-
-ul.tree-list li {
-    list-style-type: none;
-    display: block;
-    line-height: 34px;
-    margin: 0;
-    padding: 0;
-    position: relative;
+ul.tree-list li li.menu-item:last-child {
+  margin: 0;
 }
-
-ul.tree-list li img.grippy {
-    padding-right: 2px;
+ul.tree-list li .menu-toggle > i,
+ul.tree-list li .z-icon-drag,
+ul.tree-list li .z-btn-remove {
+  font-size: 16px;
+  line-height: 34px;
 }
-
-ul.tree-list .active {
-    font-weight: bold;
-    background: #f0f0ff;
+ul.tree-list li div.menu-wrapper {
+  display: grid;
+  grid-template-columns: minmax(10px, auto) auto 1fr auto auto;
+  grid-template-rows: minmax(34px, auto);
+  border: 1px solid #aaa;
+  line-height: 34px;
+  border-radius: 4px;
 }
-ul.tree-list .active .menu-edit {
-    opacity: 0.5;
-    font-weight: normal;
+ul.tree-list li div.menu-wrapper .menu-drag {
+  grid-column: 1;
+  cursor: move;
+  background: repeat-y url("/lib/images/grippy2.png") 3px 0;
+  padding: 10px;
 }
-
-
-ul.tree-list li > div {
-    cursor: move;
-    clear: both;
-    border: 1px solid #E0E0E0;
-    margin-bottom: -1px;
-    position: relative;
-    padding: 0 8px;
-    background: #ffffff; /* Old browsers */
-    background: -moz-linear-gradient(top, #ffffff 0%, #f5f5f5 50%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(50%,#f5f5f5)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #ffffff 0%,#f5f5f5 50%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #ffffff 0%,#f5f5f5 50%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #ffffff 0%,#f5f5f5 50%); /* IE10+ */
-    background: linear-gradient(top, #ffffff 0%,#f5f5f5 50%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f5f5f5',GradientType=0 ); /* IE6-9 */
-    border-radius: 4px;
-    position: relative;
+ul.tree-list li div.menu-wrapper .menu-toggle {
+  grid-column: 2;
+  width: 40px;
+  height: 34px;
+  color: #ccc;
+  display: none;
 }
-
-ul.tree-list li .btns {
-    position: absolute;
-    right: 4px;
-    top: -2px;
+ul.tree-list li div.menu-wrapper .menu-toggle:hover {
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
 }
-ul.tree-list li .btns .btn-group {
-    margin-left: 4px;
-    display: inline-block;
+ul.tree-list li div.menu-wrapper .menu-toggle > i {
+  cursor: pointer;
+}
+ul.tree-list li div.menu-wrapper .menu-toggle > i.menu-collapse {
+  display: none;
+}
+ul.tree-list li div.menu-wrapper .menu-toggle > i.menu-expand {
+  display: block;
+}
+ul.tree-list li div.menu-wrapper .menu-title,
+ul.tree-list li div.menu-wrapper > a {
+  grid-column: 3;
+  line-height: 34px;
+}
+ul.tree-list li div.menu-wrapper .warning {
+  grid-column: 4;
+  line-height: 34px;
+}
+ul.tree-list li div.menu-wrapper .btns {
+  grid-column: 5;
+  margin: 0 4px;
+}
+ul.tree-list li div.menu-wrapper .btns .btn-group {
+  margin-left: 4px;
+  display: inline-block;
+}
+ul.tree-list li div.menu-wrapper > .z-btn-remove {
+  grid-column: 5;
+  margin: 0 4px;
+  height: 34px;
+  width: 24px;
+  padding-right: 4px;
+}
+ul.tree-list li div.menu-wrapper .menu-edit {
+  cursor: pointer;
+}
+ul.tree-list li.has-submenu > div a.menu-toggle {
+  display: block;
+}
+ul.tree-list li.submenu-open > div a.menu-toggle > i.menu-collapse {
+  display: block;
+}
+ul.tree-list li.submenu-open > div a.menu-toggle > i.menu-expand {
+  display: none;
+}
+ul.tree-list li > ul {
+  display: none;
+}
+ul.tree-list li.submenu-open > ul {
+  display: block;
 }
 .menu-edit a {
-    float: right;
+  float: right;
 }
 .menu-item .category {
-    color: #999;
+  color: #999;
 }
-
-ul.tree-list .btn-group {
-    margin-left: 6px;
-    margin-top: 3px;
-}
-
 #menu-editor .widget-header {
-    height: 28px;
+  height: 28px;
 }
-    #menu-editor .widget-header .btn-group {
-        margin-right: 12px;
-    }
-
+#menu-editor .widget-header .btn-group {
+  margin-right: 12px;
+}
