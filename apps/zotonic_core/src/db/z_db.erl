@@ -657,33 +657,32 @@ insert(Table, Parameters, Context) ->
             HasPropsJSON = maps:is_key(<<"props_json">>, InsertProps), 
 
             InsertProps1 = if HasPropsJSON ->
-                                   #{<<"props_json">> := PropsJSONCol} = InsertProps,
-                                   case is_map(PropsJSONCol) of
-                                       true ->
-                                           InsertProps#{
-                                             <<"props_json">> => ?DB_PROPS_JSON(filter_empty_props(PropsJSONCol))
-                                            };
-                                       false ->
-                                           InsertProps
-                                   end;
-                               HasProps ->
-                                   #{<<"props">> := PropsCol} = InsertProps,
-                               
-                                   case PropsCol of
-                                       M when is_map(M) ->
-                                         nsertProps#{
-                                             <<"props">> => ?DB_PROPS(filter_empty_props(PropsCol))
-                                            };
-                                       [ {_, _} | _ ] = PropsCol ->
-                                           Props1 = z_props:from_props(PropsCol),
-                                           InsertProps#{
-                                               <<"props">> => ?DB_PROPS(filter_empty_props(Props1))
+                                  #{<<"props_json">> := PropsJSONCol} = InsertProps,
+                                  case is_map(PropsJSONCol) of
+                                      true ->
+                                          InsertProps#{
+                                            <<"props_json">> => ?DB_PROPS_JSON(filter_empty_props(PropsJSONCol))
                                            };
-                                       _ ->
-                                           InsertProps
-                                   end;
-                               not HasPropsJSON and not HasProps ->
-                                   InsertProps
+                                      false ->
+                                          InsertProps
+                                  end;
+                              HasProps ->
+                                  #{<<"props">> := PropsCol} = InsertProps,
+                                  case PropsCol of
+                                      #{} ->
+                                          InsertProps#{
+                                            <<"props">> => ?DB_PROPS(filter_empty_props(PropsCol))
+                                           };
+                                      [ {_, _} | _ ] ->
+                                          Props1 = z_props:from_props(PropsCol),
+                                          InsertProps#{
+                                            <<"props">> => ?DB_PROPS(filter_empty_props(Props1))
+                                           };
+                                      _ ->
+                                          InsertProps
+                                  end;
+                              not HasPropsJSON and not HasProps ->
+                                  InsertProps
                            end,
 
             %% Build the SQL insert statement
