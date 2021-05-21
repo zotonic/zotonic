@@ -732,7 +732,7 @@ update(Table, Id, Parameters, Context) when is_map(Parameters) ->
     case prepare_cols(Cols, BinParams) of
         {ok, UpdateProps} ->
             F = fun(C) ->
-                UpdateProps1 = update_merge_props(DbDriver, C, QTab, Cols, Id, UpdateProps, Context),
+                UpdateProps1 = update_merge_props(DbDriver, C, Table, Cols, Id, UpdateProps, Context),
                 UpdateProps2 = update_map_atom_arrays(UpdateProps1),
                 {ColNames, Params} = lists:unzip( maps:to_list(UpdateProps2) ),
                 ColNamesNr = lists:zip(ColNames, lists:seq(2, length(ColNames)+1)),
