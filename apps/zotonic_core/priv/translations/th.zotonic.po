@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-25 10:23\n"
+"PO-Revision-Date: 2021-05-25 10:56\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -6914,15 +6914,15 @@ msgstr "ลำดับความสำคัญในแผนผังเว
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:2
 msgid "Rebuild sitemap"
-msgstr ""
+msgstr "สร้างแผนผังเว็บไซต์ใหม่"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:8
 msgid "Rebuild the sitemap index for all pages."
-msgstr ""
+msgstr "สร้างดัชนีแผนผังเว็บไซต์ใหม่สำหรับทุกหน้า"
 
 #: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:70
 msgid "Rebuilding the sitemap in the background."
-msgstr ""
+msgstr "สร้างแผนผังเว็บไซต์ใหม่ในพื้นหลัง"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:2
 msgid "Sitemap settings"
@@ -6942,7 +6942,7 @@ msgstr "ทุกปี"
 
 #: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "You are not allowed to do this"
-msgstr ""
+msgstr "คุณไม่ได้รับอนุญาตให้ทำสิ่งนี้"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
 msgid "default"
@@ -6950,7 +6950,7 @@ msgstr "ค่าเริ่มต้น"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:13
 msgid "not in sitemap"
-msgstr ""
+msgstr "ไม่อยู่ในแผนผังเว็บไซต์"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:9
 msgid "Check our Terms of Service and Privacy policies"
