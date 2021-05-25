@@ -21,11 +21,8 @@
                     action={confirm
                         text=_"This will generate a new barcode for two-factor authentication.<br>The old barcode will not be valid anymore."
                         ok=_"Generate barcode"
-                        action={dialog_open
-                                  title=_"Scan two-factor authentication barcode"
-                                  template="_dialog_auth2fa_passcode.tpl"
-                                  id=id
-                         }
+                        postback={dialog_2fa}
+                        delegate=`mod_auth2fa`
                     }
           %}
       {% endif %}
@@ -37,16 +34,8 @@
         <p>
           {% button class="btn btn-default"
                   text=_"Enable two-factor authentication..."
-                  action={confirm
-                      text=_"This will generate a new barcode.<br>From then on you will need to use a passcode to sign in."
-                      ok=_"Generate barcode"
-                      action={dialog_open
-                            title=_"Scan two-factor authentication barcode"
-                            template="_dialog_auth2fa_passcode.tpl"
-                            id=id
-                            backdrop=`static`
-                      }
-                   }
+                  postback={request_2fa}
+                  delegate=`mod_auth2fa`
           %}
         </p>
     {% endif %}
