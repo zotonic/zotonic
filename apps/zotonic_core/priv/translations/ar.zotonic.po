@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-25 10:23\n"
+"PO-Revision-Date: 2021-05-25 10:56\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -6914,15 +6914,15 @@ msgstr "الأولوية في خريطة الموقع"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:2
 msgid "Rebuild sitemap"
-msgstr ""
+msgstr "إعادة إنشاء خريطة الموقع"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:8
 msgid "Rebuild the sitemap index for all pages."
-msgstr ""
+msgstr "إعادة إنشاء فهرس خريطة الموقع لجميع الصفحات."
 
 #: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:70
 msgid "Rebuilding the sitemap in the background."
-msgstr ""
+msgstr "إعادة إنشاء خريطة الموقع في الخلفية."
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:2
 msgid "Sitemap settings"
@@ -6942,7 +6942,7 @@ msgstr "سنوي"
 
 #: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "You are not allowed to do this"
-msgstr ""
+msgstr "لا يسمح لك أن تفعل هذا"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
 msgid "default"
@@ -6950,7 +6950,7 @@ msgstr "إفتراضي"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:13
 msgid "not in sitemap"
-msgstr ""
+msgstr "ليس في خريطة الموقع"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:9
 msgid "Check our Terms of Service and Privacy policies"
