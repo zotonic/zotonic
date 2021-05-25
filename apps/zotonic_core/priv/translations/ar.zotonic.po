@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-11 16:20\n"
+"PO-Revision-Date: 2021-05-25 10:56\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -864,7 +864,7 @@ msgstr "اسم الكتلة"
 msgid "Block quote"
 msgstr "اقتباس الكتلة"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:31
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:34
 msgid "Caches have been flushed."
 msgstr "تم مسح ذاكرة التخزين المؤقت."
 
@@ -1797,7 +1797,7 @@ msgstr "إدارة النظام"
 msgid "Telephone"
 msgstr "الهاتف"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:37
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:40
 msgid "Templates will be recompiled."
 msgstr "سيتم إعادة تجميع النماذج."
 
@@ -1810,7 +1810,7 @@ msgstr "اختبار الاستعلام"
 msgid "Text"
 msgstr "النص"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:56
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:59
 msgid "The category tree is rebuilding. This can take a long time."
 msgstr "يتم إعادة بناء شجرة الفئات، قد يستغرق هذا لمدة طويلة."
 
@@ -1818,11 +1818,11 @@ msgstr "يتم إعادة بناء شجرة الفئات، قد يستغرق ه�
 msgid "The page"
 msgstr "الصفحة"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:44
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
 msgstr "يتم إعادة بناء فهرس البحث. يعتمد هذا على حجم قاعدة البيانات و قد يستغرق هذا لمدة طويلة."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:50
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:53
 msgid "The site’s data is being reinstalled. Watch the console for messages"
 msgstr "لقد تم إعادة تثبيت بيانات الموقع. شاهد وحدة تحكم في الرسائل"
 
@@ -2096,7 +2096,7 @@ msgstr "ليس لديك إذن لإنشاء هذه الصفحة."
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "ليس لديك الأذونات المناسبة لتحميل هذا النوع من الملفات."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:66
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:69
 msgid "You don’t have permission to perform this action."
 msgstr "ليس لديك إذن للقيام بهذا الإجراء."
 
@@ -3366,7 +3366,7 @@ msgstr "قاعدة البيانات"
 msgid "Dispatch"
 msgstr "إرسال"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/erlang.tpl:4
+#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/erlang.tpl:3
 msgid "Erlang VM"
 msgstr "إرلانج إم"
 
@@ -3374,7 +3374,7 @@ msgstr "إرلانج إم"
 msgid "Memory Usage"
 msgstr "استخدام الذاكرة"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:53
+#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:46
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:20
 #: apps/zotonic_site_status/priv/templates/stats.tpl:3./apps/zotonic_site_status/priv/templates/stats.tpl:8
 msgid "Statistics"
@@ -6912,6 +6912,18 @@ msgstr "شهريا"
 msgid "Priority in sitemap"
 msgstr "الأولوية في خريطة الموقع"
 
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:2
+msgid "Rebuild sitemap"
+msgstr "إعادة إنشاء خريطة الموقع"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:8
+msgid "Rebuild the sitemap index for all pages."
+msgstr "إعادة إنشاء فهرس خريطة الموقع لجميع الصفحات."
+
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:70
+msgid "Rebuilding the sitemap in the background."
+msgstr "إعادة إنشاء خريطة الموقع في الخلفية."
+
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:2
 msgid "Sitemap settings"
 msgstr "إعدادات خريطة الموقع"
@@ -6928,9 +6940,17 @@ msgstr "أسبوعي (افتراضي)"
 msgid "Yearly"
 msgstr "سنوي"
 
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
+msgid "You are not allowed to do this"
+msgstr "لا يسمح لك أن تفعل هذا"
+
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
 msgid "default"
 msgstr "إفتراضي"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:13
+msgid "not in sitemap"
+msgstr "ليس في خريطة الموقع"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:9
 msgid "Check our Terms of Service and Privacy policies"
@@ -8335,7 +8355,7 @@ msgstr "عذرًا ، ليس لديك إذن بإعادة تحميل الترج�
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "عذرًا ، ليس لديك إذن للبحث عن الترجمات."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:381./apps/zotonic_mod_translation/src/mod_translation.erl:517
+#: apps/zotonic_mod_translation/src/mod_translation.erl:381./apps/zotonic_mod_translation/src/mod_translation.erl:519
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "عذرًا ، ليس لديك إذن بتعيين اللغة الافتراضية."
 
@@ -8363,7 +8383,7 @@ msgstr "يمكن ترجمة العنوان والجسم والنصوص الأخ�
 msgid "Translate this page in other languages."
 msgstr "ترجم هذه الصفحة إلى لغات أخرى."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:821
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:823
 msgid "Translation"
 msgstr "ترجمة"
 

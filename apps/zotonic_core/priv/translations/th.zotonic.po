@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-11 16:20\n"
+"PO-Revision-Date: 2021-05-25 10:56\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -864,7 +864,7 @@ msgstr "ชื่อบล็อก"
 msgid "Block quote"
 msgstr "บล็อกคำพูด"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:31
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:34
 msgid "Caches have been flushed."
 msgstr "ล้างแคชแล้ว"
 
@@ -1797,7 +1797,7 @@ msgstr "การดูแลระบบ"
 msgid "Telephone"
 msgstr "โทรศัพท์"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:37
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:40
 msgid "Templates will be recompiled."
 msgstr "เทมเพลตจะถูกคอมไพล์ใหม่"
 
@@ -1810,7 +1810,7 @@ msgstr "ทดสอบแบบสอบถาม"
 msgid "Text"
 msgstr "ข้อความ"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:56
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:59
 msgid "The category tree is rebuilding. This can take a long time."
 msgstr "ต้นไม้หมวดหมู่กำลังสร้างใหม่ อาจใช้เวลานาน"
 
@@ -1818,11 +1818,11 @@ msgstr "ต้นไม้หมวดหมู่กำลังสร้าง
 msgid "The page"
 msgstr "หน้า"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:44
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
 msgstr "ดัชนีการค้นหากำลังสร้างใหม่ ขึ้นอยู่กับขนาดฐานข้อมูลอาจใช้เวลานาน"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:50
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:53
 msgid "The site’s data is being reinstalled. Watch the console for messages"
 msgstr "กำลังติดตั้งข้อมูลของไซต์ใหม่ ดูคอนโซลสำหรับข้อความ"
 
@@ -2096,7 +2096,7 @@ msgstr "คุณไม่มีสิทธิ์สร้างเพจนี
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "คุณไม่มีสิทธิ์ที่เหมาะสมในการอัปโหลดไฟล์ประเภทนี้"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:66
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:69
 msgid "You don’t have permission to perform this action."
 msgstr "คุณไม่มีสิทธิ์ดำเนินการนี้"
 
@@ -3366,7 +3366,7 @@ msgstr "ฐานข้อมูล"
 msgid "Dispatch"
 msgstr "จัดส่ง"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/erlang.tpl:4
+#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/erlang.tpl:3
 msgid "Erlang VM"
 msgstr "Erlang VM"
 
@@ -3374,7 +3374,7 @@ msgstr "Erlang VM"
 msgid "Memory Usage"
 msgstr "การใช้ความจำ"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:53
+#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:46
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:20
 #: apps/zotonic_site_status/priv/templates/stats.tpl:3./apps/zotonic_site_status/priv/templates/stats.tpl:8
 msgid "Statistics"
@@ -6912,6 +6912,18 @@ msgstr "รายเดือน"
 msgid "Priority in sitemap"
 msgstr "ลำดับความสำคัญในแผนผังเว็บไซต์"
 
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:2
+msgid "Rebuild sitemap"
+msgstr "สร้างแผนผังเว็บไซต์ใหม่"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:8
+msgid "Rebuild the sitemap index for all pages."
+msgstr "สร้างดัชนีแผนผังเว็บไซต์ใหม่สำหรับทุกหน้า"
+
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:70
+msgid "Rebuilding the sitemap in the background."
+msgstr "สร้างแผนผังเว็บไซต์ใหม่ในพื้นหลัง"
+
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:2
 msgid "Sitemap settings"
 msgstr "การตั้งค่าแผนผังเว็บไซต์"
@@ -6928,9 +6940,17 @@ msgstr "รายสัปดาห์ (ค่าเริ่มต้น)"
 msgid "Yearly"
 msgstr "ทุกปี"
 
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
+msgid "You are not allowed to do this"
+msgstr "คุณไม่ได้รับอนุญาตให้ทำสิ่งนี้"
+
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
 msgid "default"
 msgstr "ค่าเริ่มต้น"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:13
+msgid "not in sitemap"
+msgstr "ไม่อยู่ในแผนผังเว็บไซต์"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:9
 msgid "Check our Terms of Service and Privacy policies"
@@ -8335,7 +8355,7 @@ msgstr "ขออภัยคุณไม่มีสิทธิ์โหลด
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "ขออภัยคุณไม่มีสิทธิ์สแกนคำแปล"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:381./apps/zotonic_mod_translation/src/mod_translation.erl:517
+#: apps/zotonic_mod_translation/src/mod_translation.erl:381./apps/zotonic_mod_translation/src/mod_translation.erl:519
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้ตั้งค่าภาษาเริ่มต้น"
 
@@ -8363,7 +8383,7 @@ msgstr "ชื่อเรื่องเนื้อหาและข้อค
 msgid "Translate this page in other languages."
 msgstr "แปลหน้านี้เป็นภาษาอื่น"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:821
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:823
 msgid "Translation"
 msgstr "การแปล"
 

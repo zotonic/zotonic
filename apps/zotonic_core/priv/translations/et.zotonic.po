@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-11 16:20\n"
+"PO-Revision-Date: 2021-05-25 10:56\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -864,7 +864,7 @@ msgstr "Blokeeri nimi"
 msgid "Block quote"
 msgstr "Blokeeri tsitaat"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:31
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:34
 msgid "Caches have been flushed."
 msgstr "Vahemälud on loputatud."
 
@@ -1797,7 +1797,7 @@ msgstr "S√ºsteemi adminnimine"
 msgid "Telephone"
 msgstr "Telefon"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:37
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:40
 msgid "Templates will be recompiled."
 msgstr "Mallid kompileeritakse uuesti."
 
@@ -1810,7 +1810,7 @@ msgstr "Testpäring"
 msgid "Text"
 msgstr "Tekst"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:56
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:59
 msgid "The category tree is rebuilding. This can take a long time."
 msgstr "Kategooriapuu on uuesti üles ehitamas. See võib võtta kaua aega."
 
@@ -1818,11 +1818,11 @@ msgstr "Kategooriapuu on uuesti üles ehitamas. See võib võtta kaua aega."
 msgid "The page"
 msgstr "Leht"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:44
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
 msgstr "Otsingu register on ülesehitamisel. Sõltuvalt andmebaasi suurusest võib see võtta kaua aega."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:50
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:53
 msgid "The site’s data is being reinstalled. Watch the console for messages"
 msgstr "Saidi andmeid installitakse uuesti. Vaadake konsooli sõnumite kohta"
 
@@ -2096,7 +2096,7 @@ msgstr "Teil pole selle lehe loomiseks luba."
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Teil pole seda tüüpi failide üleslaadimiseks õigeid õigusi."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:66
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:69
 msgid "You don’t have permission to perform this action."
 msgstr "Teil pole selle toimingu tegemiseks luba."
 
@@ -3366,7 +3366,7 @@ msgstr "Andmebaas"
 msgid "Dispatch"
 msgstr "Ärasaatmine"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/erlang.tpl:4
+#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/erlang.tpl:3
 msgid "Erlang VM"
 msgstr "Erlang VM"
 
@@ -3374,7 +3374,7 @@ msgstr "Erlang VM"
 msgid "Memory Usage"
 msgstr "Mälu kasutamine"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:53
+#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:46
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:20
 #: apps/zotonic_site_status/priv/templates/stats.tpl:3./apps/zotonic_site_status/priv/templates/stats.tpl:8
 msgid "Statistics"
@@ -6912,6 +6912,18 @@ msgstr "Igakuine"
 msgid "Priority in sitemap"
 msgstr "Prioriteet saidikaardil"
 
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:2
+msgid "Rebuild sitemap"
+msgstr "Ehitage saidikaart uuesti üles"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:8
+msgid "Rebuild the sitemap index for all pages."
+msgstr "Taastage kõigi lehtede saidikaardi register."
+
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:70
+msgid "Rebuilding the sitemap in the background."
+msgstr "Saidikaardi taastamine taustal."
+
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:2
 msgid "Sitemap settings"
 msgstr "Saidiplaani seaded"
@@ -6928,9 +6940,17 @@ msgstr "Iganädalane (vaikimisi)"
 msgid "Yearly"
 msgstr "Iga-aastane"
 
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
+msgid "You are not allowed to do this"
+msgstr "Teil pole lubatud seda teha"
+
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
 msgid "default"
 msgstr "vaikimisi"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:13
+msgid "not in sitemap"
+msgstr "mitte saidikaardil"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:9
 msgid "Check our Terms of Service and Privacy policies"
@@ -8335,7 +8355,7 @@ msgstr "Vabandust, teil pole tõlkete uuesti laadimiseks luba."
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Vabandust, teil pole tõlkete otsimiseks luba."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:381./apps/zotonic_mod_translation/src/mod_translation.erl:517
+#: apps/zotonic_mod_translation/src/mod_translation.erl:381./apps/zotonic_mod_translation/src/mod_translation.erl:519
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Vabandust, teil pole luba vaikekeele seadmiseks."
 
@@ -8363,7 +8383,7 @@ msgstr "Pealkirja, sisu ja muid tekste saab tõlkida erinevates keeltes. Siin sa
 msgid "Translate this page in other languages."
 msgstr "Tõlgi see leht teise keelde."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:821
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:823
 msgid "Translation"
 msgstr "Tõlge"
 

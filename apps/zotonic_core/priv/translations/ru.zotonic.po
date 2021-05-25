@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-11 16:20\n"
+"PO-Revision-Date: 2021-05-25 10:56\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -864,7 +864,7 @@ msgstr "Название блока"
 msgid "Block quote"
 msgstr "Цитату"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:31
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:34
 msgid "Caches have been flushed."
 msgstr "Кэши смыты."
 
@@ -1797,7 +1797,7 @@ msgstr "Системное администрирование"
 msgid "Telephone"
 msgstr "Телефон"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:37
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:40
 msgid "Templates will be recompiled."
 msgstr "Шаблоны будут перекомпилированы."
 
@@ -1810,7 +1810,7 @@ msgstr "Тестовый запрос"
 msgid "Text"
 msgstr "Текст"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:56
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:59
 msgid "The category tree is rebuilding. This can take a long time."
 msgstr "Дерево категорий восстанавливается. Это может занять много времени."
 
@@ -1818,11 +1818,11 @@ msgstr "Дерево категорий восстанавливается. Эт
 msgid "The page"
 msgstr "Страница"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:44
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
 msgstr "Поисковый индекс восстанавливается. В зависимости от размера базы данных это может занять много времени."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:50
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:53
 msgid "The site’s data is being reinstalled. Watch the console for messages"
 msgstr "Данные сайта переустанавливаются. Следите за консолью за сообщениями"
 
@@ -2096,7 +2096,7 @@ msgstr "У вас нет разрешения на создание этой с�
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "У вас нет требуемых прав для закачивания данного типа файла."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:66
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:69
 msgid "You don’t have permission to perform this action."
 msgstr "У вас нет разрешения на выполнение этого действия."
 
@@ -3366,7 +3366,7 @@ msgstr "База данных"
 msgid "Dispatch"
 msgstr "Отправлять"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/erlang.tpl:4
+#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/erlang.tpl:3
 msgid "Erlang VM"
 msgstr "Эрланг ВМ"
 
@@ -3374,7 +3374,7 @@ msgstr "Эрланг ВМ"
 msgid "Memory Usage"
 msgstr "Использование памяти"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:53
+#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:46
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:20
 #: apps/zotonic_site_status/priv/templates/stats.tpl:3./apps/zotonic_site_status/priv/templates/stats.tpl:8
 msgid "Statistics"
@@ -6912,6 +6912,18 @@ msgstr "Ежемесячно"
 msgid "Priority in sitemap"
 msgstr "Приоритет на карте сайта"
 
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:2
+msgid "Rebuild sitemap"
+msgstr "Восстановить карту сайта"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:8
+msgid "Rebuild the sitemap index for all pages."
+msgstr "Восстановите индекс карты сайта для всех страниц."
+
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:70
+msgid "Rebuilding the sitemap in the background."
+msgstr "Восстановление карты сайта в фоновом режиме."
+
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:2
 msgid "Sitemap settings"
 msgstr "Настройки элементов"
@@ -6928,9 +6940,17 @@ msgstr "Еженедельно (по умолчанию)"
 msgid "Yearly"
 msgstr "Ежегодно"
 
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
+msgid "You are not allowed to do this"
+msgstr "Вам не разрешено это делать"
+
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
 msgid "default"
 msgstr "стандартный"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:13
+msgid "not in sitemap"
+msgstr "нет в карте сайта"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:9
 msgid "Check our Terms of Service and Privacy policies"
@@ -8335,7 +8355,7 @@ msgstr "Извините, у вас нет разрешения на перез�
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Извините, у вас нет разрешения на сканирование на предмет переводов."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:381./apps/zotonic_mod_translation/src/mod_translation.erl:517
+#: apps/zotonic_mod_translation/src/mod_translation.erl:381./apps/zotonic_mod_translation/src/mod_translation.erl:519
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Извините, у вас нет разрешения на установку языка по умолчанию."
 
@@ -8363,7 +8383,7 @@ msgstr "Название, тело и другие тексты могут бы�
 msgid "Translate this page in other languages."
 msgstr "Перевести эту страницу на другие языки."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:821
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:823
 msgid "Translation"
 msgstr "Перевод"
 

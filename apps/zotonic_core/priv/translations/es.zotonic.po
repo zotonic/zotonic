@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-11 16:20\n"
+"PO-Revision-Date: 2021-05-25 10:56\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -864,7 +864,7 @@ msgstr "Nombre de bloque"
 msgid "Block quote"
 msgstr "Cita en bloque"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:31
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:34
 msgid "Caches have been flushed."
 msgstr "El caché ha sido vaciado."
 
@@ -1797,7 +1797,7 @@ msgstr "Administración de sistema"
 msgid "Telephone"
 msgstr "Teléfono"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:37
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:40
 msgid "Templates will be recompiled."
 msgstr "Las plantillas serán recompiladas."
 
@@ -1810,7 +1810,7 @@ msgstr "Consulta de prueba"
 msgid "Text"
 msgstr "Texto"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:56
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:59
 msgid "The category tree is rebuilding. This can take a long time."
 msgstr "El árbol de categorías está reconstruyendo. Esto puede llevar mucho tiempo."
 
@@ -1818,11 +1818,11 @@ msgstr "El árbol de categorías está reconstruyendo. Esto puede llevar mucho t
 msgid "The page"
 msgstr "La página"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:44
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
 msgstr "El índice de búsqueda está reconstruyendo. Dependiendo del tamaño de la base de datos, esto."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:50
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:53
 msgid "The site’s data is being reinstalled. Watch the console for messages"
 msgstr "Los datos del sitio están siendo reinstalados. Mira la consola para los mensajes"
 
@@ -2096,7 +2096,7 @@ msgstr "No tienes permiso para crear esta página."
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "No tiene los permisos adecuados para subir este tipo de archivo."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:66
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:69
 msgid "You don’t have permission to perform this action."
 msgstr "No tiene permiso para realizar esta acción."
 
@@ -3366,7 +3366,7 @@ msgstr "Base de datos"
 msgid "Dispatch"
 msgstr "Envío"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/erlang.tpl:4
+#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/erlang.tpl:3
 msgid "Erlang VM"
 msgstr "Erlang VM"
 
@@ -3374,7 +3374,7 @@ msgstr "Erlang VM"
 msgid "Memory Usage"
 msgstr "Uso de memoria"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:53
+#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:46
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:20
 #: apps/zotonic_site_status/priv/templates/stats.tpl:3./apps/zotonic_site_status/priv/templates/stats.tpl:8
 msgid "Statistics"
@@ -6912,6 +6912,18 @@ msgstr "Mensual"
 msgid "Priority in sitemap"
 msgstr "Prioridad en el mapa del sitio"
 
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:2
+msgid "Rebuild sitemap"
+msgstr "Reconstruir mapa del sitio"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:8
+msgid "Rebuild the sitemap index for all pages."
+msgstr "Reconstruya el índice del mapa del sitio para todas las páginas."
+
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:70
+msgid "Rebuilding the sitemap in the background."
+msgstr "Reconstruyendo el mapa del sitio en segundo plano."
+
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:2
 msgid "Sitemap settings"
 msgstr "Configuración del mapa del sitio"
@@ -6928,9 +6940,17 @@ msgstr "Semanal (por defecto)"
 msgid "Yearly"
 msgstr "Anual"
 
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
+msgid "You are not allowed to do this"
+msgstr "No tienes permitido hacer esto"
+
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
 msgid "default"
 msgstr "por defecto"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:13
+msgid "not in sitemap"
+msgstr "no en el mapa del sitio"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:9
 msgid "Check our Terms of Service and Privacy policies"
@@ -8336,7 +8356,7 @@ msgstr "Lo sentimos, no tiene permisos para recargar las traducciones."
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Disculpe, no tiene permiso para buscar las traducciones."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:381./apps/zotonic_mod_translation/src/mod_translation.erl:517
+#: apps/zotonic_mod_translation/src/mod_translation.erl:381./apps/zotonic_mod_translation/src/mod_translation.erl:519
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Lo sentimos, no tiene permiso para establecer por defecto el idioma."
 
@@ -8364,7 +8384,7 @@ msgstr "El título, cuerpo y otros textos pueden ser traducidos en distintos idi
 msgid "Translate this page in other languages."
 msgstr "Traducir esta página a otros idiomas."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:821
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:823
 msgid "Translation"
 msgstr "Traducción"
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-11 16:20\n"
+"PO-Revision-Date: 2021-05-25 10:56\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -864,7 +864,7 @@ msgstr "Blockera namn"
 msgid "Block quote"
 msgstr "Block citat"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:31
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:34
 msgid "Caches have been flushed."
 msgstr "Cachar har rensats."
 
@@ -1797,7 +1797,7 @@ msgstr "Systemadministration"
 msgid "Telephone"
 msgstr "Telefon"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:37
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:40
 msgid "Templates will be recompiled."
 msgstr "Mallar kommer att byggas om."
 
@@ -1810,7 +1810,7 @@ msgstr "Testfråga"
 msgid "Text"
 msgstr "Text"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:56
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:59
 msgid "The category tree is rebuilding. This can take a long time."
 msgstr "Kategorin träd ombyggnad. Detta kan ta lång tid."
 
@@ -1818,11 +1818,11 @@ msgstr "Kategorin träd ombyggnad. Detta kan ta lång tid."
 msgid "The page"
 msgstr "Sidan"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:44
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
 msgstr "Sökindex är ombyggnad. Beroende på databasens storlek, kan det här ta lång tid."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:50
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:53
 msgid "The site’s data is being reinstalled. Watch the console for messages"
 msgstr "Webbplatsens data håller på att installeras. Titta på konsolen för meddelanden"
 
@@ -2096,7 +2096,7 @@ msgstr "Du har inte behörighet att skapa den här sidan."
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Du inte har rätt behörighet för att ladda upp den här typen av fil."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:66
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:69
 msgid "You don’t have permission to perform this action."
 msgstr "Du har inte behörighet att utföra den här åtgärden."
 
@@ -3366,7 +3366,7 @@ msgstr "Databas"
 msgid "Dispatch"
 msgstr "Avsändande"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/erlang.tpl:4
+#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/erlang.tpl:3
 msgid "Erlang VM"
 msgstr "Erlang VM"
 
@@ -3374,7 +3374,7 @@ msgstr "Erlang VM"
 msgid "Memory Usage"
 msgstr "Minnesanvändning"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:53
+#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:46
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:20
 #: apps/zotonic_site_status/priv/templates/stats.tpl:3./apps/zotonic_site_status/priv/templates/stats.tpl:8
 msgid "Statistics"
@@ -6912,6 +6912,18 @@ msgstr "En gång i månaden"
 msgid "Priority in sitemap"
 msgstr "Prioritet i webbplatskarta"
 
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:2
+msgid "Rebuild sitemap"
+msgstr "Bygg om webbplatskarta"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:8
+msgid "Rebuild the sitemap index for all pages."
+msgstr "Bygg om webbplatskartaindex för alla sidor."
+
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:70
+msgid "Rebuilding the sitemap in the background."
+msgstr "Ombyggnaden av webbplatskartan i bakgrunden."
+
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:2
 msgid "Sitemap settings"
 msgstr "Inställningar för webbplatskarta"
@@ -6928,9 +6940,17 @@ msgstr "Veckovis (standard)"
 msgid "Yearly"
 msgstr "Årlig"
 
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
+msgid "You are not allowed to do this"
+msgstr "Du får inte göra detta"
+
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
 msgid "default"
 msgstr "standard"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:13
+msgid "not in sitemap"
+msgstr "inte i webbplatskarta"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:9
 msgid "Check our Terms of Service and Privacy policies"
@@ -8335,7 +8355,7 @@ msgstr "Tyvärr har du inte behörighet att ladda om översättningar."
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Tyvärr har du inte behörighet att söka efter översättningar."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:381./apps/zotonic_mod_translation/src/mod_translation.erl:517
+#: apps/zotonic_mod_translation/src/mod_translation.erl:381./apps/zotonic_mod_translation/src/mod_translation.erl:519
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Tyvärr har du inte behörighet att ställa in standardspråket."
 
@@ -8363,7 +8383,7 @@ msgstr "Titel, brödtext och andra texter kan översättas till olika språk. H�
 msgid "Translate this page in other languages."
 msgstr "Översätt den här sidan till andra språk."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:821
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:823
 msgid "Translation"
 msgstr "Översättning"
 
