@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-25 10:23\n"
+"PO-Revision-Date: 2021-05-25 10:56\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -6916,15 +6916,15 @@ msgstr "Prioriteit in de sitemap"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:2
 msgid "Rebuild sitemap"
-msgstr ""
+msgstr "Bouw de sitemap opnieuw op"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:8
 msgid "Rebuild the sitemap index for all pages."
-msgstr ""
+msgstr "Bouw de sitemapindex opnieuw op voor alle pagina's."
 
 #: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:70
 msgid "Rebuilding the sitemap in the background."
-msgstr ""
+msgstr "Het opnieuw opbouwen van de sitemap op de achtergrond."
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:2
 msgid "Sitemap settings"
@@ -6944,7 +6944,7 @@ msgstr "Jaarlijks"
 
 #: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "You are not allowed to do this"
-msgstr ""
+msgstr "U mag dit niet doen"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
 msgid "default"
@@ -6952,7 +6952,7 @@ msgstr "standaard"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:13
 msgid "not in sitemap"
-msgstr ""
+msgstr "niet in sitemap"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:9
 msgid "Check our Terms of Service and Privacy policies"
