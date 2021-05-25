@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-11 16:20\n"
+"PO-Revision-Date: 2021-05-25 10:23\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -864,7 +864,7 @@ msgstr "Blokir nama"
 msgid "Block quote"
 msgstr "Blokir kutipan"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:31
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:34
 msgid "Caches have been flushed."
 msgstr "Cache telah memerah."
 
@@ -1797,7 +1797,7 @@ msgstr "Sistem administrasi"
 msgid "Telephone"
 msgstr "Telepon"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:37
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:40
 msgid "Templates will be recompiled."
 msgstr "Template akan dikompilasi ulang."
 
@@ -1810,7 +1810,7 @@ msgstr "Tes pertanyaan"
 msgid "Text"
 msgstr "Teks"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:56
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:59
 msgid "The category tree is rebuilding. This can take a long time."
 msgstr "Kategori pohon adalah membangun kembali. Hal ini dapat memakan waktu yang lama."
 
@@ -1818,11 +1818,11 @@ msgstr "Kategori pohon adalah membangun kembali. Hal ini dapat memakan waktu yan
 msgid "The page"
 msgstr "Halaman"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:44
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
 msgstr "Pencarian indeks pembangunan kembali. Tergantung pada ukuran database, hal ini dapat memakan waktu yang lama."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:50
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:53
 msgid "The site’s data is being reinstalled. Watch the console for messages"
 msgstr "Situs data ini sedang diinstal ulang. Lihat konsol untuk pesan"
 
@@ -2096,7 +2096,7 @@ msgstr "Anda tidak memiliki izin untuk membuat halaman ini."
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Anda tidak memiliki hak akses untuk mengunggah jenis file ini."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:66
+#: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:69
 msgid "You don’t have permission to perform this action."
 msgstr "Anda tidak memiliki izin untuk melakukan tindakan ini."
 
@@ -3365,7 +3365,7 @@ msgstr "Basisdata"
 msgid "Dispatch"
 msgstr "Pengiriman"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/erlang.tpl:4
+#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/erlang.tpl:3
 msgid "Erlang VM"
 msgstr "Erlang VM"
 
@@ -3373,7 +3373,7 @@ msgstr "Erlang VM"
 msgid "Memory Usage"
 msgstr "Penggunaan Memori"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:53
+#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:46
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:20
 #: apps/zotonic_site_status/priv/templates/stats.tpl:3./apps/zotonic_site_status/priv/templates/stats.tpl:8
 msgid "Statistics"
@@ -6912,6 +6912,18 @@ msgstr "Per minggu"
 msgid "Priority in sitemap"
 msgstr "Prioritas di peta situs"
 
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:2
+msgid "Rebuild sitemap"
+msgstr ""
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:8
+msgid "Rebuild the sitemap index for all pages."
+msgstr ""
+
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:70
+msgid "Rebuilding the sitemap in the background."
+msgstr ""
+
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:2
 msgid "Sitemap settings"
 msgstr "Pengaturan peta situs"
@@ -6928,9 +6940,17 @@ msgstr "Mingguan (standar)"
 msgid "Yearly"
 msgstr "Per tahun"
 
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
+msgid "You are not allowed to do this"
+msgstr ""
+
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
 msgid "default"
 msgstr "standar"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:13
+msgid "not in sitemap"
+msgstr ""
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:9
 msgid "Check our Terms of Service and Privacy policies"
@@ -8335,7 +8355,7 @@ msgstr "Maaf, anda tidak memiliki izin untuk reload terjemahan."
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Maaf, anda tidak memiliki izin untuk scan untuk terjemahan."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:381./apps/zotonic_mod_translation/src/mod_translation.erl:517
+#: apps/zotonic_mod_translation/src/mod_translation.erl:381./apps/zotonic_mod_translation/src/mod_translation.erl:519
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Maaf, anda tidak memiliki izin untuk mengatur bahasa default."
 
@@ -8363,7 +8383,7 @@ msgstr "Judul, tubuh, dan teks-teks lain dapat diterjemahkan dalam berbagai baha
 msgid "Translate this page in other languages."
 msgstr "Terjemahkan halaman ini dalam bahasa lain."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:821
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:823
 msgid "Translation"
 msgstr "Terjemahan"
 
