@@ -54,7 +54,7 @@
 -define(MAX_RETRY, 10).
 
 % Max number of e-mails being sent at the same time
--define(EMAIL_MAX_SENDING, 100).
+-define(EMAIL_MAX_SENDING, 30).
 
 % Max number of connections per (relay) domain.
 -define(EMAIL_MAX_DOMAIN, 5).
