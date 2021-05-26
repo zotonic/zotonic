@@ -482,6 +482,12 @@ extension(<<"audio/mp4">>, _PreferExtension) -> <<".m4a">>;
 extension(<<"audio/mp4a-latm">>, _PreferExtension) -> <<".m4a">>;
 extension(<<"application/pgp-keys">>, _PreferExtension) -> <<".asc">>;
 extension(<<"application/x-bert">>, _PreferExtension) -> <<".bert">>;
+% Fonts have since 2017 their own mime types- https://tools.ietf.org/html/rfc8081#section-4.4.5
+extension(<<"font/woff">>, _PreferExtension) -> <<".woff">>;
+extension(<<"font/woff2">>, _PreferExtension) -> <<".woff2">>;
+extension(<<"font/ttf">>, _PreferExtension) -> <<".ttf">>;
+extension(<<"font/eot">>, _PreferExtension) -> <<".eot">>;
+extension(<<"font/otf">>, _PreferExtension) -> <<".otf">>;
 extension(Mime, undefined) ->
     Extensions = mimetypes:extensions(Mime),
     first_extension(Extensions);
@@ -509,6 +515,12 @@ first_extension([ Ext | _ ]) ->
 guess_mime(File) ->
     case filename:extension( z_string:to_lower(File) ) of
         <<".bert">> -> <<"application/x-bert">>;
+        % Fonts have since 2017 their own mime types- https://tools.ietf.org/html/rfc8081#section-4.4.5
+        <<".woff">> -> <<"font/woff">>;
+        <<".woff2">> -> <<"font/woff2">>;
+        <<".ttf">> -> <<"font/ttf">>;
+        <<".eot">> -> <<"font/eot">>;
+        <<".otf">> -> <<"font/otf">>;
         <<".", Ext/binary>> ->
             [Mime|_] = mimetypes:ext_to_mimes(Ext),
             maybe_map_mime(Mime);
