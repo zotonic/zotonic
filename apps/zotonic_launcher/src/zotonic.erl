@@ -96,10 +96,37 @@ runtests(Tests) ->
         end),
     ok.
 
-%% @doc Stop the zotonic server.
+%% @doc Stop all sites, the zotonic server and the beam.
 -spec stop() -> ok.
 stop() ->
-    application:stop(zotonic_launcher).
+    Sites = z_sites_manager:get_sites(),
+    maps:fold(
+        fun
+            (_Site, stopping, _Acc) -> ok;
+            (_Site, stopped, _Acc) -> ok;
+            (Site, _Status, _Acc) -> z_sites_manager:stop(Site)
+        end,
+        ok,
+        Sites),
+    % Wait a bit till all sites are stopped (max 5 secs)
+    await_sites_stopping(50),
+    application:stop(zotonic_launcher),
+    application:stop(exometer),
+    application:stop(jobs),
+    application:stop(mnesia),
+    application:stop(epgsql),
+    erlang:halt().
+
+
+await_sites_stopping(0) -> ok;
+await_sites_stopping(N) ->
+    case z_sites_manager:is_sites_running() of
+        true ->
+            timer:sleep(100),
+            await_sites_stopping(N-1);
+        false ->
+            ok
+    end.
 
 
 %% @doc Stop a zotonic server on a specific node
@@ -107,7 +134,7 @@ stop() ->
 stop([Node]) ->
     io:format("Stopping:~p~n", [Node]),
     case net_adm:ping(Node) of
-        pong -> rpc:cast(Node, init, stop, []);
+        pong -> rpc:cast(Node, zotonic, stop, []);
         pang -> io:format("There is no node with this name~n")
     end,
     init:stop().
