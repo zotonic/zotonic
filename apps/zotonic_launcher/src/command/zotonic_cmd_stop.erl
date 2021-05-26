@@ -35,7 +35,7 @@ run(_) ->
                     io:format("Stopping zotonic ~p ..", [Target]),
                     case net_adm:ping(Target) of
                         pong ->
-                            rpc:call(Target, init, stop, []),
+                            rpc:call(Target, zotonic, stop, []),
                             wait_stopped(Target, timestamp() + ?MAXWAIT);
                         pang ->
                             io:format(" Not running~n"),
