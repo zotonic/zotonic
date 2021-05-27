@@ -3590,7 +3590,7 @@ msgstr ""
 msgid "Enable 2FA"
 msgstr ""
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:39
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:36
 msgid "Enable two-factor authentication..."
 msgstr ""
 
@@ -3602,7 +3602,7 @@ msgstr ""
 msgid "From now on an extra passcode is needed to sign in."
 msgstr ""
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:23./apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:42
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:23
 msgid "Generate barcode"
 msgstr ""
 
@@ -3622,7 +3622,7 @@ msgid ""
 "regardless of the setting above."
 msgstr ""
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:57./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:54
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:46./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:54
 msgid "Only the admin can change the two-factor authentication of the admin."
 msgstr ""
 
@@ -3655,10 +3655,6 @@ msgid ""
 "authentication/duo-mobile\">Duo Mobile</a>."
 msgstr ""
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:25./apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:44
-msgid "Scan two-factor authentication barcode"
-msgstr ""
-
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:90
 msgid "Scan two-factor authentication passcode"
 msgstr ""
@@ -3683,12 +3679,6 @@ msgid ""
 "barcode will not be valid anymore."
 msgstr ""
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:41
-msgid ""
-"This will generate a new barcode.<br>From then on you will need to use a "
-"passcode to sign in."
-msgstr ""
-
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:106
 msgid "Two-factor authentication"
 msgstr ""
@@ -3707,7 +3697,7 @@ msgstr ""
 msgid "Two-factor authentication is enabled for this user."
 msgstr ""
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:34
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:31
 msgid "Two-factor authentication is not enabled for this user."
 msgstr ""
 
