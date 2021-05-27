@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-25 10:56\n"
+"PO-Revision-Date: 2021-05-27 09:55\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -3448,7 +3448,7 @@ msgstr "הגדר מי צריך להשתמש באימות דו-גורמי, זוה
 msgid "Enable 2FA"
 msgstr "אפשר 2FA"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:39
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:36
 msgid "Enable two-factor authentication..."
 msgstr "הפעל אימות דו-גורמי ..."
 
@@ -3460,7 +3460,7 @@ msgstr "כפה אימות של שני גורמים"
 msgid "From now on an extra passcode is needed to sign in."
 msgstr "מעתה יש צורך בקוד סיסמה נוסף בכניסה."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:23./apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:42
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:23
 msgid "Generate barcode"
 msgstr "צור ברקוד"
 
@@ -3476,7 +3476,7 @@ msgstr "כאן תוכלו להגדיר אילו משתמשים צריכים או
 msgid "It is possible to force two-factor authentication for a specific user group, regardless of the setting above."
 msgstr "ניתן לאלץ אימות דו-גורמי עבור קבוצת משתמשים ספציפית, ללא קשר להגדרה לעיל."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:57./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:54
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:46./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:54
 msgid "Only the admin can change the two-factor authentication of the admin."
 msgstr "רק מנהל המערכת יכול לשנות את האימות הדו-גורמי של מנהל המערכת."
 
@@ -3504,10 +3504,6 @@ msgstr "אפס שני גורמים ..."
 msgid "Scan the two-factor authentication barcode with an app such as <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 msgstr "סרוק את ברקוד האימות הדו-גורמי באמצעות אפליקציה כגון <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> או <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:25./apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:44
-msgid "Scan two-factor authentication barcode"
-msgstr "סרוק ברקוד אימות דו-גורמי"
-
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:90
 msgid "Scan two-factor authentication passcode"
 msgstr "סרוק קוד גישה לאימות דו-גורמי"
@@ -3528,10 +3524,6 @@ msgstr "פעולה זו תשבית את האימות הדו-גורמי.<br>הב�
 msgid "This will generate a new barcode for two-factor authentication.<br>The old barcode will not be valid anymore."
 msgstr "זה ייצור ברקוד חדש לאימות דו-גורמי.<br>הברקוד הישן לא יהיה תקף יותר."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:41
-msgid "This will generate a new barcode.<br>From then on you will need to use a passcode to sign in."
-msgstr "זה ייצור ברקוד חדש.<br>מכאן ואילך תצטרך להשתמש בקוד גישה בכניסה."
-
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:106
 msgid "Two-factor authentication"
 msgstr "אימות דו-גורמי"
@@ -3548,7 +3540,7 @@ msgstr "תצורת אימות דו-גורמית"
 msgid "Two-factor authentication is enabled for this user."
 msgstr "אימות דו-גורמי מופעל עבור משתמש זה."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:34
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:31
 msgid "Two-factor authentication is not enabled for this user."
 msgstr "אימות דו-גורמי אינו מופעל עבור משתמש זה."
 

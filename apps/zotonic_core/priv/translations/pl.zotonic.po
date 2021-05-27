@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-25 10:56\n"
+"PO-Revision-Date: 2021-05-27 09:55\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -3448,7 +3448,7 @@ msgstr "Zdefiniuj kto powinien używać dwuskładnikowego uwierzytelniania, jest
 msgid "Enable 2FA"
 msgstr "Włącz 2FA"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:39
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:36
 msgid "Enable two-factor authentication..."
 msgstr "Włącz uwierzytelnianie dwuskładnikowe ..."
 
@@ -3460,7 +3460,7 @@ msgstr "Wymuś uwierzytelnianie dwuskładnikowe"
 msgid "From now on an extra passcode is needed to sign in."
 msgstr "Od tej chwili do zalogowania potrzebny jest dodatkowy kod."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:23./apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:42
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:23
 msgid "Generate barcode"
 msgstr "Generowanie kodu"
 
@@ -3476,7 +3476,7 @@ msgstr "Tutaj możesz zdefiniować, którzy użytkownicy potrzebują lub powinni
 msgid "It is possible to force two-factor authentication for a specific user group, regardless of the setting above."
 msgstr "Możliwe jest wymuszenie dwuskładnikowego uwierzytelnienia dla określonej grupy użytkowników, niezależnie od powyższego ustawienia."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:57./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:54
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:46./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:54
 msgid "Only the admin can change the two-factor authentication of the admin."
 msgstr "Tylko administrator może zmienić dwuczynnikowe uwierzytelnienie administratora."
 
@@ -3504,10 +3504,6 @@ msgstr "Zresetuj dwuskładnikowy ..."
 msgid "Scan the two-factor authentication barcode with an app such as <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 msgstr "Zeskanuj kod do dwuskładnikowego uwierzytelniania za pomocą aplikacji takiej jak <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> lub <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:25./apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:44
-msgid "Scan two-factor authentication barcode"
-msgstr "Skanuj kod uwierzytelniania dwuskładnikowego"
-
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:90
 msgid "Scan two-factor authentication passcode"
 msgstr "Zeskanuj kod uwierzytelniania dwuskładnikowego"
@@ -3528,10 +3524,6 @@ msgstr "Spowoduje to wyłączenie uwierzytelniania dwuskładnikowego.<br>Poprzed
 msgid "This will generate a new barcode for two-factor authentication.<br>The old barcode will not be valid anymore."
 msgstr "Spowoduje to wygenerowanie nowego kodu do uwierzytelniania dwuskładnikowego.<br>Poprzedni kod straci ważność."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:41
-msgid "This will generate a new barcode.<br>From then on you will need to use a passcode to sign in."
-msgstr "Spowoduje to wygenerowanie nowego kodu.<br>Od tego momentu do logowania się będzie trzeba używać kodu dostępu."
-
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:106
 msgid "Two-factor authentication"
 msgstr "Uwierzytelnianie dwuskładnikowe"
@@ -3548,7 +3540,7 @@ msgstr "Konfiguracja uwierzytelniania dwuskładnikowego"
 msgid "Two-factor authentication is enabled for this user."
 msgstr "Uwierzytelnianie dwuskładnikowe jest włączone dla tego użytkownika."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:34
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:31
 msgid "Two-factor authentication is not enabled for this user."
 msgstr "Uwierzytelnianie dwuskładnikowe nie jest włączone dla tego użytkownika."
 
