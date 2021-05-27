@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-25 10:56\n"
+"PO-Revision-Date: 2021-05-27 09:55\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -3448,7 +3448,7 @@ msgstr "Définir qui doit utiliser l'authentification à deux facteurs, qui est 
 msgid "Enable 2FA"
 msgstr "Activer la 2FA"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:39
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:36
 msgid "Enable two-factor authentication..."
 msgstr "Activer l'authentification à deux facteurs..."
 
@@ -3460,7 +3460,7 @@ msgstr "Forcer l'authentification à deux facteurs"
 msgid "From now on an extra passcode is needed to sign in."
 msgstr "Désormais, un mot de passe supplémentaire est nécessaire pour se connecter."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:23./apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:42
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:23
 msgid "Generate barcode"
 msgstr "Générer un code-barres"
 
@@ -3476,7 +3476,7 @@ msgstr "Ici, vous pouvez définir quels utilisateurs ont besoin ou doivent utili
 msgid "It is possible to force two-factor authentication for a specific user group, regardless of the setting above."
 msgstr "Il est possible de forcer l'authentification à deux facteurs pour un groupe d'utilisateurs spécifique, quel que soit le paramètre ci-dessus."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:57./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:54
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:46./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:54
 msgid "Only the admin can change the two-factor authentication of the admin."
 msgstr "Seul l'administrateur peut modifier l'authentification à deux facteurs de l'administrateur."
 
@@ -3504,10 +3504,6 @@ msgstr "Réinitialiser le double facteur..."
 msgid "Scan the two-factor authentication barcode with an app such as <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 msgstr "Scannez le code-barres d'authentification à deux facteurs avec une application telle que <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> ou <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:25./apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:44
-msgid "Scan two-factor authentication barcode"
-msgstr "Scanner le code-barre d'authentification à deux facteurs"
-
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:90
 msgid "Scan two-factor authentication passcode"
 msgstr "Scanner le passcode de l'authentification à deux facteurs"
@@ -3528,10 +3524,6 @@ msgstr "Ceci va désactiver l'authentification à deux facteurs.<br>l'ancien cod
 msgid "This will generate a new barcode for two-factor authentication.<br>The old barcode will not be valid anymore."
 msgstr "Ceci va générer un nouveau code-barre à deux facteurs d'authentification.<br>l'ancien code-barre ne sera plus valide désormais."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:41
-msgid "This will generate a new barcode.<br>From then on you will need to use a passcode to sign in."
-msgstr "Ceci va générer un nouveau code-barre.<br>À partir de ce moment, vous devrez utiliser un passcode pour vous connecter."
-
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:106
 msgid "Two-factor authentication"
 msgstr "Authentification à deux facteurs"
@@ -3548,7 +3540,7 @@ msgstr "Configuration de l'authentification à deux facteurs"
 msgid "Two-factor authentication is enabled for this user."
 msgstr "L'authentification à deux facteurs est active pour cet utilisateur."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:34
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:31
 msgid "Two-factor authentication is not enabled for this user."
 msgstr "L'authentification à deux facteurs est inactive pour cet utilisateur."
 
