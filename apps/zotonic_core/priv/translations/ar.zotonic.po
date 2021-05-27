@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-25 10:56\n"
+"PO-Revision-Date: 2021-05-27 09:55\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -3448,7 +3448,7 @@ msgstr "حدد من يجب أن يستخدم المصادقة الثنائية �
 msgid "Enable 2FA"
 msgstr "تمكين 2FA"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:39
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:36
 msgid "Enable two-factor authentication..."
 msgstr "تمكين المصادقة ذات العاملين ..."
 
@@ -3460,7 +3460,7 @@ msgstr "فرض المصادقة الثنائية"
 msgid "From now on an extra passcode is needed to sign in."
 msgstr "من الآن فصاعدًا ، يلزم إدخال رمز مرور إضافي لتسجيل الدخول."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:23./apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:42
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:23
 msgid "Generate barcode"
 msgstr "توليد الباركود"
 
@@ -3476,7 +3476,7 @@ msgstr "هنا يمكنك تحديد المستخدمين الذين يحتاج�
 msgid "It is possible to force two-factor authentication for a specific user group, regardless of the setting above."
 msgstr "من الممكن فرض مصادقة ثنائية لمجموعة معينة من المستخدمين ، بغض النظر عن الإعداد أعلاه."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:57./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:54
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:46./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:54
 msgid "Only the admin can change the two-factor authentication of the admin."
 msgstr "يمكن للمسؤول فقط تغيير المصادقة الثنائية للمسؤول."
 
@@ -3504,10 +3504,6 @@ msgstr "إعادة تعيين عاملين ..."
 msgid "Scan the two-factor authentication barcode with an app such as <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 msgstr "امسح رمز المصادقة الثنائي ضوئيًا باستخدام تطبيق مثل <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> أو <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:25./apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:44
-msgid "Scan two-factor authentication barcode"
-msgstr "مسح ضوئي للرمز الشريطي للمصادقة الثنائية"
-
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:90
 msgid "Scan two-factor authentication passcode"
 msgstr "امسح رمز مرور المصادقة الثنائية ضوئيًا"
@@ -3528,10 +3524,6 @@ msgstr "سيؤدي هذا إلى تعطيل المصادقة ذات العامل
 msgid "This will generate a new barcode for two-factor authentication.<br>The old barcode will not be valid anymore."
 msgstr "سيؤدي هذا إلى إنشاء رمز شريطي جديد للمصادقة ذات العاملين.<br>لن يكون الرمز الشريطي القديم صالحًا بعد الآن."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:41
-msgid "This will generate a new barcode.<br>From then on you will need to use a passcode to sign in."
-msgstr "سيؤدي هذا إلى إنشاء رمز شريطي جديد.<br>من الآن فصاعدًا ، ستحتاج إلى استخدام رمز مرور لتسجيل الدخول."
-
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:106
 msgid "Two-factor authentication"
 msgstr "توثيق ذو عاملين"
@@ -3548,7 +3540,7 @@ msgstr "تكوين المصادقة الثنائية"
 msgid "Two-factor authentication is enabled for this user."
 msgstr "تم تمكين المصادقة ذات العاملين لهذا المستخدم."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:34
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:31
 msgid "Two-factor authentication is not enabled for this user."
 msgstr "لم يتم تمكين المصادقة ذات العاملين لهذا المستخدم."
 
