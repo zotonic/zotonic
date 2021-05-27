@@ -128,11 +128,19 @@ fetch_prop(Prop, Validated, SignupProps, Context) ->
     case proplists:get_value(Prop, SignupProps) of
         undefined ->
             V = case Validated of
-                true -> z_context:get_q_validated(Prop, Context);
-                false -> z_context:get_q(Prop, Context)
+                true ->
+                    z_context:get_q_validated(Prop, Context);
+                false ->
+                    case z_context:get_q(Prop, Context) of
+                        undefined when Prop =:= name_surname_prefix ->
+                            z_context:get_q(surprefix, Context);
+                        QV ->
+                            QV
+                    end
             end,
-            z_string:trim(z_convert:to_list(V));
-        V -> V
+            z_string:trim(z_convert:to_binary(V));
+        V ->
+            V
     end.
 
 is_set(undefined) -> false;
