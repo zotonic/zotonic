@@ -447,7 +447,9 @@ LiveValidation.prototype = {
                     } else {
                         this.onInvalid();
                     }
-                    this.formObj.asyncResult(this, isValid);
+                    if (this.formObj) {
+                        this.formObj.asyncResult(this, isValid);
+                    }
                 }
             }
         }
