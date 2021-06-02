@@ -85,8 +85,12 @@ auth_user(TWProps, AccessToken, Args) ->
     TwitterUserId = maps:get(<<"id_str">>, TWProps),
     TwitterUserName = maps:get(<<"screen_name">>, TWProps),
     lager:debug("[twitter] Authenticating ~p ~p", [TwitterUserId, TWProps]),
+    Name = maps:get(<<"name">>, TWProps),
+    [ NameFirst, NameLast ] = split_name(Name),
     PersonProps = #{
-        <<"title">> => maps:get(<<"name">>, TWProps),
+        <<"title">> => Name,
+        <<"name_first">> => NameFirst,
+        <<"name_surname">> => NameLast,
         <<"website">> => <<"https://twitter.com/", TwitterUserName/binary>>,
         <<"summary">> => maps:get(<<"description">>, TWProps),
         <<"depiction_url">> => maps:get(<<"profile_image_url_https">>, TWProps,
@@ -103,6 +107,13 @@ auth_user(TWProps, AccessToken, Args) ->
         props = PersonProps,
         is_connect = z_convert:to_bool(proplists:get_value(<<"is_connect">>, Args))
     }.
+
+split_name(Name) ->
+    case binary:split(Name, <<" ">>) of
+        [ First, Last ] -> [ First, z_string:trim(Last) ];
+        [ First ] -> [ First, <<>> ]
+    end.
+
 
 % Given the access token, fetch data about the user
 fetch_user_data(Token, Context) ->
