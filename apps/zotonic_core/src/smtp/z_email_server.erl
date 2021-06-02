@@ -866,7 +866,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
             end,
             case SendResult of
                 {error, Reason, {FailureType, Host, Message}} ->
-                    case is_retry_possible(Reason, FailureType) of
+                    case is_retry_possible(Reason, FailureType, Message) of
                         true ->
                             %% do nothing, it will retry later
                             z_notifier:notify(#email_failed{
@@ -983,9 +983,10 @@ send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) ->
     ],
     gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts1).
 
-is_retry_possible(retries_exceeded, _) -> true;
-is_retry_possible(_, permanent_failure) -> false;
-is_retry_possible(_, _) -> true.
+is_retry_possible(_Reason, _FailureType, auth_failed) -> true;  % proxy - could be temporary
+is_retry_possible(retries_exceeded, _FailureType, _Message) -> true;
+is_retry_possible(_Reason, permanent_failure, _Message) -> false;
+is_retry_possible(_Reason, __FailureType, _Message) -> true.
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
     z_convert:to_binary([

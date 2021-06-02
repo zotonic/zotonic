@@ -65,7 +65,7 @@
  {<<"proper">>,{pkg,<<"proper">>,<<"1.2.0">>},0},
  {<<"qdate">>,
   {git,"https://github.com/choptastic/qdate.git",
-       {ref,"69d7fdd626ea4983274e1d744ebae4c03a4095f1"}},
+       {ref,"3d72448491de40051f742491d115fd3fd2c6d988"}},
   0},
  {<<"qdate_localtime">>,
   {git,"https://github.com/choptastic/qdate_localtime.git",
@@ -82,12 +82,12 @@
  {<<"ssl_verify_fun">>,{pkg,<<"ssl_verify_fun">>,<<"1.1.6">>},0},
  {<<"stacktrace_compat">>,{pkg,<<"stacktrace_compat">>,<<"1.2.1">>},0},
  {<<"syslog">>,{pkg,<<"syslog">>,<<"1.1.0">>},0},
- {<<"template_compiler">>,{pkg,<<"template_compiler">>,<<"1.3.2">>},0},
+ {<<"template_compiler">>,{pkg,<<"template_compiler">>,<<"1.3.3">>},0},
  {<<"termit">>,{pkg,<<"termit">>,<<"1.0.0">>},0},
  {<<"tls_certificate_check">>,{pkg,<<"tls_certificate_check">>,<<"1.5.0">>},1},
  {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.7.0">>},0},
  {<<"zotonic_ssl">>,{pkg,<<"zotonic_ssl">>,<<"1.0.4">>},0},
- {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.3.1">>},0}]}.
+ {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.3.2">>},0}]}.
 [
 {pkg_hash,[
  {<<"bcrypt">>, <<"7D8CC4123E63DB12AB796112EE34891205D2E6DF788B72E823E81D8D37629861">>},
@@ -145,12 +145,12 @@
  {<<"ssl_verify_fun">>, <<"CF344F5692C82D2CD7554F5EC8FD961548D4FD09E7D22F5B62482E5AEAEBD4B0">>},
  {<<"stacktrace_compat">>, <<"EC6B8EA09B68DE061911AD50037E10673C823F4BC15B544DE657949DFB99961B">>},
  {<<"syslog">>, <<"6419A232BEA84F07B56DC575225007FFE34D9FDC91ABE6F1B2F254FD71D8EFC2">>},
- {<<"template_compiler">>, <<"B4E5EAD2C7472C015657BB120FB4ED47C3C38010C798800EB9C040FF90553CEE">>},
+ {<<"template_compiler">>, <<"DB2E4EE6222F7AA095770FA9B8F7B9EF037DEE418D55FFD6DFC84A0FD0EC8BC3">>},
  {<<"termit">>, <<"D463BDD0207EDD00942754D51FD822B981CDCE7FB774E9FF71D9F59429BCEF7A">>},
  {<<"tls_certificate_check">>, <<"54DC51DEFFA4EF157803E07035AB78516708F670FC910319C5893287E3AED725">>},
  {<<"yamerl">>, <<"E51DBA652DCE74C20A88294130B48051EBBBB0BE7D76F22DE064F0F3CCF0AAF5">>},
  {<<"zotonic_ssl">>, <<"56E79D1014D7C4009B3F1AB7DDD39515178D9E2CF5604CC906433AD8414F3276">>},
- {<<"zotonic_stdlib">>, <<"DBEB28D51A7557F0A2EBDC3207E7793D6ACFC360F71207C54BCBED9557020C3C">>}]},
+ {<<"zotonic_stdlib">>, <<"2D665FB9018A3E0DC14F76EF7E2AC07423C3157205CD2B9F41A49A7369F14546">>}]},
 {pkg_hash_ext,[
  {<<"bcrypt">>, <<"7FF89B21EC54DBA7095C5CE429D7C504E6CBF6E76423A5C91724577C3CE968E0">>},
  {<<"bear">>, <<"534217DCE6A719D59E54FB0EB7A367900DBFC5F85757E8C1F94269DF383F6D9B">>},
@@ -207,10 +207,10 @@
  {<<"ssl_verify_fun">>, <<"BDB0D2471F453C88FF3908E7686F86F9BE327D065CC1EC16FA4540197EA04680">>},
  {<<"stacktrace_compat">>, <<"416BEC0A4579C02976B8223AD4EDEA93A1C2E0E80B19977675542B0CAFEDBB99">>},
  {<<"syslog">>, <<"4C6A41373C7E20587BE33EF841D3DE6F3BEBA08519809329ECC4D27B15B659E1">>},
- {<<"template_compiler">>, <<"A8DBD52F2F9CBC01DBED40536FB1CAF519891DF620FA09EE87FF5FE7E5C8C141">>},
+ {<<"template_compiler">>, <<"7199FB2319980C5016D6BA206C3C62211FA00C63AFDB91D64E5CB531EE17CF5E">>},
  {<<"termit">>, <<"0F04A04B3BD798CCD86FCDA602B84C1F4DD1CCF7E3E1856C7FDD7BA0859B827A">>},
  {<<"tls_certificate_check">>, <<"E1E3F9A969317126633D7A8F1D9A3223B35504414125C78FA048700385A59B25">>},
  {<<"yamerl">>, <<"CB5A4481E2E2AD36DB83BD9962153E1A9208E2B2484185E33FC2CAAC6A50B108">>},
  {<<"zotonic_ssl">>, <<"BB06818722FCB96EC4BBDCEEEAD65CB9A9E9E12596EE0523BBF17EDCA7C620C2">>},
- {<<"zotonic_stdlib">>, <<"1075373AFC8B7F87BA74EE81BB8DB698C411FE03066BEC2CCE7CE5FAE369DD1C">>}]}
+ {<<"zotonic_stdlib">>, <<"D4F7E6EB707367E701F2AF506291252A55B2EA6AF504D1236DFE91EE057F2059">>}]}
 ].
