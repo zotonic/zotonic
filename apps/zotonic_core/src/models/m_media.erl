@@ -242,7 +242,7 @@ replace(Id, Props, Context) when is_list(Props) ->
     replace(Id, Map, Context);
 replace(Id, Props, Context) ->
     Mime = maps:get(<<"mime">>, Props, undefined),
-    Size = maps:get(<<"size">>, Props, 0),
+    Size = maps:get(<<"size">>, Props, 1),
     case z_acl:rsc_editable(Id, Context) andalso
         z_acl:is_allowed(insert, #acl_media{mime = Mime, size = Size}, Context)
     of
