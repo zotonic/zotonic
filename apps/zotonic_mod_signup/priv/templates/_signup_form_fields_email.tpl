@@ -25,8 +25,7 @@ show_signup_name_email
         {% endif %}
     </div>
 {% endif %}
-
-{% if show_signup_name_prefix or 1 %}
+{% if show_signup_name_prefix %}
     <div class="form-group" id="signup_surname_prefix">
         <label for="surprefix" class="control-label">{_ Prefix _}</label>
         <input class="form-control" id="surprefix" name="name_surname_prefix" type="text" value="" autocomplete="additional-name" />

@@ -10,17 +10,15 @@ style_width
 
 {# non-critical values, may be changed #}
 {% with
-    1,
-    0,
-    1,
-    0,
-    1,
-    1,
-    style_boxed|if_undefined:0,
+    show_signup_name_title|default_if_none:1,
+    show_signup_username_title|default_if_none:1,
+    show_signup_password2|default_if_none:0,
+    show_signup_tos_title|default_if_none:1,
+    show_signup_tos_info|default_if_none:1,
+    style_boxed|default_if_none:0,
     style_width
 as
     show_signup_name_title,
-    show_signup_name_prefix,
     show_signup_username_title,
     show_signup_password2,
     show_signup_tos_title,

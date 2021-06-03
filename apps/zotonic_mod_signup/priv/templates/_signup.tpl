@@ -13,9 +13,16 @@ style_width
 {% else %}
     {# critical form parts, must be available #}
     {% with
-        1,1,1,1,1,1
+        show_signup_name_first|default_if_none:1,
+        show_signup_name_prefix|default_if_none:1,
+        show_signup_name_last|default_if_none:1,
+        show_signup_name_email|default_if_none:1,
+        show_signup_username|default_if_none:1,
+        show_signup_password|default_if_none:1,
+        show_signup_tos_checkbox|default_if_none:1
     as
         show_signup_name_first,
+        show_signup_name_prefix,
         show_signup_name_last,
         show_signup_name_email,
         show_signup_username,
