@@ -872,8 +872,7 @@ can_media(Mime, undefined, Context) ->
 can_media(Mime, Size, Context) ->
     case max_upload_size(Context) >= Size of
         true ->
-            Cat = m_media:mime_to_category(Mime),
-            can_insert_category(Cat, Context);
+            acl_user_group_mime_check:is_acceptable(Mime, Context);
         false ->
             false
     end.
