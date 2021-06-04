@@ -242,7 +242,7 @@ replace(Id, Props, Context) when is_list(Props) ->
     replace(Id, Map, Context);
 replace(Id, Props, Context) ->
     Mime = maps:get(<<"mime">>, Props, undefined),
-    Size = maps:get(<<"size">>, Props, 0),
+    Size = maps:get(<<"size">>, Props, 1),
     case z_acl:rsc_editable(Id, Context) andalso
         z_acl:is_allowed(insert, #acl_media{mime = Mime, size = Size}, Context)
     of
@@ -435,14 +435,8 @@ replace_medium(Medium, RscId, RscProps, Options, Context) ->
         false -> {error, eacces}
     end.
 
-update_medium_1(RscId, #{ <<"mime">> := Mime } = Medium, RscProps, Options, Context) ->
-    Category = case maps:find(<<"category">>, RscProps) of
-                    {ok, undefined} -> tl(m_rsc:is_a(RscId, Context));
-                    {ok, Cat} -> Cat;
-                    error -> tl(m_rsc:is_a(RscId, Context))
-               end,
-    case z_acl:is_allowed(insert, #acl_rsc{category = Category, props = RscProps}, Context) andalso
-         z_acl:is_allowed(insert, #acl_media{mime=Mime, size=0}, Context) of
+update_medium_1(RscId, Medium, RscProps, Options, Context) ->
+    case is_update_medium_allowed(RscId, Medium, RscProps, Context) of
         true ->
             case replace_file_acl_ok(undefined, RscId, RscProps, Medium, Options, Context) of
                 {ok, NewRscId} ->
@@ -459,6 +453,21 @@ update_medium_1(RscId, #{ <<"mime">> := Mime } = Medium, RscProps, Options, Cont
         false ->
             {error, file_not_allowed}
     end.
+
+is_update_medium_allowed(insert_rsc, #{ <<"mime">> := Mime }, #{ <<"category">> := Category } = RscProps, Context) ->
+        z_acl:is_allowed(insert, #acl_rsc{category = Category, props = RscProps}, Context)
+        andalso z_acl:is_allowed(insert, #acl_media{mime=Mime, size=0}, Context);
+is_update_medium_allowed(insert_rsc, _Medium, _RscProps, _Context) ->
+        % No category - fail
+        {error, no_category};
+is_update_medium_allowed(RscId, #{ <<"mime">> := Mime }, #{ <<"category">> := Category } = RscProps, Context) ->
+        % Changing the category, check insert rights for the new category
+        z_acl:is_allowed(insert, #acl_rsc{id = RscId, category = Category, props = RscProps}, Context)
+        andalso z_acl:is_allowed(insert, #acl_media{mime=Mime, size=0}, Context);
+is_update_medium_allowed(_RscId, #{ <<"mime">> := Mime }, _RscProps, Context) ->
+        % Update check was already done, only check the Mime type
+        z_acl:is_allowed(insert, #acl_media{mime=Mime, size=0}, Context).
+
 
 
 %% @doc Make a new resource for the file based on a URL.

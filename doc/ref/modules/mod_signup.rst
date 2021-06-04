@@ -44,6 +44,13 @@ You can adjust this module’s behaviour with the following
     Defaults to ``default_content_group``.
 
 
+.. attribute:: mod_signup.depiction_as_medium
+
+    If set then any depiction_url is added as a medium record to the person
+    who signed up. Normally the depiction is added as a separate *depending*
+    image resource and connected from the person using a ``depiction``
+    predicate.
+
 
 Config: Using the user’s e-mail address as username
 ---------------------------------------------------

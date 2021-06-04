@@ -166,11 +166,12 @@ do_signup(UserId, Props, SignupProps, RequestConfirm, Context) ->
 
 %% @doc Optionally add a depiction using the 'depiction_url' in the user's props
 -spec maybe_add_depiction( m_rsc:resource_id(), map(), z:context() ) -> ok | {error, term()}.
-maybe_add_depiction(Id, Props, Context) ->
-    case m_edge:objects(Id, depiction, Context) of
-        [] ->
-            case maps:get(<<"depiction_url">>, Props, undefined) of
-                Url when Url =/= <<>>, Url =/= [], Url =/= undefined ->
+maybe_add_depiction(Id, #{ <<"depiction_url">> := Url }, Context)
+    when Url =/= <<>>, Url =/= "", Url =/= undefined ->
+    case z_convert:to_bool( m_config:get_value(mod_signup, depiction_as_medium, Context) ) of
+        false ->
+            case m_edge:objects(Id, depiction, Context) of
+                [] ->
                     MediaProps = #{
                         <<"is_dependent">> => true,
                         <<"is_published">> => true,
@@ -190,9 +191,25 @@ maybe_add_depiction(Id, Props, Context) ->
                 _ ->
                     ok
             end;
-        _ ->
-            ok
-    end.
+        true ->
+            case m_media:get(Id, Context) of
+                undefined ->
+                    case m_media:replace_url(Url, Id, #{}, z_acl:logon(Id, Context)) of
+                        {ok, _Id} ->
+                            lager:info("Added medium from depiction_url for ~p: ~p",
+                                       [Id, Url]),
+                            ok;
+                        {error, _} = Error ->
+                            lager:warning("Could not insert depiction_url for ~p: ~p ~p",
+                                          [Id, Error, Url]),
+                            Error
+                    end;
+                _Medium ->
+                    ok
+            end
+    end;
+maybe_add_depiction(_Id, _Props, _Context) ->
+    ok.
 
 insert_or_update(undefined, Props, Context) ->
     m_rsc:insert(Props, Context);
