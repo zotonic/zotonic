@@ -93,8 +93,7 @@ auth_user(TWProps, AccessToken, Args) ->
         <<"name_surname">> => NameLast,
         <<"website">> => <<"https://twitter.com/", TwitterUserName/binary>>,
         <<"summary">> => maps:get(<<"description">>, TWProps),
-        <<"depiction_url">> => maps:get(<<"profile_image_url_https">>, TWProps,
-                                maps:get(<<"profile_image_url">>, TWProps))
+        <<"depiction_url">> => depiction_url(TWProps)
     },
     AccessTokenData = #{
         <<"access_token">> => AccessToken,
@@ -118,3 +117,9 @@ split_name(Name) ->
 % Given the access token, fetch data about the user
 fetch_user_data(Token, Context) ->
     oauth_twitter_client:request(get, "account/verify_credentials", Token, Context).
+
+depiction_url(#{ <<"profile_image_url_https">> := Url }) when is_binary(Url) ->
+    Url1 = re:replace(Url, <<"_normal.jpg$">>, <<"_400x400.jpg">>),
+    iolist_to_binary(Url1);
+depiction_url(_) ->
+    undefined.
