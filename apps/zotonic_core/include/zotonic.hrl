@@ -78,9 +78,10 @@
         %% End TODO
     }).
 
-%% Wrapper macro to put Erlang terms in a bytea database column.
+%% Wrapper macro to put Erlang terms in a bytea or jsonb database column.
 %% Extraction is automatic, based on a magic marker prefixed to the serialized term.
 -define(DB_PROPS(N), {term, N}).
+-define(DB_PROPS_JSON(N), {term_json, N}).
 
 
 %% A date in the far future which will never happen.

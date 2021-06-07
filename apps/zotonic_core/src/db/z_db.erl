@@ -80,6 +80,7 @@
     columns/2,
     column_names/2,
     column_names_bin/2,
+    get_current_props/3,
     update_sequence/3,
     prepare_database/1,
     table_exists/2,
@@ -96,6 +97,10 @@
     schema_exists_conn/2,
     drop_schema/1
 ]).
+
+-ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
+-endif.
 
 -type sql() :: string() | iodata().
 -type query_error() :: nodb | enoent | epgsql:query_error() | term().
@@ -502,12 +507,19 @@ cols_map(Cols, Rows, IsMergeProps, Keys) ->
         fun(Row) ->
             lists:foldl(
                 fun
-                    ({Nr, <<"props">>}, Acc) when IsMergeProps ->
+                    ({Nr, Col}, Acc) when IsMergeProps and (Col =:= props_json orelse Col =:= <<"props_json">>) ->
+                        JSON = erlang:element(Nr, Row),
+                        case is_binary(JSON) of
+                            true ->
+                                map_merge_props(jsxrecord:decode(JSON), Acc);
+                            false ->
+                                Acc
+                        end;
+
+                    ({Nr, Col}, Acc) when IsMergeProps and (Col =:= props orelse Col =:= <<"props">>) ->
                         Props = erlang:element(Nr, Row),
                         map_merge_props(Props, Acc);
-                    ({Nr, props}, Acc) when IsMergeProps ->
-                        Props = erlang:element(Nr, Row),
-                        map_merge_props(Props, Acc);
+
                     ({Nr, Col}, Acc) ->
                         Acc#{ Col => erlang:element(Nr, Row) }
                 end,
@@ -641,21 +653,37 @@ insert(Table, Parameters, Context) ->
     BinParams = ensure_binary_keys(Parameters),
     case prepare_cols(Cols, BinParams) of
         {ok, InsertProps} ->
-            InsertProps1 = case maps:find(<<"props">>, InsertProps) of
-                {ok, PropsCol} when is_map(PropsCol) ->
-                    InsertProps#{
-                        <<"props">> => ?DB_PROPS(filter_empty_props(PropsCol))
-                    };
-                {ok, [ {_, _} | _ ] = PropsCol} ->
-                    Props1 = z_props:from_props(PropsCol),
-                    InsertProps#{
-                        <<"props">> => ?DB_PROPS(filter_empty_props(Props1))
-                    };
-                {ok, _} ->
-                    InsertProps;
-                error ->
-                    InsertProps
-            end,
+            HasProps = maps:is_key(<<"props">>, InsertProps), 
+            HasPropsJSON = maps:is_key(<<"props_json">>, InsertProps), 
+
+            InsertProps1 = if HasPropsJSON ->
+                                  #{<<"props_json">> := PropsJSONCol} = InsertProps,
+                                  case is_map(PropsJSONCol) of
+                                      true ->
+                                          InsertProps#{
+                                            <<"props_json">> => ?DB_PROPS_JSON(filter_empty_props(PropsJSONCol))
+                                           };
+                                      false ->
+                                          InsertProps
+                                  end;
+                              HasProps ->
+                                  #{<<"props">> := PropsCol} = InsertProps,
+                                  case PropsCol of
+                                      #{} ->
+                                          InsertProps#{
+                                            <<"props">> => ?DB_PROPS(filter_empty_props(PropsCol))
+                                           };
+                                      [ {_, _} | _ ] ->
+                                          Props1 = z_props:from_props(PropsCol),
+                                          InsertProps#{
+                                            <<"props">> => ?DB_PROPS(filter_empty_props(Props1))
+                                           };
+                                      _ ->
+                                          InsertProps
+                                  end;
+                              not HasPropsJSON and not HasProps ->
+                                  InsertProps
+                           end,
 
             %% Build the SQL insert statement
             {ColNames, ColParams} = lists:unzip( maps:to_list(InsertProps1) ),
@@ -704,19 +732,9 @@ update(Table, Id, Parameters, Context) when is_map(Parameters) ->
     case prepare_cols(Cols, BinParams) of
         {ok, UpdateProps} ->
             F = fun(C) ->
-                UpdateProps1 = case maps:get(<<"props">>, UpdateProps, undefined) of
-                    NewProps when is_map(NewProps); is_list(NewProps) ->
-                        % Merge the new props with the props in the database
-                        MergedProps = update_merge_props(DbDriver, C, Table, Id, NewProps),
-                        MergedProps1 = maps:without(Cols, MergedProps),
-                        UpdateProps#{
-                            <<"props">> => ?DB_PROPS( MergedProps1 )
-                        };
-                    _ ->
-                        UpdateProps
-                end,
+                UpdateProps1 = update_merge_props(DbDriver, C, Table, Cols, Id, UpdateProps, Context),
                 UpdateProps2 = update_map_atom_arrays(UpdateProps1),
-                {ColNames,Params} = lists:unzip( maps:to_list(UpdateProps2) ),
+                {ColNames, Params} = lists:unzip( maps:to_list(UpdateProps2) ),
                 ColNamesNr = lists:zip(ColNames, lists:seq(2, length(ColNames)+1)),
                 ColAssigns = [
                     ["\"", ColName, "\" = $", integer_to_list(Nr)]
@@ -739,6 +757,66 @@ update(Table, Id, Parameters, Context) when is_map(Parameters) ->
             Error
     end.
 
+get_current_props(Table, Id, Context) ->
+    DBDriver = z_context:db_driver(Context),
+    F = fun(C) ->
+                get_current_props(DBDriver, C, Table, Id, Context)
+        end,
+    with_connection(F, Context).
+
+get_current_props(DBDriver, Connection, Table, Id, Context) when is_atom(Table) ->
+    get_current_props(DBDriver, Connection, atom_to_list(Table), Id, Context);
+get_current_props(DBDriver, Connection, Table, Id, Context) ->
+    ColNames = column_names(Table, Context), 
+    get_current_props(DBDriver, Connection,
+                      lists:member(props_json, ColNames), lists:member(props, ColNames), Table, Id, Context).
+
+   
+get_current_props(_DBDriver, _Connection, false, false, _Table, _Id, _Context) ->
+    %% There is no props column
+    {error, no_properties};
+get_current_props(DBDriver, Connection, false, true, Table, Id, _Context) ->
+    %% There is only a props column.
+    case equery1(DBDriver, Connection, "select props from \"" ++ Table ++ "\" where id = $1", [Id]) of
+        {ok, Props} when is_list(Props) -> {ok, z_props:from_props(Props)};
+        {ok, Props} when is_map(Props) -> {ok, Props};
+        _E ->
+            {error, no_properties}
+    end;
+get_current_props(DBDriver, Connection, true, false, Table, Id, _Context) ->
+    %% There is only a props_json column
+    case equery1(DBDriver, Connection, "select props_json from \"" ++ Table ++ "\" where id = $1", [Id]) of
+        {ok, JSON} when is_binary(JSON) ->
+            {ok, jsxrecord:decode(JSON)};
+        _ ->
+            {error, no_properties}
+    end;
+get_current_props(DBDriver, Connection, true, true, Table, Id, _Context) ->
+    %% There is a props_json, and a props column.
+    R = case DBDriver:equery(Connection, "select props, props_json from \"" ++ Table ++ "\" where id = $1", [Id], ?TIMEOUT) of
+        {ok, _Columns, []} -> {error, noresult};
+        {ok, _RowCount, _Columns, []} -> {error, noresult};
+        {ok, _Columns, [Row|_]} -> {ok, element(1, Row), element(2, Row)};
+        {ok, _RowCount, _Columns, [Row|_]} -> {ok, element(1, Row), element(2, Row)};
+        Other -> Other
+    end,
+
+    %% Merge the properties found in the columns, the props_json column gets priority.
+    case R of
+        {ok, Props, undefined} when is_list(Props) ->
+            {ok, z_props:from_props(Props)};
+        {ok, Props, undefined} when is_map(Props) ->
+            {ok, Props};
+        {ok, undefined, JSON} when is_binary(JSON) ->
+            {ok, jsxrecord:decode(JSON)};
+        {ok, Props, JSON} when is_list(Props) andalso is_binary(JSON) ->
+            {ok, maps:merge(z_props:from_props(Props), jsxrecord:decode(JSON))}; 
+        {ok, Props, JSON} when is_map(Props) andalso is_binary(JSON) ->
+            {ok, maps:merge(Props, jsxrecord:decode(JSON))}; 
+        _ ->
+            {error, no_properties}
+    end.
+
 update_map_atom_arrays(Props) ->
     maps:map(
         fun
@@ -749,20 +827,32 @@ update_map_atom_arrays(Props) ->
         end,
         Props).
 
-update_merge_props(DbDriver, C, QTab, Id, NewProps) when is_map(NewProps) ->
-    QTab1 = z_convert:to_list(QTab),
-    Merged = case equery1(DbDriver, C, "select props from "++QTab1++" where id = $1", [Id]) of
-        {ok, OldProps} when is_list(OldProps) ->
-            maps:merge(z_props:from_props(OldProps), NewProps);
-        {ok, OldProps} when is_map(OldProps) ->
-            maps:merge(OldProps, NewProps);
+update_merge_props(DbDriver, Connection, Table, Cols, Id, #{ <<"props_json">> := NewProps }=UpdateProps, Context) ->
+    P = case get_current_props(DbDriver, Connection, Table, Id, Context) of
+            {ok, OldProps} ->
+                UpdateProps#{<<"props_json">> => ?DB_PROPS_JSON( maps:merge(OldProps, NewProps) ) };
+            _ ->
+                UpdateProps#{<<"props_json">> => ?DB_PROPS_JSON( NewProps )}
+        end,
+
+    %% Clear the existing props column
+    case lists:member(<<"props">>, Cols) of
+        true -> P#{ <<"props">> => null };
+        false -> P
+    end;
+update_merge_props(DbDriver, Connection, Table, _Cols, Id, #{ <<"props">> := NewProps }=UpdateProps, Context) ->
+    case get_current_props(DbDriver, Connection, Table, Id, Context) of
+        {ok, OldProps} ->
+            UpdateProps#{ <<"props">> => ?DB_PROPS( maps:merge(OldProps, NewProps) )};
         _ ->
-            NewProps
-    end,
-    filter_empty_props(Merged);
-update_merge_props(DbDriver, C, Table, Id, NewProps) when is_list(NewProps) ->
+            UpdateProps#{ <<"props">> => ?DB_PROPS( NewProps )}
+    end;
+update_merge_props(_DbDriver, _Connection, _Table, _Cols, _Id, #{}=UpdateProps, _Context) ->
+    UpdateProps;
+update_merge_props(DbDriver, Connection, Table, Cols, Id, NewProps, Context) when is_list(NewProps) ->
     Props1 = z_props:from_props(NewProps),
-    update_merge_props(DbDriver, C, Table, Id, Props1).
+    update_merge_props(DbDriver, Connection, Table, Cols, Id, Props1, Context).
+
 
 ensure_binary_keys(Ps) ->
     maps:fold(
@@ -832,19 +922,25 @@ prepare_cols(Cols, Props) ->
                 0 ->
                     {ok, CProps};
                 _  ->
-                    PropsCol = case maps:get(<<"props">>, CProps, undefined) of
-                        PPs when is_list(PPs) ->
-                            maps:merge(z_props:from_props(PPs), PProps);
-                        PPs when is_map(PPs) ->
-                            maps:merge(PPs, PProps);
-                        _ ->
-                            PProps
-                    end,
-                    {ok, CProps#{ <<"props">> => PropsCol }}
+                    case lists:member(<<"props_json">>, Cols) of
+                        true ->
+                            PropsCol = merge_properties(maps:get(<<"props_json">>, CProps, undefined), PProps),
+                            {ok, CProps#{ <<"props_json">> => PropsCol }};
+                        false ->
+                            PropsCol = merge_properties(maps:get(<<"props">>, CProps, undefined), PProps),
+                            {ok, CProps#{ <<"props">> => PropsCol }}
+                    end
             end;
         {error, _} = Error ->
             Error
     end.
+
+merge_properties(Properties, Props) when is_list(Properties) ->
+    maps:merge(z_props:from_props(Properties), Props);
+merge_properties(Properties, Props) when is_map(Properties) ->
+    maps:merge(Properties, Props);
+merge_properties(_, Props) ->
+    Props.
 
 split_props(Props, Cols) ->
     {CProps, PProps} = lists:foldl(
@@ -864,7 +960,7 @@ split_props(Props, Cols) ->
         0 ->
             {ok, {CProps, PProps}};
         _  ->
-            case lists:member(<<"props">>, Cols) of
+            case lists:member(<<"props_json">>, Cols) orelse lists:member(<<"props">>, Cols) of
                 true ->
                     {ok, {CProps, PProps}};
                 false ->
@@ -1264,20 +1360,37 @@ merge_props(List) ->
 merge_props([], Acc) ->
     lists:reverse(Acc);
 merge_props([R|Rest], Acc) when is_list(R) ->
-    case proplists:get_value(props, R, undefined) of
-        undefined ->
+    case {proplists:get_value(props, R, undefined), proplists:get_value(props_json, R, undefined)} of
+        {Props, PropsJSON} when (Props == undefined orelse Props == <<>>) andalso (PropsJSON == undefined orelse PropsJSON == <<>>)  ->
             merge_props(Rest, [R|Acc]);
-        <<>> ->
-            merge_props(Rest, [R|Acc]);
-        Term when is_list(Term) ->
-            merge_props(Rest, [lists:keydelete(props, 1, R)++Term|Acc]);
-        Term when is_map(Term) ->
-            T1 = lists:map(
-                fun({K,V}) ->
-                    {z_convert:to_atom(K), V}
-                end,
-                maps:to_list(Term)),
-            merge_props(Rest, [lists:keydelete(props, 1, R)++T1|Acc])
+        {Term, PropsJSON} when PropsJSON == undefined orelse PropsJSON == <<>> ->
+            case Term of
+                T when is_list(T) ->
+                    merge_props(Rest, [lists:keydelete(props, 1, R)++Term|Acc]);
+                T when is_map(T) ->
+                    T1 = lists:map(fun({K,V}) -> {z_convert:to_atom(K), V} end, maps:to_list(Term)),
+                    merge_props(Rest, [lists:keydelete(props, 1, R)++T1|Acc])
+            end;
+        {Term, PropsJSON} when Term == undefined orelse Term == <<>> ->
+            Map = jsxrecord:decode(PropsJSON),
+            T1 = lists:map(fun({K,V}) ->
+                                   {z_convert:to_atom(K), V}
+                           end,
+                           maps:to_list(Map)),
+            merge_props(Rest, [lists:keydelete(props_json, 1, R)++ T1| Acc]);
+        {Term, PropsJSON} ->
+            PropsTerm = case Term of
+                            L when is_list(L) ->
+                                L;
+                            M when is_map(M) ->
+                                lists:map(fun({K,V}) -> {z_convert:to_atom(K), V} end, maps:to_list(Term))
+                        end,
+            PropsJSONTerm = lists:map(fun({K,V}) ->
+                                              {z_convert:to_atom(K), V}
+                                      end, maps:to_list(jsxrecord:decode(PropsJSON))),
+            PropsMerged = z_utils:props_merge(PropsJSONTerm, PropsTerm),
+
+            merge_props(Rest, [ lists:keydelete(props_json, 1, lists:keydelete(props, 1, R))  ++ PropsMerged | Acc])
     end.
 
 
@@ -1306,3 +1419,196 @@ equery1(DbDriver, C, Sql, Parameters, Timeout) ->
         {ok, _RowCount, _Columns, [Row|_]} -> {ok, element(1, Row)};
         Other -> Other
     end.
+
+
+%%
+%% Tests
+%%
+
+-ifdef(TEST).
+
+prepare_cols_test() ->
+    ?assertEqual({ok, #{}}, prepare_cols([], #{})),
+
+    % Props go to the right place
+    ?assertEqual({ok, #{<<"a">> => <<"a value">>}},
+                 prepare_cols([<<"a">>, <<"b">>], #{<<"a">> => <<"a value">>})),
+    ?assertEqual({ok, #{<<"a">> => <<"a value">>, <<"b">> => <<"b value">>}},
+                 prepare_cols([<<"a">>, <<"b">>], #{<<"a">> => <<"a value">>,
+                                                    <<"b">> => <<"b value">>})),
+
+    % Column is not known
+    ?assertEqual({error, {unknown_column,[<<"c">>]}},
+                 prepare_cols([<<"a">>, <<"b">>], #{<<"a">> => <<"a value">>,
+                                                    <<"c">> => <<"c value">>})),
+
+    % When there is a props column, unknown properties go to that column.
+    ?assertEqual({ok,#{<<"a">> => <<"a value">>,
+                       <<"props">> => #{<<"c">> => <<"c value">>}}},
+                 prepare_cols([<<"a">>, <<"b">>, <<"props">>], #{<<"a">> => <<"a value">>,
+                                                                 <<"c">> => <<"c value">>})),
+
+    % An existing props map will be merged with any new values.
+    ?assertEqual({ok,#{<<"a">> => <<"a value">>,
+                       <<"props">> => #{<<"c">> => <<"c value">>,
+                                        <<"d">> => <<"d value">>}}},
+                 prepare_cols([<<"a">>, <<"b">>, <<"props">>],
+                              #{<<"a">> => <<"a value">>,
+                                <<"c">> => <<"c value">>,
+                                <<"props">> => #{<<"d">> => <<"d value">>}})),
+
+    % When there is a props_json column, unknown properties go to that column.
+    ?assertEqual({ok,#{<<"a">> => <<"a value">>,
+                       <<"props_json">> => #{<<"c">> => <<"c value">>}}},
+                 prepare_cols([<<"a">>, <<"b">>, <<"props">>, <<"props_json">>],
+                              #{<<"a">> => <<"a value">>,
+                                <<"c">> => <<"c value">>})),
+
+    % When there is a props_json column, that gets priority
+    ?assertEqual({ok,#{<<"a">> => <<"a value">>,
+                       <<"props_json">> => #{<<"c">> => <<"c value">>}}},
+                 prepare_cols([<<"a">>, <<"b">>, <<"props">>, <<"props_json">>],
+                              #{<<"a">> => <<"a value">>, <<"c">> => <<"c value">>})),
+    ?assertEqual({ok,#{<<"a">> => <<"a value">>,
+                       <<"props_json">> => #{<<"c">> => <<"c value">>}}},
+                 prepare_cols([<<"a">>, <<"b">>, <<"props_json">>],
+                              #{<<"a">> => <<"a value">>, <<"c">> => <<"c value">>})),
+
+    % existing props and props_json fields are merged
+    ?assertEqual({ok,#{<<"a">> => <<"a value">>,
+                       <<"props_json">> => #{<<"c">> => <<"c value">>,
+                                             <<"e">> => <<"e value">>}}},
+                 prepare_cols([<<"a">>, <<"b">>, <<"props">>, <<"props_json">>],
+                              #{<<"a">> => <<"a value">>,
+                                <<"c">> => <<"c value">>,
+                                <<"props_json">> => #{<<"e">> => <<"e value">>}
+                               })),
+
+
+    ok.
+
+merge_props_test() ->
+    M = merge_props([[{id,1},
+                      {is_visible,true},
+                      {rsc_id,330},
+                      {user_id,undefined},
+                      {email,<<"test@example.com">>},
+                      {name,<<"foo">>},
+                      {keep_informed,false},
+                      {props, undefined},
+                      {created,{{2020,6,25},{10,54,37}}},
+                      {props_json,undefined}],
+                     [{id,2},
+                      {is_visible,true},
+                      {rsc_id,330},
+                      {user_id,undefined},
+                      {email,<<"test@example.com">>},
+                      {name,<<"foo">>},
+                      {keep_informed,false},
+                      {props,#{<<"message">> => <<"test test">>}},
+                      {created,{{2020,6,25},{10,54,37}}},
+                      {props_json,undefined}],
+                     [{id,3},
+                      {is_visible,true},
+                      {rsc_id,330},
+                      {user_id,undefined},
+                      {email,<<"test@example.com">>},
+                      {name,<<"foo">>},
+                      {keep_informed,false},
+                      {props,[{message, <<"test test">>}]},
+                      {created,{{2020,6,25},{10,54,37}}},
+                      {props_json,undefined}],
+                     [{id,4},
+                      {is_visible,true},
+                      {rsc_id,330},
+                      {user_id,undefined},
+                      {email,<<"test@example.com">>},
+                      {name,<<"foo">>},
+                      {keep_informed,false},
+                      {props,undefined},
+                      {created,{{2020,6,25},{10,54,37}}},
+                      {props_json,<<"{\"message\": \"test test\"}">>}],
+                     [{id,5},
+                      {is_visible,true},
+                      {rsc_id,330},
+                      {user_id,undefined},
+                      {email,<<"test@example.com">>},
+                      {name,<<"foo">>},
+                      {keep_informed,false},
+                      {props,#{<<"message">> => <<"test test">>}},
+                      {created,{{2020,6,25},{11,54,55}}},
+                      {props_json,<<"{\"message\": \"123\"}">>}],
+                     [{id,6},
+                      {is_visible,true},
+                      {rsc_id,330},
+                      {user_id,undefined},
+                      {email,<<"test@example.com">>},
+                      {name,<<"foo">>},
+                      {keep_informed,false},
+                      {props, [{message,  <<"test test">>}, {extra, <<"hello">>} ]},
+                      {created,{{2020,6,25},{11,54,55}}},
+                      {props_json,<<"{\"message\": \"123\"}">>}] ]),
+    
+    ?assertEqual([[{id,1},
+                   {is_visible,true},
+                   {rsc_id,330},
+                   {user_id,undefined},
+                   {email,<<"test@example.com">>},
+                   {name,<<"foo">>},
+                   {keep_informed,false},
+                   {props,undefined},
+                   {created,{{2020,6,25},{10,54,37}}},
+                   {props_json,undefined}],
+                  [{id,2},
+                   {is_visible,true},
+                   {rsc_id,330},
+                   {user_id,undefined},
+                   {email,<<"test@example.com">>},
+                   {name,<<"foo">>},
+                   {keep_informed,false},
+                   {created,{{2020,6,25},{10,54,37}}},
+                   {props_json,undefined},
+                   {message,<<"test test">>}],
+                  [{id,3},
+                   {is_visible,true},
+                   {rsc_id,330},
+                   {user_id,undefined},
+                   {email,<<"test@example.com">>},
+                   {name,<<"foo">>},
+                   {keep_informed,false},
+                   {created,{{2020,6,25},{10,54,37}}},
+                   {props_json,undefined},
+                   {message,<<"test test">>}],
+                  [{id,4},
+                   {is_visible,true},
+                   {rsc_id,330},
+                   {user_id,undefined},
+                   {email,<<"test@example.com">>},
+                   {name,<<"foo">>},
+                   {keep_informed,false},
+                   {props,undefined},
+                   {created,{{2020,6,25},{10,54,37}}},
+                   {message,<<"test test">>}],
+                  [{id,5},
+                   {is_visible,true},
+                   {rsc_id,330},
+                   {user_id,undefined},
+                   {email,<<"test@example.com">>},
+                   {name,<<"foo">>},
+                   {keep_informed,false},
+                   {created,{{2020,6,25},{11,54,55}}},
+                   {message,<<"123">>}],
+                  [{id,5},
+                   {is_visible,true},
+                   {rsc_id,330},
+                   {user_id,undefined},
+                   {email,<<"test@example.com">>},
+                   {name,<<"foo">>},
+                   {keep_informed,false},
+                   {created,{{2020,6,25},{11,54,55}}},
+                   {extra, <<"hello">>},
+                   {message,<<"123">>}]], M),
+    ok.
+
+
+-endif.
