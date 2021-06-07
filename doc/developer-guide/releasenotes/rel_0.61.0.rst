@@ -12,6 +12,9 @@ Main changes are:
  * Changes ``mod_seo_sitemap`` module for sites with many pages and/or multiple sources of pages
  * Fix for a problem where database connections were left idling if a timeout happened during a transaction
  * Fix for a problem where the ``zotonic stop`` command could take a long time
+ * Support for Google Analytics new "G-" codes
+ * Support for Google Tag Manager
+ * Make it possible for an authenticated user to change their password on ``/logon/change``
 
 Commits since 0.60.0
 --------------------
