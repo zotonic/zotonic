@@ -70,15 +70,34 @@ start(_Args) ->
 %% @spec stop() -> ok
 %% @doc Stop the zotonic server.
 stop() ->
-    Res = application:stop(zotonic),
+    try
+        Sites = z_sites_manager:get_sites(),
+        lists:map(
+            fun z_sites_manager:stop/1,
+            Sites),
+        % Wait a bit till all sites are stopped (max 5 secs)
+        await_sites_stopping(50),
+        application:stop(zotonic)
+    catch
+        _:_ -> ok
+    end,
     application:stop(emqtt),
     application:stop(eiconv),
     application:stop(mnesia),
     application:stop(lager),
     application:stop(webzmachine),
     application:stop(crypto),
-    Res.
+    erlang:halt().
 
+await_sites_stopping(0) -> ok;
+await_sites_stopping(N) ->
+    case proplists:get_value(running,  z_sites_manager:info()) of
+        0 ->
+            ok;
+        _ ->
+            timer:sleep(100),
+            await_sites_stopping(N-1)
+    end.
 
 %% @spec stop([Node]) -> void()
 %% @doc Stop a zotonic server on a specific node
