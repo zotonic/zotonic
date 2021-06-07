@@ -182,7 +182,7 @@
         text: 'text',
         width: undefined,
         addclass: undefined,
-        backdrop: 1,
-        center: 1
+        backdrop: true,
+        center: true
     };
 })(jQuery);
