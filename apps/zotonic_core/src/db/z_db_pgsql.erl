@@ -242,18 +242,18 @@ handle_info(disconnect, #state{ busy_pid = undefined } = State) ->
     Database = get_arg(dbdatabase, State#state.conn_args),
     Schema = get_arg(dbschema, State#state.conn_args),
     lager:debug("SQL closing connection to ~s/~s (~p)", [ Database, Schema, self() ]),
-    {noreply, cancel(State)};
+    {noreply, disconnect(State, disconnect), hibernate};
 
 handle_info(disconnect, State) ->
     Database = get_arg(dbdatabase, State#state.conn_args),
     Schema = get_arg(dbschema, State#state.conn_args),
     lager:error("SQL disconnect from ~s/~s whilst busy with \"~s\"  ~p",
                 [ Database, Schema, State#state.busy_sql, State#state.busy_params ]),
-    {noreply, State, cancel(State)};
+    {noreply, State, disconnect(State, disconnect), hibernate};
 
 handle_info(timeout, #state{ busy_pid = undefined } = State) ->
     % Idle timeout
-    {noreply, disconnect(State), hibernate};
+    {noreply, disconnect(State, idle), hibernate};
 
 handle_info(timeout, #state{
         busy_pid = Pid,
@@ -265,20 +265,24 @@ handle_info(timeout, #state{
     % The connection needs to be killed to stop the out-of-bounds query
     % on the db server. This to prevent that long running queries are
     % filling up all our connections and also slowing down the database.
+    Database = get_arg(dbdatabase, State#state.conn_args),
+    Schema = get_arg(dbschema, State#state.conn_args),
     lager:error(
-        "SQL Timeout (~p) ~p msec: \"~s\"   ~p",
-        [ Pid, Timeout, Sql, Params ]),
-    {noreply, cancel(State)};
+        "SQL Timeout (~p) ~p msec on ~s/~s: \"~s\"   ~p",
+        [ Pid, Timeout, Database, Schema, Sql, Params ]),
+    {noreply, disconnect(State, sql_timeout), hibernate};
 
 handle_info({'DOWN', _Ref, process, BusyPid, Reason}, #state{
         busy_pid = BusyPid,
         busy_sql = Sql,
         busy_params = Params
     } = State) ->
+    Database = get_arg(dbdatabase, State#state.conn_args),
+    Schema = get_arg(dbschema, State#state.conn_args),
     lager:error(
-        "SQL caller ~p down with reason ~p during: \"~s\"   ~p",
-        [ BusyPid, Reason, Sql, Params ]),
-    {noreply, cancel(State)};
+        "SQL caller ~p down with reason ~p during on ~s/~s: \"~s\"   ~p",
+        [ BusyPid, Reason, Database, Schema, Sql, Params ]),
+    {noreply, disconnect(State, busy_down), hibernate};
 
 handle_info({'DOWN', _Ref, process, ConnPid, Reason}, #state{
         conn = ConnPid,
@@ -287,14 +291,18 @@ handle_info({'DOWN', _Ref, process, ConnPid, Reason}, #state{
         busy_params = Params
     } = State) when is_pid(BusyPid) ->
     % Unexpected DOWN from the connection during query
+    Database = get_arg(dbdatabase, State#state.conn_args),
+    Schema = get_arg(dbschema, State#state.conn_args),
     lager:error(
-        "SQL connection drop (~p) reason ~p on: \"~s\"   ~p",
-        [ ConnPid, Reason, Sql, Params ]),
-    {noreply, cancel(State)};
+        "SQL connection drop (~p) reason ~p on ~s/~s: \"~s\"   ~p",
+        [ ConnPid, Reason, Database, Schema, Sql, Params ]),
+    State1 = State#state{ conn = undefined },
+    {noreply, disconnect(State1, sql_conn_down), hibernate};
 
 handle_info({'DOWN', _Ref, process, Pid, _Reason}, #state{ conn = Pid } = State) ->
     % Connection down, no processes running, ok to hibernate
-    {noreply, State#state{ conn = undefined }, hibernate};
+    State1 = State#state{ conn = undefined },
+    {noreply, disconnect(State1, sql_conn_down), hibernate};
 
 handle_info({'DOWN', _Ref, process, _Pid, _Reason}, #state{ busy_pid = undefined } = State) ->
     % Might be a late down message from the busy pid, ignore.
@@ -313,10 +321,8 @@ handle_info(Info, State) ->
     lager:warning("SQL unexpected info message ~p in state ~p", [ Info, State ]),
     {noreply, State, timeout(State)}.
 
-terminate(_Reason, #state{ conn = undefined }) ->
-    ok;
-terminate(_Reason, #state{ conn = Conn }) ->
-    ok = epgsql:cancel(Conn),
+terminate(_Reason, #state{} = State) ->
+    disconnect(State, sql_conn_terminate),
     ok.
 
 code_change(_OldVsn, State, _Extra) ->
@@ -327,11 +333,47 @@ code_change(_OldVsn, State, _Extra) ->
 %% Helper functions
 %%
 
-cancel(#state{ conn = ConnPid } = State) ->
-    ok = epgsql:cancel(ConnPid),
-    #state{
-        conn_args = State#state.conn_args
-    }.
+%% @doc Close the connection to the SQL server
+disconnect(#state{ conn = undefined } = State, Reason) ->
+    State1 = kill_busy(State, Reason),
+    State1#state{
+        busy_monitor = undefined,
+        busy_pid = undefined,
+        busy_sql = undefined,
+        busy_params = []
+    };
+disconnect(#state{ conn = Conn } = State, Reason) ->
+    ok = epgsql:close(Conn),
+    State1 = receive
+        {'DOWN', _Ref, process, Conn, _Reason} ->
+            % The SQL connection sent the error to the busy pid
+            clean_busy(State)
+        after 500 ->
+            % Assume busy pid did not receive the error, kill it
+            kill_busy(State, Reason)
+    end,
+    disconnect(State1#state{ conn = undefined }, Reason).
+
+%% @doc Kill the busy process.
+kill_busy(#state{ busy_pid = Pid } = State, Reason) when is_pid(Pid) ->
+    erlang:demonitor(State#state.busy_monitor),
+    erlang:exit(Pid, Reason),
+    State#state{
+        busy_monitor = undefined,
+        busy_pid = undefined
+    };
+kill_busy(State, _Reason) ->
+    State.
+
+clean_busy(#state{ busy_pid = Pid } = State) when is_pid(Pid) ->
+    erlang:demonitor(State#state.busy_monitor),
+    State#state{
+        busy_monitor = undefined,
+        busy_pid = undefined
+    };
+clean_busy(State) ->
+    State.
+
 
 %% @doc Calculate the remaining timeout for the running query.
 timeout(#state{ busy_timeout = undefined }) ->
@@ -444,11 +486,6 @@ retry_delay(too_many_connections, _) ->
 retry_delay(_, _RetryCount)  ->
     ?CONNECT_RETRY_SLEEP.
 
-disconnect(#state{conn=undefined} = State) ->
-    State;
-disconnect(#state{conn=Conn} = State) ->
-    _ = epgsql:close(Conn),
-    State#state{conn=undefined}.
 
 get_arg(K, Args) ->
     maybe_default(K, proplists:get_value(K, Args)).
