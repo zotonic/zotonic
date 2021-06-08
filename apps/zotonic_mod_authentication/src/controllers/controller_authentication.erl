@@ -403,10 +403,10 @@ reset(_Payload, Context) ->
 
 
 reset_1(UserId, Username, Password, Passcode, Context) ->
-    QArgs = [
-        {<<"username">>, Username},
-        {<<"passcode">>, Passcode}
-    ],
+    QArgs = #{
+        <<"username">> => Username,
+        <<"passcode">> => Passcode
+    },
     case auth_postcheck(UserId, QArgs, Context) of
         ok ->
             case m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(Context)) of
@@ -479,7 +479,7 @@ check_reminder_secret(#{ <<"secret">> := Secret, <<"username">> := Username }, C
                         undefined ->
                             {[], Context};
                         Username ->
-                            NeedPasscode = case auth_postcheck(UserId, [], Context) of
+                            NeedPasscode = case auth_postcheck(UserId, #{}, Context) of
                                 {error, need_passcode} -> true;
                                 _ -> false
                             end,
@@ -550,7 +550,7 @@ auth_precheck(Username, Context) when is_binary(Username) ->
         Error -> Error
     end.
 
-auth_postcheck(UserId, QueryArgs, Context) ->
+auth_postcheck(UserId, QueryArgs, Context) when is_map(QueryArgs) ->
     case z_notifier:first(#auth_postcheck{ id = UserId, query_args = QueryArgs }, Context) of
         undefined -> ok;
         ok -> ok;
