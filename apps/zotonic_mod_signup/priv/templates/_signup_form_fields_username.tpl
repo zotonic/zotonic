@@ -13,7 +13,10 @@ show_signup_password2
     {% if show_signup_username %}
         <div class="form-group" id="signup_username">
             <label for="username" class="control-label">{_ Username _}</label>
-            <input class="form-control" id="username" name="username" type="text" value="" />
+            <input class="form-control" id="username" name="username" type="text" value=""
+                   required
+                   autocapitalize="off"
+                   autocorrect="off">
             {% validate id="username"
                 wait=400
                 type={presence failure_message=_"Enter a username"}
@@ -26,7 +29,11 @@ show_signup_password2
         {% with m.authentication.password_min_length as min_length %}
             <div class="form-group" id="signup_password1">
                 <label for="password1" class="control-label">{_ Password _}</label>
-                <input class="form-control" id="password1" name="password1" type="password" value="" autocomplete="new-password" />
+                <input class="form-control" id="password1" name="password1" type="password" value=""
+                       required
+                       autocomplete="new-password"
+                       autocapitalize="off"
+                       autocorrect="off">
                 {% if m.admin_identity.password_regex %}
                     {% validate id="password1"
                         type={presence failure_message=_"Enter a password"}
@@ -54,7 +61,11 @@ show_signup_password2
     {% if show_signup_password2 %}
         <div class="form-group" id="signup_password2">
             <label for="password2" class="control-label">{_ Verify password _}</label>
-            <input class="form-control" id="password2" name="password2" type="password" value="" autocomplete="new-password" />
+            <input class="form-control" id="password2" name="password2" type="password" value=""
+                   required
+                   autocomplete="new-password"
+                   autocapitalize="off"
+                   autocorrect="off">
             {% validate id="password2"
                 type={presence failure_message=_"Repeat your password"}
                 type={confirmation match="password1" failure_message=_"This does not match the first password"}

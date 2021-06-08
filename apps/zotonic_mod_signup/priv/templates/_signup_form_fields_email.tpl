@@ -17,7 +17,7 @@ show_signup_name_email
         {% if name_first %}
             <span>{{ name_first|escape }}</span>
         {% else %}
-            <input class="form-control" id="name_first" name="name_first" type="text" value="{{ name_first|escape }}" autocomplete="given-name" />
+            <input class="form-control" id="name_first" name="name_first" type="text" value="{{ name_first|escape }}" autocomplete="given-name">
             {% validate id="name_first"
                 type={presence failure_message=_"Enter a name"}
                 only_on_blur
@@ -28,7 +28,7 @@ show_signup_name_email
 {% if show_signup_name_prefix %}
     <div class="form-group" id="signup_surname_prefix">
         <label for="surprefix" class="control-label">{_ Prefix _}</label>
-        <input class="form-control" id="surprefix" name="name_surname_prefix" type="text" value="" autocomplete="additional-name" />
+        <input class="form-control" id="surprefix" name="name_surname_prefix" type="text" value="" autocomplete="additional-name">
     </div>
 {% endif %}
 
@@ -38,7 +38,7 @@ show_signup_name_email
         {% if name_surname %}
             <span>{{ name_surname|escape }}</span>
         {% else %}
-            <input class="form-control" id="name_surname" name="name_surname" type="text" value="{{ name_surname|escape }}" autocomplete="family-name" />
+            <input class="form-control" id="name_surname" name="name_surname" type="text" value="{{ name_surname|escape }}" autocomplete="family-name">
             {% validate id="name_surname"
                 type={presence failure_message=_"Enter a name"}
                 only_on_blur
@@ -53,7 +53,10 @@ show_signup_name_email
         {% if email %}
             <span>{{ email|escape }}</span>
         {% else %}
-            <input class="form-control" id="email" name="email" type="text" value="{{ email|escape }}" />
+            <input class="form-control" id="email" name="email" type="text"
+                   value="{{ email|escape }}"
+                   autocapitalize="off"
+                   autocorrect="off">
             {% validate id="email"
                 type={email failure_message=_"Enter a valid address"}
                 type={presence failure_message=_"Enter an e-mail address"}

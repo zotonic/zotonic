@@ -7,8 +7,12 @@
             <label for="username" class="control-label">{_ Username _}</label>
             <input class="form-control" type="text" id="username" name="username"
                    value="{{ q.options.username|default:q.username|escape }}"
-                   {% if not q.is_show_passcode %}autofocus{% endif %} required autocomplete="username"
-                   placeholder="{_ Username _}" />
+                   {% if not is_show_passcode %}autofocus{% endif %}
+                   required
+                   placeholder="{_ Username _}"
+                   autocomplete="username"
+                   autocapitalize="off"
+                   autocorrect="off">
         </div>
     {% endblock %}
 
@@ -16,18 +20,24 @@
         <div class="form-group">
             <label for="password" class="control-label">{_ Password _}</label>
             <input class="form-control" type="password" id="password" name="password" value=""
-                   required autocomplete="current-password"
-                   placeholder="{_ Password _}" />
+                   required
+                   placeholder="{_ Password _}"
+                   autocomplete="current-password"
+                   autocapitalize="off"
+                   autocorrect="off">
         </div>
     {% endblock %}
 
-    {% if q.is_show_passcode %}
+    {% if is_show_passcode %}
         {% block field_passcode %}
             <div class="form-group passcode">
                 <label for="password" class="control-label">{_ Passcode _}</label>
                 <input class="form-control" type="text" id="passcode" name="passcode" value=""
-                       autofocus required autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]+"
-                       placeholder="{_ Two-factor passcode _}" />
+                       autofocus required inputmode="numeric" pattern="[0-9]+"
+                       placeholder="{_ Two-factor passcode _}"
+                       autocomplete="one-time-code"
+                       autocapitalize="off"
+                       autocorrect="off">
             </div>
         {% endblock %}
     {% endif %}
@@ -55,11 +65,11 @@
                    name="username"
                    value="{{ q.options.username|default:q.username|escape }}"
                    class="form-control"
-                   autocapitalize="off"
                    required
-                   autocomplete="off"
-                   tabindex="-1"
-            >
+                   autocapitalize="off"
+                   autocorrect="off"
+                   autocomplete="username"
+                   tabindex="-1">
         </div>
         <p class="clearfix">
             <b>{{ q.options.username|escape }}</b>
@@ -73,10 +83,11 @@
                    name="username"
                    value="{{ q.options.username|default:q.username|escape }}"
                    class="form-control"
+                   required
                    autofocus
                    autocapitalize="off"
-                   required autocomplete="username"
-            >
+                   autocorrect="off"
+                   autocomplete="username">
         </div>
     {% endif %}
 
@@ -111,27 +122,33 @@
         <div class="form-group">
             <label for="password" class="control-label">{_ Password _}</label>
             <input class="form-control" type="password" id="password" name="password" value=""
-                   required autocomplete="current-password"
-                   {% if not q.is_show_passcode %}autofocus{% endif %}
-                   placeholder="{_ Password _}"
-            >
+                   required
+                   {% if not is_show_passcode %}autofocus{% endif %}
+                   autocomplete="current-password"
+                   autocapitalize="off"
+                   autocorrect="off"
+                   placeholder="{_ Password _}">
         </div>
 
-        {% if q.is_show_passcode %}
+        {% if is_show_passcode %}
             <div class="form-group passcode">
-                <label for="password" class="control-label">{_ Passcode _}</label>
+                <label for="passcode" class="control-label">{_ Passcode _}</label>
                 <input class="form-control" type="text" id="passcode" name="passcode" value=""
-                       autofocus required autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]+"
-                       placeholder="{_ Two-factor passcode _}" />
+                       autofocus required inputmode="numeric" pattern="[0-9]+"
+                       placeholder="{_ Two-factor passcode _}"
+                       autocomplete="one-time-code"
+                       autocapitalize="off"
+                       autocorrect="off">
             </div>
         {% endif %}
     {% elseif not q.options.is_username_checked %}
         <div class="form-group hidden">
             <label for="password" class="control-label">{_ Password _}</label>
             <input class="form-control" type="password" id="password" name="password" value=""
-                   autocomplete="current-password"
                    placeholder="{_ Password _}"
-            >
+                   autocomplete="current-password"
+                   autocapitalize="off"
+                   autocorrect="off">
         </div>
     {% endif %}
 

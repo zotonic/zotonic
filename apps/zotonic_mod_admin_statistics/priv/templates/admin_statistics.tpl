@@ -12,54 +12,55 @@
 </style>
 
 <div class="row">
-<div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
-    {% include "stat_panel/erlang.tpl" %}
-</div>
 
-<div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
-    {% include "stat_panel/system_usage.tpl" %}
-</div>
+    <div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
+        {% include "stat_panel/system_usage.tpl" %}
+    </div>
 
-<div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
-    <div class="panel panel-default">
-        <div class="panel-heading">IO</div>
-        <div class="panel-body">
-            <table class="table table-condensed">
-                <thead></thead>
-                <tbody>
-                    {% for title, id in [ ["Input", "io-input"],
-                                          ["Output", "io-output"] ] %}
-                        {% include "_stat_row.tpl" %}
-                    {% endfor %}
-                </tbody>
-            </table>
+    <div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
+        {% include "stat_panel/erlang.tpl" %}
+    </div>
+
+    <div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">IO</div>
+            <div class="panel-body">
+                <table class="table table-condensed">
+                    <thead></thead>
+                    <tbody>
+                        {% for title, id in [ ["Input", "io-input"],
+                                              ["Output", "io-output"] ] %}
+                            {% include "_stat_row.tpl" %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
-
-
-</div>
-<div class="row">
-
-<div class="col-md-5 col-lg-4 col-sm-6 col-xs-8">
-    {% include "stat_panel/memory_usage.tpl" %}
-</div>
-
-<div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
-    {% include "stat_panel/broker.tpl" %}
-</div>
-
-<div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
-    {% include "stat_panel/database.tpl" %}
-</div>
 
 </div>
 
 <div class="row">
 
-<div class="col-md-10 col-lg-8 col-sm-12">
-    {% include "stat_panel/dispatch.tpl" %}
+    <div class="col-md-5 col-lg-4 col-sm-6 col-xs-8">
+        {% include "stat_panel/memory_usage.tpl" %}
+    </div>
+
+    <div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
+        {% include "stat_panel/broker.tpl" %}
+    </div>
+
+    <div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
+        {% include "stat_panel/database.tpl" %}
+    </div>
+
 </div>
+
+<div class="row">
+
+    <div class="col-md-10 col-lg-8 col-sm-12">
+        {% include "stat_panel/dispatch.tpl" %}
+    </div>
 
 </div>
 

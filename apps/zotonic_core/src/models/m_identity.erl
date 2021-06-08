@@ -568,9 +568,9 @@ check_username_pw(Username, Password, Context) ->
 %%      If succesful then updates the 'visited' timestamp of the entry.
 -spec check_username_pw(binary() | string(), binary() | string(), list() | map(), z:context()) ->
             {ok, m_rsc:resource_id()} | {error, term()}.
+check_username_pw(Username, Password, QueryArgs, Context) when is_list(QueryArgs) ->
+    check_username_pw(Username, Password, maps:from_list(QueryArgs), Context);
 check_username_pw(Username, Password, QueryArgs, Context) when is_map(QueryArgs) ->
-    check_username_pw(Username, Password, maps:to_list(QueryArgs), Context);
-check_username_pw(Username, Password, QueryArgs, Context) ->
     NormalizedUsername = z_convert:to_binary( z_string:trim( z_string:to_lower(Username) ) ),
     case z_notifier:first(#auth_precheck{ username =  NormalizedUsername }, Context) of
         Ok when Ok =:= ok; Ok =:= undefined ->
