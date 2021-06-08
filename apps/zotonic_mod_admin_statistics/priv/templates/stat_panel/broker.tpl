@@ -1,6 +1,6 @@
 {% extends "_stats_panel.tpl" %}
 
-{% block panel_title %}{_ Broker _}{% endblock %}
+{% block panel_title %}{_ MQTT Broker _}{% endblock %}
 
 {% block panel_body %}
 <table class="table table-condensed">

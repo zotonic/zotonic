@@ -7,7 +7,7 @@
             <label for="username" class="control-label">{_ Username _}</label>
             <input class="form-control" type="text" id="username" name="username"
                    value="{{ q.options.username|default:q.username|escape }}"
-                   {% if not q.is_show_passcode %}autofocus{% endif %} required autocomplete="username"
+                   {% if not is_show_passcode %}autofocus{% endif %} required autocomplete="username"
                    placeholder="{_ Username _}" />
         </div>
     {% endblock %}
@@ -21,7 +21,7 @@
         </div>
     {% endblock %}
 
-    {% if q.is_show_passcode %}
+    {% if is_show_passcode %}
         {% block field_passcode %}
             <div class="form-group passcode">
                 <label for="password" class="control-label">{_ Passcode _}</label>
@@ -112,14 +112,14 @@
             <label for="password" class="control-label">{_ Password _}</label>
             <input class="form-control" type="password" id="password" name="password" value=""
                    required autocomplete="current-password"
-                   {% if not q.is_show_passcode %}autofocus{% endif %}
+                   {% if not is_show_passcode %}autofocus{% endif %}
                    placeholder="{_ Password _}"
             >
         </div>
 
-        {% if q.is_show_passcode %}
+        {% if is_show_passcode %}
             <div class="form-group passcode">
-                <label for="password" class="control-label">{_ Passcode _}</label>
+                <label for="passcode" class="control-label">{_ Passcode _}</label>
                 <input class="form-control" type="text" id="passcode" name="passcode" value=""
                        autofocus required autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]+"
                        placeholder="{_ Two-factor passcode _}" />

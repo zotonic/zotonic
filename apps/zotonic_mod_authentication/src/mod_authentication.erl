@@ -105,9 +105,9 @@ observe_logon_submit(#logon_submit{
             payload = #{
                 <<"username">> := Username,
                 <<"password">> := Password
-            }
+            } = Payload
         }, Context) when is_binary(Username), is_binary(Password) ->
-    case m_identity:check_username_pw(Username, Password, Context) of
+    case m_identity:check_username_pw(Username, Password, Payload, Context) of
         {ok, UserId} ->
             case Password of
                 <<>> ->

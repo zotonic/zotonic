@@ -580,7 +580,7 @@
 %%      Returns: 'undefined' | ok | {error, Reason}
 -record(auth_postcheck, {
         id :: m_rsc:resource_id(),
-        query_args = [] :: list()
+        query_args = #{} :: map()
     }).
 
 %% @doc Fold over the context after logon of user with username, communicates valid or invalid password

@@ -113,7 +113,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 observe_auth_postcheck(#auth_postcheck{ id = UserId, query_args = QueryArgs }, Context) ->
     case m_auth2fa:is_totp_enabled(UserId, Context) of
         true ->
-            case z_string:trim( z_convert:to_binary( proplists:get_value(<<"passcode">>, QueryArgs) ) ) of
+            case z_string:trim( z_convert:to_binary( maps:get(<<"passcode">>, QueryArgs, <<>>) ) ) of
                 <<>> ->
                     {error, need_passcode};
                 PassCode ->
