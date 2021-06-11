@@ -630,8 +630,8 @@ string2filter("removebg", Arg) ->
     {ok, {removebg, list_to_integer(Arg)}};
 string2filter("mediaclass", Arg) ->
     [MediaClass|Checksum] = string:tokens(Arg, "."),
-    {ok, {mediaclass, {MediaClass, iolist_to_binary(Checksum)}}}.
-string2filter(Filter, _Arg) ->
+    {ok, {mediaclass, {MediaClass, iolist_to_binary(Checksum)}}};
+string2filter(_Filter, _Arg) ->
     {error, unknown_filter}.
 
 % simple ceil for positive numbers
