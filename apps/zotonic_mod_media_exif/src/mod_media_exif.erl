@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016 Marc Worrell <marc@worrell.nl>
+%% @copyright 2016-2021 Marc Worrell <marc@worrell.nl>
 
 %% @doc Extract EXIF information from the medium record to resource properties
 
-%% Copyright 2016 Marc Worrell
+%% Copyright 2016-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -72,8 +72,14 @@ to_binary_point(undefined) ->
     undefined.
 
 % http://www.awaresystems.be/imaging/tiff/tifftags/privateifd/gps/gpslongitude.html
-gps([{ratio,D,DFrac},{ratio,M,MFrac},{ratio,S,SFrac}]) ->
-    (D/DFrac) + (M/MFrac/60) + (S/SFrac/3600);
+gps([{ratio,D,DFrac},{ratio,M,MFrac},{ratio,S,SFrac}] = Ratios) ->
+    try
+        (D/DFrac) + (M/MFrac/60) + (S/SFrac/3600)
+    catch
+        _:_ ->
+            lager:info("mod_media_exif: illegal ratios: ~p", [ Ratios ]),
+            undefined
+    end;
 gps(_) ->
     undefined.
 
