@@ -147,7 +147,7 @@ is_tracing() ->
         _ -> false
     end.
 
-%% This function should not be used but currently is required by the
+%% @doc This function MUST NOT be used, but currently is required by the
 %% install / upgrade routines. Can only be called from inside a
 %% z_db:transaction/2.
 get_raw_connection(#context{dbc=Worker}) when Worker =/= undefined ->
@@ -164,7 +164,8 @@ init(Args) ->
     {ok, #state{conn=undefined, conn_args=Args}, ?IDLE_TIMEOUT}.
 
 
-handle_call(Cmd, From, #state{conn = undefined, conn_args = Args}=State) ->
+handle_call({fetch_conn, _Ref, _CallerPid, _Sql, _Params, _Timeout, _IsTracing} = Cmd, From,
+            #state{ busy_pid = undefined, conn = undefined, conn_args = Args } = State) ->
     case connect(Args, From) of
         {ok, Conn} ->
             erlang:monitor(process, Conn),
@@ -205,15 +206,7 @@ handle_call({return_conn, Ref, Pid}, _From,
         } = State) ->
     erlang:demonitor(Monitor),
     trace_end(IsTracing, Start, Sql, Params, Conn),
-    State1 = State#state{
-        busy_monitor = undefined,
-        busy_pid = undefined,
-        busy_ref = undefined,
-        busy_timeout = undefined,
-        busy_start = undefined,
-        busy_sql = undefined,
-        busy_params = []
-    },
+    State1 = reset_busy_state(State),
     {reply, ok, State1, timeout(State1)};
 
 handle_call({return_conn, _Ref}, From, #state{ busy_pid = undefined } = State) ->
@@ -224,6 +217,14 @@ handle_call({return_conn, _Ref}, From, #state{ busy_pid = OtherPid } = State) ->
     lager:error("SQL connection returned by ~p but in use by ~p", [ From, OtherPid ]),
     {reply, {error, notyours}, State, timeout(State)};
 
+handle_call(get_raw_connection, From, #state{ conn = undefined, conn_args = Args } = State) ->
+    case connect(Args, From) of
+        {ok, Conn} ->
+            erlang:monitor(process, Conn),
+            handle_call(get_raw_connection, From, State#state{conn=Conn});
+        {error, _} = E ->
+            {reply, E, State}
+    end;
 handle_call(get_raw_connection, _From, #state{ conn = Conn } = State) ->
     {reply, Conn, State, timeout(State)};
 
@@ -252,7 +253,7 @@ handle_info(disconnect, State) ->
     {noreply, State, disconnect(State, disconnect), hibernate};
 
 handle_info(timeout, #state{ busy_pid = undefined } = State) ->
-    % Idle timeout
+    % Idle timeout - no SQL query is running
     {noreply, disconnect(State, idle), hibernate};
 
 handle_info(timeout, #state{
@@ -277,12 +278,15 @@ handle_info({'DOWN', _Ref, process, BusyPid, Reason}, #state{
         busy_sql = Sql,
         busy_params = Params
     } = State) ->
+    % The process using our connection is down.
+    % As it might have been in a transaction, we just kill
+    % the connection and let the database clean up.
     Database = get_arg(dbdatabase, State#state.conn_args),
     Schema = get_arg(dbschema, State#state.conn_args),
-    lager:error(
+    lager:info(
         "SQL caller ~p down with reason ~p during on ~s/~s: \"~s\"   ~p",
         [ BusyPid, Reason, Database, Schema, Sql, Params ]),
-    {noreply, disconnect(State, busy_down), hibernate};
+    {noreply, disconnect(State, sql_timeout), hibernate};
 
 handle_info({'DOWN', _Ref, process, ConnPid, Reason}, #state{
         conn = ConnPid,
@@ -335,45 +339,47 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @doc Close the connection to the SQL server
 disconnect(#state{ conn = undefined } = State, Reason) ->
-    State1 = kill_busy(State, Reason),
-    State1#state{
-        busy_monitor = undefined,
-        busy_pid = undefined,
-        busy_sql = undefined,
-        busy_params = []
-    };
+    kill_busy(State, Reason);
 disconnect(#state{ conn = Conn } = State, Reason) ->
     ok = epgsql:close(Conn),
     State1 = receive
         {'DOWN', _Ref, process, Conn, _Reason} ->
             % The SQL connection sent the error to the busy pid
-            clean_busy(State)
+            reset_busy_state(State)
         after 500 ->
             % Assume busy pid did not receive the error, kill it
             kill_busy(State, Reason)
     end,
-    disconnect(State1#state{ conn = undefined }, Reason).
+    State1#state{ conn = undefined }.
 
 %% @doc Kill the busy process.
 kill_busy(#state{ busy_pid = Pid } = State, Reason) when is_pid(Pid) ->
-    erlang:demonitor(State#state.busy_monitor),
+    #state{
+        busy_monitor = Monitor,
+        busy_sql = Sql,
+        busy_params = Params,
+        busy_start = Start,
+        busy_tracing = IsTracing,
+        conn = Conn
+    } = State,
+    erlang:demonitor(Monitor),
     erlang:exit(Pid, Reason),
-    State#state{
-        busy_monitor = undefined,
-        busy_pid = undefined
-    };
+    trace_end(IsTracing, Start, Sql, Params, Conn),
+    reset_busy_state(State);
 kill_busy(State, _Reason) ->
-    State.
+    reset_busy_state(State).
 
-clean_busy(#state{ busy_pid = Pid } = State) when is_pid(Pid) ->
-    erlang:demonitor(State#state.busy_monitor),
+
+reset_busy_state(State) ->
     State#state{
         busy_monitor = undefined,
-        busy_pid = undefined
-    };
-clean_busy(State) ->
-    State.
-
+        busy_pid = undefined,
+        busy_ref = undefined,
+        busy_timeout = undefined,
+        busy_start = undefined,
+        busy_sql = undefined,
+        busy_params = []
+    }.
 
 %% @doc Calculate the remaining timeout for the running query.
 timeout(#state{ busy_timeout = undefined }) ->
