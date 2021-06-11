@@ -593,10 +593,12 @@ url2props1([P|Rest], Acc) ->
                 [$-|A] -> A;
                 _ -> Arg
             end,
-    Filter = z_media_preview:string2filter(Prop, Arg1),
-    url2props1(Rest, [Filter|Acc]).
-
-
+    case z_media_preview:string2filter(Prop, Arg1) of
+        {ok, Filter} ->
+            url2props1(Rest, [Filter|Acc]);
+        {error, _} ->
+            url2props1(Rest, Acc)
+    end.
 
 opt_crop_center(Id, Options, Context) ->
     Crop = proplists:get_value(crop, Options),

@@ -580,10 +580,11 @@ calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation, _IsUpsc
 
 %% @spec string2filter(Filter, Arg) -> FilterTuple
 %% @doc Map the list of known filters and known args to atoms.  Used when mapping preview urls back to filter args.
+-spec string2filter( string(), string() ) -> {ok, tuple()|atom()} | {error, term()}.
 string2filter("crop", "none") ->
-    {crop,none};
+    {ok, {crop,none}};
 string2filter("crop", []) ->
-    {crop,center};
+    {ok, {crop,center}};
 string2filter("crop", Where) ->
     Dir = case Where of
             "north"      -> north;
@@ -599,39 +600,40 @@ string2filter("crop", Where) ->
                 {match, [[CropL], [CropT]]} = re:run(CropLT, "[+-][0-9]+", [global, {capture, first, list}]),
                 [list_to_integer(CropL), list_to_integer(CropT)]
           end,
-    {crop,Dir};
+    {ok, {crop,Dir}};
 string2filter("grey",[]) ->
-    grey;
+    {ok, grey};
 string2filter("gray",[]) ->
-    grey;
+    {ok, grey};
 string2filter("mono",[]) ->
-    mono;
+    {ok, mono};
 string2filter("flip",[]) ->
-    flip;
+    {ok, flip};
 string2filter("flop",[]) ->
-    flop;
+    {ok, flop};
 string2filter("extent",[]) ->
-    extent;
+    {ok, extent};
 string2filter("upscale",[]) ->
-    upscale;
+    {ok, upscale};
 string2filter("blur",[]) ->
-    blur;
+    {ok, blur};
 string2filter("blur",Arg) ->
-    {blur,Arg};
+    {ok, {blur,Arg}};
 string2filter("quality", Arg) ->
-    {quality, list_to_integer(Arg)};
+    {{ok, quality, list_to_integer(Arg)}};
 string2filter("background", Arg) ->
-    {background,Arg};
+    {ok, {background,Arg}};
 string2filter("lossless", _) ->
-    lossless;
+    {ok, lossless};
 string2filter("removebg", []) ->
-    {removebg, 5};
+    {ok, {removebg, 5}};
 string2filter("removebg", Arg) ->
-    {removebg, list_to_integer(Arg)};
+    {ok, {removebg, list_to_integer(Arg)}};
 string2filter("mediaclass", Arg) ->
     [MediaClass|Checksum] = string:tokens(Arg, "."),
-    {mediaclass, {MediaClass, iolist_to_binary(Checksum)}}.
-
+    {ok, {mediaclass, {MediaClass, iolist_to_binary(Checksum)}}}.
+string2filter(Filter, _Arg) ->
+    {error, unknown_filter}.
 
 % simple ceil for positive numbers
 s_ceil(A)  -> round(A + 0.499999).
