@@ -65,6 +65,7 @@
 -define(MEDIA_MAX_LENGTH_PREVIEW, 10 * 1024 * 1024).
 -define(MEDIA_MAX_LENGTH_DOWNLOAD, 500 * 1024 * 1024).
 -define(MEDIA_TIMEOUT_DOWNLOAD, 60 * 1000).
+-define(MEDIA_MAX_ROOTNAME_LENGTH, 80).
 
 -type media_url() :: binary() | string().
 
@@ -326,7 +327,9 @@ maybe_duplicate_file(#{ <<"filename">> := _, <<"is_deletable_file">> := false } 
     {ok, Ms};
 maybe_duplicate_file(#{ <<"filename">> := Filename, <<"is_deletable_file">> := true } = Ms, Context) ->
     {ok, NewFile} = duplicate_file(archive, Filename, Context),
-    RootName = filename:rootname(filename:basename(NewFile)),
+    RootName = z_string:truncate(
+        filename:rootname(filename:basename(NewFile)),
+        ?MEDIA_MAX_ROOTNAME_LENGTH),
     Ms2 = Ms#{
         <<"filename">> => NewFile,
         <<"rootname">> => RootName,
@@ -657,7 +660,9 @@ replace_file_sanitize(RscId, PreProc, Props, Opts, Context) ->
 -spec replace_file_db( m_rsc:resource_id() | insert_rsc, #media_upload_preprocess{}, map(), list(), z:context() ) ->
     {ok, m_rsc:resource_id()} | {error, term()}.
 replace_file_db(RscId, PreProc, Props, Opts, Context) ->
-    SafeRootName = z_string:to_rootname(PreProc#media_upload_preprocess.original_filename),
+    SafeRootName = z_string:truncate(
+        z_string:to_rootname(PreProc#media_upload_preprocess.original_filename),
+        ?MEDIA_MAX_ROOTNAME_LENGTH),
     PreferExtension = z_convert:to_binary(
         filename:extension(PreProc#media_upload_preprocess.original_filename)),
     Mime = z_convert:to_binary(PreProc#media_upload_preprocess.mime),
