@@ -57,9 +57,10 @@ observe_seo_sitemap_urlset(#seo_sitemap_urlset{ source = <<"seo_sitemap">>, offs
 observe_seo_sitemap_urlset(#seo_sitemap_urlset{}, _Context) ->
     undefined.
 
-observe_rsc_update_done(#rsc_update_done{ id = Id }, Context) ->
-    m_seo_sitemap:update_rsc(Id, Context).
-
+observe_rsc_update_done(#rsc_update_done{ id = Id, action = Action }, Context) when Action =/= delete ->
+    m_seo_sitemap:update_rsc(Id, Context);
+observe_rsc_update_done(#rsc_update_done{}, _Context) ->
+    undefined.
 
 event(#postback{ message = sitemap_rebuild }, Context) ->
     case z_acl:is_admin(Context)
