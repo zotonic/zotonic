@@ -106,7 +106,7 @@ addsite_check_userdir(Name, Options, Context) ->
         ok ->
             addsite_check_git(Name, Options, Context);
         {error, Error} ->
-            error(Error, SiteDir, Context)
+            report_error(Error, SiteDir, Context)
     end.
 
 % If Git: checkout from Git
@@ -453,32 +453,32 @@ is_reserved(<<"filter_", _/binary>>) -> true;
 is_reserved(_) -> false.
 
 
-error(eacces, SiteDir, Context) ->
+report_error(eacces, SiteDir, Context) ->
     {error, iolist_to_binary([
                 ?__(<<"No permission to create the site directory at:">>, Context),
                 " ", SiteDir
             ])};
-error(eexist, SiteDir, Context) ->
+report_error(eexist, SiteDir, Context) ->
     {error, iolist_to_binary([
                 ?__(<<"The file or directory already exists:">>, Context),
                 " ", SiteDir
             ])};
-error(enoent, SiteDir, Context) ->
+report_error(enoent, SiteDir, Context) ->
     {error, iolist_to_binary([
                 ?__(<<"The parent directory does not exist:">>, Context),
                 " ", SiteDir
             ])};
-error(enospc, SiteDir, Context) ->
+report_error(enospc, SiteDir, Context) ->
     {error, iolist_to_binary([
                 ?__("Disk full creating:", Context),
                 " ", SiteDir
             ])};
-error(enotdir, SiteDir, Context) ->
+report_error(enotdir, SiteDir, Context) ->
     {error, iolist_to_binary([
                 ?__(<<"A component of the path is not a directory:">>, Context),
                 " ", SiteDir
             ])};
-error(Error, SiteDir, Context) ->
+report_error(Error, SiteDir, Context) ->
     {error, iolist_to_binary([
                 ?__(<<"Could not create the file:">>, Context),
                 " ", SiteDir, " (", z_convert:to_binary(Error), ")"
