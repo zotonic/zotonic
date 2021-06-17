@@ -401,6 +401,7 @@ abs_url(<<$/, _/binary>> = Url, Context) ->
                 Port -> <<"https://", Hostname/binary, $:, (integer_to_binary(Port))/binary, Url/binary>>
             end;
         AbsUrl ->
+            ?DEBUG(AbsUrl),
             AbsUrl
     end;
 abs_url(Url, Context) ->

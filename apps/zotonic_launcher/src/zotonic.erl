@@ -90,8 +90,10 @@ runtests(Tests) ->
             ok = await_startup(zotonic_site_testsandbox),
             io:format("~nStarting eunit tests~n"),
             case eunit:test(Tests, []) of
-                ok -> init:stop(0);
-                error -> init:stop(1)
+                ok -> 
+                    erlang:halt(0);
+                error ->
+                    erlang:halt(1)
             end
         end),
     ok.
