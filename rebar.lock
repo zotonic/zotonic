@@ -40,7 +40,7 @@
  {<<"jsxrecord">>,{pkg,<<"jsxrecord">>,<<"1.2.0">>},0},
  {<<"keyserver">>,
   {git,"https://github.com/channelme/keyserver.git",
-       {ref,"7c31f30c86f43ffaea824f823dc440e972f39a7b"}},
+       {ref,"f332d1fb5009843361c943f259e546c9aa659ceb"}},
   0},
  {<<"lager">>,{pkg,<<"lager">>,<<"3.9.2">>},0},
  {<<"letsencrypt">>,
