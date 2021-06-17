@@ -22,7 +22,7 @@ all: compile
 
 $(REBAR): $(REBAR_ETAG)
 	$(ERL) -noshell -s inets -s ssl \
-	  -eval 'file:delete("$(REBAR)"), $(SET_HTTPS_PROXY) {ok, saved_to_file} = httpc:request(get, {"$(REBAR_URL)", []}, [], [{stream, "$(REBAR)"}])' \
+	  -eval 'file:delete("$(REBAR)"), $(SET_HTTPS_PROXY) {ok, saved_to_file} = httpc:request(get, {"$(REBAR_URL)", []}, [{ssl, [ {verify, verify_none} ]}], [{stream, "$(REBAR)"}])' \
 	  -s init stop
 	chmod +x $(REBAR)
 
@@ -81,13 +81,13 @@ edocs: $(REBAR)
 # used by "make compile" dependencies
 $(REBAR_ETAG):
 	$(ERL) -noshell -s inets -s ssl \
-		-eval '$(SET_HTTPS_PROXY) case httpc:request(head, {"$(REBAR_URL)", []}, [{timeout, 2000}], []) of {ok, {_, Headers,_}} -> Etag = proplists:get_value("etag", Headers), Bin = list_to_binary(Etag), case file:read_file("$(REBAR_ETAG)") of {ok, Bin} -> io:fwrite("ETag update not needed~n"); {ok, _OldEtag} -> file:write_file("$(REBAR_ETAG)", Bin); {error, enoent} -> file:write_file("$(REBAR_ETAG)", Bin); _ -> ok end,   io:fwrite("Etag: ~s~n",[Etag]); Error -> io:fwrite("Failed to get rebar3 etag: ~p~n",[Error]) end' \
+		-eval '$(SET_HTTPS_PROXY) case httpc:request(head, {"$(REBAR_URL)", []}, [{ssl, [ {verify, verify_none} ]},{timeout, 2000}], []) of {ok, {_, Headers,_}} -> Etag = proplists:get_value("etag", Headers), Bin = list_to_binary(Etag), case file:read_file("$(REBAR_ETAG)") of {ok, Bin} -> io:fwrite("ETag update not needed~n"); {ok, _OldEtag} -> file:write_file("$(REBAR_ETAG)", Bin); {error, enoent} -> file:write_file("$(REBAR_ETAG)", Bin); _ -> ok end,   io:fwrite("Etag: ~s~n",[Etag]); Error -> io:fwrite("Failed to get rebar3 etag: ~p~n",[Error]) end' \
 		-s init stop
 
 .PHONY: pull
 pull:
 	$(ERL) -noshell -s inets -s ssl \
-		-eval '$(SET_HTTPS_PROXY) case httpc:request(head, {"$(REBAR_URL)", []}, [{timeout, 2000}], []) of {ok, {_, Headers,_}} -> Etag = proplists:get_value("etag", Headers), Bin = list_to_binary(Etag), case file:read_file("$(REBAR_ETAG)") of {ok, Bin} -> io:fwrite("ETag update not needed~n"); {ok, _OldEtag} -> file:write_file("$(REBAR_ETAG)", Bin); {error, enoent} -> file:write_file("$(REBAR_ETAG)", Bin); _ -> ok end,   io:fwrite("Etag: ~s~n",[Etag]); Error -> io:fwrite("Failed to get rebar3 etag: ~p~n",[Error]) end' \
+		-eval '$(SET_HTTPS_PROXY) case httpc:request(head, {"$(REBAR_URL)", []}, [{ssl, [ {verify, verify_none} ]},{timeout, 2000}], []) of {ok, {_, Headers,_}} -> Etag = proplists:get_value("etag", Headers), Bin = list_to_binary(Etag), case file:read_file("$(REBAR_ETAG)") of {ok, Bin} -> io:fwrite("ETag update not needed~n"); {ok, _OldEtag} -> file:write_file("$(REBAR_ETAG)", Bin); {error, enoent} -> file:write_file("$(REBAR_ETAG)", Bin); _ -> ok end,   io:fwrite("Etag: ~s~n",[Etag]); Error -> io:fwrite("Failed to get rebar3 etag: ~p~n",[Error]) end' \
 		-s init stop
 
 # Cleaning
