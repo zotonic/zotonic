@@ -218,7 +218,7 @@ editable_language_codes(Context) ->
             lists:filtermap(
                 fun
                     ({Code, true}) -> {true, Code};
-                    ({Code, edit}) -> {true, Code};
+                    ({Code, editable}) -> {true, Code};
                     (_) -> false
                 end,
                 proplists:get_value(list, Cfg, []))
