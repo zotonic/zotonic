@@ -654,7 +654,7 @@ spawn_send_check_email(Id, Recipient, Email, RetryCt, Context, State) ->
         ok ->
             case is_sender_enabled(Email, Context) of
                 true ->
-                    case is_valid_email(Recipient) of
+                    case is_valid_email(Recipient, Context) of
                         true ->
                             spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State);
                         false ->
@@ -1079,12 +1079,12 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
     Headers1 = [
         {z_convert:to_binary(H), z_convert:to_binary(V)} || {H,V} <- Headers
     ],
-    Params = [
-        {<<"content-type-params">>, [ {<<"charset">>, <<"utf-8">>} ]},
-        {<<"disposition">>, <<"inline">>},
-        {<<"transfer-encoding">>, <<"quoted-printable">>},
-        {<<"disposition-params">>, []}
-    ],
+    Params = #{
+        transfer_encoding => <<"quoted-printable">>,
+        content_type_params => [ {<<"charset">>, <<"utf-8">>} ],
+        disposition => <<"inline">>,
+        disposition_params => []
+    },
     HtmlBin = z_convert:to_binary(Html),
     Parts = case z_utils:is_empty(Text) of
         true ->
@@ -1113,15 +1113,15 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
         [] ->
             case Parts1 of
                 [{T,ST,[],Ps,SubParts}] -> mimemail:encode({T,ST,Headers1,Ps,SubParts}, opt_dkim(Context));
-                _MultiPart -> mimemail:encode({<<"multipart">>, <<"alternative">>, Headers1, [], Parts1}, opt_dkim(Context))
+                _MultiPart -> mimemail:encode({<<"multipart">>, <<"alternative">>, Headers1, #{}, Parts1}, opt_dkim(Context))
             end;
         _ ->
             AttsEncoded = [ encode_attachment(Att, Context) || Att <- Attachment ],
             AttsEncodedOk = lists:filter(fun({error, _}) -> false; (_) -> true end, AttsEncoded),
             mimemail:encode({<<"multipart">>, <<"mixed">>,
                              Headers1,
-                             [],
-                             [ {<<"multipart">>, <<"alternative">>, [], [], Parts1} | AttsEncodedOk ]
+                             #{},
+                             [ {<<"multipart">>, <<"alternative">>, [], #{}, Parts1} | AttsEncodedOk ]
                             }, opt_dkim(Context))
     end.
 
@@ -1155,7 +1155,7 @@ encode_attachment(#upload{mime=undefined, data=undefined, tmpfile=TmpFile, filen
             case z_media_identify:identify(TmpFile, Filename, Context) of
                 {ok, Ps} ->
                     Mime = maps:get(<<"mime">>, Ps, <<"application/octet-stream">>),
-                    encode_attachment(Att#upload{mime=Mime}, Context);
+                    encode_attachment(Att#upload{mime = Mime}, Context);
                 {error, _} ->
                     encode_attachment(Att#upload{mime= <<"application/octet-stream">>}, Context)
             end;
@@ -1177,11 +1177,11 @@ encode_attachment(#upload{} = Att, _Context) ->
     {
         Type, Subtype,
         [],
-        [
-            {<<"transfer-encoding">>, <<"base64">>},
-            {<<"disposition">>, <<"attachment">>},
-            {<<"disposition-params">>, [{<<"filename">>, filename(Att)}]}
-        ],
+        #{
+            transfer_encoding => <<"base64">>,
+            disposition => <<"attachment">>,
+            disposition_params => [ {<<"filename">>, filename(Att)} ]
+        },
         Data
     }.
 
@@ -1472,6 +1472,11 @@ inc_timestamp({MegaSec, Sec, MicroSec}, MinToAdd) when is_integer(MinToAdd) ->
     MegaSec2 = MegaSec + Sec2 div 1000000,
     {MegaSec2, Sec3, MicroSec}.
 
+is_valid_email(Recipient, Context) ->
+    case z_context:site(Context) of
+        zotonic_site_testsandbox -> true;
+        _ -> is_valid_email(Recipient)
+    end.
 
 %% @doc Check if an e-mail address is valid
 is_valid_email(Recipient) ->

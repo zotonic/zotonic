@@ -257,13 +257,13 @@ generate_html(E) ->
 
 %% @doc Return a #email with an attachment if the disposition is attachment
 opt_attachment(Mime, Params, Body) ->
-    case proplists:get_value(<<"disposition">>, Params, <<"inline">>) of
+    case maps:get(disposition, Params, <<"inline">>) of
         <<"attachment">> -> attachment(Mime, Params, Body);
         _ -> undefined
     end.
 
 attachment({Type, SubType}, Params, Body) ->
-    DispParams = proplists:get_value(<<"disposition-params">>, Params, []),
+    DispParams = maps:get(disposition_params, Params, []),
     #email{
             attachments=[
                          #upload{
