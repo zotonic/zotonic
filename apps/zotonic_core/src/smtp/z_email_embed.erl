@@ -111,5 +111,5 @@ unreserved_filename(Name) ->
                     false -> $-
                 end
         end,
-        Unquoted).
+        z_convert:to_list(Unquoted)).
 

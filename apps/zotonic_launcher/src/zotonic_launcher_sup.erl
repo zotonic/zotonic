@@ -58,8 +58,7 @@ start_link() ->
 %% Child :: {Id,StartFunc,Restart,Shutdown,Type,Modules}
 init([]) ->
     ZotonicConfig = application:get_all_env(zotonic),
-    {ok, { {one_for_one, 1, 5}, [
-
+    Children = [
         %% Launch the zotonic core supervisor (uses the read configs)
         {zotonic_core,
             {zotonic_core_sup, start_link, [ZotonicConfig]},
@@ -70,17 +69,19 @@ init([]) ->
             {zotonic_listen_http, start_link, []},
             permanent, 5000, worker, [zotonic_listen_http]},
 
-        %% SMTP listener
-        {zotonic_listen_smtp,
-            {zotonic_listen_smtp, start_link, []},
-            permanent, 5000, worker, [zotonic_listen_smtp]},
 
         %% MQTT listener
         {zotonic_listen_mqtt,
             {zotonic_listen_mqtt, start_link, []},
             permanent, 5000, worker, [zotonic_listen_mqtt]}
-
-    ]} }.
+    ],
+    Children1  =case zotonic_listen_smtp:child_spec() of
+        ignore ->
+            Children;
+        SMTPChildSpec ->
+            Children ++ [ SMTPChildSpec ]
+    end,
+    {ok, { {one_for_one, 1, 5}, Children1 }}.
 
 %%====================================================================
 %% Internal functions

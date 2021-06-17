@@ -3,9 +3,9 @@
 %%      with gen_smtp.
 %%      Original author: Andrew Thompson (andrew@hijacked.us)
 %% @author Atilla Erdodi <atilla@maximonster.com>
-%% @copyright 2010-2017 Maximonster Interactive Things
+%% @copyright 2010-2021 Maximonster Interactive Things
 
-%% Copyright 2010-2017 Maximonster Interactive Things
+%% Copyright 2010-2021 Maximonster Interactive Things
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,16 +28,16 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--export([start_link/0]).
+-export([ child_spec/0 ]).
 
--export([init/4, handle_HELO/2, handle_EHLO/3, handle_MAIL/2, handle_MAIL_extension/2,
+-export([init/4, handle_STARTTLS/1, handle_HELO/2, handle_EHLO/3, handle_MAIL/2, handle_MAIL_extension/2,
          handle_RCPT/2, handle_RCPT_extension/2, handle_DATA/4, handle_RSET/1, handle_VRFY/2,
          handle_other/3, code_change/3, terminate/2]).
 
 -record(state, {
     options = [] :: list(),
     peer :: tuple(),
-    banner :: string(),
+    banner :: binary(),
     hostname :: binary(),
     helo :: binary() | undefined,
     rcpt :: binary() | undefined,
@@ -45,7 +45,7 @@
 }).
 
 
-start_link() ->
+child_spec() ->
     case {z_config:get(smtp_listen_ip),z_config:get(smtp_listen_port)} of
         {none, _} ->
             lager:warning("SMTP server disabled: 'smtp_listen_ip' is set to 'none'"),
@@ -68,27 +68,31 @@ start_link() ->
                 any -> lager:info("SMTP server listening on any:~p", [Port]);
                 _ -> lager:info("SMTP server listening on ~s:~p", [inet:ntoa(IP), Port])
             end,
-            start_link([ [{port, Port} | Args2] ])
+            Options = [{port, Port} | Args2],
+            gen_smtp_server:child_spec(?MODULE, ?MODULE, Options)
     end.
 
-start_link(Args) when is_list(Args) ->
-    gen_smtp_server:start_link({local, ?MODULE}, ?MODULE, Args).
 
--spec init(Hostname :: binary(), SessionCount :: non_neg_integer(), PeerName :: tuple(), Options :: list()) -> {'ok', string(), #state{}} | {'stop', any(), string()}.
+-spec init(Hostname :: atom() | string(), SessionCount :: non_neg_integer(), PeerName :: tuple(), Options :: list()) -> {'ok', iodata(), #state{}} | {'stop', any(), iodata()}.
 init(Hostname, SessionCount, PeerName, Options) ->
+    HostnameB = z_convert:to_binary(Hostname),
     case SessionCount > 20 of
         false ->
             State = #state{
                 options = Options,
                 peer = PeerName,
-                hostname = Hostname,
-                banner = io_lib:format("~s ESMTP Zotonic", [Hostname])
+                hostname = HostnameB,
+                banner = iolist_to_binary( io_lib:format("~s ESMTP Zotonic", [HostnameB]) )
             },
             {ok, State#state.banner, State};
         true ->
             lager:warning("SMTP Connection limit exceeded (~p)", [SessionCount]),
             {stop, normal, io_lib:format("421 ~s is too busy to accept mail right now", [Hostname])}
     end.
+
+-spec handle_STARTTLS(#state{}) -> #state{}.
+handle_STARTTLS(State) ->
+    State.
 
 -spec handle_HELO(Hostname :: binary(), State :: #state{}) -> {'error', string(), #state{}} | {'ok', pos_integer(), #state{}} | {'ok', #state{}}.
 handle_HELO(Hostname, State) ->

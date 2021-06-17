@@ -119,9 +119,9 @@ render(Params, _Vars, Context) ->
                 AxesScaling0   =             [X || [_, X, _] <- ProcessedAxes],
                 AxesColors0    = string:join([X || [_, _, X] <- ProcessedAxes], "|"),
 
-                AxesPositions = "&chxt=" ++ z_url:url_encode(AxesPositions0),
+                AxesPositions = "&chxt=" ++ z_convert:to_list( z_url:url_encode(AxesPositions0) ),
                 AxesScaling   = AxesScaling0,  % Already urlencode in process_axis/2
-                AxesColors    = "&chxs=" ++ z_url:url_encode(AxesColors0),
+                AxesColors    = "&chxs=" ++ z_convert:to_list( z_url:url_encode(AxesColors0) ),
                 AxesPositions ++ AxesScaling ++ AxesColors
         end,
 
@@ -137,11 +137,11 @@ render(Params, _Vars, Context) ->
                     DataStyles0  = string:join([X || [_, _, _, X, _, _] <- ProcessedData], "|"),
                     DataValues0  = string:join([X || [_, _, _, _, X, _] <- ProcessedData], "|"),
 
-                    DataColors  = "&chco="  ++ z_url:url_encode(DataColors0),
-                    DataLegends = "&chdl="  ++ z_url:url_encode(DataLegends0),
-                    DataScales  = "&chds="  ++ z_url:url_encode(DataScales0),
-                    DataStyles  = "&chls="  ++ z_url:url_encode(DataStyles0),
-                    DataValues  = "&chd=t:" ++ z_url:url_encode(DataValues0),
+                    DataColors  = "&chco="  ++ z_convert:to_list( z_url:url_encode(DataColors0) ),
+                    DataLegends = "&chdl="  ++ z_convert:to_list( z_url:url_encode(DataLegends0) ),
+                    DataScales  = "&chds="  ++ z_convert:to_list( z_url:url_encode(DataScales0) ),
+                    DataStyles  = "&chls="  ++ z_convert:to_list( z_url:url_encode(DataStyles0) ),
+                    DataValues  = "&chd=t:" ++ z_convert:to_list( z_url:url_encode(DataValues0) ),
 
                     DataLegends1 = case string:strip(DataLegends, both, $|) of
                         "&chdl=" -> [];

@@ -210,7 +210,7 @@ pt([{call,_,{remote,_,{atom,_,gettext},{atom,_,key2str}},
     [H | pt(T, Opts, Func)];
 %%%
 pt([{attribute,_L,module,Mod} = H | T], Opts, Func) ->
-    put(fname, <<(z_convert:to_binary(Mod)), ".erl">>),
+    put(fname, <<(z_convert:to_binary(Mod))/binary, ".erl">>),
     ?debug( "++++++ Filename 1 =<~p>~n",[get(fname)]),
     [H | pt(T, Opts, Func)];
 %%%
