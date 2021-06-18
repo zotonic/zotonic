@@ -92,11 +92,7 @@ auth_validated(#{ <<"access_token">> := AccessToken } = AccessData, Args, _Conte
                 <<"name_surname">> => maps:get(<<"last_name">>, FBProps, undefined),
                 <<"website">> => maps:get(<<"link">>, FBProps, undefined),
                 <<"email">> => maps:get(<<"email">>, FBProps, <<>>),
-                <<"depiction_url">> => iolist_to_binary([
-                        <<"https://graph.facebook.com/">>,
-                        FacebookUserId,
-                        <<"/picture?type=large">>
-                    ])
+                <<"depiction_url">> => depiction_url(FBProps)
             },
             {ok, #auth_validated{
                 service = facebook,
@@ -109,10 +105,14 @@ auth_validated(#{ <<"access_token">> := AccessToken } = AccessData, Args, _Conte
             Error
     end.
 
+depiction_url(#{ <<"picture">> := #{ <<"data">> := #{ <<"is_silhouette">> := false, <<"url">> := Url } } }) ->
+    Url;
+depiction_url(_) ->
+    undefined.
 
 % Given the access token, fetch data about the user
 fetch_user_data(AccessToken) ->
-    FacebookUrl = "https://graph.facebook.com/v7.0/me?fields=id,name,first_name,last_name,email&access_token="
+    FacebookUrl = "https://graph.facebook.com/v7.0/me?fields=id,name,first_name,last_name,email,picture&access_token="
                     ++ z_url:url_encode(AccessToken),
     case httpc:request(get, {FacebookUrl, []}, httpc_http_options(), httpc_options()) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
