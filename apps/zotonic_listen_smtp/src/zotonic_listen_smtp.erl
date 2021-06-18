@@ -144,12 +144,13 @@ handle_RCPT(To, State) ->
     % - Return-Path header should be present and contains <>
     case zotonic_listen_smtp_receive:get_site(To) of
         {ok, _} ->
+            lager:info("SMTP accepting incoming email for ~p", [To]),
             {ok, State};
         {error, unknown_host} ->
-            lager:info("SMTP not accepting mail for ~p: unknown host", [To]),
+            lager:warning("SMTP not accepting mail for ~p: unknown host", [To]),
             {error, "551 User not local. Relay denied.", State};
         {error, not_running} ->
-            lager:info("SMTP not accepting mail for ~p: site not running", [To]),
+            lager:warning("SMTP not accepting mail for ~p: site not running", [To]),
             {error, "453 System not accepting network messages.", State}
         % {error, Reason} ->
         %     lager:info("SMTP not accepting mail for ~p: ~p", [Reason]),
@@ -201,6 +202,8 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
         {ok, {Type, Subtype, Headers, _Params, Body} = Decoded} ->
             case find_bounce_id({Type, Subtype}, To, Headers) of
                 {ok, MessageId} ->
+                    lager:info("SMTP email to ~p is bounce of message id ~p",
+                                [ To, MessageId ]),
                     % The e-mail server knows about the messages sent from our system.
                     % Only report fatal bounces, silently ignore delivery warnings
                     case zotonic_listen_smtp_check:is_nonfatal_bounce({Type, Subtype}, Headers, Body) of
@@ -210,9 +213,13 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
                     {ok, MsgId, reset_state(State)};
                 bounce ->
                     % Bounced, but without a message id (accept & silently drop the message)
+                    lager:info("SMTP email to ~p is bounce of unknown message id",
+                                [ To ]),
                     {ok, MsgId, reset_state(State)};
                 maybe_autoreply ->
                     % Sent to a bounce address, but not a bounce (accept & silently drop the message)
+                    lager:info("SMTP email to ~p is an autoreply, ignored",
+                                [ To ]),
                     {ok, MsgId, reset_state(State)};
                 no_bounce ->
                     receive_data(zotonic_listen_smtp_spam:spam_check(DataRcvd),
@@ -224,8 +231,8 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
     end.
 
 receive_data({ok, {ham, SpamStatus, _SpamHeaders}}, {Type, Subtype, Headers, Params, Body}, MsgId, From, To, DataRcvd, State) ->
-    lager:debug("Handling email from ~s to ~p (id ~s) (peer ~s) [~p]",
-                [From, To, MsgId, inet_parse:ntoa(State#state.peer), SpamStatus]),
+    lager:info("SMTP email from ~s to ~p (id ~s) (peer ~s) [~p]",
+              [From, To, MsgId, inet_parse:ntoa(State#state.peer), SpamStatus]),
     Received = zotonic_listen_smtp_receive:received(To, From, State#state.peer, MsgId,
                                         {Type, Subtype}, Headers, Params, Body, DataRcvd),
     reply_handled_status(Received, MsgId, reset_state(State));
@@ -234,7 +241,7 @@ receive_data({ok, {spam, SpamStatus, _SpamHeaders}}, _Decoded, MsgId, From, To, 
                [From, To, MsgId, inet_parse:ntoa(State#state.peer), SpamStatus]),
     {error, zotonic_listen_smtp_spam:smtp_status(SpamStatus, From, To, State#state.peer), reset_state(State)};
 receive_data({error, Reason}, Decoded, MsgId, From, To, DataRcvd, State) ->
-    lager:debug("SMTP receive: passing erronous spam check (~p) as ham for msg-id ~p", [Reason, MsgId]),
+    lager:info("SMTP receive: passing erronous spam check (~p) as ham for msg-id ~p", [Reason, MsgId]),
     receive_data({ok, {ham, [], []}}, Decoded, MsgId, From, To, DataRcvd, State).
 
 reply_handled_status(Received, MsgId, State) ->
