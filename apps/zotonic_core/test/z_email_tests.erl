@@ -7,42 +7,44 @@
 
 
 receive_email_test() ->
-    Context = z_context:new(zotonic_site_testsandbox, en),
-    set_relay_config(Context),
-    z_notifier:observe(email_test, self(), Context),
-    {ok, Recipient} = z_notifier:first(
-        #email_add_handler{
-            notification = email_test,
-            user_id = 1,
-            resource_id = 1
+    {timeout, 20, fun() ->
+        Context = z_context:new(zotonic_site_testsandbox, en),
+        set_relay_config(Context),
+        z_notifier:observe(email_test, self(), Context),
+        {ok, Recipient} = z_notifier:first(
+            #email_add_handler{
+                notification = email_test,
+                user_id = 1,
+                resource_id = 1
+            },
+            Context),
+        To = <<(z_convert:to_binary(Recipient))/binary, "@localhost">>,
+        OutMail = #email{
+            to = To,
+            subject = <<"Test">>, 
+            text = <<"Hello World">>,
+            attachments = [
+                #upload{
+                    filename = <<"test.dat">>,
+                    data = <<"testdata">>
+                }
+            ]
         },
-        Context),
-    To = <<(z_convert:to_binary(Recipient))/binary, "@localhost">>,
-    OutMail = #email{
-        to = To,
-        subject = <<"Test">>, 
-        text = <<"Hello World">>,
-        attachments = [
-            #upload{
-                filename = <<"test.dat">>,
-                data = <<"testdata">>
-            }
-        ]
-    },
-    {ok, _} = z_email:send(OutMail, Context),
-    receive
-         {'$gen_cast',{{email_test, received, 1, 1, Received}, _ContextEmail}} ->
-            Email = Received#email_received.email,
-            <<"Test">> = Email#email.subject,
-            <<"Hello World">> = Email#email.text,
-            Upload = hd(Email#email.attachments),
-            <<"test.dat">> = Upload#upload.filename,
-            <<"testdata">> = Upload#upload.data,
-            ok;
-        X ->
-            ?DEBUG(X),
-            throw({unexpected, X})
-    end.
+        {ok, _} = z_email:send(OutMail, Context),
+        receive
+             {'$gen_cast',{{email_test, received, 1, 1, Received}, _ContextEmail}} ->
+                Email = Received#email_received.email,
+                <<"Test">> = Email#email.subject,
+                <<"Hello World">> = Email#email.text,
+                Upload = hd(Email#email.attachments),
+                <<"test.dat">> = Upload#upload.filename,
+                <<"testdata">> = Upload#upload.data,
+                ok;
+            X ->
+                ?DEBUG(X),
+                throw({unexpected, X})
+        end
+    end}.
 
 set_relay_config(Context) ->
     application:set_env(zotonic, smtp_relay, false),
