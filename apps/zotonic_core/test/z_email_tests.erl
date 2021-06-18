@@ -45,6 +45,8 @@ receive_email_test() ->
     end.
 
 set_relay_config(Context) ->
+    application:set_env(zotonic, smtp_relay, false),
+    application:set_env(zotonic, email_override, ""),
     m_config:set_value(site, smtp_relay, <<"1">>, Context),
     m_config:set_value(site, smtp_relay_host, <<"127.0.0.1">>, Context),
     m_config:set_value(site, smtp_relay_port, <<"2525">>, Context),

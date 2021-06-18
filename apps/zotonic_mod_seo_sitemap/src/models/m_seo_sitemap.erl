@@ -293,8 +293,12 @@ update_rsc(Id, Context) ->
                     case lists:member(Lang, Enabled) of
                         true ->
                             CLang = z_context:set_language(Lang, AnonContext),
-                            Url = iolist_to_binary( m_rsc:p(Id, page_url, CLang) ),
-                            {true, {z_convert:to_binary(Lang), Url}};
+                            case m_rsc:p(Id, page_url, CLang) of
+                                undefined ->
+                                    false;
+                                Url ->
+                                    {true, {z_convert:to_binary(Lang), Url}}
+                            end;
                         false ->
                             false
                     end
