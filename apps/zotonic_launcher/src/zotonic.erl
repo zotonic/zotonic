@@ -88,6 +88,8 @@ runtests(Tests) ->
                 Tests),
             io:format("~nWaiting for zotonic_site_testsandbox to be started...~n"),
             ok = await_startup(zotonic_site_testsandbox),
+            io:format("~nGive system some time to stabilize...~n"),
+            timer:sleep(5000),
             io:format("~nStarting eunit tests~n"),
             case eunit:test(Tests, []) of
                 ok -> 

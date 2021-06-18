@@ -85,7 +85,7 @@ default_language(Context) ->
 
 language_list_configured(Context) ->
     Default = default_language(Context),
-    Config = mod_translation:language_config(Context),
+    Config = z_language:language_config(Context),
     List = lists:map(
         fun
             ({Code, _}) when Code =:= Default ->
@@ -113,10 +113,10 @@ language_list_configured(Context) ->
     sort(List1).
 
 language_list_enabled(Context) ->
-	sort_codes(mod_translation:enabled_languages(Context)).
+	sort_codes(z_language:enabled_languages(Context)).
 
 language_list_editable(Context) ->
-    sort_codes(mod_translation:editable_languages(Context)).
+    sort_codes(z_language:editable_languages(Context)).
 
 main_languages() ->
     sort(z_language:main_languages()).
