@@ -112,11 +112,12 @@ depiction_url(_) ->
 
 % Given the access token, fetch data about the user
 fetch_user_data(AccessToken) ->
-    FacebookUrl = "https://graph.facebook.com/v7.0/me?fields=id,name,first_name,last_name,email,picture&access_token="
+    FacebookUrl = "https://graph.facebook.com/v7.0/me?fields=id,name,first_name,last_name,email,picture.type(large)&access_token="
                     ++ z_url:url_encode(AccessToken),
     case httpc:request(get, {FacebookUrl, []}, httpc_http_options(), httpc_options()) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             Props = z_json:decode(Payload),
+            io:format("~p", [ Props ]),
             {ok, Props};
         Other ->
             lager:error("[facebook] error fetching user data [token ~p] ~p", [AccessToken, Other]),
