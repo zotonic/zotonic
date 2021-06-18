@@ -658,16 +658,18 @@ spawn_send_check_email(Id, Recipient, Email, RetryCt, Context, State) ->
                         true ->
                             spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State);
                         false ->
+                            lager:info("[smtp] Dropping email to invalid address ~p", [ Recipient ]),
                             %% delete email from the queue and notify the system
                             delete_email(illegal_address, Id, Recipient, Email, Context),
                             State
                     end;
                 false ->
+                    lager:info("[smtp] Dropping email to ~p from disabled sender ~p", [ Recipient, z_acl:user(Context) ]),
                     delete_email(sender_disabled, Id, Recipient, Email, Context),
                     State
             end;
         {error, Template} ->
-            lager:warning("Delayed sending email because template is not available: ~p", [ Template ]),
+            lager:warning("[smtp] Delayed sending email because template is not available: ~p", [ Template ]),
             State
     end.
 
@@ -780,6 +782,7 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
                         #email_sender{id=Id, sender_pid=SenderPid, domain=Relay} | State#state.sending
                     ]};
         true ->
+            lager:info("[smtp] Dropping email to blocked address ~p", [ RecipientEmail ]),
             drop_blocked_email(Id, RecipientEmail, Email, Context),
             State
     end.
@@ -835,7 +838,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
     {relay, Relay} = proplists:lookup(relay, SmtpOpts),
     case gen_server:call(?MODULE, {is_sending_allowed, self(), Relay}) of
         {error, wait} ->
-            lager:debug("[smtp] Delaying email to \"~s\" (~s), too many parallel senders for relay \"~s\"",
+            lager:info("[smtp] Delaying email to \"~s\" (~s), too many parallel senders for relay \"~s\"",
                         [RecipientEmail, Id, Relay]),
             timer:sleep(1000),
             spawned_email_sender(Id, MessageId, Recipient, RecipientEmail, VERP, From,
@@ -856,7 +859,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                 props=LogEmail#log_email{severity=?LOG_INFO, mailer_status=sending}
                               }, Context),
 
-            lager:info("[smtp] Sending email to \"~s\" (~s), via relay \"~s\"",
+            lager:info("[smtp] Sending email to <~s> (~s), via relay \"~s\"",
                        [RecipientEmail, Id, Relay]),
 
             %% use the unique id as 'envelope sender' (VERP)
@@ -866,6 +869,8 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
             end,
             case SendResult of
                 {error, Reason, {FailureType, Host, Message}} ->
+                    lager:error("[smtp] Error sending email to <~s>: ~p  (~p)",
+                               [ RecipientEmail, Reason, {FailureType, Host, Message} ]),
                     case is_retry_possible(Reason, FailureType, Message) of
                         true ->
                             %% do nothing, it will retry later
@@ -910,6 +915,8 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                             delete_emailq(Id)
                     end;
                 {error, Reason} ->
+                    lager:error("[smtp] Error sending email to <~s>: ~p",
+                               [ RecipientEmail, Reason ]),
                     % Returned when the options are not ok
                     z_notifier:notify(#email_failed{
                             message_nr=Id,
@@ -929,6 +936,8 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     %% delete email from the queue and notify the system
                     delete_emailq(Id);
                 Receipt when is_binary(Receipt) ->
+                    lager:info("[smtp] Sent email to <~s>: ~s",
+                               [ RecipientEmail, Receipt ]),
                     z_notifier:notify(#email_sent{
                             message_nr=Id,
                             recipient=Recipient,
