@@ -34,7 +34,7 @@ hash_is_equal_old_hash_test() ->
 
     ok.
 
-check_password_no_user_test() ->
+check_password_no_user_test_() ->
     {timeout, 20, fun() -> check_password_no_user() end}.
 
 check_password_no_user() ->

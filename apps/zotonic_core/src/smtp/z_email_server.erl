@@ -936,8 +936,9 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     %% delete email from the queue and notify the system
                     delete_emailq(Id);
                 Receipt when is_binary(Receipt) ->
+                    Receipt1 = z_string:trim(Receipt),
                     lager:info("[smtp] Sent email to <~s>: ~s",
-                               [ RecipientEmail, Receipt ]),
+                               [ RecipientEmail, Receipt1 ]),
                     z_notifier:notify(#email_sent{
                             message_nr=Id,
                             recipient=Recipient,
@@ -948,7 +949,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                         props=LogEmail#log_email{
                                                 severity = ?LOG_INFO,
                                                 mailer_status = sent,
-                                                mailer_message = Receipt
+                                                mailer_message = Receipt1
                                             }
                                       }, Context),
                     %% email accepted by relay

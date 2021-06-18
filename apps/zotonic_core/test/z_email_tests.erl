@@ -6,7 +6,7 @@
 -include_lib("zotonic.hrl").
 
 
-receive_email_test() ->
+receive_email_test_() ->
     {timeout, 20, fun() ->
         Context = z_context:new(zotonic_site_testsandbox, en),
         set_relay_config(Context),

@@ -91,6 +91,8 @@ runtests(Tests) ->
             io:format("~nGive system some time to stabilize...~n"),
             timer:sleep(5000),
             io:format("~nStarting eunit tests~n"),
+            z_memo:disable(),
+            % z_memo:enable(),
             case eunit:test(Tests, []) of
                 ok -> 
                     erlang:halt(0);

@@ -730,36 +730,48 @@ ensure_hierarchy(Context) ->
 
 
 %% @doc Move a category below another category (or the root set if undefined)
--spec move_below(integer(), integer(), z:context()) -> ok.
+-spec move_below(integer(), integer(), z:context()) -> ok | {error, notfound}.
 move_below(Cat, Parent, Context) ->
     {ok, Id} = name_to_id(Cat, Context),
     ParentId = maybe_name_to_id(Parent, Context),
     Tree = menu(Context),
-    {ok, {Tree1, Node, PrevParentId}} = remove_node(Tree, Id, undefined),
-    case PrevParentId of
-        ParentId ->
-            ok;
-        _ ->
-            Tree2 = insert_node(ParentId, Node, Tree1, []),
-            m_hierarchy:save_nocheck('$category', Tree2, Context),
-            flush(Context),
-            renumber(Context)
+    case remove_node(Tree, Id, undefined) of
+        {ok, {Tree1, Node, PrevParentId}} ->
+            case PrevParentId of
+                ParentId ->
+                    ok;
+                _ ->
+                    Tree2 = insert_node(ParentId, Node, Tree1, []),
+                    m_hierarchy:save_nocheck('$category', Tree2, Context),
+                    flush(Context),
+                    renumber(Context)
+            end;
+        notfound ->
+            lager:error("Category move ~p below ~p, error: ~p",
+                    [ Cat, Parent, notfound ]),
+            {error, notfound}
     end.
 
 %% @doc Move a category after another category (on the same level).
--spec move_after( category(), category() | undefined, z:context() ) -> ok.
+-spec move_after( category(), category() | undefined, z:context() ) -> ok | {error, notfound}.
 move_after(Cat, After, Context) ->
     {ok, Id} = name_to_id(Cat, Context),
     AfterId = maybe_name_to_id(After, Context),
     Tree = menu(Context),
-    {ok, {Tree1, Node, _}} = remove_node(Tree, Id, undefined),
-    case insert_after(AfterId, Node, Tree1, []) of
-        Tree1 ->
-            ok;
-        NewTree ->
-            m_hierarchy:save_nocheck('$category', NewTree, Context),
-            flush(Context),
-            renumber(Context)
+    case remove_node(Tree, Id, undefined) of
+        {ok, {Tree1, Node, _}} ->
+            case insert_after(AfterId, Node, Tree1, []) of
+                Tree1 ->
+                    ok;
+                NewTree ->
+                    m_hierarchy:save_nocheck('$category', NewTree, Context),
+                    flush(Context),
+                    renumber(Context)
+            end;
+        notfound ->
+            lager:error("Category move ~p after ~p, error: ~p",
+                    [ Cat, After, notfound ]),
+            {error, notfound}
     end.
 
 maybe_name_to_id(undefined, _Context) ->
