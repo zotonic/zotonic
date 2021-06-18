@@ -88,10 +88,16 @@ runtests(Tests) ->
                 Tests),
             io:format("~nWaiting for zotonic_site_testsandbox to be started...~n"),
             ok = await_startup(zotonic_site_testsandbox),
+            io:format("~nGive system some time to stabilize...~n"),
+            timer:sleep(5000),
             io:format("~nStarting eunit tests~n"),
+            z_memo:disable(),
+            % z_memo:enable(),
             case eunit:test(Tests, []) of
-                ok -> init:stop(0);
-                error -> init:stop(1)
+                ok -> 
+                    erlang:halt(0);
+                error ->
+                    erlang:halt(1)
             end
         end),
     ok.

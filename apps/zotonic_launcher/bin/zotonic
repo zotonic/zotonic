@@ -42,8 +42,7 @@ case "$1" in
         export ZOTONIC_SMTP_BOUNCE_PORT=2535
 
         CMD="$(${ZOTONIC_BIN}/zotonic.escript runtests $@)"
-        \eval ${CMD}
-        EXIT=$?
+        eval ${CMD}
         ;;
     stop)
         if [ -s "${ZOTONIC_PIDFILE}" ]; then

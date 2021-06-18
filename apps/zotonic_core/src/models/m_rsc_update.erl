@@ -901,7 +901,13 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
     % Only editable languages
     Langs2 = lists:filter(
         fun(Iso) ->
-            z_language:is_language_editable(Iso, Context)
+            case z_language:is_language_editable(Iso, Context) of
+                false ->
+                    lager:info("Dropping non editable language ~p from resource ~p", [ Iso, Id ]),
+                    false;
+                true ->
+                    true
+            end
         end,
         Langs1),
     NewPropsLang = maybe_set_langs(NewProps, Langs2),

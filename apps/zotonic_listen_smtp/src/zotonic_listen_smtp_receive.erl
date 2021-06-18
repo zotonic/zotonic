@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2017 Marc Worrell
+%% @copyright 2011-2021 Marc Worrell
 %% @doc Handle received e-mail.
 
-%% Copyright 2011-2017 Marc Worrell
+%% Copyright 2011-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -57,6 +57,8 @@ received(Recipient, ParsedEmail,
          Body, Data) ->
     case get_site(Recipient) of
         {ok, {LocalPart, LocalTags, Domain, Site}} ->
+            lager:info("SMTP received email for <~s>, mapped to ~p",
+                       [ Recipient, {LocalPart, LocalTags, Domain, Site} ]),
             Context = z_context:new(Site),
             z_notifier:notify(
                 #zlog{
@@ -90,18 +92,36 @@ received(Recipient, ParsedEmail,
                     is_auto = zotonic_listen_smtp_check:is_auto(Email)
                   },
             case z_notifier:first(Email1, Context) of
-                {ok, MsgId} when is_binary(MsgId) -> {ok, MsgId};
-                {ok, _} -> {ok, undefined};
-                ok -> {ok, undefined};
-                {error, _} = Error -> Error;
-                undefined -> {error, unknown_recipient};
-                Other -> {ok, Other}
+                {ok, MsgId} when is_binary(MsgId) ->
+                    lager:info("SMTP received email for <~s>, handled as ~p",
+                               [ Recipient, MsgId ]),
+                    {ok, MsgId};
+                {ok, Other} ->
+                    lager:info("SMTP received email for <~s>, handled as ~p",
+                               [ Recipient, Other ]),
+                    {ok, undefined};
+                ok ->
+                    lager:info("SMTP received email for <~s>, handled as undefined",
+                               [ Recipient ]),
+                    {ok, undefined};
+                {error, Reason} = Error ->
+                    lager:warning("SMTP received email for <~s>, handler returned error ~p",
+                               [ Recipient, Reason ]),
+                    Error;
+                undefined ->
+                    lager:warning("SMTP received email for <~s>, unhandled assuming unknown recipient",
+                               [ Recipient ]),
+                    {error, unknown_recipient};
+                Other ->
+                    lager:warning("SMTP received email for <~s>, unexpected return value ~p",
+                               [ Recipient, Other ]),
+                    {ok, Other}
             end;
         {error, unknown_host} ->
-            lager:info("SMTP dropping message, unknown host for recipient: ~p", [Recipient]),
+            lager:warning("SMTP dropping email, unknown host for recipient: ~p", [Recipient]),
             {error, unknown_host};
         {error, not_running} ->
-            lager:info("SMTP delaying message, host for recipient is not up: ~p", [Recipient]),
+            lager:info("SMTP delaying email, host for recipient is not up: ~p", [Recipient]),
             {error, not_running}
     end.
 
@@ -257,13 +277,13 @@ generate_html(E) ->
 
 %% @doc Return a #email with an attachment if the disposition is attachment
 opt_attachment(Mime, Params, Body) ->
-    case proplists:get_value(<<"disposition">>, Params, <<"inline">>) of
+    case maps:get(disposition, Params, <<"inline">>) of
         <<"attachment">> -> attachment(Mime, Params, Body);
         _ -> undefined
     end.
 
 attachment({Type, SubType}, Params, Body) ->
-    DispParams = proplists:get_value(<<"disposition-params">>, Params, []),
+    DispParams = maps:get(disposition_params, Params, []),
     #email{
             attachments=[
                          #upload{

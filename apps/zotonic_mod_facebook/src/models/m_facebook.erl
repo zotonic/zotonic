@@ -132,9 +132,9 @@ make_httpc_request(Method, Scheme, Server, Path, Query) when Method == get; Meth
 %%
 %%
 fql_url(Query, Context) ->
-    Fql = "https://api.facebook.com/method/fql.query?format=json&query=" ++ z_url:url_encode(Query),
+    Fql = "https://api.facebook.com/method/fql.query?format=json&query=" ++ z_convert:to_list( z_url:url_encode(Query) ),
     case m_config:get_value(mod_facebook, facebook_access_token, Context) of
         undefined -> Fql;
         <<>> -> Fql;
-        AccessToken -> Fql ++ "&access_token=" ++ z_url:url_encode(AccessToken)
+        AccessToken -> Fql ++ "&access_token=" ++ z_convert:to_list( z_url:url_encode(AccessToken) )
     end.

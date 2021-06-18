@@ -78,6 +78,7 @@ do_startup(Context) ->
                 false -> ok
             end
         end),
+    z_language:initialize_config(Context),
     do_install_modules(z_db:has_connection(Context), Context),
     z_module_manager:upgrade_await(Context),
     z_sites_manager:set_site_status(z_context:site(Context), running).

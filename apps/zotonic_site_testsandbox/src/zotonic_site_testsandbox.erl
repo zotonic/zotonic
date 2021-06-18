@@ -20,10 +20,5 @@
 -mod_title("Test sandbox").
 -mod_description("Module implementing a sandbox website with database for testing purposes.").
 -mod_prio(10).
+
 -depends([ mod_translation ]).
-
--export([ init/1 ]).
-
-init(Context) ->
-    mod_translation:language_add(<<"zh-hant">>, true, Context).
-

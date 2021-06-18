@@ -41,8 +41,7 @@
 ]).
 
 manage_schema(install, Context) ->
-    ok = z_datamodel:manage(?MODULE, datamodel(), Context),
-    m_category:move_after(organization, person, Context).
+    ok = z_datamodel:manage(?MODULE, datamodel(), Context).
 
 %% @doc If an edge is inserted, then force a repivot of the subject
 observe_edge_insert(#edge_insert{ subject_id=SubjectId }, Context) ->

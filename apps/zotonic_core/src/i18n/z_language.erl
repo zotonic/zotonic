@@ -35,7 +35,14 @@
 -module(z_language).
 
 -export([
+    initialize_config/1,
+    available_translations/1,
     default_language/1,
+    enabled_languages/1,
+    editable_languages/1,
+    acceptable_languages/1,
+    language_config/1,
+    set_language_config/2,
     is_valid/1,
     to_language_atom/1,
     fallback_language/1,
@@ -61,6 +68,139 @@
 -type language() :: language_code() | binary() | string().
 
 -export_type([ language/0, language_code/0 ]).
+
+
+
+%% @doc Initialize the i18n language configurations
+-spec initialize_config( z:context() ) -> ok.
+initialize_config(Context) ->
+    % Set default language
+    case m_config:get_value(i18n, language, Context) of
+        undefined -> m_config:set_value(i18n, language, z_language:default_language(Context), Context);
+        _ -> ok
+    end,
+    % Set list of enabled languages
+    case m_config:get(i18n, languages, Context) of
+        undefined ->
+            init_config_languages(Context);
+        _Existing ->
+            ok
+    end.
+
+init_config_languages(Context) ->
+    case m_config:get(i18n, language_list, Context) of
+        undefined ->
+            m_config:set_prop(i18n, languages, list, default_languages(Context), Context);
+        I18NLanguageList ->
+            maybe_update_config_list(I18NLanguageList, Context),
+            ok
+    end.
+
+%% @doc Return the list of available languages, enable the default language.
+default_languages(Context) ->
+    Codes = available_translations(Context),
+    List = [ {C, editable} || C <- Codes ],
+    EnabledLang = case m_config:get_value(i18n, language, Context) of
+        undefined -> en;
+        <<>> -> en;
+        Code -> z_convert:to_atom(Code)
+    end,
+    List1 = proplists:delete(EnabledLang, List),
+    lists:sort( [ {EnabledLang, true} | List1 ]).
+
+
+%% @doc Fetch the available translations by checking for all .po files in zotonic_core
+-spec available_translations(z:context()) -> list( atom() ).
+available_translations(Context) ->
+    ModPoFiles = z_module_indexer:translations(Context),
+    PoFiles = proplists:get_value(zotonic_core, ModPoFiles, []),
+    lists:filter(
+        fun z_language:is_valid/1, lists:usort([ C || {C, _File} <- PoFiles ])
+    ).
+
+% Fetch the list of acceptable languages and their fallback languages.
+% Store this in the depcache (and memo) for quick(er) lookups.
+-spec acceptable_languages( z:context() ) -> list( {binary(), [ binary() ]} ).
+acceptable_languages(Context) ->
+    z_depcache:memo(
+        fun() ->
+            Enabled = enabled_languages(Context),
+            lists:foldl(
+                fun(Code, Acc) ->
+                    LangProps = z_language:properties(Code),
+                    Lang = atom_to_binary(Code, utf8),
+                    Fs = z_language:fallback_language(Code),
+                    FsAsBin = [ z_convert:to_binary(F) || F <- Fs ],
+                    Acc1 = [ {Lang, FsAsBin} | Acc ],
+                    lists:foldl(
+                        fun(Alias, AliasAcc) ->
+                            AliasBin = z_convert:to_binary(Alias),
+                            [ {AliasBin, FsAsBin} | AliasAcc ]
+                        end,
+                        Acc1,
+                        maps:get(alias, LangProps, []))
+                end,
+                [],
+                Enabled)
+        end,
+        acceptable_languages,
+        3600,
+        [config],
+        Context).
+
+%% @doc Get the list of configured languages that are enabled.
+-spec enabled_languages(z:context()) -> list( atom() ).
+enabled_languages(Context) ->
+    case z_memo:get('z_language$enabled_languages') of
+        V when is_list(V) ->
+            V;
+        _ ->
+            ConfigLanguages = lists:filtermap(
+                fun
+                    ({Code, true}) -> {true, Code};
+                    ({_, _}) -> false
+                end,
+                language_config(Context)),
+            z_memo:set('z_language$enabled_languages', ConfigLanguages)
+    end.
+
+%% @doc Get the list of configured languages that are editable.
+-spec editable_languages(z:context()) -> list( atom() ).
+editable_languages(Context) ->
+    case z_memo:get('z_language$editable_languages') of
+        V when is_list(V) ->
+            V;
+        _ ->
+            ConfigLanguages = lists:filtermap(
+                fun
+                    ({Code, true}) -> {true, Code};
+                    ({Code, editable}) -> {true, Code};
+                    ({_, _}) -> false
+                end,
+                language_config(Context)),
+            z_memo:set('z_language$editable_languages', ConfigLanguages)
+    end.
+
+%% @doc Get the list of configured languages.
+-spec language_config(z:context()) -> list( {atom(), boolean()} ).
+language_config(Context) ->
+    case m_config:get(i18n, languages, Context) of
+        undefined -> [];
+        LanguageConfig -> proplists:get_value(list, LanguageConfig, [])
+    end.
+
+%% @doc Save a new language config list
+-spec set_language_config( list(), z:context() ) -> ok.
+set_language_config(NewConfig, Context) ->
+    case language_config(Context) of
+        NewConfig -> ok;
+        _ ->
+            SortedConfig = lists:sort(NewConfig),
+            m_config:set_prop(i18n, languages, list, SortedConfig, Context)
+    end,
+    z_memo:delete('z_language$enabled_languages'),
+    z_memo:delete('z_language$editable_languages'),
+    ok.
 
 %% @doc Returns the configured default language for this server; if not set, 'en'
 %%      (English).
@@ -208,7 +348,7 @@ enabled_language_codes(Context) ->
                 proplists:get_value(list, Cfg, []))
     end.
 
-%% @doc Return list of languges enabled in the user interface.
+%% @doc Return list of languages enabled in the user interface.
 -spec editable_language_codes(z:context()) -> list( language_code() ).
 editable_language_codes(Context) ->
     case m_config:get(i18n, languages, Context) of
@@ -218,7 +358,7 @@ editable_language_codes(Context) ->
             lists:filtermap(
                 fun
                     ({Code, true}) -> {true, Code};
-                    ({Code, edit}) -> {true, Code};
+                    ({Code, editable}) -> {true, Code};
                     (_) -> false
                 end,
                 proplists:get_value(list, Cfg, []))
@@ -230,4 +370,44 @@ editable_language_codes(Context) ->
 get_property(Code, Key) ->
     Map = maps:get(Code, z_language_data:languages_map_flat(), #{}),
     maps:get(Key, Map, undefined).
+
+
+
+%% @doc Convert the 0.x config i18n.language_list to the 1.x i18n.languages
+-spec maybe_update_config_list(I18NLanguageList::list(), Context::z:context()) -> ok.
+maybe_update_config_list(I18NLanguageList, Context) ->
+    case proplists:get_value(list, I18NLanguageList) of
+        undefined ->
+            m_config:delete(i18n, language_list, Context),
+            ok;
+        List when is_list(List) ->
+            lager:info("mod_translation: Converting 'i18n.language_list.list' config list from 0.x to 1.0."),
+            NewList = lists:foldr(
+                fun
+                    ({Code, ItemProps}, Acc) when is_list(ItemProps), is_atom(Code) ->
+                        case z_language:is_valid(Code) of
+                            true ->
+                                IsEnabled = z_convert:to_bool( proplists:get_value(is_enabled, ItemProps, false) ),
+                                IsEditable = z_convert:to_bool( proplists:get_value(is_editable, ItemProps, false) ),
+                                case {IsEnabled, IsEditable} of
+                                    {true, _} -> [ {Code, true} | Acc ];
+                                    {_, true} -> [ {Code, edit} | Acc ];
+                                    {_, _} -> [ {Code, false} | Acc ]
+                                end;
+                            false ->
+                                lager:warning("mod_translation: conversion error, language ~p does not exist in z_language, skipping.", [Code]),
+                                Acc
+                        end;
+                    (Unknown, Acc) ->
+                        lager:warning("mod_translation: conversion error, contains unknown record: ", [Unknown]),
+                        Acc
+                end,
+                [],
+                List),
+            m_config:set_prop(i18n, languages, list, NewList, Context),
+            m_config:delete(i18n, language_list, Context);
+        _ ->
+            lager:warning("mod_translation: conversion error, 'i18n.language_list.list' is not a list. Resetting languages."),
+            m_config:delete(i18n, language_list, Context)
+    end.
 
