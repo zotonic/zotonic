@@ -136,7 +136,20 @@ start_site(Site) ->
     ok = z_sites_manager:start(Site),
     timer:sleep(100), %% Sleep is needed to ensure the translation server has started
     Context = z_context:new(Site),
-    ok = z_sites_manager:await_startup(Context).
+    ok = z_sites_manager:await_startup(Context),
+    Self = self(),
+    Ref = erlang:make_ref(),
+    erlang:spawn(
+        fun() ->
+            z_notifier:await(module_reindexed, Context),
+            Self ! {ok, Ref}
+        end),
+    % Force all modules to be indexed, wait till the module indexer is ready
+    z_module_indexer:reindex(Context),
+    receive
+        {ok, Ref} ->
+            ok
+    end.
 
 
 %% @doc Filter the list of beam files to find all sitetest modules
