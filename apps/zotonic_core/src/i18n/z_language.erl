@@ -74,16 +74,21 @@
 %% @doc Initialize the i18n language configurations
 -spec initialize_config( z:context() ) -> ok.
 initialize_config(Context) ->
-    % Set default language
-    case m_config:get_value(i18n, language, Context) of
-        undefined -> m_config:set_value(i18n, language, z_language:default_language(Context), Context);
-        _ -> ok
-    end,
-    % Set list of enabled languages
-    case m_config:get(i18n, languages, Context) of
-        undefined ->
-            init_config_languages(Context);
-        _Existing ->
+    case z_db:has_connection(Context) of
+        true ->
+            % Set default language
+            case m_config:get_value(i18n, language, Context) of
+                undefined -> m_config:set_value(i18n, language, z_language:default_language(Context), Context);
+                _ -> ok
+            end,
+            % Set list of enabled languages
+            case m_config:get(i18n, languages, Context) of
+                undefined ->
+                    init_config_languages(Context);
+                _Existing ->
+                    ok
+            end;
+        false ->
             ok
     end.
 

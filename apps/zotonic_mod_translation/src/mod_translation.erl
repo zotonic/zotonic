@@ -73,12 +73,7 @@
 
 %% @doc Make sure that we have the i18n.language_list setting when the site starts up.
 init(Context) ->
-    case z_context:site(Context) of
-        zotonic_site_status ->
-            ok;
-        _Other ->
-            z_language:initialize_config(Context)
-    end.
+    z_language:initialize_config(Context).
 
 %% @doc Set the language of the context. Sets to the given language if the language exists
 %%      in the config language and is enabled; otherwise tries the language's fallback language;
