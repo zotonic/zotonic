@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-06-21 14:12\n"
+"PO-Revision-Date: 2021-06-21 14:19\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -3368,7 +3368,7 @@ msgstr "Erlang VM"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/broker.tpl:3
 msgid "MQTT Broker"
-msgstr ""
+msgstr "MQTT Broker"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/memory_usage.tpl:3
 msgid "Memory Usage"
@@ -3438,7 +3438,7 @@ msgstr "Verifique os grupos de usuários para os quais a autenticação de dois 
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:21
 msgid "Copied to clipboard"
-msgstr ""
+msgstr "Copiado para a área de transferência"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:16
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
@@ -3484,7 +3484,7 @@ msgstr "Aqui você pode definir quais usuários precisam ou devem usar autentica
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:3
 msgid "If you are not able to scan the barcode then copy the code manually to your authentication App."
-msgstr ""
+msgstr "Se você não conseguir escanear o código de barras, copie o código manualmente para o seu aplicativo de autenticação."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:61
 msgid "It is possible to force two-factor authentication for a specific user group, regardless of the setting above."
@@ -3516,7 +3516,7 @@ msgstr "Redefinir dois factores..."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:2
 msgid "Scan the two-factor authentication barcode with an app such as <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
-msgstr ""
+msgstr "Digitalize o código de barras de autenticação de dois fatores com um aplicativo como <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> ou <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:92
 msgid "Scan two-factor authentication passcode"
@@ -3564,7 +3564,7 @@ msgstr "Configuração do grupo de utilizadores"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:72
 msgid "You can add two-factor authentication to your account.<br>You will need an App on your Phone to scan the barcode and generate passcodes.<br>Examples are <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> and <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
-msgstr ""
+msgstr "Você pode adicionar autenticação de dois fatores à sua conta.<br>Você precisará de um aplicativo no seu telefone para escanear o código de barras e gerar senhas.<br>exemplos são <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> e <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:17
 msgid "You can use two-factor authentication apps such as <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>.\""
@@ -3977,7 +3977,7 @@ msgstr "Você está conectado"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:3
 msgid "You can find the code in your authentication App."
-msgstr ""
+msgstr "Você pode encontrar o código em seu aplicativo de autenticação."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:101
 msgid "You can log in using the following external service"
