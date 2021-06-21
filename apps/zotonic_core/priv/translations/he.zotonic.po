@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-06-21 14:19\n"
+"PO-Revision-Date: 2021-06-21 15:09\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -3365,10 +3365,6 @@ msgstr "לְשַׁגֵר"
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/erlang.tpl:3
 msgid "Erlang VM"
 msgstr "Erlang VM"
-
-#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/broker.tpl:3
-msgid "MQTT Broker"
-msgstr "מתווך MQTT"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/memory_usage.tpl:3
 msgid "Memory Usage"
