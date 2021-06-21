@@ -221,7 +221,8 @@ observe_media_import(#media_import{url=Url, metadata=MD}, Context) ->
             #media_import_props{
                 prio = case Category of
                             website -> 11; % Prefer our own 'website' extraction
-                            _ -> 5
+                            video -> 3;
+                            _ -> 6
                        end,
                 category = Category,
                 module = ?MODULE,

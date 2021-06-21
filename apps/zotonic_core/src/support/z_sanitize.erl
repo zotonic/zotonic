@@ -343,6 +343,7 @@ allowlist(<<"e.issuu.com/",  _/binary>> = Url) -> {ok, Url};
 allowlist(<<"cdn.embedly.com/", _/binary>> = Url) -> {ok, Url};
 allowlist(<<"vk.com/video_ext",  _/binary>> = Url) -> {ok, Url};
 allowlist(<<"platform.twitter.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"prezi.com/v/", _/binary>> = Url) -> {ok, Url};
 allowlist(<<"prezi.com/embed/", _/binary>> = Url) -> {ok, Url};
 allowlist(Url) ->
     case lists:dropwhile(fun(Re) ->
