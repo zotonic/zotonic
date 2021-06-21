@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Marc Worrell
+%% @copyright 2019-2021 Marc Worrell
 %% @doc Generate TOTP image data: urls.
 
-%% Copyright 2019 Marc Worrell
+%% Copyright 2019-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -174,12 +174,16 @@ totp_disable(UserId, Context) ->
 totp_image_url(UserId, Context) when is_integer(UserId) ->
     case is_allowed_totp_enable(UserId, Context) of
         true ->
-            Issuer = z_convert:to_binary( z_context:hostname(Context) ),
-            Username = m_identity:get_username(Context),
+            SiteTitle = m_config:get_value(site, title, Context),
+            Issuer = case z_utils:is_empty(SiteTitle) of
+                true -> z_context:hostname(Context);
+                false -> SiteTitle
+            end,
+            Username = z_convert:to_binary( m_identity:get_username(Context) ),
             ServicePart = iolist_to_binary([
-                    Issuer,
-                    <<"%3A">>,
-                    z_url:url_encode(Username), <<"%20%2F%20">>, Issuer
+                    z_url:url_encode(Issuer),
+                    $:,
+                    z_url:encode(<<Username/binary, " / ", Issuer/binary>>)
                 ]),
             {ok, Passcode} = regenerate_user_secret(UserId, Context),
             {ok, Png} = generate_png(ServicePart, Issuer, Passcode, ?TOTP_PERIOD),
