@@ -292,24 +292,13 @@ to_allowed(Url, Context) ->
 to_allowlist_1([Proto,Loc], Context) when Proto =:= <<>>; Proto =:= <<"http:">>; Proto =:= <<"https:">> ->
     case allowlist(Loc, Context) of
         {ok, Loc1} ->
-            Proto1 = case preferred_protocol(Loc1) of
-                        undefined -> Proto;
-                        P -> P
-                     end,
-            {ok, <<Proto1/binary, "//", Loc1/binary>>};
+            % Always use https - http is now defunct
+            {ok, <<"https://", Loc1/binary>>};
         false ->
             false
     end;
 to_allowlist_1(_, _Context) ->
     false.
-
-preferred_protocol(<<"www.youtube.", _/binary>>) -> <<"https:">>;
-preferred_protocol(<<"vimeo.", _/binary>>) -> <<>>;
-preferred_protocol(<<"www.vimeo.", _/binary>>) -> <<>>;
-preferred_protocol(<<"platform.instagram.com", _/binary>>) -> <<>>;
-preferred_protocol(<<"platform.twitter.com", _/binary>>) -> <<>>;
-preferred_protocol(<<"www.flickr.", _/binary>>) -> <<"https:">>;
-preferred_protocol(_) -> undefined.
 
 
 allowlist(HostPath, Context) ->
@@ -339,8 +328,8 @@ allowlist(<<"www.google.com/maps/",  _/binary>> = Url) -> {ok, Url};
 allowlist(<<"video.google.com/",  _/binary>> = Url) -> {ok, Url};
 allowlist(<<"spreadsheets.google.com/",  _/binary>> = Url) -> {ok, Url};
 allowlist(<<"docs.google.com/viewer?",  _/binary>> = Url) -> {ok, Url};
-allowlist(<<"vine.co/",  _/binary>> = Url) -> {ok, Url};
 allowlist(<<"instagram.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"vine.co/",  _/binary>> = Url) -> {ok, Url};
 allowlist(<<"platform.instagram.com/",  _/binary>> = Url) -> {ok, Url};
 allowlist(<<"www.hulu.com/",  _/binary>> = Url) -> {ok, Url};
 allowlist(<<"www.metacafe.com/fplayer/", _/binary>> = Url) -> {ok, Url};
@@ -354,6 +343,7 @@ allowlist(<<"e.issuu.com/",  _/binary>> = Url) -> {ok, Url};
 allowlist(<<"cdn.embedly.com/", _/binary>> = Url) -> {ok, Url};
 allowlist(<<"vk.com/video_ext",  _/binary>> = Url) -> {ok, Url};
 allowlist(<<"platform.twitter.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"prezi.com/embed/", _/binary>> = Url) -> {ok, Url};
 allowlist(Url) ->
     case lists:dropwhile(fun(Re) ->
                             re:run(Url, Re) =:= nomatch
