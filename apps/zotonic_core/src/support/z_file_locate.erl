@@ -134,7 +134,7 @@ locate_source_module_indexer(ModuleIndex, _Path, OriginalFile, undefined, Contex
         {error, enoent} ->
             % Try to find ".tpl" version -> render and cache result
             TplFile = <<OriginalFile/binary, ".tpl">>,
-            case z_module_indexer:find(template, TplFile, Context) of
+            case z_module_indexer:find(ModuleIndex, TplFile, Context) of
                 {ok, #module_index{} = M} ->
                     {ok, render(M, Context)};
                 {error, _} = Error ->
