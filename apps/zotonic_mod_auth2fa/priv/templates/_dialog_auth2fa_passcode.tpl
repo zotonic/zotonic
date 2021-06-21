@@ -1,9 +1,30 @@
 {% if id == m.acl.user %}
-    <p>{_ Scan the two-factor authentication barcode with an app such as <a href="https://support.google.com/accounts/answer/1066447">Google Authenticator</a> or <a href="https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile">Duo Mobile</a>. _}</p>
-
-    <p style="text-align: center">
-        <img src="{{ m.auth2fa.totp_image_url[request_key] }}" style="width: 200px; height: 200px; max-width: 90%">
+    <p>{_ Scan the two-factor authentication barcode with an app such as <a target="_blank" rel="noopener noreferrer" href="https://support.google.com/accounts/answer/1066447">Google Authenticator</a> or <a target="_blank" rel="noopener noreferrer" href="https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile">Duo Mobile</a>. _}<br>
+        {_ If you are not able to scan the barcode then copy the code manually to your authentication App. _}
     </p>
+
+    {% with m.auth2fa.totp_image_url[request_key] as totp %}
+        <p style="text-align: center">
+            <img src="{{ totp.url }}" style="width: 200px; height: 200px; max-width: 90%">
+        </p>
+        <p style="text-align: center" class="form-inline">
+            <input disabled
+                   type="text"
+                   value="{{ totp.secret }}"
+                   id="{{ #secret }}"
+                   style="text-align: center">
+            <button class="btn btn-default" id="{{ #btn }}"><span class="fa fa-copy"></span> {_ Copy _}</button>
+            {% wire id=#btn
+                    action={script
+                        script="
+                            document.getElementById('" ++ #secret ++ "').select();
+                            document.execCommand('copy');
+                        "
+                    }
+                    action={growl text=_"Copied to clipboard"}
+            %}
+        </p>
+    {% endwith %}
 
     <p>
         {_ From now on an extra passcode is needed to sign in. _}

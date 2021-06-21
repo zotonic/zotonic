@@ -70,7 +70,9 @@ event(#postback{ message={request_2fa, _Args} }, Context) ->
                             {title, ?__("Add two-factor authentication", Context)},
                             {text, ?__(
                                 "You can add two-factor authentication to your account."
-                                "<br>You will need an App on your Phone to scan the barcode and generate passcodes.",
+                                "<br>You will need an App on your Phone to scan the barcode and generate passcodes."
+                                "<br>Examples are <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> "
+                                "and <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>",
                                 Context)},
                             {ok, ?__("Enable 2FA", Context)},
                             {postback, {dialog_2fa, []}},

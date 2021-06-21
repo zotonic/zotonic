@@ -49,7 +49,16 @@ m_get([ <<"totp_image_url">>, RequestKey | Rest ], _Msg, Context) ->
             {ok, {<<>>, Rest}};
         RequestKey ->
             reset_request_key(Context),
-            {ok, {totp_image_url(z_acl:user(Context), Context), Rest}}
+            case totp_image_url(z_acl:user(Context), Context) of
+                {ok, {Url, Secret}} ->
+                    Result = #{
+                        url => Url,
+                        secret => Secret
+                    },
+                    {ok, {Result, Rest}};
+                {error, _} = Error ->
+                    Error
+            end
     end;
 m_get([ User, <<"is_totp_enabled">> | Rest ], _Msg, Context) ->
     UserId = m_rsc:rid(User, Context),
@@ -170,7 +179,7 @@ totp_disable(UserId, Context) ->
     m_identity:delete_by_type(UserId, ?TOTP_IDENTITY_TYPE, Context).
 
 %% @doc Generate a new totp code and return the barcode
--spec totp_image_url( m_rsc:resource_id(), z:context() ) -> binary().
+-spec totp_image_url( m_rsc:resource_id(), z:context() ) -> {ok, {Url::binary(), Secret::binary()}} | {error, eacces}.
 totp_image_url(UserId, Context) when is_integer(UserId) ->
     case is_allowed_totp_enable(UserId, Context) of
         true ->
@@ -180,16 +189,18 @@ totp_image_url(UserId, Context) when is_integer(UserId) ->
                 false -> SiteTitle
             end,
             Username = z_convert:to_binary( m_identity:get_username(Context) ),
-            ServicePart = iolist_to_binary([
-                    z_url:url_encode(Issuer),
+            ServicePart = url_encode(
+                iolist_to_binary([
+                    Issuer,
                     $:,
-                    z_url:url_encode(<<Username/binary, " / ", Issuer/binary>>)
-                ]),
-            {ok, Passcode} = regenerate_user_secret(UserId, Context),
-            {ok, Png} = generate_png(ServicePart, Issuer, Passcode, ?TOTP_PERIOD),
-            encode_data_url(Png, <<"image/png">>);
+                    Username, " / ", Issuer
+                ])),
+            {ok, Secret} = regenerate_user_secret(UserId, Context),
+            {ok, Png} = generate_png(ServicePart, Issuer, Secret, ?TOTP_PERIOD),
+            Url = encode_data_url(Png, <<"image/png">>),
+            {ok, {Url, Secret}};
         false ->
-            <<>>
+            {error, eacces}
     end.
 
 %% Only the admin user can enable totp for the admin user
@@ -203,6 +214,8 @@ is_allowed_totp_enable(UserId, Context) ->
 encode_data_url(Data, Mime) ->
     iolist_to_binary([ <<"data:">>, Mime, <<";base64,">>, base64:encode(Data) ]).
 
+url_encode(S) ->
+    binary:replace(z_url:url_encode(S), <<"+">>, <<"%20">>, [ global ]).
 
 %% @doc Check if the given code is a valid TOTP code
 -spec is_valid_totp( m_rsc:resource_id(), binary(), z:context() ) -> boolean().
@@ -224,7 +237,7 @@ is_valid_totp(UserId, Code, Context) when is_integer(UserId), is_binary(Code) ->
 regenerate_user_secret(UserId, Context) ->
     F = fun(Ctx) ->
         totp_disable(UserId, Context),
-        Passcode = crypto:hash(sha, z_ids:id(32)),
+        Passcode = z_ids:id(20),
         Props = [
             {propb, {term, Passcode}}
         ],
@@ -240,14 +253,14 @@ generate_png(Domain, Issuer, Passcode, Seconds) ->
     Token = iolist_to_binary([
         "otpauth://totp/", Domain,
         "?period=", Period,
-        "&issuer=", z_url:url_encode(Issuer),
+        "&issuer=", url_encode(Issuer),
         "&secret=", PasscodeBase32
     ]),
     QRCode = z_auth2fa_qrcode:encode(Token),
     Image = simple_png_encode(QRCode),
     {ok, Image}.
 
-%% Very simple PNG encoder for demo purposes
+%% Very simple PNG encoder
 simple_png_encode(#qrcode{ dimension = Dim, data = Data }) ->
     MAGIC = <<137, 80, 78, 71, 13, 10, 26, 10>>,
     Size = Dim * 8,
