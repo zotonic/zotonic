@@ -23,10 +23,11 @@
 %% interface functions
 -export([discover/2, providers/2]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("../include/oembed.hrl").
 
 %% Endpoint for embed.ly oembed service
--define(EMBEDLY_ENDPOINT, "http://api.embed.ly/1/oembed?format=json&url=").
+-define(EMBEDLY_ENDPOINT, "https://api.embed.ly/1/oembed?format=json&url=").
 
 -define(HTTP_GET_TIMEOUT, 20000).
 
@@ -98,7 +99,7 @@ oembed_request(RequestUrl) ->
                 _:_ -> {error, nojson}
             end;
         {error, _} = Error ->
-            lager:info("OEmbed HTTP Request returned error for '~p' (~p ~p)", [RequestUrl, Error]),
+            lager:info("OEmbed HTTP Request returned error for '~p' (~p)", [RequestUrl, Error]),
             Error
     end.
 

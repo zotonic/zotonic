@@ -23,6 +23,9 @@
 -include_lib("../include/oembed.hrl").
 
 
+% See also: https://oembed.com/providers.json
+%           https://github.com/iamcal/oembed/tree/master/providers
+
 list() ->
     [
 
@@ -138,6 +141,18 @@ list() ->
        url_re="^https?://(www\\.)?soundcloud\\.com/.+/.+",
        endpoint_url="https://soundcloud.com/oembed",
        title="Soundcloud"
+     },
+
+     #oembed_provider{
+       url_re="^https?://(.+\\.)?prezi\\.com/v/.+",
+       endpoint_url="https://prezi.com/v/oembed/",
+       title="Prezi"
+     },
+
+     #oembed_provider{
+       url_re="^https?://(www\\.)?issuu\\.com/.+",
+       endpoint_url="https://issuu.com/oembed",
+       title="Issuu"
      }
 
     ].
