@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-27 09:55\n"
+"PO-Revision-Date: 2021-06-21 15:09\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -202,7 +202,7 @@ msgstr "改變分類 以及/或 内容組..."
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:22
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:69
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:13./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:28
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:31./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:46
 #: apps/zotonic_mod_base_site/priv/templates/_dialog_share_page.tpl:19
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
 #: apps/zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
@@ -1112,7 +1112,7 @@ msgid "Embed page"
 msgstr "嵌入页面"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:180
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:228
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:229
 msgid "Embedded Content"
 msgstr "嵌入内容"
 
@@ -2390,8 +2390,8 @@ msgstr "只有管理员可以创建配置 Key。"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:91./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:92
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:10./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:17./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:112./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:116./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:130./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:133./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:21./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:24./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:123./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:130./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:146./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:148./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:31
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:176
 msgid "Password"
 msgstr "密码"
@@ -2503,7 +2503,7 @@ msgstr "使用中继发送电子邮件"
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:60./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:61./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:87./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:88
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:3./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:50./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:19
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:81
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:7./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:11
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:7./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:12
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:15
 msgid "Username"
 msgstr "用户名"
@@ -2661,7 +2661,7 @@ msgstr "用户名重复，请选择其他用户名。"
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:31
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:16./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:13
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:8./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:8./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:20
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:53
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:52
 msgid "E-mail"
 msgstr "电子邮件"
 
@@ -2842,7 +2842,7 @@ msgid "This is not a valid e-mail address."
 msgstr "这不是一个有效的电子邮件地址。"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:34
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:35
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:42
 msgid "This password does not meet the security requirements"
 msgstr "该密码不符合安全要求"
 
@@ -3353,10 +3353,6 @@ msgstr "对象"
 msgid "subject"
 msgstr "课题"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/broker.tpl:3
-msgid "Broker"
-msgstr "經紀人"
-
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/database.tpl:3
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:121
 msgid "Database"
@@ -3436,6 +3432,16 @@ msgstr "改变了2FA的设置。"
 msgid "Check the user groups for which two-factor authentication should be forced."
 msgstr "勾选应强制执行双因素认证的用户组。"
 
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:21
+msgid "Copied to clipboard"
+msgstr "複製到剪貼板"
+
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:16
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:15
+msgid "Copy"
+msgstr "复制"
+
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:22
 msgid "Default configuration"
 msgstr "默认配置"
@@ -3444,7 +3450,7 @@ msgstr "默认配置"
 msgid "Define who should use two-factor authentication, this is the default setting for all users."
 msgstr "定义谁应该使用双因素认证，这是所有用户的默认设置。"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:75
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:77
 msgid "Enable 2FA"
 msgstr "启用2FA"
 
@@ -3456,7 +3462,7 @@ msgstr "启用双因素认证..."
 msgid "Force two-factor authentication"
 msgstr "强制双因素认证"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:9
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:27
 msgid "From now on an extra passcode is needed to sign in."
 msgstr "从现在开始，登录需要多一个密码。"
 
@@ -3472,6 +3478,10 @@ msgstr "关于双因素认证的帮助"
 msgid "Here you can define which users need or should use two-factor authentication when signing in."
 msgstr "在这里您可以定义哪些用户在登录时需要或应该使用双因素认证。"
 
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:3
+msgid "If you are not able to scan the barcode then copy the code manually to your authentication App."
+msgstr "如果您無法掃描條形碼，請手動將代碼複製到您的身份驗證應用程序。"
+
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:61
 msgid "It is possible to force two-factor authentication for a specific user group, regardless of the setting above."
 msgstr "可以不考虑上述设置，强制对特定用户组进行双因素认证。"
@@ -3480,7 +3490,7 @@ msgstr "可以不考虑上述设置，强制对特定用户组进行双因素认
 msgid "Only the admin can change the two-factor authentication of the admin."
 msgstr "只有管理员才能更改管理员的双因素认证。"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:24
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:42
 msgid "Only the user themselves can set their new two-factor authentication barcode."
 msgstr "只有用户自己才能设置自己新的双因素认证条码。"
 
@@ -3488,7 +3498,7 @@ msgstr "只有用户自己才能设置自己新的双因素认证条码。"
 msgid "Optional"
 msgstr "可选"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:10./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:16
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:10./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:34
 msgid "Remove two-factor"
 msgstr "去除双因素"
 
@@ -3501,10 +3511,10 @@ msgid "Reset two-factor..."
 msgstr "重置双因素..."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:2
-msgid "Scan the two-factor authentication barcode with an app such as <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
-msgstr "用 <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> 或 <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>等应用程序扫描双因素认证条形码。"
+msgid "Scan the two-factor authentication barcode with an app such as <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
+msgstr "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> 或 <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>等應用程序掃描兩步驗證條碼。"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:90
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:92
 msgid "Scan two-factor authentication passcode"
 msgstr "扫描双因素认证密码"
 
@@ -3524,7 +3534,7 @@ msgstr "这将禁用双因素认证。<br>旧条码将不再有效。"
 msgid "This will generate a new barcode for two-factor authentication.<br>The old barcode will not be valid anymore."
 msgstr "这将生成一个新的条形码，用于双因素认证。<br>旧条码将不再有效。"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:106
+#: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:108
 msgid "Two-factor authentication"
 msgstr "双因素认证"
 
@@ -3549,8 +3559,8 @@ msgid "User group configuration"
 msgstr "用户组配置"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:72
-msgid "You can add two-factor authentication to your account.<br>You will need an App on your Phone to scan the barcode and generate passcodes."
-msgstr "您可以为您的账户添加双因素认证。<br>您需要手机上的App来扫描条形码并生成密码。"
+msgid "You can add two-factor authentication to your account.<br>You will need an App on your Phone to scan the barcode and generate passcodes.<br>Examples are <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> and <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
+msgstr "您可以向您的帳戶添加兩步驗證。<br>您需要在手機上安裝一個應用程序來掃描條形碼並生成密碼。<br>示例是 <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> 和 <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:17
 msgid "You can use two-factor authentication apps such as <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>.\""
@@ -3659,7 +3669,7 @@ msgid "Enable the signup module to automatically sign up users that are authenti
 msgstr "启用注册模块，自动为通过以下服务认证的用户注册。"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:13
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:32./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:41
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:39./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:48
 msgid "Enter a password"
 msgstr "输入密码"
 
@@ -3689,7 +3699,7 @@ msgstr "外部服务"
 msgid "For security reasons, password reset codes are only kept for a limited amount of time and can only be used once."
 msgstr "为了确保安全，密码重设码只在有限时间内可用，而且只能被使用一次。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:8./apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:8./apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:5./apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:5
 msgid "Forgot your password?"
 msgstr "忘记密码？"
 
@@ -3750,24 +3760,20 @@ msgstr "如果您认为您已经有了一个账户，并希望收到这封电子
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "在电子邮件中，你会发现如何确认你的帐户的说明。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:40./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
+#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:50./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:162./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
 msgid "Keep me signed in"
 msgstr "让我签到"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:97
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:108
 msgid "Log on with"
 msgstr "使用登录"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:16
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:44./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:48
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:51./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:55
 msgid "Minimum characters:"
 msgstr "最少字符："
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:5./apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:5./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:12
-msgid "Need help signing in?"
-msgstr "需要帮助登录？"
-
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:166
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:183
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:67
 msgid "Next"
 msgstr "下一页"
@@ -3783,11 +3789,11 @@ msgstr "无法访问"
 msgid "One moment please"
 msgstr "请等一下"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:66
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:76
 msgid "Other username or email"
 msgstr "其他用户名或电子邮件"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:27./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:122./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:135./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
 msgid "Passcode"
 msgstr "密码"
 
@@ -3795,7 +3801,7 @@ msgstr "密码"
 msgid "Please confirm your"
 msgstr "请确认你的"
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:1
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:2
 msgid "Please enter the two-factor authentication passcode."
 msgstr "请输入双因素验证密码。"
 
@@ -3821,7 +3827,7 @@ msgid "Repeat password"
 msgstr "重复密码"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:27
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:59
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:70
 msgid "Repeat your password"
 msgstr "重复您的密码"
 
@@ -3837,7 +3843,7 @@ msgstr "重设你的密码"
 msgid "Send Verification Message"
 msgstr "发送验证信息"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:160./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:57./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:177./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Sign in"
 msgstr "登入"
@@ -3883,7 +3889,7 @@ msgstr "对不起，重试太多"
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "对不起，你的密码重设码未知或過期。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:143
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:160
 msgid "Stay logged on unless I log off."
 msgstr "除非我注销，否则请保持登录状态。"
 
@@ -3929,7 +3935,7 @@ msgstr "要查看本页面，您需要有其他访问权限。"
 msgid "Too many retries."
 msgstr "太多的重试。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:30./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:125./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:138./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
 msgid "Two-factor passcode"
 msgstr "双因素密码"
 
@@ -3937,7 +3943,7 @@ msgstr "双因素密码"
 msgid "Use some non alphabetical characters or digits to make it harder to guess."
 msgstr "请不要使用纯字母或者纯数字的密码。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:52./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:70
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:80
 msgid "Username or email"
 msgstr "用户名或电子邮件"
 
@@ -3965,7 +3971,11 @@ msgstr "你现在已经登录了。"
 msgid "You are signed in"
 msgstr "您已登錄"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:90
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:3
+msgid "You can find the code in your authentication App."
+msgstr "您可以在您的身份驗證應用程序中找到該代碼。"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:101
 msgid "You can log in using the following external service"
 msgstr "您可以使用以下外部服务登录"
 
@@ -4023,7 +4033,7 @@ msgid "Your password has expired"
 msgstr "您的密码已经过期"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:16
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:44
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:51
 msgid "Your password is too short."
 msgstr "你的密码太短了。"
 
@@ -4035,7 +4045,7 @@ msgstr "您的用戶名是"
 msgid "an hour"
 msgstr "一小时"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:97
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:108
 msgid "external service"
 msgstr "外部服务"
 
@@ -4045,7 +4055,7 @@ msgstr "外部服务"
 msgid "or"
 msgstr "或"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:105
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:116
 msgid "or you can enter the password that you have for"
 msgstr "或者您可以输入您拥有的密码"
 
@@ -6129,7 +6139,7 @@ msgid "Please unsubscribe"
 msgstr "请取消订阅"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:34
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:31
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:30
 msgid "Prefix"
 msgstr "称呼"
 
@@ -6569,11 +6579,6 @@ msgstr "添加到顶端"
 msgid "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages."
 msgstr "点击 <strong>添加菜单条目</strong> 或 <strong>菜单条目</strong> 来添加页面。"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:15
-msgid "Copy"
-msgstr "复制"
-
 #: apps/zotonic_mod_menu/src/mod_menu.erl:141
 msgid "Copy of:"
 msgstr "備份："
@@ -6728,7 +6733,7 @@ msgstr "API密钥可以在"
 msgid "Attempt to fix embedded videos for which OEmbed embedding has failed previously."
 msgstr "试图修复之前OEmbed嵌入失败的嵌入视频。"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:281
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:282
 msgid "Attempting to fix ~p videos."
 msgstr "试图修复~p视频。"
 
@@ -6740,7 +6745,7 @@ msgstr "嵌入媒体项目失败，使用HTTP代码"
 msgid "Fix embedded videos"
 msgstr "修复嵌入视频"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:278
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:279
 msgid "No embedded videos found which need fixing."
 msgstr "没有找到需要修复的嵌入式视频。"
 
@@ -6748,11 +6753,11 @@ msgstr "没有找到需要修复的嵌入式视频。"
 msgid "Save Embedly Key"
 msgstr "保存 Embedly 键"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:290
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:291
 msgid "Saved the Embedly settings."
 msgstr "保存了Embedly的设置。"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:292
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:293
 msgid "You don't have permission to change the Embedly settings."
 msgstr "你没有权限更改Embedly的设置。"
 
@@ -6908,7 +6913,7 @@ msgstr "重建站點地圖"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "重建所有頁面的站點地圖索引。"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:70
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:71
 msgid "Rebuilding the sitemap in the background."
 msgstr "在後台重建站點地圖。"
 
@@ -6928,7 +6933,7 @@ msgstr "每周（默认）"
 msgid "Yearly"
 msgstr "每年"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:73
 msgid "You are not allowed to do this"
 msgstr "您不可以這樣做"
 
@@ -6964,19 +6969,19 @@ msgstr "通过电子邮件确认您的账户"
 msgid "Confirming..."
 msgstr "確認中..."
 
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:22./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:44
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:22./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:43
 msgid "Enter a name"
 msgstr "输入一个名字"
 
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:19
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:22
 msgid "Enter a username"
 msgstr "输入用户名"
 
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:59
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:61
 msgid "Enter a valid address"
 msgstr "请输入有效的地址"
 
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:60
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:62
 msgid "Enter an e-mail address"
 msgstr "请输入电子邮件地址"
 
@@ -6996,7 +7001,7 @@ msgstr "如果您已經有一個帳戶，"
 msgid "If you do not receive the e-mail within a few minutes, please check your spam folder."
 msgstr "如果您在几分钟内没有收到邮件，请检查您的垃圾邮件文件夹。"
 
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:38
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:37
 msgid "Last name"
 msgstr "姓"
 
@@ -7044,7 +7049,7 @@ msgstr "服务条款"
 msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
 msgstr "感谢您注册本站点。接下来将需要您在使用账户前对账户进行确认。"
 
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:60
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:71
 msgid "This does not match the first password"
 msgstr "这不符合第一个密码"
 
@@ -7052,7 +7057,7 @@ msgstr "这不符合第一个密码"
 msgid "To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr "要註冊，您必須同意服務條款和隱私政策。"
 
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:56
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:63
 msgid "Verify password"
 msgstr "确认密码"
 
@@ -8135,7 +8140,7 @@ msgstr "你确定要删除这句话吗？"
 msgid "Available sub-languages"
 msgstr "可用的子语言"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:451
+#: apps/zotonic_mod_translation/src/mod_translation.erl:367
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "无法生成翻译文件，因为 <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext没有安装</a>。"
 
@@ -8283,7 +8288,7 @@ msgstr "重新加载翻译"
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "重新加载模块和站点的所有翻页。所有模版将被重新编译。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:462
+#: apps/zotonic_mod_translation/src/mod_translation.erl:378
 msgid "Reloading all .po files in the background."
 msgstr "在后台重新加载所有.po文件。"
 
@@ -8327,23 +8332,23 @@ msgstr "选择首选语言。"
 msgid "Show the language in the URL"
 msgstr "在URL中显示语言"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:378./apps/zotonic_mod_translation/src/mod_translation.erl:426
+#: apps/zotonic_mod_translation/src/mod_translation.erl:294./apps/zotonic_mod_translation/src/mod_translation.erl:342
 msgid "Sorry, could not change the language."
 msgstr "抱歉，无法更改语言。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:394./apps/zotonic_mod_translation/src/mod_translation.erl:406./apps/zotonic_mod_translation/src/mod_translation.erl:429
+#: apps/zotonic_mod_translation/src/mod_translation.erl:310./apps/zotonic_mod_translation/src/mod_translation.erl:322./apps/zotonic_mod_translation/src/mod_translation.erl:345
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "对不起，你没有权限更改语言列表。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:464
+#: apps/zotonic_mod_translation/src/mod_translation.erl:380
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "对不起，你没有权限重装翻译。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:454
+#: apps/zotonic_mod_translation/src/mod_translation.erl:370
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "对不起，你没有扫描翻译的权限。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:381./apps/zotonic_mod_translation/src/mod_translation.erl:519
+#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:435
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "对不起，你没有设置默认语言的权限。"
 
@@ -8351,7 +8356,7 @@ msgstr "对不起，你没有设置默认语言的权限。"
 msgid "Spanish"
 msgstr "西班牙语"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:448
+#: apps/zotonic_mod_translation/src/mod_translation.erl:364
 msgid "Started building the .pot files. This may take a while..."
 msgstr "开始建立.pot文件。这可能需要一段时间..."
 
@@ -8371,7 +8376,7 @@ msgstr "标题，正文以及其他文本都可以被翻译为多种语言。这
 msgid "Translate this page in other languages."
 msgstr "翻译本页面到其他语言"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:823
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:646
 msgid "Translation"
 msgstr "翻译"
 
