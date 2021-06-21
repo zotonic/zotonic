@@ -53,7 +53,7 @@ m_get([ <<"totp_image_url">>, RequestKey | Rest ], _Msg, Context) ->
                 {ok, {Url, Secret}} ->
                     Result = #{
                         url => Url,
-                        secret => Secret
+                        secret => z_auth2fa_base32:encode(Secret)
                     },
                     {ok, {Result, Rest}};
                 {error, _} = Error ->
@@ -237,7 +237,7 @@ is_valid_totp(UserId, Code, Context) when is_integer(UserId), is_binary(Code) ->
 regenerate_user_secret(UserId, Context) ->
     F = fun(Ctx) ->
         totp_disable(UserId, Context),
-        Passcode = z_ids:id(20),
+        Passcode = crypto:hash(sha, z_ids:rand_bytes(32)),
         Props = [
             {propb, {term, Passcode}}
         ],
