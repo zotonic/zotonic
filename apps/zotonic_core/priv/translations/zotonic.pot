@@ -3505,10 +3505,6 @@ msgstr ""
 msgid "Erlang VM"
 msgstr ""
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/broker.tpl:3
-msgid "MQTT Broker"
-msgstr ""
-
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/memory_usage.tpl:3
 msgid "Memory Usage"
 msgstr ""
