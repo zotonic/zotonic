@@ -183,7 +183,7 @@ totp_image_url(UserId, Context) when is_integer(UserId) ->
             ServicePart = iolist_to_binary([
                     z_url:url_encode(Issuer),
                     $:,
-                    z_url:encode(<<Username/binary, " / ", Issuer/binary>>)
+                    z_url:url_encode(<<Username/binary, " / ", Issuer/binary>>)
                 ]),
             {ok, Passcode} = regenerate_user_secret(UserId, Context),
             {ok, Png} = generate_png(ServicePart, Issuer, Passcode, ?TOTP_PERIOD),
