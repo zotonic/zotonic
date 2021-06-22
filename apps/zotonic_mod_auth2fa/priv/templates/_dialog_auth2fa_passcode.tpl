@@ -1,6 +1,6 @@
 {% if id == m.acl.user %}
-    <p>{_ Scan the two-factor authentication barcode with an app such as <a target="_blank" rel="noopener noreferrer" href="https://support.google.com/accounts/answer/1066447">Google Authenticator</a> or <a target="_blank" rel="noopener noreferrer" href="https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile">Duo Mobile</a>. _}<br>
-        {_ If you are not able to scan the barcode then copy the code manually to your authentication App. _}
+    <p>{_ Scan the two-factor authentication QR code with an app such as <a target="_blank" rel="noopener noreferrer" href="https://support.google.com/accounts/answer/1066447">Google Authenticator</a> or <a target="_blank" rel="noopener noreferrer" href="https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile">Duo Mobile</a>. _}<br>
+        {_ If you are not able to scan the QR code then copy the code manually to your authentication App. _}
     </p>
 
     {% with m.auth2fa.totp_image_url[request_key] as totp %}
@@ -42,7 +42,7 @@
     </div>
 {% else %}
     <p class="alert alert-info">
-        {_ Only the user themselves can set their new two-factor authentication barcode. _}
+        {_ Only the user themselves can set their new two-factor authentication QR code. _}
     </p>
 
     <div class="modal-footer">

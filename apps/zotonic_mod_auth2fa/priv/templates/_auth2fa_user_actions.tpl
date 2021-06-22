@@ -6,7 +6,7 @@
           {% button class="btn btn-default"
                     text=_"Remove two-factor..."
                     action={confirm
-                        text=_"This will disable the two-factor authentication.<br>The old barcode will not be valid anymore."
+                        text=_"This will disable the two-factor authentication.<br>The old QR code will not be valid anymore."
                         ok=_"Remove two-factor"
                         is_danger
                         postback={auth2fa_remove id=id}
@@ -19,8 +19,8 @@
           {% button class="btn btn-default"
                     text=_"Reset two-factor..."
                     action={confirm
-                        text=_"This will generate a new barcode for two-factor authentication.<br>The old barcode will not be valid anymore."
-                        ok=_"Generate barcode"
+                        text=_"This will generate a new QR code for two-factor authentication.<br>The old QR code will not be valid anymore."
+                        ok=_"Generate QR code"
                         postback={dialog_2fa}
                         delegate=`mod_auth2fa`
                     }
