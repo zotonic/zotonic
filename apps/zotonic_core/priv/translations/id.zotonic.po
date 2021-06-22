@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-06-21 15:09\n"
+"PO-Revision-Date: 2021-06-22 15:40\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -3466,8 +3466,8 @@ msgid "From now on an extra passcode is needed to sign in."
 msgstr "Mulai sekarang, kode sandi tambahan diperlukan untuk masuk."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:23
-msgid "Generate barcode"
-msgstr "Hasilkan kode batang"
+msgid "Generate QR code"
+msgstr ""
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:8
 msgid "Help about two-factor authentication"
@@ -3478,8 +3478,8 @@ msgid "Here you can define which users need or should use two-factor authenticat
 msgstr "Di sini Anda dapat menentukan pengguna mana yang membutuhkan atau harus menggunakan autentikasi dua faktor saat masuk."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:3
-msgid "If you are not able to scan the barcode then copy the code manually to your authentication App."
-msgstr "Jika Anda tidak dapat memindai kode batang, salin kode secara manual ke Aplikasi otentikasi Anda."
+msgid "If you are not able to scan the QR code then copy the code manually to your authentication App."
+msgstr ""
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:61
 msgid "It is possible to force two-factor authentication for a specific user group, regardless of the setting above."
@@ -3490,8 +3490,8 @@ msgid "Only the admin can change the two-factor authentication of the admin."
 msgstr "Hanya admin yang dapat mengubah otentikasi dua faktor admin."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:42
-msgid "Only the user themselves can set their new two-factor authentication barcode."
-msgstr "Hanya pengguna itu sendiri yang dapat mengatur kode batang otentikasi dua faktor baru mereka."
+msgid "Only the user themselves can set their new two-factor authentication QR code."
+msgstr ""
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:33
 msgid "Optional"
@@ -3510,8 +3510,8 @@ msgid "Reset two-factor..."
 msgstr "Setel ulang dua faktor ..."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:2
-msgid "Scan the two-factor authentication barcode with an app such as <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
-msgstr "Pindai kode batang otentikasi dua faktor dengan aplikasi seperti <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> atau <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
+msgid "Scan the two-factor authentication QR code with an app such as <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
+msgstr ""
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:92
 msgid "Scan two-factor authentication passcode"
@@ -3526,12 +3526,12 @@ msgid "Sorry, you are not allowed to remove the 2FA."
 msgstr "Maaf, Anda tidak diizinkan untuk menghapus 2FA."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:9
-msgid "This will disable the two-factor authentication.<br>The old barcode will not be valid anymore."
-msgstr "Ini akan menonaktifkan otentikasi dua faktor.<br>Barcode lama tidak akan valid lagi."
+msgid "This will disable the two-factor authentication.<br>The old QR code will not be valid anymore."
+msgstr ""
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:22
-msgid "This will generate a new barcode for two-factor authentication.<br>The old barcode will not be valid anymore."
-msgstr "Ini akan menghasilkan kode batang baru untuk otentikasi dua faktor.<br>Barcode lama tidak akan valid lagi."
+msgid "This will generate a new QR code for two-factor authentication.<br>The old QR code will not be valid anymore."
+msgstr ""
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:108
 msgid "Two-factor authentication"
