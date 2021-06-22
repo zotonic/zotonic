@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-06-21 15:09\n"
+"PO-Revision-Date: 2021-06-22 15:40\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -3467,8 +3467,8 @@ msgid "From now on an extra passcode is needed to sign in."
 msgstr "A partir de agora é necessário um código de acesso extra para iniciar a sessão."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:23
-msgid "Generate barcode"
-msgstr "Gerar código de barras"
+msgid "Generate QR code"
+msgstr "Gerar código QR"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:8
 msgid "Help about two-factor authentication"
@@ -3479,8 +3479,8 @@ msgid "Here you can define which users need or should use two-factor authenticat
 msgstr "Aqui você pode definir quais usuários precisam ou devem usar autenticação de dois fatores ao fazer o login."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:3
-msgid "If you are not able to scan the barcode then copy the code manually to your authentication App."
-msgstr "Se você não conseguir escanear o código de barras, copie o código manualmente para o seu aplicativo de autenticação."
+msgid "If you are not able to scan the QR code then copy the code manually to your authentication App."
+msgstr "Se você não conseguir escanear o código QR, copie o código manualmente para o seu aplicativo de autenticação."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:61
 msgid "It is possible to force two-factor authentication for a specific user group, regardless of the setting above."
@@ -3491,8 +3491,8 @@ msgid "Only the admin can change the two-factor authentication of the admin."
 msgstr "Apenas o administrador pode alterar a autenticação de dois fatores do administrador."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:42
-msgid "Only the user themselves can set their new two-factor authentication barcode."
-msgstr "Somente o próprio usuário pode definir seu novo código de barras de autenticação de dois fatores."
+msgid "Only the user themselves can set their new two-factor authentication QR code."
+msgstr "Apenas o próprio usuário pode definir seu novo código QR de autenticação de dois fatores."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:33
 msgid "Optional"
@@ -3511,8 +3511,8 @@ msgid "Reset two-factor..."
 msgstr "Redefinir dois factores..."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:2
-msgid "Scan the two-factor authentication barcode with an app such as <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
-msgstr "Digitalize o código de barras de autenticação de dois fatores com um aplicativo como <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> ou <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
+msgid "Scan the two-factor authentication QR code with an app such as <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
+msgstr "Digitalize o código QR de autenticação de dois fatores com um aplicativo como <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> ou <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:92
 msgid "Scan two-factor authentication passcode"
@@ -3527,12 +3527,12 @@ msgid "Sorry, you are not allowed to remove the 2FA."
 msgstr "Desculpe, não está autorizado a remover o 2FA."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:9
-msgid "This will disable the two-factor authentication.<br>The old barcode will not be valid anymore."
-msgstr "Isto irá desactivar a autenticação de dois factores.<br>O código de barras antigo não será mais válido."
+msgid "This will disable the two-factor authentication.<br>The old QR code will not be valid anymore."
+msgstr "Isso desativará a autenticação de dois fatores.<br>O código QR antigo não será mais válido."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:22
-msgid "This will generate a new barcode for two-factor authentication.<br>The old barcode will not be valid anymore."
-msgstr "Isto irá gerar um novo código de barras para autenticação de dois factores.<br>O antigo código de barras não será mais válido."
+msgid "This will generate a new QR code for two-factor authentication.<br>The old QR code will not be valid anymore."
+msgstr "Isso irá gerar um novo código QR para autenticação de dois fatores.<br>O código QR antigo não será mais válido."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:108
 msgid "Two-factor authentication"
