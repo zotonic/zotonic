@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-06-21 15:09\n"
+"PO-Revision-Date: 2021-06-22 15:46\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -3467,8 +3467,8 @@ msgid "From now on an extra passcode is needed to sign in."
 msgstr "จากนี้ไปจำเป็นต้องใช้รหัสเพิ่มเติมในการลงชื่อเข้าใช้"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:23
-msgid "Generate barcode"
-msgstr "สร้างบาร์โค้ด"
+msgid "Generate QR code"
+msgstr "สร้างรหัส QR"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:8
 msgid "Help about two-factor authentication"
@@ -3479,8 +3479,8 @@ msgid "Here you can define which users need or should use two-factor authenticat
 msgstr "คุณสามารถกำหนดได้ว่าผู้ใช้รายใดต้องการหรือควรใช้การตรวจสอบสิทธิ์แบบสองปัจจัยเมื่อลงชื่อเข้าใช้"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:3
-msgid "If you are not able to scan the barcode then copy the code manually to your authentication App."
-msgstr "หากคุณไม่สามารถสแกนบาร์โค้ดได้ ให้คัดลอกรหัสด้วยตนเองไปยังแอปรับรองความถูกต้องของคุณ"
+msgid "If you are not able to scan the QR code then copy the code manually to your authentication App."
+msgstr "หากคุณไม่สามารถสแกนรหัส QR ให้คัดลอกรหัสด้วยตนเองไปยังแอปตรวจสอบสิทธิ์ของคุณ"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:61
 msgid "It is possible to force two-factor authentication for a specific user group, regardless of the setting above."
@@ -3491,8 +3491,8 @@ msgid "Only the admin can change the two-factor authentication of the admin."
 msgstr "มีเพียงผู้ดูแลระบบเท่านั้นที่สามารถเปลี่ยนการตรวจสอบสิทธิ์สองปัจจัยของผู้ดูแลระบบได้"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:42
-msgid "Only the user themselves can set their new two-factor authentication barcode."
-msgstr "มีเพียงผู้ใช้เท่านั้นที่สามารถตั้งค่าบาร์โค้ดการตรวจสอบสิทธิ์สองปัจจัยใหม่ได้"
+msgid "Only the user themselves can set their new two-factor authentication QR code."
+msgstr "เฉพาะผู้ใช้เท่านั้นที่สามารถตั้งค่ารหัส QR การตรวจสอบสิทธิ์แบบสองปัจจัยใหม่ได้"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:33
 msgid "Optional"
@@ -3511,8 +3511,8 @@ msgid "Reset two-factor..."
 msgstr "รีเซ็ตสองปัจจัย ..."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:2
-msgid "Scan the two-factor authentication barcode with an app such as <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
-msgstr "สแกนบาร์โค้ดการตรวจสอบสิทธิ์แบบสองปัจจัยด้วยแอป เช่น <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> หรือ <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
+msgid "Scan the two-factor authentication QR code with an app such as <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
+msgstr "สแกนรหัส QR การตรวจสอบสิทธิ์แบบสองปัจจัยด้วยแอป เช่น <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> หรือ <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:92
 msgid "Scan two-factor authentication passcode"
@@ -3527,12 +3527,12 @@ msgid "Sorry, you are not allowed to remove the 2FA."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้ลบ 2FA"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:9
-msgid "This will disable the two-factor authentication.<br>The old barcode will not be valid anymore."
-msgstr "การดำเนินการนี้จะปิดใช้งานการรับรองความถูกต้องด้วยสองปัจจัย<br>บาร์โค้ดเก่าจะใช้ไม่ได้อีกต่อไป"
+msgid "This will disable the two-factor authentication.<br>The old QR code will not be valid anymore."
+msgstr "การดำเนินการนี้จะปิดใช้งานการตรวจสอบสิทธิ์แบบสองปัจจัย<br>รหัส QR เก่าจะใช้ไม่ได้อีกต่อไป"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:22
-msgid "This will generate a new barcode for two-factor authentication.<br>The old barcode will not be valid anymore."
-msgstr "สิ่งนี้จะสร้างบาร์โค้ดใหม่สำหรับการรับรองความถูกต้องด้วยสองปัจจัย<br>บาร์โค้ดเก่าจะใช้ไม่ได้อีกต่อไป"
+msgid "This will generate a new QR code for two-factor authentication.<br>The old QR code will not be valid anymore."
+msgstr "สิ่งนี้จะสร้างรหัส QR ใหม่สำหรับการตรวจสอบสิทธิ์แบบสองปัจจัย<br>รหัส QR เก่าจะใช้ไม่ได้อีกต่อไป"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:108
 msgid "Two-factor authentication"
