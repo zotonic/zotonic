@@ -193,7 +193,7 @@ fetch_ids([{_Id,_Op,SubjectId,_Pred,ObjectId,_EdgeId}|Rs], Acc) ->
 
 do_edge_notify(<<"DELETE">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
     Edge = #edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId},
-    z_notifier:notify(Edge, Context),
+    z_notifier:notify_sync(Edge, Context),
     z_mqtt:publish(
             [ <<"model">>, <<"edge">>, <<"event">>, SubjectId, <<"o">>, z_convert:to_binary(PredName) ],
             Edge,
@@ -205,7 +205,7 @@ do_edge_notify(<<"DELETE">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
     maybe_delete_dependent(ObjectId, Context);
 do_edge_notify(<<"UPDATE">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
     Edge = #edge_update{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId},
-    z_notifier:notify(Edge, Context),
+    z_notifier:notify_sync(Edge, Context),
     z_mqtt:publish(
             [ <<"model">>, <<"edge">>, <<"event">>, SubjectId, <<"o">>, z_convert:to_binary(PredName) ],
             Edge,
@@ -216,7 +216,7 @@ do_edge_notify(<<"UPDATE">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
             Context);
 do_edge_notify(<<"INSERT">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
     Edge = #edge_insert{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId},
-    z_notifier:notify(Edge, Context),
+    z_notifier:notify_sync(Edge, Context),
     z_mqtt:publish(
             [ <<"model">>, <<"edge">>, <<"event">>, SubjectId, <<"o">>, z_convert:to_binary(PredName) ],
             Edge,

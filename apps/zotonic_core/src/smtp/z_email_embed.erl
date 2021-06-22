@@ -32,7 +32,7 @@ embed_images(Parts, Context) ->
     [ embed_images_part(P, Context) || P <- Parts ].
 
 
-embed_images_part({<<"text">>, <<"html">>, Hs, Ps, Html} = HtmlPart, Context) ->
+embed_images_part({<<"text">>, <<"html">>, Hs, Params, Html} = HtmlPart, Context) when is_map(Params) ->
     case embed_images_html(Html, Context) of
         {[], _Html} ->
             HtmlPart;
@@ -40,13 +40,13 @@ embed_images_part({<<"text">>, <<"html">>, Hs, Ps, Html} = HtmlPart, Context) ->
             Html1,
             {   <<"multipart">>, <<"related">>,
                 [],
-                [],
-                [ {<<"text">>, <<"html">>, Hs, Ps, z_convert:to_binary(Html1)} | ImageParts ]
+                #{},
+                [ {<<"text">>, <<"html">>, Hs, Params, z_convert:to_binary(Html1)} | ImageParts ]
             }
     end;
-embed_images_part({<<"multipart">>, SubType, Hs, Ps, Parts}, Context) ->
+embed_images_part({<<"multipart">>, SubType, Hs, Params, Parts}, Context) when is_map(Params) ->
     Parts1 = [ embed_images_part(P, Context) || P <- Parts ],
-    {<<"multipart">>, SubType, Hs, Ps, Parts1};
+    {<<"multipart">>, SubType, Hs, Params, Parts1};
 embed_images_part(Part, _Context) ->
     Part.
 
@@ -88,13 +88,16 @@ create_attachment(Data, ContentType, Name) ->
 
 create_attachment_part(Data, ContentType, Name, Headers) ->
     [Type, Subtype] = binary:split(ContentType, <<"/">>),
+    Params = #{
+        transfer_encoding => <<"base64">>,
+        disposition => <<"inline">>,
+        disposition_params => [
+                {<<"filename">>, z_convert:to_binary(unreserved_filename(Name))}
+            ]
+    },
     { Type, Subtype,
       Headers,
-      [
-        {<<"transfer-encoding">>, <<"base64">>},
-        {<<"disposition">>, <<"inline">>},
-        {<<"disposition-params">>, [{<<"filename">>, z_convert:to_binary(unreserved_filename(Name))}]}
-      ],
+      Params,
       Data
     }.
 
