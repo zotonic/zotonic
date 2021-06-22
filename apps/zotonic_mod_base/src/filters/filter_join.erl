@@ -17,8 +17,10 @@
 %% limitations under the License.
 
 -module(filter_join).
--export([join/2, join/3]).
+-export([join/2, join/3, join/4]).
 
+
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 join(Input, Context) ->
     join(Input, <<>>, Context).
@@ -34,3 +36,14 @@ join(Input, Separator, Context) when is_list(Input) ->
             List1));
 join(Input, _, _Context) ->
     Input.
+
+join(Input, Separator, _LastSeparator, Context) when length(Input) =< 1 ->
+    join(Input, Separator, Context);
+join(Input, Separator, <<32, _Rest/binary>> = LastSeparator, Context) ->
+    join([join(lists:droplast(Input), Separator, Context),
+          lists:last(Input)],
+         LastSeparator, Context);
+join(Input, Separator, LastSeparator, Context) ->
+    %% Translated strings will have leading spaces tripped, add them here.
+    join(Input, Separator, <<32, (z_convert:to_binary(LastSeparator))/binary, 32>>, Context).
+
