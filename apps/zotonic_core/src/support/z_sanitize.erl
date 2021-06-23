@@ -307,8 +307,8 @@ allowlist(HostPath, Context) ->
             allowlist(HostPath);
         false ->
             false;
-        HostPath1 ->
-            {ok, HostPath1}
+        HostPath1 when is_binary(HostPath1) ->
+            {ok, HostPath1};
     end.
 
 
