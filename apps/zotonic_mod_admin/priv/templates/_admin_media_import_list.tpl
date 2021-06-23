@@ -30,7 +30,6 @@
                     {% if not args.id and not mi.props.title %}
                         <div class="form-group">
                             <input type="text" class="form-control" name="new_media_title" id="{{ #title.index }}" value="{{ mi.props.title|escape }}" placeholder="{_ Title _}" />
-                            {% validate id=#title.index name="new_media_title" type={presence} %}
                         </div>
                     {% endif %}
 
