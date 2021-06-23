@@ -74,7 +74,7 @@ html(Html, Context) ->
 context_options(Context) ->
     [
         {elt_extra, m_config:get_value(site, html_elt_extra, <<"embed,iframe,object,script">>, Context)},
-        {attr_extra, m_config:get_value(site, html_attr_extra, <<"data,allowfullscreen,flashvars,frameborder,scrolling,async,defer">>, Context)},
+        {attr_extra, m_config:get_value(site, html_attr_extra, <<"data,allowfullscreen,frameborder,scrolling,async,defer,allow">>, Context)},
         {element, fun(Element, Stack, Opts) -> sanitize_element(Element, Stack, Opts, Context) end}
     ].
 
@@ -160,6 +160,12 @@ cleanup_element_attr({<<"style">>, <<"mso-", _/binary>>}) ->
     % This might need some extra parsing of the css.
     % For now we just drop styles starting with a "mso-" selector.
     false;
+cleanup_element_attr({<<"allow">>, Allow}) ->
+    List = binary:split(Allow, <<";">>, Allow),
+    List1 = [ z_string:to_lower( z_string:trim(A) ) || A <- List ],
+    List2 = lists:filter(fun sanitize_attr_allow/1, List1),
+    List3 = lists:join(<<"; ">>, List2),
+    iolist_to_binary(List3);
 cleanup_element_attr(_Attr) ->
     true.
 
@@ -167,6 +173,20 @@ is_acceptable_classname(<<"Mso", _/binary>>) -> false;
 is_acceptable_classname(<<>>) -> false;
 is_acceptable_classname(_) -> true.
 
+% Allowed feature policies for the iframe 'allow' attribute.
+sanitize_attr_allow(<<"camera", _/binary>>) -> true;
+sanitize_attr_allow(<<"microphone", _/binary>>) -> true;
+sanitize_attr_allow(<<"midi", _/binary>>) -> true;
+sanitize_attr_allow(<<"encrypted-media", _/binary>>) -> true;
+sanitize_attr_allow(<<"autoplay", _/binary>>) -> true;
+sanitize_attr_allow(<<"fullscreen", _/binary>>) -> true;
+sanitize_attr_allow(<<"picture-in-picture", _/binary>>) -> true;
+sanitize_attr_allow(<<"geolocation", _/binary>>) -> true;
+sanitize_attr_allow(<<"gyroscope", _/binary>>) -> true;
+sanitize_attr_allow(<<"accelerometer", _/binary>>) -> true;
+sanitize_attr_allow(<<"ambient-light-sensor", _/binary>>) -> true;
+sanitize_attr_allow(<<"magnetometer", _/binary>>) -> true;
+sanitize_attr_allow(_) -> false.
 
 sanitize_z_media(Data) ->
     Sanitized = maps:fold(
