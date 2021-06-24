@@ -178,7 +178,7 @@ user_group_mode(Context) ->
 totp_disable(UserId, Context) ->
     m_identity:delete_by_type(UserId, ?TOTP_IDENTITY_TYPE, Context).
 
-%% @doc Generate a new totp code and return the barcode
+%% @doc Generate a new totp code and return the barcode / QR code
 -spec totp_image_url( m_rsc:resource_id(), z:context() ) -> {ok, {Url::binary(), Secret::binary()}} | {error, eacces}.
 totp_image_url(UserId, Context) when is_integer(UserId) ->
     case is_allowed_totp_enable(UserId, Context) of
