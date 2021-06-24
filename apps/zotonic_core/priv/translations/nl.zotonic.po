@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-06-22 15:40\n"
+"PO-Revision-Date: 2021-06-24 09:58\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -3530,11 +3530,11 @@ msgstr "Sorry, je mag de 2FA niet verwijderen."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:9
 msgid "This will disable the two-factor authentication.<br>The old QR code will not be valid anymore."
-msgstr "Hiermee wordt de tweefactorauthenticatie uitgeschakeld.<br>De oude QR-code is niet meer geldig."
+msgstr "Hiermee wordt de twee-factor-authenticatie uitgeschakeld.<br>De oude QR-code is niet meer geldig."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:22
 msgid "This will generate a new QR code for two-factor authentication.<br>The old QR code will not be valid anymore."
-msgstr "Hiermee wordt een nieuwe QR-code gegenereerd voor tweefactorauthenticatie.<br>De oude QR-code is niet meer geldig."
+msgstr "Hiermee wordt een nieuwe QR-code gegenereerd voor twee-factor-authenticatie.<br>De oude QR-code is niet meer geldig."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:108
 msgid "Two-factor authentication"
