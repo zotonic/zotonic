@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-06-24 09:58\n"
+"PO-Revision-Date: 2021-06-24 10:27\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -3470,7 +3470,7 @@ msgstr "Vanaf nu is een extra toegangscode nodig om in te loggen."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:23
 msgid "Generate QR code"
-msgstr "Genereer QR-code"
+msgstr "QR-code generen"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:8
 msgid "Help about two-factor authentication"
@@ -3482,7 +3482,7 @@ msgstr "Hier kunt u definiëren welke gebruikers een twee-factor-authenticatie n
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:3
 msgid "If you are not able to scan the QR code then copy the code manually to your authentication App."
-msgstr "Als u de QR-code niet kunt scannen, kopieert u de code handmatig naar uw authenticatie-app."
+msgstr "Als u de QR-code niet kunt scannen, kopieer de code handmatig naar je authenticatie-app."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:61
 msgid "It is possible to force two-factor authentication for a specific user group, regardless of the setting above."
@@ -3494,7 +3494,7 @@ msgstr "Alleen de admin kan de twee-factor authenticatie van de admin wijzigen."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:42
 msgid "Only the user themselves can set their new two-factor authentication QR code."
-msgstr "Alleen de gebruiker kan zelf zijn nieuwe QR-code voor tweefactorauthenticatie instellen."
+msgstr "Alleen de gebruiker kan zijn eigen nieuwe QR-code voor twee-factor-authenticatie instellen."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:33
 msgid "Optional"
@@ -3514,7 +3514,7 @@ msgstr "Reset twee-factor..."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:2
 msgid "Scan the two-factor authentication QR code with an app such as <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
-msgstr "Scan de QR-code met tweestapsverificatie met een app zoals <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> of <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
+msgstr "Scan de QR-code voor twee-staps-verificatie met een app zoals <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> of <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:92
 msgid "Scan two-factor authentication passcode"
@@ -3562,7 +3562,7 @@ msgstr "Configuratie van de gebruikersgroep"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:72
 msgid "You can add two-factor authentication to your account.<br>You will need an App on your Phone to scan the barcode and generate passcodes.<br>Examples are <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> and <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
-msgstr "U kunt tweefactorauthenticatie toevoegen aan uw account.<br>U hebt een app op uw telefoon nodig om de streepjescode te scannen en toegangscodes te genereren.<br>Voorbeelden zijn <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> en <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
+msgstr "Je kunt twee-factor-authenticatie instellen voor je account.<br>Je hebt een app op je telefoon nodig om de QR-code te scannen en toegangscodes te genereren.<br>Voorbeelden zijn <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> en <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:17
 msgid "You can use two-factor authentication apps such as <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>.\""
@@ -3975,7 +3975,7 @@ msgstr "U bent aangemeld"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:3
 msgid "You can find the code in your authentication App."
-msgstr "U vindt de code in uw authenticatie-app."
+msgstr "Je vindt de code in je authenticatie-app."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:101
 msgid "You can log in using the following external service"
@@ -5830,7 +5830,7 @@ msgstr "<em>Voeg</em> alle ontvangers toe aan deze lijst die op de doellijst sta
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:20
 msgid "<em>Remove</em> all recipients from this list that are on the target list"
-msgstr "<em>Verwijder</em> alle ontvangers van deze lijst die op de doellijst staan"
+msgstr "<em>Verwijder</em> alle ontvangers die op de doellijst staan"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
@@ -6155,7 +6155,7 @@ msgstr "Voorbeeld mailing"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:28
 msgid "Read more on the web"
-msgstr "Lees meer op internet"
+msgstr "Lees meer op het web"
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:73
 msgid "Recipient deleted."
@@ -6661,7 +6661,7 @@ msgstr "Cliëntgeheim"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:17
 msgid "Connect with Microsoft"
-msgstr "Maak verbinding met Microsoft"
+msgstr "Verbinden met Microsoft"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:36
 msgid "Control who can sign in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
@@ -6669,11 +6669,11 @@ msgstr "Bepaal wie zich kan aanmelden. Toegestane waarden zijn: <tt>common</tt>,
 
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:2./apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:4
 msgid "Disconnect from Microsoft"
-msgstr "Verbreek de verbinding met Microsoft"
+msgstr "Ontkoppelen van Microsoft"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:5
 msgid "Do you want to disconnect your Microsoft account?"
-msgstr "Wilt u uw Microsoft-account loskoppelen?"
+msgstr "Wilt je je Microsoft-account loskoppelen?"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:18
 msgid "Log in with Microsoft"
@@ -6689,7 +6689,7 @@ msgstr "Meer informatie over scopes"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:37
 msgid "More information about tenant identifiers"
-msgstr "Meer informatie over tenant-ID's"
+msgstr "Meer informatie over  tenant identifiers"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_logon_service.microsoft.tpl:2
 msgid "Redirecting to Microsoft."
@@ -6709,7 +6709,7 @@ msgstr "Spatie gescheiden lijst van scopes waarvoor je de gebruiker toestemming 
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
 msgid "Tenant"
-msgstr "Huurder"
+msgstr "Tenant"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:44
 msgid "Use Microsoft authentication"
@@ -6917,11 +6917,11 @@ msgstr "Bouw de sitemap opnieuw op"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:8
 msgid "Rebuild the sitemap index for all pages."
-msgstr "Bouw de sitemapindex opnieuw op voor alle pagina's."
+msgstr "Bouw de sitemap-index opnieuw op voor alle pagina's."
 
 #: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:71
 msgid "Rebuilding the sitemap in the background."
-msgstr "Het opnieuw opbouwen van de sitemap op de achtergrond."
+msgstr "De sitemap wordt in de achtergrond opnieuw opgebouwd."
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:2
 msgid "Sitemap settings"
@@ -6941,7 +6941,7 @@ msgstr "Jaarlijks"
 
 #: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:73
 msgid "You are not allowed to do this"
-msgstr "U mag dit niet doen"
+msgstr "Je hebt geen rechten om dit te doen"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
 msgid "default"
@@ -7086,7 +7086,7 @@ msgstr "Je kunt ook"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
 msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
-msgstr "Mogelijk heeft u uw account twee keer bevestigd, zodat het account al is bevestigd. Als dit het geval is, probeer dan in te loggen.<br>Als dat niet werkt, zorg er dan voor dat u de link correct heeft gekopieerd en probeer het opnieuw."
+msgstr "Misschien heb je je account twee keer bevestigd, zodat het account al is bevestigd. Als dit het geval is, probeer dan in te loggen.<br>Als dat niet werkt, zorg er dan voor dat je de link in zijn geheel hebt gekopieerd en probeer het opnieuw."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
