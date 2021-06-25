@@ -78,7 +78,6 @@ qcustompivot
                     <thead>
                         <tr>
                             <th width="26%">{_ Name _}</th>
-                            </th>
                             <th width="20%"> {_ Email _}</th>
                             <th width="10%">{_ Category _}</th>
                             <th width="12%">{_ Created on _}</th>
