@@ -10,11 +10,11 @@
         default_pagelen,
         default_pagelen_label
     %}
-        {% with q.qpagelen|default:default_pagelen as qpagelen %}
+        {% with q.pagelen|default:default_pagelen as qpagelen %}
             {% with q.qcat, q.qgroup as qcat, qgroup %}
                 <form id="{{ #form }}" method="GET" action="{% url admin_overview_rsc %}" class="form-inline">
                     <input type="hidden" name="qs" value="{{ q.qs|escape }}" />
-                    <input type="hidden" name="qquery" value="{{ q.qquery|escape }}" />
+                    <input type="hidden" name="qquery_id" value="{{ q.qquery_id|escape }}" />
                     <div class="btn-group pull-right">
                         {% if `mod_content_groups`|member:m.modules.enabled %}
                             {% if m.search[{query cat=`content_group`}]|length %}
@@ -50,7 +50,7 @@
                         </div>
                         <div class="btn-group">
                             {% include "_admin_button_dropdown.tpl"
-                                select_name="qpagelen"
+                                select_name="pagelen"
                                 selected_qvalue=qpagelen|to_integer|default:default_pagelen
                                 selected_label=qpagelen|to_integer|default:default_pagelen
                                 default_value=default_pagelen
@@ -66,15 +66,15 @@
             {% endwith %}
             <div class="admin-header">
                 <h2>
-                    {% if not q.qcat %}{{ m.rsc[q.qquery].title|default:_"Pages overview" }}{% else %}{_ Pages overview _}{% endif %}{% if q.qcat == '*' %}: {_ All Categories _}{% elseif q.qcat %}: {{ m.rsc[q.qcat].title }}{% endif %}{% if q.qcat_exclude %}, {_ excluding _}: {{ m.rsc[q.qcat_exclude].title }}{% endif %}{% if q.qs %}, {_ matching _} “{{ q.qs|escape }}”{% endif %}
+                    {% if not q.qcat %}{{ m.rsc[q.qquery_id].title|default:_"Pages overview" }}{% else %}{_ Pages overview _}{% endif %}{% if q.qcat == '*' %}: {_ All Categories _}{% elseif q.qcat %}: {{ m.rsc[q.qcat].title }}{% endif %}{% if q.qcat_exclude %}, {_ excluding _}: {{ m.rsc[q.qcat_exclude].title }}{% endif %}{% if q.qs %}, {_ matching _} “{{ q.qs|escape }}”{% endif %}
 
                     {% if q.qs %}
                         {% button text=_"show all" class="btn btn-default btn-xs"
-                                  action={redirect dispatch="admin_overview_rsc" qcat=q.qcat qquery=q.qquery} %}
+                                  action={redirect dispatch="admin_overview_rsc" qcat=q.qcat qquery_id=q.qquery_id} %}
                     {% endif %}
                 </h2>
-                {% if q.qquery and not q.qcat and m.rsc[q.qquery].summary %}
-                    <p>{{ m.rsc[q.qquery].summary }}</p>
+                {% if q.qquery_id and not q.qcat and m.rsc[q.qquery_id].summary %}
+                    <p>{{ m.rsc[q.qquery_id].summary }}</p>
                 {% endif %}
             </div>
             <div class="well z-button-row">
@@ -92,7 +92,7 @@
 
                 {% all include "_admin_make_page_buttons.tpl" %}
 
-                <a class="btn btn-default{% if not q.qcat and not q.qquery %} disabled{% endif %}" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
+                <a class="btn btn-default{% if not q.qcat and not q.qquery_id %} disabled{% endif %}" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
                 <a class="btn btn-default" href="{% url admin_media %}">{_ All media _}</a>
                 {% all include "_admin_extra_buttons.tpl" %}
             </div>
@@ -103,7 +103,7 @@
                                   m.category[q.qcat].is_a
                                   result=result
                     %}
-                    {% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page %}
+                    {% pager result=result dispatch="admin_overview_rsc" qargs pagelen=q.pagelen hide_single_page %}
                 {% endwith %}
             {% else %}
                 {% with m.search.paged[{query query_id=`admin_overview_query` is_published="all" qargs zsort="-modified" page=q.page pagelen=q.pagelen}] as result %}
@@ -111,7 +111,7 @@
                                   m.category[q.qcat].is_a
                                   result=result
                     %}
-                    {% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page %}
+                    {% pager result=result dispatch="admin_overview_rsc" qargs pagelen=q.pagelen hide_single_page %}
                 {% endwith %}
             {% endif %}
         {% endwith %}

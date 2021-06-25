@@ -144,6 +144,9 @@ request_arg(<<"ongoing">>)             -> ongoing;
 request_arg(<<"finished">>)            -> finished;
 request_arg(<<"unfinished">>)          -> unfinished;
 request_arg(<<"unfinished_or_nodate">>)-> unfinished_or_nodate;
+% Skip these
+request_arg(<<"pagelen">>)             -> undefined;
+% Complain about all else
 request_arg(Term) ->
     lager:error("Unknown query term: ~p", [Term]),
     undefined.
