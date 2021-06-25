@@ -8,12 +8,12 @@
             <img src="{{ totp.url }}" style="width: 200px; height: 200px; max-width: 90%">
         </p>
         <p style="text-align: center" class="form-inline">
-            <input disabled
+            <input readonly
                    type="text"
                    value="{{ totp.secret }}"
                    id="{{ #secret }}"
-                   style="text-align: center">
-            <button class="btn btn-default" id="{{ #btn }}"><span class="fa fa-copy"></span> {_ Copy _}</button>
+                   style="text-align: center; border: none;">
+            <button class="btn btn-xs btn-default" id="{{ #btn }}"><span class="fa fa-copy"></span> {_ Copy _}</button>
             {% wire id=#btn
                     action={script
                         script="
