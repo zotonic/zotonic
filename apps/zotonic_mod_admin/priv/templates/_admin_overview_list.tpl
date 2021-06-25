@@ -21,13 +21,13 @@ qcustompivot
                         <th width="15%">
                             {_ Category _}
                         </th>
-                        <th width="15%">
+                        <th width="15%" class="hidden-xs">
                             {_ Created on _}
                         </th>
                         <th width="15%">
                             {_ Modified on _}
                         </th>
-                        <th width="25%">
+                        <th width="25%" class="hidden-xs">
                             {_ Modified by _}
                         </th>
                     </tr>
@@ -53,10 +53,10 @@ qcustompivot
                                 {% include "_admin_overview_list_data.tpl" %}
                             {% endif %}
                         </td>
-                        <td>{{ id.created|date:_"d M Y, H:i" }}</td>
+                        <td class="hidden-xs">{{ id.created|date:_"d M Y, H:i" }}</td>
                         <td>{{ id.modified|date:_"d M Y, H:i" }}</td>
                         <td>
-                            {{ id.modifier_id.title|default:"-" }}
+                            <span class="hidden-xs">{{ id.modifier_id.title|default:"-" }}</span>
                             <span class="pull-right buttons">
                                 <a href="{{ id.page_url }}" class="btn btn-default btn-xs">{_ view _}</a>
                                 <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
@@ -80,9 +80,9 @@ qcustompivot
                             <th width="26%">{_ Name _}</th>
                             <th width="20%"> {_ Email _}</th>
                             <th width="10%">{_ Category _}</th>
-                            <th width="12%">{_ Created on _}</th>
+                            <th width="12%" class="hidden-xs">{_ Created on _}</th>
                             <th width="12%">{_ Modified on _}</th>
-                            <th width="20%">{_ Modified by _}</th>
+                            <th width="20%" class="hidden-xs">{_ Modified by _}</th>
                         </tr>
                     </thead>
 
@@ -100,10 +100,10 @@ qcustompivot
                                 <td>
                                     {{ id.category_id.title }}
                                 </td>
-                                <td>{{ m.rsc[id].created|date:_"d M Y, H:i" }}</td>
+                                <td class="hidden-xs">{{ m.rsc[id].created|date:_"d M Y, H:i" }}</td>
                                 <td>{{ m.rsc[id].modified|date:_"d M Y, H:i" }}</td>
                                 <td>
-                                    {{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}
+                                    <span class="hidden-xs">{{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}</span>
                                     <span class="pull-right">
                                         {% if id.page_url %}<a href="{{ m.rsc[id].page_url }}" class="btn btn-xs btn-default">{_ view _}</a>{% endif %}
                                         <a href="{% url admin_edit_rsc id=id %}" class="btn btn-xs btn-default">{_ edit _}</a>
@@ -134,13 +134,13 @@ qcustompivot
             <th width="15%">
                 {% catinclude "_admin_sort_header.tpl" m.category[qcat].is_a field=field|default:"category_id" type=type|default:"string" caption=_"Category" qsort=qsort %}
             </th>
-            <th width="15%">
+            <th width="15%" class="hidden-xs">
                 {% include "_admin_sort_header.tpl" field="created" caption=_"Created on" type="date" qsort=qsort %}
             </th>
             <th width="15%">
                 {% include "_admin_sort_header.tpl" field="modified" caption=_"Modified on" type="date" qsort=qsort %}
             </th>
-            <th width="25%">
+            <th width="25%" class="hidden-xs">
                 {% include "_admin_sort_header.tpl" field="modifier_id" caption=_"Modified by" type=type|default:"string" qsort=qsort %}
             </th>
         </tr>
@@ -168,10 +168,10 @@ qcustompivot
                     {% include "_admin_overview_list_data.tpl" %}
                 {% endif %}
             </td>
-            <td>{{ id.created|date:_"d M Y, H:i" }}</td>
+            <td class="hidden-xs">{{ id.created|date:_"d M Y, H:i" }}</td>
             <td>{{ id.modified|date:_"d M Y, H:i" }}</td>
             <td>
-                {{ id.modifier_id.title|default:"-" }}
+                <span class="hidden-xs">{{ id.modifier_id.title|default:"-" }}</span>
                 <span class="pull-right buttons">
                     <a href="{{ id.page_url }}" class="btn btn-default btn-xs">{_ view _}</a>
                     <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
