@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-06-24 13:33\n"
+"PO-Revision-Date: 2021-06-26 12:56\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -185,7 +185,7 @@ msgid "Cancel"
 msgstr "Anuluj"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:2./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:192./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:192./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:82./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:135./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: apps/zotonic_mod_survey/src/mod_survey.erl:151
 msgid "Category"
@@ -982,7 +982,7 @@ msgstr "Stworzony przez"
 msgid "Created by me"
 msgstr "Stworzony przeze mnie"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:17./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:25./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:138./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51
 msgid "Created on"
 msgstr "Utworzono dnia"
@@ -1090,6 +1090,12 @@ msgstr "Edytuj"
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:73
 msgid "Edit:"
 msgstr "Edytuj:"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:81
+#: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:69
+msgid "Email"
+msgstr "e-mail"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:115
 msgid "Email address"
@@ -1239,6 +1245,10 @@ msgstr "Katalog domowy"
 msgid "IP Address"
 msgstr "Adres IP"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:75
+msgid "Identities with this email address"
+msgstr "Tożsamości z tym adresem e-mail"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:8
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
 msgstr "Jeśli strona ma zakres dat publikacji, będzie widoczna tylko między dwiema datami. Zwróć uwagę, że jeśli możesz edytować stronę, zawsze możesz ją widzieć."
@@ -1377,11 +1387,11 @@ msgstr "Mój"
 msgid "Mobile"
 msgstr "mobilny"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:23./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:85./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:144./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
 msgid "Modified by"
 msgstr "Modyfikowane przez"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:28./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:84./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:141./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
 msgid "Modified on"
 msgstr "Zmodyfikowano dnia"
@@ -1390,7 +1400,7 @@ msgstr "Zmodyfikowano dnia"
 msgid "Modified:"
 msgstr "Zmodyfikowano:"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:221./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:223
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:221./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:223./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:49
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
@@ -1435,7 +1445,7 @@ msgstr "Nie znaleziono multimediów."
 msgid "No other pages found"
 msgstr "Nie znaleziono innych stron"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:16./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:63./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:16./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:184./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find_results_loop.tpl:10
 msgid "No pages found."
 msgstr "Nie znaleziono stron."
@@ -1443,6 +1453,12 @@ msgstr "Nie znaleziono stron."
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:61
 msgid "Number of open sockets grouped per ip-address (top 10)"
 msgstr "Liczba otwartych gniazd zgrupowanych według adresu IP (górna 10)"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:13
+#: apps/zotonic_mod_base_site/priv/templates/page.query.tpl:8./apps/zotonic_mod_base_site/priv/templates/search.tpl:18
+#: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:20
+msgid "Page"
+msgstr "Strona"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:47
 msgid "Page Count"
@@ -1670,6 +1686,10 @@ msgstr "Szukaj w innych mediach"
 msgid "Search query"
 msgstr "Wyszukiwana fraza"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:126
+msgid "Search results"
+msgstr "Wyniki wyszukiwania"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:85
 msgid "Search..."
 msgstr "Szukaj..."
@@ -1870,7 +1890,7 @@ msgstr "Ten plik jest zainfekowany wirusem."
 msgid "This file is too large."
 msgstr "Ten plik jest zbyt duży."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:154./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
 msgid "This is system content."
 msgstr "To jest zawartość systemu."
 
@@ -1906,7 +1926,7 @@ msgstr "Do"
 msgid "Timeout while trying to fetch data from the website."
 msgstr "Przekroczono limit czasu podczas próby pobrania danych ze strony internetowej."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:11./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:84./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:132./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:84./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
 msgid "Title"
@@ -2122,7 +2142,7 @@ msgstr "blok"
 msgid "by"
 msgstr "przez"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:51./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:57./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:103./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:104./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:171./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:172./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:55
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:66./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:68
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
@@ -2142,7 +2162,7 @@ msgstr "Usuń"
 msgid "e.g. might change"
 msgstr "np. może się zmienić"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:122./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:62./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:109./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:177./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:122./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
 msgid "edit"
@@ -2188,7 +2208,7 @@ msgstr "piksele"
 msgid "show all"
 msgstr "pokaż wszystko"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:155
 msgid "system content"
 msgstr "zawartość systemu"
 
@@ -2204,7 +2224,7 @@ msgstr "bez tytułu"
 msgid "uploaded on"
 msgstr "zapisane na"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:55./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:176./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:36
 msgid "view"
 msgstr "Zobacz"
@@ -3563,8 +3583,8 @@ msgid "You can add two-factor authentication to your account.<br>You will need a
 msgstr "Do swojego konta możesz dodać uwierzytelnianie dwuskładnikowe.<br>Aby zeskanować kod QR i wygenerować kod dostępu, będziesz potrzebować aplikacji w telefonie.<br>Przykładami są <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> i <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:17
-msgid "You can use two-factor authentication apps such as <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>.\""
-msgstr "Możesz używać aplikacji do uwierzytelniania dwuskładnikowego, takich jak <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> lub <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>”."
+msgid "You can use two-factor authentication apps such as <a rel=\"noopener noreferrer\" target=\"_blank\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a rel=\"noopener noreferrer\" target=\"_blank\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
+msgstr ""
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:11
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
@@ -4407,11 +4427,6 @@ msgstr "Odnośniki"
 msgid "Mime"
 msgstr "MIME"
 
-#: apps/zotonic_mod_base_site/priv/templates/page.query.tpl:8./apps/zotonic_mod_base_site/priv/templates/search.tpl:18
-#: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:20
-msgid "Page"
-msgstr "Strona"
-
 #: apps/zotonic_mod_base_site/priv/templates/_content_list_item.tpl:22
 msgid "Read more"
 msgstr "Czytaj dalej"
@@ -4467,11 +4482,6 @@ msgstr "Ustawienia komentarzy"
 #: apps/zotonic_mod_comment/priv/templates/_comments.tpl:2./apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:11./apps/zotonic_mod_comment/src/mod_comment.erl:200
 msgid "Comments"
 msgstr "Komentarze"
-
-#: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:69
-msgid "Email"
-msgstr "e-mail"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:21
 msgid "General Comment Form Settings"
