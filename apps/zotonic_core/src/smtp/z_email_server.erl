@@ -1022,7 +1022,7 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
                   end,
     Headers = [{<<"From">>, From},
                {<<"To">>, ensure_brackets(Email#email.to)},
-               {<<"Subject">>, iolist_to_binary(Subject)},
+               {<<"Subject">>, drop_non_printable(iolist_to_binary(Subject))},
                {<<"Date">>, date(Context)},
                {<<"MIME-Version">>, <<"1.0">>},
                {<<"Message-ID">>, MessageId},
@@ -1067,6 +1067,17 @@ date(Context) ->
 
 x_mailer() ->
     <<"Zotonic (http://zotonic.com)">>.
+
+% Replace all control and non-utf8 characters in the text with spaces.
+drop_non_printable(B) ->
+    drop_non_printable(B, <<>>).
+
+drop_non_printable(<<>>, Acc) ->
+    Acc;
+drop_non_printable(<<C/utf8, Rest/binary>>, Acc) when C >= 32 ->
+    drop_non_printable(Rest, <<Acc/binary, C/utf8>>);
+drop_non_printable(<<_, Rest/binary>>, Acc) ->
+    drop_non_printable(Rest, <<Acc/binary, " ">>).
 
 add_cc(#email{cc = undefined}, Headers) -> Headers;
 add_cc(#email{cc = []}, Headers) -> Headers;
