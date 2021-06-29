@@ -171,7 +171,10 @@ render(Params, _Vars, Context) ->
                     io_lib:format("&chbh=~b,~b,~b", [trunc(IndividualBarSize), BarSpace, BarGroupSpace])
             end,
 
-    ImageUri = lists:flatten([Path, Type, TitleText, TitleStyle, Size, Grid, BGColors, LegendLocation, BarSize, Axes, Data]),
+    ImageUri = iolist_to_binary([
+        Path, Type, TitleText, TitleStyle, Size, Grid,
+        BGColors, LegendLocation, BarSize, Axes, Data
+    ]),
     {ok, z_tags:render_tag(
             <<"img">>,
             [
