@@ -619,7 +619,7 @@ string2filter("blur",[]) ->
 string2filter("blur",Arg) ->
     {ok, {blur,Arg}};
 string2filter("quality", Arg) ->
-    {{ok, quality, list_to_integer(Arg)}};
+    {ok, {quality, list_to_integer(Arg)}};
 string2filter("background", Arg) ->
     {ok, {background,Arg}};
 string2filter("lossless", _) ->
