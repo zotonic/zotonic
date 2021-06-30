@@ -17,7 +17,7 @@
             {% with q.qcat, q.qgroup as qcat, qgroup %}
                 <form id="{{ #form }}" method="GET" action="{% url admin_media %}" class="form-inline">
                     <input type="hidden" name="qs" value="{{ q.qs|escape }}" />
-                    <input type="hidden" name="qquery" value="{{ q.qquery|escape }}" />
+                    <input type="hidden" name="qquery_id" value="{{ q.qquery_id|escape }}" />
                     <div class="btn-group pull-right">
                         {% if `mod_content_groups`|member:m.modules.enabled %}
                             {% if m.search[{query cat=`content_group`}]|length %}

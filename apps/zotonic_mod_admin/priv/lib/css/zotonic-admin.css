@@ -1022,6 +1022,27 @@ div.modal .modal-footer .pull-left {
 }
 .navbar.navbar-branded .navbar-form .form-control {
   width: 9em;
+  transition: width 200ms lineair;
+  color: white;
+  padding-left: 4px;
+  padding-right: 4px;
+  background-color: inherit;
+}
+.navbar.navbar-branded .navbar-form .form-control::placeholder {
+  color: white;
+}
+.navbar.navbar-branded .navbar-form .form-control.search-query:focus {
+  position: absolute;
+  right: 10px;
+  width: 90vw;
+  max-width: 500px;
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #222;
+  padding: 4px 10px;
+  font-size: 2rem;
+}
+.navbar.navbar-branded .navbar-form .form-control.search-query:focus::placeholder {
+  color: #666;
 }
 .navbar.navbar-branded .navbar-collapse {
   background-color: #0fa2db;

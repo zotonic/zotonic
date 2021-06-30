@@ -308,7 +308,7 @@ change(#{
                 Username ->
                     case auth_precheck(Username, Context) of
                         ok ->
-                            PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, 6, Context)),
+                            PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, 8, Context)),
 
                             case size(Password) of
                                 N when N < PasswordMinLength ->
@@ -365,7 +365,7 @@ reset(#{
     } = Payload, Context) when is_binary(Secret), is_binary(Username), is_binary(Password), is_binary(Passcode) ->
     case auth_precheck(Username, Context) of
         ok ->
-            PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, 6, Context)),
+            PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, 8, Context)),
 
             case size(Password) of
                 N when N < PasswordMinLength ->

@@ -49,8 +49,8 @@ m_get([ <<"authenticate">>, <<"password">> | Rest ], #{ payload := Payload }, Co
     end;
 m_get([ <<"password_min_length">> | Rest ], _Msg, Context) ->
     Len = case m_config:get_value(mod_authenticaton, password_min_length, Context) of
-        undefined -> 6;
-        <<>> -> 6;
+        undefined -> 8;
+        <<>> -> 8;
         N -> z_convert:to_integer(N)
     end,
     {ok, {Len, Rest}};
@@ -74,6 +74,9 @@ m_get([ <<"status">> | Rest ], _Msg, Context) ->
         <<"options">> => z_context:get(auth_options, Context, #{})
     },
     {ok, {Status, Rest}};
+m_get([ <<"is_rememberme">> | Rest ], _Msg, Context) ->
+    RememberMe = m_config:get_boolean(mod_authentication, is_rememberme, Context),
+    {ok, {RememberMe, Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:debug("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.

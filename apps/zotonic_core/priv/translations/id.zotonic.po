@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-06-22 15:46\n"
+"PO-Revision-Date: 2021-06-26 13:22\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -185,7 +185,7 @@ msgid "Cancel"
 msgstr "Batal"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:2./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:192./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:192./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:82./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:135./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: apps/zotonic_mod_survey/src/mod_survey.erl:151
 msgid "Category"
@@ -706,7 +706,7 @@ msgstr "gunakan peramban lain (misalnya Chrome jika anda sedang menggunakan Fire
 msgid "view (acl action)"
 msgstr "lihat (tindakan acl)"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:109./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:111
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:110
 msgid "&lt; Prev"
 msgstr "&lt; Sebelumnya"
 
@@ -841,7 +841,7 @@ msgstr "Media terlampir"
 msgid "Auth"
 msgstr "Auth"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:97
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:96
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:8./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:42
 msgid "Back"
 msgstr "Kembali"
@@ -982,7 +982,7 @@ msgstr "Dibuat oleh"
 msgid "Created by me"
 msgstr "Dibuat oleh saya"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:17./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:25./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:138./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51
 msgid "Created on"
 msgstr "Dibuat pada"
@@ -1019,7 +1019,7 @@ msgstr "Rentang tanggal"
 msgid "Delete if no other page is connected to this page."
 msgstr "Hapus jika tidak ada halaman lain yang terhubung ke halaman ini."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:49./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:235./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:49./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:235./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:77
 msgid "Delete if not connected anymore"
 msgstr "Hapus jika tidak terhubung lagi"
 
@@ -1090,6 +1090,12 @@ msgstr "Sunting"
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:73
 msgid "Edit:"
 msgstr "Sunting:"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:81
+#: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:69
+msgid "Email"
+msgstr "Email"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:115
 msgid "Email address"
@@ -1239,6 +1245,10 @@ msgstr "Direktori Rumah"
 msgid "IP Address"
 msgstr "Alamat IP"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:75
+msgid "Identities with this email address"
+msgstr "Identitas dengan alamat email ini"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:8
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
 msgstr "Jika halaman memiliki rentang tanggal publikasi, maka itu hanya akan terlihat di antara dua tanggal. Perhatikan bahwa jika Anda diizinkan untuk mengedit halaman, Anda selalu dapat melihatnya."
@@ -1309,7 +1319,7 @@ msgstr "Alamat pengiriman"
 msgid "Main"
 msgstr "Utama"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:122
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:121
 msgid "Make"
 msgstr "Membuat"
 
@@ -1377,11 +1387,11 @@ msgstr "Tambang"
 msgid "Mobile"
 msgstr "Mobile"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:23./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:85./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:144./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
 msgid "Modified by"
 msgstr "Dimodifikasi oleh"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:28./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:84./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:141./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
 msgid "Modified on"
 msgstr "Dimodifikasi pada"
@@ -1390,7 +1400,7 @@ msgstr "Dimodifikasi pada"
 msgid "Modified:"
 msgstr "Dimodifikasi:"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:221./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:223
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:221./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:223./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:49
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
@@ -1407,7 +1417,7 @@ msgstr "Koneksi jaringan"
 msgid "New Page"
 msgstr "Lembaran baru"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:115./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:117
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:114./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:116
 msgid "Next &gt;"
 msgstr "Berikutnya &gt;"
 
@@ -1435,7 +1445,7 @@ msgstr "Tidak ada media yang ditemukan."
 msgid "No other pages found"
 msgstr "Tidak ada halaman lain yang ditemukan"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:16./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:63./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:16./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:184./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find_results_loop.tpl:10
 msgid "No pages found."
 msgstr "Halaman tidak ditemukan."
@@ -1443,6 +1453,12 @@ msgstr "Halaman tidak ditemukan."
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:61
 msgid "Number of open sockets grouped per ip-address (top 10)"
 msgstr "Jumlah soket terbuka yang dikelompokkan per alamat ip (10 teratas)"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:13
+#: apps/zotonic_mod_base_site/priv/templates/page.query.tpl:8./apps/zotonic_mod_base_site/priv/templates/search.tpl:18
+#: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:20
+msgid "Page"
+msgstr "Halaman"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:47
 msgid "Page Count"
@@ -1547,7 +1563,7 @@ msgstr "Periode publikasi"
 msgid "Publish this page"
 msgstr "Publikasikan halaman ini"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:18./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:52./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:61./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:244./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:90
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:18./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:52./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:61./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:244./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:89
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:46
 msgid "Published"
 msgstr "Dipublikasikan"
@@ -1611,7 +1627,7 @@ msgstr "Menghapus koneksi ke"
 msgid "Renumber category tree"
 msgstr "Memberi nomor kategori pohon"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:122
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:121
 msgid "Replace"
 msgstr "Menggantikan"
 
@@ -1669,6 +1685,10 @@ msgstr "Cari media lainnya"
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:7
 msgid "Search query"
 msgstr "Pertanyaan penelusuran"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:126
+msgid "Search results"
+msgstr "Hasil Pencarian"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:85
 msgid "Search..."
@@ -1870,7 +1890,7 @@ msgstr "File ini terinfeksi virus."
 msgid "This file is too large."
 msgstr "File ini terlalu besar."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:154./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
 msgid "This is system content."
 msgstr "Ini adalah konten sistem."
 
@@ -1906,7 +1926,7 @@ msgstr "Sampai"
 msgid "Timeout while trying to fetch data from the website."
 msgstr "Waktu habis ketika mencoba untuk mengambil data dari website."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:11./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:84./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:132./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:84./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
 msgid "Title"
@@ -2122,7 +2142,7 @@ msgstr "blokir"
 msgid "by"
 msgstr "oleh"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:51./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:57./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:103./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:104./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:171./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:172./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:55
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:66./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:68
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
@@ -2142,7 +2162,7 @@ msgstr "hapus"
 msgid "e.g. might change"
 msgstr "misalnya mungkin mengubah"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:122./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:62./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:109./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:177./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:122./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
 msgid "edit"
@@ -2188,7 +2208,7 @@ msgstr "piksel"
 msgid "show all"
 msgstr "tampilkan semua"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:155
 msgid "system content"
 msgstr "konten sistem"
 
@@ -2204,7 +2224,7 @@ msgstr "tanpa judul"
 msgid "uploaded on"
 msgstr "diunggah pada"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:55./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:176./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:36
 msgid "view"
 msgstr "tampilkan"
@@ -3558,12 +3578,12 @@ msgid "User group configuration"
 msgstr "Konfigurasi grup pengguna"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:72
-msgid "You can add two-factor authentication to your account.<br>You will need an App on your Phone to scan the barcode and generate passcodes.<br>Examples are <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> and <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
-msgstr "Anda dapat menambahkan otentikasi dua faktor ke akun Anda.<br>Anda memerlukan Aplikasi di Ponsel Anda untuk memindai kode batang dan menghasilkan kode sandi.<br>Contohnya adalah <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> dan <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
+msgid "You can add two-factor authentication to your account.<br>You will need an App on your Phone to scan the QR code and generate passcodes.<br>Examples are <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> and <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
+msgstr "Anda dapat menambahkan otentikasi dua faktor ke akun Anda.<br>Anda memerlukan Aplikasi di Ponsel Anda untuk memindai kode QR dan menghasilkan kode sandi.<br>Contohnya adalah <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> dan <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:17
-msgid "You can use two-factor authentication apps such as <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>.\""
-msgstr "Anda dapat menggunakan aplikasi otentikasi dua faktor seperti <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> atau <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>\""
+msgid "You can use two-factor authentication apps such as <a rel=\"noopener noreferrer\" target=\"_blank\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a rel=\"noopener noreferrer\" target=\"_blank\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
+msgstr "Anda dapat menggunakan aplikasi autentikasi dua faktor seperti <a rel=\"noopener noreferrer\" target=\"_blank\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> atau <a rel=\"noopener noreferrer\" target=\"_blank\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:11
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
@@ -4406,11 +4426,6 @@ msgstr "Link"
 msgid "Mime"
 msgstr "Mime"
 
-#: apps/zotonic_mod_base_site/priv/templates/page.query.tpl:8./apps/zotonic_mod_base_site/priv/templates/search.tpl:18
-#: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:20
-msgid "Page"
-msgstr "Halaman"
-
 #: apps/zotonic_mod_base_site/priv/templates/_content_list_item.tpl:22
 msgid "Read more"
 msgstr "Baca lebih lanjut"
@@ -4466,11 +4481,6 @@ msgstr "Komentar Pengaturan"
 #: apps/zotonic_mod_comment/priv/templates/_comments.tpl:2./apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:11./apps/zotonic_mod_comment/src/mod_comment.erl:200
 msgid "Comments"
 msgstr "Komentar"
-
-#: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:69
-msgid "Email"
-msgstr "Email"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:21
 msgid "General Comment Form Settings"

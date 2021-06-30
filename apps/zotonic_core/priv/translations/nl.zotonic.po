@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-06-22 15:40\n"
+"PO-Revision-Date: 2021-06-29 13:33\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -185,7 +185,7 @@ msgid "Cancel"
 msgstr "Annuleer"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:2./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:192./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:192./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:82./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:135./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: apps/zotonic_mod_survey/src/mod_survey.erl:151
 msgid "Category"
@@ -706,7 +706,7 @@ msgstr "openen in een andere browser (bijvoorbeeld Chrome als je nu in Firefox z
 msgid "view (acl action)"
 msgstr "bekijk"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:109./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:111
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:110
 msgid "&lt; Prev"
 msgstr "&lt; Vorige"
 
@@ -844,7 +844,7 @@ msgstr "Gekoppelde media"
 msgid "Auth"
 msgstr "Authenticatie"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:97
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:96
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:8./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:42
 msgid "Back"
 msgstr "Terug"
@@ -985,7 +985,7 @@ msgstr "Gemaakt door"
 msgid "Created by me"
 msgstr "Gemaakt door mij"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:17./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:25./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:138./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51
 msgid "Created on"
 msgstr "Gemaakt op"
@@ -1022,7 +1022,7 @@ msgstr "Datumbereiken"
 msgid "Delete if no other page is connected to this page."
 msgstr "Verwijder als geen andere pagina’s een connectie met deze pagina hebben."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:49./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:235./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:49./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:235./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:77
 msgid "Delete if not connected anymore"
 msgstr "Verwijder indien niet meer verbonden"
 
@@ -1093,6 +1093,12 @@ msgstr "Bewerk"
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:73
 msgid "Edit:"
 msgstr "Bewerk:"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:81
+#: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:69
+msgid "Email"
+msgstr "E-mail"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:115
 msgid "Email address"
@@ -1242,6 +1248,10 @@ msgstr "Home Directory"
 msgid "IP Address"
 msgstr "IP-adres"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:75
+msgid "Identities with this email address"
+msgstr "Identiteiten met dit e-mailadres"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:8
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
 msgstr "Als een pagina een publicatiedatumbereik heeft, dan is deze alleen zichtbaar tussen die twee data. Merk op dat als je de pagina mag bewerken, je deze altijd kan zien."
@@ -1312,7 +1322,7 @@ msgstr "Postadres"
 msgid "Main"
 msgstr "Basis"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:122
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:121
 msgid "Make"
 msgstr "Maak"
 
@@ -1380,11 +1390,11 @@ msgstr "Mijn"
 msgid "Mobile"
 msgstr "Mobiele telefoon"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:23./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:85./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:144./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
 msgid "Modified by"
 msgstr "Bewerkt door"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:28./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:84./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:141./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
 msgid "Modified on"
 msgstr "Bewerkt op"
@@ -1393,7 +1403,7 @@ msgstr "Bewerkt op"
 msgid "Modified:"
 msgstr "Bewerkt:"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:221./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:223
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:221./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:223./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:49
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
@@ -1410,7 +1420,7 @@ msgstr "Netwerkverbindingen"
 msgid "New Page"
 msgstr "Nieuwe pagina"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:115./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:117
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:114./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:116
 msgid "Next &gt;"
 msgstr "Volgende &gt;"
 
@@ -1438,7 +1448,7 @@ msgstr "Geen media gevonden."
 msgid "No other pages found"
 msgstr "Geen andere pagina's gevonden"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:16./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:63./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:16./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:184./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find_results_loop.tpl:10
 msgid "No pages found."
 msgstr "Geen pagina's gevonden."
@@ -1446,6 +1456,12 @@ msgstr "Geen pagina's gevonden."
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:61
 msgid "Number of open sockets grouped per ip-address (top 10)"
 msgstr "Aantal open sockets gegroepeerd per ip-adres (top 10)"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:13
+#: apps/zotonic_mod_base_site/priv/templates/page.query.tpl:8./apps/zotonic_mod_base_site/priv/templates/search.tpl:18
+#: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:20
+msgid "Page"
+msgstr "Pagina"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:47
 msgid "Page Count"
@@ -1550,7 +1566,7 @@ msgstr "Publicatieperiode"
 msgid "Publish this page"
 msgstr "Publiceer deze pagina"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:18./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:52./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:61./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:244./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:90
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:18./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:52./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:61./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:244./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:89
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:46
 msgid "Published"
 msgstr "Gepubliceerd"
@@ -1614,7 +1630,7 @@ msgstr "Connectie verwijderd naar"
 msgid "Renumber category tree"
 msgstr "Hernummer categorieboom"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:122
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:121
 msgid "Replace"
 msgstr "Vervang"
 
@@ -1673,6 +1689,10 @@ msgstr "Zoek naar andere media"
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:7
 msgid "Search query"
 msgstr "Zoekopdracht"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:126
+msgid "Search results"
+msgstr "Zoekresultaten"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:85
 msgid "Search..."
@@ -1874,7 +1894,7 @@ msgstr "Dit bestand is geïnfecteerd met een virus."
 msgid "This file is too large."
 msgstr "Dit bestand is te groot."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:154./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
 msgid "This is system content."
 msgstr "Dit is systeeminhoud."
 
@@ -1910,7 +1930,7 @@ msgstr "Tot"
 msgid "Timeout while trying to fetch data from the website."
 msgstr "Time-out tijdens het ophalen van gegevens van de website."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:11./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:84./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:132./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:84./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
 msgid "Title"
@@ -2126,7 +2146,7 @@ msgstr "blok"
 msgid "by"
 msgstr "door"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:51./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:57./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:103./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:104./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:171./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:172./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:55
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:66./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:68
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
@@ -2146,7 +2166,7 @@ msgstr "verwijder"
 msgid "e.g. might change"
 msgstr "bv. kan nog veranderen"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:122./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:62./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:109./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:177./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:122./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
 msgid "edit"
@@ -2192,7 +2212,7 @@ msgstr "pixels"
 msgid "show all"
 msgstr "toon alles"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:155
 msgid "system content"
 msgstr "systeeminhoud"
 
@@ -2208,7 +2228,7 @@ msgstr "zonder titel"
 msgid "uploaded on"
 msgstr "geüpload op"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:55./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:176./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:36
 msgid "view"
 msgstr "bekijk"
@@ -3362,7 +3382,7 @@ msgstr "Database"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/dispatch.tpl:3
 msgid "Dispatch"
-msgstr "Verzending"
+msgstr "Verzenden"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/erlang.tpl:3
 msgid "Erlang VM"
@@ -3420,7 +3440,7 @@ msgstr "Traceer"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:70
 msgid "Add two-factor authentication"
-msgstr "Voeg authenticatie met twee factoren toe"
+msgstr "Schakel twee-factor authenticatie in"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:43
 msgid "Ask after signing in"
@@ -3470,7 +3490,7 @@ msgstr "Vanaf nu is een extra toegangscode nodig om in te loggen."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:23
 msgid "Generate QR code"
-msgstr "Genereer QR-code"
+msgstr "QR-code generen"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:8
 msgid "Help about two-factor authentication"
@@ -3482,7 +3502,7 @@ msgstr "Hier kunt u definiëren welke gebruikers een twee-factor-authenticatie n
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:3
 msgid "If you are not able to scan the QR code then copy the code manually to your authentication App."
-msgstr "Als u de QR-code niet kunt scannen, kopieert u de code handmatig naar uw authenticatie-app."
+msgstr "Als u de QR-code niet kunt scannen, kopieer de code handmatig naar je authenticatie-app."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:61
 msgid "It is possible to force two-factor authentication for a specific user group, regardless of the setting above."
@@ -3494,7 +3514,7 @@ msgstr "Alleen de admin kan de twee-factor authenticatie van de admin wijzigen."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:42
 msgid "Only the user themselves can set their new two-factor authentication QR code."
-msgstr "Alleen de gebruiker kan zelf zijn nieuwe QR-code voor tweefactorauthenticatie instellen."
+msgstr "Alleen de gebruiker kan zijn eigen nieuwe QR-code voor twee-factor-authenticatie instellen."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:33
 msgid "Optional"
@@ -3514,7 +3534,7 @@ msgstr "Reset twee-factor..."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:2
 msgid "Scan the two-factor authentication QR code with an app such as <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
-msgstr "Scan de QR-code met tweestapsverificatie met een app zoals <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> of <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
+msgstr "Scan de QR-code voor twee-staps-authenticatie met een app zoals <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> of <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:92
 msgid "Scan two-factor authentication passcode"
@@ -3530,11 +3550,11 @@ msgstr "Sorry, je mag de 2FA niet verwijderen."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:9
 msgid "This will disable the two-factor authentication.<br>The old QR code will not be valid anymore."
-msgstr "Hiermee wordt de tweefactorauthenticatie uitgeschakeld.<br>De oude QR-code is niet meer geldig."
+msgstr "Hiermee wordt de twee-factor-authenticatie uitgeschakeld.<br>De oude QR-code is dan niet meer geldig."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:22
 msgid "This will generate a new QR code for two-factor authentication.<br>The old QR code will not be valid anymore."
-msgstr "Hiermee wordt een nieuwe QR-code gegenereerd voor tweefactorauthenticatie.<br>De oude QR-code is niet meer geldig."
+msgstr "Hiermee wordt een nieuwe QR-code gegenereerd voor twee-factor-authenticatie.<br>De oude QR-code is niet meer geldig."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:108
 msgid "Two-factor authentication"
@@ -3561,12 +3581,12 @@ msgid "User group configuration"
 msgstr "Configuratie van de gebruikersgroep"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:72
-msgid "You can add two-factor authentication to your account.<br>You will need an App on your Phone to scan the barcode and generate passcodes.<br>Examples are <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> and <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
-msgstr "U kunt tweefactorauthenticatie toevoegen aan uw account.<br>U hebt een app op uw telefoon nodig om de streepjescode te scannen en toegangscodes te genereren.<br>Voorbeelden zijn <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> en <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
+msgid "You can add two-factor authentication to your account.<br>You will need an App on your Phone to scan the QR code and generate passcodes.<br>Examples are <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> and <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
+msgstr "Je kunt twee-factor-authenticatie instellen voor je account.<br>Je hebt een app op je telefoon nodig om de QR-code te scannen en toegangscodes te genereren.<br>Voorbeelden zijn <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> en <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:17
-msgid "You can use two-factor authentication apps such as <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>.\""
-msgstr "Je kunt gebruik maken van twee-factor authenticatie apps zoals <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> of <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
+msgid "You can use two-factor authentication apps such as <a rel=\"noopener noreferrer\" target=\"_blank\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a rel=\"noopener noreferrer\" target=\"_blank\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
+msgstr "Je kan twee-factor-authenticatie-apps gebruiken, zoals <a rel=\"noopener noreferrer\" target=\"_blank\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> of <a rel=\"noopener noreferrer\" target=\"_blank\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:11
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
@@ -3764,7 +3784,7 @@ msgstr "In de e-mail staan instructies om je account te bevestigen."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:50./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:162./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
 msgid "Keep me signed in"
-msgstr "Hou me ingelogd"
+msgstr "Houd me ingelogd"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:108
 msgid "Log on with"
@@ -3975,7 +3995,7 @@ msgstr "U bent aangemeld"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:3
 msgid "You can find the code in your authentication App."
-msgstr "U vindt de code in uw authenticatie-app."
+msgstr "Je vindt de code in je authenticatie-app."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:101
 msgid "You can log in using the following external service"
@@ -4409,11 +4429,6 @@ msgstr "Connecties"
 msgid "Mime"
 msgstr "Mime"
 
-#: apps/zotonic_mod_base_site/priv/templates/page.query.tpl:8./apps/zotonic_mod_base_site/priv/templates/search.tpl:18
-#: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:20
-msgid "Page"
-msgstr "Pagina"
-
 #: apps/zotonic_mod_base_site/priv/templates/_content_list_item.tpl:22
 msgid "Read more"
 msgstr "Lees meer"
@@ -4469,11 +4484,6 @@ msgstr "Reactie-instellingen"
 #: apps/zotonic_mod_comment/priv/templates/_comments.tpl:2./apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:11./apps/zotonic_mod_comment/src/mod_comment.erl:200
 msgid "Comments"
 msgstr "Reacties"
-
-#: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:69
-msgid "Email"
-msgstr "E-mail"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:21
 msgid "General Comment Form Settings"
@@ -5637,7 +5647,7 @@ msgstr "Wil je je LinkedIn-account ontkoppelen?"
 
 #: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:20
 msgid "Log in with LinkedIn"
-msgstr "Inloggen met LinkedIn"
+msgstr "Log in met LinkedIn"
 
 #: apps/zotonic_mod_linkedin/priv/templates/_logon_extra_email_reset.tpl:2
 msgid "Log on with LinkedIn"
@@ -5830,7 +5840,7 @@ msgstr "<em>Voeg</em> alle ontvangers toe aan deze lijst die op de doellijst sta
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:20
 msgid "<em>Remove</em> all recipients from this list that are on the target list"
-msgstr "<em>Verwijder</em> alle ontvangers van deze lijst die op de doellijst staan"
+msgstr "<em>Verwijder</em> alle ontvangers die op de doellijst staan"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
@@ -6155,7 +6165,7 @@ msgstr "Voorbeeld mailing"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:28
 msgid "Read more on the web"
-msgstr "Lees meer op internet"
+msgstr "Lees meer op het web"
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:73
 msgid "Recipient deleted."
@@ -6661,7 +6671,7 @@ msgstr "Cliëntgeheim"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:17
 msgid "Connect with Microsoft"
-msgstr "Maak verbinding met Microsoft"
+msgstr "Verbinden met Microsoft"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:36
 msgid "Control who can sign in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
@@ -6669,11 +6679,11 @@ msgstr "Bepaal wie zich kan aanmelden. Toegestane waarden zijn: <tt>common</tt>,
 
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:2./apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:4
 msgid "Disconnect from Microsoft"
-msgstr "Verbreek de verbinding met Microsoft"
+msgstr "Ontkoppelen van Microsoft"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:5
 msgid "Do you want to disconnect your Microsoft account?"
-msgstr "Wilt u uw Microsoft-account loskoppelen?"
+msgstr "Wilt je je Microsoft-account loskoppelen?"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:18
 msgid "Log in with Microsoft"
@@ -6689,7 +6699,7 @@ msgstr "Meer informatie over scopes"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:37
 msgid "More information about tenant identifiers"
-msgstr "Meer informatie over tenant-ID's"
+msgstr "Meer informatie over  tenant identifiers"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_logon_service.microsoft.tpl:2
 msgid "Redirecting to Microsoft."
@@ -6709,7 +6719,7 @@ msgstr "Spatie gescheiden lijst van scopes waarvoor je de gebruiker toestemming 
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
 msgid "Tenant"
-msgstr "Huurder"
+msgstr "Tenant"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:44
 msgid "Use Microsoft authentication"
@@ -6917,11 +6927,11 @@ msgstr "Bouw de sitemap opnieuw op"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:8
 msgid "Rebuild the sitemap index for all pages."
-msgstr "Bouw de sitemapindex opnieuw op voor alle pagina's."
+msgstr "Bouw de sitemap-index opnieuw op voor alle pagina's."
 
 #: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:71
 msgid "Rebuilding the sitemap in the background."
-msgstr "Het opnieuw opbouwen van de sitemap op de achtergrond."
+msgstr "De sitemap wordt in de achtergrond opnieuw opgebouwd."
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:2
 msgid "Sitemap settings"
@@ -6941,7 +6951,7 @@ msgstr "Jaarlijks"
 
 #: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:73
 msgid "You are not allowed to do this"
-msgstr "U mag dit niet doen"
+msgstr "Je hebt geen rechten om dit te doen"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
 msgid "default"
@@ -7086,7 +7096,7 @@ msgstr "Je kunt ook"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
 msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
-msgstr "Mogelijk heeft u uw account twee keer bevestigd, zodat het account al is bevestigd. Als dit het geval is, probeer dan in te loggen.<br>Als dat niet werkt, zorg er dan voor dat u de link correct heeft gekopieerd en probeer het opnieuw."
+msgstr "Misschien heb je je account twee keer bevestigd, zodat het account al is bevestigd. Als dit het geval is, probeer dan in te loggen.<br>Als dat niet werkt, zorg er dan voor dat je de link in zijn geheel hebt gekopieerd en probeer het opnieuw."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
