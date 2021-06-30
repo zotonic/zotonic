@@ -128,7 +128,7 @@ insert_template(Module, CompileTime) ->
 
 -spec start_link() -> {ok, pid()} | {error, term()}.
 start_link() ->
-    start_link(z_config:get(filewatcher_scanner_enabled, false)).
+    start_link(z_config:get(filewatcher_scanner_enabled)).
 
 %% @doc Starts the server. IsScannerEnabled is set if inotify, fswatch or the periodic
 %% directory scanner is enabled. If not then the cached mtimes are periodically flushed.
