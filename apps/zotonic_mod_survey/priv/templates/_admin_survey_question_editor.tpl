@@ -27,19 +27,19 @@
 			<div class="modal-body">
 				<div class="row">
 					<div class="col-lg-4 col-md-4" data-block-type='survey_short_answer'>
-						<p>{_ A question with a short answer _}</p>
+						<p>{_ Question with a short answer _}</p>
 						<p>
 							<input class="form-control" type="text" disabled />
 						</p>
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='survey_long_answer'>
-						<p>{_ A question with a long answer _}</p>
+						<p>{_ Question with a long answer _}</p>
 						<p>
 							<textarea class="form-control" rows="3" disabled></textarea>
 						</p>
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='survey_yesno'>
-						<p>{_ A yes or no question _}</p>
+						<p>{_ Yes or no question _}</p>
 						<p>
 							<input type="radio" disabled /> {_ Yes _}<br/>
 							<input type="radio" disabled /> {_ No _}
@@ -58,7 +58,7 @@
 				<hr/>
 				<div class="row">
 					<div class="col-lg-4 col-md-4" data-block-type='survey_likert'>
-						<p>{_ A question with a 5-point scale _} ({_ Likert _})</p>
+						<p>{_ Question with a 5-point scale _} ({_ Likert _})</p>
 						<p>
 							{_ Disagree _}
 							<input type="radio" disabled />
@@ -70,7 +70,7 @@
 						</p>
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='survey_thurstone'>
-						<p>{_ A multiple choice or quiz question _} ({_ Thurstone _})</p>
+						<p>{_ Multiple choice or quiz question _} ({_ Thurstone _})</p>
 						<p>
 							<input type="checkbox" disabled /> {_ Answer _} 1<br/>
 							<input type="checkbox" disabled /> {_ Answer _} 2<br/>
@@ -78,7 +78,7 @@
 						</p>
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='survey_matching'>
-						<p>{_ A matching question _}</p>
+						<p>{_ Matching question _}</p>
 						<p>
 							Apple <select class="form-control" disabled><option>{_ Wagner _}</option></select><br/>
 							Milk <select class="form-control" disabled><option>{_ Red _}</option></select><br/>
@@ -105,7 +105,7 @@
 						</p>
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='survey_button'>
-						<p>{_ Button _}<br/>{_ Create jumps to other questions or blocks. _}
+						<p>{_ Button _}<br/>{_ Create jumps to other questions or blocks. _}<br/>
 							<button class="btn btn-default disabled" disabled>{_ Button text _}</button>
 						</p>
 					</div>
