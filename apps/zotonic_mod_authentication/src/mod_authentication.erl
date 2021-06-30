@@ -47,7 +47,7 @@
 init(Context) ->
     % Ensure password_min_length config
     case m_config:get(?MODULE, password_min_length, Context) of
-        undefined -> m_config:set_value(?MODULE, password_min_length, "6", Context);
+        undefined -> m_config:set_value(?MODULE, password_min_length, "8", Context);
         _ -> nop
     end,
     ok.
@@ -301,7 +301,7 @@ maybe_signup(Auth, Context) ->
 
 try_signup(Auth, Context) ->
     case not Auth#auth_validated.is_signup_confirm
-        andalso z_convert:to_bool(m_config:get_value(mod_authentication, is_signup_confirm, Context))
+        andalso m_config:get_boolean(mod_authentication, is_signup_confirm, Context)
     of
         true ->
             {error, signup_confirm};

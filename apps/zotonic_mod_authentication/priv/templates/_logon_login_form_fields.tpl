@@ -46,7 +46,7 @@
         <div class="form-group">
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="rememberme" value="1" />
+                    <input type="checkbox" name="rememberme" value="1" {% if q.rememberme or m.authentication.is_rememberme %}checked{% endif %}>
                     {_ Keep me signed in _}
                 </label>
             </div>
@@ -121,7 +121,7 @@
     {% if q.options.is_user_local %}
         <div class="form-group">
             <label for="password" class="control-label">{_ Password _}</label>
-            <input class="form-control" type="password" id="password" name="password" value=""
+            <input class="form-control" type="password" id="password" name="password" value="{{ q.password|escape }}"
                    required
                    {% if not is_show_passcode %}autofocus{% endif %}
                    autocomplete="current-password"
@@ -158,7 +158,8 @@
                 <div class="form-group">
                     <div class="checkbox">
                         <label title="{_ Stay logged on unless I log off. _}">
-                            <input type="checkbox" name="rememberme" value="1" {% if q.rememberme %}checked{% endif %}>
+                            <input type="checkbox" name="rememberme" value="1"
+                                {% if q.rememberme or m.authentication.is_rememberme %}checked{% endif %}>
                             {_ Keep me signed in _}
                         </label>
                     </div>
