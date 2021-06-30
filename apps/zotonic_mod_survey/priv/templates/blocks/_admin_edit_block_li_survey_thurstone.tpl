@@ -13,7 +13,7 @@
     {% if id.is_editable %}
       <div class="form-group">
           <input class="form-control" type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="blocks[].prompt{{ lang_code_with_dollar }}" value="{{ blk.prompt[lang_code]  }}"
-                 placeholder="{_ Prompt _} ({{ lang_code }})" />
+                 placeholder="{_ A multiple choice or quiz question _} ({{ lang_code }})" />
       </div>
 
       <div class="form-group view-expanded">
@@ -23,7 +23,7 @@
 
       <div class="form-group view-expanded">
          <label class="control-label">
-              {_ One answer per line. _}{_ If you want to store <i>value</i> but show <i>answer</i>, use value#answer. E.g. <i>2019#Graduated in 2019</i> will store 2019 in the results. _}
+              {_ One answer per line. _} {_ If you want to store <i>value</i> but show <i>answer</i>, use value#answer. E.g. <i>2019#Graduated in 2019</i> will store 2019 in the results. _}
               <span class="test-controls" {% if not blk.is_test %}style="display:none"{% endif %}>
                   {_ For quiz or test, mark correct answers with a “*””. E.g. “*value#answer” _}
               </span>

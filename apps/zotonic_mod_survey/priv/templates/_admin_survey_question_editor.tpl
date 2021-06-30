@@ -39,7 +39,7 @@
 						</p>
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='survey_yesno'>
-						<p>{_ A yes or no question. _}</p>
+						<p>{_ A yes or no question _}</p>
 						<p>
 							<input type="radio" disabled /> {_ Yes _}<br/>
 							<input type="radio" disabled /> {_ No _}
@@ -58,7 +58,7 @@
 				<hr/>
 				<div class="row">
 					<div class="col-lg-4 col-md-4" data-block-type='survey_likert'>
-						<p>{_ A 5-point scale _} ({_ Likert _})</p>
+						<p>{_ A question with a 5-point scale _} ({_ Likert _})</p>
 						<p>
 							{_ Disagree _}
 							<input type="radio" disabled />
@@ -70,7 +70,7 @@
 						</p>
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='survey_thurstone'>
-						<p>{_ Multiple choice or quiz question _} ({_ Thurstone _})</p>
+						<p>{_ A multiple choice or quiz question _} ({_ Thurstone _})</p>
 						<p>
 							<input type="checkbox" disabled /> {_ Answer _} 1<br/>
 							<input type="checkbox" disabled /> {_ Answer _} 2<br/>
@@ -105,9 +105,8 @@
 						</p>
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='survey_button'>
-						<p>{_ Button _}<br/>
+						<p>{_ Button _}<br/>{_ Create jumps to other questions or blocks. _}
 							<button class="btn btn-default disabled" disabled>{_ Button text _}</button>
-						}
 						</p>
 					</div>
 				</div>
@@ -118,7 +117,7 @@
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='text'>
 
-						<p>{_ Text, image, video. _}<br/>{_ Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>. _}</p>
+						<p>{_ Text, image, video _}<br/><br/>{_ Add an introduction or explanation including uploaded or embedded images or video's. Add full width blocks or set a percentage to combine responsive blocks. _}</p>
 					</div>
 				</div>
 				{% if m.acl.use.mod_admin %}

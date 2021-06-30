@@ -13,7 +13,7 @@
     {% if id.is_editable %}
     <div class="form-group">
         <input class="form-control" type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="blocks[].prompt{{ lang_code_with_dollar }}" value="{{ blk.prompt[lang_code]  }}"
-               placeholder="{_ A qestion with a short answer _} ({{ lang_code }})" />
+               placeholder="{_ A question with a short answer _} ({{ lang_code }})" />
     </div>
 
     <div class="form-group view-expanded">

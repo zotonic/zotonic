@@ -13,13 +13,12 @@
     {% if id.is_editable %}
     <div class="form-group">
         <input class="form-control" type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="blocks[].prompt{{ lang_code_with_dollar }}" value="{{ blk.prompt[lang_code]  }}"
-               placeholder="{_ Fill in the missing parts. _} ({{ lang_code }})" />
+               placeholder="{_ Fill in the missing parts _} ({{ lang_code }})" />
     </div>
     <div class="form-group view-expanded">
        <textarea class="form-control" id="block-{{name}}-narrative{{ lang_code_for_id }}" name="blocks[].narrative{{ lang_code_with_dollar }}" rows="4"
-              placeholder="{_ I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color      ]. _} ({{ lang_code }})" >{{ blk.narrative[lang_code]  }}</textarea>
-
-        <p class="help-block"><strong>{_ Example: _}</strong> {_ I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color      ]._}</p>
+              placeholder="{_ I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]. _} ({{ lang_code }})" >{{ blk.narrative[lang_code]  }}</textarea>
+                <p class="help-block"><strong>{_ Example: _}</strong> {_ I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]. _}</p>
     </div>
 
     <div class="form-group view-expanded">
