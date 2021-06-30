@@ -27,19 +27,19 @@
 			<div class="modal-body">
 				<div class="row">
 					<div class="col-lg-4 col-md-4" data-block-type='survey_short_answer'>
-						<p>{_ Please enter your information. _}</p>
+						<p>{_ A question with a short answer _}</p>
 						<p>
 							<input class="form-control" type="text" disabled />
 						</p>
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='survey_long_answer'>
-						<p>{_ Please write an essay. _}</p>
+						<p>{_ A question with a long answer _}</p>
 						<p>
 							<textarea class="form-control" rows="3" disabled></textarea>
 						</p>
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='survey_yesno'>
-						<p>{_ Do you like pea soup? _}</p>
+						<p>{_ A yes or no question. _}</p>
 						<p>
 							<input type="radio" disabled /> {_ Yes _}<br/>
 							<input type="radio" disabled /> {_ No _}
@@ -47,7 +47,7 @@
 					</div>
 					<!--
 					<div class="col-lg-4 col-md-4" data-block-type='survey_truefalse'>
-						<p>{_ The earth is flat. _}</p>
+						<p>{_ True or false question _}</p>
 						<p>
 							<input type="radio" disabled /> {_ True _}<br/>
 							<input type="radio" disabled /> {_ False _}
@@ -58,7 +58,7 @@
 				<hr/>
 				<div class="row">
 					<div class="col-lg-4 col-md-4" data-block-type='survey_likert'>
-						<p>{_ Weasels make great pets. _}</p>
+						<p>{_ A 5-point scale _} ({_ Likert _})</p>
 						<p>
 							{_ Disagree _}
 							<input type="radio" disabled />
@@ -70,15 +70,15 @@
 						</p>
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='survey_thurstone'>
-						<p>{_ Select which you agree with. _}</p>
+						<p>{_ Multiple choice or quiz question _} ({_ Thurstone _})</p>
 						<p>
-							<input type="checkbox" disabled /> {_ I like Chinese restaurants _}<br/>
-							<input type="checkbox" disabled /> {_ Chinese food is best for money _}<br/>
-							<input type="checkbox" disabled /> {_ I always eat with others _}
+							<input type="checkbox" disabled /> {_ Answer _} 1<br/>
+							<input type="checkbox" disabled /> {_ Answer _} 2<br/>
+							<input type="checkbox" disabled /> {_ Answer _} 3
 						</p>
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='survey_matching'>
-						<p>{_ Match which answer fits best. _}</p>
+						<p>{_ A matching question _}</p>
 						<p>
 							Apple <select class="form-control" disabled><option>{_ Wagner _}</option></select><br/>
 							Milk <select class="form-control" disabled><option>{_ Red _}</option></select><br/>
@@ -89,7 +89,7 @@
 				<div class="row">
 					<div class="col-lg-4 col-md-4" data-block-type='survey_narrative'>
 						<p>
-							{_ I am _}
+							{_ A narrative question _}<br/>{_ I am _}
 							<input type="text" class="col-md-2 form-control" style="display: inline; float: none;" disabled />
 							{_ years old. I like _}
 							<select class="col-md-4 form-control" style="display: inline; float: none;" disabled><option>{_ chocolate _}</option></select>
@@ -105,8 +105,9 @@
 						</p>
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='survey_button'>
-						<p>
+						<p>{_ Button _}<br/>
 							<button class="btn btn-default disabled" disabled>{_ Button text _}</button>
+						}
 						</p>
 					</div>
 				</div>
@@ -116,7 +117,8 @@
 						<h4>{_ Header _}</h4>
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='text'>
-						<p>{_ Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>. _}</p>
+
+						<p>{_ Text, image, video. _}<br/>{_ Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>. _}</p>
 					</div>
 				</div>
 				{% if m.acl.use.mod_admin %}
