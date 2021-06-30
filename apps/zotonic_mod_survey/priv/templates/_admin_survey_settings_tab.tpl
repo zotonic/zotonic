@@ -64,12 +64,12 @@
 
 					<div class="control-group label-floating">
 				        <input type="text" name="survey_test_percentage" id="{{ #survey_test_percentage }}" 
-				               class="input-small" value="{{ id.survey_test_percentage }}" placeholder="{_ Test pass percentage _}" /> %
-					    <label class="control-label">{_ Test pass percentage _}</label>
+				               class="input-small" value="{{ id.survey_test_percentage }}" placeholder="{_ Passing score _}" /> %
+					    <label class="control-label">{_ Passing score _}</label>
 				        {% validate id=#survey_test_percentage name="survey_test_percentage"
 				        			type={numericality minimum=0 maximum=100}
 				        %}
-				        <p class="help-block muted">{_ Leave empty if there are no test questions. _}</p>
+				        <p class="help-block muted">{_ This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions. _}</p>
 					</div>
 				</div>
 			{% else %}
