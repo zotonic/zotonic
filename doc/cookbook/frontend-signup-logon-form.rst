@@ -72,7 +72,7 @@ CSS styles are defined in ``css/logon.css`` (mod_authentication).
 Password length
 ...............
 
-The minimum password length is 6 characters, and can be changed in config value ``mod_authentication.password_min_length``.
+The minimum password length is 8 characters, and can be changed in config value ``mod_authentication.password_min_length``.
 
 
 Sign up form in a modal dialog
