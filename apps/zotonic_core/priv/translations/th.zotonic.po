@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-06-26 13:22\n"
+"PO-Revision-Date: 2021-07-01 12:02\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -178,7 +178,7 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:101
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:135./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:143
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:148./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:149./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:190
 msgid "Cancel"
@@ -1201,7 +1201,7 @@ msgid "Find Page"
 msgstr "ค้นหาหน้า"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:108
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:208
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:209
 msgid "Find page"
 msgstr "ค้นหาหน้า"
 
@@ -3780,7 +3780,7 @@ msgstr "หากคุณคิดว่าคุณมีบัญชีแล
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "ในอีเมลคุณจะพบคำแนะนำเกี่ยวกับวิธียืนยันบัญชีของคุณ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:50./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:162./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
+#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:50./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:163./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
 msgid "Keep me signed in"
 msgstr "ให้ฉันลงชื่อเข้าใช้"
 
@@ -3793,7 +3793,7 @@ msgstr "เข้าสู่ระบบด้วย"
 msgid "Minimum characters:"
 msgstr "อักขระขั้นต่ำ:"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:183
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:184
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:67
 msgid "Next"
 msgstr "ต่อไป"
@@ -3863,7 +3863,7 @@ msgstr "รีเซ็ตรหัสผ่านของคุณ"
 msgid "Send Verification Message"
 msgstr "ส่งข้อความยืนยัน"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:57./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:177./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:57./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:178./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Sign in"
 msgstr "เข้าสู่ระบบ"
@@ -7337,9 +7337,17 @@ msgstr "คุณต้องเป็นผู้ดูแลระบบเพ
 msgid "not reachable or local IP"
 msgstr "ไม่สามารถเข้าถึงได้หรือ IP ในเครื่อง"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
+msgid "A narrative question"
+msgstr ""
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:25
 msgid "Add a question or block"
 msgstr "เพิ่มคำถามหรือบล็อก"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:120
+msgid "Add an introduction or explanation including uploaded or embedded images or video's. Add full width blocks or set a percentage to combine blocks."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:13
 msgid "Add page"
@@ -7381,7 +7389,7 @@ msgstr "ตกลง"
 msgid "All survey entries up until"
 msgstr "รายการสำรวจทั้งหมดจนถึง"
 
-#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:67
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:75./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:76./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:77./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:67
 msgid "Answer"
 msgstr "ตอบ"
 
@@ -7417,7 +7425,7 @@ msgstr "แน่ใจไหมว่าต้องการลบผลลั
 msgid "Are you sure you want to stop?"
 msgstr "แน่ใจไหมว่าต้องการหยุด"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:157
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:108./apps/zotonic_mod_survey/src/mod_survey.erl:157
 msgid "Button"
 msgstr "ปุ่ม"
 
@@ -7437,10 +7445,6 @@ msgstr "หมวดหมู่ให้เลือก"
 msgid "Check the answer in the admin."
 msgstr "ตรวจสอบคำตอบในแอดมิน"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:76
-msgid "Chinese food is best for money"
-msgstr "อาหารจีนดีที่สุดสำหรับเงิน"
-
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:31
 msgid "Choices"
 msgstr "ทางเลือก"
@@ -7452,6 +7456,10 @@ msgstr "สานต่อ"
 #: apps/zotonic_mod_survey/src/mod_survey.erl:156
 msgid "Country select"
 msgstr "เลือกประเทศ"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:108
+msgid "Create jumps to other questions or blocks."
+msgstr ""
 
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:840
 msgid "Created"
@@ -7490,10 +7498,6 @@ msgstr "ปิดใช้งานซ่อนแบบสำรวจ"
 msgid "Disagree"
 msgstr "ไม่เห็นด้วย"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
-msgid "Do you like pea soup?"
-msgstr "คุณชอบซุปถั่วไหม?"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:130./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:134./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
 msgid "Download will start in the background. Please check your download window."
 msgstr "การดาวน์โหลดจะเริ่มในพื้นหลัง โปรดตรวจสอบหน้าต่างดาวน์โหลดของคุณ"
@@ -7514,11 +7518,11 @@ msgstr "แก้ไขผลการสำรวจ"
 msgid "End of questions"
 msgstr "สิ้นสุดคำถาม"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:22
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:21
 msgid "Example:"
 msgstr "ตัวอย่าง:"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:36
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:26./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:36
 msgid "Explanation"
 msgstr "คำอธิบาย"
 
@@ -7543,10 +7547,10 @@ msgid "Fill in"
 msgstr "กรอก"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
-msgid "Fill in the missing parts."
-msgstr "เติมเต็มในส่วนที่ขาด"
+msgid "Fill in the missing parts"
+msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:129
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:130
 msgid "First page in category"
 msgstr "หน้าแรกในหมวดหมู่"
 
@@ -7570,7 +7574,7 @@ msgstr "การจัดการ"
 msgid "Help about surveys"
 msgstr "ความช่วยเหลือเกี่ยวกับการสำรวจ"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:63./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:46./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:71./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:63
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:63./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:71./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:63
 msgid "Hide from results"
 msgstr "ซ่อนจากผลลัพธ์"
 
@@ -7582,21 +7586,13 @@ msgstr "ซ่อนข้อมูลความคืบหน้า"
 msgid "Hide the user’s id or browser-id from result exports"
 msgstr "ซ่อนรหัสของผู้ใช้หรือรหัสเบราว์เซอร์จากการส่งออกผลลัพธ์"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:77
-msgid "I always eat with others"
-msgstr "ฉันกินข้าวกับคนอื่นตลอด"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
 msgid "I am"
 msgstr "ฉัน"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:22
-msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color      ]."
-msgstr "ฉันอายุ [age] ปี ฉันชอบไอศกรีม [icecream = vanilla | strawberry | chocolate | other] และสีที่ฉันชอบคือ [color]"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:75
-msgid "I like Chinese restaurants"
-msgstr "ฉันชอบร้านอาหารจีน"
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:21
+msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
 msgid "If you want to store <i>value</i> but show <i>answer</i>, use value#answer. E.g. <i>2019#Graduated in 2019</i> will store 2019 in the results."
@@ -7630,21 +7626,17 @@ msgstr "ผกผัน"
 msgid "Jump to a question on a next page."
 msgstr "ข้ามไปที่คำถามในหน้าถัดไป"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:103./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:103
 msgid "Leave empty if there are no test questions."
 msgstr "เว้นว่างไว้หากไม่มีคำถามทดสอบ"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:149
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61./apps/zotonic_mod_survey/src/mod_survey.erl:149
 msgid "Likert"
 msgstr "ลิเคิร์ท"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:155
 msgid "Long answer"
 msgstr "คำตอบยาว"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:119
-msgid "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
-msgstr "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:72
 msgid "Mail filled in surveys to"
@@ -7655,8 +7647,8 @@ msgid "Mail results to"
 msgstr "ส่งผลลัพธ์ไปที่"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:81./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
-msgid "Match which answer fits best."
-msgstr "จับคู่คำตอบที่เหมาะสมที่สุด"
+msgid "Matching question"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:49
 msgid "Multiple answers possible"
@@ -7665,6 +7657,10 @@ msgstr "เป็นไปได้หลายคำตอบ"
 #: apps/zotonic_mod_survey/src/mod_survey.erl:161
 msgid "Multiple choice"
 msgstr "ปรนัย"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:16
+msgid "Multiple choice or quiz question"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:62./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:41
 msgid "Multiple entries per user/browser"
@@ -7686,7 +7682,7 @@ msgstr "จำเป็นสำหรับการส่งผ่าน"
 msgid "New result:"
 msgstr "ผลลัพธ์ใหม่:"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:131
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:132
 msgid "Next page in category"
 msgstr "หน้าถัดไปในหมวดหมู่"
 
@@ -7714,7 +7710,7 @@ msgstr "หนึ่งคำตอบต่อบรรทัด"
 msgid "Only accept images."
 msgstr "ยอมรับเฉพาะรูปภาพ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:127
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:128
 msgid "Options from a page category"
 msgstr "ตัวเลือกจากหมวดหมู่หน้า"
 
@@ -7730,17 +7726,13 @@ msgstr "เงื่อนไขการกระโดดของหน้า
 msgid "Passed"
 msgstr "ผ่านไป"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:68
+msgid "Passing score"
+msgstr ""
+
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:543
 msgid "Percent"
 msgstr "เปอร์เซ็นต์"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
-msgid "Please enter your information."
-msgstr "กรุณากรอกข้อมูลของคุณ"
-
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:16
-msgid "Please enter your name."
-msgstr "กรุณากรอกชื่อของคุณ."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:31
 msgid "Please fill in all the required fields."
@@ -7750,17 +7742,13 @@ msgstr "กรุณากรอกข้อมูลในฟิลด์ที
 msgid "Please make a choice."
 msgstr "โปรดเลือก"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:135
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:136
 msgid "Please upload your file."
 msgstr "โปรดอัปโหลดไฟล์ของคุณ"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:20
 msgid "Please upload your image."
 msgstr "โปรดอัปโหลดภาพของคุณ"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:16
-msgid "Please write an essay."
-msgstr "กรุณาเขียนเรียงความ"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:23./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:42
 msgid "Points"
@@ -7782,7 +7770,7 @@ msgstr "รายการที่พิมพ์ได้"
 msgid "Progress"
 msgstr "ความคืบหน้า"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:16./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:16
 msgid "Prompt"
 msgstr "พร้อมท์"
 
@@ -7793,6 +7781,18 @@ msgstr "คำถาม"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:6./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
 msgid "Question label"
 msgstr "ป้ายคำถาม"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:16
+msgid "Question with a 5-point scale"
+msgstr ""
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:16
+msgid "Question with a long answer"
+msgstr ""
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:16
+msgid "Question with a short answer"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
 msgid "Questions"
@@ -7810,7 +7810,7 @@ msgstr "สุ่มคำตอบ"
 msgid "Red"
 msgstr "แดง"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:57./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:56
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:57./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:38./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:56
 msgid "Required, this question must be answered."
 msgstr "จำเป็นต้องตอบคำถามนี้"
 
@@ -7830,17 +7830,13 @@ msgstr "บันทึกแล้ว"
 msgid "Score"
 msgstr "คะแนน"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:130
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:131
 msgid "Second page in category"
 msgstr "หน้าที่สองในหมวดหมู่"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_country.tpl:23
 msgid "Select country"
 msgstr "เลือกประเทศ"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73
-msgid "Select which you agree with."
-msgstr "เลือกสิ่งที่คุณเห็นด้วย"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:100./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:13
 msgid "Select your country"
@@ -7946,9 +7942,13 @@ msgstr "ลบผลการสำรวจแล้ว"
 msgid "Survey results editor"
 msgstr "ตัวแก้ไขผลการสำรวจ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:96./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:97./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:68
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:96./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:97
 msgid "Test pass percentage"
 msgstr "เปอร์เซ็นต์การผ่านการทดสอบ"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:120
+msgid "Text, image, video"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:7
 msgid "Thank you for filling in our survey."
@@ -7961,10 +7961,6 @@ msgstr "ข้อความขอบคุณเท่านั้น"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "Thank you text."
 msgstr "ขอบคุณข้อความ"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
-msgid "The earth is flat."
-msgstr "พื้นโลกแบน"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
 msgid "The following has been filled in:"
@@ -7990,6 +7986,10 @@ msgstr "บล็อกนี้ส่งสัญญาณให้หยุด
 msgid "This is a result for:"
 msgstr "นี่เป็นผลลัพธ์สำหรับ:"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
+msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
+msgstr ""
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the survey has been submitted."
 msgstr "ข้อความนี้จะแสดงหลังจากส่งแบบสำรวจแล้ว"
@@ -7998,7 +7998,7 @@ msgstr "ข้อความนี้จะแสดงหลังจากส
 msgid "This text is shown as an introduction to the survey."
 msgstr "ข้อความนี้แสดงเป็นข้อมูลเบื้องต้นเกี่ยวกับแบบสำรวจ"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:150
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73./apps/zotonic_mod_survey/src/mod_survey.erl:150
 msgid "Thurstone"
 msgstr "เธอร์สโตน"
 
@@ -8018,6 +8018,14 @@ msgstr "ผลรวม"
 msgid "True"
 msgstr "จริง"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50
+msgid "True or false question"
+msgstr ""
+
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
+msgid "True or false question."
+msgstr ""
+
 #: apps/zotonic_mod_survey/src/mod_survey.erl:147
 msgid "True/False"
 msgstr "ถูกผิด"
@@ -8030,10 +8038,6 @@ msgstr "การตรวจสอบ"
 msgid "Wagner"
 msgstr "แว็กเนอร์"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:16
-msgid "Weasels make great pets."
-msgstr "วีเซิลเป็นสัตว์เลี้ยงที่ยอดเยี่ยม"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:81./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:52
 msgid "When finished show"
 msgstr "เมื่อเสร็จสิ้นการแสดง"
@@ -8045,6 +8049,10 @@ msgstr "เมื่อไม่มีเงื่อนไขใดเป็น
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 msgid "Yes"
 msgstr "ใช่"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
+msgid "Yes or no question"
+msgstr ""
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:148
 msgid "Yes/No"
