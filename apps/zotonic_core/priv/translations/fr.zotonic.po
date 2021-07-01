@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-01 12:02\n"
+"PO-Revision-Date: 2021-07-01 12:13\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -7339,7 +7339,7 @@ msgstr "non joignable ou IP locale"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
 msgid "A narrative question"
-msgstr ""
+msgstr "Une question narrative"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:25
 msgid "Add a question or block"
@@ -7347,7 +7347,7 @@ msgstr "Ajouter une question ou un bloc"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:120
 msgid "Add an introduction or explanation including uploaded or embedded images or video's. Add full width blocks or set a percentage to combine blocks."
-msgstr ""
+msgstr "Ajoutez une introduction ou une explication, y compris des images ou des vidéos téléchargées ou intégrées. Ajoutez des blocs pleine largeur ou définissez un pourcentage pour combiner les blocs."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:13
 msgid "Add page"
@@ -7459,7 +7459,7 @@ msgstr "Sélection du pays"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:108
 msgid "Create jumps to other questions or blocks."
-msgstr ""
+msgstr "Créez des sauts vers d'autres questions ou blocs."
 
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:840
 msgid "Created"
@@ -7548,7 +7548,7 @@ msgstr "Remplir"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
 msgid "Fill in the missing parts"
-msgstr ""
+msgstr "Remplissez les parties manquantes"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:130
 msgid "First page in category"
@@ -7592,7 +7592,7 @@ msgstr "Je suis"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:21
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
-msgstr ""
+msgstr "J'ai [age] ans. J'aime la crème glacée [icecream=vanilla|fraise|chocolat|autre] et ma couleur préférée est [color]."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
 msgid "If you want to store <i>value</i> but show <i>answer</i>, use value#answer. E.g. <i>2019#Graduated in 2019</i> will store 2019 in the results."
@@ -7648,7 +7648,7 @@ msgstr "Envoyez les résultats à"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:81./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
 msgid "Matching question"
-msgstr ""
+msgstr "Question correspondante"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:49
 msgid "Multiple answers possible"
@@ -7660,7 +7660,7 @@ msgstr "Choix multiple"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:16
 msgid "Multiple choice or quiz question"
-msgstr ""
+msgstr "Question à choix multiple ou quiz"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:62./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:41
 msgid "Multiple entries per user/browser"
@@ -7728,7 +7728,7 @@ msgstr "Réussi"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:68
 msgid "Passing score"
-msgstr ""
+msgstr "Note de passage"
 
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:543
 msgid "Percent"
@@ -7784,15 +7784,15 @@ msgstr "Étiquette de question"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:16
 msgid "Question with a 5-point scale"
-msgstr ""
+msgstr "Question avec une échelle de 5 points"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:16
 msgid "Question with a long answer"
-msgstr ""
+msgstr "Question avec une longue réponse"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:16
 msgid "Question with a short answer"
-msgstr ""
+msgstr "Question avec une réponse courte"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
 msgid "Questions"
@@ -7948,7 +7948,7 @@ msgstr "Pourcentage de réussite au test"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:120
 msgid "Text, image, video"
-msgstr ""
+msgstr "Texte, image, vidéo"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:7
 msgid "Thank you for filling in our survey."
@@ -7988,7 +7988,7 @@ msgstr "C'est un résultat pour:"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
-msgstr ""
+msgstr "C'est le pourcentage nécessaire pour réussir un quiz ou un test. Uniquement utilisé si vous avez ajouté des questions de quiz ou de test."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the survey has been submitted."
@@ -8020,11 +8020,11 @@ msgstr "Vrai"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50
 msgid "True or false question"
-msgstr ""
+msgstr "Question vraie ou fausse"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
 msgid "True or false question."
-msgstr ""
+msgstr "Question vraie ou fausse."
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:147
 msgid "True/False"
@@ -8052,7 +8052,7 @@ msgstr "Oui"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
 msgid "Yes or no question"
-msgstr ""
+msgstr "oui ou non question"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:148
 msgid "Yes/No"
