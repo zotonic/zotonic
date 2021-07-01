@@ -117,7 +117,7 @@
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='text'>
 
-						<p>{_ Text, image, video _}<br/><br/>{_ Add an introduction or explanation including uploaded or embedded images or video's. Add full width blocks or set a percentage to combine responsive blocks. _}</p>
+						<p>{_ Text, image, video _}<br/><br/>{_ Add an introduction or explanation including uploaded or embedded images or video's. Add full width blocks or set a percentage to combine blocks. _}</p>
 					</div>
 				</div>
 				{% if m.acl.use.mod_admin %}
