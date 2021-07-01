@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-06-26 13:22\n"
+"PO-Revision-Date: 2021-07-01 12:02\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -178,7 +178,7 @@ msgstr "Вы уверены, что хотите восстановить все
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:101
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:135./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:143
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:148./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:149./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:190
 msgid "Cancel"
@@ -1201,7 +1201,7 @@ msgid "Find Page"
 msgstr "Найти страницу"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:108
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:208
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:209
 msgid "Find page"
 msgstr "Найти страницу"
 
@@ -3780,7 +3780,7 @@ msgstr "Если вы думаете, что у вас есть аккаунт �
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "В сообщении указаны инструкции по активации вашей учетной записи."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:50./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:162./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
+#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:50./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:163./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
 msgid "Keep me signed in"
 msgstr "Держите меня в курсе"
 
@@ -3793,7 +3793,7 @@ msgstr "Войти через"
 msgid "Minimum characters:"
 msgstr "Минимальные символы:"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:183
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:184
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:67
 msgid "Next"
 msgstr "Следующий"
@@ -3863,7 +3863,7 @@ msgstr "Сброс пароля"
 msgid "Send Verification Message"
 msgstr "Получить код проверки"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:57./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:177./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:57./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:178./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Sign in"
 msgstr "Вход"
@@ -7337,9 +7337,17 @@ msgstr "Для запроса сертификатов необходимо бы
 msgid "not reachable or local IP"
 msgstr "недоступный или локальный IP"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
+msgid "A narrative question"
+msgstr ""
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:25
 msgid "Add a question or block"
 msgstr "Добавить вопрос или блок"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:120
+msgid "Add an introduction or explanation including uploaded or embedded images or video's. Add full width blocks or set a percentage to combine blocks."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:13
 msgid "Add page"
@@ -7381,7 +7389,7 @@ msgstr "Согласиться"
 msgid "All survey entries up until"
 msgstr "Все заполненные анкеты до"
 
-#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:67
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:75./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:76./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:77./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:67
 msgid "Answer"
 msgstr "Ответ"
 
@@ -7417,7 +7425,7 @@ msgstr "Вы уверены, что хотите удалить этот рез�
 msgid "Are you sure you want to stop?"
 msgstr "Вы уверены, что желаете остановиться?"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:157
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:108./apps/zotonic_mod_survey/src/mod_survey.erl:157
 msgid "Button"
 msgstr "Кнопка"
 
@@ -7437,10 +7445,6 @@ msgstr "Категория для выбора"
 msgid "Check the answer in the admin."
 msgstr "Проверить ответ в панели администратора."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:76
-msgid "Chinese food is best for money"
-msgstr "Китайская еда лучше всего за деньги"
-
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:31
 msgid "Choices"
 msgstr "Выбор"
@@ -7452,6 +7456,10 @@ msgstr "Продолжить"
 #: apps/zotonic_mod_survey/src/mod_survey.erl:156
 msgid "Country select"
 msgstr "Выбор страны"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:108
+msgid "Create jumps to other questions or blocks."
+msgstr ""
 
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:840
 msgid "Created"
@@ -7490,10 +7498,6 @@ msgstr "Инвалиды, скрыть форму опроса"
 msgid "Disagree"
 msgstr "Не согласен"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
-msgid "Do you like pea soup?"
-msgstr "Вы любите гороховый суп?"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:130./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:134./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
 msgid "Download will start in the background. Please check your download window."
 msgstr "Загрузка начнется в фоновом режиме. Пожалуйста, проверьте ваше окно загрузки."
@@ -7514,11 +7518,11 @@ msgstr "Изменить результат анкетирования"
 msgid "End of questions"
 msgstr "Конец вопросов"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:22
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:21
 msgid "Example:"
 msgstr "Например:"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:36
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:26./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:36
 msgid "Explanation"
 msgstr "Объяснение"
 
@@ -7543,10 +7547,10 @@ msgid "Fill in"
 msgstr "Заполнить форму"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
-msgid "Fill in the missing parts."
-msgstr "Заполните недостающие части."
+msgid "Fill in the missing parts"
+msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:129
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:130
 msgid "First page in category"
 msgstr "Первая страница в категории"
 
@@ -7570,7 +7574,7 @@ msgstr "Обработка"
 msgid "Help about surveys"
 msgstr "Справка об анкетах"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:63./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:46./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:71./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:63
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:63./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:71./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:63
 msgid "Hide from results"
 msgstr "Скрыть от результатов"
 
@@ -7582,21 +7586,13 @@ msgstr "Прятать информацию о прогрессе"
 msgid "Hide the user’s id or browser-id from result exports"
 msgstr "Скрыть идентификатор пользователя или идентификатор браузера от экспорта результатов."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:77
-msgid "I always eat with others"
-msgstr "Я всегда ем с другими"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
 msgid "I am"
 msgstr "я"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:22
-msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color      ]."
-msgstr "Мне [age] лет. Я люблю [icecream=ванильное|клубничное|шоколадное|другое] мороженое, и мой любимый цвет — [color      ]."
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:75
-msgid "I like Chinese restaurants"
-msgstr "Мне нравятся китайские рестораны"
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:21
+msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
 msgid "If you want to store <i>value</i> but show <i>answer</i>, use value#answer. E.g. <i>2019#Graduated in 2019</i> will store 2019 in the results."
@@ -7630,21 +7626,17 @@ msgstr "Обращенный"
 msgid "Jump to a question on a next page."
 msgstr "Перейти к вопросу на следующей странице."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:103./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:103
 msgid "Leave empty if there are no test questions."
 msgstr "Оставьте пустым, если нет тестовых вопросов."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:149
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61./apps/zotonic_mod_survey/src/mod_survey.erl:149
 msgid "Likert"
 msgstr "Шкала Лайкерта"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:155
 msgid "Long answer"
 msgstr "Длинный ответ"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:119
-msgid "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
-msgstr "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:72
 msgid "Mail filled in surveys to"
@@ -7655,8 +7647,8 @@ msgid "Mail results to"
 msgstr "Результаты отправки по почте"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:81./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
-msgid "Match which answer fits best."
-msgstr "Сопоставьте наиболее подходящий вариант."
+msgid "Matching question"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:49
 msgid "Multiple answers possible"
@@ -7665,6 +7657,10 @@ msgstr "Возможно несколько ответов"
 #: apps/zotonic_mod_survey/src/mod_survey.erl:161
 msgid "Multiple choice"
 msgstr "Многократный выбор"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:16
+msgid "Multiple choice or quiz question"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:62./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:41
 msgid "Multiple entries per user/browser"
@@ -7686,7 +7682,7 @@ msgstr "Необходимый пропуск"
 msgid "New result:"
 msgstr "Новый результат:"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:131
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:132
 msgid "Next page in category"
 msgstr "Следующая страница в категории"
 
@@ -7714,7 +7710,7 @@ msgstr "Один ответ на каждую строку."
 msgid "Only accept images."
 msgstr "Принимать только изображения."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:127
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:128
 msgid "Options from a page category"
 msgstr "Параметры из категории страницы"
 
@@ -7730,17 +7726,13 @@ msgstr "Условие перехода"
 msgid "Passed"
 msgstr "Прошел"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:68
+msgid "Passing score"
+msgstr ""
+
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:543
 msgid "Percent"
 msgstr "Процент"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
-msgid "Please enter your information."
-msgstr "Пожалуйста, введите ваши данные."
-
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:16
-msgid "Please enter your name."
-msgstr "Пожалуйста, введите ваше имя."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:31
 msgid "Please fill in all the required fields."
@@ -7750,17 +7742,13 @@ msgstr "Пожалуйста, заполните все необходимые �
 msgid "Please make a choice."
 msgstr "Пожалуйста, сделайте выбор."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:135
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:136
 msgid "Please upload your file."
 msgstr "Пожалуйста, загрузите ваш файл."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:20
 msgid "Please upload your image."
 msgstr "Пожалуйста, загрузите изображение."
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:16
-msgid "Please write an essay."
-msgstr "Пожалуйста, напишите эссе."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:23./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:42
 msgid "Points"
@@ -7782,7 +7770,7 @@ msgstr "Версия списка для печати"
 msgid "Progress"
 msgstr "Прогресс"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:16./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:16
 msgid "Prompt"
 msgstr "Подсказка"
 
@@ -7793,6 +7781,18 @@ msgstr "Вопрос"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:6./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
 msgid "Question label"
 msgstr "Ярлык вопроса"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:16
+msgid "Question with a 5-point scale"
+msgstr ""
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:16
+msgid "Question with a long answer"
+msgstr ""
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:16
+msgid "Question with a short answer"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
 msgid "Questions"
@@ -7810,7 +7810,7 @@ msgstr "Случайные ответы"
 msgid "Red"
 msgstr "Красный"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:57./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:56
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:57./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:38./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:56
 msgid "Required, this question must be answered."
 msgstr "Ответ на вопрос обязателен."
 
@@ -7830,17 +7830,13 @@ msgstr "Сохранен"
 msgid "Score"
 msgstr "Оценка"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:130
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:131
 msgid "Second page in category"
 msgstr "Вторая страница в категории"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_country.tpl:23
 msgid "Select country"
 msgstr "Укажите страну"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73
-msgid "Select which you agree with."
-msgstr "Выберите то, с чем вы согласны."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:100./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:13
 msgid "Select your country"
@@ -7946,9 +7942,13 @@ msgstr "Результат анкетирования удален."
 msgid "Survey results editor"
 msgstr "Редактор результатов анкетирования"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:96./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:97./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:68
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:96./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:97
 msgid "Test pass percentage"
 msgstr "Процент прохождения теста"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:120
+msgid "Text, image, video"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:7
 msgid "Thank you for filling in our survey."
@@ -7961,10 +7961,6 @@ msgstr "Только смс-ки."
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "Thank you text."
 msgstr "Спасибо за сообщение."
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
-msgid "The earth is flat."
-msgstr "Земля плоская."
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
 msgid "The following has been filled in:"
@@ -7990,6 +7986,10 @@ msgstr "Этот блок сигнализирует останов выполн
 msgid "This is a result for:"
 msgstr "Это результат для:"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
+msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
+msgstr ""
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the survey has been submitted."
 msgstr "Этот текст отображается после отправки опроса."
@@ -7998,7 +7998,7 @@ msgstr "Этот текст отображается после отправки
 msgid "This text is shown as an introduction to the survey."
 msgstr "Этот текст отображается как введение в опрос."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:150
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73./apps/zotonic_mod_survey/src/mod_survey.erl:150
 msgid "Thurstone"
 msgstr "Шкала Терстоуна"
 
@@ -8018,6 +8018,14 @@ msgstr "Итоговый показатель"
 msgid "True"
 msgstr "Истина"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50
+msgid "True or false question"
+msgstr ""
+
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
+msgid "True or false question."
+msgstr ""
+
 #: apps/zotonic_mod_survey/src/mod_survey.erl:147
 msgid "True/False"
 msgstr "Истина/Ложь"
@@ -8030,10 +8038,6 @@ msgstr "Проверка"
 msgid "Wagner"
 msgstr "Вагнер"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:16
-msgid "Weasels make great pets."
-msgstr "Ласки — отличные питомцы."
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:81./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:52
 msgid "When finished show"
 msgstr "По окончании шоу"
@@ -8045,6 +8049,10 @@ msgstr "Когда ни одно из условий не истинно, сле
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 msgid "Yes"
 msgstr "Да"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
+msgid "Yes or no question"
+msgstr ""
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:148
 msgid "Yes/No"
