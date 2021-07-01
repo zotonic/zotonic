@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-06-26 13:22\n"
+"PO-Revision-Date: 2021-07-01 12:02\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -178,7 +178,7 @@ msgstr "Apakah anda yakin ingin mengembalikan semua peraturan ACL ke versi yang 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:101
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:135./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:143
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:148./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:149./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:190
 msgid "Cancel"
@@ -1201,7 +1201,7 @@ msgid "Find Page"
 msgstr "Temukan Halaman"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:108
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:208
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:209
 msgid "Find page"
 msgstr "Temukan Halaman"
 
@@ -3779,7 +3779,7 @@ msgstr "Jika Anda merasa memiliki akun dan mengharapkan email ini, silakan coba 
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "Di email anda akan menemukan petunjuk cara mengonfirmasi akun anda."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:50./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:162./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
+#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:50./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:163./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
 msgid "Keep me signed in"
 msgstr "Biarkan saya tetap masuk"
 
@@ -3792,7 +3792,7 @@ msgstr "Masuk dengan"
 msgid "Minimum characters:"
 msgstr "Karakter minimum:"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:183
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:184
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:67
 msgid "Next"
 msgstr "Selanjutnya"
@@ -3862,7 +3862,7 @@ msgstr "Atur ulang kata sandi anda"
 msgid "Send Verification Message"
 msgstr "Kirim pesan verifikasi"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:57./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:177./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:57./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:178./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Sign in"
 msgstr "Masuk"
@@ -7337,9 +7337,17 @@ msgstr "Anda harus menjadi administrator untuk meminta sertifikat."
 msgid "not reachable or local IP"
 msgstr "tidak terjangkau atau IP lokal"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
+msgid "A narrative question"
+msgstr ""
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:25
 msgid "Add a question or block"
 msgstr "Tambahkan pertanyaan atau blokir"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:120
+msgid "Add an introduction or explanation including uploaded or embedded images or video's. Add full width blocks or set a percentage to combine blocks."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:13
 msgid "Add page"
@@ -7381,7 +7389,7 @@ msgstr "Setuju"
 msgid "All survey entries up until"
 msgstr "Semua survei entri sampai"
 
-#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:67
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:75./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:76./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:77./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:67
 msgid "Answer"
 msgstr "Jawab"
 
@@ -7417,7 +7425,7 @@ msgstr "Apakah anda yakin anda ingin menghapus hasil ini?"
 msgid "Are you sure you want to stop?"
 msgstr "Apakah anda yakin anda ingin berhenti?"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:157
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:108./apps/zotonic_mod_survey/src/mod_survey.erl:157
 msgid "Button"
 msgstr "Tombol"
 
@@ -7437,10 +7445,6 @@ msgstr "Kategori yang dapat dipilih"
 msgid "Check the answer in the admin."
 msgstr "Periksa jawabannya di admin."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:76
-msgid "Chinese food is best for money"
-msgstr "Makanan Cina adalah terbaik bagi uang"
-
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:31
 msgid "Choices"
 msgstr "Pilihan"
@@ -7452,6 +7456,10 @@ msgstr "Lanjutkan"
 #: apps/zotonic_mod_survey/src/mod_survey.erl:156
 msgid "Country select"
 msgstr "Pilih negara"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:108
+msgid "Create jumps to other questions or blocks."
+msgstr ""
 
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:840
 msgid "Created"
@@ -7490,10 +7498,6 @@ msgstr "Dinonaktifkan, sembunyikan formulir survei"
 msgid "Disagree"
 msgstr "Tidak setuju"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
-msgid "Do you like pea soup?"
-msgstr "Apakah anda suka sup kacang?"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:130./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:134./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
 msgid "Download will start in the background. Please check your download window."
 msgstr "Pengunduhan akan dimulai di latar belakang. Silakan periksa jendela unduhan Anda."
@@ -7514,11 +7518,11 @@ msgstr "Edit hasil survei"
 msgid "End of questions"
 msgstr "Akhir pertanyaan"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:22
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:21
 msgid "Example:"
 msgstr "Contoh:"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:36
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:26./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:36
 msgid "Explanation"
 msgstr "Penjelasan"
 
@@ -7543,10 +7547,10 @@ msgid "Fill in"
 msgstr "Mengisi"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
-msgid "Fill in the missing parts."
-msgstr "Mengisi di bagian yang hilang."
+msgid "Fill in the missing parts"
+msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:129
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:130
 msgid "First page in category"
 msgstr "Halaman pertama di kategori"
 
@@ -7570,7 +7574,7 @@ msgstr "Penanganan"
 msgid "Help about surveys"
 msgstr "Bantuan tentang survei"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:63./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:46./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:71./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:63
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:63./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:71./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:63
 msgid "Hide from results"
 msgstr "Sembunyikan dari hasil"
 
@@ -7582,21 +7586,13 @@ msgstr "Sembunyikan informasi kemajuan"
 msgid "Hide the user’s id or browser-id from result exports"
 msgstr "Sembunyikan id pengguna atau browser-id dari hasil ekspor"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:77
-msgid "I always eat with others"
-msgstr "Saya selalu makan dengan orang lain"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
 msgid "I am"
 msgstr "Saya"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:22
-msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color      ]."
-msgstr "Saya berumur [age] tahun. Saya menyukai  [eskrim=vanilla|strawberry|chocolate|lainnya] es krim dan warna favorit saya adalah  [warna      ]."
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:75
-msgid "I like Chinese restaurants"
-msgstr "Saya suka restoran china"
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:21
+msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
 msgid "If you want to store <i>value</i> but show <i>answer</i>, use value#answer. E.g. <i>2019#Graduated in 2019</i> will store 2019 in the results."
@@ -7630,21 +7626,17 @@ msgstr "Terbalik"
 msgid "Jump to a question on a next page."
 msgstr "Melompat ke sebuah pertanyaan pada halaman selanjutnya."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:103./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:103
 msgid "Leave empty if there are no test questions."
 msgstr "Biarkan kosong jika tidak ada pertanyaan tes."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:149
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61./apps/zotonic_mod_survey/src/mod_survey.erl:149
 msgid "Likert"
 msgstr "Likert"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:155
 msgid "Long answer"
 msgstr "Jawaban panjang"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:119
-msgid "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
-msgstr "Lorem ipsum sit amet, consectetur <em></em>, tapi do eiusmod <b>rendah</b> di lihat <u>sebagian besar</u>."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:72
 msgid "Mail filled in surveys to"
@@ -7655,8 +7647,8 @@ msgid "Mail results to"
 msgstr "Surat hasil"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:81./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
-msgid "Match which answer fits best."
-msgstr "Pertandingan yang jawabannya paling cocok."
+msgid "Matching question"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:49
 msgid "Multiple answers possible"
@@ -7665,6 +7657,10 @@ msgstr "Beberapa jawaban mungkin"
 #: apps/zotonic_mod_survey/src/mod_survey.erl:161
 msgid "Multiple choice"
 msgstr "Pilihan ganda"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:16
+msgid "Multiple choice or quiz question"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:62./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:41
 msgid "Multiple entries per user/browser"
@@ -7686,7 +7682,7 @@ msgstr "Yang diperlukan untuk lulus"
 msgid "New result:"
 msgstr "Hasil baru:"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:131
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:132
 msgid "Next page in category"
 msgstr "Berikutnya halaman dalam kategori"
 
@@ -7714,7 +7710,7 @@ msgstr "Satu jawaban per baris."
 msgid "Only accept images."
 msgstr "Hanya menerima gambar."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:127
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:128
 msgid "Options from a page category"
 msgstr "Pilihan dari sebuah halaman kategori"
 
@@ -7730,17 +7726,13 @@ msgstr "Halaman melompat kondisi"
 msgid "Passed"
 msgstr "Berlalu"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:68
+msgid "Passing score"
+msgstr ""
+
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:543
 msgid "Percent"
 msgstr "Persen"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
-msgid "Please enter your information."
-msgstr "Silahkan masukkan informasi anda."
-
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:16
-msgid "Please enter your name."
-msgstr "Silakan masukkan nama anda."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:31
 msgid "Please fill in all the required fields."
@@ -7750,17 +7742,13 @@ msgstr "Silahkan isi semua kolom yang diperlukan."
 msgid "Please make a choice."
 msgstr "Silakan membuat pilihan."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:135
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:136
 msgid "Please upload your file."
 msgstr "Silahkan upload file anda."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:20
 msgid "Please upload your image."
 msgstr "Silahkan upload gambar anda."
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:16
-msgid "Please write an essay."
-msgstr "Silakan menulis sebuah esai."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:23./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:42
 msgid "Points"
@@ -7782,7 +7770,7 @@ msgstr "Daftar cetak"
 msgid "Progress"
 msgstr "Kemajuan"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:16./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:16
 msgid "Prompt"
 msgstr "Cepat"
 
@@ -7793,6 +7781,18 @@ msgstr "Pertanyaan"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:6./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
 msgid "Question label"
 msgstr "Label pertanyaan"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:16
+msgid "Question with a 5-point scale"
+msgstr ""
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:16
+msgid "Question with a long answer"
+msgstr ""
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:16
+msgid "Question with a short answer"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
 msgid "Questions"
@@ -7810,7 +7810,7 @@ msgstr "Mengacak jawaban"
 msgid "Red"
 msgstr "Merah"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:57./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:56
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:57./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:38./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:56
 msgid "Required, this question must be answered."
 msgstr "Diperlukan, pertanyaan ini harus dijawab."
 
@@ -7830,17 +7830,13 @@ msgstr "Disimpan"
 msgid "Score"
 msgstr "Nilai"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:130
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:131
 msgid "Second page in category"
 msgstr "Halaman kedua dalam kategori"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_country.tpl:23
 msgid "Select country"
 msgstr "Pilih negara"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73
-msgid "Select which you agree with."
-msgstr "Pilih yang Anda setujui."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:100./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:13
 msgid "Select your country"
@@ -7946,9 +7942,13 @@ msgstr "Hasil survei dihapus."
 msgid "Survey results editor"
 msgstr "Hasil survei editor"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:96./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:97./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:68
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:96./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:97
 msgid "Test pass percentage"
 msgstr "Uji lulus persentase"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:120
+msgid "Text, image, video"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:7
 msgid "Thank you for filling in our survey."
@@ -7961,10 +7961,6 @@ msgstr "Terima kasih teks saja"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "Thank you text."
 msgstr "Terima kasih teks."
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
-msgid "The earth is flat."
-msgstr "Bumi datar."
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
 msgid "The following has been filled in:"
@@ -7990,6 +7986,10 @@ msgstr "Blok ini sinyal stop aliran. Pengguna tidak dapat melanjutkan lebih jauh
 msgid "This is a result for:"
 msgstr "Ini adalah hasil untuk:"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
+msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
+msgstr ""
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the survey has been submitted."
 msgstr "Teks ini ditampilkan setelah survei telah disampaikan."
@@ -7998,7 +7998,7 @@ msgstr "Teks ini ditampilkan setelah survei telah disampaikan."
 msgid "This text is shown as an introduction to the survey."
 msgstr "Teks ini ditampilkan sebagai pengantar survei."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:150
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73./apps/zotonic_mod_survey/src/mod_survey.erl:150
 msgid "Thurstone"
 msgstr "Thurstone"
 
@@ -8018,6 +8018,14 @@ msgstr "Jumlah"
 msgid "True"
 msgstr "Benar"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50
+msgid "True or false question"
+msgstr ""
+
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
+msgid "True or false question."
+msgstr ""
+
 #: apps/zotonic_mod_survey/src/mod_survey.erl:147
 msgid "True/False"
 msgstr "Benar/salah"
@@ -8030,10 +8038,6 @@ msgstr "Validasi"
 msgid "Wagner"
 msgstr "Wagner"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:16
-msgid "Weasels make great pets."
-msgstr "Musang menjadi hewan peliharaan yang hebat."
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:81./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:52
 msgid "When finished show"
 msgstr "Setelah selesai tampilkan"
@@ -8045,6 +8049,10 @@ msgstr "Ketika kondisi tidak benar, maka pertanyaan berikut ini istirahat akan m
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 msgid "Yes"
 msgstr "Ya"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
+msgid "Yes or no question"
+msgstr ""
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:148
 msgid "Yes/No"
