@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-01 12:02\n"
+"PO-Revision-Date: 2021-07-01 12:14\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -7339,7 +7339,7 @@ msgstr "ไม่สามารถเข้าถึงได้หรือ IP
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
 msgid "A narrative question"
-msgstr ""
+msgstr "คำถามเชิงบรรยาย"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:25
 msgid "Add a question or block"
@@ -7347,7 +7347,7 @@ msgstr "เพิ่มคำถามหรือบล็อก"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:120
 msgid "Add an introduction or explanation including uploaded or embedded images or video's. Add full width blocks or set a percentage to combine blocks."
-msgstr ""
+msgstr "เพิ่มคำนำหรือคำอธิบายรวมถึงรูปภาพหรือวิดีโอที่อัปโหลดหรือฝัง เพิ่มบล็อกแบบเต็มความกว้างหรือตั้งค่าเปอร์เซ็นต์เพื่อรวมบล็อก"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:13
 msgid "Add page"
@@ -7459,7 +7459,7 @@ msgstr "เลือกประเทศ"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:108
 msgid "Create jumps to other questions or blocks."
-msgstr ""
+msgstr "สร้างการข้ามไปยังคำถามหรือบล็อกอื่นๆ"
 
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:840
 msgid "Created"
@@ -7548,7 +7548,7 @@ msgstr "กรอก"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
 msgid "Fill in the missing parts"
-msgstr ""
+msgstr "เติมส่วนที่ขาดหายไป"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:130
 msgid "First page in category"
@@ -7592,7 +7592,7 @@ msgstr "ฉัน"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:21
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
-msgstr ""
+msgstr "ฉันอายุ [age] ฉันชอบไอศกรีม [icecream=vanilla|strawberry|chocolate|other] และสีที่ฉันชอบคือ [color]"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
 msgid "If you want to store <i>value</i> but show <i>answer</i>, use value#answer. E.g. <i>2019#Graduated in 2019</i> will store 2019 in the results."
@@ -7648,7 +7648,7 @@ msgstr "ส่งผลลัพธ์ไปที่"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:81./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
 msgid "Matching question"
-msgstr ""
+msgstr "จับคู่คำถาม"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:49
 msgid "Multiple answers possible"
@@ -7660,7 +7660,7 @@ msgstr "ปรนัย"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:16
 msgid "Multiple choice or quiz question"
-msgstr ""
+msgstr "ปรนัยหรือคำถามแบบทดสอบ"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:62./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:41
 msgid "Multiple entries per user/browser"
@@ -7728,7 +7728,7 @@ msgstr "ผ่านไป"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:68
 msgid "Passing score"
-msgstr ""
+msgstr "คะแนนผ่าน"
 
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:543
 msgid "Percent"
@@ -7784,15 +7784,15 @@ msgstr "ป้ายคำถาม"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:16
 msgid "Question with a 5-point scale"
-msgstr ""
+msgstr "คำถามที่มีมาตราส่วน 5 จุด"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:16
 msgid "Question with a long answer"
-msgstr ""
+msgstr "คำถามที่มีคำตอบยาวๆ"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:16
 msgid "Question with a short answer"
-msgstr ""
+msgstr "คำถามพร้อมคำตอบสั้นๆ"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
 msgid "Questions"
@@ -7948,7 +7948,7 @@ msgstr "เปอร์เซ็นต์การผ่านการทดส
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:120
 msgid "Text, image, video"
-msgstr ""
+msgstr "ข้อความ รูปภาพ วิดีโอ"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:7
 msgid "Thank you for filling in our survey."
@@ -7988,7 +7988,7 @@ msgstr "นี่เป็นผลลัพธ์สำหรับ:"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
-msgstr ""
+msgstr "นี่คือเปอร์เซ็นต์ที่จำเป็นในการผ่านแบบทดสอบหรือแบบทดสอบ ใช้เฉพาะเมื่อคุณได้เพิ่มแบบทดสอบหรือคำถามทดสอบ"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the survey has been submitted."
@@ -8020,11 +8020,11 @@ msgstr "จริง"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50
 msgid "True or false question"
-msgstr ""
+msgstr "คำถามจริงหรือเท็จ"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
 msgid "True or false question."
-msgstr ""
+msgstr "คำถามจริงหรือเท็จ"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:147
 msgid "True/False"
@@ -8052,7 +8052,7 @@ msgstr "ใช่"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
 msgid "Yes or no question"
-msgstr ""
+msgstr "ใช่หรือไม่ใช่คำถาม"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:148
 msgid "Yes/No"
