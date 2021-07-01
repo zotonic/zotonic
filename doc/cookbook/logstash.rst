@@ -50,7 +50,7 @@ to:
                 {json_encoder, jsx}
             ]}
         ]},
-        {crash_log, "priv/log/crash.log"}
+        {crash_log, "logs/crash.log"}
     ]},
 
 Step 3: Logstash configuration

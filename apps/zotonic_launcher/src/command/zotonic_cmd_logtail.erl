@@ -28,7 +28,7 @@ run(_) ->
     case zotonic_command:net_start() of
         ok ->
             ZotonicDir = zotonic_command:get_zotonic_dir(),
-            Cmd = "tail -n 500 '" ++ ZotonicDir ++ "/priv/log/console.log'",
+            Cmd = "tail -n 500 '" ++ ZotonicDir ++ "/logs/console.log'",
             Res = os:cmd(Cmd),
             io:format("~s~n", [ Res ]);
         {error, _} = Error ->
