@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-02 13:12\n"
+"PO-Revision-Date: 2021-07-02 13:49\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -7402,7 +7402,7 @@ msgstr "Antwoorden, één per regel"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:83
 msgid "Apple"
-msgstr "appel"
+msgstr "Appel"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:20
 msgid "Apple = Red"
@@ -7426,7 +7426,7 @@ msgstr "Weet je zeker dat je dit resultaat wilt verwijderen?"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
 msgid "Are you sure you want to stop without saving?"
-msgstr "Weet u zeker dat u wilt stoppen zonder op te slaan?"
+msgstr "Weet je zeker dat je wilt stoppen zonder op te slaan?"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:108./apps/zotonic_mod_survey/src/mod_survey.erl:157
 msgid "Button"
@@ -7551,7 +7551,7 @@ msgstr "Invullen"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
 msgid "Fill in the gaps"
-msgstr "Vul de gaten in"
+msgstr "Vul de ontbrekende delen in"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
 msgid "Fill in the missing parts"
@@ -8154,7 +8154,7 @@ msgstr "naam >= 2"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
 msgid "number"
-msgstr "aantal"
+msgstr "getal"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:31
 msgid "one per line"
