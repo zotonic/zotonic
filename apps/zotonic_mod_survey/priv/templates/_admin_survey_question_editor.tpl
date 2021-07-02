@@ -27,7 +27,7 @@
 			<div class="modal-body">
 				<div class="row">
 					<div class="col-lg-4 col-md-4" data-block-type='survey_short_answer'>
-						<p>{_ Question with a short answer _}</p>
+						<p>{_ Question with a short answer _} ({_ text _}, {_ number _}, {_ email _}, {_ phone number _}, {_ date _})</p>
 						<p>
 							<input class="form-control" type="text" disabled />
 						</p>
@@ -58,7 +58,7 @@
 				<hr/>
 				<div class="row">
 					<div class="col-lg-4 col-md-4" data-block-type='survey_likert'>
-						<p>{_ Question with a 5-point scale _} ({_ Likert _})</p>
+						<p>{_ Question with a 5-point scale _} (Likert)</p>
 						<p>
 							{_ Disagree _}
 							<input type="radio" disabled />
@@ -70,7 +70,7 @@
 						</p>
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='survey_thurstone'>
-						<p>{_ Multiple choice or quiz question _} ({_ Thurstone _})</p>
+						<p>{_ Multiple choice or quiz question _} (Thurstone)</p>
 						<p>
 							<input type="checkbox" disabled /> {_ Answer _} 1<br/>
 							<input type="checkbox" disabled /> {_ Answer _} 2<br/>
@@ -89,7 +89,7 @@
 				<div class="row">
 					<div class="col-lg-4 col-md-4" data-block-type='survey_narrative'>
 						<p>
-							{_ A narrative question _}<br/>{_ I am _}
+							{_ Fill in the gaps _}  (Narrative)</p><br/>{_ I am _}
 							<input type="text" class="col-md-2 form-control" style="display: inline; float: none;" disabled />
 							{_ years old. I like _}
 							<select class="col-md-4 form-control" style="display: inline; float: none;" disabled><option>{_ chocolate _}</option></select>

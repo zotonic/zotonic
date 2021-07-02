@@ -37,7 +37,7 @@
         <div>
             <select class="form-control" id="block-{{name}}-validation" name="blocks[].validation">
                  <option value=""></option>
-                 <option value="email" {% if blk.validation == "email" %}selected="selected"{% endif %}>{_ must be an e-mail address _}</option>
+                 <option value="email" {% if blk.validation == "email" %}selected="selected"{% endif %}>{_ must be an email address _}</option>
                  <option value="numericality" {% if blk.validation == "numericality" %}selected="selected"{% endif %}>{_ must be a number _}</option>
                  <option value="phone" {% if blk.validation == "phone" %}selected="selected"{% endif %}>{_ must be a phone number _}</option>
                  <option value="date" {% if blk.validation == "date" %}selected="selected"{% endif %}>{_ must be a date _}</option>
