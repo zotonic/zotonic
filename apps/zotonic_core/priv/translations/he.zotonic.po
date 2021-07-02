@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-01 12:13\n"
+"PO-Revision-Date: 2021-07-02 13:12\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -7337,10 +7337,6 @@ msgstr "אתה צריך להיות מנהל כדי לבקש אישורים."
 msgid "not reachable or local IP"
 msgstr "לא ניתן להשיג IP או מקומי"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
-msgid "A narrative question"
-msgstr "שאלה נרטיבית"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:25
 msgid "Add a question or block"
 msgstr "הוסף שאלה או חסום"
@@ -7401,6 +7397,10 @@ msgstr "עונה"
 msgid "Answers, one per line"
 msgstr "תשובות, אחת לכל שורה"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:83
+msgid "Apple"
+msgstr "תפוח עץ"
+
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:20
 msgid "Apple = Red"
 msgstr "תפוח = אדום"
@@ -7422,8 +7422,8 @@ msgid "Are you sure you want to delete this result?"
 msgstr "האם אתה בטוח שברצונך למחוק את התוצאה הזו?"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
-msgid "Are you sure you want to stop?"
-msgstr "האם אתה בטוח שאתה רוצה להפסיק?"
+msgid "Are you sure you want to stop without saving?"
+msgstr "האם אתה בטוח שברצונך להפסיק בלי לשמור?"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:108./apps/zotonic_mod_survey/src/mod_survey.erl:157
 msgid "Button"
@@ -7546,6 +7546,10 @@ msgstr "העלאת קובץ"
 msgid "Fill in"
 msgstr "מלא"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
+msgid "Fill in the gaps"
+msgstr "השלם את החסר"
+
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
 msgid "Fill in the missing parts"
 msgstr "מלא את החלקים החסרים"
@@ -7630,7 +7634,7 @@ msgstr "קפצו לשאלה בעמוד הבא."
 msgid "Leave empty if there are no test questions."
 msgstr "השאר ריק אם אין שאלות מבחן."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61./apps/zotonic_mod_survey/src/mod_survey.erl:149
+#: apps/zotonic_mod_survey/src/mod_survey.erl:149
 msgid "Likert"
 msgstr "ליקרט"
 
@@ -7649,6 +7653,10 @@ msgstr "תוצאות דואר אל"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:81./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
 msgid "Matching question"
 msgstr "שאלה תואמת"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:84
+msgid "Melk"
+msgstr "מלק"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:49
 msgid "Multiple answers possible"
@@ -7890,9 +7898,13 @@ msgstr "תשובה יחידה אפשרית"
 msgid "Start"
 msgstr "הַתחָלָה"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:51./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52./apps/zotonic_mod_survey/src/mod_survey.erl:159
+#: apps/zotonic_mod_survey/src/mod_survey.erl:159
 msgid "Stop"
 msgstr "תפסיק"
+
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:51./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
+msgid "Stop without saving"
+msgstr "עצור בלי לשמור"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:40./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:54./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:55
 msgid "Strongly Agree"
@@ -7998,7 +8010,7 @@ msgstr "טקסט זה מוצג לאחר הגשת הסקר."
 msgid "This text is shown as an introduction to the survey."
 msgstr "טקסט זה מוצג כמבוא לסקר."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73./apps/zotonic_mod_survey/src/mod_survey.erl:150
+#: apps/zotonic_mod_survey/src/mod_survey.erl:150
 msgid "Thurstone"
 msgstr "ת'רסטון"
 
@@ -8018,13 +8030,9 @@ msgstr "סך הכל"
 msgid "True"
 msgstr "נָכוֹן"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
 msgid "True or false question"
 msgstr "שאלה אמיתית או שקרית"
-
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
-msgid "True or false question."
-msgstr "שאלה אמיתית או שקרית."
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:147
 msgid "True/False"
@@ -8094,6 +8102,14 @@ msgstr "התוצאה שלך"
 msgid "chocolate"
 msgstr "שוקולד"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+msgid "date"
+msgstr "תַאֲרִיך"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+msgid "email"
+msgstr "אימייל"
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:6
 msgid "go to"
 msgstr "לך ל"
@@ -8118,17 +8134,29 @@ msgstr "חייב להיות מספר"
 msgid "must be a phone number"
 msgstr "חייב להיות מספר טלפון"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:27./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:37
+#: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:27./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:37
 msgid "must be an e-mail address"
 msgstr "חייבת להיות כתובת דואר אלקטרוני"
+
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:40
+msgid "must be an email address"
+msgstr "חייבת להיות כתובת דוא\"ל"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:13./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:24
 msgid "name >= 2"
 msgstr "שם> = 2"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+msgid "number"
+msgstr "מספר"
+
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:31
 msgid "one per line"
 msgstr "אחת לשורה"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+msgid "phone number"
+msgstr "מספר טלפון"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:5
 msgid "question == 1"
@@ -8137,6 +8165,10 @@ msgstr "שאלה == 1"
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_multiple_choice.tpl:16./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_narrative.tpl:23
 msgid "select…"
 msgstr "בחר…"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+msgid "text"
+msgstr "טֶקסט"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:94
 msgid "years old. I like"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-01 12:14\n"
+"PO-Revision-Date: 2021-07-02 13:13\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -7337,10 +7337,6 @@ msgstr "Anda harus menjadi administrator untuk meminta sertifikat."
 msgid "not reachable or local IP"
 msgstr "tidak terjangkau atau IP lokal"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
-msgid "A narrative question"
-msgstr "Sebuah pertanyaan naratif"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:25
 msgid "Add a question or block"
 msgstr "Tambahkan pertanyaan atau blokir"
@@ -7401,6 +7397,10 @@ msgstr "Menjawab"
 msgid "Answers, one per line"
 msgstr "Jawaban, satu per baris"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:83
+msgid "Apple"
+msgstr "apel"
+
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:20
 msgid "Apple = Red"
 msgstr "Apple = Merah"
@@ -7422,8 +7422,8 @@ msgid "Are you sure you want to delete this result?"
 msgstr "Apakah anda yakin anda ingin menghapus hasil ini?"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
-msgid "Are you sure you want to stop?"
-msgstr "Apakah anda yakin anda ingin berhenti?"
+msgid "Are you sure you want to stop without saving?"
+msgstr "Apakah Anda yakin ingin berhenti tanpa menyimpan?"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:108./apps/zotonic_mod_survey/src/mod_survey.erl:157
 msgid "Button"
@@ -7546,6 +7546,10 @@ msgstr "Unggah Berkas"
 msgid "Fill in"
 msgstr "Mengisi"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
+msgid "Fill in the gaps"
+msgstr "Isi celahnya"
+
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
 msgid "Fill in the missing parts"
 msgstr "Isi bagian yang hilang"
@@ -7630,7 +7634,7 @@ msgstr "Melompat ke sebuah pertanyaan pada halaman selanjutnya."
 msgid "Leave empty if there are no test questions."
 msgstr "Biarkan kosong jika tidak ada pertanyaan tes."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61./apps/zotonic_mod_survey/src/mod_survey.erl:149
+#: apps/zotonic_mod_survey/src/mod_survey.erl:149
 msgid "Likert"
 msgstr "Likert"
 
@@ -7649,6 +7653,10 @@ msgstr "Surat hasil"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:81./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
 msgid "Matching question"
 msgstr "Pertanyaan yang cocok"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:84
+msgid "Melk"
+msgstr "Melki"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:49
 msgid "Multiple answers possible"
@@ -7890,9 +7898,13 @@ msgstr "Jawaban tunggal mungkin"
 msgid "Start"
 msgstr "Mulai"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:51./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52./apps/zotonic_mod_survey/src/mod_survey.erl:159
+#: apps/zotonic_mod_survey/src/mod_survey.erl:159
 msgid "Stop"
 msgstr "Berhenti"
+
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:51./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
+msgid "Stop without saving"
+msgstr "Berhenti tanpa menyimpan"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:40./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:54./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:55
 msgid "Strongly Agree"
@@ -7998,7 +8010,7 @@ msgstr "Teks ini ditampilkan setelah survei telah disampaikan."
 msgid "This text is shown as an introduction to the survey."
 msgstr "Teks ini ditampilkan sebagai pengantar survei."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73./apps/zotonic_mod_survey/src/mod_survey.erl:150
+#: apps/zotonic_mod_survey/src/mod_survey.erl:150
 msgid "Thurstone"
 msgstr "Thurstone"
 
@@ -8018,13 +8030,9 @@ msgstr "Jumlah"
 msgid "True"
 msgstr "Benar"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
 msgid "True or false question"
 msgstr "Pertanyaan benar atau salah"
-
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
-msgid "True or false question."
-msgstr "Pertanyaan benar atau salah."
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:147
 msgid "True/False"
@@ -8094,6 +8102,14 @@ msgstr "Hasil Anda"
 msgid "chocolate"
 msgstr "cokelat"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+msgid "date"
+msgstr "tanggal"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+msgid "email"
+msgstr "surel"
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:6
 msgid "go to"
 msgstr "pergi ke"
@@ -8118,17 +8134,29 @@ msgstr "harus sebuah nomor"
 msgid "must be a phone number"
 msgstr "harus berupa sebuah nomor telepon"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:27./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:37
+#: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:27./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:37
 msgid "must be an e-mail address"
 msgstr "harus berupa sebuah alamat e-mail"
+
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:40
+msgid "must be an email address"
+msgstr "harus berupa alamat email"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:13./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:24
 msgid "name >= 2"
 msgstr "nama > = 2"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+msgid "number"
+msgstr "jumlah"
+
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:31
 msgid "one per line"
 msgstr "satu per baris"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+msgid "phone number"
+msgstr "nomor telepon"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:5
 msgid "question == 1"
@@ -8137,6 +8165,10 @@ msgstr "pertanyaan == 1"
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_multiple_choice.tpl:16./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_narrative.tpl:23
 msgid "select…"
 msgstr "pilih…"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+msgid "text"
+msgstr "teks"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:94
 msgid "years old. I like"

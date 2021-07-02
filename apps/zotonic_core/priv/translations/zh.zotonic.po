@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-01 12:14\n"
+"PO-Revision-Date: 2021-07-02 13:13\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -7333,10 +7333,6 @@ msgstr "你需要成为管理员才能申请证书。"
 msgid "not reachable or local IP"
 msgstr "无法到达或本地IP"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
-msgid "A narrative question"
-msgstr "一个叙事问题"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:25
 msgid "Add a question or block"
 msgstr "添加一个问题或阻止"
@@ -7397,6 +7393,10 @@ msgstr "回答"
 msgid "Answers, one per line"
 msgstr "答案，每行一个"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:83
+msgid "Apple"
+msgstr "苹果"
+
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:20
 msgid "Apple = Red"
 msgstr "苹果=红色"
@@ -7418,8 +7418,8 @@ msgid "Are you sure you want to delete this result?"
 msgstr "你确定要删除这个结果吗？"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
-msgid "Are you sure you want to stop?"
-msgstr "你确认需要中止？"
+msgid "Are you sure you want to stop without saving?"
+msgstr "您确定要停止而不保存吗？"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:108./apps/zotonic_mod_survey/src/mod_survey.erl:157
 msgid "Button"
@@ -7542,6 +7542,10 @@ msgstr "文件上传"
 msgid "Fill in"
 msgstr "填写"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
+msgid "Fill in the gaps"
+msgstr "填补差距"
+
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
 msgid "Fill in the missing parts"
 msgstr "填写缺失的部分"
@@ -7626,7 +7630,7 @@ msgstr "跳到下一页的问题。"
 msgid "Leave empty if there are no test questions."
 msgstr "如果没有试题，则留空。"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61./apps/zotonic_mod_survey/src/mod_survey.erl:149
+#: apps/zotonic_mod_survey/src/mod_survey.erl:149
 msgid "Likert"
 msgstr "李克特量表"
 
@@ -7645,6 +7649,10 @@ msgstr "将结果邮寄给"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:81./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
 msgid "Matching question"
 msgstr "匹配问题"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:84
+msgid "Melk"
+msgstr "梅尔克"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:49
 msgid "Multiple answers possible"
@@ -7886,9 +7894,13 @@ msgstr "只允许选择一个答案"
 msgid "Start"
 msgstr "开始"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:51./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52./apps/zotonic_mod_survey/src/mod_survey.erl:159
+#: apps/zotonic_mod_survey/src/mod_survey.erl:159
 msgid "Stop"
 msgstr "中止"
+
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:51./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
+msgid "Stop without saving"
+msgstr "停止而不保存"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:40./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:54./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:55
 msgid "Strongly Agree"
@@ -7994,7 +8006,7 @@ msgstr "这段文字是在提交调查后显示的。"
 msgid "This text is shown as an introduction to the survey."
 msgstr "此文显示为调查介绍。"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73./apps/zotonic_mod_survey/src/mod_survey.erl:150
+#: apps/zotonic_mod_survey/src/mod_survey.erl:150
 msgid "Thurstone"
 msgstr "瑟斯顿量表"
 
@@ -8014,13 +8026,9 @@ msgstr "总数"
 msgid "True"
 msgstr "真"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
 msgid "True or false question"
 msgstr "真假问题"
-
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
-msgid "True or false question."
-msgstr "真假问题。"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:147
 msgid "True/False"
@@ -8090,6 +8098,14 @@ msgstr "您的结果"
 msgid "chocolate"
 msgstr "巧克力"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+msgid "date"
+msgstr "日期"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+msgid "email"
+msgstr "电子邮件"
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:6
 msgid "go to"
 msgstr "去"
@@ -8114,17 +8130,29 @@ msgstr "必须是数字"
 msgid "must be a phone number"
 msgstr "必须是电话号码"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:27./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:37
+#: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:27./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:37
 msgid "must be an e-mail address"
 msgstr "必须是 e-mail 地址"
+
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:40
+msgid "must be an email address"
+msgstr "必须是电子邮件地址"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:13./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:24
 msgid "name >= 2"
 msgstr "名字>=2"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+msgid "number"
+msgstr "数字"
+
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:31
 msgid "one per line"
 msgstr "每行一个"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+msgid "phone number"
+msgstr "电话号码"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:5
 msgid "question == 1"
@@ -8133,6 +8161,10 @@ msgstr "问题=1"
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_multiple_choice.tpl:16./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_narrative.tpl:23
 msgid "select…"
 msgstr "选择..."
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+msgid "text"
+msgstr "文本"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:94
 msgid "years old. I like"
