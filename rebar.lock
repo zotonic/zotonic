@@ -62,11 +62,11 @@
  {<<"proper">>,{pkg,<<"proper">>,<<"1.4.0">>},0},
  {<<"qdate">>,
   {git,"https://github.com/choptastic/qdate.git",
-       {ref,"3d72448491de40051f742491d115fd3fd2c6d988"}},
+       {ref,"c5971cdcf46a6ce41fc54171a072843127509ae0"}},
   0},
  {<<"qdate_localtime">>,
   {git,"https://github.com/choptastic/qdate_localtime.git",
-       {ref,"a83ffd04db90ecd6619abf86fcf58006f5da0080"}},
+       {ref,"5729500223644f6959431e7344379af2fd6eb571"}},
   0},
  {<<"ranch">>,{pkg,<<"ranch">>,<<"1.8.0">>},0},
  {<<"recon">>,{pkg,<<"recon">>,<<"2.5.1">>},0},
@@ -84,7 +84,7 @@
  {<<"tls_certificate_check">>,{pkg,<<"tls_certificate_check">>,<<"1.6.0">>},1},
  {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.7.0">>},0},
  {<<"zotonic_ssl">>,{pkg,<<"zotonic_ssl">>,<<"1.0.4">>},0},
- {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.4.1">>},0}]}.
+ {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.4.2">>},0}]}.
 [
 {pkg_hash,[
  {<<"bcrypt">>, <<"7D8CC4123E63DB12AB796112EE34891205D2E6DF788B72E823E81D8D37629861">>},
@@ -148,7 +148,7 @@
  {<<"tls_certificate_check">>, <<"661C287FC3F7823F6A299834664A5932AC9D369BEFEC2883172DE0623A4AEA12">>},
  {<<"yamerl">>, <<"E51DBA652DCE74C20A88294130B48051EBBBB0BE7D76F22DE064F0F3CCF0AAF5">>},
  {<<"zotonic_ssl">>, <<"56E79D1014D7C4009B3F1AB7DDD39515178D9E2CF5604CC906433AD8414F3276">>},
- {<<"zotonic_stdlib">>, <<"07933D9BE8D5101FA331C4F95228B7E28FF4D09B30D47DA4B3E5584AD1FA479D">>}]},
+ {<<"zotonic_stdlib">>, <<"1D361AA0592998E7A5953E38E9440278E9BBF44ECC1E65F7F0F33C8A45759236">>}]},
 {pkg_hash_ext,[
  {<<"bcrypt">>, <<"7FF89B21EC54DBA7095C5CE429D7C504E6CBF6E76423A5C91724577C3CE968E0">>},
  {<<"bear">>, <<"534217DCE6A719D59E54FB0EB7A367900DBFC5F85757E8C1F94269DF383F6D9B">>},
@@ -211,5 +211,5 @@
  {<<"tls_certificate_check">>, <<"42476E2E40717F09FBF1B559A8A6975B394E46C94BB5EBB043A18269A46401C0">>},
  {<<"yamerl">>, <<"CB5A4481E2E2AD36DB83BD9962153E1A9208E2B2484185E33FC2CAAC6A50B108">>},
  {<<"zotonic_ssl">>, <<"BB06818722FCB96EC4BBDCEEEAD65CB9A9E9E12596EE0523BBF17EDCA7C620C2">>},
- {<<"zotonic_stdlib">>, <<"E27EDD952B22507FEC0BE8D110D620CF96BDE85C52B8E18117FB3E9FC93CCA7D">>}]}
+ {<<"zotonic_stdlib">>, <<"6654F4D93DB30AEBD1341255F057BE61138C1AB9F5EECCC0D235CFED21B46B24">>}]}
 ].
