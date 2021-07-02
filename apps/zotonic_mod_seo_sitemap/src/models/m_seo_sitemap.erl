@@ -403,7 +403,7 @@ install(Context) ->
                     key character varying(64) not null default '',
                     rsc_id integer,
                     category_id integer,
-                    loc character varying(500) not null,
+                    loc character varying(2000) not null,
                     lastmod timestamp with time zone,
                     changefreq character varying(10),
                     language character varying(32),
