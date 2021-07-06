@@ -9,13 +9,22 @@
    ]}
  ]},
 
- {mnesia, [
-    {dir, "data/mnesia"}
+ {setup, [
+   {data_dir, "data"},
+   {log_dir,  "logs"}
  ]},
 
- {lager,
-  [
-    %% Where to wrste the logs
+ {filezcache, [
+     {data_dir, "data/filezcache/data"},
+     {journal_dir, "data/filezcache/journal"}
+ ]},
+
+ {mnesia, [
+    {dir, setup}  % Use the config from setup -- handled by zotonic_core
+ ]},
+
+ {lager, [
+    % Where to write the logs -- must be the same as the setup log_dir
     {log_root, "logs"},
     {handlers,
     [
@@ -43,8 +52,7 @@
   %% SSL application configuration.
   %%
   %% For details see: http://erlang.org/doc/man/ssl_app.html
-  {ssl,
-   [
+  {ssl, [
       %% The max number of cached SSL parameters. Increase if you have a lot of clients
       %% connecting to your server.
       {session_cache_server_max, 20000},
@@ -54,18 +62,5 @@
 
       %% The time between pem cache cleanups (in milliseconds)
       {ssl_pem_cache_clean, 300000} % 5 minutes
-   ]},
-
-  {filezcache,
-   [
-      {data_dir, "data/filezcache/data"},
-      {journal_dir, "data/filezcache/journal"}
-   ]},
-
- {setup,
-  [
-   {data_dir, "data"},
-   {log_dir,  "logs"}
   ]}
-
 ].

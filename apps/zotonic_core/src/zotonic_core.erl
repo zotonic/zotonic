@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017 Marc Worrell
+%% @copyright 2017-2021 Marc Worrell
 %% @doc Zotonic core - main routines to 'reason' about the current Zotonic
 %%      installation.
 
-%% Copyright 2017 Marc Worrell
+%% Copyright 2017-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ assert_schedulers(_N) ->
     ok.
 
 
-%% @doc Ensure that mnesia has created its schema in the configured priv/data/mnesia directory.
+%% @doc Ensure that mnesia has created its schema in the configured data/mnesia directory.
 -spec ensure_mnesia_schema() -> ok.
 ensure_mnesia_schema() ->
     case mnesia_dir() of
@@ -75,7 +75,7 @@ ensure_mnesia_schema() ->
             end;
         undefined ->
             lager:info("No mnesia directory defined, running without persistent email queue and filezcache. "
-                       "To enable persistency, add to erlang.config: {mnesia,[{dir,\"priv/mnesia\"}]}"),
+                       "To enable persistency, add to erlang.config: {mnesia,[{dir,\"data/mnesia\"}]}"),
             ok
     end.
 
@@ -93,17 +93,15 @@ mnesia_dir_config() ->
     case application:get_env(mnesia, dir) of
         {ok, none} -> undefined;
         {ok, ""} -> undefined;
-        {ok, "priv/mnesia"} -> mnesia_priv_dir();
+        {ok, setup} -> mnesia_data_dir();
+        {ok, "data/mnesia"} -> mnesia_data_dir();
         {ok, Dir} -> {ok, Dir};
-        undefined -> mnesia_priv_dir()
+        undefined -> mnesia_data_dir()
     end.
 
-mnesia_priv_dir() ->
-    PrivDir = case code:priv_dir(zotonic) of
-        {error, bad_name} -> code:priv_dir(zotonic_core);
-        ZotonicPrivDir when is_list(ZotonicPrivDir) -> ZotonicPrivDir
-    end,
-    mnesia_dir_append_node(filename:join([ PrivDir, "mnesia" ])).
+mnesia_data_dir() ->
+    DataDir = setup:data_dir(),
+    mnesia_dir_append_node(filename:join([ DataDir, "mnesia" ])).
 
 mnesia_dir_append_node(Dir) ->
     MnesiaDir = filename:join([ Dir, atom_to_list(node()) ]),
