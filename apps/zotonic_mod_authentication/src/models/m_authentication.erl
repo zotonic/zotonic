@@ -268,10 +268,10 @@ user_auth_key(UserId, Context) ->
 %% @doc Return the secret site key used for symmetrically encrypting tokens.
 -spec site_auth_key( z:context() ) -> binary().
 site_auth_key(Context) ->
-    case m_config:get_value(mod_authenticaton, site_auth_key, Context) of
+    case m_config:get_value(mod_authentication, site_auth_key, Context) of
         undefined ->
             Key = z_ids:id(64),
-            m_config:set_value(mod_authenticaton, site_auth_key, Key, Context),
+            m_config:set_value(mod_authentication, site_auth_key, Key, Context),
             Key;
         SignKey ->
             SignKey
