@@ -48,14 +48,14 @@ m_get([ <<"authenticate">>, <<"password">> | Rest ], #{ payload := Payload }, Co
         {error, _} = Error -> Error
     end;
 m_get([ <<"password_min_length">> | Rest ], _Msg, Context) ->
-    Len = case m_config:get_value(mod_authenticaton, password_min_length, Context) of
+    Len = case m_config:get_value(mod_authentication, password_min_length, Context) of
         undefined -> 8;
         <<>> -> 8;
         N -> z_convert:to_integer(N)
     end,
     {ok, {Len, Rest}};
 m_get([ <<"is_one_step_logon">> | Rest ], _Msg, Context) ->
-    IsOneStep = z_convert:to_bool( m_config:get_value(mod_authenticaton, is_one_step_logon, Context) ),
+    IsOneStep = m_config:get_boolean(mod_authentication, is_one_step_logon, Context),
     {ok, {IsOneStep, Rest}};
 m_get([ <<"is_supported">>, <<"rememberme">> | Rest ], _Msg, Context) ->
     IsSupported = z_db:has_connection(Context),
