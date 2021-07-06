@@ -289,7 +289,7 @@ read_more(State=#mp{length=Length, content_length=ContentLength,
                         _ -> (Length1 * 100) div ContentLength
                     end,
     case NewPercentage > Percentage of
-        true -> progress(NewPercentage, ContentLength, undefined, Context);
+        true -> progress(NewPercentage, ContentLength, State#mp.z_msg, Context);
         _ -> nop
     end,
     State#mp{length=Length1, buffer=Buffer1, next_chunk=Next1, percentage=NewPercentage}.

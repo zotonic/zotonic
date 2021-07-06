@@ -650,7 +650,7 @@ function z_transport_do(msg_id, delegate, content_type, data, options)
         };
 
     options.timeout = options.timeout || TRANSPORT_TIMEOUT;
-    if (options.qos > 0) {
+    if (options.qos > 0 && options.transport !== 'form') {
         var t = setTimeout(function() {
                     z_transport_timeout(msg_id);
                 }, options.timeout);
