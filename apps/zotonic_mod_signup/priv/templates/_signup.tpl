@@ -7,7 +7,7 @@ style_width
     {% wire
         action={
             redirect
-            location=m.rsc[m.acl.user].page_url
+            location=m.signup.confirm_redirect
         }
     %}
 {% else %}

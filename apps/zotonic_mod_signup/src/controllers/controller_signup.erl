@@ -178,13 +178,8 @@ handle_confirm(UserId, SignupProps, RequestConfirm, Context) ->
             ensure_published(UserId, z_acl:sudo(Context)),
             {ok, ContextUser} = z_auth:logon(UserId, Context),
             Location = case get_redirect_page(SignupProps) of
-                [] ->
-                    case z_notifier:first(#signup_confirm_redirect{id=UserId}, ContextUser) of
-                        undefined -> m_rsc:p(UserId, page_url, ContextUser);
-                        Loc -> Loc
-                    end;
-                Url ->
-                    Url
+                <<>> -> m_signup:confirm_redirect(ContextUser);
+                Url -> Url
             end,
             % Post a onetime-token to the auth worker on the page
             % The auth worker will exchange it for a valid cookie and then perform
@@ -193,7 +188,7 @@ handle_confirm(UserId, SignupProps, RequestConfirm, Context) ->
                 {ok, Token} ->
                     AuthMsg = #{
                         token => Token,
-                        url => z_convert:to_binary( Location )
+                        url => Location
                     },
                     z_mqtt:publish(<<"~client/model/auth/post/onetime-token">>, AuthMsg, Context),
                     z_render:wire({mask, []}, Context);
@@ -220,7 +215,7 @@ handle_confirm(UserId, SignupProps, RequestConfirm, Context) ->
     end.
 
 get_redirect_page(SignupProps) ->
-    z_convert:to_list(proplists:get_value(ready_page, SignupProps, [])).
+    z_convert:to_binary(proplists:get_value(ready_page, SignupProps, <<>>)).
 
 
 ensure_published(UserId, Context) ->
