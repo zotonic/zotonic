@@ -193,7 +193,22 @@ default(environment) -> production; % development | test | acceptance | producti
 default(security_dir) ->
     case z_config_files:security_dir() of
         {ok, Dir} -> Dir;
-        {error, _} -> none
+        {error, _} -> undefined
+    end;
+default(data_dir) ->
+    case z_config_files:data_dir() of
+        {ok, Dir} -> Dir;
+        {error, _} -> undefined
+    end;
+default(log_dir) ->
+    case z_config_files:log_dir() of
+        {ok, Dir} -> Dir;
+        {error, _} -> undefined
+    end;
+default(cache_dir) ->
+    case z_config_files:cache_dir() of
+        {ok, Dir} -> Dir;
+        {error, _} -> undefined
     end;
 default(timezone) -> <<"UTC">>;
 default(listen_ip) -> any;

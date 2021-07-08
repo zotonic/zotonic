@@ -1,8 +1,8 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
-%% @copyright 2019 Maas-Maarten Zeeman 
+%% @copyright 2019-2021 Maas-Maarten Zeeman 
 %% @doc Zotonic: admin status model
 
-%% Copyright 2019 Maas-Maarten Zeeman
+%% Copyright 2019-2021 Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -48,13 +48,6 @@ m_get(Path, Msg, Context) ->
 
 m_get_1([ <<"otp_version">> | Rest ], _Msg, _Context) ->
     {ok, {otp_version(), Rest}};
-m_get_1([ <<"security_dir">> | Rest ], _Msg, _Context) ->
-    case z_config_files:security_dir() of
-        {ok, Dir} ->
-            {ok, {Dir, Rest}};
-        {error, _} = Error ->
-            Error
-    end;
 m_get_1([ <<"config_dir">> | Rest ], _Msg, _Context) ->
     case z_config_files:config_dir() of
         {ok, Dir} ->
@@ -62,6 +55,14 @@ m_get_1([ <<"config_dir">> | Rest ], _Msg, _Context) ->
         {error, _} = Error ->
             Error
     end;
+m_get_1([ <<"security_dir">> | Rest ], _Msg, _Context) ->
+    {ok, {z_config:get(security_dir), Rest}};
+m_get_1([ <<"log_dir">> | Rest ], _Msg, _Context) ->
+    {ok, {z_config:get(log_dir), Rest}};
+m_get_1([ <<"data_dir">> | Rest ], _Msg, _Context) ->
+    {ok, {z_config:get(data_dir), Rest}};
+m_get_1([ <<"cache_dir">> | Rest ], _Msg, _Context) ->
+    {ok, {z_config:get(cache_dir), Rest}};
 m_get_1([ <<"work_dir">> | Rest ], _Msg, _Context) ->
     case file:get_cwd() of
         {ok, Dir} ->
