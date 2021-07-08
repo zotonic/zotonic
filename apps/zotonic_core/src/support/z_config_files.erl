@@ -35,18 +35,18 @@
 %% Checks the following locations:
 %%
 %% <ol>
-%%   <li>The configuration <tt>security_dir</tt>
-%%   <li>The directory <tt>$HOME/.zotonic/security</tt>
-%%   <li>The directory <tt>/etc/zotonic/security</tt>  (only on Unix)
-%%   <li>The OS specific directory for application config files
+%%   <li>The configuration <tt>security_dir</tt></li>
+%%   <li>The directory <tt>$HOME/.zotonic/security</tt></li>
+%%   <li>The directory <tt>/etc/zotonic/security</tt>  (only on Unix)</li>
+%%   <li>The OS specific directory for application config files</li>
 %% </ol>
 %%
 %% If no directory is found then the OS specific directory with the
 %% the subdirectory <tt>security</tt> is used:
 %%
 %% <ol>
-%%   <li>Linux: <tt>$HOME/.config/zotonic/security/</tt>
-%%   <li>macOS: <tt>$HOME/Library/Application Support/zotonic/security/</tt>
+%%   <li>Linux: <tt>$HOME/.config/zotonic/security/</tt></li>
+%%   <li>macOS: <tt>$HOME/Library/Application Support/zotonic/security/</tt></li>
 %% </ol>
 %%
 -spec security_dir() -> {ok, file:filename_all()} | {error, term()}.
@@ -109,31 +109,31 @@ security_dir_1() ->
 %% of possible locations:
 %%
 %% <ol>
-%%   <li>The init argument <tt>zotonic_config_dir</tt>
-%%   <li>The envirpnment variable <tt>ZOTONIC_CONFIG_DIR</tt>
-%%   <li>The directory <tt>$HOME/.zotonic</tt>
-%%   <li>The directory <tt>/etc/zotonic</tt>  (only on Unix)
-%%   <li>The OS specific directory for application config files
+%%   <li>The init argument <tt>zotonic_config_dir</tt></li>
+%%   <li>The envirpnment variable <tt>ZOTONIC_CONFIG_DIR</tt></li>
+%%   <li>The directory <tt>$HOME/.zotonic</tt></li>
+%%   <li>The directory <tt>/etc/zotonic</tt>  (only on Unix)</li>
+%%   <li>The OS specific directory for application config files</li>
 %% </ol>
 %%
 %% In the last three cases subdirectories are also checked, in
 %% the following order:
 %%
 %% <ol>
-%%   <li>The complete Erlang node name
-%%   <li>The short node name without the server address
-%%   <li>The complete Zotonic version (eg. 1.2.3)
-%%   <li>The minor Zotonic version (eg. 1.2)
-%%   <li>The major Zotonic version (eg. 1)
-%%   <li>The directory itself, without any version
+%%   <li>The complete Erlang node name</li>
+%%   <li>The short node name without the server address</li>
+%%   <li>The complete Zotonic version (eg. 1.2.3)</li>
+%%   <li>The minor Zotonic version (eg. 1.2)</li>
+%%   <li>The major Zotonic version (eg. 1)</li>
+%%   <li>The directory itself, without any version</li>
 %% </ol>
 %%
 %% If no directory is found then the OS specific directory with the
 %% the major Zotonic version is used. Examples:
 %%
 %% <ol>
-%%   <li>Linux: <tt>$HOME/.config/zotonic/config/1/</tt>
-%%   <li>macOS: <tt>$HOME/Library/Application Support/zotonic/config/1/</tt>
+%%   <li>Linux: <tt>$HOME/.config/zotonic/config/1/</tt></li>
+%%   <li>macOS: <tt>$HOME/Library/Application Support/zotonic/config/1/</tt></li>
 %% </ol>
 %%
 -spec config_dir() -> {ok, file:filename_all()} | {error, term()}.
