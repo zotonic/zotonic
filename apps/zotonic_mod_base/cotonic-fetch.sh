@@ -26,4 +26,4 @@ function install {
     cp priv/lib-src/cotonic/${version}/cotonic-service-worker.js priv/lib/cotonic/cotonic-service-worker.js
 }
 
-install "1.0.6" 
+install "master" 
