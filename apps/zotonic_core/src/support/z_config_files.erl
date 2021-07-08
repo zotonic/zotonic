@@ -59,11 +59,10 @@ security_dir() ->
     end.
 
 security_dir_1() ->
-    Home = os:getenv("HOME"),
-    HomeLocs = case Home of
+    HomeLocs = case os:getenv("HOME") of
         false -> [];
         "" -> [];
-        _ ->
+        Home ->
             [
                 filename:join([Home, ".zotonic", "security"])
             ]
@@ -168,12 +167,11 @@ config_dir_env(Node) ->
     end.
 
 config_dir_find(Node) ->
-    Home = os:getenv("HOME"),
     {MajorVersion, MinorVersion} = split_version(?ZOTONIC_VERSION),
-    HomeLocs = case Home of
+    HomeLocs = case os:getenv("HOME") of
         false -> [];
         "" -> [];
-        _ ->
+        Home ->
             [
                 filename:join([Home, ".zotonic", atom_to_list(Node)]),
                 filename:join([Home, ".zotonic", base_nodename(Node)]),
@@ -213,6 +211,11 @@ config_dir_find(Node) ->
             % Use the OS specific default
             ZotonicDir = filename:join([SystemConfigDir, "config"]),
             VersionDir = filename:join([SystemConfigDir, "config", MajorVersion]),
+            % The '$HOME/.config' dir is not pre-created on some Linux VMs
+            case file:make_dir(filename:basename(SystemConfigDir)) of
+                ok -> file:change_mode(SystemConfigDir, 8#00700);
+                {error, _} -> ok
+            end,
             case file:make_dir(SystemConfigDir) of
                 ok -> file:change_mode(SystemConfigDir, 8#00700);
                 {error, _} -> ok
