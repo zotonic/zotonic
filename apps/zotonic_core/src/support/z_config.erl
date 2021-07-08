@@ -190,6 +190,11 @@ getaddr(listen_ip6, IP) -> inet:getaddr(IP, inet6);
 getaddr(_Name, IP) -> inet:getaddr(IP, inet).
 
 default(environment) -> production; % development | test | acceptance | production | education | backup
+default(security_dir) ->
+    case z_config_files:security_dir() of
+        {ok, Dir} -> Dir;
+        {error, _} -> none
+    end;
 default(timezone) -> <<"UTC">>;
 default(listen_ip) -> any;
 default(listen_ip6) ->

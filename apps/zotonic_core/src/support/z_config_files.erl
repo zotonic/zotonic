@@ -20,6 +20,9 @@
 
 -export([
     security_dir/0,
+    log_dir/0,
+    data_dir/0,
+    cache_dir/0,
     config_dir/0,
     config_dir/1,
     files/1,
@@ -35,7 +38,7 @@
 %% Checks the following locations:
 %%
 %% <ol>
-%%   <li>The configuration <tt>security_dir</tt></li>
+%%   <li>The environment variable <tt>ZOTONIC_SECURITY_DIR</tt></li>
 %%   <li>The directory <tt>$HOME/.zotonic/security</tt></li>
 %%   <li>The directory <tt>/etc/zotonic/security</tt>  (only on Unix)</li>
 %%   <li>The OS specific directory for application config files</li>
@@ -51,11 +54,16 @@
 %%
 -spec security_dir() -> {ok, file:filename_all()} | {error, term()}.
 security_dir() ->
-    case z_config:get(security_dir) of
-        undefined ->
+    case os:getenv("ZOTONIC_SECURITY_DIR") of
+        false ->
+            security_dir_1();
+        "" ->
             security_dir_1();
         Dir ->
-            {ok, Dir}
+            case filelib:is_dir(Dir) of
+                true -> {ok, Dir};
+                false -> {error, enoent}
+            end
     end.
 
 security_dir_1() ->
@@ -84,6 +92,8 @@ security_dir_1() ->
         [] ->
             % Use the OS specific default
             SecurityDir = filename:join([SystemConfigDir, "security"]),
+            % The '$HOME/.config' dir is not pre-created on some Linux VMs
+            _ = z_filelib:ensure_dir(SystemConfigDir),
             case file:make_dir(SystemConfigDir) of
                 ok -> file:change_mode(SystemConfigDir, 8#00700);
                 {error, _} -> ok
@@ -103,6 +113,183 @@ security_dir_1() ->
             {ok, D}
     end.
 
+%% @doc Find the default directory for log files.
+%% Checks the following locations:
+%%
+%% <ol>
+%%   <li>The environment variable <tt>ZOTONIC_LOG_DIR</tt></li>
+%%   <li>Local working directory <tt>logs</tt></li>
+%%   <li>The OS specific directory for application log files</li>
+%% </ol>
+%%
+%% If no directory is found then the OS specific directory is used:
+%%
+%% <ol>
+%%   <li>Linux: <tt>$HOME/.config/zotonic/security/</tt></li>
+%%   <li>macOS: <tt>$HOME/Library/Application Support/zotonic/security/</tt></li>
+%% </ol>
+%%
+-spec log_dir() -> {ok, file:filename_all()} | {error, term()}.
+log_dir() ->
+    case os:getenv("ZOTONIC_LOG_DIR") of
+        false ->
+            logs_dir_1();
+        "" ->
+            logs_dir_1();
+        Dir ->
+            case filelib:is_dir(Dir) of
+                true -> {ok, Dir};
+                false -> {error, enoent}
+            end
+    end.
+
+logs_dir_1() ->
+    HomeLocs = [
+        "logs"
+    ],
+    SystemLogDir = filename:basedir(user_config, "zotonic"),
+    SystemLocs = [
+        SystemLogDir
+    ],
+    Locs = HomeLocs ++ SystemLocs,
+    case lists:dropwhile(fun(D) -> not filelib:is_dir(D) end, Locs) of
+        [] ->
+            % Use the OS specific default
+            % The '$HOME/.config' dir is not pre-created on some Linux VMs
+            _ = z_filelib:ensure_dir(SystemLogDir),
+            case file:make_dir(SystemLogDir) of
+                ok -> file:change_mode(SystemLogDir, 8#00700);
+                {error, _} -> ok
+            end,
+            case filelib:is_dir(SystemLogDir) of
+                true ->
+                    lager:error("Could not create log directory: ~p", [ SystemLogDir ]),
+                    {ok, SystemLogDir};
+                false ->
+                    {error, enoent}
+            end;
+        [ D | _ ] ->
+            {ok, D}
+    end.
+
+%% @doc Find the default directory for data files.
+%% Checks the following locations:
+%%
+%% <ol>
+%%   <li>The environment variable <tt>ZOTONIC_DATA_DIR</tt></li>
+%%   <li>Local working directory <tt>data</tt></li>
+%%   <li>The OS specific directory for application data files</li>
+%% </ol>
+%%
+%% If no directory is found then the OS specific directory is used:
+%%
+%% <ol>
+%%   <li>Linux: <tt>$HOME/.local/share/zotonic/</tt></li>
+%%   <li>macOS: <tt>$HOME/Library/Application Support/zotonic/</tt></li>
+%% </ol>
+%%
+-spec data_dir() -> {ok, file:filename_all()} | {error, term()}.
+data_dir() ->
+    case os:getenv("ZOTONIC_DATA_DIR") of
+        false ->
+            data_dir_1();
+        "" ->
+            data_dir_1();
+        Dir ->
+            case filelib:is_dir(Dir) of
+                true -> {ok, Dir};
+                false -> {error, enoent}
+            end
+    end.
+
+data_dir_1() ->
+    HomeLocs = [
+        "data"
+    ],
+    SystemDataDir = filename:basedir(user_data, "zotonic"),
+    SystemLocs = [
+        SystemDataDir
+    ],
+    Locs = HomeLocs ++ SystemLocs,
+    case lists:dropwhile(fun(D) -> not filelib:is_dir(D) end, Locs) of
+        [] ->
+            % Use the OS specific default
+            % The '$HOME/.config' dir is not pre-created on some Linux VMs
+            _ = z_filelib:ensure_dir(SystemDataDir),
+            case file:make_dir(SystemDataDir) of
+                ok -> file:change_mode(SystemDataDir, 8#00700);
+                {error, _} -> ok
+            end,
+            case filelib:is_dir(SystemDataDir) of
+                true ->
+                    lager:error("Could not create data directory: ~p", [ SystemDataDir ]),
+                    {ok, SystemDataDir};
+                false ->
+                    {error, enoent}
+            end;
+        [ D | _ ] ->
+            {ok, D}
+    end.
+
+
+%% @doc Find the default directory for cache files.
+%% Checks the following locations:
+%%
+%% <ol>
+%%   <li>The environment variable <tt>ZOTONIC_CACHE_DIR</tt></li>
+%%   <li>Local working directory <tt>caches</tt></li>
+%%   <li>The OS specific directory for application cache files</li>
+%% </ol>
+%%
+%% If no directory is found then the OS specific directory is used:
+%%
+%% <ol>
+%%   <li>Linux: <tt>$HOME/.cache/zotonic/</tt></li>
+%%   <li>macOS: <tt>$HOME/Library/Caches/zotonic/</tt></li>
+%% </ol>
+%%
+-spec cache_dir() -> {ok, file:filename_all()} | {error, term()}.
+cache_dir() ->
+    case os:getenv("ZOTONIC_LOG_DIR") of
+        false ->
+            cache_dir_1();
+        "" ->
+            cache_dir_1();
+        Dir ->
+            case filelib:is_dir(Dir) of
+                true -> {ok, Dir};
+                false -> {error, enoent}
+            end
+    end.
+
+cache_dir_1() ->
+    HomeLocs = [
+        "caches"
+    ],
+    SystemCacheDir = filename:basedir(user_cache, "zotonic"),
+    SystemLocs = [
+        SystemCacheDir
+    ],
+    Locs = HomeLocs ++ SystemLocs,
+    case lists:dropwhile(fun(D) -> not filelib:is_dir(D) end, Locs) of
+        [] ->
+            % Use the OS specific default
+            % The '$HOME/.config' dir is not pre-created on some Linux VMs
+            _ = z_filelib:ensure_dir(SystemCacheDir),
+            case file:make_dir(SystemCacheDir) of
+                ok -> file:change_mode(SystemCacheDir, 8#00700);
+                {error, _} -> ok
+            end,
+            case filelib:is_dir(SystemCacheDir) of
+                true ->
+                    lager:error("Could not create cache directory: ~p", [ SystemCacheDir ]),
+                    {ok, SystemCacheDir};
+                false ->
+                    {error, enoent}
+            end;
+        [ D | _ ] ->
+            {ok, D}
+    end.
 
 %% @doc Find the directory with the configuration files. Defaults to the
 %% OS specific directory for all configurations. This checks a list
