@@ -1,22 +1,28 @@
 #!/usr/bin/env bash
 
 function install {
-    url=$1
-    file=${url##*/}
-    name=${file%.*}
-    if [ -d priv/lib-src/${name} ]; then
-        echo " - ${name} already installed"
+    base=https://raw.githubusercontent.com/cotonic/cotonic/
+
+    if [ -d priv/lib-src/cotonic/$1 ]; then
+        echo " - cotonic $1 already installed"
     else
-        echo " - Installing ${name} from $1"
-        mkdir -p priv/lib-src;
-        cd priv/lib-src;
-        git clone $1
-        echo "Done"
-        cd ../..
+        echo " - Downloading cotonic $1 from github"
+
+        mkdir -p priv/lib-src/cotonic/$1;
+        cd priv/lib-src/cotonic/$1;
+
+        curl -#O ${base}/$1/cotonic.js
+        curl -#O ${base}/$1/cotonic-worker.js
+        curl -#O ${base}/$1/cotonic-service-worker.js
+
+        cd ../../../..
     fi
+
+    mkdir -p priv/lib/cotonic;
+
+    cp priv/lib-src/cotonic/$1/cotonic.js priv/lib/cotonic/cotonic.js
+    cp priv/lib-src/cotonic/$1/cotonic-worker.js priv/lib/cotonic/cotonic-worker.js
+    cp priv/lib-src/cotonic/$1/cotonic-service-worker.js priv/lib/cotonic/cotonic-service-worker.js
 }
 
-install https://github.com/cotonic/cotonic.git
-
-cd priv/lib-src/cotonic
-ZOTONIC_LIB=1 make
+install "1.0.6" 
