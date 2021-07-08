@@ -54,8 +54,15 @@ is_app_available(App) ->
 setup() ->
     io:setopts([{encoding, unicode}]),
     assert_schedulers( erlang:system_info(schedulers) ),
+    load_applications(),
     z_jsxrecord:init(),
     ensure_mnesia_schema().
+
+%% @doc Load the applications so that their settings are also loaded.
+load_applications() ->
+    application:load(zotonic_core),
+    application:load(setup),
+    application:load(mnesia).
 
 assert_schedulers(1) ->
     io:format("FATAL: Not enough schedulers, please start with 2 or more schedulers.~nUse: ERLOPTS=\"+S 4:4\" ./bin/zotonic debug~n~n"),
@@ -95,13 +102,14 @@ mnesia_dir_config() ->
         {ok, ""} -> undefined;
         {ok, setup} -> mnesia_data_dir();
         {ok, "data/mnesia"} -> mnesia_data_dir();
+        {ok, "priv/mnesia"} -> mnesia_data_dir();
         {ok, Dir} -> {ok, Dir};
         undefined -> mnesia_data_dir()
     end.
 
 mnesia_data_dir() ->
-    DataDir = setup:data_dir(),
-    mnesia_dir_append_node(filename:join([ DataDir, "mnesia" ])).
+    % DataDir = setup:data_dir(),
+    mnesia_dir_append_node(filename:join([ "priv", "mnesia" ])).
 
 mnesia_dir_append_node(Dir) ->
     MnesiaDir = filename:join([ Dir, atom_to_list(node()) ]),
