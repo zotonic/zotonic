@@ -94,6 +94,7 @@ security_dir_1() ->
             end,
             case filelib:is_dir(SecurityDir) of
                 true ->
+                    lager:error("Could not create security directory: ~p", [ SecurityDir ]),
                     {ok, SecurityDir};
                 false ->
                     {error, enoent}
@@ -212,10 +213,7 @@ config_dir_find(Node) ->
             ZotonicDir = filename:join([SystemConfigDir, "config"]),
             VersionDir = filename:join([SystemConfigDir, "config", MajorVersion]),
             % The '$HOME/.config' dir is not pre-created on some Linux VMs
-            case file:make_dir(filename:basename(SystemConfigDir)) of
-                ok -> file:change_mode(SystemConfigDir, 8#00700);
-                {error, _} -> ok
-            end,
+            _ = z_filelib:ensure_dir(SystemConfigDir),
             case file:make_dir(SystemConfigDir) of
                 ok -> file:change_mode(SystemConfigDir, 8#00700);
                 {error, _} -> ok
@@ -232,6 +230,7 @@ config_dir_find(Node) ->
                 true ->
                     {ok, VersionDir};
                 false ->
+                    lager:error("Could not create config directory: ~p", [ VersionDir ]),
                     {error, enoent}
             end;
         [ D | _ ] ->
