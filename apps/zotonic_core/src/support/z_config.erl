@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2017 Marc Worrell, 2014 Arjan Scherpenisse
+%% @copyright 2010-2021 Marc Worrell, 2014 Arjan Scherpenisse
 %% @doc Wrapper for Zotonic application environment configuration
 
-%% Copyright 2010-2017 Marc Worrell, 2014 Arjan Scherpenisse
+%% Copyright 2010-2021 Marc Worrell, 2014 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -319,6 +319,9 @@ all() ->
             environment,
             zotonic_apps,
             security_dir,
+            data_dir,
+            log_dir,
+            cache_dir,
             password,
             timezone,
             listen_ip,

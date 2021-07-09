@@ -41,7 +41,7 @@ run(_) ->
 show(What) ->
     case zotonic_command:get_target_node() of
         {ok, Target} ->
-		Len = string:len(erlang:atom_to_list(Target)),
+    		Len = string:len(erlang:atom_to_list(Target)),
             if
                 What =:= all; What =:= zotonic ->
                     io:format("~n# Zotonic config for ~p:~n# ===================~s=~n", [Target, string:copies("=", Len)]),
@@ -88,7 +88,18 @@ pretty_print(Map) when is_map(Map) ->
                     io:format("~n    ~p: ", [ Key ]),
                     pretty_print_value(Key, Value)
                 end,
-                ZCfgList)
+                ZCfgList),
+            lists:foreach(
+                fun({Key, Value}) ->
+                    case proplists:is_defined(Key, ZCfgList) of
+                        false ->
+                            io:format("~n    ~p: ", [ Key ]),
+                            pretty_print_value(Key, Value);
+                        true ->
+                            ok
+                    end
+                end,
+                maps:to_list(ZCfg))
     end,
     lists:foreach(
         fun({App, AppCfg}) ->

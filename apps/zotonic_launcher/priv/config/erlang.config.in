@@ -9,22 +9,24 @@
    ]}
  ]},
 
- {setup, [
-   {data_dir, "data"},
-   {log_dir,  "logs"}
- ]},
+ %%% The directories below will be set according to the log_dir, data_dir and cache_dir
 
- {filezcache, [
-     {data_dir, "data/filezcache/data"},
-     {journal_dir, "data/filezcache/journal"}
- ]},
+ % {setup, [
+ %   {data_dir, "data"},
+ %   {log_dir,  "logs"}
+ % ]},
 
- {mnesia, [
-    {dir, setup}  % Use the config from setup -- handled by zotonic_core
- ]},
+ % {filezcache, [
+ %     {data_dir, "data/filezcache/data"},
+ %     {journal_dir, "data/filezcache/journal"}
+ % ]},
+
+ % {mnesia, [
+ %    {dir, setup}  % Use the config from setup -- handled by zotonic_core
+ % ]},
 
  {lager, [
-    % Where to write the logs -- must be the same as the setup log_dir
+    % The log_root will be set to the log_dir config in zotonic.config
     {log_root, "logs"},
     {handlers,
     [

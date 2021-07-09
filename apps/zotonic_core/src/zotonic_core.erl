@@ -26,7 +26,7 @@
     is_testsandbox/0,
     is_app_available/1,
 
-    setup/0
+    setup/1
     ]).
 
 %% @doc Check if the current site is running the testsandbox
@@ -49,20 +49,37 @@ is_app_available(App) ->
         Path when is_list(Path) -> true
     end.
 
-%% @doc Initial setup before starting Zotonic
--spec setup() -> ok.
-setup() ->
+%% @doc Initial setup before starting Zotonic, after config files are loaded. This
+%% is normally called by the zotonic_launcher_app, which also reads all config files.
+-spec setup( node() ) -> ok.
+setup(Node) ->
     io:setopts([{encoding, unicode}]),
     assert_schedulers( erlang:system_info(schedulers) ),
     load_applications(),
+    set_configs(),
     z_jsxrecord:init(),
-    ensure_mnesia_schema().
+    case node() of
+        Node -> ensure_mnesia_schema();
+        _ -> ok
+    end.
 
 %% @doc Load the applications so that their settings are also loaded.
 load_applications() ->
-    application:load(zotonic_core),
     application:load(setup),
-    application:load(mnesia).
+    application:load(lager),
+    application:load(mnesia),
+    application:load(filezcache),
+    application:load(zotonic_core).
+
+set_configs() ->
+    application:set_env(setup, log_dir, z_config:get(log_dir)),
+    application:set_env(setup, data_dir, z_config:get(data_dir)),
+    % Lager should log in the log_dir
+    application:set_env(lager, log_root, z_config:get(log_dir)),
+    % Store filezcache data in the cache_dir.
+    FileZCache = filename:join([ z_config:get(cache_dir), "filezcache", atom_to_list(node()) ]),
+    application:set_env(filezcache, data_dir, filename:join([ FileZCache, "data" ])),
+    application:set_env(filezcache, journal_dir, filename:join([ FileZCache, "journal" ])).
 
 assert_schedulers(1) ->
     io:format("FATAL: Not enough schedulers, please start with 2 or more schedulers.~nUse: ERLOPTS=\"+S 4:4\" ./bin/zotonic debug~n~n"),
@@ -87,7 +104,6 @@ ensure_mnesia_schema() ->
     end.
 
 mnesia_dir() ->
-    application:load(mnesia),
     case is_testsandbox() of
         true ->
             application:unset_env(mnesia, dir),
@@ -108,11 +124,7 @@ mnesia_dir_config() ->
     end.
 
 mnesia_data_dir() ->
-    % DataDir = setup:data_dir(),
-    mnesia_dir_append_node(filename:join([ "priv", "mnesia" ])).
-
-mnesia_dir_append_node(Dir) ->
-    MnesiaDir = filename:join([ Dir, atom_to_list(node()) ]),
+    MnesiaDir = filename:join([ z_config:get(data_dir), atom_to_list(node()), "mnesia" ]),
     case z_filelib:ensure_dir(MnesiaDir) of
         ok ->
             application:set_env(mnesia, dir, MnesiaDir),

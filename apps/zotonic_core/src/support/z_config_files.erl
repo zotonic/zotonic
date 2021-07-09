@@ -125,8 +125,8 @@ security_dir_1() ->
 %% If no directory is found then the OS specific directory is used:
 %%
 %% <ol>
-%%   <li>Linux: <tt>$HOME/.config/zotonic/security/</tt></li>
-%%   <li>macOS: <tt>$HOME/Library/Application Support/zotonic/security/</tt></li>
+%%   <li>Linux: <tt>$HOME/.cache/zotonic/log/</tt></li>
+%%   <li>macOS: <tt>$HOME/Library/Logs/zotonic//</tt></li>
 %% </ol>
 %%
 -spec log_dir() -> {ok, file:filename_all()} | {error, term()}.
@@ -147,7 +147,7 @@ logs_dir_1() ->
     HomeLocs = [
         "logs"
     ],
-    SystemLogDir = filename:basedir(user_config, "zotonic"),
+    SystemLogDir = filename:basedir(user_log, "zotonic"),
     SystemLocs = [
         SystemLogDir
     ],

@@ -27,10 +27,17 @@ info() ->
 run(_) ->
     case zotonic_command:net_start() of
         ok ->
-            ZotonicDir = zotonic_command:get_zotonic_dir(),
-            Cmd = "tail -n 500 '" ++ ZotonicDir ++ "/logs/console.log'",
-            Res = os:cmd(Cmd),
-            io:format("~s~n", [ Res ]);
+            case zotonic_command:get_target_node() of
+                {ok, Target} ->
+                    _ = zotonic_launcher_app:load_configs(Target),
+                    LogDir = z_config:get(log_dir),
+                    LogFile = filename:join([ LogDir, "console.log" ]),
+                    Cmd = "tail -n 500 \"" ++ z_utils:os_escape(LogFile) ++ "\"",
+                    Res = os:cmd(Cmd),
+                    io:format("~s~n", [ Res ]);
+                {error, _} = Error ->
+                    zotonic_command:format_error(Error)
+            end;
         {error, _} = Error ->
             zotonic_command:format_error(Error)
     end.

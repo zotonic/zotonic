@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
+%% @copyright 2009-2021 Marc Worrell
 %% @doc Defines all paths for files and directories of a site.
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -86,8 +86,23 @@ abspath(Path, Context) ->
 -spec files_subdir(file:filename_all(), z:context()) -> file:filename_all() | {error, bad_name}.
 files_subdir(SubDir, #context{ site = Site }) ->
     case site_dir(Site) of
-        {error, _} = Error -> Error;
-        Dir -> filename:join([Dir, "priv", "files", SubDir])
+        {error, _} = Error ->
+            Error;
+        Dir ->
+            PrivDir = filename:join([Dir, "priv", "files"]),
+            case filelib:is_dir(PrivDir) of
+                true ->
+                    % Old sites with the files stored in the sites's priv dir
+                    filename:join([ PrivDir, SubDir ]);
+                false ->
+                    % Normally store files in the system data_dir
+                    case z_config:get(data_dir) of
+                        undefined ->
+                            {error, bad_name};
+                        DataDir ->
+                            filename:join([DataDir, "sites", Site, "files", SubDir])
+                    end
+            end
     end.
 
 %% @doc Return the path to a files subdirectory and ensure that the directory is present
