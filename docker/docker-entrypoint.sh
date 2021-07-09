@@ -5,6 +5,7 @@ set -x
 HOME=/opt/zotonic
 ZOTONIC_PIDFILE=/run/zotonic.pid
 ZOTONIC_CONFIG_DIR=/etc/zotonic
+ZOTONIC_SECURIY_DIR=/etc/zotonic/security
 SHELL=/bin/sh
 
 export HOME ZOTONIC_PIDFILE ZOTONIC_CONFIG_DIR SHELL
