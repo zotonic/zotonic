@@ -27,7 +27,7 @@
 
         {% lib
             "js/modules/jstz.min.js"
-            "cotonic/zotonic-wired-bundle.js"
+            "cotonic/cotonic.js"
             "js/apps/zotonic-wired.js"
             "js/apps/z.widgetmanager.js"
             "js/modules/jquery.loadmask.js"
