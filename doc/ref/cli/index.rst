@@ -108,8 +108,9 @@ Currently, the following subcommands are implemented:
 ``zotonic etop``
   Show the processes that consume the most CPU. Stop with twice ctrl-C.
 
-``zotonic logtail``
-  Show the last 50 entries of the ``console.log`` file.
+``zotonic logtail [ console | error | crash ]``
+  Show the last 50 entries of the ``console.log``, ``error.log`` or ``crash.log`` file. Defaults
+  to the console log.
 
 ``zotonic flush``
   Flush the caches of all sites.

@@ -9,7 +9,7 @@ is what it looks like:
 
 .. image:: /img/zotonic_status_login.png
 
-This site is also the `fallback` site for Zotonic.
+This site is also the *fallback* site for Zotonic.
 
 Since Zotonic supports virtual hosting, it uses the HTTP ``Host:``
 parameter to see which site should be served at which URL. If it does
@@ -29,8 +29,16 @@ Pressing the ``Manage this server`` button will bring up the login
 dialog.
 
 The username for the status site is ``wwwadmin``. The password is
-automatically generated and stored in ``~/.zotonic/[release]/zotonic.config``,
+automatically generated and stored in :file:`~/.config/zotonic/config/[release]/zotonic.config`,
 where ``[release]`` is the Zotonic release number, like ``1.0``.
+
+You can see the password by executing::
+
+    bin/zotonic config
+
+You can see the location of the config files with::
+
+    bin/zotonic configfiles
 
 When logged in to the Zotonic status site, you can manage the running
 sites on the system: starting, stopping and upgrading them.

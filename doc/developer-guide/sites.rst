@@ -56,7 +56,8 @@ Create a site
 
 5. Finally, point your browser to https://yoursite.test:8443 to see your new site.
    The browser will ask to accept a self-signed certificate. Zotonic generates a
-   self-signed certificate for every site. These are stored in :file:`~/.zotonic/security`.
+   self-signed certificate for every site. These are stored in :file:`~/.config/zotonic/security`
+   (on macOS :file:`~/Library/Application Support/zotonic/security`).
 
    You can log into the admin at https://yoursite.test:8443/admin using the username ``admin``
    with the password that you can find in your site’s configuration. Use for this the command::
@@ -73,7 +74,7 @@ You can stop Zotonic by typing twice Ctrl-C at the Erlang command prompt.
 If you want to start Zotonic in the background then use::
 
   $ bin/zotonic start
-  
+
 This can be stopped with::
 
   $ bin/zotonic stop

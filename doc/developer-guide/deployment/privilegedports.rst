@@ -106,10 +106,6 @@ Source the file to update the environment::
 
   zotonic:~$ . ~/.profile
 
-Delete the Zotonic config file (this will be re-generated automatically when zotonic next starts up)::
-
-  zotonic:~$ rm ~/.zotonic/zotonic.config
-
 Stop zotonic if already running::
 
   zotonic:~$ ~/zotonic/bin/zotonic stop
@@ -118,7 +114,7 @@ Start zotonic::
 
   zotonic:~$ ~/zotonic/bin/zotonic start
 
-Browse to http://yoursite/ and verify that everything is working like it should.
+Browse to https://yoursite/ and verify that everything is working like it should.
 
 
 Using setcap

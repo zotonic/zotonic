@@ -297,7 +297,7 @@ cache_dir_1() ->
 %%
 %% <ol>
 %%   <li>The init argument <tt>zotonic_config_dir</tt></li>
-%%   <li>The envirpnment variable <tt>ZOTONIC_CONFIG_DIR</tt></li>
+%%   <li>The environment variable <tt>ZOTONIC_CONFIG_DIR</tt></li>
 %%   <li>The directory <tt>$HOME/.zotonic</tt></li>
 %%   <li>The directory <tt>/etc/zotonic</tt>  (only on Unix)</li>
 %%   <li>The OS specific directory for application config files</li>

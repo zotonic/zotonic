@@ -50,7 +50,8 @@ and `Microsoft Azure <https://docs.microsoft.com/en-us/azure/virtual-machines/li
 are such providers.
 
 After the cloud-init is done with its installation a new server is up and running on port 80 and 443.
-It will be using a self-signed certificate, located in ``/home/zotonic/.zotonic/security/self-signed/``.
+It will be using a self-signed certificate, located in :file:`/home/zotonic/.config/zotonic/security/self-signed/`
+(on macOS the directory is :file:`$HOME/Library/Application Support/zotonic/security/`).
 
 The ``wwwadmin`` password for the zotonic status site can be found after logging in to your server::
 
@@ -64,7 +65,7 @@ The ``wwwadmin`` password for the zotonic status site can be found after logging
     zotonic:
         environment: production
         zotonic_apps: /home/zotonic/zotonic/apps_user
-        security_dir: /home/zotonic/.zotonic/security
+        security_dir: /home/zotonic/.config/zotonic/security
         password: wXuqsZkC4qp8j1AZHyO3
         timezone: UTC
         ...

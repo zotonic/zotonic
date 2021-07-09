@@ -9,15 +9,27 @@ Certificate and key files
 -------------------------
 
 The certificate and key files are placed into the site sub-directory of the security
-directory. Default is: ``~/.zotonic/security/sitename/ca/``
+directory. The subdirectory will be: ``sitename/ca/``
 
 Where *sitename* must be replaced with the name of your site.
 
-The *security* directory for ``mod_ssl_ca`` can be one of the following directories:
+The security directory can be found by inspecting the output of::
 
- * ``/etc/zotonic/security/sitename/ca``
- * ``~/.zotonic/security/sitename/ca``
- * ``priv/security/sitename/ca``
+  bin/zotonic config
+
+The Zotonic *security* directory can be in one of the following directories:
+
+ * The environment variable ``ZOTONIC_SECURITY_DIR``
+ * The :file:`~/.zotonic/security` directory
+ * The :file:`/etc/zotonic/security` directory (only on Linux)
+ * The OS specific directory for application data files
+
+The OS specific directories are:
+
+ * On Unix: :file:`~/.config/zotonic/security/`
+ * On macOS: :file:`~/Library/Application Support/zotonic/security/`
+
+The default is the OS specific directory.
 
 If there is a directory ``priv/security/ca`` inside your site's OTP application folder then
 that directory will be used.

@@ -15,8 +15,8 @@ you run from port 80/443: ``{hostname, "test.zotonic.com"}``.
 Zotonic configuration
 ---------------------
 
-Example of ``~/.zotonic/[release]/zotonic.config`` ip/port settings when
-terminating SSL in nginx proxy and using plain HTTP towards the Zotonic
+Example of ``zotonic.config`` (find the location using ``bin/zotonic configfiles``) ip/port
+settings when terminating SSL in nginx proxy and using plain HTTP towards the Zotonic
 backend:
 
 .. code-block:: erlang
