@@ -38,6 +38,7 @@ start_link(Options) ->
         Options),
     z_config:init_app_env(),
     zotonic_filewatcher_sup:start_watchers(),
+    z_jsxrecord:init(),
     z_stats:init_system(),
     z_tempfile_cleanup:start(),
     ensure_job_queues(),

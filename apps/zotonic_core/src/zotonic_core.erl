@@ -57,7 +57,6 @@ setup(Node) ->
     assert_schedulers( erlang:system_info(schedulers) ),
     load_applications(),
     set_configs(),
-    z_jsxrecord:init(),
     case node() of
         Node -> ensure_mnesia_schema();
         _ -> ok
