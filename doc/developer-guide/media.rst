@@ -158,5 +158,5 @@ See http://www.imagemagick.org/Usage/ for examples of using ImageMagick from the
 command line.
 
 
-_responsive sizes: https://html.spec.whatwg.org/multipage/embedded-content.html#attr-img-srcset
-_width descriptor: https://html.spec.whatwg.org/multipage/embedded-content.html#image-candidate-string
+.. _responsive sizes: https://html.spec.whatwg.org/multipage/embedded-content.html#attr-img-srcset
+.. _width descriptor: https://html.spec.whatwg.org/multipage/embedded-content.html#image-candidate-string
