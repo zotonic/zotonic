@@ -1,5 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2016 Marc Worrell
+%% @copyright 2009-2021 Marc Worrell, David de Boer
 %% @doc Generate media urls and html for viewing media, based on the filename, size and optional filters.
 %% Does not generate media previews itself, this is done when fetching the image.
 %%
@@ -8,7 +8,7 @@
 %% /media/inline/2007/03/31/wedding.jpg
 %% /media/attachment/2007/03/31/wedding.jpg
 
-%% Copyright 2009-2016 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell, David de Boer
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -233,15 +233,81 @@ tag1(MediaRef, Filename, Options, Context) ->
         undefined -> [{alt,<<>>}|TagOpts2];
         _ -> TagOpts1
     end,
+    % Add the optional srcset
+    TagOpts4 = with_srcset(TagOpts3, Filename, Options, Context),
     % Filter some opts
     case proplists:get_value(link, TagOpts) of
         None when None =:= []; None =:= <<>>; None =:= undefined ->
-            {ok, iolist_to_binary(z_tags:render_tag("img", [{src,Url}|TagOpts3]))};
+            {ok, iolist_to_binary(z_tags:render_tag("img", [{src,Url}|TagOpts4]))};
         Link ->
             HRef = iolist_to_binary(get_link(MediaRef, Link, Context)),
-            Tag = z_tags:render_tag("img", [{src,Url}|proplists:delete(link, TagOpts3)]),
+            Tag = z_tags:render_tag("img", [{src,Url}|proplists:delete(link, TagOpts4)]),
             {ok, iolist_to_binary(z_tags:render_tag("a", [{href,HRef}], Tag))}
     end.
+
+with_srcset(TagOptions, Filename, Options, Context) ->
+    case proplists:get_value(mediaclass, Options) of
+        undefined ->
+            TagOptions;
+        MediaClass ->
+            {ok, MediaClassProps, _Hash} = z_mediaclass:get(MediaClass, Context),
+            case proplists:get_value(srcset, MediaClassProps) of
+                undefined ->
+                    TagOptions;
+                SrcSet ->
+                    Result = lists:map(
+                        fun({Descriptor, _Props} = SrcCandidate) ->
+                            %% Inherit props from the original image
+                            SrcOptions = with_srcset_props(SrcCandidate, Options, MediaClassProps),
+                            {url, SrcUrl, _TagOpts, _ImageOpts} = url1(Filename, SrcOptions, Context),
+                            binary_to_list(SrcUrl) ++ " " ++ Descriptor
+                        end,
+                        SrcSet
+                    ),
+
+                    %% Build up syntax: srcset="medium.jpg 150w, large.jpg 500w"
+                    TagOptions2 = [{srcset, string:join(Result, ", ")} | TagOptions],
+
+                    %% Optionally add sizes attribute
+                    case proplists:get_value(sizes, MediaClassProps) of
+                        undefined ->
+                            TagOptions2;
+                        Sizes ->
+                            [{sizes, Sizes} | TagOptions2]
+                    end
+            end
+    end.
+
+%% @doc Return image properties
+with_srcset_props({Descriptor, Props}, OriginalOptions, OriginalMediaClass) ->
+    Width = case proplists:get_value(width, Props) of
+        undefined ->
+            parse_srcset_descriptor(lists:reverse(Descriptor), OriginalMediaClass);
+        CandidateWidth ->
+            %% Width specified in srcset props, so use that
+            CandidateWidth
+    end,
+
+    Height = case proplists:get_value(height, Props) of
+        undefined ->
+            z_convert:to_integer(Width) / proplists:get_value(width, OriginalMediaClass)
+                * proplists:get_value(height, OriginalMediaClass);
+        CandidateHeight ->
+            CandidateHeight
+    end,
+
+    [{width, Width}, {height, Height} |
+        proplists:delete(width,
+            proplists:delete(height, OriginalOptions)
+        )
+    ].
+
+%% @doc Derive width from either width or density descriptor
+parse_srcset_descriptor("w" ++ Width, _Original) ->
+    lists:reverse(Width);
+parse_srcset_descriptor("x" ++ Density, Original) ->
+    z_convert:to_integer(lists:reverse(Density)) * proplists:get_value(width, Original).
+
 
 drop_undefined(L) when is_list(L) ->
     lists:filter(
