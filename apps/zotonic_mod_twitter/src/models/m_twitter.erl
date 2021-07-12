@@ -327,7 +327,7 @@ normalize_key(K, user) when is_binary(K) ->
     K1 = z_string:trim(K),
     case z_utils:only_digits(K1) of
         true ->
-            z_string:truncate(<<"@#", K1/binary>>, 126, <<>>);
+            z_string:truncatechars(<<"@#", K1/binary>>, 126, <<>>);
         false ->
             K2 = case K1 of
                 <<"@", _/binary>> -> K1;
@@ -338,7 +338,7 @@ normalize_key(K, user) when is_binary(K) ->
 normalize_key(K, any) ->
     K1 = normalize_key_1( z_string:trim(K) ),
     K2 = z_string:to_lower(K1),
-    z_string:truncate(K2, 126, <<>>).
+    z_string:truncatechars(K2, 126, <<>>).
 
 normalize_key_1(<<"@", _/binary>> = Username) -> Username;
 normalize_key_1(<<"#", _/binary>> = Tag) -> Tag;
