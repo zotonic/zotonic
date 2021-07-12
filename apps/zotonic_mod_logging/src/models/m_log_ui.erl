@@ -124,13 +124,13 @@ map_prop({<<"type">>, T}) ->
         _ -> <<"error">>
     end,
     {type, T1};
-map_prop({<<"message">>, M}) when is_binary(M) -> {message, z_string:truncate(M, 500)};
-map_prop({<<"stack">>, M}) when is_binary(M) -> {stack, z_string:truncate(M, 1000)};
-map_prop({<<"file">>, M}) when is_binary(M) -> {file, z_string:truncate(M, 500)};
+map_prop({<<"message">>, M}) when is_binary(M) -> {message, z_string:truncatechars(M, 500)};
+map_prop({<<"stack">>, M}) when is_binary(M) -> {stack, z_string:truncatechars(M, 1000)};
+map_prop({<<"file">>, M}) when is_binary(M) -> {file, z_string:truncatechars(M, 500)};
 map_prop({<<"line">>, M}) -> {line, z_convert:to_integer(M)};
 map_prop({<<"col">>, M}) -> {col, z_convert:to_integer(M)};
-map_prop({<<"user_agent">>, M}) when is_binary(M) -> {user_agent, z_string:truncate(M, 500)};
-map_prop({<<"url">>, M}) when is_binary(M) -> {url, z_string:truncate(M, 500)}.
+map_prop({<<"user_agent">>, M}) when is_binary(M) -> {user_agent, z_string:truncatechars(M, 500)};
+map_prop({<<"url">>, M}) when is_binary(M) -> {url, z_string:truncatechars(M, 500)}.
 
 
 -spec search_query( list(), z:context() ) -> #search_sql{}.

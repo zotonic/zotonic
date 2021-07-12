@@ -327,7 +327,7 @@ maybe_duplicate_file(#{ <<"filename">> := _, <<"is_deletable_file">> := false } 
     {ok, Ms};
 maybe_duplicate_file(#{ <<"filename">> := Filename, <<"is_deletable_file">> := true } = Ms, Context) ->
     {ok, NewFile} = duplicate_file(archive, Filename, Context),
-    RootName = z_string:truncate(
+    RootName = z_string:truncatechars(
         filename:rootname(filename:basename(NewFile)),
         ?MEDIA_MAX_ROOTNAME_LENGTH),
     Ms2 = Ms#{
