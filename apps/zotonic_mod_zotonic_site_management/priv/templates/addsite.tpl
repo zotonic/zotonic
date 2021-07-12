@@ -59,7 +59,6 @@
                     <div class="col-sm-7">
                         <select id="{{ #skel }}" name="skel" class="form-control">
                             <option value=""></option>
-                            <option value="basesite">{_ Simple site based on mod_base_site _}</option>
                             <option value="blog">{_ Basic blogging site _}</option>
                             <option value="empty">{_ Empty site, no templates etc. _}</option>
                             <option value="nodb">{_ Empty site without database connection _}</option>
