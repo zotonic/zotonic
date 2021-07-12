@@ -473,8 +473,11 @@ filter2arg({extent, _, _}, Width, Height, _AllFilters) ->
 filter2arg(upscale, Width, Height, _AllFilters) ->
     {Width, Height, []};
 filter2arg(nowh, Width, Height, _AllFilters) ->
+    {Width, Height, []};
+filter2arg({srcset, _Arg}, Width, Height, _AllFilters) ->
+    {Width, Height, []};
+filter2arg({sizes, _Arg}, Width, Height, _AllFilters) ->
     {Width, Height, []}.
-
 
 %% @spec fetch_crop(Filters) -> {Crop, Filters}
 %% @doc Split the filters into size/crop and image manipulation filters.
@@ -631,6 +634,8 @@ string2filter("removebg", Arg) ->
 string2filter("mediaclass", Arg) ->
     [MediaClass|Checksum] = string:tokens(Arg, "."),
     {ok, {mediaclass, {MediaClass, iolist_to_binary(Checksum)}}};
+string2filter("srcset", Arg) ->
+    {srcset, Arg};
 string2filter(_Filter, _Arg) ->
     {error, unknown_filter}.
 
