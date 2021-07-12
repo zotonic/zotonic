@@ -288,26 +288,39 @@ with_srcset_props({Descriptor, Props}, OriginalOptions, OriginalMediaClass) ->
             CandidateWidth
     end,
 
+    OriginalMCWidth = proplists:get_value(width, OriginalMediaClass),
+    OriginalMCHeight = proplists:get_value(height, OriginalMediaClass),
+
     Height = case proplists:get_value(height, Props) of
+        undefined when is_integer(OriginalMCWidth), is_integer(OriginalMCHeight) ->
+            (z_convert:to_integer(Width) / OriginalMCWidth) * OriginalMCHeight;
         undefined ->
-            z_convert:to_integer(Width) / proplists:get_value(width, OriginalMediaClass)
-                * proplists:get_value(height, OriginalMediaClass);
+            undefined;
         CandidateHeight ->
             CandidateHeight
     end,
 
-    [{width, Width}, {height, Height} |
-        proplists:delete(width,
-            proplists:delete(height, OriginalOptions)
-        )
-    ].
+    Options1 = proplists:delete(width,
+            proplists:delete(height, OriginalOptions) ),
+    case {Width, Height} of
+        {undefined, undefined} ->
+            Options1;
+        {_, undefined} ->
+            [ {width, Width} | Options1 ];
+        {undefined, _} ->
+            [ {height, Height} | Options1 ];
+        {_, _} ->
+            [ {width, Width}, {height, Height} | Options1 ]
+    end.
 
 %% @doc Derive width from either width or density descriptor
 parse_srcset_descriptor("w" ++ Width, _Original) ->
     lists:reverse(Width);
 parse_srcset_descriptor("x" ++ Density, Original) ->
-    z_convert:to_integer(lists:reverse(Density)) * proplists:get_value(width, Original).
-
+    case proplists:get_value(width, Original) of
+        undefined -> undefined;
+        Width -> z_convert:to_integer(lists:reverse(Density)) * Width
+    end.
 
 drop_undefined(L) when is_list(L) ->
     lists:filter(
