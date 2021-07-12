@@ -11,12 +11,12 @@ Adding a site to Zotonic is done through the :ref:`zotonic <ref-cli>` shell comm
 
 This command creates a new site with [site_name] as the site's
 name. This new site will be based on a so-called `skeleton
-site`. Currently there are four skeletons: 'blog', 'basesite', 'empty'
+site`. Currently there are four skeletons: 'blog', 'empty'
 and 'nodb'. 'blog' is the default.
 
 The addsite command is highly configurable and takes the following options:
 
-  -s <skel>    Skeleton site (one of 'blog', 'basesite', 'empty', 'nodb'; default: blog)
+  -s <skel>    Skeleton site (one of 'blog', 'empty', 'nodb'; default: blog)
   -H <host>    Site's hostname (default: <site_name>.test)
   -L           Create the site in the current directory and symlink it into the zotonic user directory
   -g <remote>  Create a git repository in the site and push it to the given remote
@@ -120,14 +120,6 @@ Zotonic comes with four different skeletons to base your site on.
   As a full example of a Zotonic website, it installs a front page
   with a listing of recent articles. As default example data, three
   example articles and a couple of images are also installed.
-
-``basesite``
-  A skeleton site which lets you build a site on top of
-  :ref:`mod_base_site`. Its site directory is pretty empty, as
-  `mod_base_site` itself implements most of the frontend templates
-  that are needed. This skeleton does install a custom homepage
-  template as ``home.tpl`` and dispatch rule to serve it. It also adds
-  a `site.css` file for tweaking fonts, colors, et cetera.
 
 ``empty``
   An empty skeleton. No templates or dispatch rules whatsoever are
