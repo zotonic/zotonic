@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-02 13:12\n"
+"PO-Revision-Date: 2021-07-13 13:53\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -180,7 +180,7 @@ msgstr "Вы уверены, что хотите восстановить все
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:135./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:143
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:149./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:190
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:189
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -796,7 +796,7 @@ msgstr "Все страницы"
 msgid "All sites have been flushed."
 msgstr "Все сайты были смыты."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:11
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:6
 msgid "Allocated"
 msgstr "Распределенный сайт"
 
@@ -904,11 +904,11 @@ msgstr "Щелкните изображение, чтобы установить
 msgid "Click to preview."
 msgstr "Нажмите для предварительного просмотра."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:89
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:103
 msgid "Close Sockets"
 msgstr "Закрыть розетки"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:90
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:104
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "Закрыть все ip-адреса, имеющие более &gt; 250 открытых сокетов."
 
@@ -916,7 +916,7 @@ msgstr "Закрыть все ip-адреса, имеющие более &gt; 25
 msgid "Close preview"
 msgstr "Закрыть предварительный просмотр"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:24
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:25
 msgid "Config Directory"
 msgstr "Конфигурационный каталог"
 
@@ -941,9 +941,9 @@ msgstr "Подключиться к сайту"
 msgid "Connect a page"
 msgstr "Связать страницу"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
-msgid "Connections and Sessions"
-msgstr "Соединения и сессии"
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:52
+msgid "Connections"
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:60
 msgid "Copied download link to clipboard"
@@ -961,11 +961,11 @@ msgstr "Не смог подключиться к сайту."
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "Не смог обнаружить ничего, что можно было бы импортировать по этому URL или вставить код."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:68
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:85
 msgid "Count"
 msgstr "Посчитать"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:66
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:83
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:103
 msgid "Country"
 msgstr "Страна"
@@ -998,6 +998,10 @@ msgstr "Настроить ЧПУ"
 #: apps/zotonic_mod_admin/priv/templates/admin.tpl:4./apps/zotonic_mod_admin/priv/templates/admin.tpl:8./apps/zotonic_mod_admin/src/mod_admin.erl:90
 msgid "Dashboard"
 msgstr "Панель"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:31
+msgid "Data Directory"
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:36
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
@@ -1047,6 +1051,10 @@ msgstr "Отсоединить"
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:36
 msgid "Discover media"
 msgstr "Откройте для себя средства массовой информации"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:25
+msgid "Disks"
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
 msgid "Do you want to remove this block?"
@@ -1130,15 +1138,15 @@ msgstr "Экстренный телефон"
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "Введите URL-адрес или код для встраивания. Он будет проанализирован, и вы сможете выбрать, как импортировать данные."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:36
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
 msgid "Erlang Init Files"
 msgstr "инит-файлы Эрланга"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:38
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Erlang Installation Root"
 msgstr "Корень установки Эрланг"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:18
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:41
 msgid "Erlang Version"
 msgstr "версия на Эрланге"
 
@@ -1210,11 +1218,11 @@ msgstr "Найти страницу"
 msgid "First"
 msgstr "Имя"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:24
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:71
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "Промойте все правила отправки URL-адресов, кэширование шаблонов и библиотек, а также другие данные, кэшированные в памяти."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:23
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:70
 msgid "Flush system caches"
 msgstr "Очистить системный кэш"
 
@@ -1237,11 +1245,11 @@ msgstr "Заголовок"
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "Здесь Вы можете редактировать аргументы поискового запроса. Каждый аргумент идет своей строкой. Дополнительную информацию вы можете найти в документации <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">по аргументам запроса</a> на сайте Zotonic."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:45
 msgid "Home Directory"
 msgstr "Главный каталог"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:64
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:81
 msgid "IP Address"
 msgstr "IP-адрес"
 
@@ -1371,7 +1379,7 @@ msgstr "Материалы на этой странице"
 msgid "Media title"
 msgstr "Название материала"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:6
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:1
 msgid "Memory"
 msgstr "Память"
 
@@ -1409,7 +1417,7 @@ msgstr "Модифицировано:"
 msgid "Name"
 msgstr "Имя"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:39
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:60
 msgid "Network Connections"
 msgstr "Сетевые подключения"
 
@@ -1450,19 +1458,11 @@ msgstr "Другие страницы не найдены"
 msgid "No pages found."
 msgstr "Страницы не найдены."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:61
-msgid "Number of open sockets grouped per ip-address (top 10)"
-msgstr "Количество открытых сокетов, сгруппированных по ip-адресам (топ 10)"
-
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:13
 #: apps/zotonic_mod_base_site/priv/templates/page.query.tpl:8./apps/zotonic_mod_base_site/priv/templates/search.tpl:18
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:20
 msgid "Page"
 msgstr "Страница"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:47
-msgid "Page Count"
-msgstr "Количество страниц"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:8
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:3./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:198
@@ -1504,6 +1504,12 @@ msgstr "Страницы для"
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "Pages overview"
 msgstr "Обзор страниц"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:30
+#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
+msgid "Path"
+msgstr "Путь"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8
 msgid "Personal name"
@@ -1578,16 +1584,16 @@ msgstr "Запрос"
 msgid "Query preview"
 msgstr "Предварительный просмотр запроса"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:40
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:87
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
 msgstr "Перестроить все поисковые запросы, поместив все страницы и данные из БД в очередь индексатора. Это может занять много времени!"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:78
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:122
 msgid "Rebuild search indices"
 msgstr "Пересобрать поисковые индексы"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:46
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:93
 msgid "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "Пересчитайте нумерацию дерева категорий. Это может занять много времени."
 
@@ -1607,7 +1613,11 @@ msgstr "Перенаправление на веб-сайт при просмо�
 msgid "Referrers to"
 msgstr "Связи с"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:50
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:49
+msgid "Refreshed every 30 minutes."
+msgstr ""
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:97
 msgid "Reinstall site datamodel"
 msgstr "Переустановить модель сайта"
 
@@ -1623,7 +1633,7 @@ msgstr "Удалить растениеводческий центр"
 msgid "Removed the connection to"
 msgstr "Удалено подключение к"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:45
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:92
 msgid "Renumber category tree"
 msgstr "Перенумеровать дерево категорий"
 
@@ -1647,7 +1657,7 @@ msgstr "Ресурсы в категории <i>meta</i> могут иметь \
 msgid "Retrieving status..."
 msgstr "Восстановление статуса..."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:98
 msgid "Runs the schema install command from the site's module again."
 msgstr "Снова запускает команду установки схемы из модуля сайта."
 
@@ -1694,7 +1704,7 @@ msgstr "Результаты поиска"
 msgid "Search..."
 msgstr "Поиск..."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:21
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:28
 msgid "Security Directory"
 msgstr "Каталог безопасности"
 
@@ -1718,10 +1728,6 @@ msgstr "Выбранные категории"
 msgid "Selecting a file will make the page a media item."
 msgstr "Выбор файла сделает страницу медиа-элементом."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:43
-msgid "Session Count"
-msgstr "Количество сеансов"
-
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:36
 msgid "Short title"
 msgstr "Короткий заголовок"
@@ -1737,6 +1743,21 @@ msgstr "Показать как"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:31
 msgid "Show page on multiple paths"
 msgstr "Показать страницу на нескольких путях"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
+msgid "Site Files Directory"
+msgstr ""
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
+#: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
+#: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:16
+#: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
+msgid "Size"
+msgstr "Размер"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14./apps/zotonic_mod_admin/priv/templates/admin.tpl:15
+msgid "Some disks are almost full."
+msgstr ""
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:137
 msgid "Something went wrong. Sorry."
@@ -1963,7 +1984,7 @@ msgstr "Уникальный идентификатор ресурса"
 msgid "Untitled"
 msgstr "Без названия"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:19
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
 msgid "Unused"
 msgstr "Неиспользованный"
 
@@ -1990,7 +2011,7 @@ msgstr "Закачать файл"
 msgid "Uploaded"
 msgstr "Закачано"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:23
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
 msgid "Usage"
 msgstr "Использование"
 
@@ -2002,7 +2023,7 @@ msgstr "Используйте автозаполнение для поиска 
 msgid "Use the title of the base content for the display name of this person."
 msgstr "Используйте заголовок базового контента в качестве отображаемого имени этой персоны."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:15
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
 msgid "Used"
 msgstr "Используется"
 
@@ -2033,6 +2054,10 @@ msgstr "Просмотреть все страницы из этой катег�
 msgid "View all referrers"
 msgstr "Просмотр всех связей"
 
+#: apps/zotonic_mod_admin/priv/templates/admin.tpl:17
+msgid "View status"
+msgstr ""
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:129
 msgid "View this page."
@@ -2054,7 +2079,7 @@ msgstr "Открыть страницу редактирования"
 msgid "Visiting address"
 msgstr "Фактический адрес проживания"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3./apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:13./apps/zotonic_mod_admin/priv/templates/admin.tpl:14
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "Warning!"
 msgstr "Внимание!"
@@ -2067,7 +2092,7 @@ msgstr "Ссылка для нажатий на изображении"
 msgid "Website or Embed"
 msgstr "Веб-сайт или Embed"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
 msgid "Work Directory"
 msgstr "Рабочий каталог"
 
@@ -2124,7 +2149,7 @@ msgstr "У вас нет разрешения на выполнение этог
 msgid "You have to specify a description of the file to make it easier to find and share."
 msgstr "Вы должны указать описание файла, чтобы его было проще найти и поделиться."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:15
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:21
 msgid "Zotonic Version"
 msgstr "Сотоническая версия"
 
@@ -2412,7 +2437,7 @@ msgstr "Только администраторы могут добавлять 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:10./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:21./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:24./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:123./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:130./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:146./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:148./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:31
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:176
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:175
 msgid "Password"
 msgstr "Пароль"
 
@@ -3374,7 +3399,7 @@ msgid "subject"
 msgstr "тема"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/database.tpl:3
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:121
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:120
 msgid "Database"
 msgstr "База данных"
 
@@ -4352,12 +4377,6 @@ msgstr "Вернуться на главную страницу"
 msgid "Session Id"
 msgstr "Идентификатор сессии"
 
-#: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
-#: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:16
-#: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
-msgid "Size"
-msgstr "Размер"
-
 #: apps/zotonic_mod_base/priv/templates/error.tpl:11
 msgid "Sorry, this page has been deleted."
 msgstr "Извините, эта страница удалена."
@@ -4641,11 +4660,6 @@ msgstr "Домен"
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:7./apps/zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:59
 msgid "Domains and redirects"
 msgstr "Домены и перенаправления"
-
-#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
-msgid "Path"
-msgstr "Путь"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:26./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:47./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:69./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:90
 msgid "Permanent"
@@ -5815,7 +5829,7 @@ msgid "Toggle non people"
 msgstr "переключать нон-людей"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:23./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:23
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:165
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:164
 msgid "User"
 msgstr "Пользователь"
 
@@ -7546,13 +7560,9 @@ msgstr "Загрузка файла"
 msgid "Fill in"
 msgstr "Заполнить форму"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
 msgid "Fill in the gaps"
 msgstr "Заполнить пробелы"
-
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
-msgid "Fill in the missing parts"
-msgstr "Заполните недостающие части"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:130
 msgid "First page in category"
@@ -8590,7 +8600,7 @@ msgstr "Предупреждение"
 msgid "A component of the path is not a directory:"
 msgstr "Компонент пути не является каталогом:"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/_z_system_button.tpl:2./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:3./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:189
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/_z_system_button.tpl:2./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:3./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:188
 msgid "Add Site"
 msgstr "Добавить сайт"
 
@@ -8602,7 +8612,7 @@ msgstr "Добавить или оформить новый сайт"
 msgid "All the files and templates are placed at"
 msgstr "Все файлы и шаблоны размещены на"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:63
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:62
 msgid "Basic blogging site"
 msgstr "Базовый сайт блога"
 
@@ -8610,7 +8620,7 @@ msgstr "Базовый сайт блога"
 msgid "Checking database ..."
 msgstr "Проверка базы данных ..."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:112
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:111
 msgid "Configure PostgreSQL Database Connection"
 msgstr "Настройка подключения к базе данных PostgreSQL"
 
@@ -8650,11 +8660,11 @@ msgstr "Не смог удалить грязь с сайта для прове�
 msgid "Disk full creating:"
 msgstr "Диск полностью создан:"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:65
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:64
 msgid "Empty site without database connection"
 msgstr "Пустой сайт без подключения к базе данных"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:64
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:63
 msgid "Empty site, no templates etc."
 msgstr "Пустой сайт, никаких шаблонов и т.д."
 
@@ -8666,11 +8676,11 @@ msgstr "Введите действительное имя хоста, напр�
 msgid "Force compile all Erlang files ..."
 msgstr "Принудительная компиляция всех файлов Erlang ..."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:75
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:74
 msgid "Git"
 msgstr "Git"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:88
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:87
 msgid "Git URL"
 msgstr "Git URL-адрес"
 
@@ -8682,7 +8692,7 @@ msgstr "Проверка..."
 msgid "Go to the admin interface at"
 msgstr "Перейдите к интерфейсу администратора по ссылке"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:132
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:131
 msgid "Host"
 msgstr "Хост"
 
@@ -8706,15 +8716,15 @@ msgstr "Нет разрешения на создание каталога са�
 msgid "Not allowed to create the site directory"
 msgstr "Не разрешено создавать каталог сайта"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:80
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:79
 msgid "Optional Git url to checkout the site. An existing <tt>config</tt> file will be overwritten."
 msgstr "Опционально Git url, чтобы проверить сайт. Существующий файл <tt>config</tt> будет перезаписан."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:137
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:136
 msgid "Please use a valid hostname."
 msgstr "Пожалуйста, используйте действительное имя хоста."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:126./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:159./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:170
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:125./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:158./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
 msgid "Please use only a…z and 0…9 characters."
 msgstr "Пожалуйста, используйте только…z и 0…9 символов."
 
@@ -8722,15 +8732,15 @@ msgstr "Пожалуйста, используйте только…z и 0…9 �
 msgid "Please use only lowercase a…z and 0…9 characters."
 msgstr "Пожалуйста, используйте только строчные буквы…z и 0…9 символов."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:143
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:142
 msgid "Port"
 msgstr "Порт"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:99
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:98
 msgid "PostgreSQL"
 msgstr "PostgreSQL"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:104
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:103
 msgid "PostgreSQL database connection. The schema defaults to the site name filled in above."
 msgstr "Подключение к базе данных PostgreSQL. По умолчанию схема соответствует имени сайта, заполненному выше."
 
@@ -8738,13 +8748,9 @@ msgstr "Подключение к базе данных PostgreSQL. По умо�
 msgid "Resolving the hostname ..."
 msgstr "Разрешение имени хоста ..."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:154
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:153
 msgid "Schema"
 msgstr "Схема"
-
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:62
-msgid "Simple site based on mod_base_site"
-msgstr "Простой сайт на основе mod_base_site"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:26
 msgid "Site name"
@@ -8778,11 +8784,11 @@ msgstr "Имя хоста неизвестно, проверьте ваш DNS и
 msgid "The parent directory does not exist:"
 msgstr "Родительский каталог не существует:"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:148
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:147
 msgid "The port must be numerical."
 msgstr "Порт должен быть цифровым."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:68
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:67
 msgid "The skeleton provides templates and content for a site."
 msgstr "Скелет предоставляет шаблоны и контент для сайта."
 
@@ -8798,7 +8804,7 @@ msgstr "Это имя зарезервировано"
 msgid "This name is taken by another Erlang module"
 msgstr "Это имя взято другим модулем Erlang."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:81
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:80
 msgid "To add config files to your Git repo, place them in the <tt>config.d</tt> directory of your site."
 msgstr "Чтобы добавить конфигурационные файлы в Git repo, поместите их в каталог <tt>config.d</tt> вашего сайта."
 
