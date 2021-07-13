@@ -24,9 +24,9 @@
 info() ->
     "Show the last lines of the error and console logs.".
 
-run("error") -> tail("error.log");
-run("crash") -> tail("crash.log");
-run(_) -> tail("console.log").
+run(["error"]) -> tail("error.log");
+run(["crash"]) -> tail("crash.log");
+run(X) -> tail("console.log").
 
 tail(File) ->
     case zotonic_command:net_start() of
