@@ -26,7 +26,7 @@ info() ->
 
 run(["error"]) -> tail("error.log");
 run(["crash"]) -> tail("crash.log");
-run(X) -> tail("console.log").
+run(_) -> tail("console.log").
 
 tail(File) ->
     case zotonic_command:net_start() of

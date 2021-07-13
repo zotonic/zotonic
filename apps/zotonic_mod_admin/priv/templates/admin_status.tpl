@@ -31,6 +31,9 @@
                                     <dt>{_ Data Directory _}</dt>
                                     <dd>{{ m.admin_status.data_dir }}</dd>
 
+                                    <dt>{_ Log Directory _}</dt>
+                                    <dd>{{ m.admin_status.log_dir }}</dd>
+
                                     <dt>{_ Site Files Directory _}</dt>
                                     <dd>{{ m.admin_status.files_dir }}</dd>
                                 {% endif %}
