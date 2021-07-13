@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-13 13:53\n"
+"PO-Revision-Date: 2021-07-13 14:09\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -943,7 +943,7 @@ msgstr "Ühendage leht"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:52
 msgid "Connections"
-msgstr ""
+msgstr "Ühendused"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:60
 msgid "Copied download link to clipboard"
@@ -1001,7 +1001,7 @@ msgstr "T√∂√∂laud"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:31
 msgid "Data Directory"
-msgstr ""
+msgstr "Andmekataloog"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:36
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
@@ -1054,7 +1054,7 @@ msgstr "Avastage meediat"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:25
 msgid "Disks"
-msgstr ""
+msgstr "Kettad"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
 msgid "Do you want to remove this block?"
@@ -1615,7 +1615,7 @@ msgstr "Viitajad sinna"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:49
 msgid "Refreshed every 30 minutes."
-msgstr ""
+msgstr "Värskendatakse iga 30 minuti järel."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:97
 msgid "Reinstall site datamodel"
@@ -1746,7 +1746,7 @@ msgstr "Kuva leht mitmel rajal"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
 msgid "Site Files Directory"
-msgstr ""
+msgstr "Saidifailide kataloog"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
@@ -1757,7 +1757,7 @@ msgstr "Grootte"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14./apps/zotonic_mod_admin/priv/templates/admin.tpl:15
 msgid "Some disks are almost full."
-msgstr ""
+msgstr "Mõni ketas on peaaegu täis."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:137
 msgid "Something went wrong. Sorry."
@@ -2056,7 +2056,7 @@ msgstr "Vaata k√µiki viitajaid"
 
 #: apps/zotonic_mod_admin/priv/templates/admin.tpl:17
 msgid "View status"
-msgstr ""
+msgstr "Kuva olek"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:129
