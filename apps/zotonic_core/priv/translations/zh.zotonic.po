@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-02 13:13\n"
+"PO-Revision-Date: 2021-07-13 13:53\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -180,7 +180,7 @@ msgstr "你确定你要恢复所有的ACL规则到他们的最新发布版本"
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:135./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:143
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:149./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:190
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:189
 msgid "Cancel"
 msgstr "取消"
 
@@ -796,7 +796,7 @@ msgstr "所有页面"
 msgid "All sites have been flushed."
 msgstr "所有场地都已冲洗完毕。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:11
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:6
 msgid "Allocated"
 msgstr "拨款"
 
@@ -904,11 +904,11 @@ msgstr "点击图片，设置裁剪中心。"
 msgid "Click to preview."
 msgstr "点击预览。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:89
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:103
 msgid "Close Sockets"
 msgstr "关闭插座"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:90
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:104
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "关闭所有来自超过 &gt; 250个开放套接字的ip地址的套接字。"
 
@@ -916,7 +916,7 @@ msgstr "关闭所有来自超过 &gt; 250个开放套接字的ip地址的套接�
 msgid "Close preview"
 msgstr "關閉預覽"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:24
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:25
 msgid "Config Directory"
 msgstr "配置目录"
 
@@ -941,9 +941,9 @@ msgstr "连接"
 msgid "Connect a page"
 msgstr "连接到页面"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
-msgid "Connections and Sessions"
-msgstr "连接和会话"
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:52
+msgid "Connections"
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:60
 msgid "Copied download link to clipboard"
@@ -961,11 +961,11 @@ msgstr "无法连接到网站。"
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "无法检测到该URL或嵌入代码上有任何可导入的内容。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:68
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:85
 msgid "Count"
 msgstr "计数"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:66
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:83
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:103
 msgid "Country"
 msgstr "国家"
@@ -998,6 +998,10 @@ msgstr "自定义页面 slug"
 #: apps/zotonic_mod_admin/priv/templates/admin.tpl:4./apps/zotonic_mod_admin/priv/templates/admin.tpl:8./apps/zotonic_mod_admin/src/mod_admin.erl:90
 msgid "Dashboard"
 msgstr "控制台"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:31
+msgid "Data Directory"
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:36
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
@@ -1047,6 +1051,10 @@ msgstr "取消连接"
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:36
 msgid "Discover media"
 msgstr "发现媒体"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:25
+msgid "Disks"
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
 msgid "Do you want to remove this block?"
@@ -1130,15 +1138,15 @@ msgstr "紧急联系电话"
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "输入网址或嵌入代码。它将被分析，你可以选择如何导入数据。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:36
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
 msgid "Erlang Init Files"
 msgstr "埃尔兰初始化文件"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:38
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Erlang Installation Root"
 msgstr "Erlang安装根"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:18
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:41
 msgid "Erlang Version"
 msgstr "埃尔兰版本"
 
@@ -1210,11 +1218,11 @@ msgstr "查找页面"
 msgid "First"
 msgstr "名字"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:24
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:71
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "刷新所有的 URL 调度规则，模版以及缓存数据。"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:23
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:70
 msgid "Flush system caches"
 msgstr "清理系统缓存"
 
@@ -1237,11 +1245,11 @@ msgstr "题头"
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "在这里你可以编辑搜索查询的参数。每个参数都有自己的行。更多信息，请参见Zotonic网站上的 <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">查询参数</a> 文档。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:45
 msgid "Home Directory"
 msgstr "主页目录"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:64
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:81
 msgid "IP Address"
 msgstr "IP地址"
 
@@ -1371,7 +1379,7 @@ msgstr "该页面上的媒体"
 msgid "Media title"
 msgstr "媒体标题"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:6
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:1
 msgid "Memory"
 msgstr "记忆"
 
@@ -1409,7 +1417,7 @@ msgstr "已修改。"
 msgid "Name"
 msgstr "名字"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:39
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:60
 msgid "Network Connections"
 msgstr "网络连接"
 
@@ -1450,19 +1458,11 @@ msgstr "未发现其他页面"
 msgid "No pages found."
 msgstr "没有找到页面。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:61
-msgid "Number of open sockets grouped per ip-address (top 10)"
-msgstr "每个ip地址的开放套接字数量（前10位）。"
-
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:13
 #: apps/zotonic_mod_base_site/priv/templates/page.query.tpl:8./apps/zotonic_mod_base_site/priv/templates/search.tpl:18
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:20
 msgid "Page"
 msgstr "页面"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:47
-msgid "Page Count"
-msgstr "页数"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:8
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:3./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:198
@@ -1504,6 +1504,12 @@ msgstr "网页"
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "Pages overview"
 msgstr "页面概览"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:30
+#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
+msgid "Path"
+msgstr "路径"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8
 msgid "Personal name"
@@ -1578,16 +1584,16 @@ msgstr "查询"
 msgid "Query preview"
 msgstr "查询预览"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:40
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:87
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
 msgstr "将所有数据库中的页面和数据重新放入索引队列中，重建所有检索索引。这可能会耗费相当长的时间。"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:78
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:122
 msgid "Rebuild search indices"
 msgstr "重建检索索引"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:46
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:93
 msgid "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "重新计算分类树。这可能会耗费一定的时间。"
 
@@ -1607,7 +1613,11 @@ msgstr "在页面上重定向到网站"
 msgid "Referrers to"
 msgstr "转介人"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:50
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:49
+msgid "Refreshed every 30 minutes."
+msgstr ""
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:97
 msgid "Reinstall site datamodel"
 msgstr "重新安装站点数据模型"
 
@@ -1623,7 +1633,7 @@ msgstr "移除作物中心"
 msgid "Removed the connection to"
 msgstr "取消了与"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:45
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:92
 msgid "Renumber category tree"
 msgstr "重计数分类树"
 
@@ -1647,7 +1657,7 @@ msgstr "<i>元</i> 类别中的资源可以有 \"功能\"：某些资源属性�
 msgid "Retrieving status..."
 msgstr "检索状态..."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:98
 msgid "Runs the schema install command from the site's module again."
 msgstr "再次运行网站模块中的schema安装命令。"
 
@@ -1694,7 +1704,7 @@ msgstr "搜索结果"
 msgid "Search..."
 msgstr "搜索..."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:21
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:28
 msgid "Security Directory"
 msgstr "安全目录"
 
@@ -1718,10 +1728,6 @@ msgstr "选定类别"
 msgid "Selecting a file will make the page a media item."
 msgstr "选择一个文件将使该页面成为一个媒体项目。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:43
-msgid "Session Count"
-msgstr "会议次数"
-
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:36
 msgid "Short title"
 msgstr "短标题"
@@ -1737,6 +1743,21 @@ msgstr "显示为"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:31
 msgid "Show page on multiple paths"
 msgstr "在多个路径上显示页面"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
+msgid "Site Files Directory"
+msgstr ""
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
+#: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
+#: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:16
+#: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
+msgid "Size"
+msgstr "大小"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14./apps/zotonic_mod_admin/priv/templates/admin.tpl:15
+msgid "Some disks are almost full."
+msgstr ""
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:137
 msgid "Something went wrong. Sorry."
@@ -1963,7 +1984,7 @@ msgstr "唯一 URL"
 msgid "Untitled"
 msgstr "未命名"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:19
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
 msgid "Unused"
 msgstr "未使用"
 
@@ -1990,7 +2011,7 @@ msgstr "上传文件"
 msgid "Uploaded"
 msgstr "上传时间"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:23
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
 msgid "Usage"
 msgstr "使用方法"
 
@@ -2002,7 +2023,7 @@ msgstr "使用自动完成来搜索本站点的媒体。"
 msgid "Use the title of the base content for the display name of this person."
 msgstr "基本内容的标题会做为人员的显示名字。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:15
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
 msgid "Used"
 msgstr "二手产品"
 
@@ -2033,6 +2054,10 @@ msgstr "查看此类别的所有页面"
 msgid "View all referrers"
 msgstr "查看所有引用"
 
+#: apps/zotonic_mod_admin/priv/templates/admin.tpl:17
+msgid "View status"
+msgstr ""
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:129
 msgid "View this page."
@@ -2054,7 +2079,7 @@ msgstr "访问完整编辑页面"
 msgid "Visiting address"
 msgstr "可访问地址"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3./apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:13./apps/zotonic_mod_admin/priv/templates/admin.tpl:14
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "Warning!"
 msgstr "警告！"
@@ -2067,7 +2092,7 @@ msgstr "点击图片的网站"
 msgid "Website or Embed"
 msgstr "网站或嵌入"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
 msgid "Work Directory"
 msgstr "工作目录"
 
@@ -2124,7 +2149,7 @@ msgstr "你没有权限执行这个动作。"
 msgid "You have to specify a description of the file to make it easier to find and share."
 msgstr "请指定文件的描述信息，让查找和共享更方便。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:15
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:21
 msgid "Zotonic Version"
 msgstr "Zotonic版本"
 
@@ -2412,7 +2437,7 @@ msgstr "只有管理员可以创建配置 Key。"
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:10./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:21./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:24./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:123./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:130./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:146./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:148./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:31
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:176
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:175
 msgid "Password"
 msgstr "密码"
 
@@ -3374,7 +3399,7 @@ msgid "subject"
 msgstr "课题"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/database.tpl:3
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:121
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:120
 msgid "Database"
 msgstr "数据库"
 
@@ -4352,12 +4377,6 @@ msgstr "返回主页"
 msgid "Session Id"
 msgstr "会议编号"
 
-#: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
-#: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:16
-#: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
-msgid "Size"
-msgstr "大小"
-
 #: apps/zotonic_mod_base/priv/templates/error.tpl:11
 msgid "Sorry, this page has been deleted."
 msgstr "对不起，这个页面已经被删除。"
@@ -4641,11 +4660,6 @@ msgstr "領域"
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:7./apps/zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:59
 msgid "Domains and redirects"
 msgstr "域名和重定向"
-
-#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
-msgid "Path"
-msgstr "路径"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:26./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:47./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:69./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:90
 msgid "Permanent"
@@ -5815,7 +5829,7 @@ msgid "Toggle non people"
 msgstr "切换非人"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:23./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:23
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:165
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:164
 msgid "User"
 msgstr "用户"
 
@@ -7542,13 +7556,9 @@ msgstr "文件上传"
 msgid "Fill in"
 msgstr "填写"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
 msgid "Fill in the gaps"
 msgstr "填补差距"
-
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
-msgid "Fill in the missing parts"
-msgstr "填写缺失的部分"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:130
 msgid "First page in category"
@@ -8586,7 +8596,7 @@ msgstr "警告"
 msgid "A component of the path is not a directory:"
 msgstr "路径的一个组成部分不是目录。"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/_z_system_button.tpl:2./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:3./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:189
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/_z_system_button.tpl:2./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:3./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:188
 msgid "Add Site"
 msgstr "添加网站"
 
@@ -8598,7 +8608,7 @@ msgstr "添加或查看新网站"
 msgid "All the files and templates are placed at"
 msgstr "所有的文件和模板都放在"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:63
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:62
 msgid "Basic blogging site"
 msgstr "基础博客网站"
 
@@ -8606,7 +8616,7 @@ msgstr "基础博客网站"
 msgid "Checking database ..."
 msgstr "检查数据库..."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:112
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:111
 msgid "Configure PostgreSQL Database Connection"
 msgstr "配置PostgreSQL数据库连接"
 
@@ -8646,11 +8656,11 @@ msgstr "无法删除Git checkout的站点dir。"
 msgid "Disk full creating:"
 msgstr "盘满创建。"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:65
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:64
 msgid "Empty site without database connection"
 msgstr "没有数据库连接的空网站"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:64
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:63
 msgid "Empty site, no templates etc."
 msgstr "空网站，没有模板等。"
 
@@ -8662,11 +8672,11 @@ msgstr "输入一个有效的主机名，如 \"www.example.com \"或 \"test.loca
 msgid "Force compile all Erlang files ..."
 msgstr "强制编译所有Erlang文件......。"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:75
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:74
 msgid "Git"
 msgstr "捷信"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:88
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:87
 msgid "Git URL"
 msgstr "Git URL"
 
@@ -8678,7 +8688,7 @@ msgstr "Git checkout ..."
 msgid "Go to the admin interface at"
 msgstr "进入管理界面，在"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:132
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:131
 msgid "Host"
 msgstr "主机"
 
@@ -8702,15 +8712,15 @@ msgstr "没有权限创建网站目录在："
 msgid "Not allowed to create the site directory"
 msgstr "不允许创建网站目录"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:80
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:79
 msgid "Optional Git url to checkout the site. An existing <tt>config</tt> file will be overwritten."
 msgstr "可选的Git网址，用于检查网站。现有的 <tt>配置</tt> 文件将被覆盖。"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:137
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:136
 msgid "Please use a valid hostname."
 msgstr "请使用有效的主机名。"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:126./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:159./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:170
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:125./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:158./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
 msgid "Please use only a…z and 0…9 characters."
 msgstr "请只使用…z和0…9个字符。"
 
@@ -8718,15 +8728,15 @@ msgstr "请只使用…z和0…9个字符。"
 msgid "Please use only lowercase a…z and 0…9 characters."
 msgstr "请只使用小写的a…z和0…9个字符。"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:143
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:142
 msgid "Port"
 msgstr "港口"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:99
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:98
 msgid "PostgreSQL"
 msgstr "PostgreSQL"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:104
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:103
 msgid "PostgreSQL database connection. The schema defaults to the site name filled in above."
 msgstr "PostgreSQL数据库连接。模式默认为上面填写的站点名称。"
 
@@ -8734,13 +8744,9 @@ msgstr "PostgreSQL数据库连接。模式默认为上面填写的站点名称�
 msgid "Resolving the hostname ..."
 msgstr "解析主机名..."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:154
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:153
 msgid "Schema"
 msgstr "模式"
-
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:62
-msgid "Simple site based on mod_base_site"
-msgstr "基于mod_base_site的简单网站"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:26
 msgid "Site name"
@@ -8774,11 +8780,11 @@ msgstr "主机名未知，请检查您的DNS或/etc/hosts文件。"
 msgid "The parent directory does not exist:"
 msgstr "父目录不存在。"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:148
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:147
 msgid "The port must be numerical."
 msgstr "端口必须是数字。"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:68
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:67
 msgid "The skeleton provides templates and content for a site."
 msgstr "骨架为网站提供模板和内容。"
 
@@ -8794,7 +8800,7 @@ msgstr "这个名字是保留的"
 msgid "This name is taken by another Erlang module"
 msgstr "这个名字是由另一个Erlang模块"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:81
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:80
 msgid "To add config files to your Git repo, place them in the <tt>config.d</tt> directory of your site."
 msgstr "要将配置文件添加到 Git repo 中，请将它们放在站点的 <tt>config.d</tt> 目录下。"
 
