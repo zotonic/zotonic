@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-13 13:53\n"
+"PO-Revision-Date: 2021-07-13 14:09\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -946,7 +946,7 @@ msgstr "Paginaconnectie maken"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:52
 msgid "Connections"
-msgstr ""
+msgstr "Verbindingen"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:60
 msgid "Copied download link to clipboard"
@@ -1004,7 +1004,7 @@ msgstr "Dashboard"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:31
 msgid "Data Directory"
-msgstr ""
+msgstr "Gegevensmap"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:36
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
@@ -1057,7 +1057,7 @@ msgstr "Ontdek media"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:25
 msgid "Disks"
-msgstr ""
+msgstr "Schijven"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
 msgid "Do you want to remove this block?"
@@ -1618,7 +1618,7 @@ msgstr "Verwijzingen naar"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:49
 msgid "Refreshed every 30 minutes."
-msgstr ""
+msgstr "Elke 30 minuten ververst."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:97
 msgid "Reinstall site datamodel"
@@ -1750,7 +1750,7 @@ msgstr "Toon pagina op meerdere paginapaden"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
 msgid "Site Files Directory"
-msgstr ""
+msgstr "Map met sitebestanden"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
@@ -1761,7 +1761,7 @@ msgstr "Grootte"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14./apps/zotonic_mod_admin/priv/templates/admin.tpl:15
 msgid "Some disks are almost full."
-msgstr ""
+msgstr "Sommige schijven zijn bijna vol."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:137
 msgid "Something went wrong. Sorry."
@@ -2060,7 +2060,7 @@ msgstr "Bekijk verwijzende pagina's"
 
 #: apps/zotonic_mod_admin/priv/templates/admin.tpl:17
 msgid "View status"
-msgstr ""
+msgstr "Status bekijken"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:129
