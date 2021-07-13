@@ -1,44 +1,65 @@
+<h4>{_ Memory _}</h4>
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>{_ Allocated _}</th>
+            <th>{_ Used _}</th>
+            <th>{_ Unused _}</th>
+            <th>{_ Usage _}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ m.admin_status.memory.allocated | filesizeformat }}</td>
+            <td>{{ m.admin_status.memory.used | filesizeformat }}</td>
+            <td>{{ m.admin_status.memory.unused | filesizeformat }}</td>
+            <td>{{ (m.admin_status.memory.usage * 100) | round }}%</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<div {% if m.admin_status.disks.alert %}class="border-danger"{% endif %}>
+
+    <h4>{_ Disks _}</h4>
+
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>{_ Path _}</th>
+                <th>{_ Size _}</th>
+                <th>{_ Usage _}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in m.admin_status.disks%}
+                <tr {% if d.alert %}style="font-weight: bold; font-size:1.1em;" class="text-danger"{% endif %}>
+                    <td>{{ d.disk|escape }}</td>
+                    <td>{{ (d.size * 1024)|filesizeformat }}</td>
+                    <td>
+                        {% if d.alert %}
+                            <span class="fa fa-warning"></span>
+                        {% endif %}
+                        {{ d.percent_used }}%</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<h4>{_ Connections _}</h4>
+
+{% with m.modules.active.mod_geoip as is_ip2country %}
 <div class="row">
     <div class="col-md-6">
         <table class="table table-sm">
-            <thead>
-                <tr>
-                    <th colspan="2" class="text-center">{_ Memory _}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th class="text-right">{_ Allocated _}</th>
-                    <td class="text-right">{{ m.admin_status.memory.allocated | filesizeformat }}</td>
-                </tr>
-                <tr>
-                    <th class="text-right">{_ Used _}</th>
-                    <td class="text-right">{{ m.admin_status.memory.used | filesizeformat }}</td>
-                </tr>
-                <tr>
-                    <th class="text-right">{_ Unused _}</th>
-                    <td class="text-right">{{ m.admin_status.memory.unused | filesizeformat }}</td>
-                </tr>
-                <tr>
-                    <th class="text-right">{_ Usage _}</th>
-                    <td class="text-right">{{ (m.admin_status.memory.usage * 100) | round }}%</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="col-md-6">
-        <table class="table table-sm">
-            <thead>
-                <tr>
-                    <th colspan="2" class="text-center">{_ Connections and Sessions _}</th>
-                </tr>
-            </thead>
             <tbody>
                 <tr>
                     <th class="text-right">{_ Network Connections _}</th>
                     <td class="text-right">{{ m.admin_status.tcp_connection_count }}</td>
                 </tr>
+                {#
                 <tr>
                     <th class="text-right">{_ Session Count _}</th>
                     <td class="text-right">{{ m.admin_status.session_count }}</td>
@@ -47,25 +68,20 @@
                     <th class="text-right">{_ Page Count _}</th>
                     <td class="text-right">{{ m.admin_status.page_count }}</td>
                 </tr>
+                #}
             </tbody>
         </table>
     </div>
-</div>
 
-{% with m.modules.active.mod_geoip as is_ip2country %}
-<div class="row">
     <div class="col-md-6">
         <table class="table table-sm">
             <thead>
                 <tr>
-                    <th colspan="2">{_ Number of open sockets grouped per ip-address (top 10) _}</th>
-                </tr>
-                <tr>
-                    <td>{_ IP Address _}</td>
+                    <th>{_ IP Address _}</th>
                     {% if is_ip2country %}
-                        <td>{_ Country _}</td>
+                        <th>{_ Country _}</th>
                     {% endif %}
-                    <td class="text-right">{_ Count _}</td>
+                    <th class="text-right">{_ Count _}</th>
                 </tr>
             </thead>
             <tbody>
@@ -80,13 +96,13 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        <div class="form-group">
+            <div>
+                {% button class="btn btn-default" text=_"Close Sockets" action={admin_tasks task='close_sockets'} %}
+                <span class="help-block">{_ Close all sockets from ip addresses which have over &gt; 250 open sockets. _}</span>
+            </div>
+        </div>
     </div>
 </div>
 {% endwith %}
-
-<div class="form-group">
-    <div>
-        {% button class="btn btn-default" text=_"Close Sockets" action={admin_tasks task='close_sockets'} %}
-        <span class="help-block">{_ Close all sockets from ip addresses which have over &gt; 250 open sockets. _}</span>
-    </div>
-</div>

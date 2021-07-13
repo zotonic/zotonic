@@ -32,7 +32,7 @@ case "$1" in
         ;;
     debug)
         CMD="$(${ZOTONIC_BIN}/zotonic.escript debug)"
-        ${CMD}
+        eval ${CMD}
         ;;
     runtests)
         export ZOTONIC_PORT=8040

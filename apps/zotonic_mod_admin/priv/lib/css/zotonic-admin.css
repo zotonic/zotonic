@@ -179,6 +179,10 @@ h3 {
 pre:empty {
   display: none;
 }
+.border-danger {
+  border-left: 4px solid #d9534f;
+  padding-left: 10px;
+}
 .ui-effects-transfer {
   border: 1px dotted #333;
   z-index: 10000;

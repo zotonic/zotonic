@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2017 Marc Worrell, 2014 Arjan Scherpenisse
+%% @copyright 2010-2021 Marc Worrell, 2014 Arjan Scherpenisse
 %% @doc Wrapper for Zotonic application environment configuration
 
-%% Copyright 2010-2017 Marc Worrell, 2014 Arjan Scherpenisse
+%% Copyright 2010-2021 Marc Worrell, 2014 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -190,6 +190,26 @@ getaddr(listen_ip6, IP) -> inet:getaddr(IP, inet6);
 getaddr(_Name, IP) -> inet:getaddr(IP, inet).
 
 default(environment) -> production; % development | test | acceptance | production | education | backup
+default(security_dir) ->
+    case z_config_files:security_dir() of
+        {ok, Dir} -> Dir;
+        {error, _} -> undefined
+    end;
+default(data_dir) ->
+    case z_config_files:data_dir() of
+        {ok, Dir} -> Dir;
+        {error, _} -> undefined
+    end;
+default(log_dir) ->
+    case z_config_files:log_dir() of
+        {ok, Dir} -> Dir;
+        {error, _} -> undefined
+    end;
+default(cache_dir) ->
+    case z_config_files:cache_dir() of
+        {ok, Dir} -> Dir;
+        {error, _} -> undefined
+    end;
 default(timezone) -> <<"UTC">>;
 default(listen_ip) -> any;
 default(listen_ip6) ->
@@ -299,6 +319,9 @@ all() ->
             environment,
             zotonic_apps,
             security_dir,
+            data_dir,
+            log_dir,
+            cache_dir,
             password,
             timezone,
             listen_ip,

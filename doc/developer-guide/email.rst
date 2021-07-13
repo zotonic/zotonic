@@ -50,9 +50,10 @@ Site-specific settings
 Zotonic-wide settings
 ^^^^^^^^^^^^^^^^^^^^^
 
-The file ``~/.zotonic/zotonic.config`` can be configured to hold any of the
-configuration options below. They are in effect for every site running
-in the Zotonic instance.
+The file ``~/.config/zotonic/1/zotonic.config``
+(on macOS ``~/Library/Application Support/zotonic/config/1/zotonic.config``)
+can be configured to hold any of the configuration options below. They are in
+effect for every site running in the Zotonic instance.
 
 Zotonic-wide settings for sending email
 """""""""""""""""""""""""""""""""""""""
@@ -184,7 +185,7 @@ How does Zotonic know the domain?
 It checks in order:
 
 - site’s config: ``bounce_email_override`` (you can also set this with the admin config as site.bounce_email_override)
-- global ``~/.zotonic/zotonic.config``: ``smtp_bounce_domain`` setting
+- global ``zotonic.config``: ``smtp_bounce_domain`` setting
 - site’s config: ``smtphost``
 - site’s config: ``hostname``
 

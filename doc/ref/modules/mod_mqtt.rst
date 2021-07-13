@@ -285,7 +285,9 @@ MQTT can listen on a port for incoming connections. Per default the listener is 
 Configuration
 ^^^^^^^^^^^^^
 
-The MQTT listener is configured in the :file:`~.zotonic/zotonic.config`.
+The MQTT listener is configured in the :file:`zotonic.config`. Use ``bin/zotonic configfiles`` to see
+where this file is located.
+
 If this file is missing then it can be copied from :file:`~apps/zotonic_launcher/priv/zotonic.config.in`.
 
 Per default it listens on MQTT port 1883 and MQTT with TLS on port 8883::

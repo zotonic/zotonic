@@ -19,8 +19,8 @@
   [
 
 %%% DTAP status of this site
-   %%% One of: development, test, acceptance, production, education, or backup
-      %% {environment, production},
+%%% One of: development, test, acceptance, production, education, or backup
+   %% {environment, production},
 
 %%% Default timezone (for example: <<"Europe/Berlin">>)
    %% {timezone, <<"UTC">>},
@@ -74,9 +74,29 @@
 %%% Defaults to ssl_listen_port.
    %% {ssl_port, 443},
 
-%%% Location of the security related files and certificates, defaults to the location of
-%%% the zotonic configuration directory: /etc/zotonic/security or ~/.zotonic/security
-   %% {security_dir, ""},
+%% Data dir, used to store files for sites, mnesia files, etc.
+%% Defaults to the OS directories:
+%%   Linux: $HOME/.local/share/zotonic/
+%%   macOS: $HOME/Library/Application Support/zotonic/
+   %% {data_dir, "data"},
+
+%% Log dir, used to store log files.
+%% Defaults to the OS directories:
+%%   Linux: $HOME/.cache/zotonic/log/
+%%   macOS: $HOME/Library/Logs/zotonic/
+   %% {log_dir, "logs"},
+
+%% Security dir, used to store certificates and other secrets
+%% Defaults to the OS directories:
+%%   Linux: $HOME/.config/zotonic/security/
+%%   macOS: $HOME/Library/Application Support/zotonic/security/
+   %% {security_dir, "security"},
+
+%% Cache dir, used to store temporary files and caches.
+%% Defaults to the OS directories:
+%%   Linux: $HOME/.cache/zotonic/
+%%   macOS: $HOME/Library/Caches/zotonic/
+   %% {cache_dir, "caches"},
 
 %%% Maximum http connections, the ipv4 and ipv6 connections are counted separately
 %%% Use 'infinity' to disable the max connections

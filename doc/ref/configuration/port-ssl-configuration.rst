@@ -114,13 +114,23 @@ Per default Zotonic will generate a self-signed certificate for all valid hostna
 self-signed certificates a real certificate can be used. Check for these the modules :ref:`mod_ssl_letsencrypt` and
 :ref:`mod_ssl_ca`
 
-Default location for the self-signed certificates is ``~/.zotonic/security/self-signed/``
+The self-signed certificates are stored in the :file:`self-signed` subdirectory of the security directory.
 
-The *security* directory can be in one of the following directories:
+You can see the ``security_dir`` location using ``bin/zotonic config``
 
- * ``/etc/zotonic/security/``
- * ``~/.zotonic/security/``
- * ``priv/security/``
+Possible locations are:
+
+ * The environment variable ``ZOTONIC_SECURITY_DIR``
+ * The :file:`~/.zotonic/security` directory
+ * The :file:`/etc/zotonic/security` directory (only on Linux)
+ * The OS specific directory for application data files
+
+The OS specific directories are:
+
+ * On Unix: :file:`~/.config/zotonic/security/`
+ * On macOS: :file:`~/Library/Application Support/zotonic/security/`
+
+The default is the OS specific directory.
 
 
 HTTPS and security
@@ -139,10 +149,14 @@ token has ``SameSite`` set to ``Strict``. This can not be configured or changed.
 Erlang SSL Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-The erlang ssl application is configured in the :file:`~/.zotonic/erlang.config`. If this file is
-missing then it can be copied from :file:`apps/zotonic_launcher/priv/erlang.config.in`.  It contains a couple of
-important settings which we recommend you to change. The reason for this is that the default
-settings Erlang uses are unsuitable for web servers. The most important settings are listed
+The erlang ssl application is configured in the :file:`erlang.config` file. It is stored next to the
+``zotonic.config`` file. You can see the config files used with::
+
+  bin/zotonic configfiles
+
+If this file is missing then it can be copied from :file:`apps/zotonic_launcher/priv/erlang.config.in`.
+It contains a couple of important settings which we recommend you to change. The reason for this is that the
+default settings Erlang uses are unsuitable for web servers. The most important settings are listed
 below.
 
 ``session_lifetime``

@@ -9,12 +9,26 @@
    ]}
  ]},
 
- {mnesia, [
-    {dir, "priv/mnesia"}
- ]},
+ %%% The directories below will be set according to the log_dir, data_dir and cache_dir
 
- {lager,
-  [{handlers,
+ % {setup, [
+ %   {data_dir, "data"},
+ %   {log_dir,  "logs"}
+ % ]},
+
+ % {filezcache, [
+ %     {data_dir, "data/filezcache/data"},
+ %     {journal_dir, "data/filezcache/journal"}
+ % ]},
+
+ % {mnesia, [
+ %    {dir, setup}  % Use the config from setup -- handled by zotonic_core
+ % ]},
+
+ {lager, [
+    % The log_root will be set to the log_dir config in zotonic.config
+    {log_root, "logs"},
+    {handlers,
     [
       {lager_console_backend, [
         {level, info},
@@ -22,26 +36,30 @@
         {formatter_config, [time, color, " [", severity, "] ", {site, [site, " "], ""}, {module, [module, ":", line, " "], ""}, message, "\n"]}
       ]},
       {lager_file_backend, [
-        {file, "priv/log/error.log"},
+        {file, "error.log"},
         {level, error},
         {formatter, lager_default_formatter},
         {formatter_config, [date, " ", time, " [", severity, "] ", {site, [site, " "], ""}, {pid, ""}, {module, [{pid, ["@"], ""}, module, {function, [":", function], ""}, {line, [":", line], ""}], ""}, " ", message, "\n"] }
       ]},
       {lager_file_backend, [
-        {file, "priv/log/console.log"},
+        {file, "console.log"},
         {level, info},
         {formatter, lager_default_formatter},
         {formatter_config, [date, " ", time, " [", severity, "] ", {site, [site, " "], ""}, {pid, ""}, {module, [{pid, ["@"], ""}, module, {function, [":", function], ""}, {line, [":", line], ""}], ""}, " ", message, "\n"] }
       ]}
     ]},
-   {crash_log, "priv/log/crash.log"}
+   {crash_log, "crash.log"}
+  ]},
+
+  %% Threshold above which a disk full warning is given, use a float between 0 and 1.0 (inclusive)
+  {os_mon, [
+      {disk_almost_full_threshold, 0.9}
   ]},
 
   %% SSL application configuration.
   %%
   %% For details see: http://erlang.org/doc/man/ssl_app.html
-  {ssl,
-   [
+  {ssl, [
       %% The max number of cached SSL parameters. Increase if you have a lot of clients
       %% connecting to your server.
       {session_cache_server_max, 20000},
@@ -51,18 +69,5 @@
 
       %% The time between pem cache cleanups (in milliseconds)
       {ssl_pem_cache_clean, 300000} % 5 minutes
-   ]},
-
-  {filezcache,
-   [
-      {data_dir, "priv/filezcache/data"},
-      {journal_dir, "priv/filezcache/journal"}
-   ]},
-
- {setup,
-  [
-   {data_dir, "priv/data"},
-   {log_dir,  "priv/log"}
   ]}
-
 ].

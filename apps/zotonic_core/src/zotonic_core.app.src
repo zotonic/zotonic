@@ -7,6 +7,7 @@
   {env, []},
   {applications, [kernel, stdlib, crypto, public_key, ssl, inets, lager,
                   mimetypes, mnesia, gproc, jobs, sidejob,
+                  os_mon,
                   bert, dh_date, eiconv, exometer_core,
                   epgsql,
                   depcache, zotonic_stdlib,
