@@ -20,10 +20,11 @@
 </table>
 
 
+<br>
+
+<h4>{_ Disks _}</h4>
+
 <div {% if m.admin_status.disks.alert %}class="border-danger"{% endif %}>
-
-    <h4>{_ Disks _}</h4>
-
     <table class="table table-sm">
         <thead>
             <tr>
@@ -48,6 +49,8 @@
     </table>
     <p class="help-block"><span class="fa fa-info-circle"></span> {_ Refreshed every 30 minutes. _}</p>
 </div>
+
+<br>
 
 <h4>{_ Connections _}</h4>
 
