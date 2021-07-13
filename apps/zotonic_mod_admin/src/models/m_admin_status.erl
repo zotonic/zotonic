@@ -34,7 +34,8 @@
     page_count/1,
     tcp_connection_count/0,
     group_sockets/0,
-    close_sockets/2
+    close_sockets/2,
+    disks/0
 ]).
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
@@ -70,6 +71,9 @@ m_get_1([ <<"work_dir">> | Rest ], _Msg, _Context) ->
         {error, _} = Error ->
             Error
     end;
+m_get_1([ <<"files_dir">> | Rest ], _Msg, Context) ->
+    Dir = z_path:files_subdir(".", Context),
+    {ok, {filename:dirname(unicode:characters_to_binary(Dir)), Rest}};
 m_get_1([ <<"session_count">> | Rest ], _Msg, Context) ->
     {ok, {session_count(Context), Rest}};
 m_get_1([ <<"page_count">> | Rest ], _Msg, Context) ->
@@ -88,6 +92,9 @@ m_get_1([ <<"memory">>, <<"unused">> | Rest ], _Msg, _Context) ->
     {ok, {recon_alloc:memory(unused), Rest}};
 m_get_1([ <<"memory">>, <<"usage">> | Rest ], _Msg, _Context) ->
     {ok, {recon_alloc:memory(usage), Rest}};
+
+m_get_1([ <<"disks">> | Rest ], _Msg, _Context) ->
+    {ok, {disks(), Rest}};
 
 m_get_1([ <<"is_ssl_application_configured">> | Rest ], _Msg, _Context) ->
     IsConf = case application:get_env(ssl, session_lifetime) of
@@ -180,3 +187,17 @@ socket_reaper([{_Ip, Ports}|Rest], Max, Acc) when length(Ports) >= Max ->
 socket_reaper([_|Rest], Max, Acc) ->
     socket_reaper(Rest, Max, Acc).
 
+
+%% @doc Return disk space information
+-spec disks() -> list( map() ).
+disks() ->
+    DiskData = disksup:get_disk_data(),
+    lists:map(
+        fun({Disk, Size, Capacity}) ->
+            #{
+                disk => unicode:characters_to_binary(Disk),
+                size => Size,
+                percent_used => Capacity
+            }
+        end,
+        DiskData).
