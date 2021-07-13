@@ -46,6 +46,7 @@
             {% endfor %}
         </tbody>
     </table>
+    <p class="help-block"><span class="fa fa-info-circle"></span> {_ Refreshed every 30 minutes. _}</p>
 </div>
 
 <h4>{_ Connections _}</h4>
