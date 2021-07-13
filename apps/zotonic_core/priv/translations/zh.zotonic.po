@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-13 13:53\n"
+"PO-Revision-Date: 2021-07-13 14:09\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -943,7 +943,7 @@ msgstr "连接到页面"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:52
 msgid "Connections"
-msgstr ""
+msgstr "连接"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:60
 msgid "Copied download link to clipboard"
@@ -1001,7 +1001,7 @@ msgstr "控制台"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:31
 msgid "Data Directory"
-msgstr ""
+msgstr "数据目录"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:36
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
@@ -1054,7 +1054,7 @@ msgstr "发现媒体"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:25
 msgid "Disks"
-msgstr ""
+msgstr "磁盘"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
 msgid "Do you want to remove this block?"
@@ -1615,7 +1615,7 @@ msgstr "转介人"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:49
 msgid "Refreshed every 30 minutes."
-msgstr ""
+msgstr "每 30 分钟刷新一次。"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:97
 msgid "Reinstall site datamodel"
@@ -1746,7 +1746,7 @@ msgstr "在多个路径上显示页面"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
 msgid "Site Files Directory"
-msgstr ""
+msgstr "站点文件目录"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
@@ -1757,7 +1757,7 @@ msgstr "大小"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14./apps/zotonic_mod_admin/priv/templates/admin.tpl:15
 msgid "Some disks are almost full."
-msgstr ""
+msgstr "一些磁盘几乎已满。"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:137
 msgid "Something went wrong. Sorry."
@@ -2056,7 +2056,7 @@ msgstr "查看所有引用"
 
 #: apps/zotonic_mod_admin/priv/templates/admin.tpl:17
 msgid "View status"
-msgstr ""
+msgstr "查看状态"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:129
