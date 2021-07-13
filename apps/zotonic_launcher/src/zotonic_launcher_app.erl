@@ -82,6 +82,7 @@ stop(_State) ->
 %% @doc Load all configurations and initialize Zotonic core.
 -spec load_configs( node() ) -> {ok, list( file:filename_all() )} | {error, term()}.
 load_configs(Node) ->
+    ensure_started(yamerl),
     load_applications(),
     ZotonicCfgs = zotonic_launcher_config:zotonic_config_files( Node ),
     case load_config_files(ZotonicCfgs) of
