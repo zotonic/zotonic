@@ -35,7 +35,8 @@
     tcp_connection_count/0,
     group_sockets/0,
     close_sockets/2,
-    disks/0
+    disks/0,
+    disks_alert/0
 ]).
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
@@ -93,8 +94,11 @@ m_get_1([ <<"memory">>, <<"unused">> | Rest ], _Msg, _Context) ->
 m_get_1([ <<"memory">>, <<"usage">> | Rest ], _Msg, _Context) ->
     {ok, {recon_alloc:memory(usage), Rest}};
 
+m_get_1([ <<"disks">>, <<"alert">> | Rest ], _Msg, _Context) ->
+    {ok, {disks_alert(), Rest}};
 m_get_1([ <<"disks">> | Rest ], _Msg, _Context) ->
     {ok, {disks(), Rest}};
+
 
 m_get_1([ <<"is_ssl_application_configured">> | Rest ], _Msg, _Context) ->
     IsConf = case application:get_env(ssl, session_lifetime) of
@@ -192,12 +196,29 @@ socket_reaper([_|Rest], Max, Acc) ->
 -spec disks() -> list( map() ).
 disks() ->
     DiskData = disksup:get_disk_data(),
+    Threshold = disks_threshold(),
     lists:map(
         fun({Disk, Size, Capacity}) ->
             #{
                 disk => unicode:characters_to_binary(Disk),
                 size => Size,
-                percent_used => Capacity
+                percent_used => Capacity,
+                alert => Capacity > Threshold
             }
         end,
         DiskData).
+
+%% @doc Return disk space information
+-spec disks_alert() -> boolean().
+disks_alert() ->
+    DiskData = disksup:get_disk_data(),
+    Threshold = disks_threshold(),
+    lists:any(
+        fun({_Disk, _Size, Capacity}) ->
+            Capacity > Threshold
+        end,
+        DiskData).
+
+%% @doc Return the percentage to be used as threshold.
+disks_threshold() ->
+    disksup:get_almost_full_threshold().

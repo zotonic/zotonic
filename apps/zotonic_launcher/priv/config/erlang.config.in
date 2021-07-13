@@ -51,6 +51,11 @@
    {crash_log, "crash.log"}
   ]},
 
+  %% Threshold above which a disk full warning is given, use a float between 0 and 1.0 (inclusive)
+  {os_mon, [
+      {disk_almost_full_threshold, 0.9}
+  ]},
+
   %% SSL application configuration.
   %%
   %% For details see: http://erlang.org/doc/man/ssl_app.html

@@ -20,34 +20,33 @@
 </table>
 
 
-<h4>{_ Disks _}</h4>
+<div {% if m.admin_status.disks.alert %}class="border-danger"{% endif %}>
 
-<table class="table table-sm">
-    <thead>
-        <tr>
-            <th>{_ Path _}</th>
-            <th>{_ Size _}</th>
-            <th>{_ Usage _}</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for d in m.admin_status.disks%}
+    <h4>{_ Disks _}</h4>
+
+    <table class="table table-sm">
+        <thead>
             <tr>
-                <td {% if d.percent_used > 90 %}class="text-danger"{% endif %}>{{ d.disk|escape }}</td>
-                <td {% if d.percent_used > 90 %}class="text-danger"{% endif %}>{{ (d.size * 1024)|filesizeformat }}</td>
-                <td {% if d.percent_used > 90 %}class="text-danger"{% endif %}>
-                    {% if d.percent_used > 90 %}
-                        <b>
-                            <span class="fa fa-warning"></span>
-                            {{ d.percent_used }}%</td>
-                        </b>
-                    {% else %}
-                        {{ d.percent_used }}%</td>
-                    {% endif %}
+                <th>{_ Path _}</th>
+                <th>{_ Size _}</th>
+                <th>{_ Usage _}</th>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% for d in m.admin_status.disks%}
+                <tr {% if d.alert %}style="font-weight: bold; font-size:1.1em;" class="text-danger"{% endif %}>
+                    <td>{{ d.disk|escape }}</td>
+                    <td>{{ (d.size * 1024)|filesizeformat }}</td>
+                    <td>
+                        {% if d.alert %}
+                            <span class="fa fa-warning"></span>
+                        {% endif %}
+                        {{ d.percent_used }}%</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 <h4>{_ Connections _}</h4>
 
