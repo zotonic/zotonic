@@ -408,11 +408,12 @@ decode_data(<<"identity">>, {encoded, Data, _Gzip}) ->
 decode_data(<<"gzip">>, {encoded, _Data, Gzip}) ->
     Gzip.
 
+abs_root(<<"/", _/binary>> = Root, _Context) ->
+    Root;
+abs_root({files, Dir}, Context) ->
+    z_path:files_subdir(Dir, Context);
 abs_root(Root, Context) ->
-    case Root of
-        <<"/", _/binary>> -> Root;
-        _ -> filename:join(z_path:site_dir(Context), Root)
-    end.
+    filename:join(z_path:site_dir(Context), Root).
 
 directory_index_vars(FullPath, RelRoot, Context) ->
     Root = abs_root(RelRoot, Context),

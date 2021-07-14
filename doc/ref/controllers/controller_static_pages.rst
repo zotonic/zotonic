@@ -10,7 +10,7 @@ in a dispatch rule.
 
 Example dispatch rule::
 
-  {oldsite, ["old", '*'], controller_static_pages, [{root, "old_site"}]}
+  {oldsite, ["old", '*'], controller_static_pages, [{root, "priv/old_site"}]}
 
 When a file ``a.txt`` is requested this resource will check for
 ``a.txt`` and ``a.txt.tpl``.  When it finds a ``.tpl`` file then that
@@ -28,10 +28,12 @@ It has the following dispatch options:
 +---------------------+-------------------------------------+-----------------------+
 |Option               |Description                          |Example                |
 +---------------------+-------------------------------------+-----------------------+
-|root                 |Name of the directory in the site    |{root, "oldsite"}      |
+|root                 |Name of the directory in the site    |{root, "priv/oldsite"} |
 |                     |directory containing the static      |                       |
 |                     |files. The root is a path name       |                       |
 |                     |relative to the current site’s base  |                       |
+|                     |directory or ``{files, "some/path"}``|                       |
+|                     |for a path relative to a site‘s files|                       |
 |                     |directory.                           |                       |
 +---------------------+-------------------------------------+-----------------------+
 |use_cache            |Whether or not served files are      |{use_cache, true}      |
