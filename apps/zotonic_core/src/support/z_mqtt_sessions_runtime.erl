@@ -147,7 +147,7 @@ connect(#{ type := connect, username := U, password := P, properties := Props },
     end,
     Context3 = case UserId of
         undefined -> Context2;
-        _ -> z_acl:logon_prefs(UserId, AuthOptions, Context2)
+        _ -> z_acl:logon(UserId, AuthOptions, Context2)
     end,
     ConnAck = #{
         type => connack,
