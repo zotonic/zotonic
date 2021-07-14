@@ -50,19 +50,76 @@ The following environment variables influence how Zotonic starts up.
   The domain to bind the SMTP server to, if any.
 
 ``ZOTONIC_CONFIG_DIR``
-  The directory with the configuration files. For Zotonic major version 1, this defaults to ``~/.zotonic/1/``.
-  Default locations (assuming the version of zotonic is 1.0 and the node is called ``zotonic@foobar``) are:
+  The directory with the configuration files. Possible locations are:
 
-   * ``~/.zotonic/zotonic@foobar/``
-   * ``~/.zotonic/zotonic/``
-   * ``~/.zotonic/1.0/``
-   * ``~/.zotonic/1/``
-   * ``~/.zotonic/``
-   * ``/etc/zotonic/zotonic@foobar/``
-   * ``/etc/zotonic/zotonic/``
-   * ``/etc/zotonic/1.0/``
-   * ``/etc/zotonic/1/``
-   * ``/etc/zotonic/``
+   * The init argument ``zotonic_config_dir``
+   * The environment variable ``ZOTONIC_CONFIG_DIR``
+   * The directory :file:`$HOME/.zotonic`
+   * The directory :file:`/etc/zotonic` (only on Unix)
+   * The OS specific directory for application config files
+
+  The OS specific directories are:
+
+   * On Unix: :file:`~/.config/zotonic/config/`
+   * On macOS: :file:`~/Library/Application Support/zotonic/config/`
+
+  In those directories the system searches for a ``zotonic*`` file in the following subdirectories (assuming the version of Zotonic is 1.2.3 and the node is called ``zotonic001@foobar``):
+
+   * ``zotonic001@foobar/``
+   * ``zotonic001/``
+   * ``1.2.3``
+   * ``1.2``
+   * ``1``
+   * ``.``
+
+  The default is the OS specific directory, with as subdirectory the major version number of Zotonic (in this case ``1``).
+  For Linux this would be :file:`~/.config/zotonic/config/1/`
+
+``ZOTONIC_SECURITY_DIR``
+  The directory to store the certificates and other security related data.
+  Possible locations are:
+
+   * The environment variable ``ZOTONIC_SECURITY_DIR``
+   * The :file:`~/.zotonic/security` directory
+   * The :file:`/etc/zotonic/security` directory (only on Linux)
+   * The OS specific directory for application data files
+
+  The OS specific directories are:
+
+   * On Unix: :file:`~/.config/zotonic/security/`
+   * On macOS: :file:`~/Library/Application Support/zotonic/security/`
+
+  The default is the OS specific directory.
+
+``ZOTONIC_DATA_DIR``
+  The directory to store the data files.
+  Possible locations are:
+
+   * The environment variable ``ZOTONIC_DATA_DIR``
+   * The :file:`data` directory in the Zotonic directory
+   * The OS specific directory for application data files
+
+  The OS specific directories are:
+
+   * On Unix: :file:`~/.local/share/zotonic`
+   * On macOS: :file:`~/Library/Application Support/zotonic/`
+
+  The default is the OS specific directory.
+
+``ZOTONIC_LOG_DIR``
+  The directory to store the log files.
+  Possible locations are:
+
+   * The environment variable ``ZOTONIC_LOG_DIR``
+   * The :file:`logs` directory in the Zotonic directory
+   * The OS specific directory for application log files
+
+  The OS specific directories are:
+
+   * On Unix: :file:`~/.cache/zotonic/log/`
+   * On macOS: :file:`~/Library/Logs/zotonic/`
+
+  The default is the OS specific directory.
 
 ``ZOTONIC_APPS``
   The directory used for sites, modules and additional OTP applications. This defaults to ``apps_user``

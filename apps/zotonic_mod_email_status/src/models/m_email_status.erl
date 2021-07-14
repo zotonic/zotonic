@@ -302,7 +302,7 @@ mark_sent(Email0, true, Context) ->
 mark_failed(Email0, IsFinal, Status, Context) ->
     Email = normalize(Email0),
     {IsValid, _} = is_valid_nocache(Email, Context),
-    Status1 = z_string:truncate(to_binary(Status), 490),
+    Status1 = z_string:truncatechars(to_binary(Status), 490),
     z_db:transaction(
                 fun(Ctx) ->
                     case z_db:q("

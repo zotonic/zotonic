@@ -33,7 +33,7 @@ info() ->
 
 usage() ->
     io:format("Usage: zotonic addsite [options] <site_name> ~n~n"),
-    io:format(" -s <skel>     Skeleton site (one of 'blog', 'basesite', 'empty', 'nodb'; default: ~s~n", [?SKEL]),
+    io:format(" -s <skel>     Skeleton site (one of 'blog', 'empty', 'nodb'; default: ~s~n", [?SKEL]),
     io:format(" -H <host>     Site's hostname (default: <site_name.test>) ~n"),
     io:format(" -L            Create the site in the current directory and add a symlink to zotonic app_user~n"),
     io:format(" -G <url>      Clone from this Git url, before copying skeleton~n"),
@@ -162,7 +162,7 @@ set_dbschema(Sitename, Options) ->
 parse(Args) when is_list(Args) ->
     Options = #{
         hostname => undefined,
-        skeleton => "basesite"
+        skeleton => "empty"
     },
     parse_args(Args, Options).
 

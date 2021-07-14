@@ -41,7 +41,7 @@ run(_) ->
 show(What) ->
     case zotonic_command:get_target_node() of
         {ok, Target} ->
-		Len = string:len(erlang:atom_to_list(Target)),
+    		Len = string:len(erlang:atom_to_list(Target)),
             if
                 What =:= all; What =:= zotonic ->
                     io:format("~n# Zotonic config for ~p:~n# ===================~s=~n", [Target, string:copies("=", Len)]),
@@ -88,7 +88,18 @@ pretty_print(Map) when is_map(Map) ->
                     io:format("~n    ~p: ", [ Key ]),
                     pretty_print_value(Key, Value)
                 end,
-                ZCfgList)
+                ZCfgList),
+            lists:foreach(
+                fun({Key, Value}) ->
+                    case proplists:is_defined(Key, ZCfgList) of
+                        false ->
+                            io:format("~n    ~p: ", [ Key ]),
+                            pretty_print_value(Key, Value);
+                        true ->
+                            ok
+                    end
+                end,
+                maps:to_list(ZCfg))
     end,
     lists:foreach(
         fun({App, AppCfg}) ->
@@ -137,8 +148,10 @@ pretty_print_value(_Key, Value) when is_list(Value) ->
                             true -> io:format("~n      - ~s", [ V ]);
                             false -> io:format("~n      - ~p", [ V ])
                         end;
+                    (V) when is_number(V); is_boolean(V); is_atom(V) ->
+                        io:format("~n      - ~p", [ V ]);
                     (V) ->
-                        io:format("~n      - ~p", [ V ])
+                        io:format("~n      - >~n        ~p", [ V ])
                 end,
                 Value)
     end;
@@ -158,12 +171,16 @@ pretty_print_value(_Key, Value) when is_map(Value) ->
                     true -> io:format("~n      ~p: ~s", [ K, V ]);
                     false -> io:format("~n      ~p: ~p", [ K, V ])
                 end;
+            ({K, V}) when is_number(V); is_boolean(V); is_atom(V) ->
+                io:format("~n      ~p: ~p", [ K, V ]);
             ({K, V}) ->
-                io:format("~n      ~p: ~p", [ K, V ])
+                io:format("~n      ~p: >~n        ~p", [ K, V ])
         end,
         List);
+pretty_print_value(_Key, Value) when is_number(Value); is_boolean(Value); is_atom(Value) ->
+    io:format("~p", [ Value ]);
 pretty_print_value(_Key, Value) ->
-    io:format("~p", [ Value ]).
+    io:format("> ~n      ~p", [ Value ]).
 
 is_utf8(<<>>) -> true;
 is_utf8(<<_/utf8, R/binary>>) -> is_utf8(R);

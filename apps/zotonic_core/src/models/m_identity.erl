@@ -545,7 +545,7 @@ nospace([]) ->
 nospace(<<>>) ->
     <<>>;
 nospace(S) ->
-    S1 = z_string:truncate(z_string:trim(S), 32, ""),
+    S1 = z_string:truncatechars(z_string:trim(S), 32, ""),
     S2 = z_string:to_slug(S1),
     nodash(binary:replace(S2, <<"-">>, <<".">>, [global])).
 

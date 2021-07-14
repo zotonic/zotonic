@@ -33,7 +33,7 @@ render(Params, _Vars, Context) ->
             {ok, <<>>};
         Src ->
             Context1 = z_context:set_language(undefined, Context),
-            Base = proplists:get_value(base, Params, <<"cotonic/cotonic-worker-bundle.js">>),
+            Base = proplists:get_value(base, Params, <<"cotonic/cotonic-worker.js">>),
             SrcUrl = z_lib_include:url([ Src ], Context1),
             BaseUrl = z_lib_include:url([ Base ], Context1),
             Name = proplists:get_value(name, Params, <<>>),

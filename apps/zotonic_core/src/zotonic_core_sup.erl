@@ -29,15 +29,16 @@
 %% supervisor callbacks
 -export([ init/1 ]).
 
-%% @doc Start the main zotonic supervisor and some helpers
+%% @doc Start the main zotonic supervisor and some helpers. The zotonic_core:setup/1 function
+%% must be called before starting this supervisor. The setup is normally called by zotonic_launcher.
 -spec start_link(list()) -> {ok, pid()}.
 start_link(Options) ->
     lists:foreach(
         fun({K,V}) -> application:set_env(zotonic_core, K, V) end,
         Options),
     z_config:init_app_env(),
-    zotonic_core:setup(),
     zotonic_filewatcher_sup:start_watchers(),
+    z_jsxrecord:init(),
     z_stats:init_system(),
     z_tempfile_cleanup:start(),
     ensure_job_queues(),

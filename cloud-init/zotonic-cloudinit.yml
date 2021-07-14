@@ -85,7 +85,7 @@ runcmd:
   - sudo su zotonic -l -c "ssh-keygen -q -f /home/zotonic/.ssh/id_rsa -N ''"
   # Zotonic installation
   - sudo su zotonic -l -c "git clone 'https://github.com/zotonic/zotonic'"
-  - sudo su zotonic -l -c "mkdir -p .zotonic/1/config.d"
-  - sudo su zotonic -l -c "cp zotonic/cloud-init/config.d/* .zotonic/1/config.d/."
+  - sudo su zotonic -l -c "mkdir -p .config/zotonic/config/1/config.d"
+  - sudo su zotonic -l -c "cp zotonic/cloud-init/config.d/* .config/zotonic/config/1/config.d/."
   - sudo su zotonic -l -c "cd zotonic; make"
   - sudo su zotonic -l -c "cd zotonic; bin/zotonic start"

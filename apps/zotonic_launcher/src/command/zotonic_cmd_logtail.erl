@@ -24,13 +24,24 @@
 info() ->
     "Show the last lines of the error and console logs.".
 
-run(_) ->
+run(["error"]) -> tail("error.log");
+run(["crash"]) -> tail("crash.log");
+run(_) -> tail("console.log").
+
+tail(File) ->
     case zotonic_command:net_start() of
         ok ->
-            ZotonicDir = zotonic_command:get_zotonic_dir(),
-            Cmd = "tail -n 500 '" ++ ZotonicDir ++ "/priv/log/console.log'",
-            Res = os:cmd(Cmd),
-            io:format("~s~n", [ Res ]);
+            case zotonic_command:get_target_node() of
+                {ok, Target} ->
+                    _ = zotonic_launcher_app:load_configs(Target),
+                    LogDir = z_config:get(log_dir),
+                    LogFile = filename:join([ LogDir, File ]),
+                    Cmd = "tail -n 500 \"" ++ z_utils:os_escape(LogFile) ++ "\"",
+                    Res = os:cmd(Cmd),
+                    io:format("~s~n", [ Res ]);
+                {error, _} = Error ->
+                    zotonic_command:format_error(Error)
+            end;
         {error, _} = Error ->
             zotonic_command:format_error(Error)
     end.

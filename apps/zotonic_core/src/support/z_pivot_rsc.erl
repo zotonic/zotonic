@@ -829,7 +829,7 @@ to_tsv(Text, Level, Args, StemmingLanguage) when is_binary(Text) ->
             {"tsvector('')", Args};
         TsvText ->
             N = length(Args) + 1,
-            Truncated = z_string:truncate(TsvText, ?MAX_TSV_LEN, <<>>),
+            Truncated = z_string:truncatechars(TsvText, ?MAX_TSV_LEN, <<>>),
             Args1 = Args ++ [Truncated],
             {["setweight(to_tsvector('pg_catalog.",StemmingLanguage,"', $",integer_to_list(N),"), '",Level,"')"], Args1}
     end.
@@ -856,18 +856,25 @@ cleanup_tsv_text(Text) when is_binary(Text) ->
 
 -spec truncate(binary(), integer()) -> binary().
 truncate(S, Len) ->
-    iolist_to_binary(
-        z_string:trim(
-            z_string:to_lower(
-                truncate_1(S, Len, Len)))).
+    S1 = z_string:trim(S),
+    S2 = truncate_1(S1, Len, <<>>),
+    z_string:trim( z_string:to_lower(S2) ).
 
-truncate_1(_S, 0, _Bytes) ->
-    <<>>;
-truncate_1(S, Utf8Len, Bytes) ->
-    case z_string:truncate(S, Utf8Len, <<>>) of
-        T when size(T) > Bytes -> truncate_1(T, Utf8Len-1, Bytes);
-        L -> L
-    end.
+truncate_1(_S, 0, Acc) ->
+    Acc;
+truncate_1(<<>>, _Len, Acc) ->
+    Acc;
+truncate_1(<<C/utf8, Rest/binary>>, Len, Acc) when C =< 32 ->
+    truncate_1(Rest, Len - 1, <<Acc/binary, " ">>);
+truncate_1(<<C/utf8, Rest/binary>>, Len, Acc) ->
+    N = size(<<C/utf8>>),
+    case Len >= N of
+        true -> truncate_1(Rest, Len - N, <<Acc/binary, C/utf8>>);
+        false -> Acc
+    end;
+truncate_1(<<_, Rest/binary>>, Len, Acc) ->
+    % Drop not-utf8 codepoints
+    truncate_1(Rest, Len, Acc).
 
 
 %% @doc Fetch the date range from the record

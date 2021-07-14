@@ -390,6 +390,13 @@ Notifications
  * The ``admin_menu`` notifications is now a tuple: ``#admin_menu{}``. Update the ``observe_admin_menu`` functions in sites and modules.
 
 
+Modules
+^^^^^^^
+
+ * Moved ``mod_base_site`` to https://github.com/zotonic/zotonic_mod_base_site
+
+
+
 .. _OTP directory structure: http://erlang.org/doc/design_principles/applications.html#id82228
 .. _umbrella application: https://www.rebar3.org/v3/docs/from-rebar-2x-to-rebar3#section-required-directory-structure
 .. _Hex.pm: https://hex.pm

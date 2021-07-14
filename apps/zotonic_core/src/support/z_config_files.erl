@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Marc Worrell
+%% @copyright 2019-2021 Marc Worrell
 %% @doc Generic support for finding and parsing config files.
 
-%% Copyright 2019 Marc Worrell
+%% Copyright 2019-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,6 +20,9 @@
 
 -export([
     security_dir/0,
+    log_dir/0,
+    data_dir/0,
+    cache_dir/0,
     config_dir/0,
     config_dir/1,
     files/1,
@@ -31,61 +34,299 @@
 -include_lib("yamerl/include/yamerl_errors.hrl").
 
 
-%% @doc Find the default configuration directory for certificates
+%% @doc Find the default directory for certificates and other secrets.
+%% Checks the following locations:
+%%
+%% <ol>
+%%   <li>The environment variable <tt>ZOTONIC_SECURITY_DIR</tt></li>
+%%   <li>The directory <tt>$HOME/.zotonic/security</tt></li>
+%%   <li>The directory <tt>/etc/zotonic/security</tt>  (only on Unix)</li>
+%%   <li>The OS specific directory for application config files</li>
+%% </ol>
+%%
+%% If no directory is found then the OS specific directory with the
+%% the subdirectory <tt>security</tt> is used:
+%%
+%% <ol>
+%%   <li>Linux: <tt>$HOME/.config/zotonic/security/</tt></li>
+%%   <li>macOS: <tt>$HOME/Library/Application Support/zotonic/security/</tt></li>
+%% </ol>
+%%
 -spec security_dir() -> {ok, file:filename_all()} | {error, term()}.
 security_dir() ->
-    case z_config:get(security_dir) of
-        undefined ->
-            case find_security_dir(system, filename:join([ "/etc/zotonic", "security" ])) of
-                {ok, Dir} ->
-                    {ok, Dir};
-                {error, _} ->
-                    Home = os:getenv("HOME"),
-                    case find_security_dir(home, filename:join([ Home, ".zotonic", "security" ])) of
-                        {ok, Dir} ->
-                            {ok, Dir};
-                        {error, _} ->
-                            find_security_dir(home, filename:join([ z_utils:lib_dir(priv), "security" ]))
-                    end
-            end;
+    case os:getenv("ZOTONIC_SECURITY_DIR") of
+        false ->
+            security_dir_1();
+        "" ->
+            security_dir_1();
         Dir ->
-            {ok, Dir}
-    end.
-
-find_security_dir(Type, Dir) ->
-    case filelib:is_dir(Dir) of
-        true ->
-            {ok, Dir};
-        false when Type =:= home ->
-            case z_filelib:ensure_dir(filename:join([Dir, ".empty"])) of
-                ok ->
-                    _ = file:change_mode(Dir, 8#00700),
-                    {ok, Dir};
-                {error, _} = Error ->
-                    Error
-            end;
-        false when Type =:= system ->
-            case filelib:is_dir( filename:basename(Dir) ) of
-                true ->
-                    case z_filelib:ensure_dir(filename:join([Dir, ".empty"])) of
-                        ok ->
-                            _ = file:change_mode(Dir, 8#00700),
-                            {ok, Dir};
-                        {error, _} = Error ->
-                            Error
-                    end;
-                false ->
-                    {error, enoent}
+            case filelib:is_dir(Dir) of
+                true -> {ok, Dir};
+                false -> {error, enoent}
             end
     end.
 
+security_dir_1() ->
+    HomeLocs = case os:getenv("HOME") of
+        false -> [];
+        "" -> [];
+        Home ->
+            [
+                filename:join([Home, ".zotonic", "security"])
+            ]
+    end,
+    EtcLocs = case os:type() of
+        {unix, _} ->
+            [
+                filename:join(["/etc/zotonic", "security"])
+            ];
+        {_, _} ->
+            []
+    end,
+    SystemConfigDir = filename:basedir(user_config, "zotonic"),
+    SystemLocs = [
+        filename:join([SystemConfigDir, "security" ])
+    ],
+    Locs = HomeLocs ++ EtcLocs ++ SystemLocs,
+    case lists:dropwhile(fun(D) -> not filelib:is_dir(D) end, Locs) of
+        [] ->
+            % Use the OS specific default
+            SecurityDir = filename:join([SystemConfigDir, "security"]),
+            % The '$HOME/.config' dir is not pre-created on some Linux VMs
+            _ = z_filelib:ensure_dir(SystemConfigDir),
+            case file:make_dir(SystemConfigDir) of
+                ok -> file:change_mode(SystemConfigDir, 8#00700);
+                {error, _} -> ok
+            end,
+            case file:make_dir(SecurityDir) of
+                ok -> file:change_mode(SecurityDir, 8#00700);
+                {error, _} -> ok
+            end,
+            case filelib:is_dir(SecurityDir) of
+                true ->
+                    lager:error("Could not create security directory: ~p", [ SecurityDir ]),
+                    {ok, SecurityDir};
+                false ->
+                    {error, enoent}
+            end;
+        [ D | _ ] ->
+            {ok, D}
+    end.
 
-%% @doc Find the configuration directory for current running Zotonic.
+%% @doc Find the default directory for log files.
+%% Checks the following locations:
+%%
+%% <ol>
+%%   <li>The environment variable <tt>ZOTONIC_LOG_DIR</tt></li>
+%%   <li>Local working directory <tt>logs</tt></li>
+%%   <li>The OS specific directory for application log files</li>
+%% </ol>
+%%
+%% If no directory is found then the OS specific directory is used:
+%%
+%% <ol>
+%%   <li>Linux: <tt>$HOME/.cache/zotonic/log/</tt></li>
+%%   <li>macOS: <tt>$HOME/Library/Logs/zotonic//</tt></li>
+%% </ol>
+%%
+-spec log_dir() -> {ok, file:filename_all()} | {error, term()}.
+log_dir() ->
+    case os:getenv("ZOTONIC_LOG_DIR") of
+        false ->
+            logs_dir_1();
+        "" ->
+            logs_dir_1();
+        Dir ->
+            case filelib:is_dir(Dir) of
+                true -> {ok, Dir};
+                false -> {error, enoent}
+            end
+    end.
+
+logs_dir_1() ->
+    HomeLocs = [
+        "logs"
+    ],
+    SystemLogDir = filename:basedir(user_log, "zotonic"),
+    SystemLocs = [
+        SystemLogDir
+    ],
+    Locs = HomeLocs ++ SystemLocs,
+    case lists:dropwhile(fun(D) -> not filelib:is_dir(D) end, Locs) of
+        [] ->
+            % Use the OS specific default
+            % The '$HOME/.config' dir is not pre-created on some Linux VMs
+            _ = z_filelib:ensure_dir(SystemLogDir),
+            case file:make_dir(SystemLogDir) of
+                ok -> file:change_mode(SystemLogDir, 8#00700);
+                {error, _} -> ok
+            end,
+            case filelib:is_dir(SystemLogDir) of
+                true ->
+                    lager:error("Could not create log directory: ~p", [ SystemLogDir ]),
+                    {ok, SystemLogDir};
+                false ->
+                    {error, enoent}
+            end;
+        [ D | _ ] ->
+            {ok, D}
+    end.
+
+%% @doc Find the default directory for data files.
+%% Checks the following locations:
+%%
+%% <ol>
+%%   <li>The environment variable <tt>ZOTONIC_DATA_DIR</tt></li>
+%%   <li>Local working directory <tt>data</tt></li>
+%%   <li>The OS specific directory for application data files</li>
+%% </ol>
+%%
+%% If no directory is found then the OS specific directory is used:
+%%
+%% <ol>
+%%   <li>Linux: <tt>$HOME/.local/share/zotonic/</tt></li>
+%%   <li>macOS: <tt>$HOME/Library/Application Support/zotonic/</tt></li>
+%% </ol>
+%%
+-spec data_dir() -> {ok, file:filename_all()} | {error, term()}.
+data_dir() ->
+    case os:getenv("ZOTONIC_DATA_DIR") of
+        false ->
+            data_dir_1();
+        "" ->
+            data_dir_1();
+        Dir ->
+            case filelib:is_dir(Dir) of
+                true -> {ok, Dir};
+                false -> {error, enoent}
+            end
+    end.
+
+data_dir_1() ->
+    HomeLocs = [
+        "data"
+    ],
+    SystemDataDir = filename:basedir(user_data, "zotonic"),
+    SystemLocs = [
+        SystemDataDir
+    ],
+    Locs = HomeLocs ++ SystemLocs,
+    case lists:dropwhile(fun(D) -> not filelib:is_dir(D) end, Locs) of
+        [] ->
+            % Use the OS specific default
+            % The '$HOME/.config' dir is not pre-created on some Linux VMs
+            _ = z_filelib:ensure_dir(SystemDataDir),
+            case file:make_dir(SystemDataDir) of
+                ok -> file:change_mode(SystemDataDir, 8#00700);
+                {error, _} -> ok
+            end,
+            case filelib:is_dir(SystemDataDir) of
+                true ->
+                    lager:error("Could not create data directory: ~p", [ SystemDataDir ]),
+                    {ok, SystemDataDir};
+                false ->
+                    {error, enoent}
+            end;
+        [ D | _ ] ->
+            {ok, D}
+    end.
+
+
+%% @doc Find the default directory for cache files.
+%% Checks the following locations:
+%%
+%% <ol>
+%%   <li>The environment variable <tt>ZOTONIC_CACHE_DIR</tt></li>
+%%   <li>Local working directory <tt>caches</tt></li>
+%%   <li>The OS specific directory for application cache files</li>
+%% </ol>
+%%
+%% If no directory is found then the OS specific directory is used:
+%%
+%% <ol>
+%%   <li>Linux: <tt>$HOME/.cache/zotonic/</tt></li>
+%%   <li>macOS: <tt>$HOME/Library/Caches/zotonic/</tt></li>
+%% </ol>
+%%
+-spec cache_dir() -> {ok, file:filename_all()} | {error, term()}.
+cache_dir() ->
+    case os:getenv("ZOTONIC_LOG_DIR") of
+        false ->
+            cache_dir_1();
+        "" ->
+            cache_dir_1();
+        Dir ->
+            case filelib:is_dir(Dir) of
+                true -> {ok, Dir};
+                false -> {error, enoent}
+            end
+    end.
+
+cache_dir_1() ->
+    HomeLocs = [
+        "caches"
+    ],
+    SystemCacheDir = filename:basedir(user_cache, "zotonic"),
+    SystemLocs = [
+        SystemCacheDir
+    ],
+    Locs = HomeLocs ++ SystemLocs,
+    case lists:dropwhile(fun(D) -> not filelib:is_dir(D) end, Locs) of
+        [] ->
+            % Use the OS specific default
+            % The '$HOME/.config' dir is not pre-created on some Linux VMs
+            _ = z_filelib:ensure_dir(SystemCacheDir),
+            case file:make_dir(SystemCacheDir) of
+                ok -> file:change_mode(SystemCacheDir, 8#00700);
+                {error, _} -> ok
+            end,
+            case filelib:is_dir(SystemCacheDir) of
+                true ->
+                    lager:error("Could not create cache directory: ~p", [ SystemCacheDir ]),
+                    {ok, SystemCacheDir};
+                false ->
+                    {error, enoent}
+            end;
+        [ D | _ ] ->
+            {ok, D}
+    end.
+
+%% @doc Find the directory with the configuration files. Defaults to the
+%% OS specific directory for all configurations. This checks a list
+%% of possible locations:
+%%
+%% <ol>
+%%   <li>The init argument <tt>zotonic_config_dir</tt></li>
+%%   <li>The environment variable <tt>ZOTONIC_CONFIG_DIR</tt></li>
+%%   <li>The directory <tt>$HOME/.zotonic</tt></li>
+%%   <li>The directory <tt>/etc/zotonic</tt>  (only on Unix)</li>
+%%   <li>The OS specific directory for application config files</li>
+%% </ol>
+%%
+%% In the last three cases subdirectories are also checked, in
+%% the following order:
+%%
+%% <ol>
+%%   <li>The complete Erlang node name</li>
+%%   <li>The short node name without the server address</li>
+%%   <li>The complete Zotonic version (eg. 1.2.3)</li>
+%%   <li>The minor Zotonic version (eg. 1.2)</li>
+%%   <li>The major Zotonic version (eg. 1)</li>
+%%   <li>The directory itself, without any version</li>
+%% </ol>
+%%
+%% If no directory is found then the OS specific directory with the
+%% the major Zotonic version is used. Examples:
+%%
+%% <ol>
+%%   <li>Linux: <tt>$HOME/.config/zotonic/config/1/</tt></li>
+%%   <li>macOS: <tt>$HOME/Library/Application Support/zotonic/config/1/</tt></li>
+%% </ol>
+%%
 -spec config_dir() -> {ok, file:filename_all()} | {error, term()}.
 config_dir() ->
     config_dir( node() ).
 
-%% @doc Find the configuration directory for the given Zotonic node.
 -spec config_dir( node() ) -> {ok, file:filename_all()} | {error, term()}.
 config_dir(Node) ->
     case proplists:get_value(zotonic_config_dir, init:get_arguments()) of
@@ -100,7 +341,7 @@ config_dir(Node) ->
             end
     end.
 
-config_dir_env(Node) ->
+config_dir_env(Node) -> 
     case os:getenv("ZOTONIC_CONFIG_DIR") of
         false ->
             config_dir_find(Node);
@@ -114,12 +355,11 @@ config_dir_env(Node) ->
     end.
 
 config_dir_find(Node) ->
-    Home = os:getenv("HOME"),
     {MajorVersion, MinorVersion} = split_version(?ZOTONIC_VERSION),
-    HomeLocs = case Home of
+    HomeLocs = case os:getenv("HOME") of
         false -> [];
         "" -> [];
-        _ ->
+        Home ->
             [
                 filename:join([Home, ".zotonic", atom_to_list(Node)]),
                 filename:join([Home, ".zotonic", base_nodename(Node)]),
@@ -129,41 +369,66 @@ config_dir_find(Node) ->
                 filename:join([Home, ".zotonic"])
             ]
     end,
-    EtcLocs = [
-        filename:join(["/etc/zotonic", atom_to_list(Node)]),
-        filename:join(["/etc/zotonic", base_nodename(Node)]),
-        filename:join(["/etc/zotonic", ?ZOTONIC_VERSION]),
-        filename:join(["/etc/zotonic", MinorVersion]),
-        filename:join(["/etc/zotonic", MajorVersion]),
-        filename:join(["/etc/zotonic"])
+    EtcLocs = case os:type() of
+        {unix, _} ->
+            [
+                filename:join(["/etc/zotonic", atom_to_list(Node)]),
+                filename:join(["/etc/zotonic", base_nodename(Node)]),
+                filename:join(["/etc/zotonic", ?ZOTONIC_VERSION]),
+                filename:join(["/etc/zotonic", MinorVersion]),
+                filename:join(["/etc/zotonic", MajorVersion]),
+                filename:join(["/etc/zotonic"])
+            ];
+        {_, _} ->
+            []
+    end,
+    SystemConfigDir = filename:basedir(user_config, "zotonic"),
+    % Use 'config' subdir as on macOS the user_config and user_data
+    % directories are the same.
+    SystemLocs = [
+        filename:join([SystemConfigDir, "config", atom_to_list(Node)]),
+        filename:join([SystemConfigDir, "config", base_nodename(Node)]),
+        filename:join([SystemConfigDir, "config", ?ZOTONIC_VERSION]),
+        filename:join([SystemConfigDir, "config", MinorVersion]),
+        filename:join([SystemConfigDir, "config", MajorVersion]),
+        filename:join([SystemConfigDir, "config" ])
     ],
-    Locations = HomeLocs ++ EtcLocs,
-    Found = lists:dropwhile(
-        fun(D) -> z_config_files:files(D, "zotonic*") =:= [] end,
-        Locations),
-    case Found of
-        [] when is_list(Home), Home =/= "" ->
-            Dir = filename:join([Home, ".zotonic", MajorVersion]),
-            ZotonicDir = filename:join([Home, ".zotonic"]),
+    Locs = HomeLocs ++ EtcLocs ++ SystemLocs,
+    case lists:dropwhile(fun is_empty_config_dir/1, Locs) of
+        [] ->
+            % Use the OS specific default
+            ZotonicDir = filename:join([SystemConfigDir, "config"]),
+            VersionDir = filename:join([SystemConfigDir, "config", MajorVersion]),
+            % The '$HOME/.config' dir is not pre-created on some Linux VMs
+            _ = z_filelib:ensure_dir(SystemConfigDir),
+            case file:make_dir(SystemConfigDir) of
+                ok -> file:change_mode(SystemConfigDir, 8#00700);
+                {error, _} -> ok
+            end,
             case file:make_dir(ZotonicDir) of
                 ok -> file:change_mode(ZotonicDir, 8#00700);
                 {error, _} -> ok
             end,
-            case file:make_dir(Dir) of
-                ok -> file:change_mode(Dir, 8#00700);
+            case file:make_dir(VersionDir) of
+                ok -> file:change_mode(VersionDir, 8#00700);
                 {error, _} -> ok
             end,
-            case filelib:is_dir(Dir) of
+            case filelib:is_dir(VersionDir) of
                 true ->
-                    {ok, Dir};
+                    {ok, VersionDir};
                 false ->
+                    lager:error("Could not create config directory: ~p", [ VersionDir ]),
                     {error, enoent}
             end;
-        [] ->
-            {error, enoent};
-        [ Dir | _ ] ->
-            {ok, Dir}
+        [ D | _ ] ->
+            {ok, D}
     end.
+
+%% @doc If there is a file starting with 'zotonic' in the directory, then we assume
+%% the directory is in use for configuration files. Otherwise check another directory
+%% for the presence of zotonic config files.
+is_empty_config_dir(Dir) ->
+    files(Dir, "zotonic*") =:= [].
 
 base_nodename(Node) ->
     lists:takewhile(fun(C) -> C =/= $@ end, atom_to_list(Node)).
@@ -195,7 +460,7 @@ files(Dir, Wildcard) ->
 %%      The file can be in erlang, yaml, or json format.
 -spec consult( file:filename_all() ) -> {ok, list( map() | proplists:proplist() )} | {error, term()}.
 consult(File) ->
-    case filename:extension(File) of
+    case z_convert:to_list( filename:extension(File) ) of
         ".config" ->
             consult_erlang(File);
         ".erlang" ->

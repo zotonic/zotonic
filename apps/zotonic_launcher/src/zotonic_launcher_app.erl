@@ -26,7 +26,9 @@
     start/2,
     stop/1,
 
-    is_root/0
+    is_root/0,
+
+    load_configs/1
 ]).
 
 %%====================================================================
@@ -34,9 +36,27 @@
 %%====================================================================
 
 start() ->
-    zotonic_core:setup(),
-    ensure_started(zotonic_launcher).
-
+    case load_configs(node()) of
+        {ok, ZotonicConfigFiles} ->
+            %
+            % Show the startup message
+            %
+            ensure_started(lager),
+            lager:info("================"),
+            lager:info("Zotonic starting"),
+            lager:info("================"),
+            lager:info("Init files used:"),
+            [ lager:info("- ~s", [Cfg]) || Cfg <- zotonic_launcher_config:erlang_config_files( node() ) ],
+            lager:info("Config files used:"),
+            [ lager:info("- ~s", [Cfg]) || Cfg <- ZotonicConfigFiles ],
+            lager:info("================"),
+            %
+            % Start the launcher and Zotonic
+            %
+            ensure_started(zotonic_launcher);
+        {error, _} = Error ->
+            Error
+    end.
 
 start(_StartType, _StartArgs) ->
     case is_root() of
@@ -58,9 +78,41 @@ stop(_State) ->
     remove_pidfile(),
     ok.
 
+
+%% @doc Load all configurations and initialize Zotonic core.
+-spec load_configs( node() ) -> {ok, list( file:filename_all() )} | {error, term()}.
+load_configs(Node) ->
+    ensure_started(yamerl),
+    load_applications(),
+    ZotonicCfgs = zotonic_launcher_config:zotonic_config_files( Node ),
+    case load_config_files(ZotonicCfgs) of
+        ok ->
+            zotonic_core:setup(Node),
+            {ok, ZotonicCfgs};
+        {error, _} = Error ->
+            Error
+    end.
+
 %%====================================================================
 %% Internal functions
 %%====================================================================
+
+%% @doc Load the applications so that their initial settings are also loaded.
+load_applications() ->
+    application:load(setup),
+    application:load(lager),
+    application:load(mnesia),
+    application:load(zotonic_core).
+
+load_config_files(ZotonicCfgs) ->
+    case zotonic_launcher_config:read_configs( ZotonicCfgs ) of
+        {ok, Config} ->
+            zotonic_launcher_config:load_configs(Config);
+        {error, _} = Error ->
+            error_logger:error_msg("Fatal error reading configuration files: ~p", [ Error ]),
+            Error
+    end.
+
 
 -spec ensure_started(atom()) -> ok | {error, term()}.
 ensure_started(App) ->

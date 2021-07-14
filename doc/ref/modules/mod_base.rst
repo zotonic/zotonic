@@ -7,9 +7,8 @@ most of Zotonic basic :ref:`dispatch rules <all dispatch rules>`,
 
 Note that the amount of `templates` has been kept to a minimum in this
 module, so that sites are free to implement whatever templates they
-want. For a standard site with commonly used templates, see the
-:ref:`mod_base_site` module.
-     
+want.
+
 .. todo:: Add more documentation
 
-.. seealso:: :ref:`dispatch rules <all dispatch rules>`, :ref:`mod_base_site`.
+.. seealso:: :ref:`dispatch rules <all dispatch rules>`.
