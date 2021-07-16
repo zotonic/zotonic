@@ -110,7 +110,7 @@ Ubuntu / Debian
 
 We recommend you install Erlang from the Erlang solutions website:
 
-https://www.erlang-solutions.com/downloads/download-erlang-otp
+https://www.erlang-solutions.com/downloads/
 
 The other requirements are easily fetched with ``apt``::
 
@@ -126,10 +126,10 @@ info). If you don't have GNU make, Zotonic will give an error when
 trying to compile.
 
 
-MacOS
+macOS
 ^^^^^
 
-With Homebrew you can install Erlang and ImageMagick using the
+With `Homebrew `<https://brew.sh/>`_ you can install Erlang and ImageMagick using the
 following commands::
 
   brew install erlang git imagemagick
@@ -141,8 +141,8 @@ Alternatively, with MacPorts::
 
 For PostgreSQL choose either:
 
-* `EnterpriseDB <https://www.enterprisedb.com/products/pgdownload.do>`_
 * `Postgress.app <https://postgresapp.com/>`_
+* `EnterpriseDB <https://www.enterprisedb.com/products/pgdownload.do>`_
 
 
 Windows

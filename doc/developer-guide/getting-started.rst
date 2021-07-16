@@ -91,7 +91,7 @@ Preparation
 First prepare your system for running Zotonic. Zotonic needs:
 
 * Erlang/OTP 22 or higher
-* PostgreSQL 9.4 or higher
+* PostgreSQL 9.5 or higher
 * ImageMagick 6.5 or higher for image resizing
 * Git for pulling in external dependencies
 * C++ compiler (gcc) for erl_exec and other dependencies
@@ -106,7 +106,7 @@ Ubuntu / Debian
 
 We recommend you install Erlang from the Erlang solutions website:
 
-https://www.erlang-solutions.com/downloads/download-erlang-otp
+https://www.erlang-solutions.com/downloads/
 
 The other requirements are easily fetched with ``apt``::
 
