@@ -95,6 +95,7 @@ First prepare your system for running Zotonic. Zotonic needs:
 * ImageMagick 6.5 or higher for image resizing
 * Git for pulling in external dependencies
 * C++ compiler (gcc) for erl_exec and other dependencies
+* FFmpeg if you want to use video
 
 .. seealso::
     a more extensive discussion of
@@ -110,14 +111,14 @@ https://www.erlang-solutions.com/downloads/
 
 The other requirements are easily fetched with ``apt``::
 
-  sudo apt-get install gcc g++ build-essential git imagemagick postgresql
+  sudo apt-get install gcc g++ build-essential git imagemagick postgresql ffmpeg
 
 macOS
 """""
 
 Install Homebrew_, then run::
 
-    $ brew install erlang git imagemagick postgresql
+    $ brew install erlang git imagemagick postgresql ffmpeg
 
 .. _Homebrew: https://brew.sh
 
@@ -133,6 +134,7 @@ can be used, they should be updated with the newest available version::
 
   # pkg install ImageMagick7-nox11
   # pkg install postgresql10-server
+  # pkg install ffmpeg
 
 
 Windows

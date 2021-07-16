@@ -114,7 +114,7 @@ https://www.erlang-solutions.com/downloads/
 
 The other requirements are easily fetched with ``apt``::
 
-  sudo sudo apt-get install gcc g++ build-essential git imagemagick postgresql
+  sudo sudo apt-get install gcc g++ build-essential git imagemagick postgresql ffmpeg
 
 
 FreeBSD
@@ -132,7 +132,7 @@ macOS
 With `Homebrew `<https://brew.sh/>`_ you can install Erlang and ImageMagick using the
 following commands::
 
-  brew install erlang git imagemagick
+  brew install erlang git imagemagick ffmpeg
 
 Alternatively, with MacPorts::
 
