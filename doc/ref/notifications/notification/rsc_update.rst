@@ -12,11 +12,11 @@ Arguments
     ``id``
         Id of the resource.
     ``props``
-        List of resource properties.
+        Map with resource properties.
 
 ``{IsChanged, UpdateProps}``
     And/remove resource properties before the update is persisted. Set
-    ``IsChanged`` to ``true`` if you want to modify ``UpdateProps``.
+    ``IsChanged`` to ``true`` if you want to modify the ``UpdateProps`` map.
 
 ``Context``
     Site context
@@ -28,4 +28,4 @@ Add a property before the resource is persisted::
 
     observe_rsc_update(#rsc_update{action = insert, id = Id}, {Modified, Props}, Context) ->
         %% Set an extra property
-        {true, Props ++ [{extra_property, <<"special value!">>}].
+        {true, Props#{ <<"extra_property">> => <<"special value!">> }}.
