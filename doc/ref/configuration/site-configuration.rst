@@ -68,26 +68,48 @@ Database name. Use ``none`` to run Zotonic without a database::
 
     {dbdatabase, none},
 
+Defaults to the database configured in the Zotonic config (which defaults to ``zotonic``).
+
+If the ``dbuser`` does not have permission to create the database then you have to create it
+yourself:
+
+.. code-block:: sql
+
+    CREATE DATABASE "some_database" ENCODING = 'UTF8' TEMPLATE template0;
+    GRANT ALL ON DATABASE some_database TO some_db_user;
+
+Where *some_db_user* must be the user you configured with ``dbuser`` and *some_database* must be
+the database configured with ``dbdatabase``.
+
+
 dbschema
 """"""""
 
-PostgreSQL Database schema. Defaults to ``public``. Example::
+PostgreSQL Database schema. Defaults to either:
 
-    {dbschema, "some_site"},
+ * the name of the site if the ``dbdatabase`` is the default database from the zotonic config
+ * ``public`` if the ``dbdatabase`` is set to something else than the default from the Zotonic config.
+
+So if you configure a special database for your site then the default schema will be ``public``.
+
+Example::
+
+    {dbschema, "mysiteschema"},
 
 In Zotonic, a single PostgreSQL database can host the data of multiple sites.
 This does not work using table prefixing, but instead, Zotonic uses PostgreSQL’s
 native feature of database schemas.
 
-A database schema is basically another database inside your database. You need
-to create any schema other than “public” first:
+A database schema is basically another database inside your database. If your dbuser does not
+have permission to create the schema, then you will need to create any schema other than ``public`` first:
 
 .. code-block:: sql
 
     CREATE SCHEMA some_site;
     GRANT ALL ON SCHEMA some_site TO some_db_user;
 
-And restart Zotonic.
+Where *some_db_user* must be the user you configured with ``dbuser``. After creating the schema, either
+restart the site or restart Zotonic.
 
 
 db_max_connections

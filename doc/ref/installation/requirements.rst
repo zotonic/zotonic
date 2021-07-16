@@ -18,7 +18,7 @@ installed:
    are in your path so that zotonic can find them. For auto-rotation
    to work you'll need the ``exif`` utility as well.
 
-3. **PostgreSQL** version 8.4 or higher. Enable trust-authentication
+3. **PostgreSQL** version 9.5 or higher. Enable trust-authentication
    (username+password) in Postgres (see below).
 
 4. **gcc** and **g++** For compiling dependencies like `erlexec`.

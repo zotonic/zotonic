@@ -12,7 +12,7 @@ them by hand, which is really time consuming and painful, or, which
 this cookbook will detail, have postgresql log the queries for you.
 
 The principal documentation and with more details, may be found here:
-http://www.postgresql.org/docs/8.4/static/runtime-config-logging.html
+https://www.postgresql.org/docs/9.5/static/runtime-config-logging.html
 
 Assumptions
 -----------

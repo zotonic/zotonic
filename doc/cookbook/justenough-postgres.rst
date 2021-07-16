@@ -371,30 +371,33 @@ In the zotonic shell:
 .. code-block:: none
 
   1> m_rsc:get(page_home, z:c(blog)).
-  [{category_id,104},
-   {created,{{2011,6,8},{22,21,55}}},
-   {creator_id,1},
-   {id,313},
-   {is_authoritative,true},
-   {is_featured,false},
-   {is_protected,false},
-   {is_published,true},
-   {modified,{{2011,6,8},{22,21,55}}},
-   {modifier_id,1},
-   {name,<<“page_home”>>},
-   {page_path,<<“/”>>},
-   {publication_end,{{9999,8,17},{12,0,0}}},
-   {publication_start,{{2011,6,8},{22,21,55}}},
-   {slug,<<“home”>>},
-   {uri,undefined},
-   {version,1},
-   {visible_for,0},
-   {title,<<“Home”>>},
-   {summary,<<“Welcome to your blog!”>>},
-   {managed_props,[{title,<<“Home”>>},
-                   {summary,<<“Welcome ”…>>},
-                   {page_path,<<“/”>>}]},
-   {installed_by,z_install_defaultdata}]
+  #{
+    <<"category_id">> => 104,
+    <<"created">> => {{2011,6,8},{22,21,55}},
+    <<"creator_id">> => 1,
+    <<"id">> => 313,
+    <<"is_authoritative">> => true,
+    <<"is_featured">> => false,
+    <<"is_protected">> => false,
+    <<"is_published">> => true,
+    <<"modified">> => {{2011,6,8},{22,21,55}},
+    <<"modifier_id">> => ,1,
+    <<"name">> => <<“page_home”>>,
+    <<"page_path">> => <<“/”>>,
+    <<"publication_end">> => ,{{9999,8,17},{12,0,0}},
+    <<"publication_start">> => ,{{2011,6,8},{22,21,55}},
+    <<"slug">> => <<“home”>>,
+    <<"uri">> => undefined,
+    <<"version">> => 1,
+    <<"visible_for">> => 0,
+    <<"title">> => <<“Home”>>,
+    <<"summary">> => <<“Welcome to your blog!”>>,
+    <<"managed_props">> => #{
+          <<"title">> => <<“Home”>>,
+          <<"summary">> => <<“Welcome ”…>>,
+          <<"page_path">> => <<“/”>>}},
+    <<"installed_by">> => <<"z_install_defaultdata">>
+  }
 
 Troubleshooting
 ---------------
@@ -511,9 +514,6 @@ http://www.cyberciti.biz/tips/howto-backup-postgresql-databases.html
 
 How To Use pg_dump and pg_restore with Postgres Plus Tutorial for Linux
 http://www.enterprisedb.com/resources-community/tutorials-quickstarts/linux/how-use-pgdump-and-pgrestore-postgres-plus-tutorial-
-
-An almost idiot’s guide to Install and Upgrade to PostgreSQL 8.4 with Yum
-http://www.postgresonline.com/journal/archives/144-An-almost-idiots-guide-to-Install-and-Upgrade-to-PostgreSQL-8.4-with-Yum.html
 
 postgresql clustering and Debian
 http://www.progsoc.org/~wildfire/notes/postgresql-cluster.html
