@@ -35,6 +35,9 @@ The password for the admin user::
 
     {admin_password, "top_secret"},
 
+Note that if the *admin_password* is set to ``admin`` then only clients with
+local network addresses can logon as the admin.
+
 .. _ref-site-configuration-database:
 
 dbhost
@@ -44,6 +47,9 @@ Database host that the site connects to. Example::
 
     {dbhost, "127.0.0.1"},
 
+Defaults to the ``dbhost`` in the Zotonic config.
+Which defaults to ``127.0.0.1``.
+
 dbport
 """"""
 
@@ -51,15 +57,21 @@ Port of the database server. Example::
 
     {dbport, 5432},
 
+Defaults to the ``dbport`` in the Zotonic config.
+Which defaults to ``5432``.
+
 dbuser
 """"""
 
-Database user.
+Database user. Defaults to the ``dbuser`` in the Zotonic config.
+Which defaults to ``zotonic``.
 
 dbpassword
 """"""""""
 
-Database password.
+Database password. Defaults to the ``dbpassword`` in the Zotonic config.
+Which defaults to ``zotonic``.
+
 
 dbdatabase
 """"""""""
