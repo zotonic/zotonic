@@ -36,7 +36,7 @@ The password for the admin user::
     {admin_password, "top_secret"},
 
 Note that if the *admin_password* is set to ``admin`` then only clients with
-local network addresses can logon as the admin.
+local network addresses can logon as the admin. See also ``ip_allowlist`` below.
 
 .. _ref-site-configuration-database:
 
