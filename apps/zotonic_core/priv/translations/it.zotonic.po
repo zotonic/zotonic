@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-13 14:09\n"
+"PO-Revision-Date: 2021-07-18 15:09\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -7950,7 +7950,7 @@ msgstr "Domande del sondaggio"
 
 #: apps/zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:13
 msgid "Survey Results Editor"
-msgstr "Editor dei risultati del sondaggio"
+msgstr "Gestione risultati del sondaggio"
 
 #: apps/zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:7
 msgid "Survey editor"
@@ -7962,7 +7962,7 @@ msgstr "Risultato del sondaggio cancellato."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:141
 msgid "Survey results editor"
-msgstr "Editore dei risultati del sondaggio"
+msgstr "Gestisci risultati del sondaggio"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:96./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:97
 msgid "Test pass percentage"
