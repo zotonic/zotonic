@@ -31,11 +31,9 @@ Create a site
 
     postgres=# CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';
     postgres=# GRANT ALL ON DATABASE zotonic TO zotonic;
-    postgres=# \c zotonic
-    postgres=# CREATE LANGUAGE "plpgsql";
-  
+
   And quit postgres:
-  
+
     postgres=# \q
 
 2. Now that there is a database Zotonic can be started. We do this in debug mode

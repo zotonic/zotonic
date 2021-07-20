@@ -35,6 +35,9 @@ The password for the admin user::
 
     {admin_password, "top_secret"},
 
+Note that if the *admin_password* is set to ``admin`` then only clients with
+local network addresses can logon as the admin. See also ``ip_allowlist`` below.
+
 .. _ref-site-configuration-database:
 
 dbhost
@@ -44,6 +47,9 @@ Database host that the site connects to. Example::
 
     {dbhost, "127.0.0.1"},
 
+Defaults to the ``dbhost`` in the Zotonic config.
+Which defaults to ``127.0.0.1``.
+
 dbport
 """"""
 
@@ -51,15 +57,21 @@ Port of the database server. Example::
 
     {dbport, 5432},
 
+Defaults to the ``dbport`` in the Zotonic config.
+Which defaults to ``5432``.
+
 dbuser
 """"""
 
-Database user.
+Database user. Defaults to the ``dbuser`` in the Zotonic config.
+Which defaults to ``zotonic``.
 
 dbpassword
 """"""""""
 
-Database password.
+Database password. Defaults to the ``dbpassword`` in the Zotonic config.
+Which defaults to ``zotonic``.
+
 
 dbdatabase
 """"""""""
@@ -68,26 +80,48 @@ Database name. Use ``none`` to run Zotonic without a database::
 
     {dbdatabase, none},
 
+Defaults to the database configured in the Zotonic config (which defaults to ``zotonic``).
+
+If the ``dbuser`` does not have permission to create the database then you have to create it
+yourself:
+
+.. code-block:: sql
+
+    CREATE DATABASE "some_database" ENCODING = 'UTF8' TEMPLATE template0;
+    GRANT ALL ON DATABASE some_database TO some_db_user;
+
+Where *some_db_user* must be the user you configured with ``dbuser`` and *some_database* must be
+the database configured with ``dbdatabase``.
+
+
 dbschema
 """"""""
 
-PostgreSQL Database schema. Defaults to ``public``. Example::
+PostgreSQL Database schema. Defaults to either:
 
-    {dbschema, "some_site"},
+ * the name of the site if the ``dbdatabase`` is the default database from the zotonic config
+ * ``public`` if the ``dbdatabase`` is set to something else than the default from the Zotonic config.
+
+So if you configure a special database for your site then the default schema will be ``public``.
+
+Example::
+
+    {dbschema, "mysiteschema"},
 
 In Zotonic, a single PostgreSQL database can host the data of multiple sites.
 This does not work using table prefixing, but instead, Zotonic uses PostgreSQL’s
 native feature of database schemas.
 
-A database schema is basically another database inside your database. You need
-to create any schema other than “public” first:
+A database schema is basically another database inside your database. If your dbuser does not
+have permission to create the schema, then you will need to create any schema other than ``public`` first:
 
 .. code-block:: sql
 
     CREATE SCHEMA some_site;
     GRANT ALL ON SCHEMA some_site TO some_db_user;
 
-And restart Zotonic.
+Where *some_db_user* must be the user you configured with ``dbuser``. After creating the schema, either
+restart the site or restart Zotonic.
 
 
 db_max_connections
@@ -206,15 +240,6 @@ smtphost
 """"""""
 
 Hostname you want e-mail messages to appear from. See :ref:`guide-email`.
-
-websockethost
-"""""""""""""
-
-The hostname that will be used for websocket requests. This hostname will be
-used in the browser for setting up the websocket connection. It can be used to
-configure a different port number for the websocket connection. For example::
-
-    {websockethost, "example.com:443"},
 
 cookie_domain
 """""""""""""

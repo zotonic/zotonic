@@ -18,7 +18,7 @@ installed:
    are in your path so that zotonic can find them. For auto-rotation
    to work you'll need the ``exif`` utility as well.
 
-3. **PostgreSQL** version 8.4 or higher. Enable trust-authentication
+3. **PostgreSQL** version 9.5 or higher. Enable trust-authentication
    (username+password) in Postgres (see below).
 
 4. **gcc** and **g++** For compiling dependencies like `erlexec`.
@@ -110,11 +110,11 @@ Ubuntu / Debian
 
 We recommend you install Erlang from the Erlang solutions website:
 
-https://www.erlang-solutions.com/downloads/download-erlang-otp
+https://www.erlang-solutions.com/downloads/
 
 The other requirements are easily fetched with ``apt``::
 
-  sudo sudo apt-get install gcc g++ build-essential git imagemagick postgresql
+  sudo sudo apt-get install gcc g++ build-essential git imagemagick postgresql ffmpeg
 
 
 FreeBSD
@@ -126,13 +126,13 @@ info). If you don't have GNU make, Zotonic will give an error when
 trying to compile.
 
 
-MacOS
+macOS
 ^^^^^
 
-With Homebrew you can install Erlang and ImageMagick using the
+With `Homebrew <https://brew.sh/>`_ you can install Erlang and ImageMagick using the
 following commands::
 
-  brew install erlang git imagemagick
+  brew install erlang git imagemagick ffmpeg
 
 Alternatively, with MacPorts::
 
@@ -141,8 +141,8 @@ Alternatively, with MacPorts::
 
 For PostgreSQL choose either:
 
-* `EnterpriseDB <https://www.enterprisedb.com/products/pgdownload.do>`_
 * `Postgress.app <https://postgresapp.com/>`_
+* `EnterpriseDB <https://www.enterprisedb.com/products/pgdownload.do>`_
 
 
 Windows

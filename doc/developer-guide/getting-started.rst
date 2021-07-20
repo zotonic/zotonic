@@ -43,11 +43,10 @@ You can now move on to :ref:`creating your first site <guide-create-site>`.
 Cloud-Init
 ----------
 
-A cloud-init file is supplied in `zotonic_launcher <https://github.com/zotonic/zotonic/blob/master/cloud-init/zotonic-cloudinit.yml>`_.
+A `cloud-init file for Ubuntu <https://github.com/zotonic/zotonic/blob/master/cloud-init/zotonic-cloudinit.yml>`_ is supplied, this has been tested with Ubuntu 20.04.
 
-This file can be used to install a VPS by providers that support cloud-init. `Hetzner <https://hetzner.de/>`_
-and `Microsoft Azure <https://docs.microsoft.com/en-us/azure/virtual-machines/linux/tutorial-automate-vm-deployment>`_
-are such providers.
+This file can be used to install a VPS by providers that support cloud-init. `Hetzner <https://hetzner.de/>`_, `Microsoft Azure <https://docs.microsoft.com/en-us/azure/virtual-machines/linux/tutorial-automate-vm-deployment>`_
+and `TransIP <https://www.transip.eu/vps/fastinstalls/>`_ are such providers.
 
 After the cloud-init is done with its installation a new server is up and running on port 80 and 443.
 It will be using a self-signed certificate, located in :file:`/home/zotonic/.config/zotonic/security/self-signed/`
@@ -91,10 +90,11 @@ Preparation
 First prepare your system for running Zotonic. Zotonic needs:
 
 * Erlang/OTP 22 or higher
-* PostgreSQL 9.4 or higher
+* PostgreSQL 9.5 or higher
 * ImageMagick 6.5 or higher for image resizing
 * Git for pulling in external dependencies
 * C++ compiler (gcc) for erl_exec and other dependencies
+* FFmpeg if you want to use video
 
 .. seealso::
     a more extensive discussion of
@@ -106,18 +106,18 @@ Ubuntu / Debian
 
 We recommend you install Erlang from the Erlang solutions website:
 
-https://www.erlang-solutions.com/downloads/download-erlang-otp
+https://www.erlang-solutions.com/downloads/
 
 The other requirements are easily fetched with ``apt``::
 
-  sudo apt-get install gcc g++ build-essential git imagemagick postgresql
+  sudo apt-get install gcc g++ build-essential git imagemagick postgresql ffmpeg
 
 macOS
 """""
 
 Install Homebrew_, then run::
 
-    $ brew install erlang git imagemagick postgresql
+    $ brew install erlang git imagemagick postgresql ffmpeg
 
 .. _Homebrew: https://brew.sh
 
@@ -133,6 +133,7 @@ can be used, they should be updated with the newest available version::
 
   # pkg install ImageMagick7-nox11
   # pkg install postgresql10-server
+  # pkg install ffmpeg
 
 
 Windows
