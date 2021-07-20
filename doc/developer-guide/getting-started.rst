@@ -43,11 +43,10 @@ You can now move on to :ref:`creating your first site <guide-create-site>`.
 Cloud-Init
 ----------
 
-A cloud-init file is supplied in `zotonic_launcher <https://github.com/zotonic/zotonic/blob/master/cloud-init/zotonic-cloudinit.yml>`_.
+A `cloud-init file for Ubuntu <https://github.com/zotonic/zotonic/blob/master/cloud-init/zotonic-cloudinit.yml>`_ is supplied, this has been tested with Ubuntu 20.04.
 
-This file can be used to install a VPS by providers that support cloud-init. `Hetzner <https://hetzner.de/>`_
-and `Microsoft Azure <https://docs.microsoft.com/en-us/azure/virtual-machines/linux/tutorial-automate-vm-deployment>`_
-are such providers.
+This file can be used to install a VPS by providers that support cloud-init. `Hetzner <https://hetzner.de/>`_, `Microsoft Azure <https://docs.microsoft.com/en-us/azure/virtual-machines/linux/tutorial-automate-vm-deployment>`_
+and `TransIP <https://www.transip.eu/vps/fastinstalls/>`_ are such providers.
 
 After the cloud-init is done with its installation a new server is up and running on port 80 and 443.
 It will be using a self-signed certificate, located in :file:`/home/zotonic/.config/zotonic/security/self-signed/`
