@@ -129,7 +129,7 @@ trying to compile.
 macOS
 ^^^^^
 
-With `Homebrew `<https://brew.sh/>`_ you can install Erlang and ImageMagick using the
+With `Homebrew <https://brew.sh/>`_ you can install Erlang and ImageMagick using the
 following commands::
 
   brew install erlang git imagemagick ffmpeg

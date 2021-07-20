@@ -43,7 +43,7 @@ packages:
 runcmd:
   # Fetch erlang from erlang solutions
   - wget -O- https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | apt-key add -
-  - echo "deb https://packages.erlang-solutions.com/ubuntu focal contrib" | tee /etc/apt/sources.list.d/erlang-solutions.list
+  - echo "deb https://packages.erlang-solutions.com/ubuntu `lsb_release -c | sed -E 's/^.*\s([a-z]+)$/\1/g'` contrib" | tee /etc/apt/sources.list.d/erlang-solutions.list
   - apt update
   - apt-get -y install erlang
   # IP4 port mapping
