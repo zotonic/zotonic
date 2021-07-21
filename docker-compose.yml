@@ -22,7 +22,6 @@ services:
             - postgres
         volumes:
             - ./:/opt/zotonic:delegated
-            - ./docker-data/etc-zotonic:/etc/zotonic:delegated
         ports:
             - 8000:8000
             - 8443:8443

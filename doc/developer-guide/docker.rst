@@ -49,8 +49,11 @@ Zotonic’s port 8443 and 8000 are exposed as local ports. You can  view the
 :ref:`Zotonic status page <ref-status-site>` at ``https://localhost:8443/``.
 You can log in using the username `wwwadmin` and the password from the config.
 
+All configurarions, logs and site data used in the container are stored in the
+:file:`docker-data` directory.
+
 Zotonic is running with a self-signed certificate. The certificate can be found
-in ``docker-data/etc-zotonic/security/self-signed/``.
+in ``docker-data/security/self-signed/``.
 
 You can also run other commands in the container, such as running the tests::
 
@@ -61,6 +64,13 @@ container and :ref:`automatically compiled <automatic-recompilation>`.
 
 You can stop the container using Ctrl+D at the Bash shell prompt.
 
+Directories:
+
+ * :file:`docker-data/config` The Zotonic and Erlang configuration files
+ * :file:`docker-data/security` Certificates used by Zotonic and sites
+ * :file:`docker-data/logs` All log files
+ * :file:`docker-data/data` Site data and mnesia files
+ * :file:`_build` All compiled files
 
 .. _zotonic/zotonic-dev: https://hub.docker.com/r/zotonic/zotonic-dev/
 .. _Docker Compose: https://docs.docker.com/compose/

@@ -1,4 +1,4 @@
-FROM erlang:22.3-alpine
+FROM erlang:24-alpine
 
 # This Docker image is used to run Zotonic inside the container
 # in conjunction with a postgresql container.
@@ -16,8 +16,6 @@ RUN apk add --no-cache bsd-compat-headers ca-certificates wget curl \
         bash file gettext git openssl inotify-tools \
         imagemagick ffmpeg
 
-RUN adduser -S -h /tmp -H -D zotonic
-
 # Note: gosu is pulled from edge; remove that when upgrading to an alpine release that
 # includes the package.
 RUN apk add --no-cache dumb-init \
@@ -26,7 +24,6 @@ RUN apk add --no-cache dumb-init \
 COPY docker/docker-entrypoint.sh /opt/zotonic-docker/docker-entrypoint.sh
 
 VOLUME /opt/zotonic
-VOLUME /etc/zotonic
 
 EXPOSE 8000 8443
 
