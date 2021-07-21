@@ -22,8 +22,11 @@ export ZOTONIC_CONFIG_DIR ZOTONIC_SECURITY_DIR ZOTONIC_DATA_DIR ZOTONIC_LOG_DIR
 
 # If this is the initial run, create the Zotonic user.
 # Set the user's uid to the same UID as the host user.
-if [ ! -f "$ZOTONIC_CONFIG_DIR/config.d/docker.config" ]
+if id "zotonic" &>/dev/null
 then
+    echo "Found user zotonic"
+else
+    echo "Create user zotonic"
     addgroup -S -g $GROUP_ID zotonic
     adduser -S -D -u $USER_ID -G zotonic zotonic
 fi
