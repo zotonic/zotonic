@@ -27,7 +27,6 @@ RUN apk add --no-cache dumb-init \
 COPY docker/docker-entrypoint.sh /opt/zotonic-docker/docker-entrypoint.sh
 
 VOLUME /opt/zotonic
-VOLUME /etc/zotonic
 
 EXPOSE 8000 8443
 
