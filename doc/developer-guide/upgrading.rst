@@ -48,6 +48,8 @@ is now available and automatically updated.
 We have decided to drop the other Docker images as in practice everybody was creating
 their own production images anyway.
 
+All files used by the Docker container are now placed in the :file:`docker-data` directory.
+
 See for more information :ref:`guide-docker`.
 
 

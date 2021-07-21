@@ -21,10 +21,6 @@ repository’s `apps/` directory::
         doc/
         docker/
         priv/
-            log/
-            sites/
-            skel/
-            ssl/
 
 ``zotonic/``
 
@@ -62,18 +58,6 @@ repository’s `apps/` directory::
 ``zotonic/priv/``
 
     The priv directory is the place where all non core files statis assets are placed.
-
-``zotonic/logs/``
-
-    Here all the logs are written.
-
-``zotonic/data/``
-
-    Here all the data is written. These are uploaded files, mnesia files etc.
-
-``zotonic/data/sites/<sitename>``
-
-    Here all the data for a specific site is written. Primarily uploaded files and generated previews.
 
 ``zotonic/apps/zotonic_core/src/``
 
