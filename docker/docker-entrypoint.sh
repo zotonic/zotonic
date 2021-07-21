@@ -3,12 +3,26 @@
 set -x
 
 HOME=/opt/zotonic
+SHELL=/bin/sh
+USER_ID=`stat -c '%g' /opt/zotonic`
+GROUP_ID=`stat -c '%u' /opt/zotonic`
+
 ZOTONIC_PIDFILE=/run/zotonic.pid
 ZOTONIC_CONFIG_DIR=/etc/zotonic
 ZOTONIC_SECURIY_DIR=/etc/zotonic/security
-SHELL=/bin/sh
+ZOTONIC_DATA_DIR=/op/zotonic/docker-data/data
+ZOTONIC_LOG_DIR=/op/zotonic/docker-data/logs
 
-export HOME ZOTONIC_PIDFILE ZOTONIC_CONFIG_DIR SHELL
+export HOME ZOTONIC_PIDFILE SHELL
+export ZOTONIC_CONFIG_DIR ZOTONIC_SECURITY_DIR ZOTONIC_DATA_DIR ZOTONIC_LOG_DIR
+
+# If this is the initial run, create the Zotonic user.
+# Set the user's uid to the same UID as the host user.
+if [ ! -f "/etc/zotonic/config.d/docker.config" ]
+then
+    addgroup -S -g $GROUP_ID zotonic
+    adduser -S -D -u $USER_ID -G zotonic zotonic
+fi
 
 # Create the pid file and enable zotonic to write to it
 touch /run/zotonic.pid && chown zotonic /run/zotonic.pid

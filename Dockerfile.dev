@@ -16,7 +16,8 @@ RUN apk add --no-cache bsd-compat-headers ca-certificates wget curl \
         bash file gettext git openssl inotify-tools \
         imagemagick ffmpeg
 
-RUN adduser -S -h /tmp -H -D zotonic
+# The Zotonic user is created in the docker-entrypoint.sh
+# RUN adduser -S -h /tmp -H -D zotonic
 
 # Note: gosu is pulled from edge; remove that when upgrading to an alpine release that
 # includes the package.
