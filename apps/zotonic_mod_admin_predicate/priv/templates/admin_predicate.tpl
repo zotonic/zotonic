@@ -60,10 +60,8 @@
 {% endwith %}
 
 {% javascript %}
-    cotonic.broker.subscribe("bridge/origin/model/rsc/event/+", function(msg) {
-        if (msg.payload._type == 'rsc_update_done' && msg.payload.action == 'delete') {
-            $('#predicate-list tr[data-id='+msg.payload.id+']').remove();
-        }
+    cotonic.broker.subscribe("bridge/origin/model/rsc/event/+id/delete", function(msg, bindings) {
+        $('#predicate-list tr[data-id='+bindings.id+']').remove();
     });
 {% endjavascript %}
 
