@@ -7,11 +7,9 @@ $('#rscform').on('shown.bs.tab', '.language-tabs > li > a[data-toggle="tab"]', f
 	}
 });
 
-cotonic.broker.subscribe("bridge/origin/model/rsc/event/{{ id }}", function(msg) {
-	if (msg.payload._record == 'rsc_update_done') {
-		if (msg.payload.action == 'delete' && $('#rscform input[name=id]').val() == {{ id }}) {
-			$('#rscform').replaceWith("<p class='alert alert-warning'><b>{_ Deleted. _}</b> {_ This page has been deleted. _}</p>");
-		}
+cotonic.broker.subscribe("bridge/origin/model/rsc/event/{{ id }}/delete", function(msg) {
+	if ($('#rscform input[name=id]').val() == '{{ id }}') {
+		$('#rscform').replaceWith("<p class='alert alert-warning'><b>{_ Deleted. _}</b> {_ This page has been deleted. _}</p>");
 	}
 });
 {% endjavascript %}

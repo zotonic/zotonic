@@ -28,7 +28,7 @@
 		<div class="tab-content widget-content nolang_before">{% block widget_content_nolang_before %}{% endblock %}</div>
 
 		<div class="tab-content widget-content">
-			{% for lang_code,lang in m.translation.language_list_enabled %}
+			{% for lang_code,lang in m.translation.language_list_editable %}
     			{# to define some helper vars that will be useful in widget_content: #}
     			{% with "$" ++ lang_code,
     					"(" ++ lang_code ++ ")",

@@ -19,24 +19,53 @@
 
 {% javascript %}
     $('#admin-translation-checkboxes input').on('change', function() {
-        let code = $(this).attr('value');
-        if ($(this).is(":checked")) {
-            $(".tab-"+code).show();
-            if (!$(".language-tabs .active a").is(":visible")) {
-                $(".tab-"+code+" a").get(0).click();
+        let enabled = {};
+        let tabBars = $(".language-tabs");
+        let firstLang = false;
+
+        $('#admin-translation-checkboxes input').each( function() {
+            let isActive = $(this).is(':checked');
+            let lang = $(this).attr('value');
+
+            enabled[lang] = isActive;
+
+            if (isActive && !firstLang) {
+                firstLang = lang;
             }
-        } else {
-            $(".tab-"+code).hide();
-            if ($(".tab-"+code).hasClass("active")) {
-                let vis = $(".language-tabs a:visible").get(0);
-                if (vis) {
-                    vis.click();
+        });
+
+
+        if (tabBars.length > 0) {
+            let activeIsDisabled = false;
+            let activeIsEnabled = false;
+            let tabs = tabBars.get(0).getElementsByTagName('li');
+
+            for (let i=0; i < tabs.length; i++) {
+                let lang = tabs[i].getAttribute('lang');
+
+                if (enabled[lang]) {
+                    if (tabs[i].style.display == 'none') {
+                        $(".language-tabs li[lang="+lang+"]").show();
+                    } else if ($(tabs[i]).hasClass('active')) {
+                        activeIsEnabled = true;
+                    }
                 } else {
-                    $(".tab-"+code).removeClass("active");
-                    $(".tab-pane.language-"+code).removeClass("active");
+                    if (tabs[i].style.display != 'none') {
+                        $(".language-tabs li[lang="+lang+"]").hide();
+                    }
+                    if ($(tabs[i]).hasClass('active')) {
+                        activeIsDisabled = true;
+                        $('.tab-pane.active.language-'+lang).removeClass('active');
+                    }
                 }
             }
+
+            if ((activeIsDisabled || !activeIsEnabled) && firstLang !== false) {
+                $(tabBars).find('li[lang='+firstLang+'] a').click();
+                $('.tab-pane.language-'+firstLang).addClass('active');
+            }
         }
+
     });
 {% endjavascript %}
 
