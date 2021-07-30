@@ -61,7 +61,8 @@
 
 {% javascript %}
     cotonic.broker.subscribe("bridge/origin/model/rsc/event/+id/delete", function(msg, bindings) {
-        $('#predicate-list tr[data-id='+bindings.id+']').remove();
+        let id = bindings.id.replace(/[^0-9]/g, '');
+        $('#predicate-list tr[data-id='+id+']').remove();
     });
 {% endjavascript %}
 
