@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-08-01 13:47\n"
+"PO-Revision-Date: 2021-08-01 13:58\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -794,7 +794,7 @@ msgstr "Все страницы"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:25
 msgid "All sites have been flushed."
-msgstr "Все сайты были смыты."
+msgstr "Все сайты были очищены."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:6
 msgid "Allocated"
@@ -866,7 +866,7 @@ msgstr "Цитату"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:34
 msgid "Caches have been flushed."
-msgstr "Кэши очищены."
+msgstr "Кэши были очищены."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:8
 msgid "Category name:"
