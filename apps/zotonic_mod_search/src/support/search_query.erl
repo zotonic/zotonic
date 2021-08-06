@@ -315,7 +315,7 @@ parse_query([{is_public, Boolean}|Rest], Context, Result) ->
 %% Filter on items whose start date lies in the future
 parse_query([{upcoming, Boolean}|Rest], Context, Result) ->
     Result1 = case z_convert:to_bool(Boolean) of
-                  true -> add_where("rsc.pivot_date_start >= current_date", Result);
+                  true -> add_where("rsc.pivot_date_start >= current_timestamp", Result);
                   false -> Result
               end,
     parse_query(Rest, Context, Result1);
@@ -324,7 +324,7 @@ parse_query([{upcoming, Boolean}|Rest], Context, Result) ->
 %% Filter on items whose date range is around the current date
 parse_query([{ongoing, Boolean}|Rest], Context, Result) ->
     Result1 = case z_convert:to_bool(Boolean) of
-                  true -> add_where("rsc.pivot_date_start <= now() and rsc.pivot_date_end >= now()", Result);
+                  true -> add_where("rsc.pivot_date_start <= current_timestamp and rsc.pivot_date_end >= current_timestamp", Result);
                   false -> Result
               end,
     parse_query(Rest, Context, Result1);
@@ -333,7 +333,7 @@ parse_query([{ongoing, Boolean}|Rest], Context, Result) ->
 %% Filter on items whose start date lies in the past
 parse_query([{finished, Boolean}|Rest], Context, Result) ->
     Result1 = case z_convert:to_bool(Boolean) of
-                  true -> add_where("rsc.pivot_date_start < current_date", Result);
+                  true -> add_where("rsc.pivot_date_start < current_timestamp", Result);
                   false -> Result
               end,
     parse_query(Rest, Context, Result1);
@@ -341,7 +341,7 @@ parse_query([{finished, Boolean}|Rest], Context, Result) ->
 %% Filter on items whose start date lies in the future
 parse_query([{unfinished, Boolean}|Rest], Context, Result) ->
     Result1 = case z_convert:to_bool(Boolean) of
-                  true -> add_where("rsc.pivot_date_end >= current_date", Result);
+                  true -> add_where("rsc.pivot_date_end >= current_timestamp", Result);
                   false -> Result
               end,
     parse_query(Rest, Context, Result1);
