@@ -851,7 +851,7 @@
 %% Type: foldl
 %% Return: modified property list of image options
 -record(media_preview_options, {
-    id :: m_rsc:resourced_id() | undefined,
+    id :: m_rsc:resource_id() | undefined,
     width :: non_neg_integer(),
     height :: non_neg_integer(),
     options :: proplists:proplist()

@@ -629,8 +629,9 @@ calc_size(#{ filters := [ {rotation, Rotation} | Fs ], image_width := W, image_h
          Rotation =:= -270 ->
     Crop1 = rotate_crop(W, H, Rotation, Crop),
     calc_size(S#{ image_width => H, image_height => W, filters => Fs, crop => Crop1 });
-calc_size(#{ filters := [ {rotation, _} | Fs ] } = S) ->
-    calc_size(S#{ filters => Fs });
+calc_size(#{ filters := [ {rotation, Rotation} | Fs ], image_width := W, image_height := H, crop := Crop } = S) ->
+    Crop1 = rotate_crop(W, H, Rotation, Crop),
+    calc_size(S#{ filters => Fs, crop => Crop1 });
 
 calc_size(#{ filters := [ {cropp, Cropp} | Fs ], image_width := IW, image_height := IH, crop := Crop } = S) ->
     {W1, H1, Left, Top, _} = cropp(IW, IH, Cropp),
