@@ -542,8 +542,15 @@ exif(File) ->
                     fun
                         (maker_note, _Val, Acc) ->
                             Acc;
+                        (user_comment, _Val, Acc) ->
+                            Acc;
                         (Tag, Val, Acc) ->
-                            Acc#{ atom_to_binary(Tag, utf8) => Val }
+                            case is_zero_val(Val) of
+                                true ->
+                                    Acc;
+                                false ->
+                                    Acc#{ atom_to_binary(Tag, utf8) => Val }
+                            end
                     end,
                     #{},
                     Dict);
@@ -555,6 +562,14 @@ exif(File) ->
             lager:error("Error reading exif ~p:~p in ~p", [A,B,Stacktrace]),
             #{}
     end.
+
+
+is_zero_val(L) when is_list(L) ->
+    lists:all(fun(C) -> C =:= 0 end, L);
+is_zero_val(L) when is_binary(L) ->
+    lists:all(fun(C) -> C =:= 0 end, z_convert:to_list(L));
+is_zero_val(_) ->
+    false.
 
 %% Detect the exif rotation in an image and swaps width/height accordingly.
 -spec exif_orientation( map() ) -> 1|2|3|4|5|6|7|8.

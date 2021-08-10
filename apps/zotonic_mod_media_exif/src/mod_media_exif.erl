@@ -32,7 +32,7 @@
 
 observe_media_upload_rsc_props(#media_upload_rsc_props{medium=Medium, options=Opts}, Props, _Context) ->
     Exif = maps:get(<<"exif">>, Medium, #{}),
-    PropsForced = forced_props(Medium),
+    PropsForced = forced_props(Props, Medium),
     PropsOverlay = overlay_props(Exif),
     Props1 = maps:merge(Props, PropsForced),
     case proplists:get_value(is_force_medium_props, Opts, true) of
@@ -46,9 +46,11 @@ medium_props(Medium) ->
     Exif = maps:get(<<"exif">>, Medium, #{}),
     maps:merge(Exif, overlay_props(Exif)).
 
-forced_props(Medium) ->
+forced_props(Props, Medium) ->
+    ImageSettings = maps:get(<<"medium_edit_settings">>, Props, #{}),
+    SubjectPoint = maps:get(<<"subject_point">>, Medium, undefined),
     #{
-        <<"crop_center">> => to_binary_point(maps:get(<<"subject_point">>, Medium, undefined))
+        <<"medium_edit_settings">> => crop_center(Medium, ImageSettings, SubjectPoint)
     }.
 
 overlay_props(Exif) when is_list(Exif) ->
@@ -66,10 +68,22 @@ overlay_props(Exif) when is_map(Exif) ->
     },
     maps:filter(fun(_K, V) -> V =/= undefined end, PropsOverlay).
 
-to_binary_point({X,Y}) ->
-    iolist_to_binary([ $+, integer_to_list(X), $+, integer_to_list(Y) ]);
-to_binary_point(undefined) ->
-    undefined.
+crop_center(Medium, undefined, Crop) ->
+    crop_center(Medium, #{}, Crop);
+crop_center(#{ <<"width">> := W, <<"height">> := H }, Settings, {X,Y}) when W > 0, H > 0 ->
+    CX = z_convert:to_float(X) / z_convert:to_float(W),
+    CY = z_convert:to_float(Y) / z_convert:to_float(Y),
+    case CX >= 0.0 andalso CX =< 100.0 andalso CY >= 0.0 andalso CY =< 100.0 of
+        true ->
+            Settings#{
+                <<"crop_center_x">> => CX,
+                <<"crop_center_y">> => CY
+            };
+        false ->
+            Settings
+    end;
+crop_center(_Medium, Settings, _Crop) ->
+    Settings.
 
 % http://www.awaresystems.be/imaging/tiff/tifftags/privateifd/gps/gpslongitude.html
 gps([{ratio,D,DFrac},{ratio,M,MFrac},{ratio,S,SFrac}] = Ratios) ->

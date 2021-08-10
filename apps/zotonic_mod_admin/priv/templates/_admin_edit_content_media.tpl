@@ -12,7 +12,11 @@
 
 {% block widget_content %}
     <div id="media-edit-view">
-        {# show the media in the best possible way - separate template because we need to refresh this after an media replace #}
-        {% include "_admin_edit_media_all.tpl" id=id %}
+        {# show the media in the best possible way - updates on medium and rsc changes #}
+        {% live template="_admin_edit_media_all.tpl"
+                id=id
+                topic=id
+                topic=[ "bridge", "orging", "model", "media", "event", id, "update" ]
+        %}
     </div>
 {% endblock %}

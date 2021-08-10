@@ -10,7 +10,8 @@ if (typeof tinyInit !== 'object')
 		"link unlink | zlink zmedia | code"
 	],
 
-    content_css: "/lib/js/tinymce-4.5.5/zotonic.css",
+  content_css: "/lib/js/tinymce-4.5.5/zotonic.css,/lib/css/tinymce-zotonic.css",
+
 //    language : "en", // set in _admin_tinymce_overrides_js.tpl
 
 	/* Adapted valid element list, added some html5 elements, removed controls, object, embed etc */

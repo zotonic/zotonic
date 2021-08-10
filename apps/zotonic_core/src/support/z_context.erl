@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2018  Marc Worrell
+%% @copyright 2009-2021  Marc Worrell
 %% @doc Request context for Zotonic request evaluation.
 
-%% Copyright 2009-2018 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -75,6 +75,7 @@
     add_q/2,
     get_q/2,
     get_q/3,
+    get_qargs/1,
     get_q_all/1,
     get_q_all/2,
     get_q_all_noz/1,
@@ -642,6 +643,19 @@ get_q(Key, #context{ props = Props }, Default) ->
         error -> Default
     end.
 
+
+%% @doc Fetch all arguments starting with a 'q'. This is used for queries.
+-spec get_qargs( z:context() ) -> list( {binary(), z:qvalue()} ).
+get_qargs(Context) ->
+    Qs = get_q_all(Context),
+    lists:foldr(fun
+                    ({<<"q", _/binary>>, _Value} = A, Acc) ->
+                        [ A | Acc ];
+                    (_, Acc) ->
+                        Acc
+                end,
+                [],
+                Qs).
 
 %% @doc Get all parameters.
 -spec get_q_all(z:context()) -> list({binary(), z:qvalue()}).

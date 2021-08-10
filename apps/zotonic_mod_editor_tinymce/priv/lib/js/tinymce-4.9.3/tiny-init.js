@@ -10,8 +10,9 @@ if (typeof tinyInit !== 'object')
         "link unlink | zlink zmedia | code"
     ],
 
-    content_css: "/lib/js/tinymce-4.9.3/zotonic.css",
-//    language : "en", // set in _admin_tinymce_overrides_js.tpl
+    content_css: "/lib/js/tinymce-4.9.3/zotonic.css,/lib/css/tinymce-zotonic~1.css",
+
+    // language : "en", // set in _admin_tinymce_overrides_js.tpl
 
     /* Adapted valid element list, added some html5 elements, removed controls, object, embed etc */
     /* See: http://www.tinymce.com/wiki.php/Configuration:valid_elements */

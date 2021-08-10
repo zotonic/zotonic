@@ -845,6 +845,17 @@
     post_props :: map() | undefined
 }).
 
+%% @doc Modify the options for an image preview url or tag. This is called for every
+%% image url generation, except if the 'original' image option is passed. The mediaclass
+%% in the options is not yet expanded.
+%% Type: foldl
+%% Return: modified property list of image options
+-record(media_preview_options, {
+    id :: m_rsc:resourced_id() | undefined,
+    width :: non_neg_integer(),
+    height :: non_neg_integer(),
+    options :: proplists:proplist()
+    }).
 
 %% @doc Send a notification that the resource 'id' is added to the query query_id.
 %% Type: notify

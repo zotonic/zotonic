@@ -226,6 +226,12 @@ is_modified(Filename, Mtime, _Context) ->
 compile_map_nested_value([{identifier, _, <<"m">>}, {identifier, _, Model}|Rest], _ContextVar, _Context) ->
     ModelA = binary_to_atom(Model, 'utf8'),
     [{mfa2, z_model, template_get, Rest, ModelA}];
+compile_map_nested_value([{identifier, _, <<"q">>}, {identifier, _, <<"qargs">>}|Rest], ContextVar, _Context) ->
+    Ast = erl_syntax:application(
+                erl_syntax:atom(z_context),
+                erl_syntax:atom(get_qargs),
+                [ erl_syntax:variable(ContextVar) ]),
+    [{ast, Ast} | Rest];
 compile_map_nested_value([{identifier, _, <<"q">>}, {identifier, _, QArg}|Rest], ContextVar, _Context) ->
     Ast = erl_syntax:application(
                 erl_syntax:atom(z_context),
