@@ -347,7 +347,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                 [Type, Dim, _Dim2 | _] = binary:split(Result1, <<" ">>, [ global ]),
                 Mime = im_mime(Type, MimeTypeFromFile),
                 [Width,Height] = binary:split( hd( binary:split(Dim, <<"=>">>) ), <<"x">>),
-                {W1,H1} = maybe_sizeup(Mime, binary_to_integer(Width), binary_to_integer(Height)),
+                {W1,H1} = maybe_size_correct(Mime, binary_to_integer(Width), binary_to_integer(Height)),
                 Props1 = #{
                     <<"width">> => W1,
                     <<"height">> => H1,
@@ -376,11 +376,18 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
     end.
 
 %% @doc Prevent unneeded 'extents' for vector based inputs.
-maybe_sizeup(Mime, W, H) ->
+maybe_size_correct(Mime, W, H) when W < 3000, H < 3000 ->
     case is_mime_vector(Mime) of
         true -> {W*2, H*2};
         false -> {W,H}
-    end.
+    end;
+maybe_size_correct(Mime, W, H) when W > 6000; H > 6000 ->
+    case is_mime_vector(Mime) of
+        true -> maybe_size_correct(Mime, W div 2, H div 2);
+        false -> {W,H}
+    end;
+maybe_size_correct(_Mime, W, H) ->
+    {W, H}.
 
 -spec is_mime_vector( string() | mime_type() ) -> boolean().
 is_mime_vector(<<"application/pdf">>) -> true;
