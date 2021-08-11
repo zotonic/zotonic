@@ -51,7 +51,8 @@
         width: 20px;
         text-align: center;
         color: red;
-        text-shadow: 1px 1px 2px black; }
+        text-shadow: 1px 1px 2px black;
+        z-index: 1410; }
   .image-edit-container .image-edit__settings {
     grid-row: 1;
     grid-column: 2;

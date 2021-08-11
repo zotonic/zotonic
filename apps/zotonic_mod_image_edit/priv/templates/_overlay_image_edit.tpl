@@ -27,6 +27,8 @@
         %}
         <form id="image-edit-form" action="postback">
 
+            <p class="help-block"><span class="glyphicon glyphicon-info-sign"></span> {_ The original image stays unaltered, all edits can be changed at any time. _}
+
             <div class="form-group">
                 <p>
                     <a href="#" id="image-edit-orientation-btn" class="btn btn-default">
@@ -425,7 +427,7 @@
     $('.image-edit-crop__wrapper').on('click', function(ev) {
         ev.preventDefault();
 
-        if ($(ev.target).hasClass('.image-edit-crop__wrapper')) {
+        if ($(ev.target).hasClass('image-edit-crop__wrapper')) {
             let $crop_wrapper = $(".image-edit-crop__wrapper");
             let w = $crop_wrapper.width();
             let h = $crop_wrapper.height();
