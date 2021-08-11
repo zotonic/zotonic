@@ -65,8 +65,9 @@
 -include_lib("../../include/zotonic.hrl").
 
 m_get([ <<"full">>, Id | Rest ], _Msg, Context) ->
+    {ok, {full(Id, Context), Rest}};
+m_get([ Id | Rest ], _Msg, Context) ->
     {ok, {full(Id, Context), Rest}}.
-
 
 %% @doc Get the full representation of a resource.
 -spec full( m_rsc:resource(), z:context() ) -> map() | undefined.
@@ -98,24 +99,25 @@ full(Id, Context) when is_integer(Id) ->
             Edges = [ edge_details(E, Context) || E <- Edges0 ],
             Medium = m_media:get(Id, Context),
 
-            PreviewUrl = case z_media_tag:url(
-                Id,
-                [ {width, 800}, {height, 800}, {upscale, true}, {absolute_url, true} ],
-                Context)
-            of
-                {ok, P} -> P;
-                _ -> undefined
-            end,
+            PreviewUrl = preview_url(Medium, Context),
+            DownloadUrl = download_url(Medium, Context),
+
+            % URL used as the base url for exporting other resource ids.
+            BaseUri0 = z_context:abs_url( z_dispatcher:url_for(id, [ {id, <<"ID">>} ], Context), Context),
+            BaseUri = binary:replace(BaseUri0, <<"ID">>, <<>>),
+
             Export = #{
                 %% Essential fields
                 <<"id">> => Id,
                 <<"uri">> => m_rsc:p(Id, uri, Context),
+                <<"base_uri">> => BaseUri,
 
                 %% Parts
                 <<"rsc">> => Rsc,
                 <<"medium">> => Medium,
                 <<"edges">> => Edges,
-                <<"preview_url">> => PreviewUrl
+                <<"preview_url">> => PreviewUrl,
+                <<"download_url">> => DownloadUrl
             },
 
             %% Filter empty lists
@@ -123,6 +125,26 @@ full(Id, Context) when is_integer(Id) ->
     end;
 full(Id, Context) ->
     full(m_rsc:rid(Id, Context), Context).
+
+% If there is a medium record, then also include a preview url
+preview_url(#{ <<"id">> := Id }, Context) ->
+    case z_media_tag:url(
+        Id,
+        [ {width, 800}, {height, 800}, {upscale, true}, {absolute_url, true} ],
+        Context)
+    of
+        {ok, P} -> P;
+        _ -> undefined
+    end;
+preview_url(_, _Context) ->
+    undefined.
+
+% If there is a medium record with a file size, then also include a download url
+download_url(#{ <<"id">> := Id, <<"size">> := Size }, Context) when Size > 0 ->
+    z_dispatcher:url_for(media_attachment, [ {id, Id}, {absolute_url, true} ], Context);
+download_url(_, _Context) ->
+    undefined.
+
 
 filter_empty(Map) ->
     maps:filter(

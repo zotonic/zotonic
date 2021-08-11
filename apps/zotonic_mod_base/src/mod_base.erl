@@ -31,6 +31,7 @@
 
 %% interface functions
 -export([
+    observe_content_types_dispatch/3,
     observe_edge_insert/2,
     observe_edge_delete/2,
     observe_media_stillimage/2,
@@ -42,6 +43,13 @@
 
 manage_schema(install, Context) ->
     ok = z_datamodel:manage(?MODULE, datamodel(), Context).
+
+%% @doc Add an extra content-type to the 'id' controller.
+observe_content_types_dispatch(#content_types_dispatch{ id = _Id }, Acc, Context) ->
+    {ContentTypes, _} = controller_api:content_types_provided(Context),
+    Dispatch = [ {CT, api_rsc_export} || CT <- ContentTypes ],
+    Dispatch ++ Acc.
+
 
 %% @doc If an edge is inserted, then force a repivot of the subject
 observe_edge_insert(#edge_insert{ subject_id=SubjectId }, Context) ->

@@ -25,6 +25,9 @@
     %% API access
     {api, ["api", '*'], controller_api, []},
 
+    % Used for redirects by controller_id - change this if another model should be used.
+    {api_rsc_export, [ "api", "model", "rsc_export", "get", id ], controller_api, []},
+
     %% Serves the favicon.ico from "lib/images/favicon.ico" in the modules.
     {favicon, ["favicon.ico"], controller_file, [ {path, "images/favicon.ico"}, {root,[lib]}, {content_disposition, inline}]},
 
