@@ -100,6 +100,57 @@ values. Example::
 
     blur="20x8"
 
+
+rotate3d
+^^^^^^^^
+
+Rotate the image in three dimensions: roll, tilt and pan. The size of the original image and canvas
+is maintained. This results in clipping at the edges.
+
+rotate3d is useful for straigthening photos of flag objects that are taken under an angle.
+
+The rotate3d accepts three arguments::
+
+    rotate3d=[ 1, 2, -3 ]
+
+This rotates the image:
+
+ * Roll 1 degree clockwise around the Z axis (like css rotateZ).
+ * Tilt 2 degrees clockwise around the X axis (like css rotateX)
+ * Pan 3 degrees counter clockwise around the Y axis (like css rotateY)
+
+The center of the rotation is at the center of the image.
+
+rotate3d, rotate and cropp are applied before other operations.
+
+rotate
+^^^^^^
+
+Rotate the image by a multiple of 90 degrees. The image size is adjusted according to the
+rotation::
+
+    rotate=90
+
+This will rotate the image 90 degrees clockwise. Use a negative number to rotate counter clockwise.
+
+Acceptable values are: ``0``, ``90``, ``180``, ``270``, ``-90``, ``-180``, and ``-270``
+
+rotate3d, rotate and cropp are applied before other operations.
+
+cropp
+^^^^^
+
+Crop percentages from the sides of an image. The image is cropped by a percentage of the
+width and/or height. The crop's argument is a list of numbers, in the order: left, right, top, bottom::
+
+    cropp=[ 10, 15, 20, 30 ]
+
+The example above crops 10% from the left side, 15% from the right, 20% from the top, and
+30% from the bottom. The resulting image will be 65% of the original width and 50% of the
+original height.
+
+rotate3d, rotate and cropp are applied before other operations.
+
 crop
 ^^^^
 
@@ -114,12 +165,20 @@ template::
 
     crop="south"
     crop="+100+100"
+    crop=[100, 100]
 
 The cropping center can also be determined by editors on the media item’s admin
-page. Without any argument, the image will be cropped to that user-defined
-cropping center::
+page (using :ref:`mod_image_edit`). Without any argument, the image will be cropped
+around the user-defined cropping center::
 
     crop
+
+The coordinate of the cropping center is relative to the original image, before rotate and
+cropp operations.
+
+If :ref:`mod_media_exif` and :ref:`mod_image_edit` are enabled then the focal point information
+of the image is taken as the cropping center for automatic cropping.
+
 
 extent
 ^^^^^^
@@ -148,13 +207,32 @@ grey
 
 Make the image greyscale.
 
+brightness
+^^^^^^^^^^
+
+Change the brightness of an image. A percentage in the range of -100 .. 100(%).
+Negative values darken the image, positive brighten the image. This applies
+a lineair multiplier to the input image, similar to the css brighten filter.
+Defaults to 0, no change.
+
+contrast
+^^^^^^^^
+
+Change the contrast of an image. A percentage in the range of -100 .. 100(%).
+Negative values decrease the contrast of the image, positive values increase
+the contrast. A value of -100 results in a gray image.
+Defaults to 0, no change.
+
 lossless
 ^^^^^^^^
 
-Controls whether resized image should become JPG (``lossless=false``) or
-PNG images (``lossless=true``). When set to ``auto``, PNG images will stay
-PNG images when resized. This protects PNG graphics them from being encoded as
-JPEGs and becoming blurry. Defaults to ``false``. Examples::
+Controls whether resized image should become JPEG (``lossless=false``) or
+PNG/GIF images (``lossless=true``). When set to ``auto``, PNG and GIF images will stay
+PNG/GIF images after resizing.
+
+This protects PNG/GIF clip art and logos from being encoded as JPEGs and becoming blurry.
+
+Defaults to ``false``. Examples::
 
     lossless=true
     lossless=`auto`

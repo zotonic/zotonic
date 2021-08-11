@@ -424,17 +424,20 @@
 
     $('.image-edit-crop__wrapper').on('click', function(ev) {
         ev.preventDefault();
-        let $crop_wrapper = $(".image-edit-crop__wrapper");
-        let w = $crop_wrapper.width();
-        let h = $crop_wrapper.height();
 
-        let cropX = ev.offsetX / w;
-        let cropY = ev.offsetY / h;
+        if ($(ev.target).hasClass('.image-edit-crop__wrapper')) {
+            let $crop_wrapper = $(".image-edit-crop__wrapper");
+            let w = $crop_wrapper.width();
+            let h = $crop_wrapper.height();
 
-        $('#image-crop-center-x').val(cropX);
-        $('#image-crop-center-y').val(cropY);
+            let cropX = ev.offsetX / w;
+            let cropY = ev.offsetY / h;
 
-        image_edit_apply_css();
+            $('#image-crop-center-x').val(cropX);
+            $('#image-crop-center-y').val(cropY);
+
+            image_edit_apply_css();
+        }
     });
 
     if (typeof window.image_edit_resize !== "function") {
