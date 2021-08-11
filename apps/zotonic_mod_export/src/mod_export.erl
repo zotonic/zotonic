@@ -32,7 +32,8 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-%% @doc Add an extra content-type to the 'id' controller.
+%% @doc Add extra content-type to the 'id' controller; as fallbacks for content-types
+%% the API controller can't handle.
 observe_content_types_dispatch(#content_types_dispatch{id=Id}, Acc, Context) ->
     Acc ++ export_encoder:content_types_dispatch(Id, Context).
 
