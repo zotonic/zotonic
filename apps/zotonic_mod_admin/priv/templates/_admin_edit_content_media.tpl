@@ -16,7 +16,7 @@
         {% live template="_admin_edit_media_all.tpl"
                 id=id
                 topic=id
-                topic=[ "bridge", "orging", "model", "media", "event", id, "update" ]
+                topic=[ "bridge", "origin", "model", "media", "event", id, "update" ]
         %}
     </div>
 {% endblock %}
