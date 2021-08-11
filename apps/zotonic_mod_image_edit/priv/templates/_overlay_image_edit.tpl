@@ -34,7 +34,7 @@
                     </a>
                 </p>
 
-                <input type="hidden" id="image-edit-orientation" name="rotation" value="{{ settings.rotation|default:'0' }}">
+                <input type="hidden" id="image-edit-orientation" name="rotate" value="{{ settings.rotate|default:'0' }}">
 
                 <input type="hidden" id="image-crop-center-x" name="crop_center_x" value="{{ settings.crop_center_x|default:'-1' }}">
                 <input type="hidden" id="image-crop-center-y" name="crop_center_y" value="{{ settings.crop_center_y|default:'-1' }}">

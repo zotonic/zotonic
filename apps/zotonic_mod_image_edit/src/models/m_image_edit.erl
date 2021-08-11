@@ -131,7 +131,7 @@ normalize(<<"crop_", _/binary>>, V) ->
         V1 when V1 > 100.0 -> 100.0;
         V1 -> round(V1*10) / 10
     end;
-normalize(<<"rotation">>, V) ->
+normalize(<<"rotate">>, V) ->
     case z_convert:to_integer(V) of
         -90 -> -90;
         -180 -> -180;
@@ -190,7 +190,7 @@ empty_args() ->
         <<"crop_center_x">> => -1,
         <<"crop_center_y">> => -1,
 
-        <<"rotation">> => 0,
+        <<"rotate">> => 0,
 
         <<"crop_top">> => 0.0,
         <<"crop_bottom">> => 0.0,

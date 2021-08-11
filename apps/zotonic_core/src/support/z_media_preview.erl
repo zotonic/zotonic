@@ -244,7 +244,7 @@ cmd_args(#{ <<"mime">> := Mime, <<"width">> := ImageWidth, <<"height">> := Image
     {FiltersPreResize, FiltersPostResize} = lists:partition(
         fun
             ({rotate3d, _}) -> true;
-            ({rotation, _}) -> true;
+            ({rotate, _}) -> true;
             ({cropp, _}) -> true;
             (_) -> false
         end,
@@ -381,7 +381,7 @@ filter2arg({correct_orientation, Orientation}, Width, Height, _AllFilters) ->
         8 -> {Width, Height, "-rotate 270"};
         _ -> {Width, Height, []}
     end;
-filter2arg({rotation, Rotation}, Width, Height, _AllFilters) ->
+filter2arg({rotate, Rotation}, Width, Height, _AllFilters) ->
     case Rotation of
         -90 -> {Height, Width, "-rotate 270"};
         -180 -> {Width, Height, "-rotate 180"};
@@ -622,14 +622,14 @@ calc_size(#{ image_width := 0 } = S) ->
 calc_size(#{ orientation := Orientation } = S) when Orientation >= 5 ->
     calc_size(S#{ orientation => 1 });
 
-calc_size(#{ filters := [ {rotation, Rotation} | Fs ], image_width := W, image_height := H, crop := Crop } = S)
+calc_size(#{ filters := [ {rotate, Rotation} | Fs ], image_width := W, image_height := H, crop := Crop } = S)
     when Rotation =:= 90;
          Rotation =:= 270;
          Rotation =:= -90;
          Rotation =:= -270 ->
     Crop1 = rotate_crop(W, H, Rotation, Crop),
     calc_size(S#{ image_width => H, image_height => W, filters => Fs, crop => Crop1 });
-calc_size(#{ filters := [ {rotation, Rotation} | Fs ], image_width := W, image_height := H, crop := Crop } = S) ->
+calc_size(#{ filters := [ {rotate, Rotation} | Fs ], image_width := W, image_height := H, crop := Crop } = S) ->
     Crop1 = rotate_crop(W, H, Rotation, Crop),
     calc_size(S#{ filters => Fs, crop => Crop1 });
 
@@ -733,97 +733,6 @@ crop_crop(Left, Top, [ X, Y ]) ->
     [ X - Left, Y - Top ];
 crop_crop(_Left, _Top, Crop) ->
     Crop.
-
-%%@doc Calculate the size of the resulting image, depends on the crop and the original image size
-% calc_size(0, Height, ImageWidth, ImageHeight, CropPar, Orientation, Filters, IsUpscale) ->
-%     calc_size(1, Height, ImageWidth, ImageHeight, CropPar, Orientation, Filters, IsUpscale);
-% calc_size(Width, 0, ImageWidth, ImageHeight, CropPar, Orientation, Filters, IsUpscale) ->
-%     calc_size(Width, 1, ImageWidth, ImageHeight, CropPar, Orientation, Filters, IsUpscale);
-% calc_size(Width, Height, 0, ImageHeight, CropPar, Orientation, Filters, IsUpscale) ->
-%     calc_size(Width, Height, 1, ImageHeight, CropPar, Orientation, Filters, IsUpscale);
-% calc_size(Width, Height, ImageWidth, 0, CropPar, Orientation, Filters, IsUpscale) ->
-%     calc_size(Width, Height, ImageWidth, 1, CropPar, Orientation, Filters, IsUpscale);
-
-% calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, Orientation, Filters, IsUpscale) when Orientation >= 5 ->
-%     calc_size(Width, Height, ImageHeight, ImageWidth, CropPar, 1, Filters, IsUpscale);
-
-% calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, Orientation, [ {rotation, Rotation} | Fs ], IsUpscale)
-%     when Rotation =:= 90;
-%          Rotation =:= 270;
-%          Rotation =:= -90;
-%          Rotation =:= -270 ->
-%     calc_size(Width, Height, ImageHeight, ImageWidth, CropPar, Orientation, Fs, IsUpscale);
-
-% calc_size(undefined, undefined, ImageWidth, ImageHeight, _CropPar, _Orientation, _Rotation, _IsUpscale) ->
-%     {ImageWidth, ImageHeight, none};
-
-% calc_size(Width, undefined, ImageWidth, ImageHeight, CropPar, Orientation, Rotation, IsUpscale) when CropPar /= none ->
-%     calc_size(Width, Width, ImageWidth, ImageHeight, CropPar, Orientation, Rotation, IsUpscale);
-
-% calc_size(undefined, Height, ImageWidth, ImageHeight, CropPar, Orientation, Rotation, IsUpscale) when CropPar /= none ->
-%     calc_size(Height, Height, ImageWidth, ImageHeight, CropPar, Orientation, Rotation, IsUpscale);
-
-% calc_size(undefined, Height, ImageWidth, ImageHeight, none, 1, _Rotation, false) when ImageHeight < Height ->
-%     % Image will be extented
-%     {ImageWidth, Height, none};
-
-% calc_size(undefined, Height, ImageWidth, ImageHeight, CropPar, Orientation, Rotation, IsUpscale) ->
-%     Width = round((ImageWidth / ImageHeight) * Height),
-%     calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, Orientation, Rotation, IsUpscale);
-
-% calc_size(Width, undefined, ImageWidth, ImageHeight, none, 1, _Rotation, false) when ImageWidth < Width ->
-%     % Image will be extented
-%     {Width, ImageHeight, none};
-
-% calc_size(Width, undefined, ImageWidth, ImageHeight, CropPar, Orientation, Rotation, IsUpscale) ->
-%     Height = round((ImageHeight / ImageWidth) * Width),
-%     calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, Orientation, Rotation, IsUpscale);
-
-% calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation, _Rotation, false)
-%     when CropPar /= none, Width > ImageWidth, Height > ImageHeight ->
-%     {Width, Height, none};
-
-% calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation, _Rotation, _IsUpscale) ->
-%     ImageAspect = ImageWidth / ImageHeight,
-%     Aspect      = Width / Height,
-%     case CropPar of
-%         none ->
-%             case Aspect > ImageAspect of
-%                 true  -> {s_ceil(ImageAspect * Height), Height, none};
-%                 false -> {Width, s_ceil(Width / ImageAspect), none}
-%             end;
-%         _ ->
-%             %% If we are doing a crop then we have to calculate the
-%             %% maximum inner bounding box, and not the maximum outer
-%             %% bounding box for the image
-%             {W,H} = case Aspect > ImageAspect of
-%                 % width is the larger one
-%                 true  -> {Width, Width / ImageAspect};
-
-%                 % height is the larger one
-%                 false -> {ImageAspect * Height, Height}
-%             end,
-
-%             Scale = ImageWidth / W,
-
-%             CropL = case CropPar of
-%                 X when X == north_west; X == west; X == south_west -> 0;
-%                 X when X == north_east; X == east; X == south_east -> s_ceil(W - Width);
-%                 [X,_] when is_integer(X) -> s_ceil(erlang:max(0, erlang:min(W-Width, X / Scale - Width/2)));
-%                 _ -> s_ceil((W - Width) / 2)
-%             end,
-
-%             CropT = case CropPar of
-%                 Y when Y == north_west; Y == north; Y == north_east -> 0;
-%                 Y when Y == south_west; Y == south; Y == south_east -> s_ceil(H - Height);
-%                 [_,Y] when is_integer(Y) -> s_ceil(erlang:max(0, erlang:min(H-Height, Y / Scale - Height/2)));
-%                 _ -> s_ceil((H - Height) / 2)
-%             end,
-
-%             %% @todo Prevent scaleup of the image, but preserve the result size
-%             %% The crop is relative to the original image
-%             {s_ceil(W), s_ceil(H), {CropL, CropT, Width, Height}}
-%     end.
 
 
 %% @doc Map the list of known filters and known args to atoms.  Used when mapping preview urls back to filter args.

@@ -117,9 +117,9 @@ expand_edit_settings(Settings, W, H, Options, Context) ->
     end,
 
     % Rotate before crop
-    Options6 = case maps:get(<<"rotation">>, Settings, 0) of
+    Options6 = case maps:get(<<"rotate">>, Settings, 0) of
         0 -> OptionsCrop;
-        R -> [ {rotation, R} | OptionsCrop ]
+        R -> [ {rotate, R} | OptionsCrop ]
     end,
 
     % Tilt, angle and pan before rotate
