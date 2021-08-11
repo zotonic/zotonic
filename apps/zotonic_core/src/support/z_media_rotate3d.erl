@@ -173,7 +173,6 @@ forward_project(X, Y, M) ->
 
 % From: http://zxq9.com/archives/1387
 
-%%% @doc
 %%% A naive matrix generation, rotation and multiplication module.
 %%% It doesn't concern itself with much checking, so input dimensions must be known
 %%% prior to calling any of these functions lest you receive some weird results back,
@@ -181,7 +180,6 @@ forward_project(X, Y, M) ->
 %%% matrix multiplication.
 %%%
 %%% All functions crash on obviously bad values.
-%%% @end
 
 -type matrix() :: [[number()]].
 
