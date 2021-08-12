@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-08-12 10:28\n"
+"PO-Revision-Date: 2021-08-12 10:35\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -951,7 +951,7 @@ msgstr "Ссылка для скачивания скопирована в бу�
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:57
 msgid "Copy download link"
-msgstr "Ссылка на скачивание"
+msgstr "Ссылка для скачивания"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:130
 msgid "Could not connect to the website."
