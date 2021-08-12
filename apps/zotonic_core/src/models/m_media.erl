@@ -800,7 +800,7 @@ replace_url(Url, RscId, RscProps, Options, Context) when is_list(RscProps) ->
     {ok, PropsMap} = z_props:from_list(RscProps),
     replace_url(Url, RscId, PropsMap, Options, Context);
 replace_url(Url, RscId, RscProps, Options, Context) ->
-    case z_acl:rsc_editable(RscId, Context) orelse not(m_rsc:p(RscId, is_authoritative, Context)) of
+    case z_acl:rsc_editable(RscId, Context) of
         true ->
             case download_file(Url) of
                 {ok, File, Filename} ->

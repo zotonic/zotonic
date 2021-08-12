@@ -115,9 +115,9 @@ full(Id, Context) when is_integer(Id) ->
                 %% Parts
                 <<"rsc">> => Rsc,
                 <<"medium">> => Medium,
+                <<"medium_url">> => DownloadUrl,
                 <<"edges">> => Edges,
-                <<"preview_url">> => PreviewUrl,
-                <<"download_url">> => DownloadUrl
+                <<"preview_url">> => PreviewUrl
             },
 
             %% Filter empty lists
