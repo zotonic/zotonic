@@ -102,15 +102,15 @@ full(Id, Context) when is_integer(Id) ->
             PreviewUrl = preview_url(Medium, Context),
             DownloadUrl = download_url(Medium, Context),
 
-            % URL used as the base url for exporting other resource ids.
+            % URL used as the template for urls to export other resource ids.
             BaseUri0 = z_context:abs_url( z_dispatcher:url_for(id, [ {id, <<"ID">>} ], Context), Context),
-            BaseUri = binary:replace(BaseUri0, <<"ID">>, <<>>),
+            BaseUri = binary:replace(BaseUri0, <<"/ID">>, <<"/:id">>),
 
             Export = #{
                 %% Essential fields
                 <<"id">> => Id,
                 <<"uri">> => m_rsc:p(Id, uri, Context),
-                <<"base_uri">> => BaseUri,
+                <<"uri_template">> => BaseUri,
 
                 %% Parts
                 <<"rsc">> => Rsc,

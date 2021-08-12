@@ -34,10 +34,12 @@
 -export([
     dispatch/2,
     dispatch/5,
+    dispatch_url/1,
     dispatch_trace/2,
     dispatch_trace/3,
     get_fallback_site/0,
     get_site_for_hostname/1,
+    get_site_for_url/1,
     update_hosts/0,
     update_dispatchinfo/0
 ]).
@@ -239,6 +241,61 @@ dispatch(Req, Env) ->
     z_memo:enable(),
     dispatch_1(DispReq, Req, Env).
 
+
+%% @doc Dispatch an URL, return the extracted dispatch information and bindings. Used
+%% for matching URLs to dispatch rules and ids.
+-spec dispatch_url( binary() | string() ) -> {ok, map()} | {error, non_neg_integer() | invalid}.
+dispatch_url( Url ) ->
+    case uri_string:parse( unicode:characters_to_binary(Url, utf8) ) of
+        #{
+            host := Host,
+            path := Path,
+            scheme := Scheme
+        } when Scheme =:= <<"http">>; Scheme =:= <<"https">> ->
+            Protocol = case Scheme of
+                <<"https">> -> https;
+                <<"http">> -> http
+            end,
+            DispReq = #dispatch{
+                host = Host,
+                path = Path,
+                method = <<"GET">>,
+                protocol = Protocol
+            },
+            case dispatch_1(DispReq, undefined, undefined) of
+                #dispatch_controller{} = Match ->
+                    Context = Match#dispatch_controller.context,
+                    BindingsMap = maps:from_list( Match#dispatch_controller.bindings ),
+                    {ok, #{
+                        site => z_context:site(Context),
+                        context => Context,
+                        controller => Match#dispatch_controller.controller,
+                        controller_options => Match#dispatch_controller.controller_options,
+                        dispatch_rule => Match#dispatch_controller.dispatch_rule,
+                        path_tokens => Match#dispatch_controller.path_tokens,
+                        bindings => BindingsMap
+                    }};
+                #dispatch_nomatch{} ->
+                    {error, nomatch};
+                {redirect, Site, NewPathOrURI, IsPermanent} ->
+                    {ok, #{
+                        site => Site,
+                        redirect => NewPathOrURI,
+                        is_permanent => IsPermanent
+                    }};
+                {redirect_protocol, Protocol, Host, IsPermanent} ->
+                    {ok, #{
+                        redirect_protocol => Protocol,
+                        redirect_host => Host,
+                        is_permanent => IsPermanent
+                    }};
+                {stop_request, RespCode} ->
+                    {error, RespCode}
+            end;
+        #{} ->
+            {error, invalid}
+    end.
+
 -spec dispatch( binary() | string(), binary() | string(), binary() | string(), boolean(), pid() | undefined ) -> dispatch().
 dispatch(Method, Host, Path, IsSsl, OptTracerPid) when is_boolean(IsSsl) ->
     Protocol = case IsSsl of
@@ -277,7 +334,7 @@ dispatch_trace(Protocol, Path, Context) ->
 get_fallback_site() ->
     get_site_for_hostname('*').
 
-%% @doc Fetch the site handling the given hostname (with optional port) (debug function)
+%% @doc Fetch the site handling the given hostname (with optional port)
 -spec get_site_for_hostname(string()|binary()|'*') -> {ok, atom()} | undefined.
 get_site_for_hostname(Hostname) when is_list(Hostname) ->
     get_site_for_hostname(list_to_binary(Hostname));
@@ -285,6 +342,16 @@ get_site_for_hostname(Hostname) ->
     case ets:lookup(?MODULE, strip_port(Hostname)) of
         [{_, Site, _Redirect}] -> {ok, Site};
         [] -> undefined
+    end.
+
+%% @doc Fetch the site handling the given URL. Scheme is not checked.
+-spec get_site_for_url( binary() | string() ) -> {ok, atom()} | undefined.
+get_site_for_url(Url) ->
+    case uri_string:parse( unicode:characters_to_binary(Url, utf8) ) of
+        #{ host := Host } ->
+            get_site_for_hostname(Host);
+        #{} ->
+            undefined
     end.
 
 
