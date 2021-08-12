@@ -19,5 +19,8 @@
  % Authentication API used by zotonic.auth.worker.js
  {logon_auth,       [ "zotonic-auth" ],     controller_authentication, []},
 
- {admin_authentication_services, ["admin", "authentication-services"],  controller_admin, [{template, "admin_authentication_services.tpl"}]}
+ {admin_authentication_services, ["admin", "authentication-services"],  controller_admin, [{template, "admin_authentication_services.tpl"}]},
+
+ % Redirect for password managers https://w3c.github.io/webappsec-change-password-url/
+ {webappsec_change_password, [ ".well-known", "change-password" ], controller_redirect, [ {dispatch, logon_change} ]}
 ].
