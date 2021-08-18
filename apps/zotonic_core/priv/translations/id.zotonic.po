@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-13 14:09\n"
+"PO-Revision-Date: 2021-08-18 09:15\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -904,11 +904,11 @@ msgstr "Klik gambar untuk mengatur tanam pusat."
 msgid "Click to preview."
 msgstr "Klik untuk melihat pratinjau."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:103
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:106
 msgid "Close Sockets"
 msgstr "Tutup Soket"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:104
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:107
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "Tutup semua soket dari alamat ip yang memiliki lebih dari &gt; 250 soket terbuka."
 
@@ -941,7 +941,7 @@ msgstr "Menghubung"
 msgid "Connect a page"
 msgstr "Menghubungkan sebuah halaman"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:52
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:55
 msgid "Connections"
 msgstr "Koneksi"
 
@@ -961,11 +961,11 @@ msgstr "Tidak dapat terhubung ke situs web."
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "Tidak dapat mendeteksi apapun untuk mengimpor pada URL tersebut atau menanamkan kode."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:85
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:88
 msgid "Count"
 msgstr "Menghitung"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:83
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:86
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:103
 msgid "Country"
 msgstr "Negara"
@@ -1031,7 +1031,7 @@ msgstr "Hapus jika tidak terhubung lagi"
 msgid "Delete this page."
 msgstr "Hapus Halaman ini."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:12
 msgid "Deleted."
 msgstr "Hapus."
 
@@ -1138,15 +1138,15 @@ msgstr "Telepon darurat"
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "Masukkan URL atau kode embed. Itu akan dianalisis dan anda dapat memilih cara untuk mengimpor data."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Erlang Init Files"
 msgstr "File Erlang Init"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:57
 msgid "Erlang Installation Root"
 msgstr "Root Instalasi Erlang"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:41
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:44
 msgid "Erlang Version"
 msgstr "Versi Erlang"
 
@@ -1218,11 +1218,11 @@ msgstr "Temukan Halaman"
 msgid "First"
 msgstr "Pertama"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:71
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:74
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "Siram semua aturan pengiriman URL, template - dan perpustakaan cache dan lainnya di memori cache data."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:70
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:73
 msgid "Flush system caches"
 msgstr "Lapisan sistem flush"
 
@@ -1245,11 +1245,11 @@ msgstr "Judul"
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "Di sini Anda dapat mengedit argumen kueri penelusuran. Setiap argumen memiliki alurnya sendiri. Untuk informasi selengkapnya, lihat dokumentasi <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">pada argumen kueri</a> di situs web Zotonic."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:45
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
 msgid "Home Directory"
 msgstr "Direktori Rumah"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:81
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:84
 msgid "IP Address"
 msgstr "Alamat IP"
 
@@ -1308,6 +1308,10 @@ msgstr "Tautan"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:37
 msgid "Live query, send notifications when matching items are updated or inserted."
 msgstr "Tinggal query, mengirim pemberitahuan ketika item yang sesuai diperbarui atau dimasukkan."
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
+msgid "Log Directory"
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:71
 #: apps/zotonic_site_status/priv/templates/_menu.tpl:5./apps/zotonic_site_status/priv/templates/_navbar.tpl:34
@@ -1417,7 +1421,7 @@ msgstr "Dimodifikasi:"
 msgid "Name"
 msgstr "Nama"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:60
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:63
 msgid "Network Connections"
 msgstr "Koneksi jaringan"
 
@@ -1505,7 +1509,7 @@ msgstr "Halaman untuk"
 msgid "Pages overview"
 msgstr "Ikhtisar halaman"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:30
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
 msgid "Path"
@@ -1584,16 +1588,16 @@ msgstr "Pertanyaan"
 msgid "Query preview"
 msgstr "Pratinjau permintaan"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:87
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:90
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
 msgstr "Membangun kembali semua pencarian-indeks dengan menempatkan semua halaman dan data dari database di pengindeks antrian. Ini dapat mengambil waktu yang lama!"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:81
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:122
 msgid "Rebuild search indices"
 msgstr "Membangun kembali indeks pencarian"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:93
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:96
 msgid "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "Menghitung ulang penomoran dari kategori pohon. Hal ini dapat memakan waktu yang lama."
 
@@ -1613,11 +1617,11 @@ msgstr "Arahkan ulang ke situs web pada tampilan halaman"
 msgid "Referrers to"
 msgstr "Perujuk untuk"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:49
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:50
 msgid "Refreshed every 30 minutes."
 msgstr "Di-refresh setiap 30 menit."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:97
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:100
 msgid "Reinstall site datamodel"
 msgstr "Pasang ulang datamodel situs"
 
@@ -1633,7 +1637,7 @@ msgstr "Memindahkan tanaman pusat"
 msgid "Removed the connection to"
 msgstr "Menghapus koneksi ke"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:92
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:95
 msgid "Renumber category tree"
 msgstr "Memberi nomor kategori pohon"
 
@@ -1657,7 +1661,7 @@ msgstr "Sumber daya dalam <i>meta</i> kategori dapat memiliki 'fitur': sumber da
 msgid "Retrieving status..."
 msgstr "Mengambil status..."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:98
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:101
 msgid "Runs the schema install command from the site's module again."
 msgstr "Menjalankan skema menginstal perintah dari situs ini modul lagi."
 
@@ -1744,11 +1748,11 @@ msgstr "Tampilkan sebagai"
 msgid "Show page on multiple paths"
 msgstr "Tampilkan halaman pada beberapa jalur"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:37
 msgid "Site Files Directory"
 msgstr "Direktori File Situs"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:16
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
@@ -1923,7 +1927,7 @@ msgstr "Nama ini sedang digunakan oleh halaman lain."
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "Halaman ini dapat dihubungkan dari halaman lain. Misalnya bisa menjadi penulis artikel."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:12
 msgid "This page has been deleted."
 msgstr "Halaman ini telah dihapus."
 
@@ -2011,7 +2015,7 @@ msgstr "Unggah Berkas"
 msgid "Uploaded"
 msgstr "Unggahan"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
 msgid "Usage"
 msgstr "Pemakaian"
 
@@ -2092,7 +2096,7 @@ msgstr "Situs web untuk klik pada gambar"
 msgid "Website or Embed"
 msgstr "Situ web atau Embed"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
 msgid "Work Directory"
 msgstr "Direktori Kerja"
 
