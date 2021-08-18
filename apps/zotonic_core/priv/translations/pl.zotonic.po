@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-08-18 09:15\n"
+"PO-Revision-Date: 2021-08-18 09:22\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -1311,7 +1311,7 @@ msgstr "Zapytanie na żywo, wysyłanie powiadomień w przypadku aktualizacji lub
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
 msgid "Log Directory"
-msgstr ""
+msgstr "Katalog dziennika"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:71
 #: apps/zotonic_site_status/priv/templates/_menu.tpl:5./apps/zotonic_site_status/priv/templates/_navbar.tpl:34
