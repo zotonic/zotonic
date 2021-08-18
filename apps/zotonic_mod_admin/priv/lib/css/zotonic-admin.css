@@ -1110,6 +1110,19 @@ body.navbar-menu-open {
     display: none;
   }
 }
+.modal-overlay.dark {
+  background-color: #1e1e1e;
+  color: #f8f8f8;
+}
+.modal-overlay.dark h2,
+.modal-overlay.dark h3,
+.modal-overlay.dark h4,
+.modal-overlay.dark label {
+  color: #f8f8f8;
+}
+.modal-overlay.dark hr {
+  background-color: #5e5e5e;
+}
 .rsc-preview-wrapper .rsc-preview {
   max-width: 800px;
   margin: 10px auto;

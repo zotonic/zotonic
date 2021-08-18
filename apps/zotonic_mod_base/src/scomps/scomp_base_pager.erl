@@ -148,8 +148,7 @@ url_for(Dispatch, Args, Context) ->
     z_dispatcher:url_for(Dispatch, Args, Context).
 
 
-%% @doc Append all query arguments iff they are not mentioned in the arglist and if qargs parameter is set
-%% Taken from z_dispatcher.erl
+%% @doc Append all query arguments iff they are not mentioned in the arglist and if qargs parameter is set.
 append_qargs(Args, Context) ->
     case proplists:get_value(qargs, Args) of
         undefined ->
@@ -158,19 +157,30 @@ append_qargs(Args, Context) ->
             proplists:delete(qargs, Args);
         true ->
             Args1 = proplists:delete(qargs, Args),
-            Qs = z_context:get_q_all(Context),
-            lists:foldr(fun
-                            ({<<"q", _/binary>> = Key, _Value}=A, Acc) ->
-                                case proplists:is_defined(Key, Args) of
-                                    true -> Acc;
-                                    false -> [ A | Acc ]
-                                end;
-                            (_, Acc) ->
-                                Acc
-                        end,
-                        Args1,
-                        Qs)
+            merge_qargs(z_context:get_qargs(Context), Args1);
+        L when is_list(L) ->
+            Args1 = proplists:delete(qargs, Args),
+            merge_qargs(L, Args1);
+        M when is_map(M) ->
+            Args1 = proplists:delete(qargs, Args),
+            merge_qargs(maps:to_list(M), Args1)
     end.
+
+merge_qargs([], Args) ->
+    Args;
+merge_qargs(Qs, Args) ->
+    Ks = [ z_convert:to_binary(A) || {A, _} <- Args ],
+    lists:foldr(
+        fun({A, _} = AV, Acc) ->
+            case lists:member(A, Ks) of
+                true ->
+                    Acc;
+                false ->
+                    [ AV | Acc ]
+            end
+        end,
+        Args,
+        Qs).
 
 encode_args(Args) ->
     lists:join($&, [

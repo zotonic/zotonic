@@ -183,7 +183,7 @@ tag(Props, Options, Context) when is_map(Props) ->
         None when None =:= []; None =:= <<>>; None =:= undefined ->
             {ok, <<>>};
         Filename ->
-            Options1 = opt_crop_center(Id, Options, Context),
+            Options1 = extra_image_options(Id, Props, Options, Context),
             tag1(Props, Filename, Options1, Context)
     end;
 tag(<<"/", Filename/binary>>, Options, Context) ->
@@ -197,7 +197,8 @@ tag({filepath, Filename, FilePath}, Options, Context) ->
 
 -spec tag1( file:filename_all() | map(),
             file:filename_all() | {filepath, file:filename_all(), file:filename_all()},
-            proplists:proplist(), z:context() )
+            proplists:proplist(),
+            z:context() )
         -> {ok, binary()}.
 tag1(_MediaRef, {filepath, Filename, FilePath}, Options, Context) ->
     tag1(FilePath, Filename, Options, Context);
@@ -391,7 +392,7 @@ url(Props, Options, Context) when is_map(Props) ->
         None when None =:= []; None =:= <<>>; None =:= undefined ->
             {ok, <<>>};
         Filename ->
-            Options1 = opt_crop_center(Id, Options, Context),
+            Options1 = extra_image_options(Id, Props, Options, Context),
             {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options1, Context),
             {ok, Url}
     end;
@@ -502,6 +503,7 @@ is_tagopt({align, _}) -> true;  % HTML 1.0 for e-mails
 is_tagopt({width, _}) -> false;
 is_tagopt({height, _}) -> false;
 is_tagopt({crop, _}) -> false;
+is_tagopt({cropp, _}) -> false;
 is_tagopt({grey, _}) -> false;
 is_tagopt({gray, _}) -> false;
 is_tagopt({mono, _}) -> false;
@@ -513,7 +515,12 @@ is_tagopt({background, _}) -> false;
 is_tagopt({lossless, _}) -> false;
 is_tagopt({removebg, _}) -> false;
 is_tagopt({mediaclass, _}) -> false;
+is_tagopt({rotate3d, _}) -> false;
+is_tagopt({brightness, _}) -> false;
+is_tagopt({contrast, _}) -> false;
+is_tagopt({original, _}) -> false;
 is_tagopt({nowh, _}) -> false;
+
 % And be sure to keep the data-xxxx args in the tag
 is_tagopt({Prop, _}) ->
     case z_convert:to_list(Prop) of
@@ -548,14 +555,22 @@ with_checksum(Size, Acc) ->
 
 props2url([], Width, Height, Acc, _Context) ->
     {Width, Height, Acc};
-props2url([{crop,None}|Rest], Width, Height, Acc, Context) when None == false; None == undefined; None == <<>>; None == [] ->
-    props2url(Rest, Width, Height, Acc, Context);
 props2url([{width,Width}|Rest], _Width, Height, Acc, Context) ->
     props2url(Rest, z_convert:to_integer(Width), Height, Acc, Context);
 props2url([{height,Height}|Rest], Width, _Height, Acc, Context) ->
     props2url(Rest, Width, z_convert:to_integer(Height), Acc, Context);
 props2url([{absolute_url,_}|Rest], Width, Height, Acc, Context) ->
     props2url(Rest, Width, Height, Acc, Context);
+props2url([{nowh, _}|Rest], Width, Height, Acc, Context) ->
+    props2url(Rest, Width, Height, Acc, Context);
+props2url([{crop,None}|Rest], Width, Height, Acc, Context)
+    when None =:= false; None =:= undefined; None =:= <<>>; None =:= [] ->
+    props2url(Rest, Width, Height, Acc, Context);
+props2url([{crop,[ X, Y ]}|Rest], Width, Height, Acc, Context) ->
+    R = [
+        "crop-+", integer_to_list(X), "+", integer_to_list(Y)
+    ],
+    props2url(Rest, Width, Height, [R|Acc], Context);
 props2url([{mediaclass,Class}|Rest], Width, Height, Acc, Context) ->
     case z_mediaclass:get(Class, Context) of
         {ok, [], <<>>} ->
@@ -570,8 +585,18 @@ props2url([{mediaclass,Class}|Rest], Width, Height, Acc, Context) ->
             ],
             props2url(Rest, Width, Height, [MC|Acc], Context)
     end;
-props2url([{nowh, _}|Rest], Width, Height, Acc, Context) ->
-    props2url(Rest, Width, Height, Acc, Context);
+props2url([{rotate3d, Args}|Rest], Width, Height, Acc, Context) ->
+    R = [
+        "rotate3d-",
+        lists:join($,, [ z_convert:to_list(N) || N <- Args ])
+    ],
+    props2url(Rest, Width, Height, [R|Acc], Context);
+props2url([{cropp, Args}|Rest], Width, Height, Acc, Context) ->
+    R = [
+        "cropp-",
+        lists:join($,, [ z_convert:to_list(N) || N <- Args ])
+    ],
+    props2url(Rest, Width, Height, [R|Acc], Context);
 props2url([{Prop}|Rest], Width, Height, Acc, Context) ->
     props2url(Rest, Width, Height, [atom_to_list(Prop)|Acc], Context);
 props2url([{_Prop,undefined}|Rest], Width, Height, Acc, Context) ->
@@ -618,20 +643,24 @@ url2props(Url, Context) ->
                                     try
                                         z_utils:checksum_assert([Filepath,Props,Extension], Check1, Context),
                                         PropList1 = case PropList of
-                                                        [] ->
-                                                            [];
-                                                        [Size|RestProps]->
-                                                            {W,XH} = lists:splitwith(fun(C) -> C >= $0 andalso C =< $9 end, Size),
-                                                            SizeProps = case {W,XH} of
-                                                                            {"", "x"}            -> [];
-                                                                            {"", ""}             -> [];
-                                                                            {Width, ""}          -> [{width,list_to_integer(Width)}];
-                                                                            {Width, "x"}         -> [{width,list_to_integer(Width)}];
-                                                                            {"", [$x|Height]}    -> [{height,list_to_integer(Height)}];
-                                                                            {Width, [$x|Height]} -> [{width,list_to_integer(Width)},{height,list_to_integer(Height)}]
-                                                                        end,
-                                                            SizeProps ++ url2props1(RestProps, [])
-                                                    end,
+                                            [] ->
+                                                [];
+                                            [Size|RestProps]->
+                                                {W,XH} = lists:splitwith(fun(C) -> C >= $0 andalso C =< $9 end, Size),
+                                                SizeProps = case {W,XH} of
+                                                    {"", "x"}            -> [];
+                                                    {"", ""}             -> [];
+                                                    {Width, ""}          -> [ {width, list_to_integer(Width)} ];
+                                                    {Width, "x"}         -> [ {width, list_to_integer(Width)} ];
+                                                    {"", [$x|Height]}    -> [ {height, list_to_integer(Height)} ];
+                                                    {Width, [$x|Height]} ->
+                                                        [
+                                                            {width,list_to_integer(Width)},
+                                                            {height,list_to_integer(Height)}
+                                                        ]
+                                                end,
+                                                SizeProps ++ url2props1(RestProps, [])
+                                        end,
                                         {ok, {Filepath,PropList1,Check1,Props}}
                                     catch
                                         error:checksum_invalid ->
@@ -679,35 +708,23 @@ url2props1([P|Rest], Acc) ->
             url2props1(Rest, Acc)
     end.
 
-opt_crop_center(Id, Options, Context) ->
-    Crop = proplists:get_value(crop, Options),
-    case is_crop_center(Crop) of
-        true -> maybe_add_crop_center(Id, Options, Context);
-        false when Crop =:= undefined ->
-            opt_crop_center_mediaclass(proplists:get_value(mediaclass, Options), Id, Options, Context);
-        false -> Options
-    end.
-
-opt_crop_center_mediaclass(undefined, _Id, Options, _Context) ->
-    Options;
-opt_crop_center_mediaclass(Mediaclass, Id, Options, Context) ->
-    {ok, Props, _Hash} = z_mediaclass:get(Mediaclass, Context),
-    case is_crop_center(proplists:get_value(crop, Props)) of
-        true -> maybe_add_crop_center(Id, Options, Context);
-        false -> Options
-    end.
-
-maybe_add_crop_center(Id, Options, Context) ->
-    case m_rsc:p_no_acl(Id, crop_center, Context) of
-        <<"+", _/binary>> = Center ->
-            z_utils:prop_replace(crop, Center, Options);
+%% @doc Let moduls modify the list of preview options, unless the 'original' option is passed.
+extra_image_options(Id, Props, Options, Context) ->
+    case proplists:get_value(original, Options) of
+        true ->
+            proplists:delete(original, Options);
         _ ->
-            Options
+            Options1 = proplists:delete(original, Options),
+            Width = maps:get(<<"width">>, Props),
+            Height = maps:get(<<"height">>, Props),
+            z_notifier:foldl(
+                #media_preview_options{
+                    id = Id,
+                    width = Width,
+                    height = Height,
+                    options = Options
+                },
+                Options1,
+                Context)
     end.
-
-is_crop_center(true) -> true;
-is_crop_center(center) -> true;
-is_crop_center(<<"center">>) -> true;
-is_crop_center("center") -> true;
-is_crop_center(_) -> false.
 

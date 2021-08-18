@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2010 Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2021 Marc Worrell, Arjan Scherpenisse
 %% @doc Admin webmachine_controller.
 
-%% Copyright 2009-2010 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2021 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -140,15 +140,15 @@ event(#submit{message={rscform, Args}}, Context) ->
                     end
             end;
         {error, duplicate_uri} ->
-            z_render:growl_error("Error, duplicate uri. Please change the uri.", Context);
+            z_render:growl_error(?__("Error, duplicate uri. Please change the uri.", Context), Context);
         {error, duplicate_page_path} ->
-            z_render:growl_error("Error, duplicate page path. Please change the uri.", Context);
+            z_render:growl_error(?__("Error, duplicate page path. Please change the uri.", Context), Context);
         {error, duplicate_name} ->
-            z_render:growl_error("Error, duplicate name. Please change the name.", Context);
+            z_render:growl_error(?__("Error, duplicate name. Please change the name.", Context), Context);
         {error, eacces} ->
-            z_render:growl_error("You don't have permission to edit this page.", Context);
+            z_render:growl_error(?__("You don't have permission to edit this page.", Context), Context);
         {error, invalid_query} ->
-            z_render:growl_error("Your search query is invalid. Please correct it before saving.", Context);
+            z_render:growl_error(?__("Your search query is invalid. Please correct it before saving.", Context), Context);
         {error, Message} when is_list(Message); is_binary(Message) ->
             z_render:growl_error(Message, Context)
     end;
@@ -170,13 +170,13 @@ event(#sort{items=Sorted, drop={dragdrop, {object_sorter, Props}, _, _}}, Contex
 event(#postback{message={query_preview, Opts}}, Context) ->
     DivId = proplists:get_value(div_id, Opts),
     try
-        Q = search_query:parse_query_text(z_context:get_q("triggervalue", Context)),
+        Q = search_query:parse_query_text(z_context:get_q(<<"triggervalue">>, Context)),
         S = z_search:search({'query', Q}, Context),
         {Html, Context1} = z_template:render_to_iolist("_admin_query_preview.tpl", [{result,S}], Context),
         z_render:update(DivId, Html, Context1)
     catch
         _: {error, {Kind, Arg}} ->
-            z_render:growl_error(["There is an error in your query: ", Kind, " - ", Arg], Context)
+            z_render:growl_error([?__("There is an error in your query:", Context), " ", Kind, " - ", Arg], Context)
     end.
 
 set_value_slug(undefined, Context) ->

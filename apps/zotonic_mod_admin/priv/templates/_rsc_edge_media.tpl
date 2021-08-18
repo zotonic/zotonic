@@ -1,19 +1,8 @@
 {# Show a thumbnail with an unlink option. Used in the admin_edit #}
 
 {% sortable id=#unlink_wrapper tag=edge_id %}
-{% with (object_id.is_a.image and object_id.crop_center) as has_cropcenter %}
 <li id="{{ #unlink_wrapper }}" class="{% if not object_id.is_published %}unpublished{% endif %}">
-    {% if has_cropcenter %}
-        {% with (1 / object_id.medium.width * object_id.medium.height) as ratio %}
-        <figure class="do_cropcenter"
-                data-cropcenter="hiddenInput:'#crop_center_{{ object_id }}', editable: false"
-                data-original-width="{{ object_id.medium.width }}"
-                style="{% if ratio > 1 %}max-width: {{ 100 * 1/ratio }}%;{% else %}max-height: {{ 100 * ratio }}%;{% endif %}">
-            <input class="nosubmit" type="hidden" name="crop_center" id="crop_center_{{ object_id }}" value="{{ object_id.crop_center }}" />
-        {% endwith %}
-    {% else %}
-        <figure>
-    {% endif %}
+    <figure>
         {% image object_id mediaclass="admin-rsc-edge-media" alt=object_id.title title=object_id.title %}
     </figure>
     <a id="{{ #unlink.object_id }}" class="z-btn-remove" title="{_ Disconnect _} {{ object_id.title }}"></a>
@@ -25,7 +14,6 @@
 	    </div>
     </div>
 </li>
-{% endwith %}
 
 {% wire id=#unlink.object_id
     action={
