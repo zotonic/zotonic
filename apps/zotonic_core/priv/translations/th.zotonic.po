@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-13 14:09\n"
+"PO-Revision-Date: 2021-08-18 09:15\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -904,11 +904,11 @@ msgstr "คลิกรูปภาพเพื่อตั้งศูนย์
 msgid "Click to preview."
 msgstr "คลิกเพื่อดูตัวอย่าง"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:103
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:106
 msgid "Close Sockets"
 msgstr "ปิดซ็อกเก็ต"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:104
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:107
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "ปิดซ็อกเก็ตทั้งหมดจากที่อยู่ IP ซึ่งมีมากกว่า &gt; 250 ซ็อกเก็ตเปิด"
 
@@ -941,7 +941,7 @@ msgstr "เชื่อมต่อ"
 msgid "Connect a page"
 msgstr "เชื่อมต่อเพจ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:52
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:55
 msgid "Connections"
 msgstr "การเชื่อมต่อ"
 
@@ -961,11 +961,11 @@ msgstr "ไม่สามารถเชื่อมต่อกับเว็
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "ไม่พบสิ่งที่จะนำเข้าใน URL หรือโค้ดฝังนั้น"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:85
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:88
 msgid "Count"
 msgstr "นับ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:83
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:86
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:103
 msgid "Country"
 msgstr "ประเทศ"
@@ -1031,7 +1031,7 @@ msgstr "ลบหากไม่ได้เชื่อมต่ออีกต
 msgid "Delete this page."
 msgstr "ลบหน้านี้"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:12
 msgid "Deleted."
 msgstr "ลบแล้ว"
 
@@ -1138,15 +1138,15 @@ msgstr "โทรศัพท์ฉุกเฉิน"
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "ป้อน URL หรือโค้ดฝัง ระบบจะวิเคราะห์และคุณสามารถเลือกวิธีการนำเข้าข้อมูลได้"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Erlang Init Files"
 msgstr "ไฟล์ Erlang Init"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:57
 msgid "Erlang Installation Root"
 msgstr "รากการติดตั้ง Erlang"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:41
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:44
 msgid "Erlang Version"
 msgstr "เวอร์ชั่น Erlang"
 
@@ -1218,11 +1218,11 @@ msgstr "ค้นหาหน้า"
 msgid "First"
 msgstr "อันดับแรก"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:71
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:74
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "ล้างกฎการส่ง URL เทมเพลตและแคชไลบรารีและข้อมูลแคชอื่น ๆ ในหน่วยความจำ"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:70
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:73
 msgid "Flush system caches"
 msgstr "แคชระบบล้าง"
 
@@ -1245,11 +1245,11 @@ msgstr "หัวข้อ"
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "คุณสามารถแก้ไขอาร์กิวเมนต์ของคำค้นหาได้ที่นี่ ทุกการโต้แย้งดำเนินไปในแนวของมันเอง สำหรับข้อมูลเพิ่มเติมโปรดดูเอกสาร <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">เกี่ยวกับอาร์กิวเมนต์เคียวรี</a> บนเว็บไซต์ Zotonic"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:45
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
 msgid "Home Directory"
 msgstr "โฮมไดเร็กทอรี"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:81
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:84
 msgid "IP Address"
 msgstr "ที่อยู่ IP"
 
@@ -1308,6 +1308,10 @@ msgstr "ลิงค์"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:37
 msgid "Live query, send notifications when matching items are updated or inserted."
 msgstr "แบบสอบถามสดส่งการแจ้งเตือนเมื่อมีการอัปเดตหรือแทรกรายการที่ตรงกัน"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
+msgid "Log Directory"
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:71
 #: apps/zotonic_site_status/priv/templates/_menu.tpl:5./apps/zotonic_site_status/priv/templates/_navbar.tpl:34
@@ -1417,7 +1421,7 @@ msgstr "แก้ไข:"
 msgid "Name"
 msgstr "ชื่อ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:60
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:63
 msgid "Network Connections"
 msgstr "เชื่อมต่อเครือข่าย"
 
@@ -1505,7 +1509,7 @@ msgstr "เพจสำหรับ"
 msgid "Pages overview"
 msgstr "ภาพรวมของเพจ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:30
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
 msgid "Path"
@@ -1584,16 +1588,16 @@ msgstr "แบบสอบถาม"
 msgid "Query preview"
 msgstr "ดูตัวอย่างการค้นหา"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:87
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:90
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
 msgstr "สร้างดัชนีการค้นหาใหม่ทั้งหมดโดยใส่เพจและข้อมูลทั้งหมดจากฐานข้อมูลในคิวตัวทำดัชนี อาจใช้เวลานาน!"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:81
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:122
 msgid "Rebuild search indices"
 msgstr "สร้างดัชนีการค้นหาใหม่"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:93
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:96
 msgid "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "คำนวณการกำหนดหมายเลขของโครงสร้างหมวดหมู่ใหม่ อาจใช้เวลานาน"
 
@@ -1613,11 +1617,11 @@ msgstr "เปลี่ยนเส้นทางไปยังเว็บไ
 msgid "Referrers to"
 msgstr "ผู้อ้างอิงถึง"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:49
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:50
 msgid "Refreshed every 30 minutes."
 msgstr "รีเฟรชทุกๆ 30 นาที"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:97
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:100
 msgid "Reinstall site datamodel"
 msgstr "ติดตั้งโมเดลข้อมูลของไซต์อีกครั้ง"
 
@@ -1633,7 +1637,7 @@ msgstr "ลบศูนย์ครอบตัด"
 msgid "Removed the connection to"
 msgstr "ลบการเชื่อมต่อกับ"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:92
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:95
 msgid "Renumber category tree"
 msgstr "ต้นไม้ประเภทเปลี่ยนหมายเลข"
 
@@ -1657,7 +1661,7 @@ msgstr "ทรัพยากรในหมวด <i>meta</i> สามาร�
 msgid "Retrieving status..."
 msgstr "กำลังเรียกข้อมูลสถานะ ..."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:98
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:101
 msgid "Runs the schema install command from the site's module again."
 msgstr "รันคำสั่ง schema install จากโมดูลของไซต์อีกครั้ง"
 
@@ -1744,11 +1748,11 @@ msgstr "แสดงเป็น"
 msgid "Show page on multiple paths"
 msgstr "แสดงเพจในหลายเส้นทาง"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:37
 msgid "Site Files Directory"
 msgstr "ไดเรกทอรีไฟล์ไซต์"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:16
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
@@ -1923,7 +1927,7 @@ msgstr "ชื่อนี้ถูกใช้โดยเพจอื่น"
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "เพจนี้สามารถเชื่อมต่อจากเพจอื่น ๆ ตัวอย่างเช่นอาจเป็นผู้เขียนบทความ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:12
 msgid "This page has been deleted."
 msgstr "เพจนี้ถูกลบแล้ว"
 
@@ -2011,7 +2015,7 @@ msgstr "อัปโหลดไฟล์"
 msgid "Uploaded"
 msgstr "อัปโหลดแล้ว"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
 msgid "Usage"
 msgstr "การใช้งาน"
 
@@ -2092,7 +2096,7 @@ msgstr "เว็บไซต์สำหรับคลิกที่ภาพ
 msgid "Website or Embed"
 msgstr "เว็บไซต์หรือฝัง"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
 msgid "Work Directory"
 msgstr "Work Directory"
 
