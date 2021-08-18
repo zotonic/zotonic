@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-13 14:09\n"
+"PO-Revision-Date: 2021-08-18 09:15\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -904,11 +904,11 @@ msgstr "Kırpma merkezini ayarlamak için resmi tıklayın."
 msgid "Click to preview."
 msgstr "Önizleme için tıklayın."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:103
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:106
 msgid "Close Sockets"
 msgstr "Soketleri Kapat"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:104
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:107
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "&gt; 250'den fazla açık soketi olan ip adreslerinden gelen tüm soketleri kapatın."
 
@@ -941,7 +941,7 @@ msgstr "Bağlan"
 msgid "Connect a page"
 msgstr "Bir sayfaya bağlan"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:52
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:55
 msgid "Connections"
 msgstr "Bağlantılar"
 
@@ -961,11 +961,11 @@ msgstr "Web sitesine bağlanılamadı."
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "O URL veya gömülü kod da içe aktarılacak herhangi bir şey tespit edilemedi."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:85
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:88
 msgid "Count"
 msgstr "Miktar"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:83
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:86
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:103
 msgid "Country"
 msgstr "Ülke"
@@ -1031,7 +1031,7 @@ msgstr "Artık bağlı değilse silin"
 msgid "Delete this page."
 msgstr "Bu sayfayı sil."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:12
 msgid "Deleted."
 msgstr "Silindi."
 
@@ -1138,15 +1138,15 @@ msgstr "Acil telefonu"
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "Bir URL ya da gömme kodu girin. Analiz edilecek ve verilerin nasıl içe aktarılacağını seçebileceksiniz."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Erlang Init Files"
 msgstr "Erlang Init Dosyaları"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:57
 msgid "Erlang Installation Root"
 msgstr "Erlang Kurulum Kökü"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:41
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:44
 msgid "Erlang Version"
 msgstr "Erlang Sürümü"
 
@@ -1218,11 +1218,11 @@ msgstr "Sayfa bul"
 msgid "First"
 msgstr "İlk"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:71
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:74
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "Tüm URL yönlendirme kurallarını, kütüphane belleğini ve diğer bellek değerlerini sıfırla."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:70
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:73
 msgid "Flush system caches"
 msgstr "Sistem belleğini sıfırla"
 
@@ -1245,11 +1245,11 @@ msgstr "Başlık"
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "Burada arama sorgusunun argümanlarını düzenleyebilirsiniz. Her argüman kendi çizgisinde gider. Daha fazla bilgi için, Zotonic web sitesinde sorgu bağımsız değişkenleri</a> ilgili <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">belgelerine bakın."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:45
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
 msgid "Home Directory"
 msgstr "Ana Dizin"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:81
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:84
 msgid "IP Address"
 msgstr "IP adresi"
 
@@ -1308,6 +1308,10 @@ msgstr "Bağlantı"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:37
 msgid "Live query, send notifications when matching items are updated or inserted."
 msgstr "Canlı sorgu, eşleşen öğeler yüklenirse veya eklenirse bildirim gönder."
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
+msgid "Log Directory"
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:71
 #: apps/zotonic_site_status/priv/templates/_menu.tpl:5./apps/zotonic_site_status/priv/templates/_navbar.tpl:34
@@ -1417,7 +1421,7 @@ msgstr "Değiştirildi:"
 msgid "Name"
 msgstr "İsim"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:60
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:63
 msgid "Network Connections"
 msgstr "Ağ bağlantıları"
 
@@ -1505,7 +1509,7 @@ msgstr "İçin sayfalar"
 msgid "Pages overview"
 msgstr "Sayfalar genel bakışı"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:30
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
 msgid "Path"
@@ -1584,16 +1588,16 @@ msgstr "Sorgu"
 msgid "Query preview"
 msgstr "Sorgu önizleme"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:87
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:90
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
 msgstr "Tüm sayfaları ve veriyi indeksleme kuyruğuna atarak tüm arama indislerini tekrardan yarat. Bu işlem hayli uzun zaman alabilir!"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:81
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:122
 msgid "Rebuild search indices"
 msgstr "Arama indislerini tekrar oluştur"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:93
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:96
 msgid "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "Kategori ağacının numaralandırılmasını yeniden hesaplayın. Bu uzun bir zaman alabilir."
 
@@ -1613,11 +1617,11 @@ msgstr "Sayfa görünümünde web sitesine yönlendir"
 msgid "Referrers to"
 msgstr "Değinenler"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:49
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:50
 msgid "Refreshed every 30 minutes."
 msgstr "Her 30 dakikada bir yenilenir."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:97
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:100
 msgid "Reinstall site datamodel"
 msgstr "Site veri modelini yeniden yükle"
 
@@ -1633,7 +1637,7 @@ msgstr "Kırpma merkezini kaldır"
 msgid "Removed the connection to"
 msgstr "Şuna olan bağlantıyı kaldır"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:92
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:95
 msgid "Renumber category tree"
 msgstr "Kategori ağacını tekrar numaralandır"
 
@@ -1657,7 +1661,7 @@ msgstr "<I>meta</i> kategorisindeki kaynaklar 'özellikler' içerebilir: yöneti
 msgid "Retrieving status..."
 msgstr "Durum alınıyor..."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:98
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:101
 msgid "Runs the schema install command from the site's module again."
 msgstr "Şema yükleme komutunu sitenin modülünden yeniden çalıştırır."
 
@@ -1744,11 +1748,11 @@ msgstr "Göster"
 msgid "Show page on multiple paths"
 msgstr "Sayfayı birden çok yol üzerinde göster"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:37
 msgid "Site Files Directory"
 msgstr "Site Dosyaları Dizini"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:16
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
@@ -1923,7 +1927,7 @@ msgstr "Bu isim başka bir sayfada kullanılıyor."
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "Bu sayfa diğer sayfalardan bağlanabilir. Örneğin, bir makalenin yazarı olabilir."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:12
 msgid "This page has been deleted."
 msgstr "Sayfa silindi."
 
@@ -2011,7 +2015,7 @@ msgstr "Dosya yükle"
 msgid "Uploaded"
 msgstr "Yüklendi"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
 msgid "Usage"
 msgstr "Kullanım"
 
@@ -2092,7 +2096,7 @@ msgstr "Resme tıklandığında gidilecek website"
 msgid "Website or Embed"
 msgstr "Web sitesi veya Embed"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
 msgid "Work Directory"
 msgstr "İş Rehberi"
 
