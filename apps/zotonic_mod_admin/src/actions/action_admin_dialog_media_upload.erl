@@ -32,7 +32,8 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Id = proplists:get_value(id, Args),
     Intent = case proplists:get_value(intent, Args) of
         undefined when Id =:= undefined -> <<"connect">>;
-        _ -> <<"update">>
+        undefined -> <<"update">>;
+        Int -> Int
     end,
     SubjectId = proplists:get_value(subject_id, Args),
     Predicate = proplists:get_value(predicate, Args, depiction),
