@@ -1169,7 +1169,7 @@ props_filter(<<"title_slug">>, Slug, Acc, Context) ->
     Slug1 = to_slug(Slug),
     SlugNoTr = z_trans:lookup_fallback(Slug1, en, Context),
     Acc#{
-        <<"slug">> => SlugNoTr,
+        <<"slug">> => z_convert:to_binary(SlugNoTr),
         <<"title_slug">> => Slug1
     };
 props_filter(<<"slug">>, Slug, Acc, _Context) ->
