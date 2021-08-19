@@ -77,10 +77,21 @@
 
 -include_lib("zotonic.hrl").
 
--type resource() :: resource_id() | list(digits()) | resource_name() | undefined.
+-type resource() :: resource_id()
+                  | list(digits())
+                  | resource_name()
+                  | resource_uri()
+                  | resource_uri_map()
+                  | undefined.
 -type resource_id() :: integer().
 -type resource_name() :: string() | binary() | atom().
 -type resource_uri() :: binary().
+-type resource_uri_map() :: #{
+        % <<"uri">> := resource_uri(),
+        % <<"name">> := binary(),
+        % <<"is_a">> := [ binary() ],
+        binary() => term()
+    }.
 -type props() :: map().
 -type props_legacy() :: proplists:proplist().
 -type props_all() :: props() | props_legacy().
@@ -841,11 +852,34 @@ rid(<<"http:", _/binary>> = Uri, Context) ->
     uri_lookup(Uri, Context);
 rid(<<"https:", _/binary>> = Uri, Context) ->
     uri_lookup(Uri, Context);
+rid(#{ <<"uri">> := Uri, <<"name">> := Name } = Map, Context) ->
+    case rid(Uri, Context) of
+        undefined ->
+            case rid(Name, Context) of
+                undefined ->
+                    undefined;
+                Id ->
+                    case is_matching_category(maps:get(<<"is_a">>, Map, undefined), is_a(Id, Context)) of
+                        true -> Id;
+                        false -> undefined
+                    end
+            end;
+        Id ->
+            Id
+    end;
 rid(UniqueName, Context) ->
     case z_utils:only_digits(UniqueName) of
         true -> z_convert:to_integer(UniqueName);
         false -> name_lookup(UniqueName, Context)
     end.
+
+is_matching_category(undefined, _) -> true;
+is_matching_category([], _) -> true;
+is_matching_category(_, undefined) -> true;
+is_matching_category(ExtIsA, LocalIsA) ->
+    ExtIsA1 = [ z_convert:to_binary(A) || A <- ExtIsA ],
+    LocalIsA1 = [ z_convert:to_binary(A) || A <- LocalIsA ],
+    lists:any( fun(A) -> lists:member(A, ExtIsA1) end, LocalIsA1 ).
 
 
 %% @doc Return the id of the resource with a certain unique name.
@@ -926,7 +960,7 @@ local_uri_to_id(Uri, Context) ->
             bindings := Bindings
         }} ->
             Id = maps:get(id, Bindings, proplists:get_value(id, Options)),
-            m_rsc:rid(Id, Context);
+            rid(Id, Context);
         _ ->
             % Non matching sites and illegal urls are rejected
             undefined

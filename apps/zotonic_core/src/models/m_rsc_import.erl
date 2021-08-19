@@ -1,7 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010 Arjan Scherpenisse
-%%
-%% @doc Importing non-authoritative things into the system.
+%% @copyright 2010-2021 Arjan Scherpenisse
+%% @doc Importing non-authoritative things exported by m_rsc_export into the system.
 
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,9 +22,11 @@
 -export([
     create_empty/2,
     create_empty/3,
-    import/2
+    import/3
 ]).
 
+
+-type options() :: list().
 
 %% @doc Create an empty, non-authoritative resource, with the given uri.
 -spec create_empty( string() | binary(), z:context()) -> {ok, m_rsc:resource_id()} | {error, duplicate_uri | term()}.
@@ -57,57 +58,128 @@ create_empty(Uri, Props, Context) ->
     end.
 
 
-%% @doc Import given resource. resource must already exist and be
-%% non-authoritative. URIs must match.
--spec import(map() | list(), z:context()) -> {ok, m_rsc:resource_id()} | {error, atom()}.
-import(RscImport, Context) when is_list(RscImport) ->
-    {ok, RscMap} = z_props:from_list(RscImport),
-    import(RscMap, Context);
-import(#{ <<"uri">> := Uri } = RscImport, Context) ->
-    case m_rsc:uri_lookup(Uri, Context) of
-        undefined ->
-            {error, {unknown_rsc, Uri}};
-        Id ->
-            import_1(Id, RscImport, Context)
-    end;
-import(_RscImport, _Context) ->
-    {error, no_uri}.
+%% @doc Import given resource. resource must already exist and be non-authoritative. URIs must match.
+-spec import( map(), options(), z:context() ) -> {ok, m_rsc:resource_id()} | {error, term()}.
+import(#{
+        <<"id">> := RemoteId,
+        <<"resource">> := Rsc,
+        <<"uri">> := Uri,
+        <<"uri_template">> := UriTemplate
+    } = JSON, Options, Context) ->
 
-import_1(Id, RscImport, Context) ->
-    case z_acl:rsc_editable(Id, Context) of
-        false ->
-            {error, eacces};
-        true ->
-            case m_rsc:p(Id, is_authoritative, Context) of
+    ?DEBUG(RemoteId),
+
+    io:format("~p~n", [ JSON ]),
+
+    RemoteRId = #{
+        <<"uri">> => Uri,
+        <<"name">> => maps:get(<<"name">>, JSON, undefined),
+        <<"is_a">> => maps:get(<<"is_a">>, JSON, undefined)
+    },
+    case update_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) of
+        {ok, LocalId} ->
+            _ = maybe_update_medium(LocalId, JSON, Context),
+            % TODO: if import_objects > 0 then also import objects
+            % decrement import_objects for every recursion
+            % (max import level  then import_objects = N, where N >= 0)
+            {ok, LocalId};
+        {error, _} = Error ->
+            Error
+    end;
+import(JSON, _Options, _Context) ->
+    lager:warning("Import of JSON without required fields id, resource, uri and uri_template: ~p", [JSON]),
+    {error, status}.
+
+
+update_rsc(_RemoteRId, #{ <<"is_authoritative">> := false }, _UriTemplate, _Options, _Context) ->
+    {error, remote_not_authoritative};
+update_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) ->
+    Rsc1 = cleanup_rsc(RemoteRId, Rsc, UriTemplate, Options, Context),
+    UpdateOptions = [
+        {is_escape_texts, false},
+        is_import
+    ],
+    case m_rsc:rid(RemoteRId, Context) of
+        undefined ->
+            m_rsc:insert(Rsc1, UpdateOptions, Context);
+        LocalId ->
+            case m_rsc:p_no_acl(LocalId, <<"is_authoritative">>, Context) of
                 false ->
-                    %% Import rsc
-                    Props = maps:get(<<"rsc">>, RscImport),
-                    Props1 = case maps:find(<<"is_published">>, Props) of
-                        {ok, true} -> Props;
-                        _ -> Props#{ <<"is_published">> => true }
-                    end,
-                    Opts = [
-                        {is_escape_texts, false},
-                        {is_import, true}
-                    ],
-                    case m_rsc_update:update(Id, Props1, Opts, Context) of
-                        {ok, Id} ->
-                            %% Import medium
-                            {ok, Id} = case maps:find(<<"medium">>, RscImport) of
-                                {ok, #{ <<"url">> := Url }} ->
-                                    m_media:replace_url(Url, Id, #{}, Context);
-                                _ ->
-                                   {ok, Id}
-                            end,
-                            %% Import category
-                            %% Import group
-                            %% Import Edges
-                            {ok, Id};
-                        {error, _} = Error ->
-                            Error
-                    end;
+                    m_rsc:update(LocalId, Rsc1, UpdateOptions, Context);
                 true ->
                     {error, authoritative}
             end
     end.
+
+cleanup_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) ->
+    PropsForced = proplists:get_value(props_forced, Options, #{}),
+    PropsDefault = proplists:get_value(props_default, Options, #{}),
+
+    % Remove modifier_id, creator_id, etc
+    Rsc1 = maps:fold(
+        fun(K, V, Acc) ->
+            % TODO: map ids in rsc and content to local ids
+            % TODO: delete all other '..._id' not mapped and not in Options
+            case m_rsc_export:is_id_prop(K) of
+                true when is_map(V) ->
+                    case m_rsc:rid(V, Context) of
+                        undefined -> Acc;
+                        VId -> Acc#{ K => VId }
+                    end;
+                true ->
+                    Acc;
+                false ->
+                    Acc#{ K => V }
+            end
+        end,
+        #{},
+        Rsc),
+    % Set forced and default props
+    Rsc2 = maps:merge(Rsc1, PropsForced),
+    Rsc3 = maps:merge(PropsDefault, Rsc2),
+    Rsc4 = Rsc3#{
+        <<"uri">> => maps:get(<<"uri">>, RemoteRId),
+        <<"is_authoritative">> => false
+    },
+    Rsc5 = case maps:find(<<"is_published">>, Rsc4) of
+        {ok, true} -> Rsc4;
+        _ -> Rsc4#{ <<"is_published">> => true }
+    end,
+    Rsc5.
+
+
+maybe_update_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := MediaUrl }, Context)
+    when is_binary(MediaUrl), is_map(Medium) ->
+    % If medium is outdated (compare with created date in medium record)
+    %    - download URL
+    %    - save into medium, ensure created date has been set (aka copied)
+    ?DEBUG(MediaUrl),
+    Options = [
+        {is_escape_texts, false},
+        is_import,
+        no_touch
+    ],
+    % TODO: add medium created date option (to set equal to imported medium)
+    Created = maps:get(<<"created">>, Medium, calendar:universal_time()),
+    UploadMedium = #{
+        <<"created">> => Created
+    },
+    ?DEBUG( m_media:replace_url(MediaUrl, LocalId, UploadMedium, Options, Context) ),
+    {ok, LocalId};
+maybe_update_medium(LocalId, #{ <<"medium">> := Medium }, Context)
+    when is_map(Medium) ->
+    % - overwrite local medium record with the imported medium record
+    %   [ sanitize any HTML in the medium record ]
+    {ok, LocalId};
+maybe_update_medium(LocalId, #{}, Context) ->
+    % If no medium:
+    %    Delete local medium record (if any)
+    case m_media:get(LocalId, Context) of
+        undefined ->
+            {ok, LocalId};
+        _LocalMedium ->
+            _ = m_media:delete(LocalId, Context),
+            {ok, LocalId}
+    end.
+
 

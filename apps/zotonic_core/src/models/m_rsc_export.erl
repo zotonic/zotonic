@@ -19,6 +19,7 @@
 %% #{
 %%    <<"id">> := 112233,
 %%    <<"uri">> := <<"http://www.example.com/id/112233">>},
+%%    <<"is_a">> := [ text, article ],
 %%    <<"resource">> := #{
 %%          %% Resource properties, e.g.:
 %%          title := <<"Foo">>,
@@ -66,7 +67,9 @@
 
 -export([
     m_get/3,
-    full/2
+    full/2,
+
+    is_id_prop/1
 ]).
 
 -include_lib("../../include/zotonic.hrl").
@@ -100,6 +103,7 @@ full(Id, Context) when is_integer(Id) ->
                 %% Essential fields
                 <<"id">> => Id,
                 <<"name">> => m_rsc:p(Id, <<"name">>, Context),
+                <<"is_a">> => m_rsc:is_a(Id, Context),
                 <<"uri">> => m_rsc:uri(Id, Context),
                 <<"uri_template">> => BaseUri,
 
@@ -194,7 +198,7 @@ is_id_prop(<<"predicate_id">>) -> true;
 is_id_prop(<<"object_id">>) -> true;
 is_id_prop(<<"subject_id">>) -> true;
 is_id_prop(P) ->
-    binary:longest_common_suffix([P, <<"_id">>]) =:= <<"_id">>.
+    binary:longest_common_suffix([P, <<"_id">>]) =:= 3.
 
 
 related_rsc(undefined, _Context) ->

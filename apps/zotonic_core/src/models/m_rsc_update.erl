@@ -1245,16 +1245,7 @@ props_filter(<<"category_id">>, CatId, Acc, Context) ->
 props_filter(<<"content_group">>, CG, Acc, _Context) when ?is_empty(CG) ->
     Acc#{ <<"content_group_id">> => undefined };
 props_filter(<<"content_group">>, CgName, Acc, Context) ->
-    CgId = m_rsc:rid(CgName, Context),
-    case m_rsc:is_a(CgId, content_group, Context)
-        orelse m_rsc:is_a(CgId, acl_collaboration_group, Context)
-    of
-        true ->
-            Acc#{ <<"content_group_id">> => CgId };
-        false ->
-            lager:error("Ignoring unknown content group '~p' in update.", [CgName]),
-            Acc
-    end;
+    props_filter(<<"content_group_id">>, CgName, Acc, Context);
 props_filter(<<"content_group_id">>, CgId, Acc, _Context) when ?is_empty(CgId) ->
     Acc#{ <<"content_group_id">> => undefined };
 props_filter(<<"content_group_id">>, CgId, Acc, Context) ->
