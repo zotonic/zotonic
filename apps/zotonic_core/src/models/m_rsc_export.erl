@@ -1,5 +1,5 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010 Arjan Scherpenisse
+%% @copyright 2010-2021 Arjan Scherpenisse
 %%
 %% @doc Export function for resources.
 
@@ -17,39 +17,46 @@
 
 %% the rsc_export() format, as returned by m_rsc:export/2
 %% #{
-%%  id := 112233, % Local ID
-%%  %% Globally unique resource URI
-%%  uri := <<"http://www.example.com/id/112233">>},
-%%  rsc := #{
-%%   %% Resource properties, e.g.:
-%%   title := <<"Foo">>,
-%%    ...
-%%  },
-%%  medium := #{
-%%   %% Medium properties, if the item has an embedded medium record.
-%%  },
-%%  category := [,
-%%   %% Category properties, if the item is a category.
-%%  ],
-%%  group := [
-%%   %% Group access properties (if item is a group)
-%%  ],
-%%  edges :=
-%%   %% Edges from this item to other items
-%%   [
-%%                                          % Every edge can contain:
-%%    #{
-%%      id := 32432423,                     % local edge id
-%%      object_id := 223344,                % local object id
-%%      object_uri := <<"http://...">>,
-%%      object_title := <<"...">>,
-%%      predicate_id := 22,                 % local predicate id
-%%      predicate_uri := <<"http://...">>,
-%%      predicate_title:= <<"...">>
+%%    <<"id">> := 112233,
+%%    <<"uri">> := <<"http://www.example.com/id/112233">>},
+%%    <<"resource">> := #{
+%%          %% Resource properties, e.g.:
+%%          title := <<"Foo">>,
+%%          ... more properties
+%%    },
+%%    <<"medium">> := #{
+%%          %% Medium properties, if the item has an embedded medium record.
+%%    },
+%%    <<"edges">> := #{
+%%      %% Edges from this item to other items
+%%      <<"depiction">> => #{
+%%          <<"predicate">> => #{
+%%                <<"id">> => 304,
+%%                <<"is_a">> => [ meta, predicate ],
+%%                <<"name">> => <<"depiction">>,
+%%                <<"title">> => {trans,[{en,<<"Depiction">>}]},
+%%                <<"uri">> => <<"http://xmlns.com/foaf/0.1/depiction">>
+%%          },
+%%          <<"objects">> => [
+%%                #{
+%%                    <<"created">> => {{2020,12,23},{15,4,55}},
+%%                    <<"object_id">> => #{
+%%                         <<"id">> => 28992,
+%%                         <<"is_a">> => [media,image],
+%%                         <<"name">> => undefined,
+%%                         <<"title">> =>
+%%                            {trans,[{nl,<<"NL: a.jpg">>},{en,<<"a.jpg">>}]},
+%%                         <<"uri">> =>
+%%                             <<"https://learningstone.test:8443/id/28992">>
+%%                    },
+%%                    <<"seq">> => 1
+%%                },
+%%                ... more objects
+%%          ]
+%%      },
+%%      ... more predicates
 %%    }
-%%   ]
-%%  }
-%% ]
+%% }
 
 
 -module(m_rsc_export).
@@ -80,25 +87,8 @@ full(Id, Context) when is_integer(Id) ->
             undefined;
         Rsc0 ->
             Rsc1 = filter_empty(Rsc0),
-
-            Rsc = Rsc1#{
-                <<"category">> => m_rsc:p(m_rsc:p(Id, category_id, Context), name, Context),
-                <<"content_group">> => m_rsc:p(m_rsc:p(Id, content_group_id, Context), name, Context)
-            },
-
-            %% This should probably be encapsulated in m_edges.
-            {ok, Edges0} = z_db:qmap("
-                                select e.predicate_id, p.name as predicate_name, e.object_id, e.seq
-                                from edge e
-                                        join rsc p on p.id = e.predicate_id
-                                where e.subject_id = $1
-                                order by e.predicate_id, e.seq, e.id",
-                                [Id],
-                                [ {keys, binary} ],
-                                Context),
-            Edges = [ edge_details(E, Context) || E <- Edges0 ],
+            Rsc = replace_ids_with_uris(Rsc1, Context),
             Medium = m_media:get(Id, Context),
-
             PreviewUrl = preview_url(Medium, Context),
             DownloadUrl = download_url(Medium, Context),
 
@@ -109,15 +99,16 @@ full(Id, Context) when is_integer(Id) ->
             Export = #{
                 %% Essential fields
                 <<"id">> => Id,
-                <<"uri">> => m_rsc:p(Id, uri, Context),
+                <<"name">> => m_rsc:p(Id, <<"name">>, Context),
+                <<"uri">> => m_rsc:uri(Id, Context),
                 <<"uri_template">> => BaseUri,
 
                 %% Parts
-                <<"rsc">> => Rsc,
+                <<"resource">> => Rsc,
                 <<"medium">> => Medium,
                 <<"medium_url">> => DownloadUrl,
-                <<"edges">> => Edges,
-                <<"preview_url">> => PreviewUrl
+                <<"preview_url">> => PreviewUrl,
+                <<"edges">> => edges(Id, Context)
             },
 
             %% Filter empty lists
@@ -125,6 +116,100 @@ full(Id, Context) when is_integer(Id) ->
     end;
 full(Id, Context) ->
     full(m_rsc:rid(Id, Context), Context).
+
+
+edges(Id, Context) ->
+    Edges = m_edge:get_edges(Id, Context),
+    lists:foldl(
+        fun({Pred, Es}, Acc) ->
+            PredRsc = related_rsc(Pred, Context),
+            PredB = z_convert:to_binary(Pred),
+            Os = lists:map(
+                fun(E) ->
+                    ObjId = proplists:get_value(object_id, E),
+                    #{
+                        <<"object_id">> => related_rsc(ObjId, Context),
+                        <<"seq">> => proplists:get_value(seq, E),
+                        <<"created">> => proplists:get_value(created, E)
+                    }
+                end,
+                Es),
+            Acc#{
+                PredB => #{
+                    <<"predicate">> => PredRsc,
+                    <<"objects">> => Os
+                }
+            }
+        end,
+        #{},
+        Edges).
+
+
+replace_ids_with_uris(Map, Context) when is_map(Map) ->
+    maps:fold(
+        fun
+            (<<"id">>, _V, Acc) ->
+                Acc;
+            (<<"blocks">>, Blocks, Acc) when is_list(Blocks) ->
+                Blocks1 = replace_block_ids_with_uris(Blocks, Context),
+                Acc#{
+                    <<"blocks">> => Blocks1
+                };
+            (<<"body", _/binary>> = Body, Text, Acc) ->
+                % TODO: replace any embedded id in the body text
+                Acc#{
+                    Body => Text
+                };
+            (P, V, Acc) when is_integer(V); is_atom(V); is_binary(V) ->
+                case is_id_prop(P) of
+                    true ->
+                        Acc#{ P => related_rsc(V, Context) };
+                    false ->
+                        Acc#{ P => V }
+                end;
+            (P, V, Acc) ->
+                Acc#{ P => V }
+        end,
+        #{},
+        Map);
+replace_ids_with_uris(V, _Context) ->
+    V.
+
+replace_block_ids_with_uris(Blocks, Context) ->
+    lists:map(
+        fun(B) ->
+            B1 = replace_ids_with_uris(B, Context),
+            % TODO: replace any embedded id in the body text
+            B1
+        end,
+        Blocks).
+
+% is_id_prop(<<"id">>) -> true;
+is_id_prop(<<"rsc_id">>) -> true;
+is_id_prop(<<"category_id">>) -> true;
+is_id_prop(<<"modifier_id">>) -> true;
+is_id_prop(<<"creator_id">>) -> true;
+is_id_prop(<<"content_group_id">>) -> true;
+is_id_prop(<<"predicate_id">>) -> true;
+is_id_prop(<<"object_id">>) -> true;
+is_id_prop(<<"subject_id">>) -> true;
+is_id_prop(P) ->
+    binary:longest_common_suffix([P, <<"_id">>]) =:= <<"_id">>.
+
+
+related_rsc(undefined, _Context) ->
+    undefined;
+related_rsc(Id, Context) when is_integer(Id) ->
+    #{
+        <<"id">> => Id,
+        <<"name">> => m_rsc:p_no_acl(Id, <<"name">>, Context),
+        <<"uri">> => m_rsc:uri(Id, Context),
+        <<"is_a">> => m_rsc:is_a(Id, Context),
+        <<"title">> => m_rsc:p(Id, <<"title">>, Context)
+    };
+related_rsc(Id, Context) ->
+    related_rsc(m_rsc:rid(Id, Context), Context).
+
 
 % If there is a medium record, then also include a preview url
 preview_url(#{ <<"id">> := Id }, Context) ->
@@ -182,16 +267,3 @@ privacy_filter(Export) ->
         Export,
         Drop
     ).
-
-%% @doc Given an edge record, add the resource uris for the object and the predicate.
-edge_details(Edge, Context) ->
-    #{
-        <<"predicate_id">> := PredicateId,
-        <<"object_id">> := ObjectId
-    } = Edge,
-    Edge#{
-        <<"predicate_uri">> => m_rsc:p(PredicateId, uri, Context),
-        <<"predicate_title">> => m_rsc:p(PredicateId, title, Context),
-        <<"object_uri">> => m_rsc:p(ObjectId, uri, Context),
-        <<"object_title">> => m_rsc:p(ObjectId, title, Context)
-    }.

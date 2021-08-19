@@ -68,6 +68,7 @@
     rid/2,
 
     name_lookup/2,
+    uri/2,
     uri_lookup/2,
     ensure_name/2,
 
@@ -633,15 +634,8 @@ p_no_acl(Id, <<"translation">>, Context) ->
         end
     end;
 p_no_acl(Id, <<"default_page_url">>, Context) -> page_url(Id, Context);
-p_no_acl(Id, <<"uri">>, Context) ->
-    case p_cached(Id, <<"uri">>, Context) of
-        Empty when Empty =:= <<>>; Empty =:= undefined ->
-            non_informational_uri(Id, Context);
-        Uri ->
-            Uri
-    end;
-p_no_acl(Id, <<"category">>, Context) ->
-    m_category:get(p_no_acl(Id, <<"category_id">>, Context), Context);
+p_no_acl(Id, <<"uri">>, Context) -> uri(Id, Context);
+p_no_acl(Id, <<"category">>, Context) -> m_category:get(p_no_acl(Id, <<"category_id">>, Context), Context);
 p_no_acl(Id, <<"media">>, Context) -> media(Id, Context);
 p_no_acl(Id, <<"medium">>, Context) -> m_media:get(Id, Context);
 p_no_acl(Id, <<"depiction">>, Context) -> m_media:depiction(Id, Context);
@@ -692,12 +686,43 @@ p_cached(Id, Property, Context) ->
     end.
 
 
-non_informational_uri(Id, Context) ->
-    case z_dispatcher:url_for(id, [{id, Id}], z_context:set_language(undefined, Context)) of
+%% @doc Determine the non informational uri of a resource.
+-spec uri( resource() | undefined, z:context() ) -> binary() | undefined.
+uri(Id, Context) when is_integer(Id) ->
+    case p_cached(Id, <<"uri">>, Context) of
+        Empty when Empty =:= <<>>; Empty =:= undefined ->
+            uri_dispatch(Id, Context);
+        Uri ->
+            Uri
+    end;
+uri(undefined, _Context) ->
+    undefined;
+uri(Id, Context) ->
+    uri(rid(Id, Context), Context).
+
+uri_dispatch(Id, Context) ->
+    DispatchId = case is_named_meta(Id, Context) of
+        {true, Name} -> Name;
+        false -> Id
+    end,
+    case z_dispatcher:url_for(id, [{id, DispatchId}], z_context:set_language(undefined, Context)) of
         undefined ->
-            iolist_to_binary(z_context:abs_url(<<"/id/", (z_convert:to_binary(Id))/binary>>, Context));
+            iolist_to_binary(z_context:abs_url(<<"/id/", (z_convert:to_binary(DispatchId))/binary>>, Context));
         Url ->
             iolist_to_binary(z_context:abs_url(Url, Context))
+    end.
+
+is_named_meta(Id, Context) ->
+    case p_cached(Id, <<"name">>, Context) of
+        Empty when Empty =:= <<>>; Empty =:= undefined ->
+            false;
+        Name ->
+            case is_a(Id, meta, Context) of
+                true ->
+                    {true, Name};
+                false ->
+                    false
+            end
     end.
 
 
@@ -812,6 +837,10 @@ rid([X|_], _Context) when not is_integer(X) ->
     undefined;
 rid(#trans{} = Tr, Context) ->
     rid(z_trans:lookup_fallback(Tr, Context), Context);
+rid(<<"http:", _/binary>> = Uri, Context) ->
+    uri_lookup(Uri, Context);
+rid(<<"https:", _/binary>> = Uri, Context) ->
+    uri_lookup(Uri, Context);
 rid(UniqueName, Context) ->
     case z_utils:only_digits(UniqueName) of
         true -> z_convert:to_integer(UniqueName);
@@ -850,21 +879,63 @@ name_lookup(Name, Context) ->
 uri_lookup(<<>>, _Context) ->
     undefined;
 uri_lookup(Uri, Context) when is_binary(Uri) ->
-    case z_depcache:get({rsc_uri, Uri}, Context) of
-        {ok, undefined} ->
-            undefined;
-        {ok, Id} ->
-            Id;
-        undefined ->
-            Id = case z_db:q1("select id from rsc where uri = $1", [Uri], Context) of
-                undefined -> undefined;
-                Value -> Value
-            end,
-            z_depcache:set({rsc_uri, Uri}, Id, ?DAY, [Id, {rsc_uri, Uri}], Context),
-            Id
+    case is_http_uri(Uri) of
+        true ->
+            case is_local_uri(Uri, Context) of
+                true ->
+                    % Check for id in URL
+                    local_uri_to_id(Uri, Context);
+                false ->
+                    case z_depcache:get({rsc_uri, Uri}, Context) of
+                        {ok, undefined} ->
+                            undefined;
+                        {ok, Id} ->
+                            Id;
+                        undefined ->
+                            Id = z_db:q1("select id from rsc where uri = $1", [Uri], Context),
+                            z_depcache:set({rsc_uri, Uri}, Id, ?DAY, [Id, {rsc_uri, Uri}], Context),
+                            Id
+                    end
+            end;
+        false ->
+            undefined
     end;
 uri_lookup(Uri, Context) ->
     uri_lookup(z_convert:to_binary(Uri), Context).
+
+
+%% @doc Check if the hostname in an URL matches the current site
+is_local_uri(Uri, Context) ->
+    Site = z_context:site(Context),
+    case z_sites_dispatcher:get_site_for_url(Uri) of
+        {ok, Site} ->
+            true;
+        _ ->
+            % Unknown or some other site
+            false
+    end.
+
+
+%% @doc Use the dispatcher to extract the id from the local URI
+local_uri_to_id(Uri, Context) ->
+    Site = z_context:site(Context),
+    case z_sites_dispatcher:dispatch_url(Uri) of
+        {ok, #{
+            site := Site,
+            controller_options := Options,
+            bindings := Bindings
+        }} ->
+            Id = maps:get(id, Bindings, proplists:get_value(id, Options)),
+            m_rsc:rid(Id, Context);
+        _ ->
+            % Non matching sites and illegal urls are rejected
+            undefined
+    end.
+
+is_http_uri(<<"http://", _/binary>>) -> true;
+is_http_uri(<<"https://", _/binary>>) -> true;
+is_http_uri(_) -> false.
+
 
 %% @doc Check if the resource is exactly the category
 -spec is_cat(resource(), atom(), z:context()) -> boolean().

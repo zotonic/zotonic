@@ -621,14 +621,15 @@ group_proplists(Prop, [Item|Rest]) ->
 group_proplists(_Prop, _PropValue, [], [], Result) ->
     lists:reverse(Result);
 group_proplists(Prop, PropValue, [], Acc, Result) ->
-    lists:reverse(Acc),
-    group_proplists(Prop, PropValue, [], [], [{PropValue,Acc}|Result]);
+    Acc1 = lists:reverse(Acc),
+    group_proplists(Prop, PropValue, [], [], [{PropValue,Acc1}|Result]);
 group_proplists(Prop, PropValue, [C|Rest], Acc, Result) ->
     case proplists:get_value(Prop, C) of
         PropValue ->
             group_proplists(Prop, PropValue, Rest, [C|Acc], Result);
         Other ->
-            group_proplists(Prop, Other, Rest, [C], [{PropValue,Acc}|Result])
+            Acc1 = lists:reverse(Acc),
+            group_proplists(Prop, Other, Rest, [C], [{PropValue,Acc1}|Result])
     end.
 
 
