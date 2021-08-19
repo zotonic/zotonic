@@ -1318,7 +1318,7 @@ generate_slug(Id, Props, Context) ->
                     Slug = to_slug(Title),
                     SlugNoTr = z_trans:lookup_fallback(Slug, en, Context),
                     Props#{
-                        <<"slug">> => SlugNoTr,
+                        <<"slug">> => z_convert:to_binary(SlugNoTr),
                         <<"title_slug">> => Slug
                     }
             end;
@@ -1337,7 +1337,7 @@ props_defaults(Props, Context) ->
                     Slug = to_slug(Title),
                     SlugNoTr = z_trans:lookup_fallback(Slug, en, Context),
                     Props#{
-                        <<"slug">> => SlugNoTr,
+                        <<"slug">> => z_convert:to_binary(SlugNoTr),
                         <<"title_slug">> => Slug
                     };
                 error ->
