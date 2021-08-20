@@ -60,7 +60,7 @@ modify_rsc_test() ->
     },
     ?assertEqual({error, eacces}, m_rsc_import:import(RscImport, C)),
 
-    {ok, {NewId, []} = m_rsc_import:import(RscImport, SudoC),
+    {ok, {NewId, []}} = m_rsc_import:import(RscImport, SudoC),
     ?assertEqual(Id, NewId),
 
     ?assertEqual(<<"Hello!">>, m_rsc:p(Id, title, AdminC)),
