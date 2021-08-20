@@ -58,7 +58,7 @@ modify_rsc_test() ->
             <<"body">> => <<"This is a <strong>statement</strong>.">>
         }
     },
-    ?assertEqual({error, eacces}, m_rsc_import:import(RscImport, C)),
+    ?assertEqual({error, non_authoritative}, m_rsc_import:import(RscImport, C)),
 
     {ok, {NewId, []}} = m_rsc_import:import(RscImport, SudoC),
     ?assertEqual(Id, NewId),
