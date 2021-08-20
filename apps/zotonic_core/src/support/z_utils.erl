@@ -473,8 +473,8 @@ os_escape(win32, [C|Rest], Acc) ->
 %%% ESCAPE JAVASCRIPT %%%
 
 %% @doc Javascript escape, see also: http://code.google.com/p/doctype/wiki/ArticleXSSInJavaScript
-js_escape({trans, []}, _OptContext) -> [];
-js_escape({trans, _} = Tr, OptContext) -> js_escape(z_trans:lookup_fallback(Tr, OptContext), OptContext);
+js_escape(#trans{ tr = [] }, _OptContext) -> [];
+js_escape(#trans{} = Tr, OptContext) -> js_escape(z_trans:lookup_fallback(Tr, OptContext), OptContext);
 js_escape({trust, Value}, _Context) -> Value;
 js_escape(undefined, _OptContext) -> [];
 js_escape([], _OptContext) -> [];

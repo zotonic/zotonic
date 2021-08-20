@@ -56,7 +56,7 @@ escape_props_check(Props) ->
 escape_props_check(Props, Context) ->
     z_html:escape_props_check(Props, context_options(Context)).
 
-escape_link({trans, Tr}) ->
+escape_link(#trans{ tr = Tr }) ->
     [ {Lang, escape_link(Text)} || {Lang, Text} <- Tr ];
 escape_link(V) ->
     z_html:escape_link(V).

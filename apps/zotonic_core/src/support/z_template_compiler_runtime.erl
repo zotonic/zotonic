@@ -434,16 +434,16 @@ get(Prop, Args, Default) when is_list(Args) ->
 
 
 %% @doc Fetch the translations for the given text.
--spec get_translations(binary(), term()) -> binary() | {trans, [{atom(), binary()}]}.
+-spec get_translations(binary(), term()) -> binary() | z:trans().
 get_translations(Text, Context) ->
     case z_trans:translations(Text, Context) of
-        {trans, Tr} -> {trans, lists:sort(Tr)};
+        #trans{ tr = Tr } -> #trans{ tr = lists:sort(Tr) };
         Other -> Other
     end.
 
 %% @doc Find the best fitting translation.
--spec lookup_translation({trans, list({atom(), binary()})}, TplVars :: map(), Context :: term()) -> binary().
-lookup_translation({trans, _} = Trans, _TplVars, Context) ->
+-spec lookup_translation(z:trans(), TplVars :: map(), Context :: term()) -> binary().
+lookup_translation(#trans{} = Trans, _TplVars, Context) ->
     z_trans:lookup_fallback(Trans, Context).
 
 
@@ -574,7 +574,7 @@ to_simple_value(#m_search_result{result=#search_result{result=Result}}, _Context
     Result;
 to_simple_value(#rsc_list{list=L}, _Context) ->
     L;
-to_simple_value({trans, _} = Trans, Context) ->
+to_simple_value(#trans{} = Trans, Context) ->
     z_trans:lookup_fallback(Trans, Context);
 to_simple_value(V, _Context) ->
     V.

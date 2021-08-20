@@ -110,12 +110,12 @@ add_labels(Lang, [{Label,Trans}|Rest], Acc) when is_binary(Trans), is_binary(Lab
     end.
 
 %% @doc Strict translation lookup of a language version
--spec lookup({trans, list()}|binary()|string(), #context{}) -> binary() | string() | undefined.
+-spec lookup(z:trans()|binary()|string(), #context{}) -> binary() | string() | undefined.
 lookup(Trans, Context) ->
     lookup(Trans, z_context:language(Context), Context).
 
--spec lookup({trans, list()}|binary()|string(), atom(), #context{}) -> binary() | string() | undefined.
-lookup({trans, Tr}, Lang, _Context) ->
+-spec lookup(z:trans()|binary()|string(), atom(), #context{}) -> binary() | string() | undefined.
+lookup(#trans{ tr = Tr }, Lang, _Context) ->
     proplists:get_value(Lang, Tr);
 lookup(Text, Lang, Context) ->
     case z_context:language(Context) of

@@ -28,7 +28,7 @@
 
 -include("zotonic.hrl").
 
-escape({trans, _} = Tr, Context) ->
+escape(#trans{} = Tr, Context) ->
     escape(z_trans:lookup_fallback(Tr, Context));
 escape(V, _Context) ->
     escape(V).

@@ -289,7 +289,7 @@ append_render_state(List=[H|_], RenderState, Context) when is_integer(H) orelse 
     {String,Rest} = lists:splitwith(F, List),
     RS1 = RenderState#render_state{ render = [ RenderState#render_state.render, String ] },
     append_render_state(Rest, RS1, Context);
-append_render_state({trans, _} = Tr, RenderState, Context) ->
+append_render_state(#trans{} = Tr, RenderState, Context) ->
     append_render_state(z_trans:lookup_fallback(Tr, Context), RenderState, Context);
 append_render_state({{_,_,_},{_,_,_}} = D, RenderState, Context) ->
     append_render_state(filter_stringify:stringify(D, Context), RenderState, Context);
