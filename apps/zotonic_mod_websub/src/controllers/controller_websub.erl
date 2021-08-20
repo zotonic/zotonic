@@ -173,7 +173,7 @@ post_callback(HubCallback, OptHubSecret, Payload) ->
         <<>> ->
             [];
         Key when is_binary(Key) ->
-            Hmac = crypto:mac(hma, sha, Key, Body),
+            Hmac = crypto:mac(hmac, sha, Key, Body),
             HmacHex = z_string:to_lower( iolist_to_binary([ z_utils:hex_encode(Hmac)]) ),
             XHubSig = <<"sha1=", HmacHex/binary>>,
             [
