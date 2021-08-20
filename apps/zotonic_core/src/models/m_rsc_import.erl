@@ -14,6 +14,13 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
+% TODO:
+% - do not import if previously deleted
+% - handle ids embedded in texts
+% - map ids in rsc blocks
+% - keep menu structure
+% - handle ids in menu structure
+
 -module(m_rsc_import).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
@@ -26,7 +33,17 @@
 ]).
 
 
--type options() :: list().
+-type option() :: {props_forced, map()}
+                | {props_default, map()}
+                | is_import_edges
+                | {is_import_edges, boolean()}.
+-type options() :: [ option() ].
+
+-export_type([
+    options/0,
+    option/0
+]).
+
 
 %% @doc Create an empty, non-authoritative resource, with the given uri.
 -spec create_empty( string() | binary(), z:context()) -> {ok, m_rsc:resource_id()} | {error, duplicate_uri | term()}.
@@ -45,10 +62,9 @@ create_empty(Uri, Props, Context) ->
                 true -> Props
             end,
             Props2 = Props1#{
-                <<"note">> => <<"Pending import">>,
+                <<"is_authoritative">> => false,
                 <<"is_published">> => false,
-                <<"uri">> => Uri,
-                <<"is_authoritative">> => false
+                <<"uri">> => Uri
             },
             m_rsc:insert(Props2, Context);
         RscId ->
@@ -58,8 +74,37 @@ create_empty(Uri, Props, Context) ->
     end.
 
 
-%% @doc Import given resource. resource must already exist and be non-authoritative. URIs must match.
--spec import( map(), options(), z:context() ) -> {ok, m_rsc:resource_id()} | {error, term()}.
+-spec maybe_create_empty( map(), z:context() ) -> {ok, m_rsc:rescource_id()} | {error, term()}.
+maybe_create_empty(Rsc, Context) ->
+    case m_rsc:rid(Rsc, Context) of
+        undefined ->
+            Category = case maps:get(<<"is_a">>, Rsc, undefined) of
+                [ _ | _ ] = IsA -> lists:last(IsA);
+                _ -> other
+            end,
+            Props = #{
+                <<"is_authoritative">> => false,
+                <<"is_published">> => false,
+                <<"uri">> => maps:get(<<"uri">>, Rsc),
+                <<"title">> => maps:get(<<"title">>, Rsc, undefined),
+                <<"name">> => maps:get(<<"name">>, Rsc, undefined),
+                <<"category_id">> => Category
+            },
+            Options = [
+                {is_escape_texts, false},
+                is_import
+            ],
+            m_rsc:insert(Props, Options, Context);
+        RscId ->
+            {ok, RscId}
+    end.
+
+
+%% @doc Import a resource. If the resource already exists then it must be non-authoritative
+%%      and have a matching URI. The resource to be updated is looked up by matching either the
+%%      URI or the unique name. If the unique name matches then the category of the existing
+%%      resource must have an overlap with the category of the imported resource.
+-spec import( map(), options(), z:context() ) -> {ok, {m_rsc:resource_id(), [ m_rsc:resource_id() ]}} | {error, term()}.
 import(#{
         <<"id">> := RemoteId,
         <<"resource">> := Rsc,
@@ -78,11 +123,14 @@ import(#{
     },
     case update_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) of
         {ok, LocalId} ->
-            _ = maybe_update_medium(LocalId, JSON, Context),
-            % TODO: if import_objects > 0 then also import objects
-            % decrement import_objects for every recursion
-            % (max import level  then import_objects = N, where N >= 0)
-            {ok, LocalId};
+            _ = maybe_import_medium(LocalId, JSON, Context),
+            NewObjects = case proplists:get_value(is_import_edges, Options) of
+                true ->
+                    import_edges(LocalId, JSON, Context);
+                false ->
+                    []
+            end,
+            {ok, {LocalId, NewObjects}};
         {error, _} = Error ->
             Error
     end;
@@ -134,6 +182,7 @@ cleanup_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) ->
         end,
         #{},
         Rsc),
+
     % Set forced and default props
     Rsc2 = maps:merge(Rsc1, PropsForced),
     Rsc3 = maps:merge(PropsDefault, Rsc2),
@@ -141,6 +190,8 @@ cleanup_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) ->
         <<"uri">> => maps:get(<<"uri">>, RemoteRId),
         <<"is_authoritative">> => false
     },
+
+    % Ensure that the is_published flag is present, defaults to true
     Rsc5 = case maps:find(<<"is_published">>, Rsc4) of
         {ok, true} -> Rsc4;
         _ -> Rsc4#{ <<"is_published">> => true }
@@ -148,7 +199,7 @@ cleanup_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) ->
     Rsc5.
 
 
-maybe_update_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := MediaUrl }, Context)
+maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := MediaUrl }, Context)
     when is_binary(MediaUrl), is_map(Medium) ->
     % If medium is outdated (compare with created date in medium record)
     %    - download URL
@@ -164,14 +215,20 @@ maybe_update_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := Medi
     UploadMedium = #{
         <<"created">> => Created
     },
-    ?DEBUG( m_media:replace_url(MediaUrl, LocalId, UploadMedium, Options, Context) ),
+    CurrentMedium = m_media:get(LocalId, Context),
+    case is_newer_medium(UploadMedium, CurrentMedium) of
+        true ->
+            _ = m_media:replace_url(MediaUrl, LocalId, UploadMedium, Options, Context);
+        false ->
+            ok
+    end,
     {ok, LocalId};
-maybe_update_medium(LocalId, #{ <<"medium">> := Medium }, Context)
+maybe_import_medium(LocalId, #{ <<"medium">> := Medium }, Context)
     when is_map(Medium) ->
-    % - overwrite local medium record with the imported medium record
-    %   [ sanitize any HTML in the medium record ]
+    % TODO: overwrite local medium record with the imported medium record
+    %       [ sanitize any HTML in the medium record ]
     {ok, LocalId};
-maybe_update_medium(LocalId, #{}, Context) ->
+maybe_import_medium(LocalId, #{}, Context) ->
     % If no medium:
     %    Delete local medium record (if any)
     case m_media:get(LocalId, Context) of
@@ -182,4 +239,97 @@ maybe_update_medium(LocalId, #{}, Context) ->
             {ok, LocalId}
     end.
 
+is_newer_medium(#{ <<"created">> := Local }, #{ <<"created">> := Remote }) when Local < Remote ->
+    true;
+is_newer_medium(#{ <<"created">> := _ }, undefined) ->
+    true;
+is_newer_medium(_, _) ->
+    false.
+
+
+%%    <<"edges">> := #{
+%%      %% Edges from this item to other items
+%%      <<"depiction">> => #{
+%%          <<"predicate">> => #{
+%%                <<"id">> => 304,
+%%                <<"is_a">> => [ meta, predicate ],
+%%                <<"name">> => <<"depiction">>,
+%%                <<"title">> => {trans,[{en,<<"Depiction">>}]},
+%%                <<"uri">> => <<"http://xmlns.com/foaf/0.1/depiction">>
+%%          },
+%%          <<"objects">> => [
+%%                #{
+%%                    <<"created">> => {{2020,12,23},{15,4,55}},
+%%                    <<"object_id">> => #{
+%%                         <<"id">> => 28992,
+%%                         <<"is_a">> => [media,image],
+%%                         <<"name">> => undefined,
+%%                         <<"title">> =>
+%%                            {trans,[{nl,<<"NL: a.jpg">>},{en,<<"a.jpg">>}]},
+%%                         <<"uri">> =>
+%%                             <<"https://learningstone.test:8443/id/28992">>
+%%                    },
+%%                    <<"seq">> => 1
+%%                },
+%%                ... more objects
+%%          ]
+%%      },
+%%      ... more predicates
+%%    }
+
+%% @doc Import all edges, return a list of newly created objects
+import_edges(LocalId, #{ <<"edges">> := Edges }, Context) when is_map(Edges) ->
+    % Delete edges not in 'Edges', add new edges if needed.
+    maps:fold(
+        fun
+            (Name, #{ <<"predicate">> := Pred, <<"objects">> := Os }, Acc) ->
+                case find_predicate(Name, Pred, Context) of
+                    {ok, PredId} ->
+                        NewObjects = replace_edges(LocalId, PredId, Os, Context),
+                        NewObjects ++ Acc;
+                    {error, _} ->
+                        Acc
+                end;
+            (Name, V, Acc) ->
+                lager:warning("Unknown import predicate ~p => ~p", [ Name, V]),
+                Acc
+        end,
+        [],
+        Edges).
+
+replace_edges(LocalId, PredId, Os, Context) ->
+    % Keep order of edges
+    {ObjectIds, NewIds} = lists:foldr(
+        fun(Edge, {Acc, New}) ->
+            Object = maps:get(<<"object_id">>, Edge),
+            case m_rsc:rid(Object, Context) of
+                undefined ->
+                    case maybe_create_empty(Object, Context) of
+                        {ok, ObjectId} ->
+                            {[ ObjectId | Acc ], [ ObjectId | New ]};
+                        {error, Reason} ->
+                            lager:debug("Skipping object ~p: ~p", [ Object, Reason ]),
+                            {Acc, New}
+                    end;
+                ObjectId ->
+                    {[ ObjectId | Acc ], New}
+            end
+        end,
+        {[], []},
+        Os),
+    m_edge:update_sequence(LocalId, PredId, ObjectIds, Context),
+    NewIds.
+
+
+% For now we only import if we know the predicate.
+% An option could be added to insert the predicate if it is was unknown.
+find_predicate(Name, Pred, Context) ->
+    PredId = case m_rsc:rid(Name, Context) of
+        undefined -> m_rsc:rid(Pred, Context);
+        Id -> Id
+    end,
+    case m_rsc:is_a(PredId, predicate, Context) of
+        true -> {ok, PredId};
+        false -> {error, enoent}
+    end.
 

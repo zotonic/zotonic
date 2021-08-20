@@ -865,128 +865,163 @@ update_sequence(Id, Pred, ObjectIds, Context) when is_integer(Id) ->
 
 %% @doc Set edges order so that the specified object ids are in given order.
 %% Any extra edges not specified will be deleted, and any missing edges will be inserted.
-%% @spec set_sequence(Id, Predicate, ObjectIds, Context) -> ok | {error, Reason}
-set_sequence(Id, Pred, ObjectIds, Context) ->
-    case z_acl:rsc_editable(Id, Context) of
-        true ->
-            {ok, SubjectId} = m_rsc:name_to_id(Id, Context),
-            {ok, PredId} = m_predicate:name_to_id(Pred, Context),
-            F = fun(Ctx) ->
-                All = z_db:q("
-                            select object_id, id
-                            from edge
-                            where predicate_id = $1
-                              and subject_id = $2", [PredId, SubjectId], Ctx),
+-spec set_sequence( m_rsc:resource(), m_rsc:resource(), [ m_rsc:resource_id() ], z:context()) -> ok | {error, term()}.
+set_sequence(Subject, Pred, ObjectIds, Context) ->
+    case m_rsc:rid(Subject, Context) of
+        undefined ->
+            {error, enoent};
+        SubjectId ->
+            case z_acl:rsc_editable(SubjectId, Context) of
+                true ->
+                    case m_predicate:name_to_id(Pred, Context) of
+                        {ok, PredId} ->
+                            F = fun(Ctx) ->
+                                All = z_db:q("
+                                            select object_id, id
+                                            from edge
+                                            where predicate_id = $1
+                                              and subject_id = $2", [PredId, SubjectId], Ctx),
 
-                [delete(EdgeId, Context) || {ObjectId, EdgeId} <- All, not lists:member(ObjectId, ObjectIds)],
-                NewEdges = [begin
-                    {ok, EdgeId} = insert(Id, Pred, ObjectId, Context),
-                    {ObjectId, EdgeId}
-                end
-                    || ObjectId <- ObjectIds,
-                    not lists:member(ObjectId, All)
-                ],
+                                % Delete edges not in ObjectIds
+                                lists:foreach(
+                                    fun({ObjectId, EdgeId}) ->
+                                        case lists:member(ObjectId, ObjectIds) of
+                                            true ->
+                                                ok;
+                                            false ->
+                                                delete(EdgeId, Context)
+                                        end
+                                    end,
+                                    All),
 
-                AllEdges = All ++ NewEdges,
-                SortedEdgeIds = [proplists:get_value(OId, AllEdges, -1) || OId <- ObjectIds],
-                z_db:update_sequence(edge, SortedEdgeIds, Ctx),
-                ok
-            end,
+                                % Add new edges not yet in the db
+                                NewEdges = lists:filtermap(
+                                    fun(ObjectId) ->
+                                        case lists:member(ObjectId, All) of
+                                            true -> false;
+                                            false ->
+                                                case insert(SubjectId, Pred, ObjectId, Context) of
+                                                    {ok, EdgeId} ->
+                                                        {ok, {ObjectId, EdgeId}};
+                                                    {error, _} ->
+                                                        false
+                                                end
+                                        end
+                                    end,
+                                    ObjectIds),
 
-            Result = z_db:transaction(F, Context),
-            z_depcache:flush(Id, Context),
-            Result;
-        false ->
-            {error, eacces}
+                                % Force order of all edges
+                                AllEdges = All ++ NewEdges,
+                                SortedEdgeIds = [
+                                    proplists:get_value(OId, AllEdges, -1) || OId <- ObjectIds
+                                ],
+                                z_db:update_sequence(edge, SortedEdgeIds, Ctx),
+                                ok
+                            end,
+
+                            Result = z_db:transaction(F, Context),
+                            z_depcache:flush(SubjectId, Context),
+                            Result;
+                        {error, _} = Error ->
+                            Error
+                    end;
+                false ->
+                    {error, eacces}
+            end
     end.
 
 
 %% @doc Update the sequence for the given edge ids.  Optionally rename the predicate on the edge.
-%% @spec update_sequence_edge_ids(Id, Predicate, EdgeIds, Context) -> ok | {error, Reason}
-update_sequence_edge_ids(Id, Pred, EdgeIds, Context) ->
-    case z_acl:rsc_editable(Id, Context) of
-        true ->
-            {ok, PredId} = m_predicate:name_to_id(Pred, Context),
-            F = fun(Ctx) ->
-                % Figure out which edge ids need to be renamed to this predicate.
-                Current = z_db:q("
-                            select id
-                            from edge
-                            where predicate_id = $1
-                              and subject_id = $2", [PredId, Id], Ctx),
-                CurrentIds = [EdgeId || {EdgeId} <- Current],
+-spec update_sequence_edge_ids( m_rsc:resource_id(), m_rsc:resource(), [ integer() ], z:context() ) -> ok | {error, term()}.
+update_sequence_edge_ids(Subject, Pred, EdgeIds, Context) ->
+    case m_rsc:rid(Subject, Context) of
+        undefined ->
+            {error, enoent};
+        Id ->
+            case z_acl:rsc_editable(Id, Context) of
+                true ->
+                    {ok, PredId} = m_predicate:name_to_id(Pred, Context),
+                    F = fun(Ctx) ->
+                        % Figure out which edge ids need to be renamed to this predicate.
+                        Current = z_db:q("
+                                    select id
+                                    from edge
+                                    where predicate_id = $1
+                                      and subject_id = $2", [PredId, Id], Ctx),
+                        CurrentIds = [EdgeId || {EdgeId} <- Current],
 
-                WrongPred = lists:foldl(
-                    fun(EdgeId, Acc) ->
-                        case lists:member(EdgeId, CurrentIds) of
-                            true -> Acc;
-                            false -> [EdgeId | Acc]
-                        end
-                    end,
-                    [],
-                    EdgeIds),
+                        WrongPred = lists:foldl(
+                            fun(EdgeId, Acc) ->
+                                case lists:member(EdgeId, CurrentIds) of
+                                    true -> Acc;
+                                    false -> [EdgeId | Acc]
+                                end
+                            end,
+                            [],
+                            EdgeIds),
 
-                %% Remove the edges where we don't have permission to remove the
-                %% old predicate and insert the new predicate.
-                {ok, Pred} = m_predicate:id_to_name(PredId, Ctx),
-                WrongPredAllowed = lists:filter(
-                    fun(EdgeId) ->
-                        {Id, EdgePredName, EdgeObjectId} = get_triple(EdgeId, Ctx),
-                        case z_acl:is_allowed(delete,
-                            #acl_edge{subject_id = Id, predicate = EdgePredName, object_id = EdgeObjectId},
-                            Ctx
-                        ) of
-                            true ->
-                                case z_acl:is_allowed(insert,
-                                    #acl_edge{subject_id = Id, predicate = Pred, object_id = EdgeObjectId},
+                        %% Remove the edges where we don't have permission to remove the
+                        %% old predicate and insert the new predicate.
+                        {ok, Pred} = m_predicate:id_to_name(PredId, Ctx),
+                        WrongPredAllowed = lists:filter(
+                            fun(EdgeId) ->
+                                {Id, EdgePredName, EdgeObjectId} = get_triple(EdgeId, Ctx),
+                                case z_acl:is_allowed(delete,
+                                    #acl_edge{subject_id = Id, predicate = EdgePredName, object_id = EdgeObjectId},
                                     Ctx
                                 ) of
-                                    true -> true;
-                                    _ -> false
-                                end;
-                            _ ->
-                                false
-                        end
-                    end, WrongPred),
+                                    true ->
+                                        case z_acl:is_allowed(insert,
+                                            #acl_edge{subject_id = Id, predicate = Pred, object_id = EdgeObjectId},
+                                            Ctx
+                                        ) of
+                                            true -> true;
+                                            _ -> false
+                                        end;
+                                    _ ->
+                                        false
+                                end
+                            end, WrongPred),
 
-                % Update the predicates on the edges that don't have the correct predicate.
-                % We have to make sure that the "wrong" edges do have the correct subject_id
-                Extra = lists:foldl(
-                    fun(EdgeId, Acc) ->
-                        case z_db:q(
-                            "update edge set predicate_id = $1 "
-                            "where id = $2 and subject_id = $3",
-                            [PredId, EdgeId, Id],
-                            Ctx
-                        ) of
-                            1 -> [EdgeId | Acc];
-                            0 -> Acc
-                        end
+                        % Update the predicates on the edges that don't have the correct predicate.
+                        % We have to make sure that the "wrong" edges do have the correct subject_id
+                        Extra = lists:foldl(
+                            fun(EdgeId, Acc) ->
+                                case z_db:q(
+                                    "update edge set predicate_id = $1 "
+                                    "where id = $2 and subject_id = $3",
+                                    [PredId, EdgeId, Id],
+                                    Ctx
+                                ) of
+                                    1 -> [EdgeId | Acc];
+                                    0 -> Acc
+                                end
+                            end,
+                            [],
+                            WrongPredAllowed),
+                        All = CurrentIds ++ Extra,
+
+                        %% Extract all edge ids that are not in our sort list, they go to the end of the new sequence
+                        AppendToEnd = lists:foldl(
+                            fun(EdgeId, Acc) ->
+                                case lists:member(EdgeId, EdgeIds) of
+                                    true -> Acc;
+                                    false -> [EdgeId | Acc]
+                                end
+                            end,
+                            [],
+                            All),
+                        SortedEdgeIds = EdgeIds ++ lists:reverse(AppendToEnd),
+                        z_db:update_sequence(edge, SortedEdgeIds, Ctx),
+                        ok
                     end,
-                    [],
-                    WrongPredAllowed),
-                All = CurrentIds ++ Extra,
 
-                %% Extract all edge ids that are not in our sort list, they go to the end of the new sequence
-                AppendToEnd = lists:foldl(
-                    fun(EdgeId, Acc) ->
-                        case lists:member(EdgeId, EdgeIds) of
-                            true -> Acc;
-                            false -> [EdgeId | Acc]
-                        end
-                    end,
-                    [],
-                    All),
-                SortedEdgeIds = EdgeIds ++ lists:reverse(AppendToEnd),
-                z_db:update_sequence(edge, SortedEdgeIds, Ctx),
-                ok
-            end,
-
-            Result = z_db:transaction(F, Context),
-            z_depcache:flush(Id, Context),
-            Result;
-        false ->
-            {error, eacces}
+                    Result = z_db:transaction(F, Context),
+                    z_depcache:flush(Id, Context),
+                    Result;
+                false ->
+                    {error, eacces}
+            end
     end.
 
 
