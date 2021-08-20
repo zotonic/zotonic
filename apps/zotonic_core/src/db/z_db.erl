@@ -529,9 +529,9 @@ cols_map(Cols, Rows, IsMergeProps, Keys) ->
         Rows).
 
 map_merge_props(M, Acc) when is_map(M) ->
-    maps:merge(Acc, M);
+    maps:merge(M, Acc);
 map_merge_props(Props, Acc) when is_list(Props) ->
-    maps:merge(Acc, z_props:from_props(Props));
+    maps:merge(z_props:from_props(Props), Acc);
 map_merge_props(_, Acc) ->
     Acc.
 
@@ -810,9 +810,9 @@ get_current_props(DBDriver, Connection, true, true, Table, Id, _Context) ->
         {ok, undefined, JSON} when is_binary(JSON) ->
             {ok, jsxrecord:decode(JSON)};
         {ok, Props, JSON} when is_list(Props) andalso is_binary(JSON) ->
-            {ok, maps:merge(z_props:from_props(Props), jsxrecord:decode(JSON))}; 
+            {ok, maps:merge(z_props:from_props(Props), jsxrecord:decode(JSON))};
         {ok, Props, JSON} when is_map(Props) andalso is_binary(JSON) ->
-            {ok, maps:merge(Props, jsxrecord:decode(JSON))}; 
+            {ok, maps:merge(Props, jsxrecord:decode(JSON))};
         _ ->
             {error, no_properties}
     end.
@@ -830,9 +830,11 @@ update_map_atom_arrays(Props) ->
 update_merge_props(DbDriver, Connection, Table, Cols, Id, #{ <<"props_json">> := NewProps }=UpdateProps, Context) ->
     P = case get_current_props(DbDriver, Connection, Table, Id, Context) of
             {ok, OldProps} ->
-                UpdateProps#{<<"props_json">> => ?DB_PROPS_JSON( maps:merge(OldProps, NewProps) ) };
+                NewProps1 = maps:merge(OldProps, NewProps),
+                NewProps2 = maps:without(Cols, NewProps1),
+                UpdateProps#{<<"props_json">> => ?DB_PROPS_JSON( drop_undefined(NewProps2) ) };
             _ ->
-                UpdateProps#{<<"props_json">> => ?DB_PROPS_JSON( NewProps )}
+                UpdateProps#{<<"props_json">> => ?DB_PROPS_JSON( drop_undefined(NewProps) )}
         end,
 
     %% Clear the existing props column
@@ -840,12 +842,14 @@ update_merge_props(DbDriver, Connection, Table, Cols, Id, #{ <<"props_json">> :=
         true -> P#{ <<"props">> => null };
         false -> P
     end;
-update_merge_props(DbDriver, Connection, Table, _Cols, Id, #{ <<"props">> := NewProps }=UpdateProps, Context) ->
+update_merge_props(DbDriver, Connection, Table, Cols, Id, #{ <<"props">> := NewProps }=UpdateProps, Context) ->
     case get_current_props(DbDriver, Connection, Table, Id, Context) of
         {ok, OldProps} ->
-            UpdateProps#{ <<"props">> => ?DB_PROPS( maps:merge(OldProps, NewProps) )};
+            NewProps1 = maps:merge(OldProps, NewProps),
+            NewProps2 = maps:without(Cols, NewProps1),
+            UpdateProps#{ <<"props">> => ?DB_PROPS( drop_undefined(NewProps2) )};
         _ ->
-            UpdateProps#{ <<"props">> => ?DB_PROPS( NewProps )}
+            UpdateProps#{ <<"props">> => ?DB_PROPS( drop_undefined(NewProps) )}
     end;
 update_merge_props(_DbDriver, _Connection, _Table, _Cols, _Id, #{}=UpdateProps, _Context) ->
     UpdateProps;
@@ -853,6 +857,15 @@ update_merge_props(DbDriver, Connection, Table, Cols, Id, NewProps, Context) whe
     Props1 = z_props:from_props(NewProps),
     update_merge_props(DbDriver, Connection, Table, Cols, Id, Props1, Context).
 
+
+drop_undefined(Props) ->
+    maps:fold(
+        fun
+            (_K, undefined, Acc) -> Acc;
+            (K, V, Acc) -> Acc#{ K => V }
+        end,
+        #{},
+        Props).
 
 ensure_binary_keys(Ps) ->
     maps:fold(

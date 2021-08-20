@@ -916,7 +916,8 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
     NewPropsLangPruned = z_props:prune_languages(NewPropsLang, maps:get(<<"language">>, NewPropsLang)),
 
     % 5. Diff the update
-    NewPropsDiff = diff(NewPropsLangPruned, Raw),
+    NewPropsLangPruned1 = clear_empty(NewPropsLangPruned, Context),
+    NewPropsDiff = diff(NewPropsLangPruned1, Raw),
 
     % 6. Ensure that there is a Timezone set in the saved resource
     PropsTz = maps:get(<<"tz">>, NewPropsDiff, undefined),
@@ -945,6 +946,29 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
         false ->
             {error, eacces}
     end.
+
+%% Set all non-column fields with empty values to 'undefined'.
+%% This makes the props blob smaller by removing all empty address (etc) fields.
+clear_empty(Props, Context) ->
+    Cols = z_db:column_names_bin(rsc, Context),
+    maps:fold(
+        fun
+            (K, <<>>, Acc) ->
+                case lists:member(K, Cols) of
+                    true -> Acc#{ K => <<>> };
+                    false -> Acc#{ K => undefined }
+                end;
+            (K, #trans{} = V, Acc) ->
+                case z_utils:is_empty(V) of
+                    true -> Acc#{ K => undefined };
+                    false -> Acc#{ K => V }
+                end;
+            (K, V, Acc) ->
+                Acc#{ K => V }
+        end,
+        #{},
+        Props).
+
 
 is_update_allowed(true, Id, NewProps, Context) ->
     z_acl:is_allowed(insert, #acl_rsc{ id = Id, props = NewProps }, Context);

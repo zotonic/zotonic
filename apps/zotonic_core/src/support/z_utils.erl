@@ -623,8 +623,8 @@ is_empty(null) -> true;
 is_empty([]) -> true;
 is_empty(<<>>) -> true;
 is_empty({{9999,_,_},{_,_,_}}) -> true;
-is_empty({trans, []}) -> true;
-is_empty({trans, Tr}) ->
+is_empty(#trans{ tr = [] }) -> true;
+is_empty(#trans{ tr = Tr }) ->
     lists:all(fun({_,Text}) -> Text =:= <<>> end, Tr);
 is_empty(_) -> false.
 
