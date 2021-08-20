@@ -49,8 +49,10 @@ modify_rsc_test() ->
     ?assertEqual({error, non_authoritative}, m_rsc:update(Id, #{ <<"title">> => <<"foo">> }, C)),
 
     RscImport = #{
+        <<"id">> => 333,
         <<"uri">> => <<"http://foo.com/id/333">>,
-        <<"rsc">> => #{
+        <<"uri_template">> => <<"http://foo.com/id/:id">>,
+        <<"resource">> => #{
             <<"title">> => <<"Hello!">>,
             <<"summary">> => <<"This is the summary.">>,
             <<"body">> => <<"This is a <strong>statement</strong>.">>
@@ -58,7 +60,7 @@ modify_rsc_test() ->
     },
     ?assertEqual({error, eacces}, m_rsc_import:import(RscImport, C)),
 
-    {ok, NewId} = m_rsc_import:import(RscImport, SudoC),
+    {ok, {NewId, []} = m_rsc_import:import(RscImport, SudoC),
     ?assertEqual(Id, NewId),
 
     ?assertEqual(<<"Hello!">>, m_rsc:p(Id, title, AdminC)),

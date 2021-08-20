@@ -29,6 +29,7 @@
 -export([
     create_empty/2,
     create_empty/3,
+    import/2,
     import/3
 ]).
 
@@ -100,6 +101,10 @@ maybe_create_empty(Rsc, Context) ->
     end.
 
 
+-spec import( map(), z:context() ) -> {ok, {m_rsc:resource_id(), [ m_rsc:resource_id() ]}} | {error, term()}.
+import(JSON, Context) ->
+    import(JSON, [], Context).
+
 %% @doc Import a resource. If the resource already exists then it must be non-authoritative
 %%      and have a matching URI. The resource to be updated is looked up by matching either the
 %%      URI or the unique name. If the unique name matches then the category of the existing
@@ -112,9 +117,7 @@ import(#{
         <<"uri_template">> := UriTemplate
     } = JSON, Options, Context) ->
 
-    ?DEBUG(RemoteId),
-
-    io:format("~p~n", [ JSON ]),
+    % io:format("~p~n", [ JSON ]),
 
     RemoteRId = #{
         <<"uri">> => Uri,
@@ -124,7 +127,7 @@ import(#{
     case update_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) of
         {ok, LocalId} ->
             _ = maybe_import_medium(LocalId, JSON, Context),
-            NewObjects = case proplists:get_value(is_import_edges, Options) of
+            NewObjects = case proplists:get_value(is_import_edges, Options, false) of
                 true ->
                     import_edges(LocalId, JSON, Context);
                 false ->
