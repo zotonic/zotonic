@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-13 14:09\n"
+"PO-Revision-Date: 2021-08-18 09:23\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -904,11 +904,11 @@ msgstr "לחץ על התמונה כדי להגדיר את מרכז החיתוך.
 msgid "Click to preview."
 msgstr "לחץ לתצוגה מקדימה."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:103
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:106
 msgid "Close Sockets"
 msgstr "סגור שקעים"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:104
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:107
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "סגור את כל השקעים מכתובות ip שיש להם מעל &gt; 250 שקעים פתוחים."
 
@@ -941,7 +941,7 @@ msgstr "לְחַבֵּר"
 msgid "Connect a page"
 msgstr "חבר דף"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:52
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:55
 msgid "Connections"
 msgstr "חיבורים"
 
@@ -961,11 +961,11 @@ msgstr "לא ניתן היה להתחבר לאתר."
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "לא ניתן היה לזהות שום דבר לייבא בכתובת אתר זו או להטמיע קוד."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:85
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:88
 msgid "Count"
 msgstr "לספור"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:83
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:86
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:103
 msgid "Country"
 msgstr "מדינה"
@@ -1031,7 +1031,7 @@ msgstr "מחק אם לא מחובר יותר"
 msgid "Delete this page."
 msgstr "מחק את העמוד הזה."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:12
 msgid "Deleted."
 msgstr "נמחק."
 
@@ -1138,15 +1138,15 @@ msgstr "טלפון חירום"
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "הזן כתובת אתר או קוד הטבע. זה ינותח ותוכלו לבחור כיצד לייבא את הנתונים."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Erlang Init Files"
 msgstr "Erlang Init קבצים"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:57
 msgid "Erlang Installation Root"
 msgstr "שורש התקנת Erlang"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:41
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:44
 msgid "Erlang Version"
 msgstr "גרסת Erlang"
 
@@ -1218,11 +1218,11 @@ msgstr "מצא דף"
 msgid "First"
 msgstr "ראשון"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:71
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:74
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "שטוף את כל כללי שליחת כתובות האתרים, מטמונים של תבניות וספרייה ונתונים אחרים במטמון בזיכרון."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:70
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:73
 msgid "Flush system caches"
 msgstr "מטמני מערכת שטיפה"
 
@@ -1245,11 +1245,11 @@ msgstr "כּוֹתֶרֶת"
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "כאן תוכלו לערוך את הטיעונים של שאילתת החיפוש. כל ויכוח עובר על קו משלו. למידע נוסף, עיין בתיעוד <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">על טיעוני השאילתות</a> באתר Zotonic."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:45
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
 msgid "Home Directory"
 msgstr "מדריך הבית"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:81
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:84
 msgid "IP Address"
 msgstr "כתובת ה - IP"
 
@@ -1308,6 +1308,10 @@ msgstr "קישור"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:37
 msgid "Live query, send notifications when matching items are updated or inserted."
 msgstr "שאילתה חיה, שלח התראות כאשר פריטים תואמים מתעדכנים או מוכנסים."
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
+msgid "Log Directory"
+msgstr "מדריך יומנים"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:71
 #: apps/zotonic_site_status/priv/templates/_menu.tpl:5./apps/zotonic_site_status/priv/templates/_navbar.tpl:34
@@ -1417,7 +1421,7 @@ msgstr "שונה:"
 msgid "Name"
 msgstr "שֵׁם"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:60
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:63
 msgid "Network Connections"
 msgstr "חיבורי רשת"
 
@@ -1505,7 +1509,7 @@ msgstr "דפים עבור"
 msgid "Pages overview"
 msgstr "סקירת דפים"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:30
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
 msgid "Path"
@@ -1584,16 +1588,16 @@ msgstr "שאילתא"
 msgid "Query preview"
 msgstr "תצוגה מקדימה של שאילתות"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:87
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:90
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
 msgstr "בנה מחדש את כל מדדי החיפוש על ידי הצבת כל העמודים והנתונים ממסד הנתונים בתור לאינדקס. זה יכול לקחת הרבה זמן!"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:81
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:122
 msgid "Rebuild search indices"
 msgstr "בנה מחדש מדדי חיפוש"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:93
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:96
 msgid "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "חישבו מחדש את המספור של עץ הקטגוריה. זה יכול לקחת הרבה זמן."
 
@@ -1613,11 +1617,11 @@ msgstr "הפניה לאתר בתצוגת עמוד"
 msgid "Referrers to"
 msgstr "מפנים ל"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:49
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:50
 msgid "Refreshed every 30 minutes."
 msgstr "מתרענן כל 30 דקות."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:97
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:100
 msgid "Reinstall site datamodel"
 msgstr "התקן מחדש את datamodel האתר"
 
@@ -1633,7 +1637,7 @@ msgstr "הסר את מרכז החיתוך"
 msgid "Removed the connection to"
 msgstr "הסיר את החיבור אל"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:92
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:95
 msgid "Renumber category tree"
 msgstr "עץ קטגוריה מחדש"
 
@@ -1657,7 +1661,7 @@ msgstr "למשאבים בקטגוריית <i>מטא</i> יכולות להיות 
 msgid "Retrieving status..."
 msgstr "מאחזר סטטוס ..."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:98
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:101
 msgid "Runs the schema install command from the site's module again."
 msgstr "מריץ שוב את פקודת התקנת הסכימה ממודול האתר."
 
@@ -1744,11 +1748,11 @@ msgstr "הראה כ"
 msgid "Show page on multiple paths"
 msgstr "הצג דף במספר נתיבים"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:37
 msgid "Site Files Directory"
 msgstr "מדריך קבצי אתרים"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:16
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
@@ -1923,7 +1927,7 @@ msgstr "שם זה נמצא בשימוש על ידי דף אחר."
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "ניתן לחבר דף זה מדפים אחרים. למשל זה יכול להיות מחבר של מאמר."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:12
 msgid "This page has been deleted."
 msgstr "דף זה נמחק."
 
@@ -2011,7 +2015,7 @@ msgstr "העלה קובץ"
 msgid "Uploaded"
 msgstr "הועלה"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
 msgid "Usage"
 msgstr "נוֹהָג"
 
@@ -2092,7 +2096,7 @@ msgstr "אתר לחיצות על תמונה"
 msgid "Website or Embed"
 msgstr "אתר או שבץ"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
 msgid "Work Directory"
 msgstr "מדריך עבודה"
 

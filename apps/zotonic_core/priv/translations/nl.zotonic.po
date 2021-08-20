@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-13 14:09\n"
+"PO-Revision-Date: 2021-08-18 09:23\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -907,11 +907,11 @@ msgstr "Klik op de afbeelding om het middelpunt van uitsnedes te bepalen."
 msgid "Click to preview."
 msgstr "Klik om een voorbeeld te bekijken."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:103
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:106
 msgid "Close Sockets"
 msgstr "Sockets  sluiten"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:104
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:107
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "Sluit alle sockets van ip-adressen die meer dan &gt; 250 open sockets hebben."
 
@@ -944,7 +944,7 @@ msgstr "Verbind"
 msgid "Connect a page"
 msgstr "Paginaconnectie maken"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:52
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:55
 msgid "Connections"
 msgstr "Verbindingen"
 
@@ -964,11 +964,11 @@ msgstr "Kon geen verbinding maken met de website."
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "Kon niets detecteren om te importeren op die URL of insluit code."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:85
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:88
 msgid "Count"
 msgstr "Tel"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:83
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:86
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:103
 msgid "Country"
 msgstr "Land"
@@ -1034,7 +1034,7 @@ msgstr "Verwijder indien niet meer verbonden"
 msgid "Delete this page."
 msgstr "Verwijder deze pagina."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:12
 msgid "Deleted."
 msgstr "Verwijderd."
 
@@ -1141,15 +1141,15 @@ msgstr "Noodnummer (telefoon)"
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "Voer een URL of insluitingscode in. Het zal worden geanalyseerd en je kan kiezen hoe de gegevens te importeren."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Erlang Init Files"
 msgstr "Erlang Init Files"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:57
 msgid "Erlang Installation Root"
 msgstr "Erlang Installatie Map"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:41
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:44
 msgid "Erlang Version"
 msgstr "Erlang versie"
 
@@ -1221,11 +1221,11 @@ msgstr "Zoek pagina"
 msgid "First"
 msgstr "Eerste"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:71
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:74
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "Ververs alle URL regels, template- en librarycaches en andere in-memory caches."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:70
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:73
 msgid "Flush system caches"
 msgstr "Flush systeemcaches"
 
@@ -1248,11 +1248,11 @@ msgstr "Kopregel"
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "Hier kan je de argumenten van de zoekopdracht bewerken. Elk argument gaat op zijn eigen regel. Voor meer informatie, zie de <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentatie over de zoekargumenten</a> op de Zotonic website."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:45
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
 msgid "Home Directory"
 msgstr "Home Directory"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:81
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:84
 msgid "IP Address"
 msgstr "IP-adres"
 
@@ -1311,6 +1311,10 @@ msgstr "Koppel"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:37
 msgid "Live query, send notifications when matching items are updated or inserted."
 msgstr "Live zoekvraag: verzend notificaties wanneer overeenkomstige pagina’s worden gemaakt of bewerkt."
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
+msgid "Log Directory"
+msgstr "Logboekmap"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:71
 #: apps/zotonic_site_status/priv/templates/_menu.tpl:5./apps/zotonic_site_status/priv/templates/_navbar.tpl:34
@@ -1420,7 +1424,7 @@ msgstr "Bewerkt:"
 msgid "Name"
 msgstr "Naam"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:60
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:63
 msgid "Network Connections"
 msgstr "Netwerkverbindingen"
 
@@ -1508,7 +1512,7 @@ msgstr "Pagina's voor"
 msgid "Pages overview"
 msgstr "Paginaoverzicht"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:30
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
 msgid "Path"
@@ -1587,16 +1591,16 @@ msgstr "Zoekvraag"
 msgid "Query preview"
 msgstr "Zoekvraag voorbeeld"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:87
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:90
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
 msgstr "Bouw de zoek-index opnieuw op door alle pagina's langs te gaan. Dit kan lang duren!"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:81
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:122
 msgid "Rebuild search indices"
 msgstr "Zoek-index opnieuw maken"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:93
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:96
 msgid "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "Hernummer de categorie-boom opnieuw. Dit kan lang duren."
 
@@ -1616,11 +1620,11 @@ msgstr "Stuur door naar website bij bekijken van de pagina"
 msgid "Referrers to"
 msgstr "Verwijzingen naar"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:49
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:50
 msgid "Refreshed every 30 minutes."
 msgstr "Elke 30 minuten ververst."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:97
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:100
 msgid "Reinstall site datamodel"
 msgstr "Datamodel opnieuw installeren"
 
@@ -1636,7 +1640,7 @@ msgstr "Verwijder uitsnede-middelpunt"
 msgid "Removed the connection to"
 msgstr "Connectie verwijderd naar"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:92
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:95
 msgid "Renumber category tree"
 msgstr "Hernummer categorieboom"
 
@@ -1661,7 +1665,7 @@ msgstr "Resources in de <em>meta</em> categorie kunnen ‘features’ hebben:\n"
 msgid "Retrieving status..."
 msgstr "Status ophalen..."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:98
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:101
 msgid "Runs the schema install command from the site's module again."
 msgstr "Installeer het schema van de sitemodule opnieuw."
 
@@ -1748,11 +1752,11 @@ msgstr "Toon als"
 msgid "Show page on multiple paths"
 msgstr "Toon pagina op meerdere paginapaden"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:37
 msgid "Site Files Directory"
 msgstr "Map met sitebestanden"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:16
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
@@ -1927,7 +1931,7 @@ msgstr "Deze naam wordt door een andere pagina gebruikt."
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "Deze pagina kan verbonden zijn met andere pagina's. Het zou bijvoorbeeld een auteur van een artikel kunnen zijn."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:12
 msgid "This page has been deleted."
 msgstr "Deze pagina is verwijderd."
 
@@ -2015,7 +2019,7 @@ msgstr "Upload bestand"
 msgid "Uploaded"
 msgstr "Geüpload"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
 msgid "Usage"
 msgstr "Gebruik"
 
@@ -2096,7 +2100,7 @@ msgstr "Website voor klikken op de afbeelding"
 msgid "Website or Embed"
 msgstr "Website of Embed"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
 msgid "Work Directory"
 msgstr "Werk Directory"
 

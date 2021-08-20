@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-13 14:09\n"
+"PO-Revision-Date: 2021-08-18 09:23\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -904,11 +904,11 @@ msgstr "Click en la imagen para establecer el centro de cultivo."
 msgid "Click to preview."
 msgstr "Haga clic para ver la vista previa."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:103
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:106
 msgid "Close Sockets"
 msgstr "Cerrar los enchufes"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:104
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:107
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "Cierre todos los sockets de las direcciones IP que tengan más de &gt; 250 sockets abiertos."
 
@@ -941,7 +941,7 @@ msgstr "Conecta"
 msgid "Connect a page"
 msgstr "Conectar a una página"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:52
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:55
 msgid "Connections"
 msgstr "Conexiones"
 
@@ -961,11 +961,11 @@ msgstr "No se pudo conectar al sitio web."
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "No pudo detectar nada para importar en esa URL o código de inserción."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:85
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:88
 msgid "Count"
 msgstr "Cuenta"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:83
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:86
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:103
 msgid "Country"
 msgstr "País"
@@ -1031,7 +1031,7 @@ msgstr "Eliminar si ya no está conectado"
 msgid "Delete this page."
 msgstr "Borrar esta página."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:12
 msgid "Deleted."
 msgstr "Eliminar."
 
@@ -1138,15 +1138,15 @@ msgstr "Teléfono de emergencias"
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "Ingrese una URL o un código de inserción. Se analizará y puede elegir como importar los datos."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Erlang Init Files"
 msgstr "Archivos de inicio de Erlang"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:57
 msgid "Erlang Installation Root"
 msgstr "Raíz de la instalación de Erlang"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:41
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:44
 msgid "Erlang Version"
 msgstr "Versión Erlang"
 
@@ -1218,11 +1218,11 @@ msgstr "Conseguir pagina"
 msgid "First"
 msgstr "Primer nombre"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:71
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:74
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "Vacié todas las reglas de despacho de URL, cachés de plantilla y biblioteca y otros datos almacenados en memoria caché."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:70
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:73
 msgid "Flush system caches"
 msgstr "Refrescar cachés de sistema"
 
@@ -1245,11 +1245,11 @@ msgstr "Cabecera"
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "Aquí puede editar los argumentos de la consulta de búsqueda. Cada argumento sigue su propia línea. Para obtener más información, consulte la documentación <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">sobre los argumentos de consulta</a> en el sitio web de Zotonic."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:45
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
 msgid "Home Directory"
 msgstr "Directorio de casas..."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:81
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:84
 msgid "IP Address"
 msgstr "Dirección IP"
 
@@ -1308,6 +1308,10 @@ msgstr "Enlace"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:37
 msgid "Live query, send notifications when matching items are updated or inserted."
 msgstr "Consulta en vivo, enviar notificaciones cuando se actualizan o insertan elementos que coincidan."
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
+msgid "Log Directory"
+msgstr "Directorio de registro"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:71
 #: apps/zotonic_site_status/priv/templates/_menu.tpl:5./apps/zotonic_site_status/priv/templates/_navbar.tpl:34
@@ -1417,7 +1421,7 @@ msgstr "Modificado:"
 msgid "Name"
 msgstr "Nombre"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:60
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:63
 msgid "Network Connections"
 msgstr "Conexiones de la red"
 
@@ -1505,7 +1509,7 @@ msgstr "Páginas para"
 msgid "Pages overview"
 msgstr "Resumen de páginas"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:30
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
 msgid "Path"
@@ -1584,16 +1588,16 @@ msgstr "Consulta"
 msgid "Query preview"
 msgstr "Vista preliminar de consulta"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:87
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:90
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
 msgstr "Volver a generar los índices de búsqueda poniendo todas las páginas y los datos de la base de datos en la cola del indizador. ¡Esto puede tomar mucho tiempo!"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:81
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:122
 msgid "Rebuild search indices"
 msgstr "Reconstruir índices de búsqueda"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:93
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:96
 msgid "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "Recalcular la enumeración del árbol de categoría. Esto puede tomar mucho tiempo."
 
@@ -1613,11 +1617,11 @@ msgstr "Redireccionar a la página web en la vista de la página"
 msgid "Referrers to"
 msgstr "Referentes a"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:49
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:50
 msgid "Refreshed every 30 minutes."
 msgstr "Refrescado cada 30 minutos."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:97
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:100
 msgid "Reinstall site datamodel"
 msgstr "Reinstalar el modelo de datos del sitio"
 
@@ -1633,7 +1637,7 @@ msgstr "Eliminar en centro del recorte"
 msgid "Removed the connection to"
 msgstr "Se ha eliminado la conexión a"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:92
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:95
 msgid "Renumber category tree"
 msgstr "Renumerar árbol de categorías"
 
@@ -1657,7 +1661,7 @@ msgstr "Los recursos en la categoría <i>meta</i> pueden tener 'funcionalidades'
 msgid "Retrieving status..."
 msgstr "Recuperar el estado..."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:98
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:101
 msgid "Runs the schema install command from the site's module again."
 msgstr "Ejecuta el esquema con el comando de instalación desde el modulo de el sitio nuevamente."
 
@@ -1744,11 +1748,11 @@ msgstr "Mostrar como"
 msgid "Show page on multiple paths"
 msgstr "Mostrar la página en varias rutas"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:37
 msgid "Site Files Directory"
 msgstr "Directorio de archivos del sitio"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:16
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
@@ -1923,7 +1927,7 @@ msgstr "Este nombre está en uso en otra página."
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "Esta página se puede conectar desde otras páginas. Por ejemplo, podría ser el autor de un artículo."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:12
 msgid "This page has been deleted."
 msgstr "Esta página ha sido eliminada."
 
@@ -2011,7 +2015,7 @@ msgstr "Subir archivo"
 msgid "Uploaded"
 msgstr "Subido"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
 msgid "Usage"
 msgstr "Uso"
 
@@ -2092,7 +2096,7 @@ msgstr "Sitio web para clics en imagen"
 msgid "Website or Embed"
 msgstr "Página web o Insertar"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
 msgid "Work Directory"
 msgstr "Directorio de trabajo"
 
