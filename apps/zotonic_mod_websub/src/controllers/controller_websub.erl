@@ -180,9 +180,7 @@ post_callback(HubCallback, OptHubSecret, Payload) ->
                 {"X-Hub-Signature", z_convert:to_list(XHubSig)}
             ]
     end,
-    Request = [
-        {HubCallback, Headers, "application/x-www-form-urlencoded", Body}
-    ],
+    Request = {HubCallback, Headers, "application/x-www-form-urlencoded", Body},
     case httpc:request(post, Request, HttpOptions, Options) of
         {ok, {{_, Status, _}, _Hs, _Body}} ->
             {ok, {Status, Body}};
