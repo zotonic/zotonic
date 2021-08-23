@@ -122,13 +122,13 @@ render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
             try
                 Reason1 = iolist_to_binary(Reason),
                 lager:error(
-                    "Error rendering template ~s due to ~s~n",
+                    "Error rendering template ~p due to ~s~n",
                     [Template, Reason1]
                 )
             catch
                 _:_ ->
                     lager:error(
-                        "Error rendering template ~s due to ~p~n",
+                        "Error rendering template ~p due to ~p~n",
                         [Template, Reason]
                     )
             end,
