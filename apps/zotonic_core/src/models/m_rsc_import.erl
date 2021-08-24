@@ -194,28 +194,31 @@ import(#{
         <<"name">> => maps:get(<<"name">>, JSON, undefined),
         <<"is_a">> => maps:get(<<"is_a">>, JSON, undefined)
     },
-    case update_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) of
-        {ok, LocalId} ->
-            _ = maybe_import_medium(LocalId, JSON, Context),
-            NewObjects = case proplists:get_value(is_import_edges, Options, false) of
-                true ->
-                    import_edges(LocalId, JSON, Context);
-                false ->
-                    []
-            end,
-            {ok, {LocalId, NewObjects}};
-        {error, _} = Error ->
-            Error
+    case Rsc of
+        #{ <<"is_authoritative">> := false } ->
+            {error, remote_not_authoritative};
+        _ ->
+            {Rsc1, EmbeddedIds} = cleanup_rsc(RemoteRId, Rsc, UriTemplate, Options, Context),
+            case update_rsc(RemoteRId, Rsc1, Options, Context) of
+                {ok, LocalId} ->
+                    _ = maybe_import_medium(LocalId, JSON, Context),
+                    NewObjects = case proplists:get_value(is_import_edges, Options, false) of
+                        true ->
+                            import_edges(LocalId, JSON, Context);
+                        false ->
+                            []
+                    end,
+                    {ok, {LocalId, NewObjects}};
+                {error, _} = Error ->
+                    Error
+            end
     end;
 import(JSON, _Options, _Context) ->
     lager:warning("Import of JSON without required fields id, resource, uri and uri_template: ~p", [JSON]),
     {error, status}.
 
 
-update_rsc(_RemoteRId, #{ <<"is_authoritative">> := false }, _UriTemplate, _Options, _Context) ->
-    {error, remote_not_authoritative};
-update_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) ->
-    {Rsc1, EmbeddedIds} = cleanup_rsc(RemoteRId, Rsc, UriTemplate, Options, Context),
+update_rsc(RemoteRId, Rsc, Options, Context) ->
     UpdateOptions = [
         {is_escape_texts, false},
         is_import
@@ -223,19 +226,19 @@ update_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) ->
     IsImportDeleted = proplists:get_value(is_import_deleted, Options, false),
     case m_rsc:rid(RemoteRId, Context) of
         undefined when IsImportDeleted ->
-            m_rsc:insert(Rsc1, UpdateOptions, Context);
+            m_rsc:insert(Rsc, UpdateOptions, Context);
         undefined when not IsImportDeleted ->
-            Uri = maps:get(<<"uri">>, Rsc1),
+            Uri = maps:get(<<"uri">>, Rsc),
             case m_rsc_gone:is_gone_uri(Uri, Context) of
                 true ->
                     {error, deleted};
                 false ->
-                    m_rsc:insert(Rsc1, UpdateOptions, Context)
+                    m_rsc:insert(Rsc, UpdateOptions, Context)
             end;
         LocalId ->
             case m_rsc:p_no_acl(LocalId, <<"is_authoritative">>, Context) of
                 false ->
-                    m_rsc:update(LocalId, Rsc1, UpdateOptions, Context);
+                    m_rsc:update(LocalId, Rsc, UpdateOptions, Context);
                 true ->
                     {error, authoritative}
             end
@@ -270,7 +273,7 @@ cleanup_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) ->
                         {Acc#{ K => V }, AccIds}
                 end
         end,
-        #{},
+        {#{}, []},
         Rsc),
 
     % Set forced and default props
