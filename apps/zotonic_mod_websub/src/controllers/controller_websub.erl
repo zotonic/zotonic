@@ -69,7 +69,7 @@ process(<<"POST">>, _AcceptedCT, _ProvidedCT, Context) ->
 handle(<<"subscribe">>, HubCallback, HubTopic, OptHubSecret, Context) ->
     case z_acl:is_allowed(use, mod_websub, Context) of
         false ->
-            refused(HubCallback, OptHubSecret, <<"access-denied-websub">>, Context);
+            refused(HubCallback, HubTopic, OptHubSecret, <<"access-denied-websub">>);
         true ->
             case topic_id(HubTopic, Context) of
                 undefined ->

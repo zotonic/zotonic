@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012 Marc Worrell
+%% @copyright 2012-2021 Marc Worrell
 %% @doc Get the sub tree of an id in a menu (if any)
 
-%% Copyright 2012 Marc Worrell
+%% Copyright 2012-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@
     menu_subtree/4
 ]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 menu_subtree(BelowId, Context) ->
     menu_subtree(BelowId, filter_menu_rsc:menu_rsc(BelowId, Context), false, Context).
 
@@ -33,9 +35,12 @@ menu_subtree(undefined, _, _, _) -> [];
 menu_subtree(_, undefined, _, _) -> [];
 menu_subtree(_, <<>>, _, _) -> [];
 menu_subtree(_, [], _, _) -> [];
+menu_subtree(_, #rsc_tree{ tree = [] }, _, _) -> [];
 menu_subtree(BelowId, Menu, AddSiblings, Context) when is_integer(Menu) ->
     menu_subtree(BelowId, m_rsc:p(Menu, menu, Context), AddSiblings, Context);
-menu_subtree(BelowId, [{_MId,L}|_] = Menu, AddSiblings, Context) when is_list(L) ->
+menu_subtree(BelowId, [ #rsc_tree{} | _ ] = Menu, AddSiblings, Context) ->
     mod_menu:menu_subtree(mod_menu:remove_invisible(Menu, Context), BelowId, z_convert:to_bool(AddSiblings), Context);
+menu_subtree(BelowId, [ {MId, L} | Rest ], AddSiblings, Context) when is_list(L) ->
+    menu_subtree(BelowId, [ #rsc_tree{ id = MId, tree = L } | Rest ], AddSiblings, Context);
 menu_subtree(BelowId, Menu, AddSiblings, Context) ->
     menu_subtree(BelowId, m_rsc:rid(Menu, Context), AddSiblings, Context).

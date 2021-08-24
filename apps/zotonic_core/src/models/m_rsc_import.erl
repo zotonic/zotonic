@@ -15,7 +15,6 @@
 %% limitations under the License.
 
 % TODO:
-% - do not import if previously deleted
 % - handle ids embedded in texts
 % - map ids in rsc blocks
 % - keep menu structure
@@ -30,19 +29,29 @@
     create_empty/2,
     create_empty/3,
     import/2,
-    import/3
+    import/3,
+    import_uri/2,
+    import_uri/3,
+    reimport/2,
+    reimport/3
 ]).
 
 
 -type option() :: {props_forced, map()}
                 | {props_default, map()}
                 | is_import_edges
-                | {is_import_edges, boolean()}.
+                | {is_import_edges, boolean()}
+                | is_import_deleted
+                | {is_import_deleted, boolean()}.
 -type options() :: [ option() ].
+
+-type import_result() :: {ok, {m_rsc:resource_id(), [ m_rsc:resource_id() ]}}
+                       | {error, term()}.
 
 -export_type([
     options/0,
-    option/0
+    option/0,
+    import_result/0
 ]).
 
 
@@ -100,8 +109,69 @@ maybe_create_empty(Rsc, Context) ->
             {ok, RscId}
     end.
 
+%% @doc Reimport a non-authoritative resource.
+-spec reimport( m_rsc:resource_id(), z:context() ) -> import_result().
+reimport(Id, Context) ->
+    reimport(Id, [], Context).
 
--spec import( map(), z:context() ) -> {ok, {m_rsc:resource_id(), [ m_rsc:resource_id() ]}} | {error, term()}.
+-spec reimport( m_rsc:resource_id(), options(), z:context() ) -> import_result().
+reimport(Id, Options, Context) ->
+    case m_rsc:p(Id, is_authoritative, Context) of
+        true ->
+            {error, authoritative};
+        false ->
+            Uri = m_rsc:uri(Id, Context),
+            case fetch_json(Uri) of
+                {ok, JSON} ->
+                    import_json(Uri, JSON, Options, Context);
+                {error, _} = Error ->
+                    Error
+            end
+    end.
+
+fetch_json(Url) ->
+    Options = [
+        {accept, "application/json"},
+        {user_agent, "Zotonic"},
+        insecure
+    ],
+    case z_url_fetch:fetch(Url, Options) of
+        {ok, {_FinalUrl, _Hs, _Size, Body}} ->
+            JSON = jsxrecord:decode(Body),
+            {ok, JSON};
+        {error, _} = Error ->
+            lager:warning("Error fetching ~p: ~p", [Url, Error]),
+            Error
+    end.
+
+import_json(_Url, #{ <<"status">> := <<"ok">>, <<"result">> := JSON }, Options, Context) ->
+    import(JSON, Options, Context);
+import_json(Url, #{ <<"status">> := <<"error">> } = JSON, _Options, _Context) ->
+    lager:warning("Remote returned error ~p: ~p", [Url, JSON]),
+    {error, remote};
+import_json(Url, JSON, _Options, _Context) ->
+    lager:warning("JSON with unknown structure ~p: ~p", [Url, JSON]),
+    {error, status}.
+
+
+%% @doc Import a non-authoritative resource from a remote URI
+-spec import_uri( string() | binary(), z:context() ) -> import_result().
+import_uri(Uri, Context) ->
+    import_uri(Uri, [], Context).
+
+%% @doc Import a non-authoritative resource from a remote URI
+-spec import_uri( string() | binary(), options(), z:context() ) -> import_result().
+import_uri(Uri, Options, Context) ->
+    case fetch_json(Uri) of
+        {ok, JSON} ->
+            import_json(Uri, JSON, Options, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+
+%% @doc Import a resource using default import options.
+-spec import( map(), z:context() ) -> import_result().
 import(JSON, Context) ->
     import(JSON, [], Context).
 
@@ -109,7 +179,7 @@ import(JSON, Context) ->
 %%      and have a matching URI. The resource to be updated is looked up by matching either the
 %%      URI or the unique name. If the unique name matches then the category of the existing
 %%      resource must have an overlap with the category of the imported resource.
--spec import( map(), options(), z:context() ) -> {ok, {m_rsc:resource_id(), [ m_rsc:resource_id() ]}} | {error, term()}.
+-spec import( map(), options(), z:context() ) -> import_result().
 import(#{
         <<"id">> := RemoteId,
         <<"resource">> := Rsc,
@@ -145,14 +215,23 @@ import(JSON, _Options, _Context) ->
 update_rsc(_RemoteRId, #{ <<"is_authoritative">> := false }, _UriTemplate, _Options, _Context) ->
     {error, remote_not_authoritative};
 update_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) ->
-    Rsc1 = cleanup_rsc(RemoteRId, Rsc, UriTemplate, Options, Context),
+    {Rsc1, EmbeddedIds} = cleanup_rsc(RemoteRId, Rsc, UriTemplate, Options, Context),
     UpdateOptions = [
         {is_escape_texts, false},
         is_import
     ],
+    IsImportDeleted = proplists:get_value(is_import_deleted, Options, false),
     case m_rsc:rid(RemoteRId, Context) of
-        undefined ->
+        undefined when IsImportDeleted ->
             m_rsc:insert(Rsc1, UpdateOptions, Context);
+        undefined when not IsImportDeleted ->
+            Uri = maps:get(<<"uri">>, Rsc1),
+            case m_rsc_gone:is_gone_uri(Uri, Context) of
+                true ->
+                    {error, deleted};
+                false ->
+                    m_rsc:insert(Rsc1, UpdateOptions, Context)
+            end;
         LocalId ->
             case m_rsc:p_no_acl(LocalId, <<"is_authoritative">>, Context) of
                 false ->
@@ -166,22 +245,30 @@ cleanup_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) ->
     PropsForced = proplists:get_value(props_forced, Options, #{}),
     PropsDefault = proplists:get_value(props_default, Options, #{}),
 
-    % Remove modifier_id, creator_id, etc
-    Rsc1 = maps:fold(
-        fun(K, V, Acc) ->
-            % TODO: map ids in rsc and content to local ids
-            % TODO: delete all other '..._id' not mapped and not in Options
-            case m_rsc_export:is_id_prop(K) of
-                true when is_map(V) ->
-                    case m_rsc:rid(V, Context) of
-                        undefined -> Acc;
-                        VId -> Acc#{ K => VId }
-                    end;
-                true ->
-                    Acc;
-                false ->
-                    Acc#{ K => V }
-            end
+    % Remove or map modifier_id, creator_id, etc
+    {Rsc1, EmbeddedIds} = maps:fold(
+        fun
+            (<<"menu">>, Menu, {Acc, AccIds}) when is_list(Menu) ->
+                % TODO: map ids in menu to local ids
+                Menu1 = Menu,
+                Acc#{ <<"menu">> => Menu1 };
+            (<<"blocks">>, Blocks, {Acc, AccIds}) when is_list(Blocks) ->
+                % TODO: map ids in blocks and content to local ids
+                Blocks1 = Blocks,
+                Acc#{ <<"blocks">> => Blocks1 };
+            (K, V, {Acc, AccIds}) ->
+                case m_rsc_export:is_id_prop(K) of
+                    true when is_map(V) ->
+                        case m_rsc:rid(V, Context) of
+                            undefined -> {Acc, AccIds};
+                            VId -> {Acc#{ K => VId }, AccIds}
+                        end;
+                    true ->
+                        {Acc, AccIds};
+                    false ->
+                        % TODO: map ids content to local ids
+                        {Acc#{ K => V }, AccIds}
+                end
         end,
         #{},
         Rsc),
@@ -199,7 +286,7 @@ cleanup_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) ->
         {ok, true} -> Rsc4;
         _ -> Rsc4#{ <<"is_published">> => true }
     end,
-    Rsc5.
+    {Rsc5, EmbeddedIds}.
 
 
 maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := MediaUrl }, Context)
@@ -207,7 +294,6 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := Medi
     % If medium is outdated (compare with created date in medium record)
     %    - download URL
     %    - save into medium, ensure created date has been set (aka copied)
-    ?DEBUG(MediaUrl),
     Options = [
         {is_escape_texts, false},
         is_import,
@@ -250,35 +336,34 @@ is_newer_medium(_, _) ->
     false.
 
 
-%%    <<"edges">> := #{
-%%      %% Edges from this item to other items
-%%      <<"depiction">> => #{
-%%          <<"predicate">> => #{
-%%                <<"id">> => 304,
-%%                <<"is_a">> => [ meta, predicate ],
-%%                <<"name">> => <<"depiction">>,
-%%                <<"title">> => {trans,[{en,<<"Depiction">>}]},
-%%                <<"uri">> => <<"http://xmlns.com/foaf/0.1/depiction">>
-%%          },
-%%          <<"objects">> => [
-%%                #{
-%%                    <<"created">> => {{2020,12,23},{15,4,55}},
-%%                    <<"object_id">> => #{
-%%                         <<"id">> => 28992,
-%%                         <<"is_a">> => [media,image],
-%%                         <<"name">> => undefined,
-%%                         <<"title">> =>
-%%                            {trans,[{nl,<<"NL: a.jpg">>},{en,<<"a.jpg">>}]},
-%%                         <<"uri">> =>
-%%                             <<"https://learningstone.test:8443/id/28992">>
-%%                    },
-%%                    <<"seq">> => 1
-%%                },
-%%                ... more objects
-%%          ]
-%%      },
-%%      ... more predicates
-%%    }
+% <<"edges">> := #{
+%   <<"depiction">> => #{
+%       <<"predicate">> => #{
+%             <<"id">> => 304,
+%             <<"is_a">> => [ meta, predicate ],
+%             <<"name">> => <<"depiction">>,
+%             <<"title">> => {trans,[{en,<<"Depiction">>}]},
+%             <<"uri">> => <<"http://xmlns.com/foaf/0.1/depiction">>
+%       },
+%       <<"objects">> => [
+%             #{
+%                 <<"created">> => {{2020,12,23},{15,4,55}},
+%                 <<"object_id">> => #{
+%                      <<"id">> => 28992,
+%                      <<"is_a">> => [media,image],
+%                      <<"name">> => undefined,
+%                      <<"title">> =>
+%                         {trans,[{nl,<<"NL: a.jpg">>},{en,<<"a.jpg">>}]},
+%                      <<"uri">> =>
+%                          <<"https://learningstone.test:8443/id/28992">>
+%                 },
+%                 <<"seq">> => 1
+%             },
+%             ... more objects
+%       ]
+%   },
+%   ... more predicates
+% }
 
 %% @doc Import all edges, return a list of newly created objects
 import_edges(LocalId, #{ <<"edges">> := Edges }, Context) when is_map(Edges) ->

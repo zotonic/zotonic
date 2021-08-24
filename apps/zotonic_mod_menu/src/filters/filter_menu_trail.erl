@@ -1,8 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2011 Arjan Scherpenisse
+%% @copyright 2011-2021 Arjan Scherpenisse
 %% @doc Get a "trail" of menu parents
 
-%% Copyright 2011 Arjan Scherpenisse
+%% Copyright 2011-2021 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@
 -module(filter_menu_trail).
 -export([menu_trail/2, menu_trail/3, test/0]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 menu_trail(undefined, _Context) ->
     undefined;
 menu_trail(Id, Context) ->
@@ -32,7 +34,10 @@ menu_trail(_Id, <<>>, _Context) ->
     undefined;
 menu_trail(undefined, _Menu, _Context) ->
     undefined;
-menu_trail(Id, [{MenuId,Sub}|_] = Menu, Context) when is_integer(MenuId), is_list(Sub) ->
+menu_trail(Id, [ #rsc_tree{ tree = Sub } | _ ] = Menu, Context) when is_list(Sub) ->
+    trail(m_rsc:rid(Id, Context), mod_menu:remove_invisible(Menu, Context), Context);
+menu_trail(Id, [{_MenuId,Sub}|_] = Menu, Context) when is_list(Sub) ->
+    % Old style nested tuples
     trail(m_rsc:rid(Id, Context), mod_menu:remove_invisible(Menu, Context), Context);
 menu_trail(Ids, Menu, Context) when is_list(Ids) ->
     lists:foldl(
@@ -50,26 +55,28 @@ menu_trail(Id, MenuId, Context) ->
 
 trail(_Id, [], _Context) ->
     []; %% not found
-trail(Id, [{Id, _}|_], _Context) ->
-    [Id]; %% found
-trail(Id, [{MenuMaybeSymbolic, Children}|Rest], Context) ->
-    MenuId = m_rsc:rid(MenuMaybeSymbolic, Context),
-    case MenuId of
+trail(Id, [ #rsc_tree{ id = Id }|_], _Context) ->
+    [ Id ]; %% found
+trail(Id, [ #rsc_tree{ id = RscId, tree = Children } | Rest ], Context) ->
+    case m_rsc:rid(RscId, Context) of
         Id ->
-            [Id];
-        _ ->
+            [ Id ];
+        MenuId ->
             case trail(Id, Children, Context) of
                 [] ->
                     %% not found
                     trail(Id, Rest, Context);
                 Path ->
                     %% Found
-                    [MenuId|Path]
+                    [ MenuId | Path ]
             end
     end;
+trail(Id, [{RscId, Sub} | Rest ], Context) ->
+    %% legacy menu notation
+    trail(Id, [ #rsc_tree{ id = RscId, tree = Sub } | Rest ], Context);
 trail(Id, [MenuId|Rest], Context) when is_integer(MenuId)->
     %% legacy menu notation
-    trail(Id, [{MenuId, []}|Rest], Context).
+    trail(Id, [ #rsc_tree{ id = MenuId, tree = [] } | Rest ], Context).
 
 
 

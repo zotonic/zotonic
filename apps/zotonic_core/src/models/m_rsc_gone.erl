@@ -29,6 +29,7 @@
     get/2,
     get_new_location/2,
     is_gone/2,
+    is_gone_uri/2,
     gone/2,
     gone/3
 ]).
@@ -87,7 +88,7 @@ get_new_location(Id, Context) when is_integer(Id) ->
 
 
 %% @doc Check if the resource used to exist.
--spec is_gone(integer()|undefined, #context{}) -> boolean().
+-spec is_gone(integer()|undefined, z:context()) -> boolean().
 is_gone(undefined, _Context) ->
     false;
 is_gone(Id, Context) when is_integer(Id) ->
@@ -96,8 +97,18 @@ is_gone(Id, Context) when is_integer(Id) ->
         end,
     z_depcache:memo(F, {rsc_is_gone, Id}, Context).
 
+%% @doc Check if the resource uri used to exist.
+-spec is_gone_uri(string()|binary(), z:context()) -> boolean().
+is_gone_uri(Uri, Context) ->
+    UriB = unicode:characters_to_binary(Uri, utf8),
+    F = fun() ->
+            z_db:q1("select count(*) from rsc_gone where uri = $1", [UriB], Context) >= 1
+        end,
+    z_depcache:memo(F, {rsc_is_gone, UriB}, Context).
+
+
 %% @doc Copy a resource to the 'gone' table, use the current user as the modifier (deleter).
--spec gone(integer(), #context{}) -> {ok, integer()} | {error, term()}.
+-spec gone(integer(), z:context()) -> {ok, integer()} | {error, term()}.
 gone(Id, Context) when is_integer(Id) ->
     gone(Id, undefined, Context).
 

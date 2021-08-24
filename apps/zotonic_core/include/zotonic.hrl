@@ -132,6 +132,12 @@
     list :: list( m_rsc:resource_id() )
 }).
 
+%% @doc Menu structures, a tree with a resource as a node.
+-record(rsc_tree, {
+    id = undefined :: m_rsc:resource() | undefined,
+    tree = [] :: list( #rsc_tree{} )
+}).
+
 %% Default page length for search
 -define(SEARCH_PAGELEN, 20).
 
@@ -313,6 +319,7 @@
     columns = [] :: list(),
     importdef
 }).
+
 
 %% @doc Check if an assumption is true
 -define(ASSERT(A,E), z_utils:assert(A,E)).
