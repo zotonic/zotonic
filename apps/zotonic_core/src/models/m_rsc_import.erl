@@ -251,11 +251,11 @@ cleanup_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) ->
             (<<"menu">>, Menu, {Acc, AccIds}) when is_list(Menu) ->
                 % TODO: map ids in menu to local ids
                 Menu1 = Menu,
-                Acc#{ <<"menu">> => Menu1 };
+                {Acc#{ <<"menu">> => Menu1 }, AccIds};
             (<<"blocks">>, Blocks, {Acc, AccIds}) when is_list(Blocks) ->
                 % TODO: map ids in blocks and content to local ids
                 Blocks1 = Blocks,
-                Acc#{ <<"blocks">> => Blocks1 };
+                {Acc#{ <<"blocks">> => Blocks1 }, AccIds};
             (K, V, {Acc, AccIds}) ->
                 case m_rsc_export:is_id_prop(K) of
                     true when is_map(V) ->
