@@ -23,7 +23,7 @@
 -module(m_rsc_import).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
--include("zotonic.hrl").
+-include("../../include/zotonic.hrl").
 
 -export([
     create_empty/2,
@@ -202,7 +202,7 @@ import(#{
                         false ->
                             []
                     end,
-                    {ok, {LocalId, NewObjects}};
+                    {ok, {LocalId, lists:usort(EmbeddedIds ++ NewObjects)}};
                 {error, _} = Error ->
                     Error
             end
@@ -252,22 +252,20 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, Options, Context) ->
                 {Acc#{ <<"menu">> => Menu1 }, AccIds1};
             (<<"blocks">>, Blocks, {Acc, AccIds}) when is_list(Blocks) ->
                 % TODO: map ids in blocks and content to local ids
-                Blocks1 = map_blocks(Blocks, UriTemplate, [], Context),
-                {Acc#{ <<"blocks">> => Blocks1 }, AccIds};
+                {Blocks1, AccIds1} = map_blocks(Blocks, UriTemplate, [], AccIds, Context),
+                {Acc#{ <<"blocks">> => Blocks1 }, AccIds1};
             (K, V, {Acc, AccIds}) ->
                 case m_rsc_export:is_id_prop(K) of
-                    true when is_map(V) ->
-                        case m_rsc:rid(V, Context) of
-                            undefined -> {Acc, AccIds};
-                            VId -> {Acc#{ K => VId }, AccIds}
-                        end;
                     true ->
-                        % Skip id props that are not fully described.
-                        % In the future we might want to use map_id/3
-                        {Acc, AccIds};
+                        case map_id(V, UriTemplate, Context) of
+                            {ok, LocalId} ->
+                                {Acc#{ K => LocalId }, [ LocalId | AccIds ]};
+                            {error, _} ->
+                                {Acc#{ K => undefined }, AccIds}
+                        end;
                     false ->
-                        V1 = map_html(K, V, UriTemplate, Context),
-                        {Acc#{ K => V1 }, AccIds}
+                        {V1, AccIds1} = map_html(K, V, UriTemplate, AccIds, Context),
+                        {Acc#{ K => V1 }, AccIds1}
                 end
         end,
         {#{}, []},
@@ -286,7 +284,7 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, Options, Context) ->
         {ok, true} -> Rsc4;
         _ -> Rsc4#{ <<"is_published">> => true }
     end,
-    {Rsc5, EmbeddedIds}.
+    {Rsc5, lists:usort(EmbeddedIds)}.
 
 
 %% @doc Map all ids in a menu to local (stub) resources. Skip all tree entries
@@ -309,26 +307,27 @@ map_menu([], _UriTemplate, Acc, _Context) ->
 
 %% @doc Map all ids in blocks to local (stub) resources. Remove blocks that can not
 %% have their ids mapped.
-map_blocks([ B | Rest ], UriTemplate, Acc, Context) ->
-    B1 = maps:fold(
-        fun(K, V, BAcc) ->
+map_blocks([ B | Rest ], UriTemplate, Acc, AccIds, Context) ->
+    {B1, AccIds1} = maps:fold(
+        fun(K, V, {BAcc, BAccIds}) ->
             case m_rsc_export:is_id_prop(K) of
                 true ->
                     case map_id(V, UriTemplate, Context) of
                         {ok, LocalId} ->
-                            BAcc#{ K => LocalId };
+                            {BAcc#{ K => LocalId }, [ LocalId | BAccIds ]};
                         {error, _} ->
-                            BAcc#{ K => undefined }
+                            {BAcc#{ K => undefined }, BAccIds}
                     end;
                 false ->
-                    BAcc#{ K => map_html(K, V, UriTemplate, Context)}
+                    {V1, BAccIds1} = map_html(K, V, UriTemplate, BAccIds, Context),
+                    {BAcc#{ K => V1}, BAccIds1 }
             end
         end,
-        #{},
+        {#{}, AccIds},
         B),
-    map_blocks(Rest, UriTemplate, [ B1 | Acc ], Context);
-map_blocks([], _UriTemplate, Acc, _Context) ->
-    lists:reverse(Acc).
+    map_blocks(Rest, UriTemplate, [ B1 | Acc ], AccIds1, Context);
+map_blocks([], _UriTemplate, Acc, AccIds, _Context) ->
+    {lists:reverse(Acc), AccIds}.
 
 
 
@@ -361,43 +360,45 @@ map_id(_, _, _) ->
 
 
 %% @doc Map texts in html properties.
-map_html(Key, Value, UriTemplate, Context) ->
+map_html(Key, Value, UriTemplate, AccIds, Context) ->
     case is_html_prop(Key) of
         true ->
-            map_html_1(Value, UriTemplate, Context);
+            map_html_1(Value, UriTemplate, AccIds, Context);
         false ->
-            Value
+            {Value, AccIds}
     end.
 
-map_html_1(#trans{ tr = Tr }, UriTemplate, Context) ->
-    Tr1 = lists:map(
-        fun({Lang, Text}) ->
-            Text1 = map_html_1(Text, UriTemplate, Context),
-            {Lang, Text1}
+map_html_1(#trans{ tr = Tr }, UriTemplate, AccIds, Context) ->
+    {Tr1, AccIds1} = lists:foldr(
+        fun({Lang, Text}, {TAcc, TAccIds}) ->
+            Text1 = map_html_1(Text, UriTemplate, AccIds, Context),
+            {[ {Lang, Text1} | TAcc ], TAccIds}
         end,
+        {[], AccIds},
         Tr),
-    #trans{ tr = Tr1 };
-map_html_1(Text, UriTemplate, Context) when is_binary(Text) ->
+    {#trans{ tr = Tr1 }, AccIds1};
+map_html_1(Text, UriTemplate, AccIds, Context) when is_binary(Text) ->
     case filter_embedded_media:embedded_media(Text, Context) of
         [] ->
-            Text;
+            {Text, AccIds};
         EmbeddedIds ->
             Text1 = lists:foldl(
-                fun(RemoteId) ->
+                fun(RemoteId, TextAcc) ->
                     case map_id(RemoteId, UriTemplate, Context) of
                         {ok, LocalId} ->
                             From = <<"<!-- z-media ", (integer_to_binary(RemoteId))/binary, " ">>,
                             To = <<"<!-- z-media-local ", (integer_to_binary(LocalId))/binary, " ">>,
-                            binary:replace(Text, From, To, [ global ]);
+                            binary:replace(TextAcc, From, To, [ global ]);
                         {error, _} ->
                             From = <<"<!-- z-media ", (integer_to_binary(RemoteId))/binary, " ">>,
                             To = <<"<!-- z-media-temp 0 ">>,
-                            binary:replace(Text, From, To, [ global ])
+                            binary:replace(TextAcc, From, To, [ global ])
                     end
                 end,
                 Text,
                 EmbeddedIds),
-            binary:replace(Text1, <<"<!-- z-media-local ">>, <<"<!-- z-media ">>, [ global ])
+            Text2 =binary:replace(Text1, <<"<!-- z-media-local ">>, <<"<!-- z-media ">>, [ global ]),
+            {Text2, EmbeddedIds ++ AccIds}
     end.
 
 is_url(<<"http:", _/binary>>) -> true;
