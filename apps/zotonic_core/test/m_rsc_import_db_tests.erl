@@ -38,7 +38,7 @@ modify_rsc_test() ->
     ?assertEqual(1, m_rsc:p(Id, version, AdminC)),
     ?assertEqual(false, m_rsc:p(Id, is_published, AdminC)),
     ?assertEqual(false, m_rsc:p(Id, is_authoritative, AdminC)),
-    ?assertEqual(true, m_rsc:is_a(Id, other, AdminC)),
+    ?assertEqual(true, m_rsc:is_a(Id, placeholder, AdminC)),
     ?assertEqual(<<"http://foo.com/id/333">>, m_rsc:p(Id, uri, AdminC)),
 
     %% Cannot update a non-authoritative resource
