@@ -177,7 +177,7 @@ import(JSON, Context) ->
 %%      resource must have an overlap with the category of the imported resource.
 -spec import( map(), options(), z:context() ) -> import_result().
 import(#{
-        <<"id">> := RemoteId,
+        <<"id">> := _RemoteId,
         <<"resource">> := Rsc,
         <<"uri">> := Uri,
         <<"uri_template">> := UriTemplate
@@ -311,23 +311,23 @@ map_menu([], _UriTemplate, Acc, _Context) ->
 %% have their ids mapped.
 map_blocks([ B | Rest ], UriTemplate, Acc, Context) ->
     B1 = maps:fold(
-        fun(K, V, Acc) ->
+        fun(K, V, BAcc) ->
             case m_rsc_export:is_id_prop(K) of
                 true ->
-                    case map_id(RemoteId, UriTemplate, Context) of
+                    case map_id(V, UriTemplate, Context) of
                         {ok, LocalId} ->
-                            B#{ K => LocalId };
+                            BAcc#{ K => LocalId };
                         {error, _} ->
-                            B#{ K => undefined }
+                            BAcc#{ K => undefined }
                     end;
                 false ->
-                    Acc#{ K => map_html(K, V, UriTemplate, Context)}
+                    BAcc#{ K => map_html(K, V, UriTemplate, Context)}
             end
         end,
         #{},
         B),
     map_blocks(Rest, UriTemplate, [ B1 | Acc ], Context);
-map_blocks([], UriTemplate, Acc, Context) ->
+map_blocks([], _UriTemplate, Acc, _Context) ->
     lists:reverse(Acc).
 
 
@@ -336,11 +336,11 @@ map_blocks([], UriTemplate, Acc, Context) ->
 map_id(RemoteId, UriTemplate, Context) when is_integer(RemoteId) ->
     case is_url(UriTemplate) of
         true ->
-            URL = binary:replace((UriTemplate, <<":id">>, z_convert:to_binary(RemoteId)),
+            URL = binary:replace(UriTemplate, <<":id">>, z_convert:to_binary(RemoteId)),
             Rsc = #{
                 <<"uri">> => URL
             },
-            maybe_create_empty(URL, Context);
+            maybe_create_empty(Rsc, Context);
         false ->
             {error, enoent}
     end;
@@ -377,7 +377,7 @@ map_html_1(#trans{ tr = Tr }, UriTemplate, Context) ->
         end,
         Tr),
     #trans{ tr = Tr1 };
-map_menu(Text, UriTemplate, Context) when is_binary(Text) ->
+map_html_1(Text, UriTemplate, Context) when is_binary(Text) ->
     case filter_embedded_media:embedded_media(Text, Context) of
         [] ->
             Text;
@@ -386,22 +386,19 @@ map_menu(Text, UriTemplate, Context) when is_binary(Text) ->
                 fun(RemoteId) ->
                     case map_id(RemoteId, UriTemplate, Context) of
                         {ok, LocalId} ->
-                            From = <<"<!-- z-media ", integer_to_binary(RemoteId)/binary, " ">>,
-                            To = <<"<!-- z-media-local ", integer_to_binary(LocalId)/binary, " ">>,
+                            From = <<"<!-- z-media ", (integer_to_binary(RemoteId))/binary, " ">>,
+                            To = <<"<!-- z-media-local ", (integer_to_binary(LocalId))/binary, " ">>,
                             binary:replace(Text, From, To, [ global ]);
                         {error, _} ->
-                            From = <<"<!-- z-media ", integer_to_binary(RemoteId)/binary, " ">>,
+                            From = <<"<!-- z-media ", (integer_to_binary(RemoteId))/binary, " ">>,
                             To = <<"<!-- z-media-temp 0 ">>,
-                            binary:replace(Text, From, To, [ global ]);
+                            binary:replace(Text, From, To, [ global ])
                     end
                 end,
                 Text,
                 EmbeddedIds),
             binary:replace(Text1, <<"<!-- z-media-local ">>, <<"<!-- z-media ">>, [ global ])
     end.
-
-map_menu(V, _UriTemplate, _Context) ->
-    V.
 
 is_url(<<"http:", _/binary>>) -> true;
 is_url(<<"https:", _/binary>>) -> true;
