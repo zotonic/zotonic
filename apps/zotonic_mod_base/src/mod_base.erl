@@ -27,7 +27,7 @@
 -mod_provides([base]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--mod_schema(1).
+-mod_schema(3).
 
 %% interface functions
 -export([
@@ -40,9 +40,6 @@
     observe_hierarchy_updated/2,
     manage_schema/2
 ]).
-
-manage_schema(install, Context) ->
-    ok = z_datamodel:manage(?MODULE, datamodel(), Context).
 
 %% @doc Add an extra content-type to the 'id' controller.
 observe_content_types_dispatch(#content_types_dispatch{ id = _Id }, Acc, Context) ->
@@ -166,14 +163,26 @@ observe_hierarchy_updated(#hierarchy_updated{ root_id = <<"$category">> }, Conte
 observe_hierarchy_updated(#hierarchy_updated{ root_id = _ }, _Context) ->
     ok.
 
-datamodel() ->
+manage_schema(_, _Context) ->
     #datamodel{
         categories = [
-            {organization, undefined, [
-                {title, {trans, [
-                    {en, <<"Organization">>},
-                    {nl, <<"Organisatie">>}
-                ]}}
-            ]}
+            {organization, undefined, #{
+                <<"title">> => #trans{
+                    tr =[
+                        {en, <<"Organization">>},
+                        {nl, <<"Organisatie">>}
+                    ]}
+            }},
+            {placeholder, undefined, #{
+                <<"title">> => #trans{
+                    tr = [
+                        {en, <<"Placeholder">>},
+                        {nl, <<"Tijdelijke aanduiding">>}
+                    ]},
+                <<"summary">> => <<
+                    "Placeholders are used for importing non-authoritative content from ",
+                    "remote sites. These are temporary resources which might be replaced ",
+                    "with a full resource.">>
+            }}
         ]
     }.

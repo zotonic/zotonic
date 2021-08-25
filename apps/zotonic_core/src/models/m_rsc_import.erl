@@ -68,7 +68,7 @@ create_empty(Uri, Props, Context) ->
     case m_rsc:uri_lookup(Uri, Context) of
         undefined ->
             Props1 = case maps:is_key(<<"category_id">>, Props) of
-                false -> Props#{ <<"category_id">> => other };
+                false -> Props#{ <<"category_id">> => placeholder };
                 true -> Props
             end,
             Props2 = Props1#{
@@ -88,17 +88,13 @@ create_empty(Uri, Props, Context) ->
 maybe_create_empty(Rsc, Context) ->
     case m_rsc:rid(Rsc, Context) of
         undefined ->
-            Category = case maps:get(<<"is_a">>, Rsc, undefined) of
-                [ _ | _ ] = IsA -> lists:last(IsA);
-                _ -> other
-            end,
             Props = #{
+                <<"category_id">> => placeholder,
                 <<"is_authoritative">> => false,
                 <<"is_published">> => false,
                 <<"uri">> => maps:get(<<"uri">>, Rsc),
                 <<"title">> => maps:get(<<"title">>, Rsc, undefined),
-                <<"name">> => maps:get(<<"name">>, Rsc, undefined),
-                <<"category_id">> => Category
+                <<"name">> => maps:get(<<"name">>, Rsc, undefined)
             },
             Options = [
                 {is_escape_texts, false},
@@ -154,12 +150,12 @@ import_json(Url, JSON, _Options, _Context) ->
     {error, status}.
 
 
-%% @doc Import a non-authoritative resource from a remote URI
+%% @doc Import a non-authoritative resource from a remote URI using default import options.
 -spec import_uri( string() | binary(), z:context() ) -> import_result().
 import_uri(Uri, Context) ->
     import_uri(Uri, [], Context).
 
-%% @doc Import a non-authoritative resource from a remote URI
+%% @doc Import a non-authoritative resource from a remote URI.
 -spec import_uri( string() | binary(), options(), z:context() ) -> import_result().
 import_uri(Uri, Options, Context) ->
     case fetch_json(Uri) of
@@ -187,8 +183,6 @@ import(#{
         <<"uri_template">> := UriTemplate
     } = JSON, Options, Context) ->
 
-    % io:format("~p~n", [ JSON ]),
-
     RemoteRId = #{
         <<"uri">> => Uri,
         <<"name">> => maps:get(<<"name">>, JSON, undefined),
@@ -198,7 +192,7 @@ import(#{
         #{ <<"is_authoritative">> := false } ->
             {error, remote_not_authoritative};
         _ ->
-            {Rsc1, EmbeddedIds} = cleanup_rsc(RemoteRId, Rsc, UriTemplate, Options, Context),
+            {Rsc1, EmbeddedIds} = cleanup_map_ids(RemoteRId, Rsc, UriTemplate, Options, Context),
             case update_rsc(RemoteRId, Rsc1, Options, Context) of
                 {ok, LocalId} ->
                     _ = maybe_import_medium(LocalId, JSON, Context),
@@ -244,7 +238,7 @@ update_rsc(RemoteRId, Rsc, Options, Context) ->
             end
     end.
 
-cleanup_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) ->
+cleanup_map_ids(RemoteRId, Rsc, UriTemplate, Options, Context) ->
     PropsForced = proplists:get_value(props_forced, Options, #{}),
     PropsDefault = proplists:get_value(props_default, Options, #{}),
 
@@ -252,12 +246,13 @@ cleanup_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) ->
     {Rsc1, EmbeddedIds} = maps:fold(
         fun
             (<<"menu">>, Menu, {Acc, AccIds}) when is_list(Menu) ->
-                % TODO: map ids in menu to local ids
-                Menu1 = Menu,
-                {Acc#{ <<"menu">> => Menu1 }, AccIds};
+                % map ids in menu to local ids
+                Menu1 = map_menu(Menu, UriTemplate, [], Context),
+                AccIds1 = menu_ids(Menu1, []) ++ AccIds,
+                {Acc#{ <<"menu">> => Menu1 }, AccIds1};
             (<<"blocks">>, Blocks, {Acc, AccIds}) when is_list(Blocks) ->
                 % TODO: map ids in blocks and content to local ids
-                Blocks1 = Blocks,
+                Blocks1 = map_blocks(Blocks, UriTemplate, [], Context),
                 {Acc#{ <<"blocks">> => Blocks1 }, AccIds};
             (K, V, {Acc, AccIds}) ->
                 case m_rsc_export:is_id_prop(K) of
@@ -267,10 +262,12 @@ cleanup_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) ->
                             VId -> {Acc#{ K => VId }, AccIds}
                         end;
                     true ->
+                        % Skip id props that are not fully described.
+                        % In the future we might want to use map_id/3
                         {Acc, AccIds};
                     false ->
-                        % TODO: map ids content to local ids
-                        {Acc#{ K => V }, AccIds}
+                        V1 = map_html(K, V, UriTemplate, Context),
+                        {Acc#{ K => V1 }, AccIds}
                 end
         end,
         {#{}, []},
@@ -290,6 +287,138 @@ cleanup_rsc(RemoteRId, Rsc, UriTemplate, Options, Context) ->
         _ -> Rsc4#{ <<"is_published">> => true }
     end,
     {Rsc5, EmbeddedIds}.
+
+
+%% @doc Map all ids in a menu to local (stub) resources. Skip all tree entries
+%% that could not be mapped to local ids.
+map_menu([ #rsc_tree{ id = RemoteId, tree = Sub } | Rest ], UriTemplate, Acc, Context) ->
+    case map_id(RemoteId, UriTemplate, Context) of
+        {ok, LocalId} ->
+            Sub1 = map_menu(Sub, UriTemplate, [], Context),
+            Acc1 = [ #rsc_tree{ id = LocalId, tree = Sub1 } | Acc ],
+            map_menu(Rest, UriTemplate, Acc1, Context);
+        {error, _} ->
+            % Skip the tree entry if the remote id could not be mapped
+            map_menu(Rest, UriTemplate, Acc, Context)
+    end;
+map_menu([ _ | Rest ], UriTemplate, Acc, Context) ->
+    map_menu(Rest, UriTemplate, Acc, Context);
+map_menu([], _UriTemplate, Acc, _Context) ->
+    lists:reverse(Acc).
+
+
+%% @doc Map all ids in blocks to local (stub) resources. Remove blocks that can not
+%% have their ids mapped.
+map_blocks([ B | Rest ], UriTemplate, Acc, Context) ->
+    B1 = maps:fold(
+        fun(K, V, Acc) ->
+            case m_rsc_export:is_id_prop(K) of
+                true ->
+                    case map_id(RemoteId, UriTemplate, Context) of
+                        {ok, LocalId} ->
+                            B#{ K => LocalId };
+                        {error, _} ->
+                            B#{ K => undefined }
+                    end;
+                false ->
+                    Acc#{ K => map_html(K, V, UriTemplate, Context)}
+            end
+        end,
+        #{},
+        B),
+    map_blocks(Rest, UriTemplate, [ B1 | Acc ], Context);
+map_blocks([], UriTemplate, Acc, Context) ->
+    lists:reverse(Acc).
+
+
+
+%% @doc Map a remote id to a local id, optionally creating a new (stub) resource.
+map_id(RemoteId, UriTemplate, Context) when is_integer(RemoteId) ->
+    case is_url(UriTemplate) of
+        true ->
+            URL = binary:replace((UriTemplate, <<":id">>, z_convert:to_binary(RemoteId)),
+            Rsc = #{
+                <<"uri">> => URL
+            },
+            maybe_create_empty(URL, Context);
+        false ->
+            {error, enoent}
+    end;
+map_id(Remote, _UriTemplate, Context) when is_map(Remote) ->
+    maybe_create_empty(Remote, Context);
+map_id(Remote, _UriTemplate, Context) when is_binary(Remote) ->
+    case is_url(Remote) of
+        true ->
+            Rsc = #{
+                <<"uri">> => Remote
+            },
+            maybe_create_empty(Rsc, Context);
+        false ->
+            {error, enoent}
+    end;
+map_id(_, _, _) ->
+    {error, enoent}.
+
+
+%% @doc Map texts in html properties.
+map_html(Key, Value, UriTemplate, Context) ->
+    case is_html_prop(Key) of
+        true ->
+            map_html_1(Value, UriTemplate, Context);
+        false ->
+            Value
+    end.
+
+map_html_1(#trans{ tr = Tr }, UriTemplate, Context) ->
+    Tr1 = lists:map(
+        fun({Lang, Text}) ->
+            Text1 = map_html_1(Text, UriTemplate, Context),
+            {Lang, Text1}
+        end,
+        Tr),
+    #trans{ tr = Tr1 };
+map_menu(Text, UriTemplate, Context) when is_binary(Text) ->
+    case filter_embedded_media:embedded_media(Text, Context) of
+        [] ->
+            Text;
+        EmbeddedIds ->
+            Text1 = lists:foldl(
+                fun(RemoteId) ->
+                    case map_id(RemoteId, UriTemplate, Context) of
+                        {ok, LocalId} ->
+                            From = <<"<!-- z-media ", integer_to_binary(RemoteId)/binary, " ">>,
+                            To = <<"<!-- z-media-local ", integer_to_binary(LocalId)/binary, " ">>,
+                            binary:replace(Text, From, To, [ global ]);
+                        {error, _} ->
+                            From = <<"<!-- z-media ", integer_to_binary(RemoteId)/binary, " ">>,
+                            To = <<"<!-- z-media-temp 0 ">>,
+                            binary:replace(Text, From, To, [ global ]);
+                    end
+                end,
+                Text,
+                EmbeddedIds),
+            binary:replace(Text1, <<"<!-- z-media-local ">>, <<"<!-- z-media ">>, [ global ])
+    end.
+
+map_menu(V, _UriTemplate, _Context) ->
+    V.
+
+is_url(<<"http:", _/binary>>) -> true;
+is_url(<<"https:", _/binary>>) -> true;
+is_url(_) -> false.
+
+
+is_html_prop(<<"body">>) -> true;
+is_html_prop(<<"body_", _/binary>>) -> true;
+is_html_prop(K) ->
+    binary:longest_common_suffix([ K, <<"_html">> ]) =:= 5.
+
+
+menu_ids([], Acc) ->
+    lists:usort(Acc);
+menu_ids([ #rsc_tree{ id = Id, tree = Sub } | Rest ], Acc) ->
+    Acc1 = [ Id | menu_ids(Sub, Acc) ],
+    menu_ids(Rest, Acc1).
 
 
 maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := MediaUrl }, Context)
