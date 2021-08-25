@@ -157,7 +157,7 @@ refused(HubCallback, HubTopic, OptHubSecret, Reason) ->
 
 
 %% @doc Post a result to the callback, return the status code or an error.
--spec post_callback( binary() | string(), binary(), list() ) -> {ok, integer()} | {error, term()}.
+-spec post_callback( binary() | string(), binary(), list() ) -> {ok, {integer(), binary()}} | {error, term()}.
 post_callback(HubCallback, OptHubSecret, Payload) ->
     Body = iolist_to_binary( uri_string:compose_query(Payload) ),
     HttpOptions = [

@@ -875,7 +875,6 @@ rid(UniqueName, Context) ->
 
 is_matching_category(undefined, _) -> true;
 is_matching_category([], _) -> true;
-is_matching_category(_, undefined) -> true;
 is_matching_category(ExtIsA, LocalIsA) ->
     ExtIsA1 = [ z_convert:to_binary(A) || A <- ExtIsA ],
     LocalIsA1 = [ z_convert:to_binary(A) || A <- LocalIsA ],

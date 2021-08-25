@@ -73,12 +73,7 @@ trail(Id, [ #rsc_tree{ id = RscId, tree = Children } | Rest ], Context) ->
     end;
 trail(Id, [{RscId, Sub} | Rest ], Context) ->
     %% legacy menu notation
-    trail(Id, [ #rsc_tree{ id = RscId, tree = Sub } | Rest ], Context);
-trail(Id, [MenuId|Rest], Context) when is_integer(MenuId)->
-    %% legacy menu notation
-    trail(Id, [ #rsc_tree{ id = MenuId, tree = [] } | Rest ], Context).
-
-
+    trail(Id, [ #rsc_tree{ id = RscId, tree = Sub } | Rest ], Context).
 
 
 test() ->
