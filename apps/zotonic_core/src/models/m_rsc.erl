@@ -925,7 +925,7 @@ uri_lookup(Uri, Context) when is_binary(Uri) ->
                         {ok, Id} ->
                             Id;
                         undefined ->
-                            Id = z_db:q1("select id from rsc where uri = $1", [Uri], Context),
+                            Id = uri_lookup_1(Uri, Context),
                             z_depcache:set({rsc_uri, Uri}, Id, ?DAY, [Id, {rsc_uri, Uri}], Context),
                             Id
                     end
@@ -935,6 +935,18 @@ uri_lookup(Uri, Context) when is_binary(Uri) ->
     end;
 uri_lookup(Uri, Context) ->
     uri_lookup(z_convert:to_binary(Uri), Context).
+
+% Check if URI is imported or replaced by another resource
+uri_lookup_1(Uri, Context) ->
+    case z_db:q1("select id from rsc where uri = $1", [Uri], Context) of
+        undefined ->
+            case m_rsc_gone:get_uri(Uri, Context) of
+                undefined -> undefined;
+                Gone -> proplists:get_value(new_id, Gone)
+            end;
+        Id ->
+            Id
+    end.
 
 
 %% @doc Check if the hostname in an URL matches the current site

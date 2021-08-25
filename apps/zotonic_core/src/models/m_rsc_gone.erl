@@ -27,6 +27,7 @@
     m_get/3,
 
     get/2,
+    get_uri/2,
     get_new_location/2,
     is_gone/2,
     is_gone_uri/2,
@@ -56,6 +57,14 @@ get(Id, Context) when is_integer(Id) ->
     z_depcache:memo(F, {rsc_gone, Id}, Context);
 get(Id, Context) ->
     get(m_rsc:rid(Id, Context), Context).
+
+
+%% @doc Get the possible 'rsc_gone' resource for the uri.
+-spec get_uri( binary() | string(), z:context() ) -> proplists:proplist() | undefined.
+get_uri(Uri, Context) when is_binary(Uri); is_list(Uri) ->
+    z_db:assoc_row("select * from rsc_gone where uri = $1", [Uri], Context);
+get_uri(_, _Context) ->
+    undefined.
 
 
 %% @doc Get the redirect location for the id, uses the current dispatch rule and otherwise
@@ -140,6 +149,14 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                                 {ok, _} = z_db:update(rsc_gone, Id, Props1, Ctx),
                                 {ok, Id};
                             0 ->
+                                % Force previous versions to refer to the new resource
+                                z_db:q("
+                                    update rsc_gone
+                                    set new_id = $1
+                                    where new_id = $2
+                                    ",
+                                    [ NewId, Id ],
+                                    Ctx),
                                 z_db:insert(rsc_gone, Props1, Ctx)
                         end
                     end,
