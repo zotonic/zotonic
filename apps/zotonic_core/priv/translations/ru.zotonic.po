@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-08-21 19:12\n"
+"PO-Revision-Date: 2021-08-26 22:18\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1119,7 +1119,7 @@ msgstr "Вставить"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:31
 msgid "Embed code will be sanitized for allowed sites and html."
-msgstr "Встраиваемый код будет дезинфицирован для разрешенных сайтов и html."
+msgstr "Встраиваемый код будет очищен для разрешенных сайтов и html."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:174
 msgid "Embed page"
