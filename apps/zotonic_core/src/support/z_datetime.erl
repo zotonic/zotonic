@@ -105,7 +105,7 @@ format_opts(Date, Tz, Context) ->
     ].
 
 %% @doc Convert a time to the local context time using the current timezone.
--spec to_local(calendar:datetime()|undefined|time_not_exists, string()|binary()|#context{}) -> calendar:datetime() | undefined.
+-spec to_local(calendar:datetime()|undefined|time_not_exists, string()|binary()|z:context()) -> calendar:datetime() | undefined.
 to_local(undefined, _Tz) ->
     undefined;
 to_local(time_not_exists, _Tz) ->
@@ -128,23 +128,21 @@ to_local(DT, <<>>) ->
 to_local(DT, #context{} = Context) ->
     to_local(DT, z_context:tz(Context));
 to_local(DT, Tz) ->
-    case qdate:to_date(z_convert:to_list(Tz), {DT, "GMT"}) of
-        {error, unknown_tz} ->
-            lager:warning("Unknown timezone ~p for to_local of ~p", [Tz, DT]),
-            DT;
-        {error, Error} ->
-            lager:warning("to_utc error ~p for to_utc of ~p", [Error, DT]),
-            DT;
-        {ambiguous, _Standard, Daylight} ->
-            Daylight;
-        time_not_exists ->
-            undefined;
-        NewDT ->
-            NewDT
+    try
+        case qdate:to_date(z_convert:to_list(Tz), {DT, "GMT"}) of
+            {ambiguous, _Standard, Daylight} ->
+                Daylight;
+            {{_, _, _}, {_, _, _}} = NewDT ->
+                NewDT
+        end
+    catch
+        _:_ ->
+            lager:warning("Error converting ~p for to_local of ~p", [Tz, DT]),
+            undefined
     end.
 
 %% @doc Convert a time to the local context time using the current timezone.
--spec to_utc(calendar:datetime()|undefined|time_not_exists, string()|binary()|#context{}) -> calendar:datetime() | undefined.
+-spec to_utc(calendar:datetime()|undefined|time_not_exists, string()|binary()|z:context()) -> calendar:datetime() | undefined.
 to_utc(undefined, _Tz) ->
     undefined;
 to_utc(time_not_exists, _Tz) ->
@@ -167,19 +165,17 @@ to_utc(DT, <<>>) ->
 to_utc(DT, #context{} = Context) ->
     to_utc(DT, z_context:tz(Context));
 to_utc(DT, Tz) ->
-    case qdate:to_date("GMT", {DT, z_convert:to_list(Tz)}) of
-        {error, unknown_tz} ->
-            lager:warning("Unknown timezone ~p for to_utc of ~p", [Tz, DT]),
-            DT;
-        {error, Error} ->
-            lager:warning("to_utc error ~p for to_utc of ~p", [Error, DT]),
-            DT;
-        {ambiguous, _Standard, Daylight} ->
-            Daylight;
-        time_not_exists ->
-            undefined;
-        NewDT ->
-            NewDT
+    try
+        case qdate:to_date("GMT", {DT, z_convert:to_list(Tz)}) of
+            {ambiguous, _Standard, Daylight} ->
+                Daylight;
+            {{_, _, _}, {_, _, _}} = NewDT ->
+                NewDT
+        end
+    catch
+        _:_ ->
+            lager:warning("Error converting ~p for to_utc of ~p", [Tz, DT]),
+            undefined
     end.
 
 
@@ -215,6 +211,12 @@ to_datetime(DT, Tz) ->
 to_dt({{_,_,_},{_,_,_}} = DT, _Now) -> DT;
 to_dt({_,_,_} = D, _Now) -> {D, {0,0,0}};
 to_dt(B, Now) when is_binary(B) ->  to_dt(binary_to_list(B), Now);
+to_dt(<<"now">>, Now) -> Now;
+to_dt(<<"today">>, Now) -> Now;
+to_dt(<<"tomorrow">>, Now) ->    relative_time(1, '+', "day", Now);
+to_dt(<<"yesterday">>, Now) ->   relative_time(1, '+', "day", Now);
+to_dt(<<"+", Relative/binary>>, Now) -> to_relative_time('+', binary_to_list(Relative), Now);
+to_dt(<<"-", Relative/binary>>, Now) -> to_relative_time('-', binary_to_list(Relative), Now);
 to_dt("now", Now) -> Now;
 to_dt("today", Now) -> Now;
 to_dt("tomorrow", Now) ->    relative_time(1, '+', "day", Now);
