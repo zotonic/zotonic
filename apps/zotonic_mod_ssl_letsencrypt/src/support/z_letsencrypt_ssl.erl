@@ -26,7 +26,7 @@ private_key(undefined, CertsPath) ->
 
 private_key({new, KeyFile}, CertsPath) ->
     FileName = filename:join(CertsPath, KeyFile),
-    Cmd = "openssl genrsa -out '" ++ letsencrypt_utils:str(FileName) ++ "' 2048",
+    Cmd = "openssl genrsa -out '" ++ z_letsencrypt_utils:str(FileName) ++ "' 2048",
     _R = os:cmd(Cmd),
     private_key(FileName, CertsPath);
 
@@ -37,8 +37,8 @@ private_key(KeyFile, _) ->
     #{
         raw => [E,N,D],
         b64 => {
-            letsencrypt_utils:b64encode(binary:encode_unsigned(N)),
-            letsencrypt_utils:b64encode(binary:encode_unsigned(E))
+            z_letsencrypt_utils:b64encode(binary:encode_unsigned(N)),
+            z_letsencrypt_utils:b64encode(binary:encode_unsigned(E))
         },
         file => KeyFile
     }.
@@ -97,7 +97,7 @@ mkcert(Type, Domain, OutName, Keyfile, SANs) ->
         [ "DNS.", integer_to_list(Nr), " = ", Name, "\n" ] || {Name, Nr} <- NamesNr
     ],
     ConfDir = filename:dirname(OutName),
-    ConfFile = filename:join(ConfDir, "letsencrypt_san_openssl." ++ letsencrypt_utils:str(Domain) ++ ".cnf"),
+    ConfFile = filename:join(ConfDir, "letsencrypt_san_openssl." ++ z_letsencrypt_utils:str(Domain) ++ ".cnf"),
     ok = file:write_file(ConfFile, Cnf),
     Cmd = io_lib:format("openssl req -new -key '~s' -sha256 -out '~s' -config '~s'",
                         [Keyfile, OutName, ConfFile]),
