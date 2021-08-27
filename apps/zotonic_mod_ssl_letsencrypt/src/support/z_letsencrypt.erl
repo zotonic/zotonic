@@ -14,11 +14,12 @@
 
 -module(z_letsencrypt).
 -author("Guillaume Bour <guillaume@bour.cc>").
--behaviour(gen_fsm).
+-behaviour(gen_statem).
 
 -export([make_cert/2, make_cert_bg/2, get_challenge/0]).
--export([start/1, stop/0, init/1, handle_event/3, handle_sync_event/4, handle_info/3, terminate/3, code_change/4]).
+-export([start/1, stop/0, init/1, terminate/3, code_change/4]).
 -export([idle/3, pending/3, valid/3, finalize/3]).
+-export([callback_mode/0]).
 
 -import(z_letsencrypt_utils, [bin/1, str/1]).
 -import(z_letsencrypt_api, [status/1]).
@@ -90,7 +91,7 @@
 %
 -spec start(list()) -> {'ok', pid()}|{'error', {'already_started',pid()}}.
 start(Args) ->
-    gen_fsm:start_link({global, ?MODULE}, ?MODULE, Args, []).
+    gen_statem:start_link({global, ?MODULE}, ?MODULE, Args, []).
 
 % stop().
 %
@@ -102,7 +103,12 @@ start(Args) ->
 stop() ->
     %NOTE: maintain compatibility with 17.X versions
     %gen_fsm:stop({global, ?MODULE})
-    gen_fsm:sync_send_all_state_event({global, ?MODULE}, stop).
+    gen_statem:call({global, ?MODULE}, stop).
+
+
+callback_mode() ->
+    state_functions.
+
 
 %% init(Args).
 %%
@@ -163,7 +169,7 @@ make_cert(Domain, Opts) ->
 
 -spec make_cert_bg(string()|binary(), map()) -> {'ok', map()}|{'error', 'invalid'}.
 make_cert_bg(Domain, Opts=#{async := Async}) ->
-    Ret = case gen_fsm:sync_send_event({global, ?MODULE}, {create, bin(Domain), Opts}, 15000) of
+    Ret = case gen_statem:call({global, ?MODULE}, {create, bin(Domain), Opts}, 15000) of
         {error, Err} ->
             io:format("error: ~p~n", [Err]),
             {error, Err};
@@ -171,14 +177,14 @@ make_cert_bg(Domain, Opts=#{async := Async}) ->
         ok ->
             case wait_valid(20) of
                 ok ->
-                    Status = gen_fsm:sync_send_event({global, ?MODULE}, finalize, 15000),
+                    Status = gen_statem:call({global, ?MODULE}, finalize, 15000),
                     case wait_finalized(Status, 20) of
                         {ok, Res} -> {ok, Res};
                         Err -> Err
                     end;
 
                 Error ->
-                    gen_fsm:send_all_state_event({global, ?MODULE}, reset),
+                    gen_statem:cast({global, ?MODULE}, reset),
                     Error
             end
     end,
@@ -204,7 +210,7 @@ make_cert_bg(Domain, Opts=#{async := Async}) ->
 %
 -spec get_challenge() -> error|map().
 get_challenge() ->
-    case catch gen_fsm:sync_send_event({global, ?MODULE}, get_challenge) of
+    case catch gen_statem:call({global, ?MODULE}, get_challenge) of
         % process not started, wrong state, ...
         {'EXIT', _Exc} ->
             %io:format("exc: ~p~n", [Exc]),
@@ -226,8 +232,8 @@ get_challenge() ->
 %
 % idle(get_challenge) :: nothing done
 %
-idle(get_challenge, _, State) ->
-    {reply, no_challenge, idle, State};
+idle({call, From}, get_challenge, State) ->
+    {keep_state, State, [ {reply, From, no_challenge} ]};
 
 % idle({create, Domain, Opts}).
 %
@@ -241,7 +247,7 @@ idle(get_challenge, _, State) ->
 %  - 'idle' if process failed
 %  - 'pending' waiting for challenges to be completes
 %
-idle({create, Domain, CertOpts}, _, State=#state{directory=Dir, key=Key, jws=Jws,
+idle({call, From}, {create, Domain, CertOpts}, State=#state{directory=Dir, key=Key, jws=Jws,
                                               nonce=Nonce, opts=Opts}) ->
     % 'http-01' or 'tls-sni-01'
     % TODO: validate type
@@ -278,7 +284,12 @@ idle({create, Domain, CertOpts}, _, State=#state{directory=Dir, key=Key, jws=Jws
         nonce = Nonce4,
         challenges = Challenges
     },
-    {reply, ok, pending, StateReply}.
+    {next_state, pending, StateReply, [ {reply, From, ok} ]};
+
+idle({call, From}, Msg, State) ->
+    handle_call(Msg, From, State);
+idle(cast, Msg, State) ->
+    handle_cast(Msg, State).
 
 
 % state 'pending'
@@ -289,7 +300,7 @@ idle({create, Domain, CertOpts}, _, State=#state{directory=Dir, key=Key, jws=Jws
 %
 % Returns list of challenges currently on-the-go with pre-computed thumbprints.
 %
-pending(get_challenge, _, State=#state{account_key=AccntKey, challenges=Challenges}) ->
+pending({call, From}, get_challenge, State=#state{account_key=AccntKey, challenges=Challenges}) ->
     % #{Domain => #{
     %     Token => Thumbprint,
     %     ...
@@ -300,7 +311,7 @@ pending(get_challenge, _, State=#state{account_key=AccntKey, challenges=Challeng
             {Token, z_letsencrypt_jws:keyauth(AccntKey, Token)}
         end, maps:values(Challenges)
     )),
-    {reply, Thumbprints, pending, State};
+    {keep_state, State, [ {reply, From, Thumbprints} ]};
 
 % pending(check).
 %
@@ -314,7 +325,7 @@ pending(get_challenge, _, State=#state{account_key=AccntKey, challenges=Challeng
 %TODO: handle other states explicitely (allowed values are 'invalid', 'deactivated',
 %      'expired' and 'revoked'
 %
-pending(_Action, _, State=#state{order=#{<<"authorizations">> := Authzs}, nonce=Nonce, key=Key, jws=Jws, opts=Opts}) ->
+pending({call, From}, _Action, State=#state{order=#{<<"authorizations">> := Authzs}, nonce=Nonce, key=Key, jws=Jws, opts=Opts}) ->
     % checking status for each authorization
     {StateName, Nonce2} = lists:foldl(fun(AuthzUri, {Status, InNonce}) ->
         {ok, Authz, _, OutNonce} = z_letsencrypt_api:authorization(AuthzUri, Key, Jws#{nonce => InNonce}, Opts),
@@ -331,7 +342,12 @@ pending(_Action, _, State=#state{order=#{<<"authorizations">> := Authzs}, nonce=
 
     %io:format(":: challenge state -> ~p~n", [Reply]),
     % reply w/ StateName
-    {reply, StateName, StateName, State#state{nonce=Nonce2}}.
+    {next_state, StateName, State#state{nonce=Nonce2}, [ {reply, From, StateName} ]};
+
+pending({call, From}, Msg, State) ->
+    handle_call(Msg, From, State);
+pending(cast, Msg, State) ->
+    handle_cast(Msg, State).
 
 % state 'valid'
 %
@@ -343,7 +359,7 @@ pending(_Action, _, State=#state{order=#{<<"authorizations">> := Authzs}, nonce=
 %
 % transition:
 %   state 'finalize'
-valid(_, _, State=#state{domain=Domain, sans=SANs, cert_path=CertPath,
+valid({call, From}, _, State=#state{domain=Domain, sans=SANs, cert_path=CertPath,
                          order=Order, key=Key, jws=Jws, nonce=Nonce, opts=Opts}) ->
 
     %NOTE: keyfile is required for csr generation
@@ -353,9 +369,19 @@ valid(_, _, State=#state{domain=Domain, sans=SANs, cert_path=CertPath,
     {ok, FinOrder, _, Nonce2} = z_letsencrypt_api:finalize(Order, Csr, Key,
                                                          Jws#{nonce => Nonce}, Opts),
 
-    {reply, status(maps:get(<<"status">>, FinOrder, nil)), finalize,
-     State#state{order=FinOrder#{<<"location">> => maps:get(<<"location">>, Order)},
-                 cert_key_file=KeyFile, nonce=Nonce2}}.
+    State1 = State#state{
+        order = FinOrder#{ <<"location">> => maps:get(<<"location">>, Order) },
+        cert_key_file = KeyFile,
+        nonce = Nonce2
+    },
+    Reply = status(maps:get(<<"status">>, FinOrder, nil)),
+    {next_state, finalize, State1, [ {reply, From, Reply} ]};
+
+valid({call, From}, Msg, State) ->
+    handle_call(Msg, From, State);
+valid(cast, Msg, State) ->
+    handle_cast(Msg, State).
+
 
 % state 'finalize'
 %
@@ -371,13 +397,16 @@ valid(_, _, State=#state{domain=Domain, sans=SANs, cert_path=CertPath,
 % transition:
 %   state 'processing' : still ongoing
 %   state 'valid'      : certificate is ready
-finalize(processing, _, State=#state{order=Order, key=Key, jws=Jws, nonce=Nonce, opts=Opts}) ->
+finalize({call, From}, processing, State=#state{order=Order, key=Key, jws=Jws, nonce=Nonce, opts=Opts}) ->
     {ok, Order2, _, Nonce2} = z_letsencrypt_api:get_order(
         maps:get(<<"location">>, Order, nil),
         Key, Jws#{nonce => Nonce}, Opts),
-    {reply, status(maps:get(<<"status">>, Order2, nil)), finalize,
-     State#state{order=Order2, nonce=Nonce2}
-    };
+    State1 = State#state{
+        order = Order2,
+        nonce = Nonce2
+    },
+    Reply = status(maps:get(<<"status">>, Order2, nil)),
+    {keep_state, State1, [ {reply, From, Reply} ]};
 
 % finalize(valid)
 %
@@ -390,46 +419,41 @@ finalize(processing, _, State=#state{order=Order, key=Key, jws=Jws, nonce=Nonce,
 %
 % transition:
 %   state 'idle' : fsm complete, going back to initial state
-finalize(valid, _, State=#state{order=Order, domain=Domain, cert_key_file=KeyFile,
+finalize({call, From}, valid, State=#state{order=Order, domain=Domain, cert_key_file=KeyFile,
                                 cert_path=CertPath, key=Key, jws=Jws, nonce=Nonce,
                                 opts=Opts}) ->
     % download certificate
     {ok, Cert} = z_letsencrypt_api:certificate(Order, Key, Jws#{nonce => Nonce}, Opts),
     CertFile   = z_letsencrypt_ssl:certificate(Domain, Cert, CertPath),
 
-    {reply, {ok, #{key => bin(KeyFile), cert => bin(CertFile)}}, idle,
-     State#state{nonce=undefined}};
+    State1 = State#state{ nonce = undefined },
+    Reply = {ok, #{key => bin(KeyFile), cert => bin(CertFile)}},
+    {next_state, idle, State1, [ {reply, From, Reply} ]};
+
+finalize({call, From}, stop, State) ->
+    handle_call(stop, From, State);
+finalize(cast, Msg, State) ->
+    handle_cast(Msg, State);
 
 % finalize(Status)
 %
 % Any other order status leads to exception.
 %
-finalize(Status, _, State) ->
+finalize({call, From}, Status, State) ->
     io:format("unknown finalize status ~p~n", [Status]),
-    {reply, {error, Status}, finalize, State}.
-
+    {keep_state, State, [ {reply, From, {error, Status}} ]}.
 
 %%%
 %%%
 %%%
 
 
-handle_event(reset, _StateName, State) ->
+handle_cast(reset, State) ->
     %io:format("reset from ~p state~n", [StateName]),
-    {next_state, idle, State};
+    {next_state, idle, State}.
 
-handle_event(_, StateName, State) ->
-    io:format("async evt: ~p~n", [StateName]),
-    {next_state, StateName, State}.
-
-handle_sync_event(stop,_,_,_) ->
-    {stop, normal, ok, #state{}};
-handle_sync_event(_,_, StateName, State) ->
-    io:format("sync evt: ~p~n", [StateName]),
-    {reply, ok, StateName, State}.
-
-handle_info(_, StateName, State) ->
-    {next_state, StateName, State}.
+handle_call(stop, From, State) ->
+    {stop_and_reply, normal, {reply, From, ok}, State}.
 
 terminate(_,_,_) ->
     ok.
@@ -514,12 +538,14 @@ wait_valid(X) ->
 wait_valid(0,_) ->
     {error, timeout};
 wait_valid(Cnt,Max) ->
-    case gen_fsm:sync_send_event({global, ?MODULE}, check, 15000) of
-        valid   -> ok;
+    case gen_statem:call({global, ?MODULE}, check, 15000) of
+        valid ->
+            ok;
         pending ->
             timer:sleep(500*(Max-Cnt+1)),
             wait_valid(Cnt-1,Max);
-        {_      , Err} -> {error, Err}
+        {_, Err} ->
+            {error, Err}
     end.
 
 % wait_finalized(X).
@@ -537,19 +563,22 @@ wait_finalized(Status, X) ->
     wait_finalized(Status,X,X).
 
 -spec wait_finalized(atom(), 0..20, 0..20) -> {ok, map()}|{error, timeout|any()}.
-wait_finalized(_, 0,_) ->
+wait_finalized(_, 0, _) ->
     {error, timeout};
-wait_finalized(Status, Cnt,Max) ->
-    case gen_fsm:sync_send_event({global, ?MODULE}, Status, 15000) of
-        {ok, Res}   -> {ok, Res};
+wait_finalized(Status, Cnt, Max) ->
+    case gen_statem:call({global, ?MODULE}, Status, 15000) of
+        {ok, Res} ->
+            {ok, Res};
         valid ->
             timer:sleep(500*(Max-Cnt+1)),
             wait_finalized(valid, Cnt-1,Max);
         processing  ->
             timer:sleep(500*(Max-Cnt+1)),
             wait_finalized(processing, Cnt-1,Max);
-        {_      , Err} -> {error, Err};
-        Any -> Any
+        {_, Err} ->
+            {error, Err};
+        Any ->
+            Any
     end.
 
 % authz(ChallenteType, AuthzUris, State).
