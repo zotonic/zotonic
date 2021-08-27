@@ -543,9 +543,9 @@ maybe_map_mime(Mime) -> Mime.
 -spec exif( file:filename_all() ) -> map().
 exif(File) ->
     try
-        case exif:read(File) of
-            {ok, Dict} ->
-                dict:fold(
+        case erlang_exif:read(File, maps) of
+            {ok, ExifMap} ->
+                maps:fold(
                     fun
                         (maker_note, _Val, Acc) ->
                             Acc;
@@ -560,7 +560,7 @@ exif(File) ->
                             end
                     end,
                     #{},
-                    Dict);
+                    ExifMap);
             {error, _} ->
                 #{}
         end
