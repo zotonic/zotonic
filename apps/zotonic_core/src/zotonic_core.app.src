@@ -17,7 +17,6 @@
                   template_compiler,
                   qdate, syslog,
                   bcrypt, erlpass,
-                  letsencrypt,
                   keyserver,
                   jsxrecord,
                   yamerl,
