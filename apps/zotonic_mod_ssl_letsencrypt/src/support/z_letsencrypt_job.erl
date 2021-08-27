@@ -40,11 +40,11 @@ request_process(ModulePid, Hostname, SANs, LetsOpts) ->
                 san => SANs,
                 async => false
             },
-            case letsencrypt:start(LetsOpts) of
+            case z_letsencrypt:start(LetsOpts) of
                 {ok, _}  ->
-                    Result = letsencrypt:make_cert(Hostname, CertOpts),
+                    Result = z_letsencrypt:make_cert(Hostname, CertOpts),
                     gen_server:cast(ModulePid, {complete, Result, self()}),
-                    letsencrypt:stop(),
+                    z_letsencrypt:stop(),
                     ok;
                 {error, _} = Error ->
                     Error
