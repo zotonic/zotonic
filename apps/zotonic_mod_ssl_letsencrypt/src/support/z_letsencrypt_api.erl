@@ -102,13 +102,22 @@ decode(_, Response) ->
 -spec request(get|post, string()|binary(), map(), nil|binary(), map()) ->
     shotgun:result()|{error, invalid_method}.
 request(Method, Uri, Headers, Content, Opts=#{netopts := Netopts}) ->
-    #{
+    Parsed = #{
         scheme := Proto,
         host := Host,
-        port := Port,
         path := Path
     } = uri_string:parse(Uri),
 
+    Port = case maps:get(port, Parsed, undefined) of
+        undefined ->
+            case Proto of
+                http -> 80;
+                <<"http">> -> 80;
+                _ -> 443
+            end;
+        P ->
+            P
+    end,
     Headers2 = Headers#{<<"content-type">> => <<"application/jose+json">>},
 
     % we want to reuse connection if exists

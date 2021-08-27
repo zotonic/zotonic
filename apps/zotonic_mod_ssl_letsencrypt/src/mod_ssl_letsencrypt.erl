@@ -401,7 +401,6 @@ start_cert_request(Hostname, SANs, #state{site = Site, request_letsencrypt_pid =
          end,
     CertPath = cert_temp_dir(Context),
     LetsOpts = [
-        {mode, slave},
         {cert_path, CertPath},
         {key_file, KeyFile}
         | ?ACME_SRV_OPTS

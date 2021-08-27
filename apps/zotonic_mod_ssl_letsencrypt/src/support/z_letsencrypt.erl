@@ -16,6 +16,8 @@
 -author("Guillaume Bour <guillaume@bour.cc>").
 -behaviour(gen_statem).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 -export([make_cert/2, make_cert_bg/2, get_challenge/0]).
 -export([start/1, stop/0, init/1, terminate/3, code_change/4]).
 -export([idle/3, pending/3, valid/3, finalize/3]).
@@ -505,7 +507,7 @@ getopts([{cert_path, Path}|Args], State) ->
     );
 % for compatibility. Will be removed in future release
 getopts([{connect_timeout, Timeout}|Args], State) ->
-    io:format("'connect_timeout' option is deprecated. Please use 'http_timeout' instead~n", []),
+    % io:format("'connect_timeout' option is deprecated. Please use 'http_timeout' instead~n", []),
     getopts(
         Args,
         State#state{opts = #{netopts => #{timeout => Timeout}}}
@@ -516,7 +518,7 @@ getopts([{http_timeout, Timeout}|Args], State) ->
         State#state{opts = #{netopts => #{timeout => Timeout}}}
      );
 getopts([Unk|_], _) ->
-    io:format("unknow parameter: ~p~n", [Unk]),
+    lager:info("letsencrypt: unknow parameter: ~p~n", [Unk]),
     %throw({badarg, io_lib:format("unknown ~p parameter", [Unk])}).
     throw(badarg).
 
