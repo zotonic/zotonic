@@ -20,8 +20,8 @@
 -export([start/1, stop/0, init/1, handle_event/3, handle_sync_event/4, handle_info/3, terminate/3, code_change/4]).
 -export([idle/3, pending/3, valid/3, finalize/3]).
 
--import(letsencrypt_utils, [bin/1, str/1]).
--import(letsencrypt_api, [status/1]).
+-import(z_letsencrypt_utils, [bin/1, str/1]).
+-import(z_letsencrypt_api, [status/1]).
 
 % uri format compatible with shotgun library
 % NOTE: currently only support 'http-01' challenge.

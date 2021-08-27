@@ -224,7 +224,7 @@ handle_call(get_challenge, _From, #state{request_letsencrypt_pid = undefined} = 
     lager:error("Fetching Letsencrypt challenge but no request running"),
     {reply, {ok, #{}}, State};
 handle_call(get_challenge, _From, #state{request_letsencrypt_pid = _Pid} = State) ->
-    case letsencrypt:get_challenge() of
+    case z_letsencrypt:get_challenge() of
         error ->
             lager:error("Error fetching Letsencrypt challenge."),
             {reply, {ok, #{}}, State};
