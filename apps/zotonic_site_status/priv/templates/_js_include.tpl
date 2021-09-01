@@ -1,7 +1,7 @@
 {% include "_js_include_jquery.tpl" %}
 {% lib
     "js/modules/jstz.min.js"
-    "cotonic/zotonic-wired-bundle.js"
+    "cotonic/cotonic.js"
 	"bootstrap/js/bootstrap.min.js"
 	"js/apps/zotonic-wired.js"
 	"js/apps/z.widgetmanager.js"
