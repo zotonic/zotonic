@@ -39,10 +39,7 @@
  {<<"mochiweb">>,{pkg,<<"mochiweb">>,<<"2.20.1">>},0},
  {<<"mqtt_packet_map">>,{pkg,<<"mqtt_packet_map">>,<<"1.1.0">>},1},
  {<<"mqtt_sessions">>,{pkg,<<"mqtt_sessions">>,<<"1.4.0">>},0},
- {<<"oauth">>,
-  {git,"https://github.com/tim/erlang-oauth.git",
-       {ref,"bdd3a80026f6835fa916d8ef0827fc094eb0ea6a"}},
-  0},
+ {<<"oauth">>,{pkg,<<"oauth">>,<<"2.1.0">>},0},
  {<<"parse_trans">>,{pkg,<<"parse_trans">>,<<"3.4.0">>},0},
  {<<"poolboy">>,{pkg,<<"poolboy">>,<<"1.5.2">>},0},
  {<<"proper">>,{pkg,<<"proper">>,<<"1.4.0">>},0},
@@ -61,10 +58,10 @@
  {<<"syslog">>,{pkg,<<"syslog">>,<<"1.1.0">>},0},
  {<<"template_compiler">>,{pkg,<<"template_compiler">>,<<"1.3.3">>},0},
  {<<"termit">>,{pkg,<<"termit">>,<<"2.0.1">>},0},
- {<<"tls_certificate_check">>,{pkg,<<"tls_certificate_check">>,<<"1.8.0">>},1},
+ {<<"tls_certificate_check">>,{pkg,<<"tls_certificate_check">>,<<"1.8.0">>},0},
  {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.8.1">>},0},
  {<<"zotonic_ssl">>,{pkg,<<"zotonic_ssl">>,<<"1.1.0">>},0},
- {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.4.3">>},0}]}.
+ {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.4.5">>},0}]}.
 [
 {pkg_hash,[
  {<<"bcrypt">>, <<"479943E153D8C7F8DD10F96079133423202A9FEBBAAA3BC6BEC805AC2A7522DC">>},
@@ -107,6 +104,7 @@
  {<<"mochiweb">>, <<"E4DBD0ED716F076366ECF62ADA5755A844E1D95C781E8C77DF1D4114BE868CDF">>},
  {<<"mqtt_packet_map">>, <<"4D44C0673B936491F9BE7AF4908092AB902C0ADFD168158DC73953A3A560C547">>},
  {<<"mqtt_sessions">>, <<"ECEA54B66208FCE812108B9C222FABA4FF7D686B87A63462204AD32893BC9AFD">>},
+ {<<"oauth">>, <<"D339CD258E3384703CB75D21A7958F0258FD1B7B0022BC59AEA154BE74B817CC">>},
  {<<"parse_trans">>, <<"BB87AC362A03CA674EBB7D9D498F45C03256ADED7214C9101F7035EF44B798C7">>},
  {<<"poolboy">>, <<"392B007A1693A64540CEAD79830443ABF5762F5D30CF50BC95CB2C1AAAFA006B">>},
  {<<"proper">>, <<"89A44B8C39D28BB9B4BE8E4D715D534905B325470F2E0EC5E004D12484A79434">>},
@@ -128,7 +126,7 @@
  {<<"tls_certificate_check">>, <<"8A41A435C8055CB11D1D0AC96B34F48377D49FEA2782D70EABCF8946539946A3">>},
  {<<"yamerl">>, <<"07DA13FFA1D8E13948943789665C62CCD679DFA7B324A4A2ED3149DF17F453A4">>},
  {<<"zotonic_ssl">>, <<"16A96C8B9597F977EC12B179CB2ED6C635674BB1BA7CEC24C5999191C3C95BDD">>},
- {<<"zotonic_stdlib">>, <<"6768F297B12D4851AD27E9D4A1341C0BD9929751FE6B262971588D09BB5B85FB">>}]},
+ {<<"zotonic_stdlib">>, <<"EB3DCAB78D59C3FEF1D4C7B53EDDCCA2184013E10A3BA624936302EEFB79FCC1">>}]},
 {pkg_hash_ext,[
  {<<"bcrypt">>, <<"F74A1367909E14F83F1A115080243ED3F8498655507224AF076E9A47A4721479">>},
  {<<"bear">>, <<"534217DCE6A719D59E54FB0EB7A367900DBFC5F85757E8C1F94269DF383F6D9B">>},
@@ -170,6 +168,7 @@
  {<<"mochiweb">>, <<"D1AEEE7870470D2FA9EAE0B3D5AB6C33801AA2D82B10E9DADE885C5C921B36AA">>},
  {<<"mqtt_packet_map">>, <<"82BD12177EC927244ECC40093FB5A9BFAC317106168FD11F7D49FB3434C6D1DA">>},
  {<<"mqtt_sessions">>, <<"9B98785D54D3ED358C7A579BD536C6857AB75EE1A851FCE91D64406D53F54DC8">>},
+ {<<"oauth">>, <<"1E88788690B3CDE182F77829F205EAB75522255DCCED20341C5BA05CAC849B13">>},
  {<<"parse_trans">>, <<"F99E368830BEA44552224E37E04943A54874F08B8590485DE8D13832B63A2DC3">>},
  {<<"poolboy">>, <<"DAD79704CE5440F3D5A3681C8590B9DC25D1A561E8F5A9C995281012860901E3">>},
  {<<"proper">>, <<"18285842185BD33EFBDA97D134A5CB5A0884384DB36119FEE0E3CFA488568CBB">>},
@@ -191,5 +190,5 @@
  {<<"tls_certificate_check">>, <<"5211FD87B4FEFAA77F2DE1F03479CBC4EE8312738A21B9B905253674468928F2">>},
  {<<"yamerl">>, <<"96CB30F9D64344FED0EF8A92E9F16F207DE6C04DFFF4F366752CA79F5BCEB23F">>},
  {<<"zotonic_ssl">>, <<"FC8193CFA273956C2669F448102DD7A4F0E4AA8E3C81FA7EB46114911146CF4C">>},
- {<<"zotonic_stdlib">>, <<"D4996C89D3FD69F57C8143101B1D5D0ED26A1D8315188CD00D9A94D6FA4B8E4F">>}]}
+ {<<"zotonic_stdlib">>, <<"743BCC3B5A5A529467CDD832AFC4116DFCB3CD8724BB3E7623F31D0C9E675723">>}]}
 ].
