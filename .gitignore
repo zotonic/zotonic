@@ -45,6 +45,7 @@ apps/*/priv/translations/template/*.pot
 
 apps/*/priv/lib/cotonic/
 apps/*/priv/lib-src/cotonic/
+apps/*/rebar.lock
 
 apps_user/*
 
