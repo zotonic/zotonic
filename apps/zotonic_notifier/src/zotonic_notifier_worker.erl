@@ -67,13 +67,6 @@
 }).
 
 
--ifdef(fun_stacktrace).
--define(WITH_STACKTRACE(T, R, S), T:R -> S = erlang:get_stacktrace(),).
--else.
--define(WITH_STACKTRACE(T, R, S), T:R:S ->).
--endif.
-
-
 %%====================================================================
 %% API
 %%====================================================================

@@ -338,14 +338,8 @@ decode_value_expire(Data, Context) ->
         true -> {ok, Value}
     end.
 
-
--ifdef(crypto_hmac).
-hmac(Type, Key, Data) ->
-    crypto:hmac(Type, Key, Data).
--else.
 hmac(Type, Key, Data) ->
     crypto:mac(hmac, Type, Key, Data).
--endif.
 
 
 %%% CHECKSUM %%%
