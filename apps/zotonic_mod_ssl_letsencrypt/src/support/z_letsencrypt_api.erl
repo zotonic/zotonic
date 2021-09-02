@@ -21,6 +21,16 @@
 -import(z_letsencrypt_utils, [str/1]).
 
 
+-type request_result() :: #{
+    status_code => integer(),
+    body => binary(),
+    headers => proplists:proplist(),
+    json => term(),
+    nonce => term(),
+    location => term(),
+    atom() => term()
+}.
+
 -ifdef(TEST).
     -define(STAGING_API_URL, <<"https://127.0.0.1:14000/dir">>).
     -define(DEFAULT_API_URL, <<"">>).
@@ -74,20 +84,6 @@ tcpconn(Key={Proto, Host, Port}) ->
             {ok, Conn}
     end.
 
-% decode(Option, Result)
-%
-% Decodes http body as json if asked, or return as if.
-%
-% returns:
-%   {ok, Result} with added json structure if required
-%
--spec decode(map(), map()) -> {ok, map()}.
-decode(#{json := true}, Response=#{body := Body}) ->
-    Payload = jsx:decode(Body, [return_maps]),
-    {ok, Response#{json => Payload}};
-decode(_, Response) ->
-    {ok, Response}.
-
 % request(get|post, Uri, Headers, Content, Options)
 %
 % Query Uri (get or post) and return results.
@@ -100,7 +96,7 @@ decode(_, Response) ->
 % TODO: is 'application/jose+json' content type always required ?
 %       (check acme documentation)
 -spec request(get|post, string()|binary(), map(), nil|binary(), map()) ->
-    shotgun:result()|{error, invalid_method}.
+    {ok, request_result()} | {error, invalid_method | term()}.
 request(Method, Uri, Headers, Content, Opts=#{netopts := Netopts}) ->
     Parsed = #{
         scheme := Proto,
@@ -111,9 +107,10 @@ request(Method, Uri, Headers, Content, Opts=#{netopts := Netopts}) ->
     Port = case maps:get(port, Parsed, undefined) of
         undefined ->
             case Proto of
-                http -> 80;
+                "http" -> 80;
+                "https" -> 443;
                 <<"http">> -> 80;
-                _ -> 443
+                <<"https">> -> 443
             end;
         P ->
             P
@@ -133,14 +130,29 @@ request(Method, Uri, Headers, Content, Opts=#{netopts := Netopts}) ->
 
     ?debug("~p(~p) => ~p~n", [Method, Uri, Result]),
     case Result of
-        {ok, Response=#{headers := RHeaders}} ->
+        {ok, Response = #{ headers := RHeaders} } ->
             R = Response#{
                   nonce    => proplists:get_value(<<"replay-nonce">>, RHeaders, nil),
                   location => proplists:get_value(<<"location">>, RHeaders, nil)
             },
             decode(Opts, R);
-        _ -> Result
+        {error, _} = Error ->
+            Error
     end.
+
+% decode(Option, Result)
+%
+% Decodes http body as json if asked, or return as if.
+%
+% returns:
+%   {ok, Result} with added json structure if required
+%
+-spec decode(map(), request_result()) -> {ok, request_result()}.
+decode(#{json := true}, Response=#{body := Body}) ->
+    Payload = jsx:decode(Body, [return_maps]),
+    {ok, Response#{ json => Payload }};
+decode(_, Response) ->
+    {ok, Response}.
 
 %%
 %% PUBLIC FUNCTIONS
