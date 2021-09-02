@@ -5,7 +5,10 @@
     {applications, [kernel, stdlib, shotgun, zotonic_core]},
     {env, []},
     {modules, []},
-    {maintainers, []},
+    {doc, "doc"},
     {licenses, ["Apache 2.0"]},
-    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+    {links, [
+        {"Website", "https://zotonic.com/"},
+        {"GitHub", "https://github.com/zotonic/zotonic"}
+    ]}
 ]}.

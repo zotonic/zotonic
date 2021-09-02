@@ -29,6 +29,10 @@
     "priv/.DS_Store",
     "priv/translations/.DS_Store"
   ]},
+  {doc, "doc"},
   {licenses, ["Apache 2.0"]},
-  {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+  {links, [
+    {"Website", "https://zotonic.com/"},
+    {"GitHub", "https://github.com/zotonic/zotonic"}
+  ]}
  ]}.
