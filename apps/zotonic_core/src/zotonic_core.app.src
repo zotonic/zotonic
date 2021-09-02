@@ -23,5 +23,12 @@
                   mqtt_sessions,
                   ringbuffer,
                   zotonic_notifier
-  ]}
+  ]},
+  {exclude_files, [
+    "priv/mnesia",
+    "priv/.DS_Store",
+    "priv/translations/.DS_Store"
+  ]},
+  {licenses, ["Apache 2.0"]},
+  {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
  ]}.
