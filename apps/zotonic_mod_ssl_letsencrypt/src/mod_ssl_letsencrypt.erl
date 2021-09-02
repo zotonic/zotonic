@@ -224,7 +224,7 @@ handle_call(get_challenge, _From, #state{request_letsencrypt_pid = undefined} = 
     lager:error("Fetching Letsencrypt challenge but no request running"),
     {reply, {ok, #{}}, State};
 handle_call(get_challenge, _From, #state{request_letsencrypt_pid = _Pid} = State) ->
-    case letsencrypt:get_challenge() of
+    case z_letsencrypt:get_challenge() of
         error ->
             lager:error("Error fetching Letsencrypt challenge."),
             {reply, {ok, #{}}, State};
@@ -401,7 +401,6 @@ start_cert_request(Hostname, SANs, #state{site = Site, request_letsencrypt_pid =
          end,
     CertPath = cert_temp_dir(Context),
     LetsOpts = [
-        {mode, slave},
         {cert_path, CertPath},
         {key_file, KeyFile}
         | ?ACME_SRV_OPTS
