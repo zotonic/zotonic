@@ -9,10 +9,11 @@
   {applications, [
     kernel, stdlib,
     erlexec,
+    jobs,
+    buffalo,
     zotonic_notifier,
     zotonic_filewatcher,
-    jobs,
-    buffalo
+    zotonic_core
   ]},
   {doc, "doc"},
   {licenses, ["Apache 2.0"]},

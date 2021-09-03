@@ -7,7 +7,7 @@
   {env, []},
   {modules, []},
   {applications, [
-    kernel, stdlib, lager, zotonic_notifier
+    kernel, stdlib, lager, zotonic_notifier, zotonic_core
   ]},
   {doc, "doc"},
   {licenses, ["Apache 2.0"]},
