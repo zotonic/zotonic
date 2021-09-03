@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$1" = "" ]; then
-    echo "Usage example: $0 0.14.0"
+    echo "Usage example: $0 1.0.1"
     exit 1
 fi
 
@@ -9,11 +9,15 @@ VERSION="$1"
 MINOR=$(echo $VERSION | sed -e 's/.[^.]*$//')
 
 # Increments version numbers where needed
-# Usage: ./prepare-release.sh 0.13.7
+# Usage: ./prepare-release.sh 1.2.3
 
-sed -e "s/^version = .*/version = '$MINOR'/" -i doc/conf.py
-sed -e "s/^release = .*/release = '$VERSION'/" -i doc/conf.py
-sed -e "s/{vsn, .*/{vsn, \"$VERSION\"},/" -i apps/zotonic_core/src/zotonic_core.app.src
-sed -e "s/ZOTONIC_VERSION, .*)./ZOTONIC_VERSION, \"$VERSION\")./" -i apps/zotonic_core/include/zotonic_release.hrl
+sed -i.bck -e "s/^version = .*/version = '$MINOR'/" doc/conf.py
+sed -i.bck -e "s/^release = .*/release = '$VERSION'/" doc/conf.py
+sed -i.bck -e "s/ZOTONIC_VERSION, .*)./ZOTONIC_VERSION, \"$VERSION\")./" apps/zotonic_core/include/zotonic_release.hrl
+echo -n "$VERSION" > VERSION
 
+rm -f doc/conf.py.bck
+rm -f apps/zotonic_core/include/zotonic_release.hrl.bck
+
+git add doc/conf.py apps/zotonic_core/include/zotonic_release.hrl VERSION
 git status

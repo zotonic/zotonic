@@ -61,7 +61,7 @@ copyright = u'2009–2017, The Zotonic Project (zotonic.com)'
 # built documents.
 #
 # The short X.Y version.
-version = '1.0'
+version = '1'
 # The full version, including alpha/beta/rc tags.
 release = '1.0-dev'
 
