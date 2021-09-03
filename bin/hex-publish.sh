@@ -39,7 +39,7 @@ do
     ../../rebar3 compile
     ../../rebar3 edoc
 
-    # ../../rebar3 publish
+    # ../../rebar3 hex publish -r hexpm --yes
 
     popd
 done
@@ -81,7 +81,7 @@ do
             ../../rebar3 compile
             ../../rebar3 edoc
 
-            # ../../rebar3 publish
+            # ../../rebar3 hex publish -r hexpm --yes
 
             popd
             ;;

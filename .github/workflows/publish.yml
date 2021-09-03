@@ -1,0 +1,64 @@
+# Publish a new version of Zotonic to Hex
+# Needs a HEX_API_KEY in the GH secrets of the project or org.
+
+name: Publish
+
+# Start if a tag is pushed to the master branch
+on:
+  push:
+    tags: [ master ]
+
+# Publish a new version IFF the tests and xref are passing
+jobs:
+  linux:
+    name: Publish to Hex ${{ matrix.otp_version }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        otp_version: [24.0.5]
+        os: [ubuntu-latest]
+
+    container:
+      image: erlang:${{ matrix.otp_version }}
+
+    # Start PostgreSQL wth 'zotonic' as the default user.
+    services:
+      postgres:
+        image: postgres:11
+        env:
+          POSTGRES_DB: zotonic
+          POSTGRES_USER: zotonic
+          POSTGRES_PASSWORD: zotonic
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Add user Zotonic
+        run: |
+          apt-get update
+          apt-get -y install sudo
+          adduser --disabled-login zotonic
+      - name: Compile
+        run: make
+      - name: Test
+        run: |
+          ZOTONIC_DBHOST=postgres bin/zotonic connectdb
+          chown -R zotonic .
+          sudo -u zotonic bash -c "ZOTONIC_DBHOST=postgres bin/zotonic runtests"
+      - name: XRef
+        run: make xref
+      - name: Publish
+        env:
+          HEX_API_KEY: ${{ secrets.HEX_API_KEY }}
+        run: |
+          VERSION=`git describe --tags`
+          bin/prepare-release.sh $VERSION
+          bin/hex-publish.sh
