@@ -62,7 +62,7 @@
     full/2
 ]).
 
--include("zotonic_core/include/zotonic.hrl").
+-include_lib("../../include/zotonic.hrl").
 
 m_get([ <<"full">>, Id | Rest ], _Msg, Context) ->
     {ok, {full(Id, Context), Rest}}.

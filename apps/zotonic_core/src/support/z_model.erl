@@ -33,7 +33,7 @@
     get_arg/3
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("../../include/zotonic.hrl").
 
 -type model_name() :: binary() | atom().
 -type verb() :: get | post | delete.

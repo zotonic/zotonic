@@ -34,7 +34,7 @@
 -module(z_file_mtime).
 -author("Marc Worrell <marc@worrell.nl>").
 
--include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("../../include/zotonic.hrl").
 -include_lib("kernel/include/file.hrl").
 
 -behaviour(gen_server).

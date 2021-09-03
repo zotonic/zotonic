@@ -34,7 +34,7 @@
 ]).
 
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
--include_lib("zotonic_fileindexer/include/zotonic_fileindexer.hrl").
+-include_lib("../include/zotonic_fileindexer.hrl").
 
 -type fileindex() :: #fileindex{}.
 

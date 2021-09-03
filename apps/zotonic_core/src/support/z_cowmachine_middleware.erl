@@ -28,7 +28,7 @@
     execute/2
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("../../include/zotonic.hrl").
 
 %% @doc Call cowmachine to handle the request with the given controller. Prepare the
 %%      metadata for lager and set the relevant Context arguments.

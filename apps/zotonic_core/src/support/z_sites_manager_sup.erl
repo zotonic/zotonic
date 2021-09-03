@@ -27,7 +27,7 @@
 %% supervisor callbacks
 -export([init/1]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("../../include/zotonic.hrl").
 
 %% @doc API for starting the sites dispatcher and manager
 -spec start_link() -> {ok, pid()} | {error, term()}.
