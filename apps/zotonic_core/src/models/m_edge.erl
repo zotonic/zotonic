@@ -651,8 +651,7 @@ subject(Id, Pred, N, Context) ->
     end.
 
 %% @doc Return all object ids of an id with a certain predicate. The order of the ids is deterministic.
-%% @spec objects(Id, Pred, Context) -> List
--spec objects(m_rsc:resource(), atom() | pos_integer(), z:context()) -> list( m_rsc:resource_id() ).
+-spec objects(SubjectId::m_rsc:resource(), Predicate::m_rsc:resource(), z:context()) -> list( m_rsc:resource_id() ).
 objects(_Id, undefined, _Context) ->
     [];
 objects(Id, Pred, Context) when is_integer(Pred) ->
@@ -685,7 +684,7 @@ objects(Id, Pred, Context) ->
 
 %% @doc Return all subject ids of an object id with a certain predicate.
 %% The order of the ids is deterministic.
-%% @spec subjects(Id, Pred, Context) -> List
+-spec subjects(ObjectId::m_rsc:resource(), Predicate::m_rsc:resource(), z:context()) -> list( m_rsc:resource_id() ).
 subjects(_Id, undefined, _Context) ->
     [];
 subjects(Id, Pred, Context) when is_integer(Pred) ->

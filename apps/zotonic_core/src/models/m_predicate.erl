@@ -149,7 +149,7 @@ is_valid_subject_category(Predicate, Category, IsSubcats, Context) ->
     end.
 
 %% @doc Lookup the name of a predicate with an id
-%% @spec id_to_name(Id, Context) -> {ok, atom()} | {error, Reason}
+-spec id_to_name(m_rsc:resource_id(), z:context()) -> {ok, atom()} | {error, {unknown_predicate, term()}}.
 id_to_name(Id, Context) when is_integer(Id) ->
     F = fun() ->
                 {L, R} = cat_bounds(Context),
@@ -168,7 +168,6 @@ id_to_name(Id, Context) when is_integer(Id) ->
     z_depcache:memo(F, {predicate_name, Id}, ?DAY, [predicate], Context).
 
 %% @doc Return the id of the predicate
-%% @spec name_to_id(Pred, Context) -> {ok, int()} | {error, Reason}
 -spec name_to_id( m_rsc:resource_name(), z:context() ) -> {ok, m_rsc:resource_id()} | {error, {unknown_predicate, term()}}.
 name_to_id(Name, Context) ->
     case m_rsc:name_to_id(Name, Context) of
