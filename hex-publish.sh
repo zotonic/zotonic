@@ -18,8 +18,12 @@ for i in $APPS
 do
     pushd $i
 
+    # Set specific version numbers for all zotonic dependencies in rebar.config
+
     ../../rebar3 compile
     ../../rebar3 edoc
+
+    # ../../rebar3 publish
 
     popd
 done
@@ -55,5 +59,5 @@ do
 done
 
 # Cleanup
-rm -rf apps/*/_build
+#rm -rf apps/*/_build
 
