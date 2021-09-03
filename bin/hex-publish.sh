@@ -12,13 +12,11 @@ APPS="zotonic_notifier zotonic_core \
       zotonic_listen_http zotonic_listen_smtp zotonic_listen_mqtt \
       zotonic_launcher"
 
-cd apps;
+pushd apps;
 
 for i in $APPS
 do
     pushd $i
-
-    # Set specific version numbers for all zotonic dependencies in rebar.config
 
     ../../rebar3 compile
     ../../rebar3 edoc
@@ -28,7 +26,7 @@ do
     popd
 done
 
-# Publish all remaining apps
+# Publish all remaining apps - skip core dependencies
 
 for i in *
 do
@@ -53,11 +51,21 @@ do
             ;;
 
         *)
-            echo $i
+            pushd $i
+
+            ../../rebar3 compile
+            ../../rebar3 edoc
+
+            # ../../rebar3 publish
+
+            popd
             ;;
     esac
 done
 
+popd
+
 # Cleanup
-#rm -rf apps/*/_build
+rm -rf apps/*/_build
+rm -f apps/*/rebar.lock
 
