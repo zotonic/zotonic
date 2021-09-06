@@ -37,12 +37,17 @@ do
     ../../rebar3 compile
     ../../rebar3 edoc
 
-    ../../rebar3 hex publish -r hexpm --yes
+    # ../../rebar3 hex publish -r hexpm --yes
+    # ../../rebar3 hex publish -r hexpm
 
     popd
 done
 
-APPS2="zotonic_filewatcher zotonic_filehandler zotonic_fileindexer \
+APPS2="zotonic_filewatcher zotonic_fileindexer zotonic_filehandler \
+      zotonic_listen_http zotonic_listen_smtp zotonic_listen_mqtt \
+      zotonic_launcher"
+
+APPS2="zotonic_fileindexer zotonic_filehandler \
       zotonic_listen_http zotonic_listen_smtp zotonic_listen_mqtt \
       zotonic_launcher"
 
@@ -59,7 +64,8 @@ do
     ../../rebar3 compile
     ../../rebar3 edoc
 
-    ../../rebar3 hex publish -r hexpm --yes
+    # ../../rebar3 hex publish -r hexpm --yes
+    ../../rebar3 hex publish -r hexpm
 
     popd
 done
