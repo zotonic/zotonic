@@ -133,5 +133,6 @@ popd
 # Cleanup
 rm -rf apps/*/_build
 rm -f apps/*/rebar.lock
+rm -f apps/*/rebar.config.bck
 
 rm -rf packages/zotonic_apps/*/_build
