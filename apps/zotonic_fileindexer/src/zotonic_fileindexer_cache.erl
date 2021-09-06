@@ -36,7 +36,6 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
--include_lib("zotonic_filehandler/include/zotonic_filehandler.hrl").
 
 -record(findex, {
         key :: tuple(),
