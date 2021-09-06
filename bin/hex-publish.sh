@@ -4,6 +4,26 @@
 # Run ./prepare-release.sh before running this script.
 # This script should be running after tagging the master branch with the new version.
 
+
+# Explicitly set the version of all depending umbrella apps
+
+VERSION=`cat VERSION`
+
+for c in apps/*/rebar.config
+do
+    sed -i.bck \
+    -e "s/zotonic_core, *\".*\"/zotonic_core, \"$VERSION\"/" \
+    -e "s/zotonic_notifier, *\".*\"/zotonic_notifier, \"$VERSION\"/" \
+    -e "s/zotonic_listen_smtp, *\".*\"/zotonic_listen_smtp, \"$VERSION\"/" \
+    -e "s/zotonic_listen_http, *\".*\"/zotonic_listen_http, \"$VERSION\"/" \
+    -e "s/zotonic_listen_mqtt, *\".*\"/zotonic_listen_mqtt, \"$VERSION\"/" \
+    -e "s/zotonic_filehandler, *\".*\"/zotonic_filehandler, \"$VERSION\"/" \
+    -e "s/zotonic_fileindexer, *\".*\"/zotonic_fileindexer, \"$VERSION\"/" \
+    -e "s/zotonic_filewatcher, *\".*\"/zotonic_filewatcher, \"$VERSION\"/" \
+    -e "s/zotonic_launcher, *\".*\"/zotonic_launcher, \"$VERSION\"/" \
+    $c
+done
+
 pushd apps;
 
 # First publish core dependencies for other apps
@@ -17,7 +37,7 @@ do
     ../../rebar3 compile
     ../../rebar3 edoc
 
-    # ../../rebar3 publish
+    ../../rebar3 hex publish -r hexpm --yes
 
     popd
 done
@@ -39,7 +59,7 @@ do
     ../../rebar3 compile
     ../../rebar3 edoc
 
-    # ../../rebar3 hex publish -r hexpm --yes
+    ../../rebar3 hex publish -r hexpm --yes
 
     popd
 done
@@ -81,7 +101,7 @@ do
             ../../rebar3 compile
             ../../rebar3 edoc
 
-            # ../../rebar3 hex publish -r hexpm --yes
+            ../../rebar3 hex publish -r hexpm --yes
 
             popd
             ;;
@@ -90,7 +110,22 @@ done
 
 popd
 
+
+# Publish the app that includes all zotonic_apps (for easy deps)
+
+pushd packages/zotonic_apps
+
+./update-deps.sh
+../../rebar3 compile
+../../rebar3 edoc
+
+../../rebar3 hex publish -r hexpm --yes
+
+popd
+
+
 # Cleanup
 rm -rf apps/*/_build
 rm -f apps/*/rebar.lock
 
+rm -rf packages/zotonic_apps/*/_build
