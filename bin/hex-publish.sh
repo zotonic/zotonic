@@ -48,12 +48,8 @@ do
     $c
 done
 
-echo "x"
-
-exit 1;
 
 pushd apps;
-
 
 # First publish core dependencies for other apps
 

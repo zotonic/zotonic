@@ -12,8 +12,7 @@
     jobs,
     buffalo,
     zotonic_notifier,
-    zotonic_filewatcher,
-    zotonic_core
+    zotonic_filewatcher
   ]},
   {doc, "doc"},
   {licenses, ["Apache 2.0"]},
