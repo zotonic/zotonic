@@ -397,7 +397,7 @@ init([]) ->
     zotonic_notifier:observe(
         ?SYSTEM_NOTIFIER, zotonic_filehandler_filechange,
         {?MODULE, filechanged_observer},
-        self() 500),
+        self(), 500),
     {ok, #state{
         sites = #{},
         site_monitors = #{}
