@@ -35,5 +35,5 @@ rm -f doc/conf.py.bck
 rm -f apps/zotonic_core/include/zotonic_release.hrl.bck
 rm -f apps/*/rebar.config.bck
 
-git add doc/conf.py apps/zotonic_core/include/zotonic_release.hrl VERSION apps/*/rebar.config
+git add doc/conf.py apps/zotonic_core/include/zotonic_release.hrl VERSION
 git status
