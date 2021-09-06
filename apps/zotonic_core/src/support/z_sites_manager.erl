@@ -395,10 +395,9 @@ init([]) ->
     timer:send_after(?PERIODIC_UPGRADE, periodic_upgrade),
     timer:send_after(?PERIODIC_START, periodic_start),
     zotonic_notifier:observe(
-        ?SYSTEM_NOTIFIER,
-        zotonic_filehandler_filechange,
-        {?MODULE, filechanged_event},
-        self()),
+        ?SYSTEM_NOTIFIER, zotonic_filehandler_filechange,
+        {?MODULE, filechanged_observer},
+        self() 500),
     {ok, #state{
         sites = #{},
         site_monitors = #{}
