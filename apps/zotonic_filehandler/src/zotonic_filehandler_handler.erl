@@ -45,7 +45,7 @@
     terminate/2
 ]).
 
--include_lib("zotonic_core/include/zotonic_notifications.hrl").
+-include_lib("zotonic_filehandler.hrl").
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
 -include_lib("zotonic_filewatcher/include/zotonic_filewatcher.hrl").
 
@@ -135,15 +135,15 @@ handle_call({filewatcher_changes, Es}, _From, State) ->
                 false ->
                     Basename = filename:extension(FilenameB),
                     Extension = filename:extension(FilenameB),
-                    z_sites_manager:foreach(
-                        fun(Context) ->
-                            z_notifier:first(#filewatcher{
-                                verb = Verb,
-                                file = FilenameB,
-                                basename = Basename,
-                                extension = Extension
-                                }, Context)
-                        end)
+                    Msg = #zotonic_filehandler_filechange{
+                        verb = Verb,
+                        file = FilenameB,
+                        basename = Basename,
+                        extension = Extension
+                    },
+                    zotonic_notifier:map(
+                        ?SYSTEM_NOTIFIER, zotonic_filehandler_filechange,
+                        Msg, undefined)
             end
         end,
         ok,

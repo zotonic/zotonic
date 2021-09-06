@@ -51,7 +51,9 @@
     wait_for_running/2,
 
     get_site_config_overrides/1,
-    put_site_config_overrides/2
+    put_site_config_overrides/2,
+
+    filechanged_observer/1
 ]).
 
 %% Testing
@@ -63,6 +65,8 @@
 -define(CONFIG_FILE, "zotonic_site.config").
 
 -include_lib("zotonic.hrl").
+-include_lib("zotonic_filehandler/include/zotonic_filehandler.hrl").
+-include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
 
 -type site_status() :: new
                      | starting
@@ -350,6 +354,30 @@ wait_for_running_1(Site, _State, Timeout) ->
     timer:sleep(1000),
     wait_for_running(Site, Timeout - 1).
 
+
+
+%% @doc Called by the zotonic_filehandler after a file has been changed. This relays the
+%% file change event to all sites using the #filewatcher{} event.
+-spec filechanged_observer(#zotonic_filehandler_filechange{}) -> ok.
+filechanged_observer(#zotonic_filehandler_filechange{} = ChangeEvent) ->
+    #zotonic_filehandler_filechange{
+        verb = Verb,
+        file = File,
+        basename = Basename,
+        extension = Extension
+    } = ChangeEvent,
+    Event = #filewatcher{
+        verb = Verb,
+        file = File,
+        basename = Basename,
+        extension = Extension
+    },
+    z_sites_manager:foreach(
+        fun(Context) ->
+            z_notifier:first(Event, Context)
+        end).
+
+
 %%====================================================================
 %% gen_server callbacks
 %%====================================================================
@@ -366,6 +394,11 @@ init([]) ->
     ok = gen_server:cast(self(), upgrade),
     timer:send_after(?PERIODIC_UPGRADE, periodic_upgrade),
     timer:send_after(?PERIODIC_START, periodic_start),
+    zotonic_notifier:observe(
+        ?SYSTEM_NOTIFIER,
+        zotonic_filehandler_filechange,
+        {?MODULE, filechanged_event},
+        self()),
     {ok, #state{
         sites = #{},
         site_monitors = #{}

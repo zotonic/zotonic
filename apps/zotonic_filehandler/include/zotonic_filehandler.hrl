@@ -16,3 +16,11 @@
     filename :: binary()
 }).
 
+%% @doc File changed, picked up by zotonic core for livereload by mod_development
+-record(zotonic_filehandler_filechange, {
+    verb :: modify | create | delete,
+    file :: binary(),
+    basename :: binary(),
+    extension :: binary()
+}).
+

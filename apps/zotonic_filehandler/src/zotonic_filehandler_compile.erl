@@ -39,8 +39,6 @@
     code_path_check/1
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
 %% @doc Compile all files. Called from zotonic-compile script
 -dialyzer({no_return, start/0}).
 start() ->
@@ -157,7 +155,7 @@ do_all_task( OptPid ) ->
             "./rebar3 compile";
         ZotonicDir ->
             lists:flatten([
-                "cd ", z_utils:os_filename(ZotonicDir),
+                "cd ", z_filelib:os_filename(ZotonicDir),
                 "; ./rebar3 compile"
             ])
     end,
