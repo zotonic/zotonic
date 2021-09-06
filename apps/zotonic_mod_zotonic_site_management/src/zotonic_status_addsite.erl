@@ -118,7 +118,7 @@ addsite_check_git(Name, Options, Context) ->
             SiteDir = site_dir(Name),
             Cmd = lists:flatten([
                 "git init -q ",
-                z_utils:os_filename(SiteDir)
+                z_filelib:os_filename(SiteDir)
                 ]),
             _ = os:cmd(Cmd),
             create_gitignore(SiteDir),
@@ -129,9 +129,9 @@ addsite_check_git(Name, Options, Context) ->
                     mod_zotonic_site_management:progress(Name, ?__(<<"Git checkout ...">>, Context), Context),
                     Cmd = lists:flatten([
                         "git clone -q --recurse-submodules ",
-                        z_utils:os_filename(Git),
+                        z_filelib:os_filename(Git),
                         " ",
-                        z_utils:os_filename(site_dir(Name))
+                        z_filelib:os_filename(site_dir(Name))
                         ]),
                     case os:cmd(Cmd) of
                         [] ->

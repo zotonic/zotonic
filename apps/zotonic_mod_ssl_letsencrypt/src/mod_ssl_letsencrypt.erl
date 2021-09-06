@@ -533,7 +533,7 @@ ensure_key_file(Context) ->
             lager:info("Generating RSA key for LetsEncrypt in ~p", [KeyFile]),
             ok = z_filelib:ensure_dir(KeyFile),
             _ = file:change_mode(filename:basename(KeyFile), 8#00700),
-            Escaped = z_utils:os_filename(KeyFile),
+            Escaped = z_filelib:os_filename(KeyFile),
             Cmd = "openssl genrsa -out "
                     ++ Escaped
                     ++ " "

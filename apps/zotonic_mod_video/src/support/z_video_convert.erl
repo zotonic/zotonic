@@ -192,11 +192,11 @@ video_convert_1(QueuePath, Orientation, Mime) ->
                         TmpFile = z_tempfile:new(),
                         FfmpegCmd = z_convert:to_list(
                                       iolist_to_binary(
-                                        [io_lib:format(Cmdline, [z_utils:os_filename(QueuePath1)]),
+                                        [io_lib:format(Cmdline, [z_filelib:os_filename(QueuePath1)]),
                                          " ",
                                          TransposeOption,
                                          " ",
-                                         z_utils:os_filename(TmpFile)
+                                         z_filelib:os_filename(TmpFile)
                                         ])),
 
                         lager:debug("Video convert: ~p", [FfmpegCmd]),
@@ -233,9 +233,9 @@ maybe_reset_metadata(_TransposeOption, QueuePath, Mime) ->
     TmpFile = z_tempfile:new( z_convert:to_list( z_media_identify:extension(Mime) ) ),
     FfmpegCmd = z_convert:to_list(
                   iolist_to_binary(
-                    [io_lib:format(?CMDLINE_RESETMETA, [z_utils:os_filename(QueuePath)]),
+                    [io_lib:format(?CMDLINE_RESETMETA, [z_filelib:os_filename(QueuePath)]),
                      " ",
-                     z_utils:os_filename(TmpFile)
+                     z_filelib:os_filename(TmpFile)
                     ])),
     case os:cmd(FfmpegCmd) of
         [] ->

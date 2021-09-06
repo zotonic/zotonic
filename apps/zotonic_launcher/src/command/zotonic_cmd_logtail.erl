@@ -36,7 +36,7 @@ tail(File) ->
                     _ = zotonic_launcher_app:load_configs(Target),
                     LogDir = z_config:get(log_dir),
                     LogFile = filename:join([ LogDir, File ]),
-                    Cmd = "tail -n 500 \"" ++ z_utils:os_escape(LogFile) ++ "\"",
+                    Cmd = "tail -n 500 \"" ++ z_filelib:os_escape(LogFile) ++ "\"",
                     Res = os:cmd(Cmd),
                     io:format("~s~n", [ Res ]);
                 {error, _} = Error ->

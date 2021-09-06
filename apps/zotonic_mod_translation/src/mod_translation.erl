@@ -629,10 +629,10 @@ consolidate_core() ->
     lager:info("Merging .pot files into \"~s\"", [ ZotonicPot]),
     Command = lists:flatten([
         "msgcat -o ",
-        z_utils:os_filename(ZotonicPot),
+        z_filelib:os_filename(ZotonicPot),
         lists:map(
             fun(F) ->
-                [ " ", z_utils:os_filename(F) ]
+                [ " ", z_filelib:os_filename(F) ]
             end,
             filelib:wildcard(PotFiles))
     ]),

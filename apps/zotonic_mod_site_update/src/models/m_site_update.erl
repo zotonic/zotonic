@@ -97,13 +97,13 @@ webhook(Token, Context) ->
 update_vcs(false, _Context) ->
     {error, no_vcs};
 update_vcs({hg, Path}, Context) ->
-    Command = lists:flatten(["(cd ", z_utils:os_filename(Path), "; hg pull -u)"]),
+    Command = lists:flatten(["(cd ", z_filelib:os_filename(Path), "; hg pull -u)"]),
     Result = os:cmd(Command),
     zotonic_fileindexer:flush(),
     ?zInfo("hg pull: ~s", [ Result ], Context),
     {ok, Result};
 update_vcs({git, Path}, Context) ->
-    Command = lists:flatten(["(cd ", z_utils:os_filename(Path), "; git pull)"]),
+    Command = lists:flatten(["(cd ", z_filelib:os_filename(Path), "; git pull)"]),
     Result = os:cmd(Command),
     zotonic_fileindexer:flush(),
     ?zInfo("git pull: ~s", [ Result ], Context),

@@ -60,11 +60,11 @@ generate_key(Context) ->
     {PrivKeyFile, PubKeyFile} = cert_files(Context),
     ok = z_filelib:ensure_dir(PrivKeyFile),
     ok = z_filelib:ensure_dir(PubKeyFile),
-    PrivKeyCmd = "openssl genrsa -out " ++ z_utils:os_filename(PrivKeyFile) ++ " 1024",
+    PrivKeyCmd = "openssl genrsa -out " ++ z_filelib:os_filename(PrivKeyFile) ++ " 1024",
     os:cmd(PrivKeyCmd),
     PubKeyCmd = "openssl rsa "
-        ++ " -in "  ++ z_utils:os_filename(PrivKeyFile)
-        ++ " -out " ++ z_utils:os_filename(PubKeyFile)
+        ++ " -in "  ++ z_filelib:os_filename(PrivKeyFile)
+        ++ " -out " ++ z_filelib:os_filename(PubKeyFile)
         ++ " -pubout -outform PEM",
     os:cmd(PubKeyCmd),
     file:change_mode(PrivKeyFile, 8#00700),

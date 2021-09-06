@@ -33,7 +33,7 @@ info(Path) ->
         CmdlineCfg -> z_convert:to_list(CmdlineCfg)
     end,
     FfprobeCmd = lists:flatten([
-           Cmdline, " ", z_utils:os_filename(Path)
+           Cmdline, " ", z_filelib:os_filename(Path)
        ]),
     lager:debug("Video info: ~p", [FfprobeCmd]),
     JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
