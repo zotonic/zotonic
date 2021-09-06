@@ -23,6 +23,7 @@ compile_commands.json
 *.wmtrace
 *.swp
 *.mo
+*.bck
 
 priv/*.config
 priv/filezcache

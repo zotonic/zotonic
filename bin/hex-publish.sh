@@ -12,6 +12,30 @@ VERSION=`cat VERSION`
 for c in apps/*/rebar.config
 do
     sed -i.bck \
+    -e "s/zotonic_core,$/{zotonic_core, \"$VERSION\"},/" \
+    -e "s/zotonic_notifier,$/{zotonic_notifier, \"$VERSION\"},/" \
+    -e "s/zotonic_listen_smtp,$/{zotonic_listen_smtp, \"$VERSION\"},/" \
+    -e "s/zotonic_listen_http,$/{zotonic_listen_http, \"$VERSION\"},/" \
+    -e "s/zotonic_listen_mqtt,$/{zotonic_listen_mqtt, \"$VERSION\"},/" \
+    -e "s/zotonic_filehandler,$/{zotonic_filehandler, \"$VERSION\"},/" \
+    -e "s/zotonic_fileindexer,$/{zotonic_fileindexer, \"$VERSION\"},/" \
+    -e "s/zotonic_filewatcher,$/{zotonic_filewatcher, \"$VERSION\"},/" \
+    -e "s/zotonic_launcher,$/{zotonic_launcher, \"$VERSION\"},/" \
+    $c
+
+    sed -i.bck \
+    -e "s/zotonic_core$/{zotonic_core, \"$VERSION\"}/" \
+    -e "s/zotonic_notifier$/{zotonic_notifier, \"$VERSION\"}/" \
+    -e "s/zotonic_listen_smtp$/{zotonic_listen_smtp, \"$VERSION\"}/" \
+    -e "s/zotonic_listen_http$/{zotonic_listen_http, \"$VERSION\"}/" \
+    -e "s/zotonic_listen_mqtt$/{zotonic_listen_mqtt, \"$VERSION\"}/" \
+    -e "s/zotonic_filehandler$/{zotonic_filehandler, \"$VERSION\"}/" \
+    -e "s/zotonic_fileindexer$/{zotonic_fileindexer, \"$VERSION\"}/" \
+    -e "s/zotonic_filewatcher$/{zotonic_filewatcher, \"$VERSION\"}/" \
+    -e "s/zotonic_launcher$/{zotonic_launcher, \"$VERSION\"}/" \
+    $c
+
+    sed -i.bck \
     -e "s/zotonic_core, *\".*\"/zotonic_core, \"$VERSION\"/" \
     -e "s/zotonic_notifier, *\".*\"/zotonic_notifier, \"$VERSION\"/" \
     -e "s/zotonic_listen_smtp, *\".*\"/zotonic_listen_smtp, \"$VERSION\"/" \
@@ -24,7 +48,12 @@ do
     $c
 done
 
+echo "x"
+
+exit 1;
+
 pushd apps;
+
 
 # First publish core dependencies for other apps
 
