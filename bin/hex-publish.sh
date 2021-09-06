@@ -49,11 +49,19 @@ do
 done
 
 
+# Delete old artifcats
+rm -rf apps/*/_build
+rm -f apps/*/rebar.lock
+
+rm -rf packages/*/*/_build
+rm -f packages/*/*/rebar.lock
+
+
 pushd apps;
 
 # First publish core dependencies for other apps
 
-APPS1="zotonic_notifier zotonic_core"
+APPS1="zotonic_notifier zotonic_filewatcher zotonic_fileindexer zotonic_filehandler zotonic_core"
 
 for i in $APPS1
 do
@@ -68,13 +76,7 @@ do
     popd
 done
 
-APPS2="zotonic_filewatcher zotonic_fileindexer zotonic_filehandler \
-      zotonic_listen_http zotonic_listen_smtp zotonic_listen_mqtt \
-      zotonic_launcher"
-
-APPS2="zotonic_fileindexer zotonic_filehandler \
-      zotonic_listen_http zotonic_listen_smtp zotonic_listen_mqtt \
-      zotonic_launcher"
+APPS2="zotonic_listen_http zotonic_listen_smtp zotonic_listen_mqtt zotonic_launcher"
 
 for i in $APPS2
 do
@@ -101,15 +103,13 @@ done
 for i in *
 do
     case $i in
-        zotonic_notifier)
-            ;;
         zotonic_core)
-            ;;
-        zotonic_filewatcher)
             ;;
         zotonic_filehandler)
             ;;
         zotonic_fileindexer)
+            ;;
+        zotonic_filewatcher)
             ;;
         zotonic_listen_http)
             ;;
@@ -118,6 +118,8 @@ do
         zotonic_listen_mqtt)
             ;;
         zotonic_launcher)
+            ;;
+        zotonic_notifier)
             ;;
 
         *)
@@ -161,3 +163,4 @@ rm -f apps/*/rebar.lock
 rm -f apps/*/rebar.config.bck
 
 rm -rf packages/zotonic_apps/*/_build
+rm -f packages/zotonic_apps/*/rebar.lock
