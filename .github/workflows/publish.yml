@@ -49,7 +49,7 @@ jobs:
       - name: Compile
         run: |
           VERSION=`git describe --tags`
-          bin/prepare-release.sh $VERSION
+          release/prepare-release.sh $VERSION
           make
       - name: Test
         run: |
@@ -63,5 +63,5 @@ jobs:
           HEX_API_KEY: ${{ secrets.HEX_API_KEY }}
         run: |
           VERSION=`git describe --tags`
-          bin/prepare-release.sh $VERSION
-          bin/hex-publish.sh
+          release/prepare-release.sh $VERSION
+          release/hex-publish.sh

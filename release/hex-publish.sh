@@ -146,13 +146,13 @@ popd
 
 # Publish the app that includes all zotonic_apps (for easy deps)
 
-pushd packages/zotonic_apps
+pushd release/packages/zotonic_apps
 
 ./update-deps.sh
-../../rebar3 compile
-../../rebar3 edoc
+../../../rebar3 compile
+../../../rebar3 edoc
 
-../../rebar3 hex publish -r hexpm --yes
+../../../rebar3 hex publish -r hexpm --yes
 
 popd
 
