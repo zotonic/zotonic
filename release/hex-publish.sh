@@ -65,7 +65,7 @@ APPS1="zotonic_notifier zotonic_filewatcher zotonic_fileindexer zotonic_filehand
 
 for i in $APPS1
 do
-    pushd $i
+    pushd apps/$i
 
     ../../rebar3 compile
     ../../rebar3 edoc
@@ -80,7 +80,7 @@ APPS2="zotonic_listen_http zotonic_listen_smtp zotonic_listen_mqtt zotonic_launc
 
 for i in $APPS2
 do
-    pushd $i
+    pushd apps/$i
 
     # Take zotonic_core as the basis for the build, this prevents
     # fetching and recompiling all dependencies of zotonic_core for
