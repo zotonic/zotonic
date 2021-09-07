@@ -65,13 +65,12 @@ APPS1="zotonic_notifier zotonic_filewatcher zotonic_fileindexer zotonic_filehand
 
 for i in $APPS1
 do
-    pushd apps/$i
+    pushd $i
 
     ../../rebar3 compile
     ../../rebar3 edoc
 
-    # ../../rebar3 hex publish -r hexpm --yes
-    ../../rebar3 hex publish -r hexpm
+    ../../rebar3 hex publish -r hexpm --yes
 
     popd
 done
@@ -80,7 +79,7 @@ APPS2="zotonic_listen_http zotonic_listen_smtp zotonic_listen_mqtt zotonic_launc
 
 for i in $APPS2
 do
-    pushd apps/$i
+    pushd $i
 
     # Take zotonic_core as the basis for the build, this prevents
     # fetching and recompiling all dependencies of zotonic_core for
@@ -91,11 +90,32 @@ do
     ../../rebar3 compile
     ../../rebar3 edoc
 
-    # ../../rebar3 hex publish -r hexpm --yes
-    ../../rebar3 hex publish -r hexpm
+    ../../rebar3 hex publish -r hexpm --yes
 
     popd
 done
+
+
+APPS3="zotonic_mod_admin zotonic_mod_wires"
+
+for i in $APPS3
+do
+    pushd $i
+
+    # Take zotonic_core as the basis for the build, this prevents
+    # fetching and recompiling all dependencies of zotonic_core for
+    # every module
+    rm -rf _build
+    cp -r ../zotonic_core/_build .
+
+    ../../rebar3 compile
+    ../../rebar3 edoc
+
+    ../../rebar3 hex publish -r hexpm --yes
+
+    popd
+done
+
 
 
 # Publish all remaining apps - skip core dependencies
@@ -121,6 +141,10 @@ do
             ;;
         zotonic_notifier)
             ;;
+        zotonic_mod_admin)
+            ;;
+        zotonic_mod_wires)
+            ;;
 
         *)
             pushd $i
@@ -134,7 +158,8 @@ do
             ../../rebar3 compile
             ../../rebar3 edoc
 
-            ../../rebar3 hex publish -r hexpm --yes
+            ../../rebar3 hex publish -r hexpm
+            # ../../rebar3 hex publish -r hexpm --yes
 
             popd
             ;;
