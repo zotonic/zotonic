@@ -154,6 +154,13 @@ do
         zotonic_mod_wires)
             ;;
 
+        # Skip - for testing only
+        zotonic_mod_acl_mock)
+            ;;
+        zotonic_site_testsandbox)
+            ;;
+
+        # Publish the remaining sites as packages
         *)
             pushd $i
 
