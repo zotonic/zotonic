@@ -64,7 +64,7 @@ pushd apps;
 
 # First publish core dependencies for other apps
 
-APPS1="zotonic_notifier zotonic_filewatcher zotonic_fileindexer zotonic_filehandler zotonic_core"
+APPS1="zotonic_notifier"
 
 for i in $APPS1
 do
@@ -78,17 +78,33 @@ do
     popd
 done
 
-APPS2="zotonic_listen_http zotonic_listen_smtp zotonic_listen_mqtt zotonic_launcher"
+# Wait for Hex to update its index
+sleep 20
+../rebar3 update
+
+APPS2="zotonic_filewatcher zotonic_fileindexer"
 
 for i in $APPS2
 do
     pushd $i
 
-    # Take zotonic_core as the basis for the build, this prevents
-    # fetching and recompiling all dependencies of zotonic_core for
-    # every module
-    rm -rf _build
-    cp -r ../zotonic_core/_build .
+    ../../rebar3 compile
+    ../../rebar3 edoc
+
+    ../../rebar3 hex publish -r hexpm --yes
+
+    popd
+done
+
+# Wait for Hex to update its index
+sleep 20
+../rebar3 update
+
+APPS3="zotonic_filehandler"
+
+for i in $APPS3
+do
+    pushd $i
 
     ../../rebar3 compile
     ../../rebar3 edoc
@@ -98,10 +114,32 @@ do
     popd
 done
 
+# Wait for Hex to update its index
+sleep 20
+../rebar3 update
 
-APPS3="zotonic_mod_admin zotonic_mod_wires"
+APPS4="zotonic_core"
 
-for i in $APPS3
+for i in $APPS4
+do
+    pushd $i
+
+    ../../rebar3 compile
+    ../../rebar3 edoc
+
+    ../../rebar3 hex publish -r hexpm --yes
+
+    popd
+done
+
+# Wait for Hex to update its index
+sleep 20
+../rebar3 update
+
+
+APPS5="zotonic_listen_http zotonic_listen_smtp zotonic_listen_mqtt zotonic_mod_admin zotonic_mod_wires"
+
+for i in $APPS5
 do
     pushd $i
 
@@ -119,6 +157,10 @@ do
     popd
 done
 
+
+# Wait for Hex to update its index
+sleep 20
+../rebar3 update
 
 
 # Publish all remaining apps - skip core dependencies
@@ -126,7 +168,7 @@ done
 for i in *
 do
     case $i in
-        # APPS1
+        # APPS1 .. APPS4
         zotonic_notifier)
             ;;
         zotonic_filewatcher)
@@ -138,17 +180,13 @@ do
         zotonic_core)
             ;;
 
-        # APPS2
+        # APPS5
         zotonic_listen_http)
             ;;
         zotonic_listen_smtp)
             ;;
         zotonic_listen_mqtt)
             ;;
-        zotonic_launcher)
-            ;;
-
-        # APPS3
         zotonic_mod_admin)
             ;;
         zotonic_mod_wires)
@@ -179,6 +217,11 @@ do
             ;;
     esac
 done
+
+# Wait for Hex to update its index
+sleep 20
+../rebar3 update
+
 
 popd
 
