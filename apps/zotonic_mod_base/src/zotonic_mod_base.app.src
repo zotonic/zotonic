@@ -10,5 +10,9 @@
     {links, [
         {"Website", "https://zotonic.com/"},
         {"GitHub", "https://github.com/zotonic/zotonic"}
+    ]},
+    {include_files, [
+        "cotonic-clean.sh",
+        "cotonic-fetch.sh"
     ]}
 ]}.

@@ -22,5 +22,9 @@
   {links, [
     {"Website", "https://zotonic.com/"},
     {"GitHub", "https://github.com/zotonic/zotonic"}
+  ]},
+  {include_files, [
+    "bin/zotonic",
+    "bin/zotonic.escript"
   ]}
  ]}.
