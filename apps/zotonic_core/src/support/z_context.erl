@@ -384,7 +384,7 @@ prune_envdata(Env) ->
     }.
 
 %% @doc Make the url an absolute url by prepending the hostname.
--spec abs_url(iodata(), z:context()) -> binary().
+-spec abs_url(undefined | iodata(), z:context()) -> binary().
 abs_url(Url, Context) when is_list(Url) ->
     abs_url(iolist_to_binary(Url), Context);
 abs_url(<<"//", _/binary>> = Url, Context) ->
@@ -402,9 +402,10 @@ abs_url(<<$/, _/binary>> = Url, Context) ->
                 Port -> <<"https://", Hostname/binary, $:, (integer_to_binary(Port))/binary, Url/binary>>
             end;
         AbsUrl ->
-            ?DEBUG(AbsUrl),
             AbsUrl
     end;
+abs_url(undefined, Context) ->
+    abs_url(<<>>, Context);
 abs_url(Url, Context) ->
     case has_url_protocol(Url) of
         true -> Url;
