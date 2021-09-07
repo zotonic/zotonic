@@ -1,3 +1,3 @@
 Hex packages that are updated and released for every new Zotonic version.
 
-See also bin/hex-publish.sh
+See also release/hex-publish.sh

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Publish all apps as Hex packages.
-# Run ./prepare-release.sh before running this script.
+# Run release/prepare-release.sh before running this script.
 # This script should be running after tagging the master branch with the new version.
 
 
