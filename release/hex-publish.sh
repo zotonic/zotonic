@@ -126,14 +126,19 @@ done
 for i in *
 do
     case $i in
-        zotonic_core)
-            ;;
-        zotonic_filehandler)
-            ;;
-        zotonic_fileindexer)
+        # APPS1
+        zotonic_notifier)
             ;;
         zotonic_filewatcher)
             ;;
+        zotonic_fileindexer)
+            ;;
+        zotonic_filehandler)
+            ;;
+        zotonic_core)
+            ;;
+
+        # APPS2
         zotonic_listen_http)
             ;;
         zotonic_listen_smtp)
@@ -142,8 +147,8 @@ do
             ;;
         zotonic_launcher)
             ;;
-        zotonic_notifier)
-            ;;
+
+        # APPS3
         zotonic_mod_admin)
             ;;
         zotonic_mod_wires)
