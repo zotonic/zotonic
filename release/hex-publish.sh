@@ -56,8 +56,8 @@ done
 rm -rf apps/*/_build
 rm -f apps/*/rebar.lock
 
-rm -rf packages/*/*/_build
-rm -f packages/*/*/rebar.lock
+rm -rf release/packages/*/_build
+rm -f release/packages/*/rebar.lock
 
 
 pushd apps;
@@ -240,9 +240,9 @@ popd
 
 
 # Cleanup
-rm -rf apps/*/_build
+# rm -rf apps/*/_build
 rm -f apps/*/rebar.lock
 rm -f apps/*/rebar.config.bck
 
-rm -rf packages/zotonic_apps/*/_build
+# rm -rf packages/zotonic_apps/*/_build
 rm -f packages/zotonic_apps/*/rebar.lock
