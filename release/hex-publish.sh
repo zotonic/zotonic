@@ -173,8 +173,7 @@ do
             ../../rebar3 compile
             ../../rebar3 edoc
 
-            ../../rebar3 hex publish -r hexpm
-            # ../../rebar3 hex publish -r hexpm --yes
+            ../../rebar3 hex publish -r hexpm --yes
 
             popd
             ;;
