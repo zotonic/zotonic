@@ -2,4 +2,6 @@
 %% Put your dispatch rules here.
 [
  %%    {home,      [],	controller_template,  	[ {template, "home.tpl"} ]}
+ {page, ["page", id],       controller_page, [ {template, {cat, "page.tpl"}} ]},
+ {page, ["page", id, slug], controller_page, [ {template, {cat, "page.tpl"}} ]}
 ].
