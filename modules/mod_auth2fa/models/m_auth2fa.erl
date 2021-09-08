@@ -38,8 +38,23 @@
 
 m_find_value(totp_image_url, #m{ value = undefined }, Context) ->
     case z_acl:user(Context) of
-        undefined -> <<>>;
-        UserId -> totp_image_url(UserId, Context)
+        undefined ->
+            undefined;
+        UserId ->
+            case z_context:get_session(request_2fa_user_id, Context) of
+                UserId ->
+                    case totp_image_url(z_acl:user(Context), Context) of
+                        {ok, {Url, Secret}} ->
+                            #{
+                                url => Url,
+                                secret => z_auth2fa_base32:encode(Secret)
+                            };
+                        {error, _} ->
+                            undefined
+                    end;
+                _ ->
+                    undefined
+            end
     end;
 m_find_value(is_totp_enabled, #m{ value = undefined }, Context) ->
     case z_acl:user(Context) of
@@ -71,6 +86,7 @@ m_find_value(user_mode, #m{ value = undefined }, Context) ->
 
 m_find_value(UserId, #m{ value = undefined } = M, _Context) when is_integer(UserId) ->
     M#m{ value = UserId }.
+
 
 %% @doc Check if totp is enabled for the given user
 -spec is_totp_enabled( m_rsc:resource_id(), z:context() ) -> boolean().
@@ -118,7 +134,7 @@ totp_disable(UserId, Context) ->
     m_identity:delete_by_type(UserId, ?TOTP_IDENTITY_TYPE, Context).
 
 %% @doc Generate a new totp code and return the barcode
--spec totp_image_url( m_rsc:resource_id(), z:context() ) -> binary().
+-spec totp_image_url( m_rsc:resource_id(), z:context() ) -> {ok, {binary(), binary()}} | {error, eacces}.
 totp_image_url(UserId, Context) when is_integer(UserId) ->
     case is_allowed_totp_enable(UserId, Context) of
         true ->
@@ -131,9 +147,9 @@ totp_image_url(UserId, Context) when is_integer(UserId) ->
                 ]),
             {ok, Passcode} = regenerate_user_secret(UserId, Context),
             {ok, Png} = generate_png(ServicePart, Issuer, Passcode, ?TOTP_PERIOD),
-            encode_data_url(Png, <<"image/png">>);
+            {ok, {encode_data_url(Png, <<"image/png">>), Passcode}};
         false ->
-            <<>>
+            {error, eacces}
     end.
 
 %% Only the admin user can enable totp for the admin user
