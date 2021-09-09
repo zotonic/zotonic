@@ -113,6 +113,30 @@ locate_source([{module, Module} = M|Rs], Path, OriginalFile, Filters, Context) -
         false ->
             locate_source(Rs, Path, OriginalFile, Filters, Context)
     end;
+locate_source([{id, Id}|Rs], Path, OriginalFile, Filters, Context) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            locate_source(Rs, Path, OriginalFile, Filters, Context);
+        RscId ->
+            case m_media:get(RscId, Context) of
+                undefined ->
+                    locate_source(Rs, Path, OriginalFile, Filters, Context);
+                Medium ->
+                    case maps:find(<<"filename">>, Medium) of
+                        {ok, None} when None =:= undefined; None =:= <<>> ->
+                            locate_source(Rs, Path, OriginalFile, Filters, Context);
+                        {ok, MediumOriginalFile} ->
+                            case locate_source_uploaded_1(Medium, Path, MediumOriginalFile, Filters, Context) of
+                                {ok, Part} ->
+                                    Part;
+                                {error, _} ->
+                                    locate_source(Rs, Path, OriginalFile, Filters, Context)
+                            end;
+                        error ->
+                            locate_source(Rs, Path, OriginalFile, Filters, Context)
+                    end
+            end
+    end;
 locate_source([DirName|Rs], Path, OriginalFile, Filters, Context) ->
     NamePath = make_abs(filename:join([DirName,Path]), Context),
     case part_file(NamePath, []) of

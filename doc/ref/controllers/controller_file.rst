@@ -68,6 +68,12 @@ The search root can be a list with one or more of the following:
    to the *files* directory of the site.
  * A tuple `{module, ModuleName}` to refer to a module. The module must implement the
    functions `file_exists/2` and `file_forbidden/2`.
+ * A tuple `{id, RscId}` where `RscId` is the unique name or id of a resource. The
+   resource must have a medium record containing an uploaded file.
+
+Note that located files are aggressively cached. Changes to the lookup routines or files will
+take a while before they are visible for new requests.
+
 
 CSS and JavaScript templates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
