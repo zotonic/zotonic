@@ -19,7 +19,7 @@
 -module(mod_wires).
 
 -mod_title("Wires and Actions").
--mod_description("Wires, actions, and other embeddable JavaScript.").
+-mod_description("Build interactive user interfaces with template wires, actions, validators and more.").
 -mod_depends([ mod_mqtt ]).
 
 -export([
