@@ -177,7 +177,7 @@ base_cmd(DefaultName, CodePaths) ->
 erlang_configs(Nodename) ->
     lists:map(
         fun(F) ->
-            [ " -config ", z_utils:os_escape(F) ]
+            [ " -config ", z_filelib:os_escape(F) ]
         end,
         zotonic_launcher_config:erlang_config_files(Nodename)).
 

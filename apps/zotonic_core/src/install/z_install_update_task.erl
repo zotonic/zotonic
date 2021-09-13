@@ -25,7 +25,7 @@
     init_language/2
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("../../include/zotonic.hrl").
 
 %% @doc Initialize the language column from the language property in the
 %% serialized props.

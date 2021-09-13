@@ -22,7 +22,7 @@
 
 -export([ scan/2 ]).
 
--include_lib("zotonic_fileindexer/include/zotonic_fileindexer.hrl").
+-include_lib("../include/zotonic_fileindexer.hrl").
 
 % Regexp for files to be ignored.
 -define(IGNORE, "^_flymake|\\.#|\\.~|^\\.").

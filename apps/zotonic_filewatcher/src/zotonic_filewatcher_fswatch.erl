@@ -22,8 +22,6 @@
 -module(zotonic_filewatcher_fswatch).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
 -behaviour(gen_server).
 
 %% gen_server exports
@@ -130,8 +128,6 @@ handle_info(start, State) ->
     {noreply, State};
 
 handle_info(_Info, State) ->
-    ?DEBUG(_Info),
-    ?DEBUG({port, State#state.port}),
     {noreply, State}.
 
 %% @spec terminate(Reason, State) -> void()

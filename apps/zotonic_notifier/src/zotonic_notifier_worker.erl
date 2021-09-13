@@ -67,13 +67,6 @@
 }).
 
 
--ifdef(fun_stacktrace).
--define(WITH_STACKTRACE(T, R, S), T:R -> S = erlang:get_stacktrace(),).
--else.
--define(WITH_STACKTRACE(T, R, S), T:R:S ->).
--endif.
-
-
 %%====================================================================
 %% API
 %%====================================================================
@@ -294,12 +287,6 @@ init(Name) ->
     {ok, State}.
 
 
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
-%%                                      {reply, Reply, State, Timeout} |
-%%                                      {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, Reply, State} |
-%%                                      {stop, Reason, State}
 %% @doc Add an observer to an event
 handle_call({observe, Event, Observer, OwnerPid, Prio}, _From, State) ->
     do_add_observer(State#state.observers, Event, {Prio, Observer, OwnerPid}),
@@ -323,9 +310,6 @@ handle_call({detach_all, OwnerPid}, _From, State) ->
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.

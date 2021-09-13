@@ -20,7 +20,7 @@
 
 -module(z_props).
 
--include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("../../include/zotonic.hrl").
 
 -export([
     from_props/1,

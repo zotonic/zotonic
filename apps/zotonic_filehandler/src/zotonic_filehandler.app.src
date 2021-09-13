@@ -9,9 +9,15 @@
   {applications, [
     kernel, stdlib,
     erlexec,
-    zotonic_notifier,
-    zotonic_filewatcher,
     jobs,
-    buffalo
+    buffalo,
+    zotonic_notifier,
+    zotonic_filewatcher
+  ]},
+  {doc, "doc"},
+  {licenses, ["Apache 2.0"]},
+  {links, [
+    {"Website", "https://zotonic.com/"},
+    {"GitHub", "https://github.com/zotonic/zotonic"}
   ]}
  ]}.

@@ -1,0 +1,15 @@
+%% -*- mode: erlang -*-
+{application, zotonic_apps,
+ [{description, "All Zotonic applications from the Zotonic core umbrella project."},
+  {vsn, {file, "../../VERSION"}},
+  {registered, []},
+  {mod, {zotonic_apps_app, []}},
+  {applications, [
+      kernel, stdlib, zotonic_launcher
+  ]},
+  {env, []},
+  {modules, [
+    zotonic_apps_app,
+    zotonic_apps_sup
+   ]}
+ ]}.

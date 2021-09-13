@@ -31,7 +31,7 @@
     ]).
 
 -include_lib("kernel/include/file.hrl").
--include_lib("zotonic_core/include/zotonic.hrl").
+
 
 %% @doc API for starting the site supervisor.
 start_link() ->

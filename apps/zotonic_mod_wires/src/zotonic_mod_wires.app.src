@@ -1,5 +1,5 @@
 {application, zotonic_mod_wires, [
-    {description, "Deprecated wires, actions, and other embedded JavaScript."},
+    {description, "Build interactive user interfaces with template wires, actions, validators and more."},
     {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [
@@ -7,7 +7,10 @@
     ]},
     {env, []},
     {modules, []},
-    {maintainers, []},
+    {doc, "doc"},
     {licenses, ["Apache 2.0"]},
-    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+    {links, [
+        {"Website", "https://zotonic.com/"},
+        {"GitHub", "https://github.com/zotonic/zotonic"}
+    ]}
 ]}.

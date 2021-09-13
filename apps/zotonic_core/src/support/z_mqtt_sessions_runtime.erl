@@ -35,8 +35,7 @@
 -define(none(A), (A =:= undefined orelse A =:= <<>>)).
 
 -include_lib("mqtt_packet_map/include/mqtt_packet_map.hrl").
--include_lib("zotonic_core/include/zotonic.hrl").
-
+-include_lib("../../include/zotonic.hrl").
 
 %% @doc Return the MQTT pool name for the given hostname.
 -spec vhost_pool( binary() ) -> {ok, atom()} | {error, unknown_host}.

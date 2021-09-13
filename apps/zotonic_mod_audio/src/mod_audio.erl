@@ -151,7 +151,7 @@ audio_info(Path) ->
         CmdlineCfg -> z_convert:to_list(CmdlineCfg)
     end,
     FfprobeCmd = lists:flatten([
-           Cmdline, " ", z_utils:os_filename(Path)
+           Cmdline, " ", z_filelib:os_filename(Path)
        ]),
     lager:debug("Audio info: ~p", [FfprobeCmd]),
     JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
@@ -210,7 +210,7 @@ audio_preview(MovieFile) ->
                 _ -> io_lib:format(Cmdline, [0, MovieFile])
             end,
             " ",
-            z_utils:os_filename(TmpFile)
+            z_filelib:os_filename(TmpFile)
         ])),
     jobs:run(media_preview_jobs,
         fun() ->

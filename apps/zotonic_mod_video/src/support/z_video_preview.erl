@@ -51,7 +51,7 @@ preview(MovieFile, Props) ->
             end,
             " ",
             orientation_to_transpose(Orientation),
-            z_utils:os_filename(TmpFile)
+            z_filelib:os_filename(TmpFile)
         ])),
     jobs:run(media_preview_jobs,
         fun() ->

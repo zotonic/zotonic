@@ -73,4 +73,4 @@ heart_env(Count, Timestamp) ->
         " ZOTONIC_HEART_START=", integer_to_list(Timestamp),
         " ", os:getenv("ZOTONIC_BIN", "bin"), "/zotonic start"
     ]),
-    {ok, lists:flatten("-env HEART_COMMAND ", z_utils:os_filename(RestartCmd))}.
+    {ok, lists:flatten("-env HEART_COMMAND ", z_filelib:os_filename(RestartCmd))}.

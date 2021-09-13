@@ -1,0 +1,17 @@
+{require_min_otp_vsn, "22.3"}.
+
+{erl_opts, [
+    {parse_transform, lager_transform},
+    debug_info
+]}.
+
+% Below will be a list of all applications inside the Zotonic umbrella application.
+{deps, [
+    ZOTONIC_APPS
+]}.
+
+{xref_checks, [
+    undefined_function_calls,
+    locals_not_used,
+    deprecated_function_calls
+]}.

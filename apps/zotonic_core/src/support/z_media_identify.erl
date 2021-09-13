@@ -175,9 +175,9 @@ identify_file_unix(false, _File, _OriginalFilename) ->
     {error, no_file_cmd};
 identify_file_unix(Cmd, File, OriginalFilename) ->
     CmdLine = unicode:characters_to_list([
-        z_utils:os_filename(Cmd),
+        z_filelib:os_filename(Cmd),
         " -b --mime-type ",
-        z_utils:os_filename(File)
+        z_filelib:os_filename(File)
     ]),
     Mime = z_string:trim( unicode:characters_to_binary( os:cmd( CmdLine ) ) ),
     case re:run(Mime, "^[a-zA-Z0-9_\\-\\.]+/[a-zA-Z0-9\\.\\-_]+$") of
@@ -315,8 +315,8 @@ identify_file_imagemagick_1(false, _OsFamily, _ImageFile, _MimeFile) ->
     lager:error("Please install ImageMagick 'identify' for identifying the type of uploaded files."),
     {error, "'identify' not installed"};
 identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
-    CleanedImageFile = z_utils:os_filename(z_convert:to_list(ImageFile) ++ "[0]"),
-    CmdOutput = os:cmd(z_utils:os_filename(Cmd)
+    CleanedImageFile = z_filelib:os_filename(z_convert:to_list(ImageFile) ++ "[0]"),
+    CmdOutput = os:cmd(z_filelib:os_filename(Cmd)
                        ++ " -quiet "
                        ++ z_convert:to_list(CleanedImageFile)
                        ++ " 2> " ++ devnull(OsFamily)),
@@ -330,7 +330,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                     string:tokens(CmdOutput, "\n")),
     case Lines of
         [] ->
-            Err = os:cmd(z_utils:os_filename(Cmd)
+            Err = os:cmd(z_filelib:os_filename(Cmd)
                          ++ " -quiet "
                          ++ z_convert:to_list(CleanedImageFile)
                          ++ " 2>&1"),

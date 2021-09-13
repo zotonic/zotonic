@@ -25,8 +25,6 @@
     flush/0,
     flush/2,
 
-    observe_zotonic_filehandler_map/2,
-
     start_link/0,
     init/1,
     handle_call/3,
@@ -36,9 +34,7 @@
     terminate/2
     ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
--include_lib("zotonic_filehandler/include/zotonic_filehandler.hrl").
 
 -record(findex, {
         key :: tuple(),
@@ -82,20 +78,6 @@ flush() ->
 flush(App, SubDir) when is_atom(App) ->
     gen_server:call(?MODULE, {flush, App, unicode:characters_to_binary(SubDir)}, infinity).
 
-
-%% @doc Called by the zotonic_filewatcher to map a file to actions.
-%%      Here we always flush the complete app if any file in the app is deleted or created.
-observe_zotonic_filehandler_map(#zotonic_filehandler_map{ verb = Verb, what = What, application = App }, _Extra)
-    when Verb =:= delete; Verb =:= create ->
-    case What of
-        {src, _} -> flush(App, <<"src">>);
-        {priv, Dir, _} -> flush(App, <<"priv/", Dir/binary>>);
-        _ -> ok
-    end,
-    undefined;
-observe_zotonic_filehandler_map(#zotonic_filehandler_map{}, _Extra) ->
-    undefined.
-
 start_link() ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
@@ -104,10 +86,6 @@ start_link() ->
 
 init(_Args) ->
     ets:new(?MODULE, [set, {keypos, #findex.key}, protected, named_table]),
-    zotonic_notifier:observe(
-            ?SYSTEM_NOTIFIER, zotonic_filehandler_map,
-            {?MODULE, observe_zotonic_filehandler_map},
-            self(), -1000),
     {ok, #state{ }}.
 
 handle_call({index, App, AppDir, SubDir, Pattern}, _From, State) ->

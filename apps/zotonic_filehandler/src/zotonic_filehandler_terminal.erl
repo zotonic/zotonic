@@ -79,9 +79,9 @@ terminate(_Reason, _State) ->
 terminal_notifier(_OS, <<>>) ->
     ok;
 terminal_notifier({unix, darwin}, Msg) ->
-    exec:run("which terminal-notifier && terminal-notifier -group zotonic -title Zotonic -message " ++ z_utils:os_escape(Msg), []);
+    exec:run("which terminal-notifier && terminal-notifier -group zotonic -title Zotonic -message " ++ z_filelib:os_escape(Msg), []);
 terminal_notifier({unix, _Arch}, Msg) ->
-    exec:run("which notify-send && notify-send -t 2000 \"Zotonic\" " ++ z_utils:os_escape(Msg), []);
+    exec:run("which notify-send && notify-send -t 2000 \"Zotonic\" " ++ z_filelib:os_escape(Msg), []);
 terminal_notifier(_OS, _Msg) ->
     ok.
 

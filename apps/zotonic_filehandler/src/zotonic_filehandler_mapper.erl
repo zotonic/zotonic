@@ -25,7 +25,7 @@
 ]).
 
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
--include_lib("zotonic_filehandler/include/zotonic_filehandler.hrl").
+-include_lib("../include/zotonic_filehandler.hrl").
 
 % Filename patterns for which we don't about unhandled events.
 -define(FILENAMES_NOWARN, <<"(/test/|/priv/ssl/|/dist/|\\.app$)">>).
@@ -41,6 +41,7 @@ map_change(Verb, Filename) ->
     map_categorized(Verb, Application, What, Ext, Root, Split, Filename).
 
 map_categorized(Verb, Application, What, Ext, Root, Split, Filename) ->
+    maybe_flush_indexer(Verb, Application, What),
     case map_notifier(Verb, Application, What, Ext, Root, Split, Filename) of
         {ok, _Mappings} = Ok ->
             Ok;
@@ -81,6 +82,16 @@ map_categorized([Fun|Other], Verb, Application, What, Ext, Root, Split, Filename
         false ->
             map_categorized(Other, Verb, Application, What, Ext, Root, Split, Filename)
     end.
+
+%% @doc Always flush the complete app if any file in the app is deleted or created.
+maybe_flush_indexer(Verb, App, What) when Verb =:= delete; Verb =:= create ->
+    case What of
+        {src, _} -> zotonic_fileindexer_cache:flush(App, <<"src">>);
+        {priv, Dir, _} -> zotonic_fileindexer_cache:flush(App, <<"priv/", Dir/binary>>);
+        _ -> ok
+    end;
+maybe_flush_indexer(_Verb, _App, _What) ->
+    ok.
 
 
 categorize(Filename) ->

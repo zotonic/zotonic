@@ -22,7 +22,7 @@
     output/2
     ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("../../include/zotonic.hrl").
 
 %% @doc Replace non-iolist parts in the output tree.
 -spec output( term(), z:context() ) -> {iolist(), z:context()}.

@@ -41,7 +41,7 @@
     all_files/2
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("../../include/zotonic.hrl").
 -include_lib("zotonic_fileindexer/include/zotonic_fileindexer.hrl").
 
 -type key_type() :: template  | lib | filter | scomp | action | validator | model | dispatch.

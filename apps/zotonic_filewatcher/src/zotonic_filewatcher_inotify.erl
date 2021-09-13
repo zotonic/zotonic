@@ -22,8 +22,6 @@
 -module(zotonic_filewatcher_inotify).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
 -behaviour(gen_server).
 
 %% gen_server exports

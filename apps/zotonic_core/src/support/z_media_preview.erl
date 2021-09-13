@@ -95,11 +95,11 @@ convert_2(CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps) ->
     file:delete(OutFile),
     ok = z_filelib:ensure_dir(OutFile),
     Cmd = lists:flatten([
-        z_utils:os_filename(ConvertCmd), " ",
+        z_filelib:os_filename(ConvertCmd), " ",
         opt_density(FileProps),
-        z_utils:os_filename( unicode:characters_to_list(InFile) ++ infile_suffix(Mime) ), " ",
+        z_filelib:os_filename( unicode:characters_to_list(InFile) ++ infile_suffix(Mime) ), " ",
         lists:flatten(lists:join(32, CmdArgs)), " ",
-        z_utils:os_filename(OutFile)
+        z_filelib:os_filename(OutFile)
     ]),
     case run_cmd(Cmd, OutFile) of
         ok ->
@@ -392,11 +392,11 @@ filter2arg({rotate, Rotation}, Width, Height, _AllFilters) ->
         _ -> {Width, Height, ""}
     end;
 filter2arg({background, Color}, Width, Height, _AllFilters) ->
-    {Width, Height, ["-background ", $", z_utils:os_escape(Color), $"]};
+    {Width, Height, ["-background ", $", z_filelib:os_escape(Color), $"]};
 filter2arg({layers, Method}, Width, Height, _AllFilters) ->
-    {Width, Height, ["-layers ", $", z_utils:os_escape(Method), $"]};
+    {Width, Height, ["-layers ", $", z_filelib:os_escape(Method), $"]};
 filter2arg({colorspace, Colorspace}, Width, Height, _AllFilters) ->
-    {Width, Height, ["-colorspace ", $", z_utils:os_escape(Colorspace), $"]};
+    {Width, Height, ["-colorspace ", $", z_filelib:os_escape(Colorspace), $"]};
 filter2arg({density, DPI}, Width, Height, _AllFilters) when is_integer(DPI) ->
     {Width, Height, ["-set units PixelsPerInch -density ", integer_to_list(DPI)]};
 filter2arg({width, _}, Width, Height, _AllFilters) ->
@@ -413,7 +413,7 @@ filter2arg({resize, EndWidth, EndHeight, true}, Width, Height, _AllFilters)
   when Width < EndWidth andalso Height < EndHeight ->
     % Scale up
     EArg = ["-resize ", integer_to_list(EndWidth),$x,integer_to_list(EndHeight)],
-    RArg = ["-thumbnail ", z_utils:os_escape([integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$!])],
+    RArg = ["-thumbnail ", z_filelib:os_escape([integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$!])],
     {EndWidth, EndHeight, [EArg, 32, RArg]};
 filter2arg({extent, EndWidth, EndHeight}, Width, Height, _AllFilters) when EndWidth == undefined orelse EndHeight == undefined ->
     {Width, Height, []};
@@ -423,7 +423,7 @@ filter2arg({extent, EndWidth, EndHeight}, Width, Height, _AllFilters) when Width
     {EndWidth, EndHeight, [GArg, 32, EArg]};
 filter2arg({resize, EndWidth, EndHeight, _}, _Width, _Height, _AllFilters) ->
     GArg = "-gravity NorthWest",
-    RArg = ["-thumbnail ", z_utils:os_escape([integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$!])],
+    RArg = ["-thumbnail ", z_filelib:os_escape([integer_to_list(EndWidth),$x,integer_to_list(EndHeight),$!])],
     {EndWidth, EndHeight, [GArg, 32, RArg]};
 filter2arg({crop, none}, Width, Height, _AllFilters) ->
     {Width, Height, []};
@@ -465,7 +465,7 @@ filter2arg({removebg, MatteFuzz}, Width, Height, AllFilters) ->
     % Check if this is also contains a matter color.
     {Matte, Fuzz} = case binary:split(z_convert:to_binary(MatteFuzz), <<",">>) of
         [ M, F ] ->
-            {"-mattecolor "++z_utils:os_escape(z_convert:to_list(M)), z_convert:to_integer(F)};
+            {"-mattecolor "++z_filelib:os_escape(z_convert:to_list(M)), z_convert:to_integer(F)};
         F ->
             {"-matte", z_convert:to_integer(F)}
     end,

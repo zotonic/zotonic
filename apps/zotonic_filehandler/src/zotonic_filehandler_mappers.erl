@@ -34,7 +34,6 @@
 ]).
 
 
--include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
 
 
@@ -207,9 +206,9 @@ compile_yecc(Filename) ->
         true ->
             zotonic_filehandler:terminal_notifier("Yecc: " ++ filename:basename(InPath)),
             Cmd = "erlc -o "
-                ++ z_utils:os_escape(filename:dirname(InPath))
+                ++ z_filelib:os_escape(filename:dirname(InPath))
                 ++ " "
-                ++ z_utils:os_escape(InPath),
+                ++ z_filelib:os_escape(InPath),
             zotonic_filehandler_compile:run_cmd(Cmd);
         false ->
             ok
@@ -239,9 +238,9 @@ compile_sass(Application, SrcPath) ->
                             zotonic_filehandler:terminal_notifier("Sass: " ++ MainFile),
                             Cmd = [
                                 sass_command(),
-                                z_utils:os_escape(InFile),
+                                z_filelib:os_escape(InFile),
                                 " ",
-                                z_utils:os_escape(OutFile)
+                                z_filelib:os_escape(OutFile)
                             ],
                             zotonic_filehandler_compile:run_cmd(Cmd);
                         {error, _} = Error ->
@@ -300,9 +299,9 @@ compile_less(Application, SrcPath) ->
                 ok ->
                     Cmd = [
                         "lessc ",
-                        z_utils:os_escape(InPath),
+                        z_filelib:os_escape(InPath),
                         " > ",
-                        z_utils:os_escape(OutPath)
+                        z_filelib:os_escape(OutPath)
                     ],
                     zotonic_filehandler_compile:run_cmd(Cmd);
                 {error, _} = Error ->
@@ -327,9 +326,9 @@ compile_coffee(Application, SrcPath) ->
                     zotonic_filehandler:terminal_notifier("Coffee: " ++ filename:basename(InPath)),
                     Cmd = [
                         "coffee -o ",
-                        z_utils:os_escape(OutPath),
+                        z_filelib:os_escape(OutPath),
                         " -c ",
-                        z_utils:os_escape(InPath)
+                        z_filelib:os_escape(InPath)
                     ],
                     zotonic_filehandler_compile:run_cmd(Cmd);
                 {error, _} = Error ->
@@ -350,7 +349,7 @@ run_build(Application, {make, Makefile}) ->
         ]}
     ],
     BuildDir = filename:dirname(Makefile),
-    MakeCmd = "cd " ++ z_utils:os_escape(BuildDir) ++ "; sh -c make " ++ z_utils:os_escape(Makefile),
+    MakeCmd = "cd " ++ z_filelib:os_escape(BuildDir) ++ "; sh -c make " ++ z_filelib:os_escape(Makefile),
     zotonic_filehandler_compile:run_cmd(MakeCmd, CmdOpts, #{ ignore_dir => BuildDir }).
 
 %% ---------------------------------------- Support routines ------------------------------

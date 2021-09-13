@@ -28,7 +28,7 @@ CONFIG1 = case os:getenv("ZOTONIC_APPS") of
         C2
 end,
 
-Version = os:cmd("git describe --tags"),
-file:write_file("VERSION", Version),
+% Version = os:cmd("git describe --tags"),
+% file:write_file("VERSION", Version),
 
 CONFIG1.

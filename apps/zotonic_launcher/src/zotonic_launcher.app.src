@@ -16,5 +16,15 @@
    [
     zotonic_launcher_app,
     zotonic_launcher_sup
-   ]}
+   ]},
+  {doc, "doc"},
+  {licenses, ["Apache 2.0"]},
+  {links, [
+    {"Website", "https://zotonic.com/"},
+    {"GitHub", "https://github.com/zotonic/zotonic"}
+  ]},
+  {include_files, [
+    "bin/zotonic",
+    "bin/zotonic.escript"
+  ]}
  ]}.

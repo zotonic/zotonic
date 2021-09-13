@@ -23,6 +23,7 @@ compile_commands.json
 *.wmtrace
 *.swp
 *.mo
+*.bck
 
 priv/*.config
 priv/filezcache
@@ -45,6 +46,11 @@ apps/*/priv/translations/template/*.pot
 
 apps/*/priv/lib/cotonic/
 apps/*/priv/lib-src/cotonic/
+apps/*/rebar.lock
+apps/*/doc
+
+release/packages/zotonic_apps/rebar.lock
+release/packages/zotonic_apps/rebar.config
 
 apps_user/*
 
@@ -57,5 +63,3 @@ zotonic.tmproj
 .sass-cache
 
 docker-data
-
-VERSION

@@ -32,7 +32,6 @@
     reload_module/1
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("kernel/include/file.hrl").
 
 % The state record for this server
