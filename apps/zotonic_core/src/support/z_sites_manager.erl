@@ -53,7 +53,7 @@
     get_site_config_overrides/1,
     put_site_config_overrides/2,
 
-    filechanged_observer/1
+    filechanged_observer/2
 ]).
 
 %% Testing
@@ -358,8 +358,8 @@ wait_for_running_1(Site, _State, Timeout) ->
 
 %% @doc Called by the zotonic_filehandler after a file has been changed. This relays the
 %% file change event to all sites using the #filewatcher{} event.
--spec filechanged_observer(#zotonic_filehandler_filechange{}) -> ok.
-filechanged_observer(#zotonic_filehandler_filechange{} = ChangeEvent) ->
+-spec filechanged_observer(#zotonic_filehandler_filechange{}, term()) -> ok.
+filechanged_observer(#zotonic_filehandler_filechange{} = ChangeEvent, _CallContext) ->
     #zotonic_filehandler_filechange{
         verb = Verb,
         file = File,
