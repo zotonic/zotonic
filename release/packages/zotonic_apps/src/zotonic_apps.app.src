@@ -1,7 +1,7 @@
 %% -*- mode: erlang -*-
 {application, zotonic_apps,
  [{description, "All Zotonic applications from the Zotonic core umbrella project."},
-  {vsn, {file, "../../VERSION"}},
+  {vsn, {file, "../../../VERSION"}},
   {registered, []},
   {mod, {zotonic_apps_app, []}},
   {applications, [
@@ -11,5 +11,11 @@
   {modules, [
     zotonic_apps_app,
     zotonic_apps_sup
+   ]},
+   {doc, "doc"},
+   {licenses, ["Apache-2.0"]},
+   {links, [
+       {"Website", "https://zotonic.com/"},
+       {"GitHub", "https://github.com/zotonic/zotonic"}
    ]}
  ]}.

@@ -12,7 +12,7 @@
     zotonic_notifier
   ]},
   {doc, "doc"},
-  {licenses, ["Apache 2.0"]},
+  {licenses, ["Apache-2.0"]},
   {links, [
     {"Website", "https://zotonic.com/"},
     {"GitHub", "https://github.com/zotonic/zotonic"}
