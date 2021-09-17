@@ -47,6 +47,8 @@
     duplicate/3,
     touch/2,
 
+    make_authoritative/2,
+
     exists/2,
 
     is_visible/2, is_editable/2, is_deletable/2, is_linkable/2,
@@ -492,6 +494,33 @@ touch(Id, Context) ->
     ) of
         1 -> {ok, Id};
         0 -> {error, enoent}
+    end.
+
+
+%% @doc Make a resource authoritative. This removes the uri from the resource and sets the
+%% resource as 'authoritative'. The uri is added to the m_rsc_gone delete log.
+-spec make_authoritative( m_rsc:resource(), z:context() ) -> {ok, resource_id()} | {error, term()}.
+make_authoritative(RscId, Context)  ->
+    case m_rsc:rid(RscId, Context) of
+        undefined ->
+            {error, enoent};
+        Id ->
+            case m_rsc:p_no_acl(Id, is_authoritative, Context) of
+                true ->
+                    {error, authoritative};
+                false ->
+                    case z_acl:rsc_editable(Id, Context) of
+                        true ->
+                            {ok, _} = m_rsc_gone:gone(Id, Id, Context),
+                            NewProps = #{
+                                <<"is_authoritative">> => true,
+                                <<"uri">> => undefined
+                            },
+                            m_rsc_update:update(Id, NewProps, Context);
+                        false ->
+                            {error, eacces}
+                    end
+            end
     end.
 
 

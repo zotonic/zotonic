@@ -33,6 +33,7 @@
     observe_media_viewer/2,
     observe_media_stillimage/2,
     observe_media_import/2,
+    observe_media_import_medium/2,
     event/2,
 
     spawn_preview_create/3
@@ -132,7 +133,7 @@ observe_rsc_update(#rsc_update{}, {error, _} = Error, _Context) ->
 
 
 %% @doc Return the media viewer for the embedded video (that is, when it is an embedded media).
-%% @spec observe_media_viewer(Notification, Context) -> undefined | {ok, Html}
+-spec observe_media_viewer(#media_viewer{}, z:context()) -> undefined | {ok, template_compiler:render_result()}.
 observe_media_viewer(#media_viewer{props= #{ <<"mime">> := ?EMBED_MIME } = Props}, Context) ->
     case maps:get(<<"video_embed_code">>, Props, undefined) of
         EmbedCode when is_binary(EmbedCode) ->
@@ -153,7 +154,7 @@ observe_media_viewer(#media_viewer{}, _Context) ->
 
 
 %% @doc Return the filename of a still image to be used for image tags.
-%% @spec observe_media_stillimage(Notification, _Context) -> undefined | {ok, Filename}
+-spec observe_media_stillimage(#media_stillimage{}, z:context()) -> undefined | {ok, file:filename_all()}.
 observe_media_stillimage(#media_stillimage{id=Id, props= #{ <<"mime">> := ?EMBED_MIME } = Props}, Context) ->
     case m_rsc:p(Id, depiction, Context) of
         undefined ->
@@ -177,6 +178,51 @@ observe_media_stillimage(#media_stillimage{id=Id, props= #{ <<"mime">> := ?EMBED
     end;
 observe_media_stillimage(#media_stillimage{}, _Context) ->
     undefined.
+
+
+%% @doc Import a embedded medium for a rsc_import. Sanitize the provided html.
+-spec observe_media_import_medium(#media_import_medium{}, z:context()) -> undefined | ok.
+observe_media_import_medium(#media_import_medium{
+        id = Id,
+        medium = #{
+            <<"mime">> := ?EMBED_MIME,
+            <<"video_embed_code">> := EmbedCode,
+            <<"video_embed_service">> := EmbedService,
+            <<"video_embed_id">> := EmbedId
+        } = Medium }, Context) ->
+    MediaProps = #{
+        <<"mime">> => ?EMBED_MIME,
+        <<"video_embed_code">> => z_sanitize:html(EmbedCode, Context),
+        <<"video_embed_service">> => z_string:to_name(EmbedService),
+        <<"video_embed_id">> => EmbedId,
+        <<"height">> => as_int(maps:get(<<"height">>, Medium, undefined)),
+        <<"width">> => as_int(maps:get(<<"width">>, Medium, undefined)),
+        <<"orientation">> => as_int(maps:get(<<"orientation">>, Medium, undefined)),
+        <<"media_import">> => z_sanitize:uri( maps:get(<<"media_import">>, Medium, undefined ))
+    },
+    OldMediaProps = m_media:get(Id, Context),
+    case OldMediaProps of
+        #{ <<"mime">> := ?EMBED_MIME } ->
+            case        z_utils:are_equal(maps:get(<<"video_embed_code">>, OldMediaProps, undefined), EmbedCode)
+                andalso z_utils:are_equal(maps:get(<<"video_embed_service">>, OldMediaProps, undefined), EmbedService)
+            of
+                true ->
+                    ok;
+                false ->
+                    ok = m_media:replace(Id, MediaProps, Context),
+                    spawn_preview_create(Id, MediaProps, Context)
+            end;
+        _ ->
+            ok = m_media:replace(Id, MediaProps, Context),
+            spawn_preview_create(Id, MediaProps, Context)
+    end,
+    ok;
+observe_media_import_medium(#media_import_medium{}, _Context) ->
+    undefined.
+
+
+as_int(undefined) -> undefined;
+as_int(N) -> z_convert:to_integer(N).
 
 
 %% @doc Recognize youtube and vimeo URLs, generate the correct embed code

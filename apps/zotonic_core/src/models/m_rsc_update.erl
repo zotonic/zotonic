@@ -512,10 +512,12 @@ update_imported_check(RscUpd, PropsOrFun, Context) ->
     update_editable_check(RscUpd, PropsOrFun, Context).
 
 
-update_editable_check(#rscupd{id = Id, is_acl_check = true} = RscUpd, PropsOrFun, Context) when is_integer(Id) ->
+update_editable_check(#rscupd{id = Id, is_acl_check = true, is_import = IsImport } = RscUpd, PropsOrFun, Context) when is_integer(Id) ->
     case z_acl:rsc_editable(Id, Context) of
         true ->
             update_normalize_props(RscUpd, PropsOrFun, Context);
+        false when IsImport ->
+            {error, eacces};
         false ->
             case m_rsc:p_no_acl(Id, is_authoritative, Context) of
                 false -> {error, non_authoritative};

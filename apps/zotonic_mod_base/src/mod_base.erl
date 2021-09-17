@@ -158,12 +158,13 @@ last(Path) -> binary:last(Path).
 
 
 observe_hierarchy_updated(#hierarchy_updated{ root_id = <<"$category">> }, Context) ->
-    % Something changed to the category hierarchy - let m_categoruy resync the pivot
+    % Something changed to the category hierarchy - let m_category resync the pivot
     m_category:renumber(Context);
 observe_hierarchy_updated(#hierarchy_updated{ root_id = _ }, _Context) ->
     ok.
 
-manage_schema(_, _Context) ->
+manage_schema(_, Context) ->
+    m_rsc_import:install(Context),
     #datamodel{
         categories = [
             {organization, undefined, #{

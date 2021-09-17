@@ -97,7 +97,7 @@ get_new_location(Id, Context) when is_integer(Id) ->
 
 
 %% @doc Check if the resource used to exist.
--spec is_gone(integer()|undefined, z:context()) -> boolean().
+-spec is_gone(m_rsc:resource_id()|undefined, z:context()) -> boolean().
 is_gone(undefined, _Context) ->
     false;
 is_gone(Id, Context) when is_integer(Id) ->
@@ -117,7 +117,7 @@ is_gone_uri(Uri, Context) ->
 
 
 %% @doc Copy a resource to the 'gone' table, use the current user as the modifier (deleter).
--spec gone(integer(), z:context()) -> {ok, integer()} | {error, term()}.
+-spec gone(m_rsc:resource_id(), z:context()) -> {ok, integer()} | {error, term()}.
 gone(Id, Context) when is_integer(Id) ->
     gone(Id, undefined, Context).
 
@@ -143,9 +143,6 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                         ],
                         case z_db:q1("select count(*) from rsc_gone where id = $1", [Id], Ctx) of
                             1 ->
-                                lager:warning(z_context:lager_md(Ctx),
-                                              "[~p] Second rsc_gone entry for id ~p",
-                                              [z_context:site(Ctx), Id]),
                                 {ok, _} = z_db:update(rsc_gone, Id, Props1, Ctx),
                                 {ok, Id};
                             0 ->

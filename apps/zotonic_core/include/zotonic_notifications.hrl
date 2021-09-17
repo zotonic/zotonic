@@ -767,13 +767,13 @@
 
 %% @doc Notification for fetching #media_import_props{} from different modules.
 %% This is used by z_media_import.erl for fetching properties and medium information (map)
-%% about resources.
+%% about resources.  The metadata is the result returned by z_url_metadata.
 %% Type: map
 -record(media_import, {
     url :: binary(),
     host_rev :: list(binary()),
     mime :: binary(),
-    metadata :: tuple()
+    metadata :: tuple() % z_url_metadata:url_metadata()
 }).
 
 % Return value of the media_import notification
@@ -826,6 +826,17 @@
     archive_file,
     options :: list(),
     medium :: z_media_identify:media_info()
+}).
+
+%% @doc Notification to import a medium record from external source. This is called for non-file
+%% medium records, for example embedded video.  If the medium record is not recognized then it
+%% will not be imported. The handling module is responsible for sanitizing and inserting the medium
+%% record.
+%% Type: first
+%% Return: ``ok | {error, term()}``.
+-record(media_import_medium, {
+    id :: m_rsc:resource_id(),
+    medium :: map()
 }).
 
 %% @doc Notification that a medium file has been changed (notify)
