@@ -1168,7 +1168,10 @@ set_resource_headers(Id, Context) when is_integer(Id) ->
     Uri = z_dispatcher:url_for(id, [ {id, Id} ], set_language('x-default', Context)),
     Hs = [ {<<"x-resource-uri">>, abs_url(Uri, Context)} ],
     Hs1 = z_notifier:foldl(#resource_headers{ id = Id }, Hs, Context),
-    set_resp_headers(Hs1, Context).
+    set_resp_headers(Hs1, Context);
+set_resource_headers(_Id, Context) ->
+    Hs = z_notifier:foldl(#resource_headers{ id = undefined }, [], Context),
+    set_resp_headers(Hs, Context).
 
 
 %% @doc Set a cookie value with default options.
