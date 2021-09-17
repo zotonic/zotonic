@@ -142,10 +142,29 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
             MaxAge = z_context:get(max_age, Context1, ?MAX_AGE),
             Context2 = set_cache_control_public(is_public(Info#z_file_info.acls, Context1), MaxAge, Context1),
             Context3 = set_content_policy(Info, Context2),
-            {z_file_request:content_stream(Info, cowmachine_req:resp_content_encoding(Context3)), Context3}
+            Context4 = z_context:set_resource_headers(maybe_id(Context3), Context3),
+            {z_file_request:content_stream(Info, cowmachine_req:resp_content_encoding(Context4)), Context4}
     end.
 
 %%%%% -------------------------- Support functions ------------------------
+
+maybe_id(Context) ->
+    case z_context:get(?MODULE, Context) of
+        {error, _} ->
+            {false, Context};
+        #z_file_info{acls=Acls} ->
+            case lists:dropwhile(
+                fun
+                    (Id) when is_integer(Id) -> false;
+                    (_) -> true
+                end,
+                Acls)
+            of
+                [ Id | _ ] -> Id;
+                [] -> undefined
+            end
+    end.
+
 
 set_content_dispostion(inline, Context) ->
     z_context:set_resp_header(<<"content-disposition">>, <<"inline">>, Context);
