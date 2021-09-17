@@ -123,6 +123,8 @@
     set_noindex_header/1,
     set_noindex_header/2,
 
+    set_resource_headers/2,
+
     set_security_headers/1,
     set_cors_headers/2,
 
@@ -1159,6 +1161,19 @@ set_noindex_header(Force, Context) ->
        true -> set_resp_header(<<"x-robots-tag">>, <<"noindex">>, Context);
        _ -> Context
     end.
+
+%% @doc Set resource specific headers. Examples are the non-informational resource uri and WebSub headers.
+-spec set_resource_headers( m_rsc:resource_id() | undefined, z:context() ) -> z:context().
+set_resource_headers(Id, Context) ->
+    Hs = case m_rsc:p_no_acl(Id, uri, Context) of
+        undefined ->
+            [];
+        Uri ->
+            [ {<<"x-resource-uri">>, Uri} ]
+    end,
+    Hs1 = z_notifier:foldl(#resource_headers{ id = Id }, Hs, Context),
+    set_resp_headers(Hs1, Context).
+
 
 %% @doc Set a cookie value with default options.
 -spec set_cookie(binary(), binary(), z:context()) -> z:context().

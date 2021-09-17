@@ -43,12 +43,23 @@
 %% @doc Check and possibly modify the http response security headers
 %% All headers are in lowercase.
 %% Type: first
--record(security_headers, { headers :: list( {binary(), binary()} ) }).
+-record(security_headers, {
+    headers :: list( {binary(), binary()} )
+}).
 
 %% @doc Set CORS headers on the HTTP response.
 %% Type: first
--record(cors_headers, { headers :: list( {binary(), binary()} ) }).
+-record(cors_headers, {
+    headers :: list( {binary(), binary()} )
+}).
 
+%% @doc Let all modules add resource specific response headers to the request.
+%% The accumulator is the list of headers to be set.
+%% Type: foldl
+%% Return: ``list( {binary(), binary()} )``
+-record(resource_headers, {
+    id :: m_rsc:resource_id() | undefined
+}).
 
 %% @doc Access log event for http. Called from the z_stats.
 %% Type: notify_sync

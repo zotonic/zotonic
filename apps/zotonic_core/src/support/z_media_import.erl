@@ -111,8 +111,12 @@ update_1(_, RscId, #media_import_props{medium_props=MP, medium_url=MediumUrl} = 
 
 %% @doc Inspect an url, return opaque metadata.
 -spec url_inspect(string()|binary(), #context{}) -> {ok, #url_metadata{}} | {error, term()}.
-url_inspect(Url, _Context) ->
-    z_url_metadata:fetch(Url).
+url_inspect(Url, Context) ->
+    Options = case m_site:environment(Context) of
+        development -> [ insecure ];
+        _ -> []
+    end,
+    z_url_metadata:fetch(Url, Options).
 
 
 %% @doc Find possible rsc/medium mappings for the url or fetched url metadata

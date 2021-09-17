@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2015 Marc Worrell
+%% @copyright 2009-2021 Marc Worrell
 %% @doc Basic page
 
-%% Copyright 2009-2015 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -82,7 +82,8 @@ is_authorized(Context) ->
 %% @doc Show the page.  Add a noindex header when requested by the editor.
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Id = z_controller_helper:get_id(Context),
-    Context1 = z_context:set_noindex_header(m_rsc:p_no_acl(Id, seo_noindex, Context), Context),
+    Context0 = z_context:set_noindex_header(m_rsc:p_no_acl(Id, seo_noindex, Context), Context),
+    Context1 = z_context:set_resource_headers(Id, Context0),
 
 	%% EXPERIMENTAL:
 	%%
