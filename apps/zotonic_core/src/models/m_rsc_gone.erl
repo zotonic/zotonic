@@ -32,7 +32,9 @@
     is_gone/2,
     is_gone_uri/2,
     gone/2,
-    gone/3
+    gone/3,
+
+    install/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -163,5 +165,52 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                     % Duplicate key - ignore (race condition)
                     {ok, Id};
                 Other -> Other
+            end
+    end.
+
+
+
+%% @doc Install or upgrade the rsc_gone table.
+-spec install( z:context() ) -> ok.
+install(Context) ->
+    % Table: rsc_gone
+    % Tracks deleted or moved resources, adding "410 gone" support
+    % Also contains new id or new url for 301 moved permanently replies.
+    % mod_backup is needed to recover a deleted resource's content.
+    case z_db:table_exists(rsc_gone, Context) of
+        false ->
+            [] = z_db:q("
+                CREATE TABLE rsc_gone
+                (
+                    id bigint not null,
+                    new_id bigint,
+                    new_uri character varying(2048),
+                    version int not null,
+                    uri character varying(2048),
+                    name character varying(80),
+                    page_path character varying(80),
+                    is_authoritative boolean NOT NULL DEFAULT true,
+                    creator_id bigint,
+                    modifier_id bigint,
+                    created timestamp with time zone NOT NULL DEFAULT now(),
+                    modified timestamp with time zone NOT NULL DEFAULT now(),
+                    CONSTRAINT rsc_gone_pkey PRIMARY KEY (id)
+                )",
+                Context),
+
+            [] = z_db:q("CREATE INDEX rsc_gone_name_key ON rsc_gone(name)", Context),
+            [] = z_db:q("CREATE INDEX rsc_gone_uri_key ON rsc_gone(uri)", Context),
+            [] = z_db:q("CREATE INDEX rsc_gone_page_path_key ON rsc_gone(page_path)", Context),
+            [] = z_db:q("CREATE INDEX rsc_gone_modified_key ON rsc_gone(modified)", Context),
+            z_db:flush(Context),
+            ok;
+        true ->
+            % Check for rsc_gone_uri_key
+            case z_db:key_exists(rsc_gone, rsc_gone_uri_key, Context) of
+                false ->
+                    [] = z_db:q("CREATE INDEX rsc_gone_uri_key ON rsc_gone(uri)", Context),
+                    ok;
+                true ->
+                    ok
             end
     end.

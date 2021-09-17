@@ -164,7 +164,6 @@ observe_hierarchy_updated(#hierarchy_updated{ root_id = _ }, _Context) ->
     ok.
 
 manage_schema(_, Context) ->
-    m_rsc_import:install(Context),
     #datamodel{
         categories = [
             {organization, undefined, #{
