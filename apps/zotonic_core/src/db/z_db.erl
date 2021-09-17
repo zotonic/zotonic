@@ -1261,7 +1261,8 @@ constraint_exists(Table, Constraint, Context) ->
               and constraint_schema = $2
               and table_name = $3
               and constraint_name = $4",
-            [Db, Schema, Table, z_convert:to_binary(Constraint)]),
+            [Db, Schema, Table, z_convert:to_binary(Constraint)],
+            Context),
     HasConstraint >= 1.
 
 
