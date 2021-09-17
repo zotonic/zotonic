@@ -168,9 +168,9 @@ create_empty(Uri, Props, Options, Context) ->
                             <<"user_id">> => z_acl:user(Ctx),
                             <<"options">> => Options
                         },
-                        z_db:insert(rsc_import, Import, Context);
+                        z_db:insert(rsc_import, Import, Ctx);
                     {error, _} = Error ->
-                        Error
+                        {rollback, Error}
                 end
             end, Context);
         RscId ->

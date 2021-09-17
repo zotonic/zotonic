@@ -203,7 +203,7 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
     case has_connection(Context) of
         true ->
             case with_connection(
-              fun(C) ->
+                fun(C) ->
                     Context1 = Context#context{dbc=C},
                     DbDriver = z_context:db_driver(Context),
                     try
@@ -229,8 +229,8 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                             DbDriver:squery(C, "ROLLBACK", ?TIMEOUT),
                             {rollback, {Why, S}}
                     end
-              end,
-              Context)
+                end,
+                Context)
             of
                 {rollback, _} = Result ->
                     z_notifier:notify_queue_flush(Context),

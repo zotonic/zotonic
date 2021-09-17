@@ -627,6 +627,8 @@ update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}}, #rscup
 
     % Return the updated or inserted id
     {ok, NewId};
+update_result({rollback, {error, _} = Er}, _RscUpd, _Context) ->
+    Er;
 update_result({rollback, {_Why, _} = Er}, _RscUpd, _Context) ->
     {error, Er};
 update_result({error, _} = Error, _RscUpd, _Context) ->
