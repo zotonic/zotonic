@@ -68,7 +68,15 @@ event(#submit{message={media_url_import, Args}}, Context) ->
 media_insert_rsc_props(ArgsEmbed, Context) ->
     SubjectId = m_rsc:rid(proplists:get_value(subject_id, ArgsEmbed), Context),
     CGId = m_rsc:rid(proplists:get_value(content_group_id, ArgsEmbed), Context),
-    add_qprops(SubjectId, CGId, Context).
+    Props = add_qprops(SubjectId, CGId, Context),
+    case z_convert:to_bool( z_context:get_q(<<"is_authoritative">>, Context) ) of
+        true ->
+            Props#{
+                <<"is_authoritative">> => true
+            };
+        false ->
+            Props
+    end.
 
 add_qprops(undefined, CGId, Context) ->
     Props = #{

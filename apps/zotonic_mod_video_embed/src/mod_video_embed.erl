@@ -155,25 +155,15 @@ observe_media_viewer(#media_viewer{}, _Context) ->
 
 %% @doc Return the filename of a still image to be used for image tags.
 -spec observe_media_stillimage(#media_stillimage{}, z:context()) -> undefined | {ok, file:filename_all()}.
-observe_media_stillimage(#media_stillimage{id=Id, props= #{ <<"mime">> := ?EMBED_MIME } = Props}, Context) ->
-    case m_rsc:p(Id, depiction, Context) of
-        undefined ->
-            case maps:get(<<"preview_filename">>, Props, undefined) of
-                PreviewFile when is_binary(PreviewFile), PreviewFile =/= <<>> ->
-                    {ok, PreviewFile};
-                _ ->
-                    case maps:get(video_embed_service, Props, undefined) of
-                        <<"youtube">> -> {ok, <<"lib/images/youtube.jpg">>};
-                        <<"vimeo">> -> {ok, <<"lib/images/vimeo.jpg">>};
-                        _ -> {ok, <<"lib/images/embed.jpg">>}
-                    end
-            end;
-        DepictionProps ->
-            case maps:get(<<"filename">>, DepictionProps, undefined) of
-                Filename when is_binary(Filename), Filename =/= <<>> ->
-                    {ok, Filename};
-                _ ->
-                    undefined
+observe_media_stillimage(#media_stillimage{id=_Id, props= #{ <<"mime">> := ?EMBED_MIME } = Props}, _Context) ->
+    case maps:get(<<"preview_filename">>, Props, undefined) of
+        PreviewFile when is_binary(PreviewFile), PreviewFile =/= <<>> ->
+            {ok, PreviewFile};
+        _ ->
+            case maps:get(<<"video_embed_service">>, Props, undefined) of
+                <<"youtube">> -> {ok, <<"lib/images/youtube.jpg">>};
+                <<"vimeo">> -> {ok, <<"lib/images/vimeo.jpg">>};
+                _ -> {ok, <<"lib/images/embed.jpg">>}
             end
     end;
 observe_media_stillimage(#media_stillimage{}, _Context) ->

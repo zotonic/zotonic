@@ -92,6 +92,7 @@ full(Id, Context) when is_integer(Id) ->
             Rsc1 = filter_empty(Rsc0),
             Rsc = replace_ids_with_uris(Rsc1, Context),
             Medium = m_media:get(Id, Context),
+            DepictionUrl = depiction_url(m_media:depiction(Id, Context), Context),
             PreviewUrl = preview_url(Medium, Context),
             DownloadUrl = download_url(Medium, Context),
 
@@ -112,6 +113,7 @@ full(Id, Context) when is_integer(Id) ->
                 <<"medium">> => Medium,
                 <<"medium_url">> => DownloadUrl,
                 <<"preview_url">> => PreviewUrl,
+                <<"depiction_url">> => DepictionUrl,
                 <<"edges">> => edges(Id, Context)
             },
 
@@ -122,28 +124,40 @@ full(Id, Context) ->
     full(m_rsc:rid(Id, Context), Context).
 
 
+%% @doc Return the list of all outgoing edges, remove edges where the predicate
+%% or object-resource is not visible.
 edges(Id, Context) ->
     Edges = m_edge:get_edges(Id, Context),
     lists:foldl(
         fun({Pred, Es}, Acc) ->
-            PredRsc = related_rsc(Pred, Context),
-            PredB = z_convert:to_binary(Pred),
-            Os = lists:map(
-                fun(E) ->
-                    ObjId = proplists:get_value(object_id, E),
-                    #{
-                        <<"object_id">> => related_rsc(ObjId, Context),
-                        <<"seq">> => proplists:get_value(seq, E),
-                        <<"created">> => proplists:get_value(created, E)
-                    }
-                end,
-                Es),
-            Acc#{
-                PredB => #{
-                    <<"predicate">> => PredRsc,
-                    <<"objects">> => Os
-                }
-            }
+            case z_acl:rsc_visible(Pred, Context) of
+                true ->
+                    PredRsc = related_rsc(Pred, Context),
+                    PredB = z_convert:to_binary(Pred),
+                    Os = lists:filtermap(
+                        fun(E) ->
+                            ObjId = proplists:get_value(object_id, E),
+                            case z_acl:rsc_visible(ObjId, Context) of
+                                true ->
+                                    {true, #{
+                                        <<"object_id">> => related_rsc(ObjId, Context),
+                                        <<"seq">> => proplists:get_value(seq, E),
+                                        <<"created">> => proplists:get_value(created, E)
+                                    }};
+                                false ->
+                                    false
+                            end
+                        end,
+                        Es),
+                    Acc#{
+                        PredB => #{
+                            <<"predicate">> => PredRsc,
+                            <<"objects">> => Os
+                        }
+                    };
+                false ->
+                    false
+            end
         end,
         #{},
         Edges).
@@ -232,6 +246,18 @@ preview_url(_, _Context) ->
 download_url(#{ <<"id">> := Id, <<"size">> := Size }, Context) when Size > 0 ->
     z_dispatcher:url_for(media_attachment, [ {id, Id}, {absolute_url, true} ], Context);
 download_url(_, _Context) ->
+    undefined.
+
+
+% Used to make a depiction of the resource, might be the resource itself or an
+% attached 'depiction' edge. Useful for external sites to display a preview of the
+% resource.
+depiction_url(#{ <<"id">> := Id } = Medium, Context) ->
+    case z_acl:rsc_visible(Id, Context) of
+        true -> preview_url(Medium, Context);
+        false -> undefined
+    end;
+depiction_url(undefined, _Context) ->
     undefined.
 
 

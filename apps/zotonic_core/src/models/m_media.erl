@@ -172,7 +172,7 @@ get_by_filename(Filename, Context) ->
     end.
 
 
-%% @doc Get the medium record that depicts the resource id. "depiction" Predicates are preferred, when
+%% @doc Get the medium record that depicts the resource id. "depiction" Predicates are preferred, if
 %% they are missing then the attached medium record itself is returned.  We must be able to generate a preview
 %% from the medium.
 -spec depiction( m_rsc:resource_id(), z:context() ) -> map() | undefined.
@@ -181,7 +181,7 @@ depiction(Id, Context) ->
         z_depcache:memo(
             fun() -> depiction([Id], [], Context) end,
             {depiction, Id},
-            ?WEEK, [Id], Context)
+            ?WEEK, [Id, {medium, Id}], Context)
     catch
         exit:{timeout, _} ->
             undefined

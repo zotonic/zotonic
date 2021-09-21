@@ -29,6 +29,8 @@
 -export([
     mark_imported/3,
 
+    fetch_preview/2,
+
     create_empty/2,
     create_empty/3,
 
@@ -44,6 +46,8 @@
     reimport/2,
     reimport/3,
 
+    update_medium_uri/3,
+
     install/1
 ]).
 
@@ -52,7 +56,9 @@
                 | {props_default, map()}                % Default properties
                 | {import_edges, non_neg_integer()}     % Number of edge-redirections to import
                 | is_import_deleted                     % Set if deleted resources must be re-imported
-                | {is_import_deleted, boolean()}.
+                | {is_import_deleted, boolean()}
+                | is_authoritative                      % If set then make a local copy, do not save uri
+                | {is_authoritative, boolean()}.
 -type options() :: [ option() ].
 
 -type import_result() :: {ok, {m_rsc:resource_id(), [ m_rsc:resource_id() ]}}
@@ -154,12 +160,22 @@ create_empty(Uri, Props, Options, Context) ->
                 true -> Props
             end,
             Props2 = Props1#{
-                <<"is_authoritative">> => false,
-                <<"is_published">> => false,
-                <<"uri">> => Uri
+                <<"is_published">> => false
             },
+            Props3 = case proplists:get_value(is_authoritative, Options, false) of
+                true ->
+                    Props2#{
+                        <<"is_authoritative">> => true,
+                        <<"uri">> => undefined
+                    };
+                false ->
+                    Props2#{
+                        <<"is_authoritative">> => false,
+                        <<"uri">> => Uri
+                    }
+            end,
             z_db:transaction(fun(Ctx) ->
-                case m_rsc:insert(Props2, Ctx) of
+                case m_rsc:insert(Props3, Ctx) of
                     {ok, NewId} ->
                         Import = #{
                             <<"id">> => NewId,
@@ -189,18 +205,28 @@ maybe_create_empty(Rsc, Options, Context) ->
                     Uri = maps:get(<<"uri">>, Rsc),
                     Props = #{
                         <<"category_id">> => Cat,
-                        <<"is_authoritative">> => false,
                         <<"is_published">> => false,
-                        <<"uri">> => Uri,
                         <<"title">> => maps:get(<<"title">>, Rsc, undefined),
                         <<"name">> => maps:get(<<"name">>, Rsc, undefined)
                     },
+                    Props2 = case proplists:get_value(is_authoritative, Options, false) of
+                        true ->
+                            Props#{
+                                <<"is_authoritative">> => true,
+                                <<"uri">> => undefined
+                            };
+                        false ->
+                            Props#{
+                                <<"is_authoritative">> => false,
+                                <<"uri">> => Uri
+                            }
+                    end,
                     UpdateOptions = [
                         {is_escape_texts, false},
                         is_import
                     ],
                     z_db:transaction(fun(Ctx) ->
-                        case m_rsc:insert(Props, UpdateOptions, Context) of
+                        case m_rsc:insert(Props2, UpdateOptions, Context) of
                             {ok, NewId} ->
                                 Import = #{
                                     <<"id">> => NewId,
@@ -267,7 +293,7 @@ import_referred_ids([ LocalId | Ids ], Acc, Context) ->
     end.
 
 
-%% @doc Reimport a non-authoritative resource using the saved import flags.
+%% @doc Reimport a non-authoritative resource or placeholder using the saved import flags.
 -spec reimport_recursive( m_rsc:resource_id(), z:context() ) -> import_result().
 reimport_recursive(Id, Context) ->
     case reimport(Id, Context) of
@@ -279,16 +305,18 @@ reimport_recursive(Id, Context) ->
     end.
 
 
-%% @doc Reimport a non-authoritative resource using the saved import flags.
+%% @doc Reimport a non-authoritative resource or placeholder using the saved import flags.
 -spec reimport( m_rsc:resource_id(), z:context() ) -> import_result().
 reimport(Id, Context) ->
     case z_db:select(rsc_import, Id, Context) of
         {ok, #{ <<"options">> := Options, <<"uri">> := Uri }} ->
-            case m_rsc:p(Id, is_authoritative, Context) of
+            case m_rsc:p(Id, is_authoritative, Context)
+                orelse m_rsc:is_a(Id, placeholder, Context)
+            of
                 true ->
                     {error, authoritative};
                 false ->
-                    case fetch_json(Uri) of
+                    case fetch_json(Uri, Context) of
                         {ok, JSON} ->
                             import_json(Uri, JSON, Options, Context);
                         {error, _} = Error ->
@@ -299,14 +327,22 @@ reimport(Id, Context) ->
             Error
     end.
 
+%% @doc Reimport a non-authoritative resource or placeholder using new import options.
 -spec reimport( m_rsc:resource_id(), options(), z:context() ) -> import_result().
 reimport(Id, Options, Context) ->
-    case m_rsc:p(Id, is_authoritative, Context) of
+    case m_rsc:p(Id, is_authoritative, Context)
+        orelse m_rsc:is_a(Id, placeholder, Context)
+    of
         true ->
             {error, authoritative};
         false ->
-            Uri = m_rsc:uri(Id, Context),
-            case fetch_json(Uri) of
+            Uri = case z_db:select(rsc_import, Id, Context) of
+                {ok, #{ <<"uri">> := ImportUri }} when is_binary(ImportUri), ImportUri /= <<>> ->
+                    ImportUri;
+                _ ->
+                    m_rsc:p(Id, uri_raw, Context)
+            end,
+            case fetch_json(Uri, Context) of
                 {ok, JSON} ->
                     import_json(Uri, JSON, Options, Context);
                 {error, _} = Error ->
@@ -314,22 +350,80 @@ reimport(Id, Options, Context) ->
             end
     end.
 
-fetch_json(Url) ->
-    Options = [
-        {accept, "application/json"},
-        {user_agent, "Zotonic"},
-        insecure
-    ],
-    case z_url_fetch:fetch(Url, Options) of
-        {ok, {_FinalUrl, _Hs, _Size, Body}} ->
-            JSON = jsxrecord:decode(Body),
-            {ok, JSON};
+-spec update_medium_uri( m_rsc:resource_id(), string() | binary(), z:context() ) -> {ok, m_rsc:resource_id()}.
+update_medium_uri(LocalId, Uri, Context) ->
+    case z_acl:rsc_editable(LocalId, Context) of
+        true ->
+            case fetch_json(Uri, Context) of
+                {ok, JSON} ->
+                    maybe_import_medium(LocalId, JSON, Context);
+                {error, _} = Error ->
+                    Error
+            end;
+        false ->
+            {error, eacces}
+    end.
+
+
+fetch_json(undefined, _Context) ->
+    {error, uri};
+fetch_json(Url, Context) ->
+    Site = z_context:site(Context),
+    case z_sites_dispatcher:get_site_for_url(Url) of
+        {ok, Site} ->
+            {error, local};
+        _ ->
+            Options = [
+                {accept, "application/json"},
+                {user_agent, "Zotonic"}
+            ],
+            case z_fetch:fetch(Url, Options, Context) of
+                {ok, {_FinalUrl, _Hs, _Size, Body}} ->
+                    JSON = jsxrecord:decode(Body),
+                    {ok, JSON};
+                {error, _} = Error ->
+                    lager:warning("Error fetching ~p: ~p", [Url, Error]),
+                    Error
+            end
+    end.
+
+
+%% @doc Fetch a sanitized version of the resource at the Url. Without edges, mapping of embedded
+%% ids etc. This is to be used as a simple & quick preview of the resource at the given Uri.
+-spec fetch_preview( string() | binary(), z:context() ) -> {ok, m_rsc:props()} | {error, term()}.
+fetch_preview(Url, Context) ->
+    case fetch_json(Url, Context) of
+        {ok, #{
+            <<"status">> := <<"ok">>,
+            <<"result">> := #{
+                <<"id">> := _RemoteId,
+                <<"resource">> := Rsc,
+                <<"uri">> := Uri
+            } = JSON
+        }} when is_map(Rsc) ->
+            case Rsc of
+                #{ <<"is_authoritative">> := false } ->
+                    {error, remote_not_authoritative};
+                _ ->
+                    Rsc1 = z_sanitize:escape_props_check(Rsc, Context),
+                    Rsc2 = Rsc1#{
+                        <<"is_authoritative">> => false,
+                        <<"uri">> => z_sanitize:uri(Uri)
+                    },
+                    % The URL might need to be fetched as a data: url, as the remote
+                    % resource might have non-anonymous access permissions.
+                    Result = #{
+                        <<"rsc">> => Rsc2,
+                        <<"depiction_url">> => maps:get(<<"depiction_url">>, JSON, undefined)
+                    },
+                    {ok, Result}
+            end;
         {error, _} = Error ->
-            lager:warning("Error fetching ~p: ~p", [Url, Error]),
             Error
     end.
 
-import_json(_Url, #{ <<"status">> := <<"ok">>, <<"result">> := JSON }, Options, Context) ->
+
+import_json(_Url, #{ <<"status">> := <<"ok">>, <<"result">> := JSON }, Options, Context) when is_map(JSON) ->
     import(JSON, Options, Context);
 import_json(Url, #{ <<"status">> := <<"error">> } = JSON, _Options, _Context) ->
     lager:warning("Remote returned error ~p: ~p", [Url, JSON]),
@@ -347,7 +441,7 @@ import_uri(Uri, Context) ->
 %% @doc Import a non-authoritative resource from a remote URI.
 -spec import_uri( string() | binary(), options(), z:context() ) -> import_result().
 import_uri(Uri, Options, Context) ->
-    case fetch_json(Uri) of
+    case fetch_json(Uri, Context) of
         {ok, JSON} ->
             import_json(Uri, JSON, Options, Context);
         {error, _} = Error ->
@@ -481,10 +575,18 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, Options, Context) ->
     % Set forced and default props
     Rsc2 = maps:merge(Rsc1, PropsForced),
     Rsc3 = maps:merge(PropsDefault, Rsc2),
-    Rsc4 = Rsc3#{
-        <<"uri">> => maps:get(<<"uri">>, RemoteRId),
-        <<"is_authoritative">> => false
-    },
+    Rsc4 = case maps:find(<<"is_authoritative">>, PropsForced) of
+        {ok, true} ->
+            Rsc3#{
+                <<"is_authoritative">> => true,
+                <<"uri">> => undefined
+            };
+        _ ->
+            Rsc3#{
+                <<"uri">> => maps:get(<<"uri">>, RemoteRId),
+                <<"is_authoritative">> => false
+            }
+    end,
 
     % Ensure that the is_published flag is present, defaults to true
     Rsc5 = case maps:find(<<"is_published">>, Rsc4) of

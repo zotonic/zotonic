@@ -89,6 +89,15 @@
                                 {_ Published _}
                             </label>
                         </div>
+
+                        {% if mi.props.is_authoritative|is_defined and not mi.props.is_authoritative %}
+                            <div class="checkbox form__is_authoritative">
+                                <label>
+                                    <input type="checkbox" id="{{ #published.index }}" name="is_authoritative" value="1">
+                                    {_ Make a local copy, do not follow the remote page _}
+                                </label>
+                            </div>
+                        {% endif %}
                     {% endif %}
                 </div>
 

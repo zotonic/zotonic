@@ -796,7 +796,8 @@
     rsc_props :: map(),
     medium_props :: z_media_identify:media_info(),
     medium_url = <<>> :: binary(),
-    preview_url :: binary() | undefined
+    preview_url :: binary() | undefined,
+    importer :: atom()
 }).
 
 %% @doc Notification to translate or map a file after upload, before insertion into the database
@@ -1131,4 +1132,13 @@
 % Simple mod_development notifications:
 % development_reload - Reload all template, modules etc
 % development_make - Perform a 'make' on Zotonic, reload all new beam files
+
+%% @doc Determine the URL fetch options for fetching the content of an URL. Used by z_fetch.erl.
+%% Type: first
+%% Return: ``z_url_fetch:options()`
+-record(url_fetch_options, {
+    host :: binary(),
+    url :: binary(),
+    options :: z_url_fetch:options()
+}).
 

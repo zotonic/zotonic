@@ -596,6 +596,7 @@ p(Id, Property, Context)
     orelse Property =:= <<"page_url_abs">>
     orelse Property =:= <<"is_a">>
     orelse Property =:= <<"uri">>
+    orelse Property =:= <<"uri_raw">>
     orelse Property =:= <<"is_authoritative">>
     orelse Property =:= <<"is_published">>
     orelse Property =:= <<"exists">>
@@ -675,6 +676,7 @@ p_no_acl(Id, <<"translation">>, Context) ->
     end;
 p_no_acl(Id, <<"default_page_url">>, Context) -> page_url(Id, Context);
 p_no_acl(Id, <<"uri">>, Context) -> uri(Id, Context);
+p_no_acl(Id, <<"uri_raw">>, Context) -> p_cached(Id, <<"uri">>, Context);
 p_no_acl(Id, <<"category">>, Context) -> m_category:get(p_no_acl(Id, <<"category_id">>, Context), Context);
 p_no_acl(Id, <<"media">>, Context) -> media(Id, Context);
 p_no_acl(Id, <<"medium">>, Context) -> m_media:get(Id, Context);
