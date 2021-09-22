@@ -506,7 +506,7 @@ fetch_json(Url, Context) ->
 
 
 %% @doc Fetch a sanitized version of the resource at the Url. Without edges, mapping of embedded
-%% ids etc. This is to be used as a simple & quick preview of the resource at the given Uri.
+%% ids etc. This is to be used as a simple and quick preview of the resource at the given Uri.
 -spec fetch_preview( string() | binary(), z:context() ) -> {ok, m_rsc:props()} | {error, term()}.
 fetch_preview(Url, Context) ->
     case fetch_json(Url, Context) of
@@ -701,9 +701,18 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
     PropsForced = proplists:get_value(props_forced, Options, #{}),
     PropsDefault = proplists:get_value(props_default, Options, #{}),
 
+    IsAuthCopy = proplists:get_value(is_authoritative, Options, false),
+
     % Remove or map modifier_id, creator_id, etc
     {Rsc1, ImportedAcc1} = maps:fold(
         fun
+            % If we make an authoritative copy then the creator/modifier is the current user
+            (<<"creator_id">>, _, {Acc, ImpAcc}) when IsAuthCopy ->
+                {Acc#{ <<"creator_id">> => z_acl:user(Context) }, ImpAcc};
+            (<<"modifier_id">>, _, {Acc, ImpAcc}) when IsAuthCopy ->
+                {Acc#{ <<"modifier_id">> => z_acl:user(Context) }, ImpAcc};
+
+            % Other ids are mapped to placeholders or local ids
             (<<"menu">>, Menu, {Acc, ImpAcc}) when is_list(Menu) ->
                 % map ids in menu to local ids
                 {Menu1, ImpAcc1} = map_menu(Menu, UriTemplate, [], ImpAcc, Options, Context),
