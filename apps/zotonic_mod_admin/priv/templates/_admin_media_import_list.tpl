@@ -94,8 +94,16 @@
                             <div class="checkbox form__is_authoritative">
                                 <label>
                                     <input type="checkbox" id="{{ #published.index }}" name="is_authoritative" value="1">
-                                    {_ Make a local copy, do not follow the remote page _}
+                                    {_ Make a local copy, disconnected from the remote page _}
                                 </label>
+                            </div>
+
+                            <div class="form-inline">
+                                <select class="form-control" name="z_import_edges">
+                                    <option value="0">{_ Do not import connections _}</option>
+                                    <option value="1" selected>{_ Import only direct connections (shallow copy) _}</option>
+                                    <option value="10">{_ Follow connections and import all (deep copy) _}</option>
+                                </select>
                             </div>
                         {% endif %}
                     {% endif %}

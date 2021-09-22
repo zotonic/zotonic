@@ -27,7 +27,7 @@
 
 event(#postback{ message={import_refresh, Args} }, Context) ->
     {id, Id} = proplists:lookup(id, Args),
-    case m_rsc_import:reimport(Id, Context) of
+    case m_rsc_import:reimport_recursive_async(Id, Context) of
         {ok, {_Id, _ObjectIds}} ->
             case proplists:get_all_values(on_success, Args) of
                 [] ->

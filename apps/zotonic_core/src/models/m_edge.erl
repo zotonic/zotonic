@@ -849,6 +849,21 @@ update_sequence(Id, Pred, ObjectIds, Context) when is_integer(Id) ->
                     [],
                     All),
 
+                lists:map(
+                    fun(OId) ->
+                        case lists:keymember(OId, 1, All) of
+                            true ->
+                                ok;
+                            false ->
+                                z_db:q("
+                                    insert into edge (subject_id, predicate_id, object_id)
+                                    values ($1, $2, $3)",
+                                    [ Id, PredId, OId ],
+                                    Context)
+                        end
+                    end,
+                    ObjectIds),
+
                 SortedIds = ObjectIds ++ lists:reverse(MissingIds),
                 SortedEdgeIds = [proplists:get_value(OId, All, -1) || OId <- SortedIds],
                 z_db:update_sequence(edge, SortedEdgeIds, Ctx),

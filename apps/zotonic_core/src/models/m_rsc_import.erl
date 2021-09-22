@@ -1,5 +1,5 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010-2021 Arjan Scherpenisse
+%% @copyright 2010-2021 Arjan Scherpenisse, Marc Worrell
 %% @doc Importing non-authoritative things exported by m_rsc_export into the system.
 
 %% Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +14,6 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
-% TODO:
-% - handle ids embedded in texts
-% - map ids in rsc blocks
-% - import embedded HTML medium records
-%
-% - store import options and user in m_rsc_import table.
-
 -module(m_rsc_import).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
@@ -34,23 +27,31 @@
     create_empty/2,
     create_empty/3,
 
+    is_imported/2,
+
     get_import_status/2,
     set_import_status/3,
 
     import/2,
     import/3,
-    import_uri_recursive/3,
     import_uri/2,
     import_uri/3,
-    reimport_recursive/2,
+    import_uri_recursive/3,
+    import_uri_recursive_async/3,
+
     reimport/2,
     reimport/3,
+    reimport_recursive/2,
+    reimport_recursive_async/2,
 
     update_medium_uri/3,
 
     install/1
 ]).
 
+-export([
+    import_referred_ids_task/3
+]).
 
 -type option() :: {props_forced, map()}                 % Properties overlayed over the imported properties
                 | {props_default, map()}                % Default properties
@@ -61,14 +62,38 @@
                 | {is_authoritative, boolean()}.
 -type options() :: [ option() ].
 
--type import_result() :: {ok, {m_rsc:resource_id(), [ m_rsc:resource_id() ]}}
+-type import_result() :: {ok, {m_rsc:resource_id(), import_map()}}
                        | {error, term()}.
+
+-type import_map() :: #{ binary() => m_rsc:resource_id() }.
 
 -export_type([
     options/0,
     option/0,
-    import_result/0
+    import_result/0,
+    import_map/0
 ]).
+
+
+
+%% @doc Check if a resource has been succesfully imported.
+-spec is_imported( m_rsc:resource(), z:context() ) -> boolean().
+is_imported( Rsc, Context ) ->
+    case m_rsc:rid(Rsc, Context) of
+        undefined ->
+            false;
+        RscId ->
+            case z_db:q1("
+                select last_import_status
+                from rsc_import
+                where id = $1",
+                [ RscId ],
+                Context)
+            of
+                <<"ok">> -> true;
+                _ -> false
+            end
+    end.
 
 
 %% @doc Fetch the import status of a resource.
@@ -156,8 +181,13 @@ create_empty(Uri, Props, Options, Context) ->
     case m_rsc:uri_lookup(Uri, Context) of
         undefined ->
             Props1 = case maps:is_key(<<"category_id">>, Props) of
-                false -> Props#{ <<"category_id">> => placeholder };
-                true -> Props
+                false ->
+                    Props#{
+                        <<"category_id">> => placeholder,
+                        <<"is_dependent">> => true
+                    };
+                true ->
+                    Props
             end,
             Props2 = Props1#{
                 <<"is_published">> => false
@@ -196,12 +226,13 @@ create_empty(Uri, Props, Options, Context) ->
     end.
 
 
--spec maybe_create_empty( map(), options(), z:context() ) -> {ok, m_rsc:rescource_id()} | {error, term()}.
-maybe_create_empty(Rsc, Options, Context) ->
-    case valid_category(Rsc, Context) of
-        {true, Cat} ->
-            case m_rsc:rid(Rsc, Context) of
-                undefined ->
+%% @doc Find or create a placeholder resource for later import of referred ids.
+-spec maybe_create_empty( map(), map(), options(), z:context() ) -> {ok, {m_rsc:rescource_id(), map()}} | {error, term()}.
+maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
+    case is_imported_resource(Rsc, ImportedAcc, Options, Context) of
+        false ->
+            case valid_category(Rsc, Context) of
+                {true, Cat} ->
                     Uri = maps:get(<<"uri">>, Rsc),
                     Props = #{
                         <<"category_id">> => Cat,
@@ -225,7 +256,7 @@ maybe_create_empty(Rsc, Options, Context) ->
                         {is_escape_texts, false},
                         is_import
                     ],
-                    z_db:transaction(fun(Ctx) ->
+                    InsertResult = z_db:transaction(fun(Ctx) ->
                         case m_rsc:insert(Props2, UpdateOptions, Context) of
                             {ok, NewId} ->
                                 Import = #{
@@ -239,14 +270,47 @@ maybe_create_empty(Rsc, Options, Context) ->
                             {error, _} = Error ->
                                 Error
                         end
-                    end, Context);
-                RscId ->
-                    {ok, RscId}
+                    end, Context),
+                    case InsertResult of
+                        {ok, LocalId} ->
+                            ImportedAcc1 = ImportedAcc#{
+                                Uri => LocalId
+                            },
+                            {ok, {LocalId, ImportedAcc1}}
+                    end;
+                false ->
+                    % Unknown category, deny access
+                    {error, eacces}
             end;
-        false ->
-            % Unknown category, deny access
-            {error, eacces}
+        {true, RscId} ->
+            {ok, {RscId, ImportedAcc}}
     end.
+
+
+is_imported_resource(Rsc, ImportedAcc, Options, Context) ->
+    Uri = uri(Rsc),
+    case maps:find(Uri, ImportedAcc) of
+        {ok, LocalId} ->
+            {true, LocalId};
+        error ->
+            case m_rsc:rid(Rsc, Context) of
+                undefined ->
+                    false;
+                RId ->
+                    case proplists:get_value(is_authoritative, Options, false) of
+                        true ->
+                            % A local copy was requested but the one present is
+                            % not authoritative.
+                            case m_rsc:p_no_acl(RId, is_authoritative, Context) of
+                                true -> {true, RId};
+                                false -> false
+                            end;
+                        false ->
+                            {true, RId}
+                    end
+            end
+    end.
+
 
 %% @doc Be strict for meta-category inserts - do not add categories or other meta
 %% data by importing references.
@@ -266,62 +330,115 @@ valid_category(_, _Context) ->
     {true, placeholder}.
 
 
-%% @doc Recursive import of resources.
--spec import_uri_recursive( string() | binary(), options(), z:context() ) -> import_result().
-import_uri_recursive(Uri, Options, Context) ->
-    case import_uri(Uri, Options, Context) of
-        {ok, {LocalId, RefIds}} ->
-            RefIds1 = import_referred_ids(RefIds, [], Context),
-            {ok, {LocalId, RefIds1}};
-        {error, _} = Error ->
-            Error
-    end.
-
-
-%% @doc Recursively import all resources connected to the given resources. Return a list
-%% of local resource ids that are imported or referred.
-import_referred_ids([], Acc, _Context) ->
-    Acc;
-import_referred_ids([ LocalId | Ids ], Acc, Context) ->
-    case reimport(LocalId, Context) of
-        {ok, {NewLocalId, RefIds}} ->
-            Acc1 = import_referred_ids(RefIds, Acc, Context),
-            Acc2 = [ NewLocalId | Acc1 ],
-            import_referred_ids(Ids, Acc2, Context);
-        {error, _} ->
-            import_referred_ids(Ids, Acc, Context)
-    end.
-
 
 %% @doc Reimport a non-authoritative resource or placeholder using the saved import flags.
 -spec reimport_recursive( m_rsc:resource_id(), z:context() ) -> import_result().
 reimport_recursive(Id, Context) ->
     case reimport(Id, Context) of
         {ok, {LocalId, RefIds}} ->
-            RefIds1 = import_referred_ids(RefIds, [], Context),
+            RefIds1 = import_referred_ids(RefIds, #{ LocalId => true }, Context),
             {ok, {LocalId, RefIds1}};
         {error, _} = Error ->
             Error
     end.
 
+%% @doc Reimport a non-authoritative resource or placeholder using the saved import flags, async
+%% reimport of all objects.
+-spec reimport_recursive_async( m_rsc:resource_id(), z:context() ) -> import_result().
+reimport_recursive_async(Id, Context) ->
+    case reimport(Id, Context) of
+        {ok, {LocalId, RefIds}} ->
+            ContextAsync = z_context:prune_for_async(Context),
+            sidejob_supervisor:spawn(
+                    zotonic_sidejobs,
+                    {?MODULE, import_referred_ids_task, [ RefIds, #{ LocalId => true }, ContextAsync ]}),
+            {ok, {LocalId, RefIds}};
+        {error, _} = Error ->
+            Error
+    end.
+
+-spec import_referred_ids_task( map(), map(), z:context() ) -> ok.
+import_referred_ids_task(RefIds, ImportedIds, Context) ->
+    _ = import_referred_ids(RefIds, ImportedIds, Context),
+    ok.
+
+%% @doc Recursively import all resources connected to the given resources. Return a list
+%% of local resource ids that are imported or referred.
+import_referred_ids(RefIds, ImportedIds, Context) ->
+    {NewRefIds, NewImportedIds} = maps:fold(
+        fun(Uri, LocalId, {ImpAcc, ImpIdsAcc}) ->
+            case maps:is_key(LocalId, ImpIdsAcc) of
+                true ->
+                    {ImpAcc, ImpIdsAcc};
+                false ->
+                    ImpAcc2 = case is_imported(LocalId, Context) of
+                        true ->
+                            ImpAcc#{
+                                Uri => LocalId
+                            };
+                        false ->
+                            case reimport_1(LocalId, ImpAcc, false, Context) of
+                                {ok, {NewLocalId, ImpAcc1}} ->
+                                    ImpAcc1#{
+                                        Uri => NewLocalId
+                                    };
+                                {error, _} ->
+                                    ImpAcc#{
+                                        Uri => LocalId
+                                    }
+                            end
+                    end,
+                    {ImpAcc2, ImpIdsAcc#{ LocalId => true }}
+            end
+        end,
+        {RefIds, ImportedIds},
+        RefIds),
+    OldCount = maps:size(RefIds),
+    NewCount = maps:size(NewRefIds),
+    case NewCount of
+        OldCount -> ok;
+        _ -> import_referred_ids(NewRefIds, NewImportedIds, Context)
+    end.
+
+
+% %% @doc Check if a resource is pending an import.
+% is_import_pending(LocalId, Context) ->
+%     case get_import_status(LocalId, Context) of
+%         {ok, #{ <<"last_import_status">> := <<"ok">> }} ->
+%             false;
+%         _ ->
+%             not m_rsc:p(LocalId, is_authoritative, Context)
+%     end.
+
 
 %% @doc Reimport a non-authoritative resource or placeholder using the saved import flags.
 -spec reimport( m_rsc:resource_id(), z:context() ) -> import_result().
 reimport(Id, Context) ->
+    reimport_1(Id, #{}, true, Context).
+
+reimport_1(Id, ImportedAcc, IsForceImport, Context) ->
     case z_db:select(rsc_import, Id, Context) of
-        {ok, #{ <<"options">> := Options, <<"uri">> := Uri }} ->
-            case m_rsc:p(Id, is_authoritative, Context)
-                orelse m_rsc:is_a(Id, placeholder, Context)
+        {ok, #{
+            <<"options">> := Options,
+            <<"uri">> := Uri,
+            <<"last_import_status">> := Status
+        }} ->
+            case m_rsc:is_a(Id, placeholder, Context)
+                orelse IsForceImport
+                orelse (
+                    not m_rsc:p(Id, is_authoritative, Context)
+                    andalso Status =/= <<"ok">>
+                )
             of
                 true ->
-                    {error, authoritative};
-                false ->
                     case fetch_json(Uri, Context) of
                         {ok, JSON} ->
-                            import_json(Uri, JSON, Options, Context);
+                            import_json(Id, Uri, JSON, ImportedAcc, Options, Context);
                         {error, _} = Error ->
                             Error
-                    end
+                    end;
+                false ->
+                    {ok, {Id, ImportedAcc}}
             end;
         {error, _} = Error ->
             Error
@@ -330,8 +447,8 @@ reimport(Id, Context) ->
 %% @doc Reimport a non-authoritative resource or placeholder using new import options.
 -spec reimport( m_rsc:resource_id(), options(), z:context() ) -> import_result().
 reimport(Id, Options, Context) ->
-    case m_rsc:p(Id, is_authoritative, Context)
-        orelse m_rsc:is_a(Id, placeholder, Context)
+    case z_convert:to_bool( m_rsc:p(Id, is_authoritative, Context) )
+        andalso not m_rsc:is_a(Id, placeholder, Context)
     of
         true ->
             {error, authoritative};
@@ -344,7 +461,7 @@ reimport(Id, Options, Context) ->
             end,
             case fetch_json(Uri, Context) of
                 {ok, JSON} ->
-                    import_json(Uri, JSON, Options, Context);
+                    import_json(Id, Uri, JSON, #{}, Options, Context);
                 {error, _} = Error ->
                     Error
             end
@@ -423,12 +540,12 @@ fetch_preview(Url, Context) ->
     end.
 
 
-import_json(_Url, #{ <<"status">> := <<"ok">>, <<"result">> := JSON }, Options, Context) when is_map(JSON) ->
-    import(JSON, Options, Context);
-import_json(Url, #{ <<"status">> := <<"error">> } = JSON, _Options, _Context) ->
+import_json(Id, _Url, #{ <<"status">> := <<"ok">>, <<"result">> := JSON }, ImportedAcc, Options, Context) when is_map(JSON) ->
+    import(Id, JSON, ImportedAcc, Options, Context);
+import_json(_Id, Url, #{ <<"status">> := <<"error">> } = JSON, _ImportedAcc, _Options, _Context) ->
     lager:warning("Remote returned error ~p: ~p", [Url, JSON]),
     {error, remote};
-import_json(Url, JSON, _Options, _Context) ->
+import_json(_Id, Url, JSON, _ImportedAcc, _Options, _Context) ->
     lager:warning("JSON with unknown structure ~p: ~p", [Url, JSON]),
     {error, status}.
 
@@ -443,11 +560,35 @@ import_uri(Uri, Context) ->
 import_uri(Uri, Options, Context) ->
     case fetch_json(Uri, Context) of
         {ok, JSON} ->
-            import_json(Uri, JSON, Options, Context);
+            import_json(undefined, Uri, JSON, #{}, Options, Context);
         {error, _} = Error ->
             Error
     end.
 
+%% @doc Recursive import of resources.
+-spec import_uri_recursive( string() | binary(), options(), z:context() ) -> import_result().
+import_uri_recursive(Uri, Options, Context) ->
+    case import_uri(Uri, Options, Context) of
+        {ok, {LocalId, RefIds}} ->
+            RefIds1 = import_referred_ids(RefIds, [], Context),
+            {ok, {LocalId, RefIds1}};
+        {error, _} = Error ->
+            Error
+    end.
+
+%% @doc Recursive import of resources, async import of all referred ids.
+-spec import_uri_recursive_async( string() | binary(), options(), z:context() ) -> import_result().
+import_uri_recursive_async(Uri, Options, Context) ->
+    case import_uri(Uri, Options, Context) of
+        {ok, {LocalId, RefIds}} ->
+            ContextAsync = z_context:prune_for_async(Context),
+            sidejob_supervisor:spawn(
+                    zotonic_sidejobs,
+                    {?MODULE, import_referred_ids_task, [ RefIds, #{ LocalId => true }, ContextAsync ]}),
+            {ok, {LocalId, RefIds}};
+        {error, _} = Error ->
+            Error
+    end.
 
 %% @doc Import a resource using default import options.
 -spec import( map(), z:context() ) -> import_result().
@@ -459,12 +600,17 @@ import(JSON, Context) ->
 %%      URI or the unique name. If the unique name matches then the category of the existing
 %%      resource must have an overlap with the category of the imported resource.
 -spec import( map(), options(), z:context() ) -> import_result().
-import(#{
+import(JSON, Options, Context) ->
+    import(undefined, JSON, #{}, Options, Context).
+
+import(OptLocalId, #{
         <<"id">> := _RemoteId,
         <<"resource">> := Rsc,
         <<"uri">> := Uri,
         <<"uri_template">> := UriTemplate
-    } = JSON, Options, Context) ->
+    } = JSON, ImportedAcc, Options, Context) ->
+
+    lager:info("Importing ~s (~p)", [ Uri, OptLocalId ]),
 
     RemoteRId = #{
         <<"uri">> => Uri,
@@ -475,18 +621,21 @@ import(#{
         #{ <<"is_authoritative">> := false } ->
             {error, remote_not_authoritative};
         _ ->
-            {Rsc1, EmbeddedIds} = cleanup_map_ids(RemoteRId, Rsc, UriTemplate, Options, Context),
-            case update_rsc(RemoteRId, Rsc1, Options, Context) of
+            {Rsc1, ImportedAcc1} = cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context),
+            case update_rsc(OptLocalId, RemoteRId, Rsc1, ImportedAcc1, Options, Context) of
                 {ok, LocalId} ->
+                    ImportedAcc2 = ImportedAcc1#{
+                        Uri => LocalId
+                    },
                     _ = maybe_import_medium(LocalId, JSON, Context),
-                    NewObjects = case proplists:get_value(import_edges, Options, 0) of
+                    ImportedAcc3 = case proplists:get_value(import_edges, Options, 0) of
                         N when is_integer(N), N > 0 ->
                             EdgeOptions = [
                                 {import_edges, N - 1} | proplists:delete(import_edges, Options)
                             ],
-                            import_edges(LocalId, JSON, EdgeOptions, Context);
+                            import_edges(LocalId, JSON, ImportedAcc2, EdgeOptions, Context);
                         _ ->
-                            []
+                            ImportedAcc2
                     end,
                     case mark_imported(LocalId, ok, Context) of
                         ok ->
@@ -503,73 +652,84 @@ import(#{
                             },
                             z_db:insert(rsc_import, Import, Context)
                     end,
-                    {ok, {LocalId, lists:usort(EmbeddedIds ++ NewObjects)}};
+                    {ok, {LocalId, ImportedAcc3}};
                 {error, _} = Error ->
                     Error
             end
     end;
-import(JSON, _Options, _Context) ->
+import(_OptLocalId, JSON, _ImportedAcc, _Options, _Context) ->
     lager:warning("Import of JSON without required fields id, resource, uri and uri_template: ~p", [JSON]),
     {error, status}.
 
 
-update_rsc(RemoteRId, Rsc, Options, Context) ->
+update_rsc(undefined, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
     UpdateOptions = [
         {is_escape_texts, false},
         is_import
     ],
+    Uri = maps:get(<<"uri">>, Rsc),
     IsImportDeleted = proplists:get_value(is_import_deleted, Options, false),
-    case m_rsc:rid(RemoteRId, Context) of
-        undefined when IsImportDeleted ->
+    case is_imported_resource(RemoteRId, ImportedAcc, Options, Context) of
+        false when IsImportDeleted ->
             m_rsc:insert(Rsc, UpdateOptions, Context);
-        undefined when not IsImportDeleted ->
-            Uri = maps:get(<<"uri">>, Rsc),
+        false when not IsImportDeleted ->
             case m_rsc_gone:is_gone_uri(Uri, Context) of
                 true ->
                     {error, deleted};
                 false ->
                     m_rsc:insert(Rsc, UpdateOptions, Context)
             end;
-        LocalId ->
-            case m_rsc:p_no_acl(LocalId, <<"is_authoritative">>, Context) of
-                false ->
-                    m_rsc:update(LocalId, Rsc, UpdateOptions, Context);
+        {true, LocalId} ->
+            case not is_imported(LocalId, Context)
+                or not m_rsc:p_no_acl(LocalId, is_authoritative, Context)
+            of
                 true ->
+                    m_rsc:update(LocalId, Rsc, UpdateOptions, Context);
+                false ->
                     {error, authoritative}
             end
-    end.
+    end;
+update_rsc(LocalId, _RemoteRId, Rsc, _ImportedAcc, _Options, Context) when is_integer(LocalId) ->
+    UpdateOptions = [
+        {is_escape_texts, false},
+        is_import
+    ],
+    m_rsc:update(LocalId, Rsc, UpdateOptions, Context).
 
-cleanup_map_ids(RemoteRId, Rsc, UriTemplate, Options, Context) ->
+
+cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
     PropsForced = proplists:get_value(props_forced, Options, #{}),
     PropsDefault = proplists:get_value(props_default, Options, #{}),
 
     % Remove or map modifier_id, creator_id, etc
-    {Rsc1, EmbeddedIds} = maps:fold(
+    {Rsc1, ImportedAcc1} = maps:fold(
         fun
-            (<<"menu">>, Menu, {Acc, AccIds}) when is_list(Menu) ->
+            (<<"menu">>, Menu, {Acc, ImpAcc}) when is_list(Menu) ->
                 % map ids in menu to local ids
-                Menu1 = map_menu(Menu, UriTemplate, [], Options, Context),
-                AccIds1 = menu_ids(Menu1, []) ++ AccIds,
-                {Acc#{ <<"menu">> => Menu1 }, AccIds1};
-            (<<"blocks">>, Blocks, {Acc, AccIds}) when is_list(Blocks) ->
-                % TODO: map ids in blocks and content to local ids
-                {Blocks1, AccIds1} = map_blocks(Blocks, UriTemplate, [], AccIds, Options, Context),
-                {Acc#{ <<"blocks">> => Blocks1 }, AccIds1};
-            (K, V, {Acc, AccIds}) ->
+                {Menu1, ImpAcc1} = map_menu(Menu, UriTemplate, [], ImpAcc, Options, Context),
+                {Acc#{ <<"menu">> => Menu1 }, ImpAcc1};
+            (<<"blocks">>, Blocks, {Acc, ImpAcc}) when is_list(Blocks) ->
+                % map ids in blocks and content to local ids
+                {Blocks1, ImpAcc1} = map_blocks(Blocks, UriTemplate, [], ImpAcc, Options, Context),
+                {Acc#{ <<"blocks">> => Blocks1 }, ImpAcc1};
+            (K, V, {Acc, ImpAcc}) ->
                 case m_rsc_export:is_id_prop(K) of
                     true ->
-                        case map_id(V, UriTemplate, Options, Context) of
-                            {ok, LocalId} ->
-                                {Acc#{ K => LocalId }, [ LocalId | AccIds ]};
+                        case map_id(V, UriTemplate, ImpAcc, Options, Context) of
+                            {ok, {LocalId, ImpAcc1}} ->
+                                ImpAcc2 = ImpAcc1#{
+                                    uri(V) => LocalId
+                                },
+                                {Acc#{ K => LocalId }, ImpAcc2};
                             {error, _} ->
-                                {Acc#{ K => undefined }, AccIds}
+                                {Acc#{ K => undefined }, ImpAcc}
                         end;
                     false ->
-                        {V1, AccIds1} = map_html(K, V, UriTemplate, AccIds, Options, Context),
-                        {Acc#{ K => V1 }, AccIds1}
+                        {V1, ImpAcc1} = map_html(K, V, UriTemplate, ImpAcc, Options, Context),
+                        {Acc#{ K => V1 }, ImpAcc1}
                 end
         end,
-        {#{}, []},
+        {#{}, ImportedAcc},
         Rsc),
 
     % Set forced and default props
@@ -593,121 +753,121 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, Options, Context) ->
         {ok, true} -> Rsc4;
         _ -> Rsc4#{ <<"is_published">> => true }
     end,
-    {Rsc5, lists:usort(EmbeddedIds)}.
+    {Rsc5, ImportedAcc1}.
 
 
 %% @doc Map all ids in a menu to local (stub) resources. Skip all tree entries
 %% that could not be mapped to local ids.
-map_menu([ #rsc_tree{ id = RemoteId, tree = Sub } | Rest ], UriTemplate, Acc, Options, Context) ->
-    case map_id(RemoteId, UriTemplate, Options, Context) of
-        {ok, LocalId} ->
-            Sub1 = map_menu(Sub, UriTemplate, [], Options, Context),
+map_menu([ #rsc_tree{ id = RemoteId, tree = Sub } | Rest ], UriTemplate, Acc, ImpAcc, Options, Context) ->
+    case map_id(RemoteId, UriTemplate, ImpAcc, Options, Context) of
+        {ok, {LocalId, ImpAcc1}} ->
+            {Sub1, ImpAcc2} = map_menu(Sub, UriTemplate, [], ImpAcc1, Options, Context),
             Acc1 = [ #rsc_tree{ id = LocalId, tree = Sub1 } | Acc ],
-            map_menu(Rest, UriTemplate, Acc1, Options, Context);
+            map_menu(Rest, UriTemplate, Acc1, ImpAcc2, Options, Context);
         {error, _} ->
             % Skip the tree entry if the remote id could not be mapped
-            map_menu(Rest, UriTemplate, Acc, Options, Context)
+            map_menu(Rest, UriTemplate, Acc, ImpAcc, Options, Context)
     end;
-map_menu([ _ | Rest ], UriTemplate, Acc, Options, Context) ->
-    map_menu(Rest, UriTemplate, Acc, Options, Context);
-map_menu([], _UriTemplate, Acc, _Options, _Context) ->
-    lists:reverse(Acc).
+map_menu([ _ | Rest ], UriTemplate, Acc, ImpAcc, Options, Context) ->
+    map_menu(Rest, UriTemplate, Acc, ImpAcc, Options, Context);
+map_menu([], _UriTemplate, Acc, ImpAcc, _Options, _Context) ->
+    {lists:reverse(Acc), ImpAcc}.
 
 
 %% @doc Map all ids in blocks to local (stub) resources. Remove blocks that can not
 %% have their ids mapped.
-map_blocks([ B | Rest ], UriTemplate, Acc, AccIds, Options, Context) ->
-    {B1, AccIds1} = maps:fold(
-        fun(K, V, {BAcc, BAccIds}) ->
+map_blocks([ B | Rest ], UriTemplate, Acc, ImpAcc, Options, Context) ->
+    {B1, ImpAcc1} = maps:fold(
+        fun(K, V, {BAcc, BImpAcc}) ->
             case m_rsc_export:is_id_prop(K) of
                 true ->
-                    case map_id(V, UriTemplate, Options, Context) of
-                        {ok, LocalId} ->
-                            {BAcc#{ K => LocalId }, [ LocalId | BAccIds ]};
+                    case map_id(V, UriTemplate, BImpAcc, Options, Context) of
+                        {ok, {LocalId, BImpAcc1}} ->
+                            {BAcc#{ K => LocalId }, BImpAcc1};
                         {error, _} ->
-                            {BAcc#{ K => undefined }, BAccIds}
+                            {BAcc#{ K => undefined }, BImpAcc}
                     end;
                 false ->
-                    {V1, BAccIds1} = map_html(K, V, UriTemplate, BAccIds, Options, Context),
-                    {BAcc#{ K => V1}, BAccIds1 }
+                    {V1, BImpAcc1} = map_html(K, V, UriTemplate, BImpAcc, Options, Context),
+                    {BAcc#{ K => V1}, BImpAcc1}
             end
         end,
-        {#{}, AccIds},
+        {#{}, ImpAcc},
         B),
-    map_blocks(Rest, UriTemplate, [ B1 | Acc ], AccIds1, Options, Context);
-map_blocks([], _UriTemplate, Acc, AccIds, _Options, _Context) ->
-    {lists:reverse(Acc), AccIds}.
+    map_blocks(Rest, UriTemplate, [ B1 | Acc ], ImpAcc1, Options, Context);
+map_blocks([], _UriTemplate, Acc, ImpAcc, _Options, _Context) ->
+    {lists:reverse(Acc), ImpAcc}.
 
 
 
 %% @doc Map a remote id to a local id, optionally creating a new (stub) resource.
-map_id(RemoteId, UriTemplate, Options, Context) when is_integer(RemoteId) ->
+map_id(RemoteId, UriTemplate, ImpAcc, Options, Context) when is_integer(RemoteId) ->
     case is_url(UriTemplate) of
         true ->
             URL = binary:replace(UriTemplate, <<":id">>, z_convert:to_binary(RemoteId)),
             Rsc = #{
                 <<"uri">> => URL
             },
-            maybe_create_empty(Rsc, Options, Context);
+            maybe_create_empty(Rsc, ImpAcc, Options, Context);
         false ->
             {error, enoent}
     end;
-map_id(Remote, _UriTemplate, Options, Context) when is_map(Remote) ->
-    maybe_create_empty(Remote, Options, Context);
-map_id(Remote, _UriTemplate, Options, Context) when is_binary(Remote) ->
+map_id(Remote, _UriTemplate, ImpAcc, Options, Context) when is_map(Remote) ->
+    maybe_create_empty(Remote, ImpAcc, Options, Context);
+map_id(Remote, _UriTemplate, ImpAcc, Options, Context) when is_binary(Remote) ->
     case is_url(Remote) of
         true ->
             Rsc = #{
                 <<"uri">> => Remote
             },
-            maybe_create_empty(Rsc, Options, Context);
+            maybe_create_empty(Rsc, ImpAcc, Options, Context);
         false ->
             {error, enoent}
     end;
-map_id(_, _, _Options, _Context) ->
+map_id(_, _, _ImpAcc, _Options, _Context) ->
     {error, enoent}.
 
 
 %% @doc Map texts in html properties.
-map_html(Key, Value, UriTemplate, AccIds, Options, Context) ->
+map_html(Key, Value, UriTemplate, ImportAcc, Options, Context) ->
     case is_html_prop(Key) of
         true ->
-            map_html_1(Value, UriTemplate, AccIds, Options, Context);
+            map_html_1(Value, UriTemplate, ImportAcc, Options, Context);
         false ->
-            {Value, AccIds}
+            {Value, ImportAcc}
     end.
 
-map_html_1(#trans{ tr = Tr }, UriTemplate, AccIds, Options, Context) ->
+map_html_1(#trans{ tr = Tr }, UriTemplate, ImportAcc, Options, Context) ->
     {Tr1, AccIds1} = lists:foldr(
         fun({Lang, Text}, {TAcc, TAccIds}) ->
-            Text1 = map_html_1(Text, UriTemplate, AccIds, Options, Context),
-            {[ {Lang, Text1} | TAcc ], TAccIds}
+            {Text1, TAccIds2} = map_html_1(Text, UriTemplate, TAccIds, Options, Context),
+            {[ {Lang, Text1} | TAcc ], TAccIds2}
         end,
-        {[], AccIds},
+        {[], ImportAcc},
         Tr),
     {#trans{ tr = Tr1 }, AccIds1};
-map_html_1(Text, UriTemplate, AccIds, Options, Context) when is_binary(Text) ->
+map_html_1(Text, UriTemplate, ImportAcc, Options, Context) when is_binary(Text) ->
     case filter_embedded_media:embedded_media(Text, Context) of
         [] ->
-            {Text, AccIds};
+            {Text, ImportAcc};
         EmbeddedIds ->
-            Text1 = lists:foldl(
-                fun(RemoteId, TextAcc) ->
-                    case map_id(RemoteId, UriTemplate, Options, Context) of
-                        {ok, LocalId} ->
+            {Text1, ImportAcc1} = lists:foldl(
+                fun(RemoteId, {TextAcc, ImpAcc}) ->
+                    case map_id(RemoteId, UriTemplate, ImpAcc, Options, Context) of
+                        {ok, {LocalId, ImpAcc1}} ->
                             From = <<"<!-- z-media ", (integer_to_binary(RemoteId))/binary, " ">>,
                             To = <<"<!-- z-media-local ", (integer_to_binary(LocalId))/binary, " ">>,
-                            binary:replace(TextAcc, From, To, [ global ]);
+                            {binary:replace(TextAcc, From, To, [ global ]), ImpAcc1};
                         {error, _} ->
                             From = <<"<!-- z-media ", (integer_to_binary(RemoteId))/binary, " ">>,
                             To = <<"<!-- z-media-temp 0 ">>,
-                            binary:replace(TextAcc, From, To, [ global ])
+                            {binary:replace(TextAcc, From, To, [ global ]), ImpAcc}
                     end
                 end,
-                Text,
+                {Text, ImportAcc},
                 EmbeddedIds),
             Text2 = binary:replace(Text1, <<"<!-- z-media-local ">>, <<"<!-- z-media ">>, [ global ]),
-            {Text2, EmbeddedIds ++ AccIds}
+            {Text2, ImportAcc1}
     end.
 
 is_url(<<"http:", _/binary>>) -> true;
@@ -719,13 +879,6 @@ is_html_prop(<<"body">>) -> true;
 is_html_prop(<<"body_", _/binary>>) -> true;
 is_html_prop(K) ->
     binary:longest_common_suffix([ K, <<"_html">> ]) =:= 5.
-
-
-menu_ids([], Acc) ->
-    lists:usort(Acc);
-menu_ids([ #rsc_tree{ id = Id, tree = Sub } | Rest ], Acc) ->
-    Acc1 = [ Id | menu_ids(Sub, Acc) ],
-    menu_ids(Rest, Acc1).
 
 
 maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := MediaUrl }, Context)
@@ -815,15 +968,14 @@ is_newer_medium(_, _) ->
 % }
 
 %% @doc Import all edges, return a list of newly created objects
-import_edges(LocalId, #{ <<"edges">> := Edges }, Options, Context) when is_map(Edges) ->
+import_edges(LocalId, #{ <<"edges">> := Edges }, ImportedAcc, Options, Context) when is_map(Edges) ->
     % Delete edges not in 'Edges', add new edges if needed.
     maps:fold(
         fun
             (Name, #{ <<"predicate">> := Pred, <<"objects">> := Os }, Acc) ->
                 case find_predicate(Name, Pred, Context) of
                     {ok, PredId} ->
-                        NewObjects = replace_edges(LocalId, PredId, Os, Options, Context),
-                        NewObjects ++ Acc;
+                        replace_edges(LocalId, PredId, Os, Acc, Options, Context);
                     {error, _} ->
                         Acc
                 end;
@@ -831,32 +983,38 @@ import_edges(LocalId, #{ <<"edges">> := Edges }, Options, Context) when is_map(E
                 lager:warning("Unknown import predicate ~p => ~p", [ Name, V]),
                 Acc
         end,
-        [],
+        ImportedAcc,
         Edges).
 
-replace_edges(LocalId, PredId, Os, Options, Context) ->
+replace_edges(LocalId, PredId, Os, ImportedAcc, Options, Context) ->
     % Keep order of edges
-    {ObjectIds, NewIds} = lists:foldr(
-        fun(Edge, {Acc, New}) ->
+    {ObjectIds, ImportedAcc1} = lists:foldr(
+        fun(Edge, {Acc, ImpAcc}) ->
             Object = maps:get(<<"object_id">>, Edge),
-            case m_rsc:rid(Object, Context) of
-                undefined ->
-                    case maybe_create_empty(Object, Options, Context) of
-                        {ok, ObjectId} ->
-                            {[ ObjectId | Acc ], [ ObjectId | New ]};
+            case is_imported_resource(Object, ImpAcc, Options, Context) of
+                false ->
+                    case maybe_create_empty(Object, ImpAcc, Options, Context) of
+                        {ok, {ObjectId, ImpAcc1}} ->
+                            {[ ObjectId | Acc ], ImpAcc1};
                         {error, Reason} ->
                             lager:debug("Skipping object ~p: ~p", [ Object, Reason ]),
-                            {Acc, New}
+                            {Acc, ImpAcc}
                     end;
-                ObjectId ->
-                    {[ ObjectId | Acc ], New}
+                {true, ObjectId} ->
+                    ImpAcc1 = ImpAcc#{
+                        uri(Object) => ObjectId
+                    },
+                    {[ ObjectId | Acc ], ImpAcc1}
             end
         end,
-        {[], []},
+        {[], ImportedAcc},
         Os),
     m_edge:update_sequence(LocalId, PredId, ObjectIds, Context),
-    NewIds.
+    ImportedAcc1.
 
+
+uri(Uri) when is_binary(Uri) -> Uri;
+uri(#{ <<"uri">> := Uri }) -> Uri.
 
 % For now we only import if we know the predicate.
 % An option could be added to insert the predicate if it is was unknown.

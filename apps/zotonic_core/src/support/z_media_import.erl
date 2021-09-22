@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2021 Marc Worrell
 %% @doc Import media from internet locations.
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -48,9 +48,20 @@ insert_1(_, #media_import_props{ rsc_props = #{ <<"uri">> := Uri }, importer = r
         {props_forced, RscProps},
         is_import_deleted
     ],
-    case m_rsc_import:import_uri(Uri, Options, Context) of
+    Options1 = case maps:find(<<"is_authoritative">>, RscProps) of
+        {ok, true} ->
+            [ is_authoritative | Options ];
+        _ ->
+            Options
+    end,
+    Options2 = case z_context:get_q(<<"z_import_edges">>, Context) of
+        undefined -> Options1;
+        <<>> -> Options1;
+        N ->
+            [ {import_edges, z_convert:to_integer(N)} | Options1 ]
+    end,
+    case m_rsc_import:import_uri_recursive_async(Uri, Options2, Context) of
         {ok, {LocalId, _ObjectIds}} ->
-            % TODO: schedule import of ObjectIds
             {ok, LocalId};
         {error, _} = Error ->
             Error
