@@ -30,6 +30,10 @@
     delete_if_unconnected/2
 ]).
 
+-export([
+    observe_check_edge_log/2
+]).
+
 -include_lib("zotonic.hrl").
 
 % Check every 10 minutes if we have anything to handle.
@@ -45,6 +49,10 @@
 check(Context) ->
     z_notifier:notify(check_edge_log, Context).
 
+%% @doc Do an edge log check.
+observe_check_edge_log(check_edge_log, Context) ->
+    Name = z_utils:name_for_site(?MODULE, Context),
+    gen_server:cast(Name, check).
 
 %%====================================================================
 %% API
@@ -74,7 +82,7 @@ init(Args) ->
         {module, ?MODULE}
       ]),
 
-    z_notifier:observe(check_edge_log, self(), Site),
+    z_notifier:observe(check_edge_log, {?MODULE, observe_check_edge_log}, Site),
 
     {ok, #state{site=Site}, ?CLEANUP_TIMEOUT_LONG}.
 
@@ -91,7 +99,7 @@ handle_call(Message, _From, State) ->
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
-handle_cast(Check, State) when Check =:= check orelse element(1, Check) =:= check_edge_log ->
+handle_cast(check, State) ->
     case do_check(State#state.site) of
         {ok, 0} ->
             {noreply, State, ?CLEANUP_TIMEOUT_LONG};
