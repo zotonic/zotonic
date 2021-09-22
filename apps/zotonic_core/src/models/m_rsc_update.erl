@@ -1156,7 +1156,7 @@ props_filter(Props, Context) ->
 
 props_filter(<<"uri">>, Uri, Acc, _Context) when ?is_empty(Uri) ->
     Acc#{ <<"uri">> => undefined };
-props_filter(<<"uri">>, Uri, Acc, _Context) when ?is_empty(Uri) ->
+props_filter(<<"uri">>, Uri, Acc, _Context) ->
     Acc#{ <<"uri">> => z_sanitize:uri(Uri) };
 props_filter(<<"name">>, Name, Acc, Context) ->
     case z_acl:is_allowed(use, mod_admin, Context) of
