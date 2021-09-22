@@ -112,9 +112,7 @@ update(RscId, #media_import_props{medium_props=MI} = MIPs, Context) ->
 
 
 update_1(_, RscId, #media_import_props{ rsc_props = #{ <<"uri">> := Uri }, importer = rsc_import }, Context) ->
-    Options = [
-    ],
-    m_rsc_import:update_medium_uri(RscId, Uri, Options, Context);
+    m_rsc_import:update_medium_uri(RscId, Uri, Context);
 update_1(0, RscId, #media_import_props{preview_url=PreviewUrl, medium_url=MediumUrl}, _Context) 
     when ?EMPTY(PreviewUrl), ?EMPTY(MediumUrl) ->
     % Nothing to do
