@@ -249,7 +249,12 @@ replace(Id, Props, Context) ->
     of
         true ->
             Depicts = depicts(Id, Context),
-            #media_upload_preprocess{ medium = Props1 } = set_av_flag(#media_upload_preprocess{ medium = Props }, Context),
+            #media_upload_preprocess{ medium = Props1 } = set_av_flag(
+                #media_upload_preprocess{
+                    medium = Props,
+                    mime = Mime
+                },
+                Context),
             F = fun(Ctx) ->
                 {ok, _} = medium_delete(Id, Ctx),
                 {ok, Id} = medium_insert(Id, Props1#{ <<"id">> => Id }, Ctx)
@@ -442,7 +447,11 @@ replace_medium(Medium, RscId, RscProps, Options, Context) ->
 update_medium_1(RscId, Medium, RscProps, Options, Context) ->
     case is_update_medium_allowed(RscId, Medium, RscProps, Context) of
         true ->
-            #media_upload_preprocess{ medium = Medium1 } = set_av_flag(#media_upload_preprocess{ medium = Medium }, Context),
+            #media_upload_preprocess{ medium = Medium1 } = set_av_flag(
+                #media_upload_preprocess{
+                    medium = Medium,
+                    mime = maps:get(<<"mime">>, Medium)
+                }, Context),
             case replace_file_acl_ok(undefined, RscId, RscProps, Medium1, Options, Context) of
                 {ok, NewRscId} ->
                     case proplists:get_value(preview_url, Options) of
