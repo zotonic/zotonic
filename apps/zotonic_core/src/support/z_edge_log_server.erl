@@ -30,6 +30,10 @@
     delete_if_unconnected/2
 ]).
 
+-export([
+    observe_check_edge_log/2
+]).
+
 -include_lib("zotonic.hrl").
 
 % Check every 10 minutes if we have anything to handle.
@@ -43,9 +47,12 @@
 
 %% @doc Force a check, useful after known edge operations.
 check(Context) ->
-    Name = z_utils:name_for_site(?MODULE, Context),
-    gen_server:call(Name, check, infinity).
+    z_notifier:notify(check_edge_log, Context).
 
+%% @doc Do an edge log check.
+observe_check_edge_log(check_edge_log, Context) ->
+    Name = z_utils:name_for_site(?MODULE, Context),
+    gen_server:cast(Name, check).
 
 %%====================================================================
 %% API
@@ -74,6 +81,9 @@ init(Args) ->
         {site, Site},
         {module, ?MODULE}
       ]),
+
+    z_notifier:observe(check_edge_log, {?MODULE, observe_check_edge_log}, Site),
+
     {ok, #state{site=Site}, ?CLEANUP_TIMEOUT_LONG}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -82,16 +92,6 @@ init(Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-handle_call(check, _From, State) ->
-    case do_check(State#state.site) of
-        {ok, 0} = OK ->
-            {reply, OK, State, ?CLEANUP_TIMEOUT_LONG};
-        {ok, _} = OK ->
-            {reply, OK, State, ?CLEANUP_TIMEOUT_SHORT};
-        {error, _} = Error ->
-            {reply, Error, State, ?CLEANUP_TIMEOUT_LONG}
-    end;
-
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
