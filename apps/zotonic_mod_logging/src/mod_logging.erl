@@ -23,7 +23,7 @@
 -mod_title("Logging to the database").
 -mod_description("Logs debug/info/warning messages into the site's database.").
 -mod_prio(1000).
--mod_schema(1).
+-mod_schema(2).
 -mod_depends([ cron ]).
 
 %% gen_server exports
