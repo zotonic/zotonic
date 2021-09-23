@@ -185,7 +185,15 @@ periodic_cleanup(Context) ->
 
 install(Context) ->
     case z_db:table_exists(log_ui, Context) of
-        true -> ok;
+        true ->
+            case z_db:column(log_ui, remote_ip, Context) of
+                {ok, #column_def{ length = N }} when N < 42 ->
+                    z_db:q("alter table log_ui alter column remote_ip type character varying(42)", Context),
+                    z_db:flush(Context);
+                _ ->
+                    ok
+            end,
+            ok;
         false ->
             z_db:q("
                 create table log_ui (
@@ -193,7 +201,7 @@ install(Context) ->
                     rsc_id int,
                     user_id int,
                     type character varying(80) not null default ''::character varying,
-                    remote_ip character varying(32),
+                    remote_ip character varying(42),
                     props bytea,
                     created timestamp with time zone not null default now(),
 
