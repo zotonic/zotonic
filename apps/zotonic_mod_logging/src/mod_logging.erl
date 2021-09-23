@@ -1,8 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010 Arjan Scherpenisse
+%% @copyright 2010-2021 Arjan Scherpenisse
 %% @doc Simple database logging.
 
-%% Copyright 2010 Arjan Scherpenisse
+%% Copyright 2010-2021 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
 -mod_title("Logging to the database").
 -mod_description("Logs debug/info/warning messages into the site's database.").
 -mod_prio(1000).
--mod_schema(1).
+-mod_schema(2).
 -mod_depends([ cron ]).
 
 %% gen_server exports

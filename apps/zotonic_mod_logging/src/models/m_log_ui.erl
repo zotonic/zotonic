@@ -1,8 +1,8 @@
 %% @author Marc Worrell
-%% @copyright 2019 Marc Worrell
+%% @copyright 2019-2021 Marc Worrell
 %% @doc Model for ui log messages.
 
-%% Copyright 2019 Marc Worrell
+%% Copyright 2019-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -186,7 +186,15 @@ periodic_cleanup(Context) ->
 
 install(Context) ->
     case z_db:table_exists(log_ui, Context) of
-        true -> ok;
+        true ->
+            case z_db:column(log_ui, remote_ip, Context) of
+                {ok, #column_def{ length = N }} when N < 42 ->
+                    z_db:q("alter table log_ui alter column remote_ip type character varying(42)", Context),
+                    z_db:flush(Context);
+                _ ->
+                    ok
+            end,
+            ok;
         false ->
             z_db:q("
                 create table log_ui (
