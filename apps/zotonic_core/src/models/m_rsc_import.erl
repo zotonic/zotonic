@@ -14,6 +14,12 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
+%% Security:
+%% - Option to allow creation of 'meta' category resources
+%% - Option to allow ACL related edges (hasusergroup)
+%% - Optionally import content-group-id (or force to props_forced)
+
+
 -module(m_rsc_import).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
@@ -703,6 +709,8 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
 
     IsAuthCopy = proplists:get_value(is_authoritative, Options, false),
 
+    OptionsNoEdges = proplists:delete(import_edges, Options),
+
     % Remove or map modifier_id, creator_id, etc
     {Rsc1, ImportedAcc1} = maps:fold(
         fun
@@ -724,7 +732,7 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
             (K, V, {Acc, ImpAcc}) ->
                 case m_rsc_export:is_id_prop(K) of
                     true ->
-                        case map_id(V, UriTemplate, ImpAcc, Options, Context) of
+                        case map_id(V, UriTemplate, ImpAcc, OptionsNoEdges, Context) of
                             {ok, {LocalId, ImpAcc1}} ->
                                 ImpAcc2 = ImpAcc1#{
                                     uri(V) => LocalId
@@ -734,7 +742,7 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
                                 {Acc#{ K => undefined }, ImpAcc}
                         end;
                     false ->
-                        {V1, ImpAcc1} = map_html(K, V, UriTemplate, ImpAcc, Options, Context),
+                        {V1, ImpAcc1} = map_html(K, V, UriTemplate, ImpAcc, OptionsNoEdges, Context),
                         {Acc#{ K => V1 }, ImpAcc1}
                 end
         end,
@@ -786,6 +794,7 @@ map_menu([], _UriTemplate, Acc, ImpAcc, _Options, _Context) ->
 %% @doc Map all ids in blocks to local (stub) resources. Remove blocks that can not
 %% have their ids mapped.
 map_blocks([ B | Rest ], UriTemplate, Acc, ImpAcc, Options, Context) ->
+    OptionsNoEdges = proplists:delete(import_edges, Options),
     {B1, ImpAcc1} = maps:fold(
         fun(K, V, {BAcc, BImpAcc}) ->
             case m_rsc_export:is_id_prop(K) of
@@ -797,7 +806,7 @@ map_blocks([ B | Rest ], UriTemplate, Acc, ImpAcc, Options, Context) ->
                             {BAcc#{ K => undefined }, BImpAcc}
                     end;
                 false ->
-                    {V1, BImpAcc1} = map_html(K, V, UriTemplate, BImpAcc, Options, Context),
+                    {V1, BImpAcc1} = map_html(K, V, UriTemplate, BImpAcc, OptionsNoEdges, Context),
                     {BAcc#{ K => V1}, BImpAcc1}
             end
         end,
