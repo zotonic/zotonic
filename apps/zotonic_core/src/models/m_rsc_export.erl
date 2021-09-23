@@ -19,7 +19,7 @@
 %% #{
 %%    <<"id">> := 112233,
 %%    <<"uri">> := <<"http://www.example.com/id/112233">>},
-%%    <<"is_a">> := [ text, article ],
+%%    <<"is_a">> := [ <<"text">>, <<"article">> ],
 %%    <<"resource">> := #{
 %%          %% Resource properties, e.g.:
 %%          title := <<"Foo">>,
@@ -33,7 +33,7 @@
 %%      <<"depiction">> => #{
 %%          <<"predicate">> => #{
 %%                <<"id">> => 304,
-%%                <<"is_a">> => [ meta, predicate ],
+%%                <<"is_a">> => [ <<"meta">>, <<"predicate">> ],
 %%                <<"name">> => <<"depiction">>,
 %%                <<"title">> => {trans,[{en,<<"Depiction">>}]},
 %%                <<"uri">> => <<"http://xmlns.com/foaf/0.1/depiction">>
@@ -43,7 +43,7 @@
 %%                    <<"created">> => {{2020,12,23},{15,4,55}},
 %%                    <<"object_id">> => #{
 %%                         <<"id">> => 28992,
-%%                         <<"is_a">> => [media,image],
+%%                         <<"is_a">> => [ <<"media">>, <<"image">> ],
 %%                         <<"name">> => undefined,
 %%                         <<"title">> =>
 %%                            {trans,[{nl,<<"NL: a.jpg">>},{en,<<"a.jpg">>}]},
@@ -129,35 +129,40 @@ full(Id, Context) ->
 edges(Id, Context) ->
     Edges = m_edge:get_edges(Id, Context),
     lists:foldl(
-        fun({Pred, Es}, Acc) ->
-            case z_acl:rsc_visible(Pred, Context) of
-                true ->
-                    PredRsc = related_rsc(Pred, Context),
-                    PredB = z_convert:to_binary(Pred),
-                    Os = lists:filtermap(
-                        fun(E) ->
-                            ObjId = proplists:get_value(object_id, E),
-                            case z_acl:rsc_visible(ObjId, Context) of
-                                true ->
-                                    {true, #{
-                                        <<"object_id">> => related_rsc(ObjId, Context),
-                                        <<"seq">> => proplists:get_value(seq, E),
-                                        <<"created">> => proplists:get_value(created, E)
-                                    }};
-                                false ->
-                                    false
-                            end
-                        end,
-                        Es),
-                    Acc#{
-                        PredB => #{
-                            <<"predicate">> => PredRsc,
-                            <<"objects">> => Os
-                        }
-                    };
-                false ->
-                    false
-            end
+        fun
+            ({hasusergroup, _Es}, Acc) ->
+                % Do not expose the groups an user is member of.
+                % TODO: make this configurable.
+                Acc;
+            ({Pred, Es}, Acc) when is_atom(Pred) ->
+                case z_acl:rsc_visible(Pred, Context) of
+                    true ->
+                        PredRsc = related_rsc(Pred, Context),
+                        PredB = z_convert:to_binary(Pred),
+                        Os = lists:filtermap(
+                            fun(E) ->
+                                ObjId = proplists:get_value(object_id, E),
+                                case z_acl:rsc_visible(ObjId, Context) of
+                                    true ->
+                                        {true, #{
+                                            <<"object_id">> => related_rsc(ObjId, Context),
+                                            <<"seq">> => proplists:get_value(seq, E),
+                                            <<"created">> => proplists:get_value(created, E)
+                                        }};
+                                    false ->
+                                        false
+                                end
+                            end,
+                            Es),
+                        Acc#{
+                            PredB => #{
+                                <<"predicate">> => PredRsc,
+                                <<"objects">> => Os
+                            }
+                        };
+                    false ->
+                        false
+                end
         end,
         #{},
         Edges).

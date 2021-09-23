@@ -14,12 +14,6 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
-%% Security:
-%% - Option to allow creation of 'meta' category resources
-%% - Option to allow ACL related edges (hasusergroup)
-%% - Optionally import content-group-id (or force to props_forced)
-
-
 -module(m_rsc_import).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
@@ -29,9 +23,6 @@
     mark_imported/3,
 
     fetch_preview/2,
-
-    create_empty/2,
-    create_empty/3,
 
     is_imported/2,
 
@@ -79,7 +70,6 @@
     import_result/0,
     import_map/0
 ]).
-
 
 
 %% @doc Check if a resource has been succesfully imported.
@@ -169,76 +159,13 @@ mark_imported(RscId, Status, Context) ->
     end.
 
 
-
-%% @doc Create an empty, non-authoritative resource, with the given uri.
--spec create_empty( string() | binary(), z:context()) -> {ok, m_rsc:resource_id()} | {error, duplicate_uri | term()}.
-create_empty(Uri, Context) ->
-    create_empty(Uri, #{}, Context).
-
--spec create_empty( string() | binary(), m_rsc:props_all(), z:context()) -> {ok, m_rsc:resource_id()} | {error, duplicate_uri | term()}.
-create_empty(Uri, Props, Context) ->
-    create_empty(Uri, Props, [], Context).
-
--spec create_empty( string() | binary(), m_rsc:props_all(), options(), z:context()) -> {ok, m_rsc:resource_id()} | {error, duplicate_uri | term()}.
-create_empty(Uri, Props, Options, Context) when is_list(Props) ->
-    {ok, RscMap} = z_props:from_list(Props),
-    create_empty(Uri, RscMap, Options, Context);
-create_empty(Uri, Props, Options, Context) ->
-    case m_rsc:uri_lookup(Uri, Context) of
-        undefined ->
-            Props1 = case maps:is_key(<<"category_id">>, Props) of
-                false ->
-                    Props#{
-                        <<"category_id">> => placeholder,
-                        <<"is_dependent">> => true
-                    };
-                true ->
-                    Props
-            end,
-            Props2 = Props1#{
-                <<"is_published">> => false
-            },
-            Props3 = case proplists:get_value(is_authoritative, Options, false) of
-                true ->
-                    Props2#{
-                        <<"is_authoritative">> => true,
-                        <<"uri">> => undefined
-                    };
-                false ->
-                    Props2#{
-                        <<"is_authoritative">> => false,
-                        <<"uri">> => Uri
-                    }
-            end,
-            z_db:transaction(fun(Ctx) ->
-                case m_rsc:insert(Props3, Ctx) of
-                    {ok, NewId} ->
-                        Import = #{
-                            <<"id">> => NewId,
-                            <<"uri">> => Uri,
-                            <<"host">> => host(Uri),
-                            <<"user_id">> => z_acl:user(Ctx),
-                            <<"options">> => Options
-                        },
-                        z_db:insert(rsc_import, Import, Ctx);
-                    {error, _} = Error ->
-                        {rollback, Error}
-                end
-            end, Context);
-        RscId ->
-            lager:info("Imported resource of \"~s\" already exists as rsc id ~p",
-                       [ Uri, RscId ]),
-            {error, duplicate_uri}
-    end.
-
-
 %% @doc Find or create a placeholder resource for later import of referred ids.
 -spec maybe_create_empty( map(), map(), options(), z:context() ) -> {ok, {m_rsc:rescource_id(), map()}} | {error, term()}.
 maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
     case is_imported_resource(Rsc, ImportedAcc, Options, Context) of
         false ->
-            case valid_category(Rsc, Context) of
-                {true, Cat} ->
+            case find_category(Rsc, #{}, Context) of
+                {ok, Cat} ->
                     Uri = maps:get(<<"uri">>, Rsc),
                     Props = #{
                         <<"category_id">> => Cat,
@@ -284,9 +211,9 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                             },
                             {ok, {LocalId, ImportedAcc1}}
                     end;
-                false ->
+                {error, _} = Error  ->
                     % Unknown category, deny access
-                    {error, eacces}
+                    Error
             end;
         {true, RscId} ->
             {ok, {RscId, ImportedAcc}}
@@ -316,25 +243,6 @@ is_imported_resource(Rsc, ImportedAcc, Options, Context) ->
                     end
             end
     end.
-
-
-%% @doc Be strict for meta-category inserts - do not add categories or other meta
-%% data by importing references.
-valid_category(#{ <<"is_a">> := [ <<"meta">> | _ ] = IsA } = Rsc, Context) ->
-    RemoteCat = lists:last(IsA),
-    case m_rsc:rid(Rsc, Context) of
-        undefined ->
-            false;
-        LocalId ->
-            LocalIsA = [ z_convert:to_binary(C) || C <- m_rsc:is_a(LocalId, Context) ],
-            case lists:last(LocalIsA) of
-                RemoteCat -> {true, LocalId};
-                _ -> false
-            end
-    end;
-valid_category(_, _Context) ->
-    {true, placeholder}.
-
 
 
 %% @doc Reimport a non-authoritative resource or placeholder using the saved import flags.
@@ -520,26 +428,36 @@ fetch_preview(Url, Context) ->
             <<"status">> := <<"ok">>,
             <<"result">> := #{
                 <<"id">> := _RemoteId,
+                <<"is_a">> := IsA,
                 <<"resource">> := Rsc,
                 <<"uri">> := Uri
             } = JSON
         }} when is_map(Rsc) ->
-            case Rsc of
-                #{ <<"is_authoritative">> := false } ->
-                    {error, remote_not_authoritative};
-                _ ->
-                    Rsc1 = z_sanitize:escape_props_check(Rsc, Context),
-                    Rsc2 = Rsc1#{
-                        <<"is_authoritative">> => false,
-                        <<"uri">> => z_sanitize:uri(Uri)
+            case is_local_site(Uri, Context) of
+                true ->
+                    {error, local};
+                false ->
+                    RId = #{
+                        <<"is_a">> => IsA
                     },
-                    % The URL might need to be fetched as a data: url, as the remote
-                    % resource might have non-anonymous access permissions.
-                    Result = #{
-                        <<"rsc">> => Rsc2,
-                        <<"depiction_url">> => maps:get(<<"depiction_url">>, JSON, undefined)
-                    },
-                    {ok, Result}
+                    case find_category(RId, Rsc, Context) of
+                        {ok, Category} ->
+                            Rsc1 = z_sanitize:escape_props_check(Rsc, Context),
+                            Rsc2 = Rsc1#{
+                                <<"is_authoritative">> => false,
+                                <<"uri">> => z_sanitize:uri(Uri),
+                                <<"category_id">> => Category
+                            },
+                            % The URL might need to be fetched as a data: url, as the remote
+                            % resource might have non-anonymous access permissions.
+                            Result = #{
+                                <<"rsc">> => Rsc2,
+                                <<"depiction_url">> => maps:get(<<"depiction_url">>, JSON, undefined)
+                            },
+                            {ok, Result};
+                        {error, _} = Error ->
+                            Error
+                    end
             end;
         {error, _} = Error ->
             Error
@@ -621,44 +539,55 @@ import(OptLocalId, #{
     RemoteRId = #{
         <<"uri">> => Uri,
         <<"name">> => maps:get(<<"name">>, JSON, undefined),
-        <<"is_a">> => maps:get(<<"is_a">>, JSON, undefined)
+        <<"is_a">> => maps:get(<<"is_a">>, JSON, [])
     },
-    case Rsc of
-        #{ <<"is_authoritative">> := false } ->
-            {error, remote_not_authoritative};
-        _ ->
-            {Rsc1, ImportedAcc1} = cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context),
-            case update_rsc(OptLocalId, RemoteRId, Rsc1, ImportedAcc1, Options, Context) of
-                {ok, LocalId} ->
-                    ImportedAcc2 = ImportedAcc1#{
-                        Uri => LocalId
+    case is_local_site(Uri, Context) of
+        true ->
+            case m_rsc:rid(Uri, Context) of
+                undefined -> {error, enoent};
+                Id -> {ok, Id}
+            end;
+        false ->
+            case find_category(RemoteRId, Rsc, Context) of
+                {ok, Category} ->
+                    {Rsc1, ImportedAcc1} = cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context),
+                    Rsc2 = Rsc1#{
+                        <<"category_id">> => Category
                     },
-                    _ = maybe_import_medium(LocalId, JSON, Context),
-                    ImportedAcc3 = case proplists:get_value(import_edges, Options, 0) of
-                        N when is_integer(N), N > 0 ->
-                            EdgeOptions = [
-                                {import_edges, N - 1} | proplists:delete(import_edges, Options)
-                            ],
-                            import_edges(LocalId, JSON, ImportedAcc2, EdgeOptions, Context);
-                        _ ->
-                            ImportedAcc2
-                    end,
-                    case mark_imported(LocalId, ok, Context) of
-                        ok ->
-                            ok;
-                        {error, enoent} ->
-                            Import = #{
-                                <<"id">> => LocalId,
-                                <<"uri">> => Uri,
-                                <<"host">> => host(Uri),
-                                <<"user_id">> => z_acl:user(Context),
-                                <<"options">> => Options,
-                                <<"last_import_date">> => calendar:universal_time(),
-                                <<"last_import_status">> => <<"ok">>
+                    case update_rsc(OptLocalId, RemoteRId, Rsc2, ImportedAcc1, Options, Context) of
+                        {ok, LocalId} ->
+                            ImportedAcc2 = ImportedAcc1#{
+                                Uri => LocalId
                             },
-                            z_db:insert(rsc_import, Import, Context)
-                    end,
-                    {ok, {LocalId, ImportedAcc3}};
+                            _ = maybe_import_medium(LocalId, JSON, Context),
+                            ImportedAcc3 = case proplists:get_value(import_edges, Options, 0) of
+                                N when is_integer(N), N > 0 ->
+                                    EdgeOptions = [
+                                        {import_edges, N - 1} | proplists:delete(import_edges, Options)
+                                    ],
+                                    import_edges(LocalId, JSON, ImportedAcc2, EdgeOptions, Context);
+                                _ ->
+                                    ImportedAcc2
+                            end,
+                            case mark_imported(LocalId, ok, Context) of
+                                ok ->
+                                    ok;
+                                {error, enoent} ->
+                                    Import = #{
+                                        <<"id">> => LocalId,
+                                        <<"uri">> => Uri,
+                                        <<"host">> => host(Uri),
+                                        <<"user_id">> => z_acl:user(Context),
+                                        <<"options">> => Options,
+                                        <<"last_import_date">> => calendar:universal_time(),
+                                        <<"last_import_status">> => <<"ok">>
+                                    },
+                                    z_db:insert(rsc_import, Import, Context)
+                            end,
+                            {ok, {LocalId, ImportedAcc3}};
+                        {error, _} = Error ->
+                            Error
+                    end;
                 {error, _} = Error ->
                     Error
             end
@@ -719,6 +648,25 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
                 {Acc#{ <<"creator_id">> => z_acl:user(Context) }, ImpAcc};
             (<<"modifier_id">>, _, {Acc, ImpAcc}) when IsAuthCopy ->
                 {Acc#{ <<"modifier_id">> => z_acl:user(Context) }, ImpAcc};
+
+            % Be specific about the category id - handled by caller
+            (<<"category_id">>, _, {Acc, ImpAcc}) -> {Acc, ImpAcc};
+            (<<"category">>, _, {Acc, ImpAcc}) -> {Acc, ImpAcc};
+
+            % Importing into a content-group depends on the import Options
+            (<<"content_group_id">>, CGRId, {Acc, ImpAcc}) ->
+                case maps:is_key(<<"content_group_id">>, PropsForced) of
+                    false ->
+                        case find_content_group(CGRId, Context) of
+                            {ok, CGId} ->
+                                {Acc#{ <<"content_group_id">> => CGId }, ImpAcc};
+                            {error, _} ->
+                                {Acc, ImpAcc}
+                        end;
+                    true ->
+                        {Acc, ImpAcc}
+                end;
+            (<<"content_group">>, _, {Acc, ImpAcc}) -> {Acc, ImpAcc};
 
             % Other ids are mapped to placeholders or local ids
             (<<"menu">>, Menu, {Acc, ImpAcc}) when is_list(Menu) ->
@@ -1034,24 +982,114 @@ replace_edges(LocalId, PredId, Os, ImportedAcc, Options, Context) ->
 uri(Uri) when is_binary(Uri) -> Uri;
 uri(#{ <<"uri">> := Uri }) -> Uri.
 
-% For now we only import if we know the predicate.
-% An option could be added to insert the predicate if it is was unknown.
+%% @doc Find the local predicate to be imported.
+%% For now we only import if we know the predicate.
+%% An option could be added to insert the predicate if it is was unknown.
 find_predicate(Name, Pred, Context) ->
     PredId = case m_rsc:rid(Name, Context) of
         undefined -> m_rsc:rid(Pred, Context);
         Id -> Id
     end,
     case m_rsc:is_a(PredId, predicate, Context) of
-        true -> {ok, PredId};
-        false -> {error, enoent}
+        true ->
+            case m_rsc:p_no_acl(PredId, name, Context) of
+                <<"hasusergroup">> ->
+                    % Do not import user group memberships
+                    % TODO: make this configurable.
+                    {error, eacces};
+                _ ->
+                    {ok, PredId}
+            end;
+        false ->
+            {error, enoent}
     end.
 
 
+%% @doc Find a content group, prefer matching on name before URI.
+find_content_group(RId, Context) ->
+    Name = maps:get(<<"name">>, RId, undefined),
+    CGId = case m_rsc:rid(Name, Context) of
+        undefined -> m_rsc:rid(RId, Context);
+        Id -> Id
+    end,
+    case m_rsc:is_a(CGId, content_group, Context) of
+        true ->
+            {ok, CGId};
+        false ->
+            {error, enoent}
+    end.
+
+%% @doc Find the category to be imported. This tries to map the 'is_a'
+%% and the uri of the category. Importing resources into the 'meta' category
+%% is not allowed.
+-spec find_category( RId::map(),  Rsc::map(), z:context() ) -> {ok, m_rsc:resource_id()} | {error, term()}.
+find_category(RId, Rsc, Context) ->
+    RscCatId = case maps:get(<<"category_id">>, Rsc, undefined) of
+        #{ <<"name">> := Name, <<"uri">> := CatUri } ->
+            case m_rsc:rid(CatUri, Context) of
+                undefined -> m_rsc:rid(Name, Context);
+                UriId -> UriId
+            end;
+        #{ <<"uri">> := CatUri } ->
+            m_rsc:rid(CatUri, Context);
+        _ ->
+            undefined
+    end,
+    case m_rsc:is_a(RscCatId, category, Context) of
+        true ->
+            check_allowed_category(RscCatId, Context);
+        false ->
+            case maps:get(<<"is_a">>, RId, undefined) of
+                IsA when is_list(IsA) ->
+                    case first_category(lists:reverse(IsA), Context) of
+                        {ok, IsACatId} ->
+                            check_allowed_category(IsACatId, Context);
+                        error ->
+                            {ok, other}
+                    end;
+                _ ->
+                    {ok, other}
+            end
+    end.
+
+check_allowed_category(CatId, Context) ->
+    case m_category:is_a(CatId, meta, Context) of
+        true ->
+            % Do not import resources in the 'meta' category.
+            % TODO: make this configurable.
+            {error, eacces};
+        false ->
+            {ok, CatId}
+    end.
+
+
+first_category([], _Context) ->
+    error;
+first_category([ R | Rs ], Context) ->
+    case m_category:name_to_id(R, Context) of
+        {ok, CatId} ->
+            {ok, CatId};
+        {error, _} ->
+            first_category(Rs, Context)
+    end.
+
+%% @doc Return the host part of an URI
+-spec host( binary() | string() ) -> binary().
 host(Uri) ->
     #{
         host := Host
     } = uri_string:parse(Uri),
-    Host.
+    z_convert:to_binary(Host).
+
+
+%% @doc Check if the site is the local site
+is_local_site(Uri, Context ) ->
+    Site = z_context:site(Context),
+    case z_sites_dispatcher:get_site_for_url(Uri) of
+        {ok, Site} -> true;
+        {ok, _} -> false;
+        undefined -> false
+    end.
 
 % Install the datamodel for managing resource imports, especially the rights and options for the imports.
 -spec install( z:context() ) -> ok.

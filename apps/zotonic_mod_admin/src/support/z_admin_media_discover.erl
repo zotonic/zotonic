@@ -30,7 +30,7 @@ event(#submit{message={media_url_embed, Args}, form=Form}, Context) ->
     UrlData = z_convert:to_binary(z_string:trim(z_context:get_q(url, Context))),
     Vars = case try_embed(UrlData, Context) of
                 {ok, List} ->
-                    ListAsProps = [ as_proplist(MI) || MI <- List ],
+                    ListAsProps = [ as_proplist(MI, Context) || MI <- List ],
                     [
                         {media_imports, ListAsProps},
                         {id, proplists:get_value(id, Args)},
@@ -155,14 +155,12 @@ error_message(R, Context) ->
     ?__("Error checking the website.", Context).
 
 
-as_proplist(#media_import_props{} = MI) ->
-    Cat = case MI#media_import_props.category of
-        audio -> audio;
-        video -> video;
-        image -> image;
-        website -> website;
-        document -> document;
-        _ -> m_media:mime_to_category(maps:get(<<"mime">>, MI#media_import_props.medium_props, undefined))
+as_proplist(#media_import_props{} = MI, Context) ->
+    Cat = case m_rsc:is_a(MI#media_import_props.category, category, Context) of
+        true ->
+            m_rsc:rid(MI#media_import_props.category, Context);
+        false ->
+            m_media:mime_to_category(maps:get(<<"mime">>, MI#media_import_props.medium_props, undefined))
     end,
     [
         {description, MI#media_import_props.description},
