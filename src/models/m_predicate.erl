@@ -359,7 +359,7 @@ for_subject(Id, Context) ->
         NoRestriction = [ NoRestrictionId || {NoRestrictionId} <- NoRestrictionIds ],
         Valid ++ NoRestriction
     end,
-    z_depcache:memo(F, {predicate_for_subject, Id}, ?WEEK, [predicare, category], Context).
+    z_depcache:memo(F, {predicate_for_subject, Id}, ?WEEK, [predicate, category], Context).
 
 
 %% @doc Return the id of the predicate category
