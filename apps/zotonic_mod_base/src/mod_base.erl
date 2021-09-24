@@ -163,7 +163,7 @@ observe_hierarchy_updated(#hierarchy_updated{ root_id = <<"$category">> }, Conte
 observe_hierarchy_updated(#hierarchy_updated{ root_id = _ }, _Context) ->
     ok.
 
-manage_schema(_, Context) ->
+manage_schema(_, _Context) ->
     #datamodel{
         categories = [
             {organization, undefined, #{

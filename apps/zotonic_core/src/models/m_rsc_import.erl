@@ -597,7 +597,7 @@ import(_OptLocalId, JSON, _ImportedAcc, _Options, _Context) ->
 update_rsc(undefined, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
     UpdateOptions = [
         {is_escape_texts, false},
-        is_import,
+        is_import
     ],
     Uri = maps:get(<<"uri">>, Rsc),
     IsImportDeleted = proplists:get_value(is_import_deleted, Options, false),
