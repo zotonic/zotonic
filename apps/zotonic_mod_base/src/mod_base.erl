@@ -172,17 +172,6 @@ manage_schema(_, Context) ->
                         {en, <<"Organization">>},
                         {nl, <<"Organisatie">>}
                     ]}
-            }},
-            {placeholder, undefined, #{
-                <<"title">> => #trans{
-                    tr = [
-                        {en, <<"Placeholder">>},
-                        {nl, <<"Tijdelijke aanduiding">>}
-                    ]},
-                <<"summary">> => <<
-                    "Placeholders are used for importing non-authoritative content from ",
-                    "remote sites. These are temporary resources which might be replaced ",
-                    "with a full resource.">>
             }}
         ]
     }.

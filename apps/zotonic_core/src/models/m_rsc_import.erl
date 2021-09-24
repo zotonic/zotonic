@@ -337,8 +337,7 @@ reimport_1(Id, ImportedAcc, IsForceImport, Context) ->
             <<"uri">> := Uri,
             <<"last_import_status">> := Status
         }} ->
-            case m_rsc:is_a(Id, placeholder, Context)
-                orelse IsForceImport
+            case IsForceImport
                 orelse (
                     not m_rsc:p(Id, is_authoritative, Context)
                     andalso Status =/= <<"ok">>
@@ -361,9 +360,7 @@ reimport_1(Id, ImportedAcc, IsForceImport, Context) ->
 %% @doc Reimport a non-authoritative resource or placeholder using new import options.
 -spec reimport( m_rsc:resource_id(), options(), z:context() ) -> import_result().
 reimport(Id, Options, Context) ->
-    case z_convert:to_bool( m_rsc:p(Id, is_authoritative, Context) )
-        andalso not m_rsc:is_a(Id, placeholder, Context)
-    of
+    case z_convert:to_bool( m_rsc:p(Id, is_authoritative, Context) ) of
         true ->
             {error, authoritative};
         false ->
@@ -600,7 +597,7 @@ import(_OptLocalId, JSON, _ImportedAcc, _Options, _Context) ->
 update_rsc(undefined, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
     UpdateOptions = [
         {is_escape_texts, false},
-        is_import
+        is_import,
     ],
     Uri = maps:get(<<"uri">>, Rsc),
     IsImportDeleted = proplists:get_value(is_import_deleted, Options, false),
