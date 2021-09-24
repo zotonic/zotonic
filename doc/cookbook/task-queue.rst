@@ -69,16 +69,17 @@ Add the callback function ``update_external_rsc/2`` referenced above to your mod
 
     update_external_rsc(RscId, Context) ->
         %% Fetch resource properties
-        Json = z_convert:to_json(m_rsc_export:full(Id, Context)),
+        {ok, JSON} = m_rsc_export:full(Id, Context),
+        Data = jsxrecord:encode(JSON),
 
-        %% Execute HTTP query to external API
+        %% Execute HTTP POST to external API
         {ok, Response} = httpc:request(
             post,
             {
                 "https://some-external-api.com",
                 [],
                 "application/json",
-                Json
+                Data
             },
             [],
             []
