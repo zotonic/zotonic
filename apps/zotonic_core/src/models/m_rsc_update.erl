@@ -457,15 +457,16 @@ update(Id, Props, Options, Context) when is_list(Props) ->
     end,
     update(Id, Props1, OptionsTz, Context);
 update(Id, PropsOrFun, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
+    IsImport = proplists:get_value(is_import, Options, false),
     Tz0 = case is_map(PropsOrFun) of
-        true ->
+        true when not IsImport ->
             % Timezone in the update props is leading over the timezone in the options
             case maps:get(<<"tz">>, PropsOrFun, undefined) of
                 undefined -> proplists:get_value(tz, Options, <<"UTC">>);
                 <<>> -> proplists:get_value(tz, Options, <<"UTC">>);
                 PropTz -> PropTz
             end;
-        false ->
+        _ ->
             proplists:get_value(tz, Options, <<"UTC">>)
     end,
     % Sanity fallback for 'undefined' tz in the options
@@ -1087,7 +1088,7 @@ preflight_check_uri(Id, #{ <<"uri">> := Uri }, Context) when Uri =/= undefined -
             ok;
         _N ->
             lager:warning("Trying to insert duplicate uri ~p", [Uri]),
-            throw({error, duplicate_uri})
+            {error, duplicate_uri}
     end;
 preflight_check_uri(_Id, _Props, _Context) ->
     ok.
