@@ -398,6 +398,20 @@ Modules
  * Moved ``mod_base_site`` to https://github.com/zotonic/zotonic_mod_base_site
 
 
+Menus
+^^^^^
+
+The storage format of the `menu` property is changed.  Previously it was stored as a list of tuples::
+
+    {1234, [ {5678, [ ... ]}, ...}
+
+This doesn't allow for conversion to JSON, so the structure has been changed to use records::
+
+    #rsc_tree{ id = ...,  tree = [ ... ]}
+
+This allows for serialization to JSON using jsxrecord.
+
+
 
 .. _OTP directory structure: http://erlang.org/doc/design_principles/applications.html#id82228
 .. _umbrella application: https://www.rebar3.org/v3/docs/from-rebar-2x-to-rebar3#section-required-directory-structure
