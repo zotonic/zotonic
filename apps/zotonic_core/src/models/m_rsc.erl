@@ -883,7 +883,8 @@ rid(<<"http:", _/binary>> = Uri, Context) ->
     uri_lookup(Uri, Context);
 rid(<<"https:", _/binary>> = Uri, Context) ->
     uri_lookup(Uri, Context);
-rid(#{ <<"uri">> := Uri, <<"name">> := Name } = Map, Context) ->
+rid(#{ <<"uri">> := Uri } = Map, Context) ->
+    Name = maps:get(<<"name">>, Map, undefined),
     case rid(Uri, Context) of
         undefined ->
             case rid(Name, Context) of

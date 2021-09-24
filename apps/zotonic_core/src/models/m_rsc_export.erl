@@ -75,37 +75,54 @@
 -include_lib("../../include/zotonic.hrl").
 
 m_get([ <<"full">>, Id | Rest ], _Msg, Context) ->
-    {ok, {full(Id, Context), Rest}};
+    case full(Id, Context) of
+        {ok, Export} ->
+            {ok, {Export, Rest}};
+        {error, _} = Error ->
+            Error
+    end;
 m_get([ Id | Rest ], _Msg, Context) ->
-    {ok, {full(Id, Context), Rest}}.
+    case full(Id, Context) of
+        {ok, Export} ->
+            {ok, {Export, Rest}};
+        {error, _} = Error ->
+            Error
+    end.
 
 %% @doc Get the full representation of a resource.
--spec full( m_rsc:resource(), z:context() ) -> map() | undefined.
+-spec full( m_rsc:resource(), z:context() ) -> {ok, map()} | {error, term()}.
 full(undefined, _Context) ->
-    undefined;
+    {error, enoent};
 full(Id, Context) when is_integer(Id) ->
     case m_rsc:get(Id, Context) of
         undefined ->
             % Access denied or not found
-            undefined;
+            case m_rsc:exists(Id, Context) of
+                true ->
+                    {error, eacces};
+                false ->
+                    {error, enoent}
+            end;
         Rsc0 ->
+            ContextNoLang = z_context:set_language('x-default', Context),
+
             Rsc1 = filter_empty(Rsc0),
-            Rsc = replace_ids_with_uris(Rsc1, Context),
-            Medium = m_media:get(Id, Context),
-            DepictionUrl = depiction_url(m_media:depiction(Id, Context), Context),
-            PreviewUrl = preview_url(Medium, Context),
-            DownloadUrl = download_url(Medium, Context),
+            Rsc = replace_ids_with_uris(Rsc1, ContextNoLang),
+            Medium = m_media:get(Id, ContextNoLang),
+            DepictionUrl = depiction_url(m_media:depiction(Id, ContextNoLang), ContextNoLang),
+            PreviewUrl = preview_url(Medium, ContextNoLang),
+            DownloadUrl = download_url(Medium, ContextNoLang),
 
             % URL used as the template for urls to export other resource ids.
-            BaseUri0 = z_context:abs_url( z_dispatcher:url_for(id, [ {id, <<"ID">>} ], Context), Context),
+            BaseUri0 = z_context:abs_url( z_dispatcher:url_for(id, [ {id, <<"ID">>} ], ContextNoLang), ContextNoLang),
             BaseUri = binary:replace(BaseUri0, <<"/ID">>, <<"/:id">>),
 
             Export = #{
                 %% Essential fields
                 <<"id">> => Id,
                 <<"name">> => m_rsc:p(Id, <<"name">>, Context),
-                <<"is_a">> => m_rsc:is_a(Id, Context),
-                <<"uri">> => m_rsc:uri(Id, Context),
+                <<"is_a">> => [ z_convert:to_binary(A) || A <- m_rsc:is_a(Id, Context) ],
+                <<"uri">> => m_rsc:uri(Id, ContextNoLang),
                 <<"uri_template">> => BaseUri,
 
                 %% Parts
@@ -114,11 +131,12 @@ full(Id, Context) when is_integer(Id) ->
                 <<"medium_url">> => DownloadUrl,
                 <<"preview_url">> => PreviewUrl,
                 <<"depiction_url">> => DepictionUrl,
-                <<"edges">> => edges(Id, Context)
+                <<"edges">> => edges(Id, ContextNoLang)
             },
 
-            %% Filter empty lists
-            filter_empty(privacy_filter(Id, Export, Context))
+            %% Filter empty values
+            Export1 = filter_empty(privacy_filter(Id, Export, ContextNoLang)),
+            {ok, Export1}
     end;
 full(Id, Context) ->
     full(m_rsc:rid(Id, Context), Context).
