@@ -82,7 +82,7 @@ export_data() ->
                       #{<<"id">> => 301,
                         <<"is_a">> => [ <<"meta">>, <<"predicate">> ],
                         <<"name">> => <<"author">>,
-                        <<"title">> => #trans{ tr = [ {<<"en">>,<<"Author">>} ]},
+                        <<"title">> => #trans{ tr = [ {en,<<"Author">>} ]},
                         <<"uri">> => <<"http://purl.org/dc/terms/creator">>}}},
       <<"id">> => 333,
       <<"is_a">> => [ <<"text">>, <<"article">>, <<"foobartext">> ],
