@@ -69,7 +69,8 @@ process(_Method, _AcceptedCT, ProvidedCT, Context) ->
     end,
     AbsUrl = z_context:abs_url(Location, Context3),
     Context4 = z_context:set_resp_header(<<"location">>, AbsUrl, Context3),
-    {{halt, 303}, Context4}.
+    Context5 = z_context:set_resource_headers(Id, Context4),
+    {{halt, 303}, Context5}.
 
 %% @doc Fetch the list of content types provided, together with their dispatch rule name.
 %% text/html is moved to the front of the list as that is the default mime type to be returned.
