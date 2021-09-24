@@ -25,14 +25,23 @@ modify_rsc_test() ->
     Options = [
         {import_edges, 1}
     ],
-    {ok, {Id, _Map}} = m_rsc_import:import(Data, Options, AdminC),
+    {ok, {Id, _}} = m_rsc_import:import(Data, Options, AdminC),
 
     ?assertEqual(Id, m_rsc:uri_lookup("https://foo.test/id/333", C)),
     ?assertEqual(Id, m_rsc:rid(<<"https://foo.test/id/333">>, C)),
     ?assertEqual(Id, m_rsc:rid(#{ <<"uri">> => <<"https://foo.test/id/333">> }, C)),
 
     lager:info("[~p] Expecting duplicate_uri error...", [?MODULE]),
-    ?assertEqual({error, duplicate_uri}, m_rsc_import:import(Data, AdminC)),
+    DupRsc = #{
+        <<"uri">> => <<"https://foo.test/id/333">>,
+        <<"category_id">> => <<"person">>,
+        <<"title">> => <<"Dup Person">>
+    },
+    ?assertEqual({error, duplicate_uri}, m_rsc:insert(DupRsc, AdminC)),
+
+    % Reimporting the same, should return the same id.
+    % No edge import should keep the existing edges as well.
+    {ok, {Id, _}} = m_rsc_import:import(Data, [], AdminC),
 
     %% Existence check
     ?assertEqual(true, m_rsc:exists(Id, AdminC)),
