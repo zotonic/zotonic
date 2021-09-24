@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-08-26 22:18\n"
+"PO-Revision-Date: 2021-09-24 17:56\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -963,7 +963,7 @@ msgstr "Не смог обнаружить ничего, что можно бы�
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:88
 msgid "Count"
-msgstr "Посчитать"
+msgstr "Счёт"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:86
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:103
