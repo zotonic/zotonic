@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-09-24 17:56\n"
+"PO-Revision-Date: 2021-09-24 18:24\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1050,7 +1050,7 @@ msgstr "Отсоединить"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:36
 msgid "Discover media"
-msgstr "Откройте для себя средства массовой информации"
+msgstr "Обнаружить медиаматериал."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:25
 msgid "Disks"
