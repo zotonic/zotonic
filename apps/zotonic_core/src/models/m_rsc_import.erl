@@ -932,7 +932,22 @@ is_newer_medium(_, _) ->
 
 %% @doc Import all edges, return a list of newly created objects
 import_edges(LocalId, #{ <<"edges">> := Edges }, ImportedAcc, Options, Context) when is_map(Edges) ->
-    % Delete edges not in 'Edges', add new edges if needed.
+    % Delete all edges with predicates not mentioned in the import
+    LocalPredicates = [ z_convert:to_binary(P) || P <- m_edge:object_predicates(LocalId, Context) ],
+    ImportPredicates = maps:keys(Edges),
+
+    lists:foreach(
+        fun
+            (<<"hasusergroup">>) ->
+                % Local ACL predicate - keep as is
+                ok;
+            (P) ->
+                % Delete all edges for predicate P
+                m_edge:set_sequence(LocalId, P, [], Context)
+        end,
+        LocalPredicates -- ImportPredicates),
+
+    % Sync predicates present in the import data.
     maps:fold(
         fun
             (Name, #{ <<"predicate">> := Pred, <<"objects">> := Os }, Acc) ->
@@ -972,7 +987,7 @@ replace_edges(LocalId, PredId, Os, ImportedAcc, Options, Context) ->
         end,
         {[], ImportedAcc},
         Os),
-    m_edge:update_sequence(LocalId, PredId, ObjectIds, Context),
+    m_edge:set_sequence(LocalId, PredId, ObjectIds, Context),
     ImportedAcc1.
 
 

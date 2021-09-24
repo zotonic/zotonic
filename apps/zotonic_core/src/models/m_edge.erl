@@ -827,56 +827,61 @@ subject_edge_props(Id, Predicate, Context) ->
 
 
 %% @doc Reorder the edges so that the mentioned ids are in front, in the listed order.
-%% @spec update_sequence(Id, Predicate, ObjectIds, Context) -> ok | {error, Reason}
-update_sequence(Id, Pred, ObjectIds, Context) when is_integer(Id) ->
-    case z_acl:rsc_editable(Id, Context) of
-        true ->
-            {ok, PredId} = m_predicate:name_to_id(Pred, Context),
-            F = fun(Ctx) ->
-                All = z_db:q("
-                            select object_id, id
-                            from edge
-                            where predicate_id = $1
-                              and subject_id = $2", [PredId, Id], Ctx),
+-spec update_sequence( m_rsc:resource(), m_rsc:resource(), list( m_rsc:resource_id(), z:context() ) ->
+    ok | {error, term()}.
+update_sequence(Subject, Pred, ObjectIds, Context) when is_integer(Id) ->
+    case m_rsc:rid(Subject, Context) of
+        undefined ->
+            {error, enoent};
+        SubjectId ->
+            case z_acl:rsc_editable(SubjectId, Context) of
+                true ->
+                    {ok, PredId} = m_predicate:name_to_id(Pred, Context),
+                    F = fun(Ctx) ->
+                        All = z_db:q("
+                                    select object_id, id
+                                    from edge
+                                    where predicate_id = $1
+                                      and subject_id = $2", [PredId, SubjectId], Ctx),
 
-                MissingIds = lists:foldl(
-                    fun({OId, _}, Acc) ->
-                        case lists:member(OId, ObjectIds) of
-                            true -> Acc;
-                            false -> [OId | Acc]
-                        end
+                        MissingIds = lists:foldl(
+                            fun({OId, _}, Acc) ->
+                                case lists:member(OId, ObjectIds) of
+                                    true -> Acc;
+                                    false -> [OId | Acc]
+                                end
+                            end,
+                            [],
+                            All),
+
+                        lists:map(
+                            fun(OId) ->
+                                case lists:keymember(OId, 1, All) of
+                                    true ->
+                                        ok;
+                                    false ->
+                                        z_db:q("
+                                            insert into edge (subject_id, predicate_id, object_id)
+                                            values ($1, $2, $3)",
+                                            [ SubjectId, PredId, OId ],
+                                            Context)
+                                end
+                            end,
+                            ObjectIds),
+
+                        SortedIds = ObjectIds ++ lists:reverse(MissingIds),
+                        SortedEdgeIds = [proplists:get_value(OId, All, -1) || OId <- SortedIds],
+                        z_db:update_sequence(edge, SortedEdgeIds, Ctx),
+                        ok
                     end,
-                    [],
-                    All),
 
-                lists:map(
-                    fun(OId) ->
-                        case lists:keymember(OId, 1, All) of
-                            true ->
-                                ok;
-                            false ->
-                                z_db:q("
-                                    insert into edge (subject_id, predicate_id, object_id)
-                                    values ($1, $2, $3)",
-                                    [ Id, PredId, OId ],
-                                    Context)
-                        end
-                    end,
-                    ObjectIds),
-
-                SortedIds = ObjectIds ++ lists:reverse(MissingIds),
-                SortedEdgeIds = [proplists:get_value(OId, All, -1) || OId <- SortedIds],
-                z_db:update_sequence(edge, SortedEdgeIds, Ctx),
-                ok
-            end,
-
-            Result = z_db:transaction(F, Context),
-            z_depcache:flush(Id, Context),
-            Result;
-        false ->
-            {error, eacces}
+                    Result = z_db:transaction(F, Context),
+                    z_depcache:flush(SubjectId, Context),
+                    Result;
+                false ->
+                    {error, eacces}
+            end
     end.
-
 
 %% @doc Set edges order so that the specified object ids are in given order.
 %% Any extra edges not specified will be deleted, and any missing edges will be inserted.
