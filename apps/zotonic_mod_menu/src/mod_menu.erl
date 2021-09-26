@@ -462,7 +462,7 @@ manage_schema(install, Context) ->
         categories = [
               {menu, categorization,
                     #{
-                        <<"title">> => <<"Page menu">>
+                        <<"title">> => <<"Page Menu">>
                     }
               }
         ],
@@ -470,7 +470,7 @@ manage_schema(install, Context) ->
             {main_menu,
                 menu,
                 #{
-                    <<"title">> => <<"Main menu">>,
+                    <<"title">> => <<"Main Menu">>,
                     <<"menu">> => validate(default_menu(Context), [])
                 }
             }

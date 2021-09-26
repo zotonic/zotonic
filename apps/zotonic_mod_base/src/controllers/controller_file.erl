@@ -151,7 +151,7 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 maybe_id(Context) ->
     case z_context:get(?MODULE, Context) of
         {error, _} ->
-            {false, Context};
+            false;
         #z_file_info{acls=Acls} ->
             case lists:dropwhile(
                 fun
