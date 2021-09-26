@@ -325,7 +325,7 @@ get_menu(Id, Context) ->
     end.
 
 validate(undefined, Acc) ->
-    Acc;
+    lists:reverse(Acc);
 validate([], Acc) ->
 	lists:reverse(Acc);
 validate([ #rsc_tree{ id = Id, tree = Sub } = M | Ms ], Acc)
