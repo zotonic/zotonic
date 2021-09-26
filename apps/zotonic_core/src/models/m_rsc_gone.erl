@@ -109,7 +109,9 @@ is_gone(Id, Context) when is_integer(Id) ->
     z_depcache:memo(F, {rsc_is_gone, Id}, Context).
 
 %% @doc Check if the resource uri used to exist.
--spec is_gone_uri(string()|binary(), z:context()) -> boolean().
+-spec is_gone_uri(string()|binary()|undefined, z:context()) -> boolean().
+is_gone_uri(undefined, _Context) ->
+    false;
 is_gone_uri(Uri, Context) ->
     UriB = unicode:characters_to_binary(Uri, utf8),
     F = fun() ->

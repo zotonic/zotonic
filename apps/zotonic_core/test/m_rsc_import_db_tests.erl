@@ -58,17 +58,36 @@ modify_rsc_test() ->
 
     %% Check edges
     ?assertEqual([1], m_edge:objects(Id, author, AdminC)),
+    ?assertEqual([Id], m_edge:objects(Id, relation, AdminC)),
 
     %% Usual rights
     ?assertEqual(false, z_acl:rsc_editable(Id, C)),
     ?assertEqual(true, z_acl:rsc_editable(Id, AdminC)),
+
+
+    % Import again, now as a local authoritative copy
+    OptionsAuth = [
+        {import_edges, 1},
+        is_authoritative
+    ],
+    {ok, {IdAuth, _}} = m_rsc_import:import(Data, OptionsAuth, AdminC),
+
+    %% Must be a different resource than the previous import.
+    ?assertEqual(true, Id =/= IdAuth),
+    ?assertEqual(true, m_rsc:p(IdAuth, is_published, AdminC)),
+    ?assertEqual(true, m_rsc:p(IdAuth, is_authoritative, AdminC)),
+
+    %% Check edges
+    ?assertEqual([1], m_edge:objects(IdAuth, author, AdminC)),
+    ?assertEqual([IdAuth], m_edge:objects(IdAuth, relation, AdminC)),
 
     ok.
 
 export_data() ->
     #{<<"depiction_url">> => <<"https://localhost/lib/images/koe.jpg">>,
       <<"edges">> =>
-          #{<<"author">> =>
+          #{
+            <<"author">> =>
                 #{<<"objects">> =>
                       [#{<<"created">> => {{2018,11,23},{10,48,11}},
                          <<"object_id">> =>
@@ -83,7 +102,24 @@ export_data() ->
                         <<"is_a">> => [ <<"meta">>, <<"predicate">> ],
                         <<"name">> => <<"author">>,
                         <<"title">> => #trans{ tr = [ {en,<<"Author">>} ]},
-                        <<"uri">> => <<"http://purl.org/dc/terms/creator">>}}},
+                        <<"uri">> => <<"http://purl.org/dc/terms/creator">>}},
+            <<"relation">> =>
+                #{<<"objects">> =>
+                      [#{<<"created">> => {{2018,11,23},{10,48,11}},
+                         <<"object_id">> =>
+                             #{<<"id">> => 333,
+                               <<"is_a">> => [ <<"text">>, <<"article">>, <<"foobartext">> ],
+                               <<"name">> => undefined,
+                               <<"title">> => <<"Hello World">>,
+                               <<"uri">> => <<"https://foo.test/id/333">>},
+                         <<"seq">> => 1}],
+                  <<"predicate">> =>
+                      #{<<"id">> => 301,
+                        <<"is_a">> => [ <<"meta">>, <<"predicate">> ],
+                        <<"name">> => <<"relation">>,
+                        <<"title">> => #trans{ tr = [ {en,<<"Related">>} ]},
+                        <<"uri">> => <<"http://purl.org/dc/terms/relation">>}}
+            },
       <<"id">> => 333,
       <<"is_a">> => [ <<"text">>, <<"article">>, <<"foobartext">> ],
       <<"resource">> =>

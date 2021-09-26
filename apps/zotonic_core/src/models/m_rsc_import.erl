@@ -703,6 +703,11 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
                 <<"is_authoritative">> => true,
                 <<"uri">> => undefined
             };
+        _ when IsAuthCopy ->
+            Rsc3#{
+                <<"is_authoritative">> => true,
+                <<"uri">> => undefined
+            };
         _ ->
             Rsc3#{
                 <<"uri">> => maps:get(<<"uri">>, RemoteRId),
