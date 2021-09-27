@@ -101,21 +101,11 @@ maybe_set_peer_ip(#{ }, Context) ->
 maybe_set_language(#{ <<"preferences">> := #{ <<"language">> := <<>> } }, Context) ->
     Context;
 maybe_set_language(#{ <<"preferences">> := #{ <<"language">> := Lang } }, Context) when is_binary(Lang) ->
-    try
-        mod_translation:set_language(Lang, Context)
-    catch
-        error:undef ->
-            z_context:set_language(Lang, Context)
-    end;
+    set_language(Lang, Context);
 maybe_set_language(#{ language := <<>> }, Context) ->
     Context;
 maybe_set_language(#{ language := Lang }, Context) ->
-    try
-        mod_translation:set_language(Lang, Context)
-    catch
-        error:undef ->
-            z_context:set_language(Lang, Context)
-    end;
+    set_language(Lang, Context);
 maybe_set_language(_Payload, Context) ->
     Context.
 
@@ -137,6 +127,13 @@ maybe_set_sid(#{ <<"options">> := #{ <<"sid">> := Sid } }, Context) when is_bina
 maybe_set_sid(_Payload, Context) ->
     Context.
 
+set_language(Lang, Context) ->
+    case z_module_manager:is_provided(mod_translation, Context) of
+        true ->
+            mod_translation:set_language(Lang, Context);
+        false ->
+            z_context:set_language(Lang, Context)
+    end.
 
 set_connect_context_options(Options, Context) ->
     Prefs = maps:get(context_prefs, Options, #{}),
