@@ -71,9 +71,14 @@ new_user_context( Site, ClientId, SessionOptions ) ->
         client_id = ClientId,
         routing_id = maps:get(routing_id, SessionOptions, <<>>)
     },
+
+    Context2 = maybe_set_language(SessionOptions, Context1),
+    Context3 = maybe_set_timezone(SessionOptions, Context2),
+    Context4 = maybe_set_peer_ip(SessionOptions, Context3),
+
     Prefs = maps:get(context_prefs, SessionOptions, #{}),
     SessionId = maps:get(cotonic_sid, Prefs, undefined),
-    z_context:set_session_id(SessionId, Context1).
+    z_context:set_session_id(SessionId, Context4).
 
 -spec control_message( list(), mqtt_packet_map:mqtt_packet(), z:context() ) -> {ok, z:context()}.
 control_message([ <<"auth">> ], #{ payload := Payload }, Context) ->
@@ -88,9 +93,23 @@ control_message([ <<"sid">> ], #{ payload := Payload }, Context) ->
 control_message(_Topic, _Packet, Context) ->
     {ok, Context}.
 
+maybe_set_peer_ip(#{ peer_ip := PeerIp }, Context) ->
+    z_context:set(peer_ip, PeerIp, Context);
+maybe_set_peer_ip(#{ }, Context) ->
+    Context.
+
 maybe_set_language(#{ <<"preferences">> := #{ <<"language">> := <<>> } }, Context) ->
     Context;
 maybe_set_language(#{ <<"preferences">> := #{ <<"language">> := Lang } }, Context) when is_binary(Lang) ->
+    try
+        mod_translation:set_language(Lang, Context)
+    catch
+        error:undef ->
+            z_context:set_language(Lang, Context)
+    end;
+maybe_set_language(#{ language := <<>> }, Context) ->
+    Context;
+maybe_set_language(#{ language := Lang }, Context) ->
     try
         mod_translation:set_language(Lang, Context)
     catch
@@ -103,6 +122,10 @@ maybe_set_language(_Payload, Context) ->
 maybe_set_timezone(#{ <<"preferences">> := #{ <<"timezone">> := <<>> } }, Context) ->
     Context;
 maybe_set_timezone(#{ <<"preferences">> := #{ <<"timezone">> := Timezone } }, Context) when is_binary(Timezone) ->
+    z_context:set_tz(Timezone, Context);
+maybe_set_timezone(#{ timezone := <<>> }, Context) ->
+    Context;
+maybe_set_timezone(#{ timezone := Timezone}, Context) when is_binary(Timezone) ->
     z_context:set_tz(Timezone, Context);
 maybe_set_timezone(_Payload, Context) ->
     Context.
