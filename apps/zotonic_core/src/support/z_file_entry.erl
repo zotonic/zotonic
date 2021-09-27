@@ -452,6 +452,8 @@ is_compressable(<<"application/javascript">>) -> true;
 is_compressable(<<"application/x-javascript">>) -> true;
 is_compressable(<<"application/xhtml+xml">>) -> true;
 is_compressable(<<"application/xml">>) -> true;
+is_compressable(<<"application/json">>) -> true;
+is_compressable(<<"application/ld+json">>) -> true;
 is_compressable(<<"image/svg+xml">>) -> true;
 is_compressable(_Mime) -> false.
 
