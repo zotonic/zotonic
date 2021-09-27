@@ -137,21 +137,15 @@ set_language(Lang, Context) ->
 
 set_connect_context_options(Options, Context) ->
     Prefs = maps:get(context_prefs, Options, #{}),
-    Context2 = case maps:get(language, Prefs, undefined) of
-        undefined -> Context;
-        Language -> z_context:set_language(Language, Context)
+    Context1 = maybe_set_language(Prefs, Context),
+    Context2 = maybe_set_timezone(Prefs, Context1),
+    Context3 = z_context:set(auth_options, maps:get(auth_options, Prefs, #{}), Context2),
+    Context4 = maybe_set_peer_ip(Options, Context3),
+    Context5 = case maps:get(cotonic_sid, Prefs, undefined) of
+        undefined -> Context4;
+        Sid -> z_context:set_session_id(Sid, Context4)
     end,
-    Context3 = case maps:get(timezone, Prefs, undefined) of
-        undefined -> Context2;
-        Tz -> z_context:set_tz(Tz, Context2)
-    end,
-    Context4 = z_context:set(auth_options, maps:get(auth_options, Prefs, #{}), Context3),
-    Context5 = z_context:set(peer_ip, maps:get(peer_ip, Options, undefined), Context4),
-    Context6 = case maps:get(cotonic_sid, Prefs, undefined) of
-        undefined -> Context5;
-        Sid -> z_context:set_session_id(Sid, Context5)
-    end,
-    z_acl:logon_refresh(Context6).
+    z_acl:logon_refresh(Context5).
 
 -spec connect( mqtt_packet_map:mqtt_packet(), boolean(), mqtt_session:msg_options(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.
 connect(#{ type := connect, username := U, password := P, properties := Props }, false,
