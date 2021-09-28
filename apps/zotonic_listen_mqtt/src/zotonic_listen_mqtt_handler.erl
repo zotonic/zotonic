@@ -95,6 +95,11 @@ recv_connect_data(ConnectData, Socket, Transport, State) ->
         {error, expect_connect} ->
             lager:info("MQTT: refusing connect with wrong packet type"),
             ok = Transport:close(Socket);
+        {error, unknown_host} ->
+            %% Common auth mistake when connecting MQTT clients to zotonic. Because most clients don't
+            %% report the connection error, it is good to at least have a message in the log.
+            lager:info("MQTT: refusing connect with unknown host. Use \"example.com:localuser\" as username."),
+            ok = Transport:close(Socket);
         {error, _} ->
             % Invalid packet or unkown host - just close the connection
             ok = Transport:close(Socket)

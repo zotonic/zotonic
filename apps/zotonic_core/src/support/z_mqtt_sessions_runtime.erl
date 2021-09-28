@@ -71,9 +71,14 @@ new_user_context( Site, ClientId, SessionOptions ) ->
         client_id = ClientId,
         routing_id = maps:get(routing_id, SessionOptions, <<>>)
     },
+
+    Context2 = maybe_set_language(SessionOptions, Context1),
+    Context3 = maybe_set_timezone(SessionOptions, Context2),
+    Context4 = maybe_set_peer_ip(SessionOptions, Context3),
+
     Prefs = maps:get(context_prefs, SessionOptions, #{}),
     SessionId = maps:get(cotonic_sid, Prefs, undefined),
-    z_context:set_session_id(SessionId, Context1).
+    z_context:set_session_id(SessionId, Context4).
 
 -spec control_message( list(), mqtt_packet_map:mqtt_packet(), z:context() ) -> {ok, z:context()}.
 control_message([ <<"auth">> ], #{ payload := Payload }, Context) ->
@@ -88,21 +93,29 @@ control_message([ <<"sid">> ], #{ payload := Payload }, Context) ->
 control_message(_Topic, _Packet, Context) ->
     {ok, Context}.
 
+maybe_set_peer_ip(#{ peer_ip := PeerIp }, Context) ->
+    z_context:set(peer_ip, PeerIp, Context);
+maybe_set_peer_ip(#{ }, Context) ->
+    Context.
+
 maybe_set_language(#{ <<"preferences">> := #{ <<"language">> := <<>> } }, Context) ->
     Context;
 maybe_set_language(#{ <<"preferences">> := #{ <<"language">> := Lang } }, Context) when is_binary(Lang) ->
-    try
-        mod_translation:set_language(Lang, Context)
-    catch
-        error:undef ->
-            z_context:set_language(Lang, Context)
-    end;
+    set_language(Lang, Context);
+maybe_set_language(#{ language := <<>> }, Context) ->
+    Context;
+maybe_set_language(#{ language := Lang }, Context) ->
+    set_language(Lang, Context);
 maybe_set_language(_Payload, Context) ->
     Context.
 
 maybe_set_timezone(#{ <<"preferences">> := #{ <<"timezone">> := <<>> } }, Context) ->
     Context;
 maybe_set_timezone(#{ <<"preferences">> := #{ <<"timezone">> := Timezone } }, Context) when is_binary(Timezone) ->
+    z_context:set_tz(Timezone, Context);
+maybe_set_timezone(#{ timezone := <<>> }, Context) ->
+    Context;
+maybe_set_timezone(#{ timezone := Timezone}, Context) when is_binary(Timezone) ->
     z_context:set_tz(Timezone, Context);
 maybe_set_timezone(_Payload, Context) ->
     Context.
@@ -114,24 +127,25 @@ maybe_set_sid(#{ <<"options">> := #{ <<"sid">> := Sid } }, Context) when is_bina
 maybe_set_sid(_Payload, Context) ->
     Context.
 
+set_language(Lang, Context) ->
+    case z_module_manager:is_provided(mod_translation, Context) of
+        true ->
+            mod_translation:set_language(Lang, Context);
+        false ->
+            z_context:set_language(Lang, Context)
+    end.
 
 set_connect_context_options(Options, Context) ->
     Prefs = maps:get(context_prefs, Options, #{}),
-    Context2 = case maps:get(language, Prefs, undefined) of
-        undefined -> Context;
-        Language -> z_context:set_language(Language, Context)
+    Context1 = maybe_set_language(Prefs, Context),
+    Context2 = maybe_set_timezone(Prefs, Context1),
+    Context3 = z_context:set(auth_options, maps:get(auth_options, Prefs, #{}), Context2),
+    Context4 = maybe_set_peer_ip(Options, Context3),
+    Context5 = case maps:get(cotonic_sid, Prefs, undefined) of
+        undefined -> Context4;
+        Sid -> z_context:set_session_id(Sid, Context4)
     end,
-    Context3 = case maps:get(timezone, Prefs, undefined) of
-        undefined -> Context2;
-        Tz -> z_context:set_tz(Tz, Context2)
-    end,
-    Context4 = z_context:set(auth_options, maps:get(auth_options, Prefs, #{}), Context3),
-    Context5 = z_context:set(peer_ip, maps:get(peer_ip, Options, undefined), Context4),
-    Context6 = case maps:get(cotonic_sid, Prefs, undefined) of
-        undefined -> Context5;
-        Sid -> z_context:set_session_id(Sid, Context5)
-    end,
-    z_acl:logon_refresh(Context6).
+    z_acl:logon_refresh(Context5).
 
 -spec connect( mqtt_packet_map:mqtt_packet(), boolean(), mqtt_session:msg_options(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.
 connect(#{ type := connect, username := U, password := P, properties := Props }, false,
