@@ -653,8 +653,7 @@ calc_size(#{ req_width := undefined, req_height := H, image_height := IH, crop :
     % Image will be extented
     {maps:get(image_width, S), H, none};
 
-calc_size(#{ req_width := undefined, req_height := H, image_width := IW, image_height := IH } = S)
-    when IH < H ->
+calc_size(#{ req_width := undefined, req_height := H, image_width := IW, image_height := IH } = S) ->
     W = round((IW / IH) * H),
     calc_size(S#{ req_width := W });
 
