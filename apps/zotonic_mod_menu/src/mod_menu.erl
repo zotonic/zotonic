@@ -328,6 +328,8 @@ validate(undefined, Acc) ->
     lists:reverse(Acc);
 validate([], Acc) ->
 	lists:reverse(Acc);
+validate(<<>>, Acc) ->
+    lists:reverse(Acc);
 validate([ #rsc_tree{ id = Id, tree = Sub } = M | Ms ], Acc)
     when is_integer(Id);
          is_atom(Id);
