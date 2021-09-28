@@ -31,8 +31,6 @@ modify_rsc_test() ->
     ?assertEqual(Id, m_rsc:rid(<<"https://foo.test/id/333">>, C)),
     ?assertEqual(Id, m_rsc:rid(#{ <<"uri">> => <<"https://foo.test/id/333">> }, C)),
 
-    ?assertEqual(1, m_rsc:p(Id, version, AdminC)),
-
     lager:info("[~p] Expecting duplicate_uri error...", [?MODULE]),
     DupRsc = #{
         <<"uri">> => <<"https://foo.test/id/333">>,
@@ -51,7 +49,6 @@ modify_rsc_test() ->
 
     %% Check properties
     ?assertEqual(<<"Hello World">>, m_rsc:p(Id, title, AdminC)),
-    ?assertEqual(2, m_rsc:p(Id, version, AdminC)),
     ?assertEqual(true, m_rsc:p(Id, is_published, AdminC)),
     ?assertEqual(false, m_rsc:p(Id, is_authoritative, AdminC)),
     ?assertEqual(<<"https://foo.test/id/333">>, m_rsc:p(Id, uri, AdminC)),
