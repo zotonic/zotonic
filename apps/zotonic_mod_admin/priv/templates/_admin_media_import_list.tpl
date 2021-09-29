@@ -107,7 +107,7 @@
                                         {% if mi.props.is_authoritative|is_defined and not mi.props.is_authoritative %}
                                             <div class="checkbox form__is_authoritative">
                                                 <label>
-                                                    <input type="checkbox" id="{{ #published.index }}" name="is_authoritative" value="1">
+                                                    <input type="checkbox" id="{{ #published.index }}" name="is_authoritative" value="1" {% if is_authoritative %}checked{% endif %}>
                                                     {_ Make a local copy, disconnected from the remote page _}
                                                 </label>
                                             </div>
