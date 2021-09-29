@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-09-29 19:16\n"
+"PO-Revision-Date: 2021-09-29 19:26\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -18,43 +18,43 @@ msgstr ""
 
 #: apps/zotonic_core/src/support/z_fetch.erl:89
 msgid "Could not fetch the remote resource URL."
-msgstr ""
+msgstr "ไม่สามารถดึง URL ทรัพยากรระยะไกล"
 
 #: apps/zotonic_core/src/support/z_fetch.erl:75
 msgid "Forbidden to access the remote resource URL."
-msgstr ""
+msgstr "ห้ามมิให้เข้าถึง URL ทรัพยากรระยะไกล"
 
 #: apps/zotonic_core/src/support/z_media_import.erl:194
 msgid "Page Import"
-msgstr ""
+msgstr "นำเข้าหน้า"
 
 #: apps/zotonic_core/src/support/z_fetch.erl:83
 msgid "The remote server can not handle this URL."
-msgstr ""
+msgstr "เซิร์ฟเวอร์ระยะไกลไม่สามารถจัดการ URL นี้ได้"
 
 #: apps/zotonic_core/src/support/z_fetch.erl:87
 msgid "The remote server for the URL is having problems."
-msgstr ""
+msgstr "เซิร์ฟเวอร์ระยะไกลสำหรับ URL มีปัญหา"
 
 #: apps/zotonic_core/src/support/z_fetch.erl:85
 msgid "The remote server for the URL is having temporary problems."
-msgstr ""
+msgstr "เซิร์ฟเวอร์ระยะไกลสำหรับ URL มีปัญหาชั่วคราว"
 
 #: apps/zotonic_core/src/support/z_fetch.erl:77
 msgid "The resource at the URL can not be found."
-msgstr ""
+msgstr "ไม่พบทรัพยากรที่ URL"
 
 #: apps/zotonic_core/src/support/z_fetch.erl:79
 msgid "The resource at the URL is gone."
-msgstr ""
+msgstr "ทรัพยากรที่ URL หายไป"
 
 #: apps/zotonic_core/src/support/z_fetch.erl:81
 msgid "Too many requests for the remote server, try again later."
-msgstr ""
+msgstr "มีคำขอสำหรับเซิร์ฟเวอร์ระยะไกลมากเกินไป โปรดลองอีกครั้งในภายหลัง"
 
 #: apps/zotonic_core/src/support/z_fetch.erl:73
 msgid "Unauthorized to access the remote resource URL."
-msgstr ""
+msgstr "ไม่ได้รับอนุญาตในการเข้าถึง URL ทรัพยากรระยะไกล"
 
 #: apps/zotonic_core/src/support/z_media_import.erl:229
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
@@ -1095,7 +1095,7 @@ msgstr "ดิสก์"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:120
 msgid "Do not import connections"
-msgstr ""
+msgstr "อย่านำเข้าการเชื่อมต่อ"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
 msgid "Do you want to remove this block?"
@@ -1201,7 +1201,7 @@ msgstr "เกิดข้อผิดพลาดในการสร้าง
 
 #: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:40
 msgid "Error importing page from remote."
-msgstr ""
+msgstr "เกิดข้อผิดพลาดในการนำเข้าหน้าจากระยะไกล"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:184
 msgid "Error uploading the file."
@@ -1209,15 +1209,15 @@ msgstr "เกิดข้อผิดพลาดในการอัปโห
 
 #: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:148
 msgid "Error, duplicate name. Please change the name."
-msgstr ""
+msgstr "เกิดข้อผิดพลาด ชื่อซ้ำ กรุณาเปลี่ยนชื่อ"
 
 #: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:146
 msgid "Error, duplicate page path. Please change the uri."
-msgstr ""
+msgstr "เกิดข้อผิดพลาด เส้นทางของหน้าที่ซ้ำกัน กรุณาเปลี่ยน uri"
 
 #: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:144
 msgid "Error, duplicate uri. Please change the uri."
-msgstr ""
+msgstr "เกิดข้อผิดพลาด ซ้ำ uri กรุณาเปลี่ยน uri"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:8
 msgid "Every page can have a date range. For example if the page is an event or description of someone’s life."
@@ -1284,7 +1284,7 @@ msgstr "แคชระบบล้าง"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:128
 msgid "Follow connections and import all (deep copy)"
-msgstr ""
+msgstr "ติดตามการเชื่อมต่อและนำเข้าทั้งหมด (สำเนาลึก)"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:49
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
@@ -1323,7 +1323,7 @@ msgstr "หากหน้ามีช่วงวันที่เผยแพ
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:124
 msgid "Import only direct connections (shallow copy)"
-msgstr ""
+msgstr "นำเข้าเฉพาะการเชื่อมต่อโดยตรง (คัดลอกแบบตื้น)"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:85
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:20
@@ -1401,7 +1401,7 @@ msgstr "ทำ"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:113
 msgid "Make a local copy, disconnected from the remote page"
-msgstr ""
+msgstr "ทำสำเนาในเครื่อง ยกเลิกการเชื่อมต่อกับเพจระยะไกล"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:69
 msgid "Make a new media item"
@@ -1452,7 +1452,7 @@ msgstr "ชื่อสื่อ"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:131
 msgid "Media updated."
-msgstr ""
+msgstr "อัพเดตสื่อแล้ว"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:1
 msgid "Memory"
@@ -1688,7 +1688,7 @@ msgstr "ผู้อ้างอิงถึง"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:9
 msgid "Refresh"
-msgstr ""
+msgstr "รีเฟรช"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:50
 msgid "Refreshed every 30 minutes."
@@ -1881,7 +1881,7 @@ msgstr "โครงสร้าง"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:34
 msgid "Succesfully imported page from remote."
-msgstr ""
+msgstr "นำเข้าเพจจากรีโมตสำเร็จ"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:23
 msgid "Summary"
@@ -2013,7 +2013,7 @@ msgstr "เพจนี้สามารถเชื่อมต่อกับ
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:4
 msgid "This page is from another website. The original can be found at"
-msgstr ""
+msgstr "หน้านี้มาจากเว็บไซต์อื่น สามารถติดตามต้นฉบับได้ที่"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:51
 msgid "This resource was created by the module"
@@ -2217,7 +2217,7 @@ msgstr "คุณไม่มีสิทธิ์สร้างเพจนี
 #: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:150
 #: apps/zotonic_mod_image_edit/src/mod_image_edit.erl:51
 msgid "You don't have permission to edit this page."
-msgstr ""
+msgstr "คุณไม่ได้รับอนุญาตให้แก้ไขหน้านี้"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:173./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:148
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
@@ -2234,7 +2234,7 @@ msgstr "คุณต้องระบุคำอธิบายของไฟ
 
 #: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:152
 msgid "Your search query is invalid. Please correct it before saving."
-msgstr ""
+msgstr "คำค้นหาของคุณไม่ถูกต้อง โปรดแก้ไขก่อนบันทึก"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:21
 msgid "Zotonic Version"
@@ -5430,7 +5430,7 @@ msgstr "ไม่สามารถอัปโหลด"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:85
 msgid "Brightness"
-msgstr ""
+msgstr "ความสว่าง"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:76
 msgid "Click the image to set the cropping center."
@@ -5438,79 +5438,79 @@ msgstr "คลิกรูปภาพเพื่อตั้งศูนย์
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:81
 msgid "Contrast"
-msgstr ""
+msgstr "ตัดกัน"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:78
 msgid "Contrast &amp; Brightness"
-msgstr ""
+msgstr "ความคมชัด &amp; ความสว่าง"
 
 #: apps/zotonic_mod_image_edit/src/mod_image_edit.erl:48
 msgid "Could not save the image settings."
-msgstr ""
+msgstr "ไม่สามารถบันทึกการตั้งค่าภาพ"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:72
 msgid "Crop bottom"
-msgstr ""
+msgstr "ครอบตัดด้านล่าง"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:64
 msgid "Crop left"
-msgstr ""
+msgstr "ครอบตัดซ้าย"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:68
 msgid "Crop right"
-msgstr ""
+msgstr "ครอบตัดขวา"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:60
 msgid "Crop top"
-msgstr ""
+msgstr "เสื้อครอป"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:14
 msgid "Cropping center, click to remove"
-msgstr ""
+msgstr "ศูนย์ครอบตัด คลิกเพื่อลบ"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_admin_edit_media_button.tpl:3
 msgid "Edit image"
-msgstr ""
+msgstr "แก้ไขภาพ"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:54
 msgid "Keep logos and clip art sharp."
-msgstr ""
+msgstr "รักษาโลโก้และภาพตัดปะให้คมชัด"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:52
 msgid "Lossless resize"
-msgstr ""
+msgstr "ปรับขนาดแบบไม่สูญเสียข้อมูล"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:101
 msgid "Pan"
-msgstr ""
+msgstr "กระทะ"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:108
 msgid "Reset"
-msgstr ""
+msgstr "รีเซ็ต"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:93
 msgid "Roll"
-msgstr ""
+msgstr "ม้วน"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:90
 msgid "Roll, Tilt &amp; Pan"
-msgstr ""
+msgstr "ม้วน, เอียง &amp; แพน"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:35
 msgid "Rotate"
-msgstr ""
+msgstr "หมุน"
 
 #: apps/zotonic_mod_image_edit/src/mod_image_edit.erl:45
 msgid "Saved the image settings."
-msgstr ""
+msgstr "บันทึกการตั้งค่ารูปภาพ"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:30
 msgid "The original image stays unaltered, all edits can be changed at any time."
-msgstr ""
+msgstr "รูปภาพต้นฉบับจะไม่มีการเปลี่ยนแปลง การแก้ไขทั้งหมดสามารถเปลี่ยนแปลงได้ตลอดเวลา"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:97
 msgid "Tilt"
-msgstr ""
+msgstr "เอียง"
 
 #: apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:3./apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
 msgid "Import CSV file"
