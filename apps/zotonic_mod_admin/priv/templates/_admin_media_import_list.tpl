@@ -1,10 +1,12 @@
 <div id="media-import-wrapper">
 
 {% if error %}
+    <br>
     <p class="alert alert-danger">
         {{ error }}
     </p>
 {% elseif not media_imports  %}
+    <br>
     <p class="alert alert-warning">
         {_ Could not detect anything to import on that URL or embed code. _}
     </p>

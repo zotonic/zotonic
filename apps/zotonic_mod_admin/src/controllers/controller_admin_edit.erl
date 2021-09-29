@@ -67,14 +67,15 @@ redirect(Location, Context) ->
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Id = z_context:get(id, Context),
-    Blocks = z_notifier:foldr(#admin_edit_blocks{id=Id}, [], Context),
+    Context1 = z_context:set_resource_headers(Id, Context),
+    Blocks = z_notifier:foldr(#admin_edit_blocks{id=Id}, [], Context1),
     Vars = [
             {id, Id},
             {blocks, lists:sort(Blocks)}
-            | z_context:get_all(Context)
+            | z_context:get_all(Context1)
            ],
-    Html = z_template:render(z_context:get(template, Context, {cat, "admin_edit.tpl"}), Vars, Context),
-    z_context:output(Html, Context).
+    Html = z_template:render(z_context:get(template, Context, {cat, "admin_edit.tpl"}), Vars, Context1),
+    z_context:output(Html, Context1).
 
 
 %% @doc Fetch the (numerical) page id from the request
