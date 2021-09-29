@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-09-29 19:16\n"
+"PO-Revision-Date: 2021-09-29 19:25\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -18,43 +18,43 @@ msgstr ""
 
 #: apps/zotonic_core/src/support/z_fetch.erl:89
 msgid "Could not fetch the remote resource URL."
-msgstr ""
+msgstr "Не удалось получить URL-адрес удаленного ресурса."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:75
 msgid "Forbidden to access the remote resource URL."
-msgstr ""
+msgstr "Запрещен доступ к URL-адресу удаленного ресурса."
 
 #: apps/zotonic_core/src/support/z_media_import.erl:194
 msgid "Page Import"
-msgstr ""
+msgstr "Импорт страницы"
 
 #: apps/zotonic_core/src/support/z_fetch.erl:83
 msgid "The remote server can not handle this URL."
-msgstr ""
+msgstr "Удаленный сервер не может обработать этот URL."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:87
 msgid "The remote server for the URL is having problems."
-msgstr ""
+msgstr "На удаленном сервере для URL-адреса возникли проблемы."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:85
 msgid "The remote server for the URL is having temporary problems."
-msgstr ""
+msgstr "На удаленном сервере для URL-адреса возникли временные проблемы."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:77
 msgid "The resource at the URL can not be found."
-msgstr ""
+msgstr "Ресурс по URL-адресу не может быть найден."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:79
 msgid "The resource at the URL is gone."
-msgstr ""
+msgstr "Ресурс по URL-адресу исчез."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:81
 msgid "Too many requests for the remote server, try again later."
-msgstr ""
+msgstr "Слишком много запросов к удаленному серверу, повторите попытку позже."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:73
 msgid "Unauthorized to access the remote resource URL."
-msgstr ""
+msgstr "Неавторизованный доступ к URL-адресу удаленного ресурса."
 
 #: apps/zotonic_core/src/support/z_media_import.erl:229
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
@@ -1095,7 +1095,7 @@ msgstr "Диски"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:120
 msgid "Do not import connections"
-msgstr ""
+msgstr "Не импортировать подключения"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
 msgid "Do you want to remove this block?"
@@ -1201,7 +1201,7 @@ msgstr "Ошибка при создании страницы."
 
 #: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:40
 msgid "Error importing page from remote."
-msgstr ""
+msgstr "Ошибка при импорте страницы с удаленного компьютера."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:184
 msgid "Error uploading the file."
@@ -1209,15 +1209,15 @@ msgstr "Ошибка при закачивании файла."
 
 #: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:148
 msgid "Error, duplicate name. Please change the name."
-msgstr ""
+msgstr "Ошибка, повторяющееся имя. Пожалуйста, измените имя."
 
 #: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:146
 msgid "Error, duplicate page path. Please change the uri."
-msgstr ""
+msgstr "Ошибка, повторяющийся путь к странице. Пожалуйста, измените uri."
 
 #: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:144
 msgid "Error, duplicate uri. Please change the uri."
-msgstr ""
+msgstr "Ошибка, повторяющийся uri. Пожалуйста, измените uri."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:8
 msgid "Every page can have a date range. For example if the page is an event or description of someone’s life."
@@ -1284,7 +1284,7 @@ msgstr "Очистить системный кэш"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:128
 msgid "Follow connections and import all (deep copy)"
-msgstr ""
+msgstr "Следите за подключениями и импортируйте все (глубокая копия)"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:49
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
@@ -1323,7 +1323,7 @@ msgstr "Если страница имеет диапазон дат публи�
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:124
 msgid "Import only direct connections (shallow copy)"
-msgstr ""
+msgstr "Импортировать только прямые соединения (мелкая копия)"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:85
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:20
@@ -1401,7 +1401,7 @@ msgstr "Создать"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:113
 msgid "Make a local copy, disconnected from the remote page"
-msgstr ""
+msgstr "Сделать локальную копию, отключенную от удаленной страницы"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:69
 msgid "Make a new media item"
@@ -1452,7 +1452,7 @@ msgstr "Название материала"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:131
 msgid "Media updated."
-msgstr ""
+msgstr "СМИ обновлены."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:1
 msgid "Memory"
@@ -1688,7 +1688,7 @@ msgstr "Связи с"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:9
 msgid "Refresh"
-msgstr ""
+msgstr "Обновить"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:50
 msgid "Refreshed every 30 minutes."
@@ -1881,7 +1881,7 @@ msgstr "Структура"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:34
 msgid "Succesfully imported page from remote."
-msgstr ""
+msgstr "Страница успешно импортирована с удаленного компьютера."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:23
 msgid "Summary"
@@ -2013,7 +2013,7 @@ msgstr "Эта страница может соединяться с други�
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:4
 msgid "This page is from another website. The original can be found at"
-msgstr ""
+msgstr "Эта страница с другого веб-сайта. Оригинал можно найти на"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:51
 msgid "This resource was created by the module"
@@ -2217,7 +2217,7 @@ msgstr "У вас нет разрешения на создание этой с�
 #: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:150
 #: apps/zotonic_mod_image_edit/src/mod_image_edit.erl:51
 msgid "You don't have permission to edit this page."
-msgstr ""
+msgstr "У вас нет разрешения на редактирование этой страницы."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:173./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:148
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
@@ -2234,7 +2234,7 @@ msgstr "Вы должны указать описание файла, чтобы
 
 #: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:152
 msgid "Your search query is invalid. Please correct it before saving."
-msgstr ""
+msgstr "Ваш поисковый запрос недействителен. Пожалуйста, исправьте это перед сохранением."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:21
 msgid "Zotonic Version"
@@ -5430,7 +5430,7 @@ msgstr "Не удалось загрузить"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:85
 msgid "Brightness"
-msgstr ""
+msgstr "Яркость"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:76
 msgid "Click the image to set the cropping center."
@@ -5438,79 +5438,79 @@ msgstr "Щелкните изображение, чтобы установить
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:81
 msgid "Contrast"
-msgstr ""
+msgstr "Контраст"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:78
 msgid "Contrast &amp; Brightness"
-msgstr ""
+msgstr "Контраст &amp; Яркость"
 
 #: apps/zotonic_mod_image_edit/src/mod_image_edit.erl:48
 msgid "Could not save the image settings."
-msgstr ""
+msgstr "Не удалось сохранить настройки изображения."
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:72
 msgid "Crop bottom"
-msgstr ""
+msgstr "Укороченный низ"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:64
 msgid "Crop left"
-msgstr ""
+msgstr "Обрезать слева"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:68
 msgid "Crop right"
-msgstr ""
+msgstr "Обрезать справа"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:60
 msgid "Crop top"
-msgstr ""
+msgstr "Укороченный топ"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:14
 msgid "Cropping center, click to remove"
-msgstr ""
+msgstr "Центр кадрирования, нажмите, чтобы удалить"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_admin_edit_media_button.tpl:3
 msgid "Edit image"
-msgstr ""
+msgstr "Редактировать изображение"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:54
 msgid "Keep logos and clip art sharp."
-msgstr ""
+msgstr "Сохраняйте четкость логотипов и картинок."
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:52
 msgid "Lossless resize"
-msgstr ""
+msgstr "Изменение размера без потерь"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:101
 msgid "Pan"
-msgstr ""
+msgstr "Сковорода"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:108
 msgid "Reset"
-msgstr ""
+msgstr "Сброс настроек"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:93
 msgid "Roll"
-msgstr ""
+msgstr "Рулон"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:90
 msgid "Roll, Tilt &amp; Pan"
-msgstr ""
+msgstr "Крен, Наклон &amp; Панорамирование"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:35
 msgid "Rotate"
-msgstr ""
+msgstr "Повернуть"
 
 #: apps/zotonic_mod_image_edit/src/mod_image_edit.erl:45
 msgid "Saved the image settings."
-msgstr ""
+msgstr "Сохранил настройки изображения."
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:30
 msgid "The original image stays unaltered, all edits can be changed at any time."
-msgstr ""
+msgstr "Исходное изображение остается неизменным, все правки можно изменить в любой момент."
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:97
 msgid "Tilt"
-msgstr ""
+msgstr "Наклон"
 
 #: apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:3./apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
 msgid "Import CSV file"
