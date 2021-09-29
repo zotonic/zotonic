@@ -19,7 +19,8 @@
 -export([
     fetch/3,
     metadata/3,
-    as_data_url/3
+    as_data_url/3,
+    error_msg/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -62,6 +63,31 @@ content_type(Hs) ->
             [ Mime | _ ] = binary:split(z_convert:to_binary(CT), <<";">>),
             z_string:trim(Mime)
     end.
+
+
+%% @doc Map (http) errors to readable format.
+-spec error_msg(integer() | {error, term()}, z:context()) -> binary().
+error_msg({Status, _Url, _Hs, _Length, _Body}, Context) ->
+    error_msg(Status, Context);
+error_msg(401, Context) ->
+    ?__("Unauthorized to access the remote resource URL.", Context);
+error_msg(403, Context) ->
+    ?__("Forbidden to access the remote resource URL.", Context);
+error_msg(404, Context) ->
+    ?__("The resource at the URL can not be found.", Context);
+error_msg(410, Context) ->
+    ?__("The resource at the URL is gone.", Context);
+error_msg(429, Context) ->
+    ?__("Too many requests for the remote server, try again later.", Context);
+error_msg(S4xx, Context) when S4xx >= 400, S4xx < 500 ->
+    ?__("The remote server can not handle this URL.", Context);
+error_msg(503, Context) ->
+    ?__("The remote server for the URL is having temporary problems.", Context);
+error_msg(S5xx, Context) when S5xx >= 500 ->
+    ?__("The remote server for the URL is having problems.", Context);
+error_msg(_, Context) ->
+    ?__("Could not fetch the remote resource URL.", Context).
+
 
 
 %% @doc Add or modify fetch options. For development sites the 'insecure' options is added, as

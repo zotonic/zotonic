@@ -156,29 +156,10 @@ error_message(sizelimit, Context) ->
     ?__("This file is too large.", Context);
 error_message({Status, Url, Hs, _Size, _Body}, Context) when is_integer(Status), is_list(Hs) ->
     lager:error("HTTP error ~p fetching URL ~p", [ Status, Url ]),
-    map_http_error(Status, Context);
+    z_fetch:error_msg(Status, Context);
 error_message(R, Context) ->
     lager:warning("Unknown media discover error: ~p", [R]),
     ?__("Error checking the website.", Context).
-
-map_http_error(401, Context) ->
-    ?__("Unauthorized to access the remote resource URL.", Context);
-map_http_error(403, Context) ->
-    ?__("Forbidden to access the remote resource URL.", Context);
-map_http_error(404, Context) ->
-    ?__("The resource at the URL can not be found.", Context);
-map_http_error(410, Context) ->
-    ?__("The resource at the URL is gone.", Context);
-map_http_error(429, Context) ->
-    ?__("Too many requests for the remote server, try again later.", Context);
-map_http_error(S4xx, Context) when S4xx >= 400, S4xx < 500 ->
-    ?__("The remote server can not handle this URL.", Context);
-map_http_error(503, Context) ->
-    ?__("The remote server for the URL is having temporary problems.", Context);
-map_http_error(S5xx, Context) when S5xx >= 500 ->
-    ?__("The remote server for the URL is having problems.", Context);
-map_http_error(_, Context) ->
-    ?__("Could not fetch the remote resource URL.", Context).
 
 
 as_proplist(#media_import_props{} = MI, Context) ->
