@@ -696,30 +696,39 @@ get_q_all(Key, #context{ props = Props }) ->
 get_q_all_noz(Context) ->
     lists:filter(fun({X,_}) -> not is_zotonic_arg(X) end, z_context:get_q_all(Context)).
 
-is_zotonic_arg(<<"zotonic_host">>) -> true;  % backwards compatibility
-is_zotonic_arg(<<"zotonic_site">>) -> true;
-is_zotonic_arg(<<"zotonic_dispatch">>) -> true;
-is_zotonic_arg(<<"zotonic_dispatch_path">>) -> true;
-is_zotonic_arg(<<"zotonic_dispatch_path_rewrite">>) -> true;
-is_zotonic_arg(<<"zotonic_ticket">>) -> true;
-is_zotonic_arg(<<"zotonic_http_", _/binary>>) -> true;
-is_zotonic_arg(<<"zotonic_topic_", _/binary>>) -> true;
+% Known Zotonic rguments:
+%
+% - postback
+% - triggervalue
+% - zotonic_host
+% - zotonic_site
+% - zotonic_dispatch
+% - zotonic_dispatch_path
+% - zotonic_dispatch_path_rewrite
+% - zotonic_ticket
+% - zotonic_http_*
+% - zotonic_topic_*
+% - z_submitter
+% - z_postback
+% - z_trigger_id
+% - z_target_id
+% - z_delegate
+% - z_message
+% - z_transport
+% - z_sid
+% - z_pageid
+% - z_v
+% - z_msg
+% - z_comet
+% - z_postback_data
+
+-spec is_zotonic_arg(binary()) -> boolean().
 is_zotonic_arg(<<"postback">>) -> true;
 is_zotonic_arg(<<"triggervalue">>) -> true;
-is_zotonic_arg(<<"z_submitter">>) -> true;
-is_zotonic_arg(<<"z_postback">>) -> true;
-is_zotonic_arg(<<"z_trigger_id">>) -> true;
-is_zotonic_arg(<<"z_target_id">>) -> true;
-is_zotonic_arg(<<"z_delegate">>) -> true;
-is_zotonic_arg(<<"z_message">>) -> true;
-is_zotonic_arg(<<"z_transport">>) -> true;
-is_zotonic_arg(<<"z_sid">>) -> true;
-is_zotonic_arg(<<"z_pageid">>) -> true;
-is_zotonic_arg(<<"z_v">>) -> true;
-is_zotonic_arg(<<"z_msg">>) -> true;
-is_zotonic_arg(<<"z_comet">>) -> true;
-is_zotonic_arg(<<"z_postback_data">>) -> true;
+is_zotonic_arg(<<"zotonic_", _/binary>>) -> true;
+is_zotonic_arg(<<"z_", _/binary>>) -> true;
 is_zotonic_arg(_) -> false.
+
 
 %% @doc Fetch a query parameter and perform the validation connected to the parameter. An exception {not_validated, Key}
 %%      is thrown when there was no validator, when the validator is invalid or when the validation failed.

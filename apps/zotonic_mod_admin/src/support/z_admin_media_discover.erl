@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2019 Marc Worrell <marc@worrell.nl>
+%% @copyright 2014-2021 Marc Worrell <marc@worrell.nl>
 %% @doc Enables embedding media from their URL.
 
-%% Copyright 2014-2019 Marc Worrell <marc@worrell.nl>
+%% Copyright 2014-2021 Marc Worrell <marc@worrell.nl>
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -68,39 +68,50 @@ event(#submit{message={media_url_import, Args}}, Context) ->
 media_insert_rsc_props(ArgsEmbed, Context) ->
     SubjectId = m_rsc:rid(proplists:get_value(subject_id, ArgsEmbed), Context),
     CGId = m_rsc:rid(proplists:get_value(content_group_id, ArgsEmbed), Context),
-    Props = add_qprops(SubjectId, CGId, Context),
-    case z_convert:to_bool( z_context:get_q(<<"is_authoritative">>, Context) ) of
-        true ->
-            Props#{
-                <<"is_authoritative">> => true
-            };
-        false ->
-            Props
-    end.
+    add_qprops(SubjectId, CGId, Context).
 
 add_qprops(undefined, CGId, Context) ->
-    Props = #{
-        <<"content_group_id">> => CGId,
-        <<"is_published">> => z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) )
-    },
-    maybe_title(Props, Context);
-add_qprops(SubjectId, undefined, Context) when is_integer(SubjectId) ->
+    Props = maps:remove(<<"is_dependent">>, qprops(Context)),
+    Props1 = maybe_cgid(undefined, Props, CGId, Context),
+    maybe_title(Props1, Context);
+add_qprops(SubjectId, CGId, Context) when is_integer(SubjectId) ->
+    Props = qprops(Context),
+    Props1 = maybe_cgid(SubjectId, Props, CGId, Context),
+    maybe_title(Props1, Context).
+
+maybe_cgid(_SubjectId, #{ <<"content_group_id">> := CGId } = Props, _, _Context) when is_integer(CGId) ->
+    Props;
+maybe_cgid(_SubjectId, Props, CGId, _Context) when is_integer(CGId) ->
+    Props#{
+        <<"content_group_id">> => CGId
+    };
+maybe_cgid(SubjectId, Props, undefined, Context) ->
     SubjCGId = m_rsc:p_no_acl(SubjectId, content_group_id, Context),
-    CGId = get_q(<<"content_group_id">>, SubjCGId, Context),
-    Props = #{
-        <<"content_group_id">> => z_convert:to_integer(CGId),
-        <<"is_published">> => z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) ),
-        <<"is_dependent">> => z_convert:to_bool( z_context:get_q(<<"is_dependent">>, Context, false) )
-    },
-    maybe_title(Props, Context);
-add_qprops(SubjectId, CGId, Context) when is_integer(SubjectId), is_integer(CGId) ->
-    CGId1 = get_q(<<"content_group_id">>, CGId, Context),
-    Props = #{
-        <<"content_group_id">> => z_convert:to_integer(CGId1),
-        <<"is_published">> => z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) ),
-        <<"is_dependent">> => z_convert:to_bool( z_context:get_q(<<"is_dependent">>, Context, false) )
-    },
-    maybe_title(Props, Context).
+    Props#{
+        <<"content_group_id">> => SubjCGId
+    }.
+
+
+-define(is_id(X), X =:= <<"content_group_id">>; X =:= <<"category_id">>).
+
+qprops(Context) ->
+    Props = z_context:get_q_all_noz(Context),
+    lists:foldl(
+        fun
+            ({IdArg, <<>>}, Acc) when ?is_id(IdArg)->
+                Acc;
+            ({IdArg, Id}, Acc) when ?is_id(IdArg) ->
+                case m_rsc:rid(Id, Context) of
+                    undefined -> Acc;
+                    RId -> Acc#{ IdArg => RId }
+                end;
+            ({<<"is_", _/binary>> = K, V}, Acc) ->
+                Acc#{ K => z_convert:to_bool(V) };
+            ({K, V}, Acc) ->
+                Acc#{ K => V }
+        end,
+        #{},
+        Props).
 
 maybe_title(Props, Context) ->
     case z_context:get_q(<<"new_media_title">>, Context) of
@@ -112,19 +123,12 @@ maybe_title(Props, Context) ->
             Props
     end.
 
-get_q(P, Default, Context) ->
-    case z_context:get_q(P, Context) of
-        undefined -> Default;
-        <<>> -> Default;
-        V -> V
-    end.
-
 %% Handling the media upload (Slightly adapted from action_admin_dialog_media_upload)
 handle_media_upload_args(<<"update">>, Id, {ok, _}, EventProps, Context) when is_integer(Id) ->
     %% Replace attached medium with the uploaded file (skip any edge requests)
     Actions = proplists:get_value(actions, EventProps, []),
     z_render:wire([
-            {growl, [{text, ?__("Media item created.", Context)}]},
+            {growl, [{text, ?__("Media updated.", Context)}]},
             {dialog_close, []}
             | Actions], Context);
 handle_media_upload_args(_Intent, _Id, {ok, NewId}, EventProps, Context) ->

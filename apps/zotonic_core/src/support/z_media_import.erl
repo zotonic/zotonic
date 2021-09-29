@@ -26,7 +26,7 @@
     url_import_props/2
     ]).
 
--include_lib("zotonic.hrl").
+-include("../../include/zotonic.hrl").
 -include_lib("zotonic_stdlib/include/z_url_metadata.hrl").
 
 
@@ -101,7 +101,7 @@ default_rsc_props(#media_import_props{category=Cat}, RscProps) ->
     maps:merge(
         #{
             <<"is_published">> => true,
-            <<"category">> => Cat
+            <<"category_id">> => Cat
         },
         RscProps).
 
@@ -191,7 +191,7 @@ import_as_resource(MD, Context) ->
             #media_import_props{
                 prio = 1,
                 category = maps:get(<<"category_id">>, Rsc, other),
-                description = ?__("Resource import", Context),
+                description = ?__("Page Import", Context),
                 rsc_props = #{
                     <<"is_authoritative">> => false,
                     <<"uri">> => Uri,

@@ -559,8 +559,12 @@ import(OptLocalId, #{
                             _ = maybe_import_medium(LocalId, JSON, Context),
                             ImportedAcc3 = case proplists:get_value(import_edges, Options, 0) of
                                 N when is_integer(N), N > 0 ->
+                                    PropsForced = proplists:get_value(props_forced, Options, #{}),
                                     EdgeOptions = [
-                                        {import_edges, N - 1} | proplists:delete(import_edges, Options)
+                                        {import_edges, N - 1},
+                                        {props_forced, maps:remove(<<"category_id">>, PropsForced)}
+                                        | proplists:delete(import_edges,
+                                            proplists:delete(props_forced, Options))
                                     ],
                                     import_edges(LocalId, JSON, ImportedAcc2, EdgeOptions, Context);
                                 _ ->
@@ -635,7 +639,19 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
 
     IsAuthCopy = proplists:get_value(is_authoritative, Options, false),
 
-    OptionsWithoutEdges = proplists:delete(import_edges, Options),
+    % Import options for resources that are directly referred.
+    % For example menus and the 'rsc_id' in blocks.
+    N = proplists:get_value(import_edges, Options, 0),
+    ReferredOptions = [
+        {import_edges, erlang:max(0, N - 1)},
+        {props_forced, maps:remove(<<"category_id">>, PropsForced)}
+        | proplists:delete(import_edges,
+            proplists:delete(props_forced, Options))
+    ],
+
+    % Import options for resources that are embedded.
+    % For example images and links in HTML texts.
+    EmbeddedOptions = proplists:delete(import_edges, ReferredOptions),
 
     % Remove or map modifier_id, creator_id, etc
     {Rsc1, ImportedAcc1} = maps:fold(
@@ -668,16 +684,16 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
             % Other ids are mapped to placeholders or local ids
             (<<"menu">>, Menu, {Acc, ImpAcc}) when is_list(Menu) ->
                 % map ids in menu to local ids
-                {Menu1, ImpAcc1} = map_menu(Menu, UriTemplate, [], ImpAcc, Options, Context),
+                {Menu1, ImpAcc1} = map_menu(Menu, UriTemplate, [], ImpAcc, ReferredOptions, Context),
                 {Acc#{ <<"menu">> => Menu1 }, ImpAcc1};
             (<<"blocks">>, Blocks, {Acc, ImpAcc}) when is_list(Blocks) ->
                 % map ids in blocks and content to local ids
-                {Blocks1, ImpAcc1} = map_blocks(Blocks, UriTemplate, [], ImpAcc, Options, Context),
+                {Blocks1, ImpAcc1} = map_blocks(Blocks, UriTemplate, [], ImpAcc, ReferredOptions, Context),
                 {Acc#{ <<"blocks">> => Blocks1 }, ImpAcc1};
             (K, V, {Acc, ImpAcc}) ->
                 case m_rsc_export:is_id_prop(K) of
                     true ->
-                        case map_id(V, UriTemplate, ImpAcc, OptionsWithoutEdges, Context) of
+                        case map_id(V, UriTemplate, ImpAcc, EmbeddedOptions, Context) of
                             {ok, {LocalId, ImpAcc1}} ->
                                 ImpAcc2 = ImpAcc1#{
                                     uri(V) => LocalId
@@ -687,7 +703,7 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
                                 {Acc#{ K => undefined }, ImpAcc}
                         end;
                     false ->
-                        {V1, ImpAcc1} = map_html(K, V, UriTemplate, ImpAcc, OptionsWithoutEdges, Context),
+                        {V1, ImpAcc1} = map_html(K, V, UriTemplate, ImpAcc, EmbeddedOptions, Context),
                         {Acc#{ K => V1 }, ImpAcc1}
                 end
         end,
@@ -744,7 +760,10 @@ map_menu([], _UriTemplate, Acc, ImpAcc, _Options, _Context) ->
 %% @doc Map all ids in blocks to local (stub) resources. Remove blocks that can not
 %% have their ids mapped.
 map_blocks([ B | Rest ], UriTemplate, Acc, ImpAcc, Options, Context) ->
-    OptionsWithoutEdges = proplists:delete(import_edges, Options),
+    EmbeddedOptions = [
+        {import_edges, 0}
+        | proplists:delete(import_edges, Options)
+    ],
     {B1, ImpAcc1} = maps:fold(
         fun(K, V, {BAcc, BImpAcc}) ->
             case m_rsc_export:is_id_prop(K) of
@@ -756,7 +775,7 @@ map_blocks([ B | Rest ], UriTemplate, Acc, ImpAcc, Options, Context) ->
                             {BAcc#{ K => undefined }, BImpAcc}
                     end;
                 false ->
-                    {V1, BImpAcc1} = map_html(K, V, UriTemplate, BImpAcc, OptionsWithoutEdges, Context),
+                    {V1, BImpAcc1} = map_html(K, V, UriTemplate, BImpAcc, EmbeddedOptions, Context),
                     {BAcc#{ K => V1}, BImpAcc1}
             end
         end,
