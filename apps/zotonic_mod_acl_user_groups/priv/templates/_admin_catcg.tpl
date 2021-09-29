@@ -1,12 +1,16 @@
-<div class="form-group">
-    <label class="control-label" for="{{ #category }}">{_ Category _}</label>
-    {% if is_nocatselect %}
-        <input class="form-control nosubmit" type="text" readonly value="{{ cat_id.title }}" />
-        <input type="hidden" id="{{ #catsel }}" name="category_id" value="{{ cat_id }}"/>
-    {% else %}
-        {% include "_admin_category_dropdown.tpl" catsel_id=#catsel %}
-    {% endif %}
-</div>
+{% if is_nocatview %}
+    <input type="hidden" id="{{ #catsel }}" name="category_id" value="{{ cat_id }}"/>
+{% else %}
+    <div class="form-group">
+        <label class="control-label" for="{{ #category }}">{_ Category _}</label>
+        {% if is_nocatselect %}
+            <input class="form-control nosubmit" type="text" readonly value="{{ cat_id.title }}" />
+            <input type="hidden" id="{{ #catsel }}" name="category_id" value="{{ cat_id }}"/>
+        {% else %}
+            {% include "_admin_category_dropdown.tpl" catsel_id=#catsel %}
+        {% endif %}
+    </div>
+{% endif %}
 
 <div class="form-group">
     <label class="control-label" for="{{ #category }}">{_ Content group _}</label>

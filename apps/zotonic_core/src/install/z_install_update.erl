@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2015 Marc Worrell
+%% @copyright 2009-2021 Marc Worrell
 %%
 %% @doc This server will install the database when started. It will always return ignore to the supervisor.
 %% This server should be started after the database pool but before any database queries will be done.
 
-%% Copyright 2009-2015 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -118,6 +118,7 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
                                    Database = proplists:get_value(dbdatabase, DbOptions),
                                    Schema = proplists:get_value(dbschema, DbOptions),
                                    ok = upgrade(C, Database, Schema),
+                                   ok = upgrade_models(Context),
                                    ok = sanity_check(C, Database, Schema)
                            end,
                            Context),
@@ -224,18 +225,6 @@ has_constraint(C, Table, Constraint, Database, Schema) ->
               and constraint_name = $4", [Database, Schema, Table, Constraint]),
     HasConstraint >= 1.
 
-%% Check if a key on a table exists by querying the information schema.
-% has_key(C, Table, Key, Database, Schema) ->
-%     {ok, _, [{HasKey}]} = epgsql:equery(C, "
-%             select count(*)
-%             from information_schema.key_column_usage
-%             where constraint_catalog = $1
-%               and constraint_schema = $2
-%               and table_name = $3
-%               and constraint_name = $4", [Database, Schema, Table, Key]),
-%     HasKey >= 1.
-
-
 
 %% Upgrade older Zotonic versions.
 upgrade(C, Database, Schema) ->
@@ -271,6 +260,12 @@ upgrade(C, Database, Schema) ->
     ok = key_changes_v1_0(C, Database, Schema),
     ok = rsc_language(C, Database, Schema),
     ok.
+
+
+-spec upgrade_models( z:context() ) -> ok.
+upgrade_models(Context) ->
+    ok = m_rsc_gone:install(Context).
+
 
 upgrade_config_schema(C, Database, Schema) ->
     case get_column_type(C, "config", "value", Database, Schema) of

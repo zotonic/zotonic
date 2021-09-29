@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013 Marc Worrell
+%% @copyright 2013-2021 Marc Worrell
 %% @doc Filter a list of menu items on visibility. Does not filter sub-menus.
 
-%% Copyright 2013 Marc Worrell
+%% Copyright 2013-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@
 -module(filter_menu_is_visible).
 -export([menu_is_visible/2]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 menu_is_visible(Items, Context) when is_list(Items) ->
 	lists:filter(fun(Item) -> is_visible(Item, Context) end, Items);
 menu_is_visible(_, _Context) ->
@@ -26,6 +28,8 @@ menu_is_visible(_, _Context) ->
 
 is_visible(undefined, _Context) ->
 	false;
+is_visible(#rsc_tree{ id = RscId }, Context) ->
+	z_acl:rsc_visible(RscId, Context);
 is_visible({RscId, _Items}, Context) ->
 	z_acl:rsc_visible(RscId, Context);
 is_visible(RscId, Context) ->

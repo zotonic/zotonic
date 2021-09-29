@@ -457,15 +457,16 @@ update(Id, Props, Options, Context) when is_list(Props) ->
     end,
     update(Id, Props1, OptionsTz, Context);
 update(Id, PropsOrFun, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
+    IsImport = proplists:get_value(is_import, Options, false),
     Tz0 = case is_map(PropsOrFun) of
-        true ->
+        true when not IsImport ->
             % Timezone in the update props is leading over the timezone in the options
             case maps:get(<<"tz">>, PropsOrFun, undefined) of
                 undefined -> proplists:get_value(tz, Options, <<"UTC">>);
                 <<>> -> proplists:get_value(tz, Options, <<"UTC">>);
                 PropTz -> PropTz
             end;
-        false ->
+        _ ->
             proplists:get_value(tz, Options, <<"UTC">>)
     end,
     % Sanity fallback for 'undefined' tz in the options
@@ -512,15 +513,12 @@ update_imported_check(RscUpd, PropsOrFun, Context) ->
     update_editable_check(RscUpd, PropsOrFun, Context).
 
 
-update_editable_check(#rscupd{id = Id, is_acl_check = true} = RscUpd, PropsOrFun, Context) when is_integer(Id) ->
+update_editable_check(#rscupd{id = Id, is_acl_check = true } = RscUpd, PropsOrFun, Context) when is_integer(Id) ->
     case z_acl:rsc_editable(Id, Context) of
         true ->
             update_normalize_props(RscUpd, PropsOrFun, Context);
         false ->
-            case m_rsc:p_no_acl(Id, is_authoritative, Context) of
-                false -> {error, non_authoritative};
-                true -> {error, eacces}
-            end
+            {error, eacces}
     end;
 update_editable_check(RscUpd, PropsOrFun, Context) ->
     update_normalize_props(RscUpd, PropsOrFun, Context).
@@ -625,6 +623,8 @@ update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}}, #rscup
 
     % Return the updated or inserted id
     {ok, NewId};
+update_result({rollback, {error, _} = Er}, _RscUpd, _Context) ->
+    Er;
 update_result({rollback, {_Why, _} = Er}, _RscUpd, _Context) ->
     {error, Er};
 update_result({error, _} = Error, _RscUpd, _Context) ->
@@ -1088,7 +1088,7 @@ preflight_check_uri(Id, #{ <<"uri">> := Uri }, Context) when Uri =/= undefined -
             ok;
         _N ->
             lager:warning("Trying to insert duplicate uri ~p", [Uri]),
-            throw({error, duplicate_uri})
+            {error, duplicate_uri}
     end;
 preflight_check_uri(_Id, _Props, _Context) ->
     ok.
@@ -1157,8 +1157,13 @@ props_filter(Props, Context) ->
 
 props_filter(<<"uri">>, Uri, Acc, _Context) when ?is_empty(Uri) ->
     Acc#{ <<"uri">> => undefined };
-props_filter(<<"uri">>, Uri, Acc, _Context) when ?is_empty(Uri) ->
-    Acc#{ <<"uri">> => z_sanitize:uri(Uri) };
+props_filter(<<"uri">>, Uri, Acc, _Context) ->
+    case z_sanitize:uri(Uri) of
+        <<"#script-removed">> ->
+            Acc#{ <<"uri">> => undefined };
+        CleanUri ->
+            Acc#{ <<"uri">> => CleanUri }
+    end;
 props_filter(<<"name">>, Name, Acc, Context) ->
     case z_acl:is_allowed(use, mod_admin, Context) of
         true ->
@@ -1245,16 +1250,7 @@ props_filter(<<"category_id">>, CatId, Acc, Context) ->
 props_filter(<<"content_group">>, CG, Acc, _Context) when ?is_empty(CG) ->
     Acc#{ <<"content_group_id">> => undefined };
 props_filter(<<"content_group">>, CgName, Acc, Context) ->
-    CgId = m_rsc:rid(CgName, Context),
-    case m_rsc:is_a(CgId, content_group, Context)
-        orelse m_rsc:is_a(CgId, acl_collaboration_group, Context)
-    of
-        true ->
-            Acc#{ <<"content_group_id">> => CgId };
-        false ->
-            lager:error("Ignoring unknown content group '~p' in update.", [CgName]),
-            Acc
-    end;
+    props_filter(<<"content_group_id">>, CgName, Acc, Context);
 props_filter(<<"content_group_id">>, CgId, Acc, _Context) when ?is_empty(CgId) ->
     Acc#{ <<"content_group_id">> => undefined };
 props_filter(<<"content_group_id">>, CgId, Acc, Context) ->

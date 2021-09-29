@@ -43,12 +43,23 @@
 %% @doc Check and possibly modify the http response security headers
 %% All headers are in lowercase.
 %% Type: first
--record(security_headers, { headers :: list( {binary(), binary()} ) }).
+-record(security_headers, {
+    headers :: list( {binary(), binary()} )
+}).
 
 %% @doc Set CORS headers on the HTTP response.
 %% Type: first
--record(cors_headers, { headers :: list( {binary(), binary()} ) }).
+-record(cors_headers, {
+    headers :: list( {binary(), binary()} )
+}).
 
+%% @doc Let all modules add resource specific response headers to the request.
+%% The accumulator is the list of headers to be set.
+%% Type: foldl
+%% Return: ``list( {binary(), binary()} )``
+-record(resource_headers, {
+    id :: m_rsc:resource_id() | undefined
+}).
 
 %% @doc Access log event for http. Called from the z_stats.
 %% Type: notify_sync
@@ -767,13 +778,13 @@
 
 %% @doc Notification for fetching #media_import_props{} from different modules.
 %% This is used by z_media_import.erl for fetching properties and medium information (map)
-%% about resources.
+%% about resources.  The metadata is the result returned by z_url_metadata.
 %% Type: map
 -record(media_import, {
     url :: binary(),
     host_rev :: list(binary()),
     mime :: binary(),
-    metadata :: tuple()
+    metadata :: tuple() % z_url_metadata:url_metadata()
 }).
 
 % Return value of the media_import notification
@@ -785,7 +796,8 @@
     rsc_props :: map(),
     medium_props :: z_media_identify:media_info(),
     medium_url = <<>> :: binary(),
-    preview_url :: binary() | undefined
+    preview_url :: binary() | undefined,
+    importer :: atom()
 }).
 
 %% @doc Notification to translate or map a file after upload, before insertion into the database
@@ -826,6 +838,17 @@
     archive_file,
     options :: list(),
     medium :: z_media_identify:media_info()
+}).
+
+%% @doc Notification to import a medium record from external source. This is called for non-file
+%% medium records, for example embedded video.  If the medium record is not recognized then it
+%% will not be imported. The handling module is responsible for sanitizing and inserting the medium
+%% record.
+%% Type: first
+%% Return: ``ok | {error, term()}``.
+-record(media_import_medium, {
+    id :: m_rsc:resource_id(),
+    medium :: map()
 }).
 
 %% @doc Notification that a medium file has been changed (notify)
@@ -1109,4 +1132,13 @@
 % Simple mod_development notifications:
 % development_reload - Reload all template, modules etc
 % development_make - Perform a 'make' on Zotonic, reload all new beam files
+
+%% @doc Determine the URL fetch options for fetching the content of an URL. Used by z_fetch.erl.
+%% Type: first
+%% Return: ``z_url_fetch:options()`
+-record(url_fetch_options, {
+    host :: binary(),
+    url :: binary(),
+    options :: z_url_fetch:options()
+}).
 

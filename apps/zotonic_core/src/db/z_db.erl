@@ -83,6 +83,8 @@
     get_current_props/3,
     update_sequence/3,
     prepare_database/1,
+    constraint_exists/3,
+    key_exists/3,
     table_exists/2,
     create_table/3,
     drop_table/2,
@@ -201,7 +203,7 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
     case has_connection(Context) of
         true ->
             case with_connection(
-              fun(C) ->
+                fun(C) ->
                     Context1 = Context#context{dbc=C},
                     DbDriver = z_context:db_driver(Context),
                     try
@@ -227,8 +229,8 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                             DbDriver:squery(C, "ROLLBACK", ?TIMEOUT),
                             {rollback, {Why, S}}
                     end
-              end,
-              Context)
+                end,
+                Context)
             of
                 {rollback, _} = Result ->
                     z_notifier:notify_queue_flush(Context),
@@ -1245,6 +1247,39 @@ create_schema(_Site, Connection, Schema) ->
             lager:error("z_db error ~p when creating schema ~p", [Reason, Schema]),
             Error
     end.
+
+
+-spec constraint_exists( table_name(), binary() | string() | atom(), z:context() ) -> boolean().
+constraint_exists(Table, Constraint, Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    Db = proplists:get_value(dbdatabase, Options),
+    Schema = proplists:get_value(dbschema, Options),
+    HasConstraint = q1("
+            select count(*)
+            from information_schema.table_constraints
+            where constraint_catalog = $1
+              and constraint_schema = $2
+              and table_name = $3
+              and constraint_name = $4",
+            [Db, Schema, Table, z_convert:to_binary(Constraint)],
+            Context),
+    HasConstraint >= 1.
+
+
+-spec key_exists( table_name(), binary() | string() | atom(), z:context() ) -> boolean().
+key_exists(Table, Key, Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    Schema = proplists:get_value(dbschema, Options),
+    HasKey = z_db:q1("
+        select count(*)
+        from pg_indexes
+        where schemaname = $1
+          and tablename = $2
+          and indexname = $3",
+        [ Schema, Table, Key ],
+        Context),
+    HasKey >= 1.
+
 
 %% @doc Check the information schema if a certain table exists in the context database.
 -spec table_exists(table_name(), z:context()) -> boolean().

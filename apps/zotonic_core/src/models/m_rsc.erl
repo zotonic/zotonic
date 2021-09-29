@@ -47,6 +47,8 @@
     duplicate/3,
     touch/2,
 
+    make_authoritative/2,
+
     exists/2,
 
     is_visible/2, is_editable/2, is_deletable/2, is_linkable/2,
@@ -68,6 +70,7 @@
     rid/2,
 
     name_lookup/2,
+    uri/2,
     uri_lookup/2,
     ensure_name/2,
 
@@ -76,10 +79,21 @@
 
 -include_lib("zotonic.hrl").
 
--type resource() :: resource_id() | list(digits()) | resource_name() | undefined.
+-type resource() :: resource_id()
+                  | list(digits())
+                  | resource_name()
+                  | resource_uri()
+                  | resource_uri_map()
+                  | undefined.
 -type resource_id() :: integer().
 -type resource_name() :: string() | binary() | atom().
 -type resource_uri() :: binary().
+-type resource_uri_map() :: #{
+        % <<"uri">> := resource_uri(),
+        % <<"name">> := binary(),
+        % <<"is_a">> := [ binary() ],
+        binary() => term()
+    }.
 -type props() :: map().
 -type props_legacy() :: proplists:proplist().
 -type props_all() :: props() | props_legacy().
@@ -483,6 +497,33 @@ touch(Id, Context) ->
     end.
 
 
+%% @doc Make a resource authoritative. This removes the uri from the resource and sets the
+%% resource as 'authoritative'. The uri is added to the m_rsc_gone delete log.
+-spec make_authoritative( m_rsc:resource(), z:context() ) -> {ok, resource_id()} | {error, term()}.
+make_authoritative(RscId, Context)  ->
+    case m_rsc:rid(RscId, Context) of
+        undefined ->
+            {error, enoent};
+        Id ->
+            case m_rsc:p_no_acl(Id, is_authoritative, Context) of
+                true ->
+                    {error, authoritative};
+                false ->
+                    case z_acl:rsc_editable(Id, Context) of
+                        true ->
+                            {ok, _} = m_rsc_gone:gone(Id, Id, Context),
+                            NewProps = #{
+                                <<"is_authoritative">> => true,
+                                <<"uri">> => undefined
+                            },
+                            m_rsc_update:update(Id, NewProps, Context);
+                        false ->
+                            {error, eacces}
+                    end
+            end
+    end.
+
+
 -spec exists(resource(), z:context()) -> boolean().
 exists(Id, Context) ->
     case rid(Id, Context) of
@@ -555,6 +596,7 @@ p(Id, Property, Context)
     orelse Property =:= <<"page_url_abs">>
     orelse Property =:= <<"is_a">>
     orelse Property =:= <<"uri">>
+    orelse Property =:= <<"uri_raw">>
     orelse Property =:= <<"is_authoritative">>
     orelse Property =:= <<"is_published">>
     orelse Property =:= <<"exists">>
@@ -633,15 +675,9 @@ p_no_acl(Id, <<"translation">>, Context) ->
         end
     end;
 p_no_acl(Id, <<"default_page_url">>, Context) -> page_url(Id, Context);
-p_no_acl(Id, <<"uri">>, Context) ->
-    case p_cached(Id, <<"uri">>, Context) of
-        Empty when Empty =:= <<>>; Empty =:= undefined ->
-            non_informational_uri(Id, Context);
-        Uri ->
-            Uri
-    end;
-p_no_acl(Id, <<"category">>, Context) ->
-    m_category:get(p_no_acl(Id, <<"category_id">>, Context), Context);
+p_no_acl(Id, <<"uri">>, Context) -> uri(Id, Context);
+p_no_acl(Id, <<"uri_raw">>, Context) -> p_cached(Id, <<"uri">>, Context);
+p_no_acl(Id, <<"category">>, Context) -> m_category:get(p_no_acl(Id, <<"category_id">>, Context), Context);
 p_no_acl(Id, <<"media">>, Context) -> media(Id, Context);
 p_no_acl(Id, <<"medium">>, Context) -> m_media:get(Id, Context);
 p_no_acl(Id, <<"depiction">>, Context) -> m_media:depiction(Id, Context);
@@ -692,12 +728,43 @@ p_cached(Id, Property, Context) ->
     end.
 
 
-non_informational_uri(Id, Context) ->
-    case z_dispatcher:url_for(id, [{id, Id}], z_context:set_language(undefined, Context)) of
+%% @doc Determine the non informational uri of a resource.
+-spec uri( resource() | undefined, z:context() ) -> binary() | undefined.
+uri(Id, Context) when is_integer(Id) ->
+    case p_cached(Id, <<"uri">>, Context) of
+        Empty when Empty =:= <<>>; Empty =:= undefined ->
+            uri_dispatch(Id, Context);
+        Uri ->
+            Uri
+    end;
+uri(undefined, _Context) ->
+    undefined;
+uri(Id, Context) ->
+    uri(rid(Id, Context), Context).
+
+uri_dispatch(Id, Context) ->
+    DispatchId = case is_named_meta(Id, Context) of
+        {true, Name} -> Name;
+        false -> Id
+    end,
+    case z_dispatcher:url_for(id, [{id, DispatchId}], z_context:set_language(undefined, Context)) of
         undefined ->
-            iolist_to_binary(z_context:abs_url(<<"/id/", (z_convert:to_binary(Id))/binary>>, Context));
+            iolist_to_binary(z_context:abs_url(<<"/id/", (z_convert:to_binary(DispatchId))/binary>>, Context));
         Url ->
             iolist_to_binary(z_context:abs_url(Url, Context))
+    end.
+
+is_named_meta(Id, Context) ->
+    case p_cached(Id, <<"name">>, Context) of
+        Empty when Empty =:= <<>>; Empty =:= undefined ->
+            false;
+        Name ->
+            case is_a(Id, meta, Context) of
+                true ->
+                    {true, Name};
+                false ->
+                    false
+            end
     end.
 
 
@@ -812,11 +879,38 @@ rid([X|_], _Context) when not is_integer(X) ->
     undefined;
 rid(#trans{} = Tr, Context) ->
     rid(z_trans:lookup_fallback(Tr, Context), Context);
+rid(<<"http:", _/binary>> = Uri, Context) ->
+    uri_lookup(Uri, Context);
+rid(<<"https:", _/binary>> = Uri, Context) ->
+    uri_lookup(Uri, Context);
+rid(#{ <<"uri">> := Uri } = Map, Context) ->
+    Name = maps:get(<<"name">>, Map, undefined),
+    case rid(Uri, Context) of
+        undefined ->
+            case rid(Name, Context) of
+                undefined ->
+                    undefined;
+                Id ->
+                    case is_matching_category(maps:get(<<"is_a">>, Map, undefined), is_a(Id, Context)) of
+                        true -> Id;
+                        false -> undefined
+                    end
+            end;
+        Id ->
+            Id
+    end;
 rid(UniqueName, Context) ->
     case z_utils:only_digits(UniqueName) of
         true -> z_convert:to_integer(UniqueName);
         false -> name_lookup(UniqueName, Context)
     end.
+
+is_matching_category(undefined, _) -> true;
+is_matching_category([], _) -> true;
+is_matching_category(ExtIsA, LocalIsA) ->
+    ExtIsA1 = [ z_convert:to_binary(A) || A <- ExtIsA ],
+    LocalIsA1 = [ z_convert:to_binary(A) || A <- LocalIsA ],
+    lists:any( fun(A) -> lists:member(A, ExtIsA1) end, LocalIsA1 ).
 
 
 %% @doc Return the id of the resource with a certain unique name.
@@ -850,21 +944,75 @@ name_lookup(Name, Context) ->
 uri_lookup(<<>>, _Context) ->
     undefined;
 uri_lookup(Uri, Context) when is_binary(Uri) ->
-    case z_depcache:get({rsc_uri, Uri}, Context) of
-        {ok, undefined} ->
-            undefined;
-        {ok, Id} ->
-            Id;
-        undefined ->
-            Id = case z_db:q1("select id from rsc where uri = $1", [Uri], Context) of
-                undefined -> undefined;
-                Value -> Value
-            end,
-            z_depcache:set({rsc_uri, Uri}, Id, ?DAY, [Id, {rsc_uri, Uri}], Context),
-            Id
+    case is_http_uri(Uri) of
+        true ->
+            case is_local_uri(Uri, Context) of
+                true ->
+                    % Check for id in URL
+                    local_uri_to_id(Uri, Context);
+                false ->
+                    case z_depcache:get({rsc_uri, Uri}, Context) of
+                        {ok, undefined} ->
+                            undefined;
+                        {ok, Id} ->
+                            Id;
+                        undefined ->
+                            Id = uri_lookup_1(Uri, Context),
+                            z_depcache:set({rsc_uri, Uri}, Id, ?DAY, [Id, {rsc_uri, Uri}], Context),
+                            Id
+                    end
+            end;
+        false ->
+            undefined
     end;
 uri_lookup(Uri, Context) ->
     uri_lookup(z_convert:to_binary(Uri), Context).
+
+% Check if URI is imported or replaced by another resource
+uri_lookup_1(Uri, Context) ->
+    case z_db:q1("select id from rsc where uri = $1", [Uri], Context) of
+        undefined ->
+            case m_rsc_gone:get_uri(Uri, Context) of
+                undefined -> undefined;
+                Gone -> proplists:get_value(new_id, Gone)
+            end;
+        Id ->
+            Id
+    end.
+
+
+%% @doc Check if the hostname in an URL matches the current site
+is_local_uri(Uri, Context) ->
+    Site = z_context:site(Context),
+    case z_sites_dispatcher:get_site_for_url(Uri) of
+        {ok, Site} ->
+            true;
+        _ ->
+            % Unknown or some other site
+            false
+    end.
+
+
+%% @doc Use the dispatcher to extract the id from the local URI
+local_uri_to_id(Uri, Context) ->
+    Site = z_context:site(Context),
+    case z_sites_dispatcher:dispatch_url(Uri) of
+        {ok, #{
+            site := Site,
+            controller_options := Options,
+            bindings := Bindings
+        }} ->
+            Id = maps:get(id, Bindings, proplists:get_value(id, Options)),
+            rid(Id, Context);
+        _ ->
+            % Non matching sites and illegal urls are rejected
+            undefined
+    end.
+
+is_http_uri(<<"http://", _/binary>>) -> true;
+is_http_uri(<<"https://", _/binary>>) -> true;
+is_http_uri(_) -> false.
+
 
 %% @doc Check if the resource is exactly the category
 -spec is_cat(resource(), atom(), z:context()) -> boolean().

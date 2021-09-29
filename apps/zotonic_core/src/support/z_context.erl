@@ -123,6 +123,8 @@
     set_noindex_header/1,
     set_noindex_header/2,
 
+    set_resource_headers/2,
+
     set_security_headers/1,
     set_cors_headers/2,
 
@@ -694,30 +696,39 @@ get_q_all(Key, #context{ props = Props }) ->
 get_q_all_noz(Context) ->
     lists:filter(fun({X,_}) -> not is_zotonic_arg(X) end, z_context:get_q_all(Context)).
 
-is_zotonic_arg(<<"zotonic_host">>) -> true;  % backwards compatibility
-is_zotonic_arg(<<"zotonic_site">>) -> true;
-is_zotonic_arg(<<"zotonic_dispatch">>) -> true;
-is_zotonic_arg(<<"zotonic_dispatch_path">>) -> true;
-is_zotonic_arg(<<"zotonic_dispatch_path_rewrite">>) -> true;
-is_zotonic_arg(<<"zotonic_ticket">>) -> true;
-is_zotonic_arg(<<"zotonic_http_", _/binary>>) -> true;
-is_zotonic_arg(<<"zotonic_topic_", _/binary>>) -> true;
+% Known Zotonic rguments:
+%
+% - postback
+% - triggervalue
+% - zotonic_host
+% - zotonic_site
+% - zotonic_dispatch
+% - zotonic_dispatch_path
+% - zotonic_dispatch_path_rewrite
+% - zotonic_ticket
+% - zotonic_http_*
+% - zotonic_topic_*
+% - z_submitter
+% - z_postback
+% - z_trigger_id
+% - z_target_id
+% - z_delegate
+% - z_message
+% - z_transport
+% - z_sid
+% - z_pageid
+% - z_v
+% - z_msg
+% - z_comet
+% - z_postback_data
+
+-spec is_zotonic_arg(binary()) -> boolean().
 is_zotonic_arg(<<"postback">>) -> true;
 is_zotonic_arg(<<"triggervalue">>) -> true;
-is_zotonic_arg(<<"z_submitter">>) -> true;
-is_zotonic_arg(<<"z_postback">>) -> true;
-is_zotonic_arg(<<"z_trigger_id">>) -> true;
-is_zotonic_arg(<<"z_target_id">>) -> true;
-is_zotonic_arg(<<"z_delegate">>) -> true;
-is_zotonic_arg(<<"z_message">>) -> true;
-is_zotonic_arg(<<"z_transport">>) -> true;
-is_zotonic_arg(<<"z_sid">>) -> true;
-is_zotonic_arg(<<"z_pageid">>) -> true;
-is_zotonic_arg(<<"z_v">>) -> true;
-is_zotonic_arg(<<"z_msg">>) -> true;
-is_zotonic_arg(<<"z_comet">>) -> true;
-is_zotonic_arg(<<"z_postback_data">>) -> true;
+is_zotonic_arg(<<"zotonic_", _/binary>>) -> true;
+is_zotonic_arg(<<"z_", _/binary>>) -> true;
 is_zotonic_arg(_) -> false.
+
 
 %% @doc Fetch a query parameter and perform the validation connected to the parameter. An exception {not_validated, Key}
 %%      is thrown when there was no validator, when the validator is invalid or when the validation failed.
@@ -1159,6 +1170,18 @@ set_noindex_header(Force, Context) ->
        true -> set_resp_header(<<"x-robots-tag">>, <<"noindex">>, Context);
        _ -> Context
     end.
+
+%% @doc Set resource specific headers. Examples are the non-informational resource uri and WebSub headers.
+-spec set_resource_headers( m_rsc:resource_id() | undefined, z:context() ) -> z:context().
+set_resource_headers(Id, Context) when is_integer(Id) ->
+    Uri = z_dispatcher:url_for(id, [ {id, Id} ], set_language('x-default', Context)),
+    Hs = [ {<<"x-resource-uri">>, abs_url(Uri, Context)} ],
+    Hs1 = z_notifier:foldl(#resource_headers{ id = Id }, Hs, Context),
+    set_resp_headers(Hs1, Context);
+set_resource_headers(_Id, Context) ->
+    Hs = z_notifier:foldl(#resource_headers{ id = undefined }, [], Context),
+    set_resp_headers(Hs, Context).
+
 
 %% @doc Set a cookie value with default options.
 -spec set_cookie(binary(), binary(), z:context()) -> z:context().

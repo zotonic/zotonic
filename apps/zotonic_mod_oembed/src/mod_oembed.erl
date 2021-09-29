@@ -29,6 +29,8 @@
     observe_media_viewer/2,
     observe_media_stillimage/2,
     observe_media_import/2,
+    observe_media_import_medium/2,
+
     event/2,
 
     preview_create/2
@@ -262,6 +264,41 @@ first([<<>>|Xs]) -> first(Xs);
 first([X|_]) -> X.
 
 
+%% @doc Import a embedded medium for a rsc_import. Sanitize the provided html.
+-spec observe_media_import_medium(#media_import_medium{}, z:context()) -> undefined | ok.
+observe_media_import_medium(#media_import_medium{
+        id = Id,
+        medium = #{
+            <<"mime">> := ?OEMBED_MIME,
+            <<"oembed_service">> := Provider,
+            <<"oembed_url">> := Url,
+            <<"oembed">> := Json
+        } = Medium }, Context) when is_map(Json) ->
+    case m_media:get(Id, Context) of
+        #{ <<"oembed_url">> := Url } ->
+            ok;
+        _Other ->
+            MediaProps = #{
+                <<"mime">> => ?OEMBED_MIME,
+                <<"oembed_service">> => Provider,
+                <<"oembed_url">> => z_sanitize:uri(Url),
+                <<"oembed">> => sanitize_json(Json, Context),
+                <<"height">> => as_int(maps:get(<<"height">>, Medium, undefined)),
+                <<"width">> => as_int(maps:get(<<"width">>, Medium, undefined)),
+                <<"orientation">> => as_int(maps:get(<<"orientation">>, Medium, undefined)),
+                <<"media_import">> => z_sanitize:uri( maps:get(<<"media_import">>, Medium, undefined ))
+            },
+            ok = m_media:replace(Id, MediaProps, Context),
+            preview_create_from_json(Id, Json, Context),
+            ok
+    end;
+observe_media_import_medium(#media_import_medium{}, _Context) ->
+    undefined.
+
+as_int(undefined) -> undefined;
+as_int(N) -> z_convert:to_integer(N).
+
+
 %% @doc Return the filename of a still image to be used for image tags.
 %% @spec observe_media_stillimage(Notification, _Context) -> undefined | {ok, Filename}
 observe_media_stillimage(#media_stillimage{ props = #{ <<"mime">> := ?OEMBED_MIME } = Props}, _Context) ->
@@ -359,7 +396,6 @@ preview_create_from_medium(MediaId, #{ <<"oembed_url">> := Url } = MediaProps, C
         {error, _} ->
             undefined
     end.
-
 
 preview_create_from_json(MediaId, Json, Context) ->
     Type = maps:get(<<"type">>, Json, undefined),

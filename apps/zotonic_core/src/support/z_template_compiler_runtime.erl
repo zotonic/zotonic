@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2020 Marc Worrell
+%% @copyright 2016-2021 Marc Worrell
 %% @doc Simple runtime for the compiled templates. Needs to be
 %%      copied and adapted for different environments.
 
-%% Copyright 2016-2020 Marc Worrell
+%% Copyright 2016-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -391,6 +391,16 @@ find_value(Key, #rsc_list{list=[H|_T] = L}, TplVars, Context) ->
     end;
 find_value(_Key, #rsc_list{list=[]}, _TplVars, _Context) ->
     undefined;
+find_value(Key, #rsc_tree{ id = Id, tree = Tree }, TplVars, Context) ->
+    case Key of
+        id -> Id;
+        tree -> Tree;
+        <<"id">> -> Id;
+        <<"tree">> -> Tree;
+        Nth when is_integer(Nth) ->
+            find_value(Nth, Tree, TplVars, Context);
+        _ -> undefined
+    end;
 find_value(IsoAtom, Text, _TplVars, _Context) when is_atom(IsoAtom), is_binary(Text) ->
     case z_language:is_valid(atom_to_list(IsoAtom)) of
         true -> Text;
@@ -554,13 +564,14 @@ to_bool(Value, _Context) ->
 -spec to_list(Value :: term(), Context :: term()) -> list().
 to_list(undefined, _Context) -> [];
 to_list(<<>>, _Context) -> [];
-to_list(#rsc_list{list=L}, _Context) -> L;
-to_list(#search_result{result=L}, _Context) -> L;
-to_list(#m_search_result{result=Result}, Context) -> to_list(Result, Context);
+to_list(#rsc_list{ list = L }, _Context) -> L;
+to_list(#search_result{ result = L }, _Context) -> L;
+to_list(#m_search_result{ result = Result }, Context) -> to_list(Result, Context);
 to_list(q, Context) -> z_context:get_q_all(Context);
 to_list(q_validated, _Context) -> [];
 to_list(#trans{}, _Context) -> [];
-to_list(V, Context) -> template_compiler_runtime:to_list(V, Context).
+to_list(V, Context) ->
+    template_compiler_runtime:to_list(V, Context).
 
 
 %% @doc Convert an argument list's values to something that can be handled as an argument to scomps.

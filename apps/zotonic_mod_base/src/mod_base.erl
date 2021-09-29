@@ -27,10 +27,11 @@
 -mod_provides([base]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--mod_schema(1).
+-mod_schema(3).
 
 %% interface functions
 -export([
+    observe_content_types_dispatch/3,
     observe_edge_insert/2,
     observe_edge_delete/2,
     observe_media_stillimage/2,
@@ -40,8 +41,12 @@
     manage_schema/2
 ]).
 
-manage_schema(install, Context) ->
-    ok = z_datamodel:manage(?MODULE, datamodel(), Context).
+%% @doc Add an extra content-type to the 'id' controller.
+observe_content_types_dispatch(#content_types_dispatch{ id = _Id }, Acc, Context) ->
+    {ContentTypes, _} = controller_api:content_types_provided(Context),
+    Dispatch = [ {CT, api_rsc_export} || CT <- ContentTypes ],
+    Dispatch ++ Acc.
+
 
 %% @doc If an edge is inserted, then force a repivot of the subject
 observe_edge_insert(#edge_insert{ subject_id=SubjectId }, Context) ->
@@ -153,19 +158,20 @@ last(Path) -> binary:last(Path).
 
 
 observe_hierarchy_updated(#hierarchy_updated{ root_id = <<"$category">> }, Context) ->
-    % Something changed to the category hierarchy - let m_categoruy resync the pivot
+    % Something changed to the category hierarchy - let m_category resync the pivot
     m_category:renumber(Context);
 observe_hierarchy_updated(#hierarchy_updated{ root_id = _ }, _Context) ->
     ok.
 
-datamodel() ->
+manage_schema(_, _Context) ->
     #datamodel{
         categories = [
-            {organization, undefined, [
-                {title, {trans, [
-                    {en, <<"Organization">>},
-                    {nl, <<"Organisatie">>}
-                ]}}
-            ]}
+            {organization, undefined, #{
+                <<"title">> => #trans{
+                    tr =[
+                        {en, <<"Organization">>},
+                        {nl, <<"Organisatie">>}
+                    ]}
+            }}
         ]
     }.

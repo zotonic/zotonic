@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2021 Marc Worrell
 %% @doc Import media from internet locations.
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,23 +23,49 @@
     insert/2,
     insert/3,
     update/3,
-    url_inspect/2,
     url_import_props/2
     ]).
 
--include_lib("zotonic.hrl").
+-include("../../include/zotonic.hrl").
 -include_lib("zotonic_stdlib/include/z_url_metadata.hrl").
 
 
 -define(EMPTY(A), ((A =:= undefined) orelse (A =:= "") orelse (A =:= <<>>))).
 
 %% @doc Insert a selected #media_import_props{}
+-spec insert( #media_import_props{}, z:context() ) -> {ok, m_rsc:resource_id()} | {error, term()}.
 insert(MI, Context) ->
     insert(MI, #{}, Context).
 
+%% @doc Insert a selected #media_import_props{}, add the forced properties to the resource.
+-spec insert( #media_import_props{}, map(), z:context() ) -> {ok, m_rsc:resource_id()} | {error, term()}.
 insert(#media_import_props{medium_props = MI} = MIPs, RscProps, Context) ->
     insert_1(maps:size(MI), MIPs, RscProps, Context).
 
+
+insert_1(_, #media_import_props{ rsc_props = #{ <<"uri">> := Uri }, importer = rsc_import }, RscProps, Context) ->
+    Options = [
+        {props_forced, RscProps},
+        is_import_deleted
+    ],
+    Options1 = case maps:find(<<"is_authoritative">>, RscProps) of
+        {ok, true} ->
+            [ is_authoritative | Options ];
+        _ ->
+            Options
+    end,
+    Options2 = case z_context:get_q(<<"z_import_edges">>, Context) of
+        undefined -> Options1;
+        <<>> -> Options1;
+        N ->
+            [ {import_edges, z_convert:to_integer(N)} | Options1 ]
+    end,
+    case m_rsc_import:import_uri_recursive_async(Uri, Options2, Context) of
+        {ok, {LocalId, _ObjectIds}} ->
+            {ok, LocalId};
+        {error, _} = Error ->
+            Error
+    end;
 insert_1(0, #media_import_props{ category = Cat } = MI, RscProps, Context) ->
     RscProps1 = maps:merge(
                     default_rsc_props(MI, RscProps),
@@ -75,7 +101,7 @@ default_rsc_props(#media_import_props{category=Cat}, RscProps) ->
     maps:merge(
         #{
             <<"is_published">> => true,
-            <<"category">> => Cat
+            <<"category_id">> => Cat
         },
         RscProps).
 
@@ -84,6 +110,9 @@ default_rsc_props(#media_import_props{category=Cat}, RscProps) ->
 update(RscId, #media_import_props{medium_props=MI} = MIPs, Context) ->
     update_1(maps:size(MI), RscId, MIPs, Context).
 
+
+update_1(_, RscId, #media_import_props{ rsc_props = #{ <<"uri">> := Uri }, importer = rsc_import }, Context) ->
+    m_rsc_import:update_medium_uri(RscId, Uri, Context);
 update_1(0, RscId, #media_import_props{preview_url=PreviewUrl, medium_url=MediumUrl}, _Context) 
     when ?EMPTY(PreviewUrl), ?EMPTY(MediumUrl) ->
     % Nothing to do
@@ -109,15 +138,17 @@ update_1(_, RscId, #media_import_props{medium_props=MP, medium_url=MediumUrl} = 
     m_media:replace_url(MediumUrl, RscId, RscProps, Options, Context).
 
 
-%% @doc Inspect an url, return opaque metadata.
--spec url_inspect(string()|binary(), #context{}) -> {ok, #url_metadata{}} | {error, term()}.
-url_inspect(Url, _Context) ->
-    z_url_metadata:fetch(Url).
-
 
 %% @doc Find possible rsc/medium mappings for the url or fetched url metadata
--spec url_import_props(#url_metadata{} | string() | binary(), #context{}) ->
+-spec url_import_props(z_url_metadata:metadata() | string() | binary(), z:context()) ->
     {ok, list(#media_import_props{})} | {error, term()}.
+url_import_props(Url, Context) when is_list(Url); is_binary(Url) ->
+    case z_fetch:metadata(Url, [], Context) of
+        {ok, MD} ->
+            url_import_props(MD, Context);
+        {error, _} = Error ->
+            Error
+    end;
 url_import_props(#url_metadata{} = MD, Context) ->
     Url = z_url_metadata:p(url, MD),
     MI = #media_import{
@@ -127,27 +158,68 @@ url_import_props(#url_metadata{} = MD, Context) ->
         metadata = MD
     },
     Ms = lists:flatten([
+        import_as_resource(MD,Context),
         import_as_website(MD, Context),
         import_as_media(MD, Context)
         | z_notifier:map(MI, Context)
     ]),
     Ms1 = [ M || M <- Ms, M =/= undefined ],
-    {ok, lists:sort(Ms1)};
-url_import_props(Url, Context) when is_list(Url); is_binary(Url) ->
-    case url_inspect(Url, Context) of
-        {ok, MD} ->
-            url_import_props(MD, Context);
-        {error, _} = Error ->
-            Error
-    end.
+    {ok, lists:sort(Ms1)}.
 
 %% @doc Return the reversed list of parts of the hostname in an url.
 host_parts(Url) ->
-    {_Protocol, Host, _Path, _Qs, _Frag} = mochiweb_util:urlsplit(z_convert:to_list(Url)),
-    Ws = lists:reverse(string:tokens(Host, ".")),
-    [ z_convert:to_binary(W) || W <- Ws ].
+    case uri_string:parse(Url) of
+        #{ host := Host } ->
+            Ws = binary:split(z_convert:to_binary(Host), <<".">>, [ global ]),
+            lists:reverse(Ws);
+        _ ->
+            []
+    end.
 
 
+%% @doc Import the remote as a resource export/import
+import_as_resource(MD, Context) ->
+    case importable_resource_uri(MD, Context) of
+        {ok, {Uri, #{
+            <<"rsc">> := Rsc,
+            <<"depiction_url">> := DepUrl
+        }}} ->
+            DataDepUrl = case z_fetch:as_data_url(DepUrl, [], Context) of
+                {ok, DU} -> DU;
+                {error, _} -> undefined
+            end,
+            #media_import_props{
+                prio = 1,
+                category = maps:get(<<"category_id">>, Rsc, other),
+                description = ?__("Page Import", Context),
+                rsc_props = #{
+                    <<"is_authoritative">> => false,
+                    <<"uri">> => Uri,
+                    <<"title">> => maps:get(<<"title">>, Rsc, undefined),
+                    <<"summary">> => maps:get(<<"summary">>, Rsc, undefined)
+                },
+                medium_props = #{},
+                preview_url = DataDepUrl,
+                importer = rsc_import
+            };
+        false ->
+            undefined
+    end.
+
+importable_resource_uri(MD, Context) ->
+    case z_url_metadata:header(<<"x-resource-uri">>, MD) of
+        <<>> ->
+            false;
+        Uri when is_binary(Uri) ->
+            case m_rsc_import:fetch_preview(Uri, Context) of
+                {ok, Rsc} ->
+                    {ok, {Uri, Rsc}};
+                {error, _} = Error ->
+                    Error
+            end;
+        undefined ->
+            false
+    end.
 
 %% @doc Import the url as a link to a website
 import_as_website(MD, Context) ->

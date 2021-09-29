@@ -172,7 +172,7 @@ get_by_filename(Filename, Context) ->
     end.
 
 
-%% @doc Get the medium record that depicts the resource id. "depiction" Predicates are preferred, when
+%% @doc Get the medium record that depicts the resource id. "depiction" Predicates are preferred, if
 %% they are missing then the attached medium record itself is returned.  We must be able to generate a preview
 %% from the medium.
 -spec depiction( m_rsc:resource_id(), z:context() ) -> map() | undefined.
@@ -181,7 +181,7 @@ depiction(Id, Context) ->
         z_depcache:memo(
             fun() -> depiction([Id], [], Context) end,
             {depiction, Id},
-            ?WEEK, [Id], Context)
+            ?WEEK, [Id, {medium, Id}], Context)
     catch
         exit:{timeout, _} ->
             undefined
@@ -249,9 +249,15 @@ replace(Id, Props, Context) ->
     of
         true ->
             Depicts = depicts(Id, Context),
+            #media_upload_preprocess{ medium = Props1 } = set_av_flag(
+                #media_upload_preprocess{
+                    medium = Props,
+                    mime = Mime
+                },
+                Context),
             F = fun(Ctx) ->
                 {ok, _} = medium_delete(Id, Ctx),
-                {ok, Id} = medium_insert(Id, Props#{ <<"id">> => Id }, Ctx)
+                {ok, Id} = medium_insert(Id, Props1#{ <<"id">> => Id }, Ctx)
             end,
             case z_db:transaction(F, Context) of
                 {ok, _} ->
@@ -428,7 +434,7 @@ insert_file(File, RscProps, MediaProps, Options, Context) ->
             {error, file_not_allowed}
     end.
 
-%% @doc Insert a medium, together with rsc props and an optional preview_url. This is used for importing media
+%% @doc Insert a medium, together with rsc props and an optional preview_url. This is used for importing media.
 insert_medium(Medium, RscProps, Options, Context) ->
     update_medium_1(insert_rsc, Medium, RscProps, Options, Context).
 
@@ -441,7 +447,12 @@ replace_medium(Medium, RscId, RscProps, Options, Context) ->
 update_medium_1(RscId, Medium, RscProps, Options, Context) ->
     case is_update_medium_allowed(RscId, Medium, RscProps, Context) of
         true ->
-            case replace_file_acl_ok(undefined, RscId, RscProps, Medium, Options, Context) of
+            #media_upload_preprocess{ medium = Medium1 } = set_av_flag(
+                #media_upload_preprocess{
+                    medium = Medium,
+                    mime = maps:get(<<"mime">>, Medium)
+                }, Context),
+            case replace_file_acl_ok(undefined, RscId, RscProps, Medium1, Options, Context) of
                 {ok, NewRscId} ->
                     case proplists:get_value(preview_url, Options) of
                         None when None =:= undefined; None =:= <<>>; None =:= [] ->
@@ -800,7 +811,7 @@ replace_url(Url, RscId, RscProps, Options, Context) when is_list(RscProps) ->
     {ok, PropsMap} = z_props:from_list(RscProps),
     replace_url(Url, RscId, PropsMap, Options, Context);
 replace_url(Url, RscId, RscProps, Options, Context) ->
-    case z_acl:rsc_editable(RscId, Context) orelse not(m_rsc:p(RscId, is_authoritative, Context)) of
+    case z_acl:rsc_editable(RscId, Context) of
         true ->
             case download_file(Url) of
                 {ok, File, Filename} ->

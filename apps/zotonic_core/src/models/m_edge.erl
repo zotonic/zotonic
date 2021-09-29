@@ -716,283 +716,368 @@ subjects(Id, Pred, Context) ->
 
 
 %% @doc Return all object ids of the resource
-%% @spec objects(Id, Context) -> list()
-objects(Id, Context) ->
-    F = fun() ->
-        Ids = z_db:q(
-            "select object_id from edge "
-            "where subject_id = $1 "
-            "order by predicate_id, seq, id",
-            [Id],
-            Context
-        ),
-        [ObjId || {ObjId} <- Ids]
-    end,
-    z_depcache:memo(F, {objects, Id}, ?DAY, [Id], Context).
+-spec objects( m_rsc:resource(), z:context() ) -> [ m_rsc:resource_id() ].
+objects(Subject, Context) ->
+    case m_rsc:rid(Subject, Context) of
+        undefined ->
+            [];
+        SubjectId ->
+            F = fun() ->
+                Ids = z_db:q(
+                    "select object_id from edge "
+                    "where subject_id = $1 "
+                    "order by predicate_id, seq, id",
+                    [SubjectId],
+                    Context
+                ),
+                [ObjId || {ObjId} <- Ids]
+            end,
+            z_depcache:memo(F, {objects, SubjectId}, ?DAY, [SubjectId], Context)
+    end.
 
 %% @doc Return all subject ids of the resource
-%% @spec subjects(Id, Context) -> list()
-subjects(Id, Context) ->
-    F = fun() ->
-        Ids = z_db:q(
-            "select subject_id from edge "
-            "where object_id = $1 order by predicate_id, id",
-            [Id],
-            Context
-        ),
-        [SubjId || {SubjId} <- Ids]
-    end,
-    z_depcache:memo(F, {subjects, Id}, ?HOUR, [Id], Context).
+-spec subjects( m_rsc:resource(), z:context() ) -> [ m_rsc:resource_id() ].
+subjects(Object, Context) ->
+    case m_rsc:rid(Object, Context) of
+        undefined ->
+            [];
+        ObjectId ->
+            F = fun() ->
+                Ids = z_db:q(
+                    "select subject_id from edge "
+                    "where object_id = $1 order by predicate_id, id",
+                    [ObjectId],
+                    Context
+                ),
+                [SubjId || {SubjId} <- Ids]
+            end,
+            z_depcache:memo(F, {subjects, ObjectId}, ?HOUR, [ObjectId], Context)
+    end.
 
 
 %% @doc Return all object ids with the edge id for a predicate/subject_id
-%% @spec object_edge_ids(Id, Predicate, Context) -> list()
-object_edge_ids(Id, Predicate, Context) ->
-    case m_predicate:name_to_id(Predicate, Context) of
-        {ok, PredId} ->
-            F = fun() ->
-                z_db:q(
-                    "select object_id, id from edge "
-                    "where subject_id = $1 and predicate_id = $2 "
-                    "order by seq, id",
-                    [Id, PredId],
-                    Context
-                )
-            end,
-            z_depcache:memo(F, {object_edge_ids, Id, PredId}, ?DAY, [Id], Context);
-        {error, _} ->
-            []
+-spec object_edge_ids( m_rsc:resource(), m_rsc:resource(), z:context() ) -> [ {m_rsc:resource_id(), integer()} ].
+object_edge_ids(Subject, Predicate, Context) ->
+    case m_rsc:rid(Subject, Context) of
+        undefined ->
+            [];
+        SubjectId ->
+            case m_predicate:name_to_id(Predicate, Context) of
+                {ok, PredId} ->
+                    F = fun() ->
+                        z_db:q(
+                            "select object_id, id from edge "
+                            "where subject_id = $1 and predicate_id = $2 "
+                            "order by seq, id",
+                            [SubjectId, PredId],
+                            Context
+                        )
+                    end,
+                    z_depcache:memo(F, {object_edge_ids, SubjectId, PredId}, ?DAY, [SubjectId], Context);
+                {error, _} ->
+                    []
+            end
     end.
 
 
 %% @doc Return all subject ids with the edge id for a predicate/object_id
-%% @spec subject_edge_ids(Id, Predicate, Context) -> list()
-subject_edge_ids(Id, Predicate, Context) ->
-    case m_predicate:name_to_id(Predicate, Context) of
-        {ok, PredId} ->
-            F = fun() ->
-                z_db:q(
-                    "select subject_id, id from edge "
-                    "where object_id = $1 and predicate_id = $2 "
-                    "order by seq, id",
-                    [Id, PredId],
-                    Context
-                )
-            end,
-            z_depcache:memo(F, {subject_edge_ids, Id, PredId}, ?DAY, [Id], Context);
-        {error, _} ->
-            []
+-spec subject_edge_ids( m_rsc:resource(), m_rsc:resource(), z:context() ) -> [ {m_rsc:resource_id(), integer()} ].
+subject_edge_ids(Object, Predicate, Context) ->
+    case m_rsc:rid(Object, Context) of
+        undefined ->
+            [];
+        ObjectId ->
+            case m_predicate:name_to_id(Predicate, Context) of
+                {ok, PredId} ->
+                    F = fun() ->
+                        z_db:q(
+                            "select subject_id, id from edge "
+                            "where object_id = $1 and predicate_id = $2 "
+                            "order by seq, id",
+                            [ObjectId, PredId],
+                            Context
+                        )
+                    end,
+                    z_depcache:memo(F, {subject_edge_ids, ObjectId, PredId}, ?DAY, [ObjectId], Context);
+                {error, _} ->
+                    []
+            end
     end.
 
 
 %% @doc Return all object ids with edge properties
--spec object_edge_props(m_rsc:resource_id(), binary()|string()|atom()|integer(), z:context()) -> list().
-object_edge_props(Id, Predicate, Context) ->
-    case m_predicate:name_to_id(Predicate, Context) of
-        {ok, PredId} ->
-            F = fun() ->
-                z_db:assoc("
-                        select *
-                        from edge
-                        where subject_id = $1
-                          and predicate_id = $2
-                        order by seq, id",
-                    [Id, PredId],
-                    Context)
-            end,
-            z_depcache:memo(F, {object_edge_props, Id, PredId}, ?DAY, [Id], Context);
-        {error, _} ->
-            []
+-spec object_edge_props(m_rsc:resource(), m_rsc:resource(), z:context()) -> list( m_rsc:resource_id() ).
+object_edge_props(Subject, Predicate, Context) ->
+    case m_rsc:rid(Subject, Context) of
+        undefined ->
+            [];
+        SubjectId ->
+            case m_predicate:name_to_id(Predicate, Context) of
+                {ok, PredId} ->
+                    F = fun() ->
+                        z_db:assoc("
+                                select *
+                                from edge
+                                where subject_id = $1
+                                  and predicate_id = $2
+                                order by seq, id",
+                            [SubjectId, PredId],
+                            Context)
+                    end,
+                    z_depcache:memo(F, {object_edge_props, SubjectId, PredId}, ?DAY, [SubjectId], Context);
+                {error, _} ->
+                    []
+            end
     end.
 
 %% @doc Return all subject ids with the edge properties
--spec subject_edge_props(m_rsc:resource_id(), binary()|string()|atom()|integer(), z:context()) -> list().
-subject_edge_props(Id, Predicate, Context) ->
-    case m_predicate:name_to_id(Predicate, Context) of
-        {ok, PredId} ->
-            F = fun() ->
-                z_db:assoc("
-                        select *
-                        from edge
-                        where object_id = $1
-                          and predicate_id = $2
-                        order by seq, id",
-                    [Id, PredId],
-                    Context)
-            end,
-            z_depcache:memo(F, {subject_edge_props, Id, PredId}, ?DAY, [Id], Context);
-        {error, _} ->
-            []
+-spec subject_edge_props(m_rsc:resource(), m_rsc:resource(), z:context()) -> list( m_rsc:resource_id() ).
+subject_edge_props(Object, Predicate, Context) ->
+    case m_rsc:rid(Object, Context) of
+        undefined ->
+            [];
+        ObjectId ->
+            case m_predicate:name_to_id(Predicate, Context) of
+                {ok, PredId} ->
+                    F = fun() ->
+                        z_db:assoc("
+                                select *
+                                from edge
+                                where object_id = $1
+                                  and predicate_id = $2
+                                order by seq, id",
+                            [ObjectId, PredId],
+                            Context)
+                    end,
+                    z_depcache:memo(F, {subject_edge_props, ObjectId, PredId}, ?DAY, [ObjectId], Context);
+                {error, _} ->
+                    []
+            end
     end.
 
 
 %% @doc Reorder the edges so that the mentioned ids are in front, in the listed order.
-%% @spec update_sequence(Id, Predicate, ObjectIds, Context) -> ok | {error, Reason}
-update_sequence(Id, Pred, ObjectIds, Context) when is_integer(Id) ->
-    case z_acl:rsc_editable(Id, Context) of
-        true ->
-            {ok, PredId} = m_predicate:name_to_id(Pred, Context),
-            F = fun(Ctx) ->
-                All = z_db:q("
-                            select object_id, id
-                            from edge
-                            where predicate_id = $1
-                              and subject_id = $2", [PredId, Id], Ctx),
+-spec update_sequence( m_rsc:resource(), m_rsc:resource(), [ m_rsc:resource_id() ], z:context() ) ->
+    ok | {error, term()}.
+update_sequence(Subject, Pred, ObjectIds, Context) ->
+    case m_rsc:rid(Subject, Context) of
+        undefined ->
+            {error, enoent};
+        SubjectId ->
+            case z_acl:rsc_editable(SubjectId, Context) of
+                true ->
+                    {ok, PredId} = m_predicate:name_to_id(Pred, Context),
+                    F = fun(Ctx) ->
+                        All = z_db:q("
+                                    select object_id, id
+                                    from edge
+                                    where predicate_id = $1
+                                      and subject_id = $2", [PredId, SubjectId], Ctx),
 
-                MissingIds = lists:foldl(
-                    fun({OId, _}, Acc) ->
-                        case lists:member(OId, ObjectIds) of
-                            true -> Acc;
-                            false -> [OId | Acc]
-                        end
+                        MissingIds = lists:foldl(
+                            fun({OId, _}, Acc) ->
+                                case lists:member(OId, ObjectIds) of
+                                    true -> Acc;
+                                    false -> [OId | Acc]
+                                end
+                            end,
+                            [],
+                            All),
+
+                        lists:map(
+                            fun(OId) ->
+                                case lists:keymember(OId, 1, All) of
+                                    true ->
+                                        ok;
+                                    false ->
+                                        z_db:q("
+                                            insert into edge (subject_id, predicate_id, object_id)
+                                            values ($1, $2, $3)",
+                                            [ SubjectId, PredId, OId ],
+                                            Context)
+                                end
+                            end,
+                            ObjectIds),
+
+                        SortedIds = ObjectIds ++ lists:reverse(MissingIds),
+                        SortedEdgeIds = [proplists:get_value(OId, All, -1) || OId <- SortedIds],
+                        z_db:update_sequence(edge, SortedEdgeIds, Ctx),
+                        ok
                     end,
-                    [],
-                    All),
 
-                SortedIds = ObjectIds ++ lists:reverse(MissingIds),
-                SortedEdgeIds = [proplists:get_value(OId, All, -1) || OId <- SortedIds],
-                z_db:update_sequence(edge, SortedEdgeIds, Ctx),
-                ok
-            end,
-
-            Result = z_db:transaction(F, Context),
-            z_depcache:flush(Id, Context),
-            Result;
-        false ->
-            {error, eacces}
+                    Result = z_db:transaction(F, Context),
+                    z_depcache:flush(SubjectId, Context),
+                    Result;
+                false ->
+                    {error, eacces}
+            end
     end.
-
 
 %% @doc Set edges order so that the specified object ids are in given order.
 %% Any extra edges not specified will be deleted, and any missing edges will be inserted.
-%% @spec set_sequence(Id, Predicate, ObjectIds, Context) -> ok | {error, Reason}
-set_sequence(Id, Pred, ObjectIds, Context) ->
-    case z_acl:rsc_editable(Id, Context) of
-        true ->
-            {ok, SubjectId} = m_rsc:name_to_id(Id, Context),
-            {ok, PredId} = m_predicate:name_to_id(Pred, Context),
-            F = fun(Ctx) ->
-                All = z_db:q("
-                            select object_id, id
-                            from edge
-                            where predicate_id = $1
-                              and subject_id = $2", [PredId, SubjectId], Ctx),
+-spec set_sequence( m_rsc:resource(), m_rsc:resource(), [ m_rsc:resource_id() ], z:context()) -> ok | {error, term()}.
+set_sequence(Subject, Pred, ObjectIds, Context) ->
+    case m_rsc:rid(Subject, Context) of
+        undefined ->
+            {error, enoent};
+        SubjectId ->
+            case z_acl:rsc_editable(SubjectId, Context) of
+                true ->
+                    case m_predicate:name_to_id(Pred, Context) of
+                        {ok, PredId} ->
+                            F = fun(Ctx) ->
+                                All = z_db:q("
+                                            select object_id, id
+                                            from edge
+                                            where predicate_id = $1
+                                              and subject_id = $2", [PredId, SubjectId], Ctx),
 
-                [delete(EdgeId, Context) || {ObjectId, EdgeId} <- All, not lists:member(ObjectId, ObjectIds)],
-                NewEdges = [begin
-                    {ok, EdgeId} = insert(Id, Pred, ObjectId, Context),
-                    {ObjectId, EdgeId}
-                end
-                    || ObjectId <- ObjectIds,
-                    not lists:member(ObjectId, All)
-                ],
+                                % Delete edges not in ObjectIds
+                                lists:foreach(
+                                    fun({ObjectId, EdgeId}) ->
+                                        case lists:member(ObjectId, ObjectIds) of
+                                            true ->
+                                                ok;
+                                            false ->
+                                                delete(EdgeId, Context)
+                                        end
+                                    end,
+                                    All),
 
-                AllEdges = All ++ NewEdges,
-                SortedEdgeIds = [proplists:get_value(OId, AllEdges, -1) || OId <- ObjectIds],
-                z_db:update_sequence(edge, SortedEdgeIds, Ctx),
-                ok
-            end,
+                                % Add new edges not yet in the db
+                                NewEdges = lists:filtermap(
+                                    fun(ObjectId) ->
+                                        case lists:member(ObjectId, All) of
+                                            true -> false;
+                                            false ->
+                                                case insert(SubjectId, Pred, ObjectId, Context) of
+                                                    {ok, EdgeId} ->
+                                                        {ok, {ObjectId, EdgeId}};
+                                                    {error, _} ->
+                                                        false
+                                                end
+                                        end
+                                    end,
+                                    ObjectIds),
 
-            Result = z_db:transaction(F, Context),
-            z_depcache:flush(Id, Context),
-            Result;
-        false ->
-            {error, eacces}
+                                % Force order of all edges
+                                AllEdges = All ++ NewEdges,
+                                SortedEdgeIds = [
+                                    proplists:get_value(OId, AllEdges, -1) || OId <- ObjectIds
+                                ],
+                                z_db:update_sequence(edge, SortedEdgeIds, Ctx),
+                                ok
+                            end,
+
+                            Result = z_db:transaction(F, Context),
+                            z_depcache:flush(SubjectId, Context),
+                            Result;
+                        {error, _} = Error ->
+                            Error
+                    end;
+                false ->
+                    {error, eacces}
+            end
     end.
 
 
 %% @doc Update the sequence for the given edge ids.  Optionally rename the predicate on the edge.
-%% @spec update_sequence_edge_ids(Id, Predicate, EdgeIds, Context) -> ok | {error, Reason}
-update_sequence_edge_ids(Id, Pred, EdgeIds, Context) ->
-    case z_acl:rsc_editable(Id, Context) of
-        true ->
-            {ok, PredId} = m_predicate:name_to_id(Pred, Context),
-            F = fun(Ctx) ->
-                % Figure out which edge ids need to be renamed to this predicate.
-                Current = z_db:q("
-                            select id
-                            from edge
-                            where predicate_id = $1
-                              and subject_id = $2", [PredId, Id], Ctx),
-                CurrentIds = [EdgeId || {EdgeId} <- Current],
+-spec update_sequence_edge_ids( m_rsc:resource_id(), m_rsc:resource(), [ integer() ], z:context() ) -> ok | {error, term()}.
+update_sequence_edge_ids(Subject, Pred, EdgeIds, Context) ->
+    case m_rsc:rid(Subject, Context) of
+        undefined ->
+            {error, enoent};
+        Id ->
+            case z_acl:rsc_editable(Id, Context) of
+                true ->
+                    {ok, PredId} = m_predicate:name_to_id(Pred, Context),
+                    F = fun(Ctx) ->
+                        % Figure out which edge ids need to be renamed to this predicate.
+                        Current = z_db:q("
+                                    select id
+                                    from edge
+                                    where predicate_id = $1
+                                      and subject_id = $2", [PredId, Id], Ctx),
+                        CurrentIds = [EdgeId || {EdgeId} <- Current],
 
-                WrongPred = lists:foldl(
-                    fun(EdgeId, Acc) ->
-                        case lists:member(EdgeId, CurrentIds) of
-                            true -> Acc;
-                            false -> [EdgeId | Acc]
-                        end
-                    end,
-                    [],
-                    EdgeIds),
+                        WrongPred = lists:foldl(
+                            fun(EdgeId, Acc) ->
+                                case lists:member(EdgeId, CurrentIds) of
+                                    true -> Acc;
+                                    false -> [EdgeId | Acc]
+                                end
+                            end,
+                            [],
+                            EdgeIds),
 
-                %% Remove the edges where we don't have permission to remove the
-                %% old predicate and insert the new predicate.
-                {ok, Pred} = m_predicate:id_to_name(PredId, Ctx),
-                WrongPredAllowed = lists:filter(
-                    fun(EdgeId) ->
-                        {Id, EdgePredName, EdgeObjectId} = get_triple(EdgeId, Ctx),
-                        case z_acl:is_allowed(delete,
-                            #acl_edge{subject_id = Id, predicate = EdgePredName, object_id = EdgeObjectId},
-                            Ctx
-                        ) of
-                            true ->
-                                case z_acl:is_allowed(insert,
-                                    #acl_edge{subject_id = Id, predicate = Pred, object_id = EdgeObjectId},
+                        %% Remove the edges where we don't have permission to remove the
+                        %% old predicate and insert the new predicate.
+                        {ok, Pred} = m_predicate:id_to_name(PredId, Ctx),
+                        WrongPredAllowed = lists:filter(
+                            fun(EdgeId) ->
+                                {Id, EdgePredName, EdgeObjectId} = get_triple(EdgeId, Ctx),
+                                case z_acl:is_allowed(delete,
+                                    #acl_edge{subject_id = Id, predicate = EdgePredName, object_id = EdgeObjectId},
                                     Ctx
                                 ) of
-                                    true -> true;
-                                    _ -> false
-                                end;
-                            _ ->
-                                false
-                        end
-                    end, WrongPred),
+                                    true ->
+                                        case z_acl:is_allowed(insert,
+                                            #acl_edge{subject_id = Id, predicate = Pred, object_id = EdgeObjectId},
+                                            Ctx
+                                        ) of
+                                            true -> true;
+                                            _ -> false
+                                        end;
+                                    _ ->
+                                        false
+                                end
+                            end, WrongPred),
 
-                % Update the predicates on the edges that don't have the correct predicate.
-                % We have to make sure that the "wrong" edges do have the correct subject_id
-                Extra = lists:foldl(
-                    fun(EdgeId, Acc) ->
-                        case z_db:q(
-                            "update edge set predicate_id = $1 "
-                            "where id = $2 and subject_id = $3",
-                            [PredId, EdgeId, Id],
-                            Ctx
-                        ) of
-                            1 -> [EdgeId | Acc];
-                            0 -> Acc
-                        end
+                        % Update the predicates on the edges that don't have the correct predicate.
+                        % We have to make sure that the "wrong" edges do have the correct subject_id
+                        Extra = lists:foldl(
+                            fun(EdgeId, Acc) ->
+                                case z_db:q(
+                                    "update edge set predicate_id = $1 "
+                                    "where id = $2 and subject_id = $3",
+                                    [PredId, EdgeId, Id],
+                                    Ctx
+                                ) of
+                                    1 -> [EdgeId | Acc];
+                                    0 -> Acc
+                                end
+                            end,
+                            [],
+                            WrongPredAllowed),
+                        All = CurrentIds ++ Extra,
+
+                        %% Extract all edge ids that are not in our sort list, they go to the end of the new sequence
+                        AppendToEnd = lists:foldl(
+                            fun(EdgeId, Acc) ->
+                                case lists:member(EdgeId, EdgeIds) of
+                                    true -> Acc;
+                                    false -> [EdgeId | Acc]
+                                end
+                            end,
+                            [],
+                            All),
+                        SortedEdgeIds = EdgeIds ++ lists:reverse(AppendToEnd),
+                        z_db:update_sequence(edge, SortedEdgeIds, Ctx),
+                        ok
                     end,
-                    [],
-                    WrongPredAllowed),
-                All = CurrentIds ++ Extra,
 
-                %% Extract all edge ids that are not in our sort list, they go to the end of the new sequence
-                AppendToEnd = lists:foldl(
-                    fun(EdgeId, Acc) ->
-                        case lists:member(EdgeId, EdgeIds) of
-                            true -> Acc;
-                            false -> [EdgeId | Acc]
-                        end
-                    end,
-                    [],
-                    All),
-                SortedEdgeIds = EdgeIds ++ lists:reverse(AppendToEnd),
-                z_db:update_sequence(edge, SortedEdgeIds, Ctx),
-                ok
-            end,
-
-            Result = z_db:transaction(F, Context),
-            z_depcache:flush(Id, Context),
-            Result;
-        false ->
-            {error, eacces}
+                    Result = z_db:transaction(F, Context),
+                    z_depcache:flush(Id, Context),
+                    Result;
+                false ->
+                    {error, eacces}
+            end
     end.
 
 
 %% @doc Return the list of predicates in use by edges to objects from the id
-%% @spec object_predicates(Id, Context) -> List
-object_predicates(Id, Context) ->
+-spec object_predicates( m_rsc:resource_id(), z:context() ) -> list( atom() ).
+object_predicates(Id, Context) when is_integer(Id) ->
     F = fun() ->
         Ps = z_db:q(
             "select distinct p.name from edge e join rsc p on e.predicate_id = p.id where e.subject_id = $1 "
@@ -1002,8 +1087,8 @@ object_predicates(Id, Context) ->
     z_depcache:memo(F, {object_preds, Id}, ?DAY, [Id], Context).
 
 %% @doc Return the list of predicates is use by edges from subjects to the id
-%% @spec subject_predicates(Id, Context) -> List
-subject_predicates(Id, Context) ->
+-spec subject_predicates( m_rsc:resource_id(), z:context() ) -> list( atom() ).
+subject_predicates(Id, Context) when is_integer(Id) ->
     F = fun() ->
         Ps = z_db:q(
             "select distinct p.name from edge e join rsc p on e.predicate_id = p.id "
@@ -1016,13 +1101,13 @@ subject_predicates(Id, Context) ->
     z_depcache:memo(F, {subject_preds, Id}, ?DAY, [Id], Context).
 
 %% @doc Return the list of predicate ids in use by edges to objects from the id
-%% @spec object_predicate_ids(Id, Context) -> List
-object_predicate_ids(Id, Context) ->
+-spec object_predicate_ids( m_rsc:resource_id(), z:context() ) -> list( m_rsc:resource_id() ).
+object_predicate_ids(Id, Context) when is_integer(Id) ->
     Ps = z_db:q("select distinct predicate_id from edge where subject_id = $1", [Id], Context),
     [P || {P} <- Ps].
 
 %% @doc Return the list of predicates is use by edges from subjects to the id
-%% @spec subject_predicate_ids(Id, Context) -> List
-subject_predicate_ids(Id, Context) ->
+-spec subject_predicate_ids( m_rsc:resource_id(), z:context() ) -> list( m_rsc:resource_id() ).
+subject_predicate_ids(Id, Context) when is_integer(Id) ->
     Ps = z_db:q("select distinct predicate_id from edge where object_id = $1", [Id], Context),
     [P || {P} <- Ps].

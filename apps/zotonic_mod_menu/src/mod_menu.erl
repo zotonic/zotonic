@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2015 Marc Worrell
-%% @doc Menu module.  Supports menus in Zotonic. Adds admin interface to define the menu.
+%% @copyright 2009-2021 Marc Worrell
+%% @doc Menu module. Supports menu trees in Zotonic. Adds admin interface to define the menu.
 
-%% Copyright 2009-2015 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,11 +28,15 @@
 %% interface functions
 -export([
     manage_schema/2,
-    init/1,
+
     event/2,
+
     observe_menu_get_rsc_ids/2,
     observe_menu_save/2,
+    observe_rsc_get/3,
     observe_admin_menu/3,
+    observe_rsc_update/3,
+
     get_menu/1,
     get_menu/2,
     set_menu/3,
@@ -45,18 +49,6 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
-
-
-%% @doc Initializes the module (after the datamodel is installed).
-init(Context) ->
-    case m_config:get(menu, menu_default, Context) of
-        undefined -> ok;
-        Props ->
-            %% upgrade from previous menu
-            OldMenu = proplists:get_value(menu, Props, []),
-            set_menu(OldMenu, Context),
-            m_config:delete(menu, menu_default, Context)
-    end.
 
 
 event(#postback_notify{message= <<"menuedit">>, trigger=TriggerId}, Context) ->
@@ -83,6 +75,53 @@ event(#z_msg_v1{data=Data}, Context) ->
     handle_cmd(proplists:get_value(<<"cmd">>, Data), Data, Context).
 
 
+%% @doc Notifier handler to get all menu ids for the default menu.
+observe_menu_get_rsc_ids(menu_get_rsc_ids, Context) ->
+    Menu = get_menu(Context),
+    {ok, menu_ids(Menu, [])}.
+
+%% @doc Observer the 'menu_save' notification
+observe_menu_save(#menu_save{id=MenuId, tree=Menu}, Context) ->
+    set_menu(MenuId, Menu, Context).
+
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
+    case m_rsc:name_to_id(main_menu, Context) of
+        {ok, Id} ->
+            [
+             #menu_item{id=admin_menu,
+                        parent=admin_content,
+                        label=?__("Menu", Context),
+                        url={admin_edit_rsc, [{id, Id}]},
+                        visiblecheck={acl, use, mod_menu}}
+             |Acc];
+        _ ->
+            Acc
+    end.
+
+%% @doc Ensure that menus in the old tuple format are translated to #rsc_tree
+observe_rsc_get(#rsc_get{}, #{ <<"menu">> := [] } = R, _Context) ->
+    R;
+observe_rsc_get(#rsc_get{}, #{ <<"menu">> := [ #rsc_tree{} | _ ] } = R, _Context) ->
+    R;
+observe_rsc_get(#rsc_get{}, #{ <<"menu">> := Menu } = R, _Context) ->
+    R#{
+        <<"menu">> => validate(Menu, [])
+    };
+observe_rsc_get(#rsc_get{}, R, _Context) ->
+    R.
+
+
+observe_rsc_update(#rsc_update{ action = Action }, {ok, #{ <<"menu">> := Menu } = R}, _Context)
+    when Action =:= update;
+         Action =:= insert ->
+
+    Menu1 = validate(Menu, []),
+    {ok, R#{ <<"menu">> => Menu1 }};
+observe_rsc_update(#rsc_update{}, Result, _Context) ->
+    Result.
+
+
+% Event handler command handling.
 handle_cmd(<<"copy">>, Data, Context) ->
     FromId = z_convert:to_integer(proplists:get_value(<<"id">>, Data)),
     case m_rsc:is_visible(FromId, Context) of
@@ -226,75 +265,58 @@ create_new(List, Context) ->
     create_new(List, [], Context).
 
 
-    create_new([], Acc, Context) ->
-        {lists:reverse(Acc), Context};
-    create_new([{Id,Sub}|Rest], Acc, Context) ->
-        {Id1, Context1} = create_new_if_needed(Id, Context),
-        {Sub1, Context2} = create_new(Sub, Context1),
-        create_new(Rest, [{Id1,Sub1}|Acc], Context2).
+create_new([], Acc, Context) ->
+    {lists:reverse(Acc), Context};
+create_new([{Id,Sub}|Rest], Acc, Context) ->
+    {Id1, Context1} = create_new_if_needed(Id, Context),
+    {Sub1, Context2} = create_new(Sub, Context1),
+    create_new(Rest, [{Id1,Sub1}|Acc], Context2).
 
 
-    create_new_if_needed(Id, Context) when is_integer(Id) ->
-        {Id, Context};
-    create_new_if_needed(Id, Context) ->
-        C = lists:last( string:tokens(Id, "-") ),
-        Category = case m_category:name_to_id(C, Context) of
-            {error, _} -> text;
-            {ok, C1} -> C1
-        end,
-        Props = #{
-            <<"is_published">> => false,
-            <<"category">> => Category,
-            <<"title">> => ?__("New page", Context)
-        },
-        {ok, RscId} = m_rsc:insert(Props, Context),
-        OuterId = iolist_to_binary(["outernew-",integer_to_list(RscId)]),
-        InnerId = iolist_to_binary(["innernew-",integer_to_list(RscId)]),
-        Context1 = z_render:wire(
-            [
-                {script, [{script, ["$('#",Id,"').attr('id','",OuterId,"');"]}]},
-                {dialog_edit_basics, [
-                            {id, RscId},
-                            {target, InnerId},
-                            {template, "_menu_edit_item.tpl"}
-                    ]},
-                {update, [
-                            {target, OuterId},
-                            {menu_id, InnerId},
-                            {id, RscId},
-                            {template, "_menu_edit_item.tpl"}
-                    ]}
-            ], Context),
-        {RscId, Context1}.
+create_new_if_needed(Id, Context) when is_integer(Id) ->
+    {Id, Context};
+create_new_if_needed(Id, Context) ->
+    C = lists:last( string:tokens(Id, "-") ),
+    Category = case m_category:name_to_id(C, Context) of
+        {error, _} -> text;
+        {ok, C1} -> C1
+    end,
+    Props = #{
+        <<"is_published">> => false,
+        <<"category">> => Category,
+        <<"title">> => ?__("New page", Context)
+    },
+    {ok, RscId} = m_rsc:insert(Props, Context),
+    OuterId = iolist_to_binary(["outernew-",integer_to_list(RscId)]),
+    InnerId = iolist_to_binary(["innernew-",integer_to_list(RscId)]),
+    Context1 = z_render:wire(
+        [
+            {script, [{script, ["$('#",Id,"').attr('id','",OuterId,"');"]}]},
+            {dialog_edit_basics, [
+                        {id, RscId},
+                        {target, InnerId},
+                        {template, "_menu_edit_item.tpl"}
+                ]},
+            {update, [
+                        {target, OuterId},
+                        {menu_id, InnerId},
+                        {id, RscId},
+                        {template, "_menu_edit_item.tpl"}
+                ]}
+        ], Context),
+    {RscId, Context1}.
 
-
-
-%% @doc Notifier handler to get all menu ids for the default menu.
-observe_menu_get_rsc_ids(menu_get_rsc_ids, Context) ->
-    Menu = get_menu(Context),
-    {ok, menu_ids(Menu, [])}.
-
-    menu_ids([], Acc) ->
-        Acc;
-    menu_ids([{Id,SubMenu}|T], Acc) ->
-        Acc1 = menu_ids(SubMenu, [Id|Acc]),
-        menu_ids(T, Acc1);
-    menu_ids([H|T], Acc) ->
-        menu_ids(T, [H|Acc]).
-
-
-%% @doc Observer the 'menu_save' notification
-observe_menu_save(#menu_save{id=MenuId, tree=Menu}, Context) ->
-    set_menu(MenuId, Menu, Context).
-
+menu_ids([], Acc) ->
+    Acc;
+menu_ids([ #rsc_tree{ id = Id, tree = SubMenu } | T ], Acc) ->
+    Acc1 = menu_ids(SubMenu, [Id|Acc]),
+    menu_ids(T, Acc1).
 
 %% @doc Fetch the default menu. Performs validation/visibility checking on the menu items.
-%% @spec get_menu(Context) -> list()
 get_menu(Context) ->
     get_menu(m_rsc:rid(main_menu, Context), Context).
 
 %% @doc Fetch a menu structure from a rsc. Performs validation/visibility checking on the menu items.
-%% @spec get_menu(Id, Context) -> list()
 get_menu(Id, Context) ->
     case m_rsc:p(Id, menu, Context) of
         undefined -> [];
@@ -302,12 +324,25 @@ get_menu(Id, Context) ->
         Menu -> remove_invisible(validate(Menu, []), [], Context)
     end.
 
-	validate([], Acc) ->
-		lists:reverse(Acc);
-	validate([{_M,_L} = M|Ms], Acc) ->
-		validate(Ms, [M|Acc]);
-	validate([M|Ms], Acc) ->
-		validate(Ms, [{M,[]}|Acc]).
+validate(undefined, Acc) ->
+    lists:reverse(Acc);
+validate([], Acc) ->
+	lists:reverse(Acc);
+validate(<<>>, Acc) ->
+    lists:reverse(Acc);
+validate([ #rsc_tree{ id = Id, tree = Sub } = M | Ms ], Acc)
+    when is_integer(Id);
+         is_atom(Id);
+         is_binary(Id) ->
+    Sub1 = validate(Sub, []),
+    validate(Ms, [ M#rsc_tree{ tree = Sub1 } | Acc ]);
+validate([ #rsc_tree{} | Ms ], Acc) ->
+    % Drop entries with invalid ids
+    validate(Ms, Acc);
+validate([ {Id,L} | Ms ], Acc) ->
+	validate(Ms, [ #rsc_tree{ id = Id, tree = validate(L, []) } | Acc ]);
+validate([ M | Ms ], Acc) ->
+	validate(Ms, [ #rsc_tree{ id = M, tree = [] } | Acc ]).
 
 
 remove_invisible(Menu, Context) ->
@@ -320,39 +355,22 @@ remove_invisible(<<>>, Acc, _Context) ->
     lists:reverse(Acc);
 remove_invisible([], Acc, _Context) ->
     lists:reverse(Acc);
-remove_invisible([{Id,Sub}|Rest], Acc, Context) ->
+remove_invisible([ #rsc_tree{ id = Id, tree = Sub } | Rest ], Acc, Context) ->
     case m_rsc:is_visible(Id, Context) andalso m_rsc:exists(Id, Context) of
-        true ->  remove_invisible(Rest, [{Id,remove_invisible(Sub, [], Context)} | Acc], Context);
+        true ->  remove_invisible(Rest, [ #rsc_tree{ id = Id, tree = remove_invisible(Sub, [], Context)} | Acc ], Context);
         false -> remove_invisible(Rest, Acc, Context)
     end;
+% Old notations
+remove_invisible([{Id,Sub}|Rest], Acc, Context) ->
+    remove_invisible([ #rsc_tree{ id = Id, tree = Sub } | Rest ], Acc, Context);
 remove_invisible([Id|Rest], Acc, Context) ->
-    case m_rsc:is_visible(Id, Context) andalso m_rsc:exists(Id, Context) of
-        true ->  remove_invisible(Rest, [Id | Acc], Context);
-        false -> remove_invisible(Rest, Acc, Context)
-    end.
+    remove_invisible([ #rsc_tree{ id = Id, tree = [] } | Rest ], Acc, Context).
 
 
-%% @doc Save the default menu, ensure that the resource 'main_menu' is defined.
-set_menu(Menu, Context) ->
-    case m_rsc:rid(main_menu, Context) of
-        undefined ->
-            Props = #{
-                <<"category">> => menu,
-                <<"is_published">> => true,
-                <<"title">> => <<"Main menu">>,
-                <<"menu">> => Menu
-            },
-            {ok, _Id} = m_rsc:insert(Props, z_acl:sudo(Context)),
-            ok;
-        Id ->
-            set_menu(Id, Menu, Context)
-    end.
-
-
-
-%% @doc Save the current menu.
+%% @doc Save the current menu to a resource.
 set_menu(Id, Menu, Context) ->
-    m_rsc:update(Id, [{menu, Menu}], Context).
+    Menu1 = validate(Menu, []),
+    m_rsc:update(Id, #{ <<"menu">> => Menu1 }, Context).
 
 
 %% @doc Flatten the menu structure in a list, used for display purposes in templates
@@ -370,23 +388,25 @@ menu_flat(X, MaxDepth, Context) ->
 
 menu_flat([], _MaxDepth, _Path, Acc, _Context) ->
     lists:reverse(Acc);
-menu_flat([ {MenuId, []} | Rest], MaxDepth, [Idx|PR], Acc, Context ) ->
+menu_flat([ #rsc_tree{ id = MenuId, tree = []} | Rest], MaxDepth, [Idx|PR], Acc, Context ) ->
     [ {m_rsc:rid(MenuId, Context), [Idx|PR], undefined} ]
         ++ menu_flat(Rest, MaxDepth, [Idx+1|PR], [], Context)
         ++  Acc;
-menu_flat([ {MenuId, _Children} | Rest], 1, [Idx|PR], Acc, Context ) ->
+menu_flat([ #rsc_tree{ id = MenuId } | Rest], 1, [Idx|PR], Acc, Context ) ->
     [ {m_rsc:rid(MenuId, Context), [Idx|PR], undefined} ]
         ++ menu_flat(Rest, 1, [Idx+1|PR], [], Context)
         ++  Acc;
-menu_flat([ {MenuId, Children} | Rest], MaxDepth, [Idx|PR], Acc, Context ) ->
+menu_flat([ #rsc_tree{ id = MenuId, tree = Children } | Rest], MaxDepth, [Idx|PR], Acc, Context ) ->
     [ {m_rsc:rid(MenuId, Context), [Idx|PR], down} ]
         ++ menu_flat(Children, MaxDepth-1, [1,Idx|PR], [], Context)
         ++ [{undefined, undefined, up}]
         ++ menu_flat(Rest, MaxDepth, [Idx+1|PR], [], Context)
         ++  Acc;
-menu_flat([ MenuId | Rest ], MaxDepth, P, A, C) when is_integer(MenuId) ->
-    %% oldschool notation fallback
-    menu_flat([{MenuId, []} | Rest], MaxDepth, P, A, C).
+% Old notations
+menu_flat([ {MenuId, Sub} | Rest ], MaxDepth, P, A, C) when is_list(Sub) ->
+    menu_flat([ #rsc_tree{ id = MenuId, tree = Sub } | Rest ], MaxDepth, P, A, C);
+menu_flat([ MenuId | Rest ], MaxDepth, P, A, C) ->
+    menu_flat([ #rsc_tree{ id = MenuId, tree = [] } | Rest ], MaxDepth, P, A, C).
 
 
 %% @doc Find the subtree below a resource id. 'undefined' when not found.
@@ -406,38 +426,34 @@ menu_subtree(Menu, BelowId, AddSiblings, Context) when not is_integer(BelowId) -
 menu_subtree(Menu, BelowId, AddSiblings, Context) ->
     menu_subtree_1(Menu, BelowId, AddSiblings, Menu, Context).
 
-    menu_subtree_1([], _BelowId, _AddSiblings, _CurrMenu, _Context) ->
-        undefined;
-    menu_subtree_1([{BelowId, Menu}|_Rest], BelowId, false, _CurrMenu, _Context) ->
-        Menu;
-    menu_subtree_1([{Id, Menu}|Rest], BelowId, AddSiblings, CurrMenu, Context) when not is_integer(Id) ->
-        menu_subtree_1([{m_rsc:rid(Id, Context), Menu}|Rest], BelowId, AddSiblings, CurrMenu, Context);
-    menu_subtree_1([{BelowId, _}|_Rest], BelowId, true, CurrMenu, _Context)  ->
-        [
-            case MenuId of
-                BelowId -> {BelowId, Menu};
-                _ -> {MenuId, []}
-            end
-            || {MenuId,Menu} <- CurrMenu
-        ];
-    menu_subtree_1([{_Id, Menu}|Rest], BelowId, AddSiblings, CurrMenu, Context) ->
-        case menu_subtree_1(Menu, BelowId, AddSiblings, Menu, Context) of
-            undefined -> menu_subtree_1(Rest, BelowId, AddSiblings, CurrMenu, Context);
-            M -> M
-        end;
-    % Old notation
-    menu_subtree_1([BelowId|_Rest], BelowId, false, _CurrMenu, _Context) ->
-        [];
-    menu_subtree_1([BelowId|_Rest], BelowId, true, CurrMenu, _Context) ->
-        [
-          case Id of
-            {MenuId,_} -> {MenuId, []};
-            _ -> {Id,[]}
-          end
-          || Id <- CurrMenu
-        ];
-    menu_subtree_1([_|Rest], BelowId, AddSiblings, CurrMenu, Context) ->
-        menu_subtree_1(Rest, BelowId, AddSiblings, CurrMenu, Context).
+menu_subtree_1([], _BelowId, _AddSiblings, _CurrMenu, _Context) ->
+    undefined;
+menu_subtree_1([ #rsc_tree{ id = BelowId, tree = Menu } | _Rest ], BelowId, false, _CurrMenu, _Context) ->
+    Menu;
+menu_subtree_1([ #rsc_tree{ id = Id, tree = Menu } | Rest ], BelowId, AddSiblings, CurrMenu, Context) when not is_integer(Id), Id =/= undefined ->
+    RscId = m_rsc:rid(Id, Context),
+    menu_subtree_1([ #rsc_tree{ id = RscId, tree = Menu } | Rest ], BelowId, AddSiblings, CurrMenu, Context);
+menu_subtree_1([ #rsc_tree{ id = BelowId } | _Rest ], BelowId, true, CurrMenu, _Context)  ->
+    [
+        case MenuId of
+            BelowId -> #rsc_tree{ id = BelowId, tree = Menu };
+            _ -> #rsc_tree{ id = MenuId, tree = [] }
+        end
+        || #rsc_tree{ id = MenuId, tree = Menu } <- CurrMenu
+    ];
+menu_subtree_1([ #rsc_tree{ tree = Menu } | Rest ], BelowId, AddSiblings, CurrMenu, Context) ->
+    case menu_subtree_1(Menu, BelowId, AddSiblings, Menu, Context) of
+        undefined -> menu_subtree_1(Rest, BelowId, AddSiblings, CurrMenu, Context);
+        M -> M
+    end;
+% Old notations
+menu_subtree_1([{Id, Sub}|Rest], BelowId, AddSiblings, CurrMenu, Context) ->
+    menu_subtree_1([ #rsc_tree{ id = Id, tree = Sub } | Rest ], BelowId, AddSiblings, CurrMenu, Context);
+menu_subtree_1([Id|Rest], BelowId, AddSiblings, CurrMenu, Context) when is_integer(Id); is_atom(Id) ->
+    menu_subtree_1([ #rsc_tree{ id = Id, tree = [] } | Rest ], BelowId, AddSiblings, CurrMenu, Context);
+% Look into next subtree
+menu_subtree_1([_|Rest], BelowId, AddSiblings, CurrMenu, Context) ->
+    menu_subtree_1(Rest, BelowId, AddSiblings, CurrMenu, Context).
 
 
 
@@ -447,16 +463,18 @@ manage_schema(install, Context) ->
     #datamodel{
         categories = [
               {menu, categorization,
-               [{title, <<"Page menu">>}]
+                    #{
+                        <<"title">> => <<"Page Menu">>
+                    }
               }
         ],
         resources = [
             {main_menu,
                 menu,
-                [
-                    {title, <<"Main menu">>},
-                    {menu, default_menu(Context)}
-                ]
+                #{
+                    <<"title">> => <<"Main Menu">>,
+                    <<"menu">> => validate(default_menu(Context), [])
+                }
             }
         ]
     };
@@ -469,21 +487,6 @@ default_menu(Context) ->
         Menu when is_list(Menu) -> Menu;
         _ -> []
     end.
-
-observe_admin_menu(#admin_menu{}, Acc, Context) ->
-    case m_rsc:name_to_id(main_menu, Context) of
-        {ok, Id} ->
-            [
-             #menu_item{id=admin_menu,
-                        parent=admin_content,
-                        label=?__("Menu", Context),
-                        url={admin_edit_rsc, [{id, Id}]},
-                        visiblecheck={acl, use, mod_menu}}
-             |Acc];
-        _ ->
-            Acc
-    end.
-
 
 
 % %% @doc test function

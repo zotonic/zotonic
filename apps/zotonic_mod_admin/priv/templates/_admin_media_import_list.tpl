@@ -1,10 +1,12 @@
 <div id="media-import-wrapper">
 
 {% if error %}
+    <br>
     <p class="alert alert-danger">
         {{ error }}
     </p>
 {% elseif not media_imports  %}
+    <br>
     <p class="alert alert-warning">
         {_ Could not detect anything to import on that URL or embed code. _}
     </p>
@@ -21,20 +23,22 @@
         %}
         <div id="{{ #panel.index}}" class="panel panel-default" {% if index > 1 %}style="display:none"{% endif %}>
             <form id="{{ #import.index }}" method="POST" class="form" action="postback">
+            {% with #import.index as form %}
+
                 <div class="panel-body">
                     <h4>
                         <span class="label label-default">{{ m.rsc[mi.category].title }}</span>
-                        {{ mi.props.title|escape }}
+                        {{ mi.props.title|escape_check }}
                     </h4>
 
                     {% if not args.id and not mi.props.title %}
                         <div class="form-group">
-                            <input type="text" class="form-control" name="new_media_title" id="{{ #title.index }}" value="{{ mi.props.title|escape }}" placeholder="{_ Title _}" />
+                            <input type="text" class="form-control" name="new_media_title" id="{{ #title.index }}" value="{{ mi.props.title|escape_check }}" placeholder="{_ Title _}" />
                         </div>
                     {% endif %}
 
                     {% if mi.props.summary %}
-                        <p>{{ mi.props.summary|escape }}</p>
+                        <p>{{ mi.props.summary|escape_check }}</p>
                     {% endif %}
 
                     {% if mi.medium_url %}
@@ -67,28 +71,69 @@
                     {% endif %}
 
                     {% if args.intent != 'update' %}
-                        {% if args.subject_id %}
-                            {% if m.admin.rsc_dialog_hide_dependent and not m.acl.is_admin %}
-                                <input type="hidden" name="is_dependent" value="{% if args.dependent %}1{% endif %}">
-                            {% else %}
-                                <div class="checkbox form__is_dependent">
-                                    <label>
-                                        <input type="checkbox" id="{{ #dependent.index }}" name="is_dependent" value="1" {% if args.dependent %}checked{% endif %}>
-                                        {_ Delete if not connected anymore _}
-                                    </label>
-                                </div>
-                            {% endif %}
-                        {% endif %}
+                        {% with m.rsc[mi.category].id,
+                                true
+                             as cat,
+                                nocatselect
+                        %}
+                        {% block import_options %}
+                            <div class="row media-import__options">
+                                <div class="col-md-6">
+                                    {% block import_options__rsc %}
+                                        {% if args.subject_id %}
+                                            {% if m.admin.rsc_dialog_hide_dependent and not m.acl.is_admin %}
+                                                <input type="hidden" name="is_dependent" value="{% if args.dependent %}1{% endif %}">
+                                            {% else %}
+                                                <div class="checkbox form__is_dependent">
+                                                    <label>
+                                                        <input type="checkbox" id="{{ #dependent.index }}" name="is_dependent" value="1" {% if args.dependent %}checked{% endif %}>
+                                                        {_ Delete if not connected anymore _}
+                                                    </label>
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
 
-                        <div class="checkbox form__is_published">
-                            <label>
-                                <input type="checkbox" id="{{ #published.index }}" name="is_published" value="1"
-                                    {% if args.subject_id or m.admin.rsc_dialog_is_published %}
-                                        checked
-                                    {% endif %}>
-                                {_ Published _}
-                            </label>
-                        </div>
+                                        <div class="checkbox form__is_published">
+                                            <label>
+                                                <input type="checkbox" id="{{ #published.index }}" name="is_published" value="1"
+                                                    {% if args.subject_id or m.admin.rsc_dialog_is_published %}
+                                                        checked
+                                                    {% endif %}>
+                                                {_ Published _}
+                                            </label>
+                                        </div>
+                                    {% endblock %}
+                                </div>
+                                <div class="col-md-6">
+                                    {% block import_options__import %}
+                                        {% if mi.props.is_authoritative|is_defined and not mi.props.is_authoritative %}
+                                            <div class="checkbox form__is_authoritative">
+                                                <label>
+                                                    <input type="checkbox" id="{{ #published.index }}" name="is_authoritative" value="1" {% if is_authoritative %}checked{% endif %}>
+                                                    {_ Make a local copy, disconnected from the remote page _}
+                                                </label>
+                                            </div>
+
+                                            <div class="radio form__import_edges">
+                                                <label>
+                                                    <input type="radio" name="z_import_edges" value="0">
+                                                    {_ Do not import connections _}
+                                                </label>
+                                                <label>
+                                                    <input type="radio" name="z_import_edges" value="1" checked>
+                                                    {_ Import only direct connections (shallow copy) _}
+                                                </label>
+                                                <label>
+                                                    <input type="radio" name="z_import_edges" value="10">
+                                                    {_ Follow connections and import all (deep copy) _}
+                                                </label>
+                                            </div>
+                                        {% endif %}
+                                    {% endblock %}
+                                </div>
+                            </div>
+                        {% endblock %}
+                    {% endwith %}
                     {% endif %}
                 </div>
 
@@ -120,6 +165,8 @@
 
                     <button type="submit" class="btn btn-primary pull-right">{% if args.intent == 'update' %}{_ Replace _}{% else %}{_ Make _}{% endif %} {{ mi.description }}</button>
                 </div>
+
+            {% endwith %}
             </form>
         </div>
     {% endwith %}

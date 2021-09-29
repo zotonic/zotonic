@@ -27,10 +27,14 @@
     m_get/3,
 
     get/2,
+    get_uri/2,
     get_new_location/2,
     is_gone/2,
+    is_gone_uri/2,
     gone/2,
-    gone/3
+    gone/3,
+
+    install/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -55,6 +59,14 @@ get(Id, Context) when is_integer(Id) ->
     z_depcache:memo(F, {rsc_gone, Id}, Context);
 get(Id, Context) ->
     get(m_rsc:rid(Id, Context), Context).
+
+
+%% @doc Get the possible 'rsc_gone' resource for the uri.
+-spec get_uri( binary() | string(), z:context() ) -> proplists:proplist() | undefined.
+get_uri(Uri, Context) when is_binary(Uri); is_list(Uri) ->
+    z_db:assoc_row("select * from rsc_gone where uri = $1", [Uri], Context);
+get_uri(_, _Context) ->
+    undefined.
 
 
 %% @doc Get the redirect location for the id, uses the current dispatch rule and otherwise
@@ -87,7 +99,7 @@ get_new_location(Id, Context) when is_integer(Id) ->
 
 
 %% @doc Check if the resource used to exist.
--spec is_gone(integer()|undefined, #context{}) -> boolean().
+-spec is_gone(m_rsc:resource_id()|undefined, z:context()) -> boolean().
 is_gone(undefined, _Context) ->
     false;
 is_gone(Id, Context) when is_integer(Id) ->
@@ -96,8 +108,20 @@ is_gone(Id, Context) when is_integer(Id) ->
         end,
     z_depcache:memo(F, {rsc_is_gone, Id}, Context).
 
+%% @doc Check if the resource uri used to exist.
+-spec is_gone_uri(string()|binary()|undefined, z:context()) -> boolean().
+is_gone_uri(undefined, _Context) ->
+    false;
+is_gone_uri(Uri, Context) ->
+    UriB = unicode:characters_to_binary(Uri, utf8),
+    F = fun() ->
+            z_db:q1("select count(*) from rsc_gone where uri = $1", [UriB], Context) >= 1
+        end,
+    z_depcache:memo(F, {rsc_is_gone, UriB}, Context).
+
+
 %% @doc Copy a resource to the 'gone' table, use the current user as the modifier (deleter).
--spec gone(integer(), #context{}) -> {ok, integer()} | {error, term()}.
+-spec gone(m_rsc:resource_id(), z:context()) -> {ok, integer()} | {error, term()}.
 gone(Id, Context) when is_integer(Id) ->
     gone(Id, undefined, Context).
 
@@ -123,12 +147,17 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                         ],
                         case z_db:q1("select count(*) from rsc_gone where id = $1", [Id], Ctx) of
                             1 ->
-                                lager:warning(z_context:lager_md(Ctx),
-                                              "[~p] Second rsc_gone entry for id ~p",
-                                              [z_context:site(Ctx), Id]),
                                 {ok, _} = z_db:update(rsc_gone, Id, Props1, Ctx),
                                 {ok, Id};
                             0 ->
+                                % Force previous versions to refer to the new resource
+                                z_db:q("
+                                    update rsc_gone
+                                    set new_id = $1
+                                    where new_id = $2
+                                    ",
+                                    [ NewId, Id ],
+                                    Ctx),
                                 z_db:insert(rsc_gone, Props1, Ctx)
                         end
                     end,
@@ -138,5 +167,52 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                     % Duplicate key - ignore (race condition)
                     {ok, Id};
                 Other -> Other
+            end
+    end.
+
+
+
+%% @doc Install or upgrade the rsc_gone table.
+-spec install( z:context() ) -> ok.
+install(Context) ->
+    % Table: rsc_gone
+    % Tracks deleted or moved resources, adding "410 gone" support
+    % Also contains new id or new url for 301 moved permanently replies.
+    % mod_backup is needed to recover a deleted resource's content.
+    case z_db:table_exists(rsc_gone, Context) of
+        false ->
+            [] = z_db:q("
+                CREATE TABLE rsc_gone
+                (
+                    id bigint not null,
+                    new_id bigint,
+                    new_uri character varying(2048),
+                    version int not null,
+                    uri character varying(2048),
+                    name character varying(80),
+                    page_path character varying(80),
+                    is_authoritative boolean NOT NULL DEFAULT true,
+                    creator_id bigint,
+                    modifier_id bigint,
+                    created timestamp with time zone NOT NULL DEFAULT now(),
+                    modified timestamp with time zone NOT NULL DEFAULT now(),
+                    CONSTRAINT rsc_gone_pkey PRIMARY KEY (id)
+                )",
+                Context),
+
+            [] = z_db:q("CREATE INDEX rsc_gone_name_key ON rsc_gone(name)", Context),
+            [] = z_db:q("CREATE INDEX rsc_gone_uri_key ON rsc_gone(uri)", Context),
+            [] = z_db:q("CREATE INDEX rsc_gone_page_path_key ON rsc_gone(page_path)", Context),
+            [] = z_db:q("CREATE INDEX rsc_gone_modified_key ON rsc_gone(modified)", Context),
+            z_db:flush(Context),
+            ok;
+        true ->
+            % Check for rsc_gone_uri_key
+            case z_db:key_exists(rsc_gone, rsc_gone_uri_key, Context) of
+                false ->
+                    [] = z_db:q("CREATE INDEX rsc_gone_uri_key ON rsc_gone(uri)", Context),
+                    ok;
+                true ->
+                    ok
             end
     end.

@@ -21,6 +21,8 @@
         {% include "_admin_edit_header.tpl" %}
     </div>
 
+    {% include "_admin_authoritative_info.tpl" %}
+
     {% block admin_edit_form_pre %}{% endblock %}
 
     {% wire

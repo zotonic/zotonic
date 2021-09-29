@@ -52,9 +52,14 @@ install(Context) ->
     ok = z_db:transaction(
         fun(Context1) ->
             ok = install_sql_list(Context1, model_pgsql()),
+            install_models(Context1),
             ok = z_install_data:install(z_context:site(Context1), Context1)
         end,
         Context).
+
+install_models(Context) ->
+    m_rsc_gone:install(Context),
+    m_rsc_import:install(Context).
 
 
 -spec install_sql_list(#context{}, list()) -> ok.
@@ -201,32 +206,6 @@ model_pgsql() ->
      "CREATE INDEX rsc_pivot_date_end_category_nr_key ON rsc (pivot_date_end, pivot_category_nr)",
      "CREATE INDEX rsc_publication_start_category_nr_key ON rsc (publication_start, pivot_category_nr)",
      "CREATE INDEX rsc_publication_end_category_nr_key ON rsc (publication_end, pivot_category_nr)",
-
-
-    % Table: rsc_gone
-    % Tracks deleted or moved resources, adding "410 gone" support
-    % Also contains new id or new url for 301 moved permanently replies.
-    % mod_backup is needed to recover a deleted resource's content.
-
-    "CREATE TABLE rsc_gone
-     (
-        id bigint not null,
-        new_id bigint,
-        new_uri character varying(2048),
-        version int not null,
-        uri character varying(2048),
-        name character varying(80),
-        page_path character varying(80),
-        is_authoritative boolean NOT NULL DEFAULT true,
-        creator_id bigint,
-        modifier_id bigint,
-        created timestamp with time zone NOT NULL DEFAULT now(),
-        modified timestamp with time zone NOT NULL DEFAULT now(),
-        CONSTRAINT rsc_gone_pkey PRIMARY KEY (id)
-     )",
-    "CREATE INDEX rsc_gone_name ON rsc_gone(name)",
-    "CREATE INDEX rsc_gone_page_path ON rsc_gone(page_path)",
-    "CREATE INDEX rsc_gone_modified ON rsc_gone(modified)",
 
 
     % Table: protect

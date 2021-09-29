@@ -57,17 +57,19 @@ content_types_provided(Context) ->
 process(_Method, _AcceptedCT, ProvidedCT, Context) ->
     {CT, Context2} = get_content_types(Context),
     {Id, Context3} = get_id(Context2),
-    {Location,Context4} = case proplists:get_value(ProvidedCT, CT) of
-                            page_url ->
-                                ContextSession = z_context:ensure_qs(Context3),
-                                {m_rsc:p_no_acl(Id, page_url, ContextSession), ContextSession};
-                            {Dispatch, DispatchArgs} when is_list(DispatchArgs) ->
-                                {z_dispatcher:url_for(Dispatch, [{id,Id} | DispatchArgs], Context3), Context3};
-                            Dispatch ->
-                                {z_dispatcher:url_for(Dispatch, [{id,Id}], Context3), Context3}
-                          end,
-    AbsUrl = z_context:abs_url(Location, Context4),
-    Context5 = z_context:set_resp_header(<<"location">>, AbsUrl, Context4),
+    Location = case proplists:get_value(ProvidedCT, CT) of
+        page_url ->
+            m_rsc:p_no_acl(Id, page_url, Context3);
+        {url, Url} ->
+            Url;
+        {Dispatch, DispatchArgs} when is_atom(Dispatch), is_list(DispatchArgs) ->
+            z_dispatcher:url_for(Dispatch, [{id,Id} | DispatchArgs], Context3);
+        Dispatch when is_atom(Dispatch) ->
+            z_dispatcher:url_for(Dispatch, [{id,Id}], Context3)
+    end,
+    AbsUrl = z_context:abs_url(Location, Context3),
+    Context4 = z_context:set_resp_header(<<"location">>, AbsUrl, Context3),
+    Context5 = z_context:set_resource_headers(Id, Context4),
     {{halt, 303}, Context5}.
 
 %% @doc Fetch the list of content types provided, together with their dispatch rule name.
@@ -104,7 +106,7 @@ get_id(Context) ->
             case z_context:get_q(<<"id">>, Context) of
                 undefined ->
                     {undefined, Context};
-                [] ->
+                <<>> ->
                     {undefined, Context};
                 Id ->
                     RscId = m_rsc:rid(Id, Context),

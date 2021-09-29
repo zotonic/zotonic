@@ -54,7 +54,7 @@
     {% if m.acl.use.mod_admin_config %}
 	    {% if id.is_a.meta or not id.is_authoritative %}
 	        <div class="form-group label-floating">
-                <input class="form-control" type="text" id="field-uri" name="uri" value="{{ id.uri }}" {% if not id.is_editable %}disabled="disabled"{% endif %}
+                <input class="form-control" type="text" id="field-uri" name="uri" value="{{ id.uri_raw }}" {% if not id.is_editable %}disabled="disabled"{% endif %}
                 placeholder="{_ Unique uri _}">
                 <label class="control-label" for="field-uri">{_ Unique uri _}</label>
             </div>

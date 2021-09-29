@@ -4,65 +4,139 @@
 -module(m_rsc_import_db_tests).
 
 -include_lib("eunit/include/eunit.hrl").
--include_lib("zotonic.hrl").
+-include_lib("../include/zotonic.hrl").
 
 modify_rsc_test() ->
     C = z_context:new(zotonic_site_testsandbox),
     ok = z_module_manager:upgrade_await(C),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
-    SudoC = z_acl:sudo(C),
 
     %% cleanup eventual remains of earlier failed tests
-    case m_rsc:uri_lookup("http://foo.com/id/333", AdminC) of
+    case m_rsc:uri_lookup("https://foo.test/id/333", AdminC) of
         undefined -> nop;
         ExistingId -> ?assertEqual(ok, m_rsc:delete(ExistingId, AdminC))
     end,
 
+    Data = export_data(),
+
     %% perform the tests
-    ?assertEqual({error, eacces}, m_rsc_import:create_empty("http://foo.com/id/333", C)),
+    ?assertEqual({error, eacces}, m_rsc_import:import(Data, C)),
 
-    {ok, Id} = m_rsc_import:create_empty("http://foo.com/id/333", AdminC),
+    Options = [
+        {import_edges, 1}
+    ],
+    {ok, {Id, _}} = m_rsc_import:import(Data, Options, AdminC),
 
-    ?assertEqual(Id, m_rsc:uri_lookup("http://foo.com/id/333", C)),
-    ?assertEqual(Id, m_rsc:uri_lookup(<<"http://foo.com/id/333">>, C)),
+    ?assertEqual(Id, m_rsc:uri_lookup("https://foo.test/id/333", C)),
+    ?assertEqual(Id, m_rsc:rid(<<"https://foo.test/id/333">>, C)),
+    ?assertEqual(Id, m_rsc:rid(#{ <<"uri">> => <<"https://foo.test/id/333">> }, C)),
 
     lager:info("[~p] Expecting duplicate_uri error...", [?MODULE]),
-    ?assertEqual({error, duplicate_uri}, m_rsc_import:create_empty("http://foo.com/id/333", AdminC)),
+    DupRsc = #{
+        <<"uri">> => <<"https://foo.test/id/333">>,
+        <<"category_id">> => <<"person">>,
+        <<"title">> => <<"Dup Person">>
+    },
+    ?assertEqual({error, duplicate_uri}, m_rsc:insert(DupRsc, AdminC)),
+
+    % Reimporting the same, should return the same id.
+    % No edge import should keep the existing edges as well.
+    {ok, {Id, _}} = m_rsc_import:import(Data, [], AdminC),
 
     %% Existence check
     ?assertEqual(true, m_rsc:exists(Id, AdminC)),
     ?assertEqual(true, m_rsc:exists(Id, C)),
 
     %% Check properties
-    ?assertEqual(undefined, m_rsc:p(Id, title, AdminC)),
-    ?assertEqual(1, m_rsc:p(Id, version, AdminC)),
-    ?assertEqual(false, m_rsc:p(Id, is_published, AdminC)),
+    ?assertEqual(<<"Hello World">>, m_rsc:p(Id, title, AdminC)),
+    ?assertEqual(true, m_rsc:p(Id, is_published, AdminC)),
     ?assertEqual(false, m_rsc:p(Id, is_authoritative, AdminC)),
-    ?assertEqual(true, m_rsc:is_a(Id, other, AdminC)),
-    ?assertEqual(<<"http://foo.com/id/333">>, m_rsc:p(Id, uri, AdminC)),
+    ?assertEqual(<<"https://foo.test/id/333">>, m_rsc:p(Id, uri, AdminC)),
+    ?assertEqual({{2014,4,30},{22,0,0}}, m_rsc:p(Id, created, AdminC)),
+    ?assertEqual({{2021,7,14},{8,47,7}}, m_rsc:p(Id, modified, AdminC)),
 
-    %% Cannot update a non-authoritative resource
+    %% Check edges
+    ?assertEqual([1], m_edge:objects(Id, author, AdminC)),
+    ?assertEqual([Id], m_edge:objects(Id, relation, AdminC)),
+
+    %% Usual rights
     ?assertEqual(false, z_acl:rsc_editable(Id, C)),
     ?assertEqual(true, z_acl:rsc_editable(Id, AdminC)),
 
-    %% Context must not be admin context, as admins are allowed to update non-authoritative resources
-    ?assertEqual({error, non_authoritative}, m_rsc:update(Id, #{ <<"title">> => <<"foo">> }, C)),
 
-    RscImport = #{
-        <<"uri">> => <<"http://foo.com/id/333">>,
-        <<"rsc">> => #{
-            <<"title">> => <<"Hello!">>,
-            <<"summary">> => <<"This is the summary.">>,
-            <<"body">> => <<"This is a <strong>statement</strong>.">>
-        }
-    },
-    ?assertEqual({error, eacces}, m_rsc_import:import(RscImport, C)),
+    % Import again, now as a local authoritative copy
+    OptionsAuth = [
+        {import_edges, 1},
+        is_authoritative
+    ],
+    {ok, {IdAuth, _}} = m_rsc_import:import(Data, OptionsAuth, AdminC),
 
-    {ok, NewId} = m_rsc_import:import(RscImport, SudoC),
-    ?assertEqual(Id, NewId),
+    %% Must be a different resource than the previous import.
+    ?assertEqual(true, Id =/= IdAuth),
+    ?assertEqual(true, m_rsc:p(IdAuth, is_published, AdminC)),
+    ?assertEqual(true, m_rsc:p(IdAuth, is_authoritative, AdminC)),
 
-    ?assertEqual(<<"Hello!">>, m_rsc:p(Id, title, AdminC)),
-    ?assertEqual(2, m_rsc:p(Id, version, AdminC)),
-    ?assertEqual(true, m_rsc:p(Id, is_published, AdminC)), % once imported, it is published
+    %% Check edges
+    ?assertEqual([1], m_edge:objects(IdAuth, author, AdminC)),
+    ?assertEqual([IdAuth], m_edge:objects(IdAuth, relation, AdminC)),
 
     ok.
+
+export_data() ->
+    #{<<"depiction_url">> => <<"https://localhost/lib/images/koe.jpg">>,
+      <<"edges">> =>
+          #{
+            <<"author">> =>
+                #{<<"objects">> =>
+                      [#{<<"created">> => {{2018,11,23},{10,48,11}},
+                         <<"object_id">> =>
+                             #{<<"id">> => 123456,
+                               <<"is_a">> => [ <<"person">> ],
+                               <<"name">> => undefined,
+                               <<"title">> => <<"Admin">>,
+                               <<"uri">> => <<"https://localhost/id/1">>},
+                         <<"seq">> => 1}],
+                  <<"predicate">> =>
+                      #{<<"id">> => 301,
+                        <<"is_a">> => [ <<"meta">>, <<"predicate">> ],
+                        <<"name">> => <<"author">>,
+                        <<"title">> => #trans{ tr = [ {en,<<"Author">>} ]},
+                        <<"uri">> => <<"http://purl.org/dc/terms/creator">>}},
+            <<"relation">> =>
+                #{<<"objects">> =>
+                      [#{<<"created">> => {{2018,11,23},{10,48,11}},
+                         <<"object_id">> =>
+                             #{<<"id">> => 333,
+                               <<"is_a">> => [ <<"text">>, <<"article">>, <<"foobartext">> ],
+                               <<"name">> => undefined,
+                               <<"title">> => <<"Hello World">>,
+                               <<"uri">> => <<"https://foo.test/id/333">>},
+                         <<"seq">> => 1}],
+                  <<"predicate">> =>
+                      #{<<"id">> => 301,
+                        <<"is_a">> => [ <<"meta">>, <<"predicate">> ],
+                        <<"name">> => <<"relation">>,
+                        <<"title">> => #trans{ tr = [ {en,<<"Related">>} ]},
+                        <<"uri">> => <<"http://purl.org/dc/terms/relation">>}}
+            },
+      <<"id">> => 333,
+      <<"is_a">> => [ <<"text">>, <<"article">>, <<"foobartext">> ],
+      <<"resource">> =>
+          #{<<"version">> => 1,
+            <<"is_published">> => true,
+            <<"is_authoritative">> => true,
+            <<"org_pubdate">> => {{2014,4,30},{22,0,0}},
+            <<"slug">> => <<"hello-world">>,
+            <<"visible_for">> => 0,
+            <<"blocks">> => [],
+            <<"tz">> => <<"Europe/Berlin">>,
+            <<"modified">> => {{2021,7,14},{8,47,7}},
+            <<"created">> => {{2014,4,30},{22,0,0}},
+            <<"seo_noindex">> => false,
+            <<"date_is_all_day">> => true,
+            <<"title">> => <<"Hello World">>},
+      <<"uri">> => <<"https://foo.test/id/333">>,
+      <<"uri_template">> => <<"https://foo.test/id/:id">>
+}.
+
+
