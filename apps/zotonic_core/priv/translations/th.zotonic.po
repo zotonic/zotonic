@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-09-29 19:26\n"
+"PO-Revision-Date: 2021-09-30 15:34\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -1200,8 +1200,8 @@ msgid "Error creating the page."
 msgstr "เกิดข้อผิดพลาดในการสร้างเพจ"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:40
-msgid "Error importing page from remote."
-msgstr "เกิดข้อผิดพลาดในการนำเข้าหน้าจากระยะไกล"
+msgid "Error importing page from the remote server."
+msgstr "เกิดข้อผิดพลาดในการนำเข้าหน้าจากเซิร์ฟเวอร์ระยะไกล"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:184
 msgid "Error uploading the file."
@@ -1880,8 +1880,8 @@ msgid "Structure"
 msgstr "โครงสร้าง"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:34
-msgid "Succesfully imported page from remote."
-msgstr "นำเข้าเพจจากรีโมตสำเร็จ"
+msgid "Succesfully imported page from the remote server."
+msgstr "นำเข้าเพจจากเซิร์ฟเวอร์ระยะไกลเรียบร้อยแล้ว"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:23
 msgid "Summary"
