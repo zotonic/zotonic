@@ -31,11 +31,11 @@ event(#postback{ message={import_refresh, Args} }, Context) ->
         {ok, {_Id, _ObjectIds}} ->
             case proplists:get_all_values(on_success, Args) of
                 [] ->
-                    z_render:growl(?__("Succesfully imported page from remote.", Context), Context);
+                    z_render:growl(?__("Succesfully imported page from the remote server.", Context), Context);
                 OnSuccess ->
                     z_render:wire(OnSuccess, Context)
             end;
         {error, Reason} ->
             lager:error("Error on reimport of rsc ~p: ~p", [ Id, Reason ]),
-            z_render:growl_error(?__("Error importing page from remote.", Context), Context)
+            z_render:growl_error(?__("Error importing page from the remote server.", Context), Context)
     end.

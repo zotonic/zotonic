@@ -1232,7 +1232,7 @@ msgid "Error creating the page."
 msgstr ""
 
 #: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:40
-msgid "Error importing page from remote."
+msgid "Error importing page from the remote server."
 msgstr ""
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:184
@@ -1941,7 +1941,7 @@ msgid "Structure"
 msgstr ""
 
 #: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:34
-msgid "Succesfully imported page from remote."
+msgid "Succesfully imported page from the remote server."
 msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:23
