@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-09-29 19:25\n"
+"PO-Revision-Date: 2021-09-30 15:33\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -1200,8 +1200,8 @@ msgid "Error creating the page."
 msgstr "Errore nella creazione della pagina."
 
 #: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:40
-msgid "Error importing page from remote."
-msgstr "Errore durante l'importazione della pagina da remoto."
+msgid "Error importing page from the remote server."
+msgstr "Errore durante l'importazione della pagina dal server remoto."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:184
 msgid "Error uploading the file."
@@ -1880,8 +1880,8 @@ msgid "Structure"
 msgstr "Struttura"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:34
-msgid "Succesfully imported page from remote."
-msgstr "Pagina importata con successo da remoto."
+msgid "Succesfully imported page from the remote server."
+msgstr "Pagina importata con successo dal server remoto."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:23
 msgid "Summary"
