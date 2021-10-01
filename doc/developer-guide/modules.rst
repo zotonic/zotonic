@@ -375,7 +375,17 @@ Module versioning
 Modules can export a ``-module_schema()`` attribute which contains an
 integer number, denoting the current module’s version. On module
 initialization, ``Module:manage_schema/2`` is called which handles
-installation and upgrade of data. You can define:
+installation and upgrade of data. 
+
+The ``manage_schema/2`` function returns either ``ok``, a ``#datamodel{}``
+record or a list of ``#datamodel{}`` records:
+
+.. code-block:: erlang
+
+    -spec manage_schame( install | {upgrade, integer()}, z:context() ) ->
+        ok | #datamodel{} | [ #datamodel{} ].
+
+In a ``#datamodel{}`` record you can define:
 
 - categories
 - predicates
