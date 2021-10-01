@@ -493,7 +493,7 @@ builtin_tag_1(Tag, _Expr, _Args, _Vars, Context) ->
 %% @todo This needs to be updated for the modern ACL modules (see z_acl)
 -spec cache_tag(MaxAge::integer(), Name::binary(), Args::list(), function(), TplVars::map(), Context::term()) ->
                 template_compiler:render_result().
-cache_tag(MaxAge, Name, Args, Fun, TplVars, Context) ->
+cache_tag(MaxAge, Name, Args, Fun, TplVars, Context) when is_integer(MaxAge) ->
     FunVars = lists:foldl(
                     fun({K,V}, Acc) ->
                         Acc#{K => V}
@@ -512,7 +512,14 @@ cache_tag(MaxAge, Name, Args, Fun, TplVars, Context) ->
                 Fun(FunVars, Context)
             end,
             z_depcache:memo(F, Key, MaxAge, Varies ++ Cat1, Context)
-    end.
+    end;
+cache_tag(undefined, Name, Args, Fun, TplVars, Context) ->
+    case proplists:get_value(maxage, Args) of
+        undefined -> cache_tag(1, Name, Args, Fun, TplVars, Context);
+        MaxAge -> cache_tag(MaxAge, Name, Args, Fun, TplVars, Context)
+    end;
+cache_tag(MaxAge, Name, Args, Fun, TplVars, Context) ->
+    cache_tag(z_convert:to_integer(MaxAge), Name, Args, Fun, TplVars, Context).
 
 do_cache(Args, Context) ->
     case z_convert:to_bool( m_config:get_value(mod_development, nocache, Context) ) of
