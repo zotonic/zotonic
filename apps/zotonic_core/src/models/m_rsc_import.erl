@@ -340,7 +340,7 @@ reimport_1(Id, ImportedAcc, IsForceImport, Context) ->
             case IsForceImport
                 orelse (
                     not m_rsc:p(Id, is_authoritative, Context)
-                    andalso Status =/= <<"ok">>
+                    orelse Status =/= <<"ok">>
                 )
             of
                 true ->
@@ -587,6 +587,7 @@ import(OptLocalId, #{
                             end,
                             {ok, {LocalId, ImportedAcc3}};
                         {error, _} = Error ->
+                            lager:info("Importing ~p into ~p gave error ~p", [ Uri, OptLocalId, Error ]),
                             Error
                     end;
                 {error, _} = Error ->
