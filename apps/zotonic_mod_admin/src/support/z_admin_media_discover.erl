@@ -109,7 +109,7 @@ qprops(Context) ->
                 Acc#{ K => z_convert:to_bool(V) };
             ({K, V}, Acc) ->
                 case binary:longest_common_suffix([<<"_id">>, K]) of
-                    3 -> Acc#{ K => z_convert:to_integer(V) };
+                    3 -> Acc#{ K => m_rsc:rid(V, Context) };
                     _ -> Acc#{ K => V }
                 end
         end,
