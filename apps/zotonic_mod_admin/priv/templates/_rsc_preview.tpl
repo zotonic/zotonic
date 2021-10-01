@@ -32,7 +32,7 @@
     {% include "_blocks.tpl" %}
 {% endif %}
 
-{% if id.haspart as haspart %}
+{% if id.o.haspart as haspart %}
     <h2>{{ m.rsc.haspart.title }}</h2>
     <ul class="">
         {% for id in haspart %}
