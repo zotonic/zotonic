@@ -108,7 +108,10 @@ qprops(Context) ->
             ({<<"is_", _/binary>> = K, V}, Acc) ->
                 Acc#{ K => z_convert:to_bool(V) };
             ({K, V}, Acc) ->
-                Acc#{ K => V }
+                case binary:longest_common_suffix([<<"_id">>, K]) of
+                    3 -> Acc#{ K => z_convert:to_integer(V) };
+                    _ -> Acc#{ K => V }
+                end
         end,
         #{},
         Props).
