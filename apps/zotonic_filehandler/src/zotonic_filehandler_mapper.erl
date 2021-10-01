@@ -68,7 +68,7 @@ map_categorized([], Verb, _Application, _What, _Ext, _Root, _Split, Filename) ->
     case re:run(Filename, ?FILENAMES_NOWARN) of
         {match, _} -> false;
         nomatch ->
-            lager:info("Unhandled file event '~p' on '~s'", [Verb, Filename])
+            lager:debug("Unhandled file event '~p' on '~s'", [Verb, Filename])
     end,
     false;
 map_categorized([Fun|Other], Verb, Application, What, Ext, Root, Split, Filename) ->
