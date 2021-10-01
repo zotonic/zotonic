@@ -1401,12 +1401,7 @@ call_manage_schema(Module, undefined, Target, Context) ->
                         Module:manage_schema(install, C)
                     end,
                     Context),
-    case SchemaRet of
-        #datamodel{} ->
-            ok = z_datamodel:manage(Module, SchemaRet, Context);
-        ok ->
-            ok
-    end,
+    datamodel_manage(Module, SchemaRet, Context),
     z_db:flush(Context),
     maybe_manage_data(Module, install, Context),
     ok = set_db_schema_version(Module, Target, Context),
@@ -1419,12 +1414,7 @@ call_manage_schema(Module, Current, Target, Context)
                         Module:manage_schema({upgrade, Current+1}, C)
                     end,
                     Context),
-    case SchemaRet of
-        #datamodel{} ->
-            ok = z_datamodel:manage(Module, SchemaRet, Context);
-        ok ->
-            ok
-    end,
+    datamodel_manage(Module, SchemaRet, Context),
     z_db:flush(Context),
     maybe_manage_data(Module, {upgrade, Current+1}, Context),
     ok = set_db_schema_version(Module, Current+1, Context),
@@ -1486,13 +1476,22 @@ reinstall(Module, Context) ->
             nop;
         2 ->
             %% has manage_schema/2
-            case Module:manage_schema(install, Context) of
-                D=#datamodel{} ->
-                    ok = z_datamodel:manage(Module, D, Context);
-                ok -> ok
-            end,
-            ok = z_db:flush(Context)
+            SchemaRet = z_db:transaction(
+                            fun(C) ->
+                                Module:manage_schema(install, C)
+                            end,
+                            Context),
+            datamodel_manage(Module, SchemaRet, Context),
+            z_db:flush(Context),
+            maybe_manage_data(Module, install, Context)
     end.
+
+datamodel_manage(_Module, ok, _Context) ->
+    ok;
+datamodel_manage(Module, #datamodel{} = D, Context) ->
+    ok = z_datamodel:manage(Module, D, Context);
+datamodel_manage(Module, Ds, Context) when is_list(Ds) ->
+    lists:foreach(fun(D) -> datamodel_manage(Module, D, Context) end, Ds).
 
 flush_mbox(Msg) ->
     receive
