@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-04 16:31\n"
+"PO-Revision-Date: 2021-10-04 16:46\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4408,7 +4408,7 @@ msgstr "Аргументы"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:140
 msgid "Auth Web Worker?"
-msgstr ""
+msgstr "Auth Web Worker?"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:142
 msgid "Authentication"
@@ -4531,7 +4531,7 @@ msgstr "Вернуться на главную страницу"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
 msgid "Service Worker?"
-msgstr ""
+msgstr "Сервисный работник?"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:2
 msgid "Session Id"
@@ -4603,7 +4603,7 @@ msgstr "Тип"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
 msgid "Web Worker Status"
-msgstr ""
+msgstr "Статус веб-воркера"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:109
 msgid "Websocket"
