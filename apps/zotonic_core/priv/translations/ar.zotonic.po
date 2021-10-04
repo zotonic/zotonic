@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-04 15:22\n"
+"PO-Revision-Date: 2021-10-04 15:56\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -2038,7 +2038,7 @@ msgid "Toggle dropdown"
 msgstr "تبديل القائمة المنسدلة"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:6
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:17
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:18
 msgid "Toggle navigation"
 msgstr "تبديل التصفح"
 
@@ -3711,7 +3711,7 @@ msgid "Already connected"
 msgstr "متصل بالفعل"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:212
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:259
 msgid "Authenticated"
 msgstr "مصادق عليه"
 
@@ -4394,7 +4394,11 @@ msgstr "هذا النسخ الاحتياطي قيد التقدم"
 msgid "# Pages"
 msgstr "# صفحات"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:216
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:77
+msgid "A latency of less than 50 milliseconds is very good, more than 250 milliseconds is slow."
+msgstr "وقت الاستجابة أقل من 50 مللي ثانية جيد جدًا ، وأكثر من 250 مللي ثانية يكون بطيئًا."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:263
 msgid "Anonymous"
 msgstr "مجهول"
 
@@ -4402,19 +4406,19 @@ msgstr "مجهول"
 msgid "Arguments"
 msgstr "الحجج"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:93
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:140
 msgid "Auth worker?"
 msgstr "عامل المصادقة؟"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:95
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:142
 msgid "Authentication"
 msgstr "المصادقة"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:39
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:69
 msgid "Browser"
 msgstr "المستعرض"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:35
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:60
 msgid "Browser Connectivity"
 msgstr "اتصال المتصفح"
 
@@ -4422,7 +4426,7 @@ msgstr "اتصال المتصفح"
 msgid "CSV"
 msgstr "CSV"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:41
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:71
 msgid "Client IP address"
 msgstr "عنوان IP للعميل"
 
@@ -4430,7 +4434,7 @@ msgstr "عنوان IP للعميل"
 msgid "Connecting..."
 msgstr "توصيل..."
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:3
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:3./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:32
 msgid "Connection Test"
 msgstr "اختبار الاتصال"
 
@@ -4454,9 +4458,17 @@ msgstr "مجلد"
 msgid "Function/ template"
 msgstr "الوظيفة / النموذج"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:41
+msgid "General connection speed and quality, for which we test with a Google server and our own server."
+msgstr "سرعة وجودة الاتصال العامة ، والتي نقوم باختبارها مع خادم Google وخادمنا الخاص."
+
 #: apps/zotonic_mod_base/priv/templates/error.tpl:10
 msgid "Gone"
 msgstr "ذهب"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:47
+msgid "If the authentication with the server works."
+msgstr "إذا كانت المصادقة مع الخادم تعمل."
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:4./apps/zotonic_mod_base/priv/templates/directory_index.tpl:8
 msgid "Index of"
@@ -4470,15 +4482,15 @@ msgstr "جسون"
 msgid "JSON-LD"
 msgstr "JSON-LD"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:70
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:112
 msgid "MQTT Bridge"
 msgstr "جسر MQTT"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:60
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:96
 msgid "MQTT Bridge Connection Status"
 msgstr "حالة اتصال MQTT Bridge"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:98./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:140./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:220
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:145./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
 msgid "No"
 msgstr "لا"
@@ -4489,19 +4501,23 @@ msgstr "لا"
 msgid "OK"
 msgstr "موافق"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:35
+msgid "On this page you can test the connection of your browser to our server and to the internet in general."
+msgstr "في هذه الصفحة ، يمكنك اختبار اتصال متصفحك بخادمنا والإنترنت بشكل عام."
+
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 msgid "Page Id"
 msgstr "معرف الصفحة"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:73
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:115
 msgid "Pong Count"
 msgstr "عدد بونغ"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:79
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:121
 msgid "Pong Errors"
 msgstr "أخطاء بونغ"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:76
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:118
 msgid "Pong Latency"
 msgstr "بونغ الكمون"
 
@@ -4513,13 +4529,17 @@ msgstr "اقرأ هذه الصفحة على الويب"
 msgid "Return to the homepage"
 msgstr "العودة إلى الصفحة الرئيسية"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:97
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
 msgid "Service worker?"
 msgstr "عامل الخدمة؟"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:2
 msgid "Session Id"
 msgstr "معرف جلسة العمل"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:36
+msgid "Several aspects of the connection are tested"
+msgstr "يتم اختبار العديد من جوانب الاتصال"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:11
 msgid "Sorry, this page has been deleted."
@@ -4533,34 +4553,74 @@ msgstr "عذرا ، ليس لديك حق الوصول إلى هذه الصفحة
 msgid "Stack trace"
 msgstr "تتبع المكدس"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:50
+msgid "Support for offline work and communication between several tabs in your browser."
+msgstr "دعم العمل دون اتصال بالإنترنت والتواصل بين عدة علامات تبويب في متصفحك."
+
 #: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
 msgid "Test your connection"
 msgstr "اختبر اتصالك"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:54
+msgid "Tests"
+msgstr "الاختبارات"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:13
 msgid "That page does not exist"
 msgstr "هذه الصفحة غير موجودة"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:102
+msgid "The <em>Pong Count</em> should increase every second, without any errors."
+msgstr "<em>Pong Count</em> كل ثانية ، دون أي أخطاء."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:136
+msgid "The authentication should show <em>Authenticated</em> or <em>Anonymous</em>."
+msgstr "يجب أن تظهر المصادقة <em></em> أو <em>مجهول</em>."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:44
+msgid "The connection our site uses to talk with our own server."
+msgstr "الاتصال الذي يستخدمه موقعنا للتحدث مع الخادم الخاص بنا."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:76
+msgid "The test below checks the connection between your machine, Google and our site."
+msgstr "يتحقق الاختبار أدناه من الاتصال بين جهازك وجوجل وموقعنا."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:78
+msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing messages."
+msgstr "يجب ألا يكون هناك أي مهلة ، إذا كانت هناك مهلات ، فهذا يعني أن اتصالك بالإنترنت يفقد الرسائل."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:135
+msgid "This tests the authentication with the server."
+msgstr "هذا يختبر المصادقة مع الخادم."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:101
+msgid "This tests the communication with the server."
+msgstr "هذا يختبر الاتصال بالخادم."
+
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:15
 msgid "Type"
 msgstr "نوع"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:67
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:109
 msgid "Websocket"
 msgstr "مقبس ويب"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:64
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:106
 msgid "Websocket Support?"
 msgstr "دعم Websocket؟"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:89
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
 msgid "Worker status"
 msgstr "حالة العامل"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:140./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:204./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:227
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:251./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 msgid "Yes"
 msgstr "نعم"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
+msgid "Your browser as it identifies itself with our server and your IP address. This is essential information for the help desk."
+msgstr "متصفحك كما يعرّف نفسه بخادمنا وعنوان IP الخاص بك. هذه معلومات أساسية لمكتب المساعدة."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
