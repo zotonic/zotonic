@@ -11,6 +11,3 @@ Miscellaneous
    ../filter_ip2country
    ../filter_ip2geo
    ../filter_is_letsencrypt_valid_hostname
-   ../filter_url
-   ../filter_url_abs
-   ../filter_sanitize_url

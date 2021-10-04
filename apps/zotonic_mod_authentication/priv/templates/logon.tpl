@@ -12,13 +12,17 @@
 {% endblock %}
 
 {% block html_attr %}
-    {% with page|default:q.p|sanitize_url as page %}
-        {% if page == "#reload" or error_code == 401 %}
-            data-onauth="#reload"
-        {% elseif {logon_done p=page}|url as logon_done_url %}
-            data-onauth="{{ logon_done_url|escape }}"
+    {% with page|default:q.p|sanitize_url as qpage %}
+        {% if qpage|is_site_url %}
+            {% if page == "#reload" or error_code == 401 %}
+                data-onauth="#reload"
+            {% elseif {logon_done p=qpage}|url as logon_done_url %}
+                data-onauth="{{ logon_done_url|escape }}"
+            {% else %}
+                data-onauth="{{ qpage|default:"#reload"|escape }}"
+            {% endif %}
         {% else %}
-            data-onauth="{{ page|default:"#reload"|escape }}"
+            data-onauth="#reload"
         {% endif %}
     {% endwith %}
 {% endblock %}
