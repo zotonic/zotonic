@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-04 15:22\n"
+"PO-Revision-Date: 2021-10-04 15:55\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -2038,7 +2038,7 @@ msgid "Toggle dropdown"
 msgstr "Beralih dropdown"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:6
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:17
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:18
 msgid "Toggle navigation"
 msgstr "Beralih navigasi"
 
@@ -3710,7 +3710,7 @@ msgid "Already connected"
 msgstr "Sudah terhubung"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:212
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:259
 msgid "Authenticated"
 msgstr "Dikonfirmasi"
 
@@ -4393,7 +4393,11 @@ msgstr "cadangan ini sedang berlangsung"
 msgid "# Pages"
 msgstr "# Halaman"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:216
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:77
+msgid "A latency of less than 50 milliseconds is very good, more than 250 milliseconds is slow."
+msgstr ""
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:263
 msgid "Anonymous"
 msgstr "Anonim"
 
@@ -4401,19 +4405,19 @@ msgstr "Anonim"
 msgid "Arguments"
 msgstr "Argumen"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:93
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:140
 msgid "Auth worker?"
 msgstr "Pekerja autentik?"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:95
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:142
 msgid "Authentication"
 msgstr "Autentikasi"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:39
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:69
 msgid "Browser"
 msgstr "Peramban"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:35
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:60
 msgid "Browser Connectivity"
 msgstr "Konektivitas Peramban"
 
@@ -4421,7 +4425,7 @@ msgstr "Konektivitas Peramban"
 msgid "CSV"
 msgstr "CSV"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:41
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:71
 msgid "Client IP address"
 msgstr "Alamat IP klien"
 
@@ -4429,7 +4433,7 @@ msgstr "Alamat IP klien"
 msgid "Connecting..."
 msgstr "Menghubungkan ..."
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:3
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:3./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:32
 msgid "Connection Test"
 msgstr "Uji Sambungan"
 
@@ -4453,9 +4457,17 @@ msgstr "Folder"
 msgid "Function/ template"
 msgstr "Fungsi/ template"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:41
+msgid "General connection speed and quality, for which we test with a Google server and our own server."
+msgstr ""
+
 #: apps/zotonic_mod_base/priv/templates/error.tpl:10
 msgid "Gone"
 msgstr "Pergi"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:47
+msgid "If the authentication with the server works."
+msgstr ""
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:4./apps/zotonic_mod_base/priv/templates/directory_index.tpl:8
 msgid "Index of"
@@ -4469,15 +4481,15 @@ msgstr "JSON"
 msgid "JSON-LD"
 msgstr "JSON-LD"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:70
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:112
 msgid "MQTT Bridge"
 msgstr "Jembatan MQTT"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:60
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:96
 msgid "MQTT Bridge Connection Status"
 msgstr "Status Koneksi Jembatan MQTT"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:98./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:140./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:220
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:145./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
 msgid "No"
 msgstr "Tidak"
@@ -4488,19 +4500,23 @@ msgstr "Tidak"
 msgid "OK"
 msgstr "BAIK"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:35
+msgid "On this page you can test the connection of your browser to our server and to the internet in general."
+msgstr ""
+
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 msgid "Page Id"
 msgstr "Id halaman"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:73
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:115
 msgid "Pong Count"
 msgstr "Hitungan Pong"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:79
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:121
 msgid "Pong Errors"
 msgstr "Kesalahan Pong"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:76
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:118
 msgid "Pong Latency"
 msgstr "Latensi Pong"
 
@@ -4512,13 +4528,17 @@ msgstr "Baca halaman ini di web"
 msgid "Return to the homepage"
 msgstr "Kembali ke beranda"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:97
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
 msgid "Service worker?"
 msgstr "Pekerja layanan?"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:2
 msgid "Session Id"
 msgstr "Id sesi"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:36
+msgid "Several aspects of the connection are tested"
+msgstr ""
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:11
 msgid "Sorry, this page has been deleted."
@@ -4532,34 +4552,74 @@ msgstr "Maaf, Anda tidak memiliki akses ke halaman ini."
 msgid "Stack trace"
 msgstr "Tumpukan jejak"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:50
+msgid "Support for offline work and communication between several tabs in your browser."
+msgstr ""
+
 #: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
 msgid "Test your connection"
 msgstr "Uji koneksi Anda"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:54
+msgid "Tests"
+msgstr ""
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:13
 msgid "That page does not exist"
 msgstr "Halaman itu tidak ada"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:102
+msgid "The <em>Pong Count</em> should increase every second, without any errors."
+msgstr ""
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:136
+msgid "The authentication should show <em>Authenticated</em> or <em>Anonymous</em>."
+msgstr ""
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:44
+msgid "The connection our site uses to talk with our own server."
+msgstr ""
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:76
+msgid "The test below checks the connection between your machine, Google and our site."
+msgstr ""
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:78
+msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing messages."
+msgstr ""
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:135
+msgid "This tests the authentication with the server."
+msgstr ""
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:101
+msgid "This tests the communication with the server."
+msgstr ""
+
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:15
 msgid "Type"
 msgstr "Tipe"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:67
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:109
 msgid "Websocket"
 msgstr "soket web"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:64
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:106
 msgid "Websocket Support?"
 msgstr "Dukungan Websocket?"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:89
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
 msgid "Worker status"
 msgstr "status pekerja"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:140./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:204./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:227
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:251./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 msgid "Yes"
 msgstr "Ya"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
+msgid "Your browser as it identifies itself with our server and your IP address. This is essential information for the help desk."
+msgstr ""
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
