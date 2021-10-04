@@ -36,6 +36,11 @@
       </div>
       <div class="panel-body">
           <dl class="dl-horizontal">
+            <dt>{_ Browser _}</dt>
+            <dd>{{ m.req.user_agent|escape }}</dd>
+          </dl>
+
+          <dl class="dl-horizontal">
              <dt>Ping Google</dt>
              <dd><span id="google-ping"></span><dd>
              <dt>Ping {{ m.site.title }}</dt>
