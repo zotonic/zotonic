@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-04 15:55\n"
+"PO-Revision-Date: 2021-10-04 16:46\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -4396,7 +4396,7 @@ msgstr "# หน้า"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:77
 msgid "A latency of less than 50 milliseconds is very good, more than 250 milliseconds is slow."
-msgstr ""
+msgstr "เวลาแฝงน้อยกว่า 50 มิลลิวินาทีนั้นดีมาก มากกว่า 250 มิลลิวินาทีนั้นช้า"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:263
 msgid "Anonymous"
@@ -4407,8 +4407,8 @@ msgid "Arguments"
 msgstr "อาร์กิวเมนต์"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:140
-msgid "Auth worker?"
-msgstr "เจ้าหน้าที่ตรวจสอบสิทธิ์?"
+msgid "Auth Web Worker?"
+msgstr "Auth Web Worker?"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:142
 msgid "Authentication"
@@ -4460,7 +4460,7 @@ msgstr "ฟังก์ชัน / แม่แบบ"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:41
 msgid "General connection speed and quality, for which we test with a Google server and our own server."
-msgstr ""
+msgstr "ความเร็วและคุณภาพการเชื่อมต่อทั่วไป ซึ่งเราทดสอบกับเซิร์ฟเวอร์ของ Google และเซิร์ฟเวอร์ของเราเอง"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:10
 msgid "Gone"
@@ -4468,7 +4468,7 @@ msgstr "ที่ไปแล้ว"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:47
 msgid "If the authentication with the server works."
-msgstr ""
+msgstr "หากการพิสูจน์ตัวตนกับเซิร์ฟเวอร์ทำงาน"
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:4./apps/zotonic_mod_base/priv/templates/directory_index.tpl:8
 msgid "Index of"
@@ -4503,7 +4503,7 @@ msgstr "ตกลง"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:35
 msgid "On this page you can test the connection of your browser to our server and to the internet in general."
-msgstr ""
+msgstr "ในหน้านี้ คุณสามารถทดสอบการเชื่อมต่อเบราว์เซอร์ของคุณกับเซิร์ฟเวอร์ของเราและกับอินเทอร์เน็ตโดยทั่วไป"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 msgid "Page Id"
@@ -4530,7 +4530,7 @@ msgid "Return to the homepage"
 msgstr "กลับไปที่หน้าแรก"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
-msgid "Service worker?"
+msgid "Service Worker?"
 msgstr "พนักงานบริการ?"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:2
@@ -4539,7 +4539,7 @@ msgstr "รหัสเซสชัน"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:36
 msgid "Several aspects of the connection are tested"
-msgstr ""
+msgstr "มีการทดสอบการเชื่อมต่อหลายด้าน"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:11
 msgid "Sorry, this page has been deleted."
@@ -4555,7 +4555,7 @@ msgstr "ติดตามกอง"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:50
 msgid "Support for offline work and communication between several tabs in your browser."
-msgstr ""
+msgstr "รองรับการทำงานออฟไลน์และการสื่อสารระหว่างหลายแท็บในเบราว์เซอร์ของคุณ"
 
 #: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
 msgid "Test your connection"
@@ -4563,7 +4563,7 @@ msgstr "ทดสอบการเชื่อมต่อของคุณ"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:54
 msgid "Tests"
-msgstr ""
+msgstr "แบบทดสอบ"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:13
 msgid "That page does not exist"
@@ -4571,35 +4571,39 @@ msgstr "ไม่มีหน้านั้น"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:102
 msgid "The <em>Pong Count</em> should increase every second, without any errors."
-msgstr ""
+msgstr "<em>Pong Count</em> ควรเพิ่มขึ้นทุกวินาทีโดยไม่มีข้อผิดพลาด"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:136
 msgid "The authentication should show <em>Authenticated</em> or <em>Anonymous</em>."
-msgstr ""
+msgstr "การตรวจสอบความถูกต้องควรแสดง <em>Authenticated</em> หรือ <em>Anonymous</em>"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:44
 msgid "The connection our site uses to talk with our own server."
-msgstr ""
+msgstr "การเชื่อมต่อที่ไซต์ของเราใช้เพื่อพูดคุยกับเซิร์ฟเวอร์ของเราเอง"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:76
 msgid "The test below checks the connection between your machine, Google and our site."
-msgstr ""
+msgstr "การทดสอบด้านล่างตรวจสอบการเชื่อมต่อระหว่างเครื่องของคุณ Google และไซต์ของเรา"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:78
 msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing messages."
-msgstr ""
+msgstr "ไม่ควรมีการหมดเวลา หากมีการหมดเวลา แสดงว่าการเชื่อมต่ออินเทอร์เน็ตของคุณสูญเสียข้อความ"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:135
 msgid "This tests the authentication with the server."
-msgstr ""
+msgstr "นี่เป็นการทดสอบการพิสูจน์ตัวตนกับเซิร์ฟเวอร์"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:101
 msgid "This tests the communication with the server."
-msgstr ""
+msgstr "นี่เป็นการทดสอบการสื่อสารกับเซิร์ฟเวอร์"
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:15
 msgid "Type"
 msgstr "ประเภท"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
+msgid "Web Worker Status"
+msgstr "สถานะ Web Worker"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:109
 msgid "Websocket"
@@ -4609,10 +4613,6 @@ msgstr "เว็บซ็อคเก็ต"
 msgid "Websocket Support?"
 msgstr "รองรับ Websocket?"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
-msgid "Worker status"
-msgstr "สถานะคนงาน"
-
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:251./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 msgid "Yes"
@@ -4620,7 +4620,7 @@ msgstr "ใช่"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
 msgid "Your browser as it identifies itself with our server and your IP address. This is essential information for the help desk."
-msgstr ""
+msgstr "เบราว์เซอร์ของคุณตามที่ระบุตัวเองด้วยเซิร์ฟเวอร์ของเราและที่อยู่ IP ของคุณ นี่เป็นข้อมูลที่จำเป็นสำหรับ Help Desk"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
