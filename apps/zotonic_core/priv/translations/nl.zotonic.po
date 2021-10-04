@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-04 16:46\n"
+"PO-Revision-Date: 2021-10-04 18:33\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -4410,11 +4410,11 @@ msgstr "Argumenten"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:140
 msgid "Auth Web Worker?"
-msgstr "Auth webwerker?"
+msgstr "Auth Web Worker?"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:142
 msgid "Authentication"
-msgstr "authenticatie"
+msgstr "Authenticatie"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:69
 msgid "Browser"
