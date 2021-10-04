@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-04 15:55\n"
+"PO-Revision-Date: 2021-10-04 16:46\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -4396,7 +4396,7 @@ msgstr "# 页数"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:77
 msgid "A latency of less than 50 milliseconds is very good, more than 250 milliseconds is slow."
-msgstr ""
+msgstr "低於 50 毫秒的延遲非常好，超過 250 毫秒就很慢。"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:263
 msgid "Anonymous"
@@ -4407,8 +4407,8 @@ msgid "Arguments"
 msgstr "参数"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:140
-msgid "Auth worker?"
-msgstr "認證工人？"
+msgid "Auth Web Worker?"
+msgstr "驗證網絡工作者？"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:142
 msgid "Authentication"
@@ -4460,7 +4460,7 @@ msgstr "函数/模版"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:41
 msgid "General connection speed and quality, for which we test with a Google server and our own server."
-msgstr ""
+msgstr "一般連接速度和質量，我們使用 Google 服務器和我們自己的服務器進行測試。"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:10
 msgid "Gone"
@@ -4468,7 +4468,7 @@ msgstr "前进"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:47
 msgid "If the authentication with the server works."
-msgstr ""
+msgstr "如果與服務器的身份驗證有效。"
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:4./apps/zotonic_mod_base/priv/templates/directory_index.tpl:8
 msgid "Index of"
@@ -4503,7 +4503,7 @@ msgstr "成功"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:35
 msgid "On this page you can test the connection of your browser to our server and to the internet in general."
-msgstr ""
+msgstr "在此頁面上，您可以測試您的瀏覽器與我們的服務器和互聯網的連接。"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 msgid "Page Id"
@@ -4530,7 +4530,7 @@ msgid "Return to the homepage"
 msgstr "返回主页"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
-msgid "Service worker?"
+msgid "Service Worker?"
 msgstr "服務人員？"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:2
@@ -4539,7 +4539,7 @@ msgstr "会议编号"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:36
 msgid "Several aspects of the connection are tested"
-msgstr ""
+msgstr "連接的幾個方面進行了測試"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:11
 msgid "Sorry, this page has been deleted."
@@ -4555,7 +4555,7 @@ msgstr "堆栈跟踪"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:50
 msgid "Support for offline work and communication between several tabs in your browser."
-msgstr ""
+msgstr "支持離線工作和瀏覽器中多個選項卡之間的通信。"
 
 #: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
 msgid "Test your connection"
@@ -4563,7 +4563,7 @@ msgstr "測試您的連接"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:54
 msgid "Tests"
-msgstr ""
+msgstr "測試"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:13
 msgid "That page does not exist"
@@ -4571,35 +4571,39 @@ msgstr "该页不存在"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:102
 msgid "The <em>Pong Count</em> should increase every second, without any errors."
-msgstr ""
+msgstr "<em>Pong Count</em> 應該每秒增加，沒有任何錯誤。"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:136
 msgid "The authentication should show <em>Authenticated</em> or <em>Anonymous</em>."
-msgstr ""
+msgstr "身份驗證應顯示 <em>Authenticated</em> 或 <em>Anonymous</em>。"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:44
 msgid "The connection our site uses to talk with our own server."
-msgstr ""
+msgstr "我們網站用來與我們自己的服務器通信的連接。"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:76
 msgid "The test below checks the connection between your machine, Google and our site."
-msgstr ""
+msgstr "下面的測試檢查您的機器、谷歌和我們網站之間的連接。"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:78
 msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing messages."
-msgstr ""
+msgstr "不應有任何超時，如果有超時，則您的 Internet 連接正在丟失消息。"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:135
 msgid "This tests the authentication with the server."
-msgstr ""
+msgstr "這將測試與服務器的身份驗證。"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:101
 msgid "This tests the communication with the server."
-msgstr ""
+msgstr "這將測試與服務器的通信。"
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:15
 msgid "Type"
 msgstr "类型"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
+msgid "Web Worker Status"
+msgstr "網絡工作者狀態"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:109
 msgid "Websocket"
@@ -4609,10 +4613,6 @@ msgstr "網絡套接字"
 msgid "Websocket Support?"
 msgstr "網絡套接字支持？"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
-msgid "Worker status"
-msgstr "工人狀態"
-
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:251./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 msgid "Yes"
@@ -4620,7 +4620,7 @@ msgstr "是"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
 msgid "Your browser as it identifies itself with our server and your IP address. This is essential information for the help desk."
-msgstr ""
+msgstr "您的瀏覽器通過我們的服務器和您的 IP 地址來標識自己。這是幫助台的重要信息。"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
