@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-09-30 15:33\n"
+"PO-Revision-Date: 2021-10-04 15:22\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -990,7 +990,7 @@ msgstr "Copia del enlace de descarga al portapapeles"
 msgid "Copy download link"
 msgstr "Copiar el enlace de descarga"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:142
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:145
 msgid "Could not connect to the website."
 msgstr "No se pudo conectar al sitio web."
 
@@ -1165,7 +1165,7 @@ msgstr "El código de incrustación será desinfectado para los sitios permitido
 msgid "Embed page"
 msgstr "Incorporar página"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:193
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:196
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:231
 msgid "Embedded Content"
 msgstr "Contenido incorporado"
@@ -1190,7 +1190,7 @@ msgstr "Raíz de la instalación de Erlang"
 msgid "Erlang Version"
 msgstr "Versión Erlang"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:162
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:165
 msgid "Error checking the website."
 msgstr "Error comprobando el sitio web."
 
@@ -1231,7 +1231,7 @@ msgstr "Cada página está categorizada en exactamente una categoría. La catego
 msgid "Existing pages"
 msgstr "Páginas existentes"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:175./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:150
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:175./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:153
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:86
 msgid "Failed to download the file."
 msgstr "Error al descargar el archivo."
@@ -1450,7 +1450,7 @@ msgstr "Medios en esta página"
 msgid "Media title"
 msgstr "Título de medio"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:131
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:134
 msgid "Media updated."
 msgstr "Medios actualizados."
 
@@ -1960,7 +1960,7 @@ msgstr "Esto no se puede deshacer. Su página se perderá para siempre."
 msgid "This connection already exists."
 msgstr "Esta conexión ya existe."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:179./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:154
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:179./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:157
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:90
 msgid "This file contains links to other files or locations."
 msgstr "Este archivo contiene enlaces a otros archivos o lugares."
@@ -1977,12 +1977,12 @@ msgstr "Este archivo no ha sido escaneado en busca de virus porque es demasiado 
 msgid "This file has not been scanned for viruses."
 msgstr "Este archivo no ha sido escaneado en busca de virus."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:177./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:152
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:177./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:155
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:88
 msgid "This file is infected with a virus."
 msgstr "Este archivo está infectado con un virus."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:181./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:156
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:181./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:159
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:92
 msgid "This file is too large."
 msgstr "Este archivo es demasiado grande."
@@ -2023,7 +2023,7 @@ msgstr "Este recurso fue creado por el módulo"
 msgid "Till"
 msgstr "Hasta"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:144
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:147
 msgid "Timeout while trying to fetch data from the website."
 msgstr "Tiempo de espera al intentar obtener datos del sitio web."
 
@@ -2038,6 +2038,7 @@ msgid "Toggle dropdown"
 msgstr "Activar despleglable"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:6
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:17
 msgid "Toggle navigation"
 msgstr "Activar navegación"
 
@@ -2205,7 +2206,7 @@ msgstr "No tiene permitido eliminar esta página."
 msgid "You are not allowed to edit this page."
 msgstr "No tiene permitido editar esta página."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:146
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:149
 msgid "You don't have permission to change this media item."
 msgstr "No se le permite cambiar este elemento multimedia."
 
@@ -2219,7 +2220,7 @@ msgstr "No tienes permiso para crear esta página."
 msgid "You don't have permission to edit this page."
 msgstr "No tienes permiso para editar esta página."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:173./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:148
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:173./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "No tiene los permisos adecuados para subir este tipo de archivo."
@@ -3710,6 +3711,7 @@ msgid "Already connected"
 msgstr "Ya conectado"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:212
 msgid "Authenticated"
 msgstr "Autenticado"
 
@@ -3843,15 +3845,15 @@ msgstr "Volver atras"
 msgid "Go to Modules"
 msgstr "Ir a Módulos"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:43./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:83./apps/zotonic_mod_authentication/priv/templates/logon.tpl:45
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:43./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:83./apps/zotonic_mod_authentication/priv/templates/logon.tpl:49
 msgid "Go to the admin"
 msgstr "Ve a la administración"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:74./apps/zotonic_mod_authentication/priv/templates/logon.tpl:36
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:74./apps/zotonic_mod_authentication/priv/templates/logon.tpl:40
 msgid "Go to the home page"
 msgstr "Ir a la página de inicio"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:78./apps/zotonic_mod_authentication/priv/templates/logon.tpl:40
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:78./apps/zotonic_mod_authentication/priv/templates/logon.tpl:44
 msgid "Go to the your profile page"
 msgstr "Ve a la página de tu perfil"
 
@@ -3983,7 +3985,7 @@ msgstr "Conectarse"
 msgid "Sign in to"
 msgstr "Conectarse a"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon.tpl:33
+#: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon.tpl:37
 msgid "Sign out"
 msgstr "Desconectarse"
 
@@ -4098,7 +4100,7 @@ msgstr "Está a punto de crear una nueva cuenta."
 msgid "You are now signed in."
 msgstr "Ya está registrado."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:32
 msgid "You are signed in"
 msgstr "Estás registrado"
 
@@ -4168,7 +4170,7 @@ msgstr "Su contraseña ha caducado"
 msgid "Your password is too short."
 msgstr "Su contraseña es demasiado corta."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:30
+#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:34
 msgid "Your username is"
 msgstr "Su nombre de usuario es"
 
@@ -4392,17 +4394,45 @@ msgstr "esta copia de seguridad está en progreso"
 msgid "# Pages"
 msgstr "# Páginas"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:216
+msgid "Anonymous"
+msgstr "Anónimo"
+
 #: apps/zotonic_mod_base/priv/templates/error.tpl:80
 msgid "Arguments"
 msgstr "Argumentos"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:93
+msgid "Auth worker?"
+msgstr "¿Trabajador de autenticación?"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:95
+msgid "Authentication"
+msgstr "Autenticación"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:39
+msgid "Browser"
+msgstr "Navegador"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:35
+msgid "Browser Connectivity"
+msgstr "Conectividad del navegador"
 
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:29
 msgid "CSV"
 msgstr "CSV"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:41
+msgid "Client IP address"
+msgstr "Dirección IP del cliente"
+
 #: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:3
 msgid "Connecting..."
 msgstr "Conectando ..."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:3
+msgid "Connection Test"
+msgstr "Prueba de conexión"
 
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:25
 msgid "Excel Workbook"
@@ -4440,6 +4470,19 @@ msgstr "JSON"
 msgid "JSON-LD"
 msgstr "JSON-LD"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:70
+msgid "MQTT Bridge"
+msgstr "Puente MQTT"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:60
+msgid "MQTT Bridge Connection Status"
+msgstr "Estado de la conexión del puente MQTT"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:98./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:140./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:220
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
+msgid "No"
+msgstr "No"
+
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_alert.tpl:5./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:8./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:11
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72
 #: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:15
@@ -4450,6 +4493,18 @@ msgstr "Aceptar"
 msgid "Page Id"
 msgstr "Id de página"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:73
+msgid "Pong Count"
+msgstr "Cuenta Pong"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:79
+msgid "Pong Errors"
+msgstr "Errores de Pong"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:76
+msgid "Pong Latency"
+msgstr "Latencia Pong"
+
 #: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
 msgstr "Leer esta página en la web"
@@ -4457,6 +4512,10 @@ msgstr "Leer esta página en la web"
 #: apps/zotonic_mod_base/priv/templates/error.tpl:14
 msgid "Return to the homepage"
 msgstr "Regresar a la página de inicio"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:97
+msgid "Service worker?"
+msgstr "¿Trabajador del servicio?"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:2
 msgid "Session Id"
@@ -4474,6 +4533,10 @@ msgstr "Lo sentimos, no tienes acceso a está página."
 msgid "Stack trace"
 msgstr "Rastro de la pila"
 
+#: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
+msgid "Test your connection"
+msgstr "Prueba tu conexión"
+
 #: apps/zotonic_mod_base/priv/templates/error.tpl:13
 msgid "That page does not exist"
 msgstr "Esa página no existe"
@@ -4481,6 +4544,23 @@ msgstr "Esa página no existe"
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:15
 msgid "Type"
 msgstr "Tipo"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:67
+msgid "Websocket"
+msgstr "Websocket"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:64
+msgid "Websocket Support?"
+msgstr "¿Soporte de Websocket?"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:89
+msgid "Worker status"
+msgstr "Estado de trabajador"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:140./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:204./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:227
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
+msgid "Yes"
+msgstr "Sí"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
@@ -7806,10 +7886,6 @@ msgstr "Nuevo resultado:"
 msgid "Next page in category"
 msgstr "Siguiente página en la categoría"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
-msgid "No"
-msgstr "No"
-
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:46
 msgid "Numeric input, show totals for this field in the survey results."
 msgstr "Entrada numérica. Mostrar los totales para este cmpo en los resultados de la encuesta."
@@ -8167,10 +8243,6 @@ msgstr "Cuando termine de mostrar"
 msgid "When no condition is true then the question following this break will be the next page."
 msgstr "Cuando una condición es verdadera entonces la pregunta siguiente a esta interrupción sera la página siguiente."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
-msgid "Yes"
-msgstr "Sí"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
 msgid "Yes or no question"
 msgstr "Si o no pregunta"
@@ -8515,7 +8587,7 @@ msgstr "Lo sentimos, no tiene permisos para recargar las traducciones."
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Disculpe, no tiene permiso para buscar las traducciones."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:435
+#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:449
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Lo sentimos, no tiene permiso para establecer por defecto el idioma."
 
@@ -8543,7 +8615,7 @@ msgstr "El título, cuerpo y otros textos pueden ser traducidos en distintos idi
 msgid "Translate this page in other languages."
 msgstr "Traducir esta página a otros idiomas."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:646
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:660
 msgid "Translation"
 msgstr "Traducción"
 
