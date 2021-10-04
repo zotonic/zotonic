@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-04 19:45\n"
+"PO-Revision-Date: 2021-10-04 19:56\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1220,7 +1220,7 @@ msgstr "Fout, dubbel paginapad. Wijzig de uri."
 
 #: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:144
 msgid "Error, duplicate uri. Please change the uri."
-msgstr "Fout, dubbele uri. Wijzig de uri."
+msgstr "Fout, dubbele uri. Gelieve de uri te veranderen."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:8
 msgid "Every page can have a date range. For example if the page is an event or description of someone’s life."
@@ -2222,7 +2222,7 @@ msgstr "Je hebt geen toestemming om deze pagina te maken."
 #: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:150
 #: apps/zotonic_mod_image_edit/src/mod_image_edit.erl:51
 msgid "You don't have permission to edit this page."
-msgstr "U heeft geen rechten om deze pagina te bewerken."
+msgstr "Je hebt geen toestemming om deze pagina te bewerken."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:173./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
@@ -2239,7 +2239,7 @@ msgstr "Je moet een omschrijving van het media-item geven om het zo eenvoudiger 
 
 #: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:152
 msgid "Your search query is invalid. Please correct it before saving."
-msgstr "Uw zoekopdracht is ongeldig. Corrigeer het voordat u opslaat."
+msgstr "Je zoekopdracht is ongeldig. Corrigeer het voordat je opslaat."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:21
 msgid "Zotonic Version"
@@ -4521,7 +4521,7 @@ msgstr "Pong-fouten"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:118
 msgid "Pong Latency"
-msgstr "Pong-latentie"
+msgstr "Pong-latency"
 
 #: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
@@ -4557,7 +4557,7 @@ msgstr "Stack trace"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:50
 msgid "Support for offline work and communication between several tabs in your browser."
-msgstr "Ondersteuning voor offline werken en communicatie tussen verschillende tabbladen in uw browser."
+msgstr "Ondersteuning voor offline werken en communicatie tussen verschillende tabbladen in je browser."
 
 #: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
 msgid "Test your connection"
@@ -4577,7 +4577,7 @@ msgstr "De <em>Pong Count</em> zou elke seconde moeten toenemen, zonder fouten."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:136
 msgid "The authentication should show <em>Authenticated</em> or <em>Anonymous</em>."
-msgstr "De authenticatie moet <em>Authenticated</em> of <em>Anonymous</em>."
+msgstr "De authenticatie zou <em>Authenticated</em> of <em>Anonymous</em>moeten tonen."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:44
 msgid "The connection our site uses to talk with our own server."
@@ -4585,19 +4585,19 @@ msgstr "De verbinding die onze site gebruikt om met onze eigen server te praten.
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:76
 msgid "The test below checks the connection between your machine, Google and our site."
-msgstr "De onderstaande test controleert de verbinding tussen uw machine, Google en onze site."
+msgstr "De onderstaande test controleert de verbinding tussen jouw machine, Google en onze site."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:78
 msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing messages."
-msgstr "Er mogen geen time-outs zijn, als er time-outs zijn, verliest uw internetverbinding berichten."
+msgstr "Er mag geen time-out zijn, als er wel time-outs zijn dan verliest je internetverbinding berichten."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:135
 msgid "This tests the authentication with the server."
-msgstr "Hiermee wordt de authenticatie met de server getest."
+msgstr "Dit test de authenticatie met de server."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:101
 msgid "This tests the communication with the server."
-msgstr "Hiermee wordt de communicatie met de server getest."
+msgstr "Dit test de communicatie met de server."
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:15
 msgid "Type"
@@ -4622,7 +4622,7 @@ msgstr "Ja"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
 msgid "Your browser as it identifies itself with our server and your IP address. This is essential information for the help desk."
-msgstr "Uw browser zoals deze zich identificeert met onze server en uw IP-adres. Dit is essentiële informatie voor de helpdesk."
+msgstr "Je browser zoals deze zich identificeert met onze server en jouw IP-adres. Dit is essentiële informatie voor de helpdesk."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
@@ -5588,7 +5588,7 @@ msgstr "Contrast &amp; Helderheid"
 
 #: apps/zotonic_mod_image_edit/src/mod_image_edit.erl:48
 msgid "Could not save the image settings."
-msgstr "Kan de beeldinstellingen niet opslaan."
+msgstr "Kon de beeldinstellingen niet opslaan."
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:72
 msgid "Crop bottom"
