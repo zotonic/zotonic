@@ -395,11 +395,11 @@ url_strip_language(<<"/", Path/binary>> = Url) ->
         _ ->
             Url
     end;
-url_strip_language(<<"https://", _>> = Path) ->
+url_strip_language(<<"https://", _/binary>> = Path) ->
     url_strip_language(url_path(Path));
-url_strip_language(<<"http://", _>> = Path) ->
+url_strip_language(<<"http://", _/binary>> = Path) ->
     url_strip_language(url_path(Path));
-url_strip_language(<<"//", _>> = Path) ->
+url_strip_language(<<"//", _/binary>> = Path) ->
     url_strip_language(url_path(Path));
 url_strip_language(Path) when is_binary(Path) ->
     Path.
