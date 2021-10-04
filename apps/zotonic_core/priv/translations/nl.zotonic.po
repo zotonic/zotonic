@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-04 18:33\n"
+"PO-Revision-Date: 2021-10-04 19:45\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1691,7 +1691,7 @@ msgstr "Verwijzingen naar"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:9
 msgid "Refresh"
-msgstr "Vernieuwen"
+msgstr "Verversen"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:50
 msgid "Refreshed every 30 minutes."
@@ -4470,7 +4470,7 @@ msgstr "Verdwenen"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:47
 msgid "If the authentication with the server works."
-msgstr "Als de authenticatie met de server werkt."
+msgstr "Of de authenticatie met de server werkt."
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:4./apps/zotonic_mod_base/priv/templates/directory_index.tpl:8
 msgid "Index of"
@@ -4490,7 +4490,7 @@ msgstr "MQTT-brug"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:96
 msgid "MQTT Bridge Connection Status"
-msgstr "MQTT Bridge-verbindingsstatus"
+msgstr "MQTT Brug Verbindingsstatus"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:145./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
@@ -4505,7 +4505,7 @@ msgstr "OK"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:35
 msgid "On this page you can test the connection of your browser to our server and to the internet in general."
-msgstr "Op deze pagina kunt u de verbinding van uw browser met onze server en met internet in het algemeen testen."
+msgstr "Op deze pagina kunt u de verbinding van uw browser met onze server en met het internet in het algemeen testen."
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 msgid "Page Id"
@@ -4533,7 +4533,7 @@ msgstr "Terug naar de homepage"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
 msgid "Service Worker?"
-msgstr "Service medewerker?"
+msgstr "Service Worker?"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:2
 msgid "Session Id"
@@ -5604,7 +5604,7 @@ msgstr "Rechts bijsnijden"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:60
 msgid "Crop top"
-msgstr "Crop top"
+msgstr "Bovenkant bijsnijden"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:14
 msgid "Cropping center, click to remove"
@@ -5612,7 +5612,7 @@ msgstr "Bijsnijdcentrum, klik om te verwijderen"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_admin_edit_media_button.tpl:3
 msgid "Edit image"
-msgstr "Bewerk afbeelding"
+msgstr "Afbeelding bewerken"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:54
 msgid "Keep logos and clip art sharp."
@@ -5620,7 +5620,7 @@ msgstr "Houd logo's en illustraties scherp."
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:52
 msgid "Lossless resize"
-msgstr "Verkleinen zonder verlies"
+msgstr "Verliesvrij verkleinen"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:101
 msgid "Pan"
@@ -5644,7 +5644,7 @@ msgstr "Draaien"
 
 #: apps/zotonic_mod_image_edit/src/mod_image_edit.erl:45
 msgid "Saved the image settings."
-msgstr "De afbeeldingsinstellingen opgeslagen."
+msgstr "De afbeeldingsinstellingen zijn opgeslagen."
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:30
 msgid "The original image stays unaltered, all edits can be changed at any time."
