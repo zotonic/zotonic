@@ -128,7 +128,7 @@
     <div class="col-md-6 col-lg-6 col-sm-6">
       <div class="panel panel-info">
         <div class="panel-heading">
-            <h3 class="panel-title">{_ Worker status _}</h3>
+            <h3 class="panel-title">{_ Web Worker status _}</h3>
         </div>
         <div class="panel-body">
           <p class="text-muted">
@@ -137,11 +137,11 @@
           </p>
 
           <dl class="dl-horizontal">
-            <dt class="text-right">{_ Auth worker? _}</dt>
+            <dt class="text-right">{_ Auth Web Worker? _}</dt>
             <dd><span id="auth_support"></span></dd>
             <dt class="text-right">{_ Authentication _}</dt>
             <dd><span id="auth_status"></span></dd>
-            <dt class="text-right">{_ Service worker? _}</dt>
+            <dt class="text-right">{_ Service Worker? _}</dt>
             <dd><span id="serviceWorker-active">{_ No _}</span></dd>
         </div>
       </div>
