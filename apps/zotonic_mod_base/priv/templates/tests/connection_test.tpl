@@ -38,6 +38,8 @@
           <dl class="dl-horizontal">
             <dt>{_ Browser _}</dt>
             <dd>{{ m.req.user_agent|escape }}</dd>
+            <dt>{_ Client IP address _}</dt>
+            <dd>{{ m.req.peer|escape }}</dd>
           </dl>
 
           <dl class="dl-horizontal">
