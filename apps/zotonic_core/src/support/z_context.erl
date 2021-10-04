@@ -44,6 +44,7 @@
     prune_for_database/1,
     prune_for_scomp/1,
 
+    is_site_url/2,
     abs_url/2,
 
     pickle/1,
@@ -384,6 +385,27 @@ prune_envdata(Env) ->
         cowmachine_cookies => [],
         cowmachine_resp_body => <<>>
     }.
+
+
+%% @doc Check if the URL is an URL of the local site
+-spec is_site_url( undefined | string() | binary(), z:context() ) -> boolean().
+is_site_url(undefined, _Context) -> false;
+is_site_url(<<"//", _/binary>> = Url, Context) -> is_site_url_1(Url, Context);
+is_site_url(<<"/", _/binary>>, _Context) -> true;
+is_site_url(<<"#", _/binary>>, _Context) -> true;
+is_site_url([ $/, $/ | _ ] = Url, Context) -> is_site_url_1(Url, Context);
+is_site_url([$/ | _], _Context) -> true;
+is_site_url([$# | _], _Context) -> true;
+is_site_url(Url, Context) -> is_site_url_1(Url, Context).
+
+is_site_url_1(Url, Context) ->
+    case z_sites_dispatcher:get_site_for_url(Url) of
+        {ok, Site} ->
+            Site =:= site(Context);
+        undefined ->
+            false
+    end.
+
 
 %% @doc Make the url an absolute url by prepending the hostname.
 -spec abs_url(undefined | iodata(), z:context()) -> binary().

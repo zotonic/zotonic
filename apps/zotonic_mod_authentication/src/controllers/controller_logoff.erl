@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2019 Marc Worrell
+%% @copyright 2010-2021 Marc Worrell
 %% @doc Log off an user, remove "autologon" cookies
 
-%% Copyright 2010-2019 Marc Worrell
+%% Copyright 2010-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -39,6 +39,10 @@ previously_existed(Context) ->
 
 moved_temporarily(Context) ->
     Location = z_context:get_q(<<"p">>, Context, <<"/">>),
-    LocationAbs = z_context:abs_url(Location, Context),
+    Location1 = case z_context:is_site_url(Location, Context) of
+        true -> Location;
+        false -> <<"/">>
+    end,
+    LocationAbs = z_context:abs_url(Location1, Context),
     {{true, LocationAbs}, Context}.
 

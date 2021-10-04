@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020 Marc Worrell
+%% @copyright 2020-2021 Marc Worrell
 %% @doc Redirects to the correct location after an user authenticated.
 
-%% Copyright 2020 Marc Worrell
+%% Copyright 2020-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -58,8 +58,12 @@ get_ready_page(Context) ->
 get_ready_page(undefined, Context) ->
     get_ready_page(<<>>, Context);
 get_ready_page(Page, Context) when is_binary(Page) ->
-    case z_notifier:first(#logon_ready_page{request_page=Page}, Context) of
-        undefined -> Page;
+    Page1 = case z_context:is_site_url(Page, Context) of
+        true -> Page;
+        false -> <<>>
+    end,
+    case z_notifier:first(#logon_ready_page{request_page=Page1}, Context) of
+        undefined -> Page1;
         Url when is_binary(Url) -> Url;
         Url when is_list(Url) -> unicode:characters_to_binary(Url, utf8)
     end.
