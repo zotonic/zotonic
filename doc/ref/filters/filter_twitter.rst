@@ -3,8 +3,8 @@
 
 Format a plain text Tweet into HTML.
 
-This filter creates hyperlinks out of the embedded URLs, @-references
-and hashtags in a Tweet, like Twitter does.
+This filter creates hyperlinks out of the embedded URLs, ``@username``-references
+and ``#tag``-hashtags in a Tweet, like Twitter does.
 
 For example::
 
@@ -12,5 +12,5 @@ For example::
 
 Converts into::
 
-  <a href="http://twitter.com/acscherp">@acscherp</a>
+  <a href="https://twitter.com/acscherp">@acscherp</a>
 

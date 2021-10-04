@@ -143,7 +143,7 @@ twitter1_at(Input, Index, Opts, Context) ->
     end.
 
 twitter_at_url(Name) ->
-    ["<a href=\"http://twitter.com/", Name, "\">@", Name, "</a>"].
+    ["<a href=\"https://twitter.com/", Name, "\">@", Name, "</a>"].
 
 twitter1_hash(Input, Index, Opts, Context) ->
     case Input of
@@ -165,5 +165,5 @@ twitter1_hash(Input, Index, Opts, Context) ->
     end.
 
 twitter_hash_url(Hash) ->
-    ["<a href=\"http://twitter.com/#search?q=%23", Hash, "\">#", Hash, "</a>"].
+    ["<a href=\"https://twitter.com/#search?q=%23", Hash, "\">#", Hash, "</a>"].
 
