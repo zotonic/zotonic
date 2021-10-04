@@ -4837,7 +4837,7 @@ msgid "Type"
 msgstr ""
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
-msgid "Web Worker status"
+msgid "Web Worker Status"
 msgstr ""
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:109

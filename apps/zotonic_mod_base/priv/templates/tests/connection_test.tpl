@@ -128,7 +128,7 @@
     <div class="col-md-6 col-lg-6 col-sm-6">
       <div class="panel panel-info">
         <div class="panel-heading">
-            <h3 class="panel-title">{_ Web Worker status _}</h3>
+            <h3 class="panel-title">{_ Web Worker Status _}</h3>
         </div>
         <div class="panel-body">
           <p class="text-muted">
