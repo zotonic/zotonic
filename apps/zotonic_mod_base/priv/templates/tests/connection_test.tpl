@@ -103,22 +103,22 @@
         </p>
 
         <dl class="dl-horizontal">
-            <dt class="text-right">{_ Websocket Support? _}</dt>
+            <dt>{_ Websocket Support? _}</dt>
             <dd><span id="ws_support"></span></dd>
 
-            <dt class="text-right">{_ Websocket _}</dt>
+            <dt>{_ Websocket _}</dt>
             <dd><span id="connect-status"></span></dd>
 
-            <dt class="text-right">{_ MQTT Bridge _}</dt>
+            <dt>{_ MQTT Bridge _}</dt>
             <dd><span id="bridge-status"></span></dd>
 
-            <dt class="text-right">{_ Pong Count _}</dt>
+            <dt>{_ Pong Count _}</dt>
             <dd><span id="pong-count">-</span></dd>
 
-            <dt class="text-right">{_ Pong Latency _}</dt>
+            <dt>{_ Pong Latency _}</dt>
             <dd><span id="pong-latency">-</span></dd>
 
-            <dt class="text-right">{_ Pong Errors _}</dt>
+            <dt>{_ Pong Errors _}</dt>
             <dd><span id="pong-error-count" >-</span></dd>
         </dl>
       </div>
@@ -137,11 +137,11 @@
           </p>
 
           <dl class="dl-horizontal">
-            <dt class="text-right">{_ Auth Web Worker? _}</dt>
+            <dt>{_ Auth Web Worker? _}</dt>
             <dd><span id="auth_support"></span></dd>
-            <dt class="text-right">{_ Authentication _}</dt>
+            <dt>{_ Authentication _}</dt>
             <dd><span id="auth_status"></span></dd>
-            <dt class="text-right">{_ Service Worker? _}</dt>
+            <dt>{_ Service Worker? _}</dt>
             <dd><span id="serviceWorker-active">{_ No _}</span></dd>
         </div>
       </div>
