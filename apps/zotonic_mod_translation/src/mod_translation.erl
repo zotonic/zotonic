@@ -383,6 +383,7 @@ event(#postback{message={translation_reload, _Args}}, Context) ->
 
 %% @doc Strip the language code from the location (if the language code is recognized).
 %%      For instance: `<<"/nl-nl/admin/translation">>' becomes `<<"/admin/translation">>'
+%%      Any hostname is stripped, and only the path is returned.
 -spec url_strip_language(binary()) -> binary().
 url_strip_language(<<"/", Path/binary>> = Url) ->
     case binary:split(Path, <<"/">>) of
@@ -394,8 +395,21 @@ url_strip_language(<<"/", Path/binary>> = Url) ->
         _ ->
             Url
     end;
+url_strip_language(<<"https://", _>> = Path) ->
+    url_strip_language(url_path(Path));
+url_strip_language(<<"http://", _>> = Path) ->
+    url_strip_language(url_path(Path));
+url_strip_language(<<"//", _>> = Path) ->
+    url_strip_language(url_path(Path));
 url_strip_language(Path) when is_binary(Path) ->
     Path.
+
+url_path(Url) ->
+    case uri_string:parse(Url) of
+        #{ path := Path } -> Path;
+        _ -> <<"/">>
+    end.
+
 
 %% @doc Set the language, as selected by the user. Persist this choice.
 -spec set_user_language(atom(), z:context()) -> z:context().
