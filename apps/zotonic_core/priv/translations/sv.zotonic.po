@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-09-30 15:33\n"
+"PO-Revision-Date: 2021-10-04 15:22\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -990,7 +990,7 @@ msgstr "Kopierad nedladdningslänk till urklipp"
 msgid "Copy download link"
 msgstr "Kopiera nedladdningslänk"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:142
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:145
 msgid "Could not connect to the website."
 msgstr "Kunde inte ansluta till webbplatsen."
 
@@ -1165,7 +1165,7 @@ msgstr "Bädda in koden kommer att desinficeras för tillåtna webbplatser och h
 msgid "Embed page"
 msgstr "Bädda in sidan"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:193
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:196
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:231
 msgid "Embedded Content"
 msgstr "Inbäddat innehåll"
@@ -1190,7 +1190,7 @@ msgstr "Erlang installationsrot"
 msgid "Erlang Version"
 msgstr "Erlang-version"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:162
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:165
 msgid "Error checking the website."
 msgstr "Felkontroll webbplatsen."
 
@@ -1231,7 +1231,7 @@ msgstr "Varje sida är kategoriserade i exakt en kategori. Den kategori som defi
 msgid "Existing pages"
 msgstr "Befintliga sidor"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:175./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:150
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:175./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:153
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:86
 msgid "Failed to download the file."
 msgstr "Gick inte att ladda ner filen."
@@ -1450,7 +1450,7 @@ msgstr "Media på denna sida"
 msgid "Media title"
 msgstr "Medietitel"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:131
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:134
 msgid "Media updated."
 msgstr "Media uppdaterat."
 
@@ -1960,7 +1960,7 @@ msgstr "Detta kan inte ångras. din sida kommer att vara förlorade för alltid.
 msgid "This connection already exists."
 msgstr "Detta samband finns redan."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:179./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:154
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:179./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:157
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:90
 msgid "This file contains links to other files or locations."
 msgstr "Den här filen innehåller länkar till andra filer eller platser."
@@ -1977,12 +1977,12 @@ msgstr "Den här filen har inte skannats efter virus eftersom den är för stor.
 msgid "This file has not been scanned for viruses."
 msgstr "Den här filen har inte skannats efter virus."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:177./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:152
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:177./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:155
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:88
 msgid "This file is infected with a virus."
 msgstr "Den här filen är infekterad med ett virus."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:181./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:156
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:181./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:159
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:92
 msgid "This file is too large."
 msgstr "Den här filen är för stor."
@@ -2023,7 +2023,7 @@ msgstr "Denna resurs skapades av modulen"
 msgid "Till"
 msgstr "Till"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:144
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:147
 msgid "Timeout while trying to fetch data from the website."
 msgstr "Timeout samtidigt som du försöker hämta data från webbplatsen."
 
@@ -2038,6 +2038,7 @@ msgid "Toggle dropdown"
 msgstr "Växla rullgardinsmenyn"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:6
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:17
 msgid "Toggle navigation"
 msgstr "Växla navigering"
 
@@ -2205,7 +2206,7 @@ msgstr "Det är inte tillåtet att ta bort denna sida."
 msgid "You are not allowed to edit this page."
 msgstr "Du är inte tillåten att ändra denna sida."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:146
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:149
 msgid "You don't have permission to change this media item."
 msgstr "Du har inte behörighet att ändra detta media artikel."
 
@@ -2219,7 +2220,7 @@ msgstr "Du har inte behörighet att skapa den här sidan."
 msgid "You don't have permission to edit this page."
 msgstr "Du har inte behörighet att redigera den här sidan."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:173./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:148
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:173./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Du inte har rätt behörighet för att ladda upp den här typen av fil."
@@ -3710,6 +3711,7 @@ msgid "Already connected"
 msgstr "Redan ansluten"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:212
 msgid "Authenticated"
 msgstr "Autentiserad"
 
@@ -3843,15 +3845,15 @@ msgstr "Gå tillbaka"
 msgid "Go to Modules"
 msgstr "Gå till moduler"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:43./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:83./apps/zotonic_mod_authentication/priv/templates/logon.tpl:45
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:43./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:83./apps/zotonic_mod_authentication/priv/templates/logon.tpl:49
 msgid "Go to the admin"
 msgstr "Gå till administratören"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:74./apps/zotonic_mod_authentication/priv/templates/logon.tpl:36
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:74./apps/zotonic_mod_authentication/priv/templates/logon.tpl:40
 msgid "Go to the home page"
 msgstr "Gå till hemsidan"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:78./apps/zotonic_mod_authentication/priv/templates/logon.tpl:40
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:78./apps/zotonic_mod_authentication/priv/templates/logon.tpl:44
 msgid "Go to the your profile page"
 msgstr "Gå till din profilsida"
 
@@ -3983,7 +3985,7 @@ msgstr "Logga in"
 msgid "Sign in to"
 msgstr "Logga in"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon.tpl:33
+#: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon.tpl:37
 msgid "Sign out"
 msgstr "Logga ut"
 
@@ -4098,7 +4100,7 @@ msgstr "Du är på väg att skapa ett nytt konto."
 msgid "You are now signed in."
 msgstr "Du är nu inloggad."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:32
 msgid "You are signed in"
 msgstr "Du är inloggad"
 
@@ -4168,7 +4170,7 @@ msgstr "ditt lösenord har gått ut"
 msgid "Your password is too short."
 msgstr "Ditt lösenord är för kort."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:30
+#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:34
 msgid "Your username is"
 msgstr "Ditt användarnamn är"
 
@@ -4392,17 +4394,45 @@ msgstr "den här säkerhetskopian pågår"
 msgid "# Pages"
 msgstr "# Sidor"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:216
+msgid "Anonymous"
+msgstr "Anonym"
+
 #: apps/zotonic_mod_base/priv/templates/error.tpl:80
 msgid "Arguments"
 msgstr "Argument"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:93
+msgid "Auth worker?"
+msgstr "Äkta arbetare?"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:95
+msgid "Authentication"
+msgstr "Autentisering"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:39
+msgid "Browser"
+msgstr "Webbläsare"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:35
+msgid "Browser Connectivity"
+msgstr "Webbläsaranslutning"
 
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:29
 msgid "CSV"
 msgstr "CSV"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:41
+msgid "Client IP address"
+msgstr "Klientens IP -adress"
+
 #: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:3
 msgid "Connecting..."
 msgstr "Ansluter..."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:3
+msgid "Connection Test"
+msgstr "Anslutningstest"
 
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:25
 msgid "Excel Workbook"
@@ -4440,6 +4470,19 @@ msgstr "JSON"
 msgid "JSON-LD"
 msgstr "JSON-LD"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:70
+msgid "MQTT Bridge"
+msgstr "MQTT Bridge"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:60
+msgid "MQTT Bridge Connection Status"
+msgstr "MQTT Bridge -anslutningsstatus"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:98./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:140./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:220
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
+msgid "No"
+msgstr "Nej"
+
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_alert.tpl:5./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:8./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:11
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72
 #: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:15
@@ -4450,6 +4493,18 @@ msgstr "OK"
 msgid "Page Id"
 msgstr "Sid-id"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:73
+msgid "Pong Count"
+msgstr "Pongräkning"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:79
+msgid "Pong Errors"
+msgstr "Pong -fel"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:76
+msgid "Pong Latency"
+msgstr "Pong Latency"
+
 #: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
 msgstr "Läs den här sidan på webben"
@@ -4457,6 +4512,10 @@ msgstr "Läs den här sidan på webben"
 #: apps/zotonic_mod_base/priv/templates/error.tpl:14
 msgid "Return to the homepage"
 msgstr "Återgå till hemsidan"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:97
+msgid "Service worker?"
+msgstr "Servicearbetare?"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:2
 msgid "Session Id"
@@ -4474,6 +4533,10 @@ msgstr "Tyvärr har du inte tillgång till den här sidan."
 msgid "Stack trace"
 msgstr "Stackspår"
 
+#: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
+msgid "Test your connection"
+msgstr "Testa din anslutning"
+
 #: apps/zotonic_mod_base/priv/templates/error.tpl:13
 msgid "That page does not exist"
 msgstr "Den sidan finns inte"
@@ -4481,6 +4544,23 @@ msgstr "Den sidan finns inte"
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:15
 msgid "Type"
 msgstr "Typ"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:67
+msgid "Websocket"
+msgstr "Websocket"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:64
+msgid "Websocket Support?"
+msgstr "Support för Websocket?"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:89
+msgid "Worker status"
+msgstr "Arbetarstatus"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:140./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:204./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:227
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
+msgid "Yes"
+msgstr "Ja"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
@@ -7806,10 +7886,6 @@ msgstr "Nytt resultat:"
 msgid "Next page in category"
 msgstr "Nästa sida i kategorin"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
-msgid "No"
-msgstr "Nej"
-
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:46
 msgid "Numeric input, show totals for this field in the survey results."
 msgstr "Numerisk inmatning, visar totalt för detta fält i undersökningsresultaten."
@@ -8166,10 +8242,6 @@ msgstr "När showen är klar"
 msgid "When no condition is true then the question following this break will be the next page."
 msgstr "När inget villkor är sant kommer frågan efter detta paus att bli nästa sida."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
-msgid "Yes"
-msgstr "Ja"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
 msgid "Yes or no question"
 msgstr "Ja eller ingen fråga"
@@ -8514,7 +8586,7 @@ msgstr "Tyvärr har du inte behörighet att ladda om översättningar."
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Tyvärr har du inte behörighet att söka efter översättningar."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:435
+#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:449
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Tyvärr har du inte behörighet att ställa in standardspråket."
 
@@ -8542,7 +8614,7 @@ msgstr "Titel, brödtext och andra texter kan översättas till olika språk. H�
 msgid "Translate this page in other languages."
 msgstr "Översätt den här sidan till andra språk."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:646
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:660
 msgid "Translation"
 msgstr "Översättning"
 
