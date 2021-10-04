@@ -1,5 +1,9 @@
 [
-    {initial_test, [ "tests", "initial_postback_test" ],
+    {initial_test, [ "test", "initial_postback_test" ],
                    controller_template,
-                   [ {template, "tests/initial_postback_test.tpl"} ]}
+                   [ {template, "tests/initial_postback_test.tpl"} ]},
+
+    {connection_test, [ "test", "connection" ],
+                   controller_template,
+                   [ {template, "tests/connection_test.tpl"} ]}
 ].
