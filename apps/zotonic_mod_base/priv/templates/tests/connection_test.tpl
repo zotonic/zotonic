@@ -8,6 +8,7 @@
     "js/modules/http_ping.js"
 %}
 
+
 <div class="container">
 
 <nav class="navbar navbar-default">
@@ -28,6 +29,30 @@
   </div>
 </nav>
 
+<h1>{_ Connection Test _}</h1>
+
+<p>
+  {_ On this page you can test the connection of your browser to our server and to the internet in general. _}<br>
+  {_ Several aspects of the connection are tested _}:
+</p>
+
+<ul>
+  <li>
+    {_ General connection speed and quality, for which we test with a Google server and our own server. _}
+  </li>
+  <li>
+    {_ The connection our site uses to talk with our own server. _}
+  </li>
+  <li>
+    {_ If the authentication with the server works. _}
+  </li>
+  <li>
+    {_ Support for offline work and communication between several tabs in your browser. _}
+  </li>
+</ul>
+
+<h2>{_ Tests _}</h2>
+
 <div class="row">
   <div class="col-md-12 col-lg-12 col-sm-12">
     <div class="panel panel-info">
@@ -35,12 +60,23 @@
           <h3 class="panel-title">{_ Browser Connectivity _}</h3>
       </div>
       <div class="panel-body">
+
+          <p class="text-muted">
+              {_ Your browser as it identifies itself with our server and your IP address. This is essential information for the help desk. _}
+          </p>
+
           <dl class="dl-horizontal">
             <dt>{_ Browser _}</dt>
             <dd>{{ m.req.user_agent|escape }}</dd>
             <dt>{_ Client IP address _}</dt>
             <dd>{{ m.req.peer|escape }}</dd>
           </dl>
+
+          <p class="text-muted">
+            {_ The test below checks the connection between your machine, Google and our site. _}<br>
+            {_ A latency of less than 50 milliseconds is very good, more than 250 milliseconds is slow. _}<br>
+            {_ There should not be any timeouts, if there are timeouts then your internet connection is losing messages. _}
+          </p>
 
           <dl class="dl-horizontal">
              <dt>Ping Google</dt>
@@ -60,6 +96,12 @@
           <h3 class="panel-title">{_ MQTT Bridge Connection Status _}</h3>
       </div>
       <div class="panel-body">
+
+        <p class="text-muted">
+          {_ This tests the communication with the server. _}
+          {_ The <em>Pong Count</em> should increase every second, without any errors. _}
+        </p>
+
         <dl class="dl-horizontal">
             <dt class="text-right">{_ Websocket Support? _}</dt>
             <dd><span id="ws_support"></span></dd>
@@ -89,6 +131,11 @@
             <h3 class="panel-title">{_ Worker status _}</h3>
         </div>
         <div class="panel-body">
+          <p class="text-muted">
+            {_ This tests the authentication with the server. _}
+            {_ The authentication should show <em>Authenticated</em> or <em>Anonymous</em>. _}
+          </p>
+
           <dl class="dl-horizontal">
             <dt class="text-right">{_ Auth worker? _}</dt>
             <dd><span id="auth_support"></span></dd>
