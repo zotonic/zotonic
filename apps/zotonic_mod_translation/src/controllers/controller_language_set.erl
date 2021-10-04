@@ -48,8 +48,12 @@ moved_temporarily(Context) ->
                    true -> <<"/">>;
                    false -> Page
                end,
+    Location1 = case z_context:is_site_url(Location, Context) of
+        true -> Location;
+        false -> <<"/">>
+    end,
     AbsUrl = z_context:abs_url(
-                    add_language(mod_translation:url_strip_language(Location), Context1),
+                    add_language(mod_translation:url_strip_language(Location1), Context1),
                     Context1),
     {{true, AbsUrl}, Context1}.
 
