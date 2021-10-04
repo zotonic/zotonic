@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-04 15:55\n"
+"PO-Revision-Date: 2021-10-04 16:46\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -4396,7 +4396,7 @@ msgstr "# Pages"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:77
 msgid "A latency of less than 50 milliseconds is very good, more than 250 milliseconds is slow."
-msgstr ""
+msgstr "Une latence inférieure à 50 millisecondes est très bonne, plus de 250 millisecondes est lente."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:263
 msgid "Anonymous"
@@ -4407,8 +4407,8 @@ msgid "Arguments"
 msgstr "Arguments"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:140
-msgid "Auth worker?"
-msgstr "Travailleur d'Auth ?"
+msgid "Auth Web Worker?"
+msgstr "Travailleur Web authentifié ?"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:142
 msgid "Authentication"
@@ -4460,7 +4460,7 @@ msgstr "Fonction/ modèles"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:41
 msgid "General connection speed and quality, for which we test with a Google server and our own server."
-msgstr ""
+msgstr "Vitesse et qualité générales de connexion, pour lesquelles nous testons avec un serveur Google et notre propre serveur."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:10
 msgid "Gone"
@@ -4468,7 +4468,7 @@ msgstr "Disparu"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:47
 msgid "If the authentication with the server works."
-msgstr ""
+msgstr "Si l'authentification avec le serveur fonctionne."
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:4./apps/zotonic_mod_base/priv/templates/directory_index.tpl:8
 msgid "Index of"
@@ -4503,7 +4503,7 @@ msgstr "OK"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:35
 msgid "On this page you can test the connection of your browser to our server and to the internet in general."
-msgstr ""
+msgstr "Sur cette page, vous pouvez tester la connexion de votre navigateur à notre serveur et à Internet en général."
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 msgid "Page Id"
@@ -4530,8 +4530,8 @@ msgid "Return to the homepage"
 msgstr "Retour à la page d'accueil"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
-msgid "Service worker?"
-msgstr "Employé de service ?"
+msgid "Service Worker?"
+msgstr "Employé de service ?"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:2
 msgid "Session Id"
@@ -4539,7 +4539,7 @@ msgstr "Identifiant Session"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:36
 msgid "Several aspects of the connection are tested"
-msgstr ""
+msgstr "Plusieurs aspects de la connexion sont testés"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:11
 msgid "Sorry, this page has been deleted."
@@ -4555,7 +4555,7 @@ msgstr "Trace de la pile"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:50
 msgid "Support for offline work and communication between several tabs in your browser."
-msgstr ""
+msgstr "Prise en charge du travail hors ligne et de la communication entre plusieurs onglets de votre navigateur."
 
 #: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
 msgid "Test your connection"
@@ -4563,7 +4563,7 @@ msgstr "Testez votre connexion"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:54
 msgid "Tests"
-msgstr ""
+msgstr "Essais"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:13
 msgid "That page does not exist"
@@ -4571,35 +4571,39 @@ msgstr "Cette page n'existe pas"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:102
 msgid "The <em>Pong Count</em> should increase every second, without any errors."
-msgstr ""
+msgstr "Le <em>Pong Count</em> devrait augmenter chaque seconde, sans aucune erreur."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:136
 msgid "The authentication should show <em>Authenticated</em> or <em>Anonymous</em>."
-msgstr ""
+msgstr "L'authentification doit afficher <em>Authentifié</em> ou <em>Anonyme</em>."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:44
 msgid "The connection our site uses to talk with our own server."
-msgstr ""
+msgstr "La connexion que notre site utilise pour communiquer avec notre propre serveur."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:76
 msgid "The test below checks the connection between your machine, Google and our site."
-msgstr ""
+msgstr "Le test ci-dessous vérifie la connexion entre votre machine, Google et notre site."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:78
 msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing messages."
-msgstr ""
+msgstr "Il ne devrait pas y avoir de délais d'attente, s'il y a des délais d'attente, votre connexion Internet perd des messages."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:135
 msgid "This tests the authentication with the server."
-msgstr ""
+msgstr "Ceci teste l'authentification avec le serveur."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:101
 msgid "This tests the communication with the server."
-msgstr ""
+msgstr "Ceci teste la communication avec le serveur."
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:15
 msgid "Type"
 msgstr "Saisir"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
+msgid "Web Worker Status"
+msgstr "Statut du travailleur Web"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:109
 msgid "Websocket"
@@ -4609,10 +4613,6 @@ msgstr "Websocket"
 msgid "Websocket Support?"
 msgstr "Prise en charge des Websockets ?"
 
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
-msgid "Worker status"
-msgstr "Statut de travailleur"
-
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:251./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 msgid "Yes"
@@ -4620,7 +4620,7 @@ msgstr "Oui"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
 msgid "Your browser as it identifies itself with our server and your IP address. This is essential information for the help desk."
-msgstr ""
+msgstr "Votre navigateur tel qu'il s'identifie avec notre serveur et votre adresse IP. Il s'agit d'informations essentielles pour le service d'assistance."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
