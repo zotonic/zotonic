@@ -391,9 +391,9 @@ prune_envdata(Env) ->
 -spec is_site_url( undefined | string() | binary(), z:context() ) -> boolean().
 is_site_url(undefined, _Context) -> false;
 is_site_url(<<"//", _/binary>> = Url, Context) -> is_site_url_1(Url, Context);
-is_site_url(<<"/", _/binary>>, Context) -> true;
-is_site_url(<<"#", _/binary>>, Context) -> true;
-is_site_url([ $/, $/ | _ ] = Url, _Context) -> is_site_url_1(Url, Context);
+is_site_url(<<"/", _/binary>>, _Context) -> true;
+is_site_url(<<"#", _/binary>>, _Context) -> true;
+is_site_url([ $/, $/ | _ ] = Url, Context) -> is_site_url_1(Url, Context);
 is_site_url([$/ | _], _Context) -> true;
 is_site_url([$# | _], _Context) -> true;
 is_site_url(Url, Context) -> is_site_url_1(Url, Context).
