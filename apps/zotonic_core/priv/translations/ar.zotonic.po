@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-04 15:56\n"
+"PO-Revision-Date: 2021-10-04 16:46\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -4407,8 +4407,8 @@ msgid "Arguments"
 msgstr "الحجج"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:140
-msgid "Auth worker?"
-msgstr "عامل المصادقة؟"
+msgid "Auth Web Worker?"
+msgstr "عامل الويب المصدق؟"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:142
 msgid "Authentication"
@@ -4530,7 +4530,7 @@ msgid "Return to the homepage"
 msgstr "العودة إلى الصفحة الرئيسية"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
-msgid "Service worker?"
+msgid "Service Worker?"
 msgstr "عامل الخدمة؟"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:2
@@ -4601,6 +4601,10 @@ msgstr "هذا يختبر الاتصال بالخادم."
 msgid "Type"
 msgstr "نوع"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
+msgid "Web Worker Status"
+msgstr "حالة عامل الويب"
+
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:109
 msgid "Websocket"
 msgstr "مقبس ويب"
@@ -4608,10 +4612,6 @@ msgstr "مقبس ويب"
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:106
 msgid "Websocket Support?"
 msgstr "دعم Websocket؟"
-
-#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
-msgid "Worker status"
-msgstr "حالة العامل"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:251./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
