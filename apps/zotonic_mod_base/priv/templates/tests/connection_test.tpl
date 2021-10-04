@@ -1,6 +1,6 @@
 {% extends "base_simple.tpl" %}
 
-{% block title %}Connection Test{% endblock %}
+{% block title %}{_ Connection Test _}{% endblock %}
 
 {% block content %}
 
@@ -14,7 +14,7 @@
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
+        <span class="sr-only">{_ Toggle navigation _}</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -32,7 +32,7 @@
   <div class="col-md-12 col-lg-12 col-sm-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-          <h3 class="panel-title">Browser Connectivity</h3>
+          <h3 class="panel-title">{_ Browser Connectivity _}</h3>
       </div>
       <div class="panel-body">
           <dl class="dl-horizontal">
@@ -47,52 +47,52 @@
 </div>
 
 <div class="row">
-  {#
-    <div class="col-md-6 col-lg-6 col-sm-6">
-      <div class="panel panel-info">
-        <div class="panel-heading">
-            <h3 class="panel-title">Zotonic Session Status</h3>
-        </div>
-        <div class="panel-body">
-           <dl id="session-info" class="dl-horizontal">
-              {% wire name="update_session_info" postback={session_info} target="session-info" %}
-              {% wire action={script script="z_event('update_session_info');"} %}
-           </dl>
-        </div>
-      </div>
-    </div>
-  #}
   <div class="col-md-6 col-lg-6 col-sm-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-          <h3 class="panel-title">MQTT Bridge Connection Status</h3>
+          <h3 class="panel-title">{_ MQTT Bridge Connection Status _}</h3>
       </div>
       <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt class="text-right">{_ Websocket Support? _}</dt>
+            <dd><span id="ws_support"></span></dd>
 
-      <dl class="dl-horizontal">
-          <dt class="text-right">Websocket Support?</dt>
-          <dd><span id="ws_support"></span></dd>
+            <dt class="text-right">{_ Websocket _}</dt>
+            <dd><span id="connect-status"></span></dd>
 
-          <dt class="text-right">Websocket</dt>
-          <dd><span id="connect-status"></span></dd>
+            <dt class="text-right">{_ MQTT Bridge _}</dt>
+            <dd><span id="bridge-status"></span></dd>
 
-          <dt class="text-right">MQTT Bridge</dt>
-          <dd><span id="bridge-status"></span></dd>
+            <dt class="text-right">{_ Pong Count _}</dt>
+            <dd><span id="pong-count">-</span></dd>
 
-          <dt class="text-right">Pong Count</dt>
-          <dd><span id="pong-count">-</span></dd>
+            <dt class="text-right">{_ Pong Latency _}</dt>
+            <dd><span id="pong-latency">-</span></dd>
 
-          <dt class="text-right">Pong Latency</dt>
-          <dd><span id="pong-latency">-</span></dd>
-
-          <dt class="text-right">Pong Errors</dt>
-          <dd><span id="pong-error-count" >-</span></dd>
-      </dl>
+            <dt class="text-right">{_ Pong Errors _}</dt>
+            <dd><span id="pong-error-count" >-</span></dd>
+        </dl>
       </div>
     </div>
    </div>
-</div>
 
+    <div class="col-md-6 col-lg-6 col-sm-6">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">{_ Worker status _}</h3>
+        </div>
+        <div class="panel-body">
+          <dl class="dl-horizontal">
+            <dt class="text-right">{_ Auth worker? _}</dt>
+            <dd><span id="auth_support"></span></dd>
+            <dt class="text-right">{_ Authentication _}</dt>
+            <dd><span id="auth_status"></span></dd>
+            <dt class="text-right">{_ Service worker? _}</dt>
+            <dd><span id="serviceWorker-active">{_ No _}</span></dd>
+        </div>
+      </div>
+    </div>
+</div>
 
 {% javascript %}
 
@@ -130,7 +130,7 @@ function update() {
     pinger_info("google-ping", google_pinger?(google_pinger.info()):{});
     pinger_info("ping", site_pinger?(site_pinger.info()):{});
 
-    document.getElementById("ws_support").innerHTML = window.WebSocket?"Yes":"No";
+    document.getElementById("ws_support").innerHTML = window.WebSocket?"{_ Yes _}":"{_ No _}";
 
     if (is_bridge_connected) {
       let startTime = new Date();
@@ -152,8 +152,8 @@ function update() {
               document.getElementById("pong-latency").innerHTML =
                 " <b>" + latency + "ms</b>" +
                 " Avg: <b>" + average + "ms</b>" +
-                " Min: " + pong_latency_max + "ms" +
-                " Max: " + pong_latency_min + "ms";
+                " Min: " + pong_latency_min + "ms" +
+                " Max: " + pong_latency_max + "ms";
           })
         .catch(
           function(e) {
@@ -161,6 +161,11 @@ function update() {
               document.getElementById("pong-error-count").innerText = ++pong_error_count;
           });
     }
+
+    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+        cotonic.broker.publish("model/serviceWorker/post/broadcast/connection-test", { msg: "ping" });
+    }
+
 }
 
 cotonic.broker.subscribe("session/origin/status", function(msg) {
@@ -184,6 +189,36 @@ cotonic.broker.subscribe("$bridge/origin/status", function(msg) {
       connected = "Not connected";
     }
     document.getElementById("bridge-status").innerText = connected;
+});
+
+cotonic.broker.subscribe("model/+model/event/ping", function(msg, bindings) {
+    if (msg.payload == "pong") {
+        if (document.getElementById(bindings.model + "_support")) {
+          document.getElementById(bindings.model + "_support").innerText = "{_ Yes _}";
+        }
+    }
+});
+
+cotonic.broker.subscribe("model/auth/event/auth", function(msg) {
+    if (msg.payload.status == "ok") {
+      if (msg.payload.is_authenticated) {
+          document.getElementById("auth_status").innerHTML = "{_ Authenticated _}:"
+          + " <b>" + encodeURIComponent(msg.payload.username) + " </b> "
+          + " <span class='text-muted'>(" + encodeURIComponent(msg.payload.user_id) + ")</span>";
+      } else {
+          document.getElementById("auth_status").innerText = "{_ Anonymous _}";
+      }
+    } else {
+      document.getElementById("auth_status").innerHTML =
+          "{_ No _}"
+          + "<span class='text-muted'>" + encodeURIComponent(msg.payload.status) + "</span>";
+    }
+});
+
+cotonic.broker.subscribe("model/serviceWorker/event/broadcast/connection-test", function(msg) {
+    if (msg.payload.msg == "ping") {
+        document.getElementById("serviceWorker-active").innerText = "{_ Yes _}";
+    }
 });
 
 {% endjavascript %}
