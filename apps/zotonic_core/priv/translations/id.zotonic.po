@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-09-30 15:34\n"
+"PO-Revision-Date: 2021-10-04 16:46\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -990,7 +990,7 @@ msgstr "Tautan unduhan disalin ke papan klip"
 msgid "Copy download link"
 msgstr "Salin tautan unduhan"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:142
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:145
 msgid "Could not connect to the website."
 msgstr "Tidak dapat terhubung ke situs web."
 
@@ -1165,7 +1165,7 @@ msgstr "Kode sematan akan dibersihkan untuk situs yang diizinkan dan html."
 msgid "Embed page"
 msgstr "Cantumkan halaman"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:193
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:196
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:231
 msgid "Embedded Content"
 msgstr "Konten Tertanam"
@@ -1190,7 +1190,7 @@ msgstr "Root Instalasi Erlang"
 msgid "Erlang Version"
 msgstr "Versi Erlang"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:162
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:165
 msgid "Error checking the website."
 msgstr "Kesalahan memeriksa situs web."
 
@@ -1231,7 +1231,7 @@ msgstr "Setiap halaman dikategorikan dalam satu kategori secara tepat. Kategori 
 msgid "Existing pages"
 msgstr "Halaman yang ada"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:175./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:150
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:175./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:153
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:86
 msgid "Failed to download the file."
 msgstr "Gagal mengunduh berkas."
@@ -1450,7 +1450,7 @@ msgstr "Media di halaman ini"
 msgid "Media title"
 msgstr "Judul media"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:131
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:134
 msgid "Media updated."
 msgstr "Media diperbarui."
 
@@ -1960,7 +1960,7 @@ msgstr "Ini tidak dapat dibatalkan. Halaman anda akan hilang selamanya."
 msgid "This connection already exists."
 msgstr "Koneksi ini sudah ada."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:179./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:154
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:179./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:157
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:90
 msgid "This file contains links to other files or locations."
 msgstr "File ini berisi link ke file atau lokasi lain."
@@ -1977,12 +1977,12 @@ msgstr "File ini belum dipindai dari virus karena terlalu besar."
 msgid "This file has not been scanned for viruses."
 msgstr "File ini belum dipindai dari virus."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:177./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:152
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:177./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:155
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:88
 msgid "This file is infected with a virus."
 msgstr "File ini terinfeksi virus."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:181./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:156
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:181./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:159
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:92
 msgid "This file is too large."
 msgstr "File ini terlalu besar."
@@ -2023,7 +2023,7 @@ msgstr "Sumber daya ini diciptakan oleh modul"
 msgid "Till"
 msgstr "Sampai"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:144
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:147
 msgid "Timeout while trying to fetch data from the website."
 msgstr "Waktu habis ketika mencoba untuk mengambil data dari website."
 
@@ -2038,6 +2038,7 @@ msgid "Toggle dropdown"
 msgstr "Beralih dropdown"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:6
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:18
 msgid "Toggle navigation"
 msgstr "Beralih navigasi"
 
@@ -2205,7 +2206,7 @@ msgstr "Anda tidak diizinkan untuk menghapus halaman ini."
 msgid "You are not allowed to edit this page."
 msgstr "Anda tidak diizinkan untuk menyunting halaman ini."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:146
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:149
 msgid "You don't have permission to change this media item."
 msgstr "Anda tidak memiliki izin untuk mengubah item media ini."
 
@@ -2219,7 +2220,7 @@ msgstr "Anda tidak memiliki izin untuk membuat halaman ini."
 msgid "You don't have permission to edit this page."
 msgstr "Anda tidak memiliki izin untuk mengedit halaman ini."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:173./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:148
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:173./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Anda tidak memiliki hak akses untuk mengunggah jenis file ini."
@@ -3709,6 +3710,7 @@ msgid "Already connected"
 msgstr "Sudah terhubung"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:259
 msgid "Authenticated"
 msgstr "Dikonfirmasi"
 
@@ -3842,15 +3844,15 @@ msgstr "Kembali"
 msgid "Go to Modules"
 msgstr "Pergi ke Modul"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:43./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:83./apps/zotonic_mod_authentication/priv/templates/logon.tpl:45
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:43./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:83./apps/zotonic_mod_authentication/priv/templates/logon.tpl:49
 msgid "Go to the admin"
 msgstr "Pergi ke admin"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:74./apps/zotonic_mod_authentication/priv/templates/logon.tpl:36
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:74./apps/zotonic_mod_authentication/priv/templates/logon.tpl:40
 msgid "Go to the home page"
 msgstr "Pergi ke halaman muka"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:78./apps/zotonic_mod_authentication/priv/templates/logon.tpl:40
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:78./apps/zotonic_mod_authentication/priv/templates/logon.tpl:44
 msgid "Go to the your profile page"
 msgstr "Buka halaman profil Anda"
 
@@ -3982,7 +3984,7 @@ msgstr "Masuk"
 msgid "Sign in to"
 msgstr "Masuk ke"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon.tpl:33
+#: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon.tpl:37
 msgid "Sign out"
 msgstr "Keluar"
 
@@ -4097,7 +4099,7 @@ msgstr "Anda adalah tentang untuk membuat akun baru."
 msgid "You are now signed in."
 msgstr "Anda sekarang sudah masuk."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:32
 msgid "You are signed in"
 msgstr "Anda sudah masuk"
 
@@ -4167,7 +4169,7 @@ msgstr "Kata sandi anda telah berakhir"
 msgid "Your password is too short."
 msgstr "Kata sandi anda terlalu pendek."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:30
+#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:34
 msgid "Your username is"
 msgstr "Nama pengguna Anda adalah"
 
@@ -4391,17 +4393,49 @@ msgstr "cadangan ini sedang berlangsung"
 msgid "# Pages"
 msgstr "# Halaman"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:77
+msgid "A latency of less than 50 milliseconds is very good, more than 250 milliseconds is slow."
+msgstr "Latensi kurang dari 50 milidetik sangat bagus, lebih dari 250 milidetik lambat."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:263
+msgid "Anonymous"
+msgstr "Anonim"
+
 #: apps/zotonic_mod_base/priv/templates/error.tpl:80
 msgid "Arguments"
 msgstr "Argumen"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:140
+msgid "Auth Web Worker?"
+msgstr "Pekerja Web Otentikasi?"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:142
+msgid "Authentication"
+msgstr "Autentikasi"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:69
+msgid "Browser"
+msgstr "Peramban"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:60
+msgid "Browser Connectivity"
+msgstr "Konektivitas Peramban"
 
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:29
 msgid "CSV"
 msgstr "CSV"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:71
+msgid "Client IP address"
+msgstr "Alamat IP klien"
+
 #: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:3
 msgid "Connecting..."
 msgstr "Menghubungkan ..."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:3./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:32
+msgid "Connection Test"
+msgstr "Uji Sambungan"
 
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:25
 msgid "Excel Workbook"
@@ -4423,9 +4457,17 @@ msgstr "Folder"
 msgid "Function/ template"
 msgstr "Fungsi/ template"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:41
+msgid "General connection speed and quality, for which we test with a Google server and our own server."
+msgstr "Kecepatan dan kualitas koneksi umum, yang kami uji dengan server Google dan server kami sendiri."
+
 #: apps/zotonic_mod_base/priv/templates/error.tpl:10
 msgid "Gone"
 msgstr "Pergi"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:47
+msgid "If the authentication with the server works."
+msgstr "Jika otentikasi dengan server berfungsi."
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:4./apps/zotonic_mod_base/priv/templates/directory_index.tpl:8
 msgid "Index of"
@@ -4439,15 +4481,44 @@ msgstr "JSON"
 msgid "JSON-LD"
 msgstr "JSON-LD"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:112
+msgid "MQTT Bridge"
+msgstr "Jembatan MQTT"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:96
+msgid "MQTT Bridge Connection Status"
+msgstr "Status Koneksi Jembatan MQTT"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:145./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
+msgid "No"
+msgstr "Tidak"
+
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_alert.tpl:5./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:8./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:11
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72
 #: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:15
 msgid "OK"
 msgstr "BAIK"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:35
+msgid "On this page you can test the connection of your browser to our server and to the internet in general."
+msgstr "Di halaman ini Anda dapat menguji koneksi browser Anda ke server kami dan ke internet secara umum."
+
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 msgid "Page Id"
 msgstr "Id halaman"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:115
+msgid "Pong Count"
+msgstr "Hitungan Pong"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:121
+msgid "Pong Errors"
+msgstr "Kesalahan Pong"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:118
+msgid "Pong Latency"
+msgstr "Latensi Pong"
 
 #: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
@@ -4457,9 +4528,17 @@ msgstr "Baca halaman ini di web"
 msgid "Return to the homepage"
 msgstr "Kembali ke beranda"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
+msgid "Service Worker?"
+msgstr "Pekerja Layanan?"
+
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:2
 msgid "Session Id"
 msgstr "Id sesi"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:36
+msgid "Several aspects of the connection are tested"
+msgstr "Beberapa aspek koneksi diuji"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:11
 msgid "Sorry, this page has been deleted."
@@ -4473,13 +4552,74 @@ msgstr "Maaf, Anda tidak memiliki akses ke halaman ini."
 msgid "Stack trace"
 msgstr "Tumpukan jejak"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:50
+msgid "Support for offline work and communication between several tabs in your browser."
+msgstr "Dukungan untuk pekerjaan offline dan komunikasi antara beberapa tab di browser Anda."
+
+#: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
+msgid "Test your connection"
+msgstr "Uji koneksi Anda"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:54
+msgid "Tests"
+msgstr "Tes"
+
 #: apps/zotonic_mod_base/priv/templates/error.tpl:13
 msgid "That page does not exist"
 msgstr "Halaman itu tidak ada"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:102
+msgid "The <em>Pong Count</em> should increase every second, without any errors."
+msgstr "<em>Pong Count</em> harus meningkat setiap detik, tanpa kesalahan."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:136
+msgid "The authentication should show <em>Authenticated</em> or <em>Anonymous</em>."
+msgstr "Otentikasi harus menunjukkan <em>Otentikasi</em> atau <em>Anonim</em>."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:44
+msgid "The connection our site uses to talk with our own server."
+msgstr "Koneksi yang digunakan situs kami untuk berbicara dengan server kami sendiri."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:76
+msgid "The test below checks the connection between your machine, Google and our site."
+msgstr "Tes di bawah ini memeriksa koneksi antara mesin Anda, Google, dan situs kami."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:78
+msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing messages."
+msgstr "Tidak boleh ada batas waktu, jika ada batas waktu maka koneksi internet Anda kehilangan pesan."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:135
+msgid "This tests the authentication with the server."
+msgstr "Ini menguji otentikasi dengan server."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:101
+msgid "This tests the communication with the server."
+msgstr "Ini menguji komunikasi dengan server."
+
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:15
 msgid "Type"
 msgstr "Tipe"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
+msgid "Web Worker Status"
+msgstr "Status Pekerja Web"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:109
+msgid "Websocket"
+msgstr "soket web"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:106
+msgid "Websocket Support?"
+msgstr "Dukungan Websocket?"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:251./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
+msgid "Yes"
+msgstr "Ya"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
+msgid "Your browser as it identifies itself with our server and your IP address. This is essential information for the help desk."
+msgstr "Browser Anda karena mengidentifikasi dirinya dengan server kami dan alamat IP Anda. Ini adalah informasi penting untuk meja bantuan."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
@@ -7806,10 +7946,6 @@ msgstr "Hasil baru:"
 msgid "Next page in category"
 msgstr "Berikutnya halaman dalam kategori"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
-msgid "No"
-msgstr "Tidak"
-
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:46
 msgid "Numeric input, show totals for this field in the survey results."
 msgstr "Masukan numerik, tampilkan total untuk bidang ini dalam hasil survei."
@@ -8166,10 +8302,6 @@ msgstr "Setelah selesai tampilkan"
 msgid "When no condition is true then the question following this break will be the next page."
 msgstr "Ketika kondisi tidak benar, maka pertanyaan berikut ini istirahat akan menjadi halaman berikutnya."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
-msgid "Yes"
-msgstr "Ya"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
 msgid "Yes or no question"
 msgstr "Ya atau tidak pertanyaan"
@@ -8514,7 +8646,7 @@ msgstr "Maaf, anda tidak memiliki izin untuk reload terjemahan."
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Maaf, anda tidak memiliki izin untuk scan untuk terjemahan."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:435
+#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:449
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Maaf, anda tidak memiliki izin untuk mengatur bahasa default."
 
@@ -8542,7 +8674,7 @@ msgstr "Judul, tubuh, dan teks-teks lain dapat diterjemahkan dalam berbagai baha
 msgid "Translate this page in other languages."
 msgstr "Terjemahkan halaman ini dalam bahasa lain."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:646
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:660
 msgid "Translation"
 msgstr "Terjemahan"
 

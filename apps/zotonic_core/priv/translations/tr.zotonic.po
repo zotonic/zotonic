@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-09-30 15:33\n"
+"PO-Revision-Date: 2021-10-04 16:46\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -990,7 +990,7 @@ msgstr "İndirme bağlantısı panoya kopyalandı"
 msgid "Copy download link"
 msgstr "İndirme bağlantısını kopyala"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:142
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:145
 msgid "Could not connect to the website."
 msgstr "Web sitesine bağlanılamadı."
 
@@ -1165,7 +1165,7 @@ msgstr "Gömme kodu, izin verilen siteler ve html için sterilize edilecektir."
 msgid "Embed page"
 msgstr "Sayfa yerleştir"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:193
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:196
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:231
 msgid "Embedded Content"
 msgstr "Gömülmüş İçerik"
@@ -1190,7 +1190,7 @@ msgstr "Erlang Kurulum Kökü"
 msgid "Erlang Version"
 msgstr "Erlang Sürümü"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:162
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:165
 msgid "Error checking the website."
 msgstr "Web sitesini kontrol etme hatası."
 
@@ -1231,7 +1231,7 @@ msgstr "Her sayfa sadece bir kategoride yer alabilir. Kategori sayfanın temsil 
 msgid "Existing pages"
 msgstr "Mevcut sayfalar"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:175./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:150
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:175./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:153
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:86
 msgid "Failed to download the file."
 msgstr "Dosyayı indirme hatası."
@@ -1450,7 +1450,7 @@ msgstr "Bu sayfadaki medya"
 msgid "Media title"
 msgstr "Medya başlığı"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:131
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:134
 msgid "Media updated."
 msgstr "Medya güncellendi."
 
@@ -1960,7 +1960,7 @@ msgstr "Geri alınamaz. Sayfa tamamen silinecek."
 msgid "This connection already exists."
 msgstr "Bu bağlantı zaten mevcut."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:179./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:154
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:179./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:157
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:90
 msgid "This file contains links to other files or locations."
 msgstr "Bu dosya, diğer dosyalara veya konumlara bağlantılar içerir."
@@ -1977,12 +1977,12 @@ msgstr "Bu dosya çok büyük olduğu için virüs taramasından geçirilmedi."
 msgid "This file has not been scanned for viruses."
 msgstr "Bu dosya virüslere karşı taranmadı."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:177./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:152
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:177./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:155
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:88
 msgid "This file is infected with a virus."
 msgstr "Bu dosyaya bir virüs bulaşmış."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:181./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:156
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:181./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:159
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:92
 msgid "This file is too large."
 msgstr "Bu dosya çok büyük."
@@ -2023,7 +2023,7 @@ msgstr "Bu kaynak modül tarafından oluşturuldu"
 msgid "Till"
 msgstr "Kadar"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:144
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:147
 msgid "Timeout while trying to fetch data from the website."
 msgstr "Web sitesinden veri almaya çalışırken zaman aşımı oluştu."
 
@@ -2038,6 +2038,7 @@ msgid "Toggle dropdown"
 msgstr "Açılır menüyü aç/kapat"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:6
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:18
 msgid "Toggle navigation"
 msgstr "Gezinmeyi aç/kapat"
 
@@ -2205,7 +2206,7 @@ msgstr "Bu sayfayı silmeye yetkiniz yok."
 msgid "You are not allowed to edit this page."
 msgstr "Bu sayfayı düzenleme yetkiniz yok."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:146
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:149
 msgid "You don't have permission to change this media item."
 msgstr "Bu medya öğesini değiştirme yetkiniz yok."
 
@@ -2219,7 +2220,7 @@ msgstr "Bu sayfayı oluşturma izniniz yok."
 msgid "You don't have permission to edit this page."
 msgstr "Bu sayfayı düzenleme izniniz yok."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:173./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:148
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:173./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Bu dosya tipini yükleme yetkiniz yok."
@@ -3710,6 +3711,7 @@ msgid "Already connected"
 msgstr "Zaten bağlı"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:259
 msgid "Authenticated"
 msgstr "Doğrulanmış"
 
@@ -3843,15 +3845,15 @@ msgstr "Geri git"
 msgid "Go to Modules"
 msgstr "Modüllere Git"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:43./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:83./apps/zotonic_mod_authentication/priv/templates/logon.tpl:45
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:43./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:83./apps/zotonic_mod_authentication/priv/templates/logon.tpl:49
 msgid "Go to the admin"
 msgstr "Yöneticiye git"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:74./apps/zotonic_mod_authentication/priv/templates/logon.tpl:36
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:74./apps/zotonic_mod_authentication/priv/templates/logon.tpl:40
 msgid "Go to the home page"
 msgstr "Ana sayfaya git"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:78./apps/zotonic_mod_authentication/priv/templates/logon.tpl:40
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:78./apps/zotonic_mod_authentication/priv/templates/logon.tpl:44
 msgid "Go to the your profile page"
 msgstr "Profil sayfanıza gidin"
 
@@ -3983,7 +3985,7 @@ msgstr "Oturum aç"
 msgid "Sign in to"
 msgstr "Giriş yap"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon.tpl:33
+#: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon.tpl:37
 msgid "Sign out"
 msgstr "Çıkış"
 
@@ -4098,7 +4100,7 @@ msgstr "Yeni bir hesap oluşturmak üzeresiniz."
 msgid "You are now signed in."
 msgstr "Şimdi giriş yaptınız."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:32
 msgid "You are signed in"
 msgstr "Oturum açtınız"
 
@@ -4168,7 +4170,7 @@ msgstr "Şifrenizin kullanım süresi doldu"
 msgid "Your password is too short."
 msgstr "Şifreniz çok kısa."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:30
+#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:34
 msgid "Your username is"
 msgstr "Kullanıcı adınız"
 
@@ -4392,17 +4394,49 @@ msgstr "bu yedekleme sürmektedir"
 msgid "# Pages"
 msgstr "# Sayfalar"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:77
+msgid "A latency of less than 50 milliseconds is very good, more than 250 milliseconds is slow."
+msgstr "50 milisaniyeden az gecikme çok iyidir, 250 milisaniyeden fazla ise yavaştır."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:263
+msgid "Anonymous"
+msgstr "Anonim"
+
 #: apps/zotonic_mod_base/priv/templates/error.tpl:80
 msgid "Arguments"
 msgstr "Argümanlar"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:140
+msgid "Auth Web Worker?"
+msgstr "Yetkilendirme Web Çalışanı?"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:142
+msgid "Authentication"
+msgstr "kimlik doğrulama"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:69
+msgid "Browser"
+msgstr "Tarayıcı"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:60
+msgid "Browser Connectivity"
+msgstr "Tarayıcı Bağlantısı"
 
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:29
 msgid "CSV"
 msgstr "CSV"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:71
+msgid "Client IP address"
+msgstr "İstemci IP adresi"
+
 #: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:3
 msgid "Connecting..."
 msgstr "Bağlanıyor..."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:3./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:32
+msgid "Connection Test"
+msgstr "Bağlantı Testi"
 
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:25
 msgid "Excel Workbook"
@@ -4424,9 +4458,17 @@ msgstr "Klasör"
 msgid "Function/ template"
 msgstr "İşlev/tema"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:41
+msgid "General connection speed and quality, for which we test with a Google server and our own server."
+msgstr "Bir Google sunucusu ve kendi sunucumuzla test ettiğimiz genel bağlantı hızı ve kalitesi."
+
 #: apps/zotonic_mod_base/priv/templates/error.tpl:10
 msgid "Gone"
 msgstr "Gitti"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:47
+msgid "If the authentication with the server works."
+msgstr "Sunucuyla kimlik doğrulama çalışıyorsa."
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:4./apps/zotonic_mod_base/priv/templates/directory_index.tpl:8
 msgid "Index of"
@@ -4440,15 +4482,44 @@ msgstr "JSON"
 msgid "JSON-LD"
 msgstr "JSON-LD"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:112
+msgid "MQTT Bridge"
+msgstr "MQTT Köprüsü"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:96
+msgid "MQTT Bridge Connection Status"
+msgstr "MQTT Köprü Bağlantı Durumu"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:145./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
+msgid "No"
+msgstr "Hayır"
+
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_alert.tpl:5./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:8./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:11
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72
 #: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:15
 msgid "OK"
 msgstr "TAMAM"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:35
+msgid "On this page you can test the connection of your browser to our server and to the internet in general."
+msgstr "Bu sayfada tarayıcınızın sunucumuza ve genel olarak internete bağlantısını test edebilirsiniz."
+
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 msgid "Page Id"
 msgstr "Sayfa kimliği"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:115
+msgid "Pong Count"
+msgstr "Pong Sayısı"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:121
+msgid "Pong Errors"
+msgstr "Pong Hataları"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:118
+msgid "Pong Latency"
+msgstr "Pong Gecikmesi"
 
 #: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
@@ -4458,9 +4529,17 @@ msgstr "Bu sayfayı web'de okuyun"
 msgid "Return to the homepage"
 msgstr "Ana sayfaya dön"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
+msgid "Service Worker?"
+msgstr "Servis Görevlisi mi?"
+
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:2
 msgid "Session Id"
 msgstr "Oturum Kimliği"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:36
+msgid "Several aspects of the connection are tested"
+msgstr "Bağlantının çeşitli yönleri test edildi"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:11
 msgid "Sorry, this page has been deleted."
@@ -4474,13 +4553,74 @@ msgstr "Üzgünüz, bu sayfaya erişim yetkiniz yok."
 msgid "Stack trace"
 msgstr "Yığın izi"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:50
+msgid "Support for offline work and communication between several tabs in your browser."
+msgstr "Tarayıcınızdaki çeşitli sekmeler arasında çevrimdışı çalışma ve iletişim desteği."
+
+#: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
+msgid "Test your connection"
+msgstr "Bağlantınızı test edin"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:54
+msgid "Tests"
+msgstr "testler"
+
 #: apps/zotonic_mod_base/priv/templates/error.tpl:13
 msgid "That page does not exist"
 msgstr "Sayfa mevcut değil"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:102
+msgid "The <em>Pong Count</em> should increase every second, without any errors."
+msgstr "<em>Pong Count</em> hatasız olarak her saniye artmalıdır."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:136
+msgid "The authentication should show <em>Authenticated</em> or <em>Anonymous</em>."
+msgstr "Kimlik doğrulama <em></em> veya <em>Anonymous</em>."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:44
+msgid "The connection our site uses to talk with our own server."
+msgstr "Sitemizin kendi sunucumuzla konuşmak için kullandığı bağlantı."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:76
+msgid "The test below checks the connection between your machine, Google and our site."
+msgstr "Aşağıdaki test, makineniz, Google ve sitemiz arasındaki bağlantıyı kontrol eder."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:78
+msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing messages."
+msgstr "Herhangi bir zaman aşımı olmamalıdır, eğer zaman aşımı varsa internet bağlantınız mesaj kaybediyor demektir."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:135
+msgid "This tests the authentication with the server."
+msgstr "Bu, sunucu ile kimlik doğrulamasını test eder."
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:101
+msgid "This tests the communication with the server."
+msgstr "Bu, sunucuyla iletişimi test eder."
+
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:15
 msgid "Type"
 msgstr "Tür"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
+msgid "Web Worker Status"
+msgstr "Web Çalışanı Durumu"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:109
+msgid "Websocket"
+msgstr "Web yuvası"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:106
+msgid "Websocket Support?"
+msgstr "Websocket Desteği?"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:251./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
+msgid "Yes"
+msgstr "Evet"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
+msgid "Your browser as it identifies itself with our server and your IP address. This is essential information for the help desk."
+msgstr "Tarayıcınız, kendisini sunucumuz ve IP adresinizle tanımlar. Bu, yardım masası için gerekli bilgilerdir."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
@@ -7806,10 +7946,6 @@ msgstr "Yeni sonuç:"
 msgid "Next page in category"
 msgstr "Kategorideki sonraki sayfa"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
-msgid "No"
-msgstr "Hayır"
-
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:46
 msgid "Numeric input, show totals for this field in the survey results."
 msgstr "Sayısal girdi, anket sonuçlarındaki bu alan için toplamlarını gösterir."
@@ -8166,10 +8302,6 @@ msgstr "Gösteri bittiğinde"
 msgid "When no condition is true then the question following this break will be the next page."
 msgstr "Hiçbir koşul doğru olmadığı zaman sayfanın sonunu takip eden soru sonraki sayfada olacaktır."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
-msgid "Yes"
-msgstr "Evet"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
 msgid "Yes or no question"
 msgstr "evet mi hayır mı soru"
@@ -8514,7 +8646,7 @@ msgstr "Maalesef, çevirileri yeniden yüklemek için izniniz yok."
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Maalesef çeviriler için tarama izniniz yok."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:435
+#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:449
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Üzgünüz, varsayılan dili belirlemek gibi bir izniniz yok."
 
@@ -8542,7 +8674,7 @@ msgstr "Başlık, gövde ve diğer metinler farklı dillerde tercüme edilebilir
 msgid "Translate this page in other languages."
 msgstr "Bu sayfayı diğer dillere çevir."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:646
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:660
 msgid "Translation"
 msgstr "Çeviri"
 
