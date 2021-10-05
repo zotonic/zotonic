@@ -30,7 +30,7 @@
 -export([in_process_server/1, in_process/1, flush_process_dict/0]).
 
 
--include_lib("zotonic.hrl").
+-include("../../include/zotonic.hrl").
 
 
 %% @doc Start depcache instance based on site configuration

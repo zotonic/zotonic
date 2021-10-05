@@ -23,7 +23,7 @@
     error_msg/2
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
+-include("../../include/zotonic.hrl").
 
 %% @doc Fetch data from an URL. Let modules change the fetch options.
 -spec fetch( string() | binary(), z_url_fetch:options(), z:context() ) -> z_url_fetch:fetch_result().

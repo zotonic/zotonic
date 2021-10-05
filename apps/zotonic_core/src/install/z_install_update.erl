@@ -30,7 +30,6 @@
     handle_info/2, code_change/3,
     terminate/2]).
 
--include_lib("zotonic.hrl").
 
 -record(state, { site :: atom(), site_props :: list() }).
 
@@ -264,7 +263,8 @@ upgrade(C, Database, Schema) ->
 
 -spec upgrade_models( z:context() ) -> ok.
 upgrade_models(Context) ->
-    ok = m_rsc_gone:install(Context).
+    ok = m_rsc_gone:install(Context),
+    ok = m_rsc_import:install(Context).
 
 
 upgrade_config_schema(C, Database, Schema) ->
