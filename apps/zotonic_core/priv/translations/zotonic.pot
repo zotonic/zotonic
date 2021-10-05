@@ -4653,6 +4653,10 @@ msgstr ""
 msgid "Client IP address"
 msgstr ""
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:229./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:240
+msgid "Connected"
+msgstr ""
+
 #: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:3
 msgid "Connecting..."
 msgstr ""
@@ -4718,6 +4722,10 @@ msgstr ""
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:145./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
 msgid "No"
+msgstr ""
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:231./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:243
+msgid "Not connected"
 msgstr ""
 
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_alert.tpl:5./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:8./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:11

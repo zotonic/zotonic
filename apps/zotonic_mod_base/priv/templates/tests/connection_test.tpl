@@ -189,7 +189,7 @@ function update() {
     if (is_bridge_connected) {
       let startTime = new Date();
 
-      cotonic.broker.call("bridge/origin/model/site/get/site", { qos: 1 })
+      cotonic.broker.call("bridge/origin/model/site/get/site", { qos: 0 })
         .then(
           function(msg) {
               let latency = Date.now() - startTime;
@@ -226,9 +226,9 @@ cotonic.broker.subscribe("session/origin/status", function(msg) {
     let connected;
 
     if (msg.payload.is_connected) {
-      connected = "Connected";
+      connected = "{_ Connected _}";
     } else {
-      connected = "Not connected";
+      connected = "{_ Not connected _}";
     }
     document.getElementById("connect-status").innerText = connected;
 });
@@ -237,10 +237,10 @@ cotonic.broker.subscribe("$bridge/origin/status", function(msg) {
     let connected;
 
     if (msg.payload.is_connected) {
-      connected = "Connected";
+      connected = "{_ Connected _}";
       is_bridge_connected = true;
     } else {
-      connected = "Not connected";
+      connected = "{_ Not connected _}";
     }
     document.getElementById("bridge-status").innerText = connected;
 });
