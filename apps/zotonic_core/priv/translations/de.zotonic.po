@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-04 16:46\n"
+"PO-Revision-Date: 2021-10-05 08:18\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -4430,6 +4430,10 @@ msgstr "CSV"
 msgid "Client IP address"
 msgstr "Client-IP-Adresse"
 
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:229./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:240
+msgid "Connected"
+msgstr ""
+
 #: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:3
 msgid "Connecting..."
 msgstr "Anschließen ..."
@@ -4494,6 +4498,10 @@ msgstr "MQTT-Bridge-Verbindungsstatus"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
 msgid "No"
 msgstr "Nein"
+
+#: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:231./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:243
+msgid "Not connected"
+msgstr ""
 
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_alert.tpl:5./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:8./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:11
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72
