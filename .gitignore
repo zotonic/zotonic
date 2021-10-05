@@ -8,6 +8,7 @@ rebar3
 rebar_etag
 rebar3.crashdump
 compile_commands.json
+rebarconfig.json
 
 *~
 *#
@@ -61,5 +62,7 @@ _checkouts
 .DS_Store
 zotonic.tmproj
 .sass-cache
+
+.eunit
 
 docker-data

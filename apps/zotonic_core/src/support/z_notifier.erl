@@ -19,7 +19,6 @@
 %% limitations under the License.
 
 -module(z_notifier).
-
 -author("Marc Worrell <marc@worrell.nl>").
 
 %% interface functions
@@ -44,10 +43,7 @@
     await_exact/3
 ]).
 
--include_lib("zotonic.hrl").
-
-%% Timeout for gen_server:call for observers.
--define(TIMEOUT, 60000).
+-include("../../include/zotonic.hrl").
 
 %% Default priority for notifiers. Normal module priorities are 1..1000.
 -define(DEFAULT_PRIORITY, 500).

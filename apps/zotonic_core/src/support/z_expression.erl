@@ -11,9 +11,6 @@
     eval/3
 ]).
 
--include("zotonic.hrl").
-
-
 %% @doc Parse an expression to an expression tree.  Uses the template_compiler parser.
 parse(Expr) when is_binary(Expr) ->
     case template_compiler_scanner:scan(<<"{{", Expr/binary, "}}">>) of

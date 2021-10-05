@@ -33,8 +33,6 @@
     install_done/1
 ]).
 
--include_lib("zotonic.hrl").
-
 %% @spec start_link(Site) -> ServerRet
 %% @doc API for starting the site supervisor.
 -spec start_link(Site :: atom()) -> {ok, pid()} | {error, term()}.

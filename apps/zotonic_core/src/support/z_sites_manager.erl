@@ -62,9 +62,7 @@
     do_scan_sites/1
 ]).
 
--define(CONFIG_FILE, "zotonic_site.config").
-
--include_lib("zotonic.hrl").
+-include("../../include/zotonic.hrl").
 -include_lib("zotonic_filehandler/include/zotonic_filehandler.hrl").
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
 
@@ -87,7 +85,6 @@
     is_enabled = true,
     status = new :: site_status(),
     pid = undefined :: undefined | pid(),
-    mref = undefined :: undefined | reference(),
     start_time = undefined :: undefined | erlang:timestam(),
     stop_time = undefined :: undefined | erlang:timestamp(),
     stop_count = 0 :: integer(),
