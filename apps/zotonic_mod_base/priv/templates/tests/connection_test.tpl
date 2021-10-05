@@ -152,7 +152,7 @@
 
 var update_interval = setInterval(update, 1000);
 
-var site_pinger = new http_ping("/close-connection", 2000);
+var site_pinger = new http_ping("{% url zotonic_ping %}", 2000);
 var google_pinger = new http_ping("//www.google.com/gen_204", 2000);
 
 var pong_count = 0;

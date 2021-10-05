@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-05-13
-%% @doc Simple resource that closes the connection, used when uploading forms with Ajax in Safari browsers.
+%% @copyright 2021 Marc Worrell
+%% @doc Simple controller that just responds with 'pong'. Used for connection tests.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -17,15 +16,18 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(controller_close_connection).
+-module(controller_ping).
 -author("Marc Worrell <marc@worrell.nl").
 
 -export([
+    content_types_provided/1,
     process/4
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
 
-process(<<"GET">>, _, _, Context) ->
-    Context1 = z_context:set_resp_header(<<"connection">>, <<"close">>, Context),
-    {<<>>, Context1}.
+content_types_provided(Context) ->
+    {[ {<<"text">>, <<"plain">>, []} ], Context}.
+
+process(_, _, _, Context) ->
+    Context1 = z_context:set_nocache_headers(Context),
+    {<<"pong">>, Context1}.

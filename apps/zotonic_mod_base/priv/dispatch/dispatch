@@ -1,9 +1,6 @@
 %% -*- mode: erlang -*-
 %% Base dispatch rules for zotonic
 [
-    %% Used in Ajax file upload, fixes a problem in Safari.  Just closes the connection.
-    {close_connection, ["close-connection"],  controller_close_connection, []},
-
     %% The id controller redirects depending on the accept header sent by the user agent.
     {id, ["id", id], controller_id, []},
 
@@ -35,5 +32,8 @@
     {jslog, ["log-client-event"], controller_nocontent, []},
 
     %% robots.txt - simple allow all file
-    {robots_txt, ["robots.txt"], controller_file, [ {path, "misc/robots.txt"}, {root,[lib]}, {content_disposition, inline} ]}
+    {robots_txt, ["robots.txt"], controller_file, [ {path, "misc/robots.txt"}, {root,[lib]}, {content_disposition, inline} ]},
+
+    %% Ping/pong
+    {zotonic_ping, [".zotonic", "ping"], controller_ping, []}
 ].
