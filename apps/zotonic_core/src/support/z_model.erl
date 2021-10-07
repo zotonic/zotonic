@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2018 Marc Worrell
+%% @copyright 2018-2021 Marc Worrell
 %%
 %% @doc Call models, direct or via MQTT
 
-%% Copyright 2018 Marc Worrell
+%% Copyright 2018-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -66,20 +66,39 @@ payload_msg(Payload) ->
         payload => Payload
     }.
 
-%% @doc Called by the compiled templates for a model lookup.
+%% @doc Called by the compiled templates for a model lookup. Any map in the path is taken as the
+%% model payload, and passed in the msg part of the model m_get call.
 -spec template_get( path(), model_name(), z:context() ) -> {ok, {term(), path()}} | {error, term()}.
 template_get( Path, Model, Context ) ->
+    case lists:any(fun erlang:is_map/1, Path) of
+        true ->
+            {PathStart, [ Payload | PathEnd ]} = lists:splitwith(fun erlang:is_map/1, Path),
+            Msg = #{
+                payload => Payload
+            },
+            case template_get_1(PathStart, Model, Msg, Context) of
+                {ok, {Result, Rest}} ->
+                    {ok, {Result, Rest ++ PathEnd}};
+                {error, _} = Error ->
+                    Error
+            end;
+        false ->
+            template_get_1(Path, Model, undefined, Context)
+    end.
+
+template_get_1(Path, Model, Msg, Context) ->
     case get_module(Model, Context) of
         {ok, Mod} ->
-            model_call(Mod, m_get, Path, undefined, Context);
+            model_call(Mod, m_get, Path, Msg, Context);
         {error, _} ->
-            case publish(Model, get, Path, undefined, Context) of
+            case publish(Model, get, Path, Msg, Context) of
                 {ok, Payload} ->
                     {ok, {Payload, []}};
                 {error, _} = Error ->
                     Error
             end
     end.
+
 
 -spec call( model_name(), verb(), path(), opt_message(), z:context() ) -> {ok, term()} | {error, term()}.
 call(Model, Verb, Path, Msg, Context) ->
