@@ -1,9 +1,9 @@
 %% @author Marc Worrell
-%% @copyright 2014-2019 Marc Worrell
+%% @copyright 2014-2021 Marc Worrell
 %%
 %% @doc Helper functions commonly used in controllers.
 
-%% Copyright 2014-2019 Marc Worrell
+%% Copyright 2014-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 %% limitations under the License.
 
 -module(z_controller_helper).
--include("zotonic.hrl").
 
 -export([
     is_authorized/1,
@@ -143,7 +142,11 @@ decode_request({<<"application">>, <<"x-www-form-urlencoded">>, _}, Context) ->
 decode_request({<<"multipart">>, <<"form-data">>, _}, Context) ->
     from_qs(Context);
 decode_request(_CT, Context) ->
-    req_body(Context).
+    case cowmachine_req:method(Context) of
+        <<"GET">> -> from_qs(Context);
+        <<"DELETE">> -> from_qs(Context);
+        _ -> req_body(Context)
+    end.
 
 %% @doc Decode the incoming body
 from_json(Context) ->
@@ -161,7 +164,7 @@ from_qs(Context) ->
 -spec req_body( z:context() ) -> {binary(), z:context()}.
 req_body(Context) ->
     case cowmachine_req:req_body(?MAX_BODY_LENGTH, Context) of
-        {undefined, Context1} -> {<<>>, Context1};
+        {undefined, Context1} -> from_qs(Context1);
         {Body, Context1} -> {Body, Context1}
     end.
 
@@ -194,8 +197,4 @@ encode_prep_qs(List) when is_list(List) ->
             (K) when is_binary(K) -> {K, true}
         end,
         List).
-
-%%
-%% Helpers
-%%
 
