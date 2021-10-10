@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-08 23:10\n"
+"PO-Revision-Date: 2021-10-10 21:56\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1250,11 +1250,11 @@ msgstr "Содержимое файла / материала"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:47
 msgid "Filter on category"
-msgstr "Фильтр категорий"
+msgstr "Фильтр по категориям"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:33./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:30
 msgid "Filter on content group"
-msgstr "Фильтр по группе содержания"
+msgstr "Фильтр по группе контента"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:73
 msgid "Find Media"
