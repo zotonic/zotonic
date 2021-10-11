@@ -1,4 +1,4 @@
-{% if m.zotonic_status_vcs.vcs_zotonic %}
+{% if m.site_update.vcs_zotonic %}
     <a id="vcs" href="#" class="list-group-item">
         <h4 class="list-group-item-heading">{_ Update Zotonic _}</h4>
         <p class="list-group-item-text text-muted">
