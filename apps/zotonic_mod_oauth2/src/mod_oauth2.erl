@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Marc Worrell
+%% @copyright 2019-2021 Marc Worrell
 %% @doc OAuth2 (https://tools.ietf.org/html/draft-ietf-oauth-v2-26)
 
-%% Copyright 2019 Marc Worrell
+%% Copyright 2019-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,15 +22,113 @@
 -mod_title("OAuth2").
 -mod_description("Provides authentication over OAuth2.").
 -mod_prio(900).
--mod_schema(1).
+-mod_schema(3).
 -mod_depends([ authentication ]).
 
 -export([
+    event/2,
     observe_request_context/3,
+    observe_admin_menu/3,
     manage_schema/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("zotonic_mod_admin/include/admin_menu.hrl").
+
+
+event(#submit{ message={oauth2_app_insert, []} }, Context) ->
+    App = #{
+        <<"user_id">> => z_acl:user(Context),
+        <<"description">> => z_string:trim(z_context:get_q_validated(<<"description">>, Context)),
+        <<"is_enabled">> => z_convert:to_bool(z_context:get_q(<<"is_enabled">>, Context))
+    },
+    case m_oauth2:insert_app(App, Context) of
+        {ok, _AppId} ->
+            z_render:wire({redirect, [ {dispatch, admin_oauth2_apps} ]}, Context);
+        {error, _} ->
+            z_render:growl_error(?__("Could not insert the App.", Context), Context)
+    end;
+event(#submit{ message={oauth2_app_update, [ {app_id, AppId} ]} }, Context) ->
+    App = #{
+        <<"description">> => z_string:trim(z_context:get_q_validated(<<"description">>, Context)),
+        <<"is_enabled">> => z_convert:to_bool(z_context:get_q(<<"is_enabled">>, Context))
+    },
+    case m_oauth2:update_app(AppId, App, Context) of
+        ok ->
+            z_render:wire({redirect, [ {dispatch, admin_oauth2_apps} ]}, Context);
+        {error, _} ->
+            z_render:growl_error(?__("Could not insert the App.", Context), Context)
+    end;
+event(#postback{ message={oauth2_app_delete, [ {app_id, AppId} ]} }, Context) ->
+    case m_oauth2:delete_app(AppId, Context) of
+        ok ->
+            z_render:wire({redirect, [ {dispatch, admin_oauth2_apps} ]}, Context);
+        {error, _} ->
+            z_render:growl_error(?__("Could not insert the App.", Context), Context)
+    end;
+event(#postback{ message={oauth2_app_token_generate, [ {app_id, AppId} ]} }, Context) ->
+    TPs = #{
+        <<"is_read_only">> => false,
+        <<"is_full_access">> => true,
+        <<"note">> => ?__("Generated using the admin interface", Context)
+    },
+    case m_oauth2:insert_token(AppId, z_acl:user(Context), TPs, Context) of
+        {ok, TId} ->
+            {ok, Token} = m_oauth2:encode_bearer_token(TId, undefined, Context),
+            z_render:dialog(
+                ?__("New access token", Context),
+                "_dialog_oauth2_app_token.tpl",
+                [
+                    {app_id, AppId},
+                    {token, Token}
+                ],
+                Context);
+        {error, _} ->
+            z_render:growl_error(?__("Could not generate the access token.", Context), Context)
+    end;
+event(#submit{ message={oauth2_consumer_insert, []} }, Context) ->
+    Consumer = #{
+        <<"user_id">> => z_acl:user(Context),
+        <<"description">> => z_string:trim(z_context:get_q_validated(<<"description">>, Context)),
+        <<"domain">> => z_string:to_lower(z_string:trim(z_context:get_q_validated(<<"domain">>, Context))),
+        <<"app_code">> => z_string:trim(z_context:get_q_validated(<<"app_code">>, Context)),
+        <<"app_secret">> => z_string:trim(z_context:get_q_validated(<<"app_secret">>, Context)),
+        <<"is_use_auth">> => z_convert:to_bool(z_context:get_q(<<"is_use_auth">>, Context)),
+        <<"is_use_import">> => z_convert:to_bool(z_context:get_q(<<"is_use_import">>, Context)),
+        <<"authorize_url">> => z_string:trim(z_context:get_q(<<"authorize_url">>, Context)),
+        <<"redirect_url">> => z_string:trim(z_context:get_q(<<"redirect_url">>, Context))
+    },
+    case m_oauth2_consumer:insert_consumer(Consumer, Context) of
+        {ok, _AppId} ->
+            z_render:wire({redirect, [ {dispatch, admin_oauth2_consumers} ]}, Context);
+        {error, _} ->
+            z_render:growl_error(?__("Could not insert the Consumer.", Context), Context)
+    end;
+event(#submit{ message={oauth2_consumer_update, [ {app_id, AppId} ]} }, Context) ->
+    Consumer = #{
+        <<"description">> => z_string:trim(z_context:get_q_validated(<<"description">>, Context)),
+        <<"domain">> => z_string:to_lower(z_string:trim(z_context:get_q_validated(<<"domain">>, Context))),
+        <<"app_code">> => z_string:trim(z_context:get_q_validated(<<"app_code">>, Context)),
+        <<"app_secret">> => z_string:trim(z_context:get_q_validated(<<"app_secret">>, Context)),
+        <<"is_use_auth">> => z_convert:to_bool(z_context:get_q(<<"is_use_auth">>, Context)),
+        <<"is_use_import">> => z_convert:to_bool(z_context:get_q(<<"is_use_import">>, Context)),
+        <<"authorize_url">> => z_string:trim(z_context:get_q(<<"authorize_url">>, Context)),
+        <<"redirect_url">> => z_string:trim(z_context:get_q(<<"redirect_url">>, Context))
+    },
+    case m_oauth2_consumer:update_consumer(AppId, Consumer, Context) of
+        ok ->
+            z_render:wire({redirect, [ {dispatch, admin_oauth2_consumers} ]}, Context);
+        {error, _} ->
+            z_render:growl_error(?__("Could not update the Consumer.", Context), Context)
+    end;
+event(#postback{ message={oauth2_consumer_delete, [ {app_id, AppId} ]} }, Context) ->
+    case m_oauth2_consumer:delete_consumer(AppId, Context) of
+        ok ->
+            z_render:wire({redirect, [ {dispatch, admin_oauth2_consumers} ]}, Context);
+        {error, _} ->
+            z_render:growl_error(?__("Could not insert the Consumer.", Context), Context)
+    end.
+
 
 
 %% @doc Check if there is a valid Authorization header or 'access_token' argument.
@@ -49,6 +147,19 @@ observe_request_context(#request_context{ phase = init }, Context, _Context) ->
     end;
 observe_request_context(#request_context{ phase = _Phase }, Context, _Context) ->
     Context.
+
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
+    [
+     #menu_item{id=admin_oauth2_apps,
+                parent=admin_auth,
+                label=?__("OAuth2 Applications", Context),
+                url={admin_oauth2_apps, []},
+                visiblecheck={acl, use, mod_admin_config}},
+     #menu_item{id=admin_oauth2_consumers,
+                parent=admin_auth,
+                label=?__("OAuth2 Consumer Tokens", Context),
+                url={admin_oauth2_consumers, []}}
+    | Acc ].
 
 try_auth(Context) ->
     case cowmachine_req:get_req_header(<<"authorization">>, Context) of
@@ -126,4 +237,6 @@ try_token(TokenId, TokenSecret, Context) ->
 
 -spec manage_schema( z_module_manager:manage_schema(), z:context() ) -> ok.
 manage_schema(Version, Context) ->
-    m_oauth2:manage_schema(Version, Context).
+    m_oauth2:manage_schema(Version, Context),
+    m_oauth2_consumer:manage_schema(Version, Context).
+

@@ -1,5 +1,14 @@
 [
     {oauth2_service_redirect, [ "oauth-service", "redirect" ],
                               controller_oauth2_service_redirect,
-                              []}
+                              []},
+
+    {admin_oauth2_apps, [ "admin", "oauth", "apps" ],
+                        controller_admin,
+                        [ {template, "admin_oauth2_apps.tpl"} ]},
+
+    {admin_oauth2_consumers, [ "admin", "oauth", "consumers" ],
+                        controller_admin,
+                        [ {template, "admin_oauth2_consumers.tpl"} ]}
+
 ].

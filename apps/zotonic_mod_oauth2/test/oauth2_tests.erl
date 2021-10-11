@@ -10,6 +10,12 @@ oauth2_request_test() ->
     ok = z_module_manager:activate_await(mod_oauth2, Context),
     ok = z_module_manager:upgrade_await(Context),
 
+    App = #{
+        <<"is_enabled">> => true,
+        <<"description">> => <<"TestApp">>
+    },
+    {ok, AppId} = m_oauth2:insert_app(App, Context),
+
     % Make a new OAuth2 token with full access to the admin (user 1) account
     TPs = #{
         <<"is_read_only">> => false,
@@ -17,14 +23,14 @@ oauth2_request_test() ->
     },
 
     % Should have permission to make a token for user 1
-    {error, eacces} = m_oauth2:insert(1, TPs, Context),
+    {error, eacces} = m_oauth2:insert_token(AppId, 1, TPs, Context),
 
-    {ok, TId_1} = m_oauth2:insert(1, TPs, SudoContext),
+    {ok, TId_1} = m_oauth2:insert_token(AppId, 1, TPs, SudoContext),
     {ok, Token_1} = m_oauth2:encode_bearer_token(TId_1, 60, SudoContext),
-    {ok, {TId_1, _TSecret_1}} = m_oauth2:decode_bearer_token(Token_1, Context),
+    {ok, TId_1} = m_oauth2:decode_bearer_token(Token_1, Context),
 
     {ok, Token_1a} = m_oauth2:encode_bearer_token(TId_1, undefined, SudoContext),
-    {ok, {TId_1, _TSecret_1a}} = m_oauth2:decode_bearer_token(Token_1a, Context),
+    {ok, TId_1} = m_oauth2:decode_bearer_token(Token_1a, Context),
 
     % Tokens can expire
     {ok, Token_1t} = m_oauth2:encode_bearer_token(TId_1, -1, SudoContext),
