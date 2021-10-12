@@ -14,7 +14,7 @@ oauth2_request_test() ->
         <<"is_enabled">> => true,
         <<"description">> => <<"TestApp">>
     },
-    {ok, AppId} = m_oauth2:insert_app(App, Context),
+    {ok, AppId} = m_oauth2:insert_app(App, z_acl:sudo(Context)),
 
     % Make a new OAuth2 token with full access to the admin (user 1) account
     TPs = #{
