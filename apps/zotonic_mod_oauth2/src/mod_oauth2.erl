@@ -217,6 +217,7 @@ observe_request_context(#request_context{ phase = _Phase }, Context, _Context) -
 %% @doc Check if the current user has a token for the given host. If so then
 %% add it to the headers for the fetch request.
 observe_url_fetch_options(#url_fetch_options{
+                    url = <<"https:", _/binary>>,
                     host = Host,
                     options = Options
                 }, Context) ->
@@ -233,7 +234,10 @@ observe_url_fetch_options(#url_fetch_options{
             end;
         _ ->
             undefined
-    end.
+    end;
+observe_url_fetch_options(_, _Context) ->
+    undefined.
+
 
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
