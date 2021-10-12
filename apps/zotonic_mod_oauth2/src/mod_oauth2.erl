@@ -213,8 +213,29 @@ observe_request_context(#request_context{ phase = init }, Context, _Context) ->
 observe_request_context(#request_context{ phase = _Phase }, Context, _Context) ->
     Context.
 
+%% @doc Check if the current user has a token for the given host. If so then
+%% add it to the headers for the fetch request.
+observe_url_fetch_options(#url_fetch_options{
+                    host = Host,
+                    options = Options
+                }, Context) ->
+    case z_acl:user(Context) of
+        UserId when is_integer(UserId) ->
+            case m_oauth2_consumer:find_token(UserId, Host, Context) of
+                {ok, AccessToken} ->
+                    [
+                        {authorization, <<"Bearer ", AccessToken/binary>>}
+                        | Options
+                    ];
+                {error, _} ->
+                    undefined
+            end;
+        _ ->
+            undefined
+    end.
+
+
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
-    [
      #menu_item{id=admin_oauth2_apps,
                 parent=admin_auth,
                 label=?__("OAuth2 Applications", Context),

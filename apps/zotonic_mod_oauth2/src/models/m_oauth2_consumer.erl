@@ -30,6 +30,8 @@
 
     get_consumer_oauth_service/2,
 
+    find_token/3,
+
     manage_schema/2
 ]).
 
@@ -171,6 +173,31 @@ update_consumer(ConsumerId, Map, Context) ->
             end;
         false ->
             {error, eacces}
+    end.
+
+%% @doc Find an access token for the given user / host combination.
+-spec find_token( UserId :: m_rsc:resource_id(), Host :: binary(), z:context() ) ->
+    {ok, binary()} | {error, term()}.
+find_token(UserId, Host, Context) ->
+    case z_db:q1("
+        select idn.propb
+        from identity idn,
+             oauth2_consumer_app app
+        where idn.rsc_id = $1
+          and app.domain = $2
+          and app.is_use_import
+          and app.name = spit_part(idn.key, ':', 1)
+        limit 1
+        ",
+        [ UserId, Host ],
+        Context)
+    of
+        #{
+            <<"access_token">> := AccesToken
+        } ->
+            {ok, AccesToken};
+        _ ->
+            {error, enoent}
     end.
 
 
