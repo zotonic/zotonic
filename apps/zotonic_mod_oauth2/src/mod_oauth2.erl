@@ -28,6 +28,7 @@
 -export([
     event/2,
     observe_request_context/3,
+    observe_url_fetch_options/2,
     observe_admin_menu/3,
     manage_schema/2
 ]).
@@ -236,6 +237,7 @@ observe_url_fetch_options(#url_fetch_options{
 
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
+     [
      #menu_item{id=admin_oauth2_apps,
                 parent=admin_auth,
                 label=?__("OAuth2 Applications", Context),

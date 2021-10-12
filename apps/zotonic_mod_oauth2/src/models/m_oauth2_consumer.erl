@@ -186,7 +186,7 @@ find_token(UserId, Host, Context) ->
         where idn.rsc_id = $1
           and app.domain = $2
           and app.is_use_import
-          and app.name = spit_part(idn.key, ':', 1)
+          and app.name = split_part(idn.key, ':', 1)
         limit 1
         ",
         [ UserId, Host ],
