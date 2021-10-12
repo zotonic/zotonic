@@ -10,7 +10,19 @@
 
     <div class="form-group">
         <div class="label-floating">
-            <input id="{{ #description }}" type="text" value="" class="form-control" name="description" required autofocus placeholder="{_ Description _}">
+            <input id="{{ #name }}" type="text" value="{{ app.name|escape }}" class="form-control" name="name" required autofocus placeholder="{_ Name _}" maxlength="128">
+            <label class="control-label" for="name">{_ Name _}</label>
+            {% validate id=#name name="name"
+                        type={presence}
+                        type={format pattern="^[-_a-zA-Z0-9]+$"}
+            %}
+            <p class="help-block">{_ This must be an unique name to identify the remote service. This can not be changed. Only a-z and 0-9 are allowed. _}</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="label-floating">
+            <input id="{{ #description }}" type="text" value="" class="form-control" name="description" required placeholder="{_ Description _}">
             <label class="control-label" for="description">{_ Description _}</label>
             {% validate id=#description name="description" type={presence} %}
         </div>
@@ -20,7 +32,10 @@
         <div class="label-floating">
             <input id="{{ #domain }}" type="text" value="" class="form-control" name="domain" required placeholder="{_ Domain (eg. www.example.com) _}">
             <label class="control-label" for="domain">{_ Domain (eg. www.example.com) _}</label>
-            {% validate id=#domain name="domain" type={presence} %}
+            {% validate id=#domain name="domain"
+                        type={presence}
+                        type={format pattern="^[-a-z0-9]+(\\.[-a-z0-9]+)+(:[0-9]+)?$"}
+            %}
         </div>
     </div>
 
@@ -67,8 +82,8 @@
 
     <div class="form-group">
         <div class="label-floating">
-            <input id="{{ #redirect_url }}" type="text" value="" class="form-control" name="redirect_url" placeholder="{_ Redirect URL _}">
-            <label class="control-label" for="redirect_url">{_ Redirect URL _}</label>
+            <input id="{{ #access_token_url }}" type="text" value="" class="form-control" name="access_token_url" placeholder="{_ Access Token URL _}">
+            <label class="control-label" for="access_token_url">{_ Access Token URL _}</label>
         </div>
     </div>
 

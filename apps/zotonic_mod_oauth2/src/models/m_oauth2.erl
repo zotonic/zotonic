@@ -24,6 +24,11 @@
 -export([
     m_get/3,
 
+    client/3,
+
+    encode_accept_code/4,
+    exchange_accept_code/5,
+
     list_apps/1,
     get_app/2,
     insert_app/2,
@@ -44,17 +49,28 @@
     get_token_access/2,
     oauth_key/1,
 
+    is_equal/2,
+
     manage_schema/2
 ]).
 
 -define(TOKEN_PREFIX, "oauth2-").
 -define(APP_KEYLEN, 24).
+-define(ACCEPT_CODE_TTL, 12000).
+-define(BEARER_TOKEN_TTL, undefined).
 
 
+m_get([ <<"client">>, ClientId, RedirectURL | Rest ], _Msg, Context) ->
+    case client(ClientId, RedirectURL, Context) of
+        {ok, App} ->
+            {ok, {App, Rest}};
+        {error, _} = Error ->
+            Error
+    end;
 m_get([ <<"apps">> ], _Msg, Context) ->
     case list_apps(Context) of
         {ok, Apps} ->
-            {ok, {Apps, Rest}};
+            {ok, {Apps, []}};
         {error, _} = Error ->
             Error
     end;
@@ -88,7 +104,162 @@ m_get(Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
-%% @doc Insert a new App. The map can contain the user_id, is_enabled flaf
+
+%% @doc Fetch the basic client details to show during OAuth authorization. The passed
+%% redirect URL must have an exact match with the registered redirect URLs.
+-spec client( ClientId :: binary(), RedirectURL :: binary(), z:context() ) ->
+    {ok, map()} | {error, term()}.
+client(ClientId, RedirectURL, Context) ->
+    case z_utils:only_digits(ClientId) of
+        true ->
+            AppId = binary_to_integer(ClientId),
+            case z_db:qmap_row("
+                select id, redirect_urls, description
+                from oauth2_app
+                where id = $1
+                  and is_enabled
+                ",
+                [ AppId ],
+                Context)
+            of
+                {ok, #{ <<"redirect_urls">> := Allowed } = App} ->
+                    case is_allowed_redirect_uri(RedirectURL, Allowed) of
+                        true ->
+                            {ok, maps:without([ <<"redirect_urls">> ], App)};
+                        false ->
+                            {error, enoent}
+                    end;
+                {error, _} = Error ->
+                    Error
+            end;
+        false ->
+            {error, enoent}
+    end.
+
+is_allowed_redirect_uri(RedirectURL, Allowed) ->
+    [ URL1 | _ ] = binary:split(RedirectURL, [ <<"?">>, <<"#">> ]),
+    AllowedUrls = binary:split(Allowed, [ <<10>>, <<13>> ], [ global, trim_all ]),
+    lists:member(URL1, AllowedUrls).
+
+
+%% @doc Encode a 'code' for the authorization accepted redirect back to the requesting
+%% party. This code will be decoded when the requesting party requests their access token.
+%% The code validity must be limited to a very short period (seconds) as it will be
+%% handled by the calling party.
+-spec encode_accept_code( ClientId :: integer(), RedirectURL :: binary(), Scope :: binary(), z:context()) ->
+    {ok, Code :: binary()} | {error, term()}.
+encode_accept_code(ClientId, RedirectURL, Scope, Context) ->
+    case z_db:qmap_row("
+        select id, redirect_urls, app_sign_secret
+        from oauth2_app
+        where id = $1
+          and is_enabled
+        ",
+        [ ClientId ],
+        Context)
+    of
+        {ok, #{
+                <<"redirect_urls">> := Allowed,
+                <<"app_sign_secret">> := AppSignSecret
+            }} ->
+            case is_allowed_redirect_uri(RedirectURL, Allowed) of
+                true ->
+                    SystemKey = oauth_key(Context),
+                    Salt = z_ids:id(8),
+                    SignKey = <<
+                        Salt/binary, $:,
+                        AppSignSecret/binary, $:,
+                        SystemKey/binary
+                        >>,
+                    Term = #{
+                        client_id => ClientId,
+                        user_id => z_acl:user(Context),
+                        redirect_uri => RedirectURL,
+                        scope => Scope
+                    },
+                    Encoded = issue_token(Term, SignKey, ?ACCEPT_CODE_TTL),
+                    {ok, <<Salt/binary, $-, Encoded/binary>>};
+                false ->
+                    {error, redirect_uri}
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
+
+
+%% @doc Exchange an authorization 'code' for for an access token. Called by the endpoint
+%% that exchanges the code for an access token to the user's account.
+-spec exchange_accept_code(
+        ClientId :: binary(),
+        ClientSecret :: binary(),
+        RedirectURL :: binary(),
+        Code :: binary(),
+        z:context()) ->
+    {ok, {Code :: binary(), UserId :: m_rsc:resource_id()}} | {error, term()}.
+exchange_accept_code(ClientIdBin, ClientSecret, RedirectURL, Code, Context) ->
+    ClientId = try
+        binary_to_integer(ClientIdBin)
+    catch
+        error:badarg -> 0
+    end,
+    case binary:split(Code, <<"-">>) of
+        [ Salt, Encoded ] ->
+            case z_db:qmap_row("
+                select id, redirect_urls, app_sign_secret, app_secret
+                from oauth2_app
+                where id = $1
+                  and is_enabled
+                ",
+                [ ClientId ],
+                Context)
+            of
+                {ok, #{
+                        <<"redirect_urls">> := _Allowed,
+                        <<"app_sign_secret">> := AppSignSecret,
+                        <<"app_secret">> := AppSecret
+                    }} ->
+                    case is_equal(ClientSecret, AppSecret) of
+                        true ->
+                            SystemKey = oauth_key(Context),
+                            SignKey = <<
+                                Salt/binary, $:,
+                                AppSignSecret/binary, $:,
+                                SystemKey/binary
+                                >>,
+                            case termit:verify_token(Encoded, SignKey) of
+                                {ok, #{
+                                        client_id := ReqClientId,
+                                        user_id := UserId,
+                                        redirect_uri := ReqRedirectURL,
+                                        scope := _Scope
+                                    }} when RedirectURL =:= ReqRedirectURL,
+                                            ClientId =:= ReqClientId ->
+                                    ContextSudo = z_acl:sudo(Context),
+                                    {ok, TokenId} = insert_token(ClientId, UserId, #{}, ContextSudo),
+                                    case encode_bearer_token(TokenId, ?BEARER_TOKEN_TTL, ContextSudo) of
+                                        {ok, Token} ->
+                                            {ok, {Token, UserId}};
+                                        {error, _} = Error ->
+                                            Error
+                                    end;
+                                {ok, _} ->
+                                    {error, mismatch};
+                                {error, _Reason} = Error ->
+                                    Error
+                            end;
+                        false ->
+                            {error, secret}
+                    end;
+                {error, _} = Error ->
+                    Error
+            end;
+        [_] ->
+            {error, code}
+    end.
+
+
+%% @doc Insert a new App. The map can contain the user_id, is_enabled flag
 %% and the App description.
 -spec insert_app( AppDetails :: map(), z:context() ) -> {ok, AppId :: integer()} | {error, term()}.
 insert_app(Map, Context) ->
@@ -98,6 +269,7 @@ insert_app(Map, Context) ->
                 <<"user_id">> => maps:get(<<"user_id">>, Map, z_acl:user(Context)),
                 <<"is_enabled">> => maps:get(<<"is_enabled">>, Map, true),
                 <<"description">> => maps:get(<<"description">>, Map, <<"Untitled">>),
+                <<"redirect_urls">> => maps:get(<<"redirect_urls">>, Map, <<>>),
                 <<"app_secret">> => z_ids:id(?APP_KEYLEN),
                 <<"app_sign_secret">> => z_ids:id(?APP_KEYLEN)
             },
@@ -128,6 +300,7 @@ update_app(AppId, Map, Context) ->
             App = #{
                 <<"is_enabled">> => maps:get(<<"is_enabled">>, Map, true),
                 <<"description">> => maps:get(<<"description">>, Map, <<"Untitled">>),
+                <<"redirect_urls">> => maps:get(<<"redirect_urls">>, Map, <<>>),
                 <<"modified">> => calendar:universal_time()
             },
             case z_db:update(oauth2_app, AppId, App, Context) of
@@ -187,7 +360,7 @@ get_app(AppId, Context) ->
         true ->
             z_db:qmap_row("
                 select a.id, a.is_enabled, a.user_id, a.app_secret,
-                       a.description, a.created, a.modified,
+                       a.description, a.redirect_urls, a.created, a.modified,
                        (select count(*) from oauth2_token t where a.id = t.app_id) as token_count
                 from oauth2_app a
                 where a.id = $1",
@@ -497,6 +670,19 @@ oauth_key(Context) ->
             SignKey
     end.
 
+
+% Constant time comparison.
+-spec is_equal(Extern :: binary(), Secret :: binary() ) -> boolean().
+is_equal(A, B) -> is_equal(A, B, true).
+
+is_equal(<<>>, <<>>, Eq) -> Eq;
+is_equal(<<>>, _B, _Eq) -> false;
+is_equal(<<_, A/binary>>, <<>>, _Eq) -> is_equal(A, <<>>, false);
+is_equal(<<C, A/binary>>, <<C, B/binary>>, Eq) -> is_equal(A, B, Eq);
+is_equal(<<_, A/binary>>, <<_, B/binary>>, _Eq) -> is_equal(A, B, false).
+
+
+
 -spec manage_schema( z_module_manager:manage_schema(), z:context() ) -> ok.
 manage_schema(_Version,  Context) ->
     % All tokens and their signature secret
@@ -569,27 +755,6 @@ manage_schema(_Version,  Context) ->
             ok = install_oauth2_app(Context)
     end.
 
-install_oauth2_app_table(Context) ->
-    [] = z_db:q("
-        CREATE TABLE oauth2_app (
-            id serial not null,
-            is_enabled boolean not null default true,
-            user_id int not null,
-            app_secret varchar(32),
-            app_sign_secret varchar(32),
-            description varchar(255),
-            created timestamp with time zone not null default now(),
-            modified timestamp with time zone not null default now(),
-
-            primary key (id),
-
-            constraint fk_oauth2_app_user_id foreign key (user_id)
-                references rsc(id)
-                on update cascade
-                on delete cascade
-        )",
-        Context).
-
 install_oauth2_app(Context) ->
     case z_db:table_exists(oauth2_app, Context) of
         false ->
@@ -610,5 +775,35 @@ install_oauth2_app(Context) ->
             z_db:q("drop table if exists oauth2_token_log cascade", Context),
             z_db:flush(Context);
         true ->
+            case z_db:column_exists(oauth2_app, redirect_urls, Context) of
+                true ->
+                    ok;
+                false ->
+                    [] = z_db:q("alter table oauth2_app add column redirect_urls text not null default ''", Context),
+                    z_db:flush(Context)
+            end,
             ok
     end.
+
+
+install_oauth2_app_table(Context) ->
+    [] = z_db:q("
+        CREATE TABLE oauth2_app (
+            id serial not null,
+            is_enabled boolean not null default true,
+            user_id int not null,
+            app_secret varchar(32),
+            app_sign_secret varchar(32),
+            description varchar(255),
+            redirect_urls text not null default '',
+            created timestamp with time zone not null default now(),
+            modified timestamp with time zone not null default now(),
+
+            primary key (id),
+
+            constraint fk_oauth2_app_user_id foreign key (user_id)
+                references rsc(id)
+                on update cascade
+                on delete cascade
+        )",
+        Context).

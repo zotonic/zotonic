@@ -24,6 +24,19 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <div class="label-floating">
+                <textarea id="{{ #redirect_urls }}" class="form-control" name="redirect_urls" required placeholder="{_ Valid redirect URLs, one per line _}">{{ app.redirect_urls|escape }}</textarea>
+                <label class="control-label" for="redirect_urls">{_ Valid redirect URLs, one per line _}</label>
+                {% validate id=#redirect_urls name="redirect_urls" type={presence} %}
+                <p class="help-block">
+                    {_ Give the redirect URLs that are valid for the website performing the OAuth2 authorization. _}
+                    {_ These must be complete URLs, but without the query (?..) or hash (#...) parts. _}<br>
+                    {_ For Zotonic sites, this URL looks like: _} <tt>https://example.com/oauth-service/redirect</tt>
+                </p>
+            </div>
+        </div>
+
         <div class="well">
             <div class="row">
                 <div class="col-sm-6">

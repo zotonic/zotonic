@@ -45,6 +45,7 @@
     <table class="table table-striped do_adminLinkedTable">
         <thead>
             <tr>
+                <th>{_ Name _}</th>
                 <th>{_ Domain _}</th>
                 <th width="25%">{_ Description _}</th>
                 <th>{_ Auth _}</th>
@@ -59,6 +60,7 @@
             {% for app in m.oauth2_consumer.consumers %}
                 {% with app.id as id %}
                     <tr id="{{ #app.id }}" class="clickable">
+                        <td>{{ app.name|escape }}</td>
                         <td>{{ app.domain|escape }}</td>
                         <td>{{ app.description|escape }}</td>
                         <td>{% if app.is_use_auth %}√{% else %}-{% endif %}</td>

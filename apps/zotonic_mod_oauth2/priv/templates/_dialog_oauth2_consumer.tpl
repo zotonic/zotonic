@@ -11,7 +11,7 @@
 
         <div class="form-group">
             <div class="label-floating">
-                <input id="{{ #description }}" type="text" value="{{ app.description|escape }}" class="form-control" name="description" required autofocus placeholder="{_ Description _}">
+                <input id="{{ #description }}" type="text" value="{{ app.description|escape }}" class="form-control" name="description" required placeholder="{_ Description _}">
                 <label class="control-label" for="description">{_ Description _}</label>
                 {% validate id=#description name="description" type={presence} %}
             </div>
@@ -21,7 +21,10 @@
             <div class="label-floating">
                 <input id="{{ #domain }}" type="text" value="{{ app.domain|escape }}" class="form-control" name="domain" required placeholder="{_ Domain (eg. www.example.com) _}">
                 <label class="control-label" for="domain">{_ Domain (eg. www.example.com) _}</label>
-                {% validate id=#domain name="domain" type={presence} %}
+                {% validate id=#domain name="domain"
+                            type={presence}
+                            type={format pattern="^[-a-z0-9]+(\\.[-a-z0-9]+)+(:[0-9]+)?$"}
+                %}
             </div>
         </div>
 
@@ -68,8 +71,8 @@
 
         <div class="form-group">
             <div class="label-floating">
-                <input id="{{ #redirect_url }}" type="text" value="{{ app.redirect_url|escape }}" class="form-control" name="redirect_url" placeholder="{_ Redirect URL _}">
-                <label class="control-label" for="redirect_url">{_ Redirect URL _}</label>
+                <input id="{{ #access_token_url }}" type="text" value="{{ app.access_token_url|escape }}" class="form-control" name="access_token_url" placeholder="{_ Access Token URL _}">
+                <label class="control-label" for="access_token_url">{_ Access Token URL _}</label>
             </div>
         </div>
 
@@ -77,16 +80,32 @@
             {% button class="btn btn-default" text=_"Cancel" action={dialog_close} tag="a" %}
             {% button class="btn btn-primary" type="submit" text=_"Update" %}
 
-
-            {% button class="btn btn-danger pull-left" type="submit" text=_"Delete"
-                action={confirm
-                    text=_"Are you sure you want to delete this Consumer App?"
-                    is_danger
-                    ok=_"Delete Consumer App"
-                    postback={oauth2_consumer_delete app_id=app.id}
-                    delegate=`mod_oauth2`
-                }
-            %}
+            {% if app.token_count > 0 %}
+                {% button class="btn btn-danger pull-left" type="submit" text=_"Delete"
+                    action={confirm
+                        text=[
+                            _"Are you sure you want to delete this Consumer App?",
+                            "<br>",
+                            "<br>",
+                            "<b>", _"This will disconnect all tokens and users.", "</b>"
+                        ]
+                        is_danger
+                        ok=_"Delete Consumer App"
+                        postback={oauth2_consumer_delete app_id=app.id}
+                        delegate=`mod_oauth2`
+                    }
+                %}
+            {% else %}
+                {% button class="btn btn-danger pull-left" type="submit" text=_"Delete"
+                    action={confirm
+                        text=_"Are you sure you want to delete this Consumer App?"
+                        is_danger
+                        ok=_"Delete Consumer App"
+                        postback={oauth2_consumer_delete app_id=app.id}
+                        delegate=`mod_oauth2`
+                    }
+                %}
+            {% endif %}
         </div>
     </form>
 {% else %}

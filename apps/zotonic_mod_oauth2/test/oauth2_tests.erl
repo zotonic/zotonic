@@ -1,7 +1,7 @@
 -module(oauth2_tests).
 
 -include_lib("eunit/include/eunit.hrl").
--include_lib("zotonic_core/include/zotonic.hrl").
+% -include_lib("zotonic_core/include/zotonic.hrl").
 
 oauth2_request_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
