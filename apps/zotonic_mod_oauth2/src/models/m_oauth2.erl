@@ -476,10 +476,19 @@ delete_token( TokenId, Context ) when is_integer(TokenId) ->
 %% @doc Return the Bearer OAuth2 token for the given token-id. The token is encoded using the
 %% the token secret, the app sign secret and the oauth2 system secret. An optional time-to-live
 %% (in seconds) is added.
--spec encode_bearer_token( TokenId :: integer(), TTL :: undefined | non_neg_integer(), z:context() ) ->
+-spec encode_bearer_token( TokenId :: integer(), TTL :: undefined | integer(), z:context() ) ->
     {ok, binary()} | {error, enoent | eacces}.
 encode_bearer_token( TokenId, TTL, Context ) ->
-    case get_token_secrets(TokenId, Context) of
+    case z_db:qmap_row("
+        select t.user_id, t.secret, app.app_sign_secret
+        from oauth2_token t
+            join oauth2_app app on t.app_id = app.id
+        where t.id = $1
+          and (t.valid_till is null or t.valid_till > now())
+          and app.is_enabled",
+        [ z_convert:to_integer(TokenId) ],
+        Context)
+     of
         {ok, #{
                 <<"user_id">> := UserId,
                 <<"secret">> := TokenSecret,
@@ -504,6 +513,7 @@ encode_bearer_token( TokenId, TTL, Context ) ->
             Error
     end.
 
+
 %5 @doc Issue token with optional expiration.
 issue_token(Term, Key, undefined) ->
     termit:issue_token(Term, Key);
@@ -514,18 +524,18 @@ issue_token(Term, Key, TTL) when is_integer(TTL) ->
 % The token is checked using the user_id, the token secret, the app sign secret, the
 % oauth2 system secret and the TTL of the token.
 -spec decode_bearer_token(binary(), z:context()) ->
-    {ok, TokenId :: integer()} | {error, unknown_token | expired | forged | badarg}.
+    {ok, map()} | {error, unknown_token | expired | forged | badarg}.
 decode_bearer_token(<<?TOKEN_PREFIX, Token/binary>>, Context) ->
     case binary:split(Token, <<"-">>) of
         [ TokenIdBin, Encoded ] ->
             try
                 TokenId = binary_to_integer(TokenIdBin),
-                case get_token_secrets(TokenId, Context) of
+                case get_token_access(TokenId, Context) of
                     {ok, #{
                             <<"user_id">> := TokenUserId,
                             <<"secret">> := TokenSecret,
                             <<"app_sign_secret">> := AppSignSecret
-                        }} ->
+                        } = TokenMap} ->
                         SystemKey = oauth_key(Context),
                         SignKey = <<
                             TokenSecret/binary, $:,
@@ -534,9 +544,9 @@ decode_bearer_token(<<?TOKEN_PREFIX, Token/binary>>, Context) ->
                             >>,
                         case termit:verify_token(Encoded, SignKey) of
                             {ok, {v1, UserId}} when UserId =:= TokenUserId ->
-                                {ok, TokenId};
+                                {ok, TokenMap};
                             {ok, _} ->
-                                {eror, forged};
+                                {error, forged};
                             {error, _Reason} = Error ->
                                 Error
                         end;
@@ -570,8 +580,11 @@ get_token( TokenId, Context ) when is_integer(TokenId) ->
         [ {keys, binary} ],
         Context)
     of
-        {ok, #{ <<"user_id">> := UserId } = Token} ->
+        {ok, #{ <<"user_id">> := UserId, <<"is_full_access">> := IsFulllAccess } = Token} ->
             case is_allowed(UserId, Context) of
+                true when IsFulllAccess ->
+                    % Full access token, no user group restrictions
+                    {ok, Token};
                 true ->
                     Groups = z_db:q("
                             select group_id
@@ -598,7 +611,7 @@ get_token( undefined, _Context ) ->
 -spec get_token_access( integer(), z:context() ) -> {ok, map()} | {error, enoent}.
 get_token_access(TokenId, Context) when is_integer(TokenId) ->
     case z_db:qmap_row("
-        select t.user_id, t.is_read_only, t.is_full_access, t.ip_allowed, t.secret,
+        select t.id, t.user_id, t.is_read_only, t.is_full_access, t.ip_allowed, t.secret,
                t.app_id, app.app_sign_secret
         from oauth2_token t
             join oauth2_app app on t.app_id = app.id
@@ -606,7 +619,6 @@ get_token_access(TokenId, Context) when is_integer(TokenId) ->
           and (t.valid_till is null or t.valid_till > now())
           and app.is_enabled",
         [ z_convert:to_integer(TokenId) ],
-        [ {keys, binary} ],
         Context)
     of
         {ok, Token} ->
@@ -623,21 +635,6 @@ get_token_access(TokenId, Context) when is_integer(TokenId) ->
         {error, enoent} ->
             {error, enoent}
     end.
-
-%% @doc Get the token secrets for authentication checks.
-%% @todo Cache this for speeding up api requests
--spec get_token_secrets( integer(), z:context() ) -> {ok, map()} | {error, enoent}.
-get_token_secrets(TokenId, Context) when is_integer(TokenId) ->
-    z_db:qmap_row("
-        select t.user_id, t.secret, app.app_sign_secret
-        from oauth2_token t
-            join oauth2_app app on t.app_id = app.id
-        where t.id = $1
-          and (t.valid_till is null or t.valid_till > now())
-          and app.is_enabled",
-        [ z_convert:to_integer(TokenId) ],
-        [ {keys, binary} ],
-        Context).
 
 
 %% @doc Check if the current user is allowed to see the tokens of the given user.

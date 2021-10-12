@@ -247,8 +247,8 @@ try_bearer(<<" ", Token/binary>>, Context) ->
     try_bearer(Token, Context);
 try_bearer(Token, Context) ->
     case m_oauth2:decode_bearer_token(Token, Context) of
-        {ok, {TokenId, TokenSecret}} ->
-            try_token(TokenId, TokenSecret, Context);
+        {ok, TokenMap} ->
+            try_token(TokenMap, Context);
         {error, unknown_token} ->
             % Somebody else's token - ignore
             Context;
@@ -258,47 +258,32 @@ try_bearer(Token, Context) ->
             Context
     end.
 
-try_token(TokenId, ExtTokenSecret, Context) ->
-    case m_oauth2:get_token_access(TokenId, Context) of
-        {ok, #{ <<"secret">> := TokenSecret } = Token} ->
-            case m_oauth2:is_equal(ExtTokenSecret, TokenSecret) of
-                true ->
-                    #{
-                        <<"user_id">> := UserId,
-                        <<"user_groups">> := UserGroups,
-                        <<"is_read_only">> := IsReadOnly,
-                        <<"is_full_access">> := IsFullAccess
-                    } = Token,
-                    Options = case IsFullAccess of
-                        true ->
-                            % No restriction on user groups
-                            #{
-                                is_read_only => IsReadOnly
-                            };
-                        false ->
-                            % Limited access, user groups will be filtered
-                            #{
-                                user_groups => UserGroups,
-                                is_read_only => IsReadOnly
-                            }
-                    end,
-                    case z_auth:is_enabled(UserId, Context) of
-                        true ->
-                            % TODO: add a log entry for the request
-                            z_acl:logon(UserId, Options, Context);
-                        false ->
-                            % User is disabled, maybe throw a 403 here?
-                            lager:info("Authenticated OAuth2 request for disabled user ~p with token ~p", [ UserId, TokenId ]),
-                            Context
-                    end;
-                false ->
-                    % Mismatch on secret, maybe throw a 400 here?
-                    lager:info("Authenticated OAuth2 request with wrong secret ~p", [ TokenId ]),
-                    Context
-            end;
-        {error, _} ->
-            % Illegal token, maybe throw a 400 here?
-            lager:info("Authenticated OAuth2 request for unknown token ~p", [ TokenId ]),
+try_token(#{
+        <<"id">> := TokenId,
+        <<"user_id">> := UserId,
+        <<"user_groups">> := UserGroups,
+        <<"is_read_only">> := IsReadOnly,
+        <<"is_full_access">> := IsFullAccess
+    }, Context) ->
+    Options = case IsFullAccess of
+        true ->
+            % No restriction on user groups
+            #{
+                is_read_only => IsReadOnly
+            };
+        false ->
+            % Limited access, user groups will be filtered
+            #{
+                user_groups => UserGroups,
+                is_read_only => IsReadOnly
+            }
+    end,
+    case z_auth:is_enabled(UserId, Context) of
+        true ->
+            z_acl:logon(UserId, Options, Context);
+        false ->
+            % User is disabled, maybe throw a 403 here?
+            lager:info("Authenticated OAuth2 request for disabled user ~p with token ~p", [ UserId, TokenId ]),
             Context
     end.
 
