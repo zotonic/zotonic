@@ -12,7 +12,7 @@
                     action={confirm title=[_"Disconnect ", app.description|escape]
                                     text=_"Do you want to disconnect your account?"
                                     ok=_"Disconnect"
-                                    action={auth_disconnect id=m.acl.user type="mod_oauth2" keyprefix=a.name}
+                                    action={auth_disconnect id=m.acl.user type="mod_oauth2" keyprefix=app.name}
                             }
             %}
         {% elseif (not is_connect and app.is_use_auth)
