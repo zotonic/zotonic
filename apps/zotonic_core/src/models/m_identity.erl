@@ -802,7 +802,7 @@ get_rsc_by_type_keyprefix(Id, Type, KeyPrefix, Context) ->
         Context).
 
 
--spec get_rsc(m_rsc:resource_id(), atom() | binary(), z:context()) -> list() | undefined.
+-spec get_rsc(m_rsc:resource_id(), type(), z:context()) -> list() | undefined.
 get_rsc(Id, Type, Context) when is_integer(Id), is_atom(Type) ->
     get_rsc(Id, z_convert:to_binary(Type), Context);
 get_rsc(Id, Type, Context) when is_integer(Id), is_binary(Type) ->
@@ -858,7 +858,7 @@ hash_is_equal(Pw, {bcrypt, Hash}) ->
     erlpass:match(Pw, Hash);
 hash_is_equal(Pw, {hash, Salt, Hash}) ->
     NewHash = crypto:hash(sha, [Salt, Pw]),
-    Hash =:= NewHash;
+    is_equal(Hash, NewHash);
 hash_is_equal(_, _) ->
     false.
 
@@ -871,7 +871,7 @@ needs_rehash({hash, _, _}) ->
     true.
 
 
--spec insert_single(m_rsc:resource(), atom(), binary(), z:context()) ->
+-spec insert_single(m_rsc:resource(), type(), key(), z:context()) ->
     {ok, pos_integer()} | {error, invalid_key}.
 insert_single(Rsc, Type, Key, Context) ->
     insert_single(Rsc, Type, Key, [], Context).
@@ -894,7 +894,7 @@ insert_single(Rsc, Type, Key, Props, Context) ->
     end.
 
 %% @doc Create an identity record.
--spec insert(m_rsc:resource(), atom(), binary(), z:context()) ->
+-spec insert(m_rsc:resource(), type(), key(), z:context()) ->
     {ok, pos_integer()} | {error, invalid_key}.
 insert(Rsc, Type, Key, Context) ->
     insert(Rsc, Type, Key, [], Context).
