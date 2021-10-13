@@ -31,6 +31,8 @@
     get_consumer_oauth_service/2,
 
     find_token/3,
+    is_connected/2,
+    is_connected/3,
 
     manage_schema/2
 ]).
@@ -55,14 +57,16 @@ m_get([ <<"consumers">>, ConsumerId | Rest ], _Msg, Context) ->
             {ok, {App, Rest}};
         {error, _} = Error ->
             Error
-    end.
+    end;
+m_get([ <<"is_connected">>, Name | Rest ], _Msg, Context) ->
+    {ok, {is_connected(Name, Context), Rest}}.
 
 
 %% @doc List all consumers that can be used for authentication.
 -spec list_consumers_auth( z:context() ) -> {ok, list( map() )} | {error, eacces | term()}.
 list_consumers_auth(Context) ->
     z_db:qmap("
-        select a.id, a.description
+        select a.id, a.name, a.description, a.is_use_import, a.is_use_auth
         from oauth2_consumer_app a
         where a.is_use_import = true
         order by description",
@@ -175,7 +179,9 @@ update_consumer(ConsumerId, Map, Context) ->
             {error, eacces}
     end.
 
-%% @doc Find an access token for the given user / host combination.
+%% @doc Find an access token for the given user / host combination. The corresponding consumer
+%% app must be marked for import usage. The identity property must be map with an access_token
+%% key.
 -spec find_token( UserId :: m_rsc:resource_id(), Host :: binary(), z:context() ) ->
     {ok, binary()} | {error, term()}.
 find_token(UserId, Host, Context) ->
@@ -198,6 +204,33 @@ find_token(UserId, Host, Context) ->
             {ok, AccesToken};
         _ ->
             {error, enoent}
+    end.
+
+%% @doc Check if the current user is connected to the OAuth2 service with the given name.
+%% This only checks the presence of the correct identity key, it does not check if the
+%% key contains a valid access_token.
+-spec is_connected( Name :: binary(), z:context() ) -> boolean().
+is_connected(Name, Context) ->
+    is_connected(z_acl:user(Context), Name, Context).
+
+%% @doc Check if the user is connected to the OAuth2 service with the given name.
+%% This only checks the presence of the correct identity key, it does not check if the
+%% key contains a valid access_token.
+-spec is_connected( UserId :: m_rsc:resource_id() | undefined, Name :: binary(), z:context() ) -> boolean().
+is_connected(undefined, _Name, _Context) ->
+    false;
+is_connected(UserId, Name, Context) ->
+    case z_db:q1("
+        select count(*)
+        from identity
+        where rsc_id = $1
+          and type = 'mod_oauth2'
+          and key like $2 || ':%'",
+        [ UserId, Name ],
+        Context)
+    of
+        0 -> false;
+        _ -> true
     end.
 
 

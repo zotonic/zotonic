@@ -1,10 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2013 Marc Worrell
-%% Date: 2009-04-25
-%%
+%% @copyright 2009-2021 Marc Worrell
 %% @doc Manage identities of users.  An identity can be an username/password, openid, oauth credentials etc.
 
-%% Copyright 2009-2013 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,11 +20,6 @@
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).
-
--type password() :: iodata().
--type bcrypt_hash() :: {bcrypt, binary()}.
--type sha1_salted_hash() :: {hash, binary(), binary()}.
--type hash() :: bcrypt_hash() | sha1_salted_hash().
 
 -export([
     m_get/3,
@@ -47,6 +40,7 @@
     get/2,
     get_rsc/2,
     get_rsc_by_type/3,
+    get_rsc_by_type_keyprefix/4,
     get_rsc/3,
 
     is_email_verified/1,
@@ -67,6 +61,7 @@
     set_by_type/5,
     delete_by_type/3,
     delete_by_type_and_key/4,
+    delete_by_type_and_keyprefix/4,
 
     insert/4,
     insert/5,
@@ -90,8 +85,21 @@
     generate_username/2
 ]).
 
+-type password() :: iodata().
+-type bcrypt_hash() :: {bcrypt, binary()}.
+-type sha1_salted_hash() :: {hash, binary(), binary()}.
+-type hash() :: bcrypt_hash() | sha1_salted_hash().
+
+-type type() :: atom() | binary().
+-type key() :: atom() | binary().
+
+-export_type([
+    type/0,
+    key/0,
+    password/0
+    ]).
+
 -include_lib("zotonic.hrl").
--include_lib("mqtt_packet_map/include/mqtt_packet_map.hrl").
 
 -define(IDN_CACHE_TIME, 3600*12).
 
@@ -155,9 +163,10 @@ m_get([ <<"get">>, IdnId | Rest ], _Msg, Context) ->
 m_get([ <<"verify">>, IdnId, VerifyKey | Rest ], _Msg, Context) ->
     Idn1 = case get(IdnId, Context) of
         Idn when is_list(Idn), is_binary(VerifyKey), VerifyKey =/= <<>> ->
-            case proplists:get_value(verify_key, Idn) of
-                VerifyKey -> Idn;
-                _ -> undefined
+            IdnVerifyKey = proplists:get_value(verify_key, Idn, <<>>),
+            case is_equal(VerifyKey, IdnVerifyKey) of
+                true -> Idn;
+                false -> undefined
             end;
         _ ->
             undefined
@@ -471,8 +480,7 @@ flush(Id, Context) ->
     z_depcache:flush({idn, Id}, Context).
 
 %% @doc Ensure that the user has an associated username and password
-%% @spec ensure_username_pw(RscId, Context) -> ok | {error, Reason}
--spec ensure_username_pw(m_rsc:resource(), #context{}) -> ok | {error, term()}.
+-spec ensure_username_pw(m_rsc:resource(), z:context()) -> ok | {error, term()}.
 ensure_username_pw(1, _Context) ->
     {error, admin_password_cannot_be_set};
 ensure_username_pw(Id, Context) ->
@@ -639,12 +647,15 @@ check_username_pw_1(<<"admin">>, Password, Context) ->
                     ),
                     {error, peer_not_allowed}
             end;
-        Password1 ->
-            z_db:q("update identity set visited = now() where id = 1", Context),
-            flush(1, Context),
-            {ok, 1};
-        _ ->
-            {error, password}
+        AdminPassword ->
+            case is_equal(Password1, AdminPassword) of
+                true ->
+                    z_db:q("update identity set visited = now() where id = 1", Context),
+                    flush(1, Context),
+                    {ok, 1};
+                false ->
+                    {error, password}
+            end
     end;
 check_username_pw_1(Username, Password, Context) ->
     Username1 = z_convert:to_binary( z_string:trim(z_string:to_lower(Username)) ),
@@ -691,7 +702,7 @@ ip_allowlist(Context) ->
 %% If succesful then updates the 'visited' timestamp of the entry.
 %% @spec check_email_pw(Email, Password, Context) -> {ok, Id} | {error, Reason}
 check_email_pw(Email, Password, Context) ->
-    case lookup_by_type_and_key_multi(email, Email, Context) of
+    case lookup_by_type_and_key_multi(<<"email">>, Email, Context) of
         [] -> {error, nouser};
         Users -> check_email_pw1(Users, Email, Password, Context)
     end.
@@ -734,34 +745,36 @@ get(IdnId, Context) ->
     z_db:assoc_row("select * from identity where id = $1", [IdnId], Context).
 
 %% @doc Fetch all credentials belonging to the user "id"
--spec get_rsc(m_rsc:resource(), #context{}) -> list().
+-spec get_rsc(m_rsc:resource(), z:context()) -> list().
 get_rsc(Id, Context) ->
     z_db:assoc("select * from identity where rsc_id = $1", [m_rsc:rid(Id, Context)], Context).
 
 
 %% @doc Fetch all different identity types of an user
--spec get_rsc_types(m_rsc:resource(), #context{}) -> list().
+-spec get_rsc_types(m_rsc:resource(), z:context()) -> [ binary() ].
 get_rsc_types(Id, Context) ->
     Rs = z_db:q("select type from identity where rsc_id = $1", [m_rsc:rid(Id, Context)], Context),
     [R || {R} <- Rs].
 
 %% @doc Fetch all credentials belonging to the user "id" and of a certain type
--spec get_rsc_by_type(m_rsc:resource(), atom(), #context{}) -> list().
+-spec get_rsc_by_type(m_rsc:resource(), type(), z:context()) -> list().
 get_rsc_by_type(Id, email, Context) ->
-    Idns = get_rsc_by_type_1(Id, email, Context),
-    case normalize_key(email, m_rsc:p_no_acl(Id, email_raw, Context)) of
+    get_rsc_by_type(Id, <<"email">>, Context);
+get_rsc_by_type(Id, <<"email">>, Context) ->
+    Idns = get_rsc_by_type_1(Id, <<"email">>, Context),
+    case normalize_key(<<"email">>, m_rsc:p_no_acl(Id, email_raw, Context)) of
         undefined ->
             Idns;
         Email ->
-            IsMissing = is_valid_key(email, Email, Context)
+            IsMissing = is_valid_key(<<"email">>, Email, Context)
                 andalso not lists:any(fun(Idn) ->
                     proplists:get_value(key, Idn) =:= Email
                 end,
                     Idns),
             case IsMissing of
                 true ->
-                    insert(Id, email, Email, Context),
-                    get_rsc_by_type_1(Id, email, Context);
+                    insert(Id, <<"email">>, Email, Context),
+                    get_rsc_by_type_1(Id, <<"email">>, Context);
                 false ->
                     Idns
             end
@@ -775,6 +788,19 @@ get_rsc_by_type_1(Id, Type, Context) ->
         [m_rsc:rid(Id, Context), Type],
         Context
     ).
+
+-spec get_rsc_by_type_keyprefix(m_rsc:resource_id(), type(), key(), z:context()) -> list().
+get_rsc_by_type_keyprefix(Id, Type, KeyPrefix, Context) ->
+    z_db:assoc(
+        "select *
+         from identity
+         where rsc_id = $1
+           and type = $2
+           and key like $3 || ':%'
+         order by is_verified desc, key asc",
+        [m_rsc:rid(Id, Context), Type, KeyPrefix],
+        Context).
+
 
 -spec get_rsc(m_rsc:resource_id(), atom() | binary(), z:context()) -> list() | undefined.
 get_rsc(Id, Type, Context) when is_integer(Id), is_atom(Type) ->
@@ -804,7 +830,7 @@ is_email_verified(UserId, Context) ->
         Email ->
             z_depcache:memo(
                 fun() ->
-                    E = normalize_key(email, Email),
+                    E = normalize_key(<<"email">>, Email),
                     z_convert:to_bool(
                         z_db:q1("
                             select is_verified
@@ -845,7 +871,7 @@ needs_rehash({hash, _, _}) ->
     true.
 
 
--spec insert_single(m_rsc:resource(), atom(), binary(), #context{}) ->
+-spec insert_single(m_rsc:resource(), atom(), binary(), z:context()) ->
     {ok, pos_integer()} | {error, invalid_key}.
 insert_single(Rsc, Type, Key, Context) ->
     insert_single(Rsc, Type, Key, [], Context).
@@ -868,7 +894,7 @@ insert_single(Rsc, Type, Key, Props, Context) ->
     end.
 
 %% @doc Create an identity record.
--spec insert(m_rsc:resource(), atom(), binary(), #context{}) ->
+-spec insert(m_rsc:resource(), atom(), binary(), z:context()) ->
     {ok, pos_integer()} | {error, invalid_key}.
 insert(Rsc, Type, Key, Context) ->
     insert(Rsc, Type, Key, [], Context).
@@ -920,20 +946,15 @@ insert_1(Rsc, Type, Key, Props, Context) ->
             {ok, IdnId}
     end.
 
--spec is_valid_key( binary() | atom(),  undefined | binary() | string(), z:context() ) -> boolean().
-is_valid_key(_Type, undefined, _Context) ->
-    false;
-is_valid_key(email, Key, _Context) ->
-    z_email_utils:is_email(Key);
-is_valid_key(username_pw, Key, _Context) ->
-    not is_reserved_name(Key);
-is_valid_key(<<"email">>, Key, Context) ->
-    is_valid_key(email, Key, Context);
-is_valid_key(<<"username_pw">>, Key, Context) ->
-    is_valid_key(username_pw, Key, Context);
-is_valid_key(Type, _Key, _Context) when is_atom(Type); is_binary(Type) ->
-    true.
+-spec is_valid_key( type(),  undefined | key(), z:context() ) -> boolean().
+is_valid_key(_Type, undefined, _Context) -> false;
+is_valid_key(email, Key, _Context) -> z_email_utils:is_email(Key);
+is_valid_key(username_pw, Key, _Context) -> not is_reserved_name(Key);
+is_valid_key(<<"email">>, Key, Context) -> is_valid_key(email, Key, Context);
+is_valid_key(<<"username_pw">>, Key, Context) -> is_valid_key(username_pw, Key, Context);
+is_valid_key(Type, _Key, _Context) when is_atom(Type); is_binary(Type) -> true.
 
+-spec normalize_key(type(), key() | undefined) -> key() | undefined.
 normalize_key(_Type, undefined) -> undefined;
 normalize_key(username_pw, Key) -> z_convert:to_binary(z_string:trim(z_string:to_lower(Key)));
 normalize_key(email, Key) -> z_convert:to_binary(z_string:trim(z_string:to_lower(Key)));
@@ -1005,7 +1026,7 @@ set_verified(Id, Context) ->
 
 %% @doc Set the verified flag on a record by rescource id, identity type and
 %% value (eg an user's email address).
--spec set_verified( m_rsc:resource_id(), string() | binary() | atom(), string() | binary(), z:context()) -> ok | {error, badarg}.
+-spec set_verified( m_rsc:resource_id(), type(), key(), z:context()) -> ok | {error, badarg}.
 set_verified(RscId, Type, Key, Context)
     when is_integer(RscId),
          Type =/= undefined,
@@ -1054,11 +1075,11 @@ is_verified(RscId, Context) ->
         _ -> true
     end.
 
--spec set_by_type(m_rsc:resource_id(), string() | binary(), string() | binary(), z:context()) -> ok.
+-spec set_by_type(m_rsc:resource_id(), type(), key(), z:context()) -> ok.
 set_by_type(RscId, Type, Key, Context) ->
     set_by_type(RscId, Type, Key, [], Context).
 
--spec set_by_type(m_rsc:resource_id(), string() | binary(), string() | binary(), term(), z:context()) -> ok.
+-spec set_by_type(m_rsc:resource_id(), type(), key(), term(), z:context()) -> ok.
 set_by_type(RscId, Type, Key, Props, Context) ->
     F = fun(Ctx) ->
         case z_db:q("
@@ -1110,7 +1131,7 @@ delete(IdnId, Context) ->
     end.
 
 %% @doc Move the identities of two resources, the identities are removed from the source id.
--spec merge(m_rsc:resource(), m_rsc:resource(), #context{}) -> ok | {error, term()}.
+-spec merge(m_rsc:resource(), m_rsc:resource(), z:context()) -> ok | {error, term()}.
 merge(WinnerId, LoserId, Context) ->
     case z_acl:rsc_editable(WinnerId, Context) andalso z_acl:rsc_editable(LoserId, Context) of
         true ->
@@ -1173,7 +1194,7 @@ is_unique_identity_type(_) -> false.
 
 %% @doc If an email identity is deleted, then ensure that the 'email' property is reset accordingly.
 maybe_reset_email_property(Id, <<"email">>, Email, Context) when is_binary(Email) ->
-    case normalize_key(email, m_rsc:p_no_acl(Id, email_raw, Context)) of
+    case normalize_key(<<"email">>, m_rsc:p_no_acl(Id, email_raw, Context)) of
         Email ->
             NewEmail = z_db:q1("
                     select key
@@ -1193,7 +1214,7 @@ maybe_reset_email_property(_Id, _Type, _Key, _Context) ->
     ok.
 
 
--spec delete_by_type(m_rsc:resource(), atom(), #context{}) -> ok.
+-spec delete_by_type(m_rsc:resource(), type(), z:context()) -> ok.
 delete_by_type(Rsc, Type, Context) ->
     RscId = m_rsc:rid(Rsc, Context),
     case z_db:q("delete from identity where rsc_id = $1 and type = $2", [RscId, Type], Context) of
@@ -1210,10 +1231,29 @@ delete_by_type(Rsc, Type, Context) ->
             ok
     end.
 
--spec delete_by_type_and_key(m_rsc:resource(), atom(), atom(), #context{}) -> ok.
+-spec delete_by_type_and_key(m_rsc:resource(), type(), key(), z:context()) -> ok.
 delete_by_type_and_key(Rsc, Type, Key, Context) ->
     RscId = m_rsc:rid(Rsc, Context),
     case z_db:q("delete from identity where rsc_id = $1 and type = $2 and key = $3",
+                [RscId, Type, Key], Context)
+    of
+        0 -> ok;
+        _N ->
+            z_depcache:flush({idn, RscId}, Context),
+            z_mqtt:publish(
+                [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
+                #{
+                    id => RscId,
+                    type => Type
+                },
+                z_acl:sudo(Context)),
+            ok
+    end.
+
+-spec delete_by_type_and_keyprefix(m_rsc:resource(), type(), key(), z:context()) -> ok.
+delete_by_type_and_keyprefix(Rsc, Type, Key, Context) ->
+    RscId = m_rsc:rid(Rsc, Context),
+    case z_db:q("delete from identity where rsc_id = $1 and type = $2 and key like $3 || ':%'",
                 [RscId, Type, Key], Context)
     of
         0 -> ok;
@@ -1336,3 +1376,13 @@ is_reserved_name_1(<<"webadmin">>) -> true;
 is_reserved_name_1(<<"mail">>) -> true;
 is_reserved_name_1(_) -> false.
 
+
+% Constant time comparison.
+-spec is_equal(Extern :: binary(), Secret :: binary() ) -> boolean().
+is_equal(A, B) -> is_equal(A, B, true).
+
+is_equal(<<>>, <<>>, Eq) -> Eq;
+is_equal(<<>>, _B, _Eq) -> false;
+is_equal(<<_, A/binary>>, <<>>, _Eq) -> is_equal(A, <<>>, false);
+is_equal(<<C, A/binary>>, <<C, B/binary>>, Eq) -> is_equal(A, B, Eq);
+is_equal(<<_, A/binary>>, <<_, B/binary>>, _Eq) -> is_equal(A, B, false).
