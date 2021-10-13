@@ -4,8 +4,9 @@
             <a id="{{ #oauthdis.app_id }}"
                href="#disconnect"
                class="btn z-btn-social"
-               style="background-color: #111"
+               style="background-color: #dde; color: #333;"
             >
+                <img src="https://{{ app.domain|escape }}/favicon.ico" style="height: 16px; width: auto; margin-right: 4px;">
                 {_ Disconnect from _} {{ app.description|escape }}
             </a>
             {% wire id=#oauthdis.app_id
@@ -16,16 +17,16 @@
                             }
             %}
         {% elseif (not is_connect and app.is_use_auth)
-               or (    is_connect and app.is_use_import)
+               or (    is_connect and (app.is_use_import or app.is_use_auth))
          %}
             <a href="{% url oauth2_consumer_authorize is_connect=is_connect consumer_id=app.id %}"
                class="btn z-btn-social"
-               style="background-color: #111"
+               style="background-color: #dde; color: #333;"
                data-onclick-topic="model/window/post/open"
             >
-               <span class="z-icon z-icon-"></span>
-               {% if is_connect %}{_ Connect with _} {{ app.description|escape }}
-               {% else %}{_ Log in with _} {{ app.description|escape }}{% endif %}
+                <img src="https://{{ app.domain|escape }}/favicon.ico" style="height: 16px; width: auto; margin-right: 4px;">
+                {% if is_connect %}{_ Connect with _} {{ app.description|escape }}
+                {% else %}{_ Log in with _} {{ app.description|escape }}{% endif %}
             </a>
         {% endif %}
     {% endwith %}

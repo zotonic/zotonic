@@ -66,7 +66,7 @@ m_get([ <<"is_connected">>, Name | Rest ], _Msg, Context) ->
 -spec list_consumers_auth( z:context() ) -> {ok, list( map() )} | {error, eacces | term()}.
 list_consumers_auth(Context) ->
     z_db:qmap("
-        select a.id, a.name, a.description, a.is_use_import, a.is_use_auth
+        select a.id, a.name, a.description, a.is_use_import, a.is_use_auth, a.domain
         from oauth2_consumer_app a
         where a.is_use_import = true
         order by description",
