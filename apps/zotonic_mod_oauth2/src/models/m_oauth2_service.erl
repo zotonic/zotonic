@@ -27,7 +27,6 @@
     redirect_url/1
 ]).
 
-
 -define(SESSION_AUTH_TTL, 3600).
 
 m_get([ <<"redirect_url">> | Rest ], _Msg, Context) ->
