@@ -80,6 +80,8 @@
     columns/2,
     column_names/2,
     column_names_bin/2,
+    column_exists/3,
+
     get_current_props/3,
     update_sequence/3,
     prepare_database/1,
@@ -1078,6 +1080,11 @@ column_names_bin(Table, Context) ->
 -spec column_names_bin(schema_name(), table_name(), z:context()) -> list( binary() ).
 column_names_bin(Schema, Table, Context) ->
     [ atom_to_binary(Col, utf8) || Col <- column_names(Schema, Table, Context) ].
+
+%% @doc Check if a column exists in a table.
+-spec column_exists(table_name(), atom(), z:context()) -> boolean().
+column_exists(Table, Column, Context) when is_atom(Column) ->
+    lists:member(Column, column_names(Table, Context)).
 
 
 %% @doc Flush all cached information about the database.

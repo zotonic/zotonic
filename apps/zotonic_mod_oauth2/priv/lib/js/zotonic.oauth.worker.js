@@ -87,9 +87,19 @@ model.present = function(data) {
                       { id: model.state_id, data: model.state_data })
                 .then( function() { actions.redirect(); } )
         } else {
-            model.status = "fetching";
-            self.call("model/sessionStorage/get/oauth-data")
-                .then( function(msg) { actions.oauth_data(msg); } )
+            self.call("model/sessionStorage/get/oauth-reload-done")
+                .then( function(msg) {
+                    if (msg.payload) {
+                        model.status = "fetching";
+                        self.call("model/sessionStorage/get/oauth-data")
+                            .then( function(msg) { actions.oauth_data(msg); } )
+                    } else {
+                        self.call("model/sessionStorage/post/oauth-reload-done", true)
+                            .then(
+                                function() { self.publish("model/location/post/reload"); }
+                            );
+                    }
+                })
         }
     }
 

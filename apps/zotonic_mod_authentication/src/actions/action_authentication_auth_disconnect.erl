@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2021 Marc Worrell
 %% @doc Disconnect an authentication method.
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,7 +29,12 @@
 render_action(TriggerId, TargetId, Args, Context) ->
     RscId = z_convert:to_integer(proplists:get_value(id, Args)),
     Type = z_convert:to_atom(proplists:get_value(type, Args)),
-    Postback = {auth_disconnect, RscId, Type},
+    Postback = case proplists:get_value(keyprefix, Args, <<>>) of
+        KeyPrefix when is_binary(KeyPrefix), KeyPrefix =/= <<>> ->
+            {auth_disconnect, RscId, Type, KeyPrefix};
+        <<>> ->
+            {auth_disconnect, RscId, Type}
+    end,
 	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
 	{PostbackMsgJS, Context}.
 
@@ -44,4 +49,13 @@ event(#postback{message={auth_disconnect, RscId, Type}}, Context) when is_atom(T
             Context;
         false ->
             z_render:growl(?__("Access denied", Context), Context)
+    end;
+event(#postback{message={auth_disconnect, RscId, Type, KeyPrefix}}, Context) when is_atom(Type), is_integer(RscId) ->
+    case z_acl:rsc_editable(RscId, Context) of
+        true ->
+            _ = m_identity:delete_by_type_and_keyprefix(RscId, Type, KeyPrefix, Context),
+            Context;
+        false ->
+            z_render:growl(?__("Access denied", Context), Context)
     end.
+

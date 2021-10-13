@@ -244,8 +244,8 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 %%      If identity is known: log on the associated user and set auth cookies.
 %%      If unknown, add identity to current user or signup a new user
 observe_auth_validated(#auth_validated{} = Auth, Context) ->
-    z_context:set(auth_method, Auth#auth_validated.service, Context),
-    maybe_add_identity(z_acl:user(Context), Auth, Context).
+    Context1 = z_context:set(auth_method, Auth#auth_validated.service, Context),
+    maybe_add_identity(z_acl:user(Context1), Auth, Context1).
 
 maybe_add_identity(undefined, Auth, Context) ->
     case auth_identity(Auth, Context) of
