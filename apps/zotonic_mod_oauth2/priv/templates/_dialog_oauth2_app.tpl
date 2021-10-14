@@ -32,9 +32,7 @@
                 <p class="help-block">
                     {_ Give the redirect URLs that are valid for the website performing the OAuth2 authorization. _}
                     {_ These must be complete URLs, but without the query (?..) or hash (#...) parts. _}<br>
-                    {% with `x-default` as z_language %}
-                        {_ For Zotonic sites this is: _} <tt>https://example.com{% url oauth2_service_redirect %}</tt>
-                    {% endwith %}
+                    {_ For Zotonic sites this you can enter the domain name(s) of the website. _}
                 </p>
             </div>
         </div>
@@ -60,7 +58,7 @@
                 </div>
                 <div class="col-sm-6">
                     <p>
-                        <label>{_ App secret _}</label><br>
+                        <label>{_ App Secret _}</label><br>
                         <tt>{{ app.app_secret|escape }}</tt>
                     </p>
                 </div>

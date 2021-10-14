@@ -123,7 +123,7 @@ client(ClientId, RedirectURL, Context) ->
                 Context)
             of
                 {ok, #{ <<"redirect_urls">> := Allowed } = App} ->
-                    case is_allowed_redirect_uri(RedirectURL, Allowed) of
+                    case is_allowed_redirect_uri(RedirectURL, Allowed, Context) of
                         true ->
                             {ok, maps:without([ <<"redirect_urls">> ], App)};
                         false ->
@@ -136,11 +136,26 @@ client(ClientId, RedirectURL, Context) ->
             {error, enoent}
     end.
 
-is_allowed_redirect_uri(RedirectURL, Allowed) ->
+is_allowed_redirect_uri(RedirectURL, Allowed, Context) ->
     [ URL1 | _ ] = binary:split(RedirectURL, [ <<"?">>, <<"#">> ]),
     AllowedUrls = binary:split(Allowed, [ <<10>>, <<13>> ], [ global, trim_all ]),
-    lists:member(URL1, AllowedUrls).
+    Expanded = expand_domain_names(AllowedUrls, Context),
+    lists:member(URL1, Expanded).
 
+expand_domain_names(Names, Context) ->
+    lists:map(
+        fun
+            (<<"https://", _/binary>> = Url) -> Url;
+            (<<"http://", _/binary>> = Url) -> Url;
+            (Domain) ->
+                ContextNoLang = z_context:set_language('x-default', Context),
+                iolist_to_binary([
+                    <<"https://">>,
+                    Domain,
+                    z_dispatcher:url_for(oauth2_service_redirect, [], ContextNoLang)
+                ])
+        end,
+        Names).
 
 %% @doc Encode a 'code' for the authorization accepted redirect back to the requesting
 %% party. This code will be decoded when the requesting party requests their access token.
@@ -162,7 +177,7 @@ encode_accept_code(ClientId, RedirectURL, Scope, Context) ->
                 <<"redirect_urls">> := Allowed,
                 <<"app_sign_secret">> := AppSignSecret
             }} ->
-            case is_allowed_redirect_uri(RedirectURL, Allowed) of
+            case is_allowed_redirect_uri(RedirectURL, Allowed, Context) of
                 true ->
                     SystemKey = oauth_key(Context),
                     Salt = z_ids:id(8),

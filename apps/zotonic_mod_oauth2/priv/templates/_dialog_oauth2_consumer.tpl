@@ -34,7 +34,7 @@
                     <div class="form-group">
                         <div class="label-floating">
                             <input id="{{ #app_code }}" type="text" value="{{ app.app_code|escape }}" class="form-control" name="app_code" required placeholder="{_ App Code _}">
-                            <label class="control-label" for="app_code">{_ App Code_}</label>
+                            <label class="control-label" for="app_code">{_ App ID}</label>
                             {% validate id=#app_code name="app_code" type={presence} %}
                         </div>
                     </div>
