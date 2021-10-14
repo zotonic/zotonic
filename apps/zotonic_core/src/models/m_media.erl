@@ -54,8 +54,8 @@
     save_preview/4,
     make_preview_unique/3,
     is_unique_file/2,
-    download_file/1,
     download_file/2,
+    download_file/3,
     mime_to_category/1
 ]).
 
@@ -498,7 +498,7 @@ insert_url(Url, RscProps, Options, Context) when is_list(RscProps) ->
     {ok, PropsMap} = z_props:from_list(RscProps),
     insert_url(Url, PropsMap, Options, Context);
 insert_url(Url, RscProps, Options, Context) ->
-    case download_file(Url) of
+    case download_file(Url, Context) of
         {ok, TmpFile, Filename} ->
             RscProps1 = RscProps#{
                 <<"original_filename">> => Filename
@@ -813,7 +813,7 @@ replace_url(Url, RscId, RscProps, Options, Context) when is_list(RscProps) ->
 replace_url(Url, RscId, RscProps, Options, Context) ->
     case z_acl:rsc_editable(RscId, Context) of
         true ->
-            case download_file(Url) of
+            case download_file(Url, Context) of
                 {ok, File, Filename} ->
                     RscProps1 = RscProps#{
                         <<"original_filename">> => Filename
@@ -915,10 +915,10 @@ mime_to_category(Mime) ->
 
 
 %% @doc Download a file from a http or data url.
-download_file(Url) ->
-    download_file(Url, []).
+download_file(Url, Context) ->
+    download_file(Url, [], Context).
 
-download_file(Url, Options) ->
+download_file(Url, Options, Context) ->
     File = z_tempfile:new(),
     {ok, Device} = file:open(File, [write]),
     MaxLength = proplists:get_value(max_length, Options, ?MEDIA_MAX_LENGTH_DOWNLOAD),
@@ -928,7 +928,7 @@ download_file(Url, Options) ->
         {timeout, Timeout},
         {device, Device}
     ],
-    case z_url_fetch:fetch_partial(Url, FetchOptions) of
+    case z_fetch:fetch_partial(Url, FetchOptions, Context) of
         {ok, {_FinalUrl, Hs, Length, _Data}} when Length < MaxLength ->
             file:close(Device),
             {ok, File, filename(Url, Hs)};
@@ -999,7 +999,7 @@ add_medium_info(File, OriginalFilename, MediaProps, Context) ->
 
 %% @doc Save a new file from a preview_url as the preview of a medium
 save_preview_url(RscId, Url, Context) ->
-    case download_file(Url, [{max_length, ?MEDIA_MAX_LENGTH_PREVIEW}]) of
+    case download_file(Url, [{max_length, ?MEDIA_MAX_LENGTH_PREVIEW}], Context) of
         {ok, TmpFile, Filename} ->
             case z_media_identify:identify_file(TmpFile, Filename, Context) of
                 {ok, MediaInfo} ->

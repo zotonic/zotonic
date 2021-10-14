@@ -18,6 +18,7 @@
 
 -export([
     fetch/3,
+    fetch_partial/3,
     metadata/3,
     as_data_url/3,
     error_msg/2
@@ -31,6 +32,14 @@ fetch(Url, Options, Context) ->
     Url1 = z_convert:to_binary(Url),
     Options1 = add_options(Url1, Options, Context),
     z_url_fetch:fetch(Url1, Options1).
+
+
+%% @doc Fetch data from an URL. Let modules change the fetch options.
+-spec fetch_partial( string() | binary(), z_url_fetch:options(), z:context() ) -> z_url_fetch:fetch_result().
+fetch_partial(Url, Options, Context) ->
+    Url1 = z_convert:to_binary(Url),
+    Options1 = add_options(Url1, Options, Context),
+    z_url_fetch:fetch_partial(Url1, Options1).
 
 
 %% @doc Fetch the metadata from an URL. Let modules change the fetch options.

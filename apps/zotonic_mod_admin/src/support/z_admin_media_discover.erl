@@ -224,11 +224,7 @@ try_url(_, _Context) ->
     {error, unknown}.
 
 try_url_http(Url, Context) ->
-    Options = case m_site:environment(Context) of
-        development -> [ insecure ];
-        _ -> []
-    end,
-    case z_url_metadata:fetch(Url, Options) of
+    case z_fetch:metadata(Url, [], Context) of
         {ok, MD} ->
             case z_media_import:url_import_props(MD, Context) of
                 {ok, List} ->
