@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-14 16:09\n"
+"PO-Revision-Date: 2021-10-14 16:17\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -778,11 +778,11 @@ msgstr "<strong>İlk</strong> konulan isim, ön isim veya vaftiz ismi olarak da 
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:115
 msgid "A copy that will remain connected so that a new version can be fetched."
-msgstr ""
+msgstr "Yeni bir sürümün alınabilmesi için bağlı kalacak bir kopya."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:119
 msgid "A local copy, disconnected from the remote site."
-msgstr ""
+msgstr "Uzak siteyle bağlantısı kesilmiş yerel bir kopya."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:10
 msgid "About categories"
@@ -1111,7 +1111,7 @@ msgstr "diskler"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:129
 msgid "Do not import connections."
-msgstr ""
+msgstr "Bağlantıları içe aktarmayın."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
 msgid "Do you want to remove this block?"
@@ -1262,7 +1262,7 @@ msgstr "Özellikler"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:9
 msgid "Fetch new version"
-msgstr ""
+msgstr "Yeni sürümü getir"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:6
 msgid "File / media content"
@@ -1304,7 +1304,7 @@ msgstr "Sistem belleğini sıfırla"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:137
 msgid "Follow connections and import all (deep copy)."
-msgstr ""
+msgstr "Bağlantıları takip edin ve tümünü içe aktarın (derin kopya)."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:49
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
@@ -1343,7 +1343,7 @@ msgstr "Bir sayfanın yayın tarih aralığı varsa, o zaman yalnızca iki tarih
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:133
 msgid "Import only direct connections (shallow copy)."
-msgstr ""
+msgstr "Yalnızca doğrudan bağlantıları içe aktarın (sığ kopya)."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:85
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:20
@@ -7020,43 +7020,43 @@ msgstr "Zotonic konsolunda MQTT yayınlama ve abone olma işlemleri hata ayıkla
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:66./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:67./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:77./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:78
 msgid "Access Token URL"
-msgstr ""
+msgstr "Erişim Simgesi URL'si"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:12
 msgid "Access content on this website."
-msgstr ""
+msgstr "Bu web sitesindeki içeriğe erişin."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:53
 msgid "Added by"
-msgstr ""
+msgstr "Tarafından eklendi"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:57
 msgid "Allow Access"
-msgstr ""
+msgstr "Erişime izin vermek"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:51./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:62
 msgid "Allow import of content from the remote website"
-msgstr ""
+msgstr "Uzak web sitesinden içeriğin içe aktarılmasına izin ver"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:48./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:59
 msgid "Allow users on the remote website to authenticate here"
-msgstr ""
+msgstr "Uzak web sitesindeki kullanıcıların burada kimlik doğrulaması yapmasına izin ver"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:16
 msgid "Allow users registered on the remote website to authenticate on this website."
-msgstr ""
+msgstr "Uzak web sitesinde kayıtlı kullanıcıların bu web sitesinde kimlik doğrulaması yapmasına izin verin."
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:123
 msgid "An OAuth2 consumer with this name already exsists, please use another name."
-msgstr ""
+msgstr "Bu ada sahip bir OAuth2 tüketicisi zaten var, lütfen başka bir ad kullanın."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:36./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:47
 msgid "App Code"
-msgstr ""
+msgstr "Uygulama Kodu"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:44
 msgid "App ID"
-msgstr ""
+msgstr "Uygulama Kimliği"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:37
 msgid "App ID}</label>\n"
@@ -7084,19 +7084,19 @@ msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:85./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:19
 msgid "App not found, or no view permission."
-msgstr ""
+msgstr "Uygulama bulunamadı veya görüntüleme izni yok."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:74
 msgid "Are you sure you want to delete this App?"
-msgstr ""
+msgstr "Bu Uygulamayı silmek istediğinizden emin misiniz?"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:79./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:93
 msgid "Are you sure you want to delete this Consumer App?"
-msgstr ""
+msgstr "Bu Tüketici Uygulamasını silmek istediğinizden emin misiniz?"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:13
 msgid "Ask users on this website for their credentials to authenticate on their website or App."
-msgstr ""
+msgstr "Web sitelerinde veya Uygulamalarında kimlik doğrulaması yapmak için bu web sitesindeki kullanıcılardan kimlik bilgilerini isteyin."
 
 #: apps/zotonic_mod_oauth2/priv/templates/logon_service_oauth_done.tpl:6
 msgid "Authenticating..."
@@ -7104,243 +7104,243 @@ msgstr "Kimlik doğrulanıyor ..."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:11
 msgid "Authorize"
-msgstr ""
+msgstr "Yetki vermek"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:59./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:60./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:70./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:71
 msgid "Authorize URL"
-msgstr ""
+msgstr "URL'yi yetkilendir"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:16
 msgid "Authorize access to your account"
-msgstr ""
+msgstr "Hesabınıza erişim yetkisi verin"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:7
 msgid "Be careful, this access token gives full access to your account."
-msgstr ""
+msgstr "Dikkatli olun, bu erişim belirteci, hesabınıza tam erişim sağlar."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:28
 msgid "Connect with"
-msgstr ""
+msgstr "İle bağlantı"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:105
 msgid "Consumer App not found, or no view permission."
-msgstr ""
+msgstr "Tüketici Uygulaması bulunamadı veya görüntüleme izni yok."
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:104
 msgid "Could not generate the access token."
-msgstr ""
+msgstr "Erişim belirteci oluşturulamadı."
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:65./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:77./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:84
 msgid "Could not insert the App."
-msgstr ""
+msgstr "Uygulama eklenemedi."
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:125./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:149
 msgid "Could not insert the Consumer."
-msgstr ""
+msgstr "Tüketici eklenemedi."
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:142
 msgid "Could not update the Consumer."
-msgstr ""
+msgstr "Tüketici güncellenemedi."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:34
 msgid "Create connections with content on {local}."
-msgstr ""
+msgstr "{local}içerikle bağlantılar oluşturun."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:72./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:76
 msgid "Delete App"
-msgstr ""
+msgstr "Uygulamayı Sil"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:85./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:95
 msgid "Delete Consumer App"
-msgstr ""
+msgstr "Tüketici Uygulamasını Sil"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:14./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:25./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
 msgid "Description - shows up on button"
-msgstr ""
+msgstr "Açıklama - düğmede görünür"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:10
 msgid "Disconnect from"
-msgstr ""
+msgstr "Bağlantıyı kes"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:20
 msgid "Do you want to connect your <b>{local}</b> account to <b>{remote}</b>?"
-msgstr ""
+msgstr "<b>{local}</b> hesabınızı <b>{remote}</b>bağlamak istiyor musunuz?"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:14
 msgid "Do you want to disconnect your account?"
-msgstr ""
+msgstr "Hesabınızın bağlantısını kesmek istiyor musunuz?"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:22./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:23./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:33./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:34
 msgid "Domain (eg. www.example.com)"
-msgstr ""
+msgstr "Etki alanı (ör. www.example.com)"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:34./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:35
 msgid "Edit App"
-msgstr ""
+msgstr "Uygulamayı Düzenle"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:77
 msgid "Edit OAuth2 App"
-msgstr ""
+msgstr "OAuth2 Uygulamasını Düzenle"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:82
 msgid "Edit OAuth2 Consumer"
-msgstr ""
+msgstr "OAuth2 Tüketicisini Düzenle"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:10
 msgid "Edit the description of the App."
-msgstr ""
+msgstr "Uygulamanın açıklamasını düzenleyin."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:13./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:47
 msgid "Enabled"
-msgstr ""
+msgstr "Etkin"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:35./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:33
 msgid "For Zotonic sites this you can enter the domain name(s) of the website."
-msgstr ""
+msgstr "Zotonic siteleri için bu, web sitesinin alan adlarını girebilirsiniz."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:52
 msgid "Generate access token"
-msgstr ""
+msgstr "Erişim belirteci oluştur"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:48
 msgid "Generate my access token"
-msgstr ""
+msgstr "Erişim jetonumu oluştur"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:33./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:31
 msgid "Give the redirect URLs that are valid for the website performing the OAuth2 authorization."
-msgstr ""
+msgstr "OAuth2 yetkilendirmesini gerçekleştiren web sitesi için geçerli olan yönlendirme URL'lerini verin."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:3
 msgid "Here is the new access token."
-msgstr ""
+msgstr "İşte yeni erişim belirteci."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:55./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:66
 msgid "If the remote website is a Zotonic website then you can leave the two URLs below empty."
-msgstr ""
+msgstr "Uzak web sitesi bir Zotonic web sitesiyse, aşağıdaki iki URL'yi boş bırakabilirsiniz."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:51
 msgid "If you have already a token then it will be replaces with the new one."
-msgstr ""
+msgstr "Zaten bir jetonunuz varsa, o zaman yenisiyle değiştirilir."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:15
 msgid "Import content from the remote website to this website."
-msgstr ""
+msgstr "Uzak web sitesinden bu web sitesine içerik aktarın."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
-msgstr ""
+msgstr "{local} hesabınızla {remote} giriş yapın."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:29
 msgid "Log in with"
-msgstr ""
+msgstr "İle giriş"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:40
 msgid "Make App"
-msgstr ""
+msgstr "Uygulama Yap"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:22./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:26
 msgid "Make a new App"
-msgstr ""
+msgstr "Yeni bir Uygulama yap"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:8
 msgid "Make a new App for OAuth2 authorization and/or content export to other websites."
-msgstr ""
+msgstr "OAuth2 yetkilendirmesi ve/veya diğer web sitelerine içerik aktarımı için yeni bir Uygulama yapın."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:8
 msgid "Make a new consumer for OAuth2 authorization and content import from another website."
-msgstr ""
+msgstr "OAuth2 yetkilendirmesi ve başka bir web sitesinden içerik içe aktarımı için yeni bir tüketici oluşturun."
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:96
 msgid "New access token"
-msgstr ""
+msgstr "Yeni erişim belirteci"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:3
 msgid "OAuth2 Application"
-msgstr ""
+msgstr "OAuth2 Uygulaması"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:7./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:247
 msgid "OAuth2 Applications"
-msgstr ""
+msgstr "OAuth2 Uygulamaları"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:3./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:7./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:252
 msgid "OAuth2 Consumer Tokens"
-msgstr ""
+msgstr "OAuth2 Tüketici Jetonları"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:88
 msgid "Only admnistrators can view OAuth2 applications."
-msgstr ""
+msgstr "OAuth2 uygulamalarını yalnızca yöneticiler görüntüleyebilir."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:93
 msgid "Only admnistrators can view OAuth2 consumers."
-msgstr ""
+msgstr "OAuth2 tüketicilerini yalnızca yöneticiler görebilir."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:84
 msgid "Register"
-msgstr ""
+msgstr "Kayıt olmak"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:23./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:27
 msgid "Register a new website"
-msgstr ""
+msgstr "Yeni bir web sitesi kaydedin"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:10
 msgid "Registration of tokens to access remote websites."
-msgstr ""
+msgstr "Uzak web sitelerine erişmek için belirteçlerin kaydı."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:9
 msgid "These applications are used by 3rd parties to:"
-msgstr ""
+msgstr "Bu uygulamalar 3. taraflarca şu amaçlarla kullanılır:"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:34./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:32
 msgid "These must be complete URLs, but without the query (?..) or hash (#...) parts."
-msgstr ""
+msgstr "Bunlar tam URL'ler olmalıdır, ancak sorgu (?..) veya karma (#...) bölümleri olmadan."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:19
 msgid "This must be an unique name to identify the remote service. This can not be changed. Only a-z and 0-9 are allowed."
-msgstr ""
+msgstr "Bu, uzak hizmeti tanımlamak için benzersiz bir ad olmalıdır. Bu değiştirilemez. Yalnızca az ve 0-9'a izin verilir."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:82
 msgid "This will disconnect all tokens and users."
-msgstr ""
+msgstr "Bu, tüm belirteçlerin ve kullanıcıların bağlantısını kesecektir."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:16
 msgid "To use one of these applications, the App ID and secret must be registered with the 3rd party."
-msgstr ""
+msgstr "Bu uygulamalardan birini kullanmak için Uygulama Kimliği ve sırrı 3. tarafa kayıtlı olmalıdır."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
-msgstr ""
+msgstr "Bilinmeyen istemci veya yönlendirme, web sitesi yöneticinize danışın."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:73
 msgid "Update"
-msgstr ""
+msgstr "Güncelle"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:70
 msgid "Update App"
-msgstr ""
+msgstr "Uygulamayı Güncelle"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:9
 msgid "Update consumer for OAuth2 authorization and content import from another website."
-msgstr ""
+msgstr "OAuth2 yetkilendirmesi ve başka bir web sitesinden içerik içe aktarma için tüketiciyi güncelleyin."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:52./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:55
 msgid "User count"
-msgstr ""
+msgstr "kullanıcı sayısı"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:29./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:30./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:27./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:28
 msgid "Valid redirect URLs, one per line"
-msgstr ""
+msgstr "Geçerli yönlendirme URL'leri, her satıra bir tane"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:11
 msgid "With a consumer token this website can:"
-msgstr ""
+msgstr "Bir tüketici belirteci ile bu web sitesi şunları yapabilir:"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:26
 msgid "You will be able to:"
-msgstr ""
+msgstr "Yapabileceksin:"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:15
 msgid "You will not be able to see this token again, so copy it and save it in a secure place."
-msgstr ""
+msgstr "Bu jetonu bir daha göremeyeceksiniz, bu yüzden kopyalayın ve güvenli bir yere kaydedin."
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "API Key can be found on"
