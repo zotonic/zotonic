@@ -32,7 +32,9 @@
                 <p class="help-block">
                     {_ Give the redirect URLs that are valid for the website performing the OAuth2 authorization. _}
                     {_ These must be complete URLs, but without the query (?..) or hash (#...) parts. _}<br>
-                    {_ For Zotonic sites, this URL looks like: _} <tt>https://example.com/oauth-service/redirect</tt>
+                    {% with `x-default` as z_language %}
+                        {_ For Zotonic sites this is: _} <tt>https://example.com{% url oauth2_service_redirect %}</tt>
+                    {% endwith %}
                 </p>
             </div>
         </div>
