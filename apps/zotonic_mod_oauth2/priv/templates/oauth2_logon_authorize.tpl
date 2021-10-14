@@ -17,17 +17,28 @@
 
         {% if m.oauth2.client[q.client_id][q.redirect_uri] as app %}
             <p>
-                {% trans "Do you want to give <b>{desc}</b> permission to access your account?" desc=app.description|escape %}
+                {% trans "Do you want to connect your <b>{local}</b> account to <b>{remote}</b>?"
+                        remote=app.description|escape
+                        local=m.site.title
+                %}
             </p>
 
-            <p>
-                {% trans "{desc} will be able to:" desc=app.description|escape %}
-            </p>
+            <p>{_ You will be able to: _}</p>
 
-            <ol>
-                <li>{_ Act on your behalf and make changes. _}</li>
-                <li>{_ Read all content you can read. _}</li>
-            </ol>
+            <ul>
+                <li>{% trans "Log in to {remote} with your {local} account."
+                        remote=app.description|escape
+                        local=m.site.title
+                    %}
+                </li>
+                <li>{% trans "Create connections with content on {local}."
+                        remote=app.description|escape
+                        local=m.site.title
+                    %}
+                </li>
+            </ul>
+
+            <br>
 
             {% wire id="oauth2-authorize"
                     type="submit"
