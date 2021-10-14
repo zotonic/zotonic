@@ -11,8 +11,8 @@
 
         <div class="form-group">
             <div class="label-floating">
-                <input id="{{ #description }}" type="text" value="{{ app.description|escape }}" class="form-control" name="description" required placeholder="{_ Description _}">
-                <label class="control-label" for="description">{_ Description _}</label>
+                <input id="{{ #description }}" type="text" value="{{ app.description|escape }}" class="form-control" name="description" required placeholder="{_ Description - shows up on button _}">
+                <label class="control-label" for="description">{_ Description - shows up on button _}</label>
                 {% validate id=#description name="description" type={presence} %}
             </div>
         </div>
