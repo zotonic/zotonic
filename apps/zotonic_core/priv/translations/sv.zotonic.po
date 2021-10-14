@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-14 16:09\n"
+"PO-Revision-Date: 2021-10-14 16:17\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -778,11 +778,11 @@ msgstr "<strong>Första</strong> även känd som förnamn, efternamn eller Chris
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:115
 msgid "A copy that will remain connected so that a new version can be fetched."
-msgstr ""
+msgstr "En kopia som förblir ansluten så att en ny version kan hämtas."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:119
 msgid "A local copy, disconnected from the remote site."
-msgstr ""
+msgstr "En lokal kopia, kopplad från den avlägsna webbplatsen."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:10
 msgid "About categories"
@@ -1111,7 +1111,7 @@ msgstr "Skivor"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:129
 msgid "Do not import connections."
-msgstr ""
+msgstr "Importera inte anslutningar."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
 msgid "Do you want to remove this block?"
@@ -1262,7 +1262,7 @@ msgstr "Funktioner"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:9
 msgid "Fetch new version"
-msgstr ""
+msgstr "Hämta ny version"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:6
 msgid "File / media content"
@@ -1304,7 +1304,7 @@ msgstr "Spola systemet cachar"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:137
 msgid "Follow connections and import all (deep copy)."
-msgstr ""
+msgstr "Följ anslutningar och importera alla (djup kopia)."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:49
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
@@ -1343,7 +1343,7 @@ msgstr "Om en sida har ett publiceringsdatum kommer den bara att vara synlig mel
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:133
 msgid "Import only direct connections (shallow copy)."
-msgstr ""
+msgstr "Importera endast direktanslutningar (grund kopia)."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:85
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:20
@@ -7020,43 +7020,43 @@ msgstr "Felsöka MQTT publicera och prenumerera på åtgärder i Zotonic-konsole
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:66./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:67./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:77./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:78
 msgid "Access Token URL"
-msgstr ""
+msgstr "URL för åtkomsttoken"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:12
 msgid "Access content on this website."
-msgstr ""
+msgstr "Få tillgång till innehåll på denna webbplats."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:53
 msgid "Added by"
-msgstr ""
+msgstr "Tillagd av"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:57
 msgid "Allow Access"
-msgstr ""
+msgstr "Tillåta åtkomst"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:51./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:62
 msgid "Allow import of content from the remote website"
-msgstr ""
+msgstr "Tillåt import av innehåll från fjärrwebbplatsen"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:48./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:59
 msgid "Allow users on the remote website to authenticate here"
-msgstr ""
+msgstr "Tillåt användare på fjärrwebbplatsen att autentisera här"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:16
 msgid "Allow users registered on the remote website to authenticate on this website."
-msgstr ""
+msgstr "Låt användare som är registrerade på fjärrwebbplatsen verifiera på denna webbplats."
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:123
 msgid "An OAuth2 consumer with this name already exsists, please use another name."
-msgstr ""
+msgstr "En OAuth2 -konsument med detta namn existerar redan, använd ett annat namn."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:36./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:47
 msgid "App Code"
-msgstr ""
+msgstr "Appkod"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:44
 msgid "App ID"
-msgstr ""
+msgstr "App -ID"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:37
 msgid "App ID}</label>\n"
@@ -7084,19 +7084,19 @@ msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:85./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:19
 msgid "App not found, or no view permission."
-msgstr ""
+msgstr "App hittades inte eller ingen visningstillstånd."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:74
 msgid "Are you sure you want to delete this App?"
-msgstr ""
+msgstr "Är du säker på att du vill ta bort den här appen?"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:79./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:93
 msgid "Are you sure you want to delete this Consumer App?"
-msgstr ""
+msgstr "Är du säker på att du vill ta bort den här konsumentappen?"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:13
 msgid "Ask users on this website for their credentials to authenticate on their website or App."
-msgstr ""
+msgstr "Be användare på denna webbplats om deras autentiseringsuppgifter för att autentisera på deras webbplats eller App."
 
 #: apps/zotonic_mod_oauth2/priv/templates/logon_service_oauth_done.tpl:6
 msgid "Authenticating..."
@@ -7104,243 +7104,243 @@ msgstr "Verifierar ..."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:11
 msgid "Authorize"
-msgstr ""
+msgstr "Godkänna"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:59./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:60./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:70./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:71
 msgid "Authorize URL"
-msgstr ""
+msgstr "Auktorisera URL"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:16
 msgid "Authorize access to your account"
-msgstr ""
+msgstr "Auktorisera åtkomst till ditt konto"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:7
 msgid "Be careful, this access token gives full access to your account."
-msgstr ""
+msgstr "Var försiktig, den här åtkomsttoken ger full åtkomst till ditt konto."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:28
 msgid "Connect with"
-msgstr ""
+msgstr "Ansluta till"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:105
 msgid "Consumer App not found, or no view permission."
-msgstr ""
+msgstr "Konsumentappen hittades inte eller ingen visningstillstånd."
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:104
 msgid "Could not generate the access token."
-msgstr ""
+msgstr "Det gick inte att generera åtkomsttoken."
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:65./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:77./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:84
 msgid "Could not insert the App."
-msgstr ""
+msgstr "Det gick inte att infoga appen."
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:125./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:149
 msgid "Could not insert the Consumer."
-msgstr ""
+msgstr "Det gick inte att infoga konsumenten."
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:142
 msgid "Could not update the Consumer."
-msgstr ""
+msgstr "Det gick inte att uppdatera konsumenten."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:34
 msgid "Create connections with content on {local}."
-msgstr ""
+msgstr "Skapa anslutningar med innehåll på {local}."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:72./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:76
 msgid "Delete App"
-msgstr ""
+msgstr "Ta bort app"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:85./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:95
 msgid "Delete Consumer App"
-msgstr ""
+msgstr "Ta bort konsumentappen"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:14./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:25./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
 msgid "Description - shows up on button"
-msgstr ""
+msgstr "Beskrivning - visas på knappen"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:10
 msgid "Disconnect from"
-msgstr ""
+msgstr "Koppla från"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:20
 msgid "Do you want to connect your <b>{local}</b> account to <b>{remote}</b>?"
-msgstr ""
+msgstr "Vill du ansluta ditt <b>{local}</b> -konto till <b>{remote}</b>?"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:14
 msgid "Do you want to disconnect your account?"
-msgstr ""
+msgstr "Vill du koppla bort ditt konto?"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:22./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:23./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:33./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:34
 msgid "Domain (eg. www.example.com)"
-msgstr ""
+msgstr "Domän (t.ex. www.exempel.com)"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:34./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:35
 msgid "Edit App"
-msgstr ""
+msgstr "Redigera app"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:77
 msgid "Edit OAuth2 App"
-msgstr ""
+msgstr "Redigera OAuth2 -appen"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:82
 msgid "Edit OAuth2 Consumer"
-msgstr ""
+msgstr "Redigera OAuth2 -konsument"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:10
 msgid "Edit the description of the App."
-msgstr ""
+msgstr "Redigera beskrivningen av appen."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:13./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:47
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiverad"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:35./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:33
 msgid "For Zotonic sites this you can enter the domain name(s) of the website."
-msgstr ""
+msgstr "För Zotonic -webbplatser kan du ange webbplatsens domännamn."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:52
 msgid "Generate access token"
-msgstr ""
+msgstr "Skapa åtkomsttoken"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:48
 msgid "Generate my access token"
-msgstr ""
+msgstr "Skapa min åtkomsttoken"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:33./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:31
 msgid "Give the redirect URLs that are valid for the website performing the OAuth2 authorization."
-msgstr ""
+msgstr "Ange de omdirigeringsadresser som är giltiga för webbplatsen som utför OAuth2 -behörigheten."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:3
 msgid "Here is the new access token."
-msgstr ""
+msgstr "Här är den nya åtkomsttoken."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:55./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:66
 msgid "If the remote website is a Zotonic website then you can leave the two URLs below empty."
-msgstr ""
+msgstr "Om fjärrwebbplatsen är en Zotonic -webbplats kan du lämna de två webbadresserna nedan tomma."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:51
 msgid "If you have already a token then it will be replaces with the new one."
-msgstr ""
+msgstr "Om du redan har en token kommer den att ersättas med den nya."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:15
 msgid "Import content from the remote website to this website."
-msgstr ""
+msgstr "Importera innehåll från fjärrwebbplatsen till denna webbplats."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
-msgstr ""
+msgstr "Logga in på {remote} med ditt {local} -konto."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:29
 msgid "Log in with"
-msgstr ""
+msgstr "Logga in med"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:40
 msgid "Make App"
-msgstr ""
+msgstr "Skapa app"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:22./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:26
 msgid "Make a new App"
-msgstr ""
+msgstr "Skapa en ny app"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:8
 msgid "Make a new App for OAuth2 authorization and/or content export to other websites."
-msgstr ""
+msgstr "Skapa en ny app för OAuth2 -auktorisering och/eller innehållsexport till andra webbplatser."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:8
 msgid "Make a new consumer for OAuth2 authorization and content import from another website."
-msgstr ""
+msgstr "Skapa en ny konsument för OAuth2 -auktorisering och innehållsimport från en annan webbplats."
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:96
 msgid "New access token"
-msgstr ""
+msgstr "Ny åtkomsttoken"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:3
 msgid "OAuth2 Application"
-msgstr ""
+msgstr "OAuth2 -applikation"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:7./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:247
 msgid "OAuth2 Applications"
-msgstr ""
+msgstr "OAuth2 -applikationer"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:3./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:7./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:252
 msgid "OAuth2 Consumer Tokens"
-msgstr ""
+msgstr "OAuth2 -konsumenttoken"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:88
 msgid "Only admnistrators can view OAuth2 applications."
-msgstr ""
+msgstr "Endast administratörer kan visa OAuth2 -applikationer."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:93
 msgid "Only admnistrators can view OAuth2 consumers."
-msgstr ""
+msgstr "Endast administratörer kan se OAuth2 -konsumenter."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:84
 msgid "Register"
-msgstr ""
+msgstr "Registrera"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:23./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:27
 msgid "Register a new website"
-msgstr ""
+msgstr "Registrera en ny webbplats"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:10
 msgid "Registration of tokens to access remote websites."
-msgstr ""
+msgstr "Registrering av tokens för åtkomst till fjärrwebbplatser."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:9
 msgid "These applications are used by 3rd parties to:"
-msgstr ""
+msgstr "Dessa applikationer används av tredje part för att:"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:34./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:32
 msgid "These must be complete URLs, but without the query (?..) or hash (#...) parts."
-msgstr ""
+msgstr "Dessa måste vara fullständiga webbadresser, men utan frågor (? ..) eller hash (#...) delar."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:19
 msgid "This must be an unique name to identify the remote service. This can not be changed. Only a-z and 0-9 are allowed."
-msgstr ""
+msgstr "Detta måste vara ett unikt namn för att identifiera fjärrtjänsten. Detta kan inte ändras. Endast az och 0-9 är tillåtna."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:82
 msgid "This will disconnect all tokens and users."
-msgstr ""
+msgstr "Detta kommer att koppla bort alla tokens och användare."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:16
 msgid "To use one of these applications, the App ID and secret must be registered with the 3rd party."
-msgstr ""
+msgstr "För att använda ett av dessa program måste App -ID och hemlighet registreras hos tredje part."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
-msgstr ""
+msgstr "Okänd klient eller omdirigering, kontakta din webbplatsadministratör."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:73
 msgid "Update"
-msgstr ""
+msgstr "Uppdatering"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:70
 msgid "Update App"
-msgstr ""
+msgstr "Uppdatera app"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:9
 msgid "Update consumer for OAuth2 authorization and content import from another website."
-msgstr ""
+msgstr "Uppdatera konsumenten för OAuth2 -auktorisering och innehållsimport från en annan webbplats."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:52./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:55
 msgid "User count"
-msgstr ""
+msgstr "Användarantal"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:29./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:30./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:27./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:28
 msgid "Valid redirect URLs, one per line"
-msgstr ""
+msgstr "Giltiga omdirigeringsadresser, en per rad"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:11
 msgid "With a consumer token this website can:"
-msgstr ""
+msgstr "Med en konsumenttoken kan denna webbplats:"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:26
 msgid "You will be able to:"
-msgstr ""
+msgstr "Du kommer att kunna:"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:15
 msgid "You will not be able to see this token again, so copy it and save it in a secure place."
-msgstr ""
+msgstr "Du kommer inte att kunna se denna token igen, så kopiera den och spara den på en säker plats."
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "API Key can be found on"
