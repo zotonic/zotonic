@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-15 11:23\n"
+"PO-Revision-Date: 2021-10-15 11:46\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -4610,7 +4610,7 @@ msgstr "Poniższy test sprawdza połączenie między Twoim komputerem, Google i 
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:78
 msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing packets."
-msgstr ""
+msgstr "Nie powinno być żadnych limitów czasu, jeśli są limity czasu, twoje połączenie internetowe traci pakiety."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:135
 msgid "This tests the authentication with the server."
@@ -4643,7 +4643,7 @@ msgstr "Tak"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
 msgid "Your browser as it identifies itself to our server and your IP address. This is essential information for the help desk, but we do not store any personal data."
-msgstr ""
+msgstr "Twoja przeglądarka, ponieważ identyfikuje się z naszym serwerem i Twoim adresem IP. Jest to niezbędna informacja dla help desku, ale nie przechowujemy żadnych danych osobowych."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
