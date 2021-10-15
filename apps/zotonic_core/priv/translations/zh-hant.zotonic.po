@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-14 16:17\n"
+"PO-Revision-Date: 2021-10-15 08:53\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -1096,7 +1096,7 @@ msgstr "依赖性"
 #: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
 #: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:8
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:13./apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:15
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:17
 #: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:8
 msgid "Disconnect"
 msgstr "取消连接"
@@ -7114,7 +7114,7 @@ msgstr "授權訪問您的帳戶"
 msgid "Be careful, this access token gives full access to your account."
 msgstr "請注意，此訪問令牌可提供對您帳戶的完全訪問權限。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:28
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
 msgid "Connect with"
 msgstr "與連接"
 
@@ -7154,7 +7154,7 @@ msgstr "刪除消費者應用"
 msgid "Description - shows up on button"
 msgstr "描述 - 顯示在按鈕上"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:10
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:12
 msgid "Disconnect from"
 msgstr "斷開連接"
 
@@ -7162,7 +7162,7 @@ msgstr "斷開連接"
 msgid "Do you want to connect your <b>{local}</b> account to <b>{remote}</b>?"
 msgstr "您想將您的 <b>{local}</b> 帳戶 <b>{remote}</b>嗎？"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:14
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:16
 msgid "Do you want to disconnect your account?"
 msgstr "您想斷開您的帳戶嗎？"
 
@@ -7226,7 +7226,7 @@ msgstr "將內容從遠程網站導入到本網站。"
 msgid "Log in to {remote} with your {local} account."
 msgstr "使用您的 {local} 帳戶登錄 {remote}"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:29
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:33
 msgid "Log in with"
 msgstr "登錄"
 
