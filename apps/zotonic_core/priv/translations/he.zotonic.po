@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-15 11:23\n"
+"PO-Revision-Date: 2021-10-15 11:46\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -4610,7 +4610,7 @@ msgstr "הבדיקה שלהלן בודקת את הקשר בין המכשיר ש�
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:78
 msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing packets."
-msgstr ""
+msgstr "לא אמורים להיות פסק זמן, אם יש פסק זמן אז חיבור האינטרנט שלך מאבד מנות."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:135
 msgid "This tests the authentication with the server."
@@ -4643,7 +4643,7 @@ msgstr "כן"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
 msgid "Your browser as it identifies itself to our server and your IP address. This is essential information for the help desk, but we do not store any personal data."
-msgstr ""
+msgstr "הדפדפן שלך כפי שהוא מזהה את עצמו לשרת שלנו וכתובת ה- IP שלך. זהו מידע חיוני לדלפק העזרה, אך איננו שומרים נתונים אישיים."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
