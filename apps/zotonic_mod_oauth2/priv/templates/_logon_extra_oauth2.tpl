@@ -6,7 +6,7 @@
                 <a id="{{ #oauthdis.app_id }}"
                    href="#disconnect"
                    class="btn z-btn-social"
-                   style="background-color: #dde; color: #333;"
+                   style="background-color: #fef8f8; color: #333;"
                 >
                     <img src="https://{{ app.domain|escape }}/favicon.ico" style="height: 16px; width: auto; margin-right: 4px;">
                     {_ Disconnect from _} {{ app.description|escape }}
@@ -25,7 +25,7 @@
              <li>
                 <a href="{% url oauth2_consumer_authorize is_connect=is_connect consumer_id=app.id %}"
                    class="btn z-btn-social"
-                   style="background-color: #dde; color: #333;"
+                   style="background-color: #fef8f8; color: #333;"
                    data-onclick-topic="model/window/post/open"
                 >
                     <img src="https://{{ app.domain|escape }}/favicon.ico" style="height: 16px; width: auto; margin-right: 4px;">
