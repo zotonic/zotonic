@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-14 16:17\n"
+"PO-Revision-Date: 2021-10-15 08:53\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -1096,7 +1096,7 @@ msgstr "Sõltuv"
 #: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
 #: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:8
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:13./apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:15
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:17
 #: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:8
 msgid "Disconnect"
 msgstr "Katkesta √ºhendus"
@@ -7118,7 +7118,7 @@ msgstr "Luba juurdepääs oma kontole"
 msgid "Be careful, this access token gives full access to your account."
 msgstr "Olge ettevaatlik, see juurdepääsumärk annab täieliku juurdepääsu teie kontole."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:28
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
 msgid "Connect with"
 msgstr "Ühendust looma"
 
@@ -7158,7 +7158,7 @@ msgstr "Kustutage tarbijarakendus"
 msgid "Description - shows up on button"
 msgstr "Kirjeldus - kuvatakse nupul"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:10
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:12
 msgid "Disconnect from"
 msgstr "Katkesta ühendus"
 
@@ -7166,7 +7166,7 @@ msgstr "Katkesta ühendus"
 msgid "Do you want to connect your <b>{local}</b> account to <b>{remote}</b>?"
 msgstr "Kas soovite oma <b>{local}</b> konto ühendada <b>{remote}</b>-ga?"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:14
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:16
 msgid "Do you want to disconnect your account?"
 msgstr "Kas soovite oma konto ühenduse katkestada?"
 
@@ -7230,7 +7230,7 @@ msgstr "Sisu importimine kaugveebisaidilt sellele veebisaidile."
 msgid "Log in to {remote} with your {local} account."
 msgstr "Logige oma {local} kontoga {remote}"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:29
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:33
 msgid "Log in with"
 msgstr "Sisene"
 
