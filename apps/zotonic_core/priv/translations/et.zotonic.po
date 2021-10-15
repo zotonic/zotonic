@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-14 16:17\n"
+"PO-Revision-Date: 2021-10-15 11:24\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -218,7 +218,7 @@ msgstr "Kas olete kindel, et soovite taastada kõik ACL-reeglid nende praegu ava
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:101
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:107
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:72./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:108./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:83./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:80./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:116./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:91./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:135./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:143
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:149./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
@@ -317,7 +317,7 @@ msgstr "Kes saab lehte n√§ha v√µi muuta."
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:76./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:91
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:84./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:99
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/src/mod_survey.erl:102
 msgid "Delete"
 msgstr "Kustuta"
@@ -1094,9 +1094,9 @@ msgstr "Sõltuv"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:28./apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:32
 #: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:8
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:6
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:13./apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:15
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:17
 #: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:8
 msgid "Disconnect"
 msgstr "Katkesta √ºhendus"
@@ -4609,8 +4609,8 @@ msgid "The test below checks the connection between your machine, Google and our
 msgstr "Allolev test kontrollib teie masina, Google'i ja meie saidi vahelist ühendust."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:78
-msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing messages."
-msgstr "Aegumisi ei tohiks olla, kui on aegumisi, kaotab teie Interneti -ühendus sõnumeid."
+msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing packets."
+msgstr "Aegumisi ei tohiks olla, kui on aegumisi, kaotab teie Interneti -ühendus pakette."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:135
 msgid "This tests the authentication with the server."
@@ -4642,8 +4642,8 @@ msgid "Yes"
 msgstr "Jah"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
-msgid "Your browser as it identifies itself with our server and your IP address. This is essential information for the help desk."
-msgstr "Teie brauser identifitseerib ennast meie serveri ja teie IP -aadressiga. See on kasutajatoe jaoks hädavajalik teave."
+msgid "Your browser as it identifies itself to our server and your IP address. This is essential information for the help desk, but we do not store any personal data."
+msgstr "Teie brauser identifitseerib ennast meie serveri ja teie IP -aadressi järgi. See on kasutajatoe jaoks oluline teave, kuid me ei salvesta isikuandmeid."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
@@ -5347,7 +5347,7 @@ msgid "App ID."
 msgstr "Rakenduse ID."
 
 #: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:19./apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:20
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:61./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:38./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:49
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:61./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:45./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:46./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:56./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:57
 msgid "App Secret"
 msgstr "Rakenduse saladus"
 
@@ -5912,19 +5912,19 @@ msgstr "kesköö"
 msgid "noon"
 msgstr "keskpäev"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:19
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:17
 msgid "Connect with LinkedIn"
 msgstr "Looge ühendus LinkedIniga"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:4./apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:6
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:2./apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:4
 msgid "Disconnect from LinkedIn"
 msgstr "Ühenduse loomine LinkedIniga"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:7
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:5
 msgid "Do you want to disconnect your LinkedIn account?"
 msgstr "Kas soovite oma LinkedIni konto lahti ühendada?"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:20
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:18
 msgid "Log in with LinkedIn"
 msgstr "Logige sisse LinkedIniga"
 
@@ -7018,7 +7018,7 @@ msgstr "Olete sidunud oma <strong>Microsofti</strong> kontot."
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
 msgstr "Siluge MQTT-d, avaldage ja tellige toimingud Zotonicu konsoolis"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:66./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:67./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:77./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:78
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:74./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:75./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:85./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:86
 msgid "Access Token URL"
 msgstr "Juurdepääsu märgi URL -ile"
 
@@ -7034,11 +7034,11 @@ msgstr "Lisas"
 msgid "Allow Access"
 msgstr "Luba juurdepääs"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:51./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:62
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:59./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:70
 msgid "Allow import of content from the remote website"
 msgstr "Sisu importimine kaugveebisaidilt"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:48./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:59
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:56./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:67
 msgid "Allow users on the remote website to authenticate here"
 msgstr "Lubage kaugveebisaidi kasutajatel siin autentida"
 
@@ -7054,33 +7054,9 @@ msgstr "Selle nimega OAuth2 tarbija on juba olemas. Palun kasutage teist nime."
 msgid "App Code"
 msgstr "Rakenduse kood"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:44
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:44./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:37./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:48
 msgid "App ID"
 msgstr "Rakenduse ID"
-
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:37
-msgid "App ID}</label>\n"
-"                            {% validate id=#app_code name=\"app_code\" type={presence} %}\n"
-"                        </div>\n"
-"    </div>\n"
-"                </div>\n"
-"                <div class=\"col-sm-6\">\n"
-"                    <div class=\"form-group\">\n"
-"     <div class=\"label-floating\">\n"
-"                            <input id=\"{{ #app_secret }}\" type=\"text\" value=\"{{ app.app_secret|escape }}\" class=\"form-control\" name=\"app_secret\" required placeholder=\"{_ App Secret"
-msgstr ""
-
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:48
-msgid "App ID}</label>\n"
-"                        {% validate id=#app_code name=\"app_code\" type={presence} %}\n"
-"                    </div>\n"
-"        </div>\n"
-"            </div>\n"
-"            <div class=\"col-sm-6\">\n"
-"        <div class=\"form-group\">\n"
-"                    <div class=\"label-floating\">\n"
-"                        <input id=\"{{ #app_secret }}\" type=\"text\" value=\"\" class=\"form-control\" name=\"app_secret\" required placeholder=\"{_ App Secret"
-msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:85./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:19
 msgid "App not found, or no view permission."
@@ -7090,7 +7066,7 @@ msgstr "Rakendust ei leitud või vaatamisluba puudub."
 msgid "Are you sure you want to delete this App?"
 msgstr "Kas olete kindel, et soovite selle rakenduse kustutada?"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:79./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:93
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:87./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:101
 msgid "Are you sure you want to delete this Consumer App?"
 msgstr "Kas olete kindel, et soovite selle tarbijarakenduse kustutada?"
 
@@ -7106,7 +7082,7 @@ msgstr "Autentimine ..."
 msgid "Authorize"
 msgstr "Volita"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:59./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:60./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:70./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:71
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:67./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:68./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:78./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:79
 msgid "Authorize URL"
 msgstr "URL -i volitamine"
 
@@ -7118,11 +7094,11 @@ msgstr "Luba juurdepääs oma kontole"
 msgid "Be careful, this access token gives full access to your account."
 msgstr "Olge ettevaatlik, see juurdepääsumärk annab täieliku juurdepääsu teie kontole."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:28
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
 msgid "Connect with"
 msgstr "Ühendust looma"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:105
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:113
 msgid "Consumer App not found, or no view permission."
 msgstr "Tarbijarakendust ei leitud või vaatamisluba puudub."
 
@@ -7150,7 +7126,7 @@ msgstr "Looge seoseid sisuga {local}."
 msgid "Delete App"
 msgstr "Kustuta rakendus"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:85./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:95
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:93./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:103
 msgid "Delete Consumer App"
 msgstr "Kustutage tarbijarakendus"
 
@@ -7158,7 +7134,7 @@ msgstr "Kustutage tarbijarakendus"
 msgid "Description - shows up on button"
 msgstr "Kirjeldus - kuvatakse nupul"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:10
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:12
 msgid "Disconnect from"
 msgstr "Katkesta ühendus"
 
@@ -7166,7 +7142,7 @@ msgstr "Katkesta ühendus"
 msgid "Do you want to connect your <b>{local}</b> account to <b>{remote}</b>?"
 msgstr "Kas soovite oma <b>{local}</b> konto ühendada <b>{remote}</b>-ga?"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:14
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:16
 msgid "Do you want to disconnect your account?"
 msgstr "Kas soovite oma konto ühenduse katkestada?"
 
@@ -7214,7 +7190,7 @@ msgstr "Andke ümbersuunamise URL -id, mis kehtivad OAuth2 volitust teostava vee
 msgid "Here is the new access token."
 msgstr "Siin on uus juurdepääsuluba."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:55./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:66
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:63./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:74
 msgid "If the remote website is a Zotonic website then you can leave the two URLs below empty."
 msgstr "Kui kaugveebisait on Zotonicu veebisait, võite jätta kaks alltoodud URL -i tühjaks."
 
@@ -7230,7 +7206,7 @@ msgstr "Sisu importimine kaugveebisaidilt sellele veebisaidile."
 msgid "Log in to {remote} with your {local} account."
 msgstr "Logige oma {local} kontoga {remote}"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:29
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:33
 msgid "Log in with"
 msgstr "Sisene"
 
@@ -7274,7 +7250,7 @@ msgstr "Ainult administraatorid saavad OAuth2 rakendusi vaadata."
 msgid "Only admnistrators can view OAuth2 consumers."
 msgstr "Ainult administraatorid saavad OAuth2 tarbijaid vaadata."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:84
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:92
 msgid "Register"
 msgstr "Registreeri"
 
@@ -7298,7 +7274,7 @@ msgstr "Need peavad olema täielikud URL -id, kuid ilma päringu (? ..) või rä
 msgid "This must be an unique name to identify the remote service. This can not be changed. Only a-z and 0-9 are allowed."
 msgstr "See peab olema unikaalne nimi kaugteenuse tuvastamiseks. Seda ei saa muuta. Lubatud on ainult az ja 0-9."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:82
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:90
 msgid "This will disconnect all tokens and users."
 msgstr "See katkestab kõik märgid ja kasutajad."
 
@@ -7310,7 +7286,7 @@ msgstr "Nende rakenduste kasutamiseks tuleb rakenduse ID ja saladus registreerid
 msgid "Unknown client or redirect, check with your website administrator."
 msgstr "Tundmatu klient või ümbersuunamine, küsige oma veebisaidi administraatorilt."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:73
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:81
 msgid "Update"
 msgstr "Värskenda"
 

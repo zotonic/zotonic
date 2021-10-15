@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-14 16:17\n"
+"PO-Revision-Date: 2021-10-15 11:46\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -218,7 +218,7 @@ msgstr "Weet je zeker dat je alle regels wilt terugzetten vanaf de gepubliceerde
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:101
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:107
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:72./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:108./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:83./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:80./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:116./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:91./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:135./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:143
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:149./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
@@ -317,7 +317,7 @@ msgstr "Bepaal wie deze pagina mag bekijken en bewerken."
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:76./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:91
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:84./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:99
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/src/mod_survey.erl:102
 msgid "Delete"
 msgstr "Verwijder"
@@ -1097,9 +1097,9 @@ msgstr "Afhankelijk"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:28./apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:32
 #: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:8
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:6
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:13./apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:15
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:17
 #: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:8
 msgid "Disconnect"
 msgstr "Ontkoppel"
@@ -4611,8 +4611,8 @@ msgid "The test below checks the connection between your machine, Google and our
 msgstr "De onderstaande test controleert de verbinding tussen jouw machine, Google en onze site."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:78
-msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing messages."
-msgstr "Er mag geen time-out zijn, als er wel time-outs zijn dan verliest je internetverbinding berichten."
+msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing packets."
+msgstr "Er mogen geen time-outs zijn, als er time-outs zijn, verliest uw internetverbinding pakketten."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:135
 msgid "This tests the authentication with the server."
@@ -4644,8 +4644,8 @@ msgid "Yes"
 msgstr "Ja"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
-msgid "Your browser as it identifies itself with our server and your IP address. This is essential information for the help desk."
-msgstr "Je browser zoals deze zich identificeert met onze server en jouw IP-adres. Dit is essentiële informatie voor de helpdesk."
+msgid "Your browser as it identifies itself to our server and your IP address. This is essential information for the help desk, but we do not store any personal data."
+msgstr "Uw browser zoals deze zich identificeert met onze server en uw IP-adres. Dit is essentiële informatie voor de helpdesk, maar wij slaan geen persoonsgegevens op."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
@@ -5349,7 +5349,7 @@ msgid "App ID."
 msgstr "App ID."
 
 #: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:19./apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:20
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:61./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:38./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:49
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:61./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:45./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:46./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:56./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:57
 msgid "App Secret"
 msgstr "App Geheim"
 
@@ -5914,19 +5914,19 @@ msgstr "middernacht"
 msgid "noon"
 msgstr "middag"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:19
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:17
 msgid "Connect with LinkedIn"
 msgstr "Verbinden met LinkedIn"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:4./apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:6
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:2./apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:4
 msgid "Disconnect from LinkedIn"
 msgstr "Verbreek de verbinding met LinkedIn"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:7
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:5
 msgid "Do you want to disconnect your LinkedIn account?"
 msgstr "Wil je je LinkedIn-account ontkoppelen?"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:20
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:18
 msgid "Log in with LinkedIn"
 msgstr "Log in met LinkedIn"
 
@@ -7020,7 +7020,7 @@ msgstr "Je hebt je <strong>Microsoft</strong> account gekoppeld."
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
 msgstr "MQTT publish en subscribe-acties debuggen in de Zotonic-console"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:66./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:67./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:77./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:78
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:74./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:75./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:85./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:86
 msgid "Access Token URL"
 msgstr "Toegangstoken-URL"
 
@@ -7036,11 +7036,11 @@ msgstr "Toegevoegd door"
 msgid "Allow Access"
 msgstr "Toegang te verlenen"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:51./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:62
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:59./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:70
 msgid "Allow import of content from the remote website"
 msgstr "Importeren van inhoud van de externe website toestaan"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:48./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:59
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:56./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:67
 msgid "Allow users on the remote website to authenticate here"
 msgstr "Sta gebruikers op de externe website toe om zich hier te verifiëren"
 
@@ -7056,33 +7056,9 @@ msgstr "Er bestaat al een OAuth2-consument met deze naam, gebruik een andere naa
 msgid "App Code"
 msgstr "App-code"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:44
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:44./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:37./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:48
 msgid "App ID"
 msgstr "App-ID"
-
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:37
-msgid "App ID}</label>\n"
-"                            {% validate id=#app_code name=\"app_code\" type={presence} %}\n"
-"                        </div>\n"
-"    </div>\n"
-"                </div>\n"
-"                <div class=\"col-sm-6\">\n"
-"                    <div class=\"form-group\">\n"
-"     <div class=\"label-floating\">\n"
-"                            <input id=\"{{ #app_secret }}\" type=\"text\" value=\"{{ app.app_secret|escape }}\" class=\"form-control\" name=\"app_secret\" required placeholder=\"{_ App Secret"
-msgstr ""
-
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:48
-msgid "App ID}</label>\n"
-"                        {% validate id=#app_code name=\"app_code\" type={presence} %}\n"
-"                    </div>\n"
-"        </div>\n"
-"            </div>\n"
-"            <div class=\"col-sm-6\">\n"
-"        <div class=\"form-group\">\n"
-"                    <div class=\"label-floating\">\n"
-"                        <input id=\"{{ #app_secret }}\" type=\"text\" value=\"\" class=\"form-control\" name=\"app_secret\" required placeholder=\"{_ App Secret"
-msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:85./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:19
 msgid "App not found, or no view permission."
@@ -7092,7 +7068,7 @@ msgstr "App niet gevonden, of geen toestemming om te bekijken."
 msgid "Are you sure you want to delete this App?"
 msgstr "Weet je zeker dat je deze app wilt verwijderen?"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:79./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:93
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:87./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:101
 msgid "Are you sure you want to delete this Consumer App?"
 msgstr "Weet u zeker dat u deze consumentenapp wilt verwijderen?"
 
@@ -7108,7 +7084,7 @@ msgstr "Authenticeren..."
 msgid "Authorize"
 msgstr "Toestemming geven"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:59./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:60./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:70./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:71
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:67./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:68./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:78./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:79
 msgid "Authorize URL"
 msgstr "URL autoriseren"
 
@@ -7120,11 +7096,11 @@ msgstr "Toegang tot uw account autoriseren"
 msgid "Be careful, this access token gives full access to your account."
 msgstr "Wees voorzichtig, dit toegangstoken geeft volledige toegang tot uw account."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:28
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
 msgid "Connect with"
 msgstr "Verbonden met"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:105
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:113
 msgid "Consumer App not found, or no view permission."
 msgstr "Consumenten-app niet gevonden of geen toestemming om te bekijken."
 
@@ -7152,7 +7128,7 @@ msgstr "Maak verbindingen met inhoud op {local}."
 msgid "Delete App"
 msgstr "App verwijderen"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:85./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:95
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:93./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:103
 msgid "Delete Consumer App"
 msgstr "Consumenten-app verwijderen"
 
@@ -7160,7 +7136,7 @@ msgstr "Consumenten-app verwijderen"
 msgid "Description - shows up on button"
 msgstr "Beschrijving - verschijnt op de knop"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:10
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:12
 msgid "Disconnect from"
 msgstr "Loskoppelen van"
 
@@ -7168,7 +7144,7 @@ msgstr "Loskoppelen van"
 msgid "Do you want to connect your <b>{local}</b> account to <b>{remote}</b>?"
 msgstr "Wilt u uw <b>{local}</b> account koppelen aan <b>{remote}</b>?"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:14
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:16
 msgid "Do you want to disconnect your account?"
 msgstr "Wil je je account ontkoppelen?"
 
@@ -7216,7 +7192,7 @@ msgstr "Geef de omleidings-URL's op die geldig zijn voor de website die de OAuth
 msgid "Here is the new access token."
 msgstr "Hier is het nieuwe toegangstoken."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:55./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:66
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:63./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:74
 msgid "If the remote website is a Zotonic website then you can leave the two URLs below empty."
 msgstr "Als de externe website een Zotonic-website is, kunt u de twee onderstaande URL's leeg laten."
 
@@ -7232,7 +7208,7 @@ msgstr "Importeer inhoud van de externe website naar deze website."
 msgid "Log in to {remote} with your {local} account."
 msgstr "Log in op {remote} met uw {local} account."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:29
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:33
 msgid "Log in with"
 msgstr "Login met"
 
@@ -7276,7 +7252,7 @@ msgstr "Alleen beheerders kunnen OAuth2-toepassingen bekijken."
 msgid "Only admnistrators can view OAuth2 consumers."
 msgstr "Alleen beheerders kunnen OAuth2-consumenten bekijken."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:84
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:92
 msgid "Register"
 msgstr "Register"
 
@@ -7300,7 +7276,7 @@ msgstr "Dit moeten volledige URL's zijn, maar zonder de query- (?..) of hash- (#
 msgid "This must be an unique name to identify the remote service. This can not be changed. Only a-z and 0-9 are allowed."
 msgstr "Dit moet een unieke naam zijn om de externe service te identificeren. Dit kan niet worden gewijzigd. Alleen az en 0-9 zijn toegestaan."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:82
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:90
 msgid "This will disconnect all tokens and users."
 msgstr "Hiermee worden alle tokens en gebruikers losgekoppeld."
 
@@ -7312,7 +7288,7 @@ msgstr "Om een van deze applicaties te gebruiken, moeten de app-ID en het geheim
 msgid "Unknown client or redirect, check with your website administrator."
 msgstr "Onbekende klant of omleiding, neem contact op met uw websitebeheerder."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:73
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:81
 msgid "Update"
 msgstr "Bijewerken"
 
