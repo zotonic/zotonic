@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-15 11:23\n"
+"PO-Revision-Date: 2021-10-15 11:46\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -4610,7 +4610,7 @@ msgstr "下面的测试检查您的机器、谷歌和我们网站之间的连接
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:78
 msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing packets."
-msgstr ""
+msgstr "不应有任何超时，如果有超时，则您的 Internet 连接正在丢失数据包。"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:135
 msgid "This tests the authentication with the server."
@@ -4643,7 +4643,7 @@ msgstr "是"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
 msgid "Your browser as it identifies itself to our server and your IP address. This is essential information for the help desk, but we do not store any personal data."
-msgstr ""
+msgstr "您的浏览器向我们的服务器和您的 IP 地址标识自己。这是帮助台的重要信息，但我们不存储任何个人数据。"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
