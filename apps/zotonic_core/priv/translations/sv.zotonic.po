@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-15 11:23\n"
+"PO-Revision-Date: 2021-10-15 11:46\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -4610,7 +4610,7 @@ msgstr "Testet nedan kontrollerar anslutningen mellan din maskin, Google och vå
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:78
 msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing packets."
-msgstr ""
+msgstr "Det ska inte finnas några timeouts, om det finns timeouts förlorar din internetanslutning paket."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:135
 msgid "This tests the authentication with the server."
@@ -4643,7 +4643,7 @@ msgstr "Ja"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
 msgid "Your browser as it identifies itself to our server and your IP address. This is essential information for the help desk, but we do not store any personal data."
-msgstr ""
+msgstr "Din webbläsare som den identifierar sig för vår server och din IP -adress. Detta är viktig information för helpdesk, men vi lagrar inga personuppgifter."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
