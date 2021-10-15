@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-15 08:53\n"
+"PO-Revision-Date: 2021-10-15 10:11\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -1094,7 +1094,7 @@ msgstr "Beroende"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:28./apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:32
 #: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:8
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:6
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:17
 #: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:8
@@ -5912,19 +5912,19 @@ msgstr "midnatt"
 msgid "noon"
 msgstr "middag"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:19
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:17
 msgid "Connect with LinkedIn"
 msgstr "Anslut till LinkedIn"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:4./apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:6
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:2./apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:4
 msgid "Disconnect from LinkedIn"
 msgstr "Koppla bort från LinkedIn"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:7
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:5
 msgid "Do you want to disconnect your LinkedIn account?"
 msgstr "Vill du koppla bort ditt LinkedIn-konto?"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:20
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:18
 msgid "Log in with LinkedIn"
 msgstr "Logga in med Linkedin"
 
