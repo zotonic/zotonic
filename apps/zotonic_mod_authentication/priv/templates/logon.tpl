@@ -13,7 +13,7 @@
 
 {% block html_attr %}
     {% with page|default:q.p|sanitize_url as qpage %}
-        {% if qpage|is_site_url %}
+        {% if qpage|is_site_url or qpage == `undefined` %}
             {% if page == "#reload" or error_code == 401 %}
                 data-onauth="#reload"
             {% elseif {logon_done p=qpage}|url as logon_done_url %}
