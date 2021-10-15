@@ -105,8 +105,8 @@
                                     {% endblock %}
                                 </div>
                                 <div class="col-md-6">
-                                    {% block import_options__import %}
-                                        {% if mi.props.is_authoritative|is_defined and not mi.props.is_authoritative %}
+                                    {% if mi.props.is_authoritative|is_defined and not mi.props.is_authoritative %}
+                                        {% block import_options__import %}
                                             <div class="form-group">
                                                 <div class="radio form__is_authoritative">
                                                     <p>{_ Create _}:</p>
@@ -138,8 +138,8 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                        {% endif %}
-                                    {% endblock %}
+                                        {% endblock %}
+                                    {% endif %}
                                 </div>
                             </div>
                         {% endblock %}

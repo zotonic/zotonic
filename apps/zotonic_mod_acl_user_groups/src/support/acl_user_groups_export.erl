@@ -181,7 +181,7 @@ ensure_content_group(CGName, IdsAcc, Context) ->
             case m_rsc:rid(CGName, Context) of
                 undefined ->
                     Props = #{
-                        <<"category">> => content_group,
+                        <<"category_id">> => content_group,
                         <<"title">> => CGName,
                         <<"name">> => CGName
                     },

@@ -67,7 +67,7 @@ page_path_test() ->
 
     {ok, Id} = m_rsc:insert(#{
             <<"title">> => <<"Hello.">>,
-            <<"category">> => <<"text">>,
+            <<"category_id">> => <<"text">>,
             <<"page_path">> => <<"/foo/bar">>
         }, AdminC),
     ?assertEqual(<<"/foo/bar">>, m_rsc:p(Id, page_path, AdminC)),
@@ -135,7 +135,7 @@ language_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     C = z_acl:sudo( z_context:new(zotonic_site_testsandbox) ),
     Props = #{
-        <<"category">> => other,
+        <<"category_id">> => other,
         <<"is_published">> => true,
         <<"language">> => [ 'zh-hant', en ],
         <<"title">> => #trans{
