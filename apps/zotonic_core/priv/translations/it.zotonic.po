@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-14 16:17\n"
+"PO-Revision-Date: 2021-10-15 08:53\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -1096,7 +1096,7 @@ msgstr "Dipendente"
 #: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
 #: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:8
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:13./apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:15
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:17
 #: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:8
 msgid "Disconnect"
 msgstr "Scollegare"
@@ -7118,7 +7118,7 @@ msgstr "Autorizza l'accesso al tuo account"
 msgid "Be careful, this access token gives full access to your account."
 msgstr "Fai attenzione, questo token di accesso dà pieno accesso al tuo account."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:28
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
 msgid "Connect with"
 msgstr "Connesso con"
 
@@ -7158,7 +7158,7 @@ msgstr "Elimina app consumatore"
 msgid "Description - shows up on button"
 msgstr "Descrizione: compare sul pulsante"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:10
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:12
 msgid "Disconnect from"
 msgstr "Disconnetti da"
 
@@ -7166,7 +7166,7 @@ msgstr "Disconnetti da"
 msgid "Do you want to connect your <b>{local}</b> account to <b>{remote}</b>?"
 msgstr "Vuoi collegare il tuo account <b>{local}</b> <b>{remote}</b>?"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:14
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:16
 msgid "Do you want to disconnect your account?"
 msgstr "Vuoi disconnettere il tuo account?"
 
@@ -7230,7 +7230,7 @@ msgstr "Importa contenuto dal sito Web remoto a questo sito Web."
 msgid "Log in to {remote} with your {local} account."
 msgstr "Accedi a {remote} con il tuo {local} account."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra.tpl:29
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:33
 msgid "Log in with"
 msgstr "Entra con"
 
