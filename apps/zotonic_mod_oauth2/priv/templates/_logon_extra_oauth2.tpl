@@ -1,5 +1,5 @@
 {% block buttons %}
-    {% for app in m.oauth2_consumer.consumers.auth %}
+    {% for app in m.oauth2_consumer.consumers.list.auth %}
         {% with app.id as app_id %}
             {% if is_connect and m.oauth2_consumer.is_connected[app.name] %}
             <li>

@@ -18,6 +18,7 @@
 
 -export([
     fetch/3,
+    fetch_json/3,
     fetch_partial/3,
     metadata/3,
     as_data_url/3,
@@ -33,6 +34,19 @@ fetch(Url, Options, Context) ->
     Options1 = add_options(Url1, Options, Context),
     z_url_fetch:fetch(Url1, Options1).
 
+%% @doc Fetch JSON data from an URL. Let modules change the fetch options. On success, the returned
+%% body is parsed with jsxrecord and returned.
+-spec fetch_json( string() | binary(), z_url_fetch:options(), z:context() ) -> {ok, term()} | {error, term()}.
+fetch_json(Url, Options, Context) ->
+    Url1 = z_convert:to_binary(Url),
+    Options1 = [ {accept, "application/json"} | proplists:delete(accept, Options) ],
+    Options2 = add_options(Url1, Options1, Context),
+    case z_url_fetch:fetch(Url1, Options2) of
+        {ok, {_Final, _Hs, _Length, Body}} ->
+            {ok, jsxrecord:decode(Body)};
+        {error, _} = Error ->
+            Error
+    end.
 
 %% @doc Fetch data from an URL. Let modules change the fetch options.
 -spec fetch_partial( string() | binary(), z_url_fetch:options(), z:context() ) -> z_url_fetch:fetch_result().

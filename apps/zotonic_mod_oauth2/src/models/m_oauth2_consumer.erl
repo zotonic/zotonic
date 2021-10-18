@@ -44,8 +44,15 @@ m_get([ <<"consumers">> ], _Msg, Context) ->
         {error, _} = Error ->
             Error
     end;
-m_get([ <<"consumers">>, <<"auth">> | Rest ], _Msg, Context) ->
+m_get([ <<"consumers">>, <<"list">>, <<"auth">> | Rest ], _Msg, Context) ->
     case list_consumers_auth(Context) of
+        {ok, Apps} ->
+            {ok, {Apps, Rest}};
+        {error, _} = Error ->
+            Error
+    end;
+m_get([ <<"consumers">>, <<"list">>, <<"import">> | Rest ], _Msg, Context) ->
+    case list_consumers_import(Context) of
         {ok, Apps} ->
             {ok, {Apps, Rest}};
         {error, _} = Error ->
@@ -65,6 +72,16 @@ m_get([ <<"is_connected">>, Name | Rest ], _Msg, Context) ->
 %% @doc List all consumers that can be used for authentication.
 -spec list_consumers_auth( z:context() ) -> {ok, list( map() )} | {error, eacces | term()}.
 list_consumers_auth(Context) ->
+    z_db:qmap("
+        select a.id, a.name, a.description, a.is_use_import, a.is_use_auth, a.domain
+        from oauth2_consumer_app a
+        where a.is_use_auth = true
+        order by description",
+        Context).
+
+%% @doc List all consumers that can be used for import of data.
+-spec list_consumers_import( z:context() ) -> {ok, list( map() )} | {error, eacces | term()}.
+list_consumers_import(Context) ->
     z_db:qmap("
         select a.id, a.name, a.description, a.is_use_import, a.is_use_auth, a.domain
         from oauth2_consumer_app a
@@ -104,7 +121,12 @@ get_consumer(ConsumerId, Context) ->
                 [ ConsumerId ],
                 Context);
         false ->
-            {error, eacces}
+            z_db:qmap_row("
+                select a.id, a.name, a.description, a.domain
+                from oauth2_consumer_app a
+                where a.id = $1",
+                [ ConsumerId ],
+                Context)
     end.
 
 
