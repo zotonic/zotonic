@@ -23,7 +23,7 @@
 -export([
     payload_msg/1,
 
-    template_get/3,
+    template_get/4,
 
     call/5,
     publish/5,
@@ -68,25 +68,9 @@ payload_msg(Payload) ->
 
 %% @doc Called by the compiled templates for a model lookup. Any map in the path is taken as the
 %% model payload, and passed in the msg part of the model m_get call.
--spec template_get( path(), model_name(), z:context() ) -> {ok, {term(), path()}} | {error, term()}.
-template_get( Path, Model, Context ) ->
-    case lists:any(fun erlang:is_map/1, Path) of
-        true ->
-            {PathStart, [ Payload | PathEnd ]} = lists:splitwith(fun erlang:is_map/1, Path),
-            Msg = #{
-                payload => Payload
-            },
-            case template_get_1(PathStart, Model, Msg, Context) of
-                {ok, {Result, Rest}} ->
-                    {ok, {Result, Rest ++ PathEnd}};
-                {error, _} = Error ->
-                    Error
-            end;
-        false ->
-            template_get_1(Path, Model, undefined, Context)
-    end.
-
-template_get_1(Path, Model, Msg, Context) ->
+-spec template_get( model_name(), path(), term(), z:context() ) -> {ok, {term(), path()}} | {error, term()}.
+template_get( Model, Path, Payload, Context ) ->
+    Msg = payload_msg(Payload),
     case get_module(Model, Context) of
         {ok, Mod} ->
             model_call(Mod, m_get, Path, Msg, Context);
@@ -164,6 +148,7 @@ get_module(mqtt_ticket, _Context)   -> {ok, m_mqtt_ticket};
 get_module(predicate, _Context) -> {ok, m_predicate};
 get_module(req, _Context)       -> {ok, m_req};
 get_module(rsc_gone, _Context)  -> {ok, m_rsc_gone};
+get_module(rsc_import, _Context)  -> {ok, m_rsc_import};
 get_module(search, _Context)    -> {ok, m_search};
 get_module(site, _Context)      -> {ok, m_site};
 get_module(sysconfig, _Context) -> {ok, m_sysconfig};
@@ -180,6 +165,7 @@ get_module(<<"mqtt_ticket">>, _Context)   -> {ok, m_mqtt_ticket};
 get_module(<<"predicate">>, _Context) -> {ok, m_predicate};
 get_module(<<"req">>, _Context)       -> {ok, m_req};
 get_module(<<"rsc_gone">>, _Context)  -> {ok, m_rsc_gone};
+get_module(<<"rsc_import">>, _Context)  -> {ok, m_rsc_import};
 get_module(<<"search">>, _Context)    -> {ok, m_search};
 get_module(<<"site">>, _Context)      -> {ok, m_site};
 get_module(<<"sysconfig">>, _Context) -> {ok, m_sysconfig};
