@@ -456,7 +456,7 @@ lookup_translation(#trans{} = Trans, _TplVars, Context) ->
 
 
 %% @doc A model call with optional payload. Compiled from m.model.path!payload
--spec model_call(Model::atom(), Path::list(), Payload::term(), Context::term()) -> template_compiler:render_result().
+-spec model_call(Model::atom(), Path::list(), Payload::term(), Context::term()) -> template_compiler:model_return().
 model_call(Model, Path, Payload, Context) ->
     z_model:template_get(Model, Path, Payload, Context).
 
