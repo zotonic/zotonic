@@ -34,8 +34,9 @@ At the very start, the template parser resolves ``m.rsc`` to module ``m_rsc``. T
 
 This is the function specification of ``m_get``::
 
-    -spec m_get(Keys, _Msg, Context) -> { term(), RestKeys } when
+    -spec m_get(Keys, Msg, Context) -> { term(), RestKeys } when
         Keys :: list(),
+        Msg :: zotonic_model:opt_msg(),
         RestKeys :: list(),
         Context:: z:context().
 
@@ -43,11 +44,11 @@ It takes the dotted expression list and returns the looked up value and the unpr
 
 In this example, the `m_get` is called as::
 
-    m_get([ 1, <<"is_cat">>, <<"person">> ], Context)
+    m_rsc:m_get([ 1, <<"is_cat">>, <<"person">> ], _Msg, Context)
 
 And will return:
 
-    {true, []}
+    {ok, {true, []}}
 
 Where ``true`` is returned because rescource id 1 is indeed a person, and ``[]`` is returned because the call consumed all
 parts of the dotted expression.
