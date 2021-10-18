@@ -54,10 +54,13 @@
 -define(MQTT_CALL_TIMEOUT, 60000).
 
 -spec payload_msg( Payload :: term() ) -> opt_message().
-payload_msg(undefined) ->
-    undefined;
-payload_msg(null) ->
-    undefined;
+payload_msg(None) when None =:= null; None =:= undefined ->
+    #{
+        type => publish,
+        topic => [],
+        properties => #{},
+        payload => undefined
+    };
 payload_msg(Payload) ->
     #{
         type => publish,
