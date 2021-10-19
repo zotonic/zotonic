@@ -62,7 +62,7 @@
   0},
  {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.8.1">>},0},
  {<<"zotonic_rdf">>,
-  {git,"git@github.com:zotonic/zotonic_rdf.git",
+  {git,"https://github.com/zotonic/zotonic_rdf.git",
        {ref,"3f151abe69d6fbc641bd62335869497829722b7e"}},
   0},
  {<<"zotonic_ssl">>,{pkg,<<"zotonic_ssl">>,<<"1.1.0">>},0},
