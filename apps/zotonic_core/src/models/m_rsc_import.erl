@@ -277,9 +277,15 @@ reimport_recursive(Id, Context) ->
 -spec reimport_recursive( m_rsc:resource_id(), map(), options() | saved, z:context() ) -> import_result().
 reimport_recursive(Id, RefIds, Options, Context) ->
     case reimport(Id, RefIds, Options, Context) of
-        {ok, {LocalId, RefIds}} ->
-            RefIds1 = import_referred_ids(RefIds, #{ LocalId => true }, Context),
-            {ok, {LocalId, RefIds1}};
+        {ok, {LocalId, RefIds1}} ->
+            Imported = maps:fold(
+                fun(_Uri, LId, ImpAcc) ->
+                    ImpAcc#{ LId => true }
+                end,
+                #{ LocalId => true },
+                RefIds),
+            RefIds2 = import_referred_ids(RefIds1, Imported, Context),
+            {ok, {LocalId, RefIds2}};
         {error, _} = Error ->
             Error
     end.
@@ -726,15 +732,10 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
 
                             % Importing into a content-group depends on the import Options
                             <<"content_group_id">> ->
-                                case maps:is_key(<<"content_group_id">>, PropsForced) of
-                                    false ->
-                                        case find_content_group(V, Context) of
-                                            {ok, CGId} ->
-                                                {Acc#{ <<"content_group_id">> => CGId }, ImpAcc};
-                                            {error, _} ->
-                                                {Acc, ImpAcc}
-                                        end;
-                                    true ->
+                                case find_content_group(V, Context) of
+                                    {ok, CGId} ->
+                                        {Acc#{ <<"content_group_id">> => CGId }, ImpAcc};
+                                    {error, _} ->
                                         {Acc, ImpAcc}
                                 end;
                             <<"content_group">> -> {Acc, ImpAcc};
@@ -1116,6 +1117,8 @@ find_predicate(Name, Pred, Context) ->
 
 
 %% @doc Find a content group, prefer matching on name before URI.
+find_content_group(undefined, _Context) ->
+    {error, enoent};
 find_content_group(RId, Context) ->
     Name = maps:get(<<"name">>, RId, undefined),
     CGId = case m_rsc:rid(Name, Context) of
