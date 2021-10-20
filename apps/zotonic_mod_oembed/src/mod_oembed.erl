@@ -1,8 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2011-2013 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% @copyright 2011-2021 Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc Enables embedding media from their URL.
 
-%% Copyright 2011-2013 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% Copyright 2011-2021 Arjan Scherpenisse <arjan@scherpenisse.net>
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("include/oembed.hrl").
+-include("../include/oembed.hrl").
 
 %% Fantasy mime type to distinguish embeddable html fragments.
 -define(OEMBED_MIME, <<"text/html-oembed">>).
@@ -270,7 +270,6 @@ observe_media_import_medium(#media_import_medium{
         id = Id,
         medium = #{
             <<"mime">> := ?OEMBED_MIME,
-            <<"oembed_service">> := Provider,
             <<"oembed_url">> := Url,
             <<"oembed">> := Json
         } = Medium }, Context) when is_map(Json) ->
@@ -278,9 +277,10 @@ observe_media_import_medium(#media_import_medium{
         #{ <<"oembed_url">> := Url } ->
             ok;
         _Other ->
+            Service = z_convert:to_binary(maps:get(<<"oembed_service">>, Medium, undefined)),
             MediaProps = #{
                 <<"mime">> => ?OEMBED_MIME,
-                <<"oembed_service">> => Provider,
+                <<"oembed_service">> => Service,
                 <<"oembed_url">> => z_sanitize:uri(Url),
                 <<"oembed">> => sanitize_json(Json, Context),
                 <<"height">> => as_int(maps:get(<<"height">>, Medium, undefined)),
