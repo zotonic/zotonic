@@ -490,24 +490,20 @@ fetch_preview(Url, Context) ->
                     RId = #{
                         <<"is_a">> => IsA
                     },
-                    case find_category(RId, Rsc, Context) of
-                        {ok, Category} ->
-                            Rsc1 = z_sanitize:escape_props_check(Rsc, Context),
-                            Rsc2 = Rsc1#{
-                                <<"is_authoritative">> => false,
-                                <<"uri">> => z_sanitize:uri(Uri),
-                                <<"category_id">> => Category
-                            },
-                            % The URL might need to be fetched as a data: url, as the remote
-                            % resource might have non-anonymous access permissions.
-                            Result = #{
-                                <<"resource">> => Rsc2,
-                                <<"depiction_url">> => maps:get(<<"depiction_url">>, JSON, undefined)
-                            },
-                            {ok, Result};
-                        {error, _} = Error ->
-                            Error
-                    end
+                    Category = find_category(RId, Rsc, Context),
+                    Rsc1 = z_sanitize:escape_props_check(Rsc, Context),
+                    Rsc2 = Rsc1#{
+                        <<"is_authoritative">> => false,
+                        <<"uri">> => z_sanitize:uri(Uri),
+                        <<"category_id">> => Category
+                    },
+                    % The URL might need to be fetched as a data: url, as the remote
+                    % resource might have non-anonymous access permissions.
+                    Result = #{
+                        <<"resource">> => Rsc2,
+                        <<"depiction_url">> => maps:get(<<"depiction_url">>, JSON, undefined)
+                    },
+                    {ok, Result}
             end;
         {ok, _} ->
             {error, format};
@@ -1138,23 +1134,19 @@ find_content_group(RId, Context) ->
 %% is not allowed.
 -spec find_allowed_category( RId::map(),  Rsc::map(), options(), z:context() ) -> {ok, m_rsc:resource_id()} | {error, term()}.
 find_allowed_category(RId, Rsc, Options, Context) ->
-    case find_category(RId, Rsc, Context) of
-        {ok, CatId} ->
-            CatName = m_rsc:p_no_acl(CatId, name, Context),
-            Allow = proplists:get_value(allow_category, Options, undefined),
-            Deny = proplists:get_value(deny_category, Options, [ <<"meta">> ]),
-            case
-                (Allow =:= undefined orelse matching_category(CatName, Allow, Context))
-                andalso not matching_category(CatName, Deny, Context)
-            of
-                true ->
-                    {ok, CatId};
-                false ->
-                    lager:info("Not importing a ~p: ~p", [ CatName, RId ]),
-                    {error, eacces}
-            end;
-        {error, _} = Error ->
-            Error
+    CatId = find_category(RId, Rsc, Context),
+    CatName = m_rsc:p_no_acl(CatId, name, Context),
+    Allow = proplists:get_value(allow_category, Options, undefined),
+    Deny = proplists:get_value(deny_category, Options, [ <<"meta">> ]),
+    case
+        (Allow =:= undefined orelse matching_category(CatName, Allow, Context))
+        andalso not matching_category(CatName, Deny, Context)
+    of
+        true ->
+            {ok, CatId};
+        false ->
+            lager:info("Not importing a ~p: ~p", [ CatName, RId ]),
+            {error, eacces}
     end.
 
 matching_category(Name, Cats, Context) ->
@@ -1167,7 +1159,7 @@ matching_category(Name, Cats, Context) ->
 
 %% @doc Find the category to be imported. This tries to map the 'is_a'
 %% and the uri of the category.
--spec find_category( RId::map(),  Rsc::map(), z:context() ) -> {ok, m_rsc:resource_id()} | {error, term()}.
+-spec find_category( RId::map(),  Rsc::map(), z:context() ) -> m_rsc:resource_id().
 find_category(RId, Rsc, Context) ->
     RscCatId = case maps:get(<<"category_id">>, Rsc, undefined) of
         #{ <<"name">> := Name, <<"uri">> := CatUri } ->
@@ -1182,18 +1174,18 @@ find_category(RId, Rsc, Context) ->
     end,
     case m_rsc:is_a(RscCatId, category, Context) of
         true ->
-            {ok, RscCatId};
+            RscCatId;
         false ->
             case maps:get(<<"is_a">>, RId, undefined) of
                 IsA when is_list(IsA) ->
                     case first_category(lists:reverse(IsA), Context) of
                         {ok, IsACatId} ->
-                            {ok, IsACatId};
+                            IsACatId;
                         error ->
-                            {ok, other}
+                            m_rsc:rid(other, Context)
                     end;
                 _ ->
-                    {ok, other}
+                    m_rsc:rid(other, Context)
             end
     end.
 
