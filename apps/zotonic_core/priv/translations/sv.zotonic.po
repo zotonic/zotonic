@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-15 11:46\n"
+"PO-Revision-Date: 2021-10-20 14:25\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -16,11 +16,11 @@ msgstr ""
 "X-Crowdin-File-ID: 8692\n"
 "Language: sv_SE\n"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:99
+#: apps/zotonic_core/src/support/z_fetch.erl:113
 msgid "Could not fetch the remote resource URL."
 msgstr "Det gick inte att hämta fjärrresursens URL."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:85
+#: apps/zotonic_core/src/support/z_fetch.erl:99
 msgid "Forbidden to access the remote resource URL."
 msgstr "Förbjudet att komma åt fjärrresursens URL."
 
@@ -28,31 +28,31 @@ msgstr "Förbjudet att komma åt fjärrresursens URL."
 msgid "Page Import"
 msgstr "Sidimport"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:93
+#: apps/zotonic_core/src/support/z_fetch.erl:107
 msgid "The remote server can not handle this URL."
 msgstr "Fjärrservern kan inte hantera denna URL."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:97
+#: apps/zotonic_core/src/support/z_fetch.erl:111
 msgid "The remote server for the URL is having problems."
 msgstr "Fjärrservern för URL: en har problem."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:95
+#: apps/zotonic_core/src/support/z_fetch.erl:109
 msgid "The remote server for the URL is having temporary problems."
 msgstr "Fjärrservern för URL: en har tillfälliga problem."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:87
+#: apps/zotonic_core/src/support/z_fetch.erl:101
 msgid "The resource at the URL can not be found."
 msgstr "Resursen på URL: en kan inte hittas."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:89
+#: apps/zotonic_core/src/support/z_fetch.erl:103
 msgid "The resource at the URL is gone."
 msgstr "Resursen på URL: en är borta."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:91
+#: apps/zotonic_core/src/support/z_fetch.erl:105
 msgid "Too many requests for the remote server, try again later."
 msgstr "För många förfrågningar om fjärrservern, försök igen senare."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:83
+#: apps/zotonic_core/src/support/z_fetch.erl:97
 msgid "Unauthorized to access the remote resource URL."
 msgstr "Obehörig för åtkomst till fjärrresursens URL."
 
@@ -1182,7 +1182,7 @@ msgid "Embed page"
 msgstr "Bädda in sidan"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:196
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:231
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:230
 msgid "Embedded Content"
 msgstr "Inbäddat innehåll"
 
@@ -7326,7 +7326,7 @@ msgstr "API-nyckel finns på"
 msgid "Attempt to fix embedded videos for which OEmbed embedding has failed previously."
 msgstr "Försök att fixa inbäddade videor för vilka OEmbed-inbäddning misslyckades tidigare."
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:319
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:318
 msgid "Attempting to fix ~p videos."
 msgstr "Försöker fixa ~ p-videor."
 
@@ -7338,7 +7338,7 @@ msgstr "Inbäddning av medieobjekt misslyckades med HTTP-kod"
 msgid "Fix embedded videos"
 msgstr "Fixa inbäddade videor"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:316
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:315
 msgid "No embedded videos found which need fixing."
 msgstr "Inga inbäddade videor hittades som behöver åtgärdas."
 
@@ -7346,11 +7346,11 @@ msgstr "Inga inbäddade videor hittades som behöver åtgärdas."
 msgid "Save Embedly Key"
 msgstr "Spara Embedly Key"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:328
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:327
 msgid "Saved the Embedly settings."
 msgstr "Sparade inställningarna för Bädda in."
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:330
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:329
 msgid "You don't have permission to change the Embedly settings."
 msgstr "Du har inte behörighet att ändra inställningarna för Bädda in."
 
