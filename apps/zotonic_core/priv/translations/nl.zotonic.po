@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-15 11:46\n"
+"PO-Revision-Date: 2021-10-20 12:24\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -7098,7 +7098,7 @@ msgstr "Wees voorzichtig, dit toegangstoken geeft volledige toegang tot uw accou
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
 msgid "Connect with"
-msgstr "Verbonden met"
+msgstr "Verbind met"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:113
 msgid "Consumer App not found, or no view permission."
