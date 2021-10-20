@@ -57,7 +57,7 @@ modify_rsc_test() ->
 
     %% Check edges
     ?assertEqual([1], m_edge:objects(Id, author, AdminC)),
-    ?assertEqual([Id], m_edge:objects(Id, relation, AdminC)),
+    ?assertEqual([Id, 1], m_edge:objects(Id, relation, AdminC)),
 
     %% Usual rights
     ?assertEqual(false, z_acl:rsc_editable(Id, C)),
@@ -78,7 +78,7 @@ modify_rsc_test() ->
 
     %% Check edges
     ?assertEqual([1], m_edge:objects(IdAuth, author, AdminC)),
-    ?assertEqual([IdAuth], m_edge:objects(IdAuth, relation, AdminC)),
+    ?assertEqual([IdAuth, 1], m_edge:objects(IdAuth, relation, AdminC)),
 
     ok.
 
@@ -111,7 +111,15 @@ export_data() ->
                                <<"name">> => undefined,
                                <<"title">> => <<"Hello World">>,
                                <<"uri">> => <<"https://foo.test/id/333">>},
-                         <<"seq">> => 1}],
+                         <<"seq">> => 1},
+                        #{<<"created">> => {{2018,11,23},{10,48,10}},
+                         <<"object_id">> =>
+                             #{<<"id">> => 1,
+                               <<"is_a">> => [ <<"person">> ],
+                               <<"name">> => undefined,
+                               <<"title">> => <<"Admin">>,
+                               <<"uri">> => <<"https://localhost/id/1">>},
+                         <<"seq">> => 2}],
                   <<"predicate">> =>
                       #{<<"id">> => 301,
                         <<"is_a">> => [ <<"meta">>, <<"predicate">> ],
@@ -138,5 +146,3 @@ export_data() ->
       <<"uri">> => <<"https://foo.test/id/333">>,
       <<"uri_template">> => <<"https://foo.test/id/:id">>
 }.
-
-
