@@ -37,7 +37,6 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include("../include/oembed.hrl").
 
 %% Fantasy mime type to distinguish embeddable html fragments.
 -define(OEMBED_MIME, <<"text/html-oembed">>).
