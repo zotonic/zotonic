@@ -14,3 +14,4 @@ URLs and links
    ../filter_urlize
    ../filter_escape_link
    ../filter_urlencode
+   ../filter_parse_url

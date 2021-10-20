@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021 Marc Worrell
-%% @doc Parse an uri. Interface to uri_string:parse/1
+%% @doc Parse an url. Interface to uri_string:parse/1. This filter is called parse_url
+%% and not parse_uri to be more consistent with all other URL filters.
 
 %% Copyright 2021 Marc Worrell
 %%
@@ -16,19 +17,19 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(filter_parse_uri).
--export([parse_uri/2]).
+-module(filter_parse_url).
+-export([parse_url/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-parse_uri(undefined, _Context) ->
+parse_url(undefined, _Context) ->
     undefined;
-parse_uri(Uri, _Context) when is_binary(Uri) ->
+parse_url(Uri, _Context) when is_binary(Uri) ->
     uri_string:parse(Uri);
-parse_uri(Uri, Context) when is_list(Uri) ->
-    parse_uri(unicode:characters_to_binary(Uri, utf8), Context);
-parse_uri(#trans{} = Tr, Context) ->
-    parse_uri(z_trans:lookup_fallback(Tr, Context), Context);
-parse_uri(V, Context) ->
-    parse_uri(z_convert:to_binary(V), Context).
+parse_url(Uri, Context) when is_list(Uri) ->
+    parse_url(unicode:characters_to_binary(Uri, utf8), Context);
+parse_url(#trans{} = Tr, Context) ->
+    parse_url(z_trans:lookup_fallback(Tr, Context), Context);
+parse_url(V, Context) ->
+    parse_url(z_convert:to_binary(V), Context).
 
