@@ -86,8 +86,8 @@ modify_rsc_test() ->
 
     % The collision on page_path and name should have removed those
     % properties from the import.
-    ?assertEqual(undefined, m_rsc:p(Id, name, AdminC)),
-    ?assertEqual(undefined, m_rsc:p(Id, page_path, AdminC)),
+    ?assertEqual(undefined, m_rsc:p(IdAuth, name, AdminC)),
+    ?assertEqual(undefined, m_rsc:p(IdAuth, page_path, AdminC)),
 
     ok.
 
