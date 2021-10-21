@@ -55,6 +55,10 @@ modify_rsc_test() ->
     ?assertEqual({{2014,4,30},{22,0,0}}, m_rsc:p(Id, created, AdminC)),
     ?assertEqual({{2021,7,14},{8,47,7}}, m_rsc:p(Id, modified, AdminC)),
 
+    ?assertEqual(<<"rsc_import_test_1">>, m_rsc:p(Id, name, AdminC)),
+    ?assertEqual(<<"/rsc-import-test-1">>, m_rsc:p(Id, page_path, AdminC)),
+
+
     %% Check edges
     ?assertEqual([1], m_edge:objects(Id, author, AdminC)),
     ?assertEqual([Id, 1], m_edge:objects(Id, relation, AdminC)),
@@ -80,7 +84,13 @@ modify_rsc_test() ->
     ?assertEqual([1], m_edge:objects(IdAuth, author, AdminC)),
     ?assertEqual([IdAuth, 1], m_edge:objects(IdAuth, relation, AdminC)),
 
+    % The collision on page_path and name should have removed those
+    % properties from the import.
+    ?assertEqual(undefined, m_rsc:p(Id, name, AdminC)),
+    ?assertEqual(undefined, m_rsc:p(Id, page_path, AdminC)),
+
     ok.
+
 
 export_data() ->
     #{<<"depiction_url">> => <<"https://localhost/lib/images/koe.jpg">>,
@@ -131,6 +141,8 @@ export_data() ->
       <<"is_a">> => [ <<"text">>, <<"article">>, <<"foobartext">> ],
       <<"resource">> =>
           #{<<"version">> => 1,
+            <<"name">> => <<"rsc_import_test_1">>,
+            <<"page_path">> => <<"/rsc-import-test-1">>,
             <<"is_published">> => true,
             <<"is_authoritative">> => true,
             <<"org_pubdate">> => {{2014,4,30},{22,0,0}},
