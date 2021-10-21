@@ -656,7 +656,27 @@ import(_OptLocalId, JSON, _ImportedAcc, _Options, _Context) ->
     {error, status}.
 
 
-update_rsc(undefined, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
+update_rsc(OptLocalId, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
+    case update_rsc_1(OptLocalId, RemoteRId, Rsc, ImportedAcc, Options, Context) of
+        {ok, _} = OK ->
+            OK;
+        {error, duplicate_page_path} ->
+            lager:warning("Import of duplicate page_path for ~p from ~p, dropped path ~p", [
+                    OptLocalId, RemoteRId, maps:get(<<"page_path">>, Rsc)
+                ]),
+            Rsc1 = maps:remove(<<"page_path">>, Rsc),
+            update_rsc(OptLocalId, RemoteRId, Rsc1, ImportedAcc, Options, Context);
+        {error, duplicate_name} ->
+            lager:warning("Import of duplicate name for ~p from ~p, dropped name ~p", [
+                    OptLocalId, RemoteRId, maps:get(<<"name">>, Rsc)
+                ]),
+            Rsc1 = maps:remove(<<"name">>, Rsc),
+            update_rsc(OptLocalId, RemoteRId, Rsc1, ImportedAcc, Options, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+update_rsc_1(undefined, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
     UpdateOptions = [
         {is_escape_texts, false},
         is_import
@@ -683,7 +703,7 @@ update_rsc(undefined, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
                     {error, authoritative}
             end
     end;
-update_rsc(LocalId, _RemoteRId, Rsc, _ImportedAcc, _Options, Context) when is_integer(LocalId) ->
+update_rsc_1(LocalId, _RemoteRId, Rsc, _ImportedAcc, _Options, Context) when is_integer(LocalId) ->
     UpdateOptions = [
         {is_escape_texts, false},
         is_import
