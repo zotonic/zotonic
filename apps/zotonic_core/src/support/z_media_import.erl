@@ -267,8 +267,8 @@ import_as_media(MD, Context) ->
     end.
 
 import_as_referred_image(MD, Context) ->
-    Width = z_convert:to_integer(z_url_metadata:p(<<"og:image:width">>, MD)),
-    Height = z_convert:to_integer(z_url_metadata:p(<<"og:image:height">>, MD)),
+    Width = to_integer(z_url_metadata:p(<<"og:image:width">>, MD)),
+    Height = to_integer(z_url_metadata:p(<<"og:image:height">>, MD)),
     case        is_integer(Width)
         andalso is_integer(Height)
         andalso Width > 32
@@ -299,6 +299,24 @@ import_as_referred_image(MD, Context) ->
             end;
         false ->
             undefined
+    end.
+
+
+to_integer(undefined) -> undefined;
+to_integer("") -> undefined;
+to_integer(<<>>) -> undefined;
+to_integer(V) ->
+    V1 = z_string:trim(V),
+    try
+        z_convert:to_integer(V1)
+    catch
+        error:badarg ->
+            try
+                erlang:round(z_convert:to_float(V1))
+            catch
+                _:_ ->
+                    undefined
+            end
     end.
 
 
