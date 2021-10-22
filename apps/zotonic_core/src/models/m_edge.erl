@@ -952,7 +952,7 @@ set_sequence(Subject, Pred, ObjectIds, Context) ->
                                             false ->
                                                 case insert(SubjectId, Pred, ObjectId, Context) of
                                                     {ok, EdgeId} ->
-                                                        {ok, {ObjectId, EdgeId}};
+                                                        {true, {ObjectId, EdgeId}};
                                                     {error, _} ->
                                                         false
                                                 end

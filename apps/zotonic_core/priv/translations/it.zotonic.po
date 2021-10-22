@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-05 08:57\n"
+"PO-Revision-Date: 2021-10-15 11:46\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -16,11 +16,11 @@ msgstr ""
 "X-Crowdin-File-ID: 8692\n"
 "Language: it_IT\n"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:89
+#: apps/zotonic_core/src/support/z_fetch.erl:99
 msgid "Could not fetch the remote resource URL."
 msgstr "Impossibile recuperare l'URL della risorsa remota."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:75
+#: apps/zotonic_core/src/support/z_fetch.erl:85
 msgid "Forbidden to access the remote resource URL."
 msgstr "Vietato accedere all'URL della risorsa remota."
 
@@ -28,31 +28,31 @@ msgstr "Vietato accedere all'URL della risorsa remota."
 msgid "Page Import"
 msgstr "Importazione pagina"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:83
+#: apps/zotonic_core/src/support/z_fetch.erl:93
 msgid "The remote server can not handle this URL."
 msgstr "Il server remoto non può gestire questo URL."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:87
+#: apps/zotonic_core/src/support/z_fetch.erl:97
 msgid "The remote server for the URL is having problems."
 msgstr "Il server remoto per l'URL sta riscontrando problemi."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:85
+#: apps/zotonic_core/src/support/z_fetch.erl:95
 msgid "The remote server for the URL is having temporary problems."
 msgstr "Il server remoto per l'URL sta riscontrando problemi temporanei."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:77
+#: apps/zotonic_core/src/support/z_fetch.erl:87
 msgid "The resource at the URL can not be found."
 msgstr "Impossibile trovare la risorsa all'URL."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:79
+#: apps/zotonic_core/src/support/z_fetch.erl:89
 msgid "The resource at the URL is gone."
 msgstr "La risorsa all'URL è andata."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:81
+#: apps/zotonic_core/src/support/z_fetch.erl:91
 msgid "Too many requests for the remote server, try again later."
 msgstr "Troppe richieste per il server remoto, riprova più tardi."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:73
+#: apps/zotonic_core/src/support/z_fetch.erl:83
 msgid "Unauthorized to access the remote resource URL."
 msgstr "Non autorizzato ad accedere all'URL della risorsa remota."
 
@@ -218,6 +218,7 @@ msgstr "Sei sicuro di voler ripristinare tutte le regole ACL alla loro versione 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:101
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:107
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:80./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:116./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:91./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:135./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:143
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:149./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
@@ -248,6 +249,7 @@ msgstr "Cambia categoria e/o gruppo di contenuti..."
 #: apps/zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
 #: apps/zotonic_mod_l10n/priv/templates/_admin_configure_module.tpl:8
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:16
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:24
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:26
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:6
 msgid "Close"
@@ -315,6 +317,7 @@ msgstr "Definisci chi può vedere o modificare questa pagina."
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:84./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:99
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/src/mod_survey.erl:102
 msgid "Delete"
 msgstr "Elimina"
@@ -387,6 +390,7 @@ msgid "Group members and managers can link"
 msgstr "I membri del gruppo e i manager possono collegare"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:52
 msgid "Import"
 msgstr "Importa"
 
@@ -466,6 +470,7 @@ msgid "Not all user groups could be deleted."
 msgstr "Non è stato possibile eliminare tutti i gruppi di utenti."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:47
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:87./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:92
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:41
 msgid "Not allowed."
 msgstr "Non consentito."
@@ -747,7 +752,7 @@ msgstr "utilizzare un altro browser (ad esempio Chrome se ora stai usando Firefo
 msgid "view (acl action)"
 msgstr "vista (azione acl)"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:153./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:155
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:163./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:165
 msgid "&lt; Prev"
 msgstr "&lt; Prev"
 
@@ -770,6 +775,14 @@ msgstr "aggiungi blocco"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
 msgstr "<strong>Nome</strong> detto anche nome di battesimo o prenome.<br/><strong>Cognome intermedio</strong> spesso abbreviato negli USA in un'iniziale come in <em>John D. Rockefeller</em>.<br/><strong>Prefisso del cognome</strong> come l'olandese <em>van, van de, der</em>.<br/><strong>Cognome</strong>."
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:115
+msgid "A copy that will remain connected so that a new version can be fetched."
+msgstr "Una copia che rimarrà collegata in modo da poter recuperare una nuova versione."
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:119
+msgid "A local copy, disconnected from the remote site."
+msgstr "Una copia locale, disconnessa dal sito remoto."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:10
 msgid "About categories"
@@ -879,10 +892,11 @@ msgid "Attached media"
 msgstr "Media allegati"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:126
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:51
 msgid "Auth"
 msgstr "Autorizzazione"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:151
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:8./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:42
 msgid "Back"
 msgstr "Indietro"
@@ -978,7 +992,7 @@ msgstr "Collegare"
 msgid "Connect a page"
 msgstr "Collegare una pagina"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:55
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:126./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:55
 msgid "Connections"
 msgstr "Connessioni"
 
@@ -1007,7 +1021,7 @@ msgstr "Conta"
 msgid "Country"
 msgstr "Nazione"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:112
 msgid "Create"
 msgstr "Creare"
 
@@ -1021,6 +1035,7 @@ msgstr "Creato da me"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:25./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:138./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:51./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:54
 msgid "Created on"
 msgstr "Creato il"
 
@@ -1079,8 +1094,9 @@ msgstr "Dipendente"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:28./apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:32
 #: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:8
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:6
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:17
 #: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:8
 msgid "Disconnect"
 msgstr "Scollegare"
@@ -1093,9 +1109,9 @@ msgstr "Scopri il contenuto"
 msgid "Disks"
 msgstr "Dischi"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:120
-msgid "Do not import connections"
-msgstr "Non importare le connessioni"
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:129
+msgid "Do not import connections."
+msgstr "Non importare le connessioni."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
 msgid "Do you want to remove this block?"
@@ -1244,6 +1260,10 @@ msgstr "In primo piano"
 msgid "Features"
 msgstr "Caratteristiche"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:9
+msgid "Fetch new version"
+msgstr "Scarica nuova versione"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:6
 msgid "File / media content"
 msgstr "File / contenuto multimediale"
@@ -1282,9 +1302,9 @@ msgstr "Lava tutte le regole di dispacciamento degli URL, le cache dei template 
 msgid "Flush system caches"
 msgstr "Sciacquare le cache di sistema"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:128
-msgid "Follow connections and import all (deep copy)"
-msgstr "Segui le connessioni e importa tutto (copia completa)"
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:137
+msgid "Follow connections and import all (deep copy)."
+msgstr "Segui le connessioni e importa tutto (copia completa)."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:49
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
@@ -1321,9 +1341,9 @@ msgstr "Identità con questo indirizzo email"
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
 msgstr "Se una pagina ha un intervallo di date di pubblicazione, allora sarà visibile solo tra le due date. Nota che se hai il permesso di modificare la pagina allora puoi sempre vederla."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:124
-msgid "Import only direct connections (shallow copy)"
-msgstr "Importa solo connessioni dirette (copia superficiale)"
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:133
+msgid "Import only direct connections (shallow copy)."
+msgstr "Importa solo connessioni dirette (copia superficiale)."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:85
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:20
@@ -1395,13 +1415,9 @@ msgstr "Indirizzo postale"
 msgid "Main"
 msgstr "Principale"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:166
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:176
 msgid "Make"
 msgstr "Fare"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:113
-msgid "Make a local copy, disconnected from the remote page"
-msgstr "Crea una copia locale, disconnessa dalla pagina remota"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:69
 msgid "Make a new media item"
@@ -1476,6 +1492,7 @@ msgstr "Modificato da"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:28./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:84./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:141./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:50
 msgid "Modified on"
 msgstr "Modificato il"
 
@@ -1488,6 +1505,7 @@ msgstr "Modificato:"
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:11./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:10
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:48
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:535
 msgid "Name"
 msgstr "Nome"
@@ -1500,7 +1518,7 @@ msgstr "Connessioni di rete"
 msgid "New Page"
 msgstr "Nuova pagina"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:159./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:161
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:169./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:171
 msgid "Next &gt;"
 msgstr "Successivo &gt;"
 
@@ -1686,10 +1704,6 @@ msgstr "Reindirizzamento al sito web alla visualizzazione della pagina"
 msgid "Referrers to"
 msgstr "Riferimenti a"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:9
-msgid "Refresh"
-msgstr "ricaricare"
-
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:50
 msgid "Refreshed every 30 minutes."
 msgstr "Aggiornato ogni 30 minuti."
@@ -1710,7 +1724,7 @@ msgstr "Rimosso il collegamento a"
 msgid "Renumber category tree"
 msgstr "Rinumerare l'albero delle categorie"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:166
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:176
 msgid "Replace"
 msgstr "Sostituire"
 
@@ -2261,6 +2275,7 @@ msgstr "da"
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:31
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:22
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:70./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:71./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:76
 msgid "d M Y, H:i"
 msgstr "d M Y, H:i"
 
@@ -3702,7 +3717,7 @@ msgstr "Puoi utilizzare app di autenticazione a due fattori come <a rel=\"noopen
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
 msgstr "Devi essere autorizzato a modificare la configurazione del sistema per vedere o cambiare la configurazione dell'autenticazione a due fattori."
 
-#: apps/zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:46
+#: apps/zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:51./apps/zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:59
 msgid "Access denied"
 msgstr "Accesso negato"
 
@@ -4594,8 +4609,8 @@ msgid "The test below checks the connection between your machine, Google and our
 msgstr "Il test seguente verifica la connessione tra la tua macchina, Google e il nostro sito."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:78
-msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing messages."
-msgstr "Non dovrebbero esserci timeout, se ci sono timeout significa che la tua connessione Internet sta perdendo messaggi."
+msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing packets."
+msgstr "Non dovrebbero esserci timeout, se ci sono timeout allora la tua connessione internet sta perdendo pacchetti."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:135
 msgid "This tests the authentication with the server."
@@ -4627,8 +4642,8 @@ msgid "Yes"
 msgstr "Sì"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
-msgid "Your browser as it identifies itself with our server and your IP address. This is essential information for the help desk."
-msgstr "Il tuo browser in quanto si identifica con il nostro server e il tuo indirizzo IP. Queste sono informazioni essenziali per l'help desk."
+msgid "Your browser as it identifies itself to our server and your IP address. This is essential information for the help desk, but we do not store any personal data."
+msgstr "Il tuo browser in quanto si identifica con il nostro server e il tuo indirizzo IP. Queste sono informazioni essenziali per l'help desk, ma non memorizziamo alcun dato personale."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
@@ -4819,6 +4834,7 @@ msgid "Admin Custom Redirects"
 msgstr "Reindirizzamenti personalizzati dell'amministratore"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:23
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:49
 msgid "Domain"
 msgstr "Dominio"
 
@@ -5331,6 +5347,7 @@ msgid "App ID."
 msgstr "App ID."
 
 #: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:19./apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:20
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:61./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:45./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:46./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:56./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:57
 msgid "App Secret"
 msgstr "App Segreto"
 
@@ -5895,19 +5912,19 @@ msgstr "mezzanotte"
 msgid "noon"
 msgstr "mezzogiorno"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:19
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:17
 msgid "Connect with LinkedIn"
 msgstr "Collegati con LinkedIn"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:4./apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:6
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:2./apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:4
 msgid "Disconnect from LinkedIn"
 msgstr "Disconnettersi da LinkedIn"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:7
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:5
 msgid "Do you want to disconnect your LinkedIn account?"
 msgstr "Vuoi scollegare il tuo account LinkedIn?"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:20
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:18
 msgid "Log in with LinkedIn"
 msgstr "Accedi con LinkedIn"
 
@@ -6079,6 +6096,7 @@ msgid "Toggle non people"
 msgstr "Toggle non persone"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:23./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:23
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:49
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:164
 msgid "User"
 msgstr "Utente"
@@ -6222,6 +6240,7 @@ msgid "Deleted the mailing list."
 msgstr "Cancellata la mailing list."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:21
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:21./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:22./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:20./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:48./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:50
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:30./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:32
 #: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:6
 msgid "Description"
@@ -6999,9 +7018,305 @@ msgstr "Hai accoppiato il tuo account <strong>Microsoft</strong>"
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
 msgstr "Debug delle azioni di pubblicazione e sottoscrizione MQTT nella console Zotonic"
 
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:74./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:75./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:85./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:86
+msgid "Access Token URL"
+msgstr "URL del token di accesso"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:12
+msgid "Access content on this website."
+msgstr "Accedi ai contenuti di questo sito web."
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:53
+msgid "Added by"
+msgstr "Aggiunto da"
+
+#: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:57
+msgid "Allow Access"
+msgstr "Consentire l'accesso"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:59./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:70
+msgid "Allow import of content from the remote website"
+msgstr "Consenti l'importazione di contenuti dal sito Web remoto"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:56./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:67
+msgid "Allow users on the remote website to authenticate here"
+msgstr "Consenti agli utenti sul sito Web remoto di autenticarsi qui"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:16
+msgid "Allow users registered on the remote website to authenticate on this website."
+msgstr "Consenti agli utenti registrati sul sito Web remoto di autenticarsi su questo sito Web."
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:123
+msgid "An OAuth2 consumer with this name already exsists, please use another name."
+msgstr "Esiste già un consumatore OAuth2 con questo nome, utilizza un altro nome."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:36./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:47
+msgid "App Code"
+msgstr "Codice dell'app"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:44./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:37./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:48
+msgid "App ID"
+msgstr "ID app"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:85./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:19
+msgid "App not found, or no view permission."
+msgstr "App non trovata o nessuna autorizzazione di visualizzazione."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:74
+msgid "Are you sure you want to delete this App?"
+msgstr "Sei sicuro di voler eliminare questa app?"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:87./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:101
+msgid "Are you sure you want to delete this Consumer App?"
+msgstr "Sei sicuro di voler eliminare questa app consumer?"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:13
+msgid "Ask users on this website for their credentials to authenticate on their website or App."
+msgstr "Chiedi agli utenti di questo sito Web le proprie credenziali per l'autenticazione sul proprio sito Web o app."
+
 #: apps/zotonic_mod_oauth2/priv/templates/logon_service_oauth_done.tpl:6
 msgid "Authenticating..."
 msgstr "Autenticazione..."
+
+#: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:11
+msgid "Authorize"
+msgstr "Autorizzare"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:67./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:68./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:78./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:79
+msgid "Authorize URL"
+msgstr "Autorizza URL"
+
+#: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:16
+msgid "Authorize access to your account"
+msgstr "Autorizza l'accesso al tuo account"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:7
+msgid "Be careful, this access token gives full access to your account."
+msgstr "Fai attenzione, questo token di accesso dà pieno accesso al tuo account."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
+msgid "Connect with"
+msgstr "Connesso con"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:113
+msgid "Consumer App not found, or no view permission."
+msgstr "App consumer non trovata o nessuna autorizzazione di visualizzazione."
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:104
+msgid "Could not generate the access token."
+msgstr "Impossibile generare il token di accesso."
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:65./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:77./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:84
+msgid "Could not insert the App."
+msgstr "Impossibile inserire l'app."
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:125./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:149
+msgid "Could not insert the Consumer."
+msgstr "Impossibile inserire il Consumatore."
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:142
+msgid "Could not update the Consumer."
+msgstr "Impossibile aggiornare il consumatore."
+
+#: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:34
+msgid "Create connections with content on {local}."
+msgstr "Crea connessioni con contenuto su {local}."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:72./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:76
+msgid "Delete App"
+msgstr "Elimina app"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:93./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:103
+msgid "Delete Consumer App"
+msgstr "Elimina app consumatore"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:14./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:25./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
+msgid "Description - shows up on button"
+msgstr "Descrizione: compare sul pulsante"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:12
+msgid "Disconnect from"
+msgstr "Disconnetti da"
+
+#: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:20
+msgid "Do you want to connect your <b>{local}</b> account to <b>{remote}</b>?"
+msgstr "Vuoi collegare il tuo account <b>{local}</b> <b>{remote}</b>?"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:16
+msgid "Do you want to disconnect your account?"
+msgstr "Vuoi disconnettere il tuo account?"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:22./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:23./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:33./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:34
+msgid "Domain (eg. www.example.com)"
+msgstr "Dominio (es. www.example.com)"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:34./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:35
+msgid "Edit App"
+msgstr "Modifica app"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:77
+msgid "Edit OAuth2 App"
+msgstr "Modifica app OAuth2"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:82
+msgid "Edit OAuth2 Consumer"
+msgstr "Modifica consumatore OAuth2"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:10
+msgid "Edit the description of the App."
+msgstr "Modifica la descrizione dell'app."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:13./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:47
+msgid "Enabled"
+msgstr "Abilitato"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:35./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:33
+msgid "For Zotonic sites this you can enter the domain name(s) of the website."
+msgstr "Per i siti Zotonic è possibile inserire il nome oi nomi di dominio del sito web."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:52
+msgid "Generate access token"
+msgstr "Genera token di accesso"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:48
+msgid "Generate my access token"
+msgstr "Genera il mio token di accesso"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:33./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:31
+msgid "Give the redirect URLs that are valid for the website performing the OAuth2 authorization."
+msgstr "Fornisci gli URL di reindirizzamento validi per il sito Web che esegue l'autorizzazione OAuth2."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:3
+msgid "Here is the new access token."
+msgstr "Ecco il nuovo token di accesso."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:63./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:74
+msgid "If the remote website is a Zotonic website then you can leave the two URLs below empty."
+msgstr "Se il sito Web remoto è un sito Web Zotonic, puoi lasciare vuoti i due URL sottostanti."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:51
+msgid "If you have already a token then it will be replaces with the new one."
+msgstr "Se hai già un token, verrà sostituito con quello nuovo."
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:15
+msgid "Import content from the remote website to this website."
+msgstr "Importa contenuto dal sito Web remoto a questo sito Web."
+
+#: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
+msgid "Log in to {remote} with your {local} account."
+msgstr "Accedi a {remote} con il tuo {local} account."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:33
+msgid "Log in with"
+msgstr "Entra con"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:40
+msgid "Make App"
+msgstr "Crea app"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:22./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:26
+msgid "Make a new App"
+msgstr "Crea una nuova App"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:8
+msgid "Make a new App for OAuth2 authorization and/or content export to other websites."
+msgstr "Crea una nuova App per l'autorizzazione OAuth2 e/o l'esportazione dei contenuti su altri siti web."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:8
+msgid "Make a new consumer for OAuth2 authorization and content import from another website."
+msgstr "Crea un nuovo consumatore per l'autorizzazione OAuth2 e l'importazione di contenuti da un altro sito web."
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:96
+msgid "New access token"
+msgstr "Nuovo token di accesso"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:3
+msgid "OAuth2 Application"
+msgstr "Applicazione OAuth2"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:7./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:247
+msgid "OAuth2 Applications"
+msgstr "Applicazioni OAuth2"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:3./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:7./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:252
+msgid "OAuth2 Consumer Tokens"
+msgstr "Token consumatore OAuth2"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:88
+msgid "Only admnistrators can view OAuth2 applications."
+msgstr "Solo gli amministratori possono visualizzare le applicazioni OAuth2."
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:93
+msgid "Only admnistrators can view OAuth2 consumers."
+msgstr "Solo gli amministratori possono visualizzare i consumatori OAuth2."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:92
+msgid "Register"
+msgstr "Registrati"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:23./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:27
+msgid "Register a new website"
+msgstr "Registra un nuovo sito web"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:10
+msgid "Registration of tokens to access remote websites."
+msgstr "Registrazione di token per accedere a siti Web remoti."
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:9
+msgid "These applications are used by 3rd parties to:"
+msgstr "Queste applicazioni sono utilizzate da terze parti per:"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:34./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:32
+msgid "These must be complete URLs, but without the query (?..) or hash (#...) parts."
+msgstr "Questi devono essere URL completi, ma senza le parti di query (?..) o hash (#...)."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:19
+msgid "This must be an unique name to identify the remote service. This can not be changed. Only a-z and 0-9 are allowed."
+msgstr "Deve essere un nome univoco per identificare il servizio remoto. Questo non può essere modificato. Sono consentiti solo az e 0-9."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:90
+msgid "This will disconnect all tokens and users."
+msgstr "Questo disconnetterà tutti i token e gli utenti."
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:16
+msgid "To use one of these applications, the App ID and secret must be registered with the 3rd party."
+msgstr "Per utilizzare una di queste applicazioni, l'ID app e il segreto devono essere registrati presso la terza parte."
+
+#: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
+msgid "Unknown client or redirect, check with your website administrator."
+msgstr "Client sconosciuto o reindirizzamento, verifica con l'amministratore del tuo sito web."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:81
+msgid "Update"
+msgstr "Aggiornare"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:70
+msgid "Update App"
+msgstr "Aggiorna app"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:9
+msgid "Update consumer for OAuth2 authorization and content import from another website."
+msgstr "Aggiorna il consumatore per l'autorizzazione OAuth2 e l'importazione di contenuti da un altro sito web."
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:52./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:55
+msgid "User count"
+msgstr "Conteggio utenti"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:29./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:30./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:27./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:28
+msgid "Valid redirect URLs, one per line"
+msgstr "URL di reindirizzamento validi, uno per riga"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:11
+msgid "With a consumer token this website can:"
+msgstr "Con un token consumatore questo sito Web può:"
+
+#: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:26
+msgid "You will be able to:"
+msgstr "Tu potrai:"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:15
+msgid "You will not be able to see this token again, so copy it and save it in a secure place."
+msgstr "Non potrai più vedere questo token, quindi copialo e salvalo in un luogo sicuro."
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "API Key can be found on"

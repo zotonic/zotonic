@@ -59,7 +59,7 @@ import_rsc(_RscId, TweetId, _UniqueName, _AuthorId, _Tweet, _Context) ->
 do_import_rsc(TweetId, ImportRsc, AuthorId, Tweet, Context) ->
     AdminContext = z_acl:sudo(Context),
     RscProps = (ImportRsc#import_resource.props)#{
-        <<"category">> => tweet,
+        <<"category_id">> => tweet,
         <<"is_published">> => true
     },
     Result = case first_media_props(ImportRsc#import_resource.media_urls, Context) of

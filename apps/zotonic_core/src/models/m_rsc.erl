@@ -879,6 +879,8 @@ rid([X|_], _Context) when not is_integer(X) ->
     undefined;
 rid(#trans{} = Tr, Context) ->
     rid(z_trans:lookup_fallback(Tr, Context), Context);
+rid(<<"urn:", _/binary>> = Uri, Context) ->
+    uri_lookup(Uri, Context);
 rid(<<"http:", _/binary>> = Uri, Context) ->
     uri_lookup(Uri, Context);
 rid(<<"https:", _/binary>> = Uri, Context) ->
@@ -944,7 +946,7 @@ name_lookup(Name, Context) ->
 uri_lookup(<<>>, _Context) ->
     undefined;
 uri_lookup(Uri, Context) when is_binary(Uri) ->
-    case is_http_uri(Uri) of
+    case is_rsc_uri(Uri) of
         true ->
             case is_local_uri(Uri, Context) of
                 true ->
@@ -1009,9 +1011,11 @@ local_uri_to_id(Uri, Context) ->
             undefined
     end.
 
-is_http_uri(<<"http://", _/binary>>) -> true;
-is_http_uri(<<"https://", _/binary>>) -> true;
-is_http_uri(_) -> false.
+is_rsc_uri(<<"urn:", _/binary>>) -> true;
+is_rsc_uri(<<"http:", _/binary>>) -> true;
+is_rsc_uri(<<"https:", _/binary>>) -> true;
+is_rsc_uri(B) ->
+    binary:match(B, <<":">>) =/= nomatch.
 
 
 %% @doc Check if the resource is exactly the category

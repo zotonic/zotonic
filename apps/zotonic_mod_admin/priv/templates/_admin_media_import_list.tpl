@@ -105,31 +105,41 @@
                                     {% endblock %}
                                 </div>
                                 <div class="col-md-6">
-                                    {% block import_options__import %}
-                                        {% if mi.props.is_authoritative|is_defined and not mi.props.is_authoritative %}
-                                            <div class="checkbox form__is_authoritative">
-                                                <label>
-                                                    <input type="checkbox" id="{{ #published.index }}" name="is_authoritative" value="1" {% if is_authoritative %}checked{% endif %}>
-                                                    {_ Make a local copy, disconnected from the remote page _}
-                                                </label>
+                                    {% if mi.props.is_authoritative|is_defined and not mi.props.is_authoritative %}
+                                        {% block import_options__import %}
+                                            <div class="form-group">
+                                                <div class="radio form__is_authoritative">
+                                                    <p>{_ Create _}:</p>
+                                                    <label>
+                                                        <input type="radio" name="is_authoritative" value="0" {% if not is_authoritative %}checked{% endif %}>
+                                                        {_ A copy that will remain connected so that a new version can be fetched. _}
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="is_authoritative" value="1" {% if is_authoritative %}checked{% endif %}>
+                                                        {_ A local copy, disconnected from the remote site. _}
+                                                    </label>
+                                                </div>
                                             </div>
 
-                                            <div class="radio form__import_edges">
-                                                <label>
-                                                    <input type="radio" name="z_import_edges" value="0">
-                                                    {_ Do not import connections _}
-                                                </label>
-                                                <label>
-                                                    <input type="radio" name="z_import_edges" value="1" checked>
-                                                    {_ Import only direct connections (shallow copy) _}
-                                                </label>
-                                                <label>
-                                                    <input type="radio" name="z_import_edges" value="10">
-                                                    {_ Follow connections and import all (deep copy) _}
-                                                </label>
+                                            <div class="form-group">
+                                                <div class="radio form__import_edges">
+                                                    <p>{_ Connections _}:</p>
+                                                    <label>
+                                                        <input type="radio" name="z_import_edges" value="0">
+                                                        {_ Do not import connections. _}
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="z_import_edges" value="1" checked>
+                                                        {_ Import only direct connections (shallow copy). _}
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="z_import_edges" value="10">
+                                                        {_ Follow connections and import all (deep copy). _}
+                                                    </label>
+                                                </div>
                                             </div>
-                                        {% endif %}
-                                    {% endblock %}
+                                        {% endblock %}
+                                    {% endif %}
                                 </div>
                             </div>
                         {% endblock %}

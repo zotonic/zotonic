@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-05 08:57\n"
+"PO-Revision-Date: 2021-10-15 11:24\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -16,11 +16,11 @@ msgstr ""
 "X-Crowdin-File-ID: 8692\n"
 "Language: ar_SA\n"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:89
+#: apps/zotonic_core/src/support/z_fetch.erl:99
 msgid "Could not fetch the remote resource URL."
 msgstr "تعذر جلب عنوان URL للمورد البعيد."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:75
+#: apps/zotonic_core/src/support/z_fetch.erl:85
 msgid "Forbidden to access the remote resource URL."
 msgstr "ممنوع الوصول إلى عنوان URL للمصدر البعيد."
 
@@ -28,31 +28,31 @@ msgstr "ممنوع الوصول إلى عنوان URL للمصدر البعيد.
 msgid "Page Import"
 msgstr "استيراد الصفحة"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:83
+#: apps/zotonic_core/src/support/z_fetch.erl:93
 msgid "The remote server can not handle this URL."
 msgstr "لا يمكن للخادم البعيد معالجة عنوان URL هذا."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:87
+#: apps/zotonic_core/src/support/z_fetch.erl:97
 msgid "The remote server for the URL is having problems."
 msgstr "يواجه الخادم البعيد لعنوان URL مشاكل."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:85
+#: apps/zotonic_core/src/support/z_fetch.erl:95
 msgid "The remote server for the URL is having temporary problems."
 msgstr "يواجه الخادم البعيد لعنوان URL مشاكل مؤقتة."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:77
+#: apps/zotonic_core/src/support/z_fetch.erl:87
 msgid "The resource at the URL can not be found."
 msgstr "لا يمكن العثور على المورد على URL."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:79
+#: apps/zotonic_core/src/support/z_fetch.erl:89
 msgid "The resource at the URL is gone."
 msgstr "اختفى المورد الموجود في URL."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:81
+#: apps/zotonic_core/src/support/z_fetch.erl:91
 msgid "Too many requests for the remote server, try again later."
 msgstr "هناك عدد كبير جدًا من الطلبات للخادم البعيد ، حاول مرة أخرى لاحقًا."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:73
+#: apps/zotonic_core/src/support/z_fetch.erl:83
 msgid "Unauthorized to access the remote resource URL."
 msgstr "غير مصرح به للوصول إلى عنوان URL للمورد البعيد."
 
@@ -218,6 +218,7 @@ msgstr "هل أنت متأكد أنك تريد استعادة كل قواعد AC
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:101
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:107
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:80./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:116./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:91./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:135./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:143
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:149./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
@@ -248,6 +249,7 @@ msgstr "قم بتغيير الفئة و/أو مجموعة المحتوى..."
 #: apps/zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
 #: apps/zotonic_mod_l10n/priv/templates/_admin_configure_module.tpl:8
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:16
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:24
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:26
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:6
 msgid "Close"
@@ -315,6 +317,7 @@ msgstr "حدد من يمكنه رؤية أو التعديل على هذه الص
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:84./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:99
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/src/mod_survey.erl:102
 msgid "Delete"
 msgstr "احذف"
@@ -387,6 +390,7 @@ msgid "Group members and managers can link"
 msgstr "أعضاء و مديري المجموعة يمكنهم الربط"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:52
 msgid "Import"
 msgstr "استيراد"
 
@@ -466,6 +470,7 @@ msgid "Not all user groups could be deleted."
 msgstr "لا يمكن حذف جميع مجموعات المستخدمين."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:47
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:87./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:92
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:41
 msgid "Not allowed."
 msgstr "غير مسموح به."
@@ -747,7 +752,7 @@ msgstr "استخدم متصفح آخر (مثلاً. كروم إذا كنت تس�
 msgid "view (acl action)"
 msgstr "عرض (إجراء acl)"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:153./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:155
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:163./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:165
 msgid "&lt; Prev"
 msgstr "&lt; السابق"
 
@@ -770,6 +775,14 @@ msgstr "+ إضافة كتلة"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
 msgstr "<strong>الأول</strong> أيضا معروف بالاسم  أو اسم كريستيان.<br/><strong>الأوسط</strong>غالباً يتم تقصيره مثل <em>جون د. روكفلر</em>.<br/><strong>اللقب البادئ</strong>مثل الهولندية <em>فان،فان دو، در</em>.<br/><strong>اللقب</strong> أيضا معروف كـ الاسم العائلي أو الاسم الأخير."
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:115
+msgid "A copy that will remain connected so that a new version can be fetched."
+msgstr "نسخة ستبقى متصلة حتى يمكن جلب نسخة جديدة."
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:119
+msgid "A local copy, disconnected from the remote site."
+msgstr "نسخة محلية غير متصلة بالموقع البعيد."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:10
 msgid "About categories"
@@ -879,10 +892,11 @@ msgid "Attached media"
 msgstr "الوسائط المرفقة"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:126
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:51
 msgid "Auth"
 msgstr "المصادقة"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:151
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:8./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:42
 msgid "Back"
 msgstr "الرجوع"
@@ -978,7 +992,7 @@ msgstr "الاتصال"
 msgid "Connect a page"
 msgstr "الاتصال بصفحة"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:55
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:126./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:55
 msgid "Connections"
 msgstr "روابط"
 
@@ -1007,7 +1021,7 @@ msgstr "العد"
 msgid "Country"
 msgstr "البلد"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:112
 msgid "Create"
 msgstr "خلق"
 
@@ -1021,6 +1035,7 @@ msgstr "التي أنشأتها بنفسي"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:25./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:138./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:51./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:54
 msgid "Created on"
 msgstr "تم إنشاؤها على"
 
@@ -1079,8 +1094,9 @@ msgstr "يعتمد"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:28./apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:32
 #: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:8
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:6
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:17
 #: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:8
 msgid "Disconnect"
 msgstr "قطع الاتصال"
@@ -1093,9 +1109,9 @@ msgstr "اكتشاف وسائل الإعلام"
 msgid "Disks"
 msgstr "الأقراص"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:120
-msgid "Do not import connections"
-msgstr "لا تستورد الاتصالات"
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:129
+msgid "Do not import connections."
+msgstr "لا تستورد الاتصالات."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
 msgid "Do you want to remove this block?"
@@ -1244,6 +1260,10 @@ msgstr "متميز"
 msgid "Features"
 msgstr "الميزات"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:9
+msgid "Fetch new version"
+msgstr "إحضار نسخة جديدة"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:6
 msgid "File / media content"
 msgstr "الملف/محتوى الوسائط"
@@ -1282,9 +1302,9 @@ msgstr "قم بمسح و تحديث جميع روابط قواعد إرسال و
 msgid "Flush system caches"
 msgstr "إعادة تحديث ذاكرة النظام"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:128
-msgid "Follow connections and import all (deep copy)"
-msgstr "متابعة الاتصالات واستيراد الكل (نسخة عميقة)"
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:137
+msgid "Follow connections and import all (deep copy)."
+msgstr "اتبع الاتصالات واستيراد الكل (نسخة عميقة)."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:49
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
@@ -1321,9 +1341,9 @@ msgstr "الهويات مع عنوان البريد الإلكتروني هذا"
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
 msgstr "إذا كانت الصفحة تحتوي على نطاق تاريخ للنشر ، فستكون مرئية فقط بين التاريخين. لاحظ أنه إذا كان مسموحًا لك بتحرير الصفحة فيمكنك دائمًا رؤيتها."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:124
-msgid "Import only direct connections (shallow copy)"
-msgstr "استيراد التوصيلات المباشرة فقط (نسخة ضحلة)"
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:133
+msgid "Import only direct connections (shallow copy)."
+msgstr "استيراد التوصيلات المباشرة فقط (نسخة ضحلة)."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:85
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:20
@@ -1395,13 +1415,9 @@ msgstr "العنوان البريدي"
 msgid "Main"
 msgstr "الرئيسية"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:166
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:176
 msgid "Make"
 msgstr "أنشئ"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:113
-msgid "Make a local copy, disconnected from the remote page"
-msgstr "قم بعمل نسخة محلية ، منفصلة عن الصفحة البعيدة"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:69
 msgid "Make a new media item"
@@ -1476,6 +1492,7 @@ msgstr "تم التعديل بواسطة"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:28./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:84./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:141./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:50
 msgid "Modified on"
 msgstr "تم التعديل على"
 
@@ -1488,6 +1505,7 @@ msgstr "تم تعديله:"
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:11./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:10
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:48
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:535
 msgid "Name"
 msgstr "الاسم"
@@ -1500,7 +1518,7 @@ msgstr "اتصالات الشبكة"
 msgid "New Page"
 msgstr "صفحة جديدة"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:159./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:161
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:169./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:171
 msgid "Next &gt;"
 msgstr "التالي &gt;"
 
@@ -1686,10 +1704,6 @@ msgstr "إعادة التوجيه إلى موقع الويب على عرض ال�
 msgid "Referrers to"
 msgstr "يشير إلى"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:9
-msgid "Refresh"
-msgstr "ينعش"
-
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:50
 msgid "Refreshed every 30 minutes."
 msgstr "يُنعش كل 30 دقيقة."
@@ -1710,7 +1724,7 @@ msgstr "تمت إزالة الاتصال بـ"
 msgid "Renumber category tree"
 msgstr "إعادة ترقيم شجرة الفئات"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:166
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:176
 msgid "Replace"
 msgstr "يحل محل"
 
@@ -2261,6 +2275,7 @@ msgstr "بواسطة"
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:31
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:22
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:70./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:71./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:76
 msgid "d M Y, H:i"
 msgstr "د MY ، H: i"
 
@@ -3702,7 +3717,7 @@ msgstr "يمكنك استخدام تطبيقات المصادقة ذات الع�
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
 msgstr "يجب أن يُسمح لك بتحرير تكوين النظام لعرض أو تغيير تكوين المصادقة الثنائية."
 
-#: apps/zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:46
+#: apps/zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:51./apps/zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:59
 msgid "Access denied"
 msgstr "تم الرفض"
 
@@ -4594,8 +4609,8 @@ msgid "The test below checks the connection between your machine, Google and our
 msgstr "يتحقق الاختبار أدناه من الاتصال بين جهازك وجوجل وموقعنا."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:78
-msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing messages."
-msgstr "يجب ألا يكون هناك أي مهلة ، إذا كانت هناك مهلات ، فهذا يعني أن اتصالك بالإنترنت يفقد الرسائل."
+msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing packets."
+msgstr "لا ينبغي أن يكون هناك أي مهلات ، إذا كانت هناك مهلات ، فهذا يعني أن اتصالك بالإنترنت يفقد الحزم."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:135
 msgid "This tests the authentication with the server."
@@ -4627,8 +4642,8 @@ msgid "Yes"
 msgstr "نعم"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
-msgid "Your browser as it identifies itself with our server and your IP address. This is essential information for the help desk."
-msgstr "متصفحك كما يعرّف نفسه بخادمنا وعنوان IP الخاص بك. هذه معلومات أساسية لمكتب المساعدة."
+msgid "Your browser as it identifies itself to our server and your IP address. This is essential information for the help desk, but we do not store any personal data."
+msgstr "متصفحك كما يعرّف نفسه بخادمنا وعنوان IP الخاص بك. هذه معلومات أساسية لمكتب المساعدة ، لكننا لا نخزن أي بيانات شخصية."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
@@ -4819,6 +4834,7 @@ msgid "Admin Custom Redirects"
 msgstr "عمليات إعادة التوجيه المخصصة للمشرف"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:23
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:49
 msgid "Domain"
 msgstr "نطاق"
 
@@ -5331,6 +5347,7 @@ msgid "App ID."
 msgstr "معرف التطبيق."
 
 #: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:19./apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:20
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:61./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:45./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:46./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:56./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:57
 msgid "App Secret"
 msgstr "سر التطبيق"
 
@@ -5895,19 +5912,19 @@ msgstr "منتصف الليل"
 msgid "noon"
 msgstr "وقت الظهيرة"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:19
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:17
 msgid "Connect with LinkedIn"
 msgstr "تواصل مع LinkedIn"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:4./apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:6
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:2./apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:4
 msgid "Disconnect from LinkedIn"
 msgstr "قطع الاتصال بـ LinkedIn"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:7
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:5
 msgid "Do you want to disconnect your LinkedIn account?"
 msgstr "هل تريد قطع الاتصال بحسابك على LinkedIn؟"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:20
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:18
 msgid "Log in with LinkedIn"
 msgstr "تسجيل الدخول مع LinkedIn"
 
@@ -6079,6 +6096,7 @@ msgid "Toggle non people"
 msgstr "تبديل غير الأشخاص"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:23./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:23
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:49
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:164
 msgid "User"
 msgstr "المستعمل"
@@ -6222,6 +6240,7 @@ msgid "Deleted the mailing list."
 msgstr "حذف القائمة البريدية."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:21
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:21./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:22./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:20./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:48./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:50
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:30./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:32
 #: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:6
 msgid "Description"
@@ -6999,9 +7018,305 @@ msgstr "لقد قمت بإقران <strong>حساب Microsoft</strong>"
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
 msgstr "ينشر Debug MQTT ويشترك في الإجراءات في وحدة التحكم Zotonic"
 
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:74./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:75./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:85./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:86
+msgid "Access Token URL"
+msgstr "الوصول إلى عنوان URL الخاص بالرمز"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:12
+msgid "Access content on this website."
+msgstr "الوصول إلى المحتوى على هذا الموقع."
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:53
+msgid "Added by"
+msgstr "أضيفت من قبل"
+
+#: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:57
+msgid "Allow Access"
+msgstr "السماح بالمرور"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:59./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:70
+msgid "Allow import of content from the remote website"
+msgstr "السماح باستيراد المحتوى من موقع الويب البعيد"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:56./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:67
+msgid "Allow users on the remote website to authenticate here"
+msgstr "اسمح للمستخدمين على موقع الويب البعيد بالمصادقة هنا"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:16
+msgid "Allow users registered on the remote website to authenticate on this website."
+msgstr "السماح للمستخدمين المسجلين على موقع الويب البعيد للمصادقة على هذا الموقع."
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:123
+msgid "An OAuth2 consumer with this name already exsists, please use another name."
+msgstr "يوجد بالفعل مستهلك OAuth2 بهذا الاسم ، يرجى استخدام اسم آخر."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:36./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:47
+msgid "App Code"
+msgstr "كود التطبيق"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:44./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:37./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:48
+msgid "App ID"
+msgstr "معرف التطبيق"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:85./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:19
+msgid "App not found, or no view permission."
+msgstr "التطبيق غير موجود ، أو لا يوجد إذن عرض."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:74
+msgid "Are you sure you want to delete this App?"
+msgstr "هل أنت متأكد أنك تريد حذف هذا التطبيق؟"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:87./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:101
+msgid "Are you sure you want to delete this Consumer App?"
+msgstr "هل أنت متأكد أنك تريد حذف تطبيق المستهلك هذا؟"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:13
+msgid "Ask users on this website for their credentials to authenticate on their website or App."
+msgstr "اطلب من المستخدمين على هذا الموقع الحصول على بيانات اعتمادهم للمصادقة على موقعهم على الويب أو تطبيقهم."
+
 #: apps/zotonic_mod_oauth2/priv/templates/logon_service_oauth_done.tpl:6
 msgid "Authenticating..."
 msgstr "مصادقة ..."
+
+#: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:11
+msgid "Authorize"
+msgstr "تفويض"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:67./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:68./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:78./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:79
+msgid "Authorize URL"
+msgstr "تخويل URL"
+
+#: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:16
+msgid "Authorize access to your account"
+msgstr "تخويل الوصول إلى حسابك"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:7
+msgid "Be careful, this access token gives full access to your account."
+msgstr "كن حذرًا ، يمنحك رمز الوصول هذا حق الوصول الكامل إلى حسابك."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
+msgid "Connect with"
+msgstr "متصل مع"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:113
+msgid "Consumer App not found, or no view permission."
+msgstr "تطبيق المستهلك غير موجود ، أو لا يوجد إذن عرض."
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:104
+msgid "Could not generate the access token."
+msgstr "تعذر إنشاء رمز الوصول."
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:65./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:77./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:84
+msgid "Could not insert the App."
+msgstr "تعذر إدخال التطبيق."
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:125./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:149
+msgid "Could not insert the Consumer."
+msgstr "تعذر إدخال المستهلك."
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:142
+msgid "Could not update the Consumer."
+msgstr "تعذر تحديث المستهلك."
+
+#: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:34
+msgid "Create connections with content on {local}."
+msgstr "إنشاء اتصالات مع المحتوى على {local}."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:72./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:76
+msgid "Delete App"
+msgstr "حذف التطبيق"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:93./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:103
+msgid "Delete Consumer App"
+msgstr "حذف تطبيق المستهلك"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:14./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:25./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
+msgid "Description - shows up on button"
+msgstr "الوصف - يظهر على الزر"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:12
+msgid "Disconnect from"
+msgstr "قطع الاتصال من"
+
+#: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:20
+msgid "Do you want to connect your <b>{local}</b> account to <b>{remote}</b>?"
+msgstr "هل تريد ربط حسابك <b>{local}</b> بـ <b>{remote}</b>؟"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:16
+msgid "Do you want to disconnect your account?"
+msgstr "هل تريد قطع اتصال حسابك؟"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:22./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:23./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:33./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:34
+msgid "Domain (eg. www.example.com)"
+msgstr "المجال (مثل www.example.com)"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:34./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:35
+msgid "Edit App"
+msgstr "تحرير التطبيق"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:77
+msgid "Edit OAuth2 App"
+msgstr "تحرير تطبيق OAuth2"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:82
+msgid "Edit OAuth2 Consumer"
+msgstr "تحرير عميل OAuth2"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:10
+msgid "Edit the description of the App."
+msgstr "قم بتحرير وصف التطبيق."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:13./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:47
+msgid "Enabled"
+msgstr "ممكن"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:35./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:33
+msgid "For Zotonic sites this you can enter the domain name(s) of the website."
+msgstr "بالنسبة إلى مواقع Zotonic ، يمكنك إدخال اسم (أسماء) المجال الخاص بالموقع الإلكتروني."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:52
+msgid "Generate access token"
+msgstr "إنشاء رمز الوصول"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:48
+msgid "Generate my access token"
+msgstr "إنشاء رمز الوصول الخاص بي"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:33./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:31
+msgid "Give the redirect URLs that are valid for the website performing the OAuth2 authorization."
+msgstr "امنح عناوين URL لإعادة التوجيه الصالحة لموقع الويب الذي يجري تفويض OAuth2."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:3
+msgid "Here is the new access token."
+msgstr "هنا هو رمز الوصول الجديد."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:63./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:74
+msgid "If the remote website is a Zotonic website then you can leave the two URLs below empty."
+msgstr "إذا كان موقع الويب البعيد هو موقع ويب Zotonic ، فيمكنك ترك عنواني URL أدناه فارغين."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:51
+msgid "If you have already a token then it will be replaces with the new one."
+msgstr "إذا كان لديك بالفعل رمز مميز ، فسيتم استبداله بالرمز الجديد."
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:15
+msgid "Import content from the remote website to this website."
+msgstr "استيراد محتوى من موقع ويب بعيد إلى موقع الويب هذا."
+
+#: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
+msgid "Log in to {remote} with your {local} account."
+msgstr "قم بتسجيل الدخول إلى {remote} باستخدام حساب {local} الخاص بك."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:33
+msgid "Log in with"
+msgstr "تسجيل الدخول مع"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:40
+msgid "Make App"
+msgstr "جعل التطبيق"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:22./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:26
+msgid "Make a new App"
+msgstr "أنشئ تطبيقًا جديدًا"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:8
+msgid "Make a new App for OAuth2 authorization and/or content export to other websites."
+msgstr "أنشئ تطبيقًا جديدًا لترخيص OAuth2 و / أو تصدير المحتوى إلى مواقع الويب الأخرى."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:8
+msgid "Make a new consumer for OAuth2 authorization and content import from another website."
+msgstr "اجعل مستهلكًا جديدًا لترخيص OAuth2 واستيراد المحتوى من موقع ويب آخر."
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:96
+msgid "New access token"
+msgstr "رمز وصول جديد"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:3
+msgid "OAuth2 Application"
+msgstr "تطبيق OAuth2"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:7./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:247
+msgid "OAuth2 Applications"
+msgstr "تطبيقات OAuth2"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:3./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:7./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:252
+msgid "OAuth2 Consumer Tokens"
+msgstr "رموز المستهلك OAuth2"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:88
+msgid "Only admnistrators can view OAuth2 applications."
+msgstr "يمكن فقط للمسجلين عرض تطبيقات OAuth2."
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:93
+msgid "Only admnistrators can view OAuth2 consumers."
+msgstr "يمكن للمسؤولين فقط عرض مستهلكي OAuth2."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:92
+msgid "Register"
+msgstr "يسجل"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:23./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:27
+msgid "Register a new website"
+msgstr "تسجيل موقع جديد"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:10
+msgid "Registration of tokens to access remote websites."
+msgstr "تسجيل الرموز للوصول إلى المواقع البعيدة."
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:9
+msgid "These applications are used by 3rd parties to:"
+msgstr "تستخدم هذه التطبيقات من قبل أطراف ثالثة من أجل:"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:34./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:32
+msgid "These must be complete URLs, but without the query (?..) or hash (#...) parts."
+msgstr "يجب أن تكون هذه عناوين URL كاملة ، ولكن بدون الاستعلام (؟ ..) أو أجزاء التجزئة (# ...)."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:19
+msgid "This must be an unique name to identify the remote service. This can not be changed. Only a-z and 0-9 are allowed."
+msgstr "يجب أن يكون هذا اسمًا فريدًا لتعريف الخدمة البعيدة. هذا لا يمكن تغييره. مسموح فقط az و 0-9."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:90
+msgid "This will disconnect all tokens and users."
+msgstr "سيؤدي هذا إلى فصل جميع الرموز المميزة والمستخدمين."
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:16
+msgid "To use one of these applications, the App ID and secret must be registered with the 3rd party."
+msgstr "لاستخدام أحد هذه التطبيقات ، يجب تسجيل معرف التطبيق والسر لدى الجهة الخارجية."
+
+#: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
+msgid "Unknown client or redirect, check with your website administrator."
+msgstr "عميل غير معروف أو إعادة توجيه ، تحقق مع مسؤول موقع الويب الخاص بك."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:81
+msgid "Update"
+msgstr "تحديث"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:70
+msgid "Update App"
+msgstr "تحديث التطبيق"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:9
+msgid "Update consumer for OAuth2 authorization and content import from another website."
+msgstr "تحديث المستهلك لتفويض OAuth2 واستيراد المحتوى من موقع ويب آخر."
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:52./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:55
+msgid "User count"
+msgstr "عدد المستخدمين"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:29./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:30./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:27./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:28
+msgid "Valid redirect URLs, one per line"
+msgstr "عناوين URL صالحة لإعادة التوجيه ، واحد في كل سطر"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:11
+msgid "With a consumer token this website can:"
+msgstr "باستخدام رمز المستهلك ، يمكن لموقع الويب هذا:"
+
+#: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:26
+msgid "You will be able to:"
+msgstr "ستكون قادرا على:"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:15
+msgid "You will not be able to see this token again, so copy it and save it in a secure place."
+msgstr "لن تتمكن من رؤية هذا الرمز المميز مرة أخرى ، لذا انسخه واحفظه في مكان آمن."
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "API Key can be found on"

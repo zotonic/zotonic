@@ -34,6 +34,7 @@
     set_context_vars/2,
     get_translations/2,
     lookup_translation/3,
+    model_call/4,
     custom_tag/4,
     builtin_tag/5,
     cache_tag/6,
@@ -223,9 +224,6 @@ is_modified(Filename, Mtime, _Context) ->
 
 %% @doc Compile time mapping of nested value lookup
 -spec compile_map_nested_value(Tokens :: list(), ContextVar :: string(), Context :: term()) -> NewTokens :: list().
-compile_map_nested_value([{identifier, _, <<"m">>}, {identifier, _, Model}|Rest], _ContextVar, _Context) ->
-    ModelA = binary_to_atom(Model, 'utf8'),
-    [{mfa2, z_model, template_get, Rest, ModelA}];
 compile_map_nested_value([{identifier, _, <<"q">>}, {identifier, _, <<"qargs">>}|Rest], ContextVar, _Context) ->
     Ast = erl_syntax:application(
                 erl_syntax:atom(z_context),
@@ -456,6 +454,11 @@ get_translations(Text, Context) ->
 lookup_translation(#trans{} = Trans, _TplVars, Context) ->
     z_trans:lookup_fallback(Trans, Context).
 
+
+%% @doc A model call with optional payload. Compiled from m.model.path::payload
+-spec model_call(Model::atom(), Path::list(), Payload::term(), Context::term()) -> template_compiler:model_return().
+model_call(Model, Path, Payload, Context) ->
+    z_model:template_get(Model, Path, Payload, Context).
 
 %% @doc Render a custom tag (Zotonic scomp)
 %% @todo support render_optional/all

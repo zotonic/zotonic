@@ -55,9 +55,13 @@ modify_rsc_test() ->
     ?assertEqual({{2014,4,30},{22,0,0}}, m_rsc:p(Id, created, AdminC)),
     ?assertEqual({{2021,7,14},{8,47,7}}, m_rsc:p(Id, modified, AdminC)),
 
+    ?assertEqual(<<"rsc_import_test_1">>, m_rsc:p(Id, name, AdminC)),
+    ?assertEqual(<<"/rsc-import-test-1">>, m_rsc:p(Id, page_path, AdminC)),
+
+
     %% Check edges
     ?assertEqual([1], m_edge:objects(Id, author, AdminC)),
-    ?assertEqual([Id], m_edge:objects(Id, relation, AdminC)),
+    ?assertEqual([Id, 1], m_edge:objects(Id, relation, AdminC)),
 
     %% Usual rights
     ?assertEqual(false, z_acl:rsc_editable(Id, C)),
@@ -78,9 +82,15 @@ modify_rsc_test() ->
 
     %% Check edges
     ?assertEqual([1], m_edge:objects(IdAuth, author, AdminC)),
-    ?assertEqual([IdAuth], m_edge:objects(IdAuth, relation, AdminC)),
+    ?assertEqual([IdAuth, 1], m_edge:objects(IdAuth, relation, AdminC)),
+
+    % The collision on page_path and name should have removed those
+    % properties from the import.
+    ?assertEqual(undefined, m_rsc:p(IdAuth, name, AdminC)),
+    ?assertEqual(undefined, m_rsc:p(IdAuth, page_path, AdminC)),
 
     ok.
+
 
 export_data() ->
     #{<<"depiction_url">> => <<"https://localhost/lib/images/koe.jpg">>,
@@ -111,7 +121,15 @@ export_data() ->
                                <<"name">> => undefined,
                                <<"title">> => <<"Hello World">>,
                                <<"uri">> => <<"https://foo.test/id/333">>},
-                         <<"seq">> => 1}],
+                         <<"seq">> => 1},
+                        #{<<"created">> => {{2018,11,23},{10,48,10}},
+                         <<"object_id">> =>
+                             #{<<"id">> => 1,
+                               <<"is_a">> => [ <<"person">> ],
+                               <<"name">> => undefined,
+                               <<"title">> => <<"Admin">>,
+                               <<"uri">> => <<"https://localhost/id/1">>},
+                         <<"seq">> => 2}],
                   <<"predicate">> =>
                       #{<<"id">> => 301,
                         <<"is_a">> => [ <<"meta">>, <<"predicate">> ],
@@ -123,6 +141,8 @@ export_data() ->
       <<"is_a">> => [ <<"text">>, <<"article">>, <<"foobartext">> ],
       <<"resource">> =>
           #{<<"version">> => 1,
+            <<"name">> => <<"rsc_import_test_1">>,
+            <<"page_path">> => <<"/rsc-import-test-1">>,
             <<"is_published">> => true,
             <<"is_authoritative">> => true,
             <<"org_pubdate">> => {{2014,4,30},{22,0,0}},
@@ -138,5 +158,3 @@ export_data() ->
       <<"uri">> => <<"https://foo.test/id/333">>,
       <<"uri_template">> => <<"https://foo.test/id/:id">>
 }.
-
-

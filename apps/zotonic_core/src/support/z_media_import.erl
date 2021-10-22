@@ -181,7 +181,7 @@ host_parts(Url) ->
 import_as_resource(MD, Context) ->
     case importable_resource_uri(MD, Context) of
         {ok, {Uri, #{
-            <<"rsc">> := Rsc,
+            <<"resource">> := Rsc,
             <<"depiction_url">> := DepUrl
         }}} ->
             DataDepUrl = case z_fetch:as_data_url(DepUrl, [], Context) of

@@ -1,5 +1,31 @@
 [
+    % Start an authorization request for the given consumer id
+    {oauth2_consumer_authorize, ["oauth-service", "authorize", "zotonic", consumer_id ],
+                         controller_oauth2_service_authorize,
+                         [ {service_module, z_zotonic_oauth_service} ]},
+
+    % Redirect to an OAuth service (eg. LinkedIn, Twitter, etc.)
     {oauth2_service_redirect, [ "oauth-service", "redirect" ],
                               controller_oauth2_service_redirect,
-                              []}
+                              []},
+
+    % Authorization of a consumer with this server
+    {oauth2_server_authorize, [ "oauth", "authorize" ],
+                              controller_template,
+                              [ {template, "oauth2_logon_authorize.tpl"}, {acl, is_auth} ]},
+
+    % Exchange a temporary code for an access token
+    {oauth2_server_access_token, [ "oauth", "access_token" ],
+                              controller_oauth2_access_token,
+                              []},
+
+    % Admin screens for apps and consumers
+    {admin_oauth2_apps, [ "admin", "oauth", "apps" ],
+                        controller_admin,
+                        [ {template, "admin_oauth2_apps.tpl"} ]},
+
+    {admin_oauth2_consumers, [ "admin", "oauth", "consumers" ],
+                        controller_admin,
+                        [ {template, "admin_oauth2_consumers.tpl"} ]}
+
 ].

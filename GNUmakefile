@@ -44,16 +44,10 @@ test: compile
 update:
 	@echo "Updating Zotonic from branch: " `git rev-parse --abbrev-ref HEAD`
 	@git pull
-	@(cd apps/zotonic_mod_base/priv/lib-src/cotonic; \
-		echo "Updating Cotonic. Branch: " `git rev-parse --abbrev-ref HEAD`; \
-		git checkout -- .; \
-		git pull)
+	@(cd apps/zotonic_mod_base/; ./cotonic-update.sh)
 
 update-cotonic:
-	@(cd apps/zotonic_mod_base/priv/lib-src/cotonic; \
-		echo "Updating Cotonic from branch: " `git rev-parse --abbrev-ref HEAD`; \
-		git checkout -- .; \
-		git pull)
+	@(cd apps/zotonic_mod_base/; ./cotonic-update.sh)
 
 .PHONY: xref dialyzer
 

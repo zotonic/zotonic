@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2020 Marc Worrell
+%% @copyright 2010-2021 Marc Worrell
 %% @doc Let new members register themselves.
 
-%% Copyright 2010-2020 Marc Worrell
+%% Copyright 2010-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -86,10 +86,9 @@ signup_existing(UserId, Props, SignupProps, RequestConfirm, Context) when is_lis
     {ok, PropsMap} = z_props:from_list(Props),
     signup_existing(UserId, PropsMap, SignupProps, RequestConfirm, Context);
 signup_existing(UserId, Props, SignupProps, RequestConfirm, Context) when is_map(Props) ->
-    ContextSudo = z_acl:sudo(Context),
-    case check_signup(Props, SignupProps, ContextSudo) of
+    case check_signup(Props, SignupProps, Context) of
         {ok, Props1, SignupProps1} ->
-            do_signup(UserId, Props1, SignupProps1, RequestConfirm, ContextSudo);
+            do_signup(UserId, Props1, SignupProps1, RequestConfirm, Context);
         {error, _} = Error ->
             Error
     end.
@@ -152,13 +151,14 @@ do_signup(UserId, Props, SignupProps, RequestConfirm, Context) ->
     IsVerified = not RequestConfirm orelse has_verified_identity(SignupProps),
     case insert_or_update(UserId, props_to_rsc(Props, IsVerified, Context), Context) of
         {ok, NewUserId} ->
-            ensure_identities(NewUserId, SignupProps, Context),
-            z_notifier:map(#signup_done{id=NewUserId, is_verified=IsVerified, props=Props, signup_props=SignupProps}, Context),
+            ContextUser = z_acl:logon(NewUserId, Context),
+            ensure_identities(NewUserId, SignupProps, ContextUser),
+            z_notifier:map(#signup_done{id=NewUserId, is_verified=IsVerified, props=Props, signup_props=SignupProps}, ContextUser),
             case IsVerified of
-                true -> z_notifier:map(#signup_confirm{id=NewUserId}, Context);
+                true -> z_notifier:map(#signup_confirm{id=NewUserId}, ContextUser);
                 false -> nop
             end,
-            maybe_add_depiction(NewUserId, Props, Context),
+            maybe_add_depiction(NewUserId, Props, ContextUser),
             {ok, NewUserId};
         {error, Reason} ->
             {error, Reason}
@@ -166,22 +166,22 @@ do_signup(UserId, Props, SignupProps, RequestConfirm, Context) ->
 
 %% @doc Optionally add a depiction using the 'depiction_url' in the user's props
 -spec maybe_add_depiction( m_rsc:resource_id(), map(), z:context() ) -> ok | {error, term()}.
-maybe_add_depiction(Id, #{ <<"depiction_url">> := Url }, Context)
+maybe_add_depiction(Id, #{ <<"depiction_url">> := Url }, ContextUser)
     when Url =/= <<>>, Url =/= "", Url =/= undefined ->
-    case z_convert:to_bool( m_config:get_value(mod_signup, depiction_as_medium, Context) ) of
+    case z_convert:to_bool( m_config:get_value(mod_signup, depiction_as_medium, ContextUser) ) of
         false ->
-            case m_edge:objects(Id, depiction, Context) of
+            case m_edge:objects(Id, depiction, ContextUser) of
                 [] ->
                     MediaProps = #{
                         <<"is_dependent">> => true,
                         <<"is_published">> => true,
-                        <<"content_group_id">> => m_rsc:p_no_acl(Id, content_group_id, Context)
+                        <<"content_group_id">> => m_rsc:p_no_acl(Id, content_group_id, ContextUser)
                     },
-                    case m_media:insert_url(Url, MediaProps, z_acl:logon(Id, Context)) of
+                    case m_media:insert_url(Url, MediaProps, ContextUser) of
                         {ok, MediaId} ->
                             lager:info("Added depiction from depiction_url for ~p: ~p",
                                        [Id, Url]),
-                            {ok, _} = m_edge:insert(Id, depiction, MediaId, Context),
+                            {ok, _} = m_edge:insert(Id, depiction, MediaId, ContextUser),
                             ok;
                         {error, _} = Error ->
                             lager:warning("Could not insert depiction_url for ~p: ~p ~p",
@@ -192,9 +192,9 @@ maybe_add_depiction(Id, #{ <<"depiction_url">> := Url }, Context)
                     ok
             end;
         true ->
-            case m_media:get(Id, Context) of
+            case m_media:get(Id, ContextUser) of
                 undefined ->
-                    case m_media:replace_url(Url, Id, #{}, z_acl:logon(Id, Context)) of
+                    case m_media:replace_url(Url, Id, #{}, ContextUser) of
                         {ok, _Id} ->
                             lager:info("Added medium from depiction_url for ~p: ~p",
                                        [Id, Url]),
@@ -208,13 +208,42 @@ maybe_add_depiction(Id, #{ <<"depiction_url">> := Url }, Context)
                     ok
             end
     end;
-maybe_add_depiction(_Id, _Props, _Context) ->
+maybe_add_depiction(_Id, _Props, _ContextUser) ->
     ok.
 
+% First insert a minimal user, before performing the complete insert
+% using the rights of the user.
 insert_or_update(undefined, Props, Context) ->
-    m_rsc:insert(Props, Context);
+    Ks = [
+        <<"is_published">>,
+        <<"is_verified_account">>,
+        <<"creator_id">>,
+        <<"category_id">>,
+        <<"content_group_id">>,
+        <<"visible_for">>,
+        <<"pref_language">>,
+        <<"pref_tz">>,
+        <<"title">>,
+        <<"name_first">>,
+        <<"name_surname_prefix">>,
+        <<"name_surname">>,
+        <<"email">>
+    ],
+    InsertProps = maps:with(Ks, Props),
+    case m_rsc:insert(InsertProps, z_acl:sudo(Context)) of
+        {ok, UserId} ->
+            UpdateProps = maps:without(Ks, Props),
+            case maps:size(UpdateProps) of
+                0 ->
+                    {ok, UserId};
+                _ ->
+                    m_rsc:update(UserId, UpdateProps, z_acl:logon(UserId, Context))
+            end;
+        {error, _} = Error ->
+            Error
+    end;
 insert_or_update(UserId, Props, Context) when is_integer(UserId) ->
-    m_rsc:update(UserId, Props, Context).
+    m_rsc:update(UserId, Props, z_acl:logon(UserId, Context)).
 
 
 has_verified_identity([]) -> false;
@@ -240,23 +269,27 @@ props_to_rsc(Props, IsVerified, Context) when is_list(Props) ->
 props_to_rsc(Props, IsVerified, Context) when is_map(Props) ->
     Category = z_convert:to_atom(m_config:get_value(mod_signup, member_category, person, Context)),
     ContentGroup = z_convert:to_atom(m_config:get_value(mod_signup, content_group, undefined, Context)),
-    Props1 = Props#{
+    Props1 = maps:without([
+            <<"category">>,
+            <<"content_group">>
+        ], Props),
+    Props2 = Props1#{
         <<"is_published">> => IsVerified,
-        <<"content_group">> => ContentGroup,
-        <<"category">> => Category,
+        <<"content_group_id">> => ContentGroup,
+        <<"category_id">> => Category,
         <<"is_verified_account">> => IsVerified,
         <<"creator_id">> => self,
         <<"pref_language">> => z_context:language(Context)
     },
-    case maps:is_key(<<"title">>, Props1) of
+    case maps:is_key(<<"title">>, Props2) of
         true ->
-            Props1;
+            Props2;
         false ->
             Vs = [
-                {id, Props1}
+                {id, Props2}
             ],
             {Title, _} = z_template:render_to_iolist("_name.tpl", Vs, Context),
-            Props1#{
+            Props2#{
                 <<"title">> => iolist_to_binary(Title)
             }
     end.

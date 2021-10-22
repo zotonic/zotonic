@@ -7,6 +7,7 @@
             <img src='/lib/images/spinner.gif' class='loading'>
         </h1>
     </div>
+
     {% worker
             name="oauth"
             src="js/zotonic.oauth.worker.js"

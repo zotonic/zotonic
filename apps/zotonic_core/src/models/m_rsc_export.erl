@@ -106,8 +106,7 @@ full(Id, Context) when is_integer(Id) ->
         Rsc0 ->
             ContextNoLang = z_context:set_language('x-default', Context),
 
-            Rsc1 = filter_empty(Rsc0),
-            Rsc = replace_ids_with_uris(Rsc1, ContextNoLang),
+            Rsc = replace_ids_with_uris(Rsc0, ContextNoLang),
             Medium = m_media:get(Id, ContextNoLang),
             DepictionUrl = depiction_url(m_media:depiction(Id, ContextNoLang), ContextNoLang),
             PreviewUrl = preview_url(Medium, ContextNoLang),
@@ -133,10 +132,7 @@ full(Id, Context) when is_integer(Id) ->
                 <<"depiction_url">> => DepictionUrl,
                 <<"edges">> => edges(Id, ContextNoLang)
             },
-
-            %% Filter empty values
-            Export1 = filter_empty(privacy_filter(Id, Export, ContextNoLang)),
-            {ok, Export1}
+            {ok, Export}
     end;
 full(Id, Context) ->
     full(m_rsc:rid(Id, Context), Context).
@@ -282,41 +278,3 @@ depiction_url(#{ <<"id">> := Id } = Medium, Context) ->
     end;
 depiction_url(undefined, _Context) ->
     undefined.
-
-
-filter_empty(Map) ->
-    maps:filter(
-        fun(_K, V) -> not is_empty(V) end,
-        Map).
-
-is_empty(#trans{ tr = [] }) ->
-    true;
-is_empty(#trans{ tr = Tr }) ->
-    lists:all(fun({_, V}) -> z_utils:is_empty(V) end, Tr);
-is_empty(V) ->
-    z_utils:is_empty(V).
-
-% Rather crude privacy filter - to be fixed in issue 1211
-% @todo replace with real privacy control in ACL module
-privacy_filter(Id, Export, Context) ->
-    case m_rsc:is_a(Id, person, Context) of
-        false ->
-            Export;
-        true ->
-            case z_acl:rsc_editable(Id, Context) of
-                true -> Export;
-                false -> privacy_filter(Export)
-            end
-    end.
-
-privacy_filter(Export) ->
-    Drop = [
-        <<"email">>
-    ],
-    lists:foldl(
-        fun(P, Acc) ->
-            maps:remove(P, Acc)
-        end,
-        Export,
-        Drop
-    ).

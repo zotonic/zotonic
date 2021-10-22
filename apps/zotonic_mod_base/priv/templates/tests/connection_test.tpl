@@ -62,7 +62,7 @@
       <div class="panel-body">
 
           <p class="text-muted">
-              {_ Your browser as it identifies itself with our server and your IP address. This is essential information for the help desk. _}
+              {_ Your browser as it identifies itself to our server and your IP address. This is essential information for the help desk, but we do not store any personal data. _}
           </p>
 
           <dl class="dl-horizontal">
@@ -75,7 +75,7 @@
           <p class="text-muted">
             {_ The test below checks the connection between your machine, Google and our site. _}<br>
             {_ A latency of less than 50 milliseconds is very good, more than 250 milliseconds is slow. _}<br>
-            {_ There should not be any timeouts, if there are timeouts then your internet connection is losing messages. _}
+            {_ There should not be any timeouts, if there are timeouts then your internet connection is losing packets. _}
           </p>
 
           <dl class="dl-horizontal">
@@ -173,9 +173,9 @@ function update() {
        if(info.tries) {
         document.getElementById(id).innerHTML =
             "Sent: " + info.tries +
-            " Timeouts: <b>" + info.loss.toFixed(1) + "%</b>" +
+            " — Timeouts: <b>" + info.loss.toFixed(1) + "%</b>" +
             " Latency: <b>" + info.latency + "ms</b>" +
-            " Avg: " + info.avg_latency.toFixed(1) + "ms" +
+            " — Avg: <b>" + info.avg_latency.toFixed(1) + "ms</b>" +
             " Min: " + info.min_latency.toFixed(1) + "ms" +
             " Max: " + info.max_latency.toFixed(1) + "ms";
       }
@@ -205,7 +205,7 @@ function update() {
 
               document.getElementById("pong-latency").innerHTML =
                 " <b>" + latency + "ms</b>" +
-                " Avg: <b>" + average + "ms</b>" +
+                " — Avg: <b>" + average + "ms</b>" +
                 " Min: " + pong_latency_min + "ms" +
                 " Max: " + pong_latency_max + "ms";
           })

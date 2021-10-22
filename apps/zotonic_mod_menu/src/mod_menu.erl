@@ -283,7 +283,7 @@ create_new_if_needed(Id, Context) ->
     end,
     Props = #{
         <<"is_published">> => false,
-        <<"category">> => Category,
+        <<"category_id">> => Category,
         <<"title">> => ?__("New page", Context)
     },
     {ok, RscId} = m_rsc:insert(Props, Context),

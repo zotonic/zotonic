@@ -117,7 +117,6 @@ fetch_user_data(AccessToken) ->
     case httpc:request(get, {FacebookUrl, []}, httpc_http_options(), httpc_options()) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             Props = z_json:decode(Payload),
-            io:format("~p", [ Props ]),
             {ok, Props};
         Other ->
             lager:error("[facebook] error fetching user data [token ~p] ~p", [AccessToken, Other]),

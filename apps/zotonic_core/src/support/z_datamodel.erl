@@ -117,8 +117,8 @@ manage_predicate(Module, {Name, Uri, Props, ValidFor}, Options, Context) ->
 manage_predicate(Module, {Name, Props, ValidFor}, Options, Context) when is_list(Props) ->
     manage_predicate(Module, {Name, z_props:from_props(Props), ValidFor}, Options, Context);
 manage_predicate(Module, {Name, Props, ValidFor}, Options, Context) ->
-    Category = maps:get(<<"category">>, Props, predicate),
-    case manage_resource(Module, {Name, Category, maps:remove(<<"category">>, Props)}, Options, Context) of
+    Category = maps:get(<<"category_id">>, Props, predicate),
+    case manage_resource(Module, {Name, Category, maps:remove(<<"category_id">>, Props)}, Options, Context) of
         ok ->
             ok;
         {ok, Id} ->

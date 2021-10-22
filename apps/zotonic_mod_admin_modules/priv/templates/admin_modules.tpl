@@ -38,11 +38,11 @@
                             {{ props.mod_description|default:"-" }}<br>
                         </td>
                         <td>
-                            {% for m in props.mod_depends %}
-                                {% if m|member:active_provided %}
-                                    <nobr><span class="text-success">&check;</span> {{ m }}</nobr>
+                            {% for d in props.mod_depends %}
+                                {% if d|member:active_provided %}
+                                    <nobr><span class="text-success">&check;</span> {{ d }}</nobr>
                                 {% else %}
-                                    <nobr><span class="text-danger">&times; {{ m }}</span></nobr>
+                                    <nobr><span class="text-danger">&times; {{ d }}</span></nobr>
                                 {% endif %}
                                 {% if not forloop.last %}<br>{% endif %}
                             {% endfor %}
@@ -53,13 +53,13 @@
                             {% else %}
                                 <nobr><span class="text-muted">&cir; {{ module }}</span></nobr>
                             {% endif %}
-                            {% for m in props.mod_provides %}
-                                {% if m /= module %}
+                            {% for p in props.mod_provides %}
+                                {% if p /= module %}
                                     <br>
-                                    {% if depending[m] %}
-                                        <nobr><span class="text-success">&ofcir;</span> {{ m }}</nobr>
+                                    {% if depending[p] %}
+                                        <nobr><span class="text-success">&ofcir;</span> {{ p }}</nobr>
                                     {% else %}
-                                        <nobr><span class="text-muted">&cir; {{ m }}</span></nobr>
+                                        <nobr><span class="text-muted">&cir; {{ p }}</span></nobr>
                                     {% endif %}
                                 {% endif %}
                             {% endfor %}

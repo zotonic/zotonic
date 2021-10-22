@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020 Marc Worrell
-%% @doc OAuth2 model for OAuth authentication
+%% @copyright 2020-2021 Marc Worrell
+%% @doc OAuth2 model for authentication using remote OAuth2 services.
 
-%% Copyright 2020 Marc Worrell
+%% Copyright 2020-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -26,8 +26,6 @@
 
     redirect_url/1
 ]).
-
--include_lib("zotonic_core/include/zotonic.hrl").
 
 -define(SESSION_AUTH_TTL, 3600).
 
@@ -95,6 +93,14 @@ handle_redirect(StateId, ServiceMod, ServiceData, Args, QArgs, SId, Context) ->
                             lager:warning("OAuth redirect with missing or illegal state argument"),
                             {error, missing_secret}
                     end;
+                <<"access_denied">> ->
+                    case maps:get(<<"error_reason">>, QArgs, undefined) of
+                        <<"user_denied">> ->
+                            {error, code};
+                        _ ->
+                            lager:error("OAuth redirect error: ~p", [ QArgs ]),
+                            {error, code}
+                    end;
                 _Error ->
                     lager:error("OAuth redirect error: ~p", [ QArgs ]),
                     {error, code}
@@ -106,11 +112,15 @@ access_token({ok, #{ <<"access_token">> := _ } = AccessData}, ServiceMod, Args, 
         ServiceMod:auth_validated(AccessData, Args, Context),
         SId,
         Context);
+access_token({ok, #{} = AccessData}, ServiceMod, _Args, _SId, _Context) ->
+    lager:info("OAuth2 access token for ~p unknown return: ~p", [ ServiceMod, AccessData ]),
+    {error, access_token};
 access_token({error, denied}, _ServiceMod, _Args, _SId, _Context) ->
     {error, denied};
 access_token({error, _Reason}, _ServiceMod, _Args, _SId, _Context) ->
     {error, access_token}.
 
+% Handle the #auth_validated{} record.
 user_data({ok, Auth}, SId, Context) ->
     case z_notifier:first(Auth, Context) of
         undefined ->

@@ -368,7 +368,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
             Props = #{
                 <<"title">> => Title,
                 <<"is_published">> => true,
-                <<"category">> => video,
+                <<"category_id">> => video,
                 <<"video_embed_service">> => EmbedService,
                 <<"video_embed_code">> => EmbedCode,
                 <<"content_group_id">> => ContentGroupdId
@@ -406,7 +406,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
         %% Update the current page
         N when is_integer(N) ->
             Props = #{
-                <<"category">> => video,
+                <<"category_id">> => video,
                 <<"video_embed_service">> => EmbedService,
                 <<"video_embed_code">> => EmbedCode
             },

@@ -600,7 +600,10 @@ to_tsquery(Text, Context) when is_binary(Text) ->
                 false ->
                     Text1 = <<(z_convert:to_binary(Text))/binary, "xcvvcx">>,
                     TsQuery = to_tsquery_1(Text1, Context),
-                    binary:replace(TsQuery, <<"xcvvcx">>, <<>>)
+                    case binary:replace(TsQuery, <<"xcvvcx">>, <<>>) of
+                        <<"''">> -> <<>>;
+                        RTsQuery -> RTsQuery
+                    end
             end;
         TsQuery ->
             TsQuery
@@ -611,11 +614,8 @@ to_tsquery(Text, Context) when is_list(Text) ->
 
 to_tsquery_1(Text, Context) when is_binary(Text) ->
     Stemmer = z_pivot_rsc:stemmer_language(Context),
-    [{TsQuery, Version}] = z_db:q("select plainto_tsquery($2, $1), version()",
-                                  [z_pivot_rsc:cleanup_tsv_text(Text), Stemmer],
-                                  Context),
-    % Version is something like "PostgreSQL 8.3.5 on i386-apple-darwin8.11.1, compiled by ..."
-    fixup_tsquery(z_convert:to_list(Stemmer), append_wildcard(Text, TsQuery, Version)).
+    [{TsQuery}] = z_db:q("select plainto_tsquery($2, $1)", [z_pivot_rsc:cleanup_tsv_text(Text), Stemmer], Context),
+    fixup_tsquery(z_convert:to_list(Stemmer), TsQuery).
 
 is_separator(C) when C < $0 -> true;
 is_separator(C) when C >= $0, C =< $9 -> false;
@@ -624,21 +624,6 @@ is_separator(C) when C >= $a, C =< $z -> false;
 is_separator(C) when C >= 128 -> false;
 is_separator(_) -> true.
 
-append_wildcard(_Text, <<>>, _Version) ->
-    <<>>;
-append_wildcard(_Text, TsQ, Version) when Version < <<"PostgreSQL 8.4">> ->
-    TsQ;
-append_wildcard(Text, TsQ, _Version) ->
-    case is_wordchar(z_string:last_char(Text)) of
-        true -> <<TsQ/binary, ":*">>;
-        false -> TsQ
-    end.
-
-is_wordchar(C) when C >= 0, C =< 9 -> true;
-is_wordchar(C) when C >= $a, C =< $z -> true;
-is_wordchar(C) when C >= $A, C =< $Z -> true;
-is_wordchar(C) when C > 255 -> true;
-is_wordchar(_) -> false.
 
 % There are some problems with the stemming of prefixes.
 % For now we fix this up by removing the one case we found.
