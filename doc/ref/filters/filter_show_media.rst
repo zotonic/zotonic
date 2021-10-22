@@ -31,6 +31,10 @@ Images that are inlined in the body text can have these parameters:
 ``link``
   Checkbox if you want to let the image include a link to its own page.
 
+``link_url``
+  If ``link`` is checked then this can be used to set the URL for the link,
+  the link url defaults to the page-url of the shown medium item.
+
 ``caption``
   Caption that will be displayed below the media item. Per default the summary
   of the media item is used for the caption. If the caption is empty, then no
@@ -66,6 +70,8 @@ the following data:
 |crop                      |If crop is forced, ``true`` or ``undefined``  |
 +--------------------------+----------------------------------------------+
 |link                      |If the image should link to the medium page   |
++--------------------------+----------------------------------------------+
+|link_url                  |Link to use, defaults to the medium page      |
 +--------------------------+----------------------------------------------+
 |caption                   |The caption from the editor                   |
 +--------------------------+----------------------------------------------+
