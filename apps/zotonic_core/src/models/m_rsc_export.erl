@@ -72,7 +72,6 @@
     is_id_prop/1
 ]).
 
--include_lib("../../include/zotonic.hrl").
 
 m_get([ <<"full">>, Id | Rest ], _Msg, Context) ->
     case full(Id, Context) of

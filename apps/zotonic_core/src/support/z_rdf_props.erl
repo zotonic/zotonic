@@ -1,0 +1,316 @@
+%% @copyright 2021 Driebit BV
+%% @doc Extract properties from a compact RDF document encoded by zotonic_rdf.
+
+%% Copyright 2021 Driebit BV
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
+-module(z_rdf_props).
+
+-author("Marc Worrell <marc@worrell.nl>").
+
+-export([
+    extract_resource/1,
+    extract_props/1,
+    extract_edges/1,
+
+    map_values/1
+]).
+
+-include("../../include/zotonic.hrl").
+
+
+%% @doc Extract standard Zotonic src import from an RDF document. The document
+%% is a "compact" document returned by zotonic_rdf.
+%% @todo Extract the category
+%% @todo Extract optional medium record
+-spec extract_resource( RDFDoc ) -> {ok, Import} | {error, term()}
+    when RDFDoc :: map(),
+         Import :: map().
+extract_resource(#{ <<"@id">> := Uri } = RDFDoc ) when is_binary(Uri) ->
+    Props = extract_props(RDFDoc),
+    Props1 = Props#{
+        <<"uri">> => Uri,
+        <<"name">> => undefined,
+        <<"is_published">> => true,
+        <<"is_authoritative">> => true,
+        <<"rdf">> => map_values(RDFDoc)
+    },
+    Rsc = #{
+        <<"uri">> => Uri,
+        <<"is_a">> => [ <<"other">> ],
+        <<"resource">> => Props1,
+        <<"edges">> => extract_edges(RDFDoc),
+        <<"medium">> => undefined
+    },
+    {ok, Rsc};
+extract_resource(_) ->
+    {error, id}.
+
+
+%% @doc Extract standard Zotonic edges from an RDF document. The document
+%% is a "compact" document returned by zotonic_rdf. This collects the @id
+%% attributes in the top-level predicates of the document.
+-spec extract_edges( RDFDoc ) -> Edges
+    when RDFDoc :: map(),
+         Edges :: #{ Predicate := [ Edge ]},
+         Predicate :: binary(),
+         Edge :: map().
+extract_edges( RDFDoc ) ->
+    maps:fold(fun extract_edge/3, #{}, RDFDoc).
+
+extract_edge(K, Vs, Acc) when is_list(Vs) ->
+    lists:foldr(
+        fun(V, VAcc) ->
+            extract_edge(K, V, VAcc)
+        end,
+        Acc,
+        Vs);
+extract_edge(K, #{ <<"@id">> := Uri }, Acc) ->
+    Es = maps:get(K, Acc, []),
+    Obj = #{
+        <<"object_id">> => #{
+            <<"is_a">> => [ <<"other">> ],
+            <<"uri">> => Uri
+        }
+    },
+    Acc#{ K => Es ++ Obj };
+extract_edge(_K, _, Acc) ->
+    Acc.
+
+
+%% @doc Extract standard Zotonic properties from an RDF document. The document
+%% is a "compact" document returned by zotonic_rdf. All predicates in the
+%% document are of the form "namespace:term", for example: "dc:title".
+%% The namespaces are the ones defined in zotonic_rdf.
+-spec extract_props( RDFDoc ) -> Props
+  when RDFDoc :: map(),
+       Props :: map().
+extract_props(RDFDoc) ->
+    Ps1 = map(RDFDoc, mapping_dates(), fun to_date/1, #{}),
+    map(RDFDoc, mapping(), fun to_simple_value/1, Ps1).
+
+map(Doc, Mapping, Fun, DocAcc) ->
+    maps:fold(
+        fun(K, P, Acc) ->
+            case maps:find(K, Doc) of
+                {ok, V} ->
+                    case Fun(V) of
+                        error -> Acc;
+                        V1 -> Acc#{ P => V1 }
+                    end;
+                error ->
+                    Acc
+            end
+        end,
+        DocAcc,
+        Mapping).
+
+to_date([ #{ <<"@value">> := V } | _ ]) ->
+    try z_datetime:to_datetime(V)
+    catch _:_ -> error
+    end;
+to_date(#{ <<"@value">> := V }) ->
+    try z_datetime:to_datetime(V)
+    catch _:_ -> error
+    end;
+to_date([ V | _ ]) when is_binary(V) ->
+    try z_datetime:to_datetime(V)
+    catch _:_ -> error
+    end;
+to_date(V) when is_binary(V) ->
+    try z_datetime:to_datetime(V)
+    catch _:_ -> error
+    end;
+to_date(_) ->
+    error.
+
+to_simple_value(#{ <<"@value">> := Val } = V) when is_binary(Val); is_number(Val); is_boolean(Val) ->
+    case to_value(V) of
+        error -> Val;
+        V1 -> V1
+    end;
+to_simple_value(V) ->
+    to_value(V).
+
+
+%% @doc Map all values in the RDF doc to values we can handle in the system
+map_values(#{ <<"@language">> := _ } = V) ->
+    case to_value(V) of
+        error -> V;
+        V1 -> V1
+    end;
+map_values([ #{ <<"@language">> := _ } | _ ] = V) ->
+    case to_value(V) of
+        error -> V;
+        V1 -> V1
+    end;
+map_values([ #{ <<"@value">> := _ } | _ ] = V) ->
+    case to_value(V) of
+        error -> V;
+        V1 -> V1
+    end;
+map_values(Doc) when is_map(Doc) ->
+    maps:fold(
+        fun(K, V, Acc) ->
+            Acc#{ K => map_values(V) }
+        end,
+        #{},
+        Doc);
+map_values(L) when is_list(L) ->
+    lists:map(fun map_values/1, L);
+map_values(V) ->
+    V.
+
+
+% See https://www.w3.org/TR/xmlschema-2/#built-in-datatypes
+to_value(V) when is_binary(V); is_number(V); is_boolean(V) ->
+    V;
+to_value(null) ->
+    undefined;
+to_value(undefined) ->
+    undefined;
+to_value(#{
+        <<"@value">> := V,
+        <<"@type">> := <<"xsd:integer">>
+    }) ->
+    try z_convert:to_integer(V)
+    catch _:_ -> error
+    end;
+to_value(#{
+        <<"@value">> := V,
+        <<"@type">> := <<"xsd:boolean">>
+    }) ->
+    try z_convert:to_bool(V)
+    catch _:_ -> error
+    end;
+to_value(#{
+        <<"@value">> := V,
+        <<"@type">> := <<"xsd:float">>
+    }) ->
+    try z_convert:to_float(V)
+    catch _:_ -> error
+    end;
+to_value(#{
+        <<"@value">> := V,
+        <<"@type">> := <<"xsd:double">>
+    }) ->
+    try z_convert:to_float(V)
+    catch _:_ -> error
+    end;
+to_value(#{
+        <<"@language">> := Lang,
+        <<"@value">> := V
+    }) ->
+    case z_language:to_language_atom(Lang) of
+        {ok, LangAtom} ->
+            try
+                V1 = z_convert:to_binary(V),
+                #trans{ tr = simplify_langs([ {LangAtom, V1} ])}
+            catch _:_ ->
+                error
+            end;
+        {error, _} ->
+            error
+    end;
+to_value([ #{ <<"@language">> := _ } | _ ] = Vs) ->
+    Trans = lists:filtermap(
+        fun
+            (#{
+                <<"@language">> := Lang,
+                <<"@value">> := V
+            }) ->
+                case z_language:to_language_atom(Lang) of
+                    {ok, LangAtom} ->
+                        try
+                            V1 = z_convert:to_binary(V),
+                            {true, {LangAtom, V1}}
+                        catch _:_ ->
+                            false
+                        end;
+                    {error, _} ->
+                        false
+                end;
+            (_) ->
+                false
+        end,
+        Vs),
+    #trans{ tr = simplify_langs(Trans) };
+to_value(_) ->
+    error.
+
+
+%% @doc Cleanup languages, map "en-gb" to "en" if there is no base
+%% version of that language.
+simplify_langs(Tr) ->
+    lists:foldl(
+        fun({Iso, V}, Acc) ->
+            case atom_to_binary(Iso, utf8) of
+                <<A,B, $-, _/binary>> ->
+                    Base = binary_to_atom(<<A, B>>, utf8),
+                    case lists:member(Base, Acc) of
+                        false -> [ {Base, V} | Acc ];
+                        true -> [ {Iso, V} | Acc ]
+                    end;
+                _ ->
+                    [ {Iso, V} | Acc ]
+            end
+        end,
+        [],
+        Tr).
+
+
+mapping_dates() ->
+    #{
+        <<"schema:dateCreated">> => <<"created">>,
+        <<"schema:dateModified">> => <<"modified">>,
+        <<"schema:datePublished">> => <<"publication_start">>,
+        <<"schema:startDate">> => <<"date_start">>,
+        <<"schema:endDate">> => <<"date_end">>,
+
+        <<"dcterms:modified">> => <<"modified">>
+    }.
+
+mapping() ->
+    #{
+        <<"schema:givenName">> => <<"name_first">>,
+        <<"schema:familyName">> => <<"name_surname">>,
+        <<"schema:telephone">> => <<"phone">>,
+
+        <<"schema:licens">> => <<"license">>,
+
+        <<"schema:headline">> => <<"title">>,
+        <<"schema:subtitle">> => <<"alternativeHeadline">>,
+        <<"schema:text">> => <<"body">>,
+        <<"schema:url">> => <<"website">>,
+
+        <<"dcterms:title">> => <<"title">>,
+        <<"dcterms:description">> => <<"summary">>,
+
+        <<"dc:title">> => <<"title">>,
+        <<"dc:description">> => <<"summary">>,
+
+        <<"foaf:name">> => <<"title">>,
+        <<"foaf:givenName">> => <<"name_first">>,
+        <<"foaf:familyName">> => <<"name_surname">>,
+        <<"foaf:firstName">> => <<"name_first">>,
+        <<"foaf:lastName">> => <<"name_surname">>,
+        <<"foaf:gender">> => <<"gender">>,
+        <<"foaf:homepage">> => <<"website">>,
+        <<"foaf:mbox">> => <<"email">>,
+        <<"foaf:phone">> => <<"phone">>,
+
+        <<"geo:lat">> => <<"location_lat">>,
+        <<"geo:long">> => <<"location_lng">>
+    }.
+
