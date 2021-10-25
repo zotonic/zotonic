@@ -24,10 +24,10 @@
         </thead>
 
         <tbody>
-            {% for m, keys in config %}
+            {% for g, keys in config %}
             {% for k, c in keys %}
             {% with c.id,
-                    m|default:'',
+                    g|default:'',
                     k|default:'',
                     c.value
                as
