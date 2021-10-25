@@ -6,6 +6,7 @@ Dates
    :maxdepth: 1
    :glob:
 
+   ../filter_add_hour
    ../filter_add_day
    ../filter_add_month
    ../filter_add_week
@@ -17,6 +18,7 @@ Dates
    ../filter_in_future
    ../filter_in_past
    ../filter_ne_day
+   ../filter_sub_hour
    ../filter_sub_day
    ../filter_sub_month
    ../filter_sub_week
