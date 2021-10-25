@@ -18,4 +18,4 @@ For example::
 When the value is ``{{2008,12,10},{15,30,0}}`` then the output is ``{{2008,12,10},{12,30,0}}``.
 
 
-.. seealso:: :ref:`filter-add_hour`, :ref:`filter_sub_day`,  :ref:`filter-sub_week`, :ref:`filter-sub_month`, :ref:`filter-sub_year`
+.. seealso:: :ref:`filter-add_hour`, :ref:`filter-sub_day`,  :ref:`filter-sub_week`, :ref:`filter-sub_month`, :ref:`filter-sub_year`
