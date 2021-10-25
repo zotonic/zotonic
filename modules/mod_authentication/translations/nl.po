@@ -647,8 +647,8 @@ msgid ""
 "request."
 msgstr ""
 "Je ontvangt dit e-mailbericht omdat jij of iemand anders heeft aangevraagd "
-"om het wachtwoord dat bij jou account hoort te veranderen. Jij of iemand "
-"anders heeft jou gebruikersnaam of e-mailadres ingevuld. Je ontvangt geen "
+"om het wachtwoord dat bij jouw account hoort te veranderen. Jij of iemand "
+"anders heeft jouw gebruikersnaam of e-mailadres ingevuld. Je ontvangt geen "
 "aanvullende e-mailberichten over deze aanvraag."
 
 #: modules/mod_authentication/templates/logoff.tpl:12
