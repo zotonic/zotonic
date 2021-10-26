@@ -344,6 +344,7 @@ mapping_dates() ->
         <<"schema:startDate">> => <<"date_start">>,
         <<"schema:endDate">> => <<"date_end">>,
 
+        <<"dcterms:created">> => <<"created">>,
         <<"dcterms:modified">> => <<"modified">>
     }.
 
