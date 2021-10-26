@@ -5,8 +5,8 @@ set -x
 HOME=/opt/zotonic
 SHELL=/bin/sh
 
-USER_ID=`stat -c '%g' /opt/zotonic`
-GROUP_ID=`stat -c '%u' /opt/zotonic`
+USER_ID=`stat -c '%u' /opt/zotonic`
+GROUP_ID=`stat -c '%g' /opt/zotonic`
 
 ZOTONIC_PIDFILE=/run/zotonic.pid
 
