@@ -901,11 +901,18 @@ rid(#{ <<"uri">> := Uri } = Map, Context) ->
         Id ->
             Id
     end;
-rid(UniqueName, Context) ->
-    case z_utils:only_digits(UniqueName) of
-        true -> z_convert:to_integer(UniqueName);
-        false -> name_lookup(UniqueName, Context)
-    end.
+rid(MaybeName, Context) when is_binary(MaybeName) ->
+    case binary:match(MaybeName, <<":">>) of
+        nomatch ->
+            case z_utils:only_digits(MaybeName) of
+                true -> z_convert:to_integer(MaybeName);
+                false -> name_lookup(MaybeName, Context)
+            end;
+        _ ->
+            uri_lookup(MaybeName, Context)
+    end;
+rid(MaybeName, Context) ->
+    name_lookup(MaybeName, Context).
 
 is_matching_category(undefined, _) -> true;
 is_matching_category([], _) -> true;

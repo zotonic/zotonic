@@ -582,10 +582,8 @@ import(JSON, Options, Context) ->
     import(undefined, JSON, #{}, Options, Context).
 
 import(OptLocalId, #{
-        <<"id">> := _RemoteId,
         <<"resource">> := Rsc,
-        <<"uri">> := Uri,
-        <<"uri_template">> := UriTemplate
+        <<"uri">> := Uri
     } = JSON, ImportedAcc, Options, Context) ->
 
     lager:info("Importing ~s (~p)", [ Uri, OptLocalId ]),
@@ -604,6 +602,7 @@ import(OptLocalId, #{
         false ->
             case find_allowed_category(RemoteRId, Rsc, Options, Context) of
                 {ok, Category} ->
+                    UriTemplate = maps:get(<<"uri_template">>, JSON, <<Uri/binary, "#:id">>),
                     {Rsc1, ImportedAcc1} = cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context),
                     Rsc2 = Rsc1#{
                         <<"category_id">> => Category
@@ -652,7 +651,7 @@ import(OptLocalId, #{
             end
     end;
 import(_OptLocalId, JSON, _ImportedAcc, _Options, _Context) ->
-    lager:warning("Import of JSON without required fields id, resource, uri and uri_template: ~p", [JSON]),
+    lager:warning("Import of JSON without required fields resource and uri: ~p", [JSON]),
     {error, status}.
 
 
@@ -1226,10 +1225,12 @@ first_category([ R | Rs ], Context) ->
 %% @doc Return the host part of an URI
 -spec host( binary() | string() ) -> binary().
 host(Uri) ->
-    #{
-        host := Host
-    } = uri_string:parse(Uri),
-    z_convert:to_binary(Host).
+    case uri_string:parse(Uri) of
+        #{ host := Host } ->
+            z_convert:to_binary(Host);
+        #{ scheme := Scheme } when Scheme =/= <<"http">>, Scheme =/= <<"https">> ->
+            Scheme
+    end.
 
 
 %% @doc Check if the site is the local site

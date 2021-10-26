@@ -37,7 +37,7 @@ run(Args) ->
 
 tests(Args) ->
     ZotonicDir = zotonic_command:get_zotonic_dir(),
-    Beams = filelib:wildcard( filename:join([ ZotonicDir, "_build", "default", "lib", "zotonic_*", "test", "*.erl" ])),
+    Beams = filelib:wildcard( filename:join([ ZotonicDir, "apps", "zotonic_*", "test", "*.erl" ])),
     Bs = lists:map(
         fun(B) ->
             filename:rootname( filename:basename(B) )
