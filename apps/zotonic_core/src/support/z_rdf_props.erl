@@ -20,9 +20,9 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    extract_resource/1,
+    extract_resource/2,
     extract_props/1,
-    extract_edges/1,
+    extract_edges/2,
 
     map_values/1
 ]).
@@ -34,58 +34,112 @@
 %% is a "compact" document returned by zotonic_rdf.
 %% @todo Extract the category
 %% @todo Extract optional medium record
--spec extract_resource( RDFDoc ) -> {ok, Import} | {error, term()}
+-spec extract_resource( RDFDoc, z:context() ) -> {ok, Import} | {error, term()}
     when RDFDoc :: map(),
          Import :: map().
-extract_resource(#{ <<"@id">> := Uri } = RDFDoc ) when is_binary(Uri) ->
-    Props = extract_props(RDFDoc),
-    Props1 = Props#{
+extract_resource(#{ <<"@id">> := Uri } = RDFDoc, Context) when is_binary(Uri) ->
+    RDFDoc1 = extract_props(RDFDoc),
+    Props1 = RDFDoc1#{
         <<"uri">> => Uri,
         <<"name">> => undefined,
         <<"is_published">> => true,
-        <<"is_authoritative">> => true,
-        <<"rdf">> => map_values(RDFDoc)
+        <<"is_authoritative">> => true
     },
+    Edges = extract_edges(RDFDoc, Context),
+    Props2 = maps:without(maps:keys(Edges), Props1),
+    {Medium, MediumUrl} = extract_medium(Props2),
+    Props3 = maps:without([
+            <<"@id">>,
+            <<"zotonic:medium_url">>
+        ], Props2),
     Rsc = #{
         <<"uri">> => Uri,
-        <<"is_a">> => [ <<"other">> ],
-        <<"resource">> => Props1,
-        <<"edges">> => extract_edges(RDFDoc),
-        <<"medium">> => undefined
+        <<"is_a">> => [ maps:get(<<"category_id">>, Props3, <<"other">>) ],
+        <<"resource">> => Props3,
+        <<"edges">> => Edges,
+        <<"medium">> => Medium,
+        <<"medium_url">> => MediumUrl
     },
     {ok, Rsc};
-extract_resource(_) ->
+extract_resource(_, _) ->
     {error, id}.
+
+
+%% @doc Extra the medium record for importing an image or other media.
+-spec extract_medium( RDFDoc ) -> {Medium, MediumUrl}
+    when RDFDoc :: map(),
+         Medium :: map() | undefined,
+         MediumUrl :: binary() | undefined.
+extract_medium(#{ <<"zotonic:medium_url">> := MediumUrl } = RDFDoc) when MediumUrl =/= <<>> ->
+    Created = maps:get(<<"modified">>, RDFDoc,
+        maps:get(<<"created">>, RDFDoc, erlang:universaltime())),
+    Medium = #{
+        <<"created">> => Created
+    },
+    {Medium, to_value(MediumUrl)};
+extract_medium(_) ->
+    {undefined, undefined}.
+
 
 
 %% @doc Extract standard Zotonic edges from an RDF document. The document
 %% is a "compact" document returned by zotonic_rdf. This collects the @id
 %% attributes in the top-level predicates of the document.
--spec extract_edges( RDFDoc ) -> Edges
+-spec extract_edges( RDFDoc, Context ) -> Edges
     when RDFDoc :: map(),
          Edges :: #{ Predicate := [ Edge ]},
          Predicate :: binary(),
-         Edge :: map().
-extract_edges( RDFDoc ) ->
-    maps:fold(fun extract_edge/3, #{}, RDFDoc).
+         Edge :: map(),
+         Context :: z:context().
+extract_edges(RDFDoc, Context) ->
+    Es = maps:fold(
+        fun(K, V, Acc) -> extract_edge(K, V, Acc, Context) end,
+        #{},
+        RDFDoc),
+    maps:fold(
+        fun(P, Os, Acc) ->
+            Acc#{
+                P => #{
+                    <<"predicate">> => #{
+                        <<"is_a">> => [ <<"meta">>, <<"predicate">> ],
+                        <<"uri">> => P
+                    },
+                    <<"objects">> => Os
+                }
+            }
+        end,
+        #{},
+        Es).
 
-extract_edge(K, Vs, Acc) when is_list(Vs) ->
+extract_edge(<<"rdf:type">>, _, Acc, _Context) ->
+    Acc;
+extract_edge(K, Vs, Acc, Context) when is_list(Vs) ->
     lists:foldr(
         fun(V, VAcc) ->
-            extract_edge(K, V, VAcc)
+            extract_edge(K, V, VAcc, Context)
         end,
         Acc,
         Vs);
-extract_edge(K, #{ <<"@id">> := Uri }, Acc) ->
-    Es = maps:get(K, Acc, []),
-    Obj = #{
-        <<"object_id">> => #{
-            <<"is_a">> => [ <<"other">> ],
-            <<"uri">> => Uri
-        }
-    },
-    Acc#{ K => Es ++ Obj };
-extract_edge(_K, _, Acc) ->
+extract_edge(K, #{ <<"@id">> := Uri }, Acc, Context) ->
+    case m_rsc:rid(K, Context) of
+        undefined ->
+            Acc;
+        RId ->
+            case m_rsc:is_a(RId, predicate, Context) of
+                true ->
+                    Es = maps:get(K, Acc, []),
+                    Obj = #{
+                        <<"object_id">> => #{
+                            <<"is_a">> => [ <<"other">> ],
+                            <<"uri">> => Uri
+                        }
+                    },
+                    Acc#{ K => lists:flatten([Es, Obj]) };
+                false ->
+                    Acc
+            end
+    end;
+extract_edge(_K, _, Acc, _Context) ->
     Acc.
 
 
@@ -97,7 +151,7 @@ extract_edge(_K, _, Acc) ->
   when RDFDoc :: map(),
        Props :: map().
 extract_props(RDFDoc) ->
-    Ps1 = map(RDFDoc, mapping_dates(), fun to_date/1, #{}),
+    Ps1 = map(RDFDoc, mapping_dates(), fun to_date/1, RDFDoc),
     map(RDFDoc, mapping(), fun to_simple_value/1, Ps1).
 
 map(Doc, Mapping, Fun, DocAcc) ->
@@ -106,8 +160,11 @@ map(Doc, Mapping, Fun, DocAcc) ->
             case maps:find(K, Doc) of
                 {ok, V} ->
                     case Fun(V) of
-                        error -> Acc;
-                        V1 -> Acc#{ P => V1 }
+                        error ->
+                            Acc;
+                        V1 ->
+                            Acc1 = maps:remove(K, Acc),
+                            Acc1#{ P => V1 }
                     end;
                 error ->
                     Acc
@@ -181,6 +238,12 @@ to_value(null) ->
 to_value(undefined) ->
     undefined;
 to_value(#{
+        <<"@id">> := URI
+    }) ->
+    try z_convert:to_binary(URI)
+    catch _:_ -> error
+    end;
+to_value(#{
         <<"@value">> := V,
         <<"@type">> := <<"xsd:integer">>
     }) ->
@@ -208,6 +271,11 @@ to_value(#{
     try z_convert:to_float(V)
     catch _:_ -> error
     end;
+to_value(#{
+        <<"@value">> := V,
+        <<"@type">> := <<"xsd:datetime">>
+    }) ->
+    to_date(V);
 to_value(#{
         <<"@language">> := Lang,
         <<"@value">> := V
@@ -283,6 +351,8 @@ mapping_dates() ->
 
 mapping() ->
     #{
+        <<"rdf:type">> => <<"category_id">>,
+
         <<"schema:givenName">> => <<"name_first">>,
         <<"schema:familyName">> => <<"name_surname">>,
         <<"schema:telephone">> => <<"phone">>,
