@@ -32,8 +32,6 @@
 
 %% @doc Extract standard Zotonic src import from an RDF document. The document
 %% is a "compact" document returned by zotonic_rdf.
-%% @todo Extract the category
-%% @todo Extract optional medium record
 -spec extract_resource( RDFDoc, z:context() ) -> {ok, Import} | {error, term()}
     when RDFDoc :: map(),
          Import :: map().
@@ -357,7 +355,7 @@ mapping() ->
         <<"schema:familyName">> => <<"name_surname">>,
         <<"schema:telephone">> => <<"phone">>,
 
-        <<"schema:licens">> => <<"license">>,
+        <<"schema:license">> => <<"license">>,
 
         <<"schema:headline">> => <<"title">>,
         <<"schema:subtitle">> => <<"alternativeHeadline">>,
