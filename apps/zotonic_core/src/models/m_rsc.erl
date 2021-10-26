@@ -713,15 +713,25 @@ p_no_acl(Id, Predicate, Context) when is_integer(Id) ->
 
 
 p_cached(Id, Property, Context) ->
+    case p_cached_1(Id, Property, Context) of
+        undefined ->
+            case z_rdf_props:mapping(Property) of
+                undefined ->
+                    undefined;
+                MappedProp ->
+                    p_cached_1(Id, MappedProp, Context)
+            end;
+        V ->
+            V
+    end.
+
+p_cached_1(Id, Property, Context) ->
     case z_depcache:get(Id, Property, Context) of
         {ok, V} ->
             V;
         undefined ->
             case get_cached_unsafe(Id, Context) of
                 undefined -> undefined;
-                Map when is_atom(Property) ->
-                    P1 = atom_to_binary(Property, utf8),
-                    maps:get(P1, Map, undefined);
                 Map ->
                     maps:get(Property, Map, undefined)
             end

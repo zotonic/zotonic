@@ -20,6 +20,8 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
+    mapping/1,
+
     extract_resource/2,
     extract_props/1,
     extract_edges/2,
@@ -28,6 +30,18 @@
 ]).
 
 -include("../../include/zotonic.hrl").
+
+
+%% @doc Check if a property can be mapped to a standard property.
+%% This is used in m_rsc:p/3 for fetching namespaced properties.
+-spec mapping( binary() ) -> binary() | undefined.
+mapping(Prop) ->
+    case maps:get(Prop, mapping(), undefined) of
+        undefined ->
+            maps:get(Prop, mapping_dates(), undefined);
+        Mapped ->
+            Mapped
+    end.
 
 
 %% @doc Extract standard Zotonic src import from an RDF document. The document
