@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-20 14:24\n"
+"PO-Revision-Date: 2021-10-27 19:08\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4936,7 +4936,7 @@ msgstr "Объяснить"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
 msgid "Final dispatch"
-msgstr "Окончательная отправка"
+msgstr "Окончательная диспетчеризация"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:111
 msgid "Find"
