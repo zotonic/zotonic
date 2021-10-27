@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-15 11:46\n"
+"PO-Revision-Date: 2021-10-20 14:25\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -16,11 +16,11 @@ msgstr ""
 "X-Crowdin-File-ID: 8692\n"
 "Language: it_IT\n"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:99
+#: apps/zotonic_core/src/support/z_fetch.erl:113
 msgid "Could not fetch the remote resource URL."
 msgstr "Impossibile recuperare l'URL della risorsa remota."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:85
+#: apps/zotonic_core/src/support/z_fetch.erl:99
 msgid "Forbidden to access the remote resource URL."
 msgstr "Vietato accedere all'URL della risorsa remota."
 
@@ -28,31 +28,31 @@ msgstr "Vietato accedere all'URL della risorsa remota."
 msgid "Page Import"
 msgstr "Importazione pagina"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:93
+#: apps/zotonic_core/src/support/z_fetch.erl:107
 msgid "The remote server can not handle this URL."
 msgstr "Il server remoto non può gestire questo URL."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:97
+#: apps/zotonic_core/src/support/z_fetch.erl:111
 msgid "The remote server for the URL is having problems."
 msgstr "Il server remoto per l'URL sta riscontrando problemi."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:95
+#: apps/zotonic_core/src/support/z_fetch.erl:109
 msgid "The remote server for the URL is having temporary problems."
 msgstr "Il server remoto per l'URL sta riscontrando problemi temporanei."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:87
+#: apps/zotonic_core/src/support/z_fetch.erl:101
 msgid "The resource at the URL can not be found."
 msgstr "Impossibile trovare la risorsa all'URL."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:89
+#: apps/zotonic_core/src/support/z_fetch.erl:103
 msgid "The resource at the URL is gone."
 msgstr "La risorsa all'URL è andata."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:91
+#: apps/zotonic_core/src/support/z_fetch.erl:105
 msgid "Too many requests for the remote server, try again later."
 msgstr "Troppe richieste per il server remoto, riprova più tardi."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:83
+#: apps/zotonic_core/src/support/z_fetch.erl:97
 msgid "Unauthorized to access the remote resource URL."
 msgstr "Non autorizzato ad accedere all'URL della risorsa remota."
 
@@ -1182,7 +1182,7 @@ msgid "Embed page"
 msgstr "Incorporare la pagina"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:196
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:231
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:230
 msgid "Embedded Content"
 msgstr "Contenuto incorporato"
 
@@ -7326,7 +7326,7 @@ msgstr "La chiave API può essere trovata su"
 msgid "Attempt to fix embedded videos for which OEmbed embedding has failed previously."
 msgstr "Tentativo di fissare i video incorporati per i quali l'incorporazione di OEmbed è fallita in precedenza."
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:319
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:318
 msgid "Attempting to fix ~p videos."
 msgstr "Tentativo di fissare i video ~p."
 
@@ -7338,7 +7338,7 @@ msgstr "Incorporazione di un elemento multimediale fallita con codice HTTP"
 msgid "Fix embedded videos"
 msgstr "Fissare i video incorporati"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:316
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:315
 msgid "No embedded videos found which need fixing."
 msgstr "Nessun video incorporato trovato che necessiti di correzione."
 
@@ -7346,11 +7346,11 @@ msgstr "Nessun video incorporato trovato che necessiti di correzione."
 msgid "Save Embedly Key"
 msgstr "Salva la chiave di Embedly"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:328
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:327
 msgid "Saved the Embedly settings."
 msgstr "Salvate le impostazioni di Embedly."
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:330
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:329
 msgid "You don't have permission to change the Embedly settings."
 msgstr "Non hai il permesso di cambiare le impostazioni di Embedly."
 

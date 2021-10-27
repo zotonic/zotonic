@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-15 11:46\n"
+"PO-Revision-Date: 2021-10-20 14:25\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -16,11 +16,11 @@ msgstr ""
 "X-Crowdin-File-ID: 8692\n"
 "Language: zh_TW\n"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:99
+#: apps/zotonic_core/src/support/z_fetch.erl:113
 msgid "Could not fetch the remote resource URL."
 msgstr "無法獲取遠程資源 URL。"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:85
+#: apps/zotonic_core/src/support/z_fetch.erl:99
 msgid "Forbidden to access the remote resource URL."
 msgstr "禁止訪問遠程資源 URL。"
 
@@ -28,31 +28,31 @@ msgstr "禁止訪問遠程資源 URL。"
 msgid "Page Import"
 msgstr "頁面導入"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:93
+#: apps/zotonic_core/src/support/z_fetch.erl:107
 msgid "The remote server can not handle this URL."
 msgstr "遠程服務器無法處理此 URL。"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:97
+#: apps/zotonic_core/src/support/z_fetch.erl:111
 msgid "The remote server for the URL is having problems."
 msgstr "URL 的遠程服務器有問題。"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:95
+#: apps/zotonic_core/src/support/z_fetch.erl:109
 msgid "The remote server for the URL is having temporary problems."
 msgstr "URL 的遠程服務器出現臨時問題。"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:87
+#: apps/zotonic_core/src/support/z_fetch.erl:101
 msgid "The resource at the URL can not be found."
 msgstr "無法找到 URL 處的資源。"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:89
+#: apps/zotonic_core/src/support/z_fetch.erl:103
 msgid "The resource at the URL is gone."
 msgstr "URL 處的資源消失了。"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:91
+#: apps/zotonic_core/src/support/z_fetch.erl:105
 msgid "Too many requests for the remote server, try again later."
 msgstr "對遠程服務器的請求過多，請稍後重試。"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:83
+#: apps/zotonic_core/src/support/z_fetch.erl:97
 msgid "Unauthorized to access the remote resource URL."
 msgstr "未經授權訪問遠程資源 URL。"
 
@@ -1182,7 +1182,7 @@ msgid "Embed page"
 msgstr "嵌入页面"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:196
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:231
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:230
 msgid "Embedded Content"
 msgstr "嵌入内容"
 
@@ -7322,7 +7322,7 @@ msgstr "API密钥可以在"
 msgid "Attempt to fix embedded videos for which OEmbed embedding has failed previously."
 msgstr "试图修复之前OEmbed嵌入失败的嵌入视频。"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:319
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:318
 msgid "Attempting to fix ~p videos."
 msgstr "试图修复~p视频。"
 
@@ -7334,7 +7334,7 @@ msgstr "嵌入媒体项目失败，使用HTTP代码"
 msgid "Fix embedded videos"
 msgstr "修复嵌入视频"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:316
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:315
 msgid "No embedded videos found which need fixing."
 msgstr "没有找到需要修复的嵌入式视频。"
 
@@ -7342,11 +7342,11 @@ msgstr "没有找到需要修复的嵌入式视频。"
 msgid "Save Embedly Key"
 msgstr "保存 Embedly 键"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:328
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:327
 msgid "Saved the Embedly settings."
 msgstr "保存了Embedly的设置。"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:330
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:329
 msgid "You don't have permission to change the Embedly settings."
 msgstr "你没有权限更改Embedly的设置。"
 
