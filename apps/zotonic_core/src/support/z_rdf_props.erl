@@ -26,7 +26,9 @@
     extract_props/1,
     extract_edges/2,
 
-    map_values/1
+    map_values/1,
+
+    to_simple_value/1
 ]).
 
 -include("../../include/zotonic.hrl").
@@ -204,6 +206,9 @@ to_date(V) when is_binary(V) ->
 to_date(_) ->
     error.
 
+
+%% @doc Translate the given value to a simpler value
+-spec to_simple_value( map() ) -> error | term().
 to_simple_value(#{ <<"@value">> := Val } = V) when is_binary(Val); is_number(Val); is_boolean(Val) ->
     case to_value(V) of
         error -> Val;

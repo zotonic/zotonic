@@ -1,8 +1,8 @@
 %% @author Dirk Geurs <dirk@driebit.nl>
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015 Driebit BV
 %% @doc Force the input to a value
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2015 Driebit BV
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
