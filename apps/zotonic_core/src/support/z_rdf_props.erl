@@ -166,7 +166,15 @@ extract_edge(_K, _, Acc, _Context) ->
        Props :: map().
 extract_props(RDFDoc) ->
     Ps1 = map(RDFDoc, mapping_dates(), fun to_date/1, RDFDoc),
-    map(RDFDoc, mapping(), fun to_simple_value/1, Ps1).
+    Ps2 = map(RDFDoc, mapping(), fun to_simple_value/1, Ps1),
+    maps:fold(
+        fun(K, V, Acc) ->
+            Acc#{
+                K => map_nested_values(V)
+            }
+        end,
+        #{},
+        Ps2).
 
 map(Doc, Mapping, Fun, DocAcc) ->
     maps:fold(
@@ -186,6 +194,32 @@ map(Doc, Mapping, Fun, DocAcc) ->
         end,
         DocAcc,
         Mapping).
+
+
+map_nested_values(#{ <<"@id">> := _ } = V) ->
+    V;
+map_nested_values(#{ <<"@value">> := _ } = V) ->
+    case to_value(V) of
+        error -> V;
+        V1 -> V1
+    end;
+map_nested_values([ #{ <<"@language">> := _ } | _ ] = V) ->
+    case to_value(V) of
+        error -> V;
+        V1 -> V1
+    end;
+map_nested_values(V) when is_list(V) ->
+    lists:map(fun map_nested_values/1, V);
+map_nested_values(V) when is_map(V) ->
+    maps:fold(
+        fun(K1, V1, Acc) ->
+            Acc#{ K1 => map_nested_values(V1) }
+        end,
+        #{},
+        V);
+map_nested_values(V) ->
+    V.
+
 
 to_date([ #{ <<"@value">> := V } | _ ]) ->
     try z_datetime:to_datetime(V)

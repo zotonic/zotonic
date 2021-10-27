@@ -895,6 +895,8 @@ rid(<<"http:", _/binary>> = Uri, Context) ->
     uri_lookup(Uri, Context);
 rid(<<"https:", _/binary>> = Uri, Context) ->
     uri_lookup(Uri, Context);
+rid(<<"/", _/binary>> = Uri, Context) ->
+    uri_lookup(Uri, Context);
 rid(#{ <<"uri">> := Uri } = Map, Context) ->
     Name = maps:get(<<"name">>, Map, undefined),
     case rid(Uri, Context) of
@@ -911,6 +913,8 @@ rid(#{ <<"uri">> := Uri } = Map, Context) ->
         Id ->
             Id
     end;
+rid(#{ <<"@id">> := Uri }, Context) ->
+    uri_lookup(Uri, Context);
 rid(MaybeName, Context) when is_binary(MaybeName) ->
     case binary:match(MaybeName, <<":">>) of
         nomatch ->
@@ -1001,6 +1005,8 @@ uri_lookup_1(Uri, Context) ->
 
 
 %% @doc Check if the hostname in an URL matches the current site
+is_local_uri(<<"/", C, _/binary>>, _Context) when C =/= $/ ->
+    true;
 is_local_uri(Uri, Context) ->
     Site = z_context:site(Context),
     case z_sites_dispatcher:get_site_for_url(Uri) of
@@ -1013,6 +1019,18 @@ is_local_uri(Uri, Context) ->
 
 
 %% @doc Use the dispatcher to extract the id from the local URI
+local_uri_to_id(<<$/, C, _/binary>> = Path, Context) when C =/= $/ ->
+    case z_sites_dispatcher:dispatch_path(Path, Context) of
+        {ok, #{
+            controller_options := Options,
+            bindings := Bindings
+        }} ->
+            Id = maps:get(id, Bindings, proplists:get_value(id, Options)),
+            rid(Id, Context);
+        _ ->
+            % Non matching sites and illegal urls are rejected
+            undefined
+    end;
 local_uri_to_id(Uri, Context) ->
     Site = z_context:site(Context),
     case z_sites_dispatcher:dispatch_url(Uri) of
@@ -1031,6 +1049,7 @@ local_uri_to_id(Uri, Context) ->
 is_rsc_uri(<<"urn:", _/binary>>) -> true;
 is_rsc_uri(<<"http:", _/binary>>) -> true;
 is_rsc_uri(<<"https:", _/binary>>) -> true;
+is_rsc_uri(<<"/", _/binary>>) -> true;
 is_rsc_uri(B) ->
     binary:match(B, <<":">>) =/= nomatch.
 

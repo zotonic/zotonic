@@ -420,6 +420,15 @@ find_value(1, #{ <<"@id">> := _ } = V, _TplVars, _Context) ->
     V;
 find_value(N, #{ <<"@id">> := _ }, _TplVars, _Context) when is_integer(N) ->
     undefined;
+find_value(<<"@id">>, #{ <<"@id">> := Uri  }, _TplVars, _Context) ->
+    Uri;
+find_value(K, #{ <<"@id">> := Uri }, TplVars, Context) when is_binary(K); is_atom(K) ->
+    case m_rsc:rid(Uri, Context) of
+        undefined -> undefined;
+        RscId -> find_value(K, RscId, TplVars, Context)
+    end;
+find_value(K, [ #{} = Tuple | _ ], TplVars, Context) when is_binary(K) ->
+    find_value(K, Tuple, TplVars, Context);
 find_value(Key, Ps, TplVars, Context) ->
     template_compiler_runtime:find_value(Key, Ps, TplVars, Context).
 
@@ -579,22 +588,27 @@ to_bool(#trans{} = Tr, Context) ->
         <<>> -> false;
         _ -> true
     end;
-to_bool(#search_result{result=L}, Context) ->
-    to_bool(L, Context);
-to_bool(#m_search_result{result=L}, Context) ->
-    to_bool(L, Context);
-to_bool(Value, _Context) ->
-    z_convert:to_bool_strict(Value).
+to_bool(#rsc_list{list=[]}, _Context) -> false;
+to_bool(#rsc_list{list=[_|_]}, _Context) -> true;
+to_bool(#search_result{result=[]}, _Context) -> false;
+to_bool(#search_result{result=[_|_]}, _Context) -> true;
+to_bool(#m_search_result{result=Result}, Context) -> to_bool(Result, Context);
+to_bool(null, _Context) -> false;
+to_bool(Value, Context) ->
+    z_convert:to_bool_strict( to_simple_value(Value, Context) ).
 
 %% @doc Convert a value to a list.
 -spec to_list(Value :: term(), Context :: term()) -> list().
 to_list(undefined, _Context) -> [];
+to_list(null, _Context) -> [];
 to_list(<<>>, _Context) -> [];
 to_list(#rsc_list{ list = L }, _Context) -> L;
 to_list(#search_result{ result = L }, _Context) -> L;
 to_list(#m_search_result{ result = Result }, Context) -> to_list(Result, Context);
 to_list(q, Context) -> z_context:get_q_all(Context);
 to_list(q_validated, _Context) -> [];
+to_list(<<"q">>, Context) -> z_context:get_q_all(Context);
+to_list(<<"q_validated">>, _Context) -> [];
 to_list(#trans{} = Tr, _Context) -> [ Tr ];
 to_list(V, _Context) when is_number(V); is_boolean(V); is_binary(V) -> [ V ];
 to_list(#{ <<"@value">> := _ } = V, _Context) -> [ V ];
@@ -649,6 +663,8 @@ to_render_result(Vs, TplVars, Context) when is_list(Vs) ->
     % Assume that all integers are meant to be unicode characters.
     lists:map(
         fun
+            ($<) -> <<"&lt;">>;
+            ($>) -> <<"&gt;">>;
             (V) when is_integer(V), V > 0, V < 127 -> V;
             (V) when is_integer(V), V >= 128 ->
                 try
