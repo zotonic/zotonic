@@ -1,0 +1,90 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2021-10-27 17:35+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: nl\n"
+
+#: modules/mod_facebook/templates/_admin_authentication_service.tpl:13
+msgid "App ID."
+msgstr "App ID."
+
+#: modules/mod_facebook/templates/_admin_authentication_service.tpl:20
+msgid "App Secret"
+msgstr "App Secret"
+
+#: modules/mod_facebook/templates/_admin_authentication_service.tpl:9
+msgid "Application keys can be found in"
+msgstr "Applicatiesleutels kun je vinden in"
+
+#: modules/mod_facebook/templates/_facebook_login_link.tpl:16
+msgid "Connect with Facebook"
+msgstr "Verbinden met Facebook"
+
+#: modules/mod_facebook/templates/_facebook_login_link.tpl:11
+msgid "Disconnect"
+msgstr "Ontkoppel"
+
+#: modules/mod_facebook/templates/_facebook_login_link.tpl:7
+#: modules/mod_facebook/templates/_facebook_login_link.tpl:9
+msgid "Disconnect from Facebook"
+msgstr "Ontkoppelen van Facebook"
+
+#: modules/mod_facebook/templates/_facebook_login_link.tpl:10
+msgid "Do you want to disconnect your Facebook account?"
+msgstr "Wil je ontkoppelen van je Facebook-account?"
+
+#: modules/mod_facebook/templates/_facebook_login_link.tpl:16
+msgid "Log in with Facebook"
+msgstr "Inloggen met Facebook"
+
+#: modules/mod_facebook/templates/_logon_service.facebook.tpl:1
+msgid "One moment please"
+msgstr "Een ogenblik geduld"
+
+#: modules/mod_facebook/templates/_logon_service.facebook.tpl:2
+msgid "Redirecting to Facebook."
+msgstr "We sturen je door naar Facebook."
+
+#: modules/mod_facebook/templates/_admin_authentication_service.tpl:46
+msgid "Save Facebook Settings"
+msgstr "Facebook-instellingen opslaan"
+
+#: modules/mod_facebook/mod_facebook.erl:70
+msgid "Saved the Facebook settings."
+msgstr "Facebook-instellingen opgeslagen."
+
+#: modules/mod_facebook/templates/_admin_authentication_service.tpl:27
+msgid "Scope"
+msgstr "Scope"
+
+#: modules/mod_facebook/templates/_admin_authentication_service.tpl:38
+msgid "Use Facebook authentication"
+msgstr "Authenticeren met Facebook"
+
+#: modules/mod_facebook/mod_facebook.erl:72
+msgid "You don't have permission to change the Facebook settings."
+msgstr "Je hebt geen rechten om de Facebook-instellingen te bewerken.."
+
+#: modules/mod_facebook/templates/_logon_extra_email_reset.tpl:2
+msgid "You have coupled your <strong>Facebook</strong> account."
+msgstr "Je hebt je <strong>Facebook</strong>-account gekoppeld."
+
+#: modules/mod_facebook/templates/_admin_authentication_service.tpl:9
+msgid "Your Facebook Developer Dashboard"
+msgstr "Je Facebook Developer Dashboard"
