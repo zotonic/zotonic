@@ -502,7 +502,7 @@ insert_url(Url, RscProps, Options, Context) when is_list(RscProps) ->
     {ok, PropsMap} = z_props:from_list(RscProps),
     insert_url(Url, PropsMap, Options, Context);
 insert_url(Url, RscProps, Options, Context) ->
-    case download_file(Url, Context) of
+    case download_file(Url, Options, Context) of
         {ok, TmpFile, Filename} ->
             RscProps1 = RscProps#{
                 <<"original_filename">> => Filename
@@ -817,7 +817,7 @@ replace_url(Url, RscId, RscProps, Options, Context) when is_list(RscProps) ->
 replace_url(Url, RscId, RscProps, Options, Context) ->
     case z_acl:rsc_editable(RscId, Context) of
         true ->
-            case download_file(Url, Context) of
+            case download_file(Url, Options, Context) of
                 {ok, File, Filename} ->
                     RscProps1 = RscProps#{
                         <<"original_filename">> => Filename
@@ -925,14 +925,20 @@ download_file(Url, Context) ->
 download_file(Url, Options, Context) ->
     File = z_tempfile:new(),
     {ok, Device} = file:open(File, [write]),
-    MaxLength = proplists:get_value(max_length, Options, ?MEDIA_MAX_LENGTH_DOWNLOAD),
-    Timeout = proplists:get_value(timeout, Options, ?MEDIA_TIMEOUT_DOWNLOAD),
-    FetchOptions = [
+    FetchOptions = proplists:get_value(fetch_options, Options, []),
+    % Backwards compatible: also allow max_length and timeout as direct options.
+    OptionsAll = Options ++ FetchOptions,
+    MaxLength = proplists:get_value(max_length, OptionsAll, ?MEDIA_MAX_LENGTH_DOWNLOAD),
+    Timeout = proplists:get_value(timeout, OptionsAll, ?MEDIA_TIMEOUT_DOWNLOAD),
+    FetchOptions1 = [
         {max_length, MaxLength},
         {timeout, Timeout},
         {device, Device}
+        | proplists:delete(max_length,
+            proplists:delete(timeout,
+                proplists:delete(device, FetchOptions)))
     ],
-    case z_fetch:fetch_partial(Url, FetchOptions, Context) of
+    case z_fetch:fetch_partial(Url, FetchOptions1, Context) of
         {ok, {_FinalUrl, Hs, Length, _Data}} when Length < MaxLength ->
             file:close(Device),
             {ok, File, filename(Url, Hs)};
