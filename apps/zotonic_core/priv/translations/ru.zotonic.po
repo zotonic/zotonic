@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-27 19:08\n"
+"PO-Revision-Date: 2021-10-27 19:23\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4952,7 +4952,7 @@ msgstr "Принудительное переключение протокола
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:23
 msgid "Found matching dispatch rule"
-msgstr "Найдено соответствующее правило отправки"
+msgstr "Найдено подходящее правило диспетчеризации"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:8./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:12
 msgid "Included templates"
