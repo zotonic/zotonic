@@ -925,6 +925,16 @@ rid(MaybeName, Context) when is_binary(MaybeName) ->
         _ ->
             uri_lookup(MaybeName, Context)
     end;
+rid(MaybeName, Context) when is_list(MaybeName) ->
+    case lists:any(fun(C) -> C =:= $: end, MaybeName) of
+        false ->
+            case z_utils:only_digits(MaybeName) of
+                true -> z_convert:to_integer(MaybeName);
+                false -> name_lookup(MaybeName, Context)
+            end;
+        true ->
+            uri_lookup(MaybeName, Context)
+    end;
 rid(MaybeName, Context) ->
     name_lookup(MaybeName, Context).
 
