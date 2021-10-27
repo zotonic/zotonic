@@ -46,7 +46,7 @@
     reimport_recursive/4,
     reimport_recursive_async/2,
 
-    update_medium_uri/3,
+    update_medium_uri/4,
 
     install/1
 ]).
@@ -65,7 +65,8 @@
                 | {allow_category, [ binary() ]}
                 | {allow_predicate, [ binary() ]}
                 | {deny_category, [ binary() ]}
-                | {deny_predicate, [ binary() ]}.
+                | {deny_predicate, [ binary() ]}
+                | {fetch_options, z_url_fetch:options()}.
 -type options() :: [ option() ].
 
 -type import_result() :: {ok, {m_rsc:resource_id(), import_map()}}
@@ -416,13 +417,13 @@ reimport(Id, RefIds, Options, Context) ->
     end.
 
 
--spec update_medium_uri( m_rsc:resource_id(), string() | binary(), z:context() ) -> {ok, m_rsc:resource_id()}.
-update_medium_uri(LocalId, Uri, Context) ->
+-spec update_medium_uri( m_rsc:resource_id(), string() | binary(), options(), z:context() ) -> {ok, m_rsc:resource_id()}.
+update_medium_uri(LocalId, Uri, Options, Context) ->
     case z_acl:rsc_editable(LocalId, Context) of
         true ->
             case fetch_json(Uri, Context) of
                 {ok, JSON} ->
-                    maybe_import_medium(LocalId, JSON, Context);
+                    maybe_import_medium(LocalId, JSON, Options, Context);
                 {error, _} = Error ->
                     Error
             end;
@@ -612,7 +613,7 @@ import(OptLocalId, #{
                             ImportedAcc2 = ImportedAcc1#{
                                 Uri => LocalId
                             },
-                            _ = maybe_import_medium(LocalId, JSON, Context),
+                            _ = maybe_import_medium(LocalId, JSON, Options, Context),
                             ImportedAcc3 = case proplists:get_value(import_edges, Options, 0) of
                                 N when is_integer(N), N > 0 ->
                                     PropsForced = proplists:get_value(props_forced, Options, #{}),
@@ -948,16 +949,11 @@ is_html_prop(K) ->
     binary:longest_common_suffix([ K, <<"_html">> ]) =:= 5.
 
 
-maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := MediaUrl }, Context)
+maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := MediaUrl }, Options, Context)
     when is_binary(MediaUrl), is_map(Medium) ->
     % If medium is outdated (compare with created date in medium record)
     %    - download URL
     %    - save into medium, ensure created date has been set (aka copied)
-    Options = [
-        {is_escape_texts, false},
-        is_import,
-        no_touch
-    ],
     % TODO: add medium created date option (to set equal to imported medium)
     Created = maps:get(<<"created">>, Medium, calendar:universal_time()),
     RemoteMedium = #{
@@ -966,12 +962,18 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := Medi
     LocalMedium = m_media:get(LocalId, Context),
     case is_newer_medium(RemoteMedium, LocalMedium) of
         true ->
-            _ = m_media:replace_url(MediaUrl, LocalId, RemoteMedium, Options, Context);
+            MediaOptions = [
+                {is_escape_texts, false},
+                is_import,
+                no_touch,
+                {fetch_options, proplists:get_value(fetch_options, Options, [])}
+            ],
+            _ = m_media:replace_url(MediaUrl, LocalId, RemoteMedium, MediaOptions, Context);
         false ->
             ok
     end,
     {ok, LocalId};
-maybe_import_medium(LocalId, #{ <<"medium">> := Medium }, Context)
+maybe_import_medium(LocalId, #{ <<"medium">> := Medium }, _Options, Context)
     when is_map(Medium) ->
     % Overwrite local medium record with the imported medium record
     % [ sanitize any HTML in the medium record ]
@@ -986,7 +988,7 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium }, Context)
         {error, _} = Error ->
             Error
     end;
-maybe_import_medium(LocalId, #{}, Context) ->
+maybe_import_medium(LocalId, #{}, _Options, Context) ->
     % If no medium:
     %    Delete local medium record (if any)
     case m_media:get(LocalId, Context) of
