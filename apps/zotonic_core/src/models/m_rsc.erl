@@ -897,6 +897,14 @@ rid(<<"https:", _/binary>> = Uri, Context) ->
     uri_lookup(Uri, Context);
 rid(<<"/", _/binary>> = Uri, Context) ->
     uri_lookup(Uri, Context);
+rid("urn:" ++ _ = Uri, Context) ->
+    uri_lookup(Uri, Context);
+rid("http:" ++ _ = Uri, Context) ->
+    uri_lookup(Uri, Context);
+rid("https:" ++ _ = Uri, Context) ->
+    uri_lookup(Uri, Context);
+rid("/" ++ _ = Uri, Context) ->
+    uri_lookup(Uri, Context);
 rid(#{ <<"uri">> := Uri } = Map, Context) ->
     Name = maps:get(<<"name">>, Map, undefined),
     case rid(Uri, Context) of
@@ -916,24 +924,24 @@ rid(#{ <<"uri">> := Uri } = Map, Context) ->
 rid(#{ <<"@id">> := Uri }, Context) ->
     uri_lookup(Uri, Context);
 rid(MaybeName, Context) when is_binary(MaybeName) ->
-    case binary:match(MaybeName, <<":">>) of
-        nomatch ->
-            case z_utils:only_digits(MaybeName) of
-                true -> z_convert:to_integer(MaybeName);
-                false -> name_lookup(MaybeName, Context)
-            end;
-        _ ->
-            uri_lookup(MaybeName, Context)
+    case z_utils:only_digits(MaybeName) of
+        true ->
+            z_convert:to_integer(MaybeName);
+        false ->
+            case binary:match(MaybeName, <<":">>) of
+                nomatch -> name_lookup(MaybeName, Context);
+                _ -> uri_lookup(MaybeName, Context)
+            end
     end;
 rid(MaybeName, Context) when is_list(MaybeName) ->
-    case lists:any(fun(C) -> C =:= $: end, MaybeName) of
-        false ->
-            case z_utils:only_digits(MaybeName) of
-                true -> z_convert:to_integer(MaybeName);
-                false -> name_lookup(MaybeName, Context)
-            end;
+    case z_utils:only_digits(MaybeName) of
         true ->
-            uri_lookup(MaybeName, Context)
+            z_convert:to_integer(MaybeName);
+        false ->
+            case lists:any(fun(C) -> C =:= $: end, MaybeName) of
+                false -> name_lookup(MaybeName, Context);
+                true -> uri_lookup(MaybeName, Context)
+            end
     end;
 rid(MaybeName, Context) ->
     name_lookup(MaybeName, Context).
