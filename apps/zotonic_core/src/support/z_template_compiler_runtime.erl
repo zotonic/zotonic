@@ -312,7 +312,7 @@ find_value(Name, [[{A,_}|_]|_] = Blocks, _TplVars, _Context ) when is_atom(A), n
     end;
 find_value(Nr, [{A,_}|_] = List, _TplVars, _Context ) when is_integer(Nr), is_integer(A) ->
     proplists:get_value(Nr, List);
-find_value(Name, [#{}|_] = Blocks, _TplVars, _Context ) when not is_integer(Name) ->
+find_value(Name, [#{ <<"name">> := _ }|_] = Blocks, _TplVars, _Context ) when not is_integer(Name) ->
     % List of maps - blocks in the rsc
     NameB = z_convert:to_binary(Name),
     case lists:dropwhile( fun (B) -> maps:get(<<"name">>, B, undefined) =/= NameB end, Blocks ) of
@@ -404,6 +404,31 @@ find_value(IsoAtom, Text, _TplVars, _Context) when is_atom(IsoAtom), is_binary(T
         true -> Text;
         false -> undefined
     end;
+find_value(1, V, _TplVars, _Context) when is_binary(V); is_number(V); is_boolean(V) ->
+    V;
+find_value(N, V, _TplVars, _Context) when is_integer(N), (is_binary(V) orelse is_number(V) orelse is_boolean(V)) ->
+    undefined;
+find_value(1, #trans{} = V, _TplVars, _Context) ->
+    V;
+find_value(N, #trans{}, _TplVars, _Context) when is_integer(N) ->
+    undefined;
+find_value(1, #{ <<"@value">> := _ } = V, _TplVars, _Context) ->
+    V;
+find_value(N, #{ <<"@value">> := _ }, _TplVars, _Context) when is_integer(N) ->
+    undefined;
+find_value(1, #{ <<"@id">> := _ } = V, _TplVars, _Context) ->
+    V;
+find_value(N, #{ <<"@id">> := _ }, _TplVars, _Context) when is_integer(N) ->
+    undefined;
+find_value(<<"@id">>, #{ <<"@id">> := Uri  }, _TplVars, _Context) ->
+    Uri;
+find_value(K, #{ <<"@id">> := Uri }, TplVars, Context) when is_binary(K); is_atom(K) ->
+    case m_rsc:rid(Uri, Context) of
+        undefined -> undefined;
+        RscId -> find_value(K, RscId, TplVars, Context)
+    end;
+find_value(K, [ #{} = Tuple | _ ], TplVars, Context) when is_binary(K) ->
+    find_value(K, Tuple, TplVars, Context);
 find_value(Key, Ps, TplVars, Context) ->
     template_compiler_runtime:find_value(Key, Ps, TplVars, Context).
 
@@ -563,23 +588,31 @@ to_bool(#trans{} = Tr, Context) ->
         <<>> -> false;
         _ -> true
     end;
-to_bool(#search_result{result=L}, Context) ->
-    to_bool(L, Context);
-to_bool(#m_search_result{result=L}, Context) ->
-    to_bool(L, Context);
-to_bool(Value, _Context) ->
-    z_convert:to_bool_strict(Value).
+to_bool(#rsc_list{list=[]}, _Context) -> false;
+to_bool(#rsc_list{list=[_|_]}, _Context) -> true;
+to_bool(#search_result{result=[]}, _Context) -> false;
+to_bool(#search_result{result=[_|_]}, _Context) -> true;
+to_bool(#m_search_result{result=Result}, Context) -> to_bool(Result, Context);
+to_bool(null, _Context) -> false;
+to_bool(Value, Context) ->
+    z_convert:to_bool_strict( to_simple_value(Value, Context) ).
 
 %% @doc Convert a value to a list.
 -spec to_list(Value :: term(), Context :: term()) -> list().
 to_list(undefined, _Context) -> [];
+to_list(null, _Context) -> [];
 to_list(<<>>, _Context) -> [];
 to_list(#rsc_list{ list = L }, _Context) -> L;
 to_list(#search_result{ result = L }, _Context) -> L;
 to_list(#m_search_result{ result = Result }, Context) -> to_list(Result, Context);
 to_list(q, Context) -> z_context:get_q_all(Context);
 to_list(q_validated, _Context) -> [];
-to_list(#trans{}, _Context) -> [];
+to_list(<<"q">>, Context) -> z_context:get_q_all(Context);
+to_list(<<"q_validated">>, _Context) -> [];
+to_list(#trans{} = Tr, _Context) -> [ Tr ];
+to_list(V, _Context) when is_number(V); is_boolean(V); is_binary(V) -> [ V ];
+to_list(#{ <<"@value">> := _ } = V, _Context) -> [ V ];
+to_list(#{ <<"@id">> := _ } = V, _Context) -> [ V ];
 to_list(V, Context) ->
     template_compiler_runtime:to_list(V, Context).
 
@@ -597,6 +630,13 @@ to_simple_value(#rsc_list{list=L}, _Context) ->
     L;
 to_simple_value(#trans{} = Trans, Context) ->
     z_trans:lookup_fallback(Trans, Context);
+to_simple_value(#{ <<"@value">> := Value } = V, _Context) ->
+    case z_rdf_props:to_simple_value(V) of
+        error -> Value;
+        V1 -> V1
+    end;
+to_simple_value(#{ <<"@id">> := Uri }, _Context) ->
+    Uri;
 to_simple_value(V, _Context) ->
     V.
 
@@ -623,7 +663,9 @@ to_render_result(Vs, TplVars, Context) when is_list(Vs) ->
     % Assume that all integers are meant to be unicode characters.
     lists:map(
         fun
-            (V) when is_integer(V), V >= 0, V =< 127 -> V;
+            ($<) -> <<"&lt;">>;
+            ($>) -> <<"&gt;">>;
+            (V) when is_integer(V), V > 0, V < 127 -> V;
             (V) when is_integer(V), V >= 128 ->
                 try
                     <<V/utf8>>
@@ -634,6 +676,10 @@ to_render_result(Vs, TplVars, Context) when is_list(Vs) ->
             (V) -> to_render_result(V, TplVars, Context)
         end,
         Vs);
+to_render_result(#{ <<"@value">> := _ } = V, TplVars, Context) ->
+    to_render_result(to_simple_value(V, Context), TplVars, Context);
+to_render_result(#{ <<"@id">> := _ } = V, TplVars, Context) ->
+    to_render_result(to_simple_value(V, Context), TplVars, Context);
 to_render_result(V, TplVars, Context) ->
     template_compiler_runtime:to_render_result(V, TplVars, Context).
 

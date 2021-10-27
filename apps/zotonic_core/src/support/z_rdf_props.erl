@@ -20,14 +20,30 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
+    mapping/1,
+
     extract_resource/2,
     extract_props/1,
     extract_edges/2,
 
-    map_values/1
+    map_values/1,
+
+    to_simple_value/1
 ]).
 
 -include("../../include/zotonic.hrl").
+
+
+%% @doc Check if a property can be mapped to a standard property.
+%% This is used in m_rsc:p/3 for fetching namespaced properties.
+-spec mapping( binary() ) -> binary() | undefined.
+mapping(Prop) ->
+    case maps:get(Prop, mapping(), undefined) of
+        undefined ->
+            maps:get(Prop, mapping_dates(), undefined);
+        Mapped ->
+            Mapped
+    end.
 
 
 %% @doc Extract standard Zotonic src import from an RDF document. The document
@@ -150,7 +166,15 @@ extract_edge(_K, _, Acc, _Context) ->
        Props :: map().
 extract_props(RDFDoc) ->
     Ps1 = map(RDFDoc, mapping_dates(), fun to_date/1, RDFDoc),
-    map(RDFDoc, mapping(), fun to_simple_value/1, Ps1).
+    Ps2 = map(RDFDoc, mapping(), fun to_simple_value/1, Ps1),
+    maps:fold(
+        fun(K, V, Acc) ->
+            Acc#{
+                K => map_nested_values(V)
+            }
+        end,
+        #{},
+        Ps2).
 
 map(Doc, Mapping, Fun, DocAcc) ->
     maps:fold(
@@ -171,6 +195,32 @@ map(Doc, Mapping, Fun, DocAcc) ->
         DocAcc,
         Mapping).
 
+
+map_nested_values(#{ <<"@id">> := _ } = V) ->
+    V;
+map_nested_values(#{ <<"@value">> := _ } = V) ->
+    case to_value(V) of
+        error -> V;
+        V1 -> V1
+    end;
+map_nested_values([ #{ <<"@language">> := _ } | _ ] = V) ->
+    case to_value(V) of
+        error -> V;
+        V1 -> V1
+    end;
+map_nested_values(V) when is_list(V) ->
+    lists:map(fun map_nested_values/1, V);
+map_nested_values(V) when is_map(V) ->
+    maps:fold(
+        fun(K1, V1, Acc) ->
+            Acc#{ K1 => map_nested_values(V1) }
+        end,
+        #{},
+        V);
+map_nested_values(V) ->
+    V.
+
+
 to_date([ #{ <<"@value">> := V } | _ ]) ->
     try z_datetime:to_datetime(V)
     catch _:_ -> error
@@ -190,6 +240,9 @@ to_date(V) when is_binary(V) ->
 to_date(_) ->
     error.
 
+
+%% @doc Translate the given value to a simpler value
+-spec to_simple_value( map() ) -> error | term().
 to_simple_value(#{ <<"@value">> := Val } = V) when is_binary(Val); is_number(Val); is_boolean(Val) ->
     case to_value(V) of
         error -> Val;

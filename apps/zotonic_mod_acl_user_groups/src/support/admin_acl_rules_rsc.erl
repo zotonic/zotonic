@@ -49,8 +49,8 @@ event(#postback{message={switch_rule_state, Args}}, Context) ->
 event(#submit{message={change_catcg, Args}}, Context) ->
     Id = proplists:get_value(id, Args),
     ErrorDiv = proplists:get_value(error, Args),
-    CatId = m_rsc:rid(z_context:get_q("category_id", Context), Context),
-    CGId = m_rsc:rid(z_context:get_q("content_group_id", Context), Context),
+    CatId = m_rsc:rid(z_context:get_q(<<"category_id">>, Context), Context),
+    CGId = m_rsc:rid(z_context:get_q(<<"content_group_id">>, Context), Context),
     case check_catcg(CGId, CatId, ErrorDiv, Context) of
         {true, ContextError} ->
             update(Id, CatId, CGId, Context, ContextError);

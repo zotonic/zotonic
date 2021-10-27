@@ -35,6 +35,7 @@
     dispatch/2,
     dispatch/5,
     dispatch_url/1,
+    dispatch_path/2,
     dispatch_trace/2,
     dispatch_trace/3,
     get_fallback_site/0,
@@ -262,39 +263,56 @@ dispatch_url( Url ) ->
                 method = <<"GET">>,
                 protocol = Protocol
             },
-            case dispatch_1(DispReq, undefined, undefined) of
-                #dispatch_controller{} = Match ->
-                    Context = Match#dispatch_controller.context,
-                    BindingsMap = maps:from_list( Match#dispatch_controller.bindings ),
-                    {ok, #{
-                        site => z_context:site(Context),
-                        context => Context,
-                        controller => Match#dispatch_controller.controller,
-                        controller_options => Match#dispatch_controller.controller_options,
-                        dispatch_rule => Match#dispatch_controller.dispatch_rule,
-                        path_tokens => Match#dispatch_controller.path_tokens,
-                        bindings => BindingsMap
-                    }};
-                #dispatch_nomatch{} ->
-                    {error, nomatch};
-                {redirect, Site, NewPathOrURI, IsPermanent} ->
-                    {ok, #{
-                        site => Site,
-                        redirect => NewPathOrURI,
-                        is_permanent => IsPermanent
-                    }};
-                {redirect_protocol, Protocol, Host, IsPermanent} ->
-                    {ok, #{
-                        redirect_protocol => Protocol,
-                        redirect_host => Host,
-                        is_permanent => IsPermanent
-                    }};
-                {stop_request, RespCode} ->
-                    {error, RespCode}
-            end;
+            dispatch_dispreq(DispReq);
         #{} ->
             {error, invalid}
     end.
+
+
+%% @doc Dispatch a path for a host, return the extracted dispatch information and bindings. Used
+%% for matching URLs to dispatch rules and ids.
+-spec dispatch_path( binary() | string(), z:context() ) -> {ok, map()} | {error, non_neg_integer() | invalid}.
+dispatch_path( Path, Context ) ->
+    DispReq = #dispatch{
+        host = z_context:hostname(Context),
+        path = Path,
+        method = <<"GET">>,
+        protocol = https
+    },
+    dispatch_dispreq(DispReq).
+
+dispatch_dispreq(DispReq) ->
+    case dispatch_1(DispReq, undefined, undefined) of
+        #dispatch_controller{} = Match ->
+            Context = Match#dispatch_controller.context,
+            BindingsMap = maps:from_list( Match#dispatch_controller.bindings ),
+            {ok, #{
+                site => z_context:site(Context),
+                context => Context,
+                controller => Match#dispatch_controller.controller,
+                controller_options => Match#dispatch_controller.controller_options,
+                dispatch_rule => Match#dispatch_controller.dispatch_rule,
+                path_tokens => Match#dispatch_controller.path_tokens,
+                bindings => BindingsMap
+            }};
+        #dispatch_nomatch{} ->
+            {error, nomatch};
+        {redirect, Site, NewPathOrURI, IsPermanent} ->
+            {ok, #{
+                site => Site,
+                redirect => NewPathOrURI,
+                is_permanent => IsPermanent
+            }};
+        {redirect_protocol, Protocol, Host, IsPermanent} ->
+            {ok, #{
+                redirect_protocol => Protocol,
+                redirect_host => Host,
+                is_permanent => IsPermanent
+            }};
+        {stop_request, RespCode} ->
+            {error, RespCode}
+    end.
+
 
 -spec dispatch( binary() | string(), binary() | string(), binary() | string(), boolean(), pid() | undefined ) -> dispatch().
 dispatch(Method, Host, Path, IsSsl, OptTracerPid) when is_boolean(IsSsl) ->
