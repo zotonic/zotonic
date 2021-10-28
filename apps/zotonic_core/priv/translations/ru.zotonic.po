@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-28 17:14\n"
+"PO-Revision-Date: 2021-10-28 18:12\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3321,7 +3321,7 @@ msgstr "Обновить список"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:4
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
-msgstr "При ресканировании будет перестроен индекс всех модулей, действий, шаблонов и т.д. Также будет перезагружены все правила отправки."
+msgstr "При повторном сканировании будут перестроены индексы всех модулей, действий, шаблонов и т.д. Также будет перезагружены все правила диспетчеризации."
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:3
 msgid "The following modules will not start because they miss dependencies:"
