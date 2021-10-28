@@ -97,7 +97,7 @@
                             <tr>
                                 <th width="10%">{_ Preview _}</th>
                                 <th width="35%">{% include "_admin_sort_header.tpl" field="pivot_title" caption=_"Title" qsort=qsort %}</th>
-                                <th width="15%">{_ Info _}</th>
+                                <th width="15%">{% include "_admin_sort_header.tpl" field="m.size" caption=_"Info" qsort=qsort %}</th>
                                 <th width="15%">{% include "_admin_sort_header.tpl" field="modified" caption=_"Modified" type="date" qsort=qsort %}</th>
                                 <th width="25%">{% include "_admin_sort_header.tpl" field="m.created" caption=_"Uploaded" type="date" qsort=qsort %}</th>
                             </tr>
@@ -115,8 +115,9 @@
                                             </td>
                                             <td>
                                                 <p class="help-block">
-                                                    {{ medium.mime|default:"&nbsp;" }}<br />
-                                                    {{ medium.width }}&times;{{ medium.height }}
+                                                    {{ medium.mime|escape }}<br>
+                                                    {{ medium.width }}&times;{{ medium.height }}<br>
+                                                    {{ medium.size|filesizeformat }}
                                                 </p>
                                             </td>
                                             <td>
