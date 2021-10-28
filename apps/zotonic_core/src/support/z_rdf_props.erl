@@ -64,7 +64,8 @@ extract_resource(#{ <<"@id">> := Uri } = RDFDoc, Context) when is_binary(Uri) ->
     {Medium, MediumUrl} = extract_medium(Props2),
     Props3 = maps:without([
             <<"@id">>,
-            <<"zotonic:medium_url">>
+            <<"zotonic:medium_url">>,
+            <<"zotonic:medium">>
         ], Props2),
     Rsc = #{
         <<"uri">> => Uri,
@@ -91,6 +92,16 @@ extract_medium(#{ <<"zotonic:medium_url">> := MediumUrl } = RDFDoc) when MediumU
         <<"created">> => Created
     },
     {Medium, to_value(MediumUrl)};
+extract_medium(#{ <<"zotonic:medium">> := Medium } = RDFDoc) when is_map(Medium) ->
+    CreatedDoc = maps:get(<<"modified">>, RDFDoc,
+        maps:get(<<"created">>, RDFDoc, erlang:universaltime())),
+    CreatedMedium = maps:get(<<"modified">>, Medium,
+        maps:get(<<"created">>, Medium, CreatedDoc)),
+    Medium1 = Medium#{
+        <<"created">> => CreatedMedium
+    },
+    MediumUrl = maps:get(<<"download_url">>, Medium1, undefined),
+    {Medium1, MediumUrl};
 extract_medium(_) ->
     {undefined, undefined}.
 

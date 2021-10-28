@@ -950,10 +950,10 @@ is_html_prop(K) ->
 
 
 maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := MediaUrl }, Options, Context)
-    when is_binary(MediaUrl), is_map(Medium) ->
+    when is_binary(MediaUrl), MediaUrl =/= <<>>, is_map(Medium) ->
     % If medium is outdated (compare with created date in medium record)
     %    - download URL
-    %    - save into medium, ensure created date has been set (aka copied)
+    %    - save into medium, ensure medium created date has been set (aka copied)
     % TODO: add medium created date option (to set equal to imported medium)
     Created = maps:get(<<"created">>, Medium, calendar:universal_time()),
     RemoteMedium = #{
@@ -968,7 +968,10 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := Medi
                 no_touch,
                 {fetch_options, proplists:get_value(fetch_options, Options, [])}
             ],
-            _ = m_media:replace_url(MediaUrl, LocalId, RemoteMedium, MediaOptions, Context);
+            RscProps = #{
+                <<"original_filename">> => maps:get(<<"original_filename">>, Medium, undefined)
+            },
+            _ = m_media:replace_url(MediaUrl, LocalId, RscProps, MediaOptions, Context);
         false ->
             ok
     end,

@@ -819,9 +819,14 @@ replace_url(Url, RscId, RscProps, Options, Context) ->
         true ->
             case download_file(Url, Options, Context) of
                 {ok, File, Filename} ->
-                    RscProps1 = RscProps#{
-                        <<"original_filename">> => Filename
-                    },
+                    RscProps1 = case maps:get(<<"original_filename">>, RscProps, undefined) of
+                        F when is_binary(F), F =/= <<>> ->
+                            RscProps;
+                        _ ->
+                            RscProps#{
+                                <<"original_filename">> => Filename
+                            }
+                    end,
                     Result = replace_file(File, RscId, RscProps1, Options, Context),
                     file:delete(File),
                     Result;
@@ -1012,7 +1017,7 @@ save_preview_url(RscId, Url, Context) ->
     case download_file(Url, [{max_length, ?MEDIA_MAX_LENGTH_PREVIEW}], Context) of
         {ok, TmpFile, Filename} ->
             case z_media_identify:identify_file(TmpFile, Filename, Context) of
-                {ok, MediaInfo} ->
+                {ok, #{ <<"mime">> := <<"image/", _/binary>> } = MediaInfo} ->
                     try
                         Mime = maps:get(<<"mime">>, MediaInfo),
                         Width = maps:get(<<"width">>, MediaInfo),
@@ -1045,6 +1050,11 @@ save_preview_url(RscId, Url, Context) ->
                             file:delete(TmpFile),
                             {error, Error}
                     end;
+                {ok, MediaInfo} ->
+                    Mime = maps:get(<<"mime">>, MediaInfo, undefined),
+                    lager:warning("Error importing preview for ~p, url ~p, not an image ~p",
+                        [RscId, Url, Mime]),
+                    {error, no_image};
                 {error, _} = Error ->
                     Error
             end;
