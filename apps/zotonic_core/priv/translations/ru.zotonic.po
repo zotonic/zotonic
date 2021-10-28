@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-27 19:44\n"
+"PO-Revision-Date: 2021-10-28 17:14\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1296,7 +1296,7 @@ msgstr "Имя"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:74
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
-msgstr "Промойте все правила отправки URL-адресов, кэширование шаблонов и библиотек, а также другие данные, кэшированные в памяти."
+msgstr "Очистить все правила диспетчеризации URL-адресов, кэши шаблонов и библиотек, а также другие данные, кэшированные в памяти."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:73
 msgid "Flush system caches"
@@ -5076,7 +5076,7 @@ msgstr "Вы не имеете права использовать отладк�
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:59
 msgid "found dispatch rule"
-msgstr "найденное отправительское правило"
+msgstr "найдено правило диспетчеризации"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
 msgid "found no match"
