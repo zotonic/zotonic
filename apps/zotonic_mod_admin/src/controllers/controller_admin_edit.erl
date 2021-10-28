@@ -108,7 +108,7 @@ event(#submit{message={rscform, Args}}, Context) ->
     case m_rsc:update(Id, Props2, Context) of
         {ok, _} ->
             case z_context:get_q(<<"z_submitter">>, Context) of
-                <<"save_view">> ->
+                SaveView when SaveView =:= <<"save_view">> orelse SaveView =:= <<"save_view_float">> ->
                     case proplists:get_value(view_location, Args) of
                         undefined ->
                             PageUrl = m_rsc:p(Id, page_url, Context),
@@ -199,7 +199,9 @@ set_value_slug(Slug, Context) ->
 filter_props(Fs) ->
     Remove = [
         <<"save_view">>,
+        <<"save_view_float">>,
         <<"save_duplicate">>,
-        <<"save_stay">>
+        <<"save_stay">>,
+        <<"save_stay_float">>
     ],
     lists:foldl(fun(P, Acc) -> proplists:delete(P, Acc) end, Fs, Remove).
