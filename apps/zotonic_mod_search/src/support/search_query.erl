@@ -114,6 +114,7 @@ request_arg(<<"hasobjectpredicate">>)  -> hasobjectpredicate;
 request_arg(<<"hassubject">>)          -> hassubject;
 request_arg(<<"hassubjectpredicate">>) -> hassubjectpredicate;
 request_arg(<<"hasanyobject">>)        -> hasanyobject;
+request_arg(<<"hasmedium">>)           -> hasmedium;
 request_arg(<<"is_authoritative">>)    -> is_authoritative;
 request_arg(<<"is_featured">>)         -> is_featured;
 request_arg(<<"is_published">>)        -> is_published;
@@ -224,6 +225,27 @@ parse_query([{id_exclude, Id}|Rest], Context, Result)  when is_integer(Id) ->
 parse_query([{id_exclude, _Id}|Rest], Context, Result)  ->
     parse_query(Rest, Context, Result);
 
+%% hasmedium=true|false
+%% Give all things which have a medium record attached (or not)
+parse_query([{hasmedium, undefined}|Rest], Context, Result) ->
+    parse_query(Rest, Context, Result);
+
+parse_query([{hasmedium, HasMedium}|Rest], Context, Result) ->
+    Result1 = case z_convert:to_bool(HasMedium) of
+        true ->
+            R = Result#search_sql{
+              tables=Result#search_sql.tables ++ [ {"medium", m} ],
+              from=Result#search_sql.from ++ ", medium m"
+            },
+            add_where("m.id = rsc.id", R);
+        false ->
+            R = Result#search_sql{
+              tables=Result#search_sql.tables ++ [ {"medium", m} ],
+              from=Result#search_sql.from ++ " left medium m on rsc.id = m.id "
+            },
+            add_where("m.id is null", R)
+    end,
+    parse_query(Rest, Context, Result1);
 
 parse_query([{hassubject, Id} | Rest], Context, Result) ->
     Result1 = parse_edges(hassubject, maybe_split_list(Id), Result, Context),
