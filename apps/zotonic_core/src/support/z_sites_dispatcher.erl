@@ -264,7 +264,7 @@ dispatch_url( Url ) ->
                 protocol = Protocol
             },
             dispatch_dispreq(DispReq);
-        #{} ->
+        _ ->
             {error, invalid}
     end.
 

@@ -169,6 +169,29 @@ author or a connection (with any predicate) to resource 2 or 3::
 
     hasanyobject[['*', 'author'], 2, 3]
 
+
+hasmedium
+^^^^^^^^^
+
+Only returns resources that have a ``medium`` record attached or only those that
+do not have a ``medium`` record attached.
+
+For example::
+
+    hasmedium
+
+Return only resources with a medium record.
+
+Or::
+
+    hasmedium=false
+
+Return only resources without a medium record.
+
+The joined medium record is `medium`, that enables sorting on, for example, the
+medium record’s creation date with ``sort=medium.created``.
+
+
 match_objects
 ^^^^^^^^^^^^^
 

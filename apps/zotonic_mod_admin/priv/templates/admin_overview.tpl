@@ -11,7 +11,7 @@
         default_pagelen_label
     %}
         {% with q.pagelen|default:default_pagelen as qpagelen %}
-            {% with q.qcat, q.qgroup as qcat, qgroup %}
+            {% with q.qcat, q.qcontent_group as qcat, qcontent_group %}
                 <form id="{{ #form }}" method="GET" action="{% url admin_overview_rsc %}" class="form-inline">
                     <input type="hidden" name="qs" value="{{ q.qs|escape }}" />
                     <input type="hidden" name="qquery_id" value="{{ q.qquery_id|escape }}" />
@@ -20,9 +20,9 @@
                             {% if m.search[{query cat=`content_group`}]|length %}
                                 <div class="btn-group">
                                     {% include "_admin_button_dropdown.tpl"
-                                        select_name="qgroup"
-                                        selected_qvalue=qgroup
-                                        selected_label=m.rsc[qgroup].title
+                                        select_name="qcontent_group"
+                                        selected_qvalue=qcontent_group
+                                        selected_label=m.rsc[qcontent_group].title
                                         default_value=""
                                         default_label=_"All Content"
                                         form_id=#form

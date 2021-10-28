@@ -14,7 +14,7 @@
         default_pagelen_label
     %}
         {% with q.qpagelen|default:default_pagelen as qpagelen %}
-            {% with q.qcat, q.qgroup as qcat, qgroup %}
+            {% with q.qcat, q.qcontent_group as qcat, qcontent_group %}
                 <form id="{{ #form }}" method="GET" action="{% url admin_media %}" class="form-inline">
                     <input type="hidden" name="qs" value="{{ q.qs|escape }}" />
                     <input type="hidden" name="qquery_id" value="{{ q.qquery_id|escape }}" />
@@ -23,9 +23,9 @@
                             {% if m.search[{query cat=`content_group`}]|length %}
                                 <div class="btn-group">
                                     {% include "_admin_button_dropdown.tpl"
-                                        select_name="qgroup"
-                                        selected_qvalue=qgroup
-                                        selected_label=m.rsc[qgroup].title
+                                        select_name="qcontent_group"
+                                        selected_qvalue=qcontent_group
+                                        selected_label=m.rsc[qcontent_group].title
                                         default_value=""
                                         default_label=_"All Content"
                                         form_id=#form
@@ -36,6 +36,21 @@
                                 </div>
                             {% endif %}
                         {% endif %}
+                        <div class="btn-group">
+                            {% include "_admin_button_dropdown.tpl"
+                               select_name="qcat"
+                               selected_qvalue=qcat
+                               selected_label=m.rsc[qcat].title
+                               default_value=""
+                               default_label=_"Selected Categories"
+                               default_value2="*"
+                               default_label2=_"All Categories"
+                               form_id=#form
+                               option_template="_admin_button_dropdown_categories.tpl"
+                               header=_"Filter on category"
+                               align="right"
+                            %}
+                        </div>
                         <div class="btn-group">
                             {% include "_admin_button_dropdown.tpl"
                                 select_name="qpagelen"
@@ -74,16 +89,17 @@
                 {% all include "_admin_extra_buttons.tpl" %}
             </div>
 
-            {% with q.qsort|default:"-created" as qsort %}
-                {% with m.search.paged[{query cat="media" text=q.qs page=q.page sort=qsort content_group=q.qgroup pagelen=qpagelen}] as result %}
+            {% with q.qsort|default:"-medium.created" as qsort %}
+                {% with m.search.paged[{query hasmedium qargs is_published="all" page=q.page sort=qsort pagelen=qpagelen zsort=qsort }] as result %}
 
                     <table class="table table-striped do_adminLinkedTable">
                         <thead>
                             <tr>
                                 <th width="10%">{_ Preview _}</th>
                                 <th width="35%">{% include "_admin_sort_header.tpl" field="pivot_title" caption=_"Title" qsort=qsort %}</th>
-                                <th width="25%">{_ Info _}</th>
-                                <th width="30%">{% include "_admin_sort_header.tpl" field="created" caption=_"Uploaded" type="date" qsort=qsort %}</th>
+                                <th width="15%">{% include "_admin_sort_header.tpl" field="medium.size" caption=_"Info" qsort=qsort %}</th>
+                                <th width="15%">{% include "_admin_sort_header.tpl" field="modified" caption=_"Modified" type="date" qsort=qsort %}</th>
+                                <th width="25%">{% include "_admin_sort_header.tpl" field="medium.created" caption=_"Uploaded" type="date" qsort=qsort %}</th>
                             </tr>
                         </thead>
 
@@ -99,12 +115,16 @@
                                             </td>
                                             <td>
                                                 <p class="help-block">
-                                                    {{ medium.mime|default:"&nbsp;" }}<br />
-                                                    {{ medium.width }}&times;{{ medium.height }}
+                                                    {{ medium.mime|escape }}<br>
+                                                    {{ medium.width }}&times;{{ medium.height }}<br>
+                                                    {{ medium.size|filesizeformat }}
                                                 </p>
                                             </td>
                                             <td>
-                                                {{ medium.created|date:"M d, H:i"|default:"&nbsp;" }}
+                                                {{ id.modified|date:_"d M Y, H:i"|default:"&nbsp;" }}
+                                            </td>
+                                            <td>
+                                                {{ medium.created|date:_"d M Y, H:i"|default:"&nbsp;" }}
                                                 <div class="pull-right buttons">
                                                     {% button
                                                         class="btn btn-default btn-xs"
