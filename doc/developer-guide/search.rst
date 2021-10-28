@@ -186,11 +186,10 @@ Or::
 
     hasmedium=false
 
-
 Return only resources without a medium record.
 
-The joined medium record is `m`, that enables sorting on, for example, the
-medium record’s creation date with ``sort=m.created``.
+The joined medium record is `medium`, that enables sorting on, for example, the
+medium record’s creation date with ``sort=medium.created``.
 
 
 match_objects

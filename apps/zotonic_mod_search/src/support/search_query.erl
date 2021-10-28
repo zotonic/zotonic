@@ -234,16 +234,16 @@ parse_query([{hasmedium, HasMedium}|Rest], Context, Result) ->
     Result1 = case z_convert:to_bool(HasMedium) of
         true ->
             R = Result#search_sql{
-              tables=Result#search_sql.tables ++ [ {"medium", m} ],
-              from=Result#search_sql.from ++ ", medium m"
+              tables=Result#search_sql.tables ++ [ {"medium", medium} ],
+              from=Result#search_sql.from ++ ", medium medium"
             },
-            add_where("m.id = rsc.id", R);
+            add_where("medium.id = rsc.id", R);
         false ->
             R = Result#search_sql{
-              tables=Result#search_sql.tables ++ [ {"medium", m} ],
-              from=Result#search_sql.from ++ " left medium m on rsc.id = m.id "
+              tables=Result#search_sql.tables ++ [ {"medium", medium} ],
+              from=Result#search_sql.from ++ " left medium m on rsc.id = medium.id "
             },
-            add_where("m.id is null", R)
+            add_where("medium.id is null", R)
     end,
     parse_query(Rest, Context, Result1);
 
