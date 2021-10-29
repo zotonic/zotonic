@@ -1316,8 +1316,6 @@ unique_name(Name, N, Context) ->
     case m_rsc:name_to_id(Name1, Context) of
         {ok, _} ->
             unique_page_path(Name, N+1, Context);
-        {redirect, _} ->
-            unique_page_path(Name, N+1, Context);
         {error, _} ->
             Name1
     end.
