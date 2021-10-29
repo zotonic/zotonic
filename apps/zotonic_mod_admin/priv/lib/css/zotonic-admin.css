@@ -811,6 +811,7 @@ input.do_timepicker {
   z-index: 1000;
   opacity: 0;
   position: fixed;
+  display: none;
   top: 50px;
   border-radius: 0;
   padding: 15px 15px;
@@ -825,6 +826,7 @@ input.do_timepicker {
   box-shadow: none;
 }
 .scrolled .admin-navbar-fixed-save {
+  display: block;
   opacity: 1.0;
 }
 div + .admin-edit-no-features {
