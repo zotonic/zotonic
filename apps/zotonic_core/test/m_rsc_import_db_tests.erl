@@ -55,8 +55,8 @@ modify_rsc_test() ->
     ?assertEqual({{2014,4,30},{22,0,0}}, m_rsc:p(Id, created, AdminC)),
     ?assertEqual({{2021,7,14},{8,47,7}}, m_rsc:p(Id, modified, AdminC)),
 
-    ?assertEqual(<<"rsc_import_test_1">>, m_rsc:p(Id, name, AdminC)),
-    ?assertEqual(<<"/rsc-import-test-1">>, m_rsc:p(Id, page_path, AdminC)),
+    ?assertEqual(<<"rsc_import_test">>, m_rsc:p(Id, name, AdminC)),
+    ?assertEqual(<<"/rsc-import-test">>, m_rsc:p(Id, page_path, AdminC)),
 
 
     %% Check edges
