@@ -186,7 +186,7 @@ name_to_id_cat(Name, Cat, Context) ->
 -spec page_path_to_id( binary() | string(), z:context() ) ->
               {ok, resource_id()}
             | {redirect, resource_id()}
-            | {error, {unknown_path, binary()}}
+            | {error, {unknown_page_path, binary()}}
             | {error, {illegal_page_path, binary(), length|unicode}}.
 page_path_to_id(Path, Context) ->
     Path1 = iolist_to_binary([ $/, z_string:trim(Path, $/) ]),

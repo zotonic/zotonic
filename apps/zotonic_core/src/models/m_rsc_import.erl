@@ -244,7 +244,7 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                         {error, duplicate_name} ->
                             Name = unique_name( maps:get(<<"name">>, Rsc), Context ),
                             lager:warning("Import of duplicate name from ~p, new name ~p", [
-                                    Uri, maps:get(<<"name">>, Rsc)
+                                    Uri, Name
                                 ]),
                             Rsc1 = Rsc#{ <<"name">> => Name },
                             maybe_create_empty(Rsc1, ImportedAcc, Options, Context);
@@ -1299,7 +1299,7 @@ unique_page_path(Path, N, Context) ->
             unique_page_path(Path, N+1, Context);
         {redirect, _} ->
             Path1;
-        {error, {unknown_path, _}} ->
+        {error, {unknown_page_path, _}} ->
             Path1;
         {error, _} ->
             undefined
