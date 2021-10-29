@@ -7,7 +7,7 @@
     </p>
 {% endif %}
 
-{% if not medium.media_import and media %}
+{% if not medium.media_import and medium.oembed_url %}
     <!-- Older content not imported with media_import -->
     <p class="clear">
         <span class="label label-info">{_ Embed _}</span>
