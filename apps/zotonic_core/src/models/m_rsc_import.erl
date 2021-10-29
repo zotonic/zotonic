@@ -1293,7 +1293,7 @@ unique_page_path(Path, Context) ->
 
 unique_page_path(Path, N, Context) ->
     B = integer_to_binary(N),
-    Path1 = <<Path, $-, B/binary>>,
+    Path1 = <<Path/binary, $-, B/binary>>,
     case m_rsc:page_path_to_id(Path1, Context) of
         {ok, _} ->
             unique_page_path(Path, N+1, Context);
@@ -1312,7 +1312,7 @@ unique_name(Name, Context) ->
 
 unique_name(Name, N, Context) ->
     B = integer_to_binary(N),
-    Name1 = <<Name, $_, B/binary>>,
+    Name1 = <<Name/binary, $_, B/binary>>,
     case m_rsc:name_to_id(Name1, Context) of
         {ok, _} ->
             unique_page_path(Name, N+1, Context);
