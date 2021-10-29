@@ -44,8 +44,6 @@
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("zotonic_stdlib/include/z_url_metadata.hrl").
-
 
 %% Fantasy mime type to distinguish embeddable html fragments.
 -define(EMBED_MIME, <<"text/html-video-embed">>).
@@ -217,9 +215,9 @@ as_int(N) -> z_convert:to_integer(N).
 
 %% @doc Recognize youtube and vimeo URLs, generate the correct embed code
 observe_media_import(#media_import{host_rev=[<<"com">>, <<"youtube">> | _], metadata=MD} = MI, Context) ->
-    media_import(youtube, ?__("Youtube Video", Context), MD, MI, Context);
+    media_import(<<"youtube">>, ?__("Youtube Video", Context), MD, MI, Context);
 observe_media_import(#media_import{host_rev=[<<"com">>, <<"vimeo">> | _], metadata=MD} = MI, Context) ->
-    media_import(vimeo, ?__("Vimeo Video", Context), MD, MI, Context);
+    media_import(<<"vimeo">>, ?__("Vimeo Video", Context), MD, MI, Context);
 observe_media_import(#media_import{}, _Context) ->
     undefined.
 
@@ -229,15 +227,22 @@ media_import(Service, Descr, MD, MI, Context) ->
     VideoId = fetch_videoid_from_url(Service, MI#media_import.url),
     case is_integer(H) andalso is_integer(W) andalso VideoId =/= <<>> of
         true ->
+            VideoIdBin = z_convert:to_binary(VideoId),
+            PreviewUrl = videoid_to_image(Service, VideoIdBin),
             [
-                media_import_props_video(Service, Descr, MD, MI, H, W, VideoId),
-                media_import_props_image(Service, MD, VideoId, Context)
+                media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl),
+                media_import_props_image(MD, PreviewUrl, Context)
             ];
         false ->
             undefined
     end.
 
-media_import_props_video(Service, Descr, MD, MI, H, W, VideoId) ->
+media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl) ->
+    VideoIdBin = z_convert:to_binary(VideoId),
+    PreviewUrl1 = case PreviewUrl of
+        undefined -> z_url_metadata:p(image, MD);
+        PU -> PU
+    end,
     #media_import_props{
         prio = 1,
         category = video,
@@ -252,34 +257,31 @@ media_import_props_video(Service, Descr, MD, MI, H, W, VideoId) ->
             <<"mime">> => ?EMBED_MIME,
             <<"width">> => W,
             <<"height">> => H,
-            <<"video_embed_service">> => z_convert:to_binary(Service),
+            <<"video_embed_service">> => Service,
             <<"video_embed_code">> => embed_code(Service, H, W, VideoId),
-            <<"video_embed_id">> => z_convert:to_binary(VideoId),
+            <<"video_embed_id">> => VideoIdBin,
             <<"media_import">> => MI#media_import.url
         },
-        preview_url = z_url_metadata:p(image, MD)
+        preview_url = PreviewUrl1
     }.
 
-media_import_props_image(Service, MD, VideoId, Context) ->
-    case videoid_to_image(Service, VideoId) of
-        undefined ->
-            undefined;
-        ImgUrl ->
-            #media_import_props{
-                prio = 10,
-                category = image,
-                description = m_rsc:p_no_acl(image, title, Context),
-                rsc_props = #{
-                    <<"title">> => z_url_metadata:p(title, MD),
-                    <<"summary">> => z_url_metadata:p(summary, MD),
-                    <<"website">> => z_url_metadata:p(url, MD)
-                },
-                medium_props = #{
-                    <<"mime">> => z_convert:to_binary(z_media_identify:guess_mime(ImgUrl))
-                },
-                medium_url = z_convert:to_binary(ImgUrl)
-            }
-    end.
+media_import_props_image(_MD, undefined, _Context) ->
+    undefined;
+media_import_props_image(MD, PreviewUrl, Context) ->
+    #media_import_props{
+        prio = 10,
+        category = image,
+        description = m_rsc:p_no_acl(image, title, Context),
+        rsc_props = #{
+            <<"title">> => z_url_metadata:p(title, MD),
+            <<"summary">> => z_url_metadata:p(summary, MD),
+            <<"website">> => z_url_metadata:p(url, MD)
+        },
+        medium_props = #{
+            <<"mime">> => z_convert:to_binary(z_media_identify:guess_mime(PreviewUrl))
+        },
+        medium_url = z_convert:to_binary(PreviewUrl)
+    }.
 
 fetch_videoid_from_embed(_Service, undefined) ->
     {<<>>, undefined};
@@ -301,7 +303,7 @@ fetch_videoid_from_embed(Service, EmbedCode) ->
             {Service, <<>>}
     end.
 
-fetch_videoid_from_url(youtube, Url) ->
+fetch_videoid_from_url(<<"youtube">>, Url) ->
     [Url1|_] = binary:split(Url, <<"?">>),
     case binary:split(Url1, <<"/embed/">>) of
         [_, Code] ->
@@ -311,33 +313,38 @@ fetch_videoid_from_url(youtube, Url) ->
             Qs1 = mochiweb_util:parse_qs(Qs),
             z_convert:to_binary(proplists:get_value("v", Qs1))
     end;
-fetch_videoid_from_url(vimeo, Url) ->
+fetch_videoid_from_url(<<"vimeo">>, Url) ->
     {_Protocol, _Host, Path, _Qs, _Hash} = mochiweb_util:urlsplit(z_convert:to_list(Url)),
     P1 = lists:last(string:tokens(Path, "/")),
     case z_utils:only_digits(P1) of
         true -> z_convert:to_binary(P1);
         false -> <<>>
-    end.
+    end;
+fetch_videoid_from_url(_Service, _Url) ->
+    <<>>.
+
+
+
 
 url_to_service(<<"https://", Url/binary>>) -> url_to_service(Url);
 url_to_service(<<"http://", Url/binary>>) -> url_to_service(Url);
 url_to_service(<<"//", Url/binary>>) -> url_to_service(Url);
-url_to_service(<<"www.youtube.com/", _/binary>>) -> youtube;
-url_to_service(<<"youtube.com/", _/binary>>) -> youtube;
-url_to_service(<<"www.vimeo.com/", _/binary>>) -> vimeo;
-url_to_service(<<"vimeo.com/", _/binary>>) -> vimeo;
-url_to_service(<<"player.vimeo.com/", _/binary>>) -> vimeo;
+url_to_service(<<"www.youtube.com/", _/binary>>) -> <<"youtube">>;
+url_to_service(<<"youtube.com/", _/binary>>) -> <<"youtube">>;
+url_to_service(<<"www.vimeo.com/", _/binary>>) -> <<"vimeo">>;
+url_to_service(<<"vimeo.com/", _/binary>>) -> <<"vimeo">>;
+url_to_service(<<"player.vimeo.com/", _/binary>>) -> <<"vimeo">>;
 url_to_service(_) -> undefined.
 
 
-embed_code(youtube, H, W, V) ->
+embed_code(<<"youtube">>, H, W, V) ->
     iolist_to_binary([
         <<"<iframe width=\"">>,integer_to_list(W),
         <<"\" height=\"">>,integer_to_list(H),
         <<"\" src=\"//www.youtube.com/embed/">>, z_url:url_encode(V),
         <<"\" style=\"border:none;\" allowfullscreen></iframe>">>
         ]);
-embed_code(vimeo, H, W, V) ->
+embed_code(<<"vimeo">>, H, W, V) ->
     iolist_to_binary([
         <<"<iframe width=\"">>,integer_to_list(W),
         <<"\" height=\"">>,integer_to_list(H),
@@ -452,7 +459,7 @@ preview_vimeo(MediaId, InsertProps, Context) ->
         <<>> ->
             static_preview(MediaId, <<"images/vimeo.jpg">>, Context);
         EmbedId ->
-            case videoid_to_image(vimeo, EmbedId) of
+            case videoid_to_image(<<"vimeo">>, EmbedId) of
                 undefined ->
                     static_preview(MediaId, <<"images/vimeo.jpg">>, Context);
                 ImgUrl ->
@@ -460,9 +467,9 @@ preview_vimeo(MediaId, InsertProps, Context) ->
             end
     end.
 
-videoid_to_image(youtube, EmbedId) ->
+videoid_to_image(<<"youtube">>, EmbedId) ->
     "https://img.youtube.com/vi/"++z_convert:to_list(EmbedId)++"/0.jpg";
-videoid_to_image(vimeo, EmbedId) ->
+videoid_to_image(<<"vimeo">>, EmbedId) ->
     JsonUrl = "https://vimeo.com/api/v2/video/" ++ z_convert:to_list(EmbedId) ++ ".json",
     case httpc:request(get, {JsonUrl, []}, [], [ {body_format, binary} ]) of
         {ok, {{_Http, 200, _Ok}, _Header, Data}} ->
@@ -474,7 +481,10 @@ videoid_to_image(vimeo, EmbedId) ->
             undefined;
         _ ->
             undefined
-    end.
+    end;
+videoid_to_image(_, _) ->
+    undefined.
+
 
 -spec static_preview( m_rsc:resource_id(), binary(), z:context() ) -> nop | {ok, file:filename_all()} | {error, term()}.
 static_preview(MediaId, LibFile, Context) ->

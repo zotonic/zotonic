@@ -43,13 +43,13 @@
 
                     {% if mi.medium_url %}
                         <p>
-                            {% if mi.category == `image` %}
+                            {% if m.rsc[mi.category].name == "image" %}
                                 <img src="{{ mi.medium_url|escape }}" class="img-responsive">
                             {% elseif mi.category == 'video' %}
                                 <video width="640" controls class="img-responsive">
                                     <source src="{{ mi.medium_url|escape }}" type="{{ mi.medium.mime|escape }}">
                                 </video>
-                            {% elseif mi.category == 'audio' %}
+                            {% elseif m.rsc[mi.category].name == "audio" %}
                                 <audio width="480" controls class="img-responsive">
                                     <source src="{{ mi.medium_url|escape }}" type="{{ mi.medium.mime|escape }}">
                                 </audio>
