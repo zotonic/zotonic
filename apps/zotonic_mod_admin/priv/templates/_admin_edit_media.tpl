@@ -4,7 +4,7 @@
     <p class="clear">
         <span class="label label-info">{_ Embed _}</span>
         {% if medium.media_import|match:'^https?:' %}
-            <a href="{{ medium.media_import|escape }}">{{ medium.media_import|truncate:80:'…'|escape }}</a>
+            <a href="{{ medium.media_import|sanitize_url|escape }}" target="_blank" rel="noopener noreferrer">{{ medium.media_import|truncate:80:'…'|escape }}</a>
         {% else %}
             <span class="text-muted">{{ medium.media_import|truncate:80:'…'|escape }}</span>
         {% endif %}
