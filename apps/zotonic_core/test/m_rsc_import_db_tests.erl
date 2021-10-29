@@ -84,10 +84,10 @@ modify_rsc_test() ->
     ?assertEqual([1], m_edge:objects(IdAuth, author, AdminC)),
     ?assertEqual([IdAuth, 1], m_edge:objects(IdAuth, relation, AdminC)),
 
-    % The collision on page_path and name should have removed those
+    % The collision on page_path and name should have renamed those
     % properties from the import.
-    ?assertEqual(undefined, m_rsc:p(IdAuth, name, AdminC)),
-    ?assertEqual(undefined, m_rsc:p(IdAuth, page_path, AdminC)),
+    ?assertEqual(<<"rsc_import_test_1">>, m_rsc:p(IdAuth, name, AdminC)),
+    ?assertEqual(<<"/rsc-import-test-1">>, m_rsc:p(IdAuth, page_path, AdminC)),
 
     ok.
 
@@ -141,8 +141,8 @@ export_data() ->
       <<"is_a">> => [ <<"text">>, <<"article">>, <<"foobartext">> ],
       <<"resource">> =>
           #{<<"version">> => 1,
-            <<"name">> => <<"rsc_import_test_1">>,
-            <<"page_path">> => <<"/rsc-import-test-1">>,
+            <<"name">> => <<"rsc_import_test">>,
+            <<"page_path">> => <<"/rsc-import-test">>,
             <<"is_published">> => true,
             <<"is_authoritative">> => true,
             <<"org_pubdate">> => {{2014,4,30},{22,0,0}},

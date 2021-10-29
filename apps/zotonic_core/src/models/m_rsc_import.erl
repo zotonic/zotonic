@@ -233,7 +233,23 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                             ImportedAcc1 = ImportedAcc#{
                                 Uri => LocalId
                             },
-                            {ok, {LocalId, ImportedAcc1}}
+                            {ok, {LocalId, ImportedAcc1}};
+                        {error, duplicate_page_path} ->
+                            PagePath = unique_page_path( maps:get(<<"page_path">>, Rsc), Context ),
+                            lager:warning("Import of duplicate page_path from ~p, new path ~p", [
+                                    Uri, PagePath
+                                ]),
+                            Rsc1 = Rsc#{ <<"page_path">> => PagePath },
+                            maybe_create_empty(Rsc1, ImportedAcc, Options, Context);
+                        {error, duplicate_name} ->
+                            Name = unique_name( maps:get(<<"name">>, Rsc), Context ),
+                            lager:warning("Import of duplicate name from ~p, new name ~p", [
+                                    Uri, maps:get(<<"name">>, Rsc)
+                                ]),
+                            Rsc1 = Rsc#{ <<"name">> => Name },
+                            maybe_create_empty(Rsc1, ImportedAcc, Options, Context);
+                        {error, _} = Error ->
+                            Error
                     end;
                 {error, _} = Error  ->
                     % Unknown category, deny access
@@ -661,27 +677,30 @@ update_rsc(OptLocalId, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
         {ok, _} = OK ->
             OK;
         {error, duplicate_page_path} ->
-            lager:warning("Import of duplicate page_path for ~p from ~p, dropped path ~p", [
-                    OptLocalId, RemoteRId, maps:get(<<"page_path">>, Rsc)
+            PagePath = unique_page_path( maps:get(<<"page_path">>, Rsc), Context ),
+            lager:warning("Import of duplicate page_path for ~p from ~p, new path ~p", [
+                    OptLocalId, RemoteRId, PagePath
                 ]),
-            Rsc1 = maps:remove(<<"page_path">>, Rsc),
+            Rsc1 = Rsc#{ <<"page_path">> => PagePath },
             update_rsc(OptLocalId, RemoteRId, Rsc1, ImportedAcc, Options, Context);
         {error, duplicate_name} ->
-            lager:warning("Import of duplicate name for ~p from ~p, dropped name ~p", [
+            Name = unique_name( maps:get(<<"name">>, Rsc), Context ),
+            lager:warning("Import of duplicate name for ~p from ~p, new name ~p", [
                     OptLocalId, RemoteRId, maps:get(<<"name">>, Rsc)
                 ]),
-            Rsc1 = maps:remove(<<"name">>, Rsc),
+            Rsc1 = Rsc#{ <<"name">> => Name },
             update_rsc(OptLocalId, RemoteRId, Rsc1, ImportedAcc, Options, Context);
         {error, _} = Error ->
             Error
     end.
 
 update_rsc_1(undefined, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
+    RscLang = ensure_language_prop(Rsc),
     UpdateOptions = [
         {is_escape_texts, false},
         is_import
     ],
-    Uri = maps:get(<<"uri">>, Rsc),
+    Uri = maps:get(<<"uri">>, RscLang),
     IsImportDeleted = proplists:get_value(is_import_deleted, Options, false),
     case is_imported_resource(RemoteRId, ImportedAcc, Options, Context) of
         false when IsImportDeleted ->
@@ -691,24 +710,44 @@ update_rsc_1(undefined, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
                 true ->
                     {error, deleted};
                 false ->
-                    m_rsc:insert(Rsc, UpdateOptions, Context)
+                    m_rsc:insert(RscLang, UpdateOptions, Context)
             end;
         {true, LocalId} ->
             case not is_imported(LocalId, Context)
                 or not m_rsc:p_no_acl(LocalId, is_authoritative, Context)
             of
                 true ->
-                    m_rsc:update(LocalId, Rsc, UpdateOptions, Context);
+                    m_rsc:update(LocalId, RscLang, UpdateOptions, Context);
                 false ->
                     {error, authoritative}
             end
     end;
 update_rsc_1(LocalId, _RemoteRId, Rsc, _ImportedAcc, _Options, Context) when is_integer(LocalId) ->
+    RscLang = ensure_language_prop(Rsc),
     UpdateOptions = [
         {is_escape_texts, false},
         is_import
     ],
-    m_rsc:update(LocalId, Rsc, UpdateOptions, Context).
+    m_rsc:update(LocalId, RscLang, UpdateOptions, Context).
+
+
+ensure_language_prop(#{ <<"language">> := _ } = Rsc) ->
+    Rsc;
+ensure_language_prop(Rsc) ->
+    Langs = maps:fold(
+        fun
+            (_K, #trans{ tr = Tr }, Acc) ->
+                Langs = [ Iso || {Iso, _} <- Tr ],
+                Acc ++ Langs;
+            (_, _, Acc) ->
+                Acc
+        end,
+        [],
+        Rsc),
+    case Langs of
+        [_|_] -> Rsc#{ <<"language">> => lists:usort(Langs) };
+        [] -> Rsc
+    end.
 
 
 cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
@@ -1245,6 +1284,42 @@ is_local_site(Uri, Context ) ->
         {ok, Site} -> true;
         {ok, _} -> false;
         undefined -> false
+    end.
+
+%% @doc Generate a new page path by appending a number.
+-spec unique_page_path(binary(), z:context()) -> binary() | undefined.
+unique_page_path(Path, Context) ->
+    unique_page_path(Path, 1, Context).
+
+unique_page_path(Path, N, Context) ->
+    B = integer_to_binary(N),
+    Path1 = <<Path, $-, B/binary>>,
+    case m_rsc:page_path_to_id(Path1, Context) of
+        {ok, _} ->
+            unique_page_path(Path, N+1, Context);
+        {redirect, _} ->
+            Path1;
+        {error, {unknown_path, _}} ->
+            Path1;
+        {error, _} ->
+            undefined
+    end.
+
+%% @doc Generate a new name by appending a number.
+-spec unique_name(binary(), z:context()) -> binary() | undefined.
+unique_name(Name, Context) ->
+    unique_name(Name, 1, Context).
+
+unique_name(Name, N, Context) ->
+    B = integer_to_binary(N),
+    Name1 = <<Name, $_, B/binary>>,
+    case m_rsc:name_to_id(Name1, Context) of
+        {ok, _} ->
+            unique_page_path(Name, N+1, Context);
+        {redirect, _} ->
+            unique_page_path(Name, N+1, Context);
+        {error, _} ->
+            Name1
     end.
 
 % Install the datamodel for managing resource imports, especially the rights and options for the imports.
