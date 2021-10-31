@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-31 22:50\n"
+"PO-Revision-Date: 2021-10-31 23:01\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1494,11 +1494,11 @@ msgstr "Изменено пользователем"
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:50
 msgid "Modified on"
-msgstr "Изменено"
+msgstr "Дата изменения"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:13
 msgid "Modified:"
-msgstr "Модифицировано:"
+msgstr "Изменено:"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:221./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:223./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:49
