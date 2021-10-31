@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-31 18:18\n"
+"PO-Revision-Date: 2021-10-31 18:57\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1304,7 +1304,7 @@ msgstr "Очистить системный кэш"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:137
 msgid "Follow connections and import all (deep copy)."
-msgstr "Следите за подключениями и импортируйте все (глубокая копия)."
+msgstr "Проследовать по связям и импортировать всё (глубокая копия)."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:49
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
