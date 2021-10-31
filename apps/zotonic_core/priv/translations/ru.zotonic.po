@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-31 22:20\n"
+"PO-Revision-Date: 2021-10-31 22:50\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1448,7 +1448,7 @@ msgstr "URL материала или HTML-код"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:60
 msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
-msgstr "Средства массовой информации включают в себя все загруженные изображения, фильмы и документы. Медиа могут быть прикреплены к страницам."
+msgstr "Материалы включают в себя все загруженные изображения, фильмы и документы. Материалы могут быть прикреплены к страницам."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:37./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:42
 msgid "Media file"
@@ -1468,7 +1468,7 @@ msgstr "Название материала"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:134
 msgid "Media updated."
-msgstr "СМИ обновлены."
+msgstr "Материал обновлён."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:1
 msgid "Memory"
