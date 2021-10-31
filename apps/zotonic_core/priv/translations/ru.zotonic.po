@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-31 19:18\n"
+"PO-Revision-Date: 2021-10-31 19:30\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1362,7 +1362,7 @@ msgstr "Встроенный блок"
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:48./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:60
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:39
 msgid "Items per page"
-msgstr "Пункты на странице"
+msgstr "Пунктов на странице"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_dashboard_events.tpl:3
 msgid "Latest modified events"
