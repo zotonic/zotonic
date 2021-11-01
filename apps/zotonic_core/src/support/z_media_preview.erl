@@ -619,8 +619,8 @@ calc_size(#{ image_height := 0 } = S) ->
 calc_size(#{ image_width := 0 } = S) ->
     calc_size(S#{ image_width => 1 });
 
-calc_size(#{ orientation := Orientation } = S) when Orientation >= 5 ->
-    calc_size(S#{ orientation => 1 });
+calc_size(#{ image_height := H, image_width := W, orientation := Orientation } = S) when Orientation >= 5 ->
+    calc_size(S#{ orientation => 1, image_height := W, image_width := H});
 
 calc_size(#{ filters := [ {rotate, Rotation} | Fs ], image_width := W, image_height := H, crop := Crop } = S)
     when Rotation =:= 90;
