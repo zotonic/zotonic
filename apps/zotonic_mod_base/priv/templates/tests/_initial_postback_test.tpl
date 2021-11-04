@@ -3,7 +3,7 @@
 
 {% if n < till %}
     <script>
-        document.location = "/tests/initial_postback_test?n={{ n }}";
+        document.location = "/test/initial_postback_test?n={{ n }}";
     </script>
 {% else %}
     <p>Success!</p>
