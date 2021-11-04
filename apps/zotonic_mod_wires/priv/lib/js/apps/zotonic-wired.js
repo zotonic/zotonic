@@ -325,7 +325,9 @@ function z_notify(message, extraParams)
             z_unmask(trigger_id);
         };
     }
-    return z_transport(delegate, 'ubf', notify, options);
+
+    z_transport_queue_add(delegate, 'ubf', notify, options);
+    z_transport_queue_check();
 }
 
 
@@ -415,10 +417,17 @@ function z_transport_queue_add( delegate, content_type, data, options )
 
 function z_transport_queue_check()
 {
-    let authState = $('html').attr('data-ui-state-auth-auth');
+    const html = document.body.parentElement;
 
+    if(!html) return;
+
+    const authState = html.dataset.uiStateAuthAuth;
+
+    // Make sure the auth worker is ready so the postbacks are
+    // either authenticated, or not... Not something in between
+    // when the auth worker is still starting.
     if (    z_transport_queue.length > 0
-        &&  $('html').hasClass('ui-state-bridge-connected')
+        &&  html.classList.contains('ui-state-bridge-connected')
         &&  (authState === 'anonymous' || authState === 'user')) {
         let trans = z_transport_queue.shift();
         z_transport(trans.delegate, trans.content_type, trans.data, trans.options);
@@ -486,7 +495,9 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
         trigger_id: trigger_id,
         post_form: optPostForm
     };
-    z_transport('postback', 'ubf', pb_event, options);
+
+    z_transport_queue_add('postback', 'ubf', pb_event, options);
+    z_transport_queue_check();
 }
 
 // function z_postback_opt_qs(extraParams)
