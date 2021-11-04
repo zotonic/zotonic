@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-31 23:01\n"
+"PO-Revision-Date: 2021-11-04 22:58\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1528,7 +1528,7 @@ msgstr "Следующий в категории:"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:14
 msgid "No connected images."
-msgstr "Нет подключенных изображений."
+msgstr "Нет связанных изображений."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:18
 msgid "No features are enabled for this meta-resource."
