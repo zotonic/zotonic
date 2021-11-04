@@ -35,6 +35,6 @@ escape_check(#trans{} = Tr, _Context) ->
 escape_check(A, _Context) when is_atom(A) ->
     z_html:escape_check(atom_to_binary(A, utf8));
 escape_check(M, _Context) when is_map(M) ->
-    z_html:escape_check(M);
+    z_html:escape_props_check(M);
 escape_check(_, _Context) ->
     undefined.
