@@ -57,8 +57,6 @@ function zotonic_startup() {
     // Handle data sent by the server
     cotonic.broker.subscribe("zotonic-transport/eval", function(msg) {
         try {
-            console.log("eval", msg.payload);
-
             eval(msg.payload);
             if (z_init_postback_forms_timeout) {
                 clearTimeout(z_init_postback_forms_timeout);
