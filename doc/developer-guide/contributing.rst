@@ -52,7 +52,7 @@ Emacs
 ^^^^^
 
 Provided with the Zotonic distribution is a Zotonic template mode,
-``zotonic-tpl-mode``, which supports the Zotonic flavor of ErlyDtl.
+``zotonic-tpl-mode``, which supports the Zotonic flavor of Django.
 It is located in the :file:`priv/emacs/zotonic-tpl-mode.el` file, and
 may be installed in emacs by adding something like this to your `.emacs`
 file:
