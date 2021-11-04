@@ -1,15 +1,18 @@
 .. highlight:: django
 
-.. index:: filter; escape
-   single: mod_base; filter, escape
-.. _filter-escape:
+.. index:: filter; escape_check
+   single: mod_base; filter, escape_check
+.. _filter-escape_check:
 
-escape
-======
+escape_check
+============
 
 * Module: :ref:`mod_base`
 
-HTML escape a text. Escapes all reserved HTML characters in the value.
+Ensures thant an HTML escaped value is properly escaped.
+
+Checks for all reserved HTML characters if they are properly escaped.
+
 Escaped strings are safe to be displayed in a HTML page.  When you
 echo a query string argument or path variable then you must escape the
 value before displaying it on a HTML page.
@@ -30,16 +33,13 @@ The following characters are replaced:
 |``&``        |``&amp;``    |
 +-------------+-------------+
 
-The escaping is only applied if the filter is not within an ``{% autoescape on %}`` block. 
 If you always want escaping to be applied, use the :ref:`filter-force_escape`
 filter.
 
 For example::
 
-  {{ value|escape }}
+  {{ value|escape_check }}
 
-When the value is ``<hel&lo>`` then the output is ``&lt;hel&amp;lo&gt;``.
+When the value is ``<hel&amp;lo>`` then the output is ``&lt;hel&amp;lo&gt;``.
 
-Note: this filter is not part of a module, it is built into the template compiler.
-
-.. seealso:: :ref:`filter-force_escape`, :ref:`filter-escape_check`
+.. seealso:: :ref:`filter-force_escape`, :ref:`filter-escape`

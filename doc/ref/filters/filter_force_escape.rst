@@ -16,4 +16,4 @@ For example::
 
 If the value is ``hel&lo`` then the output is ``hel&amp;lo``.
 
-.. seealso:: :ref:`filter-escape`
+.. seealso:: :ref:`filter-escape`, :ref:`filter-escape_check`

@@ -8,6 +8,7 @@ Character escaping
 
    ../filter_brlinebreaks
    ../filter_escape
+   ../filter_escape_check
    ../filter_escape_ical
    ../filter_escape_link
    ../filter_escapejs
