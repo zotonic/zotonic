@@ -44,3 +44,18 @@ media_data_url_test() ->
     Data = z_media_tag:scomp_data_url(<<"lib/images/trans.gif">>, [], Context),
     ?assertEqual(Data, <<"data:image/gif;base64,R0lGODlhAQABAJAAAAAAAAAAACH5BAEUAAAALAAAAAABAAEAAAICRAEAOw==">>).
 
+
+calc_size_test() ->
+    FourThirds = #{ image_width => 4000, image_height => 3000 },
+
+    ?assertEqual({200, 150, none}, z_media_preview:calc_size(FourThirds#{ req_width => 200, req_height => 200, crop => none })),
+    ?assertEqual({200, 150, none}, z_media_preview:calc_size(FourThirds#{ req_width => 200, req_height => 200, crop => none, orientation => 1 })),
+    ?assertEqual({200, 150, none}, z_media_preview:calc_size(FourThirds#{ req_width => 200, req_height => 200, crop => none, orientation => 2 })),
+    ?assertEqual({200, 150, none}, z_media_preview:calc_size(FourThirds#{ req_width => 200, req_height => 200, crop => none, orientation => 3 })),
+    ?assertEqual({200, 150, none}, z_media_preview:calc_size(FourThirds#{ req_width => 200, req_height => 200, crop => none, orientation => 4 })),
+    ?assertEqual({150, 200, none}, z_media_preview:calc_size(FourThirds#{ req_width => 200, req_height => 200, crop => none, orientation => 5 })),
+    ?assertEqual({150, 200, none}, z_media_preview:calc_size(FourThirds#{ req_width => 200, req_height => 200, crop => none, orientation => 6 })),
+    ?assertEqual({150, 200, none}, z_media_preview:calc_size(FourThirds#{ req_width => 200, req_height => 200, crop => none, orientation => 7 })),
+    ?assertEqual({150, 200, none}, z_media_preview:calc_size(FourThirds#{ req_width => 200, req_height => 200, crop => none, orientation => 8 })),
+
+    ok.
