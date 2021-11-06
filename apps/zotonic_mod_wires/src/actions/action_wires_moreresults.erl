@@ -26,15 +26,15 @@ render_action(TriggerId, TargetId, Args, Context) ->
     end,
     SearchName = Result#m_search_result.search_name,
     SearchResult = Result#m_search_result.result,
-    PageLen = pagelen(SearchResult, Result#m_search_result.search_props),
+    PageLen = pagelen(SearchResult, Result#m_search_result.search_args),
     case total(SearchResult) < PageLen of
         true ->
             {"", z_render:add_script(["$(\"#", TriggerId, "\").remove();"], Context)};
         false ->
-            Page = page(SearchResult, Result#m_search_result.search_props) + 1,
+            Page = page(SearchResult, Result#m_search_result.search_args) + 1,
             MorePageLen = proplists:get_value(pagelen, Args, PageLen),
             SearchProps = proplists:delete(pagelen,
-                                proplists:delete(page, Result#m_search_result.search_props)),
+                                proplists:delete(page, Result#m_search_result.search_args)),
             make_postback(SearchName, SearchProps, Page, PageLen, MorePageLen, Args, TriggerId, TargetId, Context)
     end.
 
@@ -53,13 +53,27 @@ total(_) ->
 
 pagelen(#search_result{pagelen=PageLen}, _) when is_integer(PageLen) ->
     PageLen;
-pagelen(_, SearchProps) ->
-    z_convert:to_integer(proplists:get_value(pagelen, SearchProps, 20)).
+pagelen(_, #{ <<"pagelen">> := PageLen }) ->
+    case z_convert:to_integer(PageLen) of
+        undefined -> 20;
+        PL -> PL
+    end;
+pagelen(_, SearchProps) when is_list(SearchProps) ->
+    z_convert:to_integer(proplists:get_value(pagelen, SearchProps, 20));
+pagelen(_, _) ->
+    20.
 
 page(#search_result{page=Page}, _) when is_integer(Page) ->
     Page;
-page(_, SearchProps) ->
-    z_convert:to_integer(proplists:get_value(page, SearchProps, 1)).
+page(_, #{ <<"page">> := Page }) ->
+    case z_convert:to_integer(Page) of
+        undefined -> 1;
+        PL -> PL
+    end;
+page(_, SearchProps) when is_list(SearchProps) ->
+    z_convert:to_integer(proplists:get_value(page, SearchProps, 1));
+page(_, _) ->
+    1.
 
 
 %% @doc Show more results.

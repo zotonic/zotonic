@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-04-15
+%% @copyright 2009-2021 Marc Worrell
 %% @doc Search the database, interfaces to specific search routines.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,20 +21,24 @@
 
 %% interface functions
 -export([
+    search/5,
+
     search/2,
     search/3,
     search_pager/3,
     search_pager/4,
     search_result/3,
     query_/2,
-    pager/3,
-    pager/4
+
+    estimate/3
 ]).
 
 -include_lib("zotonic.hrl").
 
--type search_query():: {atom(), list()}.
--type search_offset() :: pos_integer() | {pos_integer(), pos_integer()}.
+-type search_query():: {atom(), list()}
+                     | {binary(), map()|undefined}.
+-type search_offset() :: Limit :: pos_integer()
+                       | {Offset :: pos_integer(), Limit :: pos_integer()}.
 
 -export_type([
     search_query/0,
@@ -43,63 +46,215 @@
     ]).
 
 -define(OFFSET_LIMIT, {1,?SEARCH_PAGELEN}).
--define(OFFSET_PAGING, {1,30000}).
+-define(SEARCH_ALL_LIMIT, 30000).
 
-%% @doc Search items and handle the paging.  Uses the default page length.
-%% @spec search_pager({Name, SearchPropList}, Page, #context{}) -> #search_result{}
+
+%% @doc Perform a named search with arguments.
+-spec search(Name, Args, Page, PageLen, Context) -> Result when
+    Name :: binary(),
+    Args :: map() | undefined,
+    Page :: pos_integer(),
+    PageLen :: pos_integer(),
+    Context :: z:context(),
+    Result :: #search_result{}.
+search(Name, undefined, Page, PageLen, Context) ->
+    search(Name, #{}, Page, PageLen, Context);
+search(Name, Args, Page, PageLen, Context) when is_binary(Name), is_map(Args) ->
+    OffsetLimit = offset_limit(Page, PageLen),
+    Q = #search_query{
+        name = Name,
+        args = Args,
+        offsetlimit = OffsetLimit
+    },
+    case z_notifier:first(Q, Context) of
+        undefined ->
+            lager:debug("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
+            #search_result{};
+        Result ->
+            handle_search_result(Result, Page, PageLen, OffsetLimit, Context)
+    end.
+
+%% @doc Search items and handle the paging. Uses the default page length.
+-spec search_pager(search_query(), Page :: pos_integer(), z:context()) -> #search_result{}.
 search_pager(Search, Page, Context) ->
     search_pager(Search, Page, ?SEARCH_PAGELEN, Context).
 
 %% @doc Search items and handle the paging
-%% @spec search_pager({Name, SearchPropList}, Page, PageLen, #context{}) -> #search_result{}
+-spec search_pager(search_query(), Page :: pos_integer(), PageLen :: pos_integer(), z:context()) -> #search_result{}.
 search_pager(Search, undefined, PageLen, Context) ->
     search_pager(Search, 1, PageLen, Context);
-search_pager(Search, Page, PageLen, Context) ->
-    SearchResult = search(Search, ?OFFSET_PAGING, Context),
-    pager(SearchResult, Page, PageLen, Context).
+search_pager({Name, Args}, Page, PageLen, Context) when is_binary(Name) ->
+    search(Name, Args, Page, PageLen, Context);
+search_pager({Name, _} = Search, Page, PageLen, Context) when is_atom(Name) ->
+    OffsetLimit = offset_limit(Page, PageLen),
+    SearchResult = search_1(Search, Page, PageLen, OffsetLimit, Context),
+    handle_search_result(SearchResult, Page, PageLen, OffsetLimit, Context).
 
-
-pager(#search_result{pagelen=undefined} = SearchResult, Page, Context) ->
-    pager(SearchResult, Page, ?SEARCH_PAGELEN, Context);
-pager(SearchResult, Page, Context) ->
-    pager(SearchResult, Page, SearchResult#search_result.pagelen, Context).
-
-pager(#search_result{result = Result, total = undefined} = SearchResult, Page, PageLen, Context) ->
-    pager(SearchResult#search_result{total = length(Result)}, Page, PageLen, Context);
-pager(#search_result{result = Result, total = Total} = SearchResult, Page, PageLen, _Context) ->
-    Pages = erlang:ceil(Total / PageLen),
-    Offset = (Page-1) * PageLen + 1,
-    OnPage = case Offset =< Total of
-        true ->
-            {P,_} = z_utils:split(PageLen, lists:nthtail(Offset-1, Result)),
-            P;
-        false ->
-            []
-    end,
-    Next = if Offset + PageLen < Total -> Page+1; true -> false end,
-    Prev = if Page > 1 -> Page-1; true -> 1 end,
-    SearchResult#search_result{
-        result=OnPage,
-        all=Result,
-        total=Total,
-        page=Page,
-        pagelen=PageLen,
-        pages=Pages,
-        next=Next,
-        prev=Prev
-    }.
 
 %% @doc Search with the question and return the results
-%% @spec search({Name, SearchPropList}, #context{}) -> #search_result{}
+-spec search({atom()|binary(), proplists:proplist()|map()}, z:context()) -> #search_result{}.
 search(Search, Context) ->
     search(Search, ?OFFSET_LIMIT, Context).
 
 %% @doc Perform the named search and its arguments
--spec search(search_query(), search_offset(), z:context() )
-    -> #search_result{}.
+-spec search(search_query(), search_offset(), z:context() ) -> #search_result{}.
 search(Search, MaxRows, Context) when is_integer(MaxRows) ->
-    search(Search, {1, MaxRows}, Context);
-search({SearchName, Props}, OffsetLimit, Context) ->
+    search_1(Search, 1, MaxRows, {1, MaxRows}, Context);
+search(Search, {1, Limit} = OffsetLimit, Context) ->
+    search_1(Search, 1, Limit, OffsetLimit, Context);
+search(Search, {_, _} = OffsetLimit, Context) ->
+    search_1(Search, undefined, undefined, OffsetLimit, Context).
+
+
+%% @doc Handle a return value from a search function.  This can be an intermediate SQL statement
+%% that still needs to be augmented with extra ACL checks.
+-spec handle_search_result( Result, Page, PageLen, OffsetLimit, Context ) -> #search_result{} when
+    Result :: list() | #search_result{} | #search_sql{},
+    Page :: pos_integer(),
+    PageLen :: pos_integer(),
+    OffsetLimit :: {non_neg_integer(), non_neg_integer()},
+    Context :: z:context().
+handle_search_result(#search_result{ result = L, total = Total } = S, Page, PageLen, _OffsetLimit, _Context) when is_integer(Total) ->
+    L1 = lists:sublist(L, 1, PageLen),
+    Pages = (Total+PageLen-1) div PageLen + Page - 1,
+    Len = length(L),
+    Next = if
+        Len > PageLen -> Page + 1;
+        true -> false
+    end,
+    S#search_result{
+        result = L1,
+        all = L,
+        page = Page,
+        pagelen = PageLen,
+        pages = Pages,
+        prev = erlang:max(Page-1, 1),
+        next = Next
+    };
+handle_search_result(#search_result{ result = L, total = undefined } = S, Page, PageLen, _OffsetLimit,  _Context) ->
+    L1 = lists:sublist(L, 1, PageLen),
+    Len = length(L),
+    Next = if
+        Len > PageLen -> Page + 1;
+        true -> false
+    end,
+    S#search_result{
+        result = L1,
+        all = L,
+        page = Page,
+        pagelen = PageLen,
+        prev = erlang:max(Page-1, 1),
+        next = Next
+    };
+handle_search_result(L, Page, PageLen, _OffsetLimit, _Context) when is_list(L) ->
+    L1 = lists:sublist(L, 1, PageLen),
+    Len = length(L),
+    Pages = (Len+PageLen-1) div PageLen + Page - 1,
+    Next = if
+        Len > PageLen -> Page + 1;
+        true -> false
+    end,
+    #search_result{
+        result = L1,
+        all = L,
+        page = Page,
+        pagelen = PageLen,
+        pages = Pages,
+        prev = erlang:max(Page-1, 1),
+        next = Next
+    };
+handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit, Context) ->
+    Q1 = reformat_sql_query(Q, Context),
+    {Sql, Args} = concat_sql_query(Q1, OffsetLimit),
+    case Q#search_sql.run_func of
+        F when is_function(F) ->
+            Result = F(Q, Sql, Args, Context),
+            handle_search_result(Result, Page, PageLen, OffsetLimit, Context);
+        _ ->
+            Rows = case Q#search_sql.assoc of
+                false ->
+                    Rs = z_db:q(Sql, Args, Context),
+                    case Rs of
+                        [{_}|_] -> [ R || {R} <- Rs ];
+                        _ -> Rs
+                    end;
+                true ->
+                    z_db:assoc_props(Sql, Args, Context)
+            end,
+            RowCount = length(Rows),
+            FoundTotal = (Page-1) * PageLen + RowCount,
+            Total = if
+                Limit > RowCount ->
+                    % Didn't return all rows, assume we are at the end of the result set.
+                    FoundTotal;
+                true ->
+                    % The number of requested rows was returned, assume there is more.
+                    {SqlNoLimit, ArgsNoLimit} = concat_sql_query(Q1, undefined),
+                    {ok, EstimatedTotal} = estimate(SqlNoLimit, ArgsNoLimit, Context),
+                    erlang:max(FoundTotal, EstimatedTotal)
+            end,
+            Pages = (Total + PageLen - 1) div PageLen,
+            Next = if
+                Pages > Page -> Page + 1;
+                true -> false
+            end,
+            #search_result{
+                result = lists:sublist(Rows, 1, PageLen),
+                pages = Pages,
+                page = Page,
+                pagelen = PageLen,
+                all = Rows,
+                total = Total,
+                prev = erlang:max(Page-1, 1),
+                next = Next
+            }
+    end.
+
+%% @doc Estimate the number of rows matching a query. This uses the PostgreSQL query planner
+%% to return an estimate of the number of rows.
+-spec estimate(Query, Args, Context) -> {ok, Rows} | {error, term()}
+    when Query :: string() | binary(),
+         Args :: list(),
+         Context :: z:context(),
+         Rows :: non_neg_integer().
+estimate(Query, Args, Context) ->
+    Query1 = "explain " ++ z_convert:to_list(Query),
+    try
+        find_estimate( z_db:q(Query1, Args, Context) )
+    catch
+        throw:{error, _} = Error -> Error
+    end.
+
+find_estimate([]) ->
+    {ok, 0};
+find_estimate([{R}|Rs]) ->
+    case re:run(R, <<" rows=([0-9]+)">>, [{capture, all_but_first, binary}]) of
+        nomatch -> find_estimate(Rs);
+        {match, [Rows]} -> {ok, binary_to_integer(Rows)}
+    end.
+
+
+%% Calculate an offset/limit for the query. This takes such a range from the results
+%% that we can display a pager. We don't need exact results, as we will use the query
+%% planner to give an estimated number of rows.
+offset_limit(1, PageLen) ->
+    % Take 5 pages + 1
+    {1, 5 * PageLen + 1};
+offset_limit(2, PageLen) ->
+    % Take 4 pages + 1
+    {PageLen + 1, 4 * PageLen + 1};
+offset_limit(3, PageLen) ->
+    % Take 3 pages + 1
+    {2 * PageLen + 1, 3 * PageLen + 1};
+offset_limit(N, PageLen) ->
+    % Take 2 pages + 1
+    {(N-1) * PageLen + 1, 2 * PageLen + 1}.
+
+search_1({SearchName, Args}, undefined, _PageLen, {1, Limit}, Context) when is_binary(SearchName) ->
+    search(SearchName, Args, 1, Limit, Context);
+search_1({SearchName, Args}, Page, PageLen, _OffsetLimit, Context) when is_binary(SearchName), is_integer(Page) ->
+    search(SearchName, Args, Page, PageLen, Context);
+search_1({SearchName, Props}, Page, PageLen, {Offset, Limit} = OffsetLimit, Context) when is_atom(SearchName), is_list(Props) ->
     Props1 = case proplists:get_all_values(cat, Props) of
         [] -> Props;
         [[]] -> Props;
@@ -116,21 +271,33 @@ search({SearchName, Props}, OffsetLimit, Context) ->
         undefined ->
             lager:info("z_search: ignored unknown search query ~p", [ {SearchName, PropsSorted} ]),
             #search_result{};
+        Result when Page =/= undefined ->
+            handle_search_result(Result, Page, PageLen, OffsetLimit, Context);
+        Result when Offset =:= 1 ->
+            handle_search_result(Result, 1, Limit, OffsetLimit, Context);
         Result ->
             search_result(Result, OffsetLimit, Context)
     end;
-search(Name, OffsetLimit, Context) ->
-    search({z_convert:to_atom(Name), []}, OffsetLimit, Context).
+search_1(Name, Page, PageLen, OffsetLimit, Context) when is_atom(Name) ->
+    search({Name, []}, Page, PageLen, OffsetLimit, Context);
+search_1(Name, _Page, _PageLen, _OffsetLimit, _Context) ->
+    lager:info("z_search: ignored unknown search query ~p", [ Name ]),
+    #search_result{}.
 
-%% @doc Given a query as proplist, return all results.
-%% @spec query_(Props, Context) -> [Id] | []
+
+%% @doc Given a query as proplist or map, return all results.
+-spec query_( proplists:proplist() | map(), z:context() ) -> list( m_rsc:resource_id() ).
+query_(Args, Context) when is_map(Args) ->
+    S = search(<<"query">>, Args, 1, ?SEARCH_ALL_LIMIT, Context),
+    S#search_result.result;
 query_(Props, Context) ->
-    S = search({'query', Props}, ?OFFSET_PAGING, Context),
+    % deprecated, should use argument maps.
+    S = search({'query', Props}, ?SEARCH_ALL_LIMIT, Context),
     S#search_result.result.
+
 
 %% @doc Handle a return value from a search function.  This can be an intermediate SQL statement that still needs to be
 %% augmented with extra ACL checks.
-%% @spec search_result(Result, Limit, Context) -> #search_result{}
 -spec search_result( list() | #search_result{} | #search_sql{}, search_offset(), z:context() ) ->
     #search_result{}.
 search_result(L, _Limit, _Context) when is_list(L) ->
@@ -158,7 +325,15 @@ search_result(#search_sql{} = Q, Limit, Context) ->
     end.
 
 
-concat_sql_query(#search_sql{select=Select, from=From, where=Where, group_by=GroupBy, order=Order, limit=SearchLimit, args=Args}, Limit1) ->
+concat_sql_query(#search_sql{
+        select = Select,
+        from = From,
+        where = Where,
+        group_by = GroupBy,
+        order = Order,
+        limit = SearchLimit,
+        args = Args
+    }, Limit1) ->
     From1  = concat_sql_from(From),
     Where1 = case Where of
         [] -> [];
@@ -209,9 +384,8 @@ concat_sql_query(#search_sql{select=Select, from=From, where=Where, group_by=Gro
     end,
     {iolist_to_binary( lists:join(" ", Parts) ), FinalArgs}.
 
-
 %% @doc Inject the ACL checks in the SQL query.
-%% @spec reformat_sql_query(#search_sql{}, Context) -> #search_sql{}
+-spec reformat_sql_query(#search_sql{}, z:context()) -> #search_sql{}.
 reformat_sql_query(#search_sql{where=Where, from=From, tables=Tables, args=Args,
                                cats=TabCats, cats_exclude=TabCatsExclude,
                                cats_exact=TabCatsExact} = Q, Context) ->

@@ -149,21 +149,22 @@
     total :: non_neg_integer() | undefined,
     all :: list() | undefined,
     pages :: non_neg_integer() | undefined,
-    next,
-    prev,
+    next :: non_neg_integer() | false,
+    prev :: non_neg_integer(),
     facets = [] :: list()
 }).
 
+% Result of a m_search. The atom/proplists name/args are deprecated.
 -record(m_search_result, {
-    search_name,
-    search_props,
-    result,
+    search_name :: binary() | atom(),
+    search_args :: map() | proplists:proplist(),
+    result :: list(),
     page = 1,
     pagelen :: pos_integer() | undefined,
     total :: non_neg_integer() | undefined,
     pages :: non_neg_integer() | undefined,
-    next,
-    prev
+    next :: non_neg_integer() | false,
+    prev :: non_neg_integer()
 }).
 
 -record(search_sql, {

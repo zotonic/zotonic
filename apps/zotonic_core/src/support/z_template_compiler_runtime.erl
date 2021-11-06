@@ -347,9 +347,10 @@ find_value(Key, #search_result{} = S, _TplVars, _Context) ->
     end;
 find_value(Key, #m_search_result{} = S, TplVars, Context) ->
     case Key of
-        search -> {S#m_search_result.search_name, S#m_search_result.search_props};
+        search -> {S#m_search_result.search_name, S#m_search_result.search_args};
         search_name -> S#m_search_result.search_name;
-        search_props -> S#m_search_result.search_props;
+        search_args -> S#m_search_result.search_args;
+        search_props -> S#m_search_result.search_args;
         result -> S#m_search_result.result;
         total -> S#m_search_result.total;
         page -> S#m_search_result.page;
@@ -357,9 +358,10 @@ find_value(Key, #m_search_result{} = S, TplVars, Context) ->
         pagelen -> S#m_search_result.pagelen;
         next -> S#m_search_result.next;
         prev -> S#m_search_result.prev;
-        <<"search">> -> {S#m_search_result.search_name, S#m_search_result.search_props};
+        <<"search">> -> {S#m_search_result.search_name, S#m_search_result.search_args};
         <<"search_name">> -> S#m_search_result.search_name;
-        <<"search_props">> -> S#m_search_result.search_props;
+        <<"search_args">> -> S#m_search_result.search_args;
+        <<"search_props">> -> S#m_search_result.search_args;
         <<"result">> -> S#m_search_result.result;
         <<"total">> -> S#m_search_result.total;
         <<"page">> -> S#m_search_result.page;

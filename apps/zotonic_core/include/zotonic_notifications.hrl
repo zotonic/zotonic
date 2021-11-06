@@ -716,13 +716,16 @@
 %% Type: first
 %% Return: ``#search_sql{}``, ``#search_result{}`` or ``undefined``
 -record(search_query, {
-    search :: {
-        SearchName :: atom(),
-        SearchProps :: list()
-    },
+    name = undefined :: binary() | undefined,
+    args = undefined :: map() | undefined,
     offsetlimit :: {
         Offset :: pos_integer(),
         Limit :: pos_integer()
+    },
+    % Deprecated {searchname, [..]} syntax.
+    search :: {
+        SearchName :: atom(),
+        SearchProps :: list()
     }
 }).
 

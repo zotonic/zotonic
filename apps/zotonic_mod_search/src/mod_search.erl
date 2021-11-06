@@ -1,11 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-06-09
+%% @copyright 2009-2021 Marc Worrell
 %% @doc Defines PostgreSQL queries for basic content searches in Zotonic.
 %% This module needs to be split in specific PostgreSQL queries and standard SQL queries when you want to
 %% support other databases (like MySQL).
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -48,7 +47,7 @@
 -record(state, {context, query_watches=[]}).
 
 
-observe_search_query({search_query, Req, OffsetLimit}, Context) ->
+observe_search_query(#search_query{ search = Req, offsetlimit = OffsetLimit }, Context) ->
     search(Req, OffsetLimit, Context).
 
 observe_module_activate(#module_activate{module=?MODULE, pid=Pid}, _Context) ->
@@ -60,7 +59,7 @@ observe_module_activate(_, _Context) ->
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
+
 %% @doc Starts the server
 start_link(Args) when is_list(Args) ->
     gen_server:start_link(?MODULE, Args, []).
@@ -69,10 +68,6 @@ start_link(Args) when is_list(Args) ->
 %% gen_server callbacks
 %%====================================================================
 
-%% @spec init(Args) -> {ok, State} |
-%%                     {ok, State, Timeout} |
-%%                     ignore               |
-%%                     {stop, Reason}
 %% @doc Initiates the server.
 init(Args) ->
     process_flag(trap_exit, true),
@@ -87,19 +82,10 @@ init(Args) ->
     z_notifier:observe(rsc_delete, self(), Context),
     {ok, #state{context=z_acl:sudo(z_context:new(Context))}}.
 
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
-%%                                      {reply, Reply, State, Timeout} |
-%%                                      {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, Reply, State} |
-%%                                      {stop, Reason, State}
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
 %% @doc Casts for updates to resources
 handle_cast({#rsc_delete{id=Id, is_a=IsA}, _Ctx}, State=#state{context=Context,query_watches=Watches}) ->
     Watches1 = case lists:member('query', IsA) of
@@ -155,14 +141,10 @@ handle_cast(Message, State) ->
 
 
 
-%% @spec handle_info(Info, State) -> {noreply, State} |
-%%                                       {noreply, State, Timeout} |
-%%                                       {stop, Reason, State}
 %% @doc Handling all non call/cast messages
 handle_info(_Info, State) ->
     {noreply, State}.
 
-%% @spec terminate(Reason, State) -> void()
 %% @doc This function is called by a gen_server when it is about to
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
@@ -190,12 +172,12 @@ search_prevnext(Type, Args, Context) ->
     MapField = fun("date_start") -> "pivot_date_start";
                   ("date_end") -> "pivot_date_end";
                   ("title") -> "pivot_title";
-                  (X) -> X end,
+                  (X) -> z_convert:to_list(z_convert:to_name(X)) end,
     Field = z_convert:to_list(proplists:get_value(sort, Args, publication_start)),
     Limit = z_convert:to_integer(proplists:get_value(limit, Args, 1)),
     {id, Id} = proplists:lookup(id, Args),
     {cat, Cat} = proplists:lookup(cat, Args),
-    FieldValue = m_rsc:p(Id, z_convert:to_atom(Field), Context),
+    FieldValue = m_rsc:p(Id, z_convert:to_binary(Field), Context),
     #search_sql{
                  select="r.id",
                  from="rsc r",
@@ -423,7 +405,7 @@ search({upcoming, [{cat, Cat}]}, OffsetLimit, Context) ->
     search({'query', [{upcoming, true}, {cat, Cat}, {sort, "rsc.pivot_date_start"}]}, OffsetLimit, Context);
 
 search({finished, [{cat, Cat}]}, OffsetLimit, Context) ->
-    search({'query', [{finished, true}, {cat, Cat}, {sort, '-rsc.pivot_date_start'}]}, OffsetLimit, Context);
+    search({'query', [{finished, true}, {cat, Cat}, {sort, "-rsc.pivot_date_start"}]}, OffsetLimit, Context);
 
 search({autocomplete, [{text,QueryText}]}, OffsetLimit, Context) ->
     search({autocomplete, [{cat,[]}, {text,QueryText}]}, OffsetLimit, Context);
