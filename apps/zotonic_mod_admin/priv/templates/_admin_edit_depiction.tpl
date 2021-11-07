@@ -29,7 +29,7 @@
                             tabs_enabled=tabs_enabled
                             tabs_disabled="new"
                             actions=[
-                                {postback postback={reload_media rsc_id=id div_id=["links-",id|make_list,"-depiction"]}
+                                {postback postback={reload_media rsc_id=id div_id=["links-",id|to_binary,"-depiction"]}
                                     delegate="controller_admin_edit"}
                             ]
                             center=0

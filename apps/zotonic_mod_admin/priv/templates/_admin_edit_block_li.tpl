@@ -19,7 +19,7 @@
                    autocomplete="off"
             >
             &nbsp;
-            {{ blk.type|make_list|capfirst|replace:"_":" " }} {_ block _}
+            {{ blk.type|to_binary|capfirst|replace:"_":" " }} {_ block _}
             <a title="{_ Disconnect _}" class="z-btn-remove block-remove"></a>
         </div>
         {% optional include ["blocks/_admin_edit_block_li_",blk.type,".tpl"]|join name=#s blk=blk id=id is_new=is_new %}

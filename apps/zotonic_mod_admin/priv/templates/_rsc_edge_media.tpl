@@ -28,7 +28,7 @@
             postback={
                 reload_media
                 rsc_id=id
-                div_id=["links-",id|make_list,"-depiction"]
+                div_id=["links-",id|to_binary,"-depiction"]
             }
             delegate="controller_admin_edit"
         }
