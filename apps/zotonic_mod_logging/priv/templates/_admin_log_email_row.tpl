@@ -13,7 +13,7 @@
         Status
     #}
     <td>
-        <a href="{% url admin_log_email severity=q.severity status=result_row.mailer_status %}" title="{{ result_row.mailer_message|make_list|escape }} [{{ result_row.mailer_host|escape }}]">
+        <a href="{% url admin_log_email severity=q.severity status=result_row.mailer_status %}" title="{{ result_row.mailer_message|to_binary|escape }} [{{ result_row.mailer_host|escape }}]">
             {{ result_row.mailer_status|escape }}
         </a>
     </td>

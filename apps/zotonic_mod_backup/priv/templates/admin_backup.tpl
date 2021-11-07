@@ -72,7 +72,7 @@
                             <div class="alert alert-warning">
                                 <strong>{_ Warning _}</strong>
 
-                                {{ _"This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"|replace_args:[m.filestore.stats.cloud|make_list] }}
+                                {{ _"This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"|replace_args:[m.filestore.stats.cloud|to_binary] }}
                             </div>
                         {% endif %}
                     {% endif %}
