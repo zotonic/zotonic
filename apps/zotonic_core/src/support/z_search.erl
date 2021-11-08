@@ -228,7 +228,7 @@ handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit,
                         _ -> Rs
                     end;
                 true ->
-                    z_db:assoc_props(Sql, Args, Context)
+                    z_db:assoc_props(Sql, SqlArgs, Context)
             end,
             RowCount = length(Rows),
             FoundTotal = (Page-1) * PageLen + RowCount,
