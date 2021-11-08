@@ -1,8 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010 Arjan Scherpenisse
+%% @copyright 2010-2021 Arjan Scherpenisse
 %% @doc Get more results for search result
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2010-2021 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
         true ->
             {"", z_render:add_script(["$(\"#", TriggerId, "\").remove();"], Context)};
         false ->
-            Page = page(SearchResult, Result#m_search_result.search_args) + 1,
+            Page = SearchResult#search_result.page + 1,
             MorePageLen = proplists:get_value(pagelen, Args, PageLen),
             SearchProps = proplists:delete(pagelen,
                                 proplists:delete(page, Result#m_search_result.search_args)),
@@ -46,9 +46,7 @@ total(#search_result{result=Result}) when is_list(Result) ->
     case proplists:get_value(ids, Result) of
         L when is_list(L) -> length(L);
         _ -> length(Result)
-    end;
-total(_) ->
-    0.
+    end.
 
 
 pagelen(#search_result{pagelen=PageLen}, _) when is_integer(PageLen) ->
@@ -62,18 +60,6 @@ pagelen(_, SearchProps) when is_list(SearchProps) ->
     z_convert:to_integer(proplists:get_value(pagelen, SearchProps, 20));
 pagelen(_, _) ->
     20.
-
-page(#search_result{page=Page}, _) when is_integer(Page) ->
-    Page;
-page(_, #{ <<"page">> := Page }) ->
-    case z_convert:to_integer(Page) of
-        undefined -> 1;
-        PL -> PL
-    end;
-page(_, SearchProps) when is_list(SearchProps) ->
-    z_convert:to_integer(proplists:get_value(page, SearchProps, 1));
-page(_, _) ->
-    1.
 
 
 %% @doc Show more results.

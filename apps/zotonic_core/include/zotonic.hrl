@@ -146,7 +146,7 @@
     result = [] :: list(),
     page = 1 :: pos_integer(),
     pagelen = ?SEARCH_PAGELEN :: pos_integer() | undefined,
-    total = 0 :: non_neg_integer(),
+    total = undefined :: non_neg_integer() | undefined,
     all = [] :: list() | undefined,
     pages = 0 :: non_neg_integer(),
     next = false :: non_neg_integer() | false,
@@ -158,7 +158,7 @@
 -record(m_search_result, {
     search_name = <<"query">> :: binary() | atom(),
     search_args = #{} :: map() | proplists:proplist(),
-    result = [] :: list(),
+    result = #search_result{} :: #search_result{},
     page = 1,
     pagelen = ?SEARCH_PAGELEN :: pos_integer() | undefined,
     total = 0 :: non_neg_integer() | undefined,

@@ -119,7 +119,7 @@ search(Search, Context) ->
 
 %% @deprecated Use m_search:search/3
 search_pager(Search, Context) ->
-    case search(Search, true, Context) of
+    case search_deprecated(Search, true, Context) of
         {ok, Result} ->
             Result;
         {error, _} ->
@@ -191,8 +191,6 @@ get_optional_paging_props(Props, Context) when is_list(Props) ->
         false -> {1, ?SEARCH_PAGELEN, Props}
     end.
 
-get_paging_props(undefined, _Context) ->
-    {1, ?SEARCH_PAGELEN, #{}};
 get_paging_props(#{ <<"qargs">> := true } = Args, Context) ->
     try
         Page = case z_convert:to_integer(z_context:get_q(<<"page">>, Context)) of

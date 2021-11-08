@@ -324,7 +324,7 @@ search_1({SearchName, Props}, Page, PageLen, {Offset, Limit} = OffsetLimit, Cont
             search_result(Result, OffsetLimit, Context)
     end;
 search_1(Name, Page, PageLen, OffsetLimit, Context) when is_atom(Name) ->
-    search({Name, []}, Page, PageLen, OffsetLimit, Context);
+    search_1({Name, []}, Page, PageLen, OffsetLimit, Context);
 search_1(Name, _Page, _PageLen, _OffsetLimit, _Context) ->
     lager:info("z_search: ignored unknown search query ~p", [ Name ]),
     #search_result{}.

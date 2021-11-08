@@ -723,10 +723,10 @@
         Limit :: pos_integer()
     },
     % Deprecated {searchname, [..]} syntax.
-    search :: {
+    search = undefined :: {
         SearchName :: atom(),
         SearchProps :: list()
-    }
+    } | undefined
 }).
 
 %% @doc An edge has been inserted.

@@ -167,16 +167,16 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 search_prevnext(Type, Args, Context) ->
-    Order = fun(next) -> "ASC"; (previous) -> "DESC" end,
-    Operator = fun(next) -> " > "; (previous) -> " < " end,
-    MapField = fun("date_start") -> "pivot_date_start";
-                  ("date_end") -> "pivot_date_end";
-                  ("title") -> "pivot_title";
+    Order = fun(<<"next">>) -> "ASC"; (<<"previous">>) -> "DESC" end,
+    Operator = fun(<<"next">>) -> " > "; (<<"previous">>) -> " < " end,
+    MapField = fun(<<"date_start">>) -> "pivot_date_start";
+                  (<<"date_end">>) -> "pivot_date_end";
+                  (<<"title">>) -> "pivot_title";
                   (X) -> z_convert:to_list(z_string:to_name(X)) end,
-    Field = z_convert:to_list(proplists:get_value(sort, Args, publication_start)),
-    Limit = z_convert:to_integer(proplists:get_value(limit, Args, 1)),
-    {id, Id} = proplists:lookup(id, Args),
-    {cat, Cat} = proplists:lookup(cat, Args),
+    Field = z_convert:to_binary(maps:get(<<"sort">>, Args, <<"publication_start">>)),
+    Limit = z_convert:to_integer(maps:get(<<"limit">>, Args, 1)),
+    Id = maps:get(<<"id">>, Args),
+    Cat = maps:get(<<"cat">>, Args),
     FieldValue = m_rsc:p(Id, z_convert:to_binary(Field), Context),
     #search_sql{
                  select="r.id",
