@@ -322,14 +322,12 @@ find_value(Name, [#{ <<"name">> := _ }|_] = Blocks, _TplVars, _Context ) when no
 find_value(Key, #search_result{} = S, _TplVars, _Context) ->
     case Key of
         result -> S#search_result.result;
-        all -> S#search_result.all;
         total -> S#search_result.total;
         page -> S#search_result.page;
         pages -> S#search_result.pages;
         next -> S#search_result.next;
         prev -> S#search_result.prev;
         <<"result">> -> S#search_result.result;
-        <<"all">> -> S#search_result.all;
         <<"total">> -> S#search_result.total;
         <<"page">> -> S#search_result.page;
         <<"pages">> -> S#search_result.pages;

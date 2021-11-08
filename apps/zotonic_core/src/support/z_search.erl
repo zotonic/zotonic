@@ -156,7 +156,6 @@ handle_search_result(#search_result{ result = L, total = Total } = S, Page, Page
     end,
     S#search_result{
         result = L1,
-        all = L,
         page = Page,
         pagelen = PageLen,
         pages = Pages,
@@ -172,7 +171,6 @@ handle_search_result(#search_result{ result = L, total = undefined } = S, Page, 
     end,
     S#search_result{
         result = L1,
-        all = L,
         page = Page,
         pagelen = PageLen,
         prev = erlang:max(Page-1, 1),
@@ -188,7 +186,6 @@ handle_search_result(L, Page, PageLen, _OffsetLimit, _Context) when is_list(L) -
     end,
     #search_result{
         result = L1,
-        all = L,
         page = Page,
         pagelen = PageLen,
         pages = Pages,
@@ -235,7 +232,6 @@ handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit,
                 pages = Pages,
                 page = Page,
                 pagelen = PageLen,
-                all = Rows,
                 total = Total,
                 prev = erlang:max(Page-1, 1),
                 next = Next

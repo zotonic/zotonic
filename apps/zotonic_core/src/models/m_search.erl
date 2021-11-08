@@ -93,6 +93,7 @@ m_get([], Msg, Context) ->
 -spec search( binary(), map(), z:context() ) -> {ok, #m_search_result{}} | {error, term()}.
 search(Name, Args, Context) when is_binary(Name), is_map(Args) ->
     {Page, PageLen, Args1} = get_paging_props(Args, Context),
+    ?DEBUG({Page, PageLen}),
     try
         Result = z_search:search(Name, Args1, Page, PageLen, Context),
         Total = Result#search_result.total,
@@ -160,13 +161,6 @@ search_deprecated({Name, Props}, _IsPaged = false, Context) when is_atom(Name), 
             {error, Error}
     end.
 
-% try_rsc_search(SearchName, IsPaged, Context) ->
-%     case m_rsc:rid(SearchName, Context) of
-%         undefined ->
-%             {error, enoent};
-%         RscId ->
-%             search({'query', [ {query_id, RscId} ]}, IsPaged, Context)
-%     end.
 
 empty_result() ->
     #m_search_result{
@@ -175,7 +169,6 @@ empty_result() ->
             page = 1,
             pagelen = ?SEARCH_PAGELEN,
             total = 0,
-            all = [],
             pages = 1
         },
         total = 0,
@@ -219,7 +212,7 @@ get_paging_props(Args, _Context) when is_map(Args) ->
         undefined -> 1;
         P -> try z_convert:to_integer(P) catch _:_ -> 1 end
     end,
-    PageLen = case maps:get(<<"pagelen">>, Args, 1) of
+    PageLen = case maps:get(<<"pagelen">>, Args, ?SEARCH_PAGELEN) of
         undefined -> ?SEARCH_PAGELEN;
         PL -> try z_convert:to_integer(PL) catch _:_ -> ?SEARCH_PAGELEN end
     end,

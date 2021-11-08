@@ -147,7 +147,6 @@
     page = 1 :: pos_integer(),
     pagelen = ?SEARCH_PAGELEN :: pos_integer() | undefined,
     total = undefined :: non_neg_integer() | undefined,
-    all = [] :: list() | undefined,
     pages = 0 :: non_neg_integer(),
     next = false :: non_neg_integer() | false,
     prev = 1 :: non_neg_integer(),
