@@ -85,14 +85,20 @@ search(Name, Args, Page, PageLen, Context) when is_binary(Name), is_map(Args) ->
                             search(<<"query">>, Args1, Page, PageLen, Context);
                         false ->
                             lager:debug("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
-                            #search_result{}
+                            #search_result{
+                                search_name = Name,
+                                search_args = Args
+                            }
                     end;
                 undefined ->
                     lager:debug("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
-                    #search_result{}
+                    #search_result{
+                        search_name = Name,
+                        search_args = Args
+                    }
             end;
         Result ->
-            handle_search_result(Result, Page, PageLen, OffsetLimit, Context)
+            handle_search_result(Result, Page, PageLen, OffsetLimit, Name, Args ,Context)
     end.
 
 
@@ -108,10 +114,10 @@ search_pager(Search, undefined, PageLen, Context) ->
     search_pager(Search, 1, PageLen, Context);
 search_pager({Name, Args}, Page, PageLen, Context) when is_binary(Name) ->
     search(Name, Args, Page, PageLen, Context);
-search_pager({Name, _} = Search, Page, PageLen, Context) when is_atom(Name) ->
+search_pager({Name, Args} = Search, Page, PageLen, Context) when is_atom(Name) ->
     OffsetLimit = offset_limit(Page, PageLen),
     SearchResult = search_1(Search, Page, PageLen, OffsetLimit, Context),
-    handle_search_result(SearchResult, Page, PageLen, OffsetLimit, Context).
+    handle_search_result(SearchResult, Page, PageLen, OffsetLimit, Name, Args, Context).
 
 
 %% @doc Search with the question and return the results
@@ -137,18 +143,24 @@ search(Search, {Offset, Limit} = OffsetLimit, Context) ->
     end.
 
 
-
 %% @doc Handle a return value from a search function.  This can be an intermediate SQL statement
 %% that still needs to be augmented with extra ACL checks.
--spec handle_search_result( Result, Page, PageLen, OffsetLimit, Context ) -> #search_result{} when
+-spec handle_search_result( Result, Page, PageLen, OffsetLimit, Name, Args, Context ) -> #search_result{} when
     Result :: list() | #search_result{} | #search_sql{},
     Page :: pos_integer(),
     PageLen :: pos_integer(),
     OffsetLimit :: {non_neg_integer(), non_neg_integer()},
+    Name :: binary() | atom(),
+    Args :: map() | proplists:proplist(),
     Context :: z:context().
-handle_search_result(#search_result{ pages = N } = S, _Page, _PageLen, _OffsetLimit, _Context) when is_integer(N) ->
-    S;
-handle_search_result(#search_result{ result = L, total = Total } = S, Page, PageLen, _OffsetLimit, _Context) when is_integer(Total) ->
+handle_search_result(#search_result{ pages = N } = S, _Page, _PageLen, _OffsetLimit, Name, Args, _Context)
+    when is_integer(N) ->
+    S#search_result{
+        search_name = Name,
+        search_args = Args
+    };
+handle_search_result(#search_result{ result = L, total = Total } = S, Page, PageLen, _OffsetLimit, Name, Args, _Context)
+    when is_integer(Total) ->
     L1 = lists:sublist(L, 1, PageLen),
     Pages = (Total+PageLen-1) div PageLen,
     Len = length(L),
@@ -157,6 +169,8 @@ handle_search_result(#search_result{ result = L, total = Total } = S, Page, Page
         true -> false
     end,
     S#search_result{
+        search_name = Name,
+        search_args = Args,
         result = L1,
         page = Page,
         pagelen = PageLen,
@@ -164,7 +178,7 @@ handle_search_result(#search_result{ result = L, total = Total } = S, Page, Page
         prev = erlang:max(Page-1, 1),
         next = Next
     };
-handle_search_result(#search_result{ result = L, total = undefined } = S, Page, PageLen, _OffsetLimit,  _Context) ->
+handle_search_result(#search_result{ result = L, total = undefined } = S, Page, PageLen, _OffsetLimit, Name, Args, _Context) ->
     L1 = lists:sublist(L, 1, PageLen),
     Len = length(L),
     Next = if
@@ -172,13 +186,15 @@ handle_search_result(#search_result{ result = L, total = undefined } = S, Page, 
         true -> false
     end,
     S#search_result{
+        search_name = Name,
+        search_args = Args,
         result = L1,
         page = Page,
         pagelen = PageLen,
         prev = erlang:max(Page-1, 1),
         next = Next
     };
-handle_search_result(L, Page, PageLen, _OffsetLimit, _Context) when is_list(L) ->
+handle_search_result(L, Page, PageLen, _OffsetLimit, Name, Args, _Context) when is_list(L) ->
     L1 = lists:sublist(L, 1, PageLen),
     Len = length(L),
     Pages = (Len+PageLen-1) div PageLen + Page - 1,
@@ -187,6 +203,8 @@ handle_search_result(L, Page, PageLen, _OffsetLimit, _Context) when is_list(L) -
         true -> false
     end,
     #search_result{
+        search_name = Name,
+        search_args = Args,
         result = L1,
         page = Page,
         pagelen = PageLen,
@@ -194,17 +212,17 @@ handle_search_result(L, Page, PageLen, _OffsetLimit, _Context) when is_list(L) -
         prev = erlang:max(Page-1, 1),
         next = Next
     };
-handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit, Context) ->
+handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit, Name, Args, Context) ->
     Q1 = reformat_sql_query(Q, Context),
-    {Sql, Args} = concat_sql_query(Q1, OffsetLimit),
+    {Sql, SqlArgs} = concat_sql_query(Q1, OffsetLimit),
     case Q#search_sql.run_func of
         F when is_function(F) ->
             Result = F(Q, Sql, Args, Context),
-            handle_search_result(Result, Page, PageLen, OffsetLimit, Context);
+            handle_search_result(Result, Page, PageLen, OffsetLimit, Name, Args, Context);
         _ ->
             Rows = case Q#search_sql.assoc of
                 false ->
-                    Rs = z_db:q(Sql, Args, Context),
+                    Rs = z_db:q(Sql, SqlArgs, Context),
                     case Rs of
                         [{_}|_] -> [ R || {R} <- Rs ];
                         _ -> Rs
@@ -230,6 +248,8 @@ handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit,
                 true -> false
             end,
             #search_result{
+                search_name = Name,
+                search_args = Args,
                 result = lists:sublist(Rows, 1, PageLen),
                 pages = Pages,
                 page = Page,
@@ -314,12 +334,16 @@ search_1({SearchName, Props}, Page, PageLen, {Offset, Limit} = OffsetLimit, Cont
             lager:info("z_search: ignored unknown search query ~p", [ {SearchName, PropsSorted} ]),
             #search_result{};
         Result when Page =/= undefined ->
-            handle_search_result(Result, Page, PageLen, OffsetLimit, Context);
+            handle_search_result(Result, Page, PageLen, OffsetLimit, SearchName, PropsSorted, Context);
         Result when PageRest =:= 0 ->
             PageNr = (Offset - 1) div Limit + 1,
-            handle_search_result(Result, PageNr, Limit, OffsetLimit, Context);
+            handle_search_result(Result, PageNr, Limit, OffsetLimit, SearchName, PropsSorted, Context);
         Result ->
-            search_result(Result, OffsetLimit, Context)
+            S = search_result(Result, OffsetLimit, Context),
+            S#search_result{
+                search_name = SearchName,
+                search_args = PropsSorted
+            }
     end;
 search_1(Name, Page, PageLen, OffsetLimit, Context) when is_atom(Name) ->
     search_1({Name, []}, Page, PageLen, OffsetLimit, Context);
@@ -385,10 +409,14 @@ query_(Props, Context) ->
 
 %% @doc Handle a return value from a search function.  This can be an intermediate SQL statement that still needs to be
 %% augmented with extra ACL checks.
--spec search_result( list() | #search_result{} | #search_sql{}, search_offset(), z:context() ) ->
-    #search_result{}.
+-spec search_result(Result , search_offset(), Context) ->
+    #search_result{} when
+    Result :: list() | #search_result{} | #search_sql{},
+    Context :: z:context().
 search_result(L, _Limit, _Context) when is_list(L) ->
-    #search_result{result=L};
+    #search_result{
+        result = L
+    };
 search_result(#search_result{} = S, _Limit, _Context) ->
     S;
 search_result(#search_sql{} = Q, Limit, Context) ->
@@ -408,7 +436,9 @@ search_result(#search_sql{} = Q, Limit, Context) ->
                 true ->
                     z_db:assoc_props(Sql, Args, Context)
             end,
-            #search_result{result=Rows}
+            #search_result{
+                result = Rows
+            }
     end.
 
 

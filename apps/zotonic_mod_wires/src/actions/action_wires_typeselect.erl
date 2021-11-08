@@ -50,8 +50,7 @@ event(#postback{message={typeselect, Cats, Template, Actions, ActionsWithId, Oth
     Props = [{cat,Cats}, {text, Text}],
     Result = z_search:search({autocomplete, Props}, 20, Context),
     Vars = [
-        {result, #m_search_result{
-            result = Result,
+        {result, Result#search_result{
             search_name = autocomplete,
             search_args = Props
         }},

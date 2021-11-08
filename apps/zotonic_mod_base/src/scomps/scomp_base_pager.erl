@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2019 Marc Worrell
+%% @copyright 2009-2021 Marc Worrell
 %% @doc Show the pager for the search result
 
-%% Copyright 2009-2019 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -47,13 +47,6 @@ render(Params, _Vars, Context) ->
         [dispatch, result, hide_single_page, template]),
 
     case Result of
-        #m_search_result{result=#search_result{pages=0}} ->
-            {ok, <<>>};
-        #m_search_result{result=#search_result{page=Page, pages=1}} ->
-            {ok, build_html(Template, Page, 1, HideSinglePage, Dispatch, DispatchArgs, Context)};
-        #m_search_result{result=#search_result{page=Page, pages=Pages}} ->
-            Html = build_html(Template, Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context),
-            {ok, Html};
         #search_result{page=Page, pages=Pages} ->
             Html = build_html(Template, Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context),
             {ok, Html};

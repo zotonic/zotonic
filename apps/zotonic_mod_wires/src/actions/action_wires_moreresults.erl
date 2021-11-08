@@ -22,11 +22,11 @@
 
 render_action(TriggerId, TargetId, Args, Context) ->
     Result = case proplists:get_value(result, Args) of
-        #m_search_result{} = M -> M
+        #search_result{} = M -> M
     end,
-    SearchName = Result#m_search_result.search_name,
-    SearchResult = Result#m_search_result.result,
-    PageLen = pagelen(SearchResult, Result#m_search_result.search_args),
+    SearchName = Result#search_result.search_name,
+    SearchResult = Result#search_result.result,
+    PageLen = pagelen(SearchResult, Result#search_result.search_args),
     case total(SearchResult) < PageLen of
         true ->
             {"", z_render:add_script(["$(\"#", TriggerId, "\").remove();"], Context)};
@@ -34,7 +34,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
             Page = SearchResult#search_result.page + 1,
             MorePageLen = proplists:get_value(pagelen, Args, PageLen),
             SearchProps = proplists:delete(pagelen,
-                                proplists:delete(page, Result#m_search_result.search_args)),
+                                proplists:delete(page, Result#search_result.search_args)),
             make_postback(SearchName, SearchProps, Page, PageLen, MorePageLen, Args, TriggerId, TargetId, Context)
     end.
 
@@ -65,7 +65,7 @@ pagelen(_, _) ->
 %% @todo Handle the "MorePageLen" argument correctly.
 event(#postback{message={moreresults, SearchName, SearchProps, Page, PageLen, MorePageLen, Args}, trigger=TriggerId, target=TargetId}, Context) ->
     SearchProps1 = [{page, Page},{pagelen,PageLen}|SearchProps],
-    #m_search_result{result=Result} = m_search:search({SearchName, SearchProps1}, Context),
+    #search_result{result=Result} = m_search:search({SearchName, SearchProps1}, Context),
     Rows = case proplists:get_value(ids, Result#search_result.result) of
               undefined -> Result#search_result.result;
               X -> X

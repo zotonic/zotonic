@@ -90,12 +90,11 @@ m_get([], Msg, Context) ->
 
 
 %% @doc Perform a search. Pass page and pagelen as arguments for paging.
--spec search( binary(), map(), z:context() ) -> {ok, #m_search_result{}} | {error, term()}.
+-spec search( binary(), map(), z:context() ) -> {ok, #search_result{}} | {error, term()}.
 search(Name, Args, Context) when is_binary(Name), is_map(Args) ->
     {Page, PageLen, Args1} = get_paging_props(Args, Context),
     try
-        Result = z_search:search(Name, Args1, Page, PageLen, Context),
-        {ok, #m_search_result{result=Result, search_name=Name, search_args=Args}}
+        {ok, z_search:search(Name, Args1, Page, PageLen, Context)}
     catch
         throw:Error ->
             lager:error("Error in m.search[~p] error: ~p", [{Name, Args}, Error]),
@@ -103,11 +102,22 @@ search(Name, Args, Context) when is_binary(Name), is_map(Args) ->
     end.
 
 %% @deprecated Use m_search:search/3
+-spec search(S, Context) -> #search_result{}
+    when S :: {atom(), proplists:proplist()}
+            | {binary(), map()}
+            | {binary(), proplists:proplist()},
+         Context :: z:context().
 search({Name, Args}, Context) when is_binary(Name), is_map(Args) ->
-    search(Name, Args, Context);
+    case search(Name, Args, Context) of
+        {ok, S} -> S;
+        {error, _} -> empty_result()
+    end;
 search({Name, Args}, Context) when is_binary(Name), is_list(Args) ->
     Args1 = z_search:props_to_map(Args),
-    search(Name, Args1, Context);
+    case search(Name, Args1, Context) of
+        {ok, S} -> S;
+        {error, _} -> empty_result()
+    end;
 search(Search, Context) ->
     case search_deprecated(Search, false, Context) of
         {ok, Result} ->
@@ -117,6 +127,11 @@ search(Search, Context) ->
     end.
 
 %% @deprecated Use m_search:search/3
+-spec search_pager(S, Context) -> #search_result{}
+    when S :: {atom(), proplists:proplist()}
+            | {binary(), map()}
+            | {binary(), proplists:proplist()},
+         Context :: z:context().
 search_pager(Search, Context) ->
     case search_deprecated(Search, true, Context) of
         {ok, Result} ->
@@ -135,8 +150,7 @@ search_args(_) ->
 search_deprecated({Name, Props}, _IsPaged = true, Context) when is_atom(Name), is_list(Props) ->
     {Page, PageLen, Props1} = get_paging_props(Props, Context),
     try
-        Result = z_search:search_pager({Name, Props1}, Page, PageLen, Context),
-        {ok, #m_search_result{result=Result, search_name=Name, search_args=Props1}}
+        {ok, z_search:search_pager({Name, Props1}, Page, PageLen, Context)}
     catch
         throw:Error ->
             lager:error("Error in m.search[~p] error: ~p", [{Name, Props}, Error]),
@@ -151,25 +165,22 @@ search_deprecated({Name, Props}, _IsPaged = false, Context) when is_atom(Name), 
             undefined -> Result#search_result{ total = length(Result#search_result.result) };
             _ -> Result
         end,
-        {ok, #m_search_result{result=Result1, search_name=Name, search_args=Props}}
+        {ok, Result1}
     catch
         throw:Error ->
             lager:error("Error in m.search[~p] error: ~p", [{Name, Props}, Error]),
             {error, Error}
     end.
 
-
 empty_result() ->
-    #m_search_result{
-        result = #search_result{
-            result = [],
-            page = 1,
-            pagelen = ?SEARCH_PAGELEN,
-            total = 0,
-            pages = 1
-        },
+    #search_result{
         search_name = <<"error">>,
-        search_args = #{}
+        search_args = #{},
+        result = [],
+        page = 1,
+        pagelen = ?SEARCH_PAGELEN,
+        total = 0,
+        pages = 1
     }.
 
 
