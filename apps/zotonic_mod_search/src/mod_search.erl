@@ -172,7 +172,7 @@ search_prevnext(Type, Args, Context) ->
     MapField = fun("date_start") -> "pivot_date_start";
                   ("date_end") -> "pivot_date_end";
                   ("title") -> "pivot_title";
-                  (X) -> z_convert:to_list(z_convert:to_name(X)) end,
+                  (X) -> z_convert:to_list(z_string:to_name(X)) end,
     Field = z_convert:to_list(proplists:get_value(sort, Args, publication_start)),
     Limit = z_convert:to_integer(proplists:get_value(limit, Args, 1)),
     {id, Id} = proplists:lookup(id, Args),
