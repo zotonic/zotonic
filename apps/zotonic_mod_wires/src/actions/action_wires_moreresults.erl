@@ -65,8 +65,8 @@ pagelen(_, _) ->
 event(#postback{message={moreresults, SearchName, SearchProps, Page, PageLen, MorePageLen, Args}, trigger=TriggerId, target=TargetId}, Context) ->
     SearchProps1 = [{page, Page},{pagelen,PageLen}|SearchProps],
     #search_result{result=Result} = m_search:search({SearchName, SearchProps1}, Context),
-    Rows = case proplists:get_value(ids, Result#search_result.result) of
-              undefined -> Result#search_result.result;
+    Rows = case proplists:get_value(ids, Result) of
+              undefined -> Result;
               X -> X
            end,
     Context1 = case length(Rows) < PageLen of

@@ -7,7 +7,7 @@ This generates a pager as seen on the search results pages. It is used in conjun
 
 For example, a fulltext search where the search parameters come from the query string::
 
-   {% with m.search.paged[{fulltext cat=q.qcat text=q.qs page=q.page}] as result %}
+   {% with m.search.paged[{fulltext cat=q.qcat text=q.qs page=q.page pagelen=20}] as result %}
      <ul>
        {% pager result=result dispatch="admin_overview_rsc" qargs %}
        {% for id,score in result %}
@@ -40,8 +40,8 @@ The pager tag accepts the following arguments:
 +----------------+------------------------------------------------------------------+------------------------+
 |Argument        |Description                                                       |Example                 |
 +================+==================================================================+========================+
-|result          |The result from a search.  This must be a ``#search_result``, a   |result=mysearchresult   |
-|                |``#m_search_result`` record, or a list. Note that the records must|                        |
+|result          |The result from a search.  This must be a ``#search_result``      |result=mysearchresult   |
+|                |or a list. Note that the records should                           |                        |
 |                |be the result of a ``m.search.paged`` and not of a ``m.search``   |                        |
 |                |call.                                                             |                        |
 +----------------+------------------------------------------------------------------+------------------------+
