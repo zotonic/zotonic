@@ -209,7 +209,10 @@ init(Args) ->
 handle_call({{dropbox_file, File}, _SenderContext}, _From, State) ->
     GetFiles = fun() ->
         C = z_acl:sudo(State#state.context),
-        #search_result{result=Ids} = z_search:search({all, [{cat,mailinglist}]}, C),
+        #search_result{result=Ids} = z_search:search(
+            <<"query">>, #{ <<"cat">> => mailinglist },
+            1, 1000,
+            C),
         [ {m_rsc:p(Id, mailinglist_dropbox_filename, C), Id} || Id <- Ids ]
     end,
     Files = z_depcache:memo(GetFiles, mailinglist_dropbox_filenames, ?WEEK, [mailinglist], State#state.context),

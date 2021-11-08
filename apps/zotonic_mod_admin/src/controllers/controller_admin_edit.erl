@@ -172,7 +172,7 @@ event(#postback{message={query_preview, Opts}}, Context) ->
     DivId = proplists:get_value(div_id, Opts),
     try
         Q = search_query:parse_query_text(z_context:get_q(<<"triggervalue">>, Context)),
-        S = z_search:search({'query', Q}, Context),
+        S = z_search:search(<<"query">>, Q, 1, 10, Context),
         {Html, Context1} = z_template:render_to_iolist("_admin_query_preview.tpl", [{result,S}], Context),
         z_render:update(DivId, Html, Context1)
     catch

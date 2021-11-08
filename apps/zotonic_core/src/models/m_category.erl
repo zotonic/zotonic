@@ -263,12 +263,13 @@ image(Cat, Context) ->
         {ok, Id} ->
             F = fun() ->
                 #search_result{result = Result1} = z_search:search(
-                    {media_category_image, [{cat, Id}]},
+                    <<"media_category_image">>, #{ <<"cat">> => Id },
+                    1, 20,
                     Context
                 ),
-                #search_result{result = Result2} = z_search:search({
-                    media_category_depiction,
-                    [{cat, Id}]},
+                #search_result{result = Result2} = z_search:search(
+                    <<"media_category_depiction">>, #{ <<"cat">> => Id },
+                    1, 20,
                     Context
                 ),
                 Result1 ++ Result2

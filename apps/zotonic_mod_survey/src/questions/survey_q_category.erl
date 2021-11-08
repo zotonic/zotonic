@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012 Marc Worrell
+%% @copyright 2012-2021 Marc Worrell
 
-%% Copyright 2012 Marc Worrell
+%% Copyright 2012-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ prep_chart(Block, [{_, Vals}], Context) ->
     }.
 
 all_in_cat(CatName, Context) ->
-    #search_result{result=List} = z_search:search({all_bytitle, [{cat, CatName}]}, Context),
+    #search_result{result=List} = z_search:search(<<"all_bytitle">>, #{ <<"cat">> => CatName }, 1, 1000, Context),
     List.
 
 prep_answer_header(Q, Context) ->

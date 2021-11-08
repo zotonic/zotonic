@@ -40,7 +40,7 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("include/admin_menu.hrl").
+-include("../include/admin_menu.hrl").
 
 
 %% @doc Fix tinymce images that are the result of copying
@@ -139,7 +139,9 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 
 
 admin_menu_content_queries(Context) ->
-    #search_result{result=Result} = z_search:search({all_bytitle, [{cat,admin_content_query}]}, Context),
+    #search_result{result=Result} = z_search:search(
+            <<"all_bytitle">>, #{ <<"cat">> => admin_content_query },
+            1, 100, Context),
     AdminOverviewQueryId = m_rsc:rid(admin_overview_query, Context),
     Result1 = lists:filter(
         fun({_Title,Id}) ->

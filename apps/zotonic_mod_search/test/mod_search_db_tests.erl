@@ -91,7 +91,10 @@ language_search_test() ->
         {language, [ en ]},
         {title, #trans{ tr = [ {en, <<"Blah">>} ]}}
     ], C),
-    #search_result{ result = Ids } = z_search:search({query, [ {language, en}, {sort, <<"-id">>} ]}, C),
+    #search_result{ result = Ids } = z_search:search(
+        <<"query">>,
+        #{ <<"language">> => en, <<"sort">> => <<"-id">> },
+        1, 100, C),
     ?assertEqual( Id, hd(Ids) ),
     m_rsc:delete(Id, C),
     ok.

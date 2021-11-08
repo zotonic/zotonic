@@ -130,7 +130,10 @@ is_empty(_) -> false.
 
 
 do_body(#stream_state{is_query=true, id=Id} = StreamState, Context) ->
-    #search_result{result=Ids} = z_search:search({'query', [{query_id, Id}]}, Context),
+    #search_result{result=Ids} = z_search:search(
+            <<"query">>, #{ <<"query_id">> => Id },
+            1, 30000,
+            Context),
     do_body_data(Ids, StreamState, Context);
 do_body(StreamState, Context) ->
     case z_notifier:first(#export_resource_data{
