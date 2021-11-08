@@ -146,9 +146,11 @@ search(Search, {Offset, Limit} = OffsetLimit, Context) ->
     PageLen :: pos_integer(),
     OffsetLimit :: {non_neg_integer(), non_neg_integer()},
     Context :: z:context().
+handle_search_result(#search_result{ pages = N } = S, _Page, _PageLen, _OffsetLimit, _Context) when is_integer(N) ->
+    S;
 handle_search_result(#search_result{ result = L, total = Total } = S, Page, PageLen, _OffsetLimit, _Context) when is_integer(Total) ->
     L1 = lists:sublist(L, 1, PageLen),
-    Pages = (Total+PageLen-1) div PageLen + Page - 1,
+    Pages = (Total+PageLen-1) div PageLen,
     Len = length(L),
     Next = if
         Len > PageLen -> Page + 1;
@@ -306,7 +308,7 @@ search_1({SearchName, Props}, Page, PageLen, {Offset, Limit} = OffsetLimit, Cont
             PageNr = (Offset - 1) div PageLen + 1,
             SearchNameBin = z_convert:to_binary(SearchName),
             ArgsMap = props_to_map(PropsSorted),
-            search(SearchNameBin, ArgsMap, PageNr, Limit, Context);
+            search(SearchNameBin, ArgsMap, PageNr, PageLen, Context);
         undefined ->
             % Not on a page boundary so we can't use the new search, return the empty result.
             lager:info("z_search: ignored unknown search query ~p", [ {SearchName, PropsSorted} ]),
