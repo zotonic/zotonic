@@ -194,6 +194,7 @@ try_embed(<<$<, _/binary>> = Html, Context) ->
             prio = 1,
             category = video,
             description = ?__("Embedded Content", Context),
+            module = mod_admin,
             rsc_props = #{
                 <<"website">> => Url
             },

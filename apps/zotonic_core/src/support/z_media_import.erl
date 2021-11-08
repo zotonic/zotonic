@@ -66,6 +66,9 @@ insert_1(_, #media_import_props{ rsc_props = #{ <<"uri">> := Uri }, importer = r
         {error, _} = Error ->
             Error
     end;
+insert_1(_, #media_import_props{ importer = Importer } = MI, RscProps, Context)
+    when is_atom(Importer), Importer =/= undefined ->
+    Importer:media_import(rsc_insert, MI, RscProps, Context);
 insert_1(0, #media_import_props{ category = Cat } = MI, RscProps, Context) ->
     RscProps1 = maps:merge(
                     default_rsc_props(MI, RscProps),
@@ -113,6 +116,9 @@ update(RscId, #media_import_props{medium_props=MI} = MIPs, Context) ->
 
 update_1(_, RscId, #media_import_props{ rsc_props = #{ <<"uri">> := Uri }, importer = rsc_import }, Context) ->
     m_rsc_import:update_medium_uri(RscId, Uri, [], Context);
+update_1(_, RscId, #media_import_props{ importer = Importer } = MI, Context)
+    when is_atom(Importer), Importer =/= undefined ->
+    Importer:media_import(RscId, MI, #{}, Context);
 update_1(0, RscId, #media_import_props{preview_url=PreviewUrl, medium_url=MediumUrl}, _Context) 
     when ?EMPTY(PreviewUrl), ?EMPTY(MediumUrl) ->
     % Nothing to do
