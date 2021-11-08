@@ -25,17 +25,16 @@ render_action(TriggerId, TargetId, Args, Context) ->
         #search_result{} = M -> M
     end,
     SearchName = Result#search_result.search_name,
-    SearchResult = Result#search_result.result,
-    PageLen = pagelen(SearchResult, Result#search_result.search_args),
-    case total(SearchResult) < PageLen of
+    PageLen = pagelen(Result, Result#search_result.search_args),
+    case total(Result) < PageLen of
         true ->
             {"", z_render:add_script(["$(\"#", TriggerId, "\").remove();"], Context)};
         false ->
-            Page = SearchResult#search_result.page + 1,
+            NextPage = Result#search_result.page + 1,
             MorePageLen = proplists:get_value(pagelen, Args, PageLen),
             SearchProps = proplists:delete(pagelen,
                                 proplists:delete(page, Result#search_result.search_args)),
-            make_postback(SearchName, SearchProps, Page, PageLen, MorePageLen, Args, TriggerId, TargetId, Context)
+            make_postback(SearchName, SearchProps, NextPage, PageLen, MorePageLen, Args, TriggerId, TargetId, Context)
     end.
 
 total(#search_result{total=Total}) when is_integer(Total) ->
