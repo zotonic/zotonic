@@ -30,11 +30,14 @@
     search_result/3,
     query_/2,
 
+    props_to_map/1,
+
     estimate/3
 ]).
 
 -include_lib("zotonic.hrl").
 
+% The tuple format is deprecated. Use separate binary search term with a map.
 -type search_query():: {atom(), list()}
                      | {binary(), map()|undefined}.
 -type search_offset() :: Limit :: pos_integer()
@@ -52,13 +55,16 @@
 %% @doc Perform a named search with arguments.
 -spec search(Name, Args, Page, PageLen, Context) -> Result when
     Name :: binary(),
-    Args :: map() | undefined,
+    Args :: map() | proplists:proplist() | undefined,
     Page :: pos_integer(),
     PageLen :: pos_integer(),
     Context :: z:context(),
     Result :: #search_result{}.
 search(Name, undefined, Page, PageLen, Context) ->
     search(Name, #{}, Page, PageLen, Context);
+search(Name, Args, Page, PageLen, Context) when is_list(Args) ->
+    Args1 = props_to_map(Args),
+    search(Name, Args1, Page, PageLen, Context);
 search(Name, Args, Page, PageLen, Context) when is_binary(Name), is_map(Args) ->
     OffsetLimit = offset_limit(Page, PageLen),
     Q = #search_query{
@@ -68,13 +74,30 @@ search(Name, Args, Page, PageLen, Context) when is_binary(Name), is_map(Args) ->
     },
     case z_notifier:first(Q, Context) of
         undefined ->
-            lager:debug("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
-            #search_result{};
+            case m_rsc:rid(Name, Context) of
+                RId when is_integer(RId), Name =/= <<"query">> ->
+                    case m_rsc:is_a(RId, 'query', Context) of
+                        true ->
+                            % Named query, perform the query with the stored arguments.
+                            Args1 = Args#{
+                                <<"query_id">> => RId
+                            },
+                            search(<<"query">>, Args1, Page, PageLen, Context);
+                        false ->
+                            lager:debug("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
+                            #search_result{}
+                    end;
+                undefined ->
+                    lager:debug("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
+                    #search_result{}
+            end;
         Result ->
             handle_search_result(Result, Page, PageLen, OffsetLimit, Context)
     end.
 
+
 %% @doc Search items and handle the paging. Uses the default page length.
+%% @deprecated use search/5
 -spec search_pager(search_query(), Page :: pos_integer(), z:context()) -> #search_result{}.
 search_pager(Search, Page, Context) ->
     search_pager(Search, Page, ?SEARCH_PAGELEN, Context).
@@ -92,18 +115,27 @@ search_pager({Name, _} = Search, Page, PageLen, Context) when is_atom(Name) ->
 
 
 %% @doc Search with the question and return the results
+%% @deprecated use search/5
 -spec search({atom()|binary(), proplists:proplist()|map()}, z:context()) -> #search_result{}.
 search(Search, Context) ->
     search(Search, ?OFFSET_LIMIT, Context).
 
 %% @doc Perform the named search and its arguments
+%% @deprecated use search/5
 -spec search(search_query(), search_offset(), z:context() ) -> #search_result{}.
 search(Search, MaxRows, Context) when is_integer(MaxRows) ->
     search_1(Search, 1, MaxRows, {1, MaxRows}, Context);
 search(Search, {1, Limit} = OffsetLimit, Context) ->
     search_1(Search, 1, Limit, OffsetLimit, Context);
-search(Search, {_, _} = OffsetLimit, Context) ->
-    search_1(Search, undefined, undefined, OffsetLimit, Context).
+search(Search, {Offset, Limit} = OffsetLimit, Context) ->
+    case (Offset - 1) rem Limit of
+        0 ->
+            PageNr = (Offset - 1) div Limit,
+            search_1(Search, PageNr, Limit, OffsetLimit, Context);
+        _ ->
+            search_1(Search, undefined, undefined, OffsetLimit, Context)
+    end.
+
 
 
 %% @doc Handle a return value from a search function.  This can be an intermediate SQL statement
@@ -250,10 +282,14 @@ offset_limit(N, PageLen) ->
     % Take 2 pages + 1
     {(N-1) * PageLen + 1, 2 * PageLen + 1}.
 
-search_1({SearchName, Args}, undefined, _PageLen, {1, Limit}, Context) when is_binary(SearchName) ->
-    search(SearchName, Args, 1, Limit, Context);
-search_1({SearchName, Args}, Page, PageLen, _OffsetLimit, Context) when is_binary(SearchName), is_integer(Page) ->
-    search(SearchName, Args, Page, PageLen, Context);
+
+%% @doc Handle deprecated searches in the {atom, list()} format.
+search_1({SearchName, Props}, undefined, _PageLen, {1, Limit}, Context) when is_binary(SearchName) ->
+    ArgsMap = props_to_map(Props),
+    search(SearchName, ArgsMap, 1, Limit, Context);
+search_1({SearchName, Props}, Page, PageLen, _OffsetLimit, Context) when is_binary(SearchName), is_integer(Page) ->
+    ArgsMap = props_to_map(Props),
+    search(SearchName, ArgsMap, Page, PageLen, Context);
 search_1({SearchName, Props}, Page, PageLen, {Offset, Limit} = OffsetLimit, Context) when is_atom(SearchName), is_list(Props) ->
     Props1 = case proplists:get_all_values(cat, Props) of
         [] -> Props;
@@ -267,14 +303,23 @@ search_1({SearchName, Props}, Page, PageLen, {Offset, Limit} = OffsetLimit, Cont
     end,
     PropsSorted = lists:keysort(1, Props2),
     Q = #search_query{search={SearchName, PropsSorted}, offsetlimit=OffsetLimit},
+    PageRest = (Offset - 1) rem Limit,
     case z_notifier:first(Q, Context) of
+        undefined when PageRest =:= 0 ->
+            % Nicely on a page boundary, try the new search with binary search names.
+            PageNr = (Offset - 1) div Limit + 1,
+            SearchNameBin = z_convert:to_binary(SearchName),
+            ArgsMap = props_to_map(PropsSorted),
+            search(SearchNameBin, ArgsMap, PageNr, Limit, Context);
         undefined ->
+            % Not on a page boundary so we can't use the new search, return the empty result.
             lager:info("z_search: ignored unknown search query ~p", [ {SearchName, PropsSorted} ]),
             #search_result{};
         Result when Page =/= undefined ->
             handle_search_result(Result, Page, PageLen, OffsetLimit, Context);
-        Result when Offset =:= 1 ->
-            handle_search_result(Result, 1, Limit, OffsetLimit, Context);
+        Result when PageRest =:= 0 ->
+            PageNr = (Offset - 1) div Limit + 1,
+            handle_search_result(Result, PageNr, Limit, OffsetLimit, Context);
         Result ->
             search_result(Result, OffsetLimit, Context)
     end;
@@ -283,6 +328,50 @@ search_1(Name, Page, PageLen, OffsetLimit, Context) when is_atom(Name) ->
 search_1(Name, _Page, _PageLen, _OffsetLimit, _Context) ->
     lager:info("z_search: ignored unknown search query ~p", [ Name ]),
     #search_result{}.
+
+
+
+%% @doc Change a search props list to a map with binary keys.
+-spec props_to_map( proplists:proplist() | map() ) -> #{ binary() => term() }.
+props_to_map(Props) when is_map(Props) ->
+    maps:fold(
+        fun(K, V, Acc) ->
+            Acc#{ z_convert:to_binary(K) => V }
+        end,
+        #{},
+        Props);
+props_to_map(Props) ->
+    {Map, _} = lists:foldr(
+        fun({K, V}, {Acc, Counts}) ->
+            K1 = z_convert:to_binary(K),
+            case maps:get(K1, Counts, 0) of
+                0 ->
+                    Acc1 = Acc#{ K1 => V },
+                    Counts1 = Counts#{ K1 => 1 },
+                    {Acc1, Counts1};
+                1 ->
+                    V1 = #{
+                        <<"all">> => [
+                            V,
+                            maps:get(K1, Acc)
+                        ]
+                    },
+                    Acc1 = Acc#{ K1 => V1 },
+                    Counts1 = Counts#{ K1 => 2 },
+                    {Acc1, Counts1};
+                N ->
+                    #{ <<"all">> := Vs } = maps:get(K1, Acc),
+                    V1 = #{
+                        <<"all">> => [ V | Vs ]
+                    },
+                    Acc1 = Acc#{ K1 => V1 },
+                    Counts1 = Counts#{ K1 => N + 1 },
+                    {Acc1, Counts1}
+            end
+        end,
+        {#{}, #{}},
+        Props),
+    Map.
 
 
 %% @doc Given a query as proplist or map, return all results.

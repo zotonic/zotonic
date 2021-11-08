@@ -53,7 +53,7 @@ manage_schema(Version, Context) ->
     z_mailinglist_schema:manage_schema(Version, Context).
 
 
-observe_search_query({search_query, {mailinglist_recipients, [{id,Id}]}, _OffsetLimit}, _Context) ->
+observe_search_query(#search_query{ search = {mailinglist_recipients, [{id,Id}] } }, _Context) ->
     #search_sql{
         select="id, email, is_enabled",
         from="mailinglist_recipient",

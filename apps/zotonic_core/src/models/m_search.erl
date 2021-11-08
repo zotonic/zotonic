@@ -16,17 +16,13 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
-%% A search question is represented by:
+%% A deprecated search question is represented by:
 %%      {search_name, [PropList]}
 %% The search result is represented by:
 %%      {search_result, [Results], [PropList], PagingInfo}
-%% The search options are always sorted before the search is done.
 %%
-%% {% for id in m.search[{featured cat="accessoiries"}] %}
+%% {% for id in m.search.featured::%{ cat: "accessoiries" } %}
 %%
-%% Paging is done by fetching the first ?SEARCH_LIMIT rows and then return a slice from those rows.
-%% This result set should be cached for a short while (depending on writes by
-%% the user_id associated with the visitor).
 
 -module(m_search).
 -author("Marc Worrell <marc@worrell.nl").
@@ -47,8 +43,8 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ <<"paged">>, SearchName | Rest ], _Msg, Context) when is_binary(SearchName) ->
-    case search(SearchName, true, Context) of
+m_get([ <<"paged">>, SearchName | Rest ], Msg, Context) when is_binary(SearchName) ->
+    case search(SearchName, search_args(Msg), Context) of
         {error, _} = Error ->
             Error;
         {ok, Result} ->
@@ -61,8 +57,8 @@ m_get([ <<"paged">>, {Name, Props} = SearchProps | Rest ], _Msg, Context) when i
         {ok, Result} ->
             {ok, {Result, Rest}}
     end;
-m_get([ SearchName | Rest ], _Msg, Context) when is_binary(SearchName) ->
-    case search(SearchName, false, Context) of
+m_get([ SearchName | Rest ], Msg, Context) when is_binary(SearchName) ->
+    case search(SearchName, search_args(Msg), Context) of
         {error, _} = Error ->
             Error;
         {ok, Result} ->
@@ -75,30 +71,44 @@ m_get([ {Name, Props} = SearchProps | Rest ], _Msg, Context) when is_list(Props)
         {ok, Result} ->
             {ok, {Result, Rest}}
     end;
-m_get([ <<"paged">> ], _Msg, Context) ->
-    case search_deprecated({'query', [ {qargs, true} ]}, true, Context) of
+m_get([ <<"paged">> ], Msg, Context) ->
+    Args = search_args(Msg),
+    case search(<<"query">>, Args#{ <<"qargs">> => true }, Context) of
         {error, _} = Error ->
             Error;
         {ok, Result} ->
             {ok, {Result, []}}
     end;
-m_get([], _Msg, Context) ->
-    case search({'query', [ {qargs, true} ]}, false, Context) of
+m_get([], Msg, Context) ->
+    Args = search_args(Msg),
+    case search(<<"query">>, Args#{ <<"qargs">> => true }, Context) of
         {error, _} = Error ->
             Error;
         {ok, Result} ->
             {ok, {Result, []}}
     end.
 
+
 %% @doc Perform a search. Pass page and pagelen as arguments for paging.
 -spec search( binary(), map(), z:context() ) -> {ok, #m_search_result{}} | {error, term()}.
 search(Name, Args, Context) when is_binary(Name), is_map(Args) ->
-    search_named(Name, Args, Context).
-
+    {Page, PageLen, Args1} = get_paging_props(Args, Context),
+    try
+        Result = z_search:search(Name, Args1, Page, PageLen, Context),
+        Total = Result#search_result.total,
+        {ok, #m_search_result{result=Result, total=Total, search_name=Name, search_args=Args}}
+    catch
+        throw:Error ->
+            lager:error("Error in m.search[~p] error: ~p", [{Name, Args}, Error]),
+            {error, Error}
+    end.
 
 %% @deprecated Use m_search:search/3
-search({Name, Args}, Context) when is_binary(Name) ->
-    search_named(Name, Args, Context);
+search({Name, Args}, Context) when is_binary(Name), is_map(Args) ->
+    search(Name, Args, Context);
+search({Name, Args}, Context) when is_binary(Name), is_list(Args) ->
+    Args1 = z_search:props_to_map(Args),
+    search(Name, Args1, Context);
 search(Search, Context) ->
     case search_deprecated(Search, false, Context) of
         {ok, Result} ->
@@ -116,74 +126,39 @@ search_pager(Search, Context) ->
             empty_result()
     end.
 
-% Deprecated interface.
-search_deprecated({Name, Props}, IsPaged, Context) when is_atom(Name), is_list(Props), is_boolean(IsPaged) ->
-    Args = props_to_map(Props),
-    NameB = atom_to_binary(Name, utf8),
-    case search_named(NameB, Args, Context) of
-        {ok, #m_search_result{ total = undefined }} when IsPaged ->
-            % Fallback with deprecated notification.
-            {Page, PageLen, Props1} = get_paging_props(Props),
-            try
-                Result = z_search:search_pager({Name, Props1}, Page, PageLen, Context),
-                Total = Result#search_result.total,
-                {ok, #m_search_result{result=Result, total=Total, search_name=Name, search_args=Props1}}
-            catch
-                throw:Error ->
-                    lager:error("Error in m.search[~p] error: ~p", [{Name, Props}, Error]),
-                    {error, Error}
-            end;
-        {ok, #search_result{ total = undefined }} when not IsPaged ->
-            {Page, PageLen, Props1} = get_optional_paging_props(Props),
-            try
-                Offset = (Page - 1) * PageLen + 1,
-                Result = z_search:search({Name, Props1}, {Offset, PageLen}, Context),
-                Total1 = case Result#search_result.total of
-                    undefined -> length(Result#search_result.result);
-                    Total -> Total
-                end,
-                {ok, #m_search_result{result=Result, total=Total1, search_name=Name, search_args=Props}}
-            catch
-                throw:Error ->
-                    lager:error("Error in m.search[~p] error: ~p", [{Name, Props}, Error]),
-                    {error, Error}
-            end;
-        {ok, _} = OK ->
-            OK;
-        {error, _} = Error ->
-            Error
-    end.
+search_args(#{ payload := Args }) when is_map(Args) ->
+    Args;
+search_args(_) ->
+    #{}.
 
-search_named(Name, Args, Context) ->
-    {Page, PageLen, Args1} = get_paging_props(Args),
+
+% Deprecated interface.
+search_deprecated({Name, Props}, _IsPaged = true, Context) when is_atom(Name), is_list(Props) ->
+    {Page, PageLen, Props1} = get_paging_props(Props, Context),
     try
-        Result = z_search:search(Name, Args1, Page, PageLen, Context),
+        Result = z_search:search_pager({Name, Props1}, Page, PageLen, Context),
         Total = Result#search_result.total,
-        {ok, #m_search_result{result=Result, total=Total, search_name=Name, search_args=Args}}
+        {ok, #m_search_result{result=Result, total=Total, search_name=Name, search_args=Props1}}
     catch
         throw:Error ->
-            lager:error("Error in m.search[~p] error: ~p", [{Name, Args}, Error]),
+            lager:error("Error in m.search[~p] error: ~p", [{Name, Props}, Error]),
+            {error, Error}
+    end;
+search_deprecated({Name, Props}, _IsPaged = false, Context) when is_atom(Name), is_list(Props) ->
+    {Page, PageLen, Props1} = get_optional_paging_props(Props, Context),
+    try
+        Offset = (Page - 1) * PageLen + 1,
+        Result = z_search:search({Name, Props1}, {Offset, PageLen}, Context),
+        Total1 = case Result#search_result.total of
+            undefined -> length(Result#search_result.result);
+            Total -> Total
+        end,
+        {ok, #m_search_result{result=Result, total=Total1, search_name=Name, search_args=Props}}
+    catch
+        throw:Error ->
+            lager:error("Error in m.search[~p] error: ~p", [{Name, Props}, Error]),
             {error, Error}
     end.
-
-
-props_to_map(Props) ->
-    lists:foldr(
-        fun({K, V}, Acc) ->
-            B = z_convert:to_binary(K),
-            case maps:find(K, Acc) of
-                {ok, Curr} when is_list(Curr) ->
-                    Acc#{ B => [ V | Curr ]};
-                {ok, Curr} ->
-                    Acc#{ B => [ V, Curr ] };
-                error ->
-                    Acc#{ B => V }
-            end
-        end,
-        #{},
-        Props).
-
-
 
 % try_rsc_search(SearchName, IsPaged, Context) ->
 %     case m_rsc:rid(SearchName, Context) of
@@ -209,16 +184,39 @@ empty_result() ->
     }.
 
 
-get_optional_paging_props(Props) when is_list(Props) ->
+get_optional_paging_props(Props, Context) when is_list(Props) ->
     % Deprecated proplists handling
     case proplists:is_defined(page, Props) orelse proplists:is_defined(pagelen, Props) of
-        true -> get_paging_props(Props);
-        false -> {1, ?SEARCH_PAGELEN, lists:keysort(1, Props)}
+        true -> get_paging_props(Props, Context);
+        false -> {1, ?SEARCH_PAGELEN, Props}
     end.
 
-get_paging_props(undefined) ->
+get_paging_props(undefined, _Context) ->
     {1, ?SEARCH_PAGELEN, #{}};
-get_paging_props(Args) when is_map(Args) ->
+get_paging_props(#{ <<"qargs">> := true } = Args, Context) ->
+    try
+        Page = case z_convert:to_integer(z_context:get_q(<<"page">>, Context)) of
+            undefined ->
+                case maps:get(<<"page">>, Args, 1) of
+                    undefined -> 1;
+                    P -> z_convert:to_integer(P)
+                end;
+            P -> P
+        end,
+        PageLen = case z_convert:to_integer(z_context:get_q(<<"page">>, Context)) of
+            undefined ->
+                case maps:get(<<"pagelen">>, Args, ?SEARCH_PAGELEN) of
+                    undefined -> ?SEARCH_PAGELEN;
+                    PL -> z_convert:to_integer(PL)
+                end;
+            PL -> PL
+        end,
+        {Page, PageLen, maps:without([ <<"page">>, <<"pagelen">> ], Args)}
+    catch
+        _:_ ->
+            {1, ?SEARCH_PAGELEN, maps:without([ <<"page">>, <<"pagelen">> ], Args)}
+    end;
+get_paging_props(Args, _Context) when is_map(Args) ->
     Page = case maps:get(<<"page">>, Args, 1) of
         undefined -> 1;
         P -> try z_convert:to_integer(P) catch _:_ -> 1 end
@@ -228,7 +226,7 @@ get_paging_props(Args) when is_map(Args) ->
         PL -> try z_convert:to_integer(PL) catch _:_ -> ?SEARCH_PAGELEN end
     end,
     {Page, PageLen, maps:without([ <<"page">>, <<"pagelen">> ], Args)};
-get_paging_props(Props) ->
+get_paging_props(Props, _Context) when is_list(Props) ->
     % Deprecated proplists handling
     Page = case proplists:get_value(page, Props) of
         undefined -> 1;
@@ -240,4 +238,4 @@ get_paging_props(Props) ->
     end,
     P1 = proplists:delete(page, Props),
     P2 = proplists:delete(pagelen, P1),
-    {Page, PageLen, lists:keysort(1, P2)}.
+    {Page, PageLen, P2}.

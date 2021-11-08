@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011 Marc Worrell
+%% @copyright 2011-2021 Marc Worrell
 %%
 %% @doc Model for email log messages.
 
-%% Copyright 2011 Marc Worrell
+%% Copyright 2011-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,8 +29,14 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 
+
 search(Filter, Context) ->
-    {Where, Args} = lists:foldl(fun(F, Acc) -> map_search(F, Acc, Context) end, {[], []}, Filter),
+    {Where, Args} = maps:fold(
+        fun(F, V, Acc) ->
+            map_search(F, V, Acc, Context)
+        end,
+        {[], []},
+        Filter),
     #search_sql{
         select="*",
         from="log_email",
@@ -40,7 +46,7 @@ search(Filter, Context) ->
         assoc=true
     }.
 
-map_search({severity, Status}, {Ws,As}, _Context) ->
+map_search(<<"severity">>, Status, {Ws,As}, _Context) ->
     case catch z_convert:to_integer(Status) of
         StatusNr when is_integer(StatusNr) ->
             {As1,N} = arg(StatusNr, As),
@@ -48,19 +54,19 @@ map_search({severity, Status}, {Ws,As}, _Context) ->
         _ ->
             {["severity <= 1"|Ws], As}
     end;
-map_search({_, ""}, Acc, _Context) -> Acc;
-map_search({_, <<>>}, Acc, _Context) -> Acc;
-map_search({_, undefined}, Acc, _Context) -> Acc;
-map_search({status, Status}, {Ws,As}, _Context) ->
+map_search(_, "", Acc, _Context) -> Acc;
+map_search(_, <<>>, Acc, _Context) -> Acc;
+map_search(_, undefined, Acc, _Context) -> Acc;
+map_search(<<"status">>, Status, {Ws,As}, _Context) ->
     {As1,N} = arg(Status, As),
     {[["mailer_status = $",N]|Ws], As1};
-map_search({message_nr, MsgNr}, {Ws,As}, _Context) ->
+map_search(<<"message_nr">>, MsgNr, {Ws,As}, _Context) ->
     {As1,N} = arg(z_convert:to_binary(MsgNr), As),
     {[["message_nr like ($",N," || '%')"]|Ws], As1};
-map_search({template, Tpl}, {Ws,As}, _Context) ->
+map_search(<<"template">>, Tpl, {Ws,As}, _Context) ->
     {As1,N} = arg(Tpl, As),
     {[["message_template like ($",N," || '%')"]|Ws], As1};
-map_search({to, To}, {Ws,As}, _Context) ->
+map_search(<<"to">>, To, {Ws,As}, _Context) ->
     case z_utils:only_digits(To) of
         true ->
             {As1,N} = arg(list_to_integer(To), As),
@@ -69,7 +75,7 @@ map_search({to, To}, {Ws,As}, _Context) ->
             {As1,N} = arg(To, As),
             {[["envelop_to like ($",N," || '%')"]|Ws], As1}
     end;
-map_search({from, From}, {Ws,As}, _Context) ->
+map_search(<<"from">>, From, {Ws,As}, _Context) ->
     case z_utils:only_digits(From) of
         true ->
             {As1,N} = arg(z_convert:to_integer(From), As),
@@ -78,7 +84,7 @@ map_search({from, From}, {Ws,As}, _Context) ->
             {As1,N} = arg(z_convert:to_binary(From), As),
             {[["envelop_from like ($",N," || '%')"]|Ws], As1}
     end;
-map_search({content, RscId}, {Ws,As}, Context) ->
+map_search(<<"content">>, RscId, {Ws,As}, Context) ->
     case m_rsc:rid(RscId, Context) of
         undefined ->
             {["content_id = -1"|Ws], As};
@@ -86,7 +92,7 @@ map_search({content, RscId}, {Ws,As}, Context) ->
             {As1,N} = arg(Id, As),
             {[["content_id = $",N]|Ws], As1}
     end;
-map_search({other, RscId}, {Ws,As}, Context) ->
+map_search(<<"other">>, RscId, {Ws,As}, Context) ->
     case m_rsc:rid(RscId, Context) of
         undefined -> {["other_id = -1"|Ws], As};
         Id ->

@@ -50,17 +50,17 @@
 
 %% interface functions
 
-observe_search_query({search_query, {log, Args}, _OffsetLimit}, Context) ->
+observe_search_query(#search_query{ name = <<"log">>, args = Args }, Context) ->
     case z_acl:is_allowed(use, mod_logging, Context) of
         true -> m_log:search_query(Args, Context);
         false -> []
     end;
-observe_search_query({search_query, {log_email, Args}, _OffsetLimit}, Context) ->
+observe_search_query(#search_query{ name = <<"log_email">>, args = Args }, Context) ->
     case z_acl:is_allowed(use, mod_logging, Context) of
         true -> m_log_email:search(Args, Context);
         false -> []
     end;
-observe_search_query({search_query, {log_ui, Args}, _OffsetLimit}, Context) ->
+observe_search_query(#search_query{ name = <<"log_ui">>, args = Args }, Context) ->
     case z_acl:is_allowed(use, mod_logging, Context) of
         true -> m_log_ui:search_query(Args, Context);
         false -> []

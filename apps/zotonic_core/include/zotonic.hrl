@@ -145,26 +145,26 @@
 -record(search_result, {
     result = [] :: list(),
     page = 1 :: pos_integer(),
-    pagelen :: pos_integer() | undefined,
-    total :: non_neg_integer() | undefined,
-    all :: list() | undefined,
-    pages :: non_neg_integer() | undefined,
-    next :: non_neg_integer() | false,
-    prev :: non_neg_integer(),
+    pagelen = ?SEARCH_PAGELEN :: pos_integer() | undefined,
+    total = 0 :: non_neg_integer(),
+    all = [] :: list() | undefined,
+    pages = 0 :: non_neg_integer(),
+    next = false :: non_neg_integer() | false,
+    prev = 1 :: non_neg_integer(),
     facets = [] :: list()
 }).
 
 % Result of a m_search. The atom/proplists name/args are deprecated.
 -record(m_search_result, {
-    search_name :: binary() | atom(),
-    search_args :: map() | proplists:proplist(),
-    result :: list(),
+    search_name = <<"query">> :: binary() | atom(),
+    search_args = #{} :: map() | proplists:proplist(),
+    result = [] :: list(),
     page = 1,
-    pagelen :: pos_integer() | undefined,
-    total :: non_neg_integer() | undefined,
-    pages :: non_neg_integer() | undefined,
-    next :: non_neg_integer() | false,
-    prev :: non_neg_integer()
+    pagelen = ?SEARCH_PAGELEN :: pos_integer() | undefined,
+    total = 0 :: non_neg_integer() | undefined,
+    pages = 0 :: non_neg_integer() | undefined,
+    next = false :: non_neg_integer() | false,
+    prev = 1 :: non_neg_integer()
 }).
 
 -record(search_sql, {
