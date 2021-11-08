@@ -104,7 +104,7 @@ To perform a search on the running site, use the ``z_search`` module.
 ``rr(z_search).``
   Loads all records defined in ``z_search`` (including those defined in include files such as the ``#search_result`` record).
 
-``Results = z_search:search({latest, [{cat, text}]}, Context).``
+``Results = z_search:search(<<"latest">>, #{ <<"cat">> => text }, 1, 20, Context).``
   Returns the search result record, for the search on pages from the category `text`. You can specify the category as a string, binary, atom or integer.
 
 To retrieve the list of pages, we access the ``result`` property of the record data:
