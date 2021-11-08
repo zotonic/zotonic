@@ -299,11 +299,11 @@ search_1({SearchName, Props}, Page, PageLen, {Offset, Limit} = OffsetLimit, Cont
     end,
     PropsSorted = lists:keysort(1, Props2),
     Q = #search_query{search={SearchName, PropsSorted}, offsetlimit=OffsetLimit},
-    PageRest = (Offset - 1) rem Limit,
+    PageRest = (Offset - 1) rem PageLen,
     case z_notifier:first(Q, Context) of
         undefined when PageRest =:= 0 ->
             % Nicely on a page boundary, try the new search with binary search names.
-            PageNr = (Offset - 1) div Limit + 1,
+            PageNr = (Offset - 1) div PageLen + 1,
             SearchNameBin = z_convert:to_binary(SearchName),
             ArgsMap = props_to_map(PropsSorted),
             search(SearchNameBin, ArgsMap, PageNr, Limit, Context);

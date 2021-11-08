@@ -93,11 +93,9 @@ m_get([], Msg, Context) ->
 -spec search( binary(), map(), z:context() ) -> {ok, #m_search_result{}} | {error, term()}.
 search(Name, Args, Context) when is_binary(Name), is_map(Args) ->
     {Page, PageLen, Args1} = get_paging_props(Args, Context),
-    ?DEBUG({Page, PageLen}),
     try
         Result = z_search:search(Name, Args1, Page, PageLen, Context),
-        Total = Result#search_result.total,
-        {ok, #m_search_result{result=Result, total=Total, search_name=Name, search_args=Args}}
+        {ok, #m_search_result{result=Result, search_name=Name, search_args=Args}}
     catch
         throw:Error ->
             lager:error("Error in m.search[~p] error: ~p", [{Name, Args}, Error]),
@@ -138,8 +136,7 @@ search_deprecated({Name, Props}, _IsPaged = true, Context) when is_atom(Name), i
     {Page, PageLen, Props1} = get_paging_props(Props, Context),
     try
         Result = z_search:search_pager({Name, Props1}, Page, PageLen, Context),
-        Total = Result#search_result.total,
-        {ok, #m_search_result{result=Result, total=Total, search_name=Name, search_args=Props1}}
+        {ok, #m_search_result{result=Result, search_name=Name, search_args=Props1}}
     catch
         throw:Error ->
             lager:error("Error in m.search[~p] error: ~p", [{Name, Props}, Error]),
@@ -150,11 +147,11 @@ search_deprecated({Name, Props}, _IsPaged = false, Context) when is_atom(Name), 
     try
         Offset = (Page - 1) * PageLen + 1,
         Result = z_search:search({Name, Props1}, {Offset, PageLen}, Context),
-        Total1 = case Result#search_result.total of
-            undefined -> length(Result#search_result.result);
-            Total -> Total
+        Result1 = case Result#search_result.total of
+            undefined -> Result#search_result{ total = length(Result#search_result.result) };
+            _ -> Result
         end,
-        {ok, #m_search_result{result=Result, total=Total1, search_name=Name, search_args=Props}}
+        {ok, #m_search_result{result=Result1, search_name=Name, search_args=Props}}
     catch
         throw:Error ->
             lager:error("Error in m.search[~p] error: ~p", [{Name, Props}, Error]),
@@ -171,7 +168,6 @@ empty_result() ->
             total = 0,
             pages = 1
         },
-        total = 0,
         search_name = <<"error">>,
         search_args = #{}
     }.

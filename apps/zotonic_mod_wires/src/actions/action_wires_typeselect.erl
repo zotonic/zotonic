@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-04-26
+%% @copyright 2009-2021 Marc Worrell
 %% @doc Adds typeahead with a searchresult to an input box
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -53,7 +52,6 @@ event(#postback{message={typeselect, Cats, Template, Actions, ActionsWithId, Oth
     Vars = [
         {result, #m_search_result{
             result = Result,
-            total = Result#search_result.total,
             search_name = autocomplete,
             search_args = Props
         }},

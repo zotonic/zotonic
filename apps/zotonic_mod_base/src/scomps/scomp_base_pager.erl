@@ -47,8 +47,6 @@ render(Params, _Vars, Context) ->
         [dispatch, result, hide_single_page, template]),
 
     case Result of
-        #m_search_result{result=#search_result{result=[]}} ->
-            {ok, <<>>};
         #m_search_result{result=#search_result{pages=0}} ->
             {ok, <<>>};
         #m_search_result{result=#search_result{page=Page, pages=1}} ->
@@ -56,8 +54,6 @@ render(Params, _Vars, Context) ->
         #m_search_result{result=#search_result{page=Page, pages=Pages}} ->
             Html = build_html(Template, Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context),
             {ok, Html};
-        #search_result{result=[]} ->
-            {ok, <<>>};
         #search_result{page=Page, pages=Pages} ->
             Html = build_html(Template, Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context),
             {ok, Html};
