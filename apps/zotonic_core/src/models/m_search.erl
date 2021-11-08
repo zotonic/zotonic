@@ -119,7 +119,7 @@ search_pager(Search, Context) ->
 % Deprecated interface.
 search_deprecated({Name, Props}, IsPaged, Context) when is_atom(Name), is_list(Props), is_boolean(IsPaged) ->
     Args = props_to_map(Props),
-    NameB = atom_to_binary(Name),
+    NameB = atom_to_binary(Name, utf8),
     case search_named(NameB, Args, Context) of
         {ok, #m_search_result{ total = undefined }} when IsPaged ->
             % Fallback with deprecated notification.
