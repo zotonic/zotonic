@@ -158,7 +158,7 @@
 -record(m_search_result, {
     search_name = <<"query">> :: binary() | atom(),
     search_args = #{} :: map() | proplists:proplist(),
-    result = #search_result{} :: #search_result{},
+    result :: #search_result{},
     page = 1,
     pagelen = ?SEARCH_PAGELEN :: pos_integer() | undefined,
     total = 0 :: non_neg_integer() | undefined,
