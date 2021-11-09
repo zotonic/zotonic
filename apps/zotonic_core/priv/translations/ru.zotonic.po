@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-31 18:57\n"
+"PO-Revision-Date: 2021-11-04 22:58\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1323,7 +1323,7 @@ msgstr "Заголовок"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:17
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:24
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
-msgstr "Здесь Вы можете редактировать аргументы поискового запроса. Каждый аргумент идет своей строкой. Дополнительную информацию вы можете найти в документации <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">по аргументам запроса</a> на сайте Zotonic."
+msgstr "Здесь Вы можете редактировать аргументы поискового запроса. Каждый аргумент идет отдельной строкой. Дополнительную информацию вы можете найти в документации <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">по аргументам запроса</a> на сайте Zotonic."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
 msgid "Home Directory"
@@ -1362,7 +1362,7 @@ msgstr "Встроенный блок"
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:48./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:60
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:39
 msgid "Items per page"
-msgstr "Пункты на странице"
+msgstr "Пунктов на странице"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_dashboard_events.tpl:3
 msgid "Latest modified events"
@@ -1444,11 +1444,11 @@ msgstr "Материалы"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:27
 msgid "Media URL or HTML"
-msgstr "Медиа-URL или HTML"
+msgstr "URL материала или HTML-код"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:60
 msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
-msgstr "Средства массовой информации включают в себя все загруженные изображения, фильмы и документы. Медиа могут быть прикреплены к страницам."
+msgstr "Материалы включают в себя все загруженные изображения, фильмы и документы. Материалы могут быть прикреплены к страницам."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:37./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:42
 msgid "Media file"
@@ -1468,7 +1468,7 @@ msgstr "Название материала"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:134
 msgid "Media updated."
-msgstr "СМИ обновлены."
+msgstr "Материал обновлён."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:1
 msgid "Memory"
@@ -1494,11 +1494,11 @@ msgstr "Изменено пользователем"
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:50
 msgid "Modified on"
-msgstr "Изменено"
+msgstr "Дата изменения"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:13
 msgid "Modified:"
-msgstr "Модифицировано:"
+msgstr "Изменено:"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:221./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:223./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:49
@@ -1528,7 +1528,7 @@ msgstr "Следующий в категории:"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:14
 msgid "No connected images."
-msgstr "Нет подключенных изображений."
+msgstr "Нет связанных изображений."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:18
 msgid "No features are enabled for this meta-resource."
