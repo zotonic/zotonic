@@ -90,7 +90,8 @@ render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
         {context_vars, [
             <<"sudo">>,
             <<"anondo">>,
-            <<"z_language">>
+            <<"z_language">>,
+            <<"extra_args">>
         ]}
     ],
     Result = case OptBlock of
