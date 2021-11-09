@@ -30,9 +30,7 @@
     search_result/3,
     query_/2,
 
-    props_to_map/1,
-
-    estimate/3
+    props_to_map/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -239,7 +237,7 @@ handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit,
                 true ->
                     % The number of requested rows was returned, assume there is more.
                     {SqlNoLimit, ArgsNoLimit} = concat_sql_query(Q1, undefined),
-                    {ok, EstimatedTotal} = estimate(SqlNoLimit, ArgsNoLimit, Context),
+                    {ok, EstimatedTotal} = z_db:estimate_rows(SqlNoLimit, ArgsNoLimit, Context),
                     erlang:max(FoundTotal, EstimatedTotal)
             end,
             Pages = (Total + PageLen - 1) div PageLen,
@@ -259,30 +257,6 @@ handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit,
                 next = Next
             }
     end.
-
-%% @doc Estimate the number of rows matching a query. This uses the PostgreSQL query planner
-%% to return an estimate of the number of rows.
--spec estimate(Query, Args, Context) -> {ok, Rows} | {error, term()}
-    when Query :: string() | binary(),
-         Args :: list(),
-         Context :: z:context(),
-         Rows :: non_neg_integer().
-estimate(Query, Args, Context) ->
-    Query1 = "explain " ++ z_convert:to_list(Query),
-    try
-        find_estimate( z_db:q(Query1, Args, Context) )
-    catch
-        throw:{error, _} = Error -> Error
-    end.
-
-find_estimate([]) ->
-    {ok, 0};
-find_estimate([{R}|Rs]) ->
-    case re:run(R, <<" rows=([0-9]+)">>, [{capture, all_but_first, binary}]) of
-        nomatch -> find_estimate(Rs);
-        {match, [Rows]} -> {ok, binary_to_integer(Rows)}
-    end.
-
 
 %% Calculate an offset/limit for the query. This takes such a range from the results
 %% that we can display a pager. We don't need exact results, as we will use the query
