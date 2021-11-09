@@ -22,6 +22,9 @@
     m_get/3,
 
     list_consumers_auth/1,
+    list_consumers_import/1,
+    list_consumers_all/1,
+
     list_consumers/1,
     get_consumer/2,
     insert_consumer/2,
@@ -58,6 +61,13 @@ m_get([ <<"consumers">>, <<"list">>, <<"import">> | Rest ], _Msg, Context) ->
         {error, _} = Error ->
             Error
     end;
+m_get([ <<"consumers">>, <<"list">> | Rest ], _Msg, Context) ->
+    case list_consumers_all(Context) of
+        {ok, Apps} ->
+            {ok, {Apps, Rest}};
+        {error, _} = Error ->
+            Error
+    end;
 m_get([ <<"consumers">>, ConsumerId | Rest ], _Msg, Context) ->
     case get_consumer(z_convert:to_integer(ConsumerId), Context) of
         {ok, App} ->
@@ -86,6 +96,17 @@ list_consumers_import(Context) ->
         select a.id, a.name, a.description, a.is_use_import, a.is_use_auth, a.domain
         from oauth2_consumer_app a
         where a.is_use_import = true
+        order by description",
+        Context).
+
+%% @doc List all consumers that can be used for authentication or import.
+-spec list_consumers_all( z:context() ) -> {ok, list( map() )} | {error, eacces | term()}.
+list_consumers_all(Context) ->
+    z_db:qmap("
+        select a.id, a.name, a.description, a.is_use_import, a.is_use_auth, a.domain
+        from oauth2_consumer_app a
+        where a.is_use_auth = true
+           or a.is_use_import = true
         order by description",
         Context).
 
