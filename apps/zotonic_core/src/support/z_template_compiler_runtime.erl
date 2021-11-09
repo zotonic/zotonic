@@ -458,7 +458,14 @@ set_context_vars(Args, Context) when is_map(Args); is_list(Args) ->
             false -> Context2;
             true -> z_acl:anondo(Context2)
     end,
-    Context3.
+    Context4 = case get(extra_args, Args, undefined) of
+                   #{ }=ExtraArgs ->
+                       ExtraArgsProps = maps:to_list(ExtraArgs), 
+                       ExtraArgsProps1 = [ {z_convert:to_atom(Key), Value} || {Key, Value} <- ExtraArgsProps ],
+                       z_context:set(extra_args, ExtraArgsProps1, Context3);
+                   _ -> Context3
+               end,
+    Context4.
 
 get(Prop, Args, Default) when is_map(Args) ->
     maps:get(Prop, Args, Default);
