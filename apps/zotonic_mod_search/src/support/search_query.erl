@@ -200,7 +200,9 @@ request_arg(Term) ->
 filter_empty(Q) when is_map(Q) ->
     filter_empty(maps:to_list(Q));
 filter_empty(Q) when is_list(Q) ->
-    lists:filter(fun({_, X}) -> not(empty_term(X)) end, Q).
+    lists:filter(fun({_, X}) -> not(empty_term(X));
+                    ([_, X]) -> not(empty_term(X))
+                 end, Q).
 
 empty_term([]) -> true;
 empty_term(<<>>) -> true;
