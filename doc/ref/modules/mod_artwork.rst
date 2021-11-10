@@ -19,7 +19,7 @@ Included CSS icons
 How to use Material Design icons in your templates
 **************************************************
 
-* Include the CSS file: ``{% lib "material-design/css/material-design-iconic-font.min.css" %}``
+* Include the CSS file: ``{% lib "material-design/css/material-design-iconic-font.css" %}``
 * Follow the `examples <http://zavoloklom.github.io/material-design-iconic-font/examples.html>`_
 * Find the class names in the `icons overview <http://zavoloklom.github.io/material-design-iconic-font/icons.html>`_
 
@@ -27,7 +27,7 @@ How to use Material Design icons in your templates
 How to use Font Awesome icons in your templates
 ***********************************************
 
-* Include the CSS file: ``{% lib "font-awesome-4/css/font-awesome.min.css" %}``
+* Include the CSS file: ``{% lib "font-awesome-4/css/font-awesome.css" %}``
 * Follow the `Font Awesome examples <http://fontawesome.io/examples>`_
 * Find the class names in the `cheatsheet <http://fontawesome.io/cheatsheet/>`_
 
