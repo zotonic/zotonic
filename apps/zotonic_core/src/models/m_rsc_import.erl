@@ -188,9 +188,9 @@ mark_imported(RscId, Status, Context) ->
 maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
     case is_imported_resource(Rsc, ImportedAcc, Options, Context) of
         false ->
+            Uri = maps:get(<<"uri">>, Rsc),
             case find_allowed_category(Rsc, #{}, Options, Context) of
                 {ok, Cat} ->
-                    Uri = maps:get(<<"uri">>, Rsc),
                     Props = #{
                         <<"category_id">> => Cat,
                         <<"is_published">> => false,
@@ -248,11 +248,15 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                                 ]),
                             Rsc1 = Rsc#{ <<"name">> => Name },
                             maybe_create_empty(Rsc1, ImportedAcc, Options, Context);
-                        {error, _} = Error ->
+                        {error, Reason} = Error ->
+                            lager:info("Not importing menu entry from remote '~s' (category ~p) because of: ~p",
+                                       [ Uri, Cat, Reason ]),
                             Error
                     end;
-                {error, _} = Error  ->
+                {error, Reason} = Error  ->
                     % Unknown category, deny access
+                    lager:info("Not importing menu entry from remote '~s' because of category (~p): ~p",
+                               [ Uri, Reason, Rsc ]),
                     Error
             end;
         {true, RscId} ->
@@ -1157,6 +1161,8 @@ find_allowed_predicate(Name, Pred, Options, Context) ->
                 true ->
                     {ok, PredId};
                 false ->
+                    lager:info("Not importing edges with predicate '~s' because they are not allowed.",
+                               [ PredName ]),
                     {error, eacces}
             end;
         {error, _} = Error ->
