@@ -135,11 +135,11 @@ body.err403 .z-logon-box {
 .z-logon-box #signup_error_duplicate_identity {
   display: none;
 }
-.z-logon-box .error_tos_agree #signup_error_tos_agree,
-.z-logon-box .error_duplicate_username #signup_error_duplicate_username,
-.z-logon-box .error_duplicate_identity #signup_error_duplicate_identity,
-.z-logon-box .error_custom_1 #signup_error_custom_1,
-.z-logon-box .error_custom_2 #signup_error_custom_2 {
+.z-logon-box.error_tos_agree #signup_error_tos_agree,
+.z-logon-box.error_duplicate_username #signup_error_duplicate_username,
+.z-logon-box.error_duplicate_identity #signup_error_duplicate_identity,
+.z-logon-box.error_custom_1 #signup_error_custom_1,
+.z-logon-box.error_custom_2 #signup_error_custom_2 {
   display: block;
 }
 .z-logon-box .z_validation_message {
