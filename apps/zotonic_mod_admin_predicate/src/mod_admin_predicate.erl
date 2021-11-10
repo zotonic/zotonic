@@ -200,7 +200,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
                 sort = 3}
      |Acc].
 
-observe_search_query({search_query, {edges, Args}, _OffsetLimit}, Context) ->
+observe_search_query(#search_query{ search={edges, Args} }, Context) ->
     PredId = rid(predicate, Args, Context),
     SubjectId = rid(hassubject, Args, Context),
     ObjectId = rid(hasobject, Args, Context),

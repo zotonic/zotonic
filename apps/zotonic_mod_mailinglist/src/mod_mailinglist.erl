@@ -53,7 +53,7 @@ manage_schema(Version, Context) ->
     z_mailinglist_schema:manage_schema(Version, Context).
 
 
-observe_search_query({search_query, {mailinglist_recipients, [{id,Id}]}, _OffsetLimit}, _Context) ->
+observe_search_query(#search_query{ search = {mailinglist_recipients, [{id,Id}] } }, _Context) ->
     #search_sql{
         select="id, email, is_enabled",
         from="mailinglist_recipient",
@@ -209,7 +209,10 @@ init(Args) ->
 handle_call({{dropbox_file, File}, _SenderContext}, _From, State) ->
     GetFiles = fun() ->
         C = z_acl:sudo(State#state.context),
-        #search_result{result=Ids} = z_search:search({all, [{cat,mailinglist}]}, C),
+        #search_result{result=Ids} = z_search:search(
+            <<"query">>, #{ <<"cat">> => mailinglist },
+            1, 1000,
+            C),
         [ {m_rsc:p(Id, mailinglist_dropbox_filename, C), Id} || Id <- Ids ]
     end,
     Files = z_depcache:memo(GetFiles, mailinglist_dropbox_filenames, ?WEEK, [mailinglist], State#state.context),

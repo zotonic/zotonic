@@ -51,7 +51,7 @@ get_config(Context) ->
 
 
 %% @doc
-observe_search_query({search_query, {fql, Args}, OffsetLimit}, Context) ->
+observe_search_query(#search_query{ search = {fql, Args}, offsetlimit = OffsetLimit}, Context) ->
     case z_acl:is_allowed(use, mod_facebook, Context) of
         true ->
             m_facebook:search({fql, Args}, OffsetLimit, Context);

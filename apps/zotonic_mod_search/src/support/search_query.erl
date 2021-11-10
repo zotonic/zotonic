@@ -1,5 +1,5 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2009-2017 Arjan Scherpenisse
+%% @copyright 2009-2021 Arjan Scherpenisse
 %% @doc Handler for m.search[{query, Args..}]
 
 %% Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,12 +34,47 @@
 
 -define(SQL_SAFE_REGEXP, "^[0-9a-zA-Z_\.]+$").
 
+
+%% @doc Build a SQL search query from the filter arguments.
+-spec search( map() | proplists:proplist(), z:context() ) -> #search_sql{}.
 search(Query, Context) ->
-    Start = #search_sql{select="rsc.id",
-                        from="rsc rsc",
-                        tables=[{rsc, "rsc"}]},
     Query1 = filter_empty(Query),
-    case parse_query(Query1, Context, Start) of
+    Query2 = lists:filtermap(
+        fun
+            ({K, V}) when is_binary(K) ->
+                case request_arg(K) of
+                    undefined -> false;
+                    A -> {true, {A, V}}
+                end;
+            ({K, _} = KV) when is_atom(K) ->
+                {true, KV}
+        end,
+        Query1),
+    Query3 = lists:map(
+        fun
+            ({K, #{ <<"all">> := All }}) ->
+                case filter_empty(All) of
+                    [] -> [];
+                    All1 -> lists:map(fun(V) -> {K, V} end, All1)
+                end;
+            (KV) ->
+                KV
+        end,
+        Query2),
+    Query4 = case lists:flatten( proplists:get_all_values(cat, Query3) ) of
+        [] -> Query3;
+        Cats -> [{cat, Cats} | proplists:delete(cat, Query3)]
+    end,
+    Query5 = case lists:flatten( proplists:get_all_values(cat_exclude, Query4) ) of
+        [] -> Query4;
+        CatsX -> [{cat_exclude, CatsX} | proplists:delete(cat_exclude, Query4)]
+    end,
+    Search = #search_sql{
+        select = "rsc.id",
+        from = "rsc rsc",
+        tables = [ {rsc, "rsc"} ]
+    },
+    case parse_query(lists:sort(Query5), Context, Search) of
         #search_sql{} = S ->
             case z_utils:is_empty(S#search_sql.order) of
                 true -> add_order("-rsc.id", S);
@@ -49,6 +84,8 @@ search(Query, Context) ->
         Other -> Other
     end.
 
+%% @doc Fetch all arguments from the query string in the HTTP request.
+-spec qargs( z:context() ) -> list( {binary(), term()} ).
 qargs(Context) ->
     Args = z_context:get_q_all_noz(Context),
     lists:filtermap(
@@ -60,6 +97,7 @@ qargs(Context) ->
                 end,
                 Args).
 
+-spec parse_request_args( list( {binary(), term()} ) ) -> list( {atom(), term()} ).
 parse_request_args(Args) ->
     parse_request_args(Args, []).
 
@@ -71,15 +109,16 @@ parse_request_args([{K,V}|Rest], Acc) when is_binary(K) ->
         false ->
             case request_arg(K) of
                 undefined -> parse_request_args(Rest, Acc);
-                Arg -> parse_request_args(Rest, [{Arg,z_convert:to_binary(V)}|Acc])
+                Arg -> parse_request_args(Rest, [{Arg, V}|Acc])
             end
     end;
 parse_request_args([{K,V}|Rest], Acc) ->
-    parse_request_args([{z_convert:to_binary(K), z_convert:to_binary(V)}|Rest], Acc).
+    parse_request_args([{z_convert:to_binary(K), V}|Rest], Acc).
 
-%% Parses a query text. Every line is an argument; of which the first
+
+%% @doc Parses a query text. Every line is an argument; of which the first
 %% '=' separates argument key from argument value.
-%% @doc parse_query_text(string()) -> [{K, V}]
+-spec parse_query_text( binary() | string() | undefined ) -> list( {atom(), term()} ).
 parse_query_text(undefined) ->
     [];
 parse_query_text(Text) when is_list(Text) ->
@@ -146,6 +185,7 @@ request_arg(<<"finished">>)            -> finished;
 request_arg(<<"unfinished">>)          -> unfinished;
 request_arg(<<"unfinished_or_nodate">>)-> unfinished_or_nodate;
 % Skip these
+request_arg(<<"page">>)                -> undefined;
 request_arg(<<"pagelen">>)             -> undefined;
 % Complain about all else
 request_arg(Term) ->
@@ -154,7 +194,12 @@ request_arg(Term) ->
 
 
 %% Private methods start here
-filter_empty(Q) ->
+
+%% @doc Drop all empty query arguments. Search forms have empty values
+%% for unused filters.
+filter_empty(Q) when is_map(Q) ->
+    filter_empty(maps:to_list(Q));
+filter_empty(Q) when is_list(Q) ->
     lists:filter(fun({_, X}) -> not(empty_term(X)) end, Q).
 
 empty_term([]) -> true;
@@ -218,18 +263,17 @@ parse_query([{content_group, ContentGroup}|Rest], Context, Result0) ->
 
 %% id_exclude=resource-id
 %% Exclude an id from the result
-parse_query([{id_exclude, Id}|Rest], Context, Result)  when is_integer(Id) ->
-    Result1 = add_where("rsc.id <> " ++ integer_to_list(Id), Result),
-    parse_query(Rest, Context, Result1);
-
-parse_query([{id_exclude, _Id}|Rest], Context, Result)  ->
-    parse_query(Rest, Context, Result);
+parse_query([{id_exclude, Id}|Rest], Context, Result) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            parse_query(Rest, Context, Result);
+        RscId ->
+            Result1 = add_where("rsc.id <> " ++ integer_to_list(RscId), Result),
+            parse_query(Rest, Context, Result1)
+    end;
 
 %% hasmedium=true|false
 %% Give all things which have a medium record attached (or not)
-parse_query([{hasmedium, undefined}|Rest], Context, Result) ->
-    parse_query(Rest, Context, Result);
-
 parse_query([{hasmedium, HasMedium}|Rest], Context, Result) ->
     Result1 = case z_convert:to_bool(HasMedium) of
         true ->
@@ -250,6 +294,7 @@ parse_query([{hasmedium, HasMedium}|Rest], Context, Result) ->
 parse_query([{hassubject, Id} | Rest], Context, Result) ->
     Result1 = parse_edges(hassubject, maybe_split_list(Id), Result, Context),
     parse_query(Rest, Context, Result1);
+
 parse_query([{hasobject, Id} | Rest], Context, Result) ->
     Result1 = parse_edges(hasobject, maybe_split_list(Id), Result, Context),
     parse_query(Rest, Context, Result1);
@@ -385,15 +430,15 @@ parse_query([{is_authoritative, Boolean}|Rest], Context, Result) ->
 
 %% creator_id=<rsc id>
 %% Filter on items which are created by <rsc id>
-parse_query([{creator_id, Integer}|Rest], Context, Result) ->
-    {Arg, Result1} = add_arg(z_convert:to_integer(Integer), Result),
+parse_query([{creator_id, Id}|Rest], Context, Result) ->
+    {Arg, Result1} = add_arg(m_rsc:rid(Id, Context), Result),
     Result2 = add_where("rsc.creator_id = " ++ Arg, Result1),
     parse_query(Rest, Context, Result2);
 
 %% modifier_id=<rsc id>
 %% Filter on items which are last modified by <rsc id>
-parse_query([{modifier_id, Integer}|Rest], Context, Result) ->
-    {Arg, Result1} = add_arg(z_convert:to_integer(Integer), Result),
+parse_query([{modifier_id, Id}|Rest], Context, Result) ->
+    {Arg, Result1} = add_arg(m_rsc:rid(Id, Context), Result),
     Result2 = add_where("rsc.modifier_id = " ++ Arg, Result1),
     parse_query(Rest, Context, Result2);
 
@@ -424,14 +469,15 @@ parse_query([{query_id, Id}|Rest], Context, Result) ->
 %% rsc_id=<rsc id>
 %% Filter to *only* include the given rsc id. Can be used for resource existence check.
 parse_query([{rsc_id, Id}|Rest], Context, Result) ->
-    {Arg, Result1} = add_arg(Id, Result),
+    RscId = m_rsc:rid(Id, Context),
+    {Arg, Result1} = add_arg(RscId, Result),
     Result2 = add_where("rsc.id = " ++ Arg, Result1),
     parse_query(Rest, Context, Result2);
 
 %% name=<name-pattern>
 %% Filter on the unique name of a resource.
 parse_query([{name, Name}|Rest], Context, Result) ->
-    case z_string:to_lower(mod_search:trim(Name, Context)) of
+    case z_string:to_lower(mod_search:trim(z_convert:to_binary(Name), Context)) of
         All when All =:= <<>>; All =:= <<"*">>; All =:= <<"%">> ->
             Result2 = add_where("rsc.name is not null", Result),
             parse_query(Rest, Context, Result2);
@@ -444,6 +490,15 @@ parse_query([{name, Name}|Rest], Context, Result) ->
 
 %% language=<iso-code>
 %% Filter on the presence of a translation
+parse_query([{language, []}|Rest], Context, Result) ->
+    parse_query(Rest, Context, Result);
+parse_query([{language, [ Lang | Langs ]}|Rest], Context, Result) when not is_integer(Lang) ->
+    Rest1 = [
+        {language, Lang},
+        {language, Langs}
+        | Rest
+    ],
+    parse_query(Rest1, Context, Result);
 parse_query([{language, Lang}|Rest], Context, Result) ->
     case z_language:to_language_atom(Lang) of
         {ok, Code} ->
@@ -466,6 +521,15 @@ parse_query([{zsort, Sort}|Rest], Context, Result) ->
 
 %% custompivot=tablename
 %% Add a join on the given custom pivot table.
+parse_query([{custompivot, []}|Rest], Context, Result) ->
+    parse_query(Rest, Context, Result);
+parse_query([{custompivot, [ Table | Ts ]}|Rest], Context, Result) when not is_integer(Table) ->
+    Table1 = case is_atom(Table) of
+                 true -> atom_to_list(Table);
+                 false -> Table
+             end,
+    Rest1 = [ {custompivot, Ts} | Rest ],
+    parse_query(Rest1, Context, add_custompivot_join(Table1, Result));
 parse_query([{custompivot, Table}|Rest], Context, Result) ->
     Table1 = case is_atom(Table) of
                  true -> atom_to_list(Table);
@@ -476,7 +540,7 @@ parse_query([{custompivot, Table}|Rest], Context, Result) ->
 %% text=...
 %% Perform a fulltext search
 parse_query([{text, Text}|Rest], Context, Result) ->
-    case mod_search:trim(Text, Context) of
+    case mod_search:trim(z_convert:to_binary(Text), Context) of
         <<>> -> parse_query(Rest, Context, Result);
         <<"id:", S/binary>> -> mod_search:find_by_id(S, Context);
         _ ->
@@ -505,7 +569,7 @@ parse_query([{match_objects, RId}|Rest], Context, Result) ->
             parse_query([{match_object_ids, ObjectIds}, {id_exclude, Id}|Rest], Context, Result)
     end;
 parse_query([{match_object_ids, ObjectIds} | Rest], Context, Result) ->
-    ObjectIds1 = [ m_rsc:rid(OId, Context) || OId <- ObjectIds ],
+    ObjectIds1 = [ m_rsc:rid(OId, Context) || OId <- lists:flatten(ObjectIds) ],
     MatchTerms = [ ["zpo",integer_to_list(ObjId)] || ObjId <- ObjectIds1, is_integer(ObjId) ],
     TsQuery = lists:flatten(lists:join("|", MatchTerms)),
     case TsQuery of
@@ -688,6 +752,11 @@ add_where(Clause, Search) ->
 
 
 %% Add an ORDER clause.
+add_order([], Search) ->
+    Search;
+add_order([ Order | Os ], Search) when not is_integer(Order) ->
+    Search1 = add_order(Order, Search),
+    add_order(Os, Search1);
 add_order(Order, Search) when is_atom(Order) ->
     add_order(atom_to_list(Order), Search);
 add_order(Order, Search) when is_binary(Order) ->
@@ -918,10 +987,10 @@ map_filter_operator(Op) -> throw({error, {unknown_filter_operator, Op}}).
 % Convert an expression like [123,hasdocument]
 maybe_split_list(<<"[", _/binary>> = Term) ->
     unquote_all(search_parse_list:parse(Term));
-maybe_split_list([$[|Rest]) ->
-    unquote_all(search_parse_list:parse(z_convert:to_binary(Rest)));
+maybe_split_list("[" ++ _ = Term) ->
+    unquote_all(search_parse_list:parse(Term));
 maybe_split_list(Other) ->
-    [Other].
+    [ Other ].
 
 unquote_all(L) when is_list(L) ->
     lists:map(fun unquote_all/1, L);

@@ -82,7 +82,7 @@ observe_rsc_update(#rsc_update{}, Acc, _Context) ->
     Acc.
 
 
-observe_search_query({search_query, Req, OffsetLimit}, Context) ->
+observe_search_query(#search_query{ search = Req, offsetlimit = OffsetLimit }, Context) ->
     search(Req, OffsetLimit, Context).
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->

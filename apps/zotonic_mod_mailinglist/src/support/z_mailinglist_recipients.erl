@@ -35,10 +35,10 @@ count_recipients(ListId, Context) ->
         undefined -> [];
         <<>> -> [];
         _ ->
-            Q = [
-                {query_id, ListId}
-            ],
-            #search_result{ result = Result } = z_search:search({'query', Q}, ?MAX_ROWS, Context),
+            Q = #{
+                <<"query_id">> => ListId
+            },
+            #search_result{ result = Result } = z_search:search(<<"query">>, Q, 1, ?MAX_ROWS, Context),
             Result
     end,
     #{
@@ -67,10 +67,10 @@ list_recipients(List, Context) ->
         undefined -> [];
         <<>> -> [];
         _ ->
-            Q = [
-                {query_id, ListId}
-            ],
-            #search_result{ result = Result } = z_search:search({'query', Q}, ?MAX_ROWS, Context),
+            Q = #{
+                <<"query_id">> => ListId
+            },
+            #search_result{ result = Result } = z_search:search(<<"query">>, Q, 1, ?MAX_ROWS, Context),
             Result
     end,
     AllIds = lists:usort(SubIds ++ QueryIds),

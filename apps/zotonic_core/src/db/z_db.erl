@@ -82,6 +82,8 @@
     column_names_bin/2,
     column_exists/3,
 
+    estimate_rows/3,
+
     get_current_props/3,
     update_sequence/3,
     prepare_database/1,
@@ -760,6 +762,31 @@ update(Table, Id, Parameters, Context) when is_map(Parameters) ->
         {error, _} = Error ->
             Error
     end.
+
+
+%% @doc Estimate the number of rows matching a query. This uses the PostgreSQL query planner
+%% to return an estimate of the number of rows.
+-spec estimate_rows(Query, Args, Context) -> {ok, Rows} | {error, term()}
+    when Query :: string() | binary(),
+         Args :: list(),
+         Context :: z:context(),
+         Rows :: non_neg_integer().
+estimate_rows(Query, Args, Context) ->
+    Query1 = "explain " ++ z_convert:to_list(Query),
+    try
+        find_estimate( z_db:q(Query1, Args, Context) )
+    catch
+        throw:{error, _} = Error -> Error
+    end.
+
+find_estimate([]) ->
+    {ok, 0};
+find_estimate([{R}|Rs]) ->
+    case re:run(R, <<" rows=([0-9]+)">>, [{capture, all_but_first, binary}]) of
+        nomatch -> find_estimate(Rs);
+        {match, [Rows]} -> {ok, binary_to_integer(Rows)}
+    end.
+
 
 get_current_props(Table, Id, Context) ->
     DBDriver = z_context:db_driver(Context),

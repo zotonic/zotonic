@@ -141,29 +141,19 @@
 %% Default page length for search
 -define(SEARCH_PAGELEN, 20).
 
-%% @doc A set of search results
+%% @doc A set of search results. The atom/proplists name/args are deprecated, use
+%% the binary / maps from now on.
 -record(search_result, {
+    search_name = <<"query">> :: binary() | atom(),
+    search_args = #{} :: map() | proplists:proplist(),
     result = [] :: list(),
     page = 1 :: pos_integer(),
-    pagelen :: pos_integer() | undefined,
-    total :: non_neg_integer() | undefined,
-    all :: list() | undefined,
-    pages :: non_neg_integer() | undefined,
-    next,
-    prev,
+    pagelen = ?SEARCH_PAGELEN :: pos_integer() | undefined,
+    total = undefined :: non_neg_integer() | undefined,
+    pages = undefined :: non_neg_integer() | undefined,
+    next = false :: pos_integer() | false,
+    prev = 1 :: pos_integer(),
     facets = [] :: list()
-}).
-
--record(m_search_result, {
-    search_name,
-    search_props,
-    result,
-    page = 1,
-    pagelen :: pos_integer() | undefined,
-    total :: non_neg_integer() | undefined,
-    pages :: non_neg_integer() | undefined,
-    next,
-    prev
 }).
 
 -record(search_sql, {

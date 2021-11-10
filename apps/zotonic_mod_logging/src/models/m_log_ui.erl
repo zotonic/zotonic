@@ -133,10 +133,10 @@ map_prop({<<"user_agent">>, M}) when is_binary(M) -> {user_agent, z_string:trunc
 map_prop({<<"url">>, M}) when is_binary(M) -> {url, z_string:truncatechars(M, 500)}.
 
 
--spec search_query( list(), z:context() ) -> #search_sql{}.
-search_query(Args, _Context) ->
+-spec search_query( map(), z:context() ) -> #search_sql{}.
+search_query(Args, Context) ->
     % Filter on log type
-    W1 = case z_convert:to_binary( proplists:get_value(type, Args, "warning") ) of
+    W1 = case z_convert:to_binary( maps:get(<<"type">>, Args, <<"warning">>) ) of
         <<"error">> -> " type = 'error' ";
         <<"info">> -> " type <> 'debug' ";
         <<"debug">> -> "";
@@ -144,7 +144,7 @@ search_query(Args, _Context) ->
     end,
     As1 = [],
     % Filter on user-id
-    {W2, As2} = case proplists:get_value(user, Args) of
+    {W2, As2} = case maps:get(<<"user">>, Args, undefined) of
         undefined -> {W1, As1};
         "" -> {W1, As1};
         <<>> -> {W1, As1};
@@ -154,7 +154,7 @@ search_query(Args, _Context) ->
                     "" -> " user_id = $" ++ integer_to_list(length(As1) + 1);
                     _ -> W1 ++ " and user_id = $" ++ integer_to_list(length(As1) + 1)
                 end,
-                {WU, As1 ++ [ z_convert:to_integer(User) ]}
+                {WU, As1 ++ [ m_rsc:rid(User, Context) ]}
             catch
                 _:_ ->
                     {W1, As1}

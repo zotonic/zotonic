@@ -321,15 +321,21 @@ find_value(Name, [#{ <<"name">> := _ }|_] = Blocks, _TplVars, _Context ) when no
     end;
 find_value(Key, #search_result{} = S, _TplVars, _Context) ->
     case Key of
+        search -> {S#search_result.search_name, S#search_result.search_args};
+        search_name -> S#search_result.search_name;
+        search_args -> S#search_result.search_args;
+        search_props -> S#search_result.search_args;
         result -> S#search_result.result;
-        all -> S#search_result.all;
         total -> S#search_result.total;
         page -> S#search_result.page;
         pages -> S#search_result.pages;
         next -> S#search_result.next;
         prev -> S#search_result.prev;
+        <<"search">> -> {S#search_result.search_name, S#search_result.search_args};
+        <<"search_name">> -> S#search_result.search_name;
+        <<"search_args">> -> S#search_result.search_args;
+        <<"search_props">> -> S#search_result.search_args;
         <<"result">> -> S#search_result.result;
-        <<"all">> -> S#search_result.all;
         <<"total">> -> S#search_result.total;
         <<"page">> -> S#search_result.page;
         <<"pages">> -> S#search_result.pages;
@@ -341,38 +347,6 @@ find_value(Key, #search_result{} = S, _TplVars, _Context) ->
             try
                 Nth1 = z_convert:to_integer(Nth),
                 nth(Nth1, S#search_result.result)
-            catch
-                _:_ -> undefined
-            end
-    end;
-find_value(Key, #m_search_result{} = S, TplVars, Context) ->
-    case Key of
-        search -> {S#m_search_result.search_name, S#m_search_result.search_props};
-        search_name -> S#m_search_result.search_name;
-        search_props -> S#m_search_result.search_props;
-        result -> S#m_search_result.result;
-        total -> S#m_search_result.total;
-        page -> S#m_search_result.page;
-        pages -> S#m_search_result.pages;
-        pagelen -> S#m_search_result.pagelen;
-        next -> S#m_search_result.next;
-        prev -> S#m_search_result.prev;
-        <<"search">> -> {S#m_search_result.search_name, S#m_search_result.search_props};
-        <<"search_name">> -> S#m_search_result.search_name;
-        <<"search_props">> -> S#m_search_result.search_props;
-        <<"result">> -> S#m_search_result.result;
-        <<"total">> -> S#m_search_result.total;
-        <<"page">> -> S#m_search_result.page;
-        <<"pages">> -> S#m_search_result.pages;
-        <<"pagelen">> -> S#m_search_result.pagelen;
-        <<"next">> -> S#m_search_result.next;
-        <<"prev">> -> S#m_search_result.prev;
-        Nth when is_integer(Nth) ->
-            find_value(Nth, S#m_search_result.result, TplVars, Context);
-        Nth when is_binary(Nth) ->
-            try
-                Nth1 = z_convert:to_integer(Nth),
-                find_value(Nth1, S#m_search_result.result, TplVars, Context)
             catch
                 _:_ -> undefined
             end
@@ -599,7 +573,6 @@ to_bool(#rsc_list{list=[]}, _Context) -> false;
 to_bool(#rsc_list{list=[_|_]}, _Context) -> true;
 to_bool(#search_result{result=[]}, _Context) -> false;
 to_bool(#search_result{result=[_|_]}, _Context) -> true;
-to_bool(#m_search_result{result=Result}, Context) -> to_bool(Result, Context);
 to_bool(null, _Context) -> false;
 to_bool(Value, Context) ->
     z_convert:to_bool_strict( to_simple_value(Value, Context) ).
@@ -611,7 +584,6 @@ to_list(null, _Context) -> [];
 to_list(<<>>, _Context) -> [];
 to_list(#rsc_list{ list = L }, _Context) -> L;
 to_list(#search_result{ result = L }, _Context) -> L;
-to_list(#m_search_result{ result = Result }, Context) -> to_list(Result, Context);
 to_list(q, Context) -> z_context:get_q_all(Context);
 to_list(q_validated, _Context) -> [];
 to_list(<<"q">>, Context) -> z_context:get_q_all(Context);
@@ -631,7 +603,7 @@ to_simple_values(Args, Context) when is_list(Args) ->
 
 %% @doc Convert a value to something that can be handled as an argument to scomps.
 -spec to_simple_value(Value::term(), Context::term()) -> term().
-to_simple_value(#m_search_result{result=#search_result{result=Result}}, _Context) ->
+to_simple_value(#search_result{result=Result}, _Context) ->
     Result;
 to_simple_value(#rsc_list{list=L}, _Context) ->
     L;
@@ -656,7 +628,7 @@ to_render_result({{Y,M,D},{H,I,S}} = Date, TplVars, Context)
     when is_integer(Y), is_integer(M), is_integer(D),
          is_integer(H), is_integer(I), is_integer(S) ->
     z_datetime:format(Date, "Y-m-d H:i:s", set_context_vars(TplVars, Context));
-to_render_result(#m_search_result{result=#search_result{result=Result}}, _TplVars, _Context) ->
+to_render_result(#search_result{result=Result}, _TplVars, _Context) ->
     io_lib:format("~p", [Result]);
 to_render_result(#rsc_list{list=L}, _TplVars, _Context) ->
     io_lib:format("~p", [L]);
