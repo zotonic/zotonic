@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-20 14:25\n"
+"PO-Revision-Date: 2021-11-10 13:58\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "Kaugressursi URL -i ei õnnestunud tuua."
 msgid "Forbidden to access the remote resource URL."
 msgstr "Kaugressursi URL -ile juurdepääs on keelatud."
 
-#: apps/zotonic_core/src/support/z_media_import.erl:194
+#: apps/zotonic_core/src/support/z_media_import.erl:200
 msgid "Page Import"
 msgstr "Lehe import"
 
@@ -56,7 +56,7 @@ msgstr "Liiga palju taotlusi kaugserveri jaoks, proovige hiljem uuesti."
 msgid "Unauthorized to access the remote resource URL."
 msgstr "Volitamata juurdepääs kaugressursi URL -ile."
 
-#: apps/zotonic_core/src/support/z_media_import.erl:229
+#: apps/zotonic_core/src/support/z_media_import.erl:235
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
 msgstr "Veebileht"
@@ -165,7 +165,7 @@ msgid "All"
 msgstr "Kõik"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:35
-#: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:44./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:47./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:44./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "All Categories"
 msgstr "K√µik kategooriad"
 
@@ -836,12 +836,12 @@ msgstr "Kogu sisu"
 msgid "All day"
 msgstr "Terve päev"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:14./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:73./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:96
+#: apps/zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:14./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:88./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:96
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:82
 msgid "All media"
 msgstr "Kogu meedia"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:13./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:72./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:95
+#: apps/zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:13./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:87./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:95
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:81
 msgid "All pages"
 msgstr "Kõik lehed"
@@ -858,7 +858,7 @@ msgstr "Eraldatud"
 msgid "Alternative telephone"
 msgstr "Teine telefon"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:61
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:76
 msgid "And media can also be viewed on their own page."
 msgstr "Ja meediat saab vaadata ka oma lehel."
 
@@ -1170,6 +1170,7 @@ msgid "Email address for public display"
 msgstr "E-posti aadress avalikuks kuvamiseks"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:5
+#: apps/zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:13
 msgid "Embed"
 msgstr "Embed"
 
@@ -1268,7 +1269,7 @@ msgstr "Tooge uus versioon"
 msgid "File / media content"
 msgstr "File / meedia"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:47
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:50./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:47
 msgid "Filter on category"
 msgstr "Filtreeri kategooria järgi"
 
@@ -1345,7 +1346,7 @@ msgstr "Kui lehel on avaldamise kuupäevavahemik, on see nähtav ainult kahe kuu
 msgid "Import only direct connections (shallow copy)."
 msgstr "Importige ainult otseühendusi (madal koopia)."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:85
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:100
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:20
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:120
 msgid "Info"
@@ -1359,7 +1360,7 @@ msgstr "Info link modaalse hüpikaknaga"
 msgid "Inline block"
 msgstr "Sisse blokeeritud"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:48./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:60
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:63./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:60
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:39
 msgid "Items per page"
 msgstr "Üksusi lehel"
@@ -1419,7 +1420,7 @@ msgstr "Pea"
 msgid "Make"
 msgstr "Loo"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:69
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:84
 msgid "Make a new media item"
 msgstr "Loo uus meediafail"
 
@@ -1437,7 +1438,7 @@ msgstr "Tehke uus leht või meedium"
 msgid "Matching"
 msgstr "Sobitamine"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:3./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:57./apps/zotonic_mod_admin/src/mod_admin.erl:104
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:3./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:72./apps/zotonic_mod_admin/src/mod_admin.erl:104
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:103./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:113
 msgid "Media"
 msgstr "Meedia"
@@ -1446,7 +1447,7 @@ msgstr "Meedia"
 msgid "Media URL or HTML"
 msgstr "Meedia URL või HTML"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:60
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:75
 msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
 msgstr "Meedium hõlmab kõiki üleslaaditud pilte, filme ja dokumente. Lehekülgedele saab lisada meediume."
 
@@ -1485,6 +1486,11 @@ msgstr "Minu oma"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:22
 msgid "Mobile"
 msgstr "Mobiilne"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:101
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:22
+msgid "Modified"
+msgstr "Muudetud"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:85./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:144./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
 msgid "Modified by"
@@ -1538,7 +1544,7 @@ msgstr "Selle meta-ressursi jaoks pole ühtegi funktsiooni lubatud."
 msgid "No items"
 msgstr "Pole midagi"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:131
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:151
 msgid "No media found."
 msgstr "Ei leia meediat."
 
@@ -1624,7 +1630,7 @@ msgstr "Postiindeks"
 msgid "Predicate"
 msgstr "Predikaat"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:28./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:28./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:83
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:28./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:28./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:98
 msgid "Preview"
 msgstr "Eelvaade"
 
@@ -1807,7 +1813,7 @@ msgstr "Valige"
 msgid "Select a connected image"
 msgstr "Valige ühendatud pilt"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:42
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:45./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:42
 msgid "Selected Categories"
 msgstr "Valitud kategooriad"
 
@@ -2041,7 +2047,7 @@ msgstr "Kuni"
 msgid "Timeout while trying to fetch data from the website."
 msgstr "Aegumine, kui proovite veebisaidilt andmeid tuua."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:132./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:84./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:132./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:99./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
 msgid "Title"
@@ -2099,7 +2105,7 @@ msgstr "Lae √ºles oma arvutist."
 msgid "Upload file"
 msgstr "Lae fail"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:86
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:102
 #: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:75
 msgid "Uploaded"
 msgstr "√úles laetud"
@@ -2269,7 +2275,7 @@ msgstr "blokeerida"
 msgid "by"
 msgstr "poolt"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:57./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:103./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:104./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:171./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:172./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:57./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:103./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:104./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:171./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:172./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:124./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:127./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:55
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:66./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:68
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
@@ -2279,7 +2285,7 @@ msgstr "poolt"
 msgid "d M Y, H:i"
 msgstr "d MINU, H: i"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:111
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:131
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:42
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:39
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
@@ -2290,7 +2296,7 @@ msgstr "kustuta"
 msgid "e.g. might change"
 msgstr "nt võivad muutuda"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:62./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:109./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:177./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:122./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:62./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:109./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:177./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:142./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
 msgid "edit"
@@ -2514,10 +2520,6 @@ msgstr "Võti"
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:12
 msgid "Make a new config setting"
 msgstr "Tehke uus seadistusseade"
-
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:22
-msgid "Modified"
-msgstr "Muudetud"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:66
 msgid "No configurations found."
@@ -9141,11 +9143,11 @@ msgstr "Teie Twitteri rakenduste halduse leht"
 msgid "Converting"
 msgstr "Teisendamine"
 
-#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:222
+#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:220
 msgid "Vimeo Video"
 msgstr "Vimeo video"
 
-#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:220
+#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:218
 msgid "Youtube Video"
 msgstr "Youtube'i video"
 
