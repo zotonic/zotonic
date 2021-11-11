@@ -53,10 +53,7 @@ search(Query, Context) ->
     Query3 = lists:map(
         fun
             ({K, #{ <<"all">> := All }}) ->
-                case filter_empty(All) of
-                    [] -> [];
-                    All1 -> lists:map(fun(V) -> {K, V} end, All1)
-                end;
+                filter_empty( lists:map(fun(V) -> {K, V} end, All) );
             (KV) ->
                 KV
         end,
@@ -200,9 +197,7 @@ request_arg(Term) ->
 filter_empty(Q) when is_map(Q) ->
     filter_empty(maps:to_list(Q));
 filter_empty(Q) when is_list(Q) ->
-    lists:filter(fun({_, X}) -> not(empty_term(X));
-                    ([_, X]) -> not(empty_term(X))
-                 end, Q).
+    lists:filter(fun({_, X}) -> not(empty_term(X)) end, Q).
 
 empty_term([]) -> true;
 empty_term(<<>>) -> true;
