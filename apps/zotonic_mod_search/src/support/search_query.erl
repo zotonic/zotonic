@@ -50,14 +50,15 @@ search(Query, Context) ->
                 {true, KV}
         end,
         Query1),
-    Query3 = lists:map(
-        fun
-            ({K, #{ <<"all">> := All }}) ->
-                filter_empty( lists:map(fun(V) -> {K, V} end, All) );
-            (KV) ->
-                KV
-        end,
-        Query2),
+    Query3 = lists:flatten(
+        lists:map(
+            fun
+                ({K, #{ <<"all">> := All }}) ->
+                    filter_empty( lists:map(fun(V) -> {K, V} end, All) );
+                (KV) ->
+                    KV
+            end,
+            Query2)),
     Query4 = case lists:flatten( proplists:get_all_values(cat, Query3) ) of
         [] -> Query3;
         Cats -> [{cat, Cats} | proplists:delete(cat, Query3)]
