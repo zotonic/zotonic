@@ -82,6 +82,40 @@ search_query_notify_test() ->
     ok.
 
 
+search_all_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+
+    {ok, ObjId} = m_rsc:insert([{category, article},
+                             {title, <<"A test article">>}], C),
+
+    Q = {query,[
+        {cat,text},
+        {hasobject,[ObjId,author]},
+        {hasobject,[ObjId,relation]}
+    ]},
+    #search_result{ result = [] } = m_search:search(Q, C),
+
+    {ok, SubjId} = m_rsc:insert([{category, article},
+                             {title, <<"A test article">>}], C),
+    m_edge:insert(SubjId, author, ObjId, C),
+    #search_result{ result = [] } = m_search:search(Q, C),
+
+    m_edge:insert(SubjId, relation, ObjId, C),
+    #search_result{ result = [SubjId] } = m_search:search(Q, C),
+
+    Q1 = {query,[
+        {cat,text},
+        {hassubject,[SubjId,author]},
+        {hassubject,[SubjId,relation]}
+    ]},
+    #search_result{ result = [ObjId] } = m_search:search(Q1, C),
+
+    m_rsc:delete(ObjId, C),
+    m_rsc:delete(SubjId, C),
+    ok.
+
+
 language_search_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
