@@ -86,22 +86,29 @@ search_all_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
 
+    {ok, ObjId} = m_rsc:insert([{category, article},
+                             {title, <<"A test article">>}], C),
+
     Q = {query,[
         {cat,text},
-        {hasobject,[1,author]},
-        {hasobject,[1,relation]}
+        {hasobject,[ObjId,author]},
+        {hasobject,[ObjId,relation]}
     ]},
-    #search_result{ result = [] } = m_search:search(Q, C),
+    R0 = m_search:search(Q, C),
+    [] = R0#search_result.result,
 
-    {ok, Id} = m_rsc:insert([{category, article},
+    {ok, SubjId} = m_rsc:insert([{category, article},
                              {title, <<"A test article">>}], C),
-    m_edge:insert(Id, author, 1, C),
-    #search_result{ result = [] } = m_search:search(Q, C),
+    m_edge:insert(SubjId, author, ObjId, C),
+    R1 = m_search:search(Q, C),
+    [] = R1#search_result.result,
 
-    m_edge:insert(Id, relation, 1, C),
-    #search_result{ result = [ Id ] } = m_search:search(Q, C),
+    m_edge:insert(SubjId, relation, ObjId, C),
+    R2 = m_search:search(Q, C),
+    [SubjId] = R2#search_result.result,
 
-    m_rsc:delete(Id, C),
+    m_rsc:delete(ObjId, C),
+    m_rsc:delete(SubjId, C),
     ok.
 
 
