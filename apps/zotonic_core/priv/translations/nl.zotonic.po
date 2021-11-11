@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-10 13:59\n"
+"PO-Revision-Date: 2021-11-11 22:58\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -3357,7 +3357,7 @@ msgstr "Alle predicaten"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_extra_buttons.tpl:2
 msgid "All page connections"
-msgstr "Alla paginaconnecties"
+msgstr "Alle paginaconnecties"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:246
