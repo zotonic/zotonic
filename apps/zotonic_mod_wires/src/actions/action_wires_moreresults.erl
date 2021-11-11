@@ -68,8 +68,17 @@ pagelen(_, _) ->
 %% @spec event(Event, Context1) -> Context2
 %% @todo Handle the "MorePageLen" argument correctly.
 event(#postback{message={moreresults, SearchName, SearchProps, Page, PageLen, MorePageLen, Args}, trigger=TriggerId, target=TargetId}, Context) ->
-    SearchProps1 = [{page, Page},{pagelen,PageLen}|SearchProps],
-    #search_result{result=Result} = m_search:search({SearchName, SearchProps1}, Context),
+    #search_result{result=Result} = case is_list(SearchProps) of
+        true ->
+            SearchProps1 = [
+                {page, Page},
+                {pagelen, PageLen}
+                | SearchProps
+            ],
+            m_search:search({SearchName, SearchProps1}, Context);
+        false ->
+            z_search:search(SearchName, SearchProps, Page, PageLen, Context)
+    end,
     Rows = case proplists:get_value(ids, Result) of
               undefined -> Result;
               X -> X
