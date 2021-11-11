@@ -32,8 +32,13 @@ render_action(TriggerId, TargetId, Args, Context) ->
         false ->
             NextPage = Result#search_result.page + 1,
             MorePageLen = proplists:get_value(pagelen, Args, PageLen),
-            SearchProps = proplists:delete(pagelen,
-                                proplists:delete(page, Result#search_result.search_args)),
+            SearchProps = case Result#search_result.search_args of
+                SPs when is_list(SPs) ->
+                    proplists:delete(pagelen,
+                        proplists:delete(page, SPs));
+                SPs when is_map(SPs) ->
+                    maps:without([ <<"page">>, <<"pagelen">> ], SPs)
+            end,
             make_postback(SearchName, SearchProps, NextPage, PageLen, MorePageLen, Args, TriggerId, TargetId, Context)
     end.
 
