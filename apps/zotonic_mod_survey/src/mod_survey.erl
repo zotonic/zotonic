@@ -247,8 +247,12 @@ normalize_answer(A) when is_atom(A) -> {z_convert:to_binary(A), <<"1">>};
 normalize_answer({A, undefined}) -> {z_convert:to_binary(A), <<>>};
 normalize_answer({A, true}) -> {z_convert:to_binary(A), <<"1">>};
 normalize_answer({A, false}) -> {z_convert:to_binary(A), <<"0">>};
-normalize_answer({A,V}) -> {z_convert:to_binary(A), z_convert:to_binary(V)};
-normalize_answer([A,V]) -> normalize_answer({A,V}).
+normalize_answer({A, [B|_] = V}) when is_binary(B) -> {z_convert:to_binary(A), V};
+normalize_answer({A, [L|_] = V}) when is_list(L) ->
+    V1 = [ z_convert:to_binary(X) || X <- V ],
+    {z_convert:to_binary(A), V1};
+normalize_answer({A, V}) -> {z_convert:to_binary(A), z_convert:to_binary(V)};
+normalize_answer([A, V]) -> normalize_answer({A,V}).
 
 
 render_update(#context{} = RenderContext, _Args, _Context) ->
