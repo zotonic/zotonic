@@ -94,18 +94,22 @@ search_all_test() ->
         {hasobject,[ObjId,author]},
         {hasobject,[ObjId,relation]}
     ]},
-    R0 = m_search:search(Q, C),
-    [] = R0#search_result.result,
+    #search_result{ result = [] } = m_search:search(Q, C),
 
     {ok, SubjId} = m_rsc:insert([{category, article},
                              {title, <<"A test article">>}], C),
     m_edge:insert(SubjId, author, ObjId, C),
-    R1 = m_search:search(Q, C),
-    [] = R1#search_result.result,
+    #search_result{ result = [] } = m_search:search(Q, C),
 
     m_edge:insert(SubjId, relation, ObjId, C),
-    R2 = m_search:search(Q, C),
-    [SubjId] = R2#search_result.result,
+    #search_result{ result = [SubjId] } = m_search:search(Q, C),
+
+    Q1 = {query,[
+        {cat,text},
+        {hassubject,[SubjId,author]},
+        {hassubject,[SubjId,relation]}
+    ]},
+    #search_result{ result = [ObjId] } = m_search:search(Q1, C),
 
     m_rsc:delete(ObjId, C),
     m_rsc:delete(SubjId, C),
