@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-10 13:58\n"
+"PO-Revision-Date: 2021-11-12 10:08\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -307,7 +307,7 @@ msgid "Define who can see or edit this page."
 msgstr "Kes saab lehte n√§ha v√µi muuta."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:158
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:71
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:58./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:67
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:52
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:8./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:25./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:30./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53./apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:168
@@ -800,15 +800,15 @@ msgstr "Lisage uus meediumifail"
 msgid "Add a new media item"
 msgstr "Lisa uus meediafail"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:91
-msgid "Add media item"
-msgstr "Lisage meediumüksus"
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:110
+msgid "Add media content"
+msgstr "Lisage meediumisisu"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:13
 msgid "Add media to body"
 msgstr "Lisa meedia sisule"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:477./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
+#: apps/zotonic_mod_admin/src/mod_admin.erl:479./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
 msgid "Added the connection to"
 msgstr "Lisas ühenduse domeeniga"
 
@@ -870,6 +870,10 @@ msgstr "Mis tahes kategooria"
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:44
 msgid "Anybody’s"
 msgstr "Kellegi oma"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:63
+msgid "Are you sure you want to delete the media from this page?"
+msgstr "Kas olete kindel, et soovite sellelt lehelt meedia kustutada?"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:2
 msgid "Are you sure you want to delete the page"
@@ -1178,7 +1182,7 @@ msgstr "Embed"
 msgid "Embed code will be sanitized for allowed sites and html."
 msgstr "Manustatud kood desinfitseeritakse lubatud saitide ja HTML-i jaoks."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:174
+#: apps/zotonic_mod_admin/src/mod_admin.erl:176
 msgid "Embed page"
 msgstr "Manusta leht"
 
@@ -1316,7 +1320,7 @@ msgstr "Kellelt"
 msgid "Go back."
 msgstr "Tagasi"
 
-#: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:21./apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:22./apps/zotonic_mod_admin/src/mod_admin.erl:172
+#: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:21./apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:22./apps/zotonic_mod_admin/src/mod_admin.erl:174
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:116
 msgid "Header"
 msgstr "Päis"
@@ -1722,7 +1726,7 @@ msgstr "Installige saidi datamudel uuesti"
 msgid "Remarks"
 msgstr "M√§rkused"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:481
+#: apps/zotonic_mod_admin/src/mod_admin.erl:483
 msgid "Removed the connection to"
 msgstr "Ühendus saidiga eemaldati"
 
@@ -1730,17 +1734,13 @@ msgstr "Ühendus saidiga eemaldati"
 msgid "Renumber category tree"
 msgstr "Nummerda kategoori puu uuesti"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:176
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:77./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:110./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:176
 msgid "Replace"
 msgstr "Asenda"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:66
 msgid "Replace current medium"
 msgstr "Vahetage praegune andmekandja"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:58./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:91
-msgid "Replace this media item"
-msgstr "Asenda see meedia"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:6
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
@@ -1859,15 +1859,15 @@ msgstr "Midagi l√§ks valesti. Sorry."
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Vabandust, teil pole ühenduse lisamiseks luba."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:463
+#: apps/zotonic_mod_admin/src/mod_admin.erl:465
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Vabandust, teil pole ühenduse lisamiseks luba."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:465
+#: apps/zotonic_mod_admin/src/mod_admin.erl:467
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Vabandust, teil pole ühenduse kustutamiseks luba."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:171
+#: apps/zotonic_mod_admin/src/mod_admin.erl:173
 msgid "Standard"
 msgstr "Standard"
 
@@ -1943,7 +1943,7 @@ msgstr "Mallid kompileeritakse uuesti."
 msgid "Test query"
 msgstr "Testpäring"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:173
+#: apps/zotonic_mod_admin/src/mod_admin.erl:175
 msgid "Text"
 msgstr "Tekst"
 
@@ -1954,6 +1954,10 @@ msgstr "Kategooriapuu on uuesti üles ehitamas. See võib võtta kaua aega."
 #: apps/zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "The page"
 msgstr "Leht"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:65
+msgid "The page will stay, but without the media item."
+msgstr "Leht jääb alles, kuid ilma meediaüksuseta."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
@@ -1985,15 +1989,15 @@ msgstr "See ühendus on juba olemas."
 msgid "This file contains links to other files or locations."
 msgstr "See fail sisaldab linke teistele failidele või asukohtadele."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:75
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:94
 msgid "This file has been scanned for viruses."
 msgstr "Seda faili on kontrollitud viiruste suhtes."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:71
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:90
 msgid "This file has not been scanned for viruses because it is too large."
 msgstr "Seda faili pole viiruste suhtes skannitud, kuna see on liiga suur."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:79
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:98
 msgid "This file has not been scanned for viruses."
 msgstr "Seda faili pole viiruste suhtes kontrollitud."
 
@@ -2079,7 +2083,7 @@ msgstr "Unikaalne nimi"
 msgid "Unique uri"
 msgstr "Unikaalne uri"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:471./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
+#: apps/zotonic_mod_admin/src/mod_admin.erl:473./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 msgid "Untitled"
 msgstr "Pealkirjata"
@@ -2353,7 +2357,7 @@ msgstr "v√µta tagasi"
 msgid "untitled"
 msgstr "pealkirjata"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:86
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:105
 msgid "uploaded on"
 msgstr "√ºles laaditud"
 
@@ -6353,7 +6357,7 @@ msgstr "Postitusloendid"
 msgid "Mailing list"
 msgstr "Postiloend"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:392
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:395
 msgid "Mailing lists"
 msgstr "Postiloendid"
 
@@ -8643,7 +8647,7 @@ msgstr "Selle olete juba täitnud, kuid saate oma varasemaid vastuseid muuta."
 msgid "You already filled this in."
 msgstr "Selle olete juba täitnud."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:750
+#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:754
 msgid "You are not allowed to change these results."
 msgstr "Teil pole lubatud neid tulemusi muuta."
 
