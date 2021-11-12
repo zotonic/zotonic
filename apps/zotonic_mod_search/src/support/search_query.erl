@@ -145,6 +145,7 @@ request_arg(<<"creator_id">>)          -> creator_id;
 request_arg(<<"modifier_id">>)         -> modifier_id;
 request_arg(<<"custompivot">>)         -> custompivot;
 request_arg(<<"filter">>)              -> filter;
+request_arg(<<"facet.", F/binary>>)    -> {facet, F};
 request_arg(<<"id_exclude">>)          -> id_exclude;
 request_arg(<<"hasobject">>)           -> hasobject;
 request_arg(<<"hasobjectpredicate">>)  -> hasobjectpredicate;
@@ -340,19 +341,19 @@ parse_query([{is_featured, Boolean}|Rest], Context, Result) ->
 %% is_published or is_published={false,true,all}
 %% Filter on whether an item is published or not.
 parse_query([{is_published, Boolean}|Rest], Context, Result) ->
-    Result1 = Result#search_sql{extra=[no_publish_check,Result#search_sql.extra]},
+    Result1 = Result#search_sql{extra=[no_publish_check|Result#search_sql.extra]},
     case z_convert:to_binary(Boolean) of
         <<"all">> ->
             parse_query(Rest, Context, Result1);
         _ ->
             Result2 = case z_convert:to_bool(Boolean) of
                           true ->
-                              add_where("rsc.is_published and "
+                              add_where("rsc.is_published = true and "
                                         "rsc.publication_start <= now() and "
                                         "rsc.publication_end >= now()",
                                         Result1);
                           false ->
-                              add_where("(not rsc.is_published or "
+                              add_where("(rsc.is_published = false or "
                                         "rsc.publication_start > now() or "
                                         "rsc.publication_end < now())",
                                         Result1)
@@ -534,6 +535,17 @@ parse_query([{custompivot, Table}|Rest], Context, Result) ->
                  false -> Table
              end,
     parse_query(Rest, Context, add_custompivot_join(Table1, Result));
+
+%% facet.foo=value
+%% Add a join with the search_facet table.
+parse_query([{{facet, Field}, V}|Rest], Context, Result) ->
+    Result1 =case search_facet:add_search_arg(Field, V, Result, Context) of
+        {ok, Res1} ->
+            Res1;
+        {error, _} ->
+            Result
+    end,
+    parse_query(Rest, Context, Result1);
 
 %% text=...
 %% Perform a fulltext search

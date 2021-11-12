@@ -793,16 +793,16 @@ pivot_resource_custom(Id, Context) ->
     lists:foreach(
             fun
                 (undefined) -> ok;
+                (ok) -> ok;
                 (none) -> ok;
                 ({error, _} = Error) ->
                     lager:error("Error return from custom pivot of ~p, error: ~p",
                                 [Id, Error]);
-                (Res) ->
+                ({_Module, _Columns} = Res) ->
                     update_custom_pivot(Id, Res, Context)
             end,
             CustomPivots),
     ok.
-
 
 
 to_datetime(Text) ->

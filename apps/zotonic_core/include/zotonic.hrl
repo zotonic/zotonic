@@ -169,6 +169,7 @@
     cats_exclude = [] :: list(),
     cats_exact = [] :: list(),
     run_func :: function() | undefined,
+    post_func :: fun( (#search_sql{}, #search_result{}, z:context()) -> #search_result{} ) | undefined,
     extra = [] :: list(),
     assoc = false :: boolean()
 }).

@@ -18,7 +18,7 @@
 {# - ..._range_date   (date for minmax reporting)                   #}
 {# - ..._list         (comma separated list of string values)       #}
 
-{# All others are mapped to text. Texts are always truncated at 100 #}
+{# All others are mapped to text. Texts are always truncated at 80  #}
 {# characters for their column index. Full text blocks are using    #}
 {# two columns. One for the value, and one for a normalized value.  #}
 {# A trigram index is added on the normalized column.               #}
@@ -28,6 +28,8 @@
 
 {% block category_id %}{{ id.category_id }}{% endblock %}
 
-{% block foo_ft %}{% endblock %}
+{% block org_pubdate_range_date %}{{ id.org_pubdate|default:id.publication_start }}{% endblock %}
 
-{% block bar_list %}{% endblock %}
+{% block org_pubyear_int %}{{ id.org_pubdate|default:id.publication_start|date:"Y" }}{% endblock %}
+
+{% block created_year_int %}{{ id.created|date:"Y" }}{% endblock %}
