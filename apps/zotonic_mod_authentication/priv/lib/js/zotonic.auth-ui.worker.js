@@ -56,6 +56,10 @@ model.present = function(data) {
             function(msg) { actions.reminderForm(msg.payload); });
 
         self.subscribe(
+            "model/auth-ui/post/form/send_verification_message",
+            function(msg) { actions.sendVerificationMessage(msg.payload); });
+
+        self.subscribe(
             "model/auth-ui/post/form/reset",
             function(msg) { actions.resetForm(msg.payload); });
 
@@ -125,6 +129,17 @@ model.present = function(data) {
             model.status = 'updated';
         }
         model.email = data.email
+    }
+
+    if (data.is_send_verification_message) {
+        if(model.options.is_local_user && model.options.username && model.error === "verification_pending") {
+            self.call("bridge/origin/model/auth/post/send-verification-message",
+                { username: model.options.username },
+                { qos: 1 })
+                .then(actions.sendVerificationMessageResponse)
+                // .catch(actions.fetchError);
+        }
+        console.log(model);
     }
 
     if (data.is_expired) {
@@ -346,6 +361,13 @@ actions.reminderForm = function(data) {
     }
     model.present(dataReminder);
 };
+
+actions.sendVerificationMessage = function(data) {
+    const proposal = {
+        is_send_verification_message: true
+    }
+    model.present(proposal);
+}
 
 actions.resetForm = function(data) {
     let dataReset = {
