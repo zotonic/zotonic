@@ -358,9 +358,9 @@ convert_type(list, V) ->
     L1 = lists:map(fun z_string:trim/1, L),
     lists:filter( fun(B) -> B =/= <<>> end, L1 );
 convert_type(fulltext, V) ->
-    z_string:truncatechars(V, ?TEXT_LENGTH);
+    z_string:truncatechars(z_convert:to_binary(V), ?TEXT_LENGTH);
 convert_type(text, V) ->
-    z_string:truncatechars(V, ?TEXT_LENGTH).
+    z_string:truncatechars(z_convert:to_binary(V), ?TEXT_LENGTH).
 
 
 %% @doc Ensure that the facet table is correct, if not then drop the existing
