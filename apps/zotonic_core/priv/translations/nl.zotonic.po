@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-12 10:08\n"
+"PO-Revision-Date: 2021-11-12 20:46\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -876,7 +876,7 @@ msgstr "Iedereen"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:63
 msgid "Are you sure you want to delete the media from this page?"
-msgstr "Weet u zeker dat u de media van deze pagina wilt verwijderen?"
+msgstr "Weet je zeker dat je de media van deze pagina wilt verwijderen?"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:2
 msgid "Are you sure you want to delete the page"
