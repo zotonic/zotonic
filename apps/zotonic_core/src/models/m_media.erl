@@ -223,7 +223,7 @@ delete(Id, Context) ->
             Depicts = depicts(Id, Context),
             medium_delete(Id, Context),
             [z_depcache:flush(DepictId, Context) || DepictId <- Depicts],
-            z_depcache:flush(Id, Context),
+            m_rsc:touch(Id, Context),
             z_notifier:notify(#media_replace_file{id = Id, medium = []}, Context),
             z_mqtt:publish(
                 [ <<"model">>, <<"media">>, <<"event">>, Id, <<"delete">> ],

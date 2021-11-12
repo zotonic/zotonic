@@ -60,7 +60,26 @@
                 %}
             {% endif %}
             {% button
-                text=_"Replace this media item"
+                text=_"Delete"
+                class="btn btn-danger"
+                element="a"
+                action={confirm
+                    text=[
+                        _"Are you sure you want to delete the media from this page?",
+                        "<br><br>",
+                        _"The page will stay, but without the media item."
+                    ]
+                    ok=_"Delete"
+                    is_danger
+                    postback={delete_media
+                        id=id
+                    }
+                    delegate=`controller_admin_edit`
+                }
+                disabled=not (id.is_editable and medium)
+            %}
+            {% button
+                text=_"Replace"
                 class="btn btn-primary"
                 element="a"
         	    action={dialog_media_upload
@@ -93,7 +112,7 @@
     {% endif %}
     <div class="form-group clearfix">
         <div class="pull-right">
-            {% button text=medium|if:_"Replace this media item":_"Add media item"
+            {% button text=medium|if:_"Replace":_"Add media content"
                 class="btn btn-primary"
                 element="a"
     	        action={dialog_media_upload
