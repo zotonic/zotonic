@@ -63,7 +63,7 @@
 ]).
 
 -include("zotonic.hrl").
--include_lib("epgsql/include/epgsql.hrl").
+% -include_lib("epgsql/include/epgsql.hrl").
 
 % Interval (in seconds) to check if there are any items to be pivoted.
 -define(PIVOT_POLL_INTERVAL_FAST, 2).

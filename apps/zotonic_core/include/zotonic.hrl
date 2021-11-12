@@ -201,13 +201,14 @@
 
 %% For the z_db definitions
 -record(column_def, {
-    name,
-    type,
-    length,
-    is_nullable = true,
-    default,
-    primary_key,
-    unique = false
+    name :: atom(),
+    type :: string() | binary(),
+    length = undefined :: non_neg_integer() | undefined,
+    is_nullable = true :: boolean(),
+    is_array = false :: boolean(),
+    default = undefined,
+    primary_key = false :: boolean(),
+    unique = false :: boolean()
 }).
 
 %% For the datamodel: default resources to create.

@@ -35,7 +35,9 @@
     render_block/4,
     render_block_to_iolist/4,
 
-    is_template_module/1
+    is_template_module/1,
+
+    blocks/3
 ]).
 
 -include_lib("template_compiler/include/template_compiler.hrl").
@@ -171,3 +173,36 @@ render_block_to_iolist(Block, File, Vars, Context) ->
 is_template_module(Module) ->
     template_compiler:is_template_module(Module).
 
+
+%% @doc Return a list of all block names in a template.
+-spec blocks(template_compiler:template()|#module_index{}, map(), z:context() ) -> {ok, [ atom() ]} | {error, term()}.
+blocks(#module_index{filepath=Filename, key=Key}, Vars, Context) ->
+    Template = #template_file{
+        filename=Filename,
+        template=Key#module_index_key.name
+    },
+    blocks(Template, Vars, Context);
+blocks(#template_file{ filename = Filename }, Vars, Context) when is_map(Vars) ->
+    Opts =  [
+        {runtime, z_template_compiler_runtime},
+        {context_name, z_context:site(Context)},
+        {context_vars, [
+            <<"sudo">>,
+            <<"anondo">>,
+            <<"z_language">>,
+            <<"extra_args">>
+        ]}
+    ],
+    case template_compiler:lookup(Filename, Opts, Context) of
+        {ok, Module} ->
+            {ok, Module:blocks()};
+        {error, _} = Error ->
+            Error
+    end;
+blocks(Template, Vars, Context) ->
+    case z_template_compiler_runtime:map_template(Template, Vars, Context) of
+        {ok, MappedTemplate} ->
+            blocks(MappedTemplate, Vars, Context);
+        {error, _} = Error ->
+            Error
+    end.

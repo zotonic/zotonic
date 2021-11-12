@@ -1053,6 +1053,16 @@ columns1({<<"id">>, <<"integer">>, undefined, Nullable, <<"nextval(", _/binary>>
         is_nullable = z_convert:to_bool(Nullable),
         default = undefined
     };
+columns1({Name, <<"ARRAY">>, _MaxLength, Nullable, Default}) ->
+    % @todo derive the type of the array elements.
+    #column_def{
+        name = z_convert:to_atom(Name),
+        type = "text",
+        length = undefined,
+        is_array = true,
+        is_nullable = z_convert:to_bool(Nullable),
+        default = column_default(Default)
+    };
 columns1({Name,Type,MaxLength,Nullable,Default}) ->
     #column_def{
         name = z_convert:to_atom(Name),
@@ -1373,15 +1383,19 @@ ensure_table_create_cols([C|Cols], Acc) ->
     M = lists:flatten([$", atom_to_list(C#column_def.name), $", 32, column_spec(C)]),
     ensure_table_create_cols(Cols, [M|Acc]).
 
-column_spec(#column_def{type=Type, length=Length, is_nullable=Nullable, default=Default, unique=Unique}) ->
+column_spec(#column_def{type=Type, length=Length, is_nullable=Nullable, is_array = IsArray, default=Default, unique=Unique}) ->
     L = case Length of
             undefined -> [];
             _ -> [$(, integer_to_list(Length), $)]
         end,
+    A = column_spec_array(IsArray),
     N = column_spec_nullable(Nullable),
     D = column_spec_default(Default),
     U = column_spec_unique(Unique),
-    lists:flatten([Type, L, N, D, U]).
+    lists:flatten([Type, L, A, N, D, U]).
+
+column_spec_array(true) -> "[]";
+column_spec_array(false) -> "".
 
 column_spec_nullable(true) -> "";
 column_spec_nullable(false) -> " not null".
