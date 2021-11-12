@@ -206,7 +206,7 @@ facet_union(#facet_def{ name = Name }) ->
 
 %% @doc Add an extra search argument to the given query. Called by the query
 %% builder in search_query.erl
--spec add_search_arg(Field, Value, Query, Context) -> NewQuery
+-spec add_search_arg(Field, Value, Query, Context) -> {ok, NewQuery} | {error, term()}
     when Field :: binary(),
          Value :: term(),
          Query :: #search_sql{},
@@ -234,9 +234,9 @@ add_search_arg(Field, Value, Query, Context) ->
                     Query3 = add_where(Column ++ Op ++ ArgN, Query2)
             end,
             {ok, Query3};
-        {error, _} ->
+        {error, _} = Error ->
             lager:info("Uknown facet ~p, dropping query term.", [ Field ]),
-            Query
+            Error
     end.
 
 join_facet(#search_sql{ from = From } = Query) ->
@@ -436,22 +436,18 @@ create_table(Context) ->
                 }
                 | Cols
             ],
-            case z_db:create_table(search_facet, Cols1, Context) of
-                ok ->
-                    [] = z_db:q(
-                        "ALTER TABLE search_facet ADD CONSTRAINT fk_facet_id FOREIGN KEY (id)
-                         REFERENCES rsc (id)
-                         ON UPDATE CASCADE ON DELETE CASCADE",
-                        Context),
-                    lists:foreach(
-                        fun(Idx) ->
-                            [] = z_db:q(Idx, Context)
-                        end,
-                        Idxs),
-                    ok;
-                {error, _} = Error ->
-                    Error
-            end;
+            ok = z_db:create_table(search_facet, Cols1, Context),
+            [] = z_db:q(
+                "ALTER TABLE search_facet ADD CONSTRAINT fk_facet_id FOREIGN KEY (id)
+                 REFERENCES rsc (id)
+                 ON UPDATE CASCADE ON DELETE CASCADE",
+                Context),
+            lists:foreach(
+                fun(Idx) ->
+                    [] = z_db:q(Idx, Context)
+                end,
+                Idxs),
+            ok;
         {error, _} = Error ->
             Error
     end.
@@ -569,7 +565,7 @@ facet_to_index(#facet_def{
       "ON search_facet(f_", Name/binary, ")">>.
 
 
--spec facet_def( Field, Context ) -> {ok, #facet_def{}} | {error, enoent}
+-spec facet_def( Field, Context ) -> {ok, #facet_def{}} | {error, term()}
     when Field :: binary(),
          Context :: z:context().
 facet_def(F, Context) ->
@@ -587,7 +583,7 @@ facet_def(F, Context) ->
     end.
 
 %% @doc Fetch all facet definitions from the current facet template.
--spec template_facets( z:context() ) -> {ok, [ facet_def() ]}.
+-spec template_facets( z:context() ) -> {ok, [ facet_def() ]} | {error, term()}.
 template_facets(Context) ->
     case z_template:blocks(<<"pivot/facet.tpl">>, #{}, Context) of
         {ok, Blocks} ->
