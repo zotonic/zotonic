@@ -35,6 +35,7 @@
     observe_search_query/2,
     observe_module_activate/2,
     observe_custom_pivot/2,
+    observe_filewatcher/2,
     to_tsquery/2,
     rank_weight/1,
     rank_behaviour/1,
@@ -61,6 +62,18 @@ observe_module_activate(_, _Context) ->
 
 observe_custom_pivot(#custom_pivot{ id = Id }, Context) ->
     search_facet:pivot_rsc(Id, Context).
+
+observe_filewatcher(#filewatcher{ file = File, extension = <<".tpl">> }, Context) ->
+    case filename:basename(File) of
+        <<"facet.tpl">> ->
+            % If the facet.tpl is changed, then check if the facet table is still
+            % aligned with the facet.tpl template.
+            search_facet:ensure_table(Context);
+        _ ->
+            ok
+    end;
+observe_filewatcher(#filewatcher{}, _Context) ->
+    ok.
 
 %%====================================================================
 %% API

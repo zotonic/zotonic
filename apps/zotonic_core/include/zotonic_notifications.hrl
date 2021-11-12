@@ -1010,7 +1010,7 @@
 -record(debug, {what, arg = []}).
 
 %% @doc Broadcast some file changed, used for livereload by mod_development
-%% Type: first
+%% Type: notify
 -record(filewatcher, {
     verb :: modify | create | delete,
     file :: binary(),

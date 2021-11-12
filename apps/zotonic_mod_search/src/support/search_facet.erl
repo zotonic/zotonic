@@ -68,6 +68,8 @@
     search_query_facets/3,
     add_search_arg/4,
     pivot_rsc/2,
+    pivot_all/1,
+    pivot_batch/2,
     ensure_table/1,
     is_table_ok/1,
     facet_def/2,
@@ -277,29 +279,50 @@ add_arg(ArgValue, Search) ->
     {Arg, Search#search_sql{args=Search#search_sql.args ++ [ArgValue]}}.
 
 
+%% @doc Pivot all resources to fill the facet table. This runs after every change to the
+%% the facet.tpl blocks.
+-spec pivot_all( z:context() ) -> ok.
+pivot_all(Context) ->
+    z_pivot_rsc:insert_task_after(1, ?MODULE, pivot_batch, facet_pivot_batch, [0], Context).
 
+%% @doc Batch for running the facet table updates. This updates the table with 1000 resources
+%% at a time.
+pivot_batch(FromId, Context0) ->
+    Context = z_acl:sudo(Context0),
+    case z_db:q("select id from rsc where id > $1 order by id limit 1000", [FromId], Context) of
+        [] ->
+            done;
+        Rs ->
+            lists:foreach(
+                fun({Id}) ->
+                    pivot_rsc(Id, Context)
+                end,
+                Rs),
+            {Max} = lists:last(Rs),
+            {delay, 1, [Max]}
+    end.
 
 %% @doc Pivot a resource, fill the facet table.
 -spec pivot_rsc( m_rsc:resource_id(), z:context() ) -> ok | {error, term()}.
 pivot_rsc(Id, Context) ->
-    {ok, Facets} = template_facets(Context),
-    Upd = maps:from_list(
-        lists:flatten(
-            lists:map( fun(F) -> render_facet(Id, F, Context) end, Facets ) ) ),
-    R = case z_db:q1("select id from search_facet where id = $1", [ Id ], Context) of
-        undefined ->
-            Upd1 = Upd#{ <<"id">> => Id },
-            z_db:insert(search_facet, Upd1, Context);
-        _ ->
-            z_db:update(search_facet, Id, Upd, Context)
-    end,
-    case R of
-        {ok, _} ->
-            ok;
-        {error,{unknown_column,_}} ->
-            case ensure_table(Context) of
-                ok -> pivot_rsc(Id, Context);
-                {error, _} = Error -> Error
+    case ensure_table(Context) of
+        ok ->
+            {ok, Facets} = template_facets(Context),
+            Upd = maps:from_list(
+                lists:flatten(
+                    lists:map( fun(F) -> render_facet(Id, F, Context) end, Facets ) ) ),
+            R = case z_db:q1("select id from search_facet where id = $1", [ Id ], Context) of
+                undefined ->
+                    Upd1 = Upd#{ <<"id">> => Id },
+                    z_db:insert(search_facet, Upd1, Context);
+                _ ->
+                    z_db:update(search_facet, Id, Upd, Context)
+            end,
+            case R of
+                {ok, _} ->
+                    ok;
+                {error, _} = Error ->
+                    Error
             end;
         {error, _} = Error ->
             Error
@@ -350,13 +373,12 @@ ensure_table(Context) ->
         false ->
             case recreate_table(Context) of
                 ok ->
-                    z_pivot_rsc:queue_all(Context),
+                    pivot_all(Context),
                     ok;
                 {error, _} = Error ->
                     Error
             end
     end.
-
 
 %% @doc Check if the current table is compatible with the facets in pivot.tpl
 -spec is_table_ok(z:context()) -> boolean().

@@ -153,7 +153,7 @@
     pages = undefined :: non_neg_integer() | undefined,
     next = false :: pos_integer() | false,
     prev = 1 :: pos_integer(),
-    facets = [] :: list()
+    facets = undefined :: #{ binary() => map() } | undefined
 }).
 
 -record(search_sql, {
