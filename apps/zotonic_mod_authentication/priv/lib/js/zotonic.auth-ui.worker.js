@@ -85,7 +85,7 @@ model.present = function(data) {
 
     if ("is_error" in data) {
         model.is_error = data.is_error;
-        model.error = data.error;
+        model.logon_view = model.error = data.error;
         model.options = data.options || {};
         model.status = 'updated';
     }
