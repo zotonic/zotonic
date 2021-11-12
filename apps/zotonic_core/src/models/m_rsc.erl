@@ -492,8 +492,21 @@ touch(Id, Context) ->
         [z_acl:user(Context), rid(Id, Context)],
         Context
     ) of
-        1 -> {ok, Id};
-        0 -> {error, enoent}
+        1 ->
+            z_depcache:flush(Id, Context),
+            IsA = m_rsc:is_a(Id, Context),
+            Topic = [ <<"model">>, <<"rsc">>, <<"event">>, Id, <<"update">> ],
+            z_mqtt:publish(
+                Topic,
+                #{
+                    id => Id,
+                    pre_is_a => IsA,
+                    post_is_a => IsA
+                },
+                Context),
+            {ok, Id};
+        0 ->
+            {error, enoent}
     end.
 
 

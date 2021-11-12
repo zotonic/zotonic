@@ -160,6 +160,15 @@ event(#postback{message={reload_media, Opts}}, Context) ->
     {Html, Context1} = z_template:render_to_iolist({cat, "_edit_media.tpl"}, Opts, Context),
     z_render:update(DivId, Html, Context1);
 
+event(#postback{message={delete_media, Opts}}, Context) ->
+    {id, Id} = proplists:lookup(id, Opts),
+    case m_media:delete(Id, Context) of
+        ok ->
+            Context;
+        {error, eacces} ->
+            z_render:growl_error("Sorry, you have no permission to edit this page.", Context)
+    end;
+
 event(#sort{items=Sorted, drop={dragdrop, {object_sorter, Props}, _, _}}, Context) ->
     RscId     = proplists:get_value(id, Props),
     Predicate = proplists:get_value(predicate, Props),
