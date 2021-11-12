@@ -59,7 +59,7 @@
 {% else %}
     {% if q.options.is_username_checked %}
         <div class="form-group hidden">
-            <label for="username" class="control-label">{_ Username or email _}</label>
+            <label for="username" class="control-label">{% if m.signup.config.username_equals_email %}{_ Email or username _}{% else %}{_ Username or email _}{% endif %}</label>
             <input type="text"
                    id="username"
                    name="username"
@@ -77,7 +77,7 @@
         </p>
     {% else %}
         <div class="form-group">
-            <label for="username" class="control-label">{_ Username or email _}</label>
+            <label for="username" class="control-label">{% if m.signup.config.username_equals_email %}{_ Email or username _}{% else %}{_ Username or email _}{% endif %}</label>
             <input type="text"
                    id="username"
                    name="username"
