@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-12 10:08\n"
+"PO-Revision-Date: 2021-11-12 10:21\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -802,7 +802,7 @@ msgstr "Tambahkan sebuah item media baru"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:110
 msgid "Add media content"
-msgstr ""
+msgstr "Tambahkan konten media"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:13
 msgid "Add media to body"
@@ -873,7 +873,7 @@ msgstr "siapa pun"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:63
 msgid "Are you sure you want to delete the media from this page?"
-msgstr ""
+msgstr "Apakah Anda yakin ingin menghapus media dari halaman ini?"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:2
 msgid "Are you sure you want to delete the page"
@@ -1957,7 +1957,7 @@ msgstr "Halaman"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:65
 msgid "The page will stay, but without the media item."
-msgstr ""
+msgstr "Halaman akan tetap ada, tetapi tanpa item media."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
