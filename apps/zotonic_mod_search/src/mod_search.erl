@@ -34,6 +34,8 @@
 -export([
     observe_search_query/2,
     observe_module_activate/2,
+    observe_custom_pivot/2,
+    observe_filewatcher/2,
     to_tsquery/2,
     rank_weight/1,
     rank_behaviour/1,
@@ -47,6 +49,9 @@
 -record(state, {context, query_watches=[]}).
 
 
+observe_search_query(#search_query{ name = <<"facets">>, args = Args, offsetlimit = OffsetLimit }, Context) ->
+    R = search(<<"query">>, Args, OffsetLimit, Context),
+    R#search_sql{ post_func = fun search_facet:search_query_facets/3 };
 observe_search_query(#search_query{ name = Name, args = Args, offsetlimit = OffsetLimit }, Context) ->
     search(Name, Args, OffsetLimit, Context).
 
@@ -55,6 +60,20 @@ observe_module_activate(#module_activate{module=?MODULE, pid=Pid}, _Context) ->
 observe_module_activate(_, _Context) ->
     ok.
 
+observe_custom_pivot(#custom_pivot{ id = Id }, Context) ->
+    search_facet:pivot_rsc(Id, Context).
+
+observe_filewatcher(#filewatcher{ file = File, extension = <<".tpl">> }, Context) ->
+    case filename:basename(File) of
+        <<"facet.tpl">> ->
+            % If the facet.tpl is changed, then check if the facet table is still
+            % aligned with the facet.tpl template.
+            search_facet:ensure_table(Context);
+        _ ->
+            ok
+    end;
+observe_filewatcher(#filewatcher{}, _Context) ->
+    ok.
 
 %%====================================================================
 %% API

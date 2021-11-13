@@ -153,7 +153,7 @@
     pages = undefined :: non_neg_integer() | undefined,
     next = false :: pos_integer() | false,
     prev = 1 :: pos_integer(),
-    facets = [] :: list()
+    facets = undefined :: #{ binary() => map() } | undefined
 }).
 
 -record(search_sql, {
@@ -169,6 +169,7 @@
     cats_exclude = [] :: list(),
     cats_exact = [] :: list(),
     run_func :: function() | undefined,
+    post_func :: fun( (#search_result{}, #search_sql{}, z:context()) -> #search_result{} ) | undefined,
     extra = [] :: list(),
     assoc = false :: boolean()
 }).
@@ -201,13 +202,14 @@
 
 %% For the z_db definitions
 -record(column_def, {
-    name,
-    type,
-    length,
-    is_nullable = true,
-    default,
-    primary_key,
-    unique = false
+    name :: atom(),
+    type :: string() | binary(),
+    length = undefined :: non_neg_integer() | undefined,
+    is_nullable = true :: boolean(),
+    is_array = false :: boolean(),
+    default = undefined,
+    primary_key = false :: boolean(),
+    unique = false :: boolean()
 }).
 
 %% For the datamodel: default resources to create.

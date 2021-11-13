@@ -30,7 +30,8 @@
     search_result/3,
     query_/2,
 
-    props_to_map/1
+    props_to_map/1,
+    concat_sql_query/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -245,7 +246,7 @@ handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit,
                 Pages > Page -> Page + 1;
                 true -> false
             end,
-            #search_result{
+            Result = #search_result{
                 search_name = Name,
                 search_args = Args,
                 result = lists:sublist(Rows, 1, PageLen),
@@ -255,7 +256,11 @@ handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit,
                 total = Total,
                 prev = erlang:max(Page-1, 1),
                 next = Next
-            }
+            },
+            case Q#search_sql.post_func of
+                undefined -> Result;
+                Fun -> Fun(Result, Q1, Context)
+            end
     end.
 
 %% Calculate an offset/limit for the query. This takes such a range from the results
@@ -427,15 +432,15 @@ concat_sql_query(#search_sql{
     }, Limit1) ->
     From1  = concat_sql_from(From),
     Where1 = case Where of
-        [] -> [];
+        "" -> "";
         _ -> [ "where ", Where ]
     end,
     Order1 = case Order of
-        [] -> [];
+        "" -> "";
         _ -> [ "order by ", Order ]
     end,
     GroupBy1 = case GroupBy of
-        [] -> [];
+        "" -> "";
         _ -> [ "group by ", GroupBy ]
     end,
     {Parts, FinalArgs} = case SearchLimit of
@@ -589,7 +594,7 @@ publish_check(Alias, #search_sql{extra=Extra}) ->
             "";
         false ->
             " and "
-            ++Alias++".is_published and "
+            ++Alias++".is_published = true and "
             ++Alias++".publication_start <= now() and "
             ++Alias++".publication_end >= now()"
     end.

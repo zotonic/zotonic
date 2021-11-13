@@ -336,6 +336,29 @@ allows you to do filtering on custom fields like this::
 
 .. seealso:: :ref:`cookbook-custom-pivots`
 
+
+facet.name
+^^^^^^^^^^
+
+Add a join with the facets table and filter on the named facet.
+
+The facets table is filled from the ``pivot/facet.tpl`` template, each block is a
+facet that can be used for filters or for the ``facets`` query.
+
+The ``name`` must be the name without types of a block. That is, if a block is
+called ``foo_int`` then the ``name`` is ``foo`` and the query term is ``facet.foo``.
+
+The value can be an operator::
+
+    >123
+    >=123
+    <123
+    <=123
+    <>123
+
+For example, the last one translates to the SQL clause ``facet.name <> 123``.
+
+
 hasobjectpredicate
 ^^^^^^^^^^^^^^^^^^
 

@@ -371,7 +371,7 @@ filechanged_observer(#zotonic_filehandler_filechange{} = ChangeEvent, _CallConte
     },
     z_sites_manager:foreach(
         fun(Context) ->
-            z_notifier:first(Event, Context)
+            z_notifier:notify_sync(Event, Context)
         end).
 
 

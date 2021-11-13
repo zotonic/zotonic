@@ -29,6 +29,15 @@ The following searches are implemented in mod_search:
 +------------------------+---------------------------------------------------------------+-------------------+
 |Name                    |Description                                                    |Required arguments |
 +========================+===============================================================+===================+
+|query                   |Very powerful search with which you can implement almost all of|                   |
+|                        |the other search functionality. See:                           |                   |
+|                        |:ref:`guide-datamodel-query-model`                             |                   |
++------------------------+---------------------------------------------------------------+-------------------+
+|facets                  |Performs a ``query`` (see above) and then calculates facets.   |                   |
+|                        |The facets are defined using the ``pivot/facet.tpl`` template. |                   |
+|                        |Facets are returned in the ``facets`` field of the search      |                   |
+|                        |result.                                                        |                   |
++------------------------+---------------------------------------------------------------+-------------------+
 |featured                |List of pages, featured ones first.                            |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
 |featured                |List of pages in a category, featured ones first.              |cat                |
@@ -86,10 +95,6 @@ The following searches are implemented in mod_search:
 |match_objects_cats      |Returns a list of pages with similar object ids or categories. |id                 |
 |                        |Returns ``{id, rank}`` tuples. Accepts an optional ``cat``     |                   |
 |                        |parameter for filtering on category.                           |                   |
-+------------------------+---------------------------------------------------------------+-------------------+
-|query                   |Very powerful search with which you can implement almost all of|                   |
-|                        |the other search functionality. See:                           |                   |
-|                        |:ref:`guide-datamodel-query-model`                             |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
 |archive_year            |Returns an overview on publication year basis, for a specified |cat                |
 |                        |category. Every row returned has parts: "as_date", "year" and  |                   |
