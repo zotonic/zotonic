@@ -283,6 +283,7 @@ add_arg(ArgValue, Search) ->
 %% the facet.tpl blocks.
 -spec pivot_all( z:context() ) -> ok.
 pivot_all(Context) ->
+    lager:info("Faceted search: repivoting facet for all resources for ~p", [ z_context:site(Context )]),
     z_pivot_rsc:insert_task_after(1, ?MODULE, pivot_batch, facet_pivot_batch, [0], Context).
 
 %% @doc Batch for running the facet table updates. This updates the table with 1000 resources
@@ -413,6 +414,7 @@ is_type([ _ | Cols ], Name, Type) ->
 %% @doc Recreate the facet table by first dropping it.
 -spec recreate_table( z:context() ) -> ok | {error, term()}.
 recreate_table(Context) ->
+    lager:info("Faceted search: recreating facet table for ~p", [ z_context:site(Context )]),
     z_db:q("drop table if exists search_facet cascade", Context),
     z_db:flush(Context),
     create_table(Context).
