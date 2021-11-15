@@ -132,14 +132,14 @@ model.present = function(data) {
     }
 
     if (data.is_send_verification_message) {
-        if(model.options.is_local_user && model.options.username && model.error === "verification_pending") {
-            self.call("bridge/origin/model/auth/post/send-verification-message",
-                { username: model.options.username },
+        if(model.options.is_user_local && model.options.username && model.error === "verification_pending") {
+            self.call("bridge/origin/model/authentication/post/send-verification-message",
+                { username: model.options.username,
+                  token: data.token },
                 { qos: 1 })
                 .then(actions.sendVerificationMessageResponse)
-                // .catch(actions.fetchError);
+                .catch(actions.fetchError);
         }
-        console.log(model);
     }
 
     if (data.is_expired) {
@@ -364,8 +364,23 @@ actions.reminderForm = function(data) {
 
 actions.sendVerificationMessage = function(data) {
     const proposal = {
-        is_send_verification_message: true
+        is_send_verification_message: true,
+        token: data.value.token
     }
+    model.present(proposal);
+}
+
+actions.sendVerificationMessageResponse = function(data) {
+    const proposal = { };
+    
+    if(data.payload && data.payload.status === "ok") {
+        proposal.is_error = false;
+        proposal.logon_view = "verification_sent";
+    } else {
+        proposal.is_error = true;
+        proposal.logon_view = "verification_error";
+    }
+
     model.present(proposal);
 }
 
@@ -409,7 +424,7 @@ actions.reminderResponse = function(data) {
                 });
             break;
         default:
-            console.log("Unkown reminderResponse payload", data);
+            console.log("Unknown reminderResponse payload", data);
             break;
     }
 };
