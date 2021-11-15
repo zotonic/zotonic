@@ -30,8 +30,10 @@
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"confirm_redirect">> | Rest ], _Msg, Context) ->
     Url = confirm_redirect(Context),
-    {ok, {Url, Rest}}.
-
+    {ok, {Url, Rest}};
+m_get([ <<"config">>, <<"username_equals_email">> | Rest ], _Msg, Context) ->
+    V = m_config:get_boolean(mod_signup, username_equals_email, false, Context),
+    {ok, {V, Rest}}.
 
 -spec confirm_redirect( z:context() ) -> binary().
 confirm_redirect(Context) ->
