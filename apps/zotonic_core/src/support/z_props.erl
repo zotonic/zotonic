@@ -337,11 +337,13 @@ group_trans_parts(TransParts) ->
                                 add_trans(Name, Code, V, Acc);
                             {error, _} ->
                                 lager:info("Dropping trans part '~s', language code is unknown",
-                                           [ K ])
+                                           [ K ]),
+                                Acc
                         end;
                     _ ->
                         lager:info("Dropping unknown trans part '~s', should be like 'title$en'",
-                                   [ K ])
+                                   [ K ]),
+                        Acc
                 end
         end,
         #{},
