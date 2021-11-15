@@ -605,7 +605,7 @@ search(<<"events">>, #{
 search(_, _, _, _) ->
     undefined.
 
--spec trim( binary() | string() | #trans{} | undefined, z:context() ) -> binary().
+-spec trim( binary() | string() | z:trans()| undefined, z:context() ) -> binary().
 trim(undefined, _Context) -> <<>>;
 trim(S, _Context) when is_binary(S) -> z_string:trim(S);
 trim(#trans{} = Tr, Context) -> trim(z_trans:lookup_fallback(Tr, Context), Context);
@@ -614,12 +614,12 @@ trim(S, Context) -> trim(z_convert:to_binary(S), Context).
 %% @doc Expand a search string like "hello wor" to a PostgreSQL tsquery string.
 %%      If the search string ends in a word character then a wildcard is appended
 %%      to the last search term.
--spec to_tsquery(binary()|string()|{trans, list()}|undefined, #context{}) -> binary().
+-spec to_tsquery(binary()|string()|z:trans()|undefined, z:context()) -> binary().
 to_tsquery(undefined, _Context) ->
     <<>>;
 to_tsquery(<<>>, _Context) ->
     <<>>;
-to_tsquery({trans, _} = Tr, Context) ->
+to_tsquery(#trans{} = Tr, Context) ->
     to_tsquery(z_trans:lookup_fallback(Tr, Context), Context);
 to_tsquery(Text, Context) when is_binary(Text) ->
     case to_tsquery_1(Text, Context) of
@@ -656,6 +656,8 @@ is_separator(C) when C >= 128 -> false;
 is_separator(_) -> true.
 
 append_wildcard(_Text, <<>>) ->
+    <<>>;
+append_wildcard(_Text, <<"'xcvvcx'">>) ->
     <<>>;
 append_wildcard(Text, TsQ) ->
     case is_wordchar(z_string:last_char(Text)) of
