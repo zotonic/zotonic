@@ -38,6 +38,10 @@ The following searches are implemented in mod_search:
 |                        |Facets are returned in the ``facets`` field of the search      |                   |
 |                        |result.                                                        |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
+|facet_values            |Returns an empty result with the facets field set to all       |                   |
+|                        |possible values per facet, or the min/max range for a range    |                   |
+|                        |facet.                                                         |                   |
++------------------------+---------------------------------------------------------------+-------------------+
 |featured                |List of pages, featured ones first.                            |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
 |featured                |List of pages in a category, featured ones first.              |cat                |

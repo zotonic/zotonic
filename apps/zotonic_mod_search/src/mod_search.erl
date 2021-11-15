@@ -52,6 +52,18 @@
 observe_search_query(#search_query{ name = <<"facets">>, args = Args, offsetlimit = OffsetLimit }, Context) ->
     R = search(<<"query">>, Args, OffsetLimit, Context),
     R#search_sql{ post_func = fun search_facet:search_query_facets/3 };
+observe_search_query(#search_query{ name = <<"facet_values">> }, Context) ->
+    case search_facet:facet_values(Context) of
+        {ok, Facets} ->
+            #search_result{
+                result = [],
+                total = 0,
+                pages = 0,
+                facets = Facets
+            };
+        {error, _} = Error ->
+            Error
+    end;
 observe_search_query(#search_query{ name = Name, args = Args, offsetlimit = OffsetLimit }, Context) ->
     search(Name, Args, OffsetLimit, Context).
 
