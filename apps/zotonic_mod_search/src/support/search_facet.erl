@@ -65,6 +65,7 @@
 
 
 -export([
+    facet_values/1,
     search_query_facets/3,
     add_search_arg/4,
     pivot_rsc/2,
@@ -82,6 +83,49 @@
 -define(TEXT_LENGTH, 80).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+
+%% @doc Return all found values (or min/max for all facets).
+-spec facet_values(z:context()) -> {ok, map()} | {error, term()}.
+facet_values(Context) ->
+    case template_facets(Context) of
+        {ok, Facets} ->
+            FVs = lists:foldl(
+                fun
+                    (#facet_def{ type = list }, Acc) ->
+                        Acc;
+                    (#facet_def{ name = Name, is_range = true }, Acc) ->
+                        Col = <<"f_", Name/binary>>,
+                        Q = <<"select min(", Col/binary,"), max(", Col/binary,
+                              ") from search_facet">>,
+                        {Min, Max} = z_db:q_row(Q, Context),
+                        Acc#{
+                            Name => #{
+                                <<"type">> => <<"range">>,
+                                <<"min">> => Min,
+                                <<"max">> => Max
+                            }
+                        };
+                    (#facet_def{ name = Name }, Acc) ->
+                        Col = <<"f_", Name/binary>>,
+                        Q = <<"select distinct(", Col/binary,") from search_facet ",
+                              "where ", Col/binary, " is not null">>,
+                        Rs = z_db:q(Q, Context),
+                        Rs1 = [ R || {R} <- Rs ],
+                        Acc#{
+                            Name => #{
+                                <<"type">> => <<"value">>,
+                                <<"values">> => lists:sort(Rs1)
+                            }
+                        }
+                end,
+                #{},
+                Facets),
+            {ok, FVs};
+        {error, _} = Error ->
+            Error
+    end.
+
 
 
 %% @doc Add facets to the result set using the query.
