@@ -131,7 +131,10 @@ move_unused_order_args_to_select(#search_sql{ where = Where, order = Order } = Q
     end,
     Q1 = lists:foldl(
         fun(Ex, QAcc) ->
-            QAcc#search_sql{ select = QAcc#search_sql.select ++ ", " ++ z_convert:to_list(Ex) }
+            QAcc#search_sql{
+                select = QAcc#search_sql.select
+                        ++ ", " ++ z_convert:to_list(Ex) ++ "::character varying"
+                }
         end,
         Q,
         InOrder -- InWhere),

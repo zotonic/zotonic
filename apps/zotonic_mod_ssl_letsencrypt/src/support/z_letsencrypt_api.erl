@@ -51,8 +51,8 @@ status(<<"processing">>) -> processing;
 status(<<"valid">>)      -> valid;
 status(<<"invalid">>)    -> invalid;
 status(<<"revoked">>)    -> revoked;
-status(_Status)       ->
-    io:format("unknown status: ~p~n", [_Status]),
+status(Status)       ->
+    lager:error("LetsEncrypt: unknown status: ~p", [Status]),
     unknown.
 
 %% PRIVATE

@@ -173,7 +173,7 @@ make_cert(Domain, Opts) ->
 make_cert_bg(Domain, Opts=#{async := Async}) ->
     Ret = case gen_statem:call({global, ?MODULE}, {create, bin(Domain), Opts}, 15000) of
         {error, Err} ->
-            io:format("error: ~p~n", [Err]),
+            lager:error("LetsEncrypt error: ~p", [Err]),
             {error, Err};
 
         ok ->
