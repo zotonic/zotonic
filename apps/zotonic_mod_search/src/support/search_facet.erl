@@ -94,10 +94,10 @@ search_query_facets(Result, Query, Context) ->
     Q1 = join_facet(Query),
     Q2 = Q1#search_sql{
         select = "rsc.id, facet.*",
-        order = "",
         limit = undefined
     },
-    {SQL, Args} = z_search:concat_sql_query(Q2, undefined),
+    Q3 = move_unused_order_args_to_select(Q2),
+    {SQL, Args} = z_search:concat_sql_query(Q3, undefined),
     SQL2 = [
         "with result as (", SQL, ")"
     ],
@@ -119,6 +119,24 @@ search_query_facets(Result, Query, Context) ->
         total = NewTotal,
         pages = (NewTotal + PageLen - 1) div PageLen
     }.
+
+move_unused_order_args_to_select(#search_sql{ where = Where, order = Order } = Q) ->
+    InWhere = case re:run(Where, <<"\\$[0-9]+">>, [ global, {capture, all, binary} ]) of
+        {match, Ws} -> lists:flatten(Ws);
+        nomatch -> []
+    end,
+    InOrder = case re:run(Order, <<"\\$[0-9]+">>, [ global, {capture, all, binary} ]) of
+        {match, Os} -> lists:flatten(Os);
+        nomatch -> []
+    end,
+    Q1 = lists:foldl(
+        fun(Ex, QAcc) ->
+            QAcc#search_sql{ select = QAcc#search_sql.select ++ ", " ++ z_convert:to_list(Ex) }
+        end,
+        Q,
+        InOrder -- InWhere),
+    Q1#search_sql{ order = "" }.
+
 
 facet_total(Fs, Total) ->
     maps:fold(
