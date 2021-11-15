@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-15 12:38\n"
+"PO-Revision-Date: 2021-11-15 12:49\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -3812,7 +3812,7 @@ msgstr "O l'email o la password che hai inserito non è corretta. Si prega di ri
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:80
 msgid "Email or username"
-msgstr ""
+msgstr "Email o nome utente"
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:37
 msgid "Enable <em>mod_facebook</em> to see Facebook settings."
@@ -7674,7 +7674,7 @@ msgstr "Quando ti sei registrato, hai ricevuto un'e-mail con un collegamento ma 
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:29
 msgid "You already have an account,"
-msgstr ""
+msgstr "Hai già un account,"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:2
 msgid "You can also"
