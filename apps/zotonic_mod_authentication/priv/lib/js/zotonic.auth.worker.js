@@ -683,6 +683,13 @@ actions.changePassword = function(msg) {
     model.present(data);
 }
 
+actions.sentVerificationMessage = function(msg) {
+    let data = {
+        is_sent_verification_message: true
+    };
+    model.present(data)
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Worker Startup
 //

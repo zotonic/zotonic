@@ -123,14 +123,16 @@ logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
             Context3 = maybe_setautologon(Payload, Context2),
             return_status(Payload, Context3);
         {error, user_not_enabled} ->
+            Reply = #{ status => error, user_id => UserId },
             case m_rsc:p_no_acl(UserId, is_verified_account, Context) of
                 false ->
                     % The account is awaiting verification
-                    { #{ status => error, error => verification_pending, user_id => UserId }, Context };
+                    Token = z_utils:pickle( #{ user_id => UserId, timestamp => calendar:universal_time() }, Context),
+                    { Reply#{ error => verification_pending, token => Token }, Context };
                 V when V == true orelse V == undefined ->
                     % The account has been disabled after verification, or
                     % verification flag not set, account didn't need verification
-                    { #{ status => error, error => disabled, user_id => UserId }, Context }
+                    { Reply#{ error => disabled }, Context }
             end
         % {error, _Reason} ->
         %     % Hide other error codes, map to generic 'pw' error
@@ -188,21 +190,19 @@ maybe_add_logon_options(#{ status := error } = Result, Payload, Context) ->
         page => maps:get(<<"page">>, Payload, undefined),
         is_password_entered => not z_utils:is_empty(maps:get(<<"password">>, Payload, <<>>))
     },
-    Options1 = z_notifier:foldr(#logon_options{ payload = Payload }, Options, Context),
-    Result1 = Result#{
-        options => Options1
-    },
-    case Options1 of
+    Options1 = case Result of #{ token := Token } -> Options#{ token => Token}; _ -> Options end, 
+    Options2 = z_notifier:foldr(#logon_options{ payload = Payload }, Options1, Context),
+    Result1 = Result#{ options => Options2 },
+    case Options2 of
         #{ is_user_external := true } -> {Result1, Context};
         #{ is_user_local := true } -> {Result1, Context};
-        #{ is_user_local := false, is_user_external := false, username := Username }
-            when is_binary(Username), Username =/= <<>> ->
+        #{ is_user_local := false, is_user_external := false, username := Username } when is_binary(Username), Username =/= <<>> ->
             % Hide the fact an user is unknown, this prevents fishing for known usernames.
-            Options2 = Options1#{
+            Options3 = Options2#{
                 is_user_local => true,
                 is_username_checked => true
             },
-            {Result1#{ options => Options2 }, Context};
+            {Result1#{ options => Options3 }, Context};
         _ ->
             {Result1, Context}
     end;

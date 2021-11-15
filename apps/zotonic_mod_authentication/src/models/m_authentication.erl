@@ -102,6 +102,28 @@ m_post([ <<"service-confirm">> ], #{ payload := Payload }, Context) when is_map(
         _ ->
             {error, missing_auth}
     end;
+m_post([ <<"send-verification-message">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
+    case Payload of
+        #{ <<"token">> := Token } ->
+            case catch z_utils:depickle(Token, Context) of
+                #{ timestamp := {{_,_,_}, {_,_,_}}=Ts,
+                   user_id := UserId } ->
+                    case z_datetime:next_hour(Ts) > calendar:universal_time() of
+                        true ->
+                            case z_notifier:first(#identity_verification{user_id=UserId}, Context) of
+                                ok -> {ok, verification_sent};
+                                {error, _} ->
+                                    %% Hide the real error
+                                    {error, error_sending_verification}
+                            end;
+                        false -> {error, expired_token}
+                    end;
+                _ ->
+                    {error, invalid_token}
+            end;
+        _ -> {error, missing_token}
+    end;
+
 m_post(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p post: ~p", [?MODULE, Vs]),
     {error, unknown_path}.

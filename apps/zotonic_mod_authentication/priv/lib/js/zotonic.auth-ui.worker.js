@@ -56,6 +56,10 @@ model.present = function(data) {
             function(msg) { actions.reminderForm(msg.payload); });
 
         self.subscribe(
+            "model/auth-ui/post/form/send_verification_message",
+            function(msg) { actions.sendVerificationMessage(msg.payload); });
+
+        self.subscribe(
             "model/auth-ui/post/form/reset",
             function(msg) { actions.resetForm(msg.payload); });
 
@@ -85,7 +89,7 @@ model.present = function(data) {
 
     if ("is_error" in data) {
         model.is_error = data.is_error;
-        model.error = data.error;
+        model.logon_view = model.error = data.error;
         model.options = data.options || {};
         model.status = 'updated';
     }
@@ -125,6 +129,17 @@ model.present = function(data) {
             model.status = 'updated';
         }
         model.email = data.email
+    }
+
+    if (data.is_send_verification_message) {
+        if(model.options.is_user_local && model.options.username && model.error === "verification_pending") {
+            self.call("bridge/origin/model/authentication/post/send-verification-message",
+                { username: model.options.username,
+                  token: data.token },
+                { qos: 1 })
+                .then(actions.sendVerificationMessageResponse)
+                .catch(actions.fetchError);
+        }
     }
 
     if (data.is_expired) {
@@ -347,6 +362,28 @@ actions.reminderForm = function(data) {
     model.present(dataReminder);
 };
 
+actions.sendVerificationMessage = function(data) {
+    const proposal = {
+        is_send_verification_message: true,
+        token: data.value.token
+    }
+    model.present(proposal);
+}
+
+actions.sendVerificationMessageResponse = function(data) {
+    const proposal = { };
+    
+    if(data.payload && data.payload.status === "ok") {
+        proposal.is_error = false;
+        proposal.logon_view = "verification_sent";
+    } else {
+        proposal.is_error = true;
+        proposal.logon_view = "verification_error";
+    }
+
+    model.present(proposal);
+}
+
 actions.resetForm = function(data) {
     let dataReset = {
         reset: true,
@@ -387,7 +424,7 @@ actions.reminderResponse = function(data) {
                 });
             break;
         default:
-            console.log("Unkown reminderResponse payload", data);
+            console.log("Unknown reminderResponse payload", data);
             break;
     }
 };

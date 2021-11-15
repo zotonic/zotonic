@@ -92,14 +92,14 @@
     <p>{_ If you do not receive the email within a few minutes, please check your spam folder. _}</p>
     <p><a id="back_to_logon" class="btn btn-primary" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ Back to sign in _}</a></p>
 
-{% elseif q.logon_view == "verification_pending" %}
+{% elseif q.logon_view == "verification_pending" and q.options.token %}
 
     <h2 class="z-logon-title">{_ Verify your account _}</h2>
     <p>{_ You're almost done! To make sure you are really you, we ask you to confirm your account from your email address. _}</p>
-    <form id="verification_form" method="POST" action="postback">
+    <form id="verification_form" method="POST" data-onsubmit-topic="model/auth-ui/post/form/send_verification_message">
+        <input type="hidden" name="token" value="{{ q.options.token | escape }}" />
         <button class="btn btn-primary" type="submit">{_ Send Verification Message _}</button>
     </form>
-    {% wire id="verification_form" postback={send_verification user_id=user_id} %}
 
 {% elseif q.logon_view == "verification_sent" %}
 
