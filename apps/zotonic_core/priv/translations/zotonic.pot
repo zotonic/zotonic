@@ -3052,7 +3052,7 @@ msgid "Sorry"
 msgstr ""
 
 #: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:42./apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:50
-#: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:28
+#: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:31
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr ""
 
@@ -3986,6 +3986,10 @@ msgid ""
 "Either the email or the password you entered is incorrect. Please try again."
 msgstr ""
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:80
+msgid "Email or username"
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:37
 msgid "Enable <em>mod_facebook</em> to see Facebook settings."
 msgstr ""
@@ -4292,10 +4296,6 @@ msgstr ""
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
 msgid ""
 "Use some non alphabetical characters or digits to make it harder to guess."
-msgstr ""
-
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:80
-msgid "Username or email"
 msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:97
@@ -8067,6 +8067,10 @@ msgid ""
 "something went wrong."
 msgstr ""
 
+#: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:29
+msgid "You already have an account,"
+msgstr ""
+
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:2
 msgid "You can also"
 msgstr ""
@@ -8086,7 +8090,7 @@ msgstr ""
 msgid "and the"
 msgstr ""
 
-#: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
+#: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:29./apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "sign in"
 msgstr ""
 
