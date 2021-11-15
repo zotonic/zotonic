@@ -79,8 +79,8 @@ template_get( Model, Path, Payload, Context ) ->
             model_call(Mod, m_get, Path, Msg, Context);
         {error, _} ->
             case publish(Model, get, Path, Msg, Context) of
-                {ok, Payload} ->
-                    {ok, {Payload, []}};
+                {ok, RespPayload} ->
+                    {ok, {RespPayload, []}};
                 {error, _} = Error ->
                     Error
             end
