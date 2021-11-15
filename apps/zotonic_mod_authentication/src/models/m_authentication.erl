@@ -119,7 +119,7 @@ m_post([ <<"send-verification-message">> ], #{ payload := Payload }, Context) wh
                         false -> {error, expired_token}
                     end;
                 _ ->
-                    {error, invalid_toke}
+                    {error, invalid_token}
             end;
         _ -> {error, missing_token}
     end;
