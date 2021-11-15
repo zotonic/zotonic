@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-12 20:46\n"
+"PO-Revision-Date: 2021-11-15 12:38\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -2948,7 +2948,7 @@ msgid "Sorry"
 msgstr "Excuses"
 
 #: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:42./apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:50
-#: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:28
+#: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:31
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr "Sorry, deze gebruikersnaam is al in gebruik. Probeer een andere."
 
@@ -3812,6 +3812,10 @@ msgstr "Dubbele e-mail"
 msgid "Either the email or the password you entered is incorrect. Please try again."
 msgstr "Het e-mailadres of het wachtwoord dat u hebt ingevoerd, is onjuist. Probeer het a.u.b. opnieuw."
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:80
+msgid "Email or username"
+msgstr "E-mail of gebruikersnaam"
+
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:37
 msgid "Enable <em>mod_facebook</em> to see Facebook settings."
 msgstr "Activeer <em>mod_facebook</em> om Facebook instellingen te zien."
@@ -4098,10 +4102,6 @@ msgstr "Twee-factor-toegangscode"
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
 msgid "Use some non alphabetical characters or digits to make it harder to guess."
 msgstr "Gebruik bijzondere symbolen of cijfers om het moeilijker te maken om te raden."
-
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:80
-msgid "Username or email"
-msgstr "Gebruikersnaam of e-mail"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:97
 msgid "Verify your account"
@@ -7675,6 +7675,10 @@ msgstr "We zijn erg zorgvuldig met alle persoonlijke informatie die ons wordt ve
 msgid "When you signed up, you received an email with a link but it looks like something went wrong."
 msgstr "Toen je je aanmeldde, ontving je een e-mail met een link, maar het lijkt erop dat er iets mis is gegaan."
 
+#: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:29
+msgid "You already have an account,"
+msgstr "Je hebt al een account,"
+
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:2
 msgid "You can also"
 msgstr "Je kunt ook"
@@ -7691,7 +7695,7 @@ msgstr "Je moet akkoord gaan met de voorwaarden."
 msgid "and the"
 msgstr "en de"
 
-#: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
+#: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:29./apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "sign in"
 msgstr "Inloggen"
 
