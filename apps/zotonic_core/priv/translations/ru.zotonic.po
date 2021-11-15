@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-15 12:38\n"
+"PO-Revision-Date: 2021-11-15 12:48\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3812,7 +3812,7 @@ msgstr "Вы ввели неверный адрес электронной по�
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:80
 msgid "Email or username"
-msgstr ""
+msgstr "Электронная почта или имя пользователя"
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:37
 msgid "Enable <em>mod_facebook</em> to see Facebook settings."
@@ -7674,7 +7674,7 @@ msgstr "При регистрации вы получили электронно
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:29
 msgid "You already have an account,"
-msgstr ""
+msgstr "У вас уже есть учетная запись,"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:2
 msgid "You can also"
