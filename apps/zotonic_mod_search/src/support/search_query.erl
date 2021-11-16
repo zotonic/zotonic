@@ -548,7 +548,6 @@ parse_query([{{facet, Field}, V}|Rest], Context, Result) ->
         {error, _} ->
             Result
     end,
-    ?DEBUG(Result1),
     parse_query(Rest, Context, Result1);
 
 %% text=...
