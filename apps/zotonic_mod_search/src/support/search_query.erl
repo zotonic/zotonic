@@ -53,8 +53,19 @@ search(Query, Context) ->
     Query3 = lists:flatten(
         lists:map(
             fun
+                ({K, #{ <<"all">> := All, <<"any">> := Any }}) ->
+                    All1 = filter_empty( lists:map(fun(V) -> {K, V} end, All) ),
+                    case lists:filter(fun z_utils:is_empty/1, Any) of
+                        [] -> All1;
+                        Any1 -> [ {K, Any1} | All1 ]
+                    end;
                 ({K, #{ <<"all">> := All }}) ->
                     filter_empty( lists:map(fun(V) -> {K, V} end, All) );
+                ({K, #{ <<"any">> := Any }}) ->
+                    case lists:filter(fun z_utils:is_empty/1, Any) of
+                        [] -> [];
+                        Any1 -> {K, Any1}
+                    end;
                 (KV) ->
                     KV
             end,
