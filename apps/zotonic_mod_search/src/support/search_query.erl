@@ -53,8 +53,19 @@ search(Query, Context) ->
     Query3 = lists:flatten(
         lists:map(
             fun
+                ({K, #{ <<"all">> := All, <<"any">> := Any }}) ->
+                    All1 = filter_empty( lists:map(fun(V) -> {K, V} end, All) ),
+                    case lists:filter(fun z_utils:is_empty/1, Any) of
+                        [] -> All1;
+                        Any1 -> [ {K, Any1} | All1 ]
+                    end;
                 ({K, #{ <<"all">> := All }}) ->
                     filter_empty( lists:map(fun(V) -> {K, V} end, All) );
+                ({K, #{ <<"any">> := Any }}) ->
+                    case lists:filter(fun z_utils:is_empty/1, Any) of
+                        [] -> [];
+                        Any1 -> {K, Any1}
+                    end;
                 (KV) ->
                     KV
             end,
@@ -261,7 +272,15 @@ parse_query([{content_group, ContentGroup}|Rest], Context, Result0) ->
     parse_query(Rest, Context, Result2);
 
 %% id_exclude=resource-id
-%% Exclude an id from the result
+%% Exclude an id or multiple ids from the result
+parse_query([{id_exclude, Ids}|Rest], Context, Result) when is_list(Ids) ->
+    R1 =lists:foldl(
+        fun(Id, Acc) ->
+            parse_query([{id_exclude, Id}], Context, Acc)
+        end,
+        Result,
+        Ids),
+    parse_query(Rest, Context, R1);
 parse_query([{id_exclude, Id}|Rest], Context, Result) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
@@ -538,6 +557,9 @@ parse_query([{custompivot, Table}|Rest], Context, Result) ->
 
 %% facet.foo=value
 %% Add a join with the search_facet table.
+parse_query([{{facet, Field}, <<"[", _>> = V}|Rest], Context, Result) ->
+    V1 = maybe_split_list(V),
+    parse_query([ {{facet, Field}, V1} | Rest ], Context, Result);
 parse_query([{{facet, Field}, V}|Rest], Context, Result) ->
     Result1 =case search_facet:add_search_arg(Field, V, Result, Context) of
         {ok, Res1} ->

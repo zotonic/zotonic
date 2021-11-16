@@ -277,7 +277,30 @@ facet_union(#facet_def{ name = Name }) ->
          Query :: #search_sql{},
          NewQuery :: #search_sql{},
          Context :: z:context().
+add_search_arg(_Field, [], Query, _Context) ->
+    Query;
+add_search_arg(Field, [Value], Query, Context) ->
+    add_search_arg(Field, Value, Query, Context);
+add_search_arg(Field, Vs, Query, Context) when is_list(Vs) ->
+    % 'OR' query for all values
+    Q0 = join_facet(Query),
+    Q1 = Q0#search_sql{ where = Q0#search_sql.where ++ " AND (" },
+    {_, Q2} = lists:foldl(
+        fun(V, {Op, QAcc}) ->
+            case add_search_arg(Field, V, QAcc, Op, Context) of
+                {ok, QAcc1} ->
+                    {"OR", QAcc1};
+                {error, _} ->
+                    {Op, QAcc}
+            end
+        end,
+        {"", Q1},
+        Vs),
+    {ok, Q2#search_sql{ where = Q2#search_sql.where ++ ")" }};
 add_search_arg(Field, Value, Query, Context) ->
+    add_search_arg(Field, Value, Query, "AND", Context).
+
+add_search_arg(Field, Value, Query, AndOr, Context) ->
     case facet_def(Field, Context) of
         {ok, Def} ->
             {Op, Value1} = extract_op(Value),
@@ -292,11 +315,11 @@ add_search_arg(Field, Value, Query, Context) ->
                     NormV = z_string:normalize(Value2),
                     Column = "facet.ft_" ++ binary_to_list(Field),
                     {ArgN, Query2} = add_arg(<<"%", NormV/binary, "%">>, Query1),
-                    Query3 = add_where(Column ++ " like " ++ ArgN, Query2);
+                    Query3 = add_where(Column ++ " like " ++ ArgN, AndOr, Query2);
                 _ ->
                     Column = "facet.f_" ++ binary_to_list(Field),
                     {ArgN, Query2} = add_arg(Value2, Query1),
-                    Query3 = add_where(Column ++ Op ++ ArgN, Query2)
+                    Query3 = add_where(Column ++ Op ++ ArgN, AndOr, Query2)
             end,
             {ok, Query3};
         {error, _} = Error ->
@@ -308,17 +331,17 @@ join_facet(#search_sql{ from = From } = Query) ->
     case string:find(From, " search_facet facet") of
         nomatch ->
             From1 = From ++ ", search_facet facet",
-            add_where("facet.id = rsc.id", Query#search_sql{ from = From1 });
+            add_where("facet.id = rsc.id", "AND", Query#search_sql{ from = From1 });
         _ ->
             Query
     end.
 
-add_where(Clause, Search) ->
+add_where(Clause, AndOr, Search) ->
     case Search#search_sql.where of
         [] ->
             Search#search_sql{where=Clause};
         C ->
-            Search#search_sql{where=C ++ " AND " ++ Clause}
+            Search#search_sql{where=C ++ " " ++ AndOr ++ " " ++ Clause}
     end.
 
 extract_op(<<"=", V/binary>>) ->
@@ -413,6 +436,13 @@ render_block(Block, Template, Vars, Context) ->
     {Output, _RenderState} = z_template:render_block_to_iolist(Block, Template, Vars, Context),
     z_string:trim(iolist_to_binary(Output)).
 
+convert_type(list, L) when is_list(L) ->
+    L1 = lists:map(fun z_convert:to_binary/1, L),
+    L2 = lists:map(fun z_string:trim/1, L1),
+    lists:filter( fun(B) -> B =/= <<>> end, L2 );
+convert_type(Type, L) when is_list(L) ->
+    L1 = lists:map(fun(V) -> convert_type(Type, V) end, L),
+    lists:filter(fun(V) -> V =/= <<>> andalso V =/= undefined end, L1);
 convert_type(boolean, V) -> z_convert:to_bool(V);
 convert_type(_, <<>>) -> undefined;
 convert_type(id, V) -> z_convert:to_integer(V);
