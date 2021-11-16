@@ -272,7 +272,15 @@ parse_query([{content_group, ContentGroup}|Rest], Context, Result0) ->
     parse_query(Rest, Context, Result2);
 
 %% id_exclude=resource-id
-%% Exclude an id from the result
+%% Exclude an id or multiple ids from the result
+parse_query([{id_exclude, Ids}|Rest], Context, Result) when is_list(Ids) ->
+    R1 =lists:foldl(
+        fun(Id, Acc) ->
+            parse_query([{id_exclude, Id}], Context, Acc)
+        end,
+        Result,
+        Ids),
+    parse_query(Rest, Context, R1);
 parse_query([{id_exclude, Id}|Rest], Context, Result) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
