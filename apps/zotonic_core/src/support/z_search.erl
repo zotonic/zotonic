@@ -83,14 +83,14 @@ search(Name, Args, Page, PageLen, Context) when is_binary(Name), is_map(Args) ->
                             },
                             search(<<"query">>, Args1, Page, PageLen, Context);
                         false ->
-                            lager:debug("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
+                            lager:info("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
                             #search_result{
                                 search_name = Name,
                                 search_args = Args
                             }
                     end;
                 undefined ->
-                    lager:debug("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
+                    lager:info("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
                     #search_result{
                         search_name = Name,
                         search_args = Args
