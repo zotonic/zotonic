@@ -538,6 +538,9 @@ parse_query([{custompivot, Table}|Rest], Context, Result) ->
 
 %% facet.foo=value
 %% Add a join with the search_facet table.
+parse_query([{{facet, Field}, <<"[", _>> = V}|Rest], Context, Result) ->
+    V1 = maybe_split_list(V),
+    parse_query([ {{facet, Field}, V1} | Rest ], Context, Result);
 parse_query([{{facet, Field}, V}|Rest], Context, Result) ->
     Result1 =case search_facet:add_search_arg(Field, V, Result, Context) of
         {ok, Res1} ->
@@ -545,6 +548,7 @@ parse_query([{{facet, Field}, V}|Rest], Context, Result) ->
         {error, _} ->
             Result
     end,
+    ?DEBUG(Result1),
     parse_query(Rest, Context, Result1);
 
 %% text=...
