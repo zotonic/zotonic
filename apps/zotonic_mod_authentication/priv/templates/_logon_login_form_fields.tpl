@@ -4,12 +4,12 @@
     {# One step form. The field blocks are for backward compatibily with 0.x sites. #}
     {% block field_username %}
         <div class="form-group">
-            <label for="username" class="control-label">{_ Username _}</label>
+            <label for="username" class="control-label">{_ Email or username _}</label>
             <input class="form-control" type="text" id="username" name="username"
                    value="{{ q.options.username|default:q.username|escape }}"
                    {% if not is_show_passcode %}autofocus{% endif %}
                    required
-                   placeholder="{_ Username _}"
+                   placeholder="{_ Email or username _}"
                    autocomplete="username"
                    autocapitalize="off"
                    autocorrect="off">
