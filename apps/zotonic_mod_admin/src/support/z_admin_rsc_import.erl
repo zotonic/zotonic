@@ -32,8 +32,7 @@ event(#postback{ message={import_refresh, Args} }, Context) ->
         {ok, {_Id, _ObjectIds}} ->
             case proplists:get_all_values(on_success, Args) of
                 [] ->
-                    Context1 = z_render:wire(OnError, Context),
-                    z_render:growl(?__("Succesfully imported page from the remote server.", Context1), Context1);
+                    z_render:growl(?__("Succesfully imported page from the remote server.", Context), Context);
                 OnSuccess ->
                     z_render:wire(OnSuccess, Context)
             end;
