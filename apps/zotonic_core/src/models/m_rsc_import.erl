@@ -66,7 +66,8 @@
                 | {allow_predicate, [ binary() ]}
                 | {deny_category, [ binary() ]}
                 | {deny_predicate, [ binary() ]}
-                | {fetch_options, z_url_fetch:options()}.
+                | {fetch_options, z_url_fetch:options()}
+                | {uri_template, binary()}.
 -type options() :: [ option() ].
 
 -type import_result() :: {ok, {m_rsc:resource_id(), import_map()}}
@@ -80,6 +81,7 @@
     import_result/0,
     import_map/0
 ]).
+
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"fetch_raw">> | Rest ], #{ payload := Uri }, Context) ->
@@ -408,10 +410,29 @@ reimport_1(Id, ImportedAcc, IsForceImport, Context) ->
                 false ->
                     {ok, {Id, ImportedAcc}}
             end;
+        {error, enoent} ->
+            reimport_nonauth(Id, ImportedAcc, Context);
         {error, _} = Error ->
             Error
     end.
 
+reimport_nonauth(Id, ImportedAcc, Context) ->
+    case m_rsc:p_no_acl(Id, is_authoritative, Context) of
+        false ->
+            case m_rsc:p_no_acl(Id, uri_raw, Context) of
+                <<>> ->
+                    {error, uri};
+                Uri ->
+                    case fetch_json(Uri, Context) of
+                        {ok, JSON} ->
+                            import_json(Id, Uri, JSON, ImportedAcc, [], Context);
+                        {error, _} = Error ->
+                            Error
+                    end
+            end;
+        true ->
+            {error, authoritative}
+    end.
 
 %% @doc Reimport a non-authoritative resource or placeholder using new import options.
 -spec reimport( m_rsc:resource_id(), map(), options() | saved, z:context() ) -> import_result().
@@ -454,23 +475,40 @@ update_medium_uri(LocalId, Uri, Options, Context) ->
 
 fetch_json(undefined, _Context) ->
     {error, uri};
-fetch_json(Url, Context) ->
+fetch_json(Uri, Context) ->
     Site = z_context:site(Context),
-    case z_sites_dispatcher:get_site_for_url(Url) of
+    case z_sites_dispatcher:get_site_for_url(Uri) of
         {ok, Site} ->
             {error, local};
         _ ->
-            Options = [
-                {accept, "application/json"},
-                {user_agent, "Zotonic"}
-            ],
-            case z_fetch:fetch(Url, Options, Context) of
-                {ok, {_FinalUrl, _Hs, _Size, Body}} ->
-                    JSON = jsxrecord:decode(Body),
-                    {ok, JSON};
+            % Check other modules if they can return the JSON for the uri.
+            case z_notifier:first(#rsc_import_fetch{ uri = Uri }, Context) of
+                {ok, #{
+                    <<"uri">> := U,
+                    <<"resource">> := Rsc
+                }} = Data when is_binary(U), is_map(Rsc) ->
+                    {ok, #{
+                        <<"status">> => <<"ok">>,
+                        <<"result">> => Data
+                    }};
+                {ok, Data} ->
+                    {ok, Data};
                 {error, _} = Error ->
-                    lager:warning("Error fetching ~p: ~p", [Url, Error]),
-                    Error
+                    lager:warning("Error fetching ~p: ~p", [Uri, Error]),
+                    Error;
+                undefined ->
+                    Options = [
+                        {accept, "application/json"},
+                        {user_agent, "Zotonic"}
+                    ],
+                    case z_fetch:fetch(Uri, Options, Context) of
+                        {ok, {_FinalUrl, _Hs, _Size, Body}} ->
+                            JSON = jsxrecord:decode(Body),
+                            {ok, JSON};
+                        {error, _} = Error ->
+                            lager:warning("Error fetching ~p: ~p", [Uri, Error]),
+                            Error
+                    end
             end
     end.
 
@@ -544,10 +582,60 @@ import_json(Id, _Url, #{ <<"status">> := <<"ok">>, <<"result">> := JSON }, Impor
 import_json(_Id, Url, #{ <<"status">> := <<"error">> } = JSON, _ImportedAcc, _Options, _Context) ->
     lager:warning("Remote returned error ~p: ~p", [Url, JSON]),
     {error, remote};
+import_json(_Id, _Url, #{ <<"rdf_triples">> := [] }, _ImportedAcc, _Options, _Context) ->
+    {error, nodoc};
+import_json(Id, Url, #{ <<"rdf_triples">> := _ } = Data, ImportedAcc, Options, Context) ->
+    import_rdf(Id, Url, Data, ImportedAcc, Options, Context);
 import_json(_Id, Url, JSON, _ImportedAcc, _Options, _Context) ->
     lager:warning("JSON with unknown structure ~p: ~p", [Url, JSON]),
     {error, status}.
 
+import_rdf(OptLocalId, OptUri, #{ <<"rdf_triples">> := Triples } = Data, ImportedAcc, Options, Context) ->
+    DataUri = maps:get(<<"uri">>, Data, OptUri),
+    Docs = zotonic_rdf:triples_to_docs(Triples),
+    case lists:map(fun zotonic_rdf:compact/1, Docs) of
+        [] ->
+            {error, enoent};
+        CDocs ->
+            UriDocs = lists:filter(fun(Doc) -> maps:get(<<"@id">>, Doc) =:= DataUri end, CDocs),
+            {MainDoc, OtherDocs} = case UriDocs of
+                [D] -> {D, CDocs -- [D]};
+                [] -> {hd(CDocs), tl(CDocs)}
+            end,
+            MainUri = maps:get(<<"@id">>, MainDoc),
+            ImportedAcc1 = case import_doc(OptLocalId, MainDoc, ImportedAcc, Options, Context) of
+                {ok, {LocalId, Acc1}} ->
+                    Acc1#{ MainUri => LocalId };
+                {error, _} ->
+                    ImportedAcc
+            end,
+            ImportedAcc2 = lists:foldl(
+                fun(D, ImpAcc) ->
+                    case import_doc(undefined, D, ImpAcc, Options, Context) of
+                        {ok, {Id, ImpAcc1}} ->
+                            DUri = maps:get(<<"@id">>, D),
+                            ImpAcc1#{ DUri => Id };
+                        {error, _} ->
+                            ImpAcc
+                    end
+                end,
+                ImportedAcc1,
+                OtherDocs),
+            {ok, {maps:get(MainUri, ImportedAcc2), ImportedAcc2}}
+    end.
+
+import_doc(OptLocalId, Doc, ImpAcc, Options, Context) ->
+    case z_rdf_props:extract_resource(Doc, Context) of
+        {ok, Rsc} when is_map(Rsc) ->
+            Uri = maps:get(<<"uri">>, Rsc),
+            OptId1 = case OptLocalId of
+                undefined -> m_rsc:rid(Uri, Context);
+                _ -> OptLocalId
+            end,
+            import(OptId1, Rsc, ImpAcc, Options, Context);
+        {error, _} = Error ->
+            Error
+    end.
 
 %% @doc Import a non-authoritative resource from a remote URI using default import options.
 -spec import_uri( string() | binary(), z:context() ) -> import_result().
@@ -623,7 +711,7 @@ import(OptLocalId, #{
         false ->
             case find_allowed_category(RemoteRId, Rsc, Options, Context) of
                 {ok, Category} ->
-                    UriTemplate = maps:get(<<"uri_template">>, JSON, <<Uri/binary, "#:id">>),
+                    UriTemplate = maps:get(<<"uri_template">>, JSON, proplists:get_value(uri_template, Options)),
                     {Rsc1, ImportedAcc1} = cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context),
                     Rsc2 = Rsc1#{
                         <<"category_id">> => Category
@@ -671,6 +759,9 @@ import(OptLocalId, #{
                     Error
             end
     end;
+import(OptLocalId, #{ <<"rdf_triples">> := _ } = Data, ImportedAcc, Options, Context) ->
+    Uri = maps:get(<<"uri">>, Data, m_rsc:p(OptLocalId, uri_raw, Context)),
+    import_rdf(OptLocalId, Uri, Data, ImportedAcc, Options, Context);
 import(_OptLocalId, JSON, _ImportedAcc, _Options, _Context) ->
     lager:warning("Import of JSON without required fields resource and uri: ~p", [JSON]),
     {error, status}.
@@ -913,7 +1004,7 @@ map_blocks([], _UriTemplate, Acc, ImpAcc, _Options, _Context) ->
 
 %% @doc Map a remote id to a local id, optionally creating a new (stub) resource.
 map_id(RemoteId, UriTemplate, ImpAcc, Options, Context) when is_integer(RemoteId) ->
-    case is_url(UriTemplate) of
+    case is_uri(UriTemplate) of
         true ->
             URL = binary:replace(UriTemplate, <<":id">>, z_convert:to_binary(RemoteId)),
             Rsc = #{
@@ -926,7 +1017,7 @@ map_id(RemoteId, UriTemplate, ImpAcc, Options, Context) when is_integer(RemoteId
 map_id(Remote, _UriTemplate, ImpAcc, Options, Context) when is_map(Remote) ->
     maybe_create_empty(Remote, ImpAcc, Options, Context);
 map_id(Remote, _UriTemplate, ImpAcc, Options, Context) when is_binary(Remote) ->
-    case is_url(Remote) of
+    case is_uri(Remote) of
         true ->
             Rsc = #{
                 <<"uri">> => Remote
@@ -981,9 +1072,18 @@ map_html_1(Text, UriTemplate, ImportAcc, Options, Context) when is_binary(Text) 
             {Text2, ImportAcc1}
     end.
 
-is_url(<<"http:", _/binary>>) -> true;
-is_url(<<"https:", _/binary>>) -> true;
-is_url(_) -> false.
+is_uri(undefined) -> false;
+is_uri(<<"http:", _/binary>>) -> true;
+is_uri(<<"https:", _/binary>>) -> true;
+is_uri(<<C, _/binary>> = Uri) when C >= $a, C =< $z -> is_schemed(Uri);
+is_uri(<<C, _/binary>> = Uri) when C >= $A, C =< $Z -> is_schemed(Uri);
+is_uri(_) -> false.
+
+is_schemed(<<C, R/binary>>) when C >= $a, C =< $z -> is_schemed(R);
+is_schemed(<<C, R/binary>>) when C >= $A, C =< $Z -> is_schemed(R);
+is_schemed(<<$:, _/binary>>) -> true;
+is_schemed(<<>>) -> false;
+is_schemed(_) -> false.
 
 
 is_html_prop(<<"body">>) -> true;

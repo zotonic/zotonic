@@ -26,16 +26,19 @@
 -include("zotonic_core/include/zotonic.hrl").
 
 event(#postback{ message={import_refresh, Args} }, Context) ->
+    OnError = proplists:get_value(on_error, Args),
     {id, Id} = proplists:lookup(id, Args),
     case m_rsc_import:reimport_recursive_async(Id, Context) of
         {ok, {_Id, _ObjectIds}} ->
             case proplists:get_all_values(on_success, Args) of
                 [] ->
-                    z_render:growl(?__("Succesfully imported page from the remote server.", Context), Context);
+                    Context1 = z_render:wire(OnError, Context),
+                    z_render:growl(?__("Succesfully imported page from the remote server.", Context1), Context1);
                 OnSuccess ->
                     z_render:wire(OnSuccess, Context)
             end;
         {error, Reason} ->
             lager:error("Error on reimport of rsc ~p: ~p", [ Id, Reason ]),
-            z_render:growl_error(?__("Error importing page from the remote server.", Context), Context)
+            Context1 = z_render:wire(OnError, Context),
+            z_render:growl_error(?__("Error importing page from the remote server.", Context1), Context1)
     end.
