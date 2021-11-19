@@ -1,4 +1,5 @@
 {% if m.translation.language_list_enabled as list %}
+{% if list|length > 1 %}
     {% if is_nav %}
         {# Bootstrap nav item #}
         <li class="dropdown" id="languages">
@@ -32,9 +33,10 @@
         {# Simple select list #}
     	<select class="form-control" id="{{ #lang }}">
         	{% for code,lang in list %}
-       			<option {% if z_language == code %}selected="selected"{% endif %} value="{{ code }}">{{ lang.language }}</option>
+       			<option {% if z_language == code %}selected="selected"{% endif %} value="{{ code }}">{{ lang.name }}</option>
         	{% endfor %}
     	</select>
     	{% wire id=#lang type="change" postback={set_language id=id} delegate="mod_translation" %}
     {% endif %}
+{% endif %}
 {% endif %}
