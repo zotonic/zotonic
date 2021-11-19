@@ -779,6 +779,16 @@
 %% Return: return value is ignored
 -record(m_config_update_prop, {module, key, prop, value}).
 
+
+%% @doc Fetch the data for an import of a resource. Returns data in the format
+%% used by m_rsc_export and m_rsc_import.
+%% Type: first
+%% Return: {ok, map()} | {error, term()} | undefined
+-record(rsc_import_fetch, {
+    uri :: binary()
+}).
+
+
 %% @doc Notification for fetching #media_import_props{} from different modules.
 %% This is used by z_media_import.erl for fetching properties and medium information (map)
 %% about resources.  The metadata is the result returned by z_url_metadata.
