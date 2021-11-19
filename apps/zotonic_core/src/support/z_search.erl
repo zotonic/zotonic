@@ -127,7 +127,9 @@ search(Search, Context) ->
 
 %% @doc Perform the named search and its arguments
 %% @deprecated use search/5
--spec search(search_query(), search_offset(), z:context() ) -> #search_result{}.
+-spec search(search_query(), search_offset() | undefined, z:context() ) -> #search_result{}.
+search(Search, undefined, Context) ->
+    search_1(Search, 1, ?SEARCH_ALL_LIMIT, {1, ?SEARCH_ALL_LIMIT}, Context);
 search(Search, MaxRows, Context) when is_integer(MaxRows) ->
     search_1(Search, 1, MaxRows, {1, MaxRows}, Context);
 search(Search, {1, Limit} = OffsetLimit, Context) ->
