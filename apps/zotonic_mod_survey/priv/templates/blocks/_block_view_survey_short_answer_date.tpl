@@ -5,7 +5,7 @@
     {% endif %}
 
     <div class="col-sm-2">
-        <select id="{{ #y }}" class="form-control">
+        <select id="{{ #year }}" class="form-control">
             <option></option>
             {% with now|date:"Y" as year %}
             {% for i in year|range:(year-110):(0-1) %}
@@ -15,7 +15,7 @@
         </select>
     </div>
     <div class="col-sm-6">
-        <select id="{{ #m }}" class="form-control">
+        <select id="{{ #month }}" class="form-control">
             <option></option>
             <option value="1">{_ January _}</option>
             <option value="2">{_ February _}</option>
@@ -32,7 +32,7 @@
         </select>
     </div>
     <div class="col-sm-2">
-        <select id="{{ #d }}" class="form-control">
+        <select id="{{ #day }}" class="form-control">
             <option></option>
             {% for i in 1|range:31 %}
                 <option>{{ i }}</option>
@@ -45,20 +45,20 @@
     var d = $('#{{ #id }}').val();
     if (d != '') {
         d = new Date(d);
-        $('#{{ #y }}').val(d.getFullYear());
-        $('#{{ #m }}').val(d.getMonth()+1);
-        $('#{{ #d }}').val(d.getDate());
+        $('#{{ #year }}').val(d.getFullYear());
+        $('#{{ #month }}').val(d.getMonth()+1);
+        $('#{{ #day }}').val(d.getDate());
     }
-    $('#{{ #y }},#{{ #m }},#{{ #d }}').change(function() {
-        var y = $('#{{ #y }}').val();
-        var m = $('#{{ #m }}').val();
-        var d = $('#{{ #d }}').val();
+    $('#{{ #year }},#{{ #month }},#{{ #day }}').change(function() {
+        var y = $('#{{ #year }}').val();
+        var m = $('#{{ #month }}').val();
+        var d = $('#{{ #day }}').val();
 
         if (y && m && d) {
             d = new Date(y, m-1, d);
-            $('#{{ #y }}').val(d.getFullYear());
-            $('#{{ #m }}').val(d.getMonth()+1);
-            $('#{{ #d }}').val(d.getDate());
+            $('#{{ #year }}').val(d.getFullYear());
+            $('#{{ #month }}').val(d.getMonth()+1);
+            $('#{{ #day }}').val(d.getDate());
             $('#{{ #id }}').val(
                 '' + d.getFullYear()
                 + '-' + ('0'+(d.getMonth()+1)).slice(-2)
