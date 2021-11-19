@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-15 12:48\n"
+"PO-Revision-Date: 2021-11-19 13:20\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -1220,7 +1220,7 @@ msgstr "Felkontroll webbplatsen."
 msgid "Error creating the page."
 msgstr "Fel vid skapande av sidan."
 
-#: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:40
+#: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:42
 msgid "Error importing page from the remote server."
 msgstr "Fel vid import av sida från fjärrservern."
 
@@ -1268,6 +1268,10 @@ msgstr "Funktioner"
 #: apps/zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:9
 msgid "Fetch new version"
 msgstr "Hämta ny version"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:11
+msgid "Fetching new version..."
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:6
 msgid "File / media content"
@@ -1899,7 +1903,7 @@ msgstr "Gatlinje 2"
 msgid "Structure"
 msgstr "Strukturera"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:34
+#: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:35
 msgid "Succesfully imported page from the remote server."
 msgstr "Importerad sida från fjärrservern."
 
@@ -2656,7 +2660,6 @@ msgstr "Använd relä för att skicka e-post"
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:60./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:61./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:87./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:88
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:3./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:50./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:19
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:81
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:7./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:12
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:15
 msgid "Username"
 msgstr "Användarnamn"
@@ -3810,7 +3813,7 @@ msgstr "Duplicera e-post"
 msgid "Either the email or the password you entered is incorrect. Please try again."
 msgstr "Antingen e-postadressen eller lösenordet som du angav är felaktiga. Var god försök igen."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:80
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:7./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:12./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:80
 msgid "Email or username"
 msgstr "Email eller användarnamn"
 
@@ -3997,7 +4000,7 @@ msgstr "Återställ lösenordet och logga in"
 msgid "Reset your password"
 msgstr "Återställ ditt lösenord"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:100
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:101
 msgid "Send Verification Message"
 msgstr "Skicka verifieringsmeddelande"
 
