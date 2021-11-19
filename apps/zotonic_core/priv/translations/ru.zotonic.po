@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-12 10:20\n"
+"PO-Revision-Date: 2021-11-15 12:48\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2944,7 +2944,7 @@ msgid "Sorry"
 msgstr "Извините"
 
 #: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:42./apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:50
-#: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:28
+#: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:31
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr "Извините, это имя пользователя уже занято. Пожалуйста, попробуйте указать другое."
 
@@ -3810,6 +3810,10 @@ msgstr "Повторяющийся адрес электронной почты"
 msgid "Either the email or the password you entered is incorrect. Please try again."
 msgstr "Вы ввели неверный адрес электронной почты или пароль. Пожалуйста, попробуйте еще раз."
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:80
+msgid "Email or username"
+msgstr "Электронная почта или имя пользователя"
+
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:37
 msgid "Enable <em>mod_facebook</em> to see Facebook settings."
 msgstr "Включите <em>mod_facebook</em> , чтобы увидеть настройки Facebook."
@@ -4096,10 +4100,6 @@ msgstr "двухфакторный пароль"
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
 msgid "Use some non alphabetical characters or digits to make it harder to guess."
 msgstr "Используйте некоторые не алфавитные символы или цифры, чтобы затруднить догадку."
-
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:80
-msgid "Username or email"
-msgstr "Имя пользователя или адрес электронной почты"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:97
 msgid "Verify your account"
@@ -7672,6 +7672,10 @@ msgstr "Мы будем очень осторожны со всей предос
 msgid "When you signed up, you received an email with a link but it looks like something went wrong."
 msgstr "При регистрации вы получили электронное письмо со ссылкой, но похоже, что что-то пошло не так."
 
+#: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:29
+msgid "You already have an account,"
+msgstr "У вас уже есть учетная запись,"
+
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:2
 msgid "You can also"
 msgstr "Вы также можете"
@@ -7688,7 +7692,7 @@ msgstr "Вы должны согласиться с Условиями, чтоб
 msgid "and the"
 msgstr "и"
 
-#: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
+#: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:29./apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "sign in"
 msgstr "входить в систему"
 
