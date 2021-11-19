@@ -52,7 +52,7 @@
                         </p>
 
                         {% if backup_config.ok and is_editable %}
-                            <div class="form-actions">
+                            <div class="form-group">
                                 {% button class="btn btn-primary" text=_"Start backup now" action={backup_start is_full_backup} %}
                                 {% button class="btn btn-primary" text=_"Start database-only backup now" action={backup_start is_full_backup=0} %}
                             </div>
