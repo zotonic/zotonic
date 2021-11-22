@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-19 13:34\n"
+"PO-Revision-Date: 2021-11-22 14:10\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1362,7 +1362,7 @@ msgstr "Информация"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:8
 msgid "Info link with modal popup"
-msgstr "Справочную ссылку с модальным сообщением"
+msgstr "Справочную ссылку с модальным popup-сообщением"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:6
 msgid "Inline block"
