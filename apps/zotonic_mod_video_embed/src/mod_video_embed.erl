@@ -231,14 +231,14 @@ media_import(Service, Descr, MD, MI, Context) ->
             VideoIdBin = z_convert:to_binary(VideoId),
             PreviewUrl = videoid_to_image(Service, VideoIdBin),
             [
-                media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl),
+                media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl, Context),
                 media_import_props_image(MD, PreviewUrl, Context)
             ];
         false ->
             undefined
     end.
 
-media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl) ->
+media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl, Context) ->
     VideoIdBin = z_convert:to_binary(VideoId),
     PreviewUrl1 = case PreviewUrl of
         undefined -> z_url_metadata:p(image, MD);
@@ -259,7 +259,7 @@ media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl) ->
             <<"width">> => W,
             <<"height">> => H,
             <<"video_embed_service">> => Service,
-            <<"video_embed_code">> => embed_code(Service, H, W, VideoId),
+            <<"video_embed_code">> => embed_code(Service, H, W, VideoId, Context),
             <<"video_embed_id">> => VideoIdBin,
             <<"media_import">> => MI#media_import.url
         },
@@ -338,18 +338,20 @@ url_to_service(<<"player.vimeo.com/", _/binary>>) -> <<"vimeo">>;
 url_to_service(_) -> undefined.
 
 
-embed_code(<<"youtube">>, H, W, V) ->
+embed_code(<<"youtube">>, H, W, V, Context) ->
     iolist_to_binary([
         <<"<iframe width=\"">>,integer_to_list(W),
         <<"\" height=\"">>,integer_to_list(H),
         <<"\" src=\"//www.youtube.com/embed/">>, z_url:url_encode(V),
+        <<"\" sandbox=\"">>, z_sanitize:default_sandbox_attr(Context),
         <<"\" style=\"border:none;\" allowfullscreen></iframe>">>
         ]);
-embed_code(<<"vimeo">>, H, W, V) ->
+embed_code(<<"vimeo">>, H, W, V, Context) ->
     iolist_to_binary([
         <<"<iframe width=\"">>,integer_to_list(W),
         <<"\" height=\"">>,integer_to_list(H),
         <<"\" src=\"//player.vimeo.com/video/">>, z_url:url_encode(V),
+        <<"\" sandbox=\"">>, z_sanitize:default_sandbox_attr(Context),
         <<"\" style=\"border:none;\" allowfullscreen></iframe>">>
         ]).
 
