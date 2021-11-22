@@ -9,6 +9,8 @@
         <div class="drag-handle"></div>
 
         <div class="widget-header label-floating" title="{_ Drag to change position _}">
+            <a title="{_ Move block up _}" class="btn btn-default block-up">&uarr;</a>
+            <a title="{_ Move block down _}" class="btn btn-default block-down">&darr;</a>
             &nbsp;
             <input type="text"
                    class="block-name form-control form-control-small"
@@ -20,6 +22,7 @@
             >
             &nbsp;
             {{ blk.type|to_binary|capfirst|replace:"_":" " }} {_ block _}
+
             <a title="{_ Disconnect _}" class="z-btn-remove block-remove"></a>
         </div>
         {% optional include ["blocks/_admin_edit_block_li_",blk.type,".tpl"]|join name=#s blk=blk id=id is_new=is_new %}
