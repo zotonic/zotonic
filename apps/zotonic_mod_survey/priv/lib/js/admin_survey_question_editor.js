@@ -75,14 +75,29 @@ ZSurveyEditor.prototype.action = function(e) {
 		    let top = $block.position().top;
 		    let etop = $('#editcol-wrapper').scrollTop();
 		    if ($(e.target).attr('href') == '#question-down') {
-			    $block.next('.block').after($block);
+			    if ($block.prev('.block').length == 0) {
+			    	// Last of page, move to bottom of previous page
+			    	let page = $(e.target).closest('.page').next('.page');
+			    	if (page.length > 0) {
+			    		page.find(".question-list").prepend($block);
+			    	}
+			    } else {
+				    $block.next('.block').after($block);
+				}
 			} else {
-			    $block.prev('.block').before($block);
+			    if ($block.prev('.block').length == 0) {
+			    	// First of page, move to bottom of previous page
+			    	let page = $(e.target).closest('.page').prev('.page');
+			    	if (page.length > 0) {
+			    		page.find(".question-list").append($block);
+			    	}
+			    } else {
+				    $block.prev('.block').before($block);
+				}
 			}
 		    $block.find(".row").effect("highlight");
 		    let delta = $block.position().top - top;
 		    $('#editcol-wrapper').scrollTop(etop + delta);
-		    console.log(delta);
 			break;
 		case '#question-above':
 			this.question_new(e, 'above');
