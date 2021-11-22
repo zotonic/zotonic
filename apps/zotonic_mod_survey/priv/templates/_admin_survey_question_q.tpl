@@ -31,6 +31,8 @@
 	</div>
 
 	<div class="actions btn-group pull-right">
+		<a class="btn btn-default btn-sm question-up" href="#question-up" title="{_ Move question up _}">&uarr;</a>
+		<a class="btn btn-default btn-sm question-down" href="#question-down" style="margin-right: 10px" title="{_ Move question down _}">&darr;</a>
 		<a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
 			<span class="caret"></span>
 		</a>

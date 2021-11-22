@@ -67,6 +67,23 @@ ZSurveyEditor.prototype.action = function(e) {
 			this.page_delete($(e.target).closest(".page").attr('id'));
 			e.preventDefault();
 			break;
+		case '#question-up':
+		case '#question-down':
+			e.preventDefault();
+		    event.stopPropagation();
+		    let $block = $(e.target).closest('.block');
+		    let top = $block.position().top;
+		    let etop = $('#editcol-wrapper').scrollTop();
+		    if ($(e.target).attr('href') == '#question-down') {
+			    $block.next('.block').after($block);
+			} else {
+			    $block.prev('.block').before($block);
+			}
+		    $block.find(".row").effect("highlight");
+		    let delta = $block.position().top - top;
+		    $('#editcol-wrapper').scrollTop(etop + delta);
+		    console.log(delta);
+			break;
 		case '#question-above':
 			this.question_new(e, 'above');
 			e.preventDefault();
