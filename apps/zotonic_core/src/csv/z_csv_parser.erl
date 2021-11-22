@@ -24,6 +24,10 @@
 
     scan_lines/1,
     scan_lines/2,
+
+    scan_data/1,
+    scan_data/2,
+
     parse_line/2,
     cleanup_field/1
 ]).
@@ -142,6 +146,18 @@ scan_lines(Filename, FieldSep) when is_list(Filename); is_binary(Filename) ->
 scan_lines(Device, FieldSep) ->
     scan_lines(Device, FieldSep, <<>>, 0, [[]], <<>>, false).
 
+
+%% @doc Parse CSV data with the comma separator.
+-spec scan_data( binary() ) -> lines().
+scan_data(Data) when is_binary(Data) ->
+    scan_data(Data, $,).
+
+%% @doc Parse CSV data with a certain separator.
+-spec scan_data( binary(), sep() ) -> lines().
+scan_data(Data, Sep) when is_binary(Data) ->
+    scan_lines(undefined, Sep, Data, 0, [[]], <<>>, false).
+
+
 scan_lines(Device, Fs, Chunk, Index, Acc, Remainder, Quoted) ->
     case {Chunk, Quoted} of
         % Chunk is empty. Get the next chunk from the file.
@@ -151,7 +167,7 @@ scan_lines(Device, Fs, Chunk, Index, Acc, Remainder, Quoted) ->
                 EmptyChunk =:= <<$\\>>;
                 (EmptyChunk =:= <<$">> andalso Quoted);
                 EmptyChunk =:= <<13>> ->
-            case io:get_chars(Device, "", ?CSV_CHUNK_SIZE) of
+            case get_chars(Device) of
                 eof ->
                     All = case Remainder of
                               <<>> ->
@@ -231,6 +247,12 @@ scan_lines(Device, Fs, Chunk, Index, Acc, Remainder, Quoted) ->
         {LongLine, _} ->
             scan_lines(Device, Fs, <<>>, 0, Acc, <<Remainder/binary, LongLine/binary>>, Quoted)
     end.
+
+get_chars(undefined) ->
+    eof;
+get_chars(Device) ->
+    io:get_chars(Device, "", ?CSV_CHUNK_SIZE).
+
 
 append_field(<<>>, Field, [Row|Rows]) ->
     [[cleanup_field(Field)|Row]|Rows];
