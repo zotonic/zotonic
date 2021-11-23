@@ -86,10 +86,14 @@
 	{% javascript %}
 		$('body').removeClass('survey-start').addClass('survey-question');
 
-		var pos = $('#{{ #q }}').position();
-		if (pos.top < $(window).scrollTop() + 100) {
-			$(window).scrollTop(pos+100);
-		}
+        {% if is_overlay %}
+            $(".overlay-content-wrapper").get(0).scrollTo(0, 0);
+        {% else %}
+            var pos = $('#{{ #q }}').position();
+            if (pos.top < $(window).scrollTop() + 100) {
+                $(window).scrollTop(pos+100);
+            }
+        {% endif %}
 	{% endjavascript %}
 
 	{% if page_nr == 1 and id.survey_is_autostart %}
