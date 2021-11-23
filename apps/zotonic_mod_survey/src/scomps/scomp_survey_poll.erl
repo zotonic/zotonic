@@ -36,9 +36,9 @@ render(Args, _Vars, Context) ->
         true when is_integer(AnswerId) ->
             Answers = single_result(SurveyId, AnswerId, Context),
             Editing = {editing, AnswerId, Actions1},
-            mod_survey:render_next_page(SurveyId, 1, exact, Answers, [], Editing, Context);
+            mod_survey:render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args, Context);
         _NotEditing ->
-            mod_survey:render_next_page(SurveyId, 1, exact, [], [], undefined, Context)
+            mod_survey:render_next_page(SurveyId, 1, exact, [], [], undefined, Args, Context)
     end,
     {ok, z_template:render(Render#render{vars=[{element_id, ElementId}|Render#render.vars]}, Context)}.
 

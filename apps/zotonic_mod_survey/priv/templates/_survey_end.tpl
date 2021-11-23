@@ -7,3 +7,13 @@
 	<p>{_ Thank you for filling in our survey. _}</p>
 {% endif %}
 {% endwith %}
+
+{% if is_overlay %}
+	<p>
+	    <button id="{{ #survey_close }}" class="btn btn-lg btn-primary">{_ Close _}</button>
+	    {% wire id=#survey_close
+	            action={overlay_close}
+	    %}
+	</p>
+{% endif %}
+
