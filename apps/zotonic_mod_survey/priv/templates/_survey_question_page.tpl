@@ -6,7 +6,15 @@
 	{% endif %}
 
 	{% wire id=#q type="submit"
-		postback={survey_next id=id page_nr=page_nr answers=answers history=history editing=editing element_id=element_id|default:"survey-question"}
+		postback={survey_next
+			id=id
+			page_nr=page_nr
+			answers=answers
+			history=history
+			editing=editing
+			element_id=element_id|default:"survey-question"
+			is_overlay=is_overlay
+		}
 		delegate="mod_survey"
 	%}
 	<form class="form-survey survey-{{ id.name }}" id="{{ #q }}" method="post" action="postback">
@@ -49,7 +57,11 @@
 			{% if not editing or pages > 1 %}
 				{% if not id.survey_is_autostart or page_nr > 1 %}
 					<a id="{{ #cancel }}" href="#" class="btn btn-default">{_ Stop without saving _}</a>
-					{% wire id=#cancel action={confirm text=_"Are you sure you want to stop without saving?" ok=_"Stop without saving" cancel=_"Continue" action={redirect id=id}} %}
+					{% if is_overlay %}
+						{% wire id=#cancel action={confirm text=_"Are you sure you want to stop without saving?" ok=_"Stop without saving" cancel=_"Continue" action={overlay_close}} %}
+					{% else %}
+						{% wire id=#cancel action={confirm text=_"Are you sure you want to stop without saving?" ok=_"Stop without saving" cancel=_"Continue" action={redirect id=id}} %}
+					{% endif %}
 				{% endif %}
 			{% else %}
 				<a id="{{ #cancel }}" href="#" class="btn btn-default">{_ Cancel _}</a>

@@ -44,7 +44,7 @@
 
     do_submit/4,
     collect_answers/3,
-    render_next_page/7,
+    render_next_page/8,
     go_button_target/4,
     module_name/1
 ]).
@@ -64,11 +64,11 @@ event(#postback{message={survey_start, Args}}, Context) ->
         true ->
             Answers = scomp_survey_poll:single_result(SurveyId, AnswerId, Context),
             Editing = {editing, AnswerId, undefined},
-            render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Context), Args, Context);
+            render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args, Context), Args, Context);
         false ->
             Answers = normalize_answers(proplists:get_value(answers, Args)),
             Editing = proplists:get_value(editing, Args),
-            render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Context), Args, Context)
+            render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args, Context), Args, Context)
     end;
 
 event(#submit{message={survey_next, Args}}, Context) ->
@@ -77,7 +77,7 @@ event(#submit{message={survey_next, Args}}, Context) ->
     {answers, Answers} = proplists:lookup(answers, Args),
     {history, History} = proplists:lookup(history, Args),
     Editing = proplists:get_value(editing, Args),
-    render_update(render_next_page(SurveyId, PageNr+1, forward, Answers, History, Editing, Context), Args, Context);
+    render_update(render_next_page(SurveyId, PageNr+1, forward, Answers, History, Editing, Args, Context), Args, Context);
 
 event(#postback{message={survey_back, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
@@ -86,9 +86,9 @@ event(#postback{message={survey_back, Args}}, Context) ->
     Editing = proplists:get_value(editing, Args),
     case History of
         [_,PageNr|History1] ->
-            render_update(render_next_page(SurveyId, PageNr, exact, Answers, History1, Editing, Context), Args, Context);
+            render_update(render_next_page(SurveyId, PageNr, exact, Answers, History1, Editing, Args, Context), Args, Context);
         _History ->
-            render_update(render_next_page(SurveyId, 0, exact, Answers, [], Editing, Context), Args, Context)
+            render_update(render_next_page(SurveyId, 0, exact, Answers, [], Editing, Args, Context), Args, Context)
     end;
 
 event(#postback{message={survey_remove_result_confirm, Args}}, Context) ->
@@ -263,10 +263,25 @@ render_update(#render{} = Render, Args, Context) ->
 
 
 %% @doc Fetch the next page from the survey, update the page view
--spec render_next_page(integer(), integer(), exact|forward, list(), list(), term()|undefined, z:context()) -> #render{} | z:context().
-render_next_page(Id, 0, _Direction, _Answers, _History, _Editing, Context) when is_integer(Id) ->
-    z_render:wire({redirect, [{id, Id}]}, Context);
-render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when is_integer(Id) ->
+-spec render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, Context) -> Result
+    when SurveyId :: m_rsc:resource_id(),
+         PageNr :: integer(),
+         Direction :: exact|forward,
+         Answers :: list(),
+         History :: list(),
+         Editing :: term()|undefined,
+         Args :: proplists:proplist(),
+         Context :: z:context(),
+         Result :: #render{} | z:context().
+render_next_page(Id, 0, _Direction, _Answers, _History, _Editing, Args, Context) when is_integer(Id) ->
+    case z_convert:to_bool(proplists:get_value(is_overlay, Args)) of
+        true ->
+            z_render:wire({overlay_close, []}, Context);
+        false ->
+            z_render:wire({redirect, [{id, Id}]}, Context)
+    end;
+render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context) when is_integer(Id) ->
+    IsOverlay = z_convert:to_bool(proplists:get_value(is_overlay, Args)),
     {As, Submitter} = get_args(Context),
     Answers1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, As),
     Answers2 = Answers1 ++ group_multiselect(As),
@@ -291,7 +306,8 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
                         {pages, count_pages(Questions)},
                         {answers, Answers2},
                         {history, [NewPageNr|History]},
-                        {editing, Editing}
+                        {editing, Editing},
+                        {is_overlay, IsOverlay}
                     ],
                     #render{template="_survey_question_page.tpl", vars=Vars};
 
@@ -304,7 +320,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
                     z_render:growl_error("Error evaluating submit.", Context);
 
                 stop ->
-                    render_next_page(Id, 0, Direction, Answers, History, Editing, Context);
+                    render_next_page(Id, 0, Direction, Answers, History, Editing, Args, Context);
 
                 submit when Editing =:= undefined ->
                     %% That was the last page. Show a thank you and save the result.
@@ -315,29 +331,49 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
                                     #render{
                                         template="_survey_results.tpl",
                                         vars=[
-                                            {id,Id}, {inline, true}, {history, History}, {q, As}
+                                            {id,Id},
+                                            {inline, true},
+                                            {history, History},
+                                            {q, As},
+                                            {is_overlay, IsOverlay}
                                         ]
                                     };
                                 false ->
                                     #render{
                                         template="_survey_end.tpl",
                                         vars=[
-                                            {id,Id}, {history, History}, {q, As}
+                                            {id,Id},
+                                            {history, History},
+                                            {q, As},
+                                            {is_overlay, IsOverlay}
                                         ]
                                     }
                             end;
                         {ok, ContextOrRender} ->
                             ContextOrRender;
                         {error, _Reason} ->
-                            #render{template="_survey_error.tpl", vars=[{id,Id}, {history,History}, {q, As}]}
+                            #render{
+                                template="_survey_error.tpl",
+                                vars=[
+                                    {id,Id},
+                                    {history,History},
+                                    {q, As},
+                                    {is_overlay, IsOverlay}
+                                ]}
                     end;
 
                 submit ->
-                    admin_edit_survey_result(Id, Questions, Answers2, Editing, Context)
+                    admin_edit_survey_result(Id, Questions, Answers2, Editing, IsOverlay, Context)
             end;
         _NoBlocks ->
             % No survey defined, show an error page.
-            #render{template="_survey_error.tpl", vars=[{id,Id}, {q, As}]}
+            #render{
+                template="_survey_error.tpl",
+                vars=[
+                    {id,Id},
+                    {q, As},
+                    {is_overlay, IsOverlay}
+                ]}
     end.
 
     get_args(Context) ->
@@ -712,7 +748,7 @@ collect_answers([Q|Qs], Answers, FoundAnswers, Missing, Context) ->
     end.
 
 %% @doc Save the modified survey results
-admin_edit_survey_result(SurveyId, Questions, Answers, {editing, AnswerId, Actions}, Context) ->
+admin_edit_survey_result(SurveyId, Questions, Answers, {editing, AnswerId, Actions}, IsOverlay, Context) ->
     case z_acl:rsc_editable(SurveyId, Context)
         orelse (
             z_convert:to_integer(m_rsc:p(SurveyId,<<"survey_multiple">>, Context)) =:= 2
@@ -736,7 +772,8 @@ admin_edit_survey_result(SurveyId, Questions, Answers, {editing, AnswerId, Actio
                             #render{
                                 template="_admin_survey_editor_results.tpl",
                                 vars=[
-                                    {id, SurveyId}
+                                    {id, SurveyId},
+                                    {is_overlay, IsOverlay}
                                 ]
                             },
                             Context1);
@@ -744,7 +781,10 @@ admin_edit_survey_result(SurveyId, Questions, Answers, {editing, AnswerId, Actio
                     #render{
                         template="_survey_end_edit.tpl",
                         vars=[
-                            {id, SurveyId}, {inline, true}, {is_editing, true}
+                            {id, SurveyId},
+                            {inline, true},
+                            {is_editing, true},
+                            {is_overlay, IsOverlay}
                         ]
                     };
                 _ when is_list(Actions); is_tuple(Actions) ->
