@@ -72,7 +72,8 @@ ZSurveyEditor.prototype.action = function(e) {
 			e.preventDefault();
 		    event.stopPropagation();
 		    let $block = $(e.target).closest('.block');
-		    let top = $block.position().top;
+		    let top = $block.offset().top;
+		    console.log(top);
 		    let etop = $('#editcol-wrapper').scrollTop();
 		    if ($(e.target).attr('href') == '#question-down') {
 			    if ($block.next('.block').length == 0) {
@@ -97,7 +98,7 @@ ZSurveyEditor.prototype.action = function(e) {
 			}
 		    $block.effect("highlight", {}, 2000)
 		    	.find(".row").effect("highlight", {}, 2000);
-		    let delta = $block.position().top - top;
+		    let delta = $block.offset().top - top;
 		    $('#editcol-wrapper').scrollTop(etop + delta);
 			break;
 		case '#question-above':
