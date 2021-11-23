@@ -73,7 +73,10 @@ ZSurveyEditor.prototype.action = function(e) {
 		    event.stopPropagation();
 		    let $block = $(e.target).closest('.block');
 		    let top = $block.offset().top;
-		    let etop = $('#editcol-wrapper').scrollTop();
+		    let $editcol = $('#editcol-wrapper');
+		    let etop = $editcol.scrollTop();
+		    z_editor_save($block);
+		    z_editor_remove($block);
 		    if ($(e.target).attr('href') == '#question-down') {
 			    if ($block.next('.block').length == 0) {
 			    	// Last of page, move to bottom of previous page
@@ -95,10 +98,16 @@ ZSurveyEditor.prototype.action = function(e) {
 				    $block.prev('.block').before($block);
 				}
 			}
+		    z_editor_add($block);
+		    $block.closest('form').trigger('change');
 		    $block.effect("highlight", {}, 1000)
 		    	.find(".widget").effect("highlight", {}, 1000);
 		    let delta = $block.offset().top - top;
-		    $('#editcol-wrapper').scrollTop(etop + delta);
+		    if ($editcol.length) {
+			    $('#editcol-wrapper').scrollTop(etop + delta);
+			} else {
+				window.scrollTo({ top: window.scrollY + delta, behavior: 'smooth' });
+			}
 			break;
 		case '#question-above':
 			this.question_new(e, 'above');

@@ -139,6 +139,7 @@
 							</p>
 						</div>
 						<div class="col-lg-4 col-md-4" data-block-type='page'>
+							<p>{_ Another page, video or image. _}</p>
 							{% image "lib/images/koe.jpg" mediaclass="admin-editor" grey %}
 						</div>
 					</div>

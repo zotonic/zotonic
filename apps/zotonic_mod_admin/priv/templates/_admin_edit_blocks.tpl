@@ -55,17 +55,25 @@ $('#edit-blocks').sortable({
     event.stopPropagation();
     let $block = $(this).closest('li');
     let top = $block.position().top;
+    z_editor_save($block);
+    z_editor_remove($block);
     $block.next('li').after($block);
     $block.find(".widget").effect("highlight");
     window.scrollBy(0, $block.position().top - top);
+    z_editor_add($block);
+    $block.closest('form').trigger('change');
 })
 .on('click', '.block-up', function(event) {
     event.stopPropagation();
     let $block = $(this).closest('li');
     let top = $block.position().top;
+    z_editor_save($block);
+    z_editor_remove($block);
     $block.prev('li').before($block);
     $block.find(".widget").effect("highlight");
     window.scrollBy(0, $block.position().top - top);
+    z_editor_add($block);
+    $block.closest('form').trigger('change');
 });
 
 

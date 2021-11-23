@@ -38,10 +38,14 @@ ol.pages {
         &:before  {
             content: counter(pages);
             counter-increment: pages;
-            padding-right: 0.5em;
             position: absolute;
             left: -0.5em;
-            color: #0F93D5;
+            top: -0.2em;
+            padding: 0 0.4em;
+            background-color: #0F93D5;
+            color: white;
+            border: 4px solid white;
+            border-radius: 50%;
             font-size: 3em;
         }
     }
