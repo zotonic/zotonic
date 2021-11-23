@@ -73,7 +73,6 @@ ZSurveyEditor.prototype.action = function(e) {
 		    event.stopPropagation();
 		    let $block = $(e.target).closest('.block');
 		    let top = $block.offset().top;
-		    console.log(top);
 		    let etop = $('#editcol-wrapper').scrollTop();
 		    if ($(e.target).attr('href') == '#question-down') {
 			    if ($block.next('.block').length == 0) {
