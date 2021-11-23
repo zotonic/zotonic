@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-23 12:03\n"
+"PO-Revision-Date: 2021-11-23 12:34\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -1516,11 +1516,11 @@ msgstr "Değiştirildi:"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:13
 msgid "Move block down"
-msgstr ""
+msgstr "Bloğu aşağı taşı"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:12
 msgid "Move block up"
-msgstr ""
+msgstr "Bloğu yukarı taşı"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:221./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:223./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:49
@@ -7987,7 +7987,7 @@ msgstr "Tüm anket girişleri bitene kadar"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:142
 msgid "Another page, video or image."
-msgstr ""
+msgstr "Başka bir sayfa, video veya resim."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:75./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:76./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:77./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:67
 msgid "Answer"
@@ -8260,11 +8260,11 @@ msgstr "Melk"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:35
 msgid "Move question down"
-msgstr ""
+msgstr "Soruyu aşağı taşı"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:34
 msgid "Move question up"
-msgstr ""
+msgstr "Soruyu yukarı taşı"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:49
 msgid "Multiple answers possible"
