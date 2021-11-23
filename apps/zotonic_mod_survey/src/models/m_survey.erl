@@ -653,7 +653,7 @@ opt_totals(Points, MaxPoints, PassPercent) ->
             false -> <<"-">>
         end,
         z_convert:to_binary(Points),
-        z_convert:to_binary(Perc)
+        z_convert:to_binary(erlang:round(Perc))
     ].
 
 %% @doc private
