@@ -87,7 +87,9 @@
 		$('body').removeClass('survey-start').addClass('survey-question');
 
         {% if is_overlay %}
-            $(".overlay-content-wrapper").get(0).scrollTo(0, 0);
+            if ($(".overlay-content-wrapper").length > 0) {
+            	$(".overlay-content-wrapper").get(0).scrollTo(0, 0);
+            }
         {% else %}
             var pos = $('#{{ #q }}').position();
             if (pos.top < $(window).scrollTop() + 100) {
