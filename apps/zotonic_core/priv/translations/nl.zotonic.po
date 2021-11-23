@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-23 12:34\n"
+"PO-Revision-Date: 2021-11-23 17:09\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1179,7 +1179,7 @@ msgstr "E-mailadres voor openbare weergave"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:5
 #: apps/zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:13
 msgid "Embed"
-msgstr "Embed"
+msgstr "Insluiten"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:31
 msgid "Embed code will be sanitized for allowed sites and html."
@@ -7343,7 +7343,7 @@ msgstr "De API-sleutel kan gevonden worden op"
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_status.tpl:5
 msgid "Attempt to fix embedded videos for which OEmbed embedding has failed previously."
-msgstr "Probeer embedded video’s te corrigeren waarbij de vorige keer embedden is mislukt."
+msgstr "Probeer ingesloten video’s te corrigeren waarbij de vorige keer het insluiten is mislukt."
 
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:318
 msgid "Attempting to fix ~p videos."
@@ -7351,7 +7351,7 @@ msgstr "Aan het proberen om ~p videos opnieuw te embedden."
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:4
 msgid "Embedding of media item failed with HTTP code"
-msgstr "Embedden van video mislukt met HTTP code"
+msgstr "Insluiten van video mislukt met HTTP code"
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_status.tpl:4
 msgid "Fix embedded videos"
