@@ -428,6 +428,7 @@ mapping() ->
         <<"schema:addressLocality">> => <<"address_city">>,
         <<"schema:streetAddress">> => <<"address_street_1">>,
         <<"schema:postalCode">> => <<"address_postcode">>,
+        <<"schema:email">> => <<"email">>,
 
         <<"schema:license">> => <<"license">>,
 
