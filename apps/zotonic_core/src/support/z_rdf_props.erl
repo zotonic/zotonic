@@ -37,6 +37,8 @@
 %% @doc Check if a property can be mapped to a standard property.
 %% This is used in m_rsc:p/3 for fetching namespaced properties.
 -spec mapping( binary() ) -> binary() | undefined.
+mapping(<<"zotonic:", Prop/binary>>) ->
+    Prop;
 mapping(Prop) ->
     case maps:get(Prop, mapping(), undefined) of
         undefined ->
@@ -179,10 +181,11 @@ extract_props(RDFDoc) ->
     Ps1 = map(RDFDoc, mapping_dates(), fun to_date/1, RDFDoc),
     Ps2 = map(RDFDoc, mapping(), fun to_simple_value/1, Ps1),
     maps:fold(
-        fun(K, V, Acc) ->
-            Acc#{
-                K => map_nested_values(V)
-            }
+        fun
+            (<<"zotonic:", K/binary>>, V, Acc) ->
+                Acc#{ K => map_nested_values(V) };
+            (K, V, Acc) ->
+                Acc#{ K => map_nested_values(V) }
         end,
         #{},
         Ps2).
@@ -419,6 +422,12 @@ mapping() ->
         <<"schema:givenName">> => <<"name_first">>,
         <<"schema:familyName">> => <<"name_surname">>,
         <<"schema:telephone">> => <<"phone">>,
+
+        <<"schema:addressCountry">> => <<"address_country">>,
+        <<"schema:addressRegion">> => <<"address_state">>,
+        <<"schema:addressLocality">> => <<"address_city">>,
+        <<"schema:streetAddress">> => <<"address_street_1">>,
+        <<"schema:postalCode">> => <<"address_postcode">>,
 
         <<"schema:license">> => <<"license">>,
 
