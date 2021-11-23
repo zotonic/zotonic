@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-19 13:21\n"
+"PO-Revision-Date: 2021-11-23 12:04\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -220,7 +220,7 @@ msgstr "Kas olete kindel, et soovite taastada kõik ACL-reeglid nende praegu ava
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:80./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:116./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:91./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:135./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:143
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:149./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:90./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:189
 msgid "Cancel"
@@ -318,7 +318,7 @@ msgstr "Kes saab lehte n√§ha v√µi muuta."
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:84./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:99
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/src/mod_survey.erl:102
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:91./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/src/mod_survey.erl:102
 msgid "Delete"
 msgstr "Kustuta"
 
@@ -915,7 +915,7 @@ msgstr "P√µhi"
 msgid "Block"
 msgstr "Blokeeri"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:17
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:19
 msgid "Block name"
 msgstr "Blokeeri nimi"
 
@@ -1095,7 +1095,7 @@ msgstr "Kustutatud."
 msgid "Dependent"
 msgstr "Sõltuv"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:26./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:28./apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:32
 #: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
 #: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:6
@@ -1293,8 +1293,8 @@ msgstr "Leidke meedia"
 msgid "Find Page"
 msgstr "Leidke leht"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:108
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:209
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:133
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:210
 msgid "Find page"
 msgstr "Leidke leht"
 
@@ -1513,6 +1513,14 @@ msgstr "Muudetud "
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:13
 msgid "Modified:"
 msgstr "Muudetud:"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:13
+msgid "Move block down"
+msgstr ""
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:12
+msgid "Move block up"
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:221./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:223./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:49
@@ -2273,7 +2281,7 @@ msgstr "Zotonic Version"
 msgid "add media item"
 msgstr "meediaüksuse lisamine"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:22
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:24
 msgid "block"
 msgstr "blokeerida"
 
@@ -2331,7 +2339,7 @@ msgstr "klapib"
 msgid "modified by"
 msgstr "muudetud"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:18
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:20
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:19
 msgid "name"
 msgstr "nimi"
@@ -3792,7 +3800,7 @@ msgid "Close window"
 msgstr "Sulge aken"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
-#: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:92./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
 #: apps/zotonic_mod_wires/src/actions/action_wires_confirm.erl:36
 msgid "Confirm"
 msgstr "Kinnita"
@@ -4529,7 +4537,7 @@ msgstr "Pole ühendatud"
 
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_alert.tpl:5./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:8./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:11
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72
-#: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:15
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:89./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:15
 msgid "OK"
 msgstr "Okei"
 
@@ -4739,7 +4747,7 @@ msgstr "Salvesta kommentaarivormi seaded"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:13./apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:12
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:14
-#: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:6
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:4./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:6
 msgid "Settings"
 msgstr "Seaded"
 
@@ -5314,7 +5322,7 @@ msgid "Calendar"
 msgstr "Kalender"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:19./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:31./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:39
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:128./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:37
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:128./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:54./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:37
 msgid "Download CSV"
 msgstr "Laadige alla CSV"
 
@@ -5323,7 +5331,7 @@ msgid "Download Event"
 msgstr "Laadige alla sündmus"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:20./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:32./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:40
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:132./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:41
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:132./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:58./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:41
 msgid "Download Excel"
 msgstr "Laadige alla Excel"
 
@@ -6251,7 +6259,7 @@ msgstr "Kustutas meililisti."
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:21
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:21./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:22./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:20./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:48./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:50
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:30./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:32
-#: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:6
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:3./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:6
 msgid "Description"
 msgstr "Kirjeldus"
 
@@ -7957,7 +7965,7 @@ msgstr "Lisa lehehüpe"
 msgid "Add question"
 msgstr "Lisa küsimus"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:38
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:40
 msgid "Add question after"
 msgstr "Lisa küsimus pärast"
 
@@ -7976,6 +7984,10 @@ msgstr "Nõus"
 #: apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "All survey entries up until"
 msgstr "Kõik uuringu kanded kuni"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:142
+msgid "Another page, video or image."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:75./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:76./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:77./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:67
 msgid "Answer"
@@ -7997,15 +8009,15 @@ msgstr "Apple"
 msgid "Apple = Red"
 msgstr "Õun = punane"
 
-#: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:21
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:95./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:21
 msgid "Are you sure you want to delete this page jump?"
 msgstr "Kas soovite kindlasti selle lehe hüppe kustutada?"
 
-#: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:19
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:93./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:19
 msgid "Are you sure you want to delete this page?<br/>This also deletes all questions on this page."
 msgstr "Kas soovite kindlasti selle lehe kustutada?<br/>See kustutab ka kõik sellel lehel olevad küsimused."
 
-#: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:20
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:94./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:20
 msgid "Are you sure you want to delete this question?"
 msgstr "Kas soovite selle küsimuse kindlasti kustutada?"
 
@@ -8074,11 +8086,11 @@ msgstr "Vaikeväärtus"
 msgid "Delete page"
 msgstr "Kustuta leht"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:10
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:30
 msgid "Delete page jump"
 msgstr "Kustuta lehe hüpe"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:39
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:41
 msgid "Delete question"
 msgstr "Kustuta küsimus"
 
@@ -8090,7 +8102,7 @@ msgstr "Keelatud, peida küsitlusvorm"
 msgid "Disagree"
 msgstr "Pole nõus"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:130./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:134./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:130./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:134./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:56./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:60./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
 msgid "Download will start in the background. Please check your download window."
 msgstr "Allalaadimine algab taustal. Kontrollige allalaadimisakent."
 
@@ -8150,7 +8162,7 @@ msgstr "Kategooria esimene leht"
 msgid "For quiz or test, mark correct answers with a “*””. E.g. “*value#answer”"
 msgstr "Viktoriini või testi jaoks märkige õiged vastused tähega “*”. Nt “* väärtus # vastus”"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:9
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:29
 msgid "Go to question"
 msgstr "Mine küsimuse juurde"
 
@@ -8245,6 +8257,14 @@ msgstr "Sobiv küsimus"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:84
 msgid "Melk"
 msgstr "Melk"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:35
+msgid "Move question down"
+msgstr ""
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:34
+msgid "Move question up"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:49
 msgid "Multiple answers possible"
@@ -8354,7 +8374,7 @@ msgstr "Punkte vastuse kohta"
 msgid "Primary"
 msgstr "Esmane"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:140./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:49
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:140./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:66./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:49
 msgid "Printable list"
 msgstr "Prinditav nimekiri"
 
@@ -8370,7 +8390,7 @@ msgstr "Kiire"
 msgid "Question"
 msgstr "Küsimus"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:6./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
 msgid "Question label"
 msgstr "Küsimuse silt"
 
@@ -8386,7 +8406,7 @@ msgstr "Pika vastusega küsimus"
 msgid "Question with a short answer"
 msgstr "Lühikese vastusega küsimus"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
 msgid "Questions"
 msgstr "Küsimused"
 
@@ -8406,7 +8426,7 @@ msgstr "Punane"
 msgid "Required, this question must be answered."
 msgstr "Vajalik, sellele küsimusele tuleb vastata."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:4./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:6./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:4./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results"
 msgstr "Tulemused"
 
@@ -8450,7 +8470,7 @@ msgstr "Eraldage mitu e-posti aadressi komaga."
 msgid "Short answer"
 msgstr "Lühike vastus"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:138./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:47
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:138./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:64./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:47
 msgid "Show email addresses"
 msgstr "Kuva e-posti aadressid"
 
@@ -8462,7 +8482,7 @@ msgstr "Kuva edenemisriba"
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Kuva edenemisteave kui “<em>küsimus 3/10</em>”"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:46
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:63./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:46
 msgid "Show results"
 msgstr "Näita tulemusi"
 
@@ -8590,7 +8610,7 @@ msgstr "See on viktoriini või testi sooritamiseks vajalik protsent. Kasutatakse
 msgid "This text is shown after the survey has been submitted."
 msgstr "See tekst kuvatakse pärast uuringu esitamist."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:13./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:16
 msgid "This text is shown as an introduction to the survey."
 msgstr "Seda teksti näidatakse uuringu sissejuhatuseks."
 
@@ -8690,7 +8710,7 @@ msgstr "kuupäev"
 msgid "email"
 msgstr "e-post"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:6
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:19
 msgid "go to"
 msgstr "minema"
 
@@ -8698,7 +8718,7 @@ msgstr "minema"
 msgid "ice cream and my favorite color is"
 msgstr "jäätis ja minu lemmikvärv on"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:5
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:13
 msgid "if"
 msgstr "kui"
 
@@ -8738,7 +8758,7 @@ msgstr "üks rea kohta"
 msgid "phone number"
 msgstr "telefoninumber"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:5
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:15
 msgid "question == 1"
 msgstr "küsimus == 1"
 
