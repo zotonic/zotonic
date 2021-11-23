@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-23 17:09\n"
+"PO-Revision-Date: 2021-11-23 17:20\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1017,7 +1017,7 @@ msgstr "Kon geen verbinding maken met de website."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:11
 msgid "Could not detect anything to import on that URL or embed code."
-msgstr "Kon niets detecteren om te importeren op die URL of insluit code."
+msgstr "Kon niets detecteren om te importeren van die URL of insluitcode."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:88
 msgid "Count"
@@ -1183,16 +1183,16 @@ msgstr "Insluiten"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:31
 msgid "Embed code will be sanitized for allowed sites and html."
-msgstr "Embed code wordt opgeschoond voor toegestane sites en html."
+msgstr "Insluitcode wordt opgeschoond voor toegestane sites en html."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:176
 msgid "Embed page"
-msgstr "Embedpagina"
+msgstr "Pagina insluiten"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:196
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:230
 msgid "Embedded Content"
-msgstr "Ingebedde content"
+msgstr "Ingesloten content"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:34
 msgid "Emergency telephone"
@@ -1200,7 +1200,7 @@ msgstr "Noodnummer (telefoon)"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:21
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
-msgstr "Voer een URL of insluitingscode in. Het zal worden geanalyseerd en je kan kiezen hoe de gegevens te importeren."
+msgstr "Voer een URL of insluitcode in. Het zal worden geanalyseerd en je kan kiezen hoe de gegevens te importeren."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Erlang Init Files"
@@ -2209,7 +2209,7 @@ msgstr "Website voor klikken op de afbeelding"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:91./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
 msgid "Website or Embed"
-msgstr "Website of Embed"
+msgstr "Website of Insluiten"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
 msgid "Work Directory"
@@ -7347,7 +7347,7 @@ msgstr "Probeer ingesloten video’s te corrigeren waarbij de vorige keer het in
 
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:318
 msgid "Attempting to fix ~p videos."
-msgstr "Aan het proberen om ~p videos opnieuw te embedden."
+msgstr "Aan het proberen om ~p videos opnieuw in te sluiten."
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:4
 msgid "Embedding of media item failed with HTTP code"
@@ -7355,11 +7355,11 @@ msgstr "Insluiten van video mislukt met HTTP code"
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_status.tpl:4
 msgid "Fix embedded videos"
-msgstr "Repareer geëmbedde videos"
+msgstr "Repareer ingesloten video’s"
 
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:315
 msgid "No embedded videos found which need fixing."
-msgstr "Geen geëmbedde videos gevonden die gerepareerd moeten worden."
+msgstr "Geen ingesloten video’s gevonden die gerepareerd moeten worden."
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:18
 msgid "Save Embedly Key"
