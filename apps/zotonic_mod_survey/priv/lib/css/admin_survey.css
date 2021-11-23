@@ -38,8 +38,10 @@ ol.pages {
       background-color: #0F93D5;
       color: white;
       border: 4px solid white;
-      border-radius: 50%;
-      font-size: 3em; }
+      border-radius: 0.8em;
+      font-size: 3em;
+      min-width: 1.8em;
+      text-align: center; }
 
 .meta-data .buttons {
   margin-right: 10px; }
