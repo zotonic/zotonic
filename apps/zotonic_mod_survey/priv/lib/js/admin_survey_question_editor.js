@@ -95,8 +95,8 @@ ZSurveyEditor.prototype.action = function(e) {
 				    $block.prev('.block').before($block);
 				}
 			}
-		    $block.effect("highlight", {}, 2000)
-		    	.find(".row").effect("highlight", {}, 2000);
+		    $block.effect("highlight", {}, 1000)
+		    	.find(".widget").effect("highlight", {}, 1000);
 		    let delta = $block.offset().top - top;
 		    $('#editcol-wrapper').scrollTop(etop + delta);
 			break;
