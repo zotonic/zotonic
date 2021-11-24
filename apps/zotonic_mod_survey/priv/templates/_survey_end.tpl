@@ -8,11 +8,18 @@
 {% endif %}
 {% endwith %}
 
-{% if is_overlay %}
+{% if viewer == 'overlay' %}
 	<p>
 	    <button id="{{ #survey_close }}" class="btn btn-lg btn-primary">{_ Close _}</button>
 	    {% wire id=#survey_close
 	            action={overlay_close}
+	    %}
+	</p>
+{% elseif viewer == 'dialog' %}
+	<p>
+	    <button id="{{ #survey_close }}" class="btn btn-lg btn-primary">{_ Close _}</button>
+	    {% wire id=#survey_close
+	            action={dialog_close}
 	    %}
 	</p>
 {% endif %}

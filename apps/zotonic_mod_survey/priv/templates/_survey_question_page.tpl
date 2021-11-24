@@ -13,7 +13,7 @@
 			history=history
 			editing=editing
 			element_id=element_id|default:"survey-question"
-			is_overlay=is_overlay
+			viewer=viewer
 		}
 		delegate="mod_survey"
 	%}
@@ -57,8 +57,10 @@
 			{% if not editing or pages > 1 %}
 				{% if not id.survey_is_autostart or page_nr > 1 %}
 					<a id="{{ #cancel }}" href="#" class="btn btn-default">{_ Stop without saving _}</a>
-					{% if is_overlay %}
+					{% if viewer == 'overlay' %}
 						{% wire id=#cancel action={confirm text=_"Are you sure you want to stop without saving?" ok=_"Stop without saving" cancel=_"Continue" action={overlay_close}} %}
+					{% elseif viewer == 'dialog' %}
+						{% wire id=#cancel action={confirm text=_"Are you sure you want to stop without saving?" ok=_"Stop without saving" cancel=_"Continue" action={dialog_close}} %}
 					{% else %}
 						{% wire id=#cancel action={confirm text=_"Are you sure you want to stop without saving?" ok=_"Stop without saving" cancel=_"Continue" action={redirect id=id}} %}
 					{% endif %}
@@ -86,10 +88,11 @@
 	{% javascript %}
 		$('body').removeClass('survey-start').addClass('survey-question');
 
-        {% if is_overlay %}
+        {% if viewer == 'overlay' %}
             if ($(".overlay-content-wrapper").length > 0) {
             	$(".overlay-content-wrapper").get(0).scrollTo(0, 0);
             }
+        {% elseif viewer == 'dialog' %}
         {% else %}
             var pos = $('#{{ #q }}').position();
             if (pos.top < $(window).scrollTop() + 100) {
