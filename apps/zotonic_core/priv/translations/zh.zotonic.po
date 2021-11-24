@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-23 12:34\n"
+"PO-Revision-Date: 2021-11-24 09:54\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -220,7 +220,7 @@ msgstr "你确定你要恢复所有的ACL规则到他们的最新发布版本"
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:80./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:116./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:91./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:135./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:143
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:90./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:90./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:69./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:189
 msgid "Cancel"
@@ -251,7 +251,7 @@ msgstr "更改类别和/或内容群组"
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:16
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:24
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:26
-#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:6
+#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:13./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:20./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:26./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:31./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:15./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:20
 msgid "Close"
 msgstr "关闭"
 
@@ -901,7 +901,7 @@ msgid "Auth"
 msgstr "作者"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:151
-#: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:8./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:42
+#: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:50
 msgid "Back"
 msgstr "返回"
 
@@ -3943,7 +3943,7 @@ msgid "Minimum characters:"
 msgstr "最少字符："
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:184
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:67
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:74./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:81
 msgid "Next"
 msgstr "下一页"
 
@@ -8021,7 +8021,7 @@ msgstr "你确定要删除这个问题吗？"
 msgid "Are you sure you want to delete this result?"
 msgstr "你确定要删除这个结果吗？"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:61./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:63./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:65
 msgid "Are you sure you want to stop without saving?"
 msgstr "您确定要停止而不保存吗？"
 
@@ -8049,7 +8049,7 @@ msgstr "在管理页面中检查答案。"
 msgid "Choices"
 msgstr "选择"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:61./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:63./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:65
 msgid "Continue"
 msgstr "继续"
 
@@ -8342,7 +8342,7 @@ msgstr "合格分数"
 msgid "Percent"
 msgstr "百分比"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:31
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:39
 msgid "Please fill in all the required fields."
 msgstr "请填写所有必填项目。"
 
@@ -8482,7 +8482,7 @@ msgstr "显示进度信息，如“<em>问题 3/10</em>”"
 msgid "Show results"
 msgstr "显示结果"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:29
+#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:42
 msgid "Show results (admin only)"
 msgstr "显示结果（仅限管理员"
 
@@ -8502,7 +8502,7 @@ msgstr "开始"
 msgid "Stop"
 msgstr "中止"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:51./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:59./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:61./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:63./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:65
 msgid "Stop without saving"
 msgstr "停止而不保存"
 
@@ -8514,7 +8514,7 @@ msgstr "强烈同意"
 msgid "Strongly Disagree"
 msgstr "强烈不同意"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:65
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:74./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:79
 msgid "Submit"
 msgstr "提交"
 
@@ -8666,11 +8666,11 @@ msgstr "是/否"
 msgid "You already filled this in, but you can change your previous answers."
 msgstr "你已经填好了，但你可以改变你之前的答案。"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:21
+#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:22
 msgid "You already filled this in."
 msgstr "你已经填好了"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:754
+#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:796
 msgid "You are not allowed to change these results."
 msgstr "你不允许改变这些结果。"
 
