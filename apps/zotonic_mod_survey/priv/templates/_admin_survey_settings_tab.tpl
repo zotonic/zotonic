@@ -51,27 +51,37 @@
 			</div>
 
 			{% if not id.is_a.poll %}
-				<div class="form-group col-sm-6">
-					<label class="control-label">{_ When finished show _}</label>
-					<div class="controls">
-						<select class="form-control" name="survey_show_results" id="survey_show_results">
-							<option value="">{_ Thank you text only _}</option>
-							<option value="1" {% if id.survey_show_results == 1 %}selected{% endif %}>
-								{_ Aggregated results from all respondents (only results for multiple choice questions are shown) _}
-							</option>
-							<option value="2" {% if id.survey_show_results == 2 %}selected{% endif %}>
-								{_ Results from the respondent _}
-							</option>
-						</select>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="control-label">{_ When finished show _}</label>
+						<div class="controls">
+							<label class="radio">
+			        			<input type="radio" name="survey_show_results" value="" {% if not id.survey_show_results %}checked{% endif %}>
+			        			{_ Thank you text only _}
+							</label>
+							<label class="radio">
+			        			<input type="radio" name="survey_show_results" value="2" {% if id.survey_show_results == 2 %}checked{% endif %}>
+			        			{_ Results from the respondent _}
+							</label>
+							<label class="radio">
+			        			<input type="radio" name="survey_show_results" value="1" {% if id.survey_show_results == 1 %}checked{% endif %}>
+			        			{_ Aggregated results from all respondents (only results for multiple choice questions are shown) _}
+							</label>
+						</div>
 					</div>
 
-					<div class="control-group label-floating">
-				        <input type="text" name="survey_test_percentage" id="{{ #survey_test_percentage }}" 
-				               class="input-small" value="{{ id.survey_test_percentage }}" placeholder="{_ Passing score _}" /> %
-					    <label class="control-label">{_ Passing score _}</label>
-				        {% validate id=#survey_test_percentage name="survey_test_percentage"
-				        			type={numericality minimum=0 maximum=100}
-				        %}
+					<div class="form-group">
+						<label class="control-label">{_ Test pass percentage _}</label>
+						<div class="input-group">
+					        <input type="number" name="survey_test_percentage" id="{{ #survey_test_percentage }}" 
+					               class="form-control" value="{{ id.survey_test_percentage }}"
+					               placeholder="{_ Passing score _} (0-100)"
+					               min="0" max="100">
+					        <span class="input-group-addon" id="basic-addon2">%</span>
+					        {% validate id=#survey_test_percentage name="survey_test_percentage"
+					        			type={numericality minimum=0 maximum=100}
+					        %}
+					    </div>
 				        <p class="help-block muted">{_ This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions. _}</p>
 					</div>
 				</div>
