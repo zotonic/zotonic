@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-24 09:54\n"
+"PO-Revision-Date: 2021-11-24 16:06\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -457,7 +457,6 @@ msgstr "Başka bir yere taşı"
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:13
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:6
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:11
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:8
 msgid "Need more help?"
 msgstr "Daha fazla yardım mı lazım?"
 
@@ -5322,7 +5321,7 @@ msgid "Calendar"
 msgstr "Takvim"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:19./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:31./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:39
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:128./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:54./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:37
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:54./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:37
 msgid "Download CSV"
 msgstr "CSV'yi İndir"
 
@@ -5331,7 +5330,7 @@ msgid "Download Event"
 msgstr "Etkinliği İndir"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:20./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:32./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:40
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:132./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:58./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:41
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:58./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:41
 msgid "Download Excel"
 msgstr "Excel'i İndir"
 
@@ -7973,7 +7972,7 @@ msgstr "Ardından soru ekle"
 msgid "Add questions by adding blocks with the menu."
 msgstr "Menü ile bloklar ekleyerek sorular ekleyin."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:85./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:57
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
 msgid "Aggregated results from all respondents (only results for multiple choice questions are shown)"
 msgstr "Tüm katılımcılardan toplu sonuçlar (sadece çoktan seçmeli soruların sonuçları gösterilir)"
 
@@ -8094,15 +8093,11 @@ msgstr "Sayfa atlamayı sil"
 msgid "Delete question"
 msgstr "Soruyu sil"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:34
-msgid "Disabled, hide the survey form"
-msgstr "Devre dışı, anket formunu gizle"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:63
 msgid "Disagree"
 msgstr "Katılmıyorum"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:130./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:134./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:56./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:60./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:56./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:60./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
 msgid "Download will start in the background. Please check your download window."
 msgstr "İndirme işlemi arka planda başlayacaktır. Lütfen indirme pencerenizi kontrol edin."
 
@@ -8134,11 +8129,11 @@ msgstr "Açıklama"
 msgid "False"
 msgstr "Yanlış"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:4
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:6
 msgid "Feedback if correct"
 msgstr "Geri bildirim doğruysa"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:11
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:12./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:13
 msgid "Feedback if wrong"
 msgstr "Geri bildirim yanlış ise"
 
@@ -8146,9 +8141,13 @@ msgstr "Geri bildirim yanlış ise"
 msgid "File upload"
 msgstr "Dosya yükleme"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:58./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:36
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:39
 msgid "Fill in"
 msgstr "Doldurun"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:51
+msgid "Fill in and edit later after saving (one set of results)"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
 msgid "Fill in the gaps"
@@ -8166,23 +8165,19 @@ msgstr "Sınav ya da test için doğru cevabı “*”” ile işaretleyin. Örn
 msgid "Go to question"
 msgstr "Soruya gidin"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:114./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:130
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:153
 msgid "Handle this survey with"
 msgstr "Anketi ele alın"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:132
 msgid "Handling"
 msgstr "Kullanma"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:8
-msgid "Help about surveys"
-msgstr "Anketler hakkında yardım"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:63./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:71./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:63
 msgid "Hide from results"
 msgstr "Sonuçları gizle"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:42./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:90
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:91
 msgid "Hide progress information"
 msgstr "İlerleme bilgilerini gizle"
 
@@ -8202,7 +8197,7 @@ msgstr "[age] yaşındayım. [icecream=vanilla|çilek|çikolata|diğer] dondurma
 msgid "If you want to store <i>value</i> but show <i>answer</i>, use value#answer. E.g. <i>2019#Graduated in 2019</i> will store 2019 in the results."
 msgstr "<i>değer</i> saklamak, ancak <i>yanıt</i>göstermek istiyorsanız, # yanıt değerini kullanın. Örneğin <i>2019 # 2019'da mezun oldu</i> , 2019'u sonuçlarda saklayacaktır."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:26./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
 msgid "Immediately start with the questions, no “Start” button"
 msgstr "Sorulara hemen \"Başlat\" butonu ile başla"
 
@@ -8230,10 +8225,6 @@ msgstr "Ters"
 msgid "Jump to a question on a next page."
 msgstr "Sonraki sayfadaki soruya atlayın."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:103
-msgid "Leave empty if there are no test questions."
-msgstr "Test soruları yok ise boş bırakın."
-
 #: apps/zotonic_mod_survey/src/mod_survey.erl:149
 msgid "Likert"
 msgstr "Likert"
@@ -8242,11 +8233,7 @@ msgstr "Likert"
 msgid "Long answer"
 msgstr "Uzun cevap"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:72
-msgid "Mail filled in surveys to"
-msgstr "Anketlerde doldurulmuş posta"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:112./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:113
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:135./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:136
 msgid "Mail results to"
 msgstr "Posta sonuçları"
 
@@ -8278,13 +8265,13 @@ msgstr "Çoktan seçmeli"
 msgid "Multiple choice or quiz question"
 msgstr "Çoktan seçmeli veya test sorusu"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:62./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:41
-msgid "Multiple entries per user/browser"
-msgstr "Kullanıcı/tarayıcı başına birden fazla giriş"
-
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:33
 msgid "Multiple page break blocks are merged into one."
 msgstr "Çoklu sayfa sonu bloklar birleştirilir."
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:47
+msgid "Multiple times per user/browser (each time with new results)"
+msgstr ""
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:153
 msgid "Narrative"
@@ -8306,11 +8293,7 @@ msgstr "Kategorideki sonraki sayfa"
 msgid "Numeric input, show totals for this field in the survey results."
 msgstr "Sayısal girdi, anket sonuçlarındaki bu alan için toplamlarını gösterir."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:65./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:44
-msgid "Once and allow editing afterwards"
-msgstr "Bir kez ve daha sonralarda düzenlemeye izin ver"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:60./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:39
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:43
 msgid "Once only per user/browser"
 msgstr "Kullanıcı/tarayıcı başına yalnızca bir kez"
 
@@ -8338,7 +8321,7 @@ msgstr "Sayfa atlama koşulu"
 msgid "Passed"
 msgstr "Geçti"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:68
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:116
 msgid "Passing score"
 msgstr "Geçme puanı"
 
@@ -8374,11 +8357,11 @@ msgstr "Yanıt başına puanlar"
 msgid "Primary"
 msgstr "Başlıca"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:140./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:66./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:49
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:66./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:49
 msgid "Printable list"
 msgstr "Yazdırılabilir liste"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:85
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:86
 msgid "Progress"
 msgstr "İlerleme"
 
@@ -8430,7 +8413,7 @@ msgstr "Gerekli, bu soruya cevap verilmeli."
 msgid "Results"
 msgstr "Sonuçlar"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:88./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:60
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67
 msgid "Results from the respondent"
 msgstr "Karşı taraftan alınan sonuçlar"
 
@@ -8454,15 +8437,11 @@ msgstr "Ülkeyi seç"
 msgid "Select your country"
 msgstr "Ülkenizi seçin"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:30
-msgid "Send confirmation to respondent (please add a question named <i>email</i>)"
-msgstr "Yanıtlayan kişiye bir onay gönderin (lütfen <i>e-posta</i> adında bir soru ekleyin)"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:123
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:146
 msgid "Send confirmation with the results to the email address entered in this form (you must include a question labeled “email”)."
 msgstr "Sonuçlarla birlikte onayınızı bu formda girilen e-posta adresine gönderin (\"e-posta\" etiketli bir soru eklemeniz gereklidir)."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:73./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:115
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:138
 msgid "Separate multiple email addresses with a comma."
 msgstr "Birden fazla e-posta adresini virgülle ayırın."
 
@@ -8470,15 +8449,15 @@ msgstr "Birden fazla e-posta adresini virgülle ayırın."
 msgid "Short answer"
 msgstr "Kısa cevap"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:138./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:64./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:47
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:64./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:47
 msgid "Show email addresses"
 msgstr "E-posta adreslerini göster"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:50./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:102
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:103
 msgid "Show progress bar"
 msgstr "İlerleme çubuğunu göster"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:46./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:97
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Gelişim bilgilerini \"<em>Soru 3/10</em>\" olarak göster"
 
@@ -8489,10 +8468,6 @@ msgstr "Sonuçları göster"
 #: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:42
 msgid "Show results (admin only)"
 msgstr "Sonuçları göster (yalnızca yönetici)"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:137
-msgid "Show survey results"
-msgstr "Anket sonuçlarını göster"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:47
 msgid "Single answer possible"
@@ -8534,10 +8509,6 @@ msgstr "Yanlış cevaplar için puanları çıkar (toplam asla 0'dan az olmaz)"
 msgid "Success"
 msgstr "Başarı"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:6
-msgid "Survey"
-msgstr "Anket"
-
 #: apps/zotonic_mod_survey/src/mod_survey.erl:146
 msgid "Survey Questions"
 msgstr "Anket Soruları"
@@ -8554,11 +8525,7 @@ msgstr "Anket editörü"
 msgid "Survey result deleted."
 msgstr "Anket sonuçları silindi."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:141
-msgid "Survey results editor"
-msgstr "Anket sonuçları editörü"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:96./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:97
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:111
 msgid "Test pass percentage"
 msgstr "Test geçme yüzdesi"
 
@@ -8570,7 +8537,7 @@ msgstr "Metin, resim, video"
 msgid "Thank you for filling in our survey."
 msgstr "Anketimizi doldurduğunuz için teşekkür ederiz."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:83./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:55
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:63
 msgid "Thank you text only"
 msgstr "Sadece teşekkür metinleri"
 
@@ -8602,7 +8569,7 @@ msgstr "Bu blok akışın durduğunu gösterir. Kullanıcı daha ileri gidemez v
 msgid "This is a result for:"
 msgstr "Bunun sonucudur:"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:123
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "Bu, bir sınavı veya testi geçmek için gereken yüzdedir. Yalnızca sınav veya test soruları eklediyseniz kullanılır."
 
@@ -8650,7 +8617,7 @@ msgstr "Doğrulama"
 msgid "Wagner"
 msgstr "Wagner"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:81./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:52
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:59
 msgid "When finished show"
 msgstr "Gösteri bittiğinde"
 
@@ -8681,10 +8648,6 @@ msgstr "Bu sonuçları değiştirmeye izin verilmiyor."
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:74
 msgid "You are not allowed to see the results of this survey."
 msgstr "Bu anket sonuçlarını görmenize izin verilmiyor."
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:8
-msgid "You can create your survey by adding blocks with questions below the body."
-msgstr "Ana bloğun altına sorularla bloklar ekleyerek anketinizi oluşturabilirsiniz."
 
 #: apps/zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:21
 msgid "You must have edit permission on the survey to edit its results."
