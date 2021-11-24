@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-24 16:25\n"
+"PO-Revision-Date: 2021-11-24 16:35\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -7974,7 +7974,7 @@ msgstr "Добавляйте вопросы, добавляя блоки с по
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
 msgid "Aggregated results from all respondents"
-msgstr ""
+msgstr "Сводные результаты от всех респондентов"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:69
 msgid "Agree"
