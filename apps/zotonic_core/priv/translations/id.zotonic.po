@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-24 09:54\n"
+"PO-Revision-Date: 2021-11-24 16:06\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -457,7 +457,6 @@ msgstr "Pindah ke yang lain"
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:13
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:6
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:11
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:8
 msgid "Need more help?"
 msgstr "Butuh lebih banyak bantuan?"
 
@@ -5321,7 +5320,7 @@ msgid "Calendar"
 msgstr "Kalender"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:19./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:31./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:39
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:128./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:54./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:37
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:54./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:37
 msgid "Download CSV"
 msgstr "Unduh CSV"
 
@@ -5330,7 +5329,7 @@ msgid "Download Event"
 msgstr "Unduh Peristiwa"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:20./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:32./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:40
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:132./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:58./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:41
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:58./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:41
 msgid "Download Excel"
 msgstr "Unduh Excel"
 
@@ -7973,7 +7972,7 @@ msgstr "Tambahkan pertanyaan sesudahnya"
 msgid "Add questions by adding blocks with the menu."
 msgstr "Tambahkan pertanyaan dengan menambahkan blok dengan menu."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:85./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:57
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
 msgid "Aggregated results from all respondents (only results for multiple choice questions are shown)"
 msgstr "Agregat hasil dari semua responden (hanya hasil untuk pertanyaan pilihan ganda yang ditampilkan)"
 
@@ -8094,15 +8093,11 @@ msgstr "Hapus lompatan laman"
 msgid "Delete question"
 msgstr "Hapus pertanyaan"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:34
-msgid "Disabled, hide the survey form"
-msgstr "Dinonaktifkan, sembunyikan formulir survei"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:63
 msgid "Disagree"
 msgstr "Tidak setuju"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:130./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:134./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:56./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:60./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:56./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:60./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
 msgid "Download will start in the background. Please check your download window."
 msgstr "Pengunduhan akan dimulai di latar belakang. Silakan periksa jendela unduhan Anda."
 
@@ -8134,11 +8129,11 @@ msgstr "Penjelasan"
 msgid "False"
 msgstr "Salah"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:4
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:6
 msgid "Feedback if correct"
 msgstr "Umpan balik jika benar"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:11
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:12./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:13
 msgid "Feedback if wrong"
 msgstr "Umpan balik jika salah"
 
@@ -8146,9 +8141,13 @@ msgstr "Umpan balik jika salah"
 msgid "File upload"
 msgstr "Unggah Berkas"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:58./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:36
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:39
 msgid "Fill in"
 msgstr "Mengisi"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:51
+msgid "Fill in and edit later after saving (one set of results)"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
 msgid "Fill in the gaps"
@@ -8166,23 +8165,19 @@ msgstr "Untuk kuis atau tes, tandai jawaban yang benar dengan tanda \"*\"\".misa
 msgid "Go to question"
 msgstr "Pergi ke pertanyaan"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:114./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:130
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:153
 msgid "Handle this survey with"
 msgstr "Tangani survei ini dengan"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:132
 msgid "Handling"
 msgstr "Penanganan"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:8
-msgid "Help about surveys"
-msgstr "Bantuan tentang survei"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:63./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:71./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:63
 msgid "Hide from results"
 msgstr "Sembunyikan dari hasil"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:42./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:90
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:91
 msgid "Hide progress information"
 msgstr "Sembunyikan informasi kemajuan"
 
@@ -8202,7 +8197,7 @@ msgstr "Saya [age] tahun. Saya suka es krim [icecream=vanilla|strawberry|chocola
 msgid "If you want to store <i>value</i> but show <i>answer</i>, use value#answer. E.g. <i>2019#Graduated in 2019</i> will store 2019 in the results."
 msgstr "Jika Anda ingin menyimpan <i>nilai</i> tetapi menampilkan <i>jawaban</i>, gunakan nilai # jawaban. Misalnya <i>2019 # Lulus pada 2019</i> akan menyimpan 2019 di hasil."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:26./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
 msgid "Immediately start with the questions, no “Start” button"
 msgstr "Segera mulai dengan pertanyaan, tidak ada tombol \"Mulai\""
 
@@ -8230,10 +8225,6 @@ msgstr "Terbalik"
 msgid "Jump to a question on a next page."
 msgstr "Melompat ke sebuah pertanyaan pada halaman selanjutnya."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:103
-msgid "Leave empty if there are no test questions."
-msgstr "Biarkan kosong jika tidak ada pertanyaan tes."
-
 #: apps/zotonic_mod_survey/src/mod_survey.erl:149
 msgid "Likert"
 msgstr "Likert"
@@ -8242,11 +8233,7 @@ msgstr "Likert"
 msgid "Long answer"
 msgstr "Jawaban panjang"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:72
-msgid "Mail filled in surveys to"
-msgstr "Mail diisi dalam survei"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:112./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:113
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:135./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:136
 msgid "Mail results to"
 msgstr "Surat hasil"
 
@@ -8278,13 +8265,13 @@ msgstr "Pilihan ganda"
 msgid "Multiple choice or quiz question"
 msgstr "Pilihan ganda atau pertanyaan kuis"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:62./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:41
-msgid "Multiple entries per user/browser"
-msgstr "Beberapa entri per user/browser"
-
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:33
 msgid "Multiple page break blocks are merged into one."
 msgstr "Beberapa blok istirahat halaman digabung menjadi satu."
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:47
+msgid "Multiple times per user/browser (each time with new results)"
+msgstr ""
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:153
 msgid "Narrative"
@@ -8306,11 +8293,7 @@ msgstr "Berikutnya halaman dalam kategori"
 msgid "Numeric input, show totals for this field in the survey results."
 msgstr "Masukan numerik, tampilkan total untuk bidang ini dalam hasil survei."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:65./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:44
-msgid "Once and allow editing afterwards"
-msgstr "Sekali dan memungkinkan editing setelah itu"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:60./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:39
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:43
 msgid "Once only per user/browser"
 msgstr "Sekali saja per pengguna/browser"
 
@@ -8338,7 +8321,7 @@ msgstr "Halaman melompat kondisi"
 msgid "Passed"
 msgstr "Berlalu"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:68
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:116
 msgid "Passing score"
 msgstr "Nilai kelulusan"
 
@@ -8374,11 +8357,11 @@ msgstr "Poin per jawaban"
 msgid "Primary"
 msgstr "Utama"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:140./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:66./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:49
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:66./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:49
 msgid "Printable list"
 msgstr "Daftar cetak"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:85
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:86
 msgid "Progress"
 msgstr "Kemajuan"
 
@@ -8430,7 +8413,7 @@ msgstr "Diperlukan, pertanyaan ini harus dijawab."
 msgid "Results"
 msgstr "Hasil"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:88./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:60
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67
 msgid "Results from the respondent"
 msgstr "Hasil dari responden"
 
@@ -8454,15 +8437,11 @@ msgstr "Pilih negara"
 msgid "Select your country"
 msgstr "Pilih negaramu"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:30
-msgid "Send confirmation to respondent (please add a question named <i>email</i>)"
-msgstr "Kirimkan konfirmasi responden (tolong tambahkan nama sebuah pertanyaan <i>email</i>)"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:123
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:146
 msgid "Send confirmation with the results to the email address entered in this form (you must include a question labeled “email”)."
 msgstr "Kirim konfirmasi dengan hasil ke alamat email yang dimasukkan dalam formulir ini (anda harus menyertakan sebuah pertanyaan yang berlabel \"email\")."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:73./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:115
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:138
 msgid "Separate multiple email addresses with a comma."
 msgstr "Pisahkan alamat email dengan koma."
 
@@ -8470,15 +8449,15 @@ msgstr "Pisahkan alamat email dengan koma."
 msgid "Short answer"
 msgstr "Jawaban singkat"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:138./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:64./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:47
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:64./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:47
 msgid "Show email addresses"
 msgstr "Tampilkan alamat email"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:50./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:102
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:103
 msgid "Show progress bar"
 msgstr "Tampilkan kemajuan bar"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:46./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:97
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Menunjukkan informasi kemajuan seperti \"<em>Pertanyaan 3/10</em>\""
 
@@ -8489,10 +8468,6 @@ msgstr "Tampilkan hasil"
 #: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:42
 msgid "Show results (admin only)"
 msgstr "Tampilkan hasil (hanya admin)"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:137
-msgid "Show survey results"
-msgstr "Tampilkan hasil survei"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:47
 msgid "Single answer possible"
@@ -8534,10 +8509,6 @@ msgstr "Kurangi poin untuk jawaban yang salah (total tidak kurang dari 0)"
 msgid "Success"
 msgstr "Sukses"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:6
-msgid "Survey"
-msgstr "Survei"
-
 #: apps/zotonic_mod_survey/src/mod_survey.erl:146
 msgid "Survey Questions"
 msgstr "Survei pertanyaan"
@@ -8554,11 +8525,7 @@ msgstr "Editor survei"
 msgid "Survey result deleted."
 msgstr "Hasil survei dihapus."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:141
-msgid "Survey results editor"
-msgstr "Hasil survei editor"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:96./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:97
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:111
 msgid "Test pass percentage"
 msgstr "Uji lulus persentase"
 
@@ -8570,7 +8537,7 @@ msgstr "Teks, gambar, video"
 msgid "Thank you for filling in our survey."
 msgstr "Terima kasih telah mengisi survei kami."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:83./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:55
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:63
 msgid "Thank you text only"
 msgstr "Terima kasih teks saja"
 
@@ -8602,7 +8569,7 @@ msgstr "Blok ini sinyal stop aliran. Pengguna tidak dapat melanjutkan lebih jauh
 msgid "This is a result for:"
 msgstr "Ini adalah hasil untuk:"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:123
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "Ini adalah persentase yang dibutuhkan untuk lulus kuis atau tes. Hanya digunakan jika Anda telah menambahkan pertanyaan kuis atau tes."
 
@@ -8650,7 +8617,7 @@ msgstr "Validasi"
 msgid "Wagner"
 msgstr "Wagner"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:81./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:52
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:59
 msgid "When finished show"
 msgstr "Setelah selesai tampilkan"
 
@@ -8681,10 +8648,6 @@ msgstr "Anda tidak diizinkan untuk mengubah hasil tersebut."
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:74
 msgid "You are not allowed to see the results of this survey."
 msgstr "Anda tidak diizinkan untuk melihat hasil survei ini."
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:8
-msgid "You can create your survey by adding blocks with questions below the body."
-msgstr "Anda dapat membuat survei anda dengan menambahkan blok dengan pertanyaan-pertanyaan di bawah tubuh."
 
 #: apps/zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:21
 msgid "You must have edit permission on the survey to edit its results."
