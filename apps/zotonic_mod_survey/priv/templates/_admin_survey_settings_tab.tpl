@@ -35,15 +35,18 @@
 			<div class="form-group col-sm-6">
 	        	<label class="control-label">{_ Fill in _}</label>
 	        	<div class="controls">
-					<select class="form-control" name="survey_multiple" id="survey_multiple">
-						<option value="0">{_ Once only per user/browser _}</option>
-						<option value="1" {% if id.survey_multiple == 1 %}selected{% endif %}>
-							{_ Multiple entries per user/browser _}
-						</option>
-						<option value="2" {% if id.survey_multiple == 2 %}selected{% endif %}>
-							{_ Once and allow editing afterwards _}
-						</option>
-					</select>
+	        		<label class="radio">
+	        			<input type="radio" name="survey_multiple" value="0" {% if not id.survey_multiple %}checked{% endif %}>
+	        			{_ Once only per user/browser _}
+	        		</label>
+	        		<label class="radio">
+	        			<input type="radio" name="survey_multiple" value="1" {% if id.survey_multiple == 1 %}checked{% endif %}>
+	        			{_ Multiple times per user/browser (each time with new results) _}
+	        		</label>
+	        		<label class="radio">
+	        			<input type="radio" name="survey_multiple" value="2" {% if id.survey_multiple == 2 %}checked{% endif %}>
+	        			{_ Once and allow editing afterwards _}
+	        		</label>
 				</div>
 			</div>
 

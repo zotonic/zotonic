@@ -59,7 +59,7 @@
                 <select name="survey_multiple" id="survey_multiple" class="form-control">
                     <option value="0">{_ Once only per user/browser _}</option>
                     <option value="1" {% if id.survey_multiple == 1 %}selected{% endif %}>
-                        {_ Multiple entries per user/browser _}
+                        {_ Multiple times per user/browser (each time with new results) _}
                     </option>
                     <option value="2" {% if id.survey_multiple == 2 %}selected{% endif %}>
                         {_ Once and allow editing afterwards _}
