@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-24 16:07\n"
+"PO-Revision-Date: 2021-11-24 16:26\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -7973,8 +7973,8 @@ msgid "Add questions by adding blocks with the menu."
 msgstr "Fügen Sie Fragen hinzu, indem Sie Blöcke mit dem Menü hinzufügen."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
-msgid "Aggregated results from all respondents (only results for multiple choice questions are shown)"
-msgstr "Aggregierte Ergebnisse aller Befragten (nur Ergebnisse für Multiple-Choice-Fragen werden angezeigt)"
+msgid "Aggregated results from all respondents"
+msgstr "Aggregierte Ergebnisse aller Befragten"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:69
 msgid "Agree"
@@ -8147,7 +8147,7 @@ msgstr "Ausfüllen"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:51
 msgid "Fill in and edit later after saving (one set of results)"
-msgstr ""
+msgstr "Nach dem Speichern ausfüllen und bearbeiten (ein Ergebnissatz)"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
 msgid "Fill in the gaps"
@@ -8271,7 +8271,7 @@ msgstr "Mehrere Seitenumbruchblöcke werden zu einem zusammengeführt."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:47
 msgid "Multiple times per user/browser (each time with new results)"
-msgstr ""
+msgstr "Mehrfach pro Benutzer/Browser (jeweils mit neuen Ergebnissen)"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:153
 msgid "Narrative"
@@ -8485,11 +8485,11 @@ msgstr "Stopp"
 msgid "Stop without saving"
 msgstr "Stoppen ohne zu speichern"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:40./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:54./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:55
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:40./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:55./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:56
 msgid "Strongly Agree"
 msgstr "Stark zustimmen"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:8./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:59./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:60
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:8./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:60./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:61
 msgid "Strongly Disagree"
 msgstr "Stark ablehnen"
 
