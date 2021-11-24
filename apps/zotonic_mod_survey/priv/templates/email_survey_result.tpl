@@ -70,6 +70,12 @@
 		{% for blk in id.blocks %}
 		    {% if blk.is_hide_result %}
 		        {# Nothing #}
+		    {% elseif blk.type == 'header' %}
+				<tr>
+					<td style="padding: 8px; text-align: left;" colspan="2">
+						<h2 style="margin: 0">{{ blk.header }}</h2>
+					</td>
+				</tr>
 		    {% elseif blk.type|match:"^survey_.*"
 		    	  and blk.type != 'survey_page_break'
 		    	  and blk.name != 'survey_feedback'
@@ -101,9 +107,18 @@
 			{% endif %}
 		{% endfor %}
 	{% else %}
-		{% for name, ans in answers %}
-			{% with id.blocks[name] as blk %}
-				{% if not blk.is_hide_result %}
+		{% for blk in id.blocks %}
+			{% with blk.name as name %}
+			{% with answers[name] as ans %}
+			    {% if blk.is_hide_result %}
+			        {# Nothing #}
+			    {% elseif blk.type == 'header' %}
+					<tr>
+						<td style="padding: 8px; text-align: left;" colspan="2">
+							<h2 style="margin: 0">{{ blk.header }}</h2>
+						</td>
+					</tr>
+				{% elseif ans %}
 					<tr style="border-top: 1px solid #ccc">
 						<td valign="top" style="padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #dddddd; max-width:45%;">
 							{% if ans.question.prompt %}
@@ -126,6 +141,7 @@
 					</tr>
 				{% endif %}
 			{% endwith %}
+			{% endwith%}
 		{% endfor %}
 	{% endif %}
 </table>
