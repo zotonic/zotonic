@@ -47,7 +47,6 @@ answer(Block, Answers, _Context) ->
 prep_chart(_Block, [], _Context) ->
     undefined;
 prep_chart(Block, [{_, Vals}], Context) ->
-    ?DEBUG(Vals),
     Labels = [
         5, 4, 3, 2, 1
     ],
