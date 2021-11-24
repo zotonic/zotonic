@@ -274,14 +274,16 @@ render_update(#render{} = Render, Args, Context) ->
          Context :: z:context(),
          Result :: #render{} | z:context().
 render_next_page(Id, 0, _Direction, _Answers, _History, _Editing, Args, Context) when is_integer(Id) ->
-    case z_convert:to_bool(proplists:get_value(is_overlay, Args)) of
-        true ->
+    case z_convert:to_binary(proplists:get_value(viewer, Args)) of
+        <<"overlay">> ->
             z_render:wire({overlay_close, []}, Context);
-        false ->
+        <<"dialog">> ->
+            z_render:wire({dialog_close, []}, Context);
+        _ ->
             z_render:wire({redirect, [{id, Id}]}, Context)
     end;
 render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context) when is_integer(Id) ->
-    IsOverlay = z_convert:to_bool(proplists:get_value(is_overlay, Args)),
+    Viewer = z_convert:to_binary(proplists:get_value(viewer, Args)),
     {As, Submitter} = get_args(Context),
     Answers1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, As),
     Answers2 = Answers1 ++ group_multiselect(As),
@@ -307,7 +309,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                         {answers, Answers2},
                         {history, [NewPageNr|History]},
                         {editing, Editing},
-                        {is_overlay, IsOverlay}
+                        {viewer, Viewer}
                     ],
                     #render{template="_survey_question_page.tpl", vars=Vars};
 
@@ -335,7 +337,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                                             {inline, true},
                                             {history, History},
                                             {q, As},
-                                            {is_overlay, IsOverlay}
+                                            {viewer, Viewer}
                                         ]
                                     };
                                 false ->
@@ -345,7 +347,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                                             {id,Id},
                                             {history, History},
                                             {q, As},
-                                            {is_overlay, IsOverlay}
+                                            {viewer, Viewer}
                                         ]
                                     }
                             end;
@@ -358,12 +360,12 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                                     {id,Id},
                                     {history,History},
                                     {q, As},
-                                    {is_overlay, IsOverlay}
+                                    {viewer, Viewer}
                                 ]}
                     end;
 
                 submit ->
-                    admin_edit_survey_result(Id, Questions, Answers2, Editing, IsOverlay, Context)
+                    admin_edit_survey_result(Id, Questions, Answers2, Editing, Viewer, Context)
             end;
         _NoBlocks ->
             % No survey defined, show an error page.
@@ -372,7 +374,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                 vars=[
                     {id,Id},
                     {q, As},
-                    {is_overlay, IsOverlay}
+                    {viewer, Viewer}
                 ]}
     end.
 
@@ -748,7 +750,7 @@ collect_answers([Q|Qs], Answers, FoundAnswers, Missing, Context) ->
     end.
 
 %% @doc Save the modified survey results
-admin_edit_survey_result(SurveyId, Questions, Answers, {editing, AnswerId, Actions}, IsOverlay, Context) ->
+admin_edit_survey_result(SurveyId, Questions, Answers, {editing, AnswerId, Actions}, Viewer, Context) ->
     case z_acl:rsc_editable(SurveyId, Context)
         orelse (
             z_convert:to_integer(m_rsc:p(SurveyId,<<"survey_multiple">>, Context)) =:= 2
@@ -773,7 +775,7 @@ admin_edit_survey_result(SurveyId, Questions, Answers, {editing, AnswerId, Actio
                                 template="_admin_survey_editor_results.tpl",
                                 vars=[
                                     {id, SurveyId},
-                                    {is_overlay, IsOverlay}
+                                    {viewer, Viewer}
                                 ]
                             },
                             Context1);
@@ -784,7 +786,7 @@ admin_edit_survey_result(SurveyId, Questions, Answers, {editing, AnswerId, Actio
                             {id, SurveyId},
                             {inline, true},
                             {is_editing, true},
-                            {is_overlay, IsOverlay}
+                            {viewer, Viewer}
                         ]
                     };
                 _ when is_list(Actions); is_tuple(Actions) ->

@@ -2,12 +2,19 @@
 
 <p>{_ The results have been saved. _}</p>
 
-{% if is_overlay %}
+{% if viewer == 'overlay' %}
     <p>
         <a href="#" id="{{ #close }}" style="display:none" class="btn btn-primary">{_ Close _}</a>
     </p>
     {% wire id=#close
             action={overlay_close}
+    %}
+{% elseif viewer == 'dialog' %}
+    <p>
+        <a href="#" id="{{ #close }}" style="display:none" class="btn btn-primary">{_ Close _}</a>
+    </p>
+    {% wire id=#close
+            action={dialog_close}
     %}
 {% else %}
     <p>
