@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-24 09:54\n"
+"PO-Revision-Date: 2021-11-24 16:06\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -457,7 +457,6 @@ msgstr "Перейти к другому"
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:13
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:6
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:11
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:8
 msgid "Need more help?"
 msgstr "Нужна помощь?"
 
@@ -5322,7 +5321,7 @@ msgid "Calendar"
 msgstr "Календарь"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:19./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:31./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:39
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:128./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:54./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:37
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:54./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:37
 msgid "Download CSV"
 msgstr "Скачать CSV"
 
@@ -5331,7 +5330,7 @@ msgid "Download Event"
 msgstr "Событие загрузки"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:20./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:32./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:40
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:132./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:58./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:41
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:58./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:41
 msgid "Download Excel"
 msgstr "Скачать Excel"
 
@@ -7973,7 +7972,7 @@ msgstr "Добавить вопрос после"
 msgid "Add questions by adding blocks with the menu."
 msgstr "Добавляйте вопросы, добавляя блоки с помощью меню."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:85./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:57
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
 msgid "Aggregated results from all respondents (only results for multiple choice questions are shown)"
 msgstr "Агрегированные результаты по всем респондентам (показываются только результаты по вопросам с множественными вариантами ответа)."
 
@@ -8094,15 +8093,11 @@ msgstr "Удалить прыжок страницы"
 msgid "Delete question"
 msgstr "Удалить вопрос"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:34
-msgid "Disabled, hide the survey form"
-msgstr "Инвалиды, скрыть форму опроса"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:63
 msgid "Disagree"
 msgstr "Не согласен"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:130./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:134./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:56./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:60./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:56./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:60./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
 msgid "Download will start in the background. Please check your download window."
 msgstr "Загрузка начнется в фоновом режиме. Пожалуйста, проверьте ваше окно загрузки."
 
@@ -8134,11 +8129,11 @@ msgstr "Объяснение"
 msgid "False"
 msgstr "Ложь"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:4
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:6
 msgid "Feedback if correct"
 msgstr "Обратная связь, если она верна"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:11
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:12./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:13
 msgid "Feedback if wrong"
 msgstr "Обратная связь в случае ошибки"
 
@@ -8146,9 +8141,13 @@ msgstr "Обратная связь в случае ошибки"
 msgid "File upload"
 msgstr "Загрузка файла"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:58./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:36
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:39
 msgid "Fill in"
 msgstr "Заполнить форму"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:51
+msgid "Fill in and edit later after saving (one set of results)"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
 msgid "Fill in the gaps"
@@ -8166,23 +8165,19 @@ msgstr "Для теста или теста отметьте правильны�
 msgid "Go to question"
 msgstr "Перейти к вопросу"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:114./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:130
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:153
 msgid "Handle this survey with"
 msgstr "Обрабатывать эту анкету с помощью"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:132
 msgid "Handling"
 msgstr "Обработка"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:8
-msgid "Help about surveys"
-msgstr "Справка об анкетах"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:63./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:71./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:63
 msgid "Hide from results"
 msgstr "Скрыть от результатов"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:42./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:90
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:91
 msgid "Hide progress information"
 msgstr "Прятать информацию о прогрессе"
 
@@ -8202,7 +8197,7 @@ msgstr "Мне [age] лет. Мне нравится мороженое [мор�
 msgid "If you want to store <i>value</i> but show <i>answer</i>, use value#answer. E.g. <i>2019#Graduated in 2019</i> will store 2019 in the results."
 msgstr "Если вы хотите сохранить <i>значение</i> , но показать <i>ответ</i>, используйте значение#ответ. Например, <i>2019#В 2019 году</i> будет хранить 2019 в результатах."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:26./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
 msgid "Immediately start with the questions, no “Start” button"
 msgstr "Немедленно начинайте с вопросов, без кнопки \"Старт\"."
 
@@ -8230,10 +8225,6 @@ msgstr "Обращенный"
 msgid "Jump to a question on a next page."
 msgstr "Перейти к вопросу на следующей странице."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:103
-msgid "Leave empty if there are no test questions."
-msgstr "Оставьте пустым, если нет тестовых вопросов."
-
 #: apps/zotonic_mod_survey/src/mod_survey.erl:149
 msgid "Likert"
 msgstr "Шкала Лайкерта"
@@ -8242,11 +8233,7 @@ msgstr "Шкала Лайкерта"
 msgid "Long answer"
 msgstr "Длинный ответ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:72
-msgid "Mail filled in surveys to"
-msgstr "Отправить заполненные анкеты по e-mail"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:112./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:113
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:135./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:136
 msgid "Mail results to"
 msgstr "Результаты отправки по почте"
 
@@ -8278,13 +8265,13 @@ msgstr "Многократный выбор"
 msgid "Multiple choice or quiz question"
 msgstr "Множественный выбор или вопрос викторины"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:62./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:41
-msgid "Multiple entries per user/browser"
-msgstr "Несколько записей на пользователя/браузера"
-
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:33
 msgid "Multiple page break blocks are merged into one."
 msgstr "Идущие подряд разрывы страницы объединяются в один."
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:47
+msgid "Multiple times per user/browser (each time with new results)"
+msgstr ""
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:153
 msgid "Narrative"
@@ -8306,11 +8293,7 @@ msgstr "Следующая страница в категории"
 msgid "Numeric input, show totals for this field in the survey results."
 msgstr "Числовой ввод, отображение итогов по данному полю в результатах опроса."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:65./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:44
-msgid "Once and allow editing afterwards"
-msgstr "Один раз и разрешите редактирование после этого"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:60./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:39
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:43
 msgid "Once only per user/browser"
 msgstr "Один раз только для пользователя/браузера"
 
@@ -8338,7 +8321,7 @@ msgstr "Условие перехода"
 msgid "Passed"
 msgstr "Прошел"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:68
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:116
 msgid "Passing score"
 msgstr "Проходной балл"
 
@@ -8374,11 +8357,11 @@ msgstr "Баллы за ответ"
 msgid "Primary"
 msgstr "Основной"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:140./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:66./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:49
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:66./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:49
 msgid "Printable list"
 msgstr "Версия списка для печати"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:85
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:86
 msgid "Progress"
 msgstr "Прогресс"
 
@@ -8430,7 +8413,7 @@ msgstr "Ответ на вопрос обязателен."
 msgid "Results"
 msgstr "Результаты"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:88./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:60
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67
 msgid "Results from the respondent"
 msgstr "Результаты опроса"
 
@@ -8454,15 +8437,11 @@ msgstr "Укажите страну"
 msgid "Select your country"
 msgstr "Укажите вашу страну"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:30
-msgid "Send confirmation to respondent (please add a question named <i>email</i>)"
-msgstr "Отправьте респонденту подтверждение (добавьте вопрос с именем <i>по электронной почте</i>)."
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:123
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:146
 msgid "Send confirmation with the results to the email address entered in this form (you must include a question labeled “email”)."
 msgstr "Отправьте подтверждение с результатами на адрес электронной почты, указанный в этой форме (вы должны включить вопрос с пометкой \"электронная почта\")."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:73./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:115
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:138
 msgid "Separate multiple email addresses with a comma."
 msgstr "Разделите несколько адресов электронной почты запятой."
 
@@ -8470,15 +8449,15 @@ msgstr "Разделите несколько адресов электронн�
 msgid "Short answer"
 msgstr "Короткий ответ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:138./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:64./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:47
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:64./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:47
 msgid "Show email addresses"
 msgstr "Показать адреса e-mail"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:50./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:102
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:103
 msgid "Show progress bar"
 msgstr "Показывать индикатор"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:46./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:97
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Показывать информацию о прогрессе как «<em>Вопрос 3/10</em>»"
 
@@ -8489,10 +8468,6 @@ msgstr "Показать результаты"
 #: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:42
 msgid "Show results (admin only)"
 msgstr "Показать результаты (только для администраторов)"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:137
-msgid "Show survey results"
-msgstr "Показать результаты анкетирования"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:47
 msgid "Single answer possible"
@@ -8534,10 +8509,6 @@ msgstr "Вычитать баллы за неправильные ответы (
 msgid "Success"
 msgstr "Успех"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:6
-msgid "Survey"
-msgstr "Анкетирование"
-
 #: apps/zotonic_mod_survey/src/mod_survey.erl:146
 msgid "Survey Questions"
 msgstr "Вопросы анкеты"
@@ -8554,11 +8525,7 @@ msgstr "Редактор анкет"
 msgid "Survey result deleted."
 msgstr "Результат анкетирования удален."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:141
-msgid "Survey results editor"
-msgstr "Редактор результатов анкетирования"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:96./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:97
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:111
 msgid "Test pass percentage"
 msgstr "Процент прохождения теста"
 
@@ -8570,7 +8537,7 @@ msgstr "Текст, изображение, видео"
 msgid "Thank you for filling in our survey."
 msgstr "Спасибо за заполнение нашей анкеты."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:83./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:55
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:63
 msgid "Thank you text only"
 msgstr "Только смс-ки."
 
@@ -8602,7 +8569,7 @@ msgstr "Этот блок сигнализирует останов выполн
 msgid "This is a result for:"
 msgstr "Это результат для:"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:123
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "Это процент, необходимый для прохождения викторины или теста. Используется только в том случае, если вы добавили вопросы викторины или теста."
 
@@ -8650,7 +8617,7 @@ msgstr "Проверка"
 msgid "Wagner"
 msgstr "Вагнер"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:81./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:52
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:59
 msgid "When finished show"
 msgstr "По окончании шоу"
 
@@ -8681,10 +8648,6 @@ msgstr "Вы не имеете права изменять эти результ
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:74
 msgid "You are not allowed to see the results of this survey."
 msgstr "У вас нет прав для просмотра результатов этой анкеты."
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:8
-msgid "You can create your survey by adding blocks with questions below the body."
-msgstr "Вы можете создать анкету путем добавления блоков с вопросами под телом."
 
 #: apps/zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:21
 msgid "You must have edit permission on the survey to edit its results."
