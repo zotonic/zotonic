@@ -47,35 +47,48 @@ answer(Block, Answers, _Context) ->
 prep_chart(_Block, [], _Context) ->
     undefined;
 prep_chart(Block, [{_, Vals}], Context) ->
+    ?DEBUG(Vals),
     Labels = [
-        <<"5">>,<<"4">>,<<"3">>,<<"2">>,<<"1">>
+        5, 4, 3, 2, 1
     ],
-    Agree = case maps:get(<<"agree">>, Block, undefined) of
+    Agree = case z_trans:lookup_fallback(maps:get(<<"agree">>, Block, undefined), Context) of
         undefined -> ?__("Strongly Agree", Context);
         <<>> -> ?__("Strongly Agree", Context);
         Ag -> Ag
     end,
-    DisAgree = case maps:get(<<"disagree">>, Block, undefined) of
+    DisAgree = case z_trans:lookup_fallback(maps:get(<<"disagree">>, Block, undefined), Context) of
         undefined -> ?__("Strongly Disagree", Context);
         <<>> -> ?__("Strongly Disagree", Context);
         DisAg -> DisAg
     end,
     LabelsDisplay = [
-        [<<"5 ">>, z_trans:lookup_fallback(Agree, Context)],
+        iolist_to_binary([<<"5 ">>, z_trans:lookup_fallback(Agree, Context)]),
         <<"4">>,
         <<"3">>,
         <<"2">>,
-        [<<"1 ">>, z_trans:lookup_fallback(DisAgree, Context)]
+        iolist_to_binary([<<"1 ">>, z_trans:lookup_fallback(DisAgree, Context)])
     ],
-    Values = [ proplists:get_value(C, Vals, 0) || C <- Labels ],
+    LabelsPie = [
+        <<"5">>,
+        <<"4">>,
+        <<"3">>,
+        <<"2">>,
+        <<"1">>
+    ],
+    Values = [ get_value(C, Vals, 0) || C <- Labels ],
     Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
     Perc = [ round(V*100/Sum) || V <- Values ],
     #{
         <<"question">> => maps:get(<<"prompt">>, Block, undefined),
         <<"values">> => lists:zip(LabelsDisplay, Values),
         <<"type">> => <<"pie">>,
-        <<"data">> => [{L,P} || {L,P} <- lists:zip(LabelsDisplay, Perc), P /= 0]
+        <<"data">> => [{L,P} || {L,P} <- lists:zip(LabelsPie, Perc), P /= 0]
     }.
+
+get_value(C, [ {B, _} | _ ] = L, Default) when is_binary(B) ->
+    proplists:get_value(z_convert:to_binary(C), L, Default);
+get_value(C, L, Default) ->
+    proplists:get_value(C, L, Default).
 
 prep_answer_header(Block, _Context) ->
     maps:get(<<"name">>, Block, undefined).

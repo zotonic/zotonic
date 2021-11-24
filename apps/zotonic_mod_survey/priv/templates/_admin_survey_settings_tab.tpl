@@ -68,7 +68,7 @@
 						</label>
 						<label class="radio">
 		        			<input type="radio" name="survey_show_results" value="1" {% if id.survey_show_results == 1 %}checked{% endif %}>
-		        			{_ Aggregated results from all respondents (only results for multiple choice questions are shown) _}
+		        			{_ Aggregated results from all respondents _}
 						</label>
 					</div>
 				</div>
