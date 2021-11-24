@@ -14,8 +14,8 @@
 {% endblock %}
 
 {% block below_body %}
-    {% if not id.survey_is_disabled %}
-    	{% include "_survey_start.tpl" %}
+    {% if id.is_a.survey and not id.survey_is_disabled %}
+    	{% lazy template="_survey_start.tpl" id=id %}
     {% endif %}
     {% inherit %}
 {% endblock %}
