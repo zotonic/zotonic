@@ -1,5 +1,8 @@
-<div id="tinyinit">
-	{% lazy action={script script="z_editor_init();"} action={remove target="tinyinit"} %}
+<div id="tinyinit" style="padding: 10px 10px 0 30px;">
+	<div style="display: inline-block">
+		{% lazy action={script script="z_editor_init();"} action={remove target="tinyinit"} %}
+	</div>
+	{_ Initializing... _}
 </div>
 
 {% with id.blocks|survey_as_pages as pages %}

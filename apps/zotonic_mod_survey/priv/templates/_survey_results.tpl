@@ -5,8 +5,11 @@
 {% endif %}
 
 {% if id.survey_show_results == 2 and not is_aggregated %}
+
+    {# Personal results #}
+
     {% with m.survey.did_survey_results[id] as result %}
-        {% if id.survey_test_percentage %}
+        {% if id.survey_test_percentage %}. 
             {% with id|survey_test_max_points as max_points %}
                 {% if max_points %}
                     <h2>
@@ -45,6 +48,9 @@
         {% endfor %}
     {% endwith %}
 {% elseif id.survey_show_results or m.survey.is_allowed_results_download[id] %}
+
+    {# Aggregated results #}
+
 	{% for result, chart, question in m.survey.results[id] %}
 	<div class="survey_result">
         {% if question.is_hide_result %}
