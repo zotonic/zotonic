@@ -106,20 +106,19 @@ slice( Offset, Limit, Context ) ->
                 fun
                     (#{ publication_end := PubEnd }) when is_tuple(PubEnd), PubEnd < Now ->
                         false;
-                    (Url) ->
+                    (#{ loc := Loc } = Url) ->
                         case is_visible(Url, LangsB, AnonContext) of
                             true ->
-                                Map = #{ loc := Loc } = maps:from_list(Url),
-                                Map1 = Map#{
+                                Url1 = Url#{
                                     loc => z_context:abs_url(Loc, AnonContext)
                                 },
-                                Map2 = maybe_add_category_attrs(Map1, AnonContext),
-                                {true, Map2};
+                                Url2 = maybe_add_category_attrs(Url1, AnonContext),
+                                {true, Url2};
                             false ->
                                 false
                         end
                 end,
-                Rows),
+                lists:map(fun maps:from_list/1, Rows)),
             {ok, Rows1}
     end.
 
