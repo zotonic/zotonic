@@ -62,9 +62,6 @@
     %}
 {% else %}
     {% javascript %}
-        var pos = $('#{{ #q }}').position();
-        if (pos.top < $(window).scrollTop() + 100) {
-            $(window).scrollTop(pos+100);
-        }
+        $(window).scrollTop(0);
     {% endjavascript %}
 {% endif %}
