@@ -296,6 +296,7 @@ map_values(V) ->
 
 
 % See https://www.w3.org/TR/xmlschema-2/#built-in-datatypes
+%     https://schema.org/DataType
 to_value(V) when is_binary(V); is_number(V); is_boolean(V) ->
     V;
 to_value(null) ->
@@ -310,6 +311,16 @@ to_value(#{
     end;
 to_value(#{
         <<"@value">> := V,
+        <<"@type">> := <<"schema:Number">>
+    }) ->
+    try z_convert:to_integer(V)
+    catch _:_ ->
+        try z_convert:to_float(V)
+        catch _:_ -> error
+        end
+    end;
+to_value(#{
+        <<"@value">> := V,
         <<"@type">> := <<"xsd:integer">>
     }) ->
     try z_convert:to_integer(V)
@@ -317,29 +328,29 @@ to_value(#{
     end;
 to_value(#{
         <<"@value">> := V,
-        <<"@type">> := <<"xsd:boolean">>
-    }) ->
+        <<"@type">> := T
+    })
+    when T =:= <<"xsd:boolean">>;
+         T =:= <<"schema:Boolean">> ->
     try z_convert:to_bool(V)
     catch _:_ -> error
     end;
 to_value(#{
         <<"@value">> := V,
-        <<"@type">> := <<"xsd:float">>
-    }) ->
+        <<"@type">> := T
+    })
+    when T =:= <<"xsd:float">>;
+         T =:= <<"xsd:double">> ->
     try z_convert:to_float(V)
     catch _:_ -> error
     end;
 to_value(#{
         <<"@value">> := V,
-        <<"@type">> := <<"xsd:double">>
-    }) ->
-    try z_convert:to_float(V)
-    catch _:_ -> error
-    end;
-to_value(#{
-        <<"@value">> := V,
-        <<"@type">> := <<"xsd:datetime">>
-    }) ->
+        <<"@type">> := T
+    })
+    when T =:= <<"schema:DateTime">>;
+         T =:= <<"schema:Date">>;
+         T =:= <<"xsd:datetime">> ->
     to_date(V);
 to_value(#{
         <<"@language">> := Lang,
