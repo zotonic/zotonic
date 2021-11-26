@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-26 15:38\n"
+"PO-Revision-Date: 2021-11-26 15:55\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgstr "Verboden toegang te krijgen tot de externe bron-URL."
 
 #: apps/zotonic_core/src/support/z_media_import.erl:200
 msgid "Page Import"
-msgstr "Pagina importeren"
+msgstr "Pagina import"
 
 #: apps/zotonic_core/src/support/z_fetch.erl:107
 msgid "The remote server can not handle this URL."
@@ -1315,7 +1315,7 @@ msgstr "Flush systeemcaches"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:137
 msgid "Follow connections and import all (deep copy)."
-msgstr "Volg verbindingen en importeer alles (deep copy)."
+msgstr "Volg verbindingen en importeer alles (diepe kopie)."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:49
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
@@ -1518,7 +1518,7 @@ msgstr "Bewerkt:"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:13
 msgid "Move block down"
-msgstr "Blok naar beneden verplaatsen"
+msgstr "Verplaats blok omlaag"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:12
 msgid "Move block up"
@@ -1972,7 +1972,7 @@ msgstr "De pagina"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:65
 msgid "The page will stay, but without the media item."
-msgstr "De pagina blijft, maar zonder het media-item."
+msgstr "De pagina blijft over, maar zonder het media-item."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
@@ -4628,7 +4628,7 @@ msgstr "De onderstaande test controleert de verbinding tussen jouw machine, Goog
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:78
 msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing packets."
-msgstr "Er mogen geen time-outs zijn, als er time-outs zijn, verliest uw internetverbinding pakketten."
+msgstr "Er mogen geen time-outs zijn. Als er time-outs zijn, verliest uw internetverbinding pakketten."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:135
 msgid "This tests the authentication with the server."
@@ -4661,7 +4661,7 @@ msgstr "Ja"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
 msgid "Your browser as it identifies itself to our server and your IP address. This is essential information for the help desk, but we do not store any personal data."
-msgstr "Uw browser zoals deze zich identificeert met onze server en uw IP-adres. Dit is essentiële informatie voor de helpdesk, maar wij slaan geen persoonsgegevens op."
+msgstr "Jouw browser zoals deze zich identificeert aan onze server en jouwIP-adres. Dit is essentiële informatie voor de helpdesk, maar wij slaan geen persoonsgegevens op."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
@@ -7158,7 +7158,7 @@ msgstr "Loskoppelen van"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:20
 msgid "Do you want to connect your <b>{local}</b> account to <b>{remote}</b>?"
-msgstr "Wilt u uw <b>{local}</b> account koppelen aan <b>{remote}</b>?"
+msgstr "Wilt je jouw <b>{local}</b> account koppelen aan <b>{remote}</b>?"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:16
 msgid "Do you want to disconnect your account?"
