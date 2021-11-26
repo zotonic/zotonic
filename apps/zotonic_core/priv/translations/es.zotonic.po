@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-23 12:34\n"
+"PO-Revision-Date: 2021-11-26 15:37\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -220,7 +220,7 @@ msgstr "¿Está seguro de que quiere devolver todas las reglas ACL a sus version
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:80./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:116./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:91./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:135./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:143
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:90./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:69./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:153./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:69./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:189
 msgid "Cancel"
@@ -251,7 +251,7 @@ msgstr "Cambiar categoría y/o grupo de contenido..."
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:16
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:24
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:26
-#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:6
+#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:13./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:20./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:54./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:59./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:26./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:31./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:15./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:20./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:25
 msgid "Close"
 msgstr "Cerrar"
 
@@ -318,7 +318,7 @@ msgstr "Definir quién puede ver o editar esta página."
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:84./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:99
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:91./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/src/mod_survey.erl:102
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/src/mod_survey.erl:102
 msgid "Delete"
 msgstr "Borrar"
 
@@ -457,7 +457,6 @@ msgstr "Mover a otro"
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:13
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:6
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:11
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:8
 msgid "Need more help?"
 msgstr "¿Necesita más ayuda?"
 
@@ -901,7 +900,7 @@ msgid "Auth"
 msgstr "Autentificación"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:151
-#: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:8./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:42
+#: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:28./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:50./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:26
 msgid "Back"
 msgstr "Atrás"
 
@@ -1021,7 +1020,7 @@ msgid "Count"
 msgstr "Cuenta"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:86
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:103
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106
 msgid "Country"
 msgstr "País"
 
@@ -1294,7 +1293,7 @@ msgid "Find Page"
 msgstr "Conseguir pagina"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:133
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:210
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:213
 msgid "Find page"
 msgstr "Conseguir pagina"
 
@@ -1325,7 +1324,7 @@ msgid "Go back."
 msgstr "Volver hacia atrás."
 
 #: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:21./apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:22./apps/zotonic_mod_admin/src/mod_admin.erl:174
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:116
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:119
 msgid "Header"
 msgstr "Cabecera"
 
@@ -3800,7 +3799,7 @@ msgid "Close window"
 msgstr "Cerrar ventana"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:92./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
 #: apps/zotonic_mod_wires/src/actions/action_wires_confirm.erl:36
 msgid "Confirm"
 msgstr "Confirmar"
@@ -3943,7 +3942,7 @@ msgid "Minimum characters:"
 msgstr "Caracteres mínimos:"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:184
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:67
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:74./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:81
 msgid "Next"
 msgstr "Siguiente"
 
@@ -4527,7 +4526,7 @@ msgid "MQTT Bridge Connection Status"
 msgstr "Estado de la conexión del puente MQTT"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:145./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
 msgid "No"
 msgstr "No"
 
@@ -4537,7 +4536,7 @@ msgstr "No conectado"
 
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_alert.tpl:5./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:8./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:11
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:89./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:15
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:68./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:15
 msgid "OK"
 msgstr "Aceptar"
 
@@ -4654,7 +4653,7 @@ msgid "Websocket Support?"
 msgstr "¿Soporte de Websocket?"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:251./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 msgid "Yes"
 msgstr "Sí"
 
@@ -5322,7 +5321,7 @@ msgid "Calendar"
 msgstr "Calendario"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:19./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:31./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:39
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:128./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:54./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:37
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 msgid "Download CSV"
 msgstr "Descargar CSV"
 
@@ -5331,7 +5330,7 @@ msgid "Download Event"
 msgstr "Descargar evento"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:20./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:32./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:40
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:132./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:58./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:41
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:24
 msgid "Download Excel"
 msgstr "Descargar Excel"
 
@@ -5999,7 +5998,7 @@ msgid "Email status"
 msgstr "Estado del correo electrónico"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
-#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:17./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:36
+#: apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:12./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:36
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:17
 msgid "Failed"
 msgstr "Falló"
@@ -7937,15 +7936,15 @@ msgstr "Es necesario ser un administrador para solicitar certificados."
 msgid "not reachable or local IP"
 msgstr "no se puede alcanzar o la IP local"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:25
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:28
 msgid "Add a question or block"
 msgstr "Añadir una pregunta o bloquear"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:120
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:123
 msgid "Add an introduction or explanation including uploaded or embedded images or video's. Add full width blocks or set a percentage to combine blocks."
 msgstr "Agregue una introducción o explicación que incluya imágenes o videos cargados o incrustados. Agregue bloques de ancho completo o establezca un porcentaje para combinar bloques."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:13
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:16
 msgid "Add page"
 msgstr "Añadir página"
 
@@ -7973,11 +7972,11 @@ msgstr "Añade la pregunta después"
 msgid "Add questions by adding blocks with the menu."
 msgstr "Agregar preguntas añadiendo bloques con el menú."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:85./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:57
-msgid "Aggregated results from all respondents (only results for multiple choice questions are shown)"
-msgstr "Resultados agregados de todos los encuestados (sólo se muestran los resultados de las preguntas de opción múltiple)"
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
+msgid "Aggregated results from all respondents"
+msgstr "Resultados agregados de todos los encuestados"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:69
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:72
 msgid "Agree"
 msgstr "Estoy de acuerdo"
 
@@ -7985,11 +7984,11 @@ msgstr "Estoy de acuerdo"
 msgid "All survey entries up until"
 msgstr "Todas las entradas de la encuesta hasta"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:142
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:145
 msgid "Another page, video or image."
 msgstr "Otra página, video o imagen."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:75./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:76./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:77./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:67
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:78./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:79./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:80./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:67
 msgid "Answer"
 msgstr "Respuesta"
 
@@ -8001,7 +8000,7 @@ msgstr "Respondiendo"
 msgid "Answers, one per line"
 msgstr "Respuestas, una por linea"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:83
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:86
 msgid "Apple"
 msgstr "manzana"
 
@@ -8009,15 +8008,15 @@ msgstr "manzana"
 msgid "Apple = Red"
 msgstr "Manzana = rojo"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:95./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:21
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:74./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:21
 msgid "Are you sure you want to delete this page jump?"
 msgstr "¿Estas seguro de querer eliminar esta pagina?"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:93./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:19
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:72./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:19
 msgid "Are you sure you want to delete this page?<br/>This also deletes all questions on this page."
 msgstr "¿Está seguro que desea eliminar esta página?<br/>esto también borrara todas las preguntas en esta página."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:94./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:20
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:73./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:20
 msgid "Are you sure you want to delete this question?"
 msgstr "¿Estas seguro de querer eliminar esta pregunta?"
 
@@ -8025,11 +8024,11 @@ msgstr "¿Estas seguro de querer eliminar esta pregunta?"
 msgid "Are you sure you want to delete this result?"
 msgstr "¿Estas seguro de querer eliminar este resultado?"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:61./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:63./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:65
 msgid "Are you sure you want to stop without saving?"
 msgstr "¿Estás seguro de que quieres parar sin guardar?"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:108./apps/zotonic_mod_survey/src/mod_survey.erl:157
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:157
 msgid "Button"
 msgstr "Botón"
 
@@ -8037,13 +8036,17 @@ msgstr "Botón"
 msgid "Button style"
 msgstr "Estilo de botón"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:109./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:18
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:18
 msgid "Button text"
 msgstr "Texto del botón"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:68
 msgid "Category to choose from"
 msgstr "Selección de categorías"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_charts.tpl:6
+msgid "Charts"
+msgstr "Gráficos"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:11
 msgid "Check the answer in the admin."
@@ -8053,7 +8056,7 @@ msgstr "Verificar la respuesta en el administrador."
 msgid "Choices"
 msgstr "Opciones"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:61./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:63./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:65
 msgid "Continue"
 msgstr "Continuar"
 
@@ -8061,7 +8064,7 @@ msgstr "Continuar"
 msgid "Country select"
 msgstr "Seleccionar país"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:108
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111
 msgid "Create jumps to other questions or blocks."
 msgstr "Crea saltos a otras preguntas o bloques."
 
@@ -8094,15 +8097,11 @@ msgstr "Eliminar salto de página"
 msgid "Delete question"
 msgstr "Eliminar pregunta"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:34
-msgid "Disabled, hide the survey form"
-msgstr "Discapacitados, ocultar el formulario de encuesta"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:63
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:66
 msgid "Disagree"
 msgstr "No estar de acuerdo"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:130./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:134./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:56./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:60./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:22./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:26
 msgid "Download will start in the background. Please check your download window."
 msgstr "La descarga comenzará en segundo plano. Por favor revise su ventana de descarga."
 
@@ -8130,15 +8129,15 @@ msgstr "Ejemplo:"
 msgid "Explanation"
 msgstr "Explicación"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:28./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:8./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:8./apps/zotonic_mod_survey/src/questions/survey_q_truefalse.erl:61
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:56./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:28./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:8./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:8./apps/zotonic_mod_survey/src/questions/survey_q_truefalse.erl:61
 msgid "False"
 msgstr "Falso"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:4
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:6
 msgid "Feedback if correct"
 msgstr "Retroalimentación si es correcta"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:11
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:12./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:13
 msgid "Feedback if wrong"
 msgstr "Retroalimentación si es incorrecta"
 
@@ -8146,15 +8145,19 @@ msgstr "Retroalimentación si es incorrecta"
 msgid "File upload"
 msgstr "Carga de archivos"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:58./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:36
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:38
 msgid "Fill in"
 msgstr "Rellene"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:50
+msgid "Fill in and edit later after saving (one set of results)"
+msgstr "Complete y edite más tarde después de guardar (un conjunto de resultados)"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:95./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
 msgid "Fill in the gaps"
 msgstr "Rellena los huecos"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:130
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:133
 msgid "First page in category"
 msgstr "Primera página en la categoría"
 
@@ -8166,31 +8169,27 @@ msgstr "Para un examen o prueba, marque las respuestas correctas con un \"*\". P
 msgid "Go to question"
 msgstr "Ir a la pregunta"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:114./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:130
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:159
 msgid "Handle this survey with"
 msgstr "Manejar esta encuesta con"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:138
 msgid "Handling"
 msgstr "Manejo"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:8
-msgid "Help about surveys"
-msgstr "Ayuda sobre encuestas"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:63./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:71./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:63
 msgid "Hide from results"
 msgstr "Esconderse de los resultados"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:42./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:90
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:94
 msgid "Hide progress information"
 msgstr "Ocultar información de progreso"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:29
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:26
 msgid "Hide the user’s id or browser-id from result exports"
 msgstr "Ocultar el id de usuario o id del navegador del resultado de exportaciones"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:95
 msgid "I am"
 msgstr "Yo soy"
 
@@ -8202,13 +8201,17 @@ msgstr "Tengo [age] años. Me gusta el helado [helado = vainilla | fresa | choco
 msgid "If you want to store <i>value</i> but show <i>answer</i>, use value#answer. E.g. <i>2019#Graduated in 2019</i> will store 2019 in the results."
 msgstr "Si quieres almacenar <i>valor</i> pero mostrar <i>respuesta</i>, usa valor#respuesta. Por ejemplo, <i>2019#Graduado en 2019</i> almacenará 2019 en los resultados."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:26./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:23
 msgid "Immediately start with the questions, no “Start” button"
 msgstr "Iniciar inmediatamente con las preguntas. No hay botón de \"Inicio\""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:39
 msgid "Informational"
 msgstr "Informativo"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:5
+msgid "Initializing..."
+msgstr "Inicializando ..."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:26
 msgid "Input value placeholder text"
@@ -8230,10 +8233,6 @@ msgstr "Inverso"
 msgid "Jump to a question on a next page."
 msgstr "Saltar a una pregunta en la siguiente página."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:103
-msgid "Leave empty if there are no test questions."
-msgstr "Dejar en blanco si no hay preguntas de prueba."
-
 #: apps/zotonic_mod_survey/src/mod_survey.erl:149
 msgid "Likert"
 msgstr "Likert"
@@ -8242,19 +8241,15 @@ msgstr "Likert"
 msgid "Long answer"
 msgstr "Respuesta larga"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:72
-msgid "Mail filled in surveys to"
-msgstr "El correo rellenado de las encuestas a"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:112./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:113
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:141./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:142
 msgid "Mail results to"
 msgstr "Resultados del correo"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:81./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:84./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
 msgid "Matching question"
 msgstr "Pregunta coincidente"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:84
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
 msgid "Melk"
 msgstr "Melk"
 
@@ -8274,23 +8269,23 @@ msgstr "Múltiples respuestas posibles"
 msgid "Multiple choice"
 msgstr "Selección múltiple"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:76./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:16
 msgid "Multiple choice or quiz question"
 msgstr "Pregunta de opción múltiple o cuestionario"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:62./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:41
-msgid "Multiple entries per user/browser"
-msgstr "Entradas múltiples por usuario/navegador"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:33
 msgid "Multiple page break blocks are merged into one."
 msgstr "Varios bloques de salto de página se fusionan en solo uno."
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:46
+msgid "Multiple times per user/browser (each time with new results)"
+msgstr "Varias veces por usuario / navegador (cada vez con nuevos resultados)"
+
 #: apps/zotonic_mod_survey/src/mod_survey.erl:153
 msgid "Narrative"
 msgstr "Narrativa"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:27./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:46
+#: apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:22./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:46
 msgid "Needed for pass"
 msgstr "Necesario para el siguiente paso"
 
@@ -8298,7 +8293,7 @@ msgstr "Necesario para el siguiente paso"
 msgid "New result:"
 msgstr "Nuevo resultado:"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:132
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:135
 msgid "Next page in category"
 msgstr "Siguiente página en la categoría"
 
@@ -8306,11 +8301,7 @@ msgstr "Siguiente página en la categoría"
 msgid "Numeric input, show totals for this field in the survey results."
 msgstr "Entrada numérica. Mostrar los totales para este cmpo en los resultados de la encuesta."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:65./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:44
-msgid "Once and allow editing afterwards"
-msgstr "Una sola vez y permitir ediciones después"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:60./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:39
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:42
 msgid "Once only per user/browser"
 msgstr "Una sola vez por usuario/navegador"
 
@@ -8322,7 +8313,7 @@ msgstr "Una respuesta por línea."
 msgid "Only accept images."
 msgstr "Solo acepta imágenes."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:128
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:131
 msgid "Options from a page category"
 msgstr "Opciones de una categoría de página"
 
@@ -8334,11 +8325,11 @@ msgstr "Salto de página"
 msgid "Page jump condition"
 msgstr "Condición de salto de pagina"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:15./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:541
+#: apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:541
 msgid "Passed"
 msgstr "Pasado"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:68
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:122
 msgid "Passing score"
 msgstr "Puntaje de aprobación"
 
@@ -8346,7 +8337,7 @@ msgstr "Puntaje de aprobación"
 msgid "Percent"
 msgstr "Porcentaje"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:31
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:39
 msgid "Please fill in all the required fields."
 msgstr "Por favor rellene todos los campos requeridos."
 
@@ -8354,7 +8345,7 @@ msgstr "Por favor rellene todos los campos requeridos."
 msgid "Please make a choice."
 msgstr "Por favor elija una opción."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:136
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:139
 msgid "Please upload your file."
 msgstr "Por favor, suba el archivo."
 
@@ -8362,7 +8353,7 @@ msgstr "Por favor, suba el archivo."
 msgid "Please upload your image."
 msgstr "Por favor, suba la imagen."
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:23./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:42
+#: apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:18./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:42
 msgid "Points"
 msgstr "Puntos"
 
@@ -8374,11 +8365,11 @@ msgstr "Puntos por respuesta"
 msgid "Primary"
 msgstr "Primario"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:140./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:66./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:49
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:33
 msgid "Printable list"
 msgstr "Lista imprimible"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:85
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:89
 msgid "Progress"
 msgstr "Progreso"
 
@@ -8394,15 +8385,15 @@ msgstr "Pregunta"
 msgid "Question label"
 msgstr "Etiqueta de pregunta"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:16
 msgid "Question with a 5-point scale"
 msgstr "Pregunta con una escala de 5 puntos"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:16
 msgid "Question with a long answer"
 msgstr "Pregunta con una respuesta larga"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:33./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:16
 msgid "Question with a short answer"
 msgstr "Pregunta con una respuesta corta"
 
@@ -8418,7 +8409,7 @@ msgstr "Cuestionario o test de preguntas"
 msgid "Randomize answers"
 msgstr "Aleatorizar las respuestas"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:84
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
 msgid "Red"
 msgstr "Rojo"
 
@@ -8426,11 +8417,15 @@ msgstr "Rojo"
 msgid "Required, this question must be answered."
 msgstr "Requerido, esta pregunta debe ser respondida."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:6./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:4./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:6./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:6./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:6./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results"
 msgstr "Resultados"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:88./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:60
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:34
+msgid "Results editor"
+msgstr "Editor de resultados"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:68
 msgid "Results from the respondent"
 msgstr "Los resultados del demandado"
 
@@ -8442,7 +8437,7 @@ msgstr "Guardado"
 msgid "Score"
 msgstr "Puntuación"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:131
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:134
 msgid "Second page in category"
 msgstr "Siguiente pagina en la categoría"
 
@@ -8450,19 +8445,15 @@ msgstr "Siguiente pagina en la categoría"
 msgid "Select country"
 msgstr "Seleccionar país"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:100./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:13
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:103./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:13
 msgid "Select your country"
 msgstr "Seleccione su país"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:30
-msgid "Send confirmation to respondent (please add a question named <i>email</i>)"
-msgstr "Enviar confirmación al encuestado (por favor añada una pregunta con el nombre de <i>email</i>)"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:123
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:152
 msgid "Send confirmation with the results to the email address entered in this form (you must include a question labeled “email”)."
 msgstr "Enviar confirmación con los resultados a la dirección de correo electrónico introducida en este formulario (debe incluir una pregunta etiquetada con \"email\")."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:73./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:115
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:144
 msgid "Separate multiple email addresses with a comma."
 msgstr "Separar varias direcciones de correo electrónico con una coma."
 
@@ -8470,29 +8461,25 @@ msgstr "Separar varias direcciones de correo electrónico con una coma."
 msgid "Short answer"
 msgstr "Mostrar respuesta"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:138./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:64./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:47
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:31
 msgid "Show email addresses"
 msgstr "Mostrar direcciones de correo electrónico"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:50./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:102
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:106
 msgid "Show progress bar"
 msgstr "Mostrar barra de progreso"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:46./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:100
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Mostrar información de progreso, como \"<em>Pregunta 3/10</em>\""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:63./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:46
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:30
 msgid "Show results"
 msgstr "Mostrar resultados"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:29
+#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:42
 msgid "Show results (admin only)"
 msgstr "Mostrar resultados (sólo el administrador)"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:137
-msgid "Show survey results"
-msgstr "Mostrar resultados de la encuesta"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:47
 msgid "Single answer possible"
@@ -8506,7 +8493,7 @@ msgstr "Inicio"
 msgid "Stop"
 msgstr "Alto"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:51./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:59./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:61./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:63./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:65
 msgid "Stop without saving"
 msgstr "Deténgase sin guardar"
 
@@ -8518,7 +8505,7 @@ msgstr "Totalmente de acuerdo"
 msgid "Strongly Disagree"
 msgstr "Muy en desacuerdo"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:65
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:74./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:79
 msgid "Submit"
 msgstr "Enviar"
 
@@ -8533,10 +8520,6 @@ msgstr "Resta puntos por respuestas erróneas (en total nunca menos de 0)"
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Success"
 msgstr "Éxito"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:6
-msgid "Survey"
-msgstr "Encuesta"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:146
 msgid "Survey Questions"
@@ -8554,15 +8537,11 @@ msgstr "Editor de encuesta"
 msgid "Survey result deleted."
 msgstr "Mostrar resultados de la encuesta"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:141
-msgid "Survey results editor"
-msgstr "Editor de los resultados de la encuesta"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:96./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:97
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:117
 msgid "Test pass percentage"
 msgstr "Porcentaje de aprobación de la prueba"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:120
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:123
 msgid "Text, image, video"
 msgstr "Texto, imagen, video"
 
@@ -8570,7 +8549,7 @@ msgstr "Texto, imagen, video"
 msgid "Thank you for filling in our survey."
 msgstr "Gracias por rellenar nuestra encuesta."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:83./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:55
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:64
 msgid "Thank you text only"
 msgstr "Gracias sólo texto"
 
@@ -8603,7 +8582,7 @@ msgstr "Esta bloque señala un paro en el flujo. El usuario no puede continuar y
 msgid "This is a result for:"
 msgstr "Este es un resultado por:"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:129
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "Este es el porcentaje necesario para aprobar un cuestionario o examen. Solo se usa si ha agregado preguntas de prueba o cuestionario."
 
@@ -8627,15 +8606,15 @@ msgstr "Preguntar"
 msgid "Toggle outline view"
 msgstr "Alternar vista de esquema"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:29./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:66
+#: apps/zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:30./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:66
 msgid "Totals"
 msgstr "Resultados"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:23./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:7./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:7./apps/zotonic_mod_survey/src/questions/survey_q_truefalse.erl:63
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:55./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:23./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:7./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:7./apps/zotonic_mod_survey/src/questions/survey_q_truefalse.erl:63
 msgid "True"
 msgstr "Cierto"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
 msgid "True or false question"
 msgstr "Pregunta verdadera o falsa"
 
@@ -8647,11 +8626,11 @@ msgstr "Verdadero/Falso"
 msgid "Validation"
 msgstr "Validación"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:83
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:86
 msgid "Wagner"
 msgstr "Wagner"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:81./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:52
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:60
 msgid "When finished show"
 msgstr "Cuando termine de mostrar"
 
@@ -8659,7 +8638,7 @@ msgstr "Cuando termine de mostrar"
 msgid "When no condition is true then the question following this break will be the next page."
 msgstr "Cuando una condición es verdadera entonces la pregunta siguiente a esta interrupción sera la página siguiente."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
 msgid "Yes or no question"
 msgstr "Si o no pregunta"
 
@@ -8671,21 +8650,17 @@ msgstr "Si/No"
 msgid "You already filled this in, but you can change your previous answers."
 msgstr "Ya usted rellenó este campo, pero usted puede cambiar sus respuestas anteriores."
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:21
+#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:22
 msgid "You already filled this in."
 msgstr "Ya has rellenado esto."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:754
+#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:796
 msgid "You are not allowed to change these results."
 msgstr "No tiene permitido cambiar estos resultados."
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:74
+#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:45
 msgid "You are not allowed to see the results of this survey."
 msgstr "No tiene permitido ver los resultados en esta encuesta."
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:8
-msgid "You can create your survey by adding blocks with questions below the body."
-msgstr "Puede crear su encuesta agregando bloques con las preguntas debajo del cuerpo."
 
 #: apps/zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:21
 msgid "You must have edit permission on the survey to edit its results."
@@ -8695,19 +8670,19 @@ msgstr "Debes tener permiso de edición en la encuesta para editar sus resultado
 msgid "You need to give a name to every question."
 msgstr "Debes dar un nombre para cada pregunta."
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:31./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
+#: apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
 msgid "Your result"
 msgstr "Su resultado"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:95
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:98
 msgid "chocolate"
 msgstr "chocolate"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:33
 msgid "date"
 msgstr "fecha"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:33
 msgid "email"
 msgstr "Email"
 
@@ -8715,7 +8690,7 @@ msgstr "Email"
 msgid "go to"
 msgstr "ir a"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:96
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:99
 msgid "ice cream and my favorite color is"
 msgstr "helado y mi color favorito es"
 
@@ -8747,7 +8722,7 @@ msgstr "debe ser una dirección de correo electrónico"
 msgid "name >= 2"
 msgstr "nombre >= 2"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:33
 msgid "number"
 msgstr "número"
 
@@ -8755,7 +8730,7 @@ msgstr "número"
 msgid "one per line"
 msgstr "uno por línea"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:33
 msgid "phone number"
 msgstr "número de teléfono"
 
@@ -8767,11 +8742,11 @@ msgstr "pregunta == 1"
 msgid "select…"
 msgstr "seleccionar…"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:33
 msgid "text"
 msgstr "texto"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:94
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:97
 msgid "years old. I like"
 msgstr "edad. Me gusta"
 
