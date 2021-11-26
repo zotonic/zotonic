@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-26 16:08\n"
+"PO-Revision-Date: 2021-11-26 16:22\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -30,7 +30,7 @@ msgstr "Pagina import"
 
 #: apps/zotonic_core/src/support/z_fetch.erl:107
 msgid "The remote server can not handle this URL."
-msgstr "De externe server kan deze URL niet aan."
+msgstr "De externe server kan deze URL niet verwerken."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:111
 msgid "The remote server for the URL is having problems."
@@ -804,7 +804,7 @@ msgstr "Nieuw media-item"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:110
 msgid "Add media content"
-msgstr "Media-inhoud toevoegen"
+msgstr "Media toevoegen"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:13
 msgid "Add media to body"
@@ -1117,7 +1117,7 @@ msgstr "Schijven"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:129
 msgid "Do not import connections."
-msgstr "Importeer geen verbindingen."
+msgstr "Geen verbindingen importeren."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
 msgid "Do you want to remove this block?"
@@ -1224,7 +1224,7 @@ msgstr "Fout bij het maken van de pagina."
 
 #: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:42
 msgid "Error importing page from the remote server."
-msgstr "Fout bij het importeren van pagina van de externe server."
+msgstr "Fout bij het importeren van de pagina van de externe server."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:184
 msgid "Error uploading the file."
@@ -7058,7 +7058,7 @@ msgstr "Importeren van inhoud van de externe website toestaan"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:56./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:67
 msgid "Allow users on the remote website to authenticate here"
-msgstr "Sta gebruikers op de externe website toe om zich hier te verifiëren"
+msgstr "Sta gebruikers op de externe website toe zich hier te authenticeren"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:16
 msgid "Allow users registered on the remote website to authenticate on this website."
@@ -7086,7 +7086,7 @@ msgstr "Weet je zeker dat je deze app wilt verwijderen?"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:87./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:101
 msgid "Are you sure you want to delete this Consumer App?"
-msgstr "Weet u zeker dat u deze consumentenapp wilt verwijderen?"
+msgstr "Weet je zeker dat u deze consumenten-app wilt verwijderen?"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:13
 msgid "Ask users on this website for their credentials to authenticate on their website or App."
@@ -7106,11 +7106,11 @@ msgstr "URL autoriseren"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:16
 msgid "Authorize access to your account"
-msgstr "Toegang tot uw account autoriseren"
+msgstr "Toegang tot uw account toestaan"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:7
 msgid "Be careful, this access token gives full access to your account."
-msgstr "Wees voorzichtig, dit toegangstoken geeft volledige toegang tot uw account."
+msgstr "Waarschuwing: dit toegangstoken geeft volledige toegang tot je account."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
 msgid "Connect with"
@@ -7126,7 +7126,7 @@ msgstr "Kan het toegangstoken niet genereren."
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:65./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:77./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:84
 msgid "Could not insert the App."
-msgstr "Kan de app niet plaatsen."
+msgstr "Kan de app niet invoegen."
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:125./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:149
 msgid "Could not insert the Consumer."
@@ -7210,11 +7210,11 @@ msgstr "Hier is het nieuwe toegangstoken."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:63./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:74
 msgid "If the remote website is a Zotonic website then you can leave the two URLs below empty."
-msgstr "Als de externe website een Zotonic-website is, kunt u de twee onderstaande URL's leeg laten."
+msgstr "Als de externe website een Zotonic-website is, kan je de twee onderstaande URL's leeg laten."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:51
 msgid "If you have already a token then it will be replaces with the new one."
-msgstr "Als u al een token heeft, wordt deze vervangen door de nieuwe."
+msgstr "Als je  al een token hebt, wordt deze vervangen door de nieuwe."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:15
 msgid "Import content from the remote website to this website."
@@ -7222,7 +7222,7 @@ msgstr "Importeer inhoud van de externe website naar deze website."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
-msgstr "Log in op {remote} met uw {local} account."
+msgstr "Log in op {remote} met je {local} account."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:33
 msgid "Log in with"
