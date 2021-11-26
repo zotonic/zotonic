@@ -1,3 +1,5 @@
+{# Shown after survey - shows thank you and optionally the results #}
+
 {% if inline %}
 	{% include "_survey_end.tpl" %}
 
@@ -38,6 +40,31 @@
 		{% endif %}
 	</div>
 	{% endfor %}
+
 {% else %}
 	<p>{_ You are not allowed to see the results of this survey. _}</p>
+{% endif %}
+
+{% if viewer == 'overlay' %}
+    {% javascript %}
+        if ($(".overlay-content-wrapper").length > 0) {
+            $(".overlay-content-wrapper").get(0).scrollTo(0, 0);
+        }
+    {% endjavascript %}
+    <button id="{{ #survey_close }}" class="btn btn-lg btn-default">{_ Close _}</button>
+    {% wire id=#survey_close
+            action={overlay_close}
+    %}
+{% elseif viewer == 'dialog' %}
+    <button id="{{ #survey_close }}" class="btn btn-lg btn-default">{_ Close _}</button>
+    {% wire id=#survey_close
+            action={dialog_close}
+    %}
+{% else %}
+    {% javascript %}
+        var pos = $('#{{ #q }}').position();
+        if (pos.top < $(window).scrollTop() + 100) {
+            $(window).scrollTop(pos+100);
+        }
+    {% endjavascript %}
 {% endif %}
