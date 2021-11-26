@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-26 16:22\n"
+"PO-Revision-Date: 2021-11-26 16:35\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -7270,7 +7270,7 @@ msgstr "Alleen beheerders kunnen OAuth2-consumenten bekijken."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:92
 msgid "Register"
-msgstr "Register"
+msgstr "Registreer"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:23./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:27
 msgid "Register a new website"
