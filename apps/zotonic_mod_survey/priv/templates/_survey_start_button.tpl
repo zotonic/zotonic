@@ -21,6 +21,29 @@
             {% wire id=#survey_close
                     action={dialog_close}
             %}
+        {% else %}
+            <a href="#" id="{{ #close }}" style="display:none" class="btn btn-lg btn-default">{_ Close _}</a>
+            <a href="#" id="{{ #back_history }}" style="display:none" class="btn btn-lg btn-default">{_ Back _}</a>
+            {% javascript %}
+                if (window.opener) {
+                    $('#{{ #close }}')
+                        .show()
+                        .click(function() {
+                            try {
+                                window.opener.z_reload();
+                            } catch (_E) { };
+                            window.close();
+                            return false;
+                        });
+                } else if (window.history.length > 0) {
+                    $('#{{ #back_history }}')
+                        .show()
+                        .click(function() {
+                            window.history.go(-1);
+                            return false;
+                        });
+                }
+            {% endjavascript %}
         {% endif %}
     </p>
 {% endif %}
