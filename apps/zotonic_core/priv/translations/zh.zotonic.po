@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-11-26 15:23\n"
+"PO-Revision-Date: 2021-11-26 15:37\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -8042,7 +8042,7 @@ msgstr "从中选择一个分类"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_charts.tpl:6
 msgid "Charts"
-msgstr ""
+msgstr "图表"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:11
 msgid "Check the answer in the admin."
@@ -8207,7 +8207,7 @@ msgstr "提示"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:5
 msgid "Initializing..."
-msgstr ""
+msgstr "正在初始化..."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:26
 msgid "Input value placeholder text"
@@ -8419,7 +8419,7 @@ msgstr "查看结果"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:34
 msgid "Results editor"
-msgstr ""
+msgstr "结果编辑器"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:68
 msgid "Results from the respondent"
