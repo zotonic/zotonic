@@ -11,7 +11,7 @@
         <table class="table table-compact pull-left" style="width:auto">
             {% for label,value in chart.values %}
                 <tr>
-                    <th>
+                    <td>
                         {% with chart.answers[label] as text %}
                             {% if text %}
                                 {{ label }}) {{ text }}
@@ -19,14 +19,17 @@
                                 {{ label }}
                             {% endif %}
                         {% endwith %}
-                    </th>
+                    </td>
                     <td>
                         {{ value }}
                     </td>
                </tr>
             {% endfor %}
             {% if chart.has_totals %}
-                <tr><th>{_ Totals _}</th><td>{{ chart.totals }}</td></tr>
+                <tr>
+                    <th>{_ Totals _}</th>
+                    <th>{{ chart.totals }}</th>
+                </tr>
             {% endif %}
         </table>
     </div>

@@ -58,6 +58,8 @@ survey_prepare_thurstone_1(Blk, IsRandom, Context) ->
 maybe_randomize(false, List) -> List;
 maybe_randomize(true, List) -> z_utils:randomize(List).
 
+split_lines(undefined) ->
+    [];
 split_lines(Text) ->
     Options = binary:split(z_string:trim(Text), <<"\n">>, [global]),
     Lines = [ z_string:trim(Option) || Option <- Options ],

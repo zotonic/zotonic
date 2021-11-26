@@ -32,6 +32,8 @@ survey_prepare_narrative(Blk, Context) ->
     }.
 
 
+parse(undefined) ->
+    {[], []};
 parse(Text) ->
     parse(Text, [], []).
 
