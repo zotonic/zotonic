@@ -113,7 +113,7 @@ categories(Context) ->
 partition(Count, PageSize) ->
     partition(1, Count, PageSize, []).
 
-partition(Start, Count, _PageSize, Acc) when Start >= Count ->
+partition(Start, Count, _PageSize, Acc) when Start > Count ->
     lists:reverse(Acc);
 partition(Start, Count, PageSize, Acc) ->
     P = #{

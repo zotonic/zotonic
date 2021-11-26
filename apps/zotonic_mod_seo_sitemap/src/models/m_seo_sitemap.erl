@@ -81,19 +81,21 @@ max_id( Context ) ->
 %% All locations are made into absolute urls with the correct hostname.
 %% As entries are filtered on publication_end, their language and resource
 %% visibility, this might return less entries than the Limit amount requested.
--spec slice( pos_integer(), pos_integer(), z:context() ) -> {ok, list( map() )} | {error, empty}.
+-spec slice( pos_integer(), pos_integer(), z:context() ) -> {ok, list( map() )} | {error, empty | term()}.
 slice( Offset, Limit, Context ) ->
-    Rows = z_db:assoc("
+    case z_db:qmap("
         select *
         from seo_sitemap
         order by id desc
         offset $1
         limit $2",
         [ Offset-1, Limit ],
-        Context),
-    case Rows of
-        [] -> {error, empty};
-        _ ->
+        [ {keys, atom} ],
+        Context)
+    of
+        {ok, []} ->
+            {error, empty};
+        {ok, Rows} ->
             Now = calendar:universal_time(),
             AnonContext = z_context:new( z_context:site(Context) ),
             Langs = z_language:enabled_language_codes(Context),
@@ -102,20 +104,21 @@ slice( Offset, Limit, Context ) ->
                 fun
                     (#{ publication_end := PubEnd }) when is_tuple(PubEnd), PubEnd < Now ->
                         false;
-                    (Url) ->
+                    (#{ loc := Loc } = Url) ->
                         case is_visible(Url, LangsB, AnonContext) of
                             true ->
-                                Map = #{ loc := Loc } = maps:from_list(Url),
-                                Map1 = Map#{
+                                Url1 = Url#{
                                     loc => z_context:abs_url(Loc, AnonContext)
                                 },
-                                maybe_add_category_attrs(Map1, AnonContext);
+                                maybe_add_category_attrs(Url1, AnonContext);
                             false ->
                                 false
                         end
                 end,
                 Rows),
-            {ok, Rows1}
+            {ok, Rows1};
+        {error, _} = Error ->
+            Error
     end.
 
 %% @doc Filter resources and urls that are not visible
@@ -148,7 +151,6 @@ maybe_add_category_attrs(#{ category_id := CatId } = Map, Context) ->
         #{ priority := undefined } ->
             case m_rsc:p_no_acl(CatId, seo_sitemap_priority, Context) of
                 <<"0.0">> ->
-                    ?DEBUG({hide, Map}),
                     false;
                 undefined ->
                     {true, Map2#{ priority := 0.5 }};
@@ -248,6 +250,7 @@ delete_loc(Loc, Context) ->
 %% configuration.
 -spec rebuild_rsc( z:context() ) -> ok.
 rebuild_rsc(Context) ->
+    ?zInfo("SEO Sitemap: start rebuilding", Context),
     Key = <<"seo_sitemap_rebuild_rsc">>,
     {ok, _} = z_pivot_rsc:insert_task_after(10, ?MODULE, rebuild_rsc_task, Key, [ 1 ], Context),
     ok.
@@ -268,8 +271,11 @@ rebuild_rsc_task(FromId, Context) ->
         end,
         Ids1),
     case Ids1 of
-        [] -> ok;
-        _ -> {delay, 1, [ lists:last(Ids1)+1 ]}
+        [] ->
+            ?zInfo("SEO Sitemap: ready rebuilding", Context),
+            ok;
+        _ ->
+            {delay, 1, [ lists:last(Ids1)+1 ]}
     end.
 
 %% @doc Insert entries for the given resource.
