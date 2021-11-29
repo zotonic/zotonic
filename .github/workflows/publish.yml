@@ -3,15 +3,15 @@
 
 name: Publish
 
-# Start if a tag is pushed to the master branch
+# Start if a release is published
 on:
-  push:
-    tags: [ master ]
+  release:
+    types: [published]
 
 # Publish a new version IFF the tests and xref are passing
 jobs:
   linux:
-    name: Publish to Hex ${{ matrix.otp_version }}
+    name: Publish ${{ env.GITHUB_REF }} to Hex ${{ matrix.otp_version }}
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -48,8 +48,8 @@ jobs:
           adduser --disabled-login zotonic
       - name: Compile
         run: |
-          VERSION=`git describe --tags`
-          release/prepare-release.sh $VERSION
+          git checkout $GITHUB_SHA
+          release/prepare-release.sh $GITHUB_REF
           make
       - name: Test
         run: |
@@ -62,6 +62,4 @@ jobs:
         env:
           HEX_API_KEY: ${{ secrets.HEX_API_KEY }}
         run: |
-          VERSION=`git describe --tags`
-          release/prepare-release.sh $VERSION
           release/hex-publish.sh
