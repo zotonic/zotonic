@@ -48,8 +48,8 @@ jobs:
           adduser --disabled-login zotonic
       - name: Compile
         run: |
-          git checkout $GITHUB_SHA
-          release/prepare-release.sh $GITHUB_REF
+          VERSION=`git describe --tags`
+          release/prepare-release.sh $VERSION
           make
       - name: Test
         run: |
