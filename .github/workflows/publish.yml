@@ -62,4 +62,4 @@ jobs:
         env:
           HEX_API_KEY: ${{ secrets.HEX_API_KEY }}
         run: |
-          # release/hex-publish.sh
+          release/hex-publish.sh
