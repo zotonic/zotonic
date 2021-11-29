@@ -11,7 +11,7 @@ on:
 # Publish a new version IFF the tests and xref are passing
 jobs:
   linux:
-    name: Publish ${{ env.GITHUB_REF }} to Hex ${{ matrix.otp_version }}
+    name: Publish ${{ github.ref }} to Hex ${{ matrix.otp_version }}
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -62,4 +62,4 @@ jobs:
         env:
           HEX_API_KEY: ${{ secrets.HEX_API_KEY }}
         run: |
-          release/hex-publish.sh
+          # release/hex-publish.sh
