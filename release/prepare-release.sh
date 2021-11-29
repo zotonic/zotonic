@@ -6,7 +6,7 @@ if [ "$1" = "" ]; then
 fi
 
 VERSION="$1"
-MINOR=$(echo $VERSION | sed -e 's/.[^.]*$//')
+MINOR=$(echo $VERSION | sed -e 's/^\([0-9][0-9]*.[0-9][0-9]*\).*$/\1/')
 
 # Increments version numbers where needed
 # Usage: ./prepare-release.sh 1.2.3
