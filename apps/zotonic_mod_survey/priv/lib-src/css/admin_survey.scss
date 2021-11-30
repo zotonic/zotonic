@@ -203,19 +203,33 @@ label.block-type {
 #modal-question {
     margin-top: 0;
     top: 10px;
+
+    .hover {
+        background-color: #f8f8ff;
+    }
+
+    .col-md-4 {
+        min-height: 5em;
+        cursor: pointer;
+    }
+    .col-md-4 input,
+    .col-md-4 textarea,
+    .col-md-4 select {
+        cursor: pointer;
+        pointer-events: none;
+    }
+
+    .form-inline {
+        input {
+            width: 4em;
+            height: 2em;
+            margin-bottom: 4px;
+        }
+        select {
+            width: auto;
+            height: auto;
+            margin-bottom: 4px;
+        }
+    }
 }
 
-#modal-question .hover {
-    background-color: #f8f8ff;
-}
-
-#modal-question .col-md-4 {
-    min-height: 5em;
-    cursor: pointer;
-}
-
-#modal-question .col-md-4 input,
-#modal-question .col-md-4 textarea,
-#modal-question .col-md-4 select {
-    cursor: pointer;
-}
