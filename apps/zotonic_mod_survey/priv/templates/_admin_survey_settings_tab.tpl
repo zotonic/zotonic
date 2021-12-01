@@ -143,7 +143,7 @@
 			<div class="checkbox">
 				<label>
 					<input type="checkbox" name="survey_email_respondent" id="survey_email_respondent" value="1" {% if id.survey_email_respondent  %}checked{% endif %} />
-					{_ Send confirmation with the results to the email address entered in this form (you must include a question labeled “email”). _}
+					{_ Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to "must be an email address". _}
 				</label>
 			</div>
 		</div>
