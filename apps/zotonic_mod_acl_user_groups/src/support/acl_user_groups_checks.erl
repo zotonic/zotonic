@@ -718,6 +718,12 @@ can_rsc(Id, view, Context) when is_integer(Id) ->
             orelse m_rsc:p_no_acl(Id, is_published_date, Context)
         )
     )
+    orelse
+    (
+         % Members can see each other. 
+         m_rsc:is_a(Id, person, Context)
+         andalso has_common_collab_group(Id, Context)
+    )
     orelse can_rsc_1(Id, update, CGId, CatId, UGs, Context);
 can_rsc(Id, Action, Context) when is_integer(Id); Id =:= insert_rsc ->
     CatId = m_rsc:p_no_acl(Id, category_id, Context),
@@ -769,12 +775,6 @@ can_rsc_collab_member(Id, Action, CGId, CatId, Context) ->
             is_owner(Id, Context)
             orelse is_collab_group_manager(CGId, Context)
         )
-    )
-    orelse (
-        % Members can see each other
-        Action =:= view
-        andalso m_rsc:is_a(Id, person, Context)
-        andalso lists:member(CGId, has_collab_groups(Id, Context))
     ).
 
 
@@ -847,6 +847,14 @@ is_owner(Id, #context{user_id=UserId} = Context) ->
         true -> true;
         false -> false
     end.
+
+%% @doc Check if the user has a collaboration group in common with another user.
+has_common_collab_group(_Id, #context{acl=#aclug{collab_groups=[]}}) ->
+    false;
+has_common_collab_group(Id, #context{acl=#aclug{collab_groups=CGs}}=Context) when is_list(CGs) ->
+    lists:any(fun(G) -> lists:member(G, CGs) end, has_collab_groups(Id, Context));
+has_common_collab_group(_Id, _Context) ->
+    false.
 
 %% @doc Check if an edge can be made, special checks for the hasusergroup edge
 can_edge(#acl_edge{predicate=hasusergroup, subject_id=MemberId, object_id=UserGroupId}, Context) ->

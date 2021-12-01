@@ -556,7 +556,7 @@ fetch_page(_, Nr, []) ->
     {[], Nr};
 fetch_page(N, Nr, L) when N >= Nr ->
     {L, N};
-fetch_page(N, Nr, L) when N == Nr - 1 ->
+fetch_page(N, Nr, L) when N =:= Nr - 1 ->
     L1 = lists:dropwhile(fun(B) -> not is_page_end(B) end, L),
     {L1, Nr};
 fetch_page(N, Nr, [B|Bs]) when N < Nr ->
@@ -574,18 +574,20 @@ fetch_page(N, Nr, [_|Bs]) ->
 takepage(L) ->
     takepage(L, []).
 
-    takepage([], Acc) ->
-        lists:reverse(Acc);
-    takepage([Q|L], Acc) ->
-        case is_page_end(Q) of
-            true ->
-                lists:reverse(Acc);
-            _ ->
-                case maps:get(<<"name">>, Q, undefined) of
-                    <<"survey_feedback">> -> takepage(L, Acc);
-                    _ -> takepage(L, [Q|Acc])
-                end
-        end.
+takepage([], Acc) ->
+    lists:reverse(Acc);
+takepage([Q|L], Acc) ->
+    case is_page_end(Q) of
+        true ->
+            % Always add the page-end to the list of questions, so that
+            % the template can decide to show a Next button or not.
+            lists:reverse([ Q | Acc ]);
+        _ ->
+            case maps:get(<<"name">>, Q, undefined) of
+                <<"survey_feedback">> -> takepage(L, Acc);
+                _ -> takepage(L, [Q|Acc])
+            end
+    end.
 
 is_page_end(#{ <<"type">> := <<"survey_page_break">> }) -> true;
 is_page_end(#{ <<"type">> := <<"survey_stop">> }) -> true;

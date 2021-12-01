@@ -40,7 +40,8 @@
 ]).
 
 -export([
-    test/0
+    test/0,
+    videoid_to_image/2
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -475,7 +476,7 @@ videoid_to_image(<<"vimeo">>, EmbedId) ->
         {ok, {{_Http, 200, _Ok}, _Header, Data}} ->
             [ JSON | _ ] = z_json:decode(Data),
             #{ <<"thumbnail_large">> := Thumbnail } = JSON,
-            Thumbnail;
+            iolist_to_binary(re:replace(Thumbnail, <<"_[0-9]+(x[0-9]+)?$">>, <<"_1280">>));
         {ok, {StatusCode, _Header, Data}} ->
             lager:warning("Vimeo metadata fetch returns ~p ~p", [StatusCode, Data]),
             undefined;

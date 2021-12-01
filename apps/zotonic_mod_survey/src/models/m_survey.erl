@@ -448,7 +448,10 @@ count_answers([ {Row} | Rows ], Dict) when is_list(Row) ->
     Map = z_props:from_props(Row),
     count_answers([ {Map} | Rows ], Dict);
 count_answers([ {Row} | Rows ], Dict) when is_map(Row)->
-    Answers = maps:get(<<"answers">>, Row, []),
+    Answers = case maps:get(<<"answers">>, Row, []) of
+        <<>> -> [];
+        L -> L
+    end,
     Dict1 = lists:foldl(
         fun
             ({QName, QAnswer}, Acc) ->

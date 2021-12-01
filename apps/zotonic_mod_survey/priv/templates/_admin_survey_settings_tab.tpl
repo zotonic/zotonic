@@ -18,18 +18,17 @@
  	<fieldset style="margin-bottom: 10px;">
  		<h4>{_ Answering _}</h4>
 		<div class="form-group">
-            <div class="checkbox">
-	        	<label>
-		            <input type="checkbox" name="survey_is_autostart" id="survey_is_autostart" value="1" {% if id.survey_is_autostart or (id.survey_is_autostart|is_undefined and id.is_a.poll) %}checked="checked"{% endif %} />
+            <label class="checkbox">
+	            <input type="checkbox" name="survey_is_autostart" id="survey_is_autostart" value="1" {% if id.survey_is_autostart or (id.survey_is_autostart|is_undefined and id.is_a.poll) %}checked="checked"{% endif %} />
 		            {_ Immediately start with the questions, no “Start” button _}
-	            </label>
-	        </div>
-			<div class="checkbox">
-				<label>
-					<input type="checkbox" name="survey_anonymous" id="survey_anonymous" value="1" {% if id.survey_anonymous %}checked="checked"{% endif %} /> {_ Hide the user’s id or browser-id from result exports _}
-				</label>
-			</div>
+	        </label>
+			<label class="checkbox">
+				<input type="checkbox" name="survey_anonymous" id="survey_anonymous" value="1" {% if id.survey_anonymous %}checked="checked"{% endif %} /> {_ Hide the user’s id or browser-id from result exports _}
+			</label>
 		</div>
+
+		{% block survey_settings_answering %}{% endblock %}
+
 	</fieldset>
 
 	<hr>
@@ -51,6 +50,8 @@
         			{_ Fill in and edit later after saving (one set of results) _}
         		</label>
 			</div>
+
+			{% block survey_settings_fill %}{% endblock %}
 		</div>
 
 		{% if not id.is_a.poll %}
@@ -71,6 +72,8 @@
 		        			{_ Aggregated results from all respondents _}
 						</label>
 					</div>
+
+					{% block survey_settings_finished %}{% endblock %}
 				</div>
 
 			</div>
@@ -104,6 +107,9 @@
 					</label>
 				</div>
 			</div>
+
+			{% block survey_settings_progress %}{% endblock %}
+
 		</div>
 
 		{% if not id.is_a.poll %}
@@ -161,5 +167,8 @@
 			</div>
 		</div>
 		{% endif %}
+
+
+		{% block survey_settings_handling %}{% endblock %}
 	</fieldset>
 {% endblock %}

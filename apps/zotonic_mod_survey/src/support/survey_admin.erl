@@ -58,14 +58,14 @@ admin_rscform(Args) ->
     combine_conditions(Args, []).
 
 combine_conditions([], Acc) ->
-    lists:reverse(Acc);
+    lists:flatten(lists:reverse(Acc));
 combine_conditions([{<<"is_stop_page">>, <<>>}], Acc) ->
     combine_conditions([], Acc);
 combine_conditions([{<<"is_stop_page">>, <<>>}, {<<"jump-condition-", _/binary>>, _} = JC|Bs], Acc) ->
     combine_conditions([JC|Bs], Acc);
 combine_conditions([{<<"is_stop_page">>, <<>>}|Bs], Acc) ->
     combine_conditions(Bs, break_block(<<>>,<<>>,<<>>,<<>>)++Acc);
-combine_conditions([{"is_stop_page", _IsChecked}|Bs], Acc) ->
+combine_conditions([{<<"is_stop_page">>, _IsChecked}|Bs], Acc) ->
     combine_conditions(Bs, stop_block()++Acc);
 combine_conditions([
             {<<"jump-condition-", _/binary>>, Cond1}, {<<"jump-target-", _/binary>>, Target1},

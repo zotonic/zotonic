@@ -91,13 +91,13 @@
 				<hr/>
 				<div class="row">
 					<div class="col-lg-4 col-md-4" data-block-type='survey_narrative'>
-						<p>
-							{_ Fill in the gaps _}  (Narrative)</p><br/>{_ I am _}
-							<input type="text" class="col-md-2 form-control" style="display: inline; float: none;" disabled />
+						<div class="form-inline">
+							{_ Fill in the gaps _}  (Narrative)</p><br>{_ I am _}
+							<input type="text" class="form-control" style="display: inline; float: none;" disabled>
 							{_ years old. I like _}
-							<select class="col-md-4 form-control" style="display: inline; float: none;" disabled><option>{_ chocolate _}</option></select>
-							{_ ice cream and my favorite color is _} <input type="text" class="col-md-2 form-control" style="display: inline; float: none;" disabled />.
-						</p>
+							<select class="form-control" style="display: inline; float: none;" disabled><option>{_ chocolate _}</option></select>
+							{_ ice cream and my favorite color is _} <input type="text" class="form-control" style="display: inline; float: none;" disabled>.
+						</div>
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='survey_country'>
 						<p>{_ Select your country _}</p>

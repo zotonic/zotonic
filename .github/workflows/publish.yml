@@ -3,15 +3,15 @@
 
 name: Publish
 
-# Start if a tag is pushed to the master branch
+# Start if a release is published
 on:
-  push:
-    tags: [ master ]
+  release:
+    types: [published]
 
 # Publish a new version IFF the tests and xref are passing
 jobs:
   linux:
-    name: Publish to Hex ${{ matrix.otp_version }}
+    name: Publish ${{ github.ref }} to Hex ${{ matrix.otp_version }}
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -62,6 +62,8 @@ jobs:
         env:
           HEX_API_KEY: ${{ secrets.HEX_API_KEY }}
         run: |
-          VERSION=`git describe --tags`
-          release/prepare-release.sh $VERSION
+          mkdir -p ~/.config/rebar3
+          echo '{plugins, [rebar3_hex]}.' > ~/.config/rebar3/rebar.config
+          ./rebar3 plugins upgrade
+          ./rebar3 plugins list
           release/hex-publish.sh

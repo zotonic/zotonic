@@ -17,6 +17,12 @@
     </div>
 
     <div class="form-group view-expanded">
+       <textarea class="form-control" id="block-{{name}}-explanation{{ lang_code_for_id }}" name="blocks[].explanation{{ lang_code_with_dollar }}" rows="2"
+              placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
+
+    </div>
+
+    <div class="form-group view-expanded">
        <div>
            <label class="radio-inline"><input type="radio" name="{{ name }}" class="nosubmit" />
                <input type="text" id="block-{{name}}-yes{{ lang_code_for_id }}" name="blocks[].yes{{ lang_code_with_dollar }}"
@@ -31,11 +37,6 @@
        </div>
     </div>
 
-    <div class="form-group view-expanded">
-       <textarea class="form-control" id="block-{{name}}-explanation{{ lang_code_for_id }}" name="blocks[].explanation{{ lang_code_with_dollar }}" rows="2"
-              placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
-
-    </div>
     {% else %}
         <p>{{ blk.prompt[lang_code]  }}</p>
     {% endif %}

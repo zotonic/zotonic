@@ -150,15 +150,21 @@ label.block-type {
 #modal-question {
   margin-top: 0;
   top: 10px; }
-
-#modal-question .hover {
-  background-color: #f8f8ff; }
-
-#modal-question .col-md-4 {
-  min-height: 5em;
-  cursor: pointer; }
-
-#modal-question .col-md-4 input,
-#modal-question .col-md-4 textarea,
-#modal-question .col-md-4 select {
-  cursor: pointer; }
+  #modal-question .hover {
+    background-color: #f8f8ff; }
+  #modal-question .col-md-4 {
+    min-height: 5em;
+    cursor: pointer; }
+  #modal-question .col-md-4 input,
+  #modal-question .col-md-4 textarea,
+  #modal-question .col-md-4 select {
+    cursor: pointer;
+    pointer-events: none; }
+  #modal-question .form-inline input {
+    width: 4em;
+    height: 2em;
+    margin-bottom: 4px; }
+  #modal-question .form-inline select {
+    width: auto;
+    height: auto;
+    margin-bottom: 4px; }

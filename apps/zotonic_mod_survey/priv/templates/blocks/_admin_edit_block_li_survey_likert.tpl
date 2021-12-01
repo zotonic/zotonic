@@ -17,6 +17,15 @@
     </div>
 
     <div class="form-group view-expanded">
+       <textarea class="form-control"
+                 id="block-{{name}}-explanation{{ lang_code_for_id }}"
+                 name="blocks[].explanation{{ lang_code_with_dollar }}"
+                 rows="2"
+                 placeholder="{_ Explanation _} ({{ lang_code }})"
+        >{{ blk.explanation[lang_code]  }}</textarea>
+    </div>
+
+    <div class="form-group view-expanded">
         <div class="row">
             <div class="col-md-4">
                 <input type="text" id="block-{{name}}-disagree{{ lang_code_for_id }}" name="blocks[].disagree{{ lang_code_with_dollar }}"
@@ -34,15 +43,6 @@
                       placeholder="{_ Strongly Agree _}">
             </div>
         </div>
-    </div>
-
-    <div class="form-group view-expanded">
-       <textarea class="form-control"
-                 id="block-{{name}}-explanation{{ lang_code_for_id }}"
-                 name="blocks[].explanation{{ lang_code_with_dollar }}"
-                 rows="2"
-                 placeholder="{_ Explanation _} ({{ lang_code }})"
-        >{{ blk.explanation[lang_code]  }}</textarea>
     </div>
 
     {% else %}
