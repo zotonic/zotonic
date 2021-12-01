@@ -48,7 +48,7 @@
 <div class="form-group view-expanded question-options label-floating">
     <input class="form-control" type="text" id="block-{{name}}-target" name="blocks[].target" value="{{ blk.target }}" placeholder="{_ Question label _}" />
     <label class="control-label" for="block-{{name}}-target">{_ Question label _}</label>
-    <p class="help-block">{_ Jump to a question on a next page. _}</p>
+    <p class="help-block">{_ Jump to a question on a next page. _} {% trans "Use “{submit}” to create a submit button, or “{stop}” to create a stop button." submit="submit" stop="stop" %}</p>
 </div>
 
 <div class="form-group question-options">
