@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-01 11:55\n"
+"PO-Revision-Date: 2021-12-01 12:02\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -8623,7 +8623,7 @@ msgstr "Wahr/Falsch"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:51
 msgid "Use “{submit}” to create a submit button, or “{stop}” to create a stop button."
-msgstr ""
+msgstr "Verwenden Sie „{submit}“, um eine Senden-Schaltfläche zu erstellen, oder „{stop}“, um eine Stopp-Schaltfläche zu erstellen."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:36
 msgid "Validation"
