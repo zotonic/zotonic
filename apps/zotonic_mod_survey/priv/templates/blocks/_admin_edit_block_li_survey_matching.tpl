@@ -10,7 +10,7 @@
 {% block widget_header %}{% endblock %}
 
 {% block widget_content %}
-    {% if is_editable %}
+    {% if id.is_editable %}
       <div class="form-group">
          <input class="form-control" type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="blocks[].prompt{{ lang_code_with_dollar }}" value="{{ blk.prompt[lang_code]  }}"
                  placeholder="{_ Matching question _} ({{ lang_code }})" />
@@ -26,10 +26,10 @@
                 placeholder="{_ Apple = Red _} ({{ lang_code }})" >{{ blk.matching[lang_code]  }}</textarea>
 
           {#
-          <p class="help-block"><strong>{_ Example: _}</strong><br/>{_ Apple = Red<br/>
-Milk = White<br/>
-Vienna = Austria<br/>
-Flying dutchman = Wagner._}</p>
+          <p class="help-block">
+            <strong>{_ Example: _}</strong><br>
+            {_ Apple = Red<br>Milk = White<br>Vienna = Austria<br> Flying dutchman = Wagner._}
+          </p>
           #}
       </div>
 
