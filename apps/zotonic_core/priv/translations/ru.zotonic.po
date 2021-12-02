@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-01 12:02\n"
+"PO-Revision-Date: 2021-12-02 00:25\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1731,7 +1731,7 @@ msgstr "Обновляется каждые 30 минут."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:100
 msgid "Reinstall site datamodel"
-msgstr "Переустановить модель сайта"
+msgstr "Переустановить модель данных сайта"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:24
 msgid "Remarks"
