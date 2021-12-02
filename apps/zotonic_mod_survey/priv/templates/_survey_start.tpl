@@ -1,6 +1,7 @@
-{% if q.answer_id and id.is_editable %}
+{% with answer_id|default:q.answer_id as answer_id %}
+{% if answer_id and id.is_editable %}
     {% wire
-        postback={survey_start id=id answer_id=q.answer_id viewer=viewer}
+        postback={survey_start id=id answer_id=answer_id viewer=viewer}
         delegate="mod_survey"
     %}
 {% elseif id.survey_multiple == 1 %}
@@ -36,6 +37,7 @@
 		{% endif %}
     {% endwith %}
 {% endif %}
+{% endwith %}
 
 {% if m.survey.is_allowed_results_download[id] %}
     <p>
