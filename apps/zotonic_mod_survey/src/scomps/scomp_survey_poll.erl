@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2017 Marc Worrell
+%% @copyright 2011-2021 Marc Worrell
 
-%% Copyright 2011-2017 Marc Worrell
+%% Copyright 2011-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,9 +34,10 @@ render(Args, _Vars, Context) ->
     Actions1 = [ Action || Action <- Actions, Action =/= undefined ],
     Render = case z_acl:rsc_editable(SurveyId, Context) of
         true when is_integer(AnswerId) ->
-            Answers = single_result(SurveyId, AnswerId, Context),
+            {UserId, Answers} = single_result(SurveyId, AnswerId, Context),
             Editing = {editing, AnswerId, Actions1},
-            mod_survey:render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args, Context);
+            Args1 = [ {answer_user_id, UserId} | Args ],
+            mod_survey:render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context);
         _NotEditing ->
             mod_survey:render_next_page(SurveyId, 1, exact, [], [], undefined, Args, Context)
     end,
@@ -45,13 +46,14 @@ render(Args, _Vars, Context) ->
 single_result(SurveyId, AnswerId, Context) ->
     case m_survey:single_result(SurveyId, AnswerId, Context) of
         None when None =:= undefined; None =:= [] ->
-            [];
+            {undefined, []};
         Result ->
             Answers = proplists:get_value(answers, Result, []),
-            lists:map(
+            Answers1 = lists:map(
                 fun({QName, Ans}) ->
                     Answer = proplists:get_value(answer, Ans),
                     {QName, Answer}
                 end,
-                Answers)
+                Answers),
+            {proplists:get_value(user_id, Result), Answers1}
     end.
