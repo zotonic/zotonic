@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-03 13:28\n"
+"PO-Revision-Date: 2021-12-03 19:47\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1698,7 +1698,7 @@ msgstr "Предварительный просмотр запроса"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:90
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
-msgstr "Перестроить все поисковые запросы, поместив все страницы и данные из БД в очередь индексатора. Это может занять много времени!"
+msgstr "Перестроить все поисковые индексы, поместив все страницы и данные из БД в очередь индексатора. Это может занять много времени!"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:81
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:122
