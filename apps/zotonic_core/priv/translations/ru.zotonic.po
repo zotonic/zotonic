@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-03 19:47\n"
+"PO-Revision-Date: 2021-12-03 22:45\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1719,7 +1719,7 @@ msgstr "Переадресация на вышеуказанный веб-сай
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:52
 msgid "Redirect to website on page view"
-msgstr "Перенаправление на веб-сайт при просмотре страницы"
+msgstr "Переадресация на веб-сайт при просмотре страницы"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:3./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:9
 msgid "Referrers to"
