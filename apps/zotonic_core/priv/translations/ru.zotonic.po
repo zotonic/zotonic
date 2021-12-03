@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-03 23:20\n"
+"PO-Revision-Date: 2021-12-03 23:33\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1755,7 +1755,7 @@ msgstr "Заменить текущий материал"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:6
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
-msgstr "Ресурсы в категории <i>meta</i> могут иметь \"особенности\": определенные свойства ресурса, которые определяют, что показывать или скрывать на определенных страницах у администратора. Если это поле пустое, то для этого мета-ресурса не включены никакие возможности."
+msgstr "Ресурсы в категории <i>meta</i> могут иметь \"особенности\": определенные свойства ресурса, которые определяют, что показывать или скрывать на определенных страницах у администратора. Если это поле пустое, то для этого мета-ресурса не включены никакие особенности."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:89
 msgid "Retrieving status..."
