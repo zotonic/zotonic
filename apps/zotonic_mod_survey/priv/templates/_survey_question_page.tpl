@@ -30,7 +30,13 @@
 			{% endif %}
 
 			{% for blk in questions %}
-				{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join id=id blk=blk answers=answers nr=forloop.counter %}
+				{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
+							id=id
+							blk=blk
+							answers=answers
+							editing=editing
+							nr=forloop.counter
+				%}
 			{% endfor %}
 		</fieldset>
 

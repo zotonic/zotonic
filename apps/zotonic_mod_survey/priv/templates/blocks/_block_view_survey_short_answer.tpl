@@ -3,6 +3,9 @@
 {% if is_survey_answer_view %}
     <div class="form-group survey-short-answer">
         <label class="control-label">{{ blk.prompt }}</label>
+        {% if blk.explanation %}
+            <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
+        {% endif %}
         <blockquote>{{ result.answers[blk.name].answer|escape }}</blockquote>
     </div>
 {% else %}
@@ -15,13 +18,17 @@
     {% if blk.validation == "date" %}
         {% include "blocks/_block_view_survey_short_answer_date.tpl" %}
     {% else %}
-        <input type="text"
-                class="form-control"
+        <input  type="{% if blk.validation == 'email' %}email{% else %}text{% endif %}"
+                class="form-control {% if blk.validation == 'numericality' %}input-small{% elseif blk.validation == 'phone' %}input-medium{% endif %}"
                 name="{{ blk.name }}"
                 id="{{ #id }}"
-                value="{% if answers[blk.name]|is_defined %}{{ answers[blk.name]|escape }}{% elseif blk.validation == 'phone' %}{{ m.acl.user.phone }}{% elseif blk.validation == 'email' %}{{ m.acl.user.email }}{% elseif blk.name == 'name' %}{{ m.acl.user.name_first }} {% if m.acl.user.name_surname_prefix %}{{ m.acl.user.name_surname_prefix }} {% endif %}{{ m.acl.user.name_surname }}{% elseif blk.name|to_binary|member:['phone','phone_mobile','email','name_first','name_surname','name_surname_prefix','address_street_1','address_street_2','address_city','address_state','address_postcode'] %}{{ m.acl.user[blk.name|as_atom] }}{% endif %}"
+                {% if editing %}
+                    value="{{ answers[blk.name]|escape }}"
+                {% else %}
+                    value="{% if answers[blk.name]|is_defined %}{{ answers[blk.name]|escape }}{% elseif blk.validation == 'phone' %}{{ m.acl.user.phone }}{% elseif blk.validation == 'email' %}{{ m.acl.user.email }}{% elseif blk.name == 'name' %}{{ m.acl.user.name_first }} {% if m.acl.user.name_surname_prefix %}{{ m.acl.user.name_surname_prefix }} {% endif %}{{ m.acl.user.name_surname }}{% elseif blk.name|member:['phone','phone_mobile','email','name_first','name_surname','name_surname_prefix','address_street_1','address_street_2','address_city','address_state','address_postcode'] %}{{ m.acl.user[blk.name] }}{% endif %}"
+                {% endif %}
                 {% if blk.placeholder %}placeholder="{{ blk.placeholder|escape }}"{% endif %}
-        />
+        >
         {% if blk.is_required %}
             {% if blk.validation == "email" %}
                 {% validate id=#id name=blk.name type={presence} type={email failure_message=_"must be an e-mail address"} %}
