@@ -70,7 +70,7 @@ $.widget("ui.survey_test_feedback",
 
         if ($elt.attr('data-is-correct') != value) {
             cls = 'survey-q-not-ok';
-            icn = 'fa fa-remove';
+            icn = 'fa fa-times';
             $(obj)
                 .removeClass('survey-test-correct')
                 .addClass('survey-test-wrong');
