@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-03 23:33\n"
+"PO-Revision-Date: 2021-12-03 23:59\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1763,7 +1763,7 @@ msgstr "Восстановление статуса..."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:101
 msgid "Runs the schema install command from the site's module again."
-msgstr "Снова запускает команду установки схемы из модуля сайта."
+msgstr "Повторно запускает команду установки схемы из модуля сайта."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:6
 msgid "SEO Content"
@@ -1771,7 +1771,7 @@ msgstr "SEO-контент"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:4
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
-msgstr "SSL-приложение использует Erlang по умолчанию, рекомендуется изменить эту конфигурацию в вашем <tt>erlang.config</tt>."
+msgstr "SSL-приложение использует дефолтные настройки Erlang, рекомендуется изменить эту конфигурацию в вашем <tt>erlang.config</tt>."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:23./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
 msgid "Save and View"
