@@ -22,11 +22,7 @@
                 class="form-control {% if blk.validation == 'numericality' %}input-small{% elseif blk.validation == 'phone' %}input-medium{% endif %}"
                 name="{{ blk.name }}"
                 id="{{ #id }}"
-                {% if editing %}
-                    value="{{ answers[blk.name]|escape }}"
-                {% else %}
-                    value="{% if answers[blk.name]|is_defined %}{{ answers[blk.name]|escape }}{% elseif blk.validation == 'phone' %}{{ m.acl.user.phone }}{% elseif blk.validation == 'email' %}{{ m.acl.user.email }}{% elseif blk.name == 'name' %}{{ m.acl.user.name_first }} {% if m.acl.user.name_surname_prefix %}{{ m.acl.user.name_surname_prefix }} {% endif %}{{ m.acl.user.name_surname }}{% elseif blk.name|member:['phone','phone_mobile','email','name_first','name_surname','name_surname_prefix','address_street_1','address_street_2','address_city','address_state','address_postcode'] %}{{ m.acl.user[blk.name] }}{% endif %}"
-                {% endif %}
+                value="{% if answers[blk.name]|is_defined %}{{ answers[blk.name]|escape }}{% elseif blk.validation == 'phone' %}{{ answer_user_id.phone }}{% elseif blk.validation == 'email' %}{{ answer_user_id.email }}{% elseif blk.name == 'name' %}{{ answer_user_id.name_first }} {% if answer_user_id.name_surname_prefix %}{{ answer_user_id.name_surname_prefix }} {% endif %}{{ answer_user_id.name_surname }}{% elseif blk.name|member:['phone','phone_mobile','email','name_first','name_surname','name_surname_prefix','address_street_1','address_street_2','address_city','address_state','address_postcode'] %}{{ answer_user_id[blk.name] }}{% endif %}"
                 {% if blk.placeholder %}placeholder="{{ blk.placeholder|escape }}"{% endif %}
         >
         {% if blk.is_required %}

@@ -10,6 +10,7 @@
 			id=id
 			page_nr=page_nr
 			answers=answers
+			answer_user_id=answer_user_id
 			history=history
 			editing=editing
 			element_id=element_id|default:"survey-question"
@@ -34,6 +35,7 @@
 							id=id
 							blk=blk
 							answers=answers
+                            answer_user_id=answer_user_id|default:m.acl.user
 							editing=editing
 							nr=forloop.counter
 				%}

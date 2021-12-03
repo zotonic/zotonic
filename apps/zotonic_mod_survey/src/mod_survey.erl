@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2012 Marc Worrell
-%% @doc Survey module.  Define surveys and let people fill them in.
+%% @copyright 2010-2021 Marc Worrell
+%% @doc Survey module. Define surveys and let people fill them in.
 
-%% Copyright 2010-2012 Marc Worrell
+%% Copyright 2010-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -62,9 +62,22 @@ event(#postback{message={survey_start, Args}}, Context) ->
     AnswerId = z_convert:to_integer(proplists:get_value(answer_id, Args)),
     case is_integer(AnswerId) andalso z_acl:rsc_editable(SurveyId, Context) of
         true ->
-            Answers = scomp_survey_poll:single_result(SurveyId, AnswerId, Context),
+            {Answers, UserId} = case m_survey:single_result(SurveyId, AnswerId, Context) of
+                None when None =:= undefined; None =:= [] ->
+                    [];
+                Result ->
+                    As = proplists:get_value(answers, Result, []),
+                    As1 = lists:map(
+                        fun({QName, Ans}) ->
+                            Answer = proplists:get_value(answer, Ans),
+                            {QName, Answer}
+                        end,
+                        As),
+                    {As1, proplists:get_value(user_id, Result)}
+            end,
             Editing = {editing, AnswerId, undefined},
-            render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args, Context), Args, Context);
+            Args1 = [ {answer_user_id, UserId} | Args ],
+            render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context), Args1, Context);
         false ->
             Answers = normalize_answers(proplists:get_value(answers, Args)),
             Editing = proplists:get_value(editing, Args),
@@ -307,6 +320,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                         {questions, L},
                         {pages, count_pages(Questions)},
                         {answers, Answers2},
+                        {answer_user_id, proplists:get_value(answer_user_id, Args)},
                         {history, [NewPageNr|History]},
                         {editing, Editing},
                         {viewer, Viewer}
