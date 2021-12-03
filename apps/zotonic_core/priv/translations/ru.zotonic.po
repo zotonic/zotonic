@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-03 22:45\n"
+"PO-Revision-Date: 2021-12-03 22:56\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1739,7 +1739,7 @@ msgstr "Примечания"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:483
 msgid "Removed the connection to"
-msgstr "Удалено подключение к"
+msgstr "Удалена связь с"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:95
 msgid "Renumber category tree"
