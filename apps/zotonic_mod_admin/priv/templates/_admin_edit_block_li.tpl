@@ -25,6 +25,7 @@
 
             <a title="{_ Disconnect _}" class="z-btn-remove block-remove"></a>
         </div>
+
         {% optional include ["blocks/_admin_edit_block_li_",blk.type,".tpl"]|join name=#s blk=blk id=id is_new=is_new %}
     </div>
     {% if is_new %}

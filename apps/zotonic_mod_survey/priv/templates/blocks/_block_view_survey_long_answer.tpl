@@ -3,6 +3,9 @@
 {% if is_survey_answer_view %}
     <div class="form-group survey-long-answer">
         <label class="control-label">{{ blk.prompt }}</label>
+        {% if blk.explanation %}
+                <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
+        {% endif %}
         <blockquote>{{ result.answers[blk.name].answer|force_escape|linebreaksbr }}</blockquote>
     </div>
 {% else %}

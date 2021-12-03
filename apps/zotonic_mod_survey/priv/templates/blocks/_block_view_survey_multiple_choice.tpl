@@ -3,6 +3,9 @@
 {% if is_survey_answer_view %}
 <div class="form-group survey-short-answer">
     <label class="control-label" for="{{ #id }}">{{ blk.prompt }}</label>
+    {% if blk.explanation %}
+        <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
+    {% endif %}
     <p><b>{{ result.answers[blk.name].answer|escape|default:"-" }}</b></p>
 </div>
 {% else %}

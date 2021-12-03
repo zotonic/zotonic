@@ -2,6 +2,9 @@
 {% if is_survey_answer_view %}
     <div class="form-group survey-likert">
         <label class="control-label">{{ blk.prompt }}</label>
+        {% if blk.explanation %}
+                <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
+        {% endif %}
         {% with result.answers[blk.name].answer as ans %}
             <div class="controls">
                 <span>

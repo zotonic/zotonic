@@ -2,6 +2,11 @@
 	{% if blk.prompt and not is_hide_prompt %}
 		<label class="control-label" for="{{ #id }}">{{ blk.prompt }}</label>
 	{% endif %}
+
+	{% if blk.explanation and not is_survey_answer_view %}
+		 <p class="help-block">{{ blk.explanation }}</p>
+	{% endif %}
+
 	<p class="survey-narrative question-{{ nr }}">
 		{% with blk|survey_prepare_narrative as props %}
 		{% for type,name,value in props.parts %}
@@ -34,7 +39,4 @@
 		{% endfor %}
 		{% endwith %}
 	</p>
-	{% if blk.explanation and not is_survey_answer_view %}
-		 <p class="help-block">{{ blk.explanation }}</p>
-	{% endif %}
 </div>

@@ -4,6 +4,9 @@
     {% with blk|survey_prepare_matching as props %}
         <div class="form-group survey-matching">
             <label class="control-label">{{ blk.prompt }}</label>
+            {% if blk.explanation %}
+                <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
+            {% endif %}
             <ul>
                 {% for val,item in props.items %}
                 <li>
@@ -21,9 +24,9 @@
     {% with blk|survey_prepare_matching as props %}
     <div class="form-group survey-matching question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
         <label class="control-label">{{ blk.prompt }}</label>
-    {% if blk.explanation %}
-         <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
-    {% endif %}
+        {% if blk.explanation %}
+             <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
+        {% endif %}
         <div class="controls">
         {% for val,item in props.items %}
             {% with forloop.counter as index %}

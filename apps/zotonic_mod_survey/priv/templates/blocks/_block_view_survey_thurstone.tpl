@@ -4,6 +4,9 @@
     {% with blk|survey_prepare_thurstone:0 as props %}
         <div class="form-group survey-thurstone">
             <label class="control-label">{{ blk.prompt }}</label>
+            {% if blk.explanation %}
+                <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
+            {% endif %}
             {% with result.answers[blk.name].answer as ans %}
             <ul>
                 {% for option in props.answers %}
