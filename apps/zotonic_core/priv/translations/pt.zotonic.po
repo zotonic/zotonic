@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-03 13:05\n"
+"PO-Revision-Date: 2021-12-03 13:29\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -8042,7 +8042,7 @@ msgstr "Texto do botão"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
 msgid "Can only be used on the last questions page."
-msgstr ""
+msgstr "Só pode ser usado na última página de perguntas."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:68
 msgid "Category to choose from"
@@ -8183,11 +8183,11 @@ msgstr "Manuseamento"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:126
 msgid "Hidden input"
-msgstr ""
+msgstr "Entrada oculta"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_hidden.tpl:14
 msgid "Hidden value, saved with the survey but not shown to the person filling in the form."
-msgstr ""
+msgstr "Valor oculto, salvo com a pesquisa, mas não mostrado para a pessoa que preenche o formulário."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:47./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:71./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:64
 msgid "Hide from results"
@@ -8227,7 +8227,7 @@ msgstr "Inicializando ..."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_hidden.tpl:19
 msgid "Input value"
-msgstr ""
+msgstr "Valor de entrada"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:26
 msgid "Input value placeholder text"
@@ -8467,7 +8467,7 @@ msgstr "Seleccione o seu país"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:152
 msgid "Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to \"must be an email address\"."
-msgstr ""
+msgstr "Envie uma confirmação para o entrevistado. O endereço de e-mail deve ser conhecido (respondentes conectados) ou você pode adicionar um campo de texto curto com o rótulo “e-mail” e a validação definida como “deve ser um endereço de e-mail”."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:144
 msgid "Separate multiple email addresses with a comma."
@@ -8515,7 +8515,7 @@ msgstr "Pare sem salvar"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:127
 msgid "Store a value without showing an input to the respondent."
-msgstr ""
+msgstr "Armazene um valor sem mostrar uma entrada ao respondente."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:43./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:43./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:54./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:55
 msgid "Strongly Agree"
@@ -8587,7 +8587,7 @@ msgstr "Os resultados foram gravados."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
 msgid "The uploaded file will be attached to the result email."
-msgstr ""
+msgstr "O arquivo carregado será anexado ao e-mail de resultado."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_error.tpl:3
 msgid "There was an error while handling your answers. We are terribly sorry about this."
