@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-03 23:59\n"
+"PO-Revision-Date: 2021-12-04 18:10\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1818,7 +1818,7 @@ msgstr "См. также: <a href=\"http://docs.zotonic.com/en/stable/ref/config
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:255./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34
 msgid "Select"
-msgstr "Выбирать"
+msgstr "Выбрать"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:2
 msgid "Select a connected image"
@@ -1939,7 +1939,7 @@ msgstr "Состояние системы"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:8
 msgid "System administration"
-msgstr "Системное администрирование"
+msgstr "Администрирование системы"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:18
 msgid "Telephone"
@@ -1960,7 +1960,7 @@ msgstr "Текст"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:59
 msgid "The category tree is rebuilding. This can take a long time."
-msgstr "Дерево категорий восстанавливается. Это может занять много времени."
+msgstr "Дерево категорий перестраивается. Это может занять много времени."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "The page"
@@ -1972,7 +1972,7 @@ msgstr "Страница останется, но без элемента мул
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
-msgstr "Поисковый индекс восстанавливается. В зависимости от размера базы данных это может занять много времени."
+msgstr "Поисковый индекс перестраивается. В зависимости от размера базы данных это может занять много времени."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:53
 msgid "The site’s data is being reinstalled. Watch the console for messages"
