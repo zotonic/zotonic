@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-03 22:56\n"
+"PO-Revision-Date: 2021-12-03 23:59\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1751,11 +1751,11 @@ msgstr "Заменить"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:66
 msgid "Replace current medium"
-msgstr "Заменить текущую среду"
+msgstr "Заменить текущий материал"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:6
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
-msgstr "Ресурсы в категории <i>meta</i> могут иметь \"возможности\": определенные свойства ресурса, которые решают, что показывать или скрывать на определенных страницах у администратора. Если это поле пустое, то для этого мета-ресурса никаких возможностей не включено."
+msgstr "Ресурсы в категории <i>meta</i> могут иметь \"особенности\": определенные свойства ресурса, которые определяют, что показывать или скрывать на определенных страницах у администратора. Если это поле пустое, то для этого мета-ресурса не включены никакие особенности."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:89
 msgid "Retrieving status..."
@@ -1763,7 +1763,7 @@ msgstr "Восстановление статуса..."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:101
 msgid "Runs the schema install command from the site's module again."
-msgstr "Снова запускает команду установки схемы из модуля сайта."
+msgstr "Повторно запускает команду установки схемы из модуля сайта."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:6
 msgid "SEO Content"
@@ -1771,7 +1771,7 @@ msgstr "SEO-контент"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:4
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
-msgstr "SSL-приложение использует Erlang по умолчанию, рекомендуется изменить эту конфигурацию в вашем <tt>erlang.config</tt>."
+msgstr "SSL-приложение использует дефолтные настройки Erlang, рекомендуется изменить эту конфигурацию в вашем <tt>erlang.config</tt>."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:23./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
 msgid "Save and View"
