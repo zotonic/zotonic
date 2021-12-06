@@ -400,7 +400,7 @@ maybe_log_status(Status, #{
                 },
                 <<"validationRecord">> := [ #{ <<"hostname">> := Hostname } | _ ]
             } | _
-        ],
+        ]
     }) ->
     lager:error("[letsencrypt] Status ~p for ~s in response ~s (~s)", [ Status, Hostname, Detail, Type ]);
 maybe_log_status(Status, JSON) ->
