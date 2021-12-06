@@ -565,6 +565,8 @@ wait_valid(Cnt,Max) ->
         pending ->
             timer:sleep(500*(Max-Cnt+1)),
             wait_valid(Cnt-1,Max);
+        invalid ->
+            {error, invalid};
         {_, Err} ->
             {error, Err}
     end.
