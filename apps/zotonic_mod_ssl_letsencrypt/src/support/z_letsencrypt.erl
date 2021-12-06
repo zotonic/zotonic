@@ -337,7 +337,8 @@ pending({call, From}, _Action, State=#state{order=#{<<"authorizations">> := Auth
             {_, <<"pending">>} -> pending;
             {valid, Status2} ->
                 NS = z_letsencrypt_api:status(Status2),
-                maybe_log_status(NS, Authz);
+                maybe_log_status(NS, Authz),
+                NS;
             {_, _} ->
                 Status
         end,
@@ -396,16 +397,16 @@ maybe_log_status(Status, #{
                 <<"error">> := #{
                     <<"detail">> := Detail,
                     <<"type">> := Type
-                }
+                },
+                <<"validationRecord">> := [ #{ <<"hostname">> := Hostname } | _ ]
             } | _
         ],
-        <<"validationRecord">> := [
-            #{ <<"hostname">> := Hostname } | _
-        ]
     }) ->
     lager:error("[letsencrypt] Status ~p for ~s in response ~s (~s)", [ Status, Hostname, Detail, Type ]);
 maybe_log_status(Status, JSON) ->
     lager:error("[letsencrypt] Status ~p in response ~p", [ Status, JSON ]).
+
+
 
 
 % state 'invalid'
