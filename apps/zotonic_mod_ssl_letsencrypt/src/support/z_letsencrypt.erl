@@ -275,10 +275,10 @@ idle({call, From}, {create, Domain, CertOpts}, State=#state{directory=Dir, key=K
         sans = SANs
     },
     case Order2 of
-        #{ <<"type">> := <<"urn:ietf:params:acme:error:rateLimited">> } ->
-            lager:error("[letsencrypt] rate limit error for ~p", [ Domain ]),
+        #{ <<"type">> := <<"urn:ietf:params:acme:error:", _/binary>> = Type } ->
+            lager:error("[letsencrypt] error for ~s: ~s", [ Domain, Type ]),
             {next_state, invalid, StateAuth, [ {reply, From, ok} ]};
-        #{ <<"authorizations">> := AuthUris } -> 
+        #{ <<"authorizations">> := AuthUris } ->
             {ok, Challenges, Nonce4} = authz(ChallengeType, AuthUris, StateAuth),
             StateReply = StateAuth#state{
                 order = Order2,
