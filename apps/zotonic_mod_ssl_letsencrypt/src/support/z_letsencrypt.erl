@@ -403,7 +403,7 @@ maybe_log_status(Status, #{
             #{ <<"hostname">> := Hostname } | _
         ]
     }) ->
-    lager:error("[letsencrypt] Status ~p for ~s in response ~s (~s)", [ Status, Hostname, Detail, Type ]).
+    lager:error("[letsencrypt] Status ~p for ~s in response ~s (~s)", [ Status, Hostname, Detail, Type ]);
 maybe_log_status(Status, JSON) ->
     lager:error("[letsencrypt] Status ~p in response ~p", [ Status, JSON ]).
 
