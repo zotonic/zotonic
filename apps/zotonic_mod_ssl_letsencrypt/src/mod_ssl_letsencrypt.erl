@@ -59,8 +59,6 @@
 -define(KEY_BITS, 2048).
 -define(CA_CERT_URL, "https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem").
 
--define(TEST, true).
-
 -ifdef(TEST).
 -define(ACME_SRV_OPTS, [staging]).
 -else.
