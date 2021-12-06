@@ -390,7 +390,22 @@ valid(cast, Msg, State) ->
 maybe_log_status(valid, _) -> ok;
 maybe_log_status(pending, _) -> ok;
 maybe_log_status(processing, _) -> ok;
-maybe_log_status(Status, JSON) -> lager:error("[letsencrypt] Status ~p in response ~p", [ Status, JSON ]).
+maybe_log_status(Status, #{
+        <<"challenges">> := [
+            #{
+                <<"error">> := #{
+                    <<"detail">> := Detail,
+                    <<"type">> := Type
+                }
+            } | _
+        ],
+        <<"validationRecord">> := [
+            #{ <<"hostname">> := Hostname } | _
+        ]
+    }) ->
+    lager:error("[letsencrypt] Status ~p for ~s in response ~s (~s)", [ Status, Hostname, Detail, Type ]).
+maybe_log_status(Status, JSON) ->
+    lager:error("[letsencrypt] Status ~p in response ~p", [ Status, JSON ]).
 
 
 % state 'invalid'
