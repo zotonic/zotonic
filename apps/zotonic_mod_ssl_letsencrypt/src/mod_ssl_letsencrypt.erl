@@ -54,7 +54,6 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("public_key/include/public_key.hrl").
 
 -define(SNI_CACHE_TIME, 60).
 -define(KEY_BITS, 2048).
