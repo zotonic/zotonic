@@ -54,11 +54,12 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("public_key/include/public_key.hrl").
 
 -define(SNI_CACHE_TIME, 60).
 -define(KEY_BITS, 2048).
 -define(CA_CERT_URL, "https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem").
+
+-define(TEST, true).
 
 -ifdef(TEST).
 -define(ACME_SRV_OPTS, [staging]).

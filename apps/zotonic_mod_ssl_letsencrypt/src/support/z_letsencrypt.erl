@@ -1,4 +1,5 @@
 %% Copyright 2015-2020 Guillaume Bour
+%% Copyright 2020-2021 Marc Worrell
 %% 
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,7 +25,6 @@
 -export([callback_mode/0]).
 
 -import(z_letsencrypt_utils, [bin/1, str/1]).
--import(z_letsencrypt_api, [status/1]).
 
 % uri format compatible with shotgun library
 % NOTE: currently only support 'http-01' challenge.
@@ -336,8 +336,8 @@ pending({call, From}, _Action, State=#state{order=#{<<"authorizations">> := Auth
             {pending,             _} -> pending;
             {_      , <<"pending">>} -> pending;
             %TODO: we must not let that openbar :)
-            {valid  ,       Status2} -> Status2;
-            {Status ,             _} -> Status
+            {valid  ,       Status2} -> z_letsencrypt_api:status(Status2);
+            {_,                   _} -> Status
         end,
         {Ret, OutNonce}
     end, {valid, Nonce}, Authzs),
@@ -376,14 +376,19 @@ valid({call, From}, _, State=#state{domain=Domain, sans=SANs, cert_path=CertPath
         cert_key_file = KeyFile,
         nonce = Nonce2
     },
-    Reply = status(maps:get(<<"status">>, FinOrder, nil)),
-    {next_state, finalize, State1, [ {reply, From, Reply} ]};
+    Status = z_letsencrypt_api:status(maps:get(<<"status">>, FinOrder, nil)),
+    maybe_log_status(Status, FinOrder),
+    {next_state, finalize, State1, [ {reply, From, Status} ]};
 
 valid({call, From}, Msg, State) ->
     handle_call(Msg, From, State);
 valid(cast, Msg, State) ->
     handle_cast(Msg, State).
 
+maybe_log_status(valid, _) -> ok;
+maybe_log_status(pending, _) -> ok;
+maybe_log_status(processing, _) -> ok;
+maybe_log_status(Status, JSON) -> lager:error("[letsencrypt] Status ~p in response ~p", [ Status, JSON ]).
 
 % state 'finalize'
 %
@@ -407,8 +412,9 @@ finalize({call, From}, processing, State=#state{order=Order, key=Key, jws=Jws, n
         order = Order2,
         nonce = Nonce2
     },
-    Reply = status(maps:get(<<"status">>, Order2, nil)),
-    {keep_state, State1, [ {reply, From, Reply} ]};
+    Status = z_letsencrypt_api:status(maps:get(<<"status">>, Order2, nil)),
+    maybe_log_status(Status, Order2),
+    {keep_state, State1, [ {reply, From, Status} ]};
 
 % finalize(valid)
 %

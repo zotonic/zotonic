@@ -235,6 +235,7 @@ account(#{<<"newAccount">> := Uri}, Key, Jws, Opts) ->
 %
 -spec new_order(map(), [ binary() ], z_letsencrypt:ssl_privatekey(), map(), map()) -> {ok, map(), binary(), binary()}.
 new_order(#{<<"newOrder">> := Uri}, Domains, Key, Jws, Opts) ->
+    lager:info("[letsencrypt] Requesting new certificate for: ~p", [ Domains ]),
     Idns = lists:map(
         fun(Domain) ->
             #{
