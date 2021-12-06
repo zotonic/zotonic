@@ -21,7 +21,7 @@
 
 -export([make_cert/2, make_cert_bg/2, get_challenge/0]).
 -export([start/1, stop/0, init/1, terminate/3, code_change/4]).
--export([idle/3, pending/3, valid/3, invalid/3, finalize/3]).
+-export([idle/3, pending/3, valid/3, invalid/3, revoked/3, finalize/3]).
 -export([callback_mode/0]).
 
 -import(z_letsencrypt_utils, [bin/1, str/1]).
@@ -332,12 +332,14 @@ pending({call, From}, _Action, State=#state{order=#{<<"authorizations">> := Auth
     {StateName, Nonce2} = lists:foldl(fun(AuthzUri, {Status, InNonce}) ->
         {ok, Authz, _, OutNonce} = z_letsencrypt_api:authorization(AuthzUri, Key, Jws#{nonce => InNonce}, Opts),
         Ret = case {Status, maps:get(<<"status">>, Authz)} of
-            {valid  ,   <<"valid">>} -> valid;
-            {pending,             _} -> pending;
-            {_      , <<"pending">>} -> pending;
-            %TODO: we must not let that openbar :)
-            {valid  ,       Status2} -> z_letsencrypt_api:status(Status2);
-            {_,                   _} -> Status
+            {valid, <<"valid">>} -> valid;
+            {pending, _} -> pending;
+            {_, <<"pending">>} -> pending;
+            {valid, Status2} ->
+                NS = z_letsencrypt_api:status(Status2),
+                maybe_log_status(NS, Authz);
+            {_, _} ->
+                Status
         end,
         {Ret, OutNonce}
     end, {valid, Nonce}, Authzs),
@@ -400,6 +402,17 @@ invalid({call, From}, check, State) ->
 invalid({call, From}, Msg, State) ->
     handle_call(Msg, From, State);
 invalid(cast, Msg, State) ->
+    handle_cast(Msg, State).
+
+% state 'revoked'
+%
+% When order failed, and certificate generation is stopped.
+%
+revoked({call, From}, check, State) ->
+    {keep_state, State, [ {reply, From, revoked}]};
+revoked({call, From}, Msg, State) ->
+    handle_call(Msg, From, State);
+revoked(cast, Msg, State) ->
     handle_cast(Msg, State).
 
 
