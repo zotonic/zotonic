@@ -21,7 +21,7 @@
 
 -export([make_cert/2, make_cert_bg/2, get_challenge/0]).
 -export([start/1, stop/0, init/1, terminate/3, code_change/4]).
--export([idle/3, pending/3, valid/3, finalize/3]).
+-export([idle/3, pending/3, valid/3, invalid/3, finalize/3]).
 -export([callback_mode/0]).
 
 -import(z_letsencrypt_utils, [bin/1, str/1]).
@@ -175,7 +175,6 @@ make_cert_bg(Domain, Opts=#{async := Async}) ->
         {error, Err} ->
             lager:error("LetsEncrypt error: ~p", [Err]),
             {error, Err};
-
         ok ->
             case wait_valid(20) of
                 ok ->
@@ -184,22 +183,18 @@ make_cert_bg(Domain, Opts=#{async := Async}) ->
                         {ok, Res} -> {ok, Res};
                         Err -> Err
                     end;
-
                 Error ->
                     gen_statem:cast({global, ?MODULE}, reset),
                     Error
             end
     end,
-
     case Async of
         true ->
             Callback = maps:get(callback, Opts, fun(_) -> ok end),
             Callback(Ret);
-
-        _    ->
+        _ ->
             ok
     end,
-
     Ret.
 
 % get_challenge().
@@ -271,7 +266,7 @@ idle({call, From}, {create, Domain, CertOpts}, State=#state{directory=Dir, key=K
     {ok, Order, OrderLocation, Nonce3} = z_letsencrypt_api:new_order(Dir, Domains, Key, Jws2, Opts),
 
     % we need to keep trace of order location
-    Order2 = Order#{<<"location">> => OrderLocation},
+    Order2 = Order#{ <<"location">> => OrderLocation },
     StateAuth = State#state{
         domain = Domain,
         jws = Jws2,
@@ -279,14 +274,19 @@ idle({call, From}, {create, Domain, CertOpts}, State=#state{directory=Dir, key=K
         nonce = Nonce3,
         sans = SANs
     },
-    AuthUris = maps:get(<<"authorizations">>, Order),
-    {ok, Challenges, Nonce4} = authz(ChallengeType, AuthUris, StateAuth),
-    StateReply = StateAuth#state{
-        order = Order2,
-        nonce = Nonce4,
-        challenges = Challenges
-    },
-    {next_state, pending, StateReply, [ {reply, From, ok} ]};
+    case Order2 of
+        #{ <<"type">> := <<"urn:ietf:params:acme:error:rateLimited">> } ->
+            lager:error("[letsencrypt] rate limit error for ~p", [ Domain ]),
+            {next_state, invalid, StateAuth, [ {reply, From, ok} ]};
+        #{ <<"authorizations">> := AuthUris } -> 
+            {ok, Challenges, Nonce4} = authz(ChallengeType, AuthUris, StateAuth),
+            StateReply = StateAuth#state{
+                order = Order2,
+                nonce = Nonce4,
+                challenges = Challenges
+            },
+            {next_state, pending, StateReply, [ {reply, From, ok} ]}
+    end;
 
 idle({call, From}, Msg, State) ->
     handle_call(Msg, From, State);
@@ -390,6 +390,19 @@ maybe_log_status(pending, _) -> ok;
 maybe_log_status(processing, _) -> ok;
 maybe_log_status(Status, JSON) -> lager:error("[letsencrypt] Status ~p in response ~p", [ Status, JSON ]).
 
+
+% state 'invalid'
+%
+% When order failed, and certificate generation is stopped.
+%
+invalid({call, From}, check, State) ->
+    {keep_state, State, [ {reply, From, invalid}]};
+invalid({call, From}, Msg, State) ->
+    handle_call(Msg, From, State);
+invalid(cast, Msg, State) ->
+    handle_cast(Msg, State).
+
+
 % state 'finalize'
 %
 % When order is being finalized, and certificate generation is ongoing.
@@ -448,7 +461,7 @@ finalize(cast, Msg, State) ->
 % Any other order status leads to exception.
 %
 finalize({call, From}, Status, State) ->
-    io:format("unknown finalize status ~p~n", [Status]),
+    lager:error("[letsencrypt] unknown finalize status ~p~n", [Status]),
     {keep_state, State, [ {reply, From, {error, Status}} ]}.
 
 %%%
