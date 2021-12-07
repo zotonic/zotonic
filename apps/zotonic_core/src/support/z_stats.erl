@@ -85,6 +85,13 @@ init_site(Site) ->
 
 site_stats( Site ) ->
     [
+        % db pool status
+        {
+            [site, Site, db, pool],
+            {function, z_db_pool, status, [ z_context:new(Site) ], match, {'_', {workers, working}}},
+            []
+        },
+     
         % Keep track of the size of the depcache
         {
             [site, Site, depcache, size],
