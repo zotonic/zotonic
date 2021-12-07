@@ -258,15 +258,16 @@ extra_pivot_data(Text, R) ->
         <<"extra_pivot_data">> => Text
     }.
 
-%% @doc Map a country name to its iso code.  This is very crude and should be more comprehensive.
+%% @doc Map a country name to its iso code. This is very crude and should be more comprehensive.
 map_country(Prop, Rsc) ->
     case maps:get(Prop, Rsc, undefined) of
-        <<>> -> Rsc;
         undefined -> Rsc;
+        <<>> -> Rsc;
         <<A,B>> when A =< $Z orelse B =< $Z ->
-            Rsc#{ Prop => z_convert:to_binary(z_string:to_lower([A,B])) };
+            Rsc#{ Prop => z_string:to_lower(<<A,B>>) };
         Country ->
-            case z_convert:to_binary(z_string:to_lower(Country)) of
+            Country1 = value(Country),
+            case z_string:to_lower(Country1) of
                 <<"usa">> ->                Rsc#{ Prop => <<"us">>};
                 <<"holland">> ->            Rsc#{ Prop => <<"nl">>};
                 <<"nederland">> ->          Rsc#{ Prop => <<"nl">>};
@@ -278,10 +279,27 @@ map_country(Prop, Rsc) ->
                 <<"belgique">> ->           Rsc#{ Prop => <<"be">>};
                 % typos
                 <<"nehterlands">> ->        Rsc#{ Prop => <<"nl">>};
-                % just keep as-is
-                _ -> Rsc
+                % Try country tables
+                _ ->
+                    case l10n_country2iso:country2iso(Country1) of
+                        undefined -> Rsc;
+                        Iso -> Rsc#{ Prop => Iso}
+                    end
             end
     end.
+
+value(#trans{ tr = Tr }) ->
+    case proplists:get_value(en, Tr) of
+        undefined when Tr =:= [] -> <<>>;
+        undefined -> {_, T} = hd(Tr), T;
+        T -> T
+    end;
+value(V) when is_list(V) ->
+    z_convert:to_binary(V);
+value(V) when is_binary(V) ->
+    V;
+value(_) ->
+    <<>>.
 
 default_language(Context) ->
     case m_config:get_value(i18n, language, Context) of
