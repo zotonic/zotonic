@@ -603,25 +603,25 @@ import_rdf(OptLocalId, OptUri, #{ <<"rdf_triples">> := Triples } = Data, Importe
                 [] -> {hd(CDocs), tl(CDocs)}
             end,
             MainUri = maps:get(<<"@id">>, MainDoc),
-            ImportedAcc1 = case import_doc(OptLocalId, MainDoc, ImportedAcc, Options, Context) of
+            case import_doc(OptLocalId, MainDoc, ImportedAcc, Options, Context) of
                 {ok, {LocalId, Acc1}} ->
-                    Acc1#{ MainUri => LocalId };
-                {error, _} ->
-                    ImportedAcc
-            end,
-            ImportedAcc2 = lists:foldl(
-                fun(D, ImpAcc) ->
-                    case import_doc(undefined, D, ImpAcc, Options, Context) of
-                        {ok, {Id, ImpAcc1}} ->
-                            DUri = maps:get(<<"@id">>, D),
-                            ImpAcc1#{ DUri => Id };
-                        {error, _} ->
-                            ImpAcc
-                    end
-                end,
-                ImportedAcc1,
-                OtherDocs),
-            {ok, {maps:get(MainUri, ImportedAcc2), ImportedAcc2}}
+                    ImportedAcc1 = Acc1#{ MainUri => LocalId },
+                    ImportedAcc2 = lists:foldl(
+                        fun(D, ImpAcc) ->
+                            case import_doc(undefined, D, ImpAcc, Options, Context) of
+                                {ok, {Id, ImpAcc1}} ->
+                                    DUri = maps:get(<<"@id">>, D),
+                                    ImpAcc1#{ DUri => Id };
+                                {error, _} ->
+                                    ImpAcc
+                            end
+                        end,
+                        ImportedAcc1,
+                        OtherDocs),
+                    {ok, {maps:get(MainUri, ImportedAcc2, undefined), ImportedAcc2}};
+                {error, _} = Error ->
+                    Error
+            end
     end.
 
 import_doc(OptLocalId, Doc, ImpAcc, Options, Context) ->
