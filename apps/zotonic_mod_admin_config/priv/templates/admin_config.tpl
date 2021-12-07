@@ -12,7 +12,7 @@
     {% button class="btn btn-primary" text=_"Make a new config setting" action={dialog_config_new on_success={reload}} %}
 </div>
 
-<div>
+<div class="widget">
     <table class="table table-striped do_adminLinkedTable">
         <thead>
             <tr>
