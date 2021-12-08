@@ -20,9 +20,10 @@ in the ``rebar.config`` of your Zotonic site or module:
     :caption: rebar.config
 
     {deps, [
-        {lager_logstash, {git, "https://github.com/rpt/lager_logstash.git", {tag, "0.1.3"}}},
-        {jsx, {git, "https://github.com/talentdeficit/jsx.git", {tag, "2.8.0"}}}
-    ]}
+        {lager_logstash,
+            {git, "https://github.com/kivra/lager_logstash.git",
+            {ref, "aded55ed51576b19a9094b8f5e523419f05294bc"}}}
+    ]}.
 
 And recompile Zotonic to install the dependencies.
 
