@@ -85,5 +85,5 @@ call::
 
 .. _Logstash: http://www.elastic.co/products/logstash
 .. _Lager framework: https://github.com/erlang-lager/lager
-.. _this one: https://github.com/rpt/lager_logstash
+.. _this one: https://github.com/kivra/lager_logstash
 
