@@ -37,7 +37,7 @@
 			</label>
 		</div>
 
-		<ul class="jump-list" {% if is_stop %}style="display:none"{% endif %}>
+		<ul class="jump-list">
 			{% for blk in js %}
 				{% if blk.target1 or blk.condition1 %}
 					{% include "_admin_survey_question_j.tpl" target=blk.target1 condition=blk.condition1 %}
@@ -47,7 +47,7 @@
 				{% endif %}
 			{% endfor %}
 		</ul>
-		<ul class="nav nav-pills" {% if is_stop %}style="display:none"{% endif %}>
+		<ul class="nav nav-pills">
 			<li><a href="#jump-add">{_ Add page jump _}</a></li>
 		</ul>
 	</div>

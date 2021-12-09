@@ -6,15 +6,6 @@ function ZSurveyEditor() {
 	var self = this;
 	$('#admin-survey-questions').on('click', 'a', function(e) { self.action(e); });
 
-	$('#admin-survey-questions').on('click', '.is_stop_page', function(e) {
-		var $jumps = $(this).closest('.jumps');
-		if ($(this).is(':checked')) {
-			$jumps.children('ul').hide();
-		} else {
-			$jumps.children('ul').show();
-		}
-	});
-
 	$(".pages").sortable({
 		//helper: 'clone',
 		handle: '.page-header',
