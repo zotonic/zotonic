@@ -450,7 +450,10 @@ identify_magicnumber(File) ->
     end.
 
 %% @doc Return the extension for a known mime type (eg. ".mov").
--spec extension(string()|binary()) -> filename_extension().
+-spec extension(Mime) -> filename_extension()
+    when Mime :: string()
+               | binary()
+               | {binary(), binary(), list()}.
 extension(Mime) ->
     extension(Mime, undefined).
 
@@ -458,7 +461,13 @@ extension(Mime) ->
 %% multiple extensions are found for the given mime type, returns the
 %% one that is given as the preferred extension. Otherwise, it returns
 %% the first extension.
--spec extension(string()|binary(), string()|binary()|undefined, z:context()) -> filename_extension().
+-spec extension(Mime, PreferExtension, z:context()) -> filename_extension()
+    when Mime :: string()
+               | binary()
+               | {binary(), binary(), list()},
+         PreferExtension :: string()
+                          | binary()
+                          | undefined.
 extension(Mime, PreferExtension, Context) when is_binary(Mime) ->
     case z_notifier:first(
                 #media_identify_extension{
@@ -475,9 +484,18 @@ extension(Mime, PreferExtension, Context) ->
     extension(z_convert:to_binary(Mime), PreferExtension, Context).
 
 maybe_binary(undefined) -> undefined;
+maybe_binary({A, B, _}) -> <<A/binary, $/, B/binary>>;
 maybe_binary(L) -> z_convert:to_binary(L).
 
--spec extension(string()|binary(), string()|binary()|undefined) -> filename_extension().
+-spec extension(Mime, PreferExtension) -> filename_extension()
+    when Mime :: string()
+               | binary()
+               | {binary(), binary(), list()},
+         PreferExtension :: string()
+                          | binary()
+                          | undefined.
+extension({A, B, _}, PreferExtension) ->
+    extension(<<A/binary, $/, B/binary>>, PreferExtension);
 extension(Mime, PreferExtension) when is_list(Mime) ->
     extension(list_to_binary(Mime), PreferExtension);
 extension(<<"image/jpeg">>, _PreferExtension) -> <<".jpg">>;

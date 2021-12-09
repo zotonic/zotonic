@@ -25,8 +25,10 @@
         </p>
     {% endif %}
 
-    <div>
-    	<a href="{% url id zotonic_http_accept="bert" id=id %}" class="btn btn-default">{_ Download backup file _}</a>
+    <p>
+        {% if m.modules.active.mod_export %}
+            <a href="{% url export_rsc type="bert" id=id %}" class="btn btn-default">{_ Download backup file _}</a>
+        {% endif %}
     	{% button
     	    text=_"Restore backup"
     	    class="btn btn-default"
@@ -36,7 +38,11 @@
     		    id=id
     		}
     	%}
-    </div>
+    </p>
+
+    {% if not m.modules.active.mod_export %}
+        <p class="text-warning"><i class="fa fa-info-circle"></i> {_ Enable <tt>mod_export</tt> to download backup files. _}</p>
+    {% endif %}
 </div>
 
 {% endblock %}

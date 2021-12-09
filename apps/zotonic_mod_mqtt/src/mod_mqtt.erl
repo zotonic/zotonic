@@ -73,7 +73,7 @@ handle_model_request(Model, Verb, Path, Msg, Context) ->
 
 publish_response(#{ properties := #{ response_topic := Topic } } = Msg, {ok, Res}, Context) ->
     QoS = maps:get(qos, Msg, 0),
-    z_mqtt:publish(Topic, #{ status => <<"ok">>, result => Res }, #{ qos => QoS }, Context);
+    z_mqtt:publish(Topic, #{ <<"status">> => <<"ok">>, <<"result">> => Res }, #{ qos => QoS }, Context);
 publish_response(
         #{ properties := #{ response_topic := Topic } } = Msg,
         {error, #{ <<"status">> := _, <<"error">> := _ } = Res},
@@ -82,7 +82,7 @@ publish_response(
     z_mqtt:publish(Topic, Res, #{ qos => QoS }, Context);
 publish_response(#{ properties := #{ response_topic := Topic } } = Msg, {error, Res}, Context) ->
     QoS = maps:get(qos, Msg, 0),
-    z_mqtt:publish(Topic, #{ status => <<"error">>, message => Res }, #{ qos => QoS }, Context);
+    z_mqtt:publish(Topic, #{ <<"status">> => <<"error">>, <<"message">> => Res }, #{ qos => QoS }, Context);
 publish_response(#{}, _Res, _Context) ->
     ok.
 

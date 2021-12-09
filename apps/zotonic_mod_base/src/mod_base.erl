@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2012 Marc Worrell
+%% @copyright 2009-2021 Marc Worrell
 %% Date: 2009-06-08
 %% @doc The base module, implementing basic Zotonic scomps, actions, models and validators.
 
-%% Copyright 2009-2012 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -44,7 +44,14 @@
 %% @doc Add an extra content-type to the 'id' controller.
 observe_content_types_dispatch(#content_types_dispatch{ id = _Id }, Acc, Context) ->
     {ContentTypes, _} = controller_api:content_types_provided(Context),
-    Dispatch = [ {CT, api_rsc_export} || CT <- ContentTypes ],
+    Dispatch = lists:map(
+        fun
+            ({<<"application">>, <<"json">>, _} = CT) ->
+                {CT, {api_rsc_export, []}};
+            ({A, B, _} = CT) ->
+                {CT, {api_rsc_export, [ {zotonic_http_accept, <<A/binary, $/, B/binary>>} ]}}
+        end,
+        ContentTypes),
     Dispatch ++ Acc.
 
 

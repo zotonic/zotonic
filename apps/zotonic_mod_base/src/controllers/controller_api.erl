@@ -1,8 +1,8 @@
 %% @author Arjan Scherpenisse, Marc Worrell
-%% @copyright 2009-2018 Arjan Scherpenisse <arjan@scherpenisse.net>, Marc Worrell <marc@worrell.nl>
+%% @copyright 2009-2021 Arjan Scherpenisse <arjan@scherpenisse.net>, Marc Worrell <marc@worrell.nl>
 %% @doc Entrypoint for model requests via HTTP.
 
-%% Copyright 2009-2018 Arjan Scherpenisse, Marc Worrell
+%% Copyright 2009-2021 Arjan Scherpenisse, Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,9 +31,6 @@
 
     process/4
 ]).
-
-% Default max body length (32MB) for API calls, this should be configurable.
--define(MAX_BODY_LENGTH, 32*1024*1024).
 
 -define(is_http_status(Code), is_integer(Code), Code >= 200, Code < 600).
 
@@ -167,18 +164,19 @@ process(_Method, AcceptedCT, ProvidedCT, Context) ->
         {iodata(), z:context()} | {{halt, HttpCode :: pos_integer()}, z:context()}.
 process_done(ok, ProvidedCT, Context) ->
     % z_mqtt:publish response
-    Body = z_controller_helper:encode_response(ProvidedCT, #{ status => ok }),
+    Body = z_controller_helper:encode_response(ProvidedCT, #{ <<"status">> => <<"ok">> }),
     {Body, Context};
 process_done({ok, #{
-        status := <<"error">>,
-        error := _
+        <<"status">> := <<"error">>,
+        <<"error">> := _
     } = Resp}, ProvidedCT, Context) ->
     Body = z_controller_helper:encode_response(ProvidedCT, Resp),
     {Body, Context};
 process_done({ok, Resp}, ProvidedCT, Context) ->
     % z_mqtt:call response
     Body = z_controller_helper:encode_response(ProvidedCT, Resp),
-    {Body, Context};
+    Context1 = set_filename(ProvidedCT, Context),
+    {Body, Context1};
 process_done({error, _} = Error, ProvidedCT, Context) ->
     error_response(Error, ProvidedCT, Context).
 
@@ -186,60 +184,74 @@ process_done({error, _} = Error, ProvidedCT, Context) ->
     {{halt, HttpCode :: pos_integer()}, z:context()}.
 error_response({error, payload}, CT, Context) ->
     RespBody = z_controller_helper:encode_response(CT, #{
-            status => <<"error">>,
-            error => <<"payload">>,
-            message => <<"Illegal Payload Encoding">>
+            <<"status">> => <<"error">>,
+            <<"error">> => <<"payload">>,
+            <<"message">> => <<"Illegal Payload Encoding">>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 400}, Context1};
 error_response({error, eacces}, CT, Context) ->
     RespBody = z_controller_helper:encode_response(CT, #{
-            status => <<"error">>,
-            error => <<"eacces">>,
-            message => <<"Access Denied">>
+            <<"status">> => <<"error">>,
+            <<"error">> => <<"eacces">>,
+            <<"message">> => <<"Access Denied">>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 403}, Context1};
 error_response({error, enoent}, CT, Context) ->
     RespBody = z_controller_helper:encode_response(CT, #{
-            status => <<"error">>,
-            error => <<"enoent">>,
-            message => <<"Not Found">>
+            <<"status">> => <<"error">>,
+            <<"error">> => <<"enoent">>,
+            <<"message">> => <<"Not Found">>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 404}, Context1};
 error_response({error, unknown_path}, CT, Context) ->
     RespBody = z_controller_helper:encode_response(CT, #{
-            status => <<"error">>,
-            error => <<"unknown_path">>,
-            message => <<"Not Found">>
+            <<"status">> => <<"error">>,
+            <<"error">> => <<"unknown_path">>,
+            <<"message">> => <<"Not Found">>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 404}, Context1};
 error_response({error, unacceptable}, CT, Context) ->
     RespBody = z_controller_helper:encode_response(CT, #{
-            status => <<"error">>,
-            error => <<"unacceptable">>,
-            message => <<"Unacceptable Model Method">>
+            <<"status">> => <<"error">>,
+            <<"error">> => <<"unacceptable">>,
+            <<"message">> => <<"Unacceptable Model Method">>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 400}, Context1};
 error_response({error, StatusCode}, CT, Context) when ?is_http_status(StatusCode) ->
     RespBody = z_controller_helper:encode_response(CT, #{
-            status => <<"error">>,
-            error => StatusCode,
-            message => <<"Error ", (integer_to_binary(StatusCode))/binary>>
+            <<"status">> => <<"error">>,
+            <<"error">> => StatusCode,
+            <<"message">> => <<"Error ", (integer_to_binary(StatusCode))/binary>>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, StatusCode}, Context1};
 error_response({error, Reason}, CT, Context) ->
     RespBody = z_controller_helper:encode_response(CT, #{
-            status => <<"error">>,
-            error => Reason,
-            message => <<"Internal Error">>
+            <<"status">> => <<"error">>,
+            <<"error">> => Reason,
+            <<"message">> => <<"Internal Error">>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 500}, Context1}.
+
+
+set_filename(ProvidedCT, Context) ->
+    Extension = z_media_identify:extension(ProvidedCT),
+    Filename = iolist_to_binary([
+            z_string:to_name( m_site:get(title, Context) ),
+            $-,
+            z_string:to_name( lists:last(z_context:get(topic, Context)) ) ,
+            Extension
+        ]),
+    z_context:set_resp_header(
+        <<"content-disposition">>,
+        <<"inline; filename=", Filename/binary>>,
+        Context).
 
 
 %% @doc Event stream with messages sent to a subscribed topic

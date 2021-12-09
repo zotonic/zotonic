@@ -403,7 +403,7 @@ reimport_1(Id, ImportedAcc, IsForceImport, Context) ->
                 true ->
                     case fetch_json(Uri, Context) of
                         {ok, JSON} ->
-                            import_json(Id, Uri, JSON, ImportedAcc, Options, Context);
+                            import_data(Id, Uri, JSON, ImportedAcc, Options, Context);
                         {error, _} = Error ->
                             Error
                     end;
@@ -425,7 +425,7 @@ reimport_nonauth(Id, ImportedAcc, Context) ->
                 Uri ->
                     case fetch_json(Uri, Context) of
                         {ok, JSON} ->
-                            import_json(Id, Uri, JSON, ImportedAcc, [], Context);
+                            import_data(Id, Uri, JSON, ImportedAcc, [], Context);
                         {error, _} = Error ->
                             Error
                     end
@@ -452,7 +452,7 @@ reimport(Id, RefIds, Options, Context) ->
     end,
     case fetch_json(Uri, Context) of
         {ok, JSON} ->
-            import_json(Id, Uri, JSON, RefIds, Options1, Context);
+            import_data(Id, Uri, JSON, RefIds, Options1, Context);
         {error, _} = Error ->
             Error
     end.
@@ -577,16 +577,16 @@ fetch_preview(Url, Context) ->
     end.
 
 
-import_json(Id, _Url, #{ <<"status">> := <<"ok">>, <<"result">> := JSON }, ImportedAcc, Options, Context) when is_map(JSON) ->
+import_data(Id, _Url, #{ <<"status">> := <<"ok">>, <<"result">> := JSON }, ImportedAcc, Options, Context) when is_map(JSON) ->
     import(Id, JSON, ImportedAcc, Options, Context);
-import_json(_Id, Url, #{ <<"status">> := <<"error">> } = JSON, _ImportedAcc, _Options, _Context) ->
+import_data(_Id, Url, #{ <<"status">> := <<"error">> } = JSON, _ImportedAcc, _Options, _Context) ->
     lager:warning("Remote returned error ~p: ~p", [Url, JSON]),
     {error, remote};
-import_json(_Id, _Url, #{ <<"rdf_triples">> := [] }, _ImportedAcc, _Options, _Context) ->
+import_data(_Id, _Url, #{ <<"rdf_triples">> := [] }, _ImportedAcc, _Options, _Context) ->
     {error, nodoc};
-import_json(Id, Url, #{ <<"rdf_triples">> := _ } = Data, ImportedAcc, Options, Context) ->
+import_data(Id, Url, #{ <<"rdf_triples">> := _ } = Data, ImportedAcc, Options, Context) ->
     import_rdf(Id, Url, Data, ImportedAcc, Options, Context);
-import_json(_Id, Url, JSON, _ImportedAcc, _Options, _Context) ->
+import_data(_Id, Url, JSON, _ImportedAcc, _Options, _Context) ->
     lager:warning("JSON with unknown structure ~p: ~p", [Url, JSON]),
     {error, status}.
 
@@ -647,7 +647,7 @@ import_uri(Uri, Context) ->
 import_uri(Uri, Options, Context) ->
     case fetch_json(Uri, Context) of
         {ok, JSON} ->
-            import_json(undefined, Uri, JSON, #{}, Options, Context);
+            import_data(undefined, Uri, JSON, #{}, Options, Context);
         {error, _} = Error ->
             Error
     end.
@@ -706,7 +706,7 @@ import(OptLocalId, #{
         true ->
             case m_rsc:rid(Uri, Context) of
                 undefined -> {error, enoent};
-                Id -> {ok, Id}
+                Id -> {ok, {Id, ImportedAcc}}
             end;
         false ->
             case find_allowed_category(RemoteRId, Rsc, Options, Context) of
