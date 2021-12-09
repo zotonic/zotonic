@@ -38,7 +38,7 @@
                     window.close();
                     return false;
                 });
-        } else if (window.history.length > 0) {
+        } else if (window.history.length > 1) {
             $('#{{ #back_history }}')
                 .show()
                 .click(function() {
