@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-10 11:59\n"
+"PO-Revision-Date: 2021-12-10 12:09\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -7334,7 +7334,7 @@ msgstr "Met een consumententoken kan deze website:"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:26
 msgid "You will be able to:"
-msgstr "Je zal in staat zijn:"
+msgstr "Je zult in staat zijn om:"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:15
 msgid "You will not be able to see this token again, so copy it and save it in a secure place."
@@ -8474,7 +8474,7 @@ msgstr "Selecteer je land"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:152
 msgid "Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to \"must be an email address\"."
-msgstr "Stuur een bevestiging naar de respondent. Het e-mailadres moet bekend zijn (ingelogde respondenten) of u kunt een kort tekstveld toevoegen met het label \"e-mail\" en de validatie ingesteld op \"moet een e-mailadres zijn\"."
+msgstr "Stuur een bevestiging naar de respondent. Het e-mailadres moet bekend zijn (ingelogde respondenten) of je kan een kort tekstveld toevoegen met het label \"email\" en de validatie ingesteld op \"moet een e-mailadres zijn\"."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:144
 msgid "Separate multiple email addresses with a comma."
