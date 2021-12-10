@@ -13,7 +13,8 @@
 <div class="tab-content">
 	<div class="tab-pane active" id="survey-basics">
 		{% catinclude "_admin_edit_basics.tpl" id %}
-		{% catinclude "_admin_edit_body.tpl" id explanation=_"This text is shown as an introduction to the survey." %}
+		{% catinclude "_admin_edit_body.tpl" id property="body" explanation=_"This text is shown as an introduction to the survey." %}
+    {% catinclude "_admin_edit_body.tpl" id property="body_extra" explanation=_"This text is shown below the start button." %}
 		{% include "_admin_survey_edit_feedback.tpl" %}
 		{% catinclude "_admin_edit_depiction.tpl" id %}
 	</div>
