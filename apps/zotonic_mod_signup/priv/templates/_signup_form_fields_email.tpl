@@ -53,7 +53,7 @@ show_signup_name_email
         {% if email %}
             <span>{{ email|escape }}</span>
         {% else %}
-            <input class="form-control" id="email" name="email" type="email"
+            <input class="form-control" id="email" name="email" type="text"
                    value="{{ email|escape }}"
                    autocapitalize="off"
                    autocorrect="off">
