@@ -5,10 +5,11 @@
     {% block field_username %}
         <div class="form-group">
             <label for="username" class="control-label">{_ Email or username _}</label>
-            <input class="form-control" type="email" id="username" name="username"
+            <input class="form-control" type="text" id="username" name="username"
                    value="{{ q.options.username|default:q.username|escape }}"
                    {% if not is_show_passcode %}autofocus{% endif %}
                    required
+                   inputmode="email"
                    placeholder="{_ Email or username _}"
                    autocomplete="username"
                    autocapitalize="off"
@@ -60,12 +61,13 @@
     {% if q.options.is_username_checked %}
         <div class="form-group hidden">
             <label for="username" class="control-label">{_ Email or username _}</label>
-            <input type="email"
+            <input type="text"
                    id="username"
                    name="username"
                    value="{{ q.options.username|default:q.username|escape }}"
                    class="form-control"
                    required
+                   inputmode="email"
                    autocapitalize="off"
                    autocorrect="off"
                    autocomplete="username"
@@ -78,12 +80,13 @@
     {% else %}
         <div class="form-group">
             <label for="username" class="control-label">{_ Email or username _}</label>
-            <input type="email"
+            <input type="text"
                    id="username"
                    name="username"
                    value="{{ q.options.username|default:q.username|escape }}"
                    class="form-control"
                    required
+                   inputmode="email"
                    autofocus
                    autocapitalize="off"
                    autocorrect="off"
