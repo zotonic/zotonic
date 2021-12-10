@@ -4,6 +4,7 @@
         class="form-control"
         type="text"
         id="reminder_address"
+        inputmode="email"
         autofocus="autofocus="
         placeholder="{_ user@example.com _}"
         name="reminder_address"

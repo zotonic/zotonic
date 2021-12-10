@@ -9,6 +9,7 @@
                    value="{{ q.options.username|default:q.username|escape }}"
                    {% if not is_show_passcode %}autofocus{% endif %}
                    required
+                   inputmode="email"
                    placeholder="{_ Email or username _}"
                    autocomplete="username"
                    autocapitalize="off"
@@ -66,6 +67,7 @@
                    value="{{ q.options.username|default:q.username|escape }}"
                    class="form-control"
                    required
+                   inputmode="email"
                    autocapitalize="off"
                    autocorrect="off"
                    autocomplete="username"
@@ -84,6 +86,7 @@
                    value="{{ q.options.username|default:q.username|escape }}"
                    class="form-control"
                    required
+                   inputmode="email"
                    autofocus
                    autocapitalize="off"
                    autocorrect="off"
