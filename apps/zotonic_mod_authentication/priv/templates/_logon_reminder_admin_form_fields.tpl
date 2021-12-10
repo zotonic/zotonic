@@ -2,7 +2,7 @@
     <label for="reminder_address" class="control-label">{_ Your email or username _}</label>
     <input
         class="form-control"
-        type="text"
+        type="email"
         id="reminder_address"
         autofocus="autofocus="
         placeholder="{_ user@example.com _}"
