@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-13 11:11\n"
+"PO-Revision-Date: 2021-12-13 11:20\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -7379,19 +7379,19 @@ msgstr "il tuo cruscotto dell'app Embedly"
 
 #: apps/zotonic_mod_search/priv/templates/_admin_status.tpl:8
 msgid "Check the table for the faceted search and fill it by reindexing all pages."
-msgstr ""
+msgstr "Controlla la tabella per la ricerca sfaccettata e riempila reindicizzando tutte le pagine."
 
 #: apps/zotonic_mod_search/priv/templates/_admin_status.tpl:4
 msgid "Rebuild search facets"
-msgstr ""
+msgstr "Ricostruisci le sfaccettature della ricerca"
 
 #: apps/zotonic_mod_search/src/mod_search.erl:60
 msgid "Rebuilding the faceted search table."
-msgstr ""
+msgstr "Ricostruire la tabella di ricerca sfaccettata."
 
 #: apps/zotonic_mod_search/src/mod_search.erl:62
 msgid "Sorry, you are not allowed to do this."
-msgstr ""
+msgstr "Spiacenti, non sei autorizzato a farlo."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
 msgid "Add a noindex, nofollow element to all pages."
