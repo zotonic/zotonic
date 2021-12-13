@@ -195,7 +195,7 @@ map_topic(Topic, _Context) ->
 
 
 %% @doc Map subscription topic to a topic filter.
--spec map_topic_filter( topic_any(), z:context() ) -> {ok, topic()} | {error, no_topic}.
+-spec map_topic_filter( topic_any(), z:context() ) -> {ok, topic()} | {error, no_topic | term()}.
 map_topic_filter(undefined, _Context) ->
     {error, no_topic};
 map_topic_filter([], _Context) ->
@@ -218,10 +218,10 @@ map_topic_edge(ObjSub, Props, Context) ->
     MaybePredicate = proplists:get_value(predicate, Props),
     case to_predicate_name(MaybePredicate, Context) of
         {ok, PredName} ->
-            [
+            {ok, [
                 <<"model">>, <<"edge">>, <<"event">>,
                 z_convert:to_binary(Id), ObjSub, PredName
-            ];
+            ]};
         {error, _} = Error ->
             Error
     end.
@@ -237,7 +237,7 @@ to_predicate_name(<<>>, _Context) -> {ok, <<"+">>};
 to_predicate_name(Id, Context) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
-            {error, unknown_predicate};
+            {error, {unknown_predicate, Id}};
         RId ->
             case m_predicate:id_to_name(RId, Context) of
                 {ok, Name} ->
