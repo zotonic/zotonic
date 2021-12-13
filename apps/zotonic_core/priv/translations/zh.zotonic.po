@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-13 11:10\n"
+"PO-Revision-Date: 2021-12-13 11:19\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -7375,19 +7375,19 @@ msgstr "你的 Embedly 应用仪表板"
 
 #: apps/zotonic_mod_search/priv/templates/_admin_status.tpl:8
 msgid "Check the table for the faceted search and fill it by reindexing all pages."
-msgstr ""
+msgstr "检查分面搜索表并通过重新索引所有页面来填充它。"
 
 #: apps/zotonic_mod_search/priv/templates/_admin_status.tpl:4
 msgid "Rebuild search facets"
-msgstr ""
+msgstr "重建搜索方面"
 
 #: apps/zotonic_mod_search/src/mod_search.erl:60
 msgid "Rebuilding the faceted search table."
-msgstr ""
+msgstr "重建分面搜索表。"
 
 #: apps/zotonic_mod_search/src/mod_search.erl:62
 msgid "Sorry, you are not allowed to do this."
-msgstr ""
+msgstr "抱歉，您无权执行此操作。"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
 msgid "Add a noindex, nofollow element to all pages."
