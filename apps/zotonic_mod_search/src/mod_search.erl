@@ -37,6 +37,7 @@
     observe_module_activate/2,
     observe_custom_pivot/2,
     observe_filewatcher/2,
+    observe_module_reindexed/2,
     to_tsquery/2,
     rank_weight/1,
     rank_behaviour/1,
@@ -100,6 +101,23 @@ observe_filewatcher(#filewatcher{ file = File, extension = <<".tpl">> }, Context
     end;
 observe_filewatcher(#filewatcher{}, _Context) ->
     ok.
+
+
+%% @doc Check the search facet table when all modules are running and the indexer reindexed
+%% the templates.
+observe_module_reindexed(module_reindexed, Context) ->
+    Status = z_module_manager:get_modules_status(Context),
+    NotRunning = [ M || {M, S} <- Status, S =/= running ],
+    case NotRunning of
+        [] ->
+            lager:info("[~p] Checking search facet table.",
+                       [ z_context:site(Context) ]),
+            search_facet:ensure_table(Context);
+        _ ->
+            lager:info("[~p] Delaying search facet check because not all modules are running.",
+                       [ z_context:site(Context) ])
+    end.
+
 
 %%====================================================================
 %% API
