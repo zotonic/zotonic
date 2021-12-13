@@ -226,20 +226,26 @@ map_topic_edge(ObjSub, Props, Context) ->
             Error
     end.
 
+-spec to_predicate_name(Name, Context) -> {ok, binary()} | {error, term()}
+    when Name :: binary() | string() | undefined | m_rsc:resource(),
+         Context :: z:context().
 to_predicate_name(undefined, _Context) -> {ok, <<"+">>};
 to_predicate_name(<<"*">>, _Context) -> {ok, <<"+">>};
 to_predicate_name("*", _Context) -> {ok, <<"+">>};
 to_predicate_name('*', _Context) -> {ok, <<"+">>};
 to_predicate_name(<<>>, _Context) -> {ok, <<"+">>};
-to_predicate_name(Id, Context) when is_integer(Id) ->
-    case m_predicate:id_to_name(Id, Context) of
-        {ok, Name} ->
-            {ok, z_convert:to_binary(Name)};
-        {error, _} = Error ->
-            Error
-    end;
-to_predicate_name(Pred, _Context) ->
-    {ok, z_convert:to_binary(Pred)}.
+to_predicate_name(Id, Context) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, unknown_predicate};
+        RId ->
+            case m_predicate:id_to_name(RId, Context) of
+                {ok, Name} ->
+                    {ok, z_convert:to_binary(Name)};
+                {error, _} = Error ->
+                    Error
+            end
+    end.
 
 
 %% @doc Ensure that the topic is prefixed with "bridge/origin/".
