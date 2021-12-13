@@ -234,12 +234,12 @@ to_predicate_name(<<>>, _Context) -> {ok, <<"+">>};
 to_predicate_name(Id, Context) when is_integer(Id) ->
     case m_predicate:id_to_name(Id, Context) of
         {ok, Name} ->
-            z_convert:to_binary(Name);
+            {ok, z_convert:to_binary(Name)};
         {error, _} = Error ->
             Error
     end;
 to_predicate_name(Pred, _Context) ->
-    z_convert:to_binary(Pred).
+    {ok, z_convert:to_binary(Pred)}.
 
 
 %% @doc Ensure that the topic is prefixed with "bridge/origin/".
