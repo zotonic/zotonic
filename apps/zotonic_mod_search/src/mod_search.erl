@@ -32,6 +32,7 @@
 
 %% interface functions
 -export([
+    event/2,
     observe_search_query/2,
     observe_module_activate/2,
     observe_custom_pivot/2,
@@ -47,6 +48,19 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -record(state, {context, query_watches=[]}).
+
+
+
+event(#postback{ message={facet_rebuild, _Args}}, Context) ->
+    case z_acl:is_admin(Context)
+        orelse z_acl:is_allowed(use, mod_search, Context)
+    of
+        true ->
+            search_facet:pivot_all(Context),
+            z_render:growl(?__("Rebuilding the faceted search table.", Context), Context);
+        false ->
+            z_render:growl_error(?__("Sorry, you are not allowed to do this.", Context), Context)
+    end.
 
 
 observe_search_query(#search_query{ name = <<"facets">>, args = Args, offsetlimit = OffsetLimit }, Context) ->
