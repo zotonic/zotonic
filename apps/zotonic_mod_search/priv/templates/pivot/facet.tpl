@@ -26,6 +26,12 @@
 {# Date(time)s are stored as-is, no additional timezone conversion  #}
 {# is done, so be careful with the timezone used to fill the block. #}
 
+{# If you need to return a label different than the value, then a   #}
+{# block with prefix "label_" can be added. This block is rendered  #}
+{# with the id of a resource that generated the given value.        #}
+{# For blocks with postfix "_id" the default label is the resource  #}
+{# title, or for persons the rendering of "_name.tpl"               #}
+
 {% block category_id %}{{ id.category_id }}{% endblock %}
 
 {% block org_pubdate_range_date %}{{ id.org_pubdate|default:id.publication_start }}{% endblock %}

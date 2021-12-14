@@ -108,14 +108,23 @@ facet_values(Context) ->
                         };
                     (#facet_def{ name = Name }, Acc) ->
                         Col = <<"f_", Name/binary>>,
-                        Q = <<"select distinct(", Col/binary,") from search_facet ",
-                              "where ", Col/binary, " is not null">>,
-                        Rs = z_db:q(Q, Context),
-                        Rs1 = [ R || {R} <- Rs ],
+                        Q = <<"select ", Col/binary,", min(id) from search_facet ",
+                              "where ", Col/binary, " is not null ",
+                              "group by ", Col/binary>>,
+                        Rs = lists:sort(z_db:q(Q, Context)),
+                        Rs1 = lists:map(
+                            fun({V,Id}) ->
+                                #{
+                                    <<"value">> => V,
+                                    <<"facet_id">> => Id
+                                }
+                            end,
+                            Rs),
+                        Rs2 = labels(name2facet(Name, Facets), Rs1, Context),
                         Acc#{
                             Name => #{
                                 <<"type">> => <<"value">>,
-                                <<"values">> => lists:sort(Rs1)
+                                <<"values">> => Rs2
                             }
                         }
                 end,
@@ -126,8 +135,6 @@ facet_values(Context) ->
             Error
     end.
 
-
-
 %% @doc Add facets to the result set using the query.
 -spec search_query_facets(Result, Query, Context) -> NewResult
     when Result :: #search_result{},
@@ -137,7 +144,7 @@ facet_values(Context) ->
 search_query_facets(Result, Query, Context) ->
     Q1 = join_facet(Query),
     Q2 = Q1#search_sql{
-        select = "rsc.id, facet.*",
+        select = "rsc.id, facet.id as facet_id, facet.*",
         limit = undefined
     },
     Q3 = move_unused_order_args_to_select(Q2),
@@ -155,7 +162,7 @@ search_query_facets(Result, Query, Context) ->
     FinalSQL = iolist_to_binary(SQL3),
     {ok, Facets} = z_db:qmap(FinalSQL, Args, Context),
     % io:format("~n~s~n", [ FinalSQL ]),
-    Fs = group_facets(Defs, Facets),
+    Fs = group_facets(Defs, Facets, Context),
     NewTotal = facet_total(Fs, Result#search_result.total),
     PageLen = Result#search_result.pagelen,
     Result#search_result{
@@ -200,7 +207,12 @@ facet_total(Fs, Total) ->
         Fs).
 
 
-group_facets(Defs, Facets) ->
+group_facets(Defs, Facets, Context) ->
+    % Set sudo permission to fetch facet values.
+    % There has already been an ACL check on the returned ids, but some facet values
+    % might be shared with invisible ids, which will then give problems when rendering
+    % the specific value.
+    ContextSudo = z_acl:sudo(Context),
     lists:foldl(
         fun
             (#facet_def{ type = list }, Acc) ->
@@ -215,26 +227,27 @@ group_facets(Defs, Facets) ->
                         <<"max">> => convert_type(Type, Max)
                     }
                 };
-            (#facet_def{ name = Name, type = Type }, Acc) ->
+            (#facet_def{ name = Name, type = Type } = Facet, Acc) ->
                 Fs = find_facets(Name, Facets),
                 Vs = lists:map(
-                    fun(#{ <<"value">> := V, <<"count">> := Ct }) ->
-                        {binary_to_integer(Ct), V}
+                    fun(#{ <<"value">> := V, <<"count">> := Ct } = F) ->
+                        {binary_to_integer(Ct), V, F}
                     end,
                     Fs),
                 Vs1 = lists:reverse( lists:sort(Vs) ),
                 Vs2 = lists:map(
-                    fun({Ct, V}) ->
-                        #{
+                    fun({Ct, V, F}) ->
+                        F#{
                             <<"value">> => convert_type(Type, V),
                             <<"count">> => Ct
                         }
                     end,
                     Vs1),
+                Vs3 = labels(Facet, Vs2, ContextSudo),
                 Acc#{
                     Name => #{
                         <<"type">> => <<"count">>,
-                        <<"counts">> => Vs2
+                        <<"counts">> => Vs3
                     }
                 }
         end,
@@ -253,6 +266,7 @@ facet_union(#facet_def{ name = Name, is_range = true }) ->
     [
         "select '", Name, "' as facet,
             min(", Col, ")::character varying as value,
+            0 as facet_id,
             max(", Col, ")::character varying as count
          from result
          where ", Col, " is not null "
@@ -262,6 +276,7 @@ facet_union(#facet_def{ name = Name }) ->
     [
         "select '", Name, "' as facet,
             ", Col ,"::character varying as value,
+            min(facet_id)::integer as facet_id,
             count(*)::character varying as count
         from result
         where ", Col, " is not null
@@ -506,6 +521,76 @@ is_type([ _ | Cols ], Name, Type) ->
     is_type(Cols, Name, Type).
 
 
+%% @doc Add label values to the fetched facets for faceted search
+labels(_, [], _Context) ->
+    [];
+labels(Facet, Vs, Context) ->
+    Vs1 = case has_label_block(Facet, Context) of
+        {true, LabelBlock} ->
+            value_via_block(LabelBlock, Vs, Context);
+        false ->
+            case Facet#facet_def.type of
+                id ->
+                    ids_as_labels(Vs, Context);
+                _ ->
+                    values_as_labels(Vs)
+            end
+    end,
+    lists:map(fun(V) -> maps:remove(<<"facet_id">>, V) end, Vs1).
+
+value_via_block(LabelBlock, Vs, Context) ->
+    lists:map(
+        fun
+            (#{ <<"value">> := V, <<"facet_id">> := 0 } = F) ->
+                F#{ <<"label">> => V };
+            (#{ <<"value">> := V, <<"facet_id">> := Id } = F) ->
+                % NOTA BENE:
+                % The found id might not be visible.
+                case render_block(LabelBlock, {cat, <<"pivot/facet.tpl">>}, #{ <<"id">> => Id }, Context) of
+                    <<>> ->
+                        F#{ <<"label">> => V };
+                    T ->
+                        F#{ <<"label">> => T }
+                end
+        end,
+        Vs).
+
+ids_as_labels(Vs, Context) ->
+    lists:map(
+        fun(#{ <<"value">> := Id } = F) ->
+            T = case m_rsc:is_a(Id, person, Context) of
+                true ->
+                    {Name, _} = z_template:render_to_iolist("_name.tpl", #{ <<"id">> => Id }, Context),
+                    iolist_to_binary(Name);
+                false ->
+                    m_rsc:p(Id, <<"title">>, Context)
+            end,
+            T1 = case z_utils:is_empty(T) of
+                true -> m_rsc:p_no_acl(Id, <<"short_title">>, Context);
+                false -> T
+            end,
+            F#{ <<"label">> => z_trans:lookup_fallback(T1, Context) }
+        end,
+        Vs).
+
+values_as_labels(Vs) ->
+    lists:map(
+        fun(#{ <<"value">> := V } = F) ->
+            F#{ <<"label">> => V }
+        end,
+        Vs).
+
+has_label_block(#facet_def{ block = Block }, Context) ->
+    {ok, Blocks} = z_template:blocks(<<"pivot/facet.tpl">>, #{}, Context),
+    B = atom_to_binary(Block, utf8),
+    LabelBlock = binary_to_atom( <<"label_", B/binary>>, utf8 ),
+    case lists:member(LabelBlock, Blocks) of
+        true ->
+            {true, LabelBlock};
+        false ->
+            false
+    end.
+
 %% @doc Recreate the facet table by first dropping it.
 -spec recreate_table( z:context() ) -> ok | {error, term()}.
 recreate_table(Context) ->
@@ -679,12 +764,17 @@ facet_def(F, Context) ->
             Error
     end.
 
+name2facet(Name, [#facet_def{ name = Name } = F | _]) ->
+    F;
+name2facet(Name, [_|Fs]) ->
+    name2facet(Name, Fs).
+
 %% @doc Fetch all facet definitions from the current facet template.
 -spec template_facets( z:context() ) -> {ok, [ facet_def() ]} | {error, term()}.
 template_facets(Context) ->
     case z_template:blocks(<<"pivot/facet.tpl">>, #{}, Context) of
         {ok, Blocks} ->
-            Facets = lists:map(fun block_to_facet/1, Blocks),
+            Facets = lists:filtermap(fun block_to_facet/1, Blocks),
             case find_duplicate_names(Facets) of
                 [] -> {ok, Facets};
                 Names ->
@@ -712,21 +802,24 @@ find_duplicate_names(Facets) ->
 
 block_to_facet(Block) ->
     case atom_to_binary(Block, utf8) of
+        <<"label_", _/binary>> ->
+            % Label blocks are for representation of values
+            false;
         <<"is_", _/binary>> = Name ->
-            #facet_def{
+            {true, #facet_def{
                 name = Name,
                 block = Block,
                 type = boolean,
                 is_range = false
-            };
+            }};
         B ->
             {Type, Name, IsRange} = block_type(B),
-            #facet_def{
+            {true, #facet_def{
                 name = Name,
                 block = Block,
                 type = Type,
                 is_range = IsRange
-            }
+            }}
     end.
 
 block_type(B) ->
