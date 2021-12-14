@@ -793,15 +793,12 @@ img.admin-leader-image {
   padding: 0;
   margin: 0 0 10px 0;
 }
-.ui-datepicker .ui-datepicker-header {
-  height: 29px;
-}
-input.do_datepicker {
-  width: 100px;
+input[type='date'] {
+  width: auto;
   display: inline;
 }
-input.do_timepicker {
-  width: 70px;
+input[type='time'] {
+  width: auto;
   display: inline;
 }
 #sidebar-date-range .tab-content {

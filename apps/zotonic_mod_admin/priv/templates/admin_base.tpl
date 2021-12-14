@@ -16,8 +16,6 @@
         %}
 
         {% lib
-            "css/jquery-ui.datepicker.css"
-            "css/jquery.timepicker.css"
             "css/zp-menuedit.css"
             "css/z.modal.css"
             "css/z.icons.css"

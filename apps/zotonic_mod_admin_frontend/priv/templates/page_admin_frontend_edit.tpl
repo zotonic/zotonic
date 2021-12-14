@@ -9,8 +9,6 @@
 			"css/zotonic-admin.css"
 			"css/admin-bootstrap3.css"
 			"css/admin-frontend.css"
-			"css/jquery-ui.datepicker.css"
-            "css/jquery.timepicker.css"
             "font-awesome/css/font-awesome.css"
 	%}
 {% endblock %}
