@@ -177,7 +177,7 @@ await_response( Topic, Timeout, Context ) ->
 
 
 
--spec map_topic( mqtt_sessions:topic(), z:context() ) -> {ok, mqtt_sessions:topic()} | {error, no_client}.
+-spec map_topic( mqtt_sessions:topic(), z:context() ) -> {ok, mqtt_sessions:topic()} | {error, no_client | term()}.
 map_topic(Topic, Context) when is_binary(Topic) ->
     map_topic(binary:split(Topic, <<"/">>, [global]), Context);
 map_topic([ <<"~client">> | _ ], #context{ client_topic = undefined }) ->
@@ -189,19 +189,25 @@ map_topic([ <<"~user">> | T ], #context{ user_id = UserId }) when is_integer(Use
 map_topic([ <<"~user">> | T ], #context{ user_id = undefined }) ->
     {ok, [ <<"user">>, <<"anonymous">> | T ]};
 map_topic(Topic, Context) when is_tuple(Topic); is_integer(Topic) ->
-    {ok, map_topic_filter(Topic, Context)};
+    map_topic_filter(Topic, Context);
 map_topic(Topic, _Context) ->
     {ok, Topic}.
 
 
 %% @doc Map subscription topic to a topic filter.
--spec map_topic_filter( topic_any(), z:context()) -> topic().
+-spec map_topic_filter( topic_any(), z:context() ) -> {ok, topic()} | {error, no_topic | term()}.
+map_topic_filter(undefined, _Context) ->
+    {error, no_topic};
+map_topic_filter([], _Context) ->
+    {error, no_topic};
 map_topic_filter(Topic, Context) when is_list(Topic) ->
     map_topic(Topic, Context);
 map_topic_filter(Topic, Context) when is_binary(Topic) ->
     map_topic(binary:split(Topic, <<"/">>, [global]), Context);
 map_topic_filter(RscId, _Context) when is_integer(RscId) ->
-    [ <<"model">>, <<"rsc">>, <<"event">>, z_convert:to_binary(RscId), <<"+">> ];
+    {ok, [ <<"model">>, <<"rsc">>, <<"event">>, z_convert:to_binary(RscId), <<"+">> ]};
+map_topic_filter(RscId, Context) when is_atom(RscId) ->
+    map_topic_filter(m_rsc:rid(RscId, Context), Context);
 map_topic_filter({object, Props}, Context) when is_list(Props) ->
     map_topic_edge(<<"o">>, Props, Context);
 map_topic_filter({subject, Props}, Context) when is_list(Props) ->
@@ -210,24 +216,42 @@ map_topic_filter({subject, Props}, Context) when is_list(Props) ->
 map_topic_edge(ObjSub, Props, Context) ->
     Id = proplists:get_value(id, Props),
     MaybePredicate = proplists:get_value(predicate, Props),
-    PredName = to_predicate_name(MaybePredicate, Context),
-    [
-        <<"model">>, <<"edge">>, <<"event">>,
-        z_convert:to_binary(Id), ObjSub, PredName
-    ].
+    case to_predicate_name(MaybePredicate, Context) of
+        {ok, PredName} ->
+            {ok, [
+                <<"model">>, <<"edge">>, <<"event">>,
+                z_convert:to_binary(Id), ObjSub, PredName
+            ]};
+        {error, _} = Error ->
+            Error
+    end.
 
-to_predicate_name(undefined, _Context) -> <<"+">>;
-to_predicate_name(<<"*">>, _Context) -> <<"+">>;
-to_predicate_name("*", _Context) -> <<"+">>;
-to_predicate_name('*', _Context) -> <<"+">>;
-to_predicate_name(<<>>, _Context) -> <<"+">>;
-to_predicate_name(Id, Context) when is_integer(Id) ->
-    {ok, Name} = m_predicate:id_to_name(Id, Context),
-    z_convert:to_binary(Name);
-to_predicate_name(Pred, _Context) ->
-    z_convert:to_binary(Pred).
+-spec to_predicate_name(Name, Context) -> {ok, binary()} | {error, term()}
+    when Name :: binary() | string() | undefined | m_rsc:resource(),
+         Context :: z:context().
+to_predicate_name(undefined, _Context) -> {ok, <<"+">>};
+to_predicate_name(<<"*">>, _Context) -> {ok, <<"+">>};
+to_predicate_name("*", _Context) -> {ok, <<"+">>};
+to_predicate_name('*', _Context) -> {ok, <<"+">>};
+to_predicate_name(<<>>, _Context) -> {ok, <<"+">>};
+to_predicate_name(Id, Context) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, {unknown_predicate, Id}};
+        RId ->
+            case m_predicate:id_to_name(RId, Context) of
+                {ok, Name} ->
+                    {ok, z_convert:to_binary(Name)};
+                {error, _} = Error ->
+                    Error
+            end
+    end.
 
 
+%% @doc Ensure that the topic is prefixed with "bridge/origin/".
+-spec origin_topic(Topic) -> OriginTopic
+    when Topic :: mqtt_sessions:topic(),
+         OriginTopic :: mqtt_sessions:topic().
 origin_topic(<<"bridge/origin/", _/binary>> = Topic) ->
     Topic;
 origin_topic(Topic) when is_binary(Topic) ->

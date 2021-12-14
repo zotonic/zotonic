@@ -156,9 +156,14 @@ map_topics(Topics, Context) ->
     lists:filtermap(
         fun(T) ->
             case z_mqtt:map_topic(T, Context) of
+                {ok, T1} when is_binary(T); is_list(T) ->
+                    {true, z_mqtt:flatten_topic(T1)};
                 {ok, T1} ->
+                    % Ensure that topics for predicates or resources
+                    % are referring to the origin (aka server)
                     {true, z_mqtt:origin_topic( z_mqtt:flatten_topic(T1) )};
-                {error, _} ->
+                {error, Reason} ->
+                    lager:info("Error ~p on mapping wire topic ~p", [ Reason, T]),
                     false
             end
         end,
