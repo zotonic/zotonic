@@ -108,11 +108,19 @@ facet_values(Context) ->
                         };
                     (#facet_def{ name = Name }, Acc) ->
                         Col = <<"f_", Name/binary>>,
-                        Q = <<"select distinct(", Col/binary,") from search_facet ",
-                              "where ", Col/binary, " is not null">>,
-                        Rs = z_db:q(Q, Context),
-                        Rs1 = lists:sort([ R || {R} <- Rs ]),
-                        Rs2 = labels_facet_values(name2facet(Name, Facets), Rs1, Context),
+                        Q = <<"select ", Col/binary,", min(id) from search_facet ",
+                              "where ", Col/binary, " is not null ",
+                              "group by ", Col/binary>>,
+                        Rs = lists:sort(z_db:q(Q, Context)),
+                        Rs1 = lists:map(
+                            fun({V,Id}) ->
+                                #{
+                                    <<"value">> => V,
+                                    <<"facet_id">> => Id
+                                }
+                            end,
+                            Rs),
+                        Rs2 = labels(name2facet(Name, Facets), Rs1, Context),
                         Acc#{
                             Name => #{
                                 <<"type">> => <<"value">>,
@@ -136,7 +144,7 @@ facet_values(Context) ->
 search_query_facets(Result, Query, Context) ->
     Q1 = join_facet(Query),
     Q2 = Q1#search_sql{
-        select = "rsc.id, facet.*",
+        select = "rsc.id, facet.id as facet_id, facet.*",
         limit = undefined
     },
     Q3 = move_unused_order_args_to_select(Q2),
@@ -222,14 +230,14 @@ group_facets(Defs, Facets, Context) ->
             (#facet_def{ name = Name, type = Type } = Facet, Acc) ->
                 Fs = find_facets(Name, Facets),
                 Vs = lists:map(
-                    fun(#{ <<"value">> := V, <<"count">> := Ct }) ->
-                        {binary_to_integer(Ct), V}
+                    fun(#{ <<"value">> := V, <<"count">> := Ct } = F) ->
+                        {binary_to_integer(Ct), V, F}
                     end,
                     Fs),
                 Vs1 = lists:reverse( lists:sort(Vs) ),
                 Vs2 = lists:map(
-                    fun({Ct, V}) ->
-                        #{
+                    fun({Ct, V, F}) ->
+                        F#{
                             <<"value">> => convert_type(Type, V),
                             <<"count">> => Ct
                         }
@@ -258,6 +266,7 @@ facet_union(#facet_def{ name = Name, is_range = true }) ->
     [
         "select '", Name, "' as facet,
             min(", Col, ")::character varying as value,
+            0 as facet_id,
             max(", Col, ")::character varying as count
          from result
          where ", Col, " is not null "
@@ -267,6 +276,7 @@ facet_union(#facet_def{ name = Name }) ->
     [
         "select '", Name, "' as facet,
             ", Col ,"::character varying as value,
+            min(facet_id)::integer as facet_id,
             count(*)::character varying as count
         from result
         where ", Col, " is not null
@@ -511,18 +521,13 @@ is_type([ _ | Cols ], Name, Type) ->
     is_type(Cols, Name, Type).
 
 
-%% @doc Add label values to the fetched facets for facet values
-labels_facet_values(Facet, Vs, Context) ->
-    Vs1 = lists:map(fun(V) -> #{ <<"value">> => V } end, Vs),
-    labels(Facet, Vs1, Context).
-
 %% @doc Add label values to the fetched facets for faceted search
 labels(_, [], _Context) ->
     [];
 labels(Facet, Vs, Context) ->
-    case has_label_block(Facet, Context) of
+    Vs1 = case has_label_block(Facet, Context) of
         {true, LabelBlock} ->
-            value_via_block(Facet, LabelBlock, Vs, Context);
+            value_via_block(LabelBlock, Vs, Context);
         false ->
             case Facet#facet_def.type of
                 id ->
@@ -530,60 +535,25 @@ labels(Facet, Vs, Context) ->
                 _ ->
                     values_as_labels(Vs)
             end
-    end.
+    end,
+    lists:map(fun(V) -> maps:remove(<<"facet_id">>, V) end, Vs1).
 
-value_via_block(Facet, LabelBlock, Vs, Context) ->
-    Value2ids = value_ids(Facet, Vs, Context),
+value_via_block(LabelBlock, Vs, Context) ->
     lists:map(
-        fun(#{ <<"value">> := V } = F) ->
-            case maps:get(V, Value2ids, undefined) of
-                undefined ->
-                    F#{ <<"label">> => V };
-                Id ->
-                    % NOTA BENE:
-                    % The found id might not be visible.
-                    case render_block(LabelBlock, {cat, <<"pivot/facet.tpl">>}, #{ <<"id">> => Id }, Context) of
-                        <<>> ->
-                            F#{ <<"label">> => V };
-                        T ->
-                            F#{ <<"label">> => T }
-                    end
-            end
+        fun
+            (#{ <<"value">> := V, <<"facet_id">> := 0 } = F) ->
+                F#{ <<"label">> => V };
+            (#{ <<"value">> := V, <<"facet_id">> := Id } = F) ->
+                % NOTA BENE:
+                % The found id might not be visible.
+                case render_block(LabelBlock, {cat, <<"pivot/facet.tpl">>}, #{ <<"id">> => Id }, Context) of
+                    <<>> ->
+                        F#{ <<"label">> => V };
+                    T ->
+                        F#{ <<"label">> => T }
+                end
         end,
         Vs).
-
-value_ids(#facet_def{ name = Name }, [ #{ <<"value">> := V } | _ ] = Vs, Context) ->
-    Col = <<"f_", Name/binary>>,
-    T = case V of
-        _ when is_integer(V) -> "integer";
-        _ when is_float(V) -> "float";
-        _ when is_boolean(V) -> "boolean";
-        _ when is_tuple(V) -> "datetime";
-        _ when is_binary(V) -> "varchar";
-        _ -> error
-    end,
-    case T of
-        error ->
-            #{};
-        _ ->
-            Vals = [ Val || #{ <<"value">> := Val } <- Vs ],
-            Rs = z_db:q(iolist_to_binary([
-                    "select min(id), ", Col,
-                    " from search_facet ",
-                    " where ", Col, " in (SELECT(unnest($1::", T ,"[])))"
-                    " group by ", Col
-                    ]),
-                    [ Vals ],
-                    Context),
-            lists:foldl(
-                fun({Id, ColV}, Acc) ->
-                    Acc#{
-                        ColV => Id
-                    }
-                end,
-                #{},
-                Rs)
-    end.
 
 ids_as_labels(Vs, Context) ->
     lists:map(
