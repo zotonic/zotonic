@@ -693,7 +693,7 @@ drop_blocked_email(Id, Recipient, Email, Context) ->
     LogEmail = #log_email{
         severity = ?LOG_ERROR,
         mailer_status = error,
-        mailer_message = <<"Recipient blocked">>,
+        mailer_message = <<"Recipient blocked by Zotonic module (#email_is_blocked)">>,
         props = [{reason, recipient_blocked}],
         message_nr = Id,
         envelop_to = Recipient,
