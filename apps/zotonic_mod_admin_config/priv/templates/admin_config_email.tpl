@@ -87,7 +87,7 @@
                                 <input type="text" class="form-control" name="site.smtp_relay_username" value="{{ m.config.site.smtp_relay_username.value|escape }}" autocomplete="off" autocomplete="{_ Username _}">
                                 <label class="control-label">{_ Username _}</label>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group label-floating">
                                 <input type="text" class="form-control" name="site.smtp_relay_password" value="{{ m.config.site.smtp_relay_password.value|escape }}" autocomplete="off" placeholder="{_ Password _}">
                                 <label class="control-label">{_ Password _}</label>
                             </div>
