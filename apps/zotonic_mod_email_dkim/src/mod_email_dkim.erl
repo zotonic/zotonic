@@ -25,7 +25,7 @@
 
 -export([
     init/1,
-    observe_dkim_admin_info/2
+    observe_email_dkim_options/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -34,5 +34,6 @@ init(Context) ->
     z_email_dkim:ensure_configured(Context),
     ok.
 
-observe_dkim_admin_info(dkim_admin_info, Context) ->
-    m_email_dkim:admin_info(Context).
+observe_email_dkim_options(#email_dkim_options{}, Context) ->
+    z_email_dkim:mimemail_options(Context).
+

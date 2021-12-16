@@ -1093,7 +1093,7 @@ parse_post_body(Context) ->
                     {cowmachine_util:parse_qs(Body), Context1}
             end;
         <<"multipart/form-data", _/binary>> ->
-            {Form, ContextRcv} = z_parse_multipart:recv_parse(Context),
+            {Form, ContextRcv} = z_multipart_parse:recv_parse(Context),
             FileArgs = [
                 {Name, #upload{filename=Filename, tmpfile=TmpFile, tmpmonitor=TmpPid}}
                 || {Name, Filename, TmpFile, TmpPid} <- Form#multipart_form.files
