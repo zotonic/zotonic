@@ -973,7 +973,7 @@ message(Message) ->
 send_blocking(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) ->
     case z_notifier:first(
         #email_send_encoded{
-            message_id = MsgId,
+            message_nr = MsgId,
             from = VERP,
             to = RecipientEmail,
             encoded = EncodedMail,

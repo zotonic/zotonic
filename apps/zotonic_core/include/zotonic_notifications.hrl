@@ -374,7 +374,7 @@
 %%         ``{error, Reason::atom(), {FailureType, Host, Message}}`` when FailureType
 %%         is one of ``permanent_failure`` or ``temporary_failure``.
 -record(email_send_encoded, {
-    message_id :: binary(),
+    message_nr :: binary(),
     from :: binary(),        % The envelop from
     to :: binary(),          % The envelop to
     encoded :: binary(),
