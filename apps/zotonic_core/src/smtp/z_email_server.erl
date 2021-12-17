@@ -1,9 +1,8 @@
-%% @author Marc Worrell <marc@worrell.nl>
 %% @author Atilla Erdodi <atilla@maximonster.com>
-%% @copyright 2010-2020 Maximonster Interactive Things
+%% @copyright 2010-2021 Maximonster Interactive Things
 %% @doc Email server. Queues, renders and sends e-mails.
 
-%% Copyright 2010-2020 Maximonster Interactive Things
+%% Copyright 2010-2021 Maximonster Interactive Things
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -859,13 +858,10 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                 props=LogEmail#log_email{severity=?LOG_INFO, mailer_status=sending}
                               }, Context),
 
-            lager:info("[smtp] Sending email to <~s> (~s), via relay \"~s\"",
-                       [RecipientEmail, Id, Relay]),
-
             %% use the unique id as 'envelope sender' (VERP)
             SendResult = case z_config:get(smtp_is_blackhole, false) of
                 true -> <<"Blackhole - zotonic config smtp_is_blackhole is set.">>;
-                false -> send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts)
+                false -> send_blocking(Id, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context)
             end,
             case SendResult of
                 {error, Reason, {FailureType, Host, Message}} ->
@@ -935,7 +931,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                       }, Context),
                     %% delete email from the queue and notify the system
                     delete_emailq(Id);
-                Receipt when is_binary(Receipt) ->
+                {ok, Receipt} when is_binary(Receipt) ->
                     Receipt1 = z_string:trim(Receipt),
                     lager:info("[smtp] Sent email to <~s>: ~s",
                                [ RecipientEmail, Receipt1 ]),
@@ -959,7 +955,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                         true ->
                             ok;
                         false ->
-                            catch gen_smtp_client:send({VERP, [Bcc], EncodedMail}, BccSmtpOpts)
+                            catch send_blocking(Id, VERP, Bcc, EncodedMail, BccSmtpOpts, Context)
                     end
             end
     end.
@@ -972,26 +968,66 @@ message(Message) ->
             z_convert:to_binary( io_lib:format("~p", [Message]) )
     end.
 
-send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) ->
-    case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
-        {error, no_more_hosts, {permanent_failure, _Host, <<"ign Root ", _/binary>>}} ->
-            % Don't ask ...
-            send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts);
-        {error, retries_exceeded, {_FailureType, _Host, {error, closed}}} ->
-            send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts);
-        {error, retries_exceeded, {_FailureType, _Host, {error, timeout}}} ->
-            send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts);
-        Other ->
-            Other
+
+%% --- Send email using email notification, fall back to gen_smtp sending
+send_blocking(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) ->
+    case z_notifier:first(
+        #email_send_encoded{
+            message_nr = MsgId,
+            from = VERP,
+            to = RecipientEmail,
+            encoded = EncodedMail,
+            options = SmtpOpts
+        },
+        Context)
+    of
+        {ok, Receipt} ->
+            {ok, Receipt};
+        undefined ->
+            send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts);
+        smtp ->
+            send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts);
+        {error, _} = Error ->
+            Error;
+        {error, _, _} = Error ->
+            Error
     end.
 
-send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) ->
+
+send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts) ->
+    {relay, Relay} = proplists:lookup(relay, SmtpOpts),
+    lager:info("[smtp] Sending email to <~s> (~s), via relay \"~s\"",
+               [RecipientEmail, MsgId, Relay]),
+    case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
+        Receipt when is_binary(Receipt) ->
+            {ok, Receipt};
+        {error, no_more_hosts, {permanent_failure, _Host, <<"ign Root ", _/binary>>}} ->
+            % Don't ask ...
+            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts);
+        {error, retries_exceeded, {_FailureType, _Host, {error, closed}}} ->
+            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts);
+        {error, retries_exceeded, {_FailureType, _Host, {error, timeout}}} ->
+            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts);
+        {error, _} = Error ->
+            Error;
+        {error, _, _} = Error ->
+            Error
+    end.
+
+send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts) ->
     lager:info("Bounce error for ~p, retrying without TLS", [RecipientEmail]),
     SmtpOpts1 = [
         {tls, never}
         | proplists:delete(tls, SmtpOpts)
     ],
-    gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts1).
+    case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts1) of
+        Receipt when is_binary(Receipt) ->
+            {ok, Receipt};
+        {error, _} = Error ->
+            Error;
+        {error, _, _} = Error ->
+            Error
+    end.
 
 is_retry_possible(_Reason, _FailureType, auth_failed) -> true;  % proxy - could be temporary
 is_retry_possible(retries_exceeded, _FailureType, _Message) -> true;
@@ -999,10 +1035,7 @@ is_retry_possible(_Reason, permanent_failure, _Message) -> false;
 is_retry_possible(_Reason, __FailureType, _Message) -> true.
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
-    z_convert:to_binary([
-        "X-Mailer: ", x_mailer(), "\r\n",
-        Raw
-    ]);
+    z_convert:to_binary(Raw);
 encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
     %% Optionally render the text and html body
     Vars = [{email_to, Email#email.to}, {email_from, From} | Email#email.vars],
@@ -1025,16 +1058,14 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
                {<<"Subject">>, drop_non_printable(iolist_to_binary(Subject))},
                {<<"Date">>, date(Context)},
                {<<"MIME-Version">>, <<"1.0">>},
-               {<<"Message-ID">>, MessageId},
-               {<<"X-Mailer">>, x_mailer()}
+               {<<"Message-Id">>, MessageId}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
     build_and_encode_mail(Headers2, Text, Html, Email#email.attachments, Context);
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tuple(Body) ->
     Headers = [{<<"From">>, From},
                {<<"To">>, ensure_brackets(Email#email.to)},
-               {<<"Message-ID">>, MessageId},
-               {<<"X-Mailer">>, x_mailer()}
+               {<<"Message-Id">>, MessageId}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
     {BodyType, BodySubtype, BodyHeaders, BodyParams, BodyParts} = Body,
@@ -1045,8 +1076,7 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tu
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_list(Body); is_binary(Body) ->
     Headers = [{<<"From">>, From},
                {<<"To">>, ensure_brackets(Email#email.to)},
-               {<<"Message-ID">>, MessageId},
-               {<<"X-Mailer">>, x_mailer()}
+               {<<"Message-Id">>, MessageId}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
     iolist_to_binary([ encode_headers(Headers2), "\r\n\r\n", Body ]).
@@ -1064,9 +1094,6 @@ ensure_brackets(Email) ->
 
 date(Context) ->
     iolist_to_binary(z_datetime:format("r", z_context:set_language(en, Context))).
-
-x_mailer() ->
-    <<"Zotonic (http://zotonic.com)">>.
 
 % Replace all control and non-utf8 characters in the text with spaces.
 drop_non_printable(B) ->
@@ -1582,4 +1609,7 @@ copy_attachment(Att) ->
     Att.
 
 opt_dkim(Context) ->
-    z_email_dkim:mimemail_options(Context).
+    case z_notifier:first(#email_dkim_options{}, Context) of
+        undefined -> [];
+        Options when is_list(Options) -> Options
+    end.

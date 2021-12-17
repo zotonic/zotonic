@@ -1,8 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@miraclethings.nl>
-%% @copyright 2016-2020 Arjan Scherpenisse
+%% @copyright 2016-2021 Arjan Scherpenisse
 %% @doc Support functions for signing e-mail messages using DKIM
 
-%% Copyright 2016-2020 Arjan Scherpenisse
+%% Copyright 2016-2021 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 
 -module(z_email_dkim).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 -export([ensure_configured/1, cert_files/1, dns_entry/1, dns_entry_domain/1, mimemail_options/1]).
 
@@ -93,7 +93,7 @@ maybe_move_0x_keys(Context) ->
 
 %% @doc Create the options list which are passed to gen_smtp's mimemail:encode/2 function.
 mimemail_options(Context) ->
-    case z_module_manager:active(mod_email_dkim, Context) andalso is_configured(Context) of
+    case is_configured(Context) of
         false ->
             [];
         true ->

@@ -28,7 +28,7 @@
 %% OR OTHER DEALINGS IN THE SOFTWARE.
 
 
--module(z_parse_multipart).
+-module(z_multipart_parse).
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

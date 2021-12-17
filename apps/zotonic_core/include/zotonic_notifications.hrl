@@ -357,6 +357,31 @@
 }).
 
 
+%% @doc Return the options for the DKIM signature on outgoing emails. Called during
+%% email encoding.
+%% Type: first
+%% Return: ``list()`` options for the DKIM signature
+-record(email_dkim_options, {
+}).
+
+%% @doc Request to send an email using special email senders, for example using
+%% proxy APIs. If no sender is found then the email is sent using the built-in smtp
+%% server. The email is completely mime encoded.
+%% The Context is the depickled z_email:send/2 context.
+%% Type: first
+%% Return: ``{ok, Status}`` where status is a binary; or
+%%         ``smtp`` use the built-in smtp server; or
+%%         ``{error, Reason::atom(), {FailureType, Host, Message}}`` when FailureType
+%%         is one of ``permanent_failure`` or ``temporary_failure``.
+-record(email_send_encoded, {
+    message_nr :: binary(),
+    from :: binary(),        % The envelop from
+    to :: binary(),          % The envelop to
+    encoded :: binary(),
+    options :: gen_smtp_client:options()
+}).
+
+
 %% @doc Add a handler for receiving e-mail notifications
 %% Type: first
 %% Return: ``{ok, LocalFrom}``, the unique localpart of an e-mail address on this server.
