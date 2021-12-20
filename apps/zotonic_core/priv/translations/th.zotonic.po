@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-13 11:19\n"
+"PO-Revision-Date: 2021-12-20 15:28\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -1590,7 +1590,7 @@ msgstr "คำอธิบายหน้า"
 msgid "Page keywords"
 msgstr "คำหลักของหน้า"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:21
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:20
 msgid "Page path"
 msgstr "เส้นทางหน้า"
 
@@ -1844,7 +1844,7 @@ msgstr "แสดงที่อยู่ในหน้าแก้ไข"
 msgid "Show as"
 msgstr "แสดงเป็น"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:30
 msgid "Show page on multiple paths"
 msgstr "แสดงเพจในหลายเส้นทาง"
 
@@ -2026,7 +2026,7 @@ msgstr "ไฟล์นี้มีขนาดใหญ่เกินไป"
 msgid "This is system content."
 msgstr "นี่คือเนื้อหาของระบบ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:42
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
 msgid "This name is in use by another page."
 msgstr "ชื่อนี้ถูกใช้โดยเพจอื่น"
 
@@ -2050,7 +2050,7 @@ msgstr "เพจนี้สามารถเชื่อมต่อกับ
 msgid "This page is from another website. The original can be found at"
 msgstr "หน้านี้มาจากเว็บไซต์อื่น สามารถติดตามต้นฉบับได้ที่"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:48
 msgid "This resource was created by the module"
 msgstr "ทรัพยากรนี้สร้างขึ้นโดยโมดูล"
 
@@ -2086,11 +2086,11 @@ msgstr "การเชื่อมต่อมากเกินไประบ
 msgid "Type text to search"
 msgstr "พิมพ์ข้อความเพื่อค้นหา"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:38./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:40
 msgid "Unique name"
 msgstr "ชื่อเฉพาะ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:58./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:55./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:56
 msgid "Unique uri"
 msgstr "ยูริที่ไม่เหมือนใคร"
 
@@ -7385,11 +7385,11 @@ msgstr "ตรวจสอบตารางสำหรับการค้น
 msgid "Rebuild search facets"
 msgstr "สร้างแง่มุมการค้นหาใหม่"
 
-#: apps/zotonic_mod_search/src/mod_search.erl:60
+#: apps/zotonic_mod_search/src/mod_search.erl:61
 msgid "Rebuilding the faceted search table."
 msgstr "การสร้างตารางการค้นหาแบบเหลี่ยมเพชรพลอยขึ้นใหม่"
 
-#: apps/zotonic_mod_search/src/mod_search.erl:62
+#: apps/zotonic_mod_search/src/mod_search.erl:63
 msgid "Sorry, you are not allowed to do this."
 msgstr "ขออภัย คุณไม่ได้รับอนุญาตให้ทำเช่นนี้"
 
