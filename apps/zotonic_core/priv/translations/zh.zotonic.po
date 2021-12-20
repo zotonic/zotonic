@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-13 11:19\n"
+"PO-Revision-Date: 2021-12-20 15:28\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -1590,7 +1590,7 @@ msgstr "页面描述"
 msgid "Page keywords"
 msgstr "页面关键字"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:21
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:20
 msgid "Page path"
 msgstr "页面路径"
 
@@ -1844,7 +1844,7 @@ msgstr "在编辑页面显示地址"
 msgid "Show as"
 msgstr "显示为"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:30
 msgid "Show page on multiple paths"
 msgstr "在多个路径上显示页面"
 
@@ -2026,7 +2026,7 @@ msgstr "这个文件太大。"
 msgid "This is system content."
 msgstr "这是系统内容。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:42
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
 msgid "This name is in use by another page."
 msgstr "这个名字被另一个页面使用。"
 
@@ -2050,7 +2050,7 @@ msgstr "本页面可以连接到其他页面。例如你可以链接到作者或
 msgid "This page is from another website. The original can be found at"
 msgstr "此页面来自另一个网站。原文可以在"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:48
 msgid "This resource was created by the module"
 msgstr "这个资源的创建模块是"
 
@@ -2086,11 +2086,11 @@ msgstr "连接太多，仅显示第一个和最后一个。"
 msgid "Type text to search"
 msgstr "输入文本进行检索"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:38./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:40
 msgid "Unique name"
 msgstr "唯一标识"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:58./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:55./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:56
 msgid "Unique uri"
 msgstr "唯一 URL"
 
@@ -7381,11 +7381,11 @@ msgstr "检查分面搜索表并通过重新索引所有页面来填充它。"
 msgid "Rebuild search facets"
 msgstr "重建搜索方面"
 
-#: apps/zotonic_mod_search/src/mod_search.erl:60
+#: apps/zotonic_mod_search/src/mod_search.erl:61
 msgid "Rebuilding the faceted search table."
 msgstr "重建分面搜索表。"
 
-#: apps/zotonic_mod_search/src/mod_search.erl:62
+#: apps/zotonic_mod_search/src/mod_search.erl:63
 msgid "Sorry, you are not allowed to do this."
 msgstr "抱歉，您无权执行此操作。"
 
