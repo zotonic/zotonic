@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-13 11:19\n"
+"PO-Revision-Date: 2021-12-20 15:28\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1590,7 +1590,7 @@ msgstr "Описание страницы"
 msgid "Page keywords"
 msgstr "Ключевые слова страницы"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:21
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:20
 msgid "Page path"
 msgstr "Путь страницы"
 
@@ -1844,7 +1844,7 @@ msgstr "Показать адрес на странице редактирова
 msgid "Show as"
 msgstr "Показать как"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:30
 msgid "Show page on multiple paths"
 msgstr "Показать страницу на нескольких путях"
 
@@ -2026,7 +2026,7 @@ msgstr "Этот файл слишком большой."
 msgid "This is system content."
 msgstr "Это содержимое системы."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:42
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
 msgid "This name is in use by another page."
 msgstr "Это имя используется другой страницей."
 
@@ -2050,7 +2050,7 @@ msgstr "Эта страница может соединяться с други�
 msgid "This page is from another website. The original can be found at"
 msgstr "Эта страница с другого веб-сайта. Оригинал можно найти на"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:48
 msgid "This resource was created by the module"
 msgstr "Этот ресурс был создан модулем"
 
@@ -2086,11 +2086,11 @@ msgstr "Слишком много подключений, отображаютс
 msgid "Type text to search"
 msgstr "Введите строку для поиска"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:38./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:40
 msgid "Unique name"
 msgstr "Уникальное имя"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:58./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:55./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:56
 msgid "Unique uri"
 msgstr "Уникальный идентификатор ресурса"
 
@@ -7385,11 +7385,11 @@ msgstr "Проверьте таблицу на предмет фасетного
 msgid "Rebuild search facets"
 msgstr "Восстановить фасеты поиска"
 
-#: apps/zotonic_mod_search/src/mod_search.erl:60
+#: apps/zotonic_mod_search/src/mod_search.erl:61
 msgid "Rebuilding the faceted search table."
 msgstr "Восстановление таблицы фасетного поиска."
 
-#: apps/zotonic_mod_search/src/mod_search.erl:62
+#: apps/zotonic_mod_search/src/mod_search.erl:63
 msgid "Sorry, you are not allowed to do this."
 msgstr "Извините, вам не разрешено это делать."
 
