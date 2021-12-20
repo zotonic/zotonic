@@ -31,12 +31,16 @@ render_validator(length, TriggerId, _TargetId, Args, _Context)  ->
 %% @spec validate(Type, TriggerId, Values, Args, Context) -> {ok,AcceptedValue} | {error,Id,Error}
 %%          Error = invalid | novalue | {script, Script}
 validate(length, Id, Value, [Min,Max], Context) when is_list(Value); is_binary(Value) ->
-    Len   = z_string:len(Value),
-    MinOK = (Min == -1 orelse Len >= Min),
-    MaxOK = (Max == -1 orelse Len =< Max),
-    case MinOK andalso MaxOK of
-        true  -> {{ok, Value}, Context};
-        false -> {{error, Id, invalid}, Context}
+    case z_string:len(Value) of
+        0 ->
+            {{ok, Value}, Context};
+        Len ->
+            MinOK = (Min == -1 orelse Len >= Min),
+            MaxOK = (Max == -1 orelse Len =< Max),
+            case MinOK andalso MaxOK of
+                true  -> {{ok, Value}, Context};
+                false -> {{error, Id, invalid}, Context}
+            end
     end.
 
 to_number(undefined) -> -1;
