@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-13 11:19\n"
+"PO-Revision-Date: 2021-12-20 15:28\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -1590,7 +1590,7 @@ msgstr "Description de page"
 msgid "Page keywords"
 msgstr "Mots clés de la page"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:21
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:20
 msgid "Page path"
 msgstr "Chemin de la page"
 
@@ -1844,7 +1844,7 @@ msgstr "Afficher l'adresse sur la page d'édition"
 msgid "Show as"
 msgstr "Afficher comme"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:30
 msgid "Show page on multiple paths"
 msgstr "Afficher la page sur plusieurs chemins"
 
@@ -2026,7 +2026,7 @@ msgstr "Ce fichier est trop volumineux."
 msgid "This is system content."
 msgstr "C'est un contenu system."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:42
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
 msgid "This name is in use by another page."
 msgstr "Ce nom est déjà utilisé par une autre page."
 
@@ -2050,7 +2050,7 @@ msgstr "Cette page peut se connecter à d\\'autres pages. Par exemple vous pouve
 msgid "This page is from another website. The original can be found at"
 msgstr "Cette page provient d'un autre site. L'original est disponible sur"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:48
 msgid "This resource was created by the module"
 msgstr "Cette ressource a été créée par le module"
 
@@ -2086,11 +2086,11 @@ msgstr "Trop de connexions, seules la première et la dernière sont affichées.
 msgid "Type text to search"
 msgstr "Saisir le texte à rechercher"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:38./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:40
 msgid "Unique name"
 msgstr "Nom unique"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:58./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:55./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:56
 msgid "Unique uri"
 msgstr "Unique uri"
 
@@ -7385,11 +7385,11 @@ msgstr "Consultez le tableau pour la recherche à facettes et remplissez-le en r
 msgid "Rebuild search facets"
 msgstr "Reconstruire les facettes de recherche"
 
-#: apps/zotonic_mod_search/src/mod_search.erl:60
+#: apps/zotonic_mod_search/src/mod_search.erl:61
 msgid "Rebuilding the faceted search table."
 msgstr "Reconstruire la table de recherche à facettes."
 
-#: apps/zotonic_mod_search/src/mod_search.erl:62
+#: apps/zotonic_mod_search/src/mod_search.erl:63
 msgid "Sorry, you are not allowed to do this."
 msgstr "Désolé, vous n'êtes pas autorisé à le faire."
 
