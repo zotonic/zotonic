@@ -64,9 +64,23 @@ event(#postback{ message={facet_rebuild, _Args}}, Context) ->
     end.
 
 
-observe_search_query(#search_query{ name = <<"facets">>, args = Args, offsetlimit = OffsetLimit }, Context) ->
-    R = search(<<"query">>, Args, OffsetLimit, Context),
-    R#search_sql{ post_func = fun search_facet:search_query_facets/3 };
+observe_search_query(#search_query{ name = <<"facets">>, args = Args }, Context) ->
+    case search_query:search(Args, Context) of
+        #search_sql{} = R ->
+            R#search_sql{
+                post_func = fun(Result, _Q, Context) ->
+                                search_facet:search_query_facets(Result, Args, Context)
+                            end};
+        R ->
+            R
+    end;
+observe_search_query(#search_query{ name = <<"subfacets">>, args = Args }, Context) ->
+    case search_query:search(Args, Context) of
+        #search_sql{} = R ->
+            R#search_sql{ post_func = fun search_facet:search_query_subfacets/3 };
+        R ->
+            R
+    end;
 observe_search_query(#search_query{ name = <<"facet_values">> }, Context) ->
     case search_facet:facet_values(Context) of
         {ok, Facets} ->

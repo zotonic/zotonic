@@ -81,6 +81,7 @@
     column_names/2,
     column_names_bin/2,
     column_exists/3,
+    to_column_value/4,
 
     estimate_rows/3,
 
@@ -113,8 +114,8 @@
 -type query_timeout() :: integer().
 
 -type transaction_fun() :: fun((z:context()) -> term()).
--type table_name() :: atom() | string().
--type schema_name() :: default | atom() | string().
+-type table_name() :: atom() | string() | binary().
+-type schema_name() :: default | atom() | string() | binary().
 -type parameters() :: list( parameter() ).
 -type parameter() :: tuple()
                    | calendar:datetime()
@@ -1020,14 +1021,19 @@ columns(Table, Context) ->
     {Schema, Table1, _QTab} = quoted_table_name(Table),
     columns(Schema, Table1, Context).
 
--spec columns(schema_name(), string(), z:context()) -> list( #column_def{} ).
+-spec columns(schema_name(), string() | binary() | atom(), z:context()) -> list( #column_def{} ).
+columns(Schema, Table, Context) when is_binary(Table) ->
+    columns(Schema, binary_to_list(Table), Context);
+columns(Schema, Table, Context) when is_atom(Table) ->
+    columns(Schema, atom_to_list(Table), Context);
 columns(Schema, Table, Context) when is_list(Table) ->
     assert_table_name(Table),
     Options = z_db_pool:get_database_options(Context),
     Db = proplists:get_value(dbdatabase, Options),
     Schema1 = case Schema of
         default -> proplists:get_value(dbschema, Options);
-        S when is_list(S) -> S
+        S when is_list(S) -> S;
+        S when is_binary(S) -> S
     end,
     case z_depcache:get({columns, Db, Schema1, Table}, Context) of
         {ok, Cols} ->
@@ -1086,8 +1092,8 @@ column(Table, Column, Context) ->
 -spec column( schema_name(), table_name(), atom() | string(), z:context()) ->
         {ok, #column_def{}} | {error, enoent}.
 column(Schema, Table, Column0, Context) ->
-    Column = z_convert:to_atom(Column0),
     Columns = columns(Schema, Table, Context),
+    Column = to_existing_atom(Column0),
     case lists:filter(
         fun
             (#column_def{ name = Name }) when Name =:= Column -> true;
@@ -1098,6 +1104,21 @@ column(Schema, Table, Column0, Context) ->
         [] -> {error, enoent};
         [ #column_def{} = Col ] -> {ok, Col}
     end.
+
+to_existing_atom(C) ->
+    try
+        to_existing_atom_1(C)
+    catch
+        error:badarg ->
+            'ERROR'
+    end.
+
+to_existing_atom_1(C) when is_binary(C) ->
+    binary_to_existing_atom(C, utf8);
+to_existing_atom_1(C) when is_list(C) ->
+    list_to_existing_atom(C);
+to_existing_atom_1(C) when is_atom(C) ->
+    C.
 
 %% @doc Return a list with the column names of a table.  The names are sorted.
 -spec column_names(table_name(), z:context()) -> list( atom() ).
@@ -1122,6 +1143,67 @@ column_names_bin(Schema, Table, Context) ->
 -spec column_exists(table_name(), atom(), z:context()) -> boolean().
 column_exists(Table, Column, Context) when is_atom(Column) ->
     lists:member(Column, column_names(Table, Context)).
+
+
+%% @doc Convert a value so that it is compatible with the column type
+-spec to_column_value(table_name(), atom()|binary(), term(), z:context()) -> {ok, term()} | {error, term()}.
+to_column_value(Table, Column, Value, Context) ->
+    case column(Table, Column, Context) of
+        {ok, #column_def{ type = Type, length = Length }} ->
+            try
+                {ok, convert_value(Type, Length, Value)}
+            catch
+                _:Reason ->
+                    {error, Reason}
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
+convert_value("text", _, V) ->
+    z_convert:to_binary(V);
+convert_value("character varying", Len, V) ->
+    V1 = z_convert:to_binary(V),
+    z_string:truncatechars(V1, Len);
+convert_value("integer", _, V) ->
+    z_convert:to_integer(V);
+convert_value("bigint", _, V) ->
+    z_convert:to_integer(V);
+convert_value("smallint", _, V) ->
+    z_convert:to_integer(V);
+convert_value("serial", _, V) ->
+    z_convert:to_integer(V);
+convert_value("bigserial", _, V) ->
+    z_convert:to_integer(V);
+convert_value("smallserial", _, V) ->
+    z_convert:to_integer(V);
+convert_value("numeric", _, V) ->
+    z_convert:to_float(V);
+convert_value("decimal", _, V) ->
+    z_convert:to_float(V);
+convert_value("float", _, V) ->
+    z_convert:to_float(V);
+convert_value("double", _, V) ->
+    z_convert:to_float(V);
+convert_value("boolean", _, V) ->
+    z_convert:to_bool_strict(V);
+convert_value("timestamp" ++ _, _, V) ->
+    z_datetime:to_datetime(V);
+convert_value("datetime" ++ _, _, V) ->
+    z_datetime:to_datetime(V);
+convert_value("date" ++ _, _, V) ->
+    z_datetime:to_datetime(V);
+convert_value("bytea", _, V) ->
+    ?DB_PROPS(V);
+convert_value("tsvector", _, V) ->
+    z_convert:to_binary(V);
+convert_value("ARRAY", _, V) when is_list(V) ->
+    V;
+convert_value("ARRAY", _, V) ->
+    [ V ];
+convert_value(Type, _, V) ->
+    lager:warning("No type conversion for column type ~s, value ~p", [ Type, V ]),
+    V.
 
 
 %% @doc Flush all cached information about the database.
@@ -1411,7 +1493,9 @@ column_spec_unique(true) -> " UNIQUE".
 assert_table_name(A) when is_atom(A) ->
     assert_table_name1(atom_to_list(A));
 assert_table_name([ C | _ ] = Table) when C =/= $. ->
-    assert_table_name1(Table).
+    assert_table_name1(Table);
+assert_table_name(<< C,  _/binary>> = Table) when C =/= $. ->
+    assert_table_name1b(Table).
 
 assert_table_name1([]) -> true;
 assert_table_name1([$_|T]) -> assert_table_name1(T);
@@ -1420,6 +1504,14 @@ assert_table_name1([H|T]) when (H >= $a andalso H =< $z) ->
     assert_table_name1(T);
 assert_table_name1([H|T]) when (H >= $0 andalso H =< $9) ->
     assert_table_name1(T).
+
+assert_table_name1b(<<>>) -> true;
+assert_table_name1b(<<$_, T/binary>>) -> assert_table_name1b(T);
+assert_table_name1b(<<$., T/binary>>) -> assert_table_name1b(T);
+assert_table_name1b(<<H, T/binary>>) when (H >= $a andalso H =< $z) ->
+    assert_table_name1b(T);
+assert_table_name1b(<<H, T/binary>>) when (H >= $0 andalso H =< $9) ->
+    assert_table_name1b(T).
 
 %% @doc Check if a name is a valid SQL database name. Crashes when invalid
 -spec assert_database_name( string() ) -> true.

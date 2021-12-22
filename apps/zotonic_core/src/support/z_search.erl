@@ -31,6 +31,7 @@
     query_/2,
 
     props_to_map/1,
+    reformat_sql_query/2,
     concat_sql_query/2
 ]).
 

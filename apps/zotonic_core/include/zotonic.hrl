@@ -171,7 +171,8 @@
     run_func :: function() | undefined,
     post_func :: fun( (#search_result{}, #search_sql{}, z:context()) -> #search_result{} ) | undefined,
     extra = [] :: list(),
-    assoc = false :: boolean()
+    assoc = false :: boolean(),
+    query_terms = [] :: list()
 }).
 
 %% Used for fetching the site dispatch rules (see also )
