@@ -615,7 +615,7 @@ qterm({language, Lang}, _Context) ->
                     <<"rsc.language @> ">>, '$1'
                 ],
                 args = [
-                    z_convert:to_binary(Code)
+                    [ z_convert:to_binary(Code) ]
                 ]
             };
         {error, _} ->
