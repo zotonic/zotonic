@@ -157,11 +157,11 @@
 }).
 
 -record(search_sql, {
-    select :: list(),
-    from :: list(),
-    where = "" :: string(),
-    order = "" :: string(),
-    group_by = "" :: string(),
+    select :: iodata(),
+    from :: iodata(),
+    where = "" :: iodata(),
+    order = "" :: iodata(),
+    group_by = "" :: iodata(),
     limit,
     tables = [] :: list(),
     args = [] :: list(),

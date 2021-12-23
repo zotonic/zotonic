@@ -82,7 +82,7 @@ search(Query, Context) ->
     build_query(lists:sort(Query5), Context).
 
 
--spec build_query(list(), z:context()) -> #search_sql{} | #search_result{}.
+-spec build_query(list(), z:context()) -> #search_sql_terms{} | #search_result{}.
 build_query(Terms, Context) ->
     Ts = lists:flatten(lists:map(fun(T) -> qterm(T, Context) end, Terms)),
     case lists:member(none, Ts) of
@@ -641,13 +641,18 @@ qterm({{facet, Field}, V}, Context) ->
         {ok, Res1} ->
             Res1;
         {error, _} ->
-            []
+            none
     end;
 qterm({filter, R}, Context) ->
     add_filters(R, Context);
 qterm({{filter, Field}, V}, Context) ->
     {Tab, Col, Q1} = map_filter_column(Field, #search_sql_term{}),
-    pivot_qterm(Tab, Col, V, Q1, Context);
+    case pivot_qterm(Tab, Col, V, Q1, Context) of
+        {ok, QTerm} ->
+            QTerm;
+        {error, _} ->
+            none
+    end;
 qterm({text, Text}, Context) ->
     %% text=...
     %% Perform a fulltext search
@@ -1115,7 +1120,7 @@ pivot_qterm(Tab, Col, Vs, Q, Context) when is_list(Vs) ->
         end,
         Q,
         Vs),
-    Q3 = Q2#search_sql{
+    Q3 = Q2#search_sql_term{
         where = [
             <<"(">>,
             lists:join(<<" OR ">>, Q2#search_sql_term.where),
@@ -1134,9 +1139,10 @@ pivot_qterm_1(Tab, Col, Value, Query, Context) ->
             W = [
                 <<Tab/binary, $., Col/binary>>, Op, ArgN
             ],
-            Query2#search_sql_term{
+            Query3 = Query2#search_sql_term{
                 where = Query2#search_sql_term.where ++ [ W ]
-            };
+            },
+            {ok, Query3};
         {error, _} = Error ->
             lager:info("Pivot value error for column ~s.~s, value ~p, dropping query term.",
                        [ Tab, Col, Value1 ]),

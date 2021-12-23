@@ -442,7 +442,7 @@ qterm(Field, Vs, Context) when is_list(Vs) ->
         end,
         Q,
         Vs),
-    Q3 = Q2#search_sql{
+    Q3 = Q2#search_sql_term{
         where = [
             <<"(">>,
             lists:join(<<" OR ">>, Q2#search_sql_term.where),

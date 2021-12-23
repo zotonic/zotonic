@@ -78,6 +78,7 @@
 
     column/3,
     columns/2,
+    columns/3,
     column_names/2,
     column_names_bin/2,
     column_exists/3,
@@ -115,6 +116,7 @@
 
 -type transaction_fun() :: fun((z:context()) -> term()).
 -type table_name() :: atom() | string() | binary().
+-type column_name() :: atom() | string() | binary().
 -type schema_name() :: default | atom() | string() | binary().
 -type parameters() :: list( parameter() ).
 -type parameter() :: tuple()
@@ -151,6 +153,7 @@
     parameters/0,
     parameter/0,
     table_name/0,
+    column_name/0,
     schema_name/0,
     props/0,
     props_map/0,
@@ -324,22 +327,22 @@ end.
 %% Query - return proplists
 %% ----------------------------------------------------------------
 
--spec assoc_row(string(), z:context()) -> proplists:proplist().
+-spec assoc_row(sql(), z:context()) -> proplists:proplist().
 assoc_row(Sql, Context) ->
     assoc_row(Sql, [], Context).
 
--spec assoc_row(string(), parameters(), z:context()) -> proplists:proplist() | undefined.
+-spec assoc_row(sql(), parameters(), z:context()) -> proplists:proplist() | undefined.
 assoc_row(Sql, Parameters, Context) ->
     case assoc(Sql, Parameters, Context) of
         [Row|_] -> Row;
         [] -> undefined
     end.
 
--spec assoc_props_row(string(), z:context()) -> proplists:proplist() | undefined.
+-spec assoc_props_row(sql(), z:context()) -> proplists:proplist() | undefined.
 assoc_props_row(Sql, Context) ->
     assoc_props_row(Sql, [], Context).
 
--spec assoc_props_row(string(), list(), z:context()) -> proplists:proplist() | undefined.
+-spec assoc_props_row(sql(), list(), z:context()) -> proplists:proplist() | undefined.
 assoc_props_row(Sql, Parameters, Context) ->
     case assoc_props(Sql, Parameters, Context) of
         [Row|_] -> Row;
@@ -1021,7 +1024,7 @@ columns(Table, Context) ->
     {Schema, Table1, _QTab} = quoted_table_name(Table),
     columns(Schema, Table1, Context).
 
--spec columns(schema_name(), string() | binary() | atom(), z:context()) -> list( #column_def{} ).
+-spec columns(schema_name(), table_name(), z:context()) -> list( #column_def{} ).
 columns(Schema, Table, Context) when is_binary(Table) ->
     columns(Schema, binary_to_list(Table), Context);
 columns(Schema, Table, Context) when is_atom(Table) ->
@@ -1083,13 +1086,13 @@ column_default(<<"nextval(", _/binary>>) -> undefined;
 column_default(Default) -> binary_to_list(Default).
 
 
--spec column( table_name(), atom() | string(), z:context()) ->
+-spec column( table_name(), column_name(), z:context()) ->
         {ok, #column_def{}} | {error, enoent}.
 column(Table, Column, Context) ->
     {Schema, Table1, _QTab} = quoted_table_name(Table),
     column(Schema, Table1, Column, Context).
 
--spec column( schema_name(), table_name(), atom() | string(), z:context()) ->
+-spec column( schema_name(), table_name(), column_name(), z:context()) ->
         {ok, #column_def{}} | {error, enoent}.
 column(Schema, Table, Column0, Context) ->
     Columns = columns(Schema, Table, Context),
@@ -1140,13 +1143,16 @@ column_names_bin(Schema, Table, Context) ->
     [ atom_to_binary(Col, utf8) || Col <- column_names(Schema, Table, Context) ].
 
 %% @doc Check if a column exists in a table.
--spec column_exists(table_name(), atom(), z:context()) -> boolean().
+-spec column_exists(table_name(), column_name(), z:context()) -> boolean().
 column_exists(Table, Column, Context) when is_atom(Column) ->
-    lists:member(Column, column_names(Table, Context)).
+    lists:member(Column, column_names(Table, Context));
+column_exists(Table, Column, Context) when is_atom(Column) ->
+    Col1 = z_convert:to_binary(Column),
+    lists:member(Col1, column_names_bin(Table, Context)).
 
 
 %% @doc Convert a value so that it is compatible with the column type
--spec to_column_value(table_name(), atom()|binary(), term(), z:context()) -> {ok, term()} | {error, term()}.
+-spec to_column_value(table_name(), column_name(), term(), z:context()) -> {ok, term()} | {error, term()}.
 to_column_value(Table, Column, Value, Context) ->
     case column(Table, Column, Context) of
         {ok, #column_def{ type = Type, length = Length }} ->
