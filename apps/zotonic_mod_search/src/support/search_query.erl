@@ -32,13 +32,12 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include("./search_internal.hrl").
 
 -define(SQL_SAFE_REGEXP, "^[0-9a-zA-Z_\.]+$").
 
 
 %% @doc Build a SQL search query from the filter arguments.
--spec search( map() | proplists:proplist(), z:context() ) -> #search_sql{} | #search_result{}.
+-spec search( map() | proplists:proplist(), z:context() ) -> #search_sql_terms{} | #search_result{}.
 search(Query, Context) ->
     Query1 = filter_empty(Query),
     Query2 = lists:filtermap(
@@ -83,7 +82,6 @@ search(Query, Context) ->
     build_query(lists:sort(Query5), Context).
 
 
-
 -spec build_query(list(), z:context()) -> #search_sql{} | #search_result{}.
 build_query(Terms, Context) ->
     Ts = lists:flatten(lists:map(fun(T) -> qterm(T, Context) end, Terms)),
@@ -91,28 +89,8 @@ build_query(Terms, Context) ->
         true ->
             #search_result{};
         false ->
-            Ts
-            % terms_to_query(Ts)
+            #search_sql_terms{ terms = Ts }
     end.
-
-terms_to_query(Ts) ->
-    % Merge terms into #search_sql statement
-    Search = #search_sql{
-        select = "rsc.id",
-        from = "rsc rsc",
-        tables = [ {rsc, "rsc"} ],
-        query_terms = Ts
-    },
-    {Search1, _} = lists:foldl(fun merge_qterm/2, {Search, #{}}, Ts),
-    case z_utils:is_empty(Search1#search_sql.order) of
-        true -> add_order("-rsc.id", Search1);
-        false -> Search1
-    end.
-
-% Merge the query term into the search sql statement.
-merge_qterm(Term, {Search, Acc}) ->
-    {Search, Acc}.
-
 
 %% @doc Fetch all arguments from the query string in the HTTP request.
 -spec qargs( z:context() ) -> list( {binary(), term()} ).
@@ -180,6 +158,7 @@ request_arg(<<"facet.", F/binary>>)    -> {facet, F};
 request_arg(<<"filter">>)              -> filter;
 request_arg(<<"filter.facet.", F/binary>>)-> {facet, F};
 request_arg(<<"filter.", F/binary>>)   -> {filter, F};
+request_arg(<<"pivot.", _/binary>> = F)-> {filter, F};
 request_arg(<<"id_exclude">>)          -> id_exclude;
 request_arg(<<"hasobject">>)           -> hasobject;
 request_arg(<<"hasobjectpredicate">>)  -> hasobjectpredicate;
@@ -255,19 +234,19 @@ qterm({cat, Cats}, Context) ->
     %% cat=categoryname
     %% Filter results on a certain category.
     Cats1 = assure_categories(Cats, Context),
-    #search_sql_term{ cats = Cats1 };
-    % Cats2 = add_or_append("rsc", Cats1, Result#search_sql.cats),
+    % Cats2 = add_or_append(<<"rsc">>, Cats1, []),
+    #search_sql_term{ cats = [ {<<"rsc">>, Cats1}] };
     % parse_query(Rest, Context, Result#search_sql{cats=Cats2});
 qterm({cat_exclude, Cats}, Context) ->
     %% cat_exclude=categoryname
     %% Filter results outside a certain category.
     Cats1 = assure_categories(Cats, Context),
-    #search_sql_term{ cats_exclude = Cats1 };
+    #search_sql_term{ cats_exclude = [ {<<"rsc">>, Cats1} ] };
 qterm({cat_exact, Cats}, Context) ->
     %% cat_exact=categoryname
     %% Filter results excactly of a category (excluding subcategories)
     Cats1 = assure_categories(Cats, Context),
-    #search_sql_term{ cats_exact = Cats1 };
+    #search_sql_term{ cats_exact = [ {<<"rsc">>, Cats1} ] };
 qterm({content_group, ContentGroup}, Context) ->
     %% content_group=id
     %% Include only resources which are member of the given content group (or one of its children)
@@ -288,7 +267,7 @@ qterm({content_group, ContentGroup}, Context) ->
                         <<"default_content_group">> ->
                             Q#search_sql_term{
                                 where = [
-                                    <<"(rsc.content_group_id IN (SELECT(unnest(">>, '$0',
+                                    <<"(rsc.content_group_id IN (SELECT(unnest(">>, '$1',
                                     <<"::int[]))) or rsc.content_group_id is null)">>
                                 ],
                                 args = [
@@ -298,8 +277,8 @@ qterm({content_group, ContentGroup}, Context) ->
                         _ ->
                             Q#search_sql_term{
                                 where = [
-                                    <<"rsc.content_group_id IN (SELECT(unnest(">>, '$0',
-                                    <<"::int[])))>>">>
+                                    <<"rsc.content_group_id IN (SELECT(unnest(">>, '$1',
+                                    <<"::int[])))">>
                                 ],
                                 args = [
                                     List
@@ -309,7 +288,7 @@ qterm({content_group, ContentGroup}, Context) ->
                 false ->
                     Q#search_sql_term{
                         where = [
-                            <<"rsc.content_group_id = ">>, '$0'
+                            <<"rsc.content_group_id = ">>, '$1'
                         ],
                         args = [
                             CGId
@@ -328,7 +307,7 @@ qterm({id_exclude, Id}, Context) ->
             [];
         RscId ->
             #search_sql_term{
-                where = [ <<"rsc.id <> ">>, '$0'],
+                where = [ <<"rsc.id <> ">>, '$1'],
                 args = [ RscId ]
             }
     end;
@@ -338,17 +317,14 @@ qterm({hasmedium, HasMedium}, _Context) ->
     case z_convert:to_bool(HasMedium) of
         true ->
             #search_sql_term{
-                tables = #{
-                    <<"medium">> => <<"medium">>
-                },
-                where = [
-                    <<"medium.id = rsc.id ">>
-                ]
+                join_inner = #{
+                    <<"medium">> => {<<"medium">>, <<"medium.id = rsc.id">>}
+                }
             };
         false ->
             #search_sql_term{
                 join_left = #{
-                    <<"medium">> => <<"medium medium on rsc.id = medium.id">>
+                    <<"medium">> => {<<"medium">>, <<"medium.id = rsc.id">>}
                 },
                 where = [
                     <<"medium.id is null ">>
@@ -378,10 +354,12 @@ qterm({hasobjectpredicate, Predicate}, Context) ->
     %% Give all things which have any outgoing edge with given predicate
     Alias = edge_alias(),
     #search_sql_term{
-        tables = #{ Alias => <<"edge">> },
+        tables = #{
+            Alias => <<"edge">>
+        },
         where = [
             Alias, <<".subject_id = rsc.id ">>,
-            <<" and ">>, Alias, <<".predicate_id = ">>, '$0'
+            <<" and ">>, Alias, <<".predicate_id = ">>, '$1'
         ],
         args = [
             predicate_to_id(Predicate, Context)
@@ -392,10 +370,12 @@ qterm({hassubjectpredicate, Predicate}, Context) ->
     %% Give all things which have any incoming edge with given predicate
     Alias = edge_alias(),
     #search_sql_term{
-        tables = #{ Alias => <<"edge">> },
+        tables = #{
+            Alias => <<"edge">>
+        },
         where = [
             Alias, <<".object_id = rsc.id ">>,
-            <<" and ">>, Alias, <<".predicate_id = ">>, '$0'
+            <<" and ">>, Alias, <<".predicate_id = ">>, '$1'
         ],
         args = [
             predicate_to_id(Predicate, Context)
@@ -406,7 +386,7 @@ qterm({is_featured, Boolean}, _Context) ->
     %% Filter on whether an item is featured or not.
     #search_sql_term{
         where = [
-            <<"rsc.is_featured = ">>, '$0'
+            <<"rsc.is_featured = ">>, '$1'
         ],
         args = [
             z_convert:to_bool(Boolean)
@@ -535,7 +515,7 @@ qterm({is_authoritative, Boolean}, _Context) ->
     %% Filter on items which are authoritative or not
     #search_sql_term{
         where = [
-            <<"rsc.is_authoritative = ">>, '$0'
+            <<"rsc.is_authoritative = ">>, '$1'
         ],
         args = [
             z_convert:to_bool(Boolean)
@@ -546,7 +526,7 @@ qterm({creator_id, Id}, Context) ->
     %% Filter on items which are created by <rsc id>
     #search_sql_term{
         where = [
-            <<"rsc.creator_id = ">>, '$0'
+            <<"rsc.creator_id = ">>, '$1'
         ],
         args = [
             m_rsc:rid(Id, Context)
@@ -557,7 +537,7 @@ qterm({modifier_id, Id}, Context) ->
     %% Filter on items which are last modified by <rsc id>
     #search_sql_term{
         where = [
-            <<"rsc.modifier_id = ">>, '$0'
+            <<"rsc.modifier_id = ">>, '$1'
         ],
         args = [
             m_rsc:rid(Id, Context)
@@ -590,7 +570,7 @@ qterm({rsc_id, Id}, Context) ->
     %% Filter to *only* include the given rsc id. Can be used for resource existence check.
     #search_sql_term{
         where = [
-            <<"rsc.id = ">>, '$0'
+            <<"rsc.id = ">>, '$1'
         ],
         args = [
             m_rsc:rid(Id, Context)
@@ -610,7 +590,7 @@ qterm({name, Name}, Context) ->
             Name2 = binary:replace(Name1, <<"*">>, <<"%">>, [global]),
             #search_sql_term{
                 where = [
-                    <<"rsc.name like ">>, '$0'
+                    <<"rsc.name like ">>, '$1'
                 ],
                 args = [
                     Name2
@@ -632,7 +612,7 @@ qterm({language, Lang}, _Context) ->
         {ok, Code} ->
             #search_sql_term{
                 where = [
-                    <<"rsc.language @> ">>, '$0'
+                    <<"rsc.language @> ">>, '$1'
                 ],
                 args = [
                     z_convert:to_binary(Code)
@@ -656,8 +636,7 @@ qterm({{facet, Field}, <<"[", _>> = V}, Context) ->
     V1 = maybe_split_list(V),
     qterm({{facet, Field}, V1}, Context);
 qterm({{facet, Field}, V}, Context) ->
-    {match, _} = re:run(Field, ?SQL_SAFE_REGEXP),
-    case search_facet:qterm(Field, V, Context) of
+    case search_facet:qterm(sql_safe(Field), V, Context) of
         {ok, Res1} ->
             Res1;
         {error, _} ->
@@ -680,12 +659,12 @@ qterm({text, Text}, Context) ->
             TsQuery = mod_search:to_tsquery(Text, Context),
             #search_sql_term{
                 where = [
-                    '$0', <<"@@ rsc.pivot_tsv">>
+                    '$1', <<"@@ rsc.pivot_tsv">>
                 ],
                 sort = [
                     [
                       "ts_rank_cd(", mod_search:rank_weight(Context),
-                      ", rsc.pivot_tsv, ", '$0', ", ", '$1', ") desc"
+                      ", rsc.pivot_tsv, ", '$1', ", ", '$2', ") desc"
                     ]
                 ],
                 args = [
@@ -718,7 +697,7 @@ qterm({match_object_ids, ObjectIds}, Context) ->
         _ ->
             #search_sql_term{
                 tables = #{
-                    <<"matchquery">> => [ <<"to_tsquery(">>, '$0', <<")">> ]
+                    <<"matchquery">> => [ <<"to_tsquery(">>, '$1', <<")">> ]
                 },
                 where = [
                     <<"matchquery @@ rsc.pivot_rtsv">>
@@ -736,7 +715,7 @@ qterm({date_start_after, Date}, Context) ->
     %% Filter on date_start after a specific date.
     #search_sql_term{
         where = [
-            <<"rsc.pivot_date_start >= ">>, '$0'
+            <<"rsc.pivot_date_start >= ">>, '$1'
         ],
         args = [
             z_datetime:to_datetime(Date, Context)
@@ -747,7 +726,7 @@ qterm({date_start_before, Date}, Context) ->
     %% Filter on date_start before a specific date.
     #search_sql_term{
         where = [
-            <<"rsc.pivot_date_start <= ">>, '$0'
+            <<"rsc.pivot_date_start <= ">>, '$1'
         ],
         args = [
             z_datetime:to_datetime(Date, Context)
@@ -758,7 +737,7 @@ qterm({date_start_year, Year}, _Context) ->
     %% Filter on year of start date
     #search_sql_term{
         where = [
-            <<"date_part('year', rsc.pivot_date_start) ">>, '$0'
+            <<"date_part('year', rsc.pivot_date_start) ">>, '$1'
         ],
         args = [
             z_convert:to_integer(Year)
@@ -769,7 +748,7 @@ qterm({date_end_after, Date}, Context) ->
     %% Filter on date_end after a specific date.
     #search_sql_term{
         where = [
-            <<"rsc.pivot_date_end >= ">>, '$0'
+            <<"rsc.pivot_date_end >= ">>, '$1'
         ],
         args = [
             z_datetime:to_datetime(Date, Context)
@@ -780,7 +759,7 @@ qterm({date_end_before, Date}, Context) ->
     %% Filter on date_end before a specific date.
     #search_sql_term{
         where = [
-            <<"rsc.pivot_date_end <= ">>, '$0'
+            <<"rsc.pivot_date_end <= ">>, '$1'
         ],
         args = [
             z_datetime:to_datetime(Date, Context)
@@ -791,7 +770,7 @@ qterm({date_end_year, Year}, _Context) ->
     %% Filter on year of end date
     #search_sql_term{
         where = [
-            <<"date_part('year', rsc.pivot_date_end) = ">>, '$0'
+            <<"date_part('year', rsc.pivot_date_end) = ">>, '$1'
         ],
         args = [
             z_convert:to_integer(Year)
@@ -802,7 +781,7 @@ qterm({publication_year, Year}, _Context) ->
     %% Filter on year of publication
     #search_sql_term{
         where = [
-            <<"date_part('year', rsc.publication_start) = ">>, '$0'
+            <<"date_part('year', rsc.publication_start) = ">>, '$1'
         ],
         args = [
             z_convert:to_integer(Year)
@@ -813,7 +792,7 @@ qterm({publication_month, Month}, _Context) ->
     %% Filter on month of publication
     #search_sql_term{
         where = [
-            <<"date_part('month', rsc.publication_start) = ">>, '$0'
+            <<"date_part('month', rsc.publication_start) = ">>, '$1'
         ],
         args = [
             z_convert:to_integer(Month)
@@ -822,7 +801,7 @@ qterm({publication_month, Month}, _Context) ->
 qterm({publication_after, Date}, Context) ->
     #search_sql_term{
         where = [
-            <<"rsc.publication_start >= ">>, '$0'
+            <<"rsc.publication_start >= ">>, '$1'
         ],
         args = [
             z_datetime:to_datetime(Date, Context)
@@ -831,7 +810,7 @@ qterm({publication_after, Date}, Context) ->
 qterm({publication_before, Date}, Context) ->
     #search_sql_term{
         where = [
-            <<"rsc.publication_start <= ">>, '$0'
+            <<"rsc.publication_start <= ">>, '$1'
         ],
         args = [
             z_datetime:to_datetime(Date, Context)
@@ -858,8 +837,8 @@ parse_edges(hassubject, [[Id, Predicate, JoinAlias]], Context) ->
         },
         where = [
             Alias, <<".object_id = ">>, JoinAlias1, <<".id">>,
-            <<" and ">>, Alias, <<".subject_id = ">>, '$0',
-            <<" and ">>, Alias, <<".predicate_id = ">>, '$1'
+            <<" and ">>, Alias, <<".subject_id = ">>, '$1',
+            <<" and ">>, Alias, <<".predicate_id = ">>, '$2'
         ],
         args = [
             m_rsc:rid(Id, Context),
@@ -875,7 +854,7 @@ parse_edges(hassubject, [Id], Context) ->
         where = [
             Alias, <<".object_id = rsc.id">>,
             <<" and ">>, Alias, <<".subject_id = ">>,
-            '$0'
+            '$1'
         ],
         args = [
             m_rsc:rid(Id, Context)
@@ -890,8 +869,8 @@ parse_edges(hasobject, [[Id, Predicate, JoinAlias]], Context) ->
         },
         where = [
             Alias, <<".subject_id = ">>, JoinAlias1, <<".id">>,
-            <<" and ">>, Alias, <<".object_id = ">>, '$0',
-            <<" and ">>, Alias, <<".predicate_id = ">>, '$1'
+            <<" and ">>, Alias, <<".object_id = ">>, '$1',
+            <<" and ">>, Alias, <<".predicate_id = ">>, '$2'
         ],
         args = [
             m_rsc:rid(Id, Context),
@@ -907,7 +886,7 @@ parse_edges(hasobject, [Id], Context) ->
         where = [
             Alias, <<".subject_id = rsc.id">>,
             <<" and ">>, Alias, <<".object_id = ">>,
-            '$0'
+            '$1'
         ],
         args = [
             m_rsc:rid(Id, Context)
@@ -918,33 +897,17 @@ edge_alias() ->
     Nr = z_ids:identifier(6),
     <<"edge_", Nr/binary>>.
 
-%% Add a value to a proplist. If it is already there, the value is
-%% replaced by a list of values.
-add_or_append(Key, Value, PropList) ->
-    case proplists:get_value(Key, PropList) of
-        undefined ->
-            [{Key, Value} | PropList];
-        Val when not(is_list(Val)) ->
-            [{Key, [Value, Val]} | proplists:delete(Key, PropList)];
-        Val ->
-            case z_string:is_string(Val) of
-                true ->
-                    [{Key, [Value, Val]} | proplists:delete(Key, PropList)];
-                false ->
-                    [{Key, [Value | Val]} | proplists:delete(Key, PropList)]
-            end
-    end.
-
 
 %% Add a join on the hierarchy table.
 % add_hierarchy_join(HierarchyName, Lft, Rght, Search) ->
 %     {NameArg, Search1} = add_arg(HierarchyName, Search),
 %     {LftArg, Search2} = add_arg(Lft, Search1),
 %     {RghtArg, Search3} = add_arg(Rght, Search2),
-
 %     A = "h" ++ integer_to_list(length(Search#search_sql.tables)),
-%     Search4 = add_where(A ++ ".name = " ++ NameArg ++ " AND " ++ A ++ ".lft >= " ++ LftArg ++ " AND " ++ A ++ ".rght <= " ++ RghtArg, Search3),
-
+%     Search4 = add_where(
+%                      A ++ ".name = " ++ NameArg ++ " AND "
+%                   ++ A ++ ".lft >= " ++ LftArg ++ " AND "
+%                   ++ A ++ ".rght <= " ++ RghtArg, Search3),
 %     Search4#search_sql{
 %       tables=Search1#search_sql.tables ++ [{hierarchy, A}],
 %       from=Search1#search_sql.from ++ ", hierarchy " ++ A
@@ -955,70 +918,60 @@ sort_term(Sort) ->
     add_order(Sort, #search_sql_term{}).
 
 %% Add an ORDER clause.
-add_order([], Search) ->
+add_order(<<>>, Search) ->
     Search;
 add_order([ Order | Os ], Search) when not is_integer(Order) ->
     Search1 = add_order(Order, Search),
     add_order(Os, Search1);
 add_order(Order, Search) when is_atom(Order) ->
-    add_order(atom_to_list(Order), Search);
-add_order(Order, Search) when is_binary(Order) ->
-    add_order(binary_to_list(Order), Search);
-add_order("seq", Search) ->
-    add_order("+seq", Search);
-add_order([C,$s,$e,$q], Search) when C =:= $-; C =:= $+ ->
-    case proplists:get_value(edge, Search#search_sql.tables) of
-        L when is_list(L) ->
-            Search1 = add_order([C|L]++".seq", Search),
-            add_order([C|L]++".id", Search1);
-        undefined ->
-            Search
-    end;
-add_order("edge."++_ = Order, Search) ->
-    add_order([$+|Order], Search);
-add_order([C,$e,$d,$g,$e,$.|Column], Search) when C =:= $-; C =:= $+ ->
-    case proplists:get_value(edge, Search#search_sql.tables) of
-        L when is_list(L) -> add_order([C|L]++[$.|Column], Search);
-        undefined -> Search
-    end;
-add_order(Sort, Search) ->
-    Clause = case Sort of
-                 "random" ->
-                     "random()";
-                 _ ->
-                     case Sort of
-                         [$-|F1] -> maybe_ref_rsc(sql_safe(F1)) ++ " DESC";
-                         [$+|F1] -> maybe_ref_rsc(sql_safe(F1)) ++ " ASC";
-                         _ -> maybe_ref_rsc(sql_safe(Sort)) ++ " ASC"
-                     end
-             end,
-    add_order_unsafe(Clause, Search).
-
-maybe_ref_rsc(Sort) ->
-    case lists:member($., Sort) of
-        false -> "rsc." ++ Sort;
-        true -> Sort
-    end.
-
-%% Add an ORDER clause without checking on SQL safety.
-add_order_unsafe(Clause, #search_sql_term{ sort = S } = T) ->
-    T#search_sql_term{ sort = S ++ [ Clause ] };
-add_order_unsafe(Clause, #search_sql{ order = [] } = Search) ->
-    Search#search_sql{order=Clause};
-add_order_unsafe(Clause, #search_sql{ order = C } = Search) ->
-    Search#search_sql{order=C ++ ", " ++ Clause}.
+    add_order(atom_to_binary(Order, utf8), Search);
+add_order(Order, Search) when is_list(Order) ->
+    add_order(list_to_binary(Order), Search);
+add_order(<<"seq">>, Search) ->
+    add_order(<<"+seq">>, Search);
+add_order(<<C, "seq">>, Search) when C =:= $-; C =:= $+ ->
+    Search#search_sql_term{
+        sort = Search#search_sql_term.sort
+               ++ [ {edge, C, <<"seq">>}, {edge, C, <<"id">>} ]
+    };
+add_order(<<"edge.", _/binary>> = Order, Search) ->
+    O1 = sql_safe(Order),
+    add_order(<<$+, O1/binary>>, Search);
+add_order(<<C, "edge.", Column/binary>>, Search) when C =:= $-; C =:= $+ ->
+    Column1 = sql_safe(Column),
+    Search#search_sql_term{
+        sort = Search#search_sql_term.sort
+               ++ [ {edge, C, Column1} ]
+    };
+add_order(<<"random">>, Search) ->
+    Search#search_sql_term{
+        sort = Search#search_sql_term.sort
+               ++ [ <<"random()">> ]
+    };
+add_order(<<C, Sort/binary>>, Search) when C =:= $-; C =:= $+ ->
+    Sort1 = sql_safe(Sort),
+    [ Alias, Column ] = case binary:split(Sort1, <<".">>) of
+        [ Col ] ->
+            [ <<"rsc">>, Col ];
+        [ _, _ ] = AC ->
+            AC
+    end,
+    Search#search_sql_term{
+        sort = Search#search_sql_term.sort
+               ++ [ {Alias, C, Column} ]
+    }.
 
 
 %% Make sure that parts of the query are safe to append to the search query.
-sql_safe(String) when not is_list(String) ->
-    sql_safe(z_convert:to_list(String));
-sql_safe(String) ->
+sql_safe(String) when is_list(String); is_binary(String) ->
     case re:run(String, ?SQL_SAFE_REGEXP) of
         {match, _} ->
             String;
         _ ->
             throw({error, {unsafe_expression, String}})
-    end.
+    end;
+sql_safe(String) ->
+    sql_safe(z_convert:to_binary(String)).
 
 
 %% Make sure the input is a list of valid categories.
@@ -1243,12 +1196,12 @@ create_filter(Tab, Col, Operator, Value, Q) ->
 map_filter_column(<<"pivot.", P/binary>>, #search_sql_term{ join_inner = Join } = Q) ->
     case binary:split(P, <<".">>) of
         [ Table, Field ] ->
-            T1 = z_convert:to_binary(sql_safe(Table)),
+            T1 = sql_safe(Table),
             T2 = <<"pivot_", T1/binary>>,
-            F1 = z_convert:to_binary(sql_safe(Field)),
+            F1 = sql_safe(Field),
             Q1 = Q#search_sql_term{
                 join_inner = Join#{
-                    T2 => <<T2/binary, " on ", T2/binary, ".id = rsc.id">>
+                    T2 => {T2, <<T2/binary, ".id = rsc.id">>}
                 }
             },
             {T2, F1, Q1};
@@ -1259,13 +1212,13 @@ map_filter_column(<<"pivot.", P/binary>>, #search_sql_term{ join_inner = Join } 
 map_filter_column(<<"facet.", P/binary>>, #search_sql_term{ join_inner = Join } = Q) ->
     Q1 = Q#search_sql_term{
         join_inner = Join#{
-            <<"facet">> => <<"facet on facet.id = rsc.id">>
+            <<"facet">> => {<<"facet">>, <<"facet.id = rsc.id">>}
         }
     },
-    Field = z_convert:to_binary(sql_safe(P)),
+    Field = sql_safe(P),
     {<<"facet">>, <<"f_", Field/binary>>, Q1};
 map_filter_column(Column, Q) ->
-    Field = z_convert:to_binary(sql_safe(Column)),
+    Field = sql_safe(Column),
     {<<"rsc">>, Field, Q}.
 
 %% Add an AND clause to the WHERE of a #search_sql_term

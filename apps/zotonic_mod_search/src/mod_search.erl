@@ -51,7 +51,6 @@
 -record(state, {context, query_watches=[]}).
 
 
-
 event(#postback{ message={facet_rebuild, _Args}}, Context) ->
     case z_acl:is_admin(Context)
         orelse z_acl:is_allowed(use, mod_search, Context)
@@ -63,21 +62,21 @@ event(#postback{ message={facet_rebuild, _Args}}, Context) ->
             z_render:growl_error(?__("Sorry, you are not allowed to do this.", Context), Context)
     end.
 
-
 observe_search_query(#search_query{ name = <<"facets">>, args = Args }, Context) ->
     case search_query:search(Args, Context) of
-        #search_sql{} = R ->
-            R#search_sql{
-                post_func = fun(Result, _Q, Context) ->
-                                search_facet:search_query_facets(Result, Args, Context)
-                            end};
+        #search_sql_terms{} = R ->
+            R#search_sql_terms{
+                post_func = fun search_facet:search_query_facets/3
+            };
         R ->
             R
     end;
 observe_search_query(#search_query{ name = <<"subfacets">>, args = Args }, Context) ->
     case search_query:search(Args, Context) of
-        #search_sql{} = R ->
-            R#search_sql{ post_func = fun search_facet:search_query_subfacets/3 };
+        #search_sql_terms{} = R ->
+            R#search_sql_terms{
+                post_func = fun search_facet:search_query_subfacets/3
+            };
         R ->
             R
     end;

@@ -214,6 +214,9 @@ handle_search_result(L, Page, PageLen, _OffsetLimit, Name, Args, _Context) when 
         prev = erlang:max(Page-1, 1),
         next = Next
     };
+handle_search_result(#search_sql_terms{} = Terms, Page, PageLen, OffsetLimit, Name, Args, Context) ->
+    SearchSQL = z_search_terms:combine(Terms),
+    handle_search_result(SearchSQL, Page, PageLen, OffsetLimit, Name, Args, Context);
 handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit, Name, Args, Context) ->
     Q1 = reformat_sql_query(Q, Context),
     {Sql, SqlArgs} = concat_sql_query(Q1, OffsetLimit),
@@ -412,8 +415,10 @@ search_result(#search_sql{} = Q, Limit, Context) ->
                 false ->
                     Rs = z_db:q(Sql, Args, Context),
                     case Rs of
-                        [{_}|_] -> [ R || {R} <- Rs ];
-                        _ -> Rs
+                        [{_}|_] ->
+                            [ R || {R} <- Rs ];
+                        _ ->
+                            Rs
                     end;
                 true ->
                     z_db:assoc_props(Sql, Args, Context)
@@ -436,14 +441,17 @@ concat_sql_query(#search_sql{
     From1  = concat_sql_from(From),
     Where1 = case Where of
         "" -> "";
+        <<>> -> <<>>;
         _ -> [ "where ", Where ]
     end,
     Order1 = case Order of
         "" -> "";
+        <<>> -> <<>>;
         _ -> [ "order by ", Order ]
     end,
     GroupBy1 = case GroupBy of
         "" -> "";
+        <<>> -> <<>>;
         _ -> [ "group by ", GroupBy ]
     end,
     {Parts, FinalArgs} = case SearchLimit of
@@ -467,8 +475,8 @@ concat_sql_query(#search_sql{
                         Where1,
                         GroupBy1,
                         Order1,
-                        "offset", [$$|integer_to_list(N+1)],
-                        "limit", [$$|integer_to_list(N+2)]
+                        [ "offset $", integer_to_list(N+1) ],
+                        [ "limit $", integer_to_list(N+2) ]
                     ], Args1}
             end;
         _ ->
@@ -511,28 +519,35 @@ reformat_sql_query(#search_sql{where=Where, from=From, tables=Tables, args=Args,
                                 fun({Alias, Cats}, {WAcc,As}) ->
                                     add_cat_exact_check(Cats, Alias, WAcc, As, Context)
                                 end, {ExtraWhere2, Args1}, TabCatsExact),
-
-    Where1 = lists:flatten(concat_where(ExtraWhere3, Where)),
-    Q#search_sql{where=Where1, from=From2, args=Args2}.
+    Where1 = case Where of
+        <<>> -> [];
+        B when is_binary(B) -> [ B ];
+        L when is_list(L) -> L
+    end,
+    Where2 = iolist_to_binary(concat_where(ExtraWhere3, Where1)),
+    Q#search_sql{where=Where2, from=From2, args=Args2}.
 
 
 %% @doc Concatenate the where clause with the extra ACL checks using "and".  Skip empty clauses.
-%% @spec concat_where(ClauseList, CurrentWhere) -> NewClauseList
 concat_where([], Acc) ->
     Acc;
+concat_where([<<>>|Rest], Acc) ->
+    concat_where(Rest, Acc);
 concat_where([[]|Rest], Acc) ->
     concat_where(Rest, Acc);
 concat_where([W|Rest], []) ->
     concat_where(Rest, [W]);
 concat_where([W|Rest], Acc) ->
-    concat_where(Rest, [W, " and "|Acc]).
+    concat_where(Rest, [W, " and " | Acc]).
 
 
-%% @doc Process SQL from clause. We analyzing the input (it may be a string, list of #search_sql or/and other strings)
+%% @doc Process SQL from clause. Analyzing the input (it may be a string, list of #search_sql or/and other strings)
 concat_sql_from(From) ->
     Froms = concat_sql_from1(From),
     lists:join(",", Froms).
 
+concat_sql_from1(From) when is_binary(From) ->
+    [ From ]; %% from is string
 concat_sql_from1([ H | _ ] = From) when is_integer(H) ->
     [ From ]; %% from is string?
 concat_sql_from1([ #search_sql{} = From | T ]) ->
@@ -552,8 +567,10 @@ concat_sql_from1([ #search_sql{} = From | T ]) ->
     [ Subquery | concat_sql_from1(T) ];
 concat_sql_from1([ {Source,Alias} | T ]) ->
     Alias2 = case z_utils:is_empty(Alias) of
-	false -> " AS " ++ z_convert:to_list(Alias);
-	_     -> []
+        false ->
+            [ " AS ", z_convert:to_binary(Alias) ];
+        _ ->
+            []
     end,
     [ [ concat_sql_from1(Source), Alias2 ] | concat_sql_from1(T) ];
 concat_sql_from1([H|T]) ->
@@ -568,6 +585,8 @@ concat_sql_from1(Something) ->
 
 %% @doc Create extra 'where' conditions for checking the access control
 add_acl_check({rsc, Alias}, Args, Q, Context) ->
+    add_acl_check_rsc(Alias, Args, Q, Context);
+add_acl_check({<<"rsc">>, Alias}, Args, Q, Context) ->
     add_acl_check_rsc(Alias, Args, Q, Context);
 add_acl_check(_, Args, _Q, _Context) ->
     {[], Args}.
@@ -594,25 +613,27 @@ add_acl_check_rsc(Alias, Args, SearchSql, Context) ->
 publish_check(Alias, #search_sql{extra=Extra}) ->
     case lists:member(no_publish_check, Extra) of
         true ->
-            "";
+            [];
         false ->
-            " and "
-            ++Alias++".is_published = true and "
-            ++Alias++".publication_start <= now() and "
-            ++Alias++".publication_end >= now()"
+            [
+                " and "
+                , Alias, ".is_published = true and "
+                , Alias, ".publication_start <= now() and "
+                , Alias, ".publication_end >= now()"
+            ]
     end.
 
 
 %% @doc Create the 'where' conditions for the category check
-%% @spec add_cat_check(From, Alias, Exclude, Cats, Context) -> Where
 add_cat_check(_From, _Alias, _Exclude, [], _Context) ->
     {_From, []};
 add_cat_check(From, Alias, Exclude, Cats, Context) ->
     case m_category:is_tree_dirty(Context) of
         false ->
+            % Use range queries on the category_nr pivot column.
             add_cat_check_pivot(From, Alias, Exclude, Cats, Context);
         true ->
-            %% While the category tree is rebuilding, we use the less efficient version with joins.
+            % While the category tree is rebuilding, we use the less efficient version with joins.
             add_cat_check_joined(From, Alias, Exclude, Cats, Context)
     end.
 
@@ -620,54 +641,78 @@ add_cat_check_pivot(From, Alias, Exclude, Cats, Context) ->
     Ranges = m_category:ranges(Cats, Context),
     CatChecks = [ cat_check_pivot1(Alias, Exclude, Range) || Range <- Ranges ],
     case CatChecks of
-        [] -> {From, []};
-        [_CatCheck] -> {From, CatChecks};
-        _ -> {From, "(" ++ string:join(CatChecks, case Exclude of false -> " or "; true -> " and " end) ++ ")"}
+        [] ->
+            {From, []};
+        [_CatCheck] ->
+            {From, CatChecks};
+        _ ->
+            Sep = case Exclude of
+                false -> " or ";
+                true -> " and "
+            end,
+            {From, [ "(", lists:join(Sep, CatChecks), ")" ]}
     end.
 
 cat_check_pivot1(Alias, false, {From,From}) ->
-    Alias ++ ".pivot_category_nr = "++integer_to_list(From);
+    [ Alias, ".pivot_category_nr = ", integer_to_list(From) ];
 cat_check_pivot1(Alias, false, {From,To}) ->
-    Alias ++ ".pivot_category_nr >= " ++ integer_to_list(From)
-        ++ " and "++ Alias ++ ".pivot_category_nr <= " ++ integer_to_list(To);
+    [ Alias, ".pivot_category_nr >= ", integer_to_list(From)
+    , " and ", Alias, ".pivot_category_nr <= ", integer_to_list(To)
+    ];
 
 cat_check_pivot1(Alias, true, {From,From}) ->
-    Alias ++ ".pivot_category_nr <> "++integer_to_list(From);
+    [ Alias, ".pivot_category_nr <> ", integer_to_list(From) ];
 cat_check_pivot1(Alias, true, {From,To}) ->
-    [$(|Alias] ++ ".pivot_category_nr < " ++ integer_to_list(From)
-        ++ " or "++ Alias ++ ".pivot_category_nr > " ++ integer_to_list(To) ++ ")".
+    [ $(, Alias, ".pivot_category_nr < ", integer_to_list(From)
+    , " or ", Alias, ".pivot_category_nr > ", integer_to_list(To), ")"
+    ].
 
 
 %% Add category tree range checks by using joins. Less optimal; only
 %% used while the category tree is being recalculated.
 add_cat_check_joined(From, Alias, Exclude, Cats, Context) ->
     Ranges = m_category:ranges(Cats, Context),
-    CatAlias = Alias ++ "_cat",
+    CatAlias = [ Alias, "_cat" ],
     FromNew = [{"hierarchy", CatAlias}|From],
-    CatChecks = lists:map(fun(Range) ->
-                                  Check = cat_check_joined1(CatAlias, Exclude, Range),
-                                  Alias ++ ".category_id = " ++ CatAlias ++ ".id and "
-                                  ++ CatAlias ++ ".name = '$category' and "
-                                  ++ Check
-                          end,
-                          Ranges),
+    CatChecks = lists:map(
+        fun(Range) ->
+            Check = cat_check_joined1(CatAlias, Exclude, Range),
+            [
+              Alias, ".category_id = ", CatAlias, ".id and "
+            , CatAlias, ".name = '$category' and "
+            , Check
+            ]
+        end,
+        Ranges),
     case CatChecks of
-        [] -> {From, []};
-        [_CatCheck] -> {FromNew, CatChecks};
-        _ -> {FromNew, "(" ++ string:join(CatChecks, case Exclude of false -> " or "; true -> " and " end) ++ ")"}
+        [] ->
+            {From, []};
+        [_CatCheck] ->
+            {FromNew, CatChecks};
+        _ ->
+            Sep = case Exclude of
+                false -> " or ";
+                true -> " and "
+            end,
+            {FromNew, [
+                "(",
+                lists:join(Sep, CatChecks),
+                ")"
+            ]}
     end.
 
 cat_check_joined1(CatAlias, false, {Left,Left}) ->
-    CatAlias ++ ".nr = "++integer_to_list(Left);
+    [ CatAlias, ".nr = ", integer_to_list(Left) ];
 cat_check_joined1(CatAlias, false, {Left,Right}) ->
-      CatAlias ++ ".nr >= " ++ integer_to_list(Left)
-        ++ " and "++ CatAlias ++ ".nr <= " ++ integer_to_list(Right);
-
+    [ CatAlias, ".nr >= ", integer_to_list(Left)
+    , " and ", CatAlias,  ".nr <= ", integer_to_list(Right)
+    ];
 cat_check_joined1(CatAlias, true, {Left,Left}) ->
-    CatAlias ++ ".nr <> "++integer_to_list(Left);
+    [ CatAlias, ".nr <> ", integer_to_list(Left) ];
 cat_check_joined1(CatAlias, true, {Left,Right}) ->
-    "(" ++ CatAlias ++ ".nr < " ++ integer_to_list(Left)
-        ++ " or "++ CatAlias ++ ".nr > " ++ integer_to_list(Right) ++ ")".
+    [ "(", CatAlias, ".nr < ", integer_to_list(Left)
+    ," or ", CatAlias, ".nr > ", integer_to_list(Right), ")"
+    ].
 
 %% @doc Add a check for an exact category match
 add_cat_exact_check([], _Alias, WAcc, As, _Context) ->
@@ -675,7 +720,7 @@ add_cat_exact_check([], _Alias, WAcc, As, _Context) ->
 add_cat_exact_check(CatsExact, Alias, WAcc, As, Context) ->
     CatIds = [ m_rsc:rid(CId, Context) || CId <- CatsExact ],
     {WAcc ++ [
-        [Alias, ".category_id in (SELECT(unnest($"++(integer_to_list(length(As)+1))++"::int[])))"]
+        [Alias, [ ".category_id in (SELECT(unnest($", (integer_to_list(length(As)+1)), "::int[])))"] ]
      ],
      As ++ [CatIds]}.
 
