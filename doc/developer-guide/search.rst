@@ -82,25 +82,27 @@ filter
 
 Filtering on columns::
 
-    filter=['pivot_title', 'Hello']
+    filter=['pivot.title', 'Hello']
+    filter=['pivot.mypivot.foo', 'bar']
+    filter=['facet.somefacet', 'baz']
 
 In its most simple form, this does an 'equals' compare filter. The
 ``filter`` keywords expects a list. If the list is two elements long,
 we expect the first column to be the filter column name from the
 database table, and the second column name to be the filter value::
 
-    filter=['numeric_value', `gt`, 10]
+    filter=['facet.numeric_value', `gt`, 10]
 
 If the filter is a three-column list, the second column is the
 operator. This must be an atom (surround it in backquotes!) and must
 be one of the following: ``eq``, ``ne``, ``gt``, ``gte``, ``lt``,
 ``lte``; or one of ``=``, ``<>``, ``>``, ``>=``, ``<``, ``<=``::
 
-    filter=['numeric_value', `>`, 10]
+    filter=['facet.numeric_value', `>`, 10]
 
 It is possible to define an OR query for multiple terms::
 
-    filter=[ ['numeric_value', `>`, 10], ['numeric_value', `<=`, 0] ]
+    filter=[ ['facet.numeric_value', `>`, 10], ['facet.numeric_value', `<=`, 0] ]
 
 hassubject
 ^^^^^^^^^^
@@ -322,19 +324,45 @@ model. Example sorting on modification date, newest first::
 
 .. _custompivot:
 
-custompivot
-^^^^^^^^^^^
+pivot.name
+^^^^^^^^^^
 
-Add a join on the given custom pivot table. The table is joined to
-the primary ``rsc`` table: ``custompivot=foo`` (joins the ``pivot_foo`` table into the query)
+Filter on the named pivot of the rsc table. The name is prefixed with ``pivot_``.
 
-The pivot tables are aliassed with a number in order of their
-occurrence, with the first pivot table aliassed as ``pivot1``. This
-allows you to do filtering on custom fields like this::
+Available pivot fields are:
 
-    {query custompivot="pivotname" filter=["pivot1.fieldname", `=`, "hello"]}
+    *  pivot.category_nr,
+    *  pivot.first_name
+    *  pivot.surname
+    *  pivot.gender
+    *  pivot.date_start
+    *  pivot.date_end
+    *  pivot.date_start_month_day
+    *  pivot.date_end_month_day
+    *  pivot.street
+    *  pivot.city
+    *  pivot.state
+    *  pivot.postcode
+    *  pivot.country
+    *  pivot.geocode
+    *  pivot.title
+    *  pivot.location_lat
+    *  pivot.location_lng
+
+These fields can also be used in ``filter`` and the ``sort`` terms.
 
 .. seealso:: :ref:`cookbook-custom-pivots`
+
+pivot.mypivot.name
+^^^^^^^^^^^^^^^^^^
+
+Filter on the named pivot of the custom pivot ``mypivot``.
+
+Here ``mypivot`` is a custom pivot table defined with ``z_pivot_rsc:define_custom_pivot/3``
+
+Check the explanation and examples in :ref:`cookbook-custom-pivots` for more information.
+
+These fields can also be used in ``filter`` and the ``sort`` terms.
 
 
 facet.name
@@ -357,6 +385,8 @@ The value can be an operator::
     <>123
 
 For example, the last one translates to the SQL clause ``facet.name <> 123``.
+
+The facet fields can also be used in ``filter`` and the ``sort`` terms.
 
 
 hasobjectpredicate

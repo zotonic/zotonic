@@ -159,6 +159,7 @@ request_arg(<<"filter">>)              -> filter;
 request_arg(<<"filter.facet.", F/binary>>)-> {facet, F};
 request_arg(<<"filter.", F/binary>>)   -> {filter, F};
 request_arg(<<"pivot.", _/binary>> = F)-> {filter, F};
+request_arg(<<"pivot_", F/binary>>)    -> {filter, <<"pivot.", F/binary>>};
 request_arg(<<"id_exclude">>)          -> id_exclude;
 request_arg(<<"hasobject">>)           -> hasobject;
 request_arg(<<"hasobjectpredicate">>)  -> hasobjectpredicate;
