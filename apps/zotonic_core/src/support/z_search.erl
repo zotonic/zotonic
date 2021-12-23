@@ -73,9 +73,9 @@ search(Name, Args, Page, PageLen, Context) when is_binary(Name), is_map(Args) ->
         offsetlimit = OffsetLimit
     },
     case z_notifier:first(Q, Context) of
-        undefined ->
+        undefined when Name =/= <<"query">> ->
             case m_rsc:rid(Name, Context) of
-                RId when is_integer(RId), Name =/= <<"query">> ->
+                RId when is_integer(RId) ->
                     case m_rsc:is_a(RId, 'query', Context) of
                         true ->
                             % Named query, perform the query with the stored arguments.
@@ -97,6 +97,12 @@ search(Name, Args, Page, PageLen, Context) when is_binary(Name), is_map(Args) ->
                         search_args = Args
                     }
             end;
+        undefined ->
+            lager:info("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
+            #search_result{
+                search_name = Name,
+                search_args = Args
+            };
         Result ->
             handle_search_result(Result, Page, PageLen, OffsetLimit, Name, Args ,Context)
     end.
