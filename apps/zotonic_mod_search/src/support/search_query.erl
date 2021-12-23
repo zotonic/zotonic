@@ -927,26 +927,54 @@ add_order(Order, Search) when is_atom(Order) ->
     add_order(atom_to_binary(Order, utf8), Search);
 add_order(Order, Search) when is_list(Order) ->
     add_order(list_to_binary(Order), Search);
-add_order(<<"seq">>, Search) ->
-    add_order(<<"+seq">>, Search);
+add_order(<<_, "random">>, Search) ->
+    Search#search_sql_term{
+        sort = Search#search_sql_term.sort
+               ++ [ <<"random()">> ]
+    };
 add_order(<<C, "seq">>, Search) when C =:= $-; C =:= $+ ->
     Search#search_sql_term{
         sort = Search#search_sql_term.sort
                ++ [ {edge, C, <<"seq">>}, {edge, C, <<"id">>} ]
     };
-add_order(<<"edge.", _/binary>> = Order, Search) ->
-    O1 = sql_safe(Order),
-    add_order(<<$+, O1/binary>>, Search);
 add_order(<<C, "edge.", Column/binary>>, Search) when C =:= $-; C =:= $+ ->
     Column1 = sql_safe(Column),
     Search#search_sql_term{
         sort = Search#search_sql_term.sort
                ++ [ {edge, C, Column1} ]
     };
-add_order(<<"random">>, Search) ->
+add_order(<<C, "pivot.", Pivot/binary>>, Search)  when C =:= $-; C =:= $+ ->
+    case binary:split(Pivot, <<".">>) of
+        [ PivotTable, Column ] ->
+            Tab1 = sql_safe(PivotTable),
+            Col1 = <<"pivot_", Column/binary>>,
+            Col2 = sql_safe(Col1),
+            Join = Search#search_sql_term.join_inner,
+            Search#search_sql_term{
+                join_inner = Join#{
+                    Tab1 => {Tab1, <<Tab1/binary, ".id = rsc.id">>}
+                },
+                sort = Search#search_sql_term.sort
+                        ++ [ {Tab1, C, Col2} ]
+            };
+        [ Column ] ->
+            Col1 = <<"pivot_", Column/binary>>,
+            Col2 = sql_safe(Col1),
+            Search#search_sql_term{
+                sort = Search#search_sql_term.sort
+                       ++ [ {<<"rsc">>, C, Col2} ]
+            }
+    end;
+add_order(<<C, "facet.", Column/binary>>, Search)  when C =:= $-; C =:= $+ ->
+    Col1 = <<"f_", Column/binary>>,
+    Col2 = sql_safe(Col1),
+    Join = Search#search_sql_term.join_inner,
     Search#search_sql_term{
+        join_inner = Join#{
+            <<"facet">> => {<<"search_facet">>, <<"facet.id = rsc.id">>}
+        },
         sort = Search#search_sql_term.sort
-               ++ [ <<"random()">> ]
+               ++ [ {<<"facet">>, C, Col2} ]
     };
 add_order(<<C, Sort/binary>>, Search) when C =:= $-; C =:= $+ ->
     Sort1 = sql_safe(Sort),
@@ -959,7 +987,10 @@ add_order(<<C, Sort/binary>>, Search) when C =:= $-; C =:= $+ ->
     Search#search_sql_term{
         sort = Search#search_sql_term.sort
                ++ [ {Alias, C, Column} ]
-    }.
+    };
+add_order(Sort, Search) ->
+    add_order(<<"+", Sort/binary>>, Search).
+
 
 
 %% Make sure that parts of the query are safe to append to the search query.
