@@ -36,7 +36,14 @@ The following searches are implemented in mod_search:
 |facets                  |Performs a ``query`` (see above) and then calculates facets.   |                   |
 |                        |The facets are defined using the ``pivot/facet.tpl`` template. |                   |
 |                        |Facets are returned in the ``facets`` field of the search      |                   |
-|                        |result.                                                        |                   |
+|                        |result. This shows per facet the counts for alternative values.|                   |
++------------------------+---------------------------------------------------------------+-------------------+
+|subfacets               |Performs a ``query`` (see above) and then calculates facets.   |                   |
+|                        |The facets are defined using the ``pivot/facet.tpl`` template. |                   |
+|                        |Facets are returned in the ``facets`` field of the search      |                   |
+|                        |result. This is a *drill down* where the facets are counted    |                   |
+|                        |from the matching resources in the query. That means that only |                   |
+|                        |facet values that are in the result set are shown.             |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
 |facet_values            |Returns an empty result with the facets field set to all       |                   |
 |                        |possible values per facet, or the min/max range for a range    |                   |
