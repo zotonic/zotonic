@@ -21,7 +21,9 @@
 -export([
     event/2,
     task_file_to_local/1,
-    task_file_to_remote/1
+    task_file_to_remote/1,
+
+    testcred/1
     ]).
 
 -include_lib("zotonic.hrl").
@@ -73,6 +75,12 @@ event(#submit{message=admin_filestore_queue}, Context) ->
 
 
 -define(DATA, <<"Geen wolkje aan de lucht.">>).
+
+testcred(Context) ->
+    S3Url = m_config:get_value(mod_filestore, s3url, Context),
+    S3Key = m_config:get_value(mod_filestore, s3key, Context),
+    S3Secret = m_config:get_value(mod_filestore, s3secret, Context),
+    testcred(S3Url, S3Key, S3Secret, false).
 
 % Try a put, get, and delete sequence - optionally create private bucket
 testcred(S3Url, S3Key, S3Secret, IsCreateBucket)
