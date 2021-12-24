@@ -384,7 +384,8 @@ Search
 ^^^^^^
 
 * Search argument ``authoritative`` was renamed to ``is_authoritative``.
-
+* The ``custompivot`` has been removed. Pivot fields can now directly be addressed with ``pivot.mypivotname.column``.
+  Pivot tables are now joined automatically, removing the need for the ``custompivot`` search argument.
 
 Notifications
 ^^^^^^^^^^^^^

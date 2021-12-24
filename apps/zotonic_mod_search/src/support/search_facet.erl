@@ -66,8 +66,12 @@
 
 -export([
     facet_values/1,
+
     search_query_facets/3,
-    add_search_arg/4,
+    search_query_subfacets/3,
+
+    qterm/3,
+
     pivot_rsc/2,
     pivot_all/1,
     pivot_batch/2,
@@ -83,7 +87,6 @@
 -define(TEXT_LENGTH, 80).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
-
 
 %% @doc Return all found values (or min/max for all facets).
 -spec facet_values(z:context()) -> {ok, map()} | {error, term()}.
@@ -135,13 +138,77 @@ facet_values(Context) ->
             Error
     end.
 
-%% @doc Add facets to the result set using the query.
+%% @doc Add facets to the result set using the query. The facets are calculated
+%% using the query without facets, per facet a subselect is done to show the variations for
+%% that facet with respect to the other facets.
 -spec search_query_facets(Result, Query, Context) -> NewResult
     when Result :: #search_result{},
          NewResult :: #search_result{},
          Query :: #search_sql{},
          Context :: z:context().
-search_query_facets(Result, Query, Context) ->
+search_query_facets(Result, #search_sql{ search_sql_terms = undefined } = Query, Context) ->
+    search_query_subfacets(Result, Query, Context);
+search_query_facets(Result, #search_sql{ search_sql_terms = Terms }, Context) ->
+    % 1. Take the query terms
+    % 2. Split into facet terms and other terms
+    {FacetTerms, SelectTerms} = lists:partition(fun is_facet_term/1, Terms),
+    % 3. Rebuild the query for the other terms
+    SelectTerms1 = [
+        #search_sql_term{
+            select = [ <<"rsc.id">>, <<"facet.id as facet_id">>, <<"facet.*">> ],
+            join_inner = #{
+                <<"facet">> => {<<"search_facet">>, <<"facet.id = rsc.id">>}
+            }
+        }
+        | SelectTerms
+    ],
+    Q1 = z_search_terms:combine(SelectTerms1),
+    Q2 = Q1#search_sql{
+        limit = undefined
+    },
+    Q3 = move_unused_order_args_to_select(Q2),
+    Q4 = z_search:reformat_sql_query(Q3, Context),
+    {SQL, Args} = z_search:concat_sql_query(Q4, undefined),
+    SQL2 = [
+        "with result as (", SQL, ")"
+    ],
+    {ok, Defs} = template_facets(Context),
+    % 4. Add facet where clauses to all facet unions.
+    {Unions, Args2} = lists:foldl(
+        fun(Def, {UnionAcc, ArgsAcc}) ->
+            case facet_union(Def, FacetTerms, ArgsAcc) of
+                {[], ArgsAcc1} ->
+                    {UnionAcc, ArgsAcc1};
+                {UnionTerm, ArgsAcc1} ->
+                    {[ UnionTerm | UnionAcc ], ArgsAcc1}
+            end
+        end,
+        {[], Args},
+        Defs),
+    SQL3 = [
+        SQL2,
+        " ",
+        lists:join("\nunion\n", Unions)
+    ],
+    FinalSQL = iolist_to_binary(SQL3),
+    {ok, Facets} = z_db:qmap(FinalSQL, Args2, Context),
+    % io:format("~n~s~n", [ FinalSQL ]),
+    Fs = group_facets(Defs, Facets, Context),
+    Result#search_result{
+        facets = Fs
+    }.
+
+is_facet_term(#search_sql_term{ label = {facet, _} }) -> true;
+is_facet_term(#search_sql_term{}) -> false.
+
+%% @doc Add facets to the result set using the query. The facets are calculated
+%% using the result ids. Facets can be used for a "drill down".
+-spec search_query_subfacets(Result, Query, Context) -> NewResult
+    when Result :: #search_result{},
+         NewResult :: #search_result{},
+         Query :: #search_sql{},
+         Context :: z:context().
+search_query_subfacets(Result, Query, Context) ->
     Q1 = join_facet(Query),
     Q2 = Q1#search_sql{
         select = "rsc.id, facet.id as facet_id, facet.*",
@@ -154,10 +221,11 @@ search_query_facets(Result, Query, Context) ->
     ],
     {ok, Defs} = template_facets(Context),
     Unions = lists:map(fun facet_union/1, Defs),
+    Unions1 = lists:filter(fun(X) -> X =/= [] end, Unions),
     SQL3 = [
         SQL2,
         " ",
-        lists:join("\nunion\n", Unions)
+        lists:join("\nunion\n", Unions1)
     ],
     FinalSQL = iolist_to_binary(SQL3),
     {ok, Facets} = z_db:qmap(FinalSQL, Args, Context),
@@ -171,6 +239,23 @@ search_query_facets(Result, Query, Context) ->
         pages = (NewTotal + PageLen - 1) div PageLen
     }.
 
+join_facet(#search_sql{ from = From } = Query) ->
+    case string:find(From, "search_facet facet") of
+        nomatch ->
+            From1 = iolist_to_binary([ From, ", search_facet facet "]),
+            add_where("facet.id = rsc.id", "AND", Query#search_sql{ from = From1 });
+        _ ->
+            Query
+    end.
+
+add_where(Clause, _AndOr, #search_sql{ where = "" } = Search) ->
+    Search#search_sql{ where = Clause };
+add_where(Clause, _AndOr, #search_sql{ where = <<>> } = Search) ->
+    Search#search_sql{ where = Clause };
+add_where(Clause, AndOr, #search_sql{ where = C } = Search) ->
+    W = iolist_to_binary([C, " ", AndOr, " ", Clause]),
+    Search#search_sql{ where = W }.
+
 move_unused_order_args_to_select(#search_sql{ where = Where, order = Order } = Q) ->
     InWhere = case re:run(Where, <<"\\$[0-9]+">>, [ global, {capture, all, binary} ]) of
         {match, Ws} -> lists:flatten(Ws);
@@ -183,13 +268,15 @@ move_unused_order_args_to_select(#search_sql{ where = Where, order = Order } = Q
     Q1 = lists:foldl(
         fun(Ex, QAcc) ->
             QAcc#search_sql{
-                select = QAcc#search_sql.select
-                        ++ ", " ++ z_convert:to_list(Ex) ++ "::character varying"
+                select = iolist_to_binary([
+                            QAcc#search_sql.select
+                            ,", ", z_convert:to_binary(Ex), "::character varying"
+                        ])
                 }
         end,
         Q,
         InOrder -- InWhere),
-    Q1#search_sql{ order = "" }.
+    Q1#search_sql{ order = <<>> }.
 
 
 facet_total(Fs, Total) ->
@@ -259,6 +346,41 @@ find_facets(Name, Fs) ->
         fun(#{ <<"facet">> := N }) -> Name =:= N end,
         Fs).
 
+facet_union(#facet_def{ name = Name } = Def, FacetTerms, Args) ->
+    case facet_union(Def) of
+        [] ->
+            {[], Args};
+        Frag ->
+            % Append all facet clauses for facets other
+            % than the current facet def.
+            FacetTerms1 = lists:filter(
+                fun(#search_sql_term{ label = {facet, N} }) ->
+                    Name =/= N
+                end,
+                FacetTerms),
+
+            % Update all arg placeholders in the where clause
+            {Ws, Args1} = lists:foldl(
+                fun(#search_sql_term{ where = TWhere, args = TArgs }, {WAcc, ArgsAcc}) ->
+                    {_, ArgsAcc1, Mapping} = z_search_terms:merge_args(TArgs, ArgsAcc),
+                    TWhere1 = z_search_terms:map(TWhere, Mapping),
+                    {[ TWhere1 | WAcc ], ArgsAcc1}
+                end,
+                {[], Args},
+                FacetTerms1),
+            Frag1 = case Ws of
+                [] ->
+                    Frag;
+                _ ->
+                    F1 = iolist_to_binary(Frag),
+                    Ws1 = iolist_to_binary([ " ", lists:join(<<" and ">>, Ws) ]),
+                    Ws2 = binary:replace(Ws1, <<" facet.">>, <<>>, [ global ]),
+                    Ws3 = <<" where ", Ws2/binary, " and ">>,
+                    binary:replace(F1, <<" where ">>, Ws3)
+            end,
+            {Frag1, Args1}
+    end.
+
 facet_union(#facet_def{ type = list }) ->
     [];
 facet_union(#facet_def{ name = Name, is_range = true }) ->
@@ -286,36 +408,57 @@ facet_union(#facet_def{ name = Name }) ->
 
 %% @doc Add an extra search argument to the given query. Called by the query
 %% builder in search_query.erl
--spec add_search_arg(Field, Value, Query, Context) -> {ok, NewQuery} | {error, term()}
+-spec qterm(Field, Value, Context) -> {ok, Term} | {error, term()}
     when Field :: binary(),
          Value :: term(),
-         Query :: #search_sql{},
-         NewQuery :: #search_sql{},
+         Term :: #search_sql_term{},
          Context :: z:context().
-add_search_arg(_Field, [], Query, _Context) ->
-    Query;
-add_search_arg(Field, [Value], Query, Context) ->
-    add_search_arg(Field, Value, Query, Context);
-add_search_arg(Field, Vs, Query, Context) when is_list(Vs) ->
+qterm(_Field, [], _Context) ->
+    {ok, []};
+qterm(Field, [Value], Context) ->
+    Q = #search_sql_term{
+        label = {facet, Field},
+        join_inner = #{
+            <<"facet">> => {<<"search_facet">>, <<"facet.id = rsc.id">>}
+        }
+    },
+    qterm_1(Field, Value, Q, Context);
+qterm(Field, Vs, Context) when is_list(Vs) ->
     % 'OR' query for all values
-    Q0 = join_facet(Query),
-    Q1 = Q0#search_sql{ where = Q0#search_sql.where ++ " AND (" },
-    {_, Q2} = lists:foldl(
-        fun(V, {Op, QAcc}) ->
-            case add_search_arg(Field, V, QAcc, Op, Context) of
+    Q = #search_sql_term{
+        label = {facet, Field},
+        join_inner = #{
+            <<"facet">> => {<<"search_facet">>, <<"facet.id = rsc.id">>}
+        }
+    },
+    Q2 = lists:foldl(
+        fun(V, QAcc) ->
+            case qterm_1(Field, V, QAcc, Context) of
                 {ok, QAcc1} ->
-                    {"OR", QAcc1};
+                    QAcc1;
                 {error, _} ->
-                    {Op, QAcc}
+                    QAcc
             end
         end,
-        {"", Q1},
+        Q,
         Vs),
-    {ok, Q2#search_sql{ where = Q2#search_sql.where ++ ")" }};
-add_search_arg(Field, Value, Query, Context) ->
-    add_search_arg(Field, Value, Query, "AND", Context).
+    Q3 = Q2#search_sql_term{
+        where = [
+            <<"(">>,
+            lists:join(<<" OR ">>, Q2#search_sql_term.where),
+            <<")">>
+        ]
+    },
+    {ok, Q3};
+qterm(Field, Value, Context) ->
+    Q = #search_sql_term{
+        join_inner = #{
+            <<"facet">> => {<<"search_facet">>, <<"facet.id = rsc.id">>}
+        }
+    },
+    qterm_1(Field, Value, Q, Context).
 
-add_search_arg(Field, Value, Query, AndOr, Context) ->
+qterm_1(Field, Value, Query, Context) ->
     case facet_def(Field, Context) of
         {ok, Def} ->
             {Op, Value1} = extract_op(Value),
@@ -324,40 +467,36 @@ add_search_arg(Field, Value, Query, AndOr, Context) ->
             catch _:_ ->
                 undefined
             end,
-            Query1 = join_facet(Query),
-            case Def#facet_def.type of
+            Final = case Def#facet_def.type of
                 fulltext when Op =:= "=" ->
                     NormV = z_string:normalize(Value2),
-                    Column = "facet.ft_" ++ binary_to_list(Field),
-                    {ArgN, Query2} = add_arg(<<"%", NormV/binary, "%">>, Query1),
-                    Query3 = add_where(Column ++ " like " ++ ArgN, AndOr, Query2);
+                    {ArgN, Query2} = add_term_arg(<<"%", NormV/binary, "%">>, Query),
+                    W = [
+                        <<"facet.ft_">>, Field, <<" like ">>, ArgN
+                    ],
+                    Query2#search_sql_term{
+                        label = {facet_ft, Field},
+                        where = Query2#search_sql_term.where ++ [ W ]
+                    };
                 _ ->
-                    Column = "facet.f_" ++ binary_to_list(Field),
-                    {ArgN, Query2} = add_arg(Value2, Query1),
-                    Query3 = add_where(Column ++ Op ++ ArgN, AndOr, Query2)
+                    {ArgN, Query2} = add_term_arg(Value2, Query),
+                    W = [
+                        <<"facet.f_">>, Field, Op, ArgN
+                    ],
+                    Query2#search_sql_term{
+                        label = {facet, Field},
+                        where = Query2#search_sql_term.where ++ [ W ]
+                    }
             end,
-            {ok, Query3};
+            {ok, Final};
         {error, _} = Error ->
             lager:info("Uknown facet ~p, dropping query term.", [ Field ]),
             Error
     end.
 
-join_facet(#search_sql{ from = From } = Query) ->
-    case string:find(From, " search_facet facet") of
-        nomatch ->
-            From1 = From ++ ", search_facet facet",
-            add_where("facet.id = rsc.id", "AND", Query#search_sql{ from = From1 });
-        _ ->
-            Query
-    end.
-
-add_where(Clause, AndOr, Search) ->
-    case Search#search_sql.where of
-        [] ->
-            Search#search_sql{where=Clause};
-        C ->
-            Search#search_sql{where=C ++ " " ++ AndOr ++ " " ++ Clause}
-    end.
+add_term_arg(ArgValue, #search_sql_term{ args = Args } = Q) ->
+    Arg = [$$] ++ integer_to_list(length(Args) + 1),
+    {list_to_atom(Arg), Q#search_sql_term{args = Args ++ [ ArgValue ]}}.
 
 extract_op(<<"=", V/binary>>) ->
     {"=", V};
@@ -376,10 +515,11 @@ extract_op(<<"<>", V/binary>>) ->
 extract_op(V) ->
     {"=", V}.
 
-%% Append an argument to a #search_sql
-add_arg(ArgValue, Search) ->
-    Arg = [$$] ++ integer_to_list(length(Search#search_sql.args) + 1),
-    {Arg, Search#search_sql{args=Search#search_sql.args ++ [ArgValue]}}.
+
+% %% Append an argument to a #search_sql
+% add_arg(ArgValue, Search) ->
+%     Arg = [$$] ++ integer_to_list(length(Search#search_sql.args) + 1),
+%     {Arg, Search#search_sql{args=Search#search_sql.args ++ [ArgValue]}}.
 
 
 %% @doc Pivot all resources to fill the facet table. This runs after every change to the

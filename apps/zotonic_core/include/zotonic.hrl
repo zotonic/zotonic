@@ -157,22 +157,46 @@
 }).
 
 -record(search_sql, {
-    select :: list(),
-    from :: list(),
-    where = "" :: string(),
-    order = "" :: string(),
-    group_by = "" :: string(),
+    select :: iodata(),
+    from :: iodata(),
+    where = "" :: iodata(),
+    order = "" :: iodata(),
+    group_by = "" :: iodata(),
     limit,
     tables = [] :: list(),
     args = [] :: list(),
-    cats = [] :: list(),
-    cats_exclude = [] :: list(),
-    cats_exact = [] :: list(),
+    cats = [] :: list(),            % Pairs {alias, cats}
+    cats_exclude = [] :: list(),    % Pairs {alias, cats}
+    cats_exact = [] :: list(),      % Pairs {alias, cats}
     run_func :: function() | undefined,
     post_func :: fun( (#search_result{}, #search_sql{}, z:context()) -> #search_result{} ) | undefined,
     extra = [] :: list(),
-    assoc = false :: boolean()
+    assoc = false :: boolean(),
+    search_sql_terms = undefined :: list() | undefined % Optional, if search was built using #search_sql_term{} records
 }).
+
+-record(search_sql_term, {
+    label = undefined,
+    select = [ <<"rsc.id">> ],
+    tables = #{ <<"rsc">> => <<"rsc">> },
+    join_inner = #{},
+    join_left = #{},
+    where = [],
+    sort = [],
+    asort = [],
+    zsort = [],
+    cats = [],
+    cats_exclude = [],
+    cats_exact = [],
+    extra = [],
+    args = []
+}).
+
+-record(search_sql_terms, {
+    terms = [] :: [ #search_sql_term{} ],
+    post_func :: fun( (#search_result{}, #search_sql{}, z:context()) -> #search_result{} ) | undefined
+}).
+
 
 %% Used for fetching the site dispatch rules (see also )
 -record(site_dispatch_list, {

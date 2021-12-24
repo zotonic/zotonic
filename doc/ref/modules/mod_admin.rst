@@ -146,7 +146,7 @@ To make it work we are using 3 templates (where `category_name` is the lowercase
     Overrides the overview with a ``field`` variable for our custom sort. If we are using :ref:`an existing resource property<model-rsc>` such as ``date_start``, we write::
 
       {% include "_admin_overview_list.tpl"
-        field="rsc.pivot_date_start"
+        field="pivot.date_start"
       %}
 
 ``_admin_sort_header.category_name.tpl``
@@ -179,30 +179,37 @@ To sort on values that are not stored in the default Zotonic resources, you will
 
 Let's take the (unlikely) example where we want to display the summary of each page (and sort on it as well). The summary data is not stored in an easily accessible way (at least for sorting), so we need to add 2 pivot methods to our Erlang module::
 
+    -module(mymodule).
+
+    -export([
+        init/1,
+        observe_custom_pivot/2
+    ]).
+
     init(Context) ->
-        z_pivot_rsc:define_custom_pivot(?MODULE, [{summary, "binary"}], Context),
+        z_pivot_rsc:define_custom_pivot(?MODULE, [{summary, "text"}], Context),
         ok.
 
     observe_custom_pivot({custom_pivot, Id}, Context) ->
-        case m_rsc:p(Id, summary, Context) of
-            {trans, [{en, Summary}]} ->
-                {?MODULE, [{summary, Summary}]};
-            _ -> none
+        case z_trans:lookup_fallback(m_rsc:p(Id, summary, Context), Context) of
+            undefined ->
+                none;
+            Summary ->
+                {?MODULE, [{summary, Summary}]}
         end.
 
-For this example we are just grabbing the English text, and assume that other translations exist.
+For this example we are just grabbing the default language text.
 
 The ``field`` name in ``_admin_overview_list.category_name.tpl`` now just needs to contain the pivot column name::
 
     {% include "_admin_overview_list.tpl"
-        field="summary"
+        field="pivot.mymodule.summary"
     %}
 
 And the sort header template ``_admin_sort_header.category_name.tpl`` adds the custom pivot variable::
 
     {% include "_admin_sort_header.tpl"
         caption="Summary"
-        custompivot="my_module"
     %}
 
 

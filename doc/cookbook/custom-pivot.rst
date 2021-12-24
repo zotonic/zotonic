@@ -46,17 +46,13 @@ To sort on 'requestor', do the following:
 
 .. code-block:: django
 
-    {% with m.search.paged[{query custompivot='pivotname' cat='foo' sort='requestor'}] as result %}
+    {% with m.search.paged[{query cat='foo' sort='pivot.pivotname.requestor'}] as result %}
 
-Or you can filter on it. The pivot tables are aliassed with a number
-in order of their occurrence, with the first pivot table aliassed as
-``pivot1``. This allows you to do filtering on custom fields like
-this:
+Or you can filter on it:
 
 .. code-block:: django
 
-  {% with m.search.paged[{query custompivot="pivotname"
-                          filter=["pivot1.fieldname", `=`, "hello"]}]
+  {% with m.search.paged[{query filter=["pivot.pivotname.requestor", `=`, "hello"]}]
      as result %}
 
 .. seealso::

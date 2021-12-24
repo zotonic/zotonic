@@ -2,7 +2,6 @@
 Params:
 qsort
 qcat
-qcustompivot
 #}
 
 {% if (not q.page or q.page == "1") and q.qs %}
@@ -129,7 +128,7 @@ qcustompivot
     <thead>
         <tr>
             <th width="30%">
-                {% include "_admin_sort_header.tpl" field="pivot_title" caption=_"Title" type=type|default:"string" %}
+                {% include "_admin_sort_header.tpl" field="pivot.title" caption=_"Title" type=type|default:"string" %}
             </th>
             <th width="15%">
                 {% catinclude "_admin_sort_header.tpl" m.category[qcat].is_a field=field|default:"category_id" type=type|default:"string" caption=_"Category" qsort=qsort %}
