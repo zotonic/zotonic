@@ -230,7 +230,7 @@ get_user_info(Context) ->
     get_user_info(z_acl:user(Context), Context).
 
 %% @doc Return the username and last login of the resource id, undefined if no username
--spec get_user_info(m_rsc:resource() | undefined, z:context()) -> binary().
+-spec get_user_info(m_rsc:resource() | undefined, z:context()) -> map().
 get_user_info(undefined, _Context) ->
     empty_user_info(undefined);
 get_user_info(Rsc, Context) ->
