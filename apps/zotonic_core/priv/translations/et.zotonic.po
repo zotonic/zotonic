@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-24 13:27\n"
+"PO-Revision-Date: 2021-12-24 13:48\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -2869,7 +2869,7 @@ msgstr "Kui te seda saiti ei tunne, siis eirake seda e-posti aadressi. Võib-oll
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51
 msgid "Last logon"
-msgstr ""
+msgstr "Viimane sisselogimine"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:28
 msgid "Leave empty to not change the password."
@@ -3057,7 +3057,7 @@ msgstr "Kasutajanimi / parool"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:50
 msgid "Username <b>{username}</b>, last logon at {date}."
-msgstr ""
+msgstr "Kasutajanimi <b>{username}</b>, viimane sisselogimine kell {date}."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:64
 msgid "Username and password"
