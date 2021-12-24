@@ -213,8 +213,8 @@ get_username(Context) ->
     end.
 
 %% @doc Return the username of the resource id, undefined if no username
--spec get_username(m_rsc:resource_id(), z:context()) -> binary() | undefined.
-get_username(RscId, Context) when is_integer(RscId) ->
+-spec get_username(m_rsc:resource(), z:context()) -> binary() | undefined.
+get_username(RscId, Context) ->
     F = fun() ->
         z_db:q1(
             "select key from identity where rsc_id = $1 and type = 'username_pw'",
@@ -227,48 +227,46 @@ get_username(RscId, Context) when is_integer(RscId) ->
 %% @doc Return the username and last login of the current user.
 -spec get_user_info(z:context()) -> map().
 get_user_info(Context) ->
-    case z_acl:user(Context) of
-        undefined ->
-            #{
-                <<"user_id">> => undefined,
-                <<"username">> => undefined,
-                <<"visited">> => undefined,
-                <<"modified">> => undefined,
-                <<"is_expired">> => false
-            };
-        UserId ->
-            get_user_info(UserId, Context)
-    end.
+    get_user_info(z_acl:user(Context), Context).
 
 %% @doc Return the username and last login of the resource id, undefined if no username
--spec get_user_info(m_rsc:resource_id(), z:context()) -> binary().
-get_user_info(RscId, Context) when is_integer(RscId) ->
-    Row = z_db:q_row("
-             select key, visited, prop1, modified
-             from identity
-             where rsc_id = $1
-               and type = 'username_pw'",
-            [m_rsc:rid(RscId, Context)],
-            Context),
-    case Row of
+-spec get_user_info(m_rsc:resource() | undefined, z:context()) -> binary().
+get_user_info(undefined, _Context) ->
+    empty_user_info(undefined);
+get_user_info(Rsc, Context) ->
+    case m_rsc:rid(Rsc, Context) of
         undefined ->
-            #{
-                <<"user_id">> => RscId,
-                <<"username">> => undefined,
-                <<"visited">> => undefined,
-                <<"modified">> => undefined,
-                <<"is_expired">> => false
-            };
-        {Key, Visited, Prop1, Modified} ->
-            #{
-                <<"user_id">> => RscId,
-                <<"username">> => Key,
-                <<"visited">> => Visited,
-                <<"modified">> => Modified,
-                <<"is_expired">> => Prop1 =:= <<"expired">>
-            }
+            empty_user_info(undefined);
+        RscId ->
+            Row = z_db:q_row("
+                     select key, visited, prop1, modified
+                     from identity
+                     where rsc_id = $1
+                       and type = 'username_pw'",
+                    [],
+                    Context),
+            case Row of
+                undefined ->
+                    empty_user_info(RscId);
+                {Key, Visited, Prop1, Modified} ->
+                    #{
+                        <<"user_id">> => RscId,
+                        <<"username">> => Key,
+                        <<"visited">> => Visited,
+                        <<"modified">> => Modified,
+                        <<"is_expired">> => Prop1 =:= <<"expired">>
+                    }
+            end
     end.
 
+empty_user_info(RscId) ->
+    #{
+        <<"user_id">> => RscId,
+        <<"username">> => undefined,
+        <<"visited">> => undefined,
+        <<"modified">> => undefined,
+        <<"is_expired">> => false
+    }.
 
 %% @doc Check if the user is allowed to change the username of a resource.
 -spec is_allowed_set_username( m_rsc:resource_id(), z:context() ) -> boolean().
