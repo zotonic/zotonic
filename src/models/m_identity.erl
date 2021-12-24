@@ -36,6 +36,8 @@
     is_user/2,
     get_username/1,
     get_username/2,
+    get_user_info/1,
+    get_user_info/2,
     delete_username/2,
     set_username/3,
     set_username_pw/4,
@@ -77,6 +79,8 @@
     set_verified/4,
     is_verified/2,
 
+    set_visited/2,
+
     delete/2,
     merge/3,
     is_reserved_name/1,
@@ -106,6 +110,8 @@ m_find_value(is_user, #m{value=RscId}, Context) ->
     is_user(RscId, Context);
 m_find_value(username, #m{value=RscId}, Context) ->
     get_username(RscId, Context);
+m_find_value(user_info, #m{value=RscId}, Context) ->
+    get_user_info(RscId, Context);
 m_find_value(all, #m{value=RscId} = M, _Context) ->
     M#m{value={all, RscId}};
 m_find_value(all_types, #m{value=RscId}, Context) ->
@@ -156,6 +162,51 @@ get_username(Context) ->
 get_username(Id, Context) ->
     z_db:q1("select key from identity where rsc_id = $1 and type = 'username_pw'", [m_rsc:rid(Id, Context)], Context).
 
+
+%% @doc Return the username and last login of the current user.
+-spec get_user_info(z:context()) -> map().
+get_user_info(Context) ->
+    case z_acl:user(Context) of
+        undefined ->
+            #{
+                <<"user_id">> => undefined,
+                <<"username">> => undefined,
+                <<"visited">> => undefined,
+                <<"modified">> => undefined,
+                <<"is_expired">> => false
+            };
+        UserId ->
+            get_user_info(UserId, Context)
+    end.
+
+%% @doc Return the username and last login of the resource id, undefined if no username
+-spec get_user_info(m_rsc:resource_id(), z:context()) -> binary().
+get_user_info(RscId, Context) when is_integer(RscId) ->
+    Row = z_db:q_row("
+             select key, visited, prop1, modified
+             from identity
+             where rsc_id = $1
+               and type = 'username_pw'",
+            [m_rsc:rid(RscId, Context)],
+            Context),
+    case Row of
+        undefined ->
+            #{
+                <<"user_id">> => RscId,
+                <<"username">> => undefined,
+                <<"visited">> => undefined,
+                <<"modified">> => undefined,
+                <<"is_expired">> => false
+            };
+        {Key, Visited, Prop1, Modified} ->
+            #{
+                <<"user_id">> => RscId,
+                <<"username">> => Key,
+                <<"visited">> => Visited,
+                <<"modified">> => Modified,
+                <<"is_expired">> => Prop1 =:= <<"expired">>
+            }
+    end.
 
 %% @doc Check if the user is allowed to change the username of a resource.
 -spec is_allowed_set_username( m_rsc:resource_id(), z:context() ) -> boolean().
@@ -1023,8 +1074,7 @@ check_hash(RscId, Username, Password, Hash, Context) ->
     end.
 
 
-check_hash_ok(RscId, Context) ->
-    set_visited(RscId, Context),
+check_hash_ok(RscId, _Context) ->
     {ok, RscId}.
 
 %% @doc Prevent insert of reserved usernames.

@@ -103,6 +103,7 @@ logon(UserId, Context) ->
             Context3 = z_session:ensure_page_session(Context2),
             Context4 = z_notifier:foldl(auth_logon, Context3, Context3),
             z_notifier:notify(auth_logon_done, Context4),
+            m_identity:set_visited(UserId, Context),
             {ok, Context4};
         false ->
             {error, user_not_enabled}
