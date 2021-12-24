@@ -48,21 +48,26 @@
                     <tr>
                         <th width="20%">{_ Name _}</th>
                         <th width="20%">{_ Username _}</th>
+                        <th width="15%">{_ Last logon _}</th>
                         <th width="15%">{_ Created on _}</th>
-                        <th width="40%">{_ Modified on _}</th>
+                        <th width="25%">{_ Modified on _}</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     {% for id in result %}
+                    {% with m.identity[id].user_info as user_info %}
                         <tr id="{{ #tr.id }}" data-href="javascript:;" {% if not id.is_published %}class="unpublished"{% endif %}>
                             <td>{{ m.rsc[id].title|striptags }}</td>
                             <td>
-                                {% if not m.identity[id].username %}
+                                {% if not user_info.username %}
                                     &mdash;
                                 {% else %}
-                                    {{ m.identity[id].username|escape }}{% if id == me %}  <strong>{_ (that's you) _}</strong>{% endif %}</td>
-                            {% endif %}
+                                    {{ user_info.username|escape }}
+                                    {% if id == me %}  <strong>{_ (that's you) _}</strong>{% endif %}
+                                {% endif %}
+                            </td>
+                            <td>{{ user_info.visited|date:_"d M Y, H:i" }}</td>
                             <td>{{ id.created|date:_"d M Y, H:i" }}</td>
                             <td>
                                 {{ id.modified|date:_"d M Y, H:i" }}
@@ -78,6 +83,7 @@
                             </td>
                         </tr>
                         {% wire id=#tr.id|append:" td" action={dialog_edit_basics id=id target=undefined} %}
+                    {% endwith %}
                     {% empty %}
                         <tr>
                             <td colspan="4">

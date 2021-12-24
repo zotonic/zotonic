@@ -27,10 +27,13 @@
     is_user/2,
     get_username/1,
     get_username/2,
+    get_user_info/1,
+    get_user_info/2,
     delete_username/2,
     set_username/3,
     set_username_pw/4,
     set_expired/3,
+    set_visited/2,
     ensure_username_pw/2,
     check_username_pw/3,
     check_username_pw/4,
@@ -131,6 +134,12 @@ m_get([ Id, <<"username">> | Rest ], _Msg, Context) ->
         false -> undefined
     end,
     {ok, {Username, Rest}};
+m_get([ Id, <<"user_info">> | Rest ], _Msg, Context) ->
+    Info = case z_acl:rsc_editable(Id, Context) of
+        true -> get_user_info(Id, Context);
+        false -> undefined
+    end,
+    {ok, {Info, Rest}};
 m_get([ Id, <<"all_types">> | Rest ], _Msg, Context) ->
     Idns = case z_acl:rsc_editable(Id, Context) of
         true -> get_rsc_types(Id, Context);
@@ -204,7 +213,7 @@ get_username(Context) ->
     end.
 
 %% @doc Return the username of the resource id, undefined if no username
--spec get_username(m_rsc:resource(), z:context()) -> binary() | undefined.
+-spec get_username(m_rsc:resource_id(), z:context()) -> binary() | undefined.
 get_username(RscId, Context) when is_integer(RscId) ->
     F = fun() ->
         z_db:q1(
@@ -213,6 +222,52 @@ get_username(RscId, Context) when is_integer(RscId) ->
             Context)
     end,
     z_depcache:memo(F, {username, RscId}, 3600, [ {idn, RscId} ], Context).
+
+
+%% @doc Return the username and last login of the current user.
+-spec get_user_info(z:context()) -> map().
+get_user_info(Context) ->
+    case z_acl:user(Context) of
+        undefined ->
+            #{
+                <<"user_id">> => undefined,
+                <<"username">> => undefined,
+                <<"visited">> => undefined,
+                <<"modified">> => undefined,
+                <<"is_expired">> => false
+            };
+        UserId ->
+            get_user_info(UserId, Context)
+    end.
+
+%% @doc Return the username and last login of the resource id, undefined if no username
+-spec get_user_info(m_rsc:resource_id(), z:context()) -> binary().
+get_user_info(RscId, Context) when is_integer(RscId) ->
+    Row = z_db:q_row("
+             select key, visited, prop1, modified
+             from identity
+             where rsc_id = $1
+               and type = 'username_pw'",
+            [m_rsc:rid(RscId, Context)],
+            Context),
+    case Row of
+        undefined ->
+            #{
+                <<"user_id">> => RscId,
+                <<"username">> => undefined,
+                <<"visited">> => undefined,
+                <<"modified">> => undefined,
+                <<"is_expired">> => false
+            };
+        {Key, Visited, Prop1, Modified} ->
+            #{
+                <<"user_id">> => RscId,
+                <<"username">> => Key,
+                <<"visited">> => Visited,
+                <<"modified">> => Modified,
+                <<"is_expired">> => Prop1 =:= <<"expired">>
+            }
+    end.
 
 
 %% @doc Check if the user is allowed to change the username of a resource.
@@ -637,7 +692,10 @@ check_username_pw_1(<<"admin">>, Password, Context) ->
             % Only allow default password from allowed ip addresses
             case is_peer_allowed(Context) of
                 true ->
-                    z_db:q("update identity set visited = now() where id = 1", Context),
+                    z_db:q("
+                        update identity
+                        set visited = now()
+                        where id = 1", Context),
                     flush(1, Context),
                     {ok, 1};
                 false ->
@@ -650,7 +708,10 @@ check_username_pw_1(<<"admin">>, Password, Context) ->
         AdminPassword ->
             case is_equal(Password1, AdminPassword) of
                 true ->
-                    z_db:q("update identity set visited = now() where id = 1", Context),
+                    z_db:q("
+                        update identity
+                        set visited = now()
+                        where id = 1", Context),
                     flush(1, Context),
                     {ok, 1};
                 false ->
@@ -666,7 +727,13 @@ check_username_pw_1(Username, Password, Context) ->
         {error, _} = Error ->
             Error;
         undefined ->
-            Row = z_db:q_row("select rsc_id, propb, prop1 from identity where type = 'username_pw' and key = $1", [Username1], Context),
+            Row = z_db:q_row("
+                select rsc_id, propb, prop1
+                from identity
+                where type = 'username_pw'
+                  and key = $1",
+                [Username1],
+                Context),
             case Row of
                 undefined ->
                     % If the Username looks like an e-mail address, try by Email & Password
@@ -980,7 +1047,10 @@ set_visited(undefined, _Context) ->
     ok;
 set_visited(UserId, Context) when is_integer(UserId) ->
     case z_db:q(
-        "update identity set visited = now() where rsc_id = $1 and type = 'username_pw'",
+        "update identity
+         set visited = now()
+         where rsc_id = $1
+           and type = 'username_pw'",
         [m_rsc:rid(UserId, Context)],
         Context)
     of
@@ -1344,9 +1414,7 @@ check_hash(RscId, Username, Password, Hash, Context) ->
             {error, nouser}
     end.
 
-
-check_hash_ok(RscId, Context) ->
-    set_visited(RscId, Context),
+check_hash_ok(RscId, _Context) ->
     {ok, RscId}.
 
 %% @doc Prevent insert of reserved usernames.

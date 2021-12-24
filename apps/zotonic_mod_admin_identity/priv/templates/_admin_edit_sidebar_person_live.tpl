@@ -45,10 +45,17 @@
 
 <div class="form-group">
     <div class="alert alert-info">
-        {% if m.identity[id].is_user %}
-            {_ This person is also a user. _}
-        {% else %}
-            {_ This person is not yet a user. _}
-        {% endif %}
+        {% with m.identity[id].user_info as user_info %}
+            {% if user_info.username %}
+                {% trans "Username <b>{username}</b>, last logon at {date}."
+                         username=user_info.username|escape
+                         date=user_info.visited|date:_"Y-m-d H:i"
+                %}
+            {% elseif m.identity[id].is_user %}
+                {_ This person is also a user. _}
+            {% else %}
+                {_ This person is not yet a user. _}
+            {% endif %}
+        {% endwith %}
     </div>
 </div>

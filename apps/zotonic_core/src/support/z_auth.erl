@@ -80,6 +80,7 @@ logon(UserId, Context) ->
         true ->
             Context1 = z_acl:logon_prefs(UserId, Context),
             Context2 = z_notifier:foldl(#auth_logon{ id = UserId }, Context1, Context1),
+            m_identity:set_visited(UserId, Context2),
             {ok, Context2};
         false ->
             {error, user_not_enabled}
