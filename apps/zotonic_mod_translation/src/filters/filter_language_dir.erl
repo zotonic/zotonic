@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2021 Marc Worrell
-%% @doc Check if the given language is a rtl or ltr language
+%% @copyright 2021 Marc Worrell
+%% @doc Return the direction string "ltr" or "rtl" depending on the language.
+%% Returns "" for the undefined language.
 
-%% Copyright 2011-2021 Marc Worrell
+%% Copyright 2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -16,18 +17,28 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(filter_is_rtl).
+-module(filter_language_dir).
 -export([
-    is_rtl/2
+    language_dir/2
 ]).
 
-is_rtl(Id, Context) when is_integer(Id) ->
-    is_rtl(filter_language:language(Id, Context), Context);
-is_rtl([Lang|_] = Langs, Context) when is_atom(Lang) ->
-    is_rtl(filter_language:language(Langs, Context), Context);
 
-is_rtl(LanguageCode, _Context) ->
-    is_rtl(LanguageCode).
+language_dir(undefined, _Context) ->
+    <<>>;
+language_dir([], _Context) ->
+    <<>>;
+language_dir(Id, Context) when is_integer(Id) ->
+    language_dir(filter_language:language(Id, Context), Context);
+language_dir([Lang|_] = Langs, Context) when is_atom(Lang) ->
+    language_dir(filter_language:language(Langs, Context), Context);
+language_dir(LanguageCode, _Context) ->
+    dir(LanguageCode).
+
+dir(Code) ->
+    case is_rtl(Code) of
+        true -> <<"rtl">>;
+        false -> <<"ltr">>
+    end.
 
 is_rtl(LanguageCode) when is_binary(LanguageCode); is_atom(LanguageCode) ->
     z_language:is_rtl(LanguageCode);

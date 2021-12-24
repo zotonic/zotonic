@@ -1,1 +1,1 @@
-{% with language|default:id|language as lang %}xml:lang="{{ lang }}" lang="{{ lang }}" {% if lang|is_rtl %}dir="rtl" class="rtl {{ class }}"{% else %}dir="ltr" class="ltr {{ class }}"{% endif %}{% endwith %}
+{% with language|default:id|language as lang %}xml:lang="{{ lang }}" lang="{{ lang }}" {% with lang|is_rtl|if:"rtl":"ltr" as dir %}dir="{{ dir }}" {% if class /= false %}class="{{ dir }} {{ class }}"{% endif %}{% endwith %}{% endwith %}
