@@ -11,5 +11,5 @@ do
 	export "${var}"
 done
 # Start launcher
-cd ./apps/zotonic_launcher/bin/ || \exit 1
+cd $ZOTONIC/apps/zotonic_launcher/bin/ || \exit 1
 exec ./zotonic "$@"
