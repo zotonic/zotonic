@@ -97,14 +97,26 @@ Add the following entries to ``/home/zotonic/.profile``, then save file & exit::
   export ERL="authbind --deep erl"
 
 Where ``eth0`` is the name of the Ethernet interface that connects to the
-Internet. (For a MediaTemple (ve) host this was venet0:0) You could
-alternatively set it to ``lo`` for localhost-only testing or to a LAN-only
+Internet (for a MediaTemple (ve) host this was venet0:0).
+Find the Ethernet interface with `/sbin/ifconfig`.
+You could alternatively set it to ``lo`` for localhost-only testing or to a LAN-only
 interface (say eth1) for a multi-interface server you are using
 Zotonic to host an intranet site with.
 
 Source the file to update the environment::
 
   zotonic:~$ . ~/.profile
+
+Check if ``ZOTONIC_IP`` has a value::
+
+  echo $ZOTONIC_IP
+  
+If this doesn't return an IP address, it might be that your system omits "addr" at the inet line.
+You could try this instead::
+
+  export ZOTONIC_IP=`ifconfig $public_interface | awk '$1=="inet"{print $2}'`
+
+and check the result again.
 
 Stop zotonic if already running::
 
