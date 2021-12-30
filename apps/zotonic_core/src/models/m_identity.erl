@@ -243,7 +243,7 @@ get_user_info(Rsc, Context) ->
                      from identity
                      where rsc_id = $1
                        and type = 'username_pw'",
-                    [],
+                    [RscId],
                     Context),
             case Row of
                 undefined ->
