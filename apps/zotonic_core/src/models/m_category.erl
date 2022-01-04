@@ -69,7 +69,7 @@
     renumber_pivot_task/1
 ]).
 
--type category() :: m_rsc:resource_id() | atom() | binary() | string().
+-type category() :: m_rsc:resource() | atom() | binary() | string() | {m_rsc:resource_id()}.
 
 -export_type([category/0]).
 
@@ -202,18 +202,19 @@ delete(Id, TransferId, Context) ->
                         ToId = case {TransferId, ParentId} of
                                    {undefined, undefined} ->
                                        %% The removed category is a top-category, move all content to 'other'
-                                       case z_db:q1("
+                                        case z_db:q1("
                                                 select c.id
                                                 from rsc r
                                                     join hierarchy c
                                                     on c.id = r.id and c.name = '$category'
                                                 where r.name = 'other'", Ctx) of
-                                           N when is_integer(N) -> N
-                                       end;
-                                   {undefined, ParentId} ->
-                                       ParentId;
-                                   {TransferId, _ParentId} ->
-                                       TransferId = z_db:q1("select id
+                                            N when is_integer(N) -> N
+                                        end;
+                                   {undefined, _} ->
+                                        ParentId;
+                                   {_, _ParentId} ->
+                                        % Crash if transfer id is not an category
+                                        TransferId = z_db:q1("select id
                                                               from hierarchy
                                                               where id = $1
                                                                 and name = '$category'",
@@ -445,7 +446,7 @@ ranges(undefined, _Context) ->
     [];
 ranges([], _Context) ->
     [];
-ranges(Cat, Context) when is_atom(Cat); is_integer(Cat); is_binary(Cat) ->
+ranges(Cat, Context) when not is_list(Cat) ->
     ranges([Cat], Context);
 ranges(CatList0, Context) ->
     CatList = case length(CatList0) > 1 andalso z_string:is_string(CatList0) of
@@ -529,7 +530,7 @@ is_meta(CatId, Context) when is_integer(CatId) ->
 
 %% @doc Check if a category is within another category. This can be used within primitive rsc
 %%      routines that are not able to use the rsc caching (due to recursion).
--spec is_a_prim(integer(), binary()|string()|atom(), z:context()) -> boolean().
+-spec is_a_prim(m_rsc:resource_id(), binary()|string()|atom(), z:context()) -> boolean().
 is_a_prim(CatId, Name, Context) ->
     z_depcache:memo(
         fun() ->
@@ -552,7 +553,7 @@ is_a_prim(CatId, Name, Context) ->
         Context).
 
 %% @doc Map a category name to an id, be flexible with the input
--spec name_to_id(m_rsc:resource() | {m_rsc:resource_id()}, z:context()) ->
+-spec name_to_id(category(), z:context()) ->
     {ok, m_rsc:resource_id()} | {error, {unknown_category, term()}}.
 name_to_id({Id}, _Context) when is_integer(Id) ->
     {ok, Id};
@@ -565,35 +566,34 @@ name_to_id(Name, Context) when is_atom(Name); is_binary(Name); is_list(Name) ->
         {ok, Result} ->
             Result;
         undefined ->
-            Result = case z_db:q1("
-                            select r.id
-                            from rsc r
-                                join hierarchy c
-                                on r.id = c.id
-                                and c.name = '$category'
-                            where r.name = $1", [Name], Context)
-                     of
-                        undefined -> {error, {unknown_category, Name}};
-                        Id -> {ok, Id}
-                     end,
-            case Result of
-                {ok, ResultId} ->
+            RId = case m_rsc:rid(Name, Context) of
+                undefined ->
+                    undefined;
+                CatId ->
+                    case m_rsc:is_a(CatId, category, Context) of
+                        true -> CatId;
+                        false -> undefined
+                    end
+            end,
+            case RId of
+                undefined ->
                     z_depcache:set(
                         {category_name_to_id, Name},
-                        Result, ?DAY,
-                        [category, ResultId],
-                        Context
-                    );
-                {error, _Error} ->
-                    z_depcache:set(
-                        {category_name_to_id, Name},
-                        Result,
+                        {error, {unknown_category,  Name}},
                         ?DAY,
                         [category],
                         Context
-                    )
-            end,
-            Result
+                    ),
+                    {error, {unknown_category,  Name}};
+                _ ->
+                    z_depcache:set(
+                        {category_name_to_id, Name},
+                        {ok, RId}, ?DAY,
+                        [category, RId],
+                        Context
+                    ),
+                    {ok, RId}
+            end
     end.
 
 %% @doc Perform a function on all resource ids in a category. Order of the ids

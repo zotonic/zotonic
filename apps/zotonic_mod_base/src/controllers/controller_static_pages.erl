@@ -357,7 +357,6 @@ find_file(Root, File, Context) ->
     end.
 
 is_protected(<<".", _/binary>>) -> true;
-is_protected(<<"/.", _/binary>>) -> true;
 is_protected(Filename) -> is_protected_1(Filename).
 
 is_protected_1(<<>>) -> false;
@@ -426,19 +425,14 @@ directory_index_vars(FullPath, RelRoot, Context) ->
                 fun fileinfo_cmp/2,
                     lists:map(
                         fun fileinfo/1,
-                        lists:sort( 
-                            wildcard(filename:join(FullPath, <<"*">>))
+                        lists:sort(
+                            z_utils:wildcard("*", FullPath)
                         )
                     )
             ),
     [{basename, filename:basename(FullPath)},
      {files, UpFileEntry ++ Files}
     ].
-
-wildcard(Filename) when is_binary(Filename) ->
-    z_utils:wildcard( unicode:characters_to_list(Filename) );
-wildcard(Filename) when is_list(Filename) ->
-    z_utils:wildcard( Filename ).
 
 fileinfo(F) ->
     fileinfo(F, filename:basename(F)).

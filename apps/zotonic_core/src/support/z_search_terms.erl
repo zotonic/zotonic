@@ -265,8 +265,7 @@ cats(Q, Add) ->
 
 %% Add a value to a proplist. If it is already there, the value is
 %% replaced by a list of values.
-add_or_append(Key, Value, PropList) ->
-    V = z_convert:to_binary(Value),
+add_or_append(Key, V, PropList) ->
     case proplists:get_value(Key, PropList) of
         undefined ->
             [{Key, V} | PropList];

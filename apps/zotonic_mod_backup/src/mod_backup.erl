@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2012 Marc Worrell
+%% @copyright 2010-2021 Marc Worrell
 %% @doc Backup module. Creates backup of the database and files.  Allows downloading of the backup.
 %% Support creation of periodic backups.
 
-%% Copyright 2010-2012 Marc Worrell
+%% Copyright 2010-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -220,7 +220,7 @@ handle_info({'EXIT', Pid, _Error}, State) ->
             %% @todo Log the error
             %% Remove all files of this backup
             Name = z_convert:to_list(z_datetime:format(State#state.backup_start, "Ymd-His", State#state.context)),
-            [ file:delete(F) || F <- z_utils:wildcard(filename:join(dir(State#state.context), Name++"*")) ],
+            [ file:delete(F) || F <- z_utils:wildcard(Name++"*", dir(State#state.context)) ],
             {noreply, State#state{backup_pid=undefined, backup_start=undefined}};
         _ ->
             %% when connected to the page, then this might be the page exiting
@@ -253,7 +253,7 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @doc Keep the last 10 backups, delete all others.
 cleanup(Context) ->
-    Files = z_utils:wildcard(filename:join(dir(Context), "*.sql")),
+    Files = z_utils:wildcard("*.sql", dir(Context)),
     Backups = lists:sort([ filename:rootname(F) || F <- Files ]),
     case length(Backups) of
         N when N > 10 ->
@@ -409,7 +409,7 @@ archive(Name, Context) ->
 
 %% @doc List all backups in the backup directory.
 list_backup_files(Context) ->
-    Files = z_utils:wildcard(filename:join(dir(Context), "*.sql")),
+    Files = z_utils:wildcard("*.sql", dir(Context)),
     lists:reverse(
         lists:sort(
             [ {filename:rootname(filename:basename(F), ".sql"), filename_to_date(F), is_full_backup(F)} || F <- Files ])).

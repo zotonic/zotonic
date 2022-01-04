@@ -189,12 +189,22 @@ lib_dir(Dir) ->
     filename:join([lib_dir(), Dir]).
 
 %% @doc filename:wildcard version which filters dotfiles like unix does
+-spec wildcard( DirName::file:filename_all() ) -> list( file:filename() ).
+wildcard(DirName) when is_binary(DirName) ->
+    wildcard(unicode:characters_to_list(DirName));
 wildcard(Wildcard) ->
     filter_dot_files(filelib:wildcard(Wildcard)).
 
+-spec wildcard( WildCard::string(), DirName::file:filename_all() ) -> list( file:filename() ).
+wildcard(WildCard, DirName) when is_binary(DirName) ->
+    wildcard(WildCard, unicode:characters_to_list(DirName));
 wildcard(Wildcard, DirName) ->
-    filter_dot_files(filelib:wildcard(Wildcard, DirName)).
+    Fs = filter_dot_files(filelib:wildcard(Wildcard, DirName)),
+    [ filename:join(DirName, F) || F <- Fs ].
 
+-spec wildcard_recursive( WildCard::string(), DirName::file:filename_all() ) -> list( file:filename() ).
+wildcard_recursive(WildCard, DirName) when is_binary(DirName) ->
+    wildcard_recursive(WildCard, unicode:characters_to_list(DirName));
 wildcard_recursive(WildCard, DirName) ->
     wildcard_recursive_1(WildCard, DirName, []).
 
@@ -228,11 +238,13 @@ wildcard_recursive_1(WildCard, Dirname, Found) ->
 filter_dot_files(Names) ->
     [NoDotName || NoDotName <- Names, no_dot_file(NoDotName)].
 
+no_dot_file("." ++ _) ->
+    false;
 no_dot_file(Name) ->
     no_dot_file1(filename:split(Name)).
 
 no_dot_file1([]) -> true;
-no_dot_file1([[$.|_] | _]) -> false;
+no_dot_file1(["." ++ _ | _]) -> false;
 no_dot_file1([_|Rest]) -> no_dot_file1(Rest).
 
 
