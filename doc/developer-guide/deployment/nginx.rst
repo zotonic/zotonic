@@ -124,9 +124,10 @@ hostname:
         }
   }
 
-Remember to add X-Forwarded-Proto to proxied header so that Zotonic
-knows that HTTPS is used before the proxy even though HTTP is used between
-the proxy and backend. Also add X-Real-IP and X-Forwarded-For headers.
+As shown in the example above:
+
+- Add ``X-Forwarded-Proto`` to proxied header so that Zotonic knows that HTTPS is used before the proxy even though HTTP is used between the proxy and backend.
+- Add ``X-Real-IP`` and ``X-Forwarded-For`` headers.
 
 Zotonic always redirects to HTTPS so the proxy needs to be configured for
 both HTTP and HTTPS.
