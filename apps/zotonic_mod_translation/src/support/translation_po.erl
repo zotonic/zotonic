@@ -1,9 +1,8 @@
-% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010,2011 Marc Worrell
-%% Date: 2010-05-19
+%% @author Marc Worrell <marc@worrell.nl>
+%% @copyright 2010-2021 Marc Worrell
 %% @doc Generate .po files for all found labels. The .po files are generated per module and language
 
-%% Copyright 2010,2011 Marc Worrell
+%% Copyright 2010-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,8 +20,6 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([generate/1]).
-
--include_lib("zotonic_core/include/zotonic.hrl").
 
 
 %% @doc Take the list of found labels per module and generate all po files for those labels in the module directories.
@@ -48,7 +45,7 @@ generate1([{Module, Dirname, Labels}|ModuleLabels]) ->
 
 %% Delete all existing po files in a directory
 delete_po_files(Dir) ->
-    Files = z_utils:wildcard(filename:join(Dir, "[a-z][a-z].{po,pot}")),
+    Files = z_utils:wildcard("[a-z][a-z].{po,pot}", Dir),
     [ file:delete(F) || F <- Files ].
 
 %% Generate po files for all languages found in the labels.

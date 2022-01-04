@@ -162,8 +162,11 @@ do_cleanup_file({_Id, Filename, Date}, Context) ->
     PreviewPath = z_path:media_preview(Context),
     ArchivePath = z_path:media_archive(Context),
     % Remove from the file system
-    BasePreview = filename:join(PreviewPath, Filename),
-    Previews = z_utils:wildcard(binary_to_list(iolist_to_binary([BasePreview, "(*"]))),
+    PreviewFilePath = filename:join(PreviewPath, Filename),
+    PreviewDir = filename:dirname(PreviewFilePath),
+    PreviewFile = filename:basename(PreviewFilePath),
+    PreviewFilePattern = binary_to_list(iolist_to_binary([PreviewFile, "(*"])),
+    Previews = z_utils:wildcard(PreviewFilePattern, PreviewDir),
     [ file:delete(Preview) || Preview <- Previews ],
     file:delete(filename:join(ArchivePath, Filename)),
     % Remove from the file store
