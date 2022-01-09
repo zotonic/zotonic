@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-09 15:45\n"
+"PO-Revision-Date: 2022-01-09 21:42\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2032,7 +2032,7 @@ msgstr "Это имя используется другой страницей."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
 msgid "This page can be connected from other pages. For example it could be an author of an article."
-msgstr "Эта страница может быть подключена с других страниц. Например, это может быть автор статьи."
+msgstr "С этой страницей могут быть соединены другие страницы. Например, это может быть автор статьи."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:12
 msgid "This page has been deleted."
