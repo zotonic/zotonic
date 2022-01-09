@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-09 14:57\n"
+"PO-Revision-Date: 2022-01-09 15:45\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1998,7 +1998,7 @@ msgstr "Эта связь уже существует."
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:179./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:157
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:90
 msgid "This file contains links to other files or locations."
-msgstr "Этот файл содержит ссылки на другие файлы или места."
+msgstr "Этот файл содержит ссылки на другие файлы или местоположения."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:94
 msgid "This file has been scanned for viruses."
