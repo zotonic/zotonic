@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-24 13:47\n"
+"PO-Revision-Date: 2022-01-09 14:57\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1976,7 +1976,7 @@ msgstr "Поисковый индекс перестраивается. В за�
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:53
 msgid "The site’s data is being reinstalled. Watch the console for messages"
-msgstr "Данные сайта переустанавливаются. Следите за консолью за сообщениями"
+msgstr "Данные сайта переустанавливаются. Следите за сообщениями в консоли"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:12
 msgid "There are no pages with a connection to the page"
