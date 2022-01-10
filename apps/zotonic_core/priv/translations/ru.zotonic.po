@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-10 11:24\n"
+"PO-Revision-Date: 2022-01-10 13:15\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2105,11 +2105,11 @@ msgstr "Неиспользованный"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:86./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
 msgid "Upload"
-msgstr "Загрузить"
+msgstr "Закачать"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:20
 msgid "Upload File"
-msgstr "Загрузить файл"
+msgstr "Закачать файл"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:4
 msgid "Upload a file from your computer."
