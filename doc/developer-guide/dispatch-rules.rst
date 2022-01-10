@@ -14,6 +14,8 @@ Dispatch rules are also used for the reverse action of generating request URLs
 in your templates and Erlang code. As long as you use dispatch rules in your
 application, you don’t have to hard-code request URLs.
 
+.. seealso:: :ref:`mod_custom_redirect`, :ref:`mod_base`
+
 Defining dispatch rules
 -----------------------
 
@@ -284,4 +286,3 @@ needs. ControllerArgs is effective for establishing implementation
 details like the template to be used, whether or not to do caching and
 where to load static resources from.
 
-.. seealso:: :ref:`mod_custom_redirect`, :ref:`mod_base`

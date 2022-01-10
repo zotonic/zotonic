@@ -9,6 +9,12 @@ Show a still image using an ``<img />`` element. The image will be automatically
 resized to the desired size and filters. For video, use the :ref:`tag-media` tag
 instead.
 
+.. seealso:: :ref:`guide-media` developer guide.
+
+.. seealso:: :ref:`guide-media-classes` for some options that are only available in `mediaclass` files.
+
+.. seealso:: :ref:`tag-image_url`, :ref:`tag-image_data_url` and :ref:`tag-media` tags.
+
 For example::
 
    {% image "cow.jpg" width=200 height=200 crop %}
@@ -290,8 +296,3 @@ absolute_url
 
 Ensure that the generated URL contains the
 :ref:`hostname and port <tag-url-absolute>`.
-
-.. seealso::
-    * :ref:`guide-media` developer guide.
-    * :ref:`guide-media-classes` for some options that are only available in `mediaclass` files.
-    * :ref:`tag-image_url`, :ref:`tag-image_data_url` and :ref:`tag-media` tags.

@@ -306,6 +306,10 @@ mind. Remember, you too once were one.
 Zotonic releases
 ----------------
 
+.. seealso::
+    `GitHub <https://github.com/zotonic/zotonic/releases>`_ for the latest
+    release.
+
 Release dates
 ^^^^^^^^^^^^^
 
@@ -338,10 +342,6 @@ Hotfix releases
 Some bug fixes, such as security fixes, need to be made available immediately.
 In case a change cannot wait for the next monthly release, we release it as a
 hotfix, incrementing the patch number (for instance, ``0.16.1``).
-
-.. seealso::
-    `GitHub <https://github.com/zotonic/zotonic/releases>`_ for the latest
-    release.
 
 .. _Dutch test siren: http://www.invadingholland.com/guides-to-holland/emergency-alarm
 .. _Semantic versioning: http://semver.org/

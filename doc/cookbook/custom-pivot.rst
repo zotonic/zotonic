@@ -10,6 +10,9 @@ allows you to very easily add any property to any resource but
 you cannot sort or filter on them until you make database columns
 for these properties.
 
+.. seealso:: :ref:`custompivot` search argument for filtering on custom pivot columns.
+.. seealso:: :ref:`cookbook-pivot-templates` to change the content of regular pivot columns and search texts.
+
 The way to take this on is using the "custom pivot" feature. A custom
 pivot table is an extra database table with columns in which the props
 you define are copied, so you can filter and sort on them.
@@ -54,8 +57,3 @@ Or you can filter on it:
 
   {% with m.search.paged[{query filter=["pivot.pivotname.requestor", `=`, "hello"]}]
      as result %}
-
-.. seealso::
-
-    * :ref:`custompivot` search argument for filtering on custom pivot columns.
-    * :ref:`cookbook-pivot-templates` to change the content of regular pivot columns and search texts.

@@ -3,10 +3,10 @@
 Access control
 ==============
 
-.. seealso:: :ref:`mod_acl_user_groups`
-
 Access control is about defining who is allowed to access certain resources.
 It takes two steps:
+
+.. seealso:: :ref:`mod_acl_user_groups`
 
 1. The user is *authenticated*, that is, the user’s identity is determined based
    on some form of identification in the request, such as a session cookie.

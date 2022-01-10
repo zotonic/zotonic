@@ -7,6 +7,10 @@ You `should validate all input data entered in forms`_. In Zotonic you create
 forms by writing plain HTML. You can attach one or more validators to each input
 element. Validators define acceptable values for the input data.
 
+.. seealso:: the :ref:`scomp-validate` tag
+
+.. seealso:: the :ref:`validator-postback` validator
+
 Let’s say you have a required input field ‘title’. To make sure some text is
 entered in it, attach the :ref:`validator-presence` validator:
 
@@ -44,10 +48,5 @@ Zotonic comes with some commonly needed validators:
 If you need to implement custom validation logic, use the
 :ref:`validator-postback` validator. For JavaScript-only custom validation, use
 the :ref:`validator-custom` validator.
-
-.. seealso::
-
-    * the :ref:`scomp-validate` tag
-    * the :ref:`validator-postback` validator
 
 .. _should validate all input data entered in forms: https://www.owasp.org/index.php/Data_Validation

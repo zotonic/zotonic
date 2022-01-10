@@ -108,6 +108,8 @@ recompile it using this command.
 E-mail the contents of the contact form to somebody
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. seealso:: :ref:`send-email`
+
 Using Zotonic’s email module, you can very easily send somebody an
 e-mail. Let’s create a simple template to send the contents of the
 form to the site administrator.
@@ -155,5 +157,3 @@ Zotonic, please see the mod_emailer documentation.
 Finally, this contact-form handler replaces the contact form with a
 ``<p>`` tag with a success message, using the ``z_render:update``
 function.
-
-.. seealso:: :ref:`send-email`

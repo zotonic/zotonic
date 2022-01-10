@@ -5,6 +5,8 @@ Enabling Growl Notifications
 
 Using growl outside admin requires some magic to make it work.
 
+.. seealso:: :ref:`action-growl`, :ref:`tag-lib`
+
 Why
 ---
 
@@ -35,8 +37,5 @@ And the CSS::
 Now you should be able to use growl actions in your templates, example:
 
   {% button action={growl text="hello world"} %}
-
-
-.. seealso:: :ref:`action-growl`, :ref:`tag-lib`
 
 

@@ -42,13 +42,12 @@ Then create your dialog template, my_dialog.tpl in this example, and wire a set_
           action={dialog_close}
   %}
 
+.. seealso:: :ref:`guide-template-autoids`
+
 If you include a template like the one above into your dialog template
 many times (i.e. from a for loop), then having fixed ids are no
 good. To prefix the id with a unique value (per invocation of the
 template) prefix the id with a ``#``-sign. so the a-tag becomes ``<a
 id={{#my_anchor}}…`` and the wire becomes ``wire id=#my_anchor…`` which will
 expand to something like ``"ubifgt-my_anchor"``.
-
-
-.. seealso:: :ref:`guide-template-autoids`
 

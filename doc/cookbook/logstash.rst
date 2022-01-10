@@ -9,6 +9,8 @@ in the :ref:`Logging chapter <dev-logging>`, Zotonic uses the
 `Lager framework`_. So we will change Zotonic’s Logstash configuration in order
 to send messages to Logstash.
 
+.. seealso:: the :ref:`dev-logging` chapter in the Developer Guide.
+
 Step 1: install a Logstash handler
 ----------------------------------
 
@@ -80,8 +82,6 @@ You should now find all Zotonic log messages in Logstash. To test this, just
 call::
 
     lager:error("Just testing the Logstash setup here!").
-
-.. seealso:: the :ref:`dev-logging` chapter in the Developer Guide.
 
 .. _Logstash: http://www.elastic.co/products/logstash
 .. _Lager framework: https://github.com/erlang-lager/lager

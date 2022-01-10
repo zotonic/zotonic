@@ -13,10 +13,10 @@ module/site, you add templates, assets and create notification observers.
 Overriding templates
 --------------------
 
+.. seealso:: :ref:`cookbook-error-pages`
+
 :ref:`Override templates <overriding-templates>` by adding a template with
 the same name to your module/site.
-
-.. seealso:: :ref:`cookbook-error-pages`
 
 Overriding assets
 -----------------

@@ -7,6 +7,9 @@ Create custom :ref:`template filters <guide-filters>` to change the way
 variables are rendered in your templates. By following some simple rules,
 Zotonic will automatically find the filter for you:
 
+.. seealso:: :ref:`guide-templates` guide
+.. seealso:: :ref:`filters` reference
+
 1. Create a file in the :ref:`module-directory-filters` directory of
    your site or module.
 2. Prepend the filter filename with ``filter_``.
@@ -34,7 +37,3 @@ The custom ``uniquesort`` filter is then available in your templates:
         {{ thing }} is now sorted and unique!
     {% endfor %}
 
-.. seealso::
-
-    * :ref:`guide-templates` guide
-    * :ref:`filters` reference

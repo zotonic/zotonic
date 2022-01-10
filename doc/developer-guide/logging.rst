@@ -3,8 +3,13 @@
 Logging
 =======
 
+.. seealso:: :ref:`cookbook-logstash` cookbook
+.. seealso:: To log messages to the database, you can use :ref:`mod_logging`.
+
 Zotonic uses `Lager`_ for logging. Lager metadata is automatically set by
-Zotonic, so to log a message from your code, simply call Lager directly::
+Zotonic, so to log a message from your code, simply call Lager directly:
+
+.. code-block:: erlang
 
     lager:error("Something went very wrong with ~p", [SomeParam]).
 
@@ -41,8 +46,3 @@ handler as a dependency in your project, and add something like this:
 
 .. _Lager: https://github.com/erlang-lager/lager
 .. _Lager documentation: https://github.com/erlang-lager/lager#configuration
-
-.. seealso::
-
-    * :ref:`cookbook-logstash` cookbook
-    * To log messages to the database, you can use :ref:`mod_logging`.

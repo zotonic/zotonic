@@ -4,7 +4,6 @@ Modules
 =======
 
 .. seealso:: The reference for a list of :ref:`all modules <ref-modules>`.
-
 .. seealso:: You can :ref:`roll your own module <cookbook-custom-module>`.
 
 Modules are the building blocks of Zotonic. They add functionality to your
