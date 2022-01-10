@@ -1,6 +1,10 @@
 
 .. include:: meta-mod_acl_user_groups.rst
 
+.. seealso:: :ref:`guide-auth`
+
+.. seealso:: :ref:`mod_content_groups`
+
 This module adds rule-based access control.
 
 * All resources (pages) are put into a content group.
@@ -96,14 +100,14 @@ module …’. These are :ref:`managed rules` that you cannot edit in the web
 interface.
 
 Collaboration group rules
-~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Collaboration rules are special content access rules that apply to content in
 :ref:`collaboration groups <collaboration groups>` only. Each rule applies to
 all collaboration groups.
 
 Allowed media
-~~~~~~~~~~~~~
+^^^^^^^^^^^^^
 
 For each user group it is possible to define:
 

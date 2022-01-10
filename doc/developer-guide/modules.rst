@@ -3,6 +3,10 @@
 Modules
 =======
 
+.. seealso:: The reference for a list of :ref:`all modules <ref-modules>`.
+
+.. seealso:: You can :ref:`roll your own module <cookbook-custom-module>`.
+
 Modules are the building blocks of Zotonic. They add functionality to your
 Zotonic website such as:
 
@@ -15,13 +19,6 @@ Structurally, a module is a directory containing the module’s Erlang code,
 :ref:`templates <guide-templates>`, :ref:`controllers
 <guide-controllers>`, :ref:`dispatch rules <guide-dispatch>` and
 more.
-
-.. seealso::
-
-    * The reference for a list of :ref:`all modules <ref-modules>`.
-    * The `Zotonic Module Index <http://modules.zotonic.com>`_ lists
-      third-party modules.
-    * You can also :ref:`roll your own <cookbook-custom-module>`.
 
 .. _activating-modules:
 
@@ -85,7 +82,7 @@ The generic structure is::
 .. _module-file:
 
 The module file
-^^^^^^^^^^^^^^^
+---------------
 
 At the very minimum, a Zotonic module must have a module file. The name of the
 module file is an Erlang file that must be the same as the name of the module’s
@@ -123,7 +120,7 @@ When you do need a running process, read about those in the next
 topic, :ref:`guide-modules-gen_server`.
 
 Module subdirectories
-^^^^^^^^^^^^^^^^^^^^^
+---------------------
 
 Besides the module code file, a module usually has one or more
 subdirectories. These are specially named; different parts of Zotonic
@@ -132,17 +129,19 @@ scan through different folders.
 This section describes what each of the module folders hold.
 
 priv/dispatch/
-""""""""""""""
+^^^^^^^^^^^^^^
+
+.. seealso:: :ref:`guide-dispatch`
 
 This directory contains files with :ref:`dispatch rules
 <guide-dispatch>`. You can name your files however you want, just
 don't give them the extension ``.erl``, because then the Makefile will
 try to compile them.
 
-.. seealso:: :ref:`guide-dispatch`
-
 priv/lib/
-"""""""""
+^^^^^^^^^
+
+.. seealso:: the :ref:`tag-lib` template tag.
 
 The :file:`lib` (short for `library`) directory contains static images, CSS
 and javascript files. These files will be served with via the
@@ -153,10 +152,8 @@ and javascript files. These files will be served with via the
     priv/lib/js/
     priv/lib/misc/
 
-.. seealso:: the :ref:`tag-lib` template tag.
-
 priv/lib-src/
-"""""""""""""
+^^^^^^^^^^^^^
 
 This directory contains the source files for the :file:`lib` directory.
 Examples are Less, Scss, and other files.
@@ -181,7 +178,9 @@ There are standard file handlers for the following extensions/formats:
 
 
 priv/templates/
-"""""""""""""""
+^^^^^^^^^^^^^^^
+
+.. seealso:: :ref:`guide-templates`
 
 This directory contains all :ref:`templates <guide-templates>`. Templates do not
 have any prefix in their name, as they are not (directly) compiled as
@@ -199,10 +198,10 @@ The following naming conventions for templates are used:
 - The template for the home page of a site is called "home.tpl"
 - Templates for displaying resources are called "page.tpl"
 
-.. seealso:: :ref:`guide-templates`
-
 src/actions/
-""""""""""""
+^^^^^^^^^^^^
+
+.. seealso:: :ref:`guide-actions`
 
 This directory holds the :ref:`actions <guide-actions>` defined by the
 module. Every action name must be prefixed with the word “action” and
@@ -210,10 +209,10 @@ the module name (without the ``mod_``). For example the filename for the
 action ``dialog_open`` in the module ``mod_base`` will be
 ``action_base_dialog_open.erl``
 
-.. seealso:: :ref:`guide-actions`
-
 src/scomps/
-"""""""""""
+^^^^^^^^^^^
+
+.. seealso:: :ref:`guide-tags`
 
 Any custom tags that you define yourself go into the ``src/scomps/``
 directory.
@@ -222,10 +221,10 @@ Scomps are prefixed in the same way as actions, except that the word
 "scomp" is used. For example the scomp ``button`` in the module
 ``mod_base`` has as file name ``scomp_base_button.erl``.
 
-.. seealso:: :ref:`guide-tags`
-
 src/controllers/
-""""""""""""""""
+^^^^^^^^^^^^^^^^
+
+.. seealso:: :ref:`guide-controllers`
 
 This directory contains Erlang modules which define controllers which
 are called from the dispatch system to handle incoming HTTP requests.
@@ -235,10 +234,10 @@ the Erlang system. The convention is to prefix every controller with
 ``controller_`` and the name of the module, for example
 ``controller_admin_edit.erl``.
 
-.. seealso:: :ref:`guide-controllers`
-
 src/models/
-"""""""""""
+^^^^^^^^^^^
+
+.. seealso:: :ref:`guide-models`
 
 This directory contains Erlang modules, each of which is a :ref:`model
 <guide-models>`.
@@ -248,12 +247,12 @@ The module name of a model always starts with ``m_``, for example
 ``m.comment``.  Be careful to give your models a unique name to
 prevent name clashes with other models and Erlang modules.
 
-.. seealso:: :ref:`guide-models`
-
 .. _module-directory-filters:
 
 src/filters/
-""""""""""""
+^^^^^^^^^^^^
+
+.. seealso:: :ref:`guide-filters`
 
 This directory holds Erlang modules, each of which defines a
 :ref:`template filter <guide-filters>`.
@@ -265,11 +264,11 @@ added in the filters directory.  The template compiler will insert
 references to the correct modules into the compiled templates.  A
 missing filter will result in a crash of the compiled template.
 
-.. seealso:: :ref:`guide-filters`
-
 
 src/validators/
-"""""""""""""""
+^^^^^^^^^^^^^^^
+
+.. seealso:: :ref:`guide-validators`
 
 This directory holds Erlang modules, each of which defines a
 :ref:`validator <guide-validators>`.
@@ -277,8 +276,6 @@ This directory holds Erlang modules, each of which defines a
 Validators are prefixed in the same way as actions and scomps, except
 that the word “validator” is used. For example the validator “email”
 in the module “mod_base” has the file name: “validator_base_email.erl”
-
-.. seealso:: :ref:`guide-validators`
 
 
 Changing / recompiling files
@@ -377,6 +374,13 @@ integer number, denoting the current module’s version. On module
 initialization, ``Module:manage_schema/2`` is called which handles
 installation and upgrade of data. 
 
+.. note::
+
+    The function ``manage_schema/2`` is called inside a transaction, so that any
+    installation errors are rolled back. ``manage_data/2`` Is called outside
+    a transaction, and after all resources, predicates etc. are installed, but
+    before the current module version number is updated.
+
 The ``manage_schema/2`` function returns either ``ok``, a ``#datamodel{}``
 record or a list of ``#datamodel{}`` records:
 
@@ -398,13 +402,6 @@ After the ``manage_schema/2`` function is called, the optional
 called if and only if the ``manage_schema/2`` is called. If you only want
 a ``manage_data/2`` function, then add a dummy ``manage_schema/2`` function
 that returns `ok` and does nothing else.
-
-.. note::
-
-    The function ``manage_schema/2`` is called inside a transaction, so that any
-    installation errors are rolled back. ``manage_data/2`` Is called outside
-    a transaction, and after all resources, predicates etc. are installed, but
-    before the current module version number is updated.
 
 For example:
 
@@ -544,6 +541,8 @@ to ``mod_menu``, which creates the ``menu`` category for you::
 gen_server based modules
 ------------------------
 
+.. seealso:: `gen_server`_ in the Erlang documentation.
+
 When you need a running process, i.e., a module that does something in the
 background, then it is possible to implement your module as a
 `gen_server`_ (or supervisor). A gen_server is a standard way to implement
@@ -573,7 +572,6 @@ then be passed the gen_server’s PID::
         %% Do things here...
         {noreply, State}.
 
-.. seealso:: `gen_server`_ in the Erlang documentation.
 
 A minimal example
 ^^^^^^^^^^^^^^^^^

@@ -3,6 +3,8 @@
 Access control
 ==============
 
+.. seealso:: :ref:`mod_acl_user_groups`
+
 Access control is about defining who is allowed to access certain resources.
 It takes two steps:
 
@@ -61,12 +63,12 @@ code, and by the :ref:`model-acl` model from :ref:`templates <guide-templates>`.
 Protecting access to controllers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. seealso:: :ref:`controller-page-acl-options`
+
 The first point of contact for authorization is in the :term:`controller`’s
 ``is_authorized/2`` function. Both :ref:`controller-page` and
 :ref:`controller-template` check for :ref:`controller-page-acl-options` in the
 :term:`dispatch rule` that matched the current request.
-
-.. seealso:: :ref:`controller-page-acl-options`
 
 Protecting access to resources and modules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -74,10 +76,6 @@ Protecting access to resources and modules
 Zotonic ships with :ref:`mod_acl_user_groups`, a powerful user group-based
 authorization module. With this module you can define access control rules that
 determine which user groups are allowed to access which groups of content.
-
-.. seealso::
-
-    :ref:`mod_acl_user_groups`
 
 Customizing authorization
 ^^^^^^^^^^^^^^^^^^^^^^^^^
