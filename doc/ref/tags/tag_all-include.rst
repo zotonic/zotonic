@@ -5,24 +5,20 @@
 all include
 ===========
 
+.. seealso:: tag :ref:`tag-include`.
+
 Call all modules to include a certain template.
 
-
-    | The tag ``{% all include "foobar.tpl" %}`` will include all
-      templates named :file:`foobar.tpl`.
-    | Where the tag ``{% include "foobar.tpl" %}`` only includes the
-      highest priority :file:`foobar.tpl`.
-
+   * ``{% all include "foobar.tpl" %}`` will include all
+     templates named :file:`foobar.tpl`.
+   * ``{% include "foobar.tpl" %}`` only includes the
+     highest priority :file:`foobar.tpl`.
 
 Exactly the same :ref:`module priority <module-priority>` is also valid for all
 files in the :file:`lib/` directory of modules.
 
 This allows any module to change the static css, javascript, images,
 favicon.ico, robots.txt and other static files with its own version.
-
-
-
-
 
 This is an extension on the :ref:`tag-include` tag. It will include all templates with the given name, instead of the first one found.  Templates are defined in modules, because of that multiple modules can define a template with the same name.
 
@@ -48,5 +44,3 @@ The modules will be called in the order of their defined priority. This is the o
 Examples of this mechanism can be found in :ref:`mod_admin`, for example the main menu and the category specific editing fields on the edit page.
 
 Another example is the `_html_head.tpl` template which is included from the :ref:`template-base` template and allows all modules to add HTML to the head of a generated HTML page.
-
-.. seealso:: tag :ref:`tag-include`.
