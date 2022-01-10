@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-09 21:42\n"
+"PO-Revision-Date: 2022-01-10 13:36\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2070,16 +2070,16 @@ msgstr "Название"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:5
 msgid "Toggle dropdown"
-msgstr "Туггл-спад"
+msgstr "Показать/скрыть выпадающий список"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:6
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:18
 msgid "Toggle navigation"
-msgstr "тумблерная навигация"
+msgstr "Показать/скрыть навигацию"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:26
 msgid "Too many connections, only the first and last are shown."
-msgstr "Слишком много подключений, отображаются только первое и последнее."
+msgstr "Слишком много соединений, отображаются только первое и последнее."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:8
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
@@ -2101,15 +2101,15 @@ msgstr "Без названия"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
 msgid "Unused"
-msgstr "Неиспользованный"
+msgstr "Неиспользуемый"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:86./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
 msgid "Upload"
-msgstr "Загрузить"
+msgstr "Закачать"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:20
 msgid "Upload File"
-msgstr "Загрузить файл"
+msgstr "Закачать файл"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:4
 msgid "Upload a file from your computer."
@@ -2135,15 +2135,15 @@ msgstr "Используйте автозаполнение для поиска 
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8
 msgid "Use the title of the base content for the display name of this person."
-msgstr "Используйте заголовок базового контента в качестве отображаемого имени этой персоны."
+msgstr "Используйте заголовок основного контента как отображаемое имя данной персоны."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
 msgid "Used"
-msgstr "Используется"
+msgstr "Используемый"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:68
 msgid "User page"
-msgstr "страница пользователя"
+msgstr "Страница пользователя"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:18
 msgid "Valid for:"
