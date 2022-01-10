@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-10 13:15\n"
+"PO-Revision-Date: 2022-01-10 13:36\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2101,7 +2101,7 @@ msgstr "Без названия"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
 msgid "Unused"
-msgstr "Неиспользованный"
+msgstr "Неиспользуемый"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:86./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
 msgid "Upload"
@@ -2135,15 +2135,15 @@ msgstr "Используйте автозаполнение для поиска 
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8
 msgid "Use the title of the base content for the display name of this person."
-msgstr "Используйте заголовок базового контента в качестве отображаемого имени этой персоны."
+msgstr "Используйте заголовок основного контента как отображаемое имя данной персоны."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
 msgid "Used"
-msgstr "Используется"
+msgstr "Используемый"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:68
 msgid "User page"
-msgstr "страница пользователя"
+msgstr "Страница пользователя"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:18
 msgid "Valid for:"
