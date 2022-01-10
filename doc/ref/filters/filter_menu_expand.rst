@@ -1,7 +1,7 @@
 
 .. include:: meta-menu_expand.rst
 
-Takes a menu, or a menu resource id, and add alls ``haspart`` edges eminating from the menu ids.
+Takes a menu, or a menu resource id, and adds all ``haspart`` objects connected to the menu ids.
 
 With this filter it is possible to add a collection to the menu and have the pages in the collection
 automatically added to the menu.
