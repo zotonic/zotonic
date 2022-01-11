@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-exclude.rst
 
+.. seealso:: :ref:`filter-is_visible`, :ref:`filter-is_a`, :ref:`filter-filter`
+
 Filters a list on the value of a property, either on absence or inequality.
 
 This is the inverse of :ref:`filter-filter`.
@@ -45,7 +47,3 @@ Below is another example of inversely filtering a list::
 
 The example above filters against a search result and returns only
 elements whose ``name`` **is not** "page_home_gallery".
-
-
-
-.. seealso:: :ref:`filter-is_visible`, :ref:`filter-is_a`, :ref:`filter-filter`

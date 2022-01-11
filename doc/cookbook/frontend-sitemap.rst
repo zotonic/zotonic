@@ -24,13 +24,13 @@ CSS to style the end-result effectively.
 How
 ---
 
+.. seealso:: :ref:`scomp-menu`
+
 This is straight-forward except for the CSS (which isn't provided
 here), but that isn't entirely avoidable since it depends completely
 on how you want to display things.  On the other hand this does give
 you a workable nested unordered list with links to the pages which
 certainly serves the basic functionality out of the box.
-
-.. seealso:: :ref:`scomp-menu`
 
 Create site_map.tpl containing::
 

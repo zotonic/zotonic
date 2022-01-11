@@ -1,6 +1,6 @@
-
+.. highlight:: django
 .. include:: meta-alert.rst
-
+.. seealso:: actions :ref:`action-growl` and :ref:`action-confirm`.
 
 Show an alert dialog.
 
@@ -30,5 +30,3 @@ backdrop   Show backdrop: true, false, or    backdrop=false
 
 The alert dialog is rendered using the ``_action_dialog_alert.tpl`` template.
 Overrule this template to change the contents of the alert dialog.
-
-.. seealso:: actions :ref:`action-growl` and :ref:`action-confirm`.

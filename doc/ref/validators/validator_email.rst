@@ -1,5 +1,6 @@
-
+.. highlight:: django
 .. include:: meta-email.rst
+.. seealso:: :ref:`guide-validators`
 
 
 Check if the content of the input field is an e-mail address.
@@ -18,5 +19,3 @@ Argument         Description                                        Example
 failure_message  Message to show when the entered value is not
                  an e-mail address. Defaults to "Incorrect E-mail"  ``failure_message="Please enter your e-mail address."``
 ===============  =================================================  =======
-
-.. seealso:: :ref:`guide-validators`

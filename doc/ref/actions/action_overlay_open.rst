@@ -1,5 +1,6 @@
-
+.. highlight:: django
 .. include:: meta-overlay_open.rst
+.. seealso:: actions :ref:`action-overlay_close`, :ref:`action-dialog_open` and :ref:`action-dialog`.
 
 Renders a template on the server and opens a full screen overlay with the HTML output of the template.
 
@@ -15,6 +16,3 @@ The overlay template is a ``div`` with the class ``modal-overlay``. Extra classe
 the ``class`` argument::
 
    {% wire action={overlay_open template="_splash.tpl" class="splash"} %}
-
-
-.. seealso:: actions :ref:`action-overlay_close`, :ref:`action-dialog_open` and :ref:`action-dialog`.

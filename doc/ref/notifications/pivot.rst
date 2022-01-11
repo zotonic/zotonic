@@ -1,6 +1,8 @@
 Pivot notifications
 -------------------
 
+.. seealso:: :ref:`rsc_pivot_done`
+
 .. toctree::
    :maxdepth: 1
    :glob:
@@ -9,7 +11,3 @@ Pivot notifications
    notification/pivot_rsc_data
    notification/pivot_update
    notification/custom_pivot
-
-.. seealso::
-
-    :ref:`rsc_pivot_done`

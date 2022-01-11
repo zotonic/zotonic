@@ -1,6 +1,6 @@
-
+.. highlight:: django
 .. include:: meta-dialog.rst
-
+.. seealso:: actions :ref:`action-dialog_open`, :ref:`action-dialog_close` and :ref:`action-overlay_open`.
 
 Opens a dialog with a predefined HTML content and title.
 
@@ -26,8 +26,4 @@ backdrop  optional  boolean (0, 1), or the string ``"static"`` for a
 center    optional  boolean (0, 1) default 1; set to 0 to align the
                     dialog at the top
 ========  ========  ==================================================
-
-.. seealso:: actions :ref:`action-dialog_open`, :ref:`action-dialog_close` and :ref:`action-overlay_open`.
-
-
 

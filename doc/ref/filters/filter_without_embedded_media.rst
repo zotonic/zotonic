@@ -1,5 +1,6 @@
 .. highlight:: django
 .. include:: meta-without_embedded_media.rst
+.. seealso:: :ref:`filter-show_media`, :ref:`filter-embedded_media`
 
 Filter out media ids that are embedded in the ``body``, ``body_extra``
 and *text* blocks of your page.
@@ -21,5 +22,3 @@ There is an optional second argument to only consider media ids in the
     {% for media_id in m.rsc[id].media|without_embedded_media:id:0 %}
         {% media media_id width=315 extent %}
     {% endfor %}
-
-.. seealso:: :ref:`filter-show_media`, :ref:`filter-embedded_media`

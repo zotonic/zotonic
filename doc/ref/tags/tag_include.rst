@@ -5,6 +5,8 @@
 include
 =======
 
+.. seealso:: :ref:`tag-all-include` and :ref:`tag-catinclude`.
+
 Include another template. The include tag is replaced with the contents of the included template file. You can give arguments to the included template, they will be assigned as variables in the context of the included template.
 
 Example::
@@ -36,11 +38,11 @@ If the included template is not required, a `optional` keyword may be used::
 
 	      {% include "_hello.tpl" with name="Peter" %}
 
-.. seealso:: :ref:`tag-all-include` and :ref:`tag-catinclude`.
-
 
 Caching of the included template
 --------------------------------
+
+.. seealso:: :ref:`tag-cache`
 
 The output of the included template can be cached. This is useful when rendering
 the template takes considerable time, for example when the template shows a list
@@ -83,5 +85,3 @@ Caching is enabled by defining one of the caching arguments:
 |            |Only the supplied arguments are available as variables  |                       |
 |            |in the included template.                               |                       |
 +------------+--------------------------------------------------------+-----------------------+
-
-.. seealso:: :ref:`tag-cache`

@@ -58,6 +58,12 @@ to an :ref:`rsc_update_done` observer in your :ref:`site module <module-file>`::
 Execute queued tasks
 --------------------
 
+.. note::
+
+    Your callback function receives an anonymous ``Context``, so if it performs actions that
+    depend on access checks, make sure to use either ``m_rsc:p_no_acl/3`` or
+    ``z_acl:sudo(Context)``.
+
 Add the callback function ``update_external_rsc/2`` referenced above to your module::
 
     %% external_api_client.erl
@@ -87,12 +93,6 @@ Add the callback function ``update_external_rsc/2`` referenced above to your mod
 
         %% Return anything to signal the task was executed successfully
         ok.
-
-.. note::
-
-    Your callback function receives an anonymous ``Context``, so if it performs actions that
-    depend on access checks, make sure to use either ``m_rsc:p_no_acl/3`` or
-    ``z_acl:sudo(Context)``.
 
 Handle failing tasks
 --------------------

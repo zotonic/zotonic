@@ -1,5 +1,6 @@
 .. highlight:: django
 .. include:: meta-mod_facebook.rst
+.. seealso:: :ref:`mod_linkedin`, :ref:`mod_twitter`
 
 The mod_facebook module plugs into the
 :ref:`authentication systen <guide-authentication>` to enable `Facebook login`_
@@ -15,10 +16,5 @@ This will add a ‘Log in with Facebook’ button to the logon form on your site
 
 If you need extended permissions, add them to the ‘Scope’ textbox. Note that the
 module needs the ‘email’ permission for login to work.
-
-.. seealso::
-
-    * :ref:`mod_linkedin`
-    * :ref:`mod_twitter`
 
 .. _Facebook login: https://developers.facebook.com/docs/facebook-login/

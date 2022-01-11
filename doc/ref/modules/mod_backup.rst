@@ -17,15 +17,17 @@ After enabling mod_backup, it will make a backup of the site’s data
 every night at 3 AM. It keeps the last 10 copies of the data, so you
 have alway a backup to roll back to.
 
-The backups are stored under ``user/sites/yoursite/files/backup/``.
+The backups are stored under ``backup`` in the files directory of
+your site. Check in the admin under System > Status to see where the
+site files directory is located.
 
 The site’s media files are stored as a ``.tar.gz`` file, while the
 database is stored as an uncrompressed ``.sql`` file.
 
 We advise to add a `cron <http://en.wikipedia.org/wiki/Cron>`_ script
-to the server so the backup data is copied off of it on a regular
-interval.
+to the server for copying the data to remote storage.
 
 Per-resource backup/restore
 ---------------------------
+
 .. todo:: Not yet documented.

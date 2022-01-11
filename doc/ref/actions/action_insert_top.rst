@@ -1,6 +1,6 @@
-
+.. highlight:: django
 .. include:: meta-insert_top.rst
-
+.. seealso:: actions :ref:`action-insert_after`, :ref:`action-insert_before`, :ref:`action-insert_bottom` and :ref:`action-update`.
 
 Inserts HTML before the contents of an HTML element.
 
@@ -19,5 +19,3 @@ Another example, now rendering a template::
    {% button text="hello" action={insert_top target="mylist" template="_list_item.tpl" id=42} %}
 
 This insert the output of the template `_list_item.tpl` above the existing `<li/>`.  All arguments to the update action are also arguments to the template.
-
-.. seealso:: actions :ref:`action-insert_after`, :ref:`action-insert_before`, :ref:`action-insert_bottom` and :ref:`action-update`.

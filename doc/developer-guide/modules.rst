@@ -368,17 +368,17 @@ always started before the module itsef starts.
 Module versioning
 -----------------
 
-Modules can export a ``-module_schema()`` attribute which contains an
-integer number, denoting the current module’s version. On module
-initialization, ``Module:manage_schema/2`` is called which handles
-installation and upgrade of data. 
-
 .. note::
 
     The function ``manage_schema/2`` is called inside a transaction, so that any
     installation errors are rolled back. ``manage_data/2`` Is called outside
     a transaction, and after all resources, predicates etc. are installed, but
     before the current module version number is updated.
+
+Modules can export a ``-module_schema()`` attribute which contains an
+integer number, denoting the current module’s version. On module
+initialization, ``Module:manage_schema/2`` is called which handles
+installation and upgrade of data. 
 
 The ``manage_schema/2`` function returns either ``ok``, a ``#datamodel{}``
 record or a list of ``#datamodel{}`` records:

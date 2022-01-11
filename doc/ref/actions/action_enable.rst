@@ -1,6 +1,6 @@
-
+.. highlight:: django
 .. include:: meta-enable.rst
-
+.. seealso:: action :ref:`action-disable`.
 
 Resets the "disabled" attribute of a HTML tag and removes the CSS class "disabled".
 
@@ -12,5 +12,3 @@ Example::
 After clicking the button the input will be::
 
    <input id="myid" class="" type="text" value="hello" />
-
-.. seealso:: action :ref:`action-disable`.

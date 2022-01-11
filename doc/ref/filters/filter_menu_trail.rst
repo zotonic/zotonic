@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-menu_trail.rst
 
+.. seealso:: :ref:`filter-menu_subtree`, :ref:`filter-menu_flat`
+
 Return a breadcrumb navigation trail for the given id.
 
 This filter locates the filter value which represents the current page
@@ -48,5 +50,3 @@ The :ref:`tag-if` tag is now rendering the menu_trail only if there
 are two or more items in it which - as I mentioned before - happens
 when you are at least two levels deep in the menu.
 
-
-.. seealso:: :ref:`filter-menu_subtree`, :ref:`filter-menu_flat`

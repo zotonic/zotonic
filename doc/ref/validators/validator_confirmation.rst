@@ -1,6 +1,6 @@
-
+.. highlight:: django
 .. include:: meta-confirmation.rst
-
+.. seealso:: :ref:`guide-validators`
 
 Check if two inputs are the same.
 
@@ -24,5 +24,3 @@ match            The id of the input field that should have the same value.  ``m
 failure_message  Message to be shown when the two fields are unequal.
                  Defaults to "Does not match."                               ``failure_message="Please retry."``
 ===============  ==========================================================  =======
-
-.. seealso:: :ref:`guide-validators`

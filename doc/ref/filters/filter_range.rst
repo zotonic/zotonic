@@ -14,6 +14,3 @@ The second filter argument is the step size::
   {{ 1|range:10:2 }}
 
 Generates the list ``[1,3,5,7,9]``.
-
-
-

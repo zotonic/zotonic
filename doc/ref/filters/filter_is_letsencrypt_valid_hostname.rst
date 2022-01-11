@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-is_letsencrypt_valid_hostname.rst
 
+.. seealso:: :ref:`mod_ssl_letsencrypt`
+
 Test if a hostname can be used for a Let’s Encrypt certificate.
 
 Criteria are:
@@ -17,5 +19,3 @@ For example, check if the current site is reachable as *example.com*::
   {% if "example.com"|is_letsencrypt_valid_hostname %}
       Wow, this site is example.com!?!
   {% endif %}
-
-.. seealso:: :ref:`mod_ssl_letsencrypt`

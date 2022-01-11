@@ -1,5 +1,6 @@
 
 .. include:: meta-mod_ssl_ca.rst
+.. seealso:: :ref:`mod_ssl_letsencrypt`, :ref:`ref-port-ssl-configuration`
 
 The mod_ssl_ca module adds support for using SSL certificates bought from a Certificate Authority.
 
@@ -115,5 +116,4 @@ Nevertheless, if you want to use your own self signed certificate, then run the 
 
 This generates a private key of 2048 bits and a certificate that is valid for 10 years.
 
-.. seealso:: :ref:`mod_ssl_letsencrypt`, :ref:`ref-port-ssl-configuration`
 

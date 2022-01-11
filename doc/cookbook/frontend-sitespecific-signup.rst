@@ -8,6 +8,8 @@ Performing additional, project-specific actions when a user signs up
 Why
 ---
 
+.. note:: Your actual site location might be different, see the :term:`Zotonic user directory`.
+
 When a user signs up, Zotonic verifies the validity of some
 information, such as the e-mail address and the password strength. If
 these verifications succeed, it stores the user data in the Zotonic
@@ -15,9 +17,8 @@ database. If you have your own database with project-specific user
 data, you may want to insert additional information into this database
 on sign up. To do this, you need to modify the ``sitename.erl`` file,
 where `sitename` is the name of your site. Remember that this file is
-located in ``user/sites/sitename/``.
+located in ``apps_user/sitename/``.
 
-   .. note:: Your actual site location might be different, see the :term:`Zotonic user directory`.
 
 Assumptions
 -----------
@@ -27,7 +28,7 @@ Readers are assumed to be comfortable with Erlang syntax and use of the command 
 How
 ---
 
-Open ``user/sites/sitename/sitename.erl`` with your favorite editor.
+Open ``apps_user/sitename/src/sitename.erl`` with your favorite editor.
 
 Example 1: a gaming website with several point accounts for each user. Add the following code::
 

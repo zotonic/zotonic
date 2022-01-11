@@ -1,11 +1,12 @@
-
+.. highlight:: django
 .. include:: meta-update_iframe.rst
-
-Updates the content of an iframe with a template or a literal HTML text.
+.. seealso:: action :ref:`action-update`.
 
 .. note:: 
    This action is only used to update an ``iframe`` element.
    Use the :ref:`action-update` action for updating the contents of a normal HTML element.
+
+Updates the content of an iframe with a template or a literal HTML text.
 
 Example::
 
@@ -27,5 +28,3 @@ catinclude   Add this argument to use a :ref:`tag-catinclude` instead of      `c
 ===========  ===============================================================  ==========================
 
 All other arguments are passed as-is to the included template(s).
-
-.. seealso:: action :ref:`action-update`.

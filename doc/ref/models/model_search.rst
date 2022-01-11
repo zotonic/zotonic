@@ -1,5 +1,6 @@
 .. highlight:: django
 .. include:: meta-search.rst
+.. seealso:: :ref:`guide-datamodel-query-model` , :ref:`scomp-pager` tag , :ref:`mod_search` module , :ref:`cookbook-custom-search`
 
 The m_search model provides access to different kinds of search queries for searching through models.
 
@@ -21,10 +22,3 @@ Another example, searching for a text and requesting the second page with 20 res
   {% for id, rank in m.search.paged[{fulltext text=query_string page=2 pagelen=20}] %}
       {{ m.rsc[id].title }}
   {% endfor %}
-
-.. seealso::
-
-    * :ref:`guide-datamodel-query-model`
-    * :ref:`scomp-pager` tag
-    * :ref:`mod_search` module
-    * :ref:`cookbook-custom-search`

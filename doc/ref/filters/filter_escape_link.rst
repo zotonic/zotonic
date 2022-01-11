@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-escape_link.rst
 
+.. seealso:: :ref:`filter-urlize`
+
 Convert any URLs in a plaintext into HTML links, with adding the
 ``rel="nofollow"`` attribute.
 
@@ -14,6 +16,4 @@ Outputs::
 
 This filter is very useful when displaying user-generated plaintexts,
 like comments.
-
-.. seealso:: :ref:`filter-urlize`
 

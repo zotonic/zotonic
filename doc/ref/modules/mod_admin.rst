@@ -95,6 +95,7 @@ Making an admin widget conditionally visible
 --------------------------------------------
 
 .. highlight:: django
+.. seealso:: :ref:`template-admin_edit_widget_i18n`, :ref:`tag-inherit`
 
 To make an entire admin widget visible or not, depending on some
 condition that you want to calculate inside the widget’s code, you can
@@ -113,9 +114,6 @@ import/export sidebar widget. Excerpt from mod_backup’s `_admin_edit_sidebar.t
     {% endblock %}
 
 In this example, when the condition is true, the wrapper is rendered normally (content is inherited from the extended template); when false, the wrapper block is overridden by new (but void) content.
-
-
-.. seealso:: :ref:`template-admin_edit_widget_i18n`, :ref:`tag-inherit`
 
 
 Extending the admin overview page

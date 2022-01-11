@@ -9,6 +9,8 @@ escape_check
 
 * Module: :ref:`mod_base`
 
+.. seealso:: :ref:`filter-force_escape`, :ref:`filter-escape`
+
 Ensures thant an HTML escaped value is properly escaped.
 
 Checks for all reserved HTML characters if they are properly escaped.
@@ -41,5 +43,3 @@ For example::
   {{ value|escape_check }}
 
 When the value is ``<hel&amp;lo>`` then the output is ``&lt;hel&amp;lo&gt;``.
-
-.. seealso:: :ref:`filter-force_escape`, :ref:`filter-escape`

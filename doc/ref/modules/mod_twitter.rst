@@ -1,5 +1,6 @@
 .. highlight:: django
 .. include:: meta-mod_twitter.rst
+.. seealso:: :ref:`mod_facebook`, :ref:`mod_linkedin`
 
 Import Twitter updates in your Zotonic site in realtime.
 
@@ -55,11 +56,6 @@ is stored inside the ``tweet`` property in the Tweet resource, and can be
 displayed like this::
 
     {% print m.rsc[id].tweet %}
-
-.. seealso::
-
-    * :ref:`mod_facebook`
-    * :ref:`mod_linkedin`
 
 .. _public (or unprotected): https://support.twitter.com/articles/20169886
 .. _Streaming API: https://dev.twitter.com/streaming/overview

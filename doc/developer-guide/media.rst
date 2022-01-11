@@ -46,7 +46,7 @@ tag::
 
     {% image id %}
 
-You can also add inline :ref:`parameters <tag-image-arguments>`:
+You can also add inline :ref:`parameters <tag-image-arguments>`::
 
     {% image id width=200 height=200 crop %}
 

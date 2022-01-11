@@ -1,6 +1,6 @@
-
+.. highlight:: django
 .. include:: meta-mask.rst
-
+.. seealso:: action :ref:`action-unmask`, :ref:`action-mask_progress`
 
 Places a mask over an element, useful for blocking user interaction during lengthy postbacks.
 
@@ -31,5 +31,3 @@ message   Message to show next to the spinner image.         message="Searching.
 delay     Delay (in milliseconds) before the mask is shown.  
           Only shows the mask during lengthy actions.        delay=200
 ========  =================================================  =======
-
-.. seealso:: action :ref:`action-unmask`, :ref:`action-mask_progress`

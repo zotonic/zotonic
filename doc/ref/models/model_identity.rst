@@ -1,7 +1,7 @@
-
 .. include:: meta-identity.rst
 
-
+.. seealso:: :ref:`guide-auth`, :ref:`mod_authentication`,
+             :ref:`mod_twitter` or :ref:`mod_facebook`.
 
 The m_identity model manages usernames and other user
 identities. :ref:`mod_authentication` uses it to store and check
@@ -25,6 +25,3 @@ The following m_identity model properties are available in templates:
 |        |or undefined. Usage:        |             |
 |        |m.identity[page_id].username|             |
 +--------+----------------------------+-------------+
-
-.. seealso:: :ref:`guide-auth`, :ref:`mod_authentication`,
-             :ref:`mod_twitter` or :ref:`mod_facebook`.

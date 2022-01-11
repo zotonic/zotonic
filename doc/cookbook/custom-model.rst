@@ -3,13 +3,13 @@
 Create a custom model
 =====================
 
+.. seealso:: :ref:`models section <guide-models>` in the Developer Guide
+.. seealso:: list of :ref:`all models <models>`.
+
 In this chapter we will look at how to implement a model around the
 `The Open Movie Database (OMDB) API <http://www.omdbapi.com/>`_.
 
 We will touch useful background information at the same time.
-
-.. seealso:: :ref:`models section <guide-models>` in the Developer Guide
-.. seealso:: list of :ref:`all models <models>`.
 
 Model modules
 ^^^^^^^^^^^^^

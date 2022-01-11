@@ -3,6 +3,9 @@
 Validators
 ==========
 
+.. seealso:: The :ref:`scomp-validate` tag
+.. seealso:: :ref:`Forms and validation <guide-validators>` in the Developer Guide
+
 Validator types for the tag ``{% validate %}``.
 
 
@@ -11,8 +14,3 @@ Validator types for the tag ``{% validate %}``.
    :glob:
 
    validator_*
-
-.. seealso::
-
-    * the :ref:`scomp-validate` tag
-    * :ref:`Forms and validation <guide-validators>` in the Developer Guide

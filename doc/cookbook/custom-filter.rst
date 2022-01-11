@@ -3,12 +3,12 @@
 Create a custom filter
 ======================
 
+.. seealso:: :ref:`guide-templates` guide
+.. seealso:: :ref:`filters` reference
+
 Create custom :ref:`template filters <guide-filters>` to change the way
 variables are rendered in your templates. By following some simple rules,
 Zotonic will automatically find the filter for you:
-
-.. seealso:: :ref:`guide-templates` guide
-.. seealso:: :ref:`filters` reference
 
 1. Create a file in the :ref:`module-directory-filters` directory of
    your site or module.

@@ -3,12 +3,12 @@
 Create a custom controller
 ==========================
 
+.. seealso:: :ref:`guide-controllers` in the Developer Guide
+
 Zotonic comes with a large collection :ref:`controllers <guide-controllers>`
 that cover many use cases, so you’ll probably have to resort to custom
 controllers less often than you may be used to from other web frameworks. Still,
 the time may come when you need to process HTTP requests in your own way.
-
-.. seealso:: :ref:`guide-controllers` in the Developer Guide
 
 You can do so by creating a custom :ref:`controller <guide-controllers>`. Create
 a module in your site’s :file:`src/controllers/` directory and prefix it with

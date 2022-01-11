@@ -1,4 +1,4 @@
-
+.. highlight:: django
 .. include:: meta-language_dir.rst
 
 Return ``rtl`` or ``ltr`` depening on the direction of the language.

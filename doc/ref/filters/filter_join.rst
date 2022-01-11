@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-join.rst
 
+.. seealso:: :ref:`filter-element`, :ref:`filter-tail`, :ref:`filter-split`
+
 Joins the elements of a list. Joins the elements of the input list
 together, separated by the argument.
 
@@ -21,6 +23,3 @@ Gives as result::
   Jan, Piet or Klaas
 
 The spaces around the last separator are added by the filter.
-
-
-.. seealso:: :ref:`filter-element`, :ref:`filter-tail`, :ref:`filter-split`

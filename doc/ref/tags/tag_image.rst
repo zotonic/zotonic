@@ -5,15 +5,15 @@
 image
 =====
 
-Show a still image using an ``<img />`` element. The image will be automatically
-resized to the desired size and filters. For video, use the :ref:`tag-media` tag
-instead.
-
 .. seealso:: :ref:`guide-media` developer guide.
 
 .. seealso:: :ref:`guide-media-classes` for some options that are only available in `mediaclass` files.
 
 .. seealso:: :ref:`tag-image_url`, :ref:`tag-image_data_url` and :ref:`tag-media` tags.
+
+Show a still image using an ``<img />`` element. The image will be automatically
+resized to the desired size and filters. For video, use the :ref:`tag-media` tag
+instead.
 
 For example::
 

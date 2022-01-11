@@ -3,15 +3,15 @@
 Custom pivots
 =============
 
+.. seealso:: :ref:`custompivot` search argument for filtering on custom pivot columns.
+.. seealso:: :ref:`cookbook-pivot-templates` to change the content of regular pivot columns and search texts.
+
 :ref:`guide-datamodel-query-model` can only sort and filter on
 :ref:`resources <guide-datamodel-resources>` that actually have a database
 column. Zotonic's resources are stored in a serialized form. This
 allows you to very easily add any property to any resource but
 you cannot sort or filter on them until you make database columns
 for these properties.
-
-.. seealso:: :ref:`custompivot` search argument for filtering on custom pivot columns.
-.. seealso:: :ref:`cookbook-pivot-templates` to change the content of regular pivot columns and search texts.
 
 The way to take this on is using the "custom pivot" feature. A custom
 pivot table is an extra database table with columns in which the props

@@ -46,16 +46,19 @@ Create a site
 
      127.0.0.1   yoursite.test
 
-4. Create a new Zotonic site, based on the ‘blog’ skeleton site::
-
-     $ bin/zotonic addsite -s blog yoursite
+4. Create a new Zotonic site, based on the ‘blog’ skeleton site:
 
    .. note:: Zotonic has to be running for the ``addsite`` command to succeed.
+   .. code-block:: bash
+
+     $ bin/zotonic addsite -s blog yoursite
 
 5. Finally, point your browser to https://yoursite.test:8443 to see your new site.
    The browser will ask to accept a self-signed certificate. Zotonic generates a
    self-signed certificate for every site. These are stored in :file:`~/.config/zotonic/security`
    (on macOS :file:`~/Library/Application Support/zotonic/security`).
+
+   .. note:: If anything goes wrong, see the :ref:`ref-troubleshooting-installation`.
 
    You can log into the admin at https://yoursite.test:8443/admin using the username ``admin``
    with the password that you can find in your site’s configuration. Use for this the command::
@@ -65,7 +68,6 @@ Create a site
    The configuration is stored in the file :file:`apps_user/yoursite/priv/zotonic_site.config`
    in the :term:`zotonic user directory`.
 
-   .. note:: If anything goes wrong, see the :ref:`ref-troubleshooting-installation`.
 
 You can stop Zotonic by typing twice Ctrl-C at the Erlang command prompt.
 

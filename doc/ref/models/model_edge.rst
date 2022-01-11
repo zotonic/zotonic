@@ -1,5 +1,5 @@
-
 .. include:: meta-edge.rst
+.. seealso:: :ref:`model-rsc`, :ref:`model-media`
 
 Access information about page connections.
 
@@ -90,8 +90,4 @@ Example return value for ``{% print m.edge[10635] %}``::
                {seq,1000000},
                {created,{{2015,2,3},{16,23,20}}},
                {creator_id,1}]]}]
-
-
-
-.. seealso:: :ref:`model-rsc`, :ref:`model-media`
 

@@ -1,12 +1,13 @@
 
 .. include:: meta-mod_video.rst
+.. seealso:: :ref:`mod_video_embed`, :ref:`mod_oembed`, :ref:`mod_audio`, :ref:`tag-media`
 
 Adds support for viewing and handling video medium items.
 
 This module converts uploaded videos to h264 and adds a poster (preview) image of the movie.
 
 .. note::
-    mod_video uses the command-line utilities ``ffmpeg`` and ``ffprobe``. 
+    mod_video uses the command-line utilities ``ffmpeg`` and ``ffprobe``.
     For mod_video to function correctly they must be present in the search path of Zotonic.
 
 Uploading & conversion
@@ -34,6 +35,4 @@ The video module extends the ``{% media %}`` tag for viewing ``video/mp4`` video
 
 It uses the template ``_video_viewer.tpl`` for viewing.
 For the best viewing results, add ``css/video.css`` to your included css files.
-
-.. seealso:: :ref:`mod_video_embed`, :ref:`mod_oembed`, :ref:`mod_audio`, :ref:`tag-media`
 

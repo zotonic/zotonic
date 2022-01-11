@@ -4,6 +4,8 @@
    single: mod_base; filter, escape
 .. _filter-escape:
 
+.. seealso:: :ref:`filter-force_escape`, :ref:`filter-escape_check`
+
 escape
 ======
 
@@ -41,5 +43,3 @@ For example::
 When the value is ``<hel&lo>`` then the output is ``&lt;hel&amp;lo&gt;``.
 
 Note: this filter is not part of a module, it is built into the template compiler.
-
-.. seealso:: :ref:`filter-force_escape`, :ref:`filter-escape_check`

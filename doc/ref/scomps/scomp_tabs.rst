@@ -3,6 +3,13 @@
 
 Make a HTML element into a tab set.
 
+.. note::
+   There is no default styling for jQuery UI elements in the zotonic CSS files.
+   See these two threads in the zotonic users mailinglist: 
+   `does tabs scomp still work? <https://groups.google.com/d/topic/zotonic-users/mIxPpKSzugM/discussion>`_,
+   and `playing with tabs scomp <https://groups.google.com/d/topic/zotonic-users/BnZtNvVWds0/discussion>`_.
+   See also the `jQuery UI <http://jqueryui.com>`_ documentation.
+
 This is a simple interface to the jQuery UI tabs functionality.  It will show tabs to switch between different panes.
 
 The only argument is “id” which is the id of the container of the tabs.
@@ -26,10 +33,3 @@ The following example will show an interface with three tabs::
        <p>Mauris eleifend est et turpis.</p>
      </div>
    </div>
-
-.. note::
-   There is no default styling for jQuery UI elements in the zotonic CSS files.
-   See these two threads in the zotonic users mailinglist: 
-   `does tabs scomp still work? <https://groups.google.com/d/topic/zotonic-users/mIxPpKSzugM/discussion>`_,
-   and `playing with tabs scomp <https://groups.google.com/d/topic/zotonic-users/BnZtNvVWds0/discussion>`_.
-   See also the `jQuery UI <http://jqueryui.com>`_ documentation.

@@ -3,9 +3,9 @@
 Enabling Growl Notifications
 ============================
 
-Using growl outside admin requires some magic to make it work.
-
 .. seealso:: :ref:`action-growl`, :ref:`tag-lib`
+
+Using growl outside admin requires some magic to make it work.
 
 Why
 ---

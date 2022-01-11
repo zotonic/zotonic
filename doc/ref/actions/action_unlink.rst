@@ -1,5 +1,6 @@
-
+.. highlight:: django
 .. include:: meta-unlink.rst
+.. seealso:: :ref:`action-link`
 
 Remove an :term:`edge` between two :term:`resources <resource>`. Used in the admin.
 
@@ -35,7 +36,4 @@ Other arguments:
 After update, an undo message is rendered in the `undo_message_id`
 target, with the template ``_action_unlink_undo.tpl``.
 
-  
-.. seealso:: :ref:`action-link`
-             
 .. todo:: Extend documentation

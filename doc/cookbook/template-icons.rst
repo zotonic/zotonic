@@ -1,9 +1,9 @@
 Icons in templates
 ==================
 
-Zotonic provides a couple of ways to show icons in templates:
-
 .. seealso:: :ref:`ref-icons` reference
+
+Zotonic provides a couple of ways to show icons in templates:
 
 * :ref:`mod_artwork` gives access to FontAwesome and Material Design icons.
   It also has a number of other icon collections, mostly PNG images. Activate

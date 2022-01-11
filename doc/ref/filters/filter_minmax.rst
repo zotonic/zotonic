@@ -1,5 +1,6 @@
-
+.. highlight:: django
 .. include:: meta-minmax.rst
+.. seealso:: :ref:`filter-max`, :ref:`filter-min`
 
 Force the given value in the given range.
 
@@ -12,5 +13,3 @@ Example::
 This will print ``10``, since that is the minimum value allowed.
 
 Passing in ``undefined`` will not clamp the value but return ``undefined``.
-
-.. seealso:: :ref:`filter-max`, :ref:`filter-min`

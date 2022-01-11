@@ -1,5 +1,6 @@
 
 .. include:: meta-mod_video_embed.rst
+.. seealso:: :ref:`mod_oembed`, :ref:`mod_video`, :ref:`mod_audio`, :ref:`tag-media`
 
 This module, if activated, checks the pasted URLs in the *create media / page*
 dialog of the admin. It will show an embed option for Youtube and Vimeo URLs.
@@ -11,7 +12,5 @@ embed code.
 This module is accompanies :ref:`mod_oembed` and can be
 used for integrating with services that do not have oEmbed support
 but do provide HTML embed-code functionality.
-
-.. seealso:: :ref:`mod_oembed`, :ref:`mod_video`, :ref:`mod_audio`, :ref:`tag-media`
              
 .. todo:: Add more documentation

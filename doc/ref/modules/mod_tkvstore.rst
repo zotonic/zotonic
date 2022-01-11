@@ -1,5 +1,6 @@
 
 .. include:: meta-mod_tkvstore.rst
+.. seealso:: :ref:`model-tkvstore`
 
 Simple (type,key)/value store. Stores data in the store with minimal
 latency and (local) serialization of get/put requests.
@@ -11,5 +12,3 @@ type+key combination.
 A model, :ref:`model-tkvstore`, is provided to give easy access to the
 type+key combinations from the templates, and to perform get/put
 operations from within Erlang.
-
-.. seealso:: :ref:`model-tkvstore`

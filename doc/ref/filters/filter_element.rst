@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-element.rst
 
+.. seealso:: :ref:`filter-before`, :ref:`filter-after`
+
 Select an element from a tuple or list of tuples.
 
 For example::
@@ -12,5 +14,3 @@ output is the list ``[312,200]``.
 
 When value is just a tuple, ``{123, 22, 11}``, the output of
 ``|element:1`` is ``123``.
-
-.. seealso:: :ref:`filter-before`, :ref:`filter-after`

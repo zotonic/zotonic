@@ -3,13 +3,13 @@
 Logging to Logstash
 ===================
 
+.. seealso:: the :ref:`dev-logging` chapter in the Developer Guide.
+
 `Logstash`_ is often used for log centralization and analysis. This cookbook
 describes how to set up Zotonic for logging to Logstash over UDP. As mentioned
 in the :ref:`Logging chapter <dev-logging>`, Zotonic uses the
 `Lager framework`_. So we will change Zotonic’s Logstash configuration in order
 to send messages to Logstash.
-
-.. seealso:: the :ref:`dev-logging` chapter in the Developer Guide.
 
 Step 1: install a Logstash handler
 ----------------------------------

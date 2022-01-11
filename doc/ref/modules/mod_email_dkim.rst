@@ -16,14 +16,13 @@ key. The public key part is exposed through a DNS TXT record, with
 which email receiver can check whether the email actually originated
 from the domain that it claimed to come from.
 
+.. note:: The generating of the keypair depends on the ``openssl``
+          utility to be available in ``$PATH``.
 
 This RSA keypair is generated automatically when the module is
 installed, and the private/public keys are put in the directory
 ``sitename/dkim/``. When the module is active and the keypair has been
 generated, all outgoing e-mail will be signed.
-
-.. note:: The generating of the keypair depends on the ``openssl``
-          utility to be available in ``$PATH``.
 
 DNS configuration
 -----------------

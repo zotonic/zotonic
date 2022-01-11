@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-is_visible.rst
 
+.. seealso:: :ref:`filter-is_a`, :ref:`filter-is_not_a`, :ref:`filter-filter`
+
 Filter a list of resource ids so that only the visible ids remain.
 
 This filter can be applied to a list of resource ids or a single resource id.
@@ -25,5 +27,3 @@ Whilst::
   {% endfor %}
 
 Lists only the first three collection members that are visible.
-
-.. seealso:: :ref:`filter-is_a`, :ref:`filter-is_not_a`, :ref:`filter-filter`

@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-format_price.rst
 
+.. seealso:: :ref:`filter-format_number`, :ref:`filter-format_integer`, :ref:`filter-format_duration`
+
 Show a price with decimals.
 
 Formats integer and float values as a number with two decimals.
@@ -15,5 +17,3 @@ An undefined price will have the output “-”.
 
 **Note:** the decimal separator is currently always a dot, independent of
 the user’s language.
-
-.. seealso:: :ref:`filter-format_number`, :ref:`filter-format_integer`, :ref:`filter-format_duration`

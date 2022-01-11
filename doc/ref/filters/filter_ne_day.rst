@@ -1,5 +1,6 @@
 .. highlight:: django
 .. include:: meta-ne_day.rst
+.. seealso:: :ref:`filter-eq_day`
 
 Tests if two dates are not equal.
 
@@ -14,5 +15,3 @@ For example::
 This outputs “different days” if value and othervalue are dates and different.
 
 This is useful in combination with for example the if tag.
-
-.. seealso:: :ref:`filter-eq_day`

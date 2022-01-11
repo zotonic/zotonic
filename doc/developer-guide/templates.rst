@@ -4,6 +4,13 @@
 Templates
 =========
 
+.. seealso::
+
+    - :ref:`guide-media` on how to include images and other media in your
+      templates.
+    - :ref:`guide-wires` on using JavaScript to add interaction to your
+      templates.
+
 Templates are text files marked up using the Zotonic template language. Zotonic
 interprets that mark-up to dynamically generate HTML pages. Zotonic’s template
 syntax is very similar to the Django Template Language (DTL).
@@ -243,9 +250,3 @@ can be overridden in child templates:
 Using the :ref:`tag-inherit` and :ref:`tag-overrules` tags, you adapt the
 inheritance to your needs.
 
-.. seealso::
-
-    - :ref:`guide-media` on how to include images and other media in your
-      templates.
-    - :ref:`guide-wires` on using JavaScript to add interaction to your
-      templates.

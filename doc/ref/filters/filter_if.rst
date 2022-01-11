@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-if.rst
 
+.. seealso:: :ref:`tag-if`, :ref:`filter-if_undefined`
+
 Selects an argument depending on a condition.
 
 For example::
@@ -28,7 +30,3 @@ So if ``is_i18n`` evaluates to true, ``body`` is assigned to ``r.translation[lan
   {% include "_language_attrs.tpl" id=pid class=(pid==id)|if:"active":"" %}
 
 Add parameter ``class`` to the included template; when ``pid`` equals ``id``, ``class`` is ``"active"``, otherwise an empty string.
-
-
-
-.. seealso:: :ref:`tag-if`, :ref:`filter-if_undefined`

@@ -1,5 +1,6 @@
 .. highlight:: django
 .. include:: meta-vsplit_in.rst
+.. seealso:: :ref:`filter-chunk`, :ref:`filter-split_in`
 
 This filter splits a list in shorter lists. It splits an array in N
 sub-arrays of more or less equal length. This is useful when
@@ -17,5 +18,3 @@ For example::
   {% endwith %}
 
 This displays ``1 2``.  The variable b will be ``[3,4]`` and the variable c will be ``[5,6]``.
-
-.. seealso:: :ref:`filter-chunk`, :ref:`filter-split_in`

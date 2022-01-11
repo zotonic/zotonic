@@ -1,6 +1,8 @@
 
 .. include:: meta-mod_custom_redirect.rst
 
+.. seealso:: :ref:`guide-dispatch`, :ref:`mod_base`
+
 Enables redirects from unknown hosts and paths to other locations.
 The other location can be a known path or another web site.
 
@@ -35,5 +37,3 @@ Permanent or temporary redirects
 --------------------------------
 
 A redirection can be permanent or temporary. A permanent redirect will be remembered by the visiting browser (and search engines), replacing any occurence of the redirected location. A temporary redirect will not be remembered and be retried on every visit.
-
-.. seealso:: :ref:`guide-dispatch`, :ref:`mod_base`

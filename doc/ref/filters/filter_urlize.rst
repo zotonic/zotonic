@@ -1,5 +1,6 @@
 .. highlight:: django
 .. include:: meta-urlize.rst
+.. seealso:: :ref:`filter-escape_link`
 
 Find urls in the given input and make them clickable.
 
@@ -12,5 +13,3 @@ Outputs::
   <a href="http://foo.bar/">http://foo.bar/</a>
 
 This filter is very similar to the :ref:`filter-escape_link` filter.
-
-.. seealso:: :ref:`filter-escape_link`

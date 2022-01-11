@@ -1,5 +1,6 @@
-
+.. highlight:: django
 .. include:: meta-link.rst
+.. seealso:: :ref:`action-unlink`
 
 Add an :term:`edge` between two :term:`resources <resource>`. Used in the admin.
 
@@ -29,7 +30,5 @@ Other arguments:
 * element_id
 * edge_template
 * action - actions executed after linking
-
-.. seealso:: :ref:`action-unlink`
 
 .. todo:: Extend documentation

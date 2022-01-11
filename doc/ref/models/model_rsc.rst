@@ -1,4 +1,6 @@
 .. include:: meta-rsc.rst
+.. seealso:: :ref:`guide-datamodel-resources`, :ref:`guide-datamodel`,
+    :ref:`model-edge`, :ref:`model-media`, :ref:`model-rsc_gone`.
 
 The main resource model, which is the central part of the
 :ref:`Zotonic data model <guide-datamodel>`. This model provides an
@@ -295,8 +297,3 @@ In your templates, you can loop over the properties of a resource like this::
 And also using the :ref:`tag-print` tag::
 
    {% print m.rsc[id] %}
-
-
-
-.. seealso:: :ref:`guide-datamodel-resources`, :ref:`guide-datamodel`,
-    :ref:`model-edge`, :ref:`model-media`, :ref:`model-rsc_gone`.

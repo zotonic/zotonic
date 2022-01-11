@@ -1,5 +1,6 @@
 .. highlight:: django
 .. include:: meta-sub_hour.rst
+.. seealso:: :ref:`filter-add_hour`, :ref:`filter-sub_day`,  :ref:`filter-sub_week`, :ref:`filter-sub_month`, :ref:`filter-sub_year`
 
 Subtracts an hour from a date. The value must be of the form ``{{Y,M,D},{H,I,S}}``.
 
@@ -18,4 +19,3 @@ For example::
 When the value is ``{{2008,12,10},{15,30,0}}`` then the output is ``{{2008,12,10},{12,30,0}}``.
 
 
-.. seealso:: :ref:`filter-add_hour`, :ref:`filter-sub_day`,  :ref:`filter-sub_week`, :ref:`filter-sub_month`, :ref:`filter-sub_year`

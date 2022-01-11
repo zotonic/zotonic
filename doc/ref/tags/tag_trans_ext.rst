@@ -1,9 +1,11 @@
-
+.. highlight:: django
 .. index:: tag; translate
 .. _tag-trans_ext:
 
 trans (variable substitution)
 =============================
+
+.. seealso:: :ref:`tag-trans`.
 
 Translate a text value using gettext and substitute variables.
 
@@ -23,5 +25,3 @@ If a “{” is needed in the string, then repeat it::
     {% trans "Hello {{foo}}, and this is {foo}." foo=1234 %}
 
 Will echo “Hello {foo}, and this is 1234.”
-
-.. seealso:: :ref:`tag-trans`.

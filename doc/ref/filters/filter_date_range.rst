@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-date_range.rst
 
+.. seealso:: :ref:`filter-date`
+
 Show a date range.
 
 Filter to simplify displaying datetime ranges. When displaying a
@@ -21,5 +23,3 @@ following were written::
 
   {{ fromdate|date:format_ne }}{{ sep }}{{ todate|date:format_ne }}
 
-
-.. seealso:: :ref:`filter-date`

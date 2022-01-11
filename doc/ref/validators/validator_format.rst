@@ -1,6 +1,6 @@
-
+.. highlight:: django
 .. include:: meta-format.rst
-
+.. seealso:: :ref:`guide-validators`
 
 Regular expression test.
 
@@ -29,5 +29,3 @@ failure_message  Message to show when the input value does not match
                  the pattern (or does match the pattern when the negate
                  argument is given). Defaults to "Not valid."            ``failure_message="Invalid postcode"``
 ===============  ======================================================  =======
-
-.. seealso:: :ref:`guide-validators`

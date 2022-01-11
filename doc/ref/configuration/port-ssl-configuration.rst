@@ -1,4 +1,5 @@
 .. highlight:: erlang
+.. seealso:: :ref:`mod_ssl_letsencrypt`, :ref:`mod_ssl_ca`, :ref:`guide-deployment-privilegedports`
 
 .. _ref-port-ssl-configuration:
 
@@ -190,5 +191,3 @@ The notification use by the SNI (Server Name Indication) handler is:
   If ``undefined`` is returned the SSL handshake will try the next SSL module. If all
   modules return ``undefined`` then a self-signed certificate will be used.
 
-
-.. seealso:: :ref:`mod_ssl_letsencrypt`, :ref:`mod_ssl_ca`, :ref:`guide-deployment-privilegedports`

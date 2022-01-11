@@ -21,6 +21,8 @@ be client-side (such as JavaScript animations) or server-side postbacks.
 Trigger actions from JavaScript
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. seealso:: :ref:`guide-template-autoids`, :ref:`cookbook-custom-action`
+
 To trigger an action from an HTML element, you attach a wire to the element::
 
     <a href="#" id="link">Click me!</a>
@@ -33,10 +35,10 @@ is clicked, it fades away.
 Actions can be called from the template, but can also be called when some
 server-side event occurs.
 
-.. seealso:: :ref:`guide-template-autoids`, :ref:`cookbook-custom-action`
-
 Server postbacks
 ^^^^^^^^^^^^^^^^
+
+.. seealso:: :ref:`postback reference <action-postback>`
 
 Postbacks are server-side actions. For instance, to submit a form asynchronously
 through Ajax, use a postback::
@@ -55,8 +57,6 @@ called in the specified delegate module ``mysite.erl``, called ``event/2``:
     event(#submit{}, Context) ->
         io:format("The value of 'username' is: ~s~n", z_context:get("username", Context),
         Context.
-
-.. seealso:: :ref:`postback reference <action-postback>`
 
 Trigger browser actions from the server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

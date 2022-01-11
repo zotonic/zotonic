@@ -1,13 +1,13 @@
 Zotonic |version| documentation
 ===============================
 
-Welcome to the documentation for `Zotonic <http://zotonic.com>`_, the Erlang web
-framework! This describes |version|, last updated |today|.
-
 .. note::
 
     This documentation is for the 1.x version of Zotonic. For the stable 0.x
     version, please refer to the `0.x documentation`_.
+
+Welcome to the documentation for `Zotonic <http://zotonic.com>`_, the Erlang web
+framework! This describes |version|, last updated |today|.
 
 Organization
 ------------

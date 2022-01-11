@@ -4,15 +4,15 @@ Automatically add new users to a user group
 Why
 ---
 
-When you create a person, you usually need to add it to a user group as well.
-You may want to automate this, in particular if you need to differentiate the
-user group based on the person’s category.
-
 .. note::
 
     If you merely want to change the default user group for *all* users, you can
     do so through a :ref:`configuration parameter <mod-signup-new-users-content-group>`
     and you don’t need the solution below.
+
+When you create a person, you usually need to add it to a user group as well.
+You may want to automate this, in particular if you need to differentiate the
+user group based on the person’s category.
 
 Solution
 --------

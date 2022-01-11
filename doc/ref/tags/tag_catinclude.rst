@@ -5,6 +5,8 @@
 catinclude
 ==========
 
+.. seealso:: :ref:`tag-all-catinclude`, which is useful to include multiple templates.
+
 Include another template based on the category of a resource. The include tag is replaced with the contents of the included template file. You can give arguments to the included template, they will be assigned as variables in the context of the included template.
 
 Example::
@@ -42,5 +44,3 @@ This will search for the following templates, in order::
 **Note** the search order is reversed from the list order, you should add the *most specific selector last*!
 
 See the :ref:`tag-include` for caching options and argument handling.
-
-.. seealso:: :ref:`tag-all-catinclude`, which is useful to include multiple templates.

@@ -1,5 +1,6 @@
-
 .. include:: meta-mod_filestore.rst
+
+.. seealso:: :ref:`model-filestore`.
 
 Support for storing uploaded and generated images and documents on external services.
 
@@ -164,5 +165,3 @@ or by s3filez download processes.
 
 
 .. todo:: The statistics are generated dynamically, which is not a good idea with many files. This will be changed.
-
-.. seealso:: :ref:`model-filestore`.
