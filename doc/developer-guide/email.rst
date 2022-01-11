@@ -338,7 +338,7 @@ Then, you should be greeted by Zotonic in the following way::
 Press ctrl-c to exit.
 
 Handling incoming E-mail
-""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 When receiving an e-mail message, Zotonic looks at the domain part of
 the e-mail address to determine which :term:`Zotonic site` is
