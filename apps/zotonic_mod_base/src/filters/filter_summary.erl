@@ -37,7 +37,7 @@ summary(RId, N, Context) ->
                     true ->
                         Body = m_rsc:p(Id, body, Context),
                         Body1 = z_trans:lookup_fallback(Body, Context),
-                        z_string:trim_left(strip(Body1, Len + 10));
+                        z_string:trim_left(strip(Body1, Len + 50));
                     false ->
                         S
                 end,
