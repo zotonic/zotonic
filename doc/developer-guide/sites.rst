@@ -14,6 +14,8 @@ dispatch rules. Each site has its own hostname.
 Create a site
 -------------
 
+.. note:: If anything goes wrong, see the :ref:`ref-troubleshooting-installation`.
+
 1. First, prepare the database. In your terminal, connect to PostgreSQL::
 
     $ sudo -u postgres psql (enter your OS password)
@@ -58,8 +60,6 @@ Create a site
    self-signed certificate for every site. These are stored in :file:`~/.config/zotonic/security`
    (on macOS :file:`~/Library/Application Support/zotonic/security`).
 
-   .. note:: If anything goes wrong, see the :ref:`ref-troubleshooting-installation`.
-
    You can log into the admin at https://yoursite.test:8443/admin using the username ``admin``
    with the password that you can find in your site’s configuration. Use for this the command::
 
@@ -67,7 +67,6 @@ Create a site
 
    The configuration is stored in the file :file:`apps_user/yoursite/priv/zotonic_site.config`
    in the :term:`zotonic user directory`.
-
 
 You can stop Zotonic by typing twice Ctrl-C at the Erlang command prompt.
 
