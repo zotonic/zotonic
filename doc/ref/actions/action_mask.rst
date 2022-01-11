@@ -4,11 +4,15 @@
 
 Places a mask over an element, useful for blocking user interaction during lengthy postbacks.
 
-Example::
+Example:
 
-   <a id="{{ #fb_logon }}" href="#facebook"><img src="/lib/images/fb-login-button.png" width="154" height="22" alt="Facebook login button" /></a>
-   {% wire id=#fb_logon 
-      action={mask target="logon_outer" message="Waiting for Facebook ."} 
+.. code-block:: html
+
+   <a id="{{ #fb_logon }}" href="#facebook">
+      <img src="/lib/images/fb-login-button.png" width="154" height="22" alt="Facebook login button">
+   </a>
+   {% wire id=#fb_logon
+      action={mask target="logon_outer" message="Waiting for Facebook ."}
       action={redirect dispatch="facebook_authorize"} %}
 
 In this example the `logon_outer` div will be masked while the browser is being redirected to Facebook.

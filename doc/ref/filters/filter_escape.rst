@@ -1,15 +1,6 @@
 .. highlight:: django
-
-.. index:: filter; escape
-   single: mod_base; filter, escape
-.. _filter-escape:
-
+.. include:: meta-escape.rst
 .. seealso:: :ref:`filter-force_escape`, :ref:`filter-escape_check`
-
-escape
-======
-
-* Module: :ref:`mod_base`
 
 HTML escape a text. Escapes all reserved HTML characters in the value.
 Escaped strings are safe to be displayed in a HTML page.  When you
