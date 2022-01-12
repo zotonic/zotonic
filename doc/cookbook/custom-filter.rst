@@ -20,7 +20,7 @@ So, let’s say you need to sort a list of items and remove duplicate values fro
 it:
 
 .. code-block:: erlang
-    :caption: mod_yourmodule/filters/filter_uniquesort.erl
+    :caption: mod_yourmodule/src/filters/filter_uniquesort.erl
 
     -module(filter_uniquesort).
     -export([uniquesort/2]).
