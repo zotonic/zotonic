@@ -7,11 +7,13 @@ The module ``mod_geoip`` must be enabled to use this filter.
 
 Example, print the information for the current visitor:
 
-.. code-block:: erlang
+.. code-block:: django
 
   {% print m.req.peer|ip2geo %}
 
-Might print (depending on the visitor’s IP address)::
+Might print (depending on the visitor’s IP address):
+
+.. code-block:: erlang
 
     #{city =>
           {trans,[{zh,<<230,160,188,231,189,151,229,174,129,230,
@@ -67,7 +69,7 @@ Might print (depending on the visitor’s IP address)::
 
 The ``trans`` records can be shown directly, Zotonic will select the correct language:
 
-.. code-block:: erlang
+.. code-block:: django
 
     {% with m.req.peer|ip2geo as info %}
         {{ info.country.name }} {% if info.city %} - {{ info.city }}{% endif %}
