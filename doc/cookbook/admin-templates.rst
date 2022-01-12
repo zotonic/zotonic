@@ -8,14 +8,15 @@ Linking to edit pages
 
 Dispatches to edit pages is done by ``admin_edit_rsc``.
 
-Linking::
+Linking:
 
-{% url admin_edit_rsc id=my_id %}
+.. code-block:: django
 
-Redirecting::
+    {% url admin_edit_rsc id=my_id %}
+
+Redirecting:
+
+.. code-block:: django
 
     {% button text="edit" action={redirect dispatch="admin_edit_rsc" id=my_id} %}
-
-
-  
 

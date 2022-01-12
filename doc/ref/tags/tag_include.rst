@@ -10,7 +10,7 @@ include
 Include another template. The include tag is replaced with the contents of the included template file. You can give arguments to the included template, they will be assigned as variables in the context of the included template.
 
 .. note::
-   For compatibility with DTL we accept the optional `with` keyword betwen the template name and the arguments::
+   For compatibility with DTL we accept the optional `with` keyword between the template name and the arguments::
 
       {% include "_hello.tpl" with name="Peter" %}
 

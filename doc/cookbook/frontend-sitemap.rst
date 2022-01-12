@@ -32,7 +32,9 @@ on how you want to display things.  On the other hand this does give
 you a workable nested unordered list with links to the pages which
 certainly serves the basic functionality out of the box.
 
-Create site_map.tpl containing::
+Create site_map.tpl containing:
+
+.. code-block:: django
 
   {% extends "page.tpl" %}
   {% block below_body %}

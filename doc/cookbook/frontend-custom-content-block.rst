@@ -19,8 +19,9 @@ from jamendo.com, a Creative Commons music hosting site.
 
 To register the content block we add an
 ``observe_admin_edit_blocks/3`` function to the site's erl file
-e.g. ``apps_user/mysite/src/mysite.erl``::
+e.g. ``apps_user/mysite/src/mysite.erl``:
 
+.. code-block:: erlang
 
     %%====================================================================
     %% support functions go here
@@ -51,7 +52,9 @@ created in ``templates/blocks`` and will be called
 ``_block_view_music_player.tpl``.
 
 As the name suggests, ``_admin_edit_block_li_music_player.tpl`` is the
-template used on the edit form::
+template used on the edit form:
+
+.. code-block:: django
 
     {% extends "admin_edit_widget_i18n.tpl" %}
 
@@ -94,7 +97,9 @@ the input will be filled with the saved value. Without this, the data entered wi
 This is all you need to be able to add a block to the edit form. If
 you update your site and restart, you should now be able to select the
 new block. It just doesn't display anything yet so let's add
-``_block_view_music_player.tpl``::
+``_block_view_music_player.tpl``:
+
+.. code-block:: django
 
     <iframe id="widget" scrolling="no" frameborder="0" width="400"
             height="284" style="width: 400px; height: 284px;"
@@ -106,7 +111,9 @@ Since we added only one attribute, ``url``, to the block's admin template, the `
 properties: ``name``, and our custom attribute, ``url``.
 
 So if the user supplied ``http://widgets.jamendo.com/v3/album/40728?autoplay=0&layout=standard&width=400``,
-as the url to the music widget, the block's frontend view template will expand to::
+as the url to the music widget, the block's frontend view template will expand to:
+
+.. code-block:: django
 
         <iframe id="widget" scrolling="no" frameborder="0" width="400"
             height="284" style="width: 400px; height: 284px;"
