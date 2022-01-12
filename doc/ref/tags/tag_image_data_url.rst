@@ -15,7 +15,9 @@ The ``{% image_data_url %}`` tag is used generate a data url with the image data
 
 ``{% image_data_url %}`` accepts all parameters of the ``{% image %}`` tag but only outputs a data url and not the ``<img>`` element to display it.
 
-Example::
+Example:
+
+.. code-block:: django
 
     {% image_data_url "lib/images/trans.gif" %}
 

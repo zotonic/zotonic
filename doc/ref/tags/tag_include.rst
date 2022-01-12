@@ -9,34 +9,36 @@ include
 
 Include another template. The include tag is replaced with the contents of the included template file. You can give arguments to the included template, they will be assigned as variables in the context of the included template.
 
+.. note::
+   With keyword
+   For compatibility with DTL we accept the optional `with` keyword betwen the template name and the arguments::
+
+      {% include "_hello.tpl" with name="Peter" %}
+
 Example::
 
     {% include "_hello.tpl" name="Peter" %} world.
 
-When `_hello.tpl` contains the text::
+If `_hello.tpl` contains the text::
 
     Hello {{ name }}’s
 
 Then this will output the text ``Hello Peter’s world.``.
 
-When the template name is a string literal then the template will be inlined. When it is
+If the template name is a string literal then the template will be inlined. When it is
 an expression then the template will be included during runtime.
 
-.. versionadded:: 0.9.1
-   Added the `optional` keyword.
+Optional
+--------
 
 If the included template is not required, a `optional` keyword may be used::
 
    {% optional include "might-not-exist.tpl" %}
 
-.. note::
-   About unique ids
-      :index:`Automatically generated ids` (``{{ #name }}``) are :index:`unique <pair: unique; id>` within an included template and do not clash with similarly named ids in the including template.
+Unique ids
+----------
 
-   With keyword
-  	  For compatibility with DTL we accept the optional `with` keyword betwen the template name and the arguments::
-
-	      {% include "_hello.tpl" with name="Peter" %}
+:index:`Automatically generated ids` (``{{ #name }}``) are :index:`unique <pair: unique; id>` within an included template and do not clash with similarly named ids in the including template.
 
 
 Caching of the included template

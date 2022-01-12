@@ -15,7 +15,9 @@ Signal that this template extends a template with the same name in a module with
 
 The `overrules` tag must be the first tag in the template.
 
-Example, say a template "page.tpl" contains the following::
+Example, say a template "page.tpl" contains the following:
+
+.. code-block:: django
 
    {% overrules %}
    {% block title %} My new title {% endblock %}

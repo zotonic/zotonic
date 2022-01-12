@@ -15,7 +15,9 @@ Signal that this template extends another template. The extends tag
 must be the first tag in a template that inherits from another
 template.
 
-Example::
+Example:
+
+.. code-block:: django
 
    {% extends "base.tpl" %}
 
