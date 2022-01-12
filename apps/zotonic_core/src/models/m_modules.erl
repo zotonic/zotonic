@@ -63,14 +63,14 @@ m_get([ <<"provided">> ], _Msg, Context) ->
 m_get([ <<"get_provided">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true ->
-            {ok, {z_module_manager:get_provided(), Rest}};
+            {ok, {z_module_manager:scan_provided(Context), Rest}};
         false ->
             {error, eacces}
     end;
 m_get([ <<"get_depending">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true ->
-            {ok, {z_module_manager:get_depending(), Rest}};
+            {ok, {z_module_manager:scan_depending(Context), Rest}};
         false ->
             {error, eacces}
     end;
