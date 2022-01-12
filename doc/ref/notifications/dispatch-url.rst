@@ -6,6 +6,7 @@ Dispatch notifications
    :glob:
 
    notification/content_types_dispatch
+   notification/dispatch
    notification/dispatch_host
    notification/dispatch_rewrite
    notification/page_url
