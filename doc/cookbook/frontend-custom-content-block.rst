@@ -58,9 +58,9 @@ template used on the edit form:
 
     {% extends "admin_edit_widget_i18n.tpl" %}
 
-    {% block widget_title %}{_ Block _}{% endblock %}
+    {% block widget_title %}{_ Music Player _}{% endblock %}
     {% block widget_show_minimized %}false{% endblock %}
-    {% block widget_id %}edit-block-{{ #block }}{% endblock %}
+    {% block widget_id %}edit-block-music-player{% endblock %}
     {% block widget_header %}{% endblock %}
 
     {% block widget_content %}
@@ -72,7 +72,7 @@ template used on the edit form:
                                 value="{{ blk.url }}"
                                 class="input-block-level"
                                 placeholder="{_  Enter the url of the music widget _}"
-                        />
+                        >
                 </div>
         </div>
     {% endblock %}
