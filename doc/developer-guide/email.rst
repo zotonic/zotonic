@@ -3,9 +3,6 @@
 E-mail handling
 ===============
 
-Configuration
--------------
-
 Any Zotonic system is capable of sending and receiving e-mail messages
 over SMTP.
 
@@ -14,8 +11,8 @@ to one or more recipients.
 
 Out of the box, e-mail sending should "just work".
 
-Site-specific settings
-^^^^^^^^^^^^^^^^^^^^^^
+Site-specific configuration
+---------------------------
 
 +----------+----------------------+-----------------------------------------+
 |Module    |Key                   |Value                                    |
@@ -47,16 +44,16 @@ Site-specific settings
 |          |                      |``smtp_bounce_email_override`` below.    |
 +----------+----------------------+-----------------------------------------+
 
-Zotonic-wide settings
-^^^^^^^^^^^^^^^^^^^^^
+Zotonic-wide configuration
+--------------------------
 
 The file ``~/.config/zotonic/1/zotonic.config``
 (on macOS ``~/Library/Application Support/zotonic/config/1/zotonic.config``)
 can be configured to hold any of the configuration options below. They are in
 effect for every site running in the Zotonic instance.
 
-Zotonic-wide settings for sending email
-"""""""""""""""""""""""""""""""""""""""
+Zotonic-wide configuration for sending email
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 +--------------------------+--------------------------------------+
 |Key                       |Description                           |
@@ -106,7 +103,7 @@ Zotonic-wide settings for sending email
 +--------------------------+--------------------------------------+
 
 Zotonic-wide settings for receiving email
-"""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To receive email the SMTP server has to listen on the correct IP address and
 port. Spam filtering is done by checking DNSBL (DNS Block List) servers and
@@ -145,7 +142,7 @@ optionally using Spamassassin.
 
 
 The sender’s domain
-^^^^^^^^^^^^^^^^^^^
+-------------------
 
 Recipients of e-mail want a valid sender’s address on the
 envelope. This section describes how to set your e-mail bounce/sender
@@ -180,7 +177,7 @@ settings table above.
 
 
 How does Zotonic know the domain?
-"""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 It checks in order:
 
