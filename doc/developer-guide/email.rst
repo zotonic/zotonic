@@ -252,11 +252,9 @@ To include inline images, just add an ``<img>`` tag:
 .. code-block:: django
     :caption: email.tpl
 
-    …
-        <body>
-            <img src="https://yoursite.com/logo.png">
-        </body>
-    …
+    <body>
+        <img src="https://yoursite.com/logo.png">
+    </body>
 
 Use the :ref:`image tag <tag-image>` to include a
 :ref:`media depiction <guide-media>`:
@@ -264,11 +262,9 @@ Use the :ref:`image tag <tag-image>` to include a
 .. code-block:: django
     :caption: email.tpl
 
-    …
-        <body>
-            {% image id.depiction %}
-        </body>
-    …
+    <body>
+        {% image id.depiction %}
+    </body>
 
 After you’ve created the template, you can send the e-mail. You can provide
 the template variables (we had ``id`` and ``sender_name`` in the template) as
@@ -279,7 +275,7 @@ the template variables (we had ``id`` and ``sender_name`` in the template) as
     some_function(SomeId, Sender, Context) ->
         %% Create an e-mail record
         Email = #email{
-            to = "someone@somewhere.com,
+            to = "someone@somewhere.com",
             vars = [
                 {id, SomeId},
                 {sender_name, Sender}
@@ -330,7 +326,7 @@ program, like this::
 
 Then, you should be greeted by Zotonic in the following way::
 
-  220 example.com ESMTP Zotonic 0.13.0
+  220 example.com ESMTP Zotonic 1.0.0
 
 Press ctrl-c to exit.
 

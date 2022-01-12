@@ -132,18 +132,24 @@ In templates
 ^^^^^^^^^^^^
 
 To generate URLs in templates, use the :ref:`url tag <tag-url>` and pass the
-dispatch rule name::
+dispatch rule name:
+
+.. code-block:: django
 
     {% url home %}
 
-And with dispatch rule arguments::
+And with dispatch rule arguments:
+
+.. code-block:: django
 
     {% url collection id=123 slug="nice-slug-you-got-there" %}
 
 which gives: ``/collection/123/nice-slug-you-got-there``.
 
 Any arguments that are not defined in the dispatch rule are appended as query
-string parameters, so::
+string parameters, so:
+
+.. code-block:: django
 
     {% url features var=1 x="hello" %}
 
