@@ -53,7 +53,7 @@ can be configured to hold any of the configuration options below. They are in
 effect for every site running in the Zotonic instance.
 
 Zotonic-wide configuration for sending email
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 +--------------------------+--------------------------------------+
 |Key                       |Description                           |
