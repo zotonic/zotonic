@@ -34,7 +34,7 @@ first(<<First, _/binary>>, _Context) ->
     First;
 first(Tuple, _Context) when is_tuple(Tuple) ->
     erlang:element(1, Tuple);
-first([ H | _ ], _Context) when is_tuple(Tuple) ->
+first([ H | _ ], _Context) ->
     H;
 first(Other, Context) ->
     case z_template_compiler_runtime:to_list(Other, Context) of
