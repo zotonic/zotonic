@@ -226,7 +226,7 @@ pages, the better. Only make the first occurrence of a term a
 reference to its page, though; consequent occurrences can be made
 ```italic```.
 
-Add a ``.. seealso::`` section at the bottom to highlight any other
+Add a ``.. seealso::`` section at the top to highlight any other
 pages which are closely related to the current one, for example::
 
 .. code-block:: none

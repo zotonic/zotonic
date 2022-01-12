@@ -13,7 +13,8 @@ For example::
 
    {% call mymodule a=1 b=2 %}
 
-Will call ``mymodule:render([{a,1}],[{b,2}], TemplateVariables, Context)``.  Where `TemplateVariables` is the property list with all template variables and `Context` is the current Zotonic request :term:`context`.
+Will call ``mymodule:render([{a,1}],[{b,2}], TemplateVariables, Context)``.  Where `TemplateVariables` is the map
+with all template variables and `Context` is the current Zotonic request :term:`context`.
 
 The `render/2` function must return either ``{ok, IoList}`` or ``{error, Reason}``.
 

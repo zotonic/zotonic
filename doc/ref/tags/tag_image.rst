@@ -11,7 +11,7 @@ image
 
 .. seealso:: :ref:`tag-image_url`, :ref:`tag-image_data_url` and :ref:`tag-media` tags.
 
-Show a still image using an ``<img />`` element. The image will be automatically
+Show a still image using an ``<img>`` element. The image will be automatically
 resized to the desired size and filters. For video, use the :ref:`tag-media` tag
 instead.
 

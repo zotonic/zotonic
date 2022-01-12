@@ -18,7 +18,9 @@ For example::
 
     {% print value %}
 
-When value is “<b>Hello</b> world!” then the example above returns the output::
+When value is ``"<b>Hello</b> world!"`` then the example above returns the output:
+
+.. code-block:: html
 
     <pre>
     &lt;b&gt;Hello&lt;/b&gt; world!
