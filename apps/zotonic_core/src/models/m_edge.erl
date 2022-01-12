@@ -396,7 +396,7 @@ is_allowed([Error | _]) -> Error.
 
 
 %% @doc Replace the objects with the new list
--spec replace(m_rsc:resource(), pos_integer() | atom(), m_rsc:resource(), #context{}) -> ok | {error, atom()}.
+-spec replace(m_rsc:resource(), m_rsc:resource(), [ m_rsc:resource() ], z:context()) -> ok | {error, atom()}.
 replace(SubjectId, PredId, NewObjects, Context) when is_integer(PredId) ->
     case m_predicate:is_predicate(PredId, Context) of
         true -> replace1(SubjectId, PredId, NewObjects, Context);

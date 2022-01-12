@@ -1,5 +1,6 @@
 .. highlight:: django
 .. include:: meta-slugify.rst
+.. seealso:: :ref:`filter-stringify`
 
 Converts a text into a slug.
 
@@ -10,5 +11,3 @@ For example::
   {{ value|slugify }}
 
 When value is “Nichts is unmöglich!” then the output will be “nichts-is-unmoglich”.
-
-.. seealso:: :ref:`filter-stringify`

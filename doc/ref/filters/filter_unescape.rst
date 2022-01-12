@@ -1,5 +1,6 @@
 .. highlight:: django
 .. include:: meta-unescape.rst
+.. seealso:: :ref:`filter-escape`, :ref:`filter-force_escape`
 
 Removes HTML escaping from a text.
 
@@ -13,5 +14,3 @@ For example::
 
 Be careful that you only use this filter when you are absolutely sure
 that the output is not used in HTML or XML.
-
-.. seealso:: :ref:`filter-escape`, :ref:`filter-force_escape`

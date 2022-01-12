@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-escape_ical.rst
 
+.. seealso:: :ref:`filter-escape`
+
 Escape the value according to the RFC2445 rules.
 
 A double quote becomes ``\"``; a comma becomes ``\,``; a colon
@@ -15,5 +17,3 @@ For example::
   {{ value|escape_ical }}
 
 When the value is ``abc:d;e`` then the output is ``abc":"d\;e``.
-
-.. seealso:: :ref:`filter-escape`

@@ -3,9 +3,6 @@
 E-mail handling
 ===============
 
-Configuration
--------------
-
 Any Zotonic system is capable of sending and receiving e-mail messages
 over SMTP.
 
@@ -14,8 +11,8 @@ to one or more recipients.
 
 Out of the box, e-mail sending should "just work".
 
-Site-specific settings
-^^^^^^^^^^^^^^^^^^^^^^
+Site-specific configuration
+---------------------------
 
 +----------+----------------------+-----------------------------------------+
 |Module    |Key                   |Value                                    |
@@ -47,16 +44,16 @@ Site-specific settings
 |          |                      |``smtp_bounce_email_override`` below.    |
 +----------+----------------------+-----------------------------------------+
 
-Zotonic-wide settings
-^^^^^^^^^^^^^^^^^^^^^
+Zotonic-wide configuration
+--------------------------
 
 The file ``~/.config/zotonic/1/zotonic.config``
 (on macOS ``~/Library/Application Support/zotonic/config/1/zotonic.config``)
 can be configured to hold any of the configuration options below. They are in
 effect for every site running in the Zotonic instance.
 
-Zotonic-wide settings for sending email
-"""""""""""""""""""""""""""""""""""""""
+Zotonic-wide configuration for sending email
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 +--------------------------+--------------------------------------+
 |Key                       |Description                           |
@@ -106,7 +103,7 @@ Zotonic-wide settings for sending email
 +--------------------------+--------------------------------------+
 
 Zotonic-wide settings for receiving email
-"""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To receive email the SMTP server has to listen on the correct IP address and
 port. Spam filtering is done by checking DNSBL (DNS Block List) servers and
@@ -145,7 +142,7 @@ optionally using Spamassassin.
 
 
 The sender’s domain
-^^^^^^^^^^^^^^^^^^^
+-------------------
 
 Recipients of e-mail want a valid sender’s address on the
 envelope. This section describes how to set your e-mail bounce/sender
@@ -180,7 +177,7 @@ settings table above.
 
 
 How does Zotonic know the domain?
-"""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 It checks in order:
 
@@ -255,11 +252,9 @@ To include inline images, just add an ``<img>`` tag:
 .. code-block:: django
     :caption: email.tpl
 
-    …
-        <body>
-            <img src="https://yoursite.com/logo.png">
-        </body>
-    …
+    <body>
+        <img src="https://yoursite.com/logo.png">
+    </body>
 
 Use the :ref:`image tag <tag-image>` to include a
 :ref:`media depiction <guide-media>`:
@@ -267,11 +262,9 @@ Use the :ref:`image tag <tag-image>` to include a
 .. code-block:: django
     :caption: email.tpl
 
-    …
-        <body>
-            {% image id.depiction %}
-        </body>
-    …
+    <body>
+        {% image id.depiction %}
+    </body>
 
 After you’ve created the template, you can send the e-mail. You can provide
 the template variables (we had ``id`` and ``sender_name`` in the template) as
@@ -282,7 +275,7 @@ the template variables (we had ``id`` and ``sender_name`` in the template) as
     some_function(SomeId, Sender, Context) ->
         %% Create an e-mail record
         Email = #email{
-            to = "someone@somewhere.com,
+            to = "someone@somewhere.com",
             vars = [
                 {id, SomeId},
                 {sender_name, Sender}
@@ -333,12 +326,12 @@ program, like this::
 
 Then, you should be greeted by Zotonic in the following way::
 
-  220 example.com ESMTP Zotonic 0.13.0
+  220 example.com ESMTP Zotonic 1.0.0
 
 Press ctrl-c to exit.
 
 Handling incoming E-mail
-""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 When receiving an e-mail message, Zotonic looks at the domain part of
 the e-mail address to determine which :term:`Zotonic site` is

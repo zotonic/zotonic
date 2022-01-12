@@ -5,13 +5,19 @@
 image_data_url
 ==============
 
+.. seealso:: :ref:`guide-media` developer guide.
+.. seealso:: :ref:`guide-media-classes` for some options that are only available in `mediaclass` files.
+.. seealso:: :ref:`tag-image`, :ref:`tag-image_url` and :ref:`tag-media` tags.
+
 Generate a ``data:`` url of a still image.
 
 The ``{% image_data_url %}`` tag is used generate a data url with the image data.
 
-``{% image_data_url %}`` accepts all parameters of the ``{% image %}`` tag but only outputs a data url and not the ``<img />`` element to display it.
+``{% image_data_url %}`` accepts all parameters of the ``{% image %}`` tag but only outputs a data url and not the ``<img>`` element to display it.
 
-Example::
+Example:
+
+.. code-block:: django
 
     {% image_data_url "lib/images/trans.gif" %}
 
@@ -23,8 +29,3 @@ The ``image_data_url`` tag can be used in image tags or in css::
 
     <img src="{% image_data_url 'lib/images/trans.gif' %}">
 
-
-.. seealso::
-    * :ref:`guide-media` developer guide.
-    * :ref:`guide-media-classes` for some options that are only available in `mediaclass` files.
-    * :ref:`tag-image`, :ref:`tag-image_url` and :ref:`tag-media` tags.

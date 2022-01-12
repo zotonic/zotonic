@@ -106,6 +106,11 @@ All arguments are available via the ``z_context:get_q/2`` function (and friends)
 Transport
 ^^^^^^^^^
 
+.. note::
+
+    It is strongly advised to use MQTT topics instead of the ``z_transport`` mechanism.
+    See :ref:`mod_mqtt` for more information.
+
 Zotonic has a message bus to transport data between server and browser. It
 transports structured data in different formats and supports retransmission in
 case of lost messages.
@@ -117,11 +122,6 @@ Zotonic uses two mechanisms to transport data from the browser to the server:
    to post forms with files to the server.
 
 The WebSocket connection it used to transport data from the server to the browser.
-
-.. note::
-
-    It is strongly advised to use MQTT topics instead of the ``z_transport`` mechanism.
-    See :ref:`mod_mqtt` for more information.
 
 
 From browser to server

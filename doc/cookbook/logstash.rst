@@ -3,6 +3,8 @@
 Logging to Logstash
 ===================
 
+.. seealso:: the :ref:`dev-logging` chapter in the Developer Guide.
+
 `Logstash`_ is often used for log centralization and analysis. This cookbook
 describes how to set up Zotonic for logging to Logstash over UDP. As mentioned
 in the :ref:`Logging chapter <dev-logging>`, Zotonic uses the
@@ -80,8 +82,6 @@ You should now find all Zotonic log messages in Logstash. To test this, just
 call::
 
     lager:error("Just testing the Logstash setup here!").
-
-.. seealso:: the :ref:`dev-logging` chapter in the Developer Guide.
 
 .. _Logstash: http://www.elastic.co/products/logstash
 .. _Lager framework: https://github.com/erlang-lager/lager

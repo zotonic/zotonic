@@ -3,6 +3,8 @@
 Command-line shell
 ==================
 
+.. seealso:: :ref:`ref-cli`
+
 The Zotonic shell gives you access to a running Zotonic instance with its code and data.
 
 To connect to the background Zotonic server instance within an EShell (Erlang shell)::
@@ -14,8 +16,6 @@ Alternatively, use the `debug` commmand to launch the Zotonic server interactive
   zotonic debug
 
 The ``start.sh`` command in the root folder is a shortcut for this command.
-
-.. seealso:: :ref:`ref-cli`
 
 Tab completion
 --------------

@@ -1,6 +1,9 @@
 
 .. include:: meta-mod_admin_frontend.rst
 
+.. note::
+    This module is in active development. In the future live-editing and push-updates will be added. This might change the way the form and menu are handled. 
+
 Adds editing of resources, menu-trees and collections for non-admin users.
 
 With many sites it is needed to let “normal” users edit content. For those users the ``/admin`` interface is
@@ -43,8 +46,6 @@ The ``mod_admin_frontend`` makes heavy use of ``catinclude`` to find the correct
 The column with the menu is rendered using ``{% catinclude "_admin_menu_menu_view.tpl" tree_id ... %}``.
 The resource-column with the main editing form is rendered using ``{% catinclude "_admin_frontend_edit.tpl" id ... %}``. This column is loaded lazily via a postback.
 
-Check the templates in the 
-
 
 Customizing the menu column
 ...........................
@@ -84,8 +85,5 @@ If any content needs to be added on top of the page, between the publication che
 If you click on the `cog` icon on the right, then a meta data panel is shown (for access-control options and language settings).
 This panel can be extended with extra tabs using the blocks ``meta_tabs`` and ``meta_panels``.
 
-
-.. note::
-    This module is in active development. In the future live-editing and push-updates will be added. This might change the way the form and menu are handled. 
 
 .. seealso:: :ref:`mod_admin`, :ref:`filter-menu_rsc`

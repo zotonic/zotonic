@@ -3,6 +3,10 @@
 User Guide
 ==========
 
+.. seealso::
+    if you’re a developer who’s already familiar with Zotonic, you may want to
+    read the :ref:`developer-guide` instead.
+
 Welcome to the Zotonic User Guide. This guide is a non-technical introduction to
 Zotonic.
 
@@ -21,7 +25,3 @@ Zotonic.
     of Zotonic.
 
 See http://zotonic.com/support for getting help and support.
-
-.. seealso::
-    if you’re a developer who’s already familiar with Zotonic, you may want to
-    read the :ref:`developer-guide` instead.

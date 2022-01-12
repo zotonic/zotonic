@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% @doc 'first' filter, return the first element in a string or list
+%% @copyright 2010-2022 Marc Worrell
+%% @doc 'first' filter, return the first element in a string, list or tuple.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -26,20 +26,32 @@
 
 first(undefined, _Context) ->
     undefined;
-first({trans, _} = Tr, Context) ->
+first(#trans{} = Tr, Context) ->
     first(z_trans:lookup_fallback(Tr, Context), Context);
 first(<<First/utf8, _/binary>>, _Context) ->
     First;
+first(<<First, _/binary>>, _Context) ->
+    First;
+first(Tuple, _Context) when is_tuple(Tuple) ->
+    erlang:element(1, Tuple);
+first([ H | _ ], _Context) ->
+    H;
 first(Other, Context) ->
     case z_template_compiler_runtime:to_list(Other, Context) of
         [] -> <<>>;
         [H|_] -> H
     end.
 
-first(undefined, _Length, _Context) ->
+first(undefined, _N, _Context) ->
     undefined;
-first(Value, Length, Context) ->
-    first1(z_template_compiler_runtime:to_list(Value, Context), Length, []).
+first(_, N, _Context) when N < 1 ->
+    undefined;
+first(V, 1, Context) ->
+    first(V, Context);
+first(B, N, _Context) when is_binary(B) ->
+    first_bin(B, N, <<>>);
+first(Value, N, Context) ->
+    first1(z_template_compiler_runtime:to_list(Value, Context), N, []).
 
 
 first1([], _N, Acc) ->
@@ -49,3 +61,10 @@ first1(_L, 0, Acc) ->
 first1([H|T], N, Acc) ->
     first1(T, N-1, [H|Acc]).
 
+
+first_bin(_, 1, Acc) ->
+    Acc;
+first_bin(<<C/utf8, Rest/binary>>, N, Acc) ->
+    first_bin(Rest, N-1, <<Acc/binary, C/utf8>>);
+first_bin(<<C, Rest/binary>>, N, Acc) ->
+    first_bin(Rest, N-1, <<Acc/binary, C>>).

@@ -1,5 +1,6 @@
 
 .. include:: meta-mod_ssl_letsencrypt.rst
+.. seealso:: :ref:`mod_ssl_ca`, :ref:`ref-port-ssl-configuration`
 
 Request certificates from Let’s Encrypt.
 
@@ -38,20 +39,19 @@ you want to include in the certificates. (E.g. *example.com* and *www.example.co
 
 The certificate request will run on the background and the status will be shown in the panel.
 
-After a certificate was received, make sure that Let’s Encrypt is the first module on the
-SSL Certificates list by disabling all modules above Lets’s Encrypt.
-
 .. note: It can take a couple of minutes till the new certificate is used.
 
-Now go to your site using https, you should be see your site protected by a Let’s Encrypt
-certificate.
-
+After a certificate was received, make sure that Let’s Encrypt is the first module on the
+SSL Certificates list by disabling all modules above Lets’s Encrypt.
 
 .. note:
 
   Let’s Encrypt certificates are valid for ninety days. Thirty days before expiration
-  Zotonic will automatically try to fetch a new certificate. If an error happens then 
+  Zotonic will automatically try to fetch a new certificate. If an error happens then
   the renewal will be retried daily during thirty days.
+
+Now go to your site using https, you should be see your site protected by a Let’s Encrypt
+certificate.
 
 
 Certificate and key files
@@ -83,6 +83,3 @@ The default is the OS specific directory.
 
 If there is a directory ``priv/security/letsencrypt`` inside your site's OTP application folder then
 that directory will be used.
-
-
-.. seealso:: :ref:`mod_ssl_ca`, :ref:`ref-port-ssl-configuration`

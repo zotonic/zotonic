@@ -3,6 +3,9 @@
 Create a custom filter
 ======================
 
+.. seealso:: :ref:`guide-templates` guide
+.. seealso:: :ref:`filters` reference
+
 Create custom :ref:`template filters <guide-filters>` to change the way
 variables are rendered in your templates. By following some simple rules,
 Zotonic will automatically find the filter for you:
@@ -17,7 +20,7 @@ So, let’s say you need to sort a list of items and remove duplicate values fro
 it:
 
 .. code-block:: erlang
-    :caption: mod_yourmodule/filters/filter_uniquesort.erl
+    :caption: mod_yourmodule/src/filters/filter_uniquesort.erl
 
     -module(filter_uniquesort).
     -export([uniquesort/2]).
@@ -34,7 +37,3 @@ The custom ``uniquesort`` filter is then available in your templates:
         {{ thing }} is now sorted and unique!
     {% endfor %}
 
-.. seealso::
-
-    * :ref:`guide-templates` guide
-    * :ref:`filters` reference

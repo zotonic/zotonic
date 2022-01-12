@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2017 Marc Worrell
+%% @copyright 2010-2022 Marc Worrell
 %% @doc 'length' filter, return the number of elements or length of a string
+%% or other erlang term.
 
-%% Copyright 2010-2017 Marc Worrell
+%% Copyright 2010-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,13 +20,16 @@
 -module(filter_length).
 -export([length/2]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 length(undefined, _Context) -> undefined;
 length([], _Context) -> 0;
 length(<<>>, _Context) -> 0;
 length(Input, _Context) when is_binary(Input) -> z_string:len(Input);
 length(Input, _Context) when is_list(Input) -> erlang:length(Input);
-length({trans, _} = Tr, Context) ->
+length(Input, _Context) when is_tuple(Input) -> erlang:tuple_size(Input);
+length(Input, _Context) when is_map(Input) -> erlang:map_size(Input);
+length(#trans{} = Tr, Context) ->
     length(z_trans:lookup_fallback(Tr, Context), Context);
 length(Input, Context) ->
     erlang:length(z_template_compiler_runtime:to_list(Input, Context)).

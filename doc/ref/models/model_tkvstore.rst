@@ -1,5 +1,5 @@
-
 .. include:: meta-tkvstore.rst
+.. seealso:: :ref:`mod_tkvstore`
 
 Simple read-only interface to the typed key-value store of :ref:`mod_tkvstore`.
 To get a value from the store: use `m.tkvstore.type.key`, like this::
@@ -30,6 +30,3 @@ This will output the string ``Hello``.
 
 Note that the value can be any type: not only a simple string but also
 a list, tuple, or any other Erlang composite type.
-
-.. seealso:: :ref:`mod_tkvstore`
-

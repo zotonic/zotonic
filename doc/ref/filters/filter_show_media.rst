@@ -1,5 +1,6 @@
 .. highlight:: django
 .. include:: meta-show_media.rst
+.. seealso:: :ref:`filter-embedded_media`, :ref:`filter-without_embedded_media`
 
 Convert the image markers in HTML from the Rich Text editor into image tags.
 
@@ -78,7 +79,3 @@ the following data:
 
 Besides the above all context variables are passed, this gives the Erlang code
 the possibility to change the behavior of the media rendering.
-
-
-.. seealso::
-    :ref:`filter-embedded_media`, :ref:`filter-without_embedded_media`

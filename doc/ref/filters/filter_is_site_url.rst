@@ -1,5 +1,7 @@
-
+.. highlight:: django
 .. include:: meta-is_site_url.rst
+
+.. seealso:: :ref:`filter-sanitize_url`, :ref:`filter-url_abs`, :ref:`filter-url`, :ref:`filter-urlencode`
 
 Test if the given URL is a url for the current site.
 
@@ -16,6 +18,4 @@ The following will echo ``false``::
     {{ "https://foo.test"|is_site_url }}
     {{ "example.com"|is_site_url }}
     {{ "//foo.test"|is_site_url }}
-
-.. seealso:: :ref:`filter-sanitize_url`, :ref:`filter-url_abs`, :ref:`filter-url`, :ref:`filter-urlencode`
 

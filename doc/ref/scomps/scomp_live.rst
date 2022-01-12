@@ -3,12 +3,12 @@
 
 Live updating templates connected to :ref:`MQTT topics <mod_mqtt>`.
 
-This tag renders templates that are automatically re-rendered after a
-publication to an MQTT topic.
-
 .. note::
 
-    This tag is provided by :ref:`mod_mqtt`, which must be enabled.
+    The live tag is provided by :ref:`mod_mqtt`, which must be enabled.
+
+This tag renders templates that are automatically re-rendered after a
+publication to an MQTT topic.
 
 Example
 -------

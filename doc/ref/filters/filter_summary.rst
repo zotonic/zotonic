@@ -15,3 +15,7 @@ Example::
 
   {{ id|summary }}
 
+It is also possible to give a maximum length to which the text will
+be truncated::
+
+  {{ id|summary:80 }}

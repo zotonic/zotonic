@@ -5,7 +5,9 @@ Maps an IP address to a country using the MaxMind GeoIP2 database.
 
 The module ``mod_geoip`` must be enabled to use this filter.
 
-Example, print the country code of the current visitor::
+Example, print the country code of the current visitor:
+
+.. code-block:: django
 
   {% print m.req.peer|ip2country %}
 

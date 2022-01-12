@@ -1,6 +1,6 @@
-
+.. highlight:: django
 .. include:: meta-acceptance.rst
-
+.. seealso:: :ref:`guide-validators`
 
 Check if an input value evaluates to true.
 
@@ -20,5 +20,3 @@ Argument            Description                                  Example
 failure_message     Message to be shown when the input is true.
                     Defaults to "Must be accepted."              ``failure_message="Please agree to our TOS."``
 =================== ===========================================  =======
-
-.. seealso:: :ref:`guide-validators`

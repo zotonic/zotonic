@@ -1,6 +1,6 @@
-
 .. highlight:: django
 .. include:: meta-url_abs.rst
+.. seealso:: :ref:`filter-url`, :ref:`tag-url`, :ref:`filter-sanitize_url`, :ref:`filter-is_site_url`, :ref:`filter-urlencode`
 
 Generates an absolute URL for the given dispatch information.
 
@@ -18,5 +18,3 @@ This is similar to::
 
 Difference between the tag and the filter is that the filter can
 be used in expressions or with passed values.
-
-.. seealso:: :ref:`filter-url`, :ref:`tag-url`, :ref:`filter-sanitize_url`, :ref:`filter-is_site_url`, :ref:`filter-urlencode`

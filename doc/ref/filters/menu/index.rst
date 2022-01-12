@@ -8,6 +8,7 @@ Menu
 
    ../filter_menu_flat
    ../filter_menu_is_visible
+   ../filter_menu_expand
    ../filter_menu_rsc
    ../filter_menu_subtree
    ../filter_menu_trail

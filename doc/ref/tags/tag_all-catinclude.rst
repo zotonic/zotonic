@@ -5,6 +5,8 @@
 all catinclude
 ==============
 
+.. seealso:: tags :ref:`tag-catinclude` and :ref:`tag-all-include`.
+
 Include a template for all a resource’s categories from all modules.
 
 This is an extension on the :ref:`tag-catinclude` tag.  It will include all templates with the given name, instead of the first one found.  Templates are defined in modules, because of that multiple modules can define a template with the same name.
@@ -25,5 +27,3 @@ For example, in the case of a *news* article:
 * all templates with the name .hello.article.tpl.
 * all templates with the name .hello.text.tpl.
 * all templates with the name .hello.tpl.
-
-.. seealso:: tags :ref:`tag-catinclude` and :ref:`tag-all-include`.

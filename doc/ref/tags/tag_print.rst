@@ -6,6 +6,8 @@
 print
 =====
 
+.. seealso:: :ref:`scomp-debug`
+
 Show the contents of a value expression.
 
 The ``{% print %}`` tag is used to dump the contents of a variable in
@@ -16,7 +18,9 @@ For example::
 
     {% print value %}
 
-When value is “<b>Hello</b> world!” then the example above returns the output::
+When value is ``"<b>Hello</b> world!"`` then the example above returns the output:
+
+.. code-block:: html
 
     <pre>
     &lt;b&gt;Hello&lt;/b&gt; world!
@@ -24,5 +28,3 @@ When value is “<b>Hello</b> world!” then the example above returns the outpu
 
 It can also print complex values like nested lists and tuples, for
 which it uses Erlang’s ``io_lib:format/2`` function.
-
-.. seealso:: :ref:`scomp-debug`

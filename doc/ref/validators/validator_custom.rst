@@ -1,12 +1,11 @@
-
+.. highlight:: django
 .. include:: meta-custom.rst
+.. seealso:: :ref:`guide-validators`
 
 Support for custom client-side (JavaScript-based) validators.
 
 This call simply adds a ``z_add_validator()`` JavaScript call which
 adds a custom validator based on the arguments given in the validator.
-
-.. highlight:: django
 
 Example::
 
@@ -15,7 +14,9 @@ Example::
 
 .. highlight:: javascript
 
-And then ``validate_foobar`` is defined as follows::
+And then ``validate_foobar`` is defined as follows:
+
+.. code-block:: javascript
 
     function validate_foobar(value, args, isSubmit, submitTrigger)
     {
@@ -34,5 +35,3 @@ was triggered by change or focus events then it is ``false``.
 Note that this validation does not do any server side validation. Because there
 is no server side validation, the value of the ``input`` element is not
 available via ``z_context:get_q_validated/2`` but only via ``z_context:get_q/2``.
-
-.. seealso:: :ref:`guide-validators`

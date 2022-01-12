@@ -14,6 +14,8 @@ Dispatch rules are also used for the reverse action of generating request URLs
 in your templates and Erlang code. As long as you use dispatch rules in your
 application, you don’t have to hard-code request URLs.
 
+.. seealso:: :ref:`mod_custom_redirect`, :ref:`mod_base`
+
 Defining dispatch rules
 -----------------------
 
@@ -130,18 +132,24 @@ In templates
 ^^^^^^^^^^^^
 
 To generate URLs in templates, use the :ref:`url tag <tag-url>` and pass the
-dispatch rule name::
+dispatch rule name:
+
+.. code-block:: django
 
     {% url home %}
 
-And with dispatch rule arguments::
+And with dispatch rule arguments:
+
+.. code-block:: django
 
     {% url collection id=123 slug="nice-slug-you-got-there" %}
 
 which gives: ``/collection/123/nice-slug-you-got-there``.
 
 Any arguments that are not defined in the dispatch rule are appended as query
-string parameters, so::
+string parameters, so:
+
+.. code-block:: django
 
     {% url features var=1 x="hello" %}
 
@@ -284,4 +292,3 @@ needs. ControllerArgs is effective for establishing implementation
 details like the template to be used, whether or not to do caching and
 where to load static resources from.
 
-.. seealso:: :ref:`mod_custom_redirect`, :ref:`mod_base`

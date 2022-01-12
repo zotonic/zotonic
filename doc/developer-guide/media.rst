@@ -46,7 +46,7 @@ tag::
 
     {% image id %}
 
-You can also add inline :ref:`parameters <tag-image-arguments>`:
+You can also add inline :ref:`parameters <tag-image-arguments>`::
 
     {% image id width=200 height=200 crop %}
 
@@ -57,7 +57,7 @@ To render embedded media, use the :ref:`filter-show_media` filter::
 .. _guide-media-classes:
 
 Media classes
-^^^^^^^^^^^^^
+-------------
 
 Instead of inline image tag parameters, you can use media classes to define
 image transformations. The advantage is that this image definition can then be
@@ -87,7 +87,8 @@ regenerated to reflect the new media class.
 
 
 Responsive images
-"""""""""""""""""
+^^^^^^^^^^^^^^^^^
+
 To provide images in multiple `responsive sizes`_, use the ``srcset`` attribute::
 
     %% templates/mediaclass.config
@@ -130,7 +131,7 @@ descriptor by adding::
     {"2x", [{width, 2000}]}
 
 Raw ImageMagick options
-"""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Besides the normal image processing options, as described in :ref:`tag-image`,
 it is possible to add literal ImageMagick convert commands to the mediaclass

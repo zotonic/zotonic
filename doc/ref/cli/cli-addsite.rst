@@ -66,7 +66,7 @@ Will print out the following:
   Site URL: http://myfirstblog.test:8000/
 
   Skeleton site: blog
-  Site directory: /home/user/zotonic/user/sites/myfirstblog
+  Site directory: /home/user/zotonic/apps_user/myfirstblog
   Admin password: admin
 
   Database host: 127.0.0.1

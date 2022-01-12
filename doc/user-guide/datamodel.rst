@@ -71,6 +71,8 @@ given id. See the :ref:`model-rsc` model for more details on this.
 Pages
 -----
 
+.. seealso:: :ref:`resources <guide-datamodel-resources>` in the Developer Guide
+
 Resources are the main building block of Zotonic's data model.
 For simplicity of communication, a resource is often referred to as a page.
 Every resource usually has its own page on the web site, which is the
@@ -111,10 +113,6 @@ page_path         The page’s URL on the site. Defaults to ``/page/{id}/{slug}`
 category_id       The category of the resource (see below)
 ================= ================================================================
 
-.. seealso::
-
-    :ref:`resources <guide-datamodel-resources>` in the Developer Guide
-
 .. _guide-datamodel-categories:
 
 Categories
@@ -147,6 +145,8 @@ For example:
 Edges
 -----
 
+.. seealso:: :ref:`model-edge`
+
 An :term:`edge` is a labeled connection between two resources.
 
 The ``edge`` table defines these relations between resources. It does
@@ -161,12 +161,12 @@ This is to simplify the access control: if you are allowed to edit the
 resource, you’re also allowed to edit its `outgoing` edges ("Page
 connections" in the admin), creating connections to other resources.
 
-.. seealso:: :ref:`model-edge`
-
 .. _guide-datamodel-edge-predicates:
 
 Predicates
 ----------
+
+.. seealso:: :ref:`model-predicate`
 
 Edges have a label: like in :ref:`guide-datamodel-example`, `author`
 is a :term:`predicate` of an edge which denotes that a certain
@@ -190,8 +190,6 @@ Examples of predicates:
  * depiction (from any page to an image)
  * relation (non defined relation between two pages)
  * hasdocument (page has an attached document)
-
-.. seealso:: :ref:`model-predicate`
 
 
 .. todo:: document categories, predicates and resources

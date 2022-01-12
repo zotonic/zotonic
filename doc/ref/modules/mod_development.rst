@@ -62,11 +62,11 @@ With this it is possible to see for a request path which dispatch rules are matc
 Automatic recompilation
 -----------------------
 
+.. note:: The system can only scan for changed files if either ``inotify-tools`` or ``fswatch`` is installed.
+
 The core Zotonic system starts either ``inotify-tools`` or ``fswatch``, depending on
 which one is available. You have to install one of these to enable auto-compile
 and auto-load of changed files.
-
-.. note:: The system can only scan for changed files if either ``inotify-tools`` or ``fswatch`` is installed.
 
 See below for platform-specific installation instructions.
 

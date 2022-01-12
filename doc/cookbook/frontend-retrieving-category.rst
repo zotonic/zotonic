@@ -23,8 +23,10 @@ Readers are assumed to be comfortable with template development.
 How
 ---
 
-Since category is a direct property of m_rsc we can directly access it::
+Since category is a direct property of m_rsc we can directly access it:
 
-  {% with id.category as my_cat %} 
+.. code-block:: django
+
+  {% with id.category as my_cat %}
     ...
   {% endwith %}

@@ -24,7 +24,9 @@ How
 ---
 
 To be able to update a form field, you need to pass the id of the
-element you want to update to the dialog. It may look something like::
+element you want to update to the dialog. It may look something like:
+
+.. code-block:: django
 
   {% button text="Update field dialog"
           action={dialog_open
@@ -33,7 +35,9 @@ element you want to update to the dialog. It may look something like::
                   target_id="input_element_id"}
   %}
 
-Then create your dialog template, my_dialog.tpl in this example, and wire a set_value action to update the input form element::
+Then create your dialog template, my_dialog.tpl in this example, and wire a set_value action to update the input form element:
+
+.. code-block:: django
 
   <a id="my_anchor" href="javascript:void(0)" href="javascript:void(0)">Click here to update form value</a>
   {% wire id="my_anchor"
@@ -42,13 +46,12 @@ Then create your dialog template, my_dialog.tpl in this example, and wire a set_
           action={dialog_close}
   %}
 
+.. seealso:: :ref:`guide-template-autoids`
+
 If you include a template like the one above into your dialog template
 many times (i.e. from a for loop), then having fixed ids are no
 good. To prefix the id with a unique value (per invocation of the
 template) prefix the id with a ``#``-sign. so the a-tag becomes ``<a
 id={{#my_anchor}}…`` and the wire becomes ``wire id=#my_anchor…`` which will
 expand to something like ``"ubifgt-my_anchor"``.
-
-
-.. seealso:: :ref:`guide-template-autoids`
 

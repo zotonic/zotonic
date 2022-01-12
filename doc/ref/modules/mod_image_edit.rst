@@ -1,5 +1,6 @@
 
 .. include:: meta-mod_image_edit.rst
+.. seealso:: :ref:`tag-image`, :ref:`tag-image-arguments`
 
 Non destructive edits of images.
 
@@ -24,6 +25,4 @@ The original image stays untouched. Downloads will download the original image.
 
 If the original image should be used for a preview then pass the ``original`` argument to the ``{% image %}`` tag
 options.
-
-.. seealso:: :ref:`tag-image`, :ref:`tag-image-arguments`
 

@@ -3,6 +3,8 @@
 Authentication notifications
 ----------------------------
 
+.. seealso:: :ref:`user_is_enabled`
+
 .. toctree::
    :maxdepth: 1
    :glob:
@@ -18,7 +20,3 @@ Authentication notifications
    notification/auth_reset
    notification/auth_validate
    notification/auth_validated
-
-.. seealso::
-
-    :ref:`user_is_enabled`

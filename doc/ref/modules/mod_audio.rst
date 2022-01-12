@@ -1,6 +1,8 @@
 
 .. include:: meta-mod_audio.rst
 
+.. seealso:: :ref:`mod_video`, :ref:`mod_video_embed`, :ref:`tag-media`
+
 Adds support for viewing and handling audio medium items.
 
 This module parses audio files and extracts tags and an optional image from the audio file.
@@ -49,7 +51,4 @@ admin:
 
 If there is no resource title given when creating the audio page then the title
 from the tags is used. If that one is empty then the file’s basename is used.
-
-
-.. seealso:: :ref:`mod_video`, :ref:`mod_video_embed`, :ref:`tag-media`
 

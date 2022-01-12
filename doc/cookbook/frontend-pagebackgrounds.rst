@@ -23,7 +23,9 @@ How
 ---
 
 Now, the most obvious way to implement these backgrounds would be to
-attach a media item to a page and something along the lines of::
+attach a media item to a page and something along the lines of:
+
+.. code-block:: django
 
   {% if id.medium %}
     {% media id.medium %}

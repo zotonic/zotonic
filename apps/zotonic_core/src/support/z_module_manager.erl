@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2020 Marc Worrell
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Module manager, starts/restarts a site's modules.
 
-%% Copyright 2009-2020 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -45,13 +45,14 @@
     module_to_app/1,
     is_provided/2,
     get_provided/1,
-    get_provided/0,
-    get_depending/0,
+    scan_provided/1,
+    scan_depending/1,
     get_modules/1,
     get_modules_status/1,
     get_upgrade_status/1,
     whereis/2,
     all/1,
+    scan/1,
     scan/0,
     prio/1,
     prio_sort/1,
@@ -69,14 +70,14 @@
                        | {upgrade, integer()}.
 
 -type module_status() :: new
-                     | starting
-                     | running
-                     | stopping
-                     | restarting
-                     | retrying
-                     | failed
-                     | stopped
-                     | removing.
+                       | starting
+                       | running
+                       | stopping
+                       | restarting
+                       | retrying
+                       | failed
+                       | stopped
+                       | removing.
 
 -record(module_status, {
     module :: atom(),
@@ -260,7 +261,7 @@ activate(Module, IsSync, #context{site=Module} = Context) ->
     activate_1(Module, IsSync, Context);
 activate(Module, IsSync, Context) ->
     flush(Context),
-    case proplists:is_defined(Module, scan()) of
+    case proplists:is_defined(Module, scan(Context)) of
         true -> activate_1(Module, IsSync, Context);
         false ->
             z:error(
@@ -424,8 +425,8 @@ get_provided(Context) ->
 
 
 %% @doc Return a table with per provision which modules provide it.
--spec get_provided() -> #{ atom() := [ atom() ]}.
-get_provided() ->
+-spec scan_provided( z:context() ) -> #{ atom() := [ atom() ]}.
+scan_provided(Context) ->
     lists:foldl(
         fun({Module, _App, _Dir}, Acc) ->
             {_Mod, _Deps, Provs} = dependencies(Module),
@@ -438,11 +439,11 @@ get_provided() ->
                 lists:usort( [ Module | Provs ] ))
         end,
         #{},
-        scan()).
+        scan(Context)).
 
 %% @doc Return a table with per dependeny which modules depend on it.
--spec get_depending() -> #{ atom() := [ atom() ]}.
-get_depending() ->
+-spec scan_depending( z:context() ) -> #{ atom() := [ atom() ]}.
+scan_depending(Context) ->
     lists:foldl(
         fun({Module, _App, _Dir}, Acc) ->
             {_Mod, Deps, _Provs} = dependencies(Module),
@@ -455,7 +456,7 @@ get_depending() ->
                 lists:usort( Deps ))
         end,
         #{},
-        scan()).
+        scan(Context)).
 
 
 %% @doc Return the status of all running modules.
@@ -484,6 +485,16 @@ all(Context) ->
             Context),
     [ z_convert:to_atom(M) || {M} <- Modules ].
 
+
+%% @doc Scan for a list of modules and the current site. A module is always an OTP application,
+-spec scan( z:context() ) -> [ {Module :: atom(), Application :: atom(), Dir :: file:filename_all()} ].
+scan(Context) ->
+    Modules = scan(),
+    Site = z_context:site(Context),
+    [
+        {Site, Site, code:lib_dir(Site)}
+        | Modules
+    ].
 
 %% @doc Scan for a list of modules. A module is always an OTP application,
 %% the name of the application is similar to the name of the module.

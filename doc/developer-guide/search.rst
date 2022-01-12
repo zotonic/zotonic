@@ -19,6 +19,11 @@ date, newest first::
 Trying it out
 -------------
 
+.. note::
+
+   ``mod_atom_feed`` automatically sorts on last-modified date,
+   ``api/model/search/get`` doesn't.
+
 Of course you can create your own ``for``-loop in a template, but
 there are easier ways to check out the inner workings of the
 query model: through your browser.
@@ -34,11 +39,6 @@ https://zotonic.com/api/model/search/get?qcat=documentation
 Get a feed of most recent documentation containing the word "filter":
 
 https://zotonic.com/feed/search?cat=documentation&text=filter
-
-.. note::
-
-   ``mod_atom_feed`` automatically sorts on last-modified date,
-   ``api/model/search/get`` doesn't.
 
 
 Query arguments
@@ -327,6 +327,8 @@ model. Example sorting on modification date, newest first::
 pivot.name
 ^^^^^^^^^^
 
+.. seealso:: :ref:`cookbook-custom-pivots`
+
 Filter on the named pivot of the rsc table. The name is prefixed with ``pivot_``.
 
 Available pivot fields are:
@@ -351,7 +353,6 @@ Available pivot fields are:
 
 These fields can also be used in ``filter`` and the ``sort`` terms.
 
-.. seealso:: :ref:`cookbook-custom-pivots`
 
 pivot.mypivot.name
 ^^^^^^^^^^^^^^^^^^
@@ -424,11 +425,11 @@ Use prefix ``id:`` to find specific resources by id or name::
 query_id
 ^^^^^^^^
 
+.. seealso:: :ref:`guide-query-resources`
+
 Load the query arguments from the saved ``query`` resource:
 
 ``query_id=331``
-
-.. seealso:: :ref:`guide-query-resources`
 
 qargs
 ^^^^^
@@ -559,6 +560,14 @@ distinct categories with a single search query.
 Query resources
 ---------------
 
+.. seealso::
+
+    - :ref:`mod_search` reference: Zotonic’s built-in search module.
+    - `mod_elasticsearch <https://github.com/driebit/mod_elasticsearch>`_
+      on using Elasticsearch with Zotonic.
+    - `mod_search_solr <https://github.com/arjan/mod_search_solr>`_ on
+      using Solr for search.
+
 Query resources are, as the name implies,
 :ref:`guide-datamodel-resources` of the special category `query`. In
 the admin this category is called "search query". it is basically a
@@ -571,11 +580,3 @@ edit page an extra text field in which you can add search terms. Each
 search term goes on its own line, and the possible search terms are
 equal to the ones described on this page (the `Query-model
 arguments`).
-
-.. seealso::
-
-    - :ref:`mod_search` reference: Zotonic’s built-in search module.
-    - `mod_elasticsearch <https://github.com/driebit/mod_elasticsearch>`_
-      on using Elasticsearch with Zotonic.
-    - `mod_search_solr <https://github.com/arjan/mod_search_solr>`_ on
-      using Solr for search.

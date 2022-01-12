@@ -24,7 +24,7 @@ Fetching all configurations
 It is easy to loop over all site configurations::
 
     {% for key, value in m.site %}
-      {{ key }} -- {{ value }} <br />
+      {{ key }} -- {{ value }} <br>
     {% endfor %}
 
 Overriding config values

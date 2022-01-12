@@ -1,5 +1,6 @@
 .. highlight:: django
 .. include:: meta-timesince.rst
+.. seealso:: :ref:`filter-date`, :ref:`tag-now`
 
 Show a readable version of a date/time difference.
 
@@ -39,7 +40,3 @@ Show the time between creation and modification of a resource::
 This might display something like::
 
    10 days
-
-
-
-.. seealso:: :ref:`filter-date`, :ref:`tag-now`

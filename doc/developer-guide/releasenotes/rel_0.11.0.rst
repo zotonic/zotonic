@@ -3,13 +3,12 @@
 Release 0.11.0
 ==============
 
-Welcome Zotonic 0.11.0, released on October 8, 2014. These notes list
-the most important changes for this new feature release.
-
 .. note:: For upgrading to this release from an older Zotonic release, please
           read the :ref:`upgrade-notes` carefully, as some backward-incompatible
           changes have been made.
 
+Welcome Zotonic 0.11.0, released on October 8, 2014. These notes list
+the most important changes for this new feature release.
 
 Full timezone support
 ---------------------

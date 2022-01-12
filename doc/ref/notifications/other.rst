@@ -16,7 +16,6 @@ Other notifications
    notification/cors_headers
    notification/debug
    notification/debug_stream
-   notification/dispatch
    notification/dropbox_file
    notification/filewatcher
    notification/hierarchy_updated

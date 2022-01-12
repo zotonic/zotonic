@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-datediff.rst
 
+.. seealso:: :ref:`filter-date`
+
 Calculate the difference between two dates, returning a single part of
 that difference.
 
@@ -16,4 +18,3 @@ Example, where start = 2012-02-02, end = 2012-03-01::
 
 Returns `1`, since the difference in months between those 2 dates is 1.
 
-.. seealso:: :ref:`filter-date`

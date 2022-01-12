@@ -5,6 +5,13 @@
 Server configuration
 ====================
 
+.. seealso::
+
+    * See :ref:`cookbook-exometer` on how to monitor your Zotonic system.
+
+    * For general Erlang troubleshooting, Fred Hebert’s free ebook
+      `Stuff goes bad: Erlang in anger`_ is a very good resource.
+
 This chapter describes how to configure your Linux server for running Zotonic.
 
 .. _file-descriptors:
@@ -86,12 +93,6 @@ stay in the conntrack table for 5(!) days. To change this:
 If you have a proxy in front of Zotonic (e.g. HAProxy or Varnish), you need to
 change the limits on the proxy, too.
 
-.. seealso::
-
-    * See :ref:`cookbook-exometer` on how to monitor your Zotonic system.
-
-    * For general Erlang troubleshooting, Fred Hebert’s free ebook
-      `Stuff goes bad: Erlang in anger`_ is a very good resource.
 
 .. _`Stuff goes bad: Erlang in anger`: https://www.erlang-in-anger.com
 .. _overflow your conntrack table: http://antmeetspenguin.blogspot.nl/2011/01/high-performance-linux-router.html

@@ -1,5 +1,6 @@
 .. highlight:: django
 .. include:: meta-rand.rst
+.. seealso:: :ref:`filter-randomize`, :ref:`filter-random`
 
 Generates a random number.  The number is from, and including, 1 up
 to, and including, the input value.
@@ -18,6 +19,4 @@ and including, the input value::
   {{ "4.0"|rand|format_number }}
 
 Might output “3.1415926536”
-
-.. seealso:: :ref:`filter-randomize`, :ref:`filter-random`
 

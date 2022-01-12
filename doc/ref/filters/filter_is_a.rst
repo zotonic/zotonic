@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-is_a.rst
 
+.. seealso:: :ref:`filter-is_not_a`, :ref:`filter-is_visible`, :ref:`filter-filter`
+
 Filter a list of resource ids on category, or test if a single
 resource id belongs to a category.
 
@@ -41,5 +43,3 @@ This will list all collection members that are a person. While::
   {% endfor %}
 
 Lists only the first three collection members that are a person.
-
-.. seealso:: :ref:`filter-is_not_a`, :ref:`filter-is_visible`, :ref:`filter-filter`

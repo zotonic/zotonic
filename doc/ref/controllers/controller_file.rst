@@ -1,5 +1,6 @@
-
+.. highlight:: django
 .. include:: meta-file.rst
+.. seealso:: :ref:`controller-file_id`, :ref:`tag-lib`, :ref:`tag-image`, :ref:`tag-image_url`
 
 Serve an uploaded-, resized- or library file.
 
@@ -78,15 +79,12 @@ take a while before they are visible for new requests.
 CSS and JavaScript templates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If a file with a `lib` or `template` root is not found, then the same filename with the 
+.. note:: ``controller_file`` replaces ``controller_file_readonly`` and ``controller_lib``
+
+If a file with a `lib` or `template` root is not found, then the same filename with the
 addition of `.tpl` is checked. For example `styles.css.tpl`.
 If found then the template will be rendered against an empty site context.
 This means that, with the current implementation, the template will not receive the
 current language, user etc. This behavior may change in the future.
-
-
-.. note:: ``controller_file`` replaces ``controller_file_readonly`` and ``controller_lib``
-
-.. seealso:: :ref:`controller-file_id`, :ref:`tag-lib`, :ref:`tag-image`, :ref:`tag-image_url`
 
 .. versionadded:: 0.11

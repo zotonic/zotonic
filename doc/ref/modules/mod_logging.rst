@@ -1,5 +1,8 @@
 
 .. include:: meta-mod_logging.rst
+.. seealso::
+
+    For regular application logging, use :ref:`Lager <dev-logging>` instead.
 
 Logs messages to the database and adds log views to the admin.
 
@@ -36,9 +39,5 @@ E-mail log
 The e-mail log is a separate view, which lists which email messages
 have been sent to which recipients. Any mail that gets sent gets
 logged here.
-
-.. seealso::
-
-    For regular application logging, use :ref:`Lager <dev-logging>` instead.
 
 .. todo:: Add more documentation

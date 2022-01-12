@@ -1,12 +1,12 @@
 
 .. include:: meta-mod_admin_category.rst
 
+.. note:: This module requires the presence of :ref:`mod_menu` for the
+          required JavaScript files which make up the menu editor.
+
 Add support for editing :ref:`guide-datamodel-categories` in the
 admin, by presenting an editable category tree at
 ``http://yoursite.com/admin/category``.
-
-.. note:: This module requires the presence of :ref:`mod_menu` for the
-          required JavaScript files which make up the menu editor.
 
 ACL permissions
 ---------------

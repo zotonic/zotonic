@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-is_undefined.rst
 
+.. seealso:: :ref:`filter-is_defined`, :ref:`filter-if_undefined`, :ref:`filter-if`
+
 Tests if a value is undefined.
 
 Checks if the value is empty and outputs a boolean true or false.
@@ -11,5 +13,3 @@ For example::
   {% if value|is_undefined %}The value was undefined{% endif %}
 
 When the value is “” then the output “The value was undefined”.
-
-.. seealso:: :ref:`filter-is_defined`, :ref:`filter-if_undefined`, :ref:`filter-if`

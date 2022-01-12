@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-is_not_a.rst
 
+.. seealso:: :ref:`filter-is_a`, :ref:`filter-is_visible`, :ref:`filter-filter`
+
 is_not_a mirrors :ref:`filter-is_a`. It is particularly useful when
 iterating over a category and excluding members of a sub-category
 (iterating over all images associated with a page except images in the
@@ -12,6 +14,4 @@ thumbnail resources::
   {% for m in m.rsc[id].media|is_not_a:"thumbnail" %}
   ...
   {% endfor %}
-
-.. seealso:: :ref:`filter-is_a`, :ref:`filter-is_visible`, :ref:`filter-filter`
 

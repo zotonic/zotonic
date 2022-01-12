@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-is_rtl.rst
 
+.. seealso:: :ref:`filter-language_dir`, :ref:`filter-language`
+
 Check if the given language is a rtl or ltr language.
 
 Example::
@@ -11,6 +13,4 @@ Example::
 
 It currently returns ``true`` only for Arabic (``ar``), Farsi (``fa``)
 and Hebrew (``he``).
-
-.. seealso:: :ref:`filter-language_dir`, :ref:`filter-language`
 

@@ -5,6 +5,8 @@
 lib
 ===
 
+.. seealso:: :ref:`mod_development`.
+
 Combine css and javascript includes in a single request.
 
 Generates a ``<link />`` or ``<script />`` element for including the
@@ -58,5 +60,3 @@ Accepted arguments are:
 |async            |             |Load css or javascript asynchronously, use as            |
 |                 |             | ``{% lib ... async %}``                                 |
 +-----------------+-------------+---------------------------------------------------------+
-
-.. seealso:: :ref:`mod_development`.

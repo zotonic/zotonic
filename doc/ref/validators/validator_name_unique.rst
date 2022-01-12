@@ -1,5 +1,6 @@
 .. highlight:: django
 .. include:: meta-name_unique.rst
+.. seealso:: :ref:`guide-validators`, :ref:`validator-username_unique`
 
 A :ref:`validator <guide-validators>` to check whether a resource’s name is
 unique::
@@ -18,6 +19,3 @@ You can also pass a ``failure_message``::
 
     <input type="text" id="name" name="name" value="" />
     {% validate id="name" type={name_unique id=id failure_message=_"Eek! Already used!"} %}
-
-
-.. seealso:: :ref:`guide-validators`, :ref:`validator-username_unique`

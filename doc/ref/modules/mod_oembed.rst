@@ -1,5 +1,6 @@
 
 .. include:: meta-mod_oembed.rst
+.. seealso:: :ref:`mod_video_embed`, :ref:`mod_video`, :ref:`mod_audio`, :ref:`tag-media`
 
 Makes media :term:`resources <resource>` from embeddable URLs through
 the `OEmbed <http://www.oembed.com/>`_ protocol.
@@ -67,7 +68,4 @@ The following :ref:`model-config` options are supported:
   Requests the OEmbed service to return an HTML embed code with the
   requested maximum height. Not set by default.
 
-
-
-.. seealso:: :ref:`mod_video_embed`, :ref:`mod_video`, :ref:`mod_audio`, :ref:`tag-media`
 

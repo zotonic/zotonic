@@ -166,7 +166,7 @@ locate_source_module_indexer(ModuleIndex, _Path, OriginalFile, undefined, Contex
             end
     end;
 locate_source_module_indexer(ModuleIndex, Path, OriginalFile, Filters, Context) ->
-    case locate_in_filestore(Path, z_path:media_preview(Context), #{}, Context) of
+    case locate_in_filestore(Path, z_path:media_preview(Context), true, #{}, Context) of
         {ok, Part} ->
             {ok, Part};
         {error, enoent} ->
@@ -190,19 +190,24 @@ locate_source_uploaded(Path, OriginalFile, Filters, Context) ->
     end.
 
 locate_source_uploaded_1(Medium, _Path, OriginalFile, undefined, Context) ->
-    locate_in_filestore(OriginalFile, z_path:media_archive(Context), Medium, Context);
+    locate_in_filestore(OriginalFile, z_path:media_archive(Context), false, Medium, Context);
 locate_source_uploaded_1(Medium, Path, OriginalFile, Filters, Context) ->
-    case locate_in_filestore(Path, z_path:media_preview(Context), Medium, Context) of
+    case locate_in_filestore(Path, z_path:media_preview(Context), true, Medium, Context) of
         {ok, Part} ->
             {ok, Part};
         {error, enoent} ->
             maybe_generate_preview(Path, OriginalFile, Filters, Medium, Context)
     end.
 
-locate_in_filestore(Path, InDir, Medium, Context) ->
+locate_in_filestore(Path, InDir, IsPreview, Medium, Context) ->
     FSPath = z_convert:to_binary(filename:join(filename:basename(InDir), Path)),
     OptRscId = maps:get(<<"id">>, Medium, undefined),
-    OptMime = maps:get(<<"mime">>, Medium, undefined),
+    OptMime = case IsPreview of
+        true ->
+            z_media_identify:guess_mime(Path);
+        false ->
+            maps:get(<<"mime">>, Medium, undefined)
+    end,
     case z_notifier:first(#filestore{action=lookup, path=FSPath}, Context) of
         {ok, {filezcache, Pid, #{ created := Created, size := Size }}} when is_pid(Pid) ->
             {ok, #part_cache{
@@ -330,7 +335,7 @@ convert_error_part(Medium, PreviewFilePath, Filters, Context) ->
 
 
 fetch_archive(File, Context) ->
-    case locate_in_filestore(File, z_path:media_archive(Context), #{}, Context) of
+    case locate_in_filestore(File, z_path:media_archive(Context), false, #{}, Context) of
         {ok, #part_file{filepath=Filename}} ->
             {ok, Filename};
         {ok, #part_cache{cache_pid=Pid}} ->

@@ -1,5 +1,5 @@
-
 .. include:: meta-rsc_gone.rst
+.. seealso:: :ref:`guide-datamodel`, :ref:`model-rsc`
 
 This model tracks deleted resources (see :ref:`model-rsc`). Its
 primary goal is to be able to determine if a resource never existed,
@@ -53,5 +53,3 @@ The following properties are saved:
 +-------------------+-----------------------------------------------------+--------------------------------+
 |modified           |The date the resource was deleted.                   |{{2012,12,5},{23,59,59}}        |
 +-------------------+-----------------------------------------------------+--------------------------------+
-
-.. seealso:: :ref:`guide-datamodel`, :ref:`model-rsc`

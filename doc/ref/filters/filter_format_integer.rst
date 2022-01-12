@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-format_integer.rst
 
+.. seealso:: :ref:`filter-to_integer`, :ref:`filter-format_number`, :ref:`filter-format_price`, :ref:`filter-format_duration`
+
 Show an integer value.
 
 Formats an integer value as a list, assuming a radix of ten.
@@ -23,5 +25,3 @@ Will output ``00123``.  And when the number does not fit::
 Will output "**".
 
 **Note:** This option only works for positive integers.
-
-.. seealso:: :ref:`filter-to_integer`, :ref:`filter-format_number`, :ref:`filter-format_price`, :ref:`filter-format_duration`

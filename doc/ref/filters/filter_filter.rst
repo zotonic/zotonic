@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-filter.rst
 
+.. seealso:: :ref:`filter-is_visible`, :ref:`filter-is_a`, :ref:`filter-exclude`
+
 Filters a list on the value of a property, either on presence or equality.
 
 Testing presence
@@ -31,6 +33,3 @@ A second argument can be added to test on equality::
 
 Shows all elements whose ``title`` property is "Untitled".
 
-
-
-.. seealso:: :ref:`filter-is_visible`, :ref:`filter-is_a`, :ref:`filter-exclude`

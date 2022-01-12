@@ -1,6 +1,6 @@
-
+.. highlight:: django
 .. include:: meta-presence.rst
-
+.. seealso:: :ref:`guide-validators`
 
 Check if an input has been filled in or checked.
 
@@ -18,5 +18,3 @@ Argument         Description                               Example
 failure_message  Message to be shown when field is empty.
                  Defaults to "*"                           ``failure_message="Please enter."``
 ===============  ========================================  =======
-
-.. seealso:: :ref:`guide-validators`

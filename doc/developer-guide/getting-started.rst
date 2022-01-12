@@ -9,6 +9,11 @@ Zotonic container. Or you can install Zotonic on your computer.
 Docker
 ------
 
+.. seealso::
+
+    :ref:`guide-docker` for more information on using Docker and how to find the
+    password for the Zotonic status site.
+
 First `download and install Docker`_ . Then build and start Zotonic with a single
 command::
 
@@ -32,11 +37,6 @@ status site, type::
 The password is the *password* entry, the username is always ``wwwadmin``.
 
 You can now move on to :ref:`creating your first site <guide-create-site>`.
-
-.. seealso::
-
-    :ref:`guide-docker` for more information on using Docker and how to find the
-    password for the Zotonic status site.
 
 .. _guide-installation:
 
@@ -81,6 +81,10 @@ The server can be stopped and started using the command line::
 Installation
 ------------
 
+.. seealso::
+    a more extensive discussion of
+    :ref:`all requirements <installation-preinstall>`
+
 If you don’t like Docker, or you like to do things yourself, you can always
 install Zotonic on your computer yourself.
 
@@ -95,10 +99,6 @@ First prepare your system for running Zotonic. Zotonic needs:
 * Git for pulling in external dependencies
 * C++ compiler (gcc) for erl_exec and other dependencies
 * FFmpeg if you want to use video
-
-.. seealso::
-    a more extensive discussion of
-    :ref:`all requirements <installation-preinstall>`
 
 
 Ubuntu / Debian

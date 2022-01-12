@@ -1,6 +1,6 @@
-
+.. highlight:: django
 .. include:: meta-insert_bottom.rst
-
+.. seealso:: actions :ref:`action-insert_after`, :ref:`action-insert_before`, :ref:`action-insert_top` and :ref:`action-update`.
 
 Inserts HTML after the contents of an HTML element.
 
@@ -19,5 +19,3 @@ Another example, now rendering a template::
    {% button text="hello" action={insert_bottom target="mylist" template="_list_item.tpl" id=42} %}
 
 This insert the output of the template `_list_item.tpl` below the existing `<li/>`.  All arguments to the update action are also arguments to the template.
-
-.. seealso:: actions :ref:`action-insert_after`, :ref:`action-insert_before`, :ref:`action-insert_top` and :ref:`action-update`.

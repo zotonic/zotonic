@@ -3,6 +3,9 @@
 Custom pivots
 =============
 
+.. seealso:: :ref:`custompivot` search argument for filtering on custom pivot columns.
+.. seealso:: :ref:`cookbook-pivot-templates` to change the content of regular pivot columns and search texts.
+
 :ref:`guide-datamodel-query-model` can only sort and filter on
 :ref:`resources <guide-datamodel-resources>` that actually have a database
 column. Zotonic's resources are stored in a serialized form. This
@@ -54,8 +57,3 @@ Or you can filter on it:
 
   {% with m.search.paged[{query filter=["pivot.pivotname.requestor", `=`, "hello"]}]
      as result %}
-
-.. seealso::
-
-    * :ref:`custompivot` search argument for filtering on custom pivot columns.
-    * :ref:`cookbook-pivot-templates` to change the content of regular pivot columns and search texts.

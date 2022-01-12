@@ -3,6 +3,8 @@
 Create a custom controller
 ==========================
 
+.. seealso:: :ref:`guide-controllers` in the Developer Guide
+
 Zotonic comes with a large collection :ref:`controllers <guide-controllers>`
 that cover many use cases, so you’ll probably have to resort to custom
 controllers less often than you may be used to from other web frameworks. Still,
@@ -92,7 +94,3 @@ Try it out on the command line:
 
     # prints:
     Thank you posting, David
-
-.. seealso::
-
-    * :ref:`guide-controllers` in the Developer Guide

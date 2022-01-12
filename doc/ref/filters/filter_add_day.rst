@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-add_day.rst
 
+.. seealso:: :ref:`filter-sub_day`, :ref:`filter-add_week`, :ref:`filter-add_month`, :ref:`filter-add_year`
+
 Adds a day to a date. The value must be of the form ``{{Y,M,D},{H,I,S}}``.
 
 For example::
@@ -14,5 +16,3 @@ The filter has an optional argument which defines the number of days to add::
   {{ value|add_day:3 }}
 
 When the value is ``{{2008,12,10},{15,30,0}}``, the output is ``{{2008,12,13},{15,30,0}}``.
-
-.. seealso:: :ref:`filter-sub_day`, :ref:`filter-add_week`, :ref:`filter-add_month`, :ref:`filter-add_year`

@@ -44,7 +44,7 @@ Google Analytics
 ^^^^^^^^^^^^^^^^
 
 To enable `Google Universal Analytics`_ tracking on your Zotonic website, go to
-``http://yoursite/admin/seo`` in your browser and enter your Google Analytics
+``https://yoursite/admin/seo`` in your browser and enter your Google Analytics
 tracking code.
 
 Zotonic does not automatically supports the `User ID Analytics feature`_. You have to `enable User ID`_ in your Analytics
@@ -61,7 +61,7 @@ account and override the ``_ga_params.tpl`` template to add the parameter::
     }
 
 Extra parameters
-""""""""""""""""
+^^^^^^^^^^^^^^^^
 
 If you wish to add extra `Google Analytics parameters`_, override the
 ``_ga_params.tpl`` file and add the parameters::

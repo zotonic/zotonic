@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-format_duration.rst
 
+.. seealso:: :ref:`filter-format_number`, :ref:`filter-format_integer`, :ref:`filter-format_price`
+
 Show a duration in hours, minutes and seconds.
 
 Takes as input a number representing a number of seconds.
@@ -18,5 +20,3 @@ And::
 
 Will ouput ``1h0m1s``.
 
-
-.. seealso:: :ref:`filter-format_number`, :ref:`filter-format_integer`, :ref:`filter-format_price`

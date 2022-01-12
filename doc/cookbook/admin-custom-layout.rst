@@ -30,7 +30,9 @@ Content parts
 
 We won't change the default Zotonic edit template; instead we will override it by adding the category to the filename.
 
-Create a file ``_admin_edit_main_parts.webshop.tpl`` and give it the contents::
+Create a file ``_admin_edit_main_parts.webshop.tpl`` and give it the contents:
+
+.. code-block:: django
 
     {% all catinclude "_admin_edit_basics.tpl" id is_editable=is_editable languages=languages %}
     {% all catinclude "_admin_edit_content.tpl" id is_editable=is_editable languages=languages %}
@@ -48,7 +50,9 @@ For the sidebar area you can follow the same procedure. Of course you need to ke
 Category and instance
 ---------------------
 
-To show a block on a category edit page, but not on an instance of that category, check for ``id.is_a.meta``. To show the block "Features" on the category page we write::
+To show a block on a category edit page, but not on an instance of that category, check for ``id.is_a.meta``. To show the block "Features" on the category page we write:
+
+.. code-block:: django
 
   {% if id.is_a.meta %}
   {% include "_admin_edit_meta_features.tpl" %}

@@ -29,7 +29,7 @@ Where “Sortables” is the list of sortables and “Sorter” is the sorter.  
 
 Where “tag” is the tag of the sortable or sorter, “delegate” is the module that handles the event and “id” is the HTML id of the sortable or sorter.
 
-.. note:: that when the tag is a string then the ``#dragdrop`` tag will be an atom.
+.. note:: If the tag is a string then the ``#dragdrop`` tag will be an atom.
 
 The sorter can have the following arguments:
 

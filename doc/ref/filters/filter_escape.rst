@@ -1,13 +1,6 @@
 .. highlight:: django
-
-.. index:: filter; escape
-   single: mod_base; filter, escape
-.. _filter-escape:
-
-escape
-======
-
-* Module: :ref:`mod_base`
+.. include:: meta-escape.rst
+.. seealso:: :ref:`filter-force_escape`, :ref:`filter-escape_check`
 
 HTML escape a text. Escapes all reserved HTML characters in the value.
 Escaped strings are safe to be displayed in a HTML page.  When you
@@ -41,5 +34,3 @@ For example::
 When the value is ``<hel&lo>`` then the output is ``&lt;hel&amp;lo&gt;``.
 
 Note: this filter is not part of a module, it is built into the template compiler.
-
-.. seealso:: :ref:`filter-force_escape`, :ref:`filter-escape_check`

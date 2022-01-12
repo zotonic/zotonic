@@ -42,7 +42,7 @@
     when SortKey :: {IsActive :: boolean(), 1 | 2, Name :: binary()}.
 all(Context) ->
     Active  = z_module_manager:active(Context),
-    Modules = z_module_manager:scan(),
+    Modules = z_module_manager:scan(Context),
     Descrs  = lists:map(
         fun({Module, App, Path}) ->
             ModProps = [

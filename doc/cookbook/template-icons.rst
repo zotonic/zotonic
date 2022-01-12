@@ -1,6 +1,8 @@
 Icons in templates
 ==================
 
+.. seealso:: :ref:`ref-icons` reference
+
 Zotonic provides a couple of ways to show icons in templates:
 
 * :ref:`mod_artwork` gives access to FontAwesome and Material Design icons.
@@ -35,6 +37,4 @@ Then use this syntax in your template HTML::
 For instance::
 
     <span class="z-icon z-icon-off"></span>
-
-.. seealso:: :ref:`ref-icons` reference
 

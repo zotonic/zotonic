@@ -11,7 +11,7 @@ Why
 
 Making a simple contact form might seem difficult, but with the smart
 application of different Zotonic techniques you'll see that it’s
-actually very easy.﻿
+actually very easy.
 
 1. Create the contact page URL dispatcher and template
 2. Create the contact form
@@ -28,11 +28,15 @@ How
 
 Create the contact page URL dispatcher and template
 
-The URL dispatcher is placed in ``user/sites/yoursite/dispatch/dispatch``. Add this line::
+.. note:: Your actual site location might be different, see the :term:`Zotonic user directory`.
+
+The URL dispatcher is placed in ``apps_user/yoursite/priv/dispatch/dispatch``. Add this line::
 
   {contact_url, ["contact"], controller_template, [ {template, "contact.tpl"} ]},
 
-This says that the page at "/contact" will use the "contact.tpl" template. Let’s create this template, at ``user/sites/yoursite/templates/contact.tpl``::
+This says that the page at "/contact" will use the "contact.tpl" template. Let’s create this template, at ``apps_user/yoursite/priv/templates/contact.tpl``:
+
+.. code-block:: django
 
   {% extends "base.tpl" %}
 
@@ -46,14 +50,14 @@ cache (to refresh the URL dispatchers) by going to "modules" ->
 http://yoursite:8000/contact. This should show the contact page with the
 template you just made.
 
-.. note:: Your actual site location might be different, see the :term:`Zotonic user directory`.
-
 Create the contact form
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 Now you should write the acual contact form. You should decide what
 fields you want in the form, so for now, just put a name, e-mail and
-comment field::
+comment field:
+
+.. code-block:: django
 
   {% wire id="contact-form" type="submit" postback={contact} delegate="my_contactform" %}
   <form id="contact-form" method="post" action="postback">
@@ -81,8 +85,10 @@ As you see in the :ref:`scomp-wire` statement in the contact form, the
 `delegate` argument is set to ``my_contactform``, which is
 the name of an erlang module which we still have to create. When the
 form submits, this module’s event/2 function gets called. Create a
-file ``user/sites/default/support/my_contactform.erl``
-with the following contents::
+file ``apps_user/yoursite/src/support/my_contactform.erl``
+with the following contents:
+
+.. code-block:: erlang
 
   -module(my_contactform).
   -export([event/2]).
@@ -108,11 +114,15 @@ recompile it using this command.
 E-mail the contents of the contact form to somebody
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. seealso:: :ref:`send-email`
+
 Using Zotonic’s email module, you can very easily send somebody an
 e-mail. Let’s create a simple template to send the contents of the
 form to the site administrator.
 
-Create the file ``user/sites/default/templates/_email_contact.tpl``::
+Create the file ``apps_user/yoursite/priv/templates/_email_contact.tpl``:
+
+.. code-block:: django
 
   <html>
     <head>
@@ -134,7 +144,9 @@ double as the e-mail’s subject, so be sure to include it!
 
 Now we have to change our ``event/2`` function to render this template and
 e-mail it using mod_emailer. Change the event function to the
-following::
+following:
+
+.. code-block:: erlang
 
   event(#submit{message={contact, []}}, Context) ->
     Vars = [{mail, z_context:get_q(<<"mail">>, Context)},
@@ -155,5 +167,3 @@ Zotonic, please see the mod_emailer documentation.
 Finally, this contact-form handler replaces the contact form with a
 ``<p>`` tag with a success message, using the ``z_render:update``
 function.
-
-.. seealso:: :ref:`send-email`

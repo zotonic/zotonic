@@ -5,6 +5,8 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+trim(undefined, _Context) ->
+    <<>>;
 trim(#trans{} = Tr, Context) ->
     trim(z_trans:lookup_fallback(Tr, Context), Context);
 trim(Input, _Context) ->

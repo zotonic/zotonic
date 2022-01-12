@@ -1,5 +1,6 @@
 
 .. include:: meta-mod_menu.rst
+.. seealso:: The filters :ref:`filter-menu_flat`, :ref:`filter-menu_subtree` and :ref:`filter-menu_trail`.
 
 Create nested navigation menus for your site.
              
@@ -30,8 +31,6 @@ contains the hierarchical menu editor.
 
 The menu resource that is accessible from the admin page (`Content` >
 `Menu`) is the resource with the unique name ``main_menu``.
-
-.. seealso:: The filters :ref:`filter-menu_flat`, :ref:`filter-menu_subtree` and :ref:`filter-menu_trail`.
 
 
 

@@ -1,4 +1,3 @@
-
 .. highlight:: django
 .. include:: meta-pickle.rst
 

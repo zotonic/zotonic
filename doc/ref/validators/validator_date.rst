@@ -1,8 +1,6 @@
 
 .. include:: meta-date.rst
 
-.. versionadded:: 0.8
-
 Validate input date against a given date format.
 
 A quick guide to validating a date in Zotonic:

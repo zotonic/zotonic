@@ -628,9 +628,9 @@ qterm({sort, Sort}, _Context) ->
     %% Order by a given field. Putting a '-' in front of the field name reverts the ordering.
     sort_term(Sort);
 qterm({asort, Sort}, _Context) ->
-    sort_term(Sort);
+    asort_term(Sort);
 qterm({zsort, Sort}, _Context) ->
-    sort_term(Sort);
+    zsort_term(Sort);
 qterm({{facet, Field}, <<"[", _>> = V}, Context) ->
     %% facet.foo=value
     %% Add a join with the search_facet table.
@@ -919,6 +919,17 @@ edge_alias() ->
 %       from=Search1#search_sql.from ++ ", hierarchy " ++ A
 %      }.
 
+zsort_term(Sort) ->
+    T = add_order(Sort, #search_sql_term{}),
+    #search_sql_term{
+        zsort = T#search_sql_term.sort
+    }.
+
+asort_term(Sort) ->
+    T = add_order(Sort, #search_sql_term{}),
+    #search_sql_term{
+        asort = T#search_sql_term.sort
+    }.
 
 sort_term(Sort) ->
     add_order(Sort, #search_sql_term{}).

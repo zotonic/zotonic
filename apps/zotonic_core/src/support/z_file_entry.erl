@@ -212,10 +212,11 @@ locate(timeout, _, State) ->
                 Modified = newest_part(Sources, State#state.modified),
                 Size = total_size(Sources),
                 ModifiedUTC = hd(calendar:local_time_to_universal_time_dst(Modified)),
+                MimePart = mime_part(State#state.image_filters, Sources, Mime),
                 State1 = State#state{
                     is_found = true,
                     gzip_part = undefined,
-                    mime = mime_part(State#state.image_filters, Sources, Mime),
+                    mime = MimePart,
                     size = Size,
                     parts = Sources,
                     modified = Modified,

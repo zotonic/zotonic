@@ -1,5 +1,6 @@
 .. highlight:: django
 .. include:: meta-truncate.rst
+.. seealso:: :ref:`filter-truncate_html`
 
 Truncate a text to a maximum length.
 
@@ -28,6 +29,3 @@ An optional second argument defines which text will be added if the text is trun
   {{ value|truncate:8:" (more)" }}
 
 If the value is ``hello world.`` then the output is ``hello (more)``.
-
-
-.. seealso:: :ref:`filter-truncate_html`

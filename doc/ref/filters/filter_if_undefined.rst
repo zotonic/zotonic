@@ -2,6 +2,8 @@
 
 .. include:: meta-if_undefined.rst
 
+.. seealso:: :ref:`filter-is_defined`, :ref:`filter-is_undefined`, :ref:`filter-if`
+
 Tests whether a value is undefined, returning the given argument.
 
 Whereas the `|default` filter also falls back to the default value
@@ -16,5 +18,3 @@ For example::
   {% if value|if_undefined:true %}The value is true or undefined{% endif %}
 
 If the value is ``undefined``, the output will be “The value is true or undefined”.
-
-.. seealso:: :ref:`filter-is_defined`, :ref:`filter-is_undefined`, :ref:`filter-if`

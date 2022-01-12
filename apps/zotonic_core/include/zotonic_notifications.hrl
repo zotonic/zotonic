@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2021 Marc Worrell
+%% @copyright 2011-2022 Marc Worrell
 %% @doc Notifications used in Zotonic core
 
-%% Copyright 2011-2021 Marc Worrell
+%% Copyright 2011-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -607,13 +607,13 @@
 }).
 
 %% @doc First for logon of user with username, check for ratelimit, blocks etc.
-%%      Returns: 'undefined' | ok | {error, Reason}
+%% Return: 'undefined' | ok | {error, Reason}
 -record(auth_precheck, {
         username :: binary()
     }).
 
 %% @doc First for logon of user with username, called after successful password check.
-%%      Returns: 'undefined' | ok | {error, Reason}
+%% Return: 'undefined' | ok | {error, Reason}
 -record(auth_postcheck, {
         id :: m_rsc:resource_id(),
         query_args = #{} :: map()
@@ -920,6 +920,7 @@
 
 %% @doc Send a notification that the resource 'id' is added to the query query_id.
 %% Type: notify
+%% Return: return value is ignored
 -record(rsc_query_item, {
     query_id :: m_rsc:resource_id(),
     match_id :: m_rsc:resource_id()
@@ -973,8 +974,9 @@
 %% Type: first
 -record(dropbox_file, {filename}).
 
-%% @doc Try to identify a file, returning a list of file properties.
+%% @doc Try to identify a file, returning a map with file properties.
 %% Type: first
+%% Return: map with binary keys, especially ``<<"mime">>``, ``<<"width">>``, ``<<"height">>``, ``<<"orientation">>``
 -record(media_identify_file, {
     filename :: file:filename_all(),
     original_filename :: binary(),
@@ -983,6 +985,7 @@
 
 %% @doc Try to find a filename extension for a mime type (example: ".jpg")
 %% Type: first
+%% Return: Extension (for example ``<<".png">>``) or ``undefined``
 -record(media_identify_extension, {
     mime :: binary(),
     preferred :: undefined | binary()
@@ -1007,8 +1010,9 @@
 }).
 
 
-%% @doc Fetch lisy of handlers.
+%% @doc Fetch list of handlers for survey submits.
 %% Type: foldr
+%% Return: list with tuples: ``[ {handler_name, TitleForDisplay}, ... ]``
 -record(survey_get_handlers, {}).
 
 %% @doc A survey has been filled in and submitted.
@@ -1017,10 +1021,12 @@
 
 %% @doc Check if the current user is allowed to download a survey.
 %% Type: first
+%% Return: ``true``, ``false`` or ``undefined``
 -record(survey_is_allowed_results_download, {id}).
 
 %% @doc Check if a question is a submitting question.
 %% Type: first
+%% Return: ``true``, ``false`` or ``undefined``
 -record(survey_is_submit, {block = []}).
 
 %% @doc Put a value into the typed key/value store
@@ -1033,6 +1039,7 @@
 
 %% @doc Delete a value from the typed key/value store
 %% Type: notify
+%% Return: return value is ignored
 -record(tkvstore_delete, {type, key}).
 
 %% @doc Internal message of mod_development. Start a stream with debug information to the user agent.
@@ -1046,6 +1053,7 @@
 
 %% @doc Broadcast some file changed, used for livereload by mod_development
 %% Type: notify
+%% Return: return value is ignored
 -record(filewatcher, {
     verb :: modify | create | delete,
     file :: binary(),
@@ -1055,6 +1063,7 @@
 
 %% @doc An external feed delivered a resource. First handler can import it.
 %% Type: first
+%% Return:: ``{ok, m_rsc:resource_id()}``, ``{error, Reason}``, or ``undefined``
 -record(import_resource, {
     source :: atom() | binary(),
     source_id :: integer() | binary(),
@@ -1086,6 +1095,7 @@
 }).
 
 %% @doc mod_export -
+%% Type: first
 %% Return: ``{ok, "text/csv"})`` for the dispatch rule/id export.
 -record(export_resource_content_type, {
     dispatch :: atom(),

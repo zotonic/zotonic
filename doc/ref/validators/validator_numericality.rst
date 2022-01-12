@@ -1,6 +1,6 @@
-
+.. highlight:: django
 .. include:: meta-numericality.rst
-
+.. seealso:: :ref:`guide-validators`
 
 Numerical input and range check.
 
@@ -48,5 +48,3 @@ Arguments
 |too_high_message       |Message for when the entered number is greater than the    |                                |
 |                       |maximum allowed. Defaults to "Must not be more than .."    |                                |
 +-----------------------+-----------------------------------------------------------+--------------------------------+
-
-.. seealso:: :ref:`guide-validators`

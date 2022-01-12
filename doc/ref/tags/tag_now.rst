@@ -5,6 +5,8 @@
 now
 ===
 
+.. seealso:: the :ref:`filter-date` filter for the possible format characters.
+
 Show the current date and time.
 
 Displays the current local date and time, formatted according to the given date format string.
@@ -20,6 +22,4 @@ There is also a variable called ``now``, which holds the current date::
   {{ now|date:"Y-m-d" }}
 
 Is equivalent to using the ``{% now %}`` tag.
-  
-.. seealso:: the :ref:`filter-date` filter for the possible format characters.
 

@@ -1,6 +1,6 @@
-
+.. highlight:: django
 .. include:: meta-length.rst
-
+.. seealso:: :ref:`guide-validators`
 
 Check the length of a text input.
 
@@ -29,5 +29,3 @@ too_short_message     Message for when there are not enough characters entered.
 too_long_message      Message for when there are too many characters entered.
                       Defaults to "Must not be more than . characters long."
 ====================  ==========================================================  =======
-
-.. seealso:: :ref:`guide-validators`

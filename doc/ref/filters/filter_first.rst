@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-first.rst
 
+.. seealso:: :ref:`filter-tail`, :ref:`filter-last`
+
 Returns the first character or element.
 
 Returns the first byte of a binary or the first element of a list.  An
@@ -21,5 +23,14 @@ For a regular list::
 
 The filtered value is ``1``.
 
-.. seealso:: :ref:`filter-tail`, :ref:`filter-last`
+It is also possible to fetch the first N elements or characters::
 
+  {{ [1,2,3]|first:2 }}
+
+The filtered value is ``[1,2]``.
+
+Or, with a string::
+
+  {{ "hello"|first:2 }}
+
+The filtered value is ``"he"``.

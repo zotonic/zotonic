@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-group_firstchar.rst
 
+.. seealso:: :ref:`filter-group_title_firstchar`
+
 Group a list of `sorted` :ref:`resource <model-rsc>` ids on their
 first letter of the title or another rsc property. After grouping, it
 splits this list in a number of more-or-less even columns.
@@ -49,5 +51,3 @@ although the size of the indiviual groups differs.
 
 When no nr. of columns is given, the groups are returned in a single
 column.
-
-.. seealso:: :ref:`filter-group_title_firstchar`

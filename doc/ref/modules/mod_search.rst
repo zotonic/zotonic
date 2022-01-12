@@ -1,5 +1,6 @@
 
 .. include:: meta-mod_search.rst
+.. seealso:: :ref:`guide-datamodel-query-model`, :ref:`cookbook-custom-search`
 
 mod_search implements various ways of searching through the main
 resource table using :ref:`model-search`.
@@ -132,10 +133,5 @@ The following searches are implemented in mod_search:
 |                        |first.                                                         |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
 
-
-.. seealso::
-
-    * :ref:`guide-datamodel-query-model`
-    * :ref:`cookbook-custom-search`
 
 .. _PostgreSQL text search settings: https://www.postgresql.org/docs/current/static/textsearch-controls.html

@@ -103,6 +103,10 @@ action and trigger it from JavaScript with ``z_event("myname")``. See: :ref:`gui
 Wire an action to a MQTT topic
 ------------------------------
 
+.. note::
+
+    :ref:`mod_mqtt` must be enabled before wiring to a topic
+
 Use ``{% wire type={mqtt topic=... topic=...} %}`` to connect to one or more MQTT topics.
 
 .. highlight: django
@@ -116,10 +120,6 @@ Example::
 And in Erlang this will trigger the above *growl*::
 
     z_mqtt:publish(<<"~site/public/hello">>, <<>>, z_acl:sudo(z:c(mysite))).
-
-.. note::
-
-    :ref:`mod_mqtt` must be enabled before wiring to a topic
 
 See also :ref:`scomp-live`
 

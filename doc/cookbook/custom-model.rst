@@ -3,6 +3,9 @@
 Create a custom model
 =====================
 
+.. seealso:: :ref:`models section <guide-models>` in the Developer Guide
+.. seealso:: list of :ref:`all models <models>`.
+
 In this chapter we will look at how to implement a model around the
 `The Open Movie Database (OMDB) API <http://www.omdbapi.com/>`_.
 
@@ -288,8 +291,3 @@ For a complete model for this API, I would expect:
 * Data caching to speed up identical calls
 * Support for all API parameters
 * Better error handling (the service might be down or return wrong data)
-
-.. seealso::
-
-    * :ref:`models section <guide-models>` in the Developer Guide
-    * list of :ref:`all models <models>`.

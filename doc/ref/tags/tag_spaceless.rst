@@ -7,6 +7,8 @@ spaceless
 
 Removes whitespace between HTML tags.
 
+.. note:: spaceless does not remove non breaking spaces and other whitespace.
+
 Example::
 
    {% spaceless %}
@@ -19,7 +21,5 @@ After rendering::
 
    <div><p>Test test test</p></div>
 
-
-.. note:: It will not remove other whitespace.
 
 .. versionadded:: 0.8

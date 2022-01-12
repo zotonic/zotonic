@@ -5,6 +5,8 @@
 block
 =====
 
+.. seealso:: :ref:`tag-extends` and :ref:`tag-overrules`.
+
 Define a block in a template and overrules a block from an inherited template.
 
 The `block` tag is used for replacing blocks in inherited templates.
@@ -32,5 +34,3 @@ then the output will be::
 
 The name of a block must be a valid identifier, consisting of
 alphanumeric characters (a-z, 0-9) and the underscore charater.
-
-.. seealso:: :ref:`tag-extends` and :ref:`tag-overrules`.

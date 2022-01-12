@@ -20,6 +20,8 @@ templates.
 Categories
 ----------
 
+.. seealso:: :ref:`model-category` model reference
+
 Every resource belongs to a single category.
 
 There is no real distinction between rsc records that are a person, a
@@ -51,10 +53,10 @@ resources. The category table only describes the nested hierarchy of
 the categories. All other properties of a category are defined by its
 rsc record.
 
-.. seealso:: :ref:`model-category` model reference
-
 Medium
 ------
+
+.. seealso:: :ref:`model-media`
 
 Medium management is described in full in :ref:`guide-media`. Media
 metadata is stored in a separate table, called ``medium``, since one
@@ -66,8 +68,6 @@ Besides the ``medium`` table, a ``medium_deleted`` table exists. When
 a medium is deleted then any files referenced by that medium will be
 added to this table. Zotonic periodically checks this table to delete
 files that are no longer referenced by any media.
-
-.. seealso:: :ref:`model-media`
 
 Blocks
 ------
@@ -107,6 +107,8 @@ property on a resource without having to make changes to your database schema.
 Changing resources
 ^^^^^^^^^^^^^^^^^^
 
+.. seealso:: :ref:`m_rsc model reference <model-rsc>`
+
 Imagine you wish to store whether resources are liked by users. No need to
 change the database schema, define the property or whatsoever. Just update the
 resource and set a custom ``is_liked`` property (using :ref:`model-rsc`)::
@@ -136,8 +138,6 @@ To remove the property, just store it as ``undefined``::
 This flexible approach is fine for custom properties that you only want to
 retrieve and display. However, if you need to *find* all liked resources, you
 need to define ``is_liked`` as a pivot column (see below).
-
-.. seealso:: :ref:`m_rsc model reference <model-rsc>`
 
 Pivots
 ------
@@ -172,18 +172,20 @@ in the background.
 Identities
 ----------
 
+.. seealso:: :ref:`model-identity`.
+
 An rsc record can become a user by adding the user’s credentials to
 this table. A single user can have multiple kinds of credentials,
 think of his/her username, openid uri etc. A user isn't necessarily a
 person.
 
-.. seealso:: :ref:`model-identity`.
 
 Deleted resources
 -----------------
+
+.. seealso:: :ref:`model-rsc_gone`.
 
 Whenever a resource is deleted, an entry is added to the ``rsc_gone``
 table.  The page and id controllers will serve a *410 Gone* when a
 deleted resource is requested.
 
-.. seealso:: :ref:`model-rsc_gone`.

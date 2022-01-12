@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-force_escape.rst
 
+.. seealso:: :ref:`filter-escape`, :ref:`filter-escape_check`
+
 HTML escapes a text.
 
 Applies HTML escaping to a string (see the :ref:`filter-escape` filter
@@ -15,5 +17,3 @@ For example::
   {{ value|force_escape }}
 
 If the value is ``hel&lo`` then the output is ``hel&amp;lo``.
-
-.. seealso:: :ref:`filter-escape`, :ref:`filter-escape_check`

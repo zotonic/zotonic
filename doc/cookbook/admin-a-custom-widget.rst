@@ -21,7 +21,9 @@ Custom widget
 
 Content widgets are created by creating a file ``_admin_edit_content.my_cat.tpl``, where ``my_cat`` is the category name - ``webshop`` in our case.
 
-Create a file ``_admin_edit_content.webshop.tpl``::
+Create a file ``_admin_edit_content.webshop.tpl``:
+
+.. code-block:: django
 
     {% extends "admin_edit_widget_std.tpl" %}
 
@@ -29,7 +31,9 @@ Extending will also give us a couple of default properties like ``id`` and ``is_
 
 We can also override ``admin_edit_widget_i18n.tpl`` if fields need to get translated.
 
-Add these block definitions::
+Add these block definitions:
+
+.. code-block:: django
 
     {% block widget_title %}
         {_ Webshop Properties _}

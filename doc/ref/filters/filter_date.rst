@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-date.rst
 
+.. seealso:: :ref:`filter-date_range`, :ref:`filter-datediff`, :ref:`filter-timesince`, :ref:`tag-now`
+
 Formats a date or datetime according to the format specified in the argument.
 
 The date should be a tuple ``{Y,M,D}`` and the datetime should be a
@@ -192,8 +194,3 @@ Will output `10 October 1990`. This also works with datetimes::
   {{ [[1990,10,10],[10,11,12]]|date:"j F Y - H:i:s" }}
 
 Will output `10 October 1990 - 10:11:12`.
-
-
-
-
-.. seealso:: :ref:`filter-date_range`, :ref:`filter-datediff`, :ref:`filter-timesince`, :ref:`tag-now`

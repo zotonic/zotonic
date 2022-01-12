@@ -209,6 +209,8 @@ Or, with a complete MQTT message::
 JavaScript API
 ^^^^^^^^^^^^^^
 
+.. seealso:: :ref:`live tag <scomp-live>`, which uses MQTT topics.
+
 There is a separate topic tree in the browser. To be able to send message from/to the browser
 there are special *bridge* topics on both ends.
 
@@ -317,6 +319,3 @@ In this way Zotonic knows which site the user belongs to.
 If no matching site can be found, or if no hostname is given, then Zotonic
 will try to authenticate against the default site.
 
-
-.. seealso::
-    :ref:`live tag <scomp-live>`, which uses MQTT topics.

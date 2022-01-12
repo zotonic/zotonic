@@ -1,4 +1,5 @@
 .. include:: meta-postback.rst
+.. seealso:: :ref:`guide-validators`
 
 Performs a custom server side validation of an input value. This allows you to
 add your own validation logic to HTML form fields.
@@ -37,7 +38,3 @@ The ``event`` argument declares the name of the event that will be
     %% input value
     is_valid(Value) ->
         %% ...
-
-.. seealso::
-
-    * :ref:`guide-validators`

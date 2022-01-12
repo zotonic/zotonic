@@ -538,7 +538,7 @@ first_extension([ Ext | _ ]) ->
 %% @doc  Guess the mime type of a file by the extension of its filename.
 -spec guess_mime( file:filename_all() ) -> mime_type().
 guess_mime(File) ->
-    case filename:extension( z_string:to_lower(File) ) of
+    case z_string:to_lower( filename:extension( File ) ) of
         <<".bert">> -> <<"application/x-bert">>;
         % Fonts have since 2017 their own mime types- https://tools.ietf.org/html/rfc8081#section-4.4.5
         <<".woff">> -> <<"font/woff">>;

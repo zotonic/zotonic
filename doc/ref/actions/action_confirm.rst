@@ -1,10 +1,8 @@
-
+.. highlight:: django
 .. include:: meta-confirm.rst
-
+.. seealso:: actions :ref:`action-alert` and :ref:`action-growl`.
 
 Show a JavaScript confirm message and on confirmation triggers one or more actions and/or sends a postback to the server.
-
-.. highlight:: django
 
 Example::
 
@@ -51,5 +49,3 @@ delegate       Erlang module handling the postback.
 is_danger      If the 'ok' button should be flagged  is_danger
                as dangerous.
 =============  ====================================  =====================================
-
-.. seealso:: actions :ref:`action-alert` and :ref:`action-growl`.
