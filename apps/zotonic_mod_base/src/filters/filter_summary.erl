@@ -64,6 +64,8 @@ strip(_, Acc, N) when N =< 0 ->
     Acc;
 strip(<<>>, Acc, _N) ->
     Acc;
+strip(<<"</p>",T/binary>>, Acc, _N) ->
+    Acc;
 strip(<<"<wbr>",T/binary>>, Acc, N) ->
     strip(T, Acc, N);
 strip(<<"</span>",T/binary>>, Acc, N) ->
