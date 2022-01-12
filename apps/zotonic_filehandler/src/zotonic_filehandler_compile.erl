@@ -162,12 +162,51 @@ do_all_task( OptPid ) ->
     lager:debug("Compile all: start"),
     zotonic_filehandler:terminal_notifier("Compile all: start"),
     Result = run_cmd_task(Cmd, [], []),
-    zotonic_filehandler:terminal_notifier("Compile all: ready"),
+    case Result of
+        {error, _} ->
+            zotonic_filehandler:terminal_notifier("Compile all: ERROR");
+        _ ->
+            zotonic_filehandler:terminal_notifier("Compile all: ready")
+    end,
     lager:debug("Compile all: ready (~p)", [Result]),
+    Result1 = cleanup_stdout(Result),
     case is_pid(OptPid) of
         false -> ok;
-        true -> OptPid ! {all_task_result, Result}
+        true -> OptPid ! {all_task_result, Result1}
     end,
+    Result1.
+
+cleanup_stdout({error, Props} = E) ->
+    case proplists:get_value(stdout, Props) of
+        Stdout when is_list(Stdout) ->
+            Stdout1 = lists:filter(
+                fun
+                    (<<" - cotonic ", _/binary>>) ->
+                        false;
+                    (Line) ->
+                        case binary:match(Line, <<" failed">>) of
+                            nomatch ->
+                                case binary:match(Line, <<"===> ">>) of
+                                    nomatch ->
+                                        binary:match(Line, <<" Warning: ">>) =:= nomatch;
+                                    _ ->
+                                        false
+                                end;
+                            _ ->
+                                true
+                        end
+                end,
+                Stdout),
+            lists:foreach(
+                fun(Line) ->
+                    lager:error("~s", [ z_string:trim(Line) ])
+                end,
+                Stdout1),
+            {error, [ {stdout, Stdout1} | proplists:delete(stdout, Props) ]};
+        _ ->
+            E
+    end;
+cleanup_stdout(Result) ->
     Result.
 
 run_cmd(Cmd) ->
