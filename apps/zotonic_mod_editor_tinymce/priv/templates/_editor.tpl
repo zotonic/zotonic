@@ -40,7 +40,7 @@ overrides_tpl: (optional) template location that contains JavaScript overrides f
 %}
 
 {% with
-    "4.9.3",
+    "5.10.2",
     m.editor_tinymce.version
     as
     newest,

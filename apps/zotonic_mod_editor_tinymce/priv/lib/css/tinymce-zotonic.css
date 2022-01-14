@@ -1,2 +1,71 @@
-/* Override this in your project to add styles in the tinymce editor */
-/* This file is included after /lib/js/tinymce-VERSION/zotonic.css   */
+/* This file contains the CSS data for the editable area (iframe) of tinyMCE */
+/* Override this in your project to change styles in the tinymce editor      */
+
+body {
+    font-size: 13px;
+}
+
+p {
+    margin:  0 0 1rem 0;
+}
+
+img.z-tinymce-media {
+    position: relative;
+    border: 1px solid #667;
+    height: auto;
+    cursor: pointer;
+    width: 270px;
+}
+
+img.z-tinymce-media.z-active:hover {
+    border: 1px solid #039ed4;
+}
+
+img.z-tinymce-media-align-block {
+    display: block;
+    margin: 1rem 0;
+    clear: both;
+}
+
+img.z-tinymce-media-align-right {
+    float: right;
+    margin: 0.5rem;
+}
+
+img.z-tinymce-media-align-left {
+    float: left;
+    margin: 0.5rem;
+}
+
+img.z-tinymce-media-size-large {
+    width: 90%;
+}
+
+img.z-tinymce-media-size-middle {
+    width: 50%;
+}
+
+img.z-tinymce-media-size-small {
+    width: 25%;
+}
+
+aside {
+    position: relative;
+    width: 33%;
+    float: right;
+    clear: both;
+    border: 1px dashed #666;
+    margin: 1rem 0 1rem 1rem;
+    padding:  1rem;
+}
+
+aside::before {
+    content:  "aside";
+    font-size: 10px;
+    padding: 2px 4px;
+    color: white;
+    background-color: #666;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
