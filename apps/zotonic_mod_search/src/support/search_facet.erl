@@ -162,6 +162,7 @@ search_query_facets(Result, #search_sql{ search_sql_terms = Terms }, Context) ->
         }
         | SelectTerms
     ],
+
     Q1 = z_search_terms:combine(SelectTerms1),
     Q2 = Q1#search_sql{
         limit = undefined
@@ -374,9 +375,10 @@ facet_union(#facet_def{ name = Name } = Def, FacetTerms, Args) ->
                 _ ->
                     F1 = iolist_to_binary(Frag),
                     Ws1 = iolist_to_binary([ " ", lists:join(<<" and ">>, Ws) ]),
-                    Ws2 = binary:replace(Ws1, <<" facet.">>, <<>>, [ global ]),
-                    Ws3 = <<" where ", Ws2/binary, " and ">>,
-                    binary:replace(F1, <<" where ">>, Ws3)
+                    Ws2 = binary:replace(Ws1, <<" facet.">>, <<" ">>, [ global ]),
+                    Ws3 = binary:replace(Ws2, <<"(facet.">>, <<"(">>, [ global ]),
+                    Ws4 = <<" where ", Ws3/binary, " and ">>,
+                    binary:replace(F1, <<" where ">>, Ws4)
             end,
             {Frag1, Args1}
     end.
