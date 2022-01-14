@@ -32,9 +32,11 @@ Options
 All TinyMCE options are set in the global object ``tinyInit``.  This is done by the ``tiny-init.js`` file
 inside the version of TinyMCE.  For example :file:`priv/lib/js/tinymce-5.10.2/tiny-init.js`
 
-This file is included by ``editor.tpl``, which should be included in your template if you want
+This file is included by ``editor.tpl``, which should be included in your template if you want to use the editor.
 
-By replacing or extending this po
+Supply your own ``tinyInit`` object to change the default settings. This can be done before the include
+of ``_editor.tpl``, as the ``tiny-init.js`` will not replace any existing ``tinyInit`` object.
+
 
 Stylesheet
 ----------
