@@ -24,7 +24,7 @@ In the template the following variables are available:
     (Optional) If an error stack was available then this
     is a list of table rows:
     
-.. code-block:: erlang
+    .. code-block:: erlang
     
        [ IsTemplate, Module, Fun, Args, {File, Line} ]
 
