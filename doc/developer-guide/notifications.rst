@@ -3,6 +3,8 @@
 Notifications
 =============
 
+.. seealso:: :ref:`list of all notifications <notifications reference>`
+
 At different moments in the lifecycle of the web request, Zotonic sends
 notifications. By *observing* these notifications you can
 :ref:`override <cookbook-overriding>` Zotonic’s behaviour. You can also
@@ -194,4 +196,3 @@ Fold notifications
   ``admin_menu``) to build up the admin navigation menu, where each
   observer is called to add menu entries to the menu.
 
-.. seealso:: :ref:`list of all notifications <notifications reference>`
