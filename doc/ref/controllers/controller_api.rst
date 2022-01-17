@@ -1,5 +1,6 @@
 .. include:: meta-api.rst
 
+.. seealso:: :ref:`guide-dispatch` and :ref:`guide-controllers`.
 
 ``controler_api`` processes authorized REST API requests: It provides
 an easy way to create API calls to allow computer programs to perform
@@ -26,7 +27,3 @@ response topic.
 
 If there is a query argument ``response_topic`` then the API controller will only publish the
 message and immediately return.
-
-
-.. seealso:: :ref:`guide-dispatch` and :ref:`guide-controllers`.
-
