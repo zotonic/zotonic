@@ -26,6 +26,8 @@
 -export([
 
     has_connection/1,
+    database_version_string/1,
+    database_version/1,
 
     transaction/2,
     transaction/3,
@@ -109,6 +111,8 @@
 -ifdef(TEST).
 -include_lib("eunit/include/eunit.hrl").
 -endif.
+
+-type database_server() :: postgresql.
 
 -type sql() :: string() | iodata().
 -type query_error() :: nodb | enoent | epgsql:query_error() | term().
@@ -269,6 +273,35 @@ has_connection(Site) when is_atom(Site) ->
 has_connection(Context) ->
     is_pid(erlang:whereis(z_context:db_pool(Context))).
 
+
+%% @doc Return the version of the database. This is the long string describing the
+%% database version. Returns the empty string if there is no database.
+-spec database_version_string( z:context() ) -> binary().
+database_version_string(Context) ->
+    case has_connection(Context) of
+        true ->
+            z_db:q1("select version()", Context);
+        false ->
+            <<>>
+    end.
+
+%% @doc Return the version of the database. Returns {postgres, Major, Minor} for
+%% the database being used.
+-spec database_version( z:context() ) ->
+      {ok, {database_server(), non_neg_integer(), non_neg_integer()}}
+    | {error, no_database_connection}.
+database_version(Context) ->
+    case has_connection(Context) of
+        true ->
+            Ver = z_db:q1("show server_version", Context),
+            {Major, Minor} = case binary:split(Ver, <<".">>, [ global ]) of
+                [ A ] -> {binary_to_integer(A), 0};
+                [ A, B | _ ] -> {binary_to_integer(A), binary_to_integer(B)}
+            end,
+            {ok, {postgresql, Major, Minor}};
+        false ->
+            {error, no_database_connection}
+    end.
 
 %% @doc Transaction handler safe function for fetching a db connection
 -spec get_connection( z:context() ) -> {ok, pid()} | {error, nodatabase | none | full}.
