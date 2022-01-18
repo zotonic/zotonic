@@ -4,6 +4,12 @@
 
 {% block content %}
 
+<div class="admin-header">
+    <h2>{_ Statistics _}</h2>
+    <p>{_ This page shows (real-time) system statistics like memory use and requests. _}</p>
+</div>
+
+
 <style>
 .meta {
     font-weight: bold;
