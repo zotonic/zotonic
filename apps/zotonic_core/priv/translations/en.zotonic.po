@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-24 13:27\n"
+"PO-Revision-Date: 2022-01-18 13:57\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -1935,7 +1935,7 @@ msgstr "System"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:3
 msgid "System Status"
-msgstr "Status Sistem"
+msgstr "System Status"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:8
 msgid "System administration"
