@@ -87,18 +87,21 @@ extract_resource(_, _) ->
     when RDFDoc :: map(),
          Medium :: map() | undefined,
          MediumUrl :: binary() | undefined.
-extract_medium(#{ <<"zotonic:medium_url">> := MediumUrl } = RDFDoc) when MediumUrl =/= <<>> ->
+extract_medium(#{ <<"medium_url">> := MediumUrl } = RDFDoc) when MediumUrl =/= <<>> ->
     Created = maps:get(<<"modified">>, RDFDoc,
         maps:get(<<"created">>, RDFDoc, erlang:universaltime())),
     Medium = #{
         <<"created">> => Created
     },
     {Medium, to_value(MediumUrl)};
-extract_medium(#{ <<"zotonic:medium">> := Medium } = RDFDoc) when is_map(Medium) ->
+extract_medium(#{ <<"medium">> := Medium } = RDFDoc) when is_map(Medium) ->
     CreatedDoc = maps:get(<<"modified">>, RDFDoc,
         maps:get(<<"created">>, RDFDoc, erlang:universaltime())),
     CreatedMedium = maps:get(<<"modified">>, Medium,
-        maps:get(<<"created">>, Medium, CreatedDoc)),
+        maps:get(<<"created">>, Medium,
+        maps:get(<<"schema:dateCreated">>, Medium,
+        maps:get(<<"dcterms:created">>, Medium,
+        CreatedDoc)))),
     Medium1 = Medium#{
         <<"created">> => CreatedMedium
     },
