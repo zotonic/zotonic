@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-24 13:48\n"
+"PO-Revision-Date: 2022-01-18 15:48\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -970,7 +970,7 @@ msgstr "إغلاق جميع مآخذ من عناوين IP التي لديها أ
 msgid "Close preview"
 msgstr "إغلاق المعاينة"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:45
 msgid "Config Directory"
 msgstr "دليل التكوين"
 
@@ -1054,9 +1054,13 @@ msgstr "تخصيص slug الصفحة"
 msgid "Dashboard"
 msgstr "لوحة التحكم"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:39
 msgid "Data Directory"
 msgstr "دليل البيانات"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:28
+msgid "Database Version"
+msgstr "إصدار قاعدة البيانات"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:36
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
@@ -1198,15 +1202,15 @@ msgstr "هاتف حالات الطوارئ"
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "أدخل رابط URL أو كود التضمين. سيتم تحليله و بعدها يمكنك الاختيار كيف تقوم باستيراد البيانات."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
 msgid "Erlang Init Files"
 msgstr "ملفات Erlang Init"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:57
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:60
 msgid "Erlang Installation Root"
 msgstr "جذر التثبيت Erlang"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:44
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:25
 msgid "Erlang Version"
 msgstr "نسخة إرلانج"
 
@@ -1302,11 +1306,11 @@ msgstr "البحث عن الصفحة"
 msgid "First"
 msgstr "أولاً"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:77
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "قم بمسح و تحديث جميع روابط قواعد إرسال و النماذج و ذاكرة التخزين المؤقتة الخاصة بالمكتبة أو بيانات الذاكرة."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:73
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:76
 msgid "Flush system caches"
 msgstr "إعادة تحديث ذاكرة النظام"
 
@@ -1333,7 +1337,7 @@ msgstr "رأسية"
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "هنا يمكنك تحرير وسيطات استعلام البحث. كل حجة تسير على خطها الخاص. لمزيد من المعلومات ، راجع الوثائق <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">في وسيطات الاستعلام</a> على موقع Zotonic."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Home Directory"
 msgstr "الدليل الرئيسي"
 
@@ -1401,7 +1405,7 @@ msgstr "حلقة الوصل"
 msgid "Live query, send notifications when matching items are updated or inserted."
 msgstr "الاستعلام، يرسل الإشعارات عندما يتم تحديث أو إدراج عناصر مطابقة."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:42
 msgid "Log Directory"
 msgstr "دليل السجل"
 
@@ -1640,6 +1644,11 @@ msgstr "الرجاء ملء عنوان الصفحة الجديدة."
 msgid "Postcode"
 msgstr "الرمز البريدي"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_footer.tpl:4
+#: apps/zotonic_site_status/priv/templates/error.400.tpl:6./apps/zotonic_site_status/priv/templates/error.503.tpl:10./apps/zotonic_site_status/priv/templates/home.tpl:9./apps/zotonic_site_status/priv/templates/logon.tpl:10
+msgid "Powered by"
+msgstr "مشغل بواسطة"
+
 #: apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:23
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:8
 msgid "Predicate"
@@ -1696,16 +1705,16 @@ msgstr "استعلام"
 msgid "Query preview"
 msgstr "معاينة الاستعلام"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:90
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:93
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
 msgstr "أعد بناء جميع مؤشرات البحث عن طريق وضع جميع الصفحات والبيانات من قاعدة البيانات في قائمة انتظار المفهرس. قد يستغرق هذا وقتا طويلا!"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:81
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:84
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:122
 msgid "Rebuild search indices"
 msgstr "إعادة بناء مؤشرات البحث"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:96
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:99
 msgid "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "أعد حساب ترقيم شجرة الفئات. قد يستغرق هذا وقتا طويلا."
 
@@ -1729,7 +1738,7 @@ msgstr "يشير إلى"
 msgid "Refreshed every 30 minutes."
 msgstr "يُنعش كل 30 دقيقة."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:100
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:103
 msgid "Reinstall site datamodel"
 msgstr "أعد تثبيت نموذج بيانات الموقع"
 
@@ -1741,7 +1750,7 @@ msgstr "ملاحظات"
 msgid "Removed the connection to"
 msgstr "تمت إزالة الاتصال بـ"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:95
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:98
 msgid "Renumber category tree"
 msgstr "إعادة ترقيم شجرة الفئات"
 
@@ -1761,7 +1770,7 @@ msgstr "يمكن أن تحتوي الموارد في فئة <i>meta</i> على \
 msgid "Retrieving status..."
 msgstr "جارٍ استرداد الحالة ..."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:101
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:104
 msgid "Runs the schema install command from the site's module again."
 msgstr "يقوم بتشغيل أمر تثبيت المخطط من وحدة الموقع مرة أخرى."
 
@@ -1808,7 +1817,7 @@ msgstr "نتائج البحث"
 msgid "Search..."
 msgstr "بحث..."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
 msgid "Security Directory"
 msgstr "دليل الأمان"
 
@@ -1848,7 +1857,7 @@ msgstr "كما تظهر"
 msgid "Show page on multiple paths"
 msgstr "عرض الصفحة على مسارات متعددة"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:37
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:36
 msgid "Site Files Directory"
 msgstr "دليل ملفات الموقع"
 
@@ -2206,7 +2215,7 @@ msgstr "موقع للنقرات على الصورة"
 msgid "Website or Embed"
 msgstr "موقع أو تضمين"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:57
 msgid "Work Directory"
 msgstr "دليل العمل"
 
@@ -3542,7 +3551,7 @@ msgstr "إرلانج إم"
 msgid "Memory Usage"
 msgstr "استخدام الذاكرة"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:46
+#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:8./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:46
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:20
 #: apps/zotonic_site_status/priv/templates/stats.tpl:3./apps/zotonic_site_status/priv/templates/stats.tpl:8
 msgid "Statistics"
@@ -3551,6 +3560,10 @@ msgstr "الإحصاء"
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/system_usage.tpl:3
 msgid "System Usage"
 msgstr "استخدام النظام"
+
+#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:9
+msgid "This page shows (real-time) system statistics like memory use and requests."
+msgstr "تعرض هذه الصفحة إحصائيات النظام (في الوقت الفعلي) مثل استخدام الذاكرة والطلبات."
 
 #: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13./apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:14
 msgid "Album"
@@ -4573,6 +4586,10 @@ msgstr "أخطاء بونغ"
 msgid "Pong Latency"
 msgstr "بونغ الكمون"
 
+#: apps/zotonic_mod_base/priv/templates/_powered_by_zotonic.tpl:1
+msgid "Powered by Zotonic"
+msgstr "مدعوم من Zotonic"
+
 #: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
 msgstr "اقرأ هذه الصفحة على الويب"
@@ -4895,6 +4912,10 @@ msgstr "لا يسمح لك بتغيير هذا."
 msgid "Action"
 msgstr "عمل"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
+msgid "At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template."
+msgstr "في بعض الأحيان ، قد يكون من المربك تحديد القوالب المستخدمة بالفعل أثناء تجميع القالب. هنا يمكنك معرفة الملفات التي تم تضمينها أثناء تجميع قالب."
+
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:13
 msgid "Below is the list of all notifications and the installed observers."
 msgstr "فيما يلي قائمة بجميع الإخطارات والمراقبين المثبتين."
@@ -5059,6 +5080,10 @@ msgstr "عرض الأجزاء الداخلية من Zotonic والوحدات ا�
 msgid "Show paths to included template files in generated templates"
 msgstr "إظهار المسارات لملفات القوالب المضمنة في القوالب التي تم إنشاؤها"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:118
+msgid "Show which files are included in a template compilation"
+msgstr "اعرض الملفات التي تم تضمينها في تجميع القوالب"
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:7
 msgid "Site Development"
 msgstr "تطوير موقع"
@@ -5195,6 +5220,10 @@ msgstr "صغير"
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:91
 msgid "Website. Leave empty for media link"
 msgstr "موقع الكتروني. اتركه فارغا لوصلة الوسائط"
+
+#: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:6
+msgid "always use newest available"
+msgstr "استخدم دائمًا أحدث ما هو متاح"
 
 #: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:6
 msgid "DKIM e-mail signing setup"
@@ -9482,10 +9511,6 @@ msgstr "تسجيل دخول"
 #: apps/zotonic_site_status/priv/templates/error.400.tpl:20./apps/zotonic_site_status/priv/templates/error.503.tpl:21./apps/zotonic_site_status/priv/templates/home.tpl:25
 msgid "Manage this server"
 msgstr "إدارة هذا الخادم"
-
-#: apps/zotonic_site_status/priv/templates/error.400.tpl:6./apps/zotonic_site_status/priv/templates/error.503.tpl:10./apps/zotonic_site_status/priv/templates/home.tpl:9./apps/zotonic_site_status/priv/templates/logon.tpl:10
-msgid "Powered by"
-msgstr "مشغل بواسطة"
 
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:52
 msgid "Restart the site, all users will be logged off."
