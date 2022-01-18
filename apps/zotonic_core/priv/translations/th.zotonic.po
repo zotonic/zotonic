@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-24 13:48\n"
+"PO-Revision-Date: 2022-01-18 15:48\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -970,7 +970,7 @@ msgstr "ปิดซ็อกเก็ตทั้งหมดจากที่
 msgid "Close preview"
 msgstr "ปิดการแสดงตัวอย่าง"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:45
 msgid "Config Directory"
 msgstr "Config Directory"
 
@@ -1054,9 +1054,13 @@ msgstr "ปรับแต่งเพจบุ้ง"
 msgid "Dashboard"
 msgstr "แผงควบคุม"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:39
 msgid "Data Directory"
 msgstr "ไดเร็กทอรีข้อมูล"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:28
+msgid "Database Version"
+msgstr "เวอร์ชันฐานข้อมูล"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:36
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
@@ -1198,15 +1202,15 @@ msgstr "โทรศัพท์ฉุกเฉิน"
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "ป้อน URL หรือโค้ดฝัง ระบบจะวิเคราะห์และคุณสามารถเลือกวิธีการนำเข้าข้อมูลได้"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
 msgid "Erlang Init Files"
 msgstr "ไฟล์ Erlang Init"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:57
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:60
 msgid "Erlang Installation Root"
 msgstr "รากการติดตั้ง Erlang"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:44
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:25
 msgid "Erlang Version"
 msgstr "เวอร์ชั่น Erlang"
 
@@ -1302,11 +1306,11 @@ msgstr "ค้นหาหน้า"
 msgid "First"
 msgstr "อันดับแรก"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:77
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "ล้างกฎการส่ง URL เทมเพลตและแคชไลบรารีและข้อมูลแคชอื่น ๆ ในหน่วยความจำ"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:73
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:76
 msgid "Flush system caches"
 msgstr "แคชระบบล้าง"
 
@@ -1333,7 +1337,7 @@ msgstr "หัวข้อ"
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "คุณสามารถแก้ไขอาร์กิวเมนต์ของคำค้นหาได้ที่นี่ ทุกการโต้แย้งดำเนินไปในแนวของมันเอง สำหรับข้อมูลเพิ่มเติมโปรดดูเอกสาร <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">เกี่ยวกับอาร์กิวเมนต์เคียวรี</a> บนเว็บไซต์ Zotonic"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Home Directory"
 msgstr "โฮมไดเร็กทอรี"
 
@@ -1401,7 +1405,7 @@ msgstr "ลิงค์"
 msgid "Live query, send notifications when matching items are updated or inserted."
 msgstr "แบบสอบถามสดส่งการแจ้งเตือนเมื่อมีการอัปเดตหรือแทรกรายการที่ตรงกัน"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:42
 msgid "Log Directory"
 msgstr "ไดเรกทอรีบันทึก"
 
@@ -1640,6 +1644,11 @@ msgstr "กรุณากรอกชื่อหน้าใหม่"
 msgid "Postcode"
 msgstr "รหัสไปรษณีย์"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_footer.tpl:4
+#: apps/zotonic_site_status/priv/templates/error.400.tpl:6./apps/zotonic_site_status/priv/templates/error.503.tpl:10./apps/zotonic_site_status/priv/templates/home.tpl:9./apps/zotonic_site_status/priv/templates/logon.tpl:10
+msgid "Powered by"
+msgstr "ขับเคลื่อนโดย"
+
 #: apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:23
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:8
 msgid "Predicate"
@@ -1696,16 +1705,16 @@ msgstr "แบบสอบถาม"
 msgid "Query preview"
 msgstr "ดูตัวอย่างการค้นหา"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:90
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:93
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
 msgstr "สร้างดัชนีการค้นหาใหม่ทั้งหมดโดยใส่เพจและข้อมูลทั้งหมดจากฐานข้อมูลในคิวตัวทำดัชนี อาจใช้เวลานาน!"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:81
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:84
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:122
 msgid "Rebuild search indices"
 msgstr "สร้างดัชนีการค้นหาใหม่"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:96
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:99
 msgid "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "คำนวณการกำหนดหมายเลขของโครงสร้างหมวดหมู่ใหม่ อาจใช้เวลานาน"
 
@@ -1729,7 +1738,7 @@ msgstr "ผู้อ้างอิงถึง"
 msgid "Refreshed every 30 minutes."
 msgstr "รีเฟรชทุกๆ 30 นาที"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:100
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:103
 msgid "Reinstall site datamodel"
 msgstr "ติดตั้งโมเดลข้อมูลของไซต์อีกครั้ง"
 
@@ -1741,7 +1750,7 @@ msgstr "หมายเหตุ"
 msgid "Removed the connection to"
 msgstr "ลบการเชื่อมต่อกับ"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:95
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:98
 msgid "Renumber category tree"
 msgstr "ต้นไม้ประเภทเปลี่ยนหมายเลข"
 
@@ -1761,7 +1770,7 @@ msgstr "ทรัพยากรในหมวด <i>meta</i> สามาร�
 msgid "Retrieving status..."
 msgstr "กำลังเรียกข้อมูลสถานะ ..."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:101
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:104
 msgid "Runs the schema install command from the site's module again."
 msgstr "รันคำสั่ง schema install จากโมดูลของไซต์อีกครั้ง"
 
@@ -1808,7 +1817,7 @@ msgstr "ผลการค้นหา"
 msgid "Search..."
 msgstr "ค้นหา..."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
 msgid "Security Directory"
 msgstr "ไดเรกทอรีความปลอดภัย"
 
@@ -1848,7 +1857,7 @@ msgstr "แสดงเป็น"
 msgid "Show page on multiple paths"
 msgstr "แสดงเพจในหลายเส้นทาง"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:37
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:36
 msgid "Site Files Directory"
 msgstr "ไดเรกทอรีไฟล์ไซต์"
 
@@ -2206,7 +2215,7 @@ msgstr "เว็บไซต์สำหรับคลิกที่ภาพ
 msgid "Website or Embed"
 msgstr "เว็บไซต์หรือฝัง"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:57
 msgid "Work Directory"
 msgstr "Work Directory"
 
@@ -3542,7 +3551,7 @@ msgstr "Erlang VM"
 msgid "Memory Usage"
 msgstr "การใช้ความจำ"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:46
+#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:8./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:46
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:20
 #: apps/zotonic_site_status/priv/templates/stats.tpl:3./apps/zotonic_site_status/priv/templates/stats.tpl:8
 msgid "Statistics"
@@ -3551,6 +3560,10 @@ msgstr "สถิติ"
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/system_usage.tpl:3
 msgid "System Usage"
 msgstr "การใช้งานระบบ"
+
+#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:9
+msgid "This page shows (real-time) system statistics like memory use and requests."
+msgstr "หน้านี้แสดงสถิติระบบ (เรียลไทม์) เช่น การใช้หน่วยความจำและคำขอ"
 
 #: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13./apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:14
 msgid "Album"
@@ -4573,6 +4586,10 @@ msgstr "โป่งผิดพลาด"
 msgid "Pong Latency"
 msgstr "Pong Latency"
 
+#: apps/zotonic_mod_base/priv/templates/_powered_by_zotonic.tpl:1
+msgid "Powered by Zotonic"
+msgstr "ขับเคลื่อนโดย Zotonic"
+
 #: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
 msgstr "อ่านหน้านี้บนเว็บ"
@@ -4895,6 +4912,10 @@ msgstr "คุณไม่ได้รับอนุญาตให้เปล
 msgid "Action"
 msgstr "หนังบู๊"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
+msgid "At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template."
+msgstr "ในบางครั้ง อาจทำให้สับสนได้ว่าจะใช้เทมเพลตใดในระหว่างการรวบรวมเทมเพลต ที่นี่คุณสามารถดูไฟล์ที่รวมอยู่ขณะรวบรวมเทมเพลต"
+
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:13
 msgid "Below is the list of all notifications and the installed observers."
 msgstr "ด้านล่างนี้คือรายการการแจ้งเตือนทั้งหมดและผู้สังเกตการณ์ที่ติดตั้งไว้"
@@ -5059,6 +5080,10 @@ msgstr "แสดงภายในของ Zotonic และโมดูล"
 msgid "Show paths to included template files in generated templates"
 msgstr "แสดงเส้นทางไปยังไฟล์เทมเพลตที่รวมอยู่ในเทมเพลตที่สร้างขึ้น"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:118
+msgid "Show which files are included in a template compilation"
+msgstr "แสดงว่าไฟล์ใดบ้างที่รวมอยู่ในการรวบรวมเทมเพลต"
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:7
 msgid "Site Development"
 msgstr "การพัฒนาเว็บไซต์"
@@ -5195,6 +5220,10 @@ msgstr "เล็ก"
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:91
 msgid "Website. Leave empty for media link"
 msgstr "เว็บไซต์. เว้นว่างไว้สำหรับลิงก์สื่อ"
+
+#: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:6
+msgid "always use newest available"
+msgstr "ใช้ใหม่ล่าสุดที่มีให้เสมอ"
 
 #: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:6
 msgid "DKIM e-mail signing setup"
@@ -9482,10 +9511,6 @@ msgstr "เข้าสู่ระบบ"
 #: apps/zotonic_site_status/priv/templates/error.400.tpl:20./apps/zotonic_site_status/priv/templates/error.503.tpl:21./apps/zotonic_site_status/priv/templates/home.tpl:25
 msgid "Manage this server"
 msgstr "จัดการเซิร์ฟเวอร์นี้"
-
-#: apps/zotonic_site_status/priv/templates/error.400.tpl:6./apps/zotonic_site_status/priv/templates/error.503.tpl:10./apps/zotonic_site_status/priv/templates/home.tpl:9./apps/zotonic_site_status/priv/templates/logon.tpl:10
-msgid "Powered by"
-msgstr "ขับเคลื่อนโดย"
 
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:52
 msgid "Restart the site, all users will be logged off."
