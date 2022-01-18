@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-24 13:48\n"
+"PO-Revision-Date: 2022-01-18 15:47\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -970,7 +970,7 @@ msgstr "Stäng alla uttag från ip-adresser som har över &gt; 250 öppna uttag.
 msgid "Close preview"
 msgstr "Stäng förhandsgranskning"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:45
 msgid "Config Directory"
 msgstr "Config Directory"
 
@@ -1054,9 +1054,13 @@ msgstr "Anpassa sidan slug"
 msgid "Dashboard"
 msgstr "Instrumentpanel"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:39
 msgid "Data Directory"
 msgstr "Datakatalog"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:28
+msgid "Database Version"
+msgstr "Databasversion"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:36
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
@@ -1198,15 +1202,15 @@ msgstr "Nödtelefonnummer"
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "Ange en URL-adress eller bädda in kod. Det kommer att analyseras och du kan själv välja hur du vill importera data."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
 msgid "Erlang Init Files"
 msgstr "Erlang Init Files"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:57
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:60
 msgid "Erlang Installation Root"
 msgstr "Erlang installationsrot"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:44
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:25
 msgid "Erlang Version"
 msgstr "Erlang-version"
 
@@ -1302,11 +1306,11 @@ msgstr "Hitta sida"
 msgid "First"
 msgstr "Första"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:77
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "Spola alla URL försändelsen regler, mall - och bibliotek cachar och andra i minnet cachelagrade data."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:73
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:76
 msgid "Flush system caches"
 msgstr "Spola systemet cachar"
 
@@ -1333,7 +1337,7 @@ msgstr "Header"
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "Här kan du redigera argumenten för sökfrågan. Varje argument går på sin egen linje. Mer information finns i dokumentationen <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">om frågeargument</a> på Zotonic-webbplatsen."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Home Directory"
 msgstr "Hemkatalog"
 
@@ -1401,7 +1405,7 @@ msgstr "Länk"
 msgid "Live query, send notifications when matching items are updated or inserted."
 msgstr "Live-frågan, skicka meddelanden när de matchande posterna uppdateras eller införas."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:42
 msgid "Log Directory"
 msgstr "Loggkatalog"
 
@@ -1640,6 +1644,11 @@ msgstr "Vänligen fyll i titeln på den nya sidan."
 msgid "Postcode"
 msgstr "Postnummer"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_footer.tpl:4
+#: apps/zotonic_site_status/priv/templates/error.400.tpl:6./apps/zotonic_site_status/priv/templates/error.503.tpl:10./apps/zotonic_site_status/priv/templates/home.tpl:9./apps/zotonic_site_status/priv/templates/logon.tpl:10
+msgid "Powered by"
+msgstr "Drivs av"
+
 #: apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:23
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:8
 msgid "Predicate"
@@ -1696,16 +1705,16 @@ msgstr "Fråga"
 msgid "Query preview"
 msgstr "Fråga förhandsgranska"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:90
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:93
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
 msgstr "Bygga om alla sök-index genom att sätta på alla sidor och data från databasen i indexeraren kö. Detta kan ta lång tid!"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:81
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:84
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:122
 msgid "Rebuild search indices"
 msgstr "Bygga sökning index"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:96
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:99
 msgid "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "Räkna numreringen av kategori träd. Detta kan ta lång tid."
 
@@ -1729,7 +1738,7 @@ msgstr "Länkar till"
 msgid "Refreshed every 30 minutes."
 msgstr "Uppfriskas var 30: e minut."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:100
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:103
 msgid "Reinstall site datamodel"
 msgstr "Installera webbplats datamodel"
 
@@ -1741,7 +1750,7 @@ msgstr "Anmärkningar"
 msgid "Removed the connection to"
 msgstr "Bort anslutningen till"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:95
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:98
 msgid "Renumber category tree"
 msgstr "Ändra kategori träd"
 
@@ -1761,7 +1770,7 @@ msgstr "Resurser i <i>meta</i> kategori kan ha \"funktioner\": vissa egenskaper 
 msgid "Retrieving status..."
 msgstr "Hämtar status ..."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:101
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:104
 msgid "Runs the schema install command from the site's module again."
 msgstr "Kör schema installera kommandot från webbplatsens modul igen."
 
@@ -1808,7 +1817,7 @@ msgstr "Sökresultat"
 msgid "Search..."
 msgstr "Sök..."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
 msgid "Security Directory"
 msgstr "Säkerhetskatalog"
 
@@ -1848,7 +1857,7 @@ msgstr "Visa som"
 msgid "Show page on multiple paths"
 msgstr "Visa sidan på flera vägar"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:37
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:36
 msgid "Site Files Directory"
 msgstr "Webbplatskatalog"
 
@@ -2206,7 +2215,7 @@ msgstr "Webbplats för klick på bilden"
 msgid "Website or Embed"
 msgstr "Webbplats eller Bädda in"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:57
 msgid "Work Directory"
 msgstr "Arbetsregister"
 
@@ -3542,7 +3551,7 @@ msgstr "Erlang VM"
 msgid "Memory Usage"
 msgstr "Minnesanvändning"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:46
+#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:8./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:46
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:20
 #: apps/zotonic_site_status/priv/templates/stats.tpl:3./apps/zotonic_site_status/priv/templates/stats.tpl:8
 msgid "Statistics"
@@ -3551,6 +3560,10 @@ msgstr "Statistik"
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/system_usage.tpl:3
 msgid "System Usage"
 msgstr "Systemanvändning"
+
+#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:9
+msgid "This page shows (real-time) system statistics like memory use and requests."
+msgstr "Den här sidan visar (realtids) systemstatistik som minnesanvändning och förfrågningar."
 
 #: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13./apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:14
 msgid "Album"
@@ -4573,6 +4586,10 @@ msgstr "Pong -fel"
 msgid "Pong Latency"
 msgstr "Pong Latency"
 
+#: apps/zotonic_mod_base/priv/templates/_powered_by_zotonic.tpl:1
+msgid "Powered by Zotonic"
+msgstr "Drivs av Zotonic"
+
 #: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
 msgstr "Läs den här sidan på webben"
@@ -4895,6 +4912,10 @@ msgstr "Du får inte ändra detta."
 msgid "Action"
 msgstr "Handling"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
+msgid "At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template."
+msgstr "Ibland kan det vara förvirrande vilka mallar som faktiskt används under en mallkompilering. Här kan du se vilka filer som ingår när du kompilerar en mall."
+
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:13
 msgid "Below is the list of all notifications and the installed observers."
 msgstr "Nedan är listan över alla meddelanden och installerade observatörer."
@@ -5059,6 +5080,10 @@ msgstr "Visa internt i Zotonic och modulerna"
 msgid "Show paths to included template files in generated templates"
 msgstr "Visa sökvägar till inkluderade mallfiler i genererade mallar"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:118
+msgid "Show which files are included in a template compilation"
+msgstr "Visa vilka filer som ingår i en mallsammanställning"
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:7
 msgid "Site Development"
 msgstr "Platsutveckling"
@@ -5195,6 +5220,10 @@ msgstr "Små"
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:91
 msgid "Website. Leave empty for media link"
 msgstr "Hemsida. Lämna tomt för medialänk"
+
+#: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:6
+msgid "always use newest available"
+msgstr "använd alltid senaste tillgängliga"
 
 #: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:6
 msgid "DKIM e-mail signing setup"
@@ -9482,10 +9511,6 @@ msgstr "Logga in"
 #: apps/zotonic_site_status/priv/templates/error.400.tpl:20./apps/zotonic_site_status/priv/templates/error.503.tpl:21./apps/zotonic_site_status/priv/templates/home.tpl:25
 msgid "Manage this server"
 msgstr "Hantera den här servern"
-
-#: apps/zotonic_site_status/priv/templates/error.400.tpl:6./apps/zotonic_site_status/priv/templates/error.503.tpl:10./apps/zotonic_site_status/priv/templates/home.tpl:9./apps/zotonic_site_status/priv/templates/logon.tpl:10
-msgid "Powered by"
-msgstr "Drivs av"
 
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:52
 msgid "Restart the site, all users will be logged off."
