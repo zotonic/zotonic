@@ -21,7 +21,7 @@
 -behaviour(gen_server).
 
 -export([
-    start_link/4,
+    start_link/5,
     init/1,
     handle_call/3,
     handle_cast/2,
@@ -46,13 +46,11 @@
         context
     }).
 
-start_link(Id, Path, MediaInfo, Context) ->
-    Path1 = z_convert:to_binary(Path),
-    PathLookup = m_filestore:lookup(Path1, Context),
+start_link(Id, Path, PathLookup, MediaInfo, Context) ->
     gen_server:start_link(
-        {via, z_proc, {{upload, Path1}, Context}},
+        {via, z_proc, {{upload, Path}, Context}},
         ?MODULE,
-        [Id, Path1, MediaInfo, PathLookup, Context],
+        [Id, Path, MediaInfo, PathLookup, Context],
         []).
 
 init([Id, Path, MediaInfo, PathLookup, Context]) ->
