@@ -34,6 +34,9 @@
 
 %% z_db_worker callbacks
 -export([
+    pool_return_connection/2,
+    pool_get_connection/1,
+
     ensure_all_started/0,
     test_connection/1,
     squery/3,
@@ -110,6 +113,20 @@ test_connection_1(Args) ->
             E
     end.
 
+
+-spec pool_get_connection( z:context() ) -> {ok, pid()} | {error, term()}.
+pool_get_connection(Context) ->
+    z_db_pool:get_connection(Context).
+
+-spec pool_return_connection( pid(), z:context() ) -> ok | {error, term()}.
+pool_return_connection(Worker, Context) ->
+    case gen_server:call(Worker, {pool_return_connection_check, self()}) of
+        ok ->
+            z_db_pool:return_connection(Worker, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
 %% @doc Simple query without parameters, the query is interrupted if it takes
 %%      longer than Timeout msec.
 -spec squery( pid(), string() | binary(), pos_integer() ) -> query_result().
@@ -167,6 +184,18 @@ init(Args) ->
     process_flag(trap_exit, true),
     {ok, #state{conn=undefined, conn_args=Args}, ?IDLE_TIMEOUT}.
 
+handle_call({pool_return_connection_check, _CallerPid}, _From, #state{ busy_pid = undefined } = State) ->
+    {reply, ok, State};
+handle_call({pool_return_connection_check, CallerPid}, From, #state{
+            busy_pid = Pid,
+            busy_sql = Sql,
+            busy_params = Params
+        } = State) ->
+    lager:error("Connection return to pool by ~p but still running for ~p (query \"~s\" with ~p)",
+                [ CallerPid, Pid, Sql, Params ]),
+    gen_server:reply(From, {error, pool_return_other}),
+    State1 = disconnect(State, sql_timeout),
+    {stop, normal, State1};
 
 handle_call({fetch_conn, _Ref, _CallerPid, _Sql, _Params, _Timeout, _IsTracing} = Cmd, From,
             #state{ busy_pid = undefined, conn = undefined, conn_args = Args } = State) ->
@@ -227,12 +256,12 @@ handle_call({return_conn, Ref, Pid}, _From,
     State1 = reset_busy_state(State),
     {reply, ok, State1, timeout(State1)};
 
-handle_call({return_conn, _Ref}, From, #state{ busy_pid = undefined } = State) ->
-    lager:error("SQL connection returned by ~p but not in use.", [ From ]),
+handle_call({return_conn, _Ref, Pid}, _From, #state{ busy_pid = undefined } = State) ->
+    lager:error("SQL connection returned by ~p but not in use.", [ Pid ]),
     {reply, {error, idle}, State, timeout(State)};
 
-handle_call({return_conn, _Ref}, From, #state{ busy_pid = OtherPid } = State) ->
-    lager:error("SQL connection returned by ~p but in use by ~p", [ From, OtherPid ]),
+handle_call({return_conn, _Ref, Pid}, _From, #state{ busy_pid = OtherPid } = State) ->
+    lager:error("SQL connection returned by ~p but in use by ~p", [ Pid, OtherPid ]),
     {reply, {error, notyours}, State, timeout(State)};
 
 handle_call(get_raw_connection, From, #state{ conn = undefined, conn_args = Args } = State) ->
@@ -246,8 +275,9 @@ handle_call(get_raw_connection, From, #state{ conn = undefined, conn_args = Args
 handle_call(get_raw_connection, _From, #state{ conn = Conn } = State) ->
     {reply, Conn, State, timeout(State)};
 
-handle_call(_Request, _From, State) ->
-    {reply, unknown_call, State, timeout(State)}.
+handle_call(Request, _From, State) ->
+    lager:info("SQL unknown call ~p", [ Request ]),
+    {reply, {error, unknown_call}, State, timeout(State)}.
 
 
 handle_cast(_Msg, State) ->
