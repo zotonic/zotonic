@@ -188,16 +188,20 @@ handle_call({fetch_conn, Ref, CallerPid, Sql, Params, Timeout, IsTracing}, _From
     },
     {reply, {ok, State#state.conn}, State1, Timeout};
 
-handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, _From, #state{ busy_pid = OtherPid } = State)
+handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, From, #state{ busy_pid = OtherPid } = State)
     when CallerPid =:= OtherPid ->
-    % Caller is confused - starting a request when the current request isn't finished yet.
-    % Log an error and force a quick timeout for the currently running query.
+    % Caller is confused - starting a request whilst the current request isn't finished yet.
+    % Log an error, stop the running query, and kill this worker.
+    % No hope of recovery, as the caller is in an illegal state reusing this connection
+    % for multiple queries.
     lager:error("Connection requested by ~p but also using same connection for (query \"~s\" with ~p)",
                 [ CallerPid, OtherPid, Sql, Params ]),
-    {reply, {error, busy}, State, 0};
+    gen_server:reply(From, {error, busy}),
+    State1 = disconnect(State, sql_timeout),
+    {stop, normal, State1};
 
 handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, _From, #state{ busy_pid = OtherPid } = State) ->
-    % This can happen if a transaction connection is shared by two processes.
+    % This can happen if a connection is shared by two processes.
     % Deny the request and continue with the running request.
     lager:error("Connection requested by ~p but in use by ~p (query \"~s\" with ~p)",
                 [ CallerPid, OtherPid, Sql, Params ]),
@@ -281,7 +285,8 @@ handle_info(timeout, #state{
     lager:error(
         "SQL Timeout (~p) ~p msec on ~s/~s: \"~s\"   ~p",
         [ Pid, Timeout, Database, Schema, Sql, Params ]),
-    {noreply, disconnect(State, sql_timeout), hibernate};
+    State1 = disconnect(State, sql_timeout),
+    {stop, normal, State1};
 
 handle_info({'DOWN', _Ref, process, BusyPid, Reason}, #state{
         busy_pid = BusyPid,
