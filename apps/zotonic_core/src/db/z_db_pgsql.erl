@@ -193,8 +193,8 @@ handle_call({pool_return_connection_check, CallerPid}, From, #state{
         } = State) ->
     lager:error("Connection return to pool by ~p but still running for ~p (query \"~s\" with ~p)",
                 [ CallerPid, Pid, Sql, Params ]),
-    gen_server:reply(From, {error, pool_return_other}),
-    State1 = disconnect(State, sql_timeout),
+    gen_server:reply(From, {error, checkin_busy}),
+    State1 = disconnect(State, checkin_busy),
     {stop, normal, State1};
 
 handle_call({fetch_conn, _Ref, _CallerPid, _Sql, _Params, _Timeout, _IsTracing} = Cmd, From,
@@ -230,7 +230,7 @@ handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, Fr
     lager:error("Connection requested by ~p but also using same connection for (query \"~s\" with ~p)",
                 [ CallerPid, OtherPid, Sql, Params ]),
     gen_server:reply(From, {error, busy}),
-    State1 = disconnect(State, sql_timeout),
+    State1 = disconnect(State, busy),
     {stop, normal, State1};
 
 handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, _From, #state{ busy_pid = OtherPid } = State) ->
