@@ -34,6 +34,9 @@
 
 %% z_db_worker callbacks
 -export([
+    pool_return_connection/2,
+    pool_get_connection/1,
+
     ensure_all_started/0,
     test_connection/1,
     squery/3,
@@ -82,6 +85,7 @@
 start_link(Args) when is_list(Args) ->
     gen_server:start_link(?MODULE, Args, []).
 
+-spec test_connection( list() ) -> ok | {error, term()}.
 test_connection(Args) ->
     case try_connect_tcp(Args) of
         ok ->
@@ -109,9 +113,23 @@ test_connection_1(Args) ->
             E
     end.
 
+
+-spec pool_get_connection( z:context() ) -> {ok, pid()} | {error, term()}.
+pool_get_connection(Context) ->
+    z_db_pool:get_connection(Context).
+
+-spec pool_return_connection( pid(), z:context() ) -> ok | {error, term()}.
+pool_return_connection(Worker, Context) ->
+    case gen_server:call(Worker, {pool_return_connection_check, self()}) of
+        ok ->
+            z_db_pool:return_connection(Worker, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
 %% @doc Simple query without parameters, the query is interrupted if it takes
-%%      longer then Timeout msec.
--spec squery( pid(), string(), pos_integer() ) -> query_result().
+%%      longer than Timeout msec.
+-spec squery( pid(), string() | binary(), pos_integer() ) -> query_result().
 squery(Worker, Sql, Timeout) ->
     {ok, {Conn, Ref}} = fetch_conn(Worker, Sql, [], Timeout),
     Result = epgsql:squery(Conn, Sql),
@@ -119,15 +137,17 @@ squery(Worker, Sql, Timeout) ->
     decode_reply(Result).
 
 %% @doc Query with parameters, the query is interrupted if it takes
-%%      longer then Timeout msec.
--spec equery( pid(), string(), list(), pos_integer() ) -> query_result().
+%%      longer than Timeout msec.
+-spec equery( pid(), string() | binary(), list(), pos_integer() ) -> query_result().
 equery(Worker, Sql, Parameters, Timeout) ->
     {ok, {Conn, Ref}} = fetch_conn(Worker, Sql, Parameters, Timeout),
     Result = epgsql:equery(Conn, Sql, encode_values(Parameters)),
     ok = return_conn(Worker, Ref),
     decode_reply(Result).
 
-%% @doc Request the SQL connection from the worker
+%% @doc Request the SQL connection from the worker. The query is passed for logging
+% purposes. This caller will do the query using the returned connection.
+-spec fetch_conn( pid(), string() | binary(), list(), pos_integer() ) -> {ok, {pid(), reference()}}.
 fetch_conn(Worker, Sql, Parameters, Timeout) ->
     Ref = erlang:make_ref(),
     {ok, Conn} = gen_server:call(Worker, {fetch_conn, Ref, self(), Sql, Parameters, Timeout, is_tracing()}),
@@ -135,6 +155,7 @@ fetch_conn(Worker, Sql, Parameters, Timeout) ->
 
 %% @doc Return the SQL connection to the worker, must be done within the timeout
 %%      specified in the fetch_conn/4 call.
+-spec return_conn(pid(), reference()) -> ok | {error, term()}.
 return_conn(Worker, Ref) ->
     gen_server:call(Worker, {return_conn, Ref, self()}).
 
@@ -163,6 +184,18 @@ init(Args) ->
     process_flag(trap_exit, true),
     {ok, #state{conn=undefined, conn_args=Args}, ?IDLE_TIMEOUT}.
 
+handle_call({pool_return_connection_check, _CallerPid}, _From, #state{ busy_pid = undefined } = State) ->
+    {reply, ok, State};
+handle_call({pool_return_connection_check, CallerPid}, From, #state{
+            busy_pid = Pid,
+            busy_sql = Sql,
+            busy_params = Params
+        } = State) ->
+    lager:error("Connection return to pool by ~p but still running for ~p (query \"~s\" with ~p)",
+                [ CallerPid, Pid, Sql, Params ]),
+    gen_server:reply(From, {error, checkin_busy}),
+    State1 = disconnect(State, checkin_busy),
+    {stop, normal, State1};
 
 handle_call({fetch_conn, _Ref, _CallerPid, _Sql, _Params, _Timeout, _IsTracing} = Cmd, From,
             #state{ busy_pid = undefined, conn = undefined, conn_args = Args } = State) ->
@@ -188,7 +221,21 @@ handle_call({fetch_conn, Ref, CallerPid, Sql, Params, Timeout, IsTracing}, _From
     },
     {reply, {ok, State#state.conn}, State1, Timeout};
 
+handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, From, #state{ busy_pid = OtherPid } = State)
+    when CallerPid =:= OtherPid ->
+    % Caller is confused - starting a request whilst the current request isn't finished yet.
+    % Log an error, stop the running query, and kill this worker.
+    % No hope of recovery, as the caller is in an illegal state reusing this connection
+    % for multiple queries.
+    lager:error("Connection requested by ~p but also using same connection for (query \"~s\" with ~p)",
+                [ CallerPid, OtherPid, Sql, Params ]),
+    gen_server:reply(From, {error, busy}),
+    State1 = disconnect(State, busy),
+    {stop, normal, State1};
+
 handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, _From, #state{ busy_pid = OtherPid } = State) ->
+    % This can happen if a connection is shared by two processes.
+    % Deny the request and continue with the running request.
     lager:error("Connection requested by ~p but in use by ~p (query \"~s\" with ~p)",
                 [ CallerPid, OtherPid, Sql, Params ]),
     {reply, {error, busy}, State, timeout(State)};
@@ -209,12 +256,12 @@ handle_call({return_conn, Ref, Pid}, _From,
     State1 = reset_busy_state(State),
     {reply, ok, State1, timeout(State1)};
 
-handle_call({return_conn, _Ref}, From, #state{ busy_pid = undefined } = State) ->
-    lager:error("SQL connection returned by ~p but not in use.", [ From ]),
+handle_call({return_conn, _Ref, Pid}, _From, #state{ busy_pid = undefined } = State) ->
+    lager:error("SQL connection returned by ~p but not in use.", [ Pid ]),
     {reply, {error, idle}, State, timeout(State)};
 
-handle_call({return_conn, _Ref}, From, #state{ busy_pid = OtherPid } = State) ->
-    lager:error("SQL connection returned by ~p but in use by ~p", [ From, OtherPid ]),
+handle_call({return_conn, _Ref, Pid}, _From, #state{ busy_pid = OtherPid } = State) ->
+    lager:error("SQL connection returned by ~p but in use by ~p", [ Pid, OtherPid ]),
     {reply, {error, notyours}, State, timeout(State)};
 
 handle_call(get_raw_connection, From, #state{ conn = undefined, conn_args = Args } = State) ->
@@ -228,8 +275,9 @@ handle_call(get_raw_connection, From, #state{ conn = undefined, conn_args = Args
 handle_call(get_raw_connection, _From, #state{ conn = Conn } = State) ->
     {reply, Conn, State, timeout(State)};
 
-handle_call(_Request, _From, State) ->
-    {reply, unknown_call, State, timeout(State)}.
+handle_call(Request, _From, State) ->
+    lager:info("SQL unknown call ~p", [ Request ]),
+    {reply, {error, unknown_call}, State, timeout(State)}.
 
 
 handle_cast(_Msg, State) ->
@@ -271,7 +319,8 @@ handle_info(timeout, #state{
     lager:error(
         "SQL Timeout (~p) ~p msec on ~s/~s: \"~s\"   ~p",
         [ Pid, Timeout, Database, Schema, Sql, Params ]),
-    {noreply, disconnect(State, sql_timeout), hibernate};
+    State1 = disconnect(State, sql_timeout),
+    {stop, normal, State1};
 
 handle_info({'DOWN', _Ref, process, BusyPid, Reason}, #state{
         busy_pid = BusyPid,

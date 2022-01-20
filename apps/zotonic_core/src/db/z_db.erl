@@ -309,7 +309,8 @@ get_connection(#context{dbc=undefined} = Context) ->
     case has_connection(Context) of
         true ->
             set_dbtrace_flag(Context),
-            z_db_pool:get_connection(Context);
+            DbDriver = z_context:db_driver(Context),
+            DbDriver:pool_get_connection(Context);
         false ->
             {error, nodatabase}
     end;
@@ -331,7 +332,8 @@ set_dbtrace_flag(Context) ->
 
 %% @doc Transaction handler safe function for releasing a db connection
 return_connection(C, Context=#context{dbc=undefined}) ->
-    z_db_pool:return_connection(C, Context);
+    DbDriver = z_context:db_driver(Context),
+    DbDriver:pool_return_connection(C, Context);
 return_connection(_C, _Context) ->
     ok.
 
