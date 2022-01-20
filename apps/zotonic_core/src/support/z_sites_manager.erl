@@ -542,6 +542,7 @@ handle_info(periodic_upgrade, #state{ sites = Sites } = State) ->
     UpgradedSites = do_upgrade(Sites),
     timer:send_after(?PERIODIC_UPGRADE, periodic_upgrade),
     do_sync_status(UpgradedSites),
+    erlang:garbage_collect(),
     {noreply, State#state{ sites = UpgradedSites }};
 
 handle_info(periodic_start, State) ->

@@ -201,8 +201,8 @@ ulimit_n() ->
 
 max_processes() ->
     case os:getenv("MAX_PROCESSES") of
-        false -> "10000000";
-        "" -> "10000000";
+        false -> "5000000";
+        "" -> "5000000";
         MaxP -> MaxP
     end.
 
