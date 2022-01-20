@@ -152,6 +152,19 @@ The following environment variables influence how Zotonic starts up.
   Where Zotonic puts temporary files. Examples are temporary files for image
   resizing or URL downloading.
 
+``ERL_MAX_PROCESSES``
+  Maximum of processes in Erlang, defaults to 500000.
+
+``ERL_MAX_ATOMS``
+  Maximum number of atoms in Erlang, defaults to 1048576.
+
+``ERL_MAX_PORTS``
+  Maximum number of ports for the Erlang VM, defaults to the output of ``ulimit -n``
+  If ulimit returns ``unlimited`` then 100000 is used.
+
+``ERL_KERNEL_POLL``
+  How the kernel polls for i/o. Defaults to ``true``. Valid values are ``true`` and ``false``.
+
 The following environment variables influence how Zotonic stops.
 
 ``ZOTONIC_WAIT_VM``

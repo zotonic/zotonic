@@ -118,7 +118,7 @@ handle_cast({load_translations, Trans}, State) ->
     List = maps:fold(F, [], Trans),
     sync_to_table(List, State#state.table),
     z_template:reset(State#state.site),
-    {noreply, State};
+    {noreply, State, hibernate};
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->

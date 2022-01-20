@@ -124,6 +124,9 @@
 % Periodically check if we need to restat any failed modules
 -define(FAILED_CHECK, 1000).
 
+% Periodically force a garbage collect
+-define(GC_INTERVAL, 60000).
+
 
 %%====================================================================
 %% API
@@ -679,6 +682,7 @@ init(Site) ->
         {site, Site},
         {module, ?MODULE}
       ]),
+    timer:send_interval(?GC_INTERVAL, force_gc),
     {ok, #state{ site = Site }}.
 
 
@@ -847,6 +851,7 @@ handle_info(failed_restart, #state{ start_queue = [], modules = Modules } = Stat
     end,
     flush_mbox(failed_restart),
     timer:send_after(?FAILED_CHECK, failed_restart),
+    garbage_collect(),
     {noreply, State1};
 handle_info(failed_restart, State) ->
     State1 = do_cleanup_crash_state(State),
@@ -859,6 +864,10 @@ handle_info(upgrade, #state{ start_queue = [] } = State) ->
     State1 = handle_upgrade(State),
     {noreply, State1};
 handle_info(upgrade, State) ->
+    {noreply, State};
+handle_info(force_gc, #state{ site = Site } = State) ->
+    garbage_collect(),
+    z_module_sup:gc(Site),
     {noreply, State};
 
 handle_info(_Info, State) ->

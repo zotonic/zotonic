@@ -674,13 +674,13 @@ handle_cast(update_dispatchinfo, State) ->
     do_update_hosts(),
     NewRules = collect_dispatchrules(),
     do_compile_modified(State#state.rules, NewRules),
-    {noreply, State#state{
-        rules=NewRules
-    }};
+    erlang:garbage_collect(),
+    {noreply, State#state{ rules = NewRules }};
 
 %% @doc Fetch all active hostnames
 handle_cast(update_hosts, State) ->
     do_update_hosts(),
+    erlang:garbage_collect(),
     {noreply, State};
 
 %% @doc Trap unknown casts

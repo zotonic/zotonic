@@ -38,6 +38,10 @@
     observe_custom_pivot/2,
     observe_filewatcher/2,
     observe_module_reindexed/2,
+
+    pid_observe_rsc_delete/3,
+    pid_observe_rsc_update_done/3,
+
     to_tsquery/2,
     rank_weight/1,
     rank_behaviour/1,
@@ -50,6 +54,7 @@
 
 -record(state, {context, query_watches=[]}).
 
+-define(TIMEOUT_GC, 1000).
 
 event(#postback{ message={facet_rebuild, _Args}}, Context) ->
     case z_acl:is_admin(Context)
@@ -132,6 +137,56 @@ observe_module_reindexed(module_reindexed, Context) ->
     end.
 
 
+%% @doc Check the query watches for a match with the updated resource.
+pid_observe_rsc_delete(Pid, #rsc_delete{ id = Id, is_a = IsA }, _Context) ->
+    case lists:member('query', IsA) of
+        true ->
+            gen_server:cast(Pid, {watches_remove, Id});
+        false ->
+            ok
+    end.
+
+%% @doc Check if any watches need updating.
+pid_observe_rsc_update_done(_Pid, #rsc_update_done{ action = delete }, _Context) ->
+    ok;
+pid_observe_rsc_update_done(Pid, #rsc_update_done{ id = Id, pre_is_a = IsA, post_is_a = IsA }, Context) ->
+    case lists:member('query', IsA) of
+        true -> gen_server:cast(Pid, {watches_update, Id});
+        false -> ok
+    end,
+    rsc_update_notify(Pid, Id, Context);
+pid_observe_rsc_update_done(Pid, #rsc_update_done{ id = Id, pre_is_a = CatsOld, post_is_a = CatsNew }, Context) ->
+    case lists:member('query', CatsOld) of
+        true ->
+            case lists:member('query', CatsNew) of
+                true ->
+                    %% It still is a query; but might have changes; update watches.
+                    gen_server:cast(Pid, {watches_update, Id});
+                false ->
+                    %% Its no longer a query; remove from watches.
+                    gen_server:cast(Pid, {watches_remove, Id})
+            end;
+        false ->
+            case lists:member('query', CatsNew) of
+                true ->
+                    %% It has become a query
+                    gen_server:cast(Pid, {watches_update, Id});
+                false ->
+                    %% It has not been a query
+                    ok
+            end
+    end,
+    rsc_update_notify(Pid, Id, Context).
+
+rsc_update_notify(Pid, Id, Context) ->
+    {ok, Watches} = gen_server:call(Pid, get_watches),
+    ContextSudo = z_acl:sudo(Context),
+    search_query_notify:send_notifications(
+        Id,
+        search_query_notify:check_rsc(Id, Watches, ContextSudo),
+        ContextSudo).
+
+
 %%====================================================================
 %% API
 %%====================================================================
@@ -146,78 +201,41 @@ start_link(Args) when is_list(Args) ->
 
 %% @doc Initiates the server.
 init(Args) ->
-    process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
     lager:md([
         {site, z_context:site(Context)},
         {module, ?MODULE}
-      ]),
+    ]),
+    {ok, #state{ context = z_acl:sudo(z_context:new(Context)) }, ?TIMEOUT_GC}.
 
-    %% Watch for changes to resources
-    z_notifier:observe(rsc_update_done, self(), Context),
-    z_notifier:observe(rsc_delete, self(), Context),
-    {ok, #state{context=z_acl:sudo(z_context:new(Context))}}.
+handle_call(get_watches, _From, #state{ query_watches = Watches } = State) ->
+    {reply, {ok, Watches}, State, ?TIMEOUT_GC};
 
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
-%% @doc Casts for updates to resources
-handle_cast({#rsc_delete{id=Id, is_a=IsA}, _Ctx}, State=#state{context=Context,query_watches=Watches}) ->
-    Watches1 = case lists:member('query', IsA) of
-                   false -> Watches;
-                   true -> search_query_notify:watches_remove(Id, Watches, Context)
-               end,
-    {noreply, State#state{query_watches=Watches1}};
-
 handle_cast(init_query_watches, State) ->
     Watches = search_query_notify:init(State#state.context),
-    {noreply, State#state{query_watches=Watches}};
+    {noreply, State#state{query_watches=Watches}, ?TIMEOUT_GC};
 
-handle_cast({#rsc_update_done{action=delete}, _Ctx}, State) ->
-    {noreply, State};
-handle_cast({#rsc_update_done{id=Id, pre_is_a=Cats, post_is_a=Cats}, _Ctx}, State=#state{query_watches=Watches,context=Context}) ->
-    %% Update; categories have not changed.
-    Watches1 = case lists:member('query', Cats) of
-                   false -> Watches;
-                   true -> search_query_notify:watches_update(Id, Watches, Context)
-               end,
-    %% Item updated; send notifications for matched queries.
-    search_query_notify:send_notifications(Id, search_query_notify:check_rsc(Id, Watches1, Context), Context),
-    {noreply, State#state{query_watches=Watches1}};
+handle_cast({watches_remove, Id}, #state{ context = Context, query_watches = Watches } = State) ->
+    Watches1 = search_query_notify:watches_remove(Id, Watches, Context),
+    {noreply, State#state{ query_watches = Watches1 }, ?TIMEOUT_GC};
 
-handle_cast({#rsc_update_done{id=Id, pre_is_a=CatsOld, post_is_a=CatsNew}, _Ctx}, State=#state{query_watches=Watches,context=Context}) ->
-    %% Update; categories *have* changed.
-    Watches1 = case lists:member('query', CatsOld) of
-                   true ->
-                       case lists:member('query', CatsNew) of
-                           true ->
-                               %% It still is a query; but might have changes; update watches.
-                               search_query_notify:watches_update(Id, Watches, Context);
-                           false ->
-                               %% Its no longer a query; remove from watches.
-                               search_query_notify:watches_remove(Id, Watches, Context)
-                       end;
-                   false ->
-                       case lists:member('query', CatsNew) of
-                           true ->
-                               %% It has become a query
-                               search_query_notify:watches_update(Id, Watches, Context);
-                           false ->
-                               %% It has not been a query
-                               Watches
-                       end
-               end,
-    search_query_notify:send_notifications(Id, search_query_notify:check_rsc(Id, Watches1, Context), Context),
-    {noreply, State#state{query_watches=Watches1}};
+handle_cast({watches_update, Id}, #state{ context = Context, query_watches = Watches } = State) ->
+    Watches1 = search_query_notify:watches_update(Id, Watches, Context),
+    {noreply, State#state{ query_watches = Watches1 }, ?TIMEOUT_GC};
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
-
-
 %% @doc Handling all non call/cast messages
+handle_info(timeout, State) ->
+    z_depcache:flush_process_dict(),
+    erlang:garbage_collect(),
+    {noreply, State};
 handle_info(_Info, State) ->
     {noreply, State}.
 
@@ -225,10 +243,7 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, State) ->
-    Context = State#state.context,
-    z_notifier:detach(rsc_update_done, self(), Context),
-    z_notifier:detach(rsc_delete, self(), Context),
+terminate(_Reason, _State) ->
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}

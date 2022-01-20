@@ -163,6 +163,7 @@ base_cmd(DefaultName, CodePaths) ->
                             SOpt,
                             " -env ERL_MAX_PORTS ", max_ports(),
                             " +P ", max_processes(),
+                            " +t ", max_atoms(),
                             " +K ", kernel_poll(),
                             " -pa ", lists:map( fun(D) -> [ " ", D ] end, CodePaths ),
                             " ", name_arg(LongOrShortnames, Nodename),
@@ -200,14 +201,21 @@ ulimit_n() ->
     end.
 
 max_processes() ->
-    case os:getenv("MAX_PROCESSES") of
-        false -> "10000000";
-        "" -> "10000000";
+    case os:getenv("ERL_MAX_PROCESSES") of
+        false -> "5000000";
+        "" -> "5000000";
         MaxP -> MaxP
     end.
 
+max_atoms() ->
+    case os:getenv("ERL_MAX_ATOMS") of
+        false -> "1048576";
+        "" -> "1048576";
+        MaxA -> MaxA
+    end.
+
 kernel_poll() ->
-    case os:getenv("KERNEL_POLL") of
+    case os:getenv("ERL_KERNEL_POLL") of
         false -> "true";
         "" -> "true";
         KP -> KP

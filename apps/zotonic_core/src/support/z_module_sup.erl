@@ -25,7 +25,8 @@
 -export([
     start_link/1,
     start_module/3,
-    stop_module/2
+    stop_module/2,
+    gc/1
 ]).
 
 %% supervisor callbacks
@@ -54,6 +55,11 @@ start_module(Application, ChildSpec, Site) ->
 stop_module(ChildId, Site) ->
     Name = z_utils:name_for_site(z_module_sup, Site),
     supervisor:terminate_child(Name, ChildId).
+
+-spec gc( atom() ) -> any().
+gc(Site) ->
+    Name = z_utils:name_for_site(z_module_sup, Site),
+    erlang:garbage_collect(whereis(Name)).
 
 -spec init(list()) -> {ok, {supervisor:sup_flags(), [supervisor:child_spec()]}}.
 init([]) ->
