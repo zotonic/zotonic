@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-20 11:06\n"
+"PO-Revision-Date: 2022-01-20 12:04\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2175,7 +2175,7 @@ msgstr "Просмотреть все страницы из этой катег�
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:34
 msgid "View all referrers"
-msgstr "Просмотр всех связей"
+msgstr "Просмотр всех рефереров"
 
 #: apps/zotonic_mod_admin/priv/templates/admin.tpl:17
 msgid "View status"
