@@ -82,6 +82,7 @@
 start_link(Args) when is_list(Args) ->
     gen_server:start_link(?MODULE, Args, []).
 
+-spec test_connection( list() ) -> ok | {error, term()}.
 test_connection(Args) ->
     case try_connect_tcp(Args) of
         ok ->
@@ -110,8 +111,8 @@ test_connection_1(Args) ->
     end.
 
 %% @doc Simple query without parameters, the query is interrupted if it takes
-%%      longer then Timeout msec.
--spec squery( pid(), string(), pos_integer() ) -> query_result().
+%%      longer than Timeout msec.
+-spec squery( pid(), string() | binary(), pos_integer() ) -> query_result().
 squery(Worker, Sql, Timeout) ->
     {ok, {Conn, Ref}} = fetch_conn(Worker, Sql, [], Timeout),
     Result = epgsql:squery(Conn, Sql),
@@ -119,15 +120,17 @@ squery(Worker, Sql, Timeout) ->
     decode_reply(Result).
 
 %% @doc Query with parameters, the query is interrupted if it takes
-%%      longer then Timeout msec.
--spec equery( pid(), string(), list(), pos_integer() ) -> query_result().
+%%      longer than Timeout msec.
+-spec equery( pid(), string() | binary(), list(), pos_integer() ) -> query_result().
 equery(Worker, Sql, Parameters, Timeout) ->
     {ok, {Conn, Ref}} = fetch_conn(Worker, Sql, Parameters, Timeout),
     Result = epgsql:equery(Conn, Sql, encode_values(Parameters)),
     ok = return_conn(Worker, Ref),
     decode_reply(Result).
 
-%% @doc Request the SQL connection from the worker
+%% @doc Request the SQL connection from the worker. The query is passed for logging
+% purposes. This caller will do the query using the returned connection.
+-spec fetch_conn( pid(), string() | binary(), list(), pos_integer() ) -> {ok, {pid(), reference()}}.
 fetch_conn(Worker, Sql, Parameters, Timeout) ->
     Ref = erlang:make_ref(),
     {ok, Conn} = gen_server:call(Worker, {fetch_conn, Ref, self(), Sql, Parameters, Timeout, is_tracing()}),
@@ -135,6 +138,7 @@ fetch_conn(Worker, Sql, Parameters, Timeout) ->
 
 %% @doc Return the SQL connection to the worker, must be done within the timeout
 %%      specified in the fetch_conn/4 call.
+-spec return_conn(pid(), reference()) -> ok | {error, term()}.
 return_conn(Worker, Ref) ->
     gen_server:call(Worker, {return_conn, Ref, self()}).
 
