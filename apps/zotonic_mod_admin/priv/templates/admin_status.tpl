@@ -106,11 +106,7 @@
                 </div>
             </div>
 
-            <div class="widget">
-                <div class="widget-content">
-                    {% all include "_admin_system_status.tpl" %}
-                </div>
-            </div>
+            {% all include "_admin_system_status.tpl" %}
         </div>
 
         <div class="col-md-6">
@@ -121,9 +117,8 @@
             </div>
 
             <div class="widget">
+                <div class="widget-header">{_ Task queue _}</div>
                 <div class="widget-content">
-                    <h4>{_ Task queue _}</h4>
-
                     <table class="table">
                         <thead>
                             <tr>
@@ -164,7 +159,6 @@
                             {% endfor %}
                         </tbody>
                     </table>
-
                     <p class="help-block">
                         {_ Tasks are functions scheduled to run at a certain time. _}<br>
                         {_ Tasks with errors will retry five times before being dropped. _}
