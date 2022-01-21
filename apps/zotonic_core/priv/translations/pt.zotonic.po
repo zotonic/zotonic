@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-21 09:35\n"
+"PO-Revision-Date: 2022-01-21 10:03\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -1309,7 +1309,7 @@ msgstr "Primeiro"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:133
 msgid "First due"
-msgstr ""
+msgstr "Primeiro vencimento"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:77
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
@@ -1330,7 +1330,7 @@ msgstr "A partir de"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:131
 msgid "Function"
-msgstr ""
+msgstr "Função"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
 msgid "Go back."
@@ -1882,7 +1882,7 @@ msgstr "Alguns discos estão quase cheios."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:148
 msgid "Some tasks are retrying.<br>Total errors: {total}<br>Highest for single task: {max}"
-msgstr ""
+msgstr "Algumas tarefas estão tentando novamente.<br>Total de erros: {total}<br>Maior para tarefa única: {max}"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:137
 msgid "Something went wrong. Sorry."
@@ -1965,15 +1965,15 @@ msgstr "Administração do sistema"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:125
 msgid "Task queue"
-msgstr ""
+msgstr "Fila de tarefas"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:169
 msgid "Tasks are functions scheduled to run at a certain time."
-msgstr ""
+msgstr "Tarefas são funções programadas para serem executadas em um determinado horário."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:170
 msgid "Tasks with errors will retry five times before being dropped."
-msgstr ""
+msgstr "As tarefas com erros serão repetidas cinco vezes antes de serem descartadas."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:18
 msgid "Telephone"
@@ -2018,7 +2018,7 @@ msgstr "Não há páginas com uma ligação à página"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:160
 msgid "There are no tasks in the task queue."
-msgstr ""
+msgstr "Não há tarefas na fila de tarefas."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:159
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:80
