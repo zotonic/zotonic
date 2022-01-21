@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-21 11:50\n"
+"PO-Revision-Date: 2022-01-21 12:03\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -1554,7 +1554,7 @@ msgstr "Próximo &gt;"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:128
 msgid "Next due"
-msgstr ""
+msgstr "Próximo vencimento"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:61
 msgid "Next in category:"
