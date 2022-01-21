@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-21 10:03\n"
+"PO-Revision-Date: 2022-01-21 11:50\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -427,7 +427,7 @@ msgid "Members of same user group"
 msgstr "Anggota dari kelompok pengguna yang sama"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:11./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:105
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:130
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:125
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
 #: apps/zotonic_mod_base/priv/templates/error.tpl:78
@@ -850,7 +850,7 @@ msgstr "Semua Halaman"
 msgid "All sites have been flushed."
 msgstr "Semua situs telah dibilas."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:6
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
 msgid "Allocated"
 msgstr "Dialokasikan"
 
@@ -959,11 +959,11 @@ msgstr "Klik disini untuk informasi lebih lanjut"
 msgid "Click to preview."
 msgstr "Klik untuk melihat pratinjau."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:96
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:90
 msgid "Close Sockets"
 msgstr "Tutup Soket"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:97
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:91
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "Tutup semua soket dari alamat ip yang memiliki lebih dari &gt; 250 soket terbuka."
 
@@ -996,7 +996,7 @@ msgstr "Menghubung"
 msgid "Connect a page"
 msgstr "Menghubungkan sebuah halaman"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:126./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:55
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:126./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:57
 msgid "Connections"
 msgstr "Koneksi"
 
@@ -1016,11 +1016,11 @@ msgstr "Tidak dapat terhubung ke situs web."
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "Tidak dapat mendeteksi apapun untuk mengimpor pada URL tersebut atau menanamkan kode."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:78./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:132
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:72./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:127
 msgid "Count"
 msgstr "Menghitung"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106
 msgid "Country"
 msgstr "Negara"
@@ -1113,7 +1113,7 @@ msgstr "Putuskan"
 msgid "Discover media"
 msgstr "Temukan media"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
 msgid "Disks"
 msgstr "Disk"
 
@@ -1307,10 +1307,6 @@ msgstr "Temukan Halaman"
 msgid "First"
 msgstr "Pertama"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:133
-msgid "First due"
-msgstr "Jatuh tempo pertama"
-
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:77
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "Siram semua aturan pengiriman URL, template - dan perpustakaan cache dan lainnya di memori cache data."
@@ -1328,7 +1324,7 @@ msgstr "Ikuti koneksi dan impor semua (salinan dalam)."
 msgid "From"
 msgstr "Dari"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:131
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:126
 msgid "Function"
 msgstr "Fungsi"
 
@@ -1350,7 +1346,7 @@ msgstr "Di sini Anda dapat mengedit argumen kueri penelusuran. Setiap argumen me
 msgid "Home Directory"
 msgstr "Direktori Rumah"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:68
 msgid "IP Address"
 msgstr "Alamat IP"
 
@@ -1491,7 +1487,7 @@ msgstr "Judul media"
 msgid "Media updated."
 msgstr "Media diperbarui."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:1
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:2
 msgid "Memory"
 msgstr "Penyimpanan"
 
@@ -1544,7 +1540,7 @@ msgstr "Pindahkan blok ke atas"
 msgid "Name"
 msgstr "Nama"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:63
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:62
 msgid "Network Connections"
 msgstr "Koneksi jaringan"
 
@@ -1555,6 +1551,10 @@ msgstr "Lembaran baru"
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:169./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:171
 msgid "Next &gt;"
 msgstr "Berikutnya &gt;"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:128
+msgid "Next due"
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:61
 msgid "Next in category:"
@@ -1631,7 +1631,7 @@ msgstr "Halaman untuk"
 msgid "Pages overview"
 msgstr "Ikhtisar halaman"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
 msgid "Path"
@@ -1743,7 +1743,7 @@ msgstr "Arahkan ulang ke situs web pada tampilan halaman"
 msgid "Referrers to"
 msgstr "Perujuk untuk"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:50
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:51
 msgid "Refreshed every 30 minutes."
 msgstr "Di-refresh setiap 30 menit."
 
@@ -1870,7 +1870,7 @@ msgstr "Tampilkan halaman pada beberapa jalur"
 msgid "Site Files Directory"
 msgstr "Direktori File Situs"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
 msgid "Size"
@@ -1880,7 +1880,7 @@ msgstr "Ukuran"
 msgid "Some disks are almost full."
 msgstr "Beberapa disk hampir penuh."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:148
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:143
 msgid "Some tasks are retrying.<br>Total errors: {total}<br>Highest for single task: {max}"
 msgstr "Beberapa tugas sedang mencoba lagi.<br>Total kesalahan: {total}<br>Tertinggi untuk satu tugas: {max}"
 
@@ -1963,15 +1963,15 @@ msgstr "Status sistem"
 msgid "System administration"
 msgstr "Sistem administrasi"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:125
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:120
 msgid "Task queue"
 msgstr "Antrian tugas"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:169
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:163
 msgid "Tasks are functions scheduled to run at a certain time."
 msgstr "Tugas adalah fungsi yang dijadwalkan untuk dijalankan pada waktu tertentu."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:170
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:164
 msgid "Tasks with errors will retry five times before being dropped."
 msgstr "Tugas dengan kesalahan akan mencoba lagi lima kali sebelum dijatuhkan."
 
@@ -2016,7 +2016,7 @@ msgstr "Situs data ini sedang diinstal ulang. Lihat konsol untuk pesan"
 msgid "There are no pages with a connection to the page"
 msgstr "Tidak ada halaman dengan sambungan pada halaman"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:160
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:155
 msgid "There are no tasks in the task queue."
 msgstr "Tidak ada tugas dalam antrian tugas."
 
@@ -2137,7 +2137,7 @@ msgstr "Unik uri"
 msgid "Untitled"
 msgstr "Tanpa judul"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9
 msgid "Unused"
 msgstr "Tidak terpakai"
 
@@ -2163,7 +2163,7 @@ msgstr "Unggah Berkas"
 msgid "Uploaded"
 msgstr "Unggahan"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
 msgid "Usage"
 msgstr "Pemakaian"
 
@@ -2175,7 +2175,7 @@ msgstr "Gunakan autocompleter untuk mencari media di situs ini."
 msgid "Use the title of the base content for the display name of this person."
 msgstr "Gunakan judul dari isi dasar untuk menampilkan nama dari orang ini."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
 msgid "Used"
 msgstr "Bekas"
 
