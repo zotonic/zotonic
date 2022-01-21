@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-18 15:47\n"
+"PO-Revision-Date: 2022-01-21 09:35\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -427,6 +427,7 @@ msgid "Members of same user group"
 msgstr "同一用户组的成员"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:11./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:105
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:130
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
 #: apps/zotonic_mod_base/priv/templates/error.tpl:78
@@ -958,11 +959,11 @@ msgstr "点击这里获取更多信息"
 msgid "Click to preview."
 msgstr "点击预览。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:106
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:96
 msgid "Close Sockets"
 msgstr "关闭插座"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:107
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:97
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "关闭所有来自超过 &gt; 250个开放套接字的ip地址的套接字。"
 
@@ -1015,11 +1016,11 @@ msgstr "无法连接到网站。"
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "无法检测到该URL或嵌入代码上有任何可导入的内容。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:88
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:78./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:132
 msgid "Count"
 msgstr "计数"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:86
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106
 msgid "Country"
 msgstr "国家"
@@ -1306,6 +1307,10 @@ msgstr "查找页面"
 msgid "First"
 msgstr "名字"
 
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:133
+msgid "First due"
+msgstr ""
+
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:77
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "刷新所有的 URL 调度规则，模版以及缓存数据。"
@@ -1322,6 +1327,10 @@ msgstr "按照连接并导入所有（深拷贝）。"
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
 msgid "From"
 msgstr "来自"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:131
+msgid "Function"
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
 msgid "Go back."
@@ -1341,7 +1350,7 @@ msgstr "在这里你可以编辑搜索查询的参数。每个参数都有自己
 msgid "Home Directory"
 msgstr "主页目录"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:84
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:74
 msgid "IP Address"
 msgstr "IP地址"
 
@@ -1766,7 +1775,7 @@ msgstr "替换这个媒体条目"
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
 msgstr "<i>元</i> 类别中的资源可以有 \"功能\"：某些资源属性决定了在管理员的某些页面上显示或隐藏什么。如果该框为空，则该元资源没有启用任何功能。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:89
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:87
 msgid "Retrieving status..."
 msgstr "检索状态..."
 
@@ -1796,7 +1805,7 @@ msgstr "保存并查看本页面。"
 msgid "Save this page."
 msgstr "保存本页面。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:54
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:52
 msgid "Search indices rebuilt."
 msgstr "搜索指数重建。"
 
@@ -1870,6 +1879,10 @@ msgstr "大小"
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14./apps/zotonic_mod_admin/priv/templates/admin.tpl:15
 msgid "Some disks are almost full."
 msgstr "一些磁盘几乎已满。"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:148
+msgid "Some tasks are retrying.<br>Total errors: {total}<br>Highest for single task: {max}"
+msgstr ""
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:137
 msgid "Something went wrong. Sorry."
@@ -1950,6 +1963,18 @@ msgstr "系统状态"
 msgid "System administration"
 msgstr "系统管理"
 
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:125
+msgid "Task queue"
+msgstr ""
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:169
+msgid "Tasks are functions scheduled to run at a certain time."
+msgstr ""
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:170
+msgid "Tasks with errors will retry five times before being dropped."
+msgstr ""
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:18
 msgid "Telephone"
 msgstr "电话"
@@ -1990,6 +2015,10 @@ msgstr "网站的数据正在重新安装。请注意控制台的信息"
 #: apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:12
 msgid "There are no pages with a connection to the page"
 msgstr "没有连接到本页面的页面"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:160
+msgid "There are no tasks in the task queue."
+msgstr ""
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:159
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:80
@@ -7419,11 +7448,11 @@ msgstr "检查分面搜索表并通过重新索引所有页面来填充它。"
 msgid "Rebuild search facets"
 msgstr "重建搜索方面"
 
-#: apps/zotonic_mod_search/src/mod_search.erl:60
+#: apps/zotonic_mod_search/src/mod_search.erl:65
 msgid "Rebuilding the faceted search table."
 msgstr "重建分面搜索表。"
 
-#: apps/zotonic_mod_search/src/mod_search.erl:62
+#: apps/zotonic_mod_search/src/mod_search.erl:67
 msgid "Sorry, you are not allowed to do this."
 msgstr "抱歉，您无权执行此操作。"
 
