@@ -258,6 +258,7 @@ upgrade(C, Database, Schema) ->
     ok = publication_start_nullable(C, Database, Schema),
     ok = key_changes_v1_0(C, Database, Schema),
     ok = rsc_language(C, Database, Schema),
+    ok = task_queue_error_count(C, Database, Schema),
     ok.
 
 
@@ -734,8 +735,48 @@ rsc_language(C, Database, Schema) ->
 
             {ok, _} = epgsql:equery(C, "
                             insert into pivot_task_queue (module, function, key)
-                            values ('z_install_update_task', 'init_language', $1)
+                            values ('z_install_update_task', 'init_language', '')
                             ",
-                            [ z_ids:id() ]),
+                            []),
             ok
     end.
+
+task_queue_error_count(C, Database, Schema) ->
+    case has_column(C, "pivot_task_queue", "error_count", Database, Schema) of
+        true ->
+            ok;
+        false ->
+            lager:info("Upgrade: adding error_count column to database ~s ~s.pivot_task_queue", [ Database, Schema ]),
+            {ok, [], []} = epgsql:squery(C, "alter table pivot_task_queue "
+                                        "add column error_count integer not null default 0"),
+
+
+            {ok, _, Tasks} = epgsql:equery(C, "
+                    select id, props
+                    from pivot_task_queue
+                    ", []),
+
+            lists:foreach(
+                fun({TaskId, Props}) ->
+                    case task_error_ct(z_db_pgsql:decode_value(Props)) of
+                        N when is_integer(N), N > 0 ->
+                            {ok, _} = epgsql:equery(C, "
+                                            update pivot_task_queue
+                                            set error_count = $1
+                                            where id = $2
+                                            ",
+                                            [ N, TaskId ]);
+                        _ ->
+                            ok
+                    end
+                end,
+                Tasks)
+    end.
+
+task_error_ct(#{ <<"error_ct">> := Count }) ->
+    Count;
+task_error_ct(Props) when is_list(Props) ->
+    % deprecated task queue entries
+    proplists:get_value(error_ct, Props, 0);
+task_error_ct(_) ->
+    0.

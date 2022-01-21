@@ -395,9 +395,10 @@ model_pgsql() ->
         key character varying(100) NOT NULL DEFAULT ''::character varying,
         due timestamp with time zone ,
         props bytea,
+        error_count integer not null default 0,
 
         CONSTRAINT pivot_task_queue_pkey PRIMARY KEY (id),
-        CONSTRAINT pivot_task_queue_module_funcion_key_key UNIQUE (module, function, key)
+        CONSTRAINT pivot_task_queue_module_function_key_key UNIQUE (module, function, key)
     )
     ",
 

@@ -38,8 +38,6 @@ function queueCountInfo(feedbackSelector, invokeSelector) {
     };
 
     updateFeedback = function (count) {
-        console.log("ALOHA", count);
-
         var queueCount = parseInt(count, 10);
         if (queueCount > 0) {
             isUpdating = true;

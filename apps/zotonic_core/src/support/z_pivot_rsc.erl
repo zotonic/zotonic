@@ -49,6 +49,7 @@
     delete_task/3,
     delete_task/4,
     list_tasks/1,
+    count_tasks/1,
     delete_tasks/1,
 
     stemmer_language/1,
@@ -329,6 +330,16 @@ delete_task(Module, Function, UniqueKey, Context) ->
 list_tasks(Context) ->
     z_db:qmap("select * from pivot_task_queue", Context).
 
+-spec count_tasks( z:context() ) -> {ok, list( map() )} | {error, term()}.
+count_tasks(Context) ->
+    z_db:qmap("
+        select module, function, count(*), min(due) as due,
+               sum(error_count) as error_count_total,
+               max(error_count) as error_count_max
+        from pivot_task_queue
+        group by module, function
+        order by due", Context).
+
 -spec delete_tasks( z:context() ) -> non_neg_integer().
 delete_tasks(Context) ->
     z_db:q("delete from pivot_task_queue", Context).
@@ -596,7 +607,7 @@ maybe_start_task(State, _Context) ->
 %% @doc Fetch the next task uit de task queue, if any.
 poll_task(Context) ->
     case z_db:qmap_row("
-        select id, module, function, props
+        select id, module, function, props, error_count
         from pivot_task_queue
         where due is null
            or due < current_timestamp
@@ -606,9 +617,14 @@ poll_task(Context) ->
         [ {keys, atom} ],
         Context)
     of
-        {ok, #{ id := Id, module := Module, function := Function, props := Props }} ->
+        {ok, #{
+            id := Id,
+            module := Module,
+            function := Function,
+            props := Props,
+            error_count := ErrCt
+        }} ->
             Args = get_args(Props),
-            ErrCt = get_error_ct(Props),
             {ok, #{
                 task_id => Id,
                 mfa => {z_convert:to_atom(Module), z_convert:to_atom(Function), Args},
@@ -626,22 +642,20 @@ get_args(Props) when is_list(Props) ->
 get_args(undefined) ->
     [].
 
-get_error_ct(Props) when is_map(Props) ->
-    maps:get(<<"error_ct">>, Props, 0);
-get_error_ct(Props) when is_list(Props) ->
-    % deprecated task queue entries
-    proplists:get_value(error_ct, Props, 0);
-get_error_ct(_) ->
-    0.
-
 
 %% @doc Fetch the next batch of ids from the queue. Remembers the serials, as a new
 %% pivot request might come in while we are pivoting.
-%% @spec fetch_queue(Context) -> [{Id,Serial}]
+-spec fetch_queue( z:context() ) -> [ { Id::m_rsc:resource_id(), Serial::integer() }].
 fetch_queue(Context) ->
-    z_db:q("select rsc_id, serial from rsc_pivot_queue where due < current_timestamp - '10 second'::interval order by is_update, due limit $1", [?POLL_BATCH], Context).
+    z_db:q("
+        select rsc_id, serial
+        from rsc_pivot_queue
+        where due < current_timestamp - '10 second'::interval
+        order by is_update, due
+        limit $1", [?POLL_BATCH], Context).
 
-%% @doc Fetch the serial of id's queue record
+%% @doc Fetch the serial of the id's queue record
+-spec fetch_queue_id( m_rsc:resource_id(), z:context() ) -> Serial::integer().
 fetch_queue_id(Id, Context) ->
     z_db:q1("select serial from rsc_pivot_queue where rsc_id = $1", [Id], Context).
 
