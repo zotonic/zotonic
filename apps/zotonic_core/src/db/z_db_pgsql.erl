@@ -44,6 +44,11 @@
     get_raw_connection/1
 ]).
 
+%% Used by the z_install_update to access props columns
+-export([
+    decode_value/1
+    ]).
+
 -define(TERM_MAGIC_NUMBER, 16#01326A3A:1/big-unsigned-unit:32).
 
 -define(CONNECT_TIMEOUT, 5000).

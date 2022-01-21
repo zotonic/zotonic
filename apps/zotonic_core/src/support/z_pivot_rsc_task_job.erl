@@ -89,7 +89,7 @@ task_job(
                                 [TaskId, Module, Function, Args, Error, Reason, RetryDue, Trace]),
                     RetryFields = #{
                         <<"due">> => RetryDue,
-                        <<"error_ct">> => ErrCt+1
+                        <<"error_count">> => ErrCt+1
                     },
                     z_db:update(pivot_task_queue, TaskId, RetryFields, Context);
                 false ->

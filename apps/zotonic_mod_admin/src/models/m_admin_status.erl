@@ -31,8 +31,6 @@
 
     otp_version/0,
     database_version/1,
-    session_count/1,
-    page_count/1,
     tcp_connection_count/0,
     group_sockets/0,
     close_sockets/2,
@@ -83,10 +81,6 @@ m_get_1([ <<"work_dir">> | Rest ], _Msg, _Context) ->
 m_get_1([ <<"files_dir">> | Rest ], _Msg, Context) ->
     Dir = z_path:files_subdir(".", Context),
     {ok, {filename:dirname(unicode:characters_to_binary(Dir)), Rest}};
-m_get_1([ <<"session_count">> | Rest ], _Msg, Context) ->
-    {ok, {session_count(Context), Rest}};
-m_get_1([ <<"page_count">> | Rest ], _Msg, Context) ->
-    {ok, {page_count(Context), Rest}};
 m_get_1([ <<"tcp_connection_count">> | Rest ], _Msg, _Context) ->
     {ok, {tcp_connection_count(), Rest}};
 
@@ -107,6 +101,13 @@ m_get_1([ <<"disks">>, <<"alert">> | Rest ], _Msg, _Context) ->
 m_get_1([ <<"disks">> | Rest ], _Msg, _Context) ->
     {ok, {disks(), Rest}};
 
+m_get_1([ <<"task_queue">> | Rest ], _Msg, Context) ->
+    case z_pivot_rsc:count_tasks(Context) of
+        {ok, Ts} ->
+            {ok, {Ts, Rest}};
+        {error, _} = Error ->
+            Error
+    end;
 
 m_get_1([ <<"is_ssl_application_configured">> | Rest ], _Msg, _Context) ->
     IsConf = case application:get_env(ssl, session_lifetime) of
@@ -150,25 +151,6 @@ otp_version() ->
 -spec database_version( z:context() ) -> binary().
 database_version(Context) ->
     z_db:database_version_string(Context).
-
-% Return the number of sessions of this site. 
-session_count(Context) ->
-    undefined.
-    % z_session_manager:count(Context).
-
-% Return the number of page processes which are open.
-page_count(Context) ->
-    undefined.
-    % z_session_manager:fold(
-    %   fun(S, Acc) ->
-    %           case z_session:get_pages(S) of
-    %               Pages when is_list(Pages) ->
-    %                   length(Pages) + Acc;
-    %               _ -> Acc
-    %           end
-    %   end,
-    %   0,
-    %   Context).
 
 % Group open sockets per ip-address, returns a list of proplists.
 group_sockets() ->

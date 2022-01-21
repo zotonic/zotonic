@@ -63,16 +63,6 @@
                     <th class="text-right">{_ Network Connections _}</th>
                     <td class="text-right">{{ m.admin_status.tcp_connection_count }}</td>
                 </tr>
-                {#
-                <tr>
-                    <th class="text-right">{_ Session Count _}</th>
-                    <td class="text-right">{{ m.admin_status.session_count }}</td>
-                </tr>
-                <tr>
-                    <th class="text-right">{_ Page Count _}</th>
-                    <td class="text-right">{{ m.admin_status.page_count }}</td>
-                </tr>
-                #}
             </tbody>
         </table>
     </div>
