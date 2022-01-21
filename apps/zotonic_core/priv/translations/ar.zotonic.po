@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-21 09:35\n"
+"PO-Revision-Date: 2022-01-21 11:50\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -427,7 +427,7 @@ msgid "Members of same user group"
 msgstr "أعضاء من نفس مجموعة المستخدمين"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:11./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:105
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:130
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:125
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
 #: apps/zotonic_mod_base/priv/templates/error.tpl:78
@@ -850,7 +850,7 @@ msgstr "كل الصفحات"
 msgid "All sites have been flushed."
 msgstr "تم مسح جميع المواقع."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:6
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
 msgid "Allocated"
 msgstr "مخصصة"
 
@@ -959,11 +959,11 @@ msgstr "انقر هنا للمزيد من المعلومات"
 msgid "Click to preview."
 msgstr "انقر لمعاينة."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:96
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:90
 msgid "Close Sockets"
 msgstr "إغلاق مآخذ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:97
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:91
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "إغلاق جميع مآخذ من عناوين IP التي لديها أكثر من &gt; 250 مآخذ مفتوحة."
 
@@ -996,7 +996,7 @@ msgstr "الاتصال"
 msgid "Connect a page"
 msgstr "الاتصال بصفحة"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:126./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:55
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:126./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:57
 msgid "Connections"
 msgstr "روابط"
 
@@ -1016,11 +1016,11 @@ msgstr "تعذر الاتصال بالموقع."
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "لم يستطيع الكشف عن أي شئ للاستيراد من عنوان URL هذا أو كود التضمين."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:78./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:132
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:72./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:127
 msgid "Count"
 msgstr "العد"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106
 msgid "Country"
 msgstr "البلد"
@@ -1113,7 +1113,7 @@ msgstr "قطع الاتصال"
 msgid "Discover media"
 msgstr "اكتشاف وسائل الإعلام"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
 msgid "Disks"
 msgstr "الأقراص"
 
@@ -1307,10 +1307,6 @@ msgstr "البحث عن الصفحة"
 msgid "First"
 msgstr "أولاً"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:133
-msgid "First due"
-msgstr "أول موعد"
-
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:77
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "قم بمسح و تحديث جميع روابط قواعد إرسال و النماذج و ذاكرة التخزين المؤقتة الخاصة بالمكتبة أو بيانات الذاكرة."
@@ -1328,7 +1324,7 @@ msgstr "اتبع الاتصالات واستيراد الكل (نسخة عميق
 msgid "From"
 msgstr "من"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:131
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:126
 msgid "Function"
 msgstr "دور"
 
@@ -1350,7 +1346,7 @@ msgstr "هنا يمكنك تحرير وسيطات استعلام البحث. ك�
 msgid "Home Directory"
 msgstr "الدليل الرئيسي"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:68
 msgid "IP Address"
 msgstr "عنوان IP"
 
@@ -1491,7 +1487,7 @@ msgstr "عنوان الوسائط"
 msgid "Media updated."
 msgstr "تم تحديث الوسائط."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:1
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:2
 msgid "Memory"
 msgstr "ذاكرة"
 
@@ -1544,7 +1540,7 @@ msgstr "تحرك كتلة لأعلى"
 msgid "Name"
 msgstr "الاسم"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:63
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:62
 msgid "Network Connections"
 msgstr "اتصالات الشبكة"
 
@@ -1555,6 +1551,10 @@ msgstr "صفحة جديدة"
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:169./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:171
 msgid "Next &gt;"
 msgstr "التالي &gt;"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:128
+msgid "Next due"
+msgstr "المقبل بسبب"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:61
 msgid "Next in category:"
@@ -1631,7 +1631,7 @@ msgstr "صفحات لـ"
 msgid "Pages overview"
 msgstr "نظرة عامة على الصفحات"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
 msgid "Path"
@@ -1743,7 +1743,7 @@ msgstr "إعادة التوجيه إلى موقع الويب على عرض ال�
 msgid "Referrers to"
 msgstr "يشير إلى"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:50
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:51
 msgid "Refreshed every 30 minutes."
 msgstr "يُنعش كل 30 دقيقة."
 
@@ -1870,7 +1870,7 @@ msgstr "عرض الصفحة على مسارات متعددة"
 msgid "Site Files Directory"
 msgstr "دليل ملفات الموقع"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
 msgid "Size"
@@ -1880,7 +1880,7 @@ msgstr "بحجم"
 msgid "Some disks are almost full."
 msgstr "بعض الأقراص ممتلئة تقريبًا."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:148
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:143
 msgid "Some tasks are retrying.<br>Total errors: {total}<br>Highest for single task: {max}"
 msgstr "يتم إعادة محاولة بعض المهام.<br>إجمالي الأخطاء: {total}<br>الأعلى لمهمة واحدة: {max}"
 
@@ -1963,15 +1963,15 @@ msgstr "حالة النظام"
 msgid "System administration"
 msgstr "إدارة النظام"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:125
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:120
 msgid "Task queue"
 msgstr "قائمة انتظار المهام"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:169
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:163
 msgid "Tasks are functions scheduled to run at a certain time."
 msgstr "المهام هي وظائف مجدولة للتشغيل في وقت معين."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:170
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:164
 msgid "Tasks with errors will retry five times before being dropped."
 msgstr "ستتم إعادة محاولة المهام التي بها أخطاء خمس مرات قبل إسقاطها."
 
@@ -2016,7 +2016,7 @@ msgstr "لقد تم إعادة تثبيت بيانات الموقع. شاهد و
 msgid "There are no pages with a connection to the page"
 msgstr "لا توجد صفحات تحتوي على اتصال بالصفحة"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:160
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:155
 msgid "There are no tasks in the task queue."
 msgstr "لا توجد مهام في قائمة انتظار المهام."
 
@@ -2137,7 +2137,7 @@ msgstr "uri فريد"
 msgid "Untitled"
 msgstr "بدون عنوان"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9
 msgid "Unused"
 msgstr "غير مستعمل"
 
@@ -2163,7 +2163,7 @@ msgstr "تحميل الملف"
 msgid "Uploaded"
 msgstr "تم التحميل"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
 msgid "Usage"
 msgstr "إستعمال"
 
@@ -2175,7 +2175,7 @@ msgstr "استخدم الإكمال التلقائي للبحث عن الوسا�
 msgid "Use the title of the base content for the display name of this person."
 msgstr "استخدم عنوان المحتوى الأساسي لعرض اسم هذا الشخص."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
 msgid "Used"
 msgstr "مستخدم"
 
