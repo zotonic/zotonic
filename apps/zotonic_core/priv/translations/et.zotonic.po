@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-24 13:48\n"
+"PO-Revision-Date: 2022-01-21 11:50\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -427,6 +427,7 @@ msgid "Members of same user group"
 msgstr "Sama kasutajagrupi liikmed"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:11./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:105
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:125
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
 #: apps/zotonic_mod_base/priv/templates/error.tpl:78
@@ -849,7 +850,7 @@ msgstr "Kõik lehed"
 msgid "All sites have been flushed."
 msgstr "Kõik saidid on loputatud."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:6
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
 msgid "Allocated"
 msgstr "Eraldatud"
 
@@ -958,11 +959,11 @@ msgstr "Lisateabe saamiseks klõpsake siin"
 msgid "Click to preview."
 msgstr "Klõpsake eelvaate kuvamiseks."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:106
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:90
 msgid "Close Sockets"
 msgstr "Sulgege pistikupesad"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:107
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:91
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "Sulgege kõik pistikupesad ip-aadressidelt, millel on üle &gt; 250 avatud pesa."
 
@@ -970,7 +971,7 @@ msgstr "Sulgege kõik pistikupesad ip-aadressidelt, millel on üle &gt; 250 avat
 msgid "Close preview"
 msgstr "Sule eelvaade"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:45
 msgid "Config Directory"
 msgstr "Kataloogi seadistamine"
 
@@ -995,7 +996,7 @@ msgstr "Ühendage"
 msgid "Connect a page"
 msgstr "Ühendage leht"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:126./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:55
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:126./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:57
 msgid "Connections"
 msgstr "Ühendused"
 
@@ -1015,11 +1016,11 @@ msgstr "Veebisaidiga ei saanud ühendust luua."
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "Sellel URL-il ei õnnestunud midagi importida ega manustada koodi."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:88
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:72./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:127
 msgid "Count"
 msgstr "Krahv"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:86
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106
 msgid "Country"
 msgstr "Riik"
@@ -1054,9 +1055,13 @@ msgstr "Kohalda lehe h√lkutsungit"
 msgid "Dashboard"
 msgstr "T√∂√∂laud"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:39
 msgid "Data Directory"
 msgstr "Andmekataloog"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:28
+msgid "Database Version"
+msgstr "Andmebaasi versioon"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:36
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
@@ -1108,7 +1113,7 @@ msgstr "Katkesta √ºhendus"
 msgid "Discover media"
 msgstr "Avastage meediat"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
 msgid "Disks"
 msgstr "Kettad"
 
@@ -1198,15 +1203,15 @@ msgstr "H√§da telefon"
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "Sisestage URL või manuskood. Seda analüüsitakse ja saate valida, kuidas andmeid importida."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
 msgid "Erlang Init Files"
 msgstr "Erlang Init-failid"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:57
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:60
 msgid "Erlang Installation Root"
 msgstr "Erlangi installi juur"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:44
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:25
 msgid "Erlang Version"
 msgstr "Erlangi versioon"
 
@@ -1302,11 +1307,11 @@ msgstr "Leidke leht"
 msgid "First"
 msgstr "Esimene"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:77
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "Loputage kõik URL-ide saatmisreeglid, malli ja teegi vahemälud ning muud mälus olevad vahemällu salvestatud andmed."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:73
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:76
 msgid "Flush system caches"
 msgstr "T√ºhjendas√ºsteemne vahem√§lu"
 
@@ -1318,6 +1323,10 @@ msgstr "Järgige ühendusi ja importige kõik (sügav koopia)."
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
 msgid "From"
 msgstr "Kellelt"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:126
+msgid "Function"
+msgstr "Funktsioon"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
 msgid "Go back."
@@ -1333,11 +1342,11 @@ msgstr "Päis"
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "Siin saate muuta otsingupäringu argumente. Iga argument läheb oma rida. Lisateabe saamiseks vaadake Zotonicu veebisaidi päringu argumentide</a> dokumentatsiooni <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Home Directory"
 msgstr "Kodukataloog"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:84
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:68
 msgid "IP Address"
 msgstr "IP-aadress"
 
@@ -1401,7 +1410,7 @@ msgstr "Link"
 msgid "Live query, send notifications when matching items are updated or inserted."
 msgstr "Reaalajas päring, saatke märguandeid, kui vastavaid üksusi värskendatakse või lisatakse."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:42
 msgid "Log Directory"
 msgstr "Logikataloog"
 
@@ -1478,7 +1487,7 @@ msgstr "Meedia pealkiri"
 msgid "Media updated."
 msgstr "Meediat värskendati."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:1
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:2
 msgid "Memory"
 msgstr "Mälu"
 
@@ -1531,7 +1540,7 @@ msgstr "Liigutage plokk üles"
 msgid "Name"
 msgstr "Nimi"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:63
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:62
 msgid "Network Connections"
 msgstr "Võrguühendused"
 
@@ -1542,6 +1551,10 @@ msgstr "Uus leht"
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:169./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:171
 msgid "Next &gt;"
 msgstr "Järgmine &gt;"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:128
+msgid "Next due"
+msgstr "Järgmine tähtaeg"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:61
 msgid "Next in category:"
@@ -1618,7 +1631,7 @@ msgstr "Lehed"
 msgid "Pages overview"
 msgstr "Lehtede √ºlevaade"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
 msgid "Path"
@@ -1639,6 +1652,11 @@ msgstr "Palun t√§ida uue lehe pealkir."
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:97./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:98./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:156./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:157
 msgid "Postcode"
 msgstr "Postiindeks"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_footer.tpl:4
+#: apps/zotonic_site_status/priv/templates/error.400.tpl:6./apps/zotonic_site_status/priv/templates/error.503.tpl:10./apps/zotonic_site_status/priv/templates/home.tpl:9./apps/zotonic_site_status/priv/templates/logon.tpl:10
+msgid "Powered by"
+msgstr "Powered by"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:23
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:8
@@ -1696,16 +1714,16 @@ msgstr "P√§ring"
 msgid "Query preview"
 msgstr "P√§ringu eelvaade"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:90
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:93
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
 msgstr "Taastage kõik otsinguindeksid, pannes kõik andmebaasi lehed ja andmed indekseerijate järjekorda. See võib võtta kaua aega!"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:81
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:84
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:122
 msgid "Rebuild search indices"
 msgstr "Konstrueeri otsingu indeksid"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:96
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:99
 msgid "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "Arvuta kategooriapuu numeratsioon ümber. See võib võtta kaua aega."
 
@@ -1725,11 +1743,11 @@ msgstr "Suunake veebisaidile lehevaatel"
 msgid "Referrers to"
 msgstr "Viitajad sinna"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:50
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:51
 msgid "Refreshed every 30 minutes."
 msgstr "Värskendatakse iga 30 minuti järel."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:100
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:103
 msgid "Reinstall site datamodel"
 msgstr "Installige saidi datamudel uuesti"
 
@@ -1741,7 +1759,7 @@ msgstr "M√§rkused"
 msgid "Removed the connection to"
 msgstr "Ühendus saidiga eemaldati"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:95
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:98
 msgid "Renumber category tree"
 msgstr "Nummerda kategoori puu uuesti"
 
@@ -1757,11 +1775,11 @@ msgstr "Vahetage praegune andmekandja"
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
 msgstr "Kategooria <i>meta</i> ressurssidel võivad olla funktsioonid: teatud ressursside atribuudid, mis otsustavad, mida administraatori teatud lehtedel näidata või peita. Kui see kast on tühi, pole selle meta-ressursi jaoks ühtegi funktsiooni lubatud."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:89
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:87
 msgid "Retrieving status..."
 msgstr "Oleku toomine ..."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:101
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:104
 msgid "Runs the schema install command from the site's module again."
 msgstr "Käivitab saidi moodulist uuesti skeemi installimise käsu."
 
@@ -1787,7 +1805,7 @@ msgstr "Salvesta ja vaata lehte."
 msgid "Save this page."
 msgstr "Salvesta see leht."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:54
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:52
 msgid "Search indices rebuilt."
 msgstr "Otsinguindeksid on ümber ehitatud."
 
@@ -1808,7 +1826,7 @@ msgstr "Otsingu tulemused"
 msgid "Search..."
 msgstr "Otsing..."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
 msgid "Security Directory"
 msgstr "Turvakataloog"
 
@@ -1848,11 +1866,11 @@ msgstr "Kuva nimega"
 msgid "Show page on multiple paths"
 msgstr "Kuva leht mitmel rajal"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:37
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:36
 msgid "Site Files Directory"
 msgstr "Saidifailide kataloog"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
 msgid "Size"
@@ -1861,6 +1879,10 @@ msgstr "Grootte"
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14./apps/zotonic_mod_admin/priv/templates/admin.tpl:15
 msgid "Some disks are almost full."
 msgstr "Mõni ketas on peaaegu täis."
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:143
+msgid "Some tasks are retrying.<br>Total errors: {total}<br>Highest for single task: {max}"
+msgstr "Mõned ülesanded proovivad uuesti.<br>Vigu kokku: {total}<br>Suurim ühe ülesande puhul: {max}"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:137
 msgid "Something went wrong. Sorry."
@@ -1941,6 +1963,18 @@ msgstr "S√ºsteemi staatus"
 msgid "System administration"
 msgstr "S√ºsteemi adminnimine"
 
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:120
+msgid "Task queue"
+msgstr "Ülesande järjekord"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:163
+msgid "Tasks are functions scheduled to run at a certain time."
+msgstr "Ülesanded on funktsioonid, mis on ajastatud teatud aja jooksul töötama."
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:164
+msgid "Tasks with errors will retry five times before being dropped."
+msgstr "Vigadega ülesandeid proovitakse viis korda uuesti, enne kui need tühistatakse."
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:18
 msgid "Telephone"
 msgstr "Telefon"
@@ -1981,6 +2015,10 @@ msgstr "Saidi andmeid installitakse uuesti. Vaadake konsooli sõnumite kohta"
 #: apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:12
 msgid "There are no pages with a connection to the page"
 msgstr "Ei ole √htegi lehte seosega sellele lehele"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:155
+msgid "There are no tasks in the task queue."
+msgstr "Ülesannete järjekorras pole ülesandeid."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:159
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:80
@@ -2099,7 +2137,7 @@ msgstr "Unikaalne uri"
 msgid "Untitled"
 msgstr "Pealkirjata"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9
 msgid "Unused"
 msgstr "Kasutamata"
 
@@ -2125,7 +2163,7 @@ msgstr "Lae fail"
 msgid "Uploaded"
 msgstr "√úles laetud"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
 msgid "Usage"
 msgstr "Kasutamine"
 
@@ -2137,7 +2175,7 @@ msgstr "Kasuta automaatset nimelahendust meedia otsimiseks saidilt."
 msgid "Use the title of the base content for the display name of this person."
 msgstr "Kasuta baassisu pealkirja kuvatavaks isiku nimeks."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
 msgid "Used"
 msgstr "Kasutatud"
 
@@ -2206,7 +2244,7 @@ msgstr "Veebileht pildil klikkimiseks"
 msgid "Website or Embed"
 msgstr "Veebisait või Embed"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:57
 msgid "Work Directory"
 msgstr "Töökataloog"
 
@@ -3542,7 +3580,7 @@ msgstr "Erlang VM"
 msgid "Memory Usage"
 msgstr "Mälu kasutamine"
 
-#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:46
+#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:8./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:46
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:20
 #: apps/zotonic_site_status/priv/templates/stats.tpl:3./apps/zotonic_site_status/priv/templates/stats.tpl:8
 msgid "Statistics"
@@ -3551,6 +3589,10 @@ msgstr "Statistika"
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/system_usage.tpl:3
 msgid "System Usage"
 msgstr "Süsteemi kasutamine"
+
+#: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:9
+msgid "This page shows (real-time) system statistics like memory use and requests."
+msgstr "Sellel lehel kuvatakse (reaalajas) süsteemistatistika, nagu mälukasutus ja päringud."
 
 #: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13./apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:14
 msgid "Album"
@@ -4573,6 +4615,10 @@ msgstr "Pongi vead"
 msgid "Pong Latency"
 msgstr "Pongi latentsus"
 
+#: apps/zotonic_mod_base/priv/templates/_powered_by_zotonic.tpl:1
+msgid "Powered by Zotonic"
+msgstr "Powered by Zotonic"
+
 #: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
 msgstr "Lugege seda lehte veebis"
@@ -4895,6 +4941,10 @@ msgstr "Teil pole lubatud seda muuta."
 msgid "Action"
 msgstr "Tegevus"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
+msgid "At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template."
+msgstr "Mõnikord võib segadusse ajada, milliseid malle malli koostamisel tegelikult kasutatakse. Siin näete, millised failid on malli koostamisel kaasatud."
+
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:13
 msgid "Below is the list of all notifications and the installed observers."
 msgstr "Allpool on kõigi teadete ja installitud vaatlejate loend."
@@ -5059,6 +5109,10 @@ msgstr "Kuva Zotonicu sisemised osad ja moodulid"
 msgid "Show paths to included template files in generated templates"
 msgstr "Näita loodud mallides olevate mallifailide teid"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:118
+msgid "Show which files are included in a template compilation"
+msgstr "Näidake, millised failid on mallide kogumisse kaasatud"
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:7
 msgid "Site Development"
 msgstr "Saidi arendamine"
@@ -5195,6 +5249,10 @@ msgstr "Väike"
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:91
 msgid "Website. Leave empty for media link"
 msgstr "Veebisait. Jätke meediumilingi jaoks tühjaks"
+
+#: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:6
+msgid "always use newest available"
+msgstr "kasutage alati uusimat saadaolevat"
 
 #: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:6
 msgid "DKIM e-mail signing setup"
@@ -7394,11 +7452,11 @@ msgstr "Kontrollige lihvitud otsingu tabelit ja täitke see, indekseerides kõik
 msgid "Rebuild search facets"
 msgstr "Ehitage uuesti otsingu tahud"
 
-#: apps/zotonic_mod_search/src/mod_search.erl:60
+#: apps/zotonic_mod_search/src/mod_search.erl:65
 msgid "Rebuilding the faceted search table."
 msgstr "Lihvitud otsingutabeli taastamine."
 
-#: apps/zotonic_mod_search/src/mod_search.erl:62
+#: apps/zotonic_mod_search/src/mod_search.erl:67
 msgid "Sorry, you are not allowed to do this."
 msgstr "Kahjuks pole teil lubatud seda teha."
 
@@ -9482,10 +9540,6 @@ msgstr "Sisse logima"
 #: apps/zotonic_site_status/priv/templates/error.400.tpl:20./apps/zotonic_site_status/priv/templates/error.503.tpl:21./apps/zotonic_site_status/priv/templates/home.tpl:25
 msgid "Manage this server"
 msgstr "Selle serveri haldamine"
-
-#: apps/zotonic_site_status/priv/templates/error.400.tpl:6./apps/zotonic_site_status/priv/templates/error.503.tpl:10./apps/zotonic_site_status/priv/templates/home.tpl:9./apps/zotonic_site_status/priv/templates/logon.tpl:10
-msgid "Powered by"
-msgstr "Powered by"
 
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:52
 msgid "Restart the site, all users will be logged off."
