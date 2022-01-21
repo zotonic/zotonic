@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-21 13:26\n"
+"PO-Revision-Date: 2022-01-21 13:32\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -863,7 +863,7 @@ msgstr "Alternatief telefoonnummer"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:72./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:127
 msgid "Amount"
-msgstr ""
+msgstr "Hoeveelheid"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:76
 msgid "And media can also be viewed on their own page."
