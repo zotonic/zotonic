@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-21 11:50\n"
+"PO-Revision-Date: 2022-01-21 13:27\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -858,6 +858,10 @@ msgstr "Eraldatud"
 msgid "Alternative telephone"
 msgstr "Teine telefon"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:72./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:127
+msgid "Amount"
+msgstr "Summa"
+
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:76
 msgid "And media can also be viewed on their own page."
 msgstr "Ja meediat saab vaadata ka oma lehel."
@@ -1015,10 +1019,6 @@ msgstr "Veebisaidiga ei saanud ühendust luua."
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:11
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "Sellel URL-il ei õnnestunud midagi importida ega manustada koodi."
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:72./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:127
-msgid "Count"
-msgstr "Krahv"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106

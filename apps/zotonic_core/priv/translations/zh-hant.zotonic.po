@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-21 12:03\n"
+"PO-Revision-Date: 2022-01-21 13:32\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -858,6 +858,10 @@ msgstr "拨款"
 msgid "Alternative telephone"
 msgstr "其他电话"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:72./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:127
+msgid "Amount"
+msgstr "數量"
+
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:76
 msgid "And media can also be viewed on their own page."
 msgstr "所有媒体也可以通过它们自己的页面来查看。"
@@ -1015,10 +1019,6 @@ msgstr "无法连接到网站。"
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:11
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "无法检测到该URL或嵌入代码上有任何可导入的内容。"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:72./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:127
-msgid "Count"
-msgstr "计数"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106
