@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-18 15:48\n"
+"PO-Revision-Date: 2022-01-21 09:35\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -427,6 +427,7 @@ msgid "Members of same user group"
 msgstr "Leden van dezelfde groep"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:11./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:105
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:130
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
 #: apps/zotonic_mod_base/priv/templates/error.tpl:78
@@ -961,11 +962,11 @@ msgstr "Klik hier voor meer informatie"
 msgid "Click to preview."
 msgstr "Klik om een voorbeeld te bekijken."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:106
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:96
 msgid "Close Sockets"
 msgstr "Sockets  sluiten"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:107
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:97
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "Sluit alle sockets van ip-adressen die meer dan &gt; 250 open sockets hebben."
 
@@ -1018,11 +1019,11 @@ msgstr "Kon geen verbinding maken met de website."
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "Kon niets detecteren om te importeren van die URL of insluitcode."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:88
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:78./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:132
 msgid "Count"
 msgstr "Tel"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:86
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106
 msgid "Country"
 msgstr "Land"
@@ -1309,6 +1310,10 @@ msgstr "Zoek pagina"
 msgid "First"
 msgstr "Eerste"
 
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:133
+msgid "First due"
+msgstr ""
+
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:77
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "Ververs alle URL regels, template- en librarycaches en andere in-memory caches."
@@ -1325,6 +1330,10 @@ msgstr "Volg verbindingen en importeer alles (diepe kopie)."
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
 msgid "From"
 msgstr "Van"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:131
+msgid "Function"
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
 msgid "Go back."
@@ -1344,7 +1353,7 @@ msgstr "Hier kan je de argumenten van de zoekopdracht bewerken. Elk argument gaa
 msgid "Home Directory"
 msgstr "Home Directory"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:84
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:74
 msgid "IP Address"
 msgstr "IP-adres"
 
@@ -1770,7 +1779,7 @@ msgid "Resources in the <i>meta</i> category can have 'features': certain resour
 msgstr "Resources in de <em>meta</em> categorie kunnen ‘features’ hebben:\n"
 "eigenschappen die bepalen wat er op de editpagina van de admin getoond wordt."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:89
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:87
 msgid "Retrieving status..."
 msgstr "Status ophalen..."
 
@@ -1800,7 +1809,7 @@ msgstr "Bewaar de pagina en bekijk aan de voorkant."
 msgid "Save this page."
 msgstr "Bewaar deze pagina."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:54
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:52
 msgid "Search indices rebuilt."
 msgstr "Zoekindex is klaar"
 
@@ -1874,6 +1883,10 @@ msgstr "Grootte"
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14./apps/zotonic_mod_admin/priv/templates/admin.tpl:15
 msgid "Some disks are almost full."
 msgstr "Sommige schijven zijn bijna vol."
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:148
+msgid "Some tasks are retrying.<br>Total errors: {total}<br>Highest for single task: {max}"
+msgstr ""
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:137
 msgid "Something went wrong. Sorry."
@@ -1954,6 +1967,18 @@ msgstr "Systeemstatus"
 msgid "System administration"
 msgstr "Systeembeheer"
 
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:125
+msgid "Task queue"
+msgstr ""
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:169
+msgid "Tasks are functions scheduled to run at a certain time."
+msgstr ""
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:170
+msgid "Tasks with errors will retry five times before being dropped."
+msgstr ""
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:18
 msgid "Telephone"
 msgstr "Telefoon"
@@ -1994,6 +2019,10 @@ msgstr "De sitedata wordt opnieuw geïnstalleerd. Houd de console in de gaten vo
 #: apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:12
 msgid "There are no pages with a connection to the page"
 msgstr "Er zijn geen andere pagina's die een connectie hebben naar deze pagina."
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:160
+msgid "There are no tasks in the task queue."
+msgstr ""
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:159
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:80
@@ -7425,11 +7454,11 @@ msgstr "Controleer de tabel voor de gefacetteerde zoekopdracht en vul deze door 
 msgid "Rebuild search facets"
 msgstr "Zoekfacetten opnieuw opbouwen"
 
-#: apps/zotonic_mod_search/src/mod_search.erl:60
+#: apps/zotonic_mod_search/src/mod_search.erl:65
 msgid "Rebuilding the faceted search table."
 msgstr "De gefacetteerde zoektabel opnieuw opbouwen."
 
-#: apps/zotonic_mod_search/src/mod_search.erl:62
+#: apps/zotonic_mod_search/src/mod_search.erl:67
 msgid "Sorry, you are not allowed to do this."
 msgstr "Sorry, je mag dit niet doen."
 
