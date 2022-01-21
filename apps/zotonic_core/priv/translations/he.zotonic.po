@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-21 09:35\n"
+"PO-Revision-Date: 2022-01-21 10:03\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -1309,7 +1309,7 @@ msgstr "ראשון"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:133
 msgid "First due"
-msgstr ""
+msgstr "ראשון בשל"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:77
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
@@ -1330,7 +1330,7 @@ msgstr "מ"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:131
 msgid "Function"
-msgstr ""
+msgstr "פוּנקצִיָה"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
 msgid "Go back."
@@ -1882,7 +1882,7 @@ msgstr "חלק מהדיסקים כמעט מלאים."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:148
 msgid "Some tasks are retrying.<br>Total errors: {total}<br>Highest for single task: {max}"
-msgstr ""
+msgstr "חלק מהמשימות מנסים שוב.<br>סך השגיאות: {total}<br>הגבוה ביותר עבור משימה בודדת: {max}"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:137
 msgid "Something went wrong. Sorry."
@@ -1965,15 +1965,15 @@ msgstr "ניהול המערכת"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:125
 msgid "Task queue"
-msgstr ""
+msgstr "תור משימות"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:169
 msgid "Tasks are functions scheduled to run at a certain time."
-msgstr ""
+msgstr "משימות הן פונקציות שמתוזמנות לפעול בזמן מסוים."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:170
 msgid "Tasks with errors will retry five times before being dropped."
-msgstr ""
+msgstr "משימות עם שגיאות ינסו שוב חמש פעמים לפני שהם יוסרו."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:18
 msgid "Telephone"
@@ -2018,7 +2018,7 @@ msgstr "אין עמודים עם חיבור לדף"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:160
 msgid "There are no tasks in the task queue."
-msgstr ""
+msgstr "אין משימות בתור המשימות."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:159
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:80
