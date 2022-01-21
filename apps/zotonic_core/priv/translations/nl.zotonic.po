@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-21 10:04\n"
+"PO-Revision-Date: 2022-01-21 11:50\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -427,7 +427,7 @@ msgid "Members of same user group"
 msgstr "Leden van dezelfde groep"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:11./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:105
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:130
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:125
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
 #: apps/zotonic_mod_base/priv/templates/error.tpl:78
@@ -853,7 +853,7 @@ msgstr "Alle pagina’s"
 msgid "All sites have been flushed."
 msgstr "Alle site-caches zijn geleegd"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:6
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
 msgid "Allocated"
 msgstr "Toegewezen"
 
@@ -962,11 +962,11 @@ msgstr "Klik hier voor meer informatie"
 msgid "Click to preview."
 msgstr "Klik om een voorbeeld te bekijken."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:96
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:90
 msgid "Close Sockets"
 msgstr "Sockets  sluiten"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:97
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:91
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "Sluit alle sockets van ip-adressen die meer dan &gt; 250 open sockets hebben."
 
@@ -999,7 +999,7 @@ msgstr "Verbind"
 msgid "Connect a page"
 msgstr "Paginaconnectie maken"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:126./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:55
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:126./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:57
 msgid "Connections"
 msgstr "Verbindingen"
 
@@ -1019,11 +1019,11 @@ msgstr "Kon geen verbinding maken met de website."
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "Kon niets detecteren om te importeren van die URL of insluitcode."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:78./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:132
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:72./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:127
 msgid "Count"
 msgstr "Tel"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106
 msgid "Country"
 msgstr "Land"
@@ -1116,7 +1116,7 @@ msgstr "Ontkoppel"
 msgid "Discover media"
 msgstr "Ontdek media"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
 msgid "Disks"
 msgstr "Schijven"
 
@@ -1310,10 +1310,6 @@ msgstr "Zoek pagina"
 msgid "First"
 msgstr "Eerste"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:133
-msgid "First due"
-msgstr "eerst verschuldigd"
-
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:77
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "Ververs alle URL regels, template- en librarycaches en andere in-memory caches."
@@ -1331,7 +1327,7 @@ msgstr "Volg verbindingen en importeer alles (diepe kopie)."
 msgid "From"
 msgstr "Van"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:131
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:126
 msgid "Function"
 msgstr "Functie"
 
@@ -1353,7 +1349,7 @@ msgstr "Hier kan je de argumenten van de zoekopdracht bewerken. Elk argument gaa
 msgid "Home Directory"
 msgstr "Home Directory"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:68
 msgid "IP Address"
 msgstr "IP-adres"
 
@@ -1494,7 +1490,7 @@ msgstr "Media titel"
 msgid "Media updated."
 msgstr "Media bijgewerkt."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:1
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:2
 msgid "Memory"
 msgstr "Geheugen"
 
@@ -1547,7 +1543,7 @@ msgstr "Verplaats blok omhoog"
 msgid "Name"
 msgstr "Naam"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:63
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:62
 msgid "Network Connections"
 msgstr "Netwerkverbindingen"
 
@@ -1558,6 +1554,10 @@ msgstr "Nieuwe pagina"
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:169./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:171
 msgid "Next &gt;"
 msgstr "Volgende &gt;"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:128
+msgid "Next due"
+msgstr "Volgende vervaldatum"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:61
 msgid "Next in category:"
@@ -1634,7 +1634,7 @@ msgstr "Pagina's voor"
 msgid "Pages overview"
 msgstr "Paginaoverzicht"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
 msgid "Path"
@@ -1746,7 +1746,7 @@ msgstr "Stuur door naar website bij bekijken van de pagina"
 msgid "Referrers to"
 msgstr "Verwijzingen naar"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:50
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:51
 msgid "Refreshed every 30 minutes."
 msgstr "Elke 30 minuten ververst."
 
@@ -1874,7 +1874,7 @@ msgstr "Toon pagina op meerdere paginapaden"
 msgid "Site Files Directory"
 msgstr "Map met sitebestanden"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
 msgid "Size"
@@ -1884,7 +1884,7 @@ msgstr "Grootte"
 msgid "Some disks are almost full."
 msgstr "Sommige schijven zijn bijna vol."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:148
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:143
 msgid "Some tasks are retrying.<br>Total errors: {total}<br>Highest for single task: {max}"
 msgstr "Sommige taken worden opnieuw geprobeerd.<br>Totaal aantal fouten: {total}<br>Hoogste voor enkele taak: {max}"
 
@@ -1967,15 +1967,15 @@ msgstr "Systeemstatus"
 msgid "System administration"
 msgstr "Systeembeheer"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:125
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:120
 msgid "Task queue"
 msgstr "Taakwachtrij"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:169
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:163
 msgid "Tasks are functions scheduled to run at a certain time."
 msgstr "Taken zijn functies die op een bepaald tijdstip moeten worden uitgevoerd."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:170
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:164
 msgid "Tasks with errors will retry five times before being dropped."
 msgstr "Taken met fouten worden vijf keer opnieuw geprobeerd voordat ze worden verwijderd."
 
@@ -2020,7 +2020,7 @@ msgstr "De sitedata wordt opnieuw geïnstalleerd. Houd de console in de gaten vo
 msgid "There are no pages with a connection to the page"
 msgstr "Er zijn geen andere pagina's die een connectie hebben naar deze pagina."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:160
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:155
 msgid "There are no tasks in the task queue."
 msgstr "Er staan geen taken in de takenwachtrij."
 
@@ -2141,7 +2141,7 @@ msgstr "Unieke URI"
 msgid "Untitled"
 msgstr "Zonder titel"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9
 msgid "Unused"
 msgstr "Ongebruikt"
 
@@ -2167,7 +2167,7 @@ msgstr "Upload bestand"
 msgid "Uploaded"
 msgstr "Geüpload"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
 msgid "Usage"
 msgstr "Gebruik"
 
@@ -2179,7 +2179,7 @@ msgstr "Gebruik het zoekvak om mediabestanden te zoeken die al in het systeem zi
 msgid "Use the title of the base content for the display name of this person."
 msgstr "Gebruik de titel van de basisgegevens voor de naam zoals die wordt weergegeven op pagina's."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
 msgid "Used"
 msgstr "Gebruikt"
 
