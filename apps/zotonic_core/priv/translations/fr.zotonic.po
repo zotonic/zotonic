@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-18 15:48\n"
+"PO-Revision-Date: 2022-01-21 09:35\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -427,6 +427,7 @@ msgid "Members of same user group"
 msgstr "Membres du même groupe"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:11./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:105
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:130
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
 #: apps/zotonic_mod_base/priv/templates/error.tpl:78
@@ -958,11 +959,11 @@ msgstr "Cliquez ici pour plus d'informations"
 msgid "Click to preview."
 msgstr "Cliquez sur le lien pour avoir un aperçu."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:106
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:96
 msgid "Close Sockets"
 msgstr "Fermer les Sockets"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:107
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:97
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "Fermer toutes les sockets des adresses ip ayant plus &gt; 250 sockets ouvertes."
 
@@ -1015,11 +1016,11 @@ msgstr "Connexion impossible au site web"
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "Aucune données trouvée à importer sur cette URL ou code embarqué."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:88
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:78./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:132
 msgid "Count"
 msgstr "Compter"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:86
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106
 msgid "Country"
 msgstr "Pays"
@@ -1306,6 +1307,10 @@ msgstr "Rechercher page"
 msgid "First"
 msgstr "Premier"
 
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:133
+msgid "First due"
+msgstr "Premier dû"
+
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:77
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "Rafraichir toutes les URL, maquettes, caches"
@@ -1322,6 +1327,10 @@ msgstr "Suivez les connexions et importez tout (copie complète)."
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
 msgid "From"
 msgstr "De"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:131
+msgid "Function"
+msgstr "Une fonction"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
 msgid "Go back."
@@ -1341,7 +1350,7 @@ msgstr "Ici, vous pouvez modifier les arguments de la requête de recherche. Cha
 msgid "Home Directory"
 msgstr "Répertoire Home"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:84
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:74
 msgid "IP Address"
 msgstr "Adresse IP"
 
@@ -1766,7 +1775,7 @@ msgstr "Remplacer l'actuel moyen"
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
 msgstr "Les ressources de la catégorie <i>meta</i> peuvent avoir des 'fonctionnalités' : certaines propriétés de ressources décident de l'affichage ou non sur certaines pages admin.Si ce champs est vide, aucune fonctionnalité n'est active pour cette meta-ressource."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:89
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:87
 msgid "Retrieving status..."
 msgstr "Récupération du statut..."
 
@@ -1796,7 +1805,7 @@ msgstr "Enregister et visualiser la page"
 msgid "Save this page."
 msgstr "Enregistrer cette page"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:54
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:52
 msgid "Search indices rebuilt."
 msgstr "Rechercher des indices reconstruits."
 
@@ -1870,6 +1879,10 @@ msgstr "Taille"
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14./apps/zotonic_mod_admin/priv/templates/admin.tpl:15
 msgid "Some disks are almost full."
 msgstr "Certains disques sont presque pleins."
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:148
+msgid "Some tasks are retrying.<br>Total errors: {total}<br>Highest for single task: {max}"
+msgstr "Certaines tâches sont en cours de nouvelle tentative.<br>Nombre total d'erreurs : {total}<br>Maximum pour une seule tâche : {max}"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:137
 msgid "Something went wrong. Sorry."
@@ -1950,6 +1963,18 @@ msgstr "Status du système"
 msgid "System administration"
 msgstr "Administration du système"
 
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:125
+msgid "Task queue"
+msgstr "File d'attente des tâches"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:169
+msgid "Tasks are functions scheduled to run at a certain time."
+msgstr "Les tâches sont des fonctions programmées pour s'exécuter à une certaine heure."
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:170
+msgid "Tasks with errors will retry five times before being dropped."
+msgstr "Les tâches contenant des erreurs seront réessayées cinq fois avant d'être supprimées."
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:18
 msgid "Telephone"
 msgstr "Téléphone"
@@ -1990,6 +2015,10 @@ msgstr "Les données du site est en cours de réinstallation. Voir la console po
 #: apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:12
 msgid "There are no pages with a connection to the page"
 msgstr "Il n\\'y a pas de pages connectée a cette page"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:160
+msgid "There are no tasks in the task queue."
+msgstr "Il n'y a aucune tâche dans la file d'attente des tâches."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:159
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:80
@@ -7423,11 +7452,11 @@ msgstr "Consultez le tableau pour la recherche à facettes et remplissez-le en r
 msgid "Rebuild search facets"
 msgstr "Reconstruire les facettes de recherche"
 
-#: apps/zotonic_mod_search/src/mod_search.erl:60
+#: apps/zotonic_mod_search/src/mod_search.erl:65
 msgid "Rebuilding the faceted search table."
 msgstr "Reconstruire la table de recherche à facettes."
 
-#: apps/zotonic_mod_search/src/mod_search.erl:62
+#: apps/zotonic_mod_search/src/mod_search.erl:67
 msgid "Sorry, you are not allowed to do this."
 msgstr "Désolé, vous n'êtes pas autorisé à le faire."
 
