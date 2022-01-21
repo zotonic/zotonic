@@ -69,7 +69,7 @@
                         {% if is_ip2country %}
                             <th>{_ Country _}</th>
                         {% endif %}
-                        <th class="text-right">{_ Count _}</th>
+                        <th class="text-right">{_ Amount _}</th>
                     </tr>
                 </thead>
                 <tbody>

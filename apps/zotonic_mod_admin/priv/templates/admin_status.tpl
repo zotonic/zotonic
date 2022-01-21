@@ -124,7 +124,7 @@
                             <tr>
                                 <th>{_ Module _}</th>
                                 <th>{_ Function _}</th>
-                                <th>{_ Count _}</th>
+                                <th>{_ Amount _}</th>
                                 <th>{_ Next due _}</th>
                             </tr>
                         </thead>
