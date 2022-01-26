@@ -170,6 +170,7 @@ do_check_1(Rs, Context) ->
                   RscIds),
     lists:foreach(fun({_Id,Op,SubjectId,Predicate,ObjectId,EdgeId}) ->
                     PredName = z_convert:to_atom(Predicate),
+                    z_depcache:flush({predicate, m_rsc:rid(PredName, Context)}, Context),
                     do_edge_notify(Op, SubjectId, PredName, ObjectId, EdgeId, Context)
                   end, Rs),
     Ranges = z_utils:ranges([ element(1,R) || R <- Rs ]),
