@@ -907,6 +907,7 @@ update_sequence(Subject, Pred, ObjectIds, Context) ->
 
                     Result = z_db:transaction(F, Context),
                     z_depcache:flush(SubjectId, Context),
+                    z_depcache:flush({predicate, PredId}, Context),
                     Result;
                 false ->
                     {error, eacces}
@@ -971,6 +972,7 @@ set_sequence(Subject, Pred, ObjectIds, Context) ->
 
                             Result = z_db:transaction(F, Context),
                             z_depcache:flush(SubjectId, Context),
+                            z_depcache:flush({predicate, PredId}, Context),
                             Result;
                         {error, _} = Error ->
                             Error
@@ -1068,6 +1070,7 @@ update_sequence_edge_ids(Subject, Pred, EdgeIds, Context) ->
 
                     Result = z_db:transaction(F, Context),
                     z_depcache:flush(Id, Context),
+                    z_depcache:flush({predicate, PredId}, Context),
                     Result;
                 false ->
                     {error, eacces}

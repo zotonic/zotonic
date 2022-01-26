@@ -33,21 +33,32 @@ menu_expand(MenuId, Context) ->
         undefined ->
             [];
         RscId ->
-            Menu = case m_rsc:p(RscId, <<"menu">>, Context) of
-                [ #rsc_tree{} | _ ] = M -> M;
-                _ -> []
-            end,
-            TopIds = [ Id || #rsc_tree{ id = Id } <- Menu ],
-            M1 = lists:filtermap(
-                fun(Id) ->
-                    case lists:member(Id, TopIds) of
-                        false -> {true, #rsc_tree{ id = Id, tree = [] }};
-                        true -> false
-                    end
-                end,
-                m_edge:objects(RscId, haspart, Context)),
-            expand(Menu ++ M1, Context)
+            z_depcache:memo(
+                fun() -> menu_expand_1(RscId, Context) end,
+                {menu_expand, RscId},
+                ?DAY,
+                [
+                    RscId,
+                    {predicate, m_rsc:rid(haspart, Context)}
+                ],
+                Context)
     end.
+
+menu_expand_1(RscId, Context) ->
+    Menu = case m_rsc:p(RscId, <<"menu">>, Context) of
+        [ #rsc_tree{} | _ ] = M -> M;
+        _ -> []
+    end,
+    TopIds = [ Id || #rsc_tree{ id = Id } <- Menu ],
+    M1 = lists:filtermap(
+        fun(Id) ->
+            case lists:member(Id, TopIds) of
+                false -> {true, #rsc_tree{ id = Id, tree = [] }};
+                true -> false
+            end
+        end,
+        m_edge:objects(RscId, haspart, Context)),
+    expand(Menu ++ M1, Context).
 
 expand(Menu, Context) when is_list(Menu) ->
     lists:map(
