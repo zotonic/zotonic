@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-26 01:25\n"
+"PO-Revision-Date: 2022-01-26 01:41\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2305,7 +2305,7 @@ msgstr "У вас нет разрешения на выполнение этог
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:6
 msgid "You have to specify a description of the file to make it easier to find and share."
-msgstr "Вы должны указать описание файла, чтобы его было проще найти и поделиться."
+msgstr "Вы должны задать описание файла, чтобы его было проще найти и поделиться."
 
 #: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:152
 msgid "Your search query is invalid. Please correct it before saving."
@@ -2313,7 +2313,7 @@ msgstr "Ваш поисковый запрос недействителен. П�
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:21
 msgid "Zotonic Version"
-msgstr "Сотоническая версия"
+msgstr "Версия Zotonic"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
 msgid "add media item"
