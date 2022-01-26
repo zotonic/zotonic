@@ -23,7 +23,7 @@
     event/2
 ]).
 
--include("zotonic_core/include/zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 event(#postback{ message={import_refresh, Args} }, Context) ->
     OnError = proplists:get_value(on_error, Args),

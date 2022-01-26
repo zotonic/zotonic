@@ -1400,7 +1400,7 @@ schema_exists_conn(Connection, Schema) ->
 %% @doc Create a schema
 -spec create_schema(atom(), epgsql:connection(), string()) -> ok | {error, term()}.
 create_schema(_Site, Connection, Schema) ->
-    assert_database_name(Schema),
+    assert_schema_name(Schema),
     case epgsql:equery(
         Connection,
         "CREATE SCHEMA \"" ++ Schema ++ "\""
@@ -1562,6 +1562,16 @@ assert_database_name([H|T]) when (H >= $a andalso H =< $z) ->
     assert_database_name(T);
 assert_database_name([H|T]) when (H >= $0 andalso H =< $9) ->
     assert_database_name(T).
+
+%% @doc Check if a name is a valid SQL schema name. Crashes when invalid
+-spec assert_schema_name( string() ) -> true.
+assert_schema_name([]) -> true;
+assert_schema_name([$_|T]) -> assert_database_name(T);
+assert_schema_name([H|T]) when (H >= $a andalso H =< $z) ->
+    assert_database_name(T);
+assert_schema_name([H|T]) when (H >= $0 andalso H =< $9) ->
+    assert_database_name(T).
+
 
 -spec quoted_table_name( table_name() ) -> {default | string(), string(), string()}.
 quoted_table_name(TableName) ->
