@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-24 23:22\n"
+"PO-Revision-Date: 2022-01-26 01:25\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2256,7 +2256,7 @@ msgstr "Y-m-d H:i"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:6
 msgid "You are editing a:"
-msgstr "Ты редактируешь a:"
+msgstr "Вы редактируете:"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:4
 msgid "You are editing the <b>Site Administrator Account</b>."
@@ -2282,7 +2282,7 @@ msgstr "Вы не имеете права редактировать эту ст
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:149
 msgid "You don't have permission to change this media item."
-msgstr "У вас нет прав для замены этого материала."
+msgstr "У вас нет прав для изменения этого материала."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:161
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:82
