@@ -64,6 +64,6 @@ jobs:
         run: |
           mkdir -p ~/.config/rebar3
           echo '{plugins, [rebar3_hex]}.' > ~/.config/rebar3/rebar.config
-          ./rebar3 plugins upgrade
+          ./rebar3 plugins upgrade --all
           ./rebar3 plugins list
           release/hex-publish.sh
