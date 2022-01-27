@@ -48,10 +48,10 @@
 child_spec() ->
     case {z_config:get(smtp_listen_ip),z_config:get(smtp_listen_port)} of
         {none, _} ->
-            lager:warning("SMTP server disabled: 'smtp_listen_ip' is set to 'none'"),
+            ?LOG_WARNING("SMTP server disabled: 'smtp_listen_ip' is set to 'none'"),
             ignore;
         {_, none} ->
-            lager:warning("SMTP server disabled: 'smtp_listen_port' is set to 'none'"),
+            ?LOG_WARNING("SMTP server disabled: 'smtp_listen_port' is set to 'none'"),
             ignore;
         {IP, Port} ->
             Args1 = case z_config:get(smtp_listen_domain) of
@@ -65,8 +65,8 @@ child_spec() ->
                     [{address, IP} | Args1]
             end,
             case IP of
-                any -> lager:info("SMTP server listening on any:~p", [Port]);
-                _ -> lager:info("SMTP server listening on ~s:~p", [inet:ntoa(IP), Port])
+                any -> ?LOG_INFO("SMTP server listening on any:~p", [Port]);
+                _ -> ?LOG_INFO("SMTP server listening on ~s:~p", [inet:ntoa(IP), Port])
             end,
             Options = [{port, Port} | Args2],
             gen_smtp_server:child_spec(?MODULE, ?MODULE, Options)
@@ -86,7 +86,7 @@ init(Hostname, SessionCount, PeerName, Options) ->
             },
             {ok, State#state.banner, State};
         true ->
-            lager:warning("SMTP Connection limit exceeded (~p)", [SessionCount]),
+            ?LOG_WARNING("SMTP Connection limit exceeded (~p)", [SessionCount]),
             {stop, normal, io_lib:format("421 ~s is too busy to accept mail right now", [Hostname])}
     end.
 
@@ -123,7 +123,7 @@ check_dnsbl(State) ->
         {ok, allowed} ->
             {ok, State};
         {ok, {blocked, Service}} ->
-            lager:info("SMTP DNSBL check for ~s blocked by ~p -- closing connection with a 451",
+            ?LOG_INFO("SMTP DNSBL check for ~s blocked by ~p -- closing connection with a 451",
                        [inet:ntoa(State#state.peer), Service]),
             Error = io_lib:format("451 ~s has recently sent spam. If you are not a spammer, please try later. Listed at ~s",
                                  [inet:ntoa(State#state.peer), Service]),
@@ -144,16 +144,16 @@ handle_RCPT(To, State) ->
     % - Return-Path header should be present and contains <>
     case zotonic_listen_smtp_receive:get_site(To) of
         {ok, _} ->
-            lager:info("SMTP accepting incoming email for ~p", [To]),
+            ?LOG_INFO("SMTP accepting incoming email for ~p", [To]),
             {ok, State};
         {error, unknown_host} ->
-            lager:warning("SMTP not accepting mail for ~p: unknown host", [To]),
+            ?LOG_WARNING("SMTP not accepting mail for ~p: unknown host", [To]),
             {error, "551 User not local. Relay denied.", State};
         {error, not_running} ->
-            lager:warning("SMTP not accepting mail for ~p: site not running", [To]),
+            ?LOG_WARNING("SMTP not accepting mail for ~p: site not running", [To]),
             {error, "453 System not accepting network messages.", State}
         % {error, Reason} ->
-        %     lager:info("SMTP not accepting mail for ~p: ~p", [Reason]),
+        %     ?LOG_INFO("SMTP not accepting mail for ~p: ~p", [Reason]),
         %     {error, "451 Server error. Please try again later.", State}
     end.
 
@@ -202,7 +202,7 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
         {ok, {Type, Subtype, Headers, _Params, Body} = Decoded} ->
             case find_bounce_id({Type, Subtype}, To, Headers) of
                 {ok, MessageId} ->
-                    lager:info("SMTP email to ~p is bounce of message id ~p",
+                    ?LOG_INFO("SMTP email to ~p is bounce of message id ~p",
                                 [ To, MessageId ]),
                     % The e-mail server knows about the messages sent from our system.
                     % Only report fatal bounces, silently ignore delivery warnings
@@ -213,12 +213,12 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
                     {ok, MsgId, reset_state(State)};
                 bounce ->
                     % Bounced, but without a message id (accept & silently drop the message)
-                    lager:info("SMTP email to ~p is bounce of unknown message id",
+                    ?LOG_INFO("SMTP email to ~p is bounce of unknown message id",
                                 [ To ]),
                     {ok, MsgId, reset_state(State)};
                 maybe_autoreply ->
                     % Sent to a bounce address, but not a bounce (accept & silently drop the message)
-                    lager:info("SMTP email to ~p is an autoreply, ignored",
+                    ?LOG_INFO("SMTP email to ~p is an autoreply, ignored",
                                 [ To ]),
                     {ok, MsgId, reset_state(State)};
                 no_bounce ->
@@ -226,22 +226,22 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
                                  Decoded, MsgId, From, To, DataRcvd, State)
             end;
         {error, Reason} ->
-            lager:error("SMTP receive: Message decode FAILED with ~p", [Reason]),
+            ?LOG_ERROR("SMTP receive: Message decode FAILED with ~p", [Reason]),
             {error, "550 Your email cannot be parsed", State}
     end.
 
 receive_data({ok, {ham, SpamStatus, _SpamHeaders}}, {Type, Subtype, Headers, Params, Body}, MsgId, From, To, DataRcvd, State) ->
-    lager:info("SMTP email from ~s to ~p (id ~s) (peer ~s) [~p]",
+    ?LOG_INFO("SMTP email from ~s to ~p (id ~s) (peer ~s) [~p]",
               [From, To, MsgId, inet_parse:ntoa(State#state.peer), SpamStatus]),
     Received = zotonic_listen_smtp_receive:received(To, From, State#state.peer, MsgId,
                                         {Type, Subtype}, Headers, Params, Body, DataRcvd),
     reply_handled_status(Received, MsgId, reset_state(State));
 receive_data({ok, {spam, SpamStatus, _SpamHeaders}}, _Decoded, MsgId, From, To, _DataRcvd, State) ->
-    lager:info("Refusing spam from ~s to ~p (id ~s) (peer ~s) [~p]",
+    ?LOG_INFO("Refusing spam from ~s to ~p (id ~s) (peer ~s) [~p]",
                [From, To, MsgId, inet_parse:ntoa(State#state.peer), SpamStatus]),
     {error, zotonic_listen_smtp_spam:smtp_status(SpamStatus, From, To, State#state.peer), reset_state(State)};
 receive_data({error, Reason}, Decoded, MsgId, From, To, DataRcvd, State) ->
-    lager:info("SMTP receive: passing erronous spam check (~p) as ham for msg-id ~p", [Reason, MsgId]),
+    ?LOG_INFO("SMTP receive: passing erronous spam check (~p) as ham for msg-id ~p", [Reason, MsgId]),
     receive_data({ok, {ham, [], []}}, Decoded, MsgId, From, To, DataRcvd, State).
 
 reply_handled_status(Received, MsgId, State) ->

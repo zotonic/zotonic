@@ -7,7 +7,7 @@
   {env, []},
   {modules, []},
   {applications, [
-    kernel, stdlib, lager
+    kernel, stdlib
   ]},
   {doc, "doc"},
   {licenses, ["Apache-2.0"]},

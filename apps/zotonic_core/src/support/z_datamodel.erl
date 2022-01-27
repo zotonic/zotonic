@@ -147,7 +147,7 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                             ok;
                         _ ->
                             %% Resource exists but is not installed by us.
-                            lager:info("Resource '~p' (~p) exists but is not managed by ~p.", [Name, Id, Module]),
+                            ?LOG_INFO("Resource '~p' (~p) exists but is not managed by ~p.", [Name, Id, Module]),
                             ok
                     end;
                 {error, {unknown_rsc, _}} ->
@@ -170,7 +170,7 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                                  undefined -> Props4#{ <<"is_dependent">> => false };
                                  _ -> Props4
                              end,
-                    lager:info("Creating new ~p '~p'", [Category, Name]),
+                    ?LOG_INFO("Creating new ~p '~p'", [Category, Name]),
                     {ok, Id} = m_rsc_update:update(insert_rsc, Props5, [{is_import, true}], Context),
                     case maps:get(<<"media_url">>, Props5, undefined) of
                         undefined -> nop;
@@ -187,7 +187,7 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                     {ok, Id}
             end;
         {error, _} ->
-            lager:warning("Resource '~p' could not be handled because the category ~p does not exist.", [Name, Category]),
+            ?LOG_WARNING("Resource '~p' could not be handled because the category ~p does not exist.", [Name, Category]),
             ok
     end.
 
@@ -236,10 +236,10 @@ map_props(Props) when is_list(Props) ->
 maybe_force_update(K, V, Props, Module, Id, Options, _Context) ->
     case proplists:get_value(force_update, Options, false) of
         true ->
-            lager:info("~p: ~p of ~p changed in database, forced update.", [Module, K, Id]),
+            ?LOG_INFO("~p: ~p of ~p changed in database, forced update.", [Module, K, Id]),
             Props#{ K => V };
         false ->
-            lager:debug("~p: ~p of ~p changed in database, not updating.", [Module, K, Id]),
+            ?LOG_DEBUG("~p: ~p of ~p changed in database, not updating.", [Module, K, Id]),
             Props
     end.
 

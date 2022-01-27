@@ -22,6 +22,8 @@
 
 -behaviour(zotonic_model).
 
+-include_lib("kernel/include/logger.hrl").
+
 %% interface functions
 -export([
     m_get/3
@@ -41,6 +43,6 @@ m_get([ Key | Rest ], _Msg, Context) ->
             {ok, {undefined, Rest}}
     end;
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 

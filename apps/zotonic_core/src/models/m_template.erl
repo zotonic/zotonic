@@ -42,7 +42,7 @@ m_get([ <<"render">> | TemplatePath ], Msg, Context) when is_map(Msg) ->
     {Tpl, _} = z_template:render_to_iolist(Template, [], Context1),
     {ok, {iolist_to_binary(Tpl), []}};
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 to_template([]) -> <<>>;

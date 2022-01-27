@@ -112,7 +112,7 @@ delete_all([Id|Ids], N, Total, Context) ->
             maybe_progress(N, N+1, Total, Context),
             delete_all(Ids, N+1, Total, Context);
         Error ->
-            lager:error("mod_admin_category: could not delete ~p: ~p",
+            ?LOG_ERROR("mod_admin_category: could not delete ~p: ~p",
                         [Id, Error]),
             {error, Error}
     end.

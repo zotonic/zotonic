@@ -903,7 +903,7 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
         fun(Iso) ->
             case z_language:is_language_editable(Iso, Context) of
                 false ->
-                    lager:info("Dropping non editable language ~p from resource ~p", [ Iso, Id ]),
+                    ?LOG_INFO("Dropping non editable language ~p from resource ~p", [ Iso, Id ]),
                     false;
                 true ->
                     true
@@ -1064,7 +1064,7 @@ preflight_check_name(Id, #{ <<"name">> := Name }, Context) when Name =/= undefin
         0 ->
             ok;
         _N ->
-            lager:warning("Trying to insert duplicate name ~p", [Name]),
+            ?LOG_WARNING("Trying to insert duplicate name ~p", [Name]),
             {error, duplicate_name}
     end;
 preflight_check_name(_Id, _Props, _Context) ->
@@ -1076,7 +1076,7 @@ preflight_check_page_path(Id, #{ <<"page_path">> := Path }, Context) when Path =
         0 ->
             ok;
         _N ->
-            lager:warning("Trying to insert duplicate page_path ~p", [Path]),
+            ?LOG_WARNING("Trying to insert duplicate page_path ~p", [Path]),
             {error, duplicate_page_path}
     end;
 preflight_check_page_path(_Id, _Props, _Context) ->
@@ -1087,7 +1087,7 @@ preflight_check_uri(Id, #{ <<"uri">> := Uri }, Context) when Uri =/= undefined -
         0 ->
             ok;
         _N ->
-            lager:warning("Trying to insert duplicate uri ~p", [Uri]),
+            ?LOG_WARNING("Trying to insert duplicate uri ~p", [Uri]),
             {error, duplicate_uri}
     end;
 preflight_check_uri(_Id, _Props, _Context) ->
@@ -1243,7 +1243,7 @@ props_filter(<<"category_id">>, CatId, Acc, Context) ->
         true ->
             Acc#{ <<"category_id">> => CatId1 };
         false ->
-            lager:error("Ignoring unknown category '~p' in update, using 'other' instead.", [CatId]),
+            ?LOG_ERROR("Ignoring unknown category '~p' in update, using 'other' instead.", [CatId]),
             {ok, OtherId} = m_category:name_to_id(other, Context),
             Acc#{ <<"category_id">> => OtherId }
     end;
@@ -1261,7 +1261,7 @@ props_filter(<<"content_group_id">>, CgId, Acc, Context) ->
         true ->
             Acc#{ <<"content_group_id">> => CgId1 };
         false ->
-            lager:error("Ignoring unknown content group '~p' in update.", [CgId]),
+            ?LOG_ERROR("Ignoring unknown content group '~p' in update.", [CgId]),
             Acc
     end;
 props_filter(Location, P, Acc, _Context)

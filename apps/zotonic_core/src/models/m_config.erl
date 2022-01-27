@@ -61,7 +61,7 @@ m_get([ Module, Key | Rest ], _Msg, Context) ->
         false -> {error, eacces}
     end;
 m_get(Vs, _Msg, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_ERROR("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 %% @doc Return all configurations from the configuration table. Returns a nested proplist (module, key)

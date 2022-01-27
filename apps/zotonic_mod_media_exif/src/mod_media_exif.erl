@@ -91,7 +91,7 @@ gps([{ratio,D,DFrac},{ratio,M,MFrac},{ratio,S,SFrac}] = Ratios) ->
         (D/DFrac) + (M/MFrac/60) + (S/SFrac/3600)
     catch
         _:_ ->
-            lager:info("mod_media_exif: illegal ratios: ~p", [ Ratios ]),
+            ?LOG_INFO("mod_media_exif: illegal ratios: ~p", [ Ratios ]),
             undefined
     end;
 gps(_) ->

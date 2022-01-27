@@ -39,11 +39,10 @@ start_link(SiteProps) ->
 -spec init( proplists:proplist() ) -> {ok, {supervisor:sup_flags(), [ supervisor:child_spec() ]}}.
 init(SiteProps) ->
     {site, Site} = proplists:lookup(site, SiteProps),
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
-
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     KeyServerName = z_utils:name_for_site(keyserver, Site),
     KeyServer = {keyserver_sup,
                  {keyserver_sup, start_link, [KeyServerName, z_keyserver_callback, z_context:new(Site)]},

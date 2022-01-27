@@ -109,13 +109,13 @@ render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
         {error, {{ErrFile, Line, Col}, _YeccModule, Error}} ->
             try
                 Error1 = iolist_to_binary(Error),
-                lager:error(
+                ?LOG_ERROR(
                     "Error rendering template ~s:~p:~p due to ~s~n",
                     [ErrFile, Line, Col, Error1]
                 )
             catch
                 _:_ ->
-                    lager:error(
+                    ?LOG_ERROR(
                         "Error rendering template ~s:~p:~p due to ~p~n",
                         [ErrFile, Line, Col, Error]
                     )
@@ -124,20 +124,20 @@ render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
         {error, Reason} when is_list(Reason); is_binary(Reason) ->
             try
                 Reason1 = iolist_to_binary(Reason),
-                lager:error(
+                ?LOG_ERROR(
                     "Error rendering template ~p due to ~s~n",
                     [Template, Reason1]
                 )
             catch
                 _:_ ->
-                    lager:error(
+                    ?LOG_ERROR(
                         "Error rendering template ~p due to ~p~n",
                         [Template, Reason]
                     )
             end,
             <<>>;
         {error, _} = Error ->
-            lager:info("template render of ~p returns ~p", [Template, Error]),
+            ?LOG_INFO("template render of ~p returns ~p", [Template, Error]),
             <<>>
     end.
 

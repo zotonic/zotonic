@@ -24,6 +24,8 @@
 
 -behaviour(gen_server).
 
+-include_lib("kernel/include/logger.hrl").
+
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
@@ -275,7 +277,10 @@ await_exact(Notifier, Event, Msg, Timeout) ->
 %% @doc Initiates the server, creates a new observer list
 -spec init(atom()) -> {ok, #state{}}.
 init(Name) ->
-    lager:md([ {name, Name}, {module, ?MODULE} ]),
+    logger:set_process_metadata(#{
+        name => Name,
+        module => ?MODULE
+    }),
     Table = observer_table_name(Name),
     ets:new(Table, [ named_table, set, {keypos, 1}, protected ]),
     State = #state{
@@ -432,7 +437,7 @@ notify_observer(Msg, {_Prio, Pid, _OwnerPid}, true, ContextArg) when is_pid(Pid)
         gen_server:call(Pid, {Msg, ContextArg}, ?TIMEOUT)
     catch
         EM:E:Trace ->
-            lager:error("Error notifying ~p with event ~p. Error ~p:~p. Trace:~p",
+            ?LOG_ERROR("Error notifying ~p with event ~p. Error ~p:~p. Trace:~p",
                         [Pid, Msg, EM, E, Trace]),
             {error, {notify_observer, Pid, Msg, EM, E}}
     end;
@@ -451,7 +456,7 @@ notify_observer_fold(Msg, {_Prio, Pid, _OwnerPid}, Acc, ContextArg) when is_pid(
         gen_server:call(Pid, {Msg, Acc, ContextArg}, ?TIMEOUT)
     catch
         EM:E:Trace ->
-            lager:error("Error foloding ~p with event ~p. Error ~p:~p. Trace:~p",
+            ?LOG_ERROR("Error foloding ~p with event ~p. Error ~p:~p. Trace:~p",
                         [Pid, Msg, EM, E, Trace]),
             Acc
     end;

@@ -22,6 +22,8 @@
 
 -export([ m_get/3 ]).
 
+-include_lib("kernel/include/logger.hrl").
+
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"noindex">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_boolean(seo, noindex, Context), Rest}};
@@ -40,6 +42,6 @@ m_get([ <<"google">>, <<"gtm">> | Rest ], _Msg, Context) ->
 m_get([ <<"yandex">>, <<"webmaster_verify">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(seo_yandex, webmaster_verify, Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 

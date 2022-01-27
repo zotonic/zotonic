@@ -80,10 +80,10 @@ pid_observe_tkvstore_delete(Pid, #tkvstore_delete{} = Message, _Context) ->
 %% @doc Initiates the server.
 init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
-    lager:md([
-        {site, z_context:site(Context)},
-        {module, ?MODULE}
-      ]),
+    logger:set_process_metadata(#{
+        site => z_context:site(Context),
+        module => ?MODULE
+    }),
     m_tkvstore:init(Context),
     WriterPid = erlang:spawn_link(?MODULE, writer_loop, [self(), Context]),
     {ok, #state{

@@ -101,7 +101,7 @@ transport(Delegate, Payload, Context) ->
             },
             incoming_context_result(Module:event(Msg, Context));
         {error, _} ->
-            lager:info("Unkwown delegate ~p for payload ~p", [Delegate, Payload]),
+            ?LOG_INFO("Unkwown delegate ~p for payload ~p", [Delegate, Payload]),
             incoming_context_result(Context)
     end.
 

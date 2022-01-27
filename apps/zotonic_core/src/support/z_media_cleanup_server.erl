@@ -30,6 +30,7 @@
 ]).
 
 -include_lib("zotonic_file.hrl").
+-include_lib("kernel/include/logger.hrl").
 
 % Check every 10 minutes if we have anything to delete.
 % Check every 10 seconds when working through a backlog.
@@ -68,10 +69,10 @@ start_link(Args) when is_list(Args) ->
 %% @doc Initiates the server.
 init(Args) ->
     {site, Site} = proplists:lookup(site, Args),
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     {ok, #state{site=Site}, ?CLEANUP_TIMEOUT_LONG}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -174,5 +175,5 @@ do_cleanup_file({_Id, Filename, Date}, Context) ->
     ArchiveStore = iolist_to_binary([filename:basename(ArchivePath), $/, Filename ]),
     z_notifier:first(#filestore{action=delete, path=PreviewStore}, Context),
     z_notifier:first(#filestore{action=delete, path=ArchiveStore}, Context),
-    lager:debug("Medium cleanup: ~p (from ~p)", [Filename, Date]),
+    ?LOG_DEBUG("Medium cleanup: ~p (from ~p)", [Filename, Date]),
     ok.

@@ -26,6 +26,9 @@
     process/4
 ]).
 
+-include_lib("kernel/include/logger.hrl").
+
+
 service_available(Context) ->
     Context1 = z_context:set_noindex_header(Context),
     Context2 = z_context:set_nocache_headers(Context1),
@@ -43,9 +46,9 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context0) ->
     Token = z_context:get_q(<<"token">>, Context),
     case maps:get(Token, Challenges, undefined) of
         undefined ->
-            lager:warning("Letsencrypt unknown token for host ~p", [ m_req:get(host, Context) ]),
+            ?LOG_WARNING("Letsencrypt unknown token for host ~p", [ m_req:get(host, Context) ]),
             {{halt, 404}, Context};
         Thumbprint ->
-            lager:info("Letsencrypt token matched for host ~p", [ m_req:get(host, Context) ]),
+            ?LOG_INFO("Letsencrypt token matched for host ~p", [ m_req:get(host, Context) ]),
             {Thumbprint, Context}
     end.

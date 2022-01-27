@@ -95,7 +95,7 @@ fetch_access_token(Code, _AuthData, _Args, _QArgs, Context) ->
             } = z_json:decode(Payload),
             {ok, AccessData};
         Other ->
-            lager:error("[microsoft] error fetching access token [code ~p] ~p", [Code, Other]),
+            ?LOG_ERROR("[microsoft] error fetching access token [code ~p] ~p", [Code, Other]),
             {error, {http_error, MicrosoftUrl, Other}}
     end.
 
@@ -109,7 +109,7 @@ auth_validated(#{
         {ok, UserProps} ->
             JWTProps = decode_jwt(JWT),
             MSUserId = maps:get(<<"id">>, UserProps),
-            lager:debug("[microsoft] Authenticating ~p ~p", [MSUserId, UserProps]),
+            ?LOG_DEBUG("[microsoft] Authenticating ~p ~p", [MSUserId, UserProps]),
             PersonProps = #{
                 <<"title">> => maps:get(<<"displayName">>, UserProps, undefined),
                 <<"name_first">> => maps:get(<<"givenName">>, UserProps, undefined),
@@ -149,7 +149,7 @@ fetch_user_data(AccessToken) ->
             Props = z_json:decode(Payload),
             {ok, Props};
         Other ->
-            lager:error("[microsoft] error fetching user data: ~p", [Other]),
+            ?LOG_ERROR("[microsoft] error fetching user data: ~p", [Other]),
             {error, {http_error, GraphUrl, Other}}
     end.
 
@@ -174,7 +174,7 @@ fetch_user_photo(AccessToken) ->
         {ok, {{_, 404, _}, _Headers, _Data}} ->
             undefined;
         Other ->
-            lager:info("[microsoft] error fetching user photo: ~p", [Other]),
+            ?LOG_INFO("[microsoft] error fetching user photo: ~p", [Other]),
             undefined
     end.
 

@@ -180,5 +180,5 @@ error_message(av_external_links, Context) ->
 error_message(sizelimit, Context) ->
     ?__("This file is too large.", Context);
 error_message(_R, Context) ->
-    lager:warning("Unknown upload error: ~p", [_R]),
+    ?LOG_WARNING("Unknown upload error: ~p", [_R]),
     ?__("Error uploading the file.", Context).

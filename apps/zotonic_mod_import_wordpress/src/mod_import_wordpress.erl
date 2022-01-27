@@ -52,8 +52,8 @@ do_import(TmpFile, Reset, OriginalFilename, Context) ->
         catch
             _:E:Stacktrace ->
                 Msg1 = lists:flatten(io_lib:format("~p failed to import. The error was: ~p", [OriginalFilename, E])),
-                lager:warning(Msg1, Context),
-                lager:warning("Wordpress error: ~p~n~p", [E, Stacktrace]),
+                ?LOG_WARNING(Msg1, Context),
+                ?LOG_WARNING("Wordpress error: ~p~n~p", [E, Stacktrace]),
                 {growl, [ {text, Msg1}, {type, error}, {stay, true} ]}
         end,
     z_notifier:first(#page_actions{ actions = [ Action ] }, Context).

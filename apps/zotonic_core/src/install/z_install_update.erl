@@ -33,6 +33,9 @@
 
 -record(state, { site :: atom(), site_props :: list() }).
 
+-include_lib("kernel/include/logger.hrl").
+
+
 %%====================================================================
 %% API
 %%====================================================================
@@ -82,10 +85,10 @@ terminate(_Reason, _State) ->
 -spec install_check( proplists:list() ) -> ok | {error, nodbinstall | database | term()}.
 install_check(SiteProps) ->
     {site, Site} = proplists:lookup(site, SiteProps),
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     Context = z_context:new(Site),
     case z_db:has_connection(Context) of
         true ->
@@ -102,11 +105,11 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
             DbOptions = proplists:delete(dbpassword, z_db_pool:get_database_options(Context)),
             case {z_db:table_exists(config, Context), z_config:get(dbinstall)} of
                 {false, false} ->
-                    lager:error("config table does not exist and dbinstall is false; not installing"),
+                    ?LOG_ERROR("config table does not exist and dbinstall is false; not installing"),
                     {error, nodbinstall};
                 {false, _} ->
                     %% Install database
-                    lager:info("Installing database with db options: ~p", [DbOptions]),
+                    ?LOG_INFO("Installing database with db options: ~p", [DbOptions]),
                     z_install:install(Context),
                     ok;
                 {true, _} ->
@@ -125,30 +128,30 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
             end;
         {error, nodatabase} = Error ->
             % No database configured, this is ok, proceed as normal (without db)
-            lager:error("~p: Database connection failure: no database configured", [ z_context:site(Context) ]),
+            ?LOG_ERROR("~p: Database connection failure: no database configured", [ z_context:site(Context) ]),
             Error;
         {error, econnrefused} = Error ->
-            lager:error("~p: Database connection failure: connection refused", [ z_context:site(Context) ]),
+            ?LOG_ERROR("~p: Database connection failure: connection refused", [ z_context:site(Context) ]),
             Error;
         {error, Reason} ->
-            lager:warning("~p: Database connection failure: ~p", [ z_context:site(Context), Reason ]),
+            ?LOG_WARNING("~p: Database connection failure: ~p", [ z_context:site(Context), Reason ]),
             case z_config:get(dbcreate) of
                 false ->
-                    lager:error("~p: Database does not exist and dbcreate is false; not creating", [ z_context:site(Context) ]),
+                    ?LOG_ERROR("~p: Database does not exist and dbcreate is false; not creating", [ z_context:site(Context) ]),
                     {error, nodbcreate};
                 _Else ->
                     case z_db:prepare_database(Context) of
                         ok ->
-                            lager:info("~p: Retrying install check after db creation.", [ z_context:site(Context) ]),
+                            ?LOG_INFO("~p: Retrying install check after db creation.", [ z_context:site(Context) ]),
                             check_db_and_upgrade(Context, Tries+1);
                         {error, _PrepReason} = Error ->
-                            lager:error("~p: Could not create the database and schema.", [ z_context:site(Context) ]),
+                            ?LOG_ERROR("~p: Could not create the database and schema.", [ z_context:site(Context) ]),
                             Error
                     end
                 end
     end;
 check_db_and_upgrade(_Context, _Tries) ->
-    lager:error("Could not connect to database and db creation failed"),
+    ?LOG_ERROR("Could not connect to database and db creation failed"),
     {error, database}.
 
 maybe_drop_db(Context) ->
@@ -157,7 +160,7 @@ maybe_drop_db(Context) ->
         true ->
             case z_db_pool:test_connection(Context) of
                 ok ->
-                    lager:warning("[~p] Dropping existing schema ~p because of 'dbdropschema' is set.",
+                    ?LOG_WARNING("[~p] Dropping existing schema ~p because of 'dbdropschema' is set.",
                                   [ z_context:site(Context), proplists:get_value(dbschema, DbOptions) ]),
                     ok = z_db:drop_schema(Context),
                     ok;
@@ -560,7 +563,7 @@ fix_timestamptz(C, Database, Schema) ->
     ok.
 
 fix_timestamptz_column(C, Table, Col, Database, Schema) ->
-    lager:info("[database: ~p ~p] Adding time zone to ~p ~p", [Database, Schema, Table, Col]),
+    ?LOG_INFO("[database: ~p ~p] Adding time zone to ~p ~p", [Database, Schema, Table, Col]),
     {ok, [], []} = epgsql:squery(C, "alter table \""++binary_to_list(Table)++"\" alter column \""++binary_to_list(Col)++"\" type timestamp with time zone"),
     ok.
 
@@ -581,7 +584,7 @@ install_content_group_dependent(C, Database, Schema) ->
         true ->
             ok;
         false ->
-            lager:info("[database: ~p ~p] Adding rsc.is_dependent and rsc.content_group_id", [Database, Schema]),
+            ?LOG_INFO("[database: ~p ~p] Adding rsc.is_dependent and rsc.content_group_id", [Database, Schema]),
             {ok, [], []} = epgsql:squery(C,
                               "ALTER TABLE rsc "
                               "ADD COLUMN is_dependent BOOLEAN NOT NULL DEFAULT false,"
@@ -665,7 +668,7 @@ key_changes_v1_0(C, Database, Schema) ->
         false ->
             ok;
         true ->
-            lager:info("Upgrade: changing is_unique database ~s table ~s.identity", [ Database, Schema ]),
+            ?LOG_INFO("Upgrade: changing is_unique database ~s table ~s.identity", [ Database, Schema ]),
 
             {ok, [], []} = epgsql:squery(C, "
                 ALTER TABLE identity
@@ -705,7 +708,7 @@ key_changes_v1_0(C, Database, Schema) ->
         true ->
             ok;
         false ->
-            lager:info("Upgrade: adding indices to database ~s table ~s.rsc", [ Database, Schema ]),
+            ?LOG_INFO("Upgrade: adding indices to database ~s table ~s.rsc", [ Database, Schema ]),
             {ok, [], []} = epgsql:squery(C, "
                 ALTER TABLE rsc ADD CONSTRAINT fk_rsc_category_id
                     FOREIGN KEY (category_id) REFERENCES rsc (id)
@@ -728,7 +731,7 @@ rsc_language(C, Database, Schema) ->
         true ->
             ok;
         false ->
-            lager:info("Upgrade: adding language column to database ~s ~s.rsc", [ Database, Schema ]),
+            ?LOG_INFO("Upgrade: adding language column to database ~s ~s.rsc", [ Database, Schema ]),
             {ok, [], []} = epgsql:squery(C, "alter table rsc "
                                         "add column language character varying(16)[] not null default '{}'"),
             {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_language_key ON rsc USING gin(language)"),
@@ -746,7 +749,7 @@ task_queue_error_count(C, Database, Schema) ->
         true ->
             ok;
         false ->
-            lager:info("Upgrade: adding error_count column to database ~s ~s.pivot_task_queue", [ Database, Schema ]),
+            ?LOG_INFO("Upgrade: adding error_count column to database ~s ~s.pivot_task_queue", [ Database, Schema ]),
             {ok, [], []} = epgsql:squery(C, "alter table pivot_task_queue "
                                         "add column error_count integer not null default 0"),
 

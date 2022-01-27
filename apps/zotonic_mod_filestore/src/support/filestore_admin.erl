@@ -88,7 +88,7 @@ testcred(S3Url, S3Key, S3Secret, IsCreateBucket)
                 ok ->
                     testcred_file(S3Url, S3Key, S3Secret);
                 {error, _} = Error ->
-                    lager:error("S3 could not create bucket \"~s\"", [ S3Url ]),
+                    ?LOG_ERROR("S3 could not create bucket \"~s\"", [ S3Url ]),
                     Error
             end;
         {error, _} = Error ->
@@ -106,14 +106,14 @@ testcred_file(S3Url, S3Key, S3Secret)
                 {ok, _Mime, Data} ->
                     s3filez:delete(Cred, Url);
                 {ok, _Mime, OtherData} ->
-                    lager:warning("S3 get error, non matching data ~p", [OtherData]),
+                    ?LOG_WARNING("S3 get error, non matching data ~p", [OtherData]),
                     {error, data};
                 Error ->
-                    lager:warning("S3 get error: ~p", [Error]),
+                    ?LOG_WARNING("S3 get error: ~p", [Error]),
                     Error
             end;
         Error ->
-            lager:warning("S3 put error ~p", [Error]),
+            ?LOG_WARNING("S3 put error ~p", [Error]),
             Error
     end;
 testcred_file(_, _, _) ->
@@ -173,7 +173,7 @@ task_file_to_local(Context) ->
         {ok, 0} ->
             ok;
         {ok, N} ->
-            lager:info("Marked ~p files for move to local.", [N]),
+            ?LOG_INFO("Marked ~p files for move to local.", [N]),
             {delay, 1};
         _Other ->
             {delay, 10}
@@ -184,7 +184,7 @@ task_file_to_remote(Context) ->
         {ok, 0} ->
             ok;
         {ok, N} ->
-            lager:info("Unmarked ~p files for move to local.", [N]),
+            ?LOG_INFO("Unmarked ~p files for move to local.", [N]),
             {delay, 1};
         _Other ->
             {delay, 10}

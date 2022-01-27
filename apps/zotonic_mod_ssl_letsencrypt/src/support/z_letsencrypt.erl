@@ -173,7 +173,7 @@ make_cert(Domain, Opts) ->
 make_cert_bg(Domain, Opts=#{async := Async}) ->
     Ret = case gen_statem:call({global, ?MODULE}, {create, bin(Domain), Opts}, 15000) of
         {error, Err} ->
-            lager:error("LetsEncrypt error: ~p", [Err]),
+            ?LOG_ERROR("LetsEncrypt error: ~p", [Err]),
             {error, Err};
         ok ->
             case wait_valid(20) of
@@ -276,7 +276,7 @@ idle({call, From}, {create, Domain, CertOpts}, State=#state{directory=Dir, key=K
     },
     case Order2 of
         #{ <<"type">> := <<"urn:ietf:params:acme:error:", _/binary>> = Type } ->
-            lager:error("[letsencrypt] error for ~s: ~s", [ Domain, Type ]),
+            ?LOG_ERROR("[letsencrypt] error for ~s: ~s", [ Domain, Type ]),
             {next_state, invalid, StateAuth, [ {reply, From, ok} ]};
         #{ <<"authorizations">> := AuthUris } ->
             {ok, Challenges, Nonce4} = authz(ChallengeType, AuthUris, StateAuth),
@@ -402,9 +402,9 @@ maybe_log_status(Status, #{
             } | _
         ]
     }) ->
-    lager:error("[letsencrypt] Status ~p for ~s in response ~s (~s)", [ Status, Hostname, Detail, Type ]);
+    ?LOG_ERROR("[letsencrypt] Status ~p for ~s in response ~s (~s)", [ Status, Hostname, Detail, Type ]);
 maybe_log_status(Status, JSON) ->
-    lager:error("[letsencrypt] Status ~p in response ~p", [ Status, JSON ]).
+    ?LOG_ERROR("[letsencrypt] Status ~p in response ~p", [ Status, JSON ]).
 
 
 
@@ -490,7 +490,7 @@ finalize(cast, Msg, State) ->
 % Any other order status leads to exception.
 %
 finalize({call, From}, Status, State) ->
-    lager:error("[letsencrypt] unknown finalize status ~p~n", [Status]),
+    ?LOG_ERROR("[letsencrypt] unknown finalize status ~p~n", [Status]),
     {keep_state, State, [ {reply, From, {error, Status}} ]}.
 
 %%%
@@ -566,7 +566,7 @@ getopts([{http_timeout, Timeout}|Args], State) ->
         State#state{opts = #{netopts => #{timeout => Timeout}}}
      );
 getopts([Unk|_], _) ->
-    lager:info("letsencrypt: unknow parameter: ~p~n", [Unk]),
+    ?LOG_INFO("letsencrypt: unknow parameter: ~p~n", [Unk]),
     %throw({badarg, io_lib:format("unknown ~p parameter", [Unk])}).
     throw(badarg).
 

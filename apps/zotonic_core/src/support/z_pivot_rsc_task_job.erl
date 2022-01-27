@@ -47,7 +47,7 @@ task_job(
         error_count := ErrCt
     }, Context) ->
     try
-        lager:debug("Pivot task starting: ~p:~p(...)", [ Module, Function ]),
+        ?LOG_DEBUG("Pivot task starting: ~p:~p(...)", [ Module, Function ]),
         case call_function(Module, Function, ensure_list(Args), Context) of
             {delay, Delay} ->
                 Due = if
@@ -76,7 +76,7 @@ task_job(
         end
     catch
         error:undef:Trace ->
-            lager:error("Task ~p failed - undefined function, aborting: ~p:~p(~p) ~p",
+            ?LOG_ERROR("Task ~p failed - undefined function, aborting: ~p:~p(~p) ~p",
                         [TaskId, Module, Function, Args, Trace]),
             z_db:delete(pivot_task_queue, TaskId, Context);
         Error:Reason:Trace ->
@@ -85,7 +85,7 @@ task_job(
                     RetryDue = calendar:gregorian_seconds_to_datetime(
                             calendar:datetime_to_gregorian_seconds(calendar:universal_time())
                             + task_retry_backoff(ErrCt)),
-                    lager:error("Task ~p failed - will retry ~p:~p(~p) ~p:~p on ~p ~p",
+                    ?LOG_ERROR("Task ~p failed - will retry ~p:~p(~p) ~p:~p on ~p ~p",
                                 [TaskId, Module, Function, Args, Error, Reason, RetryDue, Trace]),
                     RetryFields = #{
                         <<"due">> => RetryDue,
@@ -93,7 +93,7 @@ task_job(
                     },
                     z_db:update(pivot_task_queue, TaskId, RetryFields, Context);
                 false ->
-                    lager:error("Task ~p failed - aborting ~p:~p(~p) ~p:~p ~p",
+                    ?LOG_ERROR("Task ~p failed - aborting ~p:~p(~p) ~p:~p ~p",
                                 [TaskId, Module, Function, Args, Error, Reason, Trace]),
                     z_db:delete(pivot_task_queue, TaskId, Context)
             end

@@ -40,6 +40,8 @@
     restart/0
 ]).
 
+-include_lib("kernel/include/logger.hrl").
+
 
 %%====================================================================
 %% API
@@ -93,7 +95,7 @@ handle_call(Message, _From, State) ->
 handle_cast(restart, #state{ pid = undefined } = State) ->
     {noreply, State};
 handle_cast(restart, #state{ pid = Pid } = State) when is_pid(Pid) ->
-    lager:info("[inotify] Stopping inotify file monitor."),
+    ?LOG_INFO("[inotify] Stopping inotify file monitor."),
     catch exec:stop(Pid),
     {noreply, start_inotify(State#state{ port = undefined })};
 
@@ -123,7 +125,7 @@ handle_info({stdout, _Port, Data}, #state{} = State) ->
     {noreply, State};
 
 handle_info({'DOWN', _Port, process, Pid, Reason}, #state{pid = Pid} = State) ->
-    lager:error("[inotify] inotify port closed with ~p, restarting in 5 seconds.", [Reason]),
+    ?LOG_ERROR("[inotify] inotify port closed with ~p, restarting in 5 seconds.", [Reason]),
     State1 = State#state{
         pid = undefined,
         port = undefined
@@ -164,7 +166,7 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 start_inotify(#state{executable = Executable, port = undefined} = State) ->
-    lager:info("[inotify] Starting inotify file monitor."),
+    ?LOG_INFO("[inotify] Starting inotify file monitor."),
     Args = [
             Executable,
             "-q", "-e", "modify,create,delete,moved_to,moved_from", "-m", "-r",

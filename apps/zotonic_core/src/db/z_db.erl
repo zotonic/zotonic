@@ -197,10 +197,10 @@ transaction(Function, Options, Context) ->
         {rollback, {deadlock, Trace}} = DeadlockError ->
             case proplists:get_value(noretry_on_deadlock, Options) of
                 true ->
-                    lager:warning("DEADLOCK on database transaction, NO RETRY '~p'", [Trace]),
+                    ?LOG_WARNING("DEADLOCK on database transaction, NO RETRY '~p'", [Trace]),
                     DeadlockError;
                 _False ->
-                    lager:warning("DEADLOCK on database transaction, will retry '~p'", [Trace]),
+                    ?LOG_WARNING("DEADLOCK on database transaction, will retry '~p'", [Trace]),
                     % Sleep random time, then retry transaction
                     timer:sleep(z_ids:number(100)),
                     transaction(Function, Options, Context)
@@ -500,7 +500,7 @@ qmap(Sql, Args, Options, Context) ->
                 {ok, Value} when is_list(Value); is_integer(Value) ->
                     {ok, Value};
                 {error, Reason} = Error ->
-                    lager:error("z_db error ~p in query ~s with ~p", [Reason, Sql, Args]),
+                    ?LOG_ERROR("z_db error ~p in query ~s with ~p", [Reason, Sql, Args]),
                     Error
             end
 
@@ -532,7 +532,7 @@ qmap_props(Sql, Args, Options, Context) ->
                 {ok, Value} when is_list(Value); is_integer(Value) ->
                     {ok, Value};
                 {error, Reason} = Error ->
-                    lager:error("z_db error ~p in query ~s with ~p", [Reason, Sql, Args]),
+                    ?LOG_ERROR("z_db error ~p in query ~s with ~p", [Reason, Sql, Args]),
                     Error
             end
 
@@ -603,7 +603,7 @@ q(Sql, Parameters, Context, Timeout) ->
                 {ok, _Cols, Rows} when is_list(Rows) -> Rows;
                 {ok, Value} when is_list(Value); is_integer(Value) -> Value;
                 {error, Reason} = Error ->
-                    lager:error("z_db error ~p in query ~s with ~p", [Reason, Sql, Parameters]),
+                    ?LOG_ERROR("z_db error ~p in query ~s with ~p", [Reason, Sql, Parameters]),
                     throw(Error)
             end
     end,
@@ -627,7 +627,7 @@ q1(Sql, Parameters, Context, Timeout) ->
                 {ok, Value} -> Value;
                 {error, noresult} -> undefined;
                 {error, Reason} = Error ->
-                    lager:error("z_db error ~p in query ~s with ~p", [Reason, Sql, Parameters]),
+                    ?LOG_ERROR("z_db error ~p in query ~s with ~p", [Reason, Sql, Parameters]),
                     throw(Error)
             end
     end,
@@ -752,10 +752,10 @@ insert(Table, Parameters, Context) ->
                      {error, noresult} ->
                         {ok, undefined};
                      {error, #error{ codename = unique_violation }} = Error ->
-                        lager:info("z_db unique_violation in insert to ~p of ~p", [Table, Parameters]),
+                        ?LOG_INFO("z_db unique_violation in insert to ~p of ~p", [Table, Parameters]),
                         Error;
                      {error, Reason} = Error ->
-                        lager:error("z_db error ~p in query \"~s\" with ~p", [Reason, FinalSql, ColParams]),
+                        ?LOG_ERROR("z_db error ~p in query \"~s\" with ~p", [Reason, FinalSql, ColParams]),
                         Error
                  end
             end,
@@ -793,7 +793,7 @@ update(Table, Id, Parameters, Context) when is_map(Parameters) ->
                 case equery1(DbDriver, C, Sql, [Id | Params]) of
                     {ok, _RowsUpdated} = Ok -> Ok;
                     {error, Reason} = Error ->
-                        lager:error("z_db error ~p in query ~s with ~p", [Reason, Sql, [Id | Params]]),
+                        ?LOG_ERROR("z_db error ~p in query ~s with ~p", [Reason, Sql, [Id | Params]]),
                         Error
                 end
             end,
@@ -1243,7 +1243,7 @@ convert_value("ARRAY", _, V) when is_list(V) ->
 convert_value("ARRAY", _, V) ->
     [ V ];
 convert_value(Type, _, V) ->
-    lager:warning("No type conversion for column type ~s, value ~p", [ Type, V ]),
+    ?LOG_WARNING("No type conversion for column type ~s, value ~p", [ Type, V ]),
     V.
 
 
@@ -1290,13 +1290,13 @@ ensure_database(Site, Options) ->
                     ok;
                 false ->
                     AnonOptions = proplists:delete(dbpassword, Options),
-                    lager:warning("Creating database ~p with options: ~p", [Database, AnonOptions]),
+                    ?LOG_WARNING("Creating database ~p with options: ~p", [Database, AnonOptions]),
                     create_database(Site, PgConnection, Database)
             end,
             close_connection(PgConnection),
             Result;
         {error, Reason} = Error ->
-            lager:error("Cannot create database ~p because user ~p cannot connect to the 'postgres' database: ~p",
+            ?LOG_ERROR("Cannot create database ~p because user ~p cannot connect to the 'postgres' database: ~p",
                         [Database, proplists:get_value(dbuser, Options), Reason]),
             Error
     end.
@@ -1309,7 +1309,7 @@ ensure_schema(Site, Options) ->
         true ->
             ok;
         false ->
-            lager:info("Creating schema ~p in database ~p", [Schema, Database]),
+            ?LOG_INFO("Creating schema ~p in database ~p", [Schema, Database]),
             create_schema(Site, DbConnection, Schema)
     end,
     close_connection(DbConnection),
@@ -1328,20 +1328,20 @@ drop_schema(Context) ->
                         "DROP SCHEMA \"" ++ Schema ++ "\" CASCADE"
                     ) of
                         {ok, _, _} = OK ->
-                            lager:warning("Dropped schema ~p (~p)", [Schema, OK]),
+                            ?LOG_WARNING("Dropped schema ~p (~p)", [Schema, OK]),
                             ok;
                         {error, Reason} = Error ->
-                            lager:error("z_db error ~p when dropping schema ~p", [Reason, Schema]),
+                            ?LOG_ERROR("z_db error ~p when dropping schema ~p", [Reason, Schema]),
                             Error
                     end;
                 false ->
-                    lager:warning("Could not drop schema ~p as it does not exist", [Schema]),
+                    ?LOG_WARNING("Could not drop schema ~p as it does not exist", [Schema]),
                     ok
             end,
             close_connection(DbConnection),
             Result;
         {error, Reason} ->
-            lager:error("z_db error ~p when connecting for dropping schema ~p", [Reason, Schema]),
+            ?LOG_ERROR("z_db error ~p when connecting for dropping schema ~p", [Reason, Schema]),
             ok
     end.
 
@@ -1383,7 +1383,7 @@ create_database(_Site, Connection, Database) ->
         "CREATE DATABASE \"" ++ Database ++ "\" ENCODING = 'UTF8' TEMPLATE template0"
     ) of
         {error, Reason} = Error ->
-            lager:error("z_db error ~p when creating database ~p", [Reason, Database]),
+            ?LOG_ERROR("z_db error ~p when creating database ~p", [Reason, Database]),
             Error;
         {ok, _, _} ->
             ok
@@ -1408,10 +1408,10 @@ create_schema(_Site, Connection, Schema) ->
         {ok, _, _} ->
             ok;
         {error, #error{ codename = duplicate_schema, message = Msg }} ->
-            lager:warning("Schema already exists ~p (~p)", [Schema, Msg]),
+            ?LOG_WARNING("Schema already exists ~p (~p)", [Schema, Msg]),
             ok;
         {error, Reason} = Error ->
-            lager:error("z_db error ~p when creating schema ~p", [Reason, Schema]),
+            ?LOG_ERROR("z_db error ~p when creating schema ~p", [Reason, Schema]),
             Error
     end.
 

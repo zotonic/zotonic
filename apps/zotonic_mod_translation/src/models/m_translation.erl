@@ -77,7 +77,7 @@ m_get([ <<"english_name">>, Code | Rest ], _Msg, _Context) ->
 m_get([ <<"properties">>, Code | Rest ], _Msg, _Context) ->
     {ok, {z_language:properties(Code), Rest}};
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 default_language(Context) ->

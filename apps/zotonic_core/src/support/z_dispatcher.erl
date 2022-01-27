@@ -256,10 +256,10 @@ to_bool(N) -> z_convert:to_bool(N).
 %% @doc Initiates the server, loads the dispatch list into the webmachine dispatcher
 init(SiteProps) ->
     {site, Site} = proplists:lookup(site, SiteProps),
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     {hostname, Hostname0} = proplists:lookup(hostname, SiteProps),
     Hostname = drop_port(Hostname0),
     Smtphost = drop_port(proplists:get_value(smtphost, SiteProps)),
@@ -425,7 +425,7 @@ get_file_dispatch({File, Mod}) ->
         end
     catch
         M:E ->
-            lager:error("File dispatch error: ~p  ~p", [File, {M,E}]),
+            ?LOG_ERROR("File dispatch error: ~p  ~p", [File, {M,E}]),
             throw({error, "Parse error in " ++ z_convert:to_list(File)})
     end.
 
@@ -467,7 +467,7 @@ dispatch_for_uri_lookup1([{Name, Pattern, Controller, DispatchOptions}|T], Dict)
             end,
     dispatch_for_uri_lookup1(T, Dict1);
 dispatch_for_uri_lookup1([IllegalDispatch|T], Dict) ->
-    lager:error("Dropping malformed dispatch rule: ~p", [ IllegalDispatch ]),
+    ?LOG_ERROR("Dropping malformed dispatch rule: ~p", [ IllegalDispatch ]),
     dispatch_for_uri_lookup1(T, Dict).
 
 
@@ -481,7 +481,7 @@ make_url_for(Name, Args, Escape, UriLookup) ->
         {ok, Patterns} ->
             case make_url_for1(Args1, Patterns, Escape, undefined) of
                 #dispatch_url{ url = undefined } = DispUrl when Name =/= image->
-                    lager:info("make_url_for: dispatch rule `~p' failed when processing ~p.~n",
+                    ?LOG_INFO("make_url_for: dispatch rule `~p' failed when processing ~p.~n",
                          [
                           Name1,
                           [{'Args', Args1},

@@ -20,6 +20,8 @@
 
 -behaviour(zotonic_model).
 
+-include_lib("kernel/include/logger.hrl").
+
 -export([
     m_get/3,
     m_post/3,
@@ -86,11 +88,11 @@ handle_redirect(StateId, ServiceMod, ServiceData, Args, QArgs, SId, Context) ->
                                         SId,
                                         Context);
                                 _ ->
-                                    lager:error("OAuth redirect error when fetching code: ~p", [ QArgs ]),
+                                    ?LOG_ERROR("OAuth redirect error when fetching code: ~p", [ QArgs ]),
                                     {error, code}
                             end;
                         _ ->
-                            lager:warning("OAuth redirect with missing or illegal state argument"),
+                            ?LOG_WARNING("OAuth redirect with missing or illegal state argument"),
                             {error, missing_secret}
                     end;
                 <<"access_denied">> ->
@@ -98,11 +100,11 @@ handle_redirect(StateId, ServiceMod, ServiceData, Args, QArgs, SId, Context) ->
                         <<"user_denied">> ->
                             {error, code};
                         _ ->
-                            lager:error("OAuth redirect error: ~p", [ QArgs ]),
+                            ?LOG_ERROR("OAuth redirect error: ~p", [ QArgs ]),
                             {error, code}
                     end;
                 _Error ->
-                    lager:error("OAuth redirect error: ~p", [ QArgs ]),
+                    ?LOG_ERROR("OAuth redirect error: ~p", [ QArgs ]),
                     {error, code}
             end
     end.
@@ -113,7 +115,7 @@ access_token({ok, #{ <<"access_token">> := _ } = AccessData}, ServiceMod, Args, 
         SId,
         Context);
 access_token({ok, #{} = AccessData}, ServiceMod, _Args, _SId, _Context) ->
-    lager:info("OAuth2 access token for ~p unknown return: ~p", [ ServiceMod, AccessData ]),
+    ?LOG_INFO("OAuth2 access token for ~p unknown return: ~p", [ ServiceMod, AccessData ]),
     {error, access_token};
 access_token({error, denied}, _ServiceMod, _Args, _SId, _Context) ->
     {error, denied};
@@ -125,7 +127,7 @@ user_data({ok, Auth}, SId, Context) ->
     case z_notifier:first(Auth, Context) of
         undefined ->
             % No handler for auth, signups, or signup not accepted
-            lager:warning("Undefined auth_user return for user with props ~p", [Auth]),
+            ?LOG_WARNING("Undefined auth_user return for user with props ~p", [Auth]),
             {error, auth_user_undefined};
         {ok, UserId} ->
             % Generate one time token to login for this user
@@ -136,7 +138,7 @@ user_data({ok, Auth}, SId, Context) ->
                         token => Token
                     }};
                 {error, _} = Err ->
-                    lager:warning("Error return ~p for user with props ~p", [Err, Auth]),
+                    ?LOG_WARNING("Error return ~p for user with props ~p", [Err, Auth]),
                     Err
             end;
         {error, signup_confirm} ->
@@ -152,10 +154,10 @@ user_data({ok, Auth}, SId, Context) ->
         {error, duplicate} ->
             {error, duplicate};
         {error, {duplicate_email, Email}} ->
-            lager:info("User with email \"~s\" already exists", [Email]),
+            ?LOG_INFO("User with email \"~s\" already exists", [Email]),
             {error, duplicate_email};
         {error, _} = Err ->
-            lager:warning("Error return ~p for user with props ~p", [Err, Auth]),
+            ?LOG_WARNING("Error return ~p for user with props ~p", [Err, Auth]),
             {error, auth_user_error}
     end;
 user_data(_UserError, _SId, _Context) ->

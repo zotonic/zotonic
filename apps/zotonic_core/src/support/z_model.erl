@@ -132,7 +132,7 @@ callback(Model, Verb, Path, Msg, Context) ->
         {ok, Mod} ->
             maybe_resolve(Verb, model_call(Mod, map_verb(Verb), Path, Msg, Context), Context);
         {error, _} = Error ->
-            lager:info("Publish to unknown model ~p: ~p ~p ~p", [Model, Verb, Path, Msg]),
+            ?LOG_INFO("Publish to unknown model ~p: ~p ~p ~p", [Model, Verb, Path, Msg]),
             Error
     end.
 
@@ -226,7 +226,7 @@ model_call(Mod, Callback, Path, Msg, Context) ->
                 [ {Mod, Callback, _As, _Loc} | _ ] ->
                     {error, unknown_path};
                 _ ->
-                    lager:error("Function clause in model call to ~p:~p(~p): ~p",
+                    ?LOG_ERROR("Function clause in model call to ~p:~p(~p): ~p",
                                 [ Mod, Callback, Path, S ]),
                     {error, function_clause}
             end;
@@ -235,7 +235,7 @@ model_call(Mod, Callback, Path, Msg, Context) ->
                 [ {Mod, Callback, _As, _Loc} | _ ] ->
                     {error, unknown_path};
                 _ ->
-                    lager:error("Undef in model call to ~p:~p(~p): ~p",
+                    ?LOG_ERROR("Undef in model call to ~p:~p(~p): ~p",
                                 [ Mod, Callback, Path, S ]),
                     {error, undef}
             end

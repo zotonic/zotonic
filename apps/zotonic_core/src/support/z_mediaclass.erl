@@ -117,7 +117,7 @@ expand_mediaclass_checksum(Checksum, Props) ->
             [#mediaclass_index{props=Ps}|_] ->
                 {ok, expand_mediaclass_2(Props, Ps)};
             [] ->
-                lager:warning("mediaclass expand for unknown mediaclass checksum ~p:~p", [Class, Checksum]),
+                ?LOG_WARNING("mediaclass expand for unknown mediaclass checksum ~p:~p", [Class, Checksum]),
                 {error, checksum}
         end.
 
@@ -176,10 +176,10 @@ module_reindexed(module_reindexed, Context) ->
 init(SiteProps) ->
     process_flag(trap_exit, true),
     {site, Site} = proplists:lookup(site, SiteProps),
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     Context = z_context:new(Site),
     z_notifier:observe(module_reindexed, {?MODULE, module_reindexed}, Context),
     {ok, #state{context=Context}}.
@@ -244,7 +244,7 @@ reindex(#state{context=Context, last=Last} = State) ->
             % Something changed, parse and update all classes in the files.
             Site = z_context:site(State#state.context),
             ok = reindex_files(Fs, Site),
-            lager:debug("Re-indexed mediaclass definitions"),
+            ?LOG_DEBUG("Re-indexed mediaclass definitions"),
             State#state{last=New}
     end.
 
@@ -321,7 +321,7 @@ consult_file(Path) ->
     case file:consult(Path) of
         {error, Reason} ->
             % log an error and continue
-            lager:error("Error consulting media class file ~p: ~p (skipped)", [Path, Reason]),
+            ?LOG_ERROR("Error consulting media class file ~p: ~p (skipped)", [Path, Reason]),
             [];
         {ok, MediaClasses} ->
             MediaClasses

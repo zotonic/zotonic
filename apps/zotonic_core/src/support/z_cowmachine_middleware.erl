@@ -50,7 +50,7 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
                 Sid ->
                     z_context:set_session_id(Sid, Ctx)
             end,
-            z_context:lager_md(Ctx0),
+            z_context:logger_md(Ctx0),
             Ctx1 = z_context:ensure_qs(Ctx0),
             case z_context:get_q(<<"zotonic_http_accept">>, Ctx1) of
                 undefined -> Ctx1;

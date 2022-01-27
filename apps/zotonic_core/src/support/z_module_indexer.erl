@@ -203,10 +203,10 @@ all_files1(Type, Module) ->
 init(SiteProps) ->
     process_flag(trap_exit, true),
     {site, Site} = proplists:lookup(site, SiteProps),
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     Context = z_context:new(Site),
     z_notifier:observe(module_ready, self(), Context),
     {ok, #state{context=Context}}.

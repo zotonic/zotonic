@@ -23,12 +23,14 @@
     import/2
 ]).
 
+-include_lib("kernel/include/logger.hrl").
+
 
 %% @doc Import an export
 import({acl_export, 1, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules}, Context) ->
     import({acl_export, 2, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules, [], []}, Context);
 import({acl_export, 2, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules, CollabRules, Configs}, Context) ->
-    lager:notice("ACL import by ~p: starting",
+    ?LOG_NOTICE("ACL import by ~p: starting",
                  [z_acl:user(Context)]),
     import_all(content_group, CGs, [], Context),
     import_all(acl_user_group, UGs, [], Context),
@@ -46,7 +48,7 @@ import({acl_export, 2, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules, CollabRules
             m_config:set_value(mod_acl_user_groups, K, V, Context)
         end,
         Configs),
-    lager:notice("ACL import by ~p: done", [z_acl:user(Context)]),
+    ?LOG_NOTICE("ACL import by ~p: done", [z_acl:user(Context)]),
     ok.
 
 
@@ -55,7 +57,7 @@ import({acl_export, 2, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules, CollabRules
 %% @todo Peform a dependency sort of all groups, so that content_group are inserted
 %%       in the correct order (ie the content groups of the content groups first)
 export(Context) ->
-    lager:notice("ACL export by ~p", [z_acl:user(Context)]),
+    ?LOG_NOTICE("ACL export by ~p", [z_acl:user(Context)]),
     ensure_name(content_group, Context),
     ensure_name(acl_user_group, Context),
     {acl_export, 2,
@@ -131,7 +133,7 @@ import_1(Cat, {rsc, IsA, CGName, RscProps}, IdsAcc, Context) ->
     },
     case m_rsc:rid(Name, Context) of
         undefined ->
-            lager:info("ACL export, inserting ~p with name ~p", [Cat1, Name]),
+            ?LOG_INFO("ACL export, inserting ~p with name ~p", [Cat1, Name]),
             case Name of
                 CGName ->
                     {ok, Id} = m_rsc:insert(RscPropsCat, Context),
@@ -156,7 +158,7 @@ import_1(Cat, {rsc, IsA, CGName, RscProps}, IdsAcc, Context) ->
                     },
                     case z_acl:rsc_editable(Id, Context) of
                         true ->
-                            lager:info("ACL export, updating ~p with name ~p",
+                            ?LOG_INFO("ACL export, updating ~p with name ~p",
                                        [Cat1, Name]),
                             {ok, Id} = m_rsc:update(Id, Props1, Context);
                         false ->
@@ -185,7 +187,7 @@ ensure_content_group(CGName, IdsAcc, Context) ->
                         <<"title">> => CGName,
                         <<"name">> => CGName
                     },
-                    lager:info("ACL export, inserting content_group with name ~p",
+                    ?LOG_INFO("ACL export, inserting content_group with name ~p",
                                [CGName]),
                     {ok, Id} = m_rsc:insert(Props, Context),
                     {Id, [{CGName,Id}|IdsAcc]};

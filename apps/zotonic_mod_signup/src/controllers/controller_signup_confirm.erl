@@ -28,7 +28,7 @@
 
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
-    z_context:lager_md(Context),
+    z_context:logger_md(Context),
     Rendered = z_template:render("signup_confirm.tpl", [], Context),
     z_context:output(Rendered, Context).
 

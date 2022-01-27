@@ -138,7 +138,7 @@ script(EventType, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS,
         {ok, Script, Context} ->
             {Script, Context};
         undefined ->
-            lager:error("Unhandled event type: ~p", [EventType]),
+            ?LOG_ERROR("Unhandled event type: ~p", [EventType]),
             {[], Context}
     end;
 

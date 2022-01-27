@@ -292,7 +292,7 @@ log(Type, Msg, Props, Context) ->
     Msg1 = erlang:iolist_to_binary(Msg),
     Line = proplists:get_value(line, Props, 0),
     Module = proplists:get_value(module, Props, unknown),
-    lager(Type, Props, [ z_context:site(Context), Type, Module, Line, Msg1 ]),
+    logger(Type, Props, [ z_context:site(Context), Type, Module, Line, Msg1 ]),
     UserId = case proplists:lookup(user_id, Props) of
         none -> z_acl:user(Context);
         {user_id, UId} -> UId
@@ -307,13 +307,11 @@ log(Type, Msg, Props, Context) ->
         Context),
     ok.
 
-lager(debug, [], Args) ->
-    lager:debug("[~p] ~p @ ~p:~p  ~s~n", Args);
-lager(info, [], Args) ->
-    lager:info("[~p] ~p @ ~p:~p  ~s~n", Args);
-lager(warning, [], Args) ->
-    lager:warning("[~p] ~p @ ~p:~p  ~s~n", Args);
-lager(_Severity, [], Args) ->
-    lager:error("[~p] ~p @ ~p:~p  ~s~n", Args);
-lager(Severity, Props, Args) ->
-    lager:log(Severity, Props, "[~p] ~p @ ~p:~p  ~s~n", Args).
+logger(debug, Props, Args) ->
+    ?LOG_DEBUG("[~p] ~p @ ~p:~p  ~s~n", Args, Props);
+logger(info, Props, Args) ->
+    ?LOG_INFO("[~p] ~p @ ~p:~p  ~s~n", Args, Props);
+logger(warning, Props, Args) ->
+    ?LOG_WARNING("[~p] ~p @ ~p:~p  ~s~n", Args, Props);
+logger(_Severity, Props, Args) ->
+    ?LOG_ERROR("[~p] ~p @ ~p:~p  ~s~n", Args, Props).

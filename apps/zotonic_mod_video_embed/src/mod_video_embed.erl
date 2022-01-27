@@ -77,7 +77,7 @@ observe_rsc_update(#rsc_update{action=insert, id=Id}, {ok, Props}, Context) ->
                     ok = m_media:replace(Id, MediaProps, Context),
                     spawn_preview_create(Id, MediaProps, Context);
                 false ->
-                    lager:info("Denied user ~p to embed ~p: ~p",
+                    ?LOG_INFO("Denied user ~p to embed ~p: ~p",
                                [z_acl:user(Context), ?EMBED_MIME, EmbedCodeRaw]),
                     ok
             end,
@@ -407,7 +407,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                         | Actions], ContextRedirect)
             catch
                 {error, Error} ->
-                    lager:error("[mod_video_embed] Error in add_video_embed: ~p on ~p", [Error, Props]),
+                    ?LOG_ERROR("[mod_video_embed] Error in add_video_embed: ~p on ~p", [Error, Props]),
                     z_render:growl_error("Could not create the media page.", Context)
             end;
 
@@ -478,7 +478,7 @@ videoid_to_image(<<"vimeo">>, EmbedId) ->
             #{ <<"thumbnail_large">> := Thumbnail } = JSON,
             iolist_to_binary(re:replace(Thumbnail, <<"_[0-9]+(x[0-9]+)?$">>, <<"_1280">>));
         {ok, {StatusCode, _Header, Data}} ->
-            lager:warning("Vimeo metadata fetch returns ~p ~p", [StatusCode, Data]),
+            ?LOG_WARNING("Vimeo metadata fetch returns ~p ~p", [StatusCode, Data]),
             undefined;
         _ ->
             undefined

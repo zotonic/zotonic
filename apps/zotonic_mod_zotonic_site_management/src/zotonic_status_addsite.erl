@@ -137,7 +137,7 @@ addsite_check_git(Name, Options, Context) ->
                         [] ->
                             addsite_check_skel(Name, Options, Context);
                         Error ->
-                            lager:error("[zotonic_site_status] Could not checkout ~p to ~p: ~p",
+                            ?LOG_ERROR("[zotonic_site_status] Could not checkout ~p to ~p: ~p",
                                         [Git, site_dir(Name), Error]),
                             {error, [   ?__(<<"Could not check out Git repository:">>, Context),
                                         " ", Error]}
@@ -256,7 +256,7 @@ copy_skeleton_dir(From, To, Options, Context) ->
                                                 ok ->
                                                     copy_skeleton_dir(FromPath, ToPath, Options, Context);
                                                 {error, _} = Error ->
-                                                    lager:error("[zotonic_site_status] Error creating directory ~p: ~p",
+                                                    ?LOG_ERROR("[zotonic_site_status] Error creating directory ~p: ~p",
                                                                 [ToPath, Error]),
                                                     {error, iolist_to_binary([
                                                             ?__(<<"Could not create the directory">>, Context),
@@ -315,7 +315,7 @@ copy_file("zotonic_site.config.in", FromPath, ToPath, Options) ->
         ok ->
             ok;
         {error, _} = Error ->
-            lager:error("[zotonic_site_status] Error writing ~p: ~p",
+            ?LOG_ERROR("[zotonic_site_status] Error writing ~p: ~p",
                         [FnConfig, Error]),
             Error
     end;

@@ -28,6 +28,8 @@
 -define(INACTIVE_CHECK_DELAY, 3600).
 -define(DELETE_TIMEOUT, ?INACTIVE_CHECK_DELAY*1000).
 
+-include_lib("kernel/include/logger.hrl").
+
 temporary_rsc(RscId, Context) ->
     temporary_rsc(RscId, {props, []}, Context).
 
@@ -51,7 +53,7 @@ task_delete_inactive(RscId, Key, SessionId, Context) ->
                 {ok, RscId} ->
                     {delay, ?INACTIVE_CHECK_DELAY};
                 _Other ->
-                    lager:debug("Deleting unmodified temporary resource ~p", [RscId]),
+                    ?LOG_DEBUG("Deleting unmodified temporary resource ~p", [RscId]),
                     ok = m_rsc:delete(RscId, z_acl:sudo(Context)),
                     ok
             end;
@@ -71,7 +73,7 @@ make_temporary_rsc({ok, _SessionId}, Props, Context) ->
     {Cat, Props1} = ensure_category(Props, Context),
     case m_rsc:rid(Cat, Context) of
         undefined ->
-            lager:warning("filter_temporary_rsc: could not find category '~p'", [Cat]),
+            ?LOG_WARNING("filter_temporary_rsc: could not find category '~p'", [Cat]),
             undefined;
         CatId ->
             make_rsc(
@@ -101,11 +103,11 @@ make_rsc({error, not_found}, CatId, Props, Context) ->
                         Context),
             RscId;
         {error, _} = Error ->
-            lager:error("Can not make temporary resource error ~p on ~p", [Error, Props]),
+            ?LOG_ERROR("Can not make temporary resource error ~p on ~p", [Error, Props]),
             undefined
     end;
 make_rsc({error, _} = Error, _CatId, _Props, _Context) ->
-    lager:error("Can not make temporary resource error ~p on storage lookup", [ Error ]),
+    ?LOG_ERROR("Can not make temporary resource error ~p on storage lookup", [ Error ]),
     undefined.
 
 %% If no user then limit to 1 temporary rsc per client

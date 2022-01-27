@@ -476,10 +476,10 @@ thumbnail_request(ThumbUrl, _Context) ->
                  end,
             {ok, {CT, ImageData}};
         {ok, {{_, 404, _}, _Headers, _ImageData}} ->
-            lager:info("mod_oembed: 404 on thumbnail url ~p", [ThumbUrl]),
+            ?LOG_INFO("mod_oembed: 404 on thumbnail url ~p", [ThumbUrl]),
             {error, enoent};
         Other ->
-            lager:warning("mod_oembed: unexpected result for ~p: ~p", [ThumbUrl, Other]),
+            ?LOG_WARNING("mod_oembed: unexpected result for ~p: ~p", [ThumbUrl, Other]),
             {error, httpc}
     end.
 

@@ -31,7 +31,7 @@ modify_rsc_test() ->
     ?assertEqual(Id, m_rsc:rid(<<"https://foo.test/id/333">>, C)),
     ?assertEqual(Id, m_rsc:rid(#{ <<"uri">> => <<"https://foo.test/id/333">> }, C)),
 
-    lager:info("[~p] Expecting duplicate_uri error...", [?MODULE]),
+    ?LOG_INFO("[~p] Expecting duplicate_uri error...", [?MODULE]),
     DupRsc = #{
         <<"uri">> => <<"https://foo.test/id/333">>,
         <<"category_id">> => <<"person">>,

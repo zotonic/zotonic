@@ -149,13 +149,13 @@ check_keyfile(PemFile) ->
         {ok, Bin} ->
             case public_key:pem_decode(Bin) of
                 [] ->
-                    lager:error("No private PEM key found in ~p", [PemFile]),
+                    ?LOG_ERROR("No private PEM key found in ~p", [PemFile]),
                     {error, no_private_keys_found};
                 _ ->
                     ok
             end;
         {error, _} = Error ->
-            lager:error("Cannot read key file ~p, error: ~p",
+            ?LOG_ERROR("Cannot read key file ~p, error: ~p",
                         [PemFile, Error]),
             Error
     end.

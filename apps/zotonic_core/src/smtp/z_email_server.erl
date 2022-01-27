@@ -336,7 +336,7 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
                     ignore
             end;
         {aborted, Reason} ->
-            lager:info("[smtp] Could not handle bounced messages from ~p ~p: ~p",
+            ?LOG_INFO("[smtp] Could not handle bounced messages from ~p ~p: ~p",
                       [ Peer, BounceEmail, Reason ]),
             ok
     end,
@@ -415,7 +415,7 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 handle_delivery_report(permanent_failure, MsgId, Recipient, OptMessage, Context) ->
-    lager:warning("[smtp] Permanent failure sending email to ~p (~p): ~p",
+    ?LOG_WARNING("[smtp] Permanent failure sending email to ~p (~p): ~p",
                   [Recipient, MsgId, OptMessage]),
     z_notifier:notify(#email_failed{
             message_nr = MsgId,
@@ -440,7 +440,7 @@ handle_delivery_report(permanent_failure, MsgId, Recipient, OptMessage, Context)
     % delete email from the queue and notify the system
     delete_emailq(MsgId);
 handle_delivery_report(temporary_failure, MsgId, Recipient, OptMessage, Context) ->
-    lager:info("[smtp] Temporary failure sending email to ~p (~p): ~p",
+    ?LOG_INFO("[smtp] Temporary failure sending email to ~p (~p): ~p",
                [Recipient, MsgId, OptMessage]),
     z_notifier:notify(#email_failed{
             message_nr = MsgId,
@@ -464,7 +464,7 @@ handle_delivery_report(temporary_failure, MsgId, Recipient, OptMessage, Context)
           }, Context);
 handle_delivery_report(Status, MsgId, Recipient, OptMessage, Context)
     when Status =:= sent; Status =:= relayed ->
-    lager:info("[smtp] Success sending email to ~p (~p): ~p",
+    ?LOG_INFO("[smtp] Success sending email to ~p (~p): ~p",
                [Recipient, MsgId, Status]),
     z_notifier:notify(#email_sent{
             message_nr = MsgId,
@@ -485,7 +485,7 @@ handle_delivery_report(Status, MsgId, Recipient, OptMessage, Context)
                 }
           }, Context);
 handle_delivery_report(received, MsgId, Recipient, OptMessage, Context) ->
-    lager:info("[smtp] Success sending email to ~p (~p): received",
+    ?LOG_INFO("[smtp] Success sending email to ~p (~p): received",
                [Recipient, MsgId]),
     z_notifier:notify(#email_sent{
             message_nr = MsgId,
@@ -657,18 +657,18 @@ spawn_send_check_email(Id, Recipient, Email, RetryCt, Context, State) ->
                         true ->
                             spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State);
                         false ->
-                            lager:info("[smtp] Dropping email to invalid address ~p", [ Recipient ]),
+                            ?LOG_INFO("[smtp] Dropping email to invalid address ~p", [ Recipient ]),
                             %% delete email from the queue and notify the system
                             delete_email(illegal_address, Id, Recipient, Email, Context),
                             State
                     end;
                 false ->
-                    lager:info("[smtp] Dropping email to ~p from disabled sender ~p", [ Recipient, z_acl:user(Context) ]),
+                    ?LOG_INFO("[smtp] Dropping email to ~p from disabled sender ~p", [ Recipient, z_acl:user(Context) ]),
                     delete_email(sender_disabled, Id, Recipient, Email, Context),
                     State
             end;
         {error, Template} ->
-            lager:warning("[smtp] Delayed sending email because template is not available: ~p", [ Template ]),
+            ?LOG_WARNING("[smtp] Delayed sending email because template is not available: ~p", [ Template ]),
             State
     end.
 
@@ -781,7 +781,7 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
                         #email_sender{id=Id, sender_pid=SenderPid, domain=Relay} | State#state.sending
                     ]};
         true ->
-            lager:info("[smtp] Dropping email to blocked address ~p", [ RecipientEmail ]),
+            ?LOG_INFO("[smtp] Dropping email to blocked address ~p", [ RecipientEmail ]),
             drop_blocked_email(Id, RecipientEmail, Email, Context),
             State
     end.
@@ -837,7 +837,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
     {relay, Relay} = proplists:lookup(relay, SmtpOpts),
     case gen_server:call(?MODULE, {is_sending_allowed, self(), Relay}) of
         {error, wait} ->
-            lager:info("[smtp] Delaying email to \"~s\" (~s), too many parallel senders for relay \"~s\"",
+            ?LOG_INFO("[smtp] Delaying email to \"~s\" (~s), too many parallel senders for relay \"~s\"",
                         [RecipientEmail, Id, Relay]),
             timer:sleep(1000),
             spawned_email_sender(Id, MessageId, Recipient, RecipientEmail, VERP, From,
@@ -865,7 +865,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
             end,
             case SendResult of
                 {error, Reason, {FailureType, Host, Message}} ->
-                    lager:error("[smtp] Error sending email to <~s>: ~p  (~p)",
+                    ?LOG_ERROR("[smtp] Error sending email to <~s>: ~p  (~p)",
                                [ RecipientEmail, Reason, {FailureType, Host, Message} ]),
                     case is_retry_possible(Reason, FailureType, Message) of
                         true ->
@@ -911,7 +911,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                             delete_emailq(Id)
                     end;
                 {error, Reason} ->
-                    lager:error("[smtp] Error sending email to <~s>: ~p",
+                    ?LOG_ERROR("[smtp] Error sending email to <~s>: ~p",
                                [ RecipientEmail, Reason ]),
                     % Returned when the options are not ok
                     z_notifier:notify(#email_failed{
@@ -933,7 +933,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     delete_emailq(Id);
                 {ok, Receipt} when is_binary(Receipt) ->
                     Receipt1 = z_string:trim(Receipt),
-                    lager:info("[smtp] Sent email to <~s>: ~s",
+                    ?LOG_INFO("[smtp] Sent email to <~s>: ~s",
                                [ RecipientEmail, Receipt1 ]),
                     z_notifier:notify(#email_sent{
                             message_nr=Id,
@@ -996,7 +996,7 @@ send_blocking(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) ->
 
 send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts) ->
     {relay, Relay} = proplists:lookup(relay, SmtpOpts),
-    lager:info("[smtp] Sending email to <~s> (~s), via relay \"~s\"",
+    ?LOG_INFO("[smtp] Sending email to <~s> (~s), via relay \"~s\"",
                [RecipientEmail, MsgId, Relay]),
     case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
         Receipt when is_binary(Receipt) ->
@@ -1015,7 +1015,7 @@ send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts) ->
     end.
 
 send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts) ->
-    lager:info("Bounce error for ~p, retrying without TLS", [RecipientEmail]),
+    ?LOG_INFO("Bounce error for ~p, retrying without TLS", [RecipientEmail]),
     SmtpOpts1 = [
         {tls, never}
         | proplists:delete(tls, SmtpOpts)
@@ -1299,7 +1299,7 @@ mark_sent(Id) ->
         {atomic, Result} ->
             Result;
         {aborted, Reason} ->
-            lager:info("[smtp] Could not mark message ~p as sent: ~p",
+            ?LOG_INFO("[smtp] Could not mark message ~p as sent: ~p",
                        [ Id, Reason ]),
             {error, Reason}
     end.
@@ -1318,11 +1318,11 @@ delete_emailq(Id) ->
         {atomic, ok} ->
             ok;
         {atomic, NotOk} ->
-            lager:info("[smtp] Could not delete ~p message ~p: ~p",
+            ?LOG_INFO("[smtp] Could not delete ~p message ~p: ~p",
                        [ Id, NotOk ]),
             {error, NotOk};
         {aborted, Reason} ->
-            lager:info("[smtp] Could not delete message ~p: ~p",
+            ?LOG_INFO("[smtp] Could not delete message ~p: ~p",
                        [ Id, Reason ]),
             {error, Reason}
     end.
@@ -1378,7 +1378,7 @@ delete_sent_messages(StatusSites, State) ->
                 end,
                 NotifyList);
         {aborted, Reason} ->
-            lager:info("[smtp] Could not delete sent messages: ~p", [ Reason ]),
+            ?LOG_INFO("[smtp] Could not delete sent messages: ~p", [ Reason ]),
             ok
     end.
 
@@ -1430,7 +1430,7 @@ delete_failed_messages(StatusSites) ->
                 end,
                 NotifyList);
         {aborted, Reason} ->
-            lager:info("[smtp] Could not delete failed messages: ~p", [ Reason ]),
+            ?LOG_INFO("[smtp] Could not delete failed messages: ~p", [ Reason ]),
             ok
     end.
 
@@ -1483,7 +1483,7 @@ send_next_batch(MaxListSize, StatusSites, State) ->
                 Ms),
             {true, State3};
         {aborted, Reason} ->
-            lager:info("[smtp] Could not fetch next messages to be sent: ~p",
+            ?LOG_INFO("[smtp] Could not fetch next messages to be sent: ~p",
                        [ Reason ]),
             {false, State}
     end.

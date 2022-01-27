@@ -137,7 +137,7 @@ to_local(DT, Tz) ->
         end
     catch
         _:_ ->
-            lager:warning("Error converting ~p for to_local of ~p", [Tz, DT]),
+            ?LOG_WARNING("Error converting ~p for to_local of ~p", [Tz, DT]),
             undefined
     end.
 
@@ -174,7 +174,7 @@ to_utc(DT, Tz) ->
         end
     catch
         _:_ ->
-            lager:warning("Error converting ~p for to_utc of ~p", [Tz, DT]),
+            ?LOG_WARNING("Error converting ~p for to_utc of ~p", [Tz, DT]),
             undefined
     end.
 

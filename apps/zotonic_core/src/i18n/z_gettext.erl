@@ -37,6 +37,8 @@
 %%%----------------------------------------------------------------------
 -module(z_gettext).
 
+-include_lib("kernel/include/logger.hrl").
+
 -export([parse_pot/1, parse_po/1, parse_po_bin/1, parse_po_bin/2]).
 
 -define(GETTEXT_HEADER_INFO, header).
@@ -56,7 +58,7 @@ parse_po_1(Fname, DropEmpty) ->
         {ok, Bin} ->
             parse_po_bin(Bin, DropEmpty);
         {error, _} = Error ->
-            lager:error("Error reading po file ~p: ~p", [Fname, Error]),
+            ?LOG_ERROR("Error reading po file ~p: ~p", [Fname, Error]),
             []
     end.
 

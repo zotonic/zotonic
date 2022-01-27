@@ -22,6 +22,8 @@
     info/1
 ]).
 
+-include_lib("kernel/include/logger.hrl").
+
 -define(FFPROBE_CMDLINE, "ffprobe -loglevel quiet -show_format -show_streams -print_format json ").
 
 -spec info( file:filename_all() ) -> map().
@@ -35,7 +37,7 @@ info(Path) ->
     FfprobeCmd = lists:flatten([
            Cmdline, " ", z_filelib:os_filename(Path)
        ]),
-    lager:debug("Video info: ~p", [FfprobeCmd]),
+    ?LOG_DEBUG("Video info: ~p", [FfprobeCmd]),
     JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
     try
         Ps = decode_json(JSONText),
@@ -56,7 +58,7 @@ info(Path) ->
             Info)
     catch
         error:E ->
-            lager:warning("Unexpected ffprobe return (~p) ~p", [E, JSONText]),
+            ?LOG_WARNING("Unexpected ffprobe return (~p) ~p", [E, JSONText]),
             #{}
     end.
 

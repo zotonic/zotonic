@@ -33,7 +33,7 @@
 
 resource_exists(Context) ->
     {Id, ContextQs} = get_id(z_context:ensure_qs(Context)),
-    z_context:lager_md(ContextQs),
+    z_context:logger_md(ContextQs),
     {m_rsc:exists(Id, ContextQs), ContextQs}.
 
 previously_existed(Context) ->

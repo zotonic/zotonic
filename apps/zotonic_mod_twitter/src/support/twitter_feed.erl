@@ -25,6 +25,9 @@
     get_tweet/2
 ]).
 
+-include_lib("kernel/include/logger.hrl").
+
+
 %% @doc Fetch the timeline of an user or query for a phrase or tag.
 %%      Returns a map with the 'next' args for poll_next/2, the tweets found
 %%      and the max-id of all tweets. Retweets are filtered from the query but
@@ -156,7 +159,7 @@ get_tweet(TweetId, Context) when is_integer(TweetId) ->
 
 
 fetch(API, Args, Context) ->
-    lager:debug("Twitter: fetching \"~s\" for ~p", [ API, Args ]),
+    ?LOG_DEBUG("Twitter: fetching \"~s\" for ~p", [ API, Args ]),
     Access = {
         z_convert:to_list(m_config:get_value(mod_twitter, access_token, Context)),
         z_convert:to_list(m_config:get_value(mod_twitter, access_token_secret, Context))

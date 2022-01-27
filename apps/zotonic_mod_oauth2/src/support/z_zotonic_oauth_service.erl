@@ -139,19 +139,19 @@ fetch_access_token(Code, AuthData, Args, _QArgs, Context) ->
                                 {ok, jsxrecord:decode(Body)}
                             catch
                                 _:_ ->
-                                    lager:error("OAuth2: could not access token payload: ~p", [ Body ]),
+                                    ?LOG_ERROR("OAuth2: could not access token payload: ~p", [ Body ]),
                                     {error, json}
                             end;
                         {error, Reason} ->
-                            lager:error("OAuth2: could not fetch access token: ~p", [ Reason ]),
+                            ?LOG_ERROR("OAuth2: could not fetch access token: ~p", [ Reason ]),
                             {error, http}
                     end;
                 {error, _} = Error ->
-                    lager:error("OAuth2: could not fetch consumer for access token: ~p", [ Error ]),
+                    ?LOG_ERROR("OAuth2: could not fetch consumer for access token: ~p", [ Error ]),
                     Error
             end;
         _ ->
-            lager:error("OAuth2: consumer_id mismatch between AuthData and Args"),
+            ?LOG_ERROR("OAuth2: consumer_id mismatch between AuthData and Args"),
             {error, consumer_id}
     end.
 

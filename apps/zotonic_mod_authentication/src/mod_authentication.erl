@@ -57,10 +57,10 @@ event(#submit{ message={signup_confirm, Props} }, Context) ->
     Auth1 = Auth#auth_validated{ is_signup_confirm = true },
     case z_notifier:first(Auth1, Context) of
         undefined ->
-            lager:warning("mod_authentication: 'undefined' return for auth of ~p", [Auth]),
+            ?LOG_WARNING("mod_authentication: 'undefined' return for auth of ~p", [Auth]),
             z_render:wire({show, [{target, "signup_error"}]}, Context);
         {error, _} = Err ->
-            lager:warning("mod_authentication: Error return of ~p for auth of ~p", [Err, Auth]),
+            ?LOG_WARNING("mod_authentication: Error return of ~p for auth of ~p", [Err, Auth]),
             z_render:wire({show, [{target, "signup_error"}]}, Context);
         {ok, Context1} ->
             z_render:wire({script, [{script, "window.close()"}]}, Context1)
@@ -326,7 +326,7 @@ try_signup(Auth, Context) ->
                     Error;
                 undefined ->
                     % No signup accepted
-                    lager:info("Authentication not accepted because no signup handler defined for Auth ~p", [ Auth ]),
+                    ?LOG_INFO("Authentication not accepted because no signup handler defined for Auth ~p", [ Auth ]),
                     undefined
             end
     end.

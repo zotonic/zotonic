@@ -153,10 +153,10 @@ init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     Context1 = z_acl:sudo(z_context:new(Context)),
     Site = z_context:site(Context1),
-    lager:md([
-            {site, Site},
-            {module, ?MODULE}
-        ]),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     {ok, #state{ site = Site }}.
 
 

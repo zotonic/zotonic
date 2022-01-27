@@ -61,7 +61,7 @@ m_get([ <<"record_info">>, Record | Rest ], _Msg, _Context) ->
 m_get([ <<"recompile">> | Rest ], _Msg, Context) ->
     case m_config:get_boolean(mod_development, enable_api, Context) of
         true ->
-            lager:info("Development API triggered recompilation."),
+            ?LOG_INFO("Development API triggered recompilation."),
             sidejob_supervisor:spawn(
                     zotonic_sidejobs,
                     {z, m, []}),
@@ -72,7 +72,7 @@ m_get([ <<"recompile">> | Rest ], _Msg, Context) ->
 m_get([ <<"flush">> | Rest ], _Msg, Context) ->
     case m_config:get_boolean(mod_development, enable_api, Context) of
         true ->
-            lager:info("Development API triggered cache flush."),
+            ?LOG_INFO("Development API triggered cache flush."),
             z:flush(),
             {ok, {<<"flushed">>, Rest}};
         false ->
@@ -81,7 +81,7 @@ m_get([ <<"flush">> | Rest ], _Msg, Context) ->
 m_get([ <<"reindex">> | Rest ], _Msg, Context) ->
     case m_config:get_boolean(mod_development, enable_api, Context) of
         true ->
-            lager:info("Development API triggered module reindex and translation reload."),
+            ?LOG_INFO("Development API triggered module reindex and translation reload."),
             lists:map(
                 fun(Ctx) ->
                     z_module_indexer:reindex(Ctx),
@@ -93,7 +93,7 @@ m_get([ <<"reindex">> | Rest ], _Msg, Context) ->
             {error, disabled}
     end;
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 

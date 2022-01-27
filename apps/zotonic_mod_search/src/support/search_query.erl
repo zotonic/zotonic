@@ -202,10 +202,10 @@ request_arg(<<"page">>)                -> undefined;
 request_arg(<<"pagelen">>)             -> undefined;
 % Complain about all else
 request_arg(<<"custompivot">>)         ->
-    lager:error("The query term 'custompivot' has been removed. Use filtes with 'pivot.pivotname.field' instead."),
+    ?LOG_ERROR("The query term 'custompivot' has been removed. Use filtes with 'pivot.pivotname.field' instead."),
     throw({error, {unknown_query_term, custompivot}});
 request_arg(Term) ->
-    lager:error("Skipping unknown query term: ~p", [Term]),
+    ?LOG_ERROR("Skipping unknown query term: ~p", [Term]),
     undefined.
 
 
@@ -561,7 +561,7 @@ qterm({query_id, Id}, Context) ->
         parse_query_text(z_html:unescape(m_rsc:p(Id, 'query', Context)))
     catch
         throw:{error,{unknown_query_term,Term}} ->
-            lager:error("[~p] Unknown query term in search query ~p: ~p",
+            ?LOG_ERROR("[~p] Unknown query term in search query ~p: ~p",
                         [z_context:site(Context), Id, Term]),
             []
     end,
@@ -1082,13 +1082,13 @@ assure_category_1(Name, Context) ->
         _ ->
             case m_rsc:rid(Name, Context) of
                 undefined ->
-                    lager:warning("Query: unknown category '~p'", [Name]),
+                    ?LOG_WARNING("Query: unknown category '~p'", [Name]),
                     % display_error([ ?__("Unknown category", Context), 32, $", z_html:escape(z_convert:to_binary(Name)), $" ], Context),
                     error;
                 CatId ->
                     case m_category:id_to_name(CatId, Context) of
                         undefined ->
-                            lager:warning("Query: '~p' is not a category", [Name]),
+                            ?LOG_WARNING("Query: '~p' is not a category", [Name]),
                             % display_error([ $", z_html:escape(z_convert:to_binary(Name)), $", 32, ?__("is not a category", Context) ], Context),
                             error;
                         Name1 ->
@@ -1155,7 +1155,7 @@ pivot_qterm_1(Tab, Col, Value, Query, Context) ->
             },
             {ok, Query3};
         {error, _} = Error ->
-            lager:info("Pivot value error for column ~s.~s, value ~p, dropping query term.",
+            ?LOG_INFO("Pivot value error for column ~s.~s, value ~p, dropping query term.",
                        [ Tab, Col, Value1 ]),
             Error
     end.
@@ -1393,7 +1393,7 @@ predicate_to_id_1(Pred, Context) ->
         {ok, Id} ->
             Id;
         {error, _} ->
-            lager:warning("Query: unknown predicate '~p'", [Pred]),
+            ?LOG_WARNING("Query: unknown predicate '~p'", [Pred]),
             % display_error([ ?__("Unknown predicate", Context), 32, $", z_html:escape(z_convert:to_binary(Pred)), $" ], Context),
             0
     end.

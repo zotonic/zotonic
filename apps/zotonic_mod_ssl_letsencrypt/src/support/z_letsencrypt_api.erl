@@ -20,6 +20,7 @@
 
 -import(z_letsencrypt_utils, [str/1]).
 
+-include_lib("kernel/include/logger.hrl").
 
 -type request_result() :: #{
     status_code => integer(),
@@ -52,7 +53,7 @@ status(<<"valid">>)      -> valid;
 status(<<"invalid">>)    -> invalid;
 status(<<"revoked">>)    -> revoked;
 status(Status)       ->
-    lager:error("LetsEncrypt: unknown status: ~p", [Status]),
+    ?LOG_ERROR("LetsEncrypt: unknown status: ~p", [Status]),
     unknown.
 
 %% PRIVATE
@@ -235,7 +236,7 @@ account(#{<<"newAccount">> := Uri}, Key, Jws, Opts) ->
 %
 -spec new_order(map(), [ binary() ], z_letsencrypt:ssl_privatekey(), map(), map()) -> {ok, map(), binary(), binary()}.
 new_order(#{<<"newOrder">> := Uri}, Domains, Key, Jws, Opts) ->
-    lager:info("[letsencrypt] Requesting new certificate for: ~p", [ Domains ]),
+    ?LOG_INFO("[letsencrypt] Requesting new certificate for: ~p", [ Domains ]),
     Idns = lists:map(
         fun(Domain) ->
             #{

@@ -66,7 +66,7 @@ discover_per_provider(Url, UrlExtra, [Provider=#oembed_provider{}|Rest], Context
             discover_per_provider(Url, UrlExtra, Rest, Context)
     end;
 discover_per_provider(Url, UrlExtra, [], Context) ->
-    lager:debug("Fallback embed.ly discovery for url: ~p~n", [Url]),
+    ?LOG_DEBUG("Fallback embed.ly discovery for url: ~p~n", [Url]),
     case m_config:get_value(mod_oembed, embedly_key, Context) of
         undefined ->
             {error, nomatch};
@@ -99,7 +99,7 @@ oembed_request(RequestUrl) ->
                 _:_ -> {error, nojson}
             end;
         {error, _} = Error ->
-            lager:info("OEmbed HTTP Request returned error for '~p' (~p)", [RequestUrl, Error]),
+            ?LOG_INFO("OEmbed HTTP Request returned error for '~p' (~p)", [RequestUrl, Error]),
             Error
     end.
 

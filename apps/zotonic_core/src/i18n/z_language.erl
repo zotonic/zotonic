@@ -386,7 +386,7 @@ maybe_update_config_list(I18NLanguageList, Context) ->
             m_config:delete(i18n, language_list, Context),
             ok;
         List when is_list(List) ->
-            lager:info("mod_translation: Converting 'i18n.language_list.list' config list from 0.x to 1.0."),
+            ?LOG_INFO("mod_translation: Converting 'i18n.language_list.list' config list from 0.x to 1.0."),
             NewList = lists:foldr(
                 fun
                     ({Code, ItemProps}, Acc) when is_list(ItemProps), is_atom(Code) ->
@@ -400,11 +400,11 @@ maybe_update_config_list(I18NLanguageList, Context) ->
                                     {_, _} -> [ {Code, false} | Acc ]
                                 end;
                             false ->
-                                lager:warning("mod_translation: conversion error, language ~p does not exist in z_language, skipping.", [Code]),
+                                ?LOG_WARNING("mod_translation: conversion error, language ~p does not exist in z_language, skipping.", [Code]),
                                 Acc
                         end;
                     (Unknown, Acc) ->
-                        lager:warning("mod_translation: conversion error, contains unknown record: ", [Unknown]),
+                        ?LOG_WARNING("mod_translation: conversion error, contains unknown record: ", [Unknown]),
                         Acc
                 end,
                 [],
@@ -412,7 +412,7 @@ maybe_update_config_list(I18NLanguageList, Context) ->
             m_config:set_prop(i18n, languages, list, NewList, Context),
             m_config:delete(i18n, language_list, Context);
         _ ->
-            lager:warning("mod_translation: conversion error, 'i18n.language_list.list' is not a list. Resetting languages."),
+            ?LOG_WARNING("mod_translation: conversion error, 'i18n.language_list.list' is not a list. Resetting languages."),
             m_config:delete(i18n, language_list, Context)
     end.
 

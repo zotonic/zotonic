@@ -49,12 +49,12 @@ poll(Context) ->
                             ImportCount = import_result(Sub, Result, Context),
                             set_due(Sub, Result, ImportCount, Context),
                             maybe_poll_next(Sub, Result, Context),
-                            lager:debug("Twitter: imported ~p tweets", [ ImportCount ]),
+                            ?LOG_DEBUG("Twitter: imported ~p tweets", [ ImportCount ]),
                             ok;
                         ok ->
                             ok;
                         {error, _} = Error ->
-                            lager:error("Twitter poller (~p) of \"~s\" error: ~p",
+                            ?LOG_ERROR("Twitter poller (~p) of \"~s\" error: ~p",
                                         [
                                             proplists:get_value(id, Sub),
                                             proplists:get_value(key, Sub),
@@ -72,7 +72,7 @@ poll(Context) ->
         determine_next_delay(Status, Context)
     catch
         Type:E:Trace ->
-            lager:error("Twitter poller error: ~p:~p at ~p", [ Type, E, Trace ]),
+            ?LOG_ERROR("Twitter poller error: ~p:~p at ~p", [ Type, E, Trace ]),
             {delay, ?DELAY_EXCEPTION}
     end.
 
@@ -97,7 +97,7 @@ poll_next(SubId, Next, Context) ->
                 end
             catch
                 Type:E:Trace ->
-                    lager:error("Twitter (next) poller error: ~p:~p at ~p", [ Type, E, Trace ]),
+                    ?LOG_ERROR("Twitter (next) poller error: ~p:~p at ~p", [ Type, E, Trace ]),
                     {delay, ?DELAY_EXCEPTION}
             end;
         {error, not_found} ->
@@ -214,7 +214,7 @@ poll_feed(Sub, Context) ->
                     Error
             end;
         false ->
-            lager:info("twitter_poller: disable subscription because not allowd to insert tweets for ~p", [ Sub ]),
+            ?LOG_INFO("twitter_poller: disable subscription because not allowd to insert tweets for ~p", [ Sub ]),
             m_twitter:disable(SubId, <<"acl">>, Context),
             {error, eacces}
     end.

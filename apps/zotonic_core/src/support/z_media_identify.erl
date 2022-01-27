@@ -60,7 +60,7 @@ identify(#upload{tmpfile=undefined, data=Data, filename=Filename}, Context) when
             Result;
         {error, _} = Error ->
             file:delete(TmpFile),
-            lager:warning("z_media_identify: could not write temporary file with ~p bytes to '~s'",
+            ?LOG_WARNING("z_media_identify: could not write temporary file with ~p bytes to '~s'",
                           [ size(Data), TmpFile ]),
             Error
     end;
@@ -171,7 +171,7 @@ identify_file_os(unix, File, OriginalFilename) ->
     identify_file_unix(os:find_executable("file"), File, OriginalFilename).
 
 identify_file_unix(false, _File, _OriginalFilename) ->
-    lager:error("Please install 'file' for identifying the type of uploaded files."),
+    ?LOG_ERROR("Please install 'file' for identifying the type of uploaded files."),
     {error, no_file_cmd};
 identify_file_unix(Cmd, File, OriginalFilename) ->
     CmdLine = unicode:characters_to_list([
@@ -312,7 +312,7 @@ identify_file_imagemagick(OsFamily, ImageFile, MimeFile) ->
     identify_file_imagemagick_1(os:find_executable("identify"), OsFamily, ImageFile, MimeFile).
 
 identify_file_imagemagick_1(false, _OsFamily, _ImageFile, _MimeFile) ->
-    lager:error("Please install ImageMagick 'identify' for identifying the type of uploaded files."),
+    ?LOG_ERROR("Please install ImageMagick 'identify' for identifying the type of uploaded files."),
     {error, "'identify' not installed"};
 identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
     CleanedImageFile = z_filelib:os_filename(z_convert:to_list(ImageFile) ++ "[0]"),
@@ -334,7 +334,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                          ++ " -quiet "
                          ++ z_convert:to_list(CleanedImageFile)
                          ++ " 2>&1"),
-            lager:info("identify of ~s failed:~n~s", [CleanedImageFile, Err]),
+            ?LOG_INFO("identify of ~s failed:~n~s", [CleanedImageFile, Err]),
             {error, identify};
         [Result|_] ->
             %% ["test/a.jpg","JPEG","3440x2285","3440x2285+0+0","8-bit","DirectClass","2.899mb"]
@@ -369,7 +369,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                 {ok, Props2}
             catch
                 X:B:Stacktrace ->
-                    lager:info("identify of \"~s\" failed - ~p with ~p:~p in ~p",
+                    ?LOG_INFO("identify of \"~s\" failed - ~p with ~p:~p in ~p",
                               [CleanedImageFile, CmdOutput, X, B, Stacktrace]),
                     {error, identify}
             end
@@ -584,7 +584,7 @@ exif(File) ->
         end
     catch
         A:B:Stacktrace ->
-            lager:error("Error reading exif ~p:~p in ~p", [A,B,Stacktrace]),
+            ?LOG_ERROR("Error reading exif ~p:~p in ~p", [A,B,Stacktrace]),
             #{}
     end.
 

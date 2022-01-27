@@ -80,7 +80,7 @@ event(#postback{message={DropTag,DropDelegate}, trigger=TriggerId}, Context) ->
 
     catch
         _M2:E:Stack ->
-            lager:error("Error in drop routing: ~p~n~p", [E, Stack]),
+            ?LOG_ERROR("Error in drop routing: ~p~n~p", [E, Stack]),
             Error = io_lib:format("Error in routing drop to module \"~s\"; error: \"~p\"", [DropDelegate,E]),
             z_render:wire({growl, [{text,Error}, {stay,1}]}, Context)
     end.

@@ -41,6 +41,7 @@
 
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
 -include_lib("zotonic_filewatcher.hrl").
+-include_lib("kernel/include/logger.hrl").
 
 -record(state, {
     events = [] :: map(),  % binary() => verb()
@@ -90,7 +91,7 @@ start_link() ->
 file_changed(Verb, F) when is_list(F) ->
     file_changed(Verb, unicode:characters_to_binary(F));
 file_changed(Verb, F) when is_binary(F) ->
-    lager:debug("[filewatcher] ~p of '~s'", [Verb, F]),
+    ?LOG_DEBUG("[filewatcher] ~p of '~s'", [Verb, F]),
     case is_file_blocked(F) of
         true ->
             ok;

@@ -77,13 +77,11 @@ start_link(Args) when is_list(Args) ->
 %% @doc Initiates the server.
 init(Args) ->
     {site, Site} = proplists:lookup(site, Args),
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
-
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     z_notifier:observe(check_edge_log, {?MODULE, observe_check_edge_log}, Site),
-
     {ok, #state{site=Site}, ?CLEANUP_TIMEOUT_LONG}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |

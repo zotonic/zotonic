@@ -50,7 +50,7 @@
 m_get([ <<"useauth">> | Rest ], _Msg, Context) ->
     {ok, {is_useauth(Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 -spec is_useauth(z:context()) -> boolean().

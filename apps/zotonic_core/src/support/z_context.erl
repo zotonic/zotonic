@@ -87,8 +87,8 @@
 
     is_zotonic_arg/1,
 
-    lager_md/1,
-    lager_md/2,
+    logger_md/1,
+    logger_md/2,
 
     client_id/1,
     client_topic/1,
@@ -804,29 +804,32 @@ q_upload_keepalive(false, Context) ->
     ok.
 
 %% ------------------------------------------------------------------------------------
-%% Set lager metadata for the current process
+%% Set logger metadata for the current process
 %% ------------------------------------------------------------------------------------
 
-lager_md(Context) ->
-    lager_md([], Context).
+-spec logger_md( z:context() ) -> ok.
+logger_md(Context) ->
+    logger_md(#{}, Context).
 
-lager_md(MetaData, #context{} = Context) when is_list(MetaData) ->
+-spec logger_md( map() | list(), z:context() ) -> ok.
+logger_md(MetaData, #context{} = Context) when is_list(MetaData) ->
+    logger_md(maps:from_list(MetaData), Context);
+logger_md(MetaData, #context{} = Context) when is_map(MetaData) ->
     SessionId = case session_id(Context) of
         {ok, Sid} -> Sid;
         {error, _} -> undefined
     end,
-    lager:md([
-            {site, site(Context)},
-            {user_id, Context#context.user_id},
-            {controller, Context#context.controller_module},
-            {dispatch, get(zotonic_dispatch, Context)},
-            {method, m_req:get(method, Context)},
-            {remote_ip, m_req:get(peer, Context)},
-            {is_ssl, m_req:get(is_ssl, Context)},
-            {session_id, SessionId},
-            {req_id, m_req:get(req_id, Context)}
-            | MetaData
-        ]).
+    logger:set_process_metadata(MetaData#{
+        site => site(Context),
+        user_id => Context#context.user_id,
+        controller => Context#context.controller_module,
+        dispatch => get(zotonic_dispatch, Context),
+        method => m_req:get(method, Context),
+        remote_ip => m_req:get(peer, Context),
+        is_ssl => m_req:get(is_ssl, Context),
+        session_id => SessionId,
+        req_id => m_req:get(req_id, Context)
+    }).
 
 %% ------------------------------------------------------------------------------------
 %% Set/get/modify state properties
@@ -1018,7 +1021,7 @@ set_tz(Tz, Context) when is_binary(Tz), Tz =/= <<>> ->
         true ->
             Context#context{ tz = Tz };
         false ->
-            lager:info("Dropping unknown timezone: ~p", [ Tz ]),
+            ?LOG_INFO("Dropping unknown timezone: ~p", [ Tz ]),
             Context
     end;
 set_tz(true, Context) ->
@@ -1028,7 +1031,7 @@ set_tz(1, Context) ->
 set_tz(0, Context) ->
     Context;
 set_tz(Tz, Context) ->
-    lager:error("Unknown timezone ~p", [Tz]),
+    ?LOG_ERROR("Unknown timezone ~p", [Tz]),
     Context.
 
 %% @doc Set a response header for the request in the context.

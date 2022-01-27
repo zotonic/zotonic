@@ -81,7 +81,7 @@ malformed_request(Context) ->
                             Context1 = z_context:set_client_context(TicketContext, Context),
                             {false, Context1};
                         {error, enoent} ->
-                            lager:warning("MQTT transport with an unknown ticket from ~p", [ m_req:get(peer, Context) ]),
+                            ?LOG_WARNING("MQTT transport with an unknown ticket from ~p", [ m_req:get(peer, Context) ]),
                             {true, Context}
                     end;
                 error ->
@@ -178,7 +178,7 @@ websocket_handle({ping, Opaque}, Context) ->
             end
     end;
 websocket_handle(Data, Context) ->
-    lager:warning("MQTT websocket: non binary data received: ~p", [Data]),
+    ?LOG_WARNING("MQTT websocket: non binary data received: ~p", [Data]),
     {stop, Context}.
 
 websocket_info({mqtt_transport, _SessionRef, Payload}, Context) when is_binary(Payload) ->
@@ -203,7 +203,7 @@ websocket_info(connect_check, Context) ->
             {ok, Context}
     end;
 websocket_info(Msg, Context) ->
-    lager:info("~p: Unknown message ~p", [?MODULE, Msg]),
+    ?LOG_INFO("~p: Unknown message ~p", [?MODULE, Msg]),
     {ok, Context}.
 
 
@@ -232,7 +232,7 @@ handle_connect_data(Data, Context) ->
     handle_connect_data_1(<< WsData/binary, Data/binary >>, Context).
 
 handle_connect_data_1(NewData, Context) when size(NewData) > ?MQTT_CONNECT_MAXSIZE ->
-    lager:info("MQTT: refusing connect with large connect packet"),
+    ?LOG_INFO("MQTT: refusing connect with large connect packet"),
     {stop, Context};
 handle_connect_data_1(NewData, Context) ->
     MqttPool = z_context:site(Context),
@@ -263,7 +263,7 @@ handle_connect_data_1(NewData, Context) ->
             Context1 = z_context:set(wsdata, NewData, Context),
             {ok, Context1};
         {error, expect_connect} ->
-            lager:info("MQTT: refusing connect with wrong packet type"),
+            ?LOG_INFO("MQTT: refusing connect with wrong packet type"),
             {stop, Context};
         {error, _} ->
             % Invalid packet or unkown host - just close the connection

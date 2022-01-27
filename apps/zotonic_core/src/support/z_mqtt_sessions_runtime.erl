@@ -251,7 +251,7 @@ connect(#{ type := connect, username := U, password := P, properties := Props },
             },
             {ok, ConnAck, Context};
         undefined ->
-            lager:warning("Auth module error: #logon_submit{} returned undefined."),
+            ?LOG_WARNING("Auth module error: #logon_submit{} returned undefined."),
             ConnAck = #{
                 type => connack,
                 reason_code => ?MQTT_RC_ERROR

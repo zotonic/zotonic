@@ -173,7 +173,7 @@ map_ip_address(Name, IP) when is_list(IP) ->
     case getaddr(Name, IP) of
         {ok, IpN} -> IpN;
         {error, Reason} ->
-            lager:error("Invalid '~p' address: ~p, assuming 'none' instead (~p)",
+            ?LOG_ERROR("Invalid '~p' address: ~p, assuming 'none' instead (~p)",
                         [Name, IP, Reason]),
             none
     end;
@@ -182,7 +182,7 @@ map_ip_address(Name, IP) when is_binary(IP) ->
 map_ip_address(smtp_spamd_ip, undefined) ->
     none;
 map_ip_address(Name, IP) ->
-    lager:error("Invalid ~p address: ~p, assuming 'any' instead",
+    ?LOG_ERROR("Invalid ~p address: ~p, assuming 'any' instead",
                 [Name, IP]),
     any.
 

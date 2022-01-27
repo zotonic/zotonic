@@ -80,7 +80,7 @@ map_template({overrules, Template, Filename}, _Vars, Context) ->
         {ok, _} = Ok ->
             Ok;
         {error, enoent} ->
-            lager:warning("No template for overrules of \"~s\", filename \"~s\"",
+            ?LOG_WARNING("No template for overrules of \"~s\", filename \"~s\"",
                           [ Template, Filename ]),
             {error, enoent}
     end;
@@ -494,7 +494,7 @@ builtin_tag_1(image_data_url, Expr, Args, _Vars, Context) ->
 builtin_tag_1(media, Expr, Args, _Vars, Context) ->
     z_media_tag:scomp_viewer(Expr, Args, Context);
 builtin_tag_1(Tag, _Expr, _Args, _Vars, Context) ->
-    lager:info("[~p] Unknown tag ~p", [z_context:site(Context), Tag]),
+    ?LOG_INFO("[~p] Unknown tag ~p", [z_context:site(Context), Tag]),
     <<>>.
 
 
@@ -681,10 +681,10 @@ trace_compile(Module, Filename, Options, Context) ->
         }, Context),
     case SrcPos of
         {File, Line, _Col} ->
-            lager:debug("[~p] Compiling \"~s\" (called from \"~s:~p\")",
+            ?LOG_DEBUG("[~p] Compiling \"~s\" (called from \"~s:~p\")",
                         [z_context:site(Context), Filename, File, Line]);
         undefined ->
-            lager:debug("[~p] Compiling \"~s\"",
+            ?LOG_DEBUG("[~p] Compiling \"~s\"",
                         [z_context:site(Context), Filename])
     end,
     ok.
@@ -697,7 +697,7 @@ trace_render(Filename, Options, Context) ->
         true ->
             case SrcPos of
                 {File, Line, _Col} ->
-                    lager:info("[~p] Include \"~s\" by \"~s:~p\"",
+                    ?LOG_INFO("[~p] Include \"~s\" by \"~s:~p\"",
                                [z_context:site(Context), Filename, File, Line]),
                     {ok,
                         [ <<"\n<!-- START ">>, relpath(Filename),
@@ -706,7 +706,7 @@ trace_render(Filename, Options, Context) ->
                         [ <<"\n<!-- END ">>, relpath(Filename),  <<" -->\n">> ]
                     };
                 undefined ->
-                    lager:info("[~p] Render \"~s\"",
+                    ?LOG_INFO("[~p] Render \"~s\"",
                                [z_context:site(Context), Filename]),
                     {ok,
                         [ <<"\n<!-- START ">>, relpath(Filename), <<" -->\n">> ],
@@ -723,7 +723,7 @@ trace_render(Filename, Options, Context) ->
 trace_block({File, Line, _Col}, Name, Module, Context) ->
     case z_convert:to_bool(m_config:get_value(mod_development, debug_blocks, Context)) of
         true ->
-            lager:info("[~p] Call block \"~p\" in \"~s\" by \"~s:~p\"",
+            ?LOG_INFO("[~p] Call block \"~p\" in \"~s\" by \"~s:~p\"",
                        [z_context:site(Context), Name, Module:filename(), File, Line]),
             {ok,
                 [ <<"\n<!-- BLOCK ">>, atom_to_binary(Name, 'utf8'), " @ ", relpath(Module:filename()),

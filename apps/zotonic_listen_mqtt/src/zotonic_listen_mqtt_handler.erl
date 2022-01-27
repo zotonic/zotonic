@@ -68,7 +68,7 @@ recv_connect_1(Socket, Transport, #{ data := Data } = State) ->
     end.
 
 recv_connect_data(ConnectData, Socket, Transport, _State) when size(ConnectData) > ?MQTT_CONNECT_MAXSIZE ->
-    lager:info("MQTT: refusing connect with large connect packet"),
+    ?LOG_INFO("MQTT: refusing connect with large connect packet"),
     ok = Transport:close(Socket);
 recv_connect_data(ConnectData, Socket, Transport, State) ->
     Self = self(),
@@ -93,12 +93,12 @@ recv_connect_data(ConnectData, Socket, Transport, State) ->
         {error, incomplete_packet} ->
             ?MODULE:recv_connect(Socket, Transport, State#{ data => ConnectData });
         {error, expect_connect} ->
-            lager:info("MQTT: refusing connect with wrong packet type"),
+            ?LOG_INFO("MQTT: refusing connect with wrong packet type"),
             ok = Transport:close(Socket);
         {error, unknown_host} ->
             %% Common auth mistake when connecting MQTT clients to zotonic. Because most clients don't
             %% report the connection error, it is good to at least have a message in the log.
-            lager:info("MQTT: refusing connect with unknown host. Use \"example.com:localuser\" as username."),
+            ?LOG_INFO("MQTT: refusing connect with unknown host. Use \"example.com:localuser\" as username."),
             ok = Transport:close(Socket);
         {error, _} ->
             % Invalid packet or unkown host - just close the connection
@@ -120,7 +120,7 @@ loop_data(Data, Socket, Transport, #{ session_ref := SessionRef } = State) ->
         ok ->
             ?MODULE:loop(Socket, Transport, State);
         {error, Reason} ->
-            lager:info("MQTT incoming_data/2 returned: ~p", [ Reason ]),
+            ?LOG_INFO("MQTT incoming_data/2 returned: ~p", [ Reason ]),
             ok = Transport:close(Socket)
     end.
 

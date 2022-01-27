@@ -119,7 +119,7 @@ encode_cell([Row, Col, {{Y,M,D},{H,I,S}} = Date], _IsRaw, _Context) when
             ])
     catch
         error:_if_clause ->
-            lager:warning("[~p] Illegal date in xlsx export: ~p", [Date]),
+            ?LOG_WARNING("[~p] Illegal date in xlsx export: ~p", [Date]),
             encode_inlinestr(Row, Col, <<>>)
     end;
 encode_cell([Row, Col, {Y,M,D} = Date], _IsRaw, _Context) when
@@ -132,7 +132,7 @@ encode_cell([Row, Col, {Y,M,D} = Date], _IsRaw, _Context) when
             ])
     catch
         error:_if_clause ->
-            lager:warning("[~p] Illegal date in xlsx export: ~p", [Date]),
+            ?LOG_WARNING("[~p] Illegal date in xlsx export: ~p", [Date]),
             encode_inlinestr(Row, Col, <<>>)
     end;
 encode_cell([Row, Col, V], false, _Context) ->

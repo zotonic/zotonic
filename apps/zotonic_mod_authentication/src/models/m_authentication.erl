@@ -78,7 +78,7 @@ m_get([ <<"is_rememberme">> | Rest ], _Msg, Context) ->
     RememberMe = m_config:get_boolean(mod_authentication, is_rememberme, Context),
     {ok, {RememberMe, Rest}};
 m_get(Vs, _Msg, _Context) ->
-    lager:debug("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_DEBUG("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 -spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | {error, term()}.
@@ -125,7 +125,7 @@ m_post([ <<"send-verification-message">> ], #{ payload := Payload }, Context) wh
     end;
 
 m_post(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p post: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p post: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 
@@ -133,7 +133,7 @@ handle_auth_confirm(Auth, Context) ->
     Auth1 = Auth#auth_validated{ is_signup_confirm = true },
     case z_notifier:first(Auth1, Context) of
         undefined ->
-            lager:warning("mod_authentication: 'undefined' return for auth of ~p", [Auth]),
+            ?LOG_WARNING("mod_authentication: 'undefined' return for auth of ~p", [Auth]),
             {error, nohandler};
         {ok, UserId} ->
             case z_authentication_tokens:encode_onetime_token(UserId, Context) of
@@ -143,11 +143,11 @@ handle_auth_confirm(Auth, Context) ->
                         token => Token
                     }};
                 {error, _} = Err ->
-                    lager:warning("mod_authentication: Error return of ~p for auth of ~p", [Err, Auth]),
+                    ?LOG_WARNING("mod_authentication: Error return of ~p for auth of ~p", [Err, Auth]),
                     Err
             end;
         {error, _} = Err ->
-            lager:warning("mod_authentication: Error return of ~p for auth of ~p", [Err, Auth]),
+            ?LOG_WARNING("mod_authentication: Error return of ~p for auth of ~p", [Err, Auth]),
             {error, signup}
     end.
 
@@ -213,7 +213,7 @@ send_reminder(Id, Context) ->
 send_reminder(_Id, undefined, _Context) ->
     {error, noemail};
 send_reminder(1, _Email, _Context) ->
-    lager:info("Ignoring password reminder request for 'admin' (user 1)"),
+    ?LOG_INFO("Ignoring password reminder request for 'admin' (user 1)"),
     {error, admin};
 send_reminder(undefined, Email, Context) ->
     z_email:send_render(Email, "email_password_reset.tpl", [], Context);

@@ -36,7 +36,7 @@ render(ScompName, Args, Vars, Context) ->
             render_scomp_module(ModuleName, Args, Vars, ScompContext, Context);
         {error, enoent} ->
             %% No such scomp, as we can switch on/off functionality we do a quiet skip
-            lager:info("No scomp enabled for \"~p\"", [ScompName]),
+            ?LOG_INFO("No scomp enabled for \"~p\"", [ScompName]),
             <<>>
     end.
 

@@ -43,7 +43,7 @@ observe_media_upload_preprocess(#media_upload_preprocess{ file = File, mime = Mi
             case scan_file(File, Mime, Context) of
                 ok ->
                     % all ok, give the next preprocessor a try
-                    lager:info("clamav: file ~p for user ~p is ok",
+                    ?LOG_INFO("clamav: file ~p for user ~p is ok",
                                [ Pre#media_upload_preprocess.original_filename,
                                  z_acl:user(Context)
                                ]),
@@ -87,7 +87,7 @@ observe_tick_1h(tick_1h, Context) ->
     {IP, Port} = z_clamav:ip_port(),
     case z_clamav:ping() of
         pong ->
-            lager:info("Virus scanner: ping ok for clamav daemon at ~s:~p",
+            ?LOG_INFO("Virus scanner: ping ok for clamav daemon at ~s:~p",
                         [ IP, Port ]);
         pang ->
             z:warning("Virus scanner: can not ping clamav daemon at ~s:~p",

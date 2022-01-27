@@ -140,7 +140,7 @@ m_get([ Cat | Rest ], _Msg, Context) ->
     end,
     {ok, {V, Rest}};
 m_get(Vs, _Msg, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_ERROR("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 
@@ -719,13 +719,13 @@ ensure_hierarchy(Context) ->
             {ok, CatId} = name_to_id(category, Context),
             case m_hierarchy:ensure('$category', CatId, Context) of
                 {ok, N} when N > 0 ->
-                    lager:warning("Ensure category found ~p new categories.", [N]),
+                    ?LOG_WARNING("Ensure category found ~p new categories.", [N]),
                     flush(Context);
                 {ok, 0} ->
                     ok
             end;
         true ->
-            lager:warning("Ensure category requested while renumbering."),
+            ?LOG_WARNING("Ensure category requested while renumbering."),
             {error, renumbering}
     end.
 
@@ -748,7 +748,7 @@ move_below(Cat, Parent, Context) ->
                     renumber(Context)
             end;
         notfound ->
-            lager:error("Category move ~p below ~p, error: ~p",
+            ?LOG_ERROR("Category move ~p below ~p, error: ~p",
                     [ Cat, Parent, notfound ]),
             {error, notfound}
     end.
@@ -770,7 +770,7 @@ move_after(Cat, After, Context) ->
                     renumber(Context)
             end;
         notfound ->
-            lager:error("Category move ~p after ~p, error: ~p",
+            ?LOG_ERROR("Category move ~p after ~p, error: ~p",
                     [ Cat, After, notfound ]),
             {error, notfound}
     end.
@@ -866,11 +866,11 @@ renumber_pivot_task(Context) ->
                 limit 1000", Context, 60000),
     case Nrs of
         [] ->
-            lager:info("Category renumbering completed", Context),
+            ?LOG_INFO("Category renumbering completed", Context),
             set_tree_dirty(false, Context),
             ok;
         Ids ->
-            lager:info("Category renumbering of ~p resources", [ length(Ids) ]),
+            ?LOG_INFO("Category renumbering of ~p resources", [ length(Ids) ]),
             ok = z_db:transaction(fun(Ctx) ->
                 lists:foreach(
                     fun({Id, CatNr}) ->

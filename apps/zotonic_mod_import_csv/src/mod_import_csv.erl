@@ -161,11 +161,11 @@ can_handle(OriginalFilename, DataFile, Context) ->
                         true ->
                             {ok, FD};
                         false ->
-                            lager:info("Invalid CSV file, missing 'name' and/or 'category' columns: ~p", [Cols]),
+                            ?LOG_INFO("Invalid CSV file, missing 'name' and/or 'category' columns: ~p", [Cols]),
                             {error, invalid_csv_file}
                     end;
                 {error, _} = Error ->
-                    lager:info("Invalid CSV file, error during inspect: ~p", [Error]),
+                    ?LOG_INFO("Invalid CSV file, error during inspect: ~p", [Error]),
                     Error
             end
     end.

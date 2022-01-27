@@ -21,6 +21,8 @@
 
 -behaviour(supervisor).
 
+-include_lib("kernel/include/logger.hrl").
+
 %% External exports
 -export([start_link/1]).
 
@@ -54,10 +56,10 @@ init(Site) ->
     % call. A solution is to decouple the config scanning from
     % the sites supervisor.
     erlang:spawn_link(fun() -> install_phase1(Site) end),
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     z_sites_manager:set_site_status(Site, starting),
     {ok, {{one_for_all, 2, 1}, [
         {z_trans_server,
@@ -109,7 +111,7 @@ wait_for_db(Site) ->
     wait_for_db(Site, 1000).
 
 wait_for_db(Site, 0) ->
-    lager:error("~p: Timeout waiting for database driver", [Site]),
+    ?LOG_ERROR("~p: Timeout waiting for database driver", [Site]),
     {error, timeout};
 wait_for_db(Site, N) ->
     case z_db:has_connection(Site) of

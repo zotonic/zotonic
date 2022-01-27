@@ -108,10 +108,10 @@ observe_request_context(#request_context{ phase = _ }, Context, _Context) ->
 init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     Site = z_context:site(Context),
-    lager:md([
-            {site, Site},
-            {module, ?MODULE}
-        ]),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     {ok, #state{site=Site}}.
 
 
@@ -213,7 +213,7 @@ livereload_page(Context) ->
 
 %% @doc Start a listener for a certain kind of debug information, echo it to the target id on the current page.
 start_debug_stream(TargetId, What, Context) ->
-    lager:critical("Debug stream not functional yet"),
+    ?LOG_CRITICAL("Debug stream not functional yet"),
     % Context1 = z_context:prune_for_async(Context),
     % z_session_page:spawn_link(?MODULE, page_debug_stream, [TargetId, What, Context1], Context1).
     ok.

@@ -24,6 +24,9 @@
     m_get/3
 ]).
 
+-include_lib("kernel/include/logger.hrl").
+
+
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"admin_panel">> | Rest ], _Msg, Context) ->
@@ -41,6 +44,6 @@ m_get([ <<"is_backup_in_progress">> | Rest ], _Msg, Context) ->
         false -> {error, eacces}
     end;
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 

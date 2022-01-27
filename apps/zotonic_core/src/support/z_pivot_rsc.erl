@@ -366,10 +366,10 @@ start_link(SiteProps) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(Site) ->
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
     {ok, #state{
         site=Site,
@@ -384,7 +384,7 @@ init(Site) ->
 handle_call({task_done, TaskId, _TaskPid}, _From, #state{ task_id = TaskId } = State) ->
     {reply, ok, State#state{ task_id = undefined, task_pid = undefined }};
 handle_call({task_done, TaskId, _TaskPid}, _From, State) ->
-    lager:error("Pivot received unexpected 'task_done' from task job for task ~p",
+    ?LOG_ERROR("Pivot received unexpected 'task_done' from task job for task ~p",
                 [ TaskId ]),
     {reply, {error, unknown_task, State}};
 
@@ -412,7 +412,7 @@ handle_cast(poll, State) ->
         {noreply, State1}
     catch
         Type:Err:Stack ->
-            lager:error("Poll error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
+            ?LOG_ERROR("Poll error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
             {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
     end;
 
@@ -461,7 +461,7 @@ handle_info(poll, #state{ site = Site } = State) ->
                 {noreply, State1#state{ is_initial_delay = false }}
             catch
                 Type:Err:Stack ->
-                    lager:error("Pivot error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
+                    ?LOG_ERROR("Pivot error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
                     timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
                     {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
             end;
@@ -473,7 +473,7 @@ handle_info(poll, #state{ site = Site } = State) ->
 handle_info({'DOWN', _MRef, process, _Pid, _Reason}, #state{ task_pid = undefined } = State) ->
     {noreply, State};
 handle_info({'DOWN', _MRef, process, Pid, Reason}, #state{ task_pid = Pid } = State) ->
-    lager:error("Pivot received unexpected DOWN with reason '~p' from task job for task ~p",
+    ?LOG_ERROR("Pivot received unexpected DOWN with reason '~p' from task job for task ~p",
                 [ Reason, State#state.task_id ]),
     {noreply, State#state{ task_id = undefined, task_pid = undefined }};
 
@@ -531,10 +531,10 @@ do_insert_queue(Ids, DueDate, Context) when is_list(Ids) ->
         ok ->
             ok;
         {rollback, Reason} ->
-            lager:error("pivot: rollback during pivot queue insert: ~p", [Reason]),
+            ?LOG_ERROR("pivot: rollback during pivot queue insert: ~p", [Reason]),
             timer:apply_after(100, ?MODULE, insert_queue, [Ids, DueDate, Context]);
         {error, Reason} ->
-            lager:error("pivot: error during pivot queue insert: ~p", [Reason])
+            ?LOG_ERROR("pivot: error during pivot queue insert: ~p", [Reason])
     end.
 
 
@@ -567,7 +567,7 @@ do_pivot_queued(Qs, Context) ->
         end,
     case z_db:transaction(F, Context) of
         {rollback, PivotError} ->
-            lager:error("Pivot error: ~p: ~p",
+            ?LOG_ERROR("Pivot error: ~p: ~p",
                         [PivotError, Qs]);
         L when is_list(L) ->
             lists:map(fun({Id, _Serial}) ->
@@ -585,7 +585,7 @@ do_pivot_queued(Qs, Context) ->
     true.
 
 log_error(Id, Error, _Context) ->
-    lager:warning("Pivot error ~p: ~p", [Id, Error]).
+    ?LOG_WARNING("Pivot error ~p: ~p", [Id, Error]).
 
 
 maybe_start_task(#state{ task_pid = undefined } = State, Context) ->
@@ -603,7 +603,7 @@ maybe_start_task(#state{ task_pid = undefined } = State, Context) ->
         {error, nodb} ->
             State;
         {error, _} = Error ->
-            lager:error("Pivot could not check task queue: ~p", [ Error ]),
+            ?LOG_ERROR("Pivot could not check task queue: ~p", [ Error ]),
             State
     end;
 maybe_start_task(State, _Context) ->
@@ -761,7 +761,7 @@ pivot_resource(Id, Context0) ->
                     end,
                     ok;
                 {error, enoent} ->
-                    lager:error("[~p] Missing 'pivot/pivot.tpl' template", [z_context:site(Context)]),
+                    ?LOG_ERROR("[~p] Missing 'pivot/pivot.tpl' template", [z_context:site(Context)]),
                     ok
             end;
         false ->
@@ -816,7 +816,7 @@ pivot_resource_custom(Id, Context) ->
                 (ok) -> ok;
                 (none) -> ok;
                 ({error, _} = Error) ->
-                    lager:error("Error return from custom pivot of ~p, error: ~p",
+                    ?LOG_ERROR("Error return from custom pivot of ~p, error: ~p",
                                 [Id, Error]);
                 ({_Module, _Columns} = Res) ->
                     update_custom_pivot(Id, Res, Context)
@@ -1117,7 +1117,7 @@ update_custom_pivot(Id, {Module, Columns}, Context) ->
     case Result of
         {ok, _} -> ok;
         {error, Reason} ->
-            lager:error("Error updating custom pivot ~p for ~p (~p): ~p",
+            ?LOG_ERROR("Error updating custom pivot ~p for ~p (~p): ~p",
                         [Module, Id, z_context:site(Context), Reason])
     end.
 

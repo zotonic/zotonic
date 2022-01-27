@@ -23,6 +23,8 @@
     request_process/4
     ]).
 
+-include_lib("kernel/include/logger.hrl").
+
 
 %% @doc Start a letsencrypt server for requesting this hostname
 -spec request( pid(), binary(), list( binary() ), list()) -> {ok, pid()} | {error, overload}.
@@ -56,7 +58,7 @@ request_process(ModulePid, Hostname, SANs, LetsOpts) ->
         {error, _} = Error ->
             Error;
         aborted ->
-            lager:error("LetsEncrypt process aborted for: ~s", [ Hostname ]),
+            ?LOG_ERROR("LetsEncrypt process aborted for: ~s", [ Hostname ]),
             {error, aborted}
     end.
 

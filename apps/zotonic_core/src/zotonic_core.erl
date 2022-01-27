@@ -21,6 +21,8 @@
 
 -author('Marc Worrell <marc@worrell.nl>').
 
+-include_lib("kernel/include/logger.hrl").
+
 -export([
     is_zotonic_project/0,
     is_testsandbox/0,
@@ -97,7 +99,7 @@ ensure_mnesia_schema() ->
                 false -> ok = mnesia:create_schema([node()])
             end;
         undefined ->
-            lager:info("No mnesia directory defined, running without persistent email queue and filezcache. "
+            ?LOG_INFO("No mnesia directory defined, running without persistent email queue and filezcache. "
                        "To enable persistency, add to erlang.config: {mnesia,[{dir,\"data/mnesia\"}]}"),
             ok
     end.
@@ -129,7 +131,7 @@ mnesia_data_dir() ->
             application:set_env(mnesia, dir, MnesiaDir),
             {ok, MnesiaDir};
         {error, _} = Error ->
-            lager:error("Could not create mnesia dir \"~s\": ~p",
+            ?LOG_ERROR("Could not create mnesia dir \"~s\": ~p",
                         [MnesiaDir, Error]),
             undefined
     end.
