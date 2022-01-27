@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020 Marc Worrell
+%% @copyright 2020-2022 Marc Worrell
 %% @doc Supervisor for services for a site. These can be restarted without affecting other parts.
 
-%% Copyright 2020 Marc Worrell
+%% Copyright 2020-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@
 %% supervisor callbacks
 -export([init/1]).
 
--include_lib("zotonic.hrl").
 
 %% @doc API for starting the site services supervisor.
 start_link(SiteProps) ->

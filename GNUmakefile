@@ -30,7 +30,7 @@ $(REBAR): $(REBAR_ETAG)
 .PHONY: upgrade-deps compile-zotonic compile test
 
 upgrade-deps: $(REBAR)
-	$(REBAR) $(REBAR_OPTS) upgrade
+	$(REBAR) $(REBAR_OPTS) upgrade --all
 
 compile: $(REBAR)
 	$(REBAR) $(REBAR_OPTS) compile

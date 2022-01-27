@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2017 Marc Worrell
+%% @copyright 2010-2022 Marc Worrell
 %% @doc This module is started after the complete site_sup has been booted.
 %% This is the moment for system wide initializations.
 
-%% Copyright 2010-2017 Marc Worrell
+%% Copyright 2010-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -79,6 +79,7 @@ do_startup(Context) ->
         end),
     z_language:initialize_config(Context),
     do_install_modules(z_db:has_connection(Context), Context),
+    z_depcache:flush(Context),
     z_module_manager:upgrade_await(Context),
     z_sites_manager:set_site_status(z_context:site(Context), running).
 
