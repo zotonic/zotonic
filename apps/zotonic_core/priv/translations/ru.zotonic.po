@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-26 01:41\n"
+"PO-Revision-Date: 2022-01-27 00:12\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2466,7 +2466,7 @@ msgstr "Переместить все страницы в этих катего�
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:87
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:93
 msgid "Not all resources could be deleted."
-msgstr "Не все ресурсы могут быть удалены."
+msgstr "Не все ресурсы могли быть удалены."
 
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:33
 msgid "Or click <strong>Delete All Pages</strong> to delete all pages in the categories."
