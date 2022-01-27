@@ -1,5 +1,5 @@
 {application, zotonic_mod_admin, [
-    {description, "Organize users into hierarchical groups"},
+    {description, "Admin interface to edit content and administrate a Zotonic site."},
     {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},

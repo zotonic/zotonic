@@ -449,19 +449,25 @@ handle_info(poll, #state{ is_pivot_delay = true } = State) ->
 handle_info(poll, #state{backoff_counter = Ct} = State) when Ct > 0 ->
     timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
     {noreply, State#state{ backoff_counter = Ct - 1 }};
-handle_info(poll, State) ->
-    try
-        {IsPivoting, State1} = do_poll(State),
-        case IsPivoting of
-            true ->  timer:send_after(?PIVOT_POLL_INTERVAL_FAST*1000, poll);
-            false -> timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll)
-        end,
-        {noreply, State1#state{ is_initial_delay = false }}
-    catch
-        Type:Err:Stack ->
-            lager:error("Pivot error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
+handle_info(poll, #state{ site = Site } = State) ->
+    case z_sites_manager:get_site_status(Site) of
+        {ok, running} ->
+            try
+                {IsPivoting, State1} = do_poll(State),
+                case IsPivoting of
+                    true ->  timer:send_after(?PIVOT_POLL_INTERVAL_FAST*1000, poll);
+                    false -> timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll)
+                end,
+                {noreply, State1#state{ is_initial_delay = false }}
+            catch
+                Type:Err:Stack ->
+                    lager:error("Pivot error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
+                    timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
+                    {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
+            end;
+        _ ->
             timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
-            {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
+            {noreply, State#state{ is_initial_delay = true }}
     end;
 
 handle_info({'DOWN', _MRef, process, _Pid, _Reason}, #state{ task_pid = undefined } = State) ->
