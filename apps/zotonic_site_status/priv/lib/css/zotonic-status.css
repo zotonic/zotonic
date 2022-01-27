@@ -5,6 +5,7 @@
 @Created: 	2009-02-01
 @Changed:	2012-05-03
 @Changed:	2014-12-19
+@Changed:   2021-01-27  Removed include of mod_admin vars
 
 Copyright 2009 Tim Benniks
 Copyright 2012 Arjan Scherpenisse
@@ -13,9 +14,9 @@ Copyright 2014 Arthur Clemens
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
+ 
 http://www.apache.org/licenses/LICENSE-2.0
-
+ 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -70,7 +71,7 @@ body {
   text-align: left;
 }
 .footer .zotonic-logo {
-  color: #999;
+  color: #777777;
 }
 .jumbotron h1 {
   font-size: 42px;
@@ -89,7 +90,7 @@ form.error-pw #error-pw p {
   margin-bottom: 0;
 }
 form .has-error .help-block {
-  color: #777;
+  color: #555555;
 }
 form .has-error .help-block-error {
   color: #D84315;
@@ -206,7 +207,7 @@ form .has-error .help-block-error {
   color: #fff;
 }
 .text-muted {
-  color: #999;
+  color: #777777;
 }
 .alert,
 .list-group-item,

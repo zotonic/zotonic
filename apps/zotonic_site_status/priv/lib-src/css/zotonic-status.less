@@ -5,6 +5,7 @@
 @Created: 	2009-02-01
 @Changed:	2012-05-03
 @Changed:	2014-12-19
+@Changed:   2021-01-27  Removed include of mod_admin vars
 
 Copyright 2009 Tim Benniks
 Copyright 2012 Arjan Scherpenisse
@@ -27,9 +28,21 @@ limitations under the License.
 
 // Lots of Love for LESS: http://mateuszkocz.github.io/3l/
 #3L {@import "3L/3L";}
-@import "../../../../zotonic_mod_admin/priv/lib/less/variables";
 
-@main_color: @brand-primary;
+@gray_base:              #000;
+@gray_darker:            lighten(@gray_base, 13.5%); // #222
+@gray_dark:              lighten(@gray_base, 20%);   // #333
+@gray:                   lighten(@gray_base, 33.5%); // #555
+@gray_light:             lighten(@gray_base, 46.7%); // #777
+@gray_lighter:           lighten(@gray_base, 93.5%); // #eee
+
+@brand_primary:         #0fa2db; // darken(#428bca, 6.5%); // #337ab7
+@brand_success:         #5cb85c;
+@brand_info:            #5bc0de;
+@brand_warning:         #f0ad4e;
+@brand_danger:          #d9534f;
+
+@main_color: @brand_primary;
 @main_color_hover: darken(@main_color, 5%);
 @color_palette_dark: rgba(0,0,0,0.87);
 @color_running: #4CAF50;
@@ -47,6 +60,9 @@ limitations under the License.
 @textColorError: #D84315;
 @block_border_radius: 4px;
 @info_block_border_radius: 2px;
+
+@textColorMuted: @gray_light;
+@textColorMedium: @gray;
 
 body {
     background: #eee;
