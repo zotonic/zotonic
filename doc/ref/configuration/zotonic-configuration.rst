@@ -125,7 +125,7 @@ The `erlang.config` file
 The ``erlang.config`` file contains application environment variables
 for the Erlang applications that Zotonic depends on. Here you can
 configure for instance the paths for the :ref:`log files <dev-testing>` (in
-the ``lager`` section), emqtt ports, et cetera.
+the ``kernel`` section), emqtt ports, et cetera.
 
 This file is included as an *init* configuration option when starting ``erl``
 via the command line script in ``bin/zotonic``.
@@ -152,6 +152,6 @@ The erlang configuration van be viewed with ``bin/zotonic config erlang``:
     filezcache:
         data_dir: priv/filezcache/data
         journal_dir: priv/filezcache/journal
-    lager:
+    kernel:
     ...
 
