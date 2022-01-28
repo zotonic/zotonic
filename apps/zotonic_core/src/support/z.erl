@@ -82,7 +82,7 @@
 -type trans() :: #trans{}.
 -type qvalue() :: binary() | string() | #upload{} | term().
 
--type severity() :: debug | info | warning | error | fatal.
+-type severity() :: debug | info | notice | warning | error | fatal.
 
 -export_type([
     context/0,
@@ -250,7 +250,7 @@ debug_msg(Module, Line, Msg) ->
         "DEBUG: ~p:~p  ~p~n",
         [Module, Line, Msg],
         #{
-            file => Module,
+            file => z_convert:to_list(Module),
             line => Line
         }),
     Msg.
