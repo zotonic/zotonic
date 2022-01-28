@@ -43,8 +43,6 @@
 
 -include_lib("zotonic.hrl").
 
--compile([{parse_transform, lager_transform}]).
-
 %% @doc Called from template, render the media viewer for some resource/medium
 scomp_viewer(undefined, _Options, _Context) ->
     <<>>;

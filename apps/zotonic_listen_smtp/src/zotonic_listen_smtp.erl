@@ -24,8 +24,6 @@
 
 -behaviour(gen_smtp_server_session).
 
--compile([{parse_transform, lager_transform}]).
-
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -export([ child_spec/0 ]).

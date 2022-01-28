@@ -19,8 +19,6 @@
 -module(z_template).
 -author("Marc Worrell <marc@worrell.nl>").
 
--compile([{parse_transform, lager_transform}]).
-
 -export([start_link/1]).
 
 %% External exports

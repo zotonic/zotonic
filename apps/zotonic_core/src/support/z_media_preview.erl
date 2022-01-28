@@ -21,8 +21,6 @@
 -module(z_media_preview).
 -author("Marc Worrell <marc@worrell.nl").
 
--compile([{parse_transform, lager_transform}]).
-
 %% interface functions
 -export([
     convert/4,

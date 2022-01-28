@@ -428,9 +428,10 @@ email_bin(Id, Context) ->
     z_convert:to_binary( m_rsc:p_no_acl(Id, email_raw, Context) ).
 
 %% @doc Reattach all websocket connections of an user, this forces a refresh of the permissions
-%%      used by the websocket processes.
+%% used by the websocket processes.
+%% @todo Adapt this for the MQTT sessions.
 -spec signal_user_changed( m_rsc:resource_id(), z:context() ) -> ok.
-signal_user_changed(UserId, Context) ->
+signal_user_changed(_UserId, _Context) ->
     ok.
     % Sessions = z_session_manager:list_sessions_user(UserId, Context),
     % lists:foreach(

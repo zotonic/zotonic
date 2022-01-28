@@ -173,8 +173,6 @@
 -include_lib("zotonic.hrl").
 -include_lib("epgsql/include/epgsql.hrl").
 
--compile([{parse_transform, lager_transform}]).
-
 %% @doc Perform a function inside a transaction, do a rollback on exceptions
 -spec transaction(transaction_fun(), z:context()) -> any() | {error, term()}.
 transaction(Function, Context) ->
