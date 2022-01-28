@@ -330,12 +330,12 @@ log(Type, Msg, Props, Context) ->
     ok.
 
 logger(debug, Props, Args) ->
-    ?LOG_DEBUG("[~p] ~p @ ~p:~p  ~s~n", Args, Props);
+    ?LOG_DEBUG("[~p] ~p @ ~p:~p  ~s", Args, Props);
 logger(info, Props, Args) ->
-    ?LOG_INFO("[~p] ~p @ ~p:~p  ~s~n", Args, Props);
+    ?LOG_INFO("[~p] ~p @ ~p:~p  ~s", Args, Props);
 logger(notice, Props, Args) ->
-    ?LOG_NOTICE("[~p] ~p @ ~p:~p  ~s~n", Args, Props);
+    ?LOG_NOTICE("[~p] ~p @ ~p:~p  ~s", Args, Props);
 logger(warning, Props, Args) ->
-    ?LOG_WARNING("[~p] ~p @ ~p:~p  ~s~n", Args, Props);
+    ?LOG_WARNING("[~p] ~p @ ~p:~p  ~s", Args, Props);
 logger(_Severity, Props, Args) ->
-    ?LOG_ERROR("[~p] ~p @ ~p:~p  ~s~n", Args, Props).
+    ?LOG_ERROR("[~p] ~p @ ~p:~p  ~s", Args, Props).

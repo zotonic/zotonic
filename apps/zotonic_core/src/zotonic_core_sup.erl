@@ -104,10 +104,10 @@ spawn_delayed_status() ->
             fun
               ({Site, running}) when Site =/= zotonic_site_status ->
                   Ctx = z_context:new(Site),
-                  ?LOG_NOTICE("~p ~s ~-40s~n",
+                  ?LOG_NOTICE("~p ~s ~-40s",
                              [Site, running, z_context:abs_url(<<"/">>, Ctx)]);
               ({Site, Status}) ->
-                  ?LOG_NOTICE("~p - ~s~n", [Site, Status])
+                  ?LOG_NOTICE("~p - ~s", [Site, Status])
             end,
             Running ++ Other)
         % ?LOG_INFO("================")
