@@ -19,6 +19,12 @@
 %%
 -module(z_logger_h).
 
+
+%% NOTE: patched version of logger_std_h
+%% Difference is the use of z_config:get/1 to determine the
+%% log directory.
+
+
 % -include("logger_internal.hrl").
 % -include("logger_h_common.hrl").
 
