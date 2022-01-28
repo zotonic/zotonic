@@ -25,6 +25,37 @@
  %    {dir, setup}  % Use the config from setup -- handled by zotonic_core
  % ]},
 
+ {kernel, [
+  {logger_level, info},
+  {logger, [
+      {handler, default, logger_std_h,
+          #{
+              level => notice,
+              formatter => {logger_formatter,
+                  #{
+                      template => [time," [", level, "] ", file,":",line," ",msg,"\n"]
+                  }
+              }
+          }
+      }
+
+%      {handler, default, logger_std_h,
+%         #{level => info,
+%           config =>
+%              #{sync_mode_qlen => 10000,
+%                drop_mode_qlen => 10000,
+%                flush_qlen     => 10000},
+%          formatter => {flatlog, #{
+%         map_depth => 3,
+%         term_depth => 50
+%        }}
+%         }
+%     }
+
+   ]}
+ ]},
+
+
  {lager, [
     % The log_root will be set to the log_dir config in zotonic.config
     {log_root, "logs"},
