@@ -43,7 +43,6 @@ start() ->
             %
             % Show the startup message
             %
-            ensure_started(lager),
             ?LOG_INFO("================"),
             ?LOG_INFO("Zotonic starting"),
             ?LOG_INFO("================"),
@@ -102,7 +101,6 @@ load_configs(Node) ->
 %% @doc Load the applications so that their initial settings are also loaded.
 load_applications() ->
     application:load(setup),
-    application:load(lager),
     application:load(mnesia),
     application:load(zotonic_core).
 

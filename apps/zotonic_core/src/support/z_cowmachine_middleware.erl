@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2021 Marc Worrell
+%% @copyright 2016-2022 Marc Worrell
 %%
 %% @doc Middleware for cowmachine, extra Context based initializations.
 %% This starts the https request processing after the site and dispatch rule
 %% have been selected by the z_sites_dispatcher middleware.
 
-%% Copyright 2016-2021 Marc Worrell
+%% Copyright 2016-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@
 -include_lib("../../include/zotonic.hrl").
 
 %% @doc Call cowmachine to handle the request with the given controller. Prepare the
-%%      metadata for lager and set the relevant Context arguments.
+%%      metadata for logger and set the relevant Context arguments.
 -spec execute(Req, Env) -> {ok, Req, Env} | {stop, Req}
     when Req::cowboy_req:req(), Env::cowboy_middleware:env().
 execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_options := ControllerOpts } = Env) ->

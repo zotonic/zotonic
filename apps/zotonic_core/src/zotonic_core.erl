@@ -67,7 +67,6 @@ setup(Node) ->
 %% @doc Load the applications so that their settings are also loaded.
 load_applications() ->
     application:load(setup),
-    application:load(lager),
     application:load(mnesia),
     application:load(filezcache),
     application:load(zotonic_core).
