@@ -100,7 +100,7 @@ do_clam(Command, DataFun) ->
             _ = gen_tcp:close(Socket),
             Result;
         {error, _} = Error ->
-            ?LOG_INFO("ClamAV: could not connect on ~p:~p ~p", [ ClamIP, ClamPort, Error ]),
+            ?LOG_WARNING("ClamAV: could not connect on ~p:~p ~p", [ ClamIP, ClamPort, Error ]),
             Error
     end.
 
@@ -112,7 +112,7 @@ handle_result({ok, <<"stream: OK", _/binary>>}) ->
 handle_result({ok, <<"stream: ", Msg/binary>>}) ->
     case binary:match(Msg, <<" FOUND">>) of
         nomatch ->
-            ?LOG_INFO("ClamAV: daemon returned unknown message: ~p", [ Msg ]),
+            ?LOG_WARNING("ClamAV: daemon returned unknown message: ~p", [ Msg ]),
             {error, unknown};
         {_, _} ->
             {error, infected}

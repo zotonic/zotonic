@@ -49,16 +49,16 @@ event(#submit{message=addsite, form=Form}, Context) ->
         {dbuser, z_context:get_q(<<"dbuser">>, Context)},
         {dbpassword, z_context:get_q(<<"dbpassword">>, Context)}
     ],
-    ?LOG_INFO("[zotonic_site_status] Creating site ~s with ~p", [Sitename, Options]),
+    ?LOG_NOTICE("[zotonic_site_status] Creating site ~s with ~p", [Sitename, Options]),
     case zotonic_status_addsite:addsite(Sitename, Options, Context) of
         {ok, {Site, FinalOptions}} ->
             progress(Sitename, ?__("Starting the new site ...", Context), Context),
             ok = z_sites_manager:upgrade(),
             _ = z_sites_manager:start(Site),
-            ?LOG_INFO("[zotonic_site_status] Success creating site ~s", [Site]),
+            ?LOG_NOTICE("[zotonic_site_status] Success creating site ~s", [Site]),
             case await(Site) of
                 ok ->
-                    ?LOG_INFO("[zotonic_site_status] Site ~s is running", [Site]),
+                    ?LOG_NOTICE("[zotonic_site_status] Site ~s is running", [Site]),
                     SiteContext = z_context:new(Site),
                     z_module_manager:upgrade_await(SiteContext),
                     Vars = [

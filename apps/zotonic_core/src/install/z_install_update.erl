@@ -109,7 +109,7 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
                     {error, nodbinstall};
                 {false, _} ->
                     %% Install database
-                    ?LOG_INFO("Installing database with db options: ~p", [DbOptions]),
+                    ?LOG_NOTICE("Installing database with db options: ~p", [DbOptions]),
                     z_install:install(Context),
                     ok;
                 {true, _} ->
@@ -142,7 +142,7 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
                 _Else ->
                     case z_db:prepare_database(Context) of
                         ok ->
-                            ?LOG_INFO("~p: Retrying install check after db creation.", [ z_context:site(Context) ]),
+                            ?LOG_NOTICE("~p: Retrying install check after db creation.", [ z_context:site(Context) ]),
                             check_db_and_upgrade(Context, Tries+1);
                         {error, _PrepReason} = Error ->
                             ?LOG_ERROR("~p: Could not create the database and schema.", [ z_context:site(Context) ]),
@@ -563,7 +563,7 @@ fix_timestamptz(C, Database, Schema) ->
     ok.
 
 fix_timestamptz_column(C, Table, Col, Database, Schema) ->
-    ?LOG_INFO("[database: ~p ~p] Adding time zone to ~p ~p", [Database, Schema, Table, Col]),
+    ?LOG_NOTICE("[database: ~p ~p] Adding time zone to ~p ~p", [Database, Schema, Table, Col]),
     {ok, [], []} = epgsql:squery(C, "alter table \""++binary_to_list(Table)++"\" alter column \""++binary_to_list(Col)++"\" type timestamp with time zone"),
     ok.
 
@@ -584,7 +584,7 @@ install_content_group_dependent(C, Database, Schema) ->
         true ->
             ok;
         false ->
-            ?LOG_INFO("[database: ~p ~p] Adding rsc.is_dependent and rsc.content_group_id", [Database, Schema]),
+            ?LOG_NOTICE("[database: ~p ~p] Adding rsc.is_dependent and rsc.content_group_id", [Database, Schema]),
             {ok, [], []} = epgsql:squery(C,
                               "ALTER TABLE rsc "
                               "ADD COLUMN is_dependent BOOLEAN NOT NULL DEFAULT false,"
@@ -668,7 +668,7 @@ key_changes_v1_0(C, Database, Schema) ->
         false ->
             ok;
         true ->
-            ?LOG_INFO("Upgrade: changing is_unique database ~s table ~s.identity", [ Database, Schema ]),
+            ?LOG_NOTICE("Upgrade: changing is_unique database ~s table ~s.identity", [ Database, Schema ]),
 
             {ok, [], []} = epgsql:squery(C, "
                 ALTER TABLE identity
@@ -708,7 +708,7 @@ key_changes_v1_0(C, Database, Schema) ->
         true ->
             ok;
         false ->
-            ?LOG_INFO("Upgrade: adding indices to database ~s table ~s.rsc", [ Database, Schema ]),
+            ?LOG_NOTICE("Upgrade: adding indices to database ~s table ~s.rsc", [ Database, Schema ]),
             {ok, [], []} = epgsql:squery(C, "
                 ALTER TABLE rsc ADD CONSTRAINT fk_rsc_category_id
                     FOREIGN KEY (category_id) REFERENCES rsc (id)
@@ -731,7 +731,7 @@ rsc_language(C, Database, Schema) ->
         true ->
             ok;
         false ->
-            ?LOG_INFO("Upgrade: adding language column to database ~s ~s.rsc", [ Database, Schema ]),
+            ?LOG_NOTICE("Upgrade: adding language column to database ~s ~s.rsc", [ Database, Schema ]),
             {ok, [], []} = epgsql:squery(C, "alter table rsc "
                                         "add column language character varying(16)[] not null default '{}'"),
             {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_language_key ON rsc USING gin(language)"),
@@ -749,7 +749,7 @@ task_queue_error_count(C, Database, Schema) ->
         true ->
             ok;
         false ->
-            ?LOG_INFO("Upgrade: adding error_count column to database ~s ~s.pivot_task_queue", [ Database, Schema ]),
+            ?LOG_NOTICE("Upgrade: adding error_count column to database ~s ~s.pivot_task_queue", [ Database, Schema ]),
             {ok, [], []} = epgsql:squery(C, "alter table pivot_task_queue "
                                         "add column error_count integer not null default 0"),
 

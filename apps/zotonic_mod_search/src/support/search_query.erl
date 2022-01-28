@@ -1155,8 +1155,8 @@ pivot_qterm_1(Tab, Col, Value, Query, Context) ->
             },
             {ok, Query3};
         {error, _} = Error ->
-            ?LOG_INFO("Pivot value error for column ~s.~s, value ~p, dropping query term.",
-                       [ Tab, Col, Value1 ]),
+            ?LOG_WARNING("Pivot value error for column ~s.~s, value ~p, dropping query term.",
+                         [ Tab, Col, Value1 ]),
             Error
     end.
 

@@ -281,7 +281,7 @@ handle_call(get_raw_connection, _From, #state{ conn = Conn } = State) ->
     {reply, Conn, State, timeout(State)};
 
 handle_call(Request, _From, State) ->
-    ?LOG_INFO("SQL unknown call ~p", [ Request ]),
+    ?LOG_NOTICE("SQL unknown call ~p", [ Request ]),
     {reply, {error, unknown_call}, State, timeout(State)}.
 
 
@@ -337,7 +337,7 @@ handle_info({'DOWN', _Ref, process, BusyPid, Reason}, #state{
     % the connection and let the database clean up.
     Database = get_arg(dbdatabase, State#state.conn_args),
     Schema = get_arg(dbschema, State#state.conn_args),
-    ?LOG_INFO(
+    ?LOG_NOTICE(
         "SQL caller ~p down with reason ~p during on ~s/~s: \"~s\"   ~p",
         [ BusyPid, Reason, Database, Schema, Sql, Params ]),
     {noreply, disconnect(State, sql_timeout), hibernate};
@@ -368,7 +368,7 @@ handle_info({'DOWN', _Ref, process, _Pid, _Reason}, #state{ busy_pid = undefined
 
 handle_info({'DOWN', _Ref, process, Pid, _Reason}, State) ->
     % Stray 'DOWN' message, might be a race condition.
-    ?LOG_INFO("SQL got 'DOWN' message from unknown process ~p in state ~p", [ Pid, State ]),
+    ?LOG_NOTICE("SQL got 'DOWN' message from unknown process ~p in state ~p", [ Pid, State ]),
     {noreply, State, timeout(State)};
 
 handle_info({'EXIT', _Pid, _Reason}, State) ->
@@ -567,7 +567,7 @@ trace_end(false, _Start, _Sql, _Params, _Conn) ->
     ok;
 trace_end(true, Start, Sql, Params, Conn) ->
     Duration = msec() - Start,
-    ?LOG_INFO(
+    ?LOG_NOTICE(
         "SQL ~p msec: \"~s\"   ~p",
         [ Duration, Sql, Params ]),
     maybe_explain(Duration, Sql, Params, Conn).
@@ -595,9 +595,9 @@ is_explainable(_) -> true.
 
 maybe_log_query_plan({ok, [ #column{ name = <<"QUERY PLAN">> } ], Rows}) ->
     Lines = lists:map( fun({R}) -> [ 10, R ] end, Rows ),
-    ?LOG_INFO("SQL EXPLAIN: ~s", [ iolist_to_binary(Lines) ]);
+    ?LOG_NOTICE("SQL EXPLAIN: ~s", [ iolist_to_binary(Lines) ]);
 maybe_log_query_plan(Other) ->
-    ?LOG_INFO("SQL EXPLAIN: ~p", [ Other ]),
+    ?LOG_NOTICE("SQL EXPLAIN: ~p", [ Other ]),
     ok.
 
 msec() ->

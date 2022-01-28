@@ -336,12 +336,12 @@ group_trans_parts(TransParts) ->
                             {ok, Code} ->
                                 add_trans(Name, Code, V, Acc);
                             {error, _} ->
-                                ?LOG_INFO("Dropping trans part '~s', language code is unknown",
+                                ?LOG_NOTICE("Dropping trans part '~s', language code is unknown",
                                            [ K ]),
                                 Acc
                         end;
                     _ ->
-                        ?LOG_INFO("Dropping unknown trans part '~s', should be like 'title$en'",
+                        ?LOG_NOTICE("Dropping unknown trans part '~s', should be like 'title$en'",
                                    [ K ]),
                         Acc
                 end

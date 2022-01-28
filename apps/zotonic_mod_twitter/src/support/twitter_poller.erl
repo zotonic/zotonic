@@ -214,7 +214,7 @@ poll_feed(Sub, Context) ->
                     Error
             end;
         false ->
-            ?LOG_INFO("twitter_poller: disable subscription because not allowd to insert tweets for ~p", [ Sub ]),
+            ?LOG_NOTICE("twitter_poller: disable subscription because not allowd to insert tweets for ~p", [ Sub ]),
             m_twitter:disable(SubId, <<"acl">>, Context),
             {error, eacces}
     end.

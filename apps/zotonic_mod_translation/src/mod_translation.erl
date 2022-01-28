@@ -618,7 +618,7 @@ generate(Context) ->
 generate_core() ->
     case zotonic_core:is_zotonic_project() of
         true ->
-            ?LOG_INFO("Generating .pot files..."),
+            ?LOG_NOTICE("Generating .pot files..."),
             translation_po:generate(translation_scan:scan(core_apps())),
             consolidate_core();
         false ->
@@ -640,7 +640,7 @@ core_app_to_module_name(App) when is_atom(App) ->
 consolidate_core() ->
     ZotonicPot = code:priv_dir(zotonic_core) ++ "/translations/zotonic.pot",
     PotFiles = filename:join([z_path:get_path(), "apps", "zotonic_*/priv/translations/template/*.pot"]),
-    ?LOG_INFO("Merging .pot files into \"~s\"", [ ZotonicPot]),
+    ?LOG_NOTICE("Merging .pot files into \"~s\"", [ ZotonicPot]),
     Command = lists:flatten([
         "msgcat -o ",
         z_filelib:os_filename(ZotonicPot),

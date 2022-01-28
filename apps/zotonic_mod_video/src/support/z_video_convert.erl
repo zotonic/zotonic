@@ -76,7 +76,7 @@ handle_cast(convert, State) ->
             remove_task(State);
         false ->
             % Queue file was deleted, remove our task
-            ?LOG_INFO("Video conversion (startup): medium is not current or queue file missing (id ~p, file ~p)",
+            ?LOG_NOTICE("Video conversion (startup): medium is not current or queue file missing (id ~p, file ~p)",
                        [State#state.id, State#state.queue_filename]),
             remove_task(State)
     end,
@@ -138,7 +138,7 @@ insert_broken(State) ->
             },
             m_media:replace_file(undefined, State#state.id, #{}, PropsMedia, [no_touch], Context);
         false ->
-            ?LOG_INFO("Video conversion (broken): medium is not current anymore (id ~p)", [State#state.id])
+            ?LOG_NOTICE("Video conversion (broken): medium is not current anymore (id ~p)", [State#state.id])
     end.
 
 is_current_upload(State, Context) ->

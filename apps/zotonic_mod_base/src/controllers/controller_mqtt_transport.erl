@@ -232,7 +232,7 @@ handle_connect_data(Data, Context) ->
     handle_connect_data_1(<< WsData/binary, Data/binary >>, Context).
 
 handle_connect_data_1(NewData, Context) when size(NewData) > ?MQTT_CONNECT_MAXSIZE ->
-    ?LOG_INFO("MQTT: refusing connect with large connect packet"),
+    ?LOG_NOTICE("MQTT: refusing connect with large connect packet"),
     {stop, Context};
 handle_connect_data_1(NewData, Context) ->
     MqttPool = z_context:site(Context),
@@ -263,7 +263,7 @@ handle_connect_data_1(NewData, Context) ->
             Context1 = z_context:set(wsdata, NewData, Context),
             {ok, Context1};
         {error, expect_connect} ->
-            ?LOG_INFO("MQTT: refusing connect with wrong packet type"),
+            ?LOG_NOTICE("MQTT: refusing connect with wrong packet type"),
             {stop, Context};
         {error, _} ->
             % Invalid packet or unkown host - just close the connection

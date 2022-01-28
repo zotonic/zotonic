@@ -334,7 +334,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                          ++ " -quiet "
                          ++ z_convert:to_list(CleanedImageFile)
                          ++ " 2>&1"),
-            ?LOG_INFO("identify of ~s failed:~n~s", [CleanedImageFile, Err]),
+            ?LOG_NOTICE("identify of ~s failed:~n~s", [CleanedImageFile, Err]),
             {error, identify};
         [Result|_] ->
             %% ["test/a.jpg","JPEG","3440x2285","3440x2285+0+0","8-bit","DirectClass","2.899mb"]
@@ -369,8 +369,8 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                 {ok, Props2}
             catch
                 X:B:Stacktrace ->
-                    ?LOG_INFO("identify of \"~s\" failed - ~p with ~p:~p in ~p",
-                              [CleanedImageFile, CmdOutput, X, B, Stacktrace]),
+                    ?LOG_WARNING("identify of \"~s\" failed - ~p with ~p:~p in ~p",
+                                [CleanedImageFile, CmdOutput, X, B, Stacktrace]),
                     {error, identify}
             end
     end.

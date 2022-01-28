@@ -360,8 +360,8 @@ invalid_cert_status(State) ->
 
 %% @doc Letsencrypt finished, perform housekeeping and logging
 handle_letsencrypt_result({ok, LEFiles}, State) ->
-    ?LOG_INFO("Letsencrypt successfully requested cert for ~p ~p",
-               [State#state.request_hostname, State#state.request_san]),
+    ?LOG_NOTICE("Letsencrypt successfully requested cert for ~p ~p",
+                [State#state.request_hostname, State#state.request_san]),
     Context = z_context:new(State#state.site),
     {ok, MyFiles} = cert_files_all(Context),
     {certfile, CertFile} = proplists:lookup(certfile, MyFiles),
@@ -444,15 +444,15 @@ ssl_options(Context) ->
     KeyFile = proplists:get_value(keyfile, CertFiles),
     case {filelib:is_file(CertFile), filelib:is_file(KeyFile)} of
         {false, false} ->
-            ?LOG_INFO("[~p] mod_ssl_letsencrypt: no ~p and ~p files, skipping.",
+            ?LOG_NOTICE("[~p] mod_ssl_letsencrypt: no ~p and ~p files, skipping.",
                        [z_context:site(Context), CertFile, KeyFile]),
             undefined;
         {false, true} ->
-            ?LOG_INFO("[~p] mod_ssl_letsencrypt: no ~p file (though there is a key file), skipping.",
+            ?LOG_NOTICE("[~p] mod_ssl_letsencrypt: no ~p file (though there is a key file), skipping.",
                        [z_context:site(Context), CertFile]),
             undefined;
         {true, false} ->
-            ?LOG_INFO("[~p] mod_ssl_letsencrypt: no ~p file (though there is a crt file), skipping.",
+            ?LOG_NOTICE("[~p] mod_ssl_letsencrypt: no ~p file (though there is a crt file), skipping.",
                        [z_context:site(Context), KeyFile]),
             undefined;
         {true, true} ->
@@ -529,7 +529,7 @@ ensure_key_file(Context) ->
         true ->
             {ok, KeyFile};
         false ->
-            ?LOG_INFO("Generating RSA key for LetsEncrypt in ~p", [KeyFile]),
+            ?LOG_NOTICE("Generating RSA key for LetsEncrypt in ~p", [KeyFile]),
             ok = z_filelib:ensure_dir(KeyFile),
             _ = file:change_mode(filename:basename(KeyFile), 8#00700),
             Escaped = z_filelib:os_filename(KeyFile),

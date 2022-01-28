@@ -132,7 +132,7 @@ observe_module_reindexed(module_reindexed, Context) ->
                        [ z_context:site(Context) ]),
             search_facet:ensure_table(Context);
         _ ->
-            ?LOG_INFO("[~p] Delaying search facet check because not all modules are running.",
+            ?LOG_NOTICE("[~p] Delaying search facet check because not all modules are running.",
                        [ z_context:site(Context) ])
     end.
 

@@ -161,13 +161,13 @@ logon_1(undefined, _Payload, Context) ->
 
 
 log_logon(UserId, #{ <<"username">> := Username }, Context) when is_binary(Username) ->
-    ?LOG_INFO("~p: Logon of user ~p (~s) using username '~s'",
+    ?LOG_NOTICE("~p: Logon of user ~p (~s) using username '~s'",
                 [ z_context:site(Context), UserId, username(UserId, Context), Username ]);
 log_logon(UserId, #{ <<"token">> := Token }, Context) when is_binary(Token) ->
-    ?LOG_INFO("~p: Logon of user ~p (~s) using token",
+    ?LOG_NOTICE("~p: Logon of user ~p (~s) using token",
                 [ z_context:site(Context), UserId, username(UserId, Context) ]);
 log_logon(UserId, #{}, Context) ->
-    ?LOG_INFO("~p: Logon of user ~p (~s)",
+    ?LOG_NOTICE("~p: Logon of user ~p (~s)",
                 [ z_context:site(Context), UserId, username(UserId, Context) ]).
 
 username(UserId, Context) ->
@@ -532,7 +532,7 @@ get_by_reminder_secret(Code, Context) ->
                 true ->
                     {ok, UserId};
                 false ->
-                    ?LOG_INFO("Accessing expired reminder secret for user ~p", [UserId]),
+                    ?LOG_NOTICE("Accessing expired reminder secret for user ~p", [UserId]),
                     delete_reminder_secret(UserId, Context),
                     undefined
             end

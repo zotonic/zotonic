@@ -115,7 +115,7 @@ access_token({ok, #{ <<"access_token">> := _ } = AccessData}, ServiceMod, Args, 
         SId,
         Context);
 access_token({ok, #{} = AccessData}, ServiceMod, _Args, _SId, _Context) ->
-    ?LOG_INFO("OAuth2 access token for ~p unknown return: ~p", [ ServiceMod, AccessData ]),
+    ?LOG_WARNING("OAuth2 access token for ~p unknown return: ~p", [ ServiceMod, AccessData ]),
     {error, access_token};
 access_token({error, denied}, _ServiceMod, _Args, _SId, _Context) ->
     {error, denied};
@@ -154,7 +154,7 @@ user_data({ok, Auth}, SId, Context) ->
         {error, duplicate} ->
             {error, duplicate};
         {error, {duplicate_email, Email}} ->
-            ?LOG_INFO("User with email \"~s\" already exists", [Email]),
+            ?LOG_NOTICE("User with email \"~s\" already exists", [Email]),
             {error, duplicate_email};
         {error, _} = Err ->
             ?LOG_WARNING("Error return ~p for user with props ~p", [Err, Auth]),

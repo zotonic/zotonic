@@ -173,7 +173,7 @@ task_file_to_local(Context) ->
         {ok, 0} ->
             ok;
         {ok, N} ->
-            ?LOG_INFO("Marked ~p files for move to local.", [N]),
+            ?LOG_NOTICE("Marked ~p files for move to local.", [N]),
             {delay, 1};
         _Other ->
             {delay, 10}
@@ -184,7 +184,7 @@ task_file_to_remote(Context) ->
         {ok, 0} ->
             ok;
         {ok, N} ->
-            ?LOG_INFO("Unmarked ~p files for move to local.", [N]),
+            ?LOG_NOTICE("Unmarked ~p files for move to local.", [N]),
             {delay, 1};
         _Other ->
             {delay, 10}

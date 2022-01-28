@@ -119,6 +119,7 @@ map_prop({<<"type">>, T}) ->
         <<"fatal">> -> <<"fatal">>;
         <<"error">> -> <<"error">>;
         <<"warning">> -> <<"warning">>;
+        <<"notice">> -> <<"notice">>;
         <<"info">> -> <<"info">>;
         <<"debug">> -> <<"debug">>;
         _ -> <<"error">>
@@ -138,6 +139,8 @@ search_query(Args, Context) ->
     % Filter on log type
     W1 = case z_convert:to_binary( maps:get(<<"type">>, Args, <<"warning">>) ) of
         <<"error">> -> " type = 'error' ";
+        <<"warning">> -> " type in ('warning', 'error') ";
+        <<"notice">> -> " type in ('notice', 'warning', 'error') ";
         <<"info">> -> " type <> 'debug' ";
         <<"debug">> -> "";
         _ -> " type in ('warning', 'error') "

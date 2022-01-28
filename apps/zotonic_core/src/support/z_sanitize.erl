@@ -138,7 +138,7 @@ sanitize_element_opts({comment, <<" z-media ", ZMedia/binary>>}, _Stack, _Opts) 
         {comment, <<" z-media ", Id1/binary, " ", Opts1/binary, " ">>}
     catch
         _:_ ->
-            ?LOG_INFO("Dropping illegal z-media tag: ~p", [ZMedia]),
+            ?LOG_NOTICE("Dropping illegal z-media tag: ~p", [ZMedia]),
             {comment, <<" ">>}
     end;
 sanitize_element_opts({Tag, Attrs, Inner}, _Stack, _Opts) ->
@@ -224,7 +224,7 @@ sanitize_script(Props, Context) ->
         {ok, Url} ->
             {<<"script">>, [{<<"src">>,Url} | proplists:delete(<<"src">>, Props)], []};
         false ->
-            ?LOG_INFO("Dropped script with url ~p", [Src]),
+            ?LOG_NOTICE("Dropped script with url ~p", [Src]),
             <<>>
     end.
 
@@ -234,7 +234,7 @@ sanitize_iframe(Props, Context) ->
         {ok, Url} ->
             {<<"iframe">>, [{<<"src">>,Url} | proplists:delete(<<"src">>, Props)], []};
         false ->
-            ?LOG_INFO("Dropped iframe url ~p", [Src]),
+            ?LOG_NOTICE("Dropped iframe url ~p", [Src]),
             <<>>
     end.
 
@@ -248,7 +248,7 @@ sanitize_object(Props, Context) ->
                 {ok, Url} ->
                     {<<"embed">>, [{<<"src">>,Url} | proplists:delete(<<"data">>, Props)], []};
                 false ->
-                    ?LOG_INFO("Dropped object url ~p", [Src]),
+                    ?LOG_NOTICE("Dropped object url ~p", [Src]),
                     <<>>
             end
     end.
@@ -263,7 +263,7 @@ sanitize_embed(Props, Context) ->
                 {ok, Url} ->
                     {<<"embed">>, [{<<"src">>,Url} | proplists:delete(<<"src">>, Props)], []};
                 false ->
-                    ?LOG_INFO("Dropped embed url ~p", [Src]),
+                    ?LOG_NOTICE("Dropped embed url ~p", [Src]),
                     <<>>
             end
     end.

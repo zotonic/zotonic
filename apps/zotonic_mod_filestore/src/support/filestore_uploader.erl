@@ -111,12 +111,12 @@ try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInf
                             m_filestore:dequeue(Id, Context),
                             {stop, normal, State};
                         retry ->
-                            ?LOG_INFO("Filestore upload of ~p, sleeping 30m for retry.", [Path]),
+                            ?LOG_NOTICE("Filestore upload of ~p, sleeping 30m for retry.", [Path]),
                             timer:send_after(?RETRY_DELAY, restart),
                             {noreply, State, hibernate}
                     end;
                 undefined ->
-                    ?LOG_INFO("Filestore no credentials found for ~p", [Path]),
+                    ?LOG_WARNING("Filestore no credentials found for ~p", [Path]),
                     m_filestore:dequeue(Id, Context),
                     {stop, normal, State}
             end;
@@ -137,7 +137,7 @@ handle_upload(Path, Cred, Context) ->
     AbsPath = z_path:abspath(Path, Context),
     case file:read_file_info(AbsPath) of
         {ok, #file_info{type=regular, size=0}} ->
-            ?LOG_INFO("Not uploading ~p because it is empty", [Path]),
+            ?LOG_NOTICE("Not uploading ~p because it is empty", [Path]),
             ok;
         {ok, #file_info{type=regular, size=Size}} ->
             Result = do_upload(Cred, {filename, Size, AbsPath}),

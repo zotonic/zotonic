@@ -73,7 +73,7 @@ recv_parse(Context) ->
 parse_multipart_request(Context) ->
     case cowmachine_req:get_req_header(<<"content-length">>, Context) of
         undefined ->
-            ?LOG_INFO(z_context:logger_md(Context), "Could not decode multipart: content-length header undefined"),
+            ?LOG_NOTICE(z_context:logger_md(Context), "Could not decode multipart: content-length header undefined"),
             throw({stop_request, 400});
         ContentLength ->
             Length = binary_to_integer(ContentLength),
@@ -91,7 +91,7 @@ parse_multipart_request(Context) ->
                                          next_chunk = Next,
                                          context = Context1});
                 _ ->
-                    ?LOG_INFO(z_context:logger_md(Context), "Could not decode multipart (~p) chunk: ~p", [Boundary, Chunk]),
+                    ?LOG_NOTICE(z_context:logger_md(Context), "Could not decode multipart (~p) chunk: ~p", [Boundary, Chunk]),
                     throw({stop_request, 400})
             end
     end.
@@ -108,7 +108,7 @@ feed_mp(headers, #mp{buffer=Buffer, form=Form} = State) ->
                 {exact, N} ->
                     {S1, N};
                 _ ->
-                    ?LOG_INFO("Could not decode multipart: headers incomplete or too long: ~p", [S1#mp.buffer]),
+                    ?LOG_NOTICE("Could not decode multipart: headers incomplete or too long: ~p", [S1#mp.buffer]),
                     throw({stop_request, 400})
             end
     end,
@@ -134,7 +134,7 @@ feed_mp(body, #mp{boundary=Prefix, buffer=Buffer, form=Form} = State) ->
             % Found a boundary, without an ending newline
             case read_more(State) of
                 State ->
-                    ?LOG_INFO("Could not decode multipart: incomplete end boundary at: ~p", [Buffer]),
+                    ?LOG_NOTICE("Could not decode multipart: incomplete end boundary at: ~p", [Buffer]),
                     throw({stop_request, 400});
                 S1 ->
                     feed_mp(body, S1)
@@ -153,7 +153,7 @@ feed_maybe_eof(#mp{buffer= <<>>, content_length=ContentLength, length=Length} = 
     Form1 = handle_data(eof, State#mp.form),
     {Form1, State#mp.context};
 feed_maybe_eof(#mp{buffer= <<>>}) ->
-    ?LOG_INFO("Could not decode multipart: unexpected end and missing end boundary"),
+    ?LOG_NOTICE("Could not decode multipart: unexpected end and missing end boundary"),
     throw({stop_request, 400});
 feed_maybe_eof(#mp{} = State) ->
     feed_mp(body, State).
@@ -286,7 +286,7 @@ handle_data(eof, Form) ->
 read_more(State=#mp{next_chunk=ok, content_length=ContentLength, length=Length} = State) when ContentLength =:= Length ->
     State;
 read_more(State=#mp{next_chunk=ok, context=Context} = State) ->
-    ?LOG_INFO(z_context:logger_md(Context), "Multipart post with wrong content length"),
+    ?LOG_NOTICE(z_context:logger_md(Context), "Multipart post with wrong content length"),
     throw({error, wrong_content_length});
 read_more(State=#mp{length=Length, content_length=ContentLength,
                 percentage=Percentage,

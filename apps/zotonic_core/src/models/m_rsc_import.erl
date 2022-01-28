@@ -251,8 +251,8 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                             Rsc1 = Rsc#{ <<"name">> => Name },
                             maybe_create_empty(Rsc1, ImportedAcc, Options, Context);
                         {error, Reason} = Error ->
-                            ?LOG_INFO("Not importing menu entry from remote '~s' (category ~p) because of: ~p",
-                                       [ Uri, Cat, Reason ]),
+                            ?LOG_NOTICE("Not importing menu entry from remote '~s' (category ~p) because of: ~p",
+                                        [ Uri, Cat, Reason ]),
                             Error
                     end;
                 {error, Reason} = Error  ->
@@ -1125,7 +1125,7 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium }, _Options, Context)
     % [ sanitize any HTML in the medium record ]
     case z_notifier:first(#media_import_medium{ id = LocalId, medium = Medium }, Context) of
         undefined ->
-            ?LOG_INFO("Resource import dropped medium record for local id ~p", [ LocalId ]),
+            ?LOG_NOTICE("Resource import dropped medium record for local id ~p", [ LocalId ]),
             {ok, LocalId};
         ok ->
             {ok, LocalId};
@@ -1261,7 +1261,7 @@ find_allowed_predicate(Name, Pred, Options, Context) ->
                 true ->
                     {ok, PredId};
                 false ->
-                    ?LOG_INFO("Not importing edges with predicate '~s' because they are not allowed.",
+                    ?LOG_NOTICE("Not importing edges with predicate '~s' because they are not allowed.",
                                [ PredName ]),
                     {error, eacces}
             end;
@@ -1317,7 +1317,7 @@ find_allowed_category(RId, Rsc, Options, Context) ->
         true ->
             {ok, CatId};
         false ->
-            ?LOG_INFO("Not importing a ~p: ~p", [ CatName, RId ]),
+            ?LOG_NOTICE("Not importing a ~p: ~p", [ CatName, RId ]),
             {error, eacces}
     end.
 

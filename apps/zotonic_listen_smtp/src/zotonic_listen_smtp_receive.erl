@@ -57,7 +57,7 @@ received(Recipient, ParsedEmail,
          Body, Data) ->
     case get_site(Recipient) of
         {ok, {LocalPart, LocalTags, Domain, Site}} ->
-            ?LOG_INFO("SMTP received email for <~s>, mapped to ~p",
+            ?LOG_NOTICE("SMTP received email for <~s>, mapped to ~p",
                        [ Recipient, {LocalPart, LocalTags, Domain, Site} ]),
             Context = z_context:new(Site),
             z_notifier:notify(
@@ -93,15 +93,15 @@ received(Recipient, ParsedEmail,
                   },
             case z_notifier:first(Email1, Context) of
                 {ok, MsgId} when is_binary(MsgId) ->
-                    ?LOG_INFO("SMTP received email for <~s>, handled as ~p",
+                    ?LOG_NOTICE("SMTP received email for <~s>, handled as ~p",
                                [ Recipient, MsgId ]),
                     {ok, MsgId};
                 {ok, Other} ->
-                    ?LOG_INFO("SMTP received email for <~s>, handled as ~p",
+                    ?LOG_NOTICE("SMTP received email for <~s>, handled as ~p",
                                [ Recipient, Other ]),
                     {ok, undefined};
                 ok ->
-                    ?LOG_INFO("SMTP received email for <~s>, handled as undefined",
+                    ?LOG_NOTICE("SMTP received email for <~s>, handled as undefined",
                                [ Recipient ]),
                     {ok, undefined};
                 {error, Reason} = Error ->
@@ -121,7 +121,7 @@ received(Recipient, ParsedEmail,
             ?LOG_WARNING("SMTP dropping email, unknown host for recipient: ~p", [Recipient]),
             {error, unknown_host};
         {error, not_running} ->
-            ?LOG_INFO("SMTP delaying email, host for recipient is not up: ~p", [Recipient]),
+            ?LOG_NOTICE("SMTP delaying email, host for recipient is not up: ~p", [Recipient]),
             {error, not_running}
     end.
 

@@ -81,7 +81,7 @@ inspect_data(B0) ->
                                 ])),
             {ok, [ z_string:trim( z_convert:to_binary(C) ) || C <- Cols ], Sep};
         _ ->
-            ?LOG_INFO("Invalid CSV file, could not fetch line with column defs (is there a LF or CR at the end?)"),
+            ?LOG_WARNING("Invalid CSV file, could not fetch line with column defs (is there a LF or CR at the end?)"),
             {error, invalid_csv_file}
     end.
 

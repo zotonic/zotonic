@@ -132,7 +132,7 @@ callback(Model, Verb, Path, Msg, Context) ->
         {ok, Mod} ->
             maybe_resolve(Verb, model_call(Mod, map_verb(Verb), Path, Msg, Context), Context);
         {error, _} = Error ->
-            ?LOG_INFO("Publish to unknown model ~p: ~p ~p ~p", [Model, Verb, Path, Msg]),
+            ?LOG_NOTICE("Publish to unknown model ~p: ~p ~p ~p", [Model, Verb, Path, Msg]),
             Error
     end.
 

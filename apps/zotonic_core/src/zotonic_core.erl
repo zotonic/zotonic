@@ -98,8 +98,8 @@ ensure_mnesia_schema() ->
                 false -> ok = mnesia:create_schema([node()])
             end;
         undefined ->
-            ?LOG_INFO("No mnesia directory defined, running without persistent email queue and filezcache. "
-                       "To enable persistency, add to erlang.config: {mnesia,[{dir,\"data/mnesia\"}]}"),
+            ?LOG_NOTICE("No mnesia directory defined, running without persistent email queue and filezcache. "
+                        "To enable persistency, add to erlang.config: {mnesia,[{dir,\"data/mnesia\"}]}"),
             ok
     end.
 

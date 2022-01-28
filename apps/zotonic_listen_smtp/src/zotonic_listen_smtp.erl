@@ -63,8 +63,8 @@ child_spec() ->
                     [{address, IP} | Args1]
             end,
             case IP of
-                any -> ?LOG_INFO("SMTP server listening on any:~p", [Port]);
-                _ -> ?LOG_INFO("SMTP server listening on ~s:~p", [inet:ntoa(IP), Port])
+                any -> ?LOG_NOTICE("SMTP server listening on any:~p", [Port]);
+                _ -> ?LOG_NOTICE("SMTP server listening on ~s:~p", [inet:ntoa(IP), Port])
             end,
             Options = [{port, Port} | Args2],
             gen_smtp_server:child_spec(?MODULE, ?MODULE, Options)
@@ -121,7 +121,7 @@ check_dnsbl(State) ->
         {ok, allowed} ->
             {ok, State};
         {ok, {blocked, Service}} ->
-            ?LOG_INFO("SMTP DNSBL check for ~s blocked by ~p -- closing connection with a 451",
+            ?LOG_NOTICE("SMTP DNSBL check for ~s blocked by ~p -- closing connection with a 451",
                        [inet:ntoa(State#state.peer), Service]),
             Error = io_lib:format("451 ~s has recently sent spam. If you are not a spammer, please try later. Listed at ~s",
                                  [inet:ntoa(State#state.peer), Service]),
@@ -142,7 +142,7 @@ handle_RCPT(To, State) ->
     % - Return-Path header should be present and contains <>
     case zotonic_listen_smtp_receive:get_site(To) of
         {ok, _} ->
-            ?LOG_INFO("SMTP accepting incoming email for ~p", [To]),
+            ?LOG_NOTICE("SMTP accepting incoming email for ~p", [To]),
             {ok, State};
         {error, unknown_host} ->
             ?LOG_WARNING("SMTP not accepting mail for ~p: unknown host", [To]),
@@ -200,7 +200,7 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
         {ok, {Type, Subtype, Headers, _Params, Body} = Decoded} ->
             case find_bounce_id({Type, Subtype}, To, Headers) of
                 {ok, MessageId} ->
-                    ?LOG_INFO("SMTP email to ~p is bounce of message id ~p",
+                    ?LOG_NOTICE("SMTP email to ~p is bounce of message id ~p",
                                 [ To, MessageId ]),
                     % The e-mail server knows about the messages sent from our system.
                     % Only report fatal bounces, silently ignore delivery warnings
@@ -211,12 +211,12 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
                     {ok, MsgId, reset_state(State)};
                 bounce ->
                     % Bounced, but without a message id (accept & silently drop the message)
-                    ?LOG_INFO("SMTP email to ~p is bounce of unknown message id",
+                    ?LOG_NOTICE("SMTP email to ~p is bounce of unknown message id",
                                 [ To ]),
                     {ok, MsgId, reset_state(State)};
                 maybe_autoreply ->
                     % Sent to a bounce address, but not a bounce (accept & silently drop the message)
-                    ?LOG_INFO("SMTP email to ~p is an autoreply, ignored",
+                    ?LOG_NOTICE("SMTP email to ~p is an autoreply, ignored",
                                 [ To ]),
                     {ok, MsgId, reset_state(State)};
                 no_bounce ->
@@ -229,17 +229,17 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
     end.
 
 receive_data({ok, {ham, SpamStatus, _SpamHeaders}}, {Type, Subtype, Headers, Params, Body}, MsgId, From, To, DataRcvd, State) ->
-    ?LOG_INFO("SMTP email from ~s to ~p (id ~s) (peer ~s) [~p]",
+    ?LOG_NOTICE("SMTP email from ~s to ~p (id ~s) (peer ~s) [~p]",
               [From, To, MsgId, inet_parse:ntoa(State#state.peer), SpamStatus]),
     Received = zotonic_listen_smtp_receive:received(To, From, State#state.peer, MsgId,
                                         {Type, Subtype}, Headers, Params, Body, DataRcvd),
     reply_handled_status(Received, MsgId, reset_state(State));
 receive_data({ok, {spam, SpamStatus, _SpamHeaders}}, _Decoded, MsgId, From, To, _DataRcvd, State) ->
-    ?LOG_INFO("Refusing spam from ~s to ~p (id ~s) (peer ~s) [~p]",
+    ?LOG_NOTICE("Refusing spam from ~s to ~p (id ~s) (peer ~s) [~p]",
                [From, To, MsgId, inet_parse:ntoa(State#state.peer), SpamStatus]),
     {error, zotonic_listen_smtp_spam:smtp_status(SpamStatus, From, To, State#state.peer), reset_state(State)};
 receive_data({error, Reason}, Decoded, MsgId, From, To, DataRcvd, State) ->
-    ?LOG_INFO("SMTP receive: passing erronous spam check (~p) as ham for msg-id ~p", [Reason, MsgId]),
+    ?LOG_NOTICE("SMTP receive: passing erronous spam check (~p) as ham for msg-id ~p", [Reason, MsgId]),
     receive_data({ok, {ham, [], []}}, Decoded, MsgId, From, To, DataRcvd, State).
 
 reply_handled_status(Received, MsgId, State) ->

@@ -750,7 +750,7 @@ insert(Table, Parameters, Context) ->
                      {error, noresult} ->
                         {ok, undefined};
                      {error, #error{ codename = unique_violation }} = Error ->
-                        ?LOG_INFO("z_db unique_violation in insert to ~p of ~p", [Table, Parameters]),
+                        ?LOG_NOTICE("z_db unique_violation in insert to ~p of ~p", [Table, Parameters]),
                         Error;
                      {error, Reason} = Error ->
                         ?LOG_ERROR("z_db error ~p in query \"~s\" with ~p", [Reason, FinalSql, ColParams]),
@@ -1307,7 +1307,7 @@ ensure_schema(Site, Options) ->
         true ->
             ok;
         false ->
-            ?LOG_INFO("Creating schema ~p in database ~p", [Schema, Database]),
+            ?LOG_NOTICE("Creating schema ~p in database ~p", [Schema, Database]),
             create_schema(Site, DbConnection, Schema)
     end,
     close_connection(DbConnection),

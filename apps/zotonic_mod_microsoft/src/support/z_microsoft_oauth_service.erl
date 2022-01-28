@@ -174,7 +174,7 @@ fetch_user_photo(AccessToken) ->
         {ok, {{_, 404, _}, _Headers, _Data}} ->
             undefined;
         Other ->
-            ?LOG_INFO("[microsoft] error fetching user photo: ~p", [Other]),
+            ?LOG_NOTICE("[microsoft] error fetching user photo: ~p", [Other]),
             undefined
     end.
 

@@ -70,7 +70,7 @@ extract_filters(Path, OptFilters, Context) ->
                             end,
                             {SafePath, z_convert:to_binary(OriginalFile), Filters1 ++ PreviewPropList};
                         {error, Reason} ->
-                            ?LOG_INFO("Dropping path ~p because error ~p", [ SafePath, Reason ]),
+                            ?LOG_NOTICE("Dropping path ~p because error ~p", [ SafePath, Reason ]),
                             part_missing(Path)
                     end
             end
@@ -96,7 +96,7 @@ locate_source([ModuleIndex|Roots], Path, OriginalFile, Filters, Context) when is
         {error, checksum} ->
             #part_missing{file = Path};
         {error, eacces} ->
-            ?LOG_INFO("No access to file '~s', original '~s'", [Path, OriginalFile]),
+            ?LOG_NOTICE("No access to file '~s', original '~s'", [Path, OriginalFile]),
             locate_source(Roots, Path, OriginalFile, Filters, Context);
         {error, enoent} ->
             locate_source(Roots, Path, OriginalFile, Filters, Context)
@@ -323,12 +323,12 @@ convert_error_part(Medium, PreviewFilePath, Filters, Context) ->
                             part_file(PreviewFilePath, [{acl,RscId}])
                     end;
                 {error, _} = Error ->
-                    ?LOG_INFO("[~p] Error ~p generating fallback preview for ~p with filters ~p",
+                    ?LOG_WARNING("[~p] Error ~p generating fallback preview for ~p with filters ~p",
                                [z_context:site(Context), Error, PreviewFilePath, Filters]),
                     Error
             end;
         {error, enoent} ->
-            ?LOG_INFO("[~p] Can't find 'images/placeholder.png' for convert error fallback.",
+            ?LOG_NOTICE("[~p] Can't find 'images/placeholder.png' for convert error fallback.",
                        [z_context:site(Context)]),
             {error, convert_error}
     end.

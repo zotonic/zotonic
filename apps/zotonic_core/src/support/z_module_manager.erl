@@ -791,7 +791,7 @@ handle_cast({module_reloaded, Module}, State) ->
             {noreply, State};
         _Changed ->
             % Exports or schema changed, assume the worst and restart the complete module
-            ?LOG_INFO("exports or schema of (re-)loaded module ~p changed, restarting module",
+            ?LOG_NOTICE("exports or schema of (re-)loaded module ~p changed, restarting module",
                        [Module]),
             gen_server:cast(self(), {restart_module, Module}),
             {noreply, State}

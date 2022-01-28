@@ -201,7 +201,7 @@ import_def_rsc_1_cat(Row, Callbacks, State, Context) ->
         true ->
            import_def_rsc_2_name(RscId, State2, Name, CategoryName, NormalizedRowMap, Callbacks, Context);
         false ->
-            ?LOG_INFO("import_csv: missing required attributes for ~p", [Name]),
+            ?LOG_WARNING("import_csv: missing required attributes for ~p", [Name]),
             {State2, ignore}
     end.
 
@@ -228,10 +228,10 @@ import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRowMap, Callbacks
     PrevChecksum = get_value(checksum, PrevImportData),
     case checksum(NormalizedRowMap) of
         PrevChecksum when not State#importstate.is_reset ->
-            ?LOG_INFO("import_csv: skipping ~p (importing same values)", [Name]),
+            ?LOG_NOTICE("import_csv: skipping ~p (importing same values)", [Name]),
             {State, {equal, CategoryName, Id}};
         Checksum ->
-            ?LOG_INFO("import_csv: updating ~p", [Name]),
+            ?LOG_NOTICE("import_csv: updating ~p", [Name]),
 
             % 2. Some properties might have been overwritten by an editor.
             %    For this we will update a second time with all the changed values

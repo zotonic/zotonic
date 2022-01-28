@@ -492,7 +492,7 @@ qterm_1(Field, Value, Query, Context) ->
             end,
             {ok, Final};
         {error, _} = Error ->
-            ?LOG_INFO("Uknown facet ~p, dropping query term.", [ Field ]),
+            ?LOG_NOTICE("Uknown facet ~p, dropping query term.", [ Field ]),
             Error
     end.
 
@@ -528,7 +528,7 @@ extract_op(V) ->
 %% the facet.tpl blocks.
 -spec pivot_all( z:context() ) -> ok.
 pivot_all(Context) ->
-    ?LOG_INFO("Faceted search: repivoting facet for all resources for ~p", [ z_context:site(Context )]),
+    ?LOG_NOTICE("Faceted search: repivoting facet for all resources for ~p", [ z_context:site(Context )]),
     z_pivot_rsc:insert_task_after(1, ?MODULE, pivot_batch, facet_pivot_batch, [0], Context).
 
 %% @doc Batch for running the facet table updates. This updates the table with 1000 resources

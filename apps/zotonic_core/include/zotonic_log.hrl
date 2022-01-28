@@ -21,8 +21,9 @@
 -define(LOG_LEVEL_FATAL, 0).
 -define(LOG_LEVEL_ERROR, 1).
 -define(LOG_LEVEL_WARNING, 2).
--define(LOG_LEVEL_INFO, 3).
--define(LOG_LEVEL_DEBUG, 4).
+-define(LOG_LEVEL_NOTICE, 3).
+-define(LOG_LEVEL_INFO, 4).
+-define(LOG_LEVEL_DEBUG, 5).
 
 -record(log_message, {
     type = error :: z:severity(),
@@ -60,11 +61,13 @@
 %% Log notifications
 -define(zDebug(Msg, Context), z:debug(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
 -define(zInfo(Msg, Context), z:info(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
+-define(zNotice(Msg, Context), z:notice(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
 -define(zWarning(Msg, Context), z:warning(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
 -define(zError(Msg, Context), z:error(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
 
 -define(zDebug(Msg, Args, Context), z:debug(Msg, Args, [{module, ?MODULE}, {line, ?LINE}], Context)).
 -define(zInfo(Msg, Args, Context), z:info(Msg, Args, [{module, ?MODULE}, {line, ?LINE}], Context)).
+-define(zNotice(Msg, Args, Context), z:notice(Msg, Args, [{module, ?MODULE}, {line, ?LINE}], Context)).
 -define(zWarning(Msg, Args, Context), z:warning(Msg, Args, [{module, ?MODULE}, {line, ?LINE}], Context)).
 -define(zError(Msg, Args, Context), z:error(Msg, Args, [{module, ?MODULE}, {line, ?LINE}], Context)).
 
@@ -72,5 +75,5 @@
 %% Below is copied (and adapted) from Nitrogen, which is copyright 2008-2009 Rusty Klophaus
 
 %% Easy to use macros for debugging/development
--define(PRINT(Var), ?LOG_INFO(#{ var => ??Var, value => Var })).
+-define(PRINT(Var), ?LOG_NOTICE(#{ var => ??Var, value => Var })).
 -define(DEBUG(Msg), z:debug_msg(?MODULE, ?LINE, Msg)).

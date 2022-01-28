@@ -326,7 +326,7 @@ try_signup(Auth, Context) ->
                     Error;
                 undefined ->
                     % No signup accepted
-                    ?LOG_INFO("Authentication not accepted because no signup handler defined for Auth ~p", [ Auth ]),
+                    ?LOG_WARNING("Authentication not accepted because no signup handler defined for Auth ~p", [ Auth ]),
                     undefined
             end
     end.

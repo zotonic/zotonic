@@ -494,7 +494,7 @@ builtin_tag_1(image_data_url, Expr, Args, _Vars, Context) ->
 builtin_tag_1(media, Expr, Args, _Vars, Context) ->
     z_media_tag:scomp_viewer(Expr, Args, Context);
 builtin_tag_1(Tag, _Expr, _Args, _Vars, Context) ->
-    ?LOG_INFO("[~p] Unknown tag ~p", [z_context:site(Context), Tag]),
+    ?LOG_WARNING("[~p] Unknown template tag ~p", [z_context:site(Context), Tag]),
     <<>>.
 
 
@@ -697,8 +697,8 @@ trace_render(Filename, Options, Context) ->
         true ->
             case SrcPos of
                 {File, Line, _Col} ->
-                    ?LOG_INFO("[~p] Include \"~s\" by \"~s:~p\"",
-                               [z_context:site(Context), Filename, File, Line]),
+                    ?LOG_NOTICE("[~p] Include \"~s\" by \"~s:~p\"",
+                                [z_context:site(Context), Filename, File, Line]),
                     {ok,
                         [ <<"\n<!-- START ">>, relpath(Filename),
                           <<" by ">>, relpath(File), $:, integer_to_binary(Line),
@@ -706,8 +706,8 @@ trace_render(Filename, Options, Context) ->
                         [ <<"\n<!-- END ">>, relpath(Filename),  <<" -->\n">> ]
                     };
                 undefined ->
-                    ?LOG_INFO("[~p] Render \"~s\"",
-                               [z_context:site(Context), Filename]),
+                    ?LOG_NOTICE("[~p] Render \"~s\"",
+                                [z_context:site(Context), Filename]),
                     {ok,
                         [ <<"\n<!-- START ">>, relpath(Filename), <<" -->\n">> ],
                         [ <<"\n<!-- END ">>, relpath(Filename),  <<" -->\n">> ]
@@ -723,7 +723,7 @@ trace_render(Filename, Options, Context) ->
 trace_block({File, Line, _Col}, Name, Module, Context) ->
     case z_convert:to_bool(m_config:get_value(mod_development, debug_blocks, Context)) of
         true ->
-            ?LOG_INFO("[~p] Call block \"~p\" in \"~s\" by \"~s:~p\"",
+            ?LOG_NOTICE("[~p] Call block \"~p\" in \"~s\" by \"~s:~p\"",
                        [z_context:site(Context), Name, Module:filename(), File, Line]),
             {ok,
                 [ <<"\n<!-- BLOCK ">>, atom_to_binary(Name, 'utf8'), " @ ", relpath(Module:filename()),

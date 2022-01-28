@@ -77,7 +77,7 @@ observe_rsc_update(#rsc_update{action=insert, id=Id}, {ok, Props}, Context) ->
                     ok = m_media:replace(Id, MediaProps, Context),
                     spawn_preview_create(Id, MediaProps, Context);
                 false ->
-                    ?LOG_INFO("Denied user ~p to embed ~p: ~p",
+                    ?LOG_NOTICE("Denied user ~p to embed ~p: ~p",
                                [z_acl:user(Context), ?EMBED_MIME, EmbedCodeRaw]),
                     ok
             end,

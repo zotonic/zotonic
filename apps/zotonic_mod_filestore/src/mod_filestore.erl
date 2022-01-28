@@ -236,7 +236,7 @@ task_queue_all(Offset, Max, Context) when Offset =< Max ->
         Context)
     of
         {ok, Media} ->
-            ?LOG_INFO("Ensuring ~p files are queued for remote upload.", [length(Media)]),
+            ?LOG_NOTICE("Ensuring ~p files are queued for remote upload.", [length(Media)]),
             lists:foreach(fun(M) ->
                             queue_medium(M, Context)
                           end,

@@ -147,7 +147,7 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                             ok;
                         _ ->
                             %% Resource exists but is not installed by us.
-                            ?LOG_INFO("Resource '~p' (~p) exists but is not managed by ~p.", [Name, Id, Module]),
+                            ?LOG_NOTICE("Resource '~p' (~p) exists but is not managed by ~p.", [Name, Id, Module]),
                             ok
                     end;
                 {error, {unknown_rsc, _}} ->
@@ -170,7 +170,7 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                                  undefined -> Props4#{ <<"is_dependent">> => false };
                                  _ -> Props4
                              end,
-                    ?LOG_INFO("Creating new ~p '~p'", [Category, Name]),
+                    ?LOG_NOTICE("Creating new ~p '~p'", [Category, Name]),
                     {ok, Id} = m_rsc_update:update(insert_rsc, Props5, [{is_import, true}], Context),
                     case maps:get(<<"media_url">>, Props5, undefined) of
                         undefined -> nop;
@@ -236,7 +236,7 @@ map_props(Props) when is_list(Props) ->
 maybe_force_update(K, V, Props, Module, Id, Options, _Context) ->
     case proplists:get_value(force_update, Options, false) of
         true ->
-            ?LOG_INFO("~p: ~p of ~p changed in database, forced update.", [Module, K, Id]),
+            ?LOG_NOTICE("~p: ~p of ~p changed in database, forced update.", [Module, K, Id]),
             Props#{ K => V };
         false ->
             ?LOG_DEBUG("~p: ~p of ~p changed in database, not updating.", [Module, K, Id]),

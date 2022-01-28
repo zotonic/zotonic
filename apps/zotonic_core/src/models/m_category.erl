@@ -866,11 +866,11 @@ renumber_pivot_task(Context) ->
                 limit 1000", Context, 60000),
     case Nrs of
         [] ->
-            ?LOG_INFO("Category renumbering completed", Context),
+            ?LOG_NOTICE("Category renumbering completed", Context),
             set_tree_dirty(false, Context),
             ok;
         Ids ->
-            ?LOG_INFO("Category renumbering of ~p resources", [ length(Ids) ]),
+            ?LOG_NOTICE("Category renumbering of ~p resources", [ length(Ids) ]),
             ok = z_db:transaction(fun(Ctx) ->
                 lists:foreach(
                     fun({Id, CatNr}) ->

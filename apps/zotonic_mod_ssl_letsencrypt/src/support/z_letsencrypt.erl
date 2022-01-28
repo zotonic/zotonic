@@ -566,7 +566,7 @@ getopts([{http_timeout, Timeout}|Args], State) ->
         State#state{opts = #{netopts => #{timeout => Timeout}}}
      );
 getopts([Unk|_], _) ->
-    ?LOG_INFO("letsencrypt: unknow parameter: ~p~n", [Unk]),
+    ?LOG_WARNING("letsencrypt: unknow parameter: ~p~n", [Unk]),
     %throw({badarg, io_lib:format("unknown ~p parameter", [Unk])}).
     throw(badarg).
 

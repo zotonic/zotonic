@@ -145,10 +145,10 @@ start_http_listeners_ip4(WebIp, WebPort) ->
         cowboy_options())
     of
         {ok, _} ->
-            ?LOG_INFO("HTTP IPv4 server listening on ~s:~p", [ip_to_string(WebIp), WebPort]),
+            ?LOG_NOTICE("HTTP IPv4 server listening on ~s:~p", [ip_to_string(WebIp), WebPort]),
             ok;
         {error, {already_started, _Pid}} ->
-            ?LOG_INFO("HTTP IPv4 server listening on ~s:~p", [ip_to_string(WebIp), WebPort]),
+            ?LOG_NOTICE("HTTP IPv4 server listening on ~s:~p", [ip_to_string(WebIp), WebPort]),
             ok;
         {error, eaddrinuse} ->
             ?LOG_ERROR("HTTP IPv4 server not started. Address in use on ~s:~p",
@@ -162,10 +162,10 @@ start_http_listeners_ip4(WebIp, WebPort) ->
 
 %% @doc Start IPv4 HTTPS listeners
 start_https_listeners_ip4(none, _SSLPort) ->
-    ?LOG_INFO("HTTPS IPv4 server disabled: 'ssl_listen_ip' is set to 'none'"),
+    ?LOG_WARNING("HTTPS IPv4 server disabled: 'ssl_listen_ip' is set to 'none'"),
     ok;
 start_https_listeners_ip4(_WebIp, none) ->
-    ?LOG_INFO("HTTPS IPv4 server disabled: 'ssl_listen_port' is set to 'none'"),
+    ?LOG_WARNING("HTTPS IPv4 server disabled: 'ssl_listen_port' is set to 'none'"),
     ok;
 start_https_listeners_ip4(WebIp, SSLPort) ->
     WebOpt = case WebIp of
@@ -188,10 +188,10 @@ start_https_listeners_ip4(WebIp, SSLPort) ->
         cowboy_options())
     of
         {ok, _} ->
-            ?LOG_INFO("HTTPS IPv4 server listening on ~s:~p", [ip_to_string(WebIp), SSLPort]),
+            ?LOG_NOTICE("HTTPS IPv4 server listening on ~s:~p", [ip_to_string(WebIp), SSLPort]),
             ok;
         {error, {already_started, _Pid}} ->
-            ?LOG_INFO("HTTPS IPv4 server listening on ~s:~p", [ip_to_string(WebIp), SSLPort]),
+            ?LOG_NOTICE("HTTPS IPv4 server listening on ~s:~p", [ip_to_string(WebIp), SSLPort]),
             ok;
         {error, eaddrinuse} ->
             ?LOG_ERROR("HTTPS IPv4 server not started. Address in use on ~s:~p",
@@ -229,10 +229,10 @@ start_http_listeners_ip6(WebIp, WebPort) ->
         cowboy_options())
     of
         {ok, _} ->
-            ?LOG_INFO("HTTP IPv6 server listening on ~s:~p", [ ip_to_string(WebIp), WebPort ]),
+            ?LOG_NOTICE("HTTP IPv6 server listening on ~s:~p", [ ip_to_string(WebIp), WebPort ]),
             ok;
         {error, {already_started, _Pid}} ->
-            ?LOG_INFO("HTTP IPv6 server listening on ~s:~p", [ ip_to_string(WebIp), WebPort ]),
+            ?LOG_NOTICE("HTTP IPv6 server listening on ~s:~p", [ ip_to_string(WebIp), WebPort ]),
             ok;
         {error, eaddrinuse} ->
             ?LOG_ERROR("HTTP IPv6 server not started. Address in use on ~s:~p",
@@ -271,10 +271,10 @@ start_https_listeners_ip6(WebIp, SSLPort) ->
         cowboy_options())
     of
         {ok, _} ->
-            ?LOG_INFO("HTTPS IPv6 server listening on ~s:~p", [ip_to_string(WebIp), SSLPort]),
+            ?LOG_NOTICE("HTTPS IPv6 server listening on ~s:~p", [ip_to_string(WebIp), SSLPort]),
             ok;
         {error, {already_started, _Pid}} ->
-            ?LOG_INFO("HTTPS IPv6 server listening on ~s:~p", [ip_to_string(WebIp), SSLPort]),
+            ?LOG_NOTICE("HTTPS IPv6 server listening on ~s:~p", [ip_to_string(WebIp), SSLPort]),
             ok;
         {error, eaddrinuse} ->
             ?LOG_ERROR("HTTPS IPv6 server not started. Address in use on ~p:~p",

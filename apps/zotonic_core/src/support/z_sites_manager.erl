@@ -513,11 +513,11 @@ handle_cast({set_site_status, Site, Status}, #state{ sites = Sites } = State) ->
             },
             Sites#{ Site => S1 };
         {ok, #site_status{ status = CurStatus }} ->
-            ?LOG_INFO("Site status change of ~p from ~p to ~p ignored.",
+            ?LOG_NOTICE("Site status change of ~p from ~p to ~p ignored.",
                        [Site, CurStatus, Status]),
             Sites;
         error ->
-            ?LOG_INFO("Site status change of unknown ~p to ~p ignored.",
+            ?LOG_NOTICE("Site status change of unknown ~p to ~p ignored.",
                        [Site, Status]),
             Sites
     end,
@@ -706,14 +706,14 @@ do_start(Site, #state{ sites = Sites } = State) ->
                     Error
             end;
         error ->
-            ?LOG_INFO("Requested to start unknown site ~p", [Site]),
+            ?LOG_WARNING("Requested to start unknown site ~p", [Site]),
             {error, bad_name}
     end.
 
 do_start_site(#site_status{ site = Site } = SiteStatus) ->
     case site_is_startable(SiteStatus) of
         {true, StartState} ->
-            ?LOG_INFO("Starting site ~p", [Site]),
+            ?LOG_NOTICE("Starting site ~p", [Site]),
             case z_sites_sup:start_site(Site) of
                 {ok, Pid} ->
                     {ok, SiteStatus#site_status{

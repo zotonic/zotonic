@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
+%% @copyright 2009-2022 Marc Worrell
 %%
 %% @doc Some easy shortcut functions.
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -56,6 +56,9 @@
     info/2,
     info/3,
     info/4,
+    notice/2,
+    notice/3,
+    notice/4,
     warning/2,
     warning/3,
     warning/4,
@@ -242,7 +245,14 @@ dispatch_list(SiteOrContext) ->
 
 %% @doc Echo and return a debugging value
 debug_msg(Module, Line, Msg) ->
-    error_logger:info_msg("DEBUG: ~p:~p  ~p~n", [Module, Line, Msg]),
+    logger:log(
+        notice,
+        "DEBUG: ~p:~p  ~p~n",
+        [Module, Line, Msg],
+        #{
+            file => Module,
+            line => Line
+        }),
     Msg.
 
 %% @doc Log a debug message, with extra props.
@@ -254,6 +264,11 @@ debug(Msg, Args, Props, Context) -> log(debug, Msg, Args, Props, Context).
 info(Msg, Context)         -> log(info, Msg, [], Context).
 info(Msg, Props, Context)  -> log(info, Msg, Props, Context).
 info(Msg, Args, Props, Context)  -> log(info, Msg, Args, Props, Context).
+
+%% @doc Log a  notice.
+notice(Msg, Context)         -> log(notice, Msg, [], Context).
+notice(Msg, Props, Context)  -> log(notice, Msg, Props, Context).
+notice(Msg, Args, Props, Context)  -> log(notice, Msg, Args, Props, Context).
 
 %% @doc Log a warning.
 warning(Msg, Context)         -> log(warning, Msg, [], Context).
@@ -282,27 +297,34 @@ log(Type, Props, Context) when is_atom(Type), is_list(Props) ->
         Context),
     ok.
 
--spec log( severity(), string(), list(), proplists:proplist(), z:context() ) -> ok.
+-spec log( severity(), string(), list(), proplists:proplist() | map(), z:context() ) -> ok.
 log(Type, Msg, Args, Props, Context) ->
     Msg1 = lists:flatten(io_lib:format(Msg, Args)),
     log(Type, Msg1, Props, Context).
 
--spec log( severity(), iodata(), proplists:proplist(), z:context() ) -> ok.
+-spec log( severity(), iodata(), proplists:proplist() | map(), z:context() ) -> ok.
+log(Type, Msg, Props, Context) when is_list(Props) ->
+    log(Type, Msg, maps:from_list(Props), Context);
 log(Type, Msg, Props, Context) ->
     Msg1 = erlang:iolist_to_binary(Msg),
-    Line = proplists:get_value(line, Props, 0),
-    Module = proplists:get_value(module, Props, unknown),
+    Line = maps:get(line, Props, 0),
+    Module = maps:get(module, Props, unknown),
     logger(Type, Props, [ z_context:site(Context), Type, Module, Line, Msg1 ]),
-    UserId = case proplists:lookup(user_id, Props) of
+    UserId = case maps:get(user_id, Props, none) of
         none -> z_acl:user(Context);
-        {user_id, UId} -> UId
+        UId -> UId
     end,
     z_notifier:notify(
         #zlog{
             type = Type,
             user_id = UserId,
             timestamp = os:timestamp(),
-            props = #log_message{ type = Type, message = Msg1, props = Props, user_id = UserId }
+            props = #log_message{
+                type = Type,
+                message = Msg1,
+                props = maps:to_list(Props),
+                user_id = UserId
+            }
         },
         Context),
     ok.
@@ -311,6 +333,8 @@ logger(debug, Props, Args) ->
     ?LOG_DEBUG("[~p] ~p @ ~p:~p  ~s~n", Args, Props);
 logger(info, Props, Args) ->
     ?LOG_INFO("[~p] ~p @ ~p:~p  ~s~n", Args, Props);
+logger(notice, Props, Args) ->
+    ?LOG_NOTICE("[~p] ~p @ ~p:~p  ~s~n", Args, Props);
 logger(warning, Props, Args) ->
     ?LOG_WARNING("[~p] ~p @ ~p:~p  ~s~n", Args, Props);
 logger(_Severity, Props, Args) ->

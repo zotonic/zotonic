@@ -66,7 +66,7 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
                             Error
                     end;
                 false ->
-                    ?LOG_INFO("cannot convert a ~p (~p)", [Mime, InFile]),
+                    ?LOG_NOTICE("cannot convert a ~p (~p)", [Mime, InFile]),
                     {error, mime_type}
             end;
         {ok, _} ->

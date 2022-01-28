@@ -99,7 +99,7 @@ oembed_request(RequestUrl) ->
                 _:_ -> {error, nojson}
             end;
         {error, _} = Error ->
-            ?LOG_INFO("OEmbed HTTP Request returned error for '~p' (~p)", [RequestUrl, Error]),
+            ?LOG_WARNING("OEmbed HTTP Request returned error for '~p' (~p)", [RequestUrl, Error]),
             Error
     end.
 
