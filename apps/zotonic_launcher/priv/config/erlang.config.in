@@ -31,27 +31,17 @@
       {handler, default, logger_std_h,
           #{
               level => notice,
-              formatter => {logger_formatter,
-                  #{
-                      template => [time," [", level, "] ", file,":",line," ",msg,"\n"]
+              formatter => {logjam,
+                  #{colored => true,
+                    time_designator => $\s,
+                    time_offset => "",
+                    time_unit => second,
+                    strip_tz => true,
+                    level_capitalize => true
                   }
               }
           }
       }
-
-%      {handler, default, logger_std_h,
-%         #{level => info,
-%           config =>
-%              #{sync_mode_qlen => 10000,
-%                drop_mode_qlen => 10000,
-%                flush_qlen     => 10000},
-%          formatter => {flatlog, #{
-%         map_depth => 3,
-%         term_depth => 50
-%        }}
-%         }
-%     }
-
    ]}
  ]},
 
