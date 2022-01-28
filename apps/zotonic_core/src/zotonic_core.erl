@@ -81,6 +81,26 @@ set_configs() ->
     application:set_env(filezcache, data_dir, filename:join([ FileZCache, "data" ])),
     application:set_env(filezcache, journal_dir, filename:join([ FileZCache, "journal" ])).
 
+% set_logger_dir() ->
+%     io:format("LOGGER: ~p~n", [application:get_env(zotonic_core, logger)]),
+%     LogDir = z_config:get(log_dir),
+%     lists:map(
+%         fun(#{ config := Config, id := HandlerId }) ->
+%             case Config of
+%                 #{ file := File } when is_list(File) ->
+%                     io:format("SET(~p) to ~p~n", [ HandlerId, filename:join(LogDir, filename:basename(File)) ]),
+%                     logger:update_handler_config(
+%                         HandlerId,
+%                         file,
+%                         filename:join(LogDir, filename:basename(File)));
+%                 #{} ->
+%                     ok
+%             end
+%         end,
+%         logger:get_handler_config()),
+%     logger:i(),
+%     ok.
+
 assert_schedulers(1) ->
     io:format("FATAL: Not enough schedulers, please start with 2 or more schedulers.~nUse: ERLOPTS=\"+S 4:4\" ./bin/zotonic debug~n~n"),
     erlang:halt();
