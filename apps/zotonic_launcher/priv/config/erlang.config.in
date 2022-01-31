@@ -1,112 +1,132 @@
 %% -*- mode: erlang -*-
 [
+    {exometer_core, [
+        {predefined, [
+            {[erlang, memory], {function, erlang, memory, [], value, []}, []},
+            {[erlang, system_info], {function, erlang, system_info, ['$dp'], value, [process_count]}, []},
+            {[erlang, statistics], {function, erlang, statistics, ['$dp'], value, [run_queue]}, []},
+            {[erlang, io], {function, erlang, statistics, [io], match, {{'_', input}, {'_', output}}}, []}
+        ]}
+    ]},
 
- {exometer_core, [{predefined, [
-    {[erlang, memory], {function, erlang, memory, [], value, []}, []},
-    {[erlang, system_info], {function, erlang, system_info, ['$dp'], value, [process_count]}, []},
-    {[erlang, statistics], {function, erlang, statistics, ['$dp'], value, [run_queue]}, []},
-    {[erlang, io], {function, erlang, statistics, [io], match, {{'_', input}, {'_', output}}}, []}
-   ]}
- ]},
+    {kernel, [
+        {logger_level, notice},
+        {logger, [
 
- %%% The directories below will be set according to the log_dir, data_dir and cache_dir
+            %% To use logstash:
+            %% - Enable the logstasher_h handler
+            %% - Configure logstasher below
+            %% - Add logstasher to the applications in your app.src
+            %%
+            % {handler, logstash, logstasher_h,
+            %     #{
+            %         level => info
+            %     }
+            % },
 
- % {setup, [
- %   {data_dir, "data"},
- %   {log_dir,  "logs"}
- % ]},
+            {handler, default, logger_std_h,
+                #{
+                    level => debug,
+                    formatter => {logjam,
+                        #{
+                          colored => true,
+                          time_designator => $\s,
+                          time_offset => "",
+                          time_unit => second,
+                          strip_tz => true,
+                          level_capitalize => true
+                        }
+                    }
+                }
+            },
 
- % {filezcache, [
- %     {data_dir, "data/filezcache/data"},
- %     {journal_dir, "data/filezcache/journal"}
- % ]},
+            {handler, error_log, z_logger_h,
+                #{
+                    level => error,
+                    config => #{
+                        type => file,
+                        file => "LOG_DIR/error.log",
+                        max_no_files => 10,
+                        max_no_bytes => 52428800 % 10 x 5mb
+                    },
+                    formatter => {logjam,
+                        #{
+                            colored => false,
+                            time_designator => $\s,
+                            time_offset => "",
+                            time_unit => second,
+                            strip_tz => true,
+                            level_capitalize => true
+                        }
+                    }
+                }
+            },
 
- % {mnesia, [
- %    {dir, setup}  % Use the config from setup -- handled by zotonic_core
- % ]},
-
- {kernel, [
-    {logger_level, notice},
-    {logger, [
-        {handler, default, logger_std_h,
-            #{
-                level => debug,
-                formatter => {logjam,
-                    #{
-                      colored => true,
-                      time_designator => $\s,
-                      time_offset => "",
-                      time_unit => second,
-                      strip_tz => true,
-                      level_capitalize => true
+            {handler, console_log, z_logger_h,
+                #{
+                    level => debug,
+                    config => #{
+                        type => file,
+                        file => "LOG_DIR/console.log",
+                        max_no_files => 10,
+                        max_no_bytes => 52428800 % 10 x 5mb
+                    },
+                    formatter => {logjam,
+                        #{
+                            colored => false,
+                            time_designator => $\s,
+                            time_offset => "",
+                            time_unit => second,
+                            strip_tz => true,
+                            level_capitalize => true
+                        }
                     }
                 }
             }
-        },
+        ]}
+    ]},
 
-        {handler, error_log, z_logger_h,
-            #{
-                level => error,
-                config => #{
-                    type => file,
-                    file => "LOG_DIR/error.log",
-                    max_no_files => 10,
-                    max_no_bytes => 52428800 % 10 x 5mb
-                },
-                formatter => {logjam,
-                    #{
-                        colored => false,
-                        time_designator => $\s,
-                        time_offset => "",
-                        time_unit => second,
-                        strip_tz => true,
-                        level_capitalize => true
-                    }
-                }
-            }
-        },
+    %% Logstash configuration.
+    %% Add the application logstasher to your .app.src to use logstash.
+    {logstasher, [
+        {transport, tcp},     % tcp | udp
+        {host, "localhost"},  % inet:hostname()
+        {port, 8080}          % inet:port_number()
+    ]},
 
-        {handler, console_log, z_logger_h,
-            #{
-                level => debug,
-                config => #{
-                    type => file,
-                    file => "LOG_DIR/console.log",
-                    max_no_files => 10,
-                    max_no_bytes => 52428800 % 10 x 5mb
-                },
-                formatter => {logjam,
-                    #{
-                        colored => false,
-                        time_designator => $\s,
-                        time_offset => "",
-                        time_unit => second,
-                        strip_tz => true,
-                        level_capitalize => true
-                    }
-                }
-            }
-        }
+    %% Emit a disk full warning above this threshold. Use a float between 0.0 and 1.0 (inclusive).
+    {os_mon, [
+        {disk_almost_full_threshold, 0.9}
+    ]},
+
+    %%% The directories below will be set according to the log_dir, data_dir and cache_dir
+
+    % {setup, [
+    %     {data_dir, "data"},
+    %     {log_dir,  "logs"}
+    % ]},
+
+    % {filezcache, [
+    %     {data_dir, "data/filezcache/data"},
+    %     {journal_dir, "data/filezcache/journal"}
+    % ]},
+
+    % {mnesia, [
+    %     {dir, setup}  % Use the config from setup -- handled by zotonic_core
+    % ]},
+
+    %% SSL application configuration.
+    %%
+    %% For details see: http://erlang.org/doc/man/ssl_app.html
+    {ssl, [
+        %% The max number of cached SSL parameters. Increase if you have a lot of clients
+        %% connecting to your server.
+        {session_cache_server_max, 20000},
+
+        %% The amount of time the parameters are cached. (in seconds).
+        {session_lifetime, 300}, % 5 minutes
+
+        %% The time between pem cache cleanups (in milliseconds)
+        {ssl_pem_cache_clean, 300000} % 5 minutes
     ]}
- ]},
-
-  %% Threshold above which a disk full warning is given, use a float between 0 and 1.0 (inclusive)
-  {os_mon, [
-      {disk_almost_full_threshold, 0.9}
-  ]},
-
-  %% SSL application configuration.
-  %%
-  %% For details see: http://erlang.org/doc/man/ssl_app.html
-  {ssl, [
-      %% The max number of cached SSL parameters. Increase if you have a lot of clients
-      %% connecting to your server.
-      {session_cache_server_max, 20000},
-
-      %% The amount of time the parameters are cached. (in seconds).
-      {session_lifetime, 300}, % 5 minutes
-
-      %% The time between pem cache cleanups (in milliseconds)
-      {ssl_pem_cache_clean, 300000} % 5 minutes
-  ]}
 ].
