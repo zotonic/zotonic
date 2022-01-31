@@ -485,9 +485,9 @@ diff({YMD1,{H1,I1,S1}}, {_,{_,I2,_}} = Date2) when I2 > I1 ->
 diff({YMD1,{H1,I1,S1}}, {_,{H2,_,_}} = Date2) when H2 > H1 ->
     NextDate2 = next_day(Date2),
     diff({YMD1,{H1+24,I1,S1}},NextDate2);
-diff({{Y1,M1,D1},T1}, {{Y2,M2,D2},_} = Date2) when D2 > D1 ->
-    NextDate2 = next_month(Date2),
-    diff({{Y1,M1,D1+last_day_of_the_month(Y2,M2)},T1},NextDate2);
+diff({{Y1,M1,D1},T1}, {{_Y2,_M2,D2},_} = Date2) when D2 > D1 ->
+    NextDate2 = next_day(Date2),
+    diff({{Y1,M1,D1+1},T1},NextDate2);
 diff({{Y1,M1,D1},T1}, {{_,M2,_},_} = Date2) when M2 > M1 ->
     NextDate2 = next_year(Date2),
     diff({{Y1,M1+12,D1},T1},NextDate2);
