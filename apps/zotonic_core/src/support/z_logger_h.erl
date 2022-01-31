@@ -19,10 +19,13 @@
 %%
 -module(z_logger_h).
 
-
 %% NOTE: patched version of logger_std_h
-%% Difference is the use of z_config:get/1 to determine the
-%% log directory.
+%%
+%% Differences are:
+%% 1. Use z_config:get/1 to determine the log directory.
+%% 2. Suppress supervisor progress reports.
+%%
+%% END NOTE.
 
 
 % -include("logger_internal.hrl").
@@ -97,7 +100,9 @@ removing_handler(Config) ->
 -spec log(LogEvent, Config) -> ok when
       LogEvent :: logger:log_event(),
       Config :: logger:handler_config().
-
+log(#{level := info, meta := #{error_logger := #{type := progress}}}, _Config) ->
+    % Ignore supervisor progress reports
+    ok;
 log(LogEvent, Config) ->
     logger_h_common:log(LogEvent, Config).
 
