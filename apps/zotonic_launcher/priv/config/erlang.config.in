@@ -74,7 +74,7 @@
                     level => debug,
                     config => #{
                         type => file,
-                        file => "ZOTONIC_LOG_DIR/console.log",
+                        file => "LOG_DIR/console.log",
                         max_no_files => 10,
                         max_no_bytes => 52428800 % 10 x 5mb
                     },
