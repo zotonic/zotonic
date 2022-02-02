@@ -821,14 +821,20 @@ logger_md(MetaData, #context{} = Context) when is_map(MetaData) ->
     end,
     logger:set_process_metadata(MetaData#{
         site => site(Context),
+        environment => m_site:environment(Context),
         user_id => Context#context.user_id,
+        language => language(Context),
+        timezone => tz(Context),
         controller => Context#context.controller_module,
         dispatch => get(zotonic_dispatch, Context),
         method => m_req:get(method, Context),
+        user_agent => m_req:get(user_agent, Context),
+        path => m_req:get(raw_path, Context),
         remote_ip => m_req:get(peer, Context),
         is_ssl => m_req:get(is_ssl, Context),
         session_id => SessionId,
-        correlation_id => m_req:get(req_id, Context)
+        correlation_id => m_req:get(req_id, Context),
+        node => node()
     }).
 
 %% ------------------------------------------------------------------------------------
