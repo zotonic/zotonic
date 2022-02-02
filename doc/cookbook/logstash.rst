@@ -67,7 +67,7 @@ Replace ``logger`` with the hostname or IP address of your logger. IP addresses 
 be configured as an Erlang tuple, for example: ``{127,0,0,1}``
 
 If the console output is shipped to Logstash, then use ``console`` as the transport.
-For ``console`` the configurations for ``host`` and ``port`` are ignored.
+The transport ``console`` ignores the configurations ``host`` and ``port``.
 
 After you changed the ``erlang.config`` file you will need to restart Zotonic.
 
