@@ -194,8 +194,8 @@ format_log([{Key, IfExists, Else} | Rest], Config, Msg, Meta, Acc) ->
         {ok, undefined} ->
             format_log(Rest, Config, Msg, Meta, [Else | Acc]);
         {ok, Val} ->
-            format_log(Rest, Config, Msg, Meta,
-                       [format_log(IfExists, Config, Msg, #{Key => Val}, []) | Acc])
+            Text = format_log(IfExists, Config, Msg, #{Key => Val}, []),
+            format_log(Rest, Config, Msg, Meta, [ Text | Acc])
     end;
 format_log([{Key} | Rest], Config, Msg, Meta, Acc) when is_atom(Key) ->
     case maps:find(Key, Meta) of
@@ -205,7 +205,7 @@ format_log([{Key} | Rest], Config, Msg, Meta, Acc) when is_atom(Key) ->
             format_log(Rest, Config, Msg, Meta, Acc);
         {ok, Val} ->
             Text = format_msg(#{ Key => Val }, Config),
-            format_log(Rest, Config, Msg, Meta, [Text, " " | Acc])
+            format_log(Rest, Config, Msg, Meta, [ [" ", Text] | Acc])
     end;
 format_log([Term | Rest], Config, Msg, Meta, Acc) when is_list(Term) ->
     format_log(Rest, Config, Msg, Meta, [Term | Acc]).
