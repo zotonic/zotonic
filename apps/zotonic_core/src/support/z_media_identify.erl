@@ -584,7 +584,7 @@ exif(File) ->
         end
     catch
         A:B:Stacktrace ->
-            ?LOG_ERROR("Error reading exif ~p:~p in ~p", [A,B,Stacktrace]),
+            ?LOG_ERROR("Error reading exif ~p:~p", [A,B], #{ stack => Stacktrace }),
             #{}
     end.
 

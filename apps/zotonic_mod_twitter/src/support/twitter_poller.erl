@@ -72,7 +72,7 @@ poll(Context) ->
         determine_next_delay(Status, Context)
     catch
         Type:E:Trace ->
-            ?LOG_ERROR("Twitter poller error: ~p:~p at ~p", [ Type, E, Trace ]),
+            ?LOG_ERROR("Twitter poller error: ~p:~p", [ Type, E ], #{ stack => Trace }),
             {delay, ?DELAY_EXCEPTION}
     end.
 
@@ -97,7 +97,7 @@ poll_next(SubId, Next, Context) ->
                 end
             catch
                 Type:E:Trace ->
-                    ?LOG_ERROR("Twitter (next) poller error: ~p:~p at ~p", [ Type, E, Trace ]),
+                    ?LOG_ERROR("Twitter (next) poller error: ~p:~p", [ Type, E ], #{ stack => Trace }),
                     {delay, ?DELAY_EXCEPTION}
             end;
         {error, not_found} ->

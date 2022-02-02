@@ -64,7 +64,7 @@ handle_cast(_Msg, State) ->
 handle_info(install_check, State) ->
     case install_check(State#state.site_props) of
         ok ->
-            ok = z_site_sup:install_done(State#state.site_props),
+            ok = z_site_sup:install_done(State#state.site),
             {noreply, State, hibernate};
         {error, _} ->
             {stop, installfail, State}

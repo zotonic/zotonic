@@ -58,14 +58,16 @@ below the kernel section or else added there:
     %% If a logger handler with 'logstasher_h' is defined then zotonic_core will start the
     %% logstasher application.
     {logstasher, [
-        {transport, udp},     % tcp | udp
+        {transport, udp},     % tcp | udp | console
         {host, "localhost"},  % inet:hostname()
         {port, 5000}          % inet:port_number()
     ]},
 
-
 Replace ``logger`` with the hostname or IP address of your logger. IP addresses can
 be configured as an Erlang tuple, for example: ``{127,0,0,1}``
+
+If the console output is shipped to Logstash, then use ``console`` as the transport.
+For ``console`` the configurations for ``host`` and ``port`` are ignored.
 
 After you changed the ``erlang.config`` file you will need to restart Zotonic.
 

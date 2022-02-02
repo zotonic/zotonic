@@ -437,8 +437,9 @@ notify_observer(Msg, {_Prio, Pid, _OwnerPid}, true, ContextArg) when is_pid(Pid)
         gen_server:call(Pid, {Msg, ContextArg}, ?TIMEOUT)
     catch
         EM:E:Trace ->
-            ?LOG_ERROR("Error notifying ~p with event ~p. Error ~p:~p. Trace:~p",
-                        [Pid, Msg, EM, E, Trace]),
+            ?LOG_ERROR("Error notifying ~p with event ~p. Error ~p:~p",
+                        [Pid, Msg, EM, E],
+                        #{ stack => Trace }),
             {error, {notify_observer, Pid, Msg, EM, E}}
     end;
 notify_observer(Msg, {_Prio, Pid, _OwnerPid}, false, ContextArg) when is_pid(Pid) ->
@@ -456,8 +457,9 @@ notify_observer_fold(Msg, {_Prio, Pid, _OwnerPid}, Acc, ContextArg) when is_pid(
         gen_server:call(Pid, {Msg, Acc, ContextArg}, ?TIMEOUT)
     catch
         EM:E:Trace ->
-            ?LOG_ERROR("Error foloding ~p with event ~p. Error ~p:~p. Trace:~p",
-                        [Pid, Msg, EM, E, Trace]),
+            ?LOG_ERROR("Error folding ~p with event ~p. Error ~p:~p",
+                        [Pid, Msg, EM, E],
+                        #{ stack => Trace }),
             Acc
     end;
 notify_observer_fold(Msg, {_Prio, {M, F}, _OwnerPid}, Acc, ContextArg) ->

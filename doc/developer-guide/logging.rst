@@ -61,6 +61,7 @@ handler in the logger configuration of your ``erlang.config`` file and check the
                     level => debug,
                     formatter => {logjam,
                         #{
+                            prettify => true,
                             colored => true,
                             time_designator => $\s,
                             time_offset => "",
@@ -85,6 +86,7 @@ handler in the logger configuration of your ``erlang.config`` file and check the
                     },
                     formatter => {logjam,
                         #{
+                            prettify => true,
                             colored => false,
                             time_designator => $\s,
                             time_offset => "",
@@ -109,6 +111,7 @@ handler in the logger configuration of your ``erlang.config`` file and check the
                     },
                     formatter => {logjam,
                         #{
+                            prettify => true,
                             colored => false,
                             time_designator => $\s,
                             time_offset => "",
@@ -126,7 +129,7 @@ handler in the logger configuration of your ``erlang.config`` file and check the
     %% If a logger handler with 'logstasher_h' is defined then zotonic_core will start the
     %% logstasher application.
     {logstasher, [
-        {transport, udp},     % tcp | udp
+        {transport, udp},     % tcp | udp | console
         {host, "localhost"},  % inet:hostname()
         {port, 5000}          % inet:port_number()
     ]},

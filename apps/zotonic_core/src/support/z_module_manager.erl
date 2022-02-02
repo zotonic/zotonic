@@ -131,8 +131,7 @@
 %%====================================================================
 %% @spec start_link(SiteProps::proplist()) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the module manager
-start_link(SiteProps) ->
-    {site, Site} = proplists:lookup(site, SiteProps),
+start_link(Site) ->
     gen_server:start_link({local, name(Site)}, ?MODULE, Site, []).
 
 

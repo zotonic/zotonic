@@ -30,8 +30,9 @@
             {handler, default, z_logger_h,
                 #{
                     level => debug,
-                    formatter => {logjam,
+                    formatter => {z_logger_formatter,
                         #{
+                            prettify => true,
                             colored => true,
                             time_designator => $\s,
                             time_offset => "",
@@ -54,8 +55,9 @@
                         max_no_files => 10,
                         max_no_bytes => 52428800 % 10 x 5mb
                     },
-                    formatter => {logjam,
+                    formatter => {z_logger_formatter,
                         #{
+                            prettify => true,
                             colored => false,
                             time_designator => $\s,
                             time_offset => "",
@@ -78,8 +80,9 @@
                         max_no_files => 10,
                         max_no_bytes => 52428800 % 10 x 5mb
                     },
-                    formatter => {logjam,
+                    formatter => {z_logger_formatter,
                         #{
+                            prettify => true,
                             colored => false,
                             time_designator => $\s,
                             time_offset => "",
@@ -97,7 +100,7 @@
     %% If a logger handler with 'logstasher_h' is defined then zotonic_core will start the
     %% logstasher application.
     {logstasher, [
-        {transport, udp},     % tcp | udp
+        {transport, udp},     % tcp | udp | console
         {host, "localhost"},  % inet:hostname()
         {port, 5000}          % inet:port_number()
     ]},

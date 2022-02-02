@@ -350,8 +350,7 @@ delete_tasks(Context) ->
 %%====================================================================
 %% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
-start_link(SiteProps) ->
-    {site, Site} = proplists:lookup(site, SiteProps),
+start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
     gen_server:start_link({local, Name}, ?MODULE, Site, []).
 
@@ -412,7 +411,10 @@ handle_cast(poll, State) ->
         {noreply, State1}
     catch
         Type:Err:Stack ->
-            ?LOG_ERROR("Poll error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
+            ?LOG_ERROR(
+                "Poll error ~p:~p, backing off pivoting",
+                [ Type, Err ],
+                #{ stack => Stack }),
             {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
     end;
 
@@ -461,7 +463,10 @@ handle_info(poll, #state{ site = Site } = State) ->
                 {noreply, State1#state{ is_initial_delay = false }}
             catch
                 Type:Err:Stack ->
-                    ?LOG_ERROR("Pivot error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
+                    ?LOG_ERROR(
+                        "Pivot error ~p:~p, backing off pivoting.",
+                        [ Type, Err ],
+                        #{ stack => Stack }),
                     timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
                     {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
             end;

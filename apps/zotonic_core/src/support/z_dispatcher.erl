@@ -76,10 +76,9 @@ dispatcher_args() ->
 
 %% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the dispatch server
-start_link(SiteProps) ->
-    {site, Site} = proplists:lookup(site, SiteProps),
+start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
-    gen_server:start_link({local, Name}, ?MODULE, SiteProps, []).
+    gen_server:start_link({local, Name}, ?MODULE, Site, []).
 
 
 %% @spec url_for(atom(), Context) -> iolist()
@@ -254,16 +253,19 @@ to_bool(N) -> z_convert:to_bool(N).
 %%                     ignore               |
 %%                     {stop, Reason}
 %% @doc Initiates the server, loads the dispatch list into the webmachine dispatcher
-init(SiteProps) ->
-    {site, Site} = proplists:lookup(site, SiteProps),
+init(Site) ->
     logger:set_process_metadata(#{
         site => Site,
         module => ?MODULE
     }),
-    {hostname, Hostname0} = proplists:lookup(hostname, SiteProps),
+    Context = z_context:new(Site),
+    Hostname0 = m_site:get(hostname, Context),
     Hostname = drop_port(Hostname0),
-    Smtphost = drop_port(proplists:get_value(smtphost, SiteProps)),
-    HostAlias = proplists:get_value(hostalias, SiteProps, []),
+    Smtphost = drop_port(m_site:get(smtphost, Context)),
+    HostAlias = case m_site:get(hostalias, Context) of
+        undefined -> [];
+        HA -> HA
+    end,
     Alias = lists:filtermap(
         fun(Alias) ->
             case drop_port(Alias) of
@@ -272,8 +274,11 @@ init(SiteProps) ->
             end
         end,
         HostAlias),
-    Context = z_context:new(Site),
     process_flag(trap_exit, true),
+    IsRedirect = case m_site:get(redirect, Context) of
+        undefined -> true;
+        R -> z_convert:to_bool(R)
+    end,
     State  = #state{
                 dispatchlist = [],
                 lookup = dict:new(),
@@ -284,7 +289,7 @@ init(SiteProps) ->
                 hostname_port = add_port(Hostname, http, z_config:get(port)),
                 hostname_ssl_port = add_port(Hostname, https, z_config:get(ssl_port)),
                 hostalias = Alias,
-                redirect = z_convert:to_bool(proplists:get_value(redirect, SiteProps, true))
+                redirect = IsRedirect
     },
     z_notifier:observe(module_ready, {?MODULE, reload}, Context),
     {ok, State}.

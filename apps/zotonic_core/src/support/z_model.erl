@@ -226,8 +226,9 @@ model_call(Mod, Callback, Path, Msg, Context) ->
                 [ {Mod, Callback, _As, _Loc} | _ ] ->
                     {error, unknown_path};
                 _ ->
-                    ?LOG_ERROR("Function clause in model call to ~p:~p(~p): ~p",
-                                [ Mod, Callback, Path, S ]),
+                    ?LOG_ERROR("Function clause in model call to ~p:~p(~p)",
+                                [ Mod, Callback, Path ],
+                                #{ stack => S }),
                     {error, function_clause}
             end;
         error:undef:S ->
@@ -235,8 +236,9 @@ model_call(Mod, Callback, Path, Msg, Context) ->
                 [ {Mod, Callback, _As, _Loc} | _ ] ->
                     {error, unknown_path};
                 _ ->
-                    ?LOG_ERROR("Undef in model call to ~p:~p(~p): ~p",
-                                [ Mod, Callback, Path, S ]),
+                    ?LOG_ERROR("Undef in model call to ~p:~p(~p)",
+                                [ Mod, Callback, Path ],
+                                #{ stack => S }),
                     {error, undef}
             end
     end.

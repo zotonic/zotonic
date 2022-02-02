@@ -47,10 +47,9 @@
 %%====================================================================
 %% @spec start_link(SiteArgs) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the dropbox server
-start_link(SiteProps) ->
-    {site, Site} = proplists:lookup(site, SiteProps),
+start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
-    gen_server:start_link({local, Name}, ?MODULE, SiteProps, []).
+    gen_server:start_link({local, Name}, ?MODULE, Site, []).
 
 
 %% @spec scan(context()) -> void()
@@ -67,8 +66,7 @@ scan(Context) ->
 %%                     ignore               |
 %%                     {stop, Reason}
 %% @doc Initiates the server.  Options are: dropbox_dir, processing_dir, unhandled_dir, interval, max_age and min_age
-init(SiteProps) ->
-    Site = proplists:get_value(site, SiteProps),
+init(Site) ->
     logger:set_process_metadata(#{
         site => Site,
         module => ?MODULE
@@ -77,23 +75,22 @@ init(SiteProps) ->
 	DefaultDropBoxDir = z_path:files_subdir_ensure("dropbox", Context),
 	DefaultProcessingDir = z_path:files_subdir_ensure("processing", Context),
 	DefaultUnhandledDir = z_path:files_subdir_ensure("unhandled", Context),
-    DropBox  = string:strip(proplists:get_value(dropbox_dir,            SiteProps, DefaultDropBoxDir),    right, $/),
-    ProcDir  = string:strip(proplists:get_value(dropbox_processing_dir, SiteProps, DefaultProcessingDir), right, $/),
-    UnDir    = string:strip(proplists:get_value(dropbox_unhandled_dir,  SiteProps, DefaultUnhandledDir),  right, $/),
+    DropBox  = z_string:trim_right(config(dropbox_dir,            Context, DefaultDropBoxDir),    $/),
+    ProcDir  = z_string:trim_right(config(dropbox_processing_dir, Context, DefaultProcessingDir), $/),
+    UnDir    = z_string:trim_right(config(dropbox_unhandled_dir,  Context, DefaultUnhandledDir),  $/),
     State    = #state{
                     dropbox_dir=DropBox,
                     processing_dir=ProcDir,
                     unhandled_dir=UnDir,
-                    min_age = proplists:get_value(dropbox_min_age, SiteProps, 10),
-                    max_age = proplists:get_value(dropbox_max_age, SiteProps, 3600),
+                    min_age = z_convert:to_integer(config(dropbox_min_age, Context, 10)),
+                    max_age = z_convert:to_integer(config(dropbox_max_age, Context, 3600)),
                     site=Site,
                     context=Context
                 },
-    Interval = proplists:get_value(dropbox_interval, SiteProps, 10000),
+    Interval = z_convert:to_integer(config(dropbox_interval, Context, 10000)),
     timer:apply_interval(Interval, ?MODULE, scan, [Context]),
     gen_server:cast(self(), cleanup),
     {ok, State}.
-
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -154,6 +151,13 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+
+config(Key, Context, Default) ->
+    case m_site:get(Key, Context) of
+        undefined -> Default;
+        V -> V
+    end.
 
 %% @spec do_scan(State) -> void()
 %% @doc Perform a scan of the dropbox, broadcast all to be processed files.

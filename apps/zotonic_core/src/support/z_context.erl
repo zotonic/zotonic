@@ -828,7 +828,7 @@ logger_md(MetaData, #context{} = Context) when is_map(MetaData) ->
         remote_ip => m_req:get(peer, Context),
         is_ssl => m_req:get(is_ssl, Context),
         session_id => SessionId,
-        req_id => m_req:get(req_id, Context)
+        correlation_id => m_req:get(req_id, Context)
     }).
 
 %% ------------------------------------------------------------------------------------

@@ -124,23 +124,22 @@ wait_for_db(Site, N) ->
 
 %% @doc Called by z_installer after the database installation is done.
 %%      We can now start all other site processes.
--spec install_done(list()) -> ok.
-install_done(SiteProps) when is_list(SiteProps) ->
-    {site, Site} = proplists:lookup(site, SiteProps),
+-spec install_done(atom()) -> ok.
+install_done(Site) when is_atom(Site) ->
     Dispatcher = {z_dispatcher,
-                {z_dispatcher, start_link, [SiteProps]},
+                {z_dispatcher, start_link, [Site]},
                 permanent, 5000, worker, dynamic},
 
     SiteServices = {z_site_services_sup,
-                {z_site_services_sup, start_link, [SiteProps]},
+                {z_site_services_sup, start_link, [Site]},
                 permanent, 5000, supervisor, dynamic},
 
     ModuleIndexer = {z_module_indexer,
-                {z_module_indexer, start_link, [SiteProps]},
+                {z_module_indexer, start_link, [Site]},
                 permanent, 5000, worker, dynamic},
 
     ModuleManager = {z_module_manager,
-                {z_module_manager, start_link, [SiteProps]},
+                {z_module_manager, start_link, [Site]},
                 permanent, 5000, worker, dynamic},
 
     PostStartup = {z_site_startup,

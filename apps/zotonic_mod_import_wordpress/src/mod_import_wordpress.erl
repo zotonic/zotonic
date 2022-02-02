@@ -51,9 +51,9 @@ do_import(TmpFile, Reset, OriginalFilename, Context) ->
             {growl, [ {text, Msg} ]}
         catch
             _:E:Stacktrace ->
-                Msg1 = lists:flatten(io_lib:format("~p failed to import. The error was: ~p", [OriginalFilename, E])),
-                ?LOG_WARNING(Msg1, Context),
-                ?LOG_WARNING("Wordpress error: ~p~n~p", [E, Stacktrace]),
+                ?LOG_WARNING("Wordpress failed import of ~p: ~p", [OriginalFilename, E], #{ stack => Stacktrace }),
+                Msg1 = unicode:characters_to_binary(
+                    io_lib:format("~p failed to import. The error was: ~p", [OriginalFilename, E])),
                 {growl, [ {text, Msg1}, {type, error}, {stay, true} ]}
         end,
     z_notifier:first(#page_actions{ actions = [ Action ] }, Context).
