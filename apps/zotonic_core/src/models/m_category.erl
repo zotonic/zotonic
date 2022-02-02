@@ -866,7 +866,7 @@ renumber_pivot_task(Context) ->
                 limit 1000", Context, 60000),
     case Nrs of
         [] ->
-            ?LOG_NOTICE("Category renumbering completed", Context),
+            ?zNotice("Category renumbering completed", Context),
             set_tree_dirty(false, Context),
             ok;
         Ids ->

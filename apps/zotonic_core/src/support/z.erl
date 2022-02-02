@@ -46,7 +46,7 @@
     dispatch_path/2,
     dispatch_list/1,
 
-    debug_msg/3,
+    debug_msg/2,
 
     log/3,
 
@@ -244,15 +244,11 @@ dispatch_list(SiteOrContext) ->
     end.
 
 %% @doc Echo and return a debugging value
-debug_msg(Module, Line, Msg) ->
+debug_msg(Msg, Meta) ->
     logger:log(
         notice,
-        "DEBUG: ~p:~p  ~p~n",
-        [Module, Line, Msg],
-        #{
-            file => z_convert:to_list(Module),
-            line => Line
-        }),
+        "DEBUG: ~tp",
+        Meta),
     Msg.
 
 %% @doc Log a debug message, with extra props.
@@ -308,12 +304,24 @@ log(Type, Msg, Props, Context) when is_list(Props) ->
 log(Type, Msg, Props, Context) ->
     Msg1 = erlang:iolist_to_binary(Msg),
     Line = maps:get(line, Props, 0),
-    Module = maps:get(module, Props, unknown),
-    logger(Type, Props, [ z_context:site(Context), Type, Module, Line, Msg1 ]),
     UserId = case maps:get(user_id, Props, none) of
         none -> z_acl:user(Context);
         UId -> UId
     end,
+    Meta = #{
+        site => z_context:site(Context),
+        environment => m_site:environment(Context),
+        line => Line,
+        node => node(),
+        user_id => UserId
+    },
+    Meta1 = case maps:get(mfa, Props, undefined) of
+        undefined ->
+            Meta;
+        {_, _, _} = MFA ->
+            Meta#{ mfa => MFA }
+    end,
+    logger:log(Type, "~ts", [ Msg1 ], Meta1),
     z_notifier:notify(
         #zlog{
             type = Type,
@@ -328,14 +336,3 @@ log(Type, Msg, Props, Context) ->
         },
         Context),
     ok.
-
-logger(debug, Props, Args) ->
-    ?LOG_DEBUG("[~p] ~p @ ~p:~p  ~s", Args, Props);
-logger(info, Props, Args) ->
-    ?LOG_INFO("[~p] ~p @ ~p:~p  ~s", Args, Props);
-logger(notice, Props, Args) ->
-    ?LOG_NOTICE("[~p] ~p @ ~p:~p  ~s", Args, Props);
-logger(warning, Props, Args) ->
-    ?LOG_WARNING("[~p] ~p @ ~p:~p  ~s", Args, Props);
-logger(_Severity, Props, Args) ->
-    ?LOG_ERROR("[~p] ~p @ ~p:~p  ~s", Args, Props).
