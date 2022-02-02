@@ -75,8 +75,6 @@ load_applications() ->
 set_configs() ->
     application:set_env(setup, log_dir, z_config:get(log_dir)),
     application:set_env(setup, data_dir, z_config:get(data_dir)),
-    % Lager should log in the log_dir
-    application:set_env(lager, log_root, z_config:get(log_dir)),
     % Store filezcache data in the cache_dir.
     FileZCache = filename:join([ z_config:get(cache_dir), "filezcache", atom_to_list(node()) ]),
     application:set_env(filezcache, data_dir, filename:join([ FileZCache, "data" ])),
