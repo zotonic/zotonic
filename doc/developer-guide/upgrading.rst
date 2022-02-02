@@ -56,9 +56,9 @@ See for more information :ref:`guide-docker`.
 Sites and modules are now OTP apps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Both sites and modules now follow the standard `OTP directory structure`_,
-  which means all Erlang files should reside in :file:`src/` and all other files
-  (templates, dispatch rules etc.) in :file:`priv`/.
+Both sites and modules now follow the standard `OTP directory structure`_,
+which means all Erlang files should reside in :file:`src/` and all other files
+(templates, dispatch rules etc.) in :file:`priv`/.
 
   Before::
 
@@ -86,42 +86,42 @@ Sites and modules are now OTP apps
             ...
         rebar.config
 
-* The ``user_sites_dir`` and ``user_modules_dir`` configurations have been removed.
-  The default location for sites and modules is now the ``apps_user`` directory.
-  With the ``ZOTONIC_APPS`` environment variable you can define an additional source directory
-  outside the Zotonic umbrella ``apps`` directory.
+The ``user_sites_dir`` and ``user_modules_dir`` configurations have been removed.
+The default location for sites and modules is now the ``apps_user`` directory.
+With the ``ZOTONIC_APPS`` environment variable you can define an additional source directory
+outside the Zotonic umbrella ``apps`` directory.
 
-  To upgrade, move your ``user/modules`` and ``user/sites`` applications to the ``apps_user``
-  directory.
+To upgrade, move your ``user/modules`` and ``user/sites`` applications to the ``apps_user``
+directory.
 
 
 Resources
 ^^^^^^^^^
 
-* All resources are now *maps* with *binary* keys. Use of the previous 0.x
-  proplists is deprecated, the fetch routines will always return maps, the
-  update routines will convert property lists to maps before updating.
+All resources are now *maps* with *binary* keys. Use of the previous 0.x
+proplists is deprecated, the fetch routines will always return maps, the
+update routines will convert property lists to maps before updating.
 
-* The ``name_to_id_check/2`` functions were removed from ``m_category``,
-  ``m_predicate`` and ``m_rsc``.
+The ``name_to_id_check/2`` functions were removed from ``m_category``,
+``m_predicate`` and ``m_rsc``.
 
-  Before::
+Before::
 
     Id = m_rsc:name_to_id_check(Value, Context).
 
-  After::
+After::
 
     {ok, Id} = m_rsc:name_to_id(Value, Context).
 
-* Inserting or deleting an edge no longer modifies the last modified and
-  modifier properties of the edge’s subject resource.
+Inserting or deleting an edge no longer modifies the last modified and
+modifier properties of the edge’s subject resource.
 
-* There are extra access controls on rsc properties. The ``privavy`` property
-  controls what is visible for whom.
+There are extra access controls on rsc properties. The ``privacy`` property
+controls what is visible for whom.
 
-* The function ``m_rsc:get_visible/2`` has been removed. The function ``m_rsc:get/2``
-  now checks on visibility of properties. To fetch all properties, either  use ``m_rsc:get_raw/2``
-  or call ``m_rsc:get/2`` as a administrator level user.
+The function ``m_rsc:get_visible/2`` has been removed. The function ``m_rsc:get/2``
+now checks on visibility of properties. To fetch all properties, either  use ``m_rsc:get_raw/2``
+or call ``m_rsc:get/2`` as a administrator level user.
 
 Media
 ^^^^^
@@ -134,26 +134,28 @@ update routines will convert property lists to maps before updating.
 ACL
 ^^^
 
-* mod_acl_adminonly was replaced by :ref:`mod_acl_user_groups`. To create users
-  that have access to the admin, add them to the ‘Managers’ user group.
-* The ``visible_for`` property semantics and the the ``acl_can_see``
-  notification were removed. You can get similar functionality by adding users
-  to user and collaboration groups. These are provided by mod_acl_user_groups.
-  The ``visible_for`` ``rsc`` table property has been kept for BC. So if you’re
-  using mod_acl_adminonly, mod_acl_simple_roles or a custom ACL module you can
-  still rely on the property.
-* The ``acl_rsc_update_check`` notification was removed.
+mod_acl_adminonly was replaced by :ref:`mod_acl_user_groups`. To create users
+that have access to the admin, add them to the ‘Managers’ user group.
+
+The ``visible_for`` property semantics and the the ``acl_can_see``
+notification were removed. You can get similar functionality by adding users
+to user and collaboration groups. These are provided by mod_acl_user_groups.
+The ``visible_for`` ``rsc`` table property has been kept for BC. So if you’re
+using mod_acl_adminonly, mod_acl_simple_roles or a custom ACL module you can
+still rely on the property.
+
+The ``acl_rsc_update_check`` notification was removed.
 
 Authentication
 ^^^^^^^^^^^^^^
 
-* All auth notifications values were converted to records.
+All auth notifications values were converted to records.
 
-  Before::
+Before::
 
     observe_auth_logon(auth_logon, Context, _Context) ->
 
-  After::
+After::
 
     observe_auth_logon(#auth_logon{}, Context, _Context) ->
 
@@ -161,45 +163,45 @@ Authentication
 Configuration
 ^^^^^^^^^^^^^
 
-* Port configuration :ref:`environment variables <guide-deployment-env>` were
-  changed.
+Port configuration :ref:`environment variables <guide-deployment-env>` were
+changed.
 
-  Before:
+Before:
 
   .. code-block:: bash
 
     ZOTONIC_PORT=80 ZOTONIC_SSL_PORT=443 bin/zotonic start
 
-  After:
+After:
 
   .. code-block:: bash
 
     ZOTONIC_LISTEN_PORT=80 ZOTONIC_SSL_LISTEN_PORT=443 bin/zotonic start
 
-* Black/white-lists are now called block/allow-lists.
+Black/white-lists are now called block/allow-lists.
 
-  - ``proxy_whitelist`` is now ``proxy_allowlist``
-  - ``smtp_dnsbl`` is now ``smtp_dns_blocklist``
-  - ``smtp_dnswl`` is now ``smtp_dns_allowlist``
-  - ``ip_whitelist`` is now ``ip_allowlist``
-  - ``ip_whitelist_system_management`` is now ``ip_allowlist_system_management``
+ - ``proxy_whitelist`` is now ``proxy_allowlist``
+ - ``smtp_dnsbl`` is now ``smtp_dns_blocklist``
+ - ``smtp_dnswl`` is now ``smtp_dns_allowlist``
+ - ``ip_whitelist`` is now ``ip_allowlist``
+ - ``ip_whitelist_system_management`` is now ``ip_allowlist_system_management``
 
-  If an IP is on DNS allowlist then ``z_email_dnsbl:status/2`` returns now ``{ok, allowed}``.
+If an IP is on DNS allowlist then ``z_email_dnsbl:status/2`` returns now ``{ok, allowed}``.
 
 
 Errors
 ^^^^^^
 
-* ``m_edge``, ``m_identity``, ``m_rsc``, ``m_rsc_import`` and ``m_rsc_update``
-  no longer throw exceptions. Instead, they return an ``{error, atom()}`` tuple
-  on failure.
+``m_edge``, ``m_identity``, ``m_rsc``, ``m_rsc_import`` and ``m_rsc_update``
+no longer throw exceptions. Instead, they return an ``{error, atom()}`` tuple
+on failure.
 
-  Before::
+Before::
 
     m_edge:insert(Id, this_predicate_does_not_exist, UserId, Context).
     %% crashes with an exception
 
-  After::
+After::
 
     m_edge:insert(Id, this_predicate_does_not_exist, UserId, Context).
     %% fails silently, so to make it crash:
@@ -231,29 +233,36 @@ For this to work:
 Export
 ^^^^^^
 
-* Modules mod_atom and mod_atom_feed were removed. You can export data in a
-  variety of formats using :ref:`mod_export`.
+Modules mod_atom and mod_atom_feed were removed. You can export data in a
+variety of formats using :ref:`mod_export`.
 
 JSON
 ^^^^
 
-* Mochijson structures replaced with Erlang maps.
-* All JSON encoding/decoding now relies on JSX and goes through
-  ``z_json:encode/1`` and ``z_json:decode/1``.
-* ``{trans, _}`` tuples should now be unpacked by the client, before calling
-  ``z_json:encode/1`` (previously ``z_json:to_mochijson/2``).
+Mochijson structures replaced with Erlang maps.
+
+All JSON encoding/decoding now relies on JSX and goes through
+``z_json:encode/1`` and ``z_json:decode/1``.
+
+``{trans, _}`` tuples should now be unpacked by the client, before calling
+``z_json:encode/1`` (previously ``z_json:to_mochijson/2``).
 
 Removed or deprecated functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Deprecated functions have been removed from ``z_utils``. Use the ``z_url`` and
-  ``z_json`` modules instead.
-* Deprecated function ``z_utils:name_for_host/2`` has been removed; use
-  ``z_utils:name_for_site/2`` instead.
-* The ``{% stream %}`` tag was removed, use MQTT websocket instead
-* Removed older TinyMCE versions 3.5.0 and 4.2.4.
-* ``z_utils:combine/2`` is removed, use ``lists:join/2`` instead.
-* ``z_utils:combine_defined/2`` is renamed to ``z_utils:join_defined/2``.
+Deprecated functions have been removed from ``z_utils``. Use the ``z_url`` and
+``z_json`` modules instead.
+
+Deprecated function ``z_utils:name_for_host/2`` has been removed; use
+``z_utils:name_for_site/2`` instead.
+
+The ``{% stream %}`` tag was removed, use MQTT websocket instead
+
+Removed older TinyMCE versions 3.5.0 and 4.2.4.
+
+``z_utils:combine/2`` is removed, use ``lists:join/2`` instead.
+
+``z_utils:combine_defined/2`` is renamed to ``z_utils:join_defined/2``.
 
 Module schema and data initialization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -274,33 +283,38 @@ all (optional) `#datamodel` changes are applied.
 Templates
 ^^^^^^^^^
 
-* The ``use_absolute_url`` argument of the ``url``, ``image`` and ``lib`` tags
-  was renamed to ``absolute_url``.
-* Templates are now stored in :file:`yoursite/priv/templates/` instead of
-  :file:`yoursite/templates/`.
-* The ``maxage`` caching argument was renamed to ``max_age``.
-* The models have now extra ACL checks.
+The ``use_absolute_url`` argument of the ``url``, ``image`` and ``lib`` tags
+was renamed to ``absolute_url``.
 
-  The ``m.config``, ``m.site`` and ``m.sysconfig`` models are only accessible
-  as administrator. Use the models *owning* the various settings to access the
-  configurations.
+Templates are now stored in :file:`yoursite/priv/templates/` instead of
+:file:`yoursite/templates/`.
 
-  Exception is that the hostname and site-title information is publicly accessible
-  using ``m.site``.
+The ``maxage`` caching argument was renamed to ``max_age``.
 
-  Examples:
+The models have now extra ACL checks.
+
+The ``m.config``, ``m.site`` and ``m.sysconfig`` models are only accessible
+as administrator. Use the models *owning* the various settings to access the
+configurations.
+
+Exception is that the hostname and site-title information is publicly accessible
+using ``m.site``.
+
+Examples:
 
    * ``m.config.site.title.value`` is now ``m.site.title``
    * ``m.config.mod_editor_tinymce.version.value`` is now ``m.editor_tinymce.version``
 
-  Check the various models of the modules for the new lookups.
-* The ``catinclude`` for a resource with an unique name will not look for (assuming
-  the unique name is ``my_unique_name`` and the template is ``page.tpl``):
-  ``page.name.my_unique_name.tpl`` and **not** anymore for ``page.my_unique_name.tpl``.
-  Rename your templates accordingly.
-* The category property ``feature_show_address`` property is now called ``is_feature_show_address``. All
-  feature properties should be called ``is_feature_...`` to obtain a proper boolean value
-  after the category edit form is saved.
+Check the various models of the modules for the new lookups.
+
+The ``catinclude`` for a resource with an unique name will not look for (assuming
+the unique name is ``my_unique_name`` and the template is ``page.tpl``):
+``page.name.my_unique_name.tpl`` and **not** anymore for ``page.my_unique_name.tpl``.
+Rename your templates accordingly.
+
+The category property ``feature_show_address`` property is now called ``is_feature_show_address``. All
+feature properties should be called ``is_feature_...`` to obtain a proper boolean value
+after the category edit form is saved.
 
 Port, proxies and SSL certificates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -334,7 +348,7 @@ The following changes are made:
  * The include file ``include/controller_webmachine_helper.hrl`` is removed (and not needed anymore).
 
 Binaries for request variables
-..............................
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you request an argument with ``z_context:get_q/2`` and related functions then you might need to adapt some code. Requesting a query argument using an *atom* or *binary* will return a *binary*. Requesting with a *string* returns a string, this is for backwards compatibility. The function ``get_q_all`` will return all arguments as binaries.
 
@@ -349,7 +363,7 @@ The binary name is the preferred way to request arguments.
 
 
 Events like submit, postback and postback_notify
-................................................
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Strings in the ``#submit{}``, ``#postback{}``  and ``#postback_notify{}`` events are now binaries. This is especially the case for the message, trigger, target, and form fields.
 
@@ -358,13 +372,13 @@ Watch the space between ``=`` and the ``<<"...">>``, without the space you will 
 
 
 Cookies
-.......
+^^^^^^^
 
 Use binaries for fetching and setting cookie names and values, don't use strings.
 
 
 Request and response headers
-............................
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 All request and response headers now use binary names and values, do not use strings.
 
@@ -374,7 +388,7 @@ The header values are passed as-is, and they are always binaries.
 
 
 Controllers
-...........
+^^^^^^^^^^^
 
 The controllers are simplified and will need some adaptations.
 
@@ -383,8 +397,8 @@ The following callbacks are removed:
  * ``init``
  * ``ping``
 
- All other callbacks have now a single *Context* argument, the *ReqData* argument has been removed.
- There is no need anymore for the ``?WM_REQ`` and ``?WM_REPLY`` macros, and they have been removed.
+All other callbacks have now a single *Context* argument, the *ReqData* argument has been removed.
+There is no need anymore for the ``?WM_REQ`` and ``?WM_REPLY`` macros, and they have been removed.
 
 Other controller changes changes are:
 
@@ -397,20 +411,21 @@ Other controller changes changes are:
 Search
 ^^^^^^
 
-* Search argument ``authoritative`` was renamed to ``is_authoritative``.
-* The ``custompivot`` has been removed. Pivot fields can now directly be addressed with ``pivot.mypivotname.column``.
-  Pivot tables are now joined automatically, removing the need for the ``custompivot`` search argument.
+Search argument ``authoritative`` was renamed to ``is_authoritative``.
+
+The ``custompivot`` has been removed. Pivot fields can now directly be addressed with ``pivot.mypivotname.column``.
+Pivot tables are now joined automatically, removing the need for the ``custompivot`` search argument.
 
 Notifications
 ^^^^^^^^^^^^^
 
- * The ``admin_menu`` notifications is now a tuple: ``#admin_menu{}``. Update the ``observe_admin_menu`` functions in sites and modules.
+The ``admin_menu`` notifications is now a tuple: ``#admin_menu{}``. Update the ``observe_admin_menu`` functions in sites and modules.
 
 
 Modules
 ^^^^^^^
 
- * Moved ``mod_base_site`` to https://github.com/zotonic/zotonic_mod_base_site
+Moved ``mod_base_site`` to https://github.com/zotonic/zotonic_mod_base_site
 
 
 Menus
