@@ -369,8 +369,9 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                 {ok, Props2}
             catch
                 X:B:Stacktrace ->
-                    ?LOG_WARNING("identify of \"~s\" failed - ~p with ~p:~p in ~p",
-                                [CleanedImageFile, CmdOutput, X, B, Stacktrace]),
+                    ?LOG_WARNING("identify of \"~s\" failed - ~p with ~p:~p",
+                                [CleanedImageFile, CmdOutput, X, B],
+                                #{ stack => Stacktrace }),
                     {error, identify}
             end
     end.

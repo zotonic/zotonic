@@ -57,8 +57,8 @@ observe_check_edge_log(check_edge_log, Context) ->
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
+-spec start_link(atom()) -> {ok, pid()} | ignore | {error, term()}.
 start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
     gen_server:start_link({local, Name}, ?MODULE, Site, []).

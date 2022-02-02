@@ -82,12 +82,13 @@
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
+-spec start_link() -> {ok, pid()} | ignore | {error, term()}.
 start_link() ->
     start_link([]).
-%% @spec start_link(Args::list()) -> {ok,Pid} | ignore | {error,Error}
+
 %% @doc Starts the server
+-spec start_link(list()) -> {ok, pid()} | ignore | {error, term()}.
 start_link(Args) when is_list(Args) ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, Args, []).
 
