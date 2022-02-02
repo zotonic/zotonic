@@ -180,7 +180,7 @@ expand_rules(TreeA, Rules, TreeB, _Context) ->
                                 % acl_collaboration_groups are not part of the group hierarchy
                                 expand_rule([A], Pred, B1);
                             Other ->
-                                lager:warning("Tree expand of {~p, ~p, ~p} returned ~p",
+                                ?LOG_WARNING("Tree expand of {~p, ~p, ~p} returned ~p",
                                               [A, Pred, B, Other]),
                                 []
                         end

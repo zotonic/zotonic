@@ -22,7 +22,7 @@
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
--export([start_link/0, start_link/1]).
+-export([start_link/1]).
 
 %% interface functions
 -export([
@@ -57,14 +57,11 @@ observe_check_edge_log(check_edge_log, Context) ->
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
-start_link() ->
-    start_link([]).
-start_link(Args) when is_list(Args) ->
-    {site, Site} = proplists:lookup(site, Args),
+-spec start_link(atom()) -> {ok, pid()} | ignore | {error, term()}.
+start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
-    gen_server:start_link({local, Name}, ?MODULE, Args, []).
+    gen_server:start_link({local, Name}, ?MODULE, Site, []).
 
 %%====================================================================
 %% gen_server callbacks
@@ -75,15 +72,12 @@ start_link(Args) when is_list(Args) ->
 %%                     ignore               |
 %%                     {stop, Reason}
 %% @doc Initiates the server.
-init(Args) ->
-    {site, Site} = proplists:lookup(site, Args),
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
-
+init(Site) ->
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     z_notifier:observe(check_edge_log, {?MODULE, observe_check_edge_log}, Site),
-
     {ok, #state{site=Site}, ?CLEANUP_TIMEOUT_LONG}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |

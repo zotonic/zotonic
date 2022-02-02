@@ -133,7 +133,7 @@ m_get([ Id, Key | Rest ], _Msg, Context) ->
 m_get([ Id ], _Msg, Context) ->
     {ok, {get(Id, Context), []}};
 m_get(Vs, _Msg, _Context) ->
-    lager:debug("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_DEBUG("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 
@@ -1156,7 +1156,7 @@ page_url(Id, IsAbs, Context) ->
 page_url_path([], Args, Context) ->
     case z_dispatcher:url_for(page, Args, Context) of
         undefined ->
-            lager:warning("Failed to get page url path. Is the 'page' dispatch rule missing?"),
+            ?LOG_WARNING("Failed to get page url path. Is the 'page' dispatch rule missing?"),
             undefined;
         Url -> Url
     end;

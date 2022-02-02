@@ -128,11 +128,11 @@ observe_module_reindexed(module_reindexed, Context) ->
     NotRunning = [ M || {M, S} <- Status, S =/= running ],
     case NotRunning of
         [] ->
-            lager:info("[~p] Checking search facet table.",
+            ?LOG_INFO("[~p] Checking search facet table.",
                        [ z_context:site(Context) ]),
             search_facet:ensure_table(Context);
         _ ->
-            lager:info("[~p] Delaying search facet check because not all modules are running.",
+            ?LOG_NOTICE("[~p] Delaying search facet check because not all modules are running.",
                        [ z_context:site(Context) ])
     end.
 
@@ -202,10 +202,10 @@ start_link(Args) when is_list(Args) ->
 %% @doc Initiates the server.
 init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
-    lager:md([
-        {site, z_context:site(Context)},
-        {module, ?MODULE}
-    ]),
+    logger:set_process_metadata(#{
+        site => z_context:site(Context),
+        module => ?MODULE
+    }),
     {ok, #state{ context = z_acl:sudo(z_context:new(Context)) }, ?TIMEOUT_GC}.
 
 handle_call(get_watches, _From, #state{ query_watches = Watches } = State) ->

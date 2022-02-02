@@ -111,7 +111,7 @@ drop_schema(_Site, Connection, Schema) ->
         {error, #error{ codename = invalid_schema_name }} ->
             ok;
         {error, Reason} = Error ->
-            lager:error("z_sitetest: error while dropping schema ~p: ~p", [Schema, Reason]),
+            ?LOG_ERROR("z_sitetest: error while dropping schema ~p: ~p", [Schema, Reason]),
             Error
     end.
 

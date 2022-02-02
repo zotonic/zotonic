@@ -7,83 +7,79 @@ Logging to Logstash
 
 `Logstash`_ is often used for log centralization and analysis. This cookbook
 describes how to set up Zotonic for logging to Logstash over UDP. As mentioned
-in the :ref:`Logging chapter <dev-logging>`, Zotonic uses the
-`Lager framework`_. So we will change Zotonic’s Logstash configuration in order
+in the :ref:`Logging chapter <dev-logging>`, Zotonic uses `Logger`_.
+
+So we will change Zotonic’s Logstash configuration in order
 to send messages to Logstash.
 
-Step 1: install a Logstash handler
-----------------------------------
+Step 1: add a Logstash handler
+------------------------------
 
-First, you need to install a Logstash handler for Lager, for instance
-`this one`_. To do so, add it (and the jsx JSON library) as a dependency
-in the ``rebar.config`` of your Zotonic site or module:
+Zotonic comes with the `logstash handler`_ ``logstasher_h`` for logger. The
+handler will be started automatically if it is configured as a logger
+handler in :ref:`erlang-config`:
 
 .. code-block:: erlang
-    :caption: rebar.config
+    :caption: erlang.config
 
-    {deps, [
-        {lager_logstash,
-            {git, "https://github.com/kivra/lager_logstash.git",
-            {ref, "aded55ed51576b19a9094b8f5e523419f05294bc"}}}
-    ]}.
+    {kernel, [
+        % Minimum log level for all loggers below.
+        {logger_level, info},
 
-And recompile Zotonic to install the dependencies.
+        {logger, [
+
+            %% To use logstash:
+            %% - Enable the logstasher_h handler
+            %% - Configure logstasher (see below the kernel config)
+            %%
+            {handler, logstash, logstasher_h,
+                #{
+                    level => info
+                }
+            },
+
+            %%% Other logger configs here
+            ...
+        }
+    ]},
+
 
 Step 2: configure the Logstash handler
 --------------------------------------
 
 The next step is to tell the Logstash handler where it should send its messages
-to:
+to. The configuration of ``logstasher`` in the :ref:`erlang-config` can be found
+below the kernel section or else added there:
 
 .. code-block:: erlang
     :caption: erlang.config
 
-    {lager, [
-        {handlers, [
-            %% Keep the console backend
-            {lager_console_backend, info},
-
-            %% And add a Logstash backend
-            {lager_logstash_backend, [
-                {level, info},
-
-                %% Change the host and port to your Logstash server
-                {output, {udp, "logs.yourcompany.com", 5514}},
-                {format, json},
-                {json_encoder, jsx}
-            ]}
-        ]},
-        {crash_log, "logs/crash.log"}
+    %% Logstash configuration.
+    %% If a logger handler with 'logstasher_h' is defined then zotonic_core will start the
+    %% logstasher application.
+    {logstasher, [
+        {transport, udp},     % tcp | udp | console
+        {host, "localhost"},  % inet:hostname()
+        {port, 5000}          % inet:port_number()
     ]},
 
-Step 3: Logstash configuration
-------------------------------
+Replace ``logger`` with the hostname or IP address of your logger. IP addresses can
+be configured as an Erlang tuple, for example: ``{127,0,0,1}``
 
-You need to configure your Logstash server so it can receive messages from
-Zotonic. A simple configuration should suffice:
+If the console output is shipped to Logstash, then use ``console`` as the transport.
+For ``console`` the configurations for ``host`` and ``port`` are ignored.
 
-.. code-block:: none
-    :caption: logstash.conf
-
-    input {
-        udp {
-            port => 5514
-            codec => "json"
-        }
-    }
-
-    output {
-        elasticsearch {
-            hosts => ["your_elastic:9200"]
-        }
-    }
+After you changed the ``erlang.config`` file you will need to restart Zotonic.
 
 You should now find all Zotonic log messages in Logstash. To test this, just
-call::
+call:
 
-    lager:error("Just testing the Logstash setup here!").
+.. code-block:: erlang
+
+    logger:error_msg("Just testing the Logstash setup here!").
+
 
 .. _Logstash: http://www.elastic.co/products/logstash
-.. _Lager framework: https://github.com/erlang-lager/lager
-.. _this one: https://github.com/kivra/lager_logstash
+.. _Logger: https://www.erlang.org/doc/apps/kernel/logger_chapter.html
+.. _logstash handler: https://github.com/zotonic/logstasher
 

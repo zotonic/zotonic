@@ -31,6 +31,8 @@
 % Timeout value for the connection of the spamassassin daemon
 -define(SPAMD_TIMEOUT, 60000).
 
+-include_lib("kernel/include/logger.hrl").
+
 
 -spec spam_check(binary()) -> {ok, {ham|spam, SpamdStatus::list({binary(),binary()}), SpamdHeaders::list({binary(),binary()})}} | {error, term()}.
 spam_check(EncodedMail) ->
@@ -58,11 +60,11 @@ spamcheck(EncodedMail, SpamDServer, SpamDPort) when is_tuple(SpamDServer), is_in
                     SpamStatus = proplists:get_value(<<"X-Spam-Status">>, SpamHeaders),
                     check_status(spam_status(SpamStatus), SpamHeaders);
                 {error, Reason} = Error ->
-                    lager:error("spamcheck error ~p", [Reason]),
+                    ?LOG_ERROR("spamcheck error ~p", [Reason]),
                     Error
             end;
         {error, Reason} = Err ->
-            lager:error("SMTP spam check: can not connect to spamd on ~p:~p (~p)", [SpamDServer, SpamDPort, Reason]),
+            ?LOG_ERROR("SMTP spam check: can not connect to spamd on ~p:~p (~p)", [SpamDServer, SpamDPort, Reason]),
             Err
     end;
 spamcheck(_EncodedMail, _SpamDServer, _SpamDPort) ->

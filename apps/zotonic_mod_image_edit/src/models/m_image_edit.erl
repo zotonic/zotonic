@@ -167,7 +167,7 @@ normalize(K, V)
         V1 -> V1
     end;
 normalize(K, _) ->
-    lager:info("Dropping unknown image edit argument ~p", [ K ]),
+    ?LOG_INFO("Dropping unknown image edit argument ~p", [ K ]),
     undefined.
 
 

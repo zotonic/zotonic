@@ -37,7 +37,7 @@ import_tweet(#{ <<"id">> := TweetId } = Tweet, AuthorId, Context) ->
     UniqueName = <<"tweet_", (z_convert:to_binary(TweetId))/binary>>,
     import_rsc(m_rsc:rid(UniqueName, Context), TweetId, UniqueName, AuthorId, Tweet, Context);
 import_tweet(Tweet, _AuthorId, _Context) ->
-    lager:info("Twitter: received unknown tweet data: ~p", [Tweet]),
+    ?LOG_WARNING("Twitter: received unknown tweet data: ~p", [Tweet]),
     {error, tweet_format}.
 
 import_rsc(undefined, TweetId, UniqueName, AuthorId, Tweet, Context) ->
@@ -53,7 +53,7 @@ import_rsc(undefined, TweetId, UniqueName, AuthorId, Tweet, Context) ->
             {ok, Handled}
     end;
 import_rsc(_RscId, TweetId, _UniqueName, _AuthorId, _Tweet, _Context) ->
-    lager:debug("Twitter: ignored duplicate tweet ~p", [TweetId]),
+    ?LOG_DEBUG("Twitter: ignored duplicate tweet ~p", [TweetId]),
     {error, duplicate}.
 
 do_import_rsc(TweetId, ImportRsc, AuthorId, Tweet, Context) ->
@@ -70,7 +70,7 @@ do_import_rsc(TweetId, ImportRsc, AuthorId, Tweet, Context) ->
              end,
     % Find the author for the author edge
     maybe_author(Result, AuthorId, Tweet, AdminContext),
-    lager:info("Twitter: imported tweet ~p for user_id ~p as ~p", [TweetId, z_acl:user(Context), Result]),
+    ?LOG_NOTICE("Twitter: imported tweet ~p for user_id ~p as ~p", [TweetId, z_acl:user(Context), Result]),
     Result.
 
 %% @doc If the importing user_id is defined, or if the Twitter user is coupled to an identity

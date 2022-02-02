@@ -428,9 +428,10 @@ email_bin(Id, Context) ->
     z_convert:to_binary( m_rsc:p_no_acl(Id, email_raw, Context) ).
 
 %% @doc Reattach all websocket connections of an user, this forces a refresh of the permissions
-%%      used by the websocket processes.
+%% used by the websocket processes.
+%% @todo Adapt this for the MQTT sessions.
 -spec signal_user_changed( m_rsc:resource_id(), z:context() ) -> ok.
-signal_user_changed(UserId, Context) ->
+signal_user_changed(_UserId, _Context) ->
     ok.
     % Sessions = z_session_manager:list_sessions_user(UserId, Context),
     % lists:foreach(
@@ -571,10 +572,10 @@ init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
     Site = z_context:site(Context),
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     timer:send_after(10, rebuild),
     {ok, #state{ site=Site, is_rebuild_publish=true, is_rebuild_edit=true}}.
 
@@ -607,7 +608,7 @@ handle_info(rebuild, #state{rebuilder_pid=Pid} = State) when is_pid(Pid) ->
     {noreply, State};
 
 handle_info({'DOWN', MRef, process, _Pid, normal}, #state{rebuilder_mref = MRef, site = Site} = State) ->
-    lager:debug("[mod_acl_user_groups] rebuilder for ~p finished.",
+    ?LOG_DEBUG("[mod_acl_user_groups] rebuilder for ~p finished.",
                 [State#state.rebuilding]),
     State1 = State#state{
                     rebuilding=undefined,
@@ -624,7 +625,7 @@ handle_info({'DOWN', MRef, process, _Pid, normal}, #state{rebuilder_mref = MRef,
     {noreply, State2};
 
 handle_info({'DOWN', MRef, process, _Pid, Reason}, #state{rebuilder_mref=MRef} = State) ->
-    lager:error("[mod_acl_user_groups] rebuilder for ~p down with reason ~p",
+    ?LOG_ERROR("[mod_acl_user_groups] rebuilder for ~p down with reason ~p",
                 [State#state.rebuilding, Reason]),
     State1 = case State#state.rebuilding of
                 publish -> State#state{is_rebuild_publish=true};
@@ -638,13 +639,13 @@ handle_info({'DOWN', MRef, process, _Pid, Reason}, #state{rebuilder_mref=MRef} =
                 }};
 
 handle_info({'ETS-TRANSFER', TId, _FromPid, publish}, State) ->
-    lager:debug("[mod_acl_user_groups] 'ETS-TRANSFER' for 'publish' (~p)", [TId]),
+    ?LOG_DEBUG("[mod_acl_user_groups] 'ETS-TRANSFER' for 'publish' (~p)", [TId]),
     gproc_new_ets(TId, publish, State#state.site),
     State1 = store_new_ets(TId, publish, State),
     z_mqtt:publish(<<"model/acl_user_groups/event/acl-rules/publish">>, true, z_context:new(State#state.site)),
     {noreply, State1};
 handle_info({'ETS-TRANSFER', TId, _FromPid, edit}, State) ->
-    lager:debug("[mod_acl_user_groups] 'ETS-TRANSFER' for 'edit' (~p)", [TId]),
+    ?LOG_DEBUG("[mod_acl_user_groups] 'ETS-TRANSFER' for 'edit' (~p)", [TId]),
     gproc_new_ets(TId, edit, State#state.site),
     State1 = store_new_ets(TId, edit, State),
     z_mqtt:publish(<<"model/acl_user_groups/event/acl-rules/edit">>, true, z_context:new(State#state.site)),
@@ -654,7 +655,7 @@ handle_info({'EXIT', _Pid, normal}, State) ->
     {noreply, State};
 
 handle_info(Info, State) ->
-    lager:warning("[mod_acl_user_groups] unknown info message ~p", [Info]),
+    ?LOG_WARNING("[mod_acl_user_groups] unknown info message ~p", [Info]),
     {noreply, State}.
 
 %% @spec terminate(Reason, State) -> void()

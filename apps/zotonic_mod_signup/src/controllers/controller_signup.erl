@@ -29,7 +29,7 @@
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Context2 = z_context:ensure_qs(Context),
-    z_context:lager_md(Context2),
+    z_context:logger_md(Context2),
     Vars = case z_context:get_q(<<"xs">>, Context2) of
         undefined ->
             [];
@@ -193,7 +193,7 @@ handle_confirm(UserId, SignupProps, RequestConfirm, Context) ->
                     z_mqtt:publish(<<"~client/model/auth/post/onetime-token">>, AuthMsg, Context),
                     z_render:wire({mask, []}, Context);
                 {error, _} = Error ->
-                    lager:error("Error making onetime token: ~p", [ Error ]),
+                    ?LOG_ERROR("Error making onetime token: ~p", [ Error ]),
                     show_errors([internal], Context)
             end;
         false ->

@@ -84,21 +84,21 @@ search(Name, Args, Page, PageLen, Context) when is_binary(Name), is_map(Args) ->
                             },
                             search(<<"query">>, Args1, Page, PageLen, Context);
                         false ->
-                            lager:info("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
+                            ?LOG_NOTICE("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
                             #search_result{
                                 search_name = Name,
                                 search_args = Args
                             }
                     end;
                 undefined ->
-                    lager:info("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
+                    ?LOG_NOTICE("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
                     #search_result{
                         search_name = Name,
                         search_args = Args
                     }
             end;
         undefined ->
-            lager:info("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
+            ?LOG_NOTICE("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
             #search_result{
                 search_name = Name,
                 search_args = Args
@@ -322,7 +322,7 @@ search_1({SearchName, Props}, Page, PageLen, {Offset, Limit} = OffsetLimit, Cont
             search(SearchNameBin, ArgsMap, PageNr, PageLen, Context);
         undefined ->
             % Not on a page boundary so we can't use the new search, return the empty result.
-            lager:info("z_search: ignored unknown search query ~p", [ {SearchName, PropsSorted} ]),
+            ?LOG_NOTICE("z_search: ignored unknown search query ~p", [ {SearchName, PropsSorted} ]),
             #search_result{};
         Result when Page =/= undefined ->
             handle_search_result(Result, Page, PageLen, OffsetLimit, SearchName, PropsSorted, Context);
@@ -339,7 +339,7 @@ search_1({SearchName, Props}, Page, PageLen, {Offset, Limit} = OffsetLimit, Cont
 search_1(Name, Page, PageLen, OffsetLimit, Context) when is_atom(Name) ->
     search_1({Name, []}, Page, PageLen, OffsetLimit, Context);
 search_1(Name, _Page, _PageLen, _OffsetLimit, _Context) ->
-    lager:info("z_search: ignored unknown search query ~p", [ Name ]),
+    ?LOG_NOTICE("z_search: ignored unknown search query ~p", [ Name ]),
     #search_result{}.
 
 

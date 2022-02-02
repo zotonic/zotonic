@@ -91,10 +91,10 @@ observe_module_ready(module_ready, Context) ->
 %% @doc Initiates the server.
 -spec init({ Site :: atom(), Name :: atom() }) -> {ok, #state{}}.
 init({Site, Name}) ->
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     process_flag(trap_exit, true),
     ok = z_notifier:observe(module_ready, {?MODULE, observe_module_ready}, Site),
     Table = ets:new(Name, [named_table, set, protected, {read_concurrency, true}]),

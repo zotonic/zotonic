@@ -21,8 +21,6 @@
 -module(z_media_preview).
 -author("Marc Worrell <marc@worrell.nl").
 
--compile([{parse_transform, lager_transform}]).
-
 %% interface functions
 -export([
     convert/4,
@@ -49,7 +47,7 @@
 %% @doc Convert the Infile to an outfile with a still image using the filters.
 -spec convert(file:filename_all(), file:filename_all(), list(), #context{}) -> ok | {error, term()}.
 convert(InFile, InFile, _, _Context) ->
-    lager:error("Image convert will overwrite input file ~p", [InFile]),
+    ?LOG_ERROR("Image convert will overwrite input file ~p", [InFile]),
     {error, will_overwrite_infile};
 convert(InFile, OutFile, Filters, Context) ->
     convert(InFile, InFile, OutFile, Filters, Context).
@@ -64,11 +62,11 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
                         {ok, FiltersExpanded} ->
                             convert_1(os:find_executable("convert"), InFile, OutFile, Mime, FileProps, FiltersExpanded);
                         {error, _} = Error ->
-                            lager:warning("cannot expand mediaclass for ~p (~p)", [Filters, Error]),
+                            ?LOG_WARNING("cannot expand mediaclass for ~p (~p)", [Filters, Error]),
                             Error
                     end;
                 false ->
-                    lager:info("cannot convert a ~p (~p)", [Mime, InFile]),
+                    ?LOG_NOTICE("cannot convert a ~p (~p)", [Mime, InFile]),
                     {error, mime_type}
             end;
         {ok, _} ->
@@ -78,7 +76,7 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
     end.
 
 convert_1(false, _InFile, _OutFile, _Mime, _FileProps, _Filters) ->
-    lager:error("Install ImageMagick 'convert' to generate previews of images."),
+    ?LOG_ERROR("Install ImageMagick 'convert' to generate previews of images."),
     {error, convert_missing};
 convert_1(ConvertCmd, InFile, OutFile, Mime, FileProps, Filters) ->
     OutMime = z_media_identify:guess_mime(OutFile),
@@ -113,7 +111,7 @@ convert_2(CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps) ->
                     end
             end;
         {error, _} = Error ->
-            lager:error("convert cmd ~p failed, result ~p", [Cmd, Error]),
+            ?LOG_ERROR("convert cmd ~p failed, result ~p", [Cmd, Error]),
             Error
     end.
 
@@ -137,18 +135,18 @@ once(Cmd, OutFile) ->
     Key = {n,l,Cmd},
     case gproc:reg_or_locate(Key) of
         {MyPid, _} ->
-            lager:debug("Convert: ~p", [Cmd]),
+            ?LOG_DEBUG("Convert: ~p", [Cmd]),
             Result = os:cmd(Cmd),
             gproc:unreg(Key),
             case filelib:is_regular(OutFile) of
                 true ->
                     ok;
                 false ->
-                    lager:error("convert cmd ~p failed, result ~p", [Cmd, Result]),
+                    ?LOG_ERROR("convert cmd ~p failed, result ~p", [Cmd, Result]),
                     {error, convert_error}
             end;
         {_OtherPid, _} ->
-            lager:debug("Waiting for parallel: ~p", [Cmd]),
+            ?LOG_DEBUG("Waiting for parallel: ~p", [Cmd]),
             Ref = gproc:monitor(Key),
             receive
                 {gproc, unreg, Ref, Key} ->

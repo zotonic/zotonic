@@ -76,7 +76,7 @@ process(<<"POST">>, _, Provided, Context) ->
                         result => Status
                     };
                 {error, Reason} ->
-                    lager:error("Error accepting block for fileuploader ~s: ~p",
+                    ?LOG_ERROR("Error accepting block for fileuploader ~s: ~p",
                                 [ Name, Reason ]),
                     #{
                         status => <<"error">>,

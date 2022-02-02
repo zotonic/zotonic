@@ -18,6 +18,8 @@
 -module(z_csv_parser).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
+-include_lib("kernel/include/logger.hrl").
+
 -export([
     inspect_file/1,
     inspect_data/1,
@@ -79,7 +81,7 @@ inspect_data(B0) ->
                                 ])),
             {ok, [ z_string:trim( z_convert:to_binary(C) ) || C <- Cols ], Sep};
         _ ->
-            lager:info("Invalid CSV file, could not fetch line with column defs (is there a LF or CR at the end?)"),
+            ?LOG_WARNING("Invalid CSV file, could not fetch line with column defs (is there a LF or CR at the end?)"),
             {error, invalid_csv_file}
     end.
 

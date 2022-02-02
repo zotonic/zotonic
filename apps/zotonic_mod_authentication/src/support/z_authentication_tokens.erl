@@ -285,14 +285,14 @@ decode_onetime_token(OnetimeToken, Context) ->
                             {error, user_secret}
                     end;
                 {ok, Unexpected} ->
-                    lager:error("authentication: token from sid ~p mismatch ~p", [ SId, Unexpected ]),
+                    ?LOG_ERROR("authentication: token from sid ~p mismatch ~p", [ SId, Unexpected ]),
                     {error, mismatch};
                 {error, _} = Error ->
-                    lager:error("authentication: token expired error ~p", [ Error ]),
+                    ?LOG_ERROR("authentication: token expired error ~p", [ Error ]),
                     Error
             end;
         {error, _}  = Error ->
-            lager:warning("authentication: token decode error ~p", [ Error ]),
+            ?LOG_WARNING("authentication: token decode error ~p", [ Error ]),
             Error
     end.
 

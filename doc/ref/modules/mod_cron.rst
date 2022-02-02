@@ -30,8 +30,10 @@ Example
 
 Check something every hour::
 
+    -include_lib("kernel/include/logger.hrl").
+
     observe_tick_1h(tick_1h, Context) ->
-        lager:info("And another hour has passed..."),
+        ?LOG_INFO("And another hour has passed..."),
         do_something(Context).
 
 The return value is ignored.

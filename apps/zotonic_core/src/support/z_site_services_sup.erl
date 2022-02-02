@@ -29,21 +29,18 @@
 
 
 %% @doc API for starting the site services supervisor.
-start_link(SiteProps) ->
-    {site, Site} = proplists:lookup(site, SiteProps),
+start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
-    supervisor:start_link({local, Name}, ?MODULE, SiteProps).
+    supervisor:start_link({local, Name}, ?MODULE, Site).
 
 
 %% @doc Supervisor callback, returns the supervisor tree for the zotonic site services
--spec init( proplists:proplist() ) -> {ok, {supervisor:sup_flags(), [ supervisor:child_spec() ]}}.
-init(SiteProps) ->
-    {site, Site} = proplists:lookup(site, SiteProps),
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
-
+-spec init( atom() ) -> {ok, {supervisor:sup_flags(), [ supervisor:child_spec() ]}}.
+init(Site) when is_atom(Site) ->
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     KeyServerName = z_utils:name_for_site(keyserver, Site),
     KeyServer = {keyserver_sup,
                  {keyserver_sup, start_link, [KeyServerName, z_keyserver_callback, z_context:new(Site)]},
@@ -58,27 +55,27 @@ init(SiteProps) ->
                 permanent, 5000, worker, dynamic},
 
     Template = {z_template,
-                {z_template, start_link, [SiteProps]},
+                {z_template, start_link, [Site]},
                 permanent, 5000, worker, dynamic},
 
     MediaClass = {z_mediaclass,
-                {z_mediaclass, start_link, [SiteProps]},
+                {z_mediaclass, start_link, [Site]},
                 permanent, 5000, worker, dynamic},
 
     DropBox = {z_dropbox,
-                {z_dropbox, start_link, [SiteProps]},
+                {z_dropbox, start_link, [Site]},
                 permanent, 5000, worker, dynamic},
 
     Pivot = {z_pivot_rsc,
-                {z_pivot_rsc, start_link, [SiteProps]},
+                {z_pivot_rsc, start_link, [Site]},
                 permanent, 5000, worker, dynamic},
 
     MediaCleanup = {z_media_cleanup_server,
-                {z_media_cleanup_server, start_link, [SiteProps]},
+                {z_media_cleanup_server, start_link, [Site]},
                 permanent, 5000, worker, dynamic},
 
     EdgeLog = {z_edge_log_server,
-                {z_edge_log_server, start_link, [SiteProps]},
+                {z_edge_log_server, start_link, [Site]},
                 permanent, 5000, worker, dynamic},
 
     Processes = [

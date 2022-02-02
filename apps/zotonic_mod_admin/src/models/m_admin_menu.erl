@@ -42,7 +42,7 @@ m_get([], _Msg, Context) ->
 m_get([ <<"menu">> | Rest ], _Msg, Context) ->
     {ok, {menu(Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 menu(Context) ->

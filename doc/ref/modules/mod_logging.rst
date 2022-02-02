@@ -2,7 +2,7 @@
 .. include:: meta-mod_logging.rst
 .. seealso::
 
-    For regular application logging, use :ref:`Lager <dev-logging>` instead.
+    For regular application logging, use :ref:`Logger <dev-logging>` instead.
 
 Logs messages to the database and adds log views to the admin.
 
@@ -21,7 +21,7 @@ site. Then, in your code, send the ``#zlog{}`` notification::
             #zlog{
                 user_id = z_acl:user(Context),
                 props=#log_email{
-                    severity = ?LOG_ERROR,
+                    severity = ?LOG_LEVEL_ERROR,
                     message_nr = MsgId,
                     mailer_status = bounce,
                     mailer_host = z_convert:ip_to_list(Peer),

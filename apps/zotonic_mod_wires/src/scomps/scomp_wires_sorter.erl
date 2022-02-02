@@ -116,7 +116,10 @@ event(#postback{message={SortTag,SortDelegate}, trigger=TriggerId}, Context) ->
 	    SortDelegate:event(#sort{items=Sorted, drop=Drop}, Context)
     catch
         _M:E:Stacktrace ->
-        	lager:warning("Error in routing sort to \"~s:event/2\"; error: \"~p\", stack: ~p", [SortDelegate,E, Stacktrace]),
+        	?LOG_WARNING(
+        		"Error in routing sort to \"~s:event/2\"; error: \"~p\"",
+        		[SortDelegate, E],
+        		#{ stack => Stacktrace }),
             Error = io_lib:format("Error in routing sort to \"~s:event/2\"; error: \"~p\"", [SortDelegate,E]),
             z_render:wire({growl, [{text,Error}, {stay,1}, {type, error}]}, Context)
     end.

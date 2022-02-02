@@ -84,7 +84,7 @@ m_get([ Id | Rest ], _Msg, Context) ->
             end
     end;
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 
@@ -358,7 +358,7 @@ maybe_duplicate_preview(#{ <<"preview_filename">> := Filename, <<"is_deletable_p
             },
             {ok, Ms1};
         {error, _} = Error ->
-            lager:error("Duplicate preview: error ~p for preview file \"~s\"",
+            ?LOG_ERROR("Duplicate preview: error ~p for preview file \"~s\"",
                 [Error, Filename]),
             Ms1 = maps:remove(<<"preview_filename">>, Ms),
             Ms2 = maps:remove(<<"is_deletable_preview">>, Ms1),
@@ -397,7 +397,7 @@ insert_file(#upload{ data = Data, tmpfile = undefined } = Upload, RscProps, Opti
             file:delete(TmpFile),
             Result;
         {error, _} = Error ->
-            lager:error("Could not write temporary file of ~p bytes, error: ~p",
+            ?LOG_ERROR("Could not write temporary file of ~p bytes, error: ~p",
                         [ iolist_size(Data), Error ]),
             file:delete(TmpFile),
             Error
@@ -1045,14 +1045,14 @@ save_preview_url(RscId, Url, Context) ->
                         {ok, FileUnique}
                     catch
                         _:Error ->
-                            lager:warning("Error importing preview for ~p, url ~p, mediainfo ~p",
+                            ?LOG_WARNING("Error importing preview for ~p, url ~p, mediainfo ~p",
                                 [RscId, Url, MediaInfo]),
                             file:delete(TmpFile),
                             {error, Error}
                     end;
                 {ok, MediaInfo} ->
                     Mime = maps:get(<<"mime">>, MediaInfo, undefined),
-                    lager:warning("Error importing preview for ~p, url ~p, not an image ~p",
+                    ?LOG_WARNING("Error importing preview for ~p, url ~p, not an image ~p",
                         [RscId, Url, Mime]),
                     {error, no_image};
                 {error, _} = Error ->

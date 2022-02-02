@@ -4,7 +4,7 @@
   {vsn, {file, "../../VERSION"}},
   {registered, []},
   {applications, [
-      kernel, stdlib, lager,
+      kernel, stdlib,
       ranch, zotonic_core, mqtt_sessions
   ]},
   {env, []},

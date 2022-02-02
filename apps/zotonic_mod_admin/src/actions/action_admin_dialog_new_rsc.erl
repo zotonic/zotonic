@@ -170,7 +170,7 @@ error_message(av_external_links, Context) ->
 error_message(sizelimit, Context) ->
     ?__("This file is too large.", Context);
 error_message(_R, Context) ->
-    lager:warning("Unknown page creation or upload error: ~p", [_R]),
+    ?LOG_WARNING("Unknown page creation or upload error: ~p", [_R]),
     ?__("Error creating the page.", Context).
 
 maybe_add_objects(Id, Objects, Context) when is_list(Objects) ->
@@ -178,7 +178,7 @@ maybe_add_objects(Id, Objects, Context) when is_list(Objects) ->
 maybe_add_objects(_Id, undefined, _Context) ->
     ok;
 maybe_add_objects(_Id, Objects, _Context) ->
-    lager:warning("action_admin_dialog_new_rsc: objects are not a list: ~p", [Objects]),
+    ?LOG_WARNING("action_admin_dialog_new_rsc: objects are not a list: ~p", [Objects]),
     ok.
 
 dispatch(undefined) ->

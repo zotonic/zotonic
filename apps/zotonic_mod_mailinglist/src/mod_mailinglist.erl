@@ -151,7 +151,7 @@ event(#submit{message={mailing_testaddress, [{id, PageId}]}}, Context) ->
 
 %% @doc Combine lists
 event(#submit{message={mailinglist_combine,[{id,Id}]}}, Context) ->
-    lager:warning("Id: ~p", [Id]),
+    ?LOG_WARNING("Id: ~p", [Id]),
     TargetId = z_convert:to_integer(z_context:get_q(<<"list_id">>, Context)),
     Operation = operation(z_context:get_q(<<"operation">>, Context)),
     case m_mailinglist:recipient_set_operation(Operation, Id, TargetId, Context) of
@@ -189,10 +189,10 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
-    lager:md([
-        {site, z_context:site(Context)},
-        {module, ?MODULE}
-      ]),
+    logger:set_process_metadata(#{
+        site => z_context:site(Context),
+        module => ?MODULE
+    }),
     z_notifier:observe(mailinglist_mailing, self(), Context),
     z_notifier:observe(dropbox_file, self(), 100, Context),
     timer:send_interval(180000, poll),

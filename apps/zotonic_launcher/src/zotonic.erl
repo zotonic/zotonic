@@ -34,11 +34,9 @@
     await_startup/1
 ]).
 
--compile([{parse_transform, lager_transform}]).
-
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--define(MIN_OTP_VERSION, "19").
+-define(MIN_OTP_VERSION, "22").
 
 %% @doc Start the zotonic server.
 -spec start() -> ok.
@@ -47,7 +45,7 @@ start() ->
     case zotonic_launcher_app:start() of
         ok -> ok;
         {error, Reason} ->
-            lager:error("Zotonic start error: ~p~n", [Reason]),
+            ?LOG_ERROR("Zotonic start error: ~p~n", [Reason]),
             init:stop(1)
     end.
 

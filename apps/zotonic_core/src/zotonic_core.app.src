@@ -5,7 +5,7 @@
   {modules, []},
   {registered, []},
   {env, []},
-  {applications, [kernel, stdlib, crypto, public_key, ssl, inets, lager,
+  {applications, [kernel, stdlib, crypto, public_key, ssl, inets,
                   mimetypes, mnesia, gproc, jobs, sidejob,
                   os_mon,
                   bert, dh_date, eiconv, exometer_core,

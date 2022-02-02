@@ -49,7 +49,7 @@ m_get([ <<"default_timezone">> | Rest ], _Msg, Context) ->
 m_get([ <<"timezone_is_fixed">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_boolean(mod_l10n, timezone_is_fixed, Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 

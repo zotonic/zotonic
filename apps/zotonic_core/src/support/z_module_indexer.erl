@@ -76,10 +76,9 @@ new_ets() ->
 
 %% @spec start_link(Props) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
-start_link(SiteProps) ->
-    {site, Site} = proplists:lookup(site, SiteProps),
+start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
-    gen_server:start_link({local, Name}, ?MODULE, SiteProps, []).
+    gen_server:start_link({local, Name}, ?MODULE, Site, []).
 
 
 %% @doc Reindex all sites
@@ -200,13 +199,12 @@ all_files1(Type, Module) ->
 %%                     ignore               |
 %%                     {stop, Reason}
 %% @doc Initiates the server.
-init(SiteProps) ->
+init(Site) ->
     process_flag(trap_exit, true),
-    {site, Site} = proplists:lookup(site, SiteProps),
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     Context = z_context:new(Site),
     z_notifier:observe(module_ready, self(), Context),
     {ok, #state{context=Context}}.

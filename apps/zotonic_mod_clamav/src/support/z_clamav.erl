@@ -32,6 +32,8 @@
 -define(CLAMAV_CHUNK_SIZE, 65536).
 -define(CLAMAV_RECV_TIMEOUT, 30000).
 
+-include_lib("kernel/include/logger.hrl").
+
 
 -spec ip_port() -> {string(), integer()}.
 ip_port() ->
@@ -98,7 +100,7 @@ do_clam(Command, DataFun) ->
             _ = gen_tcp:close(Socket),
             Result;
         {error, _} = Error ->
-            lager:info("ClamAV: could not connect on ~p:~p ~p", [ ClamIP, ClamPort, Error ]),
+            ?LOG_WARNING("ClamAV: could not connect on ~p:~p ~p", [ ClamIP, ClamPort, Error ]),
             Error
     end.
 
@@ -110,7 +112,7 @@ handle_result({ok, <<"stream: OK", _/binary>>}) ->
 handle_result({ok, <<"stream: ", Msg/binary>>}) ->
     case binary:match(Msg, <<" FOUND">>) of
         nomatch ->
-            lager:info("ClamAV: daemon returned unknown message: ~p", [ Msg ]),
+            ?LOG_WARNING("ClamAV: daemon returned unknown message: ~p", [ Msg ]),
             {error, unknown};
         {_, _} ->
             {error, infected}

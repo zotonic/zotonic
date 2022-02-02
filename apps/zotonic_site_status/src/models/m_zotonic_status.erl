@@ -63,7 +63,7 @@ m_get([ <<"check">> | Rest ], _Msg, _Context) ->
             }}
     end;
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 -spec get_sites_status() -> [ {atom(), z_sites_manager:site_status()} ].

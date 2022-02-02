@@ -20,8 +20,6 @@
 -author('Marc Worrell <marc@worrell.nl>').
 -behaviour(gen_server).
 
--compile([{parse_transform, lager_transform}]).
-
 %% External exports
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -133,8 +131,7 @@
 %%====================================================================
 %% @spec start_link(SiteProps::proplist()) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the module manager
-start_link(SiteProps) ->
-    {site, Site} = proplists:lookup(site, SiteProps),
+start_link(Site) ->
     gen_server:start_link({local, name(Site)}, ?MODULE, Site, []).
 
 
@@ -678,10 +675,10 @@ set_db_schema_version(M, V, Context) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(Site) ->
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     timer:send_interval(?GC_INTERVAL, force_gc),
     {ok, #state{ site = Site }}.
 
@@ -779,7 +776,7 @@ handle_cast({start_child_result, Module, Result}, #state{ site = Site } = State)
 %% @doc Check all observers of a module. Add new ones, remove non-existing ones.
 %%      This is called after a code reload of a module.
 handle_cast({module_reloaded, Module}, State) ->
-    lager:debug("checking observers of (re-)loaded module ~p", [Module]),
+    ?LOG_DEBUG("checking observers of (re-)loaded module ~p", [Module]),
     TmpState = refresh_module_exports(Module, refresh_module_schema(Module, State)),
     OldExports = proplists:get_value(Module, State#state.module_exports),
     NewExports = proplists:get_value(Module, TmpState#state.module_exports),
@@ -793,7 +790,7 @@ handle_cast({module_reloaded, Module}, State) ->
             {noreply, State};
         _Changed ->
             % Exports or schema changed, assume the worst and restart the complete module
-            lager:info("exports or schema of (re-)loaded module ~p changed, restarting module",
+            ?LOG_NOTICE("exports or schema of (re-)loaded module ~p changed, restarting module",
                        [Module]),
             gen_server:cast(self(), {restart_module, Module}),
             {noreply, State}
@@ -801,7 +798,7 @@ handle_cast({module_reloaded, Module}, State) ->
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
-    lager:error("z_module_manager: unknown cast ~p in state ~p", [Message, State]),
+    ?LOG_ERROR("z_module_manager: unknown cast ~p in state ~p", [Message, State]),
     {stop, {unknown_cast, Message}, State}.
 
 
@@ -933,7 +930,7 @@ do_module_down_1(Modules, #module_status{ module = Mod, status = running } = Ms,
     },
     Modules#{ Mod => Ms1 };
 do_module_down_1(Modules, #module_status{ module = Mod, status = Status } = Ms, Reason) ->
-    lager:error("Module ~p in state ~p stopped with reason ~p",
+    ?LOG_ERROR("Module ~p in state ~p stopped with reason ~p",
                 [Mod, Status, Reason]),
     Ms1 = Ms#module_status{
         pid = undefined,
@@ -991,7 +988,7 @@ handle_restart_module(Module, #state{ site = Site, modules = Modules } = State) 
         {ok, _} ->
             handle_upgrade(State);
         error ->
-            lager:warning("Restart of unknown module ~p", [Module]),
+            ?LOG_WARNING("Restart of unknown module ~p", [Module]),
             State
     end.
 
@@ -1010,8 +1007,8 @@ handle_upgrade(#state{ site = Site, modules = Modules } = State) ->
     StartOk = filter_startable_status(Start, Modules),
     {ok, StartList} = dependency_sort(StartOk),
 
-    lager:debug("Stopping modules: ~p", [sets:to_list(Kill)]),
-    lager:debug("Starting modules: ~p", [StartList]),
+    ?LOG_DEBUG("Stopping modules: ~p", [sets:to_list(Kill)]),
+    ?LOG_DEBUG("Starting modules: ~p", [StartList]),
 
     Modules1 = sets:fold(
         fun (Module, MsAcc) ->
@@ -1182,7 +1179,7 @@ is_module(Module) ->
         true
     catch
         M:E ->
-            lager:error("Can not fetch module info for module ~p, error: ~p:~p", [Module, M, E]),
+            ?LOG_ERROR("Can not fetch module info for module ~p, error: ~p:~p", [Module, M, E]),
             false
     end.
 
@@ -1197,7 +1194,7 @@ start_child(ManagerPid, Module, App, ChildSpec, Site) ->
                 ok ->
                     z_module_sup:start_module(App, ChildSpec, Site);
                 Error ->
-                    lager:error("Error starting module ~p, Schema initialization error:~n~p~n",
+                    ?LOG_ERROR("Error starting module ~p, Schema initialization error:~n~p~n",
                                 [Module, Error]),
                     {error, {schema_init, Error}}
             end,
@@ -1238,7 +1235,7 @@ handle_start_child_result(Module, Result, #state{ site = Site, module_monitors =
             z_notifier:notify(#module_activate{module=Module, pid=Pid}, Context),
             State2;
         {error, Reason} = Error ->
-            lager:error("Could not start module ~p, reason ~p",
+            ?LOG_ERROR("Could not start module ~p, reason ~p",
                         [Module, Reason]),
             State2 = do_module_down(Module, State1, undefined, Reason),
             State2#state{
@@ -1273,7 +1270,7 @@ stop_children_with_missing_depends(#state{ site = Site, modules = Modules } = St
         [] ->
             State;
         Unstartable ->
-            lager:debug("Stopping child modules ~p", [Unstartable]),
+            ?LOG_DEBUG("Stopping child modules ~p", [Unstartable]),
             Modules1 = lists:foldl(
                 fun(Module, ModAcc) ->
                     case maps:find(Module, ModAcc) of
@@ -1361,7 +1358,7 @@ has_behaviour(M, Behaviour) ->
                     false
             end;
         {error, _} ->
-            lager:error("Could not load module ~p", [M]),
+            ?LOG_ERROR("Could not load module ~p", [M]),
             false
     end.
 
@@ -1401,7 +1398,7 @@ refresh_module_schema(Module, #state{module_schema=Schemas} = State) ->
 manage_schema_if_db(true, Module, Current, Target, #context{} = Context) ->
     call_manage_schema(Module, Current, Target, Context);
 manage_schema_if_db(false, Module, _Current, _Target, #context{} = Context) ->
-    lager:info("[~p] Skipping schema for ~p as ~p does not use a database ('nodb').",
+    ?LOG_INFO("[~p] Skipping schema for ~p as ~p does not use a database ('nodb').",
                [z_context:site(Context), Module, z_context:site(Context)]),
     ok.
 

@@ -179,12 +179,12 @@ maybe_add_depiction(Id, #{ <<"depiction_url">> := Url }, ContextUser)
                     },
                     case m_media:insert_url(Url, MediaProps, ContextUser) of
                         {ok, MediaId} ->
-                            lager:info("Added depiction from depiction_url for ~p: ~p",
+                            ?LOG_INFO("Added depiction from depiction_url for ~p: ~p",
                                        [Id, Url]),
                             {ok, _} = m_edge:insert(Id, depiction, MediaId, ContextUser),
                             ok;
                         {error, _} = Error ->
-                            lager:warning("Could not insert depiction_url for ~p: ~p ~p",
+                            ?LOG_WARNING("Could not insert depiction_url for ~p: ~p ~p",
                                           [Id, Error, Url]),
                             Error
                     end;
@@ -196,11 +196,11 @@ maybe_add_depiction(Id, #{ <<"depiction_url">> := Url }, ContextUser)
                 undefined ->
                     case m_media:replace_url(Url, Id, #{}, ContextUser) of
                         {ok, _Id} ->
-                            lager:info("Added medium from depiction_url for ~p: ~p",
+                            ?LOG_INFO("Added medium from depiction_url for ~p: ~p",
                                        [Id, Url]),
                             ok;
                         {error, _} = Error ->
-                            lager:warning("Could not insert depiction_url for ~p: ~p ~p",
+                            ?LOG_WARNING("Could not insert depiction_url for ~p: ~p ~p",
                                           [Id, Error, Url]),
                             Error
                     end;

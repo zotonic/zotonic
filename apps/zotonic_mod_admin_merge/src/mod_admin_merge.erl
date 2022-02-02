@@ -65,7 +65,7 @@ event(#submit{ message={merge, Args} }, Context) ->
     {loser_id, LoserId} = proplists:lookup(loser_id, Args),
     MergeAction = z_context:get_q(<<"merge_action">>, Context),
     IsMergeTrans = z_convert:to_bool(z_context:get_q("is_merge_trans", Context)),
-    lager:info("MergeAction=~p WinnerId=~p LoserId=~p IsMergeTrans=~p",
+    ?LOG_NOTICE("MergeAction=~p WinnerId=~p LoserId=~p IsMergeTrans=~p",
                [MergeAction, WinnerId, LoserId, IsMergeTrans]),
     merge(WinnerId, LoserId, MergeAction, IsMergeTrans, Context).
 

@@ -390,7 +390,7 @@ depickle(Data, Context) ->
         erlang:binary_to_term(BData)
     catch
         _M:_E ->
-            lager:error("Postback data invalid, could not depickle: ~p", [Data]),
+            ?LOG_ERROR("Postback data invalid, could not depickle: ~p", [Data]),
             erlang:throw({checksum_invalid, Data})
     end.
 

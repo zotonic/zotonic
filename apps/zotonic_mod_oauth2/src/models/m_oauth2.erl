@@ -21,6 +21,8 @@
 
 -behaviour(zotonic_model).
 
+-include_lib("kernel/include/logger.hrl").
+
 -export([
     m_get/3,
 
@@ -100,7 +102,7 @@ m_get([ <<"tokens">>, <<"list">>, UserId | Rest ], _Msg, Context) ->
 m_get([ <<"tokens">>, TokenId | Rest ], _Msg, Context) ->
     {ok, {get_token(TokenId, Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 

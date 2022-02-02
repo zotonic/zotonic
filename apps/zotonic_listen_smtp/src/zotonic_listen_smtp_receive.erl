@@ -57,13 +57,13 @@ received(Recipient, ParsedEmail,
          Body, Data) ->
     case get_site(Recipient) of
         {ok, {LocalPart, LocalTags, Domain, Site}} ->
-            lager:info("SMTP received email for <~s>, mapped to ~p",
+            ?LOG_NOTICE("SMTP received email for <~s>, mapped to ~p",
                        [ Recipient, {LocalPart, LocalTags, Domain, Site} ]),
             Context = z_context:new(Site),
             z_notifier:notify(
                 #zlog{
                     props=#log_email{
-                        severity = ?LOG_INFO,
+                        severity = ?LOG_LEVEL_INFO,
                         mailer_status = received,
                         mailer_host = z_convert:ip_to_list(Peer),
                         message_nr = Reference,
@@ -93,35 +93,35 @@ received(Recipient, ParsedEmail,
                   },
             case z_notifier:first(Email1, Context) of
                 {ok, MsgId} when is_binary(MsgId) ->
-                    lager:info("SMTP received email for <~s>, handled as ~p",
+                    ?LOG_NOTICE("SMTP received email for <~s>, handled as ~p",
                                [ Recipient, MsgId ]),
                     {ok, MsgId};
                 {ok, Other} ->
-                    lager:info("SMTP received email for <~s>, handled as ~p",
+                    ?LOG_NOTICE("SMTP received email for <~s>, handled as ~p",
                                [ Recipient, Other ]),
                     {ok, undefined};
                 ok ->
-                    lager:info("SMTP received email for <~s>, handled as undefined",
+                    ?LOG_NOTICE("SMTP received email for <~s>, handled as undefined",
                                [ Recipient ]),
                     {ok, undefined};
                 {error, Reason} = Error ->
-                    lager:warning("SMTP received email for <~s>, handler returned error ~p",
+                    ?LOG_WARNING("SMTP received email for <~s>, handler returned error ~p",
                                [ Recipient, Reason ]),
                     Error;
                 undefined ->
-                    lager:warning("SMTP received email for <~s>, unhandled assuming unknown recipient",
+                    ?LOG_WARNING("SMTP received email for <~s>, unhandled assuming unknown recipient",
                                [ Recipient ]),
                     {error, unknown_recipient};
                 Other ->
-                    lager:warning("SMTP received email for <~s>, unexpected return value ~p",
+                    ?LOG_WARNING("SMTP received email for <~s>, unexpected return value ~p",
                                [ Recipient, Other ]),
                     {ok, Other}
             end;
         {error, unknown_host} ->
-            lager:warning("SMTP dropping email, unknown host for recipient: ~p", [Recipient]),
+            ?LOG_WARNING("SMTP dropping email, unknown host for recipient: ~p", [Recipient]),
             {error, unknown_host};
         {error, not_running} ->
-            lager:info("SMTP delaying email, host for recipient is not up: ~p", [Recipient]),
+            ?LOG_NOTICE("SMTP delaying email, host for recipient is not up: ~p", [Recipient]),
             {error, not_running}
     end.
 

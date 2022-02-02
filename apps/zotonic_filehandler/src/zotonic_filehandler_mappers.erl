@@ -35,6 +35,7 @@
 
 
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
+-include_lib("kernel/include/logger.hrl").
 
 
 -spec mappers() -> [ function() ].
@@ -244,7 +245,7 @@ compile_sass(Application, SrcPath) ->
                             ],
                             zotonic_filehandler_compile:run_cmd(Cmd);
                         {error, _} = Error ->
-                            lager:error("Could not create directory for ~p", [OutPath]),
+                            ?LOG_ERROR("Could not create directory for ~p", [OutPath]),
                             Error
                     end;
                 false ->
@@ -305,7 +306,7 @@ compile_less(Application, SrcPath) ->
                     ],
                     zotonic_filehandler_compile:run_cmd(Cmd);
                 {error, _} = Error ->
-                    lager:error("Could not create directory for ~p", [OutPath]),
+                    ?LOG_ERROR("Could not create directory for ~p", [OutPath]),
                     Error
             end;
         false ->
@@ -332,7 +333,7 @@ compile_coffee(Application, SrcPath) ->
                     ],
                     zotonic_filehandler_compile:run_cmd(Cmd);
                 {error, _} = Error ->
-                    lager:error("Could not create directory for ~p", [OutPath]),
+                    ?LOG_ERROR("Could not create directory for ~p", [OutPath]),
                     Error
             end;
         false ->

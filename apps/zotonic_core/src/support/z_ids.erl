@@ -223,6 +223,6 @@ rand_bytes(N) when N > 0 ->
         crypto:strong_rand_bytes(N)
     catch
         error:low_entropy ->
-            lager:info("Crypto is low on entropy"),
+            ?LOG_NOTICE("Crypto is low on entropy"),
             list_to_binary([ rand:uniform(256) || _X <- lists:seq(1, N) ])
     end.

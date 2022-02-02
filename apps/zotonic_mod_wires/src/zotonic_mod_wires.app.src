@@ -3,7 +3,7 @@
     {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [
-        kernel, stdlib, lager, zotonic_core
+        kernel, stdlib, zotonic_core
     ]},
     {env, []},
     {modules, []},

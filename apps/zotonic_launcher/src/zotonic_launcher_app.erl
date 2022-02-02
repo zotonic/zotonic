@@ -31,6 +31,8 @@
     load_configs/1
 ]).
 
+-include_lib("kernel/include/logger.hrl").
+
 %%====================================================================
 %% API
 %%====================================================================
@@ -41,15 +43,9 @@ start() ->
             %
             % Show the startup message
             %
-            ensure_started(lager),
-            lager:info("================"),
-            lager:info("Zotonic starting"),
-            lager:info("================"),
-            lager:info("Init files used:"),
-            [ lager:info("- ~s", [Cfg]) || Cfg <- zotonic_launcher_config:erlang_config_files( node() ) ],
-            lager:info("Config files used:"),
-            [ lager:info("- ~s", [Cfg]) || Cfg <- ZotonicConfigFiles ],
-            lager:info("================"),
+            ?LOG_NOTICE("Zotonic starting"),
+            [ ?LOG_NOTICE("Init file: - ~s", [Cfg]) || Cfg <- zotonic_launcher_config:erlang_config_files( node() ) ],
+            [ ?LOG_NOTICE("Config file: ~s", [Cfg]) || Cfg <- ZotonicConfigFiles ],
             %
             % Start the launcher and Zotonic
             %
@@ -61,7 +57,7 @@ start() ->
 start(_StartType, _StartArgs) ->
     case is_root() of
         true ->
-            lager:critical("Not running as root."),
+            ?LOG_CRITICAL("Not running as root."),
             {error, not_running_as_root};
         false ->
             write_pidfile(),
@@ -100,7 +96,6 @@ load_configs(Node) ->
 %% @doc Load the applications so that their initial settings are also loaded.
 load_applications() ->
     application:load(setup),
-    application:load(lager),
     application:load(mnesia),
     application:load(zotonic_core).
 
@@ -155,7 +150,7 @@ write_pidfile() ->
             ok = file:write(F, os:getpid()),
             ok = file:close(F);
         {error, Reason} ->
-            lager:error("Could not write ZOTONIC_PIDFILE \"~s\" error: ~p",
+            ?LOG_ERROR("Could not write ZOTONIC_PIDFILE \"~s\" error: ~p",
                         [get_pidfile(), Reason]),
             {error, Reason}
     end.
@@ -167,7 +162,7 @@ remove_pidfile() ->
         ok ->
             ok;
         {error, Reason} ->
-            lager:error("Could not delete ZOTONIC_PIDFILE \"~s\" error: ~p",
+            ?LOG_ERROR("Could not delete ZOTONIC_PIDFILE \"~s\" error: ~p",
                         [get_pidfile(), Reason]),
             {error, Reason}
     end.

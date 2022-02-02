@@ -118,7 +118,7 @@ validate_query_args(Context) ->
                         _  -> {error, Context3}
                     end;
                 {error, Reason} ->
-                    lager:error("Error validating query args: ~p", [ Reason ]),
+                    ?LOG_ERROR("Error validating query args: ~p", [ Reason ]),
                     % TODO: add a generic validation error
                     {error, Context}
             end;

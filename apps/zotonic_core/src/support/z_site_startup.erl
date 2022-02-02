@@ -38,10 +38,10 @@ start_link(Site) ->
 
 
 init(Site) ->
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     {ok, #state{ site = Site }, 0}.
 
 handle_call(_Msg, _From, State) ->

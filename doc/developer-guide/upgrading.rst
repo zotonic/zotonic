@@ -214,6 +214,20 @@ Errors
             "Something went wrong!"
     end.
 
+
+Logging
+^^^^^^^
+
+.. seealso:: :ref:`cookbook-logstash`
+
+The ``lager`` logger has been removed and replaced with the standard `erlang logger application`_.
+
+For this to work:
+
+ * Add the logger configuration to the ``erlang.config`` file. See :ref:`dev-logging` for an example.
+ * Remove the ``lager`` definition from the erlang.config file.
+
+
 Export
 ^^^^^^
 
@@ -417,3 +431,4 @@ This allows for serialization to JSON using jsxrecord.
 .. _OTP directory structure: http://erlang.org/doc/design_principles/applications.html#id82228
 .. _umbrella application: https://www.rebar3.org/v3/docs/from-rebar-2x-to-rebar3#section-required-directory-structure
 .. _Hex.pm: https://hex.pm
+.. _erlang logger application: https://www.erlang.org/doc/apps/kernel/logger_chapter.html

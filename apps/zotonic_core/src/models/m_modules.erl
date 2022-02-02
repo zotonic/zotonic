@@ -75,7 +75,7 @@ m_get([ <<"get_depending">> | Rest ], _Msg, Context) ->
             {error, eacces}
     end;
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 safe_to_atom(M) when is_atom(M) ->

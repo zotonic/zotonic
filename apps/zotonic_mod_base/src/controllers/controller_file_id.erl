@@ -32,7 +32,7 @@
 
 service_available(Context) ->
     Context1 = z_context:ensure_qs(Context),
-    z_context:lager_md(Context1),
+    z_context:logger_md(Context1),
     Id = get_id(Context1),
     Medium = m_media:get(Id, Context1),
     {true, z_context:set(?MODULE, {Id, Medium}, Context1)}.

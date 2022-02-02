@@ -43,8 +43,6 @@
 
 -include_lib("zotonic.hrl").
 
--compile([{parse_transform, lager_transform}]).
-
 %% @doc Called from template, render the media viewer for some resource/medium
 scomp_viewer(undefined, _Options, _Context) ->
     <<>>;
@@ -574,7 +572,7 @@ props2url([{crop,[ X, Y ]}|Rest], Width, Height, Acc, Context) ->
 props2url([{mediaclass,Class}|Rest], Width, Height, Acc, Context) ->
     case z_mediaclass:get(Class, Context) of
         {ok, [], <<>>} ->
-            lager:warning("unknown mediaclass ~p", [Class]),
+            ?LOG_WARNING("unknown mediaclass ~p", [Class]),
             props2url(Rest, Width, Height, Acc, Context);
         {ok, _Props, Checksum} ->
             MC = [

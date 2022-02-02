@@ -79,7 +79,7 @@ observe_filestore(#filestore{action=upload, path=Path, mime=Mime}, Context) ->
     ok;
 observe_filestore(#filestore{action=delete, path=Path}, Context) ->
     Count = m_filestore:mark_deleted(Path, Context),
-    lager:info("Filestore marked ~p entries as deleted for ~p", [Count, Path]),
+    ?LOG_INFO("Filestore marked ~p entries as deleted for ~p", [Count, Path]),
     ok.
 
 observe_filestore_credentials_lookup(#filestore_credentials_lookup{path=Path}, Context) ->
@@ -183,7 +183,7 @@ load_cache(#{
         Context)
     of
         {ok, #filestore_credentials{ service= <<"s3">>, location=Location1, credentials=Cred }} ->
-            lager:debug("File store cache load of ~p", [Location]),
+            ?LOG_DEBUG("File store cache load of ~p", [Location]),
             Ctx = z_context:prune_for_async(Context),
             StreamFun = fun(CachePid) ->
                 s3filez:stream(
@@ -191,13 +191,13 @@ load_cache(#{
                     Location1,
                     fun
                         ({error, FinalError}) when FinalError =:= enoent; FinalError =:= forbidden ->
-                            lager:error("File store remote file is ~p ~p", [FinalError, Location]),
+                            ?LOG_ERROR("File store remote file is ~p ~p", [FinalError, Location]),
                             ok = m_filestore:mark_error(Id, FinalError, Ctx),
                             exit(normal);
                         ({error, _} = Error) ->
                             % Abnormal exit when receiving an error.
                             % This takes down the cache entry.
-                            lager:error("File store error ~p on cache load of ~p", [Error, Location]),
+                            ?LOG_ERROR("File store error ~p on cache load of ~p", [Error, Location]),
                             exit(Error);
                         (T) when is_tuple(T) ->
                             nop;
@@ -236,14 +236,14 @@ task_queue_all(Offset, Max, Context) when Offset =< Max ->
         Context)
     of
         {ok, Media} ->
-            lager:info("Ensuring ~p files are queued for remote upload.", [length(Media)]),
+            ?LOG_NOTICE("Ensuring ~p files are queued for remote upload.", [length(Media)]),
             lists:foreach(fun(M) ->
                             queue_medium(M, Context)
                           end,
                           Media),
             {delay, 0, [Offset+?BATCH_SIZE, Max]};
         {error, _} = Error ->
-            lager:error("Error ~p when queueing files for remote upload.", [Error]),
+            ?LOG_ERROR("Error ~p when queueing files for remote upload.", [Error]),
             {delay, 60, [Offset, Max]}
     end;
 task_queue_all(_Offset, _Max, _Context) ->
@@ -336,24 +336,24 @@ start_deleter(#{
         } = FilestoreEntry, Context) ->
     case z_notifier:first(#filestore_credentials_revlookup{service=Service, location=Location}, Context) of
         {ok, #filestore_credentials{service= <<"s3">>, location=Location1, credentials=Cred}} ->
-            lager:debug("Queue delete for ~p", [Location1]),
+            ?LOG_DEBUG("Queue delete for ~p", [Location1]),
             ContextAsync = z_context:prune_for_async(Context),
             _ = s3filez:queue_delete_id({?MODULE, delete, Id}, Cred, Location1, {?MODULE, delete_ready, [Id, Path, ContextAsync]});
         undefined ->
-            lager:debug("No credentials for ~p", [FilestoreEntry])
+            ?LOG_DEBUG("No credentials for ~p", [FilestoreEntry])
     end.
 
 delete_ready(Id, Path, Context, _Ref, ok) ->
-    lager:debug("Delete remote file for ~p", [Path]),
+    ?LOG_DEBUG("Delete remote file for ~p", [Path]),
     m_filestore:purge_deleted(Id, Context);
 delete_ready(Id, Path, Context, _Ref, {error, enoent}) ->
-    lager:debug("Delete remote file for ~p was not found", [Path]),
+    ?LOG_DEBUG("Delete remote file for ~p was not found", [Path]),
     m_filestore:purge_deleted(Id, Context);
 delete_ready(Id, Path, Context, _Ref, {error, forbidden}) ->
-    lager:debug("Delete remote file for ~p was forbidden", [Path]),
+    ?LOG_DEBUG("Delete remote file for ~p was forbidden", [Path]),
     m_filestore:purge_deleted(Id, Context);
 delete_ready(_Id, Path, _Context, _Ref, {error, _} = Error) ->
-    lager:error("Could not delete remote file. Path ~p error ~p", [Path, Error]).
+    ?LOG_ERROR("Could not delete remote file. Path ~p error ~p", [Path, Error]).
 
 
 -spec start_downloaders( {ok, [ m_filestore:filestore_entry() ]} | {error, term()}, z:context() ) -> ok.
@@ -376,26 +376,26 @@ start_downloader(#{
         {ok, #filestore_credentials{service= <<"s3">>, location=Location1, credentials=Cred}} ->
             LocalPath = z_path:files_subdir(Path, Context),
             ok = z_filelib:ensure_dir(LocalPath),
-            lager:debug("Queue move to local for ~p", [Location1]),
+            ?LOG_DEBUG("Queue move to local for ~p", [Location1]),
             ContextAsync = z_context:prune_for_async(Context),
             _ = s3filez:queue_stream_id({?MODULE, stream, Id}, Cred, Location1, {?MODULE, download_stream, [Id, Path, LocalPath, ContextAsync]});
         undefined ->
-            lager:debug("No credentials for ~p", [FilestoreEntry])
+            ?LOG_DEBUG("No credentials for ~p", [FilestoreEntry])
     end.
 
 download_stream(_Id, _Path, LocalPath, _Context, {content_type, _}) ->
-    lager:debug("Download remote file ~p started", [LocalPath]),
+    ?LOG_DEBUG("Download remote file ~p started", [LocalPath]),
     file:delete(temp_path(LocalPath));
 download_stream(_Id, _Path, LocalPath, _Context, Data) when is_binary(Data) ->
     file:write_file(temp_path(LocalPath), Data, [append,raw,binary]);
 download_stream(Id, Path, LocalPath, Context, eof) ->
-    lager:debug("Download remote file ~p ready", [LocalPath]),
+    ?LOG_DEBUG("Download remote file ~p ready", [LocalPath]),
     ok = file:rename(temp_path(LocalPath), LocalPath),
     m_filestore:purge_move_to_local(Id, Context),
     filezcache:delete({z_context:site(Context), Path}),
     filestore_uploader:stale_file_entry(Path, Context);
 download_stream(Id, _Path, LocalPath, Context, {error, _} = Error) ->
-    lager:debug("Download error ~p file ~p", [Error, LocalPath]),
+    ?LOG_DEBUG("Download error ~p file ~p", [Error, LocalPath]),
     file:delete(temp_path(LocalPath)),
     m_filestore:unmark_move_to_local(Id, Context);
 download_stream(_Id, _Path, _LocalPath, _Context, _Other) ->

@@ -336,12 +336,12 @@ group_trans_parts(TransParts) ->
                             {ok, Code} ->
                                 add_trans(Name, Code, V, Acc);
                             {error, _} ->
-                                lager:info("Dropping trans part '~s', language code is unknown",
+                                ?LOG_NOTICE("Dropping trans part '~s', language code is unknown",
                                            [ K ]),
                                 Acc
                         end;
                     _ ->
-                        lager:info("Dropping unknown trans part '~s', should be like 'title$en'",
+                        ?LOG_NOTICE("Dropping unknown trans part '~s', should be like 'title$en'",
                                    [ K ]),
                         Acc
                 end
@@ -435,7 +435,7 @@ group_date_parts(DatePartsQs) ->
                     [ K ] ->
                         group_date_part(K, false, full, V, Acc);
                     _ ->
-                        lager:info("Dropping unknown date part '~s', should be like 'dt:ymd:0:propname'",
+                        ?LOG_INFO("Dropping unknown date part '~s', should be like 'dt:ymd:0:propname'",
                                    [ K ]),
                         Acc
                 end

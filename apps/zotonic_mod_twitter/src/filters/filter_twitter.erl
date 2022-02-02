@@ -25,6 +25,8 @@
 %% Number of characters for truncating an url
 -define(URL_TRUNCATE, 50).
 
+-include_lib("kernel/include/logger.hrl").
+
 
 twitter(undefined, _Context) -> undefined;
 twitter(<<"<p>", _/binary>> = Input, _Context) -> Input;
@@ -100,7 +102,7 @@ twitter1_url_html(Pre, Url, Opts) ->
                         ["<a href=\"", Url2, "\">", Text, "</a>"]
                     catch
                         _:_ ->
-                            lager:info("Twitter: removed problematic URL from Tweet: ~p", [ Url1 ]),
+                            ?LOG_INFO("Twitter: removed problematic URL from Tweet: ~p", [ Url1 ]),
                             []
                     end
             end;

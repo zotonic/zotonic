@@ -46,7 +46,7 @@ m_get([ Key | Rest ], _Msg, Context) when is_binary(Key) ->
 m_get([], _Msg, Context) ->
     {ok, {values(Context), []}};
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Non binary key get: ~p", [Vs]),
+    ?LOG_INFO("Non binary key get: ~p", [Vs]),
     {error, unknown_path}.
 
 
