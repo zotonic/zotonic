@@ -263,7 +263,7 @@ handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, Fr
     % No hope of recovery, as the caller is in an illegal state reusing this connection
     % for multiple queries.
     ?LOG_ERROR("Connection requested by ~p but also using same connection for (query \"~s\" with ~p)",
-                [ CallerPid, OtherPid, Sql, Params ]),
+                [ CallerPid, Sql, Params ]),
     gen_server:reply(From, {error, busy}),
     State1 = disconnect(State, busy),
     {stop, normal, State1};
