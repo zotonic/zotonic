@@ -46,6 +46,7 @@ task_job(
         mfa := {Module, Function, Args},
         error_count := ErrCt
     }, Context) ->
+    z_context:logger_md(Context),
     try
         ?LOG_DEBUG("Pivot task starting: ~p:~p(...)", [ Module, Function ]),
         case call_function(Module, Function, ensure_list(Args), Context) of
