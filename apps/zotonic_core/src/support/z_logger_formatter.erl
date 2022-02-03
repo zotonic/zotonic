@@ -80,7 +80,7 @@ format(#{level:=Level, msg:={report, Msg}, meta:=Meta}, UsrConfig) when is_map(M
     Config = apply_defaults(UsrConfig),
     NewMeta = maps:merge(Meta, #{level => Level
                                 ,colored_start => Level
-                                ,colored_end => "\e[0m"
+                                ,colored_end => ?COLOR_END
                                 }),
     format_log(maps:get(template, Config), Config, Msg, NewMeta);
 format(Map = #{msg := {report, KeyVal}}, UsrConfig) when is_list(KeyVal) ->

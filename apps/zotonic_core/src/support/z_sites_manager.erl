@@ -706,14 +706,22 @@ do_start(Site, #state{ sites = Sites } = State) ->
                     Error
             end;
         error ->
-            ?LOG_WARNING("Requested to start unknown site ~p", [Site]),
+            ?LOG_WARNING(#{
+                site => Site,
+                action => start_request,
+                error => bad_name,
+                text => "Requested to start unknown site"
+            }),
             {error, bad_name}
     end.
 
 do_start_site(#site_status{ site = Site } = SiteStatus) ->
     case site_is_startable(SiteStatus) of
         {true, StartState} ->
-            ?LOG_NOTICE("Starting site ~p", [Site]),
+            ?LOG_NOTICE(#{
+                site => Site,
+                action => starting
+            }),
             case z_sites_sup:start_site(Site) of
                 {ok, Pid} ->
                     {ok, SiteStatus#site_status{
@@ -722,14 +730,20 @@ do_start_site(#site_status{ site = Site } = SiteStatus) ->
                     }};
                 {error, {already_started, Pid}} ->
                     % seems we have a race condition here
-                    ?LOG_ERROR("Site already started, this shouldn't happen '~p'",
-                                [Site]),
+                    ?LOG_ERROR(#{
+                        text => "Site already started, this shouldn't happen.",
+                        site => Site,
+                        error => already_started
+                    }),
                     {ok, SiteStatus#site_status{
                         pid = Pid
                     }};
                 {error, _} = Error ->
-                    ?LOG_ERROR("Site start of ~p failed: ~p",
-                                [Site, Error]),
+                    ?LOG_ERROR(#{
+                        text => "Site start failed",
+                        site => Site,
+                        error => Error
+                    }),
                     Error
             end;
         false ->

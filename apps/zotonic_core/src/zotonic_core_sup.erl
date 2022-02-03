@@ -93,9 +93,6 @@ spawn_delayed_status() ->
     erlang:spawn(fun() ->
         log_start_warnings(),
         timer:sleep(4000),
-        % ?LOG_NOTICE("================"),
-        % ?LOG_NOTICE("Sites Status"),
-        % ?LOG_NOTICE("================"),
         SitesStatus = maps:to_list(z_sites_manager:get_sites()),
         {Running, Other} = lists:partition(
             fun({_Site, Status}) -> Status =:= running end,
@@ -104,13 +101,18 @@ spawn_delayed_status() ->
             fun
               ({Site, running}) when Site =/= zotonic_site_status ->
                   Ctx = z_context:new(Site),
-                  ?LOG_NOTICE("~p ~s ~-40s",
-                             [Site, running, z_context:abs_url(<<"/">>, Ctx)]);
+                  ?LOG_NOTICE(#{
+                        site => Site,
+                        status => running,
+                        url => z_context:abs_url(<<"/">>, Ctx)
+                    });
               ({Site, Status}) ->
-                  ?LOG_NOTICE("~p - ~s", [Site, Status])
+                  ?LOG_NOTICE(#{
+                        site => Site,
+                        status => Status
+                    })
             end,
             Running ++ Other)
-        % ?LOG_INFO("================")
     end).
 
 log_start_warnings() ->
