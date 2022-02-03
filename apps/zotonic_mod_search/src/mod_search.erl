@@ -124,16 +124,15 @@ observe_filewatcher(#filewatcher{}, _Context) ->
 %% @doc Check the search facet table when all modules are running and the indexer reindexed
 %% the templates.
 observe_module_reindexed(module_reindexed, Context) ->
+    z_context:logger_md(Context),
     Status = z_module_manager:get_modules_status(Context),
     NotRunning = [ M || {M, S} <- Status, S =/= running ],
     case NotRunning of
         [] ->
-            ?LOG_INFO("[~p] Checking search facet table.",
-                       [ z_context:site(Context) ]),
+            ?LOG_INFO("Checking search facet table."),
             search_facet:ensure_table(Context);
         _ ->
-            ?LOG_NOTICE("[~p] Delaying search facet check because not all modules are running.",
-                       [ z_context:site(Context) ])
+            ?LOG_NOTICE("Delaying search facet check because not all modules are running.")
     end.
 
 

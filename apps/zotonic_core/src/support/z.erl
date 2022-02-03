@@ -314,10 +314,10 @@ log(Type, Msg, Meta, Context) ->
             LoggerMeta#{ mfa => MFA }
     end,
     LoggerMeta2 = maps:merge(Meta, LoggerMeta1),
-    Msg1 = unicode:characters_to_binary(Msg),
+    Msg1 = unicode:characters_to_list(Msg),
     case Msg1 of
-        <<>> -> logger:log(Type, LoggerMeta2);
-        _ -> logger:log(Type, LoggerMeta2#{ text => Msg1 })
+        "" -> logger:log(Type, LoggerMeta2);
+        _ -> logger:log(Type, Msg1, LoggerMeta2)
     end,
     z_notifier:notify(
         #zlog{

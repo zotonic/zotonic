@@ -513,12 +513,13 @@ handle_cast({set_site_status, Site, Status}, #state{ sites = Sites } = State) ->
             },
             Sites#{ Site => S1 };
         {ok, #site_status{ status = CurStatus }} ->
-            ?LOG_NOTICE("Site status change of ~p from ~p to ~p ignored.",
-                       [Site, CurStatus, Status]),
+            ?LOG_NOTICE("Site status change from ~p to ~p ignored.",
+                        [CurStatus, Status],
+                        #{ site => Site }),
             Sites;
         error ->
             ?LOG_NOTICE("Site status change of unknown ~p to ~p ignored.",
-                       [Site, Status]),
+                        [Site, Status]),
             Sites
     end,
     do_sync_status(Sites1),
@@ -707,21 +708,17 @@ do_start(Site, #state{ sites = Sites } = State) ->
             end;
         error ->
             ?LOG_WARNING(#{
-                site => Site,
                 action => start_request,
                 error => bad_name,
                 text => "Requested to start unknown site"
-            }),
+            }, #{ site => Site }),
             {error, bad_name}
     end.
 
 do_start_site(#site_status{ site = Site } = SiteStatus) ->
     case site_is_startable(SiteStatus) of
         {true, StartState} ->
-            ?LOG_NOTICE(#{
-                site => Site,
-                action => starting
-            }),
+            ?LOG_NOTICE(#{ action => starting }, #{ site => Site }),
             case z_sites_sup:start_site(Site) of
                 {ok, Pid} ->
                     {ok, SiteStatus#site_status{
@@ -732,18 +729,16 @@ do_start_site(#site_status{ site = Site } = SiteStatus) ->
                     % seems we have a race condition here
                     ?LOG_ERROR(#{
                         text => "Site already started, this shouldn't happen.",
-                        site => Site,
                         error => already_started
-                    }),
+                    }, #{ site => Site }),
                     {ok, SiteStatus#site_status{
                         pid = Pid
                     }};
                 {error, _} = Error ->
                     ?LOG_ERROR(#{
                         text => "Site start failed",
-                        site => Site,
                         error => Error
-                    }),
+                    }, #{ site => Site }),
                     Error
             end;
         false ->

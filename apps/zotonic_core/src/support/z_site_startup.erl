@@ -27,6 +27,7 @@
 -export([start_link/1]).
 
 -include("../../include/zotonic_release.hrl").
+-include("../../include/zotonic.hrl").
 
 -record(state, { site :: atom() }).
 
@@ -68,10 +69,7 @@ do_startup(Context) ->
     erlang:spawn_link(
         fun() ->
             z_notifier:await(module_ready, 60000, Context),
-            z:info("Site ~p started, modules loaded",
-                    [ z_context:site(Context) ],
-                    [ {module, ?MODULE}, {line, ?LINE} ],
-                    Context),
+            ?zInfo("Site started, modules loaded", Context),
             case z_db:has_connection(Context) of
                 true -> m_config:set_value(zotonic, version, ?ZOTONIC_VERSION, Context);
                 false -> ok
