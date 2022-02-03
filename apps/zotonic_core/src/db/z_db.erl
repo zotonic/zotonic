@@ -227,18 +227,28 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                                 DbDriver:squery(C, "ROLLBACK", ?TIMEOUT),
                                 R;
                             R ->
-                                case DbDriver:squery(C, "COMMIT", ?TIMEOUT) of
-                                    {ok, [], []} -> ok;
-                                    {error, _} = ErrorCommit ->
-                                        z_notifier:notify_queue_flush(Context),
-                                        throw(ErrorCommit)
-                                end,
-                               R
+                                case DbDriver:is_connection_alive(C) of
+                                    true ->
+                                        case DbDriver:squery(C, "COMMIT", ?TIMEOUT) of
+                                            {ok, [], []} -> ok;
+                                            {error, _} = ErrorCommit ->
+                                                z_notifier:notify_queue_flush(Context),
+                                                throw(ErrorCommit)
+                                        end,
+                                        R;
+                                    false ->
+                                        {rollback, {error, connection_down}}
+                                end
                         end
                     catch
                         _:Why:S ->
                             ?LOG_ERROR("Error on database transaction: ~p", [ Why ], #{ stack => S }),
-                            DbDriver:squery(C, "ROLLBACK", ?TIMEOUT),
+                            case DbDriver:is_connection_alive(C) of
+                                true ->
+                                    DbDriver:squery(C, "ROLLBACK", ?TIMEOUT);
+                                false ->
+                                    ok
+                            end,
                             {rollback, {Why, S}}
                     end
                 end,

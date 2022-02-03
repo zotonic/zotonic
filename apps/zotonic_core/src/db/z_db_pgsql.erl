@@ -36,6 +36,7 @@
 -export([
     pool_return_connection/2,
     pool_get_connection/1,
+    is_connection_alive/1,
 
     ensure_all_started/0,
     test_connection/1,
@@ -118,6 +119,9 @@ test_connection_1(Args) ->
             E
     end.
 
+-spec is_connection_alive( pid() ) -> boolean().
+is_connection_alive(Worker) ->
+    erlang:is_process_alive(Worker).
 
 -spec pool_get_connection( z:context() ) -> {ok, pid()} | {error, term()}.
 pool_get_connection(Context) ->
@@ -125,74 +129,99 @@ pool_get_connection(Context) ->
 
 -spec pool_return_connection( pid(), z:context() ) -> ok | {error, term()}.
 pool_return_connection(Worker, Context) ->
-    try
-        case gen_server:call(Worker, {pool_return_connection_check, self()}) of
-            ok ->
-                z_db_pool:return_connection(Worker, Context);
-            {error, _} = Error ->
-                Error
-        end
-    catch
-        exit:Reason:Stack ->
-            z_context:logger_md(Context),
-            ?LOG_ERROR("Return connection failed.", #{
-                    reason => Reason,
-                    stack => Stack,
-                    connection_pid => Worker
-                }),
-            {error, Reason}
+    case is_connection_alive(Worker) of
+        true ->
+            try
+                case gen_server:call(Worker, {pool_return_connection_check, self()}) of
+                    ok ->
+                        z_db_pool:return_connection(Worker, Context);
+                    {error, _} = Error ->
+                        Error
+                end
+            catch
+                exit:Reason:Stack ->
+                    z_context:logger_md(Context),
+                    ?LOG_ERROR("Return connection failed.", #{
+                            reason => Reason,
+                            stack => Stack,
+                            connection_pid => Worker
+                        }),
+                    {error, Reason}
+            end;
+        false ->
+            {error, connection_down}
     end.
 
 %% @doc Simple query without parameters, the query is interrupted if it takes
 %%      longer than Timeout msec.
 -spec squery( pid(), string() | binary(), pos_integer() ) -> query_result().
 squery(Worker, Sql, Timeout) ->
-    case fetch_conn(Worker, Sql, [], Timeout) of
-        {ok, {Conn, Ref}} ->
-            Result = epgsql:squery(Conn, Sql),
-            ok = return_conn(Worker, Ref),
-            decode_reply(Result);
-        {error, _} = Error ->
-            Error
+    case is_connection_alive(Worker) of
+        true ->
+            case fetch_conn(Worker, Sql, [], Timeout) of
+                {ok, {Conn, Ref}} ->
+                    Result = epgsql:squery(Conn, Sql),
+                    ok = return_conn(Worker, Ref),
+                    decode_reply(Result);
+                {error, _} = Error ->
+                    Error
+            end;
+        false ->
+            {error, connection_down}
     end.
 
 %% @doc Query with parameters, the query is interrupted if it takes
 %%      longer than Timeout msec.
 -spec equery( pid(), string() | binary(), list(), pos_integer() ) -> query_result().
 equery(Worker, Sql, Parameters, Timeout) ->
-    case fetch_conn(Worker, Sql, Parameters, Timeout) of
-        {ok, {Conn, Ref}} ->
-            Result = epgsql:equery(Conn, Sql, encode_values(Parameters)),
-            ok = return_conn(Worker, Ref),
-            decode_reply(Result);
-        {error, _} = Error ->
-            Error
+    case is_connection_alive(Worker) of
+        true ->
+            case fetch_conn(Worker, Sql, Parameters, Timeout) of
+                {ok, {Conn, Ref}} ->
+                    Result = epgsql:equery(Conn, Sql, encode_values(Parameters)),
+                    ok = return_conn(Worker, Ref),
+                    decode_reply(Result);
+                {error, _} = Error ->
+                    Error
+            end;
+        false ->
+            {error, connection_down}
     end.
 
 %% @doc Request the SQL connection from the worker. The query is passed for logging
 % purposes. This caller will do the query using the returned connection.
 -spec fetch_conn( pid(), string() | binary(), list(), pos_integer() ) -> {ok, {pid(), reference()}} | {error, term()}.
 fetch_conn(Worker, Sql, Parameters, Timeout) ->
-    try
-        Ref = erlang:make_ref(),
-        {ok, Conn} = gen_server:call(Worker, {fetch_conn, Ref, self(), Sql, Parameters, Timeout, is_tracing()}),
-        {ok, {Conn, Ref}}
-    catch
-        exit:Reason:Stack ->
-            ?LOG_ERROR("Fetch connection failed.", #{
-                    reason => Reason,
-                    stack => Stack,
-                    connection_pid => Worker,
-                    sql => Sql
-                }),
-            {error, Reason}
+    case is_connection_alive(Worker) of
+        true ->
+            try
+                Ref = erlang:make_ref(),
+                {ok, Conn} = gen_server:call(Worker, {fetch_conn, Ref, self(), Sql, Parameters, Timeout, is_tracing()}),
+                {ok, {Conn, Ref}}
+            catch
+                exit:Reason:Stack ->
+                    ?LOG_ERROR("Fetch connection failed.", #{
+                            reason => Reason,
+                            stack => Stack,
+                            connection_pid => Worker,
+                            sql => Sql
+                        }),
+                    {error, Reason}
+            end;
+        false ->
+            {error, connection_down}
     end.
 
 %% @doc Return the SQL connection to the worker, must be done within the timeout
 %%      specified in the fetch_conn/4 call.
 -spec return_conn(pid(), reference()) -> ok | {error, term()}.
 return_conn(Worker, Ref) ->
-    gen_server:call(Worker, {return_conn, Ref, self()}).
+    case is_connection_alive(Worker) of
+        true ->
+            gen_server:call(Worker, {return_conn, Ref, self()});
+        false ->
+            {error, connection_down}
+    end.
 
 
 %% @doc Return the tracing flag from the process dictionary.
