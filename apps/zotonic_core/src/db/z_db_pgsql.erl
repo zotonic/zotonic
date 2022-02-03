@@ -125,38 +125,68 @@ pool_get_connection(Context) ->
 
 -spec pool_return_connection( pid(), z:context() ) -> ok | {error, term()}.
 pool_return_connection(Worker, Context) ->
-    case gen_server:call(Worker, {pool_return_connection_check, self()}) of
-        ok ->
-            z_db_pool:return_connection(Worker, Context);
-        {error, _} = Error ->
-            Error
+    try
+        case gen_server:call(Worker, {pool_return_connection_check, self()}) of
+            ok ->
+                z_db_pool:return_connection(Worker, Context);
+            {error, _} = Error ->
+                Error
+        end
+    catch
+        exit:Reason:Stack ->
+            z_context:logger_md(Context),
+            ?LOG_ERROR("Return connection failed.", #{
+                    reason => Reason,
+                    stack => Stack,
+                    connection_pid => Worker
+                }),
+            {error, Reason}
     end.
 
 %% @doc Simple query without parameters, the query is interrupted if it takes
 %%      longer than Timeout msec.
 -spec squery( pid(), string() | binary(), pos_integer() ) -> query_result().
 squery(Worker, Sql, Timeout) ->
-    {ok, {Conn, Ref}} = fetch_conn(Worker, Sql, [], Timeout),
-    Result = epgsql:squery(Conn, Sql),
-    ok = return_conn(Worker, Ref),
-    decode_reply(Result).
+    case fetch_conn(Worker, Sql, [], Timeout) of
+        {ok, {Conn, Ref}} ->
+            Result = epgsql:squery(Conn, Sql),
+            ok = return_conn(Worker, Ref),
+            decode_reply(Result);
+        {error, _} = Error ->
+            Error
+    end.
 
 %% @doc Query with parameters, the query is interrupted if it takes
 %%      longer than Timeout msec.
 -spec equery( pid(), string() | binary(), list(), pos_integer() ) -> query_result().
 equery(Worker, Sql, Parameters, Timeout) ->
-    {ok, {Conn, Ref}} = fetch_conn(Worker, Sql, Parameters, Timeout),
-    Result = epgsql:equery(Conn, Sql, encode_values(Parameters)),
-    ok = return_conn(Worker, Ref),
-    decode_reply(Result).
+    case fetch_conn(Worker, Sql, Parameters, Timeout) of
+        {ok, {Conn, Ref}} ->
+            Result = epgsql:equery(Conn, Sql, encode_values(Parameters)),
+            ok = return_conn(Worker, Ref),
+            decode_reply(Result);
+        {error, _} = Error ->
+            Error
+    end.
 
 %% @doc Request the SQL connection from the worker. The query is passed for logging
 % purposes. This caller will do the query using the returned connection.
--spec fetch_conn( pid(), string() | binary(), list(), pos_integer() ) -> {ok, {pid(), reference()}}.
+-spec fetch_conn( pid(), string() | binary(), list(), pos_integer() ) -> {ok, {pid(), reference()}} | {error, term()}.
 fetch_conn(Worker, Sql, Parameters, Timeout) ->
-    Ref = erlang:make_ref(),
-    {ok, Conn} = gen_server:call(Worker, {fetch_conn, Ref, self(), Sql, Parameters, Timeout, is_tracing()}),
-    {ok, {Conn, Ref}}.
+    try
+        Ref = erlang:make_ref(),
+        {ok, Conn} = gen_server:call(Worker, {fetch_conn, Ref, self(), Sql, Parameters, Timeout, is_tracing()}),
+        {ok, {Conn, Ref}}
+    catch
+        exit:Reason:Stack ->
+            ?LOG_ERROR("Fetch connection failed.", #{
+                    reason => Reason,
+                    stack => Stack,
+                    connection_pid => Worker,
+                    sql => Sql
+                }),
+            {error, Reason}
+    end.
 
 %% @doc Return the SQL connection to the worker, must be done within the timeout
 %%      specified in the fetch_conn/4 call.

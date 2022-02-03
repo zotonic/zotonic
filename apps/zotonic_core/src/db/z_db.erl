@@ -181,6 +181,7 @@ transaction(Function, Context) ->
 % @doc Perform a transaction with extra options. Default retry on deadlock
 -spec transaction(transaction_fun(), list(), z:context()) -> any() | {error, term()}.
 transaction(Function, Options, Context) ->
+    z_context:logger_md(Context),
     Result = case transaction1(Function, Context) of
                 {rollback, {{error, #error{ codename = deadlock_detected }}, Trace1}} ->
                     {rollback, {deadlock, Trace1}};
@@ -192,13 +193,13 @@ transaction(Function, Options, Context) ->
                     Other
             end,
     case Result of
-        {rollback, {deadlock, Trace}} = DeadlockError ->
+        {rollback, {deadlock, Stack}} = DeadlockError ->
             case proplists:get_value(noretry_on_deadlock, Options) of
                 true ->
-                    ?LOG_WARNING("DEADLOCK on database transaction, NO RETRY '~p'", [Trace]),
+                    ?LOG_ERROR("DEADLOCK on database transaction, NO RETRY", #{ stack => Stack }),
                     DeadlockError;
                 _False ->
-                    ?LOG_WARNING("DEADLOCK on database transaction, will retry '~p'", [Trace]),
+                    ?LOG_WARNING("DEADLOCK on database transaction, will retry", #{ stack => Stack }),
                     % Sleep random time, then retry transaction
                     timer:sleep(z_ids:number(100)),
                     transaction(Function, Options, Context)
@@ -236,6 +237,7 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                         end
                     catch
                         _:Why:S ->
+                            ?LOG_ERROR("Error on database transaction: ~p", [ Why ], #{ stack => S }),
                             DbDriver:squery(C, "ROLLBACK", ?TIMEOUT),
                             {rollback, {Why, S}}
                     end
