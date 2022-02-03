@@ -248,6 +248,7 @@ debug_msg(Msg, Meta) ->
     logger:log(
         notice,
         "DEBUG: ~tp",
+        [ Msg ],
         Meta),
     Msg.
 
