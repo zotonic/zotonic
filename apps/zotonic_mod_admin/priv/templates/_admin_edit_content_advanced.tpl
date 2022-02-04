@@ -32,7 +32,7 @@
     </div>
 
     <div class="form-group label-floating">
-        {% if m.acl.use.mod_admin_config %}
+        {% if m.acl.use.mod_admin %}
             <input class="form-control" type="text" id="name" name="name" value="{{ id.name }}" {% if not id.is_editable or id == 1 %}disabled="disabled"{% endif %}
             {% include "_language_attrs.tpl" language=`en` %}
             placeholder="{_ Unique name _}" 
