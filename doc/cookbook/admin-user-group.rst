@@ -24,7 +24,7 @@ resource. In your site’s main ``.erl`` file, add a ``rsc_update`` observer::
         observe_rsc_update/3
     ]).
 
-    observe_rsc_update(#rsc_update{action = insert, id = Id}, {Modified, Props} = Acc, Context) ->
+    observe_rsc_update(#rsc_update{action = insert, id = Id}, {ok, Props} = Acc, Context) ->
         %% Where 'vip' is a subcategory of 'person'
         case m_rsc:is_a(Id, vip, Context) of
             false ->
@@ -32,7 +32,7 @@ resource. In your site’s main ``.erl`` file, add a ``rsc_update`` observer::
                 Acc;
             true ->
                 %% Add hasusergroup property
-                {true, Props#{ <<"hasusergroup">> => m_rsc:rid(acl_user_group_vips, Context)}}
+                {ok, Props#{ <<"hasusergroup">> => m_rsc:rid(acl_user_group_vips, Context)}}
         end;
     observe_rsc_update(#rsc_update{}, Acc, _Context) ->
         %% Fall through

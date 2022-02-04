@@ -457,10 +457,11 @@
 %% @doc An updated resource is about to be persisted.
 %% Observe this notification to change the resource properties before they are
 %% persisted.
+%%
 %% The props are the resource's props _before_ the update, but _after_ filtering
-%% and sanitization.
+%% and sanitization. The folded value is ``{ok, UpdateProps}`` for the update itself.
 %% Type: foldr
-%% Return: ``{ok, ChangedProps}`` or ``{error, term()}``
+%% Return: ``{ok, UpdateProps}`` or ``{error, term()}``
 -record(rsc_update, {
     action :: insert | update,
     id :: m_rsc:resource_id(),
