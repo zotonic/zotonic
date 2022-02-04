@@ -8,6 +8,8 @@ Media notifications
    notification/media_identify_extension
    notification/media_identify_file
    notification/media_import
+   notification/media_import_medium
+   notification/media_preview_options
    notification/media_import_props
    notification/media_replace_file
    notification/media_stillimage

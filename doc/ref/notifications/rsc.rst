@@ -7,6 +7,7 @@ Resource notifications
 
    notification/rsc_delete
    notification/rsc_get
+   notification/rsc_import_fetch
    notification/rsc_insert
    notification/rsc_merge
    notification/rsc_pivot_done
