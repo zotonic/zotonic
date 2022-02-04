@@ -10,7 +10,7 @@ Type:
     :ref:`notification-first`
 
 Return: 
-    
+    ``true``, ``false`` or ``undefined``
 
 ``#survey_is_allowed_results_download{}`` properties:
     - id: ``unknown``

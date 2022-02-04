@@ -7,10 +7,10 @@ Broadcast some file changed, used for livereload by mod_development
 
 
 Type: 
-    :ref:`notification-first`
+    :ref:`notification-notify`
 
 Return: 
-    
+    return value is ignored
 
 ``#filewatcher{}`` properties:
     - verb: ``modify|create|delete``

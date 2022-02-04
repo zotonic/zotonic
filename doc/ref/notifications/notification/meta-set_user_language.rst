@@ -13,4 +13,4 @@ Return:
     
 
 ``#set_user_language{}`` properties:
-    - id: ``unknown``
+    - id: ``m_rsc:resource_id()``

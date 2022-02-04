@@ -10,8 +10,8 @@ Type:
     :ref:`notification-notify`
 
 Return: 
-    
+    return value is ignored
 
 ``#rsc_query_item{}`` properties:
-    - query_id: ``unknown``
-    - match_id: ``unknown``
+    - query_id: ``m_rsc:resource_id()``
+    - match_id: ``m_rsc:resource_id()``

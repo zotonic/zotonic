@@ -13,4 +13,4 @@ Return:
     ``z:context()``
 
 ``#auth_confirm{}`` properties:
-none
+    - id: ``m_rsc:resource_id()``

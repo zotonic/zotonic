@@ -14,5 +14,5 @@ Return:
     
 
 ``#comment_insert{}`` properties:
-    - comment_id: ``unknown``
-    - id: ``unknown``
+    - comment_id: ``integer``
+    - id: ``m_rsc:resource_id()``

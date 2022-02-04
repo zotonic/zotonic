@@ -10,7 +10,7 @@ Type:
     :ref:`notification-notify`
 
 Return: 
-    
+    return value is ignored
 
 ``#tkvstore_delete{}`` properties:
     - type: ``unknown``
