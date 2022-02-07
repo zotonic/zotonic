@@ -577,7 +577,7 @@ fieldset[disabled] .btn-primary.active {
 }
 .block-add-block {
   display: block;
-  margin: 0 auto 1rem auto;
+  margin: 0 auto 15px auto;
   width: fit-content;
   position: relative;
 }
