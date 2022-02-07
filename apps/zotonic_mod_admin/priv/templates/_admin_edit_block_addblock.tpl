@@ -1,7 +1,7 @@
 {% if id.is_editable %}
     <div class="clearfix">
         <div class="block-add-block">
-            <a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" href="#">
+            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
                 {_ + add block _}
                 <span class="caret"></span>
             </a>
