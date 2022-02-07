@@ -15,5 +15,5 @@ Return:
     ``{ok, Props, SignupProps}`` or ``{error, Reason}``
 
 ``#signup_check{}`` properties:
-    - props: ``list``
+    - props: ``map``
     - signup_props: ``list``

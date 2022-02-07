@@ -15,5 +15,5 @@ Return:
 ``#signup_done{}`` properties:
     - id: ``m_rsc:resource()``
     - is_verified: ``boolean``
-    - props: ``list``
+    - props: ``map``
     - signup_props: ``list``

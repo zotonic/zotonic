@@ -13,4 +13,4 @@ Return:
     
 
 ``#admin_edit_blocks{}`` properties:
-    - id: ``unknown``
+    - id: ``m_rsc:resource_id()``

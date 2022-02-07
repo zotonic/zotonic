@@ -173,6 +173,7 @@ xelatex:
 .PHONY: stubs
 stubs: erlang-stubs
 	export APPS=../apps CORE=../apps/zotonic_core MODULES=../apps/zotonic_mod* ; for f in `find ref -name .generate`; do $$f || exit 1; done
+	ref/notifications/.parse-notifications
 
 erlang-stubs:
 	export ZOTONIC_SRC=../ MODULES=../apps/zotonic_mod* ; for f in `find ref -name .generate-erlang`; do $$f || exit 1; done

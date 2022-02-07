@@ -10,7 +10,7 @@ Type:
     :ref:`notification-first`
 
 Return: 
-    
+    Extension (for example ``<<".png">>``) or ``undefined``
 
 ``#media_identify_extension{}`` properties:
     - mime: ``binary``

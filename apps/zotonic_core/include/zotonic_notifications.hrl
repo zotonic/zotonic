@@ -1178,16 +1178,17 @@
 }).
 
 
-% Simple mod_development notifications:
-% development_reload - Reload all template, modules etc
-% development_make - Perform a 'make' on Zotonic, reload all new beam files
-
 %% @doc Determine the URL fetch options for fetching the content of an URL. Used by z_fetch.erl.
 %% Type: first
-%% Return: ``z_url_fetch:options()`
+%% Return: ``z_url_fetch:options()``
 -record(url_fetch_options, {
     host :: binary(),
     url :: binary(),
     options :: z_url_fetch:options()
 }).
+
+
+% Simple mod_development notifications:
+% development_reload - Reload all template, modules etc
+% development_make - Perform a 'make' on Zotonic, reload all new beam files
 

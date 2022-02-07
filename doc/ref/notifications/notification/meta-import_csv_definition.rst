@@ -13,5 +13,5 @@ Return:
     ``#import_csv_definition{}`` or ``undefined`` (in which case the column headers are used as property names)
 
 ``#import_csv_definition{}`` properties:
-    - basename: ``unknown``
-    - filename: ``unknown``
+    - basename: ``binary``
+    - filename: ``file:filename_all()``

@@ -1,7 +1,8 @@
 #!/usr/bin/env escript
 
 main([]) ->
-    File = "../../../apps/zotonic_core/include/zotonic_notifications.hrl",
+    File = "../apps/zotonic_core/include/zotonic_notifications.hrl",
+    Dir = "ref/notifications",
     {ok, Epp} = epp:open(File, []),
     {ok, _} = epp:parse_erl_form(Epp),
     Comments = erl_comment_scan:file(File),
@@ -14,13 +15,13 @@ main([]) ->
             io:format(" - Notification: ~p~n", [ Name ]),
 
             %% Always generate meta file
-            MetaFilename = filename:join(["notification", "meta-" ++ Name ++ ".rst"]),
+            MetaFilename = filename:join([Dir, "notification", "meta-" ++ Name ++ ".rst"]),
             {ok, MetaFile} = file:open(MetaFilename, [write]),
             write_record_to_rst(MetaFile, {Name, Doc, Fields}),
             ok = file:close(MetaFile),
 
             %% Only write the include file if it doesn't yet exist
-            NotificationFilename = filename:join(["notification", Name ++ ".rst"]),
+            NotificationFilename = filename:join([Dir, "notification", Name ++ ".rst"]),
             case filelib:is_file(NotificationFilename) of
                 true ->
                     noop;
@@ -49,17 +50,17 @@ parse({eof,_}, _Epp, _Comments, Acc) ->
 parse(Epp, Comments, Acc) ->
     parse(epp:parse_erl_form(Epp), Epp, Comments, Acc).
 
-parse_record_field({typed_record_field, {record_field, _Line, {atom, _Line, Name}}, {type, _Line, union, Props}}) ->
+parse_record_field({typed_record_field, {record_field, _Line, {atom, _Line1, Name}}, {type, _Line2, union, Props}}) ->
     {Name, [parse_type(Prop) || Prop <- Props]};
-parse_record_field({typed_record_field, {record_field, _Line, {atom, _Line, Name}}, {remote_type, _Line, Parts}}) ->
+parse_record_field({typed_record_field, {record_field, _Line, {atom, _Line1, Name}}, {remote_type, _Line2, Parts}}) ->
     {Name, list_to_binary(lists:join(":", [atom_to_list(V) || {atom, _L, V} <- Parts]) ++ "()")};
-parse_record_field({typed_record_field, {record_field, _Line, {atom, _Line, Name}}, {type, _Line, Type, _L}}) ->
+parse_record_field({typed_record_field, {record_field, _Line, {atom, _Line1, Name}}, {type, _Line2, Type, _L}}) ->
     {Name, Type};
-parse_record_field({typed_record_field, {record_field, _Line, {atom, _Line, Name}, {_, _, _Default}}, {type, _Line, Type, _L}}) ->
+parse_record_field({typed_record_field, {record_field, _Line, {atom, _Line1, Name}, {_, _, _Default}}, {type, _Line2, Type, _L}}) ->
     {Name, Type};
-parse_record_field({typed_record_field, {record_field, _Line, {atom, _Line, Name}, {nil, _}}, {type, _Line, Type, _L}}) ->
+parse_record_field({typed_record_field, {record_field, _Line, {atom, _Line1, Name}, {nil, _}}, {type, _Line2, Type, _L}}) ->
     {Name, Type};
-parse_record_field({record_field, _Line, {atom, _Line, Name}}) ->
+parse_record_field({record_field, _Line, {atom, _Line1, Name}}) ->
     {Name, unknown};
 parse_record_field(_) ->
     {unknown, unknown}.
@@ -123,5 +124,7 @@ parse_doc(["% Return: " ++ Return|Docs], Acc, Type, _Return) ->
     parse_doc(Docs, Acc, Type, Return);
 parse_doc(["% " ++ Doc|Docs], Acc, Type, Return) ->
     parse_doc(Docs, [Doc ++ " \n"|Acc], Type, Return);
+parse_doc(["%"|Docs], Acc, Type, Return) ->
+    parse_doc(Docs, [" \n"|Acc], Type, Return);
 parse_doc([], Acc, Type, Return) ->
     {lists:reverse(Acc), Type, Return}.

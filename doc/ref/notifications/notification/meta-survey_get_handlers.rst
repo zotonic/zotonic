@@ -3,14 +3,14 @@
 survey_get_handlers
 ^^^^^^^^^^^^^^^^^^^
 
-Fetch lisy of handlers. 
+Fetch list of handlers for survey submits. 
 
 
 Type: 
     :ref:`notification-foldr`
 
 Return: 
-    
+    list with tuples: ``[ {handler_name, TitleForDisplay}, ... ]``
 
 ``#survey_get_handlers{}`` properties:
 none

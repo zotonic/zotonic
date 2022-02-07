@@ -13,5 +13,5 @@ Return:
     
 
 ``#admin_rscform{}`` properties:
-    - id: ``unknown``
-    - is_a: ``unknown``
+    - id: ``m_rsc:resource_id()``
+    - is_a: ``list``

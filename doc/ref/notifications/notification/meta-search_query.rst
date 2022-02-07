@@ -3,15 +3,19 @@
 search_query
 ^^^^^^^^^^^^
 
-Handle custom named search queries in your function. 
+An edge has been inserted. 
+Note that the Context for this notification does not have the user who 
+created the edge. 
 
 
 Type: 
-    :ref:`notification-first`
+    :ref:`notification-notify`
 
 Return: 
-    ``#search_sql{}``, ``#search_result{}`` or ``undefined``
+    return value is ignored
 
 ``#search_query{}`` properties:
-    - search: ``tuple``
+    - name: ``union``
+    - args: ``union``
     - offsetlimit: ``tuple``
+    - search: ``union``
