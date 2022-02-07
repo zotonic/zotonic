@@ -101,7 +101,7 @@ notify_sync
 ^^^^^^^^^^^
 
 Synchronous notification, wait till all observers have processed the
-notification before continuing. The :ref:`notificaction-notify` will
+notification before continuing. The :ref:`notification-notify` will
 notify all observers asynchronously and returns before all notifications
 are processed.
 
