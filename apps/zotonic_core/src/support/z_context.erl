@@ -1160,11 +1160,11 @@ set_nocache_headers(Context = #context{cowreq=Req}) when is_map(Req) ->
 -spec set_security_headers( z:context() ) -> z:context().
 set_security_headers(Context) ->
     Default = [
+        % {<<"content-security-policy">>, <<"script-src 'self' 'nonce-'">>}
         {<<"x-xss-protection">>, <<"1">>},
         {<<"x-content-type-options">>, <<"nosniff">>},
         {<<"x-permitted-cross-domain-policies">>, <<"none">>},
-        {<<"referrer-policy">>, <<"origin-when-cross-origin">>},
-        {<<"content-security-policy">>, <<"script-src 'self' 'nonce-'">>}
+        {<<"referrer-policy">>, <<"origin-when-cross-origin">>}
     ],
     Default1 = case z_context:get(allow_frame, Context, false) of
         true -> Default;
