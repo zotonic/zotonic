@@ -232,8 +232,9 @@ render_script(Args, Context) ->
     Script = [ get_script(Context), Extra ],
     case z_utils:get_value(format, Args, <<"html">>) of
         <<"html">> ->
+            CspNonce = z_context:csp_nonce(Context),
             [
-                <<"\n\n<script type='text/javascript'>\n">>,
+                <<"\n\n<script type='text/javascript' nonce='">>, CspNonce, <<"'>\n">>,
                 <<"window.zotonicPageInit = function() {\n">>,
                         Script,
                 <<"\n};\n</script>\n">>

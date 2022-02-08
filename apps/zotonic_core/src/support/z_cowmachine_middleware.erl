@@ -41,7 +41,8 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
     Context1 = z_context:set(ControllerOpts, Context),
     Context2 = z_context:set_controller_module(Controller, Context1),
     Context3 = z_context:init_cowdata(Req1, Env, Context2),
-    Context4 = z_context:set_security_headers(Context3),
+    Context4 = z_context:set_csp_nonce(Context3),
+    Context5 = z_context:set_security_headers(Context4),
     Options = #{
         on_welformed => fun(Ctx) ->
             erlang:erase(is_dbtrace),
@@ -66,7 +67,7 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
             Ctx
         end
     },
-    cowmachine:request(Context4, Options).
+    cowmachine:request(Context5, Options).
 
 maybe_overrule_req_headers(#{ bindings := Bindings } = Req) ->
     case maps:get(zotonic_http_accept, Bindings, undefined) of
