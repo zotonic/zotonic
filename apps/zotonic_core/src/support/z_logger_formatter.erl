@@ -238,6 +238,12 @@ format_stack(
         X ->
             format_msg(#{ report => X }, Config)
     end;
+format_stack(#{ stack := Stack }, _Meta, Config) ->
+    [
+        "\n",
+        "  Stack:",
+        pretty_stack(Stack, Config)
+    ];
 format_stack(_Data, #{ stack := Stack }, Config) ->
     [
         "\n",
@@ -279,6 +285,8 @@ format_msg(Parents, Data, Config = #{map_depth := Depth}) when is_map(Data) ->
                            Config#{map_depth := Depth-1})
                 | Acc
             ];
+        (stack, _, Acc) ->
+            Acc;
         (K, V, Acc) ->
             [
                 maybe_color(colored_key, Config),
