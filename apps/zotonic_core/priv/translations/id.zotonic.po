@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-21 13:32\n"
+"PO-Revision-Date: 2022-02-09 15:47\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -147,7 +147,7 @@ msgstr "Kelompok pengguna ACL"
 msgid "Access control"
 msgstr "Kontrol akses"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:543
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:544
 msgid "Access control rules"
 msgstr "Aturan kontrol akses"
 
@@ -160,7 +160,7 @@ msgid "Add links to the collaboration group"
 msgstr "Tambahkan tautan ke grup kolaborasi"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:109./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:110
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:45./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:127./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:158./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:46./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:127./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:158./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
 msgid "All"
 msgstr "Semuanya"
 
@@ -263,7 +263,7 @@ msgstr "Kerjasama kelompok pengelola"
 msgid "Collaboration group members"
 msgstr "Kerjasama anggota kelompok"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:539
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:540
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:47
 msgid "Collaboration groups"
 msgstr "Kerja sama kelompok"
@@ -652,7 +652,7 @@ msgstr "Menggunakan peraturan yang diterbitkan"
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "Menggunakan URL berikut untuk menguji aturan kontrol akses sebelum mempublikasikannya."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:534
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:535
 msgid "User groups"
 msgstr "Pengguna kelompok"
 
@@ -4770,7 +4770,7 @@ msgstr "Masuk atau mendaftar untuk komentar"
 
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:40./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:21
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:22./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:16
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log.tpl:38./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:38
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log.tpl:39./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:38
 msgid "Message"
 msgstr "Pesan"
 
@@ -4964,7 +4964,7 @@ msgstr "Pengontrol"
 msgid "Could not fetch tracer output, please try again."
 msgstr "Tidak dapat mengambil keluaran pelacak, harap coba lagi."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:246
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:247
 msgid "Development"
 msgstr "Pengembangan"
 
@@ -6077,7 +6077,7 @@ msgstr "Gagal"
 msgid "Fatal"
 msgstr "Fatal"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:44./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:157./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:45./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:157./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
 msgid "Filter"
 msgstr "Menyaring"
 
@@ -6125,7 +6125,7 @@ msgstr "Pesan terakhir"
 msgid "Most recent user interface events"
 msgstr "Peristiwa antarmuka pengguna terbaru"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:59./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:175./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:59
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:60./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:175./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:59
 msgid "No log messages."
 msgstr "Tidak ada pesan log."
 
@@ -6187,7 +6187,7 @@ msgstr "Alihkan bukan orang"
 msgid "User"
 msgstr "Pengguna"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:41./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:42./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:537
 msgid "User Id"
 msgstr "Id pengguna"
@@ -8327,6 +8327,10 @@ msgstr "Terbalik"
 msgid "Jump to a question on a next page."
 msgstr "Melompat ke sebuah pertanyaan pada halaman selanjutnya."
 
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:50
+msgid "Jump to this question label (must be on an other page below)"
+msgstr "Lompat ke label pertanyaan ini (harus ada di halaman lain di bawah)"
+
 #: apps/zotonic_mod_survey/src/mod_survey.erl:162
 msgid "Likert"
 msgstr "Likert"
@@ -8475,7 +8479,7 @@ msgstr "Cepat"
 msgid "Question"
 msgstr "Pertanyaan"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
 msgid "Question label"
 msgstr "Label pertanyaan"
 
