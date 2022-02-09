@@ -63,7 +63,10 @@
     warning/4,
     error/2,
     error/3,
-    error/4
+    error/4,
+    fatal/2,
+    fatal/3,
+    fatal/4
 ]).
 
 -include("zotonic.hrl").
@@ -280,6 +283,12 @@ error(Msg, Context)                -> log(error, Msg, #{}, Context).
 error(Msg, Meta, Context)          -> log(error, Msg, Meta, Context).
 error(Format, Args, Meta, Context) -> log(error, Format, Args, Meta, Context).
 
+%% @doc Log a fatal error to the logs and the database, with extra meta data.
+%% To add the current source location, use the <tt>?zError</tt> macro.
+fatal(Msg, Context)                -> log(fatal, Msg, #{}, Context).
+fatal(Msg, Meta, Context)          -> log(fatal, Msg, Meta, Context).
+fatal(Format, Args, Meta, Context) -> log(fatal, Format, Args, Meta, Context).
+
 
 -spec log( Level::severity(), Format::string(), Args::list(),
            Meta::proplists:proplist() | map(), Context::z:context() ) -> ok.
@@ -316,8 +325,8 @@ log(Type, Msg, Meta, Context) ->
     LoggerMeta2 = maps:merge(Meta, LoggerMeta1),
     Msg1 = unicode:characters_to_list(Msg),
     case Msg1 of
-        "" -> logger:log(Type, LoggerMeta2);
-        _ -> logger:log(Type, Msg1, LoggerMeta2)
+        "" -> logger:log(logger_level(Type), LoggerMeta2);
+        _ -> logger:log(logger_level(Type), Msg1, LoggerMeta2)
     end,
     z_notifier:notify(
         #zlog{
@@ -333,3 +342,10 @@ log(Type, Msg, Meta, Context) ->
         },
         Context),
     ok.
+
+logger_level(fatal) -> alert;
+logger_level(error) -> error;
+logger_level(warning) -> warning;
+logger_level(notice) -> notice;
+logger_level(info) -> info;
+logger_level(debug) -> debug.

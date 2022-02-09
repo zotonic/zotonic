@@ -68,12 +68,14 @@
 -define(zNotice(Msg, Context), z:notice(Msg, ?zLoc, Context)).
 -define(zWarning(Msg, Context), z:warning(Msg, ?zLoc, Context)).
 -define(zError(Msg, Context), z:error(Msg, ?zLoc, Context)).
+-define(zFatal(Msg, Context), z:fatal(Msg, ?zLoc, Context)).
 
 -define(zDebug(Msg, Args, Context), z:debug(Msg, Args, ?zLoc, Context)).
 -define(zInfo(Msg, Args, Context), z:info(Msg, Args, ?zLoc, Context)).
 -define(zNotice(Msg, Args, Context), z:notice(Msg, Args, ?zLoc, Context)).
 -define(zWarning(Msg, Args, Context), z:warning(Msg, Args, ?zLoc, Context)).
 -define(zError(Msg, Args, Context), z:error(Msg, Args, ?zLoc, Context)).
+-define(zFatal(Msg, Args, Context), z:fatal(Msg, Args, ?zLoc, Context)).
 
 %% Below is copied (and adapted) from Nitrogen, which is copyright 2008-2009 Rusty Klophaus
 
