@@ -802,6 +802,8 @@ string2filter("brightness", Arg) ->
     {ok, {brightness, list_to_integer(Arg)}};
 string2filter("contrast", Arg) ->
     {ok, {contrast, list_to_integer(Arg)}};
+string2filter("rotate", Arg) ->
+    {ok, {rotate, list_to_integer(Arg)}};
 string2filter(_Filter, _Arg) ->
     {error, unknown_filter}.
 
