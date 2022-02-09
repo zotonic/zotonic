@@ -479,7 +479,15 @@ pretty_error({Error, Reason}, Config) ->
         io_lib:format("~tp: ", [ Error ]),
         maybe_color(?COLOR_END, Config),
         to_string(Reason, Config)
+    ];
+pretty_error(Error, Config) ->
+    [
+        "  Reason: ",
+        maybe_color(?MAGENTA, Config),
+        io_lib:format("~tp: ", [ Error ]),
+        maybe_color(?COLOR_END, Config)
     ].
+
 
 pretty_stack(Stack, Config) ->
     lists:map(
