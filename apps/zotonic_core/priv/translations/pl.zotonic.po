@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-02-09 15:28\n"
+"PO-Revision-Date: 2022-02-09 15:47\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -8329,7 +8329,7 @@ msgstr "Przejdź do pytania na następnej stronie."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:50
 msgid "Jump to this question label (must be on an other page below)"
-msgstr ""
+msgstr "Przejdź do tej etykiety pytania (musi znajdować się na innej stronie poniżej)"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:162
 msgid "Likert"
