@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-21 13:32\n"
+"PO-Revision-Date: 2022-02-09 15:28\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -147,7 +147,7 @@ msgstr "ACL-Benutzergruppe"
 msgid "Access control"
 msgstr "Zugriffskontrolle"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:543
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:544
 msgid "Access control rules"
 msgstr "Zugriffskontrollregeln"
 
@@ -160,7 +160,7 @@ msgid "Add links to the collaboration group"
 msgstr "Links zur Kollaborationsgruppe hinzufügen"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:109./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:110
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:45./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:127./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:158./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:46./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:127./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:158./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
 msgid "All"
 msgstr "Alle"
 
@@ -263,7 +263,7 @@ msgstr "Manager von Zusammenarbeitsgruppen"
 msgid "Collaboration group members"
 msgstr "Mitglieder der Zusammenartbeitsgruppe"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:539
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:540
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:47
 msgid "Collaboration groups"
 msgstr "Zusammenarbeitsgruppen"
@@ -652,7 +652,7 @@ msgstr "Veröffentlichte Regeln verwenden"
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "Verwende die folgende URL, um die Zugriffskontrollregeln zu testen, bevor veröffentlichung."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:534
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:535
 msgid "User groups"
 msgstr "Benutzergruppen"
 
@@ -4771,7 +4771,7 @@ msgstr "Anmelden oder registrieren, um zu kommentieren"
 
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:40./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:21
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:22./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:16
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log.tpl:38./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:38
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log.tpl:39./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:38
 msgid "Message"
 msgstr "Nachricht"
 
@@ -4965,7 +4965,7 @@ msgstr "Controller"
 msgid "Could not fetch tracer output, please try again."
 msgstr "Tracer-Ausgabe konnte nicht abgerufen werden, versuchen Sie es erneut."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:246
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:247
 msgid "Development"
 msgstr "Entwicklung"
 
@@ -6078,7 +6078,7 @@ msgstr "Gescheitert"
 msgid "Fatal"
 msgstr "Fatal"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:44./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:157./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:45./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:157./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
 msgid "Filter"
 msgstr "Filter"
 
@@ -6126,7 +6126,7 @@ msgstr "Neueste Meldungen"
 msgid "Most recent user interface events"
 msgstr "Letzte Ereignisse der Benutzeroberfläche"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:59./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:175./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:59
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:60./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:175./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:59
 msgid "No log messages."
 msgstr "Keine Protokollmeldungen."
 
@@ -6188,7 +6188,7 @@ msgstr "Toggle Nicht-Personen"
 msgid "User"
 msgstr "Benutzer"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:41./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:42./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:537
 msgid "User Id"
 msgstr "Benutzer-ID"
@@ -8327,6 +8327,10 @@ msgstr "Umgekehrt"
 msgid "Jump to a question on a next page."
 msgstr "Sprung zu einer Frage auf einer nächsten Seite."
 
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:50
+msgid "Jump to this question label (must be on an other page below)"
+msgstr "Zu dieser Fragebezeichnung springen (muss sich auf einer anderen Seite unten befinden)"
+
 #: apps/zotonic_mod_survey/src/mod_survey.erl:162
 msgid "Likert"
 msgstr "Likert"
@@ -8475,7 +8479,7 @@ msgstr "Eingabeaufforderung"
 msgid "Question"
 msgstr "Frage"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
 msgid "Question label"
 msgstr "Fragenetikett"
 
