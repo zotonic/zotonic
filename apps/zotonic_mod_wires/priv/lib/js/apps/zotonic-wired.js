@@ -152,7 +152,10 @@ function z_dialog_confirm(options)
         width: (options.width),
         backdrop: backdrop
     });
-    $(".z-dialog-cancel-button").click(function() { z_dialog_close(); });
+    $(".z-dialog-cancel-button").click(function() {
+        z_dialog_close();
+        if (options.on_cancel) options.on_cancel();
+    });
     $(".z-dialog-ok-button").click(function() {
         z_dialog_close();
         if (options.on_confirm) options.on_confirm();
