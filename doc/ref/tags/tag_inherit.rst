@@ -23,7 +23,7 @@ And in your site you have a ``world.tpl`` template, defined as:
 .. code-block:: django
     :caption: templates/world.tpl
 
-    {% extends "hello.tpl" %}
+    {% inherit "hello.tpl" %}
     {% block test %}
         First line
         {% inherit %}
