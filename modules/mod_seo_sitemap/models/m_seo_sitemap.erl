@@ -28,6 +28,7 @@
     slice/3,
     update/2,
     delete_key/3,
+    delete_before/3,
     delete_loc/2,
 
     update_rsc/2,
@@ -229,6 +230,21 @@ delete_key(Source, Key, Context) ->
         _ -> ok
     end.
 
+%% @doc Delete all keys in a source that have been modified before a certain date.
+%% This is useful to cleanup after batch updates, as the insert always updates
+%% the modified date.
+-spec delete_before( binary(), calendar:datetime(), z:context() ) -> ok | {error, term()}.
+delete_before(Source, Modified, Context) ->
+    case z_db:q("
+        delete from seo_sitemap
+        where source = $1
+          and modified < $2",
+        [ Source, Modified ],
+        Context)
+    of
+        0 -> {error, enoent};
+        _ -> ok
+    end.
 
 %% @doc Delete a specific location from the sitemap.
 -spec delete_loc( binary(), z:context() ) -> ok | {error, term()}.
