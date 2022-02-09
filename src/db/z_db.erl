@@ -70,6 +70,7 @@
     update_sequence/3,
     prepare_database/1,
     table_exists/2,
+    key_exists/3,
     create_table/3,
     drop_table/2,
     flush/1,
@@ -860,7 +861,7 @@ create_schema(_Site, Connection, Schema) ->
     end.
 
 %% @doc Check the information schema if a certain table exists in the context database.
--spec table_exists(string(), #context{}) -> boolean().
+-spec table_exists(string() | atom(), #context{}) -> boolean().
 table_exists(Table, Context) ->
     Options = z_db_pool:get_database_options(Context),
     Db = proplists:get_value(dbdatabase, Options),
@@ -875,6 +876,19 @@ table_exists(Table, Context) ->
         0 -> false
     end.
 
+-spec key_exists(string() | atom(), binary() | string() | atom(), z:context()) -> boolean().
+key_exists(Table, Key, Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    Schema = proplists:get_value(dbschema, Options),
+    HasKey = z_db:q1("
+        select count(*)
+        from pg_indexes
+        where schemaname = $1
+          and tablename = $2
+          and indexname = $3",
+        [ Schema, Table, Key ],
+        Context),
+    HasKey >= 1.
 
 %% @doc Make sure that a table is dropped, only when the table exists
 drop_table(Name, Context) when is_atom(Name) ->

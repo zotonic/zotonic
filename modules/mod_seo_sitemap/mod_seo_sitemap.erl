@@ -25,7 +25,7 @@
 -mod_prio(600).
 -mod_depends([seo]).
 -mod_provides([seo_sitemap]).
--mod_schema(2).
+-mod_schema(3).
 
 -include_lib("zotonic.hrl").
 -include("include/seo_sitemap.hrl").
