@@ -145,18 +145,38 @@ start_http_listeners_ip4(WebIp, WebPort) ->
         cowboy_options())
     of
         {ok, _} ->
-            ?LOG_NOTICE("HTTP IPv4 server listening on ~s:~p", [ip_to_string(WebIp), WebPort]),
+            ?LOG_NOTICE(#{
+                text => "HTTP IPv4 server listening",
+                ip => ip_to_string(WebIp),
+                port => WebPort,
+                protocol => http
+            }),
             ok;
         {error, {already_started, _Pid}} ->
-            ?LOG_NOTICE("HTTP IPv4 server listening on ~s:~p", [ip_to_string(WebIp), WebPort]),
+            ?LOG_NOTICE(#{
+                text => "HTTP IPv4 server listening",
+                ip => ip_to_string(WebIp),
+                port => WebPort,
+                protocol => http
+            }),
             ok;
         {error, eaddrinuse} ->
-            ?LOG_ERROR("HTTP IPv4 server not started. Address in use on ~s:~p",
-                        [ ip_to_string(WebIp), WebPort ]),
+            ?LOG_ERROR(#{
+                text => "HTTP IPv4 server not started. Address in use.",
+                reason => eaddrinuse,
+                ip => ip_to_string(WebIp),
+                port => WebPort,
+                protocol => http
+            }),
             {error, eaddrinuse};
         {error, Reason} ->
-            ?LOG_ERROR("HTTP IPv4 server not started. Error ~p on ~s:~p",
-                        [ Reason, ip_to_string(WebIp), WebPort ]),
+            ?LOG_ERROR(#{
+                text => "HTTP IPv4 server not started",
+                reason => Reason,
+                ip => ip_to_string(WebIp),
+                port => WebPort,
+                protocol => http
+            }),
             {error, Reason}
     end.
 
@@ -188,18 +208,38 @@ start_https_listeners_ip4(WebIp, SSLPort) ->
         cowboy_options())
     of
         {ok, _} ->
-            ?LOG_NOTICE("HTTPS IPv4 server listening on ~s:~p", [ip_to_string(WebIp), SSLPort]),
+            ?LOG_NOTICE(#{
+                text => "HTTPS IPv4 server listening",
+                ip => ip_to_string(WebIp),
+                port => SSLPort,
+                protocol => https
+            }),
             ok;
         {error, {already_started, _Pid}} ->
-            ?LOG_NOTICE("HTTPS IPv4 server listening on ~s:~p", [ip_to_string(WebIp), SSLPort]),
+            ?LOG_NOTICE(#{
+                text => "HTTPS IPv4 server listening",
+                ip => ip_to_string(WebIp),
+                port => SSLPort,
+                protocol => https
+            }),
             ok;
         {error, eaddrinuse} ->
-            ?LOG_ERROR("HTTPS IPv4 server not started. Address in use on ~s:~p",
-                        [ ip_to_string(WebIp), SSLPort ]),
+            ?LOG_ERROR(#{
+                text => "HTTPS IPv4 server not started. Address in use.",
+                reason => eaddrinuse,
+                ip => ip_to_string(WebIp),
+                port => SSLPort,
+                protocol => https
+            }),
             {error, eaddrinuse};
         {error, Reason} ->
-            ?LOG_ERROR("HTTPS IPv4 server not started. Error ~p on ~s:~p",
-                        [ Reason, ip_to_string(WebIp), SSLPort ]),
+            ?LOG_ERROR(#{
+                text => "HTTPS IPv4 server not started",
+                reason => Reason,
+                ip => ip_to_string(WebIp),
+                port => SSLPort,
+                protocol => https
+            }),
             {error, Reason}
     end.
 
@@ -229,18 +269,38 @@ start_http_listeners_ip6(WebIp, WebPort) ->
         cowboy_options())
     of
         {ok, _} ->
-            ?LOG_NOTICE("HTTP IPv6 server listening on ~s:~p", [ ip_to_string(WebIp), WebPort ]),
+            ?LOG_NOTICE(#{
+                text => "HTTP IPv6 server listening",
+                ip => ip_to_string(WebIp),
+                port => WebPort,
+                protocol => http
+            }),
             ok;
         {error, {already_started, _Pid}} ->
-            ?LOG_NOTICE("HTTP IPv6 server listening on ~s:~p", [ ip_to_string(WebIp), WebPort ]),
+            ?LOG_NOTICE(#{
+                text => "HTTP IPv6 server listening",
+                ip => ip_to_string(WebIp),
+                port => WebPort,
+                protocol => http
+            }),
             ok;
         {error, eaddrinuse} ->
-            ?LOG_ERROR("HTTP IPv6 server not started. Address in use on ~s:~p",
-                        [ ip_to_string(WebIp), WebPort ]),
+            ?LOG_ERROR(#{
+                text => "HTTP IPv6 server not started. Address in use.",
+                reason => eaddrinuse,
+                ip => ip_to_string(WebIp),
+                port => WebPort,
+                protocol => http
+            }),
             {error, eaddrinuse};
         {error, Reason} ->
-            ?LOG_ERROR("HTTP IPv6 server not started. Error on ~p ~s:~p",
-                        [ Reason, ip_to_string(WebIp), WebPort ]),
+            ?LOG_ERROR(#{
+                text => "HTTP IPv6 server not started",
+                reason => Reason,
+                ip => ip_to_string(WebIp),
+                port => WebPort,
+                protocol => http
+            }),
             {error, Reason}
     end.
 
@@ -271,18 +331,38 @@ start_https_listeners_ip6(WebIp, SSLPort) ->
         cowboy_options())
     of
         {ok, _} ->
-            ?LOG_NOTICE("HTTPS IPv6 server listening on ~s:~p", [ip_to_string(WebIp), SSLPort]),
+            ?LOG_NOTICE(#{
+                text => "HTTPS IPv6 server listening",
+                ip => ip_to_string(WebIp),
+                port => SSLPort,
+                protocol => https
+            }),
             ok;
         {error, {already_started, _Pid}} ->
-            ?LOG_NOTICE("HTTPS IPv6 server listening on ~s:~p", [ip_to_string(WebIp), SSLPort]),
+            ?LOG_NOTICE(#{
+                text => "HTTPS IPv6 server listening",
+                ip => ip_to_string(WebIp),
+                port => SSLPort,
+                protocol => https
+            }),
             ok;
         {error, eaddrinuse} ->
-            ?LOG_ERROR("HTTPS IPv6 server not started. Address in use on ~p:~p",
-                        [ WebIp, SSLPort ]),
+            ?LOG_ERROR(#{
+                text => "HTTPS IPv6 server not started. Address in use.",
+                reason => eaddrinuse,
+                ip => ip_to_string(WebIp),
+                port => SSLPort,
+                protocol => https
+            }),
             {error, eaddrinuse};
         {error, Reason} ->
-            ?LOG_ERROR("HTTPS IPv6 server not started. Error on ~p ~s:~p",
-                        [ Reason, ip_to_string(WebIp), SSLPort ]),
+            ?LOG_ERROR(#{
+                text => "HTTPS IPv6 server not started",
+                reason => Reason,
+                ip => ip_to_string(WebIp),
+                port => SSLPort,
+                protocol => https
+            }),
             {error, Reason}
     end.
 

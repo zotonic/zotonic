@@ -39,7 +39,6 @@
 
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("mqtt_packet_map/include/mqtt_packet_map.hrl").
 
 -spec start_link( ranch:ref(), Socket :: pid(), module(), map() ) -> {ok, pid()}.
 start_link(Ref, Socket, Transport, Opts) ->
@@ -93,15 +92,31 @@ recv_connect_data(ConnectData, Socket, Transport, State) ->
         {error, incomplete_packet} ->
             ?MODULE:recv_connect(Socket, Transport, State#{ data => ConnectData });
         {error, expect_connect} ->
-            ?LOG_INFO("MQTT: refusing connect with wrong packet type"),
+            ?LOG_INFO(#{
+                text => "MQTT: refusing connect with wrong packet type",
+                reason => expect_connect,
+                src => inet:ntoa(PeerIP),
+                protocol => mqtt
+            }),
             ok = Transport:close(Socket);
         {error, unknown_host} ->
             %% Common auth mistake when connecting MQTT clients to zotonic. Because most clients don't
             %% report the connection error, it is good to at least have a message in the log.
-            ?LOG_INFO("MQTT: refusing connect with unknown host. Use \"example.com:localuser\" as username."),
+            ?LOG_INFO(#{
+                text => "MQTT: refusing connect with unknown host. Use \"example.com:localuser\" as username",
+                reason => unknown_host,
+                src => inet:ntoa(PeerIP),
+                protocol => mqtt
+            }),
             ok = Transport:close(Socket);
-        {error, _} ->
+        {error, Reason} ->
             % Invalid packet or unkown host - just close the connection
+            ?LOG_INFO(#{
+                text => "MQTT: refusing connect with invalid packet or unkown host",
+                reason => Reason,
+                src => inet:ntoa(PeerIP),
+                protocol => mqtt
+            }),
             ok = Transport:close(Socket)
     end.
 
@@ -120,7 +135,13 @@ loop_data(Data, Socket, Transport, #{ session_ref := SessionRef } = State) ->
         ok ->
             ?MODULE:loop(Socket, Transport, State);
         {error, Reason} ->
-            ?LOG_INFO("MQTT incoming_data/2 returned: ~p", [ Reason ]),
+            {ok, {PeerIP, _}} = Transport:peername(Socket),
+            ?LOG_INFO(#{
+                text => "MQTT incoming_data/2 with unexpected data",
+                reason => Reason,
+                src => inet:ntoa(PeerIP),
+                protocol => mqtt
+            }),
             ok = Transport:close(Socket)
     end.
 
