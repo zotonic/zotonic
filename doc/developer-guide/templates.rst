@@ -5,11 +5,12 @@ Templates
 =========
 
 .. seealso::
+    :ref:`guide-media` on how to include images and other media in your
+    templates.
 
-    - :ref:`guide-media` on how to include images and other media in your
-      templates.
-    - :ref:`guide-wires` on using JavaScript to add interaction to your
-      templates.
+.. seealso::
+    :ref:`guide-wires` on using JavaScript to add interaction to your
+    templates.
 
 Templates are text files marked up using the Zotonic template language. Zotonic
 interprets that mark-up to dynamically generate HTML pages. Zotonic’s template
