@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017 Marc Worrell
+%% @copyright 2017-2022 Marc Worrell
 %% @doc Zotonic Launcher, launches the Zotonic application server with
 %%      the Zotonic Core, file watchers, and port listeners.
 
-%% Copyright 2017 Marc Worrell
+%% Copyright 2017-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -55,6 +55,7 @@ start() ->
     end.
 
 start(_StartType, _StartArgs) ->
+    logger:set_application_level(ssl, warning),
     case is_root() of
         true ->
             ?LOG_CRITICAL("Not running as root."),
@@ -104,7 +105,10 @@ load_config_files(ZotonicCfgs) ->
         {ok, Config} ->
             zotonic_launcher_config:load_configs(Config);
         {error, _} = Error ->
-            error_logger:error_msg("Fatal error reading configuration files: ~p", [ Error ]),
+            ?LOG_ERROR(#{
+                text => "Fatal error reading configuration files",
+                reason => Error
+            }),
             Error
     end.
 
@@ -150,8 +154,11 @@ write_pidfile() ->
             ok = file:write(F, os:getpid()),
             ok = file:close(F);
         {error, Reason} ->
-            ?LOG_ERROR("Could not write ZOTONIC_PIDFILE \"~s\" error: ~p",
-                        [get_pidfile(), Reason]),
+            ?LOG_ERROR(#{
+                text => "Could not write ZOTONIC_PIDFILE",
+                file => get_pidfile(),
+                reason => Reason
+            }),
             {error, Reason}
     end.
 
@@ -162,8 +169,11 @@ remove_pidfile() ->
         ok ->
             ok;
         {error, Reason} ->
-            ?LOG_ERROR("Could not delete ZOTONIC_PIDFILE \"~s\" error: ~p",
-                        [get_pidfile(), Reason]),
+            ?LOG_ERROR(#{
+                text => "Could not delete ZOTONIC_PIDFILE",
+                file => get_pidfile(),
+                reason => Reason
+            }),
             {error, Reason}
     end.
 

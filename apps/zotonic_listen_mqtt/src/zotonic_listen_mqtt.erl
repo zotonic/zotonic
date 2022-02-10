@@ -120,14 +120,29 @@ start_mqtt_listeners() ->
     end.
 
 %% @doc Start IPv4 MQTT listeners
-start_mqtt_listeners_ip4(none, _Port) ->
-    ?LOG_WARNING("MQTT server disabled: 'mqtt_listen_ip' is set to 'none'"),
+start_mqtt_listeners_ip4(none, Port) ->
+    ?LOG_WARNING(#{
+        text => "MQTT server disabled: 'mqtt_listen_ip' is set to 'none'",
+        ip => none,
+        port => Port,
+        protocol => mqtt
+    }),
     ignore;
-start_mqtt_listeners_ip4(_WebIp, none) ->
-    ?LOG_WARNING("MQTT server disabled: 'mqtt_listen_port' is set to 'none'"),
+start_mqtt_listeners_ip4(WebIp, none) ->
+    ?LOG_WARNING(#{
+        text => "MQTT server disabled: 'mqtt_listen_port' is set to 'none'",
+        ip => ip_to_string(WebIp),
+        port => none,
+        protocol => mqtt
+    }),
     ignore;
 start_mqtt_listeners_ip4(WebIp, WebPort) ->
-    ?LOG_NOTICE("MQTT server listening on IPv4 ~s:~p", [ip_to_string(WebIp), WebPort]),
+    ?LOG_NOTICE(#{
+        text => "MQTT server listening on IPv4",
+        ip => ip_to_string(WebIp),
+        port => WebPort,
+        protocol => mqtt
+    }),
     WebOpt = case WebIp of
         any -> [];
         _ -> [{ip, WebIp}]
@@ -154,11 +169,21 @@ start_mqtt_listeners_ip4(WebIp, WebPort) ->
 
 %% @doc Start IPv4 MQTT ssl listeners
 start_mqtts_listeners_ip4(none, _SSLPort) -> ignore;
-start_mqtts_listeners_ip4(_WebIp, none) ->
-    ?LOG_WARNING("MQTT ssl server disabled: 'mqtt_listen_ssl_port' is set to 'none'"),
+start_mqtts_listeners_ip4(WebIp, none) ->
+    ?LOG_WARNING(#{
+        text => "MQTT ssl server disabled: 'mqtt_listen_ssl_port' is set to 'none'",
+        ip => ip_to_string(WebIp),
+        port => none,
+        protocol => mqtt
+    }),
     ignore;
 start_mqtts_listeners_ip4(WebIp, SSLPort) ->
-    ?LOG_NOTICE("MQTT ssl server listening on IPv4 ~s:~p", [ip_to_string(WebIp), SSLPort]),
+    ?LOG_NOTICE(#{
+        text => "MQTT ssl server listening on IPv4",
+        ip => ip_to_string(WebIp),
+        port => SSLPort,
+        protocol => mqtt
+    }),
     WebOpt = case WebIp of
         any -> [];
         _ -> [{ip, WebIp}]
@@ -188,7 +213,12 @@ start_mqtts_listeners_ip4(WebIp, SSLPort) ->
 start_mqtt_listeners_ip6(none, _WebPort) -> ignore;
 start_mqtt_listeners_ip6(_WebIp, none) -> ignore;
 start_mqtt_listeners_ip6(WebIp, WebPort) ->
-    ?LOG_INFO("MQTT server listening on IPv6 ~s:~p", [ip_to_string(WebIp), WebPort]),
+    ?LOG_NOTICE(#{
+        text => "MQTT server listening on IPv6",
+        ip => ip_to_string(WebIp),
+        port => WebPort,
+        protocol => mqtt
+    }),
     WebOpt = case WebIp of
         any -> [];
         _ -> [{ip, WebIp}]
@@ -214,7 +244,12 @@ start_mqtt_listeners_ip6(WebIp, WebPort) ->
 start_mqtts_listeners_ip6(none, _SSLPort) -> ignore;
 start_mqtts_listeners_ip6(_WebIp, none) -> ignore;
 start_mqtts_listeners_ip6(WebIp, SSLPort) ->
-    ?LOG_INFO("MQTT ssl server listening on IPv6 ~s:~p", [ip_to_string(WebIp), SSLPort]),
+    ?LOG_NOTICE(#{
+        text => "MQTT ssl server listening on IPv6",
+        ip => ip_to_string(WebIp),
+        port => SSLPort,
+        protocol => mqtt
+    }),
     WebOpt = case WebIp of
         any -> [];
         _ -> [{ip, WebIp}]
