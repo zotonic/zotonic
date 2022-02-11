@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-02-11 14:08\n"
+"PO-Revision-Date: 2022-02-11 14:13\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -5224,7 +5224,7 @@ msgstr "نسخة المحرر"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:13
 msgid "Insert media"
-msgstr ""
+msgstr "أدخل الوسائط"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:73
 msgid "Large"
