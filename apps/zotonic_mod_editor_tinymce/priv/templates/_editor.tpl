@@ -10,7 +10,7 @@ overrides_tpl: (optional) template location that contains JavaScript overrides f
         dialog_open
         intent="connect"
         template="_action_dialog_connect.tpl"
-        title=_"Insert image"
+        title=_"Insert media"
         width="large"
         subject_id=id
         predicate=`depiction`
