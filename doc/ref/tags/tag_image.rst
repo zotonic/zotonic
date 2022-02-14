@@ -77,6 +77,16 @@ The :ref:`media class <guide-media-classes>` of the image. Example::
 
     mediaclass="thumb"
 
+The mediaclass is added as a CSS class to the generated image, prefixed with
+``mediaclass-``.  For example::
+
+    {% img mediaclass="large" %}
+
+Might become::
+
+    <img src="/image/2021/3/29/pic.jpg%28mediaclass-large.e911845ed2e692bab8ebceb676409a04066cf43b%29.jpg"
+         decoding="async" alt="" class="mediaclass-large" width="2459" height="800">
+
 background
 ^^^^^^^^^^
 

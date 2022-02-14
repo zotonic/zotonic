@@ -1,5 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell, David de Boer
+%% @copyright 2009-2022 Marc Worrell, David de Boer
 %% @doc Generate media urls and html for viewing media, based on the filename, size and optional filters.
 %% Does not generate media previews itself, this is done when fetching the image.
 %%
@@ -212,7 +212,11 @@ tag1(MediaRef, Filename, Options, Context) ->
             % Calculate the default width/height
             case z_media_preview:size(MediaRef, SizeOptions, Context) of
                 {size, Width, Height, _Mime} ->
-                    [{width,Width},{height,Height}|TagOpts];
+                    [
+                        {width,Width},
+                        {height,Height}
+                        | TagOpts
+                    ];
                 _ ->
                     TagOpts
             end
@@ -222,25 +226,49 @@ tag1(MediaRef, Filename, Options, Context) ->
         undefined ->
             TagOpts1;
         MC ->
+            MC1 = <<"mediaclass-", (z_convert:to_binary(MC))/binary>>,
             case proplists:get_value(class, TagOpts1) of
-                undefined -> [{class, MC} | TagOpts1];
-                Class -> [{class, iolist_to_binary([MC, 32, Class])} | proplists:delete(class, TagOpts1)]
+                undefined ->
+                    [
+                        {class, MC1}
+                        | TagOpts1
+                    ];
+                Class ->
+                    [
+                        {class, <<MC1/binary, " ", (z_convert:to_binary(Class))/binary>>}
+                        | proplists:delete(class, TagOpts1)
+                    ]
             end
     end,
     % Make sure the required alt tag is present
     TagOpts3 =  case proplists:get_value(alt, TagOpts2) of
-        undefined -> [{alt,<<>>}|TagOpts2];
-        _ -> TagOpts1
+        undefined ->
+            [
+                {alt,<<>>}
+                | TagOpts2
+            ];
+        _ ->
+            TagOpts2
+    end,
+    % Add default decoding async
+    TagOpts4 =  case proplists:get_value(decoding, TagOpts3) of
+        undefined ->
+            [
+                {decoding,<<"async">>}
+                | TagOpts3
+            ];
+        _ ->
+            TagOpts3
     end,
     % Add the optional srcset
-    TagOpts4 = with_srcset(TagOpts3, Filename, Options, Context),
+    TagOpts5 = with_srcset(TagOpts4, Filename, Options, Context),
     % Filter some opts
     case proplists:get_value(link, TagOpts) of
         None when None =:= []; None =:= <<>>; None =:= undefined ->
-            {ok, iolist_to_binary(z_tags:render_tag("img", [{src,Url}|TagOpts4]))};
+            {ok, iolist_to_binary(z_tags:render_tag("img", [{src,Url}|TagOpts5]))};
         Link ->
             HRef = iolist_to_binary(get_link(MediaRef, Link, Context)),
-            Tag = z_tags:render_tag("img", [{src,Url}|proplists:delete(link, TagOpts4)]),
+            Tag = z_tags:render_tag("img", [{src,Url}|proplists:delete(link, TagOpts5)]),
             {ok, iolist_to_binary(z_tags:render_tag("a", [{href,HRef}], Tag))}
     end.
 
@@ -495,6 +523,7 @@ is_tagopt({title, _}) -> true;
 is_tagopt({class, _}) -> true;
 is_tagopt({style, _}) -> true;
 is_tagopt({loading, _}) -> true;
+is_tagopt({decoding, _}) -> true;
 is_tagopt({align, _}) -> true;  % HTML 1.0 for e-mails
 
 % Some preview args we definitely know exist (just an optimization)
@@ -513,6 +542,7 @@ is_tagopt({background, _}) -> false;
 is_tagopt({lossless, _}) -> false;
 is_tagopt({removebg, _}) -> false;
 is_tagopt({mediaclass, _}) -> false;
+is_tagopt({rotate, _}) -> false;
 is_tagopt({rotate3d, _}) -> false;
 is_tagopt({brightness, _}) -> false;
 is_tagopt({contrast, _}) -> false;
