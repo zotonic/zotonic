@@ -212,7 +212,11 @@ tag1(MediaRef, Filename, Options, Context) ->
             % Calculate the default width/height
             case z_media_preview:size(MediaRef, SizeOptions, Context) of
                 {size, Width, Height, _Mime} ->
-                    [{width,Width},{height,Height}|TagOpts];
+                    [
+                        {width,Width},
+                        {height,Height}
+                        | TagOpts
+                    ];
                 _ ->
                     TagOpts
             end
@@ -222,20 +226,39 @@ tag1(MediaRef, Filename, Options, Context) ->
         undefined ->
             TagOpts1;
         MC ->
+            MC1 = <<"mediaclass-", (z_convert:to_binary(MC))/binary>>,
             case proplists:get_value(class, TagOpts1) of
-                undefined -> [{class, MC} | TagOpts1];
-                Class -> [{class, iolist_to_binary([MC, 32, Class])} | proplists:delete(class, TagOpts1)]
+                undefined ->
+                    [
+                        {class, MC1}
+                        | TagOpts1
+                    ];
+                Class ->
+                    [
+                        {class, <<MC1/binary, " ", (z_convert:to_binary(Class))/binary>>}
+                        | proplists:delete(class, TagOpts1)
+                    ]
             end
     end,
     % Make sure the required alt tag is present
     TagOpts3 =  case proplists:get_value(alt, TagOpts2) of
-        undefined -> [{alt,<<>>}|TagOpts2];
-        _ -> TagOpts2
+        undefined ->
+            [
+                {alt,<<>>}
+                | TagOpts2
+            ];
+        _ ->
+            TagOpts2
     end,
     % Add default decoding async
     TagOpts4 =  case proplists:get_value(decoding, TagOpts3) of
-        undefined -> [{decoding,<<"async">>}|TagOpts3];
-        _ -> TagOpts3
+        undefined ->
+            [
+                {decoding,<<"async">>}
+                | TagOpts3
+            ];
+        _ ->
+            TagOpts3
     end,
     % Add the optional srcset
     TagOpts5 = with_srcset(TagOpts4, Filename, Options, Context),
