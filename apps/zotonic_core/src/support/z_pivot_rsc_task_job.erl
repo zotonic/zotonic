@@ -48,8 +48,12 @@ task_job(
     }, Context) ->
     z_context:logger_md(Context),
     try
-        ?LOG_DEBUG("Pivot task starting: ~p:~p(...)", [ Module, Function ]),
-        case call_function(Module, Function, ensure_list(Args), Context) of
+        Args1 = ensure_list(Args),
+        ?LOG_DEBUG(#{
+            text => "Pivot task starting",
+            mfa => {Module, Function, length(Args1)+1}
+        }),
+        case call_function(Module, Function, Args1, Context) of
             {delay, Delay} ->
                 Due = if
                         is_integer(Delay) ->
@@ -77,9 +81,14 @@ task_job(
         end
     catch
         error:undef:Trace ->
-            ?LOG_ERROR("Task ~p failed - undefined function, aborting: ~p:~p(~p)",
-                        [TaskId, Module, Function, Args ],
-                        #{ stack => Trace }),
+            ?LOG_ERROR(#{
+                text => "Pivot task failed - undefined function, aborting",
+                task_id => TaskId,
+                mfa => {Module, Function, Args},
+                error => error,
+                reason => undef,
+                stack => Trace
+            }),
             z_db:delete(pivot_task_queue, TaskId, Context);
         Error:Reason:Trace ->
             case ErrCt < ?MAX_TASK_ERROR_COUNT of
@@ -87,18 +96,29 @@ task_job(
                     RetryDue = calendar:gregorian_seconds_to_datetime(
                             calendar:datetime_to_gregorian_seconds(calendar:universal_time())
                             + task_retry_backoff(ErrCt)),
-                    ?LOG_ERROR("Task ~p failed - will retry ~p:~p(~p) ~p:~p on ~p",
-                                [TaskId, Module, Function, Args, Error, Reason, RetryDue],
-                                #{ stack => Trace }),
+                    ?LOG_ERROR(#{
+                        text => "Pivot task failed - will retry",
+                        task_id => TaskId,
+                        mfa => {Module, Function, Args},
+                        error => Error,
+                        reason => Reason,
+                        retry_on => RetryDue,
+                        stack => Trace
+                    }),
                     RetryFields = #{
                         <<"due">> => RetryDue,
                         <<"error_count">> => ErrCt+1
                     },
                     z_db:update(pivot_task_queue, TaskId, RetryFields, Context);
                 false ->
-                    ?LOG_ERROR("Task ~p failed - aborting ~p:~p(~p) ~p:~p",
-                                [TaskId, Module, Function, Args, Error, Reason],
-                                #{ stack => Trace }),
+                    ?LOG_ERROR(#{
+                        text => "Pivot task failed - aborting",
+                        task_id => TaskId,
+                        mfa => {Module, Function, Args},
+                        error => Error,
+                        reason => Reason,
+                        stack => Trace
+                    }),
                     z_db:delete(pivot_task_queue, TaskId, Context)
             end
     after
