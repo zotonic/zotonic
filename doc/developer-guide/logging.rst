@@ -59,7 +59,7 @@ handler in the logger configuration of your ``erlang.config`` file and check the
             {handler, default, z_logger_h,
                 #{
                     level => debug,
-                    formatter => {logjam,
+                    formatter => {z_logger_formatter,
                         #{
                             prettify => true,
                             colored => true,
@@ -84,7 +84,7 @@ handler in the logger configuration of your ``erlang.config`` file and check the
                         max_no_files => 10,
                         max_no_bytes => 52428800 % 10 x 5mb
                     },
-                    formatter => {logjam,
+                    formatter => {z_logger_formatter,
                         #{
                             prettify => true,
                             colored => false,
@@ -109,7 +109,7 @@ handler in the logger configuration of your ``erlang.config`` file and check the
                         max_no_files => 10,
                         max_no_bytes => 52428800 % 10 x 5mb
                     },
-                    formatter => {logjam,
+                    formatter => {z_logger_formatter,
                         #{
                             prettify => true,
                             colored => false,
@@ -133,7 +133,6 @@ handler in the logger configuration of your ``erlang.config`` file and check the
         {host, "localhost"},  % inet:hostname()
         {port, 5000}          % inet:port_number()
     ]},
-
 
 .. _Logger: https://www.erlang.org/doc/man/logger.html
 .. _Logger documentation: https://www.erlang.org/doc/apps/kernel/logger_chapter.html
