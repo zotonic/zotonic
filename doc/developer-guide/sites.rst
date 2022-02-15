@@ -16,7 +16,9 @@ Create a site
 
 .. note:: If anything goes wrong, see the :ref:`ref-troubleshooting-installation`.
 
-First, prepare the database. In your terminal, connect to PostgreSQL::
+First, prepare the database. In your terminal, connect to PostgreSQL:
+
+.. code-block:: bash
 
     $ sudo -u postgres psql (enter your OS password)
 
@@ -34,17 +36,21 @@ Or create the site database manually::
     postgres=# CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';
     postgres=# GRANT ALL ON DATABASE zotonic TO zotonic;
 
-And quit postgres:
+And quit postgres::
 
     postgres=# \q
 
 Now that there is a database Zotonic can be started. We do this in debug mode
-so that all console output is visible::
+so that all console output is visible:
+
+.. code-block:: bash
 
      $ bin/zotonic debug
 
 In a new terminal window, edit your ``/etc/hosts`` file, adding an entry for ``yoursite.test`` (the
-site hostname) to point at your local host::
+site hostname) to point at your local host:
+
+.. code-block:: none
 
      127.0.0.1   yoursite.test
 
@@ -62,7 +68,9 @@ self-signed certificate for every site. These are stored in :file:`~/.config/zot
 (on macOS :file:`~/Library/Application Support/zotonic/security`).
 
 You can log into the admin at https://yoursite.test:8443/admin using the username ``admin``
-with the password that you can find in your site’s configuration. Use for this the command::
+with the password that you can find in your site’s configuration. Use for this the command:
+
+.. code-block:: bash
 
       $ bin/zotonic siteconfig yoursite
 
@@ -71,11 +79,15 @@ in the :term:`zotonic user directory`.
 
 You can stop Zotonic by typing twice Ctrl-C at the Erlang command prompt.
 
-If you want to start Zotonic in the background then use::
+If you want to start Zotonic in the background then use:
+
+.. code-block:: bash
 
   $ bin/zotonic start
 
-This can be stopped with::
+This can be stopped with:
+
+.. code-block:: bash
 
   $ bin/zotonic stop
 

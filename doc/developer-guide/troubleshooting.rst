@@ -17,7 +17,9 @@ soft linked in the ``_build`` directory: ``_build/default/lib/yoursite/priv/zoto
 Browsers can’t connect to http://yoursite:8000
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Check the ``/etc/hosts`` file and make sure you have an entry like the following::
+Check the ``/etc/hosts`` file and make sure you have an entry like the following:
+
+.. code-block:: none
 
     127.0.0.1   yoursite
 
@@ -26,11 +28,20 @@ Zotonic won’t start and shows errors when running zotonic debug
 
 Check your site’s database configuration.
 
-Check PostgreSQL Authentication Config (``pg_hba.conf``).
+Check PostgreSQL Authentication Config (``pg_hba.conf`` in ``/etc/postgresql``).
 
 If you get connection failures when starting Zotonic you should
-double-check pg_hba.conf and make sure to ``/etc/init.d/postgresql
+double-check ``pg_hba.conf`` and make sure to ``/etc/init.d/postgresql
 reload`` to make sure it gets loaded.
+
+The ``pg_hba.conf`` should contain something like:
+
+.. code-block:: none
+
+    # IPv4 local connections:
+    host    all             all             127.0.0.1/32            md5
+    # IPv6 local connections:
+    host    all             all             ::1/128                 md5
 
 .. _ref-troubleshooting-sites:
 
@@ -65,6 +76,5 @@ Erlang crashes
 Here we list some common causes of Erlang crashes.
 
 ``{{badmatch,{error,emfile}}`` or ``{reason, emfile}``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You need to raise the :ref:`file-descriptors` limit.
