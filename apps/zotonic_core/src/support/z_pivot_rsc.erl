@@ -179,21 +179,57 @@ insert_queue(Ids, DueDate, Context) when is_list(Ids), is_tuple(DueDate) ->
     gen_server:cast(Context#context.pivot_server, {insert_queue, DueDate, Ids}).
 
 %% @doc Insert a slow running pivot task. For example syncing category numbers after an category update.
+-spec insert_task(Module, Function, Context) -> {ok, TaskId} | {error, term()}
+    when Module :: atom(),
+         Function :: atom(),
+         Context :: z:context(),
+         TaskId :: integer().
 insert_task(Module, Function, Context) ->
     insert_task_after(undefined, Module, Function, undefined, [], Context).
 
 %% @doc Insert a slow running pivot task. Use the UniqueKey to prevent double queued tasks.
+-spec insert_task(Module, Function, UniqueKey, Context) -> {ok, TaskId} | {error, term()}
+    when Module :: atom(),
+         Function :: atom(),
+         UniqueKey :: undefined | binary() | string(),
+         Context :: z:context(),
+         TaskId :: integer().
 insert_task(Module, Function, UniqueKey, Context) ->
     insert_task_after(undefined, Module, Function, UniqueKey, [], Context).
 
 %% @doc Insert a slow running pivot task with unique key and arguments.
+-spec insert_task(Module, Function, UniqueKey, Args, Context) -> {ok, TaskId} | {error, term()}
+    when Module :: atom(),
+         Function :: atom(),
+         UniqueKey :: undefined | binary() | string(),
+         Args :: list()
+               | fun( ( OldDue :: undefined | calendar:datetime(),
+                        Args :: list(),
+                        NewDue :: calendar:datetime(),
+                        z:context()
+                    ) -> {ok, {calendar:datetime(), list()}} | {error, term()} ),
+         Context :: z:context(),
+         TaskId :: integer().
 insert_task(Module, Function, UniqueKey, Args, Context) ->
     insert_task_after(undefined, Module, Function, UniqueKey, Args, Context).
 
 %% @doc Insert a slow running pivot task with unique key and arguments that should start after Seconds seconds.
 %% Always delete any existing transaction, to prevent race conditions when the task is running
 %% during this insert. The UniqueKey is used to have multiple entries per module/function. If only
-%% a single module/function should be queued, then set the UniqueKey to <<>>.
+%% a single module/function should be queued, then set the UniqueKey to <tt>&lt;&lt;&gt;&gt;</tt>.
+-spec insert_task_after(SecondsOrDate, Module, Function, UniqueKey, Args, Context) -> {ok, TaskId} | {error, term()}
+    when SecondsOrDate::undefined | integer() | calendar:datetime(),
+         Module :: atom(),
+         Function :: atom(),
+         UniqueKey :: undefined | binary() | string(),
+         Args :: list()
+               | fun( ( OldDue :: undefined | calendar:datetime(),
+                        Args :: list(),
+                        NewDue :: calendar:datetime(),
+                        z:context()
+                    ) -> {ok, {calendar:datetime(), list()}} | {error, term()} ),
+         Context :: z:context(),
+         TaskId :: integer().
 insert_task_after(SecondsOrDate, Module, Function, UniqueKey, ArgsFun, Context) ->
     gen_server:call(
         Context#context.pivot_server,
