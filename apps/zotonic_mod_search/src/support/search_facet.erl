@@ -529,7 +529,8 @@ extract_op(V) ->
 -spec pivot_all( z:context() ) -> ok.
 pivot_all(Context) ->
     ?LOG_NOTICE("Faceted search: repivoting facet for all resources for ~p", [ z_context:site(Context )]),
-    z_pivot_rsc:insert_task_after(1, ?MODULE, pivot_batch, facet_pivot_batch, [0], Context).
+    {ok, _} = z_pivot_rsc:insert_task_after(1, ?MODULE, pivot_batch, facet_pivot_batch, [0], Context),
+    ok.
 
 %% @doc Batch for running the facet table updates. This updates the table with 1000 resources
 %% at a time.

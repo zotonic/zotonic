@@ -191,7 +191,7 @@ insert_task(Module, Function, Context) ->
 -spec insert_task(Module, Function, UniqueKey, Context) -> {ok, TaskId} | {error, term()}
     when Module :: atom(),
          Function :: atom(),
-         UniqueKey :: undefined | binary() | string(),
+         UniqueKey :: undefined | binary() | string() | atom(),
          Context :: z:context(),
          TaskId :: integer().
 insert_task(Module, Function, UniqueKey, Context) ->
@@ -201,7 +201,7 @@ insert_task(Module, Function, UniqueKey, Context) ->
 -spec insert_task(Module, Function, UniqueKey, Args, Context) -> {ok, TaskId} | {error, term()}
     when Module :: atom(),
          Function :: atom(),
-         UniqueKey :: undefined | binary() | string(),
+         UniqueKey :: undefined | binary() | string() | atom(),
          Args :: list()
                | fun( ( OldDue :: undefined | calendar:datetime(),
                         OldArgs :: undefined | list(),
@@ -221,7 +221,7 @@ insert_task(Module, Function, UniqueKey, Args, Context) ->
     when SecondsOrDate::undefined | integer() | calendar:datetime(),
          Module :: atom(),
          Function :: atom(),
-         UniqueKey :: undefined | binary() | string(),
+         UniqueKey :: undefined | binary() | string() | atom(),
          Args :: list()
                | fun( ( OldDue :: undefined | calendar:datetime(),
                         OldArgs :: undefined | list(),
