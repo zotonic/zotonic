@@ -204,7 +204,7 @@ insert_task(Module, Function, UniqueKey, Context) ->
          UniqueKey :: undefined | binary() | string(),
          Args :: list()
                | fun( ( OldDue :: undefined | calendar:datetime(),
-                        Args :: list(),
+                        OldArgs :: undefined | list(),
                         NewDue :: calendar:datetime(),
                         z:context()
                     ) -> {ok, {calendar:datetime(), list()}} | {error, term()} ),
@@ -224,7 +224,7 @@ insert_task(Module, Function, UniqueKey, Args, Context) ->
          UniqueKey :: undefined | binary() | string(),
          Args :: list()
                | fun( ( OldDue :: undefined | calendar:datetime(),
-                        Args :: list(),
+                        OldArgs :: undefined | list(),
                         NewDue :: calendar:datetime(),
                         z:context()
                     ) -> {ok, {calendar:datetime(), list()}} | {error, term()} ),
