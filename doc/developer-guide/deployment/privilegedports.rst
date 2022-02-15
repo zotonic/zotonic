@@ -75,48 +75,33 @@ Install authbind::
 
   zotonic:~$ sudo apt-get install authbind
 
-Configure authbind to allow zotonic user to access port 80::
+Configure authbind to allow zotonic user to access port 80 and 443::
 
-  zotonic:~$ sudo touch /etc/authbind/byport/80
-  zotonic:~$ sudo chown zotonic /etc/authbind/byport/80
-  zotonic:~$ sudo chmod 500 /etc/authbind/byport/80
+  zotonic:~$ sudo install -m 500 -o zotonic /dev/null /etc/authbind/byport/80
+  zotonic:~$ sudo install -m 500 -o zotonic /dev/null /etc/authbind/byport/443
+  
+When you want to run zotonic's incoming mail server on port 25, you can make a similar 
+authbind configuration for this port.
 
 Set up the environment.
 
-You need to tell Zotonic explicitly which IP address to listen
-on. Zotonic defaults to ``any``, which will also bind to any ipv6
-addresses available. However authbind doesn't work with ipv6 and so
-will cause Zotonic to crash on startup.
+Make sure zotonic will listen on port 80 and 443. Either by setting this in the
+environment variables described below, or configuring it in zotonic's zotonic.config
+file.
 
 Add the following entries to ``/home/zotonic/.profile``, then save file & exit::
 
   export ZOTONIC_LISTEN_PORT=80
   export ZOTONIC_SSL_LISTEN_PORT=443
-  public_interface=eth0
-  export ZOTONIC_IP=`/sbin/ifconfig $public_interface | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
-  export ERL="authbind --deep erl"
-
-Where ``eth0`` is the name of the Ethernet interface that connects to the
-Internet (for a MediaTemple (ve) host this was venet0:0).
-Find the Ethernet interface with `/sbin/ifconfig`.
-You could alternatively set it to ``lo`` for localhost-only testing or to a LAN-only
-interface (say eth1) for a multi-interface server you are using
-Zotonic to host an intranet site with.
 
 Source the file to update the environment::
 
   zotonic:~$ . ~/.profile
 
-Check if ``ZOTONIC_IP`` has a value::
+Or put the following entries in zotonic's ``zotonic.config`` file::
 
-  echo $ZOTONIC_IP
-  
-If this doesn't return an IP address, it might be that your system omits "addr" at the inet line.
-You could try this instead::
-
-  export ZOTONIC_IP=`ifconfig $public_interface | awk '$1=="inet"{print $2}'`
-
-and check the result again.
+   {listen_port, 80},
+   {ssl_listen_port, 443}
 
 Stop zotonic if already running::
 
@@ -124,7 +109,7 @@ Stop zotonic if already running::
 
 Start zotonic::
 
-  zotonic:~$ ~/zotonic/bin/zotonic start
+  zotonic:~$ authbind --deep ~/zotonic/bin/zotonic start
 
 Browse to https://yoursite/ and verify that everything is working like it should.
 
