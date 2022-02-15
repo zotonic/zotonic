@@ -762,10 +762,15 @@ insert(Table, Parameters, Context) ->
                      {error, noresult} ->
                         {ok, undefined};
                      {error, #error{ codename = unique_violation }} = Error ->
-                        ?LOG_NOTICE("z_db unique_violation in insert to ~p of ~p", [Table, Parameters]),
+                        ?LOG_NOTICE(#{ text => "z_db unique_violation in insert",
+                                       table => Table,
+                                       parameters => Parameters}),
                         Error;
                      {error, Reason} = Error ->
-                        ?LOG_ERROR("z_db error ~p in query \"~s\" with ~p", [Reason, FinalSql, ColParams]),
+                        ?LOG_ERROR(#{ text => "z_db error in query",
+                                      reason => Reason,
+                                      query => FinalSql, 
+                                      parameters => ColParams }),
                         Error
                  end
             end,
