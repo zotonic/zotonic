@@ -16,57 +16,58 @@ Create a site
 
 .. note:: If anything goes wrong, see the :ref:`ref-troubleshooting-installation`.
 
-1. First, prepare the database. In your terminal, connect to PostgreSQL::
+First, prepare the database. In your terminal, connect to PostgreSQL::
 
     $ sudo -u postgres psql (enter your OS password)
 
-   And create a database user for Zotonic. You may want to change the password::
+And create a database user for Zotonic. You may want to change the password::
 
     postgres=# CREATE USER zotonic WITH PASSWORD 'zotonic';
 
-   Now, either give this user create rights to have Zotonic automatically create
-   the database for you (recommended)::
+Now, either give this user create rights to have Zotonic automatically create
+the database for you (recommended)::
 
     postgres=# ALTER USER zotonic CREATEDB;
 
-   Or create the site database manually::
+Or create the site database manually::
 
     postgres=# CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';
     postgres=# GRANT ALL ON DATABASE zotonic TO zotonic;
 
-  And quit postgres:
+And quit postgres:
 
     postgres=# \q
 
-2. Now that there is a database Zotonic can be started. We do this in debug mode
-   so that all console output is visible::
+Now that there is a database Zotonic can be started. We do this in debug mode
+so that all console output is visible::
 
      $ bin/zotonic debug
 
-3. In a new terminal window, edit your ``/etc/hosts`` file, adding an entry for ``yoursite.test`` (the
-   site hostname) to point at your local host::
+In a new terminal window, edit your ``/etc/hosts`` file, adding an entry for ``yoursite.test`` (the
+site hostname) to point at your local host::
 
      127.0.0.1   yoursite.test
 
-4. Create a new Zotonic site, based on the ‘blog’ skeleton site:
+.. note:: Zotonic has to be running for the ``addsite`` command to succeed.
 
-   .. note:: Zotonic has to be running for the ``addsite`` command to succeed.
-   .. code-block:: bash
+Create a new Zotonic site, based on the ‘blog’ skeleton site:
+
+.. code-block:: bash
 
      $ bin/zotonic addsite -s blog yoursite
 
-5. Finally, point your browser to https://yoursite.test:8443 to see your new site.
-   The browser will ask to accept a self-signed certificate. Zotonic generates a
-   self-signed certificate for every site. These are stored in :file:`~/.config/zotonic/security`
-   (on macOS :file:`~/Library/Application Support/zotonic/security`).
+Finally, point your browser to https://yoursite.test:8443 to see your new site.
+The browser will ask to accept a self-signed certificate. Zotonic generates a
+self-signed certificate for every site. These are stored in :file:`~/.config/zotonic/security`
+(on macOS :file:`~/Library/Application Support/zotonic/security`).
 
-   You can log into the admin at https://yoursite.test:8443/admin using the username ``admin``
-   with the password that you can find in your site’s configuration. Use for this the command::
+You can log into the admin at https://yoursite.test:8443/admin using the username ``admin``
+with the password that you can find in your site’s configuration. Use for this the command::
 
       $ bin/zotonic siteconfig yoursite
 
-   The configuration is stored in the file :file:`apps_user/yoursite/priv/zotonic_site.config`
-   in the :term:`zotonic user directory`.
+The configuration is stored in the file :file:`apps_user/yoursite/priv/zotonic_site.config`
+in the :term:`zotonic user directory`.
 
 You can stop Zotonic by typing twice Ctrl-C at the Erlang command prompt.
 
