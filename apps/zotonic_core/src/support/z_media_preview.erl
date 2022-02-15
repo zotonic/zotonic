@@ -61,12 +61,20 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
                     case z_mediaclass:expand_mediaclass_checksum(Filters) of
                         {ok, FiltersExpanded} ->
                             convert_1(os:find_executable("convert"), InFile, OutFile, Mime, FileProps, FiltersExpanded);
-                        {error, _} = Error ->
-                            ?LOG_WARNING("cannot expand mediaclass for ~p (~p)", [Filters, Error]),
+                        {error, Reason} = Error ->
+                            ?LOG_WARNING(#{
+                                text => <<"Cannot expand mediaclass">>,
+                                filters => Filters,
+                                reason => Reason
+                            }),
                             Error
                     end;
                 false ->
-                    ?LOG_NOTICE("cannot convert a ~p (~p)", [Mime, InFile]),
+                    ?LOG_NOTICE(#{
+                        text => <<"cannot convert mime type">>,
+                        mime => Mime,
+                        file => unicode:characters_to_binary(InFile)
+                    }),
                     {error, mime_type}
             end;
         {ok, _} ->
@@ -75,27 +83,29 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
             {error, Reason}
     end.
 
-convert_1(false, _InFile, _OutFile, _Mime, _FileProps, _Filters) ->
-    ?LOG_ERROR("Install ImageMagick 'convert' to generate previews of images."),
+convert_1(false, _InFile, _OutFile, _InMime, _FileProps, _Filters) ->
+    ?LOG_ERROR(#{
+        text => <<"Install ImageMagick 'convert' to generate previews of images.">>
+    }),
     {error, convert_missing};
-convert_1(ConvertCmd, InFile, OutFile, Mime, FileProps, Filters) ->
+convert_1(ConvertCmd, InFile, OutFile, InMime, FileProps, Filters) ->
     OutMime = z_media_identify:guess_mime(OutFile),
     case cmd_args(FileProps, Filters, OutMime) of
         {ok, {EndWidth, EndHeight, _CmdArgs}} when EndWidth > ?MAX_PIXSIZE; EndHeight > ?MAX_PIXSIZE ->
             {error, image_too_big};
         {ok, {_, _, CmdArgs}} ->
-            convert_2(CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps);
+            convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps);
         {error, _} = Error ->
             Error
     end.
 
-convert_2(CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps) ->
+convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps) ->
     file:delete(OutFile),
     ok = z_filelib:ensure_dir(OutFile),
     Cmd = lists:flatten([
         z_filelib:os_filename(ConvertCmd), " ",
         opt_density(FileProps),
-        z_filelib:os_filename( unicode:characters_to_list(InFile) ++ infile_suffix(Mime) ), " ",
+        z_filelib:os_filename( unicode:characters_to_list(InFile) ++ infile_suffix(InMime) ), " ",
         lists:flatten(lists:join(32, CmdArgs)), " ",
         z_filelib:os_filename(OutFile)
     ]),
@@ -110,12 +120,16 @@ convert_2(CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps) ->
                         true -> {error, convert_error}
                     end
             end;
-        {error, _} = Error ->
-            ?LOG_ERROR("convert cmd ~p failed, result ~p", [Cmd, Error]),
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                text => <<"convert cmd failed">>,
+                command => unicode:characters_to_binary(Cmd),
+                reason => Reason
+            }),
             Error
     end.
 
-% We need to set a bigger density for PDF rendering, otherwise the resulting
+% We need to set a higher density for PDF rendering, otherwise the resulting
 % image is too small.
 opt_density(#{ <<"mime">> := <<"application/pdf">> }) -> " -density 150x150 ";
 opt_density(_) -> "".
@@ -131,22 +145,31 @@ run_cmd(Cmd, OutFile) ->
 
 
 once(Cmd, OutFile) ->
-    MyPid = self(),
     Key = {n,l,Cmd},
     case gproc:reg_or_locate(Key) of
-        {MyPid, _} ->
-            ?LOG_DEBUG("Convert: ~p", [Cmd]),
+        {Pid, _} when Pid =:= self() ->
+            ?LOG_DEBUG(#{
+                text => <<"Image convert">>,
+                command => unicode:characters_to_binary(Cmd)
+            }),
             Result = os:cmd(Cmd),
             gproc:unreg(Key),
             case filelib:is_regular(OutFile) of
                 true ->
                     ok;
                 false ->
-                    ?LOG_ERROR("convert cmd ~p failed, result ~p", [Cmd, Result]),
+                    ?LOG_ERROR(#{
+                        text => <<"convert cmd failed">>,
+                        command => unicode:characters_to_binary(Cmd),
+                        result => unicode:characters_to_binary(Result)
+                    }),
                     {error, convert_error}
             end;
         {_OtherPid, _} ->
-            ?LOG_DEBUG("Waiting for parallel: ~p", [Cmd]),
+            ?LOG_DEBUG(#{
+                text => "Waiting for parallel resizer",
+                command => unicode:characters_to_binary(Cmd)
+            }),
             Ref = gproc:monitor(Key),
             receive
                 {gproc, unreg, Ref, Key} ->
@@ -271,13 +294,14 @@ cmd_args(#{ <<"mime">> := Mime, <<"width">> := ImageWidth, <<"height">> := Image
                     _ -> Filters4
                end,
     Filters6 = add_optional_quality(Filters5, is_lossless(OutMime), ResizeWidth, ResizeHeight),
-    Filters7 = move_pre_post_filters(Filters6),
+    Filters7 = add_optional_interlace(Filters6, OutMime),
+    Filters8 = move_pre_post_filters(Filters7),
     {EndWidth,EndHeight,Args} = lists:foldl(fun (Filter, {W,H,Acc}) ->
-                                                {NewW,NewH,Arg} = filter2arg(Filter, W, H, Filters6),
+                                                {NewW,NewH,Arg} = filter2arg(Filter, W, H, Filters7),
                                                 {NewW,NewH,[Arg|Acc]}
                                             end,
                                             {ImageWidth,ImageHeight,[]},
-                                            Filters7),
+                                            Filters8),
     {ok, {EndWidth, EndHeight, lists:reverse(Args)}};
 cmd_args(_, _Filters, _OutMime) ->
     {error, no_size}.
@@ -330,6 +354,16 @@ add_optional_quality_1(Fs, Pixels) ->
     Q = 99 - round(50 * (Pixels - ?PIX_Q99) / (?PIX_Q50 - ?PIX_Q99)),
     Fs ++ [{quality, Q}].
 
+%% @doc Make JPEG images interlaced for nicer incremental loading
+add_optional_interlace(Fs, <<"image/jpeg">>) ->
+    case proplists:is_defined(interlace, Fs) of
+        false ->
+            Fs ++ [ {interlace, "plane"} ];
+        true ->
+            Fs
+    end;
+add_optional_interlace(Fs, _) ->
+    Fs.
 
 %% @doc Determine the output mime type, after expanding optional mediaclass arguments.
 out_mime(Mime, Options, Context) ->
@@ -397,6 +431,8 @@ filter2arg({colorspace, Colorspace}, Width, Height, _AllFilters) ->
     {Width, Height, ["-colorspace ", $", z_filelib:os_escape(Colorspace), $"]};
 filter2arg({density, DPI}, Width, Height, _AllFilters) when is_integer(DPI) ->
     {Width, Height, ["-set units PixelsPerInch -density ", integer_to_list(DPI)]};
+filter2arg({interlace, Interlace}, Width, Height, _AllFilters) ->
+    {Width, Height, ["-interlace ", $", z_filelib:os_escape(Interlace), $" ]};
 filter2arg({width, _}, Width, Height, _AllFilters) ->
     {Width, Height, []};
 filter2arg({height, _}, Width, Height, _AllFilters) ->
