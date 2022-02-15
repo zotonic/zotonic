@@ -254,6 +254,22 @@ Defaults to ``false``. Examples::
     lossless=`auto`
     lossless=false
 
+interlace
+^^^^^^^^^
+
+Make a progressive JPEG or interlaced PNG/GIF image.
+
+Use ``line`` or ``plane`` to create an interlaced PNG or GIF or progressive JPEG image.
+
+``line`` uses scanline interlacing (RRR...GGG...BBB...RRR...GGG...BBB...), and ``plane``
+uses plane interlacing (RRRRRR...GGGGGG...BBBBBB...).
+
+For JPEG images this is per default set to ``plane``. To disable set to ``none``.
+
+Example::
+
+    interlace=plane
+
 mono
 ^^^^
 

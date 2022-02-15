@@ -356,7 +356,12 @@ add_optional_quality_1(Fs, Pixels) ->
 
 %% @doc Make JPEG images interlaced for nicer incremental loading
 add_optional_interlace(Fs, <<"image/jpeg">>) ->
-    Fs ++ [ {interlace, "plane"} ];
+    case proplists:is_defined(interlace, Fs) of
+        false ->
+            Fs ++ [ {interlace, "plane"} ];
+        true ->
+            Fs
+    end;
 add_optional_interlace(Fs, _) ->
     Fs.
 
