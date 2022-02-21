@@ -249,6 +249,7 @@ default(ssl_port) ->
     end;
 default(max_connections) -> 20000;
 default(ssl_max_connections) -> 20000;
+default(log_http_buffer_size) -> 10000;
 default(security_headers) -> true;
 default(smtp_verp_as_from) -> false;
 default(smtp_no_mx_lookups) -> false;
