@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2021 Marc Worrell
+%% @copyright 2021-2022 Marc Worrell
 %% @doc Model for tracking all URLs to be included in the sitemap.
 
-%% Copyright 2021 Marc Worrell
+%% Copyright 2021-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@
     slice/3,
     update/2,
     delete_key/3,
+    delete_before/3,
     delete_loc/2,
 
     update_rsc/2,
@@ -41,6 +42,8 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include("../../include/seo_sitemap.hrl").
+
+-define(SQL_TIMEOUT, 120000).
 
 m_get([ <<"urlsets">> | Rest ], _Msg, Context) ->
     {ok, {seo_sitemap:urlsets(Context), Rest}};
@@ -213,7 +216,8 @@ delete_key(Source, all, Context) ->
         delete from seo_sitemap
         where source = $1",
         [ Source ],
-        Context)
+        Context,
+        ?SQL_TIMEOUT)
     of
         0 -> {error, enoent};
         _ -> ok
@@ -230,6 +234,22 @@ delete_key(Source, Key, Context) ->
         _ -> ok
     end.
 
+%% @doc Delete all keys in a source that have been modified before a certain date.
+%% This is useful to cleanup after batch updates, as the insert always updates
+%% the modified date.
+-spec delete_before( binary(), calendar:datetime(), z:context() ) -> ok | {error, term()}.
+delete_before(Source, Modified, Context) ->
+    case z_db:q("
+        delete from seo_sitemap
+        where source = $1
+          and modified < $2",
+        [ Source, Modified ],
+        Context,
+        ?SQL_TIMEOUT)
+    of
+        0 -> {error, enoent};
+        _ -> ok
+    end.
 
 %% @doc Delete a specific location from the sitemap.
 -spec delete_loc( binary(), z:context() ) -> ok | {error, term()}.
@@ -428,6 +448,7 @@ install(Context) ->
                 ", Context),
             Indices = [
                 {"seo_sitemap_source_key_key", "source, key"},
+                {"seo_sitemap_source_modified_key", "source, modified"},
                 {"seo_sitemap_loc_key", "loc"},
                 {"fki_seo_sitemap_rsc_id", "rsc_id"},
                 {"fki_seo_sitemap_category_id", "category_id"}
@@ -438,5 +459,14 @@ install(Context) ->
             rebuild_rsc(Context),
             ok;
         true ->
-            ok
+            case z_db:key_exists(seo_sitemap, seo_sitemap_source_modified_key, Context) of
+                 false ->
+                     [] = z_db:q("
+                         create index seo_sitemap_source_modified_key
+                         on seo_sitemap (source, modified)", Context),
+                     z_db:flush(Context),
+                     ok;
+                 true ->
+                     ok
+             end
     end.
