@@ -375,6 +375,8 @@ cowboy_options() ->
         stream_handlers => [ cowboy_metrics_h, cowboy_stream_h ],
         request_timeout => ?HTTP_REQUEST_TIMEOUT,
         metrics_callback => fun zotonic_listen_http_metrics:metrics_callback/1,
+        metrics_resp_headers_filter => fun zotonic_listen_http_metrics:resp_headers_filter/1,
+        metrics_req_filter => fun zotonic_listen_http_metrics:req_filter/1,
         env => #{}
     }.
 
