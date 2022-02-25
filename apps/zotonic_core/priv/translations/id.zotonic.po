@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-02-11 14:13\n"
+"PO-Revision-Date: 2022-02-25 21:09\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -2252,7 +2252,7 @@ msgstr "Direktori Kerja"
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:52
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
 msgid "Y-m-d H:i"
-msgstr "Ymd H: i"
+msgstr "Y-m-d H:i"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:6
 msgid "You are editing a:"
