@@ -60,6 +60,7 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
         on_handled => fun(Ctx) ->
             z_context:set_req_metrics(#{
                     user_id => z_acl:user(Ctx),
+                    session_id => case z_context:session_id(Ctx) of {ok, SessionId} -> SessionId; _ -> undefined end,
                     language => z_context:language(Ctx),
                     timezone => z_context:tz(Ctx)
                 }, Ctx),
