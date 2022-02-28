@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-02-11 14:13\n"
+"PO-Revision-Date: 2022-02-28 18:55\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2448,7 +2448,7 @@ msgstr "Удалить все страницы"
 
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:71
 msgid "Delete is canceled, there are pages in the category."
-msgstr "Удаление отменяется, в категории есть страницы."
+msgstr "Удаление отменено, в категории есть страницы."
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:27
 msgid "Drag categories to the place where you want them in the hierarchy."
