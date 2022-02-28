@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-02-28 18:55\n"
+"PO-Revision-Date: 2022-02-28 19:09\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2452,7 +2452,7 @@ msgstr "Удаление отменено, в категории есть стр
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:27
 msgid "Drag categories to the place where you want them in the hierarchy."
-msgstr "Для изменения иерархии категорий можно использовать перетаскивание."
+msgstr "Перетащите категории в нужное место в иерархии."
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:21
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:45
