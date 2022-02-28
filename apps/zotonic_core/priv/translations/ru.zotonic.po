@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-02-28 19:24\n"
+"PO-Revision-Date: 2022-02-28 19:57\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2609,7 +2609,7 @@ msgstr "Имя релей-хоста"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:57./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:83./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:84
 msgid "Relay port"
-msgstr "Релейный порт"
+msgstr "Порт релей-хоста"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:112./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:113
 msgid "SMTP Hostname"
@@ -2661,7 +2661,7 @@ msgstr "Тестовое письмо от"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:43
 msgid "The Zotonic system configuration is set to use a SMTP relay."
-msgstr "Конфигурация системы Zotonic настроена на использование реле SMTP."
+msgstr "Конфигурация системы Zotonic настроена использовать SMTP-релей."
 
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:61
 msgid "The config key already exists, please choose another key name."
@@ -2673,7 +2673,7 @@ msgstr "Адрес ОТ по умолчанию для писем. По умол
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:20
 msgid "The default directory for all site-certificates is"
-msgstr "Каталог по умолчанию для всех сайтов-сертификатов имеет следующий вид"
+msgstr "Каталог по умолчанию для всех сертификатов сайта имеет следующий вид"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:4
 msgid "This can't be undone. The configuration key will be lost forever."
@@ -2701,7 +2701,7 @@ msgstr "Этот модуль не предоставляет сертифика
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:48./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:75
 msgid "Use relay to send email"
-msgstr "Использовать реле для отправки электронной почты"
+msgstr "Использовать релей для отправки электронной почты"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:60./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:61./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:87./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:88
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:3./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:50./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:19
@@ -2730,7 +2730,7 @@ msgstr "Вы должны быть администратором, чтобы п
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:70
 msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
-msgstr "Zotonic отправляет электронную почту через встроенный почтовый сервер. Вы можете отправить электронное письмо через внешнее реле."
+msgstr "Zotonic отправляет электронную почту через встроенный почтовый сервер. Вы можете отправлять электронную почту через внешний релей."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:160
 msgid "test@example.com"
@@ -2757,7 +2757,7 @@ msgstr "Нет страницы"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:127./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:81
 msgid "Save &amp; view"
-msgstr "Сохранить &amp; вид"
+msgstr "Сохранить &amp; просмотреть"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:153
 msgid "The page might have been deleted."
@@ -2773,7 +2773,7 @@ msgstr "эта страница"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:126
 msgid "Yes, discard changes"
-msgstr "Да, отбрасывайте изменения"
+msgstr "Да, сбросить изменения"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:51
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:11
@@ -2782,7 +2782,7 @@ msgstr "до"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:67
 msgid "(that's you)"
-msgstr "(это ты)"
+msgstr "(это вы)"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:13
 msgid "A secure password is prefilled, replace if needed."
@@ -2808,7 +2808,7 @@ msgstr "Добавить пользователя."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:40
 msgid "Also show persons without user account"
-msgstr "Также покажите лиц без учетной записи пользователя"
+msgstr "Также показать людей без учетной записи пользователя"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:2
 msgid "Are you sure you want to delete the username from"
@@ -2821,7 +2821,7 @@ msgstr "Вы уверены, что хотите удалить эту запи�
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:19
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:36./apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:86
 msgid "Blocked"
-msgstr "Блокированный"
+msgstr "Заблокировано"
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:86
 msgid "Changed the username."
