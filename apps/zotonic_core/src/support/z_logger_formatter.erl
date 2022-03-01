@@ -238,6 +238,8 @@ format_stack(
         X ->
             format_msg(#{ report => X }, Config)
     end;
+format_stack(#{ stack := [] }, _Meta, _Config) ->
+    [];
 format_stack(#{ stack := Stack }, _Meta, Config) ->
     [
         "\n",

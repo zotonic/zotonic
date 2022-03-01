@@ -52,6 +52,12 @@
     count_tasks/1,
     delete_tasks/1,
 
+    task_job_ping/3,
+    task_job_done/2,
+
+    pivot_job_ping/2,
+    pivot_job_done/1,
+
     stemmer_language/1,
     stemmer_language_config/1,
     cleanup_tsv_text/1,
@@ -72,6 +78,13 @@
 -define(PIVOT_POLL_INTERVAL_FAST, 2).
 -define(PIVOT_POLL_INTERVAL_SLOW, 20).
 
+% Interval to check for stuck pivot or task jobs (seconds)
+-define(JOB_CHECK_INTERVAL, 10*60).
+
+% Timeouts for pivot and tasks, killed if didn't ping in this number of seconds.
+-define(PIVOT_JOB_TIMEOUT, 20*60).      % 20 minutes for pivots
+-define(TASK_JOB_TIMEOUT, 2*60*60).     % 2 hours for tasks (might be shorter in future)
+
 % How many PIVOT_POLL_INTERVAL_SLOW we will skip on SQL errors (like timeouts)
 -define(BACKOFF_POLL_ERROR, 4).
 
@@ -83,9 +96,17 @@
     is_initial_delay = true :: boolean(),
     is_pivot_delay = false :: boolean(),
     backoff_counter = 0 :: integer(),
+
     task_pid :: undefined | pid(),
     task_id :: undefined | integer(),
-    pivot_pid :: undefined | pid()
+    task_progress :: undefined | 0..100,
+    task_ping :: undefined | erlang:timestamp(),
+    task :: undefined | map(),
+
+    pivot_pid :: undefined | pid(),
+    pivot_rsc_id :: undefined | m_rsc:resource_id(),
+    pivot_queue = [] :: [ m_rsc:resource_id() ],
+    pivot_ping :: undefined | erlang:timestamp()
 }).
 
 
@@ -291,6 +312,26 @@ get_pivot_title(Props) ->
     z_pivot_rsc_job:get_pivot_title(Props).
 
 
+%% @doc Ping from pivot process to keep alive and report progress
+-spec pivot_job_ping( m_rsc:resource_id(), z:context() ) -> ok.
+pivot_job_ping(Id, Context) ->
+    gen_server:cast(Context#context.pivot_server, {pivot_ping, self(), Id}).
+
+%% @doc Signal from pivot job that processing is done.
+-spec pivot_job_done( z:context() ) -> ok.
+pivot_job_done(Context) ->
+    gen_server:call(Context#context.pivot_server, {pivot_done, self()}).
+
+%% @doc Ping from task process to keep alive and report progress
+-spec task_job_ping( TaskId :: integer(), Percentage :: 0..100, z:context() ) -> ok.
+task_job_ping(TaskId, Percentage, Context) ->
+    gen_server:cast(Context#context.pivot_server, {task_ping, self(), TaskId, Percentage}).
+
+%% @doc Signal from task process that job is finished.
+-spec task_job_done( TaskId :: integer(), z:context() ) -> ok.
+task_job_done(TaskId, Context) ->
+    gen_server:call(Context#context.pivot_server, {task_done, self(), TaskId}, infinity).
+
 %% @doc Return the language used for stemming the full text index.
 %%      We use a single stemming to prevent having seperate indexes per language.
 -spec stemmer_language(z:context()) -> string().
@@ -333,29 +374,32 @@ start_link(Site) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(Site) ->
+    z_context:logger_md(Site),
     logger:set_process_metadata(#{
         site => Site,
         module => ?MODULE
     }),
+    timer:send_interval(?JOB_CHECK_INTERVAL*1000, job_check),
     timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
     {ok, #state{
-        site=Site,
-        is_initial_delay=true,
-        is_pivot_delay=false,
-        task_pid = undefined,
-        task_id = undefined
+        site = Site,
+        is_initial_delay = true,
+        is_pivot_delay = false
     }}.
 
-
-%% @doc Handle task_done messages from task queue jobs
-handle_call({task_done, TaskId, _TaskPid}, _From, #state{ task_id = TaskId } = State) ->
-    {reply, ok, State#state{ task_id = undefined, task_pid = undefined }};
-handle_call({task_done, TaskId, _TaskPid}, _From, State) ->
+handle_call({task_done, _TaskPid, TaskId}, _From, #state{ task_id = TaskId } = State) ->
+    % Handle task_done messages from task queue jobs
+    State1 = State#state {
+        task_id = undefined,
+        task_pid = undefined
+    },
+    {reply, ok, State1};
+handle_call({task_done, _TaskPid, TaskId}, _From, State) ->
     ?LOG_ERROR(#{
         text => <<"Pivot received 'task_done' from unknown task job">>,
         task_id => TaskId
     }),
-    {reply, {error, unknown_task, State}};
+    {reply, {error, unknown_task}, State};
 
 handle_call({pivot_done, PivotPid}, _From, #state{ pivot_pid = PivotPid } = State) ->
     {reply, ok, State#state{ pivot_pid = undefined }};
@@ -364,7 +408,7 @@ handle_call({pivot_done, PivotPid}, _From, State) ->
         text => <<"Pivot received 'pivot_done' from unknown pivot job">>,
         pid => PivotPid
     }),
-    {reply, {error, unknown_pivot, State}};
+    {reply, {error, unknown_pivot}, State};
 
 handle_call({insert_task_after, SecondsOrDate, Module, Function, UniqueKey, ArgsFun}, _From, State) ->
     Context = z_context:new(State#state.site),
@@ -377,7 +421,10 @@ handle_call(status, _From, State) ->
         is_initial_delay => State#state.is_initial_delay,
         is_pivot_delay => State#state.is_pivot_delay,
         task_pid => State#state.task_pid,
-        task_id => State#state.task_id
+        task_id => State#state.task_id,
+        task_progress => State#state.task_progress,
+        pivot_pid => State#state.pivot_pid,
+        pivot_rsc_id => State#state.pivot_rsc_id
     },
     {reply, {ok, Status}, State};
 
@@ -386,10 +433,11 @@ handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
 
-%% @doc Poll the queue for the default host
 handle_cast(poll, #state{is_initial_delay=true} = State) ->
+    % Starting up - wait
     {noreply, State};
 handle_cast(poll, State) ->
+    % Poll the pivot queue
     try
         State1 = do_poll(State),
         {noreply, State1}
@@ -404,14 +452,14 @@ handle_cast(poll, State) ->
             {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
     end;
 
-%% @doc Insert an id into the queue.
 handle_cast({insert_queue, DueDate, Ids}, State) when is_list(Ids) ->
+    % Insert an id into the queue.
     do_insert_queue(Ids, DueDate, z_context:new(State#state.site)),
     z_utils:flush_message({'$gen_cast', {insert_queue, DueDate, Ids}}),
     {noreply, State};
 
-%% @doc Poll the queue for a particular database
 handle_cast({pivot, Id}, #state{ is_initial_delay = true } = State) when is_integer(Id) ->
+    % Immediate pivot of an resource-id
     Due = z_datetime:next_minute(calendar:universal_time()),
     do_insert_queue([ Id ], Due, z_context:new(State#state.site)),
     {noreply, State};
@@ -420,12 +468,44 @@ handle_cast({pivot, Id}, #state{ backoff_counter = Ct } = State) when Ct > 0 ->
     do_insert_queue([ Id ], Due, z_context:new(State#state.site)),
     {noreply, State};
 handle_cast({pivot, Id}, State) when is_integer(Id) ->
-    do_pivot(Id, z_acl:sudo(z_context:new(State#state.site))),
+    State1 = State#state{ pivot_queue = [ Id | State#state.pivot_queue ]},
+    State2 = do_poll(State1),
+    {noreply, State2};
+
+handle_cast({pivot_ping, Pid, Id}, #state{ pivot_pid = Pid } = State) ->
+    State1 = State#state{
+        pivot_ping = os:timestamp(),
+        pivot_rsc_id = Id
+    },
+    {noreply, State1};
+handle_cast({pivot_ping, Pid, Id}, State) ->
+    ?LOG_NOTICE(#{
+        text => <<"Pivot ping from unknown process">>,
+        pid => Pid,
+        rsc_id => Id,
+        expected_pid => State#state.pivot_pid
+    }),
     {noreply, State};
 
-%% @doc Delay the next pivot, useful when performing big updates
+handle_cast({task_ping, _Pid, TaskId, Percentage}, #state{ task_id = TaskId } = State) ->
+    State1 = State#state{
+        task_ping = os:timestamp(),
+        task_progress = Percentage
+    },
+    {noreply, State1};
+handle_cast({task_ping, Pid, TaskId, _Percentage}, State) ->
+    ?LOG_NOTICE(#{
+        text => <<"Task ping for wrong task id">>,
+        pid => Pid,
+        task_id => TaskId,
+        expected_task_id => State#state.task_id
+    }),
+    {noreply, State};
+
 handle_cast(pivot_delay, State) ->
+    % Delay the next pivot, useful when performing big updates
     {noreply, State#state{is_pivot_delay=true}};
+
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
@@ -439,7 +519,7 @@ handle_info(poll, #state{backoff_counter = Ct} = State) when Ct > 0 ->
     {noreply, State#state{ backoff_counter = Ct - 1 }};
 handle_info(poll, #state{ pivot_pid = Pid } = State) when is_pid(Pid) ->
     ?LOG_INFO(#{
-        text => <<"Pivot poll when other pivot still running">>,
+        text => <<"Pivot job still running, delaying next poll">>,
         pivot_pid => Pid,
         reason => busy
     }),
@@ -480,20 +560,36 @@ handle_info({'DOWN', _MRef, process, _Pid, _Reason}, #state{ pivot_pid = undefin
     {noreply, State};
 
 handle_info({'DOWN', _MRef, process, Pid, Reason}, #state{ pivot_pid = Pid } = State) ->
+    LastRscId = State#state.pivot_rsc_id,
     ?LOG_ERROR(#{
-        text=> <<"Pivot received unexpected DOWN from pivot job">>,
-        reason => Reason
-    }),
-    {noreply, State#state{ pivot_pid = undefined, backoff_counter = ?BACKOFF_POLL_ERROR }};
-
-handle_info({'DOWN', _MRef, process, Pid, Reason}, #state{ task_pid = Pid } = State) ->
-    ?LOG_ERROR(#{
-        text => <<"Pivot received unexpected DOWN from task job">>,
+        text=> <<"Pivot received DOWN from pivot job">>,
+        rsc_id => LastRscId,
+        error => 'DOWN',
         reason => Reason,
-        task_id => State#state.task_id
+        pivot_pid => Pid
     }),
+    Context = z_context:new(State#state.site),
+    z_db:q("
+        delete from rsc_pivot_queue
+        where rsc_id = $1
+        ",
+        [ LastRscId ],
+        Context),
+    {noreply, State#state{
+        pivot_pid = undefined,
+        pivot_rsc_id = undefined,
+        backoff_counter = ?BACKOFF_POLL_ERROR
+    }};
+
+handle_info({'DOWN', _MRef, process, Pid, Reason}, #state{ task = Task, task_pid = Pid } = State) ->
+    Context = z_context:new(State#state.site),
+    z_pivot_rsc_task_job:maybe_schedule_retry(Task, 'DOWN', Reason, [], Context),
     {noreply, State#state{ task_id = undefined, task_pid = undefined }};
 
+handle_info(job_check, State) ->
+    check_pivot_job(State),
+    check_task_job(State),
+    {noreply, State};
 
 handle_info(_Info, State) ->
     {noreply, State}.
@@ -513,6 +609,47 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+check_pivot_job(#state{ pivot_pid = undefined }) ->
+    ok;
+check_pivot_job(#state{ pivot_pid = Pid, pivot_ping = LastPing } = State) ->
+    Now = z_datetime:timestamp(),
+    Ping = z_datetime:datetime_to_timestamp(calendar:now_to_universal_time(LastPing)),
+    Timeout = Ping + ?PIVOT_JOB_TIMEOUT,
+    case Now > Timeout of
+        true ->
+            ?LOG_ERROR(#{
+                text => <<"Pivot job timeout, killing pivot job">>,
+                reason => timeout,
+                pivot_pid => Pid,
+                rsc_id => State#state.pivot_rsc_id
+            }),
+            erlang:exit(Pid, timeout);
+        false ->
+            ok
+    end.
+
+check_task_job(#state{ task_pid = undefined }) ->
+    ok;
+check_task_job(#state{ task_pid = Pid, task_id = TaskId, task_ping = LastPing } = State) ->
+    Now = z_datetime:timestamp(),
+    Ping = z_datetime:datetime_to_timestamp(calendar:now_to_universal_time(LastPing)),
+    Timeout = Ping + ?TASK_JOB_TIMEOUT,
+    case Now > Timeout of
+        true ->
+            ?LOG_ERROR(#{
+                text => <<"Task job timeout, killing task for later retry">>,
+                reason => timeout,
+                task_id => TaskId,
+                task_pid => Pid,
+                progress => State#state.task_progress
+            }),
+            % Force exit - the monitor will increment the task error count
+            % and then restart the task after a backoff.
+            erlang:exit(Pid, timeout);
+        false ->
+            ok
+    end.
 
 do_insert_task_after(SecondsOrDate, Module, Function, undefined, ArgsFun, Context) ->
     UniqueKey = z_ids:id(),
@@ -644,15 +781,33 @@ do_poll(State) ->
 
 maybe_start_pivot(#state{ pivot_pid = Pid } = State, _Context) when is_pid(Pid) ->
     State;
-maybe_start_pivot(State, Context) ->
-    case do_poll_queue(Context) of
+maybe_start_pivot(#state{ pivot_queue = Queue } = State, Context) ->
+    Qs = do_poll_queue(Context),
+    Qs1 = lists:foldl(
+        fun(Id, Acc) ->
+            case lists:keymember(Id, 1, Acc) of
+                true ->
+                    Acc;
+                false ->
+                    OptSerial = fetch_queue_id(Id, Context),
+                    [ {Id, OptSerial} | Acc ]
+            end
+        end,
+        Qs,
+        Queue),
+    case Qs1 of
         [] ->
             State;
-        Queue ->
-            case z_pivot_rsc_job:start_pivot(self(), Queue, Context) of
+        _ ->
+            case z_pivot_rsc_job:start_pivot(Qs1, Context) of
                 {ok, Pid} ->
                     erlang:monitor(process, Pid),
-                    State#state{ pivot_pid = Pid };
+                    State#state{
+                        pivot_pid = Pid,
+                        pivot_queue = [],
+                        pivot_ping = os:timestamp(),
+                        pivot_rsc_id = undefined
+                    };
                 {error, _} ->
                     % overload - ignore
                     State
@@ -669,19 +824,18 @@ do_poll_queue(Context) ->
             []
     end.
 
-%% @doc Pivot a specific id, delete its queue record if present
-do_pivot(Id, Context) ->
-    OptSerial = fetch_queue_id(Id, Context),
-    z_pivot_rsc_job:pivot_job(self(), [ {Id, OptSerial} ], Context).
-
-
 maybe_start_task(#state{ task_pid = undefined } = State, Context) ->
     case poll_task(Context) of
         {ok, #{ task_id := TaskId } = Task} ->
-            case z_pivot_rsc_task_job:start_task(self(), Task, Context) of
+            case z_pivot_rsc_task_job:start_task(Task, Context) of
                 {ok, TaskPid} ->
                     erlang:monitor(process, TaskPid),
-                    State#state{ task_id = TaskId, task_pid = TaskPid };
+                    State#state{
+                        task_id = TaskId,
+                        task_pid = TaskPid,
+                        task_ping = os:timestamp(),
+                        task = Task
+                    };
                 {error, _} ->
                     State
             end;

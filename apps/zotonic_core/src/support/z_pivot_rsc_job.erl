@@ -19,9 +19,9 @@
 -module(z_pivot_rsc_job).
 
 -export([
-    start_pivot/3,
+    start_pivot/2,
 
-    pivot_job/3,
+    pivot_job/2,
 
     pivot_resource_update/4,
     get_pivot_title/1,
@@ -46,11 +46,11 @@
 
 
 %% @doc Start a task queue sidejob.
--spec start_pivot( pid(), list(), z:context() ) -> {ok, pid()} | {error, overload}.
-start_pivot(PivotPid, PivotRscList, Context) ->
+-spec start_pivot( list(), z:context() ) -> {ok, pid()} | {error, overload}.
+start_pivot(PivotRscList, Context) ->
     sidejob_supervisor:spawn(
             zotonic_sidejobs,
-            {?MODULE, pivot_job, [ PivotPid, PivotRscList, Context ]}).
+            {?MODULE, pivot_job, [ PivotRscList, Context ]}).
 
 
 %% @doc Return a modified property list with fields that need immediate pivoting on an update.
@@ -79,8 +79,8 @@ pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
 
 
 %% @doc Run the sidejob task queue task.
--spec pivot_job( pid(), list(), z:context() ) -> ok.
-pivot_job(PivotPid, PivotRscList, Context) ->
+-spec pivot_job( list(), z:context() ) -> ok.
+pivot_job(PivotRscList, Context) ->
     z_context:logger_md(Context),
     ?LOG_DEBUG(#{
         text => <<"Pivot start">>,
@@ -112,19 +112,19 @@ pivot_job(PivotPid, PivotRscList, Context) ->
                     ({Id, ok}) ->
                         ?LOG_DEBUG(#{
                             text => <<"Pivot done">>,
-                            id => Id
+                            rsc_id => Id
                         }),
                         ok;
                     ({Id, {error, Reason}}) ->
                         ?LOG_ERROR(#{
                             text => <<"Pivot error">>,
-                            id => Id,
+                            rsc_id => Id,
                             reason => Reason
                         })
                 end, L),
             delete_queue(PivotRscList, Context)
     end,
-    gen_server:call(PivotPid, {pivot_done, self()}).
+    z_pivot_rsc:pivot_job_done(Context).
 
 
 %% @doc Delete the previously queued ids iff the queue entry has not been updated in the meanwhile
@@ -142,12 +142,16 @@ delete_queue(Qs, Context) ->
 delete_queue(_Id, undefined, _Context) ->
     ok;
 delete_queue(Id, Serial, Context) ->
-    z_db:q("delete from rsc_pivot_queue where rsc_id = $1 and serial = $2", [Id,Serial], Context).
+    z_db:q("
+        delete from rsc_pivot_queue
+        where rsc_id = $1
+          and serial = $2",
+        [ Id, Serial ],
+        Context).
 
-
-
--spec pivot_resource(m_rsc:resource_id(), z:context()) -> ok | {error, eexist | term()}.
+-spec pivot_resource(m_rsc:resource_id(), z:context()) -> ok | {error, enoent | term()}.
 pivot_resource(Id, Context0) ->
+    z_pivot_rsc:pivot_job_ping(Id, Context0),
     Lang = stemmer_language_config(Context0),
     Context = z_context:set_language(Lang,
                  z_context:set_tz(<<"UTC">>,
@@ -158,7 +162,7 @@ pivot_resource(Id, Context0) ->
         Type:Err:Stack ->
             ?LOG_ERROR(#{
                 text => <<"Pivot error">>,
-                id => Id,
+                rsc_id => Id,
                 type => Type,
                 error => Err,
                 stack => Stack

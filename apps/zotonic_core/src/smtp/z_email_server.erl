@@ -871,7 +871,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
     case gen_server:call(?MODULE, {is_sending_allowed, self(), Relay}) of
         {error, wait} ->
             ?LOG_INFO(#{
-                text => <<"Delaying email to: too many parallel senders for relay">>,
+                text => <<"Delaying email send: too many parallel senders for relay">>,
                 recipient => RecipientEmail,
                 message_id => Id,
                 relay => Relay
