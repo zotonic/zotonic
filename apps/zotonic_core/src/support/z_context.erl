@@ -807,7 +807,9 @@ q_upload_keepalive(false, Context) ->
 %% Set logger metadata for the current process
 %% ------------------------------------------------------------------------------------
 
--spec logger_md( z:context() ) -> ok.
+-spec logger_md( z:context() | atom() ) -> ok.
+logger_md(Site) when is_atom(Site) ->
+    logger_md(z_context:new(Site));
 logger_md(Context) ->
     logger_md(#{}, Context).
 

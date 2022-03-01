@@ -29,6 +29,8 @@ $.widget("ui.clickable",
 			{
 				case 'A':
 				case 'INPUT':
+				case 'BUTTON':
+				case 'TEXTAREA':
 					break;
 				default:
 					var target = $(this).find("a").attr("href");

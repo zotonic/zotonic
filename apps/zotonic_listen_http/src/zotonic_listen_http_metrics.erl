@@ -28,7 +28,7 @@
 -spec req_filter(cowboy_req:req()) -> map().
 req_filter(#{ headers := Headers }=Req) ->
     Headers1 = maps:with([<<"referer">>, <<"user-agent">>], Headers),
-    Req1 = maps:with([method, scheme, path, version], Req),
+    Req1 = maps:with([method, scheme, path, version, peer], Req),
     Req1#{ headers => Headers1 }.
 
 
@@ -87,13 +87,7 @@ metrics_callback(#{
         undefined -> ok;
         _ -> z_stats:record_count(http, data_out, RespBodyLength, Site)
     end,
-    PeerIP = case maps:get(peer_ip, UserData, undefined) of
-        undefined ->
-            {Peer, _Port} = cowboy_req:peer(Req),
-            Peer;
-        Peer ->
-            Peer
-    end,
+    PeerIP = maps:get(peer_ip, UserData, src(Req)),
     Log = #{
         site => Site,
         reason => Reason,
@@ -116,6 +110,9 @@ metrics_callback(_Metrics) ->
     % Early failure.
     % TODO: Should also be logged.
     ok.
+
+src(#{ peer := {IP, _Port} }) -> IP;
+src(_) -> undefined.
 
 queue('xxx') -> zotonic_http_metrics_normal;
 queue('1xx') -> zotonic_http_metrics_normal;
