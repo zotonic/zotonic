@@ -87,13 +87,7 @@ metrics_callback(#{
         undefined -> ok;
         _ -> z_stats:record_count(http, data_out, RespBodyLength, Site)
     end,
-    PeerIP = case maps:get(peer_ip, UserData, undefined) of
-        undefined ->
-            {Peer, _Port} = cowboy_req:peer(Req),
-            Peer;
-        Peer ->
-            Peer
-    end,
+    PeerIP = maps:get(peer_ip, UserData, src(Req)),
     Log = #{
         site => Site,
         reason => Reason,
@@ -116,6 +110,9 @@ metrics_callback(_Metrics) ->
     % Early failure.
     % TODO: Should also be logged.
     ok.
+
+src(#{ peer := {IP, _Port} }) -> IP;
+src(_) -> undefined.
 
 queue('xxx') -> zotonic_http_metrics_normal;
 queue('1xx') -> zotonic_http_metrics_normal;
