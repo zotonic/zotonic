@@ -28,7 +28,7 @@
 -spec req_filter(cowboy_req:req()) -> map().
 req_filter(#{ headers := Headers }=Req) ->
     Headers1 = maps:with([<<"referer">>, <<"user-agent">>], Headers),
-    Req1 = maps:with([method, scheme, path, version], Req),
+    Req1 = maps:with([method, scheme, path, version, peer], Req),
     Req1#{ headers => Headers1 }.
 
 
