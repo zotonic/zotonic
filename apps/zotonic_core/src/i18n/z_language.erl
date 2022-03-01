@@ -78,7 +78,7 @@ initialize_config(Context) ->
         true ->
             % Set default language
             case m_config:get_value(i18n, language, Context) of
-                undefined -> m_config:set_value(i18n, language, z_language:default_language(Context), Context);
+                undefined -> m_config:set_value(i18n, language, default_language(Context), Context);
                 _ -> ok
             end,
             % Set list of enabled languages

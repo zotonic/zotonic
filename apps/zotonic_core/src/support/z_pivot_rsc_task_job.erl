@@ -50,7 +50,7 @@ task_job(
     try
         Args1 = ensure_list(Args),
         ?LOG_DEBUG(#{
-            text => "Pivot task starting",
+            text => <<"Pivot task starting">>,
             mfa => {Module, Function, length(Args1)+1}
         }),
         case call_function(Module, Function, Args1, Context) of
@@ -82,7 +82,7 @@ task_job(
     catch
         error:undef:Trace ->
             ?LOG_ERROR(#{
-                text => "Pivot task failed - undefined function, aborting",
+                text => <<"Pivot task failed - undefined function, aborting">>,
                 task_id => TaskId,
                 mfa => {Module, Function, Args},
                 error => error,
@@ -97,7 +97,7 @@ task_job(
                             calendar:datetime_to_gregorian_seconds(calendar:universal_time())
                             + task_retry_backoff(ErrCt)),
                     ?LOG_ERROR(#{
-                        text => "Pivot task failed - will retry",
+                        text => <<"Pivot task failed - will retry">>,
                         task_id => TaskId,
                         mfa => {Module, Function, Args},
                         error => Error,
@@ -112,7 +112,7 @@ task_job(
                     z_db:update(pivot_task_queue, TaskId, RetryFields, Context);
                 false ->
                     ?LOG_ERROR(#{
-                        text => "Pivot task failed - aborting",
+                        text => <<"Pivot task failed - aborting">>,
                         task_id => TaskId,
                         mfa => {Module, Function, Args},
                         error => Error,
