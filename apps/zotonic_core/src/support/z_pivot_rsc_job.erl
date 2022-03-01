@@ -24,10 +24,16 @@
     pivot_job/3,
 
     pivot_resource_update/4,
+    get_pivot_title/1,
     get_pivot_title/2,
+
+    cleanup_tsv_text/1,
+
     stemmer_language/1,
     stemmer_language_config/1,
-    cleanup_tsv_text/1
+
+    pg_lang/1,
+    pg_lang_extra/1
     ]).
 
 -include_lib("zotonic.hrl").

@@ -60,7 +60,9 @@
     % get_pivot_data/2,
 
     define_custom_pivot/3,
-    lookup_custom_pivot/4
+    lookup_custom_pivot/4,
+
+    insert_queue/3
 ]).
 
 -include("zotonic.hrl").
