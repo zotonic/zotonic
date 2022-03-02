@@ -45,6 +45,7 @@
     update/3,
     update/4,
     duplicate/3,
+    duplicate/4,
     touch/2,
 
     make_authoritative/2,
@@ -105,6 +106,11 @@
         {ok, UpdateProps :: props() } | {error, term()}
     ).
 
+-type duplicate_options() :: list(duplicate_option()).
+-type duplicate_option() :: edges
+                          | {edges, boolean()}
+                          | medium
+                          | {medium, boolean()}.
 
 -export_type([
     resource/0,
@@ -477,9 +483,14 @@ update(Id, Props, Options, Context) ->
 
 %% @doc Duplicate a resource.
 -spec duplicate(resource(), props_all(), z:context()) ->
-    {ok, NewId :: resource_id()} | {error, Reason :: string()}.
+    {ok, NewId :: resource_id()} | {error, Reason :: term()}.
 duplicate(Id, Props, Context) ->
     m_rsc_update:duplicate(Id, Props, Context).
+
+-spec duplicate(resource(), props_all(), duplicate_options(), z:context()) ->
+    {ok, NewId :: resource_id()} | {error, Reason :: term()}.
+duplicate(Id, Props, Options, Context) ->
+    m_rsc_update:duplicate(Id, Props, Options, Context).
 
 
 %% @doc "Touch" the rsc, incrementing the version nr and the modification date/ modifier_id.
