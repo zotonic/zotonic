@@ -28,6 +28,7 @@
     update/3,
     update/4,
     duplicate/3,
+    duplicate/4,
     merge_delete/4,
 
     flush/2,
@@ -352,10 +353,14 @@ flush(Id, CatList, Context) ->
 
 %% @doc Duplicate a resource, creating a new resource with the given title.
 -spec duplicate(m_rsc:resource(), m_rsc:props_all(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
-duplicate(Id, DupProps, Context) when is_list(DupProps) ->
+duplicate(Id, DupProps, Context) ->
+    duplicate(Id, DupProps, [], Context).
+
+-spec duplicate(m_rsc:resource(), m_rsc:props_all(), m_rsc:duplicate_options(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
+duplicate(Id, DupProps, DupOpts, Context) when is_list(DupProps) ->
     {ok, DupMap} = z_props:from_list(DupProps),
-    duplicate(Id, DupMap, Context);
-duplicate(Id, DupProps, Context) when is_integer(Id) ->
+    duplicate(Id, DupMap, DupOpts, Context);
+duplicate(Id, DupProps, DupOpts, Context) when is_integer(Id) ->
     case z_acl:rsc_visible(Id, Context) of
         true ->
             case m_rsc:get_raw(Id, Context) of
@@ -380,8 +385,18 @@ duplicate(Id, DupProps, Context) when is_integer(Id) ->
                         }),
                     case insert(InsProps, [{is_escape_texts, false}], Context) of
                         {ok, NewId} ->
-                            m_edge:duplicate(Id, NewId, Context),
-                            m_media:duplicate(Id, NewId, Context),
+                            case proplists:get_value(edges, DupOpts, true) of
+                                true ->
+                                    m_edge:duplicate(Id, NewId, Context);
+                                _ ->
+                                    ok
+                            end,
+                            case proplists:get_value(medium, DupOpts, true) of
+                                true ->
+                                    m_media:duplicate(Id, NewId, Context);
+                                _ ->
+                                    ok
+                            end,
                             {ok, NewId};
                         {error, _} = Error ->
                             Error
@@ -392,10 +407,10 @@ duplicate(Id, DupProps, Context) when is_integer(Id) ->
         false ->
             {error, eacces}
     end;
-duplicate(undefined, _DupProps, _Context) ->
+duplicate(undefined, _DupProps, _DupOpts, _Context) ->
     {error, enoent};
-duplicate(Id, DupProps, Context) ->
-    duplicate(m_rsc:rid(Id, Context), DupProps, Context).
+duplicate(Id, DupProps, DupOpts, Context) ->
+    duplicate(m_rsc:rid(Id, Context), DupProps, DupOpts, Context).
 
 %% @doc Update a resource
 -spec update(
