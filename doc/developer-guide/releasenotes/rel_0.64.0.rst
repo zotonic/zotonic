@@ -26,6 +26,7 @@ Marc Worrell (7):
  * mod_filestore: add simple test function to test the filestore connection.
  * seo_sitemap: add m_seo_sitemap:delete_before/3. (0.x)
  * seo_sitemap: add index on modified. Add sql timeouts.
+ * Fix a problem where heart restarted Zotonic after a zotonic stop command. Fixes #2715
 
 Rob van den Bogaard (2):
 
