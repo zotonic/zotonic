@@ -87,7 +87,8 @@ stop() ->
     application:stop(lager),
     application:stop(webzmachine),
     application:stop(crypto),
-    erlang:halt().
+    heart:set_cmd("echo ok"),
+    erlang:halt(0).
 
 await_sites_stopping(0) -> ok;
 await_sites_stopping(N) ->
