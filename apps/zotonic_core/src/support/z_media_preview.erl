@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Make still previews of media, using image manipulation functions.  Resize, crop, grey, etc.
 %% This uses the command line imagemagick tools for all image manipulation.
 %% This code is adapted from PHP GD2 code, so the resize/crop could've been done more efficiently, but it works :-)
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -408,9 +408,9 @@ filter2arg({correct_orientation, Orientation}, Width, Height, _AllFilters) ->
         3 -> {Width, Height, "-rotate 180"};
         4 -> {Width, Height, "-flop"};
         5 -> {Width, Height, "-transpose"};
-        6 -> {Width, Height, "-rotate 90"};
+        6 -> {Height, Width, "-rotate 90"};
         7 -> {Width, Height, "-transverse"};
-        8 -> {Width, Height, "-rotate 270"};
+        8 -> {Height, Width, "-rotate 270"};
         _ -> {Width, Height, []}
     end;
 filter2arg({rotate, Rotation}, Width, Height, _AllFilters) ->
@@ -654,7 +654,7 @@ calc_size(#{ image_width := 0 } = S) ->
     calc_size(S#{ image_width => 1 });
 
 calc_size(#{ image_height := H, image_width := W, orientation := Orientation } = S) when Orientation >= 5 ->
-    calc_size(S#{ orientation => 1, image_height := W, image_width := H});
+    calc_size(S#{ orientation => 1, image_height => W, image_width => H });
 
 calc_size(#{ filters := [ {rotate, Rotation} | Fs ], image_width := W, image_height := H, crop := Crop } = S)
     when Rotation =:= 90;
@@ -849,6 +849,3 @@ s_ceil(A)  -> round(A + 0.499999).
 
 ensure_integer(A) ->
     integer_to_list(list_to_integer(A)).
-
-
-
