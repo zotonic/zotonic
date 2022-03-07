@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-07 22:17\n"
+"PO-Revision-Date: 2022-03-07 22:26\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2903,7 +2903,7 @@ msgstr "Домой"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:20
 msgid "If you don't know this site, please ignore this email. Maybe someone made an error."
-msgstr "Если вы не знаете этот сайт, не обращайте внимания на это письмо. Может кто ошибся."
+msgstr "Если вы не знаете этот сайт, не обращайте внимания на это письмо. Возможно, кто-то ошибся."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51
 msgid "Last logon"
@@ -2927,7 +2927,7 @@ msgstr "Моя страница"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:7
 msgid "Name and e-mail address"
-msgstr "Имя и e-mail"
+msgstr "Имя и адрес e-mail"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:20
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:14./apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:10./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:3
