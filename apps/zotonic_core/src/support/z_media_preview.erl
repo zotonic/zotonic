@@ -407,9 +407,9 @@ filter2arg({correct_orientation, Orientation}, Width, Height, _AllFilters) ->
         2 -> {Width, Height, "-flip"};
         3 -> {Width, Height, "-rotate 180"};
         4 -> {Width, Height, "-flop"};
-        5 -> {Width, Height, "-transpose"};
+        5 -> {Height, Width, "-transpose"};
         6 -> {Height, Width, "-rotate 90"};
-        7 -> {Width, Height, "-transverse"};
+        7 -> {Height, Width, "-transverse"};
         8 -> {Height, Width, "-rotate 270"};
         _ -> {Width, Height, []}
     end;
