@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-02-28 19:57\n"
+"PO-Revision-Date: 2022-03-07 22:17\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2874,7 +2874,7 @@ msgstr "Статус электронной почты"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:8
 msgid "Enter a unique username and password. Usernames and passwords are case sensitive, so be careful when entering them."
-msgstr "Введите уникальное имя пользователя и пароль. Имена пользователей и пароли чувствительны к регистру, поэтому будьте внимательны при их вводе."
+msgstr "Введите уникальное имя пользователя и пароль. В именах пользователей и паролях учитывается регистр, поэтому будьте внимательны при их вводе."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:21
 msgid "Every page/person can be made into a user on the edit page. The difference between a user and a normal page is only that the former has logon credentials attached to its page record."
@@ -3071,7 +3071,7 @@ msgstr "Это отправит письмо с подтверждением п�
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:36
 #: apps/zotonic_mod_l10n/priv/templates/admin_l10n.tpl:14
 msgid "Timezone"
-msgstr "Таймзон"
+msgstr "Часовой пояс"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19
 msgid "Type password to change password"
