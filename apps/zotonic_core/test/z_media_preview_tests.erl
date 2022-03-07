@@ -21,6 +21,7 @@ cmd_args_jpeg_test() ->
     {ok, {_W,_H,Args}} = z_media_preview:cmd_args(MediaProps, Filters, <<"image/jpeg">>),
     CmdArgs = lists:flatten(lists:join(32, Args)),
     ?assertEqual(
+        "-strip "
         "-background \"white\" -layers \"flatten\"    -colorspace \"sRGB\" "
         "-gravity NorthWest -crop 80x80+21+0 -extent 80x80 +repage -set units PixelsPerInch "
         "-density 72   -unsharp 0.3x0.7  -quality 97 -interlace \"plane\"", CmdArgs).
@@ -41,6 +42,7 @@ cmd_args_gif_test() ->
     {ok, {_W,_H,Args}} = z_media_preview:cmd_args(MediaProps, Filters, <<"image/gif">>),
     CmdArgs = lists:flatten(lists:join(32, Args)),
     ?assertEqual(
+        "-strip "
         "-coalesce    -colorspace \"sRGB\" -gravity NorthWest "
         "-crop 80x80+21+0 -extent 80x80 +repage -set units PixelsPerInch"
         " -density 72  ", CmdArgs).
