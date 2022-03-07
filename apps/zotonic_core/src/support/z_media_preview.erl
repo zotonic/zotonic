@@ -302,7 +302,7 @@ cmd_args(#{ <<"mime">> := Mime, <<"width">> := ImageWidth, <<"height">> := Image
                                             end,
                                             {ImageWidth,ImageHeight,[]},
                                             Filters8),
-    {ok, {EndWidth, EndHeight, lists:reverse(Args)}};
+    {ok, {EndWidth, EndHeight, ["-strip" | lists:reverse(Args) ]}};
 cmd_args(_, _Filters, _OutMime) ->
     {error, no_size}.
 
