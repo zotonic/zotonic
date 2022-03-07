@@ -119,7 +119,8 @@ stop() ->
     application:stop(jobs),
     application:stop(mnesia),
     application:stop(epgsql),
-    erlang:halt().
+    heart:set_cmd("echo ok"),
+    erlang:halt(0).
 
 
 await_sites_stopping(0) -> ok;
