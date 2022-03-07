@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-07 22:26\n"
+"PO-Revision-Date: 2022-03-07 22:39\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2940,7 +2940,7 @@ msgstr "Пользователи не найдены."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:66
 msgid "No verified e-mail addresses. Please add one below."
-msgstr "Нет проверенных адресов электронной почты. Пожалуйста, добавьте один из них ниже."
+msgstr "Нет проверенных адресов электронной почты. Пожалуйста, добавьте адрес ниже."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:12
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:9
@@ -2969,7 +2969,7 @@ msgstr "Пожалуйста, подтвердите свой адрес эле�
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:22
 msgid "Random secure password:"
-msgstr "Случайный пароль:"
+msgstr "Случайный надёжный пароль:"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:7
 msgid "Search users"
@@ -3066,7 +3066,7 @@ msgstr "Этот проверочный ключ неизвестен."
 
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:108
 msgid "This will send a verification e-mail to "
-msgstr "Это отправит письмо с подтверждением по электронной почте на адрес "
+msgstr "Электронное письмо с подтверждением будет отправлено на адрес "
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:36
 #: apps/zotonic_mod_l10n/priv/templates/admin_l10n.tpl:14
@@ -3083,7 +3083,7 @@ msgstr "Использовать этот пароль"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:6
 msgid "User account"
-msgstr "аккаунт пользователя"
+msgstr "Аккаунт пользователя"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:6
 msgid "User actions"
