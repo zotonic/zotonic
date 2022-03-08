@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-07 22:48\n"
+"PO-Revision-Date: 2022-03-08 22:30\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3087,7 +3087,7 @@ msgstr "Аккаунт пользователя"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:6
 msgid "User actions"
-msgstr "Действия над пользователем"
+msgstr "действия пользователя"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:8
 msgid "Username / password"
