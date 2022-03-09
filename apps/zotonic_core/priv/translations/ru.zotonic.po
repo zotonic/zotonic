@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-08 23:42\n"
+"PO-Revision-Date: 2022-03-09 00:04\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3401,8 +3401,8 @@ msgstr "Вы не имеете права активировать или деа
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:8
 msgid "Zotonic is a modular web development framework. Most functionality is encapsulated inside modules. A set of basic modules are shipped with the Zotonic distribution,\n"
 "            while others are externally developed. This page shows an overview of all modules which are currently known to this Zotonic installation."
-msgstr "Zotonic - это модульный фреймворк для веб-разработки. Большая часть функциональности инкапсулирована внутри модулей. Набор базовых модулей поставляется с дистрибутивом Zotonic,\n"
-"            , в то время как другие модули разрабатываются извне. На этой странице представлен обзор всех модулей, которые в настоящее время известны этой установке Zotonic."
+msgstr "Zotonic - это модульный фреймворк для веб-разработки. Большая часть функциональности содержится в модулях. Набор базовых модулей поставляется с дистрибутивом Zotonic,\n"
+"            , тогда как другие модули разрабатываются на стороне. На этой странице представлен обзор всех модулей, которые в настоящее время известны этой установке Zotonic.            "
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:14
 msgid "A predicate denotes traits or aspects of a page and expresses a relationship between two pages.\n"
@@ -3425,7 +3425,7 @@ msgstr "Вы уверены, что хотите удалить"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:31
 msgid "Are you sure you want to disconnect:"
-msgstr "Ты уверен, что хочешь отключиться:"
+msgstr "Вы уверены, что хотите разъединить:"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:9
 msgid "Change the predicate on all existing page connections to:"
