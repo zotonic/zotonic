@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-08 22:36\n"
+"PO-Revision-Date: 2022-03-09 10:27\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3163,7 +3163,7 @@ msgstr "Вы получили доступ к"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:30
 msgid "You need to be an administrator to add users."
-msgstr "Вы должны быть администратором для добавления пользователей."
+msgstr "Вы должны быть администратором, чтобы добавлять пользователей."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:25
 msgid "You received this email because you verified your email address. You will not receive any additional emails because of this request."
@@ -3204,7 +3204,7 @@ msgstr "задать имя пользователя / пароль"
 
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:19
 msgid "1. Merge loser into winner"
-msgstr "1. Слить проигравшего в победителя"
+msgstr "1. Включить проигравшего в победителя"
 
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:43
 msgid "2. Delete loser"
@@ -3236,7 +3236,7 @@ msgstr "Найдите страницу для слияния:"
 
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:42
 msgid "Left"
-msgstr "Налево"
+msgstr "Слева"
 
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:101./apps/zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:3./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:3
 msgid "Merge"
@@ -3272,7 +3272,7 @@ msgstr "Выберите слева"
 
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:131
 msgid "Select Right"
-msgstr "Выберите правой кнопкой мыши"
+msgstr "Выберите справа"
 
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:30
 msgid "Select the winner from two pages. The loser will get merged into the winner. Only the winner remains."
@@ -3280,7 +3280,7 @@ msgstr "Выберите победителя из двух страниц. Пр
 
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:34
 msgid "Select the winning page"
-msgstr "Выберите выигрышную страницу"
+msgstr "Выберите выигравшую страницу"
 
 #: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:60
 msgid "Sorry, you have no permission to edit this page."
@@ -3288,7 +3288,7 @@ msgstr "Извините, у вас нет права редактировать
 
 #: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:97
 msgid "The loser is protected, unprotect the loser before merging."
-msgstr "Неудачник защищен, не защищай проигравшего перед слиянием."
+msgstr "Проигравший защищён, снимите защиту с проигравшего перед слиянием."
 
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:58./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:66
 msgid "You are not allowed to edit this page"
@@ -3340,7 +3340,7 @@ msgstr "Выключить"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:3
 msgid "Deactivating this module will stop the following modules:"
-msgstr "При деактивации этого модуля будут остановлены следующие модули:"
+msgstr "При выключении этого модуля будут остановлены следующие модули:"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:9
 msgid "Dependencies"
@@ -3364,7 +3364,7 @@ msgstr "Зависимости модуля"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:1
 msgid "Modules are missing dependencies"
-msgstr "Модули отсутствуют зависимости"
+msgstr "Модули, для которых отсутствуют зависимости"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:92
 msgid "No modules found"
@@ -3376,7 +3376,7 @@ msgstr "Приоритет"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
 msgid "Provides"
-msgstr "Предоставляет ."
+msgstr "Предоставляет"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:3
 msgid "Rescan modules"
@@ -3388,11 +3388,11 @@ msgstr "При повторном сканировании будут перес
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:3
 msgid "The following modules will not start because they miss dependencies:"
-msgstr "Следующие модули не запустятся, так как они пропускают зависимости:"
+msgstr "Следующие модули не запустятся, так как для них отсутствуют зависимости:"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:1
 msgid "There are modules depending on"
-msgstr "Существуют модули в зависимости от"
+msgstr "Есть модули, зависящие от"
 
 #: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:52
 msgid "You are not allowed to activate or deactivate modules."
@@ -3401,8 +3401,8 @@ msgstr "Вы не имеете права активировать или деа
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:8
 msgid "Zotonic is a modular web development framework. Most functionality is encapsulated inside modules. A set of basic modules are shipped with the Zotonic distribution,\n"
 "            while others are externally developed. This page shows an overview of all modules which are currently known to this Zotonic installation."
-msgstr "Zotonic - это модульный фреймворк для веб-разработки. Большая часть функциональности инкапсулирована внутри модулей. Набор базовых модулей поставляется с дистрибутивом Zotonic,\n"
-"            , в то время как другие модули разрабатываются извне. На этой странице представлен обзор всех модулей, которые в настоящее время известны этой установке Zotonic."
+msgstr "Zotonic - это модульный фреймворк для веб-разработки. Большая часть функциональности содержится в модулях. Набор базовых модулей поставляется с дистрибутивом Zotonic,\n"
+"            , тогда как другие модули разрабатываются на стороне. На этой странице представлен обзор всех модулей, которые в настоящее время известны этой установке Zotonic.            "
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:14
 msgid "A predicate denotes traits or aspects of a page and expresses a relationship between two pages.\n"
@@ -3425,7 +3425,7 @@ msgstr "Вы уверены, что хотите удалить"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:31
 msgid "Are you sure you want to disconnect:"
-msgstr "Ты уверен, что хочешь отключиться:"
+msgstr "Вы уверены, что хотите разъединить:"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:9
 msgid "Change the predicate on all existing page connections to:"
@@ -3449,7 +3449,7 @@ msgstr "Удаление отменяется, есть связи с этим �
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
 msgid "Do not find subjects using this predicate’s object titles."
-msgstr "Не находите субъектов, используя названия объектов этого предиката."
+msgstr "Не используйте названия объектов этого предиката для поиска субъектов."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:1
 msgid "Enter the title of the new predicate:"
@@ -3457,7 +3457,7 @@ msgstr "Пожалуйста, укажите название нового пр�
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:26
 msgid "Filter on predicate"
-msgstr "Фильтр на предикате"
+msgstr "Фильтр по предикату"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:20
 msgid "From category"
@@ -3477,15 +3477,15 @@ msgstr "Создать предикат"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:68
 msgid "No page connections found."
-msgstr "Подключений к странице не найдено."
+msgstr "Связи страницы не найдены."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:66
 msgid "No page connections with the predicate:"
-msgstr "Нет связи страницы с предикатом:"
+msgstr "Нет связей страницы с предикатом:"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:53
 msgid "No predicates found."
-msgstr "Предикатов не найдено."
+msgstr "Предикаты не найдены."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:11
 msgid "Object"
