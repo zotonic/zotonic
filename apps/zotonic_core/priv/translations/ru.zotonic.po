@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-09 18:35\n"
+"PO-Revision-Date: 2022-03-09 18:56\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3517,15 +3517,15 @@ msgstr "Извините, вам не разрешено вставлять со
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:5
 msgid "Subject"
-msgstr "Тема"
+msgstr "Субъект"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:54
 msgid "The direction (from/to) of this predicate is reversed from the normal definition."
-msgstr "Направление (от/к) этого предиката отличается от нормального определения."
+msgstr "Направление (от/к) этого предиката обратно относительно нормального определения."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:43
 msgid "There are no page connections with this predicate."
-msgstr "Нет никаких связей со страницей с этим предикатом."
+msgstr "Нет связей страниц с этим предикатом."
 
 #: apps/zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:65
 msgid "There is already a predicate with this name."
