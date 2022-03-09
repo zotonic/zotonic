@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-09 00:04\n"
+"PO-Revision-Date: 2022-03-09 10:27\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3449,7 +3449,7 @@ msgstr "Удаление отменяется, есть связи с этим �
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
 msgid "Do not find subjects using this predicate’s object titles."
-msgstr "Не находите субъектов, используя названия объектов этого предиката."
+msgstr "Не используйте названия объектов этого предиката для поиска субъектов."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:1
 msgid "Enter the title of the new predicate:"
@@ -3457,7 +3457,7 @@ msgstr "Пожалуйста, укажите название нового пр�
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:26
 msgid "Filter on predicate"
-msgstr "Фильтр на предикате"
+msgstr "Фильтр по предикату"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:20
 msgid "From category"
@@ -3477,15 +3477,15 @@ msgstr "Создать предикат"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:68
 msgid "No page connections found."
-msgstr "Подключений к странице не найдено."
+msgstr "Связи страницы не найдены."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:66
 msgid "No page connections with the predicate:"
-msgstr "Нет связи страницы с предикатом:"
+msgstr "Нет связей страницы с предикатом:"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:53
 msgid "No predicates found."
-msgstr "Предикатов не найдено."
+msgstr "Предикаты не найдены."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:11
 msgid "Object"
