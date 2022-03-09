@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-09 10:27\n"
+"PO-Revision-Date: 2022-03-09 18:35\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3501,7 +3501,7 @@ msgstr "Или нажмите <strong>Удалить все соединения
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:51
 msgid "Page connections overview"
-msgstr "Обзор соединений на странице"
+msgstr "Обзор соединений страницы"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:49
 msgid "Page connections with the predicate"
@@ -3513,7 +3513,7 @@ msgstr "Предикаты"
 
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:58
 msgid "Sorry, you are not allowed to insert connections with this predicate."
-msgstr "Извините, вам не разрешается вставлять соединения с этим предикатом."
+msgstr "Извините, вам не разрешено вставлять соединения с этим предикатом."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:5
 msgid "Subject"
