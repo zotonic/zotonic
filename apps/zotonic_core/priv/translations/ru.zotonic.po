@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-11 00:57\n"
+"PO-Revision-Date: 2022-03-11 01:21\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3636,11 +3636,11 @@ msgstr "Добавить двухфакторную аутентификацию
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:43
 msgid "Ask after signing in"
-msgstr "Спросите после входа в систему"
+msgstr "Спросить после входа в систему"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:43
 msgid "Changed the 2FA setting."
-msgstr "Изменена настройка 2FA."
+msgstr "Настройка 2FA изменена."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:62
 msgid "Check the user groups for which two-factor authentication should be forced."
