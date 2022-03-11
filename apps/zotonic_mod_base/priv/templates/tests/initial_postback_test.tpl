@@ -33,7 +33,7 @@
             "js/modules/jquery.loadmask.js"
         %}
 
-        <script type="text/javascript">
+        <script type="text/javascript" nonce="{{ m.req.csp_nonce }}">
             $(function()
             {
                 $.widgetManager();

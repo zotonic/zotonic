@@ -6,7 +6,7 @@
 <script type="text/javascript" src="/lib/js/tinymce-4.9.3/tinymce/jquery.tinymce.min.js"></script>
 
 {% if not is_editor_include %}
-<script type="text/javascript">
+<script type="text/javascript" nonce="{{ m.req.csp_nonce }}">
     $(document).ready(function() {
         {% all include overrides_tpl id %}
         z_editor_init();

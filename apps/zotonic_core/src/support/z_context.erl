@@ -111,6 +111,9 @@
     tz_config/1,
     set_tz/2,
 
+    set_csp_nonce/1,
+    csp_nonce/1,
+
     set_resp_header/3,
     set_resp_headers/2,
     get_resp_header/2,
@@ -1042,6 +1045,30 @@ set_tz(Tz, Context) ->
     ?LOG_ERROR("Unknown timezone ~p", [Tz]),
     Context.
 
+
+%% @doc Set the Content-Security-Policy nonce for the request.
+-spec set_csp_nonce( z:context() ) -> z:context().
+set_csp_nonce(Context) ->
+    case get(csp_nonce, Context) of
+        undefined ->
+            Nonce = z_ids:id(),
+            set(csp_nonce, Nonce, Context);
+        Nonce when is_binary(Nonce) ->
+            Context
+    end.
+
+%% @doc Return the Content-Security-Policy nonce for the request.
+-spec csp_nonce( z:context() ) -> binary().
+csp_nonce(Context) ->
+    case get(csp_nonce, Context) of
+        undefined ->
+            ?LOG_WARNING("csp_nonce requested but not set"),
+            <<>>;
+        Nonce when is_binary(Nonce) ->
+            Nonce
+    end.
+
+
 %% @doc Set a response header for the request in the context.
 -spec set_resp_header(binary(), binary(), z:context()) -> z:context().
 set_resp_header(Header, Value, #context{cowreq=Req} = Context) when is_map(Req) ->
@@ -1134,10 +1161,13 @@ set_nocache_headers(Context = #context{cowreq=Req}) when is_map(Req) ->
 %%      'security_headers' notification.
 -spec set_security_headers( z:context() ) -> z:context().
 set_security_headers(Context) ->
-    Default = [ {<<"x-xss-protection">>, <<"1">>},
-                {<<"x-content-type-options">>, <<"nosniff">>},
-                {<<"x-permitted-cross-domain-policies">>, <<"none">>},
-                {<<"referrer-policy">>, <<"origin-when-cross-origin">>} ],
+    Default = [
+        % {<<"content-security-policy">>, <<"script-src 'self' 'nonce-'">>}
+        {<<"x-xss-protection">>, <<"1">>},
+        {<<"x-content-type-options">>, <<"nosniff">>},
+        {<<"x-permitted-cross-domain-policies">>, <<"none">>},
+        {<<"referrer-policy">>, <<"origin-when-cross-origin">>}
+    ],
     Default1 = case z_context:get(allow_frame, Context, false) of
         true -> Default;
         false -> [ {<<"x-frame-options">>, <<"sameorigin">>} | Default ]
@@ -1150,7 +1180,21 @@ set_security_headers(Context) ->
         undefined -> HSTSHeaders;
         Custom -> Custom
     end,
-    cowmachine_req:set_resp_headers(SecurityHeaders, Context).
+    SecurityHeaders1 = case proplists:get_value(<<"content-security-policy">>, SecurityHeaders) of
+        undefined ->
+            SecurityHeaders;
+        CSPHdr ->
+            Nonce = csp_nonce(Context),
+            CSPHdr1 = binary:replace(
+                        CSPHdr,
+                        <<"'nonce-'">>,
+                        <<"'nonce-", Nonce/binary, $'>>),
+            [
+                {<<"content-security-policy">>, CSPHdr1}
+                | proplists:delete(<<"content-security-policy">>, SecurityHeaders)
+            ]
+    end,
+    cowmachine_req:set_resp_headers(SecurityHeaders1, Context).
 
 %% @doc Create a hsts header based on the current settings. The result is cached
 %%      for quick access.

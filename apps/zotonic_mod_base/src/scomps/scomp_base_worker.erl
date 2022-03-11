@@ -48,10 +48,10 @@ render(Params, _Vars, Context) ->
                     BaseUrl, "\",",
                     ArgsJSON, ");"
             ],
+            CspNonce = z_context:csp_nonce(Context),
             {ok, [
-                <<"<script type='text/javascript'>">>,
+                <<"<script type='text/javascript' nonce='">>, CspNonce, <<"'>">>,
                     <<"cotonic.ready.then(function() { ">>, Spawn, <<"});">>,
                 <<"</script>">>
             ]}
     end.
-

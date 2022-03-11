@@ -1,6 +1,6 @@
 {# Initialize Cotonic - set promises and pre-connect to the websocket
  #}
-<script type="text/javascript">
+<script type="text/javascript" nonce="{{ m.req.csp_nonce }}">
 var cotonic = cotonic || {};
 
 {# Pre-connect to the websocket, this connection is used by

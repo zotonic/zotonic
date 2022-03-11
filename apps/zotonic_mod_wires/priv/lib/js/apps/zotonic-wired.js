@@ -45,6 +45,19 @@ var z_transport_queue       = [];
 
 cotonic.ready.then(function() { zotonic_startup() });
 
+// Lazy css loading - set the correct media on load.
+window.addEventListener('load',
+    function() {
+        const elts = document.querySelectorAll("link[media='none']");
+        elts.forEach(function(e) {
+            if (e.hasAttribute('media-onload')) {
+                e.setAttribute('media', e.getAttribute('media-onload'));
+                e.removeAttribute('media-onload');
+            }
+        });
+    }, false);
+
+
 function zotonic_startup() {
     // Initialize the wires if the bridge is starting up
     // cotonic.broker.subscribe("$bridge/origin/status", function() {
