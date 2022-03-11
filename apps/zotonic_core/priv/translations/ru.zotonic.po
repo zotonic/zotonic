@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-11 15:39\n"
+"PO-Revision-Date: 2022-03-11 16:07\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3803,7 +3803,7 @@ msgstr "Аутентификация была проведена с"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:5
 msgid "Authorizing..."
-msgstr "Разрешаю..."
+msgstr "Авторизация..."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:115./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
 msgid "Back to sign in"
@@ -3815,7 +3815,7 @@ msgstr "Ниже указаны реквизиты учетной записи �
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:41
 msgid "Change password"
-msgstr "Измени пароль"
+msgstr "Изменить пароль"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:42
 msgid "Change password and Sign in"
