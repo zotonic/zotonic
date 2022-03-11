@@ -43,6 +43,11 @@ m_get([ <<"is_backup_in_progress">> | Rest ], _Msg, Context) ->
         true -> {ok, {mod_backup:backup_in_progress(Context), Rest}};
         false -> {error, eacces}
     end;
+m_get([ <<"directory">> | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(use, mod_backup, Context) of
+        true -> {ok, {mod_backup:dir(Context), Rest}};
+        false -> {error, eacces}
+    end;
 m_get(Vs, _Msg, _Context) ->
     ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
