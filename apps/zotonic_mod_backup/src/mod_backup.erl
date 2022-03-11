@@ -43,6 +43,7 @@
     backup_in_progress/1,
     file_exists/2,
     file_forbidden/2,
+    dir/1,
     check_configuration/0,
     manage_schema/2
 ]).

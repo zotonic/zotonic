@@ -8,7 +8,13 @@
 
             <h2>{_ Backups _}</h2>
 
-            <p>{_ Backup and restore options for your content. _}</p>
+            <p>
+                {_ Backup and restore options for your content. _}
+                {% if m.backup.directory as dir %}
+                    <br>{_ Directory _}: <tt>{{ dir|escape }}</tt>
+                {% endif %}
+            </p>
+
         </div>
 
         <div class="row">
