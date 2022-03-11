@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-09 18:56\n"
+"PO-Revision-Date: 2022-03-11 00:46\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3553,7 +3553,7 @@ msgstr "Вы не имеете права создавать этот преди
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:6
 msgid "You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to. When you don't check anything then all categories are valid."
-msgstr "Вы можете определить, для каких категорий предикат отображается на странице редактирования.  Вы также можете определить, какие категории объектов будут найдены при поиске страницы для подключения. Если вы ничего не проверяете, тогда все категории являются действительными."
+msgstr "Вы можете определить, предикат для каких категорий отображается на странице редактирования.  Вы также можете определить, какие категории объектов будут найдены при поиске страницы для связывания. Если вы ничего не проверяете, то все категории являются действительными."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 msgid "object"
@@ -3561,7 +3561,7 @@ msgstr "объект"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
 msgid "subject"
-msgstr "тема"
+msgstr "Субъект"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/database.tpl:3
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:120
