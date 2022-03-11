@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-11 01:33\n"
+"PO-Revision-Date: 2022-03-11 15:03\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3730,7 +3730,7 @@ msgstr "Отсканируйте QR-код двухфакторной аутен
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:92
 msgid "Scan two-factor authentication passcode"
-msgstr "Сканировать двухфакторный код аутентификации"
+msgstr "Сканировать код двухфакторной аутентификации"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:45
 msgid "Sorry, you are not allowed to change the 2FA settings."
