@@ -68,6 +68,7 @@ event(#postback{ message = sitemap_rebuild }, Context) ->
     of
         true ->
             m_seo_sitemap:rebuild_rsc(Context),
+            z_notifier:notify(seo_sitemap_rebuild, Context),
             z_render:growl(?__("Rebuilding the sitemap in the background.", Context), Context);
         false ->
             z_render:growl(?__("You are not allowed to do this", Context), Context)
