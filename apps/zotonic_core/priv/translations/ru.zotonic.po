@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-13 12:49\n"
+"PO-Revision-Date: 2022-03-13 12:56\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3941,11 +3941,11 @@ msgstr "Перейти на главную страницу"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:78./apps/zotonic_mod_authentication/priv/templates/logon.tpl:44
 msgid "Go to the your profile page"
-msgstr "Зайдите на страницу своего профиля"
+msgstr "Перейти на страницу своего профиля"
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:14
 msgid "Here you can set all the application keys, secrets and other configurations to integrate with external services like Facebook and Twitter."
-msgstr "Здесь вы можете установить все ключи приложения, секреты и другие конфигурации для интеграции с внешними сервисами, такими как Facebook и Twitter."
+msgstr "Здесь вы можете установить все ключи приложения, секреты и другие параметры для интеграции с внешними сервисами, такими как Facebook и Twitter."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:3
 msgid "How to reset your password"
