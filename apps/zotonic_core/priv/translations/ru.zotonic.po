@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-13 12:09\n"
+"PO-Revision-Date: 2022-03-13 12:37\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3885,7 +3885,7 @@ msgstr "Включите <em>mod_twitter</em> для просмотра наст
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:23
 msgid "Enable the signup module to automatically sign up users that are authenticating via the services below."
-msgstr "Включите модуль регистрации для автоматической регистрации пользователей, которые проходят аутентификацию через нижеперечисленные сервисы."
+msgstr "Включите модуль регистрации для автоматической регистрации пользователей с аутентификацией через нижеперечисленные сервисы."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:13
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:39./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:48
@@ -3925,7 +3925,7 @@ msgstr "Забыли пароль?"
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:10
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:13
 msgid "Go back"
-msgstr "возвращаться"
+msgstr "Вернуться"
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:23./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:37./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:40
 msgid "Go to Modules"
