@@ -1024,7 +1024,7 @@ handle_upgrade(#state{ site = Site, modules = Modules } = State) ->
     ?LOG_DEBUG(#{
         text => <<"Stopping/starting modules">>,
         stopping => [sets:to_list(Kill)],
-        starting => [sets:to_list(StartList)]
+        starting => [StartList]
     }),
 
     Modules1 = sets:fold(
@@ -1226,14 +1226,7 @@ start_child(ManagerPid, Module, App, ChildSpec, Site) ->
                         error => error,
                         reason => Reason
                     }),
-                    {error, {schema_init, Reason}};
-                Error ->
-                    ?LOG_ERROR(#{
-                        text => <<"Error starting module due to schema initialization error">>,
-                        module => Module,
-                        error => Error
-                    }),
-                    {error, {schema_init, Error}}
+                    {error, {schema_init, Reason}}
             end,
             gen_server:cast(ManagerPid, {start_child_result, Module, Result})
         end),
