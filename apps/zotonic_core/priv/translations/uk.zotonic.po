@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-11 00:22\n"
+"PO-Revision-Date: 2022-03-13 21:16\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -686,7 +686,7 @@ msgstr "Ви можете повернутися до опублікованих
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:4
 msgid "You can:"
-msgstr "Ти можеш:"
+msgstr "Ви можете:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:43
 msgid "You have to use a special URL, as provided by the an editor or administrator."

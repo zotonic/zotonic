@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-13 12:56\n"
+"PO-Revision-Date: 2022-03-13 21:16\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3953,7 +3953,7 @@ msgstr "Как сбросить пароль"
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:11
 msgid "However this email address does not belong to one of our registered users so you will not be able to change the password."
-msgstr "Однако этот адрес электронной почты не принадлежит одному из наших зарегистрированных пользователей, поэтому вы не сможете изменить пароль."
+msgstr "Однако этот адрес электронной почты не принадлежит какому-либо из наших зарегистрированных пользователей, поэтому вы не сможете изменить пароль."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:30
 msgid "I forgot my password"
@@ -3965,7 +3965,7 @@ msgstr "Я хочу создать новый аккаунт"
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:30
 msgid "If you didn't request a password reset, you can safely ignore this email. Maybe someone made an error typing his or her email address."
-msgstr "Если вы не запросили сброс пароля, вы можете безопасно проигнорировать это письмо. Возможно, кто-то допустил ошибку, набрав свой адрес электронной почты."
+msgstr "Если вы не запрашивали сброс пароля, вы можете безопасно проигнорировать это письмо. Возможно, кто-то допустил ошибку при наборе своего адреса электронной почты."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:92./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:108
 msgid "If you do not receive the email within a few minutes, please check your spam folder."
