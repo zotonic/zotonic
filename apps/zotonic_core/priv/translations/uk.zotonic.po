@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-13 21:16\n"
+"PO-Revision-Date: 2022-03-15 17:21\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -891,7 +891,7 @@ msgstr "Ви впевнені, що хочете вийти з інтерфей�
 msgid "Aside"
 msgstr "Осторонь"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:90
 msgid "Ask google to not index this page"
 msgstr "Попросіть Google не індексувати цю сторінку"
 
@@ -1047,7 +1047,7 @@ msgstr "Створено на"
 msgid "Created:"
 msgstr "Створено:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:77
 msgid "Customize page slug"
 msgstr "Налаштування сторінки"
 
@@ -4290,7 +4290,7 @@ msgstr "Резервні копії адміністратора"
 msgid "Are you sure you want to revert to this version?"
 msgstr "Ви впевнені, що хочете повернутися до цієї версії?"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:49
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:55
 msgid "At any moment you can make a backup of your system."
 msgstr "У будь-який момент ви можете зробити резервну копію своєї системи."
 
@@ -4298,7 +4298,7 @@ msgstr "У будь-який момент ви можете зробити ре�
 msgid "Back to the edit page"
 msgstr "Повернутися до сторінки редагування"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:67
+#: apps/zotonic_mod_backup/src/mod_backup.erl:68
 msgid "Backup"
 msgstr "Резервне копіювання"
 
@@ -4306,7 +4306,7 @@ msgstr "Резервне копіювання"
 msgid "Backup &amp; Restore"
 msgstr "Резервна копія &amp; Відновлення"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:11
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:12
 msgid "Backup and restore options for your content."
 msgstr "Варіанти резервного копіювання та відновлення вашого вмісту."
 
@@ -4334,6 +4334,10 @@ msgstr "Натисніть на Список <b>і відновіть попер
 msgid "Deleted"
 msgstr "Видалено"
 
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
+msgid "Directory"
+msgstr ""
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
 msgstr "Завантажте файл резервної копії"
@@ -4350,7 +4354,7 @@ msgstr "Довідка щодо відновлення резервної коп
 msgid "List and restore an earlier version"
 msgstr "Перелік і відновлення попередньої версії"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:44
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Робіть щоденну резервну копію бази даних і завантажених файлів."
 
@@ -4378,7 +4382,7 @@ msgstr "Перегляди для"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "Виберіть файл резервної копії, який потрібно завантажити. Файл має бути файлом .bert."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:37
 msgid "Show import/export panel in the admin."
 msgstr "Показати панель імпорту/експорту в адміністраторі."
 
@@ -4410,23 +4414,23 @@ msgstr "На жаль, у вас немає дозволу змінювати ц
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "На жаль, у вас немає дозволу змінювати конфігурацію."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "Start backup now"
 msgstr "Почніть резервне копіювання зараз"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
 msgid "Start database-only backup now"
 msgstr "Почніть резервне копіювання лише для бази даних зараз"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
 msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
 msgstr "Команда \"pg_dump\" не знайдена в шляху. Встановіть ключ конфігурації \"pg_dump\" на шлях до pg_dump і поверніться на цю сторінку."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:70
 msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
 msgstr "Команда \"tar\" не знайдена в шляху. Встановіть ключ конфігурації \"tar\" на шлях до tar і поверніться на цю сторінку."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:50
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "Резервна копія складається з двох частин: бази даних і завантажених файлів."
 
@@ -4434,7 +4438,7 @@ msgstr "Резервна копія складається з двох част�
 msgid "This is the version saved on"
 msgstr "Це версія, на якій збережено"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:81
 msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
 msgstr "На цьому сайті ввімкнено хмарне сховище файлів, і в цій системі є <strong>$1</strong> мультимедійних файлів, які зберігаються лише в хмарі, а не на цьому комп’ютері. Ці файли не створюватимуться!"
 
@@ -4442,13 +4446,13 @@ msgstr "На цьому сайті ввімкнено хмарне сховищ�
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "Це перезапише вашу сторінку вмістом файлу резервної копії."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:73
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "Увага"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Warning:"
 msgstr "Увага:"
 
@@ -4456,11 +4460,11 @@ msgstr "Увага:"
 msgid "You are not allowed to see the revisions"
 msgstr "Вам заборонено переглядати редакції"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:51
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
 msgid "You can have 10 backups, older ones will be deleted automatically."
 msgstr "Ви можете створити 10 резервних копій, старіші будуть видалені автоматично."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Ваша резервна копія налаштована неправильно. Модуль резервного копіювання не працюватиме, доки не буде вирішено наведену нижче проблему(и):"
 
@@ -7600,7 +7604,7 @@ msgstr "Відновіть карту сайту"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "Перебудуйте індекс карти сайту для всіх сторінок."
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:71
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "Rebuilding the sitemap in the background."
 msgstr "Відновлення карти сайту у фоновому режимі."
 
@@ -7620,7 +7624,7 @@ msgstr "Щотижня (за замовчуванням)"
 msgid "Yearly"
 msgstr "Щорічно"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:73
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:74
 msgid "You are not allowed to do this"
 msgstr "Вам заборонено це робити"
 
