@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-02-11 14:13\n"
+"PO-Revision-Date: 2022-03-15 17:21\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -894,7 +894,7 @@ msgstr "Weet je zeker dat je de admin wilt verlaten?"
 msgid "Aside"
 msgstr "Terzijde"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:90
 msgid "Ask google to not index this page"
 msgstr "Laat Google deze pagina niet indexeren"
 
@@ -1050,7 +1050,7 @@ msgstr "Gemaakt op"
 msgid "Created:"
 msgstr "Aangemaakt:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:77
 msgid "Customize page slug"
 msgstr "Paginaslug aanpassen"
 
@@ -4292,7 +4292,7 @@ msgstr "Beheerdersback-ups"
 msgid "Are you sure you want to revert to this version?"
 msgstr "Weet je zeker dat je deze versie wilt terugzetten?"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:49
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:55
 msgid "At any moment you can make a backup of your system."
 msgstr "Op elk moment kan je een backup van je systeem maken."
 
@@ -4300,7 +4300,7 @@ msgstr "Op elk moment kan je een backup van je systeem maken."
 msgid "Back to the edit page"
 msgstr "Terug naar de edit pagina."
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:67
+#: apps/zotonic_mod_backup/src/mod_backup.erl:68
 msgid "Backup"
 msgstr "Back-up"
 
@@ -4308,7 +4308,7 @@ msgstr "Back-up"
 msgid "Backup &amp; Restore"
 msgstr "Backup &amp; Terugzetten"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:11
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:12
 msgid "Backup and restore options for your content."
 msgstr "Backup- en terugzetopties voor je gegevens"
 
@@ -4336,6 +4336,10 @@ msgstr "Klik op <b>Bekijk en herstel een eerdere versie</b> voor een overzicht v
 msgid "Deleted"
 msgstr "Verwijderd"
 
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
+msgid "Directory"
+msgstr "Directory"
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
 msgstr "Download backup bestand"
@@ -4352,7 +4356,7 @@ msgstr "Hulp over backup &amp; herstel"
 msgid "List and restore an earlier version"
 msgstr "Bekijk en herstel een eerdere versie."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:44
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Maak een dagelijkse backup van de database en alle geüploade bestanden."
 
@@ -4380,7 +4384,7 @@ msgstr "Versies voor"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "Selecteer de backup die je wilt terugzetten. Het bestand moet extensie .bert hebben."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:37
 msgid "Show import/export panel in the admin."
 msgstr "Toon import/export paneel in de admin"
 
@@ -4412,23 +4416,23 @@ msgstr "Sorry, je hebt geen toestemming om deze pagina te veranderen."
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Sorry, je hebt geen toestemming om de configuratie te wijzigen."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "Start backup now"
 msgstr "Start nu met de back-up"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
 msgid "Start database-only backup now"
 msgstr "Backup alleen de database"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
 msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
 msgstr "Het \"pg_dump\" commando werd niet gevonden in het pad. Stel de \"pg_dump\" configuratieregel in op het pad naar pg_dump en keer terug naar deze pagina."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:70
 msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
 msgstr "Het \"tar\"-commando werd niet in het pad gevonden. Stel de \"tar\"-configuratieregel in op het pad naar tar en keer terug naar deze pagina."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:50
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "Een backup bestaat uit twee delen, de database en alle geüploade bestanden."
 
@@ -4436,7 +4440,7 @@ msgstr "Een backup bestaat uit twee delen, de database en alle geüploade bestan
 msgid "This is the version saved on"
 msgstr "Deze versie is bewaard op"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:81
 msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
 msgstr "Deze site heeft cloud file store ingeschakeld, en er zijn <strong>$1</strong> mediabestanden op dit systeem die alleen in de cloud zijn opgeslagen en niet op deze machine. Van deze bestanden wordt geen back-up gemaakt!"
 
@@ -4444,13 +4448,13 @@ msgstr "Deze site heeft cloud file store ingeschakeld, en er zijn <strong>$1</st
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "Dit vervangt je pagina met de inhoud van het backup bestand."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:73
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "Waarschuwing"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Warning:"
 msgstr "Waarschuwing:"
 
@@ -4458,11 +4462,11 @@ msgstr "Waarschuwing:"
 msgid "You are not allowed to see the revisions"
 msgstr "Je mag de revisies niet zien"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:51
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
 msgid "You can have 10 backups, older ones will be deleted automatically."
 msgstr "Je kan 10 backups bewaren. Oudere worden automatisch verwijderd."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Uw back-up is niet correct geconfigureerd. De back-upmodule zal niet werken totdat het probleem (of problemen) hieronder zijn opgelost:"
 
@@ -7602,7 +7606,7 @@ msgstr "Bouw de sitemap opnieuw op"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "Bouw de sitemap-index opnieuw op voor alle pagina's."
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:71
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "Rebuilding the sitemap in the background."
 msgstr "De sitemap wordt in de achtergrond opnieuw opgebouwd."
 
@@ -7622,7 +7626,7 @@ msgstr "Wekelijks (standaard)"
 msgid "Yearly"
 msgstr "Jaarlijks"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:73
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:74
 msgid "You are not allowed to do this"
 msgstr "Je hebt geen rechten om dit te doen"
 
