@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-02-25 21:09\n"
+"PO-Revision-Date: 2022-03-15 17:20\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -891,7 +891,7 @@ msgstr "แน่ใจไหมว่าต้องการออกจาก
 msgid "Aside"
 msgstr "นอกจากนี้"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:90
 msgid "Ask google to not index this page"
 msgstr "ขอให้ Google อย่าจัดทำดัชนีหน้านี้"
 
@@ -1047,7 +1047,7 @@ msgstr "สร้างบน"
 msgid "Created:"
 msgstr "สร้าง:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:77
 msgid "Customize page slug"
 msgstr "ปรับแต่งเพจบุ้ง"
 
@@ -4290,7 +4290,7 @@ msgstr "การสำรองข้อมูลของผู้ดูแล
 msgid "Are you sure you want to revert to this version?"
 msgstr "แน่ใจไหมว่าต้องการเปลี่ยนกลับเป็นเวอร์ชันนี้"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:49
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:55
 msgid "At any moment you can make a backup of your system."
 msgstr "คุณสามารถสำรองข้อมูลระบบของคุณได้ตลอดเวลา"
 
@@ -4298,7 +4298,7 @@ msgstr "คุณสามารถสำรองข้อมูลระบบ
 msgid "Back to the edit page"
 msgstr "กลับไปที่หน้าแก้ไข"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:67
+#: apps/zotonic_mod_backup/src/mod_backup.erl:68
 msgid "Backup"
 msgstr "การสำรองข้อมูล"
 
@@ -4306,7 +4306,7 @@ msgstr "การสำรองข้อมูล"
 msgid "Backup &amp; Restore"
 msgstr "สำรองข้อมูล &amp; คืนค่า"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:11
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:12
 msgid "Backup and restore options for your content."
 msgstr "สำรองและกู้คืนตัวเลือกสำหรับเนื้อหาของคุณ"
 
@@ -4334,6 +4334,10 @@ msgstr "คลิกที่ <b>รายการและกู้คืน�
 msgid "Deleted"
 msgstr "ลบแล้ว"
 
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
+msgid "Directory"
+msgstr ""
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
 msgstr "ดาวน์โหลดไฟล์สำรอง"
@@ -4350,7 +4354,7 @@ msgstr "ความช่วยเหลือเกี่ยวกับกา
 msgid "List and restore an earlier version"
 msgstr "แสดงรายการและกู้คืนเวอร์ชันก่อนหน้า"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:44
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "ทำการสำรองฐานข้อมูลและไฟล์ที่อัปโหลดทุกวัน"
 
@@ -4378,7 +4382,7 @@ msgstr "การแก้ไขสำหรับ"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "เลือกไฟล์สำรองที่คุณต้องการอัปโหลด ไฟล์นั้นต้องเป็นไฟล์ .bert"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:37
 msgid "Show import/export panel in the admin."
 msgstr "แสดงแผงการนำเข้า / ส่งออกในผู้ดูแลระบบ"
 
@@ -4410,23 +4414,23 @@ msgstr "ขออภัยคุณไม่ได้รับอนุญาต
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้เปลี่ยนการกำหนดค่า"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "Start backup now"
 msgstr "เริ่มการสำรองข้อมูลทันที"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
 msgid "Start database-only backup now"
 msgstr "เริ่มการสำรองฐานข้อมูลอย่างเดียวตอนนี้"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
 msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
 msgstr "ไม่พบคำสั่ง \"pg_dump\" ในเส้นทาง ตั้งค่าคีย์ config \"pg_dump\" เป็นพา ธ ไปยัง pg_dump และกลับมาที่เพจนี้"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:70
 msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
 msgstr "ไม่พบคำสั่ง \"tar\" ในเส้นทาง ตั้งค่าคีย์ config \"tar\" เป็นพา ธ ไปยัง tar และกลับมาที่เพจนี้"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:50
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "การสำรองข้อมูลประกอบด้วยสองส่วนฐานข้อมูลและไฟล์ที่อัปโหลด"
 
@@ -4434,7 +4438,7 @@ msgstr "การสำรองข้อมูลประกอบด้วย
 msgid "This is the version saved on"
 msgstr "นี่คือเวอร์ชันที่บันทึกไว้"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:81
 msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
 msgstr "ไซต์นี้เปิดใช้งานการจัดเก็บไฟล์บนคลาวด์และมีไฟล์มีเดีย <strong>$ 1</strong> บนระบบนี้ซึ่งเก็บไว้ในระบบคลาวด์เท่านั้นไม่ใช่ในเครื่องนี้ ไฟล์เหล่านี้จะไม่สำรอง!"
 
@@ -4442,13 +4446,13 @@ msgstr "ไซต์นี้เปิดใช้งานการจัดเ
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "สิ่งนี้จะเขียนทับหน้าของคุณด้วยเนื้อหาของไฟล์สำรอง"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:73
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "คำเตือน"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Warning:"
 msgstr "คำเตือน:"
 
@@ -4456,11 +4460,11 @@ msgstr "คำเตือน:"
 msgid "You are not allowed to see the revisions"
 msgstr "คุณไม่ได้รับอนุญาตให้ดูการแก้ไข"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:51
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
 msgid "You can have 10 backups, older ones will be deleted automatically."
 msgstr "คุณสามารถสำรองข้อมูลได้ 10 รายการข้อมูลเก่าจะถูกลบโดยอัตโนมัติ"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "การสำรองข้อมูลของคุณไม่ได้กำหนดค่าอย่างถูกต้อง โมดูลสำรองจะไม่ทำงานจนกว่าปัญหาด้านล่างจะได้รับการแก้ไข:"
 
@@ -7600,7 +7604,7 @@ msgstr "สร้างแผนผังเว็บไซต์ใหม่"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "สร้างดัชนีแผนผังเว็บไซต์ใหม่สำหรับทุกหน้า"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:71
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "Rebuilding the sitemap in the background."
 msgstr "สร้างแผนผังเว็บไซต์ใหม่ในพื้นหลัง"
 
@@ -7620,7 +7624,7 @@ msgstr "รายสัปดาห์ (ค่าเริ่มต้น)"
 msgid "Yearly"
 msgstr "ทุกปี"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:73
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:74
 msgid "You are not allowed to do this"
 msgstr "คุณไม่ได้รับอนุญาตให้ทำสิ่งนี้"
 
