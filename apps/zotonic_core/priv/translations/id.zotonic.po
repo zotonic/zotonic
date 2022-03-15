@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-02-25 21:09\n"
+"PO-Revision-Date: 2022-03-15 17:20\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -891,7 +891,7 @@ msgstr "Apakah anda yakin ingin keluar dari antarmuka admin?"
 msgid "Aside"
 msgstr "Selain"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:90
 msgid "Ask google to not index this page"
 msgstr "Minta google untuk tidak mengindeks halaman ini"
 
@@ -1047,7 +1047,7 @@ msgstr "Dibuat pada"
 msgid "Created:"
 msgstr "Dibuat:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:77
 msgid "Customize page slug"
 msgstr "Sesuaikan halaman slug"
 
@@ -4289,7 +4289,7 @@ msgstr "Admin cadangan"
 msgid "Are you sure you want to revert to this version?"
 msgstr "Apakah anda yakin anda ingin kembali kedalam versi ini?"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:49
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:55
 msgid "At any moment you can make a backup of your system."
 msgstr "Setiap saat anda bisa membuat cadangan sistem anda."
 
@@ -4297,7 +4297,7 @@ msgstr "Setiap saat anda bisa membuat cadangan sistem anda."
 msgid "Back to the edit page"
 msgstr "Kembali ke halaman edit"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:67
+#: apps/zotonic_mod_backup/src/mod_backup.erl:68
 msgid "Backup"
 msgstr "Cadangkan"
 
@@ -4305,7 +4305,7 @@ msgstr "Cadangkan"
 msgid "Backup &amp; Restore"
 msgstr "Cadangan &amp; Mengembalikan"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:11
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:12
 msgid "Backup and restore options for your content."
 msgstr "Backup dan restore pilihan untuk konten anda."
 
@@ -4333,6 +4333,10 @@ msgstr "Klik pada <b>Daftar dan memulihkan pada versi sebelumnya</b> untuk menda
 msgid "Deleted"
 msgstr "Menghapus"
 
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
+msgid "Directory"
+msgstr ""
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
 msgstr "Unduh berkas cadangan"
@@ -4349,7 +4353,7 @@ msgstr "Bantuan tentang backup &amp; mengembalikan"
 msgid "List and restore an earlier version"
 msgstr "Daftar dan kembalikan versi sebelumnya"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:44
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Membuat daily backup database dan mengunggah file."
 
@@ -4377,7 +4381,7 @@ msgstr "Revisi untuk"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "Pilih file cadangan yang ingin Anda unggah. File tersebut harus berupa file .bert."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:37
 msgid "Show import/export panel in the admin."
 msgstr "Tampilkan impor/ekspor pada panel admin."
 
@@ -4409,23 +4413,23 @@ msgstr "Maaf, Anda tidak memiliki izin untuk mengubah halaman ini."
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Maaf, Anda tidak memiliki izin untuk mengubah konfigurasi."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "Start backup now"
 msgstr "Mulai backup sekarang"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
 msgid "Start database-only backup now"
 msgstr "Mulai backup database saja sekarang"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
 msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
 msgstr "Perintah \"pg_dump\" tidak ditemukan di Path. Setelan tombol konfigurasi \"pg_dump\" ke path ke pg_dump dan kembali ke halaman ini."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:70
 msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
 msgstr "\"Tar\" perintah tidak ditemukan di jalan. Mengatur \"tar\" config kunci ke jalan tar dan kembali ke halaman ini."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:50
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "Cadangan terdiri dari dua bagian, database dan file upload."
 
@@ -4433,7 +4437,7 @@ msgstr "Cadangan terdiri dari dua bagian, database dan file upload."
 msgid "This is the version saved on"
 msgstr "Ini adalah versi yang disimpan di"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:81
 msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
 msgstr "Situs ini memiliki file awan toko diaktifkan, dan ada <strong>$1</strong> file media pada sistem ini yang hanya dapat disimpan di awan dan tidak di mesin ini. File-file ini tidak akan didukung!"
 
@@ -4441,13 +4445,13 @@ msgstr "Situs ini memiliki file awan toko diaktifkan, dan ada <strong>$1</strong
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "Ini akan menimpa anda pada halaman dengan isi dari file cadangan."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:73
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "Peringatan"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Warning:"
 msgstr "Peringatan:"
 
@@ -4455,11 +4459,11 @@ msgstr "Peringatan:"
 msgid "You are not allowed to see the revisions"
 msgstr "Anda tidak diizinkan untuk melihat revisi"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:51
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
 msgid "You can have 10 backups, older ones will be deleted automatically."
 msgstr "Anda dapat memiliki 10 cadangan, yang lebih tua akan dihapus secara otomatis."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Cadangan Anda tidak dikonfigurasi dengan benar Modul cadangan tidak akan berfungsi sampai masalah (s) di bawah ini telah diselesaikan:"
 
@@ -7600,7 +7604,7 @@ msgstr "Buat ulang peta situs"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "Buat ulang indeks peta situs untuk semua halaman."
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:71
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "Rebuilding the sitemap in the background."
 msgstr "Membangun kembali peta situs di latar belakang."
 
@@ -7620,7 +7624,7 @@ msgstr "Mingguan (standar)"
 msgid "Yearly"
 msgstr "Per tahun"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:73
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:74
 msgid "You are not allowed to do this"
 msgstr "Anda tidak diperbolehkan melakukan ini"
 
