@@ -1223,7 +1223,7 @@ start_child(ManagerPid, Module, App, ChildSpec, Site) ->
                     ?LOG_ERROR(#{
                         text => <<"Error starting module due to schema initialization error">>,
                         module => Module,
-                        error => error,
+                        result => error,
                         reason => Reason
                     }),
                     {error, {schema_init, Reason}}
@@ -1268,7 +1268,7 @@ handle_start_child_result(Module, Result, #state{ site = Site, module_monitors =
             ?LOG_ERROR(#{
                 text => <<"Could not start module">>,
                 module => Module,
-                error => error,
+                result => error,
                 reason => Reason
             }),
             State2 = do_module_down(Module, State1, undefined, Reason),
@@ -1395,7 +1395,7 @@ has_behaviour(M, Behaviour) ->
             ?LOG_ERROR(#{
                 text => <<"Could not load module">>,
                 module => M,
-                error => error,
+                result => error,
                 reason => Reason
             }),
             false
@@ -1413,7 +1413,9 @@ manage_schema(Module, Context) ->
         {false, true} ->
             ?LOG_ERROR(#{
                 text => <<"Schema version defined in module but no manage_schema/2 function">>,
-                module => Module
+                module => Module,
+                result => error,
+                reason => no_manage_schema
             }),
             {error, {manage_schema, Module}};
         {true, _} ->
@@ -1443,7 +1445,9 @@ manage_schema_if_db(true, Module, Current, Target, #context{} = Context) ->
 manage_schema_if_db(false, Module, _Current, _Target, #context{}) ->
     ?LOG_INFO(#{
         text => <<"Skipping schema for module as the site has no database ('nodb')">>,
-        module => Module
+        module => Module,
+        result => skip,
+        reason => nodb
     }),
     ok.
 
@@ -1492,6 +1496,8 @@ call_manage_schema(Module, Current, Target, _) ->
     ?LOG_ERROR(#{
         text => <<"Invalid schema version numbering">>,
         module => Module,
+        result => error,
+        reason => invalid_schema_number,
         version_current => Current,
         version_target => Target
     }),

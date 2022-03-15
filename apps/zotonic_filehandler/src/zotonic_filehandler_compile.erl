@@ -263,19 +263,22 @@ run_cmd_task(Cmd, RunOpts, Opts) ->
                         ?LOG_ERROR(#{
                             text => <<"Unexpected error from run of command task">>,
                             command => Cmd,
-                            error => Args
+                            result => error,
+                            reason => Args
                         });
                     {StdErr, _} when StdErr =/= [] ->
                         ?LOG_ERROR(#{
                             text => <<"Unexpected error from run of command task">>,
                             command => Cmd,
-                            stderr => iolist_to_binary(StdErr)
+                            result => Error,
+                            reason => iolist_to_binary(StdErr)
                         });
                     {_, StdOut} ->
                         ?LOG_ERROR(#{
                             text => <<"Unexpected error from run of command task">>,
                             command => Cmd,
-                            stdout => iolist_to_binary(StdOut)
+                            result => error,
+                            reason => iolist_to_binary(StdOut)
                         })
                 end,
                 Error
@@ -329,6 +332,8 @@ recompile_task(File) ->
                     Other ->
                         ?LOG_WARNING(#{
                             text => <<"Recompile of Erlang file unexpected result">>,
+                            result => error,
+                            reason => Other,
                             file => File,
                             result => Other
                         })
@@ -338,8 +343,8 @@ recompile_task(File) ->
                     ?LOG_WARNING(#{
                         text => <<"Recompile of Erlang file exit">>,
                         file => File,
-                        type => Type,
-                        error => Err,
+                        result => Type,
+                        reason => Err,
                         stack => Stack
                     })
             end;
@@ -348,6 +353,8 @@ recompile_task(File) ->
             % should take care of this, we don't do anything now.
             ?LOG_WARNING(#{
                 text => <<"Could not find compile options, no recompile for Erlang file">>,
+                result => error,
+                reason => no_compile_options,
                 file => File
             })
     end,

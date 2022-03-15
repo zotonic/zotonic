@@ -397,6 +397,8 @@ handle_call({task_done, _TaskPid, TaskId}, _From, #state{ task_id = TaskId } = S
 handle_call({task_done, _TaskPid, TaskId}, _From, State) ->
     ?LOG_ERROR(#{
         text => <<"Pivot received 'task_done' from unknown task job">>,
+        result => error,
+        reason => unknown_task_job,
         task_id => TaskId
     }),
     {reply, {error, unknown_task}, State};
@@ -406,6 +408,8 @@ handle_call({pivot_done, PivotPid}, _From, #state{ pivot_pid = PivotPid } = Stat
 handle_call({pivot_done, PivotPid}, _From, State) ->
     ?LOG_ERROR(#{
         text => <<"Pivot received 'pivot_done' from unknown pivot job">>,
+        result => error,
+        reason => unknown_pivot_job,
         pid => PivotPid
     }),
     {reply, {error, unknown_pivot}, State};
@@ -445,8 +449,8 @@ handle_cast(poll, State) ->
         Type:Err:Stack ->
             ?LOG_ERROR(#{
                 text => <<"Pivot poll error">>,
-                type => Type,
-                error => Err,
+                result => Type,
+                reason => Err,
                 stack => Stack
             }),
             {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
@@ -481,6 +485,8 @@ handle_cast({pivot_ping, Pid, Id}, #state{ pivot_pid = Pid } = State) ->
 handle_cast({pivot_ping, Pid, Id}, State) ->
     ?LOG_NOTICE(#{
         text => <<"Pivot ping from unknown process">>,
+        result => error,
+        reason => unknown_process,
         pid => Pid,
         rsc_id => Id,
         expected_pid => State#state.pivot_pid
@@ -496,6 +502,8 @@ handle_cast({task_ping, _Pid, TaskId, Percentage}, #state{ task_id = TaskId } = 
 handle_cast({task_ping, Pid, TaskId, _Percentage}, State) ->
     ?LOG_NOTICE(#{
         text => <<"Task ping for wrong task id">>,
+        result => error,
+        reason => wrong_task_id,
         pid => Pid,
         task_id => TaskId,
         expected_task_id => State#state.task_id
@@ -544,8 +552,8 @@ handle_info(poll, #state{ site = Site } = State) ->
                 Type:Err:Stack ->
                     ?LOG_ERROR(#{
                         text => <<"Pivot error">>,
-                        type => Type,
-                        error => Err,
+                        result => Type,
+                        reason => Err,
                         stack => Stack
                     }),
                     timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
@@ -564,7 +572,7 @@ handle_info({'DOWN', _MRef, process, Pid, Reason}, #state{ pivot_pid = Pid } = S
     ?LOG_ERROR(#{
         text=> <<"Pivot received DOWN from pivot job">>,
         rsc_id => LastRscId,
-        error => 'DOWN',
+        result => 'DOWN',
         reason => Reason,
         pivot_pid => Pid
     }),

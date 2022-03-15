@@ -43,14 +43,22 @@ observe_media_upload_preprocess(#media_upload_preprocess{ file = File, mime = Mi
             case scan_file(File, Mime, Context) of
                 ok ->
                     % all ok, give the next preprocessor a try
-                    ?LOG_NOTICE("clamav: file ~p for user ~p is ok",
-                               [ Pre#media_upload_preprocess.original_filename,
-                                 z_acl:user(Context)
-                               ]),
+                    ?LOG_NOTICE(#{
+                        text => <<"clamav: file is ok">>,
+                        result => ok,
+                        file => Pre#media_upload_preprocess.original_filename
+                    }),
                     undefined;
                 {error, Reason} = Error ->
+                    ?LOG_ERROR(#{
+                        text => <<"clamav: file is NOT ok">>,
+                        result => error,
+                        reason => Reason,
+                        file => Pre#media_upload_preprocess.original_filename,
+                        mime => Pre#media_upload_preprocess.mime
+                    }),
                     UId = z_acl:user(Context),
-                    z:error(
+                    ?zError(
                         "Virus scanner: error '~p' checking '~s' (~s) for user ~p (~s)",
                         [ Reason,
                           Pre#media_upload_preprocess.original_filename,
@@ -58,7 +66,6 @@ observe_media_upload_preprocess(#media_upload_preprocess{ file = File, mime = Mi
                           UId,
                           z_convert:to_binary( m_rsc:p_no_acl(UId, email, Context) )
                         ],
-                        [ {module, ?MODULE}, {line, ?LINE} ],
                         Context),
                     Error
             end
@@ -83,15 +90,22 @@ scan_file(File, Mime, Context) ->
 
 
 %% @doc Periodic ping of clamav to check the settings
-observe_tick_1h(tick_1h, Context) ->
+observe_tick_1h(tick_1h, _Context) ->
     {IP, Port} = z_clamav:ip_port(),
     case z_clamav:ping() of
         pong ->
-            ?LOG_NOTICE("Virus scanner: ping ok for clamav daemon at ~s:~p",
-                        [ IP, Port ]);
+            ?LOG_INFO(#{
+                text => <<"Virus scanner: ping ok for clamav">>,
+                result => ok,
+                ip => IP,
+                port => Port
+            });
         pang ->
-            z:warning("Virus scanner: can not ping clamav daemon at ~s:~p",
-                      [ IP, Port ],
-                      [ {module, ?MODULE}, {line, ?LINE} ],
-                      Context)
+            ?LOG_WARNING(#{
+                text => <<"Virus scanner: can not ping clamav daemon">>,
+                result => error,
+                reason => pang,
+                ip => IP,
+                port => Port
+            })
     end.

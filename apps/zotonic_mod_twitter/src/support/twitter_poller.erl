@@ -51,6 +51,7 @@ poll(Context) ->
                             maybe_poll_next(Sub, Result, Context),
                             ?LOG_DEBUG(#{
                                 text => <<"Imported tweets">>,
+                                result => ok,
                                 service => twitter,
                                 count => ImportCount
                             }),
@@ -63,7 +64,7 @@ poll(Context) ->
                                 service => twitter,
                                 twitter_sub_id => proplists:get_value(id, Sub),
                                 twitter_sub_key => proplists:get_value(key, Sub),
-                                error => error,
+                                result => error,
                                 reason => Reason
                             }),
                             Error;
@@ -81,7 +82,7 @@ poll(Context) ->
             ?LOG_ERROR(#{
                 text => <<"Twitter poller error">>,
                 service => twitter,
-                error => Type,
+                result => Type,
                 reason => E,
                 stack => Trace
             }),
@@ -112,7 +113,7 @@ poll_next(SubId, Next, Context) ->
                     ?LOG_ERROR(#{
                         text => <<"Twitter (next) poller error">>,
                         service => twitter,
-                        error => Type,
+                        result => Type,
                         reason => E,
                         stack => Trace
                     }),

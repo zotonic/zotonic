@@ -163,8 +163,8 @@ pivot_resource(Id, Context0) ->
             ?LOG_ERROR(#{
                 text => <<"Pivot error">>,
                 rsc_id => Id,
-                type => Type,
-                error => Err,
+                result => Type,
+                reason => Err,
                 stack => Stack
             }),
             {error, Err}
@@ -247,6 +247,8 @@ pivot_resource_1(Id, Lang, Context) ->
                 {error, enoent} ->
                     ?LOG_ERROR(#{
                         text => <<"Missing 'pivot/pivot.tpl' template">>,
+                        result => error,
+                        reason => enoent,
                         template => <<"pivot/pivot.tpl">>,
                         id => Id
                     }),
@@ -326,9 +328,10 @@ update_custom_pivot(Id, {Module, Columns}, Context) ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => <<"Error updating custom pivot">>,
+                result => error,
+                reason => Reason,
                 pivot_module => Module,
-                id => Id,
-                reason => Reason
+                id => Id
             })
     end.
 

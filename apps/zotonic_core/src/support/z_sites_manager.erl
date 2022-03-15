@@ -709,8 +709,9 @@ do_start(Site, #state{ sites = Sites } = State) ->
         error ->
             ?LOG_WARNING(#{
                 action => start_request,
-                error => bad_name,
-                text => "Requested to start unknown site"
+                result => error,
+                reason => bad_name,
+                text => <<"Requested to start unknown site">>
             }, #{ site => Site }),
             {error, bad_name}
     end.
@@ -728,16 +729,18 @@ do_start_site(#site_status{ site = Site } = SiteStatus) ->
                 {error, {already_started, Pid}} ->
                     % seems we have a race condition here
                     ?LOG_ERROR(#{
-                        text => "Site already started, this shouldn't happen.",
-                        error => already_started
+                        text => <<"Site already started, this shouldn't happen.">>,
+                        result => error,
+                        reason => already_started
                     }, #{ site => Site }),
                     {ok, SiteStatus#site_status{
                         pid = Pid
                     }};
-                {error, _} = Error ->
+                {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => "Site start failed",
-                        error => Error
+                        result => error,
+                        reason => Reason
                     }, #{ site => Site }),
                     Error
             end;
@@ -803,8 +806,11 @@ handle_down(MRef, Pid, Reason, #state{ site_monitors = Ms } = State) ->
             Sites1 = do_site_down(Site, Reason, State1#state.sites),
             State1#state{ sites = Sites1 };
         error ->
-            ?LOG_WARNING("'DOWN' with reason ~p for unknown site",
-                          [Reason]),
+            ?LOG_WARNING(#{
+                text => <<"'DOWN' for unknown site">>,
+                result => error,
+                reason => Reason
+            }),
             State
     end.
 
@@ -824,8 +830,12 @@ do_site_down(Site, Reason, Sites) ->
             z_sites_dispatcher:update_dispatchinfo(),
             Sites#{ Site => Status2 };
         error ->
-            ?LOG_WARNING("'DOWN' for site ~p with reason ~p, but no site status found",
-                          [Site, Reason]),
+            ?LOG_WARNING(#{
+                text => <<"'DOWN' for site, but no site status found">>,
+                site => Site,
+                result => error,
+                reason => Reason
+            }),
             Sites
     end.
 

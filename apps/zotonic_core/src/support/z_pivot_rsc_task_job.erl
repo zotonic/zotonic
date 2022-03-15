@@ -86,7 +86,7 @@ task_job(
                 text => <<"Pivot task failed - undefined function, aborting">>,
                 task_id => TaskId,
                 mfa => {Module, Function, Args},
-                error => error,
+                result => error,
                 reason => undef,
                 stack => Trace
             }),
@@ -106,7 +106,7 @@ maybe_schedule_retry(#{ task_id := TaskId, error_count := ErrCt, mfa := MFA }, E
         text => <<"Pivot task failed - will retry">>,
         task_id => TaskId,
         mfa => MFA,
-        error => Error,
+        result => Error,
         reason => Reason,
         retry_on => RetryDue,
         stack => Trace
@@ -122,7 +122,7 @@ maybe_schedule_retry(#{ task_id := TaskId, mfa := MFA }, Error, Reason, Trace, C
         text => <<"Pivot task failed - aborting">>,
         task_id => TaskId,
         mfa => MFA,
-        error => Error,
+        result => Error,
         reason => Reason,
         stack => Trace
     }),
