@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Defines all paths for files and directories of a site.
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -49,15 +49,17 @@ site_source_dir(#context{ site = Site }) ->
     site_dir(Site);
 site_source_dir(Site) when is_atom(Site) ->
     LibDir = z_utils:lib_dir(),
-    AppDir = filename:join([LibDir, "apps_user", Site]),
-    case filelib:is_dir(AppDir) of
-        true -> AppDir;
-        false ->
-            AppDir2 = filename:join([LibDir, "_checkouts", Site]),
-            case filelib:is_dir(AppDir2) of
-                true -> AppDir2;
-                false -> {error, bad_name}
-            end
+    Dirs = [
+        filename:join([zotonic_apps(), Site]),
+        filename:join([LibDir, "apps_user", Site]),
+        filename:join([LibDir, "apps", Site]),
+        filename:join([LibDir, "_checkouts", Site])
+    ],
+    case lists:dropwhile(fun(D) -> not filelib:is_dir(D) end, Dirs) of
+        [] ->
+            {error, bad_name};
+        [D|_] ->
+            D
     end.
 
 %% @doc Return the path to the given module in the given context.
