@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-02-25 21:08\n"
+"PO-Revision-Date: 2022-03-15 17:21\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -891,7 +891,7 @@ msgstr "¿Estas seguro que quieres salir de la interfaz del administrador?"
 msgid "Aside"
 msgstr "Al lado"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:90
 msgid "Ask google to not index this page"
 msgstr "Avisarle a Google que no indexe esta página"
 
@@ -1047,7 +1047,7 @@ msgstr "Creado el"
 msgid "Created:"
 msgstr "Creado:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:77
 msgid "Customize page slug"
 msgstr "Personalizar el slug"
 
@@ -4290,7 +4290,7 @@ msgstr "Copias de seguridad de Administrador"
 msgid "Are you sure you want to revert to this version?"
 msgstr "¿Estas seguro de volver a esta versión?"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:49
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:55
 msgid "At any moment you can make a backup of your system."
 msgstr "En cualquier momento puedes hacer una copia de seguridad de su sistema."
 
@@ -4298,7 +4298,7 @@ msgstr "En cualquier momento puedes hacer una copia de seguridad de su sistema."
 msgid "Back to the edit page"
 msgstr "Regresar a la página de edición"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:67
+#: apps/zotonic_mod_backup/src/mod_backup.erl:68
 msgid "Backup"
 msgstr "Respaldo"
 
@@ -4306,7 +4306,7 @@ msgstr "Respaldo"
 msgid "Backup &amp; Restore"
 msgstr "Copia de seguridad &amp; Restauración"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:11
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:12
 msgid "Backup and restore options for your content."
 msgstr "Opciones de Copia de seguridad y Restauración para su contenido."
 
@@ -4334,6 +4334,10 @@ msgstr "Haga click en <b>Lista y restaure a una versión anterior</b> para ver u
 msgid "Deleted"
 msgstr "Eliminar"
 
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
+msgid "Directory"
+msgstr "Directorio"
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
 msgstr "Descargar un archivo de respaldo"
@@ -4350,7 +4354,7 @@ msgstr "Ayuda acerca de la copia de seguridad &amp; y restauración"
 msgid "List and restore an earlier version"
 msgstr "Lista y restauración en la versión anterior"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:44
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Hacer un respaldo diario de la base de datos y de la carga de archivos."
 
@@ -4378,7 +4382,7 @@ msgstr "Revisiones para"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "Seleccione el archivo de respaldo que desea cargar. El archivo debe ser un archivo .bert."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:37
 msgid "Show import/export panel in the admin."
 msgstr "Mostrar en el panel del administrador la importación y exportación."
 
@@ -4410,23 +4414,23 @@ msgstr "Lo sentimos, no tiene permitido cambiar esta página."
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Lo sentimos, no tiene permitido cambiar la configuración."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "Start backup now"
 msgstr "Iniciar copia de seguridad ahora"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
 msgid "Start database-only backup now"
 msgstr "Iniciar ahora solo copia de seguridad de la base de datos"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
 msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
 msgstr "El comando \"pg_dump\" no se encontró en la ruta. Establezca la clave de configuración de \"pg_dump\" a la ruta \"pg_dump\" y vuelva a esta página."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:70
 msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
 msgstr "El comando \"tar\" no se encontró en la ruta. Establezca la clave de configuración \"tar\" a la ruta \"tar\" y vuelva a esta página."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:50
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "La copia de seguridad se compone de dos partes, la base de datos y los archivos subidos."
 
@@ -4434,7 +4438,7 @@ msgstr "La copia de seguridad se compone de dos partes, la base de datos y los a
 msgid "This is the version saved on"
 msgstr "Esta es la versión guardada en"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:81
 msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
 msgstr "Este sitio tiene habilitado el almacenamiento de archivos en la nube, y hay archivos multimedia <strong>$1</strong> en este sistema que solo están almacenados en la nube y no en este equipo. ¡Estos archivos no tienen copias de seguridad!"
 
@@ -4442,13 +4446,13 @@ msgstr "Este sitio tiene habilitado el almacenamiento de archivos en la nube, y 
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "Esto sobrescribirá su página con el contenido del archivo de la copia de seguridad."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:73
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "Advertencia"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Warning:"
 msgstr "Advertencia:"
 
@@ -4456,11 +4460,11 @@ msgstr "Advertencia:"
 msgid "You are not allowed to see the revisions"
 msgstr "No tiene permitido ver las revisiones"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:51
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
 msgid "You can have 10 backups, older ones will be deleted automatically."
 msgstr "Se puede tener 10 copias de seguridad, las más antiguas se eliminarán automáticamente."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "La copia de seguridad no está correctamente configurada. El módulo de copias de seguridad no funcionará hasta que los problemas a continuación hayan sido resueltos:"
 
@@ -7600,7 +7604,7 @@ msgstr "Reconstruir mapa del sitio"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "Reconstruya el índice del mapa del sitio para todas las páginas."
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:71
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "Rebuilding the sitemap in the background."
 msgstr "Reconstruyendo el mapa del sitio en segundo plano."
 
@@ -7620,7 +7624,7 @@ msgstr "Semanal (por defecto)"
 msgid "Yearly"
 msgstr "Anual"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:73
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:74
 msgid "You are not allowed to do this"
 msgstr "No tienes permitido hacer esto"
 
