@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-02-25 21:09\n"
+"PO-Revision-Date: 2022-03-15 17:54\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -891,7 +891,7 @@ msgstr "Yönetici arayüzünden çıkmak istediğinizden emin misiniz?"
 msgid "Aside"
 msgstr "Yana"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:90
 msgid "Ask google to not index this page"
 msgstr "Google'a bu sayfayı indekslememesini söyleyin"
 
@@ -1047,7 +1047,7 @@ msgstr "Tarihinde oluşturuldu"
 msgid "Created:"
 msgstr "Oluşturuldu:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:77
 msgid "Customize page slug"
 msgstr "Sayfa slug'ını özelleştir"
 
@@ -4290,7 +4290,7 @@ msgstr "Yönetici Yedeklemeleri"
 msgid "Are you sure you want to revert to this version?"
 msgstr "Bu sürüme geri dönmek istediğinizden emin misini?"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:49
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:55
 msgid "At any moment you can make a backup of your system."
 msgstr "Herhangi bir anda sisteminizin yedeğini oluşturabilirsiniz."
 
@@ -4298,7 +4298,7 @@ msgstr "Herhangi bir anda sisteminizin yedeğini oluşturabilirsiniz."
 msgid "Back to the edit page"
 msgstr "Düzenleme sayfasına geri dön"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:67
+#: apps/zotonic_mod_backup/src/mod_backup.erl:68
 msgid "Backup"
 msgstr "Yedekle"
 
@@ -4306,7 +4306,7 @@ msgstr "Yedekle"
 msgid "Backup &amp; Restore"
 msgstr "Yedekle &amp; Geri Yükle"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:11
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:12
 msgid "Backup and restore options for your content."
 msgstr "İçeriğiniz için yedekleme ve yeniden yükleme seçenekleri."
 
@@ -4334,6 +4334,10 @@ msgstr "Bu sayfanın daha önce kaydedilmiş sürümlerine genel bir bakış iç
 msgid "Deleted"
 msgstr "Silindi"
 
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
+msgid "Directory"
+msgstr "dizin"
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
 msgstr "Yedek dosyasını indir"
@@ -4350,7 +4354,7 @@ msgstr "Yedekleme &amp; geri yükleme hakkında yardım"
 msgid "List and restore an earlier version"
 msgstr "Önceki sürümü listele ve geri yükle"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:44
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Veritabanı ve yüklenen dosyalar için günlük yedekleme oluşturun."
 
@@ -4378,7 +4382,7 @@ msgstr "Şunun için düzeltmeler"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "Yüklemek istediğiniz yedekleme dosyasını seçin. Dosya bir .bert dosyası olmalıdır."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:37
 msgid "Show import/export panel in the admin."
 msgstr "İçe/dışa aktarma panelini yönetimde göster."
 
@@ -4410,23 +4414,23 @@ msgstr "Üzgünüz, bu sayfayı değiştirmek için izne sahip değilsiniz."
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Üzgünüz, bu yapılandırmayı değiştirmek için izne sahip değilsiniz."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "Start backup now"
 msgstr "Yedeklemeye şimdi başla"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
 msgid "Start database-only backup now"
 msgstr "Sadece veritabanı yedeklemesini şimdi başlat"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
 msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
 msgstr "Yolda \"pg_dump\" komutu bulunamadı. Yola pg_dump için \"pg_dump\" yapılandırma anahtarını girin ve bu sayfaya geri dönün."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:70
 msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
 msgstr "Yolda \"tar\" komutu bulunamadı. Yola tar için \"tar\" yapılandırma anahtarını girin ve bu sayfaya geri dönün."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:50
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "Yedek iki bölümden oluşur veritabanı ve yüklenen dosyalar."
 
@@ -4434,7 +4438,7 @@ msgstr "Yedek iki bölümden oluşur veritabanı ve yüklenen dosyalar."
 msgid "This is the version saved on"
 msgstr "Bu kaydedilmiş sürümdür"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:81
 msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
 msgstr "Bu sitede bulut dosyası saklama alanı etkinleştirilmiştir ve sistemde bu makinede değil sadece bulutta saklanmış <strong>$1</strong> medya dosyası var. Bu dosyalar yedeklenmeyecekler!"
 
@@ -4442,13 +4446,13 @@ msgstr "Bu sitede bulut dosyası saklama alanı etkinleştirilmiştir ve sistemd
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "Bu yedek dosyasındaki içeriği sayfanızın üstüne yazacaktır."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:73
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "Uyarı"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Warning:"
 msgstr "Uyarı:"
 
@@ -4456,11 +4460,11 @@ msgstr "Uyarı:"
 msgid "You are not allowed to see the revisions"
 msgstr "Bu revizyonu görmeye yetkiniz yok"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:51
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
 msgid "You can have 10 backups, older ones will be deleted automatically."
 msgstr "10 tane yedek alabilirsiniz, eskiler otomatik olarak silinecektir."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Yedeğiniz doğru olarak yapılandırılmamış. Yedek modülü problem(ler) giderilene kadar çalışmayacaktır:"
 
@@ -7600,7 +7604,7 @@ msgstr "Site haritasını yeniden oluştur"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "Tüm sayfalar için site haritası dizinini yeniden oluşturun."
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:71
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "Rebuilding the sitemap in the background."
 msgstr "Site haritasının arka planda yeniden oluşturulması."
 
@@ -7620,7 +7624,7 @@ msgstr "Haftalık (varsayılan)"
 msgid "Yearly"
 msgstr "Yıllık"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:73
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:74
 msgid "You are not allowed to do this"
 msgstr "Bunu yapma izniniz yok"
 

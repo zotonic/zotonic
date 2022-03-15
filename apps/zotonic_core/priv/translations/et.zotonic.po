@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-02-25 21:09\n"
+"PO-Revision-Date: 2022-03-15 17:21\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -891,7 +891,7 @@ msgstr "Kas soovite kindlasti administraatori liidesest väljuda?"
 msgid "Aside"
 msgstr "Kõrvale"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:90
 msgid "Ask google to not index this page"
 msgstr "Keela Googlil lehe indekseerimine"
 
@@ -1047,7 +1047,7 @@ msgstr "Loodud"
 msgid "Created:"
 msgstr "Loodud:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:77
 msgid "Customize page slug"
 msgstr "Kohalda lehe h√lkutsungit"
 
@@ -4290,7 +4290,7 @@ msgstr "Administraatori varukoopiad"
 msgid "Are you sure you want to revert to this version?"
 msgstr "Kas soovite kindlasti sellele versioonile naasta?"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:49
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:55
 msgid "At any moment you can make a backup of your system."
 msgstr "Igal hetkel saate teha oma süsteemist varukoopia."
 
@@ -4298,7 +4298,7 @@ msgstr "Igal hetkel saate teha oma süsteemist varukoopia."
 msgid "Back to the edit page"
 msgstr "Tagasi redigeerimislehele"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:67
+#: apps/zotonic_mod_backup/src/mod_backup.erl:68
 msgid "Backup"
 msgstr "Varundamine"
 
@@ -4306,7 +4306,7 @@ msgstr "Varundamine"
 msgid "Backup &amp; Restore"
 msgstr "Varundamine &amp; Taasta"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:11
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:12
 msgid "Backup and restore options for your content."
 msgstr "Teie sisu varundamise ja taastamise valikud."
 
@@ -4334,6 +4334,10 @@ msgstr "Selle lehe varasematest salvestatud versioonidest ülevaate saamiseks kl
 msgid "Deleted"
 msgstr "Kustutatud"
 
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
+msgid "Directory"
+msgstr "Kataloog"
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
 msgstr "Laadige alla varukoopia"
@@ -4350,7 +4354,7 @@ msgstr "Abi varundamise &amp; taastamise kohta"
 msgid "List and restore an earlier version"
 msgstr "Varasema versiooni loendamine ja taastamine"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:44
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Tehke andmebaasist ja üleslaaditud failidest iga päev varukoopia."
 
@@ -4378,7 +4382,7 @@ msgstr "Muudatused"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "Valige varukoopia, mille soovite üles laadida. Fail peab olema .bert-fail."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:37
 msgid "Show import/export panel in the admin."
 msgstr "Kuva administraatori paneel impordi / ekspordi kohta."
 
@@ -4410,23 +4414,23 @@ msgstr "Vabandust, teil pole selle lehe muutmiseks luba."
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Vabandust, teil pole konfiguratsiooni muutmiseks luba."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "Start backup now"
 msgstr "Alusta varundamist kohe"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
 msgid "Start database-only backup now"
 msgstr "Alustage kohe ainult andmebaasi varundamist"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
 msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
 msgstr "Käsku \"pg_dump\" teelt ei leitud. Seadistage \"pg_dump\" konfiguratsioonivõti pg_dump tee juurde ja naaske sellele lehele."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:70
 msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
 msgstr "\"Tõrva\" käsku teelt ei leitud. Määrake \"tar\" konfiguratsioonivõti tõrvamise teele ja naaske sellele lehele."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:50
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "Varukoopia koosneb kahest osast, andmebaasist ja üleslaaditud failidest."
 
@@ -4434,7 +4438,7 @@ msgstr "Varukoopia koosneb kahest osast, andmebaasist ja üleslaaditud failidest
 msgid "This is the version saved on"
 msgstr "See on versioon, kuhu on salvestatud"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:81
 msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
 msgstr "See sait on pilvefailisüsteemi poe lubatud, ja seal on <strong>$ 1</strong> meediafaile selles süsteemis, mis on ainult salvestatakse pilve ja mitte see masin. Neid faile ei varundata!"
 
@@ -4442,13 +4446,13 @@ msgstr "See sait on pilvefailisüsteemi poe lubatud, ja seal on <strong>$ 1</str
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "See kirjutab teie lehe varukoopia sisuga üle."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:73
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "Hoiatus"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Warning:"
 msgstr "Hoiatus:"
 
@@ -4456,11 +4460,11 @@ msgstr "Hoiatus:"
 msgid "You are not allowed to see the revisions"
 msgstr "Teil pole lubatud redaktsioone näha"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:51
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
 msgid "You can have 10 backups, older ones will be deleted automatically."
 msgstr "Teil võib olla 10 varukoopiat, vanemad kustutatakse automaatselt."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Teie varukoopia pole õigesti konfigureeritud. Varumoodul ei tööta enne, kui allolevad probleemid on lahendatud:"
 
@@ -7600,7 +7604,7 @@ msgstr "Ehitage saidikaart uuesti üles"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "Taastage kõigi lehtede saidikaardi register."
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:71
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "Rebuilding the sitemap in the background."
 msgstr "Saidikaardi taastamine taustal."
 
@@ -7620,7 +7624,7 @@ msgstr "Iganädalane (vaikimisi)"
 msgid "Yearly"
 msgstr "Iga-aastane"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:73
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:74
 msgid "You are not allowed to do this"
 msgstr "Teil pole lubatud seda teha"
 

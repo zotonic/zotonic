@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-02-25 21:09\n"
+"PO-Revision-Date: 2022-03-15 17:21\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -891,7 +891,7 @@ msgstr "האם אתה בטוח שברצונך לצאת מממשק הניהול?"
 msgid "Aside"
 msgstr "בַּצַד"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:90
 msgid "Ask google to not index this page"
 msgstr "בקש מ- google לא להוסיף אינדקס לדף זה"
 
@@ -1047,7 +1047,7 @@ msgstr "נוצר ב"
 msgid "Created:"
 msgstr "נוצר:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:77
 msgid "Customize page slug"
 msgstr "התאם אישית את שבלול הדף"
 
@@ -4290,7 +4290,7 @@ msgstr "גיבויים של מנהל מערכת"
 msgid "Are you sure you want to revert to this version?"
 msgstr "האם אתה בטוח שברצונך לחזור לגרסה זו?"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:49
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:55
 msgid "At any moment you can make a backup of your system."
 msgstr "בכל רגע תוכלו לבצע גיבוי של המערכת שלכם."
 
@@ -4298,7 +4298,7 @@ msgstr "בכל רגע תוכלו לבצע גיבוי של המערכת שלכם.
 msgid "Back to the edit page"
 msgstr "חזרה לדף העריכה"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:67
+#: apps/zotonic_mod_backup/src/mod_backup.erl:68
 msgid "Backup"
 msgstr "גיבוי"
 
@@ -4306,7 +4306,7 @@ msgstr "גיבוי"
 msgid "Backup &amp; Restore"
 msgstr "גיבוי &amp; שחזר"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:11
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:12
 msgid "Backup and restore options for your content."
 msgstr "אפשרויות גיבוי ושחזור לתוכן שלך."
 
@@ -4334,6 +4334,10 @@ msgstr "לחץ על רשימת <b>ושחזר גרסה קודמת</b> כדי לק
 msgid "Deleted"
 msgstr "נמחק"
 
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
+msgid "Directory"
+msgstr "מַדרִיך"
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
 msgstr "הורד קובץ גיבוי"
@@ -4350,7 +4354,7 @@ msgstr "עזרה בנוגע לשחזור גיבוי &amp;"
 msgid "List and restore an earlier version"
 msgstr "רשום ושחזר גרסה קודמת"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:44
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "גבה מדי יום את מסד הנתונים והקבצים שהועלו."
 
@@ -4378,7 +4382,7 @@ msgstr "עדכונים עבור"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "בחר את קובץ הגיבוי שברצונך להעלות. הקובץ חייב להיות קובץ .bert."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:37
 msgid "Show import/export panel in the admin."
 msgstr "הצג את לוח הייבוא / הייצוא במנהל המערכת."
 
@@ -4410,23 +4414,23 @@ msgstr "מצטערים, אין לך הרשאה לשנות דף זה."
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "מצטערים, אין לך הרשאה לשנות את התצורה."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "Start backup now"
 msgstr "התחל גיבוי עכשיו"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
 msgid "Start database-only backup now"
 msgstr "התחל כעת גיבוי למסד נתונים בלבד"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
 msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
 msgstr "הפקודה \"pg_dump\" לא נמצאה בנתיב. הגדר את מפתח התצורה \"pg_dump\" לנתיב ל- pg_dump וחזור לדף זה."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:70
 msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
 msgstr "הפקודה \"זפת\" לא נמצאה בנתיב. הגדר את מקש התצורה \"זפת\" לנתיב לזפת וחזור לדף זה."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:50
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "הגיבוי כולל שני חלקים, בסיס הנתונים והקבצים שהועלו."
 
@@ -4434,7 +4438,7 @@ msgstr "הגיבוי כולל שני חלקים, בסיס הנתונים והק�
 msgid "This is the version saved on"
 msgstr "זו הגרסה שנשמרה בתאריך"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:81
 msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
 msgstr "לאתר זה מופעלת חנות קבצי ענן, ומערכת זו כוללת קבצי מדיה <strong>$ 1</strong> המאוחסנים בענן בלבד ולא במחשב זה. קבצים אלה לא יגובו!"
 
@@ -4442,13 +4446,13 @@ msgstr "לאתר זה מופעלת חנות קבצי ענן, ומערכת זו �
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "זה יחליף את הדף שלך עם תוכן קובץ הגיבוי."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:73
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "אַזהָרָה"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Warning:"
 msgstr "אַזהָרָה:"
 
@@ -4456,11 +4460,11 @@ msgstr "אַזהָרָה:"
 msgid "You are not allowed to see the revisions"
 msgstr "אינך רשאי לראות את התיקונים"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:51
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
 msgid "You can have 10 backups, older ones will be deleted automatically."
 msgstr "אתה יכול לקבל 10 גיבויים, ישנים יותר יימחקו באופן אוטומטי."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "הגיבוי שלך לא מוגדר כהלכה. מודול הגיבוי לא יעבוד עד לפתרון הבעיה / ים למטה:"
 
@@ -7600,7 +7604,7 @@ msgstr "בנה מפת אתר מחדש"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "בנה מחדש את אינדקס ה- Sitemap לכל הדפים."
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:71
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "Rebuilding the sitemap in the background."
 msgstr "בניית מפת האתר ברקע."
 
@@ -7620,7 +7624,7 @@ msgstr "שבועי (ברירת מחדל)"
 msgid "Yearly"
 msgstr "שְׁנָתִי"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:73
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:74
 msgid "You are not allowed to do this"
 msgstr "אינך רשאי לעשות זאת"
 

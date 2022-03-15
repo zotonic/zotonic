@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-02-25 21:09\n"
+"PO-Revision-Date: 2022-03-15 17:54\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -891,7 +891,7 @@ msgstr "Är du säker på att du vill avsluta admin-gränssnittet?"
 msgid "Aside"
 msgstr "Åt sidan"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:90
 msgid "Ask google to not index this page"
 msgstr "Be google att inte indexera den här sidan"
 
@@ -1047,7 +1047,7 @@ msgstr "Skapad den"
 msgid "Created:"
 msgstr "Skapad:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:77
 msgid "Customize page slug"
 msgstr "Anpassa sidan slug"
 
@@ -4290,7 +4290,7 @@ msgstr "Admin-säkerhetskopior"
 msgid "Are you sure you want to revert to this version?"
 msgstr "Är du säker på att du vill återkomma till denna version?"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:49
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:55
 msgid "At any moment you can make a backup of your system."
 msgstr "På något ögonblick du kan göra en säkerhetskopia av ditt system."
 
@@ -4298,7 +4298,7 @@ msgstr "På något ögonblick du kan göra en säkerhetskopia av ditt system."
 msgid "Back to the edit page"
 msgstr "Tillbaka till redigeringssidan"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:67
+#: apps/zotonic_mod_backup/src/mod_backup.erl:68
 msgid "Backup"
 msgstr "Säkerhetskopiering"
 
@@ -4306,7 +4306,7 @@ msgstr "Säkerhetskopiering"
 msgid "Backup &amp; Restore"
 msgstr "Backup &amp; Återställ"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:11
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:12
 msgid "Backup and restore options for your content."
 msgstr "Säkerhetskopiering och återställning alternativ för ditt innehåll."
 
@@ -4334,6 +4334,10 @@ msgstr "Klicka på <b>Lista och återställa en tidigare version</b> för att f�
 msgid "Deleted"
 msgstr "raderade"
 
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
+msgid "Directory"
+msgstr "Katalog"
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
 msgstr "Ladda ner säkerhetskopian"
@@ -4350,7 +4354,7 @@ msgstr "Hjälp om backup &amp; återställa"
 msgid "List and restore an earlier version"
 msgstr "Lista och återställa en tidigare version"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:44
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Gör en daglig backup av databasen och uppladdade filer."
 
@@ -4378,7 +4382,7 @@ msgstr "Revideringar för"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "Välj den säkerhetskopieringsfil du vill ladda upp. Filen måste vara en .bert-fil."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:37
 msgid "Show import/export panel in the admin."
 msgstr "Visa import/export av panel i admin."
 
@@ -4410,23 +4414,23 @@ msgstr "Tyvärr, du har inte behörighet att ändra denna sida."
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Tyvärr, du har inte behörighet att ändra denna sida."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "Start backup now"
 msgstr "Starta säkerhetskopiering nu"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
 msgid "Start database-only backup now"
 msgstr "Starta enbart databas-säkerhetskopiering nu"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
 msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
 msgstr "\"Pg_dump\" - kommandot inte finns i vägen. Ställ in \"pg_dump\" config-tangenten för att vägen till pg_dump och återvända till den här sidan."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:70
 msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
 msgstr "\"Tar\" - kommandot inte finns i vägen. Ställ in \"tar\" config-tangenten för att vägen till tjära och återvända till den här sidan."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:50
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "Backup består av två delar, en för databasen och den uppladdade filer."
 
@@ -4434,7 +4438,7 @@ msgstr "Backup består av två delar, en för databasen och den uppladdade filer
 msgid "This is the version saved on"
 msgstr "Detta är versionen som sparats på"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:81
 msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
 msgstr "Denna webbplats har cloud file store aktiverat, och det är <strong>$1</strong> media filer på systemet som endast lagras i molnet och inte på denna maskin. Dessa filer inte säkerhetskopierades!"
 
@@ -4442,13 +4446,13 @@ msgstr "Denna webbplats har cloud file store aktiverat, och det är <strong>$1</
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "Detta kommer att skriva över din sida med innehåll av backup-fil."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:73
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "Varning"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Warning:"
 msgstr "Varning:"
 
@@ -4456,11 +4460,11 @@ msgstr "Varning:"
 msgid "You are not allowed to see the revisions"
 msgstr "Du får inte ser ändringarna"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:51
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
 msgid "You can have 10 backups, older ones will be deleted automatically."
 msgstr "Du kan ha 10 säkerhetskopior, äldre och kära raderas automatiskt."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Din backup är inte korrekt konfigurerad. Backup modul kommer inte att fungera förrän problemet(s) nedan har lösts:"
 
@@ -7600,7 +7604,7 @@ msgstr "Bygg om webbplatskarta"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "Bygg om webbplatskartaindex för alla sidor."
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:71
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "Rebuilding the sitemap in the background."
 msgstr "Ombyggnaden av webbplatskartan i bakgrunden."
 
@@ -7620,7 +7624,7 @@ msgstr "Veckovis (standard)"
 msgid "Yearly"
 msgstr "Årlig"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:73
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:74
 msgid "You are not allowed to do this"
 msgstr "Du får inte göra detta"
 

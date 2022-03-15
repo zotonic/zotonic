@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-02-11 14:13\n"
+"PO-Revision-Date: 2022-03-15 17:21\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -891,7 +891,7 @@ msgstr "هل أنت متأكد أنك تريد إخراج واجهة المشر�
 msgid "Aside"
 msgstr "جانبا"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:90
 msgid "Ask google to not index this page"
 msgstr "اسأل جوجل لعدم فهرسة هذه الصفحة"
 
@@ -1047,7 +1047,7 @@ msgstr "تم إنشاؤها على"
 msgid "Created:"
 msgstr "تم الإنشاء:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:77
 msgid "Customize page slug"
 msgstr "تخصيص slug الصفحة"
 
@@ -4290,7 +4290,7 @@ msgstr "النسخ الاحتياطي المسؤول"
 msgid "Are you sure you want to revert to this version?"
 msgstr "هل أنت متأكد أنك تريد العودة إلى هذا الإصدار؟"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:49
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:55
 msgid "At any moment you can make a backup of your system."
 msgstr "يمكنك عمل نسخة احتياطية من نظامك في أي لحظة."
 
@@ -4298,7 +4298,7 @@ msgstr "يمكنك عمل نسخة احتياطية من نظامك في أي ل
 msgid "Back to the edit page"
 msgstr "العودة إلى صفحة التحرير"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:67
+#: apps/zotonic_mod_backup/src/mod_backup.erl:68
 msgid "Backup"
 msgstr "دعم"
 
@@ -4306,7 +4306,7 @@ msgstr "دعم"
 msgid "Backup &amp; Restore"
 msgstr "استعادة النسخ الاحتياطي &amp;"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:11
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:12
 msgid "Backup and restore options for your content."
 msgstr "خيارات النسخ الاحتياطي والاستعادة للمحتوى الخاص بك."
 
@@ -4334,6 +4334,10 @@ msgstr "انقر فوق قائمة <b>واستعد إصدارًا سابقًا</
 msgid "Deleted"
 msgstr "تم الحذف"
 
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
+msgid "Directory"
+msgstr "الدليل"
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
 msgstr "تنزيل ملف النسخ الاحتياطي"
@@ -4350,7 +4354,7 @@ msgstr "تعليمات حول استعادة النسخ الاحتياطي &amp;
 msgid "List and restore an earlier version"
 msgstr "قائمة واستعادة نسخة سابقة"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:44
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "عمل نسخة احتياطية يومية من قاعدة البيانات والملفات المرفوعة."
 
@@ -4378,7 +4382,7 @@ msgstr "تنقيحات لـ"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "حدد ملف النسخ الاحتياطي الذي تريد تحميله. يجب أن يكون الملف ملفًا بامتداد .bert."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:37
 msgid "Show import/export panel in the admin."
 msgstr "إظهار لوحة الاستيراد / التصدير في المسؤول."
 
@@ -4410,23 +4414,23 @@ msgstr "عذرا ، ليس لديك إذن لتغيير هذه الصفحة."
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "عذرا ، ليس لديك إذن لتغيير التكوين."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "Start backup now"
 msgstr "ابدأ النسخ الاحتياطي الآن"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
 msgid "Start database-only backup now"
 msgstr "ابدأ النسخ الاحتياطي لقاعدة البيانات فقط الآن"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
 msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
 msgstr "لم يتم العثور على الأمر \"pg_dump\" في المسار. اضبط مفتاح التكوين \"pg_dump\" على المسار إلى pg_dump والعودة إلى هذه الصفحة."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:70
 msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
 msgstr "لم يتم العثور على الأمر \"tar\" في المسار. اضبط مفتاح التكوين \"tar\" على المسار إلى tar والعودة إلى هذه الصفحة."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:50
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "تتكون النسخة الاحتياطية من جزأين ، قاعدة البيانات والملفات التي تم تحميلها."
 
@@ -4434,7 +4438,7 @@ msgstr "تتكون النسخة الاحتياطية من جزأين ، قاعد
 msgid "This is the version saved on"
 msgstr "هذه هي النسخة المحفوظة في"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:81
 msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
 msgstr "يحتوي هذا الموقع على مخزن ملفات سحابي ممكّن ، وهناك <strong>$ 1</strong> ملفات وسائط على هذا النظام مخزنة فقط في السحابة وليس على هذا الجهاز. لن يتم نسخ هذه الملفات احتياطيًا!"
 
@@ -4442,13 +4446,13 @@ msgstr "يحتوي هذا الموقع على مخزن ملفات سحابي م�
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "سيؤدي هذا إلى استبدال صفحتك بمحتويات ملف النسخ الاحتياطي."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:73
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "تحذير"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Warning:"
 msgstr "تحذير:"
 
@@ -4456,11 +4460,11 @@ msgstr "تحذير:"
 msgid "You are not allowed to see the revisions"
 msgstr "لا يسمح لك أن ترى المراجعات"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:51
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
 msgid "You can have 10 backups, older ones will be deleted automatically."
 msgstr "يمكنك الحصول على 10 نسخ احتياطية ، وسيتم حذف النسخ القديمة تلقائيًا."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "لم يتم تكوين نسختك الاحتياطية بشكل صحيح. لن تعمل وحدة النسخ الاحتياطي حتى يتم حل المشكلة (المشكلات) أدناه:"
 
@@ -7600,7 +7604,7 @@ msgstr "إعادة إنشاء خريطة الموقع"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "إعادة إنشاء فهرس خريطة الموقع لجميع الصفحات."
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:71
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "Rebuilding the sitemap in the background."
 msgstr "إعادة إنشاء خريطة الموقع في الخلفية."
 
@@ -7620,7 +7624,7 @@ msgstr "أسبوعي (افتراضي)"
 msgid "Yearly"
 msgstr "سنوي"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:73
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:74
 msgid "You are not allowed to do this"
 msgstr "لا يسمح لك أن تفعل هذا"
 
