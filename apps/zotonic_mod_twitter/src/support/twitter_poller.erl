@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2018 Driebit BV
+%% @copyright 2018-2022 Driebit BV
 %% @doc Task queue handler for Twitter polls
 %% @todo Split all poll actions into separate jobs
 
-%% Copyright 2018 Driebit BV
+%% Copyright 2018-2022 Driebit BV
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -49,17 +49,23 @@ poll(Context) ->
                             ImportCount = import_result(Sub, Result, Context),
                             set_due(Sub, Result, ImportCount, Context),
                             maybe_poll_next(Sub, Result, Context),
-                            ?LOG_DEBUG("Twitter: imported ~p tweets", [ ImportCount ]),
+                            ?LOG_DEBUG(#{
+                                text => <<"Imported tweets">>,
+                                service => twitter,
+                                count => ImportCount
+                            }),
                             ok;
                         ok ->
                             ok;
-                        {error, _} = Error ->
-                            ?LOG_ERROR("Twitter poller (~p) of \"~s\" error: ~p",
-                                        [
-                                            proplists:get_value(id, Sub),
-                                            proplists:get_value(key, Sub),
-                                            Error
-                                        ]),
+                        {error, Reason} = Error ->
+                            ?LOG_ERROR(#{
+                                text => <<"Twitter poller error">>,
+                                service => twitter,
+                                twitter_sub_id => proplists:get_value(id, Sub),
+                                twitter_sub_key => proplists:get_value(key, Sub),
+                                error => error,
+                                reason => Reason
+                            }),
                             Error;
                         {delay, _} = D ->
                             D
@@ -72,7 +78,13 @@ poll(Context) ->
         determine_next_delay(Status, Context)
     catch
         Type:E:Trace ->
-            ?LOG_ERROR("Twitter poller error: ~p:~p", [ Type, E ], #{ stack => Trace }),
+            ?LOG_ERROR(#{
+                text => <<"Twitter poller error">>,
+                service => twitter,
+                error => Type,
+                reason => E,
+                stack => Trace
+            }),
             {delay, ?DELAY_EXCEPTION}
     end.
 
@@ -97,7 +109,13 @@ poll_next(SubId, Next, Context) ->
                 end
             catch
                 Type:E:Trace ->
-                    ?LOG_ERROR("Twitter (next) poller error: ~p:~p", [ Type, E ], #{ stack => Trace }),
+                    ?LOG_ERROR(#{
+                        text => <<"Twitter (next) poller error">>,
+                        service => twitter,
+                        error => Type,
+                        reason => E,
+                        stack => Trace
+                    }),
                     {delay, ?DELAY_EXCEPTION}
             end;
         {error, not_found} ->
@@ -214,7 +232,12 @@ poll_feed(Sub, Context) ->
                     Error
             end;
         false ->
-            ?LOG_NOTICE("twitter_poller: disable subscription because not allowd to insert tweets for ~p", [ Sub ]),
+            ?LOG_NOTICE(#{
+                text => <<"twitter_poller: disable subscription because not allowd to insert tweets">>,
+                service => twitter,
+                twitter_sub_id => SubId,
+                sub => Sub
+            }),
             m_twitter:disable(SubId, <<"acl">>, Context),
             {error, eacces}
     end.
