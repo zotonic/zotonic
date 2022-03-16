@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-15 17:53\n"
+"PO-Revision-Date: 2022-03-16 02:14\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3981,7 +3981,7 @@ msgstr "В сообщении указаны инструкции по акти�
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:166./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
 msgid "Keep me signed in"
-msgstr "Держите меня в курсе"
+msgstr "Оставаться в системе"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:111
 msgid "Log on with"
