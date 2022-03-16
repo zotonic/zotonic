@@ -1573,6 +1573,7 @@ assert_table_name1b(<<H, T/binary>>) when (H >= $0 andalso H =< $9) ->
 -spec assert_database_name( string() ) -> true.
 assert_database_name([]) -> true;
 assert_database_name([$.|T]) -> assert_database_name(T);
+assert_database_name([$_|T]) -> assert_database_name(T);
 assert_database_name([H|T]) when (H >= $a andalso H =< $z) ->
     assert_database_name(T);
 assert_database_name([H|T]) when (H >= $0 andalso H =< $9) ->
@@ -1581,11 +1582,11 @@ assert_database_name([H|T]) when (H >= $0 andalso H =< $9) ->
 %% @doc Check if a name is a valid SQL schema name. Crashes when invalid
 -spec assert_schema_name( string() ) -> true.
 assert_schema_name([]) -> true;
-assert_schema_name([$_|T]) -> assert_database_name(T);
+assert_schema_name([$_|T]) -> assert_schema_name(T);
 assert_schema_name([H|T]) when (H >= $a andalso H =< $z) ->
-    assert_database_name(T);
+    assert_schema_name(T);
 assert_schema_name([H|T]) when (H >= $0 andalso H =< $9) ->
-    assert_database_name(T).
+    assert_schema_name(T).
 
 
 -spec quoted_table_name( table_name() ) -> {default | string(), string(), string()}.
