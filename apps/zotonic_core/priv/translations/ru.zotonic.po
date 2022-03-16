@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-16 03:16\n"
+"PO-Revision-Date: 2022-03-16 17:20\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4106,7 +4106,7 @@ msgstr "Простите, слишком много попыток"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:25
 msgid "Sorry, your password reset code is unknown or expired"
-msgstr "Извините, ваш код для сброса пароля неверен или истек"
+msgstr "Извините, ваш код для сброса пароля неверен или устарел"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:163
 msgid "Stay logged on unless I log off."
