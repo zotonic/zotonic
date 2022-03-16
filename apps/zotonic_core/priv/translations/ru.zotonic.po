@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-16 02:48\n"
+"PO-Revision-Date: 2022-03-16 03:16\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4022,7 +4022,7 @@ msgstr "Пожалуйста, подтвердите ваш пароль для"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:2
 msgid "Please enter the two-factor authentication passcode."
-msgstr "Пожалуйста, введите двухфакторный код аутентификации."
+msgstr "Пожалуйста, введите код двухфакторной аутентификации."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:9./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:16./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:3
 msgid "Please try again in"
@@ -4034,12 +4034,12 @@ msgstr "Пожалуйста, попробуйте позже."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:13
 msgid "Redirecting to"
-msgstr "Переориентация на"
+msgstr "Перенаправление на"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:15
 #: apps/zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:43
 msgid "Redirecting..."
-msgstr "Переориентация..."
+msgstr "Перенаправление..."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:24./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:11
 msgid "Repeat password"
@@ -4077,11 +4077,11 @@ msgstr "Выйти"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:27
 msgid "Simply try again:"
-msgstr "Просто попробуй еще раз:"
+msgstr "Просто попробуйте еще раз:"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:47
 msgid "Somebody else is already connected with this account on"
-msgstr "Кто-то другой уже связан с этим аккаунтом на"
+msgstr "Кто-то другой уже подключён с этим аккаунтом к"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
 msgid "Somebody with your email address has already an account on"
