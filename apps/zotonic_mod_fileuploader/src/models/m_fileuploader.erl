@@ -38,7 +38,7 @@ m_get([ <<"status">>, Name | Rest ], _Msg, Context) ->
             Error
     end;
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 

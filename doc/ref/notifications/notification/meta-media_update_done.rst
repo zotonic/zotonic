@@ -13,9 +13,9 @@ Return:
     
 
 ``#media_update_done{}`` properties:
-    - action: ``unknown``
-    - id: ``unknown``
-    - pre_is_a: ``unknown``
-    - post_is_a: ``unknown``
-    - pre_props: ``unknown``
-    - post_props: ``unknown``
+    - action: ``insert|update|delete``
+    - id: ``m_rsc:resource_id()``
+    - pre_is_a: ``list``
+    - post_is_a: ``list``
+    - pre_props: ``map|undefined``
+    - post_props: ``map|undefined``

@@ -1,5 +1,5 @@
 {% if id.medium as medium %}
-	<figure class="image-wrapper {% if align == 'block' %}block-level-image{% else %}pull-{{align}} inline-image{% endif %} category-{{ id.category_id.name }} {{ mediaclass }} {% if not medium.filename %}embed{% endif %}">
+	<figure class="image-wrapper {% if align == 'block' %}block-level-image{% else %}pull-{{align}} inline-image{% endif %} category-{{ id.category_id.name }} mediaclass-{{ mediaclass }} {% if not medium.filename %}embed{% endif %}">
 		{% if medium.mime == "text/html-oembed" %}
 			<div class="oembed-wrapper">
 				{% media medium mediaclass=mediaclass %}

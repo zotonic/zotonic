@@ -23,6 +23,8 @@
     orientation_to_transpose/1
 ]).
 
+-include_lib("kernel/include/logger.hrl").
+
 -define(PREVIEW_CMDLINE, "ffmpeg -itsoffset -~p -i ~s -vcodec png -vframes 1 -an -f rawvideo -loglevel error -y").
 
 -spec preview(file:filename_all(), map()) -> {ok, file:filename_all()} | {error, string()}.
@@ -55,13 +57,13 @@ preview(MovieFile, Props) ->
         ])),
     jobs:run(media_preview_jobs,
         fun() ->
-            lager:debug("Video preview: ~p", [FfmpegCmd]),
+            ?LOG_DEBUG("Video preview: ~p", [FfmpegCmd]),
             case os:cmd(FfmpegCmd) of
                 [] ->
-                   lager:debug("Preview ok, file: ~p", [TmpFile]),
+                   ?LOG_DEBUG("Preview ok, file: ~p", [TmpFile]),
                    {ok, TmpFile};
                 Other ->
-                   lager:warning("Video preview error: ~p", [Other]),
+                   ?LOG_WARNING("Video preview error: ~p", [Other]),
                    {error, Other}
             end
         end).

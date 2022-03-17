@@ -188,7 +188,7 @@ m_get([ Id, Type | Rest ], _Msg, Context) ->
     end,
     {ok, {Idn, Rest}};
 m_get(Vs, _Msg, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_ERROR("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 
@@ -281,7 +281,7 @@ is_allowed_set_username(Id, Context) when is_integer(Id) ->
 delete_username(undefined, _Context) ->
     {error, enoent};
 delete_username(1, Context) ->
-    lager:warning("Trying to delete admin username (1) by ~p", [ z_acl:user(Context) ]),
+    ?LOG_WARNING("Trying to delete admin username (1) by ~p", [ z_acl:user(Context) ]),
     {error, eacces};
 delete_username(RscId, Context) when is_integer(RscId) ->
     case is_allowed_set_username(RscId, Context)  of
@@ -344,7 +344,7 @@ set_expired(UserId, false, Context) ->
 set_username(undefined, _Username, _Context) ->
     {error, enoent};
 set_username(1, _Username, Context) ->
-    lager:warning("Trying to set admin username (1) by ~p", [ z_acl:user(Context) ]),
+    ?LOG_WARNING("Trying to set admin username (1) by ~p", [ z_acl:user(Context) ]),
     {error, eacces};
 set_username(Id, Username, Context) when is_integer(Id) ->
     case is_allowed_set_username(Id, Context) of
@@ -418,7 +418,7 @@ set_username(Id, Username, Context) ->
 set_username_pw(undefined, _, _, _) ->
     {error, enoent};
 set_username_pw(1, _, _, Context) ->
-    lager:warning("Trying to set admin username (1) by ~p", [ z_acl:user(Context) ]),
+    ?LOG_WARNING("Trying to set admin username (1) by ~p", [ z_acl:user(Context) ]),
     {error, eacces};
 set_username_pw(Id, Username, Password, Context)  when is_integer(Id) ->
     case is_allowed_set_username(Id, Context) of
@@ -474,11 +474,11 @@ set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
                 z_acl:sudo(Context)),
             ok;
         {rollback, {{error, _} = Error, _Trace} = ErrTrace} ->
-            lager:error("set_username_pw error for ~p, setting username. ~p: ~p",
+            ?LOG_ERROR("set_username_pw error for ~p, setting username. ~p: ~p",
                 [Username, Error, ErrTrace]),
             Error;
         {error, _} = Error ->
-            lager:error("set_username_pw error for ~p, setting username. ~p",
+            ?LOG_ERROR("set_username_pw error for ~p, setting username. ~p",
                         [Username, Error]),
             Error
     end.
@@ -697,7 +697,7 @@ check_username_pw_1(<<"admin">>, Password, Context) ->
                     flush(1, Context),
                     {ok, 1};
                 false ->
-                    lager:error(
+                    ?LOG_ERROR(
                         "admin login with default password from non allowed ip address ~p",
                         [m_req:get(peer, Context)]
                     ),

@@ -44,7 +44,7 @@ m_get([ <<"collab_group_update">> | Rest ], _Msg, Context) ->
 m_get([ <<"collab_group_link">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(mod_acl_user_groups, collab_group_link, Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 %% @doc Check if a user group is actually in use.

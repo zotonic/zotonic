@@ -63,6 +63,8 @@ _checkouts
 zotonic.tmproj
 .sass-cache
 
+doc/ref/models/model_.rst
+
 .eunit
 
 docker-data

@@ -76,7 +76,7 @@ fetch_access_token(Code, _AuthData, _Args, _QArgs, Context) ->
             } = z_json:decode(Payload),
             {ok, AccessData};
         Other ->
-            lager:error("[facebook] error fetching access token [code ~p] ~p", [Code, Other]),
+            ?LOG_ERROR("[facebook] error fetching access token [code ~p] ~p", [Code, Other]),
             {error, {http_error, FacebookUrl, Other}}
     end.
 
@@ -85,7 +85,7 @@ auth_validated(#{ <<"access_token">> := AccessToken } = AccessData, Args, _Conte
     case fetch_user_data(AccessToken) of
         {ok, FBProps} ->
             FacebookUserId = maps:get(<<"id">>, FBProps),
-            lager:debug("[facebook] Authenticating ~p ~p", [FacebookUserId, FBProps]),
+            ?LOG_DEBUG("[facebook] Authenticating ~p ~p", [FacebookUserId, FBProps]),
             PersonProps = #{
                 <<"title">> => maps:get(<<"name">>, FBProps, undefined),
                 <<"name_first">> => maps:get(<<"first_name">>, FBProps, undefined),
@@ -119,7 +119,7 @@ fetch_user_data(AccessToken) ->
             Props = z_json:decode(Payload),
             {ok, Props};
         Other ->
-            lager:error("[facebook] error fetching user data [token ~p] ~p", [AccessToken, Other]),
+            ?LOG_ERROR("[facebook] error fetching user data [token ~p] ~p", [AccessToken, Other]),
             {error, {http_error, FacebookUrl, Other}}
     end.
 

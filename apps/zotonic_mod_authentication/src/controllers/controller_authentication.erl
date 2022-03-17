@@ -97,7 +97,7 @@ handle_cmd(<<"reset">>, Payload, Context) ->
 handle_cmd(<<"status">>, Payload, Context) ->
     status(Payload, Context);
 handle_cmd(Cmd, _Payload, Context) ->
-    lager:info("controller_authentication: unknown cmd ~p", [ Cmd ]),
+    ?LOG_INFO("controller_authentication: unknown cmd ~p", [ Cmd ]),
     {
         #{
             status => error,
@@ -161,13 +161,13 @@ logon_1(undefined, _Payload, Context) ->
 
 
 log_logon(UserId, #{ <<"username">> := Username }, Context) when is_binary(Username) ->
-    lager:info("~p: Logon of user ~p (~s) using username '~s'",
+    ?LOG_NOTICE("~p: Logon of user ~p (~s) using username '~s'",
                 [ z_context:site(Context), UserId, username(UserId, Context), Username ]);
 log_logon(UserId, #{ <<"token">> := Token }, Context) when is_binary(Token) ->
-    lager:info("~p: Logon of user ~p (~s) using token",
+    ?LOG_NOTICE("~p: Logon of user ~p (~s) using token",
                 [ z_context:site(Context), UserId, username(UserId, Context) ]);
 log_logon(UserId, #{}, Context) ->
-    lager:info("~p: Logon of user ~p (~s)",
+    ?LOG_NOTICE("~p: Logon of user ~p (~s)",
                 [ z_context:site(Context), UserId, username(UserId, Context) ]).
 
 username(UserId, Context) ->
@@ -303,7 +303,7 @@ change(#{
         UserId ->
             case m_identity:get_username(UserId, Context) of
                 undefined ->
-                    lager:error("Password change: User ~p does not have an username defined.", [ UserId ]),
+                    ?LOG_ERROR("Password change: User ~p does not have an username defined.", [ UserId ]),
                     { #{ status => error, error => username }, Context };
                 Username ->
                     case auth_precheck(Username, Context) of
@@ -375,7 +375,7 @@ reset(#{
                         {ok, UserId} ->
                             case m_identity:get_username(UserId, Context) of
                                 undefined ->
-                                    lager:error("Password reset: User ~p does not have an username defined.", [ UserId ]),
+                                    ?LOG_ERROR("Password reset: User ~p does not have an username defined.", [ UserId ]),
                                     { #{ status => error, error => username }, Context };
                                 Username ->
                                     case reset_1(UserId, Username, Password, Passcode, Context) of
@@ -490,7 +490,7 @@ check_reminder_secret(#{ <<"secret">> := Secret, <<"username">> := Username }, C
                                 need_passcode => NeedPasscode
                             };
                         OtherUsername ->
-                            lager:error("Password reset with username mismatch: got \"~s\", expected \"~s\"",
+                            ?LOG_ERROR("Password reset with username mismatch: got \"~s\", expected \"~s\"",
                                         [ Username, OtherUsername ]),
                             #{
                                 status => error,
@@ -532,7 +532,7 @@ get_by_reminder_secret(Code, Context) ->
                 true ->
                     {ok, UserId};
                 false ->
-                    lager:info("Accessing expired reminder secret for user ~p", [UserId]),
+                    ?LOG_NOTICE("Accessing expired reminder secret for user ~p", [UserId]),
                     delete_reminder_secret(UserId, Context),
                     undefined
             end

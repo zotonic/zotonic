@@ -28,6 +28,7 @@
     update/3,
     update/4,
     duplicate/3,
+    duplicate/4,
     merge_delete/4,
 
     flush/2,
@@ -352,10 +353,14 @@ flush(Id, CatList, Context) ->
 
 %% @doc Duplicate a resource, creating a new resource with the given title.
 -spec duplicate(m_rsc:resource(), m_rsc:props_all(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
-duplicate(Id, DupProps, Context) when is_list(DupProps) ->
+duplicate(Id, DupProps, Context) ->
+    duplicate(Id, DupProps, [], Context).
+
+-spec duplicate(m_rsc:resource(), m_rsc:props_all(), m_rsc:duplicate_options(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
+duplicate(Id, DupProps, DupOpts, Context) when is_list(DupProps) ->
     {ok, DupMap} = z_props:from_list(DupProps),
-    duplicate(Id, DupMap, Context);
-duplicate(Id, DupProps, Context) when is_integer(Id) ->
+    duplicate(Id, DupMap, DupOpts, Context);
+duplicate(Id, DupProps, DupOpts, Context) when is_integer(Id) ->
     case z_acl:rsc_visible(Id, Context) of
         true ->
             case m_rsc:get_raw(Id, Context) of
@@ -380,8 +385,18 @@ duplicate(Id, DupProps, Context) when is_integer(Id) ->
                         }),
                     case insert(InsProps, [{is_escape_texts, false}], Context) of
                         {ok, NewId} ->
-                            m_edge:duplicate(Id, NewId, Context),
-                            m_media:duplicate(Id, NewId, Context),
+                            case proplists:get_value(edges, DupOpts, true) of
+                                true ->
+                                    m_edge:duplicate(Id, NewId, Context);
+                                _ ->
+                                    ok
+                            end,
+                            case proplists:get_value(medium, DupOpts, true) of
+                                true ->
+                                    m_media:duplicate(Id, NewId, Context);
+                                _ ->
+                                    ok
+                            end,
                             {ok, NewId};
                         {error, _} = Error ->
                             Error
@@ -392,10 +407,10 @@ duplicate(Id, DupProps, Context) when is_integer(Id) ->
         false ->
             {error, eacces}
     end;
-duplicate(undefined, _DupProps, _Context) ->
+duplicate(undefined, _DupProps, _DupOpts, _Context) ->
     {error, enoent};
-duplicate(Id, DupProps, Context) ->
-    duplicate(m_rsc:rid(Id, Context), DupProps, Context).
+duplicate(Id, DupProps, DupOpts, Context) ->
+    duplicate(m_rsc:rid(Id, Context), DupProps, DupOpts, Context).
 
 %% @doc Update a resource
 -spec update(
@@ -903,7 +918,7 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
         fun(Iso) ->
             case z_language:is_language_editable(Iso, Context) of
                 false ->
-                    lager:info("Dropping non editable language ~p from resource ~p", [ Iso, Id ]),
+                    ?LOG_INFO("Dropping non editable language ~p from resource ~p", [ Iso, Id ]),
                     false;
                 true ->
                     true
@@ -1064,7 +1079,7 @@ preflight_check_name(Id, #{ <<"name">> := Name }, Context) when Name =/= undefin
         0 ->
             ok;
         _N ->
-            lager:warning("Trying to insert duplicate name ~p", [Name]),
+            ?LOG_WARNING("Trying to insert duplicate name ~p", [Name]),
             {error, duplicate_name}
     end;
 preflight_check_name(_Id, _Props, _Context) ->
@@ -1076,7 +1091,7 @@ preflight_check_page_path(Id, #{ <<"page_path">> := Path }, Context) when Path =
         0 ->
             ok;
         _N ->
-            lager:warning("Trying to insert duplicate page_path ~p", [Path]),
+            ?LOG_WARNING("Trying to insert duplicate page_path ~p", [Path]),
             {error, duplicate_page_path}
     end;
 preflight_check_page_path(_Id, _Props, _Context) ->
@@ -1087,7 +1102,7 @@ preflight_check_uri(Id, #{ <<"uri">> := Uri }, Context) when Uri =/= undefined -
         0 ->
             ok;
         _N ->
-            lager:warning("Trying to insert duplicate uri ~p", [Uri]),
+            ?LOG_WARNING("Trying to insert duplicate uri ~p", [Uri]),
             {error, duplicate_uri}
     end;
 preflight_check_uri(_Id, _Props, _Context) ->
@@ -1243,7 +1258,7 @@ props_filter(<<"category_id">>, CatId, Acc, Context) ->
         true ->
             Acc#{ <<"category_id">> => CatId1 };
         false ->
-            lager:error("Ignoring unknown category '~p' in update, using 'other' instead.", [CatId]),
+            ?LOG_ERROR("Ignoring unknown category '~p' in update, using 'other' instead.", [CatId]),
             {ok, OtherId} = m_category:name_to_id(other, Context),
             Acc#{ <<"category_id">> => OtherId }
     end;
@@ -1261,7 +1276,7 @@ props_filter(<<"content_group_id">>, CgId, Acc, Context) ->
         true ->
             Acc#{ <<"content_group_id">> => CgId1 };
         false ->
-            lager:error("Ignoring unknown content group '~p' in update.", [CgId]),
+            ?LOG_ERROR("Ignoring unknown content group '~p' in update.", [CgId]),
             Acc
     end;
 props_filter(Location, P, Acc, _Context)

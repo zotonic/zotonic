@@ -48,7 +48,7 @@ service_available(Context0) ->
     Context = z_context:set_noindex_header(Context0),
     Context1 = z_context:ensure_qs(Context),
     Context2 = z_context:set_cors_headers([{<<"access-control-allow-origin">>, <<"*">>}], Context1),
-    z_context:lager_md(Context2),
+    z_context:logger_md(Context2),
     case get_file_info(Context2) of
         {ok, Info} ->
             {true, z_context:set(?MODULE, Info, Context2)};
@@ -229,7 +229,7 @@ get_file_info_cfg(undefined, Context) ->
     DispPath = drop_dotdot(maybe_urldecode(rootless(cowmachine_req:disp_path(Context)))),
     get_file_info_path(DispPath, Context);
 get_file_info_cfg(id, _Context) ->
-    lager:error("controller_file does not support the 'id' config, use controller_file_id instead."),
+    ?LOG_ERROR("controller_file does not support the 'id' config, use controller_file_id instead."),
     {error, enoent};
 get_file_info_cfg(ConfiguredPath, Context) when is_list(ConfiguredPath); is_binary(ConfiguredPath) ->
     get_file_info_path(rootless(z_convert:to_binary(ConfiguredPath)), Context).

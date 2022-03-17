@@ -25,11 +25,13 @@
 length(undefined, _Context) -> undefined;
 length([], _Context) -> 0;
 length(<<>>, _Context) -> 0;
+length(#trans{} = Tr, Context) ->
+    length(z_trans:lookup_fallback(Tr, Context), Context);
+length(#search_result{ result = R }, _Context) when is_list(R) ->
+    length(R);
 length(Input, _Context) when is_binary(Input) -> z_string:len(Input);
 length(Input, _Context) when is_list(Input) -> erlang:length(Input);
 length(Input, _Context) when is_tuple(Input) -> erlang:tuple_size(Input);
 length(Input, _Context) when is_map(Input) -> erlang:map_size(Input);
-length(#trans{} = Tr, Context) ->
-    length(z_trans:lookup_fallback(Tr, Context), Context);
 length(Input, Context) ->
     erlang:length(z_template_compiler_runtime:to_list(Input, Context)).

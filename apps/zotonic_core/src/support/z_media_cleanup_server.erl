@@ -22,7 +22,7 @@
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
--export([start_link/0, start_link/1]).
+-export([start_link/1]).
 
 %% interface functions
 -export([
@@ -30,6 +30,7 @@
 ]).
 
 -include_lib("zotonic_file.hrl").
+-include_lib("kernel/include/logger.hrl").
 
 % Check every 10 minutes if we have anything to delete.
 % Check every 10 seconds when working through a backlog.
@@ -48,14 +49,12 @@ cleanup(Context) ->
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
+
 %% @doc Starts the server
-start_link() ->
-    start_link([]).
-start_link(Args) when is_list(Args) ->
-    {site, Site} = proplists:lookup(site, Args),
+-spec start_link( atom() ) -> {ok, pid()} | ignore | {error, term()}.
+start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
-    gen_server:start_link({local, Name}, ?MODULE, Args, []).
+    gen_server:start_link({local, Name}, ?MODULE, Site, []).
 
 %%====================================================================
 %% gen_server callbacks
@@ -66,12 +65,11 @@ start_link(Args) when is_list(Args) ->
 %%                     ignore               |
 %%                     {stop, Reason}
 %% @doc Initiates the server.
-init(Args) ->
-    {site, Site} = proplists:lookup(site, Args),
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
+init(Site) ->
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     {ok, #state{site=Site}, ?CLEANUP_TIMEOUT_LONG}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -174,5 +172,5 @@ do_cleanup_file({_Id, Filename, Date}, Context) ->
     ArchiveStore = iolist_to_binary([filename:basename(ArchivePath), $/, Filename ]),
     z_notifier:first(#filestore{action=delete, path=PreviewStore}, Context),
     z_notifier:first(#filestore{action=delete, path=ArchiveStore}, Context),
-    lager:debug("Medium cleanup: ~p (from ~p)", [Filename, Date]),
+    ?LOG_DEBUG("Medium cleanup: ~p (from ~p)", [Filename, Date]),
     ok.

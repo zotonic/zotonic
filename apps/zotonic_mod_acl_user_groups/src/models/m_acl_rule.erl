@@ -100,7 +100,7 @@ m_get([ T, Id | Rest ], _Msg, Context) when ?valid_acl_kind(T) ->
     end;
 
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 
@@ -229,7 +229,7 @@ actions(module, Context) ->
 
 
 update(Kind, Id, Props, Context) ->
-    lager:debug(
+    ?LOG_DEBUG(
         "ACL user groups update by ~p of ~p:~p with ~p",
        [z_acl:user(Context), Kind, Id, Props]
     ),
@@ -256,7 +256,7 @@ get(Kind, Id, Context) ->
     end.
 
 insert(Kind, Props, Context) ->
-    lager:debug(
+    ?LOG_DEBUG(
         "ACL user groups insert by ~p of ~p with ~p",
        [z_acl:user(Context), Kind, Props]
     ),
@@ -301,7 +301,7 @@ map_prop(_K, V, _Context) ->
     V.
 
 delete(Kind, Id, Context) ->
-    lager:debug(
+    ?LOG_DEBUG(
         "ACL user groups delete by ~p of ~p:~p",
        [z_acl:user(Context), Kind, Id]
     ),
@@ -328,7 +328,7 @@ manage_acl_rule({Type, Props}, Module, Context) ->
 
 %% Remove all edit versions, add edit versions of published rules
 revert(Kind, Context) ->
-    lager:warning("ACL user groups revert by ~p of ~p",
+    ?LOG_WARNING("ACL user groups revert by ~p of ~p",
                   [z_acl:user(Context), Kind]),
     T = z_convert:to_list(table(Kind)),
     Result = z_db:transaction(
@@ -356,7 +356,7 @@ revert(Kind, Context) ->
 
 %% Remove all publish versions, add published versions of unpublished rules
 publish(Kind, Context) ->
-    lager:debug(
+    ?LOG_DEBUG(
         "ACL user groups publish by ~p",
         [z_acl:user(Context)]
     ),
@@ -612,7 +612,7 @@ names_to_ids_row(R, Context) when is_map(R) ->
                                 true ->
                                     Acc#{ K => undefined };
                                 false ->
-                                    lager:notice("ACL import dropping rule, due to missing ~p ~p: ~p",
+                                    ?LOG_NOTICE("ACL import dropping rule, due to missing ~p ~p: ~p",
                                                  [K, Value, R]),
                                     #{}
                             end;
@@ -628,7 +628,7 @@ names_to_ids_row(R, Context) when is_map(R) ->
                         _ when K =:= <<"creator_id">>; K =:= <<"modifier_id">> ->
                             Acc#{ K => undefined };
                         _ ->
-                            lager:notice("ACL import dropping rule, due to missing ~p ~p: ~p",
+                            ?LOG_NOTICE("ACL import dropping rule, due to missing ~p ~p: ~p",
                                          [K, Id, R]),
                             #{}
                     end;

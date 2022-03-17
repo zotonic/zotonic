@@ -131,13 +131,15 @@ Modules can automatically subscribe to topics. This is done by adding specially 
 
 For example, the following function subscribes to the topic ``test/#``::
 
+    -include_lib("kernel/include/logger.hrl").
+
     -export([
         'mqtt:test/#'/2
     ]).
 
     -spec 'mqtt:test/#'( map(), z:context() ) -> ok.
     'mqtt:test/#'(Message, Context) ->
-        lager:debug("mqtt:test on site ~p received ~p", [ z_context:site(Context), Message ]),
+        ?LOG_DEBUG("mqtt:test on site ~p received ~p", [ z_context:site(Context), Message ]),
         ok.
 
 Here *Message* is a map with the received MQTT message (of type ``publish``)::

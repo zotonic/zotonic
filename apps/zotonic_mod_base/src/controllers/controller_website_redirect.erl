@@ -31,7 +31,7 @@ resource_exists(Context) ->
 
 previously_existed(Context) ->
     ContextQs = z_context:ensure_qs(Context),
-    z_context:lager_md(ContextQs),
+    z_context:logger_md(ContextQs),
     Id = m_rsc:rid(z_context:get_q(<<"id">>, ContextQs), ContextQs),
     Exists = m_rsc:exists(Id, ContextQs)
              andalso z_acl:rsc_visible(Id, ContextQs),

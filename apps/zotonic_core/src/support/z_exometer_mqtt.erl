@@ -65,15 +65,15 @@ exometer_report_bulk(Found, _Extra, State) ->
     {ok, State}.
 
 exometer_call(Unknown, From, State) ->
-    lager:debug("Unknown call ~p from ~p", [Unknown, From]),
+    ?LOG_DEBUG("Unknown call ~p from ~p", [Unknown, From]),
     {ok, State}.
 
 exometer_cast(Unknown, State) ->
-    lager:debug("Unknown cast: ~p", [Unknown]),
+    ?LOG_DEBUG("Unknown cast: ~p", [Unknown]),
     {ok, State}.
 
 exometer_info(Unknown, State) ->
-    lager:debug("Unknown info: ~p", [Unknown]),
+    ?LOG_DEBUG("Unknown info: ~p", [Unknown]),
     {ok, State}.
 
 exometer_newentry(_Entry, State) ->

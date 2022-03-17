@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-27 18:27\n"
+"PO-Revision-Date: 2022-03-16 17:49\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -147,7 +147,7 @@ msgstr "Группа пользователей в ACL"
 msgid "Access control"
 msgstr "Управление доступом"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:543
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:544
 msgid "Access control rules"
 msgstr "Правила доступа"
 
@@ -160,7 +160,7 @@ msgid "Add links to the collaboration group"
 msgstr "Добавлять связи в группу сотрудничества"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:109./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:110
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:45./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:127./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:158./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:46./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:127./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:158./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
 msgid "All"
 msgstr "Все"
 
@@ -263,7 +263,7 @@ msgstr "Менеджеры групп сотрудничества"
 msgid "Collaboration group members"
 msgstr "Члены группы сотрудничества"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:539
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:540
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:47
 msgid "Collaboration groups"
 msgstr "Группы сотрудничества"
@@ -652,7 +652,7 @@ msgstr "Использовать опубликованные правила"
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "Используйте следующий URL для проверки правил контроля доступа перед их публикацией."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:534
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:535
 msgid "User groups"
 msgstr "Группы пользователей"
 
@@ -891,7 +891,7 @@ msgstr "Вы уверены, что желаете покинуть интерф
 msgid "Aside"
 msgstr "Примечание"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:90
 msgid "Ask google to not index this page"
 msgstr "Не индексировать эту страницу в поисковых системах"
 
@@ -1047,7 +1047,7 @@ msgstr "Создано"
 msgid "Created:"
 msgstr "Создан:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:77
 msgid "Customize page slug"
 msgstr "Настроить содержательный URL"
 
@@ -2448,11 +2448,11 @@ msgstr "Удалить все страницы"
 
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:71
 msgid "Delete is canceled, there are pages in the category."
-msgstr "Удаление отменяется, в категории есть страницы."
+msgstr "Удаление отменено, в категории есть страницы."
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:27
 msgid "Drag categories to the place where you want them in the hierarchy."
-msgstr "Для изменения иерархии категорий можно использовать перетаскивание."
+msgstr "Перетащите категории в нужное место в иерархии."
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:21
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:45
@@ -2605,11 +2605,11 @@ msgstr "Пожалуйста, укажите имя модуля, ключ и з
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:52./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:53./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:79./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:80
 msgid "Relay hostname"
-msgstr "Имя хоста ретрансляции"
+msgstr "Имя релей-хоста"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:57./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:83./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:84
 msgid "Relay port"
-msgstr "Релейный порт"
+msgstr "Порт релей-хоста"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:112./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:113
 msgid "SMTP Hostname"
@@ -2661,7 +2661,7 @@ msgstr "Тестовое письмо от"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:43
 msgid "The Zotonic system configuration is set to use a SMTP relay."
-msgstr "Конфигурация системы Zotonic настроена на использование реле SMTP."
+msgstr "Конфигурация системы Zotonic настроена использовать SMTP-релей."
 
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:61
 msgid "The config key already exists, please choose another key name."
@@ -2673,7 +2673,7 @@ msgstr "Адрес ОТ по умолчанию для писем. По умол
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:20
 msgid "The default directory for all site-certificates is"
-msgstr "Каталог по умолчанию для всех сайтов-сертификатов имеет следующий вид"
+msgstr "Каталог по умолчанию для всех сертификатов сайта имеет следующий вид"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:4
 msgid "This can't be undone. The configuration key will be lost forever."
@@ -2701,7 +2701,7 @@ msgstr "Этот модуль не предоставляет сертифика
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:48./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:75
 msgid "Use relay to send email"
-msgstr "Использовать реле для отправки электронной почты"
+msgstr "Использовать релей для отправки электронной почты"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:60./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:61./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:87./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:88
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:3./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:50./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:19
@@ -2730,7 +2730,7 @@ msgstr "Вы должны быть администратором, чтобы п
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:70
 msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
-msgstr "Zotonic отправляет электронную почту через встроенный почтовый сервер. Вы можете отправить электронное письмо через внешнее реле."
+msgstr "Zotonic отправляет электронную почту через встроенный почтовый сервер. Вы можете отправлять электронную почту через внешний релей."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:160
 msgid "test@example.com"
@@ -2757,7 +2757,7 @@ msgstr "Нет страницы"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:127./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:81
 msgid "Save &amp; view"
-msgstr "Сохранить &amp; вид"
+msgstr "Сохранить &amp; просмотреть"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:153
 msgid "The page might have been deleted."
@@ -2773,7 +2773,7 @@ msgstr "эта страница"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:126
 msgid "Yes, discard changes"
-msgstr "Да, отбрасывайте изменения"
+msgstr "Да, сбросить изменения"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:51
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:11
@@ -2782,7 +2782,7 @@ msgstr "до"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:67
 msgid "(that's you)"
-msgstr "(это ты)"
+msgstr "(это вы)"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:13
 msgid "A secure password is prefilled, replace if needed."
@@ -2808,7 +2808,7 @@ msgstr "Добавить пользователя."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:40
 msgid "Also show persons without user account"
-msgstr "Также покажите лиц без учетной записи пользователя"
+msgstr "Также показать людей без учетной записи пользователя"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:2
 msgid "Are you sure you want to delete the username from"
@@ -2821,7 +2821,7 @@ msgstr "Вы уверены, что хотите удалить эту запи�
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:19
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:36./apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:86
 msgid "Blocked"
-msgstr "Блокированный"
+msgstr "Заблокировано"
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:86
 msgid "Changed the username."
@@ -2874,7 +2874,7 @@ msgstr "Статус электронной почты"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:8
 msgid "Enter a unique username and password. Usernames and passwords are case sensitive, so be careful when entering them."
-msgstr "Введите уникальное имя пользователя и пароль. Имена пользователей и пароли чувствительны к регистру, поэтому будьте внимательны при их вводе."
+msgstr "Введите уникальное имя пользователя и пароль. В именах пользователей и паролях учитывается регистр, поэтому будьте внимательны при их вводе."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:21
 msgid "Every page/person can be made into a user on the edit page. The difference between a user and a normal page is only that the former has logon credentials attached to its page record."
@@ -2903,7 +2903,7 @@ msgstr "Домой"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:20
 msgid "If you don't know this site, please ignore this email. Maybe someone made an error."
-msgstr "Если вы не знаете этот сайт, не обращайте внимания на это письмо. Может кто ошибся."
+msgstr "Если вы не знаете этот сайт, не обращайте внимания на это письмо. Возможно, кто-то ошибся."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51
 msgid "Last logon"
@@ -2927,7 +2927,7 @@ msgstr "Моя страница"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:7
 msgid "Name and e-mail address"
-msgstr "Имя и e-mail"
+msgstr "Имя и адрес e-mail"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:20
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:14./apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:10./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:3
@@ -2940,7 +2940,7 @@ msgstr "Пользователи не найдены."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:66
 msgid "No verified e-mail addresses. Please add one below."
-msgstr "Нет проверенных адресов электронной почты. Пожалуйста, добавьте один из них ниже."
+msgstr "Нет проверенных адресов электронной почты. Пожалуйста, добавьте адрес ниже."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:12
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:9
@@ -2969,7 +2969,7 @@ msgstr "Пожалуйста, подтвердите свой адрес эле�
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:22
 msgid "Random secure password:"
-msgstr "Случайный пароль:"
+msgstr "Случайный надёжный пароль:"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:7
 msgid "Search users"
@@ -3066,12 +3066,12 @@ msgstr "Этот проверочный ключ неизвестен."
 
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:108
 msgid "This will send a verification e-mail to "
-msgstr "Это отправит письмо с подтверждением по электронной почте на адрес "
+msgstr "Электронное письмо с подтверждением будет отправлено на адрес "
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:36
 #: apps/zotonic_mod_l10n/priv/templates/admin_l10n.tpl:14
 msgid "Timezone"
-msgstr "Таймзон"
+msgstr "Часовой пояс"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19
 msgid "Type password to change password"
@@ -3083,11 +3083,11 @@ msgstr "Использовать этот пароль"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:6
 msgid "User account"
-msgstr "аккаунт пользователя"
+msgstr "Аккаунт пользователя"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:6
 msgid "User actions"
-msgstr "действия пользователя"
+msgstr "Действия с аккаунтом"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:8
 msgid "Username / password"
@@ -3163,7 +3163,7 @@ msgstr "Вы получили доступ к"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:30
 msgid "You need to be an administrator to add users."
-msgstr "Вы должны быть администратором для добавления пользователей."
+msgstr "Вы должны быть администратором, чтобы добавлять пользователей."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:25
 msgid "You received this email because you verified your email address. You will not receive any additional emails because of this request."
@@ -3204,7 +3204,7 @@ msgstr "задать имя пользователя / пароль"
 
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:19
 msgid "1. Merge loser into winner"
-msgstr "1. Слить проигравшего в победителя"
+msgstr "1. Включить проигравшего в победителя"
 
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:43
 msgid "2. Delete loser"
@@ -3236,7 +3236,7 @@ msgstr "Найдите страницу для слияния:"
 
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:42
 msgid "Left"
-msgstr "Налево"
+msgstr "Слева"
 
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:101./apps/zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:3./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:3
 msgid "Merge"
@@ -3272,7 +3272,7 @@ msgstr "Выберите слева"
 
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:131
 msgid "Select Right"
-msgstr "Выберите правой кнопкой мыши"
+msgstr "Выберите справа"
 
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:30
 msgid "Select the winner from two pages. The loser will get merged into the winner. Only the winner remains."
@@ -3280,7 +3280,7 @@ msgstr "Выберите победителя из двух страниц. Пр
 
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:34
 msgid "Select the winning page"
-msgstr "Выберите выигрышную страницу"
+msgstr "Выберите выигравшую страницу"
 
 #: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:60
 msgid "Sorry, you have no permission to edit this page."
@@ -3288,7 +3288,7 @@ msgstr "Извините, у вас нет права редактировать
 
 #: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:97
 msgid "The loser is protected, unprotect the loser before merging."
-msgstr "Неудачник защищен, не защищай проигравшего перед слиянием."
+msgstr "Проигравший защищён, снимите защиту с проигравшего перед слиянием."
 
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:58./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:66
 msgid "You are not allowed to edit this page"
@@ -3340,7 +3340,7 @@ msgstr "Выключить"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:3
 msgid "Deactivating this module will stop the following modules:"
-msgstr "При деактивации этого модуля будут остановлены следующие модули:"
+msgstr "При выключении этого модуля будут остановлены следующие модули:"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:9
 msgid "Dependencies"
@@ -3364,7 +3364,7 @@ msgstr "Зависимости модуля"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:1
 msgid "Modules are missing dependencies"
-msgstr "Модули отсутствуют зависимости"
+msgstr "Модули, для которых отсутствуют зависимости"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:92
 msgid "No modules found"
@@ -3376,7 +3376,7 @@ msgstr "Приоритет"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
 msgid "Provides"
-msgstr "Предоставляет ."
+msgstr "Предоставляет"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:3
 msgid "Rescan modules"
@@ -3388,11 +3388,11 @@ msgstr "При повторном сканировании будут перес
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:3
 msgid "The following modules will not start because they miss dependencies:"
-msgstr "Следующие модули не запустятся, так как они пропускают зависимости:"
+msgstr "Следующие модули не запустятся, так как для них отсутствуют зависимости:"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:1
 msgid "There are modules depending on"
-msgstr "Существуют модули в зависимости от"
+msgstr "Есть модули, зависящие от"
 
 #: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:52
 msgid "You are not allowed to activate or deactivate modules."
@@ -3401,8 +3401,8 @@ msgstr "Вы не имеете права активировать или деа
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:8
 msgid "Zotonic is a modular web development framework. Most functionality is encapsulated inside modules. A set of basic modules are shipped with the Zotonic distribution,\n"
 "            while others are externally developed. This page shows an overview of all modules which are currently known to this Zotonic installation."
-msgstr "Zotonic - это модульный фреймворк для веб-разработки. Большая часть функциональности инкапсулирована внутри модулей. Набор базовых модулей поставляется с дистрибутивом Zotonic,\n"
-"            , в то время как другие модули разрабатываются извне. На этой странице представлен обзор всех модулей, которые в настоящее время известны этой установке Zotonic."
+msgstr "Zotonic - это модульный фреймворк для веб-разработки. Большая часть функциональности содержится в модулях. Набор базовых модулей поставляется с дистрибутивом Zotonic,\n"
+"            , тогда как другие модули разрабатываются на стороне. На этой странице представлен обзор всех модулей, которые в настоящее время известны этой установке Zotonic.            "
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:14
 msgid "A predicate denotes traits or aspects of a page and expresses a relationship between two pages.\n"
@@ -3425,7 +3425,7 @@ msgstr "Вы уверены, что хотите удалить"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:31
 msgid "Are you sure you want to disconnect:"
-msgstr "Ты уверен, что хочешь отключиться:"
+msgstr "Вы уверены, что хотите разъединить:"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:9
 msgid "Change the predicate on all existing page connections to:"
@@ -3449,7 +3449,7 @@ msgstr "Удаление отменяется, есть связи с этим �
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
 msgid "Do not find subjects using this predicate’s object titles."
-msgstr "Не находите субъектов, используя названия объектов этого предиката."
+msgstr "Не используйте названия объектов этого предиката для поиска субъектов."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:1
 msgid "Enter the title of the new predicate:"
@@ -3457,7 +3457,7 @@ msgstr "Пожалуйста, укажите название нового пр�
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:26
 msgid "Filter on predicate"
-msgstr "Фильтр на предикате"
+msgstr "Фильтр по предикату"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:20
 msgid "From category"
@@ -3477,15 +3477,15 @@ msgstr "Создать предикат"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:68
 msgid "No page connections found."
-msgstr "Подключений к странице не найдено."
+msgstr "Связи страницы не найдены."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:66
 msgid "No page connections with the predicate:"
-msgstr "Нет связи страницы с предикатом:"
+msgstr "Нет связей страницы с предикатом:"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:53
 msgid "No predicates found."
-msgstr "Предикатов не найдено."
+msgstr "Предикаты не найдены."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:11
 msgid "Object"
@@ -3501,7 +3501,7 @@ msgstr "Или нажмите <strong>Удалить все соединения
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:51
 msgid "Page connections overview"
-msgstr "Обзор соединений на странице"
+msgstr "Обзор соединений страницы"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:49
 msgid "Page connections with the predicate"
@@ -3513,19 +3513,19 @@ msgstr "Предикаты"
 
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:58
 msgid "Sorry, you are not allowed to insert connections with this predicate."
-msgstr "Извините, вам не разрешается вставлять соединения с этим предикатом."
+msgstr "Извините, вам не разрешено вставлять соединения с этим предикатом."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:5
 msgid "Subject"
-msgstr "Тема"
+msgstr "Субъект"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:54
 msgid "The direction (from/to) of this predicate is reversed from the normal definition."
-msgstr "Направление (от/к) этого предиката отличается от нормального определения."
+msgstr "Направление (от/к) этого предиката обратно относительно нормального определения."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:43
 msgid "There are no page connections with this predicate."
-msgstr "Нет никаких связей со страницей с этим предикатом."
+msgstr "Нет связей страниц с этим предикатом."
 
 #: apps/zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:65
 msgid "There is already a predicate with this name."
@@ -3553,7 +3553,7 @@ msgstr "Вы не имеете права создавать этот преди
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:6
 msgid "You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to. When you don't check anything then all categories are valid."
-msgstr "Вы можете определить, для каких категорий предикат отображается на странице редактирования.  Вы также можете определить, какие категории объектов будут найдены при поиске страницы для подключения. Если вы ничего не проверяете, тогда все категории являются действительными."
+msgstr "Вы можете определить, предикат для каких категорий отображается на странице редактирования.  Вы также можете определить, какие категории объектов будут найдены при поиске страницы для связывания. Если вы ничего не проверяете, то все категории являются действительными."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 msgid "object"
@@ -3561,7 +3561,7 @@ msgstr "объект"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
 msgid "subject"
-msgstr "тема"
+msgstr "Субъект"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/database.tpl:3
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:120
@@ -3600,7 +3600,7 @@ msgstr "Альбом"
 
 #: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:21./apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:22
 msgid "Album artist"
-msgstr "Альбомный художник"
+msgstr "Исполнитель альбома"
 
 #: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:27
 msgid "Album is a compilation of songs by various artists"
@@ -3608,7 +3608,7 @@ msgstr "Альбом представляет собой сборник песе
 
 #: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:17./apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:18
 msgid "Artist"
-msgstr "Художник"
+msgstr "Исполнитель"
 
 #: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:31./apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:32
 msgid "Composer"
@@ -3636,11 +3636,11 @@ msgstr "Добавить двухфакторную аутентификацию
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:43
 msgid "Ask after signing in"
-msgstr "Спросите после входа в систему"
+msgstr "Спросить после входа в систему"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:43
 msgid "Changed the 2FA setting."
-msgstr "Изменена настройка 2FA."
+msgstr "Настройка 2FA изменена."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:62
 msgid "Check the user groups for which two-factor authentication should be forced."
@@ -3710,7 +3710,7 @@ msgstr "Только сам пользователь может установи
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:33
 msgid "Optional"
-msgstr "Факультативный сайт"
+msgstr "Необязательно"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:10./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:34
 msgid "Remove two-factor"
@@ -3722,7 +3722,7 @@ msgstr "Удалить двухфакторный..."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:20
 msgid "Reset two-factor..."
-msgstr "Сброс двухфакторный..."
+msgstr "Сбросить двухфакторный..."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:2
 msgid "Scan the two-factor authentication QR code with an app such as <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
@@ -3730,7 +3730,7 @@ msgstr "Отсканируйте QR-код двухфакторной аутен
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:92
 msgid "Scan two-factor authentication passcode"
-msgstr "Сканировать двухфакторный код аутентификации"
+msgstr "Сканировать код двухфакторной аутентификации"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:45
 msgid "Sorry, you are not allowed to change the 2FA settings."
@@ -3754,11 +3754,11 @@ msgstr "Двухфакторная аутентификация"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:8
 msgid "Two-factor authentication adds an extra check on sign in. The user will need to enter a code which is generated by an App on their telephone."
-msgstr "Двухфакторная аутентификация добавляет дополнительную проверку входа. Пользователю необходимо будет ввести код, который генерируется приложением на его телефоне."
+msgstr "Двухфакторная аутентификация добавляет дополнительную проверку при входе. Пользователю необходимо будет ввести код, который генерируется приложением на его телефоне."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:7
 msgid "Two-factor authentication configuration"
-msgstr "Двухфакторная конфигурация аутентификации"
+msgstr "Конфигурация двухфакторной аутентификации"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:2
 msgid "Two-factor authentication is enabled for this user."
@@ -3770,7 +3770,7 @@ msgstr "Двухфакторная аутентификация для данн�
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:59
 msgid "User group configuration"
-msgstr "Пользовательская групповая конфигурация"
+msgstr "Конфигурация группы пользователей"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:72
 msgid "You can add two-factor authentication to your account.<br>You will need an App on your Phone to scan the QR code and generate passcodes.<br>Examples are <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> and <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
@@ -3803,7 +3803,7 @@ msgstr "Аутентификация была проведена с"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:5
 msgid "Authorizing..."
-msgstr "Разрешаю..."
+msgstr "Авторизация..."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:115./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
 msgid "Back to sign in"
@@ -3815,7 +3815,7 @@ msgstr "Ниже указаны реквизиты учетной записи �
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:41
 msgid "Change password"
-msgstr "Измени пароль"
+msgstr "Изменить пароль"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:42
 msgid "Change password and Sign in"
@@ -3831,7 +3831,7 @@ msgstr "Изменить разрешения"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:90./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:106
 msgid "Check your email"
-msgstr "Проверьте свой e-mail!"
+msgstr "Проверьте свой e-mail"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:53
 msgid "Checking the reset code…"
@@ -3885,7 +3885,7 @@ msgstr "Включите <em>mod_twitter</em> для просмотра наст
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:23
 msgid "Enable the signup module to automatically sign up users that are authenticating via the services below."
-msgstr "Включите модуль регистрации для автоматической регистрации пользователей, которые проходят аутентификацию через нижеперечисленные сервисы."
+msgstr "Включите модуль регистрации для автоматической регистрации пользователей с аутентификацией через нижеперечисленные сервисы."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:13
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:39./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:48
@@ -3925,7 +3925,7 @@ msgstr "Забыли пароль?"
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:10
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:13
 msgid "Go back"
-msgstr "возвращаться"
+msgstr "Вернуться"
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:23./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:37./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:40
 msgid "Go to Modules"
@@ -3933,7 +3933,7 @@ msgstr "Перейти к модулям"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:43./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:83./apps/zotonic_mod_authentication/priv/templates/logon.tpl:49
 msgid "Go to the admin"
-msgstr "Обратиться к администратору"
+msgstr "Перейти в панель администрирования"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:74./apps/zotonic_mod_authentication/priv/templates/logon.tpl:40
 msgid "Go to the home page"
@@ -3941,11 +3941,11 @@ msgstr "Перейти на главную страницу"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:78./apps/zotonic_mod_authentication/priv/templates/logon.tpl:44
 msgid "Go to the your profile page"
-msgstr "Зайдите на страницу своего профиля"
+msgstr "Перейти на страницу своего профиля"
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:14
 msgid "Here you can set all the application keys, secrets and other configurations to integrate with external services like Facebook and Twitter."
-msgstr "Здесь вы можете установить все ключи приложения, секреты и другие конфигурации для интеграции с внешними сервисами, такими как Facebook и Twitter."
+msgstr "Здесь вы можете установить все ключи приложения, секреты и другие параметры для интеграции с внешними сервисами, такими как Facebook и Twitter."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:3
 msgid "How to reset your password"
@@ -3953,7 +3953,7 @@ msgstr "Как сбросить пароль"
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:11
 msgid "However this email address does not belong to one of our registered users so you will not be able to change the password."
-msgstr "Однако этот адрес электронной почты не принадлежит одному из наших зарегистрированных пользователей, поэтому вы не сможете изменить пароль."
+msgstr "Однако этот адрес электронной почты не принадлежит какому-либо из наших зарегистрированных пользователей, поэтому вы не сможете изменить пароль."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:30
 msgid "I forgot my password"
@@ -3965,7 +3965,7 @@ msgstr "Я хочу создать новый аккаунт"
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:30
 msgid "If you didn't request a password reset, you can safely ignore this email. Maybe someone made an error typing his or her email address."
-msgstr "Если вы не запросили сброс пароля, вы можете безопасно проигнорировать это письмо. Возможно, кто-то допустил ошибку, набрав свой адрес электронной почты."
+msgstr "Если вы не запрашивали сброс пароля, вы можете безопасно проигнорировать это письмо. Возможно, кто-то допустил ошибку при наборе своего адреса электронной почты."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:92./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:108
 msgid "If you do not receive the email within a few minutes, please check your spam folder."
@@ -3981,7 +3981,7 @@ msgstr "В сообщении указаны инструкции по акти�
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:166./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
 msgid "Keep me signed in"
-msgstr "Держите меня в курсе"
+msgstr "Оставаться в системе"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:111
 msgid "Log on with"
@@ -3990,7 +3990,7 @@ msgstr "Войти через"
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:16
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:51./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:55
 msgid "Minimum characters:"
-msgstr "Минимальные символы:"
+msgstr "Минимум символов:"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:187
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:89
@@ -4022,7 +4022,7 @@ msgstr "Пожалуйста, подтвердите ваш пароль для"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:2
 msgid "Please enter the two-factor authentication passcode."
-msgstr "Пожалуйста, введите двухфакторный код аутентификации."
+msgstr "Пожалуйста, введите код двухфакторной аутентификации."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:9./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:16./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:3
 msgid "Please try again in"
@@ -4034,12 +4034,12 @@ msgstr "Пожалуйста, попробуйте позже."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:13
 msgid "Redirecting to"
-msgstr "Переориентация на"
+msgstr "Перенаправление на"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:15
 #: apps/zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:43
 msgid "Redirecting..."
-msgstr "Переориентация..."
+msgstr "Перенаправление..."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:24./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:11
 msgid "Repeat password"
@@ -4077,11 +4077,11 @@ msgstr "Выйти"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:27
 msgid "Simply try again:"
-msgstr "Просто попробуй еще раз:"
+msgstr "Просто попробуйте еще раз:"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:47
 msgid "Somebody else is already connected with this account on"
-msgstr "Кто-то другой уже связан с этим аккаунтом на"
+msgstr "Кто-то другой уже подключён с этим аккаунтом к"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
 msgid "Somebody with your email address has already an account on"
@@ -4106,11 +4106,11 @@ msgstr "Простите, слишком много попыток"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:25
 msgid "Sorry, your password reset code is unknown or expired"
-msgstr "Извините, ваш код для сброса пароля неверен или истек"
+msgstr "Извините, ваш код для сброса пароля неверен или устарел"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:163
 msgid "Stay logged on unless I log off."
-msgstr "Оставайтесь в системе, пока я не выйду из системы."
+msgstr "Оставаться в системе, пока я не выйду."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:20
 msgid "The email address associated with your account is"
@@ -4290,7 +4290,7 @@ msgstr "Резервные копии администратора"
 msgid "Are you sure you want to revert to this version?"
 msgstr "Вы уверены, что хотите вернуться к этой версии?"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:49
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:55
 msgid "At any moment you can make a backup of your system."
 msgstr "В любой момент вы можете сделать резервную копию вашей системы."
 
@@ -4298,7 +4298,7 @@ msgstr "В любой момент вы можете сделать резерв
 msgid "Back to the edit page"
 msgstr "Назад на страницу редактирования"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:67
+#: apps/zotonic_mod_backup/src/mod_backup.erl:68
 msgid "Backup"
 msgstr "Резервное копирование"
 
@@ -4306,7 +4306,7 @@ msgstr "Резервное копирование"
 msgid "Backup &amp; Restore"
 msgstr "Резервное копирование &amp; Восстановление"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:11
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:12
 msgid "Backup and restore options for your content."
 msgstr "Функции резервного копирования и восстановления содержимого."
 
@@ -4334,6 +4334,10 @@ msgstr "Нажмите на <b>Список и восстановите боле
 msgid "Deleted"
 msgstr "Удалено"
 
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
+msgid "Directory"
+msgstr "Каталог"
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
 msgstr "Скачать резервный файл"
@@ -4350,7 +4354,7 @@ msgstr "Справка о резервном копировании &amp; вос
 msgid "List and restore an earlier version"
 msgstr "Составить список и восстановить более раннюю версию"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:44
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Ежедневно делайте резервную копию базы данных и загруженных файлов."
 
@@ -4378,7 +4382,7 @@ msgstr "Изменения для"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "Выберите файл резервной копии, который хотите загрузить. Файл должен быть файлом .bert."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:37
 msgid "Show import/export panel in the admin."
 msgstr "Показывать панель импорта/экспорта у администратора."
 
@@ -4410,23 +4414,23 @@ msgstr "Извините, у вас нет разрешения менять э�
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Извините, у вас нет разрешения на изменение конфигурации."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "Start backup now"
 msgstr "Начните резервное копирование прямо сейчас"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
 msgid "Start database-only backup now"
 msgstr "Начните резервное копирование только базы данных"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
 msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
 msgstr "Команда \"pg_dump\" в пути не найдена. Установите ключ конфигурации \"pg_dump\" в путь к pg_dump и вернитесь на эту страницу."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:70
 msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
 msgstr "Команда \"tar\" не была найдена на пути. Установите ключ конфигурации \"tar\" в путь к tar и вернитесь на эту страницу."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:50
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "Резервная копия состоит из двух частей - базы данных и загруженных файлов."
 
@@ -4434,7 +4438,7 @@ msgstr "Резервная копия состоит из двух частей 
 msgid "This is the version saved on"
 msgstr "Эта версия сохранена на"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:81
 msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
 msgstr "На этом сайте включено облачное хранилище файлов, и на этой системе есть <strong>$1</strong> мультимедийные файлы, которые хранятся только в облаке, а не на этой машине. Резервное копирование этих файлов не выполняется!"
 
@@ -4442,13 +4446,13 @@ msgstr "На этом сайте включено облачное хранил�
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "Это перезапишет вашу страницу содержимым файла резервной копии."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:73
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "Предупреждение"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Warning:"
 msgstr "Внимание:"
 
@@ -4456,11 +4460,11 @@ msgstr "Внимание:"
 msgid "You are not allowed to see the revisions"
 msgstr "Вы не имеете права видеть ревизии"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:51
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
 msgid "You can have 10 backups, older ones will be deleted automatically."
 msgstr "Вы можете иметь 10 резервных копий, более старые будут автоматически удалены."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Ваше резервное копирование настроено неправильно. Модуль резервного копирования не будет работать до тех пор, пока не будет решена проблема(ы), указанная(ые) ниже:"
 
@@ -4771,7 +4775,7 @@ msgstr "Для оставления комментариев войдите ил
 
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:40./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:21
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:22./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:16
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log.tpl:38./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:38
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log.tpl:39./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:38
 msgid "Message"
 msgstr "Сообщение"
 
@@ -4965,7 +4969,7 @@ msgstr "Контроллер"
 msgid "Could not fetch tracer output, please try again."
 msgstr "Не удалось получить выходные данные трассировщика, попробуйте еще раз."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:246
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:247
 msgid "Development"
 msgstr "Разработка"
 
@@ -5223,8 +5227,8 @@ msgid "Editor version"
 msgstr "Редакционная версия"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:13
-msgid "Insert image"
-msgstr "Вставить изображение"
+msgid "Insert media"
+msgstr "Вставить медиа"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:73
 msgid "Large"
@@ -6078,7 +6082,7 @@ msgstr "Неудачно"
 msgid "Fatal"
 msgstr "Фатальная ошибка"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:44./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:157./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:45./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:157./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
 msgid "Filter"
 msgstr "Фильтр"
 
@@ -6126,7 +6130,7 @@ msgstr "Последние сообщения"
 msgid "Most recent user interface events"
 msgstr "Последние события в пользовательском интерфейсе"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:59./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:175./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:59
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:60./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:175./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:59
 msgid "No log messages."
 msgstr "Отсутствуют сообщения в журнале."
 
@@ -6188,7 +6192,7 @@ msgstr "переключать нон-людей"
 msgid "User"
 msgstr "Пользователь"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:41./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:42./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:537
 msgid "User Id"
 msgstr "Идентификатор пользователя"
@@ -7600,7 +7604,7 @@ msgstr "Восстановить карту сайта"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "Восстановите индекс карты сайта для всех страниц."
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:71
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "Rebuilding the sitemap in the background."
 msgstr "Восстановление карты сайта в фоновом режиме."
 
@@ -7620,7 +7624,7 @@ msgstr "Еженедельно (по умолчанию)"
 msgid "Yearly"
 msgstr "Ежегодно"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:73
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:74
 msgid "You are not allowed to do this"
 msgstr "Вам не разрешено это делать"
 
@@ -8327,6 +8331,10 @@ msgstr "Обращенный"
 msgid "Jump to a question on a next page."
 msgstr "Перейти к вопросу на следующей странице."
 
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:50
+msgid "Jump to this question label (must be on an other page below)"
+msgstr "Перейти к этому ярлыку вопроса (должен быть на другой странице ниже)"
+
 #: apps/zotonic_mod_survey/src/mod_survey.erl:162
 msgid "Likert"
 msgstr "Шкала Лайкерта"
@@ -8475,7 +8483,7 @@ msgstr "Подсказка"
 msgid "Question"
 msgstr "Вопрос"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
 msgid "Question label"
 msgstr "Ярлык вопроса"
 

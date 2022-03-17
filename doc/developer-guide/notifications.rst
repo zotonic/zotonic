@@ -95,6 +95,21 @@ foldr
 Do a fold over all observers, low prio observers first.
 
 
+.. _notification-notify_sync:
+
+notify_sync
+^^^^^^^^^^^
+
+Synchronous notification, wait till all observers have processed the
+notification before continuing. The :ref:`notification-notify` will
+notify all observers asynchronously and returns before all notifications
+are processed.
+
+The synchronous notification also shares the current database transaction
+(if any) and other context data with the observers. This allows to process
+the notification within a transaction.
+
+
 .. _guide-notifications-observe:
 
 Subscribing to notifications

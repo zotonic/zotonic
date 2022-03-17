@@ -13,4 +13,4 @@ Return:
     a URL or ``undefined``
 
 ``#logon_ready_page{}`` properties:
-    - request_page: ``string``
+    - request_page: ``union``

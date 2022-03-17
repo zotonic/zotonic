@@ -17,10 +17,13 @@
 %% limitations under the License.
 
 -module(filter_date).
+
 -export([
   date/3,
   date/4
 ]).
+
+-include_lib("kernel/include/logger.hrl").
 
 date(Date, Format, true, Context) ->
     date(Date, Format, z_context:set_tz(<<"UTC">>,Context));
@@ -60,7 +63,7 @@ date({{_,_,_} = Date,{_,_,_} = Time} = DT, FormatStr, Context) ->
         z_datetime:format({Date, Time}, FormatStr, Context)
     catch
         error:Error ->
-            lager:warning("Date format on illegal date ~p (format ~p), error: ~p", [DT, FormatStr, Error]),
+            ?LOG_WARNING("Date format on illegal date ~p (format ~p), error: ~p", [DT, FormatStr, Error]),
             undefined
     end;
 date({_,_,_} = Date, FormatStr, Context) ->
@@ -68,7 +71,7 @@ date({_,_,_} = Date, FormatStr, Context) ->
         z_datetime:format({Date, {0,0,0}}, FormatStr, Context)
     catch
         error:Error ->
-            lager:warning("Date format on illegal date ~p (format ~p), error: ~p", [Date, FormatStr, Error]),
+            ?LOG_WARNING("Date format on illegal date ~p (format ~p), error: ~p", [Date, FormatStr, Error]),
             undefined
     end;
 date(_Input, _FormatStr, _Context) ->

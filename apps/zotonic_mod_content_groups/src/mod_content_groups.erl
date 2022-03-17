@@ -126,7 +126,7 @@ delete_all([{Id}|Ids], N, Total, Context) ->
             maybe_progress(N, N+1, Total, Context),
             delete_all(Ids, N+1, Total, Context);
         Error ->
-            lager:error("Content group delete: could not delete resource: ~p (~p)", [Id, Error]),
+            ?LOG_ERROR("Content group delete: could not delete resource: ~p (~p)", [Id, Error]),
             {error, Id}
     end.
 

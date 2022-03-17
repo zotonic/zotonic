@@ -175,10 +175,10 @@ ensure_self_signed(Hostname) ->
         {false, false} ->
             generate_self_signed(Hostname, Certs);
         {false, true} ->
-            lager:error("Missing cert file ~p, regenerating keys", [CertFile]),
+            ?LOG_ERROR("Missing cert file ~p, regenerating keys", [CertFile]),
             generate_self_signed(Hostname, Certs);
         {true, false} ->
-            lager:error("Missing pem file ~p, regenerating keys", [KeyFile]),
+            ?LOG_ERROR("Missing pem file ~p, regenerating keys", [KeyFile]),
             generate_self_signed(Hostname, Certs);
         {true, true} ->
             case check_keyfile(KeyFile) of
@@ -215,7 +215,7 @@ check_keyfile(Filename) ->
 -spec generate_self_signed( string(), proplists:proplist() ) -> {ok, list()} | {error, term()}.
 generate_self_signed(Hostname, Opts) ->
     {keyfile, PemFile} = proplists:lookup(keyfile, Opts),
-    lager:info("Generating self-signed ssl keys in '~s'", [PemFile]),
+    ?LOG_INFO("Generating self-signed ssl keys in '~s'", [PemFile]),
     case z_filelib:ensure_dir(PemFile) of
         ok ->
             _ = file:change_mode(filename:dirname(PemFile), 8#00700),

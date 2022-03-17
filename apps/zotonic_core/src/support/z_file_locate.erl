@@ -55,7 +55,7 @@ maybe_enoent(Parts) ->
 extract_filters(Path, OptFilters, Context) ->
     case safe_path(Path) of
         undefined ->
-            lager:warning("Unsafe path ~p", Path),
+            ?LOG_WARNING("Unsafe path ~p", Path),
             part_missing(Path);
         SafePath ->
             case binary:match(SafePath, <<"(">>) of
@@ -70,7 +70,7 @@ extract_filters(Path, OptFilters, Context) ->
                             end,
                             {SafePath, z_convert:to_binary(OriginalFile), Filters1 ++ PreviewPropList};
                         {error, Reason} ->
-                            lager:info("Dropping path ~p because error ~p", [ SafePath, Reason ]),
+                            ?LOG_NOTICE("Dropping path ~p because error ~p", [ SafePath, Reason ]),
                             part_missing(Path)
                     end
             end
@@ -84,7 +84,7 @@ locate_source(NoRoots, Path, OriginalFile, Filters, Context) when NoRoots =:= un
         {error, preview_source_gone} ->
             throw(preview_source_gone);
         {error, _} = Error->
-            lager:debug("Could not find '~s', error ~p, original '~s'", [Path, Error, OriginalFile]),
+            ?LOG_DEBUG("Could not find '~s', error ~p, original '~s'", [Path, Error, OriginalFile]),
             #part_missing{file = Path};
         {ok, Loc} ->
             Loc
@@ -96,7 +96,7 @@ locate_source([ModuleIndex|Roots], Path, OriginalFile, Filters, Context) when is
         {error, checksum} ->
             #part_missing{file = Path};
         {error, eacces} ->
-            lager:info("No access to file '~s', original '~s'", [Path, OriginalFile]),
+            ?LOG_NOTICE("No access to file '~s', original '~s'", [Path, OriginalFile]),
             locate_source(Roots, Path, OriginalFile, Filters, Context);
         {error, enoent} ->
             locate_source(Roots, Path, OriginalFile, Filters, Context)
@@ -292,13 +292,13 @@ generate_preview(true, Path, OriginalFile, Filters, Medium, Context) ->
                             part_file(PreviewFilePath, [{acl,RscId}])
                     end;
                 {error, enoent} ->
-                    lager:warning("[~p] Convert error: input file disappeared, restarting ~p (~p)",
+                    ?LOG_WARNING("[~p] Convert error: input file disappeared, restarting ~p (~p)",
                                   [z_context:site(Context), Path, Filename]),
                     {error, preview_source_gone};
                 {error, convert_error} ->
                     convert_error_part(Medium, PreviewFilePath, Filters, Context);
                 {error, _} = Error ->
-                    lager:warning("Convert error: ~p for path ~p", [Error, Path]),
+                    ?LOG_WARNING("Convert error: ~p for path ~p", [Error, Path]),
                     Error
             end;
         {error, _} = Error ->
@@ -323,12 +323,12 @@ convert_error_part(Medium, PreviewFilePath, Filters, Context) ->
                             part_file(PreviewFilePath, [{acl,RscId}])
                     end;
                 {error, _} = Error ->
-                    lager:info("[~p] Error ~p generating fallback preview for ~p with filters ~p",
+                    ?LOG_WARNING("[~p] Error ~p generating fallback preview for ~p with filters ~p",
                                [z_context:site(Context), Error, PreviewFilePath, Filters]),
                     Error
             end;
         {error, enoent} ->
-            lager:info("[~p] Can't find 'images/placeholder.png' for convert error fallback.",
+            ?LOG_NOTICE("[~p] Can't find 'images/placeholder.png' for convert error fallback.",
                        [z_context:site(Context)]),
             {error, convert_error}
     end.

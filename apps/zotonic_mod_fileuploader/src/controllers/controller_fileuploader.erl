@@ -63,21 +63,32 @@ process(<<"GET">>, _, Provided, Context) ->
     end,
     {z_controller_helper:encode_response(Provided, Resp), Context};
 process(<<"POST">>, _, Provided, Context) ->
+    Name = z_context:get_q(<<"name">>, Context),
     QOffset = z_context:get_q(<<"offset">>, Context),
     case z_utils:only_digits(QOffset) of
         true ->
-            Name = z_context:get_q(<<"name">>, Context),
             Offset = binary_to_integer(QOffset),
             {Data, Context1} = z_controller_helper:req_body(Context),
             Resp = case m_fileuploader:upload(Name, Offset, Data, Context1) of
                 {ok, Status} ->
+                    ?LOG_DEBUG(#{
+                        text => <<"Accepted block for fileuploader">>,
+                        result => ok,
+                        name => Name,
+                        offset => Offset
+                    }),
                     #{
                         status => <<"ok">>,
                         result => Status
                     };
                 {error, Reason} ->
-                    lager:error("Error accepting block for fileuploader ~s: ~p",
-                                [ Name, Reason ]),
+                    ?LOG_ERROR(#{
+                        text => <<"Error accepting block for fileuploader">>,
+                        result => error,
+                        reason => Reason,
+                        name => Name,
+                        offset => Offset
+                    }),
                     #{
                         status => <<"error">>,
                         error => <<"upload">>
@@ -85,6 +96,13 @@ process(<<"POST">>, _, Provided, Context) ->
             end,
             {z_controller_helper:encode_response(Provided, Resp), Context1};
         false ->
+            ?LOG_ERROR(#{
+                text => <<"Error accepting block for fileuploader">>,
+                result => error,
+                reason => illegal_offset,
+                name => Name,
+                offset => QOffset
+            }),
             Resp = #{
                 status => <<"error">>,
                 error => <<"offset">>

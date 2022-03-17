@@ -1,7 +1,7 @@
 {% if m.development.livereload %}
     {% lib "js/livereload.js" %}
 
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="{{ m.req.csp_nonce }}">
         window.addEventListener(
             "load",
             function() {

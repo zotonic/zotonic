@@ -1,5 +1,7 @@
 .image-edit-overlay .modal-overlay-close {
   display: none; }
+.image-edit-overlay > div.image-edit-container {
+  background-color: #111; }
 
 .image-edit-container {
   display: grid;

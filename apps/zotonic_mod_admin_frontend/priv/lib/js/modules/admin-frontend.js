@@ -4,9 +4,10 @@ $(function() {
 		z_editor_save($('#rscform'));
 		if ($('#rscform').attr('data-formdirty')) {
 			z_dialog_confirm({
-				ok: z_translate("Yes, discard changes"),
+				cancel: z_translate("Yes, discard changes"),
+				ok: z_translate("Cancel"),
 				text: '<p>' + z_translate("There are unsaved changes. Are you sure you want to leave without saving?") + '</p>',
-				on_confirm: function() {
+				on_cancel: function() {
 					window.location.hash = hash;
 				}
 			});

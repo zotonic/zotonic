@@ -48,7 +48,7 @@ content_types_provided(Context) ->
 %% @doc Check if the current user is allowed to view the resource.
 is_authorized(Context) ->
     ContextQs = z_context:ensure_qs(Context),
-    z_context:lager_md(ContextQs),
+    z_context:logger_md(ContextQs),
     case z_context:get(anonymous, ContextQs) of
         true ->
             {true, ContextQs};

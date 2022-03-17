@@ -47,7 +47,7 @@ m_get([ <<"security_dir">> | Rest ], _Msg, Context) ->
             {ok, {<<>>, Rest}}
     end;
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 ssl_certificates(Context) ->

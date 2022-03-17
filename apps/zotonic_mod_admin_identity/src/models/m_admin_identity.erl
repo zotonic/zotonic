@@ -24,6 +24,8 @@
     m_get/3
 ]).
 
+-include_lib("kernel/include/logger.hrl").
+
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"password_regex">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(mod_admin_identity, password_regex, Context), Rest}};
@@ -42,5 +44,5 @@ m_get([ <<"new_user_contentgroup">> | Rest ], _Msg, Context) ->
     end,
     {ok, {CG, Rest}};
 m_get(Vs, _Msg, _Context) ->
-    lager:debug("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_DEBUG("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.

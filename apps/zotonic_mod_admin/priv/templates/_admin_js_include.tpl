@@ -42,7 +42,7 @@
 
 {% worker name="auth" src="js/zotonic.auth.worker.js" args=%{  auth: m.authentication.status  } %}
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="{{ m.req.csp_nonce }}">
 $(function()
 {
 	$.widgetManager();

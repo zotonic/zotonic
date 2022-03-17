@@ -262,7 +262,7 @@ paused(EventType, EventContent, Data) ->
 stopping({call, _From}, lookup, State) ->
     {next_state, stopping, lookup_file_info(State), ?STOP_TIMEOUT};
 stopping(timeout, _, State) ->
-    lager:debug("Stop file entry ~p:~p", [State#state.site, State#state.request_path]),
+    ?LOG_DEBUG("Stop file entry ~p:~p", [State#state.site, State#state.request_path]),
     {stop, normal, State};
 stopping(EventType, EventContent, Data) ->
     handle_event(EventType, EventContent, stopping, Data).
@@ -304,7 +304,7 @@ handle_event(info, {gzip, Ref, Data}, StateName, #state{gzipper=Ref} = State) ->
     },
     {next_state, StateName, State1, timeout(StateName, State1#state.is_found)};
 handle_event(info, {gzip, _Ref, _Data}, StateName, State) ->
-    lager:debug("Unexpected gzip info message in state ~p", [ StateName ]),
+    ?LOG_DEBUG("Unexpected gzip info message in state ~p", [ StateName ]),
     {next_state, StateName, State};
 handle_event(info, {'DOWN', MRef, process, _Pid, _Info}, StateName, State) ->
     case is_mref_part(MRef, State#state.parts) of
@@ -314,7 +314,7 @@ handle_event(info, {'DOWN', MRef, process, _Pid, _Info}, StateName, State) ->
             {next_state, StateName, State, timeout(StateName, State#state.is_found)}
     end;
 handle_event(EventType, EventContent, StateName, State) ->
-    lager:error("Unexpected event ~p ~p in state ~p", [EventType, EventContent, StateName]),
+    ?LOG_ERROR("Unexpected event ~p ~p in state ~p", [EventType, EventContent, StateName]),
     {next_state, StateName, State, timeout(StateName, State#state.is_found)}.
 
 terminate(_Reason, _StateName, _State) ->
@@ -561,7 +561,7 @@ locate_enoent(State, IndexRef, Mime) ->
         parts=[],
         index_ref=IndexRef
     },
-    lager:debug("~p: File not found ~p", [State#state.site, State#state.request_path]),
+    ?LOG_DEBUG("~p: File not found ~p", [State#state.site, State#state.request_path]),
     {next_state, serving, reply_waiting(State1), ?SERVING_ENOENT_TIMEOUT}.
 
 

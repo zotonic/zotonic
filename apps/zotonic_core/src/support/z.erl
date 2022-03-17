@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
-%%
-%% @doc Some easy shortcut functions.
+%% @copyright 2009-2022 Marc Worrell
+%% @doc Some easy shortcut and error logging functions.
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -46,7 +45,7 @@
     dispatch_path/2,
     dispatch_list/1,
 
-    debug_msg/3,
+    debug_msg/2,
 
     log/3,
 
@@ -56,12 +55,18 @@
     info/2,
     info/3,
     info/4,
+    notice/2,
+    notice/3,
+    notice/4,
     warning/2,
     warning/3,
     warning/4,
     error/2,
     error/3,
-    error/4
+    error/4,
+    fatal/2,
+    fatal/3,
+    fatal/4
 ]).
 
 -include("zotonic.hrl").
@@ -79,7 +84,7 @@
 -type trans() :: #trans{}.
 -type qvalue() :: binary() | string() | #upload{} | term().
 
--type severity() :: debug | info | warning | error | fatal.
+-type severity() :: debug | info | notice | warning | error | fatal.
 
 -export_type([
     context/0,
@@ -240,80 +245,107 @@ dispatch_list(SiteOrContext) ->
             Error
     end.
 
-%% @doc Echo and return a debugging value
-debug_msg(Module, Line, Msg) ->
-    error_logger:info_msg("DEBUG: ~p:~p  ~p~n", [Module, Line, Msg]),
+%% @doc Echo and return a debugging value. This is useful for adding
+%% debug anywhere in the code, as the passed argument is also returned.
+%% Example: <tt>foo( ?DEBUG(Arg) )</tt> will add Arg as a notice to the logs
+%% and still call  <tt>foo(Arg)</tt>.
+debug_msg(Msg, Meta) ->
+    logger:log(notice, "DEBUG: ~tp", [ Msg ], Meta),
     Msg.
 
-%% @doc Log a debug message, with extra props.
-debug(Msg, Context)        -> log(debug, Msg, [], Context).
-debug(Msg, Props, Context) -> log(debug, Msg, Props, Context).
-debug(Msg, Args, Props, Context) -> log(debug, Msg, Args, Props, Context).
+%% @doc Log a debug message to the logs and the database, with extra meta data.
+%% To add the current source location, use the <tt>?zDebug</tt> macro.
+debug(Msg, Context)                 -> log(debug, Msg, #{}, Context).
+debug(Msg, Meta, Context)           -> log(debug, Msg, Meta, Context).
+debug(Format, Args, Meta, Context)  -> log(debug, Format, Args, Meta, Context).
 
-%% @doc Log an informational message.
-info(Msg, Context)         -> log(info, Msg, [], Context).
-info(Msg, Props, Context)  -> log(info, Msg, Props, Context).
-info(Msg, Args, Props, Context)  -> log(info, Msg, Args, Props, Context).
+%% @doc Log an informational message to the logs and the database, with extra meta data.
+%% To add the current source location, use the <tt>?zInfo</tt> macro.
+info(Msg, Context)                  -> log(info, Msg, #{}, Context).
+info(Msg, Meta, Context)            -> log(info, Msg, Meta, Context).
+info(Format, Args, Meta, Context)   -> log(info, Format, Args, Meta, Context).
 
-%% @doc Log a warning.
-warning(Msg, Context)         -> log(warning, Msg, [], Context).
-warning(Msg, Props, Context)  -> log(warning, Msg, Props, Context).
-warning(Msg, Args, Props, Context)  -> log(warning, Msg, Args, Props, Context).
+%% @doc Log a  notice to the logs and the database, with extra meta data.
+%% To add the current source location, use the <tt>?zNotice</tt> macro.
+notice(Msg, Context)                -> log(notice, Msg, #{}, Context).
+notice(Msg, Meta, Context)          -> log(notice, Msg, Meta, Context).
+notice(Format, Args, Meta, Context) -> log(notice, Format, Args, Meta, Context).
 
-%% @doc Log a error.
-error(Msg, Context)         -> log(error, Msg, [], Context).
-error(Msg, Props, Context)  -> log(error, Msg, Props, Context).
-error(Msg, Args, Props, Context)  -> log(error, Msg, Args, Props, Context).
+%% @doc Log a warning to the logs and the database, with extra meta data.
+%% To add the current source location, use the <tt>?zWarning</tt> macro.
+warning(Msg, Context)              -> log(warning, Msg, #{}, Context).
+warning(Msg, Meta, Context)        -> log(warning, Msg, Meta, Context).
+warning(Format, Args, Meta, Context)->log(warning, Format, Args, Meta, Context).
+
+%% @doc Log a error to the logs and the database, with extra meta data.
+%% To add the current source location, use the <tt>?zError</tt> macro.
+error(Msg, Context)                -> log(error, Msg, #{}, Context).
+error(Msg, Meta, Context)          -> log(error, Msg, Meta, Context).
+error(Format, Args, Meta, Context) -> log(error, Format, Args, Meta, Context).
+
+%% @doc Log a fatal error to the logs and the database, with extra meta data.
+%% To add the current source location, use the <tt>?zError</tt> macro.
+fatal(Msg, Context)                -> log(fatal, Msg, #{}, Context).
+fatal(Msg, Meta, Context)          -> log(fatal, Msg, Meta, Context).
+fatal(Format, Args, Meta, Context) -> log(fatal, Format, Args, Meta, Context).
 
 
--spec log( severity(), proplists:proplist(), z:context() ) -> ok.
-log(Type, Props, Context) when is_atom(Type), is_list(Props) ->
-    UserId = case proplists:lookup(user_id, Props) of
+-spec log( Level::severity(), Format::string(), Args::list(),
+           Meta::proplists:proplist() | map(), Context::z:context() ) -> ok.
+log(Type, Format, Args, Meta, Context) when is_list(Args) ->
+    Msg1 = lists:flatten(io_lib:format(Format, Args)),
+    log(Type, Msg1, Meta, Context).
+
+-spec log( Level::severity(), Meta::proplists:proplist() | map(), Context::z:context() ) -> ok.
+log(Type, Meta, Context) ->
+    log(Type, <<>>, Meta, Context).
+
+-spec log( Level::severity(), Msg::iodata(), Meta::proplists:proplist() | map(), Context::z:context() ) -> ok.
+log(Type, Msg, Meta, Context) when is_list(Meta) ->
+    log(Type, Msg, maps:from_list(Meta), Context);
+log(Type, Msg, Meta, Context) ->
+    Line = maps:get(line, Meta, 0),
+    UserId = case maps:get(user_id, Meta, none) of
         none -> z_acl:user(Context);
-        {user_id, UId} -> UId
+        UId -> UId
+    end,
+    LoggerMeta = #{
+        site => z_context:site(Context),
+        environment => m_site:environment(Context),
+        line => Line,
+        node => node(),
+        user_id => UserId
+    },
+    LoggerMeta1 = case maps:get(mfa, Meta, undefined) of
+        undefined ->
+            LoggerMeta;
+        {_, _, _} = MFA ->
+            LoggerMeta#{ mfa => MFA }
+    end,
+    LoggerMeta2 = maps:merge(Meta, LoggerMeta1),
+    Msg1 = unicode:characters_to_list(Msg),
+    case Msg1 of
+        "" -> logger:log(logger_level(Type), LoggerMeta2);
+        _ -> logger:log(logger_level(Type), Msg1, LoggerMeta2)
     end,
     z_notifier:notify(
         #zlog{
             type = Type,
             user_id = UserId,
             timestamp = os:timestamp(),
-            props = Props
+            props = #log_message{
+                type = Type,
+                message = Msg1,
+                props = maps:to_list(Meta),
+                user_id = UserId
+            }
         },
         Context),
     ok.
 
--spec log( severity(), string(), list(), proplists:proplist(), z:context() ) -> ok.
-log(Type, Msg, Args, Props, Context) ->
-    Msg1 = lists:flatten(io_lib:format(Msg, Args)),
-    log(Type, Msg1, Props, Context).
-
--spec log( severity(), iodata(), proplists:proplist(), z:context() ) -> ok.
-log(Type, Msg, Props, Context) ->
-    Msg1 = erlang:iolist_to_binary(Msg),
-    Line = proplists:get_value(line, Props, 0),
-    Module = proplists:get_value(module, Props, unknown),
-    lager(Type, Props, [ z_context:site(Context), Type, Module, Line, Msg1 ]),
-    UserId = case proplists:lookup(user_id, Props) of
-        none -> z_acl:user(Context);
-        {user_id, UId} -> UId
-    end,
-    z_notifier:notify(
-        #zlog{
-            type = Type,
-            user_id = UserId,
-            timestamp = os:timestamp(),
-            props = #log_message{ type = Type, message = Msg1, props = Props, user_id = UserId }
-        },
-        Context),
-    ok.
-
-lager(debug, [], Args) ->
-    lager:debug("[~p] ~p @ ~p:~p  ~s~n", Args);
-lager(info, [], Args) ->
-    lager:info("[~p] ~p @ ~p:~p  ~s~n", Args);
-lager(warning, [], Args) ->
-    lager:warning("[~p] ~p @ ~p:~p  ~s~n", Args);
-lager(_Severity, [], Args) ->
-    lager:error("[~p] ~p @ ~p:~p  ~s~n", Args);
-lager(Severity, Props, Args) ->
-    lager:log(Severity, Props, "[~p] ~p @ ~p:~p  ~s~n", Args).
+logger_level(fatal) -> alert;
+logger_level(error) -> error;
+logger_level(warning) -> warning;
+logger_level(notice) -> notice;
+logger_level(info) -> info;
+logger_level(debug) -> debug.

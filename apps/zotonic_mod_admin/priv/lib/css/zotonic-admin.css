@@ -576,7 +576,10 @@ fieldset[disabled] .btn-primary.active {
   margin-bottom: 0;
 }
 .block-add-block {
-  margin: 0 0 9px 0;
+  display: block;
+  margin: 0 auto 15px auto;
+  width: fit-content;
+  position: relative;
 }
 .block-add-block .dropdown-menu {
   top: auto;
@@ -782,7 +785,7 @@ ul.media > li .bottom .caption a {
   padding-left: 100px;
 }
 /* small image in admin edit */
-img.admin-leader-image {
+img.mediaclass-admin-leader-image {
   background-color: #f2f2f2;
   float: left;
   width: 80px;

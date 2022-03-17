@@ -24,3 +24,4 @@ Return:
     - medium_props: ``z_media_identify:media_info()``
     - medium_url: ``binary``
     - preview_url: ``binary|undefined``
+    - importer: ``atom``

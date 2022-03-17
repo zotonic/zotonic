@@ -5,7 +5,7 @@
   {registered, []},
   {applications, [
       kernel, stdlib,
-      lager, cowmachine,
+      cowmachine,
       ringbuffer,
       zotonic_core
   ]},

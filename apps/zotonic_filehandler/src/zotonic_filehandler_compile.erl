@@ -39,6 +39,8 @@
     code_path_check/1
 ]).
 
+-include_lib("kernel/include/logger.hrl").
+
 %% @doc Compile all files. Called from zotonic-compile script
 -dialyzer({no_return, start/0}).
 start() ->
@@ -75,9 +77,12 @@ ld() ->
 ld(Module) when is_atom(Module) ->
     code:purge(Module),
     case code:load_file(Module) of
-        {error, _} = Error ->
-            lager:error("Error loading module ~p: ~p",
-                        [Module, Error]),
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                text => <<"Error loading module">>,
+                module => Module,
+                reason => Reason
+            }),
             Error;
         {module, _} = Ok ->
             z_sites_manager:module_loaded(Module),
@@ -159,7 +164,9 @@ do_all_task( OptPid ) ->
                 "; ./rebar3 compile"
             ])
     end,
-    lager:debug("Compile all: start"),
+    ?LOG_DEBUG(#{
+        text => <<"Compile all: start">>
+    }),
     zotonic_filehandler:terminal_notifier("Compile all: start"),
     Result = run_cmd_task(Cmd, [], []),
     case Result of
@@ -168,7 +175,10 @@ do_all_task( OptPid ) ->
         _ ->
             zotonic_filehandler:terminal_notifier("Compile all: ready")
     end,
-    lager:debug("Compile all: ready (~p)", [Result]),
+    ?LOG_DEBUG(#{
+        text => <<"Compile all: ready">>,
+        result => Result
+    }),
     Result1 = cleanup_stdout(Result),
     case is_pid(OptPid) of
         false -> ok;
@@ -199,7 +209,9 @@ cleanup_stdout({error, Props} = E) ->
                 Stdout),
             lists:foreach(
                 fun(Line) ->
-                    lager:error("~s", [ z_string:trim(Line) ])
+                    ?LOG_ERROR(#{
+                        text => z_string:trim(Line)
+                    })
                 end,
                 Stdout1),
             {error, [ {stdout, Stdout1} | proplists:delete(stdout, Props) ]};
@@ -236,7 +248,11 @@ run_cmd_task(Cmd, RunOpts, Opts) ->
                     [] ->
                         ok;
                     StdErr ->
-                        lager:error("Running '~s' returned '~s'", [Cmd, iolist_to_binary(StdErr)]),
+                        ?LOG_ERROR(#{
+                            text => <<"Unexpected result from run of command task">>,
+                            command => Cmd,
+                            result => iolist_to_binary(StdErr)
+                        }),
                         ok
                 end;
             {error, Args} = Error when is_list(Args) ->
@@ -244,11 +260,26 @@ run_cmd_task(Cmd, RunOpts, Opts) ->
                 StdOut = proplists:get_value(stdout, Args, []),
                 case {StdErr, StdOut} of
                     {[], []} ->
-                        lager:error("Error running '~s': ~p", [Cmd, Error]);
+                        ?LOG_ERROR(#{
+                            text => <<"Unexpected error from run of command task">>,
+                            command => Cmd,
+                            result => error,
+                            reason => Args
+                        });
                     {StdErr, _} when StdErr =/= [] ->
-                        lager:error("Error running '~s':~n~s", [Cmd, iolist_to_binary(StdErr)]);
+                        ?LOG_ERROR(#{
+                            text => <<"Unexpected error from run of command task">>,
+                            command => Cmd,
+                            result => Error,
+                            reason => iolist_to_binary(StdErr)
+                        });
                     {_, StdOut} ->
-                        lager:error("Error running '~s':~n~s", [Cmd, iolist_to_binary(StdOut)])
+                        ?LOG_ERROR(#{
+                            text => <<"Unexpected error from run of command task">>,
+                            command => Cmd,
+                            result => error,
+                            reason => iolist_to_binary(StdOut)
+                        })
                 end,
                 Error
         end
@@ -289,23 +320,43 @@ recompile(File) ->
 recompile_task(File) ->
     case compile_options(File) of
         {ok, Options} ->
-            lager:debug("Recompiling '~s' using make", [File]),
+            ?LOG_DEBUG(#{
+                text => <<"Recompile of erlang file using make">>,
+                file => File
+            }),
             zotonic_filehandler:terminal_notifier("Compiling: " ++ filename:basename(File)),
             try
                 case make:files([File], Options) of
                     up_to_date ->
                         ok;
                     Other ->
-                        lager:warning("Recompiling ~p returned ~p", [ File, Other ])
+                        ?LOG_WARNING(#{
+                            text => <<"Recompile of Erlang file unexpected result">>,
+                            result => error,
+                            reason => Other,
+                            file => File,
+                            result => Other
+                        })
                 end
             catch
-                Type:Err ->
-                    lager:warning("Recompiling ~p exited with ~p:~p", [ File, Type, Err ])
+                Type:Err:Stack ->
+                    ?LOG_WARNING(#{
+                        text => <<"Recompile of Erlang file exit">>,
+                        file => File,
+                        result => Type,
+                        reason => Err,
+                        stack => Stack
+                    })
             end;
         false ->
             % Might be some new OTP app, so a manual build on the top level
             % should take care of this, we don't do anything now.
-            lager:warning("Could not find compile options, no recompile for '~s'", [File])
+            ?LOG_WARNING(#{
+                text => <<"Could not find compile options, no recompile for Erlang file">>,
+                result => error,
+                reason => no_compile_options,
+                file => File
+            })
     end,
     ok.
 

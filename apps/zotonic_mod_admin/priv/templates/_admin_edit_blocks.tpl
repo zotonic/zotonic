@@ -6,7 +6,7 @@
     {% include "_admin_edit_block_addblock.tpl" %}
     <ul class="blocks ui-sortable" id="edit-blocks">
         {% block blocks %}
-            {% for blk in id.blocks %}
+            {% for blk in id.blocks|default:[] %}
                 {% include "_admin_edit_block_li.tpl" %}
             {% endfor %}
         {% endblock %}

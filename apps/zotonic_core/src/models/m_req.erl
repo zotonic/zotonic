@@ -1,10 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% Date: 2010-07-22
-%%
-%% @doc Model for the accessing the request fields. Exposes Webmachine's wrq.erl
+%% @copyright 2010-2022 Marc Worrell
+%% @doc Model for the accessing the HTTP request properties. Exposes Cowmachine's wrq.erl
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -46,7 +44,7 @@ m_get([ Key | Rest ], _Msg, Context) when is_binary(Key) ->
 m_get([], _Msg, Context) ->
     {ok, {values(Context), []}};
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Non binary key get: ~p", [Vs]),
+    ?LOG_INFO("Non binary key get: ~p", [Vs]),
     {error, unknown_path}.
 
 
@@ -57,6 +55,7 @@ get(_, undefined) -> undefined;
 get(site, #context{} = Context) -> z_context:site(Context);
 get(timezone, #context{} = Context) -> z_context:tz(Context);
 get(language, #context{} = Context) -> z_context:language(Context);
+get(csp_nonce, Context) -> z_context:csp_nonce(Context);
 get(is_crawler, #context{} = Context) -> z_user_agent:is_crawler(Context);
 get(peer_ip, #context{} = Context) ->
     case z_context:get(peer_ip, Context) of

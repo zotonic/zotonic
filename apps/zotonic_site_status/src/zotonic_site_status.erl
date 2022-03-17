@@ -59,21 +59,21 @@ observe_auth_validate( #auth_validate{ username = <<"wwwadmin">>, password = Pas
         true ->
             case z_convert:to_binary(z_config:get(password)) of
                 Password ->
-                    lager:info("Zotonic status logon success from allowed IP address: ~p",
+                    ?LOG_INFO("Zotonic status logon success from allowed IP address: ~p",
                                 [m_req:get(peer, Context)]),
                     {ok, 1};
                 _ ->
-                    lager:error("Zotonic status logon failure from allowed IP address: ~p",
+                    ?LOG_ERROR("Zotonic status logon failure from allowed IP address: ~p",
                                 [m_req:get(peer, Context)]),
                     {error, pw}
             end;
         false ->
-            lager:error("Zotonic status logon failure from non allowed IP address: ~p",
+            ?LOG_ERROR("Zotonic status logon failure from non allowed IP address: ~p",
                         [m_req:get(peer, Context)]),
             {error, blocked}
     end;
 observe_auth_validate( #auth_validate{ username = Username }, Context ) ->
-    lager:error("Zotonic status logon failure with non 'wwwadmin' username '~s' from IP address: ~p",
+    ?LOG_ERROR("Zotonic status logon failure with non 'wwwadmin' username '~s' from IP address: ~p",
                 [Username, m_req:get(peer, Context)]),
     {error, pw}.
 

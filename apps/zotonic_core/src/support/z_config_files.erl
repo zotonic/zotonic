@@ -32,6 +32,7 @@
 
 -include_lib("zotonic_core/include/zotonic_release.hrl").
 -include_lib("yamerl/include/yamerl_errors.hrl").
+-include_lib("kernel/include/logger.hrl").
 
 
 %% @doc Find the default directory for certificates and other secrets.
@@ -104,7 +105,7 @@ security_dir_1() ->
             end,
             case filelib:is_dir(SecurityDir) of
                 true ->
-                    lager:error("Could not create security directory: ~p", [ SecurityDir ]),
+                    ?LOG_ERROR("Could not create security directory: ~p", [ SecurityDir ]),
                     {ok, SecurityDir};
                 false ->
                     {error, enoent}
@@ -163,7 +164,7 @@ logs_dir_1() ->
             end,
             case filelib:is_dir(SystemLogDir) of
                 true ->
-                    lager:error("Could not create log directory: ~p", [ SystemLogDir ]),
+                    ?LOG_ERROR("Could not create log directory: ~p", [ SystemLogDir ]),
                     {ok, SystemLogDir};
                 false ->
                     {error, enoent}
@@ -222,7 +223,7 @@ data_dir_1() ->
             end,
             case filelib:is_dir(SystemDataDir) of
                 true ->
-                    lager:error("Could not create data directory: ~p", [ SystemDataDir ]),
+                    ?LOG_ERROR("Could not create data directory: ~p", [ SystemDataDir ]),
                     {ok, SystemDataDir};
                 false ->
                     {error, enoent}
@@ -282,7 +283,7 @@ cache_dir_1() ->
             end,
             case filelib:is_dir(SystemCacheDir) of
                 true ->
-                    lager:error("Could not create cache directory: ~p", [ SystemCacheDir ]),
+                    ?LOG_ERROR("Could not create cache directory: ~p", [ SystemCacheDir ]),
                     {ok, SystemCacheDir};
                 false ->
                     {error, enoent}
@@ -417,7 +418,7 @@ config_dir_find(Node) ->
                 true ->
                     {ok, VersionDir};
                 false ->
-                    lager:error("Could not create config directory: ~p", [ VersionDir ]),
+                    ?LOG_ERROR("Could not create config directory: ~p", [ VersionDir ]),
                     {error, enoent}
             end;
         [ D | _ ] ->

@@ -165,9 +165,9 @@ import_parts(Row, RowNr, [Def | Definitions], ImportState, Context) ->
         end
     catch
         throw:{import_error, ImportError} ->
-            lager:error("[import_csv] Error importing row #~p, error: ~p", [RowNr, ImportError]),
-            lager:error("[import_csv] Row #~p was: ~p", [RowNr, Row]),
-            lager:error("[import_csv] Row #~p import definition: ~p", [RowNr, Def]),
+            ?LOG_ERROR("[import_csv] Error importing row #~p, error: ~p", [RowNr, ImportError]),
+            ?LOG_ERROR("[import_csv] Row #~p was: ~p", [RowNr, Row]),
+            ?LOG_ERROR("[import_csv] Row #~p import definition: ~p", [RowNr, Def]),
             ImportState
     end.
 
@@ -201,12 +201,12 @@ import_def_rsc_1_cat(Row, Callbacks, State, Context) ->
         true ->
            import_def_rsc_2_name(RscId, State2, Name, CategoryName, NormalizedRowMap, Callbacks, Context);
         false ->
-            lager:info("import_csv: missing required attributes for ~p", [Name]),
+            ?LOG_WARNING("import_csv: missing required attributes for ~p", [Name]),
             {State2, ignore}
     end.
 
 import_def_rsc_2_name(insert_rsc, State, Name, CategoryName, NormalizedRowMap, Callbacks, Context) ->
-    lager:debug("import_csv: importing ~p", [Name]),
+    ?LOG_DEBUG("import_csv: importing ~p", [Name]),
     case rsc_insert(NormalizedRowMap, Context) of
         {ok, NewId} ->
             RawRscFinal = get_updated_props(NewId, NormalizedRowMap, Context),
@@ -219,7 +219,7 @@ import_def_rsc_2_name(insert_rsc, State, Name, CategoryName, NormalizedRowMap, C
             end,
             {flush_add(NewId, State), {new, CategoryName, NewId, Name}};
         {error, _} = E ->
-            lager:warning("import_csv: could not insert ~p: ~p", [Name, E]),
+            ?LOG_WARNING("import_csv: could not insert ~p: ~p", [Name, E]),
             {State, {error, CategoryName, E}}
     end;
 import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRowMap, Callbacks, Context) when is_integer(Id) ->
@@ -228,10 +228,10 @@ import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRowMap, Callbacks
     PrevChecksum = get_value(checksum, PrevImportData),
     case checksum(NormalizedRowMap) of
         PrevChecksum when not State#importstate.is_reset ->
-            lager:info("import_csv: skipping ~p (importing same values)", [Name]),
+            ?LOG_NOTICE("import_csv: skipping ~p (importing same values)", [Name]),
             {State, {equal, CategoryName, Id}};
         Checksum ->
-            lager:info("import_csv: updating ~p", [Name]),
+            ?LOG_NOTICE("import_csv: updating ~p", [Name]),
 
             % 2. Some properties might have been overwritten by an editor.
             %    For this we will update a second time with all the changed values
@@ -362,7 +362,7 @@ import_do_edge(Id, Row, {{PredCat, PredRowField}, ObjectDefinition}, State, Cont
         Name ->
             case name_lookup(Name, State, Context) of
                 {undefined, _State1} ->
-                    lager:warning("Import CSV: ddge predicate does not exist: '~p'", [Name]),
+                    ?LOG_WARNING("Import CSV: ddge predicate does not exist: '~p'", [Name]),
                     fail;
                 {PredId, State1} ->
                     import_do_edge(Id, Row, {PredId, ObjectDefinition}, State1, Context)
@@ -393,7 +393,7 @@ import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField, ObjectProps}}, S
             case name_lookup(Name, State, Context) of
                 %% Object doesn't exist, create it using the objectprops
                 {undefined, _State1} ->
-                    lager:debug("Import CSV: creating object: ~p", [[{category, ObjectCat}, {name, Name} | ObjectProps]]),
+                    ?LOG_DEBUG("Import CSV: creating object: ~p", [[{category, ObjectCat}, {name, Name} | ObjectProps]]),
                     case m_rsc:insert([{category, ObjectCat}, {name, Name} | ObjectProps], Context) of
                         {ok, RscId} ->
                             {ok, EdgeId} = m_edge:insert(Id, Predicate, RscId, Context),

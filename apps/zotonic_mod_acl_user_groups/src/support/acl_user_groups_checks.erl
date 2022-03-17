@@ -426,7 +426,7 @@ acl_update_check(insert, _Id, Props, Context) ->
         true ->
             true;
         false ->
-            lager:debug("[acl_user_group] denied user ~p insert of category ~p in content-group ~p",
+            ?LOG_DEBUG("[acl_user_group] denied user ~p insert of category ~p in content-group ~p",
                         [z_acl:user(Context), CatId, CGId]),
             false
     end;
@@ -439,7 +439,7 @@ acl_update_check(update, Id, Props, Context) ->
         true ->
             true;
         false ->
-            lager:debug("[acl_user_group] denied user ~p update on ~p of category ~p in content-group ~p",
+            ?LOG_DEBUG("[acl_user_group] denied user ~p update on ~p of category ~p in content-group ~p",
                         [z_acl:user(Context), Id, CatId, CGId]),
             false
     end.

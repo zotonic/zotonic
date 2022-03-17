@@ -78,7 +78,7 @@ scan_file(".tpl", File) ->
         {ok, Translations} ->
             normalize_line_info(Translations);
         {error, Reason} ->
-          lager:error("POT generation, erlang error in \"~s\": ~p~n", [File, Reason])
+          ?LOG_ERROR("POT generation, erlang error in \"~s\": ~p~n", [File, Reason])
     end;
 scan_file(".erl", File) ->
     IncludeDirs = case zotonic_filehandler:compile_options(File) of
@@ -89,7 +89,7 @@ scan_file(".erl", File) ->
         {ok, Epp} ->
             parse_erl(File, Epp);
         {error, Reason} ->
-            lager:error("POT generation, erlang error in \"~s\": ~p~n", [File, Reason]),
+            ?LOG_ERROR("POT generation, erlang error in \"~s\": ~p~n", [File, Reason]),
             []
     end;
 scan_file(_, _) ->

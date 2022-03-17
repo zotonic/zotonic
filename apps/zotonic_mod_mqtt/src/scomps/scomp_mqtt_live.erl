@@ -163,7 +163,7 @@ map_topics(Topics, Context) ->
                     % are referring to the origin (aka server)
                     {true, z_mqtt:origin_topic( z_mqtt:flatten_topic(T1) )};
                 {error, Reason} ->
-                    lager:info("Error ~p on mapping wire topic ~p", [ Reason, T]),
+                    ?LOG_NOTICE("Error ~p on mapping wire topic ~p", [ Reason, T]),
                     false
             end
         end,

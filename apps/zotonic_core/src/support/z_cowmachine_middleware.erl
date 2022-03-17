@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2021 Marc Worrell
+%% @copyright 2016-2022 Marc Worrell
 %%
 %% @doc Middleware for cowmachine, extra Context based initializations.
 %% This starts the https request processing after the site and dispatch rule
 %% have been selected by the z_sites_dispatcher middleware.
 
-%% Copyright 2016-2021 Marc Worrell
+%% Copyright 2016-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@
 -include_lib("../../include/zotonic.hrl").
 
 %% @doc Call cowmachine to handle the request with the given controller. Prepare the
-%%      metadata for lager and set the relevant Context arguments.
+%%      metadata for logger and set the relevant Context arguments.
 -spec execute(Req, Env) -> {ok, Req, Env} | {stop, Req}
     when Req::cowboy_req:req(), Env::cowboy_middleware:env().
 execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_options := ControllerOpts } = Env) ->
@@ -41,7 +41,8 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
     Context1 = z_context:set(ControllerOpts, Context),
     Context2 = z_context:set_controller_module(Controller, Context1),
     Context3 = z_context:init_cowdata(Req1, Env, Context2),
-    Context4 = z_context:set_security_headers(Context3),
+    Context4 = z_context:set_csp_nonce(Context3),
+    Context5 = z_context:set_security_headers(Context4),
     Options = #{
         on_welformed => fun(Ctx) ->
             erlang:erase(is_dbtrace),
@@ -50,7 +51,7 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
                 Sid ->
                     z_context:set_session_id(Sid, Ctx)
             end,
-            z_context:lager_md(Ctx0),
+            z_context:logger_md(Ctx0),
             Ctx1 = z_context:ensure_qs(Ctx0),
             case z_context:get_q(<<"zotonic_http_accept">>, Ctx1) of
                 undefined -> Ctx1;
@@ -60,13 +61,14 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
         on_handled => fun(Ctx) ->
             z_context:set_req_metrics(#{
                     user_id => z_acl:user(Ctx),
+                    session_id => case z_context:session_id(Ctx) of {ok, SessionId} -> SessionId; _ -> undefined end,
                     language => z_context:language(Ctx),
                     timezone => z_context:tz(Ctx)
                 }, Ctx),
             Ctx
         end
     },
-    cowmachine:request(Context4, Options).
+    cowmachine:request(Context5, Options).
 
 maybe_overrule_req_headers(#{ bindings := Bindings } = Req) ->
     case maps:get(zotonic_http_accept, Bindings, undefined) of

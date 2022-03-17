@@ -139,7 +139,9 @@ link_element(CssFiles, Args, Context) ->
                 <<"<link href=\"">>, CssUrl, <<"\" type=\"text/css\"">>,
                    TitleAttr,
                    <<" media=\"none\"">>,
-                   <<" onload=\"if(media!='">>, Media, <<"')media='">>, Media, <<"'\"">>,
+                   <<" media-onload=\"">>, Media ,<<"\"">>,
+                   % This is run by the script tag
+                   % <<" onload=\"if(media!='">>, Media, <<"')media='">>, Media, <<"'\"">>,
                    <<" rel=\"">>, Rel, $",
                 <<">">>,
                 <<"<noscript>">>,
@@ -304,12 +306,12 @@ checksum([File|Files], FoundFiles, State, Context) ->
                             checksum(Files, [ File1 | FoundFiles ], State1, Context);
                         {error, enoent} ->
                             %% Not found, skip the file
-                            lager:warning("lib file not found: ~s", [File]),
+                            ?LOG_WARNING("lib file not found: ~s", [File]),
                             checksum(Files, [ File | FoundFiles ], State, Context)
                     end;
                 _ ->
                     %% Not found, skip the file
-                    lager:warning("lib file not found: ~s", [File]),
+                    ?LOG_WARNING("lib file not found: ~s", [File]),
                     checksum(Files, [ File | FoundFiles ], State, Context)
             end
     end.

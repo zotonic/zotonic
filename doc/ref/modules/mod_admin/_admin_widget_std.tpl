@@ -37,7 +37,7 @@
 {# Some optional tags, that will be rendered immediately after widget container.
    For example, some javascript: #}
 {% block widget_after %}
-    <script type="text/javascript">
-	alert("Hello World!");
+    <script type="text/javascript" nonce="{{ m.req.csp_nonce }}">
+	     alert("Hello World!");
     </script>
 {% endblock %}

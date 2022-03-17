@@ -1172,7 +1172,7 @@ languages_list() -> [
     {<<"pl">>, [
         {language, <<"pl">>},
         {region, <<"PL">>},
-        {name, <<"Polszczyzna"/utf8>>},
+        {name, <<"Polski"/utf8>>},
         {name_en, <<"Polish"/utf8>>}
     ]},
     {<<"ps">>, [

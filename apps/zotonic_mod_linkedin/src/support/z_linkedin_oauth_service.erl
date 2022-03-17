@@ -80,7 +80,7 @@ fetch_access_token(Code, _AuthData, _Args, _QArgs, Context) ->
             } = z_json:decode(Payload),
             {ok, AccessData};
         Other ->
-            lager:error("[linkedin] error fetching access token [code ~p] ~p", [Code, Other]),
+            ?LOG_ERROR("[linkedin] error fetching access token [code ~p] ~p", [Code, Other]),
             {error, {http_error, LinkedInUrl, Other}}
     end.
 
@@ -100,7 +100,7 @@ auth_validated(#{ <<"access_token">> := AccessToken } = AccessData, Args, Contex
 
 
 auth_user(#{<<"id">> := LinkedInUserId} = Profile, Email, AccessTokenData, Args, _Context) ->
-    lager:debug("[linkedin] Authenticating ~p ~p", [LinkedInUserId, Profile]),
+    ?LOG_DEBUG("[linkedin] Authenticating ~p ~p", [LinkedInUserId, Profile]),
     PersonProps = #{
         <<"title">> => iolist_to_binary([
                 z_convert:to_binary(get_localized_value(<<"firstName">>, Profile)), " ",
@@ -147,10 +147,10 @@ fetch_user_data(AccessToken) ->
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             {ok, z_json:decode(Payload)};
         {ok, {{_, 401, _}, _Headers, Payload}} = Other ->
-            lager:error("[linkedin] 401 error fetching user data [token ~p] will not retry ~p", [AccessToken, Payload]),
+            ?LOG_ERROR("[linkedin] 401 error fetching user data [token ~p] will not retry ~p", [AccessToken, Payload]),
             {error, {http_error, LinkedInUrl, Other}};
         Other ->
-            lager:error("[linkedin] error fetching user data [token ~p] ~p", [AccessToken, Other]),
+            ?LOG_ERROR("[linkedin] error fetching user data [token ~p] ~p", [AccessToken, Other]),
             {error, {http_error, LinkedInUrl, Other}}
     end.
 
@@ -221,10 +221,10 @@ fetch_email_address(AccessToken) ->
                     {error, noemail}
             end;
         {ok, {{_, 401, _}, _Headers, Payload}} = Other ->
-            lager:error("[linkedin] 401 error fetching user email [token ~p] will not retry ~p", [AccessToken, Payload]),
+            ?LOG_ERROR("[linkedin] 401 error fetching user email [token ~p] will not retry ~p", [AccessToken, Payload]),
             {error, {http_error, LinkedInUrl, Other}};
         Other ->
-            lager:error("[linkedin] error fetching user email [token ~p] ~p", [AccessToken, Other]),
+            ?LOG_ERROR("[linkedin] error fetching user email [token ~p] ~p", [AccessToken, Other]),
             {error, {http_error, LinkedInUrl, Other}}
     end.
 

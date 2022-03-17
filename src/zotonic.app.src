@@ -6,7 +6,7 @@
   {mod, {zotonic_app, []}},
   {applications, [
       kernel, stdlib, crypto, public_key, ssl, inets,
-      lager, cowboy, cowmachine,
+      cowboy, cowmachine,
       zotonic_launcher
   ]},
   {env, []},

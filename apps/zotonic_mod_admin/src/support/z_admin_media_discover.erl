@@ -158,10 +158,10 @@ error_message(av_external_links, Context) ->
 error_message(sizelimit, Context) ->
     ?__("This file is too large.", Context);
 error_message({Status, Url, Hs, _Size, _Body}, Context) when is_integer(Status), is_list(Hs) ->
-    lager:error("HTTP error ~p fetching URL ~p", [ Status, Url ]),
+    ?LOG_ERROR("HTTP error ~p fetching URL ~p", [ Status, Url ]),
     z_fetch:error_msg(Status, Context);
 error_message(R, Context) ->
-    lager:warning("Unknown media discover error: ~p", [R]),
+    ?LOG_WARNING("Unknown media discover error: ~p", [R]),
     ?__("Error checking the website.", Context).
 
 

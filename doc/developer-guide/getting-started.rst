@@ -113,7 +113,7 @@ The other requirements are easily fetched with ``apt``::
   sudo apt-get install gcc g++ build-essential git imagemagick postgresql ffmpeg
 
 macOS
-"""""
+^^^^^
 
 Install Homebrew_, then run::
 
@@ -122,7 +122,7 @@ Install Homebrew_, then run::
 .. _Homebrew: https://brew.sh
 
 FreeBSD
-"""""""
+^^^^^^^
 
 Erlang and its dependencies can be installed with ``pkg``::
 
@@ -137,7 +137,7 @@ can be used, they should be updated with the newest available version::
 
 
 Windows
-"""""""
+^^^^^^^
 
 Currently, Zotonic is not officially supported on the Windows
 platform. However, the main dependencies Erlang, PostgreSQL and
@@ -150,35 +150,34 @@ It is advised to use Docker or the Linux subsystem for Windows.
 Getting Zotonic
 ^^^^^^^^^^^^^^^
 
-1. Download the latest Zotonic release ZIP file from the `GitHub releases page`_. For
-   instance:
+Download the latest Zotonic release ZIP file from the `GitHub releases page`_. For
+instance::
 
-   .. parsed-literal::
     $ wget \https://github.com/zotonic/zotonic/archive/|release|.zip
 
-   Then unzip the file and rename the directory:
+Then unzip the file and rename the directory::
 
-   .. parsed-literal::
     $ unzip |release|.zip
     $ mv zotonic-|release| zotonic
 
-   Alternatively, clone the latest development version using Git::
+Alternatively, clone the latest development version using Git::
 
     $ git clone https://github.com/zotonic/zotonic.git
 
-2. You then need to compile the Zotonic sources::
+You then need to compile the Zotonic sources::
 
     $ cd zotonic
     $ make
 
-3. Then start Zotonic in debug mode::
+Then start Zotonic in debug mode::
 
     $ bin/zotonic debug
 
-4. Now point your browser to: https://localhost:8443/.  You should see
-   a welcome message, ‘Powered by Zotonic’. This is the so-called
-   :ref:`status website <ref-status-site>`. So far, so good! Now it's
-   time to :ref:`create your first site <guide-create-site>`.
+Now point your browser to: https://localhost:8443/.  You should see
+a welcome message, ‘Powered by Zotonic’. This is the so-called
+:ref:`status website <ref-status-site>`. So far, so good! Now it's
+time to :ref:`create your first site <guide-create-site>`.
+
 
 Next steps
 ----------

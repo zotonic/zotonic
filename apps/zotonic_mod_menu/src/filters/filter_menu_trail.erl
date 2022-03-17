@@ -44,13 +44,13 @@ menu_trail(Ids, Menu, Context) when is_list(Ids) ->
         undefined,
         Ids);
 menu_trail(Id, [ #rsc_tree{} | _ ] = Menu, Context) ->
-    trail(m_rsc:rid(Id, Context), mod_menu:remove_invisible(Menu, Context), Context);
+    trail(m_rsc:rid(Id, Context), Menu, Context);
 menu_trail(Id, [{_MenuId,Sub}|_] = Menu, Context) when is_list(Sub) ->
     % Old style nested tuples
-    trail(m_rsc:rid(Id, Context), mod_menu:remove_invisible(Menu, Context), Context);
+    trail(m_rsc:rid(Id, Context), Menu, Context);
 menu_trail(Id, MenuId, Context) ->
     Menu = mod_menu:get_menu(MenuId, Context),
-    trail(m_rsc:rid(Id, Context), mod_menu:remove_invisible(Menu, Context), Context).
+    trail(m_rsc:rid(Id, Context), Menu, Context).
 
 
 trail(_Id, [], _Context) ->

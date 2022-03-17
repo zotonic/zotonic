@@ -15,7 +15,7 @@ Return:
 ``#auth_validated{}`` properties:
     - service: ``atom``
     - service_uid: ``binary``
-    - service_props: ``list``
-    - props: ``list``
+    - service_props: ``map``
+    - unknown: ``unknown``
     - is_connect: ``boolean``
     - is_signup_confirm: ``boolean``

@@ -76,7 +76,7 @@ handle_cast(convert, State) ->
             remove_task(State);
         false ->
             % Queue file was deleted, remove our task
-            lager:info("Video conversion (startup): medium is not current or queue file missing (id ~p, file ~p)",
+            ?LOG_NOTICE("Video conversion (startup): medium is not current or queue file missing (id ~p, file ~p)",
                        [State#state.id, State#state.queue_filename]),
             remove_task(State)
     end,
@@ -98,7 +98,7 @@ do_convert(QueuePath, State) ->
         {ok, TmpFile} ->
             insert_movie(TmpFile, State);
         Error ->
-            lager:warning("ffmpeg conversion error on ~p: ~p", [State#state.id, Error]),
+            ?LOG_WARNING("ffmpeg conversion error on ~p: ~p", [State#state.id, Error]),
             insert_broken(State)
     end.
 
@@ -119,7 +119,7 @@ insert_movie(TmpFile, State) ->
                 [no_touch],
                 Context);
         false ->
-            lager:info("Video conversion (ok): medium is not current anymore (id ~p)", [State#state.id])
+            ?LOG_INFO("Video conversion (ok): medium is not current anymore (id ~p)", [State#state.id])
     end.
 
 -spec original_filename( #media_upload_preprocess{} ) -> binary().
@@ -138,7 +138,7 @@ insert_broken(State) ->
             },
             m_media:replace_file(undefined, State#state.id, #{}, PropsMedia, [no_touch], Context);
         false ->
-            lager:info("Video conversion (broken): medium is not current anymore (id ~p)", [State#state.id])
+            ?LOG_NOTICE("Video conversion (broken): medium is not current anymore (id ~p)", [State#state.id])
     end.
 
 is_current_upload(State, Context) ->
@@ -199,18 +199,18 @@ video_convert_1(QueuePath, Orientation, Mime) ->
                                          z_filelib:os_filename(TmpFile)
                                         ])),
 
-                        lager:debug("Video convert: ~p", [FfmpegCmd]),
+                        ?LOG_DEBUG("Video convert: ~p", [FfmpegCmd]),
                         case os:cmd(FfmpegCmd) of
                             [] ->
                                 case filelib:file_size(TmpFile) of
                                     0 ->
-                                        lager:warning("Video convert error: (empty result file)  [queue: ~p]", [QueuePath]),
+                                        ?LOG_WARNING("Video convert error: (empty result file)  [queue: ~p]", [QueuePath]),
                                         {error, convert};
                                     _ ->
                                         {ok, TmpFile}
                                 end;
                             Other ->
-                                lager:warning("Video convert error: ~p [queue: ~p]", [Other, QueuePath]),
+                                ?LOG_WARNING("Video convert error: ~p [queue: ~p]", [Other, QueuePath]),
                                 {error, Other}
                         end;
                     {error, _} = Error ->
@@ -241,12 +241,12 @@ maybe_reset_metadata(_TransposeOption, QueuePath, Mime) ->
         [] ->
             case filelib:file_size(TmpFile) of
                 0 ->
-                    lager:warning("Video convert error: (empty result file during metadata reset)  [queue: ~p]", [QueuePath]),
+                    ?LOG_WARNING("Video convert error: (empty result file during metadata reset)  [queue: ~p]", [QueuePath]),
                     {error, convert};
                 _ ->
                     {ok, TmpFile}
             end;
         Other ->
-            lager:warning("Video convert error: (during metadata reset) ~p [queue: ~p]", [Other, QueuePath]),
+            ?LOG_WARNING("Video convert error: (during metadata reset) ~p [queue: ~p]", [Other, QueuePath]),
             {error, Other}
     end.

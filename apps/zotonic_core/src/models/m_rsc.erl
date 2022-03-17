@@ -45,6 +45,7 @@
     update/3,
     update/4,
     duplicate/3,
+    duplicate/4,
     touch/2,
 
     make_authoritative/2,
@@ -105,6 +106,11 @@
         {ok, UpdateProps :: props() } | {error, term()}
     ).
 
+-type duplicate_options() :: list(duplicate_option()).
+-type duplicate_option() :: edges
+                          | {edges, boolean()}
+                          | medium
+                          | {medium, boolean()}.
 
 -export_type([
     resource/0,
@@ -133,7 +139,7 @@ m_get([ Id, Key | Rest ], _Msg, Context) ->
 m_get([ Id ], _Msg, Context) ->
     {ok, {get(Id, Context), []}};
 m_get(Vs, _Msg, _Context) ->
-    lager:debug("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_DEBUG("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 
@@ -477,9 +483,14 @@ update(Id, Props, Options, Context) ->
 
 %% @doc Duplicate a resource.
 -spec duplicate(resource(), props_all(), z:context()) ->
-    {ok, NewId :: resource_id()} | {error, Reason :: string()}.
+    {ok, NewId :: resource_id()} | {error, Reason :: term()}.
 duplicate(Id, Props, Context) ->
     m_rsc_update:duplicate(Id, Props, Context).
+
+-spec duplicate(resource(), props_all(), duplicate_options(), z:context()) ->
+    {ok, NewId :: resource_id()} | {error, Reason :: term()}.
+duplicate(Id, Props, Options, Context) ->
+    m_rsc_update:duplicate(Id, Props, Options, Context).
 
 
 %% @doc "Touch" the rsc, incrementing the version nr and the modification date/ modifier_id.
@@ -1156,7 +1167,7 @@ page_url(Id, IsAbs, Context) ->
 page_url_path([], Args, Context) ->
     case z_dispatcher:url_for(page, Args, Context) of
         undefined ->
-            lager:warning("Failed to get page url path. Is the 'page' dispatch rule missing?"),
+            ?LOG_WARNING("Failed to get page url path. Is the 'page' dispatch rule missing?"),
             undefined;
         Url -> Url
     end;

@@ -363,7 +363,7 @@ event(#postback{message={translation_generate, _Args}}, Context) ->
                     spawn(fun() -> generate(Context) end),
                     z_render:growl(?__(<<"Started building the .pot files. This may take a while...">>, Context), Context);
                 false ->
-                    lager:error("Cannot generate translation files because gettext is not installed. See http://docs.zotonic.com/en/latest/developer-guide/translation.html."),
+                    ?LOG_ERROR("Cannot generate translation files because gettext is not installed. See http://docs.zotonic.com/en/latest/developer-guide/translation.html."),
                     z_render:growl_error(?__(<<"Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>.">>, Context), Context)
             end;
         false ->
@@ -507,7 +507,7 @@ language_status(Code, Status, Context) when is_atom(Code), is_atom(Status) ->
 language_add(NewLanguageCode, IsEnabled, Context) when is_boolean(IsEnabled) ->
     case z_language:is_valid(NewLanguageCode) of
         false ->
-            lager:warning("mod_translation error. language_add: language ~p does not exist", [NewLanguageCode]),
+            ?LOG_WARNING("mod_translation error. language_add: language ~p does not exist", [NewLanguageCode]),
             {error, not_a_language};
         true ->
             NewCode = z_convert:to_atom(NewLanguageCode),
@@ -618,7 +618,7 @@ generate(Context) ->
 generate_core() ->
     case zotonic_core:is_zotonic_project() of
         true ->
-            lager:info("Generating .pot files..."),
+            ?LOG_NOTICE("Generating .pot files..."),
             translation_po:generate(translation_scan:scan(core_apps())),
             consolidate_core();
         false ->
@@ -640,7 +640,7 @@ core_app_to_module_name(App) when is_atom(App) ->
 consolidate_core() ->
     ZotonicPot = code:priv_dir(zotonic_core) ++ "/translations/zotonic.pot",
     PotFiles = filename:join([z_path:get_path(), "apps", "zotonic_*/priv/translations/template/*.pot"]),
-    lager:info("Merging .pot files into \"~s\"", [ ZotonicPot]),
+    ?LOG_NOTICE("Merging .pot files into \"~s\"", [ ZotonicPot]),
     Command = lists:flatten([
         "msgcat -o ",
         z_filelib:os_filename(ZotonicPot),

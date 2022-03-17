@@ -33,6 +33,7 @@
 ]).
 
 -include_lib("kernel/include/file.hrl").
+-include_lib("kernel/include/logger.hrl").
 
 % The state record for this server
 -record(state, {
@@ -186,14 +187,14 @@ make_all() ->
 
 %% @doc Reload a module, purge the old code.
 reload_module(M) ->
-    lager:debug("reloading '~p'", [M]),
+    ?LOG_DEBUG("reloading '~p'", [M]),
     code:purge(M),
     code:soft_purge(M),
     case code:load_file(M) of
         {module, M} ->
             {ok, M};
         {error, Reason} = Error ->
-            lager:warning("Could not reload '~p': ~p", [M, Reason]),
+            ?LOG_WARNING("Could not reload '~p': ~p", [M, Reason]),
             Error
     end.
 

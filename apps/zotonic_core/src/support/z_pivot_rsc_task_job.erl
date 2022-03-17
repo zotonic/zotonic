@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020 Marc Worrell
+%% @copyright 2020-2022 Marc Worrell
 %% @doc Run a pivot task queue job.
 
-%% Copyright 2020 Marc Worrell
+%% Copyright 2020-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,9 +19,12 @@
 -module(z_pivot_rsc_task_job).
 
 -export([
-    start_task/3,
+    start_task/2,
 
-    task_job/3
+    task_job/2,
+
+    maybe_schedule_retry/5,
+    task_retry_due/1
     ]).
 
 -include_lib("zotonic.hrl").
@@ -31,24 +34,27 @@
 
 
 %% @doc Start a task queue sidejob.
--spec start_task( pid(), map(), z:context() ) -> {ok, pid()} | {error, overload}.
-start_task(PivotPid, Task, Context) ->
+-spec start_task( map(), z:context() ) -> {ok, pid()} | {error, overload}.
+start_task(Task, Context) ->
     sidejob_supervisor:spawn(
             zotonic_sidejobs,
-            {?MODULE, task_job, [ PivotPid, Task, Context ]}).
+            {?MODULE, task_job, [ Task, Context ]}).
 
 %% @doc Run the sidejob task queue task.
--spec task_job( pid(), map(), z:context() ) -> ok.
+-spec task_job( map(), z:context() ) -> ok.
 task_job(
-    PivotPid,
     #{
         task_id := TaskId,
-        mfa := {Module, Function, Args},
-        error_count := ErrCt
-    }, Context) ->
+        mfa := {Module, Function, Args}
+    } = Task, Context) ->
+    z_context:logger_md(Context),
     try
-        lager:debug("Pivot task starting: ~p:~p(...)", [ Module, Function ]),
-        case call_function(Module, Function, ensure_list(Args), Context) of
+        Args1 = ensure_list(Args),
+        ?LOG_DEBUG(#{
+            text => <<"Pivot task starting">>,
+            mfa => {Module, Function, length(Args1)+1}
+        }),
+        case call_function(Module, Function, Args1, Context) of
             {delay, Delay} ->
                 Due = if
                         is_integer(Delay) ->
@@ -76,32 +82,52 @@ task_job(
         end
     catch
         error:undef:Trace ->
-            lager:error("Task ~p failed - undefined function, aborting: ~p:~p(~p) ~p",
-                        [TaskId, Module, Function, Args, Trace]),
+            ?LOG_ERROR(#{
+                text => <<"Pivot task failed - undefined function, aborting">>,
+                task_id => TaskId,
+                mfa => {Module, Function, Args},
+                result => error,
+                reason => undef,
+                stack => Trace
+            }),
             z_db:delete(pivot_task_queue, TaskId, Context);
         Error:Reason:Trace ->
-            case ErrCt < ?MAX_TASK_ERROR_COUNT of
-                true ->
-                    RetryDue = calendar:gregorian_seconds_to_datetime(
-                            calendar:datetime_to_gregorian_seconds(calendar:universal_time())
-                            + task_retry_backoff(ErrCt)),
-                    lager:error("Task ~p failed - will retry ~p:~p(~p) ~p:~p on ~p ~p",
-                                [TaskId, Module, Function, Args, Error, Reason, RetryDue, Trace]),
-                    RetryFields = #{
-                        <<"due">> => RetryDue,
-                        <<"error_count">> => ErrCt+1
-                    },
-                    z_db:update(pivot_task_queue, TaskId, RetryFields, Context);
-                false ->
-                    lager:error("Task ~p failed - aborting ~p:~p(~p) ~p:~p ~p",
-                                [TaskId, Module, Function, Args, Error, Reason, Trace]),
-                    z_db:delete(pivot_task_queue, TaskId, Context)
-            end
+            maybe_schedule_retry(Task, Error, Reason, Trace, Context)
     after
-        gen_server:call(PivotPid, {task_done, TaskId, self()}, infinity)
+        z_pivot_rsc:task_job_done(TaskId, Context)
     end,
     ok.
 
+-spec maybe_schedule_retry(map(), atom(), term(), list(), z:context()) -> ok.
+maybe_schedule_retry(#{ task_id := TaskId, error_count := ErrCt, mfa := MFA }, Error, Reason, Trace, Context) 
+    when ErrCt < ?MAX_TASK_ERROR_COUNT ->
+    RetryDue = task_retry_due(ErrCt),
+    ?LOG_ERROR(#{
+        text => <<"Pivot task failed - will retry">>,
+        task_id => TaskId,
+        mfa => MFA,
+        result => Error,
+        reason => Reason,
+        retry_on => RetryDue,
+        stack => Trace
+    }),
+    RetryFields = #{
+        <<"due">> => RetryDue,
+        <<"error_count">> => ErrCt+1
+    },
+    {ok, _} = z_db:update(pivot_task_queue, TaskId, RetryFields, Context),
+    ok;
+maybe_schedule_retry(#{ task_id := TaskId, mfa := MFA }, Error, Reason, Trace, Context) ->
+    ?LOG_ERROR(#{
+        text => <<"Pivot task failed - aborting">>,
+        task_id => TaskId,
+        mfa => MFA,
+        result => Error,
+        reason => Reason,
+        stack => Trace
+    }),
+    z_db:delete(pivot_task_queue, TaskId, Context),
+    {error, stopped}.
 
 call_function(Module, Function, As, Context) ->
     code:ensure_loaded(Module),
@@ -114,6 +140,12 @@ call_function(Module, Function, As, Context) ->
             % Function called with only the arguments list
             erlang:apply(Module, Function, As)
     end.
+
+-spec task_retry_due( integer() ) -> calendar:datetime().
+task_retry_due(ErrCt) ->
+    calendar:gregorian_seconds_to_datetime(
+            calendar:datetime_to_gregorian_seconds(calendar:universal_time())
+            + task_retry_backoff(ErrCt)).
 
 task_retry_backoff(0) -> 10;
 task_retry_backoff(1) -> 1800;

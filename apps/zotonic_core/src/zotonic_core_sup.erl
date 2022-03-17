@@ -21,7 +21,7 @@
 
 -behaviour(supervisor).
 
--compile([{parse_transform, lager_transform}]).
+-include_lib("kernel/include/logger.hrl").
 
 %% External exports
 -export([ start_link/1 ]).
@@ -93,9 +93,6 @@ spawn_delayed_status() ->
     erlang:spawn(fun() ->
         log_start_warnings(),
         timer:sleep(4000),
-        lager:info("================"),
-        lager:info("Sites Status"),
-        lager:info("================"),
         SitesStatus = maps:to_list(z_sites_manager:get_sites()),
         {Running, Other} = lists:partition(
             fun({_Site, Status}) -> Status =:= running end,
@@ -104,13 +101,14 @@ spawn_delayed_status() ->
             fun
               ({Site, running}) when Site =/= zotonic_site_status ->
                   Ctx = z_context:new(Site),
-                  lager:info("~p ~s ~-40s~n",
-                             [Site, running, z_context:abs_url(<<"/">>, Ctx)]);
+                  ?LOG_NOTICE(#{
+                        status => running,
+                        url => z_context:abs_url(<<"/">>, Ctx)
+                    }, #{ site => Site });
               ({Site, Status}) ->
-                  lager:info("~p - ~s~n", [Site, Status])
+                  ?LOG_NOTICE(#{ status => Status }, #{ site => Site })
             end,
-            Running ++ Other),
-        lager:info("================")
+            Running ++ Other)
     end).
 
 log_start_warnings() ->
@@ -118,10 +116,9 @@ log_start_warnings() ->
         {ok, _} ->
             ok;
         undefined ->
-            lager:warning("********************************************************"),
-            lager:warning("SSL application using Erlang defaults, it is recommended"),
-            lager:warning("to change this configuration in your erlang.config"),
-            lager:warning("********************************************************")
+            ?LOG_WARNING(
+                "SSL application using Erlang defaults, it is recommended"
+                "to change this configuration in your erlang.config")
     end.
 
 %% @doc Ensure all job queues

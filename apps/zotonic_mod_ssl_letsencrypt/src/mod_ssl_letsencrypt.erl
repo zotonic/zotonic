@@ -127,7 +127,7 @@ event(#submit{message = {request_cert, Args}}, Context) ->
                                         ]},
                                     Context);
                 {error, Reason} ->
-                    lager:error("Could not start Letsencrypt cert request, error ~p", [Reason]),
+                    ?LOG_ERROR("Could not start Letsencrypt cert request, error ~p", [Reason]),
                     z_render:wire({alert, [
                                     {title, ?__(<<"SSL Let’s Encrypt Certificate"/utf8>>, Context)},
                                     {text, ?__("Could not start fetching the SSL certificate. Try again later.", Context)},
@@ -196,10 +196,10 @@ init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
     Site = z_context:site(Context),
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     gen_server:cast(self(), load_cert),
     {ok, #state{site=Site, self_ping = undefined }}.
 
@@ -209,7 +209,7 @@ handle_call(get_self_ping, _From, State) ->
 handle_call({is_self_ping, SelfPing}, _From, #state{self_ping = Ping} = State) ->
     {reply, z_convert:to_binary(SelfPing) =:= Ping, State};
 handle_call({cert_request, _Hostname, _SANs}, _From, #state{request_letsencrypt_pid = Pid} = State) when is_pid(Pid) ->
-    lager:error("Letsencrypt cert request whilst another request is running"),
+    ?LOG_ERROR("Letsencrypt cert request whilst another request is running"),
     {reply, {error, busy}, State};
 handle_call({cert_request, Hostname, SANs}, _From, State) ->
     case start_cert_request(Hostname, SANs, State) of
@@ -220,12 +220,12 @@ handle_call({cert_request, Hostname, SANs}, _From, State) ->
             {reply, {error, Reason}, State1}
     end;
 handle_call(get_challenge, _From, #state{request_letsencrypt_pid = undefined} = State) ->
-    lager:error("Fetching Letsencrypt challenge but no request running"),
+    ?LOG_ERROR("Fetching Letsencrypt challenge but no request running"),
     {reply, {ok, #{}}, State};
 handle_call(get_challenge, _From, #state{request_letsencrypt_pid = _Pid} = State) ->
     case z_letsencrypt:get_challenge() of
         error ->
-            lager:error("Error fetching Letsencrypt challenge."),
+            ?LOG_ERROR("Error fetching Letsencrypt challenge."),
             {reply, {ok, #{}}, State};
         Map when is_map(Map) ->
             {reply, {ok, Map}, State}
@@ -291,7 +291,7 @@ handle_info({'DOWN', MRef, process, _Pid, normal}, #state{request_monitor = MRef
         request_status = error
     }};
 handle_info({'DOWN', MRef, process, _Pid, Reason}, #state{request_monitor = MRef} = State) ->
-    lager:error("Letsencrypt went down with reason ~p, whilst requesting cert for ~p ~p",
+    ?LOG_ERROR("Letsencrypt went down with reason ~p, whilst requesting cert for ~p ~p",
                 [Reason, State#state.request_hostname, State#state.request_san]),
     gen_server:cast(self(), load_cert),
     {noreply, State#state{
@@ -305,7 +305,7 @@ handle_info({'DOWN', _MRef, process, _Pid, normal}, #state{request_monitor = und
 handle_info({'EXIT', _Pid, _Reason}, State) ->
     {noreply, State};
 handle_info(Info, State) ->
-    lager:warning("Letsencrypt unknown info message ~p", [Info]),
+    ?LOG_WARNING("Letsencrypt unknown info message ~p", [Info]),
     {noreply, State}.
 
 %% @spec terminate(Reason, State) -> void()
@@ -342,7 +342,7 @@ do_load_cert(State) ->
                         cert_valid_till = maps:get(not_after, CertMap)
                     };
                 {error, _} = Error ->
-                    lager:error("Could not decode Letsencrypt crt file ~p",
+                    ?LOG_ERROR("Could not decode Letsencrypt crt file ~p",
                                 [Error]),
                     invalid_cert_status(State)
             end;
@@ -360,8 +360,8 @@ invalid_cert_status(State) ->
 
 %% @doc Letsencrypt finished, perform housekeeping and logging
 handle_letsencrypt_result({ok, LEFiles}, State) ->
-    lager:info("Letsencrypt successfully requested cert for ~p ~p",
-               [State#state.request_hostname, State#state.request_san]),
+    ?LOG_NOTICE("Letsencrypt successfully requested cert for ~p ~p",
+                [State#state.request_hostname, State#state.request_san]),
     Context = z_context:new(State#state.site),
     {ok, MyFiles} = cert_files_all(Context),
     {certfile, CertFile} = proplists:lookup(certfile, MyFiles),
@@ -384,7 +384,7 @@ handle_letsencrypt_result({ok, LEFiles}, State) ->
         request_status = ok
     };
 handle_letsencrypt_result({error, Reason}, State) ->
-    lager:error("Letsencrypt error ~p whilst requesting cert for ~p ~p",
+    ?LOG_ERROR("Letsencrypt error ~p whilst requesting cert for ~p ~p",
                 [Reason, State#state.request_hostname, State#state.request_san]),
     State#state{
         request_status = error
@@ -444,15 +444,15 @@ ssl_options(Context) ->
     KeyFile = proplists:get_value(keyfile, CertFiles),
     case {filelib:is_file(CertFile), filelib:is_file(KeyFile)} of
         {false, false} ->
-            lager:info("[~p] mod_ssl_letsencrypt: no ~p and ~p files, skipping.",
+            ?LOG_NOTICE("[~p] mod_ssl_letsencrypt: no ~p and ~p files, skipping.",
                        [z_context:site(Context), CertFile, KeyFile]),
             undefined;
         {false, true} ->
-            lager:info("[~p] mod_ssl_letsencrypt: no ~p file (though there is a key file), skipping.",
+            ?LOG_NOTICE("[~p] mod_ssl_letsencrypt: no ~p file (though there is a key file), skipping.",
                        [z_context:site(Context), CertFile]),
             undefined;
         {true, false} ->
-            lager:info("[~p] mod_ssl_letsencrypt: no ~p file (though there is a crt file), skipping.",
+            ?LOG_NOTICE("[~p] mod_ssl_letsencrypt: no ~p file (though there is a crt file), skipping.",
                        [z_context:site(Context), KeyFile]),
             undefined;
         {true, true} ->
@@ -503,19 +503,19 @@ check_keyfile(KeyFile, Context) ->
     Hostname = z_context:hostname(Context),
     case file:read_file(KeyFile) of
         {ok, <<"-----BEGIN PRIVATE KEY", _/binary>>} ->
-            lager:error("[~p] Need RSA private key file for Letsencrypt. Use: `openssl rsa -in letsencrypt/letsencrypt.pem -out letsencrypt/letsencrypt.pem`",
+            ?LOG_ERROR("[~p] Need RSA private key file for Letsencrypt. Use: `openssl rsa -in letsencrypt/letsencrypt.pem -out letsencrypt/letsencrypt.pem`",
                         [Site, Hostname, Hostname]),
             {error, need_rsa_private_key};
         {ok, Bin} ->
             case public_key:pem_decode(Bin) of
                 [] ->
-                    lager:error("[~p] No private keys for Letsencrypt found in ~p", [Site, KeyFile]),
+                    ?LOG_ERROR("[~p] No private keys for Letsencrypt found in ~p", [Site, KeyFile]),
                     {error, no_private_keys_found};
                 _ ->
                     ok
             end;
         {error, _} = Error ->
-            lager:error("[~p] Cannot read Letsencrypt key file ~p, error: ~p",
+            ?LOG_ERROR("[~p] Cannot read Letsencrypt key file ~p, error: ~p",
                         [Site, KeyFile, Error]),
             Error
     end.
@@ -529,7 +529,7 @@ ensure_key_file(Context) ->
         true ->
             {ok, KeyFile};
         false ->
-            lager:info("Generating RSA key for LetsEncrypt in ~p", [KeyFile]),
+            ?LOG_NOTICE("Generating RSA key for LetsEncrypt in ~p", [KeyFile]),
             ok = z_filelib:ensure_dir(KeyFile),
             _ = file:change_mode(filename:basename(KeyFile), 8#00700),
             Escaped = z_filelib:os_filename(KeyFile),
@@ -548,7 +548,7 @@ ensure_key_file(Context) ->
                             Error
                     end;
                 false ->
-                    lager:error("Error generating RSA key for LetsEncrypt: ~p",
+                    ?LOG_ERROR("Error generating RSA key for LetsEncrypt: ~p",
                                 [Result]),
                     {error, openssl}
             end
@@ -565,12 +565,12 @@ download_cacert(Context) ->
                 "application/x-pem-file" ->
                     save_ca_cert(Cert, Context);
                 CT ->
-                    lager:error("Download of ~p returned a content-type ~p",
+                    ?LOG_ERROR("Download of ~p returned a content-type ~p",
                                 [?CA_CERT_URL, CT]),
                     {error, content_type}
             end;
         {error, _} = Error ->
-            lager:error("Download of ~p error ~p",
+            ?LOG_ERROR("Download of ~p error ~p",
                         [?CA_CERT_URL, Error]),
             Error
     end.

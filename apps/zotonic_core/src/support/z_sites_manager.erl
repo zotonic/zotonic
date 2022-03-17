@@ -513,12 +513,13 @@ handle_cast({set_site_status, Site, Status}, #state{ sites = Sites } = State) ->
             },
             Sites#{ Site => S1 };
         {ok, #site_status{ status = CurStatus }} ->
-            lager:info("Site status change of ~p from ~p to ~p ignored.",
-                       [Site, CurStatus, Status]),
+            ?LOG_NOTICE("Site status change from ~p to ~p ignored.",
+                        [CurStatus, Status],
+                        #{ site => Site }),
             Sites;
         error ->
-            lager:info("Site status change of unknown ~p to ~p ignored.",
-                       [Site, Status]),
+            ?LOG_NOTICE("Site status change of unknown ~p to ~p ignored.",
+                        [Site, Status]),
             Sites
     end,
     do_sync_status(Sites1),
@@ -706,14 +707,19 @@ do_start(Site, #state{ sites = Sites } = State) ->
                     Error
             end;
         error ->
-            lager:info("Requested to start unknown site ~p", [Site]),
+            ?LOG_WARNING(#{
+                action => start_request,
+                result => error,
+                reason => bad_name,
+                text => <<"Requested to start unknown site">>
+            }, #{ site => Site }),
             {error, bad_name}
     end.
 
 do_start_site(#site_status{ site = Site } = SiteStatus) ->
     case site_is_startable(SiteStatus) of
         {true, StartState} ->
-            lager:info("Starting site ~p", [Site]),
+            ?LOG_NOTICE(#{ action => starting }, #{ site => Site }),
             case z_sites_sup:start_site(Site) of
                 {ok, Pid} ->
                     {ok, SiteStatus#site_status{
@@ -722,14 +728,20 @@ do_start_site(#site_status{ site = Site } = SiteStatus) ->
                     }};
                 {error, {already_started, Pid}} ->
                     % seems we have a race condition here
-                    lager:error("Site already started, this shouldn't happen '~p'",
-                                [Site]),
+                    ?LOG_ERROR(#{
+                        text => <<"Site already started, this shouldn't happen.">>,
+                        result => error,
+                        reason => already_started
+                    }, #{ site => Site }),
                     {ok, SiteStatus#site_status{
                         pid = Pid
                     }};
-                {error, _} = Error ->
-                    lager:error("Site start of ~p failed: ~p",
-                                [Site, Error]),
+                {error, Reason} = Error ->
+                    ?LOG_ERROR(#{
+                        text => "Site start failed",
+                        result => error,
+                        reason => Reason
+                    }, #{ site => Site }),
                     Error
             end;
         false ->
@@ -794,8 +806,11 @@ handle_down(MRef, Pid, Reason, #state{ site_monitors = Ms } = State) ->
             Sites1 = do_site_down(Site, Reason, State1#state.sites),
             State1#state{ sites = Sites1 };
         error ->
-            lager:warning("'DOWN' with reason ~p for unknown site",
-                          [Reason]),
+            ?LOG_WARNING(#{
+                text => <<"'DOWN' for unknown site">>,
+                result => error,
+                reason => Reason
+            }),
             State
     end.
 
@@ -815,15 +830,19 @@ do_site_down(Site, Reason, Sites) ->
             z_sites_dispatcher:update_dispatchinfo(),
             Sites#{ Site => Status2 };
         error ->
-            lager:warning("'DOWN' for site ~p with reason ~p, but no site status found",
-                          [Site, Reason]),
+            ?LOG_WARNING(#{
+                text => <<"'DOWN' for site, but no site status found">>,
+                site => Site,
+                result => error,
+                reason => Reason
+            }),
             Sites
     end.
 
 new_status_after_down(_Site, stopping, shutdown) ->
     stopped;
 new_status_after_down(Site, Status, Reason) ->
-    lager:error("Site ~p in state ~p is down with reason ~p",
+    ?LOG_ERROR("Site ~p in state ~p is down with reason ~p",
                 [Site, Status, Reason]),
     failed.
 
@@ -876,7 +895,7 @@ do_reload_site_config(Site, Sites) ->
                     {ok, Sites}
             end;
         error ->
-            lager:info("Requested to reload site config from unknown site ~p", [Site]),
+            ?LOG_INFO("Requested to reload site config from unknown site ~p", [Site]),
             {error, bad_name}
     end.
 
@@ -998,7 +1017,7 @@ scan_app(App) ->
                     Map1 = Map#{ site => App },
                     {true, to_list(Map1)};
                 {error, Reason} ->
-                    lager:error("Error reading config files for ~p: ~p", [ App, Reason ]),
+                    ?LOG_ERROR("Error reading config files for ~p: ~p", [ App, Reason ]),
                     false
             end
     end.
@@ -1140,7 +1159,7 @@ is_testsandbox_node() ->
 
 %% @doc Handle the load of a module by the code_server, maybe reattach observers.
 do_load_module(Module, State) ->
-    lager:debug("z_sites_manager: reloading ~p", [Module]),
+    ?LOG_DEBUG("z_sites_manager: reloading ~p", [Module]),
     do_load_module(is_running_site(Module, State), is_module(Module), Module, State).
 
 do_load_module(true, _IsModule, Site, _State) ->

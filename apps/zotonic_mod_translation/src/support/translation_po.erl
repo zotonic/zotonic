@@ -21,6 +21,8 @@
 
 -export([generate/1]).
 
+-include_lib("kernel/include/logger.hrl").
+
 
 %% @doc Take the list of found labels per module and generate all po files for those labels in the module directories.
 -spec generate([{ModuleName :: atom(), Dirname :: file:filename_all(), Labels :: list()}]) -> ok.
@@ -39,7 +41,7 @@ generate1([{Module, Dirname, Labels}|ModuleLabels]) ->
             generate_po_files(Module, Dir, Labels),
             generate1(ModuleLabels);
         {error, Reason} ->
-            lager:warning("Could not create directory for extracted translations: ~p ~p", [{error, Reason}, Dir]),
+            ?LOG_WARNING("Could not create directory for extracted translations: ~p ~p", [{error, Reason}, Dir]),
             generate1(ModuleLabels)
     end.
 

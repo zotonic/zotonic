@@ -112,7 +112,8 @@ An ``{% image id mediaclass="masthead" %}`` tag in your template will output::
 
     <img src='image-default.jpg'
         sizes='100vw'
-        srcset='image-640.jpg 640w, image-1200.jpg 1200w, image-2400.jpg 2x'>
+        srcset='image-640.jpg 640w, image-1200.jpg 1200w, image-2400.jpg 2x'
+        class="mediaclass-masthead">
 
 Each ``srcset`` value is either a `width descriptor`_ or a pixel density
 descriptor.

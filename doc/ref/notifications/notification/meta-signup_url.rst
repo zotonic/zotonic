@@ -5,7 +5,7 @@ signup_url
 
 Handle a signup of a user, return the follow on page for after the signup. 
 Return ``{ok, Url}`` 
-'props' is a proplist with properties for the person resource (email, name, etc) 
+'props' is a map with properties for the person resource (email, name, etc) 
 'signup_props' is a proplist with 'identity' definitions and optional follow on url 'ready_page' 
 An identity definition is {Kind, Identifier, IsUnique, IsVerified} 
 
@@ -17,5 +17,5 @@ Return:
     
 
 ``#signup_url{}`` properties:
-    - props: ``list``
+    - props: ``map``
     - signup_props: ``list``

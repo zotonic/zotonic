@@ -56,10 +56,10 @@ init(Args) ->
     {module, Module} = proplists:lookup(module, Args),
     {context, Context} = proplists:lookup(context, Args),
     Site = z_context:site(Context),
-    lager:md([
-            {site, Site},
-            {module, Module}
-        ]),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     {ok, #state{module=Module, site=Site}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |

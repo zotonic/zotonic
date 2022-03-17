@@ -84,7 +84,7 @@ user_data({error, _} = Error, _AccessToken, _Args) ->
 auth_user(TWProps, AccessToken, Args) ->
     TwitterUserId = maps:get(<<"id_str">>, TWProps),
     TwitterUserName = maps:get(<<"screen_name">>, TWProps),
-    lager:debug("[twitter] Authenticating ~p ~p", [TwitterUserId, TWProps]),
+    ?LOG_DEBUG("[twitter] Authenticating ~p ~p", [TwitterUserId, TWProps]),
     Name = maps:get(<<"name">>, TWProps),
     [ NameFirst, NameLast ] = split_name(Name),
     PersonProps = #{

@@ -4,6 +4,8 @@
 
 -define(TESTTIME, 15000).
 
+-include_lib("kernel/include/logger.hrl").
+
 
 connect() ->
     {ok, Conn} = epgsql:connect("localhost", "zotonic", "",
@@ -38,7 +40,7 @@ test() ->
 
 test(Fun, Name, Conn, Sql, Args) ->
     {result, Count} = Fun(Conn, Sql, Args, ?TESTTIME),
-    lager:info("~p test result: ~p queries in ~p ms (~s)", [Name, Count, ?TESTTIME, Sql]).
+    ?LOG_INFO("~p test result: ~p queries in ~p ms (~s)", [Name, Count, ?TESTTIME, Sql]).
 
 
 test_squery(Conn, Sql, _Args, Time) ->

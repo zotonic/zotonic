@@ -120,10 +120,10 @@ start_http_listeners() ->
 
 %% @doc Start IPv4 HTTP listeners
 start_http_listeners_ip4(none, _Port) ->
-    lager:warning("HTTP IPv4 server disabled: 'listen_ip' is set to 'none'"),
+    ?LOG_WARNING("HTTP IPv4 server disabled: 'listen_ip' is set to 'none'"),
     ok;
 start_http_listeners_ip4(_WebIp, none) ->
-    lager:warning("HTTP IPv4 server disabled: listen_port is set to 'none'"),
+    ?LOG_WARNING("HTTP IPv4 server disabled: listen_port is set to 'none'"),
     ok;
 start_http_listeners_ip4(WebIp, WebPort) ->
     WebOpt = case WebIp of
@@ -145,27 +145,47 @@ start_http_listeners_ip4(WebIp, WebPort) ->
         cowboy_options())
     of
         {ok, _} ->
-            lager:info("HTTP IPv4 server listening on ~s:~p", [ip_to_string(WebIp), WebPort]),
+            ?LOG_NOTICE(#{
+                text => "HTTP IPv4 server listening",
+                ip => ip_to_string(WebIp),
+                port => WebPort,
+                protocol => http
+            }),
             ok;
         {error, {already_started, _Pid}} ->
-            lager:info("HTTP IPv4 server listening on ~s:~p", [ip_to_string(WebIp), WebPort]),
+            ?LOG_NOTICE(#{
+                text => "HTTP IPv4 server listening",
+                ip => ip_to_string(WebIp),
+                port => WebPort,
+                protocol => http
+            }),
             ok;
         {error, eaddrinuse} ->
-            lager:error("HTTP IPv4 server not started. Address in use on ~s:~p",
-                        [ ip_to_string(WebIp), WebPort ]),
+            ?LOG_ERROR(#{
+                text => "HTTP IPv4 server not started. Address in use.",
+                reason => eaddrinuse,
+                ip => ip_to_string(WebIp),
+                port => WebPort,
+                protocol => http
+            }),
             {error, eaddrinuse};
         {error, Reason} ->
-            lager:error("HTTP IPv4 server not started. Error ~p on ~s:~p",
-                        [ Reason, ip_to_string(WebIp), WebPort ]),
+            ?LOG_ERROR(#{
+                text => "HTTP IPv4 server not started",
+                reason => Reason,
+                ip => ip_to_string(WebIp),
+                port => WebPort,
+                protocol => http
+            }),
             {error, Reason}
     end.
 
 %% @doc Start IPv4 HTTPS listeners
 start_https_listeners_ip4(none, _SSLPort) ->
-    lager:info("HTTPS IPv4 server disabled: 'ssl_listen_ip' is set to 'none'"),
+    ?LOG_WARNING("HTTPS IPv4 server disabled: 'ssl_listen_ip' is set to 'none'"),
     ok;
 start_https_listeners_ip4(_WebIp, none) ->
-    lager:info("HTTPS IPv4 server disabled: 'ssl_listen_port' is set to 'none'"),
+    ?LOG_WARNING("HTTPS IPv4 server disabled: 'ssl_listen_port' is set to 'none'"),
     ok;
 start_https_listeners_ip4(WebIp, SSLPort) ->
     WebOpt = case WebIp of
@@ -188,18 +208,38 @@ start_https_listeners_ip4(WebIp, SSLPort) ->
         cowboy_options())
     of
         {ok, _} ->
-            lager:info("HTTPS IPv4 server listening on ~s:~p", [ip_to_string(WebIp), SSLPort]),
+            ?LOG_NOTICE(#{
+                text => "HTTPS IPv4 server listening",
+                ip => ip_to_string(WebIp),
+                port => SSLPort,
+                protocol => https
+            }),
             ok;
         {error, {already_started, _Pid}} ->
-            lager:info("HTTPS IPv4 server listening on ~s:~p", [ip_to_string(WebIp), SSLPort]),
+            ?LOG_NOTICE(#{
+                text => "HTTPS IPv4 server listening",
+                ip => ip_to_string(WebIp),
+                port => SSLPort,
+                protocol => https
+            }),
             ok;
         {error, eaddrinuse} ->
-            lager:error("HTTPS IPv4 server not started. Address in use on ~s:~p",
-                        [ ip_to_string(WebIp), SSLPort ]),
+            ?LOG_ERROR(#{
+                text => "HTTPS IPv4 server not started. Address in use.",
+                reason => eaddrinuse,
+                ip => ip_to_string(WebIp),
+                port => SSLPort,
+                protocol => https
+            }),
             {error, eaddrinuse};
         {error, Reason} ->
-            lager:error("HTTPS IPv4 server not started. Error ~p on ~s:~p",
-                        [ Reason, ip_to_string(WebIp), SSLPort ]),
+            ?LOG_ERROR(#{
+                text => "HTTPS IPv4 server not started",
+                reason => Reason,
+                ip => ip_to_string(WebIp),
+                port => SSLPort,
+                protocol => https
+            }),
             {error, Reason}
     end.
 
@@ -229,18 +269,38 @@ start_http_listeners_ip6(WebIp, WebPort) ->
         cowboy_options())
     of
         {ok, _} ->
-            lager:info("HTTP IPv6 server listening on ~s:~p", [ ip_to_string(WebIp), WebPort ]),
+            ?LOG_NOTICE(#{
+                text => "HTTP IPv6 server listening",
+                ip => ip_to_string(WebIp),
+                port => WebPort,
+                protocol => http
+            }),
             ok;
         {error, {already_started, _Pid}} ->
-            lager:info("HTTP IPv6 server listening on ~s:~p", [ ip_to_string(WebIp), WebPort ]),
+            ?LOG_NOTICE(#{
+                text => "HTTP IPv6 server listening",
+                ip => ip_to_string(WebIp),
+                port => WebPort,
+                protocol => http
+            }),
             ok;
         {error, eaddrinuse} ->
-            lager:error("HTTP IPv6 server not started. Address in use on ~s:~p",
-                        [ ip_to_string(WebIp), WebPort ]),
+            ?LOG_ERROR(#{
+                text => "HTTP IPv6 server not started. Address in use.",
+                reason => eaddrinuse,
+                ip => ip_to_string(WebIp),
+                port => WebPort,
+                protocol => http
+            }),
             {error, eaddrinuse};
         {error, Reason} ->
-            lager:error("HTTP IPv6 server not started. Error on ~p ~s:~p",
-                        [ Reason, ip_to_string(WebIp), WebPort ]),
+            ?LOG_ERROR(#{
+                text => "HTTP IPv6 server not started",
+                reason => Reason,
+                ip => ip_to_string(WebIp),
+                port => WebPort,
+                protocol => http
+            }),
             {error, Reason}
     end.
 
@@ -271,18 +331,38 @@ start_https_listeners_ip6(WebIp, SSLPort) ->
         cowboy_options())
     of
         {ok, _} ->
-            lager:info("HTTPS IPv6 server listening on ~s:~p", [ip_to_string(WebIp), SSLPort]),
+            ?LOG_NOTICE(#{
+                text => "HTTPS IPv6 server listening",
+                ip => ip_to_string(WebIp),
+                port => SSLPort,
+                protocol => https
+            }),
             ok;
         {error, {already_started, _Pid}} ->
-            lager:info("HTTPS IPv6 server listening on ~s:~p", [ip_to_string(WebIp), SSLPort]),
+            ?LOG_NOTICE(#{
+                text => "HTTPS IPv6 server listening",
+                ip => ip_to_string(WebIp),
+                port => SSLPort,
+                protocol => https
+            }),
             ok;
         {error, eaddrinuse} ->
-            lager:error("HTTPS IPv6 server not started. Address in use on ~p:~p",
-                        [ WebIp, SSLPort ]),
+            ?LOG_ERROR(#{
+                text => "HTTPS IPv6 server not started. Address in use.",
+                reason => eaddrinuse,
+                ip => ip_to_string(WebIp),
+                port => SSLPort,
+                protocol => https
+            }),
             {error, eaddrinuse};
         {error, Reason} ->
-            lager:error("HTTPS IPv6 server not started. Error on ~p ~s:~p",
-                        [ Reason, ip_to_string(WebIp), SSLPort ]),
+            ?LOG_ERROR(#{
+                text => "HTTPS IPv6 server not started",
+                reason => Reason,
+                ip => ip_to_string(WebIp),
+                port => SSLPort,
+                protocol => https
+            }),
             {error, Reason}
     end.
 
@@ -295,6 +375,8 @@ cowboy_options() ->
         stream_handlers => [ cowboy_metrics_h, cowboy_stream_h ],
         request_timeout => ?HTTP_REQUEST_TIMEOUT,
         metrics_callback => fun zotonic_listen_http_metrics:metrics_callback/1,
+        metrics_resp_headers_filter => fun zotonic_listen_http_metrics:resp_headers_filter/1,
+        metrics_req_filter => fun zotonic_listen_http_metrics:req_filter/1,
         env => #{}
     }.
 

@@ -29,7 +29,7 @@ vary(_Params, _Context) -> nocache.
 render(Params, _Vars, Context) ->
     case proplists:get_value(src, Params) of
         undefined ->
-            lager:info("Warning: {% worker %} without 'src' parameter."),
+            ?LOG_WARNING("Warning: {% worker %} without 'src' parameter."),
             {ok, <<>>};
         Src ->
             Context1 = z_context:set_language(undefined, Context),
@@ -48,10 +48,10 @@ render(Params, _Vars, Context) ->
                     BaseUrl, "\",",
                     ArgsJSON, ");"
             ],
+            CspNonce = z_context:csp_nonce(Context),
             {ok, [
-                <<"<script type='text/javascript'>">>,
+                <<"<script type='text/javascript' nonce='">>, CspNonce, <<"'>">>,
                     <<"cotonic.ready.then(function() { ">>, Spawn, <<"});">>,
                 <<"</script>">>
             ]}
     end.
-

@@ -38,7 +38,7 @@ tail(File) ->
                     LogFile = filename:join([ LogDir, File ]),
                     Cmd = "tail -n 500 \"" ++ z_filelib:os_escape(LogFile) ++ "\"",
                     Res = os:cmd(Cmd),
-                    io:format("~s~n", [ Res ]);
+                    io:format("~ts~n", [ Res ]);
                 {error, _} = Error ->
                     zotonic_command:format_error(Error)
             end;

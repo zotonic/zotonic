@@ -26,6 +26,7 @@
 
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
 -include_lib("../include/zotonic_filehandler.hrl").
+-include_lib("kernel/include/logger.hrl").
 
 % Filename patterns for which we don't about unhandled events.
 -define(FILENAMES_NOWARN, <<"(/test/|/priv/ssl/|/dist/|\\.app$)">>).
@@ -68,7 +69,7 @@ map_categorized([], Verb, _Application, _What, _Ext, _Root, _Split, Filename) ->
     case re:run(Filename, ?FILENAMES_NOWARN) of
         {match, _} -> false;
         nomatch ->
-            lager:debug("Unhandled file event '~p' on '~s'", [Verb, Filename])
+            ?LOG_DEBUG("Unhandled file event '~p' on '~s'", [Verb, Filename])
     end,
     false;
 map_categorized([Fun|Other], Verb, Application, What, Ext, Root, Split, Filename) ->

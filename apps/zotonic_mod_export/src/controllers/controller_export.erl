@@ -30,7 +30,7 @@
 
 forbidden(Context) ->
     Context2 = z_context:ensure_qs(Context),
-    z_context:lager_md(Context2),
+    z_context:logger_md(Context2),
     Dispatch = z_context:get(zotonic_dispatch, Context2),
     case z_acl:is_allowed(use, mod_export, Context2) of
         true ->
@@ -49,7 +49,7 @@ content_types_provided(Context) ->
         {ok, ContentType} when is_binary(ContentType); is_tuple(ContentType) ->
             {[ ContentType ], Context};
         {error, Reason} = Error ->
-            lager:error("mod_export error when fetching content type for ~p ~p", [Dispatch, Reason]),
+            ?LOG_ERROR("mod_export error when fetching content type for ~p ~p", [Dispatch, Reason]),
             throw(Error)
     end.
 

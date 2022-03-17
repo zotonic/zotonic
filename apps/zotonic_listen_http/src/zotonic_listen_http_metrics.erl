@@ -19,11 +19,27 @@
 -module(zotonic_listen_http_metrics).
 
 -export([
-    metrics_callback/1
+    metrics_callback/1,
+    req_filter/1,
+    resp_headers_filter/1
 ]).
 
+%% @doc Filter the headers and request to prevent excessive data copying.
+-spec req_filter(cowboy_req:req()) -> map().
+req_filter(#{ headers := Headers }=Req) ->
+    Headers1 = maps:with([<<"referer">>, <<"user-agent">>], Headers),
+    Req1 = maps:with([method, scheme, path, version, peer], Req),
+    Req1#{ headers => Headers1 }.
+
+
+%% @doc We don't use any of the response headers for logging.
+-spec resp_headers_filter(cowboy:http_headers()) -> cowboy:http_headers().
+resp_headers_filter(_Headers) ->
+    #{}.
+
+
 %% @doc Cowboy metrics callback. For docs about the argument see:
-%% https://ninenines.eu/docs/en/cowboy/2.8/manual/cowboy_metrics_h/
+%% https://ninenines.eu/docs/en/cowboy/2.9/manual/cowboy_metrics_h/
 %%
 %% The user_data metrics are added by z_sites_dispatcher, z_cowmachine_middleware
 %% and via z_context:set_req_metrics/2
@@ -39,7 +55,7 @@ metrics_callback(#{
             site := Site
         } = UserData,
         reason := Reason,
-        req := Req,
+        req := Req = #{},
         req_start := ReqStart,
         req_end := ReqEnd,
         req_body_length := ReqBodyLength,
@@ -47,7 +63,7 @@ metrics_callback(#{
         resp_start := RespStart,
         resp_status := RespStatus,
         resp_body_length := RespBodyLength
-    } = _Metrics) when is_map(Req) ->
+    } = _Metrics) ->
     UnitsPerUsec = erlang:convert_time_unit(1, microsecond, native),
     ProcessStart = case ReqBodyEnd of
         undefined -> ReqStart;
@@ -71,13 +87,7 @@ metrics_callback(#{
         undefined -> ok;
         _ -> z_stats:record_count(http, data_out, RespBodyLength, Site)
     end,
-    PeerIP = case maps:get(peer_ip, UserData, undefined) of
-        undefined ->
-            {Peer, _Port} = cowboy_req:peer(Req),
-            Peer;
-        Peer ->
-            Peer
-    end,
+    PeerIP = maps:get(peer_ip, UserData, src(Req)),
     Log = #{
         site => Site,
         reason => Reason,
@@ -100,6 +110,9 @@ metrics_callback(_Metrics) ->
     % Early failure.
     % TODO: Should also be logged.
     ok.
+
+src(#{ peer := {IP, _Port} }) -> IP;
+src(_) -> undefined.
 
 queue('xxx') -> zotonic_http_metrics_normal;
 queue('1xx') -> zotonic_http_metrics_normal;

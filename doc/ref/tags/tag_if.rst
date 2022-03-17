@@ -1,4 +1,4 @@
-
+.. highlight:: django
 .. index:: tag; if
 .. _tag-if:
 
@@ -9,14 +9,14 @@ if
 
 Show a block if the condition is true.
 
-The ``{% if %}`` tag evaluates a variable and if the result is true (boolean true, number unequal to zero, non empty string or a non empty list) then the contents of the if-block are output.  When the if-variable test fails then the optional ``{% elif %}`` blocks are evaluated. When the if and all optional elif variable tests fail, the optional ``{% else %}`` block content is output.
-
-Example:
+The ``{% if %}`` tag evaluates an expression and if the result is true (boolean true, number unequal to zero, non empty string or a non empty list) then the contents of the if-block are output.
 
 .. note::
    Besides the ``{% elif %}`` tag we also support the alias ``{% elseif %}``.
 
-.. code-block:: django
+If the if-test fails then the optional ``{% elif %}`` blocks are evaluated. If both the if-test and all elif-tests fail, then the ``{% else %}`` block contents are output.
+
+Example::
 
    {% if genre == "pop" %}
      Popular music.
@@ -41,6 +41,11 @@ Or for example::
 It is also possible to mix “and” and ”or” in one expression, so this is a valid::
 
    {% if full_moon or daytime and cloudy %}
+
+The evaluation order is: ``and``, ``xor``, and then ``or``. Left to right associative.
+So the above is equivalent to::
+
+   {% if full_moon or (daytime and cloudy) %}
 
 The ”not” operator can be used to negate a boolean value::
 

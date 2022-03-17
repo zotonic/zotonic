@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-21 13:32\n"
+"PO-Revision-Date: 2022-03-15 17:54\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -147,7 +147,7 @@ msgstr "ACL-användargrupp"
 msgid "Access control"
 msgstr "Åtkomstkontroll"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:543
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:544
 msgid "Access control rules"
 msgstr "Regler för åtkomstkontroll"
 
@@ -160,7 +160,7 @@ msgid "Add links to the collaboration group"
 msgstr "Lägga till länkar till samarbete i grupp"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:109./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:110
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:45./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:127./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:158./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:46./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:127./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:158./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
 msgid "All"
 msgstr "Allt"
 
@@ -263,7 +263,7 @@ msgstr "Samarbetsgruppschefer"
 msgid "Collaboration group members"
 msgstr "Samarbetsgruppsmedlemmar"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:539
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:540
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:47
 msgid "Collaboration groups"
 msgstr "Samarbetsgrupper"
@@ -652,7 +652,7 @@ msgstr "Använd publicerade regler"
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "Använd följande URL för att testa åtkomst regler för kontroll innan du publicerar dem."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:534
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:535
 msgid "User groups"
 msgstr "Användargrupper"
 
@@ -891,7 +891,7 @@ msgstr "Är du säker på att du vill avsluta admin-gränssnittet?"
 msgid "Aside"
 msgstr "Åt sidan"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:90
 msgid "Ask google to not index this page"
 msgstr "Be google att inte indexera den här sidan"
 
@@ -1047,7 +1047,7 @@ msgstr "Skapad den"
 msgid "Created:"
 msgstr "Skapad:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:77
 msgid "Customize page slug"
 msgstr "Anpassa sidan slug"
 
@@ -2252,7 +2252,7 @@ msgstr "Arbetsregister"
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:52
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
 msgid "Y-m-d H:i"
-msgstr "Ymd H: i"
+msgstr "Y-m-d H:i"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:6
 msgid "You are editing a:"
@@ -2337,7 +2337,7 @@ msgstr "förbi"
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:22
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:70./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:71./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:76
 msgid "d M Y, H:i"
-msgstr "d MY, H: i"
+msgstr "d M Y, H:i"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:131
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:42
@@ -4290,7 +4290,7 @@ msgstr "Admin-säkerhetskopior"
 msgid "Are you sure you want to revert to this version?"
 msgstr "Är du säker på att du vill återkomma till denna version?"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:49
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:55
 msgid "At any moment you can make a backup of your system."
 msgstr "På något ögonblick du kan göra en säkerhetskopia av ditt system."
 
@@ -4298,7 +4298,7 @@ msgstr "På något ögonblick du kan göra en säkerhetskopia av ditt system."
 msgid "Back to the edit page"
 msgstr "Tillbaka till redigeringssidan"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:67
+#: apps/zotonic_mod_backup/src/mod_backup.erl:68
 msgid "Backup"
 msgstr "Säkerhetskopiering"
 
@@ -4306,7 +4306,7 @@ msgstr "Säkerhetskopiering"
 msgid "Backup &amp; Restore"
 msgstr "Backup &amp; Återställ"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:11
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:12
 msgid "Backup and restore options for your content."
 msgstr "Säkerhetskopiering och återställning alternativ för ditt innehåll."
 
@@ -4334,6 +4334,10 @@ msgstr "Klicka på <b>Lista och återställa en tidigare version</b> för att f�
 msgid "Deleted"
 msgstr "raderade"
 
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
+msgid "Directory"
+msgstr "Katalog"
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
 msgstr "Ladda ner säkerhetskopian"
@@ -4350,7 +4354,7 @@ msgstr "Hjälp om backup &amp; återställa"
 msgid "List and restore an earlier version"
 msgstr "Lista och återställa en tidigare version"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:44
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Gör en daglig backup av databasen och uppladdade filer."
 
@@ -4378,7 +4382,7 @@ msgstr "Revideringar för"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "Välj den säkerhetskopieringsfil du vill ladda upp. Filen måste vara en .bert-fil."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:37
 msgid "Show import/export panel in the admin."
 msgstr "Visa import/export av panel i admin."
 
@@ -4410,23 +4414,23 @@ msgstr "Tyvärr, du har inte behörighet att ändra denna sida."
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Tyvärr, du har inte behörighet att ändra denna sida."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "Start backup now"
 msgstr "Starta säkerhetskopiering nu"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
 msgid "Start database-only backup now"
 msgstr "Starta enbart databas-säkerhetskopiering nu"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
 msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
 msgstr "\"Pg_dump\" - kommandot inte finns i vägen. Ställ in \"pg_dump\" config-tangenten för att vägen till pg_dump och återvända till den här sidan."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:70
 msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
 msgstr "\"Tar\" - kommandot inte finns i vägen. Ställ in \"tar\" config-tangenten för att vägen till tjära och återvända till den här sidan."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:50
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "Backup består av två delar, en för databasen och den uppladdade filer."
 
@@ -4434,7 +4438,7 @@ msgstr "Backup består av två delar, en för databasen och den uppladdade filer
 msgid "This is the version saved on"
 msgstr "Detta är versionen som sparats på"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:81
 msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
 msgstr "Denna webbplats har cloud file store aktiverat, och det är <strong>$1</strong> media filer på systemet som endast lagras i molnet och inte på denna maskin. Dessa filer inte säkerhetskopierades!"
 
@@ -4442,13 +4446,13 @@ msgstr "Denna webbplats har cloud file store aktiverat, och det är <strong>$1</
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "Detta kommer att skriva över din sida med innehåll av backup-fil."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:73
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "Varning"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Warning:"
 msgstr "Varning:"
 
@@ -4456,11 +4460,11 @@ msgstr "Varning:"
 msgid "You are not allowed to see the revisions"
 msgstr "Du får inte ser ändringarna"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:51
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
 msgid "You can have 10 backups, older ones will be deleted automatically."
 msgstr "Du kan ha 10 säkerhetskopior, äldre och kära raderas automatiskt."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Din backup är inte korrekt konfigurerad. Backup modul kommer inte att fungera förrän problemet(s) nedan har lösts:"
 
@@ -4771,7 +4775,7 @@ msgstr "Logga in eller registrera dig för att kommentera"
 
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:40./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:21
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:22./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:16
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log.tpl:38./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:38
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log.tpl:39./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:38
 msgid "Message"
 msgstr "Meddelande"
 
@@ -4965,7 +4969,7 @@ msgstr "Kontroller"
 msgid "Could not fetch tracer output, please try again."
 msgstr "Det gick inte att hämta spårningsutdata. Försök igen."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:246
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:247
 msgid "Development"
 msgstr "Utveckling"
 
@@ -5223,8 +5227,8 @@ msgid "Editor version"
 msgstr "Editor-version"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:13
-msgid "Insert image"
-msgstr "Infoga bild"
+msgid "Insert media"
+msgstr "Sätt i media"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:73
 msgid "Large"
@@ -6078,7 +6082,7 @@ msgstr "Misslyckades"
 msgid "Fatal"
 msgstr "Dödlig"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:44./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:157./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:45./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:157./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
 msgid "Filter"
 msgstr "Filtrera"
 
@@ -6126,7 +6130,7 @@ msgstr "Senaste meddelanden"
 msgid "Most recent user interface events"
 msgstr "De senaste händelserna i användargränssnittet"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:59./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:175./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:59
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:60./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:175./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:59
 msgid "No log messages."
 msgstr "Inga loggmeddelanden."
 
@@ -6188,7 +6192,7 @@ msgstr "Växla icke-personer"
 msgid "User"
 msgstr "Användare"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:41./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:42./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:537
 msgid "User Id"
 msgstr "Användar ID"
@@ -7600,7 +7604,7 @@ msgstr "Bygg om webbplatskarta"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "Bygg om webbplatskartaindex för alla sidor."
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:71
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "Rebuilding the sitemap in the background."
 msgstr "Ombyggnaden av webbplatskartan i bakgrunden."
 
@@ -7620,7 +7624,7 @@ msgstr "Veckovis (standard)"
 msgid "Yearly"
 msgstr "Årlig"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:73
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:74
 msgid "You are not allowed to do this"
 msgstr "Du får inte göra detta"
 
@@ -8327,6 +8331,10 @@ msgstr "Omvänd"
 msgid "Jump to a question on a next page."
 msgstr "Hoppa till en fråga på nästa sida."
 
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:50
+msgid "Jump to this question label (must be on an other page below)"
+msgstr "Hoppa till den här frågeetiketten (måste finnas på en annan sida nedan)"
+
 #: apps/zotonic_mod_survey/src/mod_survey.erl:162
 msgid "Likert"
 msgstr "Likert"
@@ -8475,7 +8483,7 @@ msgstr "Prompt"
 msgid "Question"
 msgstr "Fråga"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
 msgid "Question label"
 msgstr "Frågetikett"
 

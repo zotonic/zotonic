@@ -78,7 +78,7 @@ maybe_move_0x_keys(Context) ->
     case filelib:is_regular(KeyFile) andalso filelib:is_regular(PubFile) of
         true ->
             {NewKey, NewPub} = cert_files(Context),
-            lager:info("Moving old DKIM keys to \"~s\"", [ filename:dirname(NewKey) ]),
+            ?LOG_INFO("Moving old DKIM keys to \"~s\"", [ filename:dirname(NewKey) ]),
             z_filelib:ensure_dir(NewKey),
             {ok, _} = file:copy(KeyFile, NewKey),
             {ok, _} = file:copy(PubFile, NewPub),

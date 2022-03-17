@@ -10,6 +10,6 @@ This is useful in combination with the :ref:`tag-if` tag.
 
 For example::
 
-  {% if value|is_undefined %}The value was undefined{% endif %}
+  {% if value[1]|is_undefined %}The first elemeent of value was undefined{% endif %}
 
-When the value is “” then the output “The value was undefined”.
+If the value is ``[]`` then the output is ``The first elemeent of value was undefined``.

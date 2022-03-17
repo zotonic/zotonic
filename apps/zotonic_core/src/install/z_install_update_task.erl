@@ -51,7 +51,7 @@ init_language(Id, Context) ->
         {ok, Id1} ->
             {delay, 0, [ Id1 ]};
         {error, _} = Error ->
-            lager:error("Error during fixing languages (at id ~p): ~p", [ Id, Error ]),
+            ?LOG_ERROR("Error during fixing languages (at id ~p): ~p", [ Id, Error ]),
             {delay, 3600, [ Id ]}
     end.
 

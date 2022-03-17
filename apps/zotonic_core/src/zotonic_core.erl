@@ -21,6 +21,8 @@
 
 -author('Marc Worrell <marc@worrell.nl>').
 
+-include_lib("kernel/include/logger.hrl").
+
 -export([
     is_zotonic_project/0,
     is_testsandbox/0,
@@ -54,6 +56,7 @@ is_app_available(App) ->
 -spec setup( node() ) -> ok.
 setup(Node) ->
     io:setopts([{encoding, unicode}]),
+    maybe_start_logstasher(),
     assert_schedulers( erlang:system_info(schedulers) ),
     load_applications(),
     set_configs(),
@@ -65,7 +68,6 @@ setup(Node) ->
 %% @doc Load the applications so that their settings are also loaded.
 load_applications() ->
     application:load(setup),
-    application:load(lager),
     application:load(mnesia),
     application:load(filezcache),
     application:load(zotonic_core).
@@ -73,13 +75,25 @@ load_applications() ->
 set_configs() ->
     application:set_env(setup, log_dir, z_config:get(log_dir)),
     application:set_env(setup, data_dir, z_config:get(data_dir)),
-    % Lager should log in the log_dir
-    application:set_env(lager, log_root, z_config:get(log_dir)),
     % Store filezcache data in the cache_dir.
     FileZCache = filename:join([ z_config:get(cache_dir), "filezcache", atom_to_list(node()) ]),
     application:set_env(filezcache, data_dir, filename:join([ FileZCache, "data" ])),
     application:set_env(filezcache, journal_dir, filename:join([ FileZCache, "journal" ])).
 
+maybe_start_logstasher() ->
+    IsLogstasherNeeded = lists:any(
+        fun(#{ module := Module }) ->
+            Module =:= logstasher_h
+        end,
+        logger:get_handler_config()),
+    case IsLogstasherNeeded of
+        true ->
+            application:ensure_all_started(logstasher);
+        false ->
+            ok
+    end.
+
+%% @doc Refuse to start if only 1 scheduler active. Bcrypt needs separate schedulers.
 assert_schedulers(1) ->
     io:format("FATAL: Not enough schedulers, please start with 2 or more schedulers.~nUse: ERLOPTS=\"+S 4:4\" ./bin/zotonic debug~n~n"),
     erlang:halt();
@@ -97,8 +111,8 @@ ensure_mnesia_schema() ->
                 false -> ok = mnesia:create_schema([node()])
             end;
         undefined ->
-            lager:info("No mnesia directory defined, running without persistent email queue and filezcache. "
-                       "To enable persistency, add to erlang.config: {mnesia,[{dir,\"data/mnesia\"}]}"),
+            ?LOG_NOTICE("No mnesia directory defined, running without persistent email queue and filezcache. "
+                        "To enable persistency, add to erlang.config: {mnesia,[{dir,\"data/mnesia\"}]}"),
             ok
     end.
 
@@ -129,7 +143,7 @@ mnesia_data_dir() ->
             application:set_env(mnesia, dir, MnesiaDir),
             {ok, MnesiaDir};
         {error, _} = Error ->
-            lager:error("Could not create mnesia dir \"~s\": ~p",
+            ?LOG_ERROR("Could not create mnesia dir \"~s\": ~p",
                         [MnesiaDir, Error]),
             undefined
     end.

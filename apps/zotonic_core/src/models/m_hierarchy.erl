@@ -90,7 +90,7 @@ m_get([ Name, Id, <<"menu">> | Rest ], _Msg, Context) ->
     end,
     {ok, {V, Rest}};
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 
@@ -273,7 +273,7 @@ save(Name, Tree, Context) ->
                     Name1 = m_rsc:p_no_acl(CatId, name, Context),
                     save_nocheck(Name1, Tree, Context);
                 {error, _} = Error ->
-                    lager:warning("[m_hierarchy] Hierarchy save for unknown category ~p", [Name]),
+                    ?LOG_WARNING("[m_hierarchy] Hierarchy save for unknown category ~p", [Name]),
                     Error
             end;
         false ->

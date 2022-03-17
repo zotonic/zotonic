@@ -150,7 +150,7 @@ handle_call({upload, Offset, Data}, _From, State) ->
         },
         {reply, {ok, state_status(State1)}, State1, ?TIMEOUT}
     catch Type:Error ->
-        lager:error("fileuploader: error uploading ~p bytes to file ~p of ~p bytes: ~p:~p",
+        ?LOG_ERROR("fileuploader: error uploading ~p bytes to file ~p of ~p bytes: ~p:~p",
                     [ size(Data), State#state.filename, State#state.size, Type, Error ]),
         {reply, {error, fatal}, State, 0}
     end.

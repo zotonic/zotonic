@@ -4,6 +4,7 @@ import_resource
 ^^^^^^^^^^^^^^^
 
 An external feed delivered a resource. First handler can import it. 
+Return:: ``{ok, m_rsc:resource_id()}``, ``{error, Reason}``, or ``undefined`` 
 
 
 Type: 

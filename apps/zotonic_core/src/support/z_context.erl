@@ -87,8 +87,8 @@
 
     is_zotonic_arg/1,
 
-    lager_md/1,
-    lager_md/2,
+    logger_md/1,
+    logger_md/2,
 
     client_id/1,
     client_topic/1,
@@ -110,6 +110,9 @@
     tz/1,
     tz_config/1,
     set_tz/2,
+
+    set_csp_nonce/1,
+    csp_nonce/1,
 
     set_resp_header/3,
     set_resp_headers/2,
@@ -804,29 +807,40 @@ q_upload_keepalive(false, Context) ->
     ok.
 
 %% ------------------------------------------------------------------------------------
-%% Set lager metadata for the current process
+%% Set logger metadata for the current process
 %% ------------------------------------------------------------------------------------
 
-lager_md(Context) ->
-    lager_md([], Context).
+-spec logger_md( z:context() | atom() ) -> ok.
+logger_md(Site) when is_atom(Site) ->
+    logger_md(z_context:new(Site));
+logger_md(Context) ->
+    logger_md(#{}, Context).
 
-lager_md(MetaData, #context{} = Context) when is_list(MetaData) ->
+-spec logger_md( map() | list(), z:context() ) -> ok.
+logger_md(MetaData, #context{} = Context) when is_list(MetaData) ->
+    logger_md(maps:from_list(MetaData), Context);
+logger_md(MetaData, #context{} = Context) when is_map(MetaData) ->
     SessionId = case session_id(Context) of
         {ok, Sid} -> Sid;
         {error, _} -> undefined
     end,
-    lager:md([
-            {site, site(Context)},
-            {user_id, Context#context.user_id},
-            {controller, Context#context.controller_module},
-            {dispatch, get(zotonic_dispatch, Context)},
-            {method, m_req:get(method, Context)},
-            {remote_ip, m_req:get(peer, Context)},
-            {is_ssl, m_req:get(is_ssl, Context)},
-            {session_id, SessionId},
-            {req_id, m_req:get(req_id, Context)}
-            | MetaData
-        ]).
+    logger:set_process_metadata(MetaData#{
+        site => site(Context),
+        environment => m_site:environment(Context),
+        user_id => Context#context.user_id,
+        language => language(Context),
+        timezone => tz(Context),
+        controller => Context#context.controller_module,
+        dispatch => get(zotonic_dispatch, Context),
+        method => m_req:get(method, Context),
+        user_agent => m_req:get(user_agent, Context),
+        path => m_req:get(raw_path, Context),
+        remote_ip => m_req:get(peer, Context),
+        is_ssl => m_req:get(is_ssl, Context),
+        session_id => SessionId,
+        correlation_id => m_req:get(req_id, Context),
+        node => node()
+    }).
 
 %% ------------------------------------------------------------------------------------
 %% Set/get/modify state properties
@@ -1018,7 +1032,7 @@ set_tz(Tz, Context) when is_binary(Tz), Tz =/= <<>> ->
         true ->
             Context#context{ tz = Tz };
         false ->
-            lager:info("Dropping unknown timezone: ~p", [ Tz ]),
+            ?LOG_INFO("Dropping unknown timezone: ~p", [ Tz ]),
             Context
     end;
 set_tz(true, Context) ->
@@ -1028,8 +1042,32 @@ set_tz(1, Context) ->
 set_tz(0, Context) ->
     Context;
 set_tz(Tz, Context) ->
-    lager:error("Unknown timezone ~p", [Tz]),
+    ?LOG_ERROR("Unknown timezone ~p", [Tz]),
     Context.
+
+
+%% @doc Set the Content-Security-Policy nonce for the request.
+-spec set_csp_nonce( z:context() ) -> z:context().
+set_csp_nonce(Context) ->
+    case get(csp_nonce, Context) of
+        undefined ->
+            Nonce = z_ids:id(),
+            set(csp_nonce, Nonce, Context);
+        Nonce when is_binary(Nonce) ->
+            Context
+    end.
+
+%% @doc Return the Content-Security-Policy nonce for the request.
+-spec csp_nonce( z:context() ) -> binary().
+csp_nonce(Context) ->
+    case get(csp_nonce, Context) of
+        undefined ->
+            ?LOG_WARNING("csp_nonce requested but not set"),
+            <<>>;
+        Nonce when is_binary(Nonce) ->
+            Nonce
+    end.
+
 
 %% @doc Set a response header for the request in the context.
 -spec set_resp_header(binary(), binary(), z:context()) -> z:context().
@@ -1123,10 +1161,13 @@ set_nocache_headers(Context = #context{cowreq=Req}) when is_map(Req) ->
 %%      'security_headers' notification.
 -spec set_security_headers( z:context() ) -> z:context().
 set_security_headers(Context) ->
-    Default = [ {<<"x-xss-protection">>, <<"1">>},
-                {<<"x-content-type-options">>, <<"nosniff">>},
-                {<<"x-permitted-cross-domain-policies">>, <<"none">>},
-                {<<"referrer-policy">>, <<"origin-when-cross-origin">>} ],
+    Default = [
+        % {<<"content-security-policy">>, <<"script-src 'self' 'nonce-'">>}
+        {<<"x-xss-protection">>, <<"1">>},
+        {<<"x-content-type-options">>, <<"nosniff">>},
+        {<<"x-permitted-cross-domain-policies">>, <<"none">>},
+        {<<"referrer-policy">>, <<"origin-when-cross-origin">>}
+    ],
     Default1 = case z_context:get(allow_frame, Context, false) of
         true -> Default;
         false -> [ {<<"x-frame-options">>, <<"sameorigin">>} | Default ]
@@ -1139,7 +1180,21 @@ set_security_headers(Context) ->
         undefined -> HSTSHeaders;
         Custom -> Custom
     end,
-    cowmachine_req:set_resp_headers(SecurityHeaders, Context).
+    SecurityHeaders1 = case proplists:get_value(<<"content-security-policy">>, SecurityHeaders) of
+        undefined ->
+            SecurityHeaders;
+        CSPHdr ->
+            Nonce = csp_nonce(Context),
+            CSPHdr1 = binary:replace(
+                        CSPHdr,
+                        <<"'nonce-'">>,
+                        <<"'nonce-", Nonce/binary, $'>>),
+            [
+                {<<"content-security-policy">>, CSPHdr1}
+                | proplists:delete(<<"content-security-policy">>, SecurityHeaders)
+            ]
+    end,
+    cowmachine_req:set_resp_headers(SecurityHeaders1, Context).
 
 %% @doc Create a hsts header based on the current settings. The result is cached
 %%      for quick access.

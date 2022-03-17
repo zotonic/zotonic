@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-21 13:32\n"
+"PO-Revision-Date: 2022-03-15 17:54\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -147,7 +147,7 @@ msgstr "ACL kullanıcı grubu"
 msgid "Access control"
 msgstr "Erişim kontrolü"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:543
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:544
 msgid "Access control rules"
 msgstr "Kontrol kurallarına erişim"
 
@@ -160,7 +160,7 @@ msgid "Add links to the collaboration group"
 msgstr "İşbirliği grubuna bağlantılar ekleyin"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:109./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:110
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:45./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:127./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:158./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:46./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:127./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:158./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
 msgid "All"
 msgstr "Tümü"
 
@@ -263,7 +263,7 @@ msgstr "İşbirliği grubu yöneticileri"
 msgid "Collaboration group members"
 msgstr "İşbirliği grubu üyeleri"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:539
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:540
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:47
 msgid "Collaboration groups"
 msgstr "İşbirliği grupları"
@@ -652,7 +652,7 @@ msgstr "Yayınlanan kuralları kullanın"
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "Yayınlamadan önce kurallara erişimi test etmek için aşağıdaki URL'yi kullanın."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:534
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:535
 msgid "User groups"
 msgstr "Kullanıcı grupları"
 
@@ -891,7 +891,7 @@ msgstr "Yönetici arayüzünden çıkmak istediğinizden emin misiniz?"
 msgid "Aside"
 msgstr "Yana"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:90
 msgid "Ask google to not index this page"
 msgstr "Google'a bu sayfayı indekslememesini söyleyin"
 
@@ -1047,7 +1047,7 @@ msgstr "Tarihinde oluşturuldu"
 msgid "Created:"
 msgstr "Oluşturuldu:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:77
 msgid "Customize page slug"
 msgstr "Sayfa slug'ını özelleştir"
 
@@ -2252,7 +2252,7 @@ msgstr "İş Rehberi"
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:52
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
 msgid "Y-m-d H:i"
-msgstr "Y-a-g S:d"
+msgstr "Y-m-d H:i"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:6
 msgid "You are editing a:"
@@ -2337,7 +2337,7 @@ msgstr "yazan"
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:22
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:70./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:71./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:76
 msgid "d M Y, H:i"
-msgstr "g A Y, S:d"
+msgstr "d M Y, H:i"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:131
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:42
@@ -4290,7 +4290,7 @@ msgstr "Yönetici Yedeklemeleri"
 msgid "Are you sure you want to revert to this version?"
 msgstr "Bu sürüme geri dönmek istediğinizden emin misini?"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:49
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:55
 msgid "At any moment you can make a backup of your system."
 msgstr "Herhangi bir anda sisteminizin yedeğini oluşturabilirsiniz."
 
@@ -4298,7 +4298,7 @@ msgstr "Herhangi bir anda sisteminizin yedeğini oluşturabilirsiniz."
 msgid "Back to the edit page"
 msgstr "Düzenleme sayfasına geri dön"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:67
+#: apps/zotonic_mod_backup/src/mod_backup.erl:68
 msgid "Backup"
 msgstr "Yedekle"
 
@@ -4306,7 +4306,7 @@ msgstr "Yedekle"
 msgid "Backup &amp; Restore"
 msgstr "Yedekle &amp; Geri Yükle"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:11
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:12
 msgid "Backup and restore options for your content."
 msgstr "İçeriğiniz için yedekleme ve yeniden yükleme seçenekleri."
 
@@ -4334,6 +4334,10 @@ msgstr "Bu sayfanın daha önce kaydedilmiş sürümlerine genel bir bakış iç
 msgid "Deleted"
 msgstr "Silindi"
 
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
+msgid "Directory"
+msgstr "dizin"
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
 msgstr "Yedek dosyasını indir"
@@ -4350,7 +4354,7 @@ msgstr "Yedekleme &amp; geri yükleme hakkında yardım"
 msgid "List and restore an earlier version"
 msgstr "Önceki sürümü listele ve geri yükle"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:44
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Veritabanı ve yüklenen dosyalar için günlük yedekleme oluşturun."
 
@@ -4378,7 +4382,7 @@ msgstr "Şunun için düzeltmeler"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "Yüklemek istediğiniz yedekleme dosyasını seçin. Dosya bir .bert dosyası olmalıdır."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:37
 msgid "Show import/export panel in the admin."
 msgstr "İçe/dışa aktarma panelini yönetimde göster."
 
@@ -4410,23 +4414,23 @@ msgstr "Üzgünüz, bu sayfayı değiştirmek için izne sahip değilsiniz."
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Üzgünüz, bu yapılandırmayı değiştirmek için izne sahip değilsiniz."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "Start backup now"
 msgstr "Yedeklemeye şimdi başla"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
 msgid "Start database-only backup now"
 msgstr "Sadece veritabanı yedeklemesini şimdi başlat"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
 msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
 msgstr "Yolda \"pg_dump\" komutu bulunamadı. Yola pg_dump için \"pg_dump\" yapılandırma anahtarını girin ve bu sayfaya geri dönün."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:70
 msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
 msgstr "Yolda \"tar\" komutu bulunamadı. Yola tar için \"tar\" yapılandırma anahtarını girin ve bu sayfaya geri dönün."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:50
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "Yedek iki bölümden oluşur veritabanı ve yüklenen dosyalar."
 
@@ -4434,7 +4438,7 @@ msgstr "Yedek iki bölümden oluşur veritabanı ve yüklenen dosyalar."
 msgid "This is the version saved on"
 msgstr "Bu kaydedilmiş sürümdür"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:81
 msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
 msgstr "Bu sitede bulut dosyası saklama alanı etkinleştirilmiştir ve sistemde bu makinede değil sadece bulutta saklanmış <strong>$1</strong> medya dosyası var. Bu dosyalar yedeklenmeyecekler!"
 
@@ -4442,13 +4446,13 @@ msgstr "Bu sitede bulut dosyası saklama alanı etkinleştirilmiştir ve sistemd
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "Bu yedek dosyasındaki içeriği sayfanızın üstüne yazacaktır."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:73
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "Uyarı"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Warning:"
 msgstr "Uyarı:"
 
@@ -4456,11 +4460,11 @@ msgstr "Uyarı:"
 msgid "You are not allowed to see the revisions"
 msgstr "Bu revizyonu görmeye yetkiniz yok"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:51
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
 msgid "You can have 10 backups, older ones will be deleted automatically."
 msgstr "10 tane yedek alabilirsiniz, eskiler otomatik olarak silinecektir."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Yedeğiniz doğru olarak yapılandırılmamış. Yedek modülü problem(ler) giderilene kadar çalışmayacaktır:"
 
@@ -4771,7 +4775,7 @@ msgstr "Yorum yapmak için giriş yapın yada kayıt olun"
 
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:40./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:21
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:22./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:16
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log.tpl:38./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:38
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log.tpl:39./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:38
 msgid "Message"
 msgstr "Mesaj"
 
@@ -4965,7 +4969,7 @@ msgstr "Kontrolcü"
 msgid "Could not fetch tracer output, please try again."
 msgstr "İzleme çıktısı alınamadı, lütfen tekrar deneyin."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:246
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:247
 msgid "Development"
 msgstr "Geliştirme"
 
@@ -5223,8 +5227,8 @@ msgid "Editor version"
 msgstr "Editör sürümü"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:13
-msgid "Insert image"
-msgstr "Görüntü ekle"
+msgid "Insert media"
+msgstr "Medya ekle"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:73
 msgid "Large"
@@ -6078,7 +6082,7 @@ msgstr "Başarasız oldu"
 msgid "Fatal"
 msgstr "Önemli"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:44./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:157./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:45./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:157./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
 msgid "Filter"
 msgstr "Filtre"
 
@@ -6126,7 +6130,7 @@ msgstr "En son mesajlar"
 msgid "Most recent user interface events"
 msgstr "En son kullanıcı arayüzü olayları"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:59./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:175./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:59
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:60./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:175./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:59
 msgid "No log messages."
 msgstr "Kayıt mesajı yok."
 
@@ -6188,7 +6192,7 @@ msgstr "İnsan olmayanları değiştir"
 msgid "User"
 msgstr "Kullanıcı"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:41./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:42./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:537
 msgid "User Id"
 msgstr "Kullanıcı kimliği"
@@ -7600,7 +7604,7 @@ msgstr "Site haritasını yeniden oluştur"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "Tüm sayfalar için site haritası dizinini yeniden oluşturun."
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:71
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "Rebuilding the sitemap in the background."
 msgstr "Site haritasının arka planda yeniden oluşturulması."
 
@@ -7620,7 +7624,7 @@ msgstr "Haftalık (varsayılan)"
 msgid "Yearly"
 msgstr "Yıllık"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:73
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:74
 msgid "You are not allowed to do this"
 msgstr "Bunu yapma izniniz yok"
 
@@ -8327,6 +8331,10 @@ msgstr "Ters"
 msgid "Jump to a question on a next page."
 msgstr "Sonraki sayfadaki soruya atlayın."
 
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:50
+msgid "Jump to this question label (must be on an other page below)"
+msgstr "Bu soru etiketine atla (aşağıda başka bir sayfada olmalıdır)"
+
 #: apps/zotonic_mod_survey/src/mod_survey.erl:162
 msgid "Likert"
 msgstr "Likert"
@@ -8475,7 +8483,7 @@ msgstr "İstek"
 msgid "Question"
 msgstr "Soru"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
 msgid "Question label"
 msgstr "Soru etiketi"
 

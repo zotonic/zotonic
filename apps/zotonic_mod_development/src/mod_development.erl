@@ -108,10 +108,10 @@ observe_request_context(#request_context{ phase = _ }, Context, _Context) ->
 init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     Site = z_context:site(Context),
-    lager:md([
-            {site, Site},
-            {module, ?MODULE}
-        ]),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     {ok, #state{site=Site}}.
 
 
@@ -212,8 +212,9 @@ livereload_page(Context) ->
         z_acl:sudo(Context)).
 
 %% @doc Start a listener for a certain kind of debug information, echo it to the target id on the current page.
-start_debug_stream(TargetId, What, Context) ->
-    lager:critical("Debug stream not functional yet"),
+%% @todo Check if we want this for Zotonic 1.0
+start_debug_stream(_TargetId, _What, _Context) ->
+    ?LOG_CRITICAL("Debug stream not functional yet"),
     % Context1 = z_context:prune_for_async(Context),
     % z_session_page:spawn_link(?MODULE, page_debug_stream, [TargetId, What, Context1], Context1).
     ok.
@@ -231,7 +232,7 @@ page_debug_stream_loop(TargetId, What, Context) ->
             done;
         {'$gen_cast', {#debug{what=What, arg=Arg}, _Context}} ->
             %% Update the target id with a dump of this debug message
-            S = io_lib:format("~p: ~p~n", [What, Arg]),
+            _S = io_lib:format("~p: ~p~n", [What, Arg]),
             % z_session_page:add_script(z_render:insert_top(TargetId, S, Context)),
             ?MODULE:page_debug_stream_loop(TargetId, What, Context);
         {'$gen_cast', {#debug{what=_Other}, _Context}} ->

@@ -238,26 +238,26 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                             {ok, {LocalId, ImportedAcc1}};
                         {error, duplicate_page_path} ->
                             PagePath = unique_page_path( maps:get(<<"page_path">>, Rsc), Context ),
-                            lager:warning("Import of duplicate page_path from ~p, new path ~p", [
+                            ?LOG_WARNING("Import of duplicate page_path from ~p, new path ~p", [
                                     Uri, PagePath
                                 ]),
                             Rsc1 = Rsc#{ <<"page_path">> => PagePath },
                             maybe_create_empty(Rsc1, ImportedAcc, Options, Context);
                         {error, duplicate_name} ->
                             Name = unique_name( maps:get(<<"name">>, Rsc), Context ),
-                            lager:warning("Import of duplicate name from ~p, new name ~p", [
+                            ?LOG_WARNING("Import of duplicate name from ~p, new name ~p", [
                                     Uri, Name
                                 ]),
                             Rsc1 = Rsc#{ <<"name">> => Name },
                             maybe_create_empty(Rsc1, ImportedAcc, Options, Context);
                         {error, Reason} = Error ->
-                            lager:info("Not importing menu entry from remote '~s' (category ~p) because of: ~p",
-                                       [ Uri, Cat, Reason ]),
+                            ?LOG_NOTICE("Not importing menu entry from remote '~s' (category ~p) because of: ~p",
+                                        [ Uri, Cat, Reason ]),
                             Error
                     end;
                 {error, Reason} = Error  ->
                     % Unknown category, deny access
-                    lager:info("Not importing menu entry from remote '~s' because of category (~p): ~p",
+                    ?LOG_INFO("Not importing menu entry from remote '~s' because of category (~p): ~p",
                                [ Uri, Reason, Rsc ]),
                     Error
             end;
@@ -494,7 +494,7 @@ fetch_json(Uri, Context) ->
                 {ok, Data} ->
                     {ok, Data};
                 {error, _} = Error ->
-                    lager:warning("Error fetching ~p: ~p", [Uri, Error]),
+                    ?LOG_WARNING("Error fetching ~p: ~p", [Uri, Error]),
                     Error;
                 undefined ->
                     Options = [
@@ -506,7 +506,7 @@ fetch_json(Uri, Context) ->
                             JSON = jsxrecord:decode(Body),
                             {ok, JSON};
                         {error, _} = Error ->
-                            lager:warning("Error fetching ~p: ~p", [Uri, Error]),
+                            ?LOG_WARNING("Error fetching ~p: ~p", [Uri, Error]),
                             Error
                     end
             end
@@ -580,14 +580,14 @@ fetch_preview(Url, Context) ->
 import_data(Id, _Url, #{ <<"status">> := <<"ok">>, <<"result">> := JSON }, ImportedAcc, Options, Context) when is_map(JSON) ->
     import(Id, JSON, ImportedAcc, Options, Context);
 import_data(_Id, Url, #{ <<"status">> := <<"error">> } = JSON, _ImportedAcc, _Options, _Context) ->
-    lager:warning("Remote returned error ~p: ~p", [Url, JSON]),
+    ?LOG_WARNING("Remote returned error ~p: ~p", [Url, JSON]),
     {error, remote};
 import_data(_Id, _Url, #{ <<"rdf_triples">> := [] }, _ImportedAcc, _Options, _Context) ->
     {error, nodoc};
 import_data(Id, Url, #{ <<"rdf_triples">> := _ } = Data, ImportedAcc, Options, Context) ->
     import_rdf(Id, Url, Data, ImportedAcc, Options, Context);
 import_data(_Id, Url, JSON, _ImportedAcc, _Options, _Context) ->
-    lager:warning("JSON with unknown structure ~p: ~p", [Url, JSON]),
+    ?LOG_WARNING("JSON with unknown structure ~p: ~p", [Url, JSON]),
     {error, status}.
 
 import_rdf(OptLocalId, OptUri, #{ <<"rdf_triples">> := Triples } = Data, ImportedAcc, Options, Context) ->
@@ -695,7 +695,7 @@ import(OptLocalId, #{
         <<"uri">> := Uri
     } = JSON, ImportedAcc, Options, Context) ->
 
-    lager:info("Importing ~s (~p)", [ Uri, OptLocalId ]),
+    ?LOG_INFO("Importing ~s (~p)", [ Uri, OptLocalId ]),
 
     RemoteRId = #{
         <<"uri">> => Uri,
@@ -752,7 +752,7 @@ import(OptLocalId, #{
                             end,
                             {ok, {LocalId, ImportedAcc3}};
                         {error, _} = Error ->
-                            lager:info("Importing ~p into ~p gave error ~p", [ Uri, OptLocalId, Error ]),
+                            ?LOG_INFO("Importing ~p into ~p gave error ~p", [ Uri, OptLocalId, Error ]),
                             Error
                     end;
                 {error, _} = Error ->
@@ -763,7 +763,7 @@ import(OptLocalId, #{ <<"rdf_triples">> := _ } = Data, ImportedAcc, Options, Con
     Uri = maps:get(<<"uri">>, Data, m_rsc:p(OptLocalId, uri_raw, Context)),
     import_rdf(OptLocalId, Uri, Data, ImportedAcc, Options, Context);
 import(_OptLocalId, JSON, _ImportedAcc, _Options, _Context) ->
-    lager:warning("Import of JSON without required fields resource and uri: ~p", [JSON]),
+    ?LOG_WARNING("Import of JSON without required fields resource and uri: ~p", [JSON]),
     {error, status}.
 
 
@@ -773,14 +773,14 @@ update_rsc(OptLocalId, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
             OK;
         {error, duplicate_page_path} ->
             PagePath = unique_page_path( maps:get(<<"page_path">>, Rsc), Context ),
-            lager:warning("Import of duplicate page_path for ~p from ~p, new path ~p", [
+            ?LOG_WARNING("Import of duplicate page_path for ~p from ~p, new path ~p", [
                     OptLocalId, RemoteRId, PagePath
                 ]),
             Rsc1 = Rsc#{ <<"page_path">> => PagePath },
             update_rsc(OptLocalId, RemoteRId, Rsc1, ImportedAcc, Options, Context);
         {error, duplicate_name} ->
             Name = unique_name( maps:get(<<"name">>, Rsc), Context ),
-            lager:warning("Import of duplicate name for ~p from ~p, new name ~p", [
+            ?LOG_WARNING("Import of duplicate name for ~p from ~p, new name ~p", [
                     OptLocalId, RemoteRId, maps:get(<<"name">>, Rsc)
                 ]),
             Rsc1 = Rsc#{ <<"name">> => Name },
@@ -1125,7 +1125,7 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium }, _Options, Context)
     % [ sanitize any HTML in the medium record ]
     case z_notifier:first(#media_import_medium{ id = LocalId, medium = Medium }, Context) of
         undefined ->
-            lager:info("Resource import dropped medium record for local id ~p", [ LocalId ]),
+            ?LOG_NOTICE("Resource import dropped medium record for local id ~p", [ LocalId ]),
             {ok, LocalId};
         ok ->
             {ok, LocalId};
@@ -1210,7 +1210,7 @@ import_edges(LocalId, #{ <<"edges">> := Edges }, ImportedAcc, Options, Context) 
                         Acc
                 end;
             (Name, V, Acc) ->
-                lager:warning("Unknown import predicate ~p => ~p", [ Name, V]),
+                ?LOG_WARNING("Unknown import predicate ~p => ~p", [ Name, V]),
                 Acc
         end,
         ImportedAcc,
@@ -1227,7 +1227,7 @@ replace_edges(LocalId, PredId, Os, ImportedAcc, Options, Context) ->
                         {ok, {ObjectId, ImpAcc1}} ->
                             {[ ObjectId | Acc ], ImpAcc1};
                         {error, Reason} ->
-                            lager:debug("Skipping object ~p: ~p", [ Object, Reason ]),
+                            ?LOG_DEBUG("Skipping object ~p: ~p", [ Object, Reason ]),
                             {Acc, ImpAcc}
                     end;
                 {true, ObjectId} ->
@@ -1261,7 +1261,7 @@ find_allowed_predicate(Name, Pred, Options, Context) ->
                 true ->
                     {ok, PredId};
                 false ->
-                    lager:info("Not importing edges with predicate '~s' because they are not allowed.",
+                    ?LOG_NOTICE("Not importing edges with predicate '~s' because they are not allowed.",
                                [ PredName ]),
                     {error, eacces}
             end;
@@ -1317,7 +1317,7 @@ find_allowed_category(RId, Rsc, Options, Context) ->
         true ->
             {ok, CatId};
         false ->
-            lager:info("Not importing a ~p: ~p", [ CatName, RId ]),
+            ?LOG_NOTICE("Not importing a ~p: ~p", [ CatName, RId ]),
             {error, eacces}
     end.
 

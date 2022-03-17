@@ -2,6 +2,8 @@
 
 -compile(export_all).
 
+-include_lib("kernel/include/logger.hrl").
+
 -define(TESTTIME, 15000).
 -define(NUM_WORKERS, 15).
 
@@ -21,7 +23,7 @@ test() ->
 
 test(Fun, Name, Sql, Args, Context) ->
     {result, Count} = do_work(Fun, [Sql, Args, Context], ?NUM_WORKERS, ?TESTTIME),
-    lager:info("~p test result: ~p queries in ~p ms, ~p parallel test runners (~s)", [Name, Count, ?TESTTIME, ?NUM_WORKERS, Sql]).
+    ?LOG_NOTICE("~p test result: ~p queries in ~p ms, ~p parallel test runners (~s)", [Name, Count, ?TESTTIME, ?NUM_WORKERS, Sql]).
 
 test_z_db_q1(Query, Args, Context) ->
     z_db:q1(Query, Args, Context).
@@ -36,7 +38,7 @@ do_work(Fun, Args, N, T) ->
 work_dispatch_loop(Workers, Start, MaxT, Count) ->
     case Count rem 5000 =:= 0 of
         true ->
-            nop;%lager:warning("Pool status: ~p", [poolboy:status(whereis('z_db_pool$zanymeta'))]);
+            nop;%?LOG_WARNING("Pool status: ~p", [poolboy:status(whereis('z_db_pool$zanymeta'))]);
         false -> nop
     end,
 

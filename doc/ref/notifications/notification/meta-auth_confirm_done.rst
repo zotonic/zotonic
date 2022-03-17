@@ -13,4 +13,4 @@ Return:
     
 
 ``#auth_confirm_done{}`` properties:
-none
+    - id: ``m_rsc:resource_id()``

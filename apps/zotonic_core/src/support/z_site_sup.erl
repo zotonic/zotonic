@@ -21,6 +21,8 @@
 
 -behaviour(supervisor).
 
+-include_lib("kernel/include/logger.hrl").
+
 %% External exports
 -export([start_link/1]).
 
@@ -54,10 +56,10 @@ init(Site) ->
     % call. A solution is to decouple the config scanning from
     % the sites supervisor.
     erlang:spawn_link(fun() -> install_phase1(Site) end),
-    lager:md([
-        {site, Site},
-        {module, ?MODULE}
-      ]),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
     z_sites_manager:set_site_status(Site, starting),
     {ok, {{one_for_all, 2, 1}, [
         {z_trans_server,
@@ -109,7 +111,7 @@ wait_for_db(Site) ->
     wait_for_db(Site, 1000).
 
 wait_for_db(Site, 0) ->
-    lager:error("~p: Timeout waiting for database driver", [Site]),
+    ?LOG_ERROR("~p: Timeout waiting for database driver", [Site]),
     {error, timeout};
 wait_for_db(Site, N) ->
     case z_db:has_connection(Site) of
@@ -122,23 +124,22 @@ wait_for_db(Site, N) ->
 
 %% @doc Called by z_installer after the database installation is done.
 %%      We can now start all other site processes.
--spec install_done(list()) -> ok.
-install_done(SiteProps) when is_list(SiteProps) ->
-    {site, Site} = proplists:lookup(site, SiteProps),
+-spec install_done(atom()) -> ok.
+install_done(Site) when is_atom(Site) ->
     Dispatcher = {z_dispatcher,
-                {z_dispatcher, start_link, [SiteProps]},
+                {z_dispatcher, start_link, [Site]},
                 permanent, 5000, worker, dynamic},
 
     SiteServices = {z_site_services_sup,
-                {z_site_services_sup, start_link, [SiteProps]},
+                {z_site_services_sup, start_link, [Site]},
                 permanent, 5000, supervisor, dynamic},
 
     ModuleIndexer = {z_module_indexer,
-                {z_module_indexer, start_link, [SiteProps]},
+                {z_module_indexer, start_link, [Site]},
                 permanent, 5000, worker, dynamic},
 
     ModuleManager = {z_module_manager,
-                {z_module_manager, start_link, [SiteProps]},
+                {z_module_manager, start_link, [Site]},
                 permanent, 5000, worker, dynamic},
 
     PostStartup = {z_site_startup,

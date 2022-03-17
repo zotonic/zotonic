@@ -19,6 +19,7 @@ Other notifications
    notification/dropbox_file
    notification/filewatcher
    notification/hierarchy_updated
+   notification/http_log_access
    notification/language
    notification/m_config_update
    notification/m_config_update_prop
@@ -32,6 +33,7 @@ Other notifications
    notification/output_html
    notification/postback_event
    notification/postback_notify
+   notification/resource_headers
    notification/sanitize_element
    notification/sanitize_embed_url
    notification/scomp_script_render
@@ -42,3 +44,5 @@ Other notifications
    notification/tkvstore_delete
    notification/tkvstore_get
    notification/tkvstore_put
+   notification/url_fetch_options
+   notification/validate_query_args

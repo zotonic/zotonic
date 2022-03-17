@@ -43,6 +43,7 @@
     backup_in_progress/1,
     file_exists/2,
     file_forbidden/2,
+    dir/1,
     check_configuration/0,
     manage_schema/2
 ]).
@@ -368,7 +369,7 @@ pg_dump(Name, Context) ->
                  [] ->
                      ok;
                 Output ->
-                    lager:warning("backup: pg_dump error for ~p: ~s",
+                    ?LOG_WARNING("backup: pg_dump error for ~p: ~s",
                                   [ z_context:site(Context), Output ]),
                     {error, database_archive}
              end,
@@ -397,7 +398,7 @@ archive(Name, Context) ->
                 "" ->
                     ok;
                 Output ->
-                     lager:warning("backup: tar error for ~p: ~s",
+                     ?LOG_WARNING("backup: tar error for ~p: ~s",
                                    [ z_context:site(Context), Output ]),
                      {error, files_archive}
             end;

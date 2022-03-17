@@ -5,16 +5,17 @@ media_upload_props
 
 Notification that a medium file has been uploaded. 
 This is the moment to change properties, modify the file etc. 
+The folded accumulator is the map with updated medium properties. 
 
 
 Type: 
     :ref:`notification-foldl`
 
 Return: 
-    modified ``#media_upload_props{}``
+    modified medium properties map
 
 ``#media_upload_props{}`` properties:
-    - id: ``integer|insert_rsc``
+    - id: ``m_rsc:resource_id()|insert_rsc``
     - mime: ``binary``
     - archive_file: ``file:filename_all()|undefined``
     - options: ``list``

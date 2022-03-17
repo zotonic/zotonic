@@ -281,7 +281,7 @@ try_bearer(Token, Context) ->
             Context;
         {error, Reason} ->
             % Illegal token, maybe throw a 400 here?
-            lager:info("Could not decode OAuth2 token, error ~p for ~p", [ Reason, Token ]),
+            ?LOG_NOTICE("Could not decode OAuth2 token, error ~p for ~p", [ Reason, Token ]),
             Context
     end.
 
@@ -310,7 +310,7 @@ try_token(#{
             z_acl:logon(UserId, Options, Context);
         false ->
             % User is disabled, maybe throw a 403 here?
-            lager:info("Authenticated OAuth2 request for disabled user ~p with token ~p", [ UserId, TokenId ]),
+            ?LOG_NOTICE("Authenticated OAuth2 request for disabled user ~p with token ~p", [ UserId, TokenId ]),
             Context
     end.
 

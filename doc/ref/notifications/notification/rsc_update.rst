@@ -14,9 +14,8 @@ Arguments
     ``props``
         Map with resource properties.
 
-``{IsChanged, UpdateProps}``
-    And/remove resource properties before the update is persisted. Set
-    ``IsChanged`` to ``true`` if you want to modify the ``UpdateProps`` map.
+``{ok, UpdateProps} | {error, Reason}``
+    And/remove resource properties before the update is persisted.
 
 ``Context``
     Site context
@@ -26,6 +25,8 @@ Example
 
 Add a property before the resource is persisted::
 
-    observe_rsc_update(#rsc_update{action = insert, id = Id}, {Modified, Props}, Context) ->
+    observe_rsc_update(#rsc_update{action = insert, id = Id}, {ok, Props}, Context) ->
         %% Set an extra property
-        {true, Props#{ <<"extra_property">> => <<"special value!">> }}.
+        {ok, Props#{ <<"extra_property">> => <<"special value!">> }}.
+    observe_rsc_update(#rsc_update{action = insert, id = Id}, {error, _} = Error, Context) ->
+        Error.

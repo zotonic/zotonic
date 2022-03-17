@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Generates a sitemap.  For now rather crude version that will only work with smaller sites.
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
 -mod_prio(600).
 -mod_depends([seo]).
 -mod_provides([seo_sitemap]).
--mod_schema(2).
+-mod_schema(3).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include("../include/seo_sitemap.hrl").
@@ -68,6 +68,7 @@ event(#postback{ message = sitemap_rebuild }, Context) ->
     of
         true ->
             m_seo_sitemap:rebuild_rsc(Context),
+            z_notifier:notify(seo_sitemap_rebuild, Context),
             z_render:growl(?__("Rebuilding the sitemap in the background.", Context), Context);
         false ->
             z_render:growl(?__("You are not allowed to do this", Context), Context)

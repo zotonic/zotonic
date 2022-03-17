@@ -31,6 +31,7 @@
     ]).
 
 -include_lib("kernel/include/file.hrl").
+-include_lib("kernel/include/logger.hrl").
 
 
 %% @doc API for starting the site supervisor.
@@ -53,7 +54,7 @@ init([]) ->
 restart_watchers() ->
     case z_config:get(filewatcher_enabled) of
         true ->
-            lager:info("Restarting filewatchers"),
+            ?LOG_INFO("Restarting filewatchers"),
             zotonic_filewatcher_fswatch:restart(),
             zotonic_filewatcher_inotify:restart(),
             ok;
@@ -81,7 +82,7 @@ watcher_children(true) ->
     ],
     which_watcher(Watchers);
 watcher_children(false) ->
-    lager:debug("zotonic_filewatcher: disabled"),
+    ?LOG_DEBUG("zotonic_filewatcher: disabled"),
     [
         {zotonic_filewatcher_beam_reloader,
           {zotonic_filewatcher_beam_reloader, start_link, [false]},
@@ -92,9 +93,9 @@ which_watcher([]) ->
     IsScannerEnabled = z_config:get(filewatcher_scanner_enabled),
     case IsScannerEnabled of
         true ->
-            lager:warning("zotonic_filewatcher: please install fswatch or inotify-tools to improve automatic loading of changed files");
+            ?LOG_WARNING("zotonic_filewatcher: please install fswatch or inotify-tools to improve automatic loading of changed files");
         false ->
-            lager:warning("zotonic_filewatcher: please install fswatch or inotify-tools to automatically load changed files")
+            ?LOG_WARNING("zotonic_filewatcher: please install fswatch or inotify-tools to automatically load changed files")
     end,
     % Start the filewatcher process and the beam reloader.
     % If the scanner is enabled then the beam reloader will tell the monitor which

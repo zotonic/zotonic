@@ -29,6 +29,7 @@
                 <select name="type" id="log_severity" class="form-control">
                     <option {% if q.type == 'debug' %}selected{% endif %} value="debug">Debug</option>
                     <option {% if q.type == 'info' %}selected{% endif %} value="info">Info</option>
+                    <option {% if q.type == 'notice' %}selected{% endif %} value="notice">Notice</option>
                     <option {% if not q.type or q.type == 'warning' %}selected{% endif %} value="warning">Warning</option>
                     <option {% if q.type == 'error' %}selected{% endif %} value="error">Error</option>
                 </select>

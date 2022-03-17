@@ -97,7 +97,7 @@ search(Name, Args, Context) when is_binary(Name), is_map(Args) ->
         {ok, z_search:search(Name, Args1, Page, PageLen, Context)}
     catch
         throw:Error ->
-            lager:error("Error in m.search[~p] error: ~p", [{Name, Args}, Error]),
+            ?LOG_ERROR("Error in m.search[~p] error: ~p", [{Name, Args}, Error]),
             {error, Error}
     end.
 
@@ -153,7 +153,7 @@ search_deprecated({Name, Props}, _IsPaged = true, Context) when is_atom(Name), i
         {ok, z_search:search_pager({Name, Props1}, Page, PageLen, Context)}
     catch
         throw:Error ->
-            lager:error("Error in m.search[~p] error: ~p", [{Name, Props}, Error]),
+            ?LOG_ERROR("Error in m.search[~p] error: ~p", [{Name, Props}, Error]),
             {error, Error}
     end;
 search_deprecated({Name, Props}, _IsPaged = false, Context) when is_atom(Name), is_list(Props) ->
@@ -168,7 +168,7 @@ search_deprecated({Name, Props}, _IsPaged = false, Context) when is_atom(Name), 
         {ok, Result1}
     catch
         throw:Error ->
-            lager:error("Error in m.search[~p] error: ~p", [{Name, Props}, Error]),
+            ?LOG_ERROR("Error in m.search[~p] error: ~p", [{Name, Props}, Error]),
             {error, Error}
     end.
 

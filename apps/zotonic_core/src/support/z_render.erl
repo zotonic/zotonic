@@ -232,8 +232,9 @@ render_script(Args, Context) ->
     Script = [ get_script(Context), Extra ],
     case z_utils:get_value(format, Args, <<"html">>) of
         <<"html">> ->
+            CspNonce = z_context:csp_nonce(Context),
             [
-                <<"\n\n<script type='text/javascript'>\n">>,
+                <<"\n\n<script type='text/javascript' nonce='">>, CspNonce, <<"'>\n">>,
                 <<"window.zotonicPageInit = function() {\n">>,
                         Script,
                 <<"\n};\n</script>\n">>
@@ -339,7 +340,7 @@ render_actions(TriggerId, TargetId, {Action, Args}, Context) ->
                 {ok, #module_index{ erlang_module = ActionModule }} ->
                     ActionModule:render_action(Trigger, Target, Args, Context);
                 {error, enoent} ->
-                    lager:info("No action enabled for \"~p\"", [Action]),
+                    ?LOG_WARNING("No action enabled for \"~p\"", [Action]),
                     {[], Context}
             end;
         false ->
@@ -385,7 +386,7 @@ render_validator(TriggerId, TargetId, Args, Context) ->
                                         {ok, #module_index{ erlang_module = Mod }} ->
                                             {ok, Mod};
                                         {error, enoent} ->
-                                            lager:info("No validator found for \"~p\"", [VType])
+                                            ?LOG_WARNING("No validator found for \"~p\"", [VType])
                                     end;
                                 Delegate  ->
                                     {ok, Delegate}

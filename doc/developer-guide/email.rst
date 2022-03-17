@@ -350,9 +350,11 @@ the ``email_receive`` notification.
 
 The code in your module looks like this::
 
+  -include_lib("kernel/include/logger.hrl").
+
   observe_email_received(E, _C) ->
-      lager:warning("Email from: ~p: ~p", [E#email_received.from,
-                                           E#email_received.email#email.subject]),
+      ?LOG_WARNING("Email from: ~p: ~p", [E#email_received.from,
+                                          E#email_received.email#email.subject]),
       ok.
 
 Export this function and then restart your site. Now, send an e-mail
