@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2021 Marc Worrell
+%% @copyright 2014-2022 Marc Worrell
 %% @doc Import media from internet locations.
 
-%% Copyright 2014-2021 Marc Worrell
+%% Copyright 2014-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -32,13 +32,22 @@
 
 -define(EMPTY(A), ((A =:= undefined) orelse (A =:= "") orelse (A =:= <<>>))).
 
-%% @doc Insert a selected #media_import_props{}
--spec insert( #media_import_props{}, z:context() ) -> {ok, m_rsc:resource_id()} | {error, term()}.
+%% @doc Create a resource with a selected #media_import_props{}, URL or embed code.
+-spec insert( MediaImport, Context ) -> {ok, m_rsc:resource_id()} | {error, term()}
+    when MediaImport :: #media_import_props{} | Url,
+         Url :: string() | binary(),
+         Context :: z:context().
 insert(MI, Context) ->
     insert(MI, #{}, Context).
 
-%% @doc Insert a selected #media_import_props{}, add the forced properties to the resource.
--spec insert( #media_import_props{}, map(), z:context() ) -> {ok, m_rsc:resource_id()} | {error, term()}.
+%% @doc Create a resource with a selected #media_import_props{}, URL or embed code.
+%% Add the forced properties to the resource.
+-spec insert( MediaImport, RscProps, Context ) ->
+        {ok, m_rsc:resource_id()} | {error, term()}
+    when MediaImport :: #media_import_props{} | Url,
+         Url :: string() | binary(),
+         RscProps :: #{ binary() => term() },
+         Context :: z:context().
 insert(#media_import_props{medium_props = MI} = MIPs, RscProps, Context) ->
     insert_1(maps:size(MI), MIPs, RscProps, Context).
 
@@ -98,7 +107,28 @@ insert_1(_, #media_import_props{medium_url=MediumUrl} = MI, RscProps, Context) -
     RscProps2 = RscProps1#{
         <<"original_filename">> => maps:get(<<"original_filename">>, MI#media_import_props.medium_props, undefined)
     },
-    m_media:insert_url(MediumUrl, RscProps2, Context).
+    m_media:insert_url(MediumUrl, RscProps2, Context);
+insert_1(Size, Url, RscProps, Context) when is_list(Url); is_binary(Url) ->
+    case url_import_props(Url, Context) of
+        {ok, [ MI | _ ]} ->
+            insert_1(Size, MI, RscProps, Context);
+        {ok, []} ->
+            ?LOG_NOTICE(#{
+                text => <<"Import of url or embed returned no media import definitions.">>,
+                result => warning,
+                reason => no_media_imports,
+                url_or_embed => Url
+            }),
+            {error, nodata};
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                text => <<"Import of url or embed returned error.">>,
+                result => error,
+                reason => Reason,
+                url_or_embed => Url
+            }),
+            Error
+    end.
 
 default_rsc_props(#media_import_props{category=Cat}, RscProps) ->
     maps:merge(
@@ -109,21 +139,47 @@ default_rsc_props(#media_import_props{category=Cat}, RscProps) ->
         RscProps).
 
 
-%% @doc Update a resource with the selected #media_import_props()
-update(RscId, #media_import_props{medium_props=MI} = MIPs, Context) ->
-    update_1(maps:size(MI), RscId, MIPs, Context).
-
+%% @doc Update a resource's medium record with the selected #media_import_props(), URL
+%% or embed code.
+-spec update(RscId, MediaImport, Context) -> {ok, m_rsc:resource_id()} | {error, term()}
+    when RscId :: m_rsc:resource_id(),
+         MediaImport :: #media_import_props{} | Url,
+         Url :: string() | binary(),
+         Context :: z:context().
+update(RscId, #media_import_props{medium_props = MI} = MIPs, Context) ->
+    update_1(maps:size(MI), RscId, MIPs, Context);
+update(RscId, Url, Context) when is_list(Url); is_binary(Url) ->
+    case url_import_props(Url, Context) of
+        {ok, [ MI | _ ]} ->
+            update(RscId, MI, Context);
+        {ok, []} ->
+            ?LOG_NOTICE(#{
+                text => <<"Import of url returned no media import definitions.">>,
+                result => warning,
+                reason => no_media_imports,
+                url => Url
+            }),
+            {error, nodata};
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                text => <<"Import of url returned error.">>,
+                result => error,
+                reason => Reason,
+                url => Url
+            }),
+            Error
+    end.
 
 update_1(_, RscId, #media_import_props{ rsc_props = #{ <<"uri">> := Uri }, importer = rsc_import }, Context) ->
     m_rsc_import:update_medium_uri(RscId, Uri, [], Context);
 update_1(_, RscId, #media_import_props{ importer = Importer } = MI, Context)
     when is_atom(Importer), Importer =/= undefined ->
     Importer:media_import(RscId, MI, #{}, Context);
-update_1(0, RscId, #media_import_props{preview_url=PreviewUrl, medium_url=MediumUrl}, _Context) 
+update_1(0, RscId, #media_import_props{preview_url=PreviewUrl, medium_url=MediumUrl}, _Context)
     when ?EMPTY(PreviewUrl), ?EMPTY(MediumUrl) ->
     % Nothing to do
     {ok, RscId};
-update_1(Sz, RscId, #media_import_props{medium_props=MP, medium_url=MediumUrl} = MI, Context) 
+update_1(Sz, RscId, #media_import_props{medium_props=MP, medium_url=MediumUrl} = MI, Context)
     when Sz > 0, ?EMPTY(MediumUrl) ->
     % Embedded, with optional preview_url
     RscProps = #{

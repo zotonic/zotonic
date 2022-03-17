@@ -133,8 +133,8 @@ exists(Id, Context) ->
 
 
 %% @doc Get the medium record with the id
--spec get( m_rsc:resource_id(), z:context() ) -> z_media_identify:media_info() | undefined.
-get(Id, Context) ->
+-spec get( m_rsc:resource() | undefined, z:context() ) -> z_media_identify:media_info() | undefined.
+get(Id, Context) when is_integer(Id) ->
     F = fun() ->
         case z_db:qmap_props_row(
             "select * from medium where id = $1",
@@ -147,7 +147,11 @@ get(Id, Context) ->
             {error, enoent} -> undefined
         end
     end,
-    z_depcache:memo(F, {medium, Id}, ?WEEK, [Id], Context).
+    z_depcache:memo(F, {medium, Id}, ?WEEK, [Id], Context);
+get(undefined, _Context) ->
+    undefined;
+get(RscId, Context) ->
+    get(m_rsc:rid(RscId, Context), Context).
 
 
 %% @doc Fetch a medium by filename

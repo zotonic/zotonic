@@ -1,10 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2009 Arjan Scherpenisse
-%% Date: 2009-11-08
+%% @copyright 2009-2022 Arjan Scherpenisse
 %% @doc Installing parts of the zotonic datamodel. Installs
 %% predicates, categories and default resources.
 
-%% Copyright 2009 Arjan Scherpenisse
+%% Copyright 2009-2022 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,7 +33,7 @@
 %% called 'installed_by'. This decides whether it can touch it.
 %%
 
--include_lib("zotonic.hrl").
+-include("../../include/zotonic.hrl").
 
 
 %% @doc Reset the state of an imported datamodel, causing all deleted resources to be reimported
@@ -77,7 +76,6 @@ manage_medium(Module, {Name, {EmbedService, EmbedCode}, Props}, Options, Context
             m_media:replace(Id, MediaProps, Context),
             {ok, Id}
     end;
-
 manage_medium(Module, {Name, Filename, Props}, Options, Context) when is_list(Props) ->
     manage_medium(Module, {Name, Filename, z_props:from_props(Props)}, Options, Context);
 manage_medium(Module, {Name, Filename, Props}, Options, Context) ->
@@ -85,8 +83,18 @@ manage_medium(Module, {Name, Filename, Props}, Options, Context) ->
         ok ->
             ok;
         {ok, Id} ->
-            m_media:replace_file(path(Filename, Context), Id, Context),
-            {ok, Id}
+            case manage_resource(Module, {Name, media, Props}, Options, Context) of
+                ok ->
+                    ok;
+                {ok, Id} ->
+                    case is_http_url(Filename) of
+                        true ->
+                            z_media_import:update(Id, Filename, Context);
+                        false ->
+                            m_media:replace_file(path(Filename, Context), Id, Context)
+                    end,
+                    {ok, Id}
+            end
     end.
 
 manage_category(Module, {Name, ParentCategory, Props}, Options, Context) when is_list(Props) ->
@@ -145,9 +153,15 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                                     [{is_import, true}],
                                     Context),
                             ok;
-                        _ ->
+                        OtherModule ->
                             %% Resource exists but is not installed by us.
-                            ?LOG_NOTICE("Resource '~p' (~p) exists but is not managed by ~p.", [Name, Id, Module]),
+                            ?LOG_NOTICE(#{
+                                text => <<"Resource exists but is managed by another module.">>,
+                                name => Name,
+                                rsc_id => Id,
+                                module => Module,
+                                managing_module => OtherModule
+                            }),
                             ok
                     end;
                 {error, {unknown_rsc, _}} ->
@@ -170,7 +184,12 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                                  undefined -> Props4#{ <<"is_dependent">> => false };
                                  _ -> Props4
                              end,
-                    ?LOG_NOTICE("Creating new ~p '~p'", [Category, Name]),
+                    ?LOG_NOTICE(#{
+                        text => <<"Creating new managed resource.">>,
+                        module => Module,
+                        category => Category,
+                        name => Name
+                    }),
                     {ok, Id} = m_rsc_update:update(insert_rsc, Props5, [{is_import, true}], Context),
                     case maps:get(<<"media_url">>, Props5, undefined) of
                         undefined -> nop;
@@ -187,7 +206,12 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                     {ok, Id}
             end;
         {error, _} ->
-            ?LOG_WARNING("Resource '~p' could not be handled because the category ~p does not exist.", [Name, Category]),
+            ?LOG_WARNING(#{
+                text => <<"Managed resource could not be handled because the category does not exist.">>,
+                name => Name,
+                category => Category,
+                module => Module
+            }),
             ok
     end.
 
@@ -236,10 +260,20 @@ map_props(Props) when is_list(Props) ->
 maybe_force_update(K, V, Props, Module, Id, Options, _Context) ->
     case proplists:get_value(force_update, Options, false) of
         true ->
-            ?LOG_NOTICE("~p: ~p of ~p changed in database, forced update.", [Module, K, Id]),
+            ?LOG_NOTICE(#{
+                text => <<"Managed resource property changed in database, updating.">>,
+                rsc_id => Id,
+                property => K,
+                module => Module
+            }),
             Props#{ K => V };
         false ->
-            ?LOG_DEBUG("~p: ~p of ~p changed in database, not updating.", [Module, K, Id]),
+            ?LOG_DEBUG(#{
+                text => <<"Managed resource property changed in database, not updating.">>,
+                rsc_id => Id,
+                property => K,
+                module => Module
+            }),
             Props
     end.
 
@@ -311,3 +345,9 @@ manage_edge(_Module, {SubjectName, PredicateName, ObjectName, EdgeOptions}, _Opt
         _ ->
             skip %% One part of the triple was MIA
     end.
+
+is_http_url("http:" ++ _) -> true;
+is_http_url("https:" ++ _) -> true;
+is_http_url(<<"http:", _/binary>>) -> true;
+is_http_url(<<"https:", _/binary>>) -> true;
+is_http_url(_) -> false.
