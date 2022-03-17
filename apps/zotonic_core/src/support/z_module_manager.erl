@@ -1462,6 +1462,8 @@ call_manage_schema(Module, Current, Target, _Context)
     ?LOG_ERROR(#{
         text => <<"Module downgrades not supported">>,
         module => Module,
+        result => error,
+        reason => module_downgrade_unsupported,
         version_current => Current,
         version_target => Target
     }),
