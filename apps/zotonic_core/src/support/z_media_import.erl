@@ -49,8 +49,28 @@ insert(MI, Context) ->
          RscProps :: #{ binary() => term() },
          Context :: z:context().
 insert(#media_import_props{medium_props = MI} = MIPs, RscProps, Context) ->
-    insert_1(maps:size(MI), MIPs, RscProps, Context).
-
+    insert_1(maps:size(MI), MIPs, RscProps, Context);
+insert(Url, RscProps, Context) when is_list(Url); is_binary(Url) ->
+    case url_import_props(Url, Context) of
+        {ok, [ MI | _ ]} ->
+            insert(MI, RscProps, Context);
+        {ok, []} ->
+            ?LOG_NOTICE(#{
+                text => <<"Import of url or embed returned no media import definitions.">>,
+                result => warning,
+                reason => no_media_imports,
+                url_or_embed => Url
+            }),
+            {error, nodata};
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                text => <<"Import of url or embed returned error.">>,
+                result => error,
+                reason => Reason,
+                url_or_embed => Url
+            }),
+            Error
+    end.
 
 insert_1(_, #media_import_props{ rsc_props = #{ <<"uri">> := Uri }, importer = rsc_import }, RscProps, Context) ->
     Options = [
@@ -107,28 +127,7 @@ insert_1(_, #media_import_props{medium_url=MediumUrl} = MI, RscProps, Context) -
     RscProps2 = RscProps1#{
         <<"original_filename">> => maps:get(<<"original_filename">>, MI#media_import_props.medium_props, undefined)
     },
-    m_media:insert_url(MediumUrl, RscProps2, Context);
-insert_1(Size, Url, RscProps, Context) when is_list(Url); is_binary(Url) ->
-    case url_import_props(Url, Context) of
-        {ok, [ MI | _ ]} ->
-            insert_1(Size, MI, RscProps, Context);
-        {ok, []} ->
-            ?LOG_NOTICE(#{
-                text => <<"Import of url or embed returned no media import definitions.">>,
-                result => warning,
-                reason => no_media_imports,
-                url_or_embed => Url
-            }),
-            {error, nodata};
-        {error, Reason} = Error ->
-            ?LOG_ERROR(#{
-                text => <<"Import of url or embed returned error.">>,
-                result => error,
-                reason => Reason,
-                url_or_embed => Url
-            }),
-            Error
-    end.
+    m_media:insert_url(MediumUrl, RscProps2, Context).
 
 default_rsc_props(#media_import_props{category=Cat}, RscProps) ->
     maps:merge(
