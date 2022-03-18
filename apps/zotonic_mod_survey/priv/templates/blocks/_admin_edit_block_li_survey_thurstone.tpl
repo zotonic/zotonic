@@ -68,7 +68,7 @@
             </thead>
             <tbody id="{{ #answers }}">
                 {% for ans in blk.answer %}
-                    {% include "_admin_block_thurstone_answer.tpl" %}
+                    {% include "_admin_block_thurstone_answer.tpl" n=forloop.counter %}
                 {% empty %}
                     {% include "_admin_block_thurstone_answer.tpl" %}
                 {% endfor %}
@@ -95,7 +95,16 @@
             z_dialog_confirm({
                 text: "{_ Are you sure you want to delete this answer? _}",
                 ok: "{_ Delete _}",
-                on_confirm: function() { $(row).remove(); }
+                on_confirm: function() {
+                    $(row).remove();
+                    $('#{{ #answers }}')
+                        .find('tr')
+                        .each(function(idx, tr) {
+                            $(tr)
+                                .find('input[name="blocks[].answer[].value"')
+                                .attr('placeholder', idx+1)
+                        });
+                }
             });
         });
 
@@ -103,6 +112,11 @@
 
         $('#{{ #answers_add }}').click(function(e) {
             e.preventDefault();
+            const nth = $('#{{ #answers }}').find('tr').length + 1;
+            $('#{{ #answer_tpl }}')
+                .find('input[name="blocks[].answer[].value"')
+                .attr("value", "" + nth)
+                .attr("placeholder", "" + nth);
             $('#{{ #answers }}')
                 .append( $('#{{ #answer_tpl }}').html() )
                 .find('input').prop('disabled', false);

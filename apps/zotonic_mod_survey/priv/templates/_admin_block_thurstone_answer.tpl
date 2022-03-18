@@ -14,7 +14,7 @@
                name="blocks[].answer[].points_int" style="width: 5ch">
     </td>
     <td>
-        <input type="text" class="form-control" value="{{ ans.value }}" name="blocks[].answer[].value">
+        <input type="text" class="form-control" value="{{ ans.value|default:n }}" name="blocks[].answer[].value" placeholder="{{ n }}">
     </td>
     <td>
         {% for code,_lang in m.translation.language_list_editable %}
