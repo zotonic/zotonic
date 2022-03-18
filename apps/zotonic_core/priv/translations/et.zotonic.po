@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-15 17:21\n"
+"PO-Revision-Date: 2022-03-18 17:23\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "Kaugressursi URL -i ei õnnestunud tuua."
 msgid "Forbidden to access the remote resource URL."
 msgstr "Kaugressursi URL -ile juurdepääs on keelatud."
 
-#: apps/zotonic_core/src/support/z_media_import.erl:200
+#: apps/zotonic_core/src/support/z_media_import.erl:255
 msgid "Page Import"
 msgstr "Lehe import"
 
@@ -56,7 +56,7 @@ msgstr "Liiga palju taotlusi kaugserveri jaoks, proovige hiljem uuesti."
 msgid "Unauthorized to access the remote resource URL."
 msgstr "Volitamata juurdepääs kaugressursi URL -ile."
 
-#: apps/zotonic_core/src/support/z_media_import.erl:235
+#: apps/zotonic_core/src/support/z_media_import.erl:290
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
 msgstr "Veebileht"
@@ -4117,8 +4117,8 @@ msgid "The email address associated with your account is"
 msgstr "Sinu kontoga seotud e-mail on"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.password_change_match.tpl:2
-msgid "The new password must be different from the previous one. Please and try again."
-msgstr "Uus parool peab erinema eelmisest. Palun proovige uuesti."
+msgid "The new password must be different from the previous one. Please try again."
+msgstr "Uus parool peab eelmisest erinema. Palun proovi uuesti."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
