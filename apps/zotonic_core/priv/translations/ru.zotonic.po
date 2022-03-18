@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-16 17:49\n"
+"PO-Revision-Date: 2022-03-17 09:15\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4122,11 +4122,11 @@ msgstr "Новый пароль должен отличаться от пред�
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
-msgstr "URL перенаправления для OAuth конфигураций является:"
+msgstr "Конфигурация URL перенаправления для OAuth:"
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:21
 msgid "The signup module is enabled, users authenticating via the services below are automatically signed up."
-msgstr "Модуль регистрации включен, пользователи, аутентифицирующиеся через нижеприведенные сервисы, автоматически регистрируются."
+msgstr "Модуль регистрации включен, пользователи автоматически регистрируются при аутентификации через нижеприведенные сервисы."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:1
 msgid "The two passwords should be equal. Please retype them."
