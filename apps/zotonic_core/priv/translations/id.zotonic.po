@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-15 17:54\n"
+"PO-Revision-Date: 2022-03-18 17:22\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "Tidak dapat mengambil URL sumber daya jarak jauh."
 msgid "Forbidden to access the remote resource URL."
 msgstr "Dilarang mengakses URL sumber daya jarak jauh."
 
-#: apps/zotonic_core/src/support/z_media_import.erl:200
+#: apps/zotonic_core/src/support/z_media_import.erl:255
 msgid "Page Import"
 msgstr "Impor Halaman"
 
@@ -56,7 +56,7 @@ msgstr "Terlalu banyak permintaan untuk server jarak jauh, coba lagi nanti."
 msgid "Unauthorized to access the remote resource URL."
 msgstr "Tidak berwenang untuk mengakses URL sumber daya jarak jauh."
 
-#: apps/zotonic_core/src/support/z_media_import.erl:235
+#: apps/zotonic_core/src/support/z_media_import.erl:290
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
 msgstr "Situs web"
@@ -4116,8 +4116,8 @@ msgid "The email address associated with your account is"
 msgstr "Alamat email yang terkait dengan akun anda"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.password_change_match.tpl:2
-msgid "The new password must be different from the previous one. Please and try again."
-msgstr "Kata sandi baru harus berbeda dari yang sebelumnya. Silakan dan coba lagi."
+msgid "The new password must be different from the previous one. Please try again."
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
