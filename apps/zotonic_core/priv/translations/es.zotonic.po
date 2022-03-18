@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-15 17:21\n"
+"PO-Revision-Date: 2022-03-18 17:23\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "No se pudo recuperar la URL del recurso remoto."
 msgid "Forbidden to access the remote resource URL."
 msgstr "Prohibido acceder a la URL del recurso remoto."
 
-#: apps/zotonic_core/src/support/z_media_import.erl:200
+#: apps/zotonic_core/src/support/z_media_import.erl:255
 msgid "Page Import"
 msgstr "Importación de página"
 
@@ -56,7 +56,7 @@ msgstr "Demasiadas solicitudes para el servidor remoto, inténtelo de nuevo más
 msgid "Unauthorized to access the remote resource URL."
 msgstr "No autorizado para acceder a la URL del recurso remoto."
 
-#: apps/zotonic_core/src/support/z_media_import.erl:235
+#: apps/zotonic_core/src/support/z_media_import.erl:290
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
 msgstr "Sitio web"
@@ -4117,8 +4117,8 @@ msgid "The email address associated with your account is"
 msgstr "La dirección de correo electrónico asociada con su cuenta es"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.password_change_match.tpl:2
-msgid "The new password must be different from the previous one. Please and try again."
-msgstr "La nueva contraseña debe ser diferente a la anterior. Inténtelo de nuevo."
+msgid "The new password must be different from the previous one. Please try again."
+msgstr "La nueva contraseña debe ser diferente a la anterior. Inténtalo de nuevo."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
