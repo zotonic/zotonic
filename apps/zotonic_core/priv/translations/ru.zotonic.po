@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-18 17:30\n"
+"PO-Revision-Date: 2022-03-18 21:32\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4134,7 +4134,7 @@ msgstr "Пароли должны совпадать. Пожалуйста, вв
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:2
 msgid "The two-factor authentication passcode did not match. Please try again."
-msgstr "Код доступа двухфакторной аутентификации не соответствует. Пожалуйста, попробуйте еще раз."
+msgstr "Код доступа двухфакторной аутентификации не совпадает. Пожалуйста, попробуйте еще раз."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:59
 msgid "There was a problem authenticating with"
