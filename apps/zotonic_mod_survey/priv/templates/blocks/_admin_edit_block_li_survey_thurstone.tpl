@@ -28,8 +28,11 @@
                   {_ For quiz or test, mark correct answers with a “*””. E.g. “*value#answer” _}
               </span>
          </label>
+         <!--
          <textarea class="form-control" id="block-{{name}}-answers{{ lang_code_for_id }}" name="blocks[].answers{{ lang_code_with_dollar }}" rows="4"
                 placeholder="{_ Answers, one per line _} ({{ lang_code }})" >{{ blk.answers[lang_code]  }}</textarea>
+
+        -->
       </div>
 
       {% include "_admin_block_test_feedback.tpl" %}
@@ -40,6 +43,73 @@
 {% endblock %}
 
 {% block widget_content_nolang %}
+
+    {% with r_language|default:m.rsc[id].language|default:[z_language] as r_language %}
+    {% with edit_language|default:z_language as edit_language %}
+    {% with edit_language|member:r_language|if:edit_language:(r_language[1]) as edit_language %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width: 5ch">
+                    </th>
+                    <th style="width: 5ch; {% if not blk.is_test %}display:none{% endif %}" class="test-controls">
+                        {_ Correct _}
+                    </th>
+                    <th style="width: 5ch; {% if not blk.is_test %}display:none{% endif %}" class="test-controls">
+                        {_ Points _}
+                    </th>
+                    <th style="width: 15ch">
+                        {_ Stored value _}
+                    </th>
+                    <th>
+                        {_ Answer _}
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="{{ #answers }}">
+                {% for ans in blk.answer %}
+                    {% include "_admin_block_thurstone_answer.tpl" %}
+                {% empty %}
+                    {% include "_admin_block_thurstone_answer.tpl" %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endwith %}
+    {% endwith %}
+    {% endwith %}
+
+    <p>
+        <a id="{{ #answers_add }}" href="#" class="btn btn-default">{_ Add answer _}</a>
+    </p>
+
+    <table style="display: none">
+        <tbody id="{{ #answer_tpl }}">
+            {% include "_admin_block_thurstone_answer.tpl" nosubmit %}
+        </tbody>
+    </table>
+
+    {% javascript %}
+        $('#{{ #answers }}').on('click', 'a[href="#delete-answer"]', function(e) {
+            let row = $(this).closest('tr');
+            e.preventDefault();
+            z_dialog_confirm({
+                text: "{_ Are you sure you want to delete this answer? _}",
+                ok: "{_ Delete _}",
+                on_confirm: function() { $(row).remove(); }
+            });
+        });
+
+        $('#{{ #answer_tpl }}').find('input').prop('disabled', true);
+
+        $('#{{ #answers_add }}').click(function(e) {
+            e.preventDefault();
+            $('#{{ #answers }}')
+                .append( $('#{{ #answer_tpl }}').html() )
+                .find('input').prop('disabled', false);
+        });
+    {% endjavascript %}
+
+
     <div class="row">
         <div class="col-md-6">
             <div class="form-group view-expanded">
