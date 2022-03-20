@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-17 09:15\n"
+"PO-Revision-Date: 2022-03-18 21:32\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "Не удалось получить URL-адрес удаленного
 msgid "Forbidden to access the remote resource URL."
 msgstr "Запрещен доступ к URL-адресу удаленного ресурса."
 
-#: apps/zotonic_core/src/support/z_media_import.erl:200
+#: apps/zotonic_core/src/support/z_media_import.erl:255
 msgid "Page Import"
 msgstr "Импорт страницы"
 
@@ -56,7 +56,7 @@ msgstr "Слишком много запросов к удаленному се�
 msgid "Unauthorized to access the remote resource URL."
 msgstr "Неавторизованный доступ к URL-адресу удаленного ресурса."
 
-#: apps/zotonic_core/src/support/z_media_import.erl:235
+#: apps/zotonic_core/src/support/z_media_import.erl:290
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
 msgstr "Веб-сайт"
@@ -4117,7 +4117,7 @@ msgid "The email address associated with your account is"
 msgstr "Адрес e-mail, соответствующий вашей учетной записи:"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.password_change_match.tpl:2
-msgid "The new password must be different from the previous one. Please and try again."
+msgid "The new password must be different from the previous one. Please try again."
 msgstr "Новый пароль должен отличаться от предыдущего. Пожалуйста, попробуйте еще раз."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
@@ -4134,7 +4134,7 @@ msgstr "Пароли должны совпадать. Пожалуйста, вв
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:2
 msgid "The two-factor authentication passcode did not match. Please try again."
-msgstr "Код доступа двухфакторной аутентификации не соответствует. Пожалуйста, попробуйте еще раз."
+msgstr "Код доступа двухфакторной аутентификации не совпадает. Пожалуйста, попробуйте еще раз."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:59
 msgid "There was a problem authenticating with"

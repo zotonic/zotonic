@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-15 17:54\n"
+"PO-Revision-Date: 2022-03-18 17:31\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "ไม่สามารถดึง URL ทรัพยากรระ�
 msgid "Forbidden to access the remote resource URL."
 msgstr "ห้ามมิให้เข้าถึง URL ทรัพยากรระยะไกล"
 
-#: apps/zotonic_core/src/support/z_media_import.erl:200
+#: apps/zotonic_core/src/support/z_media_import.erl:255
 msgid "Page Import"
 msgstr "นำเข้าหน้า"
 
@@ -56,7 +56,7 @@ msgstr "มีคำขอสำหรับเซิร์ฟเวอร์ร
 msgid "Unauthorized to access the remote resource URL."
 msgstr "ไม่ได้รับอนุญาตในการเข้าถึง URL ทรัพยากรระยะไกล"
 
-#: apps/zotonic_core/src/support/z_media_import.erl:235
+#: apps/zotonic_core/src/support/z_media_import.erl:290
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
 msgstr "เว็บไซต์"
@@ -4117,8 +4117,8 @@ msgid "The email address associated with your account is"
 msgstr "ที่อยู่อีเมลที่เชื่อมโยงกับบัญชีของคุณคือ"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.password_change_match.tpl:2
-msgid "The new password must be different from the previous one. Please and try again."
-msgstr "รหัสผ่านใหม่ต้องแตกต่างจากรหัสก่อนหน้านี้ กรุณาลองใหม่อีกครั้ง"
+msgid "The new password must be different from the previous one. Please try again."
+msgstr "รหัสผ่านใหม่จะต้องแตกต่างจากรหัสผ่านเดิม กรุณาลองอีกครั้ง."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-15 17:20\n"
+"PO-Revision-Date: 2022-03-18 17:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "无法获取远程资源 URL。"
 msgid "Forbidden to access the remote resource URL."
 msgstr "禁止访问远程资源 URL。"
 
-#: apps/zotonic_core/src/support/z_media_import.erl:200
+#: apps/zotonic_core/src/support/z_media_import.erl:255
 msgid "Page Import"
 msgstr "页面导入"
 
@@ -56,7 +56,7 @@ msgstr "对远程服务器的请求过多，请稍后重试。"
 msgid "Unauthorized to access the remote resource URL."
 msgstr "未经授权访问远程资源 URL。"
 
-#: apps/zotonic_core/src/support/z_media_import.erl:235
+#: apps/zotonic_core/src/support/z_media_import.erl:290
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
 msgstr "网站"
@@ -4117,8 +4117,8 @@ msgid "The email address associated with your account is"
 msgstr "与你账户对应的 e-mail 地址是"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.password_change_match.tpl:2
-msgid "The new password must be different from the previous one. Please and try again."
-msgstr "新密码必须与前一个密码不同。请再试一次。"
+msgid "The new password must be different from the previous one. Please try again."
+msgstr "新密码必须与之前的密码不同。请再试一次。"
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
