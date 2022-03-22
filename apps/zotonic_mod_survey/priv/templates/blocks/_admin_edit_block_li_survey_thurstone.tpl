@@ -22,21 +22,17 @@
       </div>
 
       <div class="form-group view-expanded">
-         <label class="control-label">
-              {_ One answer per line. _} {_ If you want to store <i>value</i> but show <i>answer</i>, use value#answer. E.g. <i>2019#Graduated in 2019</i> will store 2019 in the results. _}
-              <span class="test-controls" {% if not blk.is_test %}style="display:none"{% endif %}>
-                  {_ For quiz or test, mark correct answers with a “*””. E.g. “*value#answer” _}
-              </span>
-         </label>
-         <!--
-         <textarea class="form-control" id="block-{{name}}-answers{{ lang_code_for_id }}" name="blocks[].answers{{ lang_code_with_dollar }}" rows="4"
-                placeholder="{_ Answers, one per line _} ({{ lang_code }})" >{{ blk.answers[lang_code]  }}</textarea>
-
-        -->
+        <p class="help-block">
+              {_ Possible answers to choose from. _}
+              {_ The <i>stored value</i> is the resulting value stored for this question. _}
+              {_ The <i>answer</i> is the text shown to the user. _}
+        </p>
+        <p class="help-block test-controls">
+            {_ Check the correct answers and set points for selected answers. _}
+            {_ Use negative points to subtract points. _}
+            {_ The sum of all scored points is never less than 0. _}
+         </p>
       </div>
-
-      {% include "_admin_block_test_feedback.tpl" %}
-
     {% else %}
         <p>{{ blk.prompt[lang_code]  }}</p>
     {% endif %}
@@ -75,13 +71,20 @@
                 {% endfor %}
             </tbody>
         </table>
-    {% endwith %}
-    {% endwith %}
-    {% endwith %}
 
-    <p>
-        <a id="{{ #answers_add }}" href="#" class="btn btn-default">{_ Add answer _}</a>
-    </p>
+        <p>
+            <a id="{{ #answers_add }}" href="#" class="btn btn-default">{_ Add answer _}</a>
+        </p>
+
+        {% for lang_code,_lang in m.translation.language_list_editable %}
+            <div class="widget-content-lang-{{ lang_code }}" {% if lang_code != edit_language %}style="display:none"{% endif %}>
+                {% include "_admin_block_test_feedback.tpl" %}
+            </div>
+        {% endfor %}
+
+    {% endwith %}
+    {% endwith %}
+    {% endwith %}
 
     <table style="display: none">
         <tbody id="{{ #answer_tpl }}">
