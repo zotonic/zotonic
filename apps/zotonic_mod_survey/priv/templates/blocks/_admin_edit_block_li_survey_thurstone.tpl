@@ -105,7 +105,7 @@
                         .find('tr')
                         .each(function(idx, tr) {
                             $(tr)
-                                .find('input[name="blocks[].answer[].value"')
+                                .find('input[name="blocks[].answers[].value"]')
                                 .attr('placeholder', idx+1)
                         });
                 }
@@ -118,12 +118,14 @@
             e.preventDefault();
             const nth = $('#{{ #answers }}').find('tr').length + 1;
             $('#{{ #answer_tpl }}')
-                .find('input[name="blocks[].answer[].value"')
+                .find('input[name="blocks[].answers[].value"]')
                 .attr("value", "" + nth)
                 .attr("placeholder", "" + nth);
             $('#{{ #answers }}')
                 .append( $('#{{ #answer_tpl }}').html() )
                 .find('input').prop('disabled', false);
+            console.log($('#{{ #answer_tpl }}')
+                .find('input[name="blocks[].answers[].value"]'));
         });
     {% endjavascript %}
 

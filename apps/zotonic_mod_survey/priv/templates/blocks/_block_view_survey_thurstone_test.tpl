@@ -10,7 +10,8 @@
         {% with forloop.counter as index %}
             <label class="checkbox">
                 <input id="{{ #thur.index }}" name="{{ blk.name }}" type="checkbox"
-                       value="{{ option.value }}" {% if option.value|member:ans %}checked="checked" {% endif %}
+                       value="{{ option.value|default:index }}"
+                       {% if option.value|member:ans %}checked="checked"{% endif %}
                        {% if blk.is_test_direct %}data-is-correct="{{ option.is_correct }}"{% endif %}
                        data-answer-nr="{{ index }}"
                 >
@@ -43,11 +44,13 @@
             <option></option>
         {% endif %}
     {% for option in props.answers %}
-        <option value="{{ option.value }}"
-                {% if option.value|member:ans %}selected="selected"{% endif %}
-                {% if blk.is_test_direct %}data-is-correct="{{ option.is_correct }}"{% endif %}
-                data-answer-nr="{{ forloop.counter }}"
-        >{{ option.option }}</option>
+        {% with forloop.counter as index %}
+            <option value="{{ option.value|default:index }}"
+                    {% if option.value|member:ans %}selected="selected"{% endif %}
+                    {% if blk.is_test_direct %}data-is-correct="{{ option.is_correct }}"{% endif %}
+                    data-answer-nr="{{ forloop.counter }}"
+            >{{ option.option }}</option>
+        {% endwith %}
     {% endfor %}
     </select>
     {% if blk.is_required %}
@@ -74,7 +77,7 @@
 
     {% for option in props.answers %}
         {% with forloop.counter as index %}
-            <button id="{{ #thur.index }}" name="{{ blk.name }}" value="{{ option.value }}" class="btn" type="submit">
+            <button id="{{ #thur.index }}" name="{{ blk.name }}" value="{{ option.value|default:index }}" class="btn" type="submit">
                 <span></span>{{ option.option }}
             </button>
         {% endwith %}
@@ -85,7 +88,7 @@
     {% for option in props.answers %}
         {% with forloop.counter as index %}
             <label class="radio">
-                <input id="{{ #thur.index }}" name="{{ blk.name }}" type="radio" value="{{ option.value }}"
+                <input id="{{ #thur.index }}" name="{{ blk.name }}" type="radio" value="{{ option.value|default:index }}"
                     {% if option.value|member:ans %}checked="checked" {% endif %}
                     {% if blk.is_test_direct %}data-is-correct="{{ option.is_correct }}"{% endif %}
                     data-answer-nr="{{ index }}"
