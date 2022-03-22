@@ -1,7 +1,7 @@
 /* z.survey_test_feedback js
 ----------------------------------------------------------
 
-Copyright 2017 Marc Worrell
+Copyright 2017-2022 Marc Worrell
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,31 +27,46 @@ $.widget("ui.survey_test_feedback",
             'click',
             'input',
             function(ev) {
-                var $wrap;
-                if ($(this).attr('type') == 'radio') {
-                    $wrap = $(this).closest('div').find('label');
-                } else {
-                    $wrap = $(this).closest('label');
+                let name = $(this).attr('name');
+                let $wrap = $(this).closest('.controls');
+                if ($wrap.length == 0) {
+                    if ($(this).attr('type') == 'radio') {
+                        $wrap = $(this).closest('div').find('label');
+                    } else {
+                        $wrap = $(this).closest('label');
+                    }
                 }
                 self.reset_feedback_icons($wrap);
-                if ($(this).is(':checked')) {
-                    var $icon_wrap = $(this).closest('label');
-                    self.show_feedback($(this), obj, $icon_wrap, 'true');
-                }
+                $wrap.find("input[name=" + name + "]").each(
+                    function(_idx, input) {
+                        let nr = $(input).attr('data-answer-nr');
+                        if ($(input).is(':checked')) {
+                            let $icon_wrap = $(input).closest('label');
+                            self.show_feedback($(input), obj, $icon_wrap, 'true');
+                            $wrap.find(".survey-test-feedback-answer[data-answer-nr=\""+ nr +"\"").show();
+                        }
+                    });
             });
+
         $(obj).on(
-            'click',
+            'change',
             'select',
             function(ev) {
-                var val = $(this).val();
-                var $wrap = $(this).closest('div');
-                self.reset_feedback_icons($wrap);
-
-                if (val !== '') {
-                    var cls = 'survey-q-ok';
-                    var icn = 'fa fa-check';
-                    self.show_feedback($(this), obj, $wrap, val);
+                let $select = $(this);
+                let val = $select.val();
+                let $wrap = $select.closest('.controls');
+                if ($wrap.length == 0) {
+                    $wrap = $select.closest('div');
                 }
+                self.reset_feedback_icons($wrap);
+                $(this).find('option').each(
+                    function(_, option) {
+                        if ($(option).attr('value') == val) {
+                            self.show_feedback($(option), obj, $wrap, 'true', $select);
+                            let nr = $(option).attr('data-answer-nr');
+                            $wrap.find(".survey-test-feedback-answer[data-answer-nr=\""+ nr +"\"").show();
+                        }
+                    });
             });
     },
 
@@ -62,11 +77,14 @@ $.widget("ui.survey_test_feedback",
             .removeClass("survey-q-not-ok")
             .find(".survey-test-feedback-icon")
             .remove();
+        $wrap
+            .find(".survey-test-feedback-answer")
+            .hide();
     },
 
-    show_feedback: function ($elt, obj, $icon_wrap, value) {
-        var cls = 'survey-q-ok';
-        var icn = 'fa fa-check';
+    show_feedback: function ($elt, obj, $icon_wrap, value, after) {
+        let cls = 'survey-q-ok';
+        let icn = 'fa fa-check';
 
         if ($elt.attr('data-is-correct') != value) {
             cls = 'survey-q-not-ok';
@@ -81,8 +99,14 @@ $.widget("ui.survey_test_feedback",
         }
         $icon_wrap
             .addClass("survey-test-feedback")
-            .addClass(cls)
-            .append("<span class='survey-test-feedback-icon'><span class='"+icn+"'></span></span>");
+            .addClass(cls);
+
+        const icon = "<span class='survey-test-feedback-icon'><span class='"+icn+"'></span></span>";
+        if (after) {
+            $(icon).insertAfter(after);
+        } else {
+            $icon_wrap.append(icon);
+        }
     }
 });
 

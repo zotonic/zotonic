@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017 Marc Worrell
+%% @copyright 2017-2022 Marc Worrell
 
-%% Copyright 2017 Marc Worrell
+%% Copyright 2017-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@
     single/4
 ]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Used to format results as fetched from the database
 readable_stored_result(Id, SurveyAnswer, Context) ->
@@ -67,23 +68,77 @@ order_by_blocks(As, [B|Bs], Acc) ->
 question(Name, Answer, Blocks, Context) ->
     Answer1 = answer_noempty(Answer),
     Block = block(Name, Blocks),
-    case z_convert:to_binary(maps:get(<<"type">>, Block)) of
-        <<"survey_country">> ->
-            Country = l10n_iso2country:iso2country(Answer),
+    Type = z_convert:to_binary(maps:get(<<"type">>, Block)),
+    question_1(Type, Answer1, Block, Context).
+
+question_1(<<"survey_country">>, Answer, Block, _Context) ->
+    Country = l10n_iso2country:iso2country(Answer),
+    [
+        {answers, [
             [
-                {answer_value, z_html:escape_check(Answer)},
-                {answer_text, z_html:escape_check(Country)},
-                {question, qprops(Block)}
-            ];
-        <<"survey_", _/binary>> ->
+                {value, escape_check(Answer)},
+                {text, escape_check(Country)}
+            ]
+        ]},
+        % {answer_value, z_html:escape_check(Answer)},
+        % {answer_text, z_html:escape_check(Country)},
+        {question, qprops(Block)}
+    ];
+question_1(<<"survey_yesno">>, Answer, Block, Context) ->
+    Text = case z_convert:to_bool(Answer) of
+        true -> default(maps:get(<<"yes">>, Block, undefined), <<"yes">>, Context);
+        false -> default(maps:get(<<"no">>, Block, undefined), <<"no">>, Context)
+    end,
+    [
+        {answers, [
             [
-                {answer_value, escape_check(Answer1)},
-                {answer_text, escape_check(answer(Answer1, Block, Context))},
-                {question, qprops(Block)}
-            ];
-        _ ->
-            undefined
-    end.
+                {value, escape_check(Answer)},
+                {text, escape_check(Text)}
+            ]
+        ]},
+        % {answer_value, escape_check(Answer)},
+        % {answer_text, escape_check(Text)},
+        {question, qprops(Block)}
+    ];
+question_1(<<"survey_truefalse">>, Answer, Block, Context) ->
+    Text = case z_convert:to_bool(Answer) of
+        true -> default(maps:get(<<"yes">>, Block, undefined), <<"true">>, Context);
+        false -> default(maps:get(<<"no">>, Block, undefined), <<"false">>, Context)
+    end,
+    [
+        {answers, [
+            [
+                {value, escape_check(Answer)},
+                {text, escape_check(Text)}
+            ]
+        ]},
+        % {answer_value, escape_check(Answer)},
+        % {answer_text, escape_check(Text)},
+        {question, qprops(Block)}
+    ];
+question_1(<<"survey_thurstone">>, Answer, Block, Context) ->
+    Block1 = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
+    Ans = maps:get(<<"answers">>, Block1, undefined),
+    Ns = maybe_split(Answer),
+    Answers = case is_list(Ns) of
+        true -> [ thurs_answer(N1, Ans) || N1 <- Ns ];
+        false -> [ thurs_answer(Answer, Ans) ]
+    end,
+    [
+        {answers, Answers},
+        % {answer_value, escape_check(Answer)},
+        % {answer_text, escape_check(Answer)},
+        {question, qprops(Block)}
+    ];
+question_1(<<"survey_", _/binary>>, Answer, Block, _Context) ->
+    [
+        {answer_value, escape_check(Answer)},
+        {answer_text, escape_check(Answer)},
+        {question, qprops(Block)}
+    ];
+question_1(_Type, _Answer, _Block, _Context) ->
+    undefined.
+
 
 escape_check({trans, _} = V) ->
     z_html:escape_check(V);
@@ -116,38 +171,22 @@ block(Name, [B|Rest]) ->
         _ -> block(Name, Rest)
     end.
 
-answer(N, Block, Context) ->
-    answer_1(maps:get(<<"type">>, Block, undefined), N, Block, Context).
+thurs_answer(V, []) ->
+    [
+        {value, escape_check(V)},
+        {text, escape_check(V)}
+    ];
+thurs_answer(V, [#{ <<"value">> := V } = A | _ ]) ->
+    [
+        {value, escape_check(V)},
+        {text, escape_check(maps:get(<<"option">>, A))},
+        {is_correct, maps:get(<<"is_correct">>, A, undefined)},
+        {feedback, maps:get(<<"feedback">>, A, undefined)}
+    ];
+thurs_answer(V, [ _ | Vs ]) ->
+    thurs_answer(V, As).
 
-answer_1(<<"survey_thurstone">>, N, Block, Context) ->
-    Prep = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
-    Ans = maps:get(<<"answers">>, Prep, undefined),
-    Ns = maybe_split(N),
-    case is_list(Ns) of
-        true -> [ thurs_answer(N1, Ans) || N1 <- Ns ];
-        false -> thurs_answer(N, Ans)
-    end;
-answer_1(<<"survey_yesno">>, N, Block, Context) ->
-    case z_convert:to_bool(N) of
-        true -> default(maps:get(<<"yes">>, Block, undefined), <<"yes">>, Context);
-        false -> default(maps:get(<<"no">>, Block, undefined), <<"no">>, Context)
-    end;
-answer_1(<<"survey_truefalse">>, N, Block, Context) ->
-    case z_convert:to_bool(N) of
-        true -> default(maps:get(<<"yes">>, Block, undefined), <<"true">>, Context);
-        false -> default(maps:get(<<"no">>, Block, undefined), <<"false">>, Context)
-    end;
-answer_1(_, N, _, _Context) ->
-    N.
-
-thurs_answer(V, []) -> V;
-thurs_answer(V, [A|As]) ->
-    case maps:get(<<"value">>, A, undefined) of
-        V -> maps:get(<<"option">>, A);
-        _ -> thurs_answer(V, As)
-    end.
-
-default({trans, _} = Tr, A, Context) ->
+default(#trans{} = Tr, A, Context) ->
     case default(z_trans:lookup_fallback(Tr, Context), xx, Context) of
         xx -> A;
         _ -> Tr

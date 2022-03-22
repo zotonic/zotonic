@@ -64,7 +64,7 @@
 
 			{% if not editing or pages > 1 %}
 				{% if not id.survey_is_autostart or page_nr > 1 %}
-					<a id="{{ #cancel }}" href="#" class="btn btn-default">{_ Stop without saving _}</a>
+					<a id="{{ #cancel }}" href="#" class="btn btn-lg btn-default">{_ Stop without saving _}</a>
 					{% if viewer == 'overlay' %}
 						{% wire id=#cancel action={confirm text=_"Are you sure you want to stop without saving?" ok=_"Stop without saving" cancel=_"Continue" action={overlay_close}} %}
 					{% elseif viewer == 'dialog' %}
@@ -74,19 +74,19 @@
 					{% endif %}
 				{% endif %}
 			{% else %}
-				<a id="{{ #cancel }}" href="#" class="btn btn-default">{_ Cancel _}</a>
+				<a id="{{ #cancel }}" href="#" class="btn btn-lg btn-default">{_ Cancel _}</a>
 				{% wire id=#cancel action={dialog_close} %}
 			{% endif %}
 
 			{% if editing %}
-				<button type="submit" class="btn btn-primary">{% if page_nr == pages %}{_ Submit _}{% else %}{_ Next _}{% endif %}</button>
+				<button type="submit" class="btn btn-lg btn-primary">{% if page_nr == pages %}{_ Submit _}{% else %}{_ Next _}{% endif %}</button>
 			{% else %}
 				{% with questions|last as last_q %}
 					{% if not editing and not questions|survey_is_submit and last_q.type /= "survey_stop" %}
 						{% if page_nr == pages %}
-							<button type="submit" class="btn btn-primary survey-submit">{_ Submit _}</button>
+							<button type="submit" class="btn btn-primary btn-lg survey-submit">{_ Submit _}</button>
 						{% else %}
-							<button type="submit" class="btn btn-primary survey-next">{_ Next _}</button>
+							<button type="submit" class="btn btn-primary btn-lg survey-next">{_ Next _}</button>
 						{% endif %}
 					{% endif %}
 				{% endwith %}

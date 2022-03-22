@@ -43,6 +43,7 @@
 {% endblock %}
 
 {% block widget_content_nolang %}
+{% with blk|survey_prepare_thurstone as blk %}
 
     {% with r_language|default:m.rsc[id].language|default:[z_language] as r_language %}
     {% with edit_language|default:z_language as edit_language %}
@@ -67,10 +68,10 @@
                 </tr>
             </thead>
             <tbody id="{{ #answers }}">
-                {% for ans in blk.answer %}
+                {% for ans in blk.answers %}
                     {% include "_admin_block_thurstone_answer.tpl" n=forloop.counter %}
                 {% empty %}
-                    {% include "_admin_block_thurstone_answer.tpl" %}
+                    {% include "_admin_block_thurstone_answer.tpl" n=1 %}
                 {% endfor %}
             </tbody>
         </table>
@@ -163,5 +164,6 @@
             {% include "_admin_block_test_checkbox.tpl" %}
         </div>
     </div>
+{% endwith %}
 {% endblock %}
 

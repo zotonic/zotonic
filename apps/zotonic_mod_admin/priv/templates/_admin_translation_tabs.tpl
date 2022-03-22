@@ -9,18 +9,3 @@
 {% endwith %}
 {% endwith %}
 {% endwith %}
-
-{% javascript %}
-    {# Also switch all elements marked with the given language in the widget #}
-    $('#{{ prefix }}-tabs').on('shown.bs.tab', function(e) {
-        const showLang = e.target.closest('li').getAttribute('lang');
-        const hideLang = e.relatedTarget.closest('li').getAttribute('lang');
-        const widget = e.target.closest('.widget');
-        if (widget) {
-            $(widget).find(".widget-content-lang-" + hideLang).hide();
-            $(widget).find(".widget-content-lang-" + showLang).show();
-        }
-    });
-{% endjavascript %}
-
-
