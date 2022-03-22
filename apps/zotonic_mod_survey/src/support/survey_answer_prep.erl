@@ -183,7 +183,7 @@ thurs_answer(V, [#{ <<"value">> := V } = A | _ ]) ->
         {is_correct, maps:get(<<"is_correct">>, A, undefined)},
         {feedback, maps:get(<<"feedback">>, A, undefined)}
     ];
-thurs_answer(V, [ _ | Vs ]) ->
+thurs_answer(V, [ _ | As ]) ->
     thurs_answer(V, As).
 
 default(#trans{} = Tr, A, Context) ->
