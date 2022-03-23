@@ -7,7 +7,7 @@
     </td>
     <td class="test-controls" {% if not blk.is_test %}style="display: none"{% endif %}>
         <label class="checkbox">
-            <input type="checkbox" class="checkbox" value="1"
+            <input type="checkbox" class="checkbox" style="height:32px;width:32px" value="1"
                    name="blocks[].answers[].is_correct"
                    {% if ans.is_correct %}checked{% endif %}>
             &nbsp;

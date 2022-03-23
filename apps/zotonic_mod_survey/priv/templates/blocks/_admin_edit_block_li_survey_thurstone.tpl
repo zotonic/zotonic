@@ -39,6 +39,32 @@
 {% endblock %}
 
 {% block widget_content_nolang %}
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group view-expanded">
+                <select class="form-control" id="block-{{name}}-input_type" name="blocks[].input_type">
+                  <option value="" {% if not blk.input_type %}selected{% endif %}>{_ Single answer possible _}</option>
+                  <option value="select" {% if blk.input_type == "select" %}selected{% endif %}>{_ Drop-down menu _}</option>
+                  <option value="multi" {% if blk.input_type == "multi" %}selected{% endif %}>{_ Multiple answers possible _}</option>
+                  <option value="submit" {% if blk.input_type == "submit" %}selected{% endif %}>{_ Submit on clicking an option _}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="1" name="blocks[].is_test" id="{{ #is_test }}" {% if blk.is_test %}checked{% endif %} />
+                    {_ Quiz or test question _}
+                </label>
+                {% wire id=#is_test
+                        action={script script="$(this).closest('.block').find('.test-controls').slideToggle();"}
+                %}
+            </div>
+        </div>
+    </div>
+
 {% with blk|survey_prepare_thurstone as blk %}
 
     {% with r_language|default:m.rsc[id].language|default:[z_language] as r_language %}
@@ -133,14 +159,6 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group view-expanded">
-                <select class="form-control" id="block-{{name}}-input_type" name="blocks[].input_type">
-                  <option value="" {% if not blk.input_type %}selected{% endif %}>{_ Single answer possible _}</option>
-                  <option value="select" {% if blk.input_type == "select" %}selected{% endif %}>{_ Drop-down menu _}</option>
-                  <option value="multi" {% if blk.input_type == "multi" %}selected{% endif %}>{_ Multiple answers possible _}</option>
-                  <option value="submit" {% if blk.input_type == "submit" %}selected{% endif %}>{_ Submit on clicking an option _}</option>
-                </select>
-            </div>
-            <div class="form-group view-expanded">
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" id="block-{{name}}-is_random" name="blocks[].is_random" value="1" {% if blk.is_random %}checked="checked"{% endif %} />
@@ -166,7 +184,21 @@
         </div>
 
         <div class="col-md-6">
-            {% include "_admin_block_test_checkbox.tpl" %}
+            <div class="form-group view-expanded survey-test-checkbox">
+                <div class="checkbox">
+                    <label class="test-controls" {% if not blk.is_test %}style="display:none"{% endif %}>
+                        <input type="checkbox" value="1" name="blocks[].is_test_direct" id="{{ #is_test_direct }}" {% if blk.is_test_direct %}checked{% endif %} />
+                        {_ Instant feedback (Learning Mode) _}
+                    </label>
+                </div>
+
+                <div class="checkbox">
+                    <label class="test-controls" {% if not blk.is_test %}style="display:none"{% endif %}>
+                        <input type="checkbox" value="1" name="blocks[].is_test_neg" id="{{ #is_test_neg }}" {% if blk.is_test_neg %}checked{% endif %} />
+                        {_ Subtract points for wrong answers (total never less than 0) _}
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
 {% endwith %}
