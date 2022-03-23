@@ -53,16 +53,9 @@ question_points(<<"survey_thurstone">>, A, #{ <<"is_test">> := true } = Block, C
     Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
     QuestionOptions = maps:get(<<"answers">>, Props, []),
     Answered = make_list(proplists:get_value(answer, A)),
-    AnswerPoints = lists:map(
-        fun(Q) ->
-            V = maps:get(<<"value">>, Q, undefined),
-            Points = z_convert:to_integer(maps:get(<<"points_int">>, Q, 0)),
-            case lists:member(V, Answered) of
-                true -> {V, Points};
-                false -> {V, 0}
-            end
-        end,
-        QuestionOptions),
+    IsNeg = z_convert:to_bool(maps:get(<<"is_test_neg">>, Props, false)),
+    InputType = maps:get(<<"input_type">>, Props, <<>>),
+    AnswerPoints = points(InputType, IsNeg, QuestionOptions, Answered),
     SummedPoints = erlang:max(0, sum(AnswerPoints)),
     A1 = [
         {points, SummedPoints},
@@ -74,6 +67,43 @@ question_points(<<"survey_matching">>, A, _Block, _Context) ->
     {0, A};
 question_points(_Type, A, _Block, _Context) ->
     {0, A}.
+
+
+points(<<"multi">>, IsNeg, QuestionOptions, Answered) ->
+    lists:map(
+        fun(Q) ->
+            Value = maps:get(<<"value">>, Q, undefined),
+            IsCorrect = maps:get(<<"is_correct">>, Q, false),
+            Points = case z_convert:to_integer(maps:get(<<"points_int">>, Q, 1)) of
+                undefined -> 1;
+                Pts -> Pts
+            end,
+            case lists:member(Value, Answered) of
+                true when IsCorrect -> {Value, Points};
+                true when IsNeg -> {Value, -Points};
+                true -> {Value, 0};
+                false when IsCorrect, IsNeg -> {Value, -Points};
+                false when IsCorrect -> {Value, 0};
+                false -> {Value, Points}
+            end
+        end,
+        QuestionOptions);
+points(_InputType, _IsNeg, QuestionOptions, Answered) ->
+    lists:map(
+        fun(Q) ->
+            Value = maps:get(<<"value">>, Q, undefined),
+            IsCorrect = maps:get(<<"is_correct">>, Q, false),
+            Points = case z_convert:to_integer(maps:get(<<"points_int">>, Q, 1)) of
+                undefined -> 1;
+                Pts -> Pts
+            end,
+            case lists:member(Value, Answered) of
+                true when IsCorrect -> {Value, Points};
+                true -> {Value, 0};
+                false -> {Value, 0}
+            end
+        end,
+        QuestionOptions).
 
 sum([]) -> 0;
 sum(L) -> lists:sum([Pt || {_,Pt} <- L]).

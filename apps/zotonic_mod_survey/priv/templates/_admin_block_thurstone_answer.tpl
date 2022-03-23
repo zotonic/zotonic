@@ -3,12 +3,15 @@
     <td>
         {# push new answer entry #}
         <input type="hidden" name="blocks[].answers[]." value="">
-        <a href="#delete-answer" class="btn"><span class="fa fa-trash"</span></a>
+        <a href="#delete-answer" class="btn"><span class="fa fa-trash"></span></a>
     </td>
     <td class="test-controls" {% if not blk.is_test %}style="display: none"{% endif %}>
-        <input type="checkbox" class="form-control" value="1"
-               name="blocks[].answers[].is_correct"
-               {% if ans.is_correct %}checked{% endif %}>
+        <label class="checkbox">
+            <input type="checkbox" class="checkbox" value="1"
+                   name="blocks[].answers[].is_correct"
+                   {% if ans.is_correct %}checked{% endif %}>
+            &nbsp;
+        </label>
     </td>
     <td class="test-controls" {% if not blk.is_test %}style="display: none"{% endif %}>
         <input type="number" class="form-control" value="{{ ans.points_int }}"
