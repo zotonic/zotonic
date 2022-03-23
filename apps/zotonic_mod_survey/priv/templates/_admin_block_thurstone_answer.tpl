@@ -31,7 +31,7 @@
                 <div class="test-controls" {% if not blk.is_test %}style="display: none"{% endif %}>
                     <input class="form-control widget-content-lang-{{ code }}"
                            name="blocks[].answers[].feedback${{ code }}"
-                           placeholder="{_ Feedback if correct _} ({{ code }})"
+                           placeholder="{_ Feedback _} ({{ code }})"
                            value="{{ ans.feedback[code ]}}">
                 </div>
             </div>
