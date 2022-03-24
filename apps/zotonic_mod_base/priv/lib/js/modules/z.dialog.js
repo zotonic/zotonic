@@ -116,6 +116,8 @@
                 $dialog.widgetManager();
             }
             z_editor_add($dialog);
+
+            $('#zmodal').on('hidden.bs.modal', () => $('#zmodal').remove());
         },
 
         dialogClose: function() {

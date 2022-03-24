@@ -131,7 +131,6 @@ function z_dialog_open(options)
 }
 
 function z_dialog_close()
-
 {
     $.dialogClose();
 }
