@@ -89,7 +89,10 @@ prepare_answers_1(Text, Block) ->
     case z_convert:to_bool(maps:get(<<"is_test">>, Block, false)) of
         true ->
             IsTestNeg = z_convert:to_bool(maps:get(<<"is_test_neg">>, Block, false)),
-            TestPoints = z_convert:to_integer(maps:get(<<"test_points">>, Block, 0)),
+            TestPoints = case z_convert:to_integer(maps:get(<<"test_points">>, Block, 0)) of
+                undefined -> 0;
+                TP -> TP
+            end,
             lists:map(
                 fun
                     (#{ <<"is_correct">> := true } = Ans) ->
