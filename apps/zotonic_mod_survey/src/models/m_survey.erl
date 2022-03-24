@@ -721,7 +721,7 @@ answer_prompt(Block) ->
 is_answer_user(AnsId, Context) ->
     is_answer_user(AnsId, z_acl:user(Context), Context).
 
--spec is_answer_user(integer(), integer(), z:context()) -> boolean().
+-spec is_answer_user(integer(), m_rsc:resource_id(), z:context()) -> boolean().
 is_answer_user(AnsId, UserId, Context) when is_integer(UserId) ->
     AnsUserId = z_db:q1("
         select user_id
@@ -742,7 +742,7 @@ answer_user(AnsId, Context) ->
         [AnsId],
         Context).
 
--spec list_results(integer(), z:context()) -> list().
+-spec list_results(m_rsc:resource_id(), z:context()) -> list().
 list_results(SurveyId, Context) when is_integer(SurveyId) ->
     z_db:assoc("
         select *
@@ -753,7 +753,7 @@ list_results(SurveyId, Context) when is_integer(SurveyId) ->
         [SurveyId],
         Context).
 
--spec single_result(integer(), integer(), z:context()) -> list().
+-spec single_result(m_rsc:resource_id(), integer(), z:context()) -> list().
 single_result(SurveyId, AnswerId, Context) when is_integer(SurveyId), is_integer(AnswerId) ->
     case z_db:assoc_props_row("
             select *
@@ -767,6 +767,11 @@ single_result(SurveyId, AnswerId, Context) when is_integer(SurveyId), is_integer
     end.
 
 %% @doc Retrieve the latest survey result for a user or persistent id.
+-spec single_result(SurveyId, UserId, PersistentId, Context ) -> proplists:proplist()
+    when SurveyId :: m_rsc:resource_id(),
+         UserId :: m_rsc:resource_id() | undefined,
+         PersistentId :: binary() | undefined,
+         Context :: z:context().
 single_result(SurveyId, UserId, PersistentId, Context) ->
     {Clause, Arg} = case z_utils:is_empty(UserId) of
                         true -> {"persistent = $2", PersistentId};
@@ -787,6 +792,7 @@ single_result(SurveyId, UserId, PersistentId, Context) ->
     end.
 
 %% @doc Delete all survey results
+-spec delete_results( m_rsc:resource_id(), z:context() ) -> ResultsDeleted:: non_neg_integer().
 delete_results(SurveyId, Context) ->
     z_db:q("
         DELETE FROM survey_answers
@@ -795,6 +801,7 @@ delete_results(SurveyId, Context) ->
         Context).
 
 %% @doc Delete a specific survey results
+-spec delete_result( m_rsc:resource_id(), integer(), z:context() ) -> ResultsDeleted:: non_neg_integer().
 delete_result(SurveyId, ResultId, Context) ->
     case z_db:q_row("select user_id, persistent from survey_answers where id = $1", [ResultId], Context) of
         {UserId, Persistent} ->
@@ -811,6 +818,12 @@ delete_result(SurveyId, ResultId, Context) ->
     end.
 
 %% @doc Delete all survey results for a user or persistent id.
+-spec delete_result( SurveyId, UserId, PersistentId, Context ) -> ResultsDeleted
+    when SurveyId :: m_rsc:resource_id(),
+         UserId :: m_rsc:resource_id() | undefined,
+         PersistentId :: binary() | undefined,
+         Context :: z:context(),
+         ResultsDeleted:: non_neg_integer().
 delete_result(SurveyId, UserId, PersistentId, Context) ->
     {Clause, Arg} = case z_utils:is_empty(UserId) of
                         true -> {"persistent = $2", PersistentId};

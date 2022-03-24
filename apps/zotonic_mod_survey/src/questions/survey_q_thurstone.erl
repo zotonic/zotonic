@@ -175,7 +175,7 @@ to_block(Q) ->
 
 test_max_points(Block) ->
     Block1 = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block),
-    max_points(is_multiple(Block), Block1).
+    erlang:max(0, max_points(is_multiple(Block), Block1)).
 
 max_points(true, #{ <<"answers">> := [] }) ->
     0;
@@ -187,4 +187,4 @@ max_points(false, #{ <<"answers">> := As }) ->
 max_points_answer(#{ <<"points_int">> := Points }) when is_integer(Points) ->
     Points;
 max_points_answer(_) ->
-    0.
+    1.

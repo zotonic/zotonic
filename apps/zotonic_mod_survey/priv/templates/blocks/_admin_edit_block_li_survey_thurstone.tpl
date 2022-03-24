@@ -31,12 +31,6 @@
             {_ Multiple answers possible: points are given for the correct answer </i>and</i>points are given for </i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer. _}
          </p>
       </div>
-
-
-
-
-
-
     {% else %}
         <p>{{ blk.prompt[lang_code]  }}</p>
     {% endif %}

@@ -111,7 +111,8 @@ sum(L) -> lists:sum([Pt || {_,Pt} <- L]).
 make_list(B) when is_binary(B) -> B;
 make_list(L) when is_list(L) -> L.
 
-find_block(_Name, []) -> [];
+find_block(_Name, []) ->
+    #{};
 find_block(Name, [B|Bs]) ->
     case maps:get(<<"name">>, B, undefined) of
         Name -> B;
