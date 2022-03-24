@@ -88,9 +88,9 @@ prepare_answers_1(Text, Block) ->
     Lines = split_text(Text),
     case z_convert:to_bool(maps:get(<<"is_test">>, Block, false)) of
         true ->
-            IsTestNeg = z_convert:to_bool(maps:get(<<"is_test_neg">>, Block, false)),
-            TestPoints = case z_convert:to_integer(maps:get(<<"test_points">>, Block, 0)) of
-                undefined -> 0;
+            InputType = maps:get(<<"input_type">>, Block, <<>>),
+            TestPoints = case z_convert:to_integer(maps:get(<<"test_points">>, Block, 1)) of
+                undefined -> 1;
                 TP -> TP
             end,
             lists:map(
@@ -99,14 +99,14 @@ prepare_answers_1(Text, Block) ->
                         Ans#{
                             <<"points_int">> => TestPoints
                         };
-                    (#{ <<"is_correct">> := false } = Ans) when IsTestNeg->
+                    (#{ <<"is_correct">> := false } = Ans) when InputType =:= <<"multi">> ->
                         Ans#{
-                            <<"points_int">> => 0 - TestPoints
+                            <<"points_int">> => TestPoints
                         };
                     (Ans) ->
                         Ans#{
                             <<"is_correct">> := false,
-                            <<"points_int">> => undefined
+                            <<"points_int">> => 0
                         }
                 end,
                 Lines);
