@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-18 17:23\n"
+"PO-Revision-Date: 2022-03-28 13:50\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -6839,7 +6839,7 @@ msgstr "Je kan proberen om je opnieuw in te schrijven op een van onze mailinglij
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:2
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
-msgstr "Je ontvangt deze e-mail omdat je deze informatie wilde sturen. We hebben je e-mailadres niet bewaard en je krijgt geen andere e-mails als gevolg van deze e-mail."
+msgstr "Je ontvangt deze e-mail omdat iemand je deze informatie wilde sturen. We hebben je e-mailadres niet bewaard en je krijgt geen andere e-mails als gevolg van deze e-mail."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:5
 msgid "You received this mail because you are subscribed to the mailing list"
