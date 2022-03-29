@@ -217,6 +217,8 @@ handle_search_result(L, Page, PageLen, _OffsetLimit, Name, Args, _Context) when 
         page = Page,
         pagelen = PageLen,
         pages = Pages,
+        total = Len,
+        is_total_estimated = false,
         prev = erlang:max(Page-1, 1),
         next = Next
     };
@@ -243,15 +245,15 @@ handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit,
             end,
             RowCount = length(Rows),
             FoundTotal = (Page-1) * PageLen + RowCount,
-            Total = if
+            {Total, IsEstimate} = if
                 Limit > RowCount ->
                     % Didn't return all rows, assume we are at the end of the result set.
-                    FoundTotal;
+                    {FoundTotal, false};
                 true ->
                     % The number of requested rows was returned, assume there is more.
                     {SqlNoLimit, ArgsNoLimit} = concat_sql_query(Q1, undefined),
                     {ok, EstimatedTotal} = z_db:estimate_rows(SqlNoLimit, ArgsNoLimit, Context),
-                    erlang:max(FoundTotal, EstimatedTotal)
+                    {erlang:max(FoundTotal, EstimatedTotal), true}
             end,
             Pages = (Total + PageLen - 1) div PageLen,
             Next = if
@@ -266,6 +268,7 @@ handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit,
                 page = Page,
                 pagelen = PageLen,
                 total = Total,
+                is_total_estimated = IsEstimate,
                 prev = erlang:max(Page-1, 1),
                 next = Next
             },
