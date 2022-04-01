@@ -94,7 +94,7 @@
 					    {% else %}
 					    	{% with answers[blk.name] as ans %}
 	                            {% for ans in ans.answers %}
-	                                {{ ans.text }}{% if ans.is_correct|is_defined %}{% if ans.is_correct %} <span style="color:green">√</span>{% else %} <span style="color:red">X</span>{% endif %}{% endif %}{% if not forloop.last %}<br>{% endif %}
+	                                {{ ans.text }}{% if ans.is_correct|is_defined %}{% if ans.is_correct %} <span style="color:green;font-weight:bold">√</span>{% else %} <span style="color:red;font-weight:bold">X</span>{% endif %}{% endif %}{% if not forloop.last %}<br>{% endif %}
 	                            {% endfor %}
 	                        {% endwith %}
 					    {% endif %}
@@ -128,7 +128,7 @@
 					            {% optional include "blocks/_block_view_survey_narrative.tpl" blk=blk is_survey_answer_view result=answers %}
 				            {% else %}
 	                            {% for ans in ans.answers %}
-	                                {{ ans.text }}{% if ans.is_correct|is_defined %}{% if ans.is_correct %} <span style="color:green">√</span>{% else %} <span style="color:red">X</span>{% endif %}{% endif %}{% if not forloop.last %}<br>{% endif %}
+	                                {{ ans.text }}{% if ans.is_correct|is_defined %}{% if ans.is_correct %} <span style="color:green;font-weight:bold">√</span>{% else %} <span style="color:red;font-weight:bold">X</span>{% endif %}{% endif %}{% if not forloop.last %}<br>{% endif %}
 	                            {% endfor %}
 							{% endif %}
 						</td>

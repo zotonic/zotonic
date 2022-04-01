@@ -1,5 +1,17 @@
 /* CSS for surveys, overrules the bootstrap css */
 
+.survey-is-correct:after {
+	color: green;
+	font-weight: bold;
+	content: " √";
+}
+
+.survey-is-not-correct:after {
+	color: red;
+	font-weight: bold;
+	content: " X";
+}
+
 .survey-thurstone .btn {
 	display: block;
 	width: auto;

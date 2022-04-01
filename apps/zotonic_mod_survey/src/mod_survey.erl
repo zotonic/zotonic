@@ -50,7 +50,7 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include("survey.hrl").
+-include("../include/survey.hrl").
 
 
 %% @doc Schema for mod_survey lives in separate module
@@ -313,8 +313,10 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
             case Next of
                 {L,NewPageNr} when is_list(L) ->
                     % A new list of questions, PageNr might be another than expected
+                    TargetId = proplists:get_value(element_id, Args, <<"survey-question">>),
                     Vars = [
                         {id, Id},
+                        {element_id, TargetId},
                         {q, As},
                         {page_nr, NewPageNr},
                         {questions, L},

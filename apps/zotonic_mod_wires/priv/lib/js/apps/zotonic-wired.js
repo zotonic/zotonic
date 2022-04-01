@@ -1680,8 +1680,12 @@ function z_jquery_init() {
                 return null;
 
         // Return empty value for non-checked checkboxes
-        if (successful && t == 'checkbox' && !el.checked)
+        if (successful && t == 'checkbox' && !el.checked) {
+            if (el.hasAttribute('value-unchecked')) {
+                return el.getAttribute('value-unchecked');
+            }
             return '';
+        }
 
         if (tag == 'select') {
             var index = el.selectedIndex;

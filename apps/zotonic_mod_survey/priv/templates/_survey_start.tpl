@@ -1,11 +1,21 @@
 {% with answer_id|default:q.answer_id as answer_id %}
 {% if answer_id and id.is_editable %}
     {% wire
-        postback={survey_start id=id answer_id=answer_id viewer=viewer}
+        postback={survey_start
+            id=id
+            answer_id=answer_id
+            viewer=viewer
+            element_id=element_id|default:"survey-question"
+        }
         delegate="mod_survey"
     %}
 {% elseif id.survey_multiple == 1 %}
-    {% include "_survey_start_button.tpl" id=id answers=answers viewer=viewer%}
+    {% include "_survey_start_button.tpl"
+                id=id
+                answers=answers
+                viewer=viewer
+                element_id=element_id|default:"survey-question"
+    %}
 {% else %}
     {% with m.survey.did_survey[id] as did_survey %}
         {% if did_survey and id.survey_multiple == 2 %}
@@ -14,9 +24,15 @@
                         id=id
                         answers=answers|default:m.survey.did_survey_answers[id]
                         viewer=viewer
+                        element_id=element_id|default:"survey-question"
             %}
          {% elseif not did_survey or id.survey_multiple == 1 %}
-            {% include "_survey_start_button.tpl" id=id answers=answers viewer=viewer %}
+            {% include "_survey_start_button.tpl"
+                        id=id
+                        answers=answers
+                        viewer=viewer
+                        element_id=element_id|default:"survey-question"
+            %}
         {% else %}
             <p class="alert alert-info">
                 <span class="fa fa-exclamation-triangle"></span>
