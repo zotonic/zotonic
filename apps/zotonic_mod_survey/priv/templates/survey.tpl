@@ -19,7 +19,7 @@
 
 {% block below_body %}
     {% if id.is_a.survey and not id.survey_is_disabled %}
-    	{% lazy template="_survey_start.tpl" id=id %}
+    	{% lazy template="_survey_start.tpl" id=id answers=answers %}
     {% endif %}
 
     {% inherit %}
