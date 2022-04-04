@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-18 17:30\n"
+"PO-Revision-Date: 2022-04-04 19:29\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -59,7 +59,7 @@ msgstr "Неавторизований доступ до URL-адреси від
 #: apps/zotonic_core/src/support/z_media_import.erl:290
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
-msgstr "веб-сайт"
+msgstr "вебсайт"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:274
 msgid "ago"
