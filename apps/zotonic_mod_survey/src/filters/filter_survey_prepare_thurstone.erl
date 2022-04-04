@@ -62,7 +62,7 @@ survey_prepare_thurstone_1(Blk, IsRandom) ->
                 <<"answers">> => Answers1
             }
     end,
-    maps:without([ <<"is_test_neg">>, <<"test_points">> ], Blk1).
+    maps:without([ <<"test_points">> ], Blk1).
 
 maybe_randomize(false, List) -> List;
 maybe_randomize(true, List) -> z_utils:randomize(List).
