@@ -30,14 +30,18 @@ survey_any_wrong_answer(Answer, Question, _Context) when is_list(Answer) ->
     case z_convert:to_bool(maps:get(<<"is_test">>, Question, false)) of
         true ->
             QAnswers = maps:get(<<"answers">>, Question, []),
+            InputType = maps:get(<<"input_type">>, Question, <<>>),
             lists:any(
                 fun (Option) ->
                     Val = maps:get(<<"value">>, Option, undefined),
                     IsCorrect = maps:get(<<"is_correct">>, Option, false),
                     case {member(Val, Answer), IsCorrect} of
-                        {true, false} -> true;
-                        {false, true} -> true;
-                        _ -> false
+                        {true, false} ->
+                            true;
+                        {false, true} when InputType =:= <<"multi">> ->
+                            true;
+                        _ ->
+                            false
                     end
                 end,
                 QAnswers);
