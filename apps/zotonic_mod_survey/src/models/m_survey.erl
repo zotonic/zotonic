@@ -158,7 +158,7 @@ m_get([ <<"did_survey_answers">>, SurveyId | Rest ], _Msg, Context) ->
                                 UId ->
                                     {UId, undefined, Context}
                             end,
-    As = case m_survey:single_result(m_rsc:rid(SurveyId, Context1), UserId, PersistentId, Context1) of
+    As = case single_result(m_rsc:rid(SurveyId, Context1), UserId, PersistentId, Context1) of
         None when None =:= undefined; None =:= [] ->
             [];
         Result ->
@@ -179,7 +179,7 @@ m_get([ <<"did_survey_results">>, SurveyId | Rest ], _Msg, Context) ->
                                 UId ->
                                     {UId, undefined, Context}
                             end,
-    {ok, {m_survey:single_result(SurveyId, UserId, PersistentId, Context1), Rest}};
+    {ok, {single_result(SurveyId, UserId, PersistentId, Context1), Rest}};
 m_get([ <<"did_survey_results_readable">>, SurveyId | Rest ], _Msg, Context) ->
     {UserId, PersistentId, Context1} = case z_acl:user(Context) of
                                 undefined ->
@@ -189,7 +189,7 @@ m_get([ <<"did_survey_results_readable">>, SurveyId | Rest ], _Msg, Context) ->
                                     {UId, undefined, Context}
                             end,
     RId = m_rsc:rid(SurveyId, Context1),
-    SurveyAnswer = m_survey:single_result(RId, UserId, PersistentId, Context1),
+    SurveyAnswer = single_result(RId, UserId, PersistentId, Context1),
     {ok, {survey_answer_prep:readable_stored_result(RId, SurveyAnswer, Context), Rest}};
 m_get([ <<"is_allowed_results_download">>, SurveyId | Rest ], _Msg, Context) ->
     {ok, {is_allowed_results_download(m_rsc:rid(SurveyId, Context), Context), Rest}};
