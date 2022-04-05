@@ -681,7 +681,7 @@ do_submit(SurveyId, Questions, Answers, Context) ->
          Answers :: list(),
          Editing :: undefined | {editing, AnswerId, Actions},
          AnswerId :: integer(),
-         Actions :: list() | tuple().
+         Actions :: list() | tuple() | undefined.
 do_submit(SurveyId, Questions, Answers, undefined, Context) ->
     {FoundAnswers, Missing} = collect_answers(Questions, Answers, Context),
     case z_notifier:first(
