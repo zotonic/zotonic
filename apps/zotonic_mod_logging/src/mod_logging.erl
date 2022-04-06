@@ -31,7 +31,7 @@
 -export([start_link/1]).
 -export([
     observe_search_query/2,
-    observe_tick_1m/2,
+    pid_observe_tick_1m/3,
     observe_tick_1h/2,
     pid_observe_zlog/3,
     observe_admin_menu/3,
@@ -44,9 +44,12 @@
 
 -record(state, {
     site :: atom() | undefined,
-    admin_log_pages=[] :: list(),
+    admin_log_pages = [] :: list(),
+    dedup :: map(),
     last_ui_event = 0 :: integer()
 }).
+
+-define(DEDUP_SECS, 600).
 
 %% interface functions
 
@@ -82,8 +85,9 @@ pid_observe_zlog(Pid, #zlog{ props = #log_email{} = Msg }, _Context) ->
 pid_observe_zlog(_Pid, #zlog{}, _Context) ->
     undefined.
 
-observe_tick_1m(tick_1m, Context) ->
-    check_db_pool_health(Context).
+%% @doc Check the db_pool_health every minute
+pid_observe_tick_1m(Pid, tick_1m, _Context) ->
+    gen_server:cast(Pid, check_db_pool_health).
 
 observe_tick_1h(tick_1h, Context) ->
     m_log:periodic_cleanup(Context),
@@ -153,11 +157,8 @@ init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     Context1 = z_acl:sudo(z_context:new(Context)),
     Site = z_context:site(Context1),
-    logger:set_process_metadata(#{
-        site => Site,
-        module => ?MODULE
-    }),
-    {ok, #state{ site = Site }}.
+    z_context:logger_md(Context1),
+    {ok, #state{ site = Site, dedup = #{} }}.
 
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -180,6 +181,10 @@ handle_cast({log, #log_message{} = Log}, State) ->
 handle_cast({log, OtherLog}, State) ->
     handle_other_log(OtherLog, State),
     {noreply, State};
+
+handle_cast(check_db_pool_health, #state{ site = Site, dedup = Dedup } = State) ->
+    Dedup1 = check_db_pool_health(Dedup, Site),
+    {noreply, State#state{ dedup = Dedup1 }};
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
@@ -213,32 +218,56 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 
-%% @private Check the health of the db pool. When usage is to high a warning will be %% put in the log.
-check_db_pool_health(Context) ->
-    Site = z_context:site(Context),
-    Advice = "please increase the pool size.",
-    case exometer:get_value([site, Site, db, pool_full], one) of
+%% @private Check the health of the db pool. When usage is to high a warning will be
+%% put in the log. The warning is deduplicated every hour.
+check_db_pool_health(Dedup, Site) ->
+    Context = z_context:new(Site),
+    Dedup1 = case exometer:get_value([site, Site, db, pool_full], one) of
         {ok, [{one, FullCounts}]} when FullCounts > 0 ->
-            z:error("Database pool is exhausted, ~s",
-                    [Advice],
-                    [{module, ?MODULE}, {line, ?LINE}],
-                    Context);
+            case is_dup(pool_full, Dedup) of
+                {true, D1} ->
+                    D1;
+                {false, D1} ->
+                    ?zError("Database pool is exhausted, increase db_max_connections (last minute count ~p)",
+                            [FullCounts],
+                            Context),
+                    D1
+            end;
         {ok, _} ->
-            ok;
+            Dedup;
         {error, not_found} ->
-            ok
+            Dedup
     end,
     case exometer:get_value([site, Site, db, pool_high_usage], one) of
         {ok, [{one, HighCounts}]} when HighCounts > 0 ->
-            z:info("Database pool usage is close to exhaustion, ~s", [Advice],
-                   [{module, ?MODULE}, {line, ?LINE}],
-                   Context);
+            case is_dup(pool_high_usage, Dedup1) of
+                {true, D2} ->
+                    D2;
+                {false, D2} ->
+                    ?zInfo("Database pool usage is high, increase db_max_connections (last minute count ~p)",
+                           [HighCounts],
+                           Context),
+                    D2
+            end;
         {ok, _} ->
-            ok;
+            Dedup1;
         {error, not_found} ->
-            ok
+            Dedup1
     end.
 
+is_dup(Event, Dup) ->
+    Now = z_datetime:timestamp(),
+    case maps:get(Event, Dup, undefined) of
+        undefined ->
+            {false, Dup#{ Event => Now }};
+        T ->
+            case T < Now - ?DEDUP_SECS of
+                true ->
+                    {false, Dup#{ Event => Now }};
+                false ->
+                    {true, Dup}
+            end
+    end.
 
 handle_simple_log(#log_message{ user_id = UserId, type = Type, message = Msg, props = Props }, State) ->
     Context = z_acl:sudo(z_context:new(State#state.site)),

@@ -74,7 +74,7 @@ search_query(Args, Context) ->
     W1 = case z_convert:to_binary( maps:get(<<"type">>, Args, <<"warning">>) ) of
         <<"error">> -> " type = 'error' ";
         <<"warning">> -> " type in ('warning', 'error') ";
-        <<"notice">> -> " type in ('notice', warning', 'error') ";
+        <<"notice">> -> " type in ('notice', 'warning', 'error') ";
         <<"info">> -> " type <> 'debug' ";
         <<"debug">> -> "";
         _ -> " type in ('warning', 'error') "
