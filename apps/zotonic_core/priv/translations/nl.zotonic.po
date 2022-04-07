@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-07 12:56\n"
+"PO-Revision-Date: 2022-04-07 13:20\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -8031,11 +8031,11 @@ msgstr "Voeg een introductie of uitleg toe, inclusief geüploade of ingesloten a
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:100
 msgid "Add answer"
-msgstr ""
+msgstr "Antwoord toevoegen"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
 msgid "Add answer options here. The <i>stored value</i> is stored with the results."
-msgstr ""
+msgstr "Voeg hier antwoordopties toe. De <i>opgeslagen waarde</i> wordt opgeslagen met de resultaten."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:16
 msgid "Add page"
@@ -8099,7 +8099,7 @@ msgstr "Appel = Rood"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:124
 msgid "Are you sure you want to delete this answer?"
-msgstr ""
+msgstr "Weet je zeker dat je dit antwoord wilt verwijderen?"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:75./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:21
 msgid "Are you sure you want to delete this page jump?"
@@ -8151,7 +8151,7 @@ msgstr "Controlleer het antwoord in de admin."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:29
 msgid "Check the correct answers and give each answer points."
-msgstr ""
+msgstr "Controleer de juiste antwoorden en geef elk antwoord punten."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:31
 msgid "Choices"
@@ -8163,7 +8163,7 @@ msgstr "Doorgaan"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
-msgstr ""
+msgstr "Juist"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:168
 msgid "Country select"
@@ -8240,7 +8240,7 @@ msgstr "Onwaar"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_block_thurstone_answer.tpl:34
 msgid "Feedback"
-msgstr ""
+msgstr "Feedback"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:6
 msgid "Feedback if correct"
@@ -8384,7 +8384,7 @@ msgstr "Meerdere antwoorden mogelijk"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:31
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
-msgstr ""
+msgstr "Meerdere antwoorden mogelijk: punten worden gegeven voor het juiste antwoord <i>en</i> punten voor <i>niet</i> kiezen van het verkeerde antwoord. Standaard: 1 punt voor een correct antwoord, 1 punt voor het niet kiezen van een fout antwoord."
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:173
 msgid "Multiple choice"
@@ -8600,7 +8600,7 @@ msgstr "Eén antwoord mogelijk"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:30
 msgid "Single answer possible: points are given for a correct answer. Default: 1 point for a correct answer."
-msgstr ""
+msgstr "Eén antwoord mogelijk: er worden punten gegeven voor een correct antwoord. Standaard: 1 punt voor een correct antwoord."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:14
 msgid "Start"
@@ -8620,7 +8620,7 @@ msgstr "Sla een waarde op zonder een invoer aan de respondent te tonen."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:83
 msgid "Stored value"
-msgstr ""
+msgstr "Opgeslagen waarde"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:43./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:43./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:54./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:55
 msgid "Strongly Agree"
@@ -8779,7 +8779,7 @@ msgstr "Wanneer aan geen conditie is voldaan, is de vraag na deze onderbreking d
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131
 msgid "Wrong"
-msgstr ""
+msgstr "Mis"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
 msgid "Yes or no question"
