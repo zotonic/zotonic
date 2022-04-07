@@ -105,9 +105,16 @@ security_dir_1() ->
             end,
             case filelib:is_dir(SecurityDir) of
                 true ->
-                    ?LOG_ERROR("Could not create security directory: ~p", [ SecurityDir ]),
+                    ?LOG_INFO(#{
+                        text => <<"Created security directory">>,
+                        path => SecurityDir
+                    }),
                     {ok, SecurityDir};
                 false ->
+                    ?LOG_ERROR(#{
+                        text => <<"Could not create security directory">>,
+                        path => SecurityDir
+                    }),
                     {error, enoent}
             end;
         [ D | _ ] ->
@@ -164,9 +171,16 @@ logs_dir_1() ->
             end,
             case filelib:is_dir(SystemLogDir) of
                 true ->
-                    ?LOG_ERROR("Could not create log directory: ~p", [ SystemLogDir ]),
+                    ?LOG_INFO(#{
+                        text => <<"Create log directory">>,
+                        path => SystemLogDir
+                    }),
                     {ok, SystemLogDir};
                 false ->
+                    ?LOG_ERROR(#{
+                        text => <<"Could not create log directory">>,
+                        path => SystemLogDir
+                    }),
                     {error, enoent}
             end;
         [ D | _ ] ->
@@ -223,9 +237,16 @@ data_dir_1() ->
             end,
             case filelib:is_dir(SystemDataDir) of
                 true ->
-                    ?LOG_ERROR("Could not create data directory: ~p", [ SystemDataDir ]),
+                    ?LOG_INFO(#{
+                        text => <<"Created data directory">>,
+                        path => SystemDataDir
+                    }),
                     {ok, SystemDataDir};
                 false ->
+                    ?LOG_ERROR(#{
+                        text => <<"Could not create data directory">>,
+                        path => SystemDataDir
+                    }),
                     {error, enoent}
             end;
         [ D | _ ] ->
@@ -283,9 +304,16 @@ cache_dir_1() ->
             end,
             case filelib:is_dir(SystemCacheDir) of
                 true ->
-                    ?LOG_ERROR("Could not create cache directory: ~p", [ SystemCacheDir ]),
+                    ?LOG_INFO(#{
+                        text => <<"Created cache directory">>,
+                        path => SystemCacheDir
+                    }),
                     {ok, SystemCacheDir};
                 false ->
+                    ?LOG_ERROR(#{
+                        text => <<"Could not create cache directory">>,
+                        path => SystemCacheDir
+                    }),
                     {error, enoent}
             end;
         [ D | _ ] ->
@@ -342,7 +370,7 @@ config_dir(Node) ->
             end
     end.
 
-config_dir_env(Node) -> 
+config_dir_env(Node) ->
     case os:getenv("ZOTONIC_CONFIG_DIR") of
         false ->
             config_dir_find(Node);
