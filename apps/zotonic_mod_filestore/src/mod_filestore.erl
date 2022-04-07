@@ -79,14 +79,13 @@ observe_filestore(#filestore{action=upload, path=Path, mime=Mime}, Context) ->
     ok;
 observe_filestore(#filestore{action=delete, path=Path}, Context) ->
     case m_filestore:mark_deleted(Path, Context) of
-        0 ->
-            ok;
-        Count ->
+        ok ->
             ?LOG_INFO(#{
                 text => <<"Filestore marked entries as deleted.">>,
-                path => Path,
-                count => Count
+                path => Path
             }),
+            ok;
+        {error, enoent} ->
             ok
     end.
 
