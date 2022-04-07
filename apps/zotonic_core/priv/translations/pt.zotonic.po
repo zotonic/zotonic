@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-07 12:56\n"
+"PO-Revision-Date: 2022-04-07 13:21\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -8028,11 +8028,11 @@ msgstr "Adicione uma introdução ou explicação incluindo imagens ou vídeos c
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:100
 msgid "Add answer"
-msgstr ""
+msgstr "Adicionar resposta"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
 msgid "Add answer options here. The <i>stored value</i> is stored with the results."
-msgstr ""
+msgstr "Adicione opções de resposta aqui. O valor armazenado <i></i> é armazenado com os resultados."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:16
 msgid "Add page"
@@ -8096,7 +8096,7 @@ msgstr "Maçã = Vermelha"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:124
 msgid "Are you sure you want to delete this answer?"
-msgstr ""
+msgstr "Tem certeza de que deseja excluir esta resposta?"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:75./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:21
 msgid "Are you sure you want to delete this page jump?"
@@ -8148,7 +8148,7 @@ msgstr "Verifique a resposta no administrador."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:29
 msgid "Check the correct answers and give each answer points."
-msgstr ""
+msgstr "Verifique as respostas corretas e dê pontos a cada resposta."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:31
 msgid "Choices"
@@ -8160,7 +8160,7 @@ msgstr "Continuar"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
-msgstr ""
+msgstr "Correto"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:168
 msgid "Country select"
@@ -8237,7 +8237,7 @@ msgstr "Falso"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_block_thurstone_answer.tpl:34
 msgid "Feedback"
-msgstr ""
+msgstr "Comentários"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:6
 msgid "Feedback if correct"
@@ -8381,7 +8381,7 @@ msgstr "Múltiplas respostas possíveis"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:31
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
-msgstr ""
+msgstr "Múltiplas respostas possíveis: pontos são dados para a resposta correta <i>e</i> pontos são dados para <i>e não</i> escolhendo a resposta errada. Padrão: 1 ponto por uma resposta correta, 1 ponto por não escolher uma resposta errada."
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:173
 msgid "Multiple choice"
@@ -8597,7 +8597,7 @@ msgstr "Resposta única possível"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:30
 msgid "Single answer possible: points are given for a correct answer. Default: 1 point for a correct answer."
-msgstr ""
+msgstr "Resposta única possível: pontos são dados para uma resposta correta. Padrão: 1 ponto para uma resposta correta."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:14
 msgid "Start"
@@ -8617,7 +8617,7 @@ msgstr "Armazene um valor sem mostrar uma entrada ao respondente."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:83
 msgid "Stored value"
-msgstr ""
+msgstr "Valor armazenado"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:43./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:43./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:54./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:55
 msgid "Strongly Agree"
@@ -8773,7 +8773,7 @@ msgstr "Quando nenhuma condição for verdadeira, então a pergunta após esta p
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131
 msgid "Wrong"
-msgstr ""
+msgstr "Errado"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
 msgid "Yes or no question"
