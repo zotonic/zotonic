@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-07 12:56\n"
+"PO-Revision-Date: 2022-04-07 13:21\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -8024,11 +8024,11 @@ msgstr "添加介绍或解释，包括上传或嵌入的图像或视频。添加
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:100
 msgid "Add answer"
-msgstr ""
+msgstr "添加答案"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
 msgid "Add answer options here. The <i>stored value</i> is stored with the results."
-msgstr ""
+msgstr "在此处添加答案选项。 <i>存储值</i> 与结果一起存储。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:16
 msgid "Add page"
@@ -8092,7 +8092,7 @@ msgstr "苹果=红色"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:124
 msgid "Are you sure you want to delete this answer?"
-msgstr ""
+msgstr "您确定要删除此答案吗？"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:75./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:21
 msgid "Are you sure you want to delete this page jump?"
@@ -8144,7 +8144,7 @@ msgstr "在管理页面中检查答案。"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:29
 msgid "Check the correct answers and give each answer points."
-msgstr ""
+msgstr "检查正确答案并给每个答案点。"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:31
 msgid "Choices"
@@ -8156,7 +8156,7 @@ msgstr "继续"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
-msgstr ""
+msgstr "正确的"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:168
 msgid "Country select"
@@ -8233,7 +8233,7 @@ msgstr "否"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_block_thurstone_answer.tpl:34
 msgid "Feedback"
-msgstr ""
+msgstr "回馈"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:6
 msgid "Feedback if correct"
@@ -8377,7 +8377,7 @@ msgstr "允许选择多个答案"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:31
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
-msgstr ""
+msgstr "可能有多个答案：正确答案 <i>分，选择错误答案 <i>而不是</i> 得</i> 分。默认值：答对得 1 分，未选错得 1 分。"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:173
 msgid "Multiple choice"
@@ -8593,7 +8593,7 @@ msgstr "只允许选择一个答案"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:30
 msgid "Single answer possible: points are given for a correct answer. Default: 1 point for a correct answer."
-msgstr ""
+msgstr "可能的单一答案：为正确答案给出分数。默认值：正确答案得 1 分。"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:14
 msgid "Start"
@@ -8613,7 +8613,7 @@ msgstr "存储一个值而不向响应者显示输入。"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:83
 msgid "Stored value"
-msgstr ""
+msgstr "储值"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:43./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:43./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:54./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:55
 msgid "Strongly Agree"
@@ -8769,7 +8769,7 @@ msgstr "当没有条件成立时，所有此中断后面的问题将成为下个
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131
 msgid "Wrong"
-msgstr ""
+msgstr "错误的"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
 msgid "Yes or no question"
