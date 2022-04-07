@@ -93,14 +93,10 @@
 							{% optional include "blocks/_block_view_"++blk.type++".tpl" blk=blk is_survey_answer_view result=result %}
 					    {% else %}
 					    	{% with answers[blk.name] as ans %}
-					            {% if ans.answer_text|is_list %}
-									{% for v in ans.answer_text %}
-										{{ v }}{% if not forloop.last %}<br/>{% endif %}
-									{% endfor %}
-								{% else %}
-									{{ ans.answer_text }}
-								{% endif %}
-							{% endwith %}
+	                            {% for ans in ans.answers %}
+	                                {{ ans.text }}{% if ans.is_correct|is_defined %}{% if ans.is_correct %} <span style="color:green;font-weight:bold">√ {_ Correct _}</span>{% else %} <span style="color:red;font-weight:bold">X {_ Wrong _}</span>{% endif %}{% endif %}{% if not forloop.last %}<br>{% endif %}
+	                            {% endfor %}
+	                        {% endwith %}
 					    {% endif %}
 					</td>
 				</tr>
@@ -130,12 +126,10 @@
 						<td valign="top" style="padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #dddddd;">
 							{% if blk.type == 'survey_narrative' %}
 					            {% optional include "blocks/_block_view_survey_narrative.tpl" blk=blk is_survey_answer_view result=answers %}
-				            {% elseif ans.answer_text|is_list %}
-								{% for v in ans.answer_text %}
-									{{ v }}{% if not forloop.last %}<br/>{% endif %}
-								{% endfor %}
-							{% else %}
-								{{ ans.answer_text }}
+				            {% else %}
+	                            {% for ans in ans.answers %}
+	                                {{ ans.text }}{% if ans.is_correct|is_defined %}{% if ans.is_correct %} <span style="color:green;font-weight:bold">√ {_ Correct _}</span>{% else %} <span style="color:red;font-weight:bold">X {_ Wrong _}</span>{% endif %}{% endif %}{% if not forloop.last %}<br>{% endif %}
+	                            {% endfor %}
 							{% endif %}
 						</td>
 					</tr>

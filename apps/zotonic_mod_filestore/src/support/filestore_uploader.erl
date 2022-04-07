@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2020 Marc Worrell
+%% @copyright 2014-2022 Marc Worrell
 %% @doc Process uploading a file to a remote storage.
 
-%% Copyright 2014-2020 Marc Worrell
+%% Copyright 2014-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -55,7 +55,10 @@ start_link(Id, Path, PathLookup, MediaInfo, Context) ->
 
 init([Id, Path, MediaInfo, PathLookup, Context]) ->
     z_context:logger_md(Context),
-    ?LOG_DEBUG("Started uploader for ~p", [Path]),
+    ?LOG_DEBUG(#{
+        text => <<"Started uploader">>,
+        src => Path
+    }),
     gen_server:cast(self(), start),
     {ok, #state{
             id = Id,
@@ -66,15 +69,23 @@ init([Id, Path, MediaInfo, PathLookup, Context]) ->
         }}.
 
 handle_call(Msg, _From, State) ->
-    ?LOG_ERROR("Unknown call: ~p", [Msg]),
+    ?LOG_ERROR(#{
+        text => <<"Unknown call">>,
+        msg => Msg
+    }),
     {reply, {error, unknown_msg}, State}.
 
 handle_cast(start, #state{lookup = {ok, Entry}} = State) ->
     try_upload(Entry, State);
 handle_cast(start, #state{lookup = {error, enoent}} = State) ->
     try_upload(undefined, State);
-handle_cast(start, #state{path = Path, lookup = {error, _} = Error} = State) ->
-    ?LOG_ERROR("Filestore upload error reading for path ~p: ~p", [ Path, Error ]),
+handle_cast(start, #state{path = Path, lookup = {error, Reason}} = State) ->
+    ?LOG_ERROR(#{
+        text => <<"Filestore upload error reading file">>,
+        path => Path,
+        result => error,
+        reason => Reason
+    }),
     {stop, normal, State};
 
 handle_cast(stop, State) ->
@@ -111,12 +122,20 @@ try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInf
                             m_filestore:dequeue(Id, Context),
                             {stop, normal, State};
                         retry ->
-                            ?LOG_NOTICE("Filestore upload of ~p, sleeping 30m for retry.", [Path]),
+                            ?LOG_NOTICE(#{
+                                text => <<"Filestore upload sleeping 30m for retry">>,
+                                result => warning,
+                                reason => retry,
+                                src => Path
+                            }),
                             timer:send_after(?RETRY_DELAY, restart),
                             {noreply, State, hibernate}
                     end;
                 undefined ->
-                    ?LOG_WARNING("Filestore no credentials found for ~p", [Path]),
+                    ?LOG_WARNING(#{
+                        text => <<"Filestore no credentials, ignoring queued file">>,
+                        src =>  Path
+                    }),
                     m_filestore:dequeue(Id, Context),
                     {stop, normal, State}
             end;
@@ -137,16 +156,28 @@ handle_upload(Path, Cred, Context) ->
     AbsPath = z_path:abspath(Path, Context),
     case file:read_file_info(AbsPath) of
         {ok, #file_info{type=regular, size=0}} ->
-            ?LOG_NOTICE("Not uploading ~p because it is empty", [Path]),
+            ?LOG_NOTICE(#{
+                text => <<"Not uploading empty file">>,
+                src => Path
+            }),
             ok;
         {ok, #file_info{type=regular, size=Size}} ->
             Result = do_upload(Cred, {filename, Size, AbsPath}),
             finish_upload(Result, Path, AbsPath, Size, Cred, Context);
         {ok, #file_info{type=Type}} ->
-            ?LOG_ERROR("Not uploading ~p because it is a ~p", [Path, Type]),
+            ?LOG_ERROR(#{
+                text => <<"Not uploading file because of file type">>,
+                result => error,
+                reason => filetype,
+                src => Path,
+                type => Type
+            }),
             fatal;
         {error, enoent} ->
-            ?LOG_ERROR("Not uploading ~p because it is not found", [Path]),
+            ?LOG_INFO(#{
+                text => <<"Not uploading file because it is not found">>,
+                src => Path
+            }),
             fatal
     end.
 
@@ -155,7 +186,13 @@ do_upload(#filestore_credentials{service= <<"s3">>, location=Location, credentia
 
 %% @doc Remember the new location in the m_filestore, move the file to the filezcache and delete the file
 finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, location=Location}, Context) ->
-    ?LOG_INFO("Filestore moved ~p to ~p : ~p", [Path, Service, Location]),
+    ?LOG_INFO(#{
+        text => <<"Filestore upload done">>,
+        src => Path,
+        dst => Location,
+        service => Service,
+        result => ok
+    }),
     FzCache = start_empty_cache_entry(Location),
     {ok, _} = m_filestore:store(Path, Size, Service, Location, Context),
     % Make sure that the file entry is not serving the relocated file from the file system.
@@ -169,13 +206,26 @@ finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, l
     case FzCache of
         {ok, Pid} ->
             ok = filezcache_entry:store(Pid, {tmpfile, AbsPathTmp});
-        {error, _} = Error ->
-            ?LOG_WARNING("Filestore error moving to cache entry ~p (moving ~p): ~p", [Location, Path, Error]),
+        {error, Reason} ->
+            ?LOG_WARNING(#{
+                text => <<"Filestore error moving to cache entry">>,
+                result => error,
+                reason => Reason,
+                location => Location,
+                src => Path
+            }),
             file:delete(AbsPathTmp),
             ok
     end;
-finish_upload({error, _} = Error, Path, _AbsPath, _Size, #filestore_credentials{service=Service, location=Location}, _Context) ->
-    ?LOG_ERROR("Filestore upload error to ~p : ~p of ~p error ~p", [Service, Location, Path, Error]),
+finish_upload({error, Reason}, Path, _AbsPath, _Size, #filestore_credentials{service=Service, location=Location}, _Context) ->
+    ?LOG_ERROR(#{
+        text => <<"Filestore upload error">>,
+        result => error,
+        reason => Reason,
+        src => Path,
+        dst => Location,
+        service => Service
+    }),
     retry.
 
 start_empty_cache_entry(Location) ->
@@ -183,7 +233,10 @@ start_empty_cache_entry(Location) ->
         {ok, _Pid} = OK ->
             OK;
         {error, {already_started, Pid}} ->
-            ?LOG_WARNING("Duplicate cache entry ~p (will stop & restart)", [Location]),
+            ?LOG_NOTICE(#{
+                text => <<"Duplicate cache entry (will stop & restart)">>,
+                location => Location
+            }),
             ok = filezcache_entry:delete(Pid),
             start_empty_cache_entry(Location);
         {error, _} = Error ->

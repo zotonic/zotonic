@@ -5,7 +5,11 @@
 	{% lib "css/survey.css" %}
 {% endblock %}
 
-{% block content_attributes %}{% include "_language_attrs.tpl" id=id class="wrapper" %} id="survey-question"{% endblock %}
+{% block content_area %}
+    <div id="survey-question">
+        {% inherit %}
+    </div>
+{% endblock %}
 
 {% block body %}
 	{% if not id.survey_is_autostart or id.survey_is_disabled %}
@@ -15,7 +19,11 @@
 
 {% block below_body %}
     {% if id.is_a.survey and not id.survey_is_disabled %}
-    	{% lazy template="_survey_start.tpl" id=id %}
+    	{% lazy template="_survey_start.tpl"
+                id=id
+                answers=answers
+                element_id=element_id|default:"survey-question"
+        %}
     {% endif %}
 
     {% inherit %}

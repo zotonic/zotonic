@@ -1,9 +1,9 @@
-{% include "_meta.tpl" %}
+{% optional include "_meta.tpl" %}
 
-{% include "_address.tpl" %}
+{% optional include "_address.tpl" %}
 
 {% block subnav %}
-	{% include "_subnav.tpl" %}
+	{% optional include "_subnav.tpl" %}
 {% endblock %}
 
 <div class="body">

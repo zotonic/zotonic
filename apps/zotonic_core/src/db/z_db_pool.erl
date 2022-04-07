@@ -230,7 +230,7 @@ get_connection(#context{db={Pool,_}} = Context) ->
             {error, full};
         {Time, Pid} when is_pid(Pid), Time > 10000 ->
             % Start warning if we have to wait > 10 msec for a connection
-            z_stats:record_event(db, pool_high_usage, Context),
+            record_db_status(poolboy:status(Pool), Context),
             z_stats:record_duration(db, connection_wait, Time, Context),
             {ok, Pid};
         {Time, Pid} when is_pid(Pid) ->
@@ -240,6 +240,15 @@ get_connection(#context{db={Pool,_}} = Context) ->
     end;
 get_connection(_Context) ->
     {error, nodatabase}.
+
+record_db_status({full, _Avail, _Overflow, _Busy}, Context) ->
+    z_stats:record_event(db, pool_high_usage, Context);
+record_db_status({overflow, _Avail, _Overflow, _Busy}, Context) ->
+    z_stats:record_event(db, pool_high_usage, Context);
+record_db_status({ready, 0, _Overflow, _Busy}, Context) ->
+    z_stats:record_event(db, pool_high_usage, Context);
+record_db_status({ready, _Avail, _X, _Busy}, Context) ->
+    z_stats:record_event(db, pool_slow_checkout, Context).
 
 -spec return_connection( pid(), z:context() ) -> ok | {error, term()}.
 return_connection(Worker, #context{db={Pool,_}}) when is_pid(Worker) ->

@@ -210,7 +210,9 @@ event(#postback_notify{message= <<"admin-insert-block">>}, Context) ->
                     {edit_language, EditLanguage},
                     is_new,
                     {is_editable, z_acl:rsc_editable(RscId, Context)},
-                    {blk, [{type, Type}]},
+                    {blk, #{
+                        <<"type">> => Type
+                    }},
                     {blocks, lists:sort(z_notifier:foldl(#admin_edit_blocks{id=RscId}, [], Context))}
                 ]
             },

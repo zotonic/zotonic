@@ -1,7 +1,9 @@
 {% extends "admin_base.tpl" %}
 
 {% block head_extra %}
-    {% lib "css/admin_survey.css" %}
+    {% lib "css/admin_survey.css"
+           "css/survey.css"
+    %}
 {% endblock %}
 
 {% block title %}{_ Survey editor _} &mdash; {{ m.rsc[q.id].title }}{% endblock %}
@@ -23,4 +25,8 @@
         {% endif %}
     </div>
 {% endwith %}
+{% endblock %}
+
+{% block js_extra %}
+    {% lib "js/modules/z.survey_test_feedback.js" %}
 {% endblock %}

@@ -660,7 +660,14 @@ qterm({text, Text}, Context) ->
         <<>> ->
             [];
         <<"id:", S/binary>> ->
-            mod_search:find_by_id(S, Context);
+            #search_sql_term{
+                where = [
+                    <<"rsc.id = $1">>
+                ],
+                args = [
+                    m_rsc:rid(S, Context)
+                ]
+            };
         _ ->
             TsQuery = mod_search:to_tsquery(Text, Context),
             #search_sql_term{

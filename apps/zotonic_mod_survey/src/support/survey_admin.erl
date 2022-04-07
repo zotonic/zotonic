@@ -20,7 +20,7 @@ event(#postback{message={insert_block, Args}}, Context) ->
         {is_editable, z_acl:rsc_editable(Id, Context)},
         {edit_language, edit_language(Context)},
         {r_language, r_language(Context)},
-        {blk, [{type, Block}]},
+        {blk, #{ <<"type">> => Block }},
         is_new
     ],
     z_render:update(

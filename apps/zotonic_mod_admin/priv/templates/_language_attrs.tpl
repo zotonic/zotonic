@@ -1,1 +1,1 @@
-class="{{ class }}"
+{% if class %}class="{{ class }}"{% endif %} 

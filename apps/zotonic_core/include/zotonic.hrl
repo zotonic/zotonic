@@ -151,6 +151,7 @@
     pagelen = ?SEARCH_PAGELEN :: pos_integer() | undefined,
     total = undefined :: non_neg_integer() | undefined,
     pages = undefined :: non_neg_integer() | undefined,
+    is_total_estimated = false :: boolean(),
     next = false :: pos_integer() | false,
     prev = 1 :: pos_integer(),
     facets = undefined :: #{ binary() => map() } | undefined

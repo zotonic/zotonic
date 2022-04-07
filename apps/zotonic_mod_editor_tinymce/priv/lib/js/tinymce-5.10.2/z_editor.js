@@ -33,6 +33,10 @@ var z_editor = (function ($) {
     initEditor = function($el) {
         var id, options;
         id = $el.attr('id');
+        if (!id) {
+            id = "tiny-" + Math.random().toString(16).slice(2) + "-" + (new Date()).getTime();
+            $el.attr('id', id);
+        }
         options = $.extend({}, tinyInit || {});
         options.selector = '#' + id;
         options.branding = false;

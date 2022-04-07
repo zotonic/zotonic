@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017 Marc Worrell
+%% @copyright 2017-2022 Marc Worrell
 %% @doc Check if any answer is correct.
 
-%% Copyright 2017 Marc Worrell
+%% Copyright 2017-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@
 %% limitations under the License.
 
 -module(filter_survey_any_correct_answer).
-
--include_lib("zotonic_core/include/zotonic.hrl").
 
 -export([
     survey_any_correct_answer/3

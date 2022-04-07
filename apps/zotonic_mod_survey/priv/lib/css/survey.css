@@ -1,5 +1,17 @@
 /* CSS for surveys, overrules the bootstrap css */
 
+.survey-is-correct:after {
+	color: green;
+	font-weight: bold;
+	content: " √";
+}
+
+.survey-is-not-correct:after {
+	color: red;
+	font-weight: bold;
+	content: " X";
+}
+
 .survey-thurstone .btn {
 	display: block;
 	width: auto;
@@ -52,6 +64,7 @@ form.z_form_invalid .alert.z_invalid {
 .survey-q-not-ok .survey-test-feedback-icon  {
     color: red !important;
 }
+.do_survey_test_feedback .survey-test-feedback-answer,
 .do_survey_test_feedback .survey-test-feedback-correct,
 .do_survey_test_feedback .survey-test-feedback-wrong {
     display: none;

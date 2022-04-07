@@ -1,32 +1,46 @@
+%% @author Marc Worrell <marc@worrell.nl>
+%% @copyright 2022 Marc Worrell
+%% @doc Calculate the total test score for a survey.
+
+%% Copyright 2022 Marc Worrell
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
 -module(survey_test_results).
 
 -export([
     calc_test_results/3,
-    max_points/2,
-    block_test_points/1
+    max_points/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("zotonic_mod_survey/include/survey.hrl").
-
 
 -spec max_points(integer(), #context{}) -> integer().
 max_points(Id, Context) ->
     case m_rsc:p(Id, blocks, Context) of
-        undefined -> 0;
-        [] -> 0;
-        Blocks ->
-            lists:sum(lists:map(fun max_points_block/1, Blocks))
-    end.
-
-max_points_block(Block) ->
-    case z_convert:to_bool(maps:get(<<"is_test">>, Block, false)) of
-        true ->
-            Module = mod_survey:module_name(maps:get(<<"type">>, Block, undefined)),
-            Module:test_max_points(Block);
-        false ->
+        [] ->
+            0;
+        Blocks when is_list(Blocks) ->
+            lists:sum(lists:map(fun max_points_block/1, Blocks));
+        _ ->
             0
     end.
+
+max_points_block(#{ <<"is_test">> := true } = Block) ->
+    Module = mod_survey:module_name(maps:get(<<"type">>, Block, undefined)),
+    Module:test_max_points(Block);
+max_points_block(_Block) ->
+    0.
 
 %% @doc Check all questions if they are test questions an calculate the test result.
 -spec calc_test_results(m_rsc:resource_id(), list( proplists:proplist() ), z:context()) -> {integer(), list()}.
@@ -35,73 +49,84 @@ calc_test_results(SurveyId, Answers, Context) ->
         Blocks when is_list(Blocks)->
             count_points(Answers, Blocks, 0, [], Context);
         _ ->
-            {0, Answers}
+            count_points(Answers, [], 0, [], Context)
     end.
 
 count_points([], _Blocks, PtAcc, AsAcc, _Context) ->
     {PtAcc, lists:reverse(AsAcc)};
 count_points([{Name,A}|As], Blocks, PtAcc, AsAcc, Context) ->
-    Block = find_block(proplists:get_value(block, A), Blocks),
-    case z_convert:to_bool(maps:get(<<"is_test">>, Block, false)) of
-        true ->
-            % Check if given answer is correct
-            Type = maps:get(<<"type">>, Block),
-            {PtQ, AP} = question_points(Type, A, Block, Context),
-            count_points(As, Blocks, PtAcc+PtQ, [{Name,AP}|AsAcc], Context);
-        false ->
-            count_points(As, Blocks, PtAcc, [{Name,A}|AsAcc], Context)
+    case proplists:get_value(fixed_points, A) of
+        N when is_integer(N) ->
+            count_points(As, Blocks, PtAcc+N, [{Name,A}|AsAcc], Context);
+        undefined ->
+            Block = find_block(proplists:get_value(block, A), Blocks),
+            case z_convert:to_bool(maps:get(<<"is_test">>, Block, false)) of
+                true ->
+                    % Check if given answer is correct
+                    Type = maps:get(<<"type">>, Block),
+                    {PtQ, AP} = question_points(Type, A, Block, Context),
+                    count_points(As, Blocks, PtAcc+PtQ, [{Name,AP}|AsAcc], Context);
+                false ->
+                    count_points(As, Blocks, PtAcc, [{Name,A}|AsAcc], Context)
+            end
     end.
 
 -spec question_points(binary(), proplists:proplist(), map(), z:context()) -> {integer(), proplists:proplist()}.
-question_points(<<"survey_thurstone">>, A, Block, Context) ->
-    case block_test_points(Block) of
-        GoodPoints when is_integer(GoodPoints) ->
-            Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
-            QuestionOptions = maps:get(<<"answers">>, Props, []),
-            Answered = make_list(proplists:get_value(answer, A)),
-            IsMulti = survey_q_thurstone:is_multiple(Block),
-            WrongPoints = case IsMulti of
-                true ->
-                    case z_convert:to_bool(maps:get(<<"is_test_neg">>, Block, false)) of
-                        true -> 0 - GoodPoints;
-                        false -> 0
-                    end;
-                false ->
-                    0
-            end,
-            AnswerPoints = [
-                case is_correct(IsMulti, Answered, Q) of
-                    true -> {maps:get(<<"value">>, Q, undefined), GoodPoints};
-                    false -> {maps:get(<<"value">>, Q, undefined), WrongPoints}
-                end
-                || Q <- QuestionOptions
-            ],
-            Points = erlang:max(0, sum(AnswerPoints)),
-            A1 = [
-                {points, Points},
-                {answer_points, AnswerPoints}
-                | A
-            ],
-            {Points, A1};
-        _ ->
-            {0, A}
-    end;
+question_points(<<"survey_thurstone">>, A, #{ <<"is_test">> := true } = Block, Context) ->
+    Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
+    QuestionOptions = maps:get(<<"answers">>, Props, []),
+    Answered = make_list(proplists:get_value(answer, A)),
+    IsNeg = z_convert:to_bool(maps:get(<<"is_test_neg">>, Props, false)),
+    InputType = maps:get(<<"input_type">>, Props, <<>>),
+    AnswerPoints = points(InputType, IsNeg, QuestionOptions, Answered),
+    SummedPoints = erlang:max(0, sum(AnswerPoints)),
+    A1 = [
+        {points, SummedPoints},
+        {answer_points, AnswerPoints}
+        | A
+    ],
+    {SummedPoints, A1};
 question_points(<<"survey_matching">>, A, _Block, _Context) ->
-    ?DEBUG({todo, matching_score}),
     {0, A};
 question_points(_Type, A, _Block, _Context) ->
     {0, A}.
 
-block_test_points(Block) ->
-    case z_convert:to_bool(maps:get(<<"is_test">>, Block, false)) of
-        false -> undefined;
-        true ->
-            case maps:get(<<"test_points">>, Block, 1) of
+
+points(<<"multi">>, IsNeg, QuestionOptions, Answered) ->
+    lists:map(
+        fun(Q) ->
+            Value = maps:get(<<"value">>, Q, undefined),
+            IsCorrect = maps:get(<<"is_correct">>, Q, false),
+            Points = case z_convert:to_integer(maps:get(<<"points_int">>, Q, 1)) of
                 undefined -> 1;
-                <<>> -> 1;
-                TestPoints -> z_convert:to_integer(TestPoints)
+                Pts -> Pts
+            end,
+            case lists:member(Value, Answered) of
+                true when IsCorrect -> {Value, Points};
+                true when IsNeg -> {Value, -Points};
+                true -> {Value, 0};
+                false when IsCorrect, IsNeg -> {Value, -Points};
+                false when IsCorrect -> {Value, 0};
+                false -> {Value, Points}
             end
-    end.
+        end,
+        QuestionOptions);
+points(_InputType, _IsNeg, QuestionOptions, Answered) ->
+    lists:map(
+        fun(Q) ->
+            Value = maps:get(<<"value">>, Q, undefined),
+            IsCorrect = maps:get(<<"is_correct">>, Q, false),
+            Points = case z_convert:to_integer(maps:get(<<"points_int">>, Q, 1)) of
+                undefined -> 1;
+                Pts -> Pts
+            end,
+            case lists:member(Value, Answered) of
+                true when IsCorrect -> {Value, Points};
+                true -> {Value, 0};
+                false -> {Value, 0}
+            end
+        end,
+        QuestionOptions).
 
 sum([]) -> 0;
 sum(L) -> lists:sum([Pt || {_,Pt} <- L]).
@@ -109,23 +134,10 @@ sum(L) -> lists:sum([Pt || {_,Pt} <- L]).
 make_list(B) when is_binary(B) -> B;
 make_list(L) when is_list(L) -> L.
 
-find_block(_Name, []) -> [];
+find_block(_Name, []) ->
+    #{};
 find_block(Name, [B|Bs]) ->
     case maps:get(<<"name">>, B, undefined) of
         Name -> B;
         _ -> find_block(Name, Bs)
     end.
-
-is_correct(true, Answers, Q) ->
-    V = maps:get(<<"value">>, Q, undefined),
-    case maps:get(<<"is_correct">>, Q, undefined) of
-        true -> lists:member(V, Answers);
-        false -> not lists:member(V, Answers)
-    end;
-is_correct(false, Answers, Q) ->
-    V = maps:get(<<"value">>, Q, undefined),
-    case maps:get(<<"is_correct">>, Q, false) of
-        true -> lists:member(V, Answers);
-        false -> false
-    end.
-

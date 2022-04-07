@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011 Marc Worrell
+%% @copyright 2011-2022 Marc Worrell
 
-%% Copyright 2011 Marc Worrell
+%% Copyright 2011-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@
     test_max_points/1
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
+% -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_survey/include/survey.hrl").
 
 
@@ -52,11 +52,8 @@ answer(Block, Answers, Context) ->
     end.
 
 is_defined_value(_Val, []) -> false;
-is_defined_value(Val, [Opt|Options]) ->
-    case maps:get(<<"value">>, Opt) of
-        Val -> true;
-        _ -> is_defined_value(Val, Options)
-    end.
+is_defined_value(Val, [ #{ <<"value">> := Val } | _]) -> true;
+is_defined_value(Val, [ _ | Options ]) -> is_defined_value(Val, Options).
 
 -spec prep_chart( map(), list(), z:context() ) -> map() | undefined.
 prep_chart(_Q, [], _Context) ->
@@ -83,10 +80,11 @@ prep_answer_header(Q, _Context) ->
     Name = maps:get(<<"name">>, Q, undefined),
     case is_multiple(Q) of
         true ->
-            [
-                <<Name/binary, $:, (maps:get(<<"value">>, Ans))/binary>>
-                || Ans <- maps:get(<<"answers">>, Q, [])
-            ];
+            lists:map(
+                fun(#{ <<"value">> := Value }) ->
+                    <<Name/binary, $:, Value/binary>>
+                end,
+                maps:get(<<"answers">>, Q, []));
         false ->
             Name
     end.
@@ -106,16 +104,14 @@ prep(PreppedBlock, Vs, _Context) ->
                 [] -> undefined
             end;
         true ->
-            [
-                begin
-                    K = maps:get(<<"value">>, Ans),
+            lists:map(
+                fun(#{ <<"value">> := K }) ->
                     case lists:member(K, Vs) of
                         true -> K;
                         false -> <<>>
                     end
-                end
-                || Ans <- maps:get(<<"answers">>, PreppedBlock, [])
-            ]
+                end,
+                maps:get(<<"answers">>, PreppedBlock, []))
     end.
 
 prep_answer_score(PreppedBlock, [], Context) ->
@@ -152,53 +148,43 @@ ensure_list(L) when is_list(L) -> L;
 ensure_list(V) -> [V].
 
 
+is_multiple(#{ <<"input_type">> := <<"multi">> }) ->
+    true;
+is_multiple(#{ <<"input_type">> := _ }) ->
+    false;
 is_multiple(Q) ->
-    case maps:get(<<"input_type">>, Q, undefined) of
-        <<"multi">> ->
-            true;
-        undefined ->
-            % Older surveys had the is_multiple property
-            z_convert:to_bool(maps:get(<<"is_multiple">>, Q, false));
-        _ ->
-            false
-    end.
-
+    % Older 0.x surveys had the is_multiple property
+    z_convert:to_bool(maps:get(<<"is_multiple">>, Q, false)).
 
 prep_block(Block, Context) ->
-    Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
-    maps:merge(Block, Props).
+    filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context).
 
 
+% Map __very__ old questions to block format (Zotonic 0.x)
 to_block(Q) ->
-    #{
+    Block = #{
         <<"type">> => <<"survey_thurstone">>,
         <<"is_required">> => Q#survey_question.is_required,
-        <<"is_multiple">> => false,
+        <<"input_type">> => <<>>,
+        <<"is_test">> => false,
         <<"name">> => z_convert:to_binary(Q#survey_question.name),
         <<"prompt">> => z_convert:to_binary(Q#survey_question.question),
         <<"answers">> => z_convert:to_binary(Q#survey_question.text)
-    }.
+    },
+    filter_survey_prepare_thurstone:survey_prepare_thurstone(Block).
 
 test_max_points(Block) ->
-    IsMultiple = is_multiple(Block),
-    case survey_test_results:block_test_points(Block) of
-        undefined -> 0;
-        Points when not IsMultiple ->
-            % Only a single correct answer possible
-            Points;
-        Points when IsMultiple ->
-            % Every answer is counted
-            Options = thurstone_options(Block),
-            Options1 = [ z_string:trim(Opt) || Opt <- Options ],
-            length([ Opt || Opt <- Options1, Opt /= <<>> ]) * Points
-    end.
+    Block1 = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block),
+    erlang:max(0, max_points(is_multiple(Block), Block1)).
 
-thurstone_options(Block) ->
-    case maps:get(<<"answers">>, Block, <<>>) of
-        {trans, [{_,Text}|_]} ->
-            binary:split(Text, <<"\n">>, [global]);
-        Text when is_binary(Text) ->
-            binary:split(Text, <<"\n">>, [global]);
-        _ ->
-            []
-    end.
+max_points(true, #{ <<"answers">> := [] }) ->
+    0;
+max_points(true, #{ <<"answers">> := As }) ->
+    lists:sum(lists:map(fun max_points_answer/1, As));
+max_points(false, #{ <<"answers">> := As }) ->
+    lists:max(lists:map(fun max_points_answer/1, As)).
+
+max_points_answer(#{ <<"points_int">> := Points }) when is_integer(Points) ->
+    Points;
+max_points_answer(_) ->
+    1.
