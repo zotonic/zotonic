@@ -78,9 +78,17 @@ observe_filestore(#filestore{action=upload, path=Path, mime=Mime}, Context) ->
     maybe_queue_file(<<>>, Path, true, MediaProps, Context),
     ok;
 observe_filestore(#filestore{action=delete, path=Path}, Context) ->
-    Count = m_filestore:mark_deleted(Path, Context),
-    ?LOG_INFO("Filestore marked ~p entries as deleted for ~p", [Count, Path]),
-    ok.
+    case m_filestore:mark_deleted(Path, Context) of
+        0 ->
+            ok;
+        Count ->
+            ?LOG_INFO(#{
+                text => <<"Filestore marked entries as deleted.">>,
+                path => Path,
+                count => Count
+            }),
+            ok
+    end.
 
 observe_filestore_credentials_lookup(#filestore_credentials_lookup{path=Path}, Context) ->
     S3Key = m_config:get_value(?MODULE, s3key, Context),
@@ -191,13 +199,27 @@ load_cache(#{
                     Location1,
                     fun
                         ({error, FinalError}) when FinalError =:= enoent; FinalError =:= forbidden ->
-                            ?LOG_ERROR("File store remote file is ~p ~p", [FinalError, Location]),
+                            ?LOG_ERROR(#{
+                                text => <<"File store remote file has problems.">>,
+                                result => error,
+                                reason => FinalError,
+                                service => Service,
+                                remote => Location,
+                                id => Id
+                            }),
                             ok = m_filestore:mark_error(Id, FinalError, Ctx),
                             exit(normal);
-                        ({error, _} = Error) ->
+                        ({error, Reason} = Error) ->
                             % Abnormal exit when receiving an error.
                             % This takes down the cache entry.
-                            ?LOG_ERROR("File store error ~p on cache load of ~p", [Error, Location]),
+                            ?LOG_ERROR(#{
+                                text => <<"File store error on cache load.">>,
+                                result => error,
+                                reason => Reason,
+                                service => Service,
+                                remote => Location,
+                                id => Id
+                            }),
                             exit(Error);
                         (T) when is_tuple(T) ->
                             nop;
@@ -236,14 +258,21 @@ task_queue_all(Offset, Max, Context) when Offset =< Max ->
         Context)
     of
         {ok, Media} ->
-            ?LOG_NOTICE("Ensuring ~p files are queued for remote upload.", [length(Media)]),
+            ?LOG_INFO(#{
+                text => <<"Ensuring files are queued for remote upload.">>,
+                count => length(Media)
+            }),
             lists:foreach(fun(M) ->
                             queue_medium(M, Context)
                           end,
                           Media),
             {delay, 0, [Offset+?BATCH_SIZE, Max]};
-        {error, _} = Error ->
-            ?LOG_ERROR("Error ~p when queueing files for remote upload.", [Error]),
+        {error, Reason} ->
+            ?LOG_ERROR(#{
+                text => <<"Error queueing files for remote upload.">>,
+                result => error,
+                reason => Reason
+            }),
             {delay, 60, [Offset, Max]}
     end;
 task_queue_all(_Offset, _Max, _Context) ->
@@ -333,27 +362,60 @@ start_deleter(#{
             path := Path,
             service := Service,
             location := Location
-        } = FilestoreEntry, Context) ->
+        }, Context) ->
     case z_notifier:first(#filestore_credentials_revlookup{service=Service, location=Location}, Context) of
         {ok, #filestore_credentials{service= <<"s3">>, location=Location1, credentials=Cred}} ->
-            ?LOG_DEBUG("Queue delete for ~p", [Location1]),
+            ?LOG_DEBUG(#{
+                text => <<"Queue delete.">>,
+                path => Path,
+                service => Service,
+                location => Location1,
+                id => Id
+            }),
             ContextAsync = z_context:prune_for_async(Context),
             _ = s3filez:queue_delete_id({?MODULE, delete, Id}, Cred, Location1, {?MODULE, delete_ready, [Id, Path, ContextAsync]});
         undefined ->
-            ?LOG_DEBUG("No credentials for ~p", [FilestoreEntry])
+            ?LOG_DEBUG(#{
+                text => <<"No credentials for queue delete.">>,
+                service => Service,
+                location => Location,
+                path => Path,
+                id => Id
+            })
     end.
 
 delete_ready(Id, Path, Context, _Ref, ok) ->
-    ?LOG_DEBUG("Delete remote file for ~p", [Path]),
+    ?LOG_DEBUG(#{
+        text => <<"Delete remote file done.">>,
+        result => ok,
+        path => Path
+    }),
     m_filestore:purge_deleted(Id, Context);
 delete_ready(Id, Path, Context, _Ref, {error, enoent}) ->
-    ?LOG_DEBUG("Delete remote file for ~p was not found", [Path]),
+    ?LOG_DEBUG(#{
+        text => <<"Delete remote file was not found">>,
+        result => error,
+        reason => enoent,
+        path => Path
+    }),
     m_filestore:purge_deleted(Id, Context);
 delete_ready(Id, Path, Context, _Ref, {error, forbidden}) ->
-    ?LOG_DEBUG("Delete remote file for ~p was forbidden", [Path]),
+    ?LOG_INFO(#{
+        text => <<"Delete remote file was forbidden">>,
+        path => Path,
+        result => error,
+        reason => forbidden,
+        id => Id
+    }),
     m_filestore:purge_deleted(Id, Context);
-delete_ready(_Id, Path, _Context, _Ref, {error, _} = Error) ->
-    ?LOG_ERROR("Could not delete remote file. Path ~p error ~p", [Path, Error]).
+delete_ready(Id, Path, _Context, _Ref, {error, Reason}) ->
+    ?LOG_ERROR(#{
+        text => <<"Delete remote file failed,">>,
+        path => Path,
+        result => error,
+        reason => Reason,
+        id => Id
+    }).
 
 
 -spec start_downloaders( {ok, [ m_filestore:filestore_entry() ]} | {error, term()}, z:context() ) -> ok.
@@ -371,16 +433,29 @@ start_downloader(#{
             path := Path,
             service := Service,
             location := Location
-        } = FilestoreEntry, Context) ->
+        }, Context) ->
     case z_notifier:first(#filestore_credentials_revlookup{service=Service, location=Location}, Context) of
         {ok, #filestore_credentials{service= <<"s3">>, location=Location1, credentials=Cred}} ->
             LocalPath = z_path:files_subdir(Path, Context),
             ok = z_filelib:ensure_dir(LocalPath),
-            ?LOG_DEBUG("Queue move to local for ~p", [Location1]),
+            ?LOG_DEBUG(#{
+                text => <<"Queue moved to local.">>,
+                service => Service,
+                location => Location1,
+                path => Path,
+                local_path => LocalPath,
+                id => Id
+            }),
             ContextAsync = z_context:prune_for_async(Context),
             _ = s3filez:queue_stream_id({?MODULE, stream, Id}, Cred, Location1, {?MODULE, download_stream, [Id, Path, LocalPath, ContextAsync]});
         undefined ->
-            ?LOG_DEBUG("No credentials for ~p", [FilestoreEntry])
+            ?LOG_DEBUG(#{
+                text => <<"No credentials for downloader.">>,
+                service => Service,
+                location => Location,
+                path => Path,
+                id => Id
+            })
     end.
 
 download_stream(_Id, _Path, LocalPath, _Context, {content_type, _}) ->
