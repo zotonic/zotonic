@@ -49,21 +49,26 @@ calc_test_results(SurveyId, Answers, Context) ->
         Blocks when is_list(Blocks)->
             count_points(Answers, Blocks, 0, [], Context);
         _ ->
-            {0, Answers}
+            count_points(Answers, [], 0, [], Context)
     end.
 
 count_points([], _Blocks, PtAcc, AsAcc, _Context) ->
     {PtAcc, lists:reverse(AsAcc)};
 count_points([{Name,A}|As], Blocks, PtAcc, AsAcc, Context) ->
-    Block = find_block(proplists:get_value(block, A), Blocks),
-    case z_convert:to_bool(maps:get(<<"is_test">>, Block, false)) of
-        true ->
-            % Check if given answer is correct
-            Type = maps:get(<<"type">>, Block),
-            {PtQ, AP} = question_points(Type, A, Block, Context),
-            count_points(As, Blocks, PtAcc+PtQ, [{Name,AP}|AsAcc], Context);
-        false ->
-            count_points(As, Blocks, PtAcc, [{Name,A}|AsAcc], Context)
+    case proplists:get_value(fixed_points, A) of
+        N when is_integer(N) ->
+            count_points(As, Blocks, PtAcc+N, [{Name,A}|AsAcc], Context);
+        undefined ->
+            Block = find_block(proplists:get_value(block, A), Blocks),
+            case z_convert:to_bool(maps:get(<<"is_test">>, Block, false)) of
+                true ->
+                    % Check if given answer is correct
+                    Type = maps:get(<<"type">>, Block),
+                    {PtQ, AP} = question_points(Type, A, Block, Context),
+                    count_points(As, Blocks, PtAcc+PtQ, [{Name,AP}|AsAcc], Context);
+                false ->
+                    count_points(As, Blocks, PtAcc, [{Name,A}|AsAcc], Context)
+            end
     end.
 
 -spec question_points(binary(), proplists:proplist(), map(), z:context()) -> {integer(), proplists:proplist()}.

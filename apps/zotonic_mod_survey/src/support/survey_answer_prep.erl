@@ -140,7 +140,7 @@ question_1(_Type, _Answer, _Block, _Context) ->
     undefined.
 
 
-escape_check({trans, _} = V) ->
+escape_check(#trans{} = V) ->
     z_html:escape_check(V);
 escape_check([[V|_]|_] = L) when not is_integer(V) ->
     [ escape_check(X) || X <- L ];
@@ -158,6 +158,13 @@ keep_qprop(_, _) -> false.
 answer_noempty(L) when is_list(L) -> [ A || A <- L, A /= <<>> ];
 answer_noempty(A) -> A.
 
+block(Name, undefined) ->
+    % Unknown block, but we have an answer, don't loose the answer.
+    #{
+        <<"type">> => <<"survey_short_answer">>,
+        <<"name">> => z_html:escape_check(Name),
+        <<"prompt">> => z_html:escape_check(Name)
+    };
 block(Name, []) ->
     % Unknown block, but we have an answer, don't loose the answer.
     #{

@@ -796,7 +796,7 @@ single_result(SurveyId, UserId, PersistentId, Context) ->
 delete_results(SurveyId, Context) ->
     z_db:q("
         DELETE FROM survey_answers
-        WHERE id = $2",
+        WHERE survey_id = $1",
         [SurveyId],
         Context).
 
