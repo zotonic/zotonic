@@ -31,17 +31,25 @@
 %% @doc Insert boot data into the database.
 -spec install(atom(), #context{}) -> ok.
 install(Site, Context) ->
-    ?LOG_NOTICE("~p: Install start.", [Site]),
+    ?LOG_NOTICE(#{
+        text => <<"Site install start.">>,
+        site => Site
+    }),
     ok = install_category(Context),
     ok = install_rsc(Context),
     ok = install_identity(Context),
     ok = install_predicate(Context),
     z_db:equery("SELECT setval('rsc_id_seq', m) FROM (select 1 + max(id) as m from rsc) sub", Context),
-    ?LOG_NOTICE("~p: Install done.", [Site]),
+    ?LOG_NOTICE(#{
+        text => <<"Site install done.">>,
+        site => Site
+    }),
     ok.
 
 install_category(C) ->
-    ?LOG_NOTICE("Inserting categories"),
+    ?LOG_INFO(#{
+        text => <<"Site install: Inserting categories">>
+    }),
     %% The egg has to lay a fk-checked chicken here, so the insertion order is sensitive.
 
     %% 1. Insert the categories "meta" and "category"
@@ -123,7 +131,9 @@ install_category(C) ->
 %% @doc Install some initial resources, most important is the system administrator
 %% @todo Add the hostname to the uri
 install_rsc(C) ->
-    ?LOG_NOTICE("Inserting base resources (admin, etc.)"),
+    ?LOG_INFO(#{
+        text => <<"Site install: inserting base resources (admin, etc.)">>
+    }),
     Rsc = [
         % id  vsfr  cat   protect name,         props
         [   1,  0,  102,  true,    "administrator",   ?DB_PROPS([{title,<<"Site Administrator">>}]) ]
@@ -138,7 +148,9 @@ install_rsc(C) ->
 
 %% @doc Install the admin user as an user.  Uses the hard coded password "admin" when no password defined in the environment.
 install_identity(C) ->
-    ?LOG_NOTICE("Inserting username for the admin"),
+    ?LOG_INFO(#{
+        text => <<"Site install: inserting username for the admin">>
+    }),
     Hash = m_identity:hash([]),
     {ok, 1} = z_db:equery("
         insert into identity (rsc_id, type, key, is_unique, propb)
@@ -150,7 +162,9 @@ install_identity(C) ->
 %% See http://dublincore.org/documents/dcmi-terms/
 %% @todo Extend and check this list.  Add allowed from/to categories.
 install_predicate(C) ->
-    ?LOG_NOTICE("Inserting predicates"),
+    ?LOG_INFO(#{
+        text => <<"Site install: inserting predicates">>
+    }),
     Preds = [
         % id   protect name       uri                                                  props
         [ 300, true,   "about",    "http://www.w3.org/1999/02/22-rdf-syntax-ns#about",  ?DB_PROPS([{reversed, false},{title, {trans, [{en,"About"},    {nl,"Over"}]}}])],

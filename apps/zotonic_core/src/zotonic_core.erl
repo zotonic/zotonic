@@ -142,8 +142,12 @@ mnesia_data_dir() ->
         ok ->
             application:set_env(mnesia, dir, MnesiaDir),
             {ok, MnesiaDir};
-        {error, _} = Error ->
-            ?LOG_ERROR("Could not create mnesia dir \"~s\": ~p",
-                        [MnesiaDir, Error]),
+        {error, Reason} ->
+            ?LOG_ERROR(#{
+                text => <<"Could not create mnesia dir">>,
+                path => MnesiaDir,
+                result => error,
+                reason => Reason
+            }),
             undefined
     end.

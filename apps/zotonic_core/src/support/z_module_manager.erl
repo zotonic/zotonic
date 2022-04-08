@@ -820,10 +820,9 @@ handle_info({'DOWN', _MRef, process, Pid, Reason}, #state{ start_wait = {Module,
 handle_info({'DOWN', _MRef, process, Pid, Reason}, #state{ site = Site } = State) ->
     case maps:find(Pid, State#state.module_monitors) of
         {ok, Module} ->
-            z:info(
+            ?zInfo(
                 "Module ~p stopped, reason ~p",
                 [Module, Reason],
-                [ {module, ?MODULE}, {line, ?LINE} ],
                 z_context:new(Site)),
             State1 = do_module_down(Module, State, Pid, Reason),
             {noreply, State1};
@@ -918,20 +917,53 @@ do_module_down(Module, #state{ modules = Modules } = State, Pid, Reason) ->
 
 
 do_module_down_1(Modules, #module_status{ module = Mod, status = removing }, shutdown) ->
+    ?LOG_DEBUG(#{
+        text => <<"Module stopped">>,
+        old_status => removing,
+        new_status => removed,
+        result => ok,
+        reason => shutdown,
+        module => Mod
+    }),
     maps:remove(Mod, Modules);
 do_module_down_1(Modules, #module_status{ module = Mod, status = stopping } = Ms, shutdown) ->
+    ?LOG_DEBUG(#{
+        text => <<"Module stopped">>,
+        old_status => stopping,
+        new_status => stopped,
+        result => ok,
+        reason => shutdown,
+        module => Mod
+    }),
     Ms1 = Ms#module_status{
         pid = undefined,
         status = stopped
     },
     Modules#{ Mod => Ms1 };
 do_module_down_1(Modules, #module_status{ module = Mod, status = running } = Ms, normal) ->
+    ?LOG_INFO(#{
+        text => <<"Module stopped">>,
+        old_status => running,
+        new_status => stopped,
+        result => ok,
+        reason => normal,
+        module => Mod
+    }),
     Ms1 = Ms#module_status{
         pid = undefined,
         status = stopped
     },
     Modules#{ Mod => Ms1 };
 do_module_down_1(Modules, #module_status{ module = Mod, status = restarting } = Ms, shutdown) ->
+    ?LOG_ERROR(#{
+        text => <<"Module failed">>,
+        old_status => restarting,
+        new_status => failed,
+        result => error,
+        reason => shutdown,
+        module => Mod,
+        crash_count => 0
+    }),
     Ms1 = Ms#module_status{
         pid = undefined,
         status = failed,
@@ -941,8 +973,15 @@ do_module_down_1(Modules, #module_status{ module = Mod, status = restarting } = 
     },
     Modules#{ Mod => Ms1 };
 do_module_down_1(Modules, #module_status{ module = Mod, status = Status } = Ms, Reason) ->
-    ?LOG_ERROR("Module ~p in state ~p stopped with reason ~p",
-                [Mod, Status, Reason]),
+    ?LOG_ERROR(#{
+        text => <<"Module failed">>,
+        old_status => Status,
+        new_status => failed,
+        result => error,
+        reason => Reason,
+        module => Mod,
+        crash_count => Ms#module_status.crash_count + 1
+    }),
     Ms1 = Ms#module_status{
         pid = undefined,
         status = failed,
