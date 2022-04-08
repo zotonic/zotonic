@@ -45,7 +45,7 @@ readable(Id, Answers0, Context) ->
     Blocks = m_rsc:p(Id, blocks, Context),
     Answers = order_by_blocks(Answers0, Blocks),
     Answers1 = [ {Name, question(Name, Answer, Blocks, Context)} || {Name, Answer} <- Answers ],
-    [ {Name, Q} || {Name,Q} <- Answers1, is_list(Q) ].
+    [ {Name, Q} || {Name,Q} <- Answers1, is_map(Q) ].
 
 single(Id, Name, Answer, Context) ->
     Blocks = m_rsc:p(Id, blocks, Context),
@@ -73,69 +73,89 @@ question(Name, Answer, Blocks, Context) ->
 
 question_1(<<"survey_country">>, Answer, Block, _Context) ->
     Country = l10n_iso2country:iso2country(Answer),
-    [
-        {answers, [
-            [
-                {value, escape_check(Answer)},
-                {text, escape_check(Country)}
-            ]
-        ]},
-        % {answer_value, z_html:escape_check(Answer)},
-        % {answer_text, z_html:escape_check(Country)},
-        {question, qprops(Block)}
-    ];
+    #{
+        <<"answers">> => [
+            #{
+                <<"value">> => escape_check(Answer),
+                <<"text">> => escape_check(Country)
+            }
+        ],
+        <<"question">> => qprops(Block)
+    };
 question_1(<<"survey_yesno">>, Answer, Block, Context) ->
     Text = case z_convert:to_bool(Answer) of
         true -> default(maps:get(<<"yes">>, Block, undefined), <<"yes">>, Context);
         false -> default(maps:get(<<"no">>, Block, undefined), <<"no">>, Context)
     end,
-    [
-        {answers, [
-            [
-                {value, escape_check(Answer)},
-                {text, escape_check(Text)}
-            ]
-        ]},
-        % {answer_value, escape_check(Answer)},
-        % {answer_text, escape_check(Text)},
-        {question, qprops(Block)}
-    ];
+    #{
+        <<"answers">> => [
+            #{
+                <<"value">> => escape_check(Answer),
+                <<"text">> => escape_check(Text)
+            }
+        ],
+        <<"question">> => qprops(Block)
+    };
 question_1(<<"survey_truefalse">>, Answer, Block, Context) ->
     Text = case z_convert:to_bool(Answer) of
         true -> default(maps:get(<<"yes">>, Block, undefined), <<"true">>, Context);
         false -> default(maps:get(<<"no">>, Block, undefined), <<"false">>, Context)
     end,
-    [
-        {answers, [
-            [
-                {value, escape_check(Answer)},
-                {text, escape_check(Text)}
-            ]
-        ]},
-        % {answer_value, escape_check(Answer)},
-        % {answer_text, escape_check(Text)},
-        {question, qprops(Block)}
-    ];
+    #{
+        <<"answers">> => [
+            #{
+                <<"value">> => escape_check(Answer),
+                <<"text">> => escape_check(Text)
+            }
+        ],
+        <<"question">> => qprops(Block)
+    };
 question_1(<<"survey_thurstone">>, Answer, Block, Context) ->
     Block1 = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
-    Ans = maps:get(<<"answers">>, Block1, undefined),
+    QuestionAnswers = maps:get(<<"answers">>, Block1, undefined),
     Ns = maybe_split(Answer),
     Answers = case is_list(Ns) of
-        true -> [ thurs_answer(N1, Ans) || N1 <- Ns ];
-        false -> [ thurs_answer(Answer, Ans) ]
+        true when is_list(QuestionAnswers) ->
+            lists:filtermap(
+                fun(QAns) ->
+                    Value = maps:get(<<"value">>, QAns, undefined),
+                    case lists:member(Value, Ns) of
+                        true ->
+                            Value1 = escape_check(Value),
+                            QAns1 = QAns#{
+                                <<"text">> => maps:get(<<"option">>, QAns, Value1)
+                            },
+                            {true, QAns1};
+                        false ->
+                            false
+                    end
+                end,
+                QuestionAnswers);
+        true ->
+            lists:map(
+                fun(N) ->
+                    #{
+                        <<"value">> => escape_check(N),
+                        <<"option">> => escape_check(N),
+                        <<"text">> => escape_check(N)
+                    }
+                end,
+                Ns)
     end,
-    [
-        {answers, Answers},
-        % {answer_value, escape_check(Answer)},
-        % {answer_text, escape_check(Answer)},
-        {question, qprops(Block)}
-    ];
+    #{
+        <<"answers">> => Answers,
+        <<"question">> => qprops(Block)
+    };
 question_1(<<"survey_", _/binary>>, Answer, Block, _Context) ->
-    [
-        {answer_value, escape_check(Answer)},
-        {answer_text, escape_check(Answer)},
-        {question, qprops(Block)}
-    ];
+    #{
+        <<"answers">> => [
+            #{
+                <<"value">> => escape_check(Answer),
+                <<"text">> => escape_check(Answer)
+            }
+        ],
+        <<"question">> => qprops(Block)
+    };
 question_1(_Type, _Answer, _Block, _Context) ->
     undefined.
 
@@ -158,13 +178,6 @@ keep_qprop(_, _) -> false.
 answer_noempty(L) when is_list(L) -> [ A || A <- L, A /= <<>> ];
 answer_noempty(A) -> A.
 
-block(Name, undefined) ->
-    % Unknown block, but we have an answer, don't loose the answer.
-    #{
-        <<"type">> => <<"survey_short_answer">>,
-        <<"name">> => z_html:escape_check(Name),
-        <<"prompt">> => z_html:escape_check(Name)
-    };
 block(Name, []) ->
     % Unknown block, but we have an answer, don't loose the answer.
     #{
@@ -176,22 +189,14 @@ block(Name, [B|Rest]) ->
     case maps:get(<<"name">>, B, undefined) of
         Name -> B;
         _ -> block(Name, Rest)
-    end.
-
-thurs_answer(V, []) ->
-    [
-        {value, escape_check(V)},
-        {text, escape_check(V)}
-    ];
-thurs_answer(V, [#{ <<"value">> := V } = A | _ ]) ->
-    [
-        {value, escape_check(V)},
-        {text, escape_check(maps:get(<<"option">>, A))},
-        {is_correct, maps:get(<<"is_correct">>, A, undefined)},
-        {feedback, maps:get(<<"feedback">>, A, undefined)}
-    ];
-thurs_answer(V, [ _ | As ]) ->
-    thurs_answer(V, As).
+    end;
+block(Name, Blocks) when not is_list(Blocks) ->
+    % Unknown block, but we have an answer, don't loose the answer.
+    #{
+        <<"type">> => <<"survey_short_answer">>,
+        <<"name">> => z_html:escape_check(Name),
+        <<"prompt">> => z_html:escape_check(Name)
+    }.
 
 default(#trans{} = Tr, A, Context) ->
     case default(z_trans:lookup_fallback(Tr, Context), xx, Context) of
@@ -205,6 +210,7 @@ default(V, _, _Context) -> V.
 
 maybe_split(B) when is_binary(B) ->
     binary:split(B, <<"#">>, [global]);
+maybe_split(V) when is_list(V) ->
+    V;
 maybe_split(V) ->
-    V.
-
+    [ V ].

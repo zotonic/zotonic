@@ -457,7 +457,7 @@ count_answers([ {Row} | Rows ], Dict) when is_map(Row)->
             ({QName, QAnswer}, Acc) ->
                 As = proplists:get_value(answer, QAnswer, []),
                 Block = proplists:get_value(block, QAnswer),
-                lists:foldl(
+                lists:foldr(
                     fun(Ans, QAcc) ->
                         dict:update_counter({Block, QName, Ans}, 1, QAcc)
                     end,
