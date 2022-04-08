@@ -25,7 +25,7 @@
         <p class="help-block">
               {_ Add answer options here. The <i>stored value</i> is stored with the results. _}
         </p>
-        <p class="help-block test-controls">
+        <p class="help-block test-controls" style="{% if not blk.is_test %}display:none{% endif %}">
             {_ Check the correct answers and give each answer points. _}<br>
             {_ Single answer possible: points are given for a correct answer. Default: 1 point for a correct answer. _}<br>
             {_ Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer. _}
