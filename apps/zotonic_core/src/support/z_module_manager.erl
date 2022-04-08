@@ -1030,13 +1030,17 @@ handle_upgrade(#state{ site = Site, modules = Modules } = State) ->
     Modules1 = sets:fold(
         fun (Module, MsAcc) ->
             #{ Module := ModuleStatus } = MsAcc,
-            case ModuleStatus#module_status.pid of
-                undefined -> ok;
-                _ -> z_module_sup:stop_module(Module, Site)
+            ModuleStatus1 = case ModuleStatus#module_status.pid of
+                MPid when is_pid(MPid) ->
+                    z_module_sup:stop_module(Module, Site),
+                    ModuleStatus#module_status{
+                        status = removing
+                    };
+                undefined ->
+                    ModuleStatus#module_status{
+                        status = stopped
+                    }
             end,
-            ModuleStatus1 = ModuleStatus#module_status{
-                status = removing
-            },
             MsAcc#{ Module => ModuleStatus1 }
         end,
         State#state.modules,

@@ -103,8 +103,26 @@ handle_info(_Info, State) ->
 code_change(_OldVersion, State, _Extra) ->
     {ok, State}.
 
-terminate(_Reason, _State) ->
-    ok.
+terminate(normal, _State) ->
+    ok;
+terminate({Reason, [{_Mod, _Fun, _Args, _Info} | _] = Stack}, #state{ id = Id, path = Path }) ->
+    ?LOG_ERROR(#{
+        text => <<"Filestore upload terminated">>,
+        result => error,
+        reason => Reason,
+        stack => Stack,
+        id => Id,
+        path => Path
+    });
+terminate(Reason, #state{ id = Id, path = Path }) ->
+    ?LOG_ERROR(#{
+        text => <<"Filestore upload terminated">>,
+        result => error,
+        reason => Reason,
+        id => Id,
+        path => Path
+    }).
+
 
 %%% ------ Support routines --------
 
