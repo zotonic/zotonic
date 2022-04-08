@@ -237,13 +237,17 @@ mark_deleted({prefix, Path}, Context) when is_binary(Path) ->
         0 -> {error, enoent}
     end;
 mark_deleted(Path, Context) when is_binary(Path) ->
-    z_db:q("update filestore
+    case z_db:q("update filestore
             set is_deleted = true,
                 modified = now(),
                 deleted = now()
             where path = $1",
             [Path],
-            Context).
+            Context)
+    of
+        N when N > 0 -> ok;
+        0 -> {error, enoent}
+    end.
 
 %% @doc Fetch all deleted file entries where the entry was marked as deleted
 %% at least 'Interval' ago. The Interval comes from the mod_filestore.delete_interval
