@@ -141,11 +141,13 @@ pool_return_connection(Worker, Context) ->
             catch
                 exit:Reason:Stack ->
                     z_context:logger_md(Context),
-                    ?LOG_ERROR("Return connection failed.", #{
-                            reason => Reason,
-                            stack => Stack,
-                            connection_pid => Worker
-                        }),
+                    ?LOG_ERROR(#{
+                        text => <<"Return connection failed.">>,
+                        result => exit,
+                        reason => Reason,
+                        stack => Stack,
+                        worker_pid => Worker
+                    }),
                     {error, Reason}
             end;
         false ->
@@ -200,12 +202,14 @@ fetch_conn(Worker, Sql, Parameters, Timeout) ->
                 {ok, {Conn, Ref}}
             catch
                 exit:Reason:Stack ->
-                    ?LOG_ERROR("Fetch connection failed.", #{
-                            reason => Reason,
-                            stack => Stack,
-                            connection_pid => Worker,
-                            sql => Sql
-                        }),
+                    ?LOG_ERROR(#{
+                        text => <<"Fetch connection failed.">>,
+                        result => exit,
+                        reason => Reason,
+                        stack => Stack,
+                        worker_pid => Worker,
+                        sql => Sql
+                    }),
                     {error, Reason}
             end;
         false ->
@@ -255,8 +259,16 @@ handle_call({pool_return_connection_check, CallerPid}, From, #state{
             busy_sql = Sql,
             busy_params = Params
         } = State) ->
-    ?LOG_ERROR("Connection return to pool by ~p but still running for ~p (query \"~s\" with ~p)",
-                [ CallerPid, Pid, Sql, Params ]),
+    ?LOG_ERROR(#{
+        text => <<"Connection return to pool by but still running">>,
+        result => error,
+        reason => running,
+        request_pid => CallerPid,
+        busy_pid => Pid,
+        query => Sql,
+        args => Params,
+        worker_pid => self()
+    }),
     gen_server:reply(From, {error, checkin_busy}),
     State1 = disconnect(State, checkin_busy),
     {stop, normal, State1};
@@ -291,8 +303,15 @@ handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, Fr
     % Log an error, stop the running query, and kill this worker.
     % No hope of recovery, as the caller is in an illegal state reusing this connection
     % for multiple queries.
-    ?LOG_ERROR("Connection requested by ~p but also using same connection for (query \"~s\" with ~p)",
-                [ CallerPid, Sql, Params ]),
+    ?LOG_ERROR(#{
+        text => <<"Connection requested but already using same connection">>,
+        result => error,
+        reason => busy,
+        request_pid => CallerPid,
+        query => Sql,
+        args => Params,
+        worker_pid => self()
+    }),
     gen_server:reply(From, {error, busy}),
     State1 = disconnect(State, busy),
     {stop, normal, State1};
@@ -300,8 +319,16 @@ handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, Fr
 handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, _From, #state{ busy_pid = OtherPid } = State) ->
     % This can happen if a connection is shared by two processes.
     % Deny the request and continue with the running request.
-    ?LOG_ERROR("Connection requested by ~p but in use by ~p (query \"~s\" with ~p)",
-                [ CallerPid, OtherPid, Sql, Params ]),
+    ?LOG_ERROR(#{
+        text => <<"Connection requested but in use by other pid">>,
+        result => error,
+        reason => busy,
+        request_pid => CallerPid,
+        busy_pid => OtherPid,
+        query => Sql,
+        args => Params,
+        worker_pid => self()
+    }),
     {reply, {error, busy}, State, timeout(State)};
 
 handle_call({return_conn, Ref, Pid}, _From,
@@ -321,11 +348,21 @@ handle_call({return_conn, Ref, Pid}, _From,
     {reply, ok, State1, timeout(State1)};
 
 handle_call({return_conn, _Ref, Pid}, _From, #state{ busy_pid = undefined } = State) ->
-    ?LOG_ERROR("SQL connection returned by ~p but not in use.", [ Pid ]),
+    ?LOG_ERROR(#{
+        text => <<"SQL connection returned but not in use.">>,
+        request_pid => Pid
+    }),
     {reply, {error, idle}, State, timeout(State)};
 
 handle_call({return_conn, _Ref, Pid}, _From, #state{ busy_pid = OtherPid } = State) ->
-    ?LOG_ERROR("SQL connection returned by ~p but in use by ~p", [ Pid, OtherPid ]),
+    ?LOG_ERROR(#{
+        text => <<"SQL connection returned but in use by other pid">>,
+        result => error,
+        reason => busy,
+        request_pid => Pid,
+        busy_pid => OtherPid,
+        worker_pid => self()
+    }),
     {reply, {error, notyours}, State, timeout(State)};
 
 handle_call(get_raw_connection, From, #state{ conn = undefined, conn_args = Args } = State) ->
@@ -339,8 +376,12 @@ handle_call(get_raw_connection, From, #state{ conn = undefined, conn_args = Args
 handle_call(get_raw_connection, _From, #state{ conn = Conn } = State) ->
     {reply, Conn, State, timeout(State)};
 
-handle_call(Request, _From, State) ->
-    ?LOG_NOTICE("SQL unknown call ~p", [ Request ]),
+handle_call(Message, _From, State) ->
+    ?LOG_NOTICE(#{
+        text => <<"SQL unexpected call message">>,
+        request => Message,
+        worker_pid => self()
+    }),
     {reply, {error, unknown_call}, State, timeout(State)}.
 
 
@@ -354,14 +395,27 @@ handle_info(disconnect, #state{ conn = undefined } = State) ->
 handle_info(disconnect, #state{ busy_pid = undefined } = State) ->
     Database = get_arg(dbdatabase, State#state.conn_args),
     Schema = get_arg(dbschema, State#state.conn_args),
-    ?LOG_DEBUG("SQL closing connection to ~s/~s (~p)", [ Database, Schema, self() ]),
+    ?LOG_DEBUG(#{
+        text => <<"SQL closing connection">>,
+        database => Database,
+        schema => Schema,
+        worker_pid => self()
+    }),
     {noreply, disconnect(State, disconnect), hibernate};
 
 handle_info(disconnect, State) ->
     Database = get_arg(dbdatabase, State#state.conn_args),
     Schema = get_arg(dbschema, State#state.conn_args),
-    ?LOG_ERROR("SQL disconnect from ~s/~s whilst busy with \"~s\"  ~p",
-                [ Database, Schema, State#state.busy_sql, State#state.busy_params ]),
+    ?LOG_ERROR(#{
+        text => <<"SQL disconnect whilst busy with query">>,
+        result => error,
+        reason => disconnect,
+        database => Database,
+        schema => Schema,
+        query => State#state.busy_sql,
+        args => State#state.busy_params,
+        worker_pid => self()
+    }),
     {noreply, State, disconnect(State, disconnect), hibernate};
 
 handle_info(timeout, #state{ busy_pid = undefined } = State) ->
@@ -380,9 +434,18 @@ handle_info(timeout, #state{
     % filling up all our connections and also slowing down the database.
     Database = get_arg(dbdatabase, State#state.conn_args),
     Schema = get_arg(dbschema, State#state.conn_args),
-    ?LOG_ERROR(
-        "SQL Timeout (~p) ~p msec on ~s/~s: \"~s\"   ~p",
-        [ Pid, Timeout, Database, Schema, Sql, Params ]),
+    ?LOG_ERROR(#{
+        text => <<"SQL Timeout">>,
+        result => error,
+        reason => timeout,
+        busy_pid => Pid,
+        timeout => Timeout,
+        database => Database,
+        schema => Schema,
+        query => Sql,
+        args => Params,
+        worker_pid => self()
+    }),
     State1 = disconnect(State, sql_timeout),
     {stop, normal, State1};
 
@@ -396,9 +459,17 @@ handle_info({'DOWN', _Ref, process, BusyPid, Reason}, #state{
     % the connection and let the database clean up.
     Database = get_arg(dbdatabase, State#state.conn_args),
     Schema = get_arg(dbschema, State#state.conn_args),
-    ?LOG_NOTICE(
-        "SQL caller ~p down with reason ~p during on ~s/~s: \"~s\"   ~p",
-        [ BusyPid, Reason, Database, Schema, Sql, Params ]),
+    ?LOG_NOTICE(#{
+        text => <<"SQL caller down during query">>,
+        result => error,
+        reason => Reason,
+        busy_pid => BusyPid,
+        database => Database,
+        schema => Schema,
+        query => Sql,
+        args => Params,
+        worker_pid => self()
+    }),
     {noreply, disconnect(State, sql_timeout), hibernate};
 
 handle_info({'DOWN', _Ref, process, ConnPid, Reason}, #state{
@@ -410,9 +481,17 @@ handle_info({'DOWN', _Ref, process, ConnPid, Reason}, #state{
     % Unexpected DOWN from the connection during query
     Database = get_arg(dbdatabase, State#state.conn_args),
     Schema = get_arg(dbschema, State#state.conn_args),
-    ?LOG_ERROR(
-        "SQL connection drop (~p) reason ~p on ~s/~s: \"~s\"   ~p",
-        [ ConnPid, Reason, Database, Schema, Sql, Params ]),
+    ?LOG_ERROR(#{
+        text => <<"SQL connection drop during query">>,
+        result => error,
+        reason => Reason,
+        busy_pid => BusyPid,
+        database => Database,
+        schema => Schema,
+        query => Sql,
+        args => Params,
+        worker_pid => self()
+    }),
     State1 = State#state{ conn = undefined },
     {noreply, disconnect(State1, sql_conn_down), hibernate};
 
@@ -425,9 +504,15 @@ handle_info({'DOWN', _Ref, process, _Pid, _Reason}, #state{ busy_pid = undefined
     % Might be a late down message from the busy pid, ignore.
     {noreply, State, timeout(State)};
 
-handle_info({'DOWN', _Ref, process, Pid, _Reason}, State) ->
+handle_info({'DOWN', _Ref, process, Pid, Reason}, State) ->
     % Stray 'DOWN' message, might be a race condition.
-    ?LOG_NOTICE("SQL got 'DOWN' message from unknown process ~p in state ~p", [ Pid, State ]),
+    ?LOG_NOTICE(#{
+        text => <<"SQL got 'DOWN' message from unknown process">>,
+        down_pid => Pid,
+        down_reason => Reason,
+        state => State,
+        worker_pid => self()
+    }),
     {noreply, State, timeout(State)};
 
 handle_info({'EXIT', _Pid, _Reason}, State) ->
@@ -435,7 +520,12 @@ handle_info({'EXIT', _Pid, _Reason}, State) ->
     {noreply, State};
 
 handle_info(Info, State) ->
-    ?LOG_WARNING("SQL unexpected info message ~p in state ~p", [ Info, State ]),
+    ?LOG_WARNING(#{
+        text => <<"SQL unexpected info message">>,
+        message => Info,
+        state => State,
+        worker_pid => self()
+    }),
     {noreply, State, timeout(State)}.
 
 terminate(_Reason, #state{} = State) ->
@@ -561,9 +651,17 @@ connect_1(Args, RetryCt, MRef) ->
                 retry(Args, cannot_connect_now, RetryCt, MRef);
             {error, econnrefused} ->
                 retry(Args, econnrefused, RetryCt, MRef);
-            {error, _} = E ->
-                ?LOG_WARNING("psql connection to ~p:~p returned error ~p",
-                              [Hostname, Port, E]),
+            {error, Reason} = E ->
+                ?LOG_WARNING(#{
+                    text => <<"Database psql connect returned error">>,
+                    database => Database,
+                    schema => Schema,
+                    username => Username,
+                    hostname => Hostname,
+                    port => Port,
+                    result => error,
+                    reason => Reason
+                }),
                 E
         end
     catch
@@ -585,8 +683,15 @@ retry(Args, Reason, RetryCt, MRef) ->
     Hostname = get_arg(dbhost, Args),
     Port = get_arg(dbport, Args),
     Delay = retry_delay(Reason, RetryCt),
-    ?LOG_WARNING("psql connection to ~p:~p failed: ~p, retrying in ~p ms (~p)",
-                  [Hostname, Port, Reason, Delay, self()]),
+    ?LOG_WARNING(#{
+        text => <<"Database psql connect failed">>,
+        hostname => Hostname,
+        port => Port,
+        result => error,
+        reason => Reason,
+        retry_msec => Delay,
+        worker_pid => self()
+    }),
     maybe_close_connections(Reason),
     timer:sleep(Delay),
     connect(Args, RetryCt + 1, MRef).

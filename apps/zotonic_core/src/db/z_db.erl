@@ -196,10 +196,16 @@ transaction(Function, Options, Context) ->
         {rollback, {deadlock, Stack}} = DeadlockError ->
             case proplists:get_value(noretry_on_deadlock, Options) of
                 true ->
-                    ?LOG_ERROR("DEADLOCK on database transaction, NO RETRY", #{ stack => Stack }),
+                    ?LOG_ERROR(#{
+                        text => <<"DEADLOCK on database transaction, NO RETRY">>,
+                        stack => Stack
+                    }),
                     DeadlockError;
                 _False ->
-                    ?LOG_WARNING("DEADLOCK on database transaction, will retry", #{ stack => Stack }),
+                    ?LOG_WARNING(#{
+                        text => <<"DEADLOCK on database transaction, will retry">>,
+                        stack => Stack
+                    }),
                     % Sleep random time, then retry transaction
                     timer:sleep(z_ids:number(100)),
                     transaction(Function, Options, Context)
@@ -241,8 +247,13 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                                 end
                         end
                     catch
-                        _:Why:S ->
-                            ?LOG_ERROR("Error on database transaction: ~p", [ Why ], #{ stack => S }),
+                        E:Why:S ->
+                            ?LOG_ERROR(#{
+                                text => <<"Error on database transaction">>,
+                                result => E,
+                                reason => Why,
+                                stack => S
+                            }),
                             case DbDriver:is_connection_alive(C) of
                                 true ->
                                     DbDriver:squery(C, "ROLLBACK", ?TIMEOUT);
@@ -510,7 +521,13 @@ qmap(Sql, Args, Options, Context) ->
                 {ok, Value} when is_list(Value); is_integer(Value) ->
                     {ok, Value};
                 {error, Reason} = Error ->
-                    ?LOG_ERROR("z_db error ~p in query ~s with ~p", [Reason, Sql, Args]),
+                    ?LOG_ERROR(#{
+                        text => <<"z_db error in query">>,
+                        result => error,
+                        reason => Reason,
+                        query => Sql,
+                        args => Args
+                    }),
                     Error
             end
 
@@ -542,7 +559,13 @@ qmap_props(Sql, Args, Options, Context) ->
                 {ok, Value} when is_list(Value); is_integer(Value) ->
                     {ok, Value};
                 {error, Reason} = Error ->
-                    ?LOG_ERROR("z_db error ~p in query ~s with ~p", [Reason, Sql, Args]),
+                    ?LOG_ERROR(#{
+                        text => <<"z_db error in query">>,
+                        result => error,
+                        reason => Reason,
+                        query => Sql,
+                        args => Args
+                    }),
                     Error
             end
 
@@ -613,7 +636,13 @@ q(Sql, Parameters, Context, Timeout) ->
                 {ok, _Cols, Rows} when is_list(Rows) -> Rows;
                 {ok, Value} when is_list(Value); is_integer(Value) -> Value;
                 {error, Reason} = Error ->
-                    ?LOG_ERROR("z_db error ~p in query ~s with ~p", [Reason, Sql, Parameters]),
+                    ?LOG_ERROR(#{
+                        text => <<"z_db error in query">>,
+                        result => error,
+                        reason => Reason,
+                        query => Sql,
+                        args => Parameters
+                    }),
                     throw(Error)
             end
     end,
@@ -637,7 +666,13 @@ q1(Sql, Parameters, Context, Timeout) ->
                 {ok, Value} -> Value;
                 {error, noresult} -> undefined;
                 {error, Reason} = Error ->
-                    ?LOG_ERROR("z_db error ~p in query ~s with ~p", [Reason, Sql, Parameters]),
+                    ?LOG_ERROR(#{
+                        text => <<"z_db error in query">>,
+                        result => error,
+                        reason => Reason,
+                        query => Sql,
+                        args => Parameters
+                    }),
                     throw(Error)
             end
     end,
@@ -808,7 +843,13 @@ update(Table, Id, Parameters, Context) when is_map(Parameters) ->
                 case equery1(DbDriver, C, Sql, [Id | Params]) of
                     {ok, _RowsUpdated} = Ok -> Ok;
                     {error, Reason} = Error ->
-                        ?LOG_ERROR("z_db error ~p in query ~s with ~p", [Reason, Sql, [Id | Params]]),
+                        ?LOG_ERROR(#{
+                            text => <<"z_db error in query">>,
+                            result => error,
+                            reason => Reason,
+                            query => Sql,
+                            args => [Id | Params]
+                        }),
                         Error
                 end
             end,
@@ -1258,7 +1299,11 @@ convert_value("ARRAY", _, V) when is_list(V) ->
 convert_value("ARRAY", _, V) ->
     [ V ];
 convert_value(Type, _, V) ->
-    ?LOG_WARNING("No type conversion for column type ~s, value ~p", [ Type, V ]),
+    ?LOG_WARNING(#{
+        text => <<"No type conversion for column type">>,
+        type => Type,
+        value => V
+    }),
     V.
 
 
@@ -1305,14 +1350,23 @@ ensure_database(Site, Options) ->
                     ok;
                 false ->
                     AnonOptions = proplists:delete(dbpassword, Options),
-                    ?LOG_WARNING("Creating database ~p with options: ~p", [Database, AnonOptions]),
+                    ?LOG_NOTICE(#{
+                        text => <<"Creating database">>,
+                        database => Database,
+                        options => AnonOptions
+                    }),
                     create_database(Site, PgConnection, Database)
             end,
             close_connection(PgConnection),
             Result;
         {error, Reason} = Error ->
-            ?LOG_ERROR("Cannot create database ~p because user ~p cannot connect to the 'postgres' database: ~p",
-                        [Database, proplists:get_value(dbuser, Options), Reason]),
+            ?LOG_ERROR(#{
+                text => <<"Cannot create database because user cannot connect to the 'postgres' database">>,
+                result => error,
+                reason => Reason,
+                database => Database,
+                dbuser => proplists:get_value(dbuser, Options)
+            }),
             Error
     end.
 
@@ -1324,7 +1378,11 @@ ensure_schema(Site, Options) ->
         true ->
             ok;
         false ->
-            ?LOG_NOTICE("Creating schema ~p in database ~p", [Schema, Database]),
+            ?LOG_NOTICE(#{
+                text => <<"Creating schema in database">>,
+                database => Database,
+                schema => Schema
+            }),
             create_schema(Site, DbConnection, Schema)
     end,
     close_connection(DbConnection),
@@ -1343,20 +1401,44 @@ drop_schema(Context) ->
                         "DROP SCHEMA \"" ++ Schema ++ "\" CASCADE"
                     ) of
                         {ok, _, _} = OK ->
-                            ?LOG_WARNING("Dropped schema ~p (~p)", [Schema, OK]),
+                            ?LOG_NOTICE(#{
+                                text => <<"Dropped schema">>,
+                                result => ok,
+                                database => Database,
+                                schema => Schema,
+                                return_value => OK
+                            }),
                             ok;
                         {error, Reason} = Error ->
-                            ?LOG_ERROR("z_db error ~p when dropping schema ~p", [Reason, Schema]),
+                            ?LOG_ERROR(#{
+                                text => <<"z_db error when dropping schema">>,
+                                result => error,
+                                reason => Reason,
+                                database => Database,
+                                schema => Schema
+                            }),
                             Error
                     end;
                 false ->
-                    ?LOG_WARNING("Could not drop schema ~p as it does not exist", [Schema]),
+                    ?LOG_WARNING(#{
+                        text => <<"Could not drop schema as it does not exist">>,
+                        result => warning,
+                        reason => noschema,
+                        database => Database,
+                        schema => Schema
+                    }),
                     ok
             end,
             close_connection(DbConnection),
             Result;
         {error, Reason} ->
-            ?LOG_ERROR("z_db error ~p when connecting for dropping schema ~p", [Reason, Schema]),
+            ?LOG_ERROR(#{
+                text => <<"z_db error when connecting for dropping schema">>,
+                result => error,
+                reason => Reason,
+                database => Database,
+                schema => Schema
+            }),
             ok
     end.
 
@@ -1398,7 +1480,12 @@ create_database(_Site, Connection, Database) ->
         "CREATE DATABASE \"" ++ Database ++ "\" ENCODING = 'UTF8' TEMPLATE template0"
     ) of
         {error, Reason} = Error ->
-            ?LOG_ERROR("z_db error ~p when creating database ~p", [Reason, Database]),
+            ?LOG_ERROR(#{
+                text => <<"z_db error when creating database">>,
+                result => error,
+                reason => Reason,
+                database => Database
+            }),
             Error;
         {ok, _, _} ->
             ok
@@ -1423,10 +1510,20 @@ create_schema(_Site, Connection, Schema) ->
         {ok, _, _} ->
             ok;
         {error, #error{ codename = duplicate_schema, message = Msg }} ->
-            ?LOG_WARNING("Schema already exists ~p (~p)", [Schema, Msg]),
+            ?LOG_NOTICE(#{
+                text => <<"Schema already exists">>,
+                result => warning,
+                reason => duplicate_schema,
+                message => Msg
+            }),
             ok;
         {error, Reason} = Error ->
-            ?LOG_ERROR("z_db error ~p when creating schema ~p", [Reason, Schema]),
+            ?LOG_ERROR(#{
+                text => <<"z_db error when creating schema">>,
+                result => error,
+                reason => Reason,
+                schema => Schema
+            }),
             Error
     end.
 

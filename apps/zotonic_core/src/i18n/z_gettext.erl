@@ -57,8 +57,13 @@ parse_po_1(Fname, DropEmpty) ->
     case file:read_file(Fname) of
         {ok, Bin} ->
             parse_po_bin(Bin, DropEmpty);
-        {error, _} = Error ->
-            ?LOG_ERROR("Error reading po file ~p: ~p", [Fname, Error]),
+        {error, Reason} ->
+            ?LOG_ERROR(#{
+                text => <<"Error reading po file">>,
+                path => Fname,
+                result => error,
+                reason => Reason
+            }),
             []
     end.
 
