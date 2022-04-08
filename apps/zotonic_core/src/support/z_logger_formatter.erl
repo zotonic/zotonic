@@ -31,7 +31,7 @@
     apply_defaults/1, format_log/4, format_to_binary/2, string_to_binary/1
     ]).
 
--export([format_msg/2, to_string/2]).
+-export([format_msg/2, to_string/2, pretty_stack/2]).
 
 -ifdef(TEST).
 -endif.
