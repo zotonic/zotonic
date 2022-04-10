@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-10 17:12\n"
+"PO-Revision-Date: 2022-04-10 17:35\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -774,7 +774,7 @@ msgstr "+ додати блок"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
-msgstr "<strong>Перший</strong> також відомий як ім'я, ім'я чи ім'я Крістен.<br/><strong>Середній</strong> часто скорочується до початкового, як у <em>Джон Д. Рокфеллер</em>.<br/><strong>Префікс прізвища</strong> як голландський <em>van, van de, der</em>.<br/><strong>Прізвище</strong> також відоме як прізвище або прізвище."
+msgstr "<strong>Ім'я</strong> також відоме як дане ім'я.<br/><strong>По батькові</strong> часто скорочується до початкового, як у <em>Джон Д. Рокфеллер</em>.<br/><strong>Префікс прізвища</strong> як голландський <em>van, van de, der</em>.<br/><strong>Прізвище</strong> також відоме як прізвище за паспортом."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:115
 msgid "A copy that will remain connected so that a new version can be fetched."
@@ -818,7 +818,7 @@ msgstr "Адреса"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_base.tpl:5
 msgid "Admin"
-msgstr "адмін"
+msgstr "Адмін"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_logon.tpl:4
 msgid "Admin log on"
@@ -830,7 +830,7 @@ msgstr "Розширений"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:30./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:27
 msgid "All Content"
-msgstr "Весь вміст"
+msgstr "Весь контент"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:34
 msgid "All day"
@@ -839,16 +839,16 @@ msgstr "Весь день"
 #: apps/zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:14./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:88./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:96
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:82
 msgid "All media"
-msgstr "Усі ЗМІ"
+msgstr "Всі медіа"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:13./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:87./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:95
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:81
 msgid "All pages"
-msgstr "Усі сторінки"
+msgstr "Всі сторінки"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:25
 msgid "All sites have been flushed."
-msgstr "Усі сайти очищено."
+msgstr "Всі сайти очищено."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
 msgid "Allocated"
@@ -873,7 +873,7 @@ msgstr "Будь-яка категорія"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:44
 msgid "Anybody’s"
-msgstr "Будь-який"
+msgstr "Будь-хто"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:63
 msgid "Are you sure you want to delete the media from this page?"
@@ -902,7 +902,7 @@ msgstr "Прикріплені медіа"
 #: apps/zotonic_mod_admin/src/mod_admin.erl:126
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:51
 msgid "Auth"
-msgstr "авт"
+msgstr "Авторизація"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:151
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:28./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:58./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:38
