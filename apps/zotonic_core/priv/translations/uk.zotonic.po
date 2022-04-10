@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-10 14:24\n"
+"PO-Revision-Date: 2022-04-10 15:21\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -571,11 +571,11 @@ msgstr "На жаль, вам не дозволено видалити це."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:45
 msgid "Sorry, you are not allowed to insert pages of this category into the selected content group."
-msgstr "На жаль, вам заборонено вставляти сторінки цієї категорії у вибрану групу вмісту."
+msgstr "На жаль, вам заборонено вставляти сторінки цієї категорії у вибрану групу контенту."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:33
 msgid "System content groups"
-msgstr "Системні групи вмісту"
+msgstr "Системні контентні групи"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:26
 msgid "Test ACL rules"
