@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-10 19:14\n"
+"PO-Revision-Date: 2022-04-10 20:50\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -1481,7 +1481,7 @@ msgstr "Медіа на цій сторінці"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:26./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:27
 msgid "Media title"
-msgstr "Назва медіа"
+msgstr "Медіа заголовок"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:134
 msgid "Media updated."
@@ -1617,7 +1617,7 @@ msgstr "Для читання людиною URL-сторінки"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:34./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:36
 msgid "Page title"
-msgstr "Назва сторінки"
+msgstr "Заголовок сторінки"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:3./apps/zotonic_mod_admin/src/mod_admin.erl:99
 msgid "Pages"
@@ -1647,7 +1647,7 @@ msgstr "Розмір кількості зведеної черги:"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:3
 msgid "Please fill in the title of the new page."
-msgstr "Заповніть, будь ласка, назву нової сторінки."
+msgstr "Заповніть, будь ласка, заголовок нової сторінки."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:97./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:98./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:156./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:157
 msgid "Postcode"
@@ -1769,7 +1769,7 @@ msgstr "Замінити"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:66
 msgid "Replace current medium"
-msgstr "Замініть поточне середовище"
+msgstr "Замінити поточне середовище"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:6
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
@@ -1848,11 +1848,11 @@ msgstr "Вибрані категорії"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:50
 msgid "Selecting a file will make the page a media item."
-msgstr "Вибір файлу зробить сторінку медіа-елементом."
+msgstr "Вибір файлу зробить сторінку медіаелементом."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:36
 msgid "Short title"
-msgstr "Коротка назва"
+msgstr "Короткий заголовок"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_features.category.tpl:8
 msgid "Show address on edit page"
@@ -1864,7 +1864,7 @@ msgstr "Показати як"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:30
 msgid "Show page on multiple paths"
-msgstr "Показати сторінку на кількох шляхах"
+msgstr "Показати сторінку з кількома шляхами"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:36
 msgid "Site Files Directory"
@@ -2104,7 +2104,7 @@ msgstr "Час очікування під час спроби отримати 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
 msgid "Title"
-msgstr "Назва"
+msgstr "Заголовок"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:5
 msgid "Toggle dropdown"
@@ -2135,7 +2135,7 @@ msgstr "Унікальний uri"
 #: apps/zotonic_mod_admin/src/mod_admin.erl:475./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 msgid "Untitled"
-msgstr "Без назви"
+msgstr "Без заголовка"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9
 msgid "Unused"
@@ -2173,7 +2173,7 @@ msgstr "Використовуйте автозаповнення для пош�
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8
 msgid "Use the title of the base content for the display name of this person."
-msgstr "Використовуйте назву основного вмісту для відображуваного імені цієї особи."
+msgstr "Використовуйте заголовок основного контенту для відображення імені цієї особи."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
 msgid "Used"
@@ -2405,7 +2405,7 @@ msgstr "скасувати"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:28./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:39./apps/zotonic_mod_admin/priv/templates/_choose_media.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_item.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:11./apps/zotonic_mod_admin/priv/templates/_rsc_item.tpl:10
 msgid "untitled"
-msgstr "без назви"
+msgstr "без заголовка"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:105
 msgid "uploaded on"
@@ -3453,7 +3453,7 @@ msgstr "Не знаходьте суб’єкти, використовуючи 
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:1
 msgid "Enter the title of the new predicate:"
-msgstr "Введіть назву нового присудка:"
+msgstr "Введіть заголовок нового присудка:"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:26
 msgid "Filter on predicate"
@@ -4069,7 +4069,7 @@ msgstr "Увійти"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/logon.tpl:11
 msgid "Sign in to"
-msgstr "Увійдіть до"
+msgstr "Увійти до"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon.tpl:37
 msgid "Sign out"
@@ -7722,7 +7722,7 @@ msgstr "Зареєструватися"
 
 #: apps/zotonic_mod_signup/priv/templates/_logon_link.tpl:2./apps/zotonic_mod_signup/priv/templates/_signup_title.tpl:1
 msgid "Sign up"
-msgstr "зареєструватися"
+msgstr "Зареєструватися"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:11
 msgid "Sign up with your e-mail address"
