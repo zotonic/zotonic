@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-10 21:19\n"
+"PO-Revision-Date: 2022-04-10 21:40\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -2062,7 +2062,7 @@ msgstr "Цей файл завеликий."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:38./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:153./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
 msgid "This is system content."
-msgstr "Це системний вміст."
+msgstr "Це системний контент."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
 msgid "This name is in use by another page."
@@ -2070,7 +2070,7 @@ msgstr "Це ім’я використовується іншою сторін�
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
 msgid "This page can be connected from other pages. For example it could be an author of an article."
-msgstr "Цю сторінку можна підключити з інших сторінок. Наприклад, це може бути автор статті."
+msgstr "Цю сторінку можна приєднати з інших сторінок. Наприклад, це може бути автор статті."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:18
 msgid "This page has been deleted."
@@ -2082,7 +2082,7 @@ msgstr "Ця сторінка містить набір адміністрати
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:8
 msgid "This page is able to connect to others. For example you can connect it to an actor or a brand."
-msgstr "Ця сторінка може підключатися до інших. Наприклад, ви можете підключити його до актора або бренду."
+msgstr "Ця сторінка може підключатися до інших. Наприклад, ви можете приєднати його до актора або бренду."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:4
 msgid "This page is from another website. The original can be found at"
@@ -2113,7 +2113,7 @@ msgstr "Перемкнути спадне меню"
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:6
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:18
 msgid "Toggle navigation"
-msgstr "Переключити навігацію"
+msgstr "Перемикнути навігацію"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:26
 msgid "Too many connections, only the first and last are shown."
@@ -2185,7 +2185,7 @@ msgstr "Сторінка користувача"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:18
 msgid "Valid for:"
-msgstr "Діє для:"
+msgstr "Дійсний для:"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:46
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:129
