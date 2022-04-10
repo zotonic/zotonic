@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: 2011-03-17 14:53\n"
-"PO-Revision-Date: 2022-02-25 21:09\n"
+"PO-Revision-Date: 2022-04-10 12:52\n"
 "Last-Translator: Michael Connors <michael@bring42.net>\n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -188,7 +188,7 @@ msgid "Denmark"
 msgstr "Данія"
 
 msgid "Djibouti"
-msgstr "Джібуті"
+msgstr "Джибуті"
 
 msgid "Dominica"
 msgstr "Домініка"
@@ -245,7 +245,7 @@ msgid "Gambia"
 msgstr "Гамбія"
 
 msgid "Gaza Strip Administered by Israel"
-msgstr "Сектор Газа під управлінням Ізраїлю"
+msgstr "Сектор Гази під управлінням Ізраїлю"
 
 msgid "Georgia"
 msgstr "Грузія"
@@ -287,13 +287,13 @@ msgid "Guinea Bissau"
 msgstr "Гвінея-Бісау"
 
 msgid "Guyana"
-msgstr "Гайана"
+msgstr "Гаяна"
 
 msgid "Haiti"
 msgstr "Гаїті"
 
 msgid "Heard and McDonald Islands"
-msgstr "Острови Херда і Макдональда"
+msgstr "Острови Херд і Макдональд"
 
 msgid "Holy See (Vatican City State)"
 msgstr "Святий Престол (держава Ватикан)"
