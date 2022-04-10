@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-10 17:55\n"
+"PO-Revision-Date: 2022-04-10 18:12\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -1143,7 +1143,7 @@ msgstr "Дублікат сторінки"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:76./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:81
 msgid "Duplicate this page."
-msgstr "Дублюйте цю сторінку."
+msgstr "Дублювати цю сторінку."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address_email.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address_email.tpl:4
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_identity_email.tpl:2
@@ -1193,7 +1193,7 @@ msgstr "Вставити сторінку"
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:196
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:230
 msgid "Embedded Content"
-msgstr "Вбудований вміст"
+msgstr "Вбудований контент"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:34
 msgid "Emergency telephone"
@@ -1201,7 +1201,7 @@ msgstr "Телефон екстреної допомоги"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:21
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
-msgstr "Введіть URL-адресу або код вставки. Це буде проаналізовано, і ви зможете вибрати, як імпортувати дані."
+msgstr "Введіть URL-адресу або код вставки. Це буде проаналізовано, і Ви зможете вибрати, як імпортувати дані."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:48
 msgid "Erlang Init Files"
@@ -1238,15 +1238,15 @@ msgstr "Помилка, дублікат імені. Будь ласка, змі
 
 #: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:146
 msgid "Error, duplicate page path. Please change the uri."
-msgstr "Помилка, дубльований шлях до сторінки. Будь ласка, змініть uri."
+msgstr "Помилка, дубльований шлях до сторінки. Будь ласка, змініть URI."
 
 #: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:144
 msgid "Error, duplicate uri. Please change the uri."
-msgstr "Помилка, дублікат uri. Будь ласка, змініть uri."
+msgstr "Помилка, дублікат URI. Будь ласка, змініть URI."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:8
 msgid "Every page can have a date range. For example if the page is an event or description of someone’s life."
-msgstr "Кожна сторінка може мати діапазон дат. Наприклад, якщо сторінка є подією або описом чиєсь життя."
+msgstr "Кожна сторінка може мати діапазон дат. Наприклад, якщо сторінка є подією або описом чийогось життя."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:12
 msgid "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
@@ -1279,7 +1279,7 @@ msgstr "Отримання нової версії..."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:6
 msgid "File / media content"
-msgstr "Файловий / медіа-вміст"
+msgstr "Файловий / медіаконтент"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:50./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:47
 msgid "Filter on category"
@@ -1305,7 +1305,7 @@ msgstr "Знайти сторінку"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:20
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:15./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:16
 msgid "First"
-msgstr "Спочатку"
+msgstr "Перший"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:77
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
@@ -1317,7 +1317,7 @@ msgstr "Очистити системні кеші"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:137
 msgid "Follow connections and import all (deep copy)."
-msgstr "Слідкуйте за з’єднаннями та імпортуйте все (глибка копія)."
+msgstr "Слідкуйте за з’єднаннями та імпортуйте все (глибока копія)."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:49
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
@@ -1340,7 +1340,7 @@ msgstr "Заголовок"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:17
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:24
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
-msgstr "Тут ви можете редагувати аргументи пошукового запиту. Кожен аргумент має свою лінію. Для отримання додаткової інформації дивіться документацію <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">щодо аргументів запиту</a> на веб-сайті Zotonic."
+msgstr "Тут Ви можете редагувати аргументи пошукового запиту. Кожен аргумент має свою лінію. Для отримання додаткової інформації дивіться документацію <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">щодо аргументів запиту</a> на веб-сайті Zotonic."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Home Directory"
