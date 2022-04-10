@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-10 14:13\n"
+"PO-Revision-Date: 2022-04-10 14:24\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -281,21 +281,21 @@ msgstr "Групи співпраці — це групи користувачі
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:64
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:108
 msgid "Content"
-msgstr "Зміст"
+msgstr "Контент"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:58
 msgid "Content group"
-msgstr "Група вмісту"
+msgstr "Контент група"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:16
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:55
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:184
 msgid "Content groups"
-msgstr "Групи вмісту"
+msgstr "Контент групи"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:76
 msgid "Content rules for collaboration group members and managers"
-msgstr "Правила вмісту для членів групи співпраці та менеджерів"
+msgstr "Правила контенту для членів групи співпраці та менеджерів"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:42
 msgid "Could not move to collaboration group."
@@ -383,11 +383,11 @@ msgstr "Менеджери груп можуть зв’язувати"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:51
 msgid "Group members and managers can edit"
-msgstr "Учасники групи та менеджери можуть редагувати"
+msgstr "Члени групи та менеджери можуть редагувати"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:59
 msgid "Group members and managers can link"
-msgstr "Учасники групи та менеджери можуть зв’язувати"
+msgstr "Члени групи та менеджери можуть зв’язувати"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:52
@@ -493,7 +493,7 @@ msgstr "Дозволи"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:45
 msgid "Please select a collaboration_group"
-msgstr "Будь ласка, виберіть Collaboration_group"
+msgstr "Будь ласка, виберіть collaboration_group"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:46
 msgid "Private"
