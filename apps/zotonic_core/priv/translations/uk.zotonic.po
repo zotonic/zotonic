@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-10 20:50\n"
+"PO-Revision-Date: 2022-04-10 21:12\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -1902,7 +1902,7 @@ msgstr "На жаль, у вас немає дозволу на видаленн
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:173
 msgid "Standard"
-msgstr "Стандартний"
+msgstr "Стандарт"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_sort_header.event.tpl:2
 msgid "Starts"
@@ -1910,7 +1910,7 @@ msgstr "Починається"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:104./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:105./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:163./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:164
 msgid "State"
-msgstr "держава"
+msgstr "Стан"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:135
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
@@ -1943,7 +1943,7 @@ msgstr "Резюме"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:27./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:28
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:22./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:23
 msgid "Sur. prefix"
-msgstr "Sur префікс"
+msgstr "Префікс прізвища"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:32
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:28./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:30
@@ -1953,7 +1953,7 @@ msgstr "Прізвище"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:130
 msgid "System"
-msgstr "система"
+msgstr "Система"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:3
 msgid "System Status"
