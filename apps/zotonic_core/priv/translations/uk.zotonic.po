@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-10 15:21\n"
+"PO-Revision-Date: 2022-04-10 17:12\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -547,7 +547,7 @@ msgstr "Збережені налаштування групи для співп
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_category_dropdown.tpl:3
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:199
 msgid "Select category"
-msgstr "Виберіть категорію"
+msgstr "Вибрати категорію"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:84
 msgid "Show"
@@ -567,11 +567,11 @@ msgstr "Спочатку покажіть цю групу користувачі
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:56./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:72
 #: apps/zotonic_mod_menu/src/mod_menu.erl:172
 msgid "Sorry, you are not allowed to delete this."
-msgstr "На жаль, вам не дозволено видалити це."
+msgstr "На жаль, Вам не дозволено видалити це."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:45
 msgid "Sorry, you are not allowed to insert pages of this category into the selected content group."
-msgstr "На жаль, вам заборонено вставляти сторінки цієї категорії у вибрану групу контенту."
+msgstr "На жаль, Вам заборонено вставляти сторінки цієї категорії у вибрану групу контенту."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:33
 msgid "System content groups"
@@ -618,7 +618,7 @@ msgstr "Це не може бути скасовано."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:19
 msgid "This page is a"
-msgstr "Ця сторінка є a"
+msgstr "Ця сторінка є"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:18
 msgid "This rule is managed by module"
@@ -630,7 +630,7 @@ msgstr "Спробуйте правила ACL"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:46
 msgid "Try a different combination of category and content group."
-msgstr "Спробуйте іншу комбінацію категорії та групи вмісту."
+msgstr "Спробуйте іншу комбінацію категорії та контент групи."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:14
 msgid "Try rules..."
