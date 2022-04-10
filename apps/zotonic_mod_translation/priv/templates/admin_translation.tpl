@@ -6,7 +6,7 @@
 <div class="admin-header">
     <h2>{_ Languages overview _}</h2>
     <p>
-        {_ Part of _} <a href="http://zotonic.com/docs/latest/ref/modules/mod_translation.html">mod_translation</a>. {_ See also: _} <a href="http://zotonic.com/docs/latest/developer-guide/translation.html">{_ Developer Documentation _}</a></li>
+        {_ Part of _} <a href="http://zotonic.com/docs/latest/ref/modules/mod_translation.html">mod_translation</a>. {_ See also: _} <a href="http://docs.zotonic.com/en/latest/developer-guide/translation.html">{_ Developer Documentation _}</a></li>
     </p>
 </div>
 
