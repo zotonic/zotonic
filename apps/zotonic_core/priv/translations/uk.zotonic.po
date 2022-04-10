@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-10 21:12\n"
+"PO-Revision-Date: 2022-04-10 21:19\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -2002,7 +2002,7 @@ msgstr "Сторінка"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:65
 msgid "The page will stay, but without the media item."
-msgstr "Сторінка залишиться, але без медіа-елементу."
+msgstr "Сторінка залишиться, але без медіаелементу."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
