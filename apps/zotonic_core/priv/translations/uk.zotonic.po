@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-10 18:30\n"
+"PO-Revision-Date: 2022-04-10 18:50\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -1438,11 +1438,11 @@ msgstr "Зробити"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:84
 msgid "Make a new media item"
-msgstr "Зробіть новий медіафайл"
+msgstr "Зробити новий медіафайл"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:82
 msgid "Make a new page"
-msgstr "Зробіть нову сторінку"
+msgstr "Зробити нову сторінку"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:4./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:85
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:71
@@ -1457,7 +1457,7 @@ msgstr "Збіг"
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:3./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:72./apps/zotonic_mod_admin/src/mod_admin.erl:104
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:103./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:113
 msgid "Media"
-msgstr "ЗМІ"
+msgstr "Медіа"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:27
 msgid "Media URL or HTML"
@@ -1477,7 +1477,7 @@ msgstr "Медіа-елемент створено."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:4
 msgid "Media on this page"
-msgstr "ЗМІ на цій сторінці"
+msgstr "Медіа на цій сторінці"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:26./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:27
 msgid "Media title"
@@ -1485,7 +1485,7 @@ msgstr "Назва медіа"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:134
 msgid "Media updated."
-msgstr "ЗМІ оновлено."
+msgstr "Медіа оновлено."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:2
 msgid "Memory"
