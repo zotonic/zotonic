@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-11 17:11\n"
+"PO-Revision-Date: 2022-04-11 17:34\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -4767,7 +4767,7 @@ msgstr "Загальні налаштування форми коментарі�
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:17
 msgid "Here you find settings to configure the comment module to suit your needs."
-msgstr "Тут ви знайдете налаштування для налаштування модуля коментарів відповідно до ваших потреб."
+msgstr "Тут Ви знайдете налаштування для налаштування модуля коментарів відповідно до Ваших потреб."
 
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:62
 msgid "Log on or sign up to comment"
@@ -4793,7 +4793,7 @@ msgstr "Опубліковано"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:4
 msgid "Recent Comments"
-msgstr "недавні коментарі"
+msgstr "Недавні коментарі"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:9
 msgid "Recent comments"
@@ -4831,7 +4831,7 @@ msgstr "Вам не дозволено перемикати коментар."
 
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:7./apps/zotonic_mod_comment/priv/templates/_comments_moderation.tpl:1
 msgid "Your comment has been saved and will be subject to moderation before it is displayed on the website"
-msgstr "Ваш коментар збережено і буде підлягати модерації, перш ніж він буде відображений на вебсайті"
+msgstr "Ваш коментар збережено і буде підлягати модерації, перш ніж він буде зображений на вебсайті"
 
 #: apps/zotonic_mod_comment/priv/templates/_admin_comments_toggledisplay.tpl:4./apps/zotonic_mod_comment/priv/templates/_admin_comments_toggledisplay.tpl:15
 msgid "publish"
@@ -4847,7 +4847,7 @@ msgstr "Привіт, контактна форма"
 
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:32
 msgid "Thank you!"
-msgstr "Дякую!"
+msgstr "Дякую Вам!"
 
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:33
 msgid "Your message has been submitted! We’ll get in touch soon."
@@ -4867,7 +4867,7 @@ msgstr "Ви впевнені, що хочете видалити такі гр�
 
 #: apps/zotonic_mod_content_groups/priv/templates/_admin_edit_sidebar_content_group.tpl:4
 msgid "Content Group"
-msgstr "Група вмісту"
+msgstr "Група контенту"
 
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:75
 msgid "Delete is canceled, there are pages in this content group."
