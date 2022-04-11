@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-11 15:24\n"
+"PO-Revision-Date: 2022-04-11 15:51\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -2609,7 +2609,7 @@ msgstr "Ім'я хоста ретрансляції"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:57./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:83./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:84
 msgid "Relay port"
-msgstr "Релейний порт"
+msgstr "Порт ретрансляції"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:112./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:113
 msgid "SMTP Hostname"
@@ -2633,15 +2633,15 @@ msgstr "Надіслати"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:148
 msgid "Send a test email"
-msgstr "Надішліть тестовий електронний лист"
+msgstr "Надіслати тестовий електронний лист"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:152
 msgid "Send a test email or check the status of an email address."
-msgstr "Надішліть тестовий електронний лист або перевірте статус електронної адреси."
+msgstr "Надіслати тестовий електронний лист або перевірити статус електронної адреси."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_email_test_result.tpl:4
 msgid "Sent an email to"
-msgstr "Надіслала електронного листа на адресу"
+msgstr "Надіслано електронний лист на адресу"
 
 #: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:97
 msgid "Sent email to"
@@ -2669,7 +2669,7 @@ msgstr "Ключ конфігурації вже існує, будь ласка
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:125
 msgid "The default FROM address for emails. Defaults to"
-msgstr "Адреса FROM за замовчуванням для електронних листів. За замовчуванням"
+msgstr "Адреса ВІД за замовчуванням для електронних листів. За замовчуванням"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:20
 msgid "The default directory for all site-certificates is"
@@ -2745,7 +2745,7 @@ msgstr "Додайте сторінки або натисніть сторінк
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:56
 #: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:56./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:28
 msgid "Language"
-msgstr "Мову"
+msgstr "Мова"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:30./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:38
 msgid "Loading ..."
@@ -2782,7 +2782,7 @@ msgstr "до"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:67
 msgid "(that's you)"
-msgstr "(ось вам)"
+msgstr "(це Ви)"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:13
 msgid "A secure password is prefilled, replace if needed."
@@ -2887,7 +2887,7 @@ msgstr "Введіть ім'я та адресу електронної пошт
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:6
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:7./apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:15
 msgid "Hello"
-msgstr "Здравствуйте"
+msgstr "Здрастуйте"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:10
 msgid "Help about user credentials"
@@ -2903,7 +2903,7 @@ msgstr "Додому"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:20
 msgid "If you don't know this site, please ignore this email. Maybe someone made an error."
-msgstr "Якщо ви не знаєте цього сайту, проігноруйте цей лист. Можливо хтось зробив помилку."
+msgstr "Якщо Ви не знаєте цього сайту, проігноруйте цей лист. Можливо хтось зробив помилку."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51
 msgid "Last logon"
@@ -3003,13 +3003,13 @@ msgstr "На жаль, це ім’я користувача вже викори
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:57
 msgid "Sorry, you can not remove your own username."
-msgstr "На жаль, ви не можете видалити власне ім’я користувача."
+msgstr "На жаль, Ви не можете видалити власне ім’я користувача."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:20
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:5
 msgid "Thank you"
-msgstr "Дякую"
+msgstr "Дякую Вам"
 
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:214
 msgid "The address is invalid."
@@ -3091,7 +3091,7 @@ msgstr "Дії користувача"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:8
 msgid "Username / password"
-msgstr "Ім'я користувача Пароль"
+msgstr "Ім'я користувача / пароль"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:50
 msgid "Username <b>{username}</b>, last logon at {date}."
