@@ -21,7 +21,7 @@
     </ul>
 
     <p class="notification notice">
-        {_ Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href="https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments">documentation on the query arguments</a> on the Zotonic website. _}
+        {_ Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href="https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments">documentation on the query arguments</a> on the Zotonic website. _}
     </p>
 
     <div class="form-group">
