@@ -4601,7 +4601,7 @@ msgid "Show import/export panel in the admin."
 msgstr ""
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:66
-msgid "Sorry, there is no mudule that can import this."
+msgid "Sorry, there is no module that can import this."
 msgstr ""
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:73./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:98

@@ -63,7 +63,7 @@ event(#submit{message={restore, Args}}, Context) ->
                     z_render:wire([{dialog_close, []},
                                    {redirect, [{dispatch, admin_edit_rsc}, {id,NewId}]}], Context);
                 undefined ->
-                    z_render:growl_error(?__("Sorry, there is no mudule that can import this.", Context), Context);
+                    z_render:growl_error(?__("Sorry, there is no module that can import this.", Context), Context);
                 {error, badarg} ->
                     z_render:growl_error(?__("Sorry, this is not a backup file or it is corrupted.", Context), Context);
                 {error, Reason} ->
@@ -103,4 +103,3 @@ set_config(What, Context) ->
         false ->
             z_render:growl_error(?__("Sorry, you have no permission to change the configuration.", Context), Context)
     end.
-
