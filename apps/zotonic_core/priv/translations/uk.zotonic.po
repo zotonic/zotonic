@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-11 15:12\n"
+"PO-Revision-Date: 2022-04-11 15:24\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -2470,7 +2470,7 @@ msgstr "Не всі ресурси можна було видалити."
 
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:33
 msgid "Or click <strong>Delete All Pages</strong> to delete all pages in the categories."
-msgstr "Або натисніть <strong>Видалити всі сторінки</strong> , щоб видалити всі сторінки в категоріях."
+msgstr "Або натисніть <strong>Видалити всі сторінки</strong>, щоб видалити всі сторінки в категоріях."
 
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:49
 msgid "There are no pages in these categories."
@@ -2478,7 +2478,7 @@ msgstr "У цих категоріях немає сторінок."
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:24
 msgid "Use the <i class=\"glyphicon glyphicon-cog\"></i> button to add or remove categories."
-msgstr "Використовуйте кнопку <i class=\"glyphicon glyphicon-cog\"></i> , щоб додати або видалити категорії."
+msgstr "Використовуйте кнопку <i class=\"glyphicon glyphicon-cog\"></i>, щоб додати або видалити категорії."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:24
 msgid "A copy of all email is sent to"
@@ -2494,7 +2494,7 @@ msgstr "Додати ключ"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:16
 msgid "All email is sent to"
-msgstr "Усі електронні листи надсилаються на адресу"
+msgstr "Всі електронні листи надсилаються на адресу"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:8
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:29
@@ -2515,7 +2515,7 @@ msgstr "Сертифікати, надані модулями SSL"
 
 #: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:54
 msgid "Config"
-msgstr "конфіг"
+msgstr "Конфіг"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:3./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:50
@@ -2548,11 +2548,11 @@ msgstr "Конфігурація та налаштування електрон�
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:13
 msgid "Enable <strong>mod_ssl_letsencrypt</strong> to request free SSL certificates from"
-msgstr "Увімкніть <strong>mod_ssl_letsencrypt</strong> , щоб запитувати безкоштовні сертифікати SSL"
+msgstr "Увімкніть <strong>mod_ssl_letsencrypt</strong>, щоб запитувати безкоштовні сертифікати SSL"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:10
 msgid "Here you can see all the email configurations and send test emails."
-msgstr "Тут ви можете переглянути всі конфігурації електронної пошти та надіслати тестові листи."
+msgstr "Тут Ви можете переглянути всі конфігурації електронної пошти та надіслати тестові листи."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:4
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:25
@@ -2561,7 +2561,7 @@ msgstr "Ім'я хоста"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:117
 msgid "If you change this then you might need to request a new SSL certificate that includes this hostname."
-msgstr "Якщо ви зміните це, вам може знадобитися запитати новий сертифікат SSL, який містить це ім’я хоста."
+msgstr "Якщо Ви зміните це, Вам може знадобитися запит на новий сертифікат SSL, який містить це ім’я хоста."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:106
 msgid "It is possible to intercept all email and send it to a single address. Configure this address here."
