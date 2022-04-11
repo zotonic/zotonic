@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-11 09:31\n"
+"PO-Revision-Date: 2022-04-11 18:05\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -4387,8 +4387,8 @@ msgid "Show import/export panel in the admin."
 msgstr "הצג את לוח הייבוא / הייצוא במנהל המערכת."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:66
-msgid "Sorry, there is no mudule that can import this."
-msgstr "מצטערים, אין בוץ שיכול לייבא זאת."
+msgid "Sorry, there is no module that can import this."
+msgstr ""
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:73./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:98
 msgid "Sorry, there was an error replacing your page."
