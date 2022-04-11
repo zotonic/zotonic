@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-11 16:56\n"
+"PO-Revision-Date: 2022-04-11 17:11\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -4388,7 +4388,7 @@ msgstr "Показати панель імпорту/експорту в адм�
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:66
 msgid "Sorry, there is no mudule that can import this."
-msgstr "На жаль, немає мудула, який може імпортувати це."
+msgstr "На жаль, немає модуля, який може імпортувати це."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:73./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:98
 msgid "Sorry, there was an error replacing your page."
@@ -4486,7 +4486,7 @@ msgstr "# Сторінок"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:77
 msgid "A latency of less than 50 milliseconds is very good, more than 250 milliseconds is slow."
-msgstr "Затримка менше 50 мілісекунд – це дуже добре, більше 250 мілісекунд – повільно."
+msgstr "Затримка менше ніж 50 мілісекунд – це дуже добре, більше ніж 250 мілісекунд – повільно."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:263
 msgid "Anonymous"
@@ -4506,7 +4506,7 @@ msgstr "Аутентифікація"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:69
 msgid "Browser"
-msgstr "браузер"
+msgstr "Браузер"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:60
 msgid "Browser Connectivity"
@@ -4582,7 +4582,7 @@ msgstr "Міст MQTT"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:96
 msgid "MQTT Bridge Connection Status"
-msgstr "Стан підключення MQTT Bridge"
+msgstr "Стан підключення MQTT мосту"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:145./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:35./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
@@ -4601,7 +4601,7 @@ msgstr "гаразд"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:35
 msgid "On this page you can test the connection of your browser to our server and to the internet in general."
-msgstr "На цій сторінці ви можете перевірити підключення вашого браузера до нашого сервера та до Інтернету в цілому."
+msgstr "На цій сторінці Ви можете перевірити підключення вашого браузера до нашого сервера та до Інтернету в цілому."
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 msgid "Page Id"
@@ -4609,7 +4609,7 @@ msgstr "Ідентифікатор сторінки"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:115
 msgid "Pong Count"
-msgstr "Понг граф"
+msgstr "Підрахунок Pong"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:121
 msgid "Pong Errors"
@@ -4649,7 +4649,7 @@ msgstr "Вибачте, цю сторінку видалено."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:8
 msgid "Sorry, you don’t have access to this page."
-msgstr "На жаль, у вас немає доступу до цієї сторінки."
+msgstr "На жаль, у Вас немає доступу до цієї сторінки."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:23
 msgid "Stack trace"
@@ -4673,11 +4673,11 @@ msgstr "Цієї сторінки не існує"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:102
 msgid "The <em>Pong Count</em> should increase every second, without any errors."
-msgstr "<em>Pong Count</em> має збільшуватися щосекунди, без будь-яких помилок."
+msgstr "<em>Підрахунок Pong</em> має збільшуватися щосекунди, без будь-яких помилок."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:136
 msgid "The authentication should show <em>Authenticated</em> or <em>Anonymous</em>."
-msgstr "Аутентифікація має показувати <em>Authenticated</em> або <em>Anonymous</em>."
+msgstr "Аутентифікація має показувати <em>Аутентифікований</em> або <em>Анонімний</em>."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:44
 msgid "The connection our site uses to talk with our own server."
@@ -4705,7 +4705,7 @@ msgstr "Тип"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
 msgid "Web Worker Status"
-msgstr "Статус веб-працівника"
+msgstr "Статус Web Worker"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:109
 msgid "Websocket"
