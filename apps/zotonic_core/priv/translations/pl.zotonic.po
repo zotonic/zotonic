@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-07 13:20\n"
+"PO-Revision-Date: 2022-04-11 09:07\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -1339,8 +1339,8 @@ msgstr "Nagłówek"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:17
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:24
-msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
-msgstr "Tutaj możesz edytować argumenty zapytania wyszukiwania. Każdy argument ma swoją własną linię. Więcej informacji możesz znaleźć w dokumentacji <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">dotyczącej argumentów zapytania</a> na stronie internetowej Zotonic."
+msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">documentation on the query arguments</a> on the Zotonic website."
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Home Directory"
