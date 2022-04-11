@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-11 16:01\n"
+"PO-Revision-Date: 2022-04-11 16:08\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -3264,7 +3264,7 @@ msgstr "Не вказано дію злиття."
 
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:48
 msgid "Right"
-msgstr "Правильно"
+msgstr "Праворуч"
 
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:128
 msgid "Select Left"
@@ -3280,11 +3280,11 @@ msgstr "Виберіть переможця з двох сторінок. Пер
 
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:34
 msgid "Select the winning page"
-msgstr "Виберіть сторінку-переможець"
+msgstr "Виберіть сторінку переможця"
 
 #: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:60
 msgid "Sorry, you have no permission to edit this page."
-msgstr "На жаль, у вас немає дозволу редагувати цю сторінку."
+msgstr "На жаль, у Вас немає дозволу редагувати цю сторінку."
 
 #: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:97
 msgid "The loser is protected, unprotect the loser before merging."
@@ -3300,7 +3300,7 @@ msgstr "Вам не дозволено вибрати цю сторінку і, 
 
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:61
 msgid "You are not allowed to select this page and thereby deleting page Right."
-msgstr "Вам не дозволено вибрати цю сторінку і, таким чином, видалити сторінку Right."
+msgstr "Вам не дозволено вибрати цю сторінку і, таким чином, видалити сторінку Праворуч."
 
 #: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:73
 msgid "You cannot remove the admin user."
