@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-07 13:21\n"
+"PO-Revision-Date: 2022-04-11 09:31\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -1339,8 +1339,8 @@ msgstr "Judul"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:17
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:24
-msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
-msgstr "Di sini Anda dapat mengedit argumen kueri penelusuran. Setiap argumen memiliki alurnya sendiri. Untuk informasi selengkapnya, lihat dokumentasi <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">pada argumen kueri</a> di situs web Zotonic."
+msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">documentation on the query arguments</a> on the Zotonic website."
+msgstr "Di sini Anda dapat mengedit argumen kueri penelusuran. Setiap argumen berjalan pada jalurnya sendiri. Untuk informasi selengkapnya, lihat dokumentasi <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">pada argumen kueri</a> di situs web Zotonic."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Home Directory"
