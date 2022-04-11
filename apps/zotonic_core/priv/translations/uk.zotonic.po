@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-11 09:31\n"
+"PO-Revision-Date: 2022-04-11 15:12\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -2217,11 +2217,11 @@ msgstr "Переглянути цю сторінку."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:20
 msgid "Visible from"
-msgstr "Видно з"
+msgstr "Видимий з"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:28
 msgid "Visible till"
-msgstr "Видно до"
+msgstr "Видимий до"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:73./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:38
 msgid "Visit full edit page"
@@ -2264,7 +2264,7 @@ msgstr "Ви редагуєте обліковий запис адміністр
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:2
 msgid "You are going to duplicate the page"
-msgstr "Ви збираєтеся скопіювати сторінку"
+msgstr "Ви збираєтеся дублювати сторінку"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_delete_media.erl:52
 msgid "You are not allowed to delete this media."
@@ -2282,7 +2282,7 @@ msgstr "Вам не дозволено редагувати цю сторінк�
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:149
 msgid "You don't have permission to change this media item."
-msgstr "Ви не маєте дозволу змінювати цей медіа-елемент."
+msgstr "Ви не маєте дозволу змінювати цей медіаелемент."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:161
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:82
@@ -2313,15 +2313,15 @@ msgstr "Ваш пошуковий запит недійсний. Будь лас
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:21
 msgid "Zotonic Version"
-msgstr "Зотонічна версія"
+msgstr "Zotonic версія"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
 msgid "add media item"
-msgstr "додати медіа-елемент"
+msgstr "додати медіаелемент"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:24
 msgid "block"
-msgstr "блокувати"
+msgstr "блок"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:15
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:48
@@ -2348,7 +2348,7 @@ msgstr "видалити"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:22
 msgid "e.g. might change"
-msgstr "наприклад, може змінитися"
+msgstr "наприклад: може змінитися"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:176./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:142./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:81
@@ -2385,19 +2385,19 @@ msgstr "ім'я"
 #: apps/zotonic_mod_admin/priv/templates/_admin_view_types.tpl:2./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:62
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:19
 msgid "page"
-msgstr "сторінку"
+msgstr "сторінка"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:17
 msgid "pixels"
-msgstr "пікселів"
+msgstr "пікселі"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:72./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:22
 msgid "show all"
-msgstr "Покажи все"
+msgstr "показати все"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:154
 msgid "system content"
-msgstr "системний зміст"
+msgstr "системний контент"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:3
 msgid "undo"
@@ -2430,7 +2430,7 @@ msgstr "Категорії"
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:12
 msgid "Categories are used to categorize all pages. Every page belongs to exactly one category.<br/>The categories are defined in a hierarchy. Here you can change that hierarchy."
-msgstr "Категорії використовуються для класифікації всіх сторінок. Кожна сторінка належить точно до однієї категорії.<br/>Категорії визначені в ієрархії. Тут ви можете змінити цю ієрархію."
+msgstr "Категорії використовуються для класифікації всіх сторінок. Кожна сторінка належить точно до однієї категорії.<br/>Категорії визначені в ієрархії. Тут Ви можете змінити цю ієрархію."
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:3
 msgid "Category Hierarchy"
