@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-11 16:08\n"
+"PO-Revision-Date: 2022-04-11 16:28\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -3408,15 +3408,15 @@ msgstr "Zotonic — це модульний фреймворк для веб-р�
 msgid "A predicate denotes traits or aspects of a page and expresses a relationship between two pages.\n"
 "    The relation is always directed, from the subject to the object.<br/>Predicates are defined in ontologies like <a href=\"http://sioc-project.org/\">SIOC</a>.  On this page you can define the predicates known to Zotonic."
 msgstr "Присудок позначає ознаки або аспекти сторінки та виражає зв’язок між двома сторінками.\n"
-"    Відношення завжди спрямоване від суб'єкта до об'єкта.<br/>Предикати визначаються в онтологіях, таких як <a href=\"http://sioc-project.org/\">SIOC</a>. На цій сторінці ви можете визначити предикати, відомі Zotonic."
+"    Відношення завжди спрямоване від суб'єкта до об'єкта.<br/>Предикати визначаються в онтологіях, таких як <a href=\"http://sioc-project.org/\">SIOC</a>. На цій сторінці Ви можете визначити предикати, відомі Zotonic."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:23
 msgid "All Predicates"
-msgstr "Усі предикати"
+msgstr "Всі предикати"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_extra_buttons.tpl:2
 msgid "All page connections"
-msgstr "Усі підключення сторінок"
+msgstr "Всі підключення сторінок"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:246
@@ -3497,7 +3497,7 @@ msgstr "Показано лише з’єднання з:"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:25
 msgid "Or click <strong>Delete All Connections</strong> to delete all connections with this predicate."
-msgstr "Або натисніть <strong>Видалити всі з’єднання</strong> , щоб видалити всі з’єднання з цим предикатом."
+msgstr "Або натисніть <strong>Видалити всі з’єднання</strong>, щоб видалити всі з’єднання з цим предикатом."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:51
 msgid "Page connections overview"
@@ -3513,7 +3513,7 @@ msgstr "Присудки"
 
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:58
 msgid "Sorry, you are not allowed to insert connections with this predicate."
-msgstr "На жаль, вам заборонено вставляти зв’язки з цим предикатом."
+msgstr "На жаль, Вам заборонено вставляти зв’язки з цим предикатом."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:5
 msgid "Subject"
@@ -3553,7 +3553,7 @@ msgstr "Вам не дозволено створювати цей предик�
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:6
 msgid "You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to. When you don't check anything then all categories are valid."
-msgstr "Ви можете визначити, для яких категорій предикат відображатиметься на сторінці редагування. Ви також можете визначити, які категорії об’єктів будуть знайдені під час пошуку сторінки для підключення. Якщо ви нічого не перевіряєте, усі категорії дійсні."
+msgstr "Ви можете визначити, для яких категорій предикат відображатиметься на сторінці редагування. Ви також можете визначити, які категорії об’єктів будуть знайдені під час пошуку сторінки для підключення. Якщо Ви нічого не перевіряєте, усі категорії дійсні."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 msgid "object"
@@ -3690,11 +3690,11 @@ msgstr "Довідка про двофакторну аутентифікаці�
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:14
 msgid "Here you can define which users need or should use two-factor authentication when signing in."
-msgstr "Тут ви можете визначити, яким користувачам потрібна або повинна використовуватися двофакторна аутентифікація під час входу."
+msgstr "Тут Ви можете визначити, яким користувачам потрібна або повинна використовуватися двофакторна аутентифікація під час входу."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:3
 msgid "If you are not able to scan the QR code then copy the code manually to your authentication App."
-msgstr "Якщо ви не можете відсканувати QR-код, скопіюйте код вручну до програми для аутентифікації."
+msgstr "Якщо Ви не можете просканувати QR-код, скопіюйте код вручну до програми для аутентифікації."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:61
 msgid "It is possible to force two-factor authentication for a specific user group, regardless of the setting above."
