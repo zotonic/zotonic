@@ -18,7 +18,7 @@
 					{% if status.is_blocked %}
 						<span class="text-error"><span class="glyphicon glyphicon-ban-circle"></span> {_ Blocked _}</span>
 					{% elseif idn.is_verified %}
-						<span class="glyphicon glyphicon-ok" title="{_ Verified _}"></span> {_ Verfied _}
+						<span class="glyphicon glyphicon-ok" title="{_ Verified _}"></span> {_ Verified _}
 					{% else %}
 						<a id="{{ #verify.idn_id }}"  href="#" class="btn btn-default btn-sm" title="{_ Send verification e-mail _}">{_ Verify _}</a>
 						{% wire id=#verify.idn_id
