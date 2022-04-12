@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-12 15:18\n"
+"PO-Revision-Date: 2022-04-12 15:23\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -6388,7 +6388,7 @@ msgstr "Ім'я"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
 msgid "From now on you will receive mail from our mailing list."
-msgstr "Відтепер ви отримуватимете листи з нашого списку розсилки."
+msgstr "Відтепер Ви отримуватимете листи з нашого списку розсилки."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:6
 msgid "Give your e-mail address to subscribe to"
@@ -6412,7 +6412,7 @@ msgstr "Довідка щодо сторінки розсилки"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_goodbye.tpl:8
 msgid "Hope to see you again."
-msgstr "Сподіваюся побачити вас знову."
+msgstr "Сподіваюся побачити Вас знову."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:6
 msgid "It appears you have sent\n"
@@ -6420,8 +6420,8 @@ msgid "It appears you have sent\n"
 "    the recipients that did not yet receive the mail will get it. As a\n"
 "    safety-caution, it is impossible to send the same page twice to\n"
 "    the same e-mail address."
-msgstr "Схоже, ви вже надіслали\n"
-"    цю сторінку до цього списку. Якщо ви надішлете його знову, лише\n"
+msgstr "Схоже, Ви вже надіслали\n"
+"    цю сторінку до цього списку. Якщо Ви надішлете його знову, лише\n"
 "    одержувачі, які ще не отримали листа, отримають його. З\n"
 "    безпеки, неможливо надіслати ту саму сторінку двічі на\n"
 "    саму адресу електронної пошти."
@@ -6480,7 +6480,7 @@ msgstr "Операція"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:24
 msgid "Our excuses for the inconvenience."
-msgstr "Наші виправдання за незручності."
+msgstr "Ми вибачаємося за незручності."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:19
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
