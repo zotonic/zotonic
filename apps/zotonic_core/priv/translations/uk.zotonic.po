@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-12 15:11\n"
+"PO-Revision-Date: 2022-04-12 15:18\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -6215,11 +6215,11 @@ msgstr "<em>Видалити</em> всіх одержувачів із цьог�
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
-msgstr "<h3>одержувачів</h3><p>Щоб додати, видалити або переглянути одержувачів зі списку розсилки, натисніть посилання «показати всіх одержувачів».</p><h3>Ім'я відправника та адреса електронної пошти</h3><p>Ім'я відправника та адресу електронної пошти можна встановити для кожного списку розсилки. За замовчуванням це ключ конфігурації <tt>site.email_from</tt>. Для <i>з</i> надісланих електронних листів буде встановлено ім’я та адресу відправника.</p><h3>Автоматичне завантаження списків одержувачів</h3><p>Ім'я файлу Dropbox використовується для автоматичного завантаження повного списку одержувачів. Ім’я файлу має відповідати назві файлу зі списку одержувачів. Повний список одержувачів буде замінено на одержувачів у файлі Dropbox.</p><h3>Контроль доступу</h3><p>Кожен, хто може редагувати список розсилки, також має право надіслати сторінку до списку розсилки. Кожен, хто може переглядати список розсилки, може додати адресу електронної пошти до списку розсилки.</p>"
+msgstr "<h3>Одержувачі</h3><p>Щоб додати, видалити або переглянути одержувачів зі списку розсилки, натисніть посилання «показати всіх одержувачів».</p><h3>Ім'я відправника та адреса електронної пошти</h3><p>Ім'я відправника та адресу електронної пошти можна встановити для кожного списку розсилки. За замовчуванням це ключ конфігурації <tt>site.email_from</tt>. <i>Для</i> надісланих електронних листів буде встановлено ім’я та адресу відправника.</p><h3>Автоматичне завантаження списків одержувачів</h3><p>Ім'я файлу Dropbox використовується для автоматичного завантаження повного списку одержувачів. Ім’я файлу має відповідати назві файлу зі списку одержувачів. Повний список одержувачів буде замінено на одержувачів у файлі Dropbox.</p><h3>Контроль доступу</h3><p>Кожен, хто може редагувати список розсилки, також має право надіслати сторінку до списку розсилки. Кожен, хто може переглядати список розсилки, може додати адресу електронної пошти до списку розсилки.</p>"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:68
 msgid "Act"
-msgstr "діяти"
+msgstr "Акт"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24
 msgid "Add a new recipient."
@@ -6235,15 +6235,15 @@ msgstr "Додав одержувача."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist.tpl:14
 msgid "All mailing lists"
-msgstr "Усі списки розсилки"
+msgstr "Всі списки розсилки"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:19
 msgid "All recipients of the mailing list. You can upload or download this list, which must be a file with one e-mail address per line."
-msgstr "Усі одержувачі списку розсилки. Ви можете завантажити або завантажити цей список, який має бути файлом з однією адресою електронної пошти на рядок."
+msgstr "Всі одержувачі списку розсилки. Ви можете завантажити або завантажити цей список, який має бути файлом з однією адресою електронної пошти на рядок."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:9
 msgid "Any page can be sent as a mailing. You can send a mailing from any edit page. On this page you can add or remove mailing lists and their recipients."
-msgstr "Будь-яку сторінку можна надіслати як розсилку. Ви можете надіслати розсилку з будь-якої сторінки редагування. На цій сторінці ви можете додавати або видаляти списки розсилки та їх одержувачів."
+msgstr "Будь-яку сторінку можна надіслати як розсилку. Ви можете надіслати розсилку з будь-якої сторінки редагування. На цій сторінці Ви можете додавати або видаляти списки розсилки та їх одержувачів."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:1
 msgid "Are you sure you want to cancel the mailing to"
@@ -6255,11 +6255,11 @@ msgstr "Ви впевнені, що хочете видалити список �
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:49
 msgid "Are you sure you want to reset the statistics for this mailing? This means that if you send the mailing again afterwards, recipients might have gotten the mailing twice."
-msgstr "Ви впевнені, що хочете скинути статистику для цієї розсилки? Це означає, що якщо ви потім знову відправите лист, одержувачі могли отримати його двічі."
+msgstr "Ви впевнені, що хочете скинути статистику для цієї розсилки? Це означає, що якщо Ви потім знову відправите лист, одержувачі могли отримати його двічі."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:9
 msgid "Before you will receive any further mail you need to confirm your subscription."
-msgstr "Перш ніж ви отримаєте будь-яку подальшу пошту, вам потрібно підтвердити свою підписку."
+msgstr "Перш ніж Ви отримаєте будь-яку подальшу пошту, Вам потрібно підтвердити свою підписку."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:5
 msgid "Cancel mailing"
@@ -6271,11 +6271,11 @@ msgstr "Установіть прапорець, щоб активувати а�
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
 msgid "Clear"
-msgstr "Ясно"
+msgstr "Чистий"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:10
 msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
-msgstr "Натисніть <strong>скасувати підписку</strong> , щоб видалити себе зі списку розсилки."
+msgstr "Натисніть <strong>скасувати підписку</strong>, щоб видалити себе зі списку розсилки."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:14
 msgid "Click the button below to confirm your subscription to this mailing list."
@@ -6291,7 +6291,7 @@ msgstr "Об’єднайте список розсилки"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
 msgid "Combine…"
-msgstr "Об’єднати…"
+msgstr "Комбінувати…"
 
 #: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:96
 msgid "Confirm mailing cancelation."
