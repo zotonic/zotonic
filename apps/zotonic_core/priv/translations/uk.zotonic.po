@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-12 15:23\n"
+"PO-Revision-Date: 2022-04-12 15:51\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -6496,7 +6496,7 @@ msgstr "Виконати операцію"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:3
 msgid "Please confirm that you want to send the page"
-msgstr "Будь ласка, підтвердьте, що ви хочете надіслати сторінку"
+msgstr "Будь ласка, підтвердьте, що Ви хочете надіслати сторінку"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:12
 msgid "Please confirm your subscription"
@@ -6508,19 +6508,19 @@ msgstr "Будь ласка, підтвердьте свою підписку н
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:5
 msgid "Please enter the e-mail address you want to send a test mail to."
-msgstr "Будь ласка, введіть адресу електронної пошти, на яку ви хочете надіслати тестовий лист."
+msgstr "Будь ласка, введіть адресу електронної пошти, на яку Ви хочете надіслати тестовий лист."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:5
 msgid "Please enter the e-mail address you want to send this page to."
-msgstr "Будь ласка, введіть адресу електронної пошти, на яку ви хочете надіслати цю сторінку."
+msgstr "Будь ласка, введіть адресу електронної пошти, на яку Ви хочете надіслати цю сторінку."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:11
 msgid "Please follow"
-msgstr "Будь ласка Слідуйте"
+msgstr "Будь ласка, слідуйте"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:6
 msgid "Please note:"
-msgstr "Будь ласка, запиши:"
+msgstr "Будь ласка, запишіть:"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
 msgid "Please unsubscribe"
@@ -6641,7 +6641,7 @@ msgstr "Показати всіх одержувачів &raquo;"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:27
 msgid "Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address."
-msgstr "На жаль, я не можу підписатися на вас на список розсилки. Будь ласка, спробуйте пізніше або з іншою адресою електронної пошти."
+msgstr "На жаль, я не можу підписатися на Вас на список розсилки. Будь ласка, спробуйте пізніше або з іншою адресою електронної пошти."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:26
 msgid "Sorry, can’t confirm your subscription"
@@ -6653,11 +6653,11 @@ msgstr "На жаль, не можу знайти вашу підписку"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:17
 msgid "Sorry, something went wrong. Please try again later."
-msgstr "Вибач, щось пішло не так. Будь-ласка спробуйте пізніше."
+msgstr "Вибачте, щось пішло не так. Будь ласка, спробуйте пізніше."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:22
 msgid "Sorry, something went wrong. Please try to re-subscribe."
-msgstr "Вибач, щось пішло не так. Будь ласка, спробуйте повторно підписатися."
+msgstr "Вибачте, щось пішло не так. Будь ласка, спробуйте повторно підписатися."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:83./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:18
 msgid "Subscribe"
@@ -6681,7 +6681,7 @@ msgstr "Цільовий список розсилки"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:21
 msgid "Thank you. You are now subscribed."
-msgstr "Дякую. Тепер ви підписані."
+msgstr "Дякую. Тепер Ви підписані."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:16
 msgid "Thank you. You are now unsubscribed."
@@ -6689,7 +6689,7 @@ msgstr "Дякую. Ви скасовані."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:28
 msgid "The confirmation key is unknown. Either you already confirmed or something else went wrong."
-msgstr "Ключ підтвердження невідомий. Або ви вже підтвердили, або щось пішло не так."
+msgstr "Ключ підтвердження невідомий. Або Ви вже підтвердили, або щось пішло не так."
 
 #: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:57
 msgid "The e-mails are being sent..."
@@ -6697,7 +6697,7 @@ msgstr "Електронні листи надсилаються..."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "The key in your link does not match any subscription. Either you already unsubscribed, or the mailing list has been deleted."
-msgstr "Ключ у вашому посиланні не відповідає жодній підписці. Або ви вже скасували підписку, або список розсилки видалено."
+msgstr "Ключ у Вашому посиланні не відповідає жодній підписці. Або Ви вже скасували підписку, або список розсилки видалено."
 
 #: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:109
 msgid "The mailing has been canceled."
@@ -6709,7 +6709,7 @@ msgstr "Лист буде надіслано, коли сторінка стан
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:15
 msgid "The page you are trying to e-mail is not yet published. What do you want to do?"
-msgstr "Сторінка, яку ви намагаєтеся надіслати електронною поштою, ще не опублікована. Що ти хочеш робити?"
+msgstr "Сторінка, яку Ви намагаєтеся надіслати електронною поштою, ще не опублікована. Що Ви хочете зробити?"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:3
 msgid "The recipients list of the mailing list will be deleted as well."
@@ -6745,7 +6745,7 @@ msgstr "Цю сторінку можна надіслати в різні спи
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipient.tpl:6
 msgid "Tick the checkbox if you want the recipient to receive a welcome e-mail message."
-msgstr "Установіть прапорець, якщо ви хочете, щоб одержувач отримував вітальне повідомлення електронної пошти."
+msgstr "Установіть прапорець, якщо Ви хочете, щоб одержувач отримував вітальне повідомлення електронної пошти."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:13
 msgid "Unsubscribe"
@@ -6781,11 +6781,11 @@ msgstr "Ласкаво просимо до"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:15
 msgid "When you don’t want to receive any mail then please ignore this message."
-msgstr "Якщо ви не хочете отримувати пошту, проігноруйте це повідомлення."
+msgstr "Якщо Ви не хочете отримувати пошту, проігноруйте це повідомлення."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:9
 msgid "When you don’t want to receive any more mail then"
-msgstr "Коли ви більше не хочете отримувати пошту"
+msgstr "Коли Ви більше не хочете отримувати пошту"
 
 #: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:79
 msgid "You are not allowed to add or enable recipients."
@@ -6821,15 +6821,15 @@ msgstr "Вам заборонено переглядати або редагув
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
 msgid "You are now subscribed to our mailing list"
-msgstr "Тепер ви підписані на наш список розсилки"
+msgstr "Тепер Ви підписані на наш список розсилки"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_goodbye.tpl:3
 msgid "You are now unsubscribed from"
-msgstr "Тепер ви скасували підписку"
+msgstr "Тепер Ви скасували підписку"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_goodbye.tpl:8
 msgid "You are now unsubscribed from the mailing list"
-msgstr "Тепер ви скасували підписку зі списку розсилки"
+msgstr "Тепер Ви скасували підписку зі списку розсилки"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:29
 msgid "You can try to re-subscribe to one of our mailing lists in the side column."
@@ -6837,7 +6837,7 @@ msgstr "Ви можете спробувати повторно підписат
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:2
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
-msgstr "Ви отримали цей лист, тому що хтось хотів надіслати вам цю інформацію. Ми не зберегли вашу адресу електронної пошти і не будемо надсилати вам інші листи через цю пошту."
+msgstr "Ви отримали цей лист, тому що хтось хотів надіслати Вам цю інформацію. Ми не зберегли вашу адресу електронної пошти і не будемо надсилати вам інші листи через цю пошту."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:5
 msgid "You received this mail because you are subscribed to the mailing list"
@@ -6853,7 +6853,7 @@ msgstr "Ви або хтось інший додали свою адресу е�
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
 msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. When you don’t receive it, then please check your spam folder."
-msgstr "Вашу адресу електронної пошти додано до списку розсилки. На вашу адресу електронної пошти буде надіслано лист з підтвердженням, який надійде незабаром. Якщо ви не отримаєте його, перевірте папку зі спамом."
+msgstr "Вашу адресу електронної пошти додано до списку розсилки. На Вашу адресу електронної пошти буде надіслано лист з підтвердженням, який надійде незабаром. Якщо Ви не отримаєте його, перевірте папку зі спамом."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:73
 msgid "bounced"
@@ -6881,7 +6881,7 @@ msgstr "ще ніколи не надсилався."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
 msgid "if you don't want to receive any further mail from this list."
-msgstr "якщо ви більше не хочете отримувати листи з цього списку."
+msgstr "якщо Ви більше не хочете отримувати листи з цього списку."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:9
 msgid "mailing list"
@@ -6937,15 +6937,15 @@ msgstr "Додати після"
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:28
 msgid "Add before"
-msgstr "Додайте раніше"
+msgstr "Додати перед"
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:29
 msgid "Add below"
-msgstr "Додайте нижче"
+msgstr "Додати нижче"
 
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:14./apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:30
 msgid "Add bottom"
-msgstr "Додайте дно"
+msgstr "Додати нижній"
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:8
 msgid "Add category"
@@ -6961,11 +6961,11 @@ msgstr "Додати пункт меню"
 
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:13./apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:29
 msgid "Add top"
-msgstr "Додайте верх"
+msgstr "Додати верх"
 
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:20
 msgid "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages."
-msgstr "Натисніть <strong>Додати пункт меню</strong> або <strong>Пункт меню</strong> , щоб додати сторінки."
+msgstr "Натисніть <strong>Додати пункт меню</strong> або <strong>Пункт меню</strong>, щоб додати сторінки."
 
 #: apps/zotonic_mod_menu/src/mod_menu.erl:180
 msgid "Copy of:"
@@ -7030,7 +7030,7 @@ msgstr "і всі елементи з відступом під ним?"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:14./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:15
 msgid "Application ID"
-msgstr "Ідентифікатор програми"
+msgstr "Ідентифікатор додатку"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:9
 msgid "Azure Portal App registrations"
