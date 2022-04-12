@@ -1,7 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2010 Arjan Scherpenisse
 %% Date: 2010-09-20
-%% @doc Wordpress WXR import.
+%% @doc WordPress WXR import.
 
 %% Copyright 2010,2011 Arjan Scherpenisse
 %%
@@ -34,12 +34,12 @@
 -define(WP_NS, "http://wordpress.org/export/1.0/").
 
 
-%% @doc Import a .wxr wordpress file.
+%% @doc Import a .wxr WordPress file.
 wxr_import(Filename, Context) ->
     wxr_import(Filename, false, Context).
 
 
-%% @doc Import a .wxr wordpress file. The reset flag controls whether or not previously deleted resources will be recreated.
+%% @doc Import a .wxr WordPress file. The reset flag controls whether or not previously deleted resources will be recreated.
 wxr_import(Filename, Reset, Context) ->
     case Reset of
         true -> z_datamodel:reset_deleted(mod_import_wordpress, Context);
