@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-12 12:28\n"
+"PO-Revision-Date: 2022-04-12 13:36\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -5207,7 +5207,7 @@ msgstr "Між текстом"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:8
 msgid "Caption"
-msgstr "Заголовок"
+msgstr "Підпис"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:44
 msgid "Crop"
@@ -5280,7 +5280,7 @@ msgstr "Щоб завершити конфігурацію DKIM, потрібн�
 
 #: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:25
 msgid "When all is setup, you can use the <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a> website to verify your domain's DKIM record."
-msgstr "Коли все налаштовано, Ви можете використовувати вебсайт <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a> , щоб перевірити запис DKIM вашого домену."
+msgstr "Коли все налаштовано, Ви можете використовувати вебсайт <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a>, щоб перевірити запис DKIM вашого домену."
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:187
 msgid "Bounces"
@@ -5316,11 +5316,11 @@ msgstr "Надіслано на цю адресу"
 
 #: apps/zotonic_mod_email_status/src/mod_email_status.erl:69
 msgid "Sorry, you are not allowed to block this email address."
-msgstr "На жаль, вам заборонено блокувати цю адресу електронної пошти."
+msgstr "На жаль, Вам заборонено блокувати цю адресу електронної пошти."
 
 #: apps/zotonic_mod_email_status/src/mod_email_status.erl:55
 msgid "Sorry, you are not allowed to reset this email address."
-msgstr "На жаль, вам не дозволено скинути цю адресу електронної пошти."
+msgstr "На жаль, Вам не дозволено скинути цю адресу електронної пошти."
 
 #: apps/zotonic_mod_email_status/src/mod_email_status.erl:64
 msgid "The email address has been blocked."
@@ -5435,7 +5435,7 @@ msgstr "Довідка щодо експорту"
 
 #: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:14./apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:15
 msgid "App ID."
-msgstr "Ідентифікатор програми."
+msgstr "Ідентифікатор додатка."
 
 #: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:19./apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:20
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:61./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:45./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:46./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:56./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:57
@@ -5446,7 +5446,7 @@ msgstr "Секрет додатка"
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:9
 #: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:9
 msgid "Application keys can be found in"
-msgstr "Ключі програми можна знайти в"
+msgstr "Ключі додатка можна знайти в"
 
 #: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:17
 msgid "Connect with Facebook"
@@ -5466,7 +5466,7 @@ msgstr "Увійдіть за допомогою Facebook"
 
 #: apps/zotonic_mod_facebook/priv/templates/_logon_extra_email_reset.tpl:2
 msgid "Log on with Facebook"
-msgstr "Увійдіть за допомогою Facebook"
+msgstr "Залогінитися за допомогою Facebook"
 
 #: apps/zotonic_mod_facebook/priv/templates/_logon_service.facebook.tpl:2
 msgid "Redirecting to Facebook."
@@ -5525,19 +5525,19 @@ msgstr "Через 3 місяці"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
 msgid "All cloud files can be moved back to the file system on the server."
-msgstr "Усі хмарні файли можна перемістити назад у файлову систему на сервері."
+msgstr "Всі хмарні файли можна перемістити назад у файлову систему на сервері."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
 msgid "All cloud files will be queued for download."
-msgstr "Усі хмарні файли будуть поставлені в чергу для завантаження."
+msgstr "Всі хмарні файли будуть поставлені в чергу для завантаження."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:161
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
-msgstr "Усі файли будуть поставлені в чергу, завантаження почнеться у фоновому режимі протягом 10 хвилин."
+msgstr "Всі файли будуть поставлені в чергу, завантаження почнеться у фоновому режимі протягом 10 хвилин."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:155
 msgid "All local uploaded and preview files can be moved to the cloud."
-msgstr "Усі локально завантажені файли та файли попереднього перегляду можна перемістити в хмару."
+msgstr "Всі локально завантажені файли та файли попереднього перегляду можна перемістити в хмару."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
 msgid "Are you sure you want to move all files to the cloud?"
@@ -5678,7 +5678,7 @@ msgstr "Вам не дозволено змінювати ці налаштув�
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
-msgstr "Zotonic може зберігати завантажені та змінені файли в хмарі. Тут ви можете налаштувати розташування та ключі доступу до хмарного сервісу."
+msgstr "Zotonic може зберігати завантажені та змінені файли в хмарі. Тут Ви можете налаштувати розташування та ключі доступу до хмарного сервісу."
 
 #: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:78
 msgid "Could not upload"
