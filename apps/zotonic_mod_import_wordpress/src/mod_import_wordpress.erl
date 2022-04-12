@@ -21,7 +21,7 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -mod_title("Import WordPress WXR").
--mod_description("Import your Wordpress blog into Zotonic using a .wxr file.").
+-mod_description("Import your WordPress blog into Zotonic using a .wxr file.").
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_wires/include/mod_wires.hrl").
@@ -51,7 +51,7 @@ do_import(TmpFile, Reset, OriginalFilename, Context) ->
             {growl, [ {text, Msg} ]}
         catch
             _:E:Stacktrace ->
-                ?LOG_WARNING("Wordpress failed import of ~p: ~p", [OriginalFilename, E], #{ stack => Stacktrace }),
+                ?LOG_WARNING("WordPress failed import of ~p: ~p", [OriginalFilename, E], #{ stack => Stacktrace }),
                 Msg1 = unicode:characters_to_binary(
                     io_lib:format("~p failed to import. The error was: ~p", [OriginalFilename, E])),
                 {growl, [ {text, Msg1}, {type, error}, {stay, true} ]}
