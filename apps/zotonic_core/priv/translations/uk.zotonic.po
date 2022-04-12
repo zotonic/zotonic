@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-11 18:18\n"
+"PO-Revision-Date: 2022-04-12 12:28\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -4947,7 +4947,7 @@ msgstr "Дія"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
 msgid "At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template."
-msgstr "Іноді це може бути незрозумілим, які шаблони насправді використовуються під час компіляції шаблону. Тут ви можете побачити, які файли включені під час компіляції шаблону."
+msgstr "Іноді це може бути незрозумілим, які шаблони насправді використовуються під час компіляції шаблону. Тут Ви можете побачити, які файли включені під час компіляції шаблону."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:13
 msgid "Below is the list of all notifications and the installed observers."
@@ -4955,7 +4955,7 @@ msgstr "Нижче наведено список усіх сповіщень т�
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:13
 msgid "Below you see in real time which templates are compiled and included."
-msgstr "Нижче ви бачите в режимі реального часу, які шаблони зібрані та включені."
+msgstr "Нижче Ви бачите в режимі реального часу, які шаблони зібрані та включені."
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:6
 msgid "Bindings"
@@ -4999,7 +4999,7 @@ msgstr "Порожній журнал"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:81
 msgid "Enable <tt>mod_server_storage</tt> to use database query tracing."
-msgstr "Увімкніть <tt>mod_server_storage</tt> , щоб використовувати трасування запитів до бази даних."
+msgstr "Увімкніть <tt>mod_server_storage</tt>, щоб використовувати трасування запитів до бази даних."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:58
 msgid "Enable API to recompile and build Zotonic"
