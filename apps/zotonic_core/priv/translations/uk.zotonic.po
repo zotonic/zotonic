@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-12 14:37\n"
+"PO-Revision-Date: 2022-04-12 15:11\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -6207,11 +6207,11 @@ msgstr "електронна адреса підтверджена"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:14
 msgid "<em>Add</em> all recipients to this list that are on the target list"
-msgstr "<em>Додайте</em> усіх одержувачів до цього списку, які є в цільовому списку"
+msgstr "<em>Додайте</em> всіх одержувачів до цього списку, які є в цільовому списку"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:20
 msgid "<em>Remove</em> all recipients from this list that are on the target list"
-msgstr "<em>Видалити</em> усіх одержувачів із цього списку, які є в цільовому списку"
+msgstr "<em>Видалити</em> всіх одержувачів із цього списку, які є в цільовому списку"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
