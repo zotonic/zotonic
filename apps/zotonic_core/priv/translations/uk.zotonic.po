@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-12 13:36\n"
+"PO-Revision-Date: 2022-04-12 14:37\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -5718,11 +5718,11 @@ msgstr "Обрізати правильно"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:60
 msgid "Crop top"
-msgstr "Кроп-топ"
+msgstr "Обрізати зверху"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:14
 msgid "Cropping center, click to remove"
-msgstr "Центр обрізки, натисніть, щоб видалити"
+msgstr "Центральна обрізка, натисніть, щоб видалити"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_admin_edit_media_button.tpl:3
 msgid "Edit image"
@@ -5738,7 +5738,7 @@ msgstr "Зміна розміру без втрат"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:101
 msgid "Pan"
-msgstr "Пан"
+msgstr "Сковорода"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:108
 msgid "Reset"
@@ -5750,7 +5750,7 @@ msgstr "Рулет"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:90
 msgid "Roll, Tilt &amp; Pan"
-msgstr "Рулон, нахил &amp; Панорамування"
+msgstr "Рулон, Нахил &amp; Панорамування"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:35
 msgid "Rotate"
@@ -5833,21 +5833,21 @@ msgstr "Імпорт Wordpress"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:57
 msgid "Apr"
-msgstr "квітень"
+msgstr "Квіт."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:42
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:23
 msgid "April"
-msgstr "квітень"
+msgstr "Квітень"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:61
 msgid "Aug"
-msgstr "серп"
+msgstr "Серп."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:46
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:27
 msgid "August"
-msgstr "серпень"
+msgstr "Серпень"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:24
 msgid "BCE"
@@ -5855,11 +5855,11 @@ msgstr "до нашої ери"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:26
 msgid "CE"
-msgstr "CE"
+msgstr "нашої ери"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:65
 msgid "Dec"
-msgstr "груд"
+msgstr "Груд."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:50
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:31
@@ -5868,12 +5868,12 @@ msgstr "Грудень"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:55
 msgid "Feb"
-msgstr "лютий"
+msgstr "Лют."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:40
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:21
 msgid "February"
-msgstr "лютий"
+msgstr "Лютий"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:24
 msgid "Fix timezone, show all dates in the above timezone."
@@ -5881,38 +5881,38 @@ msgstr "Виправити часовий пояс, показати всі да
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:33
 msgid "Friday"
-msgstr "п'ятниця"
+msgstr "П'ятниця"
 
 #: apps/zotonic_mod_l10n/priv/templates/admin_l10n.tpl:8
 msgid "Here you can set the default localization configurations."
-msgstr "Тут ви можете встановити конфігурації локалізації за замовчуванням."
+msgstr "Тут Ви можете встановити конфігурації локалізації за замовчуванням."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:54
 msgid "Jan"
-msgstr "Січ"
+msgstr "Січ."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:39
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:20
 msgid "January"
-msgstr "січня"
+msgstr "Січня"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:60
 msgid "Jul"
-msgstr "липень"
+msgstr "Лип."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:45
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:26
 msgid "July"
-msgstr "липень"
+msgstr "Липень"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:59
 msgid "Jun"
-msgstr "черв"
+msgstr "Черв."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:44
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:25
 msgid "June"
-msgstr "червень"
+msgstr "Червень"
 
 #: apps/zotonic_mod_l10n/priv/templates/admin_l10n.tpl:3
 msgid "L10N Configuration"
@@ -5924,25 +5924,25 @@ msgstr "Локалізація"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:56
 msgid "Mar"
-msgstr "березень"
+msgstr "Берез."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:41
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:22
 msgid "March"
-msgstr "березень"
+msgstr "Березень"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:43./apps/zotonic_mod_l10n/src/support/l10n_date.erl:58
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:24
 msgid "May"
-msgstr "Може"
+msgstr "Травень"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:29
 msgid "Monday"
-msgstr "понеділок"
+msgstr "Понеділок"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:64
 msgid "Nov"
-msgstr "лист"
+msgstr "Листоп."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:49
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:30
@@ -5951,20 +5951,20 @@ msgstr "Листопад"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:63
 msgid "Oct"
-msgstr "жовт"
+msgstr "Жовт."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:48
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:29
 msgid "October"
-msgstr "жовтень"
+msgstr "Жовтень"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:34
 msgid "Saturday"
-msgstr "субота"
+msgstr "Субота"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:62
 msgid "Sep"
-msgstr "вер"
+msgstr "Верес."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:47
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:28
@@ -5973,7 +5973,7 @@ msgstr "Вересень"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:35
 msgid "Sunday"
-msgstr "неділя"
+msgstr "Неділя"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:32
 msgid "This forces the timezone to the configured timezone. Irrespective of the timezone selected by the user or user-agent."
@@ -5985,15 +5985,15 @@ msgstr "Це встановлює часовий пояс за замовчув�
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:32
 msgid "Thursday"
-msgstr "четвер"
+msgstr "Четвер"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:30
 msgid "Tuesday"
-msgstr "вівторок"
+msgstr "Вівторок"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:31
 msgid "Wednesday"
-msgstr "середа"
+msgstr "Середа"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:20
 msgid "midnight"
@@ -6005,7 +6005,7 @@ msgstr "полудень"
 
 #: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:17
 msgid "Connect with LinkedIn"
-msgstr "Підключіться до LinkedIn"
+msgstr "Під'єднатися до LinkedIn"
 
 #: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:2./apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:4
 msgid "Disconnect from LinkedIn"
@@ -6021,7 +6021,7 @@ msgstr "Увійдіть за допомогою LinkedIn"
 
 #: apps/zotonic_mod_linkedin/priv/templates/_logon_extra_email_reset.tpl:2
 msgid "Log on with LinkedIn"
-msgstr "Увійдіть за допомогою LinkedIn"
+msgstr "Залогінитися за допомогою LinkedIn"
 
 #: apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:31
 msgid "Save LinkedIn Settings"
@@ -6045,7 +6045,7 @@ msgstr "Ключі програми можна знайти в"
 
 #: apps/zotonic_mod_linkedin/src/mod_linkedin.erl:49
 msgid "You don't have permission to change the LinkedIn settings."
-msgstr "У вас немає дозволу змінювати налаштування LinkedIn."
+msgstr "У Вас немає дозволу змінювати налаштування LinkedIn."
 
 #: apps/zotonic_mod_linkedin/priv/templates/_logon_extra_email_reset.tpl:2
 msgid "You have coupled your <strong>LinkedIn</strong> account."
@@ -6092,7 +6092,7 @@ msgstr "Ідентичності"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_base.tpl:3./apps/zotonic_mod_logging/src/mod_logging.erl:102
 msgid "Log"
-msgstr "журнал"
+msgstr "Журнал"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:3
 msgid "Log email"
