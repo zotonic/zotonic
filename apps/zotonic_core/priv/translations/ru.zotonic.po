@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-13 16:05\n"
+"PO-Revision-Date: 2022-04-13 18:47\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -8027,8 +8027,8 @@ msgid "Add answer"
 msgstr "Добавить ответ"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
-msgid "Add answer options here. The <i>stored value</i> is stored with the results."
-msgstr "Добавьте сюда варианты ответов. Сохраненное значение <i></i> сохраняется вместе с результатами."
+msgid "Add answer options here. Each stored value must be unique."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:16
 msgid "Add page"
