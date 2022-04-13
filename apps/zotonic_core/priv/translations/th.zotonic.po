@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-11 18:19\n"
+"PO-Revision-Date: 2022-04-13 15:52\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -3113,11 +3113,7 @@ msgstr "ผู้ใช้"
 msgid "Users Overview"
 msgstr "ภาพรวมผู้ใช้"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21
-msgid "Verfied"
-msgstr "ยืนยัน"
-
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44
 msgid "Verified"
 msgstr "ตรวจสอบแล้ว"
 
@@ -5555,7 +5551,7 @@ msgstr "URL ฐาน"
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "ก่อนบันทึกการตั้งค่าระบบจะตรวจสอบโดยการอัปโหลด (และลบ) ไฟล์ขนาดเล็ก"
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:119
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:126
 msgid "Cloud File Store"
 msgstr "Cloud File Store"
 
@@ -5816,20 +5812,20 @@ msgid "Import WXR file"
 msgstr "นำเข้าไฟล์ WXR"
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:5
-msgid "Import a Wordpress WXR export file into Zotonic."
-msgstr "นำเข้าไฟล์ส่งออก Wordpress WXR ไปยัง Zotonic"
+msgid "Import a WordPress WXR export file into Zotonic."
+msgstr ""
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:2
-msgid "Upload a wordpress WXR file from your computer."
-msgstr "อัปโหลดไฟล์ wordpress WXR จากคอมพิวเตอร์ของคุณ"
+msgid "Upload a WordPress WXR file from your computer."
+msgstr ""
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:9
 msgid "WXR file"
 msgstr "WXR"
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
-msgid "Wordpress import"
-msgstr "นำเข้า Wordpress"
+msgid "WordPress import"
+msgstr ""
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:57
 msgid "Apr"
@@ -8907,7 +8903,7 @@ msgstr "แน่ใจไหมว่าต้องการลบภาษา
 msgid "Available sub-languages"
 msgstr "ภาษาย่อยที่ใช้ได้"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:367
+#: apps/zotonic_mod_translation/src/mod_translation.erl:376
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "ไม่สามารถสร้างไฟล์แปลได้เนื่องจากไม่ได้ติดตั้ง <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext</a>."
 
@@ -9055,7 +9051,7 @@ msgstr "โหลดการแปลซ้ำ"
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "โหลดคำแปลทั้งหมดซ้ำจากโมดูลและไซต์ เทมเพลตทั้งหมดจะถูกคอมไพล์ใหม่"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:378
+#: apps/zotonic_mod_translation/src/mod_translation.erl:391
 msgid "Reloading all .po files in the background."
 msgstr "กำลังโหลดไฟล์. po ทั้งหมดซ้ำในพื้นหลัง"
 
@@ -9107,15 +9103,15 @@ msgstr "ขออภัยไม่สามารถเปลี่ยนภา
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้เปลี่ยนรายการภาษา"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:380
+#: apps/zotonic_mod_translation/src/mod_translation.erl:393
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "ขออภัยคุณไม่มีสิทธิ์โหลดคำแปลซ้ำ"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:370
+#: apps/zotonic_mod_translation/src/mod_translation.erl:383
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "ขออภัยคุณไม่มีสิทธิ์สแกนคำแปล"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:449
+#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:462
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้ตั้งค่าภาษาเริ่มต้น"
 
@@ -9143,7 +9139,7 @@ msgstr "ชื่อเรื่องเนื้อหาและข้อค
 msgid "Translate this page in other languages."
 msgstr "แปลหน้านี้เป็นภาษาอื่น"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:660
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:686
 msgid "Translation"
 msgstr "การแปล"
 
