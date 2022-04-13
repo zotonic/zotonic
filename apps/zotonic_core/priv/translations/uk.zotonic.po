@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-13 08:28\n"
+"PO-Revision-Date: 2022-04-13 13:57\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -7920,7 +7920,7 @@ msgstr "Якщо виникають проблеми із запитом сер�
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:55
 msgid "If you want different hostnames in the certificate then request a new certificate below."
-msgstr "Якщо вам потрібні різні імена хостів у сертифікаті, запитайте новий сертифікат нижче."
+msgstr "Якщо Вам потрібні різні імена хостів у сертифікаті, запитайте новий сертифікат нижче."
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:4./apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:10
 msgid "Let’s Encrypt Certificate"
