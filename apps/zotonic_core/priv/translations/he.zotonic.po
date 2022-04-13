@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-11 18:19\n"
+"PO-Revision-Date: 2022-04-13 15:53\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -3113,11 +3113,7 @@ msgstr "משתמשים"
 msgid "Users Overview"
 msgstr "סקירת משתמשים"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21
-msgid "Verfied"
-msgstr "מאולתר"
-
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44
 msgid "Verified"
 msgstr "מְאוּמָת"
 
@@ -5555,7 +5551,7 @@ msgstr "כתובת URL בסיסית"
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "לפני שמירת ההגדרות הם ייבדקו על ידי העלאת (והסרה) של קובץ קטן."
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:119
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:126
 msgid "Cloud File Store"
 msgstr "חנות קבצי ענן"
 
@@ -5816,20 +5812,20 @@ msgid "Import WXR file"
 msgstr "ייבא קובץ WXR"
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:5
-msgid "Import a Wordpress WXR export file into Zotonic."
-msgstr "ייבא קובץ ייצוא של Wordpress WXR ל- Zotonic."
+msgid "Import a WordPress WXR export file into Zotonic."
+msgstr ""
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:2
-msgid "Upload a wordpress WXR file from your computer."
-msgstr "העלה קובץ WXR של WordPress מהמחשב שלך."
+msgid "Upload a WordPress WXR file from your computer."
+msgstr ""
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:9
 msgid "WXR file"
 msgstr "קובץ WXR"
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
-msgid "Wordpress import"
-msgstr "ייבוא וורדפרס"
+msgid "WordPress import"
+msgstr ""
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:57
 msgid "Apr"
@@ -8907,7 +8903,7 @@ msgstr "האם אתה בטוח שברצונך להסיר את השפה הזו?"
 msgid "Available sub-languages"
 msgstr "שפות משנה זמינות"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:367
+#: apps/zotonic_mod_translation/src/mod_translation.erl:376
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "לא ניתן ליצור קבצי תרגום מכיוון שלא מותקן <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext</a>."
 
@@ -9055,7 +9051,7 @@ msgstr "טען תרגומים מחדש"
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "טען מחדש את כל התרגומים מהמודולים והאתר. כל התבניות יורכבו מחדש."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:378
+#: apps/zotonic_mod_translation/src/mod_translation.erl:391
 msgid "Reloading all .po files in the background."
 msgstr "טוען מחדש את כל קבצי ה- PO ברקע."
 
@@ -9107,15 +9103,15 @@ msgstr "מצטערים, לא הצלחנו לשנות את השפה."
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "מצטערים, אין לך הרשאה לשנות את רשימת השפות."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:380
+#: apps/zotonic_mod_translation/src/mod_translation.erl:393
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "מצטערים, אין לך הרשאה לטעון תרגומים מחדש."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:370
+#: apps/zotonic_mod_translation/src/mod_translation.erl:383
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "מצטערים, אין לך הרשאה לסרוק לתרגומים."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:449
+#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:462
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "מצטערים, אין לך הרשאה להגדיר את שפת ברירת המחדל."
 
@@ -9143,7 +9139,7 @@ msgstr "הכותרת, הגוף וטקסטים אחרים ניתנים לתרגו
 msgid "Translate this page in other languages."
 msgstr "תרגם דף זה בשפות אחרות."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:660
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:686
 msgid "Translation"
 msgstr "תִרגוּם"
 
