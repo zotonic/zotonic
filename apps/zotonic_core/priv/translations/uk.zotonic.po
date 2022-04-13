@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-13 08:22\n"
+"PO-Revision-Date: 2022-04-13 08:28\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -7686,11 +7686,11 @@ msgstr "Я згоден на"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "If you already have an account,"
-msgstr "Якщо у вас уже є обліковий запис,"
+msgstr "Якщо у Вас уже є обліковий запис,"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_stage.tpl:9
 msgid "If you do not receive the e-mail within a few minutes, please check your spam folder."
-msgstr "Якщо ви не отримаєте електронного листа протягом кількох хвилин, перевірте папку зі спамом."
+msgstr "Якщо Ви не отримаєте електронного листа протягом кількох хвилин, перевірте папку зі спамом."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:37
 msgid "Last name"
@@ -7706,7 +7706,7 @@ msgstr "Будь ласка, підтвердьте свій обліковий 
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_stage.tpl:3
 msgid "Please follow the instructions in the email we've sent you."
-msgstr "Будь ласка, дотримуйтесь інструкцій у електронному листі, який ми вам надіслали."
+msgstr "Будь ласка, дотримуйтесь інструкцій в електронному листі, який ми Вам надіслали."
 
 #: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:10
 msgid "Please follow the link below."
@@ -7730,7 +7730,7 @@ msgstr "Зареєструйтеся, використовуючи адресу 
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:24
 msgid "Sorry, there is already an account coupled to your account at your service provider. Maybe your account here was suspended."
-msgstr "На жаль, у вашого постачальника послуг уже є обліковий запис, пов’язаний з вашим обліковим записом. Можливо, ваш обліковий запис тут призупинено."
+msgstr "На жаль, у Вашого постачальника послуг уже є обліковий запис, пов’язаний з Вашим обліковим записом. Можливо, Ваш обліковий запис тут призупинено."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:22
 msgid "Terms of Service"
@@ -7738,7 +7738,7 @@ msgstr "Умови обслуговування"
 
 #: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:8
 msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
-msgstr "Дякуємо за реєстрацію на нашому сайті. Ми просимо вас підтвердити свій обліковий запис, перш ніж ви зможете ним користуватися."
+msgstr "Дякуємо за реєстрацію на нашому сайті. Ми просимо Вас підтвердити свій обліковий запис, перш ніж Ви зможете ним користуватися."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:71
 msgid "This does not match the first password"
@@ -7762,7 +7762,7 @@ msgstr "Ми будемо дуже обережні з усією наданою
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:23
 msgid "When you signed up, you received an email with a link but it looks like something went wrong."
-msgstr "Коли ви зареєструвалися, ви отримали електронний лист із посиланням, але, схоже, щось пішло не так."
+msgstr "Коли Ви зареєструвалися, Ви отримали електронний лист із посиланням, але, схоже, щось пішло не так."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:29
 msgid "You already have an account,"
@@ -7774,7 +7774,7 @@ msgstr "Ви також можете"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
 msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
-msgstr "Можливо, ви двічі підтвердили свій обліковий запис, тому обліковий запис уже підтверджено. Якщо так, спробуйте увійти.<br>Якщо це не спрацює, переконайтеся, що ви скопіювали посилання правильно, і повторіть спробу."
+msgstr "Можливо, Ви двічі підтвердили свій обліковий запис, тому обліковий запис уже підтверджено. Якщо так, спробуйте увійти.<br>Якщо це не спрацює, переконайтеся, що Ви скопіювали посилання правильно, і повторіть спробу."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
