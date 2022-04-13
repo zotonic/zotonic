@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-13 13:57\n"
+"PO-Revision-Date: 2022-04-13 14:09\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -8032,7 +8032,7 @@ msgstr "Додайте відповідь"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
 msgid "Add answer options here. The <i>stored value</i> is stored with the results."
-msgstr "Додайте тут варіанти відповідей. Збережене значення <i></i> зберігається разом із результатами."
+msgstr "Додайте тут варіанти відповідей. <i>Збережене значення</i> зберігається разом із результатами."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:16
 msgid "Add page"
@@ -8040,11 +8040,11 @@ msgstr "Додати сторінку"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:9
 msgid "Add page above"
-msgstr "Додайте сторінку вище"
+msgstr "Додати сторінку вище"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:10
 msgid "Add page below"
-msgstr "Додайте сторінку нижче"
+msgstr "Додати сторінку нижче"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:51
 msgid "Add page jump"
@@ -8052,15 +8052,15 @@ msgstr "Додати перехід сторінки"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:27
 msgid "Add question"
-msgstr "Додайте запитання"
+msgstr "Додати запитання"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:40
 msgid "Add question after"
-msgstr "Додайте питання після"
+msgstr "Додати питання після"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:8
 msgid "Add questions by adding blocks with the menu."
-msgstr "Додайте запитання, додавши блоки з меню."
+msgstr "Додати запитання, додавши блоки з меню."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
 msgid "Aggregated results from all respondents"
@@ -8072,7 +8072,7 @@ msgstr "Згоден"
 
 #: apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "All survey entries up until"
-msgstr "Усі записи опитування до"
+msgstr "Всі записи опитування до"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150
 msgid "Another page, video or image."
@@ -8088,7 +8088,7 @@ msgstr "Відповідаючи"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:86
 msgid "Apple"
-msgstr "яблуко"
+msgstr "Яблуко"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:26
 msgid "Apple = Red"
@@ -8180,7 +8180,7 @@ msgstr "Небезпека"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:36
 msgid "Dead end. Remove Next button. No questions will be submitted unless you add a button jump to a next page."
-msgstr "Мертвий кінець. Видалити кнопку «Далі». Жодні запитання не надсилатимуться, якщо ви не додасте кнопку переходу на наступну сторінку."
+msgstr "Мертвий кінець. Видалити кнопку «Далі». Жодні запитання не надсилатимуться, якщо Ви не додасте кнопку переходу на наступну сторінку."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:37
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:24
@@ -8225,7 +8225,7 @@ msgstr "Кінець запитань"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
 msgid "Example:"
-msgstr "приклад:"
+msgstr "Приклад:"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:21
 msgid "Explanation"
@@ -8233,7 +8233,7 @@ msgstr "Пояснення"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:56./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:28./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:11./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:28./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:35./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:11./apps/zotonic_mod_survey/src/questions/survey_q_truefalse.erl:61
 msgid "False"
-msgstr "помилковий"
+msgstr "Помилковий"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_block_thurstone_answer.tpl:34
 msgid "Feedback"
@@ -8241,11 +8241,11 @@ msgstr "Зворотній зв'язок"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:6
 msgid "Feedback if correct"
-msgstr "Відгук, якщо правильний"
+msgstr "Відгук, якщо коректно"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:12./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:13
 msgid "Feedback if wrong"
-msgstr "Відгук, якщо неправильний"
+msgstr "Відгук, якщо неправильно"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:172
 msgid "File upload"
@@ -8381,7 +8381,7 @@ msgstr "Можливі декілька відповідей"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:31
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
-msgstr "Можливі декілька відповідей: за правильну відповідь нараховуються бали <i>і</i> бал за <i>, а не</i> за неправильну відповідь. За замовчуванням: 1 бал за правильну відповідь, 1 бал за неправильну відповідь."
+msgstr "Можливі декілька відповідей: за правильну відповідь нараховуються бали <i>і</i> бал за а, <i>не</i> за неправильну відповідь. За замовчуванням: 1 бал за правильну відповідь, 1 бал за неправильну відповідь."
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:173
 msgid "Multiple choice"
@@ -8469,7 +8469,7 @@ msgstr "Будь ласка, завантажте своє зображення.
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:18./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:80
 msgid "Points"
-msgstr "Окуляри"
+msgstr "Точки"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:38
 msgid "Primary"
