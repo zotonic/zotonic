@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-13 16:05\n"
+"PO-Revision-Date: 2022-04-13 16:33\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -3590,7 +3590,7 @@ msgstr "Systeemgebruik"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:9
 msgid "This page shows (real-time) system statistics like memory use and requests."
-msgstr "Deze pagina toont (realtime) systeemstatistieken zoals geheugengebruik en aanvragen."
+msgstr "Deze pagina toont (real-time) systeemstatistieken zoals geheugengebruik en aanvragen."
 
 #: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13./apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:14
 msgid "Album"
@@ -5113,7 +5113,7 @@ msgstr "Toon paden naar ingevoegde templates in gegenereerde templates"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:118
 msgid "Show which files are included in a template compilation"
-msgstr "Laat zien welke bestanden zijn opgenomen in een sjablooncompilatie"
+msgstr "Laat zien welke bestanden zijn opgenomen in een sjabloon-compilatie"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:7
 msgid "Site Development"
@@ -5819,7 +5819,7 @@ msgstr "Importeer een WordPress WXR-exportbestand in Zotonic."
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:2
 msgid "Upload a WordPress WXR file from your computer."
-msgstr "Upload een WordPress WXR-bestand vanaf uw computer."
+msgstr "Upload een WordPress WXR-bestand vanaf je computer."
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:9
 msgid "WXR file"
@@ -7372,7 +7372,7 @@ msgstr "Om een van deze applicaties te gebruiken, moeten de app-ID en het geheim
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
-msgstr "Onbekende klant of omleiding, neem contact op met uw websitebeheerder."
+msgstr "Onbekende klant of omleiding, neem contact op met de websitebeheerder."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:81
 msgid "Update"
@@ -7392,7 +7392,7 @@ msgstr "Aantal gebruikers"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:29./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:30./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:27./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:28
 msgid "Valid redirect URLs, one per line"
-msgstr "Geldige omleidings-URL's, één per regel"
+msgstr "Geldige redirect URL's, één per regel"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:11
 msgid "With a consumer token this website can:"
@@ -7404,7 +7404,7 @@ msgstr "Je zult in staat zijn om:"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:15
 msgid "You will not be able to see this token again, so copy it and save it in a secure place."
-msgstr "U kunt dit token niet meer zien, dus kopieer het en bewaar het op een veilige plaats."
+msgstr "Je kunt dit token hierna niet meer zien, dus kopieer het en bewaar het op een veilige plaats."
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "API Key can be found on"
@@ -8147,7 +8147,7 @@ msgstr "Controlleer het antwoord in de admin."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:29
 msgid "Check the correct answers and give each answer points."
-msgstr "Controleer de juiste antwoorden en geef elk antwoord punten."
+msgstr "Selecteer de correcte antwoorden en geef elk antwoord punten."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:31
 msgid "Choices"
@@ -8380,7 +8380,7 @@ msgstr "Meerdere antwoorden mogelijk"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:31
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
-msgstr "Meerdere antwoorden mogelijk: punten worden gegeven voor het juiste antwoord <i>en</i> punten voor <i>niet</i> kiezen van het verkeerde antwoord. Standaard: 1 punt voor een correct antwoord, 1 punt voor het niet kiezen van een fout antwoord."
+msgstr "Meerdere antwoorden mogelijk: punten worden gegeven voor het juiste antwoord <i>en</i> punten worden gegeven voor het <i>niet</i> kiezen van het verkeerde antwoord. Standaard: 1 punt voor een correct antwoord, 1 punt voor het niet kiezen van een fout antwoord."
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:173
 msgid "Multiple choice"
