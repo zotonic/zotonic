@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-13 14:41\n"
+"PO-Revision-Date: 2022-04-13 14:57\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -8697,7 +8697,7 @@ msgstr "Під час обробки ваших відповідей стала�
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:14
 msgid "This block show a file upload field. This can only be used as the last question of a survey. The default survey routines can’t handle file upload, you will need to add your own survey handler to your site or module."
-msgstr "Цей блок показує поле завантаження файлу. Це можна використовувати лише як останнє запитання опитування. Стандартні процедури опитування не можуть обробляти завантаження файлів, вам потрібно буде додати власний обробник опитування на свій сайт або модуль."
+msgstr "Цей блок показує поле завантаження файлу. Це можна використовувати лише як останнє запитання опитування. Стандартні процедури опитування не можуть обробляти завантаження файлів, Вам потрібно буде додати власний обробник опитування на свій сайт або модуль."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_stop.tpl:9
 msgid "This block signals a stop in the flow. The user can't continue further and it is counted as a page break."
@@ -8709,7 +8709,7 @@ msgstr "Це результат для:"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:129
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
-msgstr "Це відсоток, необхідний для проходження тесту або тесту. Використовується, лише якщо ви додали запитання вікторини або тесту."
+msgstr "Це відсоток, необхідний для проходження тесту або тесту. Використовується, лише якщо Ви додали запитання вікторини або тесту."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the survey has been submitted."
@@ -8765,7 +8765,7 @@ msgstr "Вагнера"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:60
 msgid "When finished show"
-msgstr "Коли закінчено шоу"
+msgstr "Коли закінчитися, показати"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:32
 msgid "When no condition is true then the question following this break will be the next page."
@@ -8781,7 +8781,7 @@ msgstr "Так чи ні питання"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:160
 msgid "Yes/No"
-msgstr "Так ні"
+msgstr "Так/Ні"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:22
 msgid "You already filled this in, but you can change your previous answers."
@@ -8837,7 +8837,7 @@ msgstr "якщо"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:43
 msgid "must be a date"
-msgstr "має бути побачення"
+msgstr "має бути дата"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:42
 msgid "must be a number"
@@ -8885,7 +8885,7 @@ msgstr "текст"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:97
 msgid "years old. I like"
-msgstr "років. мені подобається"
+msgstr "років. Мені подобається"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:14./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:15
 msgid "Add language"
@@ -8897,7 +8897,7 @@ msgstr "Додано"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail.tpl:19
 msgid "All languages"
-msgstr "Усі мови"
+msgstr "Всі мови"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:1
 msgid "Are you sure you want to remove this language?"
@@ -8913,7 +8913,7 @@ msgstr "Не вдається створити файли перекладу, о
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:29
 msgid "Code"
-msgstr "код"
+msgstr "Код"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:1
 msgid "Copy texts from a language to the currently selected language."
@@ -8925,7 +8925,7 @@ msgstr "Копіювати переклад"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:97
 msgid "Danish"
-msgstr "датський"
+msgstr "Данський"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_sublanguage_note.tpl:2
 msgid "Deciding on a main language or sub-language"
@@ -8941,7 +8941,7 @@ msgstr "Документація розробника"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:99
 msgid "Dutch"
-msgstr "голландський"
+msgstr "Голландський"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:26
 msgid "Editable"
@@ -8949,7 +8949,7 @@ msgstr "Можливість редагування"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:98
 msgid "English"
-msgstr "англійська"
+msgstr "Англійська"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:51
 msgid "Fallback language"
@@ -8957,7 +8957,7 @@ msgstr "Запасна мова"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:100
 msgid "Finnish"
-msgstr "фінська"
+msgstr "Фінська"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:137
 msgid "For Developers"
@@ -8969,7 +8969,7 @@ msgstr "Для нових відвідувачів установіть мову
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:101
 msgid "French"
-msgstr "французький"
+msgstr "Французький"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:143
 msgid "Generate .pot files"
@@ -8977,11 +8977,11 @@ msgstr "Згенеруйте файли .pot"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:102
 msgid "German"
-msgstr "німецький"
+msgstr "Німецький"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:3
 msgid "Heads up! Removing this language will <strong>not</strong> delete any of the existing translations. But until you add (and activate) the language again, you will not be able to select or edit content written in this language."
-msgstr "Голова вгору! Видалення цієї мови <strong>не</strong> до видалення жодного з існуючих перекладів. Але поки ви не додасте (і не активуєте) мову знову, ви не зможете вибирати або редагувати вміст, написаний цією мовою."
+msgstr "Голову вгору! Видалення цієї мови <strong>не</strong> видалить жодного з існуючих перекладів. Але поки Ви не додасте (і не активуєте) мову знову, Ви не зможете вибирати або редагувати вміст, написаний цією мовою."
 
 #: apps/zotonic_mod_translation/priv/templates/_admin_edit_sidebar.tpl:8
 msgid "Help about translations"
@@ -8989,7 +8989,7 @@ msgstr "Довідка щодо перекладів"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:103
 msgid "Hungarian"
-msgstr "угорська"
+msgstr "Угорська"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:43
 msgid "If a language is set to 'off' then edited texts will loose their translation in that lanuage."
@@ -9001,11 +9001,11 @@ msgstr "Якщо для мови встановлено значення \"пе�
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:118
 msgid "If you change the stemmer language then you will need to reindex all data."
-msgstr "Якщо ви зміните мову stemmer, вам потрібно буде переіндексувати всі дані."
+msgstr "Якщо Ви зміните мову stemmer, вам потрібно буде переіндексувати всі дані."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:104
 msgid "Italian"
-msgstr "італійська"
+msgstr "Італійська"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:71
 msgid "Language in URL"
@@ -9033,7 +9033,7 @@ msgstr "Немає налаштованих мов."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:105
 msgid "Norwegian"
-msgstr "норвезька"
+msgstr "Норвезька"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:27
 msgid "Off"
@@ -9065,11 +9065,11 @@ msgstr "Видалити мову"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:106
 msgid "Romanian"
-msgstr "румунська"
+msgstr "Румунська"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:107
 msgid "Russian"
-msgstr "російський"
+msgstr "Російська"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:145
 msgid "Scan all templates for translation tags and generate .pot files that can be used for translating the templates. The <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext package must be installed</a>."
