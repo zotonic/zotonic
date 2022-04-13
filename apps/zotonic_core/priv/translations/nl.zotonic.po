@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-11 18:18\n"
+"PO-Revision-Date: 2022-04-13 15:53\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1064,7 +1064,7 @@ msgstr "Gegevensmap"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:28
 msgid "Database Version"
-msgstr "Databaseversie"
+msgstr "Database versie"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:36
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
@@ -1557,7 +1557,7 @@ msgstr "Volgende &gt;"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:128
 msgid "Next due"
-msgstr "Volgende vervaldatum"
+msgstr "Volgende"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:61
 msgid "Next in category:"
@@ -2911,7 +2911,7 @@ msgstr "Als u deze site niet kent, kunt u deze e-mail negeren. Misschien heeft i
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51
 msgid "Last logon"
-msgstr "Laatste aanmelding"
+msgstr "Laatste login"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:28
 msgid "Leave empty to not change the password."
@@ -3099,7 +3099,7 @@ msgstr "Gebruikersnaam / wachtwoord"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:50
 msgid "Username <b>{username}</b>, last logon at {date}."
-msgstr "Gebruikersnaam <b>{username}</b>, laatste aanmelding om {date}."
+msgstr "Gebruikersnaam <b>{username}</b>, laatste login op {date}."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:64
 msgid "Username and password"
@@ -3117,11 +3117,7 @@ msgstr "Gebruikers"
 msgid "Users Overview"
 msgstr "Gebruikersoverzicht"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21
-msgid "Verfied"
-msgstr "Bevestigd"
-
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44
 msgid "Verified"
 msgstr "Bevestigd"
 
@@ -5557,7 +5553,7 @@ msgstr "Basis URL"
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Voordat de instellingen worden opgeslagen, worden ze gecontroleerd door een klein bestand te uploaden (en te verwijderen)."
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:119
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:126
 msgid "Cloud File Store"
 msgstr "Cloud File Store"
 
@@ -5818,20 +5814,20 @@ msgid "Import WXR file"
 msgstr "Importeer WXR bestand"
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:5
-msgid "Import a Wordpress WXR export file into Zotonic."
-msgstr "Importeer een Wordpress WXR bestand in Zotonic"
+msgid "Import a WordPress WXR export file into Zotonic."
+msgstr ""
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:2
-msgid "Upload a wordpress WXR file from your computer."
-msgstr "Upload een Wordpress WXR bestand van je computer."
+msgid "Upload a WordPress WXR file from your computer."
+msgstr ""
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:9
 msgid "WXR file"
 msgstr "WXR bestand"
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
-msgid "Wordpress import"
-msgstr "Wordpress import"
+msgid "WordPress import"
+msgstr ""
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:57
 msgid "Apr"
@@ -8163,7 +8159,7 @@ msgstr "Doorgaan"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
-msgstr "Juist"
+msgstr "Correct"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:168
 msgid "Country select"
@@ -8536,7 +8532,7 @@ msgstr "Resultaten"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:34
 msgid "Results editor"
-msgstr "Resultatenbewerker"
+msgstr "Resultaten-editor"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:68
 msgid "Results from the respondent"
@@ -8913,7 +8909,7 @@ msgstr "Weet je zeker dat je deze taal wilt verwijderen?"
 msgid "Available sub-languages"
 msgstr "Beschikbare subtalen"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:367
+#: apps/zotonic_mod_translation/src/mod_translation.erl:376
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Kan de vertaalbestanden niet genereren omdat <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext niet is geïnstalleerd</a>."
 
@@ -9061,7 +9057,7 @@ msgstr "Vertalingen opnieuw laden"
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "Laad alle vertalingen van de modules en de site. Alle templates worden opnieuw gecompileerd."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:378
+#: apps/zotonic_mod_translation/src/mod_translation.erl:391
 msgid "Reloading all .po files in the background."
 msgstr "Alle .po bestanden worden opnieuw geladen in een achtergrondproces."
 
@@ -9113,15 +9109,15 @@ msgstr "Sorry, kon de taal niet veranderen."
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "Sorry, je hebt geen toestemming om de taallijst te wijzigen."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:380
+#: apps/zotonic_mod_translation/src/mod_translation.erl:393
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "Sorry, je hebt geen toestemming om talen opnieuw te laden."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:370
+#: apps/zotonic_mod_translation/src/mod_translation.erl:383
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Sorry, je hebt geen toestemming om te scannen voor vertalingen."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:449
+#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:462
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Sorry, je hebt geen toestemming om de standaard taal in te stellen."
 
@@ -9149,7 +9145,7 @@ msgstr "De titel en andere teksten kunnen vertaald kunnen worden in verschillend
 msgid "Translate this page in other languages."
 msgstr "Vertaal deze pagina in andere talen."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:660
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:686
 msgid "Translation"
 msgstr "Vertaling"
 
