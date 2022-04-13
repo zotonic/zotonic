@@ -23,7 +23,7 @@
 
       <div class="form-group view-expanded">
         <p class="help-block">
-              {_ Add answer options here. The <i>stored value</i> is stored with the results. _}
+              {_ Add answer options here. Each stored value must be unique. _}
         </p>
         <p class="help-block test-controls" style="{% if not blk.is_test %}display:none{% endif %}">
             {_ Check the correct answers and give each answer points. _}<br>
