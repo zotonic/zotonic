@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-12 15:51\n"
+"PO-Revision-Date: 2022-04-13 08:22\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -7062,7 +7062,7 @@ msgstr "Увійдіть за допомогою Microsoft"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_logon_extra_email_reset.tpl:2
 msgid "Log on with Microsoft"
-msgstr "Увійдіть за допомогою Microsoft"
+msgstr "Залогінитися за допомогою Microsoft"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:28
 msgid "More information about scopes"
@@ -7098,7 +7098,7 @@ msgstr "Використовуйте автентифікацію Microsoft"
 
 #: apps/zotonic_mod_microsoft/src/mod_microsoft.erl:62
 msgid "You don't have permission to change the Microsoft settings."
-msgstr "У вас немає дозволу змінювати налаштування Microsoft."
+msgstr "У Вас немає дозволу змінювати налаштування Microsoft."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_logon_extra_email_reset.tpl:2
 msgid "You have coupled your <strong>Microsoft</strong> account."
@@ -7142,11 +7142,11 @@ msgstr "Споживач OAuth2 з таким ім’ям уже існує, б�
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:36./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:47
 msgid "App Code"
-msgstr "Код програми"
+msgstr "Код додатку"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:44./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:37./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:48
 msgid "App ID"
-msgstr "Ідентифікатор програми"
+msgstr "Ідентифікатор додатка"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:85./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:19
 msgid "App not found, or no view permission."
@@ -7158,7 +7158,7 @@ msgstr "Ви впевнені, що хочете видалити цю прог�
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:87./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:101
 msgid "Are you sure you want to delete this Consumer App?"
-msgstr "Ви впевнені, що хочете видалити цю програму для споживачів?"
+msgstr "Ви впевнені, що хочете видалити цей додаток для споживачів?"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:13
 msgid "Ask users on this website for their credentials to authenticate on their website or App."
@@ -7218,7 +7218,7 @@ msgstr "Видалити додаток"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:93./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:103
 msgid "Delete Consumer App"
-msgstr "Видалити додаток Consumer"
+msgstr "Видалити додаток Споживач"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:14./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:25./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
 msgid "Description - shows up on button"
@@ -7262,7 +7262,7 @@ msgstr "Увімкнено"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:35./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:33
 msgid "For Zotonic sites this you can enter the domain name(s) of the website."
-msgstr "Для сайтів Zotonic ви можете ввести доменне ім’я(а) вебсайту."
+msgstr "Для сайтів Zotonic Ви можете ввести доменне ім’я(ена) вебсайту."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:52
 msgid "Generate access token"
@@ -7282,11 +7282,11 @@ msgstr "Ось новий маркер доступу."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:63./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:74
 msgid "If the remote website is a Zotonic website then you can leave the two URLs below empty."
-msgstr "Якщо віддалений вебсайт є вебсайтом Zotonic, ви можете залишити дві URL-адреси нижче порожніми."
+msgstr "Якщо віддалений вебсайт є вебсайтом Zotonic, Ви можете залишити дві URL-адреси нижче порожніми."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:51
 msgid "If you have already a token then it will be replaces with the new one."
-msgstr "Якщо у вас вже є токен, він буде замінений на новий."
+msgstr "Якщо у Вас вже є токен, він буде замінений на новий."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:15
 msgid "Import content from the remote website to this website."
@@ -7326,7 +7326,7 @@ msgstr "Додаток OAuth2"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:7./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:247
 msgid "OAuth2 Applications"
-msgstr "Програми OAuth2"
+msgstr "Додатки OAuth2"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:3./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:7./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:252
 msgid "OAuth2 Consumer Tokens"
@@ -7334,7 +7334,7 @@ msgstr "Споживчі токени OAuth2"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:88
 msgid "Only admnistrators can view OAuth2 applications."
-msgstr "Тільки адміністратори можуть переглядати програми OAuth2."
+msgstr "Тільки адміністратори можуть переглядати додатки OAuth2."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:93
 msgid "Only admnistrators can view OAuth2 consumers."
@@ -7354,7 +7354,7 @@ msgstr "Реєстрація токенів для доступу до відд�
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:9
 msgid "These applications are used by 3rd parties to:"
-msgstr "Ці програми використовуються третіми сторонами для:"
+msgstr "Ці додатки використовуються третіми сторонами для:"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:34./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:32
 msgid "These must be complete URLs, but without the query (?..) or hash (#...) parts."
@@ -7422,7 +7422,7 @@ msgstr "Спроба виправити ~p відео."
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:4
 msgid "Embedding of media item failed with HTTP code"
-msgstr "Не вдалося вставити медіа-елемент із кодом HTTP"
+msgstr "Не вдалося вставити медіаелемент із кодом HTTP"
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_status.tpl:4
 msgid "Fix embedded videos"
@@ -7442,11 +7442,11 @@ msgstr "Збережено налаштування Embedly."
 
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:329
 msgid "You don't have permission to change the Embedly settings."
-msgstr "У вас немає дозволу змінювати налаштування Embedly."
+msgstr "У Вас немає дозволу змінювати налаштування Embedly."
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "your Embedly app dashboard"
-msgstr "ваша інформаційна панель програми Embedly"
+msgstr "Ваша інформаційна панель програми Embedly"
 
 #: apps/zotonic_mod_search/priv/templates/_admin_status.tpl:8
 msgid "Check the table for the faceted search and fill it by reindexing all pages."
@@ -7462,7 +7462,7 @@ msgstr "Відновлення таблиці фасетного пошуку."
 
 #: apps/zotonic_mod_search/src/mod_search.erl:67
 msgid "Sorry, you are not allowed to do this."
-msgstr "На жаль, вам заборонено це робити."
+msgstr "На жаль, Вам заборонено це робити."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
 msgid "Add a noindex, nofollow element to all pages."
@@ -7470,11 +7470,11 @@ msgstr "Додайте елемент noindex, nofollow до всіх сторі
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96
 msgid "Bing Webmaster"
-msgstr "Bing Webmaster"
+msgstr "Bing вебмайстер"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:93./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
 msgid "Bing Webmaster validation id"
-msgstr "Ідентифікатор перевірки веб-майстра Bing"
+msgstr "Ідентифікатор перевірки вебмайстра Bing"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
@@ -7514,7 +7514,7 @@ msgstr "Ідентифікатор Менеджера тегів Google"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:9
 msgid "Here you find settings to optimize the indexing of your site by search engines."
-msgstr "Тут ви знайдете налаштування для оптимізації індексації вашого сайту пошуковими системами."
+msgstr "Тут Ви знайдете налаштування для оптимізації індексації вашого сайту пошуковими системами."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:22./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:23
 msgid "Keywords"
@@ -7550,11 +7550,11 @@ msgstr "Де я можу знайти свій сценарій відстеже
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:110
 msgid "Yandex Webmaster"
-msgstr "Веб-майстер Яндекса"
+msgstr "Вебмайстер Яндекса"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:107./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:108
 msgid "Yandex Webmaster validation id"
-msgstr "Ідентифікатор перевірки Яндекс для веб-майстра"
+msgstr "Ідентифікатор перевірки Яндекс для вебмайстра"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:97./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:111
 msgid "You find this id in the content attribute of the meta tag, it has the format"
