@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-11 18:18\n"
+"PO-Revision-Date: 2022-04-13 18:47\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -3113,11 +3113,7 @@ msgstr "المستخدمين"
 msgid "Users Overview"
 msgstr "نظرة عامة حول المستخدمين"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21
-msgid "Verfied"
-msgstr "تم التحقق منه"
-
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44
 msgid "Verified"
 msgstr "تم التحقق منه"
 
@@ -5555,7 +5551,7 @@ msgstr "URL الأساسي"
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "قبل أن يتم حفظ الإعدادات ، سيتم التحقق منها عن طريق تحميل (وإزالة) ملف صغير."
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:119
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:126
 msgid "Cloud File Store"
 msgstr "مخزن الملفات السحابية"
 
@@ -5816,20 +5812,20 @@ msgid "Import WXR file"
 msgstr "استيراد ملف WXR"
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:5
-msgid "Import a Wordpress WXR export file into Zotonic."
-msgstr "استيراد ملف تصدير Wordpress WXR إلى Zotonic."
+msgid "Import a WordPress WXR export file into Zotonic."
+msgstr "قم باستيراد ملف تصدير WordPress WXR إلى Zotonic."
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:2
-msgid "Upload a wordpress WXR file from your computer."
-msgstr "قم بتحميل ملف Wordpress WXR من جهاز الكمبيوتر الخاص بك."
+msgid "Upload a WordPress WXR file from your computer."
+msgstr "قم بتحميل ملف WordPress WXR من جهاز الكمبيوتر الخاص بك."
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:9
 msgid "WXR file"
 msgstr "ملف WXR"
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
-msgid "Wordpress import"
-msgstr "وورد الاستيراد"
+msgid "WordPress import"
+msgstr "استيراد ووردبريس"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:57
 msgid "Apr"
@@ -8031,8 +8027,8 @@ msgid "Add answer"
 msgstr "أضف إجابة"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
-msgid "Add answer options here. The <i>stored value</i> is stored with the results."
-msgstr "أضف خيارات الإجابة هنا. يتم تخزين القيمة <i>المخزنة</i> مع النتائج."
+msgid "Add answer options here. Each stored value must be unique."
+msgstr "أضف خيارات الإجابة هنا. يجب أن تكون كل قيمة مخزنة فريدة."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:16
 msgid "Add page"
@@ -8907,7 +8903,7 @@ msgstr "هل أنت متأكد أنك تريد إزالة هذه اللغة؟"
 msgid "Available sub-languages"
 msgstr "اللغات الفرعية المتاحة"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:367
+#: apps/zotonic_mod_translation/src/mod_translation.erl:376
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "لا يمكن إنشاء ملفات الترجمة لأنه لم يتم تثبيت <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext</a>."
 
@@ -9055,7 +9051,7 @@ msgstr "إعادة تحميل الترجمات"
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "أعد تحميل جميع الترجمات من الوحدات والموقع. سيتم إعادة تجميع جميع القوالب."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:378
+#: apps/zotonic_mod_translation/src/mod_translation.erl:391
 msgid "Reloading all .po files in the background."
 msgstr "إعادة تحميل كافة ملفات .po في الخلفية."
 
@@ -9107,15 +9103,15 @@ msgstr "عذرا ، لا يمكن تغيير اللغة."
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "عذرا ، ليس لديك إذن لتغيير قائمة اللغات."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:380
+#: apps/zotonic_mod_translation/src/mod_translation.erl:393
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "عذرًا ، ليس لديك إذن بإعادة تحميل الترجمات."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:370
+#: apps/zotonic_mod_translation/src/mod_translation.erl:383
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "عذرًا ، ليس لديك إذن للبحث عن الترجمات."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:449
+#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:462
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "عذرًا ، ليس لديك إذن بتعيين اللغة الافتراضية."
 
@@ -9143,7 +9139,7 @@ msgstr "يمكن ترجمة العنوان والجسم والنصوص الأخ�
 msgid "Translate this page in other languages."
 msgstr "ترجم هذه الصفحة إلى لغات أخرى."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:660
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:686
 msgid "Translation"
 msgstr "ترجمة"
 
