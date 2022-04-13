@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-13 14:09\n"
+"PO-Revision-Date: 2022-04-13 14:41\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -8525,7 +8525,7 @@ msgstr "червоний"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:169./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:57
 msgid "Required, this question must be answered."
-msgstr "Обов’язковий, на це запитання потрібно відповісти."
+msgstr "Обов’язково, на це запитання потрібно відповісти."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:6./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:6./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:6./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results"
@@ -8601,19 +8601,19 @@ msgstr "Можлива одна відповідь: за правильну ві
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:14
 msgid "Start"
-msgstr "Почніть"
+msgstr "Почати"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:171
 msgid "Stop"
-msgstr "Стій"
+msgstr "Зупинити"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:67./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:69./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:71./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:73
 msgid "Stop without saving"
-msgstr "Зупиніться без збереження"
+msgstr "Зупинити без збереження"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:127
 msgid "Store a value without showing an input to the respondent."
-msgstr "Зберігайте значення, не показуючи вхідні дані респонденту."
+msgstr "Зберегти значення, не показуючи вхідні дані респонденту."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:83
 msgid "Stored value"
