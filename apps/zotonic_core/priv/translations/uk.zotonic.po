@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-13 15:08\n"
+"PO-Revision-Date: 2022-04-13 15:22\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -9329,7 +9329,7 @@ msgstr "Налаштуйте підключення до бази даних Pos
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:3
 msgid "Congratulations, your site has been created and is now running."
-msgstr "Вітаємо, ваш сайт створено і зараз працює."
+msgstr "Вітаємо, Ваш сайт створено і зараз працює."
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:162
 msgid "Copy skeleton files ..."
@@ -9389,7 +9389,7 @@ msgstr "URL-адреса Git"
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:129
 msgid "Git checkout ..."
-msgstr "Git Checkout..."
+msgstr "Git checkout..."
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:11
 msgid "Go to the admin interface at"
@@ -9437,7 +9437,7 @@ msgstr "Будь ласка, використовуйте лише малі си
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:142
 msgid "Port"
-msgstr "порт"
+msgstr "Порт"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:98
 msgid "PostgreSQL"
@@ -9461,7 +9461,7 @@ msgstr "Назва сайту"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:57
 msgid "Skeleton"
-msgstr "скелет"
+msgstr "Скелет"
 
 #: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:74
 msgid "Something is wrong, site is not starting. Please check the logs."
@@ -9547,7 +9547,7 @@ msgstr "Очистіть та перезавантажте всі налашту
 msgid "If you feel that you are here by mistake,\n"
 "                please hit the \"back\" button in your browser or\n"
 "                try a different address."
-msgstr "Якщо ви відчуваєте, що опинилися тут помилково,\n"
+msgstr "Якщо Ви відчуваєте, що опинилися тут помилково,\n"
 "                , будь ласка, натисніть кнопку «Назад» у своєму браузері або\n"
 "                спробуйте іншу адресу."
 
@@ -9556,7 +9556,7 @@ msgid "If you feel that you are here by mistake,\n"
 "            please hit the \"back\" button in your browser or\n"
 "            try a different address. If you are here to manage\n"
 "            this server, please enter the password below."
-msgstr "Якщо ви відчуваєте, що опинилися тут помилково,\n"
+msgstr "Якщо Ви відчуваєте, що опинилися тут помилково,\n"
 "            , будь ласка, натисніть кнопку «Назад» у своєму браузері або\n"
 "            спробуйте іншу адресу. Якщо ви керуєте\n"
 "            цим сервером, будь ласка, введіть пароль нижче."
@@ -9571,7 +9571,7 @@ msgstr "Керуйте цим сервером"
 
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:52
 msgid "Restart the site, all users will be logged off."
-msgstr "Перезапустіть сайт, усі користувачі вийдуть із системи."
+msgstr "Перезапустіть сайт, всі користувачі вийдуть із системи."
 
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:16
 msgid "Retrying"
@@ -9579,7 +9579,7 @@ msgstr "Повторна спроба"
 
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:15
 msgid "Running"
-msgstr "Біг"
+msgstr "Запущено"
 
 #: apps/zotonic_site_status/priv/templates/_menu.tpl:3./apps/zotonic_site_status/priv/templates/status.tpl:3
 msgid "Sites"
@@ -9603,7 +9603,7 @@ msgstr "Зупинився"
 
 #: apps/zotonic_site_status/priv/templates/error.503.tpl:12
 msgid "The site you are trying to visit is experiencing some problems. Please try again later."
-msgstr "Сайт, який ви намагаєтеся відвідати, має певні проблеми. Будь-ласка спробуйте пізніше."
+msgstr "Сайт, який Ви намагаєтеся відвідати, має певні проблеми. Будь ласка, спробуйте пізніше."
 
 #: apps/zotonic_site_status/priv/templates/logon.tpl:33
 msgid "This password is not correct."
@@ -9671,5 +9671,5 @@ msgstr "почати"
 
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:37./apps/zotonic_site_status/priv/templates/_sites.tpl:42
 msgid "stop"
-msgstr "Стоп"
+msgstr "зупинити"
 
