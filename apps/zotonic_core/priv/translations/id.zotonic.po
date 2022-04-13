@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-13 15:52\n"
+"PO-Revision-Date: 2022-04-13 16:06\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -5812,11 +5812,11 @@ msgstr "Impor berkas WXR"
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:5
 msgid "Import a WordPress WXR export file into Zotonic."
-msgstr ""
+msgstr "Impor file ekspor WXR WordPress ke Zotonic."
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:2
 msgid "Upload a WordPress WXR file from your computer."
-msgstr ""
+msgstr "Unggah file WXR WordPress dari komputer Anda."
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:9
 msgid "WXR file"
@@ -5824,7 +5824,7 @@ msgstr "Berkas WXR"
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
 msgid "WordPress import"
-msgstr ""
+msgstr "Impor WordPress"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:57
 msgid "Apr"
