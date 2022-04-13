@@ -105,7 +105,7 @@ prepare_answers_1(Text, Block) ->
                         };
                     (Ans) ->
                         Ans#{
-                            <<"is_correct">> := false,
+                            <<"is_correct">> => false,
                             <<"points_int">> => 0
                         }
                 end,

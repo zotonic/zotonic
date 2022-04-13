@@ -14,7 +14,7 @@ SMTP
    provides a new email log-view for inspecting what mails go in and
    out.
 
-Commandline   
+Commandline
    A "zotonic" shell command. The "zotonic.sh" shell command has been
    replaced by a more generic and more powerful shell command with
    support for pluggable subcommands.
@@ -50,8 +50,8 @@ mod_import_csv
    new content on the fly.
 
 mod_import_wordpress
-   Basic import module for Wordpress WXR file format, allowing you to
-   migrate a Wordpress blog into Zotonic.
+   Basic import module for WordPress WXR file format, allowing you to
+   migrate a WordPress blog into Zotonic.
 
 
 Discontinued modules

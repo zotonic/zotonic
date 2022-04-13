@@ -318,11 +318,22 @@ start_link(Args) ->
     supervisor:start_link(?MODULE, Args).
 
 init(_Args) ->
-    {ok,{{simple_one_for_one, 20, 10},
-         [
-          {undefined, {filestore_uploader, start_link, []},
-           transient, brutal_kill, worker, [filestore_uploader]}
-         ]}}.
+    {ok,{
+        #{
+            strategy => simple_one_for_one,
+            intensity => 20,
+            period => 10
+        },
+        [
+            #{
+                id => undefined,
+                start => {filestore_uploader, start_link, []},
+                restart => transient,
+                shutdown => brutal_kill,
+                type => worker,
+                modules => [filestore_uploader]
+            }
+        ]}}.
 
 
 %%% ------------------------------------------------------------------------------------

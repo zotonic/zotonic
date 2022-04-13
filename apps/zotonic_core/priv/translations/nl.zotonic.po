@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-07 13:48\n"
+"PO-Revision-Date: 2022-04-11 18:18\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1342,8 +1342,8 @@ msgstr "Kopregel"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:17
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:24
-msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
-msgstr "Hier kan je de argumenten van de zoekopdracht bewerken. Elk argument gaat op zijn eigen regel. Voor meer informatie, zie de <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentatie over de zoekargumenten</a> op de Zotonic website."
+msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">documentation on the query arguments</a> on the Zotonic website."
+msgstr "Hier kunt u de argumenten van de zoekopdracht bewerken. Elk argument gaat op zijn eigen lijn. Zie voor meer informatie de <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">-documentatie over de queryargumenten</a> op de Zotonic-website."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Home Directory"
@@ -4389,7 +4389,7 @@ msgid "Show import/export panel in the admin."
 msgstr "Toon import/export paneel in de admin"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:66
-msgid "Sorry, there is no mudule that can import this."
+msgid "Sorry, there is no module that can import this."
 msgstr "Sorry, er is geen module die dit kan importeren."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:73./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:98

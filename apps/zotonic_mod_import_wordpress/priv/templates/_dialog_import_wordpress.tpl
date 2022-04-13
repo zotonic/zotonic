@@ -1,5 +1,5 @@
 <p>
-    {_ Upload a wordpress WXR file from your computer. _}
+    {_ Upload a WordPress WXR file from your computer. _}
 </p>
 
 {% wire id=#form type="submit" delegate="mod_import_wordpress" postback={wxr_upload} %}
@@ -26,4 +26,3 @@
         <button class="btn btn-primary" type="submit">{_ Start import _}</button>
     </div>
 </form>
-
