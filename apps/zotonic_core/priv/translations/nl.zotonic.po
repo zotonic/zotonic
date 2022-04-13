@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-13 15:53\n"
+"PO-Revision-Date: 2022-04-13 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1343,7 +1343,7 @@ msgstr "Kopregel"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:17
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:24
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">documentation on the query arguments</a> on the Zotonic website."
-msgstr "Hier kunt u de argumenten van de zoekopdracht bewerken. Elk argument gaat op zijn eigen lijn. Zie voor meer informatie de <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">-documentatie over de queryargumenten</a> op de Zotonic-website."
+msgstr "Hier kan je de argumenten van de zoekopdracht bewerken. Elk argument staat op een eigen regel. Zie voor meer informatie de <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">-documentatie over de queryargumenten</a> op de Zotonic-website."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Home Directory"
@@ -3590,7 +3590,7 @@ msgstr "Systeemgebruik"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:9
 msgid "This page shows (real-time) system statistics like memory use and requests."
-msgstr "Deze pagina toont (realtime) systeemstatistieken zoals geheugengebruik en verzoeken."
+msgstr "Deze pagina toont (realtime) systeemstatistieken zoals geheugengebruik en aanvragen."
 
 #: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13./apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:14
 msgid "Album"
@@ -4619,7 +4619,7 @@ msgstr "Pong-latency"
 
 #: apps/zotonic_mod_base/priv/templates/_powered_by_zotonic.tpl:1
 msgid "Powered by Zotonic"
-msgstr "Mogelijk gemaakt door Zotonic"
+msgstr "Powered by Zotonic"
 
 #: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
@@ -4945,7 +4945,7 @@ msgstr "Actie"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
 msgid "At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template."
-msgstr "Soms kan het verwarrend zijn welke sjablonen daadwerkelijk worden gebruikt tijdens een sjablooncompilatie. Hier kunt u zien welke bestanden worden meegeleverd bij het samenstellen van een sjabloon."
+msgstr "Soms kan het verwarrend zijn welke sjablonen daadwerkelijk worden gebruikt tijdens een sjablooncompilatie. Hier kan je zien welke bestanden worden meegenomen bij het samenstellen van een sjabloon."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:13
 msgid "Below is the list of all notifications and the installed observers."
@@ -5815,11 +5815,11 @@ msgstr "Importeer WXR bestand"
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:5
 msgid "Import a WordPress WXR export file into Zotonic."
-msgstr ""
+msgstr "Importeer een WordPress WXR-exportbestand in Zotonic."
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:2
 msgid "Upload a WordPress WXR file from your computer."
-msgstr ""
+msgstr "Upload een WordPress WXR-bestand vanaf uw computer."
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:9
 msgid "WXR file"
@@ -5827,7 +5827,7 @@ msgstr "WXR bestand"
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
 msgid "WordPress import"
-msgstr ""
+msgstr "WordPress importeren"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:57
 msgid "Apr"
