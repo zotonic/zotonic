@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-13 16:06\n"
+"PO-Revision-Date: 2022-04-13 18:47\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -8023,8 +8023,8 @@ msgid "Add answer"
 msgstr "添加答案"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
-msgid "Add answer options here. The <i>stored value</i> is stored with the results."
-msgstr "在此處添加答案選項。 <i>存儲值</i> 與結果一起存儲。"
+msgid "Add answer options here. Each stored value must be unique."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:16
 msgid "Add page"
