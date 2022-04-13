@@ -1382,8 +1382,8 @@ msgstr ""
 msgid ""
 "Here you can edit the arguments of the search query. Every argument goes on "
 "its own line. For more information, see the <a href=\"https://docs.zotonic."
-"com/en/latest/developer-guide/search.html#query-arguments"
-"\">documentation on the query arguments</a> on the Zotonic website."
+"com/en/latest/developer-guide/search.html#query-arguments\">documentation on "
+"the query arguments</a> on the Zotonic website."
 msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
@@ -3225,11 +3225,7 @@ msgstr ""
 msgid "Users Overview"
 msgstr ""
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21
-msgid "Verfied"
-msgstr ""
-
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44
 msgid "Verified"
 msgstr ""
 
@@ -5827,7 +5823,7 @@ msgid ""
 "removing) a small file."
 msgstr ""
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:119
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:126
 msgid "Cloud File Store"
 msgstr ""
 
@@ -6099,11 +6095,11 @@ msgid "Import WXR file"
 msgstr ""
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:5
-msgid "Import a Wordpress WXR export file into Zotonic."
+msgid "Import a WordPress WXR export file into Zotonic."
 msgstr ""
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:2
-msgid "Upload a wordpress WXR file from your computer."
+msgid "Upload a WordPress WXR file from your computer."
 msgstr ""
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:9
@@ -6111,7 +6107,7 @@ msgid "WXR file"
 msgstr ""
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
-msgid "Wordpress import"
+msgid "WordPress import"
 msgstr ""
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:57
@@ -9363,7 +9359,7 @@ msgstr ""
 msgid "Available sub-languages"
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:367
+#: apps/zotonic_mod_translation/src/mod_translation.erl:376
 msgid ""
 "Cannot generate translation files because <a href=\"http://docs.zotonic.com/"
 "en/latest/developer-guide/translation.html\">gettext is not installed</a>."
@@ -9523,7 +9519,7 @@ msgid ""
 "recompiled."
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:378
+#: apps/zotonic_mod_translation/src/mod_translation.erl:391
 msgid "Reloading all .po files in the background."
 msgstr ""
 
@@ -9579,15 +9575,15 @@ msgstr ""
 msgid "Sorry, you don't have permission to change the language list."
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:380
+#: apps/zotonic_mod_translation/src/mod_translation.erl:393
 msgid "Sorry, you don't have permission to reload translations."
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:370
+#: apps/zotonic_mod_translation/src/mod_translation.erl:383
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:449
+#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:462
 msgid "Sorry, you don't have permission to set the default language."
 msgstr ""
 
@@ -9620,7 +9616,7 @@ msgstr ""
 msgid "Translate this page in other languages."
 msgstr ""
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:660
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:686
 msgid "Translation"
 msgstr ""
 
