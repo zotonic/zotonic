@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-13 14:57\n"
+"PO-Revision-Date: 2022-04-13 15:08\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -8925,7 +8925,7 @@ msgstr "Копіювати переклад"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:97
 msgid "Danish"
-msgstr "Данський"
+msgstr "Данська"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_sublanguage_note.tpl:2
 msgid "Deciding on a main language or sub-language"
@@ -8941,7 +8941,7 @@ msgstr "Документація розробника"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:99
 msgid "Dutch"
-msgstr "Голландський"
+msgstr "Голландська"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:26
 msgid "Editable"
@@ -8969,7 +8969,7 @@ msgstr "Для нових відвідувачів установіть мову
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:101
 msgid "French"
-msgstr "Французький"
+msgstr "Французька"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:143
 msgid "Generate .pot files"
@@ -8977,7 +8977,7 @@ msgstr "Згенеруйте файли .pot"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:102
 msgid "German"
-msgstr "Німецький"
+msgstr "Німецька"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:3
 msgid "Heads up! Removing this language will <strong>not</strong> delete any of the existing translations. But until you add (and activate) the language again, you will not be able to select or edit content written in this language."
@@ -9105,23 +9105,23 @@ msgstr "На жаль, не вдалося змінити мову."
 
 #: apps/zotonic_mod_translation/src/mod_translation.erl:310./apps/zotonic_mod_translation/src/mod_translation.erl:322./apps/zotonic_mod_translation/src/mod_translation.erl:345
 msgid "Sorry, you don't have permission to change the language list."
-msgstr "На жаль, у вас немає дозволу змінювати список мов."
+msgstr "На жаль, у Вас немає дозволу змінювати список мов."
 
 #: apps/zotonic_mod_translation/src/mod_translation.erl:380
 msgid "Sorry, you don't have permission to reload translations."
-msgstr "На жаль, у вас немає дозволу перезавантажувати переклади."
+msgstr "На жаль, у Вас немає дозволу перезавантажувати переклади."
 
 #: apps/zotonic_mod_translation/src/mod_translation.erl:370
 msgid "Sorry, you don't have permission to scan for translations."
-msgstr "На жаль, у вас немає дозволу на пошук перекладів."
+msgstr "На жаль, у Вас немає дозволу на пошук перекладів."
 
 #: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:449
 msgid "Sorry, you don't have permission to set the default language."
-msgstr "На жаль, у вас немає дозволу на встановлення мови за замовчуванням."
+msgstr "На жаль, у Вас немає дозволу на встановлення мови за замовчуванням."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:108
 msgid "Spanish"
-msgstr "іспанська"
+msgstr "Іспанська"
 
 #: apps/zotonic_mod_translation/src/mod_translation.erl:364
 msgid "Started building the .pot files. This may take a while..."
@@ -9129,7 +9129,7 @@ msgstr "Почали створювати файли .pot. Це може зай�
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:109
 msgid "Swedish"
-msgstr "шведський"
+msgstr "Шведська"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_sublanguage_note.tpl:3
 msgid "The golden rule when choosing a language is simplicity. Stick to the main language if you can; use a sub-language (adding region or script) when it adds useful distinguishing information."
@@ -9137,7 +9137,7 @@ msgstr "Золоте правило при виборі мови – прост�
 
 #: apps/zotonic_mod_translation/priv/templates/_admin_edit_sidebar.tpl:8
 msgid "The title, body and other texts can be translated in different languages. Here you can select which languages will be used."
-msgstr "Заголовок, основний текст та інші тексти можна перекладати різними мовами. Тут ви можете вибрати, які мови використовуватимуться."
+msgstr "Заголовок, основний текст та інші тексти можна перекладати різними мовами. Тут Ви можете вибрати, які мови використовуватимуться."
 
 #: apps/zotonic_mod_translation/priv/templates/_admin_edit_sidebar.tpl:8
 msgid "Translate this page in other languages."
@@ -9153,7 +9153,7 @@ msgstr "Переклади"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:110
 msgid "Turkish"
-msgstr "турецька"
+msgstr "Турецька"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:56./apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:63
 msgid "not enabled"
@@ -9229,7 +9229,7 @@ msgstr "Увійдіть за допомогою Twitter"
 
 #: apps/zotonic_mod_twitter/priv/templates/_logon_extra_email_reset.tpl:2
 msgid "Log on with Twitter"
-msgstr "Увійдіть за допомогою Twitter"
+msgstr "Залогінитися за допомогою Twitter"
 
 #: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:53
 msgid "Maximum poll delay"
@@ -9237,7 +9237,7 @@ msgstr "Максимальна затримка опитування"
 
 #: apps/zotonic_mod_twitter/priv/templates/_admin_edit_sidebar_twitter.tpl:16
 msgid "Note that this user or organization must have <em>create</em> rights on the <em>Tweet</em> category."
-msgstr "Зауважте, що цей користувач або організація повинні мати <em>прав на створення</em> категорії <em>твіти</em>."
+msgstr "Зауважте, що цей користувач або організація повинні мати <em>права на створення</em> категорії <em>Твіти</em>."
 
 #: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:73
 msgid "Save Twitter Settings"
@@ -9265,7 +9265,7 @@ msgstr "У Twitter періодично проводиться опитуван�
 
 #: apps/zotonic_mod_twitter/priv/templates/_admin_edit_sidebar_twitter.tpl:15
 msgid "Use <tt>@foobar</tt> or <tt>foobar</tt> to import all recent and future tweets from \"foobar\"."
-msgstr "Використовуйте <tt>@foobar</tt> або <tt>foobar</tt> , щоб імпортувати всі останні та майбутні твіти з \"foobar\"."
+msgstr "Використовуйте <tt>@foobar</tt> або <tt>foobar</tt>, щоб імпортувати всі останні та майбутні твіти з \"foobar\"."
 
 #: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:27
 msgid "Use Twitter authentication"
@@ -9273,7 +9273,7 @@ msgstr "Використовуйте автентифікацію Twitter"
 
 #: apps/zotonic_mod_twitter/src/mod_twitter.erl:78
 msgid "You don't have permission to change the Twitter settings."
-msgstr "У вас немає дозволу змінювати налаштування Twitter."
+msgstr "У Вас немає дозволу змінювати налаштування Twitter."
 
 #: apps/zotonic_mod_twitter/priv/templates/_logon_extra_email_reset.tpl:2
 msgid "You have coupled your <strong>Twitter</strong> account."
