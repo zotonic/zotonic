@@ -407,11 +407,18 @@ set_server_header(Req) ->
     cowboy_req:set_resp_header(<<"server">>, cowmachine_response:server_header(), Req).
 
 raw_path(Req) ->
-    Path = cowboy_req:path(Req),
+    Path = drop_extra_slashes(cowboy_req:path(Req)),
     case cowboy_req:qs(Req) of
         <<>> -> Path;
         Qs -> <<Path/binary, $?, Qs/binary>>
     end.
+
+%% Prevent that if the path is "//example.com" that we will redirect to https://example.com.
+%% As multiple '/' in front of the path is illegal, we just drop the extra '/'.
+drop_extra_slashes(<<"//", Path/binary>>) ->
+    drop_extra_slashes(<<"/", Path/binary>>);
+drop_extra_slashes(Path) ->
+    Path.
 
 redirect(Uri, IsPermanent, Req) ->
     Req1 = cowboy_req:set_resp_header(<<"location">>, Uri, set_server_header(Req)),
