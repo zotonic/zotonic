@@ -263,6 +263,24 @@ import_as_resource(MD, Context) ->
                 preview_url = DataDepUrl,
                 importer = rsc_import
             };
+        {error, {Code, FinalUrl, _Hs, _Size, _Body}} ->
+            ?LOG_WARNING(#{
+                text => <<"Error importing as resource">>,
+                result => error,
+                reason => http_error,
+                http_code => Code,
+                url => z_url_metadata:p(final_url, MD),
+                final_url => FinalUrl
+            }),
+            undefined;
+        {error, Reason} ->
+            ?LOG_WARNING(#{
+                text => <<"Error importing as resource">>,
+                result => error,
+                reason => Reason,
+                url => z_url_metadata:p(final_url, MD)
+            }),
+            undefined;
         false ->
             undefined
     end.
