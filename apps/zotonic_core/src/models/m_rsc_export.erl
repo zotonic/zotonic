@@ -72,6 +72,7 @@
     is_id_prop/1
 ]).
 
+-include_lib("../../include/zotonic.hrl").
 
 m_get([ <<"full">>, Id | Rest ], _Msg, Context) ->
     case full(Id, Context) of
@@ -105,7 +106,7 @@ full(Id, Context) when is_integer(Id) ->
         Rsc0 ->
             ContextNoLang = z_context:set_language('x-default', Context),
 
-            Rsc = replace_ids_with_uris(Rsc0, ContextNoLang),
+            Rsc = replace_map_ids_with_uris(Rsc0, ContextNoLang),
             Medium = m_media:get(Id, ContextNoLang),
             DepictionUrl = depiction_url(m_media:depiction(Id, ContextNoLang), ContextNoLang),
             PreviewUrl = preview_url(Medium, ContextNoLang),
@@ -124,7 +125,7 @@ full(Id, Context) when is_integer(Id) ->
                 <<"uri_template">> => BaseUri,
 
                 %% Parts
-                <<"resource">> => Rsc,
+                <<"resource">> => maps:without([<<"id">>], Rsc),
                 <<"medium">> => Medium,
                 <<"medium_url">> => DownloadUrl,
                 <<"preview_url">> => PreviewUrl,
@@ -181,44 +182,75 @@ edges(Id, Context) ->
         Edges).
 
 
-replace_ids_with_uris(Map, Context) when is_map(Map) ->
+replace_map_ids_with_uris(Map, Context) when is_map(Map) ->
     maps:fold(
         fun
-            (<<"id">>, _V, Acc) ->
-                Acc;
-            (<<"blocks">>, Blocks, Acc) when is_list(Blocks) ->
-                Blocks1 = replace_block_ids_with_uris(Blocks, Context),
-                Acc#{
-                    <<"blocks">> => Blocks1
-                };
-            (<<"body", _/binary>> = Body, Text, Acc) ->
-                % TODO: replace any embedded id in the body text
-                Acc#{
-                    Body => Text
-                };
-            (P, V, Acc) when is_integer(V); is_atom(V); is_binary(V) ->
-                case is_id_prop(P) of
-                    true ->
-                        Acc#{ P => related_rsc(V, Context) };
-                    false ->
-                        Acc#{ P => V }
-                end;
-            (P, V, Acc) ->
-                Acc#{ P => V }
+            (K, V, Acc) when is_binary(K) ->
+                V1 = replace_kv_ids_with_uris(K, V, Context),
+                Acc#{ K => V1 };
+            (K, V, Acc) ->
+                Acc#{ K => V }
         end,
         #{},
-        Map);
-replace_ids_with_uris(V, _Context) ->
+        Map).
+
+replace_kv_ids_with_uris(Key, V, Context) when is_integer(V); is_atom(V); is_binary(V) ->
+    case is_id_prop(Key) of
+        true ->
+            related_rsc(V, Context);
+        false ->
+            V
+    end;
+replace_kv_ids_with_uris(_Key, V, Context) when is_map(V) ->
+    replace_map_ids_with_uris(V, Context);
+replace_kv_ids_with_uris(Key, V, Context) when is_list(V) ->
+    [ _ | Ks ] = lists:reverse(binary:split(Key, <<"_">>, [global])),
+    replace_list_ids_with_uris(Ks, V, Context);
+replace_kv_ids_with_uris(_Key, V, Context) ->
+    replace_value_with_uris(V, Context).
+
+replace_list_ids_with_uris(Ks, List, Context) ->
+    lists:map(
+        fun
+            (V) when is_integer(V); is_atom(V); is_binary(V) ->
+                case is_id(Ks) of
+                    true -> related_rsc(V, Context);
+                    false -> V
+                end;
+            (V) when is_list(V) ->
+                replace_list_ids_with_uris(tail(Ks), V, Context);
+            ({K, V}) ->
+                K1 = z_convert:to_binary(K),
+                {K1, replace_kv_ids_with_uris(K1, V, Context)};
+            (V) ->
+                replace_value_with_uris(V, Context)
+        end,
+        List).
+
+replace_value_with_uris(V, Context) when is_map(V) ->
+    replace_map_ids_with_uris(V, Context);
+replace_value_with_uris(V, Context) when is_list(V) ->
+    replace_list_ids_with_uris([], V, Context);
+replace_value_with_uris(#trans{} = V, _Context) ->
+    % TODO: replace embedded ids in html texts
+    V;
+replace_value_with_uris({{Y, M, D}, {H, I, S}} = DateTime, _Context)
+    when is_integer(Y), is_integer(M), is_integer(D),
+         is_integer(H), is_integer(I), is_integer(S) ->
+    DateTime;
+replace_value_with_uris({Y, M, D} = Date, _Context)
+    when is_integer(Y), is_integer(M), is_integer(D) ->
+    Date;
+replace_value_with_uris(#upload{}, _Context) ->
+    undefined;
+replace_value_with_uris(V, _Context) ->
     V.
 
-replace_block_ids_with_uris(Blocks, Context) ->
-    lists:map(
-        fun(B) ->
-            B1 = replace_ids_with_uris(B, Context),
-            % TODO: replace any embedded id in the body text
-            B1
-        end,
-        Blocks).
+is_id([ <<"id">> | _ ]) -> true;
+is_id(_) -> false.
+
+tail([_|Ks]) -> Ks;
+tail([]) -> [].
 
 % is_id_prop(<<"id">>) -> true;
 is_id_prop(<<"rsc_id">>) -> true;
@@ -230,8 +262,10 @@ is_id_prop(<<"predicate_id">>) -> true;
 is_id_prop(<<"object_id">>) -> true;
 is_id_prop(<<"subject_id">>) -> true;
 is_id_prop(P) ->
-    binary:longest_common_suffix([P, <<"_id">>]) =:= 3.
-
+    case binary:longest_common_suffix([P, <<"_id">>]) of
+        3 -> true;
+        _ -> false
+    end.
 
 related_rsc(undefined, _Context) ->
     undefined;

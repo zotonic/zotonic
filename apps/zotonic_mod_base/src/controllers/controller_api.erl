@@ -34,8 +34,6 @@
 
 -define(is_http_status(Code), is_integer(Code), Code >= 200, Code < 600).
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
 -spec service_available( z:context() ) -> {boolean(), z:context()}.
 service_available(Context) ->
     Context1 = set_cors_header(Context),

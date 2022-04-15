@@ -43,7 +43,7 @@ qcat
                                     {{ id.name }}
                                 </span>
                             {% endif %}
-                            <span {% include "_language_attrs.tpl" %}>{{ id.title|striptags|default:"<em>untitled</em>" }}</span>
+                            <span {% include "_language_attrs.tpl" %}>{{ id.title|striptags|default:_"<em>Untitled</em>" }}</span>
                         </td>
                         <td>
                             {% if qcat %}
@@ -158,7 +158,7 @@ qcat
                         {{ id.name }}
                     </span>
                 {% endif %}
-                <span {% include "_language_attrs.tpl" %}>{{ id.title|striptags|default:"<em>untitled</em>" }}</span>
+                <span {% include "_language_attrs.tpl" %}>{{ id.title|striptags|default:_"<em>Untitled</em>" }}</span>
             </td>
             <td>
                 {% if qcat %}

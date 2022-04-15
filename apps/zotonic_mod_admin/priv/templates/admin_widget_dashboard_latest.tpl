@@ -50,7 +50,7 @@
                                         <div class="admin-list-thumb">
                                         {% image id mediaclass="admin-list-dashboard" class="thumb" %}
                                     {% endif %}
-                                    <span>{{ (m.rsc[id].title|striptags|truncate:50)|default:"<em>untitled</em>" }}</span>
+                                    <span>{{ (m.rsc[id].title|striptags|truncate:50)|default:_"<em>Untitled</em>" }}</span>
                                     {% if media %}
                                         </div>
                                     {% endif %}

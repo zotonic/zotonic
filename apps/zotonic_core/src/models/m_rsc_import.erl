@@ -238,33 +238,51 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                             {ok, {LocalId, ImportedAcc1}};
                         {error, duplicate_page_path} ->
                             PagePath = unique_page_path( maps:get(<<"page_path">>, Rsc), Context ),
-                            ?LOG_WARNING("Import of duplicate page_path from ~p, new path ~p", [
-                                    Uri, PagePath
-                                ]),
+                            ?LOG_WARNING(#{
+                                text => <<"Import of duplicate page_path">>,
+                                result => error,
+                                reason => duplicate_page_path,
+                                uri => Uri,
+                                page_path => PagePath
+                            }),
                             Rsc1 = Rsc#{ <<"page_path">> => PagePath },
                             maybe_create_empty(Rsc1, ImportedAcc, Options, Context);
                         {error, duplicate_name} ->
                             Name = unique_name( maps:get(<<"name">>, Rsc), Context ),
-                            ?LOG_WARNING("Import of duplicate name from ~p, new name ~p", [
-                                    Uri, Name
-                                ]),
+                            ?LOG_WARNING(#{
+                                text => <<"Import of duplicate name">>,
+                                result => error,
+                                reason => duplicate_name,
+                                uri => Uri,
+                                old_name => maps:get(<<"name">>, Props2, undefined),
+                                new_name => Name
+                            }),
                             Rsc1 = Rsc#{ <<"name">> => Name },
                             maybe_create_empty(Rsc1, ImportedAcc, Options, Context);
                         {error, Reason} = Error ->
-                            ?LOG_NOTICE("Not importing menu entry from remote '~s' (category ~p) because of: ~p",
-                                        [ Uri, Cat, Reason ]),
+                            ?LOG_NOTICE(#{
+                                text => <<"Not importing menu entry from remote">>,
+                                result => error,
+                                reason => Reason,
+                                uri => Uri,
+                                category => Cat
+                            }),
                             Error
                     end;
                 {error, Reason} = Error  ->
                     % Unknown category, deny access
-                    ?LOG_INFO("Not importing menu entry from remote '~s' because of category (~p): ~p",
-                               [ Uri, Reason, Rsc ]),
+                    ?LOG_INFO(#{
+                        text => <<"Not importing menu entry from remote, category disallowed">>,
+                        result => error,
+                        reason => Reason,
+                        uri => Uri,
+                        rsc => Rsc
+                    }),
                     Error
             end;
         {true, RscId} ->
             {ok, {RscId, ImportedAcc}}
     end.
-
 
 is_imported_resource(Rsc, ImportedAcc, Options, Context) ->
     Uri = uri(Rsc),
@@ -493,8 +511,13 @@ fetch_json(Uri, Context) ->
                     }};
                 {ok, Data} ->
                     {ok, Data};
-                {error, _} = Error ->
-                    ?LOG_WARNING("Error fetching ~p: ~p", [Uri, Error]),
+                {error, Reason} = Error ->
+                    ?LOG_WARNING(#{
+                        text => <<"Error fetching resource">>,
+                        result => error,
+                        reason => Reason,
+                        uri => Uri
+                    }),
                     Error;
                 undefined ->
                     Options = [
@@ -505,8 +528,13 @@ fetch_json(Uri, Context) ->
                         {ok, {_FinalUrl, _Hs, _Size, Body}} ->
                             JSON = jsxrecord:decode(Body),
                             {ok, JSON};
-                        {error, _} = Error ->
-                            ?LOG_WARNING("Error fetching ~p: ~p", [Uri, Error]),
+                        {error, Reason} = Error ->
+                            ?LOG_WARNING(#{
+                                text => <<"Error fetching resource for import">>,
+                                result => error,
+                                reason => Reason,
+                                uri => Uri
+                            }),
                             Error
                     end
             end
@@ -580,14 +608,22 @@ fetch_preview(Url, Context) ->
 import_data(Id, _Url, #{ <<"status">> := <<"ok">>, <<"result">> := JSON }, ImportedAcc, Options, Context) when is_map(JSON) ->
     import(Id, JSON, ImportedAcc, Options, Context);
 import_data(_Id, Url, #{ <<"status">> := <<"error">> } = JSON, _ImportedAcc, _Options, _Context) ->
-    ?LOG_WARNING("Remote returned error ~p: ~p", [Url, JSON]),
+    ?LOG_WARNING(#{
+        text => <<"Remote returned error on import">>,
+        uri => Url,
+        json => JSON
+    }),
     {error, remote};
 import_data(_Id, _Url, #{ <<"rdf_triples">> := [] }, _ImportedAcc, _Options, _Context) ->
     {error, nodoc};
 import_data(Id, Url, #{ <<"rdf_triples">> := _ } = Data, ImportedAcc, Options, Context) ->
     import_rdf(Id, Url, Data, ImportedAcc, Options, Context);
 import_data(_Id, Url, JSON, _ImportedAcc, _Options, _Context) ->
-    ?LOG_WARNING("JSON with unknown structure ~p: ~p", [Url, JSON]),
+    ?LOG_WARNING(#{
+        text => <<"Import of JSON with unknown structure">>,
+        uri => Url,
+        json => JSON
+    }),
     {error, status}.
 
 import_rdf(OptLocalId, OptUri, #{ <<"rdf_triples">> := Triples } = Data, ImportedAcc, Options, Context) ->
@@ -695,8 +731,11 @@ import(OptLocalId, #{
         <<"uri">> := Uri
     } = JSON, ImportedAcc, Options, Context) ->
 
-    ?LOG_INFO("Importing ~s (~p)", [ Uri, OptLocalId ]),
-
+    ?LOG_INFO(#{
+        text => <<"Importing resource">>,
+        uri => Uri,
+        local_id => OptLocalId
+    }),
     RemoteRId = #{
         <<"uri">> => Uri,
         <<"name">> => maps:get(<<"name">>, JSON, undefined),
@@ -751,8 +790,14 @@ import(OptLocalId, #{
                                     z_db:insert(rsc_import, Import, Context)
                             end,
                             {ok, {LocalId, ImportedAcc3}};
-                        {error, _} = Error ->
-                            ?LOG_INFO("Importing ~p into ~p gave error ~p", [ Uri, OptLocalId, Error ]),
+                        {error, Reason} = Error ->
+                            ?LOG_INFO(#{
+                                text => <<"Importing resource returned error">>,
+                                result => error,
+                                reason => Reason,
+                                uri => Uri,
+                                rsc_id => OptLocalId
+                            }),
                             Error
                     end;
                 {error, _} = Error ->
@@ -763,7 +808,10 @@ import(OptLocalId, #{ <<"rdf_triples">> := _ } = Data, ImportedAcc, Options, Con
     Uri = maps:get(<<"uri">>, Data, m_rsc:p(OptLocalId, uri_raw, Context)),
     import_rdf(OptLocalId, Uri, Data, ImportedAcc, Options, Context);
 import(_OptLocalId, JSON, _ImportedAcc, _Options, _Context) ->
-    ?LOG_WARNING("Import of JSON without required fields resource and uri: ~p", [JSON]),
+    ?LOG_WARNING(#{
+        text => <<"Import of JSON without required fields resource and uri">>,
+        json => JSON
+    }),
     {error, status}.
 
 
@@ -772,17 +820,33 @@ update_rsc(OptLocalId, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
         {ok, _} = OK ->
             OK;
         {error, duplicate_page_path} ->
-            PagePath = unique_page_path( maps:get(<<"page_path">>, Rsc), Context ),
-            ?LOG_WARNING("Import of duplicate page_path for ~p from ~p, new path ~p", [
-                    OptLocalId, RemoteRId, PagePath
-                ]),
+            OldPath = maps:get(<<"page_path">>, Rsc),
+            PagePath = unique_page_path(OldPath, Context),
+            ?LOG_WARNING(#{
+                text => <<"Import of duplicate page_path">>,
+                result => error,
+                reason => duplicate_page_path,
+                rsc_id => OptLocalId,
+                remote_id => RemoteRId,
+                old_page_path => OldPath,
+                new_page_path => PagePath,
+                uri => maps:get(<<"uri">>, Rsc, undefined)
+            }),
             Rsc1 = Rsc#{ <<"page_path">> => PagePath },
             update_rsc(OptLocalId, RemoteRId, Rsc1, ImportedAcc, Options, Context);
         {error, duplicate_name} ->
-            Name = unique_name( maps:get(<<"name">>, Rsc), Context ),
-            ?LOG_WARNING("Import of duplicate name for ~p from ~p, new name ~p", [
-                    OptLocalId, RemoteRId, maps:get(<<"name">>, Rsc)
-                ]),
+            OldName = maps:get(<<"name">>, Rsc),
+            Name = unique_name(OldName, Context),
+            ?LOG_WARNING(#{
+                text => <<"Import of duplicate name">>,
+                result => error,
+                reason => duplicate_name,
+                rsc_id => OptLocalId,
+                remote_id => RemoteRId,
+                old_name => OldName,
+                new_name => Name,
+                uri => maps:get(<<"uri">>, Rsc, undefined)
+            }),
             Rsc1 = Rsc#{ <<"name">> => Name },
             update_rsc(OptLocalId, RemoteRId, Rsc1, ImportedAcc, Options, Context);
         {error, _} = Error ->
@@ -861,16 +925,13 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
             proplists:delete(props_forced, Options))
     ],
 
-    % Import options for resources that are embedded.
-    % For example images and links in HTML texts.
-    EmbeddedOptions = proplists:delete(import_edges, ReferredOptions),
-
     % Remove or map modifier_id, creator_id, etc
     {Rsc1, ImportedAcc1} = maps:fold(
         fun
             (K, V, {Acc, ImpAcc}) ->
                 case maps:is_key(K, PropsForced) of
                     true ->
+                        % Forced props are assumed to use local ids, no mapping needed.
                         {Acc, ImpAcc};
                     false ->
                         case K of
@@ -899,26 +960,12 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
                                 % map ids in menu to local ids
                                 {Menu1, ImpAcc1} = map_menu(V, UriTemplate, [], ImpAcc, ReferredOptions, Context),
                                 {Acc#{ <<"menu">> => Menu1 }, ImpAcc1};
-                            <<"blocks">> when is_list(V) ->
-                                % map ids in blocks and content to local ids
-                                {Blocks1, ImpAcc1} = map_blocks(V, UriTemplate, [], ImpAcc, ReferredOptions, Context),
-                                {Acc#{ <<"blocks">> => Blocks1 }, ImpAcc1};
+
+                            % All other values are mapped, considering the key and value to see if
+                            % it is a resource reference.
                             _ ->
-                                case m_rsc_export:is_id_prop(K) of
-                                    true ->
-                                        case map_id(V, UriTemplate, ImpAcc, EmbeddedOptions, Context) of
-                                            {ok, {LocalId, ImpAcc1}} ->
-                                                ImpAcc2 = ImpAcc1#{
-                                                    uri(V) => LocalId
-                                                },
-                                                {Acc#{ K => LocalId }, ImpAcc2};
-                                            {error, _} ->
-                                                {Acc#{ K => undefined }, ImpAcc}
-                                        end;
-                                    false ->
-                                        {V1, ImpAcc1} = map_html(K, V, UriTemplate, ImpAcc, EmbeddedOptions, Context),
-                                        {Acc#{ K => V1 }, ImpAcc1}
-                                end
+                                {V1, ImpAcc1} = map_key_value(K, V, UriTemplate, ImpAcc, ReferredOptions, Context),
+                                {Acc#{ K => V1 }, ImpAcc1}
                         end
                 end
         end,
@@ -953,6 +1000,15 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
     end,
     {Rsc5, ImportedAcc1}.
 
+%% @doc Check if the value looks like an exported id description.
+is_id_map(#{
+        <<"id">> := Id,
+        <<"uri">> := Uri,
+        <<"is_a">> := [ Cat |_ ]
+    }) when is_integer(Id), is_binary(Uri), is_binary(Cat) ->
+    true;
+is_id_map(_) ->
+    false.
 
 %% @doc Map all ids in a menu to local (stub) resources. Skip all tree entries
 %% that could not be mapped to local ids.
@@ -972,43 +1028,70 @@ map_menu([], _UriTemplate, Acc, ImpAcc, _Options, _Context) ->
     {lists:reverse(Acc), ImpAcc}.
 
 
-%% @doc Map all ids in blocks to local (stub) resources. Remove blocks that can not
-%% have their ids mapped.
-map_blocks([ B | Rest ], UriTemplate, Acc, ImpAcc, Options, Context) ->
-    EmbeddedOptions = [
-        {import_edges, 0}
-        | proplists:delete(import_edges, Options)
-    ],
-    {B1, ImpAcc1} = maps:fold(
-        fun(K, V, {BAcc, BImpAcc}) ->
-            case m_rsc_export:is_id_prop(K) of
-                true ->
-                    case map_id(V, UriTemplate, BImpAcc, Options, Context) of
-                        {ok, {LocalId, BImpAcc1}} ->
-                            {BAcc#{ K => LocalId }, BImpAcc1};
-                        {error, _} ->
-                            {BAcc#{ K => undefined }, BImpAcc}
-                    end;
-                false ->
-                    {V1, BImpAcc1} = map_html(K, V, UriTemplate, BImpAcc, EmbeddedOptions, Context),
-                    {BAcc#{ K => V1}, BImpAcc1}
-            end
-        end,
-        {#{}, ImpAcc},
-        B),
-    map_blocks(Rest, UriTemplate, [ B1 | Acc ], ImpAcc1, Options, Context);
-map_blocks([], _UriTemplate, Acc, ImpAcc, _Options, _Context) ->
+%% @doc Map all ids in a list to local (stub) resources.
+map_list([{K, V} | Rest], UriTemplate, Acc, ImpAcc, Options, Context) when is_binary(K) ->
+    {V1, ImpAcc1} = map_key_value(K, V, UriTemplate, ImpAcc, Options, Context),
+    map_list(Rest, UriTemplate, [{K, V1} | Acc], ImpAcc1, Options, Context);
+map_list([V | Rest], UriTemplate, Acc, ImpAcc, Options, Context) ->
+    {V1, ImpAcc1} = map_value(V, UriTemplate, ImpAcc, Options, Context),
+    map_list(Rest, UriTemplate, [V1 | Acc], ImpAcc1, Options, Context);
+map_list([], _UriTemplate, Acc, ImpAcc, _Options, _Context) ->
     {lists:reverse(Acc), ImpAcc}.
 
+%% @doc Map all ids in a map. The map itself could be an id reference, if so then
+%% replace the map with the newly referred local id.
+map_map(Map, UriTemplate, ImpAcc, Options, Context) when is_map(Map) ->
+    case is_id_map(Map) of
+        true ->
+            case map_id(Map, UriTemplate, ImpAcc, Options, Context) of
+                {ok, {LocalId, ImpAcc1}} ->
+                    {LocalId, ImpAcc1};
+                {error, _} ->
+                    {Map, ImpAcc}
+            end;
+        false ->
+            maps:fold(
+                fun(K, V, {BAcc, BImpAcc}) ->
+                    {V1, BImpAcc1} = map_key_value(K, V, UriTemplate, BImpAcc, Options, Context),
+                    {BAcc#{ K => V1 }, BImpAcc1}
+                end,
+                {#{}, ImpAcc},
+                Map)
+    end.
+
+%% @doc Map ids in the value, irrespective of the name of the key.
+map_value(V, UriTemplate, ImpAcc, Options, Context) ->
+    map_key_value(<<>>, V, UriTemplate, ImpAcc, Options, Context).
+
+%% @doc Map ids in the value, knowing the name and the semantics of the key.
+map_key_value(K, V, UriTemplate, ImpAcc, Options, Context) ->
+    case m_rsc_export:is_id_prop(K) orelse is_id_map(V) of
+        true ->
+            case map_id(V, UriTemplate, ImpAcc, Options, Context) of
+                {ok, {LocalId, ImpAcc1}} ->
+                    ImpAcc2 = ImpAcc1#{
+                        uri(V) => LocalId
+                    },
+                    {LocalId, ImpAcc2};
+                {error, _} ->
+                    {undefined, ImpAcc}
+            end;
+        false when is_list(V) ->
+            map_list(V, UriTemplate, [], ImpAcc, Options, Context);
+        false when is_map(V) ->
+            map_map(V, UriTemplate, ImpAcc, Options, Context);
+        false ->
+            map_html(K, V, UriTemplate, ImpAcc, Options, Context)
+    end.
 
 
 %% @doc Map a remote id to a local id, optionally creating a new (stub) resource.
 map_id(RemoteId, UriTemplate, ImpAcc, Options, Context) when is_integer(RemoteId) ->
     case is_uri(UriTemplate) of
         true ->
-            URL = binary:replace(UriTemplate, <<":id">>, z_convert:to_binary(RemoteId)),
+            Uri = binary:replace(UriTemplate, <<":id">>, z_convert:to_binary(RemoteId)),
             Rsc = #{
-                <<"uri">> => URL
+                <<"uri">> => Uri
             },
             maybe_create_empty(Rsc, ImpAcc, Options, Context);
         false ->
@@ -1031,6 +1114,8 @@ map_id(_, _, _ImpAcc, _Options, _Context) ->
 
 
 %% @doc Map texts in html properties.
+map_html(_Key, #trans{} = Value, UriTemplate, ImportAcc, Options, Context) ->
+    map_html_1(Value, UriTemplate, ImportAcc, Options, Context);
 map_html(Key, Value, UriTemplate, ImportAcc, Options, Context) ->
     case is_html_prop(Key) of
         true ->
@@ -1049,13 +1134,16 @@ map_html_1(#trans{ tr = Tr }, UriTemplate, ImportAcc, Options, Context) ->
         Tr),
     {#trans{ tr = Tr1 }, AccIds1};
 map_html_1(Text, UriTemplate, ImportAcc, Options, Context) when is_binary(Text) ->
+    % Import options for resources that are embedded.
+    % For example images and links in HTML texts.
+    EmbeddedOptions = proplists:delete(import_edges, Options),
     case filter_embedded_media:embedded_media(Text, Context) of
         [] ->
             {Text, ImportAcc};
         EmbeddedIds ->
             {Text1, ImportAcc1} = lists:foldl(
                 fun(RemoteId, {TextAcc, ImpAcc}) ->
-                    case map_id(RemoteId, UriTemplate, ImpAcc, Options, Context) of
+                    case map_id(RemoteId, UriTemplate, ImpAcc, EmbeddedOptions, Context) of
                         {ok, {LocalId, ImpAcc1}} ->
                             From = <<"<!-- z-media ", (integer_to_binary(RemoteId))/binary, " ">>,
                             To = <<"<!-- z-media-local ", (integer_to_binary(LocalId))/binary, " ">>,
@@ -1125,7 +1213,10 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium }, _Options, Context)
     % [ sanitize any HTML in the medium record ]
     case z_notifier:first(#media_import_medium{ id = LocalId, medium = Medium }, Context) of
         undefined ->
-            ?LOG_NOTICE("Resource import dropped medium record for local id ~p", [ LocalId ]),
+            ?LOG_NOTICE(#{
+                text => <<"Resource import dropped medium record">>,
+                rsc_id => LocalId
+            }),
             {ok, LocalId};
         ok ->
             {ok, LocalId};
@@ -1210,7 +1301,11 @@ import_edges(LocalId, #{ <<"edges">> := Edges }, ImportedAcc, Options, Context) 
                         Acc
                 end;
             (Name, V, Acc) ->
-                ?LOG_WARNING("Unknown import predicate ~p => ~p", [ Name, V]),
+                ?LOG_WARNING(#{
+                    text => <<"Import of unknown predicate">>,
+                    name => Name,
+                    props => V
+                }),
                 Acc
         end,
         ImportedAcc,
@@ -1227,7 +1322,12 @@ replace_edges(LocalId, PredId, Os, ImportedAcc, Options, Context) ->
                         {ok, {ObjectId, ImpAcc1}} ->
                             {[ ObjectId | Acc ], ImpAcc1};
                         {error, Reason} ->
-                            ?LOG_DEBUG("Skipping object ~p: ~p", [ Object, Reason ]),
+                            ?LOG_DEBUG(#{
+                                text => <<"Skipping import of object">>,
+                                result => error,
+                                reason => Reason,
+                                object => Object
+                            }),
                             {Acc, ImpAcc}
                     end;
                 {true, ObjectId} ->
@@ -1261,8 +1361,12 @@ find_allowed_predicate(Name, Pred, Options, Context) ->
                 true ->
                     {ok, PredId};
                 false ->
-                    ?LOG_NOTICE("Not importing edges with predicate '~s' because they are not allowed.",
-                               [ PredName ]),
+                    ?LOG_NOTICE(#{
+                        text => <<"Not importing edges because predicate is not allowed.">>,
+                        result => error,
+                        reason => eacces,
+                        predicate => PredName
+                    }),
                     {error, eacces}
             end;
         {error, _} = Error ->
@@ -1317,7 +1421,14 @@ find_allowed_category(RId, Rsc, Options, Context) ->
         true ->
             {ok, CatId};
         false ->
-            ?LOG_NOTICE("Not importing a ~p: ~p", [ CatName, RId ]),
+            ?LOG_NOTICE(#{
+                text => <<"Not importing resource because category is disallowed">>,
+                result => error,
+                reason => eacces,
+                category => CatName,
+                category_id => CatId,
+                rsc_id => RId
+            }),
             {error, eacces}
     end.
 
