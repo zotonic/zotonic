@@ -245,7 +245,7 @@ replace_value_with_uris({{Y, M, D}, {H, I, S}} = DateTime, _Context)
 replace_value_with_uris({Y, M, D} = Date, _Context)
     when is_integer(Y), is_integer(M), is_integer(D) ->
     Date;
-replace_value_with_uris(R, _Context) when is_tuple(R) ->
+replace_value_with_uris(#upload{}, _Context) ->
     undefined;
 replace_value_with_uris(V, _Context) ->
     V.
