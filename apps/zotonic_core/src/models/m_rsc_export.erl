@@ -106,7 +106,7 @@ full(Id, Context) when is_integer(Id) ->
         Rsc0 ->
             ContextNoLang = z_context:set_language('x-default', Context),
 
-            Rsc = replace_ids_with_uris(Rsc0, ContextNoLang),
+            Rsc = replace_map_ids_with_uris(Rsc0, ContextNoLang),
             Medium = m_media:get(Id, ContextNoLang),
             DepictionUrl = depiction_url(m_media:depiction(Id, ContextNoLang), ContextNoLang),
             PreviewUrl = preview_url(Medium, ContextNoLang),
@@ -182,7 +182,7 @@ edges(Id, Context) ->
         Edges).
 
 
-replace_ids_with_uris(Map, Context) when is_map(Map) ->
+replace_map_ids_with_uris(Map, Context) when is_map(Map) ->
     maps:fold(
         fun
             (K, V, Acc) when is_binary(K) ->
@@ -192,12 +192,8 @@ replace_ids_with_uris(Map, Context) when is_map(Map) ->
                 Acc#{ K => V }
         end,
         #{},
-        Map);
-replace_ids_with_uris(V, _Context) ->
-    V.
+        Map).
 
-replace_kv_ids_with_uris(Key, V, Context) when is_atom(Key) ->
-    replace_kv_ids_with_uris(z_convert:to_binary(Key), V, Context);
 replace_kv_ids_with_uris(Key, V, Context) when is_integer(V); is_atom(V); is_binary(V) ->
     case is_id_prop(Key) of
         true ->
@@ -206,7 +202,7 @@ replace_kv_ids_with_uris(Key, V, Context) when is_integer(V); is_atom(V); is_bin
             V
     end;
 replace_kv_ids_with_uris(_Key, V, Context) when is_map(V) ->
-    replace_ids_with_uris(V, Context);
+    replace_map_ids_with_uris(V, Context);
 replace_kv_ids_with_uris(Key, V, Context) when is_list(V) ->
     [ _ | Ks ] = lists:reverse(binary:split(Key, <<"_">>, [global])),
     replace_list_ids_with_uris(Ks, V, Context);
@@ -232,7 +228,7 @@ replace_list_ids_with_uris(Ks, List, Context) ->
         List).
 
 replace_value_with_uris(V, Context) when is_map(V) ->
-    replace_ids_with_uris(V, Context);
+    replace_map_ids_with_uris(V, Context);
 replace_value_with_uris(V, Context) when is_list(V) ->
     replace_list_ids_with_uris([], V, Context);
 replace_value_with_uris(#trans{} = V, _Context) ->
