@@ -1004,7 +1004,7 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
 is_id_map(#{
         <<"id">> := Id,
         <<"uri">> := Uri,
-        <<"is_a">> := [ Cat |_]
+        <<"is_a">> := [ Cat |_ ]
     }) when is_integer(Id), is_binary(Uri), is_binary(Cat) ->
     true;
 is_id_map(_) ->
