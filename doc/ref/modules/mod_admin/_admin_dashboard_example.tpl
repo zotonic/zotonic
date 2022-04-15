@@ -30,7 +30,7 @@
 		<li {% if not m.rsc[id].is_published %}class="unpublished" {% endif %}>
 		    <a href="{% url admin_edit_rsc id=id %}" class="clearfix">
 			<span class="zp-5">{% forloop.counter %}</span>
-			<span class="zp-65">{{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}</span>
+			<span class="zp-65">{{ m.rsc[id].title|striptags|default:_"<em>Untitled</em>" }}</span>
 			<span class="zp-25">
 			    {% button text=_"view" action={redirect id=id} %}
 			    {% button text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}

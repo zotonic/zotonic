@@ -29,7 +29,7 @@
                 {% for id, pred_id in result %}
                 {% if id.is_visible %}
                 <tr id="{{ #tr.id }}" class="{% if not m.rsc[id].is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
-                    <td><span {% include "_language_attrs.tpl" %}>{{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}</span></td>
+                    <td><span {% include "_language_attrs.tpl" %}>{{ m.rsc[id].title|striptags|default:_"<em>Untitled</em>" }}</span></td>
                     <td>{{ m.rsc[m.rsc[id].category_id].title }}</td>
                     <td>{{ m.rsc[pred_id].title }}</td>
                     <td>{{ m.rsc[id].modified|date:_"d M Y, H:i" }}</td>

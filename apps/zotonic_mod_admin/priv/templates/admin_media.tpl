@@ -110,7 +110,7 @@
                                         <tr id="{{ #li.id }}" {% if not id.is_published %}class="unpublished" {% endif %} data-href="{% url admin_edit_rsc id=id %}">
                                             <td>{% image medium mediaclass="admin-list-overview" class="thumb" %}</td>
                                             <td>
-                                                <strong>{{ id.title|striptags|default:"<em>untitled</em>" }}</strong><br />
+                                                <strong>{{ id.title|striptags|default:_"<em>Untitled</em>" }}</strong><br />
                                                 <span class="text-muted">{{ medium.filename|default:"-" }}</span>
                                             </td>
                                             <td>
