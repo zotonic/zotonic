@@ -239,9 +239,7 @@ error_response({error, Reason}, CT, Context) ->
 
 
 payload(<<"GET">>, _AcceptedCT, Context) ->
-    Qs = z_context:get_q_all_noz(Context),
-    {ok, Props} = z_props:from_qs(Qs),
-    {maps:remove(<<"*">>, Props), Context};
+    {z_context:get_q_map(Context), Context};
 payload(_Method, AcceptedCT, Context) ->
     z_controller_helper:decode_request(AcceptedCT, Context).
 
