@@ -81,6 +81,7 @@
     get_q_all/2,
     get_q_all_noz/1,
     get_q_validated/2,
+    get_q_map/1,
     set_q_all/2,
 
     q_upload_keepalive/2,
@@ -720,6 +721,15 @@ get_q_all(Key, #context{ props = Props }) ->
 -spec get_q_all_noz(z:context()) -> list({binary(), z:qvalue()}).
 get_q_all_noz(Context) ->
     lists:filter(fun({X,_}) -> not is_zotonic_arg(X) end, z_context:get_q_all(Context)).
+
+%% @doc Get all query/post args, transformed into a map.
+%% Removes Zotonic vars and the dispatcher '*' variable.
+-spec get_q_map(z:context()) -> map().
+get_q_map(Context) ->
+    Qs = z_context:get_q_all_noz(Context),
+    {ok, Props} = z_props:from_qs(Qs),
+    maps:remove(<<"*">>, Props).
+
 
 % Known Zotonic rguments:
 %

@@ -157,9 +157,7 @@ from_json(Context) ->
 %% @doc Make a map from the query arguments.
 from_qs(Context) ->
     Context1 = z_context:ensure_qs(Context),
-    Qs = z_context:get_q_all(Context1),
-    {ok, Props} = z_props:from_qs(Qs),
-    {Props, Context1}.
+    {z_context:get_q_map(Context1), Context1}.
 
 -spec req_body( z:context() ) -> {binary(), z:context()}.
 req_body(Context) ->
