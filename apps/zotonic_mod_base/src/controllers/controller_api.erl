@@ -1,8 +1,8 @@
 %% @author Arjan Scherpenisse, Marc Worrell
-%% @copyright 2009-2021 Arjan Scherpenisse <arjan@scherpenisse.net>, Marc Worrell <marc@worrell.nl>
+%% @copyright 2009-2022 Arjan Scherpenisse <arjan@scherpenisse.net>, Marc Worrell <marc@worrell.nl>
 %% @doc Entrypoint for model requests via HTTP.
 
-%% Copyright 2009-2021 Arjan Scherpenisse, Marc Worrell
+%% Copyright 2009-2022 Arjan Scherpenisse, Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -111,8 +111,8 @@ process(_Method, _AcceptedCT, {<<"text">>, <<"event-stream">>, _}, Context) ->
         {error, _} = Error ->
             process_done(Error, {<<"application">>, <<"json">>, []}, Context)
     end;
-process(Method, AcceptedCT, ProvidedCT, Context) ->
-    {Payload, Context1} = payload(Method, AcceptedCT, Context),
+process(_Method, AcceptedCT, ProvidedCT, Context) ->
+    {Payload, Context1} = z_controller_helper:decode_request(AcceptedCT, Context),
     case z_context:get_q(<<"response_topic">>, Context) of
         undefined ->
             Msg = #{
@@ -236,12 +236,6 @@ error_response({error, Reason}, CT, Context) ->
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 500}, Context1}.
-
-
-payload(<<"GET">>, _AcceptedCT, Context) ->
-    {z_context:get_q_map(Context), Context};
-payload(_Method, AcceptedCT, Context) ->
-    z_controller_helper:decode_request(AcceptedCT, Context).
 
 
 set_filename(ProvidedCT, Context) ->

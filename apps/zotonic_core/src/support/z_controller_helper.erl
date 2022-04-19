@@ -1,9 +1,9 @@
 %% @author Marc Worrell
-%% @copyright 2014-2021 Marc Worrell
+%% @copyright 2014-2022 Marc Worrell
 %%
 %% @doc Helper functions commonly used in controllers.
 
-%% Copyright 2014-2021 Marc Worrell
+%% Copyright 2014-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

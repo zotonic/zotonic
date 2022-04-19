@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021  Marc Worrell
+%% @copyright 2009-2022  Marc Worrell
 %% @doc Request context for Zotonic request evaluation.
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -50,8 +50,6 @@
     pickle/1,
     depickle/1,
     depickle_site/1,
-
-    % combine_results/2,
 
     init_cowdata/3,
 
