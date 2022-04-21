@@ -288,9 +288,9 @@ render_update(#render{} = Render, Args, Context) ->
 render_next_page(Id, 0, _Direction, _Answers, _History, _Editing, Args, Context) when is_integer(Id) ->
     case z_convert:to_binary(proplists:get_value(viewer, Args)) of
         <<"overlay">> ->
-            z_render:wire({overlay_close, []}, Context);
+            z_render:dialog_close(Context);
         <<"dialog">> ->
-            z_render:wire({dialog_close, []}, Context);
+            z_render:overlay_close(Context);
         _ ->
             z_render:wire({redirect, [{id, Id}]}, Context)
     end;
@@ -391,7 +391,7 @@ render_result_page(Id, undefined, false, History, As, Viewer, _Args, _Context) -
         ]
     };
 render_result_page(Id, {editing, _AnswerId, []}, _IsShowResults, _History, _As, Viewer, _Args, Context) ->
-    z_render:update(
+    Context1 = z_render:update(
             "survey-results",
             #render{
                 template="_admin_survey_editor_results.tpl",
@@ -400,7 +400,8 @@ render_result_page(Id, {editing, _AnswerId, []}, _IsShowResults, _History, _As, 
                     {viewer, Viewer}
                 ]
             },
-            Context);
+            Context),
+    viewer_close(Viewer, Context1);
 render_result_page(Id, {editing, _AnswerId, undefined}, true, History, As, Viewer, _Args, _Context) ->
     #render{
         template="_survey_results.tpl",
@@ -438,11 +439,16 @@ render_result_page(Id, {editing, _AnswerId, Actions}, true, History, As, Viewer,
             ]
         },
         ContextActions);
-render_result_page(_Id, {editing, _AnswerId, Actions}, false, _History, _As, <<"dialog">>, _Args, Context) ->
+render_result_page(_Id, {editing, _AnswerId, Actions}, false, _History, _As, Viewer, _Args, Context) ->
     ContextActions = z_render:wire(Actions, Context),
-    z_render:dialog_close(ContextActions);
-render_result_page(_Id, {editing, _AnswerId, Actions}, false, _History, _As, _Viewer, _Args, Context) ->
-    z_render:wire(Actions, Context).
+    viewer_close(Viewer, ContextActions).
+
+viewer_close(<<"dialog">>, Context) ->
+    z_render:dialog_close(Context);
+viewer_close(<<"overlay">>, Context) ->
+    z_render:overlay_close(Context);
+viewer_close(_, Context) ->
+    Context.
 
 
 get_args(Context) ->
