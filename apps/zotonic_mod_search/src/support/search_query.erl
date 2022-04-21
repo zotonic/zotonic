@@ -348,7 +348,7 @@ qterm({id, Id}, Context) ->
             [];
         RscId ->
             #search_sql_term{
-                where = [ <<"rsc.id = ">>, '$1'],
+                where = [ <<"rsc.id = ">>, '$1' ],
                 args = [ RscId ]
             }
     end;
