@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Search model, used as an interface to the search functions of modules etc.
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -93,8 +93,9 @@ m_get([], Msg, Context) ->
 -spec search( binary(), map(), z:context() ) -> {ok, #search_result{}} | {error, term()}.
 search(Name, Args, Context) when is_binary(Name), is_map(Args) ->
     {Page, PageLen, Args1} = get_paging_props(Args, Context),
+    {Options, Args2} = get_search_options(Args1),
     try
-        {ok, z_search:search(Name, Args1, Page, PageLen, Context)}
+        {ok, z_search:search(Name, Args2, Page, PageLen, Options, Context)}
     catch
         throw:Error ->
             ?LOG_ERROR("Error in m.search[~p] error: ~p", [{Name, Args}, Error]),
@@ -177,12 +178,18 @@ empty_result() ->
         search_name = <<"error">>,
         search_args = #{},
         result = [],
+        options = #{},
         page = 1,
         pagelen = ?SEARCH_PAGELEN,
         total = 0,
         pages = 1
     }.
 
+
+get_search_options(#{ <<"options">> := Options } = Args) when is_map(Options) ->
+    {Options, maps:remove(<<"options">>, Args)};
+get_search_options(Args) ->
+    {#{}, Args}.
 
 get_optional_paging_props(Props, Context) when is_list(Props) ->
     % Deprecated proplists handling

@@ -39,7 +39,12 @@ render_action(TriggerId, TargetId, Args, Context) ->
                 SPs when is_map(SPs) ->
                     maps:without([ <<"page">>, <<"pagelen">> ], SPs)
             end,
-            make_postback(SearchName, SearchProps, NextPage, PageLen, MorePageLen, Args, TriggerId, TargetId, Context)
+            make_postback(
+                SearchName, SearchProps,
+                NextPage, PageLen, MorePageLen,
+                Args, Result#search_result.options,
+                TriggerId, TargetId,
+                Context)
     end.
 
 total(#search_result{total=Total}) when is_integer(Total) ->
@@ -67,7 +72,7 @@ pagelen(_, _) ->
 %% @doc Show more results.
 %% @spec event(Event, Context1) -> Context2
 %% @todo Handle the "MorePageLen" argument correctly.
-event(#postback{message={moreresults, SearchName, SearchProps, Page, PageLen, MorePageLen, Args}, trigger=TriggerId, target=TargetId}, Context) ->
+event(#postback{message={moreresults, SearchName, SearchProps, Page, PageLen, MorePageLen, Args, Options}, trigger=TriggerId, target=TargetId}, Context) ->
     #search_result{result=Result} = case is_list(SearchProps) of
         true ->
             SearchProps1 = [
@@ -77,7 +82,7 @@ event(#postback{message={moreresults, SearchName, SearchProps, Page, PageLen, Mo
             ],
             m_search:search({SearchName, SearchProps1}, Context);
         false ->
-            z_search:search(SearchName, SearchProps, Page, PageLen, Context)
+            z_search:search(SearchName, SearchProps, Page, PageLen, Options, Context)
     end,
     Rows = case proplists:get_value(ids, Result) of
               undefined -> Result;
@@ -85,7 +90,12 @@ event(#postback{message={moreresults, SearchName, SearchProps, Page, PageLen, Mo
            end,
     Context1 = case length(Rows) < PageLen of
                    false ->
-                        {JS, Ctx} = make_postback(SearchName, SearchProps, Page+1, PageLen, MorePageLen, Args, TriggerId, TargetId, Context),
+                        {JS, Ctx} = make_postback(
+                                SearchName, SearchProps,
+                                Page+1, PageLen, MorePageLen,
+                                Args, Options,
+                                TriggerId, TargetId,
+                                Context),
                         RebindJS = case proplists:get_value(visible, Args) of
                            true ->
                                [ <<"z_on_visible('#">>, TriggerId, <<"', function() {">>, JS, <<"});">> ];
@@ -132,7 +142,7 @@ to_id(M) when is_map(M) -> maps:get(id, M, undefined);
 to_id(_) -> undefined.
 
 
-make_postback(SearchName, SearchProps, Page, PageLen, MorePageLen, Args, TriggerId, TargetId, Context) ->
-    Postback = {moreresults, SearchName, SearchProps, Page, PageLen, MorePageLen, Args},
+make_postback(SearchName, SearchProps, Page, PageLen, MorePageLen, Args, Options, TriggerId, TargetId, Context) ->
+    Postback = {moreresults, SearchName, SearchProps, Page, PageLen, MorePageLen, Args, Options},
     {PostbackJS, _PickledPostback} = z_render:make_postback(Postback, key, TriggerId, TargetId, ?MODULE, Context),
     {PostbackJS, Context}.

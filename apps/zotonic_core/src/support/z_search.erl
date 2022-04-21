@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Search the database, interfaces to specific search routines.
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@
 %% interface functions
 -export([
     search/5,
+    search/6,
 
     search/2,
     search/3,
@@ -30,6 +31,7 @@
     search_result/3,
     query_/2,
 
+    map_to_options/1,
     props_to_map/1,
     reformat_sql_query/2,
     concat_sql_query/2
@@ -42,6 +44,9 @@
                      | {binary(), map()|undefined}.
 -type search_offset() :: Limit :: pos_integer()
                        | {Offset :: pos_integer(), Limit :: pos_integer()}.
+-type search_options() :: #{
+        properties => list(binary()) | boolean()
+    }.
 
 -export_type([
     search_query/0,
@@ -60,12 +65,25 @@
     PageLen :: pos_integer(),
     Context :: z:context(),
     Result :: #search_result{}.
-search(Name, undefined, Page, PageLen, Context) ->
-    search(Name, #{}, Page, PageLen, Context);
-search(Name, Args, Page, PageLen, Context) when is_list(Args) ->
+search(Name, Args, Page, PageLen, Context) ->
+    search(Name, Args, Page, PageLen, #{}, Context).
+
+%% @doc Perform a named search with arguments.
+-spec search(Name, Args, Page, PageLen, Options, Context) -> Result when
+    Name :: binary(),
+    Args :: map() | proplists:proplist() | undefined,
+    Page :: pos_integer(),
+    PageLen :: pos_integer(),
+    Options :: map(),
+    Context :: z:context(),
+    Result :: #search_result{}.
+search(Name, undefined, Page, PageLen, Options, Context) ->
+    search(Name, #{}, Page, PageLen, Options, Context);
+search(Name, Args, Page, PageLen, Options, Context) when is_list(Args) ->
     Args1 = props_to_map(Args),
-    search(Name, Args1, Page, PageLen, Context);
-search(Name, Args, Page, PageLen, Context) when is_binary(Name), is_map(Args) ->
+    search(Name, Args1, Page, PageLen, Options, Context);
+search(Name, Args, Page, PageLen, Options0, Context) when is_binary(Name), is_map(Args), is_map(Options0) ->
+    Options = map_to_options(Options0),
     OffsetLimit = offset_limit(Page, PageLen),
     Q = #search_query{
         name = Name,
@@ -82,7 +100,7 @@ search(Name, Args, Page, PageLen, Context) when is_binary(Name), is_map(Args) ->
                             Args1 = Args#{
                                 <<"query_id">> => RId
                             },
-                            search(<<"query">>, Args1, Page, PageLen, Context);
+                            search(<<"query">>, Args1, Page, PageLen, Options, Context);
                         false ->
                             ?LOG_NOTICE("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
                             #search_result{
@@ -104,7 +122,9 @@ search(Name, Args, Page, PageLen, Context) when is_binary(Name), is_map(Args) ->
                 search_args = Args
             };
         Result ->
-            handle_search_result(Result, Page, PageLen, OffsetLimit, Name, Args ,Context)
+            handle_post_options(
+                handle_search_result(Result, Page, PageLen, OffsetLimit, Name, Args, Options, Context),
+                Context)
     end.
 
 
@@ -123,7 +143,7 @@ search_pager({Name, Args}, Page, PageLen, Context) when is_binary(Name) ->
 search_pager({Name, Args} = Search, Page, PageLen, Context) when is_atom(Name) ->
     OffsetLimit = offset_limit(Page, PageLen),
     SearchResult = search_1(Search, Page, PageLen, OffsetLimit, Context),
-    handle_search_result(SearchResult, Page, PageLen, OffsetLimit, Name, Args, Context).
+    handle_search_result(SearchResult, Page, PageLen, OffsetLimit, Name, Args, #{}, Context).
 
 
 %% @doc Search with the question and return the results
@@ -153,21 +173,23 @@ search(Search, {Offset, Limit} = OffsetLimit, Context) ->
 
 %% @doc Handle a return value from a search function.  This can be an intermediate SQL statement
 %% that still needs to be augmented with extra ACL checks.
--spec handle_search_result( Result, Page, PageLen, OffsetLimit, Name, Args, Context ) -> #search_result{} when
+-spec handle_search_result( Result, Page, PageLen, OffsetLimit, Name, Args, Options, Context ) -> #search_result{} when
     Result :: list() | #search_result{} | #search_sql{},
     Page :: pos_integer(),
     PageLen :: pos_integer(),
     OffsetLimit :: {non_neg_integer(), non_neg_integer()},
     Name :: binary() | atom(),
     Args :: map() | proplists:proplist(),
+    Options :: search_options(),
     Context :: z:context().
-handle_search_result(#search_result{ pages = N } = S, _Page, _PageLen, _OffsetLimit, Name, Args, _Context)
+handle_search_result(#search_result{ pages = N } = S, _Page, _PageLen, _OffsetLimit, Name, Args, Options, _Context)
     when is_integer(N) ->
     S#search_result{
         search_name = Name,
-        search_args = Args
+        search_args = Args,
+        options = Options
     };
-handle_search_result(#search_result{ result = L, total = Total } = S, Page, PageLen, _OffsetLimit, Name, Args, _Context)
+handle_search_result(#search_result{ result = L, total = Total } = S, Page, PageLen, _OffsetLimit, Name, Args, Options, _Context)
     when is_integer(Total) ->
     L1 = lists:sublist(L, 1, PageLen),
     Pages = (Total+PageLen-1) div PageLen,
@@ -180,13 +202,14 @@ handle_search_result(#search_result{ result = L, total = Total } = S, Page, Page
         search_name = Name,
         search_args = Args,
         result = L1,
+        options = Options,
         page = Page,
         pagelen = PageLen,
         pages = Pages,
         prev = erlang:max(Page-1, 1),
         next = Next
     };
-handle_search_result(#search_result{ result = L, total = undefined } = S, Page, PageLen, _OffsetLimit, Name, Args, _Context) ->
+handle_search_result(#search_result{ result = L, total = undefined } = S, Page, PageLen, _OffsetLimit, Name, Args, Options, _Context) ->
     L1 = lists:sublist(L, 1, PageLen),
     Len = length(L),
     Next = if
@@ -197,12 +220,13 @@ handle_search_result(#search_result{ result = L, total = undefined } = S, Page, 
         search_name = Name,
         search_args = Args,
         result = L1,
+        options = Options,
         page = Page,
         pagelen = PageLen,
         prev = erlang:max(Page-1, 1),
         next = Next
     };
-handle_search_result(L, Page, PageLen, _OffsetLimit, Name, Args, _Context) when is_list(L) ->
+handle_search_result(L, Page, PageLen, _OffsetLimit, Name, Args, Options, _Context) when is_list(L) ->
     L1 = lists:sublist(L, 1, PageLen),
     Len = length(L),
     Pages = (Len+PageLen-1) div PageLen + Page - 1,
@@ -214,6 +238,7 @@ handle_search_result(L, Page, PageLen, _OffsetLimit, Name, Args, _Context) when 
         search_name = Name,
         search_args = Args,
         result = L1,
+        options = Options,
         page = Page,
         pagelen = PageLen,
         pages = Pages,
@@ -222,16 +247,16 @@ handle_search_result(L, Page, PageLen, _OffsetLimit, Name, Args, _Context) when 
         prev = erlang:max(Page-1, 1),
         next = Next
     };
-handle_search_result(#search_sql_terms{} = Terms, Page, PageLen, OffsetLimit, Name, Args, Context) ->
+handle_search_result(#search_sql_terms{} = Terms, Page, PageLen, OffsetLimit, Name, Args, Options, Context) ->
     SearchSQL = z_search_terms:combine(Terms),
-    handle_search_result(SearchSQL, Page, PageLen, OffsetLimit, Name, Args, Context);
-handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit, Name, Args, Context) ->
+    handle_search_result(SearchSQL, Page, PageLen, OffsetLimit, Name, Args, Options, Context);
+handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit, Name, Args, Options, Context) ->
     Q1 = reformat_sql_query(Q, Context),
     {Sql, SqlArgs} = concat_sql_query(Q1, OffsetLimit),
     case Q#search_sql.run_func of
         F when is_function(F) ->
             Result = F(Q, Sql, Args, Context),
-            handle_search_result(Result, Page, PageLen, OffsetLimit, Name, Args, Context);
+            handle_search_result(Result, Page, PageLen, OffsetLimit, Name, Args, Options, Context);
         _ ->
             Rows = case Q#search_sql.assoc of
                 false ->
@@ -264,6 +289,7 @@ handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit,
                 search_name = Name,
                 search_args = Args,
                 result = lists:sublist(Rows, 1, PageLen),
+                options = Options,
                 pages = Pages,
                 page = Page,
                 pagelen = PageLen,
@@ -328,10 +354,10 @@ search_1({SearchName, Props}, Page, PageLen, {Offset, Limit} = OffsetLimit, Cont
             ?LOG_NOTICE("z_search: ignored unknown search query ~p", [ {SearchName, PropsSorted} ]),
             #search_result{};
         Result when Page =/= undefined ->
-            handle_search_result(Result, Page, PageLen, OffsetLimit, SearchName, PropsSorted, Context);
+            handle_search_result(Result, Page, PageLen, OffsetLimit, SearchName, PropsSorted, #{}, Context);
         Result when PageRest =:= 0 ->
             PageNr = (Offset - 1) div Limit + 1,
-            handle_search_result(Result, PageNr, Limit, OffsetLimit, SearchName, PropsSorted, Context);
+            handle_search_result(Result, PageNr, Limit, OffsetLimit, SearchName, PropsSorted, #{}, Context);
         Result ->
             S = search_result(Result, OffsetLimit, Context),
             S#search_result{
@@ -346,6 +372,103 @@ search_1(Name, _Page, _PageLen, _OffsetLimit, _Context) ->
     #search_result{}.
 
 
+%% @doc Handle the options applied after a search has been done.
+-spec handle_post_options(#search_result{}, z:context()) -> #search_result{}.
+handle_post_options(#search_result{ options = Options } = S, Context) ->
+    maybe_option_properties(Options, S, Context).
+
+maybe_option_properties(#{ properties := Props }, #search_result{ result = Result } = S, Context) ->
+    Result1 = lists:filtermap(
+        fun(R) ->
+            option_properties(R, Props, Context)
+        end,
+        Result),
+    S#search_result{ result = Result1 };
+maybe_option_properties(_Options, S, _Context) ->
+    S.
+
+option_properties(R, true, Context) ->
+    DefaultProps = [
+        <<"id">>,
+        <<"title">>,
+        <<"short_title">>,
+        <<"summary">>,
+        <<"category_id">>,
+        <<"category">>,
+        <<"page_url">>,
+        <<"thumbnail_url">>
+    ],
+    option_properties(R, DefaultProps, Context);
+option_properties(Id, Props, Context) when is_integer(Id), is_list(Props) ->
+    case z_acl:rsc_visible(Id, Context) of
+        true ->
+            Rsc = lists:foldl(
+                fun
+                    (<<"category">>, Acc) ->
+                        CatId = m_rsc:p(Id, <<"category_id">>, Context),
+                        Acc#{
+                            <<"category">> => #{
+                                <<"id">> => CatId,
+                                <<"name">> => m_rsc:p(CatId, <<"name">>, Context),
+                                <<"title">> => m_rsc:p(CatId, <<"title">>, Context)
+                            }
+                        };
+                    (P, Acc) when is_binary(P) ->
+                        Acc#{
+                            P => m_rsc:p(Id, P, Context)
+                        };
+                    (_, Acc) ->
+                        Acc
+                end,
+                #{ <<"id">> => Id },
+                Props),
+            {true, Rsc};
+        false ->
+            false
+    end;
+option_properties({Title, Id}, Props, Context) when is_integer(Id) ->
+    % Typical result from a search bytitle (or another sort key)
+    case option_properties(Id, Props, Context) of
+        {true, Rsc} ->
+            {true, {Title, Rsc}};
+        false ->
+            false
+    end;
+option_properties(R, _Props, _Context) ->
+    R.
+
+%% @doc Map a map with (binary) search options to a search option list.
+-spec map_to_options( map() ) -> search_options().
+map_to_options(Map) ->
+    maps:fold(
+        fun
+            (properties, V, Acc) ->
+                Acc#{ properties => opt_props(V) };
+            (<<"properties">>, V, Acc) ->
+                Acc#{ properties => opt_props(V) };
+            (K, V, Acc) ->
+                ?LOG_INFO(#{
+                    text => <<"Dropping unknown search option">>,
+                    option => K,
+                    value => V
+                }),
+                Acc
+        end,
+        #{},
+        Map).
+
+opt_props(<<>>) ->
+    true;
+opt_props(B) when is_binary(B) ->
+    opt_props([B]);
+opt_props([]) ->
+    true;
+opt_props(L) when is_list(L) ->
+    lists:flatten([
+        binary:split(z_convert:to_binary(P), <<",">>, [global, trim]) || P <- L
+    ]);
+opt_props(P) ->
+    z_convert:to_bool(P).
 
 %% @doc Change a search props list to a map with binary keys.
 -spec props_to_map( proplists:proplist() | map() ) -> #{ binary() => term() }.

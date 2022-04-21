@@ -1,5 +1,5 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2009-2021 Arjan Scherpenisse
+%% @copyright 2009-2022 Arjan Scherpenisse
 %% @doc Handler for m.search[{query, Args..}]
 
 %% Licensed under the Apache License, Version 2.0 (the "License");
@@ -201,9 +201,10 @@ request_arg(<<"unfinished_or_nodate">>)-> unfinished_or_nodate;
 % Skip these
 request_arg(<<"page">>)                -> undefined;
 request_arg(<<"pagelen">>)             -> undefined;
+request_arg(<<"options">>)             -> undefined;
 % Complain about all else
 request_arg(<<"custompivot">>)         ->
-    ?LOG_ERROR("The query term 'custompivot' has been removed. Use filtes with 'pivot.pivotname.field' instead."),
+    ?LOG_ERROR("The query term 'custompivot' has been removed. Use filters with 'pivot.pivotname.field' instead."),
     throw({error, {unknown_query_term, custompivot}});
 request_arg(Term) ->
     ?LOG_ERROR("Skipping unknown query term: ~p", [Term]),

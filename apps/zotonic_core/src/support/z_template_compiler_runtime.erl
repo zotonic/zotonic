@@ -329,6 +329,7 @@ find_value(Key, #search_result{} = S, _TplVars, _Context) ->
         search_args -> S#search_result.search_args;
         search_props -> S#search_result.search_args;
         result -> S#search_result.result;
+        options -> S#search_result.options;
         total -> S#search_result.total;
         page -> S#search_result.page;
         pages -> S#search_result.pages;
@@ -339,6 +340,7 @@ find_value(Key, #search_result{} = S, _TplVars, _Context) ->
         <<"search_args">> -> S#search_result.search_args;
         <<"search_props">> -> S#search_result.search_args;
         <<"result">> -> S#search_result.result;
+        <<"options">> -> S#search_result.options;
         <<"total">> -> S#search_result.total;
         <<"page">> -> S#search_result.page;
         <<"pages">> -> S#search_result.pages;
