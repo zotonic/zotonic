@@ -149,7 +149,7 @@
     result = [] :: list(),
     page = 1 :: pos_integer(),
     pagelen = ?SEARCH_PAGELEN :: pos_integer() | undefined,
-    options = #{} :: #{ binary() => any() },
+    options = #{} :: z_search:search_options(),
     total = undefined :: non_neg_integer() | undefined,
     pages = undefined :: non_neg_integer() | undefined,
     is_total_estimated = false :: boolean(),
