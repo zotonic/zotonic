@@ -132,3 +132,37 @@ language_search_test() ->
     ?assertEqual( Id, hd(Ids) ),
     m_rsc:delete(Id, C),
     ok.
+
+properties_search_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    % Default properties
+    #search_result{
+        result = [
+            #{
+                <<"id">> := _,
+                <<"thumbnail_url">> := _,
+                <<"title">> := _,
+                <<"short_title">> := _,
+                <<"summary">> := _,
+                <<"category_id">> := _,
+                <<"category">> := #{
+                    <<"id">> := _,
+                    <<"name">> := _,
+                    <<"title">> := _
+                }
+            }
+            | _
+        ]
+    } = z_search:search(<<"query">>, #{}, 1, 20, #{ properties => true}, C),
+    % Specific properties
+    #search_result{
+        result = [ R1 | _ ]
+    } = z_search:search(<<"query">>, #{}, 1, 20, #{ properties => [ <<"body">> ] }, C),
+    [ <<"body">>, <<"id">> ] = lists:sort(maps:keys(R1)),
+    % No properties, just resource ids
+    #search_result{
+        result = [ R2 | _ ]
+    } = z_search:search(<<"query">>, #{}, 1, 20, #{}, C),
+    true = is_integer(R2),
+    ok.
