@@ -288,9 +288,9 @@ render_update(#render{} = Render, Args, Context) ->
 render_next_page(Id, 0, _Direction, _Answers, _History, _Editing, Args, Context) when is_integer(Id) ->
     case z_convert:to_binary(proplists:get_value(viewer, Args)) of
         <<"overlay">> ->
-            z_render:wire({overlay_close, []}, Context);
+            z_render:dialog_close(Context);
         <<"dialog">> ->
-            z_render:wire({dialog_close, []}, Context);
+            z_render:overlay_close(Context);
         _ ->
             z_render:wire({redirect, [{id, Id}]}, Context)
     end;
