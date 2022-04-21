@@ -70,6 +70,13 @@ Filter resources to exclude the given category::
 
     cat_exclude='meta'
 
+id
+^^
+
+Filter resources to only include the ones with the given ids::
+
+    id=123
+
 id_exclude
 ^^^^^^^^^^
 

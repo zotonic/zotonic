@@ -160,6 +160,7 @@ request_arg(<<"filter.facet.", F/binary>>)-> {facet, F};
 request_arg(<<"filter.", F/binary>>)   -> {filter, F};
 request_arg(<<"pivot.", _/binary>> = F)-> {filter, F};
 request_arg(<<"pivot_", F/binary>>)    -> {filter, <<"pivot.", F/binary>>};
+request_arg(<<"id">>)                  -> id;
 request_arg(<<"id_exclude">>)          -> id_exclude;
 request_arg(<<"hasobject">>)           -> hasobject;
 request_arg(<<"hasobjectpredicate">>)  -> hasobjectpredicate;
@@ -300,8 +301,20 @@ qterm({content_group, ContentGroup}, Context) ->
 qterm({id_exclude, Ids}, Context) when is_list(Ids) ->
     %% id_exclude=resource-id
     %% Exclude an id or multiple ids from the result
-    Es = lists:map(fun(Id) -> {id_exclude, Id} end, Ids),
-    qterm(Es, Context);
+    RscIds = lists:filtermap(
+        fun(Id) ->
+            case m_rsc:rid(Id, Context) of
+                undefined -> false;
+                RscId -> {true, RscId}
+            end
+        end,
+        Ids),
+    #search_sql_term{
+        where = [
+            <<"rsc.id NOT IN (SELECT(unnest(">>, '$1', <<"::int[])))">>
+        ],
+        args = [ RscIds ]
+    };
 qterm({id_exclude, Id}, Context) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
@@ -309,6 +322,33 @@ qterm({id_exclude, Id}, Context) ->
         RscId ->
             #search_sql_term{
                 where = [ <<"rsc.id <> ">>, '$1'],
+                args = [ RscId ]
+            }
+    end;
+qterm({id, Ids}, Context) when is_list(Ids) ->
+    %% id=resource-id
+    %% Limit to an id or multiple ids
+    RscIds = lists:filtermap(
+        fun(Id) ->
+            case m_rsc:rid(Id, Context) of
+                undefined -> false;
+                RscId -> {true, RscId}
+            end
+        end,
+        Ids),
+    #search_sql_term{
+        where = [
+            <<"rsc.id IN (SELECT(unnest(">>, '$1', <<"::int[])))">>
+        ],
+        args = [ RscIds ]
+    };
+qterm({id, Id}, Context) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            [];
+        RscId ->
+            #search_sql_term{
+                where = [ <<"rsc.id = ">>, '$1' ],
                 args = [ RscId ]
             }
     end;
