@@ -902,8 +902,16 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
             end,
             case SendResult of
                 {error, Reason, {FailureType, Host, Message}} ->
-                    ?LOG_ERROR("[smtp] Error sending email to <~s>: ~p  (~p)",
-                               [ RecipientEmail, Reason, {FailureType, Host, Message} ]),
+                    ?LOG_ERROR(#{
+                        text => <<"Error sending email">>,
+                        recipient => RecipientEmail,
+                        relay => Relay,
+                        result => error,
+                        reason => Reason,
+                        failure_type => FailureType,
+                        host => Host,
+                        message => Message
+                    }),
                     case is_retry_possible(Reason, FailureType, Message) of
                         true ->
                             %% do nothing, it will retry later
@@ -951,6 +959,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     ?LOG_ERROR(#{
                         text => <<"Error sending email">>,
                         recipient => RecipientEmail,
+                        result => error,
                         reason => Reason
                     }),
                     % Returned when the options are not ok
@@ -975,6 +984,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     Receipt1 = z_string:trim(Receipt),
                     ?LOG_NOTICE(#{
                         text => <<"Sent email">>,
+                        result => ok,
                         recipient => RecipientEmail,
                         message => Receipt1
                     }),
@@ -1064,7 +1074,8 @@ send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts) ->
 send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts) ->
     ?LOG_NOTICE(#{
         text => <<"Bounce error, retrying without TLS">>,
-        recipient => RecipientEmail
+        recipient => RecipientEmail,
+        relay => proplists:get_value(relay, SmtpOpts)
     }),
     SmtpOpts1 = [
         {tls, never}

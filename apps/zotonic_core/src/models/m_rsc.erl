@@ -699,6 +699,10 @@ p_no_acl(Id, <<"translation">>, Context) ->
         end
     end;
 p_no_acl(Id, <<"default_page_url">>, Context) -> page_url(Id, Context);
+p_no_acl(Id, <<"image_url_abs">>, Context) -> z_context:abs_url(p_no_acl(Id, <<"image_url">>, Context), Context);
+p_no_acl(Id, <<"thumbnail_url_abs">>, Context) -> z_context:abs_url(p_no_acl(Id, <<"thumbnail_url">>, Context), Context);
+p_no_acl(Id, <<"image_url">>, Context) -> image_url(Id, <<"image">>, Context);
+p_no_acl(Id, <<"thumbnail_url">>, Context) -> image_url(Id, <<"thumbnail">>, Context);
 p_no_acl(Id, <<"uri">>, Context) -> uri(Id, Context);
 p_no_acl(Id, <<"uri_raw">>, Context) -> p_cached(Id, <<"uri">>, Context);
 p_no_acl(Id, <<"category">>, Context) -> m_category:get(p_no_acl(Id, <<"category_id">>, Context), Context);
@@ -799,6 +803,16 @@ is_named_meta(Id, Context) ->
                 false ->
                     false
             end
+    end.
+
+image_url(Id, Mediaclass, Context) ->
+    case z_media_tag:url(Id, [ {mediaclass, Mediaclass} ], Context) of
+        {ok, <<>>} ->
+            undefined;
+        {ok, Url} ->
+            Url;
+        {error, _} ->
+            undefined
     end.
 
 

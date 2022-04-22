@@ -204,6 +204,16 @@ A resource has the following properties accessible from the templates:
 |                     |itself. When no medium is found then undefined is    |                                |
 |                     |returned.                                            |                                |
 +---------------------+-----------------------------------------------------+--------------------------------+
+|image_url            |An url of the depiction, using the mediaclass        |<<"/image/...">>                |
+|                     |``image`` defined in mod_base                        |                                |
++---------------------+-----------------------------------------------------+--------------------------------+
+|image_url_abs        |The absolute ``image_url``, that is including https: |<<"http://example.com//...">>   |
++---------------------+-----------------------------------------------------+--------------------------------+
+|thumbnail_url        |An url of the depiction, using the mediaclass        |<<"/image/...">>                |
+|                     | ``thumbnail`` defined in mod_base                   |                                |
++---------------------+-----------------------------------------------------+--------------------------------+
+|thumbnail_url_abs    |The absolute ``thumbnail_url``, including https:     |<<"http://example.com//...">>   |
++---------------------+-----------------------------------------------------+--------------------------------+
 |email                |E-mail address. Returns a binary or undefined.       |<<"me@example.com">>            |
 +---------------------+-----------------------------------------------------+--------------------------------+
 |website              |URL of a website. Returns a binary or undefined.     |<<"http://zotonic.com">>        |
