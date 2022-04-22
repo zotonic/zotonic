@@ -28,7 +28,8 @@
 %% @doc Used to format results as fetched from the database
 readable_stored_result(Id, SurveyAnswer, Context) ->
     case proplists:get_value(answers, SurveyAnswer, []) of
-        [] -> [];
+        [] ->
+            [];
         Answers ->
             QVs = lists:foldl(
                 fun({QName, Ans}, Acc) ->
@@ -173,6 +174,7 @@ qprops(Block) when is_map(Block) ->
     maps:filter(fun keep_qprop/2, Block).
 
 keep_qprop(<<"prompt">>, _) -> true;
+keep_qprop(<<"is_test">>, _) -> true;
 keep_qprop(_, _) -> false.
 
 answer_noempty(L) when is_list(L) -> [ A || A <- L, A /= <<>> ];
