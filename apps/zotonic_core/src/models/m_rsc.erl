@@ -807,9 +807,11 @@ is_named_meta(Id, Context) ->
 
 image_url(Id, Mediaclass, Context) ->
     case z_media_tag:url(Id, [ {mediaclass, Mediaclass} ], Context) of
+        {ok, <<>>} ->
+            undefined;
         {ok, Url} ->
             Url;
-        {error, enoent} ->
+        {error, _} ->
             undefined
     end.
 
