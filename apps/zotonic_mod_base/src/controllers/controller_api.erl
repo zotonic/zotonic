@@ -112,7 +112,7 @@ process(_Method, _AcceptedCT, {<<"text">>, <<"event-stream">>, _}, Context) ->
             process_done(Error, {<<"application">>, <<"json">>, []}, Context)
     end;
 process(_Method, AcceptedCT, ProvidedCT, Context) ->
-    {Payload, Context1} = z_controller_helper:decode_request(AcceptedCT, Context),
+    {Payload, Context1} = z_controller_helper:decode_request_noz(AcceptedCT, Context),
     case z_context:get_q(<<"response_topic">>, Context) of
         undefined ->
             Msg = #{

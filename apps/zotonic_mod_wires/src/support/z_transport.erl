@@ -100,8 +100,14 @@ transport(Delegate, Payload, Context) ->
                 data = map_to_list(Payload)
             },
             incoming_context_result(Module:event(Msg, Context));
-        {error, _} ->
-            ?LOG_WARNING("Unkwown delegate ~p for payload ~p", [Delegate, Payload]),
+        {error, Reason} ->
+            ?LOG_WARNING(#{
+                text => <<"Unknown delegate for payload">>,
+                result => error,
+                reason => Reason,
+                delegate => Delegate,
+                payload => Payload
+            }),
             incoming_context_result(Context)
     end.
 

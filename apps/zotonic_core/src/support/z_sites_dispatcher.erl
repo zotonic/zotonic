@@ -365,10 +365,17 @@ get_site_for_hostname(Hostname) ->
 %% @doc Fetch the site handling the given URL. Scheme is not checked.
 -spec get_site_for_url( binary() | string() ) -> {ok, atom()} | undefined.
 get_site_for_url(Url) ->
-    case uri_string:parse( unicode:characters_to_binary(Url, utf8) ) of
+    UrlBin = unicode:characters_to_binary(Url, utf8),
+    case uri_string:parse(UrlBin) of
         #{ host := Host } ->
             get_site_for_hostname(Host);
         #{} ->
+            undefined;
+        {error, invalid_uri, _Path} ->
+            ?LOG_NOTICE(#{
+                text => <<"Invalid URL, not site matched">>,
+                url => UrlBin
+            }),
             undefined
     end.
 

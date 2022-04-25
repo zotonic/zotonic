@@ -26,6 +26,7 @@
     get_id/1,
     get_configured_id/1,
     decode_request/2,
+    decode_request_noz/2,
     encode_response/2,
     req_body/1
  ]).
@@ -119,9 +120,39 @@ get_configured_id(Context) ->
     end.
 
 
+%% @doc Decode the request data - remove zotonic arguments that are part
+%% of the query string and/or post.
+-spec decode_request_noz( undefined | cow_http_hd:media_type(), z:context() ) -> { map() | binary(), z:context() }.
+decode_request_noz(undefined, Context) ->
+    from_qs_noz(Context);
+decode_request_noz({<<"application">>, <<"x-www-form-urlencoded">>, _}, Context) ->
+    from_qs_noz(Context);
+decode_request_noz({<<"multipart">>, <<"form-data">>, _}, Context) ->
+    from_qs_noz(Context);
+decode_request_noz({<<"application">>, <<"json">>, _}, Context) ->
+    from_json(Context);
+decode_request_noz({<<"application">>, <<"javascript">>, _}, Context) ->
+    from_json(Context);
+decode_request_noz({<<"text">>, <<"javascript">>, _}, Context) ->
+    from_json(Context);
+decode_request_noz({<<"text">>, <<"x-ubf">>, _} = Mime, Context) ->
+    decode_request(Mime, Context);
+decode_request_noz({<<"application">>, <<"x-bert">>, _} = Mime, Context) ->
+    decode_request(Mime, Context);
+decode_request_noz(_CT, Context) ->
+    case cowmachine_req:method(Context) of
+        <<"GET">> -> from_qs_noz(Context);
+        <<"DELETE">> -> from_qs_noz(Context);
+        _ -> req_body(Context)
+    end.
+
 %% @doc Decode the request data
 -spec decode_request( undefined | cow_http_hd:media_type(), z:context() ) -> { map() | binary(), z:context() }.
 decode_request(undefined, Context) ->
+    from_qs(Context);
+decode_request({<<"application">>, <<"x-www-form-urlencoded">>, _}, Context) ->
+    from_qs(Context);
+decode_request({<<"multipart">>, <<"form-data">>, _}, Context) ->
     from_qs(Context);
 decode_request({<<"application">>, <<"json">>, _}, Context) ->
     from_json(Context);
@@ -137,10 +168,6 @@ decode_request({<<"application">>, <<"x-bert">>, _}, Context) ->
     {Body, Context1} = req_body(Context),
     Data = erlang:binary_to_term(Body, [safe]),
     {Data, Context1};
-decode_request({<<"application">>, <<"x-www-form-urlencoded">>, _}, Context) ->
-    from_qs(Context);
-decode_request({<<"multipart">>, <<"form-data">>, _}, Context) ->
-    from_qs(Context);
 decode_request(_CT, Context) ->
     case cowmachine_req:method(Context) of
         <<"GET">> -> from_qs(Context);
@@ -158,6 +185,11 @@ from_json(Context) ->
 from_qs(Context) ->
     Context1 = z_context:ensure_qs(Context),
     {z_context:get_q_map(Context1), Context1}.
+
+%% @doc Make a map from the query arguments.
+from_qs_noz(Context) ->
+    Context1 = z_context:ensure_qs(Context),
+    {z_context:get_q_map_noz(Context1), Context1}.
 
 -spec req_body( z:context() ) -> {binary(), z:context()}.
 req_body(Context) ->
