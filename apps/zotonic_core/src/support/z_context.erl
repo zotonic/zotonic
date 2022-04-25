@@ -80,10 +80,12 @@
     get_q_all_noz/1,
     get_q_validated/2,
     get_q_map/1,
+    get_q_map_noz/1,
     set_q_all/2,
 
     q_upload_keepalive/2,
 
+    without_zotonic_args/1,
     is_zotonic_arg/1,
 
     logger_md/1,
@@ -718,15 +720,35 @@ get_q_all(Key, #context{ props = Props }) ->
 %% @doc Get all query/post args, filter the zotonic internal args.
 -spec get_q_all_noz(z:context()) -> list({binary(), z:qvalue()}).
 get_q_all_noz(Context) ->
-    lists:filter(fun({X,_}) -> not is_zotonic_arg(X) end, z_context:get_q_all(Context)).
+    lists:filter(fun({X,_}) -> not is_zotonic_arg(X) end, get_q_all(Context)).
+
+%% @doc Get all query/post args, transformed into a map.
+-spec get_q_map(z:context()) -> map().
+get_q_map(Context) ->
+    Qs = get_q_all(Context),
+    {ok, Props} = z_props:from_qs(Qs),
+    maps:remove(<<"*">>, Props).
 
 %% @doc Get all query/post args, transformed into a map.
 %% Removes Zotonic vars and the dispatcher '*' variable.
--spec get_q_map(z:context()) -> map().
-get_q_map(Context) ->
-    Qs = z_context:get_q_all_noz(Context),
+-spec get_q_map_noz(z:context()) -> map().
+get_q_map_noz(Context) ->
+    Qs = get_q_all_noz(Context),
     {ok, Props} = z_props:from_qs(Qs),
     maps:remove(<<"*">>, Props).
+
+%% @doc Filter all Zotonic and dispatcher vars from a map.
+-spec without_zotonic_args(map()) -> map().
+without_zotonic_args(Map) ->
+    maps:fold(
+        fun(K, V, Acc) ->
+            case is_zotonic_arg(K) of
+                true -> Acc;
+                false -> Acc#{ K => V }
+            end
+        end,
+        #{},
+        Map).
 
 
 % Known Zotonic rguments:

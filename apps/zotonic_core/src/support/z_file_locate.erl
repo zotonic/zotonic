@@ -55,7 +55,11 @@ maybe_enoent(Parts) ->
 extract_filters(Path, OptFilters, Context) ->
     case safe_path(Path) of
         undefined ->
-            ?LOG_WARNING("Unsafe path ~p", Path),
+            ?LOG_WARNING(#{
+                text => <<"Unsafe path ~p">>,
+                result => error,
+                path => Path
+            }),
             part_missing(Path);
         SafePath ->
             case binary:match(SafePath, <<"(">>) of
@@ -70,7 +74,12 @@ extract_filters(Path, OptFilters, Context) ->
                             end,
                             {SafePath, z_convert:to_binary(OriginalFile), Filters1 ++ PreviewPropList};
                         {error, Reason} ->
-                            ?LOG_NOTICE("Dropping path ~p because error ~p", [ SafePath, Reason ]),
+                            ?LOG_NOTICE(#{
+                                text => <<"Dropping path">>,
+                                path => SafePath,
+                                result => error,
+                                reason => Reason
+                            }),
                             part_missing(Path)
                     end
             end
@@ -83,8 +92,14 @@ locate_source(NoRoots, Path, OriginalFile, Filters, Context) when NoRoots =:= un
     case locate_source_uploaded(Path, OriginalFile, Filters, Context) of
         {error, preview_source_gone} ->
             throw(preview_source_gone);
-        {error, _} = Error->
-            ?LOG_DEBUG("Could not find '~s', error ~p, original '~s'", [Path, Error, OriginalFile]),
+        {error, Reason} ->
+            ?LOG_DEBUG(#{
+                text => <<"Could not find file">>,
+                path => Path,
+                file => OriginalFile,
+                result => error,
+                reason => Reason
+            }),
             #part_missing{file = Path};
         {ok, Loc} ->
             Loc
@@ -96,7 +111,13 @@ locate_source([ModuleIndex|Roots], Path, OriginalFile, Filters, Context) when is
         {error, checksum} ->
             #part_missing{file = Path};
         {error, eacces} ->
-            ?LOG_NOTICE("No access to file '~s', original '~s'", [Path, OriginalFile]),
+            ?LOG_NOTICE(#{
+                text => <<"No access to file">>,
+                result => error,
+                reason => eacces,
+                path => Path,
+                file => OriginalFile
+            }),
             locate_source(Roots, Path, OriginalFile, Filters, Context);
         {error, enoent} ->
             locate_source(Roots, Path, OriginalFile, Filters, Context)
@@ -292,13 +313,23 @@ generate_preview(true, Path, OriginalFile, Filters, Medium, Context) ->
                             part_file(PreviewFilePath, [{acl,RscId}])
                     end;
                 {error, enoent} ->
-                    ?LOG_WARNING("[~p] Convert error: input file disappeared, restarting ~p (~p)",
-                                  [z_context:site(Context), Path, Filename]),
+                    ?LOG_WARNING(#{
+                        text => <<"Convert error: input file disappeared, restarting file entry">>,
+                        result => error,
+                        reason => enoent,
+                        path => Path,
+                        filename => Filename
+                    }),
                     {error, preview_source_gone};
                 {error, convert_error} ->
                     convert_error_part(Medium, PreviewFilePath, Filters, Context);
-                {error, _} = Error ->
-                    ?LOG_WARNING("Convert error: ~p for path ~p", [Error, Path]),
+                {error, Reason} = Error ->
+                    ?LOG_WARNING(#{
+                        text => <<"Convert error">>,
+                        result => error,
+                        reason => Reason,
+                        path => Path
+                    }),
                     Error
             end;
         {error, _} = Error ->
@@ -322,14 +353,22 @@ convert_error_part(Medium, PreviewFilePath, Filters, Context) ->
                         RscId ->
                             part_file(PreviewFilePath, [{acl,RscId}])
                     end;
-                {error, _} = Error ->
-                    ?LOG_WARNING("[~p] Error ~p generating fallback preview for ~p with filters ~p",
-                               [z_context:site(Context), Error, PreviewFilePath, Filters]),
+                {error, Reason} = Error ->
+                    ?LOG_WARNING(#{
+                        text => <<"Error generating fallback preview with filters">>,
+                        result => error,
+                        reason => Reason,
+                        path => PreviewFilePath,
+                        filters => Filters
+                    }),
                     Error
             end;
         {error, enoent} ->
-            ?LOG_NOTICE("[~p] Can't find 'images/placeholder.png' for convert error fallback.",
-                       [z_context:site(Context)]),
+            ?LOG_NOTICE(#{
+                text => <<"Can't find 'images/placeholder.png' for convert error fallback.">>,
+                result => error,
+                reason => enoent
+            }),
             {error, convert_error}
     end.
 
