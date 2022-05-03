@@ -375,6 +375,7 @@ is_tagopt({title, _}) -> true;
 is_tagopt({class, _}) -> true;
 is_tagopt({style, _}) -> true;
 is_tagopt({loading, _}) -> true;
+is_tagopt({decoding, _}) -> true;
 is_tagopt({align, _}) -> true;  % HTML 1.0 for e-mails
 
 % Some preview args we definitely know exist (just an optimization)
