@@ -26,7 +26,7 @@
     run/1
 ]).
 
--define(SKEL, blog).
+-define(SKEL, "blog").
 
 info() ->
     "Add a site and install database".
@@ -162,7 +162,7 @@ set_dbschema(Sitename, Options) ->
 parse(Args) when is_list(Args) ->
     Options = #{
         hostname => undefined,
-        skeleton => "empty"
+        skeleton => ?SKEL
     },
     parse_args(Args, Options).
 
