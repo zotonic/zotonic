@@ -26,7 +26,7 @@ The addsite command is highly configurable and takes the following options:
   -u <user>    Database user (default: zotonic)
   -P <pass>    Database password (default: zotonic)
   -d <name>    Database name (default: zotonic)
-  -n <schema>  Database schema (default: public)
+  -n <schema>  Database schema (default: <site_name>)
   -a <pass>    Admin password (default: admin)
 
 
@@ -74,7 +74,7 @@ Will print out the following:
   Database user: zotonic
   Database password: zotonic
   Database name: zotonic
-  Database schema: public
+  Database schema: myfirstblog
 
   >>> Hit return to proceed...
 
