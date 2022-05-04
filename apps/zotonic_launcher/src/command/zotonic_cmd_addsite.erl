@@ -177,8 +177,8 @@ parse_args([ "-G", GitUrl | Args ], Acc) ->
     parse_args(Args, Acc#{ git => GitUrl });
 parse_args([ "-h", Host | Args ], Acc) ->
     parse_args(Args, Acc#{ dbhost => Host });
-parse_args([ "-p", Host | Args ], Acc) ->
-    parse_args(Args, Acc#{ dbhost => Host });
+parse_args([ "-p", Port | Args ], Acc) ->
+    parse_args(Args, Acc#{ dbport => Port });
 parse_args([ "-u", User | Args ], Acc) ->
     parse_args(Args, Acc#{ dbuser => User });
 parse_args([ "-P", Pw | Args ], Acc) ->
