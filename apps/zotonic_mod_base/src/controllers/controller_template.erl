@@ -58,17 +58,11 @@ is_authorized(Context) ->
 
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
-    Id = z_controller_helper:get_id(Context),
-    Context0 = z_context:set_noindex_header(m_rsc:p_no_acl(Id, seo_noindex, Context), Context),
-    Context1 = z_context:set_resource_headers(Id, Context0),
-    Context2 = set_optional_cache_header(Context1),
-    Template = z_context:get(template, Context2),
-    Vars = [
-        {id, Id}
-        | z_context:get_all(Context2)
-    ],
-    Rendered = z_template:render(Template, Vars, Context2),
-    z_context:output(Rendered, Context2).
+    Context1 = set_optional_cache_header(Context),
+    Template = z_context:get(template, Context1),
+    Vars = z_context:get_all(Context1),
+    Rendered = z_template:render(Template, Vars, Context1),
+    z_context:output(Rendered, Context1).
 
 set_optional_cache_header(Context) ->
     case z_context:get(max_age, Context) of
