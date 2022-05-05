@@ -114,14 +114,7 @@ stop() ->
         Sites),
     % Wait a bit till all sites are stopped (max 5 secs)
     await_sites_stopping(50),
-    application:stop(zotonic_launcher),
-    application:stop(exometer),
-    application:stop(jobs),
-    application:stop(mnesia),
-    application:stop(epgsql),
-    heart:set_cmd("echo ok"),
-    erlang:halt(0).
-
+    init:stop(0).
 
 await_sites_stopping(0) -> ok;
 await_sites_stopping(N) ->
