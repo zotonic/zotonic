@@ -37,10 +37,10 @@ At the very start, the template parser resolves ``m.rsc`` to module ``m_rsc``. T
 
 This is the function specification of ``m_get``::
 
-    -spec m_get(Keys, Msg, Context) -> { term(), RestKeys } when
+    -spec m_get(Keys, Msg, Context) -> Return when
         Keys :: list(),
         Msg :: zotonic_model:opt_msg(),
-        RestKeys :: list(),
+        Return :: zotonic_model:return(),
         Context:: z:context().
 
 It takes the dotted expression list and returns the looked up value and the unprocessed part of the dotted list (if any).
@@ -108,7 +108,7 @@ We will write our model in module ``models/m_omdb.erl``. Let's first get the man
     -include_lib("zotonic_core/include/zotonic.hrl").
 
     % ... We will add our m_get functions here
-    -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> {ok, { term(), list() }} | {error, term()}.
+    -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
     m_get([ _ | Rest ], _Msg, _Context) ->
         {ok, {undefined, Rest}};
     m_get(_, _Msg, _Context) ->
