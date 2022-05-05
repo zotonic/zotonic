@@ -18,7 +18,7 @@ Models are Erlang modules that are prefixed with ``m_`` and stored in your main 
 
 Each model module is required to implement one function (as defined behavior in ``zotonic_model.erl``):
 
-* m_get/2
+* m_get/3
 
 m_get
 ^^^^^
