@@ -112,9 +112,25 @@ stop() ->
         end,
         ok,
         Sites),
+    
     % Wait a bit till all sites are stopped (max 5 secs)
     await_sites_stopping(50),
-    init:stop(0).
+
+    % Stop all other running applications. Note: on OTP 25 we can simply use init:stop(0).
+    % On earlier OTP versions this is problematic because all modules are unloaded before
+    % the node is stopped. This can take a long time.
+    application:stop(zotonic_launcher),
+    application:stop(exometer),
+    application:stop(jobs),
+    application:stop(mnesia),
+    application:stop(epgsql),
+
+    [ application:stop(A) || {A, _, _} <- application:which_applications() ],
+
+    % Tell heart we are stopping, otherwise it will restart the node.
+    heart:set_cmd("echo ok"),
+
+    erlang:halt(0).
 
 await_sites_stopping(0) -> ok;
 await_sites_stopping(N) ->
