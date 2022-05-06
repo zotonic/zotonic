@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2013 Marc Worrell
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Generic template controller, serves the template mentioned in the dispatch configuration.
 
-%% Copyright 2009-2013 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -26,8 +26,6 @@
     process/4
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
 service_available(Context) ->
     Context1 = case z_convert:to_bool(z_context:get(nocache, Context)) of
         true -> z_context:set_nocache_headers(Context);
@@ -47,28 +45,32 @@ content_types_provided(Context) ->
 
 %% @doc Check if the current user is allowed to view the resource.
 is_authorized(Context) ->
-    ContextQs = z_context:ensure_qs(Context),
-    z_context:logger_md(ContextQs),
-    case z_context:get(anonymous, ContextQs) of
+    z_context:logger_md(Context),
+    case z_context:get(anonymous, Context) of
         true ->
-            {true, ContextQs};
+            {true, Context};
         _ ->
-            z_controller_helper:is_authorized(ContextQs)
+            z_controller_helper:is_authorized(Context)
     end.
 
-
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
-    Id = z_controller_helper:get_id(Context),
-    Context0 = z_context:set_noindex_header(m_rsc:p_no_acl(Id, seo_noindex, Context), Context),
-    Context1 = z_context:set_resource_headers(Id, Context0),
+    Vars = z_context:get_all(Context),
+    {Vars1, OptRscId} = maybe_options_id(Vars, Context),
+    Context0 = z_context:set_noindex_header(m_rsc:p_no_acl(OptRscId, seo_noindex, Context), Context),
+    Context1 = z_context:set_resource_headers(OptRscId, Context0),
     Context2 = set_optional_cache_header(Context1),
     Template = z_context:get(template, Context2),
-    Vars = [
-        {id, Id}
-        | z_context:get_all(Context2)
-    ],
-    Rendered = z_template:render(Template, Vars, Context2),
+    Rendered = z_template:render(Template, Vars1, Context2),
     z_context:output(Rendered, Context2).
+
+-spec maybe_options_id(list(), z:context()) -> {list(), m_rsc:resource_id()|undefined}.
+maybe_options_id(Vars, Context) ->
+    case lists:keyfind(id, 1, Vars) of
+        {id, PageId} ->
+            {lists:keydelete(id, 1, Vars), m_rsc:rid(PageId, Context)};
+        false ->
+            {Vars, undefined}
+    end.
 
 set_optional_cache_header(Context) ->
     case z_context:get(max_age, Context) of
@@ -80,6 +82,3 @@ set_optional_cache_header(Context) ->
                 <<"public, max-age=", (z_convert:to_binary(MaxAge))/binary>>,
                 Context)
     end.
-
-
-
