@@ -622,16 +622,20 @@ subject(Id, Pred, N, Context) ->
 -spec objects(m_rsc:resource(), atom() | pos_integer(), #context{}) -> list().
 objects(_Id, undefined, _Context) ->
     [];
-objects(Id, Pred, Context) when is_integer(Pred) ->
+objects(undefined, _, _Context) ->
+    [];
+objects(Id, Pred, Context) when is_integer(Pred), is_integer(Id) ->
     case z_depcache:get({objects, Pred, Id}, Context) of
         {ok, Objects} ->
             Objects;
         undefined ->
-            Ids = z_db:q("select object_id from edge where subject_id = $1 and predicate_id = $2 order by seq,id", [m_rsc:name_to_id_check(Id, Context), Pred], Context),
+            Ids = z_db:q("select object_id from edge where subject_id = $1 and predicate_id = $2 order by seq,id", [Id, Pred], Context),
             Objects = [ ObjId || {ObjId} <- Ids ],
             z_depcache:set({objects, Pred, Id}, Objects, ?DAY, [Id], Context),
             Objects
     end;
+objects(Id, Pred, Context) when not is_integer(Id) ->
+    objects(m_rsc:rid(Id, Context), Pred, Context);
 objects(Id, Pred, Context) ->
     case m_predicate:name_to_id(Pred, Context) of
         {error, _} -> [];
@@ -643,7 +647,9 @@ objects(Id, Pred, Context) ->
 %% @spec subjects(Id, Pred, Context) -> List
 subjects(_Id, undefined, _Context) ->
     [];
-subjects(Id, Pred, Context) when is_integer(Pred) ->
+subjects(undefined, _, _Context) ->
+    [];
+subjects(Id, Pred, Context) when is_integer(Pred), is_integer(Id) ->
     case z_depcache:get({subjects, Pred, Id}, Context) of
         {ok, Objects} ->
             Objects;
@@ -653,6 +659,8 @@ subjects(Id, Pred, Context) when is_integer(Pred) ->
             z_depcache:set({subjects, Pred, Id}, Subjects, ?HOUR, [Id], Context),
             Subjects
     end;
+subjects(Id, Pred, Context) when not is_integer(Id) ->
+    subjects(m_rsc:rid(Id, Context), Pred, Context);
 subjects(Id, Pred, Context) ->
     case m_predicate:name_to_id(Pred, Context) of
         {error, _} -> [];
