@@ -167,12 +167,14 @@ handle_file(_Verb, _Basename, SASS, F) when SASS =:= ".scss"; SASS =:= ".sass" -
     OutPath = filename:join(filename:dirname(InPath), "css"),
     case filelib:is_dir(OutPath) of
         true ->
-            lists:map(fun(MainFile) ->
-                              InFile = filename:join(InPath, MainFile),
-                              {OutFileBase, _} = lists:split(length(MainFile) - 4, MainFile),
-                              OutFile = filename:join(OutPath, OutFileBase ++ "css"),
-                              os:cmd("sassc --omit-map-comment " ++ z_utils:os_escape(InFile) ++ " " ++ z_utils:os_escape(OutFile))
-                      end, MainScss);
+            lists:map(
+                fun(MainFile) ->
+                    InFile = filename:join(InPath, MainFile),
+                    {OutFileBase, _} = lists:split(length(MainFile) - 4, MainFile),
+                    OutFile = filename:join(OutPath, OutFileBase ++ "css"),
+                    os:cmd("sassc --omit-map-comment " ++ z_utils:os_escape(InFile) ++ " " ++ z_utils:os_escape(OutFile))
+                end,
+                MainScss);
         false ->
             undefined
     end;
@@ -337,7 +339,13 @@ send_message(undefined) ->
 send_message("") ->
     undefined;
 send_message(Message) ->
-    send_message(os:type(), z_string:trim(Message)).
+    case z_string:trim(Message) of
+        "" -> undefined;
+        <<>> -> undefined;
+        Msg ->
+            lager:info("~s", [ Msg ]),
+            send_message(os:type(), Msg)
+    end.
 
 %% @doc send message to the user
 send_message(_OS, "") ->
