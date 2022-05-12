@@ -129,10 +129,10 @@ observe_module_reindexed(module_reindexed, Context) ->
     NotRunning = [ M || {M, S} <- Status, S =/= running ],
     case NotRunning of
         [] ->
-            ?LOG_INFO("Checking search facet table."),
+            ?LOG_DEBUG("Checking search facet table."),
             search_facet:ensure_table(Context);
         _ ->
-            ?LOG_NOTICE("Delaying search facet check because not all modules are running.")
+            ?LOG_INFO("Delaying search facet check because not all modules are running.")
     end.
 
 
