@@ -21,6 +21,12 @@ get_default_rules() ->
             {content_group_id, system_content_group}
         ]},
         {rsc, [
+            {acl_user_group_id, acl_user_group_members},
+            {actions, [update]},
+            {content_group_id, default_content_group},
+            {is_owner, true}
+        ]},
+        {rsc, [
             {acl_user_group_id, acl_user_group_editors},
             {actions, [insert, update, link, delete]},
             {content_group_id, default_content_group}
