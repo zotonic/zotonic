@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-13 19:00\n"
+"PO-Revision-Date: 2022-05-12 15:52\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -56,7 +56,7 @@ msgstr "对远程服务器的请求过多，请稍后重试。"
 msgid "Unauthorized to access the remote resource URL."
 msgstr "未经授权访问远程资源 URL。"
 
-#: apps/zotonic_core/src/support/z_media_import.erl:290
+#: apps/zotonic_core/src/support/z_media_import.erl:308
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
 msgstr "网站"
@@ -771,6 +771,10 @@ msgstr "增加"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_addblock.tpl:5
 msgid "+ add block"
 msgstr "+ 添加块"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:46./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:161./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:113./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:32./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
+msgid "<em>Untitled</em>"
+msgstr "<em>无标题</em>"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
@@ -8356,8 +8360,8 @@ msgid "Matching question"
 msgstr "匹配问题"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
-msgid "Melk"
-msgstr "梅尔克"
+msgid "Milk"
+msgstr "牛奶"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:35
 msgid "Move question down"
@@ -8511,7 +8515,7 @@ msgstr "小测验或测试题"
 msgid "Randomize answers"
 msgstr "随机化答案"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:86
 msgid "Red"
 msgstr "红色"
 
@@ -8751,10 +8755,6 @@ msgstr "使用“{submit}”创建提交按钮，或使用“{stop}”创建停�
 msgid "Validation"
 msgstr "验证"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:86
-msgid "Wagner"
-msgstr "瓦格纳"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:60
 msgid "When finished show"
 msgstr "完成后显示"
@@ -8762,6 +8762,10 @@ msgstr "完成后显示"
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:32
 msgid "When no condition is true then the question following this break will be the next page."
 msgstr "当没有条件成立时，所有此中断后面的问题将成为下个页面。"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
+msgid "White"
+msgstr "白色的"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131
 msgid "Wrong"
@@ -8783,7 +8787,7 @@ msgstr "你已经填好了，但你可以改变你之前的答案。"
 msgid "You already filled this in."
 msgstr "你已经填好了"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:120./apps/zotonic_mod_survey/src/mod_survey.erl:135./apps/zotonic_mod_survey/src/mod_survey.erl:730
+#: apps/zotonic_mod_survey/src/mod_survey.erl:120./apps/zotonic_mod_survey/src/mod_survey.erl:135./apps/zotonic_mod_survey/src/mod_survey.erl:736
 msgid "You are not allowed to change these results."
 msgstr "你不允许改变这些结果。"
 
