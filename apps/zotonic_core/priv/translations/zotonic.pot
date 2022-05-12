@@ -8798,7 +8798,7 @@ msgid "Matching question"
 msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
-msgid "Melk"
+msgid "Milk"
 msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:35
@@ -8956,7 +8956,7 @@ msgstr ""
 msgid "Randomize answers"
 msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:86
 msgid "Red"
 msgstr ""
 
@@ -9212,10 +9212,6 @@ msgstr ""
 msgid "Validation"
 msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:86
-msgid "Wagner"
-msgstr ""
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:60
 msgid "When finished show"
 msgstr ""
@@ -9224,6 +9220,10 @@ msgstr ""
 msgid ""
 "When no condition is true then the question following this break will be the "
 "next page."
+msgstr ""
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
+msgid "White"
 msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131
