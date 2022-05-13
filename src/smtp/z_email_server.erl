@@ -771,7 +771,7 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
                           Sub
                   end,
     Headers = [{"From", From},
-               {"To", z_convert:to_list(Email#email.to)},
+               {"To", ensure_brackets(Email#email.to)},
                {"Subject", z_convert:to_flatlist(Subject)},
                {"Date", date(Context)},
                {"MIME-Version", "1.0"},
@@ -782,7 +782,7 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
     build_and_encode_mail(Headers2, Text, Html, Email#email.attachments, Context);
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tuple(Body) ->
     Headers = [{<<"From">>, From},
-               {<<"To">>, Email#email.to},
+               {<<"To">>, ensure_brackets(Email#email.to)},
                {<<"Message-ID">>, MessageId},
                {<<"X-Mailer">>, "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
                 | Email#email.headers ],
@@ -794,7 +794,7 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tu
     mimemail:encode({BodyType, BodySubtype, MailHeaders, BodyParams, BodyParts}, opt_dkim(Context));
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_list(Body); is_binary(Body) ->
     Headers = [{"From", From},
-               {"To", z_convert:to_list(Email#email.to)},
+               {"To", ensure_brackets(Email#email.to)},
                {"Message-ID", MessageId},
                {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
                 | Email#email.headers ],
@@ -822,6 +822,18 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_li
         {Name, Email} = z_email:split_name_email(ReplyTo),
         ReplyTo1 = z_email:combine_name_email(Name, z_email:ensure_domain(Email, Context)),
         [{"Reply-To", ReplyTo1} | Headers].
+
+
+ensure_brackets(Email) when is_binary(Email) ->
+    case binary:match(Email, <<"<">>) of
+        {_,_} ->
+            z_convert:to_list(Email);
+        nomatch ->
+            [ Name | _ ] = binary:split(Email, <<"@">>),
+            z_convert:to_list(<<Name/binary, " <", Email/binary, $>>>)
+    end;
+ensure_brackets(Email) ->
+    ensure_brackets(z_convert:to_binary(Email)).
 
 
 build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
