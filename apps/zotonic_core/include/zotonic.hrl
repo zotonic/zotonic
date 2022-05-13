@@ -108,9 +108,9 @@
 
 %% @doc e-mail notification used by z_email and z_email_server.
 -record(email, {
-    to = [] :: list() | binary(),
-    cc = [] :: list() | binary() | undefined,
-    bcc = [] :: list(),
+    to = <<>> :: string() | binary() | m_rsc:resource_id(),
+    cc = undefined :: string() | binary() | undefined,
+    bcc = undefined :: string() | binary() | undefined,
     from = <<>> :: binary() | string(),
     reply_to,
     headers = [] :: list(),

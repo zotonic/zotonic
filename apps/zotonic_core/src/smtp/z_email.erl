@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
+%% @copyright 2009-2022 Marc Worrell
 %%
 %% @doc Send e-mail to a recipient. Optionally queue low priority messages.
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,6 +28,9 @@
 
 	get_admin_email/1,
     get_email_from/1,
+    format_recipient/2,
+    ensure_to_email/2,
+
 	send_admin/3,
 
 	send_page/3,
@@ -48,8 +51,6 @@
 ]).
 
 -include_lib("zotonic.hrl").
-
--define(EMAIL_SRV, z_email_server).
 
 
 % The email domain depends on the site sending the e-mail
@@ -79,6 +80,32 @@ bounce_domain(Context) ->
         BounceDomain -> z_convert:to_binary(BounceDomain)
     end.
 
+%% @doc Return the email address to be used in emails for the
+%% given id. The address will be formatted using the recipient's name.
+-spec format_recipient(m_rsc:resource(), z:context()) -> {ok, binary()} | {error, term()}.
+format_recipient(Id, Context) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, enoent};
+        RscId ->
+            case m_rsc:p(Id, email_raw, Context) of
+                undefined ->
+                    {error, no_email};
+                Email ->
+                    {Name, _NameCtx} = z_template:render_to_iolist("_name.tpl", [{id, RscId}], Context),
+                    {ok, combine_name_email(iolist_to_binary(Name), Email)}
+            end
+    end.
+
+%% @doc If the recipient is an resource id, ensure that it is formatted as an email address.
+-spec ensure_to_email( #email{}, z:context() ) -> {ok, #email{}} | {error, term()}.
+ensure_to_email(#email{ to = Id } = E, Context) when is_integer(Id) ->
+    case format_recipient(Id, Context) of
+        {ok, To} ->
+            {ok, E#email{ to = To }};
+        {error, _} = Error ->
+            Error
+    end.
 
 %% @doc Fetch the e-mail address of the site administrator
 -spec get_admin_email(z:context()) -> binary().
@@ -152,18 +179,23 @@ send_page(Email, Id, Context) ->
 
 %% @doc Send an email message defined by the email record.
 send(#email{} = Email, Context) ->
-	z_email_server:send(Email, Context).
+    case ensure_to_email(Email, Context) of
+        {ok, Email1} ->
+            z_email_server:send(Email1, Context);
+        {error, _} = Error ->
+            Error
+    end.
 
 send(MsgId, #email{} = Email, Context) ->
 	z_email_server:send(MsgId, Email, Context).
 
 %% @doc Send a simple text message to an email address
 send(To, Subject, Message, Context) ->
-	z_email_server:send(#email{queue=false, to=To, subject=Subject, text=Message}, Context).
+	send(#email{queue=false, to=To, subject=Subject, text=Message}, Context).
 
 %% @doc Queue a simple text message to an email address
 sendq(To, Subject, Message, Context) ->
-	z_email_server:send(#email{queue=true, to=To, subject=Subject, text=Message}, Context).
+	send(#email{queue=true, to=To, subject=Subject, text=Message}, Context).
 
 %% @doc Send a html message to an email address, render the message using a template.
 send_render(To, HtmlTemplate, Vars, Context) ->
@@ -171,8 +203,8 @@ send_render(To, HtmlTemplate, Vars, Context) ->
 
 %% @doc Send a html and text message to an email address, render the message using two templates.
 send_render(To, HtmlTemplate, TextTemplate, Vars, Context) ->
-	z_email_server:send(#email{queue=false, to=To, from=proplists:get_value(email_from, Vars),
-	                        html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context).
+	send(#email{queue=false, to=To, from=proplists:get_value(email_from, Vars),
+	            html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context).
 
 %% @doc Queue a html message to an email address, render the message using a template.
 sendq_render(To, HtmlTemplate, Vars, Context) ->
@@ -180,8 +212,8 @@ sendq_render(To, HtmlTemplate, Vars, Context) ->
 
 %% @doc Queue a html and text message to an email address, render the message using two templates.
 sendq_render(To, HtmlTemplate, TextTemplate, Vars, Context) ->
-	z_email_server:send(#email{queue=true, to=To, from=proplists:get_value(email_from, Vars),
-	                             html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context).
+	send(#email{queue=true, to=To, from=proplists:get_value(email_from, Vars),
+	            html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context).
 
 
 %% @doc Combine a name and an email address to the format `jan janssen <jan@example.com>'
@@ -189,9 +221,9 @@ sendq_render(To, HtmlTemplate, TextTemplate, Vars, Context) ->
 -spec combine_name_email(Name::binary()|string(), Email::binary()|string()) -> binary().
 combine_name_email(undefined, Email) -> Email;
 combine_name_email(Name, Email) ->
-    Name1 = z_convert:to_list(z_string:trim(Name)),
-    Email1 = z_convert:to_list(Email),
-    z_convert:to_binary(smtp_util:combine_rfc822_addresses([{Name1, Email1}])).
+    Name1 = z_convert:to_binary(z_string:trim(Name)),
+    Email1 = z_convert:to_binary(Email),
+    smtp_util:combine_rfc822_addresses([{Name1, Email1}]).
 
 
 %% @doc Split the name and email from the format `jan janssen <jan@example.com>'
