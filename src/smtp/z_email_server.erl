@@ -771,20 +771,18 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
                           Sub
                   end,
     Headers = [{"From", From},
-               {"To", ensure_brackets(Email#email.to)},
+               {"To", z_convert:to_list(ensure_brackets(Email#email.to))},
                {"Subject", z_convert:to_flatlist(Subject)},
                {"Date", date(Context)},
                {"MIME-Version", "1.0"},
-               {"Message-ID", MessageId},
-               {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
+               {"Message-Id", MessageId}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
     build_and_encode_mail(Headers2, Text, Html, Email#email.attachments, Context);
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tuple(Body) ->
     Headers = [{<<"From">>, From},
                {<<"To">>, ensure_brackets(Email#email.to)},
-               {<<"Message-ID">>, MessageId},
-               {<<"X-Mailer">>, "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
+               {<<"Message-Id">>, MessageId}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
     {BodyType, BodySubtype, BodyHeaders, BodyParams, BodyParts} = Body,
@@ -794,9 +792,8 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tu
     mimemail:encode({BodyType, BodySubtype, MailHeaders, BodyParams, BodyParts}, opt_dkim(Context));
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_list(Body); is_binary(Body) ->
     Headers = [{"From", From},
-               {"To", ensure_brackets(Email#email.to)},
-               {"Message-ID", MessageId},
-               {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
+               {"To", z_convert:to_list(ensure_brackets(Email#email.to))},
+               {"Message-Id", MessageId}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
     iolist_to_binary([ encode_headers(Headers2), "\r\n\r\n", Body ]).
@@ -827,10 +824,10 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_li
 ensure_brackets(Email) when is_binary(Email) ->
     case binary:match(Email, <<"<">>) of
         {_,_} ->
-            z_convert:to_list(Email);
+            Email;
         nomatch ->
             [ Name | _ ] = binary:split(Email, <<"@">>),
-            z_convert:to_list(<<Name/binary, " <", Email/binary, $>>>)
+            <<Name/binary, " <", Email/binary, $>>>
     end;
 ensure_brackets(Email) ->
     ensure_brackets(z_convert:to_binary(Email)).

@@ -40,7 +40,8 @@
 -export([
     signup/4,
     signup_existing/5,
-    request_verification/2
+    request_verification/2,
+    send_verify_email/3
 ]).
 
 -include("zotonic.hrl").
