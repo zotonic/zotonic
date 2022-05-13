@@ -22,6 +22,7 @@
 
 -export([
     uri/1,
+    default_sandbox_attr/1,
     ensure_safe_js_callback/1,
     escape_props/1,
     escape_props/2,
@@ -35,8 +36,22 @@
 
 -include_lib("zotonic.hrl").
 
+
+% Youtube needs at least: allow-popups allow-same-origin allow-scripts
+% See: https://csplite.com/csp/test186/
+-define(IFRAME_SANDBOX, <<"allow-popups allow-scripts allow-same-origin">>).
+
+
 uri(Uri) ->
     z_html:sanitize_uri(Uri).
+
+
+default_sandbox_attr(Context) ->
+    case m_config:get_value(site, html_iframe_sandbox, Context) of
+        undefined -> ?IFRAME_SANDBOX;
+        <<>> -> ?IFRAME_SANDBOX;
+        Sb -> Sb
+    end.
 
 %% @doc Escape a Javascript callback function. Crash if not a safe callback function name.
 -spec ensure_safe_js_callback( string() | binary() ) -> binary().
@@ -232,7 +247,11 @@ sanitize_iframe(Props, Context) ->
     Src = proplists:get_value(<<"src">>, Props),
     case to_allowed(Src, Context) of
         {ok, Url} ->
-            {<<"iframe">>, [{<<"src">>,Url} | proplists:delete(<<"src">>, Props)], []};
+            {<<"iframe">>, [
+                {<<"src">>,Url},
+                {<<"sandbox">>, default_sandbox_attr(Context)}
+                | proplists:delete(<<"src">>,
+                    proplists:delete(<<"sandbox">>, Props))], []};
         false ->
             ?LOG_NOTICE("Dropped iframe url ~p", [Src]),
             <<>>
@@ -240,9 +259,9 @@ sanitize_iframe(Props, Context) ->
 
 sanitize_object(Props, Context) ->
     Src = proplists:get_value(<<"data">>, Props),
-    case maybe_embed2iframe(Src, Props) of
-        {ok, NewElement} ->
-            NewElement;
+    case maybe_youtube(Src, Props, Context) of
+        {ok, YoutubeIframe} ->
+            YoutubeIframe;
         false ->
             case to_allowed(Src, Context) of
                 {ok, Url} ->
@@ -255,9 +274,9 @@ sanitize_object(Props, Context) ->
 
 sanitize_embed(Props, Context) ->
     Src = proplists:get_value(<<"src">>, Props),
-    case maybe_embed2iframe(Src, Props) of
-        {ok, NewElement} ->
-            NewElement;
+    case maybe_youtube(Src, Props, Context) of
+        {ok, YoutubeIframe} ->
+            YoutubeIframe;
         false ->
             case to_allowed(Src, Context) of
                 {ok, Url} ->
@@ -268,31 +287,32 @@ sanitize_embed(Props, Context) ->
             end
     end.
 
-maybe_embed2iframe(undefined, _Props) ->
+maybe_youtube(undefined, _Props, _Context) ->
     false;
-maybe_embed2iframe(Url, Props) ->
+maybe_youtube(Url, Props, Context) ->
     case binary:split(Url, <<"//">>) of
         [_,Loc] ->
-            maybe_embed2iframe_1(Loc, Props);
+            maybe_youtube_1(Loc, Props, Context);
         _ ->
             false
     end.
 
-maybe_embed2iframe_1(<<"www.youtube.com/v/", Rest/binary>>, Props) ->
+maybe_youtube_1(<<"www.youtube.com/v/", Rest/binary>>, Props, Context) ->
     [VideoCode|_] = binary:split(hd(binary:split(Rest, <<"?">>)), <<"&">>),
-    make_iframe(<<"https://www.youtube.com/embed/", VideoCode/binary>>, Props);
-maybe_embed2iframe_1(<<"www.youtube.com/embed/", _Rest/binary>> = EmbedUrl, Props) ->
-    make_iframe(<<"https://",EmbedUrl/binary>>, Props);
-maybe_embed2iframe_1(_, _Props) ->
+    make_iframe(<<"https://www.youtube.com/embed/", VideoCode/binary>>, Props, Context);
+maybe_youtube_1(<<"www.youtube.com/embed/", _Rest/binary>> = EmbedUrl, Props, Context) ->
+    make_iframe(<<"https://",EmbedUrl/binary>>, Props, Context);
+maybe_youtube_1(_, _Props, _Context) ->
     false.
 
-make_iframe(Url, Props) ->
+make_iframe(Url, Props, Context) ->
     {ok, {<<"iframe">>,
         [
             {<<"width">>, proplists:get_value(<<"width">>, Props, <<"480">>)},
             {<<"height">>, proplists:get_value(<<"height">>, Props, <<"360">>)},
             {<<"allowfullscreen">>, proplists:get_value(<<"allowfullscreen">>, Props, <<"1">>)},
             {<<"frameborder">>, <<"0">>},
+            {<<"sandbox">>, default_sandbox_attr(Context)},
             {<<"src">>, maybe_append_flashvars(Url, proplists:get_value(<<"flashvars">>, Props) )}
         ],
         []}}.
