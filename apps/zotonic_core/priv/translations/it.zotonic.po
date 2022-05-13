@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-13 19:00\n"
+"PO-Revision-Date: 2022-05-12 15:52\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -56,7 +56,7 @@ msgstr "Troppe richieste per il server remoto, riprova più tardi."
 msgid "Unauthorized to access the remote resource URL."
 msgstr "Non autorizzato ad accedere all'URL della risorsa remota."
 
-#: apps/zotonic_core/src/support/z_media_import.erl:290
+#: apps/zotonic_core/src/support/z_media_import.erl:308
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
 msgstr "Sito web"
@@ -771,6 +771,10 @@ msgstr "aggiungere"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_addblock.tpl:5
 msgid "+ add block"
 msgstr "aggiungi blocco"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:46./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:161./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:113./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:32./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
+msgid "<em>Untitled</em>"
+msgstr "<em>Senza titolo</em>"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
@@ -8360,8 +8364,8 @@ msgid "Matching question"
 msgstr "Domanda corrispondente"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
-msgid "Melk"
-msgstr "Melk"
+msgid "Milk"
+msgstr "Latte"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:35
 msgid "Move question down"
@@ -8515,7 +8519,7 @@ msgstr "Domanda del quiz o del test"
 msgid "Randomize answers"
 msgstr "Randomizzare le risposte"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:86
 msgid "Red"
 msgstr "Rosso"
 
@@ -8755,10 +8759,6 @@ msgstr "Utilizzare \"{submit}\" per creare un pulsante di invio o \"{stop}\" per
 msgid "Validation"
 msgstr "Convalida"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:86
-msgid "Wagner"
-msgstr "Wagner"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:60
 msgid "When finished show"
 msgstr "Al termine mostra"
@@ -8766,6 +8766,10 @@ msgstr "Al termine mostra"
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:32
 msgid "When no condition is true then the question following this break will be the next page."
 msgstr "Quando nessuna condizione è vera, la domanda che segue questa interruzione sarà la pagina successiva."
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
+msgid "White"
+msgstr "Bianco"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131
 msgid "Wrong"
@@ -8787,7 +8791,7 @@ msgstr "Hai già compilato questo, ma puoi cambiare le tue risposte precedenti."
 msgid "You already filled this in."
 msgstr "L'hai già compilato."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:120./apps/zotonic_mod_survey/src/mod_survey.erl:135./apps/zotonic_mod_survey/src/mod_survey.erl:730
+#: apps/zotonic_mod_survey/src/mod_survey.erl:120./apps/zotonic_mod_survey/src/mod_survey.erl:135./apps/zotonic_mod_survey/src/mod_survey.erl:736
 msgid "You are not allowed to change these results."
 msgstr "Non ti è permesso cambiare questi risultati."
 
