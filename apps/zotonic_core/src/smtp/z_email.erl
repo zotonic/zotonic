@@ -99,6 +99,12 @@ format_recipient(Id, Context) ->
 
 %% @doc If the recipient is an resource id, ensure that it is formatted as an email address.
 -spec ensure_to_email( #email{}, z:context() ) -> {ok, #email{}} | {error, term()}.
+ensure_to_email(#email{ to = undefined }, _Context) ->
+    {error, no_recipient};
+ensure_to_email(#email{ to = <<>> }, _Context) ->
+    {error, no_recipient};
+ensure_to_email(#email{ to = "" }, _Context) ->
+    {error, no_recipient};
 ensure_to_email(#email{ to = Id } = E, Context) when is_integer(Id) ->
     case format_recipient(Id, Context) of
         {ok, To} ->
