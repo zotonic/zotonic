@@ -19,6 +19,7 @@ endif
 
 # Default target - update sources and call all compile rules in succession
 all: compile
+	bin/zotonic completion
 
 $(REBAR): $(REBAR_ETAG)
 	$(ERL) -noshell -s inets -s ssl \
