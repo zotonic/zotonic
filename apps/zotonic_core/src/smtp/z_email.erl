@@ -105,7 +105,9 @@ ensure_to_email(#email{ to = Id } = E, Context) when is_integer(Id) ->
             {ok, E#email{ to = To }};
         {error, _} = Error ->
             Error
-    end.
+    end;
+ensure_to_email(#email{} = E, _Context) ->
+    {ok, E}.
 
 %% @doc Fetch the e-mail address of the site administrator
 -spec get_admin_email(z:context()) -> binary().
