@@ -40,7 +40,8 @@
 -export([
     signup/4,
     signup_existing/5,
-    request_verification/2
+    request_verification/2,
+    send_verify_email/3
 ]).
 
 -include("zotonic.hrl").
@@ -266,7 +267,9 @@ send_verify_email(UserId, Ident, Context) ->
         {email, Email},
         {verify_key, Key}
     ],
-    z_email:send_render(Email, "email_verify.tpl", Vars, z_acl:sudo(Context)),
+    {Name, _NameCtx} = z_template:render_to_iolist("_name.tpl", [{id, UserId}], z_acl:sudo(Context)),
+    To = z_email:combine_name_email(z_string:trim(iolist_to_binary(Name)), Email),
+    z_email:send_render(To, "email_verify.tpl", Vars, z_acl:sudo(Context)),
     ok.
 
 
