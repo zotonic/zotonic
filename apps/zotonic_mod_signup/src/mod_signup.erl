@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2021 Marc Worrell
+%% @copyright 2010-2022 Marc Worrell
 %% @doc Let new members register themselves.
 
-%% Copyright 2010-2021 Marc Worrell
+%% Copyright 2010-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -151,7 +151,11 @@ do_signup(UserId, Props, SignupProps, RequestConfirm, Context) ->
     IsVerified = not RequestConfirm orelse has_verified_identity(SignupProps),
     case insert_or_update(UserId, props_to_rsc(Props, IsVerified, Context), Context) of
         {ok, NewUserId} ->
-            ContextUser = z_acl:logon(NewUserId, Context),
+            ContextLogon = z_acl:logon(NewUserId, Context),
+            ContextUser = case m_rsc:p_no_acl(NewUserId, creator_id, Context) of
+                NewUserId -> z_acl:sudo(ContextLogon);
+                _ -> ContextLogon
+            end,
             ensure_identities(NewUserId, SignupProps, ContextUser),
             z_notifier:map(#signup_done{id=NewUserId, is_verified=IsVerified, props=Props, signup_props=SignupProps}, ContextUser),
             case IsVerified of
