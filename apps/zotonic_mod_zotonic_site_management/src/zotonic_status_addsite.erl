@@ -279,7 +279,7 @@ copy_skeleton_dir(From, To, Options, Context) ->
             Files).
 
 copy_file("SITE" ++ Ext = Filename, FromPath, ToPath, Options) when Ext == "_sup.erl"; Ext == "_app.erl" ->
-    case proplists:get_value(supervisor, Options) of
+    case proplists:get_value(app, Options) of
         true ->
             copy_site_file(Filename, FromPath, ToPath, Options);
         false ->
@@ -424,7 +424,7 @@ map_tag(<<"%%SIGNKEYSIMPLE%%">>, Options) -> proplists:get_value(sign_key_simple
 map_tag(<<"%%YEAR%%">>, _Options) ->  z_dateformat:format(calendar:local_time(), "Y", []);
 map_tag(<<"%%DATE%%">>, _Options) -> z_dateformat:format(calendar:local_time(), "Y-m-d", []);
 map_tag(<<"%%APPSRCMOD%%">>, Options) ->
-    case proplists:get_value(supervisor, Options) of
+    case proplists:get_value(app, Options) of
         true ->
             Site = proplists:get_value(site, Options),
             <<"{", Site/binary, "_app, []}">>;

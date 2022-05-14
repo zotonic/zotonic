@@ -27,25 +27,25 @@
 ]).
 
 -define(SKEL, "blog").
--define(SUP, false).
+-define(APP, false).
 
 info() ->
     "Add a site and install database".
 
 usage() ->
     io:format("Usage: zotonic addsite [options] <site_name> ~n~n"),
-    io:format(" -s <skel>          Skeleton site (one of 'blog', 'empty', 'nodb'; default: ~s~n", [?SKEL]),
-    io:format(" -H <host>          Site's hostname (default: <site_name.test>) ~n"),
-    io:format(" -L                 Create the site in the current directory and add a symlink to zotonic app_user~n"),
-    io:format(" -G <url>           Clone from this Git url, before copying skeleton~n"),
-    io:format(" -h <host>          Database host (default: ~s) ~n", [ z_config:get(dbhost) ]),
-    io:format(" -p <port>          Database port (default: ~p) ~n", [ z_config:get(dbport) ]),
-    io:format(" -u <user>          Database user (default: ~s) ~n", [ z_config:get(dbuser) ]),
-    io:format(" -P <pass>          Database password (default: ~s) ~n", [ z_config:get(dbpassword) ]),
-    io:format(" -d <name>          Database name (default: ~s) ~n", [ z_config:get(dbdatabase) ]),
-    io:format(" -n <schema>        Database schema (defaults to <site_name>) ~n"),
-    io:format(" -a <pass>          Admin password~n"),
-    io:format(" -S <supervisor>    If true, initializes a site app and a root supervisor when the site starts (default: ~p)~n~n", [?SUP]).
+    io:format(" -s <skel>     Skeleton site (one of 'blog', 'empty', 'nodb'; default: ~s~n", [?SKEL]),
+    io:format(" -H <host>     Site's hostname (default: <site_name.test>) ~n"),
+    io:format(" -L            Create the site in the current directory and add a symlink to zotonic app_user~n"),
+    io:format(" -G <url>      Clone from this Git url, before copying skeleton~n"),
+    io:format(" -h <host>     Database host (default: ~s) ~n", [ z_config:get(dbhost) ]),
+    io:format(" -p <port>     Database port (default: ~p) ~n", [ z_config:get(dbport) ]),
+    io:format(" -u <user>     Database user (default: ~s) ~n", [ z_config:get(dbuser) ]),
+    io:format(" -P <pass>     Database password (default: ~s) ~n", [ z_config:get(dbpassword) ]),
+    io:format(" -d <name>     Database name (default: ~s) ~n", [ z_config:get(dbdatabase) ]),
+    io:format(" -n <schema>   Database schema (defaults to <site_name>) ~n"),
+    io:format(" -a <pass>     Admin password~n"),
+    io:format(" -A <app>      If true, initializes a site app and a root app when the site starts (default: ~p)~n~n", [?APP]).
 
 run(Args) ->
     case zotonic_command:get_target_node() of
@@ -165,7 +165,7 @@ parse(Args) when is_list(Args) ->
     Options = #{
         hostname => undefined,
         skeleton => ?SKEL,
-        supervisor => ?SUP
+        app => ?APP
     },
     parse_args(Args, Options).
 
@@ -192,10 +192,10 @@ parse_args([ "-n", Schema | Args ], Acc) ->
     parse_args(Args, Acc#{ dbschema => Schema });
 parse_args([ "-a", Pw | Args ], Acc) ->
     parse_args(Args, Acc#{ admin_password => Pw });
-parse_args([ "-S", "true" | Args ], Acc) ->
-    parse_args(Args, Acc#{ supervisor => true });
-parse_args([ "-S", "false" | Args ], Acc) ->
-    parse_args(Args, Acc#{ supervisor => false });
+parse_args([ "-A", "true" | Args ], Acc) ->
+    parse_args(Args, Acc#{ app => true });
+parse_args([ "-A", "false" | Args ], Acc) ->
+    parse_args(Args, Acc#{ app => false });
 parse_args([ "-" ++ _ = Arg | _ ], _Acc) ->
     {error, Arg};
 parse_args(Rest, Acc) ->
