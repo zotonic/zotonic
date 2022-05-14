@@ -74,7 +74,7 @@ languages
             {% if initial_lang_code and language.sublanguages %}
                 <tr>
                     <td>{_ Available sub-languages _}</td>
-                    <td>{% for lang_code in language.sublanguages|element:1 %}
+                    <td>{% for lang_code in language.sublanguages|make_list|element:1 %}
                         {% if m.translation.language_list_enabled[lang_code|as_atom] %}
                             <span class="mod_translation-code mod_translation-added">{{ lang_code }}</span>
                         {% else %}
