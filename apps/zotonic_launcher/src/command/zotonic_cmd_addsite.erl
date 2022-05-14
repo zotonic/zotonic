@@ -192,11 +192,20 @@ parse_args([ "-n", Schema | Args ], Acc) ->
     parse_args(Args, Acc#{ dbschema => Schema });
 parse_args([ "-a", Pw | Args ], Acc) ->
     parse_args(Args, Acc#{ admin_password => Pw });
-parse_args([ "-A", "true" | Args ], Acc) ->
-    parse_args(Args, Acc#{ app => true });
-parse_args([ "-A", "false" | Args ], Acc) ->
-    parse_args(Args, Acc#{ app => false });
+parse_args([ "-A", App | Args ], Acc) ->
+    case re:run(App, "^(true|false|1|0)$", [caseless, {capture, none}]) of
+        match ->
+            Bool = string_to_boolean(string:to_lower(App)),
+            parse_args(Args, Acc#{ app => Bool });
+        nomatch ->
+            {error, App}
+    end;
 parse_args([ "-" ++ _ = Arg | _ ], _Acc) ->
     {error, Arg};
 parse_args(Rest, Acc) ->
     {ok, {Acc, Rest}}.
+
+string_to_boolean("true") -> true;
+string_to_boolean("false") -> false;
+string_to_boolean("1") -> true;
+string_to_boolean("0") -> false.
