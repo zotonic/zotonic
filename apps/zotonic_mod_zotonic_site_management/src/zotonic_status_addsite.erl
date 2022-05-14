@@ -278,14 +278,16 @@ copy_skeleton_dir(From, To, Options, Context) ->
             ok,
             Files).
 
-copy_file("SITE" ++ Ext = Filename, FromPath, ToPath, Options) when Ext == "_sup.erl"; Ext == "_app.erl" ->
-    case proplists:get_value(app, Options) of
+copy_file("SITE" ++ Ext = Filename, FromPath, ToPath, Options)
+    when Ext == "_sup.erl"; Ext == "_app.erl" ->
+    case proplists:get_value(app, Options, false) of
         true ->
             copy_site_file(Filename, FromPath, ToPath, Options);
         false ->
             ok
     end;
-copy_file("SITE" ++ Ext = Filename, FromPath, ToPath, Options) when Ext == ".erl"; Ext == ".app.src"; Ext == "_sup.erl"; Ext == "_app.erl" ->
+copy_file("SITE" ++ Ext = Filename, FromPath, ToPath, Options)
+    when Ext == ".erl"; Ext == ".app.src"; Ext == "_sup.erl"; Ext == "_app.erl" ->
     copy_site_file(Filename, FromPath, ToPath, Options);
 copy_file("zotonic_site.config.in", FromPath, ToPath, Options) ->
     % First replace the tags in the config.in, then copy it.
