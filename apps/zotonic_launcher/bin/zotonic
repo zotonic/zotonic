@@ -20,11 +20,10 @@ case "$1" in
     completion)
         COMMAND_NAMES="$(${ZOTONIC_BIN}/zotonic.escript command_names)"
         # TODO: Check OS (this works in Ubuntu 21.10)
-        SYS_COMPLETION_DIR="/etc/bash_completion.d"
-        OUTPUT="$SYS_COMPLETION_DIR/zotonic-completion.bash"
+        OUTPUT="$ZOTONIC_BIN/zotonic-completion.bash"
         # TODO: Completion for options
-        sudo sh -c "printf '#/usr/bin/env bash\n\n_zotonic_completions()\n{\n\tif [ \"\${#COMP_WORDS[@]}\" != \"2\" ]; then\n\t\treturn\n\tfi\n\n\tCOMPREPLY=(\$(compgen -W %s \"\${COMP_WORDS[1]}\"))\n}\n\ncomplete -F _zotonic_completions zotonic' '$COMMAND_NAMES' >| '$OUTPUT'"
-        sudo bash -c "source $OUTPUT"
+        printf "#/usr/bin/env bash\n\n_zotonic_completions()\n{\n\tif [ \"\${#COMP_WORDS[@]}\" != \"2\" ]; then\n\t\treturn\n\tfi\n\n\tCOMPREPLY=(\$(compgen -W %s \"\${COMP_WORDS[1]}\"))\n}\n\ncomplete -F _zotonic_completions zotonic" "$COMMAND_NAMES" >| "$OUTPUT"
+        bash -c "source $OUTPUT"
         ;;
     start)
         CMD="$(${ZOTONIC_BIN}/zotonic.escript start)"

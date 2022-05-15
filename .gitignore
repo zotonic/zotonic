@@ -68,3 +68,5 @@ doc/ref/models/model_.rst
 .eunit
 
 docker-data
+
+apps/zotonic_launcher/bin/zotonic-completion.bash
