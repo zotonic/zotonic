@@ -45,7 +45,7 @@ usage() ->
     io:format(" -d <name>     Database name (default: ~s) ~n", [ z_config:get(dbdatabase) ]),
     io:format(" -n <schema>   Database schema (defaults to <site_name>) ~n"),
     io:format(" -a <pass>     Admin password~n"),
-    io:format(" -A <app>      If true, initializes a site app and a root app when the site starts (default: ~p)~n~n", [?APP]).
+    io:format(" -A <app>      If true, initializes a site app and a root supervisor when the site starts (default: ~p)~n~n", [?APP]).
 
 run(Args) ->
     case zotonic_command:get_target_node() of
