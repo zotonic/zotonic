@@ -8988,8 +8988,8 @@ msgid "Hungarian"
 msgstr "Húngaro"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:43
-msgid "If a language is set to 'off' then edited texts will loose their translation in that lanuage."
-msgstr "Se uma língua estiver definida para 'off', então os textos editados perderão sua tradução nessa lanuage."
+msgid "If a language is set to 'off' then edited texts will loose their translation in that language."
+msgstr "Se uma língua estiver definida para 'off', então os textos editados perderão sua tradução nessa language."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:42
 msgid "If a language is set to 'view' or 'editable' then texts for that language are editable in the admin."

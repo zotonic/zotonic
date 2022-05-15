@@ -9450,7 +9450,7 @@ msgstr ""
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:43
 msgid ""
 "If a language is set to 'off' then edited texts will loose their translation "
-"in that lanuage."
+"in that language."
 msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:42

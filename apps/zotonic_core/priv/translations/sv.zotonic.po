@@ -8988,7 +8988,7 @@ msgid "Hungarian"
 msgstr "Ungerska"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:43
-msgid "If a language is set to 'off' then edited texts will loose their translation in that lanuage."
+msgid "If a language is set to 'off' then edited texts will loose their translation in that language."
 msgstr "Om ett språk är inställt på 'av' förlorar redigerade texter sin översättning i den språket."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:42
