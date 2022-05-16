@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2022 Marc Worrell, Arjan Scherpenisse
 %% @doc Admin webmachine_controller.
 
-%% Copyright 2009-2021 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2022 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

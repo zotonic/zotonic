@@ -1,3 +1,20 @@
+%% @author Arjan Scherpenisse
+%% @copyright 2022 Arjan Scherpenisse
+%% @doc Export the ACL rules in a format that can be imported again.
+
+%% Copyright 2022 Arjan Scherpenisse
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
 
 -module(controller_admin_acl_rules_export).
 
@@ -7,8 +24,6 @@
         content_types_provided/1,
         process/4
     ]).
-
--include_lib("zotonic_core/include/zotonic.hrl").
 
 service_available(Context) ->
     Context1 = z_context:set_noindex_header(Context),
