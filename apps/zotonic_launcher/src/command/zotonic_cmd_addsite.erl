@@ -27,6 +27,7 @@
 ]).
 
 -define(SKEL, "blog").
+-define(APP, false).
 
 info() ->
     "Add a site and install database".
@@ -43,7 +44,8 @@ usage() ->
     io:format(" -P <pass>     Database password (default: ~s) ~n", [ z_config:get(dbpassword) ]),
     io:format(" -d <name>     Database name (default: ~s) ~n", [ z_config:get(dbdatabase) ]),
     io:format(" -n <schema>   Database schema (defaults to <site_name>) ~n"),
-    io:format(" -a <pass>     Admin password~n~n").
+    io:format(" -a <pass>     Admin password~n"),
+    io:format(" -A <app>      If true, initializes a site app and a root supervisor when the site starts (default: ~p)~n~n", [?APP]).
 
 run(Args) ->
     case zotonic_command:get_target_node() of
@@ -162,7 +164,8 @@ set_dbschema(Sitename, Options) ->
 parse(Args) when is_list(Args) ->
     Options = #{
         hostname => undefined,
-        skeleton => ?SKEL
+        skeleton => ?SKEL,
+        app => ?APP
     },
     parse_args(Args, Options).
 
@@ -189,6 +192,14 @@ parse_args([ "-n", Schema | Args ], Acc) ->
     parse_args(Args, Acc#{ dbschema => Schema });
 parse_args([ "-a", Pw | Args ], Acc) ->
     parse_args(Args, Acc#{ admin_password => Pw });
+parse_args([ "-A", App | Args ], Acc) ->
+    case re:run(App, "^(true|false|1|0)$", [caseless, {capture, none}]) of
+        match ->
+            Bool = z_convert:to_bool(string:to_lower(App)),
+            parse_args(Args, Acc#{ app => Bool });
+        nomatch ->
+            {error, App}
+    end;
 parse_args([ "-" ++ _ = Arg | _ ], _Acc) ->
     {error, Arg};
 parse_args(Rest, Acc) ->

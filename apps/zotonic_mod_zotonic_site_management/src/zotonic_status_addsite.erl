@@ -278,21 +278,17 @@ copy_skeleton_dir(From, To, Options, Context) ->
             ok,
             Files).
 
-copy_file("SITE" ++ Ext, FromPath, ToPath, Options) when Ext == ".erl"; Ext == ".app.src" ->
-    % Replace with the site name
-    ToPath1 = filename:join([
-                    filename:dirname(ToPath),
-                    z_convert:to_list(proplists:get_value(site, Options)) ++ Ext
-                ]),
-    case filelib:is_file(ToPath1) of
+copy_file("SITE" ++ Ext = Filename, FromPath, ToPath, Options)
+    when Ext == "_sup.erl"; Ext == "_app.erl" ->
+    case proplists:get_value(app, Options, false) of
         true ->
-            ok;
+            copy_site_file(Filename, FromPath, ToPath, Options);
         false ->
-            % Replace the module name, write the site Erlang module.
-            {ok, SiteErl} = file:read_file(FromPath),
-            Outfile = replace_tags(SiteErl, Options),
-            file:write_file(ToPath1, Outfile)
+            ok
     end;
+copy_file("SITE" ++ Ext = Filename, FromPath, ToPath, Options)
+    when Ext == ".erl"; Ext == ".app.src"; Ext == "_sup.erl"; Ext == "_app.erl" ->
+    copy_site_file(Filename, FromPath, ToPath, Options);
 copy_file("zotonic_site.config.in", FromPath, ToPath, Options) ->
     % First replace the tags in the config.in, then copy it.
     {ok, Bin} = file:read_file(FromPath),
@@ -329,6 +325,21 @@ copy_file(_Filename, FromPath, ToPath, _Options) ->
             end
     end.
 
+copy_site_file("SITE" ++ Ext, FromPath, ToPath, Options) ->
+    % Replace with the site name
+    ToPath1 = filename:join([
+                    filename:dirname(ToPath),
+                    z_convert:to_list(proplists:get_value(site, Options)) ++ Ext
+                ]),
+    case filelib:is_file(ToPath1) of
+        true ->
+            ok;
+        false ->
+            % Replace the module name, write the site Erlang module.
+            {ok, SiteErl} = file:read_file(FromPath),
+            Outfile = replace_tags(SiteErl, Options),
+            file:write_file(ToPath1, Outfile)
+    end.
 
 normalize_options(Options) ->
     lists:flatten(
@@ -414,6 +425,14 @@ map_tag(<<"%%SIGNKEY%%">>, Options) -> proplists:get_value(sign_key, Options);
 map_tag(<<"%%SIGNKEYSIMPLE%%">>, Options) -> proplists:get_value(sign_key_simple, Options);
 map_tag(<<"%%YEAR%%">>, _Options) ->  z_dateformat:format(calendar:local_time(), "Y", []);
 map_tag(<<"%%DATE%%">>, _Options) -> z_dateformat:format(calendar:local_time(), "Y-m-d", []);
+map_tag(<<"%%APPSRCMOD%%">>, Options) ->
+    case proplists:get_value(app, Options, false) of
+        true ->
+            Site = proplists:get_value(site, Options),
+            <<"{", Site/binary, "_app, []}">>;
+        false ->
+            <<"[]">>
+    end;
 map_tag(Bin, _Options) -> Bin.
 
 

@@ -28,7 +28,7 @@ The addsite command is highly configurable and takes the following options:
   -d <name>    Database name (default: zotonic)
   -n <schema>  Database schema (default: <site_name>)
   -a <pass>    Admin password (default: admin)
-
+  -A <app>     If true, initializes a site app and a root supervisor when the site starts (default: false)
 
 Adding a site
 -------------
