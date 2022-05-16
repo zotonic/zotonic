@@ -107,10 +107,12 @@
 
 
 %% @doc e-mail notification used by z_email and z_email_server.
+%% If the email is a received email then To/Cc/Bcc can be a list.
+%% For sending only a single email address is supported.
 -record(email, {
-    to = [] :: list() | binary(),
-    cc = [] :: list() | binary() | undefined,
-    bcc = [] :: list(),
+    to = [] :: list() | string() | binary() | m_rsc:resource_id() | undefined,
+    cc = [] :: list() | string() | binary() | undefined,
+    bcc = [] :: list() | string() | binary() | undefined,
     from = <<>> :: binary() | string(),
     reply_to,
     headers = [] :: list(),

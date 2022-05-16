@@ -329,7 +329,7 @@ send_verify_email(UserId, Ident, Context) ->
         {email, Email},
         {verify_key, Key}
     ],
-    z_email:send_render(Email, "email_verify.tpl", Vars, z_acl:sudo(Context)),
+    z_email:send_render(UserId, "email_verify.tpl", Vars, z_acl:sudo(Context)),
     ok.
 
 
