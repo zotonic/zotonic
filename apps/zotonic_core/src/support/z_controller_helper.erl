@@ -41,7 +41,7 @@
              Context :: z:context(),
              Context1 :: z:context();
     (ACLs, Context) -> {boolean(), Context1}
-        when ACLs :: [ z_acl:acl() ],
+        when ACLs :: z_acl:acl(),
              Context :: z:context(),
              Context1 :: z:context().
 is_authorized(ACLs, Context) when is_list(ACLs) ->
