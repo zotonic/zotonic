@@ -87,8 +87,8 @@ pivot_job(PivotRscList, Context) ->
         rsc_list => PivotRscList
     }),
     F = fun(Ctx) ->
-                [ {Id, pivot_resource(Id, Ctx)} || {Id,_Serial} <- PivotRscList ]
-        end,
+            [ {Id, pivot_resource(Id, Ctx)} || {Id,_Serial} <- PivotRscList ]
+    end,
     case z_db:transaction(F, Context) of
         {rollback, PivotError} ->
             ?LOG_ERROR(#{
@@ -427,22 +427,30 @@ month_day(?EPOCH_START) -> undefined;
 month_day(?ST_JUTTEMIS) -> undefined;
 month_day({{_Y,M,D}, _}) -> M*100+D.
 
-%% @doc Fetch the first title from the record for sorting.
+%% @doc Fetch the title in the default language for sorting.
+-spec get_pivot_title(m_rsc:resource_id(), z:context()) -> binary().
 get_pivot_title(Id, Context) ->
-    z_string:to_lower(get_pivot_title(#{ <<"title">> => m_rsc:p(Id, <<"title">>, Context) })).
+    Title = m_rsc:p(Id, <<"title">>, z_language:default_language(Context), Context),
+    Lang = z_language:default_language(Context),
+    Title1 = z_trans:lookup_fallback(Title, Lang, Context),
+    z_string:trim(z_string:to_lower(Title1)).
 
+%% @doc Fetch the first title from the record for sorting.
+-spec get_pivot_title(map()) -> binary().
 get_pivot_title(Props) ->
-    case maps:get(<<"title">>, Props, <<>>) of
+    Title = case maps:get(<<"title">>, Props, <<>>) of
         #trans{ tr = [] } ->
             <<>>;
         #trans{ tr = [{_, Text}|_] } ->
-            z_string:to_lower(Text);
+            Text;
         T ->
-            z_string:to_lower(T)
-    end.
+            T
+    end,
+    z_string:trim(z_string:to_lower(Title)).
 
 
 %% @doc Return the raw resource data for the pivoter
+-spec get_pivot_rsc(m_rsc:resource_id(), z:context()) -> map() | undefined.
 get_pivot_rsc(Id, Context) ->
     case z_db:qmap_props_row(
         "select * from rsc where id = $1",
