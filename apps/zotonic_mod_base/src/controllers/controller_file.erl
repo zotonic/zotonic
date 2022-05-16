@@ -79,7 +79,8 @@ forbidden(Context) ->
         {error, _ } ->
             {false, Context};
         #z_file_info{} = FInfo ->
-            case z_controller_helper:is_authorized(Context) of
+            Id = get_id(Context),
+            case z_controller_helper:is_authorized(Id, Context) of
                 {false, Context2} ->
                     {true, Context2};
                 {true, Context2} ->
@@ -147,6 +148,14 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     end.
 
 %%%%% -------------------------- Support functions ------------------------
+
+
+get_id(Context) ->
+    case maybe_id(Context) of
+        false -> undefined;
+        undefined -> undefined;
+        RscId -> RscId
+    end.
 
 maybe_id(Context) ->
     case z_context:get(?MODULE, Context) of

@@ -50,12 +50,13 @@ is_authorized(Context) ->
         true ->
             {true, Context};
         _ ->
-            z_controller_helper:is_authorized(Context)
+            Id = z_controller_helper:get_configured_id(Context),
+            z_controller_helper:is_authorized(Id, Context)
     end.
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Vars = z_context:get_all(Context),
-    {Vars1, OptRscId} = maybe_options_id(Vars, Context),
+    {Vars1, OptRscId} = maybe_configured_id(Vars, Context),
     Context0 = z_context:set_noindex_header(m_rsc:p_no_acl(OptRscId, seo_noindex, Context), Context),
     Context1 = z_context:set_resource_headers(OptRscId, Context0),
     Context2 = set_optional_cache_header(Context1),
@@ -63,14 +64,10 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Rendered = z_template:render(Template, Vars1, Context2),
     z_context:output(Rendered, Context2).
 
--spec maybe_options_id(list(), z:context()) -> {list(), m_rsc:resource_id()|undefined}.
-maybe_options_id(Vars, Context) ->
-    case lists:keyfind(id, 1, Vars) of
-        {id, PageId} ->
-            {lists:keydelete(id, 1, Vars), m_rsc:rid(PageId, Context)};
-        false ->
-            {Vars, undefined}
-    end.
+-spec maybe_configured_id(list(), z:context()) -> {list(), m_rsc:resource_id()|undefined}.
+maybe_configured_id(Vars, Context) ->
+    Id = z_controller_helper:get_configured_id(Context),
+    {[ {id, Id} | lists:keydelete(id, 1, Vars) ], Id}.
 
 set_optional_cache_header(Context) ->
     case z_context:get(max_age, Context) of

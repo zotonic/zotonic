@@ -41,7 +41,7 @@ service_available(Context) ->
 is_authorized(Context) ->
     Context1 = z_context:set_resp_header(<<"x-frame-options">>, <<"SAMEORIGIN">>, Context),
     {Context2, Id} = ensure_id(Context1),
-    z_controller_helper:is_authorized([ {use, mod_admin}, {view, Id} ], Context2).
+    z_controller_helper:is_authorized(Id, [ {use, mod_admin}, {view, Id} ], Context2).
 
 resource_exists(Context) ->
     {Context2, Id} = ensure_id(Context),
