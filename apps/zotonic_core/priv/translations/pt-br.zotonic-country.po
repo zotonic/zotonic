@@ -2,17 +2,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: 2011-03-17 14:53\n"
-"PO-Revision-Date: 2022-05-17 09:10\n"
+"PO-Revision-Date: 2022-05-17 08:35\n"
 "Last-Translator: Michael Connors <michael@bring42.net>\n"
-"Language-Team: Portuguese\n"
-"Language: pt_PT\n"
+"Language-Team: Portuguese, Brazilian\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: zotonic\n"
 "X-Crowdin-Project-ID: 3405\n"
-"X-Crowdin-Language: pt-PT\n"
+"X-Crowdin-Language: pt-BR\n"
 "X-Crowdin-File: /master/apps/zotonic_core/priv/translations/zotonic-country.pot\n"
 "X-Crowdin-File-ID: 8694\n"
 
@@ -35,13 +35,13 @@ msgid "Angola"
 msgstr "Angola"
 
 msgid "Anguilla"
-msgstr "Anguilla"
+msgstr "Anguila"
 
 msgid "Antarctica"
 msgstr "Antártica"
 
 msgid "Antigua and Barbuda"
-msgstr "Antigua e Barbuda"
+msgstr "Antígua e Barbuda"
 
 msgid "Argentina"
 msgstr "Argentina"
@@ -65,7 +65,7 @@ msgid "Bahamas"
 msgstr "Bahamas"
 
 msgid "Bahrain"
-msgstr "Bahrain"
+msgstr "Bahrein"
 
 msgid "Bangladesh"
 msgstr "Bangladesh"
@@ -74,7 +74,7 @@ msgid "Barbados"
 msgstr "Barbados"
 
 msgid "Belarus"
-msgstr "Bielo-Rússia"
+msgstr "Bielorrússia"
 
 msgid "Belgium"
 msgstr "Bélgica"
@@ -83,7 +83,7 @@ msgid "Belize"
 msgstr "Belize"
 
 msgid "Benin"
-msgstr "Benin"
+msgstr "Benim"
 
 msgid "Bermuda"
 msgstr "Bermudas"
@@ -98,7 +98,7 @@ msgid "Bosnia-Herzegovina"
 msgstr "Bósnia e Herzegovina"
 
 msgid "Botswana"
-msgstr "Botswana"
+msgstr "Botsuana"
 
 msgid "Bouvet Island"
 msgstr "Ilha Bouvet"
@@ -188,7 +188,7 @@ msgid "Denmark"
 msgstr "Dinamarca"
 
 msgid "Djibouti"
-msgstr "Djibouti"
+msgstr "Djibuti"
 
 msgid "Dominica"
 msgstr "Dominica"
@@ -221,7 +221,7 @@ msgid "Ethiopia"
 msgstr "Etiópia"
 
 msgid "Falkland Islands (Malvinas)"
-msgstr "Ilhas Falkland (Malvinas)"
+msgstr "Ilhas Malvinas (Malvinas)"
 
 msgid "Faroe Islands"
 msgstr "ilhas Faroe"
@@ -248,7 +248,7 @@ msgid "Gaza Strip Administered by Israel"
 msgstr "Faixa de Gaza administrada por Israel"
 
 msgid "Georgia"
-msgstr "Georgia"
+msgstr "Geórgia"
 
 msgid "Germany"
 msgstr "Alemanha"
@@ -269,7 +269,7 @@ msgid "Greenland"
 msgstr "Groenlândia"
 
 msgid "Grenada"
-msgstr "Grenada"
+msgstr "Granada"
 
 msgid "Guadeloupe"
 msgstr "Guadalupe"
@@ -284,7 +284,7 @@ msgid "Guinea"
 msgstr "Guiné"
 
 msgid "Guinea Bissau"
-msgstr "Guinea bissau"
+msgstr "Guiné-Bissau"
 
 msgid "Guyana"
 msgstr "Guiana"
@@ -377,7 +377,7 @@ msgid "Libya"
 msgstr "Líbia"
 
 msgid "Liechtenstein"
-msgstr "Liechtenstein"
+msgstr "Listenstaine"
 
 msgid "Lithuania"
 msgstr "Lituânia"
@@ -389,7 +389,7 @@ msgid "Macao"
 msgstr "Macau"
 
 msgid "Macedonia"
-msgstr "Macedonia"
+msgstr "Macedônia"
 
 msgid "Madagascar"
 msgstr "Madagáscar"
@@ -422,7 +422,7 @@ msgid "Mauritius"
 msgstr "Maurício"
 
 msgid "Mayotte"
-msgstr "Mayotte"
+msgstr "Maiote"
 
 msgid "Mexico"
 msgstr "México"
@@ -431,7 +431,7 @@ msgid "Micronesia"
 msgstr "Micronésia"
 
 msgid "Moldova"
-msgstr "Moldova"
+msgstr "Moldávia"
 
 msgid "Monaco"
 msgstr "Mônaco"
@@ -449,10 +449,10 @@ msgid "Mozambique"
 msgstr "Moçambique"
 
 msgid "Myanmar"
-msgstr "Myanmar"
+msgstr "Mianmar"
 
 msgid "Namibia"
-msgstr "Namibia"
+msgstr "Namíbia"
 
 msgid "Nauru"
 msgstr "Nauru"
@@ -461,7 +461,7 @@ msgid "Nepal"
 msgstr "Nepal"
 
 msgid "Netherlands"
-msgstr "Países Baixos"
+msgstr "Holanda"
 
 msgid "Netherlands Antilles"
 msgstr "Antilhas Holandesas"
@@ -551,19 +551,19 @@ msgid "Rwanda"
 msgstr "Ruanda"
 
 msgid "South Georgia and the South Sandwich Islands"
-msgstr "Geórgia do Sul e Ilhas Sandwich do Sul"
+msgstr "Ilhas Geórgia do Sul e Sandwich do Sul"
 
 msgid "Saint Helena"
 msgstr "Santa Helena"
 
 msgid "Saint Kitts and Nevis Anguilla"
-msgstr "São Cristóvão e Névis Anguila"
+msgstr "São Cristóvão e Nevis Anguila"
 
 msgid "Saint Lucia"
 msgstr "Santa Lúcia"
 
 msgid "Saint Pierre and Miquelon"
-msgstr "São Pedro e Miquelão"
+msgstr "São Pedro e Miquelon"
 
 msgid "Sao Tome and Principe"
 msgstr "São Tomé e Príncipe"
@@ -575,7 +575,7 @@ msgid "Samoa"
 msgstr "Samoa"
 
 msgid "San Marino"
-msgstr "San Marino"
+msgstr "São Marinho"
 
 msgid "Saudi Arabia"
 msgstr "Arábia Saudita"
@@ -584,7 +584,7 @@ msgid "Senegal"
 msgstr "Senegal"
 
 msgid "Seychelles"
-msgstr "Seychelles"
+msgstr "Seicheles"
 
 msgid "Sierra Leone"
 msgstr "Serra Leoa"
@@ -653,13 +653,13 @@ msgid "Togo"
 msgstr "Ir"
 
 msgid "Tokelau"
-msgstr "Tokelau"
+msgstr "Toquelau"
 
 msgid "Tonga"
 msgstr "Tonga"
 
 msgid "Trinidad and Tobago"
-msgstr "Trinidad e Tobago"
+msgstr "Trindade e Tobago"
 
 msgid "Tunisia"
 msgstr "Tunísia"
@@ -713,7 +713,7 @@ msgid "Virgin Islands (USA)"
 msgstr "Ilhas Virgens (EUA)"
 
 msgid "Wallis and Futuna Islands"
-msgstr "Wallis e Futuna Islands"
+msgstr "Ilhas Wallis e Futuna"
 
 msgid "West Bank Administered by Israel"
 msgstr "Cisjordânia administrada por Israel"
