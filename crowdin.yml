@@ -5,5 +5,6 @@ files:
       two_letters_code:
         es-ES: es
         pt-PT: pt
+        pt-BR: pt-br
         zh-CN: zh
         zh-TW: zh-hant
