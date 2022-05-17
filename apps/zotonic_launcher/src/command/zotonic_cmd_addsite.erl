@@ -205,7 +205,8 @@ parse_args(Rest, Acc) ->
     {ok, {Acc, Rest}}.
 
 parse_bool_arg(Key, Arg, Args, Acc) ->
-    case re:run(Arg, "^(true|false|1|0)$", [caseless, {capture, none}]) of
+    {ok, RE} = re:compile("^(true|false|1|0)$", [unicode, ucp, caseless]),
+    case re:run(Arg, RE, [{capture, none}]) of
         match ->
             Bool = z_convert:to_bool(string:to_lower(Arg)),
             parse_args(Args, Acc#{ Key => Bool });
