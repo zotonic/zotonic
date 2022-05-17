@@ -25,7 +25,7 @@
 -include("../../include/zotonic_command.hrl").
 
 info() ->
-    "Wait for a max timeout till Zotonc is running and responding to a ping.".
+    "Wait for a max timeout till Zotonic is running and responding to a ping.".
 
 run([ Timeout ]) ->
     try
