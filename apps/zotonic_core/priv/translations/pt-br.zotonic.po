@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-05-17 09:14\n"
+"PO-Revision-Date: 2022-05-17 16:41\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -18,11 +18,11 @@ msgstr ""
 
 #: apps/zotonic_core/src/support/z_fetch.erl:113
 msgid "Could not fetch the remote resource URL."
-msgstr "Não foi possível buscar a URL do recurso remoto."
+msgstr "Não foi possível buscar o URL do recurso remoto."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:99
 msgid "Forbidden to access the remote resource URL."
-msgstr "Proibido acessar a URL do recurso remoto."
+msgstr "Proibido acessar o URL do recurso remoto."
 
 #: apps/zotonic_core/src/support/z_media_import.erl:255
 msgid "Page Import"
@@ -30,19 +30,19 @@ msgstr "Importação de página"
 
 #: apps/zotonic_core/src/support/z_fetch.erl:107
 msgid "The remote server can not handle this URL."
-msgstr "O servidor remoto não pode lidar com esta URL."
+msgstr "O servidor remoto não pode lidar com este URL."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:111
 msgid "The remote server for the URL is having problems."
-msgstr "O servidor remoto para a URL está com problemas."
+msgstr "O servidor remoto para o URL está com problemas."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:109
 msgid "The remote server for the URL is having temporary problems."
-msgstr "O servidor remoto para a URL está tendo problemas temporários."
+msgstr "O servidor remoto para o URL está tendo problemas temporários."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:101
 msgid "The resource at the URL can not be found."
-msgstr "O recurso na URL não pode ser encontrado."
+msgstr "O recurso no URL não pode ser encontrado."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:103
 msgid "The resource at the URL is gone."
@@ -54,7 +54,7 @@ msgstr "Muitas solicitações para o servidor remoto, tente novamente mais tarde
 
 #: apps/zotonic_core/src/support/z_fetch.erl:97
 msgid "Unauthorized to access the remote resource URL."
-msgstr "Não autorizado a acessar a URL do recurso remoto."
+msgstr "Não autorizado a acessar o URL do recurso remoto."
 
 #: apps/zotonic_core/src/support/z_media_import.erl:308
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
@@ -587,11 +587,11 @@ msgstr "Testar regras de controle de acesso"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:44
 msgid "The URL is only valid for one day."
-msgstr "A URL é válida apenas por um dia."
+msgstr "O URL é válido apenas por um dia."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:12
 msgid "The URL is valid for one day."
-msgstr "A URL é válida por um dia."
+msgstr "O URL é válido por um dia."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:7
 msgid "The default upload size is:"
@@ -650,7 +650,7 @@ msgstr "Usar regras publicadas"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:2
 msgid "Use the following URL to test the access control rules before publishing them."
-msgstr "Use a seguinte URL para testar as regras de controle de acesso antes de publicá-las."
+msgstr "Use o seguinte URL para testar as regras de controle de acesso antes de publicá-las."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:535
 msgid "User groups"
@@ -690,7 +690,7 @@ msgstr "Você pode:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:43
 msgid "You have to use a special URL, as provided by the an editor or administrator."
-msgstr "Você deve usar um URL especial, conforme fornecido pelo editor ou administrador."
+msgstr "Você deve utilizar um URL especial, conforme fornecido por um editor ou administrador."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:88
 msgid "all"
@@ -734,7 +734,7 @@ msgstr "gerenciar próprio"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:9
 msgid "send this URL to somebody else for testing"
-msgstr "envie este URL para outra pessoa para teste"
+msgstr "envie este URL a outra pessoa para teste"
 
 #: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:227
 msgid "use (acl action)"
@@ -4122,7 +4122,7 @@ msgstr "A nova senha deve ser diferente da anterior. Por favor, tente novamente.
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
-msgstr "A URL de redirecionamento para configurações OAuth é:"
+msgstr "O URL de redirecionamento para configurações OAuth é:"
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:21
 msgid "The signup module is enabled, users authenticating via the services below are automatically signed up."
@@ -4935,7 +4935,7 @@ msgstr "Redirecione domínios e caminhos desconhecidos para páginas ou locais c
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:9
 msgid "The new location can be a local path or a complete URL. Leave the host empty for redirects within this site."
-msgstr "O novo local pode ser um caminho local ou uma URL completa. Deixe o host vazio para redirecionamentos neste site."
+msgstr "O novo local pode ser um caminho local ou um URL completo. Deixe o host vazio para redirecionamentos neste site."
 
 #: apps/zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:73
 msgid "You are not allowed to change this."
@@ -7908,7 +7908,7 @@ msgstr "Os certificados são renovados automaticamente antes de expirarem."
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_ssl_letsencrypt_form.tpl:5
 msgid "Check the following urls:"
-msgstr "Verifique as seguintes urls:"
+msgstr "Verifique os seguintes urls:"
 
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:133
 msgid "Could not start fetching the SSL certificate. Try again later."
