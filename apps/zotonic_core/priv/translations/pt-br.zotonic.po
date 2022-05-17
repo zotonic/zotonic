@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-05-17 22:57\n"
+"PO-Revision-Date: 2022-05-17 23:16\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -778,7 +778,7 @@ msgstr "<em>Sem título</em>"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
-msgstr "<strong>Primeiro</strong> também conhecido como nome próprio, nome próprio ou nome de batismo.<br/><strong>Middle</strong> muitas vezes encurtado para uma inicial como em <em>John D. Rockefeller</em>.<br/><strong>Prefixo de sobrenome</strong> como o holandês <em>van, van de, der</em>.<br/><strong>Sobrenome</strong> também conhecido como sobrenome ou sobrenome."
+msgstr "<strong>Primeiro nome</strong>, também conhecido como nome próprio ou nome de batismo.<br/><strong>Nome do meio</strong>, muitas vezes encurtado para uma inicial como <em>John D. Rockefeller</em>.<br/><strong>Prefixo de sobrenome</strong>, como Pedro <em>dos</em> Santos.<br/><strong>Sobrenome</strong>, também conhecido como nome da família ou último nome."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:115
 msgid "A copy that will remain connected so that a new version can be fetched."
@@ -864,7 +864,7 @@ msgstr "Telefone alternativo"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:72./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:127
 msgid "Amount"
-msgstr "Resultar"
+msgstr "Montante"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:76
 msgid "And media can also be viewed on their own page."
