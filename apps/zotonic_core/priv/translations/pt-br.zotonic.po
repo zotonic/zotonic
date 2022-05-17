@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-05-17 16:49\n"
+"PO-Revision-Date: 2022-05-17 16:59\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -85,7 +85,7 @@ msgstr "horas"
 #: apps/zotonic_core/src/support/z_datetime.erl:274
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
-msgstr "dentro"
+msgstr "em"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
 msgid "minute"
@@ -167,7 +167,7 @@ msgstr "Tudo"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:35
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:47./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:44./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "All Categories"
-msgstr "todas as categorias"
+msgstr "Todas as Categorias"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_module.tpl:17
 msgid "All Modules"
@@ -175,7 +175,7 @@ msgstr "Todos os Módulos"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_module.tpl:9./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:9
 msgid "All User Groups"
-msgstr "Todos os grupos de usuários"
+msgstr "Todos os Grupos de Usuários"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:29./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:18
 msgid "All collaboration groups"
