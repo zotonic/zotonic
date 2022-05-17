@@ -334,8 +334,7 @@ recompile_task(File) ->
                             text => <<"Recompile of Erlang file unexpected result">>,
                             result => error,
                             reason => Other,
-                            file => File,
-                            result => Other
+                            file => File
                         })
                 end
             catch
