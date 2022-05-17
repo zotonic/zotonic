@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-05-17 18:12\n"
+"PO-Revision-Date: 2022-05-17 22:57\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -534,11 +534,11 @@ msgstr "Regras revertidas"
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:109
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:81
 msgid "Save"
-msgstr "Salve "
+msgstr "Salvar"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:77
 msgid "Save Upload Permissions"
-msgstr "Salvar permissões de upload"
+msgstr "Salvar Permissões de Upload"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:143
 msgid "Saved collaboration group settings"
@@ -547,11 +547,11 @@ msgstr "Configurações de grupo de colaboração salvas"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_category_dropdown.tpl:3
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:199
 msgid "Select category"
-msgstr "Selecione a Categoria"
+msgstr "Selecione a categoria"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:84
 msgid "Show"
-msgstr "exposição"
+msgstr "Mostrar"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:35
 msgid "Show private properties to"
@@ -583,7 +583,7 @@ msgstr "Testar regras de ACL"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:3./apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:6
 msgid "Test Access Control Rules"
-msgstr "Testar regras de controle de acesso"
+msgstr "Testar Regras de Controle de Acesso"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:44
 msgid "The URL is only valid for one day."
@@ -626,15 +626,15 @@ msgstr "Esta regra é gerenciada pelo módulo"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:17
 msgid "Try ACL rules"
-msgstr "Experimente as regras de ACL"
+msgstr "Testar as regras de ACL"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:46
 msgid "Try a different combination of category and content group."
-msgstr "Experimente uma combinação diferente de categoria e grupo de conteúdo."
+msgstr "Tente uma combinação diferente de categoria e grupo de conteúdo."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:14
 msgid "Try rules..."
-msgstr "Tente regras..."
+msgstr "Testar regras..."
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:126
 msgid "Upload settings saved"
@@ -642,7 +642,7 @@ msgstr "Configurações de upload salvas"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:2
 msgid "Upload the ACL rules file that you previously exported. Note: all current rules will be <b>replaced</b> by the rule definition file that is uploaded."
-msgstr "Faça upload do arquivo de regras de ACL que você exportou anteriormente. Observação: todas as regras atuais serão <b>substituídas por</b> pelo arquivo de definição de regra que foi carregado."
+msgstr "Faça upload do arquivo de regras de ACL que você exportou anteriormente. Observação: todas as regras atuais serão <b>substituídas</b> pelo arquivo de definição de regra que foi carregado."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:27./apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:50
 msgid "Use published rules"
@@ -678,11 +678,11 @@ msgstr "Você está usando a versão <b>publicada</b> das regras de controle de 
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:10
 msgid "You are using the <b>test</b> version of the access control rules."
-msgstr "Você está usando a versão <b>test</b> das regras de controle de acesso."
+msgstr "Você está usando a versão de <b>teste</b> das regras de controle de acesso."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:17
 msgid "You can switch back to the published access control rules by:"
-msgstr "Você pode voltar para as regras de controle de acesso publicadas:"
+msgstr "Você pode voltar para as regras publicadas de controle de acesso:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:4
 msgid "You can:"
@@ -742,7 +742,7 @@ msgstr "use (ação acl)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:7
 msgid "use <b>New Private Window</b> (check the <b>File</b> menu of your browser)"
-msgstr "use <b>New Private Window</b> (verifique o menu <b>File</b> do seu navegador)"
+msgstr "use <b>Nova Janela Privada</b> (verifique o menu <b>Arquivo</b> do seu navegador)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:8
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
@@ -754,7 +754,7 @@ msgstr "ver (ação acl)"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:163./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:165
 msgid "&lt; Prev"
-msgstr "&lt; anterior"
+msgstr "&lt; Anterior"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:61
 msgid "(private)"
@@ -766,7 +766,7 @@ msgstr "(público)"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44
 msgid "+ add"
-msgstr "+ acrescentar"
+msgstr "+ adicionar"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_addblock.tpl:5
 msgid "+ add block"
