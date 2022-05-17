@@ -46,7 +46,7 @@ usage() ->
     io:format(" -d <name>        Database name (default: ~s) ~n", [ z_config:get(dbdatabase) ]),
     io:format(" -n <schema>      Database schema (defaults to <site_name>) ~n"),
     io:format(" -a <pass>        Admin password~n"),
-    io:format(" -A <app>         If true, initializes a site app and a root supervisor when the site starts (default: ~p)~n~n", [?APP]),
+    io:format(" -A <app>         If true, initializes a site app and a root supervisor when the site starts (default: ~p)~n", [?APP]),
     io:format(" -U <umbrella>    If true, the site dir becomes a multi-app structure (default: ~p)~n~n", [?UMBRELLA]).
 
 run(Args) ->
