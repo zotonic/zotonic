@@ -32,7 +32,9 @@ service_available(Context) ->
     {true, Context2}.
 
 resource_exists(Context) ->
-    {false, z_authentication_tokens:reset_cookies(Context)}.
+    Context1 = z_authentication_tokens:reset_cookies(Context),
+    Context2 = z_auth:logoff(Context1),
+    {false, Context2}.
 
 previously_existed(Context) ->
     {true, Context}.
