@@ -28,24 +28,26 @@
 
 -define(SKEL, "blog").
 -define(APP, false).
+-define(UMBRELLA, false).
 
 info() ->
     "Add a site and install database".
 
 usage() ->
     io:format("Usage: zotonic addsite [options] <site_name> ~n~n"),
-    io:format(" -s <skel>     Skeleton site (one of 'blog', 'empty', 'nodb'; default: ~s~n", [?SKEL]),
-    io:format(" -H <host>     Site's hostname (default: <site_name.test>) ~n"),
-    io:format(" -L            Create the site in the current directory and add a symlink to zotonic app_user~n"),
-    io:format(" -G <url>      Clone from this Git url, before copying skeleton~n"),
-    io:format(" -h <host>     Database host (default: ~s) ~n", [ z_config:get(dbhost) ]),
-    io:format(" -p <port>     Database port (default: ~p) ~n", [ z_config:get(dbport) ]),
-    io:format(" -u <user>     Database user (default: ~s) ~n", [ z_config:get(dbuser) ]),
-    io:format(" -P <pass>     Database password (default: ~s) ~n", [ z_config:get(dbpassword) ]),
-    io:format(" -d <name>     Database name (default: ~s) ~n", [ z_config:get(dbdatabase) ]),
-    io:format(" -n <schema>   Database schema (defaults to <site_name>) ~n"),
-    io:format(" -a <pass>     Admin password~n"),
-    io:format(" -A <app>      If true, initializes a site app and a root supervisor when the site starts (default: ~p)~n~n", [?APP]).
+    io:format(" -s <skel>        Skeleton site (one of 'blog', 'empty', 'nodb'; default: ~s~n", [?SKEL]),
+    io:format(" -H <host>        Site's hostname (default: <site_name.test>) ~n"),
+    io:format(" -L               Create the site in the current directory and add a symlink to zotonic app_user~n"),
+    io:format(" -G <url>         Clone from this Git url, before copying skeleton~n"),
+    io:format(" -h <host>        Database host (default: ~s) ~n", [ z_config:get(dbhost) ]),
+    io:format(" -p <port>        Database port (default: ~p) ~n", [ z_config:get(dbport) ]),
+    io:format(" -u <user>        Database user (default: ~s) ~n", [ z_config:get(dbuser) ]),
+    io:format(" -P <pass>        Database password (default: ~s) ~n", [ z_config:get(dbpassword) ]),
+    io:format(" -d <name>        Database name (default: ~s) ~n", [ z_config:get(dbdatabase) ]),
+    io:format(" -n <schema>      Database schema (defaults to <site_name>) ~n"),
+    io:format(" -a <pass>        Admin password~n"),
+    io:format(" -A <app>         If true, initializes a site app and a root supervisor when the site starts (default: ~p)~n~n", [?APP]),
+    io:format(" -U <umbrella>    If true, the site dir becomes a multi-app structure (default: ~p)~n~n", [?UMBRELLA]).
 
 run(Args) ->
     case zotonic_command:get_target_node() of
@@ -165,7 +167,8 @@ parse(Args) when is_list(Args) ->
     Options = #{
         hostname => undefined,
         skeleton => ?SKEL,
-        app => ?APP
+        app => ?APP,
+        umbrella => ?UMBRELLA
     },
     parse_args(Args, Options).
 
@@ -193,14 +196,19 @@ parse_args([ "-n", Schema | Args ], Acc) ->
 parse_args([ "-a", Pw | Args ], Acc) ->
     parse_args(Args, Acc#{ admin_password => Pw });
 parse_args([ "-A", App | Args ], Acc) ->
-    case re:run(App, "^(true|false|1|0)$", [caseless, {capture, none}]) of
-        match ->
-            Bool = z_convert:to_bool(string:to_lower(App)),
-            parse_args(Args, Acc#{ app => Bool });
-        nomatch ->
-            {error, App}
-    end;
+    parse_bool_arg(app, App, Args, Acc);
+parse_args([ "-U", Umbrella | Args ], Acc) ->
+    parse_bool_arg(umbrella, Umbrella, Args, Acc);
 parse_args([ "-" ++ _ = Arg | _ ], _Acc) ->
     {error, Arg};
 parse_args(Rest, Acc) ->
     {ok, {Acc, Rest}}.
+
+parse_bool_arg(Key, Arg, Args, Acc) ->
+    case re:run(Arg, "^(true|false|1|0)$", [caseless, {capture, none}]) of
+        match ->
+            Bool = z_convert:to_bool(string:to_lower(Arg)),
+            parse_args(Args, Acc#{ Key => Bool });
+        nomatch ->
+            {error, Arg}
+    end.

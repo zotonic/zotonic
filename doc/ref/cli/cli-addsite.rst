@@ -16,19 +16,20 @@ and 'nodb'. 'blog' is the default.
 
 The addsite command is highly configurable and takes the following options:
 
-  -s <skel>    Skeleton site (one of 'blog', 'empty', 'nodb'; default: blog)
-  -H <host>    Site's hostname (default: <site_name>.test)
-  -L           Create the site in the current directory and symlink it into the zotonic user directory
-  -g <remote>  Create a git repository in the site and push it to the given remote
+  -s <skel>      Skeleton site (one of 'blog', 'empty', 'nodb'; default: blog)
+  -H <host>      Site's hostname (default: <site_name>.test)
+  -L             Create the site in the current directory and symlink it into the zotonic user directory
+  -g <remote>    Create a git repository in the site and push it to the given remote
 
-  -h <host>    Database host (default: localhost)
-  -p <port>    Database port (default: 5432)
-  -u <user>    Database user (default: zotonic)
-  -P <pass>    Database password (default: zotonic)
-  -d <name>    Database name (default: zotonic)
-  -n <schema>  Database schema (default: <site_name>)
-  -a <pass>    Admin password (default: admin)
-  -A <app>     If true, initializes a site app and a root supervisor when the site starts (default: false)
+  -h <host>      Database host (default: localhost)
+  -p <port>      Database port (default: 5432)
+  -u <user>      Database user (default: zotonic)
+  -P <pass>      Database password (default: zotonic)
+  -d <name>      Database name (default: zotonic)
+  -n <schema>    Database schema (default: <site_name>)
+  -a <pass>      Admin password (default: admin)
+  -A <app>       If true, initializes a site app and a root supervisor when the site starts (default: false)
+  -U <umbrella>  If true, the site dir becomes a multi-app structure (default: false)
 
 Adding a site
 -------------

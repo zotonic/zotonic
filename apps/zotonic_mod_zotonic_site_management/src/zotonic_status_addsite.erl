@@ -31,12 +31,12 @@ addsite(Name, Options, Context) when is_binary(Name) ->
     % Check if name can used for the site (not z_, zotonic_, existing site, or existing module)
     case check_name(Name, Context) of
         ok ->
-            case filelib:is_file(site_dir(Name)) of
+            case filelib:is_file(site_root_dir(Name)) of
                 true ->
                     {error, iolist_to_binary([
                         ?__(<<"There is already a file or directory named">>, Context),
                         " ",
-                        site_dir(Name)])};
+                        site_root_dir(Name)])};
                 false ->
                     addsite_check_hostname(Name, Options, Context)
             end;
@@ -101,7 +101,7 @@ addsite_check_db(Name, Options, Context) ->
 -spec addsite_check_userdir(binary(), list(), z:context()) ->
     {ok, {atom(), list()}} | {error, term()}.
 addsite_check_userdir(Name, Options, Context) ->
-    SiteDir = site_dir(Name),
+    SiteDir = site_root_dir(Name),
     case file:make_dir(SiteDir) of
         ok ->
             addsite_check_git(Name, Options, Context);
@@ -115,7 +115,7 @@ addsite_check_userdir(Name, Options, Context) ->
 addsite_check_git(Name, Options, Context) ->
     case z_string:trim( z_convert:to_binary( proplists:get_value(git, Options, <<>>) ) ) of
         <<>> ->
-            SiteDir = site_dir(Name),
+            SiteDir = site_root_dir(Name),
             Cmd = lists:flatten([
                 "git init -q ",
                 z_filelib:os_filename(SiteDir)
@@ -124,14 +124,14 @@ addsite_check_git(Name, Options, Context) ->
             create_gitignore(SiteDir),
             addsite_check_skel(Name, Options, Context);
         Git ->
-            case file:del_dir(site_dir(Name)) of
+            case file:del_dir(site_root_dir(Name)) of
                 ok ->
                     mod_zotonic_site_management:progress(Name, ?__(<<"Git checkout ...">>, Context), Context),
                     Cmd = lists:flatten([
                         "git clone -q --recurse-submodules ",
                         z_filelib:os_filename(Git),
                         " ",
-                        z_filelib:os_filename(site_dir(Name))
+                        z_filelib:os_filename(site_root_dir(Name))
                         ]),
                     case os:cmd(Cmd) of
                         [] ->
@@ -142,7 +142,7 @@ addsite_check_git(Name, Options, Context) ->
                                 in => zotonic_mod_zotonic_site_management,
                                 site => Name,
                                 git_url => Git,
-                                site_dir => site_dir(Name),
+                                site_dir => site_root_dir(Name),
                                 result => error,
                                 reason => Error
                             }),
@@ -158,7 +158,7 @@ addsite_check_git(Name, Options, Context) ->
 % Make directory, copy 'priv/skel/<skel> skeleton, replace config.in and SITE.erl on the fly
 % Do not copy files that would overwrite any file or directory from Git
 addsite_check_skel(Name, Options, Context) ->
-    case ensure_dir(site_dir(Name), Context) of
+    case ensure_dirs(site_dirs(Name, Options), Context) of
         ok ->
             addsite_copy_skel(Name, Options, Context);
         {error, _} = Error ->
@@ -167,7 +167,7 @@ addsite_check_skel(Name, Options, Context) ->
 
 addsite_copy_skel(Name, Options, Context) ->
     mod_zotonic_site_management:progress(Name, ?__(<<"Copy skeleton files ...">>, Context), Context),
-    SiteDir = site_dir(Name),
+    SiteDir = guess_site_dir(Name, Options),
     case skel_dir(Options) of
         undefined ->
             {error, <<"No site skeleton selected">>};
@@ -383,8 +383,47 @@ site_ebin_dir(Name) ->
     end,
     z_convert:to_list(Dir).
 
-site_dir(Name) ->
-    z_convert:to_list(filename:join([ z_path:zotonic_apps(), Name ])).
+site_dirs(Name, Options) ->
+    Tokens = site_dir_tokens(Name, Options),
+    BaseDir = z_path:zotonic_apps(),
+    do_site_dirs(Tokens, BaseDir, []).
+
+do_site_dirs([Token | Tokens], Prev, Acc) ->
+    Dir = filename:join(Prev, Token),
+    do_site_dirs(Tokens, Dir, [Dir | Acc]);
+do_site_dirs([], _Prev, Acc) ->
+    lists:reverse(Acc).
+
+site_dir_tokens(Name, Options) ->
+    case proplists:get_value(umbrella, Options, false) of
+        true ->
+            site_umbrella_dir_tokens(Name);
+        false ->
+            site_root_dir_tokens(Name)
+    end.
+
+guess_site_dir(Name, Options) ->
+    case proplists:get_value(umbrella, Options, false) of
+        true ->
+            site_umbrella_dir(Name);
+        false ->
+            site_root_dir(Name)
+    end.
+
+site_root_dir_tokens(Name) ->
+    [Name].
+
+site_umbrella_dir_tokens(Name) ->
+    [Name, <<"apps">>, Name].
+
+site_root_dir(Name) ->
+    do_site_dir(site_root_dir_tokens(Name)).
+
+site_umbrella_dir(Name) ->
+    do_site_dir(site_umbrella_dir_tokens(Name)).
+
+do_site_dir(Tokens) ->
+    z_convert:to_list(filename:join([ z_path:zotonic_apps() | Tokens ])).
 
 skel_dir(Options) ->
     case z_string:to_name(proplists:get_value(skeleton, Options, <<"empty">>)) of
@@ -394,6 +433,16 @@ skel_dir(Options) ->
             PrivDir = code:priv_dir(zotonic_mod_zotonic_site_management),
             filename:join([ PrivDir, "skel", Skel ])
     end.
+
+ensure_dirs([Dir | Dirs], Context) ->
+    case ensure_dir(Dir, Context) of
+        ok ->
+            ensure_dirs(Dirs, Context);
+        {error, _} = Error ->
+            Error
+    end;
+ensure_dirs([], _Context) ->
+    ok.
 
 ensure_dir(Dir, Context) ->
     case file:make_dir(Dir) of
