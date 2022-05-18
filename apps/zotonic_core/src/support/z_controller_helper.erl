@@ -20,9 +20,9 @@
 -module(z_controller_helper).
 
 -export([
-    is_authorized/1,
     is_authorized/2,
     is_authorized/3,
+    is_authorized_action/3,
     get_id/1,
     get_configured_id/1,
     decode_request/2,
@@ -35,16 +35,26 @@
 -define(MAX_BODY_LENGTH, 32*1024*1024).
 
 % @doc Check if the current user is allowed to access the controller.
--spec is_authorized( z:context() ) -> {boolean(), z:context()}.
-is_authorized(Context) ->
+-spec is_authorized
+    (OptRscId, Context) -> {boolean(), Context1}
+        when OptRscId :: m_rsc:resource_id() | undefined,
+             Context :: z:context(),
+             Context1 :: z:context();
+    (ACLs, Context) -> {boolean(), Context1}
+        when ACLs :: z_acl:acl(),
+             Context :: z:context(),
+             Context1 :: z:context().
+is_authorized(ACLs, Context) when is_list(ACLs) ->
+    is_authorized(undefined, ACLs, Context);
+is_authorized(OptRscId, Context) ->
     case z_context:get(acl, Context) of
         undefined ->
-            is_authorized(append_acl([], Context), Context);
+            is_authorized(OptRscId, append_acl(OptRscId, [], Context), Context);
         ignore ->
             {true, Context};
         is_auth ->
             case z_auth:is_auth(Context) of
-                true -> is_authorized(append_acl([], Context), Context);
+                true -> is_authorized(OptRscId, append_acl(OptRscId, [], Context), Context);
                 false -> {false, Context}
             end;
         logoff ->
@@ -52,55 +62,57 @@ is_authorized(Context) ->
                true -> z_auth:logoff(Context);
                false -> Context
             end,
-            is_authorized(append_acl([], Context), Context1);
+            is_authorized(OptRscId, append_acl(OptRscId, [], Context), Context1);
         Acl ->
-            is_authorized(append_acl(Acl, Context), Context)
+            is_authorized(OptRscId, append_acl(OptRscId, Acl, Context), Context)
     end.
 
--spec is_authorized(boolean() | z_acl:acl(), z:context()) -> {boolean(), z:context()}.
-is_authorized(true, Context) ->
+-spec is_authorized(OptRscId, ACL, z:context()) -> {boolean(), z:context()}
+    when OptRscId :: m_rsc:resource_id() | undefined,
+         ACL :: boolean() | z_acl:acl().
+is_authorized(_OptRscId, true, Context) ->
     {true, Context};
-is_authorized(false, Context) ->
+is_authorized(_OptRscId, false, Context) ->
     {false, Context};
-is_authorized(ACLs, Context) when is_list(ACLs) ->
-    is_authorized(is_allowed(ACLs, Context), Context).
+is_authorized(OptRscId, ACLs, Context) when is_list(ACLs) ->
+    {is_allowed(OptRscId, ACLs, Context), Context}.
 
--spec is_authorized(z_acl:action(), z_acl:object(), z:context()) -> {boolean(), z:context()}.
-is_authorized(Action, Object, Context) ->
-    is_authorized([{Action, Object}], Context).
-
+-spec is_authorized_action(z_acl:action(), z_acl:object(), z:context()) -> {boolean(), z:context()}.
+is_authorized_action(Action, Object, Context) ->
+    is_authorized(undefined, [{Action, Object}], Context).
 
 %% Check list of {Action,Object} ACL pairs
--spec is_allowed( z_acl:acl(), z:context() ) -> boolean().
-is_allowed([], _Context) ->
+-spec is_allowed(OptRscId, z_acl:acl(), z:context() ) -> boolean()
+    when OptRscId :: m_rsc:resource_id() | undefined.
+is_allowed(_OptRscId, [], _Context) ->
     true;
-is_allowed([ {Action,Object} | ACLs ], Context) ->
+is_allowed(OptRscId, [ {Action,Object} | ACLs ], Context) ->
     case z_acl:is_allowed(Action, Object, Context) of
         true ->
-            is_allowed(ACLs, Context);
+            is_allowed(OptRscId, ACLs, Context);
         false ->
             %% If the resource doesn't exist then we let the request through
             %% This will enable a 404 response later in the http flow checks.
             case {Action, Object} of
-                {view, undefined} -> is_allowed(ACLs, Context);
-                {view, false} -> is_allowed(ACLs, Context);
+                {view, undefined} -> is_allowed(OptRscId, ACLs, Context);
+                {view, false} -> is_allowed(OptRscId, ACLs, Context);
                 {view, Id} ->
                     case m_rsc:exists(Id, Context) of
                         true -> false;
-                        false -> is_allowed(ACLs, Context)
+                        false -> is_allowed(OptRscId, ACLs, Context)
                     end;
                 _ ->
                     false
             end
     end.
 
-append_acl({_, _} = Acl, Context) ->
-    [ get_acl_action(Context), Acl ];
-append_acl(Acl, Context) when is_list(Acl) ->
-    [ get_acl_action(Context) | Acl ].
+append_acl(OptRscId, {_, _} = Acl, Context) ->
+    [ get_acl_action(OptRscId, Context), Acl ];
+append_acl(OptRscId, Acl, Context) when is_list(Acl) ->
+    [ get_acl_action(OptRscId, Context) | Acl ].
 
-get_acl_action(Context) ->
-    {z_context:get(acl_action, Context, view), get_id(Context)}.
+get_acl_action(OptRscId, Context) ->
+    {z_context:get(acl_action, Context, view), OptRscId}.
 
 
 %% @doc Fetch the id from the request or the dispatch configuration.

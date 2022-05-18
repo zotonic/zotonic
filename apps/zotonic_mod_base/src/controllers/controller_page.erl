@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Basic page
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -76,7 +76,14 @@ redirect(Location, Context) ->
 
 %% @doc Check if the current user is allowed to view the resource.
 is_authorized(Context) ->
-    controller_template:is_authorized(Context).
+    z_context:logger_md(Context),
+    case z_context:get(anonymous, Context) of
+        true ->
+            {true, Context};
+        _ ->
+            Id = z_controller_helper:get_id(Context),
+            z_controller_helper:is_authorized(Id, Context)
+    end.
 
 
 %% @doc Show the page.  Add a noindex header when requested by the editor.

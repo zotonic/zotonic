@@ -27,10 +27,10 @@
 	moved_permanently/1
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
 
 is_authorized(Context) ->
-    z_controller_helper:is_authorized(Context).
+    Id = z_controller_helper:get_configured_id(Context),
+    z_controller_helper:is_authorized(Id, Context).
 
 resource_exists(Context) ->
 	{false, Context}.

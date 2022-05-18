@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013-2014 Marc Worrell
+%% @copyright 2013-2022 Marc Worrell
 %%
 %% @doc Serve a file (possibly resized)
 
-%% Copyright 2013-2014 Marc Worrell
+%% Copyright 2013-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -79,7 +79,8 @@ forbidden(Context) ->
         {error, _ } ->
             {false, Context};
         #z_file_info{} = FInfo ->
-            case z_controller_helper:is_authorized(Context) of
+            Id = get_id(Context),
+            case z_controller_helper:is_authorized(Id, Context) of
                 {false, Context2} ->
                     {true, Context2};
                 {true, Context2} ->
@@ -147,6 +148,14 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     end.
 
 %%%%% -------------------------- Support functions ------------------------
+
+
+get_id(Context) ->
+    case maybe_id(Context) of
+        false -> undefined;
+        undefined -> undefined;
+        RscId -> RscId
+    end.
 
 maybe_id(Context) ->
     case z_context:get(?MODULE, Context) of

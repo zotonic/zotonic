@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2022 Marc Worrell, Arjan Scherpenisse
 %% @doc Admin webmachine_controller.
 
-%% Copyright 2009-2021 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2022 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ service_available(Context) ->
 is_authorized(Context) ->
     Context1 = z_context:set_resp_header(<<"x-frame-options">>, <<"SAMEORIGIN">>, Context),
     {Context2, Id} = ensure_id(Context1),
-    z_controller_helper:is_authorized([ {use, mod_admin}, {view, Id} ], Context2).
+    z_controller_helper:is_authorized(Id, [ {use, mod_admin}, {view, Id} ], Context2).
 
 resource_exists(Context) ->
     {Context2, Id} = ensure_id(Context),
