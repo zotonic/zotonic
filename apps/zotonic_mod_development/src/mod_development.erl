@@ -39,6 +39,8 @@
     pid_observe_development_make/3,
     observe_admin_menu/3,
     observe_request_context/3,
+    chrome/1,
+    chrome/2,
     % internal (for spawn)
     page_debug_stream/3,
     page_debug_stream_loop/3
@@ -95,6 +97,48 @@ observe_request_context(#request_context{ phase = refresh }, Context, _Context) 
     Context;
 observe_request_context(#request_context{ phase = _ }, Context, _Context) ->
     Context.
+
+%% @doc Runs Chrome opening it in the site URL.
+%% Ignore certificate errors and defines the site as secure, helpful to run Web Workers.
+%% For extra args @see https://peter.sh/experiments/chromium-command-line-switches/
+%% Common args:
+%%   --incognito            Launches Chrome directly in Incognito private browsing mode
+%%   --purge-memory-button  Add purge memory button to Chrome
+%%   --multi-profiles       Enable multiple profiles in Chrome
+%% e.g.
+%% ``` mod_development:chrome(foo, ["--incognito", "--start-maximized"]). '''
+-spec chrome(SiteOrContext :: atom() | z:context()) -> {ok, port()} | {error, term()}.
+chrome(SiteOrContext) ->
+    chrome(SiteOrContext, []).
+
+-spec chrome(SiteOrContext :: atom() | z:context(), ExtraArgs :: [string()]) -> {ok, port()} | {error, term()}.
+chrome(#context{} = Context, ExtraArgs) ->
+    case os:find_executable("google-chrome") of
+        false ->
+            {error, "Chrome executable not found."};
+        Chrome ->
+            TmpPath = filename:join([<<"/">>, <<"tmp">>, <<"foo">>]),
+            SiteUrl = z_context:abs_url(<<"/">>, Context),
+            Args = lists:join(" ", [
+                "--user-data-dir=" ++ TmpPath,
+                "--ignore-certificate-errors",
+                "--unsafely-treat-insecure-origin-as-secure=" ++ SiteUrl
+                | ExtraArgs
+            ]),
+            Command = io_lib:format("~s ~s ~s", [Chrome, Args, SiteUrl]),
+            io:format(
+                "Trying to run Chrome by the commmand:\n$ ~s\n",
+                [unicode:characters_to_list(Command)]
+            ),
+            case catch open_port({spawn, Command}, [in, hide]) of
+                Port when is_port(Port) ->
+                    {ok, Port};
+                Error ->
+                    {error, Error}
+            end
+    end;
+chrome(Site, ExtraArgs) ->
+    chrome(z:c(Site), ExtraArgs).
 
 %%====================================================================
 %% gen_server callbacks
