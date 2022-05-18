@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-05-17 09:14\n"
+"PO-Revision-Date: 2022-05-17 23:26\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -18,11 +18,11 @@ msgstr ""
 
 #: apps/zotonic_core/src/support/z_fetch.erl:113
 msgid "Could not fetch the remote resource URL."
-msgstr "Não foi possível buscar a URL do recurso remoto."
+msgstr "Não foi possível buscar o URL do recurso remoto."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:99
 msgid "Forbidden to access the remote resource URL."
-msgstr "Proibido acessar a URL do recurso remoto."
+msgstr "Proibido acessar o URL do recurso remoto."
 
 #: apps/zotonic_core/src/support/z_media_import.erl:255
 msgid "Page Import"
@@ -30,19 +30,19 @@ msgstr "Importação de página"
 
 #: apps/zotonic_core/src/support/z_fetch.erl:107
 msgid "The remote server can not handle this URL."
-msgstr "O servidor remoto não pode lidar com esta URL."
+msgstr "O servidor remoto não pode lidar com este URL."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:111
 msgid "The remote server for the URL is having problems."
-msgstr "O servidor remoto para a URL está com problemas."
+msgstr "O servidor remoto para o URL está com problemas."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:109
 msgid "The remote server for the URL is having temporary problems."
-msgstr "O servidor remoto para a URL está tendo problemas temporários."
+msgstr "O servidor remoto para o URL está tendo problemas temporários."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:101
 msgid "The resource at the URL can not be found."
-msgstr "O recurso na URL não pode ser encontrado."
+msgstr "O recurso no URL não pode ser encontrado."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:103
 msgid "The resource at the URL is gone."
@@ -54,12 +54,12 @@ msgstr "Muitas solicitações para o servidor remoto, tente novamente mais tarde
 
 #: apps/zotonic_core/src/support/z_fetch.erl:97
 msgid "Unauthorized to access the remote resource URL."
-msgstr "Não autorizado a acessar a URL do recurso remoto."
+msgstr "Não autorizado a acessar o URL do recurso remoto."
 
 #: apps/zotonic_core/src/support/z_media_import.erl:308
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
-msgstr "Local na rede Internet"
+msgstr "Site"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:274
 msgid "ago"
@@ -85,7 +85,7 @@ msgstr "horas"
 #: apps/zotonic_core/src/support/z_datetime.erl:274
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
-msgstr "dentro"
+msgstr "em"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
 msgid "minute"
@@ -167,7 +167,7 @@ msgstr "Tudo"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:35
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:47./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:44./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "All Categories"
-msgstr "todas as categorias"
+msgstr "Todas as Categorias"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_module.tpl:17
 msgid "All Modules"
@@ -175,7 +175,7 @@ msgstr "Todos os Módulos"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_module.tpl:9./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:9
 msgid "All User Groups"
-msgstr "Todos os grupos de usuários"
+msgstr "Todos os Grupos de Usuários"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:29./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:18
 msgid "All collaboration groups"
@@ -253,7 +253,7 @@ msgstr "Alterar categoria e/ou grupo de conteúdo..."
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:26
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:13./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:20./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:54./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:59./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:43./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:48./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:32./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:37
 msgid "Close"
-msgstr "Perto"
+msgstr "Fechar"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:45
 msgid "Collaboration group managers"
@@ -281,7 +281,7 @@ msgstr "Grupos de colaboração são grupos de usuários em que todo o conteúdo
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:64
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:108
 msgid "Content"
-msgstr "Contente"
+msgstr "Conteúdo"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:58
 msgid "Content group"
@@ -343,7 +343,7 @@ msgstr "Excluindo..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:43
 msgid "Edit &amp; link rights on the collaboration groups"
-msgstr "Editar &amp; direitos de link nos grupos de colaboração"
+msgstr "Editar &amp; vincular direitos nos grupos de colaboração"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:43./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:47
 msgid "Edit Rule"
@@ -363,7 +363,7 @@ msgstr "Exportar regras de edição"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:10
 msgid "File types follow the group hierarchy. Derived groups inherit the mime settings from their ancestor."
-msgstr "Os tipos de arquivo seguem a hierarquia do grupo. Grupos derivados herdam as configurações de mímica de seu ancestral."
+msgstr "Os tipos de arquivos seguem a hierarquia do grupo. Grupos derivados herdam as configurações de mímica de seu ancestral."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:28
 msgid "File uploads"
@@ -408,7 +408,7 @@ msgstr "Ao importar, a lista de regras será atualizada após a importação."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:40./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:17
 msgid "Keep"
-msgstr "Guarda"
+msgstr "Manter"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:6
 msgid "Maximum file upload size per user group. This restricts file uploads for users."
@@ -493,7 +493,7 @@ msgstr "Permissões"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:45
 msgid "Please select a collaboration_group"
-msgstr "Selecione um grupo_colaboração"
+msgstr "Por favor, selecione um grupo de colaboração"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:46
 msgid "Private"
@@ -534,11 +534,11 @@ msgstr "Regras revertidas"
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:109
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:81
 msgid "Save"
-msgstr "Salve "
+msgstr "Salvar"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:77
 msgid "Save Upload Permissions"
-msgstr "Salvar permissões de upload"
+msgstr "Salvar Permissões de Upload"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:143
 msgid "Saved collaboration group settings"
@@ -547,11 +547,11 @@ msgstr "Configurações de grupo de colaboração salvas"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_category_dropdown.tpl:3
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:199
 msgid "Select category"
-msgstr "Selecione a Categoria"
+msgstr "Selecione a categoria"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:84
 msgid "Show"
-msgstr "exposição"
+msgstr "Mostrar"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:35
 msgid "Show private properties to"
@@ -583,15 +583,15 @@ msgstr "Testar regras de ACL"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:3./apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:6
 msgid "Test Access Control Rules"
-msgstr "Testar regras de controle de acesso"
+msgstr "Testar Regras de Controle de Acesso"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:44
 msgid "The URL is only valid for one day."
-msgstr "A URL é válida apenas por um dia."
+msgstr "O URL é válido apenas por um dia."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:12
 msgid "The URL is valid for one day."
-msgstr "A URL é válida por um dia."
+msgstr "O URL é válido por um dia."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:7
 msgid "The default upload size is:"
@@ -626,15 +626,15 @@ msgstr "Esta regra é gerenciada pelo módulo"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:17
 msgid "Try ACL rules"
-msgstr "Experimente as regras de ACL"
+msgstr "Testar as regras de ACL"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:46
 msgid "Try a different combination of category and content group."
-msgstr "Experimente uma combinação diferente de categoria e grupo de conteúdo."
+msgstr "Tente uma combinação diferente de categoria e grupo de conteúdo."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:14
 msgid "Try rules..."
-msgstr "Tente regras..."
+msgstr "Testar regras..."
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:126
 msgid "Upload settings saved"
@@ -642,7 +642,7 @@ msgstr "Configurações de upload salvas"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:2
 msgid "Upload the ACL rules file that you previously exported. Note: all current rules will be <b>replaced</b> by the rule definition file that is uploaded."
-msgstr "Faça upload do arquivo de regras de ACL que você exportou anteriormente. Observação: todas as regras atuais serão <b>substituídas por</b> pelo arquivo de definição de regra que foi carregado."
+msgstr "Faça upload do arquivo de regras de ACL que você exportou anteriormente. Observação: todas as regras atuais serão <b>substituídas</b> pelo arquivo de definição de regra que foi carregado."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:27./apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:50
 msgid "Use published rules"
@@ -650,7 +650,7 @@ msgstr "Usar regras publicadas"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:2
 msgid "Use the following URL to test the access control rules before publishing them."
-msgstr "Use a seguinte URL para testar as regras de controle de acesso antes de publicá-las."
+msgstr "Use o seguinte URL para testar as regras de controle de acesso antes de publicá-las."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:535
 msgid "User groups"
@@ -678,11 +678,11 @@ msgstr "Você está usando a versão <b>publicada</b> das regras de controle de 
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:10
 msgid "You are using the <b>test</b> version of the access control rules."
-msgstr "Você está usando a versão <b>test</b> das regras de controle de acesso."
+msgstr "Você está usando a versão de <b>teste</b> das regras de controle de acesso."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:17
 msgid "You can switch back to the published access control rules by:"
-msgstr "Você pode voltar para as regras de controle de acesso publicadas:"
+msgstr "Você pode voltar para as regras publicadas de controle de acesso:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:4
 msgid "You can:"
@@ -690,7 +690,7 @@ msgstr "Você pode:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:43
 msgid "You have to use a special URL, as provided by the an editor or administrator."
-msgstr "Você deve usar um URL especial, conforme fornecido pelo editor ou administrador."
+msgstr "Você deve utilizar um URL especial, conforme fornecido por um editor ou administrador."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:88
 msgid "all"
@@ -734,7 +734,7 @@ msgstr "gerenciar próprio"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:9
 msgid "send this URL to somebody else for testing"
-msgstr "envie este URL para outra pessoa para teste"
+msgstr "envie este URL a outra pessoa para teste"
 
 #: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:227
 msgid "use (acl action)"
@@ -742,7 +742,7 @@ msgstr "use (ação acl)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:7
 msgid "use <b>New Private Window</b> (check the <b>File</b> menu of your browser)"
-msgstr "use <b>New Private Window</b> (verifique o menu <b>File</b> do seu navegador)"
+msgstr "use <b>Nova Janela Privada</b> (verifique o menu <b>Arquivo</b> do seu navegador)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:8
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
@@ -754,7 +754,7 @@ msgstr "ver (ação acl)"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:163./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:165
 msgid "&lt; Prev"
-msgstr "&lt; anterior"
+msgstr "&lt; Anterior"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:61
 msgid "(private)"
@@ -766,7 +766,7 @@ msgstr "(público)"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44
 msgid "+ add"
-msgstr "+ acrescentar"
+msgstr "+ adicionar"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_addblock.tpl:5
 msgid "+ add block"
@@ -778,7 +778,7 @@ msgstr "<em>Sem título</em>"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
-msgstr "<strong>Primeiro</strong> também conhecido como nome próprio, nome próprio ou nome de batismo.<br/><strong>Middle</strong> muitas vezes encurtado para uma inicial como em <em>John D. Rockefeller</em>.<br/><strong>Prefixo de sobrenome</strong> como o holandês <em>van, van de, der</em>.<br/><strong>Sobrenome</strong> também conhecido como sobrenome ou sobrenome."
+msgstr "<strong>Primeiro nome</strong>, também conhecido como nome próprio ou nome de batismo.<br/><strong>Nome do meio</strong>, muitas vezes encurtado para uma inicial como <em>John D. Rockefeller</em>.<br/><strong>Prefixo de sobrenome</strong>, como Pedro <em>dos</em> Santos.<br/><strong>Sobrenome</strong>, também conhecido como nome da família ou último nome."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:115
 msgid "A copy that will remain connected so that a new version can be fetched."
@@ -864,7 +864,7 @@ msgstr "Telefone alternativo"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:72./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:127
 msgid "Amount"
-msgstr "Resultar"
+msgstr "Montante"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:76
 msgid "And media can also be viewed on their own page."
@@ -893,7 +893,7 @@ msgstr "Tem certeza de que deseja sair da interface de administração?"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:11
 msgid "Aside"
-msgstr "Aparte"
+msgstr "Ao lado"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:90
 msgid "Ask google to not index this page"
@@ -911,7 +911,7 @@ msgstr "Autenticação"
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:151
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:28./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:58./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:38
 msgid "Back"
-msgstr "Costas"
+msgstr "Voltar"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics.tpl:4
 msgid "Basic"
@@ -921,7 +921,7 @@ msgstr "Básico"
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:6
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_hidden.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:4
 msgid "Block"
-msgstr "Quadra"
+msgstr "Bloco"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:19
 msgid "Block name"
@@ -4122,7 +4122,7 @@ msgstr "A nova senha deve ser diferente da anterior. Por favor, tente novamente.
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
-msgstr "A URL de redirecionamento para configurações OAuth é:"
+msgstr "O URL de redirecionamento para configurações OAuth é:"
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:21
 msgid "The signup module is enabled, users authenticating via the services below are automatically signed up."
@@ -4935,7 +4935,7 @@ msgstr "Redirecione domínios e caminhos desconhecidos para páginas ou locais c
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:9
 msgid "The new location can be a local path or a complete URL. Leave the host empty for redirects within this site."
-msgstr "O novo local pode ser um caminho local ou uma URL completa. Deixe o host vazio para redirecionamentos neste site."
+msgstr "O novo local pode ser um caminho local ou um URL completo. Deixe o host vazio para redirecionamentos neste site."
 
 #: apps/zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:73
 msgid "You are not allowed to change this."
@@ -7908,7 +7908,7 @@ msgstr "Os certificados são renovados automaticamente antes de expirarem."
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_ssl_letsencrypt_form.tpl:5
 msgid "Check the following urls:"
-msgstr "Verifique as seguintes urls:"
+msgstr "Verifique os seguintes urls:"
 
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:133
 msgid "Could not start fetching the SSL certificate. Try again later."
