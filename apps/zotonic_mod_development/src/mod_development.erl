@@ -351,7 +351,7 @@ exec_chrome(Executable, SiteUrl, ExtraArgs, Options) ->
 do_exec_chrome(Executable, SiteUrl, Args, _Options) ->
     Command = io_lib:format("~s ~s ~s", [Executable, Args, SiteUrl]),
     io:format(
-        "Trying to run Chrome/Chromium by the commmand:\n$ ~s\n",
+        "Trying to execute the commmand:\n$ ~s\n",
         [unicode:characters_to_list(Command)]
     ),
     case catch open_port({spawn, Command}, [in, hide]) of
