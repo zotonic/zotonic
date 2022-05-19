@@ -307,25 +307,25 @@ exec_browser(chrome, {unix, linux}, SiteUrl, ExtraArgs) ->
         false ->
             {error, "Chrome executable not found."};
         Executable ->
-            exec_chrome(Executable, SiteUrl, ExtraArgs)
+            exec_chrome_secure(Executable, SiteUrl, ExtraArgs)
     end;
 exec_browser(chrome, {unix, darwin}, SiteUrl, ExtraArgs) ->
     Executable = "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome",
-    exec_chrome(Executable, SiteUrl, ExtraArgs);
+    exec_chrome_secure(Executable, SiteUrl, ExtraArgs);
 exec_browser(chromium, {unix, linux}, SiteUrl, ExtraArgs) ->
     case os:find_executable("chromium-browser") of
         false ->
             {error, "Chromium executable not found."};
         Executable ->
-            exec_chrome(Executable, SiteUrl, ExtraArgs)
+            exec_chrome_secure(Executable, SiteUrl, ExtraArgs)
     end;
 exec_browser(chromium, {unix, darwin}, SiteUrl, ExtraArgs) ->
     Executable = "/Applications/Chromium.app/Contents/MacOS/Chromium",
-    exec_chrome(Executable, SiteUrl, ExtraArgs);
+    exec_chrome_secure(Executable, SiteUrl, ExtraArgs);
 exec_browser(_Browser, _OS, _SiteUrl, _ExtraArgs) ->
     {error, "Browser or operating system not supported."}.
 
-exec_chrome(Executable, SiteUrl, ExtraArgs) ->
+exec_chrome_secure(Executable, SiteUrl, ExtraArgs) ->
     TmpPath = filename:join([<<"/">>, <<"tmp">>, <<"foo">>]),
     Args = lists:join(" ", [
         "--user-data-dir=" ++ TmpPath,
@@ -333,9 +333,12 @@ exec_chrome(Executable, SiteUrl, ExtraArgs) ->
         "--unsafely-treat-insecure-origin-as-secure=" ++ SiteUrl
         | ExtraArgs
     ]),
+    exec_chrome(Executable, SiteUrl, Args).
+
+exec_chrome(Executable, SiteUrl, Args) ->
     Command = io_lib:format("~s ~s ~s", [Executable, Args, SiteUrl]),
     io:format(
-        "Trying to run Chrome by the commmand:\n$ ~s\n",
+        "Trying to run Chrome/Chromium by the commmand:\n$ ~s\n",
         [unicode:characters_to_list(Command)]
     ),
     case catch open_port({spawn, Command}, [in, hide]) of
