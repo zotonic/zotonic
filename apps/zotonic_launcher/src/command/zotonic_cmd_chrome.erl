@@ -22,34 +22,46 @@
 %% API
 -export([
     info/0,
+    info/1,
     usage/0,
-    run/1
+    usage/1,
+    run/1,
+    run/2
 ]).
 
 info() ->
-    "Opens Chrome in the site URL with secure certificate flags".
+    info("Chrome").
+
+info(Browser) ->
+    "Opens " ++ Browser ++ " in the site URL with secure certificate flags".
 
 usage() ->
-    io:format("USAGE: zotonic chrome [options] <site_name> ~n"),
+    usage("chrome").
+
+usage(Browser) ->
+    io:format("USAGE: zotonic " ++ Browser ++ " [options] <site_name> ~n"),
     io:format("Options: ~n"),
     io:format("  See https://peter.sh/experiments/chromium-command-line-switches/ ~n"),
     io:format("Note: ~n"),
     io:format("  Requires 'zotonic start' ~n~n").
 
 run(Args) ->
+    run(chrome, Args).
+
+run(Browser, Args) ->
     case zotonic_command:net_start() of
         ok ->
-            run_parse_args(Args);
+            run_parse_args(Browser, Args);
         {error, _} = Error ->
             zotonic_command:format_error(Error)
     end.
 
-run_parse_args(Args) ->
+run_parse_args(Browser, Args) ->
     case parse_args(Args, #{args => []}) of
         {ok, #{site := Site, args := ParsedArgs}} ->
             SiteName = list_to_atom(Site),
             Res = zotonic_command:rpc(
-                mod_development, exec_browser, [ chrome, SiteName, ParsedArgs ]
+                mod_development, exec_browser, [ Browser, SiteName, ParsedArgs ]
             ),
             io:format("~p~n", [ Res ]);
         {error, _} = ZError ->
@@ -57,7 +69,7 @@ run_parse_args(Args) ->
     end.
 
 parse_args(["--" ++ _], _Acc) ->
-    {error, "The last entry should be the site name"};
+    {error, "The last entry must be the site name"};
 parse_args([Site], Acc) ->
     {ok, Acc#{site => Site}};
 parse_args(["--" ++ _ = Arg | Rest], #{args := Args} = AccIn) ->
@@ -67,4 +79,4 @@ parse_args([], _Acc) ->
     usage(),
     halt(1);
 parse_args([Arg | _Args], _Acc) ->
-    {error, "All Chrome args starts with '--'. '" ++ Arg ++ "' is invalid"}.
+    {error, "All args must start with '--'. '" ++ Arg ++ "' is invalid"}.
