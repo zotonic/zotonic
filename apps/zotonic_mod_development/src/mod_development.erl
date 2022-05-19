@@ -107,38 +107,11 @@ observe_request_context(#request_context{ phase = _ }, Context, _Context) ->
 %%   --multi-profiles       Enable multiple profiles in Chrome
 %% e.g.
 %% ``` mod_development:chrome(foo, ["--incognito", "--start-maximized"]). '''
--spec chrome(SiteOrContext :: atom() | z:context()) -> {ok, port()} | {error, term()}.
 chrome(SiteOrContext) ->
     chrome(SiteOrContext, []).
 
--spec chrome(SiteOrContext :: atom() | z:context(), ExtraArgs :: [string()]) -> {ok, port()} | {error, term()}.
-chrome(#context{} = Context, ExtraArgs) ->
-    case os:find_executable("google-chrome") of
-        false ->
-            {error, "Chrome executable not found."};
-        Chrome ->
-            TmpPath = filename:join([<<"/">>, <<"tmp">>, <<"foo">>]),
-            SiteUrl = z_context:abs_url(<<"/">>, Context),
-            Args = lists:join(" ", [
-                "--user-data-dir=" ++ TmpPath,
-                "--ignore-certificate-errors",
-                "--unsafely-treat-insecure-origin-as-secure=" ++ SiteUrl
-                | ExtraArgs
-            ]),
-            Command = io_lib:format("~s ~s ~s", [Chrome, Args, SiteUrl]),
-            io:format(
-                "Trying to run Chrome by the commmand:\n$ ~s\n",
-                [unicode:characters_to_list(Command)]
-            ),
-            case catch open_port({spawn, Command}, [in, hide]) of
-                Port when is_port(Port) ->
-                    {ok, Port};
-                Error ->
-                    {error, Error}
-            end
-    end;
-chrome(Site, ExtraArgs) ->
-    chrome(z:c(Site), ExtraArgs).
+chrome(SiteOrContext, ExtraArgs) ->
+    browser(chrome, SiteOrContext, ExtraArgs).
 
 %%====================================================================
 %% gen_server callbacks
@@ -294,3 +267,48 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 
      |Acc].
 
+-spec browser(Browser, SiteOrContext, ExtraArgs) -> RetType
+    when
+        Browser       :: atom(),
+        SiteOrContext :: atom() | z:context(),
+        ExtraArgs     :: [string()],
+        RetType       :: {ok, port()} | {error, term()}.
+browser(Browser, #context{} = Context, ExtraArgs) ->
+    OS = os:type(),
+    SiteUrl = z_context:abs_url(<<"/">>, Context),
+    browser(Browser, OS, SiteUrl, ExtraArgs);
+browser(Browser, Site, ExtraArgs) ->
+    browser(Browser, z:c(Site), ExtraArgs).
+
+browser(chrome, {unix, linux}, SiteUrl, ExtraArgs) ->
+    case os:find_executable("google-chrome") of
+        false ->
+            {error, "Chrome executable not found."};
+        Executable ->
+            exec_chrome(Executable, SiteUrl, ExtraArgs)
+    end;
+browser(chrome, {unix, darwin}, SiteUrl, ExtraArgs) ->
+    Executable = "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome",
+    exec_chrome(Executable, SiteUrl, ExtraArgs);
+browser(_Browser, _OS, _SiteUrl, _ExtraArgs) ->
+    {error, "Browser or operating system not supported."}.
+
+exec_chrome(Executable, SiteUrl, ExtraArgs) ->
+    TmpPath = filename:join([<<"/">>, <<"tmp">>, <<"foo">>]),
+    Args = lists:join(" ", [
+        "--user-data-dir=" ++ TmpPath,
+        "--ignore-certificate-errors",
+        "--unsafely-treat-insecure-origin-as-secure=" ++ SiteUrl
+        | ExtraArgs
+    ]),
+    Command = io_lib:format("~s ~s ~s", [Executable, Args, SiteUrl]),
+    io:format(
+        "Trying to run Chrome by the commmand:\n$ ~s\n",
+        [unicode:characters_to_list(Command)]
+    ),
+    case catch open_port({spawn, Command}, [in, hide]) of
+        Port when is_port(Port) ->
+            {ok, Port};
+        Error ->
+            {error, Error}
+    end.
