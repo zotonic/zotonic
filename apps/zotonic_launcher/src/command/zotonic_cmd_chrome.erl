@@ -48,6 +48,7 @@ usage(Browser) ->
     io:format("  --incognito            Launches " ++ Browser ++ " directly in Incognito private browsing mode ~n"),
     io:format("  --purge-memory-button  Add purge memory button to " ++ Browser ++ " ~n"),
     io:format("  --multi-profiles       Enable multiple profiles in " ++ Browser ++ " ~n"),
+    io:format("~n"),
     io:format("  * See a list of switches here https://peter.sh/experiments/chromium-command-line-switches/ ~n"),
     io:format("~n"),
     io:format("Notes: ~n"),
@@ -67,7 +68,7 @@ run(Browser, Args) ->
 
 run_parse_args(Browser, Args) ->
     Defaults = #{args => [], options => #{secure => false}},
-    case parse_args(Args, Defaults) of
+    case parse_args(atom_to_list(Browser), Args, Defaults) of
         {ok, #{
             site := Site,
             args := ParsedArgs,
@@ -82,18 +83,18 @@ run_parse_args(Browser, Args) ->
             zotonic_command:format_error(ZError)
     end.
 
-parse_args(["--" ++ _], _Acc) ->
+parse_args(_Browser, ["--" ++ _], _Acc) ->
     {error, "The last entry must be the site name"};
-parse_args([Site], Acc) ->
+parse_args(_Browser, [Site], Acc) ->
     {ok, Acc#{site => Site}};
-parse_args(["--" ++ _ = Arg | Rest], #{args := Args} = AccIn) ->
+parse_args(Browser, ["--" ++ _ = Arg | Rest], #{args := Args} = AccIn) ->
     AccOut = AccIn#{args => [Arg | Args]},
-    parse_args(Rest, AccOut);
-parse_args(["-s" | Rest], #{options := Options} = AccIn) ->
+    parse_args(Browser, Rest, AccOut);
+parse_args(Browser, ["-s" | Rest], #{options := Options} = AccIn) ->
     AccOut = AccIn#{options => Options#{secure => true}},
-    parse_args(Rest, AccOut);
-parse_args([], _Acc) ->
-    usage(),
+    parse_args(Browser, Rest, AccOut);
+parse_args(Browser, [], _Acc) ->
+    usage(Browser),
     halt(1);
-parse_args([Arg | _Args], _Acc) ->
-    {error, "All args must start with '--'. '" ++ Arg ++ "' is invalid"}.
+parse_args(Browser, [Arg | _Args], _Acc) ->
+    {error, "All " ++ Browser ++ " args must start with '--'. '" ++ Arg ++ "' is invalid"}.
