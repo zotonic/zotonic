@@ -39,8 +39,10 @@ usage() ->
     usage("chrome").
 
 usage(Browser) ->
-    io:format("USAGE: zotonic " ++ Browser ++ " [options] <site_name> ~n"),
+    io:format("USAGE: zotonic " ++ Browser ++ " [options] [switches] <site_name> ~n"),
     io:format("Options: ~n"),
+    io:format("  -s <secure>   Opens site as secure and ignore certificate errors ~n"),
+    io:format("Switches: ~n"),
     io:format("  See https://peter.sh/experiments/chromium-command-line-switches/ ~n"),
     io:format("Note: ~n"),
     io:format("  Requires 'zotonic start' ~n~n").
@@ -57,11 +59,16 @@ run(Browser, Args) ->
     end.
 
 run_parse_args(Browser, Args) ->
-    case parse_args(Args, #{args => []}) of
-        {ok, #{site := Site, args := ParsedArgs}} ->
+    Defaults = #{args => [], options => #{secure => false}},
+    case parse_args(Args, Defaults) of
+        {ok, #{
+            site := Site,
+            args := ParsedArgs,
+            options := Options
+        }} ->
             SiteName = list_to_atom(Site),
             Res = zotonic_command:rpc(
-                mod_development, exec_browser, [ Browser, SiteName, ParsedArgs ]
+                mod_development, exec_browser, [ Browser, SiteName, ParsedArgs, Options ]
             ),
             io:format("~p~n", [ Res ]);
         {error, _} = ZError ->
@@ -74,6 +81,9 @@ parse_args([Site], Acc) ->
     {ok, Acc#{site => Site}};
 parse_args(["--" ++ _ = Arg | Rest], #{args := Args} = AccIn) ->
     AccOut = AccIn#{args => [Arg | Args]},
+    parse_args(Rest, AccOut);
+parse_args(["-s" | Rest], #{options := Options} = AccIn) ->
+    AccOut = AccIn#{options => Options#{secure => true}},
     parse_args(Rest, AccOut);
 parse_args([], _Acc) ->
     usage(),

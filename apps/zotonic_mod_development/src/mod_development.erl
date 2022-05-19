@@ -41,10 +41,12 @@
     observe_request_context/3,
     chrome/1,
     chrome/2,
+    chrome/3,
     chromium/1,
     chromium/2,
-    exec_browser/3,
+    chromium/3,
     exec_browser/4,
+    exec_browser/5,
     % internal (for spawn)
     page_debug_stream/3,
     page_debug_stream_loop/3
@@ -115,7 +117,10 @@ chrome(SiteOrContext) ->
     chrome(SiteOrContext, []).
 
 chrome(SiteOrContext, ExtraArgs) ->
-    exec_browser(chrome, SiteOrContext, ExtraArgs).
+    chrome(SiteOrContext, ExtraArgs, #{}).
+
+chrome(SiteOrContext, ExtraArgs, Options) ->
+    exec_browser(chrome, SiteOrContext, ExtraArgs, Options).
 
 %% @doc Runs Chromium opening it in the site URL.
 %% Ignore certificate errors and defines the site as secure, helpful to run Web Workers.
@@ -130,47 +135,51 @@ chromium(SiteOrContext) ->
     chromium(SiteOrContext, []).
 
 chromium(SiteOrContext, ExtraArgs) ->
-    exec_browser(chromium, SiteOrContext, ExtraArgs).
+    chromium(SiteOrContext, ExtraArgs, #{}).
+
+chromium(SiteOrContext, ExtraArgs, Options) ->
+    exec_browser(chromium, SiteOrContext, ExtraArgs, Options).
 
 %% @doc Opens the site URL as secure in a browser
 %% Currently supported:
 %%   * Linux  [Chrome, Chromium]
 %%   * macOS  [Chrome, Chromium]
 %% @todo: support more OS and maybe other browsers
--spec exec_browser(Browser, SiteOrContext, ExtraArgs) -> RetType
+-spec exec_browser(Browser, SiteOrContext, ExtraArgs, Options) -> RetType
     when
         Browser       :: atom(),
         SiteOrContext :: atom() | z:context(),
         ExtraArgs     :: [string()],
+        Options       :: map(),
         RetType       :: {ok, port()} | {error, term()}.
-exec_browser(Browser, #context{} = Context, ExtraArgs) ->
+exec_browser(Browser, #context{} = Context, ExtraArgs, Options) ->
     OS = os:type(),
     SiteUrl = z_context:abs_url(<<"/">>, Context),
-    exec_browser(Browser, OS, SiteUrl, ExtraArgs);
-exec_browser(Browser, Site, ExtraArgs) ->
-    exec_browser(Browser, z:c(Site), ExtraArgs).
+    exec_browser(Browser, OS, SiteUrl, ExtraArgs, Options);
+exec_browser(Browser, Site, ExtraArgs, Options) ->
+    exec_browser(Browser, z:c(Site), ExtraArgs, Options).
 
-exec_browser(chrome, {unix, linux}, SiteUrl, ExtraArgs) ->
+exec_browser(chrome, {unix, linux}, SiteUrl, ExtraArgs, Options) ->
     case os:find_executable("google-chrome") of
         false ->
             {error, "Chrome executable not found."};
         Executable ->
-            exec_chrome_secure(Executable, SiteUrl, ExtraArgs)
+            exec_chrome(Executable, SiteUrl, ExtraArgs, Options)
     end;
-exec_browser(chrome, {unix, darwin}, SiteUrl, ExtraArgs) ->
+exec_browser(chrome, {unix, darwin}, SiteUrl, ExtraArgs, Options) ->
     Executable = "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome",
-    exec_chrome_secure(Executable, SiteUrl, ExtraArgs);
-exec_browser(chromium, {unix, linux}, SiteUrl, ExtraArgs) ->
+    exec_chrome(Executable, SiteUrl, ExtraArgs, Options);
+exec_browser(chromium, {unix, linux}, SiteUrl, ExtraArgs, Options) ->
     case os:find_executable("chromium-browser") of
         false ->
             {error, "Chromium executable not found."};
         Executable ->
-            exec_chrome_secure(Executable, SiteUrl, ExtraArgs)
+            exec_chrome(Executable, SiteUrl, ExtraArgs, Options)
     end;
-exec_browser(chromium, {unix, darwin}, SiteUrl, ExtraArgs) ->
+exec_browser(chromium, {unix, darwin}, SiteUrl, ExtraArgs, Options) ->
     Executable = "/Applications/Chromium.app/Contents/MacOS/Chromium",
-    exec_chrome_secure(Executable, SiteUrl, ExtraArgs);
-exec_browser(_Browser, _OS, _SiteUrl, _ExtraArgs) ->
+    exec_chrome(Executable, SiteUrl, ExtraArgs, Options);
+exec_browser(_Browser, _OS, _SiteUrl, _ExtraArgs, _Options) ->
     {error, "Browser or operating system not supported."}.
 
 %%====================================================================
@@ -327,7 +336,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 
      |Acc].
 
-exec_chrome_secure(Executable, SiteUrl, ExtraArgs) ->
+exec_chrome(Executable, SiteUrl, ExtraArgs, #{secure := true} = Options) ->
     TmpPath = filename:join([<<"/">>, <<"tmp">>, <<"foo">>]),
     Args = lists:join(" ", [
         "--user-data-dir=" ++ TmpPath,
@@ -335,9 +344,11 @@ exec_chrome_secure(Executable, SiteUrl, ExtraArgs) ->
         "--unsafely-treat-insecure-origin-as-secure=" ++ SiteUrl
         | ExtraArgs
     ]),
-    exec_chrome(Executable, SiteUrl, Args).
+    do_exec_chrome(Executable, SiteUrl, Args, Options);
+exec_chrome(Executable, SiteUrl, ExtraArgs, Options) ->
+    do_exec_chrome(Executable, SiteUrl, ExtraArgs, Options).
 
-exec_chrome(Executable, SiteUrl, Args) ->
+do_exec_chrome(Executable, SiteUrl, Args, _Options) ->
     Command = io_lib:format("~s ~s ~s", [Executable, Args, SiteUrl]),
     io:format(
         "Trying to run Chrome/Chromium by the commmand:\n$ ~s\n",
