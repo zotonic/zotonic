@@ -41,6 +41,8 @@
     observe_request_context/3,
     chrome/1,
     chrome/2,
+    chromium/1,
+    chromium/2,
     % internal (for spawn)
     page_debug_stream/3,
     page_debug_stream_loop/3
@@ -112,6 +114,21 @@ chrome(SiteOrContext) ->
 
 chrome(SiteOrContext, ExtraArgs) ->
     browser(chrome, SiteOrContext, ExtraArgs).
+
+%% @doc Runs Chromium opening it in the site URL.
+%% Ignore certificate errors and defines the site as secure, helpful to run Web Workers.
+%% For extra args @see https://peter.sh/experiments/chromium-command-line-switches/
+%% Common args:
+%%   --incognito            Launches Chromium directly in Incognito private browsing mode
+%%   --purge-memory-button  Add purge memory button to Chromium
+%%   --multi-profiles       Enable multiple profiles in Chromium
+%% e.g.
+%% ``` mod_development:chromium(foo, ["--incognito", "--start-maximized"]). '''
+chromium(SiteOrContext) ->
+    chromium(SiteOrContext, []).
+
+chromium(SiteOrContext, ExtraArgs) ->
+    browser(chromium, SiteOrContext, ExtraArgs).
 
 %%====================================================================
 %% gen_server callbacks
@@ -267,6 +284,11 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 
      |Acc].
 
+%% Runs browser in a safe mode
+%% @todo: support more OS and maybe other browsers
+%% Currently supported:
+%%   * Linux  [Chrome, Chromium]
+%%   * macOS  [Chrome, Chromium]
 -spec browser(Browser, SiteOrContext, ExtraArgs) -> RetType
     when
         Browser       :: atom(),
@@ -289,6 +311,16 @@ browser(chrome, {unix, linux}, SiteUrl, ExtraArgs) ->
     end;
 browser(chrome, {unix, darwin}, SiteUrl, ExtraArgs) ->
     Executable = "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome",
+    exec_chrome(Executable, SiteUrl, ExtraArgs);
+browser(chromium, {unix, linux}, SiteUrl, ExtraArgs) ->
+    case os:find_executable("chromium-browser") of
+        false ->
+            {error, "Chromium executable not found."};
+        Executable ->
+            exec_chrome(Executable, SiteUrl, ExtraArgs)
+    end;
+browser(chromium, {unix, darwin}, SiteUrl, ExtraArgs) ->
+    Executable = "/Applications/Chromium.app/Contents/MacOS/Chromium",
     exec_chrome(Executable, SiteUrl, ExtraArgs);
 browser(_Browser, _OS, _SiteUrl, _ExtraArgs) ->
     {error, "Browser or operating system not supported."}.
