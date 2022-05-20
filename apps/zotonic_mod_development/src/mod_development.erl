@@ -349,7 +349,9 @@ exec_chrome(Executable, SiteUrl, ExtraArgs, Options) ->
     do_exec_chrome(Executable, SiteUrl, ExtraArgs, Options).
 
 do_exec_chrome(Executable, SiteUrl, Args, _Options) ->
-    Command = io_lib:format("~s ~s ~s", [Executable, Args, SiteUrl]),
+    Command = io_lib:format("~s ~s ~s", [
+        z_filelib:os_escape(Executable), Args, z_filelib:os_filename(SiteUrl)
+    ]),
     io:format(
         "Trying to execute the commmand:\n$ ~s\n",
         [unicode:characters_to_list(Command)]
