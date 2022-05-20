@@ -151,7 +151,7 @@ chromium(SiteOrContext, ExtraArgs, Options) ->
         SiteOrContext :: atom() | z:context(),
         ExtraArgs     :: [string()],
         Options       :: map(),
-        RetType       :: {ok, port()} | {error, term()}.
+        RetType       :: {ok, term()} | {error, term()}.
 exec_browser(Browser, #context{} = Context, ExtraArgs, Options) ->
     OS = os:type(),
     SiteUrl = z_context:abs_url(<<"/">>, Context),
@@ -354,6 +354,9 @@ do_exec_chrome(Executable, SiteUrl, Args, _Options) ->
         "Trying to execute the commmand:\n$ ~s\n",
         [unicode:characters_to_list(Command)]
     ),
+    do_exec_browser(Command).
+
+do_exec_browser(Command) ->
     case catch open_port({spawn, Command}, [in, hide]) of
         Port when is_port(Port) ->
             {ok, Port};
