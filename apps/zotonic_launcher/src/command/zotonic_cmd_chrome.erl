@@ -42,7 +42,7 @@ usage(Browser) ->
     io:format("USAGE: zotonic " ++ Browser ++ " [options] [switches] <site_name> ~n"),
     io:format("~n"),
     io:format("Options: ~n"),
-    io:format("  -s <secure>   Opens site as secure and ignore certificate errors ~n"),
+    io:format("  -s <secure>            Opens site as secure and ignore certificate errors ~n"),
     io:format("~n"),
     io:format("Switches: ~n"),
     io:format("  --incognito            Launches " ++ Browser ++ " directly in Incognito private browsing mode ~n"),
