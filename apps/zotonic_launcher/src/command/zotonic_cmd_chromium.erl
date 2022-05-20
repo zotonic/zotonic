@@ -1,5 +1,5 @@
 %% @author William Fank Thomé <williamthome@hotmail.com>
-%% @copyright 2022 Marc Worrell
+%% @copyright 2022 William Fank Thomé
 %% @doc Chromium CLI command
 
 %% Copyright 2022 Marc Worrell
