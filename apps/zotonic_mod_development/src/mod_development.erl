@@ -39,6 +39,14 @@
     pid_observe_development_make/3,
     observe_admin_menu/3,
     observe_request_context/3,
+    chrome/1,
+    chrome/2,
+    chrome/3,
+    chromium/1,
+    chromium/2,
+    chromium/3,
+    exec_browser/4,
+    exec_browser/5,
     % internal (for spawn)
     page_debug_stream/3,
     page_debug_stream_loop/3
@@ -95,6 +103,84 @@ observe_request_context(#request_context{ phase = refresh }, Context, _Context) 
     Context;
 observe_request_context(#request_context{ phase = _ }, Context, _Context) ->
     Context.
+
+%% @doc Runs Chrome opening it in the site URL.
+%% Ignore certificate errors and defines the site as secure, helpful to run Web Workers.
+%% For extra args @see https://peter.sh/experiments/chromium-command-line-switches/
+%% Common args:
+%%   --incognito            Launches Chrome directly in Incognito private browsing mode
+%%   --purge-memory-button  Add purge memory button to Chrome
+%%   --multi-profiles       Enable multiple profiles in Chrome
+%% e.g.
+%% ``` mod_development:chrome(foo, ["--incognito", "--start-maximized"]). '''
+chrome(SiteOrContext) ->
+    chrome(SiteOrContext, []).
+
+chrome(SiteOrContext, ExtraArgs) ->
+    chrome(SiteOrContext, ExtraArgs, #{}).
+
+chrome(SiteOrContext, ExtraArgs, Options) ->
+    exec_browser(chrome, SiteOrContext, ExtraArgs, Options).
+
+%% @doc Runs Chromium opening it in the site URL.
+%% Ignore certificate errors and defines the site as secure, helpful to run Web Workers.
+%% For extra args @see https://peter.sh/experiments/chromium-command-line-switches/
+%% Common args:
+%%   --incognito            Launches Chromium directly in Incognito private browsing mode
+%%   --purge-memory-button  Add purge memory button to Chromium
+%%   --multi-profiles       Enable multiple profiles in Chromium
+%% e.g.
+%% ``` mod_development:chromium(foo, ["--incognito", "--start-maximized"]). '''
+chromium(SiteOrContext) ->
+    chromium(SiteOrContext, []).
+
+chromium(SiteOrContext, ExtraArgs) ->
+    chromium(SiteOrContext, ExtraArgs, #{}).
+
+chromium(SiteOrContext, ExtraArgs, Options) ->
+    exec_browser(chromium, SiteOrContext, ExtraArgs, Options).
+
+%% @doc Opens the site URL as secure in a browser
+%% Currently supported:
+%%   * Linux  [Chrome, Chromium]
+%%   * macOS  [Chrome, Chromium]
+%% @todo: support more OS and maybe other browsers
+-spec exec_browser(Browser, SiteOrContext, ExtraArgs, Options) -> RetType
+    when
+        Browser       :: atom(),
+        SiteOrContext :: atom() | z:context(),
+        ExtraArgs     :: [string()],
+        Options       :: map(),
+        RetType       :: {ok, term()} | {error, term()}.
+exec_browser(Browser, #context{} = Context, ExtraArgs, Options) ->
+    OS = os:type(),
+    SiteUrl = z_context:abs_url(<<"/">>, Context),
+    exec_browser(Browser, OS, SiteUrl, ExtraArgs, Options);
+exec_browser(Browser, Site, ExtraArgs, Options) ->
+    exec_browser(Browser, z:c(Site), ExtraArgs, Options).
+
+exec_browser(chrome, {unix, linux}, SiteUrl, ExtraArgs, Options) ->
+    case os:find_executable("google-chrome") of
+        false ->
+            {error, "Chrome executable not found."};
+        Executable ->
+            exec_chrome(Executable, SiteUrl, ExtraArgs, Options)
+    end;
+exec_browser(chrome, {unix, darwin}, SiteUrl, ExtraArgs, Options) ->
+    Executable = "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome",
+    exec_chrome(Executable, SiteUrl, ExtraArgs, Options);
+exec_browser(chromium, {unix, linux}, SiteUrl, ExtraArgs, Options) ->
+    case os:find_executable("chromium-browser") of
+        false ->
+            {error, "Chromium executable not found."};
+        Executable ->
+            exec_chrome(Executable, SiteUrl, ExtraArgs, Options)
+    end;
+exec_browser(chromium, {unix, darwin}, SiteUrl, ExtraArgs, Options) ->
+    Executable = "/Applications/Chromium.app/Contents/MacOS/Chromium",
+    exec_chrome(Executable, SiteUrl, ExtraArgs, Options);
+exec_browser(_Browser, _OS, _SiteUrl, _ExtraArgs, _Options) ->
+    {error, "Browser or operating system not supported."}.
 
 %%====================================================================
 %% gen_server callbacks
@@ -250,3 +336,32 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 
      |Acc].
 
+exec_chrome(Executable, SiteUrl, ExtraArgs, #{secure := true} = Options) ->
+    TmpPath = filename:join([ z_tempfile:temppath(), "zotonic-chrome" ]),
+    Args = lists:join(" ", [
+        "--user-data-dir=" ++ TmpPath,
+        "--ignore-certificate-errors",
+        "--unsafely-treat-insecure-origin-as-secure=" ++ SiteUrl
+        | ExtraArgs
+    ]),
+    do_exec_chrome(Executable, SiteUrl, Args, Options);
+exec_chrome(Executable, SiteUrl, ExtraArgs, Options) ->
+    do_exec_chrome(Executable, SiteUrl, ExtraArgs, Options).
+
+do_exec_chrome(Executable, SiteUrl, Args, _Options) ->
+    Command = io_lib:format("~s ~s ~s", [
+        z_filelib:os_escape(Executable), Args, z_filelib:os_filename(SiteUrl)
+    ]),
+    io:format(
+        "Trying to execute the commmand:\n$ ~s\n",
+        [unicode:characters_to_list(Command)]
+    ),
+    do_exec_browser(Command).
+
+do_exec_browser(Command) ->
+    case catch open_port({spawn, Command}, [in, hide]) of
+        Port when is_port(Port) ->
+            {ok, Port};
+        Error ->
+            {error, Error}
+    end.
