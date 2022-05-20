@@ -337,7 +337,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
      |Acc].
 
 exec_chrome(Executable, SiteUrl, ExtraArgs, #{secure := true} = Options) ->
-    TmpPath = filename:join([<<"/">>, <<"tmp">>, <<"foo">>]),
+    TmpPath = filename:join([ z_tempfile:temppath(), "zotonic-chrome" ]),
     Args = lists:join(" ", [
         "--user-data-dir=" ++ TmpPath,
         "--ignore-certificate-errors",
