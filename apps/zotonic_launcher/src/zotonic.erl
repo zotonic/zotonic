@@ -103,6 +103,11 @@ runtests(Tests) ->
 %% @doc Stop all sites, the zotonic server and the beam.
 -spec stop() -> ok.
 stop() ->
+    ?LOG_INFO(#{
+        text => <<"Stopping Zotonic">>
+    }),
+    logger:set_primary_config(level, error),
+
     Sites = z_sites_manager:get_sites(),
     maps:fold(
         fun
@@ -117,7 +122,10 @@ stop() ->
     await_sites_stopping(50),
 
     % Tell heart we are stopping, otherwise it will restart the node.
-    heart:set_cmd("echo ok"),
+    case whereis(heart) of
+        undefined -> ok;
+        HeartPid when is_pid(HeartPid) -> heart:set_cmd("echo ok")
+    end,
 
     % Stop all other running applications. Note: on OTP 25 we can simply use init:stop(0).
     % On earlier OTP versions this is problematic because all modules are unloaded before
@@ -126,16 +134,44 @@ stop() ->
         Version when Version >= 25 ->
             init:stop();
         _ ->
-            application:stop(zotonic_launcher),
             application:stop(exometer),
+
+            [ maybe_app_stop(A) || {A, _, _} <- application:which_applications() ],
+
+            application:stop(os_mon),
             application:stop(jobs),
+            application:stop(sidejob),
             application:stop(mnesia),
             application:stop(epgsql),
 
-            [ application:stop(A) || {A, _, _} <- application:which_applications() ],
-
             erlang:halt(0)
     end.
+
+
+maybe_app_stop(jobs) -> false;
+maybe_app_stop(sidejob) -> false;
+maybe_app_stop(mnesia) -> false;
+maybe_app_stop(epgsql) -> false;
+maybe_app_stop(zotonic_core) -> false;
+
+maybe_app_stop(sasl) -> false;
+maybe_app_stop(kernel) -> false;
+maybe_app_stop(stdlib) -> false;
+maybe_app_stop(inets) -> false;
+maybe_app_stop(ssl) -> false;
+maybe_app_stop(public_key) -> false;
+maybe_app_stop(crypto) -> false;
+maybe_app_stop(asn1) -> false;
+maybe_app_stop(tls_certificate_check) -> false;
+maybe_app_stop(ssl_verify_fun) -> false;
+maybe_app_stop(os_mon) -> false;
+maybe_app_stop(poolboy) -> false;
+maybe_app_stop(depcache) -> false;
+maybe_app_stop(setup) -> false;
+maybe_app_stop(syslog) -> false;
+maybe_app_stop(exometer_core) -> false;
+maybe_app_stop(A) -> application:stop(A).
+
 
 await_sites_stopping(0) -> ok;
 await_sites_stopping(N) ->
