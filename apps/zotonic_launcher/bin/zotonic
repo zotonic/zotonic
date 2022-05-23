@@ -22,6 +22,8 @@ case "$1" in
         case "${unameOut}" in
             Linux*)     machine=Linux;;
             Darwin*)    machine=Mac;;
+            FreeBSD*)   machine=BSD;;
+            DragonFly*) machine=BSD;;
             CYGWIN*)    machine=Cygwin;;
             MINGW*)     machine=MinGw;;
             *)          machine="UNKNOWN:${unameOut}"
@@ -30,6 +32,7 @@ case "$1" in
         case "${machine}" in
             Linux*)     BASH_FILE=~/.bashrc;;
             Mac*)       BASH_FILE=~/.bash_profile;;
+            BSD*)       BASH_FILE=~/.bashrc;;
             *)          unset BASH_FILE
         esac
 
@@ -86,8 +89,8 @@ case "$1" in
         if [ -s "${ZOTONIC_PIDFILE}" ]; then
             readonly PID=$(\cat -- "${ZOTONIC_PIDFILE}")
         fi
-        ${ZOTONIC_BIN}/zotonic.escript stop & 
-        \wait $!    
+        ${ZOTONIC_BIN}/zotonic.escript stop &
+        \wait $!
         if [ ! -z "${PID}" ] && [ "${ZOTONIC_WAIT_VM:=0}" -eq "1" ]; then
             \printf "%s" "Waiting for VM stop "
             while \kill -0 ${PID} 2> /dev/null; do \printf "%s" "." ; \sleep 1; done;
