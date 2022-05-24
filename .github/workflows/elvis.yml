@@ -27,6 +27,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Download Elvis
-        run: wget https://github.com/inaka/elvis/releases/download/1.1.0/elvis && chmod +x elvis
+        run: wget https://github.com/inaka/elvis/releases/download/0.2.12/elvis && chmod +x elvis
       - name: Run Elvis
         run: ./elvis rock
