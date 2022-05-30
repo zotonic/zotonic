@@ -57,7 +57,7 @@ fetch_partial(Url, Options, Context) ->
 
 
 %% @doc Fetch the metadata from an URL. Let modules change the fetch options.
--spec metadata( string() | binary(), z_url_fetch:options(), z:context() ) -> {ok, z_url_metadat:metadata()} | {error, term()}.
+-spec metadata( string() | binary(), z_url_fetch:options(), z:context() ) -> {ok, z_url_metadata:metadata()} | {error, term()}.
 metadata(Url, Options, Context) ->
     Options1 = add_options(Url, Options, Context),
     z_url_metadata:fetch(Url, Options1).
