@@ -497,7 +497,7 @@ pretty_stack(Stack, Config) ->
             [
                 "\n     ",
                 maybe_color(colored_mfa, Config),
-                io_lib:format("~tp:~tp/~p", [ M, F, Arity ]),
+                io_lib:format("~ts:~ts/~p", [ bin(M), bin(F), Arity ]),
                 maybe_color(?COLOR_END, Config),
                 " @ ",
                 pretty_pos(Pos, Config)
@@ -508,7 +508,7 @@ pretty_stack(Stack, Config) ->
 pretty_pos(Pos, Config) ->
     [
         maybe_color(colored_text, Config),
-        io_lib:format("~tp", [ proplists:get_value(file, Pos) ]),
+        io_lib:format("\"~ts\"", [ proplists:get_value(file, Pos, "undefined") ]),
         maybe_color(colored_end, Config),
         case proplists:get_value(line, Pos) of
             undefined -> "";
@@ -525,3 +525,6 @@ maybe_color(Color, Config) when is_atom(Color) ->
     maps:get(Color, Config, "");
 maybe_color(Color, _Config) ->
     Color.
+
+bin(A) when is_atom(A) -> atom_to_binary(A, utf8);
+bin(B) when is_binary(B) -> B.
