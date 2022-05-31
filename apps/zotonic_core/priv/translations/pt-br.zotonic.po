@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-05-17 23:26\n"
+"PO-Revision-Date: 2022-05-31 05:43\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -969,11 +969,11 @@ msgstr "Clique para visualizar."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:90
 msgid "Close Sockets"
-msgstr "Fechar soquetes"
+msgstr "Fechar Sockets"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:91
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
-msgstr "Feche todos os soquetes de endereços IP que tenham mais de &gt; 250 soquetes abertos."
+msgstr "Feche todos os sockets de endereços IP que tenham mais de &gt; 250 soquetes abertos."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:33
 msgid "Close preview"
@@ -981,7 +981,7 @@ msgstr "Fechar visualização"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:45
 msgid "Config Directory"
-msgstr "Diretório de configuração"
+msgstr "Diretório de Configuração"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:38
 msgid "Confirm block removal"
@@ -1022,7 +1022,7 @@ msgstr "Não foi possível conectar ao site."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:11
 msgid "Could not detect anything to import on that URL or embed code."
-msgstr "Não foi possível detectar nada para importar nesse URL ou código de incorporação."
+msgstr "Não foi possível detectar nada para importar nesse URL ou código incorporado."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106
@@ -1061,11 +1061,11 @@ msgstr "Painel"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:39
 msgid "Data Directory"
-msgstr "Diretório de dados"
+msgstr "Diretório de Dados"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:28
 msgid "Database Version"
-msgstr "Versão do banco de dados"
+msgstr "Versão do Banco de Dados"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:36
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
@@ -1073,7 +1073,7 @@ msgstr "Versão do banco de dados"
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:20./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:111./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:533./apps/zotonic_mod_survey/src/models/m_survey.erl:536
 msgid "Date"
-msgstr "Encontro"
+msgstr "Data"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:6
 msgid "Date range"
@@ -1093,7 +1093,7 @@ msgstr "Excluir se não estiver mais conectado"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:72
 msgid "Delete this page."
-msgstr "Delete essa página."
+msgstr "Excluir essa página."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:18
 msgid "Deleted."
@@ -1111,11 +1111,11 @@ msgstr "Dependente"
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:17
 #: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:8
 msgid "Disconnect"
-msgstr "desconectar"
+msgstr "Desconectar"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:36
 msgid "Discover media"
-msgstr "Descubra mídia"
+msgstr "Descobrir mídia"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
 msgid "Disks"
@@ -1123,7 +1123,7 @@ msgstr "Discos"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:129
 msgid "Do not import connections."
-msgstr "Não importe conexões."
+msgstr "Não importar conexões."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
 msgid "Do you want to remove this block?"
@@ -1147,7 +1147,7 @@ msgstr "Página duplicada"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:76./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:81
 msgid "Duplicate this page."
-msgstr "Duplique esta página."
+msgstr "Duplicar esta página."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address_email.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address_email.tpl:4
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_identity_email.tpl:2
@@ -1184,7 +1184,7 @@ msgstr "Endereço de e-mail para exibição pública"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:5
 #: apps/zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:13
 msgid "Embed"
-msgstr "Embutir"
+msgstr "Incorporar"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:31
 msgid "Embed code will be sanitized for allowed sites and html."
@@ -1197,7 +1197,7 @@ msgstr "Incorporar página"
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:196
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:230
 msgid "Embedded Content"
-msgstr "Conteúdo incorporado"
+msgstr "Conteúdo Incorporado"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:34
 msgid "Emergency telephone"
@@ -1267,7 +1267,7 @@ msgstr "Falha ao baixar o arquivo."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:38
 msgid "Featured"
-msgstr "Apresentou"
+msgstr "Destaque"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:4./apps/zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:6
 msgid "Features"
@@ -1287,7 +1287,7 @@ msgstr "Arquivo/conteúdo de mídia"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:50./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:47
 msgid "Filter on category"
-msgstr "Filtrar por categoria"
+msgstr "Filtrar na categoria"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:33./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:30
 msgid "Filter on content group"
@@ -1295,11 +1295,11 @@ msgstr "Filtrar no grupo de conteúdo"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:73
 msgid "Find Media"
-msgstr "Encontrar mídia"
+msgstr "Encontrar Mídia"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:74
 msgid "Find Page"
-msgstr "Localizar página"
+msgstr "Localizar Página"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:133
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:218
@@ -1334,7 +1334,7 @@ msgstr "Função"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
 msgid "Go back."
-msgstr "Volte."
+msgstr "Voltar."
 
 #: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:21./apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:22./apps/zotonic_mod_admin/src/mod_admin.erl:174
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:119
@@ -1344,11 +1344,11 @@ msgstr "Cabeçalho"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:17
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:24
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">documentation on the query arguments</a> on the Zotonic website."
-msgstr "Aqui você pode editar os argumentos da consulta de pesquisa. Cada argumento segue sua própria linha. Para obter mais informações, consulte a documentação <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">sobre os argumentos de consulta</a> no site da Zotonic."
+msgstr "Aqui você pode editar os argumentos da consulta de pesquisa. Cada argumento segue sua própria linha. Para obter mais informações, consulte a <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">documentação sobre os argumentos de consulta</a> no site do Zotonic."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Home Directory"
-msgstr "Diretório inicial"
+msgstr "Diretório Inicial"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:68
 msgid "IP Address"
@@ -1785,7 +1785,7 @@ msgstr "Recuperando status..."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:104
 msgid "Runs the schema install command from the site's module again."
-msgstr "Executa o comando de instalação do esquema do módulo do site novamente."
+msgstr "Executa novamente o comando de instalação do esquema a partir do módulo do site."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:6
 msgid "SEO Content"
@@ -1802,12 +1802,12 @@ msgstr "Salvar e visualizar"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:23./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:127./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:81
 msgid "Save and view the page."
-msgstr "Salve e visualize a página."
+msgstr "Salvar e visualizar a página."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:124./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
 msgid "Save this page."
-msgstr "Salve esta página."
+msgstr "Salvar esta página."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:52
 msgid "Search indices rebuilt."
@@ -1824,7 +1824,7 @@ msgstr "Consulta de pesquisa"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:125
 msgid "Search results"
-msgstr "Procurar Resultados"
+msgstr "Resultados da pesquisa"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:85
 msgid "Search..."
@@ -1832,7 +1832,7 @@ msgstr "Procurar..."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
 msgid "Security Directory"
-msgstr "Diretório de segurança"
+msgstr "Diretório de Segurança"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:6
 msgid "See also: <a href=\"http://docs.zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">The erlang.config file</a>"
@@ -1848,7 +1848,7 @@ msgstr "Selecione uma imagem conectada"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:45./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:42
 msgid "Selected Categories"
-msgstr "Categorias selecionadas"
+msgstr "Categorias Selecionadas"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:50
 msgid "Selecting a file will make the page a media item."
@@ -1872,7 +1872,7 @@ msgstr "Mostrar página em vários caminhos"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:36
 msgid "Site Files Directory"
-msgstr "Diretório de arquivos do site"
+msgstr "Diretório de Arquivos do Site"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
