@@ -160,7 +160,7 @@ rsc_visible(RscName, Context) ->
 -spec rsc_prop_visible(m_rsc:resource(), atom() | binary(), z:context()) -> boolean().
 rsc_prop_visible(undefined, _Property, _Context) ->
     true;
-rsc_prop_visible(Id, _Property, #context{user_id=UserId}) when Id == UserId andalso is_integer(UserId) ->
+rsc_prop_visible(Id, _Property, #context{user_id=UserId}) when Id =:= UserId andalso is_integer(UserId) ->
     true;
 rsc_prop_visible(_Id, _Property, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
@@ -192,10 +192,7 @@ rsc_prop_visible(RscName, Property, Context) ->
 -spec rsc_editable(m_rsc:resource(), z:context()) -> boolean().
 rsc_editable(undefined, _Context) ->
     false;
-rsc_editable(Id, #context{user_id=Id}) when is_integer(Id) ->
-    %% Can always edit myself
-    true;
-rsc_editable(_Id, #context{acl=admin}) ->
+rsc_editable(_Id, #context{ acl = admin }) ->
     true;
 rsc_editable(Id, Context) when is_integer(Id) ->
     is_allowed(update, Id, Context);
@@ -209,9 +206,9 @@ rsc_editable(RscName, Context) ->
 -spec rsc_deletable(m_rsc:resource(), z:context()) -> boolean().
 rsc_deletable(undefined, _Context) ->
     false;
-rsc_deletable(_Id, #context{user_id=undefined}) ->
+rsc_deletable(_Id, #context{ user_id = undefined }) ->
     false;
-rsc_deletable(Id, #context{acl=admin} = Context) ->
+rsc_deletable(Id, #context{ acl = admin } = Context) ->
     not z_convert:to_bool(m_rsc:p_no_acl(Id, <<"is_protected">>, Context));
 rsc_deletable(Id, Context) when is_integer(Id) ->
     not z_convert:to_bool(m_rsc:p_no_acl(Id, <<"is_protected">>, Context))
