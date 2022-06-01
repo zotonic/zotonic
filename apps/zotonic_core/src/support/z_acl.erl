@@ -284,6 +284,7 @@ set_admin(Context) ->
 
 
 %% @doc Check if an admin is logged on and the read only flag is not set.
+%% Exception for sudo, where updates are always allowed.
 -spec is_admin_editable( z:context() ) -> boolean().
 is_admin_editable(#context{ acl = admin }) -> true;
 is_admin_editable(#context{ acl_is_read_only = true }) -> false;
