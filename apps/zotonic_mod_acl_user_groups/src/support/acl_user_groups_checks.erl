@@ -1,7 +1,7 @@
-%% @copyright 2015-2016 Marc Worrell
+%% @copyright 2015-2022 Marc Worrell
 %% @doc Routines for ACL notifications.
 
-%% Copyright 2015-2016 Marc Worrell
+%% Copyright 2015-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -202,6 +202,14 @@ acl_is_allowed(_, #context{user_id=1}) ->
     true;
 acl_is_allowed(#acl_is_allowed{object=undefined}, _Context) ->
     undefined;
+acl_is_allowed(#acl_is_allowed{action=view, object=Id}, #context{ user_id = UserId })
+    when is_integer(Id), Id =:= UserId ->
+    % User can view their own resource
+    true;
+acl_is_allowed(#acl_is_allowed{action=update, object=Id}, #context{ user_id = UserId })
+    when is_integer(Id), Id =:= UserId ->
+    % User can update their own resource
+    true;
 acl_is_allowed(#acl_is_allowed{action=view, object=Id}, Context) when is_integer(Id) orelse is_atom(Id) ->
     can_rsc(Id, view, Context);
 acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_media{mime=Mime, size=Size}}, Context) ->
