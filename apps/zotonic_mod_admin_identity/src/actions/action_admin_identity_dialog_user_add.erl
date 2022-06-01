@@ -36,7 +36,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 
 event(#postback{message={dialog_user_add, OnSuccess}}, Context) ->
-    case z_acl:is_allowed(use, mod_admin_identity, Context) of
+    case not z_acl:is_read_only(Context) andalso z_acl:is_allowed(use, mod_admin_identity, Context) of
         true ->
             Vars = [
                 {on_success, OnSuccess}
@@ -49,7 +49,7 @@ event(#postback{message={dialog_user_add, OnSuccess}}, Context) ->
 %% @doc Create user resource and a password identity
 %% @spec event(Event, Context1) -> Context2
 event(#submit{message={user_add, Args}}, Context) ->
-    case z_acl:is_allowed(use, mod_admin_identity, Context) of
+    case not z_acl:is_read_only(Context) andalso z_acl:is_allowed(use, mod_admin_identity, Context) of
         true ->
             Username = z_context:get_q_validated(<<"new_username">>, Context),
             Password = z_context:get_q_validated(<<"new_password">>, Context),

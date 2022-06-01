@@ -37,6 +37,7 @@
          is_read_only/1,
          set_read_only/2,
 
+         is_admin_editable/1,
          is_admin/1,
          sudo/1,
          sudo/2,
@@ -248,6 +249,9 @@ user_groups(Context) ->
     end.
 
 -spec is_read_only( z:context() ) -> boolean().
+is_read_only(#context{ acl = admin }) ->
+    % Sudo is never read only.
+    false;
 is_read_only(#context{ acl_is_read_only = IsReadOnly }) ->
     IsReadOnly.
 
@@ -277,6 +281,13 @@ set_admin(#context{ acl = undefined } = Context) ->
     Context#context{ acl = admin, user_id = ?ACL_ADMIN_USER_ID };
 set_admin(Context) ->
     Context#context{ acl = admin }.
+
+
+%% @doc Check if an admin is logged on and the read only flag is not set.
+-spec is_admin_editable( z:context() ) -> boolean().
+is_admin_editable(#context{ acl = admin }) -> true;
+is_admin_editable(#context{ acl_is_read_only = true }) -> false;
+is_admin_editable(Context) -> is_admin(Context).
 
 %% @doc Check if the current user is an admin or a sudo action
 -spec is_admin( z:context() ) -> boolean().

@@ -52,12 +52,14 @@ event(#postback{message={set_username_password, Id, OnDelete}}, Context) ->
 
 event(#postback{message={delete_username, Args}}, Context) ->
     Id = m_rsc:rid(proplists:get_value(id, Args), Context),
-    case {z_acl:is_allowed(use, mod_admin_identity, Context), z_acl:user(Context)} of
-        {_, Id} ->
+    case {z_acl:is_read_only(Context), z_acl:is_allowed(use, mod_admin_identity, Context), z_acl:user(Context)} of
+        {true, _, _} ->
+            z_render:growl_error(?__("Only an administrator or the user him/herself can set a password.", Context), Context);
+        {false, _, Id} ->
             z_render:growl_error(?__("Sorry, you can not remove your own username.", Context), Context);
-        {true, _} when Id =:= 1 ->
+        {false, true, _} when Id =:= 1 ->
             z_render:growl_error(?__("The admin user can not be removed.", Context), Context);
-        {true, _} ->
+        {false, true, _} ->
             case m_identity:delete_username(Id, Context) of
                 ok ->
                     Context1 = z_render:growl(?__("Deleted the user account.", Context), Context),
@@ -65,7 +67,7 @@ event(#postback{message={delete_username, Args}}, Context) ->
                 {error, _} ->
                     z_render:growl_error(?__("You are not allowed to delete this user account.", Context), Context)
             end;
-        {false, _} ->
+        {false, false, _} ->
             z_render:growl_error(?__("Only an administrator or the user him/herself can set a password.", Context), Context)
     end;
 
@@ -74,7 +76,11 @@ event(#submit{message=set_username_password}, Context) ->
     Username = z_context:get_q_validated(<<"new_username">>, Context),
     Password = z_context:get_q_validated(<<"new_password">>, Context),
 
-    case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:user(Context) == Id of
+    case not z_acl:is_read_only(Context)
+        andalso (
+            z_acl:is_allowed(use, mod_admin_identity, Context)
+            orelse z_acl:user(Context) == Id)
+    of
         true ->
             case Password of
                 <<>> ->

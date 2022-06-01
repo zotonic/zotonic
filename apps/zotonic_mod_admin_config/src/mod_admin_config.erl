@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2015 Marc Worrell
-%% Date: 2009-08-07
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Allow editing and inserting config keys with string values.
 
-%% Copyright 2009-2015 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -59,7 +58,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 
 
 event(#submit{ message = {config_save, Args} }, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_admin_editable(Context) of
         true ->
             Module = z_convert:to_atom( proplists:get_value(module, Args, undefined) ),
             Qs = z_context:get_q_all_noz(Context),

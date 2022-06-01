@@ -110,7 +110,7 @@ observe_tick_24h(tick_24h, Context) ->
 %% @doc Handle UI events
 %% @todo ACL check
 event(#submit{message = {request_cert, Args}}, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_admin_editable(Context) of
         true ->
             {hostname, Hostname} = proplists:lookup(hostname, Args),
             {wrapper, Wrapper} = proplists:lookup(wrapper, Args),
