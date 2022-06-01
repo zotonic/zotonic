@@ -202,12 +202,10 @@ acl_is_allowed(_, #context{user_id=1}) ->
     true;
 acl_is_allowed(#acl_is_allowed{object=undefined}, _Context) ->
     undefined;
-acl_is_allowed(#acl_is_allowed{action=view, object=Id}, #context{ user_id = UserId })
-    when is_integer(Id), Id =:= UserId ->
+acl_is_allowed(#acl_is_allowed{action=view, object=UserId}, #context{user_id=UserId}) when is_integer(UserId) ->
     % User can view their own resource
     true;
-acl_is_allowed(#acl_is_allowed{action=update, object=Id}, #context{ user_id = UserId })
-    when is_integer(Id), Id =:= UserId ->
+acl_is_allowed(#acl_is_allowed{action=update, object=UserId}, #context{user_id=UserId}) when is_integer(UserId) ->
     % User can update their own resource
     true;
 acl_is_allowed(#acl_is_allowed{action=view, object=Id}, Context) when is_integer(Id) orelse is_atom(Id) ->
@@ -262,7 +260,7 @@ acl_is_allowed_prop(_Id, _Prop, #context{acl=admin}) ->
     true;
 acl_is_allowed_prop(_Id, _Prop, #context{user_id=1}) ->
     true;
-acl_is_allowed_prop(Id, _Prop, #context{user_id=Id}) ->
+acl_is_allowed_prop(UserId, _Prop, #context{user_id=UserId}) when is_integer(UserId) ->
     true;
 acl_is_allowed_prop(Id, Prop, Context) ->
     case is_private_property(Prop) of
