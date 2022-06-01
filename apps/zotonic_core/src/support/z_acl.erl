@@ -128,9 +128,6 @@ is_allowed_prop(Action, Object, Property, Context) ->
 -spec rsc_visible( m_rsc:resource(), z:context() ) -> boolean().
 rsc_visible(undefined, _Context) ->
     true;
-rsc_visible(Id, #context{user_id = UserId}) when Id =:= UserId andalso is_integer(UserId) ->
-    %% Can always see myself
-    true;
 rsc_visible(_Id, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
 rsc_visible(_Id, #context{acl=admin}) ->
@@ -159,8 +156,6 @@ rsc_visible(RscName, Context) ->
 %% @doc Check if a property of the resource is visible for the current user
 -spec rsc_prop_visible(m_rsc:resource(), atom() | binary(), z:context()) -> boolean().
 rsc_prop_visible(undefined, _Property, _Context) ->
-    true;
-rsc_prop_visible(Id, _Property, #context{ user_id=Id }) when is_integer(Id) ->
     true;
 rsc_prop_visible(_Id, _Property, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
