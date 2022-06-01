@@ -45,7 +45,12 @@ file_data(Path, Context) ->
                 {ok, {Mime, z_file_request:content_data(Info, identity)}}
             catch
                 Type:Err ->
-                    ?LOG_WARNING("File data error for ~p: ~p", [ Path, {Type, Err} ]),
+                    ?LOG_WARNING(#{
+                        text => <<"File data error">>,
+                        file => Path,
+                        result => Type,
+                        reason => Err
+                    }),
                     {error, data}
             end;
         {error, _} = Error ->

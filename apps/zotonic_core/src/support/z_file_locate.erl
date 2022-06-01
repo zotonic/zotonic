@@ -56,7 +56,7 @@ extract_filters(Path, OptFilters, Context) ->
     case safe_path(Path) of
         undefined ->
             ?LOG_WARNING(#{
-                text => <<"Unsafe path ~p">>,
+                text => <<"Unsafe path">>,
                 result => error,
                 path => Path
             }),

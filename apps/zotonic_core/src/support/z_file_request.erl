@@ -118,7 +118,10 @@ stream_single_part(#part_cache{cache_pid=Pid}, FzLookup) ->
         {ok, Data} ->
             Data;
         Other ->
-            ?LOG_WARNING("Unexpected result from the filezcache: ~p", [Other]),
+            ?LOG_WARNING(#{
+                text => <<"Unexpected result from the filezcache">>,
+                result => Other
+            }),
             <<>>
     end;
 stream_single_part(#part_missing{}, _FzLookup) ->
@@ -137,7 +140,10 @@ stream_many_parts([#part_cache{cache_pid=Pid}|Parts], FzLookup) ->
         {ok, {device, _DevicePid} = Device} ->
             {Device, fun() -> ?MODULE:stream_many_parts(Parts, FzLookup) end};
         Other ->
-            ?LOG_WARNING("Unexpected result from the filezcache: ~p", [Other]),
+            ?LOG_WARNING(#{
+                text => <<"Unexpected result from the filezcache">>,
+                result => Other
+            }),
             stream_many_parts(Parts, FzLookup)
     end;
 stream_many_parts([#part_missing{}|Parts], FzLookup) ->
