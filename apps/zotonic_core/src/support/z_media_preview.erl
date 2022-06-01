@@ -47,7 +47,12 @@
 %% @doc Convert the Infile to an outfile with a still image using the filters.
 -spec convert(file:filename_all(), file:filename_all(), list(), #context{}) -> ok | {error, term()}.
 convert(InFile, InFile, _, _Context) ->
-    ?LOG_ERROR("Image convert will overwrite input file ~p", [InFile]),
+    ?LOG_ERROR(#{
+        text => <<"Image convert will overwrite input file">>,
+        result => error,
+        reason => will_overwrite_infile,
+        file => InFile
+    }),
     {error, will_overwrite_infile};
 convert(InFile, OutFile, Filters, Context) ->
     convert(InFile, InFile, OutFile, Filters, Context).
@@ -64,8 +69,9 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
                         {error, Reason} = Error ->
                             ?LOG_WARNING(#{
                                 text => <<"Cannot expand mediaclass">>,
-                                filters => Filters,
-                                reason => Reason
+                                result => error,
+                                reason => Reason,
+                                filters => Filters
                             }),
                             Error
                     end;

@@ -116,7 +116,13 @@ expand_mediaclass_checksum(Checksum, Props) ->
             [#mediaclass_index{props=Ps}|_] ->
                 {ok, expand_mediaclass_2(Props, Ps)};
             [] ->
-                ?LOG_WARNING("mediaclass expand for unknown mediaclass checksum ~p:~p", [Class, Checksum]),
+                ?LOG_WARNING(#{
+                    text => <<"mediaclass expand for unknown mediaclass checksum">>,
+                    result => error,
+                    reason => checksum,
+                    mediaclass => Class,
+                    checksum => Checksum
+                }),
                 {error, checksum}
         end.
 
@@ -319,7 +325,12 @@ consult_file(Path) ->
     case file:consult(Path) of
         {error, Reason} ->
             % log an error and continue
-            ?LOG_ERROR("Error consulting media class file ~p: ~p (skipped)", [Path, Reason]),
+            ?LOG_ERROR(#{
+                text => <<"Error consulting media class file">>,
+                file => Path,
+                result => error,
+                reason => Reason
+            }),
             [];
         {ok, MediaClasses} ->
             MediaClasses
