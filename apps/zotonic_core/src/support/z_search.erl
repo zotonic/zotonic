@@ -102,21 +102,33 @@ search(Name, Args, Page, PageLen, Options0, Context) when is_binary(Name), is_ma
                             },
                             search(<<"query">>, Args1, Page, PageLen, Options, Context);
                         false ->
-                            ?LOG_NOTICE("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
+                            ?LOG_NOTICE(#{
+                                text => <<"z_search: ignored unknown search query">>,
+                                name => Name,
+                                args => Args
+                            }),
                             #search_result{
                                 search_name = Name,
                                 search_args = Args
                             }
                     end;
                 undefined ->
-                    ?LOG_NOTICE("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
+                    ?LOG_NOTICE(#{
+                        text => <<"z_search: ignored unknown search query">>,
+                        name => Name,
+                        args => Args
+                    }),
                     #search_result{
                         search_name = Name,
                         search_args = Args
                     }
             end;
         undefined ->
-            ?LOG_NOTICE("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
+            ?LOG_NOTICE(#{
+                text => <<"z_search: ignored unknown search query">>,
+                name => Name,
+                args => Args
+            }),
             #search_result{
                 search_name = Name,
                 search_args = Args
@@ -351,7 +363,11 @@ search_1({SearchName, Props}, Page, PageLen, {Offset, Limit} = OffsetLimit, Cont
             search(SearchNameBin, ArgsMap, PageNr, PageLen, Context);
         undefined ->
             % Not on a page boundary so we can't use the new search, return the empty result.
-            ?LOG_NOTICE("z_search: ignored unknown search query ~p", [ {SearchName, PropsSorted} ]),
+            ?LOG_NOTICE(#{
+                text => <<"z_search: ignored unknown search query">>,
+                name => SearchName,
+                args => PropsSorted
+            }),
             #search_result{};
         Result when Page =/= undefined ->
             handle_search_result(Result, Page, PageLen, OffsetLimit, SearchName, PropsSorted, #{}, Context);
@@ -368,7 +384,10 @@ search_1({SearchName, Props}, Page, PageLen, {Offset, Limit} = OffsetLimit, Cont
 search_1(Name, Page, PageLen, OffsetLimit, Context) when is_atom(Name) ->
     search_1({Name, []}, Page, PageLen, OffsetLimit, Context);
 search_1(Name, _Page, _PageLen, _OffsetLimit, _Context) ->
-    ?LOG_NOTICE("z_search: ignored unknown search query ~p", [ Name ]),
+    ?LOG_NOTICE(#{
+        text => <<"z_search: ignored unknown search query">>,
+        name => Name
+    }),
     #search_result{}.
 
 

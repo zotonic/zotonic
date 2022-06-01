@@ -340,7 +340,12 @@ render_actions(TriggerId, TargetId, {Action, Args}, Context) ->
                 {ok, #module_index{ erlang_module = ActionModule }} ->
                     ActionModule:render_action(Trigger, Target, Args, Context);
                 {error, enoent} ->
-                    ?LOG_WARNING("No action enabled for \"~p\"", [Action]),
+                    ?LOG_WARNING(#{
+                        text => <<"Action not enabled">>,
+                        result => error,
+                        reason => enoent,
+                        action => Action
+                    }),
                     {[], Context}
             end;
         false ->
@@ -385,8 +390,14 @@ render_validator(TriggerId, TargetId, Args, Context) ->
                                     case z_module_indexer:find(validator, VType, Context) of
                                         {ok, #module_index{ erlang_module = Mod }} ->
                                             {ok, Mod};
-                                        {error, enoent} ->
-                                            ?LOG_WARNING("No validator found for \"~p\"", [VType])
+                                        {error, enoent} = Error ->
+                                            ?LOG_WARNING(#{
+                                                text => <<"Validator not found">>,
+                                                result => error,
+                                                reason => enoent,
+                                                validator => VType
+                                            }),
+                                            Error
                                     end;
                                 Delegate  ->
                                     {ok, Delegate}
