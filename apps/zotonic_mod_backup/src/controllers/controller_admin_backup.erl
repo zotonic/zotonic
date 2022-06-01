@@ -96,7 +96,7 @@ error_message(_R, Context) ->
 
 
 set_config(What, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_admin_editable(Context) of
         true ->
             m_config:set_value(mod_backup, What, z_context:get_q(<<"triggervalue">>, Context), Context),
             z_render:growl(?__("Changed configuration.", Context), Context);

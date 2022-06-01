@@ -280,7 +280,7 @@ exchange_accept_code(ClientIdBin, ClientSecret, RedirectURL, Code, Context) ->
 %% and the App description.
 -spec insert_app( AppDetails :: map(), z:context() ) -> {ok, AppId :: integer()} | {error, term()}.
 insert_app(Map, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_admin_editable(Context) of
         true ->
             App = #{
                 <<"user_id">> => maps:get(<<"user_id">>, Map, z_acl:user(Context)),
@@ -298,7 +298,7 @@ insert_app(Map, Context) ->
 %% @doc Delete an App. All associated tokens are deleted as well.
 -spec delete_app( AppId :: integer(), z:context() ) -> ok | {error, term()}.
 delete_app(AppId, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_admin_editable(Context) of
         true ->
             case z_db:delete(oauth2_app, AppId, Context) of
                 {ok, 1} -> ok;
@@ -312,7 +312,7 @@ delete_app(AppId, Context) ->
 %% @doc Update an App's is_enabled flag and description.
 -spec update_app( AppId :: integer(), map(), z:context() ) -> ok | {error, term()}.
 update_app(AppId, Map, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_admin_editable(Context) of
         true ->
             App = #{
                 <<"is_enabled">> => maps:get(<<"is_enabled">>, Map, true),
@@ -332,7 +332,7 @@ update_app(AppId, Map, Context) ->
 %% @doc Regenerate the secret and sign key of an App. All outstanding tokens are deleted.
 -spec update_app_secret( AppId :: integer(), z:context() ) -> {ok, binary()}| {error, term()}.
 update_app_secret(AppId, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_admin_editable(Context) of
         true ->
             Secret = z_ids:id(?APP_KEYLEN),
             App = #{
@@ -425,7 +425,7 @@ list_tokens(undefined, _Context) ->
 -spec insert_token( AppId :: integer(), UserId :: m_rsc:resource_id(), TokenProps :: map(), z:context() ) ->
     {ok, TokenId :: integer()} | {error, term()}.
 insert_token( AppId, UserId, Props, Context ) when is_map(Props), is_integer(AppId) ->
-    case is_allowed(UserId, Context) of
+    case is_allowed(UserId, Context) and not z_acl:is_read_only(Context) of
         true ->
             z_db:transaction(
                 fun(Ctx) ->
@@ -481,7 +481,7 @@ delete_token( TokenId, Context ) when is_integer(TokenId) ->
         undefined ->
             {error, enoent};
         UserId ->
-            case is_allowed(UserId, Context) of
+            case is_allowed(UserId, Context) and not z_acl:is_read_only(Context) of
                 true ->
                     z_db:q("delete from oauth2_token where id = $1", [ TokenId ], Context),
                     ok;

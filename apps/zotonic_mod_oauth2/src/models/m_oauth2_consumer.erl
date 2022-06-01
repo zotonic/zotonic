@@ -165,7 +165,7 @@ get_consumer_oauth_service(ConsumerId, Context) ->
 %% @doc Insert a new Consumer.
 -spec insert_consumer( ConsumerDetails :: map(), z:context() ) -> {ok, ConsumerId :: integer()} | {error, term()}.
 insert_consumer(Map, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_admin_editable(Context) of
         true ->
             Name = maps:get(<<"name">>, Map, <<>>),
             Consumer = #{
@@ -193,7 +193,7 @@ insert_consumer(Map, Context) ->
 %% @doc Delete an App. All associated tokens are deleted as well.
 -spec delete_consumer( ConsumerId :: integer(), z:context() ) -> ok | {error, term()}.
 delete_consumer(ConsumerId, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_admin_editable(Context) of
         true ->
             case z_db:delete(oauth2_consumer_app, ConsumerId, Context) of
                 {ok, 1} -> ok;
@@ -207,7 +207,7 @@ delete_consumer(ConsumerId, Context) ->
 %% @doc Update an App's is_enabled flag and description.
 -spec update_consumer( ConsumerId :: integer(), map(), z:context() ) -> ok | {error, term()}.
 update_consumer(ConsumerId, Map, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_admin_editable(Context) of
         true ->
             Consumer = maps:without([<<"modified">>, <<"created">>, <<"use_id">>], Map),
             Consumer1 = Consumer#{

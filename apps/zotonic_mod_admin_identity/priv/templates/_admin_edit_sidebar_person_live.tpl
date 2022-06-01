@@ -1,4 +1,4 @@
-{% if m.acl.is_allowed.use.mod_admin_identity or id == m.acl.user %}
+{% if m.acl.is_allowed.use.mod_admin_identity or (id == m.acl.user and id.is_editable) %}
     <div class="form-group">
         <div>
             {% button class="btn btn-default"

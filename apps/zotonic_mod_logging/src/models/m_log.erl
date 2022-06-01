@@ -39,12 +39,12 @@
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([], _Msg, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_allowed(use, mod_logging, Context) of
         true -> {ok, {list(Context), []}};
         false -> {error, eacces}
     end;
 m_get([ Index | Rest ], _Msg, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_allowed(use, mod_logging, Context) of
         true -> {ok, {get(z_convert:to_integer(Index), Context), Rest}};
         false -> {error, eacces}
     end;
