@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-05-12 16:17\n"
+"PO-Revision-Date: 2022-06-02 16:31\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -289,7 +289,7 @@ msgstr "Konten grup"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:16
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:55
-#: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:184
+#: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:197
 msgid "Content groups"
 msgstr "Kelompok konten"
 
@@ -704,7 +704,7 @@ msgstr "klik <b>Menggunakan peraturan yang diterbitkan</b> di bawah ini"
 msgid "closing this browser tab"
 msgstr "menutup tab browser ini"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:222
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:221
 msgid "delete (acl action)"
 msgstr "hapus (tindakan acl)"
 
@@ -712,7 +712,7 @@ msgstr "hapus (tindakan acl)"
 msgid "deny"
 msgstr "menolak"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:221
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:220
 msgid "edit (acl action)"
 msgstr "ubah (tindakan acl)"
 
@@ -720,11 +720,11 @@ msgstr "ubah (tindakan acl)"
 msgid "in the group"
 msgstr "dalam kelompok"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:220
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:219
 msgid "insert (acl action)"
 msgstr "masukkan (tindakan acl)"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:223
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:222
 msgid "link (acl action)"
 msgstr "tauntan (tindakan acl)"
 
@@ -736,7 +736,7 @@ msgstr "mengelola sendiri"
 msgid "send this URL to somebody else for testing"
 msgstr "kirimkan URL ini ke orang lain untuk pengujian"
 
-#: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:227
+#: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:226
 msgid "use (acl action)"
 msgstr "gunakan (tindakan acl)"
 
@@ -748,7 +748,7 @@ msgstr "gunakan <b>Jendela Pribadi Baru</b> (periksa menu <b>Berkas</b> dari per
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
 msgstr "gunakan peramban lain (misalnya Chrome jika anda sedang menggunakan Firefox)"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:219
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:218
 msgid "view (acl action)"
 msgstr "lihat (tindakan acl)"
 
@@ -1194,7 +1194,7 @@ msgstr "Kode sematan akan dibersihkan untuk situs yang diizinkan dan html."
 msgid "Embed page"
 msgstr "Cantumkan halaman"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:196
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:207
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:230
 msgid "Embedded Content"
 msgstr "Konten Tertanam"
@@ -1219,11 +1219,11 @@ msgstr "Root Instalasi Erlang"
 msgid "Erlang Version"
 msgstr "Versi Erlang"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:165
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:176
 msgid "Error checking the website."
 msgstr "Kesalahan memeriksa situs web."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:174
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:178
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
 msgid "Error creating the page."
 msgstr "Terjadi kesalahan saat membuat halaman."
@@ -1232,7 +1232,7 @@ msgstr "Terjadi kesalahan saat membuat halaman."
 msgid "Error importing page from the remote server."
 msgstr "Kesalahan saat mengimpor halaman dari server jauh."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:184
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:188
 msgid "Error uploading the file."
 msgstr "Kesalahan mengunggah berkas."
 
@@ -2517,7 +2517,7 @@ msgstr "Apakah anda yakin anda ingin menghapus kunci konfigurasi"
 msgid "Certificates provided by SSL modules"
 msgstr "Sertifikat disediakan oleh modul SSL"
 
-#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:54
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:53
 msgid "Config"
 msgstr "Konfigurasi"
 
@@ -2542,7 +2542,7 @@ msgstr "Timpa email"
 msgid "Email FROM"
 msgstr "Email DARI"
 
-#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:44
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:43
 msgid "Email configuration"
 msgstr "Konfigurasi email"
 
@@ -2619,7 +2619,7 @@ msgstr "Port relai"
 msgid "SMTP Hostname"
 msgstr "Nama Host SMTP"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:49
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:48
 msgid "SSL Certificates"
 msgstr "Sertifikat SSL"
 
@@ -2647,7 +2647,7 @@ msgstr "Kirim email percobaan atau periksa status alamat email."
 msgid "Sent an email to"
 msgstr "Mengirim email ke"
 
-#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:97
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:96
 msgid "Sent email to"
 msgstr "Mengirim email ke"
 
@@ -2723,7 +2723,7 @@ msgstr "Berlaku sampai"
 msgid "Value"
 msgstr "Nilai"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:163./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:101
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:163./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr "Lihat status email"
@@ -2827,7 +2827,7 @@ msgstr "Apakah anda yakin anda ingin menghapus entri ini?"
 msgid "Blocked"
 msgstr "Memblokir"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:86
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:92
 msgid "Changed the username."
 msgstr "Mengubah nama pengguna."
 
@@ -2855,7 +2855,7 @@ msgstr "Tidak dapat membuat pengguna. Maaf."
 msgid "Delete this e-mail address"
 msgstr "Hapus alamat e-mail ini"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:63
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:65
 msgid "Deleted the user account."
 msgstr "Menghapus akun pengguna."
 
@@ -2963,7 +2963,7 @@ msgstr "Hanya pengelola yang bisa menghapus nama pengguna."
 msgid "Only an administrator can delete usernames."
 msgstr "Hanya pengelola yang bisa menghapus nama pengguna."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:69./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:113
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:57./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:71./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:119
 msgid "Only an administrator or the user him/herself can set a password."
 msgstr "Hanya pengelola atau pengguna yang bisa mengatur kata sandi."
 
@@ -3005,7 +3005,7 @@ msgstr "Maaf"
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr "Maaf, nama pengguna ini telah di gunakan. Silakan coba yang lain."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:57
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:59
 msgid "Sorry, you can not remove your own username."
 msgstr "Maaf, Anda tidak dapat menghapus nama pengguna Anda sendiri."
 
@@ -3019,11 +3019,11 @@ msgstr "Terima kasih"
 msgid "The address is invalid."
 msgstr "Alamat tidak sah."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:59
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:61
 msgid "The admin user can not be removed."
 msgstr "Pengguna admin tidak dapat dihapus."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:108
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:114
 msgid "The new username/ password has been set."
 msgstr "Nama pengguna baru/ kata sandi telah ditetapkan."
 
@@ -3031,7 +3031,7 @@ msgstr "Nama pengguna baru/ kata sandi telah ditetapkan."
 msgid "The password of the admin user cannot be changed in the database. Please edit your site's configuration file at"
 msgstr "Kata sandi pengguna admin tidak dapat diubah dalam basisdata. Silahkan sunting berkas konfigurasi situs anda di"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:89./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:95
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:95./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:101
 msgid "The username is already in use, please try another."
 msgstr "Nama pengguna sudah di pakai, silahkan coba yang lain."
 
@@ -3141,7 +3141,7 @@ msgstr "Ketika anda menambahkan kepercayaan kepada seseorang maka seseorang akan
 msgid "You are not allowed to create the person page."
 msgstr "Anda tidak diizinkan untuk membuat orang halaman."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:66
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:68
 msgid "You are not allowed to delete this user account."
 msgstr "Anda tidak diizinkan untuk menghapus akun pengguna ini."
 
@@ -3254,11 +3254,11 @@ msgstr "Gabungkan dua halaman sekalian. Anda dapat memilih halaman mana yang aka
 msgid "Merge with another page …"
 msgstr "Bergabung dengan halaman lain …"
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:113
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:118
 msgid "Merging the two pages ..."
 msgstr "Menggabungkan dua halaman ..."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:118
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:123
 msgid "No merge action specified."
 msgstr "Tidak ada penggabungan tindakan yang ditentukan."
 
@@ -3286,7 +3286,7 @@ msgstr "Pilih halaman pemenang"
 msgid "Sorry, you have no permission to edit this page."
 msgstr "Maaf, anda tidak memiliki izin untuk menyunting halaman ini."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:97
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:102
 msgid "The loser is protected, unprotect the loser before merging."
 msgstr "Pecundang telah dilindungi, tidak melindungi pecundang sebelum penggabungan."
 
@@ -3302,19 +3302,19 @@ msgstr "Anda tidak diizinkan untuk memilih halaman ini dan dengan demikian mengh
 msgid "You are not allowed to select this page and thereby deleting page Right."
 msgstr "Anda tidak diizinkan untuk memilih halaman ini dan dengan demikian menghapus halaman yang benar."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:73
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:78
 msgid "You cannot remove the admin user."
 msgstr "Anda tidak dapat menghapus pengguna admin."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:99
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:104
 msgid "You do not have permission to delete the loser."
 msgstr "Anda tidak memiliki izin untuk menghapus pecundang."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:77./apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:101
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:82./apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:106
 msgid "You do not have permission to edit the winner."
 msgstr "Anda tidak memiliki izin untuk menyunting pemenang."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:87
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:92
 msgid "not implemented yet"
 msgstr "belum diimplementasikan"
 
@@ -3909,7 +3909,7 @@ msgstr "Masukkan alamat email Anda untuk menerima instruksi tentang cara mengatu
 msgid "Error"
 msgstr "Kesalahan"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:237
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:247
 msgid "External Services"
 msgstr "Pelayanan luar"
 
@@ -4968,7 +4968,7 @@ msgstr "Pengontrol"
 msgid "Could not fetch tracer output, please try again."
 msgstr "Tidak dapat mengambil keluaran pelacak, harap coba lagi."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:247
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:333
 msgid "Development"
 msgstr "Pengembangan"
 
@@ -6441,7 +6441,7 @@ msgstr "Daftar surat"
 msgid "Mailing list"
 msgstr "Daftar surat"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:395
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:394
 msgid "Mailing lists"
 msgstr "Daftar surat"
 
@@ -7456,11 +7456,11 @@ msgstr "Periksa tabel untuk pencarian segi dan isi dengan mengindeks ulang semua
 msgid "Rebuild search facets"
 msgstr "Bangun kembali aspek penelusuran"
 
-#: apps/zotonic_mod_search/src/mod_search.erl:65
+#: apps/zotonic_mod_search/src/mod_search.erl:68
 msgid "Rebuilding the faceted search table."
 msgstr "Membangun kembali tabel pencarian segi."
 
-#: apps/zotonic_mod_search/src/mod_search.erl:67
+#: apps/zotonic_mod_search/src/mod_search.erl:70
 msgid "Sorry, you are not allowed to do this."
 msgstr "Maaf, Anda tidak diizinkan melakukan ini."
 
@@ -9299,7 +9299,7 @@ msgstr "Youtube Video"
 msgid "Alert"
 msgstr "Waspada"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:478
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:497
 msgid "A component of the path is not a directory:"
 msgstr "Komponen jalan bukanlah sebuah direktori:"
 
@@ -9343,7 +9343,7 @@ msgstr "Tidak dapat memeriksa repositori Git:"
 msgid "Could not connect to 'postgres' database or create the database."
 msgstr "Tidak dapat terhubung ke database 'postgres' atau membuat database."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:483
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:502
 msgid "Could not create the file:"
 msgstr "Tidak dapat membuat berkas:"
 
@@ -9351,7 +9351,7 @@ msgstr "Tidak dapat membuat berkas:"
 msgid "Could not create the schema in the database."
 msgstr "Tidak bisa membuat skema di database."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:383
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:394
 msgid "Could not create the site directory"
 msgstr "Tidak dapat membuat direktori situs"
 
@@ -9359,7 +9359,7 @@ msgstr "Tidak dapat membuat direktori situs"
 msgid "Could not delete the site dir for the Git checkout:"
 msgstr "Tidak dapat menghapus direktori situs untuk pemeriksaan Git:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:473
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:492
 msgid "Disk full creating:"
 msgstr "Disk penuh membuat:"
 
@@ -9411,11 +9411,11 @@ msgstr "Masuk dengan nama pengguna <b>admin</b> dan kata sandi"
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
 msgstr "Pastikan nama host ini memiliki entri DNS yang valid atau ditambahkan ke file <tt>/etc/hosts</tt>anda."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:458
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:477
 msgid "No permission to create the site directory at:"
 msgstr "Tidak ada izin untuk membuat situs direktori di:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:378
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:389
 msgid "Not allowed to create the site directory"
 msgstr "Tidak diizinkan membuat direktori situs"
 
@@ -9475,7 +9475,7 @@ msgstr "Memulai situs baru ..."
 msgid "Succesfully created the site."
 msgstr "Berhasil membuat situs."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:463
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:482
 msgid "The file or directory already exists:"
 msgstr "Berkas atau direktori sudah ada:"
 
@@ -9483,7 +9483,7 @@ msgstr "Berkas atau direktori sudah ada:"
 msgid "The hostname is unknown, check your DNS or /etc/hosts file"
 msgstr "Nama host tidak diketahui, periksa file DNS atau / etc / hosts Anda"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:468
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:487
 msgid "The parent directory does not exist:"
 msgstr "Direktori induk tidak ada:"
 
@@ -9499,11 +9499,11 @@ msgstr "Kerangka menyediakan template dan konten untuk sebuah situs."
 msgid "There is already a file or directory named"
 msgstr "Sudah ada sebuah file atau direktori bernama"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:430
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:449
 msgid "This name is reserved"
 msgstr "Nama ini dicadangkan"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:434
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:453
 msgid "This name is taken by another Erlang module"
 msgstr "Nama ini diambil oleh modul Erlang lainnya"
 
