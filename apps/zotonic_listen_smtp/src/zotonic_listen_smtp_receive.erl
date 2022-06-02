@@ -57,8 +57,14 @@ received(Recipient, ParsedEmail,
          Body, Data) ->
     case get_site(Recipient) of
         {ok, {LocalPart, LocalTags, Domain, Site}} ->
-            ?LOG_NOTICE("SMTP received email for <~s>, mapped to ~p",
-                       [ Recipient, {LocalPart, LocalTags, Domain, Site} ]),
+            ?LOG_INFO(#{
+                text => <<"SMTP received email">>,
+                recipient => Recipient,
+                localpart => LocalPart,
+                localtags => LocalTags,
+                domain => Domain,
+                site => Site
+            }),
             Context = z_context:new(Site),
             z_notifier:notify(
                 #zlog{
@@ -93,35 +99,69 @@ received(Recipient, ParsedEmail,
                   },
             case z_notifier:first(Email1, Context) of
                 {ok, MsgId} when is_binary(MsgId) ->
-                    ?LOG_NOTICE("SMTP received email for <~s>, handled as ~p",
-                               [ Recipient, MsgId ]),
+                    ?LOG_INFO(#{
+                        text => <<"SMTP received email handled">>,
+                        result => ok,
+                        recipient => Recipient,
+                        message_id => MsgId
+                    }),
                     {ok, MsgId};
                 {ok, Other} ->
-                    ?LOG_NOTICE("SMTP received email for <~s>, handled as ~p",
-                               [ Recipient, Other ]),
+                    ?LOG_INFO(#{
+                        text => <<"SMTP received email handled">>,
+                        result => ok,
+                        recipient => Recipient,
+                        message_id => Other
+                    }),
                     {ok, undefined};
                 ok ->
-                    ?LOG_NOTICE("SMTP received email for <~s>, handled as undefined",
-                               [ Recipient ]),
+                    ?LOG_INFO(#{
+                        text => <<"SMTP received email handled">>,
+                        result => ok,
+                        recipient => Recipient,
+                        message_id => undefined
+                    }),
                     {ok, undefined};
                 {error, Reason} = Error ->
-                    ?LOG_WARNING("SMTP received email for <~s>, handler returned error ~p",
-                               [ Recipient, Reason ]),
+                    ?LOG_WARNING(#{
+                        text => <<"SMTP received email, handler error">>,
+                        result => error,
+                        reason => Reason,
+                        recipient => Recipient
+                    }),
                     Error;
                 undefined ->
-                    ?LOG_WARNING("SMTP received email for <~s>, unhandled assuming unknown recipient",
-                               [ Recipient ]),
+                    ?LOG_WARNING(#{
+                        text => <<"SMTP received email, unhandled assuming unknown recipient">>,
+                        result => error,
+                        reason => unknown_recipient,
+                        recipient => Recipient
+                    }),
                     {error, unknown_recipient};
                 Other ->
-                    ?LOG_WARNING("SMTP received email for <~s>, unexpected return value ~p",
-                               [ Recipient, Other ]),
+                    ?LOG_WARNING(#{
+                        text => <<"SMTP received email, unexpected return value">>,
+                        result => error,
+                        reason => Other,
+                        recipient => Recipient
+                    }),
                     {ok, Other}
             end;
         {error, unknown_host} ->
-            ?LOG_WARNING("SMTP dropping email, unknown host for recipient: ~p", [Recipient]),
+            ?LOG_WARNING(#{
+                text => <<"SMTP received email, dropped">>,
+                result => error,
+                reason => unknown_host,
+                recipient => Recipient
+            }),
             {error, unknown_host};
         {error, not_running} ->
-            ?LOG_NOTICE("SMTP delaying email, host for recipient is not up: ~p", [Recipient]),
+            ?LOG_NOTICE(#{
+                text => <<"SMTP received email, host for recipient is not up">>,
+                result => warning,
+                reason => not_running,
+                recipient => Recipient
+            }),
             {error, not_running}
     end.
 

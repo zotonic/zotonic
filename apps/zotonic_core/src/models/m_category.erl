@@ -139,8 +139,7 @@ m_get([ Cat | Rest ], _Msg, Context) ->
         {error, _} -> undefined
     end,
     {ok, {V, Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_ERROR("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
@@ -719,7 +718,10 @@ ensure_hierarchy(Context) ->
             {ok, CatId} = name_to_id(category, Context),
             case m_hierarchy:ensure('$category', CatId, Context) of
                 {ok, N} when N > 0 ->
-                    ?LOG_WARNING("Ensure category found ~p new categories.", [N]),
+                    ?LOG_NOTICE(#{
+                        text => <<"Ensure category found new categories.">>,
+                        count => N
+                    }),
                     flush(Context);
                 {ok, 0} ->
                     ok
@@ -748,8 +750,13 @@ move_below(Cat, Parent, Context) ->
                     renumber(Context)
             end;
         notfound ->
-            ?LOG_ERROR("Category move ~p below ~p, error: ~p",
-                    [ Cat, Parent, notfound ]),
+            ?LOG_ERROR(#{
+                text => <<"Category move below gave error">>,
+                cat_moved => Cat,
+                cat_parent => Parent,
+                result => error,
+                reason => notfound
+            }),
             {error, notfound}
     end.
 
@@ -770,8 +777,13 @@ move_after(Cat, After, Context) ->
                     renumber(Context)
             end;
         notfound ->
-            ?LOG_ERROR("Category move ~p after ~p, error: ~p",
-                    [ Cat, After, notfound ]),
+            ?LOG_ERROR(#{
+                text => <<"Category move after error">>,
+                result => error,
+                reason => notfound,
+                cat_moved => Cat,
+                cat_after => After
+            }),
             {error, notfound}
     end.
 
@@ -870,7 +882,10 @@ renumber_pivot_task(Context) ->
             set_tree_dirty(false, Context),
             ok;
         Ids ->
-            ?LOG_NOTICE("Category renumbering of ~p resources", [ length(Ids) ]),
+            ?LOG_INFO(#{
+                text => <<"Category renumbering of resources">>,
+                count => length(Ids)
+            }),
             ok = z_db:transaction(fun(Ctx) ->
                 lists:foreach(
                     fun({Id, CatNr}) ->

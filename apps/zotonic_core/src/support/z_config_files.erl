@@ -446,7 +446,12 @@ config_dir_find(Node) ->
                 true ->
                     {ok, VersionDir};
                 false ->
-                    ?LOG_ERROR("Could not create config directory: ~p", [ VersionDir ]),
+                    ?LOG_ERROR(#{
+                        text => <<"Could not create config directory">>,
+                        path => VersionDir,
+                        result => error,
+                        reason => not_directory
+                    }),
                     {error, enoent}
             end;
         [ D | _ ] ->

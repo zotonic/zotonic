@@ -101,8 +101,7 @@ m_get([ <<"tokens">>, <<"list">>, UserId | Rest ], _Msg, Context) ->
     end;
 m_get([ <<"tokens">>, TokenId | Rest ], _Msg, Context) ->
     {ok, {get_token(TokenId, Context), Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 

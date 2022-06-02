@@ -731,9 +731,12 @@ trace_end(false, _Start, _Sql, _Params, _Conn) ->
     ok;
 trace_end(true, Start, Sql, Params, Conn) ->
     Duration = msec() - Start,
-    ?LOG_NOTICE(
-        "SQL ~p msec: \"~s\"   ~p",
-        [ Duration, Sql, Params ]),
+    ?LOG_NOTICE(#{
+        text => <<"SQL TRACE">>,
+        msec => Duration,
+        sql => Sql,
+        params => Params
+    }),
     maybe_explain(Duration, Sql, Params, Conn).
 
 maybe_explain(Duration, _Sql, _Params, _Conn) when Duration < ?DBTRACE_EXPLAIN_MSEC ->
@@ -759,9 +762,15 @@ is_explainable(_) -> true.
 
 maybe_log_query_plan({ok, [ #column{ name = <<"QUERY PLAN">> } ], Rows}) ->
     Lines = lists:map( fun({R}) -> [ 10, R ] end, Rows ),
-    ?LOG_NOTICE("SQL EXPLAIN: ~s", [ iolist_to_binary(Lines) ]);
+    ?LOG_NOTICE(#{
+        text => <<"SQL EXPLAIN">>,
+        explain => iolist_to_binary(Lines)
+    });
 maybe_log_query_plan(Other) ->
-    ?LOG_NOTICE("SQL EXPLAIN: ~p", [ Other ]),
+    ?LOG_NOTICE(#{
+        text => <<"SQL EXPLAIN">>,
+        explain => Other
+    }),
     ok.
 
 msec() ->

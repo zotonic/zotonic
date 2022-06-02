@@ -813,7 +813,12 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
                         #email_sender{id=Id, sender_pid=SenderPid, domain=Relay} | State#state.sending
                     ]};
         true ->
-            ?LOG_NOTICE("[smtp] Dropping email to blocked address ~p", [ RecipientEmail ]),
+            ?LOG_NOTICE(#{
+                text => <<"[smtp] Dropping email to blocked address">>,
+                result => error,
+                reason => blocked,
+                email => RecipientEmail
+            }),
             drop_blocked_email(Id, RecipientEmail, Email, Context),
             State
     end.

@@ -47,8 +47,7 @@ m_get([ Id, <<"new_location">> | Rest ], _Msg, Context) ->
     {ok, {get_new_location(Id, Context), Rest}};
 m_get([ Id, <<"is_gone">> | Rest ], _Msg, Context) ->
     {ok, {is_gone(Id, Context), Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 %% @doc Get the possible 'rsc_gone' resource for the id.

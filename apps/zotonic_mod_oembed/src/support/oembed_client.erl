@@ -66,7 +66,10 @@ discover_per_provider(Url, UrlExtra, [Provider=#oembed_provider{}|Rest], Context
             discover_per_provider(Url, UrlExtra, Rest, Context)
     end;
 discover_per_provider(Url, UrlExtra, [], Context) ->
-    ?LOG_DEBUG("Fallback embed.ly discovery for url: ~p~n", [Url]),
+    ?LOG_DEBUG(#{
+        text => <<"Fallback embed.ly discovery">>,
+        url => Url
+    }),
     case m_config:get_value(mod_oembed, embedly_key, Context) of
         undefined ->
             {error, nomatch};
@@ -98,8 +101,13 @@ oembed_request(RequestUrl) ->
             catch
                 _:_ -> {error, nojson}
             end;
-        {error, _} = Error ->
-            ?LOG_WARNING("OEmbed HTTP Request returned error for '~p' (~p)", [RequestUrl, Error]),
+        {error, Reason} = Error ->
+            ?LOG_WARNING(#{
+                text => <<"OEmbed HTTP Request returned error">>,
+                result => error,
+                reason => Reason,
+                url => RequestUrl
+            }),
             Error
     end.
 

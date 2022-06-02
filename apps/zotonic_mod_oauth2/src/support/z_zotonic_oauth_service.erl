@@ -139,19 +139,38 @@ fetch_access_token(Code, AuthData, Args, _QArgs, Context) ->
                                 {ok, jsxrecord:decode(Body)}
                             catch
                                 _:_ ->
-                                    ?LOG_ERROR("OAuth2: could not access token payload: ~p", [ Body ]),
+                                    ?LOG_ERROR(#{
+                                        text => <<"OAuth2: could not access token payload">>,
+                                        result => error,
+                                        reason => json,
+                                        payload => Body
+                                    }),
                                     {error, json}
                             end;
                         {error, Reason} ->
-                            ?LOG_ERROR("OAuth2: could not fetch access token: ~p", [ Reason ]),
+                            ?LOG_ERROR(#{
+                                text => <<"OAuth2: could not fetch access token">>,
+                                result => error,
+                                reason => Reason
+                            }),
                             {error, http}
                     end;
-                {error, _} = Error ->
-                    ?LOG_ERROR("OAuth2: could not fetch consumer for access token: ~p", [ Error ]),
+                {error, Reason} = Error ->
+                    ?LOG_ERROR(#{
+                        text => <<"OAuth2: could not fetch consumer for access token">>,
+                        result => error,
+                        reason => Reason
+                    }),
                     Error
             end;
-        _ ->
-            ?LOG_ERROR("OAuth2: consumer_id mismatch between AuthData and Args"),
+        Found ->
+            ?LOG_ERROR(#{
+                text => <<"OAuth2: consumer_id mismatch between AuthData and Args">>,
+                result => error,
+                reason => consumer_id,
+                expected => ConsumerIdBin,
+                found => Found
+            }),
             {error, consumer_id}
     end.
 

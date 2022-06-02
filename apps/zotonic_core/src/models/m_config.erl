@@ -60,8 +60,7 @@ m_get([ Module, Key | Rest ], _Msg, Context) ->
         true -> {ok, {get(Module, Key, Context), Rest}};
         false -> {error, eacces}
     end;
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_ERROR("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 %% @doc Return all configurations from the configuration table. Returns a nested proplist (module, key)

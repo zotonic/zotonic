@@ -60,11 +60,21 @@ spamcheck(EncodedMail, SpamDServer, SpamDPort) when is_tuple(SpamDServer), is_in
                     SpamStatus = proplists:get_value(<<"X-Spam-Status">>, SpamHeaders),
                     check_status(spam_status(SpamStatus), SpamHeaders);
                 {error, Reason} = Error ->
-                    ?LOG_ERROR("spamcheck error ~p", [Reason]),
+                    ?LOG_ERROR(#{
+                        text => <<"spamcheck error">>,
+                        result => error,
+                        reason => Reason
+                    }),
                     Error
             end;
         {error, Reason} = Err ->
-            ?LOG_ERROR("SMTP spam check: can not connect to spamd on ~p:~p (~p)", [SpamDServer, SpamDPort, Reason]),
+            ?LOG_ERROR(#{
+                text => <<"SMTP spam check: can not connect to spamd">>,
+                to => SpamDServer,
+                port => SpamDPort,
+                result => error,
+                reason => Reason
+            }),
             Err
     end;
 spamcheck(_EncodedMail, _SpamDServer, _SpamDPort) ->

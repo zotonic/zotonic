@@ -1062,7 +1062,10 @@ set_tz(Tz, Context) when is_binary(Tz), Tz =/= <<>> ->
         true ->
             Context#context{ tz = Tz };
         false ->
-            ?LOG_INFO("Dropping unknown timezone: ~p", [ Tz ]),
+            ?LOG_INFO(#{
+                text => <<"Ignoring unknown timezone">>,
+                tz => Tz
+            }),
             Context
     end;
 set_tz(true, Context) ->
@@ -1072,7 +1075,10 @@ set_tz(1, Context) ->
 set_tz(0, Context) ->
     Context;
 set_tz(Tz, Context) ->
-    ?LOG_ERROR("Unknown timezone ~p", [Tz]),
+    ?LOG_ERROR(#{
+        text => <<"Ignoring unknown timezone">>,
+        tz => Tz
+    }),
     Context.
 
 

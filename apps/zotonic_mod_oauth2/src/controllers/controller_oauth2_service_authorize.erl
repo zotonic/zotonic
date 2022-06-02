@@ -54,8 +54,13 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
                 worker_args => Args
             },
             z_template:render_to_iolist("logon_service_oauth.tpl", Vars, Context);
-        {error, _} = Error ->
-            ?LOG_ERROR("Error with OAuth redirect for ~p: ~p", [ ServiceMod, Error ]),
+        {error, Reason} ->
+            ?LOG_ERROR(#{
+                text => <<"Error with OAuth redirect">>,
+                service => ServiceMod,
+                result => error,
+                reason => Reason
+            }),
             Vars = #{
                 service => ServiceMod:title(Context)
             },

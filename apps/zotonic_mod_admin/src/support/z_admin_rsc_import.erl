@@ -37,7 +37,12 @@ event(#postback{ message={import_refresh, Args} }, Context) ->
                     z_render:wire(OnSuccess, Context)
             end;
         {error, Reason} ->
-            ?LOG_ERROR("Error on reimport of rsc ~p: ~p", [ Id, Reason ]),
+            ?LOG_ERROR(#{
+                text => <<"Error on reimport of resource">>,
+                rsc_id => Id,
+                result => error,
+                reason => Reason
+            }),
             Context1 = z_render:wire(OnError, Context),
             z_render:growl_error(?__("Error importing page from the remote server.", Context1), Context1)
     end.

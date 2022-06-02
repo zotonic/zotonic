@@ -111,9 +111,21 @@ delete_all([Id|Ids], N, Total, Context) ->
         ok ->
             maybe_progress(N, N+1, Total, Context),
             delete_all(Ids, N+1, Total, Context);
+        {error, Reason} ->
+            ?LOG_ERROR(#{
+                text => <<"mod_admin_category: could not delete resource">>,
+                result => error,
+                reason => Reason,
+                rsc_id => Id
+            }),
+            {error, Reason};
         Error ->
-            ?LOG_ERROR("mod_admin_category: could not delete ~p: ~p",
-                        [Id, Error]),
+            ?LOG_ERROR(#{
+                text => <<"mod_admin_category: could not delete resource">>,
+                result => error,
+                reason => Error,
+                rsc_id => Id
+            }),
             {error, Error}
     end.
 

@@ -77,8 +77,7 @@ m_get([ <<"status">> | Rest ], _Msg, Context) ->
 m_get([ <<"is_rememberme">> | Rest ], _Msg, Context) ->
     RememberMe = m_config:get_boolean(mod_authentication, is_rememberme, Context),
     {ok, {RememberMe, Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_DEBUG("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 -spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | {error, term()}.

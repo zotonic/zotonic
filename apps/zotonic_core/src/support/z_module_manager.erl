@@ -1347,7 +1347,10 @@ stop_children_with_missing_depends(#state{ site = Site, modules = Modules } = St
         [] ->
             State;
         Unstartable ->
-            ?LOG_DEBUG("Stopping child modules ~p", [Unstartable]),
+            ?LOG_DEBUG(#{
+                text => <<"Stopping child modules">>,
+                modules => Unstartable
+            }),
             Modules1 = lists:foldl(
                 fun(Module, ModAcc) ->
                     case maps:find(Module, ModAcc) of

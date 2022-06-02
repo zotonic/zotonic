@@ -299,15 +299,19 @@ update_changed(Id, KVs, RscProps, Context) ->
 
 
 pivot_resource_custom(Id, Context) ->
-    CustomPivots = z_notifier:map(#custom_pivot{id=Id}, Context),
+    CustomPivots = z_notifier:map(#custom_pivot{ id = Id }, Context),
     lists:foreach(
             fun
                 (undefined) -> ok;
                 (ok) -> ok;
                 (none) -> ok;
-                ({error, _} = Error) ->
-                    ?LOG_ERROR("Error return from custom pivot of ~p, error: ~p",
-                                [Id, Error]);
+                ({error, Reason}) ->
+                    ?LOG_ERROR(#{
+                        text => <<"Error return from custom pivot">>,
+                        rsc_id => Id,
+                        result => error,
+                        reason => Reason
+                    });
                 ({_Module, _Columns} = Res) ->
                     update_custom_pivot(Id, Res, Context)
             end,

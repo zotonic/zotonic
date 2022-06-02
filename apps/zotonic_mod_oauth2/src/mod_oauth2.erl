@@ -281,7 +281,12 @@ try_bearer(Token, Context) ->
             Context;
         {error, Reason} ->
             % Illegal token, maybe throw a 400 here?
-            ?LOG_NOTICE("Could not decode OAuth2 token, error ~p for ~p", [ Reason, Token ]),
+            ?LOG_NOTICE(#{
+                text => <<"Could not decode OAuth2 token">>,
+                result => error,
+                reason => Reason,
+                token => Token
+            }),
             Context
     end.
 
@@ -310,7 +315,13 @@ try_token(#{
             z_acl:logon(UserId, Options, Context);
         false ->
             % User is disabled, maybe throw a 403 here?
-            ?LOG_NOTICE("Authenticated OAuth2 request for disabled user ~p with token ~p", [ UserId, TokenId ]),
+            ?LOG_NOTICE(#{
+                text => <<"Authenticated OAuth2 request for disabled user">>,
+                user_id => UserId,
+                result => error,
+                reason => disabled,
+                token_id => TokenId
+            }),
             Context
     end.
 
