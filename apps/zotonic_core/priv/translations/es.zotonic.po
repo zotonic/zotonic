@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-05-12 16:16\n"
+"PO-Revision-Date: 2022-06-02 16:32\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -289,7 +289,7 @@ msgstr "Grupo de contenido"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:16
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:55
-#: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:184
+#: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:197
 msgid "Content groups"
 msgstr "Grupos de contenidos"
 
@@ -704,7 +704,7 @@ msgstr "haciendo click en <b> Usar reglas publicadas </b> a continuación"
 msgid "closing this browser tab"
 msgstr "cerrando esta pestaña del navegador"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:222
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:221
 msgid "delete (acl action)"
 msgstr "eliminar (acción de acl)"
 
@@ -712,7 +712,7 @@ msgstr "eliminar (acción de acl)"
 msgid "deny"
 msgstr "rechazar"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:221
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:220
 msgid "edit (acl action)"
 msgstr "editar (acción de acl)"
 
@@ -720,11 +720,11 @@ msgstr "editar (acción de acl)"
 msgid "in the group"
 msgstr "en el grupo"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:220
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:219
 msgid "insert (acl action)"
 msgstr "insertar(acción acl)"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:223
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:222
 msgid "link (acl action)"
 msgstr "enlace (acción acl)"
 
@@ -736,7 +736,7 @@ msgstr "Administrar por tu cuenta"
 msgid "send this URL to somebody else for testing"
 msgstr "envía esta URL a alguien más para probar"
 
-#: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:227
+#: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:226
 msgid "use (acl action)"
 msgstr "uso (acción acl)"
 
@@ -748,7 +748,7 @@ msgstr "usa la<b>Nueva ventana privada</b>(comprueba el menú de<b>Archivo</b> d
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
 msgstr "use otro navegador (p. Ej., Chrome si está usando Firefox ahora)"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:219
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:218
 msgid "view (acl action)"
 msgstr "ver (acción de acl)"
 
@@ -1194,7 +1194,7 @@ msgstr "El código de incrustación será desinfectado para los sitios permitido
 msgid "Embed page"
 msgstr "Incorporar página"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:196
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:207
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:230
 msgid "Embedded Content"
 msgstr "Contenido incorporado"
@@ -1219,11 +1219,11 @@ msgstr "Raíz de la instalación de Erlang"
 msgid "Erlang Version"
 msgstr "Versión Erlang"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:165
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:176
 msgid "Error checking the website."
 msgstr "Error comprobando el sitio web."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:174
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:178
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
 msgid "Error creating the page."
 msgstr "Error al crear la página."
@@ -1232,7 +1232,7 @@ msgstr "Error al crear la página."
 msgid "Error importing page from the remote server."
 msgstr "Error al importar la página desde el servidor remoto."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:184
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:188
 msgid "Error uploading the file."
 msgstr "Error cargando el archivo."
 
@@ -2517,7 +2517,7 @@ msgstr "Está seguro de que quiere eliminar la clave de configuración"
 msgid "Certificates provided by SSL modules"
 msgstr "Certificados proporcionados por los módulos SSL"
 
-#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:54
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:53
 msgid "Config"
 msgstr "Configuración"
 
@@ -2542,7 +2542,7 @@ msgstr "Anulación de correo electrónico"
 msgid "Email FROM"
 msgstr "Email de"
 
-#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:44
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:43
 msgid "Email configuration"
 msgstr "Configuración de correo electrónico"
 
@@ -2619,7 +2619,7 @@ msgstr "Puerto de relé"
 msgid "SMTP Hostname"
 msgstr "Nombre de host SMTP"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:49
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:48
 msgid "SSL Certificates"
 msgstr "Certificado SSL"
 
@@ -2647,7 +2647,7 @@ msgstr "Envíe un correo electrónico de prueba o verifique el estado de una dir
 msgid "Sent an email to"
 msgstr "Envió un correo electrónico a"
 
-#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:97
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:96
 msgid "Sent email to"
 msgstr "Enviado correo electrónico a"
 
@@ -2723,7 +2723,7 @@ msgstr "Válido hasta"
 msgid "Value"
 msgstr "Valor"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:163./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:101
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:163./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr "Ver estado de correo electrónico"
@@ -2827,7 +2827,7 @@ msgstr "¿Estas seguro de querer eliminar esta entrada?"
 msgid "Blocked"
 msgstr "Bloqueado"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:86
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:92
 msgid "Changed the username."
 msgstr "Cambiar el nombre de usuario."
 
@@ -2855,7 +2855,7 @@ msgstr "No se pudo crear el usuario. Lo sentimos."
 msgid "Delete this e-mail address"
 msgstr "Eliminar esta dirección de correo electrónico"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:63
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:65
 msgid "Deleted the user account."
 msgstr "Eliminó la cuenta de usuario."
 
@@ -2963,7 +2963,7 @@ msgstr "Solo los administradores pueden eliminar los nombres de usuarios."
 msgid "Only an administrator can delete usernames."
 msgstr "Solo un administrador puede eliminar nombres de usuarios."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:69./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:113
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:57./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:71./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:119
 msgid "Only an administrator or the user him/herself can set a password."
 msgstr "Solo un administrador o el usuario pueden establecer la contraseña."
 
@@ -3005,7 +3005,7 @@ msgstr "Lo sentimos"
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr "Disculpe, este nombre de usuario ya está siendo usado. Por favor use uno distinto."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:57
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:59
 msgid "Sorry, you can not remove your own username."
 msgstr "Lo siento, no puedes eliminar tu propio nombre de usuario."
 
@@ -3019,11 +3019,11 @@ msgstr "Gracias"
 msgid "The address is invalid."
 msgstr "La dirección es invalida."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:59
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:61
 msgid "The admin user can not be removed."
 msgstr "El usuario administrador no puede ser eliminado."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:108
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:114
 msgid "The new username/ password has been set."
 msgstr "Se ha establecido el nuevo nombre de usuario/contraseña."
 
@@ -3031,7 +3031,7 @@ msgstr "Se ha establecido el nuevo nombre de usuario/contraseña."
 msgid "The password of the admin user cannot be changed in the database. Please edit your site's configuration file at"
 msgstr "No se puede cambiar la contraseña del usuario de administrador en la base datos. Por favor edite el archivo de configuración del sitio en"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:89./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:95
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:95./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:101
 msgid "The username is already in use, please try another."
 msgstr "El nombre de usuario ya está en uso, por favor utilice otro."
 
@@ -3141,7 +3141,7 @@ msgstr "Cuando añade credenciales a una persona entonces esa persona se vuelve 
 msgid "You are not allowed to create the person page."
 msgstr "No tiene permitido crear la página de persona."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:66
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:68
 msgid "You are not allowed to delete this user account."
 msgstr "No está permitido eliminar esta cuenta de usuario."
 
@@ -3254,11 +3254,11 @@ msgstr "Combinar dos páginas. Se puede seleccionar con cuál página combinar y
 msgid "Merge with another page …"
 msgstr "Combinar con otra página…"
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:113
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:118
 msgid "Merging the two pages ..."
 msgstr "Combinar las dos páginas ..."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:118
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:123
 msgid "No merge action specified."
 msgstr "No se especificó ninguna acción de combinación."
 
@@ -3286,7 +3286,7 @@ msgstr "Seleccionar la página ganadora"
 msgid "Sorry, you have no permission to edit this page."
 msgstr "Lo siento, no tiene permiso para editar esta página."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:97
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:102
 msgid "The loser is protected, unprotect the loser before merging."
 msgstr "El perdedor está protegido. Desproteja el perdedor antes de la combinación."
 
@@ -3302,19 +3302,19 @@ msgstr "No tiene permitido seleccionar esta página y de este modo eliminar la p
 msgid "You are not allowed to select this page and thereby deleting page Right."
 msgstr "No tiene permitido seleccionar esta página y de este modo eliminar la página derecha."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:73
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:78
 msgid "You cannot remove the admin user."
 msgstr "No se puede eliminar el usuario de administrador."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:99
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:104
 msgid "You do not have permission to delete the loser."
 msgstr "No tiene permitido eliminar el perdedor."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:77./apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:101
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:82./apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:106
 msgid "You do not have permission to edit the winner."
 msgstr "No tiene permitido editar el ganador."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:87
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:92
 msgid "not implemented yet"
 msgstr "aun no se implementa"
 
@@ -3910,7 +3910,7 @@ msgstr "Ingrese su dirección de correo electrónico para recibir instrucciones 
 msgid "Error"
 msgstr "Error"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:237
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:247
 msgid "External Services"
 msgstr "Servicios externos"
 
@@ -4969,7 +4969,7 @@ msgstr "Controlador"
 msgid "Could not fetch tracer output, please try again."
 msgstr "No se pudo obtener el resultado del rastreador. Vuelva a intentarlo."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:247
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:333
 msgid "Development"
 msgstr "Desarrollo"
 
@@ -6442,7 +6442,7 @@ msgstr "Listas de correo"
 msgid "Mailing list"
 msgstr "Lista de correo"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:395
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:394
 msgid "Mailing lists"
 msgstr "Listas de correo"
 
@@ -7456,11 +7456,11 @@ msgstr "Compruebe la tabla para la búsqueda por facetas y rellénela volviendo 
 msgid "Rebuild search facets"
 msgstr "Reconstruir facetas de búsqueda"
 
-#: apps/zotonic_mod_search/src/mod_search.erl:65
+#: apps/zotonic_mod_search/src/mod_search.erl:68
 msgid "Rebuilding the faceted search table."
 msgstr "Reconstruyendo la tabla de búsqueda por facetas."
 
-#: apps/zotonic_mod_search/src/mod_search.erl:67
+#: apps/zotonic_mod_search/src/mod_search.erl:70
 msgid "Sorry, you are not allowed to do this."
 msgstr "Lo siento, no tienes permitido hacer esto."
 
@@ -9300,7 +9300,7 @@ msgstr "Vídeo de Youtube"
 msgid "Alert"
 msgstr "Alerta"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:478
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:497
 msgid "A component of the path is not a directory:"
 msgstr "Un componente de la ruta no es un directorio:"
 
@@ -9344,7 +9344,7 @@ msgstr "No se puede comprobar el repositorio en Git:"
 msgid "Could not connect to 'postgres' database or create the database."
 msgstr "No se puede conectar a la base de datos 'postgres' o crearla."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:483
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:502
 msgid "Could not create the file:"
 msgstr "No se puede crear el archivo:"
 
@@ -9352,7 +9352,7 @@ msgstr "No se puede crear el archivo:"
 msgid "Could not create the schema in the database."
 msgstr "No se puede crear el esquema en la base de datos."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:383
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:394
 msgid "Could not create the site directory"
 msgstr "No se puede crear el directorio del sitio"
 
@@ -9360,7 +9360,7 @@ msgstr "No se puede crear el directorio del sitio"
 msgid "Could not delete the site dir for the Git checkout:"
 msgstr "No se puede borrar el directorio del sitio para la comprobación del Git:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:473
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:492
 msgid "Disk full creating:"
 msgstr "Creando el completado del Disco:"
 
@@ -9412,11 +9412,11 @@ msgstr "Entrar con el nombre de usuario del <b>administrador</b> y contraseña"
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
 msgstr "Asegúrate de que el nombre del host tiene una entrada de DNS valida o se agrega a su archivo<tt>etc/hosts</tt>."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:458
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:477
 msgid "No permission to create the site directory at:"
 msgstr "No existe el permiso para crear el directorio en:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:378
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:389
 msgid "Not allowed to create the site directory"
 msgstr "No tiene permiso de crear el directorio del sitio"
 
@@ -9476,7 +9476,7 @@ msgstr "Empezando el nuevo sitio ..."
 msgid "Succesfully created the site."
 msgstr "El sitio ha sido creado con éxito."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:463
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:482
 msgid "The file or directory already exists:"
 msgstr "El archivo o el directorio ya existe:"
 
@@ -9484,7 +9484,7 @@ msgstr "El archivo o el directorio ya existe:"
 msgid "The hostname is unknown, check your DNS or /etc/hosts file"
 msgstr "El nombre del host es desconocido, compruebe su DNS o el archivo /etc/hosts"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:468
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:487
 msgid "The parent directory does not exist:"
 msgstr "El directorio padre no existe:"
 
@@ -9500,11 +9500,11 @@ msgstr "La estructura provee plantillas y contenido para un sito."
 msgid "There is already a file or directory named"
 msgstr "Ya hay un archivo o directorio con el nombre"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:430
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:449
 msgid "This name is reserved"
 msgstr "Este nombre está reservado"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:434
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:453
 msgid "This name is taken by another Erlang module"
 msgstr "Este nombre es tomado por otro módulo de Erlang"
 

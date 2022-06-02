@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-05-12 15:52\n"
+"PO-Revision-Date: 2022-06-02 16:31\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -289,7 +289,7 @@ msgstr "内容群"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:16
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:55
-#: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:184
+#: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:197
 msgid "Content groups"
 msgstr "数个内容群"
 
@@ -704,7 +704,7 @@ msgstr "点击 <b>使用下面的</b> 发布规则。"
 msgid "closing this browser tab"
 msgstr "关闭该浏览器标签"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:222
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:221
 msgid "delete (acl action)"
 msgstr "删除"
 
@@ -712,7 +712,7 @@ msgstr "删除"
 msgid "deny"
 msgstr "否定"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:221
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:220
 msgid "edit (acl action)"
 msgstr "编辑"
 
@@ -720,11 +720,11 @@ msgstr "编辑"
 msgid "in the group"
 msgstr "同行"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:220
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:219
 msgid "insert (acl action)"
 msgstr "加插"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:223
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:222
 msgid "link (acl action)"
 msgstr "联动"
 
@@ -736,7 +736,7 @@ msgstr "自理"
 msgid "send this URL to somebody else for testing"
 msgstr "把这个网址发给别人测试"
 
-#: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:227
+#: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:226
 msgid "use (acl action)"
 msgstr "采用"
 
@@ -748,7 +748,7 @@ msgstr "使用 <b>新建私人窗口</b> （查看浏览器的 <b>文件</b> 菜
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
 msgstr "使用其他浏览器（如：Chrome，如果你现在使用Firefox）。"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:219
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:218
 msgid "view (acl action)"
 msgstr "视图"
 
@@ -1194,7 +1194,7 @@ msgstr "嵌入代码将被允许的网站和html消毒。"
 msgid "Embed page"
 msgstr "嵌入页面"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:196
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:207
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:230
 msgid "Embedded Content"
 msgstr "嵌入内容"
@@ -1219,11 +1219,11 @@ msgstr "Erlang安装根"
 msgid "Erlang Version"
 msgstr "埃尔兰版本"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:165
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:176
 msgid "Error checking the website."
 msgstr "检查网站时出错。"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:174
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:178
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
 msgid "Error creating the page."
 msgstr "创建页面时出错。"
@@ -1232,7 +1232,7 @@ msgstr "创建页面时出错。"
 msgid "Error importing page from the remote server."
 msgstr "从远程服务器导入页面时出错。"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:184
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:188
 msgid "Error uploading the file."
 msgstr "上传文件出错。"
 
@@ -2517,7 +2517,7 @@ msgstr "确认删除配置 Key"
 msgid "Certificates provided by SSL modules"
 msgstr "由SSL模块提供的证书"
 
-#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:54
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:53
 msgid "Config"
 msgstr "配置"
 
@@ -2542,7 +2542,7 @@ msgstr "电子邮件覆盖"
 msgid "Email FROM"
 msgstr "电子邮件来自"
 
-#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:44
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:43
 msgid "Email configuration"
 msgstr "电子邮件设定"
 
@@ -2619,7 +2619,7 @@ msgstr "中继口"
 msgid "SMTP Hostname"
 msgstr "SMTP主机名"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:49
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:48
 msgid "SSL Certificates"
 msgstr "SSL证书"
 
@@ -2647,7 +2647,7 @@ msgstr "发送测试电子邮件或检查电子邮件地址的状态。"
 msgid "Sent an email to"
 msgstr "已发送电子邮件至"
 
-#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:97
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:96
 msgid "Sent email to"
 msgstr "发送给"
 
@@ -2723,7 +2723,7 @@ msgstr "有效期至"
 msgid "Value"
 msgstr "值"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:163./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:101
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:163./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr "查看邮件状态"
@@ -2827,7 +2827,7 @@ msgstr "你确定要删除这条记录吗？"
 msgid "Blocked"
 msgstr "受阻"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:86
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:92
 msgid "Changed the username."
 msgstr "用户名已修改。"
 
@@ -2855,7 +2855,7 @@ msgstr "无法创建用户。"
 msgid "Delete this e-mail address"
 msgstr "删除此电子邮件地址"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:63
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:65
 msgid "Deleted the user account."
 msgstr "删除了用户账户。"
 
@@ -2963,7 +2963,7 @@ msgstr "只有管理员可以删除用户名。"
 msgid "Only an administrator can delete usernames."
 msgstr "只有管理员可以删除用户名。"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:69./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:113
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:57./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:71./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:119
 msgid "Only an administrator or the user him/herself can set a password."
 msgstr "只有管理员或者用户自己可以设置密码。"
 
@@ -3005,7 +3005,7 @@ msgstr "对不起"
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr "对不起，用户名已被使用。请尝试其他用户名。"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:57
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:59
 msgid "Sorry, you can not remove your own username."
 msgstr "对不起，你不能删除自己的用户名。"
 
@@ -3019,11 +3019,11 @@ msgstr "谢谢"
 msgid "The address is invalid."
 msgstr "该地址无效。"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:59
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:61
 msgid "The admin user can not be removed."
 msgstr "管理员用户不能被删除。"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:108
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:114
 msgid "The new username/ password has been set."
 msgstr "新用户名/密码设置成功。"
 
@@ -3031,7 +3031,7 @@ msgstr "新用户名/密码设置成功。"
 msgid "The password of the admin user cannot be changed in the database. Please edit your site's configuration file at"
 msgstr "管理员用户的密码不能在数据库中修改，请修改站点的配置文件"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:89./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:95
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:95./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:101
 msgid "The username is already in use, please try another."
 msgstr "用户名已经被使用，请使用其他名字。"
 
@@ -3141,7 +3141,7 @@ msgstr "当一个人员被添加认证信息后，他就成为一个用户。这
 msgid "You are not allowed to create the person page."
 msgstr "没有权限创建人员页面。"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:66
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:68
 msgid "You are not allowed to delete this user account."
 msgstr "您不能删除该用户账户。"
 
@@ -3254,11 +3254,11 @@ msgstr "将两个页面合并在一起。您可以选择与哪个页面合并，
 msgid "Merge with another page …"
 msgstr "与其他页面合并 …。"
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:113
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:118
 msgid "Merging the two pages ..."
 msgstr "合并两页..."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:118
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:123
 msgid "No merge action specified."
 msgstr "没有指定合并行动。"
 
@@ -3286,7 +3286,7 @@ msgstr "选择中奖页面"
 msgid "Sorry, you have no permission to edit this page."
 msgstr "对不起，你没有权限编辑本页面。"
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:97
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:102
 msgid "The loser is protected, unprotect the loser before merging."
 msgstr "败家子是被保护的，合并前先解保护败家子。"
 
@@ -3302,19 +3302,19 @@ msgstr "你不允许选择这个页面，从而删除页面左。"
 msgid "You are not allowed to select this page and thereby deleting page Right."
 msgstr "你不允许选择这个页面，从而删除页面的权利。"
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:73
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:78
 msgid "You cannot remove the admin user."
 msgstr "您无法删除管理员用户。"
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:99
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:104
 msgid "You do not have permission to delete the loser."
 msgstr "你没有删除失败者的权限。"
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:77./apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:101
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:82./apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:106
 msgid "You do not have permission to edit the winner."
 msgstr "您没有编辑获奖者的权限。"
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:87
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:92
 msgid "not implemented yet"
 msgstr "未实施"
 
@@ -3910,7 +3910,7 @@ msgstr "输入您的电子邮件地址，以接收有关如何重设密码的说
 msgid "Error"
 msgstr "错误"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:237
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:247
 msgid "External Services"
 msgstr "外部服务"
 
@@ -4969,7 +4969,7 @@ msgstr "控制器"
 msgid "Could not fetch tracer output, please try again."
 msgstr "无法获取跟踪器输出，请重试。"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:247
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:333
 msgid "Development"
 msgstr "开发"
 
@@ -6438,7 +6438,7 @@ msgstr "邮件列表"
 msgid "Mailing list"
 msgstr "邮件列表"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:395
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:394
 msgid "Mailing lists"
 msgstr "邮件列表"
 
@@ -7452,11 +7452,11 @@ msgstr "检查分面搜索表并通过重新索引所有页面来填充它。"
 msgid "Rebuild search facets"
 msgstr "重建搜索方面"
 
-#: apps/zotonic_mod_search/src/mod_search.erl:65
+#: apps/zotonic_mod_search/src/mod_search.erl:68
 msgid "Rebuilding the faceted search table."
 msgstr "重建分面搜索表。"
 
-#: apps/zotonic_mod_search/src/mod_search.erl:67
+#: apps/zotonic_mod_search/src/mod_search.erl:70
 msgid "Sorry, you are not allowed to do this."
 msgstr "抱歉，您无权执行此操作。"
 
@@ -9295,7 +9295,7 @@ msgstr "Youtube视频"
 msgid "Alert"
 msgstr "警告"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:478
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:497
 msgid "A component of the path is not a directory:"
 msgstr "路径的一个组成部分不是目录。"
 
@@ -9339,7 +9339,7 @@ msgstr "无法查看Git仓库。"
 msgid "Could not connect to 'postgres' database or create the database."
 msgstr "无法连接到'postgres'数据库或创建数据库。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:483
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:502
 msgid "Could not create the file:"
 msgstr "无法创建文件。"
 
@@ -9347,7 +9347,7 @@ msgstr "无法创建文件。"
 msgid "Could not create the schema in the database."
 msgstr "无法在数据库中创建模式。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:383
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:394
 msgid "Could not create the site directory"
 msgstr "无法创建网站目录"
 
@@ -9355,7 +9355,7 @@ msgstr "无法创建网站目录"
 msgid "Could not delete the site dir for the Git checkout:"
 msgstr "无法删除Git checkout的站点dir。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:473
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:492
 msgid "Disk full creating:"
 msgstr "盘满创建。"
 
@@ -9407,11 +9407,11 @@ msgstr "用用户名 <b>admin</b> 和密码登录。"
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
 msgstr "确保这个主机名有一个有效的DNS条目，或者被添加到你的 <tt>/etc/hosts</tt> 文件中。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:458
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:477
 msgid "No permission to create the site directory at:"
 msgstr "没有权限创建网站目录在："
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:378
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:389
 msgid "Not allowed to create the site directory"
 msgstr "不允许创建网站目录"
 
@@ -9471,7 +9471,7 @@ msgstr "开始新网站..."
 msgid "Succesfully created the site."
 msgstr "成功创建了网站。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:463
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:482
 msgid "The file or directory already exists:"
 msgstr "文件或目录已经存在。"
 
@@ -9479,7 +9479,7 @@ msgstr "文件或目录已经存在。"
 msgid "The hostname is unknown, check your DNS or /etc/hosts file"
 msgstr "主机名未知，请检查您的DNS或/etc/hosts文件。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:468
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:487
 msgid "The parent directory does not exist:"
 msgstr "父目录不存在。"
 
@@ -9495,11 +9495,11 @@ msgstr "骨架为网站提供模板和内容。"
 msgid "There is already a file or directory named"
 msgstr "已经有一个名为"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:430
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:449
 msgid "This name is reserved"
 msgstr "这个名字是保留的"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:434
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:453
 msgid "This name is taken by another Erlang module"
 msgstr "这个名字是由另一个Erlang模块"
 

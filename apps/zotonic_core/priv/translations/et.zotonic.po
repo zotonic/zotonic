@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-05-12 15:53\n"
+"PO-Revision-Date: 2022-06-02 16:31\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -289,7 +289,7 @@ msgstr "Sisurühm"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:16
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:55
-#: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:184
+#: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:197
 msgid "Content groups"
 msgstr "Sisurühmad"
 
@@ -704,7 +704,7 @@ msgstr "klõpsates nuppu <b>Kasuta allpool avaldatud reegleid</b>"
 msgid "closing this browser tab"
 msgstr "selle brauseri vahelehe sulgemine"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:222
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:221
 msgid "delete (acl action)"
 msgstr "kustuta (acl-toiming)"
 
@@ -712,7 +712,7 @@ msgstr "kustuta (acl-toiming)"
 msgid "deny"
 msgstr "eitada"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:221
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:220
 msgid "edit (acl action)"
 msgstr "muuda (acl-toiming)"
 
@@ -720,11 +720,11 @@ msgstr "muuda (acl-toiming)"
 msgid "in the group"
 msgstr "rühmas"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:220
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:219
 msgid "insert (acl action)"
 msgstr "sisesta (acl-toiming)"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:223
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:222
 msgid "link (acl action)"
 msgstr "link (ACL-toiming)"
 
@@ -736,7 +736,7 @@ msgstr "ise hakkama saama"
 msgid "send this URL to somebody else for testing"
 msgstr "saada see URL kellelegi teisele testimiseks"
 
-#: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:227
+#: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:226
 msgid "use (acl action)"
 msgstr "kasutamine (acl-toiming)"
 
@@ -748,7 +748,7 @@ msgstr "kasuta <b>uut privaatset akent</b> (kontrollige oma brauseri menüüd <b
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
 msgstr "kasutage mõnda muud brauserit (nt Chrome, kui kasutate nüüd Firefoxi)"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:219
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:218
 msgid "view (acl action)"
 msgstr "vaade (acl-toiming)"
 
@@ -1194,7 +1194,7 @@ msgstr "Manustatud kood desinfitseeritakse lubatud saitide ja HTML-i jaoks."
 msgid "Embed page"
 msgstr "Manusta leht"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:196
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:207
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:230
 msgid "Embedded Content"
 msgstr "Manustatud sisu"
@@ -1219,11 +1219,11 @@ msgstr "Erlangi installi juur"
 msgid "Erlang Version"
 msgstr "Erlangi versioon"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:165
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:176
 msgid "Error checking the website."
 msgstr "Viga veebisaidi kontrollimisel."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:174
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:178
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
 msgid "Error creating the page."
 msgstr "Viga lehe loomisel."
@@ -1232,7 +1232,7 @@ msgstr "Viga lehe loomisel."
 msgid "Error importing page from the remote server."
 msgstr "Viga lehe kaugserverist importimisel."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:184
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:188
 msgid "Error uploading the file."
 msgstr "Viga faili üleslaadimisel."
 
@@ -2517,7 +2517,7 @@ msgstr "Oled kindel, et tahad kustutada konfiguratsioonivõtit"
 msgid "Certificates provided by SSL modules"
 msgstr "SSL-moodulite pakutavad sertifikaadid"
 
-#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:54
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:53
 msgid "Config"
 msgstr "Konfiguratsioon"
 
@@ -2542,7 +2542,7 @@ msgstr "E-posti alistamine"
 msgid "Email FROM"
 msgstr "E-post FROM"
 
-#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:44
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:43
 msgid "Email configuration"
 msgstr "E-posti konfiguratsioon"
 
@@ -2619,7 +2619,7 @@ msgstr "Relee sadam"
 msgid "SMTP Hostname"
 msgstr "SMTP hostinimi"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:49
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:48
 msgid "SSL Certificates"
 msgstr "SSL-sertifikaadid"
 
@@ -2647,7 +2647,7 @@ msgstr "Saatke testmeil või kontrollige e-posti aadressi olekut."
 msgid "Sent an email to"
 msgstr "Saadetud e-kiri aadressile"
 
-#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:97
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:96
 msgid "Sent email to"
 msgstr "Saadetud meil aadressile"
 
@@ -2723,7 +2723,7 @@ msgstr "Kehtiv kuni"
 msgid "Value"
 msgstr "Väärtus"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:163./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:101
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:163./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr "Kuva e-posti olek"
@@ -2827,7 +2827,7 @@ msgstr "Kas soovite kindlasti selle kirje kustutada?"
 msgid "Blocked"
 msgstr "Blokeeritud"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:86
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:92
 msgid "Changed the username."
 msgstr "Muutis kasutajanime."
 
@@ -2855,7 +2855,7 @@ msgstr "Kasutajat ei õnnestunud luua. Vabandust."
 msgid "Delete this e-mail address"
 msgstr "Kustutage see e-posti aadress"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:63
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:65
 msgid "Deleted the user account."
 msgstr "Kasutajakonto kustutati."
 
@@ -2963,7 +2963,7 @@ msgstr "Ainult administraatorid saavad kasutajanimesid kustutada."
 msgid "Only an administrator can delete usernames."
 msgstr "Kasutajanimesid saab kustutada ainult administraator."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:69./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:113
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:57./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:71./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:119
 msgid "Only an administrator or the user him/herself can set a password."
 msgstr "Ainult administraator või kasutaja saab ise parooli määrata."
 
@@ -3005,7 +3005,7 @@ msgstr "Vabandust"
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr "Vabandust, see kasutajanimi on juba kasutusel. Palun proovige mõnda muud."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:57
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:59
 msgid "Sorry, you can not remove your own username."
 msgstr "Vabandust, te ei saa oma kasutajanime eemaldada."
 
@@ -3019,11 +3019,11 @@ msgstr "Aitäh"
 msgid "The address is invalid."
 msgstr "Aadress on vale."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:59
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:61
 msgid "The admin user can not be removed."
 msgstr "Administraatorit ei saa eemaldada."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:108
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:114
 msgid "The new username/ password has been set."
 msgstr "Uus kasutajanimi / parool on määratud."
 
@@ -3031,7 +3031,7 @@ msgstr "Uus kasutajanimi / parool on määratud."
 msgid "The password of the admin user cannot be changed in the database. Please edit your site's configuration file at"
 msgstr "Administraatori parooli ei saa andmebaasis muuta. Muutke oma saidi konfiguratsioonifaili aadressil"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:89./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:95
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:95./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:101
 msgid "The username is already in use, please try another."
 msgstr "Kasutajanimi on juba kasutusel, proovige teist."
 
@@ -3141,7 +3141,7 @@ msgstr "Kui lisate isikule mandaadi, saab inimene kasutajaks. Inimene või masin
 msgid "You are not allowed to create the person page."
 msgstr "Teil pole lubatud isikulehte luua."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:66
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:68
 msgid "You are not allowed to delete this user account."
 msgstr "Teil pole lubatud seda kasutajakontot kustutada."
 
@@ -3254,11 +3254,11 @@ msgstr "Ühendage kaks lehte kokku. Saate valida, millise lehega ühendada ja mi
 msgid "Merge with another page …"
 msgstr "Ühenda teise lehega …"
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:113
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:118
 msgid "Merging the two pages ..."
 msgstr "Kahe lehe ühendamine ..."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:118
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:123
 msgid "No merge action specified."
 msgstr "Ühinemistoimingut pole määratud."
 
@@ -3286,7 +3286,7 @@ msgstr "Valige võitnud leht"
 msgid "Sorry, you have no permission to edit this page."
 msgstr "Vabandust, teil pole selle lehe muutmiseks luba."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:97
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:102
 msgid "The loser is protected, unprotect the loser before merging."
 msgstr "Kaotaja on kaitstud, kaitsta kaotajat enne ühinemist."
 
@@ -3302,19 +3302,19 @@ msgstr "Teil pole lubatud seda lehte valida ja seeläbi vasakpoolset lehte kustu
 msgid "You are not allowed to select this page and thereby deleting page Right."
 msgstr "Teil ei ole lubatud seda lehte valida ja seeläbi kustutada leht Right."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:73
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:78
 msgid "You cannot remove the admin user."
 msgstr "Te ei saa administraatori kasutajat eemaldada."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:99
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:104
 msgid "You do not have permission to delete the loser."
 msgstr "Teil pole luba kaotaja kustutamiseks."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:77./apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:101
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:82./apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:106
 msgid "You do not have permission to edit the winner."
 msgstr "Teil pole luba võitjat muuta."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:87
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:92
 msgid "not implemented yet"
 msgstr "pole veel rakendatud"
 
@@ -3910,7 +3910,7 @@ msgstr "Parooli lähtestamise juhiste saamiseks sisestage oma e-posti aadress."
 msgid "Error"
 msgstr "Viga"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:237
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:247
 msgid "External Services"
 msgstr "Välisteenused"
 
@@ -4969,7 +4969,7 @@ msgstr "Kontroller"
 msgid "Could not fetch tracer output, please try again."
 msgstr "Jälgija väljundit ei õnnestunud tuua, proovige uuesti."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:247
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:333
 msgid "Development"
 msgstr "Areng"
 
@@ -6442,7 +6442,7 @@ msgstr "Postitusloendid"
 msgid "Mailing list"
 msgstr "Postiloend"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:395
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:394
 msgid "Mailing lists"
 msgstr "Postiloendid"
 
@@ -7456,11 +7456,11 @@ msgstr "Kontrollige lihvitud otsingu tabelit ja täitke see, indekseerides kõik
 msgid "Rebuild search facets"
 msgstr "Ehitage uuesti otsingu tahud"
 
-#: apps/zotonic_mod_search/src/mod_search.erl:65
+#: apps/zotonic_mod_search/src/mod_search.erl:68
 msgid "Rebuilding the faceted search table."
 msgstr "Lihvitud otsingutabeli taastamine."
 
-#: apps/zotonic_mod_search/src/mod_search.erl:67
+#: apps/zotonic_mod_search/src/mod_search.erl:70
 msgid "Sorry, you are not allowed to do this."
 msgstr "Kahjuks pole teil lubatud seda teha."
 
@@ -9299,7 +9299,7 @@ msgstr "Youtube'i video"
 msgid "Alert"
 msgstr "Aandacht"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:478
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:497
 msgid "A component of the path is not a directory:"
 msgstr "Tee komponent ei ole kataloog:"
 
@@ -9343,7 +9343,7 @@ msgstr "Giti hoidlat ei õnnestunud vaadata:"
 msgid "Could not connect to 'postgres' database or create the database."
 msgstr "'Postgres' andmebaasiga ei saanud ühendust luua ega andmebaasi luua."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:483
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:502
 msgid "Could not create the file:"
 msgstr "Faili ei saanud luua:"
 
@@ -9351,7 +9351,7 @@ msgstr "Faili ei saanud luua:"
 msgid "Could not create the schema in the database."
 msgstr "Skeemi ei saanud andmebaasis luua."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:383
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:394
 msgid "Could not create the site directory"
 msgstr "Saidikataloogi ei saanud luua"
 
@@ -9359,7 +9359,7 @@ msgstr "Saidikataloogi ei saanud luua"
 msgid "Could not delete the site dir for the Git checkout:"
 msgstr "Giti kassast saidi direkti ei saanud kustutada:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:473
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:492
 msgid "Disk full creating:"
 msgstr "Ketta loomine on täielik:"
 
@@ -9411,11 +9411,11 @@ msgstr "Logige sisse kasutajanimega <b>admin</b> ja parooliga"
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
 msgstr "Veenduge, et sellel hostinimel on kehtiv DNS-sisestus või see on lisatud teie faili <tt>/ etc / hosts</tt>."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:458
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:477
 msgid "No permission to create the site directory at:"
 msgstr "Puudub luba saidi kataloogi loomiseks aadressil:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:378
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:389
 msgid "Not allowed to create the site directory"
 msgstr "Saidikataloogi pole lubatud luua"
 
@@ -9475,7 +9475,7 @@ msgstr "Uue saidi alustamine ..."
 msgid "Succesfully created the site."
 msgstr "Saidi loomine õnnestus."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:463
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:482
 msgid "The file or directory already exists:"
 msgstr "Fail või kataloog on juba olemas:"
 
@@ -9483,7 +9483,7 @@ msgstr "Fail või kataloog on juba olemas:"
 msgid "The hostname is unknown, check your DNS or /etc/hosts file"
 msgstr "Hosti nimi pole teada, kontrollige oma DNS- või / etc / hosts-faili"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:468
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:487
 msgid "The parent directory does not exist:"
 msgstr "Vanemkataloogi pole olemas:"
 
@@ -9499,11 +9499,11 @@ msgstr "Skelett pakub saidi malle ja sisu."
 msgid "There is already a file or directory named"
 msgstr "Nimega fail või kataloog on juba olemas"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:430
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:449
 msgid "This name is reserved"
 msgstr "See nimi on reserveeritud"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:434
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:453
 msgid "This name is taken by another Erlang module"
 msgstr "Selle nime võtab teine Erlangi moodul"
 

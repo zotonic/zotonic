@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-05-12 16:17\n"
+"PO-Revision-Date: 2022-06-02 16:31\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -289,7 +289,7 @@ msgstr "Innehållsgrupp"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:16
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:55
-#: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:184
+#: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:197
 msgid "Content groups"
 msgstr "Innehållsgrupper"
 
@@ -704,7 +704,7 @@ msgstr "att klicka på <b>Använd publicerade regler</b> nedan"
 msgid "closing this browser tab"
 msgstr "stänger denna webbläsarflik"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:222
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:221
 msgid "delete (acl action)"
 msgstr "ta bort (acl-åtgärd)"
 
@@ -712,7 +712,7 @@ msgstr "ta bort (acl-åtgärd)"
 msgid "deny"
 msgstr "förneka"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:221
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:220
 msgid "edit (acl action)"
 msgstr "redigera (acl-åtgärd)"
 
@@ -720,11 +720,11 @@ msgstr "redigera (acl-åtgärd)"
 msgid "in the group"
 msgstr "i gruppen"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:220
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:219
 msgid "insert (acl action)"
 msgstr "infoga (acl-åtgärd)"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:223
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:222
 msgid "link (acl action)"
 msgstr "länk (ACL-åtgärd)"
 
@@ -736,7 +736,7 @@ msgstr "hantera egna"
 msgid "send this URL to somebody else for testing"
 msgstr "skicka denna URL för att någon annan för att testa"
 
-#: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:227
+#: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:226
 msgid "use (acl action)"
 msgstr "användning (acl-åtgärd)"
 
@@ -748,7 +748,7 @@ msgstr "användning <b>Nytt Privat Fönster</b> (kontrollera <b>Arkiv</b> menyn 
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
 msgstr "använd en annan webbläsare (tex. Chrome om du nu använder Firefox)"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:219
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:218
 msgid "view (acl action)"
 msgstr "visa (acl-åtgärd)"
 
@@ -1194,7 +1194,7 @@ msgstr "Bädda in koden kommer att desinficeras för tillåtna webbplatser och h
 msgid "Embed page"
 msgstr "Bädda in sidan"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:196
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:207
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:230
 msgid "Embedded Content"
 msgstr "Inbäddat innehåll"
@@ -1219,11 +1219,11 @@ msgstr "Erlang installationsrot"
 msgid "Erlang Version"
 msgstr "Erlang-version"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:165
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:176
 msgid "Error checking the website."
 msgstr "Felkontroll webbplatsen."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:174
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:178
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
 msgid "Error creating the page."
 msgstr "Fel vid skapande av sidan."
@@ -1232,7 +1232,7 @@ msgstr "Fel vid skapande av sidan."
 msgid "Error importing page from the remote server."
 msgstr "Fel vid import av sida från fjärrservern."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:184
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:188
 msgid "Error uploading the file."
 msgstr "Fel vid uppladdningen av filen."
 
@@ -2517,7 +2517,7 @@ msgstr "Är du säker på att du vill ta bort konfigurationen nyckel"
 msgid "Certificates provided by SSL modules"
 msgstr "Certifikat från SSL-moduler"
 
-#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:54
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:53
 msgid "Config"
 msgstr "Konfig"
 
@@ -2542,7 +2542,7 @@ msgstr "E-post åsidosättande"
 msgid "Email FROM"
 msgstr "E-post FRÅN"
 
-#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:44
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:43
 msgid "Email configuration"
 msgstr "E-postkonfiguration"
 
@@ -2619,7 +2619,7 @@ msgstr "Reläport"
 msgid "SMTP Hostname"
 msgstr "SMTP-värdnamn"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:49
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:48
 msgid "SSL Certificates"
 msgstr "SSL-certifikat"
 
@@ -2647,7 +2647,7 @@ msgstr "Skicka ett test-e-postmeddelande eller kontrollera status för en e-post
 msgid "Sent an email to"
 msgstr "Skickat ett mejl till"
 
-#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:97
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:96
 msgid "Sent email to"
 msgstr "Skickat e-post till"
 
@@ -2723,7 +2723,7 @@ msgstr "Giltig till"
 msgid "Value"
 msgstr "Värde"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:163./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:101
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:163./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr "Visa e-poststatus"
@@ -2827,7 +2827,7 @@ msgstr "Är du säker på att du vill radera detta inlägg?"
 msgid "Blocked"
 msgstr "Blockerad"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:86
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:92
 msgid "Changed the username."
 msgstr "Bytt användarnamn."
 
@@ -2855,7 +2855,7 @@ msgstr "Det gick inte att skapa användaren. Förlåt."
 msgid "Delete this e-mail address"
 msgstr "Ta bort den här e-postadressen"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:63
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:65
 msgid "Deleted the user account."
 msgstr "Borttaget användarkonto."
 
@@ -2963,7 +2963,7 @@ msgstr "Det är bara administratörer som kan ta bort användarnamn."
 msgid "Only an administrator can delete usernames."
 msgstr "Endast en administratör kan ta bort användarnamn."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:69./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:113
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:57./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:71./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:119
 msgid "Only an administrator or the user him/herself can set a password."
 msgstr "Endast en administratör eller användare själv kan ställa in ett lösenord."
 
@@ -3005,7 +3005,7 @@ msgstr "Förlåt"
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr "Ledsen, det önskade användarnamnet är redan i användning. Vänligen prova en annan."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:57
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:59
 msgid "Sorry, you can not remove your own username."
 msgstr "Du kan tyvärr inte ta bort ditt eget användarnamn."
 
@@ -3019,11 +3019,11 @@ msgstr "Tack"
 msgid "The address is invalid."
 msgstr "Adressen är ogiltig."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:59
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:61
 msgid "The admin user can not be removed."
 msgstr "Administratörsanvändaren kan inte tas bort."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:108
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:114
 msgid "The new username/ password has been set."
 msgstr "Det nya användarnamnet/ lösenordet har ställts in."
 
@@ -3031,7 +3031,7 @@ msgstr "Det nya användarnamnet/ lösenordet har ställts in."
 msgid "The password of the admin user cannot be changed in the database. Please edit your site's configuration file at"
 msgstr "Lösenordet för admin-användaren kan inte ändras i databasen. Vänligen redigera webbplatsens konfiguration fil på"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:89./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:95
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:95./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:101
 msgid "The username is already in use, please try another."
 msgstr "Användarnamnet är redan i bruk, försök med ett annat."
 
@@ -3141,7 +3141,7 @@ msgstr "När du lägger till referenser till en person och sen den personen blir
 msgid "You are not allowed to create the person page."
 msgstr "Du är inte tillåten att skapa den personens sida."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:66
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:68
 msgid "You are not allowed to delete this user account."
 msgstr "Du har inte tillåtelse att radera detta användarkonto."
 
@@ -3254,11 +3254,11 @@ msgstr "Slå samman två sidor. Du kan välja med vilken sida du vill slå ihop 
 msgid "Merge with another page …"
 msgstr "Slå ihop med en annan sida …"
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:113
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:118
 msgid "Merging the two pages ..."
 msgstr "Sammanfoga de två sidorna ..."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:118
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:123
 msgid "No merge action specified."
 msgstr "Ingen sammanslagningsåtgärd specificerad."
 
@@ -3286,7 +3286,7 @@ msgstr "Välj den vinnande sidan"
 msgid "Sorry, you have no permission to edit this page."
 msgstr "Du har tyvärr inte behörighet att redigera den här sidan."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:97
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:102
 msgid "The loser is protected, unprotect the loser before merging."
 msgstr "Förloraren är skyddad, skyddar förloraren innan den slås samman."
 
@@ -3302,19 +3302,19 @@ msgstr "Du är inte tillåten att välja den här sidan och därmed ta bort sida
 msgid "You are not allowed to select this page and thereby deleting page Right."
 msgstr "Du är inte tillåten att välja den här sidan och därmed ta bort sidan till Höger."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:73
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:78
 msgid "You cannot remove the admin user."
 msgstr "Du kan inte ta bort administratörsanvändaren."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:99
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:104
 msgid "You do not have permission to delete the loser."
 msgstr "Du har inte behörighet att ta bort förloraren."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:77./apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:101
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:82./apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:106
 msgid "You do not have permission to edit the winner."
 msgstr "Du har inte behörighet att redigera vinnaren."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:87
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:92
 msgid "not implemented yet"
 msgstr "ännu inte genomfört"
 
@@ -3910,7 +3910,7 @@ msgstr "Ange din e-postadress för att få instruktioner om hur du återställer
 msgid "Error"
 msgstr "Fel"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:237
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:247
 msgid "External Services"
 msgstr "Externa tjänster"
 
@@ -4969,7 +4969,7 @@ msgstr "Kontroller"
 msgid "Could not fetch tracer output, please try again."
 msgstr "Det gick inte att hämta spårningsutdata. Försök igen."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:247
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:333
 msgid "Development"
 msgstr "Utveckling"
 
@@ -6442,7 +6442,7 @@ msgstr "Postlistor"
 msgid "Mailing list"
 msgstr "E-postlista"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:395
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:394
 msgid "Mailing lists"
 msgstr "E-postlistor"
 
@@ -7456,11 +7456,11 @@ msgstr "Kontrollera tabellen för den facetterade sökningen och fyll den genom 
 msgid "Rebuild search facets"
 msgstr "Bygg om sökaspekter"
 
-#: apps/zotonic_mod_search/src/mod_search.erl:65
+#: apps/zotonic_mod_search/src/mod_search.erl:68
 msgid "Rebuilding the faceted search table."
 msgstr "Bygger om den mångfacetterade söktabellen."
 
-#: apps/zotonic_mod_search/src/mod_search.erl:67
+#: apps/zotonic_mod_search/src/mod_search.erl:70
 msgid "Sorry, you are not allowed to do this."
 msgstr "Tyvärr, du får inte göra detta."
 
@@ -9299,7 +9299,7 @@ msgstr "Youtube-video"
 msgid "Alert"
 msgstr "Varning"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:478
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:497
 msgid "A component of the path is not a directory:"
 msgstr "En del av sökvägen är inte en katalog:"
 
@@ -9343,7 +9343,7 @@ msgstr "Det gick inte att kolla in Git-arkivet:"
 msgid "Could not connect to 'postgres' database or create the database."
 msgstr "Det gick inte att ansluta till \"postgres\" -databasen eller skapa databasen."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:483
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:502
 msgid "Could not create the file:"
 msgstr "Det gick inte att skapa filen:"
 
@@ -9351,7 +9351,7 @@ msgstr "Det gick inte att skapa filen:"
 msgid "Could not create the schema in the database."
 msgstr "Det gick inte att skapa schemat i databasen."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:383
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:394
 msgid "Could not create the site directory"
 msgstr "Det gick inte att skapa webbplatskatalogen"
 
@@ -9359,7 +9359,7 @@ msgstr "Det gick inte att skapa webbplatskatalogen"
 msgid "Could not delete the site dir for the Git checkout:"
 msgstr "Det gick inte att ta bort webbplatsdir för Git-kassan:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:473
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:492
 msgid "Disk full creating:"
 msgstr "Disk full skapande:"
 
@@ -9411,11 +9411,11 @@ msgstr "Logga in med användarnamn <b>admin</b> och lösenord"
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
 msgstr "Se till att detta värdnamn har en giltig DNS-post eller läggs till i din <tt>/ etc / hosts</tt> fil."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:458
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:477
 msgid "No permission to create the site directory at:"
 msgstr "Ingen behörighet att skapa webbplatskatalogen på:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:378
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:389
 msgid "Not allowed to create the site directory"
 msgstr "Inte tillåtet att skapa webbplatskatalogen"
 
@@ -9475,7 +9475,7 @@ msgstr "Startar den nya webbplatsen ..."
 msgid "Succesfully created the site."
 msgstr "Skapade webbplatsen framgångsrikt."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:463
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:482
 msgid "The file or directory already exists:"
 msgstr "Filen eller katalogen finns redan:"
 
@@ -9483,7 +9483,7 @@ msgstr "Filen eller katalogen finns redan:"
 msgid "The hostname is unknown, check your DNS or /etc/hosts file"
 msgstr "Värdnamnet är okänt, kontrollera din DNS- eller / etc / hosts-fil"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:468
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:487
 msgid "The parent directory does not exist:"
 msgstr "Den överordnade katalogen finns inte:"
 
@@ -9499,11 +9499,11 @@ msgstr "Skelettet innehåller mallar och innehåll för en webbplats."
 msgid "There is already a file or directory named"
 msgstr "Det finns redan en fil eller katalog som heter"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:430
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:449
 msgid "This name is reserved"
 msgstr "Detta namn är reserverat"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:434
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:453
 msgid "This name is taken by another Erlang module"
 msgstr "Detta namn tas av en annan Erlang-modul"
 
