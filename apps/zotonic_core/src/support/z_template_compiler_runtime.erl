@@ -82,6 +82,7 @@ map_template({overrules, Template, Filename}, _Vars, Context) ->
         {error, enoent} ->
             ?LOG_WARNING(#{
                 text => <<"No template for overrules">>,
+                in => zotonic_core,
                 template => Template,
                 filename => Filename
             }),
@@ -501,6 +502,7 @@ builtin_tag_1(media, Expr, Args, _Vars, Context) ->
 builtin_tag_1(Tag, _Expr, _Args, _Vars, _Context) ->
     ?LOG_WARNING(#{
         text => <<"Unknown template tag">>,
+        in => zotonic_core,
         tag => Tag
     }),
     <<>>.
@@ -691,6 +693,7 @@ trace_compile(Module, Filename, Options, Context) ->
         {File, Line, _Col} ->
             ?LOG_DEBUG(#{
                 text => <<"Template compile">>,
+                in => zotonic_core,
                 template => Filename,
                 at => File,
                 line => Line
@@ -698,6 +701,7 @@ trace_compile(Module, Filename, Options, Context) ->
         undefined ->
             ?LOG_DEBUG(#{
                 text => <<"Template compile">>,
+                in => zotonic_core,
                 template => Filename
             })
     end,
@@ -713,6 +717,7 @@ trace_render(Filename, Options, Context) ->
                 {File, Line, _Col} ->
                     ?LOG_NOTICE(#{
                         text => <<"Template include">>,
+                        in => zotonic_core,
                         template => Filename,
                         at => File,
                         line => Line
@@ -726,6 +731,7 @@ trace_render(Filename, Options, Context) ->
                 undefined ->
                     ?LOG_NOTICE(#{
                         text => <<"Template render">>,
+                        in => zotonic_core,
                         template => Filename
                     }),
                     {ok,
@@ -745,6 +751,7 @@ trace_block({File, Line, _Col}, Name, Module, Context) ->
         true ->
             ?LOG_NOTICE(#{
                 text => <<"Template call block">>,
+                in => zotonic_core,
                 block => Name,
                 template => Module:filename(),
                 at => File,

@@ -918,7 +918,12 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
         fun(Iso) ->
             case z_language:is_language_editable(Iso, Context) of
                 false ->
-                    ?LOG_INFO("Dropping non editable language ~p from resource ~p", [ Iso, Id ]),
+                    ?LOG_INFO(#{
+                        text => <<"Dropping non editable language from resource">>,
+                        in => zotonic_core,
+                        language => Iso,
+                        rsc_id => Id
+                    }),
                     false;
                 true ->
                     true
@@ -1079,7 +1084,14 @@ preflight_check_name(Id, #{ <<"name">> := Name }, Context) when Name =/= undefin
         0 ->
             ok;
         _N ->
-            ?LOG_WARNING("Trying to insert duplicate name ~p", [Name]),
+            ?LOG_WARNING(#{
+                text => <<"Trying to insert duplicate name">>,
+                in => zotonic_core,
+                name => Name,
+                rsc_id => Id,
+                result => error,
+                reason => duplicate_name
+            }),
             {error, duplicate_name}
     end;
 preflight_check_name(_Id, _Props, _Context) ->
@@ -1091,7 +1103,14 @@ preflight_check_page_path(Id, #{ <<"page_path">> := Path }, Context) when Path =
         0 ->
             ok;
         _N ->
-            ?LOG_WARNING("Trying to insert duplicate page_path ~p", [Path]),
+            ?LOG_WARNING(#{
+                text => <<"Trying to insert duplicate page_path">>,
+                in => zotonic_core,
+                result => error,
+                reason => duplicate_page_path,
+                rsc_id => Id,
+                page_path => Path
+            }),
             {error, duplicate_page_path}
     end;
 preflight_check_page_path(_Id, _Props, _Context) ->
@@ -1102,7 +1121,14 @@ preflight_check_uri(Id, #{ <<"uri">> := Uri }, Context) when Uri =/= undefined -
         0 ->
             ok;
         _N ->
-            ?LOG_WARNING("Trying to insert duplicate uri ~p", [Uri]),
+            ?LOG_WARNING(#{
+                text => <<"Trying to insert duplicate uri">>,
+                in => zotonic_core,
+                result => error,
+                reason => duplicate_uri,
+                rsc_id => Id,
+                uri => Uri
+            }),
             {error, duplicate_uri}
     end;
 preflight_check_uri(_Id, _Props, _Context) ->
@@ -1258,7 +1284,11 @@ props_filter(<<"category_id">>, CatId, Acc, Context) ->
         true ->
             Acc#{ <<"category_id">> => CatId1 };
         false ->
-            ?LOG_ERROR("Ignoring unknown category '~p' in update, using 'other' instead.", [CatId]),
+            ?LOG_WARNING(#{
+                text => <<"Ignoring unknown category in update, using 'other' instead.">>,
+                in => zotonic_core,
+                category_id => CatId
+            }),
             {ok, OtherId} = m_category:name_to_id(other, Context),
             Acc#{ <<"category_id">> => OtherId }
     end;
@@ -1276,7 +1306,11 @@ props_filter(<<"content_group_id">>, CgId, Acc, Context) ->
         true ->
             Acc#{ <<"content_group_id">> => CgId1 };
         false ->
-            ?LOG_ERROR("Ignoring unknown content group '~p' in update.", [CgId]),
+            ?LOG_WARNING(#{
+                text => <<"Ignoring unknown content group">>,
+                in => zotonic_core,
+                content_group_id => CgId
+            }),
             Acc
     end;
 props_filter(Location, P, Acc, _Context)

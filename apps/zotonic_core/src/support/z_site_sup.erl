@@ -111,7 +111,11 @@ wait_for_db(Site) ->
     wait_for_db(Site, 1000).
 
 wait_for_db(Site, 0) ->
-    ?LOG_ERROR("~p: Timeout waiting for database driver", [Site]),
+    ?LOG_ERROR(#{
+        text => <<"Timeout waiting for database driver">>,
+        in => zotonic_core,
+        site => Site
+    }),
     {error, timeout};
 wait_for_db(Site, N) ->
     case z_db:has_connection(Site) of

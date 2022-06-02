@@ -77,8 +77,15 @@ observe_rsc_update(#rsc_update{action=insert, id=Id}, {ok, Props}, Context) ->
                     ok = m_media:replace(Id, MediaProps, Context),
                     spawn_preview_create(Id, MediaProps, Context);
                 false ->
-                    ?LOG_NOTICE("Denied user ~p to embed ~p: ~p",
-                               [z_acl:user(Context), ?EMBED_MIME, EmbedCodeRaw]),
+                    ?LOG_NOTICE(#{
+                        text => <<"User not allowed to insert ", ?EMBED_MIME/binary>>,
+                        in => zotonic_mod_video_embed,
+                        result => error,
+                        reason => eacces,
+                        user_id => z_acl:user(Context),
+                        mime => ?EMBED_MIME,
+                        embed_code => EmbedCodeRaw
+                    }),
                     ok
             end,
             Props1 = maps:remove(<<"video_embed_code">>,
@@ -383,7 +390,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                 <<"video_embed_code">> => EmbedCode,
                 <<"content_group_id">> => ContentGroupdId
             },
-            try m_rsc:insert(Props, Context) of
+            case m_rsc:insert(Props, Context) of
                 {ok, MediaId} ->
                     spawn_preview_create(MediaId, Props, Context),
 
@@ -406,10 +413,17 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                     z_render:wire([
                         {dialog_close, []},
                         {growl, [{text, "Made the media page."}]}
-                        | Actions], ContextRedirect)
-            catch
+                        | Actions], ContextRedirect);
+
                 {error, Error} ->
-                    ?LOG_ERROR("[mod_video_embed] Error in add_video_embed: ~p on ~p", [Error, Props]),
+                    ?LOG_ERROR(#{
+                        text => <<"Error in add_video_embed">>,
+                        in => zotonic_mod_video_embed,
+                        result => error,
+                        reason => Error,
+                        props => Props,
+                        subject_id => SubjectId
+                    }),
                     z_render:growl_error("Could not create the media page.", Context)
             end;
 
@@ -420,10 +434,10 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                 <<"video_embed_service">> => EmbedService,
                 <<"video_embed_code">> => EmbedCode
             },
-            try
-                {ok, _} = m_rsc:update(Id, Props, Context)
-            catch
-                _ ->
+            case m_rsc:update(Id, Props, Context) of
+                {ok, _} = Ok ->
+                    Ok;
+                {error, _} ->
                     z_render:growl_error("Could not update the page with the new embed code.", Context)
             end
     end.
@@ -480,7 +494,13 @@ videoid_to_image(<<"vimeo">>, EmbedId) ->
             #{ <<"thumbnail_large">> := Thumbnail } = JSON,
             iolist_to_binary(re:replace(Thumbnail, <<"_[0-9]+(x[0-9]+)?$">>, <<"_1280">>));
         {ok, {StatusCode, _Header, Data}} ->
-            ?LOG_WARNING("Vimeo metadata fetch returns ~p ~p", [StatusCode, Data]),
+            ?LOG_WARNING(#{
+                text => <<"Vimeo metadata fetch returned error">>,
+                in => zotonic_mod_video_embed,
+                reason => error,
+                result => StatusCode,
+                date => Data
+            }),
             undefined;
         _ ->
             undefined

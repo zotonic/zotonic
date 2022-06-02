@@ -434,8 +434,13 @@ acl_update_check(insert, _Id, Props, Context) ->
         true ->
             true;
         false ->
-            ?LOG_DEBUG("[acl_user_group] denied user ~p insert of category ~p in content-group ~p",
-                        [z_acl:user(Context), CatId, CGId]),
+            ?LOG_DEBUG(#{
+                text => <<"ACL denied user to inACL dert resource">>,
+                in => zotonic_mod_acl_user_groups,
+                user_id => z_acl:user(Context),
+                category_id => CatId,
+                content_group_od => CGId
+            }),
             false
     end;
 acl_update_check(update, Id, Props, Context) ->
@@ -447,8 +452,14 @@ acl_update_check(update, Id, Props, Context) ->
         true ->
             true;
         false ->
-            ?LOG_DEBUG("[acl_user_group] denied user ~p update on ~p of category ~p in content-group ~p",
-                        [z_acl:user(Context), Id, CatId, CGId]),
+            ?LOG_DEBUG(#{
+                text => <<"ACL denied user to update resource">>,
+                in => zotonic_mod_acl_user_groups,
+                user_id => z_acl:user(Context),
+                rsc_id => Id,
+                category_id => CatId,
+                content_group_id => CGId
+            }),
             false
     end.
 

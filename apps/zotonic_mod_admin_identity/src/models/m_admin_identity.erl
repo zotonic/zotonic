@@ -43,6 +43,5 @@ m_get([ <<"new_user_contentgroup">> | Rest ], _Msg, Context) ->
         C -> C
     end,
     {ok, {CG, Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_DEBUG("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.

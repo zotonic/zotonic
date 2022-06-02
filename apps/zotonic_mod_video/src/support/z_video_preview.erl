@@ -57,13 +57,31 @@ preview(MovieFile, Props) ->
         ])),
     jobs:run(media_preview_jobs,
         fun() ->
-            ?LOG_DEBUG("Video preview: ~p", [FfmpegCmd]),
+            ?LOG_DEBUG(#{
+                text => <<"Video preview">>,
+                movie_file => MovieFile,
+                tmp_file => TmpFile,
+                command => FfmpegCmd
+            }),
             case os:cmd(FfmpegCmd) of
                 [] ->
-                   ?LOG_DEBUG("Preview ok, file: ~p", [TmpFile]),
+                   ?LOG_DEBUG(#{
+                        text => <<"Preview ok">>,
+                        result => ok,
+                        command => FfmpegCmd,
+                        movie_file => MovieFile,
+                        tmp_file => TmpFile
+                    }),
                    {ok, TmpFile};
                 Other ->
-                   ?LOG_WARNING("Video preview error: ~p", [Other]),
+                   ?LOG_WARNING(#{
+                        text => <<"Video preview error">>,
+                        result => error,
+                        reason => Other,
+                        movie_file => MovieFile,
+                        tmp_file => TmpFile,
+                        command => FfmpegCmd
+                    }),
                    {error, Other}
             end
         end).

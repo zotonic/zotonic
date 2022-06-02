@@ -430,7 +430,13 @@ get_file_dispatch({File, Mod}) ->
         end
     catch
         M:E ->
-            ?LOG_ERROR("File dispatch error: ~p  ~p", [File, {M,E}]),
+            ?LOG_ERROR(#{
+                text => <<"File dispatch error">>,
+                in => zotonic_core,
+                file => File,
+                result => M,
+                reason => E
+            }),
             throw({error, "Parse error in " ++ z_convert:to_list(File)})
     end.
 
@@ -472,7 +478,13 @@ dispatch_for_uri_lookup1([{Name, Pattern, Controller, DispatchOptions}|T], Dict)
             end,
     dispatch_for_uri_lookup1(T, Dict1);
 dispatch_for_uri_lookup1([IllegalDispatch|T], Dict) ->
-    ?LOG_ERROR("Dropping malformed dispatch rule: ~p", [ IllegalDispatch ]),
+    ?LOG_ERROR(#{
+        text => <<"Dispatcher dropping malformed dispatch rule">>,
+        in => zotonic_core,
+        result => error,
+        reason => malformed,
+        dispatch_rule => IllegalDispatch
+    }),
     dispatch_for_uri_lookup1(T, Dict).
 
 
@@ -486,14 +498,14 @@ make_url_for(Name, Args, Escape, UriLookup) ->
         {ok, Patterns} ->
             case make_url_for1(Args1, Patterns, Escape, undefined) of
                 #dispatch_url{ url = undefined } = DispUrl when Name =/= image->
-                    ?LOG_INFO("make_url_for: dispatch rule `~p' failed when processing ~p.~n",
-                         [
-                          Name1,
-                          [{'Args', Args1},
-                           {'Patterns', Patterns},
-                           {'Escape', Escape}
-                          ]
-                         ]),
+                    ?LOG_INFO(#{
+                        text => <<"Dispatcher make_url_for failed">>,
+                        in => zotonic_core,
+                        dispatch_rule => Name1,
+                        args => Args1,
+                        patterns => Patterns,
+                        escape => Escape
+                    }),
                     DispUrl;
                 DispUrl ->
                     DispUrl

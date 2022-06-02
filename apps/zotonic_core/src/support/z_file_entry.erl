@@ -186,6 +186,7 @@ init([InitialState, RequestPath, Root, OptFilterProps, Minify, Site]) ->
         paused -> ?PAUSED_TIMEOUT;
         locate -> 0
     end,
+    z_context:logger_md(Site),
     {ok, InitialState, State, Timeout}.
 
 callback_mode() ->
@@ -262,7 +263,11 @@ paused(EventType, EventContent, Data) ->
 stopping({call, _From}, lookup, State) ->
     {next_state, stopping, lookup_file_info(State), ?STOP_TIMEOUT};
 stopping(timeout, _, State) ->
-    ?LOG_DEBUG("Stop file entry ~p:~p", [State#state.site, State#state.request_path]),
+    ?LOG_DEBUG(#{
+        text => <<"Stop file entry">>,
+        in => zotonic_core,
+        filename => State#state.request_path
+    }),
     {stop, normal, State};
 stopping(EventType, EventContent, Data) ->
     handle_event(EventType, EventContent, stopping, Data).
@@ -304,7 +309,11 @@ handle_event(info, {gzip, Ref, Data}, StateName, #state{gzipper=Ref} = State) ->
     },
     {next_state, StateName, State1, timeout(StateName, State1#state.is_found)};
 handle_event(info, {gzip, _Ref, _Data}, StateName, State) ->
-    ?LOG_DEBUG("Unexpected gzip info message in state ~p", [ StateName ]),
+    ?LOG_DEBUG(#{
+        text => <<"Unexpected gzip info message">>,
+        in => zotonic_core,
+        state => StateName
+    }),
     {next_state, StateName, State};
 handle_event(info, {'DOWN', MRef, process, _Pid, _Info}, StateName, State) ->
     case is_mref_part(MRef, State#state.parts) of
@@ -314,7 +323,13 @@ handle_event(info, {'DOWN', MRef, process, _Pid, _Info}, StateName, State) ->
             {next_state, StateName, State, timeout(StateName, State#state.is_found)}
     end;
 handle_event(EventType, EventContent, StateName, State) ->
-    ?LOG_ERROR("Unexpected event ~p ~p in state ~p", [EventType, EventContent, StateName]),
+    ?LOG_ERROR(#{
+        text => <<"Unexpected event">>,
+        in => zotonic_core,
+        event => EventType,
+        event_content => EventContent,
+        state => StateName
+    }),
     {next_state, StateName, State, timeout(StateName, State#state.is_found)}.
 
 terminate(_Reason, _StateName, _State) ->
@@ -542,8 +557,14 @@ minify_m(Filename, Data, MinifyModule) ->
                 Minified when is_binary(Minified) ->
                     Minified;
                 Reason ->
-                    error_logger:warning_msg("mod_base: Could not minify ~p. [Reason: ~p]~n", [Filename, Reason]),
-                    Data 
+                    ?LOG_WARNING(#{
+                        text => <<"Could not minify file">>,
+                        in => zotonic_core,
+                        result => error,
+                        reason => Reason,
+                        filename => Filename
+                    }),
+                    Data
             end
     end.
 
@@ -561,7 +582,11 @@ locate_enoent(State, IndexRef, Mime) ->
         parts=[],
         index_ref=IndexRef
     },
-    ?LOG_DEBUG("~p: File not found ~p", [State#state.site, State#state.request_path]),
+    ?LOG_DEBUG(#{
+        text => <<"File not found">>,
+        in => zotonic_core,
+        file => State#state.request_path
+    }),
     {next_state, serving, reply_waiting(State1), ?SERVING_ENOENT_TIMEOUT}.
 
 

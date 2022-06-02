@@ -492,7 +492,11 @@ qterm_1(Field, Value, Query, Context) ->
             end,
             {ok, Final};
         {error, _} = Error ->
-            ?LOG_NOTICE("Uknown facet ~p, dropping query term.", [ Field ]),
+            ?LOG_NOTICE(#{
+                text => <<"Unknown facet, dropping query term.">>,
+                in => zotonic_mod_search,
+                facet => Field
+            }),
             Error
     end.
 
@@ -528,7 +532,10 @@ extract_op(V) ->
 %% the facet.tpl blocks.
 -spec pivot_all( z:context() ) -> ok.
 pivot_all(Context) ->
-    ?LOG_NOTICE("Faceted search: repivoting facet for all resources for ~p", [ z_context:site(Context )]),
+    ?LOG_INFO(#{
+        in => zotonic_mod_search,
+        text => <<"Faceted search: repivoting facet for all resources">>
+    }),
     {ok, _} = z_pivot_rsc:insert_task_after(1, ?MODULE, pivot_batch, facet_pivot_batch, [0], Context),
     ok.
 
@@ -737,7 +744,10 @@ has_label_block(#facet_def{ block = Block }, Context) ->
 %% @doc Recreate the facet table by first dropping it.
 -spec recreate_table( z:context() ) -> ok | {error, term()}.
 recreate_table(Context) ->
-    ?LOG_INFO("Faceted search: recreating facet table for ~p", [ z_context:site(Context )]),
+    ?LOG_INFO(#{
+        in => zotonic_mod_search,
+        text => <<"Faceted search: recreating facet table">>
+    }),
     z_db:q("drop table if exists search_facet cascade", Context),
     z_db:flush(Context),
     create_table(Context).
@@ -921,7 +931,13 @@ template_facets(Context) ->
             case find_duplicate_names(Facets) of
                 [] -> {ok, Facets};
                 Names ->
-                    ?LOG_ERROR("Blocks with duplicate basenames in facet.tpl: ~p", [ Names ]),
+                    ?LOG_ERROR(#{
+                        text => <<"Blocks with duplicate basenames in facet.tpl">>,
+                        in => zotonic_mod_search,
+                        name => Names,
+                        result => error,
+                        reason => duplicate_blocks
+                    }),
                     {error, duplicate_blocks}
             end;
         {error, _} = Error ->

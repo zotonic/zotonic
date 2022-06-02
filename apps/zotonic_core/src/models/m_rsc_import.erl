@@ -240,6 +240,7 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                             PagePath = unique_page_path( maps:get(<<"page_path">>, Rsc), Context ),
                             ?LOG_WARNING(#{
                                 text => <<"Import of duplicate page_path">>,
+                                in => zotonic_core,
                                 result => error,
                                 reason => duplicate_page_path,
                                 uri => Uri,
@@ -251,6 +252,7 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                             Name = unique_name( maps:get(<<"name">>, Rsc), Context ),
                             ?LOG_WARNING(#{
                                 text => <<"Import of duplicate name">>,
+                                in => zotonic_core,
                                 result => error,
                                 reason => duplicate_name,
                                 uri => Uri,
@@ -262,6 +264,7 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                         {error, Reason} = Error ->
                             ?LOG_NOTICE(#{
                                 text => <<"Not importing menu entry from remote">>,
+                                in => zotonic_core,
                                 result => error,
                                 reason => Reason,
                                 uri => Uri,
@@ -273,6 +276,7 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                     % Unknown category, deny access
                     ?LOG_INFO(#{
                         text => <<"Not importing menu entry from remote, category disallowed">>,
+                        in => zotonic_core,
                         result => error,
                         reason => Reason,
                         uri => Uri,
@@ -514,6 +518,7 @@ fetch_json(Uri, Context) ->
                 {error, Reason} = Error ->
                     ?LOG_WARNING(#{
                         text => <<"Error fetching resource">>,
+                        in => zotonic_core,
                         result => error,
                         reason => Reason,
                         uri => Uri
@@ -531,6 +536,7 @@ fetch_json(Uri, Context) ->
                         {error, Reason} = Error ->
                             ?LOG_WARNING(#{
                                 text => <<"Error fetching resource for import">>,
+                                in => zotonic_core,
                                 result => error,
                                 reason => Reason,
                                 uri => Uri
@@ -610,6 +616,7 @@ import_data(Id, _Url, #{ <<"status">> := <<"ok">>, <<"result">> := JSON }, Impor
 import_data(_Id, Url, #{ <<"status">> := <<"error">> } = JSON, _ImportedAcc, _Options, _Context) ->
     ?LOG_WARNING(#{
         text => <<"Remote returned error on import">>,
+        in => zotonic_core,
         uri => Url,
         json => JSON
     }),
@@ -621,6 +628,7 @@ import_data(Id, Url, #{ <<"rdf_triples">> := _ } = Data, ImportedAcc, Options, C
 import_data(_Id, Url, JSON, _ImportedAcc, _Options, _Context) ->
     ?LOG_WARNING(#{
         text => <<"Import of JSON with unknown structure">>,
+        in => zotonic_core,
         uri => Url,
         json => JSON
     }),
@@ -733,6 +741,7 @@ import(OptLocalId, #{
 
     ?LOG_INFO(#{
         text => <<"Importing resource">>,
+        in => zotonic_core,
         uri => Uri,
         local_id => OptLocalId
     }),
@@ -793,6 +802,7 @@ import(OptLocalId, #{
                         {error, Reason} = Error ->
                             ?LOG_INFO(#{
                                 text => <<"Importing resource returned error">>,
+                                in => zotonic_core,
                                 result => error,
                                 reason => Reason,
                                 uri => Uri,
@@ -810,6 +820,7 @@ import(OptLocalId, #{ <<"rdf_triples">> := _ } = Data, ImportedAcc, Options, Con
 import(_OptLocalId, JSON, _ImportedAcc, _Options, _Context) ->
     ?LOG_WARNING(#{
         text => <<"Import of JSON without required fields resource and uri">>,
+        in => zotonic_core,
         json => JSON
     }),
     {error, status}.
@@ -824,6 +835,7 @@ update_rsc(OptLocalId, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
             PagePath = unique_page_path(OldPath, Context),
             ?LOG_WARNING(#{
                 text => <<"Import of duplicate page_path">>,
+                in => zotonic_core,
                 result => error,
                 reason => duplicate_page_path,
                 rsc_id => OptLocalId,
@@ -839,6 +851,7 @@ update_rsc(OptLocalId, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
             Name = unique_name(OldName, Context),
             ?LOG_WARNING(#{
                 text => <<"Import of duplicate name">>,
+                in => zotonic_core,
                 result => error,
                 reason => duplicate_name,
                 rsc_id => OptLocalId,
@@ -1215,6 +1228,7 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium }, _Options, Context)
         undefined ->
             ?LOG_NOTICE(#{
                 text => <<"Resource import dropped medium record">>,
+                in => zotonic_core,
                 rsc_id => LocalId
             }),
             {ok, LocalId};
@@ -1303,6 +1317,7 @@ import_edges(LocalId, #{ <<"edges">> := Edges }, ImportedAcc, Options, Context) 
             (Name, V, Acc) ->
                 ?LOG_WARNING(#{
                     text => <<"Import of unknown predicate">>,
+                    in => zotonic_core,
                     name => Name,
                     props => V
                 }),
@@ -1324,6 +1339,7 @@ replace_edges(LocalId, PredId, Os, ImportedAcc, Options, Context) ->
                         {error, Reason} ->
                             ?LOG_DEBUG(#{
                                 text => <<"Skipping import of object">>,
+                                in => zotonic_core,
                                 result => error,
                                 reason => Reason,
                                 object => Object
@@ -1363,6 +1379,7 @@ find_allowed_predicate(Name, Pred, Options, Context) ->
                 false ->
                     ?LOG_NOTICE(#{
                         text => <<"Not importing edges because predicate is not allowed.">>,
+                        in => zotonic_core,
                         result => error,
                         reason => eacces,
                         predicate => PredName
@@ -1423,6 +1440,7 @@ find_allowed_category(RId, Rsc, Options, Context) ->
         false ->
             ?LOG_NOTICE(#{
                 text => <<"Not importing resource because category is disallowed">>,
+                in => zotonic_core,
                 result => error,
                 reason => eacces,
                 category => CatName,

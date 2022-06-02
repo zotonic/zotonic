@@ -87,8 +87,14 @@ testcred(S3Url, S3Key, S3Secret, IsCreateBucket)
             case s3filez:create_bucket(Cred, S3Url) of
                 ok ->
                     testcred_file(S3Url, S3Key, S3Secret);
-                {error, _} = Error ->
-                    ?LOG_ERROR("S3 could not create bucket \"~s\"", [ S3Url ]),
+                {error, Reason} = Error ->
+                    ?LOG_ERROR(#{
+                        text => <<"S3 could not create bucket">>,
+                        in => zotonic_mod_filestore,
+                        result => error,
+                        reason => Reason,
+                        url => S3Url
+                    }),
                     Error
             end;
         {error, _} = Error ->
@@ -105,15 +111,36 @@ testcred_file(S3Url, S3Key, S3Secret)
             case s3filez:get(Cred, Url) of
                 {ok, _Mime, Data} ->
                     s3filez:delete(Cred, Url);
-                {ok, _Mime, OtherData} ->
-                    ?LOG_WARNING("S3 get error, non matching data ~p", [OtherData]),
+                {ok, Mime, OtherData} ->
+                    ?LOG_WARNING(#{
+                        text => <<"S3 get error, non matching data">>,
+                        in => zotonic_mod_filestore,
+                        result => error,
+                        reason => data,
+                        mime_received => Mime,
+                        data_received => OtherData,
+                        data_expected => Data,
+                        url => Url
+                    }),
                     {error, data};
-                Error ->
-                    ?LOG_WARNING("S3 get error: ~p", [Error]),
+                {error, Reason} = Error ->
+                    ?LOG_WARNING(#{
+                        text => <<"S3 get error">>,
+                        in => zotonic_mod_filestore,
+                        result => error,
+                        reason => Reason,
+                        url => Url
+                    }),
                     Error
             end;
-        Error ->
-            ?LOG_WARNING("S3 put error ~p", [Error]),
+        {error, Reason} = Error ->
+            ?LOG_WARNING(#{
+                text => <<"S3 put error">>,
+                in => zotonic_mod_filestore,
+                result => error,
+                reason => Reason,
+                url => Url
+            }),
             Error
     end;
 testcred_file(_, _, _) ->
@@ -173,7 +200,12 @@ task_file_to_local(Context) ->
         {ok, 0} ->
             ok;
         {ok, N} ->
-            ?LOG_NOTICE("Marked ~p files for move to local.", [N]),
+            ?LOG_NOTICE(#{
+                text => <<"Marked files for move to local">>,
+                in => zotonic_mod_filestore,
+                result => ok,
+                count => N
+            }),
             {delay, 1};
         _Other ->
             {delay, 10}
@@ -184,7 +216,12 @@ task_file_to_remote(Context) ->
         {ok, 0} ->
             ok;
         {ok, N} ->
-            ?LOG_NOTICE("Unmarked ~p files for move to local.", [N]),
+            ?LOG_NOTICE(#{
+                text => <<"Unmarked files for move to local">>,
+                in => zotonic_mod_filestore,
+                result => ok,
+                count => N
+            }),
             {delay, 1};
         _Other ->
             {delay, 10}

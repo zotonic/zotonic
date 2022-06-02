@@ -137,8 +137,15 @@ addsite_check_git(Name, Options, Context) ->
                         [] ->
                             addsite_check_skel(Name, Options, Context);
                         Error ->
-                            ?LOG_ERROR("[zotonic_site_status] Could not checkout ~p to ~p: ~p",
-                                        [Git, site_dir(Name), Error]),
+                            ?LOG_ERROR(#{
+                                text => <<"[zotonic_site_status] Could not checkout Git repository">>,
+                                in => zotonic_mod_zotonic_site_management,
+                                site => Name,
+                                git_url => Git,
+                                site_dir => site_dir(Name),
+                                result => error,
+                                reason => Error
+                            }),
                             {error, [   ?__(<<"Could not check out Git repository:">>, Context),
                                         " ", Error]}
                     end;
@@ -255,9 +262,14 @@ copy_skeleton_dir(From, To, Options, Context) ->
                                             case file:make_dir(ToPath) of
                                                 ok ->
                                                     copy_skeleton_dir(FromPath, ToPath, Options, Context);
-                                                {error, _} = Error ->
-                                                    ?LOG_ERROR("[zotonic_site_status] Error creating directory ~p: ~p",
-                                                                [ToPath, Error]),
+                                                {error, Reason} ->
+                                                    ?LOG_ERROR(#{
+                                                        text => <<"[zotonic_site_status] Error creating directory">>,
+                                                        in => zotonic_mod_zotonic_site_management,
+                                                        directory => ToPath,
+                                                        result => error,
+                                                        reason => Reason
+                                                    }),
                                                     {error, iolist_to_binary([
                                                             ?__(<<"Could not create the directory">>, Context),
                                                             " ",
@@ -310,9 +322,14 @@ copy_file("zotonic_site.config.in", FromPath, ToPath, Options) ->
     case file:write_file(FnConfig, Cfg) of
         ok ->
             ok;
-        {error, _} = Error ->
-            ?LOG_ERROR("[zotonic_site_status] Error writing ~p: ~p",
-                        [FnConfig, Error]),
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                text => <<"[zotonic_site_status] Error writing site config file">>,
+                in => zotonic_mod_zotonic_site_management,
+                result => error,
+                reason => Reason,
+                filename => FnConfig
+            }),
             Error
     end;
 copy_file(_Filename, FromPath, ToPath, _Options) ->

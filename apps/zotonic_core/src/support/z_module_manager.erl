@@ -772,6 +772,7 @@ handle_cast({start_child_result, Module, Result}, #state{ site = Site } = State)
 handle_cast({module_reloaded, Module}, State) ->
     ?LOG_DEBUG(#{
         text => <<"Checking observers of (re-)loaded module">>,
+        in => zotonic_core,
         module => Module
     }),
     TmpState = refresh_module_exports(Module, refresh_module_schema(Module, State)),
@@ -789,6 +790,7 @@ handle_cast({module_reloaded, Module}, State) ->
             % Exports or schema changed, assume the worst and restart the complete module
             ?LOG_NOTICE(#{
                 text => <<"Exports or schema of (re-)loaded module changed, restarting module">>,
+                in => zotonic_core,
                 module => Module
             }),
             gen_server:cast(self(), {restart_module, Module}),
@@ -799,6 +801,7 @@ handle_cast({module_reloaded, Module}, State) ->
 handle_cast(Message, State) ->
     ?LOG_ERROR(#{
         text => <<"z_module_manager: unknown cast">>,
+        in => zotonic_core,
         message_in => Message,
         state => State
     }),
@@ -919,6 +922,7 @@ do_module_down(Module, #state{ modules = Modules } = State, Pid, Reason) ->
 do_module_down_1(Modules, #module_status{ module = Mod, status = removing }, shutdown) ->
     ?LOG_DEBUG(#{
         text => <<"Module stopped">>,
+        in => zotonic_core,
         old_status => removing,
         new_status => removed,
         result => ok,
@@ -929,6 +933,7 @@ do_module_down_1(Modules, #module_status{ module = Mod, status = removing }, shu
 do_module_down_1(Modules, #module_status{ module = Mod, status = stopping } = Ms, shutdown) ->
     ?LOG_DEBUG(#{
         text => <<"Module stopped">>,
+        in => zotonic_core,
         old_status => stopping,
         new_status => stopped,
         result => ok,
@@ -943,6 +948,7 @@ do_module_down_1(Modules, #module_status{ module = Mod, status = stopping } = Ms
 do_module_down_1(Modules, #module_status{ module = Mod, status = running } = Ms, normal) ->
     ?LOG_INFO(#{
         text => <<"Module stopped">>,
+        in => zotonic_core,
         old_status => running,
         new_status => stopped,
         result => ok,
@@ -957,6 +963,7 @@ do_module_down_1(Modules, #module_status{ module = Mod, status = running } = Ms,
 do_module_down_1(Modules, #module_status{ module = Mod, status = restarting } = Ms, shutdown) ->
     ?LOG_ERROR(#{
         text => <<"Module failed">>,
+        in => zotonic_core,
         old_status => restarting,
         new_status => failed,
         result => error,
@@ -975,6 +982,7 @@ do_module_down_1(Modules, #module_status{ module = Mod, status = restarting } = 
 do_module_down_1(Modules, #module_status{ module = Mod, status = Status } = Ms, Reason) ->
     ?LOG_ERROR(#{
         text => <<"Module failed">>,
+        in => zotonic_core,
         old_status => Status,
         new_status => failed,
         result => error,
@@ -1040,6 +1048,7 @@ handle_restart_module(Module, #state{ site = Site, modules = Modules } = State) 
         error ->
             ?LOG_WARNING(#{
                 text => <<"Restart of unknown module">>,
+                in => zotonic_core,
                 module => Module
             }),
             State
@@ -1062,6 +1071,7 @@ handle_upgrade(#state{ site = Site, modules = Modules } = State) ->
 
     ?LOG_DEBUG(#{
         text => <<"Stopping/starting modules">>,
+        in => zotonic_core,
         stopping => [sets:to_list(Kill)],
         starting => [StartList]
     }),
@@ -1239,6 +1249,7 @@ is_module(Module) ->
         M:E ->
             ?LOG_ERROR(#{
                 text => <<"Can not fetch module info for module">>,
+                in => zotonic_core,
                 module => Module,
                 error => M,
                 reason => E
@@ -1256,6 +1267,7 @@ start_child(ManagerPid, Module, App, ChildSpec, Site) ->
             z_context:logger_md(Context),
             ?LOG_DEBUG(#{
                 text => <<"Starting module">>,
+                in => zotonic_core,
                 module => Module,
                 app => App
             }),
@@ -1265,6 +1277,7 @@ start_child(ManagerPid, Module, App, ChildSpec, Site) ->
                 {error, Reason} ->
                     ?LOG_ERROR(#{
                         text => <<"Error starting module due to schema initialization error">>,
+                        in => zotonic_core,
                         module => Module,
                         result => error,
                         reason => Reason
@@ -1310,6 +1323,7 @@ handle_start_child_result(Module, Result, #state{ site = Site, module_monitors =
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 text => <<"Could not start module">>,
+                in => zotonic_core,
                 module => Module,
                 result => error,
                 reason => Reason
@@ -1347,7 +1361,11 @@ stop_children_with_missing_depends(#state{ site = Site, modules = Modules } = St
         [] ->
             State;
         Unstartable ->
-            ?LOG_DEBUG("Stopping child modules ~p", [Unstartable]),
+            ?LOG_DEBUG(#{
+                text => <<"Stopping child modules">>,
+                in => zotonic_core,
+                modules => Unstartable
+            }),
             Modules1 = lists:foldl(
                 fun(Module, ModAcc) ->
                     case maps:find(Module, ModAcc) of
@@ -1437,6 +1455,7 @@ has_behaviour(M, Behaviour) ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => <<"Could not load module">>,
+                in => zotonic_core,
                 module => M,
                 result => error,
                 reason => Reason
@@ -1456,6 +1475,7 @@ manage_schema(Module, Context) ->
         {false, true} ->
             ?LOG_ERROR(#{
                 text => <<"Schema version defined in module but no manage_schema/2 function">>,
+                in => zotonic_core,
                 module => Module,
                 result => error,
                 reason => no_manage_schema
@@ -1488,6 +1508,7 @@ manage_schema_if_db(true, Module, Current, Target, #context{} = Context) ->
 manage_schema_if_db(false, Module, _Current, _Target, #context{}) ->
     ?LOG_INFO(#{
         text => <<"Skipping schema for module as the site has no database ('nodb')">>,
+        in => zotonic_core,
         module => Module,
         result => skip,
         reason => nodb
@@ -1504,6 +1525,7 @@ call_manage_schema(Module, Current, Target, _Context)
     % Downgrade
     ?LOG_ERROR(#{
         text => <<"Module downgrades not supported">>,
+        in => zotonic_core,
         module => Module,
         result => error,
         reason => module_downgrade_unsupported,
@@ -1540,6 +1562,7 @@ call_manage_schema(Module, Current, Target, _) ->
     % Should be an integer (or undefined)\
     ?LOG_ERROR(#{
         text => <<"Invalid schema version numbering">>,
+        in => zotonic_core,
         module => Module,
         result => error,
         reason => invalid_schema_number,

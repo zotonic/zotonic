@@ -22,8 +22,6 @@
 
 -behaviour(zotonic_model).
 
--include_lib("kernel/include/logger.hrl").
-
 %% interface functions
 -export([
     m_get/3
@@ -42,7 +40,6 @@ m_get([ Key | Rest ], _Msg, Context) ->
         error:badarg ->
             {ok, {undefined, Rest}}
     end;
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 

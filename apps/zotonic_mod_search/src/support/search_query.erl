@@ -207,7 +207,11 @@ request_arg(<<"custompivot">>)         ->
     ?LOG_ERROR("The query term 'custompivot' has been removed. Use filters with 'pivot.pivotname.field' instead."),
     throw({error, {unknown_query_term, custompivot}});
 request_arg(Term) ->
-    ?LOG_ERROR("Skipping unknown query term: ~p", [Term]),
+    ?LOG_ERROR(#{
+        text => <<"Skipping unknown query term">>,
+        in => zotonic_mod_search,
+        term => Term
+    }),
     undefined.
 
 
@@ -602,8 +606,14 @@ qterm({query_id, Id}, Context) ->
         parse_query_text(z_html:unescape(m_rsc:p(Id, 'query', Context)))
     catch
         throw:{error,{unknown_query_term,Term}} ->
-            ?LOG_ERROR("[~p] Unknown query term in search query ~p: ~p",
-                        [z_context:site(Context), Id, Term]),
+            ?LOG_ERROR(#{
+                text => <<"Unknown query term in search query">>,
+                in => zotonic_mod_search,
+                result => error,
+                reason => unknown_query_term,
+                query_id => Id,
+                term => Term
+            }),
             []
     end,
     qterm(QArgs, Context);
@@ -1130,13 +1140,21 @@ assure_category_1(Name, Context) ->
         _ ->
             case m_rsc:rid(Name, Context) of
                 undefined ->
-                    ?LOG_WARNING("Query: unknown category '~p'", [Name]),
+                    ?LOG_NOTICE(#{
+                        text => <<"Query: unknown category">>,
+                        in => zotonic_mod_search,
+                        name => Name
+                    }),
                     % display_error([ ?__("Unknown category", Context), 32, $", z_html:escape(z_convert:to_binary(Name)), $" ], Context),
                     error;
                 CatId ->
                     case m_category:id_to_name(CatId, Context) of
                         undefined ->
-                            ?LOG_WARNING("Query: '~p' is not a category", [Name]),
+                            ?LOG_NOTICE(#{
+                                text => <<"Query: term is not a category">>,
+                                in => zotonic_mod_search,
+                                name => Name
+                            }),
                             % display_error([ $", z_html:escape(z_convert:to_binary(Name)), $", 32, ?__("is not a category", Context) ], Context),
                             error;
                         Name1 ->
@@ -1202,9 +1220,16 @@ pivot_qterm_1(Tab, Col, Value, Query, Context) ->
                 where = Query2#search_sql_term.where ++ [ W ]
             },
             {ok, Query3};
-        {error, _} = Error ->
-            ?LOG_WARNING("Pivot value error for column ~s.~s, value ~p, dropping query term.",
-                         [ Tab, Col, Value1 ]),
+        {error, Reason} = Error ->
+            ?LOG_WARNING(#{
+                text => <<"Pivot value error, dropping query term.">>,
+                in => zotonic_mod_search,
+                result => error,
+                reason => Reason,
+                table => Tab,
+                column => Col,
+                value => Value1
+            }),
             Error
     end.
 
@@ -1441,7 +1466,11 @@ predicate_to_id_1(Pred, Context) ->
         {ok, Id} ->
             Id;
         {error, _} ->
-            ?LOG_WARNING("Query: unknown predicate '~p'", [Pred]),
+            ?LOG_NOTICE(#{
+                text => <<"Query: unknown predicate">>,
+                in => zotonic_mod_search,
+                predicate => Pred
+            }),
             % display_error([ ?__("Unknown predicate", Context), 32, $", z_html:escape(z_convert:to_binary(Pred)), $" ], Context),
             0
     end.

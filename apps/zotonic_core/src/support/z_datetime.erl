@@ -136,8 +136,15 @@ to_local(DT, Tz) ->
                 NewDT
         end
     catch
-        _:_ ->
-            ?LOG_WARNING("Error converting ~p for to_local of ~p", [Tz, DT]),
+        Type:Reason ->
+            ?LOG_WARNING(#{
+                text => <<"Error converting date for to_local">>,
+                in => zotonic_core,
+                tz => Tz,
+                date => DT,
+                result => Type,
+                reason => Reason
+            }),
             undefined
     end.
 
@@ -173,8 +180,15 @@ to_utc(DT, Tz) ->
                 NewDT
         end
     catch
-        _:_ ->
-            ?LOG_WARNING("Error converting ~p for to_utc of ~p", [Tz, DT]),
+        Type:Reason ->
+            ?LOG_WARNING(#{
+                text => <<"Error converting date for to_utc">>,
+                in => zotonic_core,
+                tz => Tz,
+                date => DT,
+                result => Type,
+                reason => Reason
+            }),
             undefined
     end.
 

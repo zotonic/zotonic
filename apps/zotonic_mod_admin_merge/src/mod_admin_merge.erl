@@ -65,8 +65,14 @@ event(#submit{ message={merge, Args} }, Context) ->
     {loser_id, LoserId} = proplists:lookup(loser_id, Args),
     MergeAction = z_context:get_q(<<"merge_action">>, Context),
     IsMergeTrans = z_convert:to_bool(z_context:get_q("is_merge_trans", Context)),
-    ?LOG_NOTICE("MergeAction=~p WinnerId=~p LoserId=~p IsMergeTrans=~p",
-               [MergeAction, WinnerId, LoserId, IsMergeTrans]),
+    ?LOG_INFO(#{
+        text => <<"Merge resources">>,
+        in => zotonic_mod_admin_merge,
+        action => MergeAction,
+        winner_id => WinnerId,
+        loser_id => LoserId,
+        is_trans => IsMergeTrans
+    }),
     merge(WinnerId, LoserId, MergeAction, IsMergeTrans, Context).
 
 merge(_WinnerId, _LoserId = 1, _MergeAction, _IsMergeTrans, Context) ->

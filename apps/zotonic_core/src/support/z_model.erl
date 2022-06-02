@@ -132,7 +132,14 @@ callback(Model, Verb, Path, Msg, Context) ->
         {ok, Mod} ->
             maybe_resolve(Verb, model_call(Mod, map_verb(Verb), Path, Msg, Context), Context);
         {error, _} = Error ->
-            ?LOG_NOTICE("Publish to unknown model ~p: ~p ~p ~p", [Model, Verb, Path, Msg]),
+            ?LOG_NOTICE(#{
+                text => <<"Publish to unknown model">>,
+                in => zotonic_core,
+                model => Model,
+                verb => Verb,
+                path => Path,
+                message => Msg
+            }),
             Error
     end.
 
@@ -226,9 +233,16 @@ model_call(Mod, Callback, Path, Msg, Context) ->
                 [ {Mod, Callback, _As, _Loc} | _ ] ->
                     {error, unknown_path};
                 _ ->
-                    ?LOG_ERROR("Function clause in model call to ~p:~p(~p)",
-                                [ Mod, Callback, Path ],
-                                #{ stack => S }),
+                    ?LOG_ERROR(#{
+                        text => <<"Error in model function call">>,
+                        in => zotonic_core,
+                        result => error,
+                        reason => function_clause,
+                        model => Mod,
+                        callback => Callback,
+                        path => Path,
+                        stack => S
+                    }),
                     {error, function_clause}
             end;
         error:undef:S ->
@@ -236,9 +250,16 @@ model_call(Mod, Callback, Path, Msg, Context) ->
                 [ {Mod, Callback, _As, _Loc} | _ ] ->
                     {error, unknown_path};
                 _ ->
-                    ?LOG_ERROR("Undef in model call to ~p:~p(~p)",
-                                [ Mod, Callback, Path ],
-                                #{ stack => S }),
+                    ?LOG_ERROR(#{
+                        text => <<"Undef in model call">>,
+                        in => zotonic_core,
+                        result => error,
+                        reason => undef,
+                        model => Mod,
+                        callback => Callback,
+                        path => Path,
+                        stack => S
+                    }),
                     {error, undef}
             end
     end.

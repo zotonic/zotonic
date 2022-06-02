@@ -109,43 +109,81 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
                     {error, nodbinstall};
                 {false, _} ->
                     %% Install database
-                    ?LOG_NOTICE("Installing database with db options: ~p", [DbOptions]),
+                    ?LOG_NOTICE(#{
+                        text => <<"Installing database with db">>,
+                        in => zotonic_core,
+                        options => DbOptions
+                    }),
                     z_install:install(Context),
                     ok;
                 {true, _} ->
                     %% Normal startup, do upgrade / check
                     ok = z_db:transaction(
-                           fun(Context1) ->
-                                   C = z_db_pgsql:get_raw_connection(Context1),
-                                   Database = proplists:get_value(dbdatabase, DbOptions),
-                                   Schema = proplists:get_value(dbschema, DbOptions),
-                                   ok = upgrade(C, Database, Schema),
-                                   ok = upgrade_models(Context),
-                                   ok = sanity_check(C, Database, Schema)
-                           end,
-                           Context),
+                            fun(Context1) ->
+                                C = z_db_pgsql:get_raw_connection(Context1),
+                                Database = proplists:get_value(dbdatabase, DbOptions),
+                                Schema = proplists:get_value(dbschema, DbOptions),
+                                ok = upgrade(C, Database, Schema),
+                                ok = upgrade_models(Context),
+                                ok = sanity_check(C, Database, Schema)
+                            end,
+                            Context),
                     ok
             end;
         {error, nodatabase} = Error ->
             % No database configured, this is ok, proceed as normal (without db)
-            ?LOG_ERROR("~p: Database connection failure: no database configured", [ z_context:site(Context) ]),
+            ?LOG_ERROR(#{
+                text => <<"Database connection failure: no database configured">>,
+                in => zotonic_core,
+                result => error,
+                reason => nodatabase,
+                site => z_context:site(Context)
+            }),
             Error;
         {error, econnrefused} = Error ->
-            ?LOG_ERROR("~p: Database connection failure: connection refused", [ z_context:site(Context) ]),
+            ?LOG_ERROR(#{
+                text => <<"Database connection failure: connection refused">>,
+                in => zotonic_core,
+                site => z_context:site(Context),
+                result => error,
+                reason => econnrefused
+            }),
             Error;
         {error, Reason} ->
-            ?LOG_WARNING("~p: Database connection failure: ~p", [ z_context:site(Context), Reason ]),
+            ?LOG_WARNING(#{
+                text => "Database connection failure",
+                in => zotonic_core,
+                result => error,
+                reason => Reason,
+                site => z_context:site(Context)
+            }),
             case z_config:get(dbcreate) of
                 false ->
-                    ?LOG_ERROR("~p: Database does not exist and dbcreate is false; not creating", [ z_context:site(Context) ]),
+                    ?LOG_ERROR(#{
+                        text => <<"Database does not exist and dbcreate is false; not creating">>,
+                        in => zotonic_core,
+                        result => error,
+                        reason => nodbcreate,
+                        site => z_context:site(Context)
+                    }),
                     {error, nodbcreate};
                 _Else ->
                     case z_db:prepare_database(Context) of
                         ok ->
-                            ?LOG_NOTICE("~p: Retrying install check after db creation.", [ z_context:site(Context) ]),
+                            ?LOG_NOTICE(#{
+                                text => <<"Retrying install check after db creation.">>,
+                                in => zotonic_core,
+                                site => z_context:site(Context)
+                            }),
                             check_db_and_upgrade(Context, Tries+1);
-                        {error, _PrepReason} = Error ->
-                            ?LOG_ERROR("~p: Could not create the database and schema.", [ z_context:site(Context) ]),
+                        {error, PrepReason} = Error ->
+                            ?LOG_ERROR(#{
+                                text => <<"Could not create the database and schema.">>,
+                                in => zotonic_core,
+                                site => z_context:site(Context),
+                                result => error,
+                                reason => PrepReason
+                            }),
                             Error
                     end
                 end
@@ -160,8 +198,13 @@ maybe_drop_db(Context) ->
         true ->
             case z_db_pool:test_connection(Context) of
                 ok ->
-                    ?LOG_WARNING("[~p] Dropping existing schema ~p because of 'dbdropschema' is set.",
-                                  [ z_context:site(Context), proplists:get_value(dbschema, DbOptions) ]),
+                    ?LOG_WARNING(#{
+                        text => <<"Dropping existing schema because of 'dbdropschema' is set.">>,
+                        in => zotonic_core,
+                        schema => proplists:get_value(dbschema, DbOptions),
+                        database => proplists:get_value(dbdatabase, DbOptions),
+                        site => z_context:site(Context)
+                    }),
                     ok = z_db:drop_schema(Context),
                     ok;
                 {error, _} ->
@@ -563,7 +606,14 @@ fix_timestamptz(C, Database, Schema) ->
     ok.
 
 fix_timestamptz_column(C, Table, Col, Database, Schema) ->
-    ?LOG_NOTICE("[database: ~p ~p] Adding time zone to ~p ~p", [Database, Schema, Table, Col]),
+    ?LOG_NOTICE(#{
+        text => <<"Adding time zone to column">>,
+        in => zotonic_core,
+        database => Database,
+        schema => Schema,
+        table => Table,
+        column => Col
+    }),
     {ok, [], []} = epgsql:squery(C, "alter table \""++binary_to_list(Table)++"\" alter column \""++binary_to_list(Col)++"\" type timestamp with time zone"),
     ok.
 
@@ -584,7 +634,12 @@ install_content_group_dependent(C, Database, Schema) ->
         true ->
             ok;
         false ->
-            ?LOG_NOTICE("[database: ~p ~p] Adding rsc.is_dependent and rsc.content_group_id", [Database, Schema]),
+            ?LOG_NOTICE(#{
+                text => <<"Adding rsc.is_dependent and rsc.content_group_id">>,
+                in => zotonic_core,
+                database => Database,
+                schema => Schema
+            }),
             {ok, [], []} = epgsql:squery(C,
                               "ALTER TABLE rsc "
                               "ADD COLUMN is_dependent BOOLEAN NOT NULL DEFAULT false,"
@@ -668,8 +723,13 @@ key_changes_v1_0(C, Database, Schema) ->
         false ->
             ok;
         true ->
-            ?LOG_NOTICE("Upgrade: changing is_unique database ~s table ~s.identity", [ Database, Schema ]),
-
+            ?LOG_NOTICE(#{
+                text => <<"Upgrade: changing is_unique on identity table">>,
+                in => zotonic_core,
+                database => Database,
+                schema => Schema,
+                table => identity
+            }),
             {ok, [], []} = epgsql:squery(C, "
                 ALTER TABLE identity
                 DROP CONSTRAINT identity_type_key_unique"),
@@ -708,7 +768,13 @@ key_changes_v1_0(C, Database, Schema) ->
         true ->
             ok;
         false ->
-            ?LOG_NOTICE("Upgrade: adding indices to database ~s table ~s.rsc", [ Database, Schema ]),
+            ?LOG_NOTICE(#{
+                text => <<"Upgrade: adding indices to rsc table">>,
+                in => zotonic_core,
+                database => Database,
+                schema => Schema,
+                table => rsc
+            }),
             {ok, [], []} = epgsql:squery(C, "
                 ALTER TABLE rsc ADD CONSTRAINT fk_rsc_category_id
                     FOREIGN KEY (category_id) REFERENCES rsc (id)
@@ -731,7 +797,13 @@ rsc_language(C, Database, Schema) ->
         true ->
             ok;
         false ->
-            ?LOG_NOTICE("Upgrade: adding language column to database ~s ~s.rsc", [ Database, Schema ]),
+            ?LOG_NOTICE(#{
+                text => <<"Upgrade: adding language column to rsc table">>,
+                in => zotonic_core,
+                database => Database,
+                schema => Schema,
+                table => rsc
+            }),
             {ok, [], []} = epgsql:squery(C, "alter table rsc "
                                         "add column language character varying(16)[] not null default '{}'"),
             {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_language_key ON rsc USING gin(language)"),
@@ -749,7 +821,13 @@ task_queue_error_count(C, Database, Schema) ->
         true ->
             ok;
         false ->
-            ?LOG_NOTICE("Upgrade: adding error_count column to database ~s ~s.pivot_task_queue", [ Database, Schema ]),
+            ?LOG_NOTICE(#{
+                text => <<"Upgrade: adding error_count column pivot_task_queue">>,
+                in => zotonic_core,
+                database => Database,
+                schema => Schema,
+                table => pivot_task_queue
+            }),
             {ok, [], []} = epgsql:squery(C, "alter table pivot_task_queue "
                                         "add column error_count integer not null default 0"),
 

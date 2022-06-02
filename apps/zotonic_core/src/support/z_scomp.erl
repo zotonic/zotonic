@@ -36,7 +36,13 @@ render(ScompName, Args, Vars, Context) ->
             render_scomp_module(ModuleName, Args, Vars, ScompContext, Context);
         {error, enoent} ->
             %% No such scomp, as we can switch on/off functionality we do a quiet skip
-            ?LOG_WARNING("No scomp enabled for \"~p\"", [ScompName]),
+            ?LOG_WARNING(#{
+                text => <<"Scomp not enabled">>,
+                in => zotonic_core,
+                result => error,
+                reason => enoent,
+                scomp => ScompName
+            }),
             <<>>
     end.
 

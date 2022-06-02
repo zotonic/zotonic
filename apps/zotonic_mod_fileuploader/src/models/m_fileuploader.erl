@@ -37,8 +37,7 @@ m_get([ <<"status">>, Name | Rest ], _Msg, Context) ->
         {error, _} = Error ->
             Error
     end;
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 

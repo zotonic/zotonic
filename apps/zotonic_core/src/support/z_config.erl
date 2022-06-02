@@ -173,8 +173,14 @@ map_ip_address(Name, IP) when is_list(IP) ->
     case getaddr(Name, IP) of
         {ok, IpN} -> IpN;
         {error, Reason} ->
-            ?LOG_ERROR("Invalid '~p' address: ~p, assuming 'none' instead (~p)",
-                        [Name, IP, Reason]),
+            ?LOG_ERROR(#{
+                text => <<"Invalid IP address for config, assuming 'none">>,
+                in => zotonic_core,
+                config_name => Name,
+                ip => IP,
+                result => error,
+                reason => Reason
+            }),
             none
     end;
 map_ip_address(Name, IP) when is_binary(IP) ->
@@ -182,8 +188,14 @@ map_ip_address(Name, IP) when is_binary(IP) ->
 map_ip_address(smtp_spamd_ip, undefined) ->
     none;
 map_ip_address(Name, IP) ->
-    ?LOG_ERROR("Invalid ~p address: ~p, assuming 'any' instead",
-                [Name, IP]),
+    ?LOG_ERROR(#{
+        text => <<"Invalid IP address for config, assuming 'any'">>,
+        in => zotonic_core,
+        config_name => Name,
+        ip => IP,
+        result => error,
+        reason => invalid_ip
+    }),
     any.
 
 getaddr(listen_ip6, IP) -> inet:getaddr(IP, inet6);

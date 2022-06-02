@@ -35,6 +35,5 @@ m_get([ <<"list">>, Id | Rest ], _Msg, Context) ->
     RscId = m_rsc:rid(Id, Context),
     List = lists:sort( z_notifier:foldr(#admin_edit_blocks{ id = RscId }, [], Context) ),
     {ok, {List, Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.

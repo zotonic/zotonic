@@ -108,6 +108,7 @@ render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
                 Reason1 = iolist_to_binary(Reason),
                 ?LOG_ERROR(#{
                     text => <<"Error rendering template">>,
+                    in => zotonic_core,
                     template => Template,
                     result => error,
                     reason => Reason1
@@ -116,6 +117,7 @@ render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
                 _:_ ->
                     ?LOG_ERROR(#{
                         text => <<"Error rendering template">>,
+                        in => zotonic_core,
                         template => Template,
                         result => error,
                         reason => Reason
@@ -128,6 +130,7 @@ render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => <<"Error rendering template">>,
+                in => zotonic_core,
                 template => Template,
                 result => error,
                 reason => Reason

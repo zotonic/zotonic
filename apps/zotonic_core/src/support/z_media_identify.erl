@@ -60,8 +60,12 @@ identify(#upload{tmpfile=undefined, data=Data, filename=Filename}, Context) when
             Result;
         {error, _} = Error ->
             file:delete(TmpFile),
-            ?LOG_WARNING("z_media_identify: could not write temporary file with ~p bytes to '~s'",
-                          [ size(Data), TmpFile ]),
+            ?LOG_WARNING(#{
+                text => <<"z_media_identify: could not write temporary file">>,
+                in => zotonic_core,
+                size => size(Data),
+                file => TmpFile
+            }),
             Error
     end;
 identify(#upload{tmpfile=File, filename=Filename}, Context) ->
@@ -334,7 +338,13 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                          ++ " -quiet "
                          ++ z_convert:to_list(CleanedImageFile)
                          ++ " 2>&1"),
-            ?LOG_NOTICE("identify of ~s failed:~n~s", [CleanedImageFile, Err]),
+            ?LOG_NOTICE(#{
+                text => <<"identify of file failed">>,
+                in => zotonic_core,
+                file => CleanedImageFile,
+                result => error,
+                output => Err
+            }),
             {error, identify};
         [Result|_] ->
             %% ["test/a.jpg","JPEG","3440x2285","3440x2285+0+0","8-bit","DirectClass","2.899mb"]
@@ -369,9 +379,15 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                 {ok, Props2}
             catch
                 X:B:Stacktrace ->
-                    ?LOG_WARNING("identify of \"~s\" failed - ~p with ~p:~p",
-                                [CleanedImageFile, CmdOutput, X, B],
-                                #{ stack => Stacktrace }),
+                    ?LOG_WARNING(#{
+                        text => <<"identify of file failed">>,
+                        in => zotonic_core,
+                        file => CleanedImageFile,
+                        result => X,
+                        reason => B,
+                        output => CmdOutput,
+                        stack => Stacktrace
+                    }),
                     {error, identify}
             end
     end.
@@ -585,7 +601,14 @@ exif(File) ->
         end
     catch
         A:B:Stacktrace ->
-            ?LOG_ERROR("Error reading exif ~p:~p", [A,B], #{ stack => Stacktrace }),
+            ?LOG_ERROR(#{
+                text => <<"Error reading exif data from file">>,
+                in => zotonic_core,
+                result => A,
+                reason => B,
+                filename => File,
+                stack => Stacktrace
+            }),
             #{}
     end.
 

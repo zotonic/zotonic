@@ -84,7 +84,12 @@ user_data({error, _} = Error, _AccessToken, _Args) ->
 auth_user(TWProps, AccessToken, Args) ->
     TwitterUserId = maps:get(<<"id_str">>, TWProps),
     TwitterUserName = maps:get(<<"screen_name">>, TWProps),
-    ?LOG_DEBUG("[twitter] Authenticating ~p ~p", [TwitterUserId, TWProps]),
+    ?LOG_DEBUG(#{
+        text => <<"[twitter] Authenticating">>,
+        in => zotonic_mod_twitter,
+        twitter_user_id => TwitterUserId,
+        props => TWProps
+    }),
     Name = maps:get(<<"name">>, TWProps),
     [ NameFirst, NameLast ] = split_name(Name),
     PersonProps = #{

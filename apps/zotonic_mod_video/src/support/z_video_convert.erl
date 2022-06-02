@@ -76,8 +76,12 @@ handle_cast(convert, State) ->
             remove_task(State);
         false ->
             % Queue file was deleted, remove our task
-            ?LOG_NOTICE("Video conversion (startup): medium is not current or queue file missing (id ~p, file ~p)",
-                       [State#state.id, State#state.queue_filename]),
+            ?LOG_NOTICE(#{
+                text => <<"Video conversion (startup): medium is not current or queue file missing">>,
+                in => zotonic_mod_video,
+                rsc_id => State#state.id,
+                filename => State#state.queue_filename
+            }),
             remove_task(State)
     end,
     {stop, normal, State}.
@@ -97,8 +101,15 @@ do_convert(QueuePath, State) ->
     case video_convert(QueuePath, Upload#media_upload_preprocess.mime) of
         {ok, TmpFile} ->
             insert_movie(TmpFile, State);
-        Error ->
-            ?LOG_WARNING("ffmpeg conversion error on ~p: ~p", [State#state.id, Error]),
+        {error, Reason} ->
+            ?LOG_WARNING(#{
+                text => <<"ffmpeg conversion error">>,
+                in => zotonic_mod_video,
+                rsc_id => State#state.id,
+                filename => QueuePath,
+                result => error,
+                reason => Reason
+            }),
             insert_broken(State)
     end.
 
@@ -119,7 +130,11 @@ insert_movie(TmpFile, State) ->
                 [no_touch],
                 Context);
         false ->
-            ?LOG_INFO("Video conversion (ok): medium is not current anymore (id ~p)", [State#state.id])
+            ?LOG_INFO(#{
+                text => <<"Video conversion (ok): medium is not current anymore">>,
+                in => zotonic_mod_video,
+                rsc_id => State#state.id
+            })
     end.
 
 -spec original_filename( #media_upload_preprocess{} ) -> binary().
@@ -138,7 +153,11 @@ insert_broken(State) ->
             },
             m_media:replace_file(undefined, State#state.id, #{}, PropsMedia, [no_touch], Context);
         false ->
-            ?LOG_NOTICE("Video conversion (broken): medium is not current anymore (id ~p)", [State#state.id])
+            ?LOG_NOTICE(#{
+                text => <<"Video conversion (broken): medium is not current anymore">>,
+                in => zotonic_mod_video,
+                rsc_id => State#state.id
+            })
     end.
 
 is_current_upload(State, Context) ->
@@ -199,18 +218,36 @@ video_convert_1(QueuePath, Orientation, Mime) ->
                                          z_filelib:os_filename(TmpFile)
                                         ])),
 
-                        ?LOG_DEBUG("Video convert: ~p", [FfmpegCmd]),
+                        ?LOG_DEBUG(#{
+                            text => <<"Video convert">>,
+                            in => zotonic_mod_video,
+                            command => FfmpegCmd
+                        }),
                         case os:cmd(FfmpegCmd) of
                             [] ->
                                 case filelib:file_size(TmpFile) of
                                     0 ->
-                                        ?LOG_WARNING("Video convert error: (empty result file)  [queue: ~p]", [QueuePath]),
+                                        ?LOG_WARNING(#{
+                                            text => <<"Video convert error: (empty result file)">>,
+                                            in => zotonic_mod_video,
+                                            command => FfmpegCmd,
+                                            result => error,
+                                            reason => convert,
+                                            filename => QueuePath
+                                        }),
                                         {error, convert};
                                     _ ->
                                         {ok, TmpFile}
                                 end;
                             Other ->
-                                ?LOG_WARNING("Video convert error: ~p [queue: ~p]", [Other, QueuePath]),
+                                ?LOG_WARNING(#{
+                                    text => <<"Video convert error">>,
+                                    in => zotonic_mod_video,
+                                    command => FfmpegCmd,
+                                    result => error,
+                                    reason => Other,
+                                    filename => QueuePath
+                                }),
                                 {error, Other}
                         end;
                     {error, _} = Error ->
@@ -241,12 +278,26 @@ maybe_reset_metadata(_TransposeOption, QueuePath, Mime) ->
         [] ->
             case filelib:file_size(TmpFile) of
                 0 ->
-                    ?LOG_WARNING("Video convert error: (empty result file during metadata reset)  [queue: ~p]", [QueuePath]),
+                    ?LOG_WARNING(#{
+                        text => <<"Video convert error: (empty result file during metadata reset)">>,
+                        in => zotonic_mod_video,
+                        command => FfmpegCmd,
+                        result => error,
+                        reason => convert,
+                        filename => QueuePath
+                    }),
                     {error, convert};
                 _ ->
                     {ok, TmpFile}
             end;
         Other ->
-            ?LOG_WARNING("Video convert error: (during metadata reset) ~p [queue: ~p]", [Other, QueuePath]),
+            ?LOG_WARNING(#{
+                text => <<"Video convert error: (during metadata reset)">>,
+                in => zotonic_mod_video,
+                command => FfmpegCmd,
+                result => error,
+                reason => Other,
+                filename => QueuePath
+            }),
             {error, Other}
     end.

@@ -187,8 +187,7 @@ m_get([ Id, Type | Rest ], _Msg, Context) ->
         false -> undefined
     end,
     {ok, {Idn, Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_ERROR("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
@@ -281,7 +280,11 @@ is_allowed_set_username(Id, Context) when is_integer(Id) ->
 delete_username(undefined, _Context) ->
     {error, enoent};
 delete_username(1, Context) ->
-    ?LOG_WARNING("Trying to delete admin username (1) by ~p", [ z_acl:user(Context) ]),
+    ?LOG_WARNING(#{
+        text => <<"Trying to delete admin username (1)">>,
+        in => zotonic_core,
+        user_id => z_acl:user(Context)
+    }),
     {error, eacces};
 delete_username(RscId, Context) when is_integer(RscId) ->
     case is_allowed_set_username(RscId, Context)  of
@@ -344,7 +347,11 @@ set_expired(UserId, false, Context) ->
 set_username(undefined, _Username, _Context) ->
     {error, enoent};
 set_username(1, _Username, Context) ->
-    ?LOG_WARNING("Trying to set admin username (1) by ~p", [ z_acl:user(Context) ]),
+    ?LOG_WARNING(#{
+        text => <<"Trying to set admin username (1)">>,
+        in => zotonic_core,
+        user_id => z_acl:user(Context)
+    }),
     {error, eacces};
 set_username(Id, Username, Context) when is_integer(Id) ->
     case is_allowed_set_username(Id, Context) of
@@ -418,7 +425,11 @@ set_username(Id, Username, Context) ->
 set_username_pw(undefined, _, _, _) ->
     {error, enoent};
 set_username_pw(1, _, _, Context) ->
-    ?LOG_WARNING("Trying to set admin username (1) by ~p", [ z_acl:user(Context) ]),
+    ?LOG_WARNING(#{
+        text => <<"Trying to set admin username (1)">>,
+        in => zotonic_core,
+        user_id => z_acl:user(Context)
+    }),
     {error, eacces};
 set_username_pw(Id, Username, Password, Context)  when is_integer(Id) ->
     case is_allowed_set_username(Id, Context) of
@@ -473,13 +484,26 @@ set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
                 },
                 z_acl:sudo(Context)),
             ok;
-        {rollback, {{error, _} = Error, _Trace} = ErrTrace} ->
-            ?LOG_ERROR("set_username_pw error for ~p, setting username. ~p: ~p",
-                [Username, Error, ErrTrace]),
+        {rollback, {{error, Reason} = Error, Trace}} ->
+            ?LOG_ERROR(#{
+                text => <<"Error setting username/password">>,
+                in => zotonic_core,
+                user_id => Id,
+                username => Username,
+                result => error,
+                reason => Reason,
+                stack => Trace
+            }),
             Error;
-        {error, _} = Error ->
-            ?LOG_ERROR("set_username_pw error for ~p, setting username. ~p",
-                        [Username, Error]),
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                text => <<"Error setting username/password">>,
+                in => zotonic_core,
+                result => error,
+                reason => Reason,
+                user_id => Id,
+                username => Username
+            }),
             Error
     end.
 

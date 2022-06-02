@@ -187,14 +187,24 @@ make_all() ->
 
 %% @doc Reload a module, purge the old code.
 reload_module(M) ->
-    ?LOG_DEBUG("reloading '~p'", [M]),
+    ?LOG_DEBUG(#{
+        text => <<"Reloading module">>,
+        in => zotonic_filewatcher,
+        module => M
+    }),
     code:purge(M),
     code:soft_purge(M),
     case code:load_file(M) of
         {module, M} ->
             {ok, M};
         {error, Reason} = Error ->
-            ?LOG_WARNING("Could not reload '~p': ~p", [M, Reason]),
+            ?LOG_WARNING(#{
+                text => <<"Could not reload module">>,
+                in => zotonic_filewatcher,
+                module => M,
+                result => error,
+                reason => Reason
+            }),
             Error
     end.
 

@@ -84,6 +84,7 @@ pivot_job(PivotRscList, Context) ->
     z_context:logger_md(Context),
     ?LOG_DEBUG(#{
         text => <<"Pivot start">>,
+        in => zotonic_core,
         rsc_list => PivotRscList
     }),
     F = fun(Ctx) ->
@@ -93,6 +94,7 @@ pivot_job(PivotRscList, Context) ->
         {rollback, PivotError} ->
             ?LOG_ERROR(#{
                 text => <<"Pivot error">>,
+                in => zotonic_core,
                 rsc_list => PivotRscList,
                 error => rollback,
                 reason => PivotError
@@ -112,12 +114,14 @@ pivot_job(PivotRscList, Context) ->
                     ({Id, ok}) ->
                         ?LOG_DEBUG(#{
                             text => <<"Pivot done">>,
+                            in => zotonic_core,
                             rsc_id => Id
                         }),
                         ok;
                     ({Id, {error, Reason}}) ->
                         ?LOG_ERROR(#{
                             text => <<"Pivot error">>,
+                            in => zotonic_core,
                             rsc_id => Id,
                             reason => Reason
                         })
@@ -162,6 +166,7 @@ pivot_resource(Id, Context0) ->
         Type:Err:Stack ->
             ?LOG_ERROR(#{
                 text => <<"Pivot error">>,
+                in => zotonic_core,
                 rsc_id => Id,
                 result => Type,
                 reason => Err,
@@ -247,6 +252,7 @@ pivot_resource_1(Id, Lang, Context) ->
                 {error, enoent} ->
                     ?LOG_ERROR(#{
                         text => <<"Missing 'pivot/pivot.tpl' template">>,
+                        in => zotonic_core,
                         result => error,
                         reason => enoent,
                         template => <<"pivot/pivot.tpl">>,
@@ -299,15 +305,20 @@ update_changed(Id, KVs, RscProps, Context) ->
 
 
 pivot_resource_custom(Id, Context) ->
-    CustomPivots = z_notifier:map(#custom_pivot{id=Id}, Context),
+    CustomPivots = z_notifier:map(#custom_pivot{ id = Id }, Context),
     lists:foreach(
             fun
                 (undefined) -> ok;
                 (ok) -> ok;
                 (none) -> ok;
-                ({error, _} = Error) ->
-                    ?LOG_ERROR("Error return from custom pivot of ~p, error: ~p",
-                                [Id, Error]);
+                ({error, Reason}) ->
+                    ?LOG_ERROR(#{
+                        text => <<"Error return from custom pivot">>,
+                        in => zotonic_core,
+                        rsc_id => Id,
+                        result => error,
+                        reason => Reason
+                    });
                 ({_Module, _Columns} = Res) ->
                     update_custom_pivot(Id, Res, Context)
             end,
@@ -328,6 +339,7 @@ update_custom_pivot(Id, {Module, Columns}, Context) ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => <<"Error updating custom pivot">>,
+                in => zotonic_core,
                 result => error,
                 reason => Reason,
                 pivot_module => Module,

@@ -95,7 +95,13 @@ fetch_access_token(Code, _AuthData, _Args, _QArgs, Context) ->
             } = z_json:decode(Payload),
             {ok, AccessData};
         Other ->
-            ?LOG_ERROR("[microsoft] error fetching access token [code ~p] ~p", [Code, Other]),
+            ?LOG_ERROR(#{
+                text => <<"[microsoft] error fetching access token">>,
+                in => zotonic_mod_microsoft,
+                code => Code,
+                result => error,
+                reason => Other
+            }),
             {error, {http_error, MicrosoftUrl, Other}}
     end.
 
@@ -109,7 +115,12 @@ auth_validated(#{
         {ok, UserProps} ->
             JWTProps = decode_jwt(JWT),
             MSUserId = maps:get(<<"id">>, UserProps),
-            ?LOG_DEBUG("[microsoft] Authenticating ~p ~p", [MSUserId, UserProps]),
+            ?LOG_DEBUG(#{
+                text => <<"[microsoft] Authenticating user">>,
+                in => zotonic_mod_microsoft,
+                microsoft_user_id => MSUserId,
+                user_props => UserProps
+            }),
             PersonProps = #{
                 <<"title">> => maps:get(<<"displayName">>, UserProps, undefined),
                 <<"name_first">> => maps:get(<<"givenName">>, UserProps, undefined),
@@ -149,7 +160,13 @@ fetch_user_data(AccessToken) ->
             Props = z_json:decode(Payload),
             {ok, Props};
         Other ->
-            ?LOG_ERROR("[microsoft] error fetching user data: ~p", [Other]),
+            ?LOG_ERROR(#{
+                text => <<"[microsoft] error fetching user data">>,
+                in => zotonic_mod_microsoft,
+                result => error,
+                reason => Other,
+                url => GraphUrl
+            }),
             {error, {http_error, GraphUrl, Other}}
     end.
 
@@ -174,7 +191,13 @@ fetch_user_photo(AccessToken) ->
         {ok, {{_, 404, _}, _Headers, _Data}} ->
             undefined;
         Other ->
-            ?LOG_NOTICE("[microsoft] error fetching user photo: ~p", [Other]),
+            ?LOG_NOTICE(#{
+                text => <<"[microsoft] error fetching user photo">>,
+                in => zotonic_mod_microsoft,
+                result => error,
+                reason => Other,
+                url => GraphUrl
+            }),
             undefined
     end.
 

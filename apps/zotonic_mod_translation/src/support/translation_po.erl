@@ -41,7 +41,13 @@ generate1([{Module, Dirname, Labels}|ModuleLabels]) ->
             generate_po_files(Module, Dir, Labels),
             generate1(ModuleLabels);
         {error, Reason} ->
-            ?LOG_WARNING("Could not create directory for extracted translations: ~p ~p", [{error, Reason}, Dir]),
+            ?LOG_WARNING(#{
+                in => zotonic_mod_translation,
+                text => <<"Could not create directory for .pot files">>,
+                result => error,
+                reason => Reason,
+                directory => Dir
+            }),
             generate1(ModuleLabels)
     end.
 

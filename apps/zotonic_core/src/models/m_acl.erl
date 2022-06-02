@@ -50,14 +50,7 @@ m_get([ Action, Object | Rest ], _Msg, Context) ->
     {ok, {is_allowed(Action, Object, Context), Rest}};
 
 % Error, unknown lookup.
-m_get(Vs, Msg, _Context) ->
-    ?LOG_DEBUG(#{
-        result => error,
-        reason => unknown_path,
-        path => Vs,
-        msg => Msg,
-        model => ?MODULE
-    }),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 is_allowed(Action, Object, Context) ->

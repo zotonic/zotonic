@@ -118,7 +118,13 @@ validate_query_args(Context) ->
                         _  -> {error, Context3}
                     end;
                 {error, Reason} ->
-                    ?LOG_ERROR("Error validating query args: ~p", [ Reason ]),
+                    ?LOG_ERROR(#{
+                        text => <<"Error validating query args">>,
+                        in => zotonic_core,
+                        result => error,
+                        reason => Reason,
+                        qargs => QArgs
+                    }),
                     % TODO: add a generic validation error
                     {error, Context}
             end;

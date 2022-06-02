@@ -158,10 +158,23 @@ error_message(av_external_links, Context) ->
 error_message(sizelimit, Context) ->
     ?__("This file is too large.", Context);
 error_message({Status, Url, Hs, _Size, _Body}, Context) when is_integer(Status), is_list(Hs) ->
-    ?LOG_ERROR("HTTP error ~p fetching URL ~p", [ Status, Url ]),
+    ?LOG_ERROR(#{
+        text => <<"HTTP error fetching URL">>,
+        in => zotonic_mod_admin,
+        result => error,
+        reason => http_status,
+        http_status => Status,
+        url => Url,
+        headers => Hs
+    }),
     z_fetch:error_msg(Status, Context);
 error_message(R, Context) ->
-    ?LOG_WARNING("Unknown media discover error: ~p", [R]),
+    ?LOG_WARNING(#{
+        text => <<"Unknown media discover error">>,
+        in => zotonic_mod_admin,
+        result => error,
+        reason => R
+    }),
     ?__("Error checking the website.", Context).
 
 

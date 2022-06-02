@@ -43,8 +43,7 @@ m_get([ Key | Rest ], _Msg, Context) when is_binary(Key) ->
     end;
 m_get([], _Msg, Context) ->
     {ok, {values(Context), []}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Non binary key get: ~p", [Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 

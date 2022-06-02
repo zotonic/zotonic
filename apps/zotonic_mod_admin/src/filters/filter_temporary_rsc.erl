@@ -53,7 +53,11 @@ task_delete_inactive(RscId, Key, SessionId, Context) ->
                 {ok, RscId} ->
                     {delay, ?INACTIVE_CHECK_DELAY};
                 _Other ->
-                    ?LOG_DEBUG("Deleting unmodified temporary resource ~p", [RscId]),
+                    ?LOG_DEBUG(#{
+                        text => <<"Deleting unmodified temporary resource">>,
+                        in => zotonic_mod_admin,
+                        rsc_id => RscId
+                    }),
                     ok = m_rsc:delete(RscId, z_acl:sudo(Context)),
                     ok
             end;
@@ -73,7 +77,11 @@ make_temporary_rsc({ok, _SessionId}, Props, Context) ->
     {Cat, Props1} = ensure_category(Props, Context),
     case m_rsc:rid(Cat, Context) of
         undefined ->
-            ?LOG_WARNING("filter_temporary_rsc: could not find category '~p'", [Cat]),
+            ?LOG_WARNING(#{
+                text => <<"filter_temporary_rsc: could not find category">>,
+                in => zotonic_mod_admin,
+                category => Cat
+            }),
             undefined;
         CatId ->
             make_rsc(
@@ -102,12 +110,25 @@ make_rsc({error, not_found}, CatId, Props, Context) ->
                         ?MODULE, task_delete_inactive, z_convert:to_binary(RscId), Args,
                         Context),
             RscId;
-        {error, _} = Error ->
-            ?LOG_ERROR("Can not make temporary resource error ~p on ~p", [Error, Props]),
+        {error, Reason} ->
+            ?LOG_ERROR(#{
+                text => <<"Can not make temporary resource">>,
+                in => zotonic_mod_admin,
+                result => error,
+                reason => Reason,
+                category_id => CatId,
+                props => Props
+            }),
             undefined
     end;
-make_rsc({error, _} = Error, _CatId, _Props, _Context) ->
-    ?LOG_ERROR("Can not make temporary resource error ~p on storage lookup", [ Error ]),
+make_rsc({error, Reason}, CatId, _Props, _Context) ->
+    ?LOG_ERROR(#{
+        text => <<"Can not make temporary resource on storage lookup">>,
+        in => zotonic_mod_admin,
+        result => error,
+        reason => Reason,
+        category_id => CatId
+    }),
     undefined.
 
 %% If no user then limit to 1 temporary rsc per client

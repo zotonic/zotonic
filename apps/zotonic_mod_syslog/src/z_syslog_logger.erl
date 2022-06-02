@@ -77,7 +77,11 @@ log(#http_log_access{
         sanitize(UserAgent)),
     gen_server:call(?MODULE, {log, Msg});
 log(#http_log_access{ metrics = Metrics }) ->
-    ?LOG_DEBUG("z_syslog_logger: could not log ~p", [ Metrics ]),
+    ?LOG_DEBUG(#{
+        text => <<"z_syslog_logger: could not log metrics">>,
+        in => zotonic_mod_syslog,
+        metrics => Metrics
+    }),
     ok.
 
 %% ------------------------------------------------------------------------------------

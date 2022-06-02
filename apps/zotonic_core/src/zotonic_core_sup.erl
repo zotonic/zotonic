@@ -103,10 +103,14 @@ spawn_delayed_status() ->
                   Ctx = z_context:new(Site),
                   ?LOG_NOTICE(#{
                         status => running,
+                        in => zotonic_core,
                         url => z_context:abs_url(<<"/">>, Ctx)
                     }, #{ site => Site });
               ({Site, Status}) ->
-                  ?LOG_NOTICE(#{ status => Status }, #{ site => Site })
+                  ?LOG_NOTICE(#{
+                        status => Status,
+                        in => zotonic_core
+                    }, #{ site => Site })
             end,
             Running ++ Other)
     end).

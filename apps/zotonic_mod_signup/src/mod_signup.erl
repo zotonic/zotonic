@@ -169,7 +169,7 @@ do_signup(UserId, Props, SignupProps, RequestConfirm, Context) ->
     end.
 
 %% @doc Optionally add a depiction using the 'depiction_url' in the user's props
--spec maybe_add_depiction( m_rsc:resource_id(), map(), z:context() ) -> ok | {error, term()}.
+-spec maybe_add_depiction( UserId :: m_rsc:resource_id(), map(), z:context() ) -> ok | {error, term()}.
 maybe_add_depiction(Id, #{ <<"depiction_url">> := Url }, ContextUser)
     when Url =/= <<>>, Url =/= "", Url =/= undefined ->
     case z_convert:to_bool( m_config:get_value(mod_signup, depiction_as_medium, ContextUser) ) of
@@ -183,13 +183,25 @@ maybe_add_depiction(Id, #{ <<"depiction_url">> := Url }, ContextUser)
                     },
                     case m_media:insert_url(Url, MediaProps, ContextUser) of
                         {ok, MediaId} ->
-                            ?LOG_INFO("Added depiction from depiction_url for ~p: ~p",
-                                       [Id, Url]),
+                            ?LOG_INFO(#{
+                                text => <<"Added user depiction from depiction_url">>,
+                                in => zotonic_mod_signup,
+                                result => ok,
+                                user_id => Id,
+                                rsc_id => MediaId,
+                                url => Url
+                            }),
                             {ok, _} = m_edge:insert(Id, depiction, MediaId, ContextUser),
                             ok;
-                        {error, _} = Error ->
-                            ?LOG_WARNING("Could not insert depiction_url for ~p: ~p ~p",
-                                          [Id, Error, Url]),
+                        {error, Reason} = Error ->
+                            ?LOG_WARNING(#{
+                                text => <<"Could not insert user depiction_url">>,
+                                in => zotonic_mod_signup,
+                                user_id => Id,
+                                result => error,
+                                reason => Reason,
+                                url => Url
+                            }),
                             Error
                     end;
                 _ ->
@@ -200,12 +212,24 @@ maybe_add_depiction(Id, #{ <<"depiction_url">> := Url }, ContextUser)
                 undefined ->
                     case m_media:replace_url(Url, Id, #{}, ContextUser) of
                         {ok, _Id} ->
-                            ?LOG_INFO("Added medium from depiction_url for ~p: ~p",
-                                       [Id, Url]),
+                            ?LOG_INFO(#{
+                                text => <<"Added medium from depiction_url for user">>,
+                                in => zotonic_mod_signup,
+                                result => ok,
+                                user_id => Id,
+                                rsc_id => Id,
+                                url => Url
+                            }),
                             ok;
-                        {error, _} = Error ->
-                            ?LOG_WARNING("Could not insert depiction_url for ~p: ~p ~p",
-                                          [Id, Error, Url]),
+                        {error, Reason} = Error ->
+                            ?LOG_WARNING(#{
+                                text => <<"Could not set user medium from depiction_url">>,
+                                in => zotonic_mod_signup,
+                                user_id => Id,
+                                result => error,
+                                reason => Reason,
+                                url => Url
+                            }),
                             Error
                     end;
                 _Medium ->

@@ -63,7 +63,14 @@ date({{_,_,_} = Date,{_,_,_} = Time} = DT, FormatStr, Context) ->
         z_datetime:format({Date, Time}, FormatStr, Context)
     catch
         error:Error ->
-            ?LOG_WARNING("Date format on illegal date ~p (format ~p), error: ~p", [DT, FormatStr, Error]),
+            ?LOG_WARNING(#{
+                text => <<"Date format on illegal date">>,
+                in => zotonic_mod_base,
+                format => FormatStr,
+                date => DT,
+                result => error,
+                reason => Error
+            }),
             undefined
     end;
 date({_,_,_} = Date, FormatStr, Context) ->
@@ -71,7 +78,14 @@ date({_,_,_} = Date, FormatStr, Context) ->
         z_datetime:format({Date, {0,0,0}}, FormatStr, Context)
     catch
         error:Error ->
-            ?LOG_WARNING("Date format on illegal date ~p (format ~p), error: ~p", [Date, FormatStr, Error]),
+            ?LOG_WARNING(#{
+                text => <<"Date format on illegal date">>,
+                in => zotonic_mod_base,
+                format => FormatStr,
+                date => Date,
+                result => error,
+                reason => Error
+            }),
             undefined
     end;
 date(_Input, _FormatStr, _Context) ->

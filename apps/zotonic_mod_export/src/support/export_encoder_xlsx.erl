@@ -119,7 +119,13 @@ encode_cell([Row, Col, {{Y,M,D},{H,I,S}} = Date], _IsRaw, _Context) when
             ])
     catch
         error:_if_clause ->
-            ?LOG_WARNING("[~p] Illegal date in xlsx export: ~p", [Date]),
+            ?LOG_WARNING(#{
+                text => <<"Illegal date in xlsx export">>,
+                in => zotonic_mod_export,
+                result => error,
+                reason => illegal_date,
+                date => Date
+            }),
             encode_inlinestr(Row, Col, <<>>)
     end;
 encode_cell([Row, Col, {Y,M,D} = Date], _IsRaw, _Context) when
@@ -132,7 +138,13 @@ encode_cell([Row, Col, {Y,M,D} = Date], _IsRaw, _Context) when
             ])
     catch
         error:_if_clause ->
-            ?LOG_WARNING("[~p] Illegal date in xlsx export: ~p", [Date]),
+            ?LOG_WARNING(#{
+                text => <<"Illegal date in xlsx export">>,
+                in => zotonic_mod_export,
+                result => error,
+                reason => illegal_date,
+                date => Date
+            }),
             encode_inlinestr(Row, Col, <<>>)
     end;
 encode_cell([Row, Col, V], false, _Context) ->

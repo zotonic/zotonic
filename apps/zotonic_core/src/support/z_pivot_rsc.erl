@@ -397,6 +397,7 @@ handle_call({task_done, _TaskPid, TaskId}, _From, #state{ task_id = TaskId } = S
 handle_call({task_done, _TaskPid, TaskId}, _From, State) ->
     ?LOG_ERROR(#{
         text => <<"Pivot received 'task_done' from unknown task job">>,
+        in => zotonic_core,
         result => error,
         reason => unknown_task_job,
         task_id => TaskId
@@ -408,6 +409,7 @@ handle_call({pivot_done, PivotPid}, _From, #state{ pivot_pid = PivotPid } = Stat
 handle_call({pivot_done, PivotPid}, _From, State) ->
     ?LOG_ERROR(#{
         text => <<"Pivot received 'pivot_done' from unknown pivot job">>,
+        in => zotonic_core,
         result => error,
         reason => unknown_pivot_job,
         pid => PivotPid
@@ -449,6 +451,7 @@ handle_cast(poll, State) ->
         Type:Err:Stack ->
             ?LOG_ERROR(#{
                 text => <<"Pivot poll error">>,
+                in => zotonic_core,
                 result => Type,
                 reason => Err,
                 stack => Stack
@@ -485,6 +488,7 @@ handle_cast({pivot_ping, Pid, Id}, #state{ pivot_pid = Pid } = State) ->
 handle_cast({pivot_ping, Pid, Id}, State) ->
     ?LOG_NOTICE(#{
         text => <<"Pivot ping from unknown process">>,
+        in => zotonic_core,
         result => error,
         reason => unknown_process,
         pid => Pid,
@@ -502,6 +506,7 @@ handle_cast({task_ping, _Pid, TaskId, Percentage}, #state{ task_id = TaskId } = 
 handle_cast({task_ping, Pid, TaskId, _Percentage}, State) ->
     ?LOG_NOTICE(#{
         text => <<"Task ping for wrong task id">>,
+        in => zotonic_core,
         result => error,
         reason => wrong_task_id,
         pid => Pid,
@@ -528,6 +533,7 @@ handle_info(poll, #state{backoff_counter = Ct} = State) when Ct > 0 ->
 handle_info(poll, #state{ pivot_pid = Pid } = State) when is_pid(Pid) ->
     ?LOG_INFO(#{
         text => <<"Pivot job still running, delaying next poll">>,
+        in => zotonic_core,
         pivot_pid => Pid,
         reason => busy
     }),
@@ -537,7 +543,8 @@ handle_info(poll, #state{ site = Site } = State) ->
     case z_sites_manager:get_site_status(Site) of
         {ok, running} ->
             ?LOG_DEBUG(#{
-                text => <<"Pivot poll">>
+                text => <<"Pivot poll">>,
+                in => zotonic_core
             }),
             try
                 State1 = do_poll(State),
@@ -552,6 +559,7 @@ handle_info(poll, #state{ site = Site } = State) ->
                 Type:Err:Stack ->
                     ?LOG_ERROR(#{
                         text => <<"Pivot error">>,
+                        in => zotonic_core,
                         result => Type,
                         reason => Err,
                         stack => Stack
@@ -570,7 +578,8 @@ handle_info({'DOWN', _MRef, process, _Pid, _Reason}, #state{ pivot_pid = undefin
 handle_info({'DOWN', _MRef, process, Pid, Reason}, #state{ pivot_pid = Pid } = State) ->
     LastRscId = State#state.pivot_rsc_id,
     ?LOG_ERROR(#{
-        text=> <<"Pivot received DOWN from pivot job">>,
+        text => <<"Pivot received DOWN from pivot job">>,
+        in => zotonic_core,
         rsc_id => LastRscId,
         result => 'DOWN',
         reason => Reason,
@@ -628,6 +637,7 @@ check_pivot_job(#state{ pivot_pid = Pid, pivot_ping = LastPing } = State) ->
         true ->
             ?LOG_ERROR(#{
                 text => <<"Pivot job timeout, killing pivot job">>,
+                in => zotonic_core,
                 reason => timeout,
                 pivot_pid => Pid,
                 rsc_id => State#state.pivot_rsc_id
@@ -647,6 +657,7 @@ check_task_job(#state{ task_pid = Pid, task_id = TaskId, task_ping = LastPing } 
         true ->
             ?LOG_ERROR(#{
                 text => <<"Task job timeout, killing task for later retry">>,
+                in => zotonic_core,
                 reason => timeout,
                 task_id => TaskId,
                 task_pid => Pid,
@@ -769,12 +780,14 @@ do_insert_queue(Ids, DueDate, Context) when is_list(Ids) ->
         {rollback, Reason} ->
             ?LOG_ERROR(#{
                 text => <<"Rollback during pivot queue insert">>,
+                in => zotonic_core,
                 reason => Reason
             }),
             timer:apply_after(100, ?MODULE, insert_queue, [Ids, DueDate, Context]);
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => <<"Error during pivot queue insert">>,
+                in => zotonic_core,
                 reason => Reason
             })
     end.
@@ -854,6 +867,7 @@ maybe_start_task(#state{ task_pid = undefined } = State, Context) ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => "Pivot could not check task queue",
+                in => zotonic_core,
                 reason => Reason
             }),
             State

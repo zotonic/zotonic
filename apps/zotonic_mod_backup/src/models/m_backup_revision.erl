@@ -43,8 +43,7 @@ m_get([ <<"list">>, Id | Rest ], _Msg, Context) ->
         false -> []
     end,
     {ok, {Revs, Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 

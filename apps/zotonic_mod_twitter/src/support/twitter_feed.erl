@@ -159,7 +159,12 @@ get_tweet(TweetId, Context) when is_integer(TweetId) ->
 
 
 fetch(API, Args, Context) ->
-    ?LOG_DEBUG("Twitter: fetching \"~s\" for ~p", [ API, Args ]),
+    ?LOG_DEBUG(#{
+        text => <<"Twitter: fetching from API">>,
+        in => zotonic_mod_twitter,
+        api => API,
+        args => Args
+    }),
     Access = {
         z_convert:to_list(m_config:get_value(mod_twitter, access_token, Context)),
         z_convert:to_list(m_config:get_value(mod_twitter, access_token_secret, Context))
