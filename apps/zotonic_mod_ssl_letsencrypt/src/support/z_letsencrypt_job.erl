@@ -58,7 +58,12 @@ request_process(ModulePid, Hostname, SANs, LetsOpts) ->
         {error, _} = Error ->
             Error;
         aborted ->
-            ?LOG_ERROR("LetsEncrypt process aborted for: ~s", [ Hostname ]),
+            ?LOG_ERROR(#{
+                text => <<"LetsEncrypt process aborted">>,
+                result => error,
+                reason => aborted,
+                hostname => Hostname
+            }),
             {error, aborted}
     end.
 

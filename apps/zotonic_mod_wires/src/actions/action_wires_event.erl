@@ -138,7 +138,10 @@ script(EventType, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS,
         {ok, Script, Context} ->
             {Script, Context};
         undefined ->
-            ?LOG_ERROR("Unhandled event type: ~p", [EventType]),
+            ?LOG_ERROR(#{
+                text => <<"Unhandled event type for wires scomp">>,
+                type => EventType
+            }),
             {[], Context}
     end;
 

@@ -102,7 +102,10 @@ twitter1_url_html(Pre, Url, Opts) ->
                         ["<a href=\"", Url2, "\">", Text, "</a>"]
                     catch
                         _:_ ->
-                            ?LOG_INFO("Twitter: removed problematic URL from Tweet: ~p", [ Url1 ]),
+                            ?LOG_INFO(#{
+                                text => <<"Twitter: removed problematic URL from Tweet">>,
+                                url => Url1
+                            }),
                             []
                     end
             end;

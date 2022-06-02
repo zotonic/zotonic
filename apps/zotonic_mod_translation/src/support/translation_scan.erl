@@ -78,8 +78,14 @@ scan_file(".tpl", File) ->
         {ok, Translations} ->
             normalize_line_info(Translations);
         {error, Reason} ->
-          ?LOG_ERROR("POT generation, erlang error in \"~s\": ~p~n", [File, Reason])
-    end;
+            ?LOG_ERROR(#{
+                text => <<"POT generation, template error">>,
+                filename => File,
+                result => error,
+                reason => Reason
+            }),
+            []
+      end;
 scan_file(".erl", File) ->
     IncludeDirs = case zotonic_filehandler:compile_options(File) of
         {ok, Options} -> proplists:get_all_values(i, Options);
@@ -89,7 +95,12 @@ scan_file(".erl", File) ->
         {ok, Epp} ->
             parse_erl(File, Epp);
         {error, Reason} ->
-            ?LOG_ERROR("POT generation, erlang error in \"~s\": ~p~n", [File, Reason]),
+            ?LOG_ERROR(#{
+                text => <<"POT generation, erlang error">>,
+                result => error,
+                reason => Reason,
+                filename => File
+            }),
             []
     end;
 scan_file(_, _) ->

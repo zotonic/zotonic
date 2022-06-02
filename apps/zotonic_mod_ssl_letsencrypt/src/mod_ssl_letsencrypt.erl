@@ -127,7 +127,13 @@ event(#submit{message = {request_cert, Args}}, Context) ->
                                         ]},
                                     Context);
                 {error, Reason} ->
-                    ?LOG_ERROR("Could not start Letsencrypt cert request, error ~p", [Reason]),
+                    ?LOG_ERROR(#{
+                        text => <<"Could not start Letsencrypt cert request">>,
+                        result => error,
+                        reason => Reason,
+                        hostname => Hostname,
+                        san => SANs1
+                    }),
                     z_render:wire({alert, [
                                     {title, ?__(<<"SSL Let’s Encrypt Certificate"/utf8>>, Context)},
                                     {text, ?__("Could not start fetching the SSL certificate. Try again later.", Context)},
@@ -291,8 +297,13 @@ handle_info({'DOWN', MRef, process, _Pid, normal}, #state{request_monitor = MRef
         request_status = error
     }};
 handle_info({'DOWN', MRef, process, _Pid, Reason}, #state{request_monitor = MRef} = State) ->
-    ?LOG_ERROR("Letsencrypt went down with reason ~p, whilst requesting cert for ~p ~p",
-                [Reason, State#state.request_hostname, State#state.request_san]),
+    ?LOG_ERROR(#{
+        text => <<"Letsencrypt went down whilst requesting cert">>,
+        result => error,
+        reason => Reason,
+        hostname => State#state.request_hostname,
+        san => State#state.request_san
+    }),
     gen_server:cast(self(), load_cert),
     {noreply, State#state{
         request_monitor = undefined,
@@ -305,7 +316,10 @@ handle_info({'DOWN', _MRef, process, _Pid, normal}, #state{request_monitor = und
 handle_info({'EXIT', _Pid, _Reason}, State) ->
     {noreply, State};
 handle_info(Info, State) ->
-    ?LOG_WARNING("Letsencrypt unknown info message ~p", [Info]),
+    ?LOG_WARNING(#{
+        text => <<"Letsencrypt unknown info message">>,
+        message => Info
+    }),
     {noreply, State}.
 
 %% @spec terminate(Reason, State) -> void()
@@ -341,9 +355,12 @@ do_load_cert(State) ->
                         cert_san = maps:get(subject_alt_names, CertMap, []),
                         cert_valid_till = maps:get(not_after, CertMap)
                     };
-                {error, _} = Error ->
-                    ?LOG_ERROR("Could not decode Letsencrypt crt file ~p",
-                                [Error]),
+                {error, Reason} = Error ->
+                    ?LOG_ERROR(#{
+                        text => <<"Could not decode Letsencrypt crt file">>,
+                        result => error,
+                        reason => Reason
+                    }),
                     invalid_cert_status(State)
             end;
         false ->
@@ -360,8 +377,12 @@ invalid_cert_status(State) ->
 
 %% @doc Letsencrypt finished, perform housekeeping and logging
 handle_letsencrypt_result({ok, LEFiles}, State) ->
-    ?LOG_NOTICE("Letsencrypt successfully requested cert for ~p ~p",
-                [State#state.request_hostname, State#state.request_san]),
+    ?LOG_NOTICE(#{
+        text => <<"Letsencrypt successfully requested cert">>,
+        result => ok,
+        hostname => State#state.request_hostname,
+        san => State#state.request_san
+    }),
     Context = z_context:new(State#state.site),
     {ok, MyFiles} = cert_files_all(Context),
     {certfile, CertFile} = proplists:lookup(certfile, MyFiles),
@@ -384,8 +405,13 @@ handle_letsencrypt_result({ok, LEFiles}, State) ->
         request_status = ok
     };
 handle_letsencrypt_result({error, Reason}, State) ->
-    ?LOG_ERROR("Letsencrypt error ~p whilst requesting cert for ~p ~p",
-                [Reason, State#state.request_hostname, State#state.request_san]),
+    ?LOG_ERROR(#{
+        text => <<"Letsencrypt error whilst requesting cert">>,
+        result => error,
+        reason => Reason,
+        hostname => State#state.request_hostname,
+        san => State#state.request_san
+    }),
     State#state{
         request_status = error
     }.
@@ -444,16 +470,25 @@ ssl_options(Context) ->
     KeyFile = proplists:get_value(keyfile, CertFiles),
     case {filelib:is_file(CertFile), filelib:is_file(KeyFile)} of
         {false, false} ->
-            ?LOG_NOTICE("[~p] mod_ssl_letsencrypt: no ~p and ~p files, skipping.",
-                       [z_context:site(Context), CertFile, KeyFile]),
+            ?LOG_NOTICE(#{
+                text => <<"mod_ssl_letsencrypt: no cert and key files, skipping.">>,
+                cert_filename => CertFile,
+                key_filename => KeyFile
+            }),
             undefined;
         {false, true} ->
-            ?LOG_NOTICE("[~p] mod_ssl_letsencrypt: no ~p file (though there is a key file), skipping.",
-                       [z_context:site(Context), CertFile]),
+            ?LOG_NOTICE(#{
+                text => <<"mod_ssl_letsencrypt: no cert file (though there is a key file), skipping.">>,
+                cert_filename => CertFile,
+                key_filename => KeyFile
+            }),
             undefined;
         {true, false} ->
-            ?LOG_NOTICE("[~p] mod_ssl_letsencrypt: no ~p file (though there is a crt file), skipping.",
-                       [z_context:site(Context), KeyFile]),
+            ?LOG_NOTICE(#{
+                text => <<"mod_ssl_letsencrypt: no key file (though there is a cert file), skipping.">>,
+                cert_filename => CertFile,
+                key_filename => KeyFile
+            }),
             undefined;
         {true, true} ->
             case check_keyfile(KeyFile, Context) of
@@ -499,24 +534,41 @@ cert_temp_dir(Context) ->
 
 -spec check_keyfile(string(), z:context()) -> ok | {error, openssl|no_private_keys_found|need_rsa_private_key|term()}.
 check_keyfile(KeyFile, Context) ->
-    Site = z_context:site(Context),
     Hostname = z_context:hostname(Context),
     case file:read_file(KeyFile) of
         {ok, <<"-----BEGIN PRIVATE KEY", _/binary>>} ->
-            ?LOG_ERROR("[~p] Need RSA private key file for Letsencrypt. Use: `openssl rsa -in letsencrypt/letsencrypt.pem -out letsencrypt/letsencrypt.pem`",
-                        [Site, Hostname, Hostname]),
+            ?LOG_ERROR(#{
+                text => <<
+                    "Need RSA private key file for Letsencrypt. "
+                    "Use: `openssl rsa -in letsencrypt/letsencrypt.pem -out letsencrypt/letsencrypt.pem`">>,
+                result => error,
+                reason => need_rsa_private_key,
+                hostname => Hostname,
+                key_file => KeyFile
+            }),
             {error, need_rsa_private_key};
         {ok, Bin} ->
             case public_key:pem_decode(Bin) of
                 [] ->
-                    ?LOG_ERROR("[~p] No private keys for Letsencrypt found in ~p", [Site, KeyFile]),
+                    ?LOG_ERROR(#{
+                        text => <<"No private keys for Letsencrypt found">>,
+                        result => error,
+                        hostname => Hostname,
+                        reason => no_private_keys_found,
+                        key_file => KeyFile
+                    }),
                     {error, no_private_keys_found};
                 _ ->
                     ok
             end;
-        {error, _} = Error ->
-            ?LOG_ERROR("[~p] Cannot read Letsencrypt key file ~p, error: ~p",
-                        [Site, KeyFile, Error]),
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                text => <<"Cannot read Letsencrypt key file">>,
+                key_file => KeyFile,
+                result => error,
+                hostname => Hostname,
+                reason => Reason
+            }),
             Error
     end.
 
@@ -529,7 +581,10 @@ ensure_key_file(Context) ->
         true ->
             {ok, KeyFile};
         false ->
-            ?LOG_NOTICE("Generating RSA key for LetsEncrypt in ~p", [KeyFile]),
+            ?LOG_NOTICE(#{
+                text => <<"Generating RSA key for LetsEncrypt">>,
+                key_file => KeyFile
+            }),
             ok = z_filelib:ensure_dir(KeyFile),
             _ = file:change_mode(filename:basename(KeyFile), 8#00700),
             Escaped = z_filelib:os_filename(KeyFile),
@@ -548,8 +603,12 @@ ensure_key_file(Context) ->
                             Error
                     end;
                 false ->
-                    ?LOG_ERROR("Error generating RSA key for LetsEncrypt: ~p",
-                                [Result]),
+                    ?LOG_ERROR(#{
+                        text => <<"Error generating RSA key for LetsEncrypt">>,
+                        key_file => KeyFile,
+                        result => error,
+                        reason => Result
+                    }),
                     {error, openssl}
             end
     end.
@@ -565,13 +624,22 @@ download_cacert(Context) ->
                 "application/x-pem-file" ->
                     save_ca_cert(Cert, Context);
                 CT ->
-                    ?LOG_ERROR("Download of ~p returned a content-type ~p",
-                                [?CA_CERT_URL, CT]),
+                    ?LOG_ERROR(#{
+                        text => <<"Download of cert file returned unexpected content-type">>,
+                        result => error,
+                        reason => content_type,
+                        url => ?CA_CERT_URL,
+                        content_type => CT
+                    }),
                     {error, content_type}
             end;
-        {error, _} = Error ->
-            ?LOG_ERROR("Download of ~p error ~p",
-                        [?CA_CERT_URL, Error]),
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                text => <<"Download of cert file failed">>,
+                result => error,
+                reason => Reason,
+                url => ?CA_CERT_URL
+            }),
             Error
     end.
 

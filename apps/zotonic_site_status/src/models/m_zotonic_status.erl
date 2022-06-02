@@ -32,9 +32,6 @@
 ]).
 
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
-
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"sites_status">> | Rest ], _Msg, Context) ->
@@ -62,8 +59,7 @@ m_get([ <<"check">> | Rest ], _Msg, _Context) ->
                 <<"message">> => <<"Not all sites are running.">>
             }}
     end;
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 -spec get_sites_status() -> [ {atom(), z_sites_manager:site_status()} ].

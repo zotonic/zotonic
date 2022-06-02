@@ -1,10 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011 Marc Worrell <marc@worrell.nl>
-%% Date: 2011-12-23
-
+%% @copyright 2011-2022 Marc Worrell <marc@worrell.nl>
 %% @doc Default Zotonic site, used when no other site can handle the supplied Host.
 
-%% Copyright 2011 Marc Worrell
+%% Copyright 2011-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -57,33 +55,50 @@ sites_status_observer(Context, SitesStatus, _SitesManagerContext) ->
 observe_auth_validate( #auth_validate{ username = <<"wwwadmin">>, password = Password }, Context ) ->
     case is_peer_allowed(Context) of
         true ->
-            case z_convert:to_binary(z_config:get(password)) of
-                Password ->
-                    ?LOG_INFO("Zotonic status logon success from allowed IP address: ~p",
-                                [m_req:get(peer, Context)]),
+            case is_equal(Password, z_convert:to_binary(z_config:get(password))) of
+                true ->
+                    ?LOG_INFO(#{
+                        text => <<"Zotonic status logon success from allowed IP address">>,
+                        result => ok,
+                        username => <<"wwwadmin">>,
+                        ip => m_req:get(peer, Context)
+                    }),
                     {ok, 1};
-                _ ->
-                    ?LOG_ERROR("Zotonic status logon failure from allowed IP address: ~p",
-                                [m_req:get(peer, Context)]),
+                false ->
+                    ?LOG_ERROR(#{
+                        text => <<"Zotonic status logon failure from allowed IP address">>,
+                        result => error,
+                        reason => password,
+                        ip => m_req:get(peer, Context)
+                    }),
                     {error, pw}
             end;
         false ->
-            ?LOG_ERROR("Zotonic status logon failure from non allowed IP address: ~p",
-                        [m_req:get(peer, Context)]),
+            ?LOG_ERROR(#{
+                text => <<"Zotonic status logon failure from non allowed IP address">>,
+                result => error,
+                reason => blocked,
+                ip => m_req:get(peer, Context)
+            }),
             {error, blocked}
     end;
 observe_auth_validate( #auth_validate{ username = Username }, Context ) ->
-    ?LOG_ERROR("Zotonic status logon failure with non 'wwwadmin' username '~s' from IP address: ~p",
-                [Username, m_req:get(peer, Context)]),
+    ?LOG_ERROR(#{
+        text => <<"Zotonic status logon failure with non 'wwwadmin' username">>,
+        result => error,
+        reason => pw,
+        username => Username,
+        ip => m_req:get(peer, Context)
+    }),
     {error, pw}.
 
 
 %% @doc Check if an user is enabled.
-observe_user_is_enabled(#user_is_enabled{id=1}, _Context) -> true;
+observe_user_is_enabled(#user_is_enabled{ id = 1 }, _Context) -> true;
 observe_user_is_enabled(#user_is_enabled{}, _Context) -> false.
 
 %% @doc Let the user log on, this is the moment to start caching information.
-observe_acl_logon(#acl_logon{id=UserId}, Context) ->
+observe_acl_logon(#acl_logon{ id = UserId }, Context) ->
     Context#context{user_id=UserId}.
 
 %% @doc Let the user log off, clean up any cached information.
@@ -95,3 +110,14 @@ observe_acl_logoff(#acl_logoff{}, Context) ->
 is_peer_allowed(Context) ->
     Peer = m_req:get(peer, Context),
     z_ip_address:ip_match(Peer, z_config:get(ip_allowlist_system_management)).
+
+% Constant time comparison.
+-spec is_equal(Extern :: binary(), Secret :: binary() ) -> boolean().
+is_equal(A, B) -> is_equal(A, B, true).
+
+is_equal(<<>>, <<>>, Eq) -> Eq;
+is_equal(<<>>, _B, _Eq) -> false;
+is_equal(<<_, A/binary>>, <<>>, _Eq) -> is_equal(A, <<>>, false);
+is_equal(<<C, A/binary>>, <<C, B/binary>>, Eq) -> is_equal(A, B, Eq);
+is_equal(<<_, A/binary>>, <<_, B/binary>>, _Eq) -> is_equal(A, B, false).
+

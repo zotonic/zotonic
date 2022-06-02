@@ -49,16 +49,26 @@ event(#submit{message=addsite, form=Form}, Context) ->
         {dbuser, z_context:get_q(<<"dbuser">>, Context)},
         {dbpassword, z_context:get_q(<<"dbpassword">>, Context)}
     ],
-    ?LOG_NOTICE("[zotonic_site_status] Creating site ~s with ~p", [Sitename, Options]),
+    ?LOG_NOTICE(#{
+        text => <<"[zotonic_site_status] Creating site">>,
+        site => Sitename,
+        options => Options
+    }),
     case zotonic_status_addsite:addsite(Sitename, Options, Context) of
         {ok, {Site, FinalOptions}} ->
             progress(Sitename, ?__("Starting the new site ...", Context), Context),
             ok = z_sites_manager:upgrade(),
             _ = z_sites_manager:start(Site),
-            ?LOG_NOTICE("[zotonic_site_status] Success creating site ~s", [Site]),
+            ?LOG_NOTICE(#{
+                text => <<"[zotonic_site_status] Success creating site">>,
+                site => Site
+            }),
             case await(Site) of
                 ok ->
-                    ?LOG_NOTICE("[zotonic_site_status] Site ~s is running", [Site]),
+                    ?LOG_NOTICE(#{
+                        text => <<"[zotonic_site_status] Site is running">>,
+                        site => Site
+                    }),
                     SiteContext = z_context:new(Site),
                     z_module_manager:upgrade_await(SiteContext),
                     Vars = [
@@ -70,7 +80,12 @@ event(#submit{message=addsite, form=Form}, Context) ->
                     Context1 = notice(Form, Site, ?__("Succesfully created the site.", Context), Context),
                     z_render:replace(Form, #render{vars=Vars, template="_addsite_success.tpl"}, Context1);
                 {error, StartError} ->
-                    ?LOG_ERROR("[zotonic_site_status] Newly created site ~s is NOT running (~p)", [Site, StartError]),
+                    ?LOG_ERROR(#{
+                        text => <<"[zotonic_site_status] Newly created site is NOT running">>,
+                        site => Site,
+                        result => error,
+                        reason => StartError
+                    }),
                     notice(Form, Site, ?__("Something is wrong, site is not starting. Please check the logs.", Context), Context)
             end;
         {error, Msg} when is_list(Msg); is_binary(Msg) ->

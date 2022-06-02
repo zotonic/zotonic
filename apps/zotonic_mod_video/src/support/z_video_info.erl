@@ -37,7 +37,10 @@ info(Path) ->
     FfprobeCmd = lists:flatten([
            Cmdline, " ", z_filelib:os_filename(Path)
        ]),
-    ?LOG_DEBUG("Video info: ~p", [FfprobeCmd]),
+    ?LOG_DEBUG(#{
+        text => <<"Video info">>,
+        command => FfprobeCmd
+    }),
     JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
     try
         Ps = decode_json(JSONText),
@@ -58,7 +61,13 @@ info(Path) ->
             Info)
     catch
         error:E ->
-            ?LOG_WARNING("Unexpected ffprobe return (~p) ~p", [E, JSONText]),
+            ?LOG_WARNING(#{
+                text => <<"Unexpected ffprobe return">>,
+                command => FfprobeCmd,
+                reason => error,
+                result => E,
+                probe_output => JSONText
+            }),
             #{}
     end.
 

@@ -53,7 +53,12 @@ status(<<"valid">>)      -> valid;
 status(<<"invalid">>)    -> invalid;
 status(<<"revoked">>)    -> revoked;
 status(Status)       ->
-    ?LOG_ERROR("LetsEncrypt: unknown status: ~p", [Status]),
+    ?LOG_ERROR(#{
+        text => <<"LetsEncrypt: unknown status">>,
+        result => error,
+        reason => unknown_status,
+        status => Status
+    }),
     unknown.
 
 %% PRIVATE
@@ -236,7 +241,11 @@ account(#{<<"newAccount">> := Uri}, Key, Jws, Opts) ->
 %
 -spec new_order(map(), [ binary() ], z_letsencrypt:ssl_privatekey(), map(), map()) -> {ok, map(), binary(), binary()}.
 new_order(#{<<"newOrder">> := Uri}, Domains, Key, Jws, Opts) ->
-    ?LOG_NOTICE("[letsencrypt] Requesting new certificate for: ~p", [ Domains ]),
+    ?LOG_NOTICE(#{
+        text => <<"LetsEncrypt requesting new certificate">>,
+        domain => Domains,
+        type => dns
+    }),
     Idns = lists:map(
         fun(Domain) ->
             #{

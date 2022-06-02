@@ -149,13 +149,22 @@ check_keyfile(PemFile) ->
         {ok, Bin} ->
             case public_key:pem_decode(Bin) of
                 [] ->
-                    ?LOG_ERROR("No private PEM key found in ~p", [PemFile]),
+                    ?LOG_ERROR(#{
+                        text => <<"No private PEM key found">>,
+                        result => error,
+                        reason => no_private_keys_found,
+                        filename => PemFile
+                    }),
                     {error, no_private_keys_found};
                 _ ->
                     ok
             end;
-        {error, _} = Error ->
-            ?LOG_ERROR("Cannot read key file ~p, error: ~p",
-                        [PemFile, Error]),
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                text => <<"Cannot read key file">>,
+                result => error,
+                reason => Reason,
+                filename => PemFile
+            }),
             Error
     end.

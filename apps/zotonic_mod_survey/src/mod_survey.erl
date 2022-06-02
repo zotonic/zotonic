@@ -328,12 +328,24 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                     ],
                     #render{template="_survey_question_page.tpl", vars=Vars};
 
-                {error, {not_found, Name} = Reason} ->
-                    ?LOG_ERROR("Survey ~p, error ~p on page ~p", [Id, Reason, PageNr]),
+                {error, {not_found, Name}} ->
+                    ?LOG_ERROR(#{
+                        text => <<"Survey error, page not found">>,
+                        result => error,
+                        reason => page_not_found,
+                        rsc_id => Id,
+                        page_name => Name
+                    }),
                     z_render:growl_error("Error in survey, could not find page "++z_convert:to_list(Name), Context);
 
                 {error, Reason} ->
-                    ?LOG_ERROR("Survey ~p, error ~p on page ~p", [Id, Reason, PageNr]),
+                    ?LOG_ERROR(#{
+                        text => <<"Survey error evaluating submit">>,
+                        result => error,
+                        reason => Reason,
+                        page_nr => PageNr,
+                        rsc_id => Id
+                    }),
                     z_render:growl_error("Error evaluating submit.", Context);
 
                 stop ->
