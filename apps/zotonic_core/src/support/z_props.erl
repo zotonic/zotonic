@@ -338,6 +338,7 @@ group_trans_parts(TransParts) ->
                             {error, Reason} ->
                                 ?LOG_NOTICE(#{
                                     text => <<"Dropping trans part, language code is unknown">>,
+                                    in => zotonic_core,
                                     result => error,
                                     reason => Reason,
                                     language => Lang,
@@ -348,6 +349,7 @@ group_trans_parts(TransParts) ->
                     _ ->
                         ?LOG_NOTICE(#{
                             text => <<"Dropping unknown trans part, should be like 'title$en'">>,
+                            in => zotonic_core,
                             result => error,
                             reason => format,
                             part => K
@@ -446,6 +448,7 @@ group_date_parts(DatePartsQs) ->
                     _ ->
                         ?LOG_INFO(#{
                             text => <<"Dropping unknown date part, should be like 'dt:ymd:0:propname'">>,
+                            in => zotonic_core,
                             result => error,
                             reason => format,
                             part => K

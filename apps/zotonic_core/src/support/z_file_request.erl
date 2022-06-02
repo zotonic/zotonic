@@ -120,6 +120,7 @@ stream_single_part(#part_cache{cache_pid=Pid}, FzLookup) ->
         Other ->
             ?LOG_WARNING(#{
                 text => <<"Unexpected result from the filezcache">>,
+                in => zotonic_core,
                 result => Other
             }),
             <<>>
@@ -142,6 +143,7 @@ stream_many_parts([#part_cache{cache_pid=Pid}|Parts], FzLookup) ->
         Other ->
             ?LOG_WARNING(#{
                 text => <<"Unexpected result from the filezcache">>,
+                in => zotonic_core,
                 result => Other
             }),
             stream_many_parts(Parts, FzLookup)

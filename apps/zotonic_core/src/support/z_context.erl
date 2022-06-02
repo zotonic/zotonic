@@ -1064,6 +1064,7 @@ set_tz(Tz, Context) when is_binary(Tz), Tz =/= <<>> ->
         false ->
             ?LOG_INFO(#{
                 text => <<"Ignoring unknown timezone">>,
+                in => zotonic_core,
                 tz => Tz
             }),
             Context
@@ -1077,6 +1078,7 @@ set_tz(0, Context) ->
 set_tz(Tz, Context) ->
     ?LOG_ERROR(#{
         text => <<"Ignoring unknown timezone">>,
+        in => zotonic_core,
         tz => Tz
     }),
     Context.
@@ -1098,7 +1100,10 @@ set_csp_nonce(Context) ->
 csp_nonce(Context) ->
     case get(csp_nonce, Context) of
         undefined ->
-            ?LOG_WARNING("csp_nonce requested but not set"),
+            ?LOG_WARNING(#{
+                text => <<"csp_nonce requested but not set">>,
+                in => zotonic_core
+            }),
             <<>>;
         Nonce when is_binary(Nonce) ->
             Nonce

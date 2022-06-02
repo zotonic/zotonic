@@ -95,6 +95,7 @@ parse_multipart_request(Context) ->
                     z_context:logger_md(Context),
                     ?LOG_NOTICE(#{
                         text => <<"Could not decode multipart chunk">>,
+                        in => zotonic_core,
                         boundary => Boundary,
                         chunk => Chunk
                     }),
@@ -116,6 +117,7 @@ feed_mp(headers, #mp{buffer=Buffer, form=Form} = State) ->
                 _ ->
                     ?LOG_NOTICE(#{
                         text => <<"Could not decode multipart: headers incomplete or too long">>,
+                        in => zotonic_core,
                         buffer => S1#mp.buffer
                     }),
                     throw({stop_request, 400})
@@ -145,6 +147,7 @@ feed_mp(body, #mp{boundary=Prefix, buffer=Buffer, form=Form} = State) ->
                 State ->
                     ?LOG_NOTICE(#{
                         text => <<"Could not decode multipart: incomplete end boundary">>,
+                        in => zotonic_core,
                         buffer => Buffer
                     }),
                     throw({stop_request, 400});
@@ -255,6 +258,7 @@ handle_data({body, Data}, #multipart_form{filename=Filename, file=undefined} = F
         {error, Error} ->
             ?LOG_ERROR(#{
                 text => <<"Could not open file for writing">>,
+                in => zotonic_core,
                 result => error,
                 reason => Error,
                 file => Form#multipart_form.tmpfile

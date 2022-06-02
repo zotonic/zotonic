@@ -363,6 +363,7 @@ maybe_duplicate_preview(#{ <<"preview_filename">> := Filename, <<"is_deletable_p
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => <<"Error duplicating preview">>,
+                in => zotonic_core,
                 result => error,
                 reason => Reason,
                 filename => Filename
@@ -406,6 +407,7 @@ insert_file(#upload{ data = Data, tmpfile = undefined } = Upload, RscProps, Opti
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 text => <<"Could not write temporary file">>,
+                in => zotonic_core,
                 result => error,
                 reason => Reason,
                 size => iolist_size(Data),
@@ -1059,6 +1061,7 @@ save_preview_url(RscId, Url, Context) ->
                         Type:Error ->
                             ?LOG_WARNING(#{
                                 text => <<"Error importing preview">>,
+                                in => zotonic_core,
                                 result => Type,
                                 reason => Error,
                                 rsc_id => RscId,
@@ -1072,6 +1075,7 @@ save_preview_url(RscId, Url, Context) ->
                     Mime = maps:get(<<"mime">>, MediaInfo, undefined),
                     ?LOG_WARNING(#{
                         text => <<"Error importing preview">>,
+                        in => zotonic_core,
                         result => error,
                         reason => no_image,
                         rsc_id => RscId,

@@ -342,6 +342,7 @@ render_actions(TriggerId, TargetId, {Action, Args}, Context) ->
                 {error, enoent} ->
                     ?LOG_WARNING(#{
                         text => <<"Action not enabled">>,
+                        in => zotonic_core,
                         result => error,
                         reason => enoent,
                         action => Action
@@ -393,6 +394,7 @@ render_validator(TriggerId, TargetId, Args, Context) ->
                                         {error, enoent} = Error ->
                                             ?LOG_WARNING(#{
                                                 text => <<"Validator not found">>,
+                                                in => zotonic_core,
                                                 result => error,
                                                 reason => enoent,
                                                 validator => VType

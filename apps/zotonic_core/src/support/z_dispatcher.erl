@@ -432,6 +432,7 @@ get_file_dispatch({File, Mod}) ->
         M:E ->
             ?LOG_ERROR(#{
                 text => <<"File dispatch error">>,
+                in => zotonic_core,
                 file => File,
                 result => M,
                 reason => E
@@ -479,6 +480,7 @@ dispatch_for_uri_lookup1([{Name, Pattern, Controller, DispatchOptions}|T], Dict)
 dispatch_for_uri_lookup1([IllegalDispatch|T], Dict) ->
     ?LOG_ERROR(#{
         text => <<"Dispatcher dropping malformed dispatch rule">>,
+        in => zotonic_core,
         result => error,
         reason => malformed,
         dispatch_rule => IllegalDispatch
@@ -498,6 +500,7 @@ make_url_for(Name, Args, Escape, UriLookup) ->
                 #dispatch_url{ url = undefined } = DispUrl when Name =/= image->
                     ?LOG_INFO(#{
                         text => <<"Dispatcher make_url_for failed">>,
+                        in => zotonic_core,
                         dispatch_rule => Name1,
                         args => Args1,
                         patterns => Patterns,

@@ -79,6 +79,7 @@ log(#http_log_access{
 log(#http_log_access{ metrics = Metrics }) ->
     ?LOG_DEBUG(#{
         text => <<"z_syslog_logger: could not log metrics">>,
+        in => zotonic_mod_syslog,
         metrics => Metrics
     }),
     ok.

@@ -139,6 +139,7 @@ addsite_check_git(Name, Options, Context) ->
                         Error ->
                             ?LOG_ERROR(#{
                                 text => <<"[zotonic_site_status] Could not checkout Git repository">>,
+                                in => zotonic_mod_zotonic_site_management,
                                 site => Name,
                                 git_url => Git,
                                 site_dir => site_dir(Name),
@@ -264,6 +265,7 @@ copy_skeleton_dir(From, To, Options, Context) ->
                                                 {error, Reason} ->
                                                     ?LOG_ERROR(#{
                                                         text => <<"[zotonic_site_status] Error creating directory">>,
+                                                        in => zotonic_mod_zotonic_site_management,
                                                         directory => ToPath,
                                                         result => error,
                                                         reason => Reason
@@ -323,6 +325,7 @@ copy_file("zotonic_site.config.in", FromPath, ToPath, Options) ->
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 text => <<"[zotonic_site_status] Error writing site config file">>,
+                in => zotonic_mod_zotonic_site_management,
                 result => error,
                 reason => Reason,
                 filename => FnConfig

@@ -118,6 +118,7 @@ expand_mediaclass_checksum(Checksum, Props) ->
             [] ->
                 ?LOG_WARNING(#{
                     text => <<"mediaclass expand for unknown mediaclass checksum">>,
+                    in => zotonic_core,
                     result => error,
                     reason => checksum,
                     mediaclass => Class,
@@ -327,6 +328,7 @@ consult_file(Path) ->
             % log an error and continue
             ?LOG_ERROR(#{
                 text => <<"Error consulting media class file">>,
+                in => zotonic_core,
                 file => Path,
                 result => error,
                 reason => Reason

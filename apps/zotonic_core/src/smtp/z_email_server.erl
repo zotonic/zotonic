@@ -340,6 +340,7 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
         {aborted, Reason} ->
             ?LOG_WARNING(#{
                 text => <<"Could not handle bounced messages">>,
+                in => zotonic_core,
                 src => Peer,
                 bounce_email => BounceEmail,
                 reason => Reason
@@ -423,6 +424,7 @@ code_change(_OldVsn, State, _Extra) ->
 handle_delivery_report(permanent_failure, MsgId, Recipient, OptMessage, Context) ->
     ?LOG_WARNING(#{
         text => <<"Permanent failure sending email">>,
+        in => zotonic_core,
         recipient => Recipient,
         message_id => MsgId,
         message => OptMessage
@@ -452,6 +454,7 @@ handle_delivery_report(permanent_failure, MsgId, Recipient, OptMessage, Context)
 handle_delivery_report(temporary_failure, MsgId, Recipient, OptMessage, Context) ->
     ?LOG_WARNING(#{
         text => <<"Temporary failure sending email">>,
+        in => zotonic_core,
         recipient => Recipient,
         message_id => MsgId,
         message => OptMessage
@@ -480,6 +483,7 @@ handle_delivery_report(Status, MsgId, Recipient, OptMessage, Context)
     when Status =:= sent; Status =:= relayed ->
     ?LOG_NOTICE(#{
         text => <<"Success sending email">>,
+        in => zotonic_core,
         recipient => Recipient,
         message_id => MsgId,
         state => Status
@@ -505,6 +509,7 @@ handle_delivery_report(Status, MsgId, Recipient, OptMessage, Context)
 handle_delivery_report(received, MsgId, Recipient, OptMessage, Context) ->
     ?LOG_NOTICE(#{
         text => <<"Success sending email">>,
+        in => zotonic_core,
         recipient => Recipient,
         message_id => MsgId,
         status => received
@@ -681,6 +686,7 @@ spawn_send_check_email(Id, Recipient, Email, RetryCt, Context, State) ->
                         false ->
                             ?LOG_NOTICE(#{
                                 text => <<"Dropping email to invalid address">>,
+                                in => zotonic_core,
                                 recipient => Recipient
                             }),
                             %% delete email from the queue and notify the system
@@ -690,6 +696,7 @@ spawn_send_check_email(Id, Recipient, Email, RetryCt, Context, State) ->
                 false ->
                     ?LOG_NOTICE(#{
                         text => <<"Dropping email from disabled sender">>,
+                        in => zotonic_core,
                         recipient => Recipient,
                         sender => z_acl:user(Context)
                     }),
@@ -699,6 +706,7 @@ spawn_send_check_email(Id, Recipient, Email, RetryCt, Context, State) ->
         {error, Template} ->
             ?LOG_WARNING(#{
                 text => <<"Delayed sending email because template is not available">>,
+                in => zotonic_core,
                 template => Template
             }),
             State
@@ -815,6 +823,7 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
         true ->
             ?LOG_NOTICE(#{
                 text => <<"[smtp] Dropping email to blocked address">>,
+                in => zotonic_core,
                 result => error,
                 reason => blocked,
                 email => RecipientEmail
@@ -877,6 +886,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
         {error, wait} ->
             ?LOG_INFO(#{
                 text => <<"Delaying email send: too many parallel senders for relay">>,
+                in => zotonic_core,
                 recipient => RecipientEmail,
                 message_id => Id,
                 relay => Relay
@@ -909,6 +919,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                 {error, Reason, {FailureType, Host, Message}} ->
                     ?LOG_ERROR(#{
                         text => <<"Error sending email">>,
+                        in => zotonic_core,
                         recipient => RecipientEmail,
                         relay => Relay,
                         result => error,
@@ -963,6 +974,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                 {error, Reason} ->
                     ?LOG_ERROR(#{
                         text => <<"Error sending email">>,
+                        in => zotonic_core,
                         recipient => RecipientEmail,
                         result => error,
                         reason => Reason
@@ -989,6 +1001,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     Receipt1 = z_string:trim(Receipt),
                     ?LOG_NOTICE(#{
                         text => <<"Sent email">>,
+                        in => zotonic_core,
                         result => ok,
                         recipient => RecipientEmail,
                         message => Receipt1
@@ -1056,6 +1069,7 @@ send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts) ->
     {relay, Relay} = proplists:lookup(relay, SmtpOpts),
     ?LOG_INFO(#{
         text => <<"Sending email">>,
+        in => zotonic_core,
         recipient => RecipientEmail,
         message_id => MsgId,
         relay => Relay
@@ -1079,6 +1093,7 @@ send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts) ->
 send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts) ->
     ?LOG_NOTICE(#{
         text => <<"Bounce error, retrying without TLS">>,
+        in => zotonic_core,
         recipient => RecipientEmail,
         relay => proplists:get_value(relay, SmtpOpts)
     }),
@@ -1367,6 +1382,7 @@ mark_sent(Id) ->
         {aborted, Reason} ->
             ?LOG_NOTICE(#{
                 text => <<"Could not mark message as sent">>,
+                in => zotonic_core,
                 message_id => id,
                 reason => Reason
             }),
@@ -1389,6 +1405,7 @@ delete_emailq(Id) ->
         {atomic, NotOk} ->
             ?LOG_NOTICE(#{
                 text => <<"Could not delete message">>,
+                in => zotonic_core,
                 message_id => Id,
                 reason => NotOk
             }),
@@ -1396,6 +1413,7 @@ delete_emailq(Id) ->
         {aborted, Reason} ->
             ?LOG_NOTICE(#{
                 text => <<"Could not delete message">>,
+                in => zotonic_core,
                 message_id => Id,
                 reason => Reason
             }),
@@ -1454,6 +1472,7 @@ delete_sent_messages(StatusSites, State) ->
         {aborted, Reason} ->
             ?LOG_NOTICE(#{
                 text => <<"Could not delete sent messages">>,
+                in => zotonic_core,
                 reason => Reason
             }),
             ok
@@ -1509,6 +1528,7 @@ delete_failed_messages(StatusSites) ->
         {aborted, Reason} ->
             ?LOG_NOTICE(#{
                 text => <<"Could not delete failed messages">>,
+                in => zotonic_core,
                 reason => Reason
             }),
             ok
@@ -1565,6 +1585,7 @@ send_next_batch(MaxListSize, StatusSites, State) ->
         {aborted, Reason} ->
             ?LOG_NOTICE(#{
                 text => <<"Could not fetch next messages to be sent">>,
+                in => zotonic_core,
                 reason => Reason
             }),
             {false, State}

@@ -55,6 +55,7 @@ task_delete_inactive(RscId, Key, SessionId, Context) ->
                 _Other ->
                     ?LOG_DEBUG(#{
                         text => <<"Deleting unmodified temporary resource">>,
+                        in => zotonic_mod_admin,
                         rsc_id => RscId
                     }),
                     ok = m_rsc:delete(RscId, z_acl:sudo(Context)),
@@ -78,6 +79,7 @@ make_temporary_rsc({ok, _SessionId}, Props, Context) ->
         undefined ->
             ?LOG_WARNING(#{
                 text => <<"filter_temporary_rsc: could not find category">>,
+                in => zotonic_mod_admin,
                 category => Cat
             }),
             undefined;
@@ -111,6 +113,7 @@ make_rsc({error, not_found}, CatId, Props, Context) ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => <<"Can not make temporary resource">>,
+                in => zotonic_mod_admin,
                 result => error,
                 reason => Reason,
                 category_id => CatId,
@@ -121,6 +124,7 @@ make_rsc({error, not_found}, CatId, Props, Context) ->
 make_rsc({error, Reason}, CatId, _Props, _Context) ->
     ?LOG_ERROR(#{
         text => <<"Can not make temporary resource on storage lookup">>,
+        in => zotonic_mod_admin,
         result => error,
         reason => Reason,
         category_id => CatId

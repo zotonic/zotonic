@@ -59,6 +59,7 @@ request_process(ModulePid, Hostname, SANs, LetsOpts) ->
             Error;
         aborted ->
             ?LOG_ERROR(#{
+                in => zotonic_mod_ssl_letsencrypt,
                 text => <<"LetsEncrypt process aborted">>,
                 result => error,
                 reason => aborted,

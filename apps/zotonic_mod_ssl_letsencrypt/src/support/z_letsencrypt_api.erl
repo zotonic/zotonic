@@ -55,6 +55,7 @@ status(<<"revoked">>)    -> revoked;
 status(Status)       ->
     ?LOG_ERROR(#{
         text => <<"LetsEncrypt: unknown status">>,
+        in => zotonic_mod_ssl_letsencrypt,
         result => error,
         reason => unknown_status,
         status => Status
@@ -243,6 +244,7 @@ account(#{<<"newAccount">> := Uri}, Key, Jws, Opts) ->
 new_order(#{<<"newOrder">> := Uri}, Domains, Key, Jws, Opts) ->
     ?LOG_NOTICE(#{
         text => <<"LetsEncrypt requesting new certificate">>,
+        in => zotonic_mod_ssl_letsencrypt,
         domain => Domains,
         type => dns
     }),

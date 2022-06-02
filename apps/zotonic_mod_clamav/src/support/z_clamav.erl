@@ -102,6 +102,7 @@ do_clam(Command, DataFun) ->
         {error, Reason} = Error ->
             ?LOG_WARNING(#{
                 text => <<"ClamAV: could not connect">>,
+                in => zotonic_mod_clamav,
                 to => ClamIP,
                 port => ClamPort,
                 result => error,
@@ -120,6 +121,7 @@ handle_result({ok, <<"stream: ", Msg/binary>>}) ->
         nomatch ->
             ?LOG_WARNING(#{
                 text => <<"ClamAV: daemon returned unknown message">>,
+                in => zotonic_mod_clamav,
                 result => error,
                 reason => unknown_message,
                 message => Msg

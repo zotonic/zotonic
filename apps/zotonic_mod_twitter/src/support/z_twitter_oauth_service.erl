@@ -86,6 +86,7 @@ auth_user(TWProps, AccessToken, Args) ->
     TwitterUserName = maps:get(<<"screen_name">>, TWProps),
     ?LOG_DEBUG(#{
         text => <<"[twitter] Authenticating">>,
+        in => zotonic_mod_twitter,
         twitter_user_id => TwitterUserId,
         props => TWProps
     }),

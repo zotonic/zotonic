@@ -59,6 +59,7 @@ received(Recipient, ParsedEmail,
         {ok, {LocalPart, LocalTags, Domain, Site}} ->
             ?LOG_INFO(#{
                 text => <<"SMTP received email">>,
+                in => zotonic_listen_smtp,
                 recipient => Recipient,
                 localpart => LocalPart,
                 localtags => LocalTags,
@@ -101,6 +102,7 @@ received(Recipient, ParsedEmail,
                 {ok, MsgId} when is_binary(MsgId) ->
                     ?LOG_INFO(#{
                         text => <<"SMTP received email handled">>,
+                        in => zotonic_listen_smtp,
                         result => ok,
                         recipient => Recipient,
                         message_id => MsgId
@@ -109,6 +111,7 @@ received(Recipient, ParsedEmail,
                 {ok, Other} ->
                     ?LOG_INFO(#{
                         text => <<"SMTP received email handled">>,
+                        in => zotonic_listen_smtp,
                         result => ok,
                         recipient => Recipient,
                         message_id => Other
@@ -117,6 +120,7 @@ received(Recipient, ParsedEmail,
                 ok ->
                     ?LOG_INFO(#{
                         text => <<"SMTP received email handled">>,
+                        in => zotonic_listen_smtp,
                         result => ok,
                         recipient => Recipient,
                         message_id => undefined
@@ -125,6 +129,7 @@ received(Recipient, ParsedEmail,
                 {error, Reason} = Error ->
                     ?LOG_WARNING(#{
                         text => <<"SMTP received email, handler error">>,
+                        in => zotonic_listen_smtp,
                         result => error,
                         reason => Reason,
                         recipient => Recipient
@@ -133,6 +138,7 @@ received(Recipient, ParsedEmail,
                 undefined ->
                     ?LOG_WARNING(#{
                         text => <<"SMTP received email, unhandled assuming unknown recipient">>,
+                        in => zotonic_listen_smtp,
                         result => error,
                         reason => unknown_recipient,
                         recipient => Recipient
@@ -141,6 +147,7 @@ received(Recipient, ParsedEmail,
                 Other ->
                     ?LOG_WARNING(#{
                         text => <<"SMTP received email, unexpected return value">>,
+                        in => zotonic_listen_smtp,
                         result => error,
                         reason => Other,
                         recipient => Recipient
@@ -150,6 +157,7 @@ received(Recipient, ParsedEmail,
         {error, unknown_host} ->
             ?LOG_WARNING(#{
                 text => <<"SMTP received email, dropped">>,
+                in => zotonic_listen_smtp,
                 result => error,
                 reason => unknown_host,
                 recipient => Recipient
@@ -158,6 +166,7 @@ received(Recipient, ParsedEmail,
         {error, not_running} ->
             ?LOG_NOTICE(#{
                 text => <<"SMTP received email, host for recipient is not up">>,
+                in => zotonic_listen_smtp,
                 result => warning,
                 reason => not_running,
                 recipient => Recipient

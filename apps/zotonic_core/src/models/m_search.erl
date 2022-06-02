@@ -100,6 +100,7 @@ search(Name, Args, Context) when is_binary(Name), is_map(Args) ->
         throw:Error ->
             ?LOG_ERROR(#{
                 text => <<"Error in m.search">>,
+                in => zotonic_core,
                 result => error,
                 reason => Error,
                 search_name => Name,
@@ -162,6 +163,7 @@ search_deprecated({Name, Props}, _IsPaged = true, Context) when is_atom(Name), i
         throw:Error ->
             ?LOG_ERROR(#{
                 text => <<"Error in m.search">>,
+                in => zotonic_core,
                 result => error,
                 reason => Error,
                 search_name => Name,
@@ -183,6 +185,7 @@ search_deprecated({Name, Props}, _IsPaged = false, Context) when is_atom(Name), 
         throw:Error ->
             ?LOG_ERROR(#{
                 text => <<"Error in m.search">>,
+                in => zotonic_core,
                 result => error,
                 reason => Error,
                 search_name => Name,

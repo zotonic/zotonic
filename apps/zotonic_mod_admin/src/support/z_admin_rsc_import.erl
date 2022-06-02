@@ -39,6 +39,7 @@ event(#postback{ message={import_refresh, Args} }, Context) ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => <<"Error on reimport of resource">>,
+                in => zotonic_mod_admin,
                 rsc_id => Id,
                 result => error,
                 reason => Reason

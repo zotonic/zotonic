@@ -143,6 +143,7 @@ pool_return_connection(Worker, Context) ->
                     z_context:logger_md(Context),
                     ?LOG_ERROR(#{
                         text => <<"Return connection failed.">>,
+                        in => zotonic_core,
                         result => exit,
                         reason => Reason,
                         stack => Stack,
@@ -204,6 +205,7 @@ fetch_conn(Worker, Sql, Parameters, Timeout) ->
                 exit:Reason:Stack ->
                     ?LOG_ERROR(#{
                         text => <<"Fetch connection failed.">>,
+                        in => zotonic_core,
                         result => exit,
                         reason => Reason,
                         stack => Stack,
@@ -261,6 +263,7 @@ handle_call({pool_return_connection_check, CallerPid}, From, #state{
         } = State) ->
     ?LOG_ERROR(#{
         text => <<"Connection return to pool by but still running">>,
+        in => zotonic_core,
         result => error,
         reason => running,
         request_pid => CallerPid,
@@ -305,6 +308,7 @@ handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, Fr
     % for multiple queries.
     ?LOG_ERROR(#{
         text => <<"Connection requested but already using same connection">>,
+        in => zotonic_core,
         result => error,
         reason => busy,
         request_pid => CallerPid,
@@ -321,6 +325,7 @@ handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, _F
     % Deny the request and continue with the running request.
     ?LOG_ERROR(#{
         text => <<"Connection requested but in use by other pid">>,
+        in => zotonic_core,
         result => error,
         reason => busy,
         request_pid => CallerPid,
@@ -350,6 +355,7 @@ handle_call({return_conn, Ref, Pid}, _From,
 handle_call({return_conn, _Ref, Pid}, _From, #state{ busy_pid = undefined } = State) ->
     ?LOG_ERROR(#{
         text => <<"SQL connection returned but not in use.">>,
+        in => zotonic_core,
         request_pid => Pid
     }),
     {reply, {error, idle}, State, timeout(State)};
@@ -357,6 +363,7 @@ handle_call({return_conn, _Ref, Pid}, _From, #state{ busy_pid = undefined } = St
 handle_call({return_conn, _Ref, Pid}, _From, #state{ busy_pid = OtherPid } = State) ->
     ?LOG_ERROR(#{
         text => <<"SQL connection returned but in use by other pid">>,
+        in => zotonic_core,
         result => error,
         reason => busy,
         request_pid => Pid,
@@ -379,6 +386,7 @@ handle_call(get_raw_connection, _From, #state{ conn = Conn } = State) ->
 handle_call(Message, _From, State) ->
     ?LOG_NOTICE(#{
         text => <<"SQL unexpected call message">>,
+        in => zotonic_core,
         request => Message,
         worker_pid => self()
     }),
@@ -397,6 +405,7 @@ handle_info(disconnect, #state{ busy_pid = undefined } = State) ->
     Schema = get_arg(dbschema, State#state.conn_args),
     ?LOG_DEBUG(#{
         text => <<"SQL closing connection">>,
+        in => zotonic_core,
         database => Database,
         schema => Schema,
         worker_pid => self()
@@ -408,6 +417,7 @@ handle_info(disconnect, State) ->
     Schema = get_arg(dbschema, State#state.conn_args),
     ?LOG_ERROR(#{
         text => <<"SQL disconnect whilst busy with query">>,
+        in => zotonic_core,
         result => error,
         reason => disconnect,
         database => Database,
@@ -436,6 +446,7 @@ handle_info(timeout, #state{
     Schema = get_arg(dbschema, State#state.conn_args),
     ?LOG_ERROR(#{
         text => <<"SQL Timeout">>,
+        in => zotonic_core,
         result => error,
         reason => timeout,
         busy_pid => Pid,
@@ -461,6 +472,7 @@ handle_info({'DOWN', _Ref, process, BusyPid, Reason}, #state{
     Schema = get_arg(dbschema, State#state.conn_args),
     ?LOG_NOTICE(#{
         text => <<"SQL caller down during query">>,
+        in => zotonic_core,
         result => error,
         reason => Reason,
         busy_pid => BusyPid,
@@ -483,6 +495,7 @@ handle_info({'DOWN', _Ref, process, ConnPid, Reason}, #state{
     Schema = get_arg(dbschema, State#state.conn_args),
     ?LOG_ERROR(#{
         text => <<"SQL connection drop during query">>,
+        in => zotonic_core,
         result => error,
         reason => Reason,
         busy_pid => BusyPid,
@@ -508,6 +521,7 @@ handle_info({'DOWN', _Ref, process, Pid, Reason}, State) ->
     % Stray 'DOWN' message, might be a race condition.
     ?LOG_NOTICE(#{
         text => <<"SQL got 'DOWN' message from unknown process">>,
+        in => zotonic_core,
         down_pid => Pid,
         down_reason => Reason,
         state => State,
@@ -522,6 +536,7 @@ handle_info({'EXIT', _Pid, _Reason}, State) ->
 handle_info(Info, State) ->
     ?LOG_WARNING(#{
         text => <<"SQL unexpected info message">>,
+        in => zotonic_core,
         message => Info,
         state => State,
         worker_pid => self()
@@ -654,6 +669,7 @@ connect_1(Args, RetryCt, MRef) ->
             {error, Reason} = E ->
                 ?LOG_WARNING(#{
                     text => <<"Database psql connect returned error">>,
+                    in => zotonic_core,
                     database => Database,
                     schema => Schema,
                     username => Username,
@@ -685,6 +701,7 @@ retry(Args, Reason, RetryCt, MRef) ->
     Delay = retry_delay(Reason, RetryCt),
     ?LOG_WARNING(#{
         text => <<"Database psql connect failed">>,
+        in => zotonic_core,
         hostname => Hostname,
         port => Port,
         result => error,
@@ -733,6 +750,7 @@ trace_end(true, Start, Sql, Params, Conn) ->
     Duration = msec() - Start,
     ?LOG_NOTICE(#{
         text => <<"SQL TRACE">>,
+        in => zotonic_core,
         msec => Duration,
         sql => Sql,
         params => Params
@@ -764,11 +782,13 @@ maybe_log_query_plan({ok, [ #column{ name = <<"QUERY PLAN">> } ], Rows}) ->
     Lines = lists:map( fun({R}) -> [ 10, R ] end, Rows ),
     ?LOG_NOTICE(#{
         text => <<"SQL EXPLAIN">>,
+        in => zotonic_core,
         explain => iolist_to_binary(Lines)
     });
 maybe_log_query_plan(Other) ->
     ?LOG_NOTICE(#{
         text => <<"SQL EXPLAIN">>,
+        in => zotonic_core,
         explain => Other
     }),
     ok.

@@ -104,6 +104,7 @@ search(Name, Args, Page, PageLen, Options0, Context) when is_binary(Name), is_ma
                         false ->
                             ?LOG_NOTICE(#{
                                 text => <<"z_search: ignored unknown search query">>,
+                                in => zotonic_core,
                                 name => Name,
                                 args => Args
                             }),
@@ -115,6 +116,7 @@ search(Name, Args, Page, PageLen, Options0, Context) when is_binary(Name), is_ma
                 undefined ->
                     ?LOG_NOTICE(#{
                         text => <<"z_search: ignored unknown search query">>,
+                        in => zotonic_core,
                         name => Name,
                         args => Args
                     }),
@@ -126,6 +128,7 @@ search(Name, Args, Page, PageLen, Options0, Context) when is_binary(Name), is_ma
         undefined ->
             ?LOG_NOTICE(#{
                 text => <<"z_search: ignored unknown search query">>,
+                in => zotonic_core,
                 name => Name,
                 args => Args
             }),
@@ -365,6 +368,7 @@ search_1({SearchName, Props}, Page, PageLen, {Offset, Limit} = OffsetLimit, Cont
             % Not on a page boundary so we can't use the new search, return the empty result.
             ?LOG_NOTICE(#{
                 text => <<"z_search: ignored unknown search query">>,
+                in => zotonic_core,
                 name => SearchName,
                 args => PropsSorted
             }),
@@ -386,6 +390,7 @@ search_1(Name, Page, PageLen, OffsetLimit, Context) when is_atom(Name) ->
 search_1(Name, _Page, _PageLen, _OffsetLimit, _Context) ->
     ?LOG_NOTICE(#{
         text => <<"z_search: ignored unknown search query">>,
+        in => zotonic_core,
         name => Name
     }),
     #search_result{}.
@@ -468,6 +473,7 @@ map_to_options(Map) ->
             (K, V, Acc) ->
                 ?LOG_INFO(#{
                     text => <<"Dropping unknown search option">>,
+                    in => zotonic_core,
                     option => K,
                     value => V
                 }),

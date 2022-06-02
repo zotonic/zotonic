@@ -515,6 +515,7 @@ handle_cast({set_site_status, Site, Status}, #state{ sites = Sites } = State) ->
         {ok, #site_status{ status = CurStatus }} ->
             ?LOG_NOTICE(#{
                 text => <<"Site status change">>,
+                in => zotonic_core,
                 old_status => CurStatus,
                 status => Status
             }, #{ site => Site }),
@@ -522,6 +523,7 @@ handle_cast({set_site_status, Site, Status}, #state{ sites = Sites } = State) ->
         error ->
             ?LOG_NOTICE(#{
                 text => <<"Site status change">>,
+                in => zotonic_core,
                 old_status => unknown,
                 status => Status
             }, #{ site => Site }),
@@ -714,6 +716,7 @@ do_start(Site, #state{ sites = Sites } = State) ->
         error ->
             ?LOG_WARNING(#{
                 action => start_request,
+                in => zotonic_core,
                 result => error,
                 reason => bad_name,
                 text => <<"Requested to start unknown site">>
@@ -726,6 +729,7 @@ do_start_site(#site_status{ site = Site } = SiteStatus) ->
         {true, StartState} ->
             ?LOG_NOTICE(#{
                 text => <<"Site starting">>,
+                in => zotonic_core,
                 action => starting
             }, #{ site => Site }),
             case z_sites_sup:start_site(Site) of
@@ -738,6 +742,7 @@ do_start_site(#site_status{ site = Site } = SiteStatus) ->
                     % seems we have a race condition here
                     ?LOG_ERROR(#{
                         text => <<"Site already started, this shouldn't happen.">>,
+                        in => zotonic_core,
                         result => error,
                         reason => already_started
                     }, #{ site => Site }),
@@ -747,6 +752,7 @@ do_start_site(#site_status{ site = Site } = SiteStatus) ->
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => "Site start failed",
+                        in => zotonic_core,
                         result => error,
                         reason => Reason
                     }, #{ site => Site }),
@@ -816,6 +822,7 @@ handle_down(MRef, Pid, Reason, #state{ site_monitors = Ms } = State) ->
         error ->
             ?LOG_WARNING(#{
                 text => <<"'DOWN' for unknown site">>,
+                in => zotonic_core,
                 result => error,
                 reason => Reason
             }),
@@ -840,6 +847,7 @@ do_site_down(Site, Reason, Sites) ->
         error ->
             ?LOG_WARNING(#{
                 text => <<"'DOWN' for site, but no site status found">>,
+                in => zotonic_core,
                 site => Site,
                 result => error,
                 reason => Reason
@@ -852,6 +860,7 @@ new_status_after_down(_Site, stopping, shutdown) ->
 new_status_after_down(Site, Status, Reason) ->
     ?LOG_ERROR(#{
         text => <<"Site is down">>,
+        in => zotonic_core,
         old_status => Status,
         status => failed,
         reason => Reason
@@ -909,6 +918,7 @@ do_reload_site_config(Site, Sites) ->
         error ->
             ?LOG_INFO(#{
                 text => <<"Requested to reload site config from unknown site">>,
+                in => zotonic_core,
                 site => Site
             }),
             {error, bad_name}
@@ -1034,6 +1044,7 @@ scan_app(App) ->
                 {error, Reason} ->
                     ?LOG_ERROR(#{
                         text => <<"Error reading config files">>,
+                        in => zotonic_core,
                         app => App,
                         result => error,
                         reason => Reason
@@ -1181,6 +1192,7 @@ is_testsandbox_node() ->
 do_load_module(Module, State) ->
     ?LOG_DEBUG(#{
         text => <<"Reloading module">>,
+        in => zotonic_core,
         module => Module
     }),
     do_load_module(is_running_site(Module, State), is_module(Module), Module, State).

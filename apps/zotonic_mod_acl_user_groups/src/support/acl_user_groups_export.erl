@@ -32,6 +32,7 @@ import({acl_export, 1, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules}, Context) -
 import({acl_export, 2, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules, CollabRules, Configs}, Context) ->
     ?LOG_NOTICE(#{
         text => <<"ACL import starting">>,
+        in => zotonic_mod_acl_user_groups,
         user_id => z_acl:user(Context)
     }),
     import_all(content_group, CGs, [], Context),
@@ -52,6 +53,7 @@ import({acl_export, 2, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules, CollabRules
         Configs),
     ?LOG_NOTICE(#{
         text => <<"ACL import done">>,
+        in => zotonic_mod_acl_user_groups,
         user_id => z_acl:user(Context)
     }),
     ok.
@@ -64,6 +66,7 @@ import({acl_export, 2, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules, CollabRules
 export(Context) ->
     ?LOG_NOTICE(#{
         text => <<"ACL export">>,
+        in => zotonic_mod_acl_user_groups,
         user_id => z_acl:user(Context)
     }),
     ensure_name(content_group, Context),
@@ -143,6 +146,7 @@ import_1(Cat, {rsc, IsA, CGName, RscProps}, IdsAcc, Context) ->
         undefined ->
             ?LOG_INFO(#{
                 text => <<"ACL export, inserting named category">>,
+                in => zotonic_mod_acl_user_groups,
                 category_id => Cat1,
                 name => Name
             }),
@@ -172,6 +176,7 @@ import_1(Cat, {rsc, IsA, CGName, RscProps}, IdsAcc, Context) ->
                         true ->
                             ?LOG_INFO(#{
                                 text => <<"ACL export, updating name of category">>,
+                                in => zotonic_mod_acl_user_groups,
                                 category_id => Cat1,
                                 name => Name
                             }),
@@ -204,6 +209,7 @@ ensure_content_group(CGName, IdsAcc, Context) ->
                     },
                     ?LOG_INFO(#{
                         text => <<"ACL export, inserting named content_group">>,
+                        in => zotonic_mod_acl_user_groups,
                         name => CGName
                     }),
                     {ok, Id} = m_rsc:insert(Props, Context),

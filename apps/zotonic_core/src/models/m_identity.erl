@@ -282,6 +282,7 @@ delete_username(undefined, _Context) ->
 delete_username(1, Context) ->
     ?LOG_WARNING(#{
         text => <<"Trying to delete admin username (1)">>,
+        in => zotonic_core,
         user_id => z_acl:user(Context)
     }),
     {error, eacces};
@@ -348,6 +349,7 @@ set_username(undefined, _Username, _Context) ->
 set_username(1, _Username, Context) ->
     ?LOG_WARNING(#{
         text => <<"Trying to set admin username (1)">>,
+        in => zotonic_core,
         user_id => z_acl:user(Context)
     }),
     {error, eacces};
@@ -425,6 +427,7 @@ set_username_pw(undefined, _, _, _) ->
 set_username_pw(1, _, _, Context) ->
     ?LOG_WARNING(#{
         text => <<"Trying to set admin username (1)">>,
+        in => zotonic_core,
         user_id => z_acl:user(Context)
     }),
     {error, eacces};
@@ -484,6 +487,7 @@ set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
         {rollback, {{error, Reason} = Error, Trace}} ->
             ?LOG_ERROR(#{
                 text => <<"Error setting username/password">>,
+                in => zotonic_core,
                 user_id => Id,
                 username => Username,
                 result => error,
@@ -494,6 +498,7 @@ set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 text => <<"Error setting username/password">>,
+                in => zotonic_core,
                 result => error,
                 reason => Reason,
                 user_id => Id,

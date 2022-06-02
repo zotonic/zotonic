@@ -283,6 +283,7 @@ try_bearer(Token, Context) ->
             % Illegal token, maybe throw a 400 here?
             ?LOG_NOTICE(#{
                 text => <<"Could not decode OAuth2 token">>,
+                in => zotonic_mod_oauth2,
                 result => error,
                 reason => Reason,
                 token => Token
@@ -317,6 +318,7 @@ try_token(#{
             % User is disabled, maybe throw a 403 here?
             ?LOG_NOTICE(#{
                 text => <<"Authenticated OAuth2 request for disabled user">>,
+                in => zotonic_mod_oauth2,
                 user_id => UserId,
                 result => error,
                 reason => disabled,

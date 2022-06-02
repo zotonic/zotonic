@@ -160,6 +160,7 @@ error_message(sizelimit, Context) ->
 error_message({Status, Url, Hs, _Size, _Body}, Context) when is_integer(Status), is_list(Hs) ->
     ?LOG_ERROR(#{
         text => <<"HTTP error fetching URL">>,
+        in => zotonic_mod_admin,
         result => error,
         reason => http_status,
         http_status => Status,
@@ -170,6 +171,7 @@ error_message({Status, Url, Hs, _Size, _Body}, Context) when is_integer(Status),
 error_message(R, Context) ->
     ?LOG_WARNING(#{
         text => <<"Unknown media discover error">>,
+        in => zotonic_mod_admin,
         result => error,
         reason => R
     }),

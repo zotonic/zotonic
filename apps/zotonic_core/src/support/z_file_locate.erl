@@ -57,6 +57,7 @@ extract_filters(Path, OptFilters, Context) ->
         undefined ->
             ?LOG_WARNING(#{
                 text => <<"Unsafe path">>,
+                in => zotonic_core,
                 result => error,
                 path => Path
             }),
@@ -76,6 +77,7 @@ extract_filters(Path, OptFilters, Context) ->
                         {error, Reason} ->
                             ?LOG_NOTICE(#{
                                 text => <<"Dropping path">>,
+                                in => zotonic_core,
                                 path => SafePath,
                                 result => error,
                                 reason => Reason
@@ -95,6 +97,7 @@ locate_source(NoRoots, Path, OriginalFile, Filters, Context) when NoRoots =:= un
         {error, Reason} ->
             ?LOG_DEBUG(#{
                 text => <<"Could not find file">>,
+                in => zotonic_core,
                 path => Path,
                 file => OriginalFile,
                 result => error,
@@ -113,6 +116,7 @@ locate_source([ModuleIndex|Roots], Path, OriginalFile, Filters, Context) when is
         {error, eacces} ->
             ?LOG_NOTICE(#{
                 text => <<"No access to file">>,
+                in => zotonic_core,
                 result => error,
                 reason => eacces,
                 path => Path,
@@ -315,6 +319,7 @@ generate_preview(true, Path, OriginalFile, Filters, Medium, Context) ->
                 {error, enoent} ->
                     ?LOG_WARNING(#{
                         text => <<"Convert error: input file disappeared, restarting file entry">>,
+                        in => zotonic_core,
                         result => error,
                         reason => enoent,
                         path => Path,
@@ -326,6 +331,7 @@ generate_preview(true, Path, OriginalFile, Filters, Medium, Context) ->
                 {error, Reason} = Error ->
                     ?LOG_WARNING(#{
                         text => <<"Convert error">>,
+                        in => zotonic_core,
                         result => error,
                         reason => Reason,
                         path => Path
@@ -356,6 +362,7 @@ convert_error_part(Medium, PreviewFilePath, Filters, Context) ->
                 {error, Reason} = Error ->
                     ?LOG_WARNING(#{
                         text => <<"Error generating fallback preview with filters">>,
+                        in => zotonic_core,
                         result => error,
                         reason => Reason,
                         path => PreviewFilePath,
@@ -366,6 +373,7 @@ convert_error_part(Medium, PreviewFilePath, Filters, Context) ->
         {error, enoent} ->
             ?LOG_NOTICE(#{
                 text => <<"Can't find 'images/placeholder.png' for convert error fallback.">>,
+                in => zotonic_core,
                 result => error,
                 reason => enoent
             }),

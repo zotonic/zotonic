@@ -79,6 +79,7 @@ observe_rsc_update(#rsc_update{action=insert, id=Id}, {ok, Props}, Context) ->
                 false ->
                     ?LOG_NOTICE(#{
                         text => <<"User not allowed to insert ", ?EMBED_MIME/binary>>,
+                        in => zotonic_mod_video_embed,
                         result => error,
                         reason => eacces,
                         user_id => z_acl:user(Context),
@@ -417,6 +418,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                 {error, Error} ->
                     ?LOG_ERROR(#{
                         text => <<"Error in add_video_embed">>,
+                        in => zotonic_mod_video_embed,
                         result => error,
                         reason => Error,
                         props => Props,
@@ -494,6 +496,7 @@ videoid_to_image(<<"vimeo">>, EmbedId) ->
         {ok, {StatusCode, _Header, Data}} ->
             ?LOG_WARNING(#{
                 text => <<"Vimeo metadata fetch returned error">>,
+                in => zotonic_mod_video_embed,
                 reason => error,
                 result => StatusCode,
                 date => Data

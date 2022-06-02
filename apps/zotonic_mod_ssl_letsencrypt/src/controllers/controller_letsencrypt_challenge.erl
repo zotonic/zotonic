@@ -48,6 +48,7 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context0) ->
         undefined ->
             ?LOG_WARNING(#{
                 text => <<"Letsencrypt unknown token for host">>,
+                in => zotonic_mod_ssl_letsencrypt,
                 result => error,
                 reason => 404,
                 hostname => m_req:get(host, Context)
@@ -56,6 +57,7 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context0) ->
         Thumbprint ->
             ?LOG_INFO(#{
                 text => <<"Letsencrypt token matched for host">>,
+                in => zotonic_mod_ssl_letsencrypt,
                 result => ok,
                 hostname => m_req:get(host, Context)
             }),

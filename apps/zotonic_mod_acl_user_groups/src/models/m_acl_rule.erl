@@ -302,6 +302,7 @@ map_prop(_K, V, _Context) ->
 delete(Kind, Id, Context) ->
     ?LOG_DEBUG(#{
         text => <<"ACL user groups delete">>,
+        in => zotonic_mod_acl_user_groups,
         user_id => z_acl:user(Context),
         kind => Kind,
         rsc_id => Id
@@ -331,6 +332,7 @@ manage_acl_rule({Type, Props}, Module, Context) ->
 revert(Kind, Context) ->
     ?LOG_WARNING(#{
         text => <<"ACL user groups revert">>,
+        in => zotonic_mod_acl_user_groups,
         user_id => z_acl:user(Context),
         kind => Kind
     }),
@@ -362,6 +364,7 @@ revert(Kind, Context) ->
 publish(Kind, Context) ->
     ?LOG_INFO(#{
         text => <<"ACL user groups publish">>,
+        in => zotonic_mod_acl_user_groups,
         user_id => z_acl:user(Context)
     }),
     T = z_convert:to_list(table(Kind)),
@@ -618,6 +621,7 @@ names_to_ids_row(R, Context) when is_map(R) ->
                                 false ->
                                     ?LOG_NOTICE(#{
                                         text => <<"ACL import dropping rule, due to missing field">>,
+                                        in => zotonic_mod_acl_user_groups,
                                         field => K,
                                         value => Value,
                                         rules => R
@@ -638,6 +642,7 @@ names_to_ids_row(R, Context) when is_map(R) ->
                         _ ->
                             ?LOG_NOTICE(#{
                                 text => <<"ACL import dropping rule, due to missing field">>,
+                                in => zotonic_mod_acl_user_groups,
                                 field => K,
                                 id => Id,
                                 rules => R

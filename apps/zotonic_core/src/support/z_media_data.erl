@@ -47,6 +47,7 @@ file_data(Path, Context) ->
                 Type:Err ->
                     ?LOG_WARNING(#{
                         text => <<"File data error">>,
+                        in => zotonic_core,
                         file => Path,
                         result => Type,
                         reason => Err

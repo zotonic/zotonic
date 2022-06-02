@@ -152,6 +152,7 @@ handle_call({upload, Offset, Data}, _From, State) ->
     catch Type:Error ->
         ?LOG_ERROR(#{
             text => <<"fileuploader: error uploading to file">>,
+            in => zotonic_mod_fileuploader,
             bytes => size(Data),
             filename => State#state.filename,
             size => State#state.size,

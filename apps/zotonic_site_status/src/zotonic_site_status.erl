@@ -59,6 +59,7 @@ observe_auth_validate( #auth_validate{ username = <<"wwwadmin">>, password = Pas
                 true ->
                     ?LOG_INFO(#{
                         text => <<"Zotonic status logon success from allowed IP address">>,
+                        in => zotonic_site_status,
                         result => ok,
                         username => <<"wwwadmin">>,
                         ip => m_req:get(peer, Context)
@@ -67,6 +68,7 @@ observe_auth_validate( #auth_validate{ username = <<"wwwadmin">>, password = Pas
                 false ->
                     ?LOG_ERROR(#{
                         text => <<"Zotonic status logon failure from allowed IP address">>,
+                        in => zotonic_site_status,
                         result => error,
                         reason => password,
                         ip => m_req:get(peer, Context)
@@ -76,6 +78,7 @@ observe_auth_validate( #auth_validate{ username = <<"wwwadmin">>, password = Pas
         false ->
             ?LOG_ERROR(#{
                 text => <<"Zotonic status logon failure from non allowed IP address">>,
+                in => zotonic_site_status,
                 result => error,
                 reason => blocked,
                 ip => m_req:get(peer, Context)
@@ -85,6 +88,7 @@ observe_auth_validate( #auth_validate{ username = <<"wwwadmin">>, password = Pas
 observe_auth_validate( #auth_validate{ username = Username }, Context ) ->
     ?LOG_ERROR(#{
         text => <<"Zotonic status logon failure with non 'wwwadmin' username">>,
+        in => zotonic_site_status,
         result => error,
         reason => pw,
         username => Username,

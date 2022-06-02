@@ -165,6 +165,7 @@ map_topics(Topics, Context) ->
                 {error, Reason} ->
                     ?LOG_NOTICE(#{
                         text => <<"Error on mapping wire topic">>,
+                        in => zotonic_mod_mqtt,
                         result => error,
                         reason => Reason,
                         topic => T

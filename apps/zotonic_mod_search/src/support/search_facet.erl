@@ -494,6 +494,7 @@ qterm_1(Field, Value, Query, Context) ->
         {error, _} = Error ->
             ?LOG_NOTICE(#{
                 text => <<"Unknown facet, dropping query term.">>,
+                in => zotonic_mod_search,
                 facet => Field
             }),
             Error
@@ -532,6 +533,7 @@ extract_op(V) ->
 -spec pivot_all( z:context() ) -> ok.
 pivot_all(Context) ->
     ?LOG_INFO(#{
+        in => zotonic_mod_search,
         text => <<"Faceted search: repivoting facet for all resources">>
     }),
     {ok, _} = z_pivot_rsc:insert_task_after(1, ?MODULE, pivot_batch, facet_pivot_batch, [0], Context),
@@ -743,6 +745,7 @@ has_label_block(#facet_def{ block = Block }, Context) ->
 -spec recreate_table( z:context() ) -> ok | {error, term()}.
 recreate_table(Context) ->
     ?LOG_INFO(#{
+        in => zotonic_mod_search,
         text => <<"Faceted search: recreating facet table">>
     }),
     z_db:q("drop table if exists search_facet cascade", Context),
@@ -930,6 +933,7 @@ template_facets(Context) ->
                 Names ->
                     ?LOG_ERROR(#{
                         text => <<"Blocks with duplicate basenames in facet.tpl">>,
+                        in => zotonic_mod_search,
                         name => Names,
                         result => error,
                         reason => duplicate_blocks

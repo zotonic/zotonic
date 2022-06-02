@@ -90,6 +90,7 @@ testcred(S3Url, S3Key, S3Secret, IsCreateBucket)
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => <<"S3 could not create bucket">>,
+                        in => zotonic_mod_filestore,
                         result => error,
                         reason => Reason,
                         url => S3Url
@@ -113,6 +114,7 @@ testcred_file(S3Url, S3Key, S3Secret)
                 {ok, Mime, OtherData} ->
                     ?LOG_WARNING(#{
                         text => <<"S3 get error, non matching data">>,
+                        in => zotonic_mod_filestore,
                         result => error,
                         reason => data,
                         mime_received => Mime,
@@ -124,6 +126,7 @@ testcred_file(S3Url, S3Key, S3Secret)
                 {error, Reason} = Error ->
                     ?LOG_WARNING(#{
                         text => <<"S3 get error">>,
+                        in => zotonic_mod_filestore,
                         result => error,
                         reason => Reason,
                         url => Url
@@ -133,6 +136,7 @@ testcred_file(S3Url, S3Key, S3Secret)
         {error, Reason} = Error ->
             ?LOG_WARNING(#{
                 text => <<"S3 put error">>,
+                in => zotonic_mod_filestore,
                 result => error,
                 reason => Reason,
                 url => Url
@@ -198,6 +202,7 @@ task_file_to_local(Context) ->
         {ok, N} ->
             ?LOG_NOTICE(#{
                 text => <<"Marked files for move to local">>,
+                in => zotonic_mod_filestore,
                 result => ok,
                 count => N
             }),
@@ -213,6 +218,7 @@ task_file_to_remote(Context) ->
         {ok, N} ->
             ?LOG_NOTICE(#{
                 text => <<"Unmarked files for move to local">>,
+                in => zotonic_mod_filestore,
                 result => ok,
                 count => N
             }),

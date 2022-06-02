@@ -103,6 +103,7 @@ insert(Notification, UserId, ResourceId, Context) ->
 				throw:{error, #error{ severity = error, codename = foreign_key_violation }} ->
 					?LOG_WARNING(#{
 						text => <<"Error on creating a new e-mail address">>,
+		                in => zotonic_mod_email_receive,
 						result => error,
 						reason => foreign_key_violation,
 						user_id => UserId,

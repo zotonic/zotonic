@@ -57,6 +57,7 @@ init([Id, Path, MediaInfo, PathLookup, Context]) ->
     z_context:logger_md(Context),
     ?LOG_DEBUG(#{
         text => <<"Started uploader">>,
+        in => zotonic_mod_filestore,
         src => Path
     }),
     gen_server:cast(self(), start),
@@ -71,6 +72,7 @@ init([Id, Path, MediaInfo, PathLookup, Context]) ->
 handle_call(Msg, _From, State) ->
     ?LOG_ERROR(#{
         text => <<"Unknown call">>,
+        in => zotonic_mod_filestore,
         msg => Msg
     }),
     {reply, {error, unknown_msg}, State}.
@@ -82,6 +84,7 @@ handle_cast(start, #state{lookup = {error, enoent}} = State) ->
 handle_cast(start, #state{path = Path, lookup = {error, Reason}} = State) ->
     ?LOG_ERROR(#{
         text => <<"Filestore upload error reading file">>,
+        in => zotonic_mod_filestore,
         path => Path,
         result => error,
         reason => Reason
@@ -108,6 +111,7 @@ terminate(normal, _State) ->
 terminate({Reason, [{_Mod, _Fun, _Args, _Info} | _] = Stack}, #state{ id = Id, path = Path }) ->
     ?LOG_ERROR(#{
         text => <<"Filestore upload terminated">>,
+        in => zotonic_mod_filestore,
         result => error,
         reason => Reason,
         stack => Stack,
@@ -117,6 +121,7 @@ terminate({Reason, [{_Mod, _Fun, _Args, _Info} | _] = Stack}, #state{ id = Id, p
 terminate(Reason, #state{ id = Id, path = Path }) ->
     ?LOG_ERROR(#{
         text => <<"Filestore upload terminated">>,
+        in => zotonic_mod_filestore,
         result => error,
         reason => Reason,
         id => Id,
@@ -142,6 +147,7 @@ try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInf
                         retry ->
                             ?LOG_NOTICE(#{
                                 text => <<"Filestore upload sleeping 30m for retry">>,
+                                in => zotonic_mod_filestore,
                                 result => warning,
                                 reason => retry,
                                 src => Path
@@ -152,6 +158,7 @@ try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInf
                 undefined ->
                     ?LOG_WARNING(#{
                         text => <<"Filestore no credentials, ignoring queued file">>,
+                        in => zotonic_mod_filestore,
                         src =>  Path
                     }),
                     m_filestore:dequeue(Id, Context),
@@ -176,6 +183,7 @@ handle_upload(Path, Cred, Context) ->
         {ok, #file_info{type=regular, size=0}} ->
             ?LOG_NOTICE(#{
                 text => <<"Not uploading empty file">>,
+                in => zotonic_mod_filestore,
                 src => Path
             }),
             ok;
@@ -185,6 +193,7 @@ handle_upload(Path, Cred, Context) ->
         {ok, #file_info{type=Type}} ->
             ?LOG_ERROR(#{
                 text => <<"Not uploading file because of file type">>,
+                in => zotonic_mod_filestore,
                 result => error,
                 reason => filetype,
                 src => Path,
@@ -194,6 +203,7 @@ handle_upload(Path, Cred, Context) ->
         {error, enoent} ->
             ?LOG_INFO(#{
                 text => <<"Not uploading file because it is not found">>,
+                in => zotonic_mod_filestore,
                 src => Path
             }),
             fatal
@@ -206,6 +216,7 @@ do_upload(#filestore_credentials{service= <<"s3">>, location=Location, credentia
 finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, location=Location}, Context) ->
     ?LOG_INFO(#{
         text => <<"Filestore upload done">>,
+        in => zotonic_mod_filestore,
         src => Path,
         dst => Location,
         service => Service,
@@ -227,6 +238,7 @@ finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, l
         {error, Reason} ->
             ?LOG_WARNING(#{
                 text => <<"Filestore error moving to cache entry">>,
+                in => zotonic_mod_filestore,
                 result => error,
                 reason => Reason,
                 location => Location,
@@ -238,6 +250,7 @@ finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, l
 finish_upload({error, Reason}, Path, _AbsPath, _Size, #filestore_credentials{service=Service, location=Location}, _Context) ->
     ?LOG_ERROR(#{
         text => <<"Filestore upload error">>,
+        in => zotonic_mod_filestore,
         result => error,
         reason => Reason,
         src => Path,
@@ -253,6 +266,7 @@ start_empty_cache_entry(Location) ->
         {error, {already_started, Pid}} ->
             ?LOG_NOTICE(#{
                 text => <<"Duplicate cache entry (will stop & restart)">>,
+                in => zotonic_mod_filestore,
                 location => Location
             }),
             ok = filezcache_entry:delete(Pid),

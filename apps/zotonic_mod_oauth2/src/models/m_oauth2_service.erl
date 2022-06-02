@@ -90,6 +90,7 @@ handle_redirect(StateId, ServiceMod, ServiceData, Args, QArgs, SId, Context) ->
                                 _ ->
                                     ?LOG_ERROR(#{
                                         text => <<"OAuth redirect error when fetching code">>,
+                                        in => zotonic_mod_oauth2,
                                         result => error,
                                         reason => code,
                                         qargs => QArgs
@@ -107,6 +108,7 @@ handle_redirect(StateId, ServiceMod, ServiceData, Args, QArgs, SId, Context) ->
                         Error ->
                             ?LOG_ERROR(#{
                                 text => <<"OAuth redirect error">>,
+                                in => zotonic_mod_oauth2,
                                 result => error,
                                 reason => Error,
                                 qargs => QArgs
@@ -116,6 +118,7 @@ handle_redirect(StateId, ServiceMod, ServiceData, Args, QArgs, SId, Context) ->
                 Error ->
                     ?LOG_ERROR(#{
                         text => <<"OAuth redirect error">>,
+                        in => zotonic_mod_oauth2,
                         result => error,
                         reason => Error,
                         qargs => QArgs
@@ -132,6 +135,7 @@ access_token({ok, #{ <<"access_token">> := _ } = AccessData}, ServiceMod, Args, 
 access_token({ok, #{} = AccessData}, ServiceMod, _Args, _SId, _Context) ->
     ?LOG_WARNING(#{
         text => <<"OAuth2 access token with unknown return">>,
+        in => zotonic_mod_oauth2,
         result => error,
         reason => unknown_data,
         service => ServiceMod,
@@ -150,6 +154,7 @@ user_data({ok, Auth}, SId, Context) ->
             % No handler for auth, signups, or signup not accepted
             ?LOG_WARNING(#{
                 text => <<"Undefined auth_user return for user">>,
+                in => zotonic_mod_oauth2,
                 result => error,
                 reason => auth_user_undefined,
                 props => Auth
@@ -166,6 +171,7 @@ user_data({ok, Auth}, SId, Context) ->
                 {error, Reason} = Err ->
                     ?LOG_WARNING(#{
                         text => <<"Error return for user">>,
+                        in => zotonic_mod_oauth2,
                         result => error,
                         reason => Reason,
                         props => Auth
@@ -187,6 +193,7 @@ user_data({ok, Auth}, SId, Context) ->
         {error, {duplicate_email, Email}} ->
             ?LOG_NOTICE(#{
                 text => <<"User with email already exists">>,
+                in => zotonic_mod_oauth2,
                 email => Email,
                 result => error,
                 reason => duplicate_email
@@ -195,6 +202,7 @@ user_data({ok, Auth}, SId, Context) ->
         {error, Reason} = Err ->
             ?LOG_WARNING(#{
                 text => <<"Error return for user">>,
+                in => zotonic_mod_oauth2,
                 auth => Auth,
                 result => error,
                 reason => Reason

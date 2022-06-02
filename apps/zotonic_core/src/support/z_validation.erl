@@ -120,6 +120,7 @@ validate_query_args(Context) ->
                 {error, Reason} ->
                     ?LOG_ERROR(#{
                         text => <<"Error validating query args">>,
+                        in => zotonic_core,
                         result => error,
                         reason => Reason,
                         qargs => QArgs

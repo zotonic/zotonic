@@ -62,6 +62,7 @@ spamcheck(EncodedMail, SpamDServer, SpamDPort) when is_tuple(SpamDServer), is_in
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => <<"spamcheck error">>,
+                        in => zotonic_listen_smtp,
                         result => error,
                         reason => Reason
                     }),
@@ -70,6 +71,7 @@ spamcheck(EncodedMail, SpamDServer, SpamDPort) when is_tuple(SpamDServer), is_in
         {error, Reason} = Err ->
             ?LOG_ERROR(#{
                 text => <<"SMTP spam check: can not connect to spamd">>,
+                in => zotonic_listen_smtp,
                 to => SpamDServer,
                 port => SpamDPort,
                 result => error,

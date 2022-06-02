@@ -195,6 +195,7 @@ handle_confirm(UserId, SignupProps, RequestConfirm, Context) ->
                 {error, Reason} ->
                     ?LOG_ERROR(#{
                         text => <<"Error making onetime token">>,
+                        in => zotonic_mod_signup,
                         result => error,
                         reason => Reason
                     }),

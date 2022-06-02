@@ -42,6 +42,7 @@ generate1([{Module, Dirname, Labels}|ModuleLabels]) ->
             generate1(ModuleLabels);
         {error, Reason} ->
             ?LOG_WARNING(#{
+                in => zotonic_mod_translation,
                 text => <<"Could not create directory for .pot files">>,
                 result => error,
                 reason => Reason,

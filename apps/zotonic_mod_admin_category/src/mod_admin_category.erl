@@ -114,6 +114,7 @@ delete_all([Id|Ids], N, Total, Context) ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => <<"mod_admin_category: could not delete resource">>,
+                in => zotonic_mod_admin,
                 result => error,
                 reason => Reason,
                 rsc_id => Id
@@ -122,6 +123,7 @@ delete_all([Id|Ids], N, Total, Context) ->
         Error ->
             ?LOG_ERROR(#{
                 text => <<"mod_admin_category: could not delete resource">>,
+                in => zotonic_mod_admin,
                 result => error,
                 reason => Error,
                 rsc_id => Id

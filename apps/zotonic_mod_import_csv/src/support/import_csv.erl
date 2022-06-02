@@ -167,6 +167,7 @@ import_parts(Row, RowNr, [Def | Definitions], ImportState, Context) ->
         throw:{import_error, ImportError} ->
             ?LOG_ERROR(#{
                 text => <<"Error importing CSV row data">>,
+                in => zotonic_mod_import_csv,
                 result => error,
                 reason => ImportError,
                 row_nr => RowNr,
@@ -208,6 +209,7 @@ import_def_rsc_1_cat(Row, Callbacks, State, Context) ->
         false ->
             ?LOG_WARNING(#{
                 text => <<"import_csv: missing required attributes">>,
+                in => zotonic_mod_import_csv,
                 name => Name,
                 result => error,
                 reason => missing_attributes
@@ -218,6 +220,7 @@ import_def_rsc_1_cat(Row, Callbacks, State, Context) ->
 import_def_rsc_2_name(insert_rsc, State, Name, CategoryName, NormalizedRowMap, Callbacks, Context) ->
     ?LOG_DEBUG(#{
         text => <<"import_csv: importing resource">>,
+        in => zotonic_mod_import_csv,
         name => Name,
         category_name => CategoryName
     }),
@@ -235,6 +238,7 @@ import_def_rsc_2_name(insert_rsc, State, Name, CategoryName, NormalizedRowMap, C
         {error, Reason} = E ->
             ?LOG_WARNING(#{
                 text => <<"import_csv: could not insert resource">>,
+                in => zotonic_mod_import_csv,
                 name => Name,
                 category_name => CategoryName,
                 result => error,
@@ -250,6 +254,7 @@ import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRowMap, Callbacks
         PrevChecksum when not State#importstate.is_reset ->
             ?LOG_INFO(#{
                 text => <<"import_csv: skipping row (importing same values)">>,
+                in => zotonic_mod_import_csv,
                 name => Name,
                 rsc_id => Id,
                 category_name => CategoryName
@@ -258,6 +263,7 @@ import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRowMap, Callbacks
         Checksum ->
             ?LOG_INFO(#{
                 text => <<"import_csv: updating resource">>,
+                in => zotonic_mod_import_csv,
                 name => Name,
                 category_name => CategoryName,
                 rsc_id => Id
@@ -394,6 +400,7 @@ import_do_edge(Id, Row, {{PredCat, PredRowField}, ObjectDefinition}, State, Cont
                 {undefined, _State1} ->
                     ?LOG_WARNING(#{
                         text => <<"Import CSV: edge predicate does not exist">>,
+                        in => zotonic_mod_import_csv,
                         result => error,
                         reason => predicate,
                         name => Name,
@@ -431,6 +438,7 @@ import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField, ObjectProps}}, S
                 {undefined, _State1} ->
                     ?LOG_DEBUG(#{
                         text => <<"Import CSV: creating object">>,
+                        in => zotonic_mod_import_csv,
                         category => ObjectCat,
                         name => Name,
                         subject_id => Id

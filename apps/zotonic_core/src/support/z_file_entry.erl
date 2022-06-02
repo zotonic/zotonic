@@ -265,6 +265,7 @@ stopping({call, _From}, lookup, State) ->
 stopping(timeout, _, State) ->
     ?LOG_DEBUG(#{
         text => <<"Stop file entry">>,
+        in => zotonic_core,
         filename => State#state.request_path
     }),
     {stop, normal, State};
@@ -310,6 +311,7 @@ handle_event(info, {gzip, Ref, Data}, StateName, #state{gzipper=Ref} = State) ->
 handle_event(info, {gzip, _Ref, _Data}, StateName, State) ->
     ?LOG_DEBUG(#{
         text => <<"Unexpected gzip info message">>,
+        in => zotonic_core,
         state => StateName
     }),
     {next_state, StateName, State};
@@ -323,6 +325,7 @@ handle_event(info, {'DOWN', MRef, process, _Pid, _Info}, StateName, State) ->
 handle_event(EventType, EventContent, StateName, State) ->
     ?LOG_ERROR(#{
         text => <<"Unexpected event">>,
+        in => zotonic_core,
         event => EventType,
         event_content => EventContent,
         state => StateName
@@ -556,6 +559,7 @@ minify_m(Filename, Data, MinifyModule) ->
                 Reason ->
                     ?LOG_WARNING(#{
                         text => <<"Could not minify file">>,
+                        in => zotonic_core,
                         result => error,
                         reason => Reason,
                         filename => Filename
@@ -580,6 +584,7 @@ locate_enoent(State, IndexRef, Mime) ->
     },
     ?LOG_DEBUG(#{
         text => <<"File not found">>,
+        in => zotonic_core,
         file => State#state.request_path
     }),
     {next_state, serving, reply_waiting(State1), ?SERVING_ENOENT_TIMEOUT}.

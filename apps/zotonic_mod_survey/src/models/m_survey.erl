@@ -269,6 +269,7 @@ replace_survey_submission(SurveyId, AnswerId, Answers, Context) when is_integer(
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => <<"Error updating survey submission">>,
+                in => zotonic_mod_survey,
                 result => error,
                 reason => Reason,
                 rsc_id => SurveyId,
@@ -414,6 +415,7 @@ prep_chart(Type, Block, Stats, Context) ->
         undefined ->
             ?LOG_WARNING(#{
                 text => <<"Not preparing chart because there is no known question handler">>,
+                in => zotonic_mod_survey,
                 result => error,
                 reason => handler,
                 type => Type,

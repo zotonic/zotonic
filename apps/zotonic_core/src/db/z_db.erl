@@ -198,12 +198,14 @@ transaction(Function, Options, Context) ->
                 true ->
                     ?LOG_ERROR(#{
                         text => <<"DEADLOCK on database transaction, NO RETRY">>,
+                        in => zotonic_core,
                         stack => Stack
                     }),
                     DeadlockError;
                 _False ->
                     ?LOG_WARNING(#{
                         text => <<"DEADLOCK on database transaction, will retry">>,
+                        in => zotonic_core,
                         stack => Stack
                     }),
                     % Sleep random time, then retry transaction
@@ -250,6 +252,7 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                         E:Why:S ->
                             ?LOG_ERROR(#{
                                 text => <<"Error on database transaction">>,
+                                in => zotonic_core,
                                 result => E,
                                 reason => Why,
                                 stack => S
@@ -523,6 +526,7 @@ qmap(Sql, Args, Options, Context) ->
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => <<"z_db error in query">>,
+                        in => zotonic_core,
                         result => error,
                         reason => Reason,
                         query => Sql,
@@ -561,6 +565,7 @@ qmap_props(Sql, Args, Options, Context) ->
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => <<"z_db error in query">>,
+                        in => zotonic_core,
                         result => error,
                         reason => Reason,
                         query => Sql,
@@ -638,6 +643,7 @@ q(Sql, Parameters, Context, Timeout) ->
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => <<"z_db error in query">>,
+                        in => zotonic_core,
                         result => error,
                         reason => Reason,
                         query => Sql,
@@ -668,6 +674,7 @@ q1(Sql, Parameters, Context, Timeout) ->
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => <<"z_db error in query">>,
+                        in => zotonic_core,
                         result => error,
                         reason => Reason,
                         query => Sql,

@@ -175,6 +175,7 @@ make_cert_bg(Domain, Opts=#{async := Async}) ->
         {error, Err} ->
             ?LOG_ERROR(#{
                 text => <<"LetsEncrypt error making cert">>,
+                in => zotonic_mod_ssl_letsencrypt,
                 result => error,
                 reason => Err,
                 domain => Domain
@@ -283,6 +284,7 @@ idle({call, From}, {create, Domain, CertOpts}, State=#state{directory=Dir, key=K
         #{ <<"type">> := <<"urn:ietf:params:acme:error:", _/binary>> = Type } ->
             ?LOG_ERROR(#{
                 text => <<"LetsEncrypt] error for cert delivery">>,
+                in => zotonic_mod_ssl_letsencrypt,
                 result => error,
                 reason => invalid,
                 domain => Domain,
@@ -415,6 +417,7 @@ maybe_log_status(Status, #{
     }) ->
     ?LOG_ERROR(#{
         text => <<"LetsEncrypt status error returned">>,
+        in => zotonic_mod_ssl_letsencrypt,
         result => error,
         status => Status,
         hostname => Hostname,
@@ -424,6 +427,7 @@ maybe_log_status(Status, #{
 maybe_log_status(Status, JSON) ->
     ?LOG_ERROR(#{
         text => <<"LetsEncrypt status error in response">>,
+        in => zotonic_mod_ssl_letsencrypt,
         result => error,
         status => Status,
         fin_order => JSON
@@ -515,6 +519,7 @@ finalize(cast, Msg, State) ->
 finalize({call, From}, Status, State) ->
     ?LOG_ERROR(#{
         text => <<"LetsEncrypt unknown finalize status">>,
+        in => zotonic_mod_ssl_letsencrypt,
         result => error,
         reason => unknown_status,
         status => Status
@@ -596,6 +601,7 @@ getopts([{http_timeout, Timeout}|Args], State) ->
 getopts([Unk|_], _) ->
     ?LOG_WARNING(#{
         text => <<"LetsEncrypt: unknown parameter">>,
+        in => zotonic_mod_ssl_letsencrypt,
         result => error,
         reason => badarg,
         parameter => Unk

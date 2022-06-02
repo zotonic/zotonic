@@ -67,6 +67,7 @@ event(#submit{ message={merge, Args} }, Context) ->
     IsMergeTrans = z_convert:to_bool(z_context:get_q("is_merge_trans", Context)),
     ?LOG_INFO(#{
         text => <<"Merge resources">>,
+        in => zotonic_mod_admin_merge,
         action => MergeAction,
         winner_id => WinnerId,
         loser_id => LoserId,

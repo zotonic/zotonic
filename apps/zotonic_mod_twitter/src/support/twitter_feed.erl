@@ -161,6 +161,7 @@ get_tweet(TweetId, Context) when is_integer(TweetId) ->
 fetch(API, Args, Context) ->
     ?LOG_DEBUG(#{
         text => <<"Twitter: fetching from API">>,
+        in => zotonic_mod_twitter,
         api => API,
         args => Args
     }),

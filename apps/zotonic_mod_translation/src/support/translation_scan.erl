@@ -79,6 +79,7 @@ scan_file(".tpl", File) ->
             normalize_line_info(Translations);
         {error, Reason} ->
             ?LOG_ERROR(#{
+                in => zotonic_mod_translation,
                 text => <<"POT generation, template error">>,
                 filename => File,
                 result => error,
@@ -96,6 +97,7 @@ scan_file(".erl", File) ->
             parse_erl(File, Epp);
         {error, Reason} ->
             ?LOG_ERROR(#{
+                in => zotonic_mod_translation,
                 text => <<"POT generation, erlang error">>,
                 result => error,
                 reason => Reason,

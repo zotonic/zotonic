@@ -93,6 +93,7 @@ gps([{ratio,D,DFrac},{ratio,M,MFrac},{ratio,S,SFrac}] = Ratios) ->
         _:_ ->
             ?LOG_NOTICE(#{
                 text => <<"mod_media_exif: illegal ratios">>,
+                in => zotonic_mod_media_exif,
                 ratios => Ratios
             }),
             undefined

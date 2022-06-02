@@ -39,6 +39,7 @@ import_tweet(#{ <<"id">> := TweetId } = Tweet, AuthorId, Context) ->
 import_tweet(Tweet, _AuthorId, _Context) ->
     ?LOG_WARNING(#{
         text => <<"Twitter: received unknown tweet data">>,
+        in => zotonic_mod_twitter,
         result => error,
         reason => tweet_format,
         tweet => Tweet
@@ -60,6 +61,7 @@ import_rsc(undefined, TweetId, UniqueName, AuthorId, Tweet, Context) ->
 import_rsc(_RscId, TweetId, _UniqueName, _AuthorId, _Tweet, _Context) ->
     ?LOG_DEBUG(#{
         text => <<"Twitter: ignored duplicate tweet">>,
+        in => zotonic_mod_twitter,
         tweet_id => TweetId
     }),
     {error, duplicate}.
@@ -80,6 +82,7 @@ do_import_rsc(TweetId, ImportRsc, AuthorId, Tweet, Context) ->
     maybe_author(Result, AuthorId, Tweet, AdminContext),
     ?LOG_INFO(#{
         text => <<"Twitter: imported tweet for user">>,
+        in => zotonic_mod_twitter,
         tweet_id => TweetId,
         user_id => z_acl:user(Context),
         author_id => AuthorId,

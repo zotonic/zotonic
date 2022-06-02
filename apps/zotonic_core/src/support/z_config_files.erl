@@ -107,12 +107,14 @@ security_dir_1() ->
                 true ->
                     ?LOG_INFO(#{
                         text => <<"Created security directory">>,
+                        in => zotonic_core,
                         path => SecurityDir
                     }),
                     {ok, SecurityDir};
                 false ->
                     ?LOG_ERROR(#{
                         text => <<"Could not create security directory">>,
+                        in => zotonic_core,
                         path => SecurityDir
                     }),
                     {error, enoent}
@@ -173,12 +175,14 @@ logs_dir_1() ->
                 true ->
                     ?LOG_INFO(#{
                         text => <<"Create log directory">>,
+                        in => zotonic_core,
                         path => SystemLogDir
                     }),
                     {ok, SystemLogDir};
                 false ->
                     ?LOG_ERROR(#{
                         text => <<"Could not create log directory">>,
+                        in => zotonic_core,
                         path => SystemLogDir
                     }),
                     {error, enoent}
@@ -239,12 +243,14 @@ data_dir_1() ->
                 true ->
                     ?LOG_INFO(#{
                         text => <<"Created data directory">>,
+                        in => zotonic_core,
                         path => SystemDataDir
                     }),
                     {ok, SystemDataDir};
                 false ->
                     ?LOG_ERROR(#{
                         text => <<"Could not create data directory">>,
+                        in => zotonic_core,
                         path => SystemDataDir
                     }),
                     {error, enoent}
@@ -306,12 +312,14 @@ cache_dir_1() ->
                 true ->
                     ?LOG_INFO(#{
                         text => <<"Created cache directory">>,
+                        in => zotonic_core,
                         path => SystemCacheDir
                     }),
                     {ok, SystemCacheDir};
                 false ->
                     ?LOG_ERROR(#{
                         text => <<"Could not create cache directory">>,
+                        in => zotonic_core,
                         path => SystemCacheDir
                     }),
                     {error, enoent}
@@ -448,6 +456,7 @@ config_dir_find(Node) ->
                 false ->
                     ?LOG_ERROR(#{
                         text => <<"Could not create config directory">>,
+                        in => zotonic_core,
                         path => VersionDir,
                         result => error,
                         reason => not_directory

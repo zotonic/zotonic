@@ -53,6 +53,7 @@ do_import(TmpFile, Reset, OriginalFilename, Context) ->
             Type:E:Stacktrace ->
                 ?LOG_WARNING(#{
                     text => <<"WordPress failed import">>,
+                    in => zotonic_mod_import_wordpress,
                     file => OriginalFilename,
                     result => Type,
                     reason => E,

@@ -82,6 +82,7 @@ fetch_access_token(Code, _AuthData, _Args, _QArgs, Context) ->
         Other ->
             ?LOG_ERROR(#{
                 text => <<"[linkedin] error fetching access token">>,
+                in => zotonic_mod_linkedin,
                 result => error,
                 reason => Other
             }),
@@ -106,6 +107,7 @@ auth_validated(#{ <<"access_token">> := AccessToken } = AccessData, Args, Contex
 auth_user(#{<<"id">> := LinkedInUserId} = Profile, Email, AccessTokenData, Args, _Context) ->
     ?LOG_DEBUG(#{
         text => <<"[linkedin] Authenticating">>,
+        in => zotonic_mod_linkedin,
         linkedin_user_id => LinkedInUserId,
         email => Email
     }),
@@ -157,6 +159,7 @@ fetch_user_data(AccessToken) ->
         {ok, {{_, 401, _}, _Headers, Payload}} = Other ->
             ?LOG_ERROR(#{
                 text => <<"[linkedin] 401 error fetching user data will not retry">>,
+                in => zotonic_mod_linkedin,
                 result => error,
                 reason => 401,
                 payload => Payload
@@ -165,6 +168,7 @@ fetch_user_data(AccessToken) ->
         Other ->
             ?LOG_ERROR(#{
                 text => <<"[linkedin] error fetching user data">>,
+                in => zotonic_mod_linkedin,
                 result => error,
                 reason => Other
             }),
@@ -240,6 +244,7 @@ fetch_email_address(AccessToken) ->
         {ok, {{_, 401, _}, _Headers, Payload}} = Other ->
             ?LOG_ERROR(#{
                 text => <<"[linkedin] 401 error fetching user email will not retry">>,
+                in => zotonic_mod_linkedin,
                 result => error,
                 reason => 401,
                 payload => Payload
@@ -248,6 +253,7 @@ fetch_email_address(AccessToken) ->
         Other ->
             ?LOG_ERROR(#{
                 text => <<"[linkedin] error fetching user email">>,
+                in => zotonic_mod_linkedin,
                 result => error,
                 reason => Other
             }),

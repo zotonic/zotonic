@@ -53,6 +53,7 @@ init_language(Id, Context) ->
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 text => <<"Error during fixing languages, delaying next batch">>,
+                in => zotonic_core,
                 rsc_id => Id,
                 result => error,
                 reason => Reason

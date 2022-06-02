@@ -82,6 +82,7 @@ event(#postback{message={DropTag,DropDelegate}, trigger=TriggerId}, Context) ->
         M2:E:Stack ->
             ?LOG_ERROR(#{
                 text => <<"Error in drop routing">>,
+                in => zotonic_mod_wires,
                 result => M2,
                 reason => E,
                 drop_delegate => DropDelegate,

@@ -141,6 +141,7 @@ fetch_access_token(Code, AuthData, Args, _QArgs, Context) ->
                                 _:_ ->
                                     ?LOG_ERROR(#{
                                         text => <<"OAuth2: could not access token payload">>,
+                                        in => zotonic_mod_oauth2,
                                         result => error,
                                         reason => json,
                                         payload => Body
@@ -150,6 +151,7 @@ fetch_access_token(Code, AuthData, Args, _QArgs, Context) ->
                         {error, Reason} ->
                             ?LOG_ERROR(#{
                                 text => <<"OAuth2: could not fetch access token">>,
+                                in => zotonic_mod_oauth2,
                                 result => error,
                                 reason => Reason
                             }),
@@ -158,6 +160,7 @@ fetch_access_token(Code, AuthData, Args, _QArgs, Context) ->
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => <<"OAuth2: could not fetch consumer for access token">>,
+                        in => zotonic_mod_oauth2,
                         result => error,
                         reason => Reason
                     }),
@@ -166,6 +169,7 @@ fetch_access_token(Code, AuthData, Args, _QArgs, Context) ->
         Found ->
             ?LOG_ERROR(#{
                 text => <<"OAuth2: consumer_id mismatch between AuthData and Args">>,
+                in => zotonic_mod_oauth2,
                 result => error,
                 reason => consumer_id,
                 expected => ConsumerIdBin,

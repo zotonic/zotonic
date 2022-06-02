@@ -185,6 +185,7 @@ maybe_add_depiction(Id, #{ <<"depiction_url">> := Url }, ContextUser)
                         {ok, MediaId} ->
                             ?LOG_INFO(#{
                                 text => <<"Added user depiction from depiction_url">>,
+                                in => zotonic_mod_signup,
                                 result => ok,
                                 user_id => Id,
                                 rsc_id => MediaId,
@@ -195,6 +196,7 @@ maybe_add_depiction(Id, #{ <<"depiction_url">> := Url }, ContextUser)
                         {error, Reason} = Error ->
                             ?LOG_WARNING(#{
                                 text => <<"Could not insert user depiction_url">>,
+                                in => zotonic_mod_signup,
                                 user_id => Id,
                                 result => error,
                                 reason => Reason,
@@ -212,6 +214,7 @@ maybe_add_depiction(Id, #{ <<"depiction_url">> := Url }, ContextUser)
                         {ok, _Id} ->
                             ?LOG_INFO(#{
                                 text => <<"Added medium from depiction_url for user">>,
+                                in => zotonic_mod_signup,
                                 result => ok,
                                 user_id => Id,
                                 rsc_id => Id,
@@ -221,6 +224,7 @@ maybe_add_depiction(Id, #{ <<"depiction_url">> := Url }, ContextUser)
                         {error, Reason} = Error ->
                             ?LOG_WARNING(#{
                                 text => <<"Could not set user medium from depiction_url">>,
+                                in => zotonic_mod_signup,
                                 user_id => Id,
                                 result => error,
                                 reason => Reason,

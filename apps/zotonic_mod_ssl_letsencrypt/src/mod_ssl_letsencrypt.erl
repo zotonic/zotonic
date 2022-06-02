@@ -129,6 +129,7 @@ event(#submit{message = {request_cert, Args}}, Context) ->
                 {error, Reason} ->
                     ?LOG_ERROR(#{
                         text => <<"Could not start Letsencrypt cert request">>,
+                        in => zotonic_mod_ssl_letsencrypt,
                         result => error,
                         reason => Reason,
                         hostname => Hostname,
@@ -299,6 +300,7 @@ handle_info({'DOWN', MRef, process, _Pid, normal}, #state{request_monitor = MRef
 handle_info({'DOWN', MRef, process, _Pid, Reason}, #state{request_monitor = MRef} = State) ->
     ?LOG_ERROR(#{
         text => <<"Letsencrypt went down whilst requesting cert">>,
+        in => zotonic_mod_ssl_letsencrypt,
         result => error,
         reason => Reason,
         hostname => State#state.request_hostname,
@@ -318,6 +320,7 @@ handle_info({'EXIT', _Pid, _Reason}, State) ->
 handle_info(Info, State) ->
     ?LOG_WARNING(#{
         text => <<"Letsencrypt unknown info message">>,
+        in => zotonic_mod_ssl_letsencrypt,
         message => Info
     }),
     {noreply, State}.
@@ -358,6 +361,7 @@ do_load_cert(State) ->
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => <<"Could not decode Letsencrypt crt file">>,
+                        in => zotonic_mod_ssl_letsencrypt,
                         result => error,
                         reason => Reason
                     }),
@@ -379,6 +383,7 @@ invalid_cert_status(State) ->
 handle_letsencrypt_result({ok, LEFiles}, State) ->
     ?LOG_NOTICE(#{
         text => <<"Letsencrypt successfully requested cert">>,
+        in => zotonic_mod_ssl_letsencrypt,
         result => ok,
         hostname => State#state.request_hostname,
         san => State#state.request_san
@@ -407,6 +412,7 @@ handle_letsencrypt_result({ok, LEFiles}, State) ->
 handle_letsencrypt_result({error, Reason}, State) ->
     ?LOG_ERROR(#{
         text => <<"Letsencrypt error whilst requesting cert">>,
+        in => zotonic_mod_ssl_letsencrypt,
         result => error,
         reason => Reason,
         hostname => State#state.request_hostname,
@@ -472,6 +478,7 @@ ssl_options(Context) ->
         {false, false} ->
             ?LOG_NOTICE(#{
                 text => <<"mod_ssl_letsencrypt: no cert and key files, skipping.">>,
+                in => zotonic_mod_ssl_letsencrypt,
                 cert_filename => CertFile,
                 key_filename => KeyFile
             }),
@@ -479,6 +486,7 @@ ssl_options(Context) ->
         {false, true} ->
             ?LOG_NOTICE(#{
                 text => <<"mod_ssl_letsencrypt: no cert file (though there is a key file), skipping.">>,
+                in => zotonic_mod_ssl_letsencrypt,
                 cert_filename => CertFile,
                 key_filename => KeyFile
             }),
@@ -486,6 +494,7 @@ ssl_options(Context) ->
         {true, false} ->
             ?LOG_NOTICE(#{
                 text => <<"mod_ssl_letsencrypt: no key file (though there is a cert file), skipping.">>,
+                in => zotonic_mod_ssl_letsencrypt,
                 cert_filename => CertFile,
                 key_filename => KeyFile
             }),
@@ -541,6 +550,7 @@ check_keyfile(KeyFile, Context) ->
                 text => <<
                     "Need RSA private key file for Letsencrypt. "
                     "Use: `openssl rsa -in letsencrypt/letsencrypt.pem -out letsencrypt/letsencrypt.pem`">>,
+                in => zotonic_mod_ssl_letsencrypt,
                 result => error,
                 reason => need_rsa_private_key,
                 hostname => Hostname,
@@ -552,6 +562,7 @@ check_keyfile(KeyFile, Context) ->
                 [] ->
                     ?LOG_ERROR(#{
                         text => <<"No private keys for Letsencrypt found">>,
+                        in => zotonic_mod_ssl_letsencrypt,
                         result => error,
                         hostname => Hostname,
                         reason => no_private_keys_found,
@@ -564,6 +575,7 @@ check_keyfile(KeyFile, Context) ->
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 text => <<"Cannot read Letsencrypt key file">>,
+                in => zotonic_mod_ssl_letsencrypt,
                 key_file => KeyFile,
                 result => error,
                 hostname => Hostname,
@@ -583,6 +595,7 @@ ensure_key_file(Context) ->
         false ->
             ?LOG_NOTICE(#{
                 text => <<"Generating RSA key for LetsEncrypt">>,
+                in => zotonic_mod_ssl_letsencrypt,
                 key_file => KeyFile
             }),
             ok = z_filelib:ensure_dir(KeyFile),
@@ -605,6 +618,7 @@ ensure_key_file(Context) ->
                 false ->
                     ?LOG_ERROR(#{
                         text => <<"Error generating RSA key for LetsEncrypt">>,
+                        in => zotonic_mod_ssl_letsencrypt,
                         key_file => KeyFile,
                         result => error,
                         reason => Result
@@ -626,6 +640,7 @@ download_cacert(Context) ->
                 CT ->
                     ?LOG_ERROR(#{
                         text => <<"Download of cert file returned unexpected content-type">>,
+                        in => zotonic_mod_ssl_letsencrypt,
                         result => error,
                         reason => content_type,
                         url => ?CA_CERT_URL,
@@ -636,6 +651,7 @@ download_cacert(Context) ->
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 text => <<"Download of cert file failed">>,
+                in => zotonic_mod_ssl_letsencrypt,
                 result => error,
                 reason => Reason,
                 url => ?CA_CERT_URL

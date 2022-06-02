@@ -604,6 +604,7 @@ props2url([{mediaclass,Class}|Rest], Width, Height, Acc, Context) ->
         {ok, [], <<>>} ->
             ?LOG_WARNING(#{
                 text => <<"Ignoring unknown mediaclass">>,
+                in => zotonic_core,
                 mediaclass => Class
             }),
             props2url(Rest, Width, Height, Acc, Context);

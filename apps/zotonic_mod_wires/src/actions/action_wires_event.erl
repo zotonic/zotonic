@@ -140,6 +140,7 @@ script(EventType, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS,
         undefined ->
             ?LOG_ERROR(#{
                 text => <<"Unhandled event type for wires scomp">>,
+                in => zotonic_mod_wires,
                 type => EventType
             }),
             {[], Context}

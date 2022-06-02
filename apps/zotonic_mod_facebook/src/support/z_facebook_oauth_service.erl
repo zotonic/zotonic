@@ -78,6 +78,7 @@ fetch_access_token(Code, _AuthData, _Args, _QArgs, Context) ->
         Other ->
             ?LOG_ERROR(#{
                 text => <<"Facebook error fetching access token">>,
+                in => zotonic_mod_facebook,
                 code => Code,
                 result => error,
                 reason => Other
@@ -92,6 +93,7 @@ auth_validated(#{ <<"access_token">> := AccessToken } = AccessData, Args, _Conte
             FacebookUserId = maps:get(<<"id">>, FBProps),
             ?LOG_DEBUG(#{
                 text => <<"Facebook authenticating">>,
+                in => zotonic_mod_facebook,
                 facebook_user_id => FacebookUserId,
                 facebook_props => FBProps
             }),
@@ -130,6 +132,7 @@ fetch_user_data(AccessToken) ->
         Other ->
             ?LOG_ERROR(#{
                 text => <<"Facebook error fetching user data">>,
+                in => zotonic_mod_facebook,
                 access_token => AccessToken,
                 result => error,
                 reason => Other

@@ -134,6 +134,7 @@ callback(Model, Verb, Path, Msg, Context) ->
         {error, _} = Error ->
             ?LOG_NOTICE(#{
                 text => <<"Publish to unknown model">>,
+                in => zotonic_core,
                 model => Model,
                 verb => Verb,
                 path => Path,
@@ -234,6 +235,7 @@ model_call(Mod, Callback, Path, Msg, Context) ->
                 _ ->
                     ?LOG_ERROR(#{
                         text => <<"Error in model function call">>,
+                        in => zotonic_core,
                         result => error,
                         reason => function_clause,
                         model => Mod,
@@ -250,6 +252,7 @@ model_call(Mod, Callback, Path, Msg, Context) ->
                 _ ->
                     ?LOG_ERROR(#{
                         text => <<"Undef in model call">>,
+                        in => zotonic_core,
                         result => error,
                         reason => undef,
                         model => Mod,

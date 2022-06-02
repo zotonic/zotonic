@@ -97,6 +97,7 @@ fetch_access_token(Code, _AuthData, _Args, _QArgs, Context) ->
         Other ->
             ?LOG_ERROR(#{
                 text => <<"[microsoft] error fetching access token">>,
+                in => zotonic_mod_microsoft,
                 code => Code,
                 result => error,
                 reason => Other
@@ -116,6 +117,7 @@ auth_validated(#{
             MSUserId = maps:get(<<"id">>, UserProps),
             ?LOG_DEBUG(#{
                 text => <<"[microsoft] Authenticating user">>,
+                in => zotonic_mod_microsoft,
                 microsoft_user_id => MSUserId,
                 user_props => UserProps
             }),
@@ -160,6 +162,7 @@ fetch_user_data(AccessToken) ->
         Other ->
             ?LOG_ERROR(#{
                 text => <<"[microsoft] error fetching user data">>,
+                in => zotonic_mod_microsoft,
                 result => error,
                 reason => Other,
                 url => GraphUrl
@@ -190,6 +193,7 @@ fetch_user_photo(AccessToken) ->
         Other ->
             ?LOG_NOTICE(#{
                 text => <<"[microsoft] error fetching user photo">>,
+                in => zotonic_mod_microsoft,
                 result => error,
                 reason => Other,
                 url => GraphUrl

@@ -71,6 +71,7 @@ map_categorized([], Verb, _Application, _What, _Ext, _Root, _Split, Filename) ->
         nomatch ->
             ?LOG_DEBUG(#{
                 text => <<"Unhandled file event">>,
+                in => zotonic_filehandler,
                 verb => Verb,
                 filename => Filename
             })

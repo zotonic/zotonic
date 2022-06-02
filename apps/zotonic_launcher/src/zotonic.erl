@@ -47,6 +47,7 @@ start() ->
         {error, Reason} ->
             ?LOG_EMERGENCY(#{
                 text => <<"Zotonic start error">>,
+                in => zotonic_launcher,
                 result => error,
                 reason => Reason
             }),

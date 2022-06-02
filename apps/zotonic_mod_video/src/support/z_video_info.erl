@@ -39,6 +39,7 @@ info(Path) ->
        ]),
     ?LOG_DEBUG(#{
         text => <<"Video info">>,
+        in => zotonic_mod_video,
         command => FfprobeCmd
     }),
     JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
@@ -63,6 +64,7 @@ info(Path) ->
         error:E ->
             ?LOG_WARNING(#{
                 text => <<"Unexpected ffprobe return">>,
+                in => zotonic_mod_video,
                 command => FfprobeCmd,
                 reason => error,
                 result => E,

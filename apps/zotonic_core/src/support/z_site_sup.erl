@@ -113,6 +113,7 @@ wait_for_db(Site) ->
 wait_for_db(Site, 0) ->
     ?LOG_ERROR(#{
         text => <<"Timeout waiting for database driver">>,
+        in => zotonic_core,
         site => Site
     }),
     {error, timeout};

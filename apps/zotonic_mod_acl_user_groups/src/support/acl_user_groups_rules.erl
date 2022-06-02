@@ -182,6 +182,7 @@ expand_rules(TreeA, Rules, TreeB, _Context) ->
                             Other ->
                                 ?LOG_WARNING(#{
                                     text => <<"ACL tree expand returned unexpected value">>,
+                                    in => zotonic_mod_acl_user_groups,
                                     actor => A,
                                     predicate => Pred,
                                     object => B,

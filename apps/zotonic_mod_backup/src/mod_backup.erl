@@ -372,6 +372,7 @@ pg_dump(Name, Context) ->
                 Output ->
                     ?LOG_WARNING(#{
                         text => <<"backup: pg_dump error">>,
+                        in => zotonic_mod_backup,
                         result => error,
                         reason => pg_dump,
                         output => Output,
@@ -406,6 +407,7 @@ archive(Name, Context) ->
                 Output ->
                      ?LOG_WARNING(#{
                         text => <<"backup: tar error">>,
+                        in => zotonic_mod_backup,
                         result => error,
                         reason => tar,
                         output => Output,

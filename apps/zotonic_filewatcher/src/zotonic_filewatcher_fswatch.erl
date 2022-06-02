@@ -115,6 +115,7 @@ handle_info({stdout, _Port, FilenameFlags}, #state{ data = Data } = State) ->
 handle_info({'DOWN', _Port, process, Pid, Reason}, #state{pid = Pid} = State) ->
     ?LOG_ERROR(#{
         text => <<"[fswatch] fswatch port closed, restarting in 5 seconds.">>,
+        in => zotonic_filewatcher,
         result => error,
         reason => Reason
     }),

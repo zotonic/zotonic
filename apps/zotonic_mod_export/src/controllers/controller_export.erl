@@ -51,6 +51,7 @@ content_types_provided(Context) ->
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 text => <<"mod_export error when fetching content type">>,
+                in => zotonic_mod_export,
                 dispatch => Dispatch,
                 result => Error,
                 reason => Reason

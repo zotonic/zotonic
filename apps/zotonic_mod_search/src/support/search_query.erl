@@ -209,6 +209,7 @@ request_arg(<<"custompivot">>)         ->
 request_arg(Term) ->
     ?LOG_ERROR(#{
         text => <<"Skipping unknown query term">>,
+        in => zotonic_mod_search,
         term => Term
     }),
     undefined.
@@ -607,6 +608,7 @@ qterm({query_id, Id}, Context) ->
         throw:{error,{unknown_query_term,Term}} ->
             ?LOG_ERROR(#{
                 text => <<"Unknown query term in search query">>,
+                in => zotonic_mod_search,
                 result => error,
                 reason => unknown_query_term,
                 query_id => Id,
@@ -1140,6 +1142,7 @@ assure_category_1(Name, Context) ->
                 undefined ->
                     ?LOG_NOTICE(#{
                         text => <<"Query: unknown category">>,
+                        in => zotonic_mod_search,
                         name => Name
                     }),
                     % display_error([ ?__("Unknown category", Context), 32, $", z_html:escape(z_convert:to_binary(Name)), $" ], Context),
@@ -1149,6 +1152,7 @@ assure_category_1(Name, Context) ->
                         undefined ->
                             ?LOG_NOTICE(#{
                                 text => <<"Query: term is not a category">>,
+                                in => zotonic_mod_search,
                                 name => Name
                             }),
                             % display_error([ $", z_html:escape(z_convert:to_binary(Name)), $", 32, ?__("is not a category", Context) ], Context),
@@ -1219,6 +1223,7 @@ pivot_qterm_1(Tab, Col, Value, Query, Context) ->
         {error, Reason} = Error ->
             ?LOG_WARNING(#{
                 text => <<"Pivot value error, dropping query term.">>,
+                in => zotonic_mod_search,
                 result => error,
                 reason => Reason,
                 table => Tab,
@@ -1463,6 +1468,7 @@ predicate_to_id_1(Pred, Context) ->
         {error, _} ->
             ?LOG_NOTICE(#{
                 text => <<"Query: unknown predicate">>,
+                in => zotonic_mod_search,
                 predicate => Pred
             }),
             % display_error([ ?__("Unknown predicate", Context), 32, $", z_html:escape(z_convert:to_binary(Pred)), $" ], Context),

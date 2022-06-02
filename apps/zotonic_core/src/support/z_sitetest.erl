@@ -113,6 +113,7 @@ drop_schema(_Site, Connection, Schema) ->
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 text => <<"z_sitetest: error while dropping schema">>,
+                in => zotonic_core,
                 schema => Schema,
                 result => error,
                 reason => Reason

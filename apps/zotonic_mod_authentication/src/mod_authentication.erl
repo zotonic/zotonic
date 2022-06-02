@@ -59,6 +59,7 @@ event(#submit{ message={signup_confirm, Props} }, Context) ->
         undefined ->
             ?LOG_ERROR(#{
                 text => <<"mod_authentication: 'undefined' return for auth">>,
+                in => zotonic_mod_authentication,
                 result => error,
                 reason => no_auth,
                 auth => Auth
@@ -67,6 +68,7 @@ event(#submit{ message={signup_confirm, Props} }, Context) ->
         {error, Reason} ->
             ?LOG_WARNING(#{
                 text => <<"mod_authentication: Error return for auth">>,
+                in => zotonic_mod_authentication,
                 result => error,
                 reason => Reason,
                 auth => Auth
@@ -338,6 +340,7 @@ try_signup(Auth, Context) ->
                     % No signup accepted
                     ?LOG_WARNING(#{
                         text => <<"Authentication not accepted because no signup handler defined for Auth">>,
+                        in => zotonic_mod_authentication,
                         result => error,
                         reason => no_auth_signup,
                         auth => Auth

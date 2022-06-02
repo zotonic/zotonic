@@ -331,6 +331,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                 {error, {not_found, Name}} ->
                     ?LOG_ERROR(#{
                         text => <<"Survey error, page not found">>,
+                        in => zotonic_mod_survey,
                         result => error,
                         reason => page_not_found,
                         rsc_id => Id,
@@ -341,6 +342,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                 {error, Reason} ->
                     ?LOG_ERROR(#{
                         text => <<"Survey error evaluating submit">>,
+                        in => zotonic_mod_survey,
                         result => error,
                         reason => Reason,
                         page_nr => PageNr,

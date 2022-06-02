@@ -247,6 +247,7 @@ compile_sass(Application, SrcPath) ->
                         {error, Reason} = Error ->
                             ?LOG_ERROR(#{
                                 text => <<"Could not create directory">>,
+                                in => zotonic_filehandler,
                                 path => OutPath,
                                 result => error,
                                 reason => Reason
@@ -313,6 +314,7 @@ compile_less(Application, SrcPath) ->
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => <<"Could not create directory">>,
+                        in => zotonic_filehandler,
                         path => OutPath,
                         result => error,
                         reason => Reason
@@ -345,6 +347,7 @@ compile_coffee(Application, SrcPath) ->
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => <<"Could not create directory">>,
+                        in => zotonic_filehandler,
                         path => OutPath,
                         result => error,
                         reason => Reason

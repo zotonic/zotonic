@@ -51,6 +51,7 @@ event(#submit{message=addsite, form=Form}, Context) ->
     ],
     ?LOG_NOTICE(#{
         text => <<"[zotonic_site_status] Creating site">>,
+        in => zotonic_mod_zotonic_site_management,
         site => Sitename,
         options => Options
     }),
@@ -61,12 +62,14 @@ event(#submit{message=addsite, form=Form}, Context) ->
             _ = z_sites_manager:start(Site),
             ?LOG_NOTICE(#{
                 text => <<"[zotonic_site_status] Success creating site">>,
+                in => zotonic_mod_zotonic_site_management,
                 site => Site
             }),
             case await(Site) of
                 ok ->
                     ?LOG_NOTICE(#{
                         text => <<"[zotonic_site_status] Site is running">>,
+                        in => zotonic_mod_zotonic_site_management,
                         site => Site
                     }),
                     SiteContext = z_context:new(Site),
@@ -82,6 +85,7 @@ event(#submit{message=addsite, form=Form}, Context) ->
                 {error, StartError} ->
                     ?LOG_ERROR(#{
                         text => <<"[zotonic_site_status] Newly created site is NOT running">>,
+                        in => zotonic_mod_zotonic_site_management,
                         site => Site,
                         result => error,
                         reason => StartError

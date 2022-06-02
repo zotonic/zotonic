@@ -172,6 +172,7 @@ error_message(sizelimit, Context) ->
 error_message(R, Context) ->
     ?LOG_WARNING(#{
         text => <<"Unknown page creation or upload error">>,
+        in => zotonic_mod_admin,
         result => error,
         reason => R
     }),
@@ -184,6 +185,7 @@ maybe_add_objects(_Id, undefined, _Context) ->
 maybe_add_objects(_Id, Objects, _Context) ->
     ?LOG_WARNING(#{
         text => <<"action_admin_dialog_new_rsc: objects are not a list">>,
+        in => zotonic_mod_admin,
         objects => Objects
     }),
     ok.

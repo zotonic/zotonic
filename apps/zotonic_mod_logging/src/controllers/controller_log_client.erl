@@ -62,6 +62,7 @@ log(Body, Context) ->
                     m_log_ui:insert_event(LogEvent, Context),
                     ?LOG_INFO(#{
                         text => <<"UI event">>,
+                        in => zotonic_mod_logging,
                         event => Body1
                     });
                 false ->

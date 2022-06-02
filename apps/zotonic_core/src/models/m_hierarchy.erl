@@ -274,6 +274,7 @@ save(Name, Tree, Context) ->
                 {error, Reason} = Error ->
                     ?LOG_WARNING(#{
                         text => <<"[m_hierarchy] Hierarchy save for unknown category">>,
+                        in => zotonic_core,
                         result => error,
                         reason => Reason,
                         name => Name

@@ -83,6 +83,7 @@ malformed_request(Context) ->
                         {error, enoent} ->
                             ?LOG_WARNING(#{
                                 text => <<"MQTT transport with an unknown ticket">>,
+                                in => zotonic_mod_base,
                                 peer_ip => m_req:get(peer, Context),
                                 result => error,
                                 reason => unknown_mqtt_ticket
@@ -185,6 +186,7 @@ websocket_handle({ping, Opaque}, Context) ->
 websocket_handle(Data, Context) ->
     ?LOG_WARNING(#{
         text => <<"MQTT websocket: non binary data received">>,
+        in => zotonic_mod_base,
         data => Data
     }),
     {stop, Context}.
@@ -213,6 +215,7 @@ websocket_info(connect_check, Context) ->
 websocket_info(Msg, Context) ->
     ?LOG_INFO(#{
         text => <<"Unknown message for websocket">>,
+        in => zotonic_mod_base,
         module => ?MODULE,
         message => Msg
     }),

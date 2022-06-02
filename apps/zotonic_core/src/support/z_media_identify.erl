@@ -62,6 +62,7 @@ identify(#upload{tmpfile=undefined, data=Data, filename=Filename}, Context) when
             file:delete(TmpFile),
             ?LOG_WARNING(#{
                 text => <<"z_media_identify: could not write temporary file">>,
+                in => zotonic_core,
                 size => size(Data),
                 file => TmpFile
             }),
@@ -339,6 +340,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                          ++ " 2>&1"),
             ?LOG_NOTICE(#{
                 text => <<"identify of file failed">>,
+                in => zotonic_core,
                 file => CleanedImageFile,
                 result => error,
                 output => Err
@@ -379,6 +381,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                 X:B:Stacktrace ->
                     ?LOG_WARNING(#{
                         text => <<"identify of file failed">>,
+                        in => zotonic_core,
                         file => CleanedImageFile,
                         result => X,
                         reason => B,
@@ -600,6 +603,7 @@ exif(File) ->
         A:B:Stacktrace ->
             ?LOG_ERROR(#{
                 text => <<"Error reading exif data from file">>,
+                in => zotonic_core,
                 result => A,
                 reason => B,
                 filename => File,

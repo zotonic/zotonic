@@ -392,6 +392,7 @@ depickle(Data, Context) ->
         _M:_E ->
             ?LOG_ERROR(#{
                 text => <<"Postback data invalid, could not depickle">>,
+                in => zotonic_core,
                 data => Data
             }),
             erlang:throw({checksum_invalid, Data})

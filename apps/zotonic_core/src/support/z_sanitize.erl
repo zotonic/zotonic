@@ -155,6 +155,7 @@ sanitize_element_opts({comment, <<" z-media ", ZMedia/binary>>}, _Stack, _Opts) 
         _:_ ->
             ?LOG_NOTICE(#{
                 text => <<"Dropping illegal z-media tag">>,
+                in => zotonic_core,
                 zmedia => ZMedia
             }),
             {comment, <<" ">>}
@@ -244,6 +245,7 @@ sanitize_script(Props, Context) ->
         false ->
             ?LOG_NOTICE(#{
                 text => <<"Dropped script with url">>,
+                in => zotonic_core,
                 url => Src
             }),
             <<>>
@@ -261,6 +263,7 @@ sanitize_iframe(Props, Context) ->
         false ->
             ?LOG_NOTICE(#{
                 text => <<"Dropped iframe url">>,
+                in => zotonic_core,
                 url => Src
             }),
             <<>>
@@ -278,6 +281,7 @@ sanitize_object(Props, Context) ->
                 false ->
                     ?LOG_NOTICE(#{
                         text => <<"Dropped object url">>,
+                        in => zotonic_core,
                         url => Src
                     }),
                     <<>>
@@ -296,6 +300,7 @@ sanitize_embed(Props, Context) ->
                 false ->
                     ?LOG_NOTICE(#{
                         text => <<"Dropped embed url">>,
+                        in => zotonic_core,
                         url => Src
                     }),
                     <<>>

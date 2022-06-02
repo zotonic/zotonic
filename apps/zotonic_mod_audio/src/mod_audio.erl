@@ -155,6 +155,7 @@ audio_info(Path) ->
        ]),
     ?LOG_DEBUG(#{
         text => <<"Extract audio info">>,
+        in => zotonic_mod_audio,
         command => FfprobeCmd
     }),
     JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
@@ -172,6 +173,7 @@ audio_info(Path) ->
         error:E ->
             ?LOG_WARNING(#{
                 text => <<"Unexpected ffprobe return">>,
+                in => zotonic_mod_audio,
                 result => error,
                 reason => E,
                 ffprobe_return => JSONText

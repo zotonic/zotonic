@@ -42,6 +42,7 @@ test(Fun, Name, Conn, Sql, Args) ->
     {result, Count} = Fun(Conn, Sql, Args, ?TESTTIME),
     ?LOG_INFO(#{
         text => <<"Query test result">>,
+        in => zotonic_core,
         name => Name,
         query_count => Count,
         msec => ?TESTTIME,

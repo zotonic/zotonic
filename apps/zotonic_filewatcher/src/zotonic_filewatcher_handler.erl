@@ -93,6 +93,7 @@ file_changed(Verb, F) when is_list(F) ->
 file_changed(Verb, F) when is_binary(F) ->
     ?LOG_DEBUG(#{
         text => <<"Filewatcher event">>,
+        in => zotonic_filewatcher,
         verb => Verb,
         filename => F
     }),

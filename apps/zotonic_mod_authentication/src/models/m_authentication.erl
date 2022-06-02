@@ -134,6 +134,7 @@ handle_auth_confirm(Auth, Context) ->
         undefined ->
             ?LOG_WARNING(#{
                 text => <<"mod_authentication: 'undefined' return for auth">>,
+                in => zotonic_mod_authentication,
                 result => error,
                 reason => no_auth,
                 auth => Auth
@@ -149,6 +150,7 @@ handle_auth_confirm(Auth, Context) ->
                 {error, Reason} = Err ->
                     ?LOG_WARNING(#{
                         text => <<"mod_authentication: error return for auth">>,
+                        in => zotonic_mod_authentication,
                         result => error,
                         reason => Reason,
                         auth => Auth
@@ -158,6 +160,7 @@ handle_auth_confirm(Auth, Context) ->
         {error, Reason} ->
             ?LOG_WARNING(#{
                 text => <<"mod_authentication: Error return for auth">>,
+                in => zotonic_mod_authentication,
                 result => error,
                 reason => Reason,
                 auth => Auth
@@ -229,6 +232,7 @@ send_reminder(_Id, undefined, _Context) ->
 send_reminder(1, _Email, _Context) ->
     ?LOG_INFO(#{
         text => <<"Ignoring password reminder request for 'admin' (user 1)">>,
+        in => zotonic_mod_authentication,
         user_id => 1,
         username => <<"admin">>
     }),

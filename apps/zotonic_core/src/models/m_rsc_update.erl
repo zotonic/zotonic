@@ -920,6 +920,7 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
                 false ->
                     ?LOG_INFO(#{
                         text => <<"Dropping non editable language from resource">>,
+                        in => zotonic_core,
                         language => Iso,
                         rsc_id => Id
                     }),
@@ -1085,6 +1086,7 @@ preflight_check_name(Id, #{ <<"name">> := Name }, Context) when Name =/= undefin
         _N ->
             ?LOG_WARNING(#{
                 text => <<"Trying to insert duplicate name">>,
+                in => zotonic_core,
                 name => Name,
                 rsc_id => Id,
                 result => error,
@@ -1103,6 +1105,7 @@ preflight_check_page_path(Id, #{ <<"page_path">> := Path }, Context) when Path =
         _N ->
             ?LOG_WARNING(#{
                 text => <<"Trying to insert duplicate page_path">>,
+                in => zotonic_core,
                 result => error,
                 reason => duplicate_page_path,
                 rsc_id => Id,
@@ -1120,6 +1123,7 @@ preflight_check_uri(Id, #{ <<"uri">> := Uri }, Context) when Uri =/= undefined -
         _N ->
             ?LOG_WARNING(#{
                 text => <<"Trying to insert duplicate uri">>,
+                in => zotonic_core,
                 result => error,
                 reason => duplicate_uri,
                 rsc_id => Id,
@@ -1282,6 +1286,7 @@ props_filter(<<"category_id">>, CatId, Acc, Context) ->
         false ->
             ?LOG_WARNING(#{
                 text => <<"Ignoring unknown category in update, using 'other' instead.">>,
+                in => zotonic_core,
                 category_id => CatId
             }),
             {ok, OtherId} = m_category:name_to_id(other, Context),
@@ -1303,6 +1308,7 @@ props_filter(<<"content_group_id">>, CgId, Acc, Context) ->
         false ->
             ?LOG_WARNING(#{
                 text => <<"Ignoring unknown content group">>,
+                in => zotonic_core,
                 content_group_id => CgId
             }),
             Acc

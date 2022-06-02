@@ -439,6 +439,7 @@ notify_observer(Msg, {_Prio, Pid, _OwnerPid}, true, ContextArg) when is_pid(Pid)
         EM:E:Trace ->
             ?LOG_ERROR(#{
                 text => <<"Error notifying observer">>,
+                in => zotonic_notifier,
                 result => EM,
                 reason => E,
                 pid => Pid,
@@ -464,6 +465,7 @@ notify_observer_fold(Msg, {_Prio, Pid, _OwnerPid}, Acc, ContextArg) when is_pid(
         EM:E:Trace ->
             ?LOG_ERROR(#{
                 text => <<"Error folding observers">>,
+                in => zotonic_notifier,
                 pid => Pid,
                 result => EM,
                 reason => E,

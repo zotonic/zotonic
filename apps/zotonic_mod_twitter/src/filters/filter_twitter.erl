@@ -104,6 +104,7 @@ twitter1_url_html(Pre, Url, Opts) ->
                         _:_ ->
                             ?LOG_INFO(#{
                                 text => <<"Twitter: removed problematic URL from Tweet">>,
+                                in => zotonic_mod_twitter,
                                 url => Url1
                             }),
                             []

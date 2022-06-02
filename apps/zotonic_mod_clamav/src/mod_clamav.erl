@@ -45,6 +45,7 @@ observe_media_upload_preprocess(#media_upload_preprocess{ file = File, mime = Mi
                     % all ok, give the next preprocessor a try
                     ?LOG_NOTICE(#{
                         text => <<"clamav: file is ok">>,
+                        in => zotonic_mod_clamav,
                         result => ok,
                         file => Pre#media_upload_preprocess.original_filename
                     }),
@@ -52,6 +53,7 @@ observe_media_upload_preprocess(#media_upload_preprocess{ file = File, mime = Mi
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => <<"clamav: file is NOT ok">>,
+                        in => zotonic_mod_clamav,
                         result => error,
                         reason => Reason,
                         file => Pre#media_upload_preprocess.original_filename,
@@ -96,6 +98,7 @@ observe_tick_1h(tick_1h, _Context) ->
         pong ->
             ?LOG_INFO(#{
                 text => <<"Virus scanner: ping ok for clamav">>,
+                in => zotonic_mod_clamav,
                 result => ok,
                 ip => IP,
                 port => Port
@@ -103,6 +106,7 @@ observe_tick_1h(tick_1h, _Context) ->
         pang ->
             ?LOG_WARNING(#{
                 text => <<"Virus scanner: can not ping clamav daemon">>,
+                in => zotonic_mod_clamav,
                 result => error,
                 reason => pang,
                 ip => IP,

@@ -139,6 +139,7 @@ to_local(DT, Tz) ->
         Type:Reason ->
             ?LOG_WARNING(#{
                 text => <<"Error converting date for to_local">>,
+                in => zotonic_core,
                 tz => Tz,
                 date => DT,
                 result => Type,
@@ -182,6 +183,7 @@ to_utc(DT, Tz) ->
         Type:Reason ->
             ?LOG_WARNING(#{
                 text => <<"Error converting date for to_utc">>,
+                in => zotonic_core,
                 tz => Tz,
                 date => DT,
                 result => Type,

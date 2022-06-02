@@ -293,6 +293,7 @@ map_interval(Interval) ->
         error:badarg ->
             ?LOG_ERROR(#{
                 text => <<"Filestore illegal delete interval">>,
+                in => zotonic_mod_filestore,
                 result => error,
                 reason => badarg,
                 interval => Interval

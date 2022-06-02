@@ -478,6 +478,7 @@ thumbnail_request(ThumbUrl, _Context) ->
         {ok, {{_, 404, _}, _Headers, _ImageData}} ->
             ?LOG_INFO(#{
                 text => <<"mod_oembed: 404 on thumbnail url">>,
+                in => zotonic_mod_oembed,
                 result => error,
                 reason => enoent,
                 url => ThumbUrl
@@ -486,6 +487,7 @@ thumbnail_request(ThumbUrl, _Context) ->
         Other ->
             ?LOG_WARNING(#{
                 text => <<"mod_oembed: unexpected result for thumbnail url">>,
+                in => zotonic_mod_oembed,
                 result => error,
                 reason => Other,
                 url => ThumbUrl

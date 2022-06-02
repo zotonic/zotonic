@@ -93,6 +93,7 @@ error_message(sizelimit, Context) ->
 error_message(R, Context) ->
     ?LOG_WARNING(#{
         text => <<"Unknown page creation or upload error">>,
+        in => zotonic_mod_backup,
         result => error,
         reason => R
     }),

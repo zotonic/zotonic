@@ -189,6 +189,7 @@ make_all() ->
 reload_module(M) ->
     ?LOG_DEBUG(#{
         text => <<"Reloading module">>,
+        in => zotonic_filewatcher,
         module => M
     }),
     code:purge(M),
@@ -199,6 +200,7 @@ reload_module(M) ->
         {error, Reason} = Error ->
             ?LOG_WARNING(#{
                 text => <<"Could not reload module">>,
+                in => zotonic_filewatcher,
                 module => M,
                 result => error,
                 reason => Reason

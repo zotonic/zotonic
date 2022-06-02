@@ -38,6 +38,7 @@ render(ScompName, Args, Vars, Context) ->
             %% No such scomp, as we can switch on/off functionality we do a quiet skip
             ?LOG_WARNING(#{
                 text => <<"Scomp not enabled">>,
+                in => zotonic_core,
                 result => error,
                 reason => enoent,
                 scomp => ScompName

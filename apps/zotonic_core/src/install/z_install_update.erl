@@ -111,6 +111,7 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
                     %% Install database
                     ?LOG_NOTICE(#{
                         text => <<"Installing database with db">>,
+                        in => zotonic_core,
                         options => DbOptions
                     }),
                     z_install:install(Context),
@@ -133,6 +134,7 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
             % No database configured, this is ok, proceed as normal (without db)
             ?LOG_ERROR(#{
                 text => <<"Database connection failure: no database configured">>,
+                in => zotonic_core,
                 result => error,
                 reason => nodatabase,
                 site => z_context:site(Context)
@@ -141,6 +143,7 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
         {error, econnrefused} = Error ->
             ?LOG_ERROR(#{
                 text => <<"Database connection failure: connection refused">>,
+                in => zotonic_core,
                 site => z_context:site(Context),
                 result => error,
                 reason => econnrefused
@@ -149,6 +152,7 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
         {error, Reason} ->
             ?LOG_WARNING(#{
                 text => "Database connection failure",
+                in => zotonic_core,
                 result => error,
                 reason => Reason,
                 site => z_context:site(Context)
@@ -157,6 +161,7 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
                 false ->
                     ?LOG_ERROR(#{
                         text => <<"Database does not exist and dbcreate is false; not creating">>,
+                        in => zotonic_core,
                         result => error,
                         reason => nodbcreate,
                         site => z_context:site(Context)
@@ -167,12 +172,14 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
                         ok ->
                             ?LOG_NOTICE(#{
                                 text => <<"Retrying install check after db creation.">>,
+                                in => zotonic_core,
                                 site => z_context:site(Context)
                             }),
                             check_db_and_upgrade(Context, Tries+1);
                         {error, PrepReason} = Error ->
                             ?LOG_ERROR(#{
                                 text => <<"Could not create the database and schema.">>,
+                                in => zotonic_core,
                                 site => z_context:site(Context),
                                 result => error,
                                 reason => PrepReason
@@ -193,6 +200,7 @@ maybe_drop_db(Context) ->
                 ok ->
                     ?LOG_WARNING(#{
                         text => <<"Dropping existing schema because of 'dbdropschema' is set.">>,
+                        in => zotonic_core,
                         schema => proplists:get_value(dbschema, DbOptions),
                         database => proplists:get_value(dbdatabase, DbOptions),
                         site => z_context:site(Context)
@@ -600,6 +608,7 @@ fix_timestamptz(C, Database, Schema) ->
 fix_timestamptz_column(C, Table, Col, Database, Schema) ->
     ?LOG_NOTICE(#{
         text => <<"Adding time zone to column">>,
+        in => zotonic_core,
         database => Database,
         schema => Schema,
         table => Table,
@@ -627,6 +636,7 @@ install_content_group_dependent(C, Database, Schema) ->
         false ->
             ?LOG_NOTICE(#{
                 text => <<"Adding rsc.is_dependent and rsc.content_group_id">>,
+                in => zotonic_core,
                 database => Database,
                 schema => Schema
             }),
@@ -715,6 +725,7 @@ key_changes_v1_0(C, Database, Schema) ->
         true ->
             ?LOG_NOTICE(#{
                 text => <<"Upgrade: changing is_unique on identity table">>,
+                in => zotonic_core,
                 database => Database,
                 schema => Schema,
                 table => identity
@@ -759,6 +770,7 @@ key_changes_v1_0(C, Database, Schema) ->
         false ->
             ?LOG_NOTICE(#{
                 text => <<"Upgrade: adding indices to rsc table">>,
+                in => zotonic_core,
                 database => Database,
                 schema => Schema,
                 table => rsc
@@ -787,6 +799,7 @@ rsc_language(C, Database, Schema) ->
         false ->
             ?LOG_NOTICE(#{
                 text => <<"Upgrade: adding language column to rsc table">>,
+                in => zotonic_core,
                 database => Database,
                 schema => Schema,
                 table => rsc
@@ -810,6 +823,7 @@ task_queue_error_count(C, Database, Schema) ->
         false ->
             ?LOG_NOTICE(#{
                 text => <<"Upgrade: adding error_count column pivot_task_queue">>,
+                in => zotonic_core,
                 database => Database,
                 schema => Schema,
                 table => pivot_task_queue

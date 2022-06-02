@@ -182,6 +182,7 @@ error_message(sizelimit, Context) ->
 error_message(R, Context) ->
     ?LOG_WARNING(#{
         text => <<"Unknown file upload error">>,
+        in => zotonic_mod_admin,
         result => error,
         reason => R
     }),

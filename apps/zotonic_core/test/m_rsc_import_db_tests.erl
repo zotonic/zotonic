@@ -33,6 +33,7 @@ modify_rsc_test() ->
 
     ?LOG_NOTICE(#{
         text => <<"Expecting duplicate_uri error...">>,
+        in => zotonic_core,
         module => ?MODULE
     }),
     DupRsc = #{

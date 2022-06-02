@@ -720,6 +720,7 @@ ensure_hierarchy(Context) ->
                 {ok, N} when N > 0 ->
                     ?LOG_NOTICE(#{
                         text => <<"Ensure category found new categories.">>,
+                        in => zotonic_core,
                         count => N
                     }),
                     flush(Context);
@@ -727,7 +728,10 @@ ensure_hierarchy(Context) ->
                     ok
             end;
         true ->
-            ?LOG_WARNING("Ensure category requested while renumbering."),
+            ?LOG_WARNING(#{
+                text => <<"Ensure category requested while renumbering.">>,
+                in => zotonic_core
+            }),
             {error, renumbering}
     end.
 
@@ -752,6 +756,7 @@ move_below(Cat, Parent, Context) ->
         notfound ->
             ?LOG_ERROR(#{
                 text => <<"Category move below gave error">>,
+                in => zotonic_core,
                 cat_moved => Cat,
                 cat_parent => Parent,
                 result => error,
@@ -779,6 +784,7 @@ move_after(Cat, After, Context) ->
         notfound ->
             ?LOG_ERROR(#{
                 text => <<"Category move after error">>,
+                in => zotonic_core,
                 result => error,
                 reason => notfound,
                 cat_moved => Cat,
@@ -884,6 +890,7 @@ renumber_pivot_task(Context) ->
         Ids ->
             ?LOG_INFO(#{
                 text => <<"Category renumbering of resources">>,
+                in => zotonic_core,
                 count => length(Ids)
             }),
             ok = z_db:transaction(fun(Ctx) ->

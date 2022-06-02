@@ -80,6 +80,7 @@ maybe_move_0x_keys(Context) ->
             {NewKey, NewPub} = cert_files(Context),
             ?LOG_INFO(#{
                 text => <<"Moving old DKIM keys">>,
+                in => zotonic_mod_email_dkim,
                 old_keyfile => KeyFile,
                 old_pubfile => PubFile,
                 keyfile => NewKey,

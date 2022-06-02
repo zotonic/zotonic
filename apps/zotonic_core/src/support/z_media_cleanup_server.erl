@@ -174,6 +174,7 @@ do_cleanup_file({_Id, Filename, Date}, Context) ->
     z_notifier:first(#filestore{action=delete, path=ArchiveStore}, Context),
     ?LOG_DEBUG(#{
         text => <<"Medium cleanup">>,
+        in => zotonic_core,
         filename => Filename,
         date => Date
     }),

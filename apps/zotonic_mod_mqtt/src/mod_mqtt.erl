@@ -41,6 +41,7 @@
 'mqtt:test/#'(Msg, _Context) ->
     ?LOG_DEBUG(#{
         text => <<"mod_mqtt test topic">>,
+        in => zotonic_mod_mqtt,
         mqtt_msg => Msg
     }),
     ok.

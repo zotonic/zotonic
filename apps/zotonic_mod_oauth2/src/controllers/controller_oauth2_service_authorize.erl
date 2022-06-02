@@ -57,6 +57,7 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => <<"Error with OAuth redirect">>,
+                in => zotonic_mod_oauth2,
                 service => ServiceMod,
                 result => error,
                 reason => Reason

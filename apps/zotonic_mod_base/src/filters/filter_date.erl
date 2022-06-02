@@ -65,6 +65,7 @@ date({{_,_,_} = Date,{_,_,_} = Time} = DT, FormatStr, Context) ->
         error:Error ->
             ?LOG_WARNING(#{
                 text => <<"Date format on illegal date">>,
+                in => zotonic_mod_base,
                 format => FormatStr,
                 date => DT,
                 result => error,
@@ -79,6 +80,7 @@ date({_,_,_} = Date, FormatStr, Context) ->
         error:Error ->
             ?LOG_WARNING(#{
                 text => <<"Date format on illegal date">>,
+                in => zotonic_mod_base,
                 format => FormatStr,
                 date => Date,
                 result => error,

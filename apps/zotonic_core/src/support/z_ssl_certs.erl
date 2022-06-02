@@ -177,12 +177,14 @@ ensure_self_signed(Hostname) ->
         {false, true} ->
             ?LOG_ERROR(#{
                 text => <<"Missing cert file, regenerating keys">>,
+                in => zotonic_core,
                 file => CertFile
             }),
             generate_self_signed(Hostname, Certs);
         {true, false} ->
             ?LOG_ERROR(#{
                 text => <<"Missing pem file, regenerating keys">>,
+                in => zotonic_core,
                 file => KeyFile
             }),
             generate_self_signed(Hostname, Certs);
@@ -223,6 +225,7 @@ generate_self_signed(Hostname, Opts) ->
     {keyfile, PemFile} = proplists:lookup(keyfile, Opts),
     ?LOG_INFO(#{
         text => <<"Generating self-signed ssl keys">>,
+        in => zotonic_core,
         file => PemFile
     }),
     case z_filelib:ensure_dir(PemFile) of
