@@ -115,24 +115,45 @@
 
 -behaviour(gen_server).
 
--export([monitor_file/1, monitor_file/2, monitor_file/3, monitor_dir/1,
-         monitor_dir/2, monitor_dir/3, automonitor/1, automonitor/2,
-         automonitor/3, demonitor/1, demonitor/2, demonitor_file/2,
-         demonitor_file/3, demonitor_dir/2, demonitor_dir/3,
-         get_interval/0, get_interval/1, set_interval/1, set_interval/2,
+-export([monitor_file/1,
+         monitor_file/2,
+         monitor_file/3,
+         monitor_dir/1,
+         monitor_dir/2,
+         monitor_dir/3,
+         automonitor/1,
+         automonitor/2,
+         automonitor/3,
+         demonitor/1,
+         demonitor/2,
+         demonitor_file/2,
+         demonitor_file/3,
+         demonitor_dir/2,
+         demonitor_dir/3,
+         get_interval/0,
+         get_interval/1,
+         set_interval/1,
+         set_interval/2,
          normalize_path/1]).
+-export([start/0,
+         start/1,
+         start/2,
+         start_link/0,
+         start_link/1,
+         start_link/2,
+         stop/0,
+         stop/1]).
+-export([init/1,
+         handle_call/3,
+         handle_cast/2,
+         handle_info/2,
+         code_change/3,
+         terminate/2]).
 
--export([start/0, start/1, start/2, start_link/0, start_link/1,
-         start_link/2, stop/0, stop/1]).
-
--export([init/1, handle_call/3, handle_cast/2, handle_info/2,
-         code_change/3, terminate/2]).
-
--compile({no_auto_import,[monitor/2]}).
--compile({no_auto_import,[demonitor/2]}).
+-compile({no_auto_import, [monitor/2]}).
+-compile({no_auto_import, [demonitor/2]}).
 
 -include_lib("kernel/include/file.hrl").
-
 
 %% NOTE: Monitored paths should be absolute, but this is not checked.
 %%
@@ -162,29 +183,26 @@
 %% % @type object() = {file|directory, filename()}
 %% @type monitor() = reference(). A monitor reference.
 
--record(state, {poll=true,  % boolean(), false if polling is disabled
-                interval,   % polling interval (milliseconds)
-                files,      % map: file path -> #entry{}
-                dirs,       % map: directory path -> #entry{}
-                autodirs,   % map: directory path -> monitor() -> entries
-                refs,       % map: monitor() -> #monitor_info{}
-                clients     % map: client Pid -> #client_info{}
-               }).
-
--record(entry, {info = undefined,      % #file_info{} or posix atom
-                dir = [],              % directory entries (if any)
-                stable = 0,            % integer(), millis until dir stable
-                monitors = sets:new()  % set(monitor())
-               }).
-
--record(client_info, {monitor,    % erlang:monitor/2 reference
-                      refs        % set(monitor()); monitors owned by client
-                     }).
-
--record(monitor_info, {pid,     % client Pid
-                       auto,    % boolean(), true for an automonitor
-                       objects  % set(object())
-                      }).
+-record(state,
+        {poll = true,  % boolean(), false if polling is disabled
+         interval,   % polling interval (milliseconds)
+         files,      % map: file path -> #entry{}
+         dirs,       % map: directory path -> #entry{}
+         autodirs,   % map: directory path -> monitor() -> entries
+         refs,       % map: monitor() -> #monitor_info{}
+         clients}).     % map: client Pid -> #client_info{}
+-record(entry,
+        {info = undefined,      % #file_info{} or posix atom
+         dir = [],              % directory entries (if any)
+         stable = 0,            % integer(), millis until dir stable
+         monitors = sets:new()}).  % set(monitor())
+-record(client_info,
+        {monitor,    % erlang:monitor/2 reference
+         refs}).        % set(monitor()); monitors owned by client
+-record(monitor_info,
+        {pid,     % client Pid
+         auto,    % boolean(), true for an automonitor
+         objects}).  % set(object())
 
 %%
 %% User interface
@@ -239,20 +257,22 @@ monitor_dir(Path, Opts) ->
 monitor_dir(Server, Path, Opts) ->
     monitor(Server, Path, Opts, directory).
 
-
 %% not exported
 monitor(Server, Path, Opts, Type) ->
     FlatPath = normalize_path(Path),
     Ref = case proplists:get_value(monitor, Opts) of
-              R when is_reference(R) ; R =:= undefined -> R;
-              _ -> erlang:error(badarg)
+              R when is_reference(R); R =:= undefined ->
+                  R;
+              _ ->
+                  erlang:error(badarg)
           end,
     Cmd = {monitor, self(), {Type, FlatPath}, Ref},
     case gen_server:call(Server, Cmd) of
-        {ok, Ref1} -> {ok, Ref1, FlatPath};
-        {error, Reason} -> {error, Reason}
+        {ok, Ref1} ->
+            {ok, Ref1, FlatPath};
+        {error, Reason} ->
+            {error, Reason}
     end.
-
 
 %% @spec (filename()) -> {ok, monitor(), binary()}
 %% @equiv automonitor(Path, [])
@@ -273,7 +293,6 @@ automonitor(Server, Path, _Opts) ->
     FlatPath = normalize_path(Path),
     {ok, Ref} = gen_server:call(Server, {automonitor, self(), FlatPath}),
     {ok, Ref, FlatPath}.
-
 
 %% @spec (monitor()) -> ok | {error, not_owner}
 %% @equiv demonitor(file_monitor, Ref)
@@ -313,7 +332,6 @@ demonitor(Server, Path, Ref, Type) when is_reference(Ref) ->
     FlatPath = normalize_path(Path),
     ok = gen_server:call(Server, {demonitor, self(), {Type, FlatPath}, Ref}).
 
-
 %% @spec () -> integer()
 %% @equiv get_interval(file_monitor)
 get_interval() ->
@@ -324,7 +342,6 @@ get_interval() ->
 get_interval(Server) ->
     gen_server:call(Server, get_interval).
 
-
 %% @spec (integer()) -> ok
 %% @equiv set_interval(file_monitor, Time)
 set_interval(Time) ->
@@ -334,7 +351,6 @@ set_interval(Time) ->
 %% @doc Sets the polling interval. Units are in milliseconds.
 set_interval(Server, Time) when is_integer(Time) ->
     gen_server:call(Server, {set_interval, Time}).
-
 
 %% @spec () -> {ok, ServerPid::pid()} | ignore | {error, any()}
 %% @equiv start([])
@@ -385,7 +401,6 @@ start_link(undefined, Options) ->
 start_link(Name, Options) ->
     gen_server:start_link(Name, ?MODULE, Options, []).
 
-
 %% @spec () -> ok
 %% @equiv stop(file_monitor)
 stop() ->
@@ -397,7 +412,6 @@ stop(Server) ->
     gen_server:call(Server, stop),
     ok.
 
-
 %%
 %% gen_server callbacks
 %%
@@ -405,12 +419,14 @@ stop(Server) ->
 %% @private
 init(Options) ->
     Time = safe_interval(proplists:get_value(interval, Options)),
-    St = #state{interval = Time,
-                files = dict:new(),
-                dirs = dict:new(),
-                autodirs = dict:new(),
-                clients = dict:new(),
-                refs = dict:new()},
+    St = #state{
+             interval = Time,
+             files = dict:new(),
+             dirs = dict:new(),
+             autodirs = dict:new(),
+             clients = dict:new(),
+             refs = dict:new()
+         },
     set_timer(St),
     {ok, St}.
 
@@ -421,10 +437,10 @@ init(Options) ->
 %% @private
 handle_call({monitor, Pid, Object, undefined}, From, St) ->
     handle_call({monitor, Pid, Object, make_ref()}, From, St);
-handle_call({monitor, Pid, Object, Ref}, _From, St)
-  when is_pid(Pid), is_reference(Ref) ->
+handle_call({monitor, Pid, Object, Ref}, _From, St) when is_pid(Pid), is_reference(Ref) ->
     try add_monitor(Object, Pid, Ref, St) of
-        St1 -> {reply, {ok, Ref}, register_client(Pid, Ref, St1)}
+        St1 ->
+            {reply, {ok, Ref}, register_client(Pid, Ref, St1)}
     catch
         not_owner ->
             {reply, {error, not_owner}, St};
@@ -433,14 +449,16 @@ handle_call({monitor, Pid, Object, Ref}, _From, St)
     end;
 handle_call({demonitor, Pid, Ref}, _From, St) when is_reference(Ref) ->
     try delete_monitor(Pid, Ref, St) of
-        St1 -> {reply, ok, St1}
+        St1 ->
+            {reply, ok, St1}
     catch
         not_owner ->
             {reply, {error, not_owner}, St}
     end;
 handle_call({demonitor, Pid, Object, Ref}, _From, St) when is_reference(Ref) ->
     try demonitor_path(Pid, Ref, Object, St) of
-        St1 -> {reply, ok, St1}
+        St1 ->
+            {reply, ok, St1}
     catch
         not_owner ->
             {reply, {error, not_owner}, St}
@@ -454,7 +472,7 @@ handle_call({automonitor, Pid, Path}, _From, St) when is_pid(Pid) ->
 handle_call(get_interval, _From, St) ->
     {reply, St#state.interval, St};
 handle_call({set_interval, Time}, _From, St) ->
-    {reply, ok, St#state{interval=safe_interval(Time)}};
+    {reply, ok, St#state{ interval = safe_interval(Time) }};
 handle_call(stop, _From, St) ->
     {stop, normal, ok, St}.
 
@@ -466,7 +484,7 @@ handle_cast(_, St) ->
 handle_info({?MSGTAG, Ref, Event}, St) ->
     %% auto-monitoring event to self
     case dict:find(Ref, St#state.refs) of
-        {ok, #monitor_info{pid=Pid}} ->
+        {ok, #monitor_info{ pid = Pid }} ->
             {noreply, autoevent(Event, Pid, Ref, St)};
         error ->
             %% could happen if this event was already in the queue when
@@ -477,7 +495,7 @@ handle_info({?MSGTAG, Ref, Event}, St) ->
 handle_info(poll, St) ->
     {noreply, set_timer(poll(St))};
 handle_info(enable_poll, St) ->
-    {noreply, St#state{poll=true}};
+    {noreply, St#state{ poll = true }};
 handle_info({'DOWN', _Ref, process, Pid, _Info}, St) ->
     {noreply, remove_client(Pid, St)};
 handle_info(_, St) ->
@@ -503,7 +521,8 @@ terminate(_Reason, _St) ->
 %% @spec (filename()) -> binary()
 %% @doc Flattens the given path to a single binary.
 
-normalize_path(Path) when is_binary(Path) -> Path;
+normalize_path(Path) when is_binary(Path) ->
+    Path;
 normalize_path(Path) ->
     list_to_binary(flatten_onto(Path, [])).
 
@@ -521,12 +540,12 @@ flatten_onto(_, _) ->
     erlang:error(badarg).
 
 join_to_path(Path, File) when is_binary(Path), is_binary(File) ->
-    normalize_path(filename:join(binary_to_list(Path),
-                                 binary_to_list(File))).
+    normalize_path(filename:join(binary_to_list(Path), binary_to_list(File))).
 
 safe_interval(N) when is_integer(N) ->
     min(16#FFFFffff, max(N, ?MIN_INTERVAL));
-safe_interval(_) -> ?DEFAULT_INTERVAL.
+safe_interval(_) ->
+    ?DEFAULT_INTERVAL.
 
 set_timer(St) ->
     erlang:send_after(St#state.interval, self(), poll),
@@ -562,24 +581,23 @@ set_timer(St) ->
 %% - Errors on automonitored directories cause immediate demonitoring of
 %%   the entries of the directory, but not the directory itself.
 
-autoevent({_Tag, Path, Type, #file_info{}=Info, _Files}, Pid, Ref, St)
-  when (((Type =:= file) and (Info#file_info.type =:= directory)) orelse
-        ((Type =:= directory) and (Info#file_info.type =/= directory))) ->
+autoevent({_Tag, Path, Type, #file_info{  } = Info, _Files}, Pid, Ref, St)
+    when (Type =:= file) and (Info#file_info.type =:= directory)
+         orelse (Type =:= directory) and (Info#file_info.type =/= directory) ->
     %% monitor type mismatch detected
     autoremonitor_path(Path, Pid, Ref, St);
-autoevent({_Tag, Path, directory, #file_info{}=Info, Files}, Pid, Ref, St0)
-  when Info#file_info.type =:= directory ->
+autoevent({_Tag, Path, directory, #file_info{  } = Info, Files}, Pid, Ref, St0)
+    when Info#file_info.type =:= directory ->
     %% add/remove automonitoring to/from all added/deleted entries
     lists:foldl(fun ({added, File}, St) ->
                         St1 = add_autodir_entry(Path, File, Ref, St),
-                        automonitor_path(join_to_path(Path, File),
-                                         Pid, Ref, St1);
+                        automonitor_path(join_to_path(Path, File), Pid, Ref, St1);
                     ({deleted, File}, St) ->
                         St1 = remove_autodir_entry(Path, File, Ref, St),
-                        autodemonitor_path(join_to_path(Path, File),
-                                           Pid, Ref, St1)
+                        autodemonitor_path(join_to_path(Path, File), Pid, Ref, St1)
                 end,
-                St0, Files);
+                St0,
+                Files);
 autoevent({error, Path, directory, enotdir}, Pid, Ref, St) ->
     %% monitor type mismatch detected
     autoremonitor_path(Path, Pid, Ref, St);
@@ -597,9 +615,11 @@ automonitor_path(Path, Pid, Ref, St) ->
     %% Pid should be a known client, otherwise do nothing
     case dict:is_key(Pid, St#state.clients) of
         true ->
-            try unsafe_automonitor_path(Path, Pid, Ref, St)
+            try
+                unsafe_automonitor_path(Path, Pid, Ref, St)
             catch
-                throw:_ -> St
+                _ ->
+                    St
             end;
         false ->
             St
@@ -607,22 +627,27 @@ automonitor_path(Path, Pid, Ref, St) ->
 
 %% see add_monitor for possible thrown exceptions
 unsafe_automonitor_path(Path, Pid, Ref, St) ->
-    Object = case file:read_file_info(binary_to_list(Path)) of
-                 {ok, #file_info{type=directory}} ->
-                     {directory, Path};
-                 _ ->
-                     {file, Path}    % also for errors
-             end,
+    Object =
+        case file:read_file_info(binary_to_list(Path)) of
+            {ok, #file_info{ type = directory }} ->
+                {directory, Path};
+            _ ->
+                {file, Path}    % also for errors
+        end,
     add_automonitor(Object, Pid, Ref, St).
 
 autodemonitor_path(Path, Pid, Ref, St0) ->
-    St1 = try demonitor_path(Pid, Ref, {file, Path}, St0)
+    St1 = try
+              demonitor_path(Pid, Ref, {file, Path}, St0)
           catch
-              not_owner -> St0
+              not_owner ->
+                  St0
           end,
-    St2 = try demonitor_path(Pid, Ref, {directory, Path}, St1)
+    St2 = try
+              demonitor_path(Pid, Ref, {directory, Path}, St1)
           catch
-              not_owner -> St1
+              not_owner ->
+                  St1
           end,
     autodemonitor_dir_entries(Path, Pid, Ref, St2).
 
@@ -634,16 +659,20 @@ autodemonitor_dir_entries(Path, Pid, Ref, St0) ->
                 {ok, Set} ->
                     Map = dict:erase(Ref, Map0),
                     %% purge empty entries to save space
-                    Dirs = case dict:size(Map) > 0 of
-                               true -> dict:store(Path, Map, Dirs0);
-                               false -> dict:erase(Path, Dirs0)
-                           end,
-                    St1 = St0#state{autodirs = Dirs},
-                    sets:fold(fun (File, St) ->
-                                      P = join_to_path(Path, File),
-                                      autodemonitor_path(P, Pid, Ref, St)
+                    Dirs =
+                        case dict:size(Map) > 0 of
+                            true ->
+                                dict:store(Path, Map, Dirs0);
+                            false ->
+                                dict:erase(Path, Dirs0)
+                        end,
+                    St1 = St0#state{ autodirs = Dirs },
+                    sets:fold(fun(File, St) ->
+                                 P = join_to_path(Path, File),
+                                 autodemonitor_path(P, Pid, Ref, St)
                               end,
-                              St1, Set);
+                              St1,
+                              Set);
                 error ->
                     St0
             end;
@@ -658,15 +687,16 @@ add_autodir_entry(Path, File, Ref, St) ->
     Map = case dict:find(Path, St#state.autodirs) of
               {ok, Map0} ->
                   Set = case dict:find(Ref, Map0) of
-                            {ok, Entries} -> Entries;
-                            error -> sets:new()
+                            {ok, Entries} ->
+                                Entries;
+                            error ->
+                                sets:new()
                         end,
                   dict:store(Ref, sets:add_element(File, Set), Map0);
               error ->
-                  dict:store(Ref, sets:add_element(File, sets:new()),
-                             dict:new())
+                  dict:store(Ref, sets:add_element(File, sets:new()), dict:new())
           end,
-    St#state{autodirs = dict:store(Path, Map, St#state.autodirs)}.
+    St#state{ autodirs = dict:store(Path, Map, St#state.autodirs) }.
 
 remove_autodir_entry(Path, File, Ref, St) ->
     Dirs0 = St#state.autodirs,
@@ -677,15 +707,21 @@ remove_autodir_entry(Path, File, Ref, St) ->
                     %% purge empty entries to save space
                     Set = sets:del_element(File, Set0),
                     Map = case sets:size(Set) > 0 of
-                              true -> dict:store(Ref, Set, Map0);
-                              false -> dict:erase(Ref, Map0)
+                              true ->
+                                  dict:store(Ref, Set, Map0);
+                              false ->
+                                  dict:erase(Ref, Map0)
                           end,
-                    Dirs = case dict:size(Map) > 0 of
-                               true -> dict:store(Path, Map, Dirs0);
-                               false -> dict:erase(Path, Dirs0)
-                           end,
-                    St#state{autodirs = Dirs};
-                error -> St
+                    Dirs =
+                        case dict:size(Map) > 0 of
+                            true ->
+                                dict:store(Path, Map, Dirs0);
+                            false ->
+                                dict:erase(Path, Dirs0)
+                        end,
+                    St#state{ autodirs = Dirs };
+                error ->
+                    St
             end;
         error ->
             St
@@ -694,19 +730,27 @@ remove_autodir_entry(Path, File, Ref, St) ->
 %% client monitoring (once a client, always a client - until death)
 
 register_client(Pid, Ref, St) ->
-    Info = case dict:find(Pid, St#state.clients) of
-               {ok, OldInfo} -> OldInfo;
-               error ->
-                   Monitor = erlang:monitor(process, Pid),
-                   #client_info{monitor = Monitor, refs = sets:new()}
-           end,
+    Info =
+        case dict:find(Pid, St#state.clients) of
+            {ok, OldInfo} ->
+                OldInfo;
+            error ->
+                Monitor = erlang:monitor(process, Pid),
+                #client_info{
+                    monitor = Monitor,
+                    refs = sets:new()
+                }
+        end,
     Refs = sets:add_element(Ref, Info#client_info.refs),
-    St#state{clients = dict:store(Pid, Info#client_info{refs = Refs},
-                                  St#state.clients)}.
+    St#state{ clients = dict:store(Pid, Info#client_info{ refs = Refs }, St#state.clients) }.
 
 remove_client(Pid, St) ->
     case dict:find(Pid, St#state.clients) of
-        {ok, #client_info{monitor = Monitor, refs = Refs}} ->
+        {ok,
+         #client_info{
+             monitor = Monitor,
+             refs = Refs
+         }} ->
             erlang:demonitor(Monitor, [flush]),
             purge_client(Pid, Refs, St);
         error ->
@@ -714,12 +758,12 @@ remove_client(Pid, St) ->
     end.
 
 purge_client(Pid, Refs, St0) ->
-    sets:fold(fun (Ref, St) ->
-                      %% the Pid *should* be the owner here, so
-                      %% a not_owner exception should not happen
-                      delete_monitor(Pid, Ref, St)
+    sets:fold(fun(Ref, St) ->
+                 %% the Pid *should* be the owner here, so
+                 %% a not_owner exception should not happen
+                 delete_monitor(Pid, Ref, St)
               end,
-              St0#state{clients = dict:erase(Pid, St0#state.clients)},
+              St0#state{ clients = dict:erase(Pid, St0#state.clients) },
               Refs).
 
 %% Adding a new monitor; throws 'not_owner' if the monitor reference is
@@ -733,21 +777,29 @@ add_automonitor(Object, Pid, Ref, St) ->
     add_monitor(Object, Pid, Ref, St, true).
 
 add_monitor(Object, Pid, Ref, St, Auto) ->
-    Info = case dict:find(Ref, St#state.refs) of
-               {ok, #monitor_info{pid = Pid, auto = Auto}=OldInfo} ->
-                   OldInfo;
-               {ok, #monitor_info{pid = Pid}} ->
-                   throw(automonitor);
-               {ok, #monitor_info{}} ->
-                   throw(not_owner);
-               error ->
-                   #monitor_info{pid = Pid, auto = Auto,
-                                 objects = sets:new()}
-           end,
+    Info =
+        case dict:find(Ref, St#state.refs) of
+            {ok,
+             #monitor_info{
+                 pid = Pid,
+                 auto = Auto
+             } =
+                 OldInfo} ->
+                OldInfo;
+            {ok, #monitor_info{ pid = Pid }} ->
+                throw(automonitor);
+            {ok, #monitor_info{  }} ->
+                throw(not_owner);
+            error ->
+                #monitor_info{
+                    pid = Pid,
+                    auto = Auto,
+                    objects = sets:new()
+                }
+        end,
     NewObjects = sets:add_element(Object, Info#monitor_info.objects),
-    Refs = dict:store(Ref, Info#monitor_info{objects = NewObjects},
-                      St#state.refs),
-    monitor_path(Object, Ref, St#state{refs = Refs}).
+    Refs = dict:store(Ref, Info#monitor_info{ objects = NewObjects }, St#state.refs),
+    monitor_path(Object, Ref, St#state{ refs = Refs }).
 
 %% We must separate the namespaces for files and dirs; there may be
 %% simultaneous file and directory monitors for the same path, and a
@@ -756,30 +808,31 @@ add_monitor(Object, Pid, Ref, St, Auto) ->
 %% expected to refer to a file or a directory.
 
 monitor_path({file, Path}, Ref, St) ->
-    St#state{files = monitor_path(Path, Ref, file, St#state.files, St)};
+    St#state{ files = monitor_path(Path, Ref, file, St#state.files, St) };
 monitor_path({directory, Path}, Ref, St) ->
-    St#state{dirs = monitor_path(Path, Ref, directory, St#state.dirs, St)}.
+    St#state{ dirs = monitor_path(Path, Ref, directory, St#state.dirs, St) }.
 
 %% Adding a new monitor forces an immediate poll of the path, such that
 %% previous monitors only see any real change, while the new monitor
 %% either gets {found, ...} or {error, ...}.
 
 monitor_path(Path, Ref, Type, Dict, St) ->
-    Entry = case dict:find(Path, Dict) of
-                {ok, OldEntry} -> poll_file(Path, OldEntry, Type, St);
-                error -> new_entry(Path, Type, St)
-            end,
-    event(#entry{}, dummy_entry(Entry, Ref), Type, Path, St),
-    NewEntry = Entry#entry{monitors =
-                           sets:add_element(Ref, Entry#entry.monitors)},
+    Entry =
+        case dict:find(Path, Dict) of
+            {ok, OldEntry} ->
+                poll_file(Path, OldEntry, Type, St);
+            error ->
+                new_entry(Path, Type, St)
+        end,
+    event(#entry{  }, dummy_entry(Entry, Ref), Type, Path, St),
+    NewEntry = Entry#entry{ monitors = sets:add_element(Ref, Entry#entry.monitors) },
     dict:store(Path, NewEntry, Dict).
 
 dummy_entry(Entry, Ref) ->
-    Entry#entry{monitors = sets:add_element(Ref, sets:new())}.
+    Entry#entry{ monitors = sets:add_element(Ref, sets:new()) }.
 
 new_entry(Path, Type, St) ->
-    refresh_entry(Path, #entry{monitors = sets:new()}, Type,
-                  St#state.interval).
+    refresh_entry(Path, #entry{ monitors = sets:new() }, Type, St#state.interval).
 
 %% Deleting a monitor by reference; throws not_owner if the monitor
 %% reference is owned by another Pid. The client_info entry may already
@@ -787,22 +840,25 @@ new_entry(Path, Type, St) ->
 
 delete_monitor(Pid, Ref, St0) ->
     St1 = case dict:find(Pid, St0#state.clients) of
-              {ok, #client_info{refs = Refs}=I} ->
+              {ok, #client_info{ refs = Refs } = I} ->
                   NewRefs = sets:del_element(Ref, Refs),
-                  St0#state{clients =
-                            dict:store(Pid, I#client_info{refs = NewRefs},
-                                       St0#state.clients)};
+                  St0#state{ clients = dict:store(Pid, I#client_info{ refs = NewRefs }, St0#state.clients) };
               error ->
                   St0
           end,
     case dict:find(Ref, St1#state.refs) of
-        {ok, #monitor_info{pid = Pid, objects = Objects}} ->
-            sets:fold(fun (Object, St) ->
-                              purge_monitor_path(Ref, Object, St)
+        {ok,
+         #monitor_info{
+             pid = Pid,
+             objects = Objects
+         }} ->
+            sets:fold(fun(Object, St) ->
+                         purge_monitor_path(Ref, Object, St)
                       end,
-                      St1#state{refs = dict:erase(Ref, St1#state.refs)},
+                      St1#state{ refs = dict:erase(Ref, St1#state.refs) },
                       Objects);
-        {ok, #monitor_info{}} -> throw(not_owner);
+        {ok, #monitor_info{  }} ->
+            throw(not_owner);
         error ->
             St1
     end.
@@ -812,11 +868,17 @@ delete_monitor(Pid, Ref, St0) ->
 
 demonitor_path(Pid, Ref, Object, St) ->
     case dict:find(Ref, St#state.refs) of
-        {ok, #monitor_info{pid = Pid, objects = Objects}=I} ->
+        {ok,
+         #monitor_info{
+             pid = Pid,
+             objects = Objects
+         } =
+             I} ->
             St1 = purge_monitor_path(Ref, Object, St),
-            I1 = I#monitor_info{objects=sets:del_element(Object, Objects)},
-            St1#state{refs = dict:store(Ref, I1, St1#state.refs)};
-        {ok, #monitor_info{}} -> throw(not_owner);
+            I1 = I#monitor_info{ objects = sets:del_element(Object, Objects) },
+            St1#state{ refs = dict:store(Ref, I1, St1#state.refs) };
+        {ok, #monitor_info{  }} ->
+            throw(not_owner);
         error ->
             St
     end.
@@ -824,9 +886,9 @@ demonitor_path(Pid, Ref, Object, St) ->
 %% Deleting a particular monitor from a path.
 
 purge_monitor_path(Ref, {file, Path}, St) ->
-    St#state{files = purge_monitor_path_1(Path, Ref, St#state.files)};
+    St#state{ files = purge_monitor_path_1(Path, Ref, St#state.files) };
 purge_monitor_path(Ref, {directory, Path}, St) ->
-    St#state{dirs = purge_monitor_path_1(Path, Ref, St#state.dirs)}.
+    St#state{ dirs = purge_monitor_path_1(Path, Ref, St#state.dirs) }.
 
 purge_monitor_path_1(Path, Ref, Dict) ->
     case dict:find(Path, Dict) of
@@ -834,7 +896,7 @@ purge_monitor_path_1(Path, Ref, Dict) ->
             Monitors = sets:del_element(Ref, Entry#entry.monitors),
             case sets:size(Monitors) > 0 of
                 true ->
-                    dict:store(Path, Entry#entry{monitors = Monitors}, Dict);
+                    dict:store(Path, Entry#entry{ monitors = Monitors }, Dict);
                 false ->
                     dict:erase(Path, Dict)
             end;
@@ -867,47 +929,48 @@ purge_monitor_path_1(Path, Ref, Dict) ->
 %% have been changes, the timestamps should also be different - see
 %% refresh_entry() below for more details.
 
-event(#entry{info = Info, stable = Stable},
-      #entry{info = Info, stable = Stable}, _Type, _Path, _St) ->
+event(#entry{
+          info = Info,
+          stable = Stable
+      },
+      #entry{
+          info = Info,
+          stable = Stable
+      },
+      _Type,
+      _Path,
+      _St) ->
     ok;    % no change in state
-event(#entry{info = undefined}, #entry{info = NewInfo}=Entry,
-      Type, Path, St)
-  when not is_atom(NewInfo) ->
+event(#entry{ info = undefined }, #entry{ info = NewInfo } = Entry, Type, Path, St) when not is_atom(NewInfo) ->
     %% file or directory exists, for a fresh monitor
     Diff = diff_lists(Entry#entry.dir, []),
     cast({found, Path, Type, NewInfo, Diff}, Entry#entry.monitors, St);
-event(OldEntry, #entry{info = NewInfo}=Entry, Type, Path, St)
-  when is_atom(NewInfo) ->
+event(OldEntry, #entry{ info = NewInfo } = Entry, Type, Path, St) when is_atom(NewInfo) ->
     %% file or directory is not available
     type_change_event(OldEntry#entry.info, NewInfo, Type, Path, Entry, St),
     cast({error, Path, Type, NewInfo}, Entry#entry.monitors, St);
-event(OldEntry, #entry{info = NewInfo}=Entry, Type, Path, St) ->
+event(OldEntry, #entry{ info = NewInfo } = Entry, Type, Path, St) ->
     %% a file or directory has changed or become readable again after an error
     type_change_event(OldEntry#entry.info, NewInfo, Type, Path, Entry, St),
     Diff = diff_lists(Entry#entry.dir, OldEntry#entry.dir),
-    if Diff =:= [],
-       Entry#entry.stable =/= OldEntry#entry.stable,
-       NewInfo =:= OldEntry#entry.info ->
-            %% if only the time-to-stable has changed, we must not
-            %% broadcast an event unless there really was a change in
-            %% the directory list
-            ok;
+    if Diff =:= [], Entry#entry.stable =/= OldEntry#entry.stable, NewInfo =:= OldEntry#entry.info ->
+           %% if only the time-to-stable has changed, we must not
+           %% broadcast an event unless there really was a change in
+           %% the directory list
+           ok;
        true ->
-            cast({changed, Path, Type, NewInfo, Diff},
-                 Entry#entry.monitors, St)
+           cast({changed, Path, Type, NewInfo, Diff}, Entry#entry.monitors, St)
     end.
 
 %% sudden changes in file type cause an 'enoent' error report before the
 %% new status, so that clients do not need to detect this themselves
-type_change_event(#file_info{type = T}, #file_info{type = T}, _, _, _, _) ->
+type_change_event(#file_info{ type = T }, #file_info{ type = T }, _, _, _, _) ->
     ok;
-type_change_event(#file_info{}, #file_info{}, Type, Path, Entry, St) ->
+type_change_event(#file_info{  }, #file_info{  }, Type, Path, Entry, St) ->
     cast_enoent(Type, Path, Entry, St);
-type_change_event(#file_info{type = directory}, enotdir, Type, Path, Entry,
-                  St) ->
+type_change_event(#file_info{ type = directory }, enotdir, Type, Path, Entry, St) ->
     cast_enoent(Type, Path, Entry, St);
-type_change_event(enotdir, #file_info{type = directory}, Type, Path, Entry,
-                  St) ->
+type_change_event(enotdir, #file_info{ type = directory }, Type, Path, Entry, St) ->
     cast_enoent(Type, Path, Entry, St);
 type_change_event(_, _, _, _, _, _) ->
     ok.
@@ -915,21 +978,27 @@ type_change_event(_, _, _, _, _, _) ->
 cast_enoent(Type, Path, Entry, St) ->
     cast({error, Path, Type, enoent}, Entry#entry.monitors, St).
 
-poll(#state{poll=false}=St) ->
+poll(#state{ poll = false } = St) ->
     St;
-poll(#state{poll=true}=St) ->
-    Files = dict:map(fun (Path, Entry) ->
-                             poll_file(Path, Entry, file, St)
-                     end,
-                     St#state.files),
-    Dirs = dict:map(fun (Path, Entry) ->
-                            poll_file(Path, Entry, directory, St)
-                    end,
-                    St#state.dirs),
+poll(#state{ poll = true } = St) ->
+    Files =
+        dict:map(fun(Path, Entry) ->
+                    poll_file(Path, Entry, file, St)
+                 end,
+                 St#state.files),
+    Dirs =
+        dict:map(fun(Path, Entry) ->
+                    poll_file(Path, Entry, directory, St)
+                 end,
+                 St#state.dirs),
     %% polling will now be disabled until all automonitoring events have
     %% been processed:
     self() ! enable_poll,
-    St#state{poll=false, files = Files, dirs = Dirs}.
+    St#state{
+          poll = false,
+          files = Files,
+          dirs = Dirs
+      }.
 
 poll_file(Path, Entry, Type, St) ->
     NewEntry = refresh_entry(Path, Entry, Type, St#state.interval),
@@ -956,8 +1025,7 @@ poll_file(Path, Entry, Type, St) ->
 %% directory timestamp.
 
 refresh_entry(Path, Entry, Type, Delta) when is_binary(Path) ->
-    refresh_entry_0(binary_to_list(Path), Entry, Type, Delta,
-                    Entry#entry.info).
+    refresh_entry_0(binary_to_list(Path), Entry, Type, Delta, Entry#entry.info).
 
 refresh_entry_0(Path, Entry, Type, Delta, OldInfo) ->
     refresh_entry_1(Path, Entry, Type, Delta, OldInfo, false).
@@ -967,14 +1035,12 @@ refresh_entry_1(Path, Entry, Type, Delta, OldInfo, Break) ->
     case Type of
         directory when not is_atom(NewInfo) ->
             case NewInfo#file_info.type of
-                directory when is_atom(OldInfo)
-                ; NewInfo#file_info.mtime =/= OldInfo#file_info.mtime ->
+                directory when is_atom(OldInfo); NewInfo#file_info.mtime =/= OldInfo#file_info.mtime ->
                     %% The info has changed, so we are forced to refresh
                     %% the directory listing. We set the time-to-stable,
                     %% and loop to ensure that the info is always later
                     %% than the listing. See below for more details.
-                    refresh_entry_2(Path, Entry, Type, Delta, NewInfo,
-                                    ?TIME_TO_STABLE);
+                    refresh_entry_2(Path, Entry, Type, Delta, NewInfo, ?TIME_TO_STABLE);
                 directory when Entry#entry.stable > 0, not Break ->
                     %% If both the old and new timestamps exist and the
                     %% modification time has not changed, but the entry
@@ -985,14 +1051,17 @@ refresh_entry_1(Path, Entry, Type, Delta, OldInfo, Break) ->
                     %% happens at least once after the initial listing
                     %% regardless of the value of Delta. (See the
                     %% discussion about timestamp resolution above.)
-                    refresh_entry_2(Path, Entry, Type, Delta, NewInfo,
-                                    max(0, Entry#entry.stable - Delta));
+                    refresh_entry_2(Path, Entry, Type, Delta, NewInfo, max(0, Entry#entry.stable - Delta));
                 directory ->
-                    Entry#entry{info = NewInfo};
+                    Entry#entry{ info = NewInfo };
                 _ ->
                     %% attempting to monitor a non-directory as a
                     %% directory is reported as an 'enotdir' error
-                    Entry#entry{info = enotdir, dir = [], stable = 0}
+                    Entry#entry{
+                             info = enotdir,
+                             dir = [],
+                             stable = 0
+                         }
             end;
         _ ->
             %% If we're not monitoring this path as a directory, or we
@@ -1000,7 +1069,11 @@ refresh_entry_1(Path, Entry, Type, Delta, OldInfo, Break) ->
             %% but just track its status. To handle the case of an error
             %% on a directory type monitor, we make sure to reset the
             %% list of directory entries.
-            Entry#entry{info = NewInfo, dir = [], stable = 0}
+            Entry#entry{
+                     info = NewInfo,
+                     dir = [],
+                     stable = 0
+                 }
     end.
 
 refresh_entry_2(Path, Entry, Type, Delta, Info, Stable) ->
@@ -1008,10 +1081,15 @@ refresh_entry_2(Path, Entry, Type, Delta, Info, Stable) ->
     %% re-read the info, but also ensure that we do not trigger the
     %% stability rule again until the next poll
     refresh_entry_1(Path,
-                    Entry#entry{info = Info,
-                                dir = list_dir(Path),
-                                stable = Stable},
-                    Type, Delta, Info, true).
+                    Entry#entry{
+                             info = Info,
+                             dir = list_dir(Path),
+                             stable = Stable
+                         },
+                    Type,
+                    Delta,
+                    Info,
+                    true).
 
 %% We clear some fields of the file_info so that we only trigger on real
 %% changes; see the //kernel/file.erl manual and file.hrl for details.
@@ -1019,8 +1097,10 @@ refresh_entry_2(Path, Entry, Type, Delta, Info, Stable) ->
 get_file_info(Path) when is_list(Path) ->
     case file:read_file_info(Path) of
         {ok, Info} ->
-            Info#file_info{access = undefined,
-                           atime  = undefined};
+            Info#file_info{
+                    access = undefined,
+                    atime = undefined
+                };
         {error, Error} ->
             Error  % posix error code as atom
     end.
@@ -1034,23 +1114,24 @@ list_dir("." ++ _) ->
     [];
 list_dir(Path) when is_list(Path) ->
     Dirname = filename:dirname(Path),
-    Files = case file:list_dir(Path) of
-                {ok, Fs} ->
-                    Fs1 = lists:filter(
-                        fun(F) ->
-                            not zotonic_filewatcher_handler:is_file_blocked(Dirname, F)
-                        end,
-                        Fs),
-                    lists:map( fun normalize_path/1, Fs1 );
-                {error, _} -> []
-            end,
+    Files =
+        case file:list_dir(Path) of
+            {ok, Fs} ->
+                Fs1 = lists:filter(fun(F) ->
+                                      not zotonic_filewatcher_handler:is_file_blocked(Dirname, F)
+                                   end,
+                                   Fs),
+                lists:map(fun normalize_path/1, Fs1);
+            {error, _} ->
+                []
+        end,
     lists:sort(Files).
 
 %% both lists must be sorted for this diff to work
 
-diff_lists([F1 | Fs1], [F2 | _]=Fs2) when F1 < F2 ->
+diff_lists([F1 | Fs1], [F2 | _] = Fs2) when F1 < F2 ->
     [{added, F1} | diff_lists(Fs1, Fs2)];
-diff_lists([F1 | _]=Fs1, [F2 | Fs2]) when F1 > F2 ->
+diff_lists([F1 | _] = Fs1, [F2 | Fs2]) when F1 > F2 ->
     [{deleted, F2} | diff_lists(Fs1, Fs2)];
 diff_lists([_ | Fs1], [_ | Fs2]) ->
     diff_lists(Fs1, Fs2);
@@ -1066,15 +1147,22 @@ diff_lists([], []) ->
 %% more detail above, and 'file_monitor' is the name of this module.
 
 cast(Message, Monitors, St) ->
-    sets:fold(fun (Ref, Msg) ->
-                      case dict:find(Ref, St#state.refs) of
-                          {ok, #monitor_info{pid = Pid, auto = Auto}} ->
-                              Pid ! {?MSGTAG, Ref, Msg},
-                              case Auto of
-                                  true -> self() ! {?MSGTAG, Ref, Msg};
-                                  false -> ok
-                              end
-                      end,
-                      Msg  % note that this is a fold, not a map
+    sets:fold(fun(Ref, Msg) ->
+                 case dict:find(Ref, St#state.refs) of
+                     {ok,
+                      #monitor_info{
+                          pid = Pid,
+                          auto = Auto
+                      }} ->
+                         Pid ! {?MSGTAG, Ref, Msg},
+                         case Auto of
+                             true ->
+                                 self() ! {?MSGTAG, Ref, Msg};
+                             false ->
+                                 ok
+                         end
+                 end,
+                 Msg  % note that this is a fold, not a map
               end,
-              Message, Monitors).
+              Message,
+              Monitors).

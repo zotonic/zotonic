@@ -17,16 +17,17 @@
 %% limitations under the License.
 
 -module(mod_email_dkim).
+
 -author("Arjan Scherpenisse <arjan@miraclethings.nl>").
 
 -mod_title("Email DKIM signing").
+
 -mod_description("Signs outgoing e-mails with DomainKeys Identified Mail Signatures (RFC 6376)").
+
 -mod_prio(500).
 
--export([
-    init/1,
-    observe_email_dkim_options/2
-]).
+-export([init/1,
+         observe_email_dkim_options/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -34,6 +35,5 @@ init(Context) ->
     z_email_dkim:ensure_configured(Context),
     ok.
 
-observe_email_dkim_options(#email_dkim_options{}, Context) ->
+observe_email_dkim_options(#email_dkim_options{  }, Context) ->
     z_email_dkim:mimemail_options(Context).
-

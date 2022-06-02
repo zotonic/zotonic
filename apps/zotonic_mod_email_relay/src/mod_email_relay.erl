@@ -17,20 +17,21 @@
 %% limitations under the License.
 
 -module(mod_email_relay).
+
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Email Relay").
+
 -mod_description("Relay incoming e-mails for known users to their private e-mail address.").
+
 -mod_prio(500).
 
--export([
-    observe_email_received/2
-]).
+-export([observe_email_received/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 % @doc Check if the recipient is a known user, if so redirect the received e-mail as-is to that user.
-observe_email_received(#email_received{localpart=Recipient} = Received, Context) ->
+observe_email_received(#email_received{ localpart = Recipient } = Received, Context) ->
     case m_identity:lookup_by_username(Recipient, Context) of
         undefined ->
             undefined;
@@ -45,9 +46,9 @@ observe_email_received(#email_received{localpart=Recipient} = Received, Context)
                         false ->
                             % Relay the e-mail as-is
                             Msg = #email{
-                                to = Email,
-                                raw = Received#email_received.raw
-                            },
+                                      to = Email,
+                                      raw = Received#email_received.raw
+                                  },
                             z_email:send(Msg, Context)
                     end;
                 false ->

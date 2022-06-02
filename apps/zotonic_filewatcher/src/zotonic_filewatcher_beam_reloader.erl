@@ -18,32 +18,32 @@
 %% limitations under the License.
 
 -module(zotonic_filewatcher_beam_reloader).
+
 -author("Marc Worrell <marc@worrell.nl>").
+
 -behaviour(gen_server).
 
 %% gen_server exports
--export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
+-export([init/1,
+         handle_call/3,
+         handle_cast/2,
+         handle_info/2,
+         terminate/2,
+         code_change/3]).
 -export([start_link/1]).
-
 %% interface functions
--export([
-    reload/0,
-    make/0,
-    reload_module/1
-]).
+-export([reload/0,
+         make/0,
+         reload_module/1]).
 
 -include_lib("kernel/include/file.hrl").
 -include_lib("kernel/include/logger.hrl").
 
 % The state record for this server
--record(state, {
-    periodic=true :: boolean(),
-    start_time :: calendar:datetime()
-}).
+-record(state, {periodic = true :: boolean(), start_time :: calendar:datetime()}).
 
 % Interval for checking for new and/or changed BEAM files.
 -define(DEV_POLL_INTERVAL, 10000).
-
 
 %%====================================================================
 %% API
@@ -58,7 +58,6 @@ start_link(Periodic) ->
             {ok, Pid}
     end.
 
-
 %% @doc Check if beam files are changed, load the changed ones.
 reload() ->
     gen_server:cast(?MODULE, reload).
@@ -66,7 +65,6 @@ reload() ->
 %% @doc Perform a make:all() and reload the changed beam files.
 make() ->
     gen_server:cast(?MODULE, make).
-
 
 %%====================================================================
 %% gen_server callbacks
@@ -79,11 +77,11 @@ make() ->
 %% @doc Initiates the server.
 init([IsPeriodic]) ->
     init_scanner(IsPeriodic),
-    {ok, #state{
-            periodic=IsPeriodic,
-            start_time=calendar:local_time()
-        }}.
-
+    {ok,
+     #state{
+         periodic = IsPeriodic,
+         start_time = calendar:local_time()
+     }}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -95,23 +93,19 @@ init([IsPeriodic]) ->
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
-
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
 handle_cast(reload, State) ->
     reload_all(),
     {noreply, State};
-
 handle_cast(make, State) ->
     make_all(),
     reload_all(),
     {noreply, State};
-
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
-
 
 %% @spec handle_info(Info, State) -> {noreply, State} |
 %%                                       {noreply, State, Timeout} |
@@ -121,32 +115,29 @@ handle_info(reload_beams, State) ->
     reload_all(),
     timer:send_after(?DEV_POLL_INTERVAL, reload_beams),
     {noreply, State};
-
 %% @doc Handling all non call/cast messages
 handle_info({zotonic_filewatcher_monitor, _Ref, {changed, Path, file, _FileInfo, _Diff}}, State) ->
     zotonic_filewatcher_handler:file_changed(modify, Path),
     {noreply, State};
-
-handle_info({zotonic_filewatcher_monitor, _Ref, {found, Path, file, FileInfo, _Diff}}, #state{start_time=StartTime} = State) ->
+handle_info({zotonic_filewatcher_monitor, _Ref, {found, Path, file, FileInfo, _Diff}},
+            #state{ start_time = StartTime } = State) ->
     case StartTime < FileInfo#file_info.mtime of
-        true -> zotonic_filewatcher_handler:file_changed(create, Path);
-        false -> ok
+        true ->
+            zotonic_filewatcher_handler:file_changed(create, Path);
+        false ->
+            ok
     end,
     {noreply, State};
-
 handle_info({zotonic_filewatcher_monitor, _Ref, {changed, Path, directory, _FileInfo, Diff}}, State) ->
-    lists:foreach(
-            fun
-                ({deleted, File}) ->
-                    FilePath = filename:join([Path, File]),
-                    zotonic_filewatcher_handler:file_changed(delete, FilePath);
-                ({added, File}) ->
-                    FilePath = filename:join([Path, File]),
-                    zotonic_filewatcher_handler:file_changed(create, FilePath)
-            end,
-            Diff),
+    lists:foreach(fun ({deleted, File}) ->
+                          FilePath = filename:join([Path, File]),
+                          zotonic_filewatcher_handler:file_changed(delete, FilePath);
+                      ({added, File}) ->
+                          FilePath = filename:join([Path, File]),
+                          zotonic_filewatcher_handler:file_changed(create, FilePath)
+                  end,
+                  Diff),
     {noreply, State};
-
 handle_info(_Info, State) ->
     {noreply, State}.
 
@@ -163,7 +154,6 @@ terminate(_Reason, _State) ->
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
-
 %%====================================================================
 %% support functions
 %%====================================================================
@@ -173,12 +163,11 @@ reload_all() ->
     case reload_loaded_modules() of
         [] ->
             z_sites_dispatcher:update_dispatchinfo(),
-            [ z_module_indexer:reindex(C) || C <- z_sites_manager:get_site_contexts() ],
+            [z_module_indexer:reindex(C) || C <- z_sites_manager:get_site_contexts()],
             ok;
         _ ->
             z:flush()
     end.
-
 
 %% @doc Remake beam files from source. Do not load the new files (yet).
 make_all() ->
@@ -202,8 +191,8 @@ reload_module(M) ->
 %% @spec reload_loaded_modules() -> [Result]
 reload_loaded_modules() ->
     Dir = z_utils:lib_dir(),
-    Modules = [{M,P} || {M, P} <- code:all_loaded(), is_list(P) andalso string:str(P, Dir) > 0],
-    [reload_module(M) || {M,Path} <- Modules, module_changed(M,Path)].
+    Modules = [{M, P} || {M, P} <- code:all_loaded(), is_list(P) andalso string:str(P, Dir) > 0],
+    [reload_module(M) || {M, Path} <- Modules, module_changed(M, Path)].
 
 %% @doc Check if the version number of the module has been changed.  Skip template modules.
 %% @spec module_changed(atom(), filename()) -> bool()
@@ -218,9 +207,12 @@ module_changed(Module, BeamFile) ->
                     false;
                 Version ->
                     case beam_lib:version(BeamFile) of
-                        {ok, {_Module, Version}} -> false;
-                        {ok, {_Module, _OtherVersion}} -> true;
-                        {error, _, _} -> false
+                        {ok, {_Module, Version}} ->
+                            false;
+                        {ok, {_Module, _OtherVersion}} ->
+                            true;
+                        {error, _, _} ->
+                            false
                     end
             end
     end.
@@ -229,7 +221,7 @@ module_changed(Module, BeamFile) ->
 init_scanner(true) ->
     Dirs = zotonic_filewatcher_sup:watch_dirs(),
     lists:foreach(fun(Dir) ->
-                    _ = zotonic_filewatcher_monitor:automonitor(Dir)
+                     _ = zotonic_filewatcher_monitor:automonitor(Dir)
                   end,
                   Dirs),
     ok;

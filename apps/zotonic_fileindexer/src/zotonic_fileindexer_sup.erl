@@ -17,14 +17,14 @@
 %% limitations under the License.
 
 -module(zotonic_fileindexer_sup).
+
 -author('Marc Worrell <marc@worrell.nl>').
+
 -behaviour(supervisor).
 
 %% External exports
--export([
-    start_link/0,
-    init/1
-]).
+-export([start_link/0,
+         init/1]).
 
 %% @doc API for starting the site supervisor.
 start_link() ->
@@ -32,14 +32,7 @@ start_link() ->
 
 %% @doc Return the notifier gen_server(s) to be used.
 init([]) ->
-    {ok, {
-        {one_for_one, 5, 10},
-        [
-            spec(zotonic_fileindexer_cache)
-        ]
-    }}.
+    {ok, {{one_for_one, 5, 10}, [spec(zotonic_fileindexer_cache)]}}.
 
 spec(Name) ->
-    {Name,
-        {zotonic_fileindexer_cache, start_link, []},
-        permanent, 5000, worker, [zotonic_fileindexer_cache]}.
+    {Name, {zotonic_fileindexer_cache, start_link, []}, permanent, 5000, worker, [zotonic_fileindexer_cache]}.

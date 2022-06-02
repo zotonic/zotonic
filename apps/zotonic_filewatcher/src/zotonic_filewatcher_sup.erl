@@ -17,22 +17,21 @@
 %% limitations under the License.
 
 -module(zotonic_filewatcher_sup).
+
 -author('Marc Worrell <marc@worrell.nl>').
+
 -behaviour(supervisor).
 
 %% External exports
--export([
-    start_link/0,
-    init/1,
-    start_watchers/0,
-    restart_watchers/0,
-    watch_dirs/0,
-    watch_dirs_expanded/0
-    ]).
+-export([start_link/0,
+         init/1,
+         start_watchers/0,
+         restart_watchers/0,
+         watch_dirs/0,
+         watch_dirs_expanded/0]).
 
 -include_lib("kernel/include/file.hrl").
 -include_lib("kernel/include/logger.hrl").
-
 
 %% @doc API for starting the site supervisor.
 start_link() ->
@@ -40,11 +39,13 @@ start_link() ->
 
 %% @doc Return the filewatcher gen_server(s) to be used.
 init([]) ->
-    Children = [
-        {zotonic_filewatcher_handler,
+    Children =
+        [{zotonic_filewatcher_handler,
           {zotonic_filewatcher_handler, start_link, []},
-          permanent, 5000, worker, [zotonic_filewatcher_handler]}
-    ],
+          permanent,
+          5000,
+          worker,
+          [zotonic_filewatcher_handler]}],
     RestartStrategy = {one_for_all, 5, 10},
     {ok, {RestartStrategy, Children}}.
 
@@ -66,28 +67,25 @@ start_watchers() ->
     case z_config:get(filewatcher_enabled) of
         true ->
             Children = watcher_children(z_config:get(filewatcher_enabled)),
-            lists:foreach(
-                fun(ChildSpec) ->
-                    supervisor:start_child(?MODULE, ChildSpec)
-                end,
-                Children);
+            lists:foreach(fun(ChildSpec) ->
+                             supervisor:start_child(?MODULE, ChildSpec)
+                          end,
+                          Children);
         false ->
             ok
     end.
 
 watcher_children(true) ->
-    Watchers = [
-        zotonic_filewatcher_fswatch,
-        zotonic_filewatcher_inotify
-    ],
+    Watchers = [zotonic_filewatcher_fswatch, zotonic_filewatcher_inotify],
     which_watcher(Watchers);
 watcher_children(false) ->
     ?LOG_DEBUG("zotonic_filewatcher: disabled"),
-    [
-        {zotonic_filewatcher_beam_reloader,
-          {zotonic_filewatcher_beam_reloader, start_link, [false]},
-          permanent, 5000, worker, [zotonic_filewatcher_beam_reloader]}
-    ].
+    [{zotonic_filewatcher_beam_reloader,
+      {zotonic_filewatcher_beam_reloader, start_link, [false]},
+      permanent,
+      5000,
+      worker,
+      [zotonic_filewatcher_beam_reloader]}].
 
 which_watcher([]) ->
     IsScannerEnabled = z_config:get(filewatcher_scanner_enabled),
@@ -100,28 +98,29 @@ which_watcher([]) ->
     % Start the filewatcher process and the beam reloader.
     % If the scanner is enabled then the beam reloader will tell the monitor which
     % directories need to be watched.
-    MonitorOpts = [
-        {interval, z_config:get(filewatcher_scanner_interval)}
-    ],
-    [
-        {zotonic_filewatcher_monitor,
-          {zotonic_filewatcher_monitor, start_link, [ MonitorOpts ]},
-          permanent, 5000, worker, [zotonic_filewatcher_monitor]},
-        {zotonic_filewatcher_beam_reloader,
-          {zotonic_filewatcher_beam_reloader, start_link, [ IsScannerEnabled ]},
-          permanent, 5000, worker, [zotonic_filewatcher_beam_reloader]}
-    ];
-which_watcher([M|Ms]) ->
+    MonitorOpts = [{interval, z_config:get(filewatcher_scanner_interval)}],
+    [{zotonic_filewatcher_monitor,
+      {zotonic_filewatcher_monitor, start_link, [MonitorOpts]},
+      permanent,
+      5000,
+      worker,
+      [zotonic_filewatcher_monitor]},
+     {zotonic_filewatcher_beam_reloader,
+      {zotonic_filewatcher_beam_reloader, start_link, [IsScannerEnabled]},
+      permanent,
+      5000,
+      worker,
+      [zotonic_filewatcher_beam_reloader]}];
+which_watcher([M | Ms]) ->
     case M:is_installed() of
         true ->
-            [
-                {zotonic_filewatcher_beam_reloader,
-                  {zotonic_filewatcher_beam_reloader, start_link, [false]},
-                  permanent, 5000, worker, [zotonic_filewatcher_beam_reloader]},
-                {M,
-                  {M, start_link, []},
-                  permanent, 5000, worker, [M]}
-            ];
+            [{zotonic_filewatcher_beam_reloader,
+              {zotonic_filewatcher_beam_reloader, start_link, [false]},
+              permanent,
+              5000,
+              worker,
+              [zotonic_filewatcher_beam_reloader]},
+             {M, {M, start_link, []}, permanent, 5000, worker, [M]}];
         false ->
             which_watcher(Ms)
     end.
@@ -129,43 +128,45 @@ which_watcher([M|Ms]) ->
 %% @doc Return the list of all directories to watch
 %% @todo Add a non recursive watch on zotonic_apps, _checkouts and the lib dir.
 %%       To see if new applications are added (or removed).
--spec watch_dirs() -> list(string()).
+-spec watch_dirs() -> [string()].
 watch_dirs() ->
-    ZotonicDirs = [
-        filename:join([ z_path:get_path(), "_checkouts" ]),
-        build_lib_dir()
-    ],
-    lists:filter(fun(Dir) -> filelib:is_dir(Dir) end, ZotonicDirs).
+    ZotonicDirs = [filename:join([z_path:get_path(), "_checkouts"]), build_lib_dir()],
+    lists:filter(fun(Dir) ->
+                    filelib:is_dir(Dir)
+                 end,
+                 ZotonicDirs).
 
 %% @doc We expand all watch dirs, so that symbolic links to src, include, and priv are followed
--spec watch_dirs_expanded() -> list(string()).
+-spec watch_dirs_expanded() -> [string()].
 watch_dirs_expanded() ->
-    lists:foldl(
-        fun(Dir, Acc) ->
-            symlinks(Dir) ++ [ Dir | Acc ]
-        end,
-        [],
-        watch_dirs()).
+    lists:foldl(fun(Dir, Acc) ->
+                   symlinks(Dir) ++ [Dir | Acc]
+                end,
+                [],
+                watch_dirs()).
 
 symlinks(Dir) ->
-    All =  filelib:wildcard(filename:join([ Dir, "*" ]))
-        ++ filelib:wildcard(filename:join([ Dir, "*", "{src,priv,include}" ])),
-    lists:filter(
-        fun(D) ->
-            case filelib:is_file(D) of
-                true ->
-                    case file:read_link_info(D) of
-                        {ok, #file_info{ type = symlink }} -> true;
-                        _ -> false
-                    end;
-                false ->
-                    false
-            end
-        end,
-        All).
+    All = filelib:wildcard(
+              filename:join([Dir, "*"]))
+          ++ filelib:wildcard(
+                 filename:join([Dir, "*", "{src,priv,include}"])),
+    lists:filter(fun(D) ->
+                    case filelib:is_file(D) of
+                        true ->
+                            case file:read_link_info(D) of
+                                {ok, #file_info{ type = symlink }} ->
+                                    true;
+                                _ ->
+                                    false
+                            end;
+                        false ->
+                            false
+                    end
+                 end,
+                 All).
 
 %% @doc Return the _build/default/lib directory
 -spec build_lib_dir() -> file:filename().
 build_lib_dir() ->
-    filename:dirname(code:lib_dir(zotonic_filewatcher)).
-
+    filename:dirname(
+        code:lib_dir(zotonic_filewatcher)).

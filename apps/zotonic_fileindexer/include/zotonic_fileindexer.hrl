@@ -16,10 +16,5 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--record(fileindex, {
-    basename :: binary(),
-    rootname :: binary(),
-    extension :: binary(),
-    relpath :: binary(),
-    path :: binary()
-}).
+-record(fileindex,
+        {basename :: binary(), rootname :: binary(), extension :: binary(), relpath :: binary(), path :: binary()}).

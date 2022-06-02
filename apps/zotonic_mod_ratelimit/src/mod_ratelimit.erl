@@ -22,83 +22,100 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Rate Limiting").
--mod_description("Rate limiting of authentication tries and other types of requests.").
--mod_prio(500).
--mod_depends([ cron ]).
 
--export([
-    observe_auth_precheck/2,
-    observe_auth_checked/2,
-    observe_auth_logon/3,
-    observe_auth_reset/2,
-    observe_tick_6h/2,
-    init/1
-]).
+-mod_description("Rate limiting of authentication tries and other types of requests.").
+
+-mod_prio(500).
+
+-mod_depends([cron]).
+
+-export([observe_auth_precheck/2,
+         observe_auth_checked/2,
+         observe_auth_logon/3,
+         observe_auth_reset/2,
+         observe_tick_6h/2,
+         init/1]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 % Length of the secret for signing the device cookie
 -define(DEVICE_SECRET_LENGTH, 32).
-
 % Validity period of a device cookie
--define(DEVICE_MAX_AGE, 3600*24*180).
-
+-define(DEVICE_MAX_AGE, 3600 * 24 * 180).
 % Name of the cookie storing the device id for rate limiting.
 -define(DEVICE_COOKIE, <<"z_rldid">>).
 
-
--record(rldid, {
-        username :: binary(),
-        device_id :: binary()
-    }).
+-record(rldid, {username :: binary(), device_id :: binary()}).
 
 %% @doc Setup the mnesia tables for registering the event counters.
 init(Context) ->
     m_ratelimit:init(Context).
 
 %% @doc Check if rate limiting applies to this authentication request
-observe_auth_precheck( #auth_precheck{ username = Username }, Context ) ->
-    DeviceId = case validate_device_cookie(Context) of
-        {ok, #rldid{ username = Username, device_id = DId }} -> DId;
-        {ok, _} -> undefined;
-        {error, _} -> undefined
-    end,
+observe_auth_precheck(#auth_precheck{ username = Username }, Context) ->
+    DeviceId =
+        case validate_device_cookie(Context) of
+            {ok,
+             #rldid{
+                 username = Username,
+                 device_id = DId
+             }} ->
+                DId;
+            {ok, _} ->
+                undefined;
+            {error, _} ->
+                undefined
+        end,
     case m_ratelimit:is_event_limited(auth, Username, DeviceId, Context) of
         true ->
-            z:warning(
-                "Rate limit on auth hit for username '~s' (from ~p)",
-                [ Username, m_req:get(peer, Context) ],
-                [ {module, ?MODULE}, {line, ?LINE} ],
-                Context),
+            z:warning("Rate limit on auth hit for username '~s' (from ~p)",
+                      [Username, m_req:get(peer, Context)],
+                      [{module, ?MODULE}, {line, ?LINE}],
+                      Context),
             {error, ratelimit};
         false ->
             undefined
     end.
 
 %% @doc Handle the result of the password authentication, register all failures
-observe_auth_checked( #auth_checked{ username = Username, is_accepted = false }, Context ) ->
-    DeviceId = case validate_device_cookie(Context) of
-        {ok, #rldid{ username = Username, device_id = DId }} -> DId;
-        {ok, _} -> undefined;
-        {error, _} -> undefined
-    end,
+observe_auth_checked(#auth_checked{
+                         username = Username,
+                         is_accepted = false
+                     },
+                     Context) ->
+    DeviceId =
+        case validate_device_cookie(Context) of
+            {ok,
+             #rldid{
+                 username = Username,
+                 device_id = DId
+             }} ->
+                DId;
+            {ok, _} ->
+                undefined;
+            {error, _} ->
+                undefined
+        end,
     m_ratelimit:insert_event(auth, Username, DeviceId, Context);
-observe_auth_checked( #auth_checked{ username = Username, is_accepted = true }, _Context ) ->
+observe_auth_checked(#auth_checked{
+                         username = Username,
+                         is_accepted = true
+                     },
+                     _Context) ->
     % Store the authenticated username for later retrieval in observe_auth_logon.
     erlang:put(ratelimit_event_username, Username).
 
-
 %% @doc Authentication succeeded, set the device id cookie (if we have an username from auth_checked)
-observe_auth_logon( #auth_logon{}, Context, _Context ) ->
+observe_auth_logon(#auth_logon{  }, Context, _Context) ->
     case auth_username(Context) of
         undefined ->
             Context;
         Username ->
             erlang:erase(ratelimit_event_username),
             RId = #rldid{
-                username = Username,
-                device_id = z_ids:id(16)
-            },
+                      username = Username,
+                      device_id = z_ids:id(16)
+                  },
             set_device_cookie(RId, Context)
     end.
 
@@ -112,18 +129,25 @@ auth_username(Context) ->
 
 %% @doc Auth reset requested, register it against the device cookie
 observe_auth_reset(#auth_reset{ username = Username }, Context) ->
-    DeviceId = case validate_device_cookie(Context) of
-        {ok, #rldid{ username = Username, device_id = DId }} -> DId;
-        {ok, _} -> undefined;
-        {error, _} -> undefined
-    end,
+    DeviceId =
+        case validate_device_cookie(Context) of
+            {ok,
+             #rldid{
+                 username = Username,
+                 device_id = DId
+             }} ->
+                DId;
+            {ok, _} ->
+                undefined;
+            {error, _} ->
+                undefined
+        end,
     case m_ratelimit:is_event_limited(reset, Username, DeviceId, Context) of
         true ->
-            z:warning(
-                "Rate limit on reset hit for username '~s' (from ~p)",
-                [ Username, m_req:get(peer, Context) ],
-                [ {module, ?MODULE}, {line, ?LINE} ],
-                Context),
+            z:warning("Rate limit on reset hit for username '~s' (from ~p)",
+                      [Username, m_req:get(peer, Context)],
+                      [{module, ?MODULE}, {line, ?LINE}],
+                      Context),
             {error, ratelimit};
         false ->
             m_ratelimit:insert_event(reset, Username, DeviceId, Context),
@@ -134,9 +158,8 @@ observe_auth_reset(#auth_reset{ username = Username }, Context) ->
 observe_tick_6h(tick_6h, Context) ->
     m_ratelimit:prune(Context).
 
-
 %% @doc Validate if the request has a device cookie and if it is valid return the decoded term.
--spec validate_device_cookie( z:context() ) -> {ok, term()} | {error, none|badarg|forged|expired}.
+-spec validate_device_cookie(z:context()) -> {ok, term()} | {error, none | badarg | forged | expired}.
 validate_device_cookie(Context) ->
     case z_context:get_cookie(?DEVICE_COOKIE, Context) of
         undefined ->
@@ -145,36 +168,34 @@ validate_device_cookie(Context) ->
             CookieB = z_convert:to_binary(Cookie),
             Secret = device_secret(Context),
             case termit:decode_base64(CookieB, Secret) of
-                {ok, Term} -> termit:check_expired(Term);
-                {error, _} = Error -> Error
+                {ok, Term} ->
+                    termit:check_expired(Term);
+                {error, _} = Error ->
+                    Error
             end
     end.
 
 %% @doc Set a device cookie with the given identity/term.
--spec set_device_cookie( term(), z:context() ) -> z:context().
+-spec set_device_cookie(term(), z:context()) -> z:context().
 set_device_cookie(Term, Context) ->
     Secret = device_secret(Context),
     ExpTerm = termit:expiring(Term, ?DEVICE_MAX_AGE),
     Cookie = termit:encode_base64(ExpTerm, Secret),
-    Options = [
-        {max_age, ?DEVICE_MAX_AGE},
-        {path, "/"},
-        {same_site, strict},
-        {http_only, true},
-        {secure, true}
-    ],
+    Options = [{max_age, ?DEVICE_MAX_AGE}, {path, "/"}, {same_site, strict}, {http_only, true}, {secure, true}],
     z_context:set_cookie(?DEVICE_COOKIE, Cookie, Options, Context).
 
--spec device_secret( z:context() ) -> binary().
+-spec device_secret(z:context()) -> binary().
 device_secret(Context) ->
     case m_config:get_value(mod_ratelimit, device_secret, Context) of
-        <<>> -> generate_device_secret(Context);
-        undefined -> generate_device_secret(Context);
-        Secret -> Secret
+        <<>> ->
+            generate_device_secret(Context);
+        undefined ->
+            generate_device_secret(Context);
+        Secret ->
+            Secret
     end.
 
 generate_device_secret(Context) ->
     Secret = z_ids:id(?DEVICE_SECRET_LENGTH),
     m_config:set_value(mod_ratelimit, device_secret, Secret, Context),
     Secret.
-

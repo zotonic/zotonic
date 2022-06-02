@@ -18,40 +18,43 @@
 %% limitations under the License.
 
 -module(mod_facebook).
+
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Facebook").
--mod_description("Adds Facebook login and other Facebook related features.").
--mod_prio(400).
--mod_depends([ admin, authentication, mod_oauth2 ]).
 
--export([
-    observe_search_query/2,
-    event/2
-]).
--export([
-    get_config/1
-]).
+-mod_description("Adds Facebook login and other Facebook related features.").
+
+-mod_prio(400).
+
+-mod_depends([admin, authentication, mod_oauth2]).
+
+-export([observe_search_query/2,
+         event/2]).
+-export([get_config/1]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
-
 
 % You have to add your Facebook appid and secret to the config.
 % By default, we only request access to the Facebook user's e-mail address.
 -define(FACEBOOK_SCOPE, <<"email">>).
 
-
 %% @doc Return the facebook appid, secret and scope
--spec get_config(z:context()) -> {AppId::string(), Secret::string(), Scope::string()}.
+-spec get_config(z:context()) -> {AppId :: string(), Secret :: string(), Scope :: string()}.
 get_config(Context) ->
-    { z_convert:to_list(m_config:get_value(mod_facebook, appid, Context)),
-      z_convert:to_list(m_config:get_value(mod_facebook, appsecret, Context)),
-      z_convert:to_list(m_config:get_value(mod_facebook, scope, ?FACEBOOK_SCOPE, Context))
-    }.
-
+    {z_convert:to_list(
+         m_config:get_value(mod_facebook, appid, Context)),
+     z_convert:to_list(
+         m_config:get_value(mod_facebook, appsecret, Context)),
+     z_convert:to_list(
+         m_config:get_value(mod_facebook, scope, ?FACEBOOK_SCOPE, Context))}.
 
 %% @doc
-observe_search_query(#search_query{ search = {fql, Args}, offsetlimit = OffsetLimit}, Context) ->
+observe_search_query(#search_query{
+                         search = {fql, Args},
+                         offsetlimit = OffsetLimit
+                     },
+                     Context) ->
     case z_acl:is_allowed(use, mod_facebook, Context) of
         true ->
             m_facebook:search({fql, Args}, OffsetLimit, Context);
@@ -61,8 +64,7 @@ observe_search_query(#search_query{ search = {fql, Args}, offsetlimit = OffsetLi
 observe_search_query(_, _Context) ->
     undefined.
 
-
-event(#submit{message=admin_facebook}, Context) ->
+event(#submit{ message = admin_facebook }, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
             save_settings(Context),
@@ -72,20 +74,26 @@ event(#submit{message=admin_facebook}, Context) ->
     end.
 
 save_settings(Context) ->
-    lists:foreach(fun ({Key, Value}) ->
-                        case is_setting(Key) of
-                            true -> m_config:set_value(mod_facebook, binary_to_atom(Key, 'utf8'), Value, Context);
-                            false -> ok
-                        end
+    lists:foreach(fun({Key, Value}) ->
+                     case is_setting(Key) of
+                         true ->
+                             m_config:set_value(mod_facebook, binary_to_atom(Key, utf8), Value, Context);
+                         false ->
+                             ok
+                     end
                   end,
                   z_context:get_q_all_noz(Context)).
 
-is_setting(<<"appid">>) -> true;
-is_setting(<<"appsecret">>) -> true;
-is_setting(<<"scope">>) -> true;
-is_setting(<<"useauth">>) -> true;
-is_setting(_) -> false.
-
+is_setting(<<"appid">>) ->
+    true;
+is_setting(<<"appsecret">>) ->
+    true;
+is_setting(<<"scope">>) ->
+    true;
+is_setting(<<"useauth">>) ->
+    true;
+is_setting(_) ->
+    false.
 
 % %% @doc Redirect to facebook, keep extra arguments in query arg
 % event(#postback{message={logon_redirect, Args}}, Context) ->
@@ -98,4 +106,3 @@ is_setting(_) -> false.
 %                 ]},
 %             {redirect, [{dispatch, facebook_authorize}, {pk, Pickled}]}
 %         ], Context).
-

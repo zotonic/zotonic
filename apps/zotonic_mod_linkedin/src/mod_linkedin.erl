@@ -21,26 +21,28 @@
 %% limitations under the License.
 
 -module(mod_linkedin).
+
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("LinkedIn").
+
 -mod_description("Use LinkedIn for logon.").
+
 -mod_prio(500).
--mod_depends([ admin, authentication, mod_oauth2 ]).
--mod_provides([ linkedin ]).
+
+-mod_depends([admin, authentication, mod_oauth2]).
+
+-mod_provides([linkedin]).
 
 %% interface functions
--export([
-        event/2,
-        get_config/1
-    ]).
+-export([event/2,
+         get_config/1]).
 
 -define(LINKEDIN_SCOPE, "r_liteprofile r_emailaddress").
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-
-event(#submit{message=admin_linkedin}, Context) ->
+event(#submit{ message = admin_linkedin }, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
             save_settings(Context),
@@ -50,25 +52,30 @@ event(#submit{message=admin_linkedin}, Context) ->
     end.
 
 save_settings(Context) ->
-    lists:foreach(fun ({Key, Value}) ->
-                        case is_setting(Key) of
-                            true -> m_config:set_value(mod_linkedin, binary_to_atom(Key, 'utf8'), Value, Context);
-                            false -> ok
-                        end
+    lists:foreach(fun({Key, Value}) ->
+                     case is_setting(Key) of
+                         true ->
+                             m_config:set_value(mod_linkedin, binary_to_atom(Key, utf8), Value, Context);
+                         false ->
+                             ok
+                     end
                   end,
                   z_context:get_q_all_noz(Context)).
 
-is_setting(<<"appid">>) -> true;
-is_setting(<<"appsecret">>) -> true;
-is_setting(<<"useauth">>) -> true;
-is_setting(_) -> false.
-
+is_setting(<<"appid">>) ->
+    true;
+is_setting(<<"appsecret">>) ->
+    true;
+is_setting(<<"useauth">>) ->
+    true;
+is_setting(_) ->
+    false.
 
 %% @doc Return the linkedin appid, secret and scope
--spec get_config(z:context()) -> {AppId::string(), Secret::string(), Scope::string()}.
+-spec get_config(z:context()) -> {AppId :: string(), Secret :: string(), Scope :: string()}.
 get_config(Context) ->
-    { z_convert:to_list(m_config:get_value(mod_linkedin, appid, Context)),
-      z_convert:to_list(m_config:get_value(mod_linkedin, appsecret, Context)),
-      ?LINKEDIN_SCOPE
-    }.
-
+    {z_convert:to_list(
+         m_config:get_value(mod_linkedin, appid, Context)),
+     z_convert:to_list(
+         m_config:get_value(mod_linkedin, appsecret, Context)),
+     ?LINKEDIN_SCOPE}.

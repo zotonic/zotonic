@@ -21,206 +21,242 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Audio").
+
 -mod_description("Play uploaded audio files.").
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--export([
-    observe_media_viewer/2,
-    observe_media_upload_props/3,
-    observe_media_upload_rsc_props/3
-]).
-
+-export([observe_media_viewer/2,
+         observe_media_upload_props/3,
+         observe_media_upload_rsc_props/3]).
 % For testing
--export([
-    audio_info/1
-]).
+-export([audio_info/1]).
 
 -define(FFPROBE_CMDLINE, "ffprobe -loglevel quiet -show_format -show_streams -print_format json ").
 -define(PREVIEW_CMDLINE, "ffmpeg -i ~s -vcodec png -vframes 1 -an -f rawvideo -loglevel error -y").
 
-
 %% @doc Return the media viewer for the audio
--spec observe_media_viewer(#media_viewer{}, z:context()) -> undefined | {ok, template_compiler:render_result()}.
-observe_media_viewer(#media_viewer{props=Props, options=Options}, Context) ->
+-spec observe_media_viewer(#media_viewer{  }, z:context()) -> undefined | {ok, template_compiler:render_result()}.
+observe_media_viewer(#media_viewer{
+                         props = Props,
+                         options = Options
+                     },
+                     Context) ->
     case maps:get(<<"mime">>, Props, undefined) of
         <<"audio/", _/binary>> ->
-            Vars = [
-                {props, Props},
-                {options, Options}
-            ],
-            {ok, z_template:render(#render{template="_audio_viewer.tpl", vars = Vars}, Context)};
+            Vars = [{props, Props}, {options, Options}],
+            {ok,
+             z_template:render(#render{
+                                   template = "_audio_viewer.tpl",
+                                   vars = Vars
+                               },
+                               Context)};
         _ ->
             undefined
     end.
 
-
 %% @doc Set medium properties from the uploaded file.
-observe_media_upload_props(#media_upload_props{archive_file=undefined, mime= <<"audio/", _/binary>>}, Medium, _Context) ->
+observe_media_upload_props(#media_upload_props{
+                               archive_file = undefined,
+                               mime = <<"audio/", _/binary>>
+                           },
+                           Medium,
+                           _Context) ->
     Medium;
-observe_media_upload_props(#media_upload_props{id=Id, archive_file=File, mime= <<"audio/", _/binary>>}, Medium, Context) ->
+observe_media_upload_props(#media_upload_props{
+                               id = Id,
+                               archive_file = File,
+                               mime = <<"audio/", _/binary>>
+                           },
+                           Medium,
+                           Context) ->
     FileAbs = z_media_archive:abspath(File, Context),
     Info = audio_info(FileAbs),
-    Info2 = case audio_preview(FileAbs) of
-        {ok, TmpFile} ->
-            PreviewFilename = m_media:make_preview_unique(Id, <<".png">>, Context),
-            PreviewPath = z_media_archive:abspath(PreviewFilename, Context),
-            ok = z_media_preview:convert(TmpFile, PreviewPath, [], Context),
-            {ok, PreviewInfo} = z_media_identify:identify_file(PreviewPath, Context),
-            _ = file:delete(TmpFile),
-            Info#{
-                <<"preview_filename">> => PreviewFilename,
-                <<"preview_width">> => maps:get(<<"width">>, PreviewInfo, undefined),
-                <<"preview_height">> => maps:get(<<"height">>, PreviewInfo, undefined),
-                <<"is_deletable_preview">> => true
-            };
-        {error, _} ->
-            Info
-    end,
+    Info2 =
+        case audio_preview(FileAbs) of
+            {ok, TmpFile} ->
+                PreviewFilename = m_media:make_preview_unique(Id, <<".png">>, Context),
+                PreviewPath = z_media_archive:abspath(PreviewFilename, Context),
+                ok = z_media_preview:convert(TmpFile, PreviewPath, [], Context),
+                {ok, PreviewInfo} = z_media_identify:identify_file(PreviewPath, Context),
+                _ = file:delete(TmpFile),
+                Info#{
+                        <<"preview_filename">> => PreviewFilename,
+                        <<"preview_width">> => maps:get(<<"width">>, PreviewInfo, undefined),
+                        <<"preview_height">> => maps:get(<<"height">>, PreviewInfo, undefined),
+                        <<"is_deletable_preview">> => true
+                    };
+            {error, _} ->
+                Info
+        end,
     maps:merge(Medium, Info2);
-observe_media_upload_props(#media_upload_props{}, Medium, _Context) ->
+observe_media_upload_props(#media_upload_props{  }, Medium, _Context) ->
     Medium.
 
-
 %% @doc Set resource properties from the medium properties
-observe_media_upload_rsc_props(
-        #media_upload_rsc_props{ id = insert_rsc, mime = <<"audio/", _/binary>>, medium = Medium },
-        Props,
-        _Context) ->
-    case maps:get(<<"tags">>, Medium, #{}) of
+observe_media_upload_rsc_props(#media_upload_rsc_props{
+                                   id = insert_rsc,
+                                   mime = <<"audio/", _/binary>>,
+                                   medium = Medium
+                               },
+                               Props,
+                               _Context) ->
+    case maps:get(<<"tags">>, Medium, #{  }) of
         Tags when is_map(Tags) ->
             Props1 = maybe_date(<<"org_pubdate">>, Props, <<"creation_time">>, Tags),
-            maps:fold(
-                fun(Tag, Value, Acc) ->
-                    case is_tag_prop(Tag) of
-                        {true, Tag1} ->
-                            case is_empty_prop(Tag1, Props) of
-                                true ->
-                                    Acc#{ Tag1 => Value };
-                                false ->
-                                    Acc
-                            end;
-                        false ->
-                            Acc
-                    end
-                end,
-                Props1,
-                Tags);
+            maps:fold(fun(Tag, Value, Acc) ->
+                         case is_tag_prop(Tag) of
+                             {true, Tag1} ->
+                                 case is_empty_prop(Tag1, Props) of
+                                     true ->
+                                         Acc#{ Tag1 => Value };
+                                     false ->
+                                         Acc
+                                 end;
+                             false ->
+                                 Acc
+                         end
+                      end,
+                      Props1,
+                      Tags);
         _ ->
             Props
     end;
-observe_media_upload_rsc_props(#media_upload_rsc_props{}, Props, _Context) ->
+observe_media_upload_rsc_props(#media_upload_rsc_props{  }, Props, _Context) ->
     Props.
-
 
 maybe_date(DateProp, Props, TagProp, Tags) ->
     case maps:get(TagProp, Tags, undefined) of
-        undefined -> Props;
-        <<>> -> Props;
+        undefined ->
+            Props;
+        <<>> ->
+            Props;
         Date ->
             try
-                Props#{
-                    DateProp => z_datetime:to_datetime(Date)
-                }
+                Props#{ DateProp => z_datetime:to_datetime(Date) }
             catch
-                _:_ -> Props
+                _:_ ->
+                    Props
             end
     end.
 
-is_tag_prop(<<"title">> = T) -> {true, T};
-is_tag_prop(<<"artist">> = T) -> {true, T};
-is_tag_prop(<<"album">> = T) -> {true, T};
-is_tag_prop(<<"album_artist">> = T) -> {true, T};
-is_tag_prop(<<"composer">> = T) -> {true, T};
-is_tag_prop(<<"genre">> = T) -> {true, T};
-is_tag_prop(<<"track">> = T) -> {true, T};
+is_tag_prop(<<"title">> = T) ->
+    {true, T};
+is_tag_prop(<<"artist">> = T) ->
+    {true, T};
+is_tag_prop(<<"album">> = T) ->
+    {true, T};
+is_tag_prop(<<"album_artist">> = T) ->
+    {true, T};
+is_tag_prop(<<"composer">> = T) ->
+    {true, T};
+is_tag_prop(<<"genre">> = T) ->
+    {true, T};
+is_tag_prop(<<"track">> = T) ->
+    {true, T};
 % is_tag_prop(<<"date">> = T) -> {true, T};
-is_tag_prop(<<"copyright">> = T) -> {true, T};
-is_tag_prop(<<"compilation">>) -> {true, <<"is_compilation">>};
-is_tag_prop(_) -> false.
+is_tag_prop(<<"copyright">> = T) ->
+    {true, T};
+is_tag_prop(<<"compilation">>) ->
+    {true, <<"is_compilation">>};
+is_tag_prop(_) ->
+    false.
 
 is_empty_prop(K, Props) ->
-    z_utils:is_empty( maps:get(K, Props, undefined) ).
-
+    z_utils:is_empty(
+        maps:get(K, Props, undefined)).
 
 audio_info(Path) ->
-    Cmdline = case z_config:get(ffprobe_cmdline) of
-        undefined -> ?FFPROBE_CMDLINE;
-        <<>> -> ?FFPROBE_CMDLINE;
-        "" -> ?FFPROBE_CMDLINE;
-        CmdlineCfg -> z_convert:to_list(CmdlineCfg)
-    end,
-    FfprobeCmd = lists:flatten([
-           Cmdline, " ", z_filelib:os_filename(Path)
-       ]),
+    Cmdline =
+        case z_config:get(ffprobe_cmdline) of
+            undefined ->
+                ?FFPROBE_CMDLINE;
+            <<>> ->
+                ?FFPROBE_CMDLINE;
+            "" ->
+                ?FFPROBE_CMDLINE;
+            CmdlineCfg ->
+                z_convert:to_list(CmdlineCfg)
+        end,
+    FfprobeCmd = lists:flatten([Cmdline, " ", z_filelib:os_filename(Path)]),
     ?LOG_DEBUG("Audio info: ~p", [FfprobeCmd]),
-    JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
+    JSONText =
+        unicode:characters_to_binary(
+            os:cmd(FfprobeCmd)),
     try
         Ps = decode_json(JSONText),
-        Info = #{
-            <<"duration">> => fetch_duration(Ps),
-            <<"bit_rate">> => fetch_bit_rate(Ps),
-            <<"tags">> => fetch_tags(Ps)
-        },
-        maps:filter(
-            fun(_K, V) -> V =/= undefined end,
-            Info)
+        Info =
+            #{
+                <<"duration">> => fetch_duration(Ps),
+                <<"bit_rate">> => fetch_bit_rate(Ps),
+                <<"tags">> => fetch_tags(Ps)
+            },
+        maps:filter(fun(_K, V) ->
+                       V =/= undefined
+                    end,
+                    Info)
     catch
         error:E ->
             ?LOG_WARNING("Unexpected ffprobe return (~p) ~p", [E, JSONText]),
-            #{}
+            #{  }
     end.
 
 decode_json(JSONText) ->
     z_json:decode(JSONText).
 
-fetch_duration(#{<<"format">> := #{<<"duration">> := Duration}}) ->
+fetch_duration(#{ <<"format">> := #{ <<"duration">> := Duration } }) ->
     round(z_convert:to_float(Duration));
 fetch_duration(_) ->
     0.
 
-fetch_bit_rate(#{<<"format">> := #{<<"bit_rate">> := BitRate}}) ->
+fetch_bit_rate(#{ <<"format">> := #{ <<"bit_rate">> := BitRate } }) ->
     round(z_convert:to_float(BitRate));
 fetch_bit_rate(_) ->
     undefined.
 
-fetch_tags(#{ <<"format">> := #{ <<"tags">> := Tags }}) when is_map(Tags) ->
+fetch_tags(#{ <<"format">> := #{ <<"tags">> := Tags } }) when is_map(Tags) ->
     maps:filter(fun is_tag_ok/2, Tags);
 fetch_tags(_) ->
     undefined.
 
-is_tag_ok(<<"iTunSMPB">>, _) -> false;
-is_tag_ok(<<"iTunNORM">>, _) -> false;
-is_tag_ok(_, _) -> true.
-
-
+is_tag_ok(<<"iTunSMPB">>, _) ->
+    false;
+is_tag_ok(<<"iTunNORM">>, _) ->
+    false;
+is_tag_ok(_, _) ->
+    true.
 
 audio_preview(MovieFile) ->
-    Cmdline = case z_config:get(ffmpeg_preview_cmdline) of
-        undefined -> ?PREVIEW_CMDLINE;
-        <<>> -> ?PREVIEW_CMDLINE;
-        "" -> ?PREVIEW_CMDLINE;
-        CmdlineCfg -> z_convert:to_list(CmdlineCfg)
-    end,
+    Cmdline =
+        case z_config:get(ffmpeg_preview_cmdline) of
+            undefined ->
+                ?PREVIEW_CMDLINE;
+            <<>> ->
+                ?PREVIEW_CMDLINE;
+            "" ->
+                ?PREVIEW_CMDLINE;
+            CmdlineCfg ->
+                z_convert:to_list(CmdlineCfg)
+        end,
     TmpFile = z_tempfile:new(),
-    FfmpegCmd = z_convert:to_list(
-        iolist_to_binary([
-            case string:str(Cmdline, "-itsoffset") of
-                0 -> io_lib:format(Cmdline, [MovieFile]);
-                _ -> io_lib:format(Cmdline, [0, MovieFile])
-            end,
-            " ",
-            z_filelib:os_filename(TmpFile)
-        ])),
+    FfmpegCmd =
+        z_convert:to_list(iolist_to_binary([case string:str(Cmdline, "-itsoffset") of
+                                                0 ->
+                                                    io_lib:format(Cmdline, [MovieFile]);
+                                                _ ->
+                                                    io_lib:format(Cmdline, [0, MovieFile])
+                                            end,
+                                            " ",
+                                            z_filelib:os_filename(TmpFile)])),
     jobs:run(media_preview_jobs,
-        fun() ->
-            case os:cmd(FfmpegCmd) of
-                [] ->
-                   {ok, TmpFile};
-                Other ->
-                   {error, Other}
-            end
-        end).
+             fun() ->
+                case os:cmd(FfmpegCmd) of
+                    [] ->
+                        {ok, TmpFile};
+                    Other ->
+                        {error, Other}
+                end
+             end).
 
 % "format": {
 %     "filename": "Rammstein/RAMMSTEIN/01 DEUTSCHLAND.m4a",

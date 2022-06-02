@@ -17,13 +17,13 @@
 %% limitations under the License.
 
 -module(z_syslog_sup).
+
 -author('Marc Worrell <marc@worrell.nl>').
+
 -behaviour(supervisor).
 
--export([
-    start_link/0,
-    init/1
-]).
+-export([start_link/0,
+         init/1]).
 
 %% @doc API for starting the site supervisor.
 start_link() ->
@@ -31,15 +31,12 @@ start_link() ->
 
 %% @doc Return the notifier gen_server(s) to be used.
 init([]) ->
-    SupFlags = #{
-        strategy => one_for_one
-    },
-    Children = [
-        #{
-            id => z_syslog_logger,
-            start => {z_syslog_logger, start_link, []},
-            restart => permanent,
-            type => worker
-        }
-    ],
+    SupFlags = #{ strategy => one_for_one },
+    Children =
+        [#{
+             id => z_syslog_logger,
+             start => {z_syslog_logger, start_link, []},
+             restart => permanent,
+             type => worker
+         }],
     {ok, {SupFlags, Children}}.

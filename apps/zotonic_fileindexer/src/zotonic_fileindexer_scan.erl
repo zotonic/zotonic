@@ -20,17 +20,20 @@
 
 -author('Marc Worrell <marc@worrell.nl>').
 
--export([ scan/2 ]).
+-export([scan/2]).
 
 -include_lib("../include/zotonic_fileindexer.hrl").
 
 % Regexp for files to be ignored.
 -define(IGNORE, "^_flymake|\\.#|\\.~|^\\.").
 
--spec scan( file:filename_all(), undefined|string()|binary() ) -> list( file:filename_all() ).
-scan(Dir, undefined) -> scan(Dir, ".");
-scan(Dir, "") -> scan(Dir, ".");
-scan(Dir, <<>>) -> scan(Dir, ".");
+-spec scan(file:filename_all(), undefined | string() | binary()) -> [file:filename_all()].
+scan(Dir, undefined) ->
+    scan(Dir, ".");
+scan(Dir, "") ->
+    scan(Dir, ".");
+scan(Dir, <<>>) ->
+    scan(Dir, ".");
 scan(Dir, FilenameRE) ->
     {ok, IgnoreRE} = re:compile(?IGNORE),
     {ok, FileRE} = re:compile(FilenameRE),
@@ -39,12 +42,11 @@ scan(Dir, FilenameRE) ->
 scan_recursive(RelPath, Dir, FileRE, IgnoreRE, Acc) ->
     case file:list_dir(Dir) of
         {ok, Files} ->
-              lists:foldl(
-                fun(F, AccF) ->
-                    scan_filename(to_binary(F), RelPath, Dir, FileRE, IgnoreRE, AccF)
-                end,
-                Acc,
-                Files);
+            lists:foldl(fun(F, AccF) ->
+                           scan_filename(to_binary(F), RelPath, Dir, FileRE, IgnoreRE, AccF)
+                        end,
+                        Acc,
+                        Files);
         {error, _} ->
             Acc
     end.
@@ -60,14 +62,15 @@ scan_filename(F, RelPath, Dir, FileRE, IgnoreRE, Acc) ->
                 false ->
                     case re:run(F, FileRE) of
                         {match, _} ->
-                            Found = #fileindex{
-                                basename = to_binary(F),
-                                rootname = to_binary(filename:rootname(F)),
-                                extension = to_binary(filename:extension(F)),
-                                relpath = to_binary(RelPath1),
-                                path = to_binary(Path)
-                            },
-                            [ Found | Acc ];
+                            Found =
+                                #fileindex{
+                                    basename = to_binary(F),
+                                    rootname = to_binary(filename:rootname(F)),
+                                    extension = to_binary(filename:extension(F)),
+                                    relpath = to_binary(RelPath1),
+                                    path = to_binary(Path)
+                                },
+                            [Found | Acc];
                         nomatch ->
                             Acc
                     end
@@ -76,8 +79,12 @@ scan_filename(F, RelPath, Dir, FileRE, IgnoreRE, Acc) ->
             Acc
     end.
 
-join(<<>>, F) -> F;
-join(Dir, F) -> filename:join([ Dir, F ]).
+join(<<>>, F) ->
+    F;
+join(Dir, F) ->
+    filename:join([Dir, F]).
 
-to_binary(B) when is_binary(B) -> B;
-to_binary(L) -> unicode:characters_to_binary(L).
+to_binary(B) when is_binary(B) ->
+    B;
+to_binary(L) ->
+    unicode:characters_to_binary(L).

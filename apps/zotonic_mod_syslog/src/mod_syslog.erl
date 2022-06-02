@@ -17,18 +17,20 @@
 %% limitations under the License.
 
 -module(mod_syslog).
+
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Syslog").
+
 -mod_description("Log http requests to the syslog.").
+
 -mod_depends([]).
+
 -mod_provides([]).
 
--export([
-    observe_http_log_access/2
-]).
+-export([observe_http_log_access/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-observe_http_log_access(#http_log_access{} = Log, _Context) ->
+observe_http_log_access(#http_log_access{  } = Log, _Context) ->
     z_syslog_logger:log(Log).

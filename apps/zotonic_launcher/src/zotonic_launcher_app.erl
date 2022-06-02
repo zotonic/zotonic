@@ -21,15 +21,11 @@
 
 -behaviour(application).
 
--export([
-    start/0,
-    start/2,
-    stop/1,
-
-    is_root/0,
-
-    load_configs/1
-]).
+-export([start/0,
+         start/2,
+         stop/1,
+         is_root/0,
+         load_configs/1]).
 
 -include_lib("kernel/include/logger.hrl").
 
@@ -44,8 +40,8 @@ start() ->
             % Show the startup message
             %
             ?LOG_NOTICE("Zotonic starting"),
-            [ ?LOG_NOTICE("Init file: - ~s", [Cfg]) || Cfg <- zotonic_launcher_config:erlang_config_files( node() ) ],
-            [ ?LOG_NOTICE("Config file: ~s", [Cfg]) || Cfg <- ZotonicConfigFiles ],
+            [?LOG_NOTICE("Init file: - ~s", [Cfg]) || Cfg <- zotonic_launcher_config:erlang_config_files(node())],
+            [?LOG_NOTICE("Config file: ~s", [Cfg]) || Cfg <- ZotonicConfigFiles],
             %
             % Start the launcher and Zotonic
             %
@@ -65,7 +61,6 @@ start(_StartType, _StartArgs) ->
             zotonic_launcher_sup:start_link()
     end.
 
-
 -spec is_root() -> boolean().
 is_root() ->
     os:getenv("USER") =:= "root".
@@ -75,13 +70,12 @@ stop(_State) ->
     remove_pidfile(),
     ok.
 
-
 %% @doc Load all configurations and initialize Zotonic core.
--spec load_configs( node() ) -> {ok, list( file:filename_all() )} | {error, term()}.
+-spec load_configs(node()) -> {ok, [file:filename_all()]} | {error, term()}.
 load_configs(Node) ->
     ensure_started(yamerl),
     load_applications(),
-    ZotonicCfgs = zotonic_launcher_config:zotonic_config_files( Node ),
+    ZotonicCfgs = zotonic_launcher_config:zotonic_config_files(Node),
     case load_config_files(ZotonicCfgs) of
         ok ->
             zotonic_core:setup(Node),
@@ -101,17 +95,16 @@ load_applications() ->
     application:load(zotonic_core).
 
 load_config_files(ZotonicCfgs) ->
-    case zotonic_launcher_config:read_configs( ZotonicCfgs ) of
+    case zotonic_launcher_config:read_configs(ZotonicCfgs) of
         {ok, Config} ->
             zotonic_launcher_config:load_configs(Config);
         {error, _} = Error ->
             ?LOG_ERROR(#{
-                text => "Fatal error reading configuration files",
-                reason => Error
-            }),
+                           text => "Fatal error reading configuration files",
+                           reason => Error
+                       }),
             Error
     end.
-
 
 -spec ensure_started(atom()) -> ok | {error, term()}.
 ensure_started(App) ->
@@ -120,22 +113,26 @@ ensure_started(App) ->
             ok;
         {error, {not_started, Dep}} ->
             case ensure_started(Dep) of
-                ok -> ensure_started(App);
-                {error, _} = Error -> Error
+                ok ->
+                    ensure_started(App);
+                {error, _} = Error ->
+                    Error
             end;
         {error, {already_started, App}} ->
             ok;
         {error, {Tag, Msg}} when is_list(Tag), is_list(Msg) ->
-            {error, lists:flatten(io_lib:format("~s: ~s", [Tag, Msg]))};
+            {error,
+             lists:flatten(
+                 io_lib:format("~s: ~s", [Tag, Msg]))};
         {error, {bad_return, {{M, F, Args}, Return}}} ->
-            A = string:join([io_lib:format("~p", [A])|| A <- Args], ", "),
-            {error, lists:flatten(
-                        io_lib:format("~s failed to start due to a bad return value from call ~s:~s(~s):~n~p",
-                                      [App, M, F, A, Return]))};
+            A = string:join([io_lib:format("~p", [A]) || A <- Args], ", "),
+            {error,
+             lists:flatten(
+                 io_lib:format("~s failed to start due to a bad return value from call ~s:~s(~s):~n~p",
+                               [App, M, F, A, Return]))};
         {error, Reason} ->
             {error, Reason}
     end.
-
 
 -spec get_pidfile() -> file:filename().
 get_pidfile() ->
@@ -155,13 +152,12 @@ write_pidfile() ->
             ok = file:close(F);
         {error, Reason} ->
             ?LOG_ERROR(#{
-                text => "Could not write ZOTONIC_PIDFILE",
-                file => get_pidfile(),
-                reason => Reason
-            }),
+                           text => "Could not write ZOTONIC_PIDFILE",
+                           file => get_pidfile(),
+                           reason => Reason
+                       }),
             {error, Reason}
     end.
-
 
 -spec remove_pidfile() -> ok | {error, term()}.
 remove_pidfile() ->
@@ -170,10 +166,9 @@ remove_pidfile() ->
             ok;
         {error, Reason} ->
             ?LOG_ERROR(#{
-                text => "Could not delete ZOTONIC_PIDFILE",
-                file => get_pidfile(),
-                reason => Reason
-            }),
+                           text => "Could not delete ZOTONIC_PIDFILE",
+                           file => get_pidfile(),
+                           reason => Reason
+                       }),
             {error, Reason}
     end.
-

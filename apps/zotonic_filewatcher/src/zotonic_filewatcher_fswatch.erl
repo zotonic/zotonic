@@ -20,27 +20,25 @@
 %% limitations under the License.
 
 -module(zotonic_filewatcher_fswatch).
+
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -behaviour(gen_server).
 
 %% gen_server exports
--export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
+-export([init/1,
+         handle_call/3,
+         handle_cast/2,
+         handle_info/2,
+         terminate/2,
+         code_change/3]).
 -export([start_link/0]).
 
--record(state, {
-    pid :: pid() | undefined,
-    port :: integer() | undefined,
-    data :: binary(),
-    executable :: string()
-}).
+-record(state, {pid :: pid() | undefined, port :: integer() | undefined, data :: binary(), executable :: string()}).
 
 %% interface functions
--export([
-    is_installed/0,
-    restart/0
-]).
-
+-export([is_installed/0,
+         restart/0]).
 
 -include_lib("kernel/include/logger.hrl").
 
@@ -76,12 +74,13 @@ restart() ->
 %% @doc Initiates the server.
 init([Executable]) ->
     process_flag(trap_exit, true),
-    State = #state{
-        executable = Executable,
-        port = undefined,
-        pid = undefined,
-        data = <<>>
-    },
+    State =
+        #state{
+            executable = Executable,
+            port = undefined,
+            pid = undefined,
+            data = <<>>
+        },
     timer:send_after(100, start),
     {ok, State}.
 
@@ -98,37 +97,32 @@ handle_cast(restart, #state{ pid = Pid } = State) when is_pid(Pid) ->
     ?LOG_INFO("[inotify] Stopping fswatch file monitor."),
     catch exec:stop(Pid),
     {noreply, start_fswatch(State#state{ port = undefined })};
-
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
 %% @doc Reading a line from the fswatch program.
 handle_info({stdout, _Port, FilenameFlags}, #state{ data = Data } = State) ->
-    {FVs, Rest} = extract_filename_verb( <<Data/binary, FilenameFlags/binary>>),
-    lists:map(
-        fun({Filename, Verb}) ->
-            zotonic_filewatcher_handler:file_changed(Verb, Filename)
-        end,
-        FVs),
+    {FVs, Rest} = extract_filename_verb(<<Data/binary, FilenameFlags/binary>>),
+    lists:map(fun({Filename, Verb}) ->
+                 zotonic_filewatcher_handler:file_changed(Verb, Filename)
+              end,
+              FVs),
     {noreply, State#state{ data = Rest }};
-
-handle_info({'DOWN', _Port, process, Pid, Reason}, #state{pid = Pid} = State) ->
+handle_info({'DOWN', _Port, process, Pid, Reason}, #state{ pid = Pid } = State) ->
     ?LOG_ERROR("[fswatch] fswatch port closed with ~p, restarting in 5 seconds.", [Reason]),
-    State1 = State#state{
-        pid = undefined,
-        port = undefined
-    },
+    State1 =
+        State#state{
+                 pid = undefined,
+                 port = undefined
+             },
     timer:send_after(5000, start),
     {noreply, State1};
-
 handle_info({'EXIT', _Pid, _Reason}, State) ->
     {noreply, State};
-
-handle_info(start, #state{port = undefined} = State) ->
+handle_info(start, #state{ port = undefined } = State) ->
     {noreply, start_fswatch(State)};
 handle_info(start, State) ->
     {noreply, State};
-
 handle_info(_Info, State) ->
     {noreply, State}.
 
@@ -137,9 +131,9 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, #state{pid = undefined}) ->
+terminate(_Reason, #state{ pid = undefined }) ->
     ok;
-terminate(_Reason, #state{pid = Pid}) ->
+terminate(_Reason, #state{ pid = Pid }) ->
     catch exec:stop(Pid),
     ok.
 
@@ -148,87 +142,122 @@ terminate(_Reason, #state{pid = Pid}) ->
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
-
 %%====================================================================
 %% support functions
 %%====================================================================
 
-start_fswatch(State=#state{executable = Executable, port = undefined}) ->
+start_fswatch(State =
+                  #state{
+                      executable = Executable,
+                      port = undefined
+                  }) ->
     ?LOG_INFO("[fswatch] Starting fswatch file monitor."),
-    REs = lists:foldl(
-        fun(RE, Acc) ->
-            [ "-e", RE | Acc ]
-        end,
-        [],
-        string:tokens(zotonic_filewatcher_handler:re_exclude(), "|")),
-    Args = [ Executable, "-0", "-x", "-Lr" ]
-        ++ REs
-        ++ zotonic_filewatcher_sup:watch_dirs_expanded(),
+    REs = lists:foldl(fun(RE, Acc) ->
+                         ["-e", RE | Acc]
+                      end,
+                      [],
+                      string:tokens(
+                          zotonic_filewatcher_handler:re_exclude(), "|")),
+    Args = [Executable, "-0", "-x", "-Lr"] ++ REs ++ zotonic_filewatcher_sup:watch_dirs_expanded(),
     {ok, Pid, Port} = exec:run_link(Args, [stdout, monitor]),
     State#state{
-        port = Port,
-        pid = Pid,
-        data = <<>>
-    }.
+             port = Port,
+             pid = Pid,
+             data = <<>>
+         }.
 
 extract_filename_verb(Line) ->
-    [ Rest | Lines ] = lists:reverse( binary:split(Line, <<0>>, [global]) ),
+    [Rest | Lines] =
+        lists:reverse(
+            binary:split(Line, <<0>>, [global])),
     FVs = lists:foldl(fun split_line/2, [], Lines),
     {FVs, Rest}.
 
 split_line(<<>>, Acc) ->
     Acc;
 split_line(Line, Acc) ->
-	% get a file path that may include spaces
-	Filepath = get_filepath(Line),
-	% extract a verb from the line, while ignoring strings that are not verbs
-	[_|Flags] = binary:split(Line, <<" ">>, [global]),
-    Verb = case extract_verb(Flags) of
-        create ->
-            % Deletes and renames are sometimes seen as a create
-            case filelib:is_file(Filepath) of
-                true -> create;
-                false -> delete
-            end;
-        V ->
-            V
-    end,
+    % get a file path that may include spaces
+    Filepath = get_filepath(Line),
+    % extract a verb from the line, while ignoring strings that are not verbs
+    [_ | Flags] = binary:split(Line, <<" ">>, [global]),
+    Verb =
+        case extract_verb(Flags) of
+            create ->
+                % Deletes and renames are sometimes seen as a create
+                case filelib:is_file(Filepath) of
+                    true ->
+                        create;
+                    false ->
+                        delete
+                end;
+            V ->
+                V
+        end,
     [{Filepath, Verb} | Acc].
 
 %% Remove verbs from line, preserve spaces
 get_filepath(Line) ->
-	Space = <<" ">>,
-	Parts = lists:foldl(fun(Part, Acc) ->
-		case extract_filepath(Part) of
-			<<>> -> Acc;
-			P -> <<Acc/binary, P/binary, Space/binary>>
-		end
-	end, <<>>, binary:split(Line, Space, [global])),
-	string:strip(unicode:characters_to_list(Parts), both, $ ).
+    Space = <<" ">>,
+    Parts =
+        lists:foldl(fun(Part, Acc) ->
+                       case extract_filepath(Part) of
+                           <<>> ->
+                               Acc;
+                           P ->
+                               <<Acc/binary, P/binary, Space/binary>>
+                       end
+                    end,
+                    <<>>,
+                    binary:split(Line, Space, [global])),
+    string:strip(
+        unicode:characters_to_list(Parts), both, $ ).
 
 % Remove all known verbs; the remainder must be the file path
 % of course this breaks when new event names are added to fswatch
-extract_filepath(<<>>) -> <<>>;
-extract_filepath(<<"PlatformSpecific">>) -> <<>>;
-extract_filepath(<<"AttributeModified">>) -> <<>>;
-extract_filepath(<<"Created">>) -> <<>>;
-extract_filepath(<<"Updated">>) -> <<>>;
-extract_filepath(<<"Removed">>) -> <<>>;
-extract_filepath(<<"Renamed">>) -> <<>>;
-extract_filepath(<<"OwnerModified">>) -> <<>>;
-extract_filepath(<<"MovedFrom">>) -> <<>>;
-extract_filepath(<<"MovedTo">>) -> <<>>;
-extract_filepath(<<"IsFile">>) -> <<>>;
-extract_filepath(<<"IsDir">>) -> <<>>;
-extract_filepath(<<"IsSymLink">>) -> <<>>;
-extract_filepath(<<"Link">>) -> <<>>;
-extract_filepath(F) -> F.
+extract_filepath(<<>>) ->
+    <<>>;
+extract_filepath(<<"PlatformSpecific">>) ->
+    <<>>;
+extract_filepath(<<"AttributeModified">>) ->
+    <<>>;
+extract_filepath(<<"Created">>) ->
+    <<>>;
+extract_filepath(<<"Updated">>) ->
+    <<>>;
+extract_filepath(<<"Removed">>) ->
+    <<>>;
+extract_filepath(<<"Renamed">>) ->
+    <<>>;
+extract_filepath(<<"OwnerModified">>) ->
+    <<>>;
+extract_filepath(<<"MovedFrom">>) ->
+    <<>>;
+extract_filepath(<<"MovedTo">>) ->
+    <<>>;
+extract_filepath(<<"IsFile">>) ->
+    <<>>;
+extract_filepath(<<"IsDir">>) ->
+    <<>>;
+extract_filepath(<<"IsSymLink">>) ->
+    <<>>;
+extract_filepath(<<"Link">>) ->
+    <<>>;
+extract_filepath(F) ->
+    F.
 
-extract_verb([]) -> modify;
-extract_verb([<<"Removed">>, <<"Renamed">> | _ ]) -> modify;
-extract_verb([<<"Created">>|_]) -> create;
-extract_verb([<<"Removed">>|_]) -> delete;
-extract_verb([<<"MovedFrom">>|_]) -> delete;
-extract_verb([<<"MovedTo">>|_]) -> create;
-extract_verb([<<"Renamed">>|_]) -> create;
-extract_verb([_|Flags]) -> extract_verb(Flags).
+extract_verb([]) ->
+    modify;
+extract_verb([<<"Removed">>, <<"Renamed">> | _]) ->
+    modify;
+extract_verb([<<"Created">> | _]) ->
+    create;
+extract_verb([<<"Removed">> | _]) ->
+    delete;
+extract_verb([<<"MovedFrom">> | _]) ->
+    delete;
+extract_verb([<<"MovedTo">> | _]) ->
+    create;
+extract_verb([<<"Renamed">> | _]) ->
+    create;
+extract_verb([_ | Flags]) ->
+    extract_verb(Flags).

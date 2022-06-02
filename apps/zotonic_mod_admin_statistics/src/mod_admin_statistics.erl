@@ -17,40 +17,39 @@
 %% limitations under the License.
 
 -module(mod_admin_statistics).
+
 -author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl>").
 
 -mod_title("Admin Statistics").
+
 -mod_description("Allow admins to view system statistics.").
+
 -mod_prio(800).
+
 -mod_depends([admin, mod_mqtt]).
+
 -mod_provides([]).
 
-
 %% interface functions
--export([
-    observe_admin_menu/3
-]).
+-export([observe_admin_menu/3]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
-
 
 %%
 %% Observes
 %%
 
-observe_admin_menu(#admin_menu{}, Acc, Context) ->
-    [
-     #menu_item{id=admin_statistics,
-                parent=admin_system,
-                label=?__("Statistics", Context),
-                url={admin_statistics},
-                visiblecheck={acl, use, mod_admin_statistics}}
-     |Acc].
-
+observe_admin_menu(#admin_menu{  }, Acc, Context) ->
+    [#menu_item{
+         id = admin_statistics,
+         parent = admin_system,
+         label = ?__("Statistics", Context),
+         url = {admin_statistics},
+         visiblecheck = {acl, use, mod_admin_statistics}
+     }
+     | Acc].
 
 %%
 %% Helpers
 %%
-
-

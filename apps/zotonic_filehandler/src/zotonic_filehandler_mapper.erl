@@ -19,10 +19,8 @@
 
 -module(zotonic_filehandler_mapper).
 
--export([
-    map_change/2,
-    is_application/1
-]).
+-export([map_change/2,
+         is_application/1]).
 
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
 -include_lib("../include/zotonic_filehandler.hrl").
@@ -31,13 +29,13 @@
 % Filename patterns for which we don't about unhandled events.
 -define(FILENAMES_NOWARN, <<"(/test/|/priv/ssl/|/dist/|\\.app$)">>).
 
-
--spec map_change(zotonic_filehandler:verb(), Filename::binary()) ->
-    {ok, [ mfa() ]} | {error, term()} | false.
+-spec map_change(zotonic_filehandler:verb(), Filename :: binary()) -> {ok, [mfa()]} | {error, term()} | false.
 map_change(Verb, Filename) ->
     {Application, What} = categorize(Filename),
     Ext = filename:extension(Filename),
-    Root = filename:rootname(filename:basename(Filename)),
+    Root =
+        filename:rootname(
+            filename:basename(Filename)),
     Split = filename:split(Filename),
     map_categorized(Verb, Application, What, Ext, Root, Split, Filename).
 
@@ -53,26 +51,25 @@ map_categorized(Verb, Application, What, Ext, Root, Split, Filename) ->
 
 map_notifier(Verb, Application, What, Ext, Root, Split, Filename) ->
     Msg = #zotonic_filehandler_map{
-        verb = Verb,
-        application = Application,
-        what = What,
-        extension = Ext,
-        root = Root,
-        split = Split,
-        filename = Filename
-    },
-    zotonic_notifier:first(
-        ?SYSTEM_NOTIFIER, zotonic_filehandler_map,
-        Msg, undefined).
+              verb = Verb,
+              application = Application,
+              what = What,
+              extension = Ext,
+              root = Root,
+              split = Split,
+              filename = Filename
+          },
+    zotonic_notifier:first(?SYSTEM_NOTIFIER, zotonic_filehandler_map, Msg, undefined).
 
 map_categorized([], Verb, _Application, _What, _Ext, _Root, _Split, Filename) ->
     case re:run(Filename, ?FILENAMES_NOWARN) of
-        {match, _} -> false;
+        {match, _} ->
+            false;
         nomatch ->
             ?LOG_DEBUG("Unhandled file event '~p' on '~s'", [Verb, Filename])
     end,
     false;
-map_categorized([Fun|Other], Verb, Application, What, Ext, Root, Split, Filename) ->
+map_categorized([Fun | Other], Verb, Application, What, Ext, Root, Split, Filename) ->
     case Fun(Verb, Application, What, Ext, Root, Split, Filename) of
         {ok, _} = Ok ->
             Ok;
@@ -87,43 +84,39 @@ map_categorized([Fun|Other], Verb, Application, What, Ext, Root, Split, Filename
 %% @doc Always flush the complete app if any file in the app is deleted or created.
 maybe_flush_indexer(Verb, App, What) when Verb =:= delete; Verb =:= create ->
     case What of
-        {src, _} -> zotonic_fileindexer_cache:flush(App, <<"src">>);
-        {priv, Dir, _} -> zotonic_fileindexer_cache:flush(App, <<"priv/", Dir/binary>>);
-        _ -> ok
+        {src, _} ->
+            zotonic_fileindexer_cache:flush(App, <<"src">>);
+        {priv, Dir, _} ->
+            zotonic_fileindexer_cache:flush(App, <<"priv/", Dir/binary>>);
+        _ ->
+            ok
     end;
 maybe_flush_indexer(_Verb, _App, _What) ->
     ok.
 
-
 categorize(Filename) ->
     case categorize_notifier(Filename) of
-        {ok, {_,_} = Cat} ->
+        {ok, {_, _} = Cat} ->
             Cat;
         undefined ->
-            Try = [
-                fun config_dir_file/1,
-                fun config_file/1,
-                fun priv_file/1,
-                fun src_file/1,
-                fun include_file/1,
-                fun app_file/1,
-                fun ebin_file/1,
-                fun test_file/1
-            ],
+            Try = [fun config_dir_file/1,
+                   fun config_file/1,
+                   fun priv_file/1,
+                   fun src_file/1,
+                   fun include_file/1,
+                   fun app_file/1,
+                   fun ebin_file/1,
+                   fun test_file/1],
             categorize_1(Try, Filename)
     end.
 
 categorize_notifier(Filename) ->
-    Msg = #zotonic_filehandler_categorize{
-        filename = Filename
-    },
-    zotonic_notifier:first(
-        ?SYSTEM_NOTIFIER, zotonic_filehandler_categorize,
-        Msg, undefined).
+    Msg = #zotonic_filehandler_categorize{ filename = Filename },
+    zotonic_notifier:first(?SYSTEM_NOTIFIER, zotonic_filehandler_categorize, Msg, undefined).
 
 categorize_1([], _Filename) ->
     {undefined, undefined};
-categorize_1([Fun|Other], Filename) ->
+categorize_1([Fun | Other], Filename) ->
     case Fun(Filename) of
         {AppVsn, What} ->
             case is_application(AppVsn) of
@@ -200,30 +193,34 @@ ebin_file(F) ->
             {AppVsn, {ebin, EbinFile}}
     end.
 
-
 %% @doc Check if the directory name is the name of a (compiled) application
 is_application(AppName) when is_atom(AppName) ->
     case code:lib_dir(AppName) of
-        {error, bad_name} -> is_application__app(AppName, AppName);
-        LibDir when is_list(LibDir) -> {true, AppName}
+        {error, bad_name} ->
+            is_application__app(AppName, AppName);
+        LibDir when is_list(LibDir) ->
+            {true, AppName}
     end;
 is_application(AppNameVsn) when is_binary(AppNameVsn) ->
-    [AppName|_] = binary:split(AppNameVsn, <<"-">>),
+    [AppName | _] = binary:split(AppNameVsn, <<"-">>),
     AppNameS = unicode:characters_to_list(AppName),
     case code:where_is_file(AppNameS ++ ".app") of
-        non_existing -> is_application__app(AppNameVsn, AppName);
-        _Path -> {true, z_convert:to_atom(AppName)}
+        non_existing ->
+            is_application__app(AppNameVsn, AppName);
+        _Path ->
+            {true, z_convert:to_atom(AppName)}
     end.
 
 is_application__app(AppNameVsn, AppName) ->
     case filelib:is_regular(
-        filename:join([
-            filename:dirname(code:lib_dir(zotonic_filehandler)),
-            AppNameVsn,
-            "ebin",
-            z_convert:to_list(AppName)++".app"
-        ]))
+             filename:join([filename:dirname(
+                                code:lib_dir(zotonic_filehandler)),
+                            AppNameVsn,
+                            "ebin",
+                            z_convert:to_list(AppName) ++ ".app"]))
     of
-        true -> {true, z_convert:to_atom(AppName)};
-        false -> false
+        true ->
+            {true, z_convert:to_atom(AppName)};
+        false ->
+            false
     end.

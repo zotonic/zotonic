@@ -14,7 +14,9 @@ hash_test() ->
 
 needs_rehash_test() ->
     ?assertEqual(true, m_identity:needs_rehash(old_hash("password"))),
-    ?assertEqual(false, m_identity:needs_rehash(m_identity:hash("password"))),
+    ?assertEqual(false,
+                 m_identity:needs_rehash(
+                     m_identity:hash("password"))),
     ok.
 
 hash_is_equal_test() ->
@@ -35,7 +37,11 @@ hash_is_equal_old_hash_test() ->
     ok.
 
 check_password_no_user_test_() ->
-    {timeout, 20, fun() -> check_password_no_user() end}.
+    {timeout,
+     20,
+     fun() ->
+        check_password_no_user()
+     end}.
 
 check_password_no_user() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
@@ -47,7 +53,11 @@ check_password_no_user() ->
     ok.
 
 check_username_password_test_() ->
-    {timeout, 20, fun() -> check_username_password() end}.
+    {timeout,
+     20,
+     fun() ->
+        check_username_password()
+     end}.
 
 check_username_password() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
@@ -62,17 +72,16 @@ check_username_password() ->
     ?assertEqual({error, password}, m_identity:check_username_pw("mr_y", "wrong-secret", C)),
 
     %% Make sure stored hashes don't need to be upgraded.
-    {MrYId, Hash} = z_db:q_row("select rsc_id, propb from identity where type = 'username_pw' and key = $1",
-        ["mr_y"], C),
+    {MrYId, Hash} =
+        z_db:q_row("select rsc_id, propb from identity where type = 'username_pw' and key = $1", ["mr_y"], C),
     ?assert(not m_identity:needs_rehash(Hash)),
 
     %% update the hash value in the database and set the old hash algorithm.
     OldHash = old_hash("secret"),
-    z_db:q("update identity set propb = $2 where type = 'username_pw' and key = $1",
-        ["mr_y", {term, OldHash}], C),
+    z_db:q("update identity set propb = $2 where type = 'username_pw' and key = $1", ["mr_y", {term, OldHash}], C),
 
-    {MrYId, CurrentHash} = z_db:q_row(
-        "select rsc_id, propb from identity where type = 'username_pw' and key = $1", ["mr_y"], C),
+    {MrYId, CurrentHash} =
+        z_db:q_row("select rsc_id, propb from identity where type = 'username_pw' and key = $1", ["mr_y"], C),
     ?assert(m_identity:needs_rehash(CurrentHash)),
 
     %% Logging in with the wrong password still does not work.
@@ -82,8 +91,8 @@ check_username_password() ->
     ?assertEqual({ok, MrYId}, m_identity:check_username_pw("mr_y", "secret", C)),
 
     %% But now hash of the user has been replaced with one which does not need a rehash
-    {MrYId, NewHash} = z_db:q_row(
-        "select rsc_id, propb from identity where type = 'username_pw' and key = $1", ["mr_y"], C),
+    {MrYId, NewHash} =
+        z_db:q_row("select rsc_id, propb from identity where type = 'username_pw' and key = $1", ["mr_y"], C),
     ?assert(not m_identity:needs_rehash(NewHash)),
 
     %% And afterwards the user can still logon
@@ -99,29 +108,28 @@ start_modules(Context) ->
     ok = z_module_manager:activate_await(mod_admin_identity, Context),
     ok = z_module_manager:upgrade_await(Context).
 
-
 %% Old hash algorithm copied from m_identity before the change to bcrypt.
 old_hash(Pw) ->
     Salt = z_ids:id(10),
     Hash = crypto:hash(sha, [Salt, Pw]),
     {hash, Salt, Hash}.
 
-
 ensure_new_user(Name, Password, Context) ->
     z_db:transaction(fun(Ctx) ->
-        ok = delete_user(Name, Ctx),
+                        ok = delete_user(Name, Ctx),
 
-        PersonId = m_rsc:rid(person, Ctx),
-        {ok, Id} = m_rsc:insert([{title, Name}, {category_id, PersonId}], Ctx),
+                        PersonId = m_rsc:rid(person, Ctx),
+                        {ok, Id} = m_rsc:insert([{title, Name}, {category_id, PersonId}], Ctx),
 
-        ok = m_identity:set_username_pw(Id, Name, Password, Ctx),
-        Id
-    end, Context).
-
+                        ok = m_identity:set_username_pw(Id, Name, Password, Ctx),
+                        Id
+                     end,
+                     Context).
 
 delete_user(Name, Context) ->
     case m_identity:lookup_by_username(Name, Context) of
-        undefined -> ok;
+        undefined ->
+            ok;
         Props ->
             {rsc_id, Id} = proplists:lookup(rsc_id, Props),
             m_rsc:delete(Id, Context)

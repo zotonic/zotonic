@@ -4,23 +4,22 @@
 
 youtube_test() ->
     Context = z_context:new(zotonic_site_testsandbox),
-    In  = <<"<iframe width=\"560\" height=\"315\" src=\"//www.youtube.com/embed/2RXp3r2gb3A\" frameborder=\"0\" allowfullscreen></iframe>">>,
-    Out = <<
-        "<iframe src=\"https://www.youtube.com/embed/2RXp3r2gb3A\" "
-        "sandbox=\"allow-popups allow-scripts allow-same-origin\" "
-        "width=\"560\" height=\"315\" "
-        "frameborder=\"0\" allowfullscreen=\"allowfullscreen\">"
-        "</iframe>">>,
+    In =
+        <<"<iframe width=\"560\" height=\"315\" src=\"//www.youtube.com/embed/2RXp3r2gb3A\" frameborder=\"0\" allowfullscreen></iframe>">>,
+    Out = <<"<iframe src=\"https://www.youtube.com/embed/2RXp3r2gb3A\" "
+            "sandbox=\"allow-popups allow-scripts allow-same-origin\" "
+            "width=\"560\" height=\"315\" "
+            "frameborder=\"0\" allowfullscreen=\"allowfullscreen\">"
+            "</iframe>">>,
     ?assertEqual(Out, z_sanitize:html(In, Context)).
 
 youtube_object_test() ->
     Context = z_context:new(zotonic_site_testsandbox),
-    In  = <<"<object data=\"http://www.youtube.com/embed/dQw4w9WgXcQ\" width=\"560\" height=\"315\"></object>">>,
-    Out = <<
-        "<iframe width=\"560\" height=\"315\" allowfullscreen=\"1\" frameborder=\"0\" "
-        "sandbox=\"allow-popups allow-scripts allow-same-origin\" "
-        "src=\"https://www.youtube.com/embed/dQw4w9WgXcQ\">"
-        "</iframe>">>,
+    In = <<"<object data=\"http://www.youtube.com/embed/dQw4w9WgXcQ\" width=\"560\" height=\"315\"></object>">>,
+    Out = <<"<iframe width=\"560\" height=\"315\" allowfullscreen=\"1\" frameborder=\"0\" "
+            "sandbox=\"allow-popups allow-scripts allow-same-origin\" "
+            "src=\"https://www.youtube.com/embed/dQw4w9WgXcQ\">"
+            "</iframe>">>,
     ?assertEqual(Out, z_sanitize:html(In, Context)).
 
 mso1_test() ->
@@ -69,7 +68,8 @@ sanitize_csv(In, Out) ->
     file:delete(OutFile).
 
 svg_imagetragick_test() ->
-    A = z_svg:sanitize(<<"
+    A =
+        z_svg:sanitize(<<"
 <?xml version=\"1.0\" standalone=\"no\"?>
 <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">
 <svg width=\"800\" height=\"600\"
@@ -80,7 +80,8 @@ svg_imagetragick_test() ->
 ">>),
     ?assertEqual(nomatch, binary:match(A, <<"upload.wikimedia">>)),
 
-    B = z_svg:sanitize(<<"
+    B =
+        z_svg:sanitize(<<"
 <?xml version=\"1.0\" standalone=\"no\"?>
 <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">
 <svg width=\"800\" height=\"600\"
@@ -91,7 +92,8 @@ svg_imagetragick_test() ->
 ">>),
     ?assertEqual(nomatch, binary:match(B, <<"example.com">>)),
 
-    C = z_svg:sanitize(<<"
+    C =
+        z_svg:sanitize(<<"
 <?xml version=\"1.0\" standalone=\"no\"?>
 <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">
 <svg width=\"800\" height=\"600\"
@@ -100,5 +102,5 @@ svg_imagetragick_test() ->
     <image width=\"800\" height=\"600\" clip-path=\"url(#foobar)\"</image>
 </svg>
 ">>),
-    ?assertMatch({_,_}, binary:match(C, <<"#foobar">>)),
+    ?assertMatch({_, _}, binary:match(C, <<"#foobar">>)),
     ok.

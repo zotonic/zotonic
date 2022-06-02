@@ -17,24 +17,23 @@
 %% limitations under the License.
 
 -module(mod_oembed).
+
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -mod_title("OEmbed support").
+
 -mod_description("Add external media in your site by their URL.").
+
 -mod_prio(600).
 
 %% interface functions
--export([
-    observe_rsc_update/3,
-    observe_media_viewer/2,
-    observe_media_stillimage/2,
-    observe_media_import/2,
-    observe_media_import_medium/2,
-
-    event/2,
-
-    preview_create/2
-]).
+-export([observe_rsc_update/3,
+         observe_media_viewer/2,
+         observe_media_stillimage/2,
+         observe_media_import/2,
+         observe_media_import_medium/2,
+         event/2,
+         preview_create/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -44,10 +43,14 @@
 %% @doc Check if the update contains video embed information.  If so
 %% then try to get the oembed information from the provider and update
 %% the attached medium item.
--spec observe_rsc_update(#rsc_update{}, {ok, m_rsc:props()} | {error, term()}, z:context()) ->
-          {ok, m_rsc:props()}
-        | {error, term()}.
-observe_rsc_update(#rsc_update{action=insert, id=Id}, {ok, Props}, Context) ->
+-spec observe_rsc_update(#rsc_update{  }, {ok, m_rsc:props()} | {error, term()}, z:context()) ->
+                            {ok, m_rsc:props()} | {error, term()}.
+observe_rsc_update(#rsc_update{
+                       action = insert,
+                       id = Id
+                   },
+                   {ok, Props},
+                   Context) ->
     case maps:get(<<"oembed_url">>, Props, undefined) of
         undefined ->
             {ok, Props};
@@ -56,93 +59,103 @@ observe_rsc_update(#rsc_update{action=insert, id=Id}, {ok, Props}, Context) ->
         <<>> ->
             {ok, maps:remove(<<"oembed_url">>, Props)};
         EmbedUrl ->
-            case z_acl:is_allowed(insert, #acl_media{mime=?OEMBED_MIME}, Context) of
+            case z_acl:is_allowed(insert, #acl_media{ mime = ?OEMBED_MIME }, Context) of
                 true ->
-                    MediaProps = #{
-                        <<"mime">> => ?OEMBED_MIME,
-                        <<"oembed_url">> => EmbedUrl
-                    },
+                    MediaProps =
+                        #{
+                            <<"mime">> => ?OEMBED_MIME,
+                            <<"oembed_url">> => EmbedUrl
+                        },
                     case preview_create_from_medium(Id, MediaProps, z_acl:sudo(Context)) of
                         undefined ->
                             {ok, maps:remove(<<"oembed_url">>, Props)};
                         OEmbedTitle ->
-                            Title = z_trans:lookup_fallback( maps:get(<<"title">>, Props, <<>>), Context ),
-                            Props1 = case z_utils:is_empty(Title) of
-                                        true ->
-                                            Props#{
-                                                <<"title">> => z_html:escape(OEmbedTitle)
-                                            };
-                                        false ->
-                                            Props
-                                     end,
+                            Title =
+                                z_trans:lookup_fallback(
+                                    maps:get(<<"title">>, Props, <<>>), Context),
+                            Props1 =
+                                case z_utils:is_empty(Title) of
+                                    true ->
+                                        Props#{ <<"title">> => z_html:escape(OEmbedTitle) };
+                                    false ->
+                                        Props
+                                end,
                             {ok, maps:remove(<<"oembed_url">>, Props1)}
                     end;
                 false ->
                     {ok, maps:remove(<<"oembed_url">>, Props)}
             end
     end;
-observe_rsc_update(#rsc_update{action=update, id=Id, props=CurrProps}, {ok, UpdateProps}, Context) ->
+observe_rsc_update(#rsc_update{
+                       action = update,
+                       id = Id,
+                       props = CurrProps
+                   },
+                   {ok, UpdateProps},
+                   Context) ->
     case maps:is_key(<<"oembed_url">>, UpdateProps) of
         true ->
             OldMediaProps = m_media:get(Id, Context),
-            {EmbedChanged, OEmbedTitle} = case maps:get(<<"oembed_url">>, UpdateProps) of
-                Empty when Empty =:= undefined; Empty =:= <<>>; Empty =:= "" ->
-                    % Delete the media record iff the media mime type is our mime type
-                    case OldMediaProps of
-                        #{ <<"mime">> := ?OEMBED_MIME } ->
-                            m_media:delete(Id, Context);
-                        _ ->
-                            nop
-                    end,
-                    {false, undefined};
-                EmbedUrl ->
-                    MediaProps = #{
-                        <<"mime">> => ?OEMBED_MIME,
-                        <<"oembed_url">> => EmbedUrl
-                    },
-                    case OldMediaProps of
-                        undefined ->
-                            {true, preview_create_from_medium(Id, MediaProps, Context)};
-                        #{ <<"mime">> := ?OEMBED_MIME } ->
-                            case        z_utils:are_equal(maps:get(oembed_url, OldMediaProps, undefined), EmbedUrl)
-                                andalso maps:get(<<"oembed">>, OldMediaProps, undefined) =/= undefined
-                            of
-                                true ->
-                                    %% Not changed
-                                    {false, undefined};
-                                false ->
-                                    %% Changed, update the medium record
-                                    {true, preview_create_from_medium(Id, MediaProps, Context)}
-                            end;
-                        _ ->
-                            {true, preview_create_from_medium(Id, MediaProps, Context)}
-                    end
-            end,
+            {EmbedChanged, OEmbedTitle} =
+                case maps:get(<<"oembed_url">>, UpdateProps) of
+                    Empty when Empty =:= undefined; Empty =:= <<>>; Empty =:= "" ->
+                        % Delete the media record iff the media mime type is our mime type
+                        case OldMediaProps of
+                            #{ <<"mime">> := ?OEMBED_MIME } ->
+                                m_media:delete(Id, Context);
+                            _ ->
+                                nop
+                        end,
+                        {false, undefined};
+                    EmbedUrl ->
+                        MediaProps =
+                            #{
+                                <<"mime">> => ?OEMBED_MIME,
+                                <<"oembed_url">> => EmbedUrl
+                            },
+                        case OldMediaProps of
+                            undefined ->
+                                {true, preview_create_from_medium(Id, MediaProps, Context)};
+                            #{ <<"mime">> := ?OEMBED_MIME } ->
+                                case z_utils:are_equal(
+                                         maps:get(oembed_url, OldMediaProps, undefined), EmbedUrl)
+                                     andalso maps:get(<<"oembed">>, OldMediaProps, undefined) =/= undefined
+                                of
+                                    true ->
+                                        %% Not changed
+                                        {false, undefined};
+                                    false ->
+                                        %% Changed, update the medium record
+                                        {true, preview_create_from_medium(Id, MediaProps, Context)}
+                                end;
+                            _ ->
+                                {true, preview_create_from_medium(Id, MediaProps, Context)}
+                        end
+                end,
             % Set the rsc title if it was not yet defined
-            UpdateProps1 = case EmbedChanged of
-                true when is_binary(OEmbedTitle) ->
-                    CurrTitle = maps:get(<<"title">>, UpdateProps, maps:get(<<"title">>, CurrProps, <<>>)),
-                    case z_utils:is_empty(z_trans:lookup_fallback(CurrTitle, Context)) of
-                        true ->
-                            UpdateProps#{
-                                <<"title">> => z_html:escape_check(OEmbedTitle)
-                            };
-                        false ->
-                            UpdateProps
-                    end;
-                true ->
-                    UpdateProps;
-                false ->
-                    UpdateProps
-            end,
+            UpdateProps1 =
+                case EmbedChanged of
+                    true when is_binary(OEmbedTitle) ->
+                        CurrTitle = maps:get(<<"title">>, UpdateProps, maps:get(<<"title">>, CurrProps, <<>>)),
+                        case z_utils:is_empty(
+                                 z_trans:lookup_fallback(CurrTitle, Context))
+                        of
+                            true ->
+                                UpdateProps#{ <<"title">> => z_html:escape_check(OEmbedTitle) };
+                            false ->
+                                UpdateProps
+                        end;
+                    true ->
+                        UpdateProps;
+                    false ->
+                        UpdateProps
+                end,
             {ok, maps:remove(<<"oembed_url">>, UpdateProps1)};
         false ->
             {ok, UpdateProps}
     end;
-observe_rsc_update(#rsc_update{}, {error, _} = Error, _Context) ->
+observe_rsc_update(#rsc_update{  }, {error, _} = Error, _Context) ->
     Error.
-
-
 
 %% @doc Return the media viewer for the embedded video (that is, when
 %% it is an embedded media). First tries the template called
@@ -151,51 +164,53 @@ observe_rsc_update(#rsc_update{}, {error, _} = Error, _Context) ->
 %% falls back to the generic template <tt>_oembed_embeddable.tpl</tt>.
 %% @spec observe_media_viewer(Notification, Context) -> undefined | {ok, Html}
 observe_media_viewer(#media_viewer{
-            id = Id,
-            props= #{ <<"mime">> := ?OEMBED_MIME } = Props,
-            filename = Filename,
-            options = Options
-        }, Context) ->
-    TplOpts = [
-        {id, Id},
-        {medium, Props},
-        {options, Options},
-        {filename, Filename}
-    ],
-    Html = case maps:find(<<"oembed">>, Props) of
-       {ok, OEmbed} ->
-            case lookup(<<"provider_name">>, provider_name, OEmbed) of
-                {ok, N} ->
-                    Tpl = iolist_to_binary(["_oembed_embeddable_",z_string:to_name(N),".tpl"]),
-                    case z_module_indexer:find(template, Tpl, Context) of
-                        {ok, Found} ->
-                            z_template:render(Found, TplOpts, Context);
-                        {error, _} ->
-                            media_viewer_fallback(OEmbed, TplOpts, Context)
-                    end;
-                error ->
-                    media_viewer_fallback(OEmbed, TplOpts, Context)
-            end;
-        error ->
-            <<"<!-- No oembed code found -->">>
-    end,
+                         id = Id,
+                         props = #{ <<"mime">> := ?OEMBED_MIME } = Props,
+                         filename = Filename,
+                         options = Options
+                     },
+                     Context) ->
+    TplOpts = [{id, Id}, {medium, Props}, {options, Options}, {filename, Filename}],
+    Html =
+        case maps:find(<<"oembed">>, Props) of
+            {ok, OEmbed} ->
+                case lookup(<<"provider_name">>, provider_name, OEmbed) of
+                    {ok, N} ->
+                        Tpl = iolist_to_binary(["_oembed_embeddable_", z_string:to_name(N), ".tpl"]),
+                        case z_module_indexer:find(template, Tpl, Context) of
+                            {ok, Found} ->
+                                z_template:render(Found, TplOpts, Context);
+                            {error, _} ->
+                                media_viewer_fallback(OEmbed, TplOpts, Context)
+                        end;
+                    error ->
+                        media_viewer_fallback(OEmbed, TplOpts, Context)
+                end;
+            error ->
+                <<"<!-- No oembed code found -->">>
+        end,
     {ok, Html};
-observe_media_viewer(#media_viewer{}, _Context) ->
+observe_media_viewer(#media_viewer{  }, _Context) ->
     undefined.
 
 lookup(K1, K2, OEmbed) when is_list(OEmbed) ->
     case proplists:lookup(K1, OEmbed) of
-        {K1, V} -> {ok, V};
+        {K1, V} ->
+            {ok, V};
         none ->
             case proplists:lookup(K2, OEmbed) of
-                {K2, V} -> {ok, V};
-                none -> error
+                {K2, V} ->
+                    {ok, V};
+                none ->
+                    error
             end
     end;
 lookup(K1, K2, OEmbed) when is_map(OEmbed) ->
     case maps:find(K1, OEmbed) of
-        {ok, V} -> {ok, V};
-        error -> maps:find(K2, OEmbed)
+        {ok, V} ->
+            {ok, V};
+        error ->
+            maps:find(K2, OEmbed)
     end.
 
 media_viewer_fallback(OEmbed, TplOpts, Context) ->
@@ -203,110 +218,129 @@ media_viewer_fallback(OEmbed, TplOpts, Context) ->
         {ok, Html} ->
             Html1 = binary:replace(Html, <<"http://">>, <<"https://">>, [global]),
             IsIframe = binary:match(Html1, <<"<iframe">>) =/= nomatch,
-            TplOpts1 = [
-                {html, Html1},
-                {is_iframe, IsIframe}
-                | TplOpts
-            ],
+            TplOpts1 = [{html, Html1}, {is_iframe, IsIframe} | TplOpts],
             z_template:render("_oembed_embeddable.tpl", TplOpts1, Context);
         error ->
             z_template:render("_oembed_embeddable.tpl", TplOpts, Context)
     end.
 
-
 % @doc Recognize youtube and vimeo URLs, generate the correct embed code
-observe_media_import(#media_import{url=Url, metadata=MD}, Context) ->
+observe_media_import(#media_import{
+                         url = Url,
+                         metadata = MD
+                     },
+                     Context) ->
     case oembed_request(Url, Context) of
         {ok, Json} ->
             Category = type_to_category(maps:get(<<"type">>, Json, undefined)),
             #media_import_props{
-                prio = case Category of
-                            website -> 11; % Prefer our own 'website' extraction
-                            video -> 3;
-                            _ -> 6
-                       end,
+                prio =
+                    case Category of
+                        website ->
+                            11; % Prefer our own 'website' extraction
+                        video ->
+                            3;
+                        _ ->
+                            6
+                    end,
                 category = Category,
                 module = ?MODULE,
                 description = ?__("Embedded Content", Context),
-                rsc_props = #{
-                    <<"title">> => z_html:unescape(
-                            first([
-                                maps:get(<<"title">>, Json, undefined),
-                                z_url_metadata:p(title, MD)
-                            ])),
-                    <<"summary">> => z_html:unescape(
-                            first([
-                                maps:get(<<"description">>, Json, undefined),
-                                z_url_metadata:p(summary, MD)
-                            ])),
-                    <<"website">> => Url
-                },
-                medium_props = #{
-                    <<"mime">> => ?OEMBED_MIME,
-                    <<"width">> => maps:get(<<"width">>, Json, undefined),
-                    <<"height">> => maps:get(<<"height">>, Json, undefined),
-                    <<"oembed_service">> => maps:get(<<"provider_name">>, Json, undefined),
-                    <<"oembed_url">> => Url,
-                    <<"oembed">> => Json,
-                    <<"media_import">> => Url
-                },
+                rsc_props =
+                    #{
+                        <<"title">> =>
+                            z_html:unescape(first([maps:get(<<"title">>, Json, undefined),
+                                                   z_url_metadata:p(title, MD)])),
+                        <<"summary">> =>
+                            z_html:unescape(first([maps:get(<<"description">>, Json, undefined),
+                                                   z_url_metadata:p(summary, MD)])),
+                        <<"website">> => Url
+                    },
+                medium_props =
+                    #{
+                        <<"mime">> => ?OEMBED_MIME,
+                        <<"width">> => maps:get(<<"width">>, Json, undefined),
+                        <<"height">> => maps:get(<<"height">>, Json, undefined),
+                        <<"oembed_service">> => maps:get(<<"provider_name">>, Json, undefined),
+                        <<"oembed_url">> => Url,
+                        <<"oembed">> => Json,
+                        <<"media_import">> => Url
+                    },
                 preview_url = maps:get(<<"thumbnail_url">>, Json, undefined)
             };
         {error, _} ->
             undefined
     end.
 
-first([]) -> undefined;
-first([undefined|Xs]) -> first(Xs);
-first([""|Xs]) -> first(Xs);
-first([<<>>|Xs]) -> first(Xs);
-first([X|_]) -> X.
-
+first([]) ->
+    undefined;
+first([undefined | Xs]) ->
+    first(Xs);
+first(["" | Xs]) ->
+    first(Xs);
+first([<<>> | Xs]) ->
+    first(Xs);
+first([X | _]) ->
+    X.
 
 %% @doc Import a embedded medium for a rsc_import. Sanitize the provided html.
--spec observe_media_import_medium(#media_import_medium{}, z:context()) -> undefined | ok.
+-spec observe_media_import_medium(#media_import_medium{  }, z:context()) -> undefined | ok.
 observe_media_import_medium(#media_import_medium{
-        id = Id,
-        medium = #{
-            <<"mime">> := ?OEMBED_MIME,
-            <<"oembed_url">> := Url,
-            <<"oembed">> := Json
-        } = Medium }, Context) when is_map(Json) ->
+                                id = Id,
+                                medium =
+                                    #{
+                                        <<"mime">> := ?OEMBED_MIME,
+                                        <<"oembed_url">> := Url,
+                                        <<"oembed">> := Json
+                                    } =
+                                        Medium
+                            },
+                            Context)
+    when is_map(Json) ->
     case m_media:get(Id, Context) of
         #{ <<"oembed_url">> := Url } ->
             ok;
         _Other ->
-            Service = z_convert:to_binary(maps:get(<<"oembed_service">>, Medium, undefined)),
-            MediaProps = #{
-                <<"mime">> => ?OEMBED_MIME,
-                <<"oembed_service">> => Service,
-                <<"oembed_url">> => z_sanitize:uri(Url),
-                <<"oembed">> => sanitize_json(Json, Context),
-                <<"height">> => as_int(maps:get(<<"height">>, Medium, undefined)),
-                <<"width">> => as_int(maps:get(<<"width">>, Medium, undefined)),
-                <<"orientation">> => as_int(maps:get(<<"orientation">>, Medium, undefined)),
-                <<"media_import">> => z_sanitize:uri( maps:get(<<"media_import">>, Medium, undefined ))
-            },
+            Service =
+                z_convert:to_binary(
+                    maps:get(<<"oembed_service">>, Medium, undefined)),
+            MediaProps =
+                #{
+                    <<"mime">> => ?OEMBED_MIME,
+                    <<"oembed_service">> => Service,
+                    <<"oembed_url">> => z_sanitize:uri(Url),
+                    <<"oembed">> => sanitize_json(Json, Context),
+                    <<"height">> => as_int(maps:get(<<"height">>, Medium, undefined)),
+                    <<"width">> => as_int(maps:get(<<"width">>, Medium, undefined)),
+                    <<"orientation">> => as_int(maps:get(<<"orientation">>, Medium, undefined)),
+                    <<"media_import">> =>
+                        z_sanitize:uri(
+                            maps:get(<<"media_import">>, Medium, undefined))
+                },
             ok = m_media:replace(Id, MediaProps, Context),
             preview_create_from_json(Id, Json, Context),
             ok
     end;
-observe_media_import_medium(#media_import_medium{}, _Context) ->
+observe_media_import_medium(#media_import_medium{  }, _Context) ->
     undefined.
 
-as_int(undefined) -> undefined;
-as_int(N) -> z_convert:to_integer(N).
-
+as_int(undefined) ->
+    undefined;
+as_int(N) ->
+    z_convert:to_integer(N).
 
 %% @doc Return the filename of a still image to be used for image tags.
 %% @spec observe_media_stillimage(Notification, _Context) -> undefined | {ok, Filename}
-observe_media_stillimage(#media_stillimage{ props = #{ <<"mime">> := ?OEMBED_MIME } = Props}, _Context) ->
+observe_media_stillimage(#media_stillimage{ props = #{ <<"mime">> := ?OEMBED_MIME } = Props }, _Context) ->
     case maps:get(<<"preview_filename">>, Props, <<>>) of
-        undefined -> {ok, <<"lib/images/embed.jpg">>};
-        <<>> -> {ok, <<"lib/images/embed.jpg">>};
-        PreviewFile -> {ok, PreviewFile}
+        undefined ->
+            {ok, <<"lib/images/embed.jpg">>};
+        <<>> ->
+            {ok, <<"lib/images/embed.jpg">>};
+        PreviewFile ->
+            {ok, PreviewFile}
     end;
-observe_media_stillimage(#media_stillimage{}, _Context) ->
+observe_media_stillimage(#media_stillimage{  }, _Context) ->
     undefined.
 
 event(#postback{ message = fix_missing }, Context) ->
@@ -314,21 +348,26 @@ event(#postback{ message = fix_missing }, Context) ->
         0 ->
             z_render:growl(?__("No embedded videos found which need fixing.", Context), Context);
         N ->
-            spawn(fun() -> oembed_admin:count_missing(Context) end),
+            spawn(fun() ->
+                     oembed_admin:count_missing(Context)
+                  end),
             Msg = ?__("Attempting to fix ~p videos.", Context),
-            z_render:growl(lists:flatten(io_lib:format(Msg, [N])), Context)
+            z_render:growl(
+                lists:flatten(
+                    io_lib:format(Msg, [N])),
+                Context)
     end;
-
 event(#submit{ message = admin_oembed }, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
-            EmbedlyKey = z_string:trim(z_context:get_q(<<"embedly_key">>, Context)),
+            EmbedlyKey =
+                z_string:trim(
+                    z_context:get_q(<<"embedly_key">>, Context)),
             m_config:set_value(mod_oembed, embedly_key, EmbedlyKey, Context),
             z_render:growl(?__("Saved the Embedly settings.", Context), Context);
         false ->
             z_render:growl(?__("You don't have permission to change the Embedly settings.", Context), Context)
     end.
-
 
 %% @doc (Re)create a preview from the stored oembed information
 preview_create(Id, Context) ->
@@ -359,8 +398,7 @@ preview_create(Id, Context) ->
 %% Fetch or create a preview for the movie. Returns the media title
 %% that need to be set on the rsc if the rsc has no title.
 preview_create_from_medium(MediaId, #{ <<"oembed_url">> := Url } = MediaProps, Context)
-    when is_binary(Url),
-         Url =/= <<>> ->
+    when is_binary(Url), Url =/= <<>> ->
     case oembed_request(Url, Context) of
         {ok, Json} ->
             case maps:get(<<"type">>, Json, undefined) of
@@ -372,24 +410,23 @@ preview_create_from_medium(MediaId, #{ <<"oembed_url">> := Url } = MediaProps, C
                     %% store found properties in the media part of the rsc
                     Html = maps:get(<<"html">>, Json, <<>>),
                     {EmbedService, EmbedId} = fetch_videoid_from_embed(<<>>, Html),
-                    MediaProps1 = MediaProps#{
-                        <<"oembed">> => Json,
-                        <<"video_embed_service">> => EmbedService,
-                        <<"video_embed_id">> => EmbedId
-                    },
+                    MediaProps1 =
+                        MediaProps#{
+                                      <<"oembed">> => Json,
+                                      <<"video_embed_service">> => EmbedService,
+                                      <<"video_embed_id">> => EmbedId
+                                  },
                     ok = m_media:replace(MediaId, MediaProps1, Context),
                     _ = preview_create_from_json(MediaId, Json, Context),
                     maps:get(<<"title">>, Json, undefined)
             end;
         {error, {http, Code, Body}} ->
             Err = #{
-                <<"error">> => http_error,
-                <<"code">> => Code,
-                <<"body">> => Body
-            },
-            MediaProps1 = MediaProps#{
-                <<"oembed">> => Err
-            },
+                      <<"error">> => http_error,
+                      <<"code">> => Code,
+                      <<"body">> => Body
+                  },
+            MediaProps1 = MediaProps#{ <<"oembed">> => Err },
             ok = m_media:replace(MediaId, MediaProps1, Context),
             undefined;
         {error, _} ->
@@ -407,8 +444,10 @@ preview_create_from_json(MediaId, Json, Context) ->
                     {ok, _} = m_media:save_preview(MediaId, ImageData, CT, Context),
                     %% move to correct category if rsc is a 'media'
                     case m_rsc:is_a(MediaId, media, Context) of
-                        true -> m_rsc:update(MediaId, [{category, type_to_category(Type)}], Context);
-                        false -> m_rsc:touch(MediaId, Context)
+                        true ->
+                            m_rsc:update(MediaId, [{category, type_to_category(Type)}], Context);
+                        false ->
+                            m_rsc:touch(MediaId, Context)
                     end;
                 {error, _} ->
                     nop
@@ -416,11 +455,11 @@ preview_create_from_json(MediaId, Json, Context) ->
     end.
 
 %% @doc Perform OEmbed discovery on a given URL.
--spec oembed_request( string() | binary(), z:context() ) -> {ok, map()} | {error, term()}.
+-spec oembed_request(string() | binary(), z:context()) -> {ok, map()} | {error, term()}.
 oembed_request(Url, Context) ->
     F = fun() ->
-        oembed_client:discover(Url, Context)
-    end,
+           oembed_client:discover(Url, Context)
+        end,
     case z_depcache:memo(F, {oembed, Url}, 1800, Context) of
         {ok, Json} when is_map(Json) ->
             {ok, sanitize_json(Json, Context)};
@@ -428,28 +467,29 @@ oembed_request(Url, Context) ->
             Error
     end.
 
--spec sanitize_json( map(), z:context() ) -> map().
+-spec sanitize_json(map(), z:context()) -> map().
 sanitize_json(Json, Context) ->
-    maps:fold(
-        fun(K, V, Acc) ->
-            case sanitize_json1(K, V, Context) of
-                {K1, V1} ->
-                    Acc#{ K1 => V1 };
-                false ->
-                    Acc
-            end
-        end,
-        #{},
-        Json).
+    maps:fold(fun(K, V, Acc) ->
+                 case sanitize_json1(K, V, Context) of
+                     {K1, V1} ->
+                         Acc#{ K1 => V1 };
+                     false ->
+                         Acc
+                 end
+              end,
+              #{  },
+              Json).
 
 sanitize_json1(_K, null, _Context) ->
     false;
 sanitize_json1(<<"html">>, <<>>, _Context) ->
     false;
 sanitize_json1(<<"html">>, Html, Context) ->
-    case z_sanitize:html(Html,Context) of
-        <<>> -> false;
-        Html1 -> {<<"html">>, Html1}
+    case z_sanitize:html(Html, Context) of
+        <<>> ->
+            false;
+        Html1 ->
+            {<<"html">>, Html1}
     end;
 sanitize_json1(<<"body">>, Body, Context) ->
     {<<"body">>, z_sanitize:html(Body, Context)};
@@ -460,7 +500,7 @@ sanitize_json1(<<"provider_url">>, Url, _Context) ->
 sanitize_json1(<<"author_url">>, Url, _Context) ->
     {<<"author_url">>, z_sanitize:uri(Url)};
 sanitize_json1(K, V, _Context) when is_binary(V) ->
-    {K,  z_html:escape_check(V)};
+    {K, z_html:escape_check(V)};
 sanitize_json1(K, V, _Context) when is_boolean(V); is_integer(V) ->
     {K, V};
 sanitize_json1(_K, _V, _Context) ->
@@ -471,8 +511,10 @@ thumbnail_request(ThumbUrl, _Context) ->
     case httpc:request(get, {z_convert:to_list(ThumbUrl), []}, [], []) of
         {ok, {{_, 200, _}, Headers, ImageData}} ->
             CT = case proplists:lookup("content-type", Headers) of
-                     {"content-type", C} -> z_convert:to_binary(C);
-                     _ -> <<"image/jpeg">>
+                     {"content-type", C} ->
+                         z_convert:to_binary(C);
+                     _ ->
+                         <<"image/jpeg">>
                  end,
             {ok, {CT, ImageData}};
         {ok, {{_, 404, _}, _Headers, _ImageData}} ->
@@ -482,7 +524,6 @@ thumbnail_request(ThumbUrl, _Context) ->
             ?LOG_WARNING("mod_oembed: unexpected result for ~p: ~p", [ThumbUrl, Other]),
             {error, httpc}
     end.
-
 
 %% @doc Get the preview URL from JSON structure. Either the thumbnail
 %% URL for non-photo elements, or the full URL for photo elements.
@@ -496,22 +537,21 @@ preview_url_from_json(<<"photo">>, Json) ->
 preview_url_from_json(_Type, Json) ->
     maps:get(<<"thumbnail_url">>, Json, undefined).
 
-
-type_to_category(<<"photo">>) -> image;
-type_to_category(<<"video">>) -> video;
-type_to_category(<<"link">>) -> website;
-type_to_category(_Type) -> document.
-
+type_to_category(<<"photo">>) ->
+    image;
+type_to_category(<<"video">>) ->
+    video;
+type_to_category(<<"link">>) ->
+    website;
+type_to_category(_Type) ->
+    document.
 
 %% This is a copy from mod_video_embed, should be combined (which is in the works)
 fetch_videoid_from_embed(_Service, undefined) ->
     {<<>>, undefined};
 fetch_videoid_from_embed(Service, EmbedCode) ->
-    case re:run(EmbedCode,
-                <<"(src|href)=\"([^\"]*)\"">>,
-                [global, notempty, {capture, all, binary}])
-    of
-        {match, [[_,_,Url]|_]} ->
+    case re:run(EmbedCode, <<"(src|href)=\"([^\"]*)\"">>, [global, notempty, {capture, all, binary}]) of
+        {match, [[_, _, Url] | _]} ->
             case url_to_service(Url) of
                 undefined ->
                     {Service, <<>>};
@@ -523,32 +563,50 @@ fetch_videoid_from_embed(Service, EmbedCode) ->
     end.
 
 fetch_videoid(youtube, Url) ->
-    [Url1|_] = binary:split(Url, <<"?">>),
+    [Url1 | _] = binary:split(Url, <<"?">>),
     case binary:split(Url1, <<"/embed/">>) of
         [_, Code] ->
             Code;
         _ ->
-            {_Protocol, _Host, _Path, Qs, _Hash} = mochiweb_util:urlsplit(z_convert:to_list(Url)),
+            {_Protocol, _Host, _Path, Qs, _Hash} =
+                mochiweb_util:urlsplit(
+                    z_convert:to_list(Url)),
             Qs1 = mochiweb_util:parse_qs(Qs),
-            z_convert:to_binary(proplists:get_value("v", Qs1))
+            z_convert:to_binary(
+                proplists:get_value("v", Qs1))
     end;
 fetch_videoid(vimeo, Url) ->
-    {_Protocol, _Host, Path, _Qs, _Hash} = mochiweb_util:urlsplit(z_convert:to_list(Url)),
-    P1 = lists:last(string:tokens(Path, "/")),
+    {_Protocol, _Host, Path, _Qs, _Hash} =
+        mochiweb_util:urlsplit(
+            z_convert:to_list(Url)),
+    P1 = lists:last(
+             string:tokens(Path, "/")),
     case z_utils:only_digits(P1) of
-        true -> z_convert:to_binary(P1);
-        false -> <<>>
+        true ->
+            z_convert:to_binary(P1);
+        false ->
+            <<>>
     end;
 fetch_videoid(_Service, _Url) ->
     <<>>.
 
-url_to_service(<<"https://", Url/binary>>) -> url_to_service(Url);
-url_to_service(<<"http://", Url/binary>>) -> url_to_service(Url);
-url_to_service(<<"//", Url/binary>>) -> url_to_service(Url);
-url_to_service(<<"www.youtube.com/", _/binary>>) -> youtube;
-url_to_service(<<"youtube.com/", _/binary>>) -> youtube;
-url_to_service(<<"www.vimeo.com/", _/binary>>) -> vimeo;
-url_to_service(<<"vimeo.com/", _/binary>>) -> vimeo;
-url_to_service(<<"flv.video.yandex.ru/", _/binary>>) -> yandex;
-url_to_service(<<"static.video.yandex.ru/", _/binary>>) -> yandex;
-url_to_service(_) -> undefined.
+url_to_service(<<"https://", Url/binary>>) ->
+    url_to_service(Url);
+url_to_service(<<"http://", Url/binary>>) ->
+    url_to_service(Url);
+url_to_service(<<"//", Url/binary>>) ->
+    url_to_service(Url);
+url_to_service(<<"www.youtube.com/", _/binary>>) ->
+    youtube;
+url_to_service(<<"youtube.com/", _/binary>>) ->
+    youtube;
+url_to_service(<<"www.vimeo.com/", _/binary>>) ->
+    vimeo;
+url_to_service(<<"vimeo.com/", _/binary>>) ->
+    vimeo;
+url_to_service(<<"flv.video.yandex.ru/", _/binary>>) ->
+    yandex;
+url_to_service(<<"static.video.yandex.ru/", _/binary>>) ->
+    yandex;
+url_to_service(_) ->
+    undefined.

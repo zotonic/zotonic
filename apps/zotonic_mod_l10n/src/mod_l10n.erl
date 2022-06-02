@@ -25,26 +25,22 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Localization").
+
 -mod_description("Localization, timezones, translations for country names etc.").
 
--export([
-    % observe_auth_logon/3,
-    observe_request_context/3,
-    observe_user_context/3,
-    observe_pivot_rsc_data/3,
-    % observe_rsc_update_done/2,
-    observe_admin_menu/3,
+-export([observe_request_context/3,
+         observe_user_context/3,
+         observe_pivot_rsc_data/3,
+         observe_admin_menu/3,
+         set_user_timezone/2]).    % observe_auth_logon/3,
 
-    set_user_timezone/2
-]).
+    % observe_rsc_update_done/2,
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
-
 -define(TZ_COOKIE, <<"z.tz">>).
--define(TZ_COOKIE_MAX_AGE, 3600*24*365).
-
+-define(TZ_COOKIE_MAX_AGE, 3600 * 24 * 365).
 
 %% @doc Check if the user has a preferred timezone
 observe_request_context(#request_context{ phase = init }, Context, _Context) ->
@@ -54,7 +50,12 @@ observe_request_context(#request_context{ phase = init }, Context, _Context) ->
         false ->
             maybe_user(Context)
     end;
-observe_request_context(#request_context{ phase = auth_status, document = #{ <<"timezone">> := TzData } }, Context, _Context) ->
+observe_request_context(#request_context{
+                            phase = auth_status,
+                            document = #{ <<"timezone">> := TzData }
+                        },
+                        Context,
+                        _Context) ->
     case is_fixed_timezone(Context) of
         true ->
             Context;
@@ -71,11 +72,10 @@ observe_request_context(#request_context{ phase = auth_status, document = #{ <<"
                     case m_rsc:p_no_acl(UserId, <<"pref_tz">>, Context) of
                         None when None =:= undefined; None =:= <<>> ->
                             Context1 = try_set_timezone(Tz, Context),
-                            _ = m_rsc:update(
-                                    UserId,
-                                    #{ <<"pref_tz">> => z_context:tz(Context1) },
-                                    [ no_touch ],
-                                    Context1),
+                            _ = m_rsc:update(UserId,
+                                             #{ <<"pref_tz">> => z_context:tz(Context1) },
+                                             [no_touch],
+                                             Context1),
                             maybe_set_cookie(Context1);
                         UserTz ->
                             Context1 = try_set_timezone(UserTz, Context),
@@ -83,7 +83,7 @@ observe_request_context(#request_context{ phase = auth_status, document = #{ <<"
                     end
             end
     end;
-observe_request_context(#request_context{}, Context, _Context) ->
+observe_request_context(#request_context{  }, Context, _Context) ->
     Context.
 
 % maybe_q_timezone(Context) ->
@@ -113,24 +113,17 @@ maybe_cookie(Context) ->
             try_set_timezone(Tz, Context)
     end.
 
-
 maybe_set_cookie(Context) ->
     Tz = z_context:tz(Context),
     case z_context:get_cookie(?TZ_COOKIE, Context) of
-        Tz -> Context;
-        _ -> set_cookie(Tz, Context)
+        Tz ->
+            Context;
+        _ ->
+            set_cookie(Tz, Context)
     end.
 
 set_cookie(Tz, Context) ->
-    z_context:set_cookie(
-        ?TZ_COOKIE,
-        Tz,
-        [
-            {max_age, ?TZ_COOKIE_MAX_AGE},
-            {path, <<"/">>},
-            {secure, true}
-        ],
-        Context).
+    z_context:set_cookie(?TZ_COOKIE, Tz, [{max_age, ?TZ_COOKIE_MAX_AGE}, {path, <<"/">>}, {secure, true}], Context).
 
 observe_user_context(#user_context{ id = UserId }, Context, _Context) ->
     case is_fixed_timezone(Context) of
@@ -169,7 +162,8 @@ observe_user_context(#user_context{ id = UserId }, Context, _Context) ->
 %     end.
 
 is_fixed_timezone(Context) ->
-    z_convert:to_bool(m_config:get_value(mod_l10n, timezone_is_fixed, Context)).
+    z_convert:to_bool(
+        m_config:get_value(mod_l10n, timezone_is_fixed, Context)).
 
 %% @doc Set the timezone, as selected by the user. Persist this choice.
 set_user_timezone(Tz, Context) ->
@@ -179,120 +173,143 @@ set_user_timezone(Tz, Context) ->
             nop;
         UserId ->
             case m_rsc:p_no_acl(UserId, <<"pref_tz">>, Context1) of
-                Tz -> nop;
-                _ -> catch m_rsc:update(UserId, #{ <<"pref_tz">> => z_context:tz(Context1) }, Context1)
+                Tz ->
+                    nop;
+                _ ->
+                    catch m_rsc:update(UserId, #{ <<"pref_tz">> => z_context:tz(Context1) }, Context1)
             end
     end,
     Context1.
-
 
 %% @doc Set the timezone of the user. Only done when the found timezone is a known timezone.
 try_set_timezone(<<>>, Context) ->
     Context;
 try_set_timezone(Tz, Context) ->
     case m_l10n:is_timezone(Tz) of
-        true -> set_timezone(Tz, Context);
-        false -> Context
+        true ->
+            set_timezone(Tz, Context);
+        false ->
+            Context
     end.
 
 %% @doc Set the timezone of the current context
 set_timezone(Tz, Context) ->
     case z_context:tz(Context) of
-        Tz -> Context;
-        _ -> z_context:set_tz(Tz, Context)
+        Tz ->
+            Context;
+        _ ->
+            z_context:set_tz(Tz, Context)
     end.
 
-
-observe_admin_menu(#admin_menu{}, Acc, Context) ->
-    [
-     #menu_item{id=admin_l10n,
-                parent=admin_modules,
-                label=?__("Localization", Context),
-                url={admin_l10n},
-                visiblecheck={acl, use, mod_config}}
-
-     |Acc].
+observe_admin_menu(#admin_menu{  }, Acc, Context) ->
+    [#menu_item{
+         id = admin_l10n,
+         parent = admin_modules,
+         label = ?__("Localization", Context),
+         url = {admin_l10n},
+         visiblecheck = {acl, use, mod_config}
+     }
+     | Acc].
 
 %% @doc Expand the two letter iso code country depending on the languages in the resource.
-observe_pivot_rsc_data(#pivot_rsc_data{}, Rsc, Context) ->
-    Languages = lists:usort([ en, default_language(Context) | resource_languages(Rsc) ]),
+observe_pivot_rsc_data(#pivot_rsc_data{  }, Rsc, Context) ->
+    Languages = lists:usort([en, default_language(Context) | resource_languages(Rsc)]),
     Rsc2 = expand_country(<<"address_country">>, Rsc, Languages, Context),
     expand_country(<<"mail_country">>, Rsc2, Languages, Context).
 
 expand_country(Prop, Rsc, Languages, Context) ->
-	Rsc1 = map_country(Prop, Rsc),
+    Rsc1 = map_country(Prop, Rsc),
     case maps:get(Prop, Rsc1, undefined) of
         <<>> ->
             Rsc1;
         undefined ->
             Rsc1;
-        <<_,_>> = Iso ->
-            Countries = lists:map(
-                            fun(Lang) ->
-                                m_l10n:country_name(Iso, Lang, Context)
+        <<_, _>> = Iso ->
+            Countries =
+                lists:map(fun(Lang) ->
+                             m_l10n:country_name(Iso, Lang, Context)
+                          end,
+                          Languages),
+            Rsc2 =
+                lists:foldl(fun(C, Acc) ->
+                               extra_pivot_data(C, Acc)
                             end,
-                            Languages),
-            Rsc2 = lists:foldl(
-                fun(C, Acc) ->
-                    extra_pivot_data(C, Acc)
-                end,
-                Rsc1,
-                lists:usort(Countries)),
+                            Rsc1,
+                            lists:usort(Countries)),
             add_alias(Iso, Rsc2);
         _Other ->
             Rsc1
     end.
 
-add_alias(<<"us">>, R) -> extra_pivot_data(<<"USA">>, R);
-add_alias(<<"uk">>, R) -> extra_pivot_data(<<"England">>, R);
-add_alias(<<"nl">>, R) -> extra_pivot_data(<<"Holland">>, R);
-add_alias(<<"be">>, R) -> extra_pivot_data(<<"België Belgique"/utf8>>, R);
-add_alias(_, R) -> R.
+add_alias(<<"us">>, R) ->
+    extra_pivot_data(<<"USA">>, R);
+add_alias(<<"uk">>, R) ->
+    extra_pivot_data(<<"England">>, R);
+add_alias(<<"nl">>, R) ->
+    extra_pivot_data(<<"Holland">>, R);
+add_alias(<<"be">>, R) ->
+    extra_pivot_data(<<"België Belgique"/utf8>>, R);
+add_alias(_, R) ->
+    R.
 
 extra_pivot_data(Text, #{ <<"extra_pivot_data">> := Extra } = R) when is_binary(Extra) ->
-    R#{
-        <<"extra_pivot_data">> => <<Extra/binary, " ", Text/binary>>
-    };
+    R#{ <<"extra_pivot_data">> => <<Extra/binary, " ", Text/binary>> };
 extra_pivot_data(Text, R) ->
-    R#{
-        <<"extra_pivot_data">> => Text
-    }.
+    R#{ <<"extra_pivot_data">> => Text }.
 
 %% @doc Map a country name to its iso code. This is very crude and should be more comprehensive.
 map_country(Prop, Rsc) ->
     case maps:get(Prop, Rsc, undefined) of
-        undefined -> Rsc;
-        <<>> -> Rsc;
-        <<A,B>> when A =< $Z orelse B =< $Z ->
-            Rsc#{ Prop => z_string:to_lower(<<A,B>>) };
+        undefined ->
+            Rsc;
+        <<>> ->
+            Rsc;
+        <<A, B>> when A =< $Z orelse B =< $Z ->
+            Rsc#{ Prop => z_string:to_lower(<<A, B>>) };
         Country ->
             Country1 = value(Country),
             case z_string:to_lower(Country1) of
-                <<"usa">> ->                Rsc#{ Prop => <<"us">>};
-                <<"holland">> ->            Rsc#{ Prop => <<"nl">>};
-                <<"nederland">> ->          Rsc#{ Prop => <<"nl">>};
-                <<"netherlands">> ->        Rsc#{ Prop => <<"nl">>};
-                <<"the netherlands">> ->    Rsc#{ Prop => <<"nl">>};
-                <<"netherlands, the">> ->   Rsc#{ Prop => <<"nl">>};
-                <<"belgië"/utf8>> ->        Rsc#{ Prop => <<"be">>};
-                <<"belgie">> ->             Rsc#{ Prop => <<"be">>};
-                <<"belgique">> ->           Rsc#{ Prop => <<"be">>};
+                <<"usa">> ->
+                    Rsc#{ Prop => <<"us">> };
+                <<"holland">> ->
+                    Rsc#{ Prop => <<"nl">> };
+                <<"nederland">> ->
+                    Rsc#{ Prop => <<"nl">> };
+                <<"netherlands">> ->
+                    Rsc#{ Prop => <<"nl">> };
+                <<"the netherlands">> ->
+                    Rsc#{ Prop => <<"nl">> };
+                <<"netherlands, the">> ->
+                    Rsc#{ Prop => <<"nl">> };
+                <<"belgië"/utf8>> ->
+                    Rsc#{ Prop => <<"be">> };
+                <<"belgie">> ->
+                    Rsc#{ Prop => <<"be">> };
+                <<"belgique">> ->
+                    Rsc#{ Prop => <<"be">> };
                 % typos
-                <<"nehterlands">> ->        Rsc#{ Prop => <<"nl">>};
+                <<"nehterlands">> ->
+                    Rsc#{ Prop => <<"nl">> };
                 % Try country tables
                 _ ->
                     case l10n_country2iso:country2iso(Country1) of
-                        undefined -> Rsc;
-                        Iso -> Rsc#{ Prop => Iso}
+                        undefined ->
+                            Rsc;
+                        Iso ->
+                            Rsc#{ Prop => Iso }
                     end
             end
     end.
 
 value(#trans{ tr = Tr }) ->
     case proplists:get_value(en, Tr) of
-        undefined when Tr =:= [] -> <<>>;
-        undefined -> {_, T} = hd(Tr), T;
-        T -> T
+        undefined when Tr =:= [] ->
+            <<>>;
+        undefined ->
+            {_, T} = hd(Tr),
+            T;
+        T ->
+            T
     end;
 value(V) when is_list(V) ->
     z_convert:to_binary(V);
@@ -303,15 +320,22 @@ value(_) ->
 
 default_language(Context) ->
     case m_config:get_value(i18n, language, Context) of
-        undefined -> en;
-        <<>> -> en;
-        Lang -> z_convert:to_atom(Lang)
+        undefined ->
+            en;
+        <<>> ->
+            en;
+        Lang ->
+            z_convert:to_atom(Lang)
     end.
 
 resource_languages(Rsc) ->
     case maps:get(<<"language">>, Rsc, undefined) of
-        undefined -> [];
-        <<>> -> [];
-        Atom when is_atom(Atom) -> [ Atom ];
-        Langs -> [ z_convert:to_atom(Lang) || Lang <- Langs, Lang /= <<>> ]
+        undefined ->
+            [];
+        <<>> ->
+            [];
+        Atom when is_atom(Atom) ->
+            [Atom];
+        Langs ->
+            [z_convert:to_atom(Lang) || Lang <- Langs, Lang /= <<>>]
     end.

@@ -23,15 +23,12 @@
 -export([start_link/4]).
 -export([connection_process/5]).
 
--spec start_link( ranch:ref(), ssl:sslsocket(), module(), map() ) -> {ok, pid()}.
+-spec start_link(ranch:ref(), ssl:sslsocket(), module(), map()) -> {ok, pid()}.
 start_link(Ref, Socket, Transport, Opts) ->
-    Pid = proc_lib:spawn_link(
-                ?MODULE,
-                connection_process,
-                [ self(), Ref, Socket, Transport, Opts ]),
+    Pid = proc_lib:spawn_link(?MODULE, connection_process, [self(), Ref, Socket, Transport, Opts]),
     {ok, Pid}.
 
--spec connection_process( pid(), ranch:ref(), ssl:sslsocket(), module(), map() ) -> ok.
+-spec connection_process(pid(), ranch:ref(), ssl:sslsocket(), module(), map()) -> ok.
 connection_process(_Parent, Ref, Socket, Transport, Opts) ->
     % TODO: Fetch the SNI hostname
-    zotonic_listen_mqtt_handler:init(Ref, Socket, Transport, Opts#{ is_ssl => true } ).
+    zotonic_listen_mqtt_handler:init(Ref, Socket, Transport, Opts#{ is_ssl => true }).

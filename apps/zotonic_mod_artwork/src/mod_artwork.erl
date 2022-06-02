@@ -21,7 +21,11 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Icons and Images").
+
 -mod_description("Art work for your site. Social icons, file icons etc.").
+
 -mod_prio(800).
+
 -mod_depends([]).
+
 -mod_provides([icons, social_icons]).

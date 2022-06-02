@@ -23,46 +23,48 @@
 
 -include_lib("kernel/include/logger.hrl").
 
--export([
-    is_zotonic_project/0,
-    is_testsandbox/0,
-    is_app_available/1,
-
-    setup/1
-    ]).
+-export([is_zotonic_project/0,
+         is_testsandbox/0,
+         is_app_available/1,
+         setup/1]).
 
 %% @doc Check if the current site is running the testsandbox
 -spec is_testsandbox() -> boolean().
 is_testsandbox() ->
     case atom_to_list(node()) of
-        "zotonic001_testsandbox@" ++ _ -> true;
-        _ -> false
+        "zotonic001_testsandbox@" ++ _ ->
+            true;
+        _ ->
+            false
     end.
 
 %% @doc Check if this running Zotonic is the main Git project.
 %%      This is used for e.g. the .pot generation.
 is_zotonic_project() ->
-    is_app_available(zotonic)
-    andalso is_app_available(zotonic_core).
+    is_app_available(zotonic) andalso is_app_available(zotonic_core).
 
 is_app_available(App) ->
     case code:which(App) of
-        non_existing -> false;
-        Path when is_list(Path) -> true
+        non_existing ->
+            false;
+        Path when is_list(Path) ->
+            true
     end.
 
 %% @doc Initial setup before starting Zotonic, after config files are loaded. This
 %% is normally called by the zotonic_launcher_app, which also reads all config files.
--spec setup( node() ) -> ok.
+-spec setup(node()) -> ok.
 setup(Node) ->
     io:setopts([{encoding, unicode}]),
     maybe_start_logstasher(),
-    assert_schedulers( erlang:system_info(schedulers) ),
+    assert_schedulers(erlang:system_info(schedulers)),
     load_applications(),
     set_configs(),
     case node() of
-        Node -> ensure_mnesia_schema();
-        _ -> ok
+        Node ->
+            ensure_mnesia_schema();
+        _ ->
+            ok
     end.
 
 %% @doc Load the applications so that their settings are also loaded.
@@ -76,16 +78,16 @@ set_configs() ->
     application:set_env(setup, log_dir, z_config:get(log_dir)),
     application:set_env(setup, data_dir, z_config:get(data_dir)),
     % Store filezcache data in the cache_dir.
-    FileZCache = filename:join([ z_config:get(cache_dir), "filezcache", atom_to_list(node()) ]),
-    application:set_env(filezcache, data_dir, filename:join([ FileZCache, "data" ])),
-    application:set_env(filezcache, journal_dir, filename:join([ FileZCache, "journal" ])).
+    FileZCache = filename:join([z_config:get(cache_dir), "filezcache", atom_to_list(node())]),
+    application:set_env(filezcache, data_dir, filename:join([FileZCache, "data"])),
+    application:set_env(filezcache, journal_dir, filename:join([FileZCache, "journal"])).
 
 maybe_start_logstasher() ->
-    IsLogstasherNeeded = lists:any(
-        fun(#{ module := Module }) ->
-            Module =:= logstasher_h
-        end,
-        logger:get_handler_config()),
+    IsLogstasherNeeded =
+        lists:any(fun(#{ module := Module }) ->
+                     Module =:= logstasher_h
+                  end,
+                  logger:get_handler_config()),
     case IsLogstasherNeeded of
         true ->
             application:ensure_all_started(logstasher);
@@ -100,15 +102,19 @@ assert_schedulers(1) ->
 assert_schedulers(_N) ->
     ok.
 
-
 %% @doc Ensure that mnesia has created its schema in the configured data/mnesia directory.
 -spec ensure_mnesia_schema() -> ok.
 ensure_mnesia_schema() ->
     case mnesia_dir() of
         {ok, Dir} ->
-            case filelib:is_dir(Dir) andalso filelib:is_regular(filename:join(Dir, "schema.DAT")) of
-                true -> ok;
-                false -> ok = mnesia:create_schema([node()])
+            case filelib:is_dir(Dir)
+                 andalso filelib:is_regular(
+                             filename:join(Dir, "schema.DAT"))
+            of
+                true ->
+                    ok;
+                false ->
+                    ok = mnesia:create_schema([node()])
             end;
         undefined ->
             ?LOG_NOTICE("No mnesia directory defined, running without persistent email queue and filezcache. "
@@ -127,27 +133,34 @@ mnesia_dir() ->
 
 mnesia_dir_config() ->
     case application:get_env(mnesia, dir) of
-        {ok, none} -> undefined;
-        {ok, ""} -> undefined;
-        {ok, setup} -> mnesia_data_dir();
-        {ok, "data/mnesia"} -> mnesia_data_dir();
-        {ok, "priv/mnesia"} -> mnesia_data_dir();
-        {ok, Dir} -> {ok, Dir};
-        undefined -> mnesia_data_dir()
+        {ok, none} ->
+            undefined;
+        {ok, ""} ->
+            undefined;
+        {ok, setup} ->
+            mnesia_data_dir();
+        {ok, "data/mnesia"} ->
+            mnesia_data_dir();
+        {ok, "priv/mnesia"} ->
+            mnesia_data_dir();
+        {ok, Dir} ->
+            {ok, Dir};
+        undefined ->
+            mnesia_data_dir()
     end.
 
 mnesia_data_dir() ->
-    MnesiaDir = filename:join([ z_config:get(data_dir), atom_to_list(node()), "mnesia" ]),
+    MnesiaDir = filename:join([z_config:get(data_dir), atom_to_list(node()), "mnesia"]),
     case z_filelib:ensure_dir(MnesiaDir) of
         ok ->
             application:set_env(mnesia, dir, MnesiaDir),
             {ok, MnesiaDir};
         {error, Reason} ->
             ?LOG_ERROR(#{
-                text => <<"Could not create mnesia dir">>,
-                path => MnesiaDir,
-                result => error,
-                reason => Reason
-            }),
+                           text => <<"Could not create mnesia dir">>,
+                           path => MnesiaDir,
+                           result => error,
+                           reason => Reason
+                       }),
             undefined
     end.

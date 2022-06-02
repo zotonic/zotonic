@@ -17,29 +17,28 @@
 %% limitations under the License.
 
 -module(mod_email_status).
+
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Email Status").
+
 -mod_description("Track bounce and receive status of email recipients.").
+
 -mod_prio(10).
+
 -mod_schema(3).
 
--export([
-    event/2,
-
-    observe_email_is_blocked/2,
-    observe_email_sent/2,
-    observe_email_failed/2,
-    observe_email_bounced/2,
-    observe_email_received/2,
-
-    manage_schema/2
-]).
+-export([event/2,
+         observe_email_is_blocked/2,
+         observe_email_sent/2,
+         observe_email_failed/2,
+         observe_email_bounced/2,
+         observe_email_received/2,
+         manage_schema/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-
-event(#postback{message={email_status_reset, Args}}, Context) ->
+event(#postback{ message = {email_status_reset, Args} }, Context) ->
     Id = proplists:get_value(id, Args),
     Email = proplists:get_value(email, Args),
     case is_allowed(Id, Context) of
@@ -54,7 +53,7 @@ event(#postback{message={email_status_reset, Args}}, Context) ->
         false ->
             z_render:growl(?__("Sorry, you are not allowed to reset this email address.", Context), Context)
     end;
-event(#postback{message={email_status_block, Args}}, Context) ->
+event(#postback{ message = {email_status_block, Args} }, Context) ->
     Email = proplists:get_value(email, Args),
     case z_acl:is_admin(Context) of
         true ->
@@ -77,29 +76,42 @@ is_allowed(Id, Context) ->
 is_allowed(Context) ->
     z_acl:is_allowed(use, mod_email_status, Context).
 
-
-observe_email_is_blocked(#email_is_blocked{recipient = Recipient}, Context) ->
+observe_email_is_blocked(#email_is_blocked{ recipient = Recipient }, Context) ->
     not m_email_status:is_ok_to_send(Recipient, Context).
 
-observe_email_sent(#email_sent{recipient=Recipient, is_final=IsFinal}, Context) ->
+observe_email_sent(#email_sent{
+                       recipient = Recipient,
+                       is_final = IsFinal
+                   },
+                   Context) ->
     m_email_status:mark_sent(Recipient, IsFinal, Context).
 
-observe_email_failed(#email_failed{reason=sender_disabled}, _Context) ->
+observe_email_failed(#email_failed{ reason = sender_disabled }, _Context) ->
     undefined;
-observe_email_failed(#email_failed{is_final=false, retry_ct=RetryCt}, _Context) when RetryCt < 2 ->
+observe_email_failed(#email_failed{
+                         is_final = false,
+                         retry_ct = RetryCt
+                     },
+                     _Context)
+    when RetryCt < 2 ->
     undefined;
-observe_email_failed(#email_failed{recipient=Recipient, is_final=IsFinal, status=Status}, Context) ->
+observe_email_failed(#email_failed{
+                         recipient = Recipient,
+                         is_final = IsFinal,
+                         status = Status
+                     },
+                     Context) ->
     m_email_status:mark_failed(Recipient, IsFinal, Status, Context).
 
 %% @doc Mark an email address as bouncing, only marks for messages which we know we have sent.
-observe_email_bounced(#email_bounced{recipient=undefined}, _Context) ->
+observe_email_bounced(#email_bounced{ recipient = undefined }, _Context) ->
     ok;
-observe_email_bounced(#email_bounced{message_nr=undefined}, _Context) ->
+observe_email_bounced(#email_bounced{ message_nr = undefined }, _Context) ->
     ok;
-observe_email_bounced(#email_bounced{recipient=Recipient}, Context) ->
+observe_email_bounced(#email_bounced{ recipient = Recipient }, Context) ->
     m_email_status:mark_bounced(Recipient, Context).
 
-observe_email_received(#email_received{from=From}, Context) when is_binary(From) ->
+observe_email_received(#email_received{ from = From }, Context) when is_binary(From) ->
     m_email_status:mark_received(From, Context),
     undefined.
 

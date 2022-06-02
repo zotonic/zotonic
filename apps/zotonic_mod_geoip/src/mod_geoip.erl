@@ -16,9 +16,11 @@
 %% limitations under the License.
 
 -module(mod_geoip).
+
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("GeoIP").
+
 -mod_description("Map IP addresses to geo locations.").
 
 -define(MAXMIND_COUNTRY_DB, 'GeoLite2-Country').
@@ -26,14 +28,11 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--export([
-    init/1,
-    lookup/1,
+-export([init/1,
+         lookup/1,
+         license_key/0]).
 
-    license_key/0
-]).
-
--spec lookup( tuple() | string() | binary() ) -> {ok, map()} | {error, invalid_address|not_found}.
+-spec lookup(tuple() | string() | binary()) -> {ok, map()} | {error, invalid_address | not_found}.
 lookup(IP) ->
     case locus:lookup(city, IP) of
         {ok, Info} ->
@@ -51,21 +50,28 @@ init(Context) ->
         {error, already_started} ->
             ok;
         {error, Reason} ->
-            ?zError("Could not start mod_geoip dependency locus: ~p", [ Reason ], Context)
+            ?zError("Could not start mod_geoip dependency locus: ~p", [Reason], Context)
     end.
 
-maybe_set_license_key(undefined, Context) -> maybe_log_error(Context);
-maybe_set_license_key("", Context) -> maybe_log_error(Context);
-maybe_set_license_key(<<>>, Context) -> maybe_log_error(Context);
+maybe_set_license_key(undefined, Context) ->
+    maybe_log_error(Context);
+maybe_set_license_key("", Context) ->
+    maybe_log_error(Context);
+maybe_set_license_key(<<>>, Context) ->
+    maybe_log_error(Context);
 maybe_set_license_key(LicenseKey, _Context) ->
     application:set_env(locus, license_key, z_convert:to_list(LicenseKey)).
 
 maybe_log_error(Context) ->
     case application:get_env(locus, license_key) of
-        {ok, "YOUR_LICENSE_KEY"} -> log_error(Context);
-        {ok, ""} -> log_error(Context);
-        {ok, _} -> ok;
-        undefined -> log_error(Context)
+        {ok, "YOUR_LICENSE_KEY"} ->
+            log_error(Context);
+        {ok, ""} ->
+            log_error(Context);
+        {ok, _} ->
+            ok;
+        undefined ->
+            log_error(Context)
     end.
 
 log_error(Context) ->
@@ -73,17 +79,24 @@ log_error(Context) ->
 
 license_key() ->
     case z_config:get(maxmind_license_key) of
-        undefined -> license_key_app();
-        "" -> license_key_app();
-        LicKey -> LicKey
+        undefined ->
+            license_key_app();
+        "" ->
+            license_key_app();
+        LicKey ->
+            LicKey
     end.
 
 license_key_app() ->
     case application:get_env(locus, license_key) of
-        {ok, "YOUR_LICENSE_KEY"} -> undefined;
-        {ok, ""} -> undefined;
-        {ok, LicenseKey} -> LicenseKey;
-        undefined -> undefined
+        {ok, "YOUR_LICENSE_KEY"} ->
+            undefined;
+        {ok, ""} ->
+            undefined;
+        {ok, LicenseKey} ->
+            LicenseKey;
+        undefined ->
+            undefined
     end.
 
 result(Map) ->
@@ -95,30 +108,32 @@ result(Map) ->
         subdivisions => extract_subdivisions(Map)
     }.
 
-extract_city( #{ <<"city">> := City } ) ->
-    map_trans( maps:get(<<"names">>, City, #{}) );
-extract_city( _Map ) ->
+extract_city(#{ <<"city">> := City }) ->
+    map_trans(maps:get(<<"names">>, City, #{  }));
+extract_city(_Map) ->
     undefined.
 
-extract_continent( #{ <<"continent">> := Continent } ) when is_map(Continent) ->
+extract_continent(#{ <<"continent">> := Continent }) when is_map(Continent) ->
     #{
         code => maps:get(<<"code">>, Continent, undefined),
-        name => map_trans( maps:get(<<"names">>, Continent, #{}) )
+        name => map_trans(maps:get(<<"names">>, Continent, #{  }))
     };
 extract_continent(_) ->
-    #{}.
+    #{  }.
 
-extract_country( #{ <<"country">> := Country } ) when is_map(Country) ->
+extract_country(#{ <<"country">> := Country }) when is_map(Country) ->
     #{
         is_eu => maps:get(<<"is_in_european_union">>, Country, false),
-        iso => z_string:to_lower( maps:get(<<"iso_code">>, Country, <<>>) ),
-        name => map_trans( maps:get(<<"names">>, Country, #{}) )
+        iso =>
+            z_string:to_lower(
+                maps:get(<<"iso_code">>, Country, <<>>)),
+        name => map_trans(maps:get(<<"names">>, Country, #{  }))
     };
 extract_country(_) ->
-    #{}.
+    #{  }.
 
-extract_location( #{ <<"location">> := Location } = Info ) when is_map(Location) ->
-    Postal = maps:get(<<"postal">>, Info, #{}),
+extract_location(#{ <<"location">> := Location } = Info) when is_map(Location) ->
+    Postal = maps:get(<<"postal">>, Info, #{  }),
     #{
         accuracy_radius => maps:get(<<"accuracy_radius">>, Location, undefined),
         longitude => maps:get(<<"longitude">>, Location, undefined),
@@ -127,31 +142,31 @@ extract_location( #{ <<"location">> := Location } = Info ) when is_map(Location)
         postcode => maps:get(<<"code">>, Postal, undefined)
     };
 extract_location(_) ->
-    #{}.
+    #{  }.
 
 extract_subdivisions(#{ <<"subdivisions">> := Subdivisions }) when is_list(Subdivisions) ->
-    lists:map(
-        fun( #{ <<"names">> := Names, <<"iso_code">> := Code } ) ->
-            #{
-                code => Code,
-                name => map_trans(Names)
-            }
-        end,
-        Subdivisions);
+    lists:map(fun(#{
+                      <<"names">> := Names,
+                      <<"iso_code">> := Code
+                  }) ->
+                 #{
+                     code => Code,
+                     name => map_trans(Names)
+                 }
+              end,
+              Subdivisions);
 extract_subdivisions(_) ->
     [].
 
-
-map_trans( Names ) ->
-    Tr = maps:fold(
-        fun(K, V, Acc) ->
-            [ {map_language(K), V} | Acc ]
-        end,
-        [],
-        Names),
+map_trans(Names) ->
+    Tr = maps:fold(fun(K, V, Acc) ->
+                      [{map_language(K), V} | Acc]
+                   end,
+                   [],
+                   Names),
     {trans, Tr}.
 
 map_language(<<A, B, $-, _/binary>>) ->
-    list_to_atom([ A, B ]);
+    list_to_atom([A, B]);
 map_language(Lang) ->
     binary_to_atom(Lang, utf8).

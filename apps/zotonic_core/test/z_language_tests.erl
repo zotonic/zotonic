@@ -1,31 +1,23 @@
 -module(z_language_tests).
 
 -include_lib("eunit/include/eunit.hrl").
--include("zotonic.hrl").
 
+-include("zotonic.hrl").
 
 -define(PROPERTIES_LANGUAGE_CODE, <<"pa">>).
 -define(EXPECTED_PROPERTIES,
-    [
-        {language, <<"pa">>},
-        {script, <<"Arab">>},
-        {name, <<"ਪੰਜਾਬੀ"/utf8>>},
-        {name_en, <<"Punjabi"/utf8>>},
-        {sublanguages, [
-            {<<"pa-arab">>, [
-                {language, <<"pa">>},
-                {script, <<"Arab">>},
-                {name, <<"ابی"/utf8>>},
-                {name_en, <<"Punjabi - Arab"/utf8>>}
-            ]},
-            {<<"pa-guru">>, [
-                {language, <<"pa">>},
-                {script, <<"Guru">>},
-                {name, <<"ਪੰਜਾਬੀ ਦੇ - ਗੁਰਮੁਖੀ"/utf8>>},
-                {name_en, <<"Punjabi - Arab"/utf8>>}
-            ]}
-        ]}
-    ]).
+        [{language, <<"pa">>},
+         {script, <<"Arab">>},
+         {name, <<"ਪੰਜਾਬੀ"/utf8>>},
+         {name_en, <<"Punjabi"/utf8>>},
+         {sublanguages,
+          [{<<"pa-arab">>,
+            [{language, <<"pa">>}, {script, <<"Arab">>}, {name, <<"ابی"/utf8>>}, {name_en, <<"Punjabi - Arab"/utf8>>}]},
+           {<<"pa-guru">>,
+            [{language, <<"pa">>},
+             {script, <<"Guru">>},
+             {name, <<"ਪੰਜਾਬੀ ਦੇ - ਗੁਰਮੁਖੀ"/utf8>>},
+             {name_en, <<"Punjabi - Arab"/utf8>>}]}]}]).
 
 %% z_language:english_name
 
@@ -45,7 +37,6 @@ test_get_english_name_2() ->
     Expected = <<"Punjabi - Arab">>,
     ?assertEqual(Expected, Result).
 
-
 %% z_language:get_properties
 
 get_properties_test() ->
@@ -56,65 +47,49 @@ get_properties_test() ->
     test_get_properties_5(),
     test_get_properties_6(),
     test_get_properties_7().
+
     % test_get_properties_8().
 
 test_get_properties_1() ->
     Code = ?PROPERTIES_LANGUAGE_CODE,
     Result = z_language:properties(Code),
-    ?assertEqual(
-        proplists:get_value(language, ?EXPECTED_PROPERTIES),
-        maps:get(language, Result)
-    ).
+    ?assertEqual(proplists:get_value(language, ?EXPECTED_PROPERTIES), maps:get(language, Result)).
 
 test_get_properties_2() ->
     Code = ?PROPERTIES_LANGUAGE_CODE,
     Result = z_language:properties(Code),
-    ?assertEqual(
-        proplists:get_value(direction, ?EXPECTED_PROPERTIES),
-        maps:get(direction, Result, undefined)
-    ).
+    ?assertEqual(proplists:get_value(direction, ?EXPECTED_PROPERTIES), maps:get(direction, Result, undefined)).
 
 test_get_properties_3() ->
     Code = ?PROPERTIES_LANGUAGE_CODE,
     Result = z_language:properties(Code),
-    ?assertEqual(
-        proplists:get_value(name, ?EXPECTED_PROPERTIES),
-        maps:get(name, Result)
-    ).
+    ?assertEqual(proplists:get_value(name, ?EXPECTED_PROPERTIES), maps:get(name, Result)).
 
 test_get_properties_4() ->
     Code = ?PROPERTIES_LANGUAGE_CODE,
     Result = z_language:properties(Code),
-    ?assertEqual(
-        proplists:get_value(name_en, ?EXPECTED_PROPERTIES),
-        maps:get(name_en, Result)
-    ).
+    ?assertEqual(proplists:get_value(name_en, ?EXPECTED_PROPERTIES), maps:get(name_en, Result)).
 
 test_get_properties_5() ->
     Code = ?PROPERTIES_LANGUAGE_CODE,
     Result = z_language:properties(Code),
-    ?assertEqual(
-        proplists:get_value(script, ?EXPECTED_PROPERTIES),
-        maps:get(script, Result)
-    ).
+    ?assertEqual(proplists:get_value(script, ?EXPECTED_PROPERTIES), maps:get(script, Result)).
 
 test_get_properties_6() ->
     Code = ?PROPERTIES_LANGUAGE_CODE,
     Result = z_language:properties(Code),
-    ?assertEqual(
-        length(proplists:get_value(sublanguages, ?EXPECTED_PROPERTIES)),
-        maps:size(maps:get(sublanguages, Result, #{}))
-    ).
+    ?assertEqual(length(proplists:get_value(sublanguages, ?EXPECTED_PROPERTIES)),
+                 maps:size(
+                     maps:get(sublanguages, Result, #{  }))).
 
 test_get_properties_7() ->
     Code = ?PROPERTIES_LANGUAGE_CODE,
     Result = z_language:properties(Code),
-    [{ExpectedCode, _ExpectedData}|_] = proplists:get_value(sublanguages, ?EXPECTED_PROPERTIES),
+    [{ExpectedCode, _ExpectedData} | _] = proplists:get_value(sublanguages, ?EXPECTED_PROPERTIES),
     SubLang = maps:get(sublanguages, Result),
-    ?assertEqual(
-        true,
-        maps:is_key(z_convert:to_atom(ExpectedCode), SubLang)
-    ).
+    ?assertEqual(true,
+                 maps:is_key(
+                     z_convert:to_atom(ExpectedCode), SubLang)).
 
 % test_get_properties_8() ->
 %     Code = ?PROPERTIES_LANGUAGE_CODE,
@@ -127,7 +102,6 @@ test_get_properties_7() ->
 %         proplists:get_value(region, ExpectedData),
 %         maps:get(region, ResultData)
 %     ).
-
 
 %% z_language:is_valid
 
@@ -160,7 +134,6 @@ test_is_valid_4() ->
     Result = z_language:is_valid(Code),
     Expected = false,
     ?assertEqual(Expected, Result).
-
 
 %% z_language:is_rtl
 

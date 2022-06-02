@@ -18,29 +18,26 @@
 %% limitations under the License.
 
 -module(mod_editor_tinymce).
+
 -author("Arthur Clemens <arthurclemens@gmail.com>").
 
 -mod_title("TinyMCE Editor").
+
 -mod_description("Rich Text Editor using TinyMCE.").
+
 -mod_prio(500).
 
--export([
-    event/2
-    ]).
+-export([event/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-event(#z_msg_v1{data=Data}, Context) ->
+event(#z_msg_v1{ data = Data }, Context) ->
     handle_cmd(proplists:get_value(<<"cmd">>, Data), Data, Context).
 
 handle_cmd(<<"zmedia-props">>, Data, Context) ->
     {<<"options">>, Options} = proplists:lookup(<<"options">>, Data),
     {<<"id">>, Id} = proplists:lookup(<<"id">>, Data),
-    z_render:dialog(
-        ?__("Media Properties", Context),
-        "_tinymce_dialog_zmedia_props.tpl",
-        [
-            {id, m_rsc:rid(Id, Context)},
-            {options, Options}
-        ],
-        Context).
+    z_render:dialog(?__("Media Properties", Context),
+                    "_tinymce_dialog_zmedia_props.tpl",
+                    [{id, m_rsc:rid(Id, Context)}, {options, Options}],
+                    Context).

@@ -10,5 +10,4 @@
 
 -define(DEFAULT_NODENAME, "zotonic").
 -define(DEFAULT_NODENAME_TEST, "zotonic001_testsandbox").
-
 -define(MAXWAIT, 30).

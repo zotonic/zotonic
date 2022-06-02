@@ -17,36 +17,36 @@
 %% limitations under the License.
 
 -module(mod_export).
+
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Export Data").
+
 -mod_description("Exports data as CSV and other formats.").
+
 -mod_prio(800).
+
 -mod_depends([mod_base]).
 
--export([
-    observe_content_types_dispatch/3,
-    observe_export_resource_content_disposition/2,
-    rsc_props/1
-]).
+-export([observe_content_types_dispatch/3,
+         observe_export_resource_content_disposition/2,
+         rsc_props/1]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Add extra content-type to the 'id' controller; as fallbacks for content-types
 %% the API controller can't handle.
-observe_content_types_dispatch(#content_types_dispatch{id=Id}, Acc, Context) ->
+observe_content_types_dispatch(#content_types_dispatch{ id = Id }, Acc, Context) ->
     Acc ++ export_encoder:content_types_dispatch(Id, Context).
 
-
 %% @doc Get the content-disposition for the export
-observe_export_resource_content_disposition(
-        #export_resource_content_disposition{
-            dispatch = export_rsc_query,
-            content_type = <<"application/atom+xml", _/binary>>
-        },
-        _Context) ->
+observe_export_resource_content_disposition(#export_resource_content_disposition{
+                                                dispatch = export_rsc_query,
+                                                content_type = <<"application/atom+xml", _/binary>>
+                                            },
+                                            _Context) ->
     {ok, <<"inline">>};
-observe_export_resource_content_disposition(#export_resource_content_disposition{}, _Context) ->
+observe_export_resource_content_disposition(#export_resource_content_disposition{  }, _Context) ->
     {ok, <<"attachment">>}.
 
 rsc_props(Context) ->

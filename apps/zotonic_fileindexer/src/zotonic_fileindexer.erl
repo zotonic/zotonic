@@ -20,23 +20,19 @@
 
 -behaviour(application).
 
--export([
-    start/0,
-    start/2,
-    stop/1,
-
-    scan/2,
-    scan/3,
-
-    flush/0,
-    flush/1,
-    flush/2
-]).
+-export([start/0,
+         start/2,
+         stop/1,
+         scan/2,
+         scan/3,
+         flush/0,
+         flush/1,
+         flush/2]).
 
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
 -include_lib("../include/zotonic_fileindexer.hrl").
 
--type fileindex() :: #fileindex{}.
+-type fileindex() :: #fileindex{  }.
 
 -export_type([fileindex/0]).
 
@@ -54,16 +50,15 @@ start(_StartType, _StartArgs) ->
 stop(_State) ->
     ok.
 
-
 %% @doc Scan an application/dir for files matching a file pattern
--spec scan(atom(), file:filename_all()) -> {ok, list( zotonic_fileindexer:fileindex() )} | {error, term()}.
+-spec scan(atom(), file:filename_all()) -> {ok, [zotonic_fileindexer:fileindex()]} | {error, term()}.
 scan(App, SubDir) when is_atom(App) ->
     scan(App, SubDir, undefined).
 
--spec scan(atom(), file:filename_all(), string()|binary()|undefined) -> {ok, list( zotonic_fileindexer:fileindex() )} | {error, term()}.
+-spec scan(atom(), file:filename_all(), string() | binary() | undefined) ->
+              {ok, [zotonic_fileindexer:fileindex()]} | {error, term()}.
 scan(App, SubDir, Pattern) when is_atom(App) ->
     zotonic_fileindexer_cache:find(App, SubDir, Pattern).
-
 
 %% @doc Clear the complete cache, force a rescan.
 -spec flush() -> ok.
@@ -91,18 +86,23 @@ ensure_started(App) ->
             ok;
         {error, {not_started, Dep}} ->
             case ensure_started(Dep) of
-                ok -> ensure_started(App);
-                {error, _} = Error -> Error
+                ok ->
+                    ensure_started(App);
+                {error, _} = Error ->
+                    Error
             end;
         {error, {already_started, App}} ->
             ok;
         {error, {Tag, Msg}} when is_list(Tag), is_list(Msg) ->
-            {error, lists:flatten(io_lib:format("~s: ~s", [Tag, Msg]))};
+            {error,
+             lists:flatten(
+                 io_lib:format("~s: ~s", [Tag, Msg]))};
         {error, {bad_return, {{M, F, Args}, Return}}} ->
-            A = string:join([io_lib:format("~p", [A])|| A <- Args], ", "),
-            {error, lists:flatten(
-                        io_lib:format("~s failed to start due to a bad return value from call ~s:~s(~s):~n~p",
-                                      [App, M, F, A, Return]))};
+            A = string:join([io_lib:format("~p", [A]) || A <- Args], ", "),
+            {error,
+             lists:flatten(
+                 io_lib:format("~s failed to start due to a bad return value from call ~s:~s(~s):~n~p",
+                               [App, M, F, A, Return]))};
         {error, Reason} ->
             {error, Reason}
     end.
