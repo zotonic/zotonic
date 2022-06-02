@@ -15,10 +15,13 @@
 %% limitations under the License.
 
 -module(zotonic_site_testsandbox).
+
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -mod_title("Test sandbox").
+
 -mod_description("Module implementing a sandbox website with database for testing purposes.").
+
 -mod_prio(10).
 
--depends([ mod_translation ]).
+-depends([mod_translation]).

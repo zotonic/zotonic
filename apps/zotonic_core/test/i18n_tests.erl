@@ -15,7 +15,8 @@ msgstr \"nl\"
 ">>),
     [{header, <<"header value">>}, {<<"en">>, <<"nl">>}] = X2,
 
-    X3 = z_gettext:parse_po_bin(<<"msgid \"\"
+    X3 =
+        z_gettext:parse_po_bin(<<"msgid \"\"
 msgstr \"header value\"
 
 msgid \"en\"
@@ -26,7 +27,8 @@ msgstr \"\"
 ">>),
     [{header, <<"header value">>}, {<<"en">>, <<"nl">>}] = X3,
 
-    X4 = z_gettext:parse_po_bin(<<"msgid \"\"
+    X4 =
+        z_gettext:parse_po_bin(<<"msgid \"\"
 msgstr \"header value\"
 
 #~ msgid \"en\"

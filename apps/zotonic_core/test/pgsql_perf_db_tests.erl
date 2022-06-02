@@ -6,15 +6,12 @@
 
 -include_lib("kernel/include/logger.hrl").
 
-
 connect() ->
-    {ok, Conn} = epgsql:connect("localhost", "zotonic", "",
-                               [{database, "zotonic"}]),
+    {ok, Conn} = epgsql:connect("localhost", "zotonic", "", [{database, "zotonic"}]),
     Conn.
 
 ts() ->
     z_utils:now_msec().
-
 
 test() ->
     Conn = connect(),
@@ -36,12 +33,9 @@ test() ->
 
     ok.
 
-
-
 test(Fun, Name, Conn, Sql, Args) ->
     {result, Count} = Fun(Conn, Sql, Args, ?TESTTIME),
     ?LOG_INFO("~p test result: ~p queries in ~p ms (~s)", [Name, Count, ?TESTTIME, Sql]).
-
 
 test_squery(Conn, Sql, _Args, Time) ->
     test_squery1(Conn, Sql, Time, 0, ts()).
@@ -50,7 +44,7 @@ test_squery1(Conn, Sql, Time, Count, Start) ->
     {ok, _, _} = epgsql:squery(Conn, Sql),
     case ts() - Start of
         T when T < Time ->
-            test_squery1(Conn, Sql, Time, Count+1, Start);
+            test_squery1(Conn, Sql, Time, Count + 1, Start);
         _ ->
             {result, Count}
     end.
@@ -62,7 +56,7 @@ test_equery1(Conn, Sql, Args, Time, Count, Start) ->
     {ok, _, _} = epgsql:equery(Conn, Sql, Args),
     case ts() - Start of
         T when T < Time ->
-            test_equery1(Conn, Sql, Args, Time, Count+1, Start);
+            test_equery1(Conn, Sql, Args, Time, Count + 1, Start);
         _ ->
             {result, Count}
     end.
@@ -75,7 +69,7 @@ test_z_db_q1(Context, Sql, Args, Time, Count, Start) ->
     z_db:q1(Sql, Args, Context),
     case ts() - Start of
         T when T < Time ->
-            test_z_db_q1(Context, Sql, Args, Time, Count+1, Start);
+            test_z_db_q1(Context, Sql, Args, Time, Count + 1, Start);
         _ ->
             {result, Count}
     end.

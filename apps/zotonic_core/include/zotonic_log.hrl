@@ -25,43 +25,38 @@
 -define(LOG_LEVEL_INFO, 4).
 -define(LOG_LEVEL_DEBUG, 5).
 
--record(log_message, {
-    type = error :: z:severity(),
-    user_id :: m_rsc:resource_id() | undefined,
-    message :: iodata() | undefined,
-    props = [] :: proplists:proplist()
-}).
-
-
--record(log_email, {
-    severity = ?LOG_LEVEL_ERROR,
-    message_nr,
-    mailer_status,      % sending, sent, error, retry, warning, bounce, received
-    mailer_message,     % any text, to clarify the mailer_status
-    mailer_host,        % SMTP server or client we are talking with
-    envelop_to,         % the 'to' on the envelop
-    envelop_from,       % the 'from' on the envelop
-    to_id,              % who is receiving the e-mail
-    from_id,            % who is sending (user in the #context)
-    content_id,         % The page being sent (if any)
-    other_id,           % In case of a mailinglist the mailinglist id
-    message_template,   % template used for rendering the e-mail (if any)
-    props = []          % optional extra properties to be logged
-}).
-
+-record(log_message,
+        {type = error :: z:severity(),
+         user_id :: m_rsc:resource_id() | undefined,
+         message :: iodata() | undefined,
+         props = [] :: proplists:proplist()}).
+-record(log_email,
+        {severity = ?LOG_LEVEL_ERROR,
+         message_nr,
+         mailer_status,      % sending, sent, error, retry, warning, bounce, received
+         mailer_message,     % any text, to clarify the mailer_status
+         mailer_host,        % SMTP server or client we are talking with
+         envelop_to,         % the 'to' on the envelop
+         envelop_from,       % the 'from' on the envelop
+         to_id,              % who is receiving the e-mail
+         from_id,            % who is sending (user in the #context)
+         content_id,         % The page being sent (if any)
+         other_id,           % In case of a mailinglist the mailinglist id
+         message_template,   % template used for rendering the e-mail (if any)
+         props = []}).          % optional extra properties to be logged
 % NOTE: Make sure to extend record_to_proplist/1 in mod_logging.erl when adding log types.
--record(zlog, {
-    type = debug :: z:severity(),
-    user_id = undefined :: m_rsc:resource_id() | undefined,
-    timestamp = undefined :: erlang:timestamp() | undefined,
-    props = [] :: proplists:proplist() | #log_message{} | #log_email{}
-}).
+-record(zlog,
+        {type = debug :: z:severity(),
+         user_id = undefined :: m_rsc:resource_id() | undefined,
+         timestamp = undefined :: erlang:timestamp() | undefined,
+         props = [] :: proplists:proplist() | #log_message{  } | #log_email{  }}).
 
-
--define(zLoc, #{mfa=>{?MODULE,?FUNCTION_NAME,?FUNCTION_ARITY},
-                line=>?LINE,
-                file=>?FILE}).
-
+-define(zLoc,
+        #{
+            mfa => {?MODULE, ?FUNCTION_NAME, ?FUNCTION_ARITY},
+            line => ?LINE,
+            file => ?FILE
+        }).
 %% Log notifications
 -define(zDebug(Msg, Context), z:debug(Msg, ?zLoc, Context)).
 -define(zInfo(Msg, Context), z:info(Msg, ?zLoc, Context)).
@@ -69,7 +64,6 @@
 -define(zWarning(Msg, Context), z:warning(Msg, ?zLoc, Context)).
 -define(zError(Msg, Context), z:error(Msg, ?zLoc, Context)).
 -define(zFatal(Msg, Context), z:fatal(Msg, ?zLoc, Context)).
-
 -define(zDebug(Msg, Args, Context), z:debug(Msg, Args, ?zLoc, Context)).
 -define(zInfo(Msg, Args, Context), z:info(Msg, Args, ?zLoc, Context)).
 -define(zNotice(Msg, Args, Context), z:notice(Msg, Args, ?zLoc, Context)).
@@ -80,5 +74,9 @@
 %% Below is copied (and adapted) from Nitrogen, which is copyright 2008-2009 Rusty Klophaus
 
 %% Easy to use macros for debugging/development
--define(PRINT(Var), ?LOG_NOTICE(#{ var => ??Var, value => Var })).
+-define(PRINT(Var),
+        ?LOG_NOTICE(#{
+                        var => ??Var,
+                        value => Var
+                    })).
 -define(DEBUG(Msg), z:debug_msg(Msg, ?zLoc)).

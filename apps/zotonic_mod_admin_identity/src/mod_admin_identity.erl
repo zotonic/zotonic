@@ -17,33 +17,41 @@
 %% limitations under the License.
 
 -module(mod_admin_identity).
+
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Admin identity/user supports").
+
 -mod_description("Adds support for handling and verification of user identities.").
+
 -mod_depends([admin]).
+
 -mod_provides([]).
 
-
 %% interface functions
--export([
-    observe_identity_verified/2,
-    observe_identity_password_match/2,
-    observe_rsc_update/3,
-    observe_search_query/2,
-    observe_admin_menu/3,
-    event/2
-]).
+-export([observe_identity_verified/2,
+         observe_identity_password_match/2,
+         observe_rsc_update/3,
+         observe_search_query/2,
+         observe_admin_menu/3,
+         event/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
-
-observe_identity_verified(#identity_verified{user_id=RscId, type=Type, key=Key}, Context) ->
+observe_identity_verified(#identity_verified{
+                              user_id = RscId,
+                              type = Type,
+                              key = Key
+                          },
+                          Context) ->
     m_identity:set_verified(RscId, Type, Key, Context).
 
-
-observe_identity_password_match(#identity_password_match{password=Password, hash=Hash}, _Context) ->
+observe_identity_password_match(#identity_password_match{
+                                    password = Password,
+                                    hash = Hash
+                                },
+                                _Context) ->
     case m_identity:hash_is_equal(Password, Hash) of
         true ->
             case m_identity:needs_rehash(Hash) of
@@ -56,17 +64,25 @@ observe_identity_password_match(#identity_password_match{password=Password, hash
             {error, password}
     end.
 
-
-observe_rsc_update(#rsc_update{action=Action, id=RscId, props=Pre}, {ok, Post}, Context)
+observe_rsc_update(#rsc_update{
+                       action = Action,
+                       id = RscId,
+                       props = Pre
+                   },
+                   {ok, Post},
+                   Context)
     when Action =:= insert; Action =:= update ->
     case z_context:get(is_m_identity_update, Context) of
         true ->
             {ok, Post};
         _false ->
             case {maps:get(<<"email">>, Pre, undefined), maps:get(<<"email">>, Post, undefined)} of
-                {A, A} -> {ok, Post};
-                {_Old, undefined} -> {ok, Post};
-                {_Old, <<>>} -> {ok, Post};
+                {A, A} ->
+                    {ok, Post};
+                {_Old, undefined} ->
+                    {ok, Post};
+                {_Old, <<>>} ->
+                    {ok, Post};
                 {_Old, New} ->
                     case is_email_identity_category(Pre, Post, Context) of
                         true ->
@@ -78,45 +94,43 @@ observe_rsc_update(#rsc_update{action=Action, id=RscId, props=Pre}, {ok, Post}, 
                     {ok, Post}
             end
     end;
-observe_rsc_update(#rsc_update{}, Acc, _Context) ->
+observe_rsc_update(#rsc_update{  }, Acc, _Context) ->
     Acc.
 
-
-observe_search_query(#search_query{ search = Req, offsetlimit = OffsetLimit }, Context) ->
+observe_search_query(#search_query{
+                         search = Req,
+                         offsetlimit = OffsetLimit
+                     },
+                     Context) ->
     search(Req, OffsetLimit, Context).
 
-observe_admin_menu(#admin_menu{}, Acc, Context) ->
-    [
-     #menu_item{id=admin_user,
-                parent=admin_auth,
-                label=?__("Users", Context),
-                url={admin_user},
-                visiblecheck={acl, use, mod_admin_identity}}
-
-     |Acc].
-
+observe_admin_menu(#admin_menu{  }, Acc, Context) ->
+    [#menu_item{
+         id = admin_user,
+         parent = admin_auth,
+         label = ?__("Users", Context),
+         url = {admin_user},
+         visiblecheck = {acl, use, mod_admin_identity}
+     }
+     | Acc].
 
 % Verify an identity - for now assume an e-mail identity
-event(#postback{message={identity_verify_confirm, Args}}, Context) ->
+event(#postback{ message = {identity_verify_confirm, Args} }, Context) ->
     {idn_id, IdnId} = proplists:lookup(idn_id, Args),
     case m_identity:get(IdnId, Context) of
         undefined ->
             z_render:growl_error("Sorry, can not find this identity.", Context);
         Idn ->
-            z_render:wire({confirm, [
-                            {text, [
-                                    ?__("This will send a verification e-mail to ", Context),
-                                    proplists:get_value(key, Idn), $.
-                                ]},
+            z_render:wire({confirm,
+                           [{text,
+                             [?__("This will send a verification e-mail to ", Context),
+                              proplists:get_value(key, Idn),
+                              $.]},
                             {ok, ?__("Send", Context)},
-                            {action, {postback, [
-                                        {postback, {identity_verify, Args}},
-                                        {delegate, ?MODULE}
-                                    ]}}
-                        ]},
-                        Context)
+                            {action, {postback, [{postback, {identity_verify, Args}}, {delegate, ?MODULE}]}}]},
+                          Context)
     end;
-event(#postback{message={identity_verify, Args}}, Context) ->
+event(#postback{ message = {identity_verify, Args} }, Context) ->
     {id, RscId} = proplists:lookup(id, Args),
     {idn_id, IdnId} = proplists:lookup(idn_id, Args),
     case send_verification(RscId, IdnId, Context) of
@@ -127,7 +141,7 @@ event(#postback{message={identity_verify, Args}}, Context) ->
         ok ->
             z_render:growl(?__("Sent verification e-mail.", Context), Context)
     end;
-event(#postback{message={identity_verify_check, Args}}, Context) ->
+event(#postback{ message = {identity_verify_check, Args} }, Context) ->
     {idn_id, IdnId} = proplists:lookup(idn_id, Args),
     {verify_key, VerifyKey} = proplists:lookup(verify_key, Args),
     Context1 = z_render:wire({hide, [{target, "verify-checking"}]}, Context),
@@ -137,7 +151,7 @@ event(#postback{message={identity_verify_check, Args}}, Context) ->
         ok ->
             z_render:wire({fade_in, [{target, "verify-ok"}]}, Context1)
     end;
-event(#postback{message={identity_verify_preferred, Args}}, Context) ->
+event(#postback{ message = {identity_verify_preferred, Args} }, Context) ->
     {id, RscId} = proplists:lookup(id, Args),
     {type, Type} = proplists:lookup(type, Args),
     Key = z_context:get_q(<<"key">>, Context),
@@ -160,41 +174,41 @@ event(#postback{message={identity_verify_preferred, Args}}, Context) ->
         false ->
             z_render:growl_error(?__("You are not allowed to edit identities.", Context), Context)
     end;
-
 % Delete an identity
-event(#postback{message={identity_delete_confirm, Args}}, Context) ->
-    z_render:wire({confirm, [
-                    {text, ?__("Are you sure you want to delete this entry?", Context)},
+event(#postback{ message = {identity_delete_confirm, Args} }, Context) ->
+    z_render:wire({confirm,
+                   [{text, ?__("Are you sure you want to delete this entry?", Context)},
                     {ok, ?__("Delete", Context)},
-                    {action, {postback, [
-                                {postback, {identity_delete, Args}},
-                                {delegate, ?MODULE}
-                            ]}}
-                ]},
-                Context);
-event(#postback{message={identity_delete, Args}}, Context) ->
+                    {action, {postback, [{postback, {identity_delete, Args}}, {delegate, ?MODULE}]}}]},
+                  Context);
+event(#postback{ message = {identity_delete, Args} }, Context) ->
     {id, RscId} = proplists:lookup(id, Args),
     {idn_id, IdnId} = proplists:lookup(idn_id, Args),
     {list_element, ListId} = proplists:lookup(list_element, Args),
     case m_rsc:is_editable(RscId, Context) of
         true ->
             case m_identity:get(IdnId, Context) of
-                undefined -> nop;
-                Idn -> {rsc_id, RscId} = proplists:lookup(rsc_id, Idn)
+                undefined ->
+                    nop;
+                Idn ->
+                    {rsc_id, RscId} = proplists:lookup(rsc_id, Idn)
             end,
             {ok, _} = m_identity:delete(IdnId, Context),
             z_render:wire({mask, [{target, ListId}]}, Context);
         false ->
             z_render:growl_error(?__("You are not allowed to edit identities.", Context), Context)
     end;
-
 % Add an identity
-event(#postback{message={identity_add, Args}}, Context) ->
+event(#postback{ message = {identity_add, Args} }, Context) ->
     {id, RscId} = proplists:lookup(id, Args),
     case m_rsc:is_editable(RscId, Context) of
         true ->
-            Type = z_convert:to_atom(proplists:get_value(type, Args, email)),
-            case z_string:trim(z_context:get_q(<<"idn-key">>, Context, <<>>)) of
+            Type =
+                z_convert:to_atom(
+                    proplists:get_value(type, Args, email)),
+            case z_string:trim(
+                     z_context:get_q(<<"idn-key">>, Context, <<>>))
+            of
                 <<>> ->
                     Context;
                 Key ->
@@ -220,15 +234,15 @@ event(#postback{message={identity_add, Args}}, Context) ->
         false ->
             z_render:growl_error(?__("You are not allowed to edit identities.", Context), Context)
     end;
-
 %% Log on as this user
-event(#postback{message={switch_user, [{id, Id}]}}, Context) ->
-    ContextSwitch = case z_context:get(auth_options, Context) of
-        #{ sudo_user_id := SUid } when is_integer(SUid) ->
-            z_acl:logon(SUid, Context);
-        _ ->
-            Context
-    end,
+event(#postback{ message = {switch_user, [{id, Id}]} }, Context) ->
+    ContextSwitch =
+        case z_context:get(auth_options, Context) of
+            #{ sudo_user_id := SUid } when is_integer(SUid) ->
+                z_acl:logon(SUid, Context);
+            _ ->
+                Context
+        end,
     case z_auth:switch_user(Id, ContextSwitch) of
         ok ->
             % Changing the authenticated will force all connected pages to reload or change.
@@ -238,22 +252,26 @@ event(#postback{message={switch_user, [{id, Id}]}}, Context) ->
             z_render:growl_error(?__("You are not allowed to switch users.", Context), Context)
     end.
 
-
-
-
 is_existing_key(RscId, Type, Key, Context) ->
     Existing = m_identity:get_rsc_by_type(RscId, Type, Context),
-    case lists:filter(fun(Idn) -> proplists:get_value(key, Idn) == Key end, Existing) of
-        [] -> false;
-        _ -> true
+    case lists:filter(fun(Idn) ->
+                         proplists:get_value(key, Idn) == Key
+                      end,
+                      Existing)
+    of
+        [] ->
+            false;
+        _ ->
+            true
     end.
 
--spec ensure( m_rsc:resource_id(), atom(), atom()|binary(), z:context() ) -> ok | {ok, integer()} | {error, term()}.
-ensure(_RscId, _Type, undefined, _Context) -> ok;
-ensure(_RscId, _Type, <<>>, _Context) -> ok;
+-spec ensure(m_rsc:resource_id(), atom(), atom() | binary(), z:context()) -> ok | {ok, integer()} | {error, term()}.
+ensure(_RscId, _Type, undefined, _Context) ->
+    ok;
+ensure(_RscId, _Type, <<>>, _Context) ->
+    ok;
 ensure(RscId, Type, Key, Context) when is_binary(Key) ->
     m_identity:insert(RscId, Type, Key, Context).
-
 
 %%====================================================================
 %% support functions
@@ -269,9 +287,7 @@ is_email_identity_category(_Pre, _Post, _Context) ->
     false.
 
 is_email_identity_category(IsA) when is_list(IsA) ->
-    lists:member(person, IsA)
-    orelse lists:member(institution, IsA).
-
+    lists:member(person, IsA) orelse lists:member(institution, IsA).
 
 send_verification(RscId, IdnId, Context) ->
     case m_identity:get(IdnId, Context) of
@@ -284,18 +300,13 @@ send_verification(RscId, IdnId, Context) ->
                     % Send the verfication e-mail
                     Email = proplists:get_value(key, Idn),
                     {ok, VerifyKey} = m_identity:set_verify_key(IdnId, Context),
-                    Vars = [
-                        {idn, Idn},
-                        {id, RscId},
-                        {verify_key, VerifyKey}
-                    ],
+                    Vars = [{idn, Idn}, {id, RscId}, {verify_key, VerifyKey}],
                     z_email:send_render(Email, "email_identity_verify.tpl", Vars, Context),
                     ok;
                 _Type ->
                     {error, unsupported}
             end
     end.
-
 
 verify(IdnId, VerifyKey, Context) ->
     case m_identity:lookup_by_verify_key(VerifyKey, Context) of
@@ -307,9 +318,13 @@ verify(IdnId, VerifyKey, Context) ->
                         undefined ->
                             {error, notfound};
                         Idn ->
-                            case z_convert:to_bool(proplists:get_value(is_verified, Idn)) of
-                                true -> ok;
-                                false -> {error, wrongkey}
+                            case z_convert:to_bool(
+                                     proplists:get_value(is_verified, Idn))
+                            of
+                                true ->
+                                    ok;
+                                false ->
+                                    {error, wrongkey}
                             end
                     end;
                 _ ->
@@ -318,51 +333,58 @@ verify(IdnId, VerifyKey, Context) ->
         Idn ->
             % Set the identity to verified
             IdnIdBin = z_convert:to_binary(IdnId),
-            case z_convert:to_binary(proplists:get_value(id, Idn)) of
+            case z_convert:to_binary(
+                     proplists:get_value(id, Idn))
+            of
                 IdnIdBin ->
-                    m_identity:set_verified(proplists:get_value(id, Idn), Context),
+                    m_identity:set_verified(
+                        proplists:get_value(id, Idn), Context),
                     ok;
                 _ ->
                     {error, wrongkey}
             end
     end.
 
-
 search({users, []}, OffsetLimit, Context) ->
-    search({user, [{text,undefined},{users_only,true}]}, OffsetLimit, Context);
-search({users, [{users_only,UsersOnly}]}, OffsetLimit, Context) ->
-    search({user, [{text,undefined},{users_only,UsersOnly}]}, OffsetLimit, Context);
-search({users, [{text,Text}]}, OffsetLimit, Context) ->
-    search({user, [{text,Text},{user_only,true}]}, OffsetLimit, Context);
-search({users, [{text,QueryText}, {users_only, UsersOnly0}]}, _OffsetLimit, Context) ->
+    search({user, [{text, undefined}, {users_only, true}]}, OffsetLimit, Context);
+search({users, [{users_only, UsersOnly}]}, OffsetLimit, Context) ->
+    search({user, [{text, undefined}, {users_only, UsersOnly}]}, OffsetLimit, Context);
+search({users, [{text, Text}]}, OffsetLimit, Context) ->
+    search({user, [{text, Text}, {user_only, true}]}, OffsetLimit, Context);
+search({users, [{text, QueryText}, {users_only, UsersOnly0}]}, _OffsetLimit, Context) ->
     UsersOnly = z_convert:to_bool(UsersOnly0),
-    {TSJoin, Where, Args, Order} = case z_utils:is_empty(QueryText) of
-                        true ->
-                            {[], [], [], "r.pivot_title"};
-                        false ->
-                            {", plainto_tsquery($2, $1) query",
-                             "query @@ r.pivot_tsv",
-                             [QueryText, z_pivot_rsc:stemmer_language(Context)],
-                             "ts_rank_cd(pivot_tsv, query, 32)"}
-                     end,
-    IdnJoin = case UsersOnly of
-                true -> " join identity i on (r.id = i.rsc_id and i.type = 'username_pw') ";
-                false -> ""
-              end,
-    Cats = case UsersOnly of
-                true -> [];
-                false -> [{"r", [person, institution]}]
-           end,
+    {TSJoin, Where, Args, Order} =
+        case z_utils:is_empty(QueryText) of
+            true ->
+                {[], [], [], "r.pivot_title"};
+            false ->
+                {", plainto_tsquery($2, $1) query",
+                 "query @@ r.pivot_tsv",
+                 [QueryText, z_pivot_rsc:stemmer_language(Context)],
+                 "ts_rank_cd(pivot_tsv, query, 32)"}
+        end,
+    IdnJoin =
+        case UsersOnly of
+            true ->
+                " join identity i on (r.id = i.rsc_id and i.type = 'username_pw') ";
+            false ->
+                ""
+        end,
+    Cats =
+        case UsersOnly of
+            true ->
+                [];
+            false ->
+                [{"r", [person, institution]}]
+        end,
     #search_sql{
-       select="r.id",
-       from="rsc r " ++ IdnJoin ++ TSJoin,
-       where=Where,
-       order=Order,
-       args=Args,
-       cats=Cats,
-       tables=[{rsc,"r"}]
-      };
+        select = "r.id",
+        from = "rsc r " ++ IdnJoin ++ TSJoin,
+        where = Where,
+        order = Order,
+        args = Args,
+        cats = Cats,
+        tables = [{rsc, "r"}]
+    };
 search(_, _, _) ->
     undefined.
-
-

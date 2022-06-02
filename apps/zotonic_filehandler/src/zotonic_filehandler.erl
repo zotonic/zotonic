@@ -17,22 +17,19 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
-
 -module(zotonic_filehandler).
 
--export([
-    compile_all/0,
-    compile_all_sync/0,
-    reload_modules/0,
-    reload_module/1,
-    load_module/1,
-    compile_options/1,
-    terminal_notifier/1
-]).
+-export([compile_all/0,
+         compile_all_sync/0,
+         reload_modules/0,
+         reload_module/1,
+         load_module/1,
+         compile_options/1,
+         terminal_notifier/1]).
 
--type verb() :: create|modify|delete.
+-type verb() :: create | modify | delete.
+
 -export_type([verb/0]).
-
 
 -spec compile_all() -> ok | {error, term()}.
 compile_all() ->
@@ -63,9 +60,6 @@ load_module(Module) ->
 compile_options(ErlangFile) ->
     zotonic_filehandler_compile:compile_options(ErlangFile).
 
-
 %% @doc Send a message to the user as a system notification
 terminal_notifier(Msg) ->
     zotonic_filehandler_terminal:notify(Msg).
-
-

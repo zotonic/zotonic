@@ -1,4 +1,1 @@
-
--record(filewatcher_changes, {
-    changes :: map()
-}).
+-record(filewatcher_changes, {changes :: map()}).

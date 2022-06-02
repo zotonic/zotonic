@@ -19,6 +19,5 @@
 % Used for posting uploaded files as query arguments.
 % See also the zotonic.fileuploader.worker.js
 
--record(fileuploader, {
-    name :: binary()        % Name of the uploaded file
-}).
+-record(fileuploader,
+        {name :: binary()}).        % Name of the uploaded file

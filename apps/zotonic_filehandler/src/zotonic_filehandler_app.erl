@@ -20,11 +20,9 @@
 
 -behaviour(application).
 
--export([
-    start/0,
-    start/2,
-    stop/1
-]).
+-export([start/0,
+         start/2,
+         stop/1]).
 
 %%====================================================================
 %% API
@@ -45,22 +43,15 @@ stop(_State) ->
 %% Internal functions
 %%====================================================================
 
-
 %% @doc Ensure all job queues
 ensure_job_queues() ->
-    ensure_job_queue(
-        zotonic_filehandler_single_job,
-        [
-            {regulators, [
-                {counter, [
-                    {limit, 1},
-                    {modifiers, [{cpu, 1}]}
-                ]}
-            ]}
-        ]).
+    ensure_job_queue(zotonic_filehandler_single_job,
+                     [{regulators, [{counter, [{limit, 1}, {modifiers, [{cpu, 1}]}]}]}]).
 
 ensure_job_queue(Name, Options) ->
     case jobs:queue_info(Name) of
-        undefined -> jobs:add_queue(Name, Options);
-        {queue, _Props} -> ok
+        undefined ->
+            jobs:add_queue(Name, Options);
+        {queue, _Props} ->
+            ok
     end.

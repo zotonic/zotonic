@@ -20,37 +20,27 @@
 
 -behaviour(gen_server).
 
--export([
-    find/3,
-    flush/0,
-    flush/2,
-
-    start_link/0,
-    init/1,
-    handle_call/3,
-    handle_cast/2,
-    handle_info/2,
-    code_change/3,
-    terminate/2
-    ]).
+-export([find/3,
+         flush/0,
+         flush/2,
+         start_link/0,
+         init/1,
+         handle_call/3,
+         handle_cast/2,
+         handle_info/2,
+         code_change/3,
+         terminate/2]).
 
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
 
--record(findex, {
-        key :: tuple(),
-        app :: atom(),
-        subdir :: binary(),
-        files :: list( zotonic_fileindexer:fileindex() )
-    }).
-
--record(state, { }).
+-record(findex, {key :: tuple(), app :: atom(), subdir :: binary(), files :: [zotonic_fileindexer:fileindex()]}).
+-record(state, {}).
 
 -define(TIMEOUT, infinity).
 
 %% @doc Find all files underneath a app/dir. Optional with a certain extension.
--spec find(atom(), file:filename_all(), binary()|list()|undefined) ->
-      {ok, list( zotonic_fileindexer:fileindex() )}
-    | {error, term()}.
+-spec find(atom(), file:filename_all(), binary() | list() | undefined) ->
+              {ok, [zotonic_fileindexer:fileindex()]} | {error, term()}.
 find(App, SubDir, OptPattern) when is_atom(App) ->
     {ok, AppDir} = app_dir(App),
     case filelib:is_dir(AppDir) of
@@ -81,33 +71,32 @@ flush(App, SubDir) when is_atom(App) ->
 start_link() ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% gen_server callbacks %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 init(_Args) ->
     ets:new(?MODULE, [set, {keypos, #findex.key}, protected, named_table]),
-    {ok, #state{ }}.
+    {ok, #state{  }}.
 
 handle_call({index, App, AppDir, SubDir, Pattern}, _From, State) ->
-    Files = zotonic_fileindexer_scan:scan(filename:join(AppDir, SubDir), Pattern),
+    Files =
+        zotonic_fileindexer_scan:scan(
+            filename:join(AppDir, SubDir), Pattern),
     Key = key(App, SubDir, Pattern),
-    FIndex = #findex{
-        key = Key,
-        app = App,
-        subdir = unicode:characters_to_binary(SubDir),
-        files = Files
-    },
+    FIndex =
+        #findex{
+            key = Key,
+            app = App,
+            subdir = unicode:characters_to_binary(SubDir),
+            files = Files
+        },
     ets:insert(?MODULE, FIndex),
     {reply, {ok, Files}, State};
-
 handle_call({flush, App, SubDir}, _From, State) ->
     do_flush(App, SubDir),
     {reply, ok, State};
-
 handle_call(flush, _From, State) ->
     ets:delete_all_objects(?MODULE),
     {reply, ok, State};
-
 handle_call(_Cmd, _From, State) ->
     {reply, {error, uknown_command}, State}.
 
@@ -123,45 +112,57 @@ code_change(_Version, State, _Extra) ->
 terminate(_Reason, _State) ->
     ok.
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Local functions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 app_dir(App) ->
     case code:lib_dir(App) of
         {error, bad_name} ->
             % Not started - assume it is located in our _build directory
-            {ok, filename:join([ build_dir(), App ])};
+            {ok, filename:join([build_dir(), App])};
         Path when is_list(Path) ->
             {ok, Path}
     end.
 
 build_dir() ->
-    filename:dirname( filename:dirname( code:lib_dir(zotonic_fileindexer) ) ).
+    filename:dirname(
+        filename:dirname(
+            code:lib_dir(zotonic_fileindexer))).
 
 key(App, SubDir, OptPattern) ->
     P = pattern(OptPattern),
     {App, unicode:characters_to_binary(SubDir), P}.
 
-pattern(undefined) -> <<".">>;
-pattern("") -> <<".">>;
-pattern(<<>>) -> <<".">>;
-pattern(P) -> unicode:characters_to_binary(P).
+pattern(undefined) ->
+    <<".">>;
+pattern("") ->
+    <<".">>;
+pattern(<<>>) ->
+    <<".">>;
+pattern(P) ->
+    unicode:characters_to_binary(P).
 
 do_flush(App, SubDir) ->
-    Ks = ets:foldl(
-        fun(FIndex, Acc) ->
-            case match(FIndex, App, SubDir) of
-                true -> [ FIndex#findex.key | Acc ];
-                false -> Acc
-            end
-        end,
-        [],
-        ?MODULE),
-    lists:foreach(
-        fun(K) -> ets:delete(?MODULE, K) end,
-        Ks).
+    Ks = ets:foldl(fun(FIndex, Acc) ->
+                      case match(FIndex, App, SubDir) of
+                          true ->
+                              [FIndex#findex.key | Acc];
+                          false ->
+                              Acc
+                      end
+                   end,
+                   [],
+                   ?MODULE),
+    lists:foreach(fun(K) ->
+                     ets:delete(?MODULE, K)
+                  end,
+                  Ks).
 
-match(#findex{ app = App, subdir = FSub }, App, SubDir) ->
+match(#findex{
+          app = App,
+          subdir = FSub
+      },
+      App,
+      SubDir) ->
     is_prefix(SubDir, FSub);
 match(_, _App, _SubDir) ->
     false.

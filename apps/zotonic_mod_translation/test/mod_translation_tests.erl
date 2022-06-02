@@ -3,7 +3,6 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-
 url_strip_language_test() ->
     test_url_strip_language1(),
     test_url_strip_language2().

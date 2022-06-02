@@ -25,34 +25,35 @@
 %% limitations under the License.
 
 -module(mod_twitter).
+
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -mod_title("Twitter").
+
 -mod_description("Use Twitter for logon, and/or import tweets from users or tags on Twitter.").
+
 -mod_prio(401).
+
 -mod_schema(2).
+
 -mod_depends([admin, authentication, cron]).
+
 -mod_provides([twitter]).
 
 %% interface functions
--export([
-        init/1,
-        event/2,
-        manage_schema/2,
-        observe_rsc_update_done/2,
-        observe_tick_1h/2
-    ]).
+-export([init/1,
+         event/2,
+         manage_schema/2,
+         observe_rsc_update_done/2,
+         observe_tick_1h/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-
--define(DELAY_RATELIMIT, 15*60*1000).
--define(DELAY_ERROR,      1*60*1000).
--define(DELAY_START,        10*1000).
-
+-define(DELAY_RATELIMIT, 15 * 60 * 1000).
+-define(DELAY_ERROR, 1 * 60 * 1000).
+-define(DELAY_START, 10 * 1000).
 -define(STARTUP_DELAY_SECS, 30).
 -define(POLL_TASK_NAME, <<"twitter-subscription-poller">>).
-
 
 %% @doc Initialize or restart the poll task.
 init(Context) ->
@@ -61,13 +62,15 @@ init(Context) ->
 %% @doc Ensure our poller task is always there.
 observe_tick_1h(tick_1h, Context) ->
     case z_pivot_rsc:get_task(twitter_poller, poll, ?POLL_TASK_NAME, Context) of
-        {ok, _Task} -> ok;
-        {error, enoent} -> init(Context);
-        {error, _} -> ok
+        {ok, _Task} ->
+            ok;
+        {error, enoent} ->
+            init(Context);
+        {error, _} ->
+            ok
     end.
 
-
-event(#submit{message=admin_twitter}, Context) ->
+event(#submit{ message = admin_twitter }, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
             save_settings(Context),
@@ -79,34 +82,44 @@ event(#submit{message=admin_twitter}, Context) ->
     end.
 
 save_settings(Context) ->
-    lists:foreach(
-        fun ({Key, Value}) ->
-            case is_setting(Key) of
-                true -> m_config:set_value(mod_twitter, binary_to_atom(Key, 'utf8'), Value, Context);
-                false -> ok
-            end
-        end,
-        z_context:get_q_all_noz(Context)).
+    lists:foreach(fun({Key, Value}) ->
+                     case is_setting(Key) of
+                         true ->
+                             m_config:set_value(mod_twitter, binary_to_atom(Key, utf8), Value, Context);
+                         false ->
+                             ok
+                     end
+                  end,
+                  z_context:get_q_all_noz(Context)).
 
-is_setting(<<"consumer_key">>) -> true;
-is_setting(<<"consumer_secret">>) -> true;
-is_setting(<<"useauth">>) -> true;
-is_setting(<<"access_token">>) -> true;
-is_setting(<<"access_token_secret">>) -> true;
-is_setting(<<"follow">>) -> true;
-is_setting(<<"max_feed_backoff">>) -> true;
-is_setting(_) -> false.
+is_setting(<<"consumer_key">>) ->
+    true;
+is_setting(<<"consumer_secret">>) ->
+    true;
+is_setting(<<"useauth">>) ->
+    true;
+is_setting(<<"access_token">>) ->
+    true;
+is_setting(<<"access_token_secret">>) ->
+    true;
+is_setting(<<"follow">>) ->
+    true;
+is_setting(<<"max_feed_backoff">>) ->
+    true;
+is_setting(_) ->
+    false.
 
--spec observe_rsc_update_done(#rsc_update_done{}, z:context()) -> ok.
+-spec observe_rsc_update_done(#rsc_update_done{  }, z:context()) -> ok.
 observe_rsc_update_done(#rsc_update_done{ id = Id }, Context) ->
     TwId = m_rsc:p_no_acl(Id, twitter_id, Context),
     case m_twitter:normalize_key(TwId, user) of
         <<>> ->
             case m_identity:get_rsc(Id, twitter_id, Context) of
-            undefined ->
+                undefined ->
                     ok;
                 L when is_list(L) ->
-                    m_identity:delete(proplists:get_value(id, L), Context)
+                    m_identity:delete(
+                        proplists:get_value(id, L), Context)
             end;
         <<"@", _/binary>> = TwitterId ->
             save_identity(Id, TwitterId, Context);
@@ -115,24 +128,28 @@ observe_rsc_update_done(#rsc_update_done{ id = Id }, Context) ->
     end.
 
 save_identity(Id, TwitterId, Context) ->
-    IsChanged = case m_identity:get_rsc(Id, twitter_id, Context) of
-        undefined ->
-            m_identity:insert(Id, twitter_id, TwitterId, Context),
-            true;
-        Idn ->
-            case proplists:get_value(key, Idn) of
-                TwitterId ->
-                    false;
-                _Changed ->
-                    m_identity:delete(proplists:get_value(id, Idn), Context),
-                    m_identity:insert(Id, twitter_id, TwitterId, Context),
-                    true
-            end
-    end,
+    IsChanged =
+        case m_identity:get_rsc(Id, twitter_id, Context) of
+            undefined ->
+                m_identity:insert(Id, twitter_id, TwitterId, Context),
+                true;
+            Idn ->
+                case proplists:get_value(key, Idn) of
+                    TwitterId ->
+                        false;
+                    _Changed ->
+                        m_identity:delete(
+                            proplists:get_value(id, Idn), Context),
+                        m_identity:insert(Id, twitter_id, TwitterId, Context),
+                        true
+                end
+        end,
     m_twitter:update_identitiy_subscription(Id, Context),
     case IsChanged of
-        true -> init(Context);
-        false -> ok
+        true ->
+            init(Context);
+        false ->
+            ok
     end.
 
 %%====================================================================
@@ -145,10 +162,6 @@ save_identity(Id, TwitterId, Context) ->
 manage_schema(Version, Context) ->
     ok = m_twitter:install(Version, Context),
     #datamodel{
-        categories=[
-            {tweet, text, [{title, <<"Tweet">>}]}
-        ],
-        resources=[
-            {from_twitter, keyword, [{title, <<"From Twitter">>}]}
-        ]
+        categories = [{tweet, text, [{title, <<"Tweet">>}]}],
+        resources = [{from_twitter, keyword, [{title, <<"From Twitter">>}]}]
     }.

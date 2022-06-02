@@ -21,21 +21,15 @@
 -behaviour(gen_server).
 
 -export([start_link/0]).
-
--export([
-    init/1,
-    handle_call/3,
-    handle_cast/2,
-    handle_info/2,
-    code_change/3,
-    terminate/2
-    ]).
-
--export([
-    start_http_listeners/0,
-    stop_http_listeners/0,
-    await/0
-    ]).
+-export([init/1,
+         handle_call/3,
+         handle_cast/2,
+         handle_info/2,
+         code_change/3,
+         terminate/2]).
+-export([start_http_listeners/0,
+         stop_http_listeners/0,
+         await/0]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -52,7 +46,8 @@ start_link() ->
 -spec await() -> ok.
 await() ->
     case gen_server:call(?MODULE, status, infinity) of
-        started -> ok;
+        started ->
+            ok;
         init ->
             timer:sleep(10),
             await()
@@ -62,7 +57,6 @@ await() ->
 %% gen_server functions
 %%====================================================================
 
-
 init([]) ->
     % Set trap_exit, so that terminate is called
     process_flag(trap_exit, true),
@@ -71,7 +65,6 @@ init([]) ->
 
 handle_call(status, _From, State) ->
     {reply, State, State};
-
 handle_call(_Msg, _From, State) ->
     {reply, {error, unknown_call}, State}.
 
@@ -90,7 +83,6 @@ terminate(_Why, started) ->
 terminate(_Why, init) ->
     ok.
 
-
 %%====================================================================
 %% Internal functions
 %%====================================================================
@@ -98,12 +90,12 @@ terminate(_Why, init) ->
 %% @doc Stop all HTTP listeners
 -spec stop_http_listeners() -> ok.
 stop_http_listeners() ->
-    lists:foreach(
-            fun cowboy:stop_listener/1,
-            [ zotonic_http_listener_ipv4,
-              zotonic_https_listener_ipv4,
-              zotonic_http_listener_ipv6,
-              zotonic_https_listener_ipv6]).
+    lists:foreach(fun cowboy:stop_listener/1,
+                  [zotonic_http_listener_ipv4,
+                   zotonic_https_listener_ipv4,
+                   zotonic_http_listener_ipv6,
+                   zotonic_https_listener_ipv6]).
+
 %% @doc Start the HTTP/S listeners
 -spec start_http_listeners() -> ok.
 start_http_listeners() ->
@@ -126,57 +118,54 @@ start_http_listeners_ip4(_WebIp, none) ->
     ?LOG_WARNING("HTTP IPv4 server disabled: listen_port is set to 'none'"),
     ok;
 start_http_listeners_ip4(WebIp, WebPort) ->
-    WebOpt = case WebIp of
-        any -> [];
-        _ -> [{ip, WebIp}]
-    end,
-    case cowboy:start_clear(
-        zotonic_http_listener_ipv4,
-        #{
-            max_connections => z_config:get(max_connections),
-            num_acceptors => z_config:get(inet_acceptor_pool_size),
-            socket_opts => [
-                inet,
-                {port, WebPort},
-                {backlog, z_config:get(inet_backlog)}
-                | WebOpt
-            ]
-        },
-        cowboy_options())
+    WebOpt =
+        case WebIp of
+            any ->
+                [];
+            _ ->
+                [{ip, WebIp}]
+        end,
+    case cowboy:start_clear(zotonic_http_listener_ipv4,
+                            #{
+                                max_connections => z_config:get(max_connections),
+                                num_acceptors => z_config:get(inet_acceptor_pool_size),
+                                socket_opts => [inet, {port, WebPort}, {backlog, z_config:get(inet_backlog)} | WebOpt]
+                            },
+                            cowboy_options())
     of
         {ok, _} ->
             ?LOG_NOTICE(#{
-                text => "HTTP IPv4 server listening",
-                ip => ip_to_string(WebIp),
-                port => WebPort,
-                protocol => http
-            }),
+                            text => "HTTP IPv4 server listening",
+                            ip => ip_to_string(WebIp),
+                            port => WebPort,
+                            protocol => http
+                        }),
             ok;
         {error, {already_started, _Pid}} ->
             ?LOG_NOTICE(#{
-                text => "HTTP IPv4 server listening",
-                ip => ip_to_string(WebIp),
-                port => WebPort,
-                protocol => http
-            }),
+                            text => "HTTP IPv4 server listening",
+                            ip => ip_to_string(WebIp),
+                            port => WebPort,
+                            protocol => http
+                        }),
             ok;
         {error, eaddrinuse} ->
             ?LOG_ERROR(#{
-                text => "HTTP IPv4 server not started. Address in use.",
-                reason => eaddrinuse,
-                ip => ip_to_string(WebIp),
-                port => WebPort,
-                protocol => http
-            }),
+                           text => "HTTP IPv4 server not started. Address in use.",
+                           reason => eaddrinuse,
+                           ip => ip_to_string(WebIp),
+                           port => WebPort,
+                           protocol => http
+                       }),
             {error, eaddrinuse};
         {error, Reason} ->
             ?LOG_ERROR(#{
-                text => "HTTP IPv4 server not started",
-                reason => Reason,
-                ip => ip_to_string(WebIp),
-                port => WebPort,
-                protocol => http
-            }),
+                           text => "HTTP IPv4 server not started",
+                           reason => Reason,
+                           ip => ip_to_string(WebIp),
+                           port => WebPort,
+                           protocol => http
+                       }),
             {error, Reason}
     end.
 
@@ -188,58 +177,57 @@ start_https_listeners_ip4(_WebIp, none) ->
     ?LOG_WARNING("HTTPS IPv4 server disabled: 'ssl_listen_port' is set to 'none'"),
     ok;
 start_https_listeners_ip4(WebIp, SSLPort) ->
-    WebOpt = case WebIp of
-        any -> [];
-        _ -> [{ip, WebIp}]
-    end,
-    case cowboy:start_tls(
-        zotonic_https_listener_ipv4,
-        #{
-            max_connections => z_config:get(ssl_max_connections),
-            num_acceptors => z_config:get(ssl_acceptor_pool_size),
-            socket_opts => [
-                inet,
-                {port, SSLPort},
-                {backlog, z_config:get(ssl_backlog)}
-            ]
-            ++ z_ssl_certs:ssl_listener_options()
-            ++ WebOpt
-        },
-        cowboy_options())
+    WebOpt =
+        case WebIp of
+            any ->
+                [];
+            _ ->
+                [{ip, WebIp}]
+        end,
+    case cowboy:start_tls(zotonic_https_listener_ipv4,
+                          #{
+                              max_connections => z_config:get(ssl_max_connections),
+                              num_acceptors => z_config:get(ssl_acceptor_pool_size),
+                              socket_opts =>
+                                  [inet, {port, SSLPort}, {backlog, z_config:get(ssl_backlog)}]
+                                  ++ z_ssl_certs:ssl_listener_options()
+                                  ++ WebOpt
+                          },
+                          cowboy_options())
     of
         {ok, _} ->
             ?LOG_NOTICE(#{
-                text => "HTTPS IPv4 server listening",
-                ip => ip_to_string(WebIp),
-                port => SSLPort,
-                protocol => https
-            }),
+                            text => "HTTPS IPv4 server listening",
+                            ip => ip_to_string(WebIp),
+                            port => SSLPort,
+                            protocol => https
+                        }),
             ok;
         {error, {already_started, _Pid}} ->
             ?LOG_NOTICE(#{
-                text => "HTTPS IPv4 server listening",
-                ip => ip_to_string(WebIp),
-                port => SSLPort,
-                protocol => https
-            }),
+                            text => "HTTPS IPv4 server listening",
+                            ip => ip_to_string(WebIp),
+                            port => SSLPort,
+                            protocol => https
+                        }),
             ok;
         {error, eaddrinuse} ->
             ?LOG_ERROR(#{
-                text => "HTTPS IPv4 server not started. Address in use.",
-                reason => eaddrinuse,
-                ip => ip_to_string(WebIp),
-                port => SSLPort,
-                protocol => https
-            }),
+                           text => "HTTPS IPv4 server not started. Address in use.",
+                           reason => eaddrinuse,
+                           ip => ip_to_string(WebIp),
+                           port => SSLPort,
+                           protocol => https
+                       }),
             {error, eaddrinuse};
         {error, Reason} ->
             ?LOG_ERROR(#{
-                text => "HTTPS IPv4 server not started",
-                reason => Reason,
-                ip => ip_to_string(WebIp),
-                port => SSLPort,
-                protocol => https
-            }),
+                           text => "HTTPS IPv4 server not started",
+                           reason => Reason,
+                           ip => ip_to_string(WebIp),
+                           port => SSLPort,
+                           protocol => https
+                       }),
             {error, Reason}
     end.
 
@@ -249,58 +237,56 @@ start_http_listeners_ip6(none, _WebPort) ->
 start_http_listeners_ip6(_WebIp, none) ->
     ok;
 start_http_listeners_ip6(WebIp, WebPort) ->
-    WebOpt = case WebIp of
-        any -> [];
-        _ -> [{ip, WebIp}]
-    end,
-    case cowboy:start_clear(
-        zotonic_http_listener_ipv6,
-        #{
-            max_connections => z_config:get(max_connections),
-            num_acceptors => z_config:get(inet_acceptor_pool_size),
-            socket_opts => [
-                inet6,
-                {ipv6_v6only, true},
-                {port, WebPort},
-                {backlog, z_config:get(inet_backlog)}
-            ]
-            ++ WebOpt
-        },
-        cowboy_options())
+    WebOpt =
+        case WebIp of
+            any ->
+                [];
+            _ ->
+                [{ip, WebIp}]
+        end,
+    case cowboy:start_clear(zotonic_http_listener_ipv6,
+                            #{
+                                max_connections => z_config:get(max_connections),
+                                num_acceptors => z_config:get(inet_acceptor_pool_size),
+                                socket_opts =>
+                                    [inet6, {ipv6_v6only, true}, {port, WebPort}, {backlog, z_config:get(inet_backlog)}]
+                                    ++ WebOpt
+                            },
+                            cowboy_options())
     of
         {ok, _} ->
             ?LOG_NOTICE(#{
-                text => "HTTP IPv6 server listening",
-                ip => ip_to_string(WebIp),
-                port => WebPort,
-                protocol => http
-            }),
+                            text => "HTTP IPv6 server listening",
+                            ip => ip_to_string(WebIp),
+                            port => WebPort,
+                            protocol => http
+                        }),
             ok;
         {error, {already_started, _Pid}} ->
             ?LOG_NOTICE(#{
-                text => "HTTP IPv6 server listening",
-                ip => ip_to_string(WebIp),
-                port => WebPort,
-                protocol => http
-            }),
+                            text => "HTTP IPv6 server listening",
+                            ip => ip_to_string(WebIp),
+                            port => WebPort,
+                            protocol => http
+                        }),
             ok;
         {error, eaddrinuse} ->
             ?LOG_ERROR(#{
-                text => "HTTP IPv6 server not started. Address in use.",
-                reason => eaddrinuse,
-                ip => ip_to_string(WebIp),
-                port => WebPort,
-                protocol => http
-            }),
+                           text => "HTTP IPv6 server not started. Address in use.",
+                           reason => eaddrinuse,
+                           ip => ip_to_string(WebIp),
+                           port => WebPort,
+                           protocol => http
+                       }),
             {error, eaddrinuse};
         {error, Reason} ->
             ?LOG_ERROR(#{
-                text => "HTTP IPv6 server not started",
-                reason => Reason,
-                ip => ip_to_string(WebIp),
-                port => WebPort,
-                protocol => http
-            }),
+                           text => "HTTP IPv6 server not started",
+                           reason => Reason,
+                           ip => ip_to_string(WebIp),
+                           port => WebPort,
+                           protocol => http
+                       }),
             {error, Reason}
     end.
 
@@ -310,80 +296,82 @@ start_https_listeners_ip6(none, _SSLPort) ->
 start_https_listeners_ip6(_WebIp, none) ->
     ok;
 start_https_listeners_ip6(WebIp, SSLPort) ->
-    WebOpt = case WebIp of
-        any -> [];
-        _ -> [{ip, WebIp}]
-    end,
-    case cowboy:start_tls(
-        zotonic_https_listener_ipv6,
-        #{
-            max_connections => z_config:get(ssl_max_connections),
-            num_acceptors => z_config:get(ssl_acceptor_pool_size),
-            socket_opts => [
-                inet6,
-                {ipv6_v6only, true},
-                {port, SSLPort},
-                {backlog, z_config:get(ssl_backlog)}
-            ]
-            ++ z_ssl_certs:ssl_listener_options()
-            ++ WebOpt
-        },
-        cowboy_options())
+    WebOpt =
+        case WebIp of
+            any ->
+                [];
+            _ ->
+                [{ip, WebIp}]
+        end,
+    case cowboy:start_tls(zotonic_https_listener_ipv6,
+                          #{
+                              max_connections => z_config:get(ssl_max_connections),
+                              num_acceptors => z_config:get(ssl_acceptor_pool_size),
+                              socket_opts =>
+                                  [inet6, {ipv6_v6only, true}, {port, SSLPort}, {backlog, z_config:get(ssl_backlog)}]
+                                  ++ z_ssl_certs:ssl_listener_options()
+                                  ++ WebOpt
+                          },
+                          cowboy_options())
     of
         {ok, _} ->
             ?LOG_NOTICE(#{
-                text => "HTTPS IPv6 server listening",
-                ip => ip_to_string(WebIp),
-                port => SSLPort,
-                protocol => https
-            }),
+                            text => "HTTPS IPv6 server listening",
+                            ip => ip_to_string(WebIp),
+                            port => SSLPort,
+                            protocol => https
+                        }),
             ok;
         {error, {already_started, _Pid}} ->
             ?LOG_NOTICE(#{
-                text => "HTTPS IPv6 server listening",
-                ip => ip_to_string(WebIp),
-                port => SSLPort,
-                protocol => https
-            }),
+                            text => "HTTPS IPv6 server listening",
+                            ip => ip_to_string(WebIp),
+                            port => SSLPort,
+                            protocol => https
+                        }),
             ok;
         {error, eaddrinuse} ->
             ?LOG_ERROR(#{
-                text => "HTTPS IPv6 server not started. Address in use.",
-                reason => eaddrinuse,
-                ip => ip_to_string(WebIp),
-                port => SSLPort,
-                protocol => https
-            }),
+                           text => "HTTPS IPv6 server not started. Address in use.",
+                           reason => eaddrinuse,
+                           ip => ip_to_string(WebIp),
+                           port => SSLPort,
+                           protocol => https
+                       }),
             {error, eaddrinuse};
         {error, Reason} ->
             ?LOG_ERROR(#{
-                text => "HTTPS IPv6 server not started",
-                reason => Reason,
-                ip => ip_to_string(WebIp),
-                port => SSLPort,
-                protocol => https
-            }),
+                           text => "HTTPS IPv6 server not started",
+                           reason => Reason,
+                           ip => ip_to_string(WebIp),
+                           port => SSLPort,
+                           protocol => https
+                       }),
             {error, Reason}
     end.
 
-ip_to_string(any) -> "any";
-ip_to_string(IP) -> inet:ntoa(IP).
+ip_to_string(any) ->
+    "any";
+ip_to_string(IP) ->
+    inet:ntoa(IP).
 
 cowboy_options() ->
     #{
-        middlewares => [ cowmachine_proxy, z_sites_dispatcher, z_cowmachine_middleware ],
-        stream_handlers => [ cowboy_metrics_h, cowboy_stream_h ],
+        middlewares => [cowmachine_proxy, z_sites_dispatcher, z_cowmachine_middleware],
+        stream_handlers => [cowboy_metrics_h, cowboy_stream_h],
         request_timeout => ?HTTP_REQUEST_TIMEOUT,
         metrics_callback => fun zotonic_listen_http_metrics:metrics_callback/1,
         metrics_resp_headers_filter => fun zotonic_listen_http_metrics:resp_headers_filter/1,
         metrics_req_filter => fun zotonic_listen_http_metrics:req_filter/1,
-        env => #{}
+        env => #{  }
     }.
 
 %% @todo Exclude platforms that do not support raw ipv6 socket options
 -spec ipv6_supported() -> boolean().
 ipv6_supported() ->
-    case (catch inet:getaddr("localhost", inet6)) of
-        {ok, _Addr} -> true;
-        {error, _} -> false
+    case catch inet:getaddr("localhost", inet6) of
+        {ok, _Addr} ->
+            true;
+        {error, _} ->
+            false
     end.

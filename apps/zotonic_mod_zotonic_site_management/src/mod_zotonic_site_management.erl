@@ -21,34 +21,39 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Zotonic Site Management").
+
 -mod_description("Manage Zotonic sites.").
+
 -mod_prio(500).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_wires/include/mod_wires.hrl").
 
--export([
-    event/2,
+-export([event/2,
+         progress/3]).
 
-    progress/3
-    ]).
-
-event(#submit{message=addsite, form=Form}, Context) ->
+event(#submit{
+          message = addsite,
+          form = Form
+      },
+      Context) ->
     true = z_auth:is_auth(Context),
     Sitename = z_context:get_q_validated(<<"sitename">>, Context),
-    Options = [
-        {hostname, z_context:get_q_validated(<<"hostname">>, Context)},
-        {skeleton, z_context:get_q_validated(<<"skel">>, Context)},
-        {dbdatabase, z_context:get_q_validated(<<"dbdatabase">>, Context)},
-        {dbschema, case z_context:get_q_validated(<<"dbschema">>, Context) of
-                        <<>> -> Sitename;
-                        Schema -> Schema
-                   end},
-        {dbhost, z_context:get_q_validated(<<"dbhost">>, Context)},
-        {dbport, z_context:get_q_validated(<<"dbport">>, Context)},
-        {dbuser, z_context:get_q(<<"dbuser">>, Context)},
-        {dbpassword, z_context:get_q(<<"dbpassword">>, Context)}
-    ],
+    Options =
+        [{hostname, z_context:get_q_validated(<<"hostname">>, Context)},
+         {skeleton, z_context:get_q_validated(<<"skel">>, Context)},
+         {dbdatabase, z_context:get_q_validated(<<"dbdatabase">>, Context)},
+         {dbschema,
+          case z_context:get_q_validated(<<"dbschema">>, Context) of
+              <<>> ->
+                  Sitename;
+              Schema ->
+                  Schema
+          end},
+         {dbhost, z_context:get_q_validated(<<"dbhost">>, Context)},
+         {dbport, z_context:get_q_validated(<<"dbport">>, Context)},
+         {dbuser, z_context:get_q(<<"dbuser">>, Context)},
+         {dbpassword, z_context:get_q(<<"dbpassword">>, Context)}],
     ?LOG_NOTICE("[zotonic_site_status] Creating site ~s with ~p", [Sitename, Options]),
     case zotonic_status_addsite:addsite(Sitename, Options, Context) of
         {ok, {Site, FinalOptions}} ->
@@ -61,17 +66,24 @@ event(#submit{message=addsite, form=Form}, Context) ->
                     ?LOG_NOTICE("[zotonic_site_status] Site ~s is running", [Site]),
                     SiteContext = z_context:new(Site),
                     z_module_manager:upgrade_await(SiteContext),
-                    Vars = [
-                        {admin_url, abs_url_for(admin, SiteContext)},
-                        {site_url, z_context:abs_url(<<"/">>, SiteContext)},
-                        {site_dir, z_path:site_dir(SiteContext)}
-                        | FinalOptions
-                    ],
+                    Vars =
+                        [{admin_url, abs_url_for(admin, SiteContext)},
+                         {site_url, z_context:abs_url(<<"/">>, SiteContext)},
+                         {site_dir, z_path:site_dir(SiteContext)}
+                         | FinalOptions],
                     Context1 = notice(Form, Site, ?__("Succesfully created the site.", Context), Context),
-                    z_render:replace(Form, #render{vars=Vars, template="_addsite_success.tpl"}, Context1);
+                    z_render:replace(Form,
+                                     #render{
+                                         vars = Vars,
+                                         template = "_addsite_success.tpl"
+                                     },
+                                     Context1);
                 {error, StartError} ->
                     ?LOG_ERROR("[zotonic_site_status] Newly created site ~s is NOT running (~p)", [Site, StartError]),
-                    notice(Form, Site, ?__("Something is wrong, site is not starting. Please check the logs.", Context), Context)
+                    notice(Form,
+                           Site,
+                           ?__("Something is wrong, site is not starting. Please check the logs.", Context),
+                           Context)
             end;
         {error, Msg} when is_list(Msg); is_binary(Msg) ->
             notice(Form, Sitename, Msg, Context);
@@ -92,13 +104,13 @@ await(Site, Tries) ->
             ok;
         {ok, starting} ->
             timer:sleep(1000),
-            await(Site, Tries+1);
+            await(Site, Tries + 1);
         {ok, new} ->
             timer:sleep(1000),
-            await(Site, Tries+1);
+            await(Site, Tries + 1);
         {ok, retrying} ->
             timer:sleep(1000),
-            await(Site, Tries+1);
+            await(Site, Tries + 1);
         {ok, Other} ->
             {error, Other};
         {error, _} = Error ->
@@ -107,36 +119,25 @@ await(Site, Tries) ->
 
 abs_url_for(Dispatch, Context) ->
     case z_dispatcher:url_for(Dispatch, Context) of
-        undefined -> undefined;
-        Url -> z_context:abs_url(Url, Context)
+        undefined ->
+            undefined;
+        Url ->
+            z_context:abs_url(Url, Context)
     end.
 
 % @doc Render a notice.
 notice(Form, Sitename, Text, Context) ->
-    Actions = notice_actions(Sitename, Text) ++ [ {unmask, [{target, Form}]} ],
+    Actions = notice_actions(Sitename, Text) ++ [{unmask, [{target, Form}]}],
     z_render:wire(Actions, Context).
 
 progress(Sitename, Text, Context) ->
     case erlang:get(is_zotonic_command) of
         true ->
-            io:format("~s~n", [ Text ]);
+            io:format("~s~n", [Text]);
         _ ->
-            z_notifier:notify(
-                #page_actions{
-                    actions = notice_actions(Sitename, Text)
-                }, Context)
+            z_notifier:notify(#page_actions{ actions = notice_actions(Sitename, Text) }, Context)
     end.
 
 notice_actions(Sitename, Text) ->
-    [
-        {insert_top, [
-            {target, "notices"},
-            {template, "_notice.tpl"},
-            {site, Sitename},
-            {notice, Text}
-        ]},
-        {fade_out, [
-            {selector, "#notices > div:gt(0)"}, {speed, 2000}
-        ]}
-    ].
-
+    [{insert_top, [{target, "notices"}, {template, "_notice.tpl"}, {site, Sitename}, {notice, Text}]},
+     {fade_out, [{selector, "#notices > div:gt(0)"}, {speed, 2000}]}].

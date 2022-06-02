@@ -20,21 +20,29 @@
 -module(mod_clamav).
 
 -mod_title("ClamAV").
--mod_description("Scan uploaded files for viruses and malware.").
--mod_prio(100).
--mod_provides([ antivirus ]).
--mod_depends([ cron ]).
 
--export([
-     observe_media_upload_preprocess/2,
-     observe_tick_1h/2
-]).
+-mod_description("Scan uploaded files for viruses and malware.").
+
+-mod_prio(100).
+
+-mod_provides([antivirus]).
+
+-mod_depends([cron]).
+
+-export([observe_media_upload_preprocess/2,
+         observe_tick_1h/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-
 %% @doc Check the uploaded file with clamav
-observe_media_upload_preprocess(#media_upload_preprocess{ file = File, mime = Mime, medium = Medium } = Pre, Context) when is_binary(File) ->
+observe_media_upload_preprocess(#media_upload_preprocess{
+                                    file = File,
+                                    mime = Mime,
+                                    medium = Medium
+                                } =
+                                    Pre,
+                                Context)
+    when is_binary(File) ->
     case maps:get(<<"is_av_sizelimit">>, Medium, false) of
         true ->
             % This is the second try, now with disabled av-scanner
@@ -44,50 +52,49 @@ observe_media_upload_preprocess(#media_upload_preprocess{ file = File, mime = Mi
                 ok ->
                     % all ok, give the next preprocessor a try
                     ?LOG_NOTICE(#{
-                        text => <<"clamav: file is ok">>,
-                        result => ok,
-                        file => Pre#media_upload_preprocess.original_filename
-                    }),
+                                    text => <<"clamav: file is ok">>,
+                                    result => ok,
+                                    file => Pre#media_upload_preprocess.original_filename
+                                }),
                     undefined;
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
-                        text => <<"clamav: file is NOT ok">>,
-                        result => error,
-                        reason => Reason,
-                        file => Pre#media_upload_preprocess.original_filename,
-                        mime => Pre#media_upload_preprocess.mime
-                    }),
+                                   text => <<"clamav: file is NOT ok">>,
+                                   result => error,
+                                   reason => Reason,
+                                   file => Pre#media_upload_preprocess.original_filename,
+                                   mime => Pre#media_upload_preprocess.mime
+                               }),
                     UId = z_acl:user(Context),
-                    ?zError(
-                        "Virus scanner: error '~p' checking '~s' (~s) for user ~p (~s)",
-                        [ Reason,
-                          Pre#media_upload_preprocess.original_filename,
-                          Pre#media_upload_preprocess.mime,
-                          UId,
-                          z_convert:to_binary( m_rsc:p_no_acl(UId, email, Context) )
-                        ],
-                        Context),
+                    ?zError("Virus scanner: error '~p' checking '~s' (~s) for user ~p (~s)",
+                            [Reason,
+                             Pre#media_upload_preprocess.original_filename,
+                             Pre#media_upload_preprocess.mime,
+                             UId,
+                             z_convert:to_binary(
+                                 m_rsc:p_no_acl(UId, email, Context))],
+                            Context),
                     Error
             end
     end;
 observe_media_upload_preprocess(#media_upload_preprocess{ file = undefined }, _Context) ->
     undefined.
 
-
 scan_file(File, Mime, Context) ->
-  MimeB = z_convert:to_binary(Mime),
-  Fs = [
-    fun() -> z_clamav:scan_file(File) end,
-    fun() -> z_clamav_msoffice:scan_file(File, MimeB, Context) end
-  ],
-  lists:foldl(
-    fun
-        (F, ok) -> F();
-        (_F, Err) -> Err
-    end,
-    ok,
-    Fs).
-
+    MimeB = z_convert:to_binary(Mime),
+    Fs = [fun() ->
+             z_clamav:scan_file(File)
+          end,
+          fun() ->
+             z_clamav_msoffice:scan_file(File, MimeB, Context)
+          end],
+    lists:foldl(fun (F, ok) ->
+                        F();
+                    (_F, Err) ->
+                        Err
+                end,
+                ok,
+                Fs).
 
 %% @doc Periodic ping of clamav to check the settings
 observe_tick_1h(tick_1h, _Context) ->
@@ -95,17 +102,17 @@ observe_tick_1h(tick_1h, _Context) ->
     case z_clamav:ping() of
         pong ->
             ?LOG_INFO(#{
-                text => <<"Virus scanner: ping ok for clamav">>,
-                result => ok,
-                ip => IP,
-                port => Port
-            });
+                          text => <<"Virus scanner: ping ok for clamav">>,
+                          result => ok,
+                          ip => IP,
+                          port => Port
+                      });
         pang ->
             ?LOG_WARNING(#{
-                text => <<"Virus scanner: can not ping clamav daemon">>,
-                result => error,
-                reason => pang,
-                ip => IP,
-                port => Port
-            })
+                             text => <<"Virus scanner: can not ping clamav daemon">>,
+                             result => error,
+                             reason => pang,
+                             ip => IP,
+                             port => Port
+                         })
     end.

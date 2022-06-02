@@ -16,65 +16,41 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--record(z_file_info, {
-        modifiedUTC :: calendar:datetime(),
-        mime :: binary(),
-        size :: integer(),
-        acls :: list(integer()|{module, atom()}),
-        encodings :: list()
-    }).
-
--record(filestore, {
-        action = upload :: lookup | upload | delete,
-        path :: file:filename_all(),
-        filename :: file:filename_all() | undefined,
-        mime :: binary() | string() | undefined
-    }).
-
+-record(z_file_info,
+        {modifiedUTC :: calendar:datetime(),
+         mime :: binary(),
+         size :: integer(),
+         acls :: [integer() | {module, atom()}],
+         encodings :: list()}).
+-record(filestore,
+        {action = upload :: lookup | upload | delete,
+         path :: file:filename_all(),
+         filename :: file:filename_all() | undefined,
+         mime :: binary() | string() | undefined}).
 %%% @doc Notification to find the filestore credentials
--record(filestore_credentials_lookup, {
-        id :: integer(),
-        path :: binary()
-    }).
-
--record(filestore_credentials_revlookup, {
-        service :: binary(),
-        location :: binary()
-    }).
-
+-record(filestore_credentials_lookup, {id :: integer(), path :: binary()}).
+-record(filestore_credentials_revlookup, {service :: binary(), location :: binary()}).
 %%% @doc Filestore credentials, used for uploading a file to a storage service
--record(filestore_credentials, {
-        service :: binary(),
-        location :: binary(),
-        credentials :: any()
-    }).
-
-
+-record(filestore_credentials, {service :: binary(), location :: binary(), credentials :: any()}).
 %% @doc Used internally for all the parts of an encoding.
 %% One request can consists of different parts (think concatenated js/css)
--record(part_cache, {
-        acl,                    % optional associated resource id or module, for acl checks
-        modified,               % modification time for this entry
-        cache_pid,              % pid of cache entry
-        cache_monitor,          % monitor of cache entry
-        size,
-        mime                    % optional mime type
-    }).
--record(part_file, {
-        acl,                    % optional associated resource id or module, for acl checks
-        modified,               % modification time for this entry
-        mtime,                  % modification time of the file
-        filepath,               % path to static file
-        size,                   % size of this file (needed for sendfile)
-        mime                    % optional mime type
-    }).
--record(part_data, {
-        acl,                    % optional associated resource id or module, for acl checks
-        modified,               % modification time for this entry
-        data,                   % binary data
-        mime                    % optional mime type
-    }).
-
--record(part_missing, {
-        file
-    }).
+-record(part_cache,
+        {acl,                    % optional associated resource id or module, for acl checks
+         modified,               % modification time for this entry
+         cache_pid,              % pid of cache entry
+         cache_monitor,          % monitor of cache entry
+         size,
+         mime}).                    % optional mime type
+-record(part_file,
+        {acl,                    % optional associated resource id or module, for acl checks
+         modified,               % modification time for this entry
+         mtime,                  % modification time of the file
+         filepath,               % path to static file
+         size,                   % size of this file (needed for sendfile)
+         mime}).                    % optional mime type
+-record(part_data,
+        {acl,                    % optional associated resource id or module, for acl checks
+         modified,               % modification time for this entry
+         data,                   % binary data
+         mime}).                    % optional mime type
+-record(part_missing, {file}).

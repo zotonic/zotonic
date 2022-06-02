@@ -10,17 +10,12 @@ person_can_edit_own_resource_test() ->
     Context = context(),
 
     %% Person must be able to edit person category
-    replace_managed(
-        [
-            {rsc, [
-                {acl_user_group_id, acl_user_group_anonymous},
-                {actions, [view, update]},
-                {is_owner, true},
-                {category_id, person}
-            ]}
-        ],
-        Context
-    ),
+    replace_managed([{rsc,
+                      [{acl_user_group_id, acl_user_group_anonymous},
+                       {actions, [view, update]},
+                       {is_owner, true},
+                       {category_id, person}]}],
+                    Context),
 
     {ok, Id} = m_rsc:insert([{category, person}], z_acl:sudo(Context)),
 
@@ -30,23 +25,17 @@ person_can_edit_own_resource_test() ->
     UserContext = z_acl:logon(Id, Context),
     {ok, Id} = m_rsc:update(Id, [{title, "Test"}], UserContext).
 
-
 person_can_insert_text_in_default_content_group_only_test() ->
     Context = context(),
 
     %% Person must be able to insert text into the default user group
-    replace_managed(
-        [
-            {rsc, [
-                {acl_user_group_id, acl_user_group_anonymous},
-                {content_group_id, default_content_group},
-                {actions, [insert]},
-                {is_owner, true},
-                {category_id, article}
-            ]}
-        ],
-        Context
-    ),
+    replace_managed([{rsc,
+                      [{acl_user_group_id, acl_user_group_anonymous},
+                       {content_group_id, default_content_group},
+                       {actions, [insert]},
+                       {is_owner, true},
+                       {category_id, article}]}],
+                    Context),
 
     % Make a new user
     {ok, Id} = m_rsc:insert([{category, person}], z_acl:sudo(Context)),
@@ -58,14 +47,18 @@ person_can_insert_text_in_default_content_group_only_test() ->
 
     %% But not in the system content group
     SystemContentGroupId = m_rsc:p(system_content_group, id, Context),
-    ?assertEqual({error, eacces}, m_rsc:insert([{category, article}, {content_group_id, SystemContentGroupId}], UserContext)),
+    ?assertEqual({error, eacces},
+                 m_rsc:insert([{category, article}, {content_group_id, SystemContentGroupId}], UserContext)),
 
     ok.
 
-
-
 acl_is_allowed_accepts_rsc_name_object_test() ->
-    ?assertEqual(false, acl_user_groups_checks:acl_is_allowed(#acl_is_allowed{action = insert, object = text}, context())).
+    ?assertEqual(false,
+                 acl_user_groups_checks:acl_is_allowed(#acl_is_allowed{
+                                                           action = insert,
+                                                           object = text
+                                                       },
+                                                       context())).
 
 %% @doc See https://github.com/zotonic/zotonic/issues/1306
 acl_is_allowed_override_test() ->
@@ -81,15 +74,7 @@ publish_test() ->
     Context = context(),
 
     %% Anonymous can view everything
-    replace_managed(
-        [
-            {rsc, [
-                {acl_user_group_id, acl_user_group_anonymous},
-                {actions, [view]}
-            ]}
-        ],
-        Context
-    ),
+    replace_managed([{rsc, [{acl_user_group_id, acl_user_group_anonymous}, {actions, [view]}]}], Context),
 
     {ok, Id} = m_rsc:insert([{title, <<"Top secret!">>}, {category, text}], z_acl:sudo(Context)),
     ?assertEqual(<<"Top secret!">>, m_rsc:p(Id, title, z_acl:sudo(Context))),
@@ -108,20 +93,17 @@ start_modules(Context) ->
     ok = z_module_manager:activate_await(mod_acl_user_groups, Context),
     ok = z_module_manager:upgrade_await(Context).
 
-is_allowed_always_true(#acl_is_allowed{}, _Context) ->
+is_allowed_always_true(#acl_is_allowed{  }, _Context) ->
     true.
 
 replace_managed(Rules, Context) ->
     z_mqtt:subscribe(<<"model/acl_user_groups/event/acl-rules/publish-rebuild">>, z_acl:sudo(Context)),
 
-    m_acl_rule:replace_managed(
-        Rules,
-        ?MODULE,
-        z_acl:sudo(Context)
-    ),
+    m_acl_rule:replace_managed(Rules, ?MODULE, z_acl:sudo(Context)),
 
     receive
-        {mqtt_msg, _Msg} -> ok
+        {mqtt_msg, _Msg} ->
+            ok
     end,
 
     z_mqtt:unsubscribe(<<"model/acl_user_groups/event/acl-rules/publish-rebuild">>, z_acl:sudo(Context)).

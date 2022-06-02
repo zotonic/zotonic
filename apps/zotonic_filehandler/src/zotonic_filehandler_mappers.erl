@@ -18,46 +18,39 @@
 %% limitations under the License.
 
 -module(zotonic_filehandler_mappers).
+
 -author("Arjan Scherpenisse <arjan@miraclethings.nl>").
 
--export([
-    mappers/0
-]).
-
+-export([mappers/0]).
 %% Actions, do not use from other modules.
--export([
-    compile_yecc/1,
-    compile_sass/2,
-    compile_coffee/2,
-    compile_less/2,
-    run_build/2
-]).
-
+-export([compile_yecc/1,
+         compile_sass/2,
+         compile_coffee/2,
+         compile_less/2,
+         run_build/2]).
 
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
 -include_lib("kernel/include/logger.hrl").
 
-
--spec mappers() -> [ function() ].
+-spec mappers() -> [function()].
 mappers() ->
-    Builtin = [
-        fun drop_dirs/7,
-        fun temp_beam/7,
-        fun beam_file/7,
-        fun app_file/7,
-        fun header_file/7,
-        fun erlang_file/7,
-        fun yecc/7,
-        fun lib_src_build/7,
-        fun sass_file/7,
-        fun coffee_file/7,
-        fun less_file/7
-    ],
-    zotonic_notifier:foldl(
-        ?SYSTEM_NOTIFIER, zotonic_filehandler_mappers,
-        zotonic_filehandler_mappers, Builtin,
-        undefined).
-
+    Builtin =
+        [fun drop_dirs/7,
+         fun temp_beam/7,
+         fun beam_file/7,
+         fun app_file/7,
+         fun header_file/7,
+         fun erlang_file/7,
+         fun yecc/7,
+         fun lib_src_build/7,
+         fun sass_file/7,
+         fun coffee_file/7,
+         fun less_file/7],
+    zotonic_notifier:foldl(?SYSTEM_NOTIFIER,
+                           zotonic_filehandler_mappers,
+                           zotonic_filehandler_mappers,
+                           Builtin,
+                           undefined).
 
 %% ------------------------------ Map files to actions ------------------------------
 
@@ -65,10 +58,11 @@ drop_dirs(delete, _Application, _What, _Ext, _Root, _Split, _Filename) ->
     false;
 drop_dirs(_Verb, _Application, _What, _Ext, _Root, _Split, Filename) ->
     case filelib:is_dir(Filename) of
-        true -> ok;
-        false -> false
+        true ->
+            ok;
+        false ->
+            false
     end.
-
 
 %% @doc Recompile Erlang files on the fly
 temp_beam(_Verb, _Application, _What, <<".bea#">>, _Root, _Split, _Filename) ->
@@ -76,126 +70,97 @@ temp_beam(_Verb, _Application, _What, <<".bea#">>, _Root, _Split, _Filename) ->
 temp_beam(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
     false.
 
-
 beam_file(delete, _Application, _What, <<".beam">>, _Root, _Split, _Filename) ->
     ok;
 beam_file(create, _Application, {ebin, _EbinFile}, <<".beam">>, Root, _Split, _Filename) ->
     case is_indexed_beam_file(Root) of
         true ->
-            {ok, [
-                {zotonic_filehandler_compile, ld, [erlang:binary_to_atom(Root, utf8)]},
-                {z_module_indexer, reindex, []}
-            ]};
+            {ok,
+             [{zotonic_filehandler_compile, ld, [erlang:binary_to_atom(Root, utf8)]}, {z_module_indexer, reindex, []}]};
         false ->
-            {ok, [
-                {zotonic_filehandler_compile, ld, [erlang:binary_to_atom(Root, utf8)]}
-            ]}
+            {ok, [{zotonic_filehandler_compile, ld, [erlang:binary_to_atom(Root, utf8)]}]}
     end;
 beam_file(_Verb, _Application, {ebin, _EbinFile}, <<".beam">>, Root, _Split, _Filename) ->
-    {ok, [
-        {zotonic_filehandler_compile, ld, [erlang:binary_to_atom(Root, utf8)]}
-    ]};
+    {ok, [{zotonic_filehandler_compile, ld, [erlang:binary_to_atom(Root, utf8)]}]};
 beam_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
     false.
 
-is_indexed_beam_file(<<"mod_", _/binary>>) -> true;
-is_indexed_beam_file(<<"m_", _/binary>>) -> true;
-is_indexed_beam_file(<<"scomp_", _/binary>>) -> true;
-is_indexed_beam_file(<<"filter_", _/binary>>) -> true;
-is_indexed_beam_file(_) -> false.
-
+is_indexed_beam_file(<<"mod_", _/binary>>) ->
+    true;
+is_indexed_beam_file(<<"m_", _/binary>>) ->
+    true;
+is_indexed_beam_file(<<"scomp_", _/binary>>) ->
+    true;
+is_indexed_beam_file(<<"filter_", _/binary>>) ->
+    true;
+is_indexed_beam_file(_) ->
+    false.
 
 %% @doc Check for newly created/added Erlang applications
 app_file(create, _Application, {app, _AppFile}, <<".app">>, _Root, _Split, Filename) ->
-    {ok, [
-        {zotonic_filehandler_compile, code_path_check, [Filename]}
-    ]};
+    {ok, [{zotonic_filehandler_compile, code_path_check, [Filename]}]};
 app_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
     false.
-
 
 header_file(delete, _Basename, _What, <<".hrl">>, _Root, _Split, _Filename) ->
     ok;
 header_file(_Verb, _Basename, _What, <<".hrl">>, _Root, _Split, _Filename) ->
-    {ok, [
-        {zotonic_filehandler_compile, all, []}
-    ]};
+    {ok, [{zotonic_filehandler_compile, all, []}]};
 header_file(_Verb, _Basename, _What, _Ext, _Root, _Split, _Filename) ->
     false.
-
 
 erlang_file(delete, _Application, _What, <<".erl">>, _Root, _Split, _Filename) ->
     % Should delete the beam file
     ok;
 erlang_file(_Verb, _Application, {src, _Path}, <<".erl">>, _Root, _Split, Filename) ->
-    {ok, [
-        {zotonic_filehandler_compile, recompile, [Filename]}
-    ]};
+    {ok, [{zotonic_filehandler_compile, recompile, [Filename]}]};
 erlang_file(_Verb, _Application, {test, _Path}, <<".erl">>, _Root, _Split, Filename) ->
-    {ok, [
-        {zotonic_filehandler_compile, recompile, [Filename]}
-    ]};
+    {ok, [{zotonic_filehandler_compile, recompile, [Filename]}]};
 erlang_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
     false.
-
 
 yecc(delete, _Application, _What, <<".yrl">>, _Root, _Split, _Filename) ->
     % Should delete the erlang file
     ok;
 yecc(_Verb, _Application, {src, _Path}, <<".yrl">>, _Root, _Split, Filename) ->
-    {ok, [
-        {?MODULE, compile_yecc, [Filename]}
-    ]};
+    {ok, [{?MODULE, compile_yecc, [Filename]}]};
 yecc(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
     false.
-
 
 lib_src_build(_Verb, Application, {priv, <<"lib-src">>, Path}, _Ext, _Root, _Split, _Filename) ->
     case build_command(Application, Path) of
         {ok, BuildCmd} ->
-            {ok, [
-                {?MODULE, run_build, [Application, BuildCmd]}
-            ]};
+            {ok, [{?MODULE, run_build, [Application, BuildCmd]}]};
         false ->
             false
     end;
 lib_src_build(_Verb, _Application, _Path, _Ext, _Root, _Split, _Filename) ->
     false.
 
-sass_file(delete, _Application, _What, Ext, _Root, _Split, _Filename)
-    when Ext =:= <<".sass">>; Ext =:= <<".scss">> ->
+sass_file(delete, _Application, _What, Ext, _Root, _Split, _Filename) when Ext =:= <<".sass">>; Ext =:= <<".scss">> ->
     % Should delete the css file
     ok;
 sass_file(_Verb, Application, {priv, <<"lib-src">>, Path}, Ext, _Root, _Split, _Filename)
     when Ext =:= <<".sass">>; Ext =:= <<".scss">> ->
-    {ok, [
-        {?MODULE, compile_sass, [Application, Path]}
-    ]};
+    {ok, [{?MODULE, compile_sass, [Application, Path]}]};
 sass_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
     false.
-
 
 less_file(delete, _Application, _What, <<".less">>, _Root, _Split, _Filename) ->
     % Should delete the css file
     ok;
 less_file(_Verb, Application, {priv, <<"lib-src">>, Path}, <<".less">>, _Root, _Split, _Filename) ->
-    {ok, [
-        {?MODULE, compile_less, [Application, Path]}
-    ]};
+    {ok, [{?MODULE, compile_less, [Application, Path]}]};
 less_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
     false.
-
 
 coffee_file(delete, _Application, _What, <<".coffee">>, _Root, _Split, _Filename) ->
     % Should delete the js file
     ok;
 coffee_file(_Verb, Application, {priv, <<"lib-src">>, Path}, <<".coffee">>, _Root, _Split, _Filename) ->
-    {ok, [
-        {?MODULE, compile_coffee, [Application, Path]}
-    ]};
+    {ok, [{?MODULE, compile_coffee, [Application, Path]}]};
 coffee_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
     false.
-
 
 %% ------------------------------ Action callbacks -----------------------------------
 
@@ -207,52 +172,49 @@ compile_yecc(Filename) ->
         true ->
             zotonic_filehandler:terminal_notifier("Yecc: " ++ filename:basename(InPath)),
             Cmd = "erlc -o "
-                ++ z_filelib:os_escape(filename:dirname(InPath))
-                ++ " "
-                ++ z_filelib:os_escape(InPath),
+                  ++ z_filelib:os_escape(
+                         filename:dirname(InPath))
+                  ++ " "
+                  ++ z_filelib:os_escape(InPath),
             zotonic_filehandler_compile:run_cmd(Cmd);
         false ->
             ok
     end.
 
-
 %% @doc SCSS / SASS files from priv/lib-src/css/.../foo.sass -> priv/lib/css/.../foo.css
 compile_sass(Application, SrcPath) ->
     AppPriv = code:priv_dir(Application),
-    SrcFile = filename:join([ AppPriv, "lib-src", SrcPath]),
-    SassExt = z_convert:to_list( filename:extension(SrcPath) ),
-    MainScss = case filename:basename(SrcPath) of
-        <<"_", _/binary>> ->
-            find_main_sass_files(AppPriv, filename:dirname(SrcPath), SassExt);
-        <<_/binary>> ->
-            [ SrcPath ]
-    end,
-    lists:map(
-        fun(MainFile) ->
-            InFile = filename:join([ AppPriv, "lib-src", MainFile]),
-            OutPath = filename:join([ AppPriv, "lib", MainFile]),
-            OutFile = iolist_to_binary([ filename:rootname(OutPath), ".css" ]),
-            case is_newer(SrcFile, OutFile) of
-                true ->
-                    case z_filelib:ensure_dir(OutPath) of
-                        ok ->
-                            zotonic_filehandler:terminal_notifier("Sass: " ++ MainFile),
-                            Cmd = [
-                                sass_command(),
-                                z_filelib:os_escape(InFile),
-                                " ",
-                                z_filelib:os_escape(OutFile)
-                            ],
-                            zotonic_filehandler_compile:run_cmd(Cmd);
-                        {error, _} = Error ->
-                            ?LOG_ERROR("Could not create directory for ~p", [OutPath]),
-                            Error
-                    end;
-                false ->
-                    ok
-            end
-       end,
-       MainScss).
+    SrcFile = filename:join([AppPriv, "lib-src", SrcPath]),
+    SassExt =
+        z_convert:to_list(
+            filename:extension(SrcPath)),
+    MainScss =
+        case filename:basename(SrcPath) of
+            <<"_", _/binary>> ->
+                find_main_sass_files(AppPriv, filename:dirname(SrcPath), SassExt);
+            <<_/binary>> ->
+                [SrcPath]
+        end,
+    lists:map(fun(MainFile) ->
+                 InFile = filename:join([AppPriv, "lib-src", MainFile]),
+                 OutPath = filename:join([AppPriv, "lib", MainFile]),
+                 OutFile = iolist_to_binary([filename:rootname(OutPath), ".css"]),
+                 case is_newer(SrcFile, OutFile) of
+                     true ->
+                         case z_filelib:ensure_dir(OutPath) of
+                             ok ->
+                                 zotonic_filehandler:terminal_notifier("Sass: " ++ MainFile),
+                                 Cmd = [sass_command(), z_filelib:os_escape(InFile), " ", z_filelib:os_escape(OutFile)],
+                                 zotonic_filehandler_compile:run_cmd(Cmd);
+                             {error, _} = Error ->
+                                 ?LOG_ERROR("Could not create directory for ~p", [OutPath]),
+                                 Error
+                         end;
+                     false ->
+                         ok
+                 end
+              end,
+              MainScss).
 
 sass_command() ->
     case os:find_executable("sassc") of
@@ -265,24 +227,26 @@ sass_command() ->
 find_main_sass_files(AppPriv, SrcPath, SassExt) when is_binary(SrcPath) ->
     InPath = filename:join([AppPriv, "lib-src", SrcPath]),
     {ok, Files} = file:list_dir(InPath),
-    MainScss = lists:filter(
-        fun
-            ([$_|_]) -> false;
-            (E) -> lists:suffix(SassExt, E)
-        end,
-        Files),
+    MainScss =
+        lists:filter(fun ([$_ | _]) ->
+                             false;
+                         (E) ->
+                             lists:suffix(SassExt, E)
+                     end,
+                     Files),
     case MainScss of
         [] ->
             case SrcPath of
-                <<".">> -> [];
-                _ -> find_main_sass_files(AppPriv, filename:dirname(SrcPath), SassExt)
+                <<".">> ->
+                    [];
+                _ ->
+                    find_main_sass_files(AppPriv, filename:dirname(SrcPath), SassExt)
             end;
         _ ->
-            lists:map(
-                fun(File) ->
-                    filename:join(SrcPath, File)
-                end,
-                MainScss)
+            lists:map(fun(File) ->
+                         filename:join(SrcPath, File)
+                      end,
+                      MainScss)
     end.
 
 %% @doc LESS files from priv/lib-src/css/.../foo.less -> priv/lib/css/.../foo.css
@@ -291,19 +255,17 @@ find_main_sass_files(AppPriv, SrcPath, SassExt) when is_binary(SrcPath) ->
 compile_less(Application, SrcPath) ->
     AppPriv = code:priv_dir(Application),
     InPath = filename:join([AppPriv, "lib-src", SrcPath]),
-    DstPath = unicode:characters_to_list(filename:rootname(SrcPath)) ++ ".css",
-    OutPath = filename:join([ AppPriv, "lib", DstPath ]),
+    DstPath =
+        unicode:characters_to_list(
+            filename:rootname(SrcPath))
+        ++ ".css",
+    OutPath = filename:join([AppPriv, "lib", DstPath]),
     case is_newer(InPath, OutPath) of
         true ->
             zotonic_filehandler:terminal_notifier("Lessc: " ++ filename:basename(InPath)),
             case z_filelib:ensure_dir(OutPath) of
                 ok ->
-                    Cmd = [
-                        "lessc ",
-                        z_filelib:os_escape(InPath),
-                        " > ",
-                        z_filelib:os_escape(OutPath)
-                    ],
+                    Cmd = ["lessc ", z_filelib:os_escape(InPath), " > ", z_filelib:os_escape(OutPath)],
                     zotonic_filehandler_compile:run_cmd(Cmd);
                 {error, _} = Error ->
                     ?LOG_ERROR("Could not create directory for ~p", [OutPath]),
@@ -313,24 +275,21 @@ compile_less(Application, SrcPath) ->
             ok
     end.
 
-
 %% @doc coffee files from priv/lib-src/js/.../foo.coffee -> priv/lib/js/.../foo.js
 compile_coffee(Application, SrcPath) ->
     AppPriv = code:priv_dir(Application),
     InPath = filename:join([AppPriv, "lib-src", SrcPath]),
-    DstPath = unicode:characters_to_list(filename:rootname(SrcPath)) ++ ".js",
-    OutPath = filename:join([ AppPriv, "lib", DstPath ]),
+    DstPath =
+        unicode:characters_to_list(
+            filename:rootname(SrcPath))
+        ++ ".js",
+    OutPath = filename:join([AppPriv, "lib", DstPath]),
     case is_newer(InPath, OutPath) of
         true ->
             case z_filelib:ensure_dir(OutPath) of
                 ok ->
                     zotonic_filehandler:terminal_notifier("Coffee: " ++ filename:basename(InPath)),
-                    Cmd = [
-                        "coffee -o ",
-                        z_filelib:os_escape(OutPath),
-                        " -c ",
-                        z_filelib:os_escape(InPath)
-                    ],
+                    Cmd = ["coffee -o ", z_filelib:os_escape(OutPath), " -c ", z_filelib:os_escape(InPath)],
                     zotonic_filehandler_compile:run_cmd(Cmd);
                 {error, _} = Error ->
                     ?LOG_ERROR("Could not create directory for ~p", [OutPath]),
@@ -343,12 +302,7 @@ compile_coffee(Application, SrcPath) ->
 %% @doc Run the build command in a lib-src directory
 run_build(Application, {make, Makefile}) ->
     zotonic_filehandler:terminal_notifier("Make: " ++ app_path(Application, Makefile)),
-    CmdOpts = [
-        {env, [
-            {"APP_DIR", code:lib_dir(Application)},
-            {"ZOTONIC_LIB", "1"}
-        ]}
-    ],
+    CmdOpts = [{env, [{"APP_DIR", code:lib_dir(Application)}, {"ZOTONIC_LIB", "1"}]}],
     BuildDir = filename:dirname(Makefile),
     MakeCmd = "cd " ++ z_filelib:os_escape(BuildDir) ++ "; sh -c make " ++ z_filelib:os_escape(Makefile),
     zotonic_filehandler_compile:run_cmd(MakeCmd, CmdOpts, #{ ignore_dir => BuildDir }).
@@ -359,7 +313,7 @@ app_path(Application, BuildCmd) ->
     AppB = atom_to_binary(Application, utf8),
     case binary:split(BuildCmd, <<"/", AppB/binary, "/">>) of
         [_, X] ->
-            unicode:characters_to_list(iolist_to_binary([ AppB, "/", X]));
+            unicode:characters_to_list(iolist_to_binary([AppB, "/", X]));
         [_] ->
             unicode:characters_to_list(BuildCmd)
     end.
@@ -369,10 +323,12 @@ is_newer(In, Out) ->
     OutMod = filelib:last_modified(Out),
     is_newer_1(InMod, OutMod).
 
-is_newer_1(0, _) -> false;
-is_newer_1(_, 0) -> true;
-is_newer_1(A, B) -> A > B.
-
+is_newer_1(0, _) ->
+    false;
+is_newer_1(_, 0) ->
+    true;
+is_newer_1(A, B) ->
+    A > B.
 
 %% @doc Find a Makefile on the path to the changed lib-src file.
 %%      We look for a Makefile to build the targets in 'priv/lib'. This Makefile will
@@ -380,7 +336,10 @@ is_newer_1(A, B) -> A > B.
 %%      TODO: Support buildwatchers, maybe with "make watcher"
 build_command(Application, SrcPath) ->
     LibSrcDir = filename:join([code:priv_dir(Application), "lib-src"]),
-    case find_build(LibSrcDir, filename:split(filename:dirname(SrcPath))) of
+    case find_build(LibSrcDir,
+                    filename:split(
+                        filename:dirname(SrcPath)))
+    of
         {ok, {make, _Makefile} = BuildCmd} ->
             {ok, BuildCmd};
         false ->
@@ -389,7 +348,8 @@ build_command(Application, SrcPath) ->
 
 find_build(LibSrcDir, Dir) ->
     case lists:member(<<"dist">>, Dir) of
-        true -> false;
+        true ->
+            false;
         false ->
             Dirname = filename:join([LibSrcDir] ++ Dir),
             Makefile = filename:join(Dirname, <<"Makefile">>),

@@ -19,28 +19,33 @@
 %% limitations under the License.
 
 -module(mod_tkvstore).
+
 -author("Marc Worrell <marc@worrell.nl>").
+
 -behaviour(gen_server).
 
 -mod_author("Marc Worrell <marc@worrell.nl>").
+
 -mod_title("Typed K/V Store").
+
 -mod_description("Simple typed key/value store used to store structured data.").
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% gen_server exports
--export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
--export([start_link/0, start_link/1]).
-
+-export([init/1,
+         handle_call/3,
+         handle_cast/2,
+         handle_info/2,
+         terminate/2,
+         code_change/3]).
+-export([start_link/0,
+         start_link/1]).
 %% interface functions
--export([
-    pid_observe_tkvstore_get/3,
-    pid_observe_tkvstore_put/3,
-    pid_observe_tkvstore_delete/3,
-
-    writer_loop/2
-]).
-
+-export([pid_observe_tkvstore_get/3,
+         pid_observe_tkvstore_put/3,
+         pid_observe_tkvstore_delete/3,
+         writer_loop/2]).
 
 -record(state, {context, writer_pid, data}).
 
@@ -51,23 +56,21 @@
 %% @doc Starts the server
 start_link() ->
     start_link([]).
+
 start_link(Args) when is_list(Args) ->
     gen_server:start_link(?MODULE, Args, []).
 
-
 %% @doc Do a put in the persistent store, replace existing key/value
-pid_observe_tkvstore_put(Pid, #tkvstore_put{} = Message, _Context) ->
+pid_observe_tkvstore_put(Pid, #tkvstore_put{  } = Message, _Context) ->
     gen_server:cast(Pid, Message).
 
 %% @doc Fetch the persistent data of a type/key
-pid_observe_tkvstore_get(Pid, #tkvstore_get{} = Message, _Context) ->
+pid_observe_tkvstore_get(Pid, #tkvstore_get{  } = Message, _Context) ->
     gen_server:call(Pid, Message).
 
 %% @doc Delete the persistent data of a type/key
-pid_observe_tkvstore_delete(Pid, #tkvstore_delete{} = Message, _Context) ->
+pid_observe_tkvstore_delete(Pid, #tkvstore_delete{  } = Message, _Context) ->
     gen_server:cast(Pid, Message).
-
-
 
 %%====================================================================
 %% gen_server callbacks
@@ -81,16 +84,17 @@ pid_observe_tkvstore_delete(Pid, #tkvstore_delete{} = Message, _Context) ->
 init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     logger:set_process_metadata(#{
-        site => z_context:site(Context),
-        module => ?MODULE
-    }),
+                                    site => z_context:site(Context),
+                                    module => ?MODULE
+                                }),
     m_tkvstore:init(Context),
     WriterPid = erlang:spawn_link(?MODULE, writer_loop, [self(), Context]),
-    {ok, #state{
-            context=z_context:new(Context),
-            data=dict:new(),
-            writer_pid=WriterPid
-        }}.
+    {ok,
+     #state{
+         context = z_context:new(Context),
+         data = dict:new(),
+         writer_pid = WriterPid
+     }}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -99,7 +103,12 @@ init(Args) ->
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
 %% @doc Fetch persistent data, first check the data dict that is still being written
-handle_call(#tkvstore_get{type=Type, key=Key}, _From, State) ->
+handle_call(#tkvstore_get{
+                type = Type,
+                key = Key
+            },
+            _From,
+            State) ->
     case dict:find({Type, Key}, State#state.data) of
         {ok, Data} ->
             % Data is being written, return the data that is not yet in the store
@@ -108,34 +117,36 @@ handle_call(#tkvstore_get{type=Type, key=Key}, _From, State) ->
             %% @todo Spawn this process when it starts to be a blocker
             {reply, m_tkvstore:get(Type, Key, State#state.context), State}
     end;
-
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
-
 
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
 %% @doc Put request, copy to the writer, keep a local copy of the data
-handle_cast(#tkvstore_put{type=Type, key=Key, value=Data}, State) ->
+handle_cast(#tkvstore_put{
+                type = Type,
+                key = Key,
+                value = Data
+            },
+            State) ->
     State#state.writer_pid ! {data, Type, Key, Data},
-    {noreply, State#state{ data=dict:store({Type, Key}, Data, State#state.data) }};
-
+    {noreply, State#state{ data = dict:store({Type, Key}, Data, State#state.data) }};
 %% @doc Delete a value from the tkvstore
-handle_cast(#tkvstore_delete{type=Type, key=Key}, State) ->
+handle_cast(#tkvstore_delete{
+                type = Type,
+                key = Key
+            },
+            State) ->
     State#state.writer_pid ! {delete, Type, Key},
-    {noreply, State#state{ data=dict:store({Type, Key}, undefined, State#state.data) }};
-
+    {noreply, State#state{ data = dict:store({Type, Key}, undefined, State#state.data) }};
 %% @doc Writer loop wrote the data, remove our local copy
 handle_cast({written, Type, Key}, State) ->
-    {noreply, State#state{ data=dict:erase({Type, Key}, State#state.data) }};
-
+    {noreply, State#state{ data = dict:erase({Type, Key}, State#state.data) }};
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
-
-
 
 %% @spec handle_info(Info, State) -> {noreply, State} |
 %%                                       {noreply, State, Timeout} |
@@ -159,13 +170,9 @@ terminate(_Reason, State) ->
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
-
 %%====================================================================
 %% support functions
 %%====================================================================
-
-
-
 
 %% @doc Simple writer loop, started as a process
 writer_loop(KVStorePid, Context) ->

@@ -17,31 +17,24 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
-
 -module(zotonic_filehandler_terminal).
 
 -behaviour(gen_server).
 
--export([
-    notify/1
-]).
-
--export([
-    start_link/0,
-    init/1,
-    handle_call/3,
-    handle_cast/2,
-    handle_info/2,
-    code_change/3,
-    terminate/2
-]).
+-export([notify/1]).
+-export([start_link/0,
+         init/1,
+         handle_call/3,
+         handle_cast/2,
+         handle_info/2,
+         code_change/3,
+         terminate/2]).
 
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
 
 -record(state, {}).
 
-
--spec notify( string() | binary() | undefined ) -> ok.
+-spec notify(string() | binary() | undefined) -> ok.
 notify(undefined) ->
     ok;
 notify(Message) ->
@@ -54,7 +47,7 @@ start_link() ->
 %% ------------------------------------- gen_server callbacks ------------------------------
 
 init([]) ->
-    {ok, #state{}}.
+    {ok, #state{  }}.
 
 handle_call(_Msg, _From, State) ->
     {reply, {error, unknown_msg}, State}.
@@ -75,13 +68,13 @@ terminate(_Reason, _State) ->
 
 %% ------------------------------------- Internal functions -------------------------------------
 
-
 terminal_notifier(_OS, <<>>) ->
     ok;
 terminal_notifier({unix, darwin}, Msg) ->
-    exec:run("which terminal-notifier && terminal-notifier -group zotonic -title Zotonic -message " ++ z_filelib:os_escape(Msg), []);
+    exec:run("which terminal-notifier && terminal-notifier -group zotonic -title Zotonic -message "
+             ++ z_filelib:os_escape(Msg),
+             []);
 terminal_notifier({unix, _Arch}, Msg) ->
     exec:run("which notify-send && notify-send -t 2000 \"Zotonic\" " ++ z_filelib:os_escape(Msg), []);
 terminal_notifier(_OS, _Msg) ->
     ok.
-

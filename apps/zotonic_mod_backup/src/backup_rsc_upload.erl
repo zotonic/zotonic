@@ -18,19 +18,22 @@
 %% limitations under the License.
 -module(backup_rsc_upload).
 
--export([
-    rsc_upload/2
-]).
+-export([rsc_upload/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-rsc_upload(#rsc_upload{id=Id, format=bert, data=Data}, Context) ->
+rsc_upload(#rsc_upload{
+               id = Id,
+               format = bert,
+               data = Data
+           },
+           Context) ->
     case catch bert:decode(Data) of
-        [ {OtherId, Props} ] when is_list(Props), is_integer(OtherId) ->
+        [{OtherId, Props}] when is_list(Props), is_integer(OtherId) ->
             rsc_upload(Id, Props, Context);
-        [ {Prop,_} | _ ] = Props when is_list(Props), is_atom(Prop) ->
+        [{Prop, _} | _] = Props when is_list(Props), is_atom(Prop) ->
             rsc_upload(Id, Props, Context);
-        [ Props ] when is_map(Props) ->
+        [Props] when is_map(Props) ->
             rsc_upload(Id, Props, Context);
         _ ->
             {error, badarg}
@@ -42,31 +45,35 @@ rsc_upload(Id, Props, Context) when is_integer(Id) ->
     m_rsc_update:update(Id, update_props(Props, Context), [{is_escape_texts, false}, is_import], Context).
 
 update_props(Props, Context) when is_map(Props) ->
-    UpdateProps = maps:filter(
-        fun(K, _V) ->
-            is_updateable(K)
-        end,
-        Props),
-    UpdateProps#{
-        <<"category">> => map_category(Props, Context)
-    };
+    UpdateProps =
+        maps:filter(fun(K, _V) ->
+                       is_updateable(K)
+                    end,
+                    Props),
+    UpdateProps#{ <<"category">> => map_category(Props, Context) };
 update_props(Props, Context) when is_list(Props) ->
-    UpdateProps = lists:filter(fun({K,_}) ->
-                                    is_updateable(z_convert:to_binary(K))
-                               end,
-                               Props),
-    [{category, map_category(Props, Context)} | UpdateProps ].
+    UpdateProps =
+        lists:filter(fun({K, _}) ->
+                        is_updateable(z_convert:to_binary(K))
+                     end,
+                     Props),
+    [{category, map_category(Props, Context)} | UpdateProps].
 
 map_category(#{ <<"computed_category">> := CompCat }, Context) when is_list(CompCat) ->
     case lists:dropwhile(fun(Name) ->
                             case m_category:name_to_id(Name, Context) of
-                                {ok, _} -> false;
-                                {error, _} -> true
+                                {ok, _} ->
+                                    false;
+                                {error, _} ->
+                                    true
                             end
                          end,
-                         CompCat) of
-        [] -> other;
-        [N|_] -> N
+                         CompCat)
+    of
+        [] ->
+            other;
+        [N | _] ->
+            N
     end;
 map_category(Props, _Context) when is_map(Props) ->
     other;
@@ -77,27 +84,46 @@ map_category(Props, Context) when is_list(Props) ->
         List ->
             case lists:dropwhile(fun(Name) ->
                                     case m_category:name_to_id(Name, Context) of
-                                        {ok, _} -> false;
-                                        {error, _} -> true
+                                        {ok, _} ->
+                                            false;
+                                        {error, _} ->
+                                            true
                                     end
                                  end,
-                                 List) of
-                [] -> other;
-                [N|_] -> N
+                                 List)
+            of
+                [] ->
+                    other;
+                [N | _] ->
+                    N
             end
     end.
 
-is_updateable(<<"id">>) -> false;
-is_updateable(<<"category_id">>) -> false;
-is_updateable(<<"category">>) -> false;
-is_updateable(<<"version">>) -> false;
-is_updateable(<<"medium">>) -> false;
-is_updateable(<<"created">>) -> false;
-is_updateable(<<"creator_id">>) -> false;
-is_updateable(<<"modified">>) -> false;
-is_updateable(<<"modifier_id">>) -> false;
-is_updateable(<<"page_url">>) -> false;
-is_updateable(<<"props">>) -> false;
-is_updateable(<<"computed_", _/binary>>) -> false;
-is_updateable(<<"pivot_", _/binary>>) -> false;
-is_updateable(_) -> true.
+is_updateable(<<"id">>) ->
+    false;
+is_updateable(<<"category_id">>) ->
+    false;
+is_updateable(<<"category">>) ->
+    false;
+is_updateable(<<"version">>) ->
+    false;
+is_updateable(<<"medium">>) ->
+    false;
+is_updateable(<<"created">>) ->
+    false;
+is_updateable(<<"creator_id">>) ->
+    false;
+is_updateable(<<"modified">>) ->
+    false;
+is_updateable(<<"modifier_id">>) ->
+    false;
+is_updateable(<<"page_url">>) ->
+    false;
+is_updateable(<<"props">>) ->
+    false;
+is_updateable(<<"computed_", _/binary>>) ->
+    false;
+is_updateable(<<"pivot_", _/binary>>) ->
+    false;
+is_updateable(_) ->
+    true.

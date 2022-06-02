@@ -18,21 +18,20 @@
 %% limitations under the License.
 
 -module(zotonic).
+
 -author('Marc Worrell <marc@worrell.nl>').
 
--export([
-    start/0,
-    stop/0,
-    stop/1,
-    ping/0,
-    status/0,
-    status/1,
-    update/0,
-    update/1,
-    runtests/1,
-    await_startup/0,
-    await_startup/1
-]).
+-export([start/0,
+         stop/0,
+         stop/1,
+         ping/0,
+         status/0,
+         status/1,
+         update/0,
+         update/1,
+         runtests/1,
+         await_startup/0,
+         await_startup/1]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -43,7 +42,8 @@
 start() ->
     test_erlang_version(),
     case zotonic_launcher_app:start() of
-        ok -> ok;
+        ok ->
+            ok;
         {error, Reason} ->
             ?LOG_ERROR("Zotonic start error: ~p~n", [Reason]),
             init:stop(1)
@@ -55,7 +55,7 @@ await_startup() ->
     zotonic_listen_http:await(),
     ok.
 
--spec await_startup( atom() ) -> ok | {error, timeout | stopped | removing | term()}.
+-spec await_startup(atom()) -> ok | {error, timeout | stopped | removing | term()}.
 await_startup(Site) ->
     ok = await_startup(),
     await_startup_1(Site, 500).
@@ -66,7 +66,7 @@ await_startup_1(Site, N) ->
     case z_sites_manager:wait_for_running(Site) of
         {error, bad_name} ->
             timer:sleep(100),
-            await_startup_1(Site, N-1);
+            await_startup_1(Site, N - 1);
         {error, _} = Error ->
             Error;
         ok ->
@@ -74,44 +74,43 @@ await_startup_1(Site, N) ->
     end.
 
 %% @doc Called by the 'make test' commands.
--spec runtests( list(atom()) ) -> ok.
+-spec runtests([atom()]) -> ok.
 runtests(Tests) ->
-    erlang:spawn(
-        fun() ->
-            io:format("~nRunning tests:"),
-            lists:foreach(
-                fun(T) ->
-                    io:format("~n - ~p", [T])
-                end,
-                Tests),
-            io:format("~nWaiting for zotonic_site_testsandbox to be started...~n"),
-            ok = await_startup(zotonic_site_testsandbox),
-            io:format("~nGive system some time to stabilize...~n"),
-            timer:sleep(5000),
-            io:format("~nStarting eunit tests~n"),
-            z_memo:disable(),
-            % z_memo:enable(),
-            case eunit:test(Tests, []) of
-                ok -> 
-                    erlang:halt(0);
-                error ->
-                    erlang:halt(1)
-            end
-        end),
+    erlang:spawn(fun() ->
+                    io:format("~nRunning tests:"),
+                    lists:foreach(fun(T) ->
+                                     io:format("~n - ~p", [T])
+                                  end,
+                                  Tests),
+                    io:format("~nWaiting for zotonic_site_testsandbox to be started...~n"),
+                    ok = await_startup(zotonic_site_testsandbox),
+                    io:format("~nGive system some time to stabilize...~n"),
+                    timer:sleep(5000),
+                    io:format("~nStarting eunit tests~n"),
+                    z_memo:disable(),
+                    % z_memo:enable(),
+                    case eunit:test(Tests, []) of
+                        ok ->
+                            erlang:halt(0);
+                        error ->
+                            erlang:halt(1)
+                    end
+                 end),
     ok.
 
 %% @doc Stop all sites, the zotonic server and the beam.
 -spec stop() -> ok.
 stop() ->
     Sites = z_sites_manager:get_sites(),
-    maps:fold(
-        fun
-            (_Site, stopping, _Acc) -> ok;
-            (_Site, stopped, _Acc) -> ok;
-            (Site, _Status, _Acc) -> z_sites_manager:stop(Site)
-        end,
-        ok,
-        Sites),
+    maps:fold(fun (_Site, stopping, _Acc) ->
+                      ok;
+                  (_Site, stopped, _Acc) ->
+                      ok;
+                  (Site, _Status, _Acc) ->
+                      z_sites_manager:stop(Site)
+              end,
+              ok,
+              Sites),
     % Wait a bit till all sites are stopped (max 5 secs)
     await_sites_stopping(50),
     application:stop(zotonic_launcher),
@@ -122,25 +121,26 @@ stop() ->
     heart:set_cmd("echo ok"),
     erlang:halt(0).
 
-
-await_sites_stopping(0) -> ok;
+await_sites_stopping(0) ->
+    ok;
 await_sites_stopping(N) ->
     case z_sites_manager:is_sites_running() of
         true ->
             timer:sleep(100),
-            await_sites_stopping(N-1);
+            await_sites_stopping(N - 1);
         false ->
             ok
     end.
-
 
 %% @doc Stop a zotonic server on a specific node
 -spec stop([node()]) -> any().
 stop([Node]) ->
     io:format("Stopping:~p~n", [Node]),
     case net_adm:ping(Node) of
-        pong -> rpc:cast(Node, zotonic, stop, []);
-        pang -> io:format("There is no node with this name~n")
+        pong ->
+            rpc:cast(Node, zotonic, stop, []);
+        pang ->
+            io:format("There is no node with this name~n")
     end,
     init:stop().
 
@@ -157,10 +157,8 @@ status() ->
 %% @doc Get server status.  Prints the state of sites running.
 -spec status([node()]) -> ok.
 status([Node]) ->
-    [io:format(
-        "~-20s- ~s~n",
-        [Site, Status]
-    ) || [Site, Status | _] <- rpc:call(Node, z_sites_manager, get_sites_status, [])],
+    [io:format("~-20s- ~s~n", [Site, Status])
+     || [Site, Status | _] <- rpc:call(Node, z_sites_manager, get_sites_status, [])],
     ok.
 
 %% @doc Update the server. Compiles and loads any new code, flushes caches and rescans all modules.
@@ -174,8 +172,10 @@ update() ->
 update([Node]) ->
     io:format("Update:~p~n", [Node]),
     case net_adm:ping(Node) of
-        pong -> rpc:cast(Node, zotonic, update, []);
-        pang -> io:format("There is no node with this name~n")
+        pong ->
+            rpc:cast(Node, zotonic, update, []);
+        pang ->
+            io:format("There is no node with this name~n")
     end,
     init:stop().
 
@@ -184,10 +184,8 @@ test_erlang_version() ->
     % Check for minimal OTP version
     case otp_release() of
         Version when Version < ?MIN_OTP_VERSION ->
-            io:format(
-                "Zotonic needs at least Erlang release ~p; this is ~p~n",
-                [?MIN_OTP_VERSION, erlang:system_info(otp_release)]
-            ),
+            io:format("Zotonic needs at least Erlang release ~p; this is ~p~n",
+                      [?MIN_OTP_VERSION, erlang:system_info(otp_release)]),
             erlang:exit({minimal_otp_version, ?MIN_OTP_VERSION});
         _ ->
             ok
@@ -197,6 +195,8 @@ test_erlang_version() ->
 -spec otp_release() -> string().
 otp_release() ->
     case erlang:system_info(otp_release) of
-        [$R | V] -> V;
-        V -> V
+        [$R | V] ->
+            V;
+        V ->
+            V
     end.

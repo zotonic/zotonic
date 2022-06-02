@@ -1,4 +1,1 @@
-
--record(page_actions, {
-    actions = [] :: list( {atom(), proplists:list()} ) | {atom(), proplists:list()}
-}).
+-record(page_actions, {actions = [] :: [{atom(), proplists:list()}] | {atom(), proplists:list()}}).

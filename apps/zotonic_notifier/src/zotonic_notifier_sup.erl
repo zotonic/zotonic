@@ -17,16 +17,16 @@
 %% limitations under the License.
 
 -module(zotonic_notifier_sup).
+
 -author('Marc Worrell <marc@worrell.nl>').
+
 -behaviour(supervisor).
 
 %% External exports
--export([
-    start_link/0,
-    start_notifier/1,
-    stop_notifier/1,
-    init/1
-]).
+-export([start_link/0,
+         start_notifier/1,
+         stop_notifier/1,
+         init/1]).
 
 -include("zotonic_notifier.hrl").
 
@@ -37,10 +37,7 @@ start_link() ->
 %% @doc Return the notifier gen_server(s) to be used.
 init([]) ->
     RestartStrategy = {one_for_one, 5, 10},
-    {ok, {RestartStrategy, [
-        spec(?DEFAULT_NOTIFIER),
-        spec(?SYSTEM_NOTIFIER)
-    ]}}.
+    {ok, {RestartStrategy, [spec(?DEFAULT_NOTIFIER), spec(?SYSTEM_NOTIFIER)]}}.
 
 start_notifier(Name) when is_atom(Name) ->
     supervisor:start_child(?MODULE, spec(Name)).
@@ -49,6 +46,4 @@ stop_notifier(Name) when is_atom(Name) ->
     supervisor:delete_child(?MODULE, Name).
 
 spec(Name) ->
-    {Name,
-        {zotonic_notifier_worker, start_link, [Name]},
-        permanent, 5000, worker, [zotonic_notifier_worker]}.
+    {Name, {zotonic_notifier_worker, start_link, [Name]}, permanent, 5000, worker, [zotonic_notifier_worker]}.

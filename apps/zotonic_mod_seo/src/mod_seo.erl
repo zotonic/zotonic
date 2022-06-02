@@ -18,29 +18,31 @@
 %% limitations under the License.
 
 -module(mod_seo).
+
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Search Engine Optimization (SEO)").
+
 -mod_description("Structured data, Google Analytics").
+
 -mod_prio(600).
+
 -mod_depends([base, admin]).
+
 -mod_provides([seo]).
 
 %% interface functions
--export([
-         observe_admin_menu/3
-        ]).
+-export([observe_admin_menu/3]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
-
-observe_admin_menu(#admin_menu{}, Acc, Context) ->
-    [
-     #menu_item{id=admin_seo,
-                parent=admin_modules,
-                label=?__("SEO", Context),
-                url={admin_seo},
-                visiblecheck={acl, use, ?MODULE}}
-
-     |Acc].
+observe_admin_menu(#admin_menu{  }, Acc, Context) ->
+    [#menu_item{
+         id = admin_seo,
+         parent = admin_modules,
+         label = ?__("SEO", Context),
+         url = {admin_seo},
+         visiblecheck = {acl, use, ?MODULE}
+     }
+     | Acc].

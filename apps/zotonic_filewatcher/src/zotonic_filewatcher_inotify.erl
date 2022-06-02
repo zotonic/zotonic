@@ -20,28 +20,27 @@
 %% limitations under the License.
 
 -module(zotonic_filewatcher_inotify).
+
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -behaviour(gen_server).
 
 %% gen_server exports
--export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
+-export([init/1,
+         handle_call/3,
+         handle_cast/2,
+         handle_info/2,
+         terminate/2,
+         code_change/3]).
 -export([start_link/0]).
 
--record(state, {
-    pid :: pid() | undefined,
-    port :: integer() | undefined,
-    executable :: string()
-}).
+-record(state, {pid :: pid() | undefined, port :: integer() | undefined, executable :: string()}).
 
 %% interface functions
--export([
-    is_installed/0,
-    restart/0
-]).
+-export([is_installed/0,
+         restart/0]).
 
 -include_lib("kernel/include/logger.hrl").
-
 
 %%====================================================================
 %% API
@@ -75,19 +74,18 @@ restart() ->
 %% @doc Initiates the server.
 init([Executable]) ->
     process_flag(trap_exit, true),
-    State = #state{
-        executable = Executable,
-        port = undefined,
-        pid = undefined
-    },
+    State =
+        #state{
+            executable = Executable,
+            port = undefined,
+            pid = undefined
+        },
     timer:send_after(100, start),
     {ok, State}.
-
 
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
-
 
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
@@ -98,49 +96,45 @@ handle_cast(restart, #state{ pid = Pid } = State) when is_pid(Pid) ->
     ?LOG_INFO("[inotify] Stopping inotify file monitor."),
     catch exec:stop(Pid),
     {noreply, start_inotify(State#state{ port = undefined })};
-
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
-
 
 %% @doc Reading a line from the inotifywait program. Sets a timer to
 %% prevent duplicate file changed message for the same filename
 %% (e.g. if a editor saves a file twice for some reason).
-handle_info({stdout, _Port, Data}, #state{} = State) ->
-    Lines = binary:split(
-        binary:replace(Data, <<"\r\n">>, <<"\n">>, [global]),
-        <<"\n">>,
-        [global]),
-    lists:map(
-        fun(Line) ->
-            case re:run(Line, "^(.+) (MODIFY|CREATE|DELETE|MOVED_TO|MOVED_FROM) (.+)", [{capture, all_but_first, binary}]) of
-                nomatch ->
-                    ok;
-                {match, [Path, Verb, File]} ->
-                    Filename = filename:join(Path, File),
-                    zotonic_filewatcher_handler:file_changed(verb(Verb), Filename)
-            end
-        end,
-        Lines),
+handle_info({stdout, _Port, Data}, #state{  } = State) ->
+    Lines =
+        binary:split(
+            binary:replace(Data, <<"\r\n">>, <<"\n">>, [global]), <<"\n">>, [global]),
+    lists:map(fun(Line) ->
+                 case re:run(Line,
+                             "^(.+) (MODIFY|CREATE|DELETE|MOVED_TO|MOVED_FROM) (.+)",
+                             [{capture, all_but_first, binary}])
+                 of
+                     nomatch ->
+                         ok;
+                     {match, [Path, Verb, File]} ->
+                         Filename = filename:join(Path, File),
+                         zotonic_filewatcher_handler:file_changed(verb(Verb), Filename)
+                 end
+              end,
+              Lines),
     {noreply, State};
-
-handle_info({'DOWN', _Port, process, Pid, Reason}, #state{pid = Pid} = State) ->
+handle_info({'DOWN', _Port, process, Pid, Reason}, #state{ pid = Pid } = State) ->
     ?LOG_ERROR("[inotify] inotify port closed with ~p, restarting in 5 seconds.", [Reason]),
-    State1 = State#state{
-        pid = undefined,
-        port = undefined
-    },
+    State1 =
+        State#state{
+                 pid = undefined,
+                 port = undefined
+             },
     timer:send_after(5000, start),
     {noreply, State1};
-
 handle_info({'EXIT', _Pid, _Reason}, State) ->
     {noreply, State};
-
 handle_info(start, #state{ port = undefined } = State) ->
     {noreply, start_inotify(State)};
 handle_info(start, State) ->
     {noreply, State};
-
 handle_info(_Info, State) ->
     {noreply, State}.
 
@@ -149,9 +143,9 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, #state{pid = undefined}) ->
+terminate(_Reason, #state{ pid = undefined }) ->
     ok;
-terminate(_Reason, #state{pid = Pid}) ->
+terminate(_Reason, #state{ pid = Pid }) ->
     catch exec:stop(Pid),
     ok.
 
@@ -160,27 +154,39 @@ terminate(_Reason, #state{pid = Pid}) ->
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
-
 %%====================================================================
 %% support functions
 %%====================================================================
 
-start_inotify(#state{executable = Executable, port = undefined} = State) ->
+start_inotify(#state{
+                  executable = Executable,
+                  port = undefined
+              } =
+                  State) ->
     ?LOG_INFO("[inotify] Starting inotify file monitor."),
-    Args = [
-            Executable,
-            "-q", "-e", "modify,create,delete,moved_to,moved_from", "-m", "-r",
-            "--exclude", zotonic_filewatcher_handler:re_exclude()
-        ]
+    Args =
+        [Executable,
+         "-q",
+         "-e",
+         "modify,create,delete,moved_to,moved_from",
+         "-m",
+         "-r",
+         "--exclude",
+         zotonic_filewatcher_handler:re_exclude()]
         ++ zotonic_filewatcher_sup:watch_dirs_expanded(),
     {ok, Pid, Port} = exec:run_link(Args, [stdout, monitor]),
     State#state{
-        port = Port,
-        pid = Pid
-    }.
+             port = Port,
+             pid = Pid
+         }.
 
-verb(<<"CREATE">>) -> create;
-verb(<<"MODIFY">>) -> modify;
-verb(<<"DELETE">>) -> delete;
-verb(<<"MOVED_FROM">>) -> delete;
-verb(<<"MOVED_TO">>) -> create.
+verb(<<"CREATE">>) ->
+    create;
+verb(<<"MODIFY">>) ->
+    modify;
+verb(<<"DELETE">>) ->
+    delete;
+verb(<<"MOVED_FROM">>) ->
+    delete;
+verb(<<"MOVED_TO">>) ->
+    create.
