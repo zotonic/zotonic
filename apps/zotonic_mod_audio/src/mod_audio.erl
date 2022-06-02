@@ -153,7 +153,10 @@ audio_info(Path) ->
     FfprobeCmd = lists:flatten([
            Cmdline, " ", z_filelib:os_filename(Path)
        ]),
-    ?LOG_DEBUG("Audio info: ~p", [FfprobeCmd]),
+    ?LOG_DEBUG(#{
+        text => <<"Extract audio info">>,
+        command => FfprobeCmd
+    }),
     JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
     try
         Ps = decode_json(JSONText),
@@ -167,7 +170,12 @@ audio_info(Path) ->
             Info)
     catch
         error:E ->
-            ?LOG_WARNING("Unexpected ffprobe return (~p) ~p", [E, JSONText]),
+            ?LOG_WARNING(#{
+                text => <<"Unexpected ffprobe return">>,
+                result => error,
+                reason => E,
+                ffprobe_return => JSONText
+            }),
             #{}
     end.
 

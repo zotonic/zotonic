@@ -97,7 +97,10 @@ handle_cmd(<<"reset">>, Payload, Context) ->
 handle_cmd(<<"status">>, Payload, Context) ->
     status(Payload, Context);
 handle_cmd(Cmd, _Payload, Context) ->
-    ?LOG_INFO("controller_authentication: unknown cmd ~p", [ Cmd ]),
+    ?LOG_INFO(#{
+        text => <<"controller_authentication: unknown cmd">>,
+        cmd => Cmd
+    }),
     {
         #{
             status => error,
@@ -123,6 +126,12 @@ logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
             Context3 = maybe_setautologon(Payload, Context2),
             return_status(Payload, Context3);
         {error, user_not_enabled} ->
+            ?LOG_INFO(#{
+                text => <<"Logon attempt of disabled user">>,
+                user_id => UserId,
+                result => error,
+                reason => user_not_enabled
+            }),
             Reply = #{ status => error, user_id => UserId },
             case m_rsc:p_no_acl(UserId, is_verified_account, Context) of
                 false ->
@@ -142,8 +151,20 @@ logon_1({expired, UserId}, _Payload, Context) when is_integer(UserId) ->
     % The password is expired and needs a reset - this is similar to password reset
     case m_identity:get_username(UserId, Context) of
         undefined ->
+            ?LOG_NOTICE(#{
+                text => <<"Logon attempt of user with expired password and no username">>,
+                user_id => UserId,
+                result => error,
+                reason => expired
+            }),
             { #{ status => error, error => pw }, Context };
         Username ->
+            ?LOG_INFO(#{
+                text => <<"Logon attempt of user wth expired password">>,
+                user_id => UserId,
+                result => error,
+                reason => expired_password
+            }),
             Code = m_authentication:set_reminder_secret(UserId, Context),
             { #{ status => error, error => password_expired, username => Username, secret => Code }, Context }
     end;
@@ -153,22 +174,40 @@ logon_1({error, need_passcode}, _Payload, Context) ->
     { #{ status => error, error => need_passcode }, Context };
 logon_1({error, passcode}, _Payload, Context) ->
     { #{ status => error, error => passcode }, Context };
-logon_1({error, _Reason}, _Payload, Context) ->
+logon_1({error, Reason}, _Payload, Context) ->
     % Hide other error codes, map to generic 'pw' error
+    ?LOG_INFO(#{
+        text => <<"Logon attempt of user">>,
+        result => error,
+        reason => Reason
+    }),
     { #{ status => error, error => pw }, Context };
 logon_1(undefined, _Payload, Context) ->
     { #{ status => error, error => pw }, Context }.
 
 
 log_logon(UserId, #{ <<"username">> := Username }, Context) when is_binary(Username) ->
-    ?LOG_NOTICE("~p: Logon of user ~p (~s) using username '~s'",
-                [ z_context:site(Context), UserId, username(UserId, Context), Username ]);
+    ?LOG_NOTICE(#{
+        text => <<"Logon of user using username">>,
+        result => ok,
+        user_id => UserId,
+        username_used => Username,
+        username => username(UserId, Context)
+    });
 log_logon(UserId, #{ <<"token">> := Token }, Context) when is_binary(Token) ->
-    ?LOG_NOTICE("~p: Logon of user ~p (~s) using token",
-                [ z_context:site(Context), UserId, username(UserId, Context) ]);
+    ?LOG_NOTICE(#{
+        text => <<"Logon of user using token">>,
+        result => ok,
+        user_id => UserId,
+        username => username(UserId, Context)
+    });
 log_logon(UserId, #{}, Context) ->
-    ?LOG_NOTICE("~p: Logon of user ~p (~s)",
-                [ z_context:site(Context), UserId, username(UserId, Context) ]).
+    ?LOG_NOTICE(#{
+        text => <<"Logon of user">>,
+        result => ok,
+        user_id => UserId,
+        username => username(UserId, Context)
+    }).
 
 username(UserId, Context) ->
     case m_identity:get_username(UserId, Context) of
@@ -303,7 +342,12 @@ change(#{
         UserId ->
             case m_identity:get_username(UserId, Context) of
                 undefined ->
-                    ?LOG_ERROR("Password change: User ~p does not have an username defined.", [ UserId ]),
+                    ?LOG_ERROR(#{
+                        text => <<"Password change for user without username">>,
+                        result => error,
+                        reason => no_username,
+                        user_id => UserId
+                    }),
                     { #{ status => error, error => username }, Context };
                 Username ->
                     case auth_precheck(Username, Context) of
@@ -375,7 +419,12 @@ reset(#{
                         {ok, UserId} ->
                             case m_identity:get_username(UserId, Context) of
                                 undefined ->
-                                    ?LOG_ERROR("Password reset: User ~p does not have an username defined.", [ UserId ]),
+                                    ?LOG_ERROR(#{
+                                        text => <<"Password reset for user without username">>,
+                                        result => error,
+                                        reason => no_username,
+                                        user_id => UserId
+                                    }),
                                     { #{ status => error, error => username }, Context };
                                 Username ->
                                     case reset_1(UserId, Username, Password, Passcode, Context) of
@@ -490,8 +539,13 @@ check_reminder_secret(#{ <<"secret">> := Secret, <<"username">> := Username }, C
                                 need_passcode => NeedPasscode
                             };
                         OtherUsername ->
-                            ?LOG_ERROR("Password reset with username mismatch: got \"~s\", expected \"~s\"",
-                                        [ Username, OtherUsername ]),
+                            ?LOG_ERROR(#{
+                                text => <<"Password reset with username mismatch">>,
+                                result => error,
+                                reason => username_mismatch,
+                                username_given => Username,
+                                username => OtherUsername
+                            }),
                             #{
                                 status => error,
                                 error => unknown_code
@@ -532,7 +586,12 @@ get_by_reminder_secret(Code, Context) ->
                 true ->
                     {ok, UserId};
                 false ->
-                    ?LOG_NOTICE("Accessing expired reminder secret for user ~p", [UserId]),
+                    ?LOG_INFO(#{
+                        text => <<"Accessing expired reminder secret for user">>,
+                        result => warning,
+                        reason => expired_secret,
+                        user_id => UserId
+                    }),
                     delete_reminder_secret(UserId, Context),
                     undefined
             end

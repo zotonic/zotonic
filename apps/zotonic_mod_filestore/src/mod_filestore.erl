@@ -190,7 +190,10 @@ load_cache(#{
         Context)
     of
         {ok, #filestore_credentials{ service= <<"s3">>, location=Location1, credentials=Cred }} ->
-            ?LOG_DEBUG("File store cache load of ~p", [Location]),
+            ?LOG_DEBUG(#{
+                text => <<"File store cache load">>,
+                location => Location
+            }),
             Ctx = z_context:prune_for_async(Context),
             StreamFun = fun(CachePid) ->
                 s3filez:stream(

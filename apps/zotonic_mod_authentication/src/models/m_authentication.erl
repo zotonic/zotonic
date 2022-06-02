@@ -133,7 +133,12 @@ handle_auth_confirm(Auth, Context) ->
     Auth1 = Auth#auth_validated{ is_signup_confirm = true },
     case z_notifier:first(Auth1, Context) of
         undefined ->
-            ?LOG_WARNING("mod_authentication: 'undefined' return for auth of ~p", [Auth]),
+            ?LOG_WARNING(#{
+                text => <<"mod_authentication: 'undefined' return for auth">>,
+                result => error,
+                reason => no_auth,
+                auth => Auth
+            }),
             {error, nohandler};
         {ok, UserId} ->
             case z_authentication_tokens:encode_onetime_token(UserId, Context) of
@@ -142,12 +147,22 @@ handle_auth_confirm(Auth, Context) ->
                         result => token,
                         token => Token
                     }};
-                {error, _} = Err ->
-                    ?LOG_WARNING("mod_authentication: Error return of ~p for auth of ~p", [Err, Auth]),
+                {error, Reason} = Err ->
+                    ?LOG_WARNING(#{
+                        text => <<"mod_authentication: error return for auth">>,
+                        result => error,
+                        reason => Reason,
+                        auth => Auth
+                    }),
                     Err
             end;
-        {error, _} = Err ->
-            ?LOG_WARNING("mod_authentication: Error return of ~p for auth of ~p", [Err, Auth]),
+        {error, Reason} ->
+            ?LOG_WARNING(#{
+                text => <<"mod_authentication: Error return for auth">>,
+                result => error,
+                reason => Reason,
+                auth => Auth
+            }),
             {error, signup}
     end.
 
@@ -213,7 +228,11 @@ send_reminder(Id, Context) ->
 send_reminder(_Id, undefined, _Context) ->
     {error, noemail};
 send_reminder(1, _Email, _Context) ->
-    ?LOG_INFO("Ignoring password reminder request for 'admin' (user 1)"),
+    ?LOG_INFO(#{
+        text => <<"Ignoring password reminder request for 'admin' (user 1)">>,
+        user_id => 1,
+        username => <<"admin">>
+    }),
     {error, admin};
 send_reminder(undefined, Email, Context) ->
     z_email:send_render(Email, "email_password_reset.tpl", [], Context);

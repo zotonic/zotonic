@@ -81,7 +81,12 @@ malformed_request(Context) ->
                             Context1 = z_context:set_client_context(TicketContext, Context),
                             {false, Context1};
                         {error, enoent} ->
-                            ?LOG_WARNING("MQTT transport with an unknown ticket from ~p", [ m_req:get(peer, Context) ]),
+                            ?LOG_WARNING(#{
+                                text => <<"MQTT transport with an unknown ticket">>,
+                                peer_ip => m_req:get(peer, Context),
+                                result => error,
+                                reason => unknown_mqtt_ticket
+                            }),
                             {true, Context}
                     end;
                 error ->
@@ -178,7 +183,10 @@ websocket_handle({ping, Opaque}, Context) ->
             end
     end;
 websocket_handle(Data, Context) ->
-    ?LOG_WARNING("MQTT websocket: non binary data received: ~p", [Data]),
+    ?LOG_WARNING(#{
+        text => <<"MQTT websocket: non binary data received">>,
+        data => Data
+    }),
     {stop, Context}.
 
 websocket_info({mqtt_transport, _SessionRef, Payload}, Context) when is_binary(Payload) ->
@@ -203,7 +211,11 @@ websocket_info(connect_check, Context) ->
             {ok, Context}
     end;
 websocket_info(Msg, Context) ->
-    ?LOG_INFO("~p: Unknown message ~p", [?MODULE, Msg]),
+    ?LOG_INFO(#{
+        text => <<"Unknown message for websocket">>,
+        module => ?MODULE,
+        message => Msg
+    }),
     {ok, Context}.
 
 

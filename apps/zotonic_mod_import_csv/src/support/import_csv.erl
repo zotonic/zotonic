@@ -165,9 +165,14 @@ import_parts(Row, RowNr, [Def | Definitions], ImportState, Context) ->
         end
     catch
         throw:{import_error, ImportError} ->
-            ?LOG_ERROR("[import_csv] Error importing row #~p, error: ~p", [RowNr, ImportError]),
-            ?LOG_ERROR("[import_csv] Row #~p was: ~p", [RowNr, Row]),
-            ?LOG_ERROR("[import_csv] Row #~p import definition: ~p", [RowNr, Def]),
+            ?LOG_ERROR(#{
+                text => <<"Error importing CSV row data">>,
+                result => error,
+                reason => ImportError,
+                row_nr => RowNr,
+                row => Row,
+                row_def => Def
+            }),
             ImportState
     end.
 
@@ -201,12 +206,21 @@ import_def_rsc_1_cat(Row, Callbacks, State, Context) ->
         true ->
            import_def_rsc_2_name(RscId, State2, Name, CategoryName, NormalizedRowMap, Callbacks, Context);
         false ->
-            ?LOG_WARNING("import_csv: missing required attributes for ~p", [Name]),
+            ?LOG_WARNING(#{
+                text => <<"import_csv: missing required attributes">>,
+                name => Name,
+                result => error,
+                reason => missing_attributes
+            }),
             {State2, ignore}
     end.
 
 import_def_rsc_2_name(insert_rsc, State, Name, CategoryName, NormalizedRowMap, Callbacks, Context) ->
-    ?LOG_DEBUG("import_csv: importing ~p", [Name]),
+    ?LOG_DEBUG(#{
+        text => <<"import_csv: importing resource">>,
+        name => Name,
+        category_name => CategoryName
+    }),
     case rsc_insert(NormalizedRowMap, Context) of
         {ok, NewId} ->
             RawRscFinal = get_updated_props(NewId, NormalizedRowMap, Context),
@@ -218,8 +232,14 @@ import_def_rsc_2_name(insert_rsc, State, Name, CategoryName, NormalizedRowMap, C
                 Callback -> Callback(NewId, NormalizedRowMap, Context)
             end,
             {flush_add(NewId, State), {new, CategoryName, NewId, Name}};
-        {error, _} = E ->
-            ?LOG_WARNING("import_csv: could not insert ~p: ~p", [Name, E]),
+        {error, Reason} = E ->
+            ?LOG_WARNING(#{
+                text => <<"import_csv: could not insert resource">>,
+                name => Name,
+                category_name => CategoryName,
+                result => error,
+                reason => Reason
+            }),
             {State, {error, CategoryName, E}}
     end;
 import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRowMap, Callbacks, Context) when is_integer(Id) ->
@@ -228,10 +248,20 @@ import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRowMap, Callbacks
     PrevChecksum = get_value(checksum, PrevImportData),
     case checksum(NormalizedRowMap) of
         PrevChecksum when not State#importstate.is_reset ->
-            ?LOG_NOTICE("import_csv: skipping ~p (importing same values)", [Name]),
+            ?LOG_INFO(#{
+                text => <<"import_csv: skipping row (importing same values)">>,
+                name => Name,
+                rsc_id => Id,
+                category_name => CategoryName
+            }),
             {State, {equal, CategoryName, Id}};
         Checksum ->
-            ?LOG_NOTICE("import_csv: updating ~p", [Name]),
+            ?LOG_INFO(#{
+                text => <<"import_csv: updating resource">>,
+                name => Name,
+                category_name => CategoryName,
+                rsc_id => Id
+            }),
 
             % 2. Some properties might have been overwritten by an editor.
             %    For this we will update a second time with all the changed values
@@ -362,7 +392,13 @@ import_do_edge(Id, Row, {{PredCat, PredRowField}, ObjectDefinition}, State, Cont
         Name ->
             case name_lookup(Name, State, Context) of
                 {undefined, _State1} ->
-                    ?LOG_WARNING("Import CSV: ddge predicate does not exist: '~p'", [Name]),
+                    ?LOG_WARNING(#{
+                        text => <<"Import CSV: edge predicate does not exist">>,
+                        result => error,
+                        reason => predicate,
+                        name => Name,
+                        subject_id => Id
+                    }),
                     fail;
                 {PredId, State1} ->
                     import_do_edge(Id, Row, {PredId, ObjectDefinition}, State1, Context)
@@ -393,7 +429,12 @@ import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField, ObjectProps}}, S
             case name_lookup(Name, State, Context) of
                 %% Object doesn't exist, create it using the objectprops
                 {undefined, _State1} ->
-                    ?LOG_DEBUG("Import CSV: creating object: ~p", [[{category, ObjectCat}, {name, Name} | ObjectProps]]),
+                    ?LOG_DEBUG(#{
+                        text => <<"Import CSV: creating object">>,
+                        category => ObjectCat,
+                        name => Name,
+                        subject_id => Id
+                    }),
                     case m_rsc:insert([{category, ObjectCat}, {name, Name} | ObjectProps], Context) of
                         {ok, RscId} ->
                             {ok, EdgeId} = m_edge:insert(Id, Predicate, RscId, Context),

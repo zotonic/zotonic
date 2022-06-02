@@ -71,8 +71,7 @@ m_get([ <<"stats">> | Rest ], _Msg, Context) ->
         true -> {ok, {stats(Context), Rest}};
         false -> {error, eacces}
     end;
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 %% @doc Add a file/medium to the upload queue.
@@ -292,7 +291,12 @@ map_interval(Interval) ->
         iolist_to_binary(L)
     catch
         error:badarg ->
-            ?LOG_ERROR("Filestore illegal delete interval ~p", [ Interval ]),
+            ?LOG_ERROR(#{
+                text => <<"Filestore illegal delete interval">>,
+                result => error,
+                reason => badarg,
+                interval => Interval
+            }),
             <<"false">>
     end.
 

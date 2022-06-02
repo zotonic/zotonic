@@ -45,7 +45,11 @@ start() ->
     case zotonic_launcher_app:start() of
         ok -> ok;
         {error, Reason} ->
-            ?LOG_ERROR("Zotonic start error: ~p~n", [Reason]),
+            ?LOG_EMERGENCY(#{
+                text => <<"Zotonic start error">>,
+                result => error,
+                reason => Reason
+            }),
             init:stop(1)
     end.
 

@@ -244,8 +244,13 @@ compile_sass(Application, SrcPath) ->
                                 z_filelib:os_escape(OutFile)
                             ],
                             zotonic_filehandler_compile:run_cmd(Cmd);
-                        {error, _} = Error ->
-                            ?LOG_ERROR("Could not create directory for ~p", [OutPath]),
+                        {error, Reason} = Error ->
+                            ?LOG_ERROR(#{
+                                text => <<"Could not create directory">>,
+                                path => OutPath,
+                                result => error,
+                                reason => Reason
+                            }),
                             Error
                     end;
                 false ->
@@ -305,8 +310,13 @@ compile_less(Application, SrcPath) ->
                         z_filelib:os_escape(OutPath)
                     ],
                     zotonic_filehandler_compile:run_cmd(Cmd);
-                {error, _} = Error ->
-                    ?LOG_ERROR("Could not create directory for ~p", [OutPath]),
+                {error, Reason} = Error ->
+                    ?LOG_ERROR(#{
+                        text => <<"Could not create directory">>,
+                        path => OutPath,
+                        result => error,
+                        reason => Reason
+                    }),
                     Error
             end;
         false ->
@@ -332,8 +342,13 @@ compile_coffee(Application, SrcPath) ->
                         z_filelib:os_escape(InPath)
                     ],
                     zotonic_filehandler_compile:run_cmd(Cmd);
-                {error, _} = Error ->
-                    ?LOG_ERROR("Could not create directory for ~p", [OutPath]),
+                {error, Reason} = Error ->
+                    ?LOG_ERROR(#{
+                        text => <<"Could not create directory">>,
+                        path => OutPath,
+                        result => error,
+                        reason => Reason
+                    }),
                     Error
             end;
         false ->

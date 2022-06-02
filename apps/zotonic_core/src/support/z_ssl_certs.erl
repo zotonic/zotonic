@@ -175,10 +175,16 @@ ensure_self_signed(Hostname) ->
         {false, false} ->
             generate_self_signed(Hostname, Certs);
         {false, true} ->
-            ?LOG_ERROR("Missing cert file ~p, regenerating keys", [CertFile]),
+            ?LOG_ERROR(#{
+                text => <<"Missing cert file, regenerating keys">>,
+                file => CertFile
+            }),
             generate_self_signed(Hostname, Certs);
         {true, false} ->
-            ?LOG_ERROR("Missing pem file ~p, regenerating keys", [KeyFile]),
+            ?LOG_ERROR(#{
+                text => <<"Missing pem file, regenerating keys">>,
+                file => KeyFile
+            }),
             generate_self_signed(Hostname, Certs);
         {true, true} ->
             case check_keyfile(KeyFile) of
@@ -215,7 +221,10 @@ check_keyfile(Filename) ->
 -spec generate_self_signed( string(), proplists:proplist() ) -> {ok, list()} | {error, term()}.
 generate_self_signed(Hostname, Opts) ->
     {keyfile, PemFile} = proplists:lookup(keyfile, Opts),
-    ?LOG_INFO("Generating self-signed ssl keys in '~s'", [PemFile]),
+    ?LOG_INFO(#{
+        text => <<"Generating self-signed ssl keys">>,
+        file => PemFile
+    }),
     case z_filelib:ensure_dir(PemFile) of
         ok ->
             _ = file:change_mode(filename:dirname(PemFile), 8#00700),

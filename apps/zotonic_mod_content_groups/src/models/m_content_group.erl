@@ -29,15 +29,11 @@
     is_used/2
 ]).
 
-
--include_lib("zotonic_core/include/zotonic.hrl").
-
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"is_used">>, CGId | Rest ], _Msg, Context) ->
     {ok, {is_used(CGId, Context), Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 %% @doc Check if a content group is actually in use.

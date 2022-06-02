@@ -80,7 +80,11 @@ fetch_access_token(Code, _AuthData, _Args, _QArgs, Context) ->
             } = z_json:decode(Payload),
             {ok, AccessData};
         Other ->
-            ?LOG_ERROR("[linkedin] error fetching access token [code ~p] ~p", [Code, Other]),
+            ?LOG_ERROR(#{
+                text => <<"[linkedin] error fetching access token">>,
+                result => error,
+                reason => Other
+            }),
             {error, {http_error, LinkedInUrl, Other}}
     end.
 
@@ -100,7 +104,11 @@ auth_validated(#{ <<"access_token">> := AccessToken } = AccessData, Args, Contex
 
 
 auth_user(#{<<"id">> := LinkedInUserId} = Profile, Email, AccessTokenData, Args, _Context) ->
-    ?LOG_DEBUG("[linkedin] Authenticating ~p ~p", [LinkedInUserId, Profile]),
+    ?LOG_DEBUG(#{
+        text => <<"[linkedin] Authenticating">>,
+        linkedin_user_id => LinkedInUserId,
+        email => Email
+    }),
     PersonProps = #{
         <<"title">> => iolist_to_binary([
                 z_convert:to_binary(get_localized_value(<<"firstName">>, Profile)), " ",
@@ -147,10 +155,19 @@ fetch_user_data(AccessToken) ->
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             {ok, z_json:decode(Payload)};
         {ok, {{_, 401, _}, _Headers, Payload}} = Other ->
-            ?LOG_ERROR("[linkedin] 401 error fetching user data [token ~p] will not retry ~p", [AccessToken, Payload]),
+            ?LOG_ERROR(#{
+                text => <<"[linkedin] 401 error fetching user data will not retry">>,
+                result => error,
+                reason => 401,
+                payload => Payload
+            }),
             {error, {http_error, LinkedInUrl, Other}};
         Other ->
-            ?LOG_ERROR("[linkedin] error fetching user data [token ~p] ~p", [AccessToken, Other]),
+            ?LOG_ERROR(#{
+                text => <<"[linkedin] error fetching user data">>,
+                result => error,
+                reason => Other
+            }),
             {error, {http_error, LinkedInUrl, Other}}
     end.
 
@@ -221,10 +238,19 @@ fetch_email_address(AccessToken) ->
                     {error, noemail}
             end;
         {ok, {{_, 401, _}, _Headers, Payload}} = Other ->
-            ?LOG_ERROR("[linkedin] 401 error fetching user email [token ~p] will not retry ~p", [AccessToken, Payload]),
+            ?LOG_ERROR(#{
+                text => <<"[linkedin] 401 error fetching user email will not retry">>,
+                result => error,
+                reason => 401,
+                payload => Payload
+            }),
             {error, {http_error, LinkedInUrl, Other}};
         Other ->
-            ?LOG_ERROR("[linkedin] error fetching user email [token ~p] ~p", [AccessToken, Other]),
+            ?LOG_ERROR(#{
+                text => <<"[linkedin] error fetching user email">>,
+                result => error,
+                reason => Other
+            }),
             {error, {http_error, LinkedInUrl, Other}}
     end.
 

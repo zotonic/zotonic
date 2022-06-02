@@ -40,8 +40,13 @@ test() ->
 
 test(Fun, Name, Conn, Sql, Args) ->
     {result, Count} = Fun(Conn, Sql, Args, ?TESTTIME),
-    ?LOG_INFO("~p test result: ~p queries in ~p ms (~s)", [Name, Count, ?TESTTIME, Sql]).
-
+    ?LOG_INFO(#{
+        text => <<"Query test result">>,
+        name => Name,
+        query_count => Count,
+        msec => ?TESTTIME,
+        sql => Sql
+    }).
 
 test_squery(Conn, Sql, _Args, Time) ->
     test_squery1(Conn, Sql, Time, 0, ts()).

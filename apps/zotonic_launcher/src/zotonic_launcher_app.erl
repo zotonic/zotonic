@@ -43,9 +43,11 @@ start() ->
             %
             % Show the startup message
             %
-            ?LOG_NOTICE("Zotonic starting"),
-            [ ?LOG_NOTICE("Init file: - ~s", [Cfg]) || Cfg <- zotonic_launcher_config:erlang_config_files( node() ) ],
-            [ ?LOG_NOTICE("Config file: ~s", [Cfg]) || Cfg <- ZotonicConfigFiles ],
+            ?LOG_NOTICE(#{
+                text => <<"Zotonic starting">>,
+                init_files => zotonic_launcher_config:erlang_config_files( node() ),
+                config_files => ZotonicConfigFiles
+            }),
             %
             % Start the launcher and Zotonic
             %

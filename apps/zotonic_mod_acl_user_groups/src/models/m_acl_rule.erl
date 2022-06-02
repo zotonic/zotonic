@@ -99,8 +99,7 @@ m_get([ T, Id | Rest ], _Msg, Context) when ?valid_acl_kind(T) ->
             {ok, {undefined, Rest}}
     end;
 
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
@@ -301,10 +300,12 @@ map_prop(_K, V, _Context) ->
     V.
 
 delete(Kind, Id, Context) ->
-    ?LOG_DEBUG(
-        "ACL user groups delete by ~p of ~p:~p",
-       [z_acl:user(Context), Kind, Id]
-    ),
+    ?LOG_DEBUG(#{
+        text => <<"ACL user groups delete">>,
+        user_id => z_acl:user(Context),
+        kind => Kind,
+        rsc_id => Id
+    }),
     %% Assertion, can only delete edit version of a rule
     {ok, Row} = z_db:select(table(Kind), Id, Context),
     true = maps:get(<<"is_edit">>, Row),
@@ -328,8 +329,11 @@ manage_acl_rule({Type, Props}, Module, Context) ->
 
 %% Remove all edit versions, add edit versions of published rules
 revert(Kind, Context) ->
-    ?LOG_WARNING("ACL user groups revert by ~p of ~p",
-                  [z_acl:user(Context), Kind]),
+    ?LOG_WARNING(#{
+        text => <<"ACL user groups revert">>,
+        user_id => z_acl:user(Context),
+        kind => Kind
+    }),
     T = z_convert:to_list(table(Kind)),
     Result = z_db:transaction(
         fun(Ctx) ->
@@ -356,10 +360,10 @@ revert(Kind, Context) ->
 
 %% Remove all publish versions, add published versions of unpublished rules
 publish(Kind, Context) ->
-    ?LOG_DEBUG(
-        "ACL user groups publish by ~p",
-        [z_acl:user(Context)]
-    ),
+    ?LOG_INFO(#{
+        text => <<"ACL user groups publish">>,
+        user_id => z_acl:user(Context)
+    }),
     T = z_convert:to_list(table(Kind)),
     Result = z_db:transaction(
        fun(Ctx) ->
@@ -612,8 +616,12 @@ names_to_ids_row(R, Context) when is_map(R) ->
                                 true ->
                                     Acc#{ K => undefined };
                                 false ->
-                                    ?LOG_NOTICE("ACL import dropping rule, due to missing ~p ~p: ~p",
-                                                 [K, Value, R]),
+                                    ?LOG_NOTICE(#{
+                                        text => <<"ACL import dropping rule, due to missing field">>,
+                                        field => K,
+                                        value => Value,
+                                        rules => R
+                                    }),
                                     #{}
                             end;
                         Id ->
@@ -628,8 +636,12 @@ names_to_ids_row(R, Context) when is_map(R) ->
                         _ when K =:= <<"creator_id">>; K =:= <<"modifier_id">> ->
                             Acc#{ K => undefined };
                         _ ->
-                            ?LOG_NOTICE("ACL import dropping rule, due to missing ~p ~p: ~p",
-                                         [K, Id, R]),
+                            ?LOG_NOTICE(#{
+                                text => <<"ACL import dropping rule, due to missing field">>,
+                                field => K,
+                                id => Id,
+                                rules => R
+                            }),
                             #{}
                     end;
                 undefined ->

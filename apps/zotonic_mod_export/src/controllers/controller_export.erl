@@ -49,7 +49,12 @@ content_types_provided(Context) ->
         {ok, ContentType} when is_binary(ContentType); is_tuple(ContentType) ->
             {[ ContentType ], Context};
         {error, Reason} = Error ->
-            ?LOG_ERROR("mod_export error when fetching content type for ~p ~p", [Dispatch, Reason]),
+            ?LOG_ERROR(#{
+                text => <<"mod_export error when fetching content type">>,
+                dispatch => Dispatch,
+                result => Error,
+                reason => Reason
+            }),
             throw(Error)
     end.
 

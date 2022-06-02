@@ -91,7 +91,11 @@ start_link() ->
 file_changed(Verb, F) when is_list(F) ->
     file_changed(Verb, unicode:characters_to_binary(F));
 file_changed(Verb, F) when is_binary(F) ->
-    ?LOG_DEBUG("[filewatcher] ~p of '~s'", [Verb, F]),
+    ?LOG_DEBUG(#{
+        text => <<"Filewatcher event">>,
+        verb => Verb,
+        filename => F
+    }),
     case is_file_blocked(F) of
         true ->
             ok;
