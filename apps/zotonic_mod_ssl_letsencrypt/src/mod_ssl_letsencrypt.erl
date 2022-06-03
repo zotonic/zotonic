@@ -358,7 +358,7 @@ do_load_cert(State) ->
                         cert_san = maps:get(subject_alt_names, CertMap, []),
                         cert_valid_till = maps:get(not_after, CertMap)
                     };
-                {error, Reason} = Error ->
+                {error, Reason} ->
                     ?LOG_ERROR(#{
                         text => <<"Could not decode Letsencrypt crt file">>,
                         in => zotonic_mod_ssl_letsencrypt,
