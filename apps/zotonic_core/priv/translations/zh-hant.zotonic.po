@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-06-02 16:31\n"
+"PO-Revision-Date: 2022-06-03 20:08\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "無法獲取遠程資源 URL。"
 msgid "Forbidden to access the remote resource URL."
 msgstr "禁止訪問遠程資源 URL。"
 
-#: apps/zotonic_core/src/support/z_media_import.erl:255
+#: apps/zotonic_core/src/support/z_media_import.erl:259
 msgid "Page Import"
 msgstr "頁面導入"
 
@@ -56,75 +56,75 @@ msgstr "對遠程服務器的請求過多，請稍後重試。"
 msgid "Unauthorized to access the remote resource URL."
 msgstr "未經授權訪問遠程資源 URL。"
 
-#: apps/zotonic_core/src/support/z_media_import.erl:308
+#: apps/zotonic_core/src/support/z_media_import.erl:314
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
 msgstr "網站"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:274
+#: apps/zotonic_core/src/support/z_datetime.erl:288
 msgid "ago"
 msgstr "以前"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
+#: apps/zotonic_core/src/support/z_datetime.erl:346./apps/zotonic_core/src/support/z_datetime.erl:349
 msgid "day"
 msgstr "日"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
+#: apps/zotonic_core/src/support/z_datetime.erl:346./apps/zotonic_core/src/support/z_datetime.erl:349
 msgid "days"
 msgstr "日"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:330./apps/zotonic_core/src/support/z_datetime.erl:333
+#: apps/zotonic_core/src/support/z_datetime.erl:344./apps/zotonic_core/src/support/z_datetime.erl:347
 msgid "hour"
 msgstr "小時"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:330./apps/zotonic_core/src/support/z_datetime.erl:333
+#: apps/zotonic_core/src/support/z_datetime.erl:344./apps/zotonic_core/src/support/z_datetime.erl:347
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:12./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr "小時"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:274
+#: apps/zotonic_core/src/support/z_datetime.erl:288
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
 msgstr "在"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
+#: apps/zotonic_core/src/support/z_datetime.erl:342./apps/zotonic_core/src/support/z_datetime.erl:345
 msgid "minute"
 msgstr "分鐘"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
+#: apps/zotonic_core/src/support/z_datetime.erl:342./apps/zotonic_core/src/support/z_datetime.erl:345
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:13./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr "分鐘"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:325
+#: apps/zotonic_core/src/support/z_datetime.erl:339
 msgid "moments"
 msgstr "片刻"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:334./apps/zotonic_core/src/support/z_datetime.erl:337
+#: apps/zotonic_core/src/support/z_datetime.erl:348./apps/zotonic_core/src/support/z_datetime.erl:351
 msgid "month"
 msgstr "月"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:334./apps/zotonic_core/src/support/z_datetime.erl:337
+#: apps/zotonic_core/src/support/z_datetime.erl:348./apps/zotonic_core/src/support/z_datetime.erl:351
 msgid "months"
 msgstr "月"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:274./apps/zotonic_core/src/support/z_datetime.erl:324
+#: apps/zotonic_core/src/support/z_datetime.erl:288./apps/zotonic_core/src/support/z_datetime.erl:338
 msgid "now"
 msgstr "現在"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
+#: apps/zotonic_core/src/support/z_datetime.erl:340./apps/zotonic_core/src/support/z_datetime.erl:343
 msgid "second"
 msgstr "秒"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
+#: apps/zotonic_core/src/support/z_datetime.erl:340./apps/zotonic_core/src/support/z_datetime.erl:343
 msgid "seconds"
 msgstr "秒鐘"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:336
+#: apps/zotonic_core/src/support/z_datetime.erl:350
 msgid "year"
 msgstr "年"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:336
+#: apps/zotonic_core/src/support/z_datetime.erl:350
 msgid "years"
 msgstr "年"
 
@@ -219,7 +219,7 @@ msgstr "您確定要將所有ACL規則還原到其當前發布的版本嗎？"
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:107
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:80./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:116./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:91./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
-#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:134./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:142
+#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:149
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:158./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:77./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:189
@@ -1071,7 +1071,7 @@ msgstr "數據庫版本"
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:16
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:20./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:111./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:533./apps/zotonic_mod_survey/src/models/m_survey.erl:536
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:543./apps/zotonic_mod_survey/src/models/m_survey.erl:546
 msgid "Date"
 msgstr "日期"
 
@@ -1194,7 +1194,7 @@ msgstr "嵌入代码将被允许的网站和html消毒。"
 msgid "Embed page"
 msgstr "嵌入页面"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:207
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:209
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:230
 msgid "Embedded Content"
 msgstr "嵌入内容"
@@ -1219,20 +1219,20 @@ msgstr "Erlang安装根"
 msgid "Erlang Version"
 msgstr "埃尔兰版本"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:176
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:178
 msgid "Error checking the website."
 msgstr "检查网站时出错。"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:178
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:179
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:100
 msgid "Error creating the page."
 msgstr "创建页面时出错。"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:42
+#: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:48
 msgid "Error importing page from the remote server."
 msgstr "從遠程服務器導入頁面時出錯。"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:188
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:189
 msgid "Error uploading the file."
 msgstr "上传文件時出错。"
 
@@ -1540,7 +1540,7 @@ msgstr "向上移動塊"
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:11./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:10
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:48
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:538
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:548
 msgid "Name"
 msgstr "名字"
 
@@ -2428,7 +2428,7 @@ msgstr "流覽網站"
 msgid "Are you sure you want to delete the following categories:"
 msgstr "你确定你要删除以下类别："
 
-#: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:10./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:186
+#: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:10./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:200
 msgid "Categories"
 msgstr "分类"
 
@@ -3254,11 +3254,11 @@ msgstr "将两个页面合并在一起。您可以选择与哪个页面合并，
 msgid "Merge with another page …"
 msgstr "与其他页面合并 …。"
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:118
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:119
 msgid "Merging the two pages ..."
 msgstr "合并两页..."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:123
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:124
 msgid "No merge action specified."
 msgstr "没有指定合并行动。"
 
@@ -3286,7 +3286,7 @@ msgstr "选择中奖页面"
 msgid "Sorry, you have no permission to edit this page."
 msgstr "对不起，你没有权限编辑本页面。"
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:102
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:103
 msgid "The loser is protected, unprotect the loser before merging."
 msgstr "败家子是被保护的，合并前先解保护败家子。"
 
@@ -3302,19 +3302,19 @@ msgstr "你不允许选择这个页面，从而删除页面左。"
 msgid "You are not allowed to select this page and thereby deleting page Right."
 msgstr "你不允许选择这个页面，从而删除页面的权利。"
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:78
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:79
 msgid "You cannot remove the admin user."
 msgstr "您无法删除管理员用户。"
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:104
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:105
 msgid "You do not have permission to delete the loser."
 msgstr "你没有删除失败者的权限。"
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:82./apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:106
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:83./apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:107
 msgid "You do not have permission to edit the winner."
 msgstr "您没有编辑获奖者的权限。"
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:92
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:93
 msgid "not implemented yet"
 msgstr "未实施"
 
@@ -3910,7 +3910,7 @@ msgstr "输入您的电子邮件地址，以接收有关如何重设密码的说
 msgid "Error"
 msgstr "错误"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:247
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:249
 msgid "External Services"
 msgstr "外部服务"
 
@@ -4314,7 +4314,7 @@ msgstr "站点内容的备份和恢复选项。"
 msgid "Backups"
 msgstr "备份"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:102
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:107
 msgid "Changed configuration."
 msgstr "改变了配置。"
 
@@ -4410,7 +4410,7 @@ msgstr "对不起，这不是备份文件，或者是损坏了。"
 msgid "Sorry, you don't have permission to change this page."
 msgstr "对不起，你没有权限改变这个页面。"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:104
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:109
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "对不起，你没有权限更改配置。"
 
@@ -4682,6 +4682,14 @@ msgstr "身份驗證應顯示 <em>Authenticated</em> 或 <em>Anonymous</em>。"
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:44
 msgid "The connection our site uses to talk with our own server."
 msgstr "我們網站用來與我們自己的服務器通信的連接。"
+
+#: apps/zotonic_mod_base/priv/templates/error.tpl:123
+msgid "The stack trace is shown because this is not a production site."
+msgstr "顯示堆棧跟踪是因為這不是生產站點。"
+
+#: apps/zotonic_mod_base/priv/templates/error.tpl:121
+msgid "The stack trace is shown because you are an administrator of this site."
+msgstr "顯示堆棧跟踪是因為您是該站點的管理員。"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:76
 msgid "The test below checks the connection between your machine, Google and our site."
@@ -5555,7 +5563,7 @@ msgstr "基础URL"
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "在保存设置之前，将通过上传（和删除）一个小文件进行检查。"
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:126
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:127
 msgid "Cloud File Store"
 msgstr "云端文件存储"
 
@@ -6193,7 +6201,7 @@ msgid "User"
 msgstr "用户"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:42./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:537
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:547
 msgid "User Id"
 msgstr "用户ID"
 
@@ -7906,7 +7914,7 @@ msgstr "证书在到期前会自动更新。"
 msgid "Check the following urls:"
 msgstr "请检查以下网址。"
 
-#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:133
+#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:140
 msgid "Could not start fetching the SSL certificate. Try again later."
 msgstr "无法开始获取SSL证书。请稍后再试。"
 
@@ -7958,7 +7966,7 @@ msgstr "申请证书"
 msgid "Retry the request below."
 msgstr "重试以下请求。"
 
-#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:132./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:140
+#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:139./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:147
 msgid "SSL Let’s Encrypt Certificate"
 msgstr "SSL加密证书"
 
@@ -8006,7 +8014,7 @@ msgstr "您可以通过在 <tt>zotonic.config</tt> 配置文件中设置 <tt>端
 msgid "You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file."
 msgstr "您可以通过在 <tt>zotonic.config</tt> 配置文件中设置 <tt>ssl_port</tt> 来改变。"
 
-#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141
+#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:148
 msgid "You need to be an administrator to request certificates."
 msgstr "你需要成为管理员才能申请证书。"
 
@@ -8166,7 +8174,7 @@ msgstr "国家选择"
 msgid "Create jumps to other questions or blocks."
 msgstr "創建跳轉到其他問題或塊。"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:856
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:866
 msgid "Created"
 msgstr "创建"
 
@@ -8435,7 +8443,7 @@ msgstr "页面中断"
 msgid "Page jump condition"
 msgstr "页面跳转条件"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:544
+#: apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:554
 msgid "Passed"
 msgstr "通过"
 
@@ -8443,7 +8451,7 @@ msgstr "通过"
 msgid "Passing score"
 msgstr "合格分數"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:546
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:556
 msgid "Percent"
 msgstr "百分比"
 
@@ -8539,7 +8547,7 @@ msgstr "答辩人的结果"
 msgid "Saved"
 msgstr "已保存"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:545
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:555
 msgid "Score"
 msgstr "分数"
 
@@ -8787,7 +8795,7 @@ msgstr "你已经填好了，但你可以改变你之前的答案。"
 msgid "You already filled this in."
 msgstr "你已经填好了"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:120./apps/zotonic_mod_survey/src/mod_survey.erl:135./apps/zotonic_mod_survey/src/mod_survey.erl:736
+#: apps/zotonic_mod_survey/src/mod_survey.erl:120./apps/zotonic_mod_survey/src/mod_survey.erl:135./apps/zotonic_mod_survey/src/mod_survey.erl:750
 msgid "You are not allowed to change these results."
 msgstr "你不允许改变这些结果。"
 
@@ -8903,7 +8911,7 @@ msgstr "你确定要删除这句话吗？"
 msgid "Available sub-languages"
 msgstr "可用的子语言"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:376
+#: apps/zotonic_mod_translation/src/mod_translation.erl:377
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "无法生成翻译文件，因为 <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext没有安装</a>。"
 
@@ -9051,7 +9059,7 @@ msgstr "重新加载翻译"
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "重新加载模块和站点的所有翻页。所有模版将被重新编译。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:391
+#: apps/zotonic_mod_translation/src/mod_translation.erl:392
 msgid "Reloading all .po files in the background."
 msgstr "在后台重新加载所有.po文件。"
 
@@ -9103,15 +9111,15 @@ msgstr "抱歉，无法更改语言。"
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "对不起，你没有权限更改语言列表。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:393
+#: apps/zotonic_mod_translation/src/mod_translation.erl:394
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "对不起，你没有权限重装翻译。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:383
+#: apps/zotonic_mod_translation/src/mod_translation.erl:384
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "对不起，你没有扫描翻译的权限。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:462
+#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:463
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "对不起，你没有设置默认语言的权限。"
 
@@ -9139,7 +9147,7 @@ msgstr "标题，正文以及其他文本都可以被翻译为多种语言。这
 msgid "Translate this page in other languages."
 msgstr "翻译本页面到其他语言"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:686
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:690
 msgid "Translation"
 msgstr "翻译"
 
@@ -9283,11 +9291,11 @@ msgstr "您的Twitter应用管理页面"
 msgid "Converting"
 msgstr "转换"
 
-#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:221
+#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:228
 msgid "Vimeo Video"
 msgstr "Vimeo视频"
 
-#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:219
+#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:226
 msgid "Youtube Video"
 msgstr "Youtube视频"
 
@@ -9295,7 +9303,7 @@ msgstr "Youtube视频"
 msgid "Alert"
 msgstr "警告"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:497
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:514
 msgid "A component of the path is not a directory:"
 msgstr "路径的一个组成部分不是目录。"
 
@@ -9327,11 +9335,11 @@ msgstr "配置PostgreSQL数据库连接"
 msgid "Congratulations, your site has been created and is now running."
 msgstr "恭喜您，您的网站已经创建，现在正在运行。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:162
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:169
 msgid "Copy skeleton files ..."
 msgstr "复制骨架文件..."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:142
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:149
 msgid "Could not check out Git repository:"
 msgstr "无法查看Git仓库。"
 
@@ -9339,7 +9347,7 @@ msgstr "无法查看Git仓库。"
 msgid "Could not connect to 'postgres' database or create the database."
 msgstr "无法连接到'postgres'数据库或创建数据库。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:502
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:519
 msgid "Could not create the file:"
 msgstr "无法创建文件。"
 
@@ -9347,15 +9355,15 @@ msgstr "无法创建文件。"
 msgid "Could not create the schema in the database."
 msgstr "无法在数据库中创建模式。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:394
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:411
 msgid "Could not create the site directory"
 msgstr "无法创建网站目录"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:146
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:153
 msgid "Could not delete the site dir for the Git checkout:"
 msgstr "无法删除Git checkout的站点dir。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:492
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:509
 msgid "Disk full creating:"
 msgstr "盘满创建。"
 
@@ -9371,7 +9379,7 @@ msgstr "空网站，没有模板等。"
 msgid "Enter a valid hostname like \"www.example.com\" or \"test.local\"."
 msgstr "输入一个有效的主机名，如 \"www.example.com \"或 \"test.local\"。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:203
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:210
 msgid "Force compile all Erlang files ..."
 msgstr "强制编译所有Erlang文件......。"
 
@@ -9407,11 +9415,11 @@ msgstr "用用户名 <b>admin</b> 和密码登录。"
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
 msgstr "确保这个主机名有一个有效的DNS条目，或者被添加到你的 <tt>/etc/hosts</tt> 文件中。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:477
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:494
 msgid "No permission to create the site directory at:"
 msgstr "没有权限创建网站目录在："
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:389
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:406
 msgid "Not allowed to create the site directory"
 msgstr "不允许创建网站目录"
 
@@ -9459,19 +9467,19 @@ msgstr "网站名称"
 msgid "Skeleton"
 msgstr "骨架"
 
-#: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:74
+#: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:93
 msgid "Something is wrong, site is not starting. Please check the logs."
 msgstr "出了点问题，网站无法启动。请检查日志。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:55
+#: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:60
 msgid "Starting the new site ..."
 msgstr "开始新网站..."
 
-#: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:70
+#: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:83
 msgid "Succesfully created the site."
 msgstr "成功创建了网站。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:482
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:499
 msgid "The file or directory already exists:"
 msgstr "文件或目录已经存在。"
 
@@ -9479,7 +9487,7 @@ msgstr "文件或目录已经存在。"
 msgid "The hostname is unknown, check your DNS or /etc/hosts file"
 msgstr "主机名未知，请检查您的DNS或/etc/hosts文件。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:487
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:504
 msgid "The parent directory does not exist:"
 msgstr "父目录不存在。"
 
@@ -9495,11 +9503,11 @@ msgstr "骨架为网站提供模板和内容。"
 msgid "There is already a file or directory named"
 msgstr "已经有一个名为"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:449
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:466
 msgid "This name is reserved"
 msgstr "这个名字是保留的"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:453
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:470
 msgid "This name is taken by another Erlang module"
 msgstr "这个名字是由另一个Erlang模块"
 
