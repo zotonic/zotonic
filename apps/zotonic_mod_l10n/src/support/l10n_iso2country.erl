@@ -4,7 +4,7 @@
 
 %% @author Marc Worrell <marc@worrell.nl>
 %% @doc Mapping of iso code to country name in english
-%% @copyright 2011-2015 Marc Worrell
+%% @copyright 2011-2022 Marc Worrell
 
 -module(l10n_iso2country).
 
@@ -252,7 +252,7 @@ iso2country() -> [
 	{<<"to">>, <<"Tonga"/utf8>>},
 	{<<"tt">>, <<"Trinidad and Tobago"/utf8>>},
 	{<<"tn">>, <<"Tunisia"/utf8>>},
-	{<<"tr">>, <<"Turkey"/utf8>>},
+	{<<"tr">>, <<"Türkiye"/utf8>>},
 	{<<"tm">>, <<"Turkmenistan"/utf8>>},
 	{<<"tc">>, <<"Turks and Caicos Islands"/utf8>>},
 	{<<"tv">>, <<"Tuvalu"/utf8>>},
