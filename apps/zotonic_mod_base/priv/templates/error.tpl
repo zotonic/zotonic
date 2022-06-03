@@ -19,7 +19,7 @@
       <p><strong>{{ error_erlang|escape }}</strong></p>
   {% endif %}
 
-  {% if error_table and m.site.environment /= `production` %}
+  {% if (error_table and m.site.environment /= `production`) or m.acl.is_admin %}
       <h2>{_ Stack trace _}</h2>
 
       <style type="text/css">
@@ -114,6 +114,16 @@
                 {% endfor %}
             </tbody>
       </table>
+
+      <p class="text-muted">
+        <span class="glyphicon glyphicon-info-sign"></span>
+        {% if m.site.environment == `production` %}
+            {_ The stack trace is shown because you are an administrator of this site. _}
+        {% else %}
+            {_ The stack trace is shown because this is not a production site. _}
+        {% endif %}
+      </p>
+
   {% else %}
       {% if error_dump %}
           <pre>{{ error_dump }}</pre>
