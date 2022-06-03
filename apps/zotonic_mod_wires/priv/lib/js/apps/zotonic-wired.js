@@ -104,7 +104,11 @@ function zotonic_startup() {
             "$bridge/origin/status",
             function(msg) {
                 if (msg.payload.is_connected) {
-                    cotonic.broker.publish("model/sessionStorage/post/mqtt-origin-client-id", msg.payload.client_id);
+                    cotonic.broker.publish(
+                        "model/sessionStorage/post/mqtt-origin-client-id",
+                        msg.payload.client_id,
+                        { retain: true }
+                    );
                 }
             }, { wid: "zotonicjs" });
 
