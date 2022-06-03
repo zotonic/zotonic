@@ -43,6 +43,7 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
     Context3 = z_context:init_cowdata(Req1, Env, Context2),
     Context4 = z_context:set_csp_nonce(Context3),
     Context5 = z_context:set_security_headers(Context4),
+    Context6 = z_notifier:foldl(#middleware{ on = executed }, Context5, Context5),
     Options = #{
         on_welformed => fun(Ctx) ->
             erlang:erase(is_dbtrace),
@@ -53,10 +54,11 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
             end,
             z_context:logger_md(Ctx0),
             Ctx1 = z_context:ensure_qs(Ctx0),
-            case z_context:get_q(<<"zotonic_http_accept">>, Ctx1) of
+            Ctx2 = case z_context:get_q(<<"zotonic_http_accept">>, Ctx1) of
                 undefined -> Ctx1;
                 HttpAccept -> set_accept_context(HttpAccept, Ctx1)
-            end
+            end,
+            z_notifier:foldl(#middleware{ on = welformed }, Ctx2, Ctx2)
         end,
         on_handled => fun(Ctx) ->
             z_context:set_req_metrics(#{
@@ -65,10 +67,10 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
                     language => z_context:language(Ctx),
                     timezone => z_context:tz(Ctx)
                 }, Ctx),
-            Ctx
+            z_notifier:foldl(#middleware{ on = handled }, Ctx, Ctx)
         end
     },
-    cowmachine:request(Context5, Options).
+    cowmachine:request(Context6, Options).
 
 maybe_overrule_req_headers(#{ bindings := Bindings } = Req) ->
     case maps:get(zotonic_http_accept, Bindings, undefined) of
