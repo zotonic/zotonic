@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-06-02 16:32\n"
+"PO-Revision-Date: 2022-06-03 20:09\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "Nie udało się pobrać adresu URL zdalnego zasobu."
 msgid "Forbidden to access the remote resource URL."
 msgstr "Zabroniony dostęp do adresu URL zdalnego zasobu."
 
-#: apps/zotonic_core/src/support/z_media_import.erl:255
+#: apps/zotonic_core/src/support/z_media_import.erl:259
 msgid "Page Import"
 msgstr "Import strony"
 
@@ -56,75 +56,75 @@ msgstr "Za dużo żądań dla serwera zdalnego, spróbuj ponownie później."
 msgid "Unauthorized to access the remote resource URL."
 msgstr "Brak autoryzacji dostępu do adresu URL zdalnego zasobu."
 
-#: apps/zotonic_core/src/support/z_media_import.erl:308
+#: apps/zotonic_core/src/support/z_media_import.erl:314
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
 msgstr "Strona internetowa"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:274
+#: apps/zotonic_core/src/support/z_datetime.erl:288
 msgid "ago"
 msgstr "temu"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
+#: apps/zotonic_core/src/support/z_datetime.erl:346./apps/zotonic_core/src/support/z_datetime.erl:349
 msgid "day"
 msgstr "dzień"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
+#: apps/zotonic_core/src/support/z_datetime.erl:346./apps/zotonic_core/src/support/z_datetime.erl:349
 msgid "days"
 msgstr "dni"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:330./apps/zotonic_core/src/support/z_datetime.erl:333
+#: apps/zotonic_core/src/support/z_datetime.erl:344./apps/zotonic_core/src/support/z_datetime.erl:347
 msgid "hour"
 msgstr "godzina"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:330./apps/zotonic_core/src/support/z_datetime.erl:333
+#: apps/zotonic_core/src/support/z_datetime.erl:344./apps/zotonic_core/src/support/z_datetime.erl:347
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:12./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr "godziny"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:274
+#: apps/zotonic_core/src/support/z_datetime.erl:288
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
 msgstr "w"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
+#: apps/zotonic_core/src/support/z_datetime.erl:342./apps/zotonic_core/src/support/z_datetime.erl:345
 msgid "minute"
 msgstr "minuta"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
+#: apps/zotonic_core/src/support/z_datetime.erl:342./apps/zotonic_core/src/support/z_datetime.erl:345
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:13./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr "minuty"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:325
+#: apps/zotonic_core/src/support/z_datetime.erl:339
 msgid "moments"
 msgstr "chwile"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:334./apps/zotonic_core/src/support/z_datetime.erl:337
+#: apps/zotonic_core/src/support/z_datetime.erl:348./apps/zotonic_core/src/support/z_datetime.erl:351
 msgid "month"
 msgstr "miesiąc"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:334./apps/zotonic_core/src/support/z_datetime.erl:337
+#: apps/zotonic_core/src/support/z_datetime.erl:348./apps/zotonic_core/src/support/z_datetime.erl:351
 msgid "months"
 msgstr "miesiące"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:274./apps/zotonic_core/src/support/z_datetime.erl:324
+#: apps/zotonic_core/src/support/z_datetime.erl:288./apps/zotonic_core/src/support/z_datetime.erl:338
 msgid "now"
 msgstr "teraz"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
+#: apps/zotonic_core/src/support/z_datetime.erl:340./apps/zotonic_core/src/support/z_datetime.erl:343
 msgid "second"
 msgstr "sekunda"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
+#: apps/zotonic_core/src/support/z_datetime.erl:340./apps/zotonic_core/src/support/z_datetime.erl:343
 msgid "seconds"
 msgstr "sekundy"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:336
+#: apps/zotonic_core/src/support/z_datetime.erl:350
 msgid "year"
 msgstr "rok"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:336
+#: apps/zotonic_core/src/support/z_datetime.erl:350
 msgid "years"
 msgstr "lata"
 
@@ -219,7 +219,7 @@ msgstr "Czy na pewno chcesz przywrócić wszystkie reguły ACL do ich obecnie op
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:107
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:80./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:116./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:91./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
-#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:134./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:142
+#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:149
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:158./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:77./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:189
@@ -1071,7 +1071,7 @@ msgstr "Wersja bazy danych"
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:16
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:20./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:111./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:533./apps/zotonic_mod_survey/src/models/m_survey.erl:536
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:543./apps/zotonic_mod_survey/src/models/m_survey.erl:546
 msgid "Date"
 msgstr "Data"
 
@@ -1194,7 +1194,7 @@ msgstr "Kod osadzenia zostanie oczyszczony dla dozwolonych witryn i html."
 msgid "Embed page"
 msgstr "Umieść stronę"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:207
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:209
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:230
 msgid "Embedded Content"
 msgstr "Wbudowana zawartość"
@@ -1219,20 +1219,20 @@ msgstr "Korzeń instalacji Erlang"
 msgid "Erlang Version"
 msgstr "Wersja Erlang"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:176
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:178
 msgid "Error checking the website."
 msgstr "Błąd podczas sprawdzania witryny."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:178
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:179
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:100
 msgid "Error creating the page."
 msgstr "Błąd podczas tworzenia strony."
 
-#: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:42
+#: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:48
 msgid "Error importing page from the remote server."
 msgstr "Błąd podczas importowania strony ze zdalnego serwera."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:188
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:189
 msgid "Error uploading the file."
 msgstr "Błąd podczas przesyłania pliku."
 
@@ -1540,7 +1540,7 @@ msgstr "Przesuń blok w górę"
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:11./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:10
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:48
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:538
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:548
 msgid "Name"
 msgstr "Nazwa"
 
@@ -2428,7 +2428,7 @@ msgstr "odwiedź stronę"
 msgid "Are you sure you want to delete the following categories:"
 msgstr "Czy na pewno chcesz usunąć następujące kategorie:"
 
-#: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:10./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:186
+#: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:10./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:200
 msgid "Categories"
 msgstr "Kategorie"
 
@@ -3254,11 +3254,11 @@ msgstr "Połącz dwie strony razem. Możesz wybrać którą stronę chcesz poł�
 msgid "Merge with another page …"
 msgstr "Połącz z inną stroną …"
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:118
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:119
 msgid "Merging the two pages ..."
 msgstr "Łączenie dwóch stron ..."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:123
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:124
 msgid "No merge action specified."
 msgstr "Nie określono działań związanych z połączeniem."
 
@@ -3286,7 +3286,7 @@ msgstr "Wybierz zwycięską stronę"
 msgid "Sorry, you have no permission to edit this page."
 msgstr "Przepraszamy, nie masz uprawnień do edycji tej strony."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:102
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:103
 msgid "The loser is protected, unprotect the loser before merging."
 msgstr "Przegrany jest chroniony, należy chronić przegranego przed połączeniem."
 
@@ -3302,19 +3302,19 @@ msgstr "Nie możesz wybrać tej strony i tym samym usunąć strony po lewej."
 msgid "You are not allowed to select this page and thereby deleting page Right."
 msgstr "Nie możesz wybrać tej strony i w ten sposób usunąć stronę po prawej."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:78
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:79
 msgid "You cannot remove the admin user."
 msgstr "Nie możesz usunąć administratora."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:104
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:105
 msgid "You do not have permission to delete the loser."
 msgstr "Nie masz uprawnień, aby usunąć przegranego."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:82./apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:106
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:83./apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:107
 msgid "You do not have permission to edit the winner."
 msgstr "Nie masz uprawnień aby edytować zwycięzcę."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:92
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:93
 msgid "not implemented yet"
 msgstr "jeszcze niezaimplementowane"
 
@@ -3910,7 +3910,7 @@ msgstr "Wprowadź swój adres e-mail, aby otrzymać instrukcje resetowania hasł
 msgid "Error"
 msgstr "Błąd"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:247
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:249
 msgid "External Services"
 msgstr "Usługi zewnętrzne"
 
@@ -4314,7 +4314,7 @@ msgstr "Opcje tworzenia kopii zapasowych i przywracania zawartości."
 msgid "Backups"
 msgstr "Kopie zapasowe"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:102
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:107
 msgid "Changed configuration."
 msgstr "Zmieniona konfiguracja."
 
@@ -4410,7 +4410,7 @@ msgstr "Przepraszamy, to nie jest plik kopii zapasowej lub plik jest uszkodzony.
 msgid "Sorry, you don't have permission to change this page."
 msgstr "Przepraszamy, nie masz uprawnień do zmiany tej strony."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:104
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:109
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Przepraszamy, nie masz uprawnień do zmiany konfiguracji."
 
@@ -4682,6 +4682,14 @@ msgstr "Uwierzytelnianie powinno wskazywać <em>Uwierzytelniony</em> lub <em>Ano
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:44
 msgid "The connection our site uses to talk with our own server."
 msgstr "Połączenie, z którego korzysta nasza strona, aby komunikować się z naszym własnym serwerem."
+
+#: apps/zotonic_mod_base/priv/templates/error.tpl:123
+msgid "The stack trace is shown because this is not a production site."
+msgstr "Wyświetlany jest ślad stosu, ponieważ nie jest to lokalizacja produkcyjna."
+
+#: apps/zotonic_mod_base/priv/templates/error.tpl:121
+msgid "The stack trace is shown because you are an administrator of this site."
+msgstr "Wyświetlany jest ślad stosu, ponieważ jesteś administratorem tej witryny."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:76
 msgid "The test below checks the connection between your machine, Google and our site."
@@ -5555,7 +5563,7 @@ msgstr "Podstawowy adres URL"
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Zanim ustawienia zostaną zapisane, zostaną one sprawdzone poprzez przesłanie (i usunięcie) małego pliku."
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:126
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:127
 msgid "Cloud File Store"
 msgstr "Magazyn plików w chmurze"
 
@@ -6193,7 +6201,7 @@ msgid "User"
 msgstr "Użytkownik"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:42./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:537
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:547
 msgid "User Id"
 msgstr "Identyfikator użytkownika"
 
@@ -7910,7 +7918,7 @@ msgstr "Certyfikaty są automatycznie odnawiane przed ich wygaśnięciem."
 msgid "Check the following urls:"
 msgstr "Sprawdź następujące urny:"
 
-#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:133
+#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:140
 msgid "Could not start fetching the SSL certificate. Try again later."
 msgstr "Nie mogłem rozpocząć pobierania certyfikatu SSL. Spróbuj ponownie później."
 
@@ -7962,7 +7970,7 @@ msgstr "Wnioskowanie o świadectwa"
 msgid "Retry the request below."
 msgstr "Proszę powtórzyć poniższy wniosek."
 
-#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:132./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:140
+#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:139./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:147
 msgid "SSL Let’s Encrypt Certificate"
 msgstr "SSL Szyfrujmy certyfikat"
 
@@ -8010,7 +8018,7 @@ msgstr "Możesz to zmienić ustawiając <tt>port</tt> w pliku konfiguracyjnym <t
 msgid "You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file."
 msgstr "Możesz to zmienić ustawiając <tt>ssl_port</tt> w pliku konfiguracyjnym <tt>zotonic.config</tt> ."
 
-#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141
+#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:148
 msgid "You need to be an administrator to request certificates."
 msgstr "Musisz być administratorem, aby wnioskować o certyfikaty."
 
@@ -8170,7 +8178,7 @@ msgstr "Wybór kraju"
 msgid "Create jumps to other questions or blocks."
 msgstr "Twórz skoki do innych pytań lub bloków."
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:856
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:866
 msgid "Created"
 msgstr "Stworzony"
 
@@ -8439,7 +8447,7 @@ msgstr "Koniec strony"
 msgid "Page jump condition"
 msgstr "Stan skoku strony"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:544
+#: apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:554
 msgid "Passed"
 msgstr "Minął"
 
@@ -8447,7 +8455,7 @@ msgstr "Minął"
 msgid "Passing score"
 msgstr "Pozytywny wynik"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:546
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:556
 msgid "Percent"
 msgstr "Procent"
 
@@ -8543,7 +8551,7 @@ msgstr "Wyniki uzyskane od respondenta"
 msgid "Saved"
 msgstr "Zapisane"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:545
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:555
 msgid "Score"
 msgstr "Wynik"
 
@@ -8791,7 +8799,7 @@ msgstr "Wypełniłeś już to, ale możesz zmienić swoje poprzednie odpowiedzi.
 msgid "You already filled this in."
 msgstr "Już to wypełniłeś."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:120./apps/zotonic_mod_survey/src/mod_survey.erl:135./apps/zotonic_mod_survey/src/mod_survey.erl:736
+#: apps/zotonic_mod_survey/src/mod_survey.erl:120./apps/zotonic_mod_survey/src/mod_survey.erl:135./apps/zotonic_mod_survey/src/mod_survey.erl:750
 msgid "You are not allowed to change these results."
 msgstr "Nie wolno ci zmieniać tych wyników."
 
@@ -8907,7 +8915,7 @@ msgstr "Jesteś pewien, że chcesz usunąć ten język?"
 msgid "Available sub-languages"
 msgstr "Dostępne podjęzyki"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:376
+#: apps/zotonic_mod_translation/src/mod_translation.erl:377
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Nie można generować plików tłumaczeniowych, ponieważ <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext nie jest zainstalowany</a>."
 
@@ -9055,7 +9063,7 @@ msgstr "Przeładuj tłumaczenia"
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "Przeładuj wszystkie tłumaczenia z modułów i strony. Wszystkie szablony zostaną ponownie skompilowane."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:391
+#: apps/zotonic_mod_translation/src/mod_translation.erl:392
 msgid "Reloading all .po files in the background."
 msgstr "Przeładowanie wszystkich plików .po w tle."
 
@@ -9107,15 +9115,15 @@ msgstr "Przepraszam, nie mogłem zmienić języka."
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "Przepraszam, nie ma pan pozwolenia na zmianę listy języków."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:393
+#: apps/zotonic_mod_translation/src/mod_translation.erl:394
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "Przepraszam, nie ma pan pozwolenia na przeładowanie tłumaczeń."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:383
+#: apps/zotonic_mod_translation/src/mod_translation.erl:384
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Przepraszam, nie masz pozwolenia na skanowanie w poszukiwaniu tłumaczeń."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:462
+#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:463
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Przepraszam, nie masz uprawnień do ustawiania domyślnego języka."
 
@@ -9143,7 +9151,7 @@ msgstr "Tytuł, korpus i inne teksty mogą być tłumaczone na różne języki. 
 msgid "Translate this page in other languages."
 msgstr "Dodaj informację o innych wersjach językowych tej strony."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:686
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:690
 msgid "Translation"
 msgstr "Tłumaczenia"
 
@@ -9287,11 +9295,11 @@ msgstr "Twoja strona zarządzania aplikacją na Twitterze"
 msgid "Converting"
 msgstr "Przeliczanie"
 
-#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:221
+#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:228
 msgid "Vimeo Video"
 msgstr "Wideo Vimeo"
 
-#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:219
+#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:226
 msgid "Youtube Video"
 msgstr "Wideo Youtube"
 
@@ -9299,7 +9307,7 @@ msgstr "Wideo Youtube"
 msgid "Alert"
 msgstr "Ostrzeżenie"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:497
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:514
 msgid "A component of the path is not a directory:"
 msgstr "Składnik ścieżki nie jest katalogiem:"
 
@@ -9331,11 +9339,11 @@ msgstr "Konfiguracja połączenia z bazą danych PostgreSQL"
 msgid "Congratulations, your site has been created and is now running."
 msgstr "Gratulacje, twoja strona została stworzona i działa."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:162
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:169
 msgid "Copy skeleton files ..."
 msgstr "Skopiuj akta szkieletu..."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:142
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:149
 msgid "Could not check out Git repository:"
 msgstr "Nie mogłem sprawdzić repozytorium Gita:"
 
@@ -9343,7 +9351,7 @@ msgstr "Nie mogłem sprawdzić repozytorium Gita:"
 msgid "Could not connect to 'postgres' database or create the database."
 msgstr "Nie mógł się połączyć z bazą danych \"postgres\" ani stworzyć bazy danych."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:502
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:519
 msgid "Could not create the file:"
 msgstr "Nie mógł utworzyć pliku:"
 
@@ -9351,15 +9359,15 @@ msgstr "Nie mógł utworzyć pliku:"
 msgid "Could not create the schema in the database."
 msgstr "Nie można utworzyć schematu w bazie danych."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:394
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:411
 msgid "Could not create the site directory"
 msgstr "Nie można było utworzyć katalogu stron"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:146
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:153
 msgid "Could not delete the site dir for the Git checkout:"
 msgstr "Nie mogłem usunąć strony do kasy Git:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:492
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:509
 msgid "Disk full creating:"
 msgstr "Tarcza pełna tworzenia:"
 
@@ -9375,7 +9383,7 @@ msgstr "Pusta strona, brak szablonów itp."
 msgid "Enter a valid hostname like \"www.example.com\" or \"test.local\"."
 msgstr "Wpisz prawidłową nazwę hosta, np. \"www.example.com\" lub \"test.local\"."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:203
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:210
 msgid "Force compile all Erlang files ..."
 msgstr "Force kompiluje wszystkie pliki Erlanga..."
 
@@ -9411,11 +9419,11 @@ msgstr "Zaloguj się za pomocą nazwy użytkownika <b>admin</b> i hasła"
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
 msgstr "Upewnij się, że ta nazwa hosta ma prawidłowy wpis DNS lub jest dodana do Twojego pliku <tt>/etc/hosts</tt> ."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:477
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:494
 msgid "No permission to create the site directory at:"
 msgstr "Brak uprawnień do tworzenia katalogu witryny pod adresem:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:389
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:406
 msgid "Not allowed to create the site directory"
 msgstr "Nie wolno tworzyć katalogu stron"
 
@@ -9463,19 +9471,19 @@ msgstr "Nazwa strony internetowej"
 msgid "Skeleton"
 msgstr "Szkielet"
 
-#: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:74
+#: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:93
 msgid "Something is wrong, site is not starting. Please check the logs."
 msgstr "Coś jest nie tak, strona się nie zaczyna. Proszę sprawdzić dzienniki."
 
-#: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:55
+#: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:60
 msgid "Starting the new site ..."
 msgstr "Uruchomienie nowej strony..."
 
-#: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:70
+#: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:83
 msgid "Succesfully created the site."
 msgstr "Sukcesywnie stworzona strona."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:482
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:499
 msgid "The file or directory already exists:"
 msgstr "Plik lub katalog już istnieje:"
 
@@ -9483,7 +9491,7 @@ msgstr "Plik lub katalog już istnieje:"
 msgid "The hostname is unknown, check your DNS or /etc/hosts file"
 msgstr "Nazwa hosta nie jest znana, sprawdź swój plik DNS lub /etc/hosts"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:487
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:504
 msgid "The parent directory does not exist:"
 msgstr "Katalog rodzicielski nie istnieje:"
 
@@ -9499,11 +9507,11 @@ msgstr "Szkielet dostarcza szablonów i treści dla strony."
 msgid "There is already a file or directory named"
 msgstr "Istnieje już plik lub katalog o nazwie"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:449
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:466
 msgid "This name is reserved"
 msgstr "Ta nazwa jest zastrzeżona"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:453
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:470
 msgid "This name is taken by another Erlang module"
 msgstr "Ta nazwa jest przejęta przez inny moduł Erlanga"
 
