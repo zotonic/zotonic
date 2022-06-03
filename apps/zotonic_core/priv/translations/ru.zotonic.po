@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-06-02 16:32\n"
+"PO-Revision-Date: 2022-06-03 20:09\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "Не удалось получить URL-адрес удаленного
 msgid "Forbidden to access the remote resource URL."
 msgstr "Запрещен доступ к URL-адресу удаленного ресурса."
 
-#: apps/zotonic_core/src/support/z_media_import.erl:255
+#: apps/zotonic_core/src/support/z_media_import.erl:259
 msgid "Page Import"
 msgstr "Импорт страницы"
 
@@ -56,75 +56,75 @@ msgstr "Слишком много запросов к удаленному се�
 msgid "Unauthorized to access the remote resource URL."
 msgstr "Неавторизованный доступ к URL-адресу удаленного ресурса."
 
-#: apps/zotonic_core/src/support/z_media_import.erl:308
+#: apps/zotonic_core/src/support/z_media_import.erl:314
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
 msgstr "Веб-сайт"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:274
+#: apps/zotonic_core/src/support/z_datetime.erl:288
 msgid "ago"
 msgstr "назад"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
+#: apps/zotonic_core/src/support/z_datetime.erl:346./apps/zotonic_core/src/support/z_datetime.erl:349
 msgid "day"
 msgstr "день"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
+#: apps/zotonic_core/src/support/z_datetime.erl:346./apps/zotonic_core/src/support/z_datetime.erl:349
 msgid "days"
 msgstr "дней"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:330./apps/zotonic_core/src/support/z_datetime.erl:333
+#: apps/zotonic_core/src/support/z_datetime.erl:344./apps/zotonic_core/src/support/z_datetime.erl:347
 msgid "hour"
 msgstr "час"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:330./apps/zotonic_core/src/support/z_datetime.erl:333
+#: apps/zotonic_core/src/support/z_datetime.erl:344./apps/zotonic_core/src/support/z_datetime.erl:347
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:12./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr "часов"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:274
+#: apps/zotonic_core/src/support/z_datetime.erl:288
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
 msgstr "в"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
+#: apps/zotonic_core/src/support/z_datetime.erl:342./apps/zotonic_core/src/support/z_datetime.erl:345
 msgid "minute"
 msgstr "минута"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
+#: apps/zotonic_core/src/support/z_datetime.erl:342./apps/zotonic_core/src/support/z_datetime.erl:345
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:13./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr "минут"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:325
+#: apps/zotonic_core/src/support/z_datetime.erl:339
 msgid "moments"
 msgstr "несколько секунд"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:334./apps/zotonic_core/src/support/z_datetime.erl:337
+#: apps/zotonic_core/src/support/z_datetime.erl:348./apps/zotonic_core/src/support/z_datetime.erl:351
 msgid "month"
 msgstr "месяц"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:334./apps/zotonic_core/src/support/z_datetime.erl:337
+#: apps/zotonic_core/src/support/z_datetime.erl:348./apps/zotonic_core/src/support/z_datetime.erl:351
 msgid "months"
 msgstr "месяцев"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:274./apps/zotonic_core/src/support/z_datetime.erl:324
+#: apps/zotonic_core/src/support/z_datetime.erl:288./apps/zotonic_core/src/support/z_datetime.erl:338
 msgid "now"
 msgstr "сейчас"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
+#: apps/zotonic_core/src/support/z_datetime.erl:340./apps/zotonic_core/src/support/z_datetime.erl:343
 msgid "second"
 msgstr "секунда"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
+#: apps/zotonic_core/src/support/z_datetime.erl:340./apps/zotonic_core/src/support/z_datetime.erl:343
 msgid "seconds"
 msgstr "секунд"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:336
+#: apps/zotonic_core/src/support/z_datetime.erl:350
 msgid "year"
 msgstr "год"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:336
+#: apps/zotonic_core/src/support/z_datetime.erl:350
 msgid "years"
 msgstr "лет"
 
@@ -219,7 +219,7 @@ msgstr "Вы уверены, что хотите восстановить все
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:107
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:80./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:116./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:91./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
-#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:134./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:142
+#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:149
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:158./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:77./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:189
@@ -1071,7 +1071,7 @@ msgstr "Версия базы данных"
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:16
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:20./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:111./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:533./apps/zotonic_mod_survey/src/models/m_survey.erl:536
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:543./apps/zotonic_mod_survey/src/models/m_survey.erl:546
 msgid "Date"
 msgstr "Дата"
 
@@ -1194,7 +1194,7 @@ msgstr "Встраиваемый код будет очищен для разр�
 msgid "Embed page"
 msgstr "Встроить страницу"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:207
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:209
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:230
 msgid "Embedded Content"
 msgstr "Встроенный контент"
@@ -1219,20 +1219,20 @@ msgstr "Корень установки Эрланг"
 msgid "Erlang Version"
 msgstr "версия на Эрланге"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:176
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:178
 msgid "Error checking the website."
 msgstr "Ошибка при проверке сайта."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:178
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:179
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:100
 msgid "Error creating the page."
 msgstr "Ошибка при создании страницы."
 
-#: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:42
+#: apps/zotonic_mod_admin/src/support/z_admin_rsc_import.erl:48
 msgid "Error importing page from the remote server."
 msgstr "Ошибка при импорте страницы с удаленного сервера."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:188
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:189
 msgid "Error uploading the file."
 msgstr "Ошибка при закачивании файла."
 
@@ -1540,7 +1540,7 @@ msgstr "Переместить блок вверх"
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:11./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:10
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:48
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:538
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:548
 msgid "Name"
 msgstr "Имя"
 
@@ -2428,7 +2428,7 @@ msgstr "перейти на сайт"
 msgid "Are you sure you want to delete the following categories:"
 msgstr "Вы уверены, что хотите удалить следующие категории:"
 
-#: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:10./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:186
+#: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:10./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:200
 msgid "Categories"
 msgstr "Категории"
 
@@ -3254,11 +3254,11 @@ msgstr "Соедините две страницы. Вы можете выбра
 msgid "Merge with another page …"
 msgstr "Объединить с другой страницей …."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:118
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:119
 msgid "Merging the two pages ..."
 msgstr "Слияние двух страниц..."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:123
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:124
 msgid "No merge action specified."
 msgstr "Действие по слиянию не указано."
 
@@ -3286,7 +3286,7 @@ msgstr "Выберите выигравшую страницу"
 msgid "Sorry, you have no permission to edit this page."
 msgstr "Извините, у вас нет права редактировать эту страницу."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:102
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:103
 msgid "The loser is protected, unprotect the loser before merging."
 msgstr "Проигравший защищён, снимите защиту с проигравшего перед слиянием."
 
@@ -3302,19 +3302,19 @@ msgstr "Вы не можете выбрать эту страницу и тем 
 msgid "You are not allowed to select this page and thereby deleting page Right."
 msgstr "Вы не можете выбрать эту страницу и тем самым удалить страницу справа."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:78
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:79
 msgid "You cannot remove the admin user."
 msgstr "Вы не можете удалить пользователя-администратора."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:104
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:105
 msgid "You do not have permission to delete the loser."
 msgstr "У вас нет разрешения на удаление проигравшего."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:82./apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:106
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:83./apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:107
 msgid "You do not have permission to edit the winner."
 msgstr "Вы не имеете права редактировать победителя."
 
-#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:92
+#: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:93
 msgid "not implemented yet"
 msgstr "ещё не реализованный"
 
@@ -3910,7 +3910,7 @@ msgstr "Введите свой адрес электронной почты, ч
 msgid "Error"
 msgstr "Ошибка"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:247
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:249
 msgid "External Services"
 msgstr "Внешние службы"
 
@@ -4314,7 +4314,7 @@ msgstr "Функции резервного копирования и восст
 msgid "Backups"
 msgstr "Резервные копии"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:102
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:107
 msgid "Changed configuration."
 msgstr "Измененная конфигурация."
 
@@ -4410,7 +4410,7 @@ msgstr "Извините, это не резервная копия или он�
 msgid "Sorry, you don't have permission to change this page."
 msgstr "Извините, у вас нет разрешения менять эту страницу."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:104
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:109
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Извините, у вас нет разрешения на изменение конфигурации."
 
@@ -4682,6 +4682,14 @@ msgstr "Аутентификация должна показать <em>Authentic
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:44
 msgid "The connection our site uses to talk with our own server."
 msgstr "Соединение, которое наш сайт использует для связи с нашим собственным сервером."
+
+#: apps/zotonic_mod_base/priv/templates/error.tpl:123
+msgid "The stack trace is shown because this is not a production site."
+msgstr "Трассировка стека показана, потому что это не рабочая площадка."
+
+#: apps/zotonic_mod_base/priv/templates/error.tpl:121
+msgid "The stack trace is shown because you are an administrator of this site."
+msgstr "Трассировка стека показана, потому что вы являетесь администратором этого сайта."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:76
 msgid "The test below checks the connection between your machine, Google and our site."
@@ -5555,7 +5563,7 @@ msgstr "Базовый URL-адрес"
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Перед сохранением настроек они будут проверены путем загрузки (и удаления) небольшого файла."
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:126
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:127
 msgid "Cloud File Store"
 msgstr "Облачный файловый магазин"
 
@@ -6193,7 +6201,7 @@ msgid "User"
 msgstr "Пользователь"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:42./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:537
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:547
 msgid "User Id"
 msgstr "Идентификатор пользователя"
 
@@ -7910,7 +7918,7 @@ msgstr "Сертификаты автоматически продлеваютс
 msgid "Check the following urls:"
 msgstr "Проверьте следующие урны:"
 
-#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:133
+#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:140
 msgid "Could not start fetching the SSL certificate. Try again later."
 msgstr "Не смог начать получать SSL-сертификат. Попробуйте позже."
 
@@ -7962,7 +7970,7 @@ msgstr "Запрос сертификатов"
 msgid "Retry the request below."
 msgstr "Повторите запрос ниже."
 
-#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:132./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:140
+#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:139./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:147
 msgid "SSL Let’s Encrypt Certificate"
 msgstr "SSL-сертификат шифрования"
 
@@ -8010,7 +8018,7 @@ msgstr "Вы можете изменить это, установив <tt>пор
 msgid "You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file."
 msgstr "Вы можете изменить это, установив <tt>ssl_port</tt> в конфигурационном файле <tt>zotonic.config</tt> ."
 
-#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141
+#: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:148
 msgid "You need to be an administrator to request certificates."
 msgstr "Для запроса сертификатов необходимо быть администратором."
 
@@ -8170,7 +8178,7 @@ msgstr "Выбор страны"
 msgid "Create jumps to other questions or blocks."
 msgstr "Создавайте переходы к другим вопросам или блокам."
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:856
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:866
 msgid "Created"
 msgstr "Создан"
 
@@ -8439,7 +8447,7 @@ msgstr "Разрыв страницы"
 msgid "Page jump condition"
 msgstr "Условие перехода"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:544
+#: apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:554
 msgid "Passed"
 msgstr "Прошел"
 
@@ -8447,7 +8455,7 @@ msgstr "Прошел"
 msgid "Passing score"
 msgstr "Проходной балл"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:546
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:556
 msgid "Percent"
 msgstr "Процент"
 
@@ -8543,7 +8551,7 @@ msgstr "Результаты опроса"
 msgid "Saved"
 msgstr "Сохранен"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:545
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:555
 msgid "Score"
 msgstr "Оценка"
 
@@ -8791,7 +8799,7 @@ msgstr "Вы уже заполнили эту форму, но можете из
 msgid "You already filled this in."
 msgstr "Ты уже заполнил это."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:120./apps/zotonic_mod_survey/src/mod_survey.erl:135./apps/zotonic_mod_survey/src/mod_survey.erl:736
+#: apps/zotonic_mod_survey/src/mod_survey.erl:120./apps/zotonic_mod_survey/src/mod_survey.erl:135./apps/zotonic_mod_survey/src/mod_survey.erl:750
 msgid "You are not allowed to change these results."
 msgstr "Вы не имеете права изменять эти результаты."
 
@@ -8907,7 +8915,7 @@ msgstr "Вы уверены, что хотите удалить этот язы�
 msgid "Available sub-languages"
 msgstr "Доступные подязыки"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:376
+#: apps/zotonic_mod_translation/src/mod_translation.erl:377
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Не может генерировать файлы перевода, потому что не установлен <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext</a>."
 
@@ -9055,7 +9063,7 @@ msgstr "Обновить переводы"
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "Перезагрузите все переводы с модулей и сайта. Все шаблоны будут перекомпилированы."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:391
+#: apps/zotonic_mod_translation/src/mod_translation.erl:392
 msgid "Reloading all .po files in the background."
 msgstr "Перезагрузка всех .po файлов в фоновом режиме."
 
@@ -9107,15 +9115,15 @@ msgstr "Извините, не смог изменить язык."
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "Извините, у вас нет разрешения на изменение списка языков."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:393
+#: apps/zotonic_mod_translation/src/mod_translation.erl:394
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "Извините, у вас нет разрешения на перезагрузку переводов."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:383
+#: apps/zotonic_mod_translation/src/mod_translation.erl:384
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Извините, у вас нет разрешения на сканирование на предмет переводов."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:462
+#: apps/zotonic_mod_translation/src/mod_translation.erl:297./apps/zotonic_mod_translation/src/mod_translation.erl:463
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Извините, у вас нет разрешения на установку языка по умолчанию."
 
@@ -9143,7 +9151,7 @@ msgstr "Название, тело и другие тексты могут бы�
 msgid "Translate this page in other languages."
 msgstr "Перевести эту страницу на другие языки."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:686
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:690
 msgid "Translation"
 msgstr "Перевод"
 
@@ -9287,11 +9295,11 @@ msgstr "Ваша страница управления приложениями 
 msgid "Converting"
 msgstr "Преобразование"
 
-#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:221
+#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:228
 msgid "Vimeo Video"
 msgstr "Видеозапись"
 
-#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:219
+#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:226
 msgid "Youtube Video"
 msgstr "Youtube Video"
 
@@ -9299,7 +9307,7 @@ msgstr "Youtube Video"
 msgid "Alert"
 msgstr "Предупреждение"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:497
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:514
 msgid "A component of the path is not a directory:"
 msgstr "Компонент пути не является каталогом:"
 
@@ -9331,11 +9339,11 @@ msgstr "Настройка подключения к базе данных Postg
 msgid "Congratulations, your site has been created and is now running."
 msgstr "Поздравляю, ваш сайт создан и работает."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:162
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:169
 msgid "Copy skeleton files ..."
 msgstr "Скопируйте файлы скелета..."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:142
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:149
 msgid "Could not check out Git repository:"
 msgstr "Не смог проверить Git-репозиторий:"
 
@@ -9343,7 +9351,7 @@ msgstr "Не смог проверить Git-репозиторий:"
 msgid "Could not connect to 'postgres' database or create the database."
 msgstr "Не смог подключиться к базе данных 'postgres' или создать ее."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:502
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:519
 msgid "Could not create the file:"
 msgstr "Не смог создать файл:"
 
@@ -9351,15 +9359,15 @@ msgstr "Не смог создать файл:"
 msgid "Could not create the schema in the database."
 msgstr "Не смог создать схему в базе данных."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:394
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:411
 msgid "Could not create the site directory"
 msgstr "Не удалось создать каталог сайта"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:146
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:153
 msgid "Could not delete the site dir for the Git checkout:"
 msgstr "Не смог удалить грязь с сайта для проверки Git'а:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:492
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:509
 msgid "Disk full creating:"
 msgstr "Диск полностью создан:"
 
@@ -9375,7 +9383,7 @@ msgstr "Пустой сайт, никаких шаблонов и т.д."
 msgid "Enter a valid hostname like \"www.example.com\" or \"test.local\"."
 msgstr "Введите действительное имя хоста, например, \"www.example.com\" или \"test.local\"."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:203
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:210
 msgid "Force compile all Erlang files ..."
 msgstr "Принудительная компиляция всех файлов Erlang ..."
 
@@ -9411,11 +9419,11 @@ msgstr "Войдите с именем пользователя <b>admin</b> и 
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
 msgstr "Убедитесь, что это имя хоста имеет правильную DNS запись или добавлено в ваш файл <tt>/etc/hosts</tt> ."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:477
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:494
 msgid "No permission to create the site directory at:"
 msgstr "Нет разрешения на создание каталога сайта:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:389
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:406
 msgid "Not allowed to create the site directory"
 msgstr "Не разрешено создавать каталог сайта"
 
@@ -9463,19 +9471,19 @@ msgstr "Название сайта"
 msgid "Skeleton"
 msgstr "Скелет"
 
-#: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:74
+#: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:93
 msgid "Something is wrong, site is not starting. Please check the logs."
 msgstr "Что-то не так, сайт не начинается. Пожалуйста, проверьте журналы."
 
-#: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:55
+#: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:60
 msgid "Starting the new site ..."
 msgstr "Запуск нового сайта..."
 
-#: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:70
+#: apps/zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:83
 msgid "Succesfully created the site."
 msgstr "Успешно созданный сайт."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:482
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:499
 msgid "The file or directory already exists:"
 msgstr "Файл или каталог уже существует:"
 
@@ -9483,7 +9491,7 @@ msgstr "Файл или каталог уже существует:"
 msgid "The hostname is unknown, check your DNS or /etc/hosts file"
 msgstr "Имя хоста неизвестно, проверьте ваш DNS или файл /etc/hosts."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:487
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:504
 msgid "The parent directory does not exist:"
 msgstr "Родительский каталог не существует:"
 
@@ -9499,11 +9507,11 @@ msgstr "Скелет предоставляет шаблоны и контент
 msgid "There is already a file or directory named"
 msgstr "Уже есть файл или каталог с именем"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:449
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:466
 msgid "This name is reserved"
 msgstr "Это имя зарезервировано"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:453
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:470
 msgid "This name is taken by another Erlang module"
 msgstr "Это имя взято другим модулем Erlang."
 
