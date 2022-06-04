@@ -43,7 +43,7 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
     Context3 = z_context:init_cowdata(Req1, Env, Context2),
     Context4 = z_context:set_csp_nonce(Context3),
     Context5 = z_context:set_security_headers(Context4),
-    Context6 = z_notifier:foldl(#middleware{ on = executed }, Context5, Context5),
+    Context6 = z_notifier:foldl(#middleware{ on = request }, Context5, Context5),
     Options = #{
         on_welformed => fun(Ctx) ->
             erlang:erase(is_dbtrace),

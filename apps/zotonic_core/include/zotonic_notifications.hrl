@@ -1192,7 +1192,7 @@
 %% Type: foldl
 %% Return: modified context
 -record(middleware, {
-    on :: executed | welformed | handled
+    on :: request | welformed | handled
 }).
 
 
