@@ -1190,7 +1190,7 @@
 
 %% @doc Delegates the request processing.
 %% Type: foldl
-%% Return: modified context
+%% Return: updated ``z:context()``
 -record(middleware, {
     on :: request | welformed | handled
 }).
