@@ -1188,6 +1188,14 @@
 }).
 
 
+%% @doc Delegates the request processing.
+%% Type: foldl
+%% Return: updated ``z:context()``
+-record(middleware, {
+    on :: request | welformed | handled
+}).
+
+
 % Simple mod_development notifications:
 % development_reload - Reload all template, modules etc
 % development_make - Perform a 'make' on Zotonic, reload all new beam files

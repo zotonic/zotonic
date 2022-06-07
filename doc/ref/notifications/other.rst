@@ -27,6 +27,7 @@ Other notifications
    notification/mailinglist_message
    notification/menu_rsc
    notification/menu_save
+   notification/middleware
    notification/module_activate
    notification/module_deactivate
    notification/multiupload
