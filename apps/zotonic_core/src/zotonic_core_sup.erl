@@ -50,7 +50,7 @@ start_link(Options) ->
 
 %% @doc supervisor callback.
 init([]) ->
-    spawn_delayed_status(),
+    log_start_warnings(),
     z_filehandler:start_observers(),
     LogBufferSize = z_config:get(log_http_buffer_size),
     Processes = [
@@ -88,32 +88,6 @@ init([]) ->
             permanent, 10100, worker, dynamic}
     ],
     {ok, {{one_for_one, 1000, 10}, Processes}}.
-
-spawn_delayed_status() ->
-    erlang:spawn(fun() ->
-        log_start_warnings(),
-        timer:sleep(4000),
-        SitesStatus = maps:to_list(z_sites_manager:get_sites()),
-        {Running, Other} = lists:partition(
-            fun({_Site, Status}) -> Status =:= running end,
-            SitesStatus),
-        lists:map(
-            fun
-              ({Site, running}) when Site =/= zotonic_site_status ->
-                  Ctx = z_context:new(Site),
-                  ?LOG_NOTICE(#{
-                        status => running,
-                        in => zotonic_core,
-                        url => z_context:abs_url(<<"/">>, Ctx)
-                    }, #{ site => Site });
-              ({Site, Status}) ->
-                  ?LOG_NOTICE(#{
-                        status => Status,
-                        in => zotonic_core
-                    }, #{ site => Site })
-            end,
-            Running ++ Other)
-    end).
 
 log_start_warnings() ->
     case application:get_env(ssl, session_lifetime) of
