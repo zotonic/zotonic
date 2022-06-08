@@ -88,6 +88,8 @@ Sites have the following default config settings:
 |                           | user has not been active.                       |                   |
 |                           | Default: 14400 (4 hours)                        |                   |
 +---------------------------+-------------------------------------------------+-------------------+
+| site                      | The name of the site, an atom.                  | wwwzotonic.       |
++---------------------------+-------------------------------------------------+-------------------+
 | hsts                      | Indicate if the site should use Strict          | true              |
 |                           | Transport Security. When set, the browser will  |                   |
 |                           | no longer use insecure http to access the site. |                   |
