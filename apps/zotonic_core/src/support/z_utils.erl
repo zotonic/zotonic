@@ -1,11 +1,10 @@
 %% @author Marc Worrell
-%% @copyright 2009-2012 Marc Worrell
-%%
-%% Parts are from wf_utils.erl which is Copyright (c) 2008-2009 Rusty Klophaus
-%%
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Misc utility functions for zotonic
+%% Parts are from wf_utils.erl which is Copyright (c) 2008-2009 Rusty Klophaus
+%% @enddoc
 
-%% Copyright 2009-2012 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,6 +22,7 @@
 -include("zotonic.hrl").
 
 -export([
+    otp_release/0,
     pipeline/2,
     write_terms/2,
     get_value/2,
@@ -91,6 +91,15 @@
     flush_message/1,
     ensure_existing_module/1
 ]).
+
+
+
+%% @doc Return the major OTP version as an integer.
+-spec otp_release() -> integer().
+otp_release() ->
+    {match, [Version]} = re:run(erlang:system_info(otp_release), "^R?([0-9]+)", [{capture, all_but_first, list}]),
+    list_to_integer(Version).
+
 
 %% @doc Apply a list of functions to a startlist of arguments.
 %% All functions must return: ok | {ok, term()} | {error, term()}.

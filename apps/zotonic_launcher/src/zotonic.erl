@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
-
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Start/stop functions for Zotonic
+%% @enddoc
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--define(MIN_OTP_VERSION, "22").
+-define(MIN_OTP_VERSION, 22).
 
 %% @doc Start the zotonic server.
 -spec start() -> ok.
@@ -108,6 +108,11 @@ runtests(Tests) ->
 %% @doc Stop all sites, the zotonic server and the beam.
 -spec stop() -> ok.
 stop() ->
+    ?LOG_INFO(#{
+        text => <<"Stopping Zotonic">>
+    }),
+    logger:set_primary_config(level, error),
+
     Sites = z_sites_manager:get_sites(),
     maps:fold(
         fun
@@ -117,15 +122,60 @@ stop() ->
         end,
         ok,
         Sites),
+
     % Wait a bit till all sites are stopped (max 5 secs)
     await_sites_stopping(50),
-    application:stop(zotonic_launcher),
-    application:stop(exometer),
-    application:stop(jobs),
-    application:stop(mnesia),
-    application:stop(epgsql),
-    heart:set_cmd("echo ok"),
-    erlang:halt(0).
+
+    % Tell heart we are stopping, otherwise it will restart the node.
+    case whereis(heart) of
+        undefined -> ok;
+        HeartPid when is_pid(HeartPid) -> heart:set_cmd("echo ok")
+    end,
+
+    % Stop all other running applications. Note: on OTP 25 we can simply use init:stop(0).
+    % On earlier OTP versions this is problematic because all modules are unloaded before
+    % the node is stopped. This can take a long time.
+    case z_utils:otp_release() of
+        Version when Version >= 25 ->
+            init:stop();
+        _ ->
+            application:stop(exometer),
+
+            [ maybe_app_stop(A) || {A, _, _} <- application:which_applications() ],
+
+            application:stop(os_mon),
+            application:stop(jobs),
+            application:stop(sidejob),
+            application:stop(mnesia),
+            application:stop(epgsql),
+
+            erlang:halt(0)
+    end.
+
+
+maybe_app_stop(jobs) -> false;
+maybe_app_stop(sidejob) -> false;
+maybe_app_stop(mnesia) -> false;
+maybe_app_stop(epgsql) -> false;
+maybe_app_stop(zotonic_core) -> false;
+
+maybe_app_stop(sasl) -> false;
+maybe_app_stop(kernel) -> false;
+maybe_app_stop(stdlib) -> false;
+maybe_app_stop(inets) -> false;
+maybe_app_stop(ssl) -> false;
+maybe_app_stop(public_key) -> false;
+maybe_app_stop(crypto) -> false;
+maybe_app_stop(asn1) -> false;
+maybe_app_stop(tls_certificate_check) -> false;
+maybe_app_stop(ssl_verify_fun) -> false;
+maybe_app_stop(os_mon) -> false;
+maybe_app_stop(poolboy) -> false;
+maybe_app_stop(depcache) -> false;
+maybe_app_stop(setup) -> false;
+maybe_app_stop(syslog) -> false;
+maybe_app_stop(exometer_core) -> false;
+maybe_app_stop(A) -> application:stop(A).
 
 
 await_sites_stopping(0) -> ok;
@@ -187,21 +237,13 @@ update([Node]) ->
 -spec test_erlang_version() -> ok.
 test_erlang_version() ->
     % Check for minimal OTP version
-    case otp_release() of
+    case z_utils:otp_release() of
         Version when Version < ?MIN_OTP_VERSION ->
             io:format(
-                "Zotonic needs at least Erlang release ~p; this is ~p~n",
+                "Zotonic needs at least Erlang release ~p; this is ~s~n",
                 [?MIN_OTP_VERSION, erlang:system_info(otp_release)]
             ),
             erlang:exit({minimal_otp_version, ?MIN_OTP_VERSION});
         _ ->
             ok
-    end.
-
-%% @doc Strip the optional "R" from the OTP release because from 17.0 onwards it is unused
--spec otp_release() -> string().
-otp_release() ->
-    case erlang:system_info(otp_release) of
-        [$R | V] -> V;
-        V -> V
     end.
