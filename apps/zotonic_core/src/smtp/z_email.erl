@@ -238,7 +238,7 @@ combine_name_email(Name, Email) ->
 -spec split_name_email(binary()|string()) -> {binary(), binary()}.
 split_name_email(Email) ->
     Email1 = z_string:trim(rfc2047:decode(Email)),
-    case smtp_util:parse_rfc822_addresses(Email1) of
+    case smtp_util:parse_rfc5322_addresses(Email1) of
         {ok, [{undefined, E}|_]} -> {<<>>, z_convert:to_binary(E)};
         {ok, [{N,E}|_]} -> {z_string:trim(z_convert:to_binary(N)), z_convert:to_binary(E)};
         {error, _} -> {z_string:trim(z_convert:to_binary(Email1)), <<>>}

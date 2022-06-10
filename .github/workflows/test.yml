@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        otp_version: [22, 23.2.5, 24.0.5]
+        otp_version: [22, 23, 24, 25.0.1]
         os: [ubuntu-latest]
 
     container:
@@ -27,7 +27,7 @@ jobs:
     # Start PostgreSQL wth 'zotonic' as the default user.
     services:
       postgres:
-        image: postgres:11
+        image: postgres:14
         env:
           POSTGRES_DB: zotonic
           POSTGRES_USER: zotonic
