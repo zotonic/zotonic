@@ -1,0 +1,67 @@
+/* Specific styles for Zotonic search view admin
+   ----------------------------------------------------------
+
+@package:	Zotonic admin CSS
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+---------------------------------------------------------- */
+.search-view-results .active {
+  background: #ccc;
+}
+.search-view-results .list-item {
+  margin: 0;
+}
+.search-view-results li {
+  padding: 10px 4px;
+  margin: 0;
+  font-size: 2rem;
+  color: #222;
+}
+.search-view-results li p {
+  padding: 0;
+  margin: 0;
+}
+.search-view-results {
+  position: absolute;
+  right: 10px;
+  top: 50px;
+  width: 90vw;
+  max-width: 500px;
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #222;
+  font-size: 2rem;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+.search-view-results li.search-view-list-item a {
+  color: #1683b1;
+}
+.search-view-results li.search-view-list-item a:hover {
+  color: #1ca5de;
+}
+.search-view-results li:hover {
+  cursor: pointer;
+}
+.search-view-results .float-right {
+  float: right;
+}
+.search-view-results img {
+  vertical-align: middle;
+  height: 35px;
+  width: 35px;
+}
+.search-view-results .glyphicon {
+  vertical-align: middle;
+  font-size: 35px;
+}
