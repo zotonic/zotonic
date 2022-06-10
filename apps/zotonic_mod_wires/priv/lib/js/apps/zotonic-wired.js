@@ -107,7 +107,12 @@ function zotonic_startup() {
                     cotonic.broker.publish(
                         "model/sessionStorage/post/mqtt-origin-client-id",
                         msg.payload.client_id,
-                        { retain: true }
+                    );
+                    // Retain the client-id
+                    cotonic.broker.publish(
+                        "$bridge/origin/client-id",
+                        msg.payload.client_id,
+                        { retain: true },
                     );
                 }
             }, { wid: "zotonicjs" });
