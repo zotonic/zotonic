@@ -10,7 +10,5 @@
  {admin_referrers,     ["admin", "referrer", id],         controller_admin_referrers,     [ seo_noindex ]},
  {admin_media_preview, ["admin", "media", "preview", id], controller_admin_media_preview, [ seo_noindex ]},
 
- {admin_status,        ["admin", "status"],               controller_admin,               [{template, "admin_status.tpl"}, {selected, "status"}, seo_noindex]},
-
- {search,              [ "search-view" ],                 controller_template,            [ {template, "search_view.tpl"}]}
+ {admin_status,        ["admin", "status"],               controller_admin,               [{template, "admin_status.tpl"}, {selected, "status"}, seo_noindex]}
 ].

@@ -1,31 +1,33 @@
 jQuery( document ).ready(function() {
-    var surl, input, $form, $result;
+    let surl, input, $form, $result;
+    let search_view_busy = false;
 
     jQuery( '[name="qs"]' ).on('input', function() {
-        surl = window.location.protocol + '//' + window.location.host + '/search-view?qs=';
-        $form = jQuery( this ).closest( 'form' );
-        input = this;
+        if (!search_view_busy && this.value != last_search) {
+            search_view_busy = true;
+            $form = jQuery( this ).closest( 'form' );
+            input = this;
 
-        jQuery.ajax({
-            type: 'GET',
-            url: surl + this.value
-      	}).done(function( data ) {
-            jQuery( input ).next().remove();
-            jQuery( input ).after( data );
+            cotonic.broker.call("bridge/origin/model/template/get/render/search_view.tpl", { qs: this.value })
+                .then(function( resp ) {
+                    search_view_busy = false;
+                    jQuery( input ).next().remove();
+                    jQuery( input ).after( resp.payload.result );
 
-            $result = jQuery( '.search-view-results li' );
+                    $result = jQuery( '.search-view-results li' );
 
-            $result.on('click', function() {
-                jQuery( input ).next().remove();
-                input.value = jQuery( this ).find( 'span' ).text();
-                $form.submit();
-            });
+                    $result.on('click', function() {
+                        jQuery( input ).next().remove();
+                        input.value = jQuery( this ).find( 'span' ).text();
+                        $form.submit();
+                    });
 
-            $result.hover(function() {
-                $result.removeClass( 'active' );
-                jQuery( this ).toggleClass( 'active' );
-            });
-      	});
+                    $result.hover(function() {
+                        $result.removeClass( 'active' );
+                        jQuery( this ).toggleClass( 'active' );
+                    });
+          	});
+        }
     });
 
     jQuery( this ).keydown(function(e) {
