@@ -9,8 +9,8 @@ assignees: ''
 ## `Zotonic` version
 [Put release version here and update tag link(0.0.0) ...](https://github.com/zotonic/zotonic.git)
 
-## `OS` version
-<!-- Put the `OS` version ... -->
+## `OS` / `Browser` version
+<!-- Put the `OS` and `Browser` version ... -->
 
 ## Steps to reproduce
 <!-- (Optional)Describe steps to reproduce bug ... -->
