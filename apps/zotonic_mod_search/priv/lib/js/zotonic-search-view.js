@@ -1,14 +1,16 @@
 jQuery( document ).ready(function() {
     let surl, input, $form, $result;
     let search_view_busy = false;
+    let last_search = '';
 
     jQuery( '[name="qs"]' ).on('input', function() {
         if (!search_view_busy && this.value != last_search) {
+            last_search = this.value;
             search_view_busy = true;
             $form = jQuery( this ).closest( 'form' );
             input = this;
 
-            cotonic.broker.call("bridge/origin/model/template/get/render/search_view.tpl", { qs: this.value })
+            cotonic.broker.call("bridge/origin/model/template/get/render/search_view.tpl", { qs: last_search })
                 .then(function( resp ) {
                     search_view_busy = false;
                     jQuery( input ).next().remove();
