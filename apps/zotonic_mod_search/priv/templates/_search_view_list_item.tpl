@@ -1,6 +1,10 @@
 {% if id.is_visible %}
 <div class="list-item{% if is_highlight or id.is_featured %} featured{% endif %} do_clickable">
-    <span class="glyphicon glyphicon-search"></span>
+    {% if id.depiction as dep %}
+        {% image dep class="float-left" mediaclass="small-crop" crop=crop link=link alt=id.title %}
+    {% else %}
+        <span class="glyphicon glyphicon-search"></span>
+    {% endif %}
     <span>{{ id.title|default:_"Untitled" }}</span>
     <em>
         &ndash; <small class="text-muted"> {{ id.category_id.title }} </small>
