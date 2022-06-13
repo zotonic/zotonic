@@ -365,6 +365,7 @@ publish(Kind, Context) ->
     ?LOG_INFO(#{
         text => <<"ACL user groups publish">>,
         in => zotonic_mod_acl_user_groups,
+        kind => Kind,
         user_id => z_acl:user(Context)
     }),
     T = z_convert:to_list(table(Kind)),
