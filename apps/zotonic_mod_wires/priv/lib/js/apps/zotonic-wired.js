@@ -204,7 +204,8 @@ function z_dialog_alert(options)
 
 function z_dialog_overlay_open(options)
 {
-    var overlay_id = 'modal-overlay';
+    let overlay_id = 'modal-overlay';
+    let level;
 
     if (typeof options.level !== 'undefined' && options.level > 0) {
         overlay_id = overlay_id + "-level-" + options.level;
@@ -212,17 +213,18 @@ function z_dialog_overlay_open(options)
     } else {
         level = 0;
     }
-    var $overlay = $('#'+overlay_id);
+
+    let $overlay = $('#'+overlay_id);
     if ($overlay.length > 0) {
         $overlay
             .html('<a href="#close" class="modal-overlay-close" onclick="return z_dialog_overlay_close(this)">&times;</a>' + options.html)
             .attr('class', 'modal-overlay')
             .show();
     } else {
-        html = '<div class="modal-overlay modal-overlay-level-' + level + '" id="' + overlay_id + '">' +
-               '<a href="#close" class="modal-overlay-close" onclick="return z_dialog_overlay_close(this)">&times;</a>' +
-               options.html +
-               '</div>';
+        const html = '<div class="modal-overlay modal-overlay-level-' + level + '" id="' + overlay_id + '">' +
+                     '<a href="#close" class="modal-overlay-close" onclick="return z_dialog_overlay_close(this)">&times;</a>' +
+                     options.html +
+                     '</div>';
         $('body').append(html);
         $overlay = $('#'+overlay_id);
     }
