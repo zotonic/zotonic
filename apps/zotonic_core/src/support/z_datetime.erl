@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2016 Marc Worrell
-%%
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Utility functions for datetime handling and representation.
 
-%% Copyright 2009-2016 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -46,6 +45,7 @@
 
     prev_year/1,
     prev_month/1,
+    prev_month/2,
     prev_week/1,
     prev_day/1,
     prev_hour/1,
@@ -54,6 +54,7 @@
 
     next_year/1,
     next_month/1,
+    next_month/2,
     next_week/1,
     next_day/1,
     next_hour/1,
@@ -257,7 +258,7 @@ relative_time(N, '+', ["thursday"|_], Now) ->  relative_time_n(N*7, fun next_day
 relative_time(N, '+', ["friday"|_], Now) ->    relative_time_n(N*7, fun next_day/1, week_start(5, Now));
 relative_time(N, '+', ["saturday"|_], Now) ->  relative_time_n(N*7, fun next_day/1, week_start(6, Now));
 relative_time(N, '+', ["week"|_], Now) ->      relative_time_n(N*7, fun next_day/1, Now);
-relative_time(N, '+', ["month"|_], Now) ->     relative_time_n(N,   fun next_month/1, Now);
+relative_time(N, '+', ["month"|_], Now) ->     next_month(Now, N);
 relative_time(N, '+', ["year"|_], Now) ->      relative_time_n(N,   fun next_year/1, Now);
 relative_time(N, '-', ["day"|_], Now) ->       relative_time_n(N,   fun prev_day/1, Now);
 relative_time(N, '-', ["sunday"|_], Now) ->    relative_time_n(N*7, fun prev_day/1, week_start(7, Now));
@@ -267,7 +268,7 @@ relative_time(N, '-', ["wednesday"|_], Now) -> relative_time_n(N*7, fun prev_day
 relative_time(N, '-', ["thursday"|_], Now) ->  relative_time_n(N*7, fun prev_day/1, week_start(4, Now));
 relative_time(N, '-', ["friday"|_], Now) ->    relative_time_n(N*7, fun prev_day/1, week_start(5, Now));
 relative_time(N, '-', ["week"|_], Now) ->      relative_time_n(N*7, fun prev_day/1, Now);
-relative_time(N, '-', ["month"|_], Now) ->     relative_time_n(N,   fun prev_month/1, Now);
+relative_time(N, '-', ["month"|_], Now) ->     prev_month(Now, N);
 relative_time(N, '-', ["year"|_], Now) ->      relative_time_n(N,   fun prev_year/1, Now);
 relative_time(_N, _Op, _Unit, _Now) ->         undefined.
 
@@ -380,8 +381,8 @@ prev_year({{Y,M,D},T}) ->
     {{Y-1,M,D}, T}.
 
 %% @doc Return the date one month earlier.
-prev_month({{Y,1,D},T}) -> {{Y-1,12,D},T};
-prev_month({{Y,M,D},T}) -> move_day_if_undefined({{Y,M-1,D}, T}, fun prev_day/1).
+prev_month(DT) -> next_month(DT, -1).
+prev_month(DT, N) -> next_month(DT, -N).
 
 %% @doc Return the date one week earlier.
 prev_week(DT) ->
@@ -431,8 +432,18 @@ next_year({{Y,M,D},T}) ->
 
 %% @doc Return the date one month later. Gives unpredictable results if the
 %%      day doesn't exist in the next month. (eg. feb 30 will become feb 28).
-next_month({{Y,12,D},T}) -> {{Y+1,1,D},T};
-next_month({{Y,M,D},T}) -> move_day_if_undefined({{Y,M+1,D}, T}, fun prev_day/1).
+next_month(DT) -> next_month(DT, 1).
+next_month({{Y, M, D}, T}, N) ->
+    DT1 = {{Y, M+N, D}, T},
+    norm_month(DT1).
+
+norm_month({{Y, M, D}, T}) when M =< 0 ->
+    norm_month({{Y-1, M+12, D}, T});
+norm_month({{Y, M, D}, T}) when M > 12 ->
+    norm_month({{Y+1, M-12, D}, T});
+norm_month({{Y, M, D}, T}) ->
+    D1 = erlang:min(last_day_of_the_month(Y,M), D),
+    {{Y, M, D1}, T}.
 
 %% @doc Return the date one week later.
 next_week(DT) ->
@@ -601,12 +612,6 @@ undefined_if_invalid_date({{Y,M,D},{H,I,S}} = Date) when
         end;
 undefined_if_invalid_date(_) ->
     undefined.
-
-move_day_if_undefined(Date, Fun) ->
-    case undefined_if_invalid_date(Date) of
-        undefined -> move_day_if_undefined(Fun(Date), Fun);
-        _ -> Date
-    end.
 
 
 %% Routines below are adapted from calendar.erl, which is:

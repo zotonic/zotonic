@@ -29,3 +29,13 @@ timesince_user_specified_texts_test() ->
     ?assertEqual(<<"10 hours">>, iolist_to_binary(z_datetime:timesince({{2010,9,27},{10,13,35}}, {{2010,9,27},{20,13,45}}, " ,bar,baz", C))),
     ?assertEqual(<<"bar">>, iolist_to_binary(z_datetime:timesince({{2010,9,27},{10,13,35}}, {{2010,9,27},{10,13,35}}, " ,bar", C))),
     ?assertEqual(<<"moments foo">>, iolist_to_binary(z_datetime:timesince({{2010,9,27},{10,13,35}}, {{2010,9,27},{10,13,37}}, "foo,bar,baz", C))).
+
+time_add_month_test() ->
+    ?assertEqual({{2021,12,1},{0,0,0}}, z_datetime:next_month({{2022,1,1},{0,0,0}}, -1)),
+    ?assertEqual({{2021,2,1},{0,0,0}},  z_datetime:next_month({{2022,1,1},{0,0,0}}, 1)),
+    ?assertEqual({{2022,2,18},{0,0,0}}, z_datetime:next_month({{2022,1,31},{0,0,0}}, 1)),
+    ?assertEqual({{2021,3,31},{0,0,0}}, z_datetime:next_month({{2022,1,31},{0,0,0}}, 2)),
+    ?assertEqual({{2021,4,30},{0,0,0}}, z_datetime:next_month({{2022,1,31},{0,0,0}}, 3)),
+    ?assertEqual({{2023,1,31},{0,0,0}}, z_datetime:next_month({{2022,1,31},{0,0,0}}, 12)),
+    ?assertEqual({{2023,2,28},{0,0,0}}, z_datetime:next_month({{2022,1,31},{0,0,0}}, 13)),
+    ?assertEqual({{2023,2,29},{0,0,0}}, z_datetime:next_month({{2022,1,31},{0,0,0}}, 25)).
