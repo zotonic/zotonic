@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-06-03 20:09\n"
+"PO-Revision-Date: 2022-06-13 13:12\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -2138,6 +2138,7 @@ msgstr "אורי ייחודי"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:475./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
+#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 msgid "Untitled"
 msgstr "ללא כותרת"
 
@@ -2357,6 +2358,7 @@ msgstr "למשל עשוי להשתנות"
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:176./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:142./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:81
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
+#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:23./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:18
 msgid "edit"
 msgstr "לַעֲרוֹך"
 
@@ -2417,6 +2419,7 @@ msgstr "הועלה בתאריך"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:60./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:107./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:175./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:36
+#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:19./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:14
 msgid "view"
 msgstr "נוף"
 
@@ -9307,7 +9310,7 @@ msgstr "סרטון יוטיוב"
 msgid "Alert"
 msgstr "עֵרָנִי"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:514
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:563
 msgid "A component of the path is not a directory:"
 msgstr "רכיב הנתיב אינו ספרייה:"
 
@@ -9351,7 +9354,7 @@ msgstr "לא ניתן היה לבדוק את מאגר Git:"
 msgid "Could not connect to 'postgres' database or create the database."
 msgstr "לא ניתן היה להתחבר למסד 'postgres' או ליצור את מסד הנתונים."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:519
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:568
 msgid "Could not create the file:"
 msgstr "לא ניתן ליצור את הקובץ:"
 
@@ -9359,7 +9362,7 @@ msgstr "לא ניתן ליצור את הקובץ:"
 msgid "Could not create the schema in the database."
 msgstr "לא ניתן היה ליצור את הסכימה במסד הנתונים."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:411
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:460
 msgid "Could not create the site directory"
 msgstr "לא ניתן היה ליצור את ספריית האתרים"
 
@@ -9367,7 +9370,7 @@ msgstr "לא ניתן היה ליצור את ספריית האתרים"
 msgid "Could not delete the site dir for the Git checkout:"
 msgstr "לא ניתן למחוק את אתר האתר לקופת Git:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:509
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:558
 msgid "Disk full creating:"
 msgstr "יצירת דיסק מלא:"
 
@@ -9419,11 +9422,11 @@ msgstr "התחבר עם שם משתמש <b>Admin</b> וסיסמה"
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
 msgstr "ודא שלשם המארח הזה יש ערך DNS חוקי או שהוא נוסף לקובץ <tt>/ etc / hosts</tt>."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:494
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:543
 msgid "No permission to create the site directory at:"
 msgstr "אין הרשאה ליצור את ספריית האתרים בכתובת:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:406
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:455
 msgid "Not allowed to create the site directory"
 msgstr "אסור ליצור את ספריית האתרים"
 
@@ -9483,7 +9486,7 @@ msgstr "מתחיל את האתר החדש ..."
 msgid "Succesfully created the site."
 msgstr "יצר את האתר בהצלחה."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:499
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:548
 msgid "The file or directory already exists:"
 msgstr "הקובץ או הספריה כבר קיימים:"
 
@@ -9491,7 +9494,7 @@ msgstr "הקובץ או הספריה כבר קיימים:"
 msgid "The hostname is unknown, check your DNS or /etc/hosts file"
 msgstr "שם המארח אינו ידוע, בדוק את קובץ ה- DNS שלך או / etc / hosts"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:504
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:553
 msgid "The parent directory does not exist:"
 msgstr "ספריית האב אינה קיימת:"
 
@@ -9507,11 +9510,11 @@ msgstr "השלד מספק תבניות ותוכן לאתר."
 msgid "There is already a file or directory named"
 msgstr "יש כבר קובץ או ספרייה בשם"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:466
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:515
 msgid "This name is reserved"
 msgstr "שם זה שמור"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:470
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:519
 msgid "This name is taken by another Erlang module"
 msgstr "שם זה נלקח על ידי מודול אחר של Erlang"
 
