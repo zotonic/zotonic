@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-06-03 20:09\n"
+"PO-Revision-Date: 2022-06-13 13:13\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -2142,6 +2142,7 @@ msgstr "Unieke URI"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:475./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
+#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 msgid "Untitled"
 msgstr "Zonder titel"
 
@@ -2361,6 +2362,7 @@ msgstr "bv. kan nog veranderen"
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:176./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:142./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:81
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
+#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:23./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:18
 msgid "edit"
 msgstr "bewerk"
 
@@ -2421,6 +2423,7 @@ msgstr "geüpload op"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:60./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:107./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:175./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:36
+#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:19./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:14
 msgid "view"
 msgstr "bekijk"
 
@@ -9313,7 +9316,7 @@ msgstr "YouTube-video"
 msgid "Alert"
 msgstr "Waarschuwing"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:514
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:563
 msgid "A component of the path is not a directory:"
 msgstr "Een component van het pad is geen directory:"
 
@@ -9357,7 +9360,7 @@ msgstr "Kon Git repository niet uitchecken:"
 msgid "Could not connect to 'postgres' database or create the database."
 msgstr "Kon geen verbinding maken met de 'postgres' database of de database aanmaken."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:519
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:568
 msgid "Could not create the file:"
 msgstr "Kon het bestand niet aanmaken:"
 
@@ -9365,7 +9368,7 @@ msgstr "Kon het bestand niet aanmaken:"
 msgid "Could not create the schema in the database."
 msgstr "Kon het schema niet in de database aanmaken."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:411
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:460
 msgid "Could not create the site directory"
 msgstr "Kon de site directory niet aanmaken"
 
@@ -9373,7 +9376,7 @@ msgstr "Kon de site directory niet aanmaken"
 msgid "Could not delete the site dir for the Git checkout:"
 msgstr "Kon de site dir voor de Git checkout niet verwijderen:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:509
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:558
 msgid "Disk full creating:"
 msgstr "Schijf vol tijdens maken:"
 
@@ -9425,11 +9428,11 @@ msgstr "Log in met gebruikersnaam <b>admin</b> en wachtwoord"
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
 msgstr "Zorg ervoor dat deze hostnaam een geldige DNS-instelling heeft of voeg deze toe aan je <tt>/etc/hosts</tt> bestand."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:494
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:543
 msgid "No permission to create the site directory at:"
 msgstr "Geen toestemming om de site directory aan te maken op:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:406
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:455
 msgid "Not allowed to create the site directory"
 msgstr "Het is niet toegestaan om de site directory aan te maken"
 
@@ -9489,7 +9492,7 @@ msgstr "Start de nieuwe site ..."
 msgid "Succesfully created the site."
 msgstr "De site is met succes gecreëerd."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:499
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:548
 msgid "The file or directory already exists:"
 msgstr "Het bestand of de map bestaat al:"
 
@@ -9497,7 +9500,7 @@ msgstr "Het bestand of de map bestaat al:"
 msgid "The hostname is unknown, check your DNS or /etc/hosts file"
 msgstr "De hostnaam is onbekend, controleer de DNS of /etc/hosts bestand"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:504
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:553
 msgid "The parent directory does not exist:"
 msgstr "De bovenliggende map bestaat niet:"
 
@@ -9513,11 +9516,11 @@ msgstr "Het skelet biedt templates en inhoud voor een site."
 msgid "There is already a file or directory named"
 msgstr "Er is al een bestand of map met de naam"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:466
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:515
 msgid "This name is reserved"
 msgstr "Deze naam is gereserveerd"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:470
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:519
 msgid "This name is taken by another Erlang module"
 msgstr "Deze naam is in gebruik door een andere Erlang-module"
 
