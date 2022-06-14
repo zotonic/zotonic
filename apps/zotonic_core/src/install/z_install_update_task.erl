@@ -50,7 +50,7 @@ init_language(Id, Context) ->
             ok;
         {ok, Id1} ->
             {delay, 0, [ Id1 ]};
-        {error, Reason} = Error ->
+        {error, Reason} ->
             ?LOG_ERROR(#{
                 text => <<"Error during fixing languages, delaying next batch">>,
                 in => zotonic_core,

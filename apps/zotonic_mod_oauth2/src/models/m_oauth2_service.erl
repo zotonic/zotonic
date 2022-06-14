@@ -199,7 +199,7 @@ user_data({ok, Auth}, SId, Context) ->
                 reason => duplicate_email
             }),
             {error, duplicate_email};
-        {error, Reason} = Err ->
+        {error, Reason} ->
             ?LOG_WARNING(#{
                 text => <<"Error return for user">>,
                 in => zotonic_mod_oauth2,
