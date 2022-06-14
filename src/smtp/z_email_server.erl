@@ -966,22 +966,15 @@ check_override(EmailAddr, SiteOverride, #state{override=ZotonicOverride}) ->
         true -> SiteOverride;
         false -> ZotonicOverride
     end,
-    case z_utils:is_empty(UseOverride) of
+    EmailAddr1 = case z_utils:is_empty(UseOverride) of
         true ->
-            z_convert:to_list(EmailAddr);
+            EmailAddr;
         false ->
-            escape_email(z_convert:to_list(EmailAddr)) ++ " (override) <" ++ z_convert:to_list(UseOverride) ++ ">"
-    end.
-
-
-escape_email(Email) ->
-   escape_email(Email, []).
-escape_email([], Acc) ->
-    lists:reverse(Acc);
-escape_email([$@|T], Acc) ->
-    escape_email(T, [$-,$t,$a,$-|Acc]);
-escape_email([H|T], Acc) ->
-    escape_email(T, [H|Acc]).
+            z_email:combine_name_email(
+                iolist_to_binary([EmailAddr, " (override)"]),
+                UseOverride)
+    end,
+    z_convert:to_list(EmailAddr1).
 
 optional_render(undefined, undefined, _Vars, _Context) ->
     [];
