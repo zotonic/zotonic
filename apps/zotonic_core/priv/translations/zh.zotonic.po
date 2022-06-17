@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-06-03 20:08\n"
+"PO-Revision-Date: 2022-06-13 13:12\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -2138,6 +2138,7 @@ msgstr "唯一 URL"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:475./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
+#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 msgid "Untitled"
 msgstr "未命名"
 
@@ -2357,6 +2358,7 @@ msgstr "如：可能改变"
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:176./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:142./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:81
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
+#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:23./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:18
 msgid "edit"
 msgstr "编辑"
 
@@ -2417,6 +2419,7 @@ msgstr "上传时间"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:60./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:107./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:175./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:36
+#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:19./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:14
 msgid "view"
 msgstr "查看"
 
@@ -9303,7 +9306,7 @@ msgstr "Youtube视频"
 msgid "Alert"
 msgstr "警告"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:514
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:563
 msgid "A component of the path is not a directory:"
 msgstr "路径的一个组成部分不是目录。"
 
@@ -9347,7 +9350,7 @@ msgstr "无法查看Git仓库。"
 msgid "Could not connect to 'postgres' database or create the database."
 msgstr "无法连接到'postgres'数据库或创建数据库。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:519
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:568
 msgid "Could not create the file:"
 msgstr "无法创建文件。"
 
@@ -9355,7 +9358,7 @@ msgstr "无法创建文件。"
 msgid "Could not create the schema in the database."
 msgstr "无法在数据库中创建模式。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:411
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:460
 msgid "Could not create the site directory"
 msgstr "无法创建网站目录"
 
@@ -9363,7 +9366,7 @@ msgstr "无法创建网站目录"
 msgid "Could not delete the site dir for the Git checkout:"
 msgstr "无法删除Git checkout的站点dir。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:509
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:558
 msgid "Disk full creating:"
 msgstr "盘满创建。"
 
@@ -9415,11 +9418,11 @@ msgstr "用用户名 <b>admin</b> 和密码登录。"
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
 msgstr "确保这个主机名有一个有效的DNS条目，或者被添加到你的 <tt>/etc/hosts</tt> 文件中。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:494
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:543
 msgid "No permission to create the site directory at:"
 msgstr "没有权限创建网站目录在："
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:406
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:455
 msgid "Not allowed to create the site directory"
 msgstr "不允许创建网站目录"
 
@@ -9479,7 +9482,7 @@ msgstr "开始新网站..."
 msgid "Succesfully created the site."
 msgstr "成功创建了网站。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:499
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:548
 msgid "The file or directory already exists:"
 msgstr "文件或目录已经存在。"
 
@@ -9487,7 +9490,7 @@ msgstr "文件或目录已经存在。"
 msgid "The hostname is unknown, check your DNS or /etc/hosts file"
 msgstr "主机名未知，请检查您的DNS或/etc/hosts文件。"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:504
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:553
 msgid "The parent directory does not exist:"
 msgstr "父目录不存在。"
 
@@ -9503,11 +9506,11 @@ msgstr "骨架为网站提供模板和内容。"
 msgid "There is already a file or directory named"
 msgstr "已经有一个名为"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:466
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:515
 msgid "This name is reserved"
 msgstr "这个名字是保留的"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:470
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:519
 msgid "This name is taken by another Erlang module"
 msgstr "这个名字是由另一个Erlang模块"
 

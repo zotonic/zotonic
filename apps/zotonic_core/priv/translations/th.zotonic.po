@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-06-03 20:08\n"
+"PO-Revision-Date: 2022-06-13 13:12\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -2138,6 +2138,7 @@ msgstr "ยูริที่ไม่เหมือนใคร"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:475./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
+#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 msgid "Untitled"
 msgstr "ไม่มีชื่อ"
 
@@ -2357,6 +2358,7 @@ msgstr "เช่นอาจมีการเปลี่ยนแปลง"
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:176./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:142./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:81
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
+#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:23./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:18
 msgid "edit"
 msgstr "แก้ไข"
 
@@ -2417,6 +2419,7 @@ msgstr "อัปโหลดเมื่อ"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:60./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:107./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:175./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:36
+#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:19./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:14
 msgid "view"
 msgstr "ดู"
 
@@ -9307,7 +9310,7 @@ msgstr "วิดีโอ Youtube"
 msgid "Alert"
 msgstr "การแจ้งเตือน"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:514
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:563
 msgid "A component of the path is not a directory:"
 msgstr "ส่วนประกอบของเส้นทางไม่ใช่ไดเร็กทอรี:"
 
@@ -9351,7 +9354,7 @@ msgstr "ไม่สามารถตรวจสอบที่เก็บ Gi
 msgid "Could not connect to 'postgres' database or create the database."
 msgstr "ไม่สามารถเชื่อมต่อกับฐานข้อมูล \"postgres\" หรือสร้างฐานข้อมูลได้"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:519
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:568
 msgid "Could not create the file:"
 msgstr "ไม่สามารถสร้างไฟล์:"
 
@@ -9359,7 +9362,7 @@ msgstr "ไม่สามารถสร้างไฟล์:"
 msgid "Could not create the schema in the database."
 msgstr "ไม่สามารถสร้างสคีมาในฐานข้อมูล"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:411
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:460
 msgid "Could not create the site directory"
 msgstr "ไม่สามารถสร้างไดเร็กทอรีไซต์"
 
@@ -9367,7 +9370,7 @@ msgstr "ไม่สามารถสร้างไดเร็กทอรี
 msgid "Could not delete the site dir for the Git checkout:"
 msgstr "ไม่สามารถลบไซต์ dir สำหรับการชำระเงิน Git:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:509
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:558
 msgid "Disk full creating:"
 msgstr "สร้างดิสก์เต็ม:"
 
@@ -9419,11 +9422,11 @@ msgstr "เข้าสู่ระบบด้วย username <b>admin</b> แ�
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
 msgstr "ตรวจสอบให้แน่ใจว่าชื่อโฮสต์นี้มีรายการ DNS ที่ถูกต้องหรือถูกเพิ่มในไฟล์ <tt>/ etc / hosts</tt> คุณ"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:494
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:543
 msgid "No permission to create the site directory at:"
 msgstr "ไม่มีสิทธิ์สร้างไดเร็กทอรีไซต์ที่:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:406
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:455
 msgid "Not allowed to create the site directory"
 msgstr "ไม่อนุญาตให้สร้างไดเร็กทอรีไซต์"
 
@@ -9483,7 +9486,7 @@ msgstr "กำลังเริ่มไซต์ใหม่ ..."
 msgid "Succesfully created the site."
 msgstr "สร้างไซต์สำเร็จ"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:499
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:548
 msgid "The file or directory already exists:"
 msgstr "มีไฟล์หรือไดเร็กทอรีอยู่แล้ว:"
 
@@ -9491,7 +9494,7 @@ msgstr "มีไฟล์หรือไดเร็กทอรีอยู่
 msgid "The hostname is unknown, check your DNS or /etc/hosts file"
 msgstr "ไม่ทราบชื่อโฮสต์ตรวจสอบไฟล์ DNS หรือ / etc / hosts"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:504
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:553
 msgid "The parent directory does not exist:"
 msgstr "ไม่มีไดเร็กทอรีหลัก:"
 
@@ -9507,11 +9510,11 @@ msgstr "โครงกระดูกจัดเตรียมเทมเพ
 msgid "There is already a file or directory named"
 msgstr "มีไฟล์หรือไดเร็กทอรีชื่ออยู่แล้ว"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:466
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:515
 msgid "This name is reserved"
 msgstr "ชื่อนี้สงวนไว้"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:470
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:519
 msgid "This name is taken by another Erlang module"
 msgstr "ชื่อนี้ใช้โดยโมดูล Erlang อื่น"
 
