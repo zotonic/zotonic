@@ -34,6 +34,10 @@
 -include("../../include/zotonic_command.hrl").
 -include_lib("zotonic_core/include/zotonic_release.hrl").
 
+%% Behaviour
+
+-callback cmd_info() -> #cmd_info{}.
+
 get_zotonic_dir() ->
     {ok, Dir} = case os:getenv("ZOTONIC") of
         false -> file:get_cwd();

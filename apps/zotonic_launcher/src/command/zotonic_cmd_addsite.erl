@@ -19,6 +19,8 @@
 -module(zotonic_cmd_addsite).
 -author("Marc Worrell").
 
+-behaviour(zotonic_command).
+
 %% API
 -export([
     info/0,
@@ -26,14 +28,136 @@
     run/1
 ]).
 
+-include("../../include/zotonic_command.hrl").
+
 -define(SKEL, "blog").
 -define(APP, false).
 -define(UMBRELLA, false).
 
+cmd_info() ->
+    #cmd_info{
+        name        = <<"addsite">>,
+        description = <<"Add a site and install database">>,
+        run         = <<"zotonic addsite [options] <site_name>">>,
+        options = [
+            #cmd_option{
+                name        = <<"skeleton">>,
+                description = <<"Skeleton site">>,
+                arg         = <<"s">>,
+                values      = [<<"blog">>, <<"empty">>, <<"nodb">>],
+                default     = <<"blog">>
+            },
+            #cmd_option{
+                name        = <<"hostname">>,
+                description = <<"Site's hostname">>,
+                arg         = <<"H">>,
+                default     = <<"<site_name>.test">>
+            },
+            #cmd_option{
+                name        = <<"site_dir">>,
+                description = <<"Create the site in the current directory and add a symlink to zotonic app_user">>,
+                arg         = <<"L">>,
+                default     = <<"<cwd>">>
+            },
+            #cmd_option{
+                name        = <<"git">>,
+                description = <<"Clone from this Git url, before copying skeleton">>,
+                arg         = <<"G">>
+            },
+            #cmd_option{
+                name        = <<"dbhost">>,
+                description = <<"Database host">>,
+                arg         = <<"h">>,
+                default     = <<"localhost">>
+            },
+            #cmd_option{
+                name        = <<"dbport">>,
+                description = <<"Database port">>,
+                arg         = <<"p">>,
+                default     = <<"5432">>
+            },
+            #cmd_option{
+                name        = <<"dbuser">>,
+                description = <<"Database user">>,
+                arg         = <<"u">>,
+                default     = <<"zotonic">>
+            },
+            #cmd_option{
+                name        = <<"dbpassword">>,
+                description = <<"Database password">>,
+                arg         = <<"p">>,
+                default     = <<"zotonic">>
+            },
+            #cmd_option{
+                name        = <<"dbdatabase">>,
+                description = <<"Database name">>,
+                arg         = <<"d">>,
+                default     = <<"zotonic">>
+            },
+            #cmd_option{
+                name        = <<"dbschema">>,
+                description = <<"Database schema">>,
+                arg         = <<"n">>,
+                default     = <<"public">>
+            },
+            #cmd_option{
+                name        = <<"admin_password">>,
+                description = <<"Admin password">>,
+                arg         = <<"a">>,
+                default     = <<"<random>">>
+            },
+            #cmd_option{
+                name        = <<"app">>,
+                description = <<"If true, initializes a site app and a root supervisor when the site starts">>,
+                arg         = <<"A">>,
+                default     = <<"false">>
+            },
+            #cmd_option{
+                name        = <<"umbrella">>,
+                description = <<"If true, the site dir becomes a multi-app structure">>,
+                arg         = <<"U">>,
+                default     = <<"false">>
+            }
+        ]
+    }.
+
 info() ->
-    "Add a site and install database".
+    Info = cmd_info(),
+    Info#cmd_info.description.
 
 usage() ->
+    io:format("~n~n/* Auto generated~n *-----------------*/~n~n"),
+
+    Info = #cmd_info{options = Options} = cmd_info(),
+    Title = do_usage_title(Info),
+    io:format("~s~n~n", [Title]),
+    LongestOptionNameSize = lists:foldl(
+        fun(#cmd_option{name = OptionName}, Size) ->
+            NameSize = size(OptionName),
+            case NameSize > Size of
+                true ->
+                    NameSize;
+                false ->
+                    Size
+            end
+        end,
+        0,
+        Options
+    ),
+    BeginIndent = 1,
+    Prefix = binary:copy(<<" ">>, BeginIndent),
+    ExtraNPad = 3,
+    Pad = LongestOptionNameSize + ExtraNPad,
+    lists:foreach(
+        fun(Option) ->
+            OptionInfo = do_option_info(Option, Pad),
+            io:format("~s~s~n", [Prefix, OptionInfo])
+        end,
+        Options
+    ),
+
+    io:format("~n~n/* Old one~n *-----------------*/~n~n"),
+
     io:format("Usage: zotonic addsite [options] <site_name> ~n~n"),
     io:format(" -s <skel>        Skeleton site (one of 'blog', 'empty', 'nodb'; default: ~s~n", [?SKEL]),
     io:format(" -H <host>        Site's hostname (default: <site_name.test>) ~n"),
@@ -48,6 +172,58 @@ usage() ->
     io:format(" -a <pass>        Admin password~n"),
     io:format(" -A <app>         If true, initializes a site app and a root supervisor when the site starts (default: ~p)~n", [?APP]),
     io:format(" -U <umbrella>    If true, the site dir becomes a multi-app structure (default: ~p)~n~n", [?UMBRELLA]).
+
+do_usage_title(#cmd_info{run = Run}) ->
+    <<"Usage: ", Run/binary>>.
+
+do_option_info(
+    #cmd_option{
+        name = Name,
+        description = Description,
+        arg = Arg,
+        values = Values,
+        default = Default
+    },
+    NPad
+) ->
+    Pad = binary:copy(<<" ">>, NPad - size(Name)),
+    Info1 = <<"-", Arg/binary, " <", Name/binary, "> ", Pad/binary, Description/binary>>,
+    Info2 = case Values =:= [] of
+        true ->
+            Info1;
+        false ->
+            ValuesSufix = case Default =:= <<>> of
+                true ->
+                    <<")">>;
+                false ->
+                    <<";">>
+            end,
+            ValuesInfo = do_option_values_info(Values),
+            <<Info1/binary, " (one of ", ValuesInfo/binary, ValuesSufix/binary>>
+    end,
+    case Default =:= <<>> of
+        true ->
+            Info2;
+        false ->
+            DefaultSufix = case Values =:= [] of
+                true ->
+                    <<" (">>;
+                false ->
+                    <<" ">>
+            end,
+            <<Info2/binary, DefaultSufix/binary, "default: ", Default/binary, ")">>
+    end.
+
+do_option_values_info(Values) ->
+    do_option_values_info(Values, <<>>).
+
+do_option_values_info([], Acc) ->
+    Acc;
+do_option_values_info([Value], Acc) ->
+    <<Acc/binary, "'", Value/binary, "'">>;
+do_option_values_info([Value | Values], Acc) ->
+    AccOut = <<Acc/binary, "'", Value/binary, "', ">>,
+    do_option_values_info(Values, AccOut).
 
 run(Args) ->
     case zotonic_command:get_target_node() of
