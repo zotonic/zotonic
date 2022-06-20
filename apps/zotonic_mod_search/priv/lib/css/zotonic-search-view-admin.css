@@ -86,6 +86,6 @@ limitations under the License.
 .search-view-results li.active .glyphicon {
   color: white;
 }
-.search-view-results li .active {
+.search-view-results li.active {
   background: #eee;
 }

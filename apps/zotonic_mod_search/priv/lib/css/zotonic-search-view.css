@@ -32,9 +32,6 @@ limitations under the License.
   border-bottom: 1px solid #eee;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
-.search-view-results .active {
-  background: #ccc;
-}
 .search-view-results .list-item {
   margin: 0;
 }
@@ -88,4 +85,7 @@ limitations under the License.
 .search-view-results li:hover .glyphicon,
 .search-view-results li.active .glyphicon {
   color: white;
+}
+.search-view-results li.active {
+  background: #ccc;
 }
