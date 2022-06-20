@@ -15,53 +15,77 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ---------------------------------------------------------- */
-.search-view-results .active {
-  background: #ccc;
-}
-.search-view-results .list-item {
-  margin: 0;
-}
-.search-view-results li {
-  padding: 10px 4px;
-  margin: 0;
-  font-size: 2rem;
-  color: #222;
-}
-.search-view-results li p {
-  padding: 0;
-  margin: 0;
-}
 .search-view-results {
   position: absolute;
   right: 10px;
   top: 50px;
   width: 90vw;
   max-width: 500px;
+  max-height: calc(100vh - 100px);
+  overflow-y: scroll;
   background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-bottom: 1px solid #eee;
   color: #222;
-  font-size: 2rem;
+  font-size: 1.6rem;
   margin: 0;
   padding: 0;
   list-style-type: none;
 }
-.search-view-results li.search-view-list-item a {
-  color: #1683b1;
-}
-.search-view-results li.search-view-list-item a:hover {
-  color: #1ca5de;
-}
-.search-view-results li:hover {
+.search-view-results li {
+  border: 1px solid #e8e8e8;
+  border-top: none;
   cursor: pointer;
 }
-.search-view-results .float-right {
-  float: right;
+.search-view-results li .list-item {
+  display: grid;
+  grid-template-columns: 38px 1fr minmax(20px, auto);
+  grid-template-rows: auto auto;
+  padding: 5px 4px;
+  margin: 0;
+  color: #222;
 }
-.search-view-results img {
-  vertical-align: middle;
-  height: 35px;
-  width: 35px;
+.search-view-results li .list-item .list-item__title {
+  grid-row: 1;
+  grid-column: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0;
+  margin: 0;
 }
-.search-view-results .glyphicon {
-  vertical-align: middle;
-  font-size: 35px;
+.search-view-results li .list-item .list-item__meta {
+  grid-row: 2;
+  grid-column: 2;
+  font-size: 0.8em;
+  text-transform: lowercase;
+}
+.search-view-results li .list-item .btn-group {
+  grid-row: 1 / span 3;
+  grid-column: 4;
+  text-align: right;
+}
+.search-view-results li .list-item img {
+  grid-row: 1 / span 3;
+  grid-column: 1;
+  margin-top: 6px;
+  height: 32px;
+  width: 32px;
+  border: 1px solid #eee;
+}
+.search-view-results li .list-item .glyphicon {
+  grid-row: 1 / span 3;
+  grid-column: 1;
+  margin-top: 6px;
+  font-size: 16px;
+  color: #ccc;
+  width: 32px;
+  text-align: center;
+}
+.search-view-results li:hover .glyphicon,
+.search-view-results li.active .glyphicon {
+  color: white;
+}
+.search-view-results li .active {
+  background: #eee;
 }
