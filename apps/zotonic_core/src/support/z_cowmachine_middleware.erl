@@ -48,8 +48,7 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
             erlang:erase(is_dbtrace),
             Ctx1 = case z_context:get_cookie(<<"cotonic-sid">>, Ctx) of
                 undefined -> Ctx;
-                Sid ->
-                    z_context:set_session_id(Sid, Ctx)
+                Sid -> z_context:set_session_id(Sid, Ctx)
             end,
             z_context:logger_md(Ctx1),
             z_notifier:foldl(#middleware{ on = request }, Ctx1, Ctx1)
