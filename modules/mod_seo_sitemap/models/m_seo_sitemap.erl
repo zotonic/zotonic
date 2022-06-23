@@ -115,8 +115,12 @@ slice( Offset, Limit, Context ) ->
                                 Url1 = Url#{
                                     loc => z_context:abs_url(Loc, AnonContext)
                                 },
-                                Url2 = maybe_add_category_attrs(Url1, AnonContext),
-                                {true, Url2};
+                                case maybe_add_category_attrs(Url1, AnonContext) of
+                                    #{ priority := P } when P < 0.1 ->
+                                        false;
+                                    Url2 ->
+                                        {true, Url2}
+                                end;
                             false ->
                                 false
                         end
