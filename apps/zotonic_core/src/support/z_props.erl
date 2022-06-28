@@ -181,7 +181,8 @@ from_qs(Qs, Now) ->
 nested(Qs) ->
     Map = lists:foldl(
         fun({K, V}, Acc) ->
-            Parts = binary:split(K, <<".">>, [global]),
+            [ K1 | _ ] = binary:split(K, <<"~">>),
+            Parts = binary:split(K1, <<".">>, [global]),
             nested_assign(Parts, V, Acc)
         end,
         #{},
