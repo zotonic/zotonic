@@ -34,6 +34,7 @@
     get_boolean/3,
     get_boolean/4,
 
+    set_default_value/4,
     set_value/4,
     set_prop/5,
 
@@ -215,6 +216,18 @@ get_boolean(Module, Key, Context) ->
 -spec get_boolean( atom() | binary(), atom() | binary(), term(), z:context() ) -> boolean().
 get_boolean(Module, Key, Default, Context) ->
     z_convert:to_bool(get_value(Module, Key, Default, Context)).
+
+
+%% @doc Set the value of a config iff the current value is 'undefined'. Useful for initialization
+%% of new module data schemas.
+-spec set_default_value( atom() | binary(), atom() | binary(), string() | binary() | atom(), z:context() ) -> ok | {error, term()}.
+set_default_value(Module, Key, Value, Context) ->
+    case get_value(Module, Key, Context) of
+        undefined ->
+            set_value(Module, Key, Value, Context);
+        _Value ->
+            ok
+    end.
 
 %% @doc Set a "simple" config value.
 -spec set_value( atom() | binary(), atom() | binary(), string() | binary() | atom(), z:context() ) -> ok | {error, term()}.
