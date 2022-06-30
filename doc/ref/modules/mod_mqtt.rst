@@ -238,8 +238,8 @@ The JavaScript API uses callback functions:
 
 .. code-block:: javascript
 
-	cotonic.broker.subscribe("bridge/origin/foo/#", function(msg, bindings, options) { console.log(msg); });
-	cotonic.broker.publish("bridge/origin/foo/bar", "hello world");
+	cotonic.broker.subscribe("bridge/origin/test/#", function(msg, bindings, options) { console.log(msg); });
+	cotonic.broker.publish("bridge/origin/test/foo", "hello world");
 
 The received message is an JSON object:
 
