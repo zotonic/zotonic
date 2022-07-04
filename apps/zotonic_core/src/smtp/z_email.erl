@@ -226,8 +226,12 @@ sendq_render(To, HtmlTemplate, TextTemplate, Vars, Context) ->
 
 %% @doc Combine a name and an email address to the format `jan janssen <jan@example.com>'
 %% @todo do we need rfc2047:encode/1 call here?
--spec combine_name_email(Name::binary()|string(), Email::binary()|string()) -> binary().
-combine_name_email(undefined, Email) -> Email;
+-spec combine_name_email(Name, Email) -> NameEmail when
+    Name :: binary() | string() | undefined,
+    Email :: binary() | string(),
+    NameEmail :: binary().
+combine_name_email(undefined, Email) ->
+    Email;
 combine_name_email(Name, Email) ->
     Name1 = z_convert:to_binary(z_string:trim(Name)),
     Email1 = z_convert:to_binary(Email),
@@ -235,11 +239,26 @@ combine_name_email(Name, Email) ->
 
 
 %% @doc Split the name and email from the format `jan janssen <jan@example.com>'
--spec split_name_email(binary()|string()) -> {binary(), binary()}.
+-spec split_name_email(String) -> {Name, Email} when
+    String :: string() | binary(),
+    Name :: binary(),
+    Email :: binary().
 split_name_email(Email) ->
     Email1 = z_string:trim(rfc2047:decode(Email)),
     case smtp_util:parse_rfc5322_addresses(Email1) of
-        {ok, [{undefined, E}|_]} -> {<<>>, z_convert:to_binary(E)};
-        {ok, [{N,E}|_]} -> {z_string:trim(z_convert:to_binary(N)), z_convert:to_binary(E)};
-        {error, _} -> {z_string:trim(z_convert:to_binary(Email1)), <<>>}
+        {ok, [{N,E}|_]} ->
+            {z_string:trim(z_convert:to_binary(N)), z_convert:to_binary(E)};
+        {error,{1,smtp_rfc5322_parse,["syntax error before: ","'>'"]}} ->
+            % Issue parsing emails without domain, add a domain before the final '>' and try again
+            Email2 = iolist_to_binary(re:replace(Email1, <<">$">>, <<"@example.com>">>)),
+            case smtp_util:parse_rfc5322_addresses(Email2) of
+                {ok, [{N,E}|_]} ->
+                    N1 = z_string:trim(z_convert:to_binary(N)),
+                    E1 = z_convert:to_binary(re:replace(E, <<"@example.com$">>, <<>>)),
+                    {N1, E1};
+                {error, _} ->
+                    {z_string:trim(z_convert:to_binary(Email1)), <<>>}
+            end;
+        {error, _} ->
+            {z_string:trim(z_convert:to_binary(Email1)), <<>>}
     end.
