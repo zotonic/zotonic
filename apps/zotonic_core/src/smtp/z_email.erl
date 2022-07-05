@@ -233,8 +233,8 @@ sendq_render(To, HtmlTemplate, TextTemplate, Vars, Context) ->
 combine_name_email(undefined, Email) ->
     Email;
 combine_name_email(Name, Email) ->
-    Name1 = z_convert:to_binary(z_string:trim(Name)),
-    Email1 = z_convert:to_binary(Email),
+    Name1 = z_string:trim(unicode:characters_to_binary(Name)),
+    Email1 = unicode:characters_to_binary(Email),
     smtp_util:combine_rfc822_addresses([{Name1, Email1}]).
 
 
