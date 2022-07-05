@@ -8,6 +8,7 @@
 email_split_test() ->
     {<<"Jan Janssen">>, <<"jan@example.com">>} = z_email:split_name_email(<<"Jan Janssen <jan@example.com>">>),
     {<<"Jan Janssen">>, <<"jan">>} = z_email:split_name_email(<<"Jan Janssen <jan>">>),
+    {<<"Klønhammer"/utf8>>, <<"test@example.com">>} = z_email:split_name_email(<<"Klønhammer <test@example.com>"/utf8>>),
     ok.
 
 receive_email_test_() ->
