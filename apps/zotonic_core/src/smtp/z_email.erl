@@ -247,14 +247,14 @@ split_name_email(Email) ->
     Email1 = z_string:trim(rfc2047:decode(unicode:characters_to_binary(Email, utf8))),
     case smtp_util:parse_rfc5322_addresses(Email1) of
         {ok, [{N,E}|_]} ->
-            {z_string:trim(unicode:characters_to_binary(N, utf8)), unicode:characters_to_binary(E, utf8)};
+            {z_string:trim(unicode:characters_to_binary(b(N), utf8)), unicode:characters_to_binary(b(E), utf8)};
         {error,{1,smtp_rfc5322_parse,["syntax error before: ","'>'"]}} ->
             % Issue parsing emails without domain, add a domain before the final '>' and try again
             Email2 = iolist_to_binary(re:replace(Email1, <<">$">>, <<"@example.com>">>)),
             case smtp_util:parse_rfc5322_addresses(Email2) of
                 {ok, [{N,E}|_]} ->
-                    N1 = z_string:trim(unicode:characters_to_binary(N, utf8)),
-                    E1 = unicode:characters_to_binary(re:replace(E, <<"@example.com$">>, <<>>), utf8),
+                    N1 = z_string:trim(unicode:characters_to_binary(b(N), utf8)),
+                    E1 = unicode:characters_to_binary(re:replace(b(E), <<"@example.com$">>, <<>>), utf8),
                     {N1, E1};
                 {error, _} ->
                     {z_string:trim(z_convert:to_binary(Email1)), <<>>}
@@ -262,3 +262,7 @@ split_name_email(Email) ->
         {error, _} ->
             {z_string:trim(z_convert:to_binary(Email1)), <<>>}
     end.
+
+b(undefined) -> <<>>;
+b(S) -> S.
+
