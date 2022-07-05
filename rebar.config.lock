@@ -61,7 +61,7 @@
                            "37ba6bb25576c225bf414d1517de908635612413"}},
        {webzmachine,".*",
                     {git,"https://github.com/zotonic/webzmachine.git",
-                         "106bf7651b8f32036ca041a5ea84e139620473ea"}},
+                         "674211aa5ce8b320b914cd2787e442c851950830"}},
        {z_stdlib,".*",
                  {git,"https://github.com/zotonic/z_stdlib.git",
                       "8e37cafc58a2e3ba5d3878f3812fa651e676fa97"}},
