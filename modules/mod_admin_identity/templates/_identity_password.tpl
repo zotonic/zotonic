@@ -23,7 +23,7 @@
 <div class="form-group row">
     <label class="control-label col-md-3" for="new_password">{_ Password _}</label>
     <div class="col-md-9">
-        <input class="form-control" type="password" id="new_password" name="new_password" value="{{ password|escape }}" autocomplete="new-password" />
+        <input class="form-control" type="password" id="new_password" name="new_password" value="{{ password|escape }}" autocomplete="one-time-code" />
         {% if m.config.mod_admin_identity.password_regex.value %}
             {% validate id="new_password" type={presence} type={format pattern=m.config.mod_admin_identity.password_regex.value failure_message=_"This password does not meet the security requirements"} %}
         {% else %}
