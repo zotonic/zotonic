@@ -4,8 +4,8 @@
 {% if id %}
 	<meta property="og:title" content="{{ id.title }}"/>
 	<meta property="og:description" content="{{ id|summary:160 }}"/>
-	<meta property="og:url" content="http://{{ m.site.hostname }}{{ id.page_url }}"/>
+	<meta property="og:url" content="{{ id.page_url_abs }}"/>
 	{% if id.depiction %}
-	<meta property="og:image" content="http://{{ m.site.hostname }}{% image_url id.depiction mediaclass="facebook-og" %}"/>
+	<meta property="og:image" content="{% image_url id.depiction mediaclass="facebook-og" use_absolute_url %}"/>
 	{% endif %}
 {% endif %}
