@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%%
+%% @copyright 2010-2022 Marc Worrell
 %% @doc Serve static pages relative to a defined root.  This resource is useful to add a complete static html subsite to an existing site.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -102,7 +101,7 @@ content_types_provided(ReqData, State) ->
     {ReqData1, State1} = check_resource(ReqData, State),
     case State1#state.mime of
         undefined ->
-            CT = z_media_identify:guess_mime(filename:basename(State1#state.fullpath, ".tpl")),
+            CT = z_media_identify:guess_mime(bin(filename:basename(State1#state.fullpath, ".tpl"))),
             {[{CT, provide_content}], ReqData1, State1#state{mime=CT}};
         Mime ->
             {[{Mime, provide_content}], ReqData1, State1}
@@ -222,7 +221,8 @@ check_resource(ReqData, #state{fullpath=undefined} = State) ->
     case relative_path(wrq:disp_path(ReqData)) of
         undefined ->
             {ReqData, State#state{fullpath=false, context=Context, mime="text/html"}};
-        SafePath ->
+        SafePath0 ->
+            SafePath = unicode:characters_to_list(z_convert:to_binary(SafePath0), utf8),
             Cached = case State#state.use_cache of
                 true -> z_depcache:get(cache_key(SafePath), Context);
                 _    -> undefined
@@ -390,8 +390,13 @@ fileinfo(F, N) ->
     [{name, N},
      {is_dir, filelib:is_dir(F)},
      {last_modified, z_file_mtime:last_modified(F)},
-     {mime, z_media_identify:guess_mime(F)},
+     {mime, z_media_identify:guess_mime(bin(F))},
      {size, filelib:file_size(F)}].
+
+bin(F) when is_list(F) ->
+    unicode:characters_to_binary(F);
+bin(F) when is_binary(F) ->
+    F.
 
 
 fileinfo_cmp(A, B) ->
