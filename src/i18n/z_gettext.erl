@@ -96,7 +96,11 @@ parse_po_part(<<>>) ->
 get_msgstr(<<"msgstr", T/binary>>) ->
     get_po_string(T);
 get_msgstr(<<_/utf8, T/binary>>) ->
-    get_msgstr(T).
+    get_msgstr(T);
+get_msgstr(B) ->
+    lager:error("gettext: unexpected po string: ~s", [ B ]),
+    {<<>>, <<>>}.
+
 
 skip_to_eol(<<>>) -> <<>>;
 skip_to_eol(<<"\r\n", T/binary>>) -> T;
@@ -119,7 +123,10 @@ get_po_string(<<$\s, T/binary>>) -> get_po_string(T);
 get_po_string(<<$\r, T/binary>>) -> get_po_string(T);
 get_po_string(<<$\n, T/binary>>) -> get_po_string(T);
 get_po_string(<<$\t, T/binary>>) -> get_po_string(T);
-get_po_string(<<$", T/binary>>)  -> eat_string(T).
+get_po_string(<<$", T/binary>>)  -> eat_string(T);
+get_po_string(B) ->
+    lager:error("gettext: unexpected po string: ~s", [ B ]),
+    {<<>>, <<>>}.
 
 eat_string(S) ->
     eat_string(S, <<>>).
