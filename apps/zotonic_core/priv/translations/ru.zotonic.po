@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-06-13 13:13\n"
+"PO-Revision-Date: 2022-07-09 14:20\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2672,11 +2672,11 @@ msgstr "Конфигурация системы Zotonic настроена ис�
 
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:61
 msgid "The config key already exists, please choose another key name."
-msgstr "Параметр уже существует, пожалуйста, задайте другое имя ключа."
+msgstr "Параметр уже существует, пожалуйста, задайте другое имя."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:125
 msgid "The default FROM address for emails. Defaults to"
-msgstr "Адрес ОТ по умолчанию для писем. По умолчанию"
+msgstr "Адрес FROM по умолчанию для писем. По умолчанию"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:20
 msgid "The default directory for all site-certificates is"
