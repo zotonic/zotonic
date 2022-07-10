@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-07-09 16:02\n"
+"PO-Revision-Date: 2022-07-10 09:16\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2832,7 +2832,7 @@ msgstr "Заблокировано"
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:92
 msgid "Changed the username."
-msgstr "Учетная запись изменена."
+msgstr "Имя пользователя изменено."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:13./apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:11
 msgid "Click OK to log on as this user. You will be redirected to the home page if this user has no rights to access the admin system."
