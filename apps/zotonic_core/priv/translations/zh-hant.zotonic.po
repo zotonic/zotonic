@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-06-13 13:12\n"
+"PO-Revision-Date: 2022-07-11 16:58\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -61,70 +61,70 @@ msgstr "未經授權訪問遠程資源 URL。"
 msgid "Website"
 msgstr "網站"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:288
+#: apps/zotonic_core/src/support/z_datetime.erl:289
 msgid "ago"
 msgstr "以前"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:346./apps/zotonic_core/src/support/z_datetime.erl:349
+#: apps/zotonic_core/src/support/z_datetime.erl:347./apps/zotonic_core/src/support/z_datetime.erl:350
 msgid "day"
 msgstr "日"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:346./apps/zotonic_core/src/support/z_datetime.erl:349
+#: apps/zotonic_core/src/support/z_datetime.erl:347./apps/zotonic_core/src/support/z_datetime.erl:350
 msgid "days"
 msgstr "日"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:344./apps/zotonic_core/src/support/z_datetime.erl:347
+#: apps/zotonic_core/src/support/z_datetime.erl:345./apps/zotonic_core/src/support/z_datetime.erl:348
 msgid "hour"
 msgstr "小時"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:344./apps/zotonic_core/src/support/z_datetime.erl:347
+#: apps/zotonic_core/src/support/z_datetime.erl:345./apps/zotonic_core/src/support/z_datetime.erl:348
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:12./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr "小時"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:288
+#: apps/zotonic_core/src/support/z_datetime.erl:289
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
 msgstr "在"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:342./apps/zotonic_core/src/support/z_datetime.erl:345
+#: apps/zotonic_core/src/support/z_datetime.erl:343./apps/zotonic_core/src/support/z_datetime.erl:346
 msgid "minute"
 msgstr "分鐘"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:342./apps/zotonic_core/src/support/z_datetime.erl:345
+#: apps/zotonic_core/src/support/z_datetime.erl:343./apps/zotonic_core/src/support/z_datetime.erl:346
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:13./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr "分鐘"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:339
+#: apps/zotonic_core/src/support/z_datetime.erl:340
 msgid "moments"
 msgstr "片刻"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:348./apps/zotonic_core/src/support/z_datetime.erl:351
+#: apps/zotonic_core/src/support/z_datetime.erl:349./apps/zotonic_core/src/support/z_datetime.erl:352
 msgid "month"
 msgstr "月"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:348./apps/zotonic_core/src/support/z_datetime.erl:351
+#: apps/zotonic_core/src/support/z_datetime.erl:349./apps/zotonic_core/src/support/z_datetime.erl:352
 msgid "months"
 msgstr "月"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:288./apps/zotonic_core/src/support/z_datetime.erl:338
+#: apps/zotonic_core/src/support/z_datetime.erl:289./apps/zotonic_core/src/support/z_datetime.erl:339
 msgid "now"
 msgstr "現在"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:340./apps/zotonic_core/src/support/z_datetime.erl:343
+#: apps/zotonic_core/src/support/z_datetime.erl:341./apps/zotonic_core/src/support/z_datetime.erl:344
 msgid "second"
 msgstr "秒"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:340./apps/zotonic_core/src/support/z_datetime.erl:343
+#: apps/zotonic_core/src/support/z_datetime.erl:341./apps/zotonic_core/src/support/z_datetime.erl:344
 msgid "seconds"
 msgstr "秒鐘"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:350
+#: apps/zotonic_core/src/support/z_datetime.erl:351
 msgid "year"
 msgstr "年"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:350
+#: apps/zotonic_core/src/support/z_datetime.erl:351
 msgid "years"
 msgstr "年"
 
@@ -1301,7 +1301,7 @@ msgstr "查找媒體"
 msgid "Find Page"
 msgstr "查找页面"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:133
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:139
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:218
 msgid "Find page"
 msgstr "查找页面"
@@ -1758,6 +1758,12 @@ msgstr "重新安装站点数据模型"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:24
 msgid "Remarks"
 msgstr "附注"
+
+#: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:16
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:44
+msgid "Remove"
+msgstr "删除"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:485
 msgid "Removed the connection to"
@@ -2358,13 +2364,18 @@ msgstr "如：可能改变"
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:176./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:142./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:81
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
-#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:23./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:18
+#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:21./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:16
 msgid "edit"
 msgstr "修改编辑"
 
 #: apps/zotonic_mod_admin/priv/templates/_edit_button.tpl:7
 msgid "edit this page"
 msgstr "修改编辑本页面"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:158./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:115./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:55
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:95
+msgid "estimated"
+msgstr "估計的"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "excluding"
@@ -2373,6 +2384,11 @@ msgstr "除去"
 #: apps/zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "has been disconnected."
 msgstr "已经取消了连接。"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:158./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:115./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:55
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:95
+msgid "items found"
+msgstr "物品已找到"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:15
@@ -2419,7 +2435,7 @@ msgstr "上传时间"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:60./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:107./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:175./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:36
-#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:19./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:14
+#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:17./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:12
 msgid "view"
 msgstr "查看"
 
@@ -2600,7 +2616,7 @@ msgstr "只有管理员可以创建配置 Key。"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:91./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:92
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:10./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:25./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:126./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:133./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:149./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:151./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:25./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:130./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:137./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:153./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:155./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:31
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:175
 msgid "Password"
@@ -3003,7 +3019,7 @@ msgstr "设置用户名及密码"
 msgid "Sorry"
 msgstr "对不起"
 
-#: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:42./apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:50
+#: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:41
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:31
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr "对不起，這個用户名已被使用。请尝试其他用户名。"
@@ -3982,11 +3998,11 @@ msgstr "如果您认为您已经有了一个账户，并希望收到这封电子
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "在电子邮件中，你会发现如何确认你的帐户的说明。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:166./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
+#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:170./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
 msgid "Keep me signed in"
 msgstr "让我签到"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:111
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:115
 msgid "Log on with"
 msgstr "使用登录"
 
@@ -3995,7 +4011,7 @@ msgstr "使用登录"
 msgid "Minimum characters:"
 msgstr "最少字符："
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:187
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:191
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:89
 msgid "Next"
 msgstr "下一页"
@@ -4015,7 +4031,7 @@ msgstr "请等一下"
 msgid "Other username or email"
 msgstr "其他用户名或电子邮件"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:138./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:142./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
 msgid "Passcode"
 msgstr "密码"
 
@@ -4065,7 +4081,7 @@ msgstr "重设你的密码"
 msgid "Send Verification Message"
 msgstr "发送验证信息"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:58./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:181./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:58./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:185./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Sign in"
 msgstr "登入"
@@ -4111,7 +4127,7 @@ msgstr "对不起，重试太多"
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "对不起，你的密码重设码未知或過期。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:163
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:167
 msgid "Stay logged on unless I log off."
 msgstr "除非我注销，否则请保持登录状态。"
 
@@ -4157,7 +4173,7 @@ msgstr "要查看本页面，您需要有其他访问权限。"
 msgid "Too many retries."
 msgstr "太多的重试。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:141./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
 msgid "Two-factor passcode"
 msgstr "双因素密码"
 
@@ -4263,7 +4279,7 @@ msgstr "您的用戶名是"
 msgid "an hour"
 msgstr "一小时"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:111
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:115
 msgid "external service"
 msgstr "外部服务"
 
@@ -4273,7 +4289,7 @@ msgstr "外部服务"
 msgid "or"
 msgstr "或"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:119
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:123
 msgid "or you can enter the password that you have for"
 msgstr "或者您可以输入您拥有的密码"
 
@@ -7010,11 +7026,6 @@ msgstr "层次结构"
 msgid "Menu"
 msgstr "菜单"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:44
-msgid "Remove"
-msgstr "删除"
-
 #: apps/zotonic_mod_menu/src/mod_menu.erl:145
 msgid "Sorry, can’t copy that page."
 msgstr "对不起，不能复制那一页。"
@@ -7611,7 +7622,7 @@ msgstr "重建站點地圖"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "重建所有頁面的站點地圖索引。"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:70
 msgid "Rebuilding the sitemap in the background."
 msgstr "在後台重建站點地圖。"
 
@@ -7631,7 +7642,7 @@ msgstr "每周（默认）"
 msgid "Yearly"
 msgstr "每年"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:74
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "You are not allowed to do this"
 msgstr "您不可以這樣做"
 
