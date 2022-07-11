@@ -55,7 +55,7 @@
 
 -define(OFFSET_LIMIT, {1,?SEARCH_PAGELEN}).
 -define(SEARCH_ALL_LIMIT, 30000).
-
+-define(MIN_LOOKAHEAD, 200).
 
 %% @doc Perform a named search with arguments.
 -spec search(Name, Args, Page, PageLen, Context) -> Result when
@@ -182,7 +182,7 @@ search(Search, {Offset, Limit} = OffsetLimit, Context) ->
             PageNr = (Offset - 1) div Limit,
             search_1(Search, PageNr, Limit, OffsetLimit, Context);
         _ ->
-            search_1(Search, undefined, undefined, OffsetLimit, Context)
+            search_1(Search, 1, ?SEARCH_ALL_LIMIT, OffsetLimit, Context)
     end.
 
 
@@ -317,16 +317,16 @@ handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit,
 %% planner to give an estimated number of rows.
 offset_limit(1, PageLen) ->
     % Take 5 pages + 1
-    {1, 5 * PageLen + 1};
+    {1, erlang:max(5 * PageLen + 1, ?MIN_LOOKAHEAD)};
 offset_limit(2, PageLen) ->
     % Take 4 pages + 1
-    {PageLen + 1, 4 * PageLen + 1};
+    {PageLen + 1, erlang:max(4 * PageLen + 1, ?MIN_LOOKAHEAD - PageLen)};
 offset_limit(3, PageLen) ->
     % Take 3 pages + 1
-    {2 * PageLen + 1, 3 * PageLen + 1};
+    {2 * PageLen + 1, erlang:max(3 * PageLen + 1, ?MIN_LOOKAHEAD - 2 * PageLen)};
 offset_limit(N, PageLen) ->
     % Take 2 pages + 1
-    {(N-1) * PageLen + 1, 2 * PageLen + 1}.
+    {(N-1) * PageLen + 1, erlang:max(2 * PageLen + 1, ?MIN_LOOKAHEAD - N * PageLen)}.
 
 
 %% @doc Handle deprecated searches in the {atom, list()} format.
