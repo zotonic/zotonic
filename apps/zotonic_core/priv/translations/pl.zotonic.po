@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-06-13 13:13\n"
+"PO-Revision-Date: 2022-07-11 16:59\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -61,70 +61,70 @@ msgstr "Brak autoryzacji dostępu do adresu URL zdalnego zasobu."
 msgid "Website"
 msgstr "Strona internetowa"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:288
+#: apps/zotonic_core/src/support/z_datetime.erl:289
 msgid "ago"
 msgstr "temu"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:346./apps/zotonic_core/src/support/z_datetime.erl:349
+#: apps/zotonic_core/src/support/z_datetime.erl:347./apps/zotonic_core/src/support/z_datetime.erl:350
 msgid "day"
 msgstr "dzień"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:346./apps/zotonic_core/src/support/z_datetime.erl:349
+#: apps/zotonic_core/src/support/z_datetime.erl:347./apps/zotonic_core/src/support/z_datetime.erl:350
 msgid "days"
 msgstr "dni"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:344./apps/zotonic_core/src/support/z_datetime.erl:347
+#: apps/zotonic_core/src/support/z_datetime.erl:345./apps/zotonic_core/src/support/z_datetime.erl:348
 msgid "hour"
 msgstr "godzina"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:344./apps/zotonic_core/src/support/z_datetime.erl:347
+#: apps/zotonic_core/src/support/z_datetime.erl:345./apps/zotonic_core/src/support/z_datetime.erl:348
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:12./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr "godziny"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:288
+#: apps/zotonic_core/src/support/z_datetime.erl:289
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
 msgstr "w"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:342./apps/zotonic_core/src/support/z_datetime.erl:345
+#: apps/zotonic_core/src/support/z_datetime.erl:343./apps/zotonic_core/src/support/z_datetime.erl:346
 msgid "minute"
 msgstr "minuta"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:342./apps/zotonic_core/src/support/z_datetime.erl:345
+#: apps/zotonic_core/src/support/z_datetime.erl:343./apps/zotonic_core/src/support/z_datetime.erl:346
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:13./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr "minuty"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:339
+#: apps/zotonic_core/src/support/z_datetime.erl:340
 msgid "moments"
 msgstr "chwile"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:348./apps/zotonic_core/src/support/z_datetime.erl:351
+#: apps/zotonic_core/src/support/z_datetime.erl:349./apps/zotonic_core/src/support/z_datetime.erl:352
 msgid "month"
 msgstr "miesiąc"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:348./apps/zotonic_core/src/support/z_datetime.erl:351
+#: apps/zotonic_core/src/support/z_datetime.erl:349./apps/zotonic_core/src/support/z_datetime.erl:352
 msgid "months"
 msgstr "miesiące"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:288./apps/zotonic_core/src/support/z_datetime.erl:338
+#: apps/zotonic_core/src/support/z_datetime.erl:289./apps/zotonic_core/src/support/z_datetime.erl:339
 msgid "now"
 msgstr "teraz"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:340./apps/zotonic_core/src/support/z_datetime.erl:343
+#: apps/zotonic_core/src/support/z_datetime.erl:341./apps/zotonic_core/src/support/z_datetime.erl:344
 msgid "second"
 msgstr "sekunda"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:340./apps/zotonic_core/src/support/z_datetime.erl:343
+#: apps/zotonic_core/src/support/z_datetime.erl:341./apps/zotonic_core/src/support/z_datetime.erl:344
 msgid "seconds"
 msgstr "sekundy"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:350
+#: apps/zotonic_core/src/support/z_datetime.erl:351
 msgid "year"
 msgstr "rok"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:350
+#: apps/zotonic_core/src/support/z_datetime.erl:351
 msgid "years"
 msgstr "lata"
 
@@ -1301,7 +1301,7 @@ msgstr "Znajdź media"
 msgid "Find Page"
 msgstr "Znajdź stronę"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:133
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:139
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:218
 msgid "Find page"
 msgstr "Znajdź stronę"
@@ -1758,6 +1758,12 @@ msgstr "Zainstaluj ponownie model danych witryny"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:24
 msgid "Remarks"
 msgstr "Uwagi"
+
+#: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:16
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:44
+msgid "Remove"
+msgstr "Usuń"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:485
 msgid "Removed the connection to"
@@ -2358,13 +2364,18 @@ msgstr "np. może się zmienić"
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:176./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:142./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:81
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
-#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:23./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:18
+#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:21./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:16
 msgid "edit"
 msgstr "edytuj"
 
 #: apps/zotonic_mod_admin/priv/templates/_edit_button.tpl:7
 msgid "edit this page"
 msgstr "Edytuj stronę"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:158./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:115./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:55
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:95
+msgid "estimated"
+msgstr "szacowany"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "excluding"
@@ -2373,6 +2384,11 @@ msgstr "z wyłączeniem"
 #: apps/zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "has been disconnected."
 msgstr "został rozłączony"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:158./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:115./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:55
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:95
+msgid "items found"
+msgstr "znalezione przedmioty"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:15
@@ -2419,7 +2435,7 @@ msgstr "zapisane na"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:60./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:107./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:175./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:36
-#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:19./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:14
+#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:17./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:12
 msgid "view"
 msgstr "Zobacz"
 
@@ -2600,7 +2616,7 @@ msgstr "Tylko administratorzy mogą dodawać konfiguracje."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:91./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:92
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:10./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:25./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:126./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:133./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:149./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:151./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:25./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:130./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:137./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:153./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:155./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:31
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:175
 msgid "Password"
@@ -3003,7 +3019,7 @@ msgstr "Zmień login lub hasło"
 msgid "Sorry"
 msgstr "Przepraszamy"
 
-#: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:42./apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:50
+#: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:41
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:31
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr "Przepraszamy, nazwa użytkownika jest już w użyciu. Wybierz inną nazwę."
@@ -3982,11 +3998,11 @@ msgstr "Jeśli uważasz że posiadasz konto i spodziewałeś / spodziewałaś si
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "W e-mailu znajdziesz instrukcje, jak potwierdzić swoje konto."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:166./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
+#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:170./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
 msgid "Keep me signed in"
 msgstr "Nie wylogowuj mnie"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:111
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:115
 msgid "Log on with"
 msgstr "Zaloguj się za pomocą"
 
@@ -3995,7 +4011,7 @@ msgstr "Zaloguj się za pomocą"
 msgid "Minimum characters:"
 msgstr "Minimalna liczba znaków:"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:187
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:191
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:89
 msgid "Next"
 msgstr "Następnie"
@@ -4015,7 +4031,7 @@ msgstr "Proszę czekać"
 msgid "Other username or email"
 msgstr "Inna nazwa użytkownika lub adres e-mail"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:138./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:142./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
 msgid "Passcode"
 msgstr "Kod dostępu"
 
@@ -4065,7 +4081,7 @@ msgstr "Zresetuj swoje hasło"
 msgid "Send Verification Message"
 msgstr "Wyślij wiadomość weryfikacyjną"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:58./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:181./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:58./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:185./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Sign in"
 msgstr "Zaloguj się"
@@ -4111,7 +4127,7 @@ msgstr "Przepraszamy, zbyt wiele ponownych prób"
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "Przepraszamy, Twój kod resetowania hasła jest nieznany lub wygasł"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:163
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:167
 msgid "Stay logged on unless I log off."
 msgstr "Pozostań zalogowany, chyba że się wyloguję."
 
@@ -4157,7 +4173,7 @@ msgstr "Aby wyświetlić tę stronę, musisz mieć inne prawa dostępu."
 msgid "Too many retries."
 msgstr "Zbyt wiele ponownych prób."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:141./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
 msgid "Two-factor passcode"
 msgstr "Hasło dwuskładnikowe"
 
@@ -4263,7 +4279,7 @@ msgstr "Twoja nazwa użytkownika to"
 msgid "an hour"
 msgstr "godzina"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:111
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:115
 msgid "external service"
 msgstr "usługa zewnętrzna"
 
@@ -4273,7 +4289,7 @@ msgstr "usługa zewnętrzna"
 msgid "or"
 msgstr "lub"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:119
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:123
 msgid "or you can enter the password that you have for"
 msgstr "lub możesz wprowadzić hasło, które masz dla"
 
@@ -7014,11 +7030,6 @@ msgstr "Hierarchia dla"
 msgid "Menu"
 msgstr "Menu"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:44
-msgid "Remove"
-msgstr "Usuń"
-
 #: apps/zotonic_mod_menu/src/mod_menu.erl:145
 msgid "Sorry, can’t copy that page."
 msgstr "Przepraszamy, tej strony nie da się skopiować."
@@ -7615,7 +7626,7 @@ msgstr "Odbuduj mapę witryny"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "Odbuduj indeks mapy witryny dla wszystkich stron."
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:70
 msgid "Rebuilding the sitemap in the background."
 msgstr "Odbudowywanie mapy witryny w tle."
 
@@ -7635,7 +7646,7 @@ msgstr "Co tydzień (domyślnie)"
 msgid "Yearly"
 msgstr "Rocznie"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:74
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "You are not allowed to do this"
 msgstr "Nie możesz tego zrobić"
 
