@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-06-13 13:12\n"
+"PO-Revision-Date: 2022-07-11 16:58\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -61,70 +61,70 @@ msgstr "Неавторизований доступ до URL-адреси від
 msgid "Website"
 msgstr "вебсайт"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:288
+#: apps/zotonic_core/src/support/z_datetime.erl:289
 msgid "ago"
 msgstr "тому"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:346./apps/zotonic_core/src/support/z_datetime.erl:349
+#: apps/zotonic_core/src/support/z_datetime.erl:347./apps/zotonic_core/src/support/z_datetime.erl:350
 msgid "day"
 msgstr "день"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:346./apps/zotonic_core/src/support/z_datetime.erl:349
+#: apps/zotonic_core/src/support/z_datetime.erl:347./apps/zotonic_core/src/support/z_datetime.erl:350
 msgid "days"
 msgstr "днів"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:344./apps/zotonic_core/src/support/z_datetime.erl:347
+#: apps/zotonic_core/src/support/z_datetime.erl:345./apps/zotonic_core/src/support/z_datetime.erl:348
 msgid "hour"
 msgstr "година"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:344./apps/zotonic_core/src/support/z_datetime.erl:347
+#: apps/zotonic_core/src/support/z_datetime.erl:345./apps/zotonic_core/src/support/z_datetime.erl:348
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:12./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr "годин"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:288
+#: apps/zotonic_core/src/support/z_datetime.erl:289
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
 msgstr "в"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:342./apps/zotonic_core/src/support/z_datetime.erl:345
+#: apps/zotonic_core/src/support/z_datetime.erl:343./apps/zotonic_core/src/support/z_datetime.erl:346
 msgid "minute"
 msgstr "хвилина"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:342./apps/zotonic_core/src/support/z_datetime.erl:345
+#: apps/zotonic_core/src/support/z_datetime.erl:343./apps/zotonic_core/src/support/z_datetime.erl:346
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:13./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr "хвилин"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:339
+#: apps/zotonic_core/src/support/z_datetime.erl:340
 msgid "moments"
 msgstr "моментів"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:348./apps/zotonic_core/src/support/z_datetime.erl:351
+#: apps/zotonic_core/src/support/z_datetime.erl:349./apps/zotonic_core/src/support/z_datetime.erl:352
 msgid "month"
 msgstr "місяць"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:348./apps/zotonic_core/src/support/z_datetime.erl:351
+#: apps/zotonic_core/src/support/z_datetime.erl:349./apps/zotonic_core/src/support/z_datetime.erl:352
 msgid "months"
 msgstr "місяців"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:288./apps/zotonic_core/src/support/z_datetime.erl:338
+#: apps/zotonic_core/src/support/z_datetime.erl:289./apps/zotonic_core/src/support/z_datetime.erl:339
 msgid "now"
 msgstr "зараз"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:340./apps/zotonic_core/src/support/z_datetime.erl:343
+#: apps/zotonic_core/src/support/z_datetime.erl:341./apps/zotonic_core/src/support/z_datetime.erl:344
 msgid "second"
 msgstr "секунда"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:340./apps/zotonic_core/src/support/z_datetime.erl:343
+#: apps/zotonic_core/src/support/z_datetime.erl:341./apps/zotonic_core/src/support/z_datetime.erl:344
 msgid "seconds"
 msgstr "секунд"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:350
+#: apps/zotonic_core/src/support/z_datetime.erl:351
 msgid "year"
 msgstr "рік"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:350
+#: apps/zotonic_core/src/support/z_datetime.erl:351
 msgid "years"
 msgstr "років"
 
@@ -1301,7 +1301,7 @@ msgstr "Знайти медіа"
 msgid "Find Page"
 msgstr "Знайти сторінку"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:133
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:139
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:218
 msgid "Find page"
 msgstr "Знайти сторінку"
@@ -1758,6 +1758,12 @@ msgstr "Перевстановіть модель даних сайту"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:24
 msgid "Remarks"
 msgstr "Зауваження"
+
+#: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:16
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:44
+msgid "Remove"
+msgstr "Видалити"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:485
 msgid "Removed the connection to"
@@ -2358,13 +2364,18 @@ msgstr "наприклад: може змінитися"
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:176./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:142./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:81
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
-#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:23./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:18
+#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:21./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:16
 msgid "edit"
 msgstr "редагувати"
 
 #: apps/zotonic_mod_admin/priv/templates/_edit_button.tpl:7
 msgid "edit this page"
 msgstr "редагувати цю сторінку"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:158./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:115./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:55
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:95
+msgid "estimated"
+msgstr "оцінюється"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "excluding"
@@ -2373,6 +2384,11 @@ msgstr "виключаючи"
 #: apps/zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "has been disconnected."
 msgstr "було відключено."
+
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:158./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:115./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:55
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:95
+msgid "items found"
+msgstr "предметів знайдено"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:15
@@ -2419,7 +2435,7 @@ msgstr "завантажено на"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:60./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:107./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:175./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:36
-#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:19./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:14
+#: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:17./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:12
 msgid "view"
 msgstr "перегляд"
 
@@ -2600,7 +2616,7 @@ msgstr "Тільки адміністратор може додавати клю
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:91./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:92
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:10./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:25./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:126./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:133./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:149./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:151./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:25./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:130./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:137./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:153./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:155./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:31
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:175
 msgid "Password"
@@ -3003,7 +3019,7 @@ msgstr "Встановити ім'я користувача / пароль"
 msgid "Sorry"
 msgstr "Вибачте"
 
-#: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:42./apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:50
+#: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:41
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:31
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr "На жаль, це ім’я користувача вже використовується. Будь ласка, спробуйте інший."
@@ -3982,11 +3998,11 @@ msgstr "Якщо Ви думаєте, що у Вас є обліковий за�
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "У електронному листі Ви знайдете інструкції щодо підтвердження облікового запису."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:166./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
+#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:170./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
 msgid "Keep me signed in"
 msgstr "Тримайте мене в системі"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:111
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:115
 msgid "Log on with"
 msgstr "Увійдіть за допомогою"
 
@@ -3995,7 +4011,7 @@ msgstr "Увійдіть за допомогою"
 msgid "Minimum characters:"
 msgstr "Мінімальна кількість символів:"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:187
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:191
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:89
 msgid "Next"
 msgstr "Далі"
@@ -4015,7 +4031,7 @@ msgstr "Будь ласка, хвилиночку"
 msgid "Other username or email"
 msgstr "Інше ім'я користувача або електронна адреса"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:138./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:142./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
 msgid "Passcode"
 msgstr "Код доступу"
 
@@ -4065,7 +4081,7 @@ msgstr "Скинути пароль"
 msgid "Send Verification Message"
 msgstr "Надіслати повідомлення про підтвердження"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:58./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:181./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:58./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:185./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Sign in"
 msgstr "Увійти"
@@ -4111,7 +4127,7 @@ msgstr "Вибачте, забагато повторних спроб"
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "На жаль, Ваш код скидання пароля невідомий або прострочений"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:163
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:167
 msgid "Stay logged on unless I log off."
 msgstr "Залишатися в системі, якщо я не вийду."
 
@@ -4157,7 +4173,7 @@ msgstr "Щоб переглянути цю сторінку, потрібно м
 msgid "Too many retries."
 msgstr "Забагато повторних спроб."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:141./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
 msgid "Two-factor passcode"
 msgstr "Двофакторний пароль"
 
@@ -4263,7 +4279,7 @@ msgstr "Ваше ім'я користувача"
 msgid "an hour"
 msgstr "годину"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:111
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:115
 msgid "external service"
 msgstr "зовнішній сервіс"
 
@@ -4273,7 +4289,7 @@ msgstr "зовнішній сервіс"
 msgid "or"
 msgstr "або"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:119
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:123
 msgid "or you can enter the password that you have for"
 msgstr "або Ви можете ввести пароль, який у Вас є для"
 
@@ -7014,11 +7030,6 @@ msgstr "Ієрархія для"
 msgid "Menu"
 msgstr "Меню"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:44
-msgid "Remove"
-msgstr "Видалити"
-
 #: apps/zotonic_mod_menu/src/mod_menu.erl:145
 msgid "Sorry, can’t copy that page."
 msgstr "На жаль, не вдається скопіювати цю сторінку."
@@ -7615,7 +7626,7 @@ msgstr "Відновіть карту сайту"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "Перебудуйте індекс карти сайту для всіх сторінок."
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:70
 msgid "Rebuilding the sitemap in the background."
 msgstr "Відновлення карти сайту у фоновому режимі."
 
@@ -7635,7 +7646,7 @@ msgstr "Щотижня (за замовчуванням)"
 msgid "Yearly"
 msgstr "Щорічно"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:74
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "You are not allowed to do this"
 msgstr "Вам заборонено це робити"
 
