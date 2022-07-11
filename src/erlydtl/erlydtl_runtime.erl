@@ -95,6 +95,41 @@ find_value(IsoAtom, Text, _Context) when is_atom(IsoAtom), is_binary(Text) ->
             undefined
     end;
 
+% Search results
+find_value(Key, #search_result{} = S, _Context) when is_integer(Key) ->
+    try
+        lists:nth(Key, S#search_result.result)
+    catch
+        _:_ -> undefined
+    end;
+find_value(Key, #m_search_result{} = S, Context) when is_integer(Key) ->
+    find_value(Key, S#m_search_result.result, Context);
+
+find_value(Key, #search_result{} = S, _Context) when is_atom(Key) ->
+    case Key of
+        result -> S#search_result.result;
+        total -> S#search_result.total;
+        is_total_estimated -> S#search_result.is_total_estimated;
+        page -> S#search_result.page;
+        pages -> S#search_result.pages;
+        next -> S#search_result.next;
+        prev -> S#search_result.prev
+    end;
+find_value(Key, #m_search_result{ result = Result } = S, _Context) when is_atom(Key) ->
+    case Key of
+        search -> {S#m_search_result.search_name, S#m_search_result.search_props};
+        search_name -> S#m_search_result.search_name;
+        search_props -> S#m_search_result.search_props;
+        result -> Result;
+        total -> Result#search_result.total;
+        is_total_estimated -> Result#search_result.is_total_estimated;
+        page -> S#m_search_result.page;
+        pages -> S#m_search_result.pages;
+        pagelen -> S#m_search_result.pagelen;
+        next -> S#m_search_result.next;
+        prev -> S#m_search_result.prev
+    end;
+
 %% JSON-decoded proplist structure
 find_value(Key, {obj, Props}, _Context) when is_list(Props) ->
     proplists:get_value(z_convert:to_list(Key), Props);
@@ -131,39 +166,6 @@ find_value(Key, Tuple, _Context) when is_tuple(Tuple) ->
             end;
         _ ->
             undefined
-    end;
-
-% Search results
-find_value(Key, #search_result{} = S, _Context) when is_integer(Key) ->
-    try
-        lists:nth(Key, S#search_result.result)
-    catch
-        _:_ -> undefined
-    end;
-find_value(Key, #m_search_result{} = S, Context) when is_integer(Key) ->
-    find_value(Key, S#m_search_result.result, Context);
-
-find_value(Key, #search_result{} = S, _Context) when is_atom(Key) ->
-    case Key of
-        result -> S#search_result.result;
-        all -> S#search_result.all;
-        total -> S#search_result.total;
-        page -> S#search_result.page;
-        pages -> S#search_result.pages;
-        next -> S#search_result.next;
-        prev -> S#search_result.prev
-    end;
-find_value(Key, #m_search_result{} = S, _Context) when is_atom(Key) ->
-    case Key of
-        search -> {S#m_search_result.search_name, S#m_search_result.search_props};
-        search_name -> S#m_search_result.search_name;
-        search_props -> S#m_search_result.search_props;
-        result -> S#m_search_result.result;
-        page -> S#m_search_result.page;
-        pages -> S#m_search_result.pages;
-        pagelen -> S#m_search_result.pagelen;
-        next -> S#m_search_result.next;
-        prev -> S#m_search_result.prev
     end;
 
 %% When the current value lookup is a function, the context can be passed to F

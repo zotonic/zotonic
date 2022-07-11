@@ -63,6 +63,8 @@
                                     qcustompivot=custompivot|default:q.qcustompivot|urlencode
                                     qcat=q.qcat
                                     qs=q.qs
+                                    qpagelen=q.qpagelen
+                                    qquery=q.qquery
                          %}{{ url_append }}">{{ caption }}{{ status_modifier_char }}</a>
             {% endwith %}
         {% endwith %}

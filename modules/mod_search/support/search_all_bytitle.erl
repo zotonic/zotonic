@@ -56,12 +56,12 @@ search1(Left, Right, Search, Context) ->
     IdTitles = [ add_title(Id, Featured, Search, Context) || {Id, Featured} <- Ids, m_rsc:is_visible(Id, Context) ],
     Sorted = lists:sort(IdTitles),
     Result = [ {Title, Id} || {_Name, Title, Id} <- Sorted ],
-    #search_result{result=Result, all=Sorted, total=length(Sorted)}.
+    #search_result{result=Result, total=length(Sorted)}.
 
 
-    add_title(Id, true, all_bytitle_featured, Context) ->
-        Title = ?__(m_rsc:p(Id, title, Context), Context),
-        {[32 | z_string:to_name(Title)], Title, Id};
-    add_title(Id, _Featured, _Search, Context) ->
-        Title = ?__(m_rsc:p(Id, title, Context), Context),
-        {z_string:to_name(Title), Title, Id}.
+add_title(Id, true, all_bytitle_featured, Context) ->
+    Title = ?__(m_rsc:p(Id, title, Context), Context),
+    {[32 | z_string:to_name(Title)], Title, Id};
+add_title(Id, _Featured, _Search, Context) ->
+    Title = ?__(m_rsc:p(Id, title, Context), Context),
+    {z_string:to_name(Title), Title, Id}.

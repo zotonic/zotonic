@@ -192,7 +192,7 @@ poll_feed(Sub, Context) ->
         true ->
             {key, FeedKey} = proplists:lookup(key, Sub),
             {last_id, LastId} = proplists:lookup(last_id, Sub),
-            lager:debug("twitter_poller: polling feed for '~s'", [ z_context:site(Context), FeedKey ]),
+            lager:debug("twitter_poller: ~p polling feed for '~s'", [ z_context:site(Context), FeedKey ]),
             case twitter_feed:poll(FeedKey, LastId, Context) of
                 {ok, Result} ->
                     {ok, Result};

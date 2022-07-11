@@ -107,13 +107,15 @@
                 {% with q.qsort as qsort %}
                     {% with m.rsc[q.qquery|default:`admin_overview_query`].id as qquery_id %}
                           {% with (qquery_id.is_visible and not q.qcat)|
-                                    if:{query query_id=qquery_id cat=qcat cat_exclude=qcat_exclude content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen sort=qsort zsort="-modified" custompivot=q.qcustompivot}
-                                      :{query authoritative=1 cat=qcat cat_exclude=qcat_exclude content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen sort=qsort zsort="-modified" custompivot=q.qcustompivot}
+                                    if:{query query_id=qquery_id cat=qcat cat_exclude=qcat_exclude content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen asort=qsort zsort="-modified" custompivot=q.qcustompivot}
+                                      :{query authoritative=1 cat=qcat cat_exclude=qcat_exclude content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen asort=qsort zsort="-modified" custompivot=q.qcustompivot}
                              as query
                           %}
+                          {% print query %}
                               {% with m.search.paged[query] as result %}
                                   {% catinclude "_admin_overview_list.tpl" m.category[qcat].is_a result=result qsort=qsort qcat=qcat qcat_exclude=qcat_exclude custompivot=q.qcustompivot %}
                                   {% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page %}
+                                  <div class="text-muted clear-left"><b>{{ result.total }}</b> {_ items found _}{% if result.is_total_estimated %} ({_ estimated _}){% endif %}.</div>
                               {% endwith %}
                           {% endwith %}
                     {% endwith %}
