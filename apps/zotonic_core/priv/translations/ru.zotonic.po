@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-06-13 13:13\n"
+"PO-Revision-Date: 2022-07-10 10:12\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2672,11 +2672,11 @@ msgstr "Конфигурация системы Zotonic настроена ис�
 
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:61
 msgid "The config key already exists, please choose another key name."
-msgstr "Параметр уже существует, пожалуйста, задайте другое имя ключа."
+msgstr "Параметр уже существует, пожалуйста, задайте другое имя."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:125
 msgid "The default FROM address for emails. Defaults to"
-msgstr "Адрес ОТ по умолчанию для писем. По умолчанию"
+msgstr "Адрес FROM по умолчанию для писем. По умолчанию"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:20
 msgid "The default directory for all site-certificates is"
@@ -2720,7 +2720,7 @@ msgstr "Имя пользователя"
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:16
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:37
 msgid "Valid till"
-msgstr "действительный до"
+msgstr "Действителен до"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:16./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:17./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:19./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:21
 msgid "Value"
@@ -2832,7 +2832,7 @@ msgstr "Заблокировано"
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:92
 msgid "Changed the username."
-msgstr "Учетная запись изменена."
+msgstr "Имя пользователя изменено."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:13./apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:11
 msgid "Click OK to log on as this user. You will be redirected to the home page if this user has no rights to access the admin system."
@@ -2844,7 +2844,7 @@ msgstr "Щелкните ссылку, чтобы подтвердить сво�
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:10
 msgid "Click “delete” to remove any existing username/password from the person; this person will no longer be a user."
-msgstr "Нажмите \"удалить\", чтобы удалить любое существующее имя пользователя/пароль; этот человек больше не будет пользователем."
+msgstr "Нажмите \"удалить\", чтобы удалить любое существующее имя пользователя/пароль этого человека; этот человек больше не будет пользователем."
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_delete_username.erl:53
 msgid "Confirm user deletion"
@@ -2885,7 +2885,7 @@ msgstr "Введите уникальное имя пользователя и �
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:21
 msgid "Every page/person can be made into a user on the edit page. The difference between a user and a normal page is only that the former has logon credentials attached to its page record."
-msgstr "Каждую страницу/человека можно сделать пользователем на странице редактирования. Разница между пользователем и обычной страницей заключается только в том, что первая имеет учетные данные для входа в систему, прикрепленные к записи страницы."
+msgstr "Каждую страницу/человека можно сделать пользователем на странице редактирования. Разница между пользователем и обычной страницей заключается только в том, что первый имеет учетные данные для входа в систему, прикрепленные к записи страницы."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:9
 msgid "Give the name and the e-mail address of the new user. A <em>person</em> page will be created for this user."
@@ -2894,7 +2894,7 @@ msgstr "Укажите имя и адрес электронной почты н
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:6
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:7./apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:15
 msgid "Hello"
-msgstr "Добро пожаловать,"
+msgstr "Здравствуйте,"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:10
 msgid "Help about user credentials"
