@@ -155,6 +155,7 @@
                         </tbody>
                     </table>
                     {% pager result=result dispatch="admin_media" qargs hide_single_page %}
+                    <div class="text-muted clear-left"><b>{{ result.total }}</b> {_ items found _}{% if result.is_total_estimated %} ({_ estimated _}){% endif %}.</div>
                 {% endwith %}
             {% endwith %}
 

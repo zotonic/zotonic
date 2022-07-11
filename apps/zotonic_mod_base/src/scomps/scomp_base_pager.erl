@@ -47,14 +47,14 @@ render(Params, _Vars, Context) ->
         [dispatch, result, hide_single_page, template]),
 
     case Result of
-        #search_result{page=Page, pages=Pages} ->
-            Html = build_html(Template, Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context),
+        #search_result{page=Page, pages=Pages, is_total_estimated=IsEstimated} ->
+            Html = build_html(Template, Page, Pages, IsEstimated, HideSinglePage, Dispatch, DispatchArgs, Context),
             {ok, Html};
         [ Chunk | _ ] = List when is_list(Chunk) ->
             % Paginated list with page chunks
             Page = lookup_arg(page, 1, Params, Context),
             Pages = length(List),
-            {ok, build_html(Template, Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context)};
+            {ok, build_html(Template, Page, Pages, false, HideSinglePage, Dispatch, DispatchArgs, Context)};
         List when is_list(List) ->
             % Flat list
             render_list(Template, List, Params, HideSinglePage, Dispatch, DispatchArgs, Context);
@@ -70,7 +70,7 @@ render_list(Template, List, Params, HideSinglePage, Dispatch, DispatchArgs, Cont
     PageLen = lookup_arg(pagelen, ?SEARCH_PAGELEN, Params, Context),
     Page = lookup_arg(page, 1, Params, Context),
     Pages = (length(List) - 1) div PageLen + 1,
-    {ok, build_html(Template, Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context)}.
+    {ok, build_html(Template, Page, Pages, false, HideSinglePage, Dispatch, DispatchArgs, Context)}.
 
 lookup_arg(Name, Default, Params, Context) ->
     V = case proplists:get_value(Name, Params) of
@@ -92,12 +92,12 @@ lookup_arg(Name, Default, Params, Context) ->
         _ -> V1
     end.
 
-build_html(_Template, _Page, Pages, true, _Dispatch, _DispatchArgs, _Context) when Pages =< 1 ->
+build_html(_Template, _Page, Pages, _IsEstimated, true, _Dispatch, _DispatchArgs, _Context) when Pages =< 1 ->
     <<>>;
-build_html(Template, Page, Pages, _HideSinglePage, Dispatch, DispatchArgs, Context) ->
+build_html(Template, Page, Pages, IsEstimated, _HideSinglePage, Dispatch, DispatchArgs, Context) ->
     {S,M,E} = pages(Page, Pages),
     DispatchQArgs = append_qargs(DispatchArgs, Context),
-    Urls = urls(S, M, E, Dispatch, DispatchQArgs, Context),
+    Urls = urls(S, M, E, IsEstimated, Dispatch, DispatchQArgs, Context),
     Props = [
         {prev_url, case Page =< 1 of
                         true -> undefined;
@@ -109,7 +109,8 @@ build_html(Template, Page, Pages, _HideSinglePage, Dispatch, DispatchArgs, Conte
                    end},
         {pages, Urls},
         {page, Page},
-        {dispatch, Dispatch}
+        {dispatch, Dispatch},
+        {is_estimated, IsEstimated}
         | DispatchArgs
     ],
     {Html, _} = z_template:render_to_iolist(Template, Props, Context),
@@ -172,59 +173,52 @@ encode_args(Args) ->
         [z_url:url_encode(K), $=, z_url:url_encode(V)] || {K,V} <- Args
     ]).
 
+
 pages(Page, Pages) ->
-    AtStart = (not (Page == Pages)) and (Page < ?SLIDE),
-    AtEnd = (not AtStart) and (Page > (Pages - (?SLIDE - 1))),
-    Start = case AtStart of
-        true ->
-            % Together "1 .. "
-            seq(1, erlang:min(?SLIDE, Pages - 1));
-        false ->
-            % Separate "1 ... 3"
-            [1]
+    SliderMin = erlang:max(1, Page - ?DELTA),
+    SliderMax = if
+        Page < ?DELTA -> erlang:min(Pages, ?DELTA + ?DELTA);
+        true -> erlang:min(Pages, Page + ?DELTA)
     end,
-    End = case AtEnd of
-        true ->
-            % Together "10 .. 15"
-            seq(erlang:max(2, Pages - ?SLIDE + 1), Pages);
-        false ->
-            [Pages]
+    Slider = seq(SliderMin, SliderMax),
+    {Start, Slider1} = if
+        SliderMin =:= 1 -> {[], Slider};
+        SliderMin =:= 2 -> {[], [1|Slider]};
+        SliderMin =:= 3 -> {[], [1,2|Slider]};
+        true -> {[1], Slider}
     end,
-    Middle = case (not AtStart) and (not AtEnd) of
-        true ->
-            seq(erlang:max(2, Page - ?DELTA), erlang:min(Pages - 1, Page + ?DELTA));
-        false ->
-            []
+    {End, Slider2} = if
+        SliderMax =:= Pages -> {[], Slider1};
+        SliderMax =:= Pages - 1 -> {[], Slider1 ++ [Pages]};
+        SliderMax =:= Pages - 2 -> {[], Slider1 ++ [Pages-1,Pages]};
+        true -> {[Pages], Slider1}
     end,
-    {Start, Middle, End}.
-
-
-urls(Start, Middle, End, Dispatch, DispatchArgs, Context) ->
-    UrlStart  = [ {N, url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- Start ],
-    UrlMiddle = [ {N, url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- Middle ],
-    UrlEnd    = [ {N, url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- End ],
-    {Part1,Next} = case Middle of
-        [] ->
-            {UrlStart, max(Start) + 1};
-        [N|_] when N == 2 ->
-            % Now Start is always of the format [1]
-            {UrlStart ++ UrlMiddle, lists:max(Middle) + 1};
-        _ ->
-            {UrlStart ++ [{undefined, sep}|UrlMiddle], lists:max(Middle) + 1}
-    end,
-    case End of
-        [] ->
-            Part1;
-        [M|_] ->
+    {Start1, Slider3} = case {Slider2,End} of
+        {[N|_], []} ->
+            Extra = ?DELTA + ?DELTA - length(Slider2),
             if
-                M == Next -> Part1 ++ UrlEnd;
-                true -> Part1 ++ [{undefined, sep}|UrlEnd]
-            end
+                N - Extra =< 3 ->
+                    {[], seq(1,N-1) ++ Slider2};
+                true ->
+                    {Start, seq(N-Extra, N-1) ++ Slider2}
+            end;
+        {_, _} ->
+            {Start, Slider2}
+    end,
+    {Start1, Slider3, End}.
+
+urls(Start, Slider, End, IsEstimated, Dispatch, DispatchArgs, Context) ->
+    Start1 = [ {N, z_dispatcher:url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- Start ],
+    Slider1 = [ {N, z_dispatcher:url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- Slider ],
+    End1 = [ {N, z_dispatcher:url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- End ],
+    case {Start1, Slider1, End1} of
+        {[], S, []} -> S;
+        {[], S, [_]} when IsEstimated -> S ++ [ {undefined, sep} ];
+        {[], S, E} -> S ++ [ {undefined, sep} | E ];
+        {B, S, []} -> B ++ [ {undefined, sep} | S ];
+        {B, S, [_]} when IsEstimated -> B ++ [ {undefined, sep} | S ] ++ [ {undefined, sep} ];
+        {B, S, E} -> B ++ [ {undefined, sep} | S ] ++ [ {undefined, sep} | E ]
     end.
-
-
-max([]) -> 0;
-max(L) -> lists:max(L).
 
 seq(A,B) when B < A -> [];
 seq(A,B) -> lists:seq(A,B).

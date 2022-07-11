@@ -197,13 +197,6 @@ search(Search, {Offset, Limit} = OffsetLimit, Context) ->
     Args :: map() | proplists:proplist(),
     Options :: search_options(),
     Context :: z:context().
-handle_search_result(#search_result{ pages = N } = S, _Page, _PageLen, _OffsetLimit, Name, Args, Options, _Context)
-    when is_integer(N) ->
-    S#search_result{
-        search_name = Name,
-        search_args = Args,
-        options = Options
-    };
 handle_search_result(#search_result{ result = L, total = Total } = S, Page, PageLen, _OffsetLimit, Name, Args, Options, _Context)
     when is_integer(Total) ->
     L1 = lists:sublist(L, 1, PageLen),

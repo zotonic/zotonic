@@ -16,7 +16,7 @@
 {% block feedback %}
 	{% if not is_result_email %}
 		{% if id.email_text_html %}
-			{{ id.email_text_html|show_media:"_body_media_mailing.tpl" }}
+			{{ id.email_text_html|show_media:"email/_body_media.tpl" }}
 		{% else %}
 			<p>{_ The following has been filled in: _} <a href="{{ id.page_url_abs }}">{{ id.title }}</a></p>
 		{% endif %}

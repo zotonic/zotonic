@@ -332,6 +332,7 @@ find_value(Key, #search_result{} = S, _TplVars, _Context) ->
         result -> S#search_result.result;
         options -> S#search_result.options;
         total -> S#search_result.total;
+        is_total_estimated -> S#search_result.total;
         page -> S#search_result.page;
         pages -> S#search_result.pages;
         next -> S#search_result.next;
@@ -343,6 +344,7 @@ find_value(Key, #search_result{} = S, _TplVars, _Context) ->
         <<"result">> -> S#search_result.result;
         <<"options">> -> S#search_result.options;
         <<"total">> -> S#search_result.total;
+        <<"is_total_estimated">> -> S#search_result.is_total_estimated;
         <<"page">> -> S#search_result.page;
         <<"pages">> -> S#search_result.pages;
         <<"next">> -> S#search_result.next;
