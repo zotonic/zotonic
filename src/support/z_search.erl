@@ -100,12 +100,6 @@ search(Search, {Offset, Limit} = OffsetLimit, Context) ->
     Name :: binary() | atom(),
     Args :: proplists:proplist(),
     Context :: z:context().
-handle_search_result(#search_result{ pages = N } = S, _Page, _PageLen, _OffsetLimit, Name, Args, _Context)
-    when is_integer(N) ->
-    S#search_result{
-        search_name = Name,
-        search_args = Args
-    };
 handle_search_result(#search_result{ result = L, total = Total } = S, Page, PageLen, _OffsetLimit, Name, Args, _Context)
     when is_integer(Total) ->
     L1 = lists:sublist(L, 1, PageLen),
