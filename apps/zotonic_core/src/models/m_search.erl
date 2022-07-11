@@ -203,6 +203,7 @@ empty_result() ->
         page = 1,
         pagelen = ?SEARCH_PAGELEN,
         total = 0,
+        is_total_estimated = false,
         pages = 1
     }.
 
