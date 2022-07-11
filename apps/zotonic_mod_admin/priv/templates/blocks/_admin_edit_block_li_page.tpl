@@ -12,6 +12,9 @@
     		{% catinclude "_rsc_block_item.tpl" blk.rsc_id %}
         {% endif %}
 	</div>
+    <br><br>
+    <a href="#disconnect" class="btn btn-xs btn-danger page-disconnect pull-right">{_ Remove _}</a>
+    <br><br>
 	<input type="hidden" id="block-{{name}}-rsc_id" name="blocks[].rsc_id" value="{{ blk.rsc_id }}" />
 </fieldset>
 

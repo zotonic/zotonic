@@ -104,6 +104,12 @@ $('#edit-blocks-wrapper').on('click', '.block-page a.page-connect', function(eve
     event.preventDefault();
 });
 
+$('#edit-blocks-wrapper').on('click', '.block-page a.page-disconnect', function(event) {
+    window.zBlockConnectTrigger = this;
+    window.zAdminBlockConnectDone({object_id: '', predicate: '', subject_id: '', title: '', title_language: '', url_language: '' });
+    event.preventDefault();
+});
+
 window.zAdminBlockConnectDone = function(v) {
     var $block_page = $(window.zBlockConnectTrigger).closest(".block-page");
     var target_id = $(".rsc-item-wrapper", $block_page).attr('id');
