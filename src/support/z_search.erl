@@ -86,7 +86,7 @@ search(Search, {Offset, Limit} = OffsetLimit, Context) ->
             PageNr = (Offset - 1) div Limit,
             search_1(Search, PageNr, Limit, OffsetLimit, Context);
         _ ->
-            search_1(Search, undefined, undefined, OffsetLimit, Context)
+            search_1(Search, 1, ?SEARCH_ALL_LIMIT, OffsetLimit, Context)
     end.
 
 
