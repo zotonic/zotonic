@@ -145,14 +145,16 @@
 
 %% @doc A set of search results
 -record(search_result, {
+    search_name = 'query' :: atom(),
+    search_args = [] :: proplists:proplist(),
     result = [] :: list(),
     page = 1 :: pos_integer(),
-    pagelen :: pos_integer(),
-    total :: non_neg_integer(),
-    all :: non_neg_integer(),
-    pages :: non_neg_integer(),
-    next,
-    prev,
+    pagelen = ?SEARCH_PAGELEN :: pos_integer() | undefined,
+    total = undefined :: non_neg_integer() | undefined,
+    pages = undefined :: non_neg_integer() | undefined,
+    is_total_estimated = false :: boolean(),
+    next = false :: pos_integer() | false,
+    prev = 1 :: pos_integer(),
     facets = [] :: list()
 }).
 

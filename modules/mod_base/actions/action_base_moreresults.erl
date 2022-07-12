@@ -41,8 +41,6 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 total(#search_result{total=Total}) when is_integer(Total) ->
     Total;
-total(#search_result{all=All}) when is_list(All) ->
-    length(All);
 total(#search_result{result=Result}) when is_list(Result) ->
     case proplists:get_value(ids, Result) of
         L when is_list(L) -> length(L);

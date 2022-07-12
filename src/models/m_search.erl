@@ -122,7 +122,6 @@ empty_result(SearchName, Props, PageLen) ->
             page=1,
             pagelen=PageLen,
             total=0,
-            all=[],
             pages=1
         },
         total=0,
@@ -145,6 +144,11 @@ get_result(props, Result, _Context) ->
     Result#m_search_result.search_props;
 get_result(total, Result, _Context) ->
     Result#m_search_result.total;
+get_result(is_total_estimated, Result, _Context) ->
+    case Result#m_search_result.result of
+        #search_result{is_total_estimated=IsTotalEstimated} -> IsTotalEstimated;
+        undefined -> false
+    end;
 get_result(facets, Result, _Context) ->
     #search_result{facets = Facets} = Result#m_search_result.result,
     Facets;
