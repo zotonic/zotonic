@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-07-12 09:37\n"
+"PO-Revision-Date: 2022-07-12 13:03\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -2379,7 +2379,7 @@ msgstr "bewerk deze pagina"
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:158./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:115./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:55
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:95
 msgid "estimated"
-msgstr "geschatte"
+msgstr "geschat"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "excluding"
@@ -4706,11 +4706,11 @@ msgstr "De verbinding die onze site gebruikt om met onze eigen server te praten.
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:123
 msgid "The stack trace is shown because this is not a production site."
-msgstr "De stacktracering wordt weergegeven omdat dit geen productielocatie is."
+msgstr "De stack trace wordt getoond omdat dit geen productie site is."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:121
 msgid "The stack trace is shown because you are an administrator of this site."
-msgstr "De stacktracering wordt getoond omdat u beheerder bent van deze site."
+msgstr "De stack trace wordt getoond omdat u een beheerder van deze site bent."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:76
 msgid "The test below checks the connection between your machine, Google and our site."
