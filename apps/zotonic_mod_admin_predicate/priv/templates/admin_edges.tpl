@@ -92,7 +92,7 @@
                 }] as result %}
                 {% include "_admin_edges_list.tpl" result=result qsort=qsort qcat=qcat %}
                 {% pager result=result dispatch="admin_edges" qargs hide_single_page %}
-                <div class="text-muted clear-left"><b>{{ result.total }}</b> {_ items found _}{% if result.is_total_estimated %} ({_ estimated _}){% endif %}.</div>
+                <div class="text-muted clear-left">{% trans "{total} items found" total=result.total %}{% if result.is_total_estimated %} ({_ estimated _}){% endif %}</div>
             {% endwith %}
         {% endwith %}
     {% endwith %}

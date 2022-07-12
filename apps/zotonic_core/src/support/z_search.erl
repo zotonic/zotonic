@@ -55,7 +55,7 @@
 
 -define(OFFSET_LIMIT, {1,?SEARCH_PAGELEN}).
 -define(SEARCH_ALL_LIMIT, 30000).
-
+-define(MIN_LOOKAHEAD, 200).
 
 %% @doc Perform a named search with arguments.
 -spec search(Name, Args, Page, PageLen, Context) -> Result when
@@ -149,7 +149,9 @@ search(Name, Args, Page, PageLen, Options0, Context) when is_binary(Name), is_ma
 search_pager(Search, Page, Context) ->
     search_pager(Search, Page, ?SEARCH_PAGELEN, Context).
 
-%% @doc Search items and handle the paging
+%% @doc Search items and handle the paging. This fetches extra rows beyond the requested
+%% rows to ensure that the pager has the information for the "next page" options.
+%% The number of extra rows depends on the current page, more for page 1, less for later pages.
 -spec search_pager(search_query(), Page :: pos_integer(), PageLen :: pos_integer(), z:context()) -> #search_result{}.
 search_pager(Search, undefined, PageLen, Context) ->
     search_pager(Search, 1, PageLen, Context);
@@ -179,10 +181,12 @@ search(Search, {1, Limit} = OffsetLimit, Context) ->
 search(Search, {Offset, Limit} = OffsetLimit, Context) ->
     case (Offset - 1) rem Limit of
         0 ->
+            % On a page boundary, we can calculate the page number.
             PageNr = (Offset - 1) div Limit,
             search_1(Search, PageNr, Limit, OffsetLimit, Context);
         _ ->
-            search_1(Search, undefined, undefined, OffsetLimit, Context)
+            % Not on a page boundary, give up on calculating the page number.
+            search_1(Search, 1, ?SEARCH_ALL_LIMIT, OffsetLimit, Context)
     end.
 
 
@@ -317,22 +321,19 @@ handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit,
 %% planner to give an estimated number of rows.
 offset_limit(1, PageLen) ->
     % Take 5 pages + 1
-    {1, 5 * PageLen + 1};
+    {1, erlang:max(5 * PageLen + 1, ?MIN_LOOKAHEAD)};
 offset_limit(2, PageLen) ->
     % Take 4 pages + 1
-    {PageLen + 1, 4 * PageLen + 1};
+    {PageLen + 1, erlang:max(4 * PageLen + 1, ?MIN_LOOKAHEAD - PageLen)};
 offset_limit(3, PageLen) ->
     % Take 3 pages + 1
-    {2 * PageLen + 1, 3 * PageLen + 1};
+    {2 * PageLen + 1, erlang:max(3 * PageLen + 1, ?MIN_LOOKAHEAD - 2 * PageLen)};
 offset_limit(N, PageLen) ->
     % Take 2 pages + 1
-    {(N-1) * PageLen + 1, 2 * PageLen + 1}.
+    {(N-1) * PageLen + 1, erlang:max(2 * PageLen + 1, ?MIN_LOOKAHEAD - N * PageLen)}.
 
 
 %% @doc Handle deprecated searches in the {atom, list()} format.
-search_1({SearchName, Props}, undefined, _PageLen, {1, Limit}, Context) when is_binary(SearchName) ->
-    ArgsMap = props_to_map(Props),
-    search(SearchName, ArgsMap, 1, Limit, Context);
 search_1({SearchName, Props}, Page, PageLen, _OffsetLimit, Context) when is_binary(SearchName), is_integer(Page) ->
     ArgsMap = props_to_map(Props),
     search(SearchName, ArgsMap, Page, PageLen, Context);
