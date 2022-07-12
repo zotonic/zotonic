@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-07-11 16:59\n"
+"PO-Revision-Date: 2022-07-12 08:35\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -2385,11 +2385,6 @@ msgstr "ازالة"
 msgid "has been disconnected."
 msgstr "تم قطع الاتصال."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:158./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:115./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:55
-#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:95
-msgid "items found"
-msgstr "تم العثور على العناصر"
-
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:15
 msgid "matching"
@@ -2442,6 +2437,11 @@ msgstr "رأي"
 #: apps/zotonic_mod_admin/priv/templates/_admin_navbar_brand.tpl:1./apps/zotonic_mod_admin/priv/templates/admin_logon.tpl:12
 msgid "visit site"
 msgstr "تفضل بزيارة الموقع"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:158./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:115./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:55
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:95
+msgid "{total} items found"
+msgstr ""
 
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:1
 msgid "Are you sure you want to delete the following categories:"
