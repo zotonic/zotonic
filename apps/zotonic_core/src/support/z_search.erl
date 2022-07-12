@@ -149,7 +149,9 @@ search(Name, Args, Page, PageLen, Options0, Context) when is_binary(Name), is_ma
 search_pager(Search, Page, Context) ->
     search_pager(Search, Page, ?SEARCH_PAGELEN, Context).
 
-%% @doc Search items and handle the paging
+%% @doc Search items and handle the paging. This fetches extra rows beyond the requested
+%% rows to ensure that the pager has the information for the "next page" options.
+%% The number of extra rows depends on the current page, more for page 1, less for later pages.
 -spec search_pager(search_query(), Page :: pos_integer(), PageLen :: pos_integer(), z:context()) -> #search_result{}.
 search_pager(Search, undefined, PageLen, Context) ->
     search_pager(Search, 1, PageLen, Context);
@@ -179,9 +181,11 @@ search(Search, {1, Limit} = OffsetLimit, Context) ->
 search(Search, {Offset, Limit} = OffsetLimit, Context) ->
     case (Offset - 1) rem Limit of
         0 ->
+            % On a page boundary, we can calculate the page number.
             PageNr = (Offset - 1) div Limit,
             search_1(Search, PageNr, Limit, OffsetLimit, Context);
         _ ->
+            % Not on a page boundary, give up on calculating the page number.
             search_1(Search, 1, ?SEARCH_ALL_LIMIT, OffsetLimit, Context)
     end.
 
@@ -330,9 +334,6 @@ offset_limit(N, PageLen) ->
 
 
 %% @doc Handle deprecated searches in the {atom, list()} format.
-search_1({SearchName, Props}, undefined, _PageLen, {1, Limit}, Context) when is_binary(SearchName) ->
-    ArgsMap = props_to_map(Props),
-    search(SearchName, ArgsMap, 1, Limit, Context);
 search_1({SearchName, Props}, Page, PageLen, _OffsetLimit, Context) when is_binary(SearchName), is_integer(Page) ->
     ArgsMap = props_to_map(Props),
     search(SearchName, ArgsMap, Page, PageLen, Context);
