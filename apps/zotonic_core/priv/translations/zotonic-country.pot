@@ -666,7 +666,7 @@ msgstr ""
 msgid "Tunisia"
 msgstr ""
 
-msgid "Turkey"
+msgid "Türkiye"
 msgstr ""
 
 msgid "Turkmenistan"
