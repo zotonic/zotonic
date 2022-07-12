@@ -52,7 +52,7 @@
             </tbody>
         </table>
         {% pager result=result dispatch="admin_referrers" hide_single_page=1 id=object_id qargs %}
-        <div class="text-muted clear-left"><b>{{ result.total }}</b> {_ items found _}{% if result.is_total_estimated %} ({_ estimated _}){% endif %}.</div>
+        <div class="text-muted clear-left">{% trans "{total} items found" total=result.total %}{% if result.is_total_estimated %} ({_ estimated _}){% endif %}</div>
     {% endifnotequal %}
 </div>
 {% endwith %}
