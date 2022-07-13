@@ -47,6 +47,9 @@ render(Params, _Vars, Context) ->
         [dispatch, result, hide_single_page, template]),
 
     case Result of
+        #search_result{page=Page, pages=undefined, prev=Prev, next=Next} ->
+            Html = build_prevnext(Template, Page, Prev, Next, Dispatch, DispatchArgs, Context),
+            {ok, Html};
         #search_result{page=Page, pages=Pages, is_total_estimated=IsEstimated} ->
             Html = build_html(Template, Page, Pages, IsEstimated, HideSinglePage, Dispatch, DispatchArgs, Context),
             {ok, Html};
@@ -91,6 +94,27 @@ lookup_arg(Name, Default, Params, Context) ->
         N when N =< 0 -> Default;
         _ -> V1
     end.
+
+build_prevnext(_Template, 1, _Prev, false, _Dispatch, _DispatchArgs, _Context) ->
+    <<>>;
+build_prevnext(Template, Page, Prev, Next, Dispatch, DispatchArgs, Context) ->
+    DispatchQArgs = append_qargs(DispatchArgs, Context),
+    Props = [
+        {prev_url, case Page =< 1 of
+                        true -> undefined;
+                        false ->  url_for(Dispatch, [{page,Prev}|DispatchQArgs], Context)
+                   end},
+        {next_url, case Next of
+                        false -> undefined;
+                        _ ->  url_for(Dispatch, [{page,Next}|DispatchQArgs], Context)
+                   end},
+        {pages, []},
+        {page, Page},
+        {dispatch, Dispatch},
+        {is_estimated, true}
+    ],
+    {Html, _} = z_template:render_to_iolist(Template, Props, Context),
+    Html.
 
 build_html(_Template, _Page, Pages, _IsEstimated, true, _Dispatch, _DispatchArgs, _Context) when Pages =< 1 ->
     <<>>;
