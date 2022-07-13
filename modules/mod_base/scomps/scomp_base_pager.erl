@@ -60,15 +60,19 @@ render(Params, _Vars, Context) ->
             {ok, <<>>};
         #m_search_result{result=#search_result{pages=0}} ->
             {ok, <<>>};
+        #m_search_result{result=#search_result{page=Page, pages=undefined, prev=Prev, next=Next}} ->
+            Html = build_prevnext(Page, Prev, Next, Dispatch, DispatchArgs, Context),
+            {ok, Html};
         #m_search_result{result=#search_result{page=Page, pages=1}} ->
             {ok, build_html(Page, 1, false, HideSinglePage, Dispatch, DispatchArgs, Context)};
         #m_search_result{result=#search_result{page=Page, pages=Pages, is_total_estimated=IsEstimated}} ->
             Html = build_html(Page, Pages, IsEstimated, HideSinglePage, Dispatch, DispatchArgs, Context),
             {ok, Html};
-        #search_result{result=[]} ->
+        #search_result{pages=0} ->
             {ok, <<>>};
-        #search_result{pages=undefined} ->
-            {ok, <<>>};
+        #search_result{page=Page, pages=undefined, prev=Prev, next=Next} ->
+            Html = build_prevnext(Page, Prev, Next, Dispatch, DispatchArgs, Context),
+            {ok, Html};
         #search_result{page=Page, pages=Pages, is_total_estimated=IsEstimated} ->
             Html = build_html(Page, Pages, IsEstimated, HideSinglePage, Dispatch, DispatchArgs, Context),
             {ok, Html};
@@ -113,6 +117,26 @@ lookup_arg(Name, Default, Params, Context) ->
         N when N =< 0 -> Default;
         _ -> V1
     end.
+
+build_prevnext(1, _Prev, false, _Dispatch, _DispatchArgs, _Context) ->
+    <<>>;
+build_prevnext(Page, Prev, Next, Dispatch, DispatchArgs, Context) ->
+    Props = [
+        {prev_url, case Page =< 1 of
+                        true -> undefined;
+                        false ->  url_for(Dispatch, [{page,Prev}|DispatchArgs], Context)
+                   end},
+        {next_url, case Next of
+                        false -> undefined;
+                        _ ->  url_for(Dispatch, [{page,Next}|DispatchArgs], Context)
+                   end},
+        {pages, []},
+        {page, Page},
+        {dispatch, Dispatch},
+        {is_estimated, true}
+    ],
+    {Html, _} = z_template:render_to_iolist("_pager.tpl", Props, Context),
+    Html.
 
 build_html(_Page, Pages, _IsEtimated, true, _Dispatch, _DispatchArgs, _Context) when Pages =< 1 ->
     <<>>;
