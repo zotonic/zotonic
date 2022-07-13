@@ -122,9 +122,9 @@ build_prevnext(1, _Prev, false, _Dispatch, _DispatchArgs, _Context) ->
     <<>>;
 build_prevnext(Page, Prev, Next, Dispatch, DispatchArgs, Context) ->
     Props = [
-        {prev_url, case Prev of
-                        false -> undefined;
-                        _ ->  url_for(Dispatch, [{page,Prev}|DispatchArgs], Context)
+        {prev_url, case Page =< 1 of
+                        true -> undefined;
+                        false ->  url_for(Dispatch, [{page,Prev}|DispatchArgs], Context)
                    end},
         {next_url, case Next of
                         false -> undefined;
