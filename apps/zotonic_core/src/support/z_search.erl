@@ -203,17 +203,16 @@ search(Search, {Offset, Limit} = OffsetLimit, Context) ->
     Context :: z:context().
 handle_search_result(#search_result{ result = L, total = Total } = S, Page, PageLen, _OffsetLimit, Name, Args, Options, _Context)
     when is_integer(Total) ->
-    L1 = lists:sublist(L, 1, PageLen),
     Pages = (Total+PageLen-1) div PageLen,
     Len = length(L),
     Next = if
-        Len > PageLen -> Page + 1;
+        Page < Pages -> Page + 1;
         true -> false
     end,
     S#search_result{
         search_name = Name,
         search_args = Args,
-        result = L1,
+        result = lists:sublist(L, 1, PageLen),
         options = Options,
         page = Page,
         pagelen = PageLen,
@@ -222,7 +221,7 @@ handle_search_result(#search_result{ result = L, total = Total } = S, Page, Page
         next = Next
     };
 handle_search_result(#search_result{ result = L, total = undefined } = S, Page, PageLen, _OffsetLimit, Name, Args, Options, _Context) ->
-    L1 = lists:sublist(L, 1, PageLen),
+    % Search result without page nr, but which should have used the OffsetLimit.
     Len = length(L),
     Next = if
         Len > PageLen -> Page + 1;
@@ -231,30 +230,30 @@ handle_search_result(#search_result{ result = L, total = undefined } = S, Page, 
     S#search_result{
         search_name = Name,
         search_args = Args,
-        result = L1,
+        result = lists:sublist(L, 1, PageLen),
         options = Options,
         page = Page,
         pagelen = PageLen,
         prev = erlang:max(Page-1, 1),
         next = Next
     };
-handle_search_result(L, Page, PageLen, _OffsetLimit, Name, Args, Options, _Context) when is_list(L) ->
-    L1 = lists:sublist(L, 1, PageLen),
-    Len = length(L),
-    Pages = (Len+PageLen-1) div PageLen + Page - 1,
+handle_search_result(L, Page, PageLen, {Offset, _Limit}, Name, Args, Options, _Context) when is_list(L) ->
+    % Simple search results that don't do their paging and offset/limit handling, do the paging here.
+    Total = length(L),
+    Pages = (Total + PageLen - 1) div PageLen,
     Next = if
-        Len > PageLen -> Page + 1;
+        Page < Pages -> Page + 1;
         true -> false
     end,
     #search_result{
         search_name = Name,
         search_args = Args,
-        result = L1,
-        options = Options,
+        result = sublist(L, Offset, PageLen),
         page = Page,
         pagelen = PageLen,
         pages = Pages,
-        total = Len,
+        options = Options,
+        total = Total,
         is_total_estimated = false,
         prev = erlang:max(Page-1, 1),
         next = Next
@@ -332,6 +331,14 @@ offset_limit(N, PageLen) ->
     % Take 2 pages + 1
     {(N-1) * PageLen + 1, erlang:max(2 * PageLen + 1, ?MIN_LOOKAHEAD - N * PageLen)}.
 
+
+sublist(L, Offset, Limit) ->
+    try
+        lists:sublist(L, Offset, Limit)
+    catch
+        error:function_clause ->
+            []
+    end.
 
 %% @doc Handle deprecated searches in the {atom, list()} format.
 search_1({SearchName, Props}, Page, PageLen, _OffsetLimit, Context) when is_binary(SearchName), is_integer(Page) ->
