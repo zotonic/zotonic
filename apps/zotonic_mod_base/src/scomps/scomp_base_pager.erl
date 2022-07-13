@@ -98,6 +98,7 @@ lookup_arg(Name, Default, Params, Context) ->
 build_prevnext(_Template, 1, _Prev, false, _Dispatch, _DispatchArgs, _Context) ->
     <<>>;
 build_prevnext(Template, Page, Prev, Next, Dispatch, DispatchArgs, Context) ->
+    DispatchQArgs = append_qargs(DispatchArgs, Context),
     Props = [
         {prev_url, case Page =< 1 of
                         true -> undefined;
@@ -105,7 +106,7 @@ build_prevnext(Template, Page, Prev, Next, Dispatch, DispatchArgs, Context) ->
                    end},
         {next_url, case Next of
                         false -> undefined;
-                        _ ->  url_for(Dispatch, [{page,Next}|DispatchArgs], Context)
+                        _ ->  url_for(Dispatch, [{page,Next}|DispatchQArgs], Context)
                    end},
         {pages, []},
         {page, Page},
