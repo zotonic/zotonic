@@ -545,18 +545,6 @@ cert_temp_dir(Context) ->
 check_keyfile(KeyFile, Context) ->
     Hostname = z_context:hostname(Context),
     case file:read_file(KeyFile) of
-        {ok, <<"-----BEGIN PRIVATE KEY", _/binary>>} ->
-            ?LOG_ERROR(#{
-                text => <<
-                    "Need RSA private key file for Letsencrypt. "
-                    "Use: `openssl rsa -in letsencrypt/letsencrypt.pem -out letsencrypt/letsencrypt.pem`">>,
-                in => zotonic_mod_ssl_letsencrypt,
-                result => error,
-                reason => need_rsa_private_key,
-                hostname => Hostname,
-                key_file => KeyFile
-            }),
-            {error, need_rsa_private_key};
         {ok, Bin} ->
             case public_key:pem_decode(Bin) of
                 [] ->
