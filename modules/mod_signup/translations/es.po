@@ -10,17 +10,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic-0.7.1\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-03-13 16:10+0100\n"
-"Last-Translator: Juan Jose Comellas <juanjo@comellas.org>\n"
+"PO-Revision-Date: 2022-07-14 14:02+0200\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
-"Language: \n"
+"Language: es_AR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Spanish\n"
-"X-Poedit-Country: ARGENTINA\n"
+"X-Generator: Poedit 3.1.1\n"
 
-#: modules/mod_signup/templates/signup_confirm.tpl:12
+#: modules/mod_signup/templates/signup_confirm.tpl:31
 msgid "Bring me to my profile page"
 msgstr "Ir a la página de mi perfil"
 
@@ -33,13 +32,13 @@ msgstr ""
 msgid "Choose a username and password"
 msgstr "Elija un nombre de usuario y contraseña"
 
-#: modules/mod_signup/templates/signup_confirm.tpl:26
+#: modules/mod_signup/templates/signup_confirm.tpl:21
 msgid "Confirm key"
 msgstr "Confirmar clave"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:3
-#: modules/mod_signup/templates/signup_confirm.tpl:15
-#: modules/mod_signup/templates/signup_confirm.tpl:30
+#: modules/mod_signup/templates/signup_confirm.tpl:7
+#: modules/mod_signup/templates/signup_confirm.tpl:24
 msgid "Confirm my account"
 msgstr "Confirmar mi cuenta"
 
@@ -48,8 +47,9 @@ msgid "Confirm my account."
 msgstr "Confirmar mi cuenta."
 
 #: modules/mod_signup/templates/_signup_stage.tpl:1
+#, fuzzy
 msgid "Confirm your account by email"
-msgstr ""
+msgstr "Confirme su cuenta por correo electrónico"
 
 #: modules/mod_signup/templates/email_verify.tpl:6
 msgid "Dear"
@@ -57,28 +57,32 @@ msgstr "Estimado"
 
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:53
 msgid "E-mail"
-msgstr ""
+msgstr "Email"
 
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:22
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:44
 msgid "Enter a name"
-msgstr ""
+msgstr "Ingrese un nombre"
 
-#: modules/mod_signup/templates/_signup_form_fields_username.tpl:35
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:36
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:45
+#, fuzzy
 msgid "Enter a password"
-msgstr ""
+msgstr "Introduzca una contraseña"
 
 #: modules/mod_signup/templates/_signup_form_fields_username.tpl:19
 msgid "Enter a username"
-msgstr ""
+msgstr "Introduzca un nombre de usuario"
 
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:59
+#, fuzzy
 msgid "Enter a valid address"
-msgstr ""
+msgstr "Introduzca una dirección válida"
 
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:60
+#, fuzzy
 msgid "Enter an e-mail address"
-msgstr ""
+msgstr "Introduzca una dirección de correo electrónico"
 
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:16
 msgid "First name"
@@ -97,16 +101,19 @@ msgid "If the link does not work then you can go to"
 msgstr "Si el vínculo no funciona entonces puede ir a"
 
 #: modules/mod_signup/templates/_signup_stage.tpl:5
+#, fuzzy
 msgid ""
 "If you do not receive the e-mail within a few minutes, please check your "
 "spam folder."
 msgstr ""
+"Si no recibe el correo electrónico en unos minutos, compruebe su carpeta de "
+"correo no deseado."
 
 #: modules/mod_signup/templates/_signup_outside.tpl:1
 msgid "If you have already an account,"
 msgstr "Si ya tiene una cuenta,"
 
-#: modules/mod_signup/templates/signup_confirm.tpl:17
+#: modules/mod_signup/templates/signup_confirm.tpl:19
 msgid ""
 "In your e-mail you received a confirmation key. Please copy it in the input "
 "field below."
@@ -118,17 +125,20 @@ msgstr ""
 msgid "Last name"
 msgstr "Apellido"
 
-#: modules/mod_signup/templates/_signup_form_fields_username.tpl:42
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:52
+#, fuzzy
 msgid "Minimum characters:"
-msgstr ""
+msgstr "Caracteres mínimos:"
 
-#: modules/mod_signup/templates/_signup_form_fields_username.tpl:38
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:48
+#, fuzzy
 msgid "Minimum characters: "
-msgstr ""
+msgstr "Caracteres mínimos"
 
 #: modules/mod_signup/templates/_logon_link.tpl:2
+#, fuzzy
 msgid "No account yet?"
-msgstr ""
+msgstr "¿Aún no tiene cuenta?"
 
 #: modules/mod_signup/templates/_signup_form_fields_username.tpl:32
 msgid "Password"
@@ -139,8 +149,9 @@ msgid "Please confirm your account"
 msgstr "Por favor confirme su cuenta"
 
 #: modules/mod_signup/templates/_signup_stage.tpl:3
+#, fuzzy
 msgid "Please follow the instructions in the email we've sent you."
-msgstr ""
+msgstr "Siga las instrucciones del correo electrónico que le hemos enviado."
 
 #: modules/mod_signup/templates/email_verify.tpl:10
 msgid "Please follow the link below."
@@ -154,9 +165,10 @@ msgstr "Prefijo"
 msgid "Privacy policies"
 msgstr "Políticas de privacidad"
 
-#: modules/mod_signup/templates/_signup_form_fields_username.tpl:52
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:63
+#, fuzzy
 msgid "Repeat your password"
-msgstr ""
+msgstr "Repite tu contraseña"
 
 #: modules/mod_signup/templates/_signup_form_fields.tpl:5
 #: modules/mod_signup/templates/signup.tpl:3
@@ -166,17 +178,12 @@ msgstr "Registrar"
 #: modules/mod_signup/templates/_logon_link.tpl:2
 #: modules/mod_signup/templates/_signup_title.tpl:1
 msgid "Sign up"
-msgstr ""
+msgstr "Registar"
 
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:11
+#, fuzzy
 msgid "Sign up with your e-mail address"
-msgstr ""
-
-#: modules/mod_signup/templates/signup_confirm.tpl:20
-msgid "Sorry, I don't know that confirmation code. Did you copy it correctly?"
-msgstr ""
-"Disculpe, no hay registro de ese código de confirmación. Lo copió "
-"correctamente?"
+msgstr "Regístrese con su dirección de correo electrónico"
 
 #: modules/mod_signup/templates/_signup_box.tpl:24
 msgid ""
@@ -186,9 +193,27 @@ msgstr ""
 "Disculpe, ya existe una cuenta asociada a la cuenta de su proveedor de "
 "servicio. Puede que su cuenta aquí haya sido suspendida."
 
-#: modules/mod_signup/templates/_signup_form_fields_tos.tpl:22
-msgid "Terms of Service"
+#: modules/mod_signup/templates/signup_confirm.tpl:12
+#, fuzzy
+#| msgid ""
+#| "Sorry, I don't know that confirmation code. Did you copy it correctly?"
+msgid ""
+"Sorry, this confirmation key is unknown or already used. Did you copy it "
+"correctly?"
 msgstr ""
+"Disculpe, no hay registro de ese código de confirmación. Lo copió "
+"correctamente?"
+
+#: modules/mod_signup/templates/_signup_box.tpl:28
+msgid "Sorry, this username is already in use. Please try another one."
+msgstr ""
+"Disculpe, este nombre de usuario ya está siendo usado. Por favor use uno "
+"distinto."
+
+#: modules/mod_signup/templates/_signup_form_fields_tos.tpl:22
+#, fuzzy
+msgid "Terms of Service"
+msgstr "Condiciones de servicio"
 
 #: modules/mod_signup/templates/email_verify.tpl:8
 msgid ""
@@ -198,9 +223,15 @@ msgstr ""
 "Gracias por registrarse en nuestro sitio. Le pedimos que confirme su cuenta "
 "antes de usarla."
 
-#: modules/mod_signup/templates/_signup_form_fields_username.tpl:53
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:64
+#, fuzzy
 msgid "This does not match the first password"
-msgstr ""
+msgstr "Esto no coincide con la primera contraseña"
+
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:39
+#, fuzzy
+msgid "This password does not meet the security requirements"
+msgstr "Esta contraseña no cumple los requisitos de seguridad"
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:14
 msgid ""
@@ -209,41 +240,55 @@ msgstr ""
 "Para registrarse debe aceptar los Términos de Servicio y las Políticas de "
 "Privacidad."
 
+#: modules/mod_signup/templates/signup_confirm.tpl:13
+#, fuzzy
+msgid "Try to log on"
+msgstr "Intente conectarse"
+
 #: modules/mod_signup/templates/_signup_form_fields_username.tpl:15
 msgid "Username"
 msgstr "Nombre de usuario"
 
-#: modules/mod_signup/templates/_signup_form_fields_username.tpl:49
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:60
 msgid "Verify password"
 msgstr "Verificar clave"
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:13
+#, fuzzy
 msgid ""
 "We will be very careful with all the information given to us and will never "
 "give your name or address away without your permission. We do have some "
 "rules that we need you to agree with."
 msgstr ""
-
-#: modules/mod_signup/templates/signup_confirm.tpl:8
-msgid "Welcome"
-msgstr "Bienvenido"
+"Seremos muy cuidadosos con toda la información que nos proporcione y nunca "
+"daremos su nombre o dirección sin su permiso. Tenemos algunas reglas que "
+"necesitamos que aceptes."
 
 #: modules/mod_signup/templates/_signup_extra.tpl:2
 msgid "You can also"
 msgstr "También puede"
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:26
+#, fuzzy
 msgid "You must agree to the Terms in order to sign up."
-msgstr ""
+msgstr "Debe aceptar las Condiciones para poder inscribirse."
 
-#: modules/mod_signup/templates/signup_confirm.tpl:10
-msgid "Your account is confirmed. You can now continue on our site."
+#: modules/mod_signup/templates/signup_confirm.tpl:29
+#, fuzzy
+#| msgid "Your account is confirmed. You can now continue on our site."
+msgid "Your account is confirmed and you are logged on."
 msgstr ""
 "Su cuenta ha sido confirmada. Puede continuar operando en nuestro sitio."
 
-#: modules/mod_signup/templates/_signup_form_fields_username.tpl:38
+#: modules/mod_signup/templates/signup_confirm.tpl:13
+#, fuzzy
+msgid "Your account might have been confirmed already."
+msgstr "Es posible que su cuenta ya haya sido confirmada."
+
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:48
+#, fuzzy
 msgid "Your password is too short."
-msgstr ""
+msgstr "Su nueva clave es demasiado corta."
 
 #: modules/mod_signup/templates/email_verify.tpl:14
 msgid "and enter the key"
@@ -259,15 +304,18 @@ msgstr "en el campo de entrada."
 
 #: modules/mod_signup/templates/_signup_extra.tpl:9
 msgid "or"
-msgstr ""
+msgstr "o"
 
 #: modules/mod_signup/templates/_signup_outside.tpl:1
 msgid "sign in"
-msgstr ""
+msgstr "Conectarse"
 
 #: modules/mod_signup/templates/_signup_extra.tpl:2
 msgid "sign up for a username and password"
 msgstr "regístrese para obtener usuario y clave"
+
+#~ msgid "Welcome"
+#~ msgstr "Bienvenido"
 
 #~ msgid "And sign up"
 #~ msgstr "Y regístrese"
@@ -280,11 +328,6 @@ msgstr "regístrese para obtener usuario y clave"
 
 #~ msgid "Sign up and become a member"
 #~ msgstr "Regístrese y conviértase en miembro"
-
-#~ msgid "Sorry, this username is already in use. Please try another one."
-#~ msgstr ""
-#~ "Disculpe, este nombre de usuario ya está siendo usado. Por favor use uno "
-#~ "distinto."
 
 #~ msgid ""
 #~ "In the e-mail you will find instructions on how to confirm your account."

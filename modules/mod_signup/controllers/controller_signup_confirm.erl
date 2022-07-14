@@ -40,29 +40,13 @@ charsets_provided(ReqData, Context) ->
 content_types_provided(ReqData, Context) ->
     {[{"text/html", provide_content}], ReqData, Context}.
 
-
 provide_content(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1),
     z_context:lager_md(Context2),
-    Key = z_context:get_q(key, Context2, []),
-    {Vars, ContextConfirm} = case Key of
-                                [] ->
-                                    {[], Context2};
-                                _ ->
-                                    case confirm(Key, Context2) of
-                                        {ok, UserId} ->
-                                            {ok, ContextUser} = z_auth:logon(UserId, Context2),
-                                            Location = confirm_location(UserId, ContextUser),
-                                            {[{user_id, UserId}, {location,Location}], ContextUser};
-                                        {error, _Reason} ->
-                                            {[{error, true}], Context2}
-                                    end
-                              end,
-    Rendered = z_template:render("signup_confirm.tpl", Vars, ContextConfirm),
-    {Output, OutputContext} = z_context:output(Rendered, ContextConfirm),
+    Rendered = z_template:render("signup_confirm.tpl", [], Context2),
+    {Output, OutputContext} = z_context:output(Rendered, Context2),
     ?WM_REPLY(Output, OutputContext).
-
 
 %% @doc Handle the submit of the signup form.
 event(#submit{}, Context) ->
@@ -71,11 +55,17 @@ event(#submit{}, Context) ->
         {ok, UserId} ->
             {ok, ContextUser} = z_auth:logon(UserId, Context),
             Location = confirm_location(UserId, ContextUser),
-            z_render:wire({redirect, [{location, Location}]}, ContextUser);
+            z_render:wire([
+                    {hide, [{target, "confirm_form"}]},
+                    {show, [{target, "confirm_ok"}]},
+                    {redirect, [{location, Location}]}
+                ], ContextUser);
         {error, _Reason} ->
-            z_render:wire({show, [{target,"confirm_error"}]}, Context)
+            z_render:wire([
+                    {show, [{target,"confirm_error"}]},
+                    {show, [{target,"confirm_key"}]}
+                ], Context)
     end.
-
 
 confirm(Key, Context) ->
     case m_identity:lookup_by_verify_key(Key, Context) of

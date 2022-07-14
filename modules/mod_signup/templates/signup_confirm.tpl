@@ -4,31 +4,31 @@
 
 {% block content %}
 
-{% if user_id %}
-	<h1>{_ Welcome _} {{ m.rsc[user_id].title }}</h1>
+<h1>{_ Confirm my account _}</h1>
 
-	<p>{_ Your account is confirmed. You can now continue on our site. _}</p>
-
-	<p><a href="{{ location|default:m.rsc[user_id].page_url }}">{_ Bring me to my profile page _}</a>.</p>
-
-{% else %}
-	<h1>{_ Confirm my account _}</h1>
-
-	<p>{_ In your e-mail you received a confirmation key. Please copy it in the input field below. _}</p>
-
-	<p id="confirm_error" class="error" {% if not error %}style="display: none"{% endif %}>
-		{_ Sorry, I don't know that confirmation code. Did you copy it correctly? _}
-	</p>
+<div id="confirm_form">
+	<div id="confirm_error" class="error" style="display: none">
+		<p>
+			{_ Sorry, this confirmation key is unknown or already used. Did you copy it correctly? _}<br>
+			{_ Your account might have been confirmed already. _} <a href="{% url logon %}">{_ Try to log on _}</a>
+		</p>
+	</div>
 
 	<form class="setcookie" id="signup_confirm_form" method="post" action="postback">
+		<div class="form-group" id="confirm_key" {% if q.key %}style="display: none"{% endif %}>
+			<p>{_ In your e-mail you received a confirmation key. Please copy it in the input field below. _}</p>
 
-		<p id="confirm_key">
 			<label for="key">{_ Confirm key _}</label>
 			<input class="form-control" type="text" id="key" name="key" value="{{ q.key|escape }}" />
-		</p>
-
-		<button>{_ Confirm my account _}</button>
+		</div>
+		<button class="btn btn-primary" type="submit">{_ Confirm my account _}</button>
 	</form>
-{% endif %}
+</div>
+
+<div id="confirm_ok" style="display: none">
+	<p>{_ Your account is confirmed and you are logged on. _}</p>
+
+	<p><a href="{{ location|default:m.rsc[user_id].page_url }}">{_ Bring me to my profile page _}</a>.</p>
+</div>
 
 {% endblock %}
