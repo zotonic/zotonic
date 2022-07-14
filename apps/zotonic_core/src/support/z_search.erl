@@ -204,7 +204,6 @@ search(Search, {Offset, Limit} = OffsetLimit, Context) ->
 handle_search_result(#search_result{ result = L, total = Total } = S, Page, PageLen, _OffsetLimit, Name, Args, Options, _Context)
     when is_integer(Total) ->
     Pages = (Total+PageLen-1) div PageLen,
-    Len = length(L),
     Next = if
         Page < Pages -> Page + 1;
         true -> false

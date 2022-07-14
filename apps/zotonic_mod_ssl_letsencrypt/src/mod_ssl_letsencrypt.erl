@@ -541,22 +541,10 @@ cert_dir(Context) ->
 cert_temp_dir(Context) ->
     filename:join([cert_dir(Context), "tmp"]).
 
--spec check_keyfile(string(), z:context()) -> ok | {error, openssl|no_private_keys_found|need_rsa_private_key|term()}.
+-spec check_keyfile(string(), z:context()) -> ok | {error, no_private_keys_found|term()}.
 check_keyfile(KeyFile, Context) ->
     Hostname = z_context:hostname(Context),
     case file:read_file(KeyFile) of
-        {ok, <<"-----BEGIN PRIVATE KEY", _/binary>>} ->
-            ?LOG_ERROR(#{
-                text => <<
-                    "Need RSA private key file for Letsencrypt. "
-                    "Use: `openssl rsa -in letsencrypt/letsencrypt.pem -out letsencrypt/letsencrypt.pem`">>,
-                in => zotonic_mod_ssl_letsencrypt,
-                result => error,
-                reason => need_rsa_private_key,
-                hostname => Hostname,
-                key_file => KeyFile
-            }),
-            {error, need_rsa_private_key};
         {ok, Bin} ->
             case public_key:pem_decode(Bin) of
                 [] ->
@@ -585,7 +573,7 @@ check_keyfile(KeyFile, Context) ->
     end.
 
 %% @doc Ensure that we have a RSA key for Letsencrypt.
--spec ensure_key_file(z:context()) -> {ok, string()} | {error, openssl|no_private_keys_found|need_rsa_private_key|term()}.
+-spec ensure_key_file(z:context()) -> {ok, string()} | {error, openssl|term()}.
 ensure_key_file(Context) ->
     SSLDir = cert_dir(Context),
     KeyFile = filename:join(SSLDir, "letsencrypt_api.key"),
