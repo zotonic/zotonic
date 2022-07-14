@@ -189,7 +189,7 @@ ensure_self_signed(Hostname) ->
             }),
             generate_self_signed(Hostname, Certs);
         {true, true} ->
-            case check_keyfile(KeyFile) of
+            case zotonic_ssl_certs:check_keyfile(KeyFile) of
                 ok -> {ok, Certs};
                 {error, _} = E -> E
             end
@@ -205,19 +205,6 @@ site_hostname(Context) ->
             site_hostname(undefined);
         ConfiguredHostname ->
             ConfiguredHostname
-    end.
-
-check_keyfile(Filename) ->
-    case file:read_file(Filename) of
-        {ok, <<"-----BEGIN PRIVATE KEY", _/binary>>} ->
-            {error, {need_rsa_private_key, Filename, "use: openssl rsa -in sitename.key -out sitename.pem"}};
-        {ok, Bin} ->
-            case public_key:pem_decode(Bin) of
-                [] -> {error, {no_private_keys_found, Filename}};
-                _ -> ok
-            end;
-        {error, _} = Error ->
-            {error, {cannot_read_pemfile, Filename, Error}}
     end.
 
 -spec generate_self_signed( string(), proplists:proplist() ) -> {ok, list()} | {error, term()}.
