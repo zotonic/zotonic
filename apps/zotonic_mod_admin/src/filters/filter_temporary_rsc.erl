@@ -141,6 +141,10 @@ find_existing(CatId, Context) ->
             end;
         {error, not_found} ->
             {error, not_found};
+        {error, no_session} ->
+            %% There is no storage session, so the user did not store anything.
+            %% When a resource is created, the storage session will be started.
+            {error, not_found};
         {error, _} = Error ->
             Error
     end.
