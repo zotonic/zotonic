@@ -120,16 +120,7 @@ make_rsc({error, not_found}, CatId, Props, Context) ->
                 props => Props
             }),
             undefined
-    end;
-make_rsc({error, Reason}, CatId, _Props, _Context) ->
-    ?LOG_ERROR(#{
-        text => <<"Can not make temporary resource on storage lookup">>,
-        in => zotonic_mod_admin,
-        result => error,
-        reason => Reason,
-        category_id => CatId
-    }),
-    undefined.
+    end.
 
 %% If no user then limit to 1 temporary rsc per client
 find_existing(CatId, Context) ->
@@ -141,8 +132,8 @@ find_existing(CatId, Context) ->
             end;
         {error, not_found} ->
             {error, not_found};
-        {error, _} = Error ->
-            Error
+        {error, no_session} ->
+            {error, not_found}
     end.
 
 is_unmodified_rsc(Id, Context) ->
