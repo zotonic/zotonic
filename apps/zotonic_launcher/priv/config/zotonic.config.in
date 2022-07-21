@@ -249,6 +249,9 @@
 %% code will take longer to be detected.
    %% {filewatcher_scanner_interval, 10000},
 
+%%% Show a growl message on the terminal if a file is compiled or handled.
+   %% {filewatcher_terminal_notifier, true},
+
 %%% Maximum number of entries in the metrics log buffer. There are two buffers, one for 1/2/3xx
 %%% results and one for 4/5xx results. All metrics are buffered so that the loggers can easily
 %%% handle spikes.

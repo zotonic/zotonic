@@ -297,6 +297,7 @@ default(dbschema) -> "public";
 default(filewatcher_enabled) -> true;
 default(filewatcher_scanner_enabled) -> true;
 default(filewatcher_scanner_interval) -> 10000;
+default(filewatcher_terminal_notifier) -> true;
 default(syslog_ident) -> "zotonic";
 default(syslog_opts) -> [ndelay];
 default(syslog_facility) -> local0;
