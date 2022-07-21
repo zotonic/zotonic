@@ -23,12 +23,12 @@ The search routines are now using the query planner to estimate the number of ro
 To support this, the following changes were made:
 
  * The ``all`` field in the ``#search_result`` record is now deprecated.
- * In ``#search_result` there is a new flag ``is_total_estimated``. This is set to ``true``
+ * In ``#search_result`` there is a new flag ``is_total_estimated``. This is set to ``true``
    if the total was estimated by using the query planner.
  * If the total is estimated then the pager does not show the last page.
  * In the admin the (estimated) total items found is shown below the pager.
 
-With this change some searches will be must faster as the database does not need to count to
+With this change some searches will be much faster as the database does not need to count to
 max 30K rows, like in the pre 0.68.0 implementation.
 
 The 1.x version of Zotonic is also using the query planner to estimate the number of rows, so
