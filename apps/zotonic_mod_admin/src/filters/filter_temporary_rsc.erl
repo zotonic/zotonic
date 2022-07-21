@@ -97,12 +97,10 @@ make_rsc({error, not_found}, CatId, Props, Context) ->
         {ok, RscId} ->
             Key = {temporary_rsc, CatId},
             {ok, SessionId} = z_context:session_id(Context),
-            {ok, ClientId} = z_context:client_id(Context),
             m_server_storage:secure_store(Key, RscId, Context),
             Args = [
                 RscId,
                 Key,
-                ClientId,
                 SessionId
             ],
             z_pivot_rsc:insert_task_after(
