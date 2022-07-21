@@ -339,12 +339,17 @@ send_message(undefined) ->
 send_message("") ->
     undefined;
 send_message(Message) ->
-    case z_string:trim(Message) of
-        "" -> undefined;
-        <<>> -> undefined;
-        Msg ->
-            lager:info("~s", [ Msg ]),
-            send_message(os:type(), Msg)
+    case z_config:get(filewatcher_terminal_notifier) of
+        true ->
+            case z_string:trim(Message) of
+                "" -> undefined;
+                <<>> -> undefined;
+                Msg ->
+                    lager:info("~s", [ Msg ]),
+                    send_message(os:type(), Msg)
+            end;
+        false ->
+            ok
     end.
 
 %% @doc send message to the user
