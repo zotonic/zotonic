@@ -148,6 +148,7 @@
     search_name = 'query' :: atom(),
     search_args = [] :: proplists:proplist(),
     result = [] :: list(),
+    all = [] :: list(),  % DEPRECATED is removed in 1.0
     page = 1 :: pos_integer(),
     pagelen = ?SEARCH_PAGELEN :: pos_integer() | undefined,
     total = undefined :: non_neg_integer() | undefined,

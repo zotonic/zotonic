@@ -113,7 +113,8 @@ find_value(Key, #search_result{} = S, _Context) when is_atom(Key) ->
         page -> S#search_result.page;
         pages -> S#search_result.pages;
         next -> S#search_result.next;
-        prev -> S#search_result.prev
+        prev -> S#search_result.prev;
+        all -> [] % Deprecated
     end;
 find_value(Key, #m_search_result{ result = Result } = S, _Context) when is_atom(Key) ->
     case Key of
@@ -127,7 +128,8 @@ find_value(Key, #m_search_result{ result = Result } = S, _Context) when is_atom(
         pages -> S#m_search_result.pages;
         pagelen -> S#m_search_result.pagelen;
         next -> S#m_search_result.next;
-        prev -> S#m_search_result.prev
+        prev -> S#m_search_result.prev;
+        all -> [] % Deprecated
     end;
 
 %% JSON-decoded proplist structure
