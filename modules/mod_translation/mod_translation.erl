@@ -222,6 +222,8 @@ observe_url_rewrite(#url_rewrite{args=Args}, Url, Context) ->
     case z_context:language(Context) of
         undefined ->
             Url;
+        'x-default' ->
+            Url;
         Language ->
             case lists:keyfind(z_language, 1, Args) of
                 false ->

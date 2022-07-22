@@ -1,8 +1,10 @@
-{% if id %}
-	<link rel="shortlink" href="{% block shortlink %}{% url id id=id use_absolute_url %}{% endblock %}" />
-	<link rel="canonical" href="{% block canonical %}{{ m.rsc[id].page_url_abs }}{% endblock %}" />
+{% if id and id.is_a.query and q.page %}
+    <link rel="canonical" href="{% block canonical %}{{ m.rsc[id].page_url_abs }}{% endblock %}?page={{ q.page|escape }}" />
+    <link rel="shortlink" href="{% block shortlink %}{% url id id=id use_absolute_url %}{% endblock %}" />
+{% elseif id %}
+    <link rel="canonical" href="{% block canonical %}{{ m.rsc[id].page_url_abs }}{% endblock %}" />
+    <link rel="shortlink" href="{% block shortlink %}{% url id id=id use_absolute_url %}{% endblock %}" />
 {% endif %}
-
 {% if m.config.seo.noindex.value or noindex %}
 	<meta name="robots" content="noindex,nofollow" />
 {% elseif id and id.language and m.modules.active.mod_translation and not z_language|member:id.language %}
