@@ -39,6 +39,7 @@
 
          is_admin_editable/1,
          is_admin/1,
+         is_sudo/1,
          sudo/1,
          sudo/2,
          anondo/1,
@@ -248,6 +249,9 @@ user_groups(Context) ->
         L when is_list(L) -> L
     end.
 
+%% @doc Check if the current access permissions are set to read-only.
+%% This is an authorization option for the current z.auth cookie or
+%% bearer token.
 -spec is_read_only( z:context() ) -> boolean().
 is_read_only(#context{ acl = admin }) ->
     % Sudo is never read only.
@@ -255,10 +259,18 @@ is_read_only(#context{ acl = admin }) ->
 is_read_only(#context{ acl_is_read_only = IsReadOnly }) ->
     IsReadOnly.
 
+%% @doc Set the current context to read only. Models can use this
+%% state to prevent updates to data.
 -spec set_read_only( boolean(), z:context() ) -> z:context().
 set_read_only(IsReadOnly, Context) ->
     Context#context{ acl_is_read_only = IsReadOnly }.
 
+%% @doc Check if the current context acl is set using a sudo.
+-spec is_sudo( z:context() ) -> boolean().
+is_sudo(#context{ acl = admin }) ->
+    true;
+is_sudo(_) ->
+    false.
 
 %% @doc Call a function with admin privileges.
 -spec sudo( Fun, z:context() ) -> any()

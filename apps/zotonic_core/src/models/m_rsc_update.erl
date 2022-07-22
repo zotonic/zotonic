@@ -712,36 +712,51 @@ split_edges_map(What, Map, Acc) ->
         Acc,
         Map).
 
+insert_edges({ok, _Id, _Res}, [], _Context) ->
+    ok;
 insert_edges({ok, Id, Res}, Edges, Context) ->
-    lists:foreach(
-        fun
-            ({_ ,<<>>, _}) ->
-                ok;
-            ({_ ,undefined, _}) ->
-                ok;
-            ({_ ,_, undefined}) ->
-                ok;
-            ({object, Pred, Es}) when is_list(Es) ->
-                Es1 = lists:filtermap(
-                    fun(EId) ->
-                        case m_rsc:rid(EId, Context) of
-                            undefined -> false;
-                            Rid -> {true, Rid}
-                        end
-                    end,
-                    Es),
-                m_edge:replace(Id, Pred, Es1, Context);
-            ({object, Pred, E}) ->
-                m_edge:insert(Id, Pred, E, Context);
-            ({subject, Pred, Es}) when is_list(Es) ->
-                lists:map(
-                    fun(E) -> m_edge:insert(E, Pred, Id, Context) end,
-                    Es);
-            ({subject, Pred, E}) ->
-                m_edge:insert(E, Pred, Id, Context)
-        end,
-        Edges),
-    {ok, Id, Res};
+    case z_acl:is_sudo(Context) of
+        true ->
+            ?LOG_ERROR(#{
+                text => <<"Not allowed to insert edges during rsc update with sudo">>,
+                result => error,
+                error => eacces,
+                in => zotonic_core,
+                rsc_id => Id,
+                edges => Edges
+            }),
+            ok;
+        false ->
+            lists:foreach(
+                fun
+                    ({_ ,<<>>, _}) ->
+                        ok;
+                    ({_ ,undefined, _}) ->
+                        ok;
+                    ({_ ,_, undefined}) ->
+                        ok;
+                    ({object, Pred, Es}) when is_list(Es) ->
+                        Es1 = lists:filtermap(
+                            fun(EId) ->
+                                case m_rsc:rid(EId, Context) of
+                                    undefined -> false;
+                                    Rid -> {true, Rid}
+                                end
+                            end,
+                            Es),
+                        m_edge:replace(Id, Pred, Es1, Context);
+                    ({object, Pred, E}) ->
+                        m_edge:insert(Id, Pred, E, Context);
+                    ({subject, Pred, Es}) when is_list(Es) ->
+                        lists:map(
+                            fun(E) -> m_edge:insert(E, Pred, Id, Context) end,
+                            Es);
+                    ({subject, Pred, E}) ->
+                        m_edge:insert(E, Pred, Id, Context)
+                end,
+                Edges),
+            {ok, Id, Res}
+    end;
 insert_edges({error, _} = Error , _, _Context) ->
     Error.
 
