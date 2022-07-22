@@ -712,9 +712,9 @@ split_edges_map(What, Map, Acc) ->
         Acc,
         Map).
 
-insert_edges({ok, _Id, _Res}, [], _Context) ->
-    ok;
-insert_edges({ok, Id, Res}, Edges, Context) ->
+insert_edges({ok, _Id, _Res} = Result, [], _Context) ->
+    Result;
+insert_edges({ok, Id, _Res} = Result, Edges, Context) ->
     case z_acl:is_sudo(Context) of
         true ->
             ?LOG_ERROR(#{
@@ -725,7 +725,8 @@ insert_edges({ok, Id, Res}, Edges, Context) ->
                 rsc_id => Id,
                 edges => Edges
             }),
-            ok;
+            % ignore edge insertion error
+            Result;
         false ->
             lists:foreach(
                 fun
@@ -755,7 +756,7 @@ insert_edges({ok, Id, Res}, Edges, Context) ->
                         m_edge:insert(E, Pred, Id, Context)
                 end,
                 Edges),
-            {ok, Id, Res}
+            Result
     end;
 insert_edges({error, _} = Error , _, _Context) ->
     Error.
