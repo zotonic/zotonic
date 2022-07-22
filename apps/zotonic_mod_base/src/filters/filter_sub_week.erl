@@ -21,10 +21,10 @@
 
 sub_week(undefined, _Context) ->
 	undefined;
-sub_week(Date, Context) ->
-	filter_add_day:add_day(Date, -7, Context).
+sub_week(Date, _Context) ->
+	z_datetime:prev_week(Date).
 
 sub_week(undefined, _N, _Context) ->
 	undefined;
-sub_week(Date, N, Context) ->
-	filter_add_day:add_day(Date, -7*N, Context).
+sub_week(Date, N, _Context) ->
+	z_datetime:prev_week(Date, N).
