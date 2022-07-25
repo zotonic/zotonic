@@ -40,11 +40,11 @@ time_add_month_test() ->
     ?assertEqual({{2024,2,29},{0,0,0}}, z_datetime:next_month({{2022,1,31},{0,0,0}}, 25)).
 
 repair_test() ->
-    ?assertEqual({{2021,12,1},{0,0,0}}, z_datetime:maybe_repair_date({{2021,12,1},{0,0,undefined}})),
-    ?assertEqual({{2021,12,1},{0,0,0}}, z_datetime:maybe_repair_date({{2021,12,1},{0,undefined,0}})),
-    ?assertEqual({{2021,12,1},{0,0,0}}, z_datetime:maybe_repair_date({{2021,12,1},{undefined,0,0}})),
-    ?assertEqual({{2021,12,1},{0,1,1}}, z_datetime:maybe_repair_date({{2021,12,1},{0,0,61}})),
-    ?assertEqual({{2021,12,1},{1,1,0}}, z_datetime:maybe_repair_date({{2021,12,1},{0,61,0}})),
-    ?assertEqual({{2021,11,30},{0,0,0}}, z_datetime:maybe_repair_date({{2021,12,0},{0,0,0}})),
-    ?assertEqual({{2020,12,1},{0,0,0}}, z_datetime:maybe_repair_date({{2021,0,1},{0,0,0}})),
-    ?assertEqual({{2020,11,30},{0,0,0}}, z_datetime:maybe_repair_date({{2021,0,0},{0,0,0}})).
+    ?assertEqual({{2021,12,1},{0,0,0}}, z_datetime:maybe_fix_datetime({{2021,12,1},{0,0,undefined}})),
+    ?assertEqual({{2021,12,1},{0,0,0}}, z_datetime:maybe_fix_datetime({{2021,12,1},{0,undefined,0}})),
+    ?assertEqual({{2021,12,1},{0,0,0}}, z_datetime:maybe_fix_datetime({{2021,12,1},{undefined,0,0}})),
+    ?assertEqual({{2021,12,1},{0,1,1}}, z_datetime:maybe_fix_datetime({{2021,12,1},{0,0,61}})),
+    ?assertEqual({{2021,12,1},{1,1,0}}, z_datetime:maybe_fix_datetime({{2021,12,1},{0,61,0}})),
+    ?assertEqual({{2021,11,30},{0,0,0}}, z_datetime:maybe_fix_datetime({{2021,12,0},{0,0,0}})),
+    ?assertEqual({{2020,12,1},{0,0,0}}, z_datetime:maybe_fix_datetime({{2021,0,1},{0,0,0}})),
+    ?assertEqual({{2020,11,30},{0,0,0}}, z_datetime:maybe_fix_datetime({{2021,0,0},{0,0,0}})).
