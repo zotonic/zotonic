@@ -85,6 +85,7 @@
     datetime_to_timestamp/1,
 
     undefined_if_invalid_date/1,
+    maybe_repair_date/1,
 
     last_day_of_the_month/2,
     is_leap_year/1
@@ -92,6 +93,22 @@
 
 
 -include_lib("zotonic.hrl").
+
+
+% A date, same as the calendar:datetime() but with a larger year range.
+-type datetime() :: calendar:datetime()
+                  | {{integer(),1..12,1..31}, {0..23,0..59,0..59}}.
+
+-type date() :: calendar:date()
+              | {integer(),1..12,1..31}.
+
+% Data that looks like a datetime and can be coerced into a datetime.
+-type fixable_datetime() :: datetime()
+                          | date()
+                          | {integer(),integer(),integer()}
+                          | {{integer(),integer(),integer()}, {integer()|undefined,integer()|undefined,integer()|undefined}}.
+
+-export_type([ datetime/0, date/0, fixable_datetime/0 ]).
 
 
 %% @doc Format the current date according to the format and the timezone settings in the context.
@@ -672,6 +689,46 @@ undefined_if_invalid_date({{Y,M,D},{H,I,S}} = Date) when
         end;
 undefined_if_invalid_date(_) ->
     undefined.
+
+
+%% @doc Shift a date if the date falls outside the valid date or time ranges. Return undefined
+%% if the date could not be mapped to some valid date.
+-spec maybe_repair_date(fixable_datetime() | undefined) -> datetime() | undefined.
+maybe_repair_date({_,_,_} = Date) ->
+    maybe_repair_date({Date, {0,0,0}});
+maybe_repair_date({{Y,M,D},{H,I,undefined}}) ->
+    maybe_repair_date({{Y,M,D},{H,I,0}});
+maybe_repair_date({{Y,M,D},{H,undefined,S}}) ->
+    maybe_repair_date({{Y,M,D},{H,0,S}});
+maybe_repair_date({{Y,M,D},{undefined,I,S}}) ->
+    maybe_repair_date({{Y,M,D},{0,I,S}});
+maybe_repair_date({{Y,M,D},{H,I,S}}) when
+    not is_integer(Y); not is_integer(M); not is_integer(D),
+    not is_integer(H); not is_integer(I); not is_integer(S) ->
+    undefined;
+maybe_repair_date({{Y,M,D},{H,I,S}}) when is_integer(H), H < 0 ->
+    maybe_repair_date(prev_day({{Y,M,D},{H+24,I,S}}));
+maybe_repair_date({{Y,M,D},{H,I,S}}) when is_integer(I), I < 0 ->
+    maybe_repair_date(prev_hour({{Y,M,D},{H,I+60,S}}));
+maybe_repair_date({{Y,M,D},{H,I,S}}) when is_integer(S), S < 0 ->
+    maybe_repair_date(prev_minute({{Y,M,D},{H,I,S+60}}));
+maybe_repair_date({{Y,M,D},{H,I,S}}) when is_integer(H), H >= 24 ->
+    maybe_repair_date(next_day({{Y,M,D},{H-24,I,S}}));
+maybe_repair_date({{Y,M,D},{H,I,S}}) when is_integer(I), I >= 60 ->
+    maybe_repair_date(next_hour({{Y,M,D},{H,I-60,S}}));
+maybe_repair_date({{Y,M,D},{H,I,S}}) when is_integer(S), S >= 60 ->
+    maybe_repair_date(next_minute({{Y,M,D},{H,I,S-60}}));
+maybe_repair_date({{Y,M,D},{H,I,S}}) when is_integer(M), M =< 0 ->
+    maybe_repair_date(prev_month({{Y,1,D},{H,I,S}}, 0-M+1));
+maybe_repair_date({{Y,M,D},{H,I,S}}) when is_integer(D), D =< 0 ->
+    maybe_repair_date(prev_day({{Y,M,1},{H,I,S}}, 0-D+1));
+maybe_repair_date({{Y,M,D},{H,I,S}} = Date) when
+    is_integer(Y), is_integer(M), is_integer(D),
+    is_integer(H), is_integer(I), is_integer(S) ->
+    norm_month(Date);
+maybe_repair_date(_) ->
+    undefined.
+
 
 
 %% Routines below are adapted from calendar.erl, which is:
