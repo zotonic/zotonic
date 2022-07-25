@@ -240,7 +240,7 @@ get_user_info(Rsc, Context) ->
         RscId ->
             Row = z_db:q_row("
                      select key, visited, modified,
-                            expires >= now() as is_expired
+                            coalesce(expires <= now(),false) as is_expired
                      from identity
                      where rsc_id = $1
                        and type = 'username_pw'",
@@ -831,7 +831,7 @@ check_username_pw_1(Username, Password, Context) ->
             Error;
         undefined ->
             Row = z_db:q_row("
-                select rsc_id, propb, expires >= now()
+                select rsc_id, propb, coalesce(expires <= now(),false) as is_expired
                 from identity
                 where type = 'username_pw'
                   and key = $1",
