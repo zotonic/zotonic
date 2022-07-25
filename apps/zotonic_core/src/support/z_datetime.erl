@@ -326,13 +326,13 @@ timesince(Date, Base, _AgoText, _NowText, InText, Mode, Context) when Date > Bas
 timesince(Date, Base, AgoText, _NowText, _InText, Mode, Context) ->
     combine({combine(reldate(Date, Base, Mode, Context)), AgoText}, " ").
 
-    combine(Tup) -> combine(Tup, ", ").
+combine(Tup) -> combine(Tup, ", ").
 
-    combine({"", B},   _Sep) -> B;
-    combine({A,""},    _Sep) -> A;
-    combine({<<>>, B}, _Sep) -> B;
-    combine({A,<<>>},  _Sep) -> A;
-    combine({A,B}, Sep) -> [A,Sep,B].
+combine({"", B},   _Sep) -> B;
+combine({A,""},    _Sep) -> A;
+combine({<<>>, B}, _Sep) -> B;
+combine({A,<<>>},  _Sep) -> A;
+combine({A,B}, Sep) -> [A,Sep,B].
 
 
 
@@ -381,14 +381,16 @@ week_start(StartDayNr, {D,_}) ->
     end.
 
 %% @doc Return the date one year earlier.
-prev_year({{Y,2,29},T})  ->
-    {{Y-1,3,1}, T};
 prev_year({{Y,M,D},T}) ->
-    {{Y-1,M,D}, T}.
+    norm_month({{Y-1,M,D}, T});
+prev_year({_,_,_} = Date) ->
+    prev_year({Date, {0,0,0}}).
 
 prev_year({{Y,M,D}, T}, N) ->
     DT1 = {{Y-N,M,D}, T},
-    norm_month(DT1).
+    norm_month(DT1);
+prev_year({_,_,_} = Date, N) ->
+    prev_year({Date, {0,0,0}}, N).
 
 %% @doc Return the date one month earlier.
 prev_month(DT) -> next_month(DT, -1).
@@ -449,22 +451,29 @@ prev_second(Date, N) ->
     nth(Date, -N, fun next_second/1, fun prev_second/1).
 
 %% @doc Return the date one year later.
-next_year({{Y,2,29},T})  ->
-    {{Y+1,3,1}, T};
 next_year({{Y,M,D},T}) ->
-    {{Y+1,M,D}, T}.
+    norm_month({{Y+1,M,D}, T});
+next_year({_,_,_} = Date) ->
+    next_year({Date, {0,0,0}}).
 
 next_year({{Y,M,D}, T}, N) ->
     DT1 = {{Y+N,M,D}, T},
-    norm_month(DT1).
+    norm_month(DT1);
+next_year({_,_,_} = Date, N) ->
+    next_year({Date, {0,0,0}}, N).
 
 %% @doc Return the date one month later. Gives unpredictable results if the
 %%      day doesn't exist in the next month. (eg. feb 30 will become feb 28).
-next_month(DT) -> next_month(DT, 1).
+next_month(DT) ->
+    next_month(DT, 1).
+
 next_month({{Y, M, D}, T}, N) ->
     DT1 = {{Y, M+N, D}, T},
-    norm_month(DT1).
+    norm_month(DT1);
+next_month({_,_,_} = Date, N) ->
+    next_month({Date, {0,0,0}}, N).
 
+%% @doc Move the date so that the month/day number is valid.
 norm_month({{Y, M, D}, T}) when M =< 0 ->
     norm_month({{Y-1, M+12, D}, T});
 norm_month({{Y, M, D}, T}) when M > 12 ->
@@ -477,7 +486,8 @@ norm_month({{Y, M, D}, T}) ->
 next_week(DT) ->
     next_week_1(DT, 7).
 
-next_week_1(DT, 0) -> DT;
+next_week_1(DT, 0) ->
+    DT;
 next_week_1(DT, N) ->
     DT1 = next_day(DT),
     next_week_1(DT1, N-1).
