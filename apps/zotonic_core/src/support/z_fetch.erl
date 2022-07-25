@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2021 Marc Worrell
+%% @copyright 2021-2022 Marc Worrell
 %% @doc Fetch data from URLs. Interfaces to z_url_fetch and z_url_metadata.
+%% @enddoc
 
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,6 +21,10 @@
     fetch/3,
     fetch_json/3,
     fetch_partial/3,
+
+    fetch/5,
+    fetch_json/5,
+
     metadata/3,
     as_data_url/3,
     error_msg/2
@@ -31,7 +36,7 @@
 -spec fetch( string() | binary(), z_url_fetch:options(), z:context() ) -> z_url_fetch:fetch_result().
 fetch(Url, Options, Context) ->
     Url1 = z_convert:to_binary(Url),
-    Options1 = add_options(Url1, Options, Context),
+    Options1 = add_options(get, Url1, Options, Context),
     z_url_fetch:fetch(Url1, Options1).
 
 %% @doc Fetch JSON data from an URL. Let modules change the fetch options. On success, the returned
@@ -40,7 +45,7 @@ fetch(Url, Options, Context) ->
 fetch_json(Url, Options, Context) ->
     Url1 = z_convert:to_binary(Url),
     Options1 = [ {accept, "application/json"} | proplists:delete(accept, Options) ],
-    Options2 = add_options(Url1, Options1, Context),
+    Options2 = add_options(get, Url1, Options1, Context),
     case z_url_fetch:fetch(Url1, Options2) of
         {ok, {_Final, _Hs, _Length, Body}} ->
             {ok, jsxrecord:decode(Body)};
@@ -52,14 +57,64 @@ fetch_json(Url, Options, Context) ->
 -spec fetch_partial( string() | binary(), z_url_fetch:options(), z:context() ) -> z_url_fetch:fetch_result().
 fetch_partial(Url, Options, Context) ->
     Url1 = z_convert:to_binary(Url),
-    Options1 = add_options(Url1, Options, Context),
+    Options1 = add_options(get, Url1, Options, Context),
     z_url_fetch:fetch_partial(Url1, Options1).
+
+
+%% @doc Perform a request and data from an URL. Let modules change the fetch options. On success, the
+%% returned body is parsed with jsxrecord and returned.
+-spec fetch(Method, Url, Payload, Options, Context) -> Result when
+    Method :: get | post | delete | put,
+    Url :: string() | binary(),
+    Payload :: list() | binary(),
+    Options :: z_url_fetch:options(),
+    Context :: z:context(),
+    Result :: z_url_fetch:fetch_result().
+fetch(Method, Url, Args, Options, Context) ->
+    Payload = payload(Args),
+    Url1 = z_convert:to_binary(Url),
+    Options1 = [
+        {content_type, "application/x-www-form-urlencoded"}
+        | Options
+    ],
+    Options2 = add_options(post, Url1, Options1, Context),
+    case z_url_fetch:fetch(Method, Url1, Payload, Options2) of
+        {ok, {_Final, _Hs, _Length, Body}} ->
+            {ok, jsxrecord:decode(Body)};
+        {error, _} = Error ->
+            Error
+    end.
+
+%% @doc Perform a request and fetch JSON data from an URL. Let modules change the fetch options. On success, the
+%% returned body is parsed with jsxrecord and returned.
+-spec fetch_json(Method, Url, Payload, Options, Context) -> Result when
+    Method :: get | post | delete | put,
+    Url :: string() | binary(),
+    Payload :: list() | binary(),
+    Options :: z_url_fetch:options(),
+    Context:: z:context(),
+    Result :: {ok, term()} | {error, term()}.
+fetch_json(Method, Url, Args, Options, Context) ->
+    Options1 = [
+        {accept, "application/json"}
+        | proplists:delete(accept, Options)
+    ],
+    case fetch(Method, Url, Args, Options1, Context) of
+        {ok, {_Final, _Hs, _Length, Body}} ->
+            {ok, jsxrecord:decode(Body)};
+        {error, _} = Error ->
+            Error
+    end.
+
+payload(B) when is_binary(B) -> B;
+payload(M) when is_map(M) -> cow_qs:qs(maps:to_list(M));
+payload(L) when is_list(L) -> cow_qs:qs(L).
 
 
 %% @doc Fetch the metadata from an URL. Let modules change the fetch options.
 -spec metadata( string() | binary(), z_url_fetch:options(), z:context() ) -> {ok, z_url_metadata:metadata()} | {error, term()}.
 metadata(Url, Options, Context) ->
-    Options1 = add_options(Url, Options, Context),
+    Options1 = add_options(get, Url, Options, Context),
     z_url_metadata:fetch(Url, Options1).
 
 
@@ -118,7 +173,7 @@ error_msg(_, Context) ->
 %% development sites are using self-signed certificates. The #url_fetch_options notification is
 %% used to add an authorization header or other option for a specific site. If no language is
 %% set in the options then the current context language is used for the preferred language.
-add_options(Url,Options, Context) ->
+add_options(Method, Url, Options, Context) ->
     Options1 = case proplists:is_defined(insecure, Options) of
         false ->
             case m_site:environment(Context) of
@@ -141,6 +196,7 @@ add_options(Url,Options, Context) ->
                 error -> Host
             end,
             case z_notifier:first(#url_fetch_options{
+                    method = Method,
                     url = Url,
                     host = HostPort,
                     options = Options2

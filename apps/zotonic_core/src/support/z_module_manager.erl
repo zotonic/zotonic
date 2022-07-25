@@ -961,12 +961,12 @@ do_module_down_1(Modules, #module_status{ module = Mod, status = running } = Ms,
     },
     Modules#{ Mod => Ms1 };
 do_module_down_1(Modules, #module_status{ module = Mod, status = restarting } = Ms, shutdown) ->
-    ?LOG_ERROR(#{
-        text => <<"Module failed">>,
+    ?LOG_INFO(#{
+        text => <<"Module shutdown during restart">>,
         in => zotonic_core,
         old_status => restarting,
-        new_status => failed,
-        result => error,
+        new_status => failed,       % set to failed to enforce restart
+        result => ok,
         reason => shutdown,
         module => Mod,
         crash_count => 0

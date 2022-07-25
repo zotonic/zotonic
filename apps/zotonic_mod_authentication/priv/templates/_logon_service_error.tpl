@@ -4,7 +4,20 @@
         <div class="container">
             <h1>{_ You are about to create a new account. _}</h1>
 
-            <p>{_ Close this window and log in if you are already a user of _} {{ m.site.title }}</p>
+            {% if q.url %}
+                <p>
+                    {% trans 'If you are already a user of {site} then <a href="{logon_url}">log on</a>.'
+                            site=m.site.title
+                            logon_url=`logon`|url
+                    %}
+                </p>
+            {% else %}
+                <p>
+                    {% trans 'Close this window and log on if you are already a user of {site}.'
+                             site=m.site.title
+                    %}
+                </p>
+            {% endif %}
 
             {% wire id="signup_confirm"
                     type="submit"
@@ -18,8 +31,13 @@
                   action="postback"
             >
                 <input type="hidden" name="auth" value="{{ q.auth|escape }}">
+                <input type="hidden" name="url" value="{{ q.url|escape }}">
                 <button class="btn btn-primary" type="submit">{_ I want to create a new account _}</button>
-                <a class="btn btn-default" href="#" data-onclick-topic="model/window/post/close">{_ Close window _}</a>
+                {% if q.url %}
+                    <a class="btn btn-default" href="/">{_ Cancel _}</a>
+                {% else %}
+                    <a class="btn btn-default" href="#" data-onclick-topic="model/window/post/close">{_ Close window _}</a>
+                {% endif %}
             </form>
 
             <div class="padding alert alert-danger" style="display:none" id="signup_error">
@@ -34,7 +52,7 @@
             <div class="container">
                 <h1>{_ Sorry _}</h1>
 
-                <p>{_ You have to share your email address to be able to sign in. _}</p>
+                <p>{_ You have to share your email address to be able to log in. _}</p>
 
                 {% if auth_link %}
                     <p><a href="{{ auth_link }}">{_ Change your permissions _}</a></p>

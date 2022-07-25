@@ -65,5 +65,6 @@ observe_page_actions(#page_actions{ actions = Actions }, Context) ->
         topic := [ _, Delegate ]
     },
     Context) ->
+    z_context:logger_md(Context),
     z_context:q_upload_keepalive(true, Context),
     z_transport:transport(Delegate, Payload, Context).

@@ -1182,6 +1182,7 @@
 %% Type: first
 %% Return: ``z_url_fetch:options()``
 -record(url_fetch_options, {
+    method :: get | post | put | delete,
     host :: binary(),
     url :: binary(),
     options :: z_url_fetch:options()

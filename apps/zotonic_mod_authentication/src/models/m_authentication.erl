@@ -85,13 +85,14 @@ m_post([ <<"request-reminder">> ], #{ payload := Payload }, Context) when is_map
     request_reminder(Payload, Context);
 m_post([ <<"service-confirm">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
     case maps:get(<<"value">>, Payload, undefined) of
-        #{ <<"auth">> := AuthEncoded } ->
+        #{ <<"auth">> := AuthEncoded, <<"url">> := Url } ->
+            UrlSafe = z_sanitize:uri(Url),
             Secret = z_context:state_cookie_secret(Context),
             case termit:decode_base64(AuthEncoded, Secret) of
                 {ok, AuthExp} ->
                     case termit:check_expired(AuthExp) of
                         {ok, Auth} ->
-                            handle_auth_confirm(Auth, Context);
+                            handle_auth_confirm(Auth, UrlSafe, Context);
                         {error, _} = Error ->
                             Error
                     end;
@@ -128,7 +129,7 @@ m_post(Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
-handle_auth_confirm(Auth, Context) ->
+handle_auth_confirm(Auth, Url, Context) ->
     Auth1 = Auth#auth_validated{ is_signup_confirm = true },
     case z_notifier:first(Auth1, Context) of
         undefined ->
@@ -145,7 +146,8 @@ handle_auth_confirm(Auth, Context) ->
                 {ok, Token} ->
                     {ok, #{
                         result => token,
-                        token => Token
+                        token => Token,
+                        url => Url
                     }};
                 {error, Reason} = Err ->
                     ?LOG_WARNING(#{

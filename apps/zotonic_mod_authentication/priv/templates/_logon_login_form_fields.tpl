@@ -104,7 +104,11 @@
             {_ You can log in using the following external service _}
         </p>
         {% for ext in q.options.user_external %}
-            {% if ext.url %}
+            {% if ext.template %}
+                <p class="clearfix">
+                    {% include ext.template ext=ext %}
+                </p>
+            {% elseif ext.url %}
                 <p class="clearfix">
                     <a href="{{ ext.url|escape }}" class="btn btn-default" style="display: block">
                         <span class="fal fa-globe"></span>
