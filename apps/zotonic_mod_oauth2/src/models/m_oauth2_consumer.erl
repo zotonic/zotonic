@@ -190,7 +190,8 @@ insert_consumer(Map, Context) ->
                 <<"app_code">> => maps:get(<<"app_code">>, Map, <<>>),
                 <<"app_secret">> => maps:get(<<"app_secret">>, Map, <<>>),
                 <<"authorize_url">> => maps:get(<<"authorize_url">>, Map, <<>>),
-                <<"access_token_url">> => maps:get(<<"access_token_url">>, Map, <<>>)
+                <<"access_token_url">> => maps:get(<<"access_token_url">>, Map, <<>>),
+                <<"grant_type">> => maps:get(<<"grant_type">>, Map, <<"authorization_code">>)
             },
             case z_db:q1("select count(*) from oauth2_consumer_app where name = $1", [ Name ], Context) of
                 0 ->

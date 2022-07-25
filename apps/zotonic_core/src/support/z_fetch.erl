@@ -33,7 +33,10 @@
 -include("../../include/zotonic.hrl").
 
 %% @doc Fetch data from an URL. Let modules change the fetch options.
--spec fetch( string() | binary(), z_url_fetch:options(), z:context() ) -> z_url_fetch:fetch_result().
+-spec fetch(Url, Options, Context) -> z_url_fetch:fetch_result() when
+    Url :: string() | binary(),
+    Options :: z_url_fetch:options(),
+    Context :: z:context().
 fetch(Url, Options, Context) ->
     Url1 = z_convert:to_binary(Url),
     Options1 = add_options(get, Url1, Options, Context),
@@ -41,12 +44,18 @@ fetch(Url, Options, Context) ->
 
 %% @doc Fetch JSON data from an URL. Let modules change the fetch options. On success, the returned
 %% body is parsed with jsxrecord and returned.
--spec fetch_json( string() | binary(), z_url_fetch:options(), z:context() ) -> {ok, term()} | {error, term()}.
+-spec fetch_json(Url, Options, Context) -> {ok, JSON} | {error, term()} when
+    Url :: string() | binary(),
+    Options :: z_url_fetch:options(),
+    Context :: z:context(),
+    JSON :: term().
 fetch_json(Url, Options, Context) ->
     Url1 = z_convert:to_binary(Url),
     Options1 = [ {accept, "application/json"} | proplists:delete(accept, Options) ],
     Options2 = add_options(get, Url1, Options1, Context),
     case z_url_fetch:fetch(Url1, Options2) of
+        {ok, {_Final, _Hs, _Length, <<>>}} ->
+            {ok, #{}};
         {ok, {_Final, _Hs, _Length, Body}} ->
             {ok, jsxrecord:decode(Body)};
         {error, _} = Error ->
@@ -54,19 +63,21 @@ fetch_json(Url, Options, Context) ->
     end.
 
 %% @doc Fetch data from an URL. Let modules change the fetch options.
--spec fetch_partial( string() | binary(), z_url_fetch:options(), z:context() ) -> z_url_fetch:fetch_result().
+-spec fetch_partial(Url, Options, Context) -> z_url_fetch:fetch_result() when
+    Url :: string() | binary(),
+    Options :: z_url_fetch:options(),
+    Context :: z:context().
 fetch_partial(Url, Options, Context) ->
     Url1 = z_convert:to_binary(Url),
     Options1 = add_options(get, Url1, Options, Context),
     z_url_fetch:fetch_partial(Url1, Options1).
 
 
-%% @doc Perform a request and data from an URL. Let modules change the fetch options. On success, the
-%% returned body is parsed with jsxrecord and returned.
+%% @doc Perform a request and data from an URL. Let modules change the fetch options.
 -spec fetch(Method, Url, Payload, Options, Context) -> Result when
     Method :: get | post | delete | put,
     Url :: string() | binary(),
-    Payload :: list() | binary(),
+    Payload :: list() | binary() | map(),
     Options :: z_url_fetch:options(),
     Context :: z:context(),
     Result :: z_url_fetch:fetch_result().
@@ -78,12 +89,7 @@ fetch(Method, Url, Args, Options, Context) ->
         | Options
     ],
     Options2 = add_options(post, Url1, Options1, Context),
-    case z_url_fetch:fetch(Method, Url1, Payload, Options2) of
-        {ok, {_Final, _Hs, _Length, Body}} ->
-            {ok, jsxrecord:decode(Body)};
-        {error, _} = Error ->
-            Error
-    end.
+    z_url_fetch:fetch(Method, Url1, Payload, Options2).
 
 %% @doc Perform a request and fetch JSON data from an URL. Let modules change the fetch options. On success, the
 %% returned body is parsed with jsxrecord and returned.
@@ -100,6 +106,8 @@ fetch_json(Method, Url, Args, Options, Context) ->
         | proplists:delete(accept, Options)
     ],
     case fetch(Method, Url, Args, Options1, Context) of
+        {ok, {_Final, _Hs, _Length, <<>>}} ->
+            {ok, #{}};
         {ok, {_Final, _Hs, _Length, Body}} ->
             {ok, jsxrecord:decode(Body)};
         {error, _} = Error ->
