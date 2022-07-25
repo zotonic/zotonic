@@ -96,7 +96,7 @@ fetch(Method, Url, Args, Options, Context) ->
 -spec fetch_json(Method, Url, Payload, Options, Context) -> Result when
     Method :: get | post | delete | put,
     Url :: string() | binary(),
-    Payload :: list() | binary(),
+    Payload :: list() | binary() | map(),
     Options :: z_url_fetch:options(),
     Context:: z:context(),
     Result :: {ok, term()} | {error, term()}.

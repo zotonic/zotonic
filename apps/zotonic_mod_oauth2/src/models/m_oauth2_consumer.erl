@@ -265,7 +265,7 @@ fetch_token(ConsumerId, UserId, Context) ->
                         <<"client_secret">> => AppSecret,
                         <<"grant_type">> => <<"client_credentials">>
                     },
-                    case z_fetch:fetch(post, TokenUrl, Payload, [], Context) of
+                    case z_fetch:fetch_json(post, TokenUrl, Payload, [], Context) of
                         {ok, #{
                             <<"access_token">> := AccessToken
                             % <<"expires_in">> := ExpiresInSecs
