@@ -802,10 +802,14 @@ check_username_pw_1(<<"admin">>, Password, Context) ->
                     flush(1, Context),
                     {ok, 1};
                 false ->
-                    ?LOG_ERROR(
-                        "admin login with default password from non allowed ip address ~p",
-                        [m_req:get(peer, Context)]
-                    ),
+                    ?LOG_ERROR(#{
+                        text => <<"admin login with default password from non allowed ip address">>,
+                        in => zotonic_core,
+                        ip_address => m_req:get(peer, Context),
+                        username => <<"admin">>,
+                        result => error,
+                        reason => peer_not_allowed
+                    }),
                     {error, peer_not_allowed}
             end;
         AdminPassword ->
