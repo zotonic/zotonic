@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-07-12 17:44\n"
+"PO-Revision-Date: 2022-07-24 19:34\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3048,7 +3048,7 @@ msgstr "Новые имя / пароль установлены."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:3
 msgid "The password of the admin user cannot be changed in the database. Please edit your site's configuration file at"
-msgstr "Пароль пользователя-администратора не может быть изменен в базе данных. Пожалуйста, отредактируйте конфигурационный файл Вашего сайта по адресу"
+msgstr "Пароль пользователя-администратора не может быть изменен в базе данных. Пожалуйста, отредактируйте файл конфигурации Вашего сайта по адресу"
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:95./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:101
 msgid "The username is already in use, please try another."
@@ -3056,7 +3056,7 @@ msgstr "Пользователь с таким именем уже сущест�
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_delete_username.erl:46
 msgid "There is no username coupled to this person."
-msgstr "С этой персоной нет связанных учетных записей."
+msgstr "Нет учетных записей, связанных с этой персоной."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:4
 msgid "This can't be undone. The username and password will be lost forever."
@@ -3174,7 +3174,7 @@ msgstr "Вы не имеете права менять пользователе�
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:10
 msgid "You can now login to the admin, on the following URL:"
-msgstr "Теперь вы можете войти в систему по следующему URL:"
+msgstr "Теперь вы можете войти в систему администратором по следующему URL:"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:10
 msgid "You have been granted access to"
