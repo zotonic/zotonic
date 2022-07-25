@@ -44,22 +44,34 @@
     days_in_year/1,
 
     prev_year/1,
+    prev_year/2,
     prev_month/1,
     prev_month/2,
     prev_week/1,
+    prev_week/2,
     prev_day/1,
+    prev_day/2,
     prev_hour/1,
+    prev_hour/2,
     prev_minute/1,
+    prev_minute/2,
     prev_second/1,
+    prev_second/2,
 
     next_year/1,
+    next_year/2,
     next_month/1,
     next_month/2,
     next_week/1,
+    next_week/2,
     next_day/1,
+    next_day/2,
     next_hour/1,
+    next_hour/2,
     next_minute/1,
+    next_minute/2,
     next_second/1,
+    next_second/2,
 
     diff/2,
 
@@ -73,6 +85,7 @@
     datetime_to_timestamp/1,
 
     undefined_if_invalid_date/1,
+    maybe_fix_datetime/1,
 
     last_day_of_the_month/2,
     is_leap_year/1
@@ -80,6 +93,22 @@
 
 
 -include_lib("zotonic.hrl").
+
+
+% A date, same as the calendar:datetime() but with a larger year range.
+-type datetime() :: calendar:datetime()
+                  | {{integer(),1..12,1..31}, {0..23,0..59,0..59}}.
+
+-type date() :: calendar:date()
+              | {integer(),1..12,1..31}.
+
+% Data that looks like a datetime and can be coerced into a datetime.
+-type fixable_datetime() :: datetime()
+                          | date()
+                          | {integer(),integer(),integer()}
+                          | {{integer(),integer(),integer()}, {integer()|undefined,integer()|undefined,integer()|undefined}}.
+
+-export_type([ datetime/0, date/0, fixable_datetime/0 ]).
 
 
 %% @doc Format the current date according to the format and the timezone settings in the context.
@@ -247,36 +276,30 @@ to_relative_time(Op, S, Now) ->
 
 relative_time(_N, Op, [[C|_]=N|Ts], Now) when C >= $0, C =< $9 ->
     relative_time(list_to_integer(N), Op, Ts, Now);
-relative_time(N, '+', ["minute"|_], Now) ->    relative_time_n(N,   fun next_minute/1, Now);
-relative_time(N, '+', ["hour"|_], Now) ->      relative_time_n(N,   fun next_hour/1, Now);
-relative_time(N, '+', ["day"|_], Now) ->       relative_time_n(N,   fun next_day/1, Now);
-relative_time(N, '+', ["sunday"|_], Now) ->    relative_time_n(N*7, fun next_day/1, week_start(7, Now));
-relative_time(N, '+', ["monday"|_], Now) ->    relative_time_n(N*7, fun next_day/1, week_start(1, Now));
-relative_time(N, '+', ["tuesday"|_], Now) ->   relative_time_n(N*7, fun next_day/1, week_start(2, Now));
-relative_time(N, '+', ["wednesday"|_], Now) -> relative_time_n(N*7, fun next_day/1, week_start(3, Now));
-relative_time(N, '+', ["thursday"|_], Now) ->  relative_time_n(N*7, fun next_day/1, week_start(4, Now));
-relative_time(N, '+', ["friday"|_], Now) ->    relative_time_n(N*7, fun next_day/1, week_start(5, Now));
-relative_time(N, '+', ["saturday"|_], Now) ->  relative_time_n(N*7, fun next_day/1, week_start(6, Now));
-relative_time(N, '+', ["week"|_], Now) ->      relative_time_n(N*7, fun next_day/1, Now);
+relative_time(N, '+', ["minute"|_], Now) ->    next_minute(Now, N);
+relative_time(N, '+', ["hour"|_], Now) ->      next_hour(Now, N);
+relative_time(N, '+', ["day"|_], Now) ->       next_day(Now, N);
+relative_time(N, '+', ["sunday"|_], Now) ->    next_day(week_start(7, Now), N*7);
+relative_time(N, '+', ["monday"|_], Now) ->    next_day(week_start(1, Now), N*7);
+relative_time(N, '+', ["tuesday"|_], Now) ->   next_day(week_start(2, Now), N*7);
+relative_time(N, '+', ["wednesday"|_], Now) -> next_day(week_start(3, Now), N*7);
+relative_time(N, '+', ["thursday"|_], Now) ->  next_day(week_start(4, Now), N*7);
+relative_time(N, '+', ["friday"|_], Now) ->    next_day(week_start(5, Now), N*7);
+relative_time(N, '+', ["saturday"|_], Now) ->  next_day(week_start(6, Now), N*7);
+relative_time(N, '+', ["week"|_], Now) ->      next_week(Now, N);
 relative_time(N, '+', ["month"|_], Now) ->     next_month(Now, N);
-relative_time(N, '+', ["year"|_], Now) ->      relative_time_n(N,   fun next_year/1, Now);
-relative_time(N, '-', ["day"|_], Now) ->       relative_time_n(N,   fun prev_day/1, Now);
-relative_time(N, '-', ["sunday"|_], Now) ->    relative_time_n(N*7, fun prev_day/1, week_start(7, Now));
-relative_time(N, '-', ["monday"|_], Now) ->    relative_time_n(N*7, fun prev_day/1, week_start(1, Now));
-relative_time(N, '-', ["tuesday"|_], Now) ->   relative_time_n(N*7, fun prev_day/1, week_start(2, Now));
-relative_time(N, '-', ["wednesday"|_], Now) -> relative_time_n(N*7, fun prev_day/1, week_start(3, Now));
-relative_time(N, '-', ["thursday"|_], Now) ->  relative_time_n(N*7, fun prev_day/1, week_start(4, Now));
-relative_time(N, '-', ["friday"|_], Now) ->    relative_time_n(N*7, fun prev_day/1, week_start(5, Now));
-relative_time(N, '-', ["week"|_], Now) ->      relative_time_n(N*7, fun prev_day/1, Now);
+relative_time(N, '+', ["year"|_], Now) ->      next_year(Now, N);
+relative_time(N, '-', ["day"|_], Now) ->       prev_day(Now, N);
+relative_time(N, '-', ["sunday"|_], Now) ->    prev_day(week_start(7, Now), N*7);
+relative_time(N, '-', ["monday"|_], Now) ->    prev_day(week_start(1, Now), N*7);
+relative_time(N, '-', ["tuesday"|_], Now) ->   prev_day(week_start(2, Now), N*7);
+relative_time(N, '-', ["wednesday"|_], Now) -> prev_day(week_start(3, Now), N*7);
+relative_time(N, '-', ["thursday"|_], Now) ->  prev_day(week_start(4, Now), N*7);
+relative_time(N, '-', ["friday"|_], Now) ->    prev_day(week_start(5, Now), N*7);
+relative_time(N, '-', ["week"|_], Now) ->      prev_week(Now, N);
 relative_time(N, '-', ["month"|_], Now) ->     prev_month(Now, N);
-relative_time(N, '-', ["year"|_], Now) ->      relative_time_n(N,   fun prev_year/1, Now);
+relative_time(N, '-', ["year"|_], Now) ->      prev_year(Now, N);
 relative_time(_N, _Op, _Unit, _Now) ->         undefined.
-
-relative_time_n(N, _F, DT) when N =< 0 ->
-    DT;
-relative_time_n(N, F, DT) ->
-    relative_time_n(N-1, F, F(DT)).
-
 
 %% @doc Show a humanized version of a relative datetime.  Like "4 months, 3 days ago".
 %% @spec timesince(Date, Context) -> string()
@@ -320,13 +343,13 @@ timesince(Date, Base, _AgoText, _NowText, InText, Mode, Context) when Date > Bas
 timesince(Date, Base, AgoText, _NowText, _InText, Mode, Context) ->
     combine({combine(reldate(Date, Base, Mode, Context)), AgoText}, " ").
 
-    combine(Tup) -> combine(Tup, ", ").
+combine(Tup) -> combine(Tup, ", ").
 
-    combine({"", B},   _Sep) -> B;
-    combine({A,""},    _Sep) -> A;
-    combine({<<>>, B}, _Sep) -> B;
-    combine({A,<<>>},  _Sep) -> A;
-    combine({A,B}, Sep) -> [A,Sep,B].
+combine({"", B},   _Sep) -> B;
+combine({A,""},    _Sep) -> A;
+combine({<<>>, B}, _Sep) -> B;
+combine({A,<<>>},  _Sep) -> A;
+combine({A,B}, Sep) -> [A,Sep,B].
 
 
 
@@ -369,16 +392,22 @@ week_start(StartDayNr, {D,_}) ->
     Today = {D,{0,0,0}},
     WeekDay = calendar:day_of_the_week(D),
     if
-        WeekDay > StartDayNr -> relative_time_n(WeekDay - StartDayNr, fun prev_day/1, Today);
+        WeekDay > StartDayNr -> prev_day(Today, WeekDay - StartDayNr);
         WeekDay =:= StartDayNr -> Today;
-        WeekDay < StartDayNr -> relative_time_n(WeekDay - StartDayNr + 7, fun prev_day/1, Today)
+        WeekDay < StartDayNr -> prev_day(Today, WeekDay - StartDayNr + 7)
     end.
 
 %% @doc Return the date one year earlier.
-prev_year({{Y,2,29},T})  ->
-    {{Y-1,3,1}, T};
 prev_year({{Y,M,D},T}) ->
-    {{Y-1,M,D}, T}.
+    norm_month({{Y-1,M,D}, T});
+prev_year({_,_,_} = Date) ->
+    prev_year({Date, {0,0,0}}).
+
+prev_year({{Y,M,D}, T}, N) ->
+    DT1 = {{Y-N,M,D}, T},
+    norm_month(DT1);
+prev_year({_,_,_} = Date, N) ->
+    prev_year({Date, {0,0,0}}, N).
 
 %% @doc Return the date one month earlier.
 prev_month(DT) -> next_month(DT, -1).
@@ -393,6 +422,9 @@ prev_week_1(DT, N) ->
     DT1 = prev_day(DT),
     prev_week_1(DT1, N-1).
 
+prev_week(Date, N) ->
+    nth(Date, -N, fun next_week/1, fun prev_week/1).
+
 %% @doc Return the date one day earlier.
 prev_day({{_,_,1},_} = Date) ->
     {{Y1,M1,_},T1} = prev_month(Date),
@@ -402,6 +434,8 @@ prev_day({{Y,M,D},T}) ->
 prev_day({_,_,_} = Date) ->
     prev_day({Date, {0,0,0}}).
 
+prev_day(Date, N) ->
+    nth(Date, -N, fun next_day/1, fun prev_day/1).
 
 %% @doc Return the date one hour earlier.
 prev_hour({_,{0,_,_}} = Date) ->
@@ -410,12 +444,18 @@ prev_hour({_,{0,_,_}} = Date) ->
 prev_hour({YMD,{H,I,S}}) ->
     {YMD, {H-1,I,S}}.
 
+prev_hour(Date, N) ->
+    nth(Date, -N, fun next_hour/1, fun prev_hour/1).
+
 %% @doc Return the date one minute earlier.
 prev_minute({_,{_,0,_}} = Date) ->
     {YMD,{H,_,S}} = prev_hour(Date),
     {YMD,{H,59,S}};
 prev_minute({YMD,{H,I,S}}) ->
     {YMD, {H,I-1,S}}.
+
+prev_minute(Date, N) ->
+    nth(Date, -N, fun next_minute/1, fun prev_minute/1).
 
 %% @doc Return the date one second earlier.
 prev_second({_,{_,_,0}} = Date) ->
@@ -424,19 +464,33 @@ prev_second({_,{_,_,0}} = Date) ->
 prev_second({YMD,{H,I,S}}) ->
     {YMD, {H,I,S-1}}.
 
+prev_second(Date, N) ->
+    nth(Date, -N, fun next_second/1, fun prev_second/1).
+
 %% @doc Return the date one year later.
-next_year({{Y,2,29},T})  ->
-    {{Y+1,3,1}, T};
 next_year({{Y,M,D},T}) ->
-    {{Y+1,M,D}, T}.
+    norm_month({{Y+1,M,D}, T});
+next_year({_,_,_} = Date) ->
+    next_year({Date, {0,0,0}}).
+
+next_year({{Y,M,D}, T}, N) ->
+    DT1 = {{Y+N,M,D}, T},
+    norm_month(DT1);
+next_year({_,_,_} = Date, N) ->
+    next_year({Date, {0,0,0}}, N).
 
 %% @doc Return the date one month later. Gives unpredictable results if the
 %%      day doesn't exist in the next month. (eg. feb 30 will become feb 28).
-next_month(DT) -> next_month(DT, 1).
+next_month(DT) ->
+    next_month(DT, 1).
+
 next_month({{Y, M, D}, T}, N) ->
     DT1 = {{Y, M+N, D}, T},
-    norm_month(DT1).
+    norm_month(DT1);
+next_month({_,_,_} = Date, N) ->
+    next_month({Date, {0,0,0}}, N).
 
+%% @doc Move the date so that the month/day number is valid.
 norm_month({{Y, M, D}, T}) when M =< 0 ->
     norm_month({{Y-1, M+12, D}, T});
 norm_month({{Y, M, D}, T}) when M > 12 ->
@@ -449,10 +503,14 @@ norm_month({{Y, M, D}, T}) ->
 next_week(DT) ->
     next_week_1(DT, 7).
 
-next_week_1(DT, 0) -> DT;
+next_week_1(DT, 0) ->
+    DT;
 next_week_1(DT, N) ->
     DT1 = next_day(DT),
     next_week_1(DT1, N-1).
+
+next_week(Date, N) ->
+    nth(Date, N, fun next_week/1, fun prev_week/1).
 
 %% @doc Return the date one day later.
 next_day({{Y,M,D},T} = Date) ->
@@ -466,12 +524,18 @@ next_day({{Y,M,D},T} = Date) ->
 next_day({_,_,_} = Date) ->
     next_day({Date, {0,0,0}}).
 
+next_day(Date, N) ->
+    nth(Date, N, fun next_day/1, fun prev_day/1).
+
 %% @doc Return the date one hour later.
 next_hour({_,{23,_,_}} = Date) ->
     {YMD,{_,I,S}} = next_day(Date),
     {YMD,{0,I,S}};
 next_hour({YMD,{H,I,S}}) ->
     {YMD, {H+1,I,S}}.
+
+next_hour(Date, N) ->
+    nth(Date, N, fun next_hour/1, fun prev_hour/1).
 
 %% @doc Return the date one minute later.
 next_minute({_,{_,59,_}} = Date) ->
@@ -480,12 +544,25 @@ next_minute({_,{_,59,_}} = Date) ->
 next_minute({YMD,{H,I,S}}) ->
     {YMD, {H,I+1,S}}.
 
+next_minute(Date, N) ->
+    nth(Date, N, fun next_minute/1, fun prev_minute/1).
+
 %% @doc Return the date one second later.
 next_second({_,{_,_,59}} = Date) ->
     {YMD,{H,I,_}} = next_minute(Date),
     {YMD,{H,I,0}};
 next_second({YMD,{H,I,S}}) ->
     {YMD, {H,I,S+1}}.
+
+next_second(Date, N) ->
+    nth(Date, N, fun next_second/1, fun prev_second/1).
+
+nth(Date, 0, _Next, _Prev) ->
+    Date;
+nth(Date, N, Next, Prev) when is_integer(N), N > 0 ->
+    nth(Next(Date), N-1, Next, Prev);
+nth(Date, N, Next, Prev) when is_integer(N), N < 0 ->
+    nth(Prev(Date), N+1, Next, Prev).
 
 %% @doc Return the number of days in a certain year.
 days_in_year(Y) ->
@@ -612,6 +689,46 @@ undefined_if_invalid_date({{Y,M,D},{H,I,S}} = Date) when
         end;
 undefined_if_invalid_date(_) ->
     undefined.
+
+
+%% @doc Shift a date if the date falls outside the valid date or time ranges. Return undefined
+%% if the date could not be mapped to some valid date.
+-spec maybe_fix_datetime(fixable_datetime() | undefined) -> datetime() | undefined.
+maybe_fix_datetime({_,_,_} = Date) ->
+    maybe_fix_datetime({Date, {0,0,0}});
+maybe_fix_datetime({{Y,M,D},{H,I,undefined}}) ->
+    maybe_fix_datetime({{Y,M,D},{H,I,0}});
+maybe_fix_datetime({{Y,M,D},{H,undefined,S}}) ->
+    maybe_fix_datetime({{Y,M,D},{H,0,S}});
+maybe_fix_datetime({{Y,M,D},{undefined,I,S}}) ->
+    maybe_fix_datetime({{Y,M,D},{0,I,S}});
+maybe_fix_datetime({{Y,M,D},{H,I,S}}) when
+    not is_integer(Y); not is_integer(M); not is_integer(D),
+    not is_integer(H); not is_integer(I); not is_integer(S) ->
+    undefined;
+maybe_fix_datetime({{Y,M,D},{H,I,S}}) when is_integer(H), H < 0 ->
+    maybe_fix_datetime(prev_day({{Y,M,D},{H+24,I,S}}));
+maybe_fix_datetime({{Y,M,D},{H,I,S}}) when is_integer(I), I < 0 ->
+    maybe_fix_datetime(prev_hour({{Y,M,D},{H,I+60,S}}));
+maybe_fix_datetime({{Y,M,D},{H,I,S}}) when is_integer(S), S < 0 ->
+    maybe_fix_datetime(prev_minute({{Y,M,D},{H,I,S+60}}));
+maybe_fix_datetime({{Y,M,D},{H,I,S}}) when is_integer(H), H >= 24 ->
+    maybe_fix_datetime(next_day({{Y,M,D},{H-24,I,S}}));
+maybe_fix_datetime({{Y,M,D},{H,I,S}}) when is_integer(I), I >= 60 ->
+    maybe_fix_datetime(next_hour({{Y,M,D},{H,I-60,S}}));
+maybe_fix_datetime({{Y,M,D},{H,I,S}}) when is_integer(S), S >= 60 ->
+    maybe_fix_datetime(next_minute({{Y,M,D},{H,I,S-60}}));
+maybe_fix_datetime({{Y,M,D},{H,I,S}}) when is_integer(M), M =< 0 ->
+    maybe_fix_datetime(prev_month({{Y,1,D},{H,I,S}}, 0-M+1));
+maybe_fix_datetime({{Y,M,D},{H,I,S}}) when is_integer(D), D =< 0 ->
+    maybe_fix_datetime(prev_day({{Y,M,1},{H,I,S}}, 0-D+1));
+maybe_fix_datetime({{Y,M,D},{H,I,S}} = Date) when
+    is_integer(Y), is_integer(M), is_integer(D),
+    is_integer(H), is_integer(I), is_integer(S) ->
+    norm_month(Date);
+maybe_fix_datetime(_) ->
+    undefined.
+
 
 
 %% Routines below are adapted from calendar.erl, which is:

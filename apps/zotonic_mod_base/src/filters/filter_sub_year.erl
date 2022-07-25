@@ -21,10 +21,10 @@
 
 sub_year(undefined, _Context) ->
 	undefined;
-sub_year({{Y,M,D},Time}, _Context) ->
-	{{Y-1,M,D},Time}.
+sub_year(Date, _Context) ->
+	z_datetime:prev_year(Date).
 
 sub_year(undefined, _N, _Context) ->
 	undefined;
-sub_year({{Y,M,D},Time}, N, _Context) ->
-	{{Y-N,M,D},Time}.
+sub_year(Date, N, _Context) ->
+	z_datetime:prev_year(Date, N).
