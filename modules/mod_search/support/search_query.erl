@@ -448,6 +448,8 @@ parse_query([{text, Text}|Rest], Context, Result) ->
             mod_search:find_by_id(S, Context);
         [] ->
             parse_query(Rest, Context, Result);
+        <<>> ->
+            parse_query(Rest, Context, Result);
         _ ->
             TsQuery = mod_search:to_tsquery(Text, Context),
             {QArg, Result1} = add_arg(TsQuery, Result),
