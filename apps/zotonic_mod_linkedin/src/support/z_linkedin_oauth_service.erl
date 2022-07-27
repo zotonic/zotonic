@@ -127,6 +127,11 @@ auth_user(#{<<"id">> := LinkedInUserId} = Profile, Email, AccessTokenData, Args,
         service_uid = LinkedInUserId,
         service_props = AccessTokenData,
         props = PersonProps,
+        identities = #{
+            type => <<"email">>,
+            key => Email,
+            is_verified => true
+        },
         is_connect = z_convert:to_bool(proplists:get_value(<<"is_connect">>, Args))
     }}.
 

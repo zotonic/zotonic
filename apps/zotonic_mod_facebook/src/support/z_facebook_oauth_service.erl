@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2020 Marc Worrell
+%% @copyright 2010-2022 Marc Worrell
 %% @doc Support routines for using Facebook as an external identity provider.
 %%
 %% See: http://developers.facebook.com/docs/authentication/
 
-%% Copyright 2010-2020 Marc Worrell
+%% Copyright 2010-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -97,12 +97,13 @@ auth_validated(#{ <<"access_token">> := AccessToken } = AccessData, Args, _Conte
                 facebook_user_id => FacebookUserId,
                 facebook_props => FBProps
             }),
+            Email = maps:get(<<"email">>, FBProps, <<>>),
             PersonProps = #{
                 <<"title">> => maps:get(<<"name">>, FBProps, undefined),
                 <<"name_first">> => maps:get(<<"first_name">>, FBProps, undefined),
                 <<"name_surname">> => maps:get(<<"last_name">>, FBProps, undefined),
                 <<"website">> => maps:get(<<"link">>, FBProps, undefined),
-                <<"email">> => maps:get(<<"email">>, FBProps, <<>>),
+                <<"email">> => Email,
                 <<"depiction_url">> => depiction_url(FBProps)
             },
             {ok, #auth_validated{
@@ -110,6 +111,13 @@ auth_validated(#{ <<"access_token">> := AccessToken } = AccessData, Args, _Conte
                 service_uid = FacebookUserId,
                 service_props = AccessData,
                 props = PersonProps,
+                identities = [
+                    #{
+                        type => <<"email">>,
+                        key => Email,
+                        is_verified => true
+                    }
+                ],
                 is_connect = z_convert:to_bool(proplists:get_value(<<"is_connect">>, Args))
             }};
         {error, _} = Error ->

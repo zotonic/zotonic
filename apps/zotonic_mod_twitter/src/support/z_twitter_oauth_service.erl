@@ -109,6 +109,7 @@ auth_user(TWProps, AccessToken, Args) ->
         service_uid = TwitterUserId,
         service_props = AccessTokenData,
         props = PersonProps,
+        identities = [],
         is_connect = z_convert:to_bool(proplists:get_value(<<"is_connect">>, Args))
     }.
 

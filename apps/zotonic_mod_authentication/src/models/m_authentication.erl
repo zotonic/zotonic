@@ -171,7 +171,8 @@ handle_auth_confirm(Auth, Url, Context) ->
     end.
 
 
-%% @doc Send password reminders to everybody with the given email address
+%% @doc Send password reminders to everybody with the given email address in one of their
+%% registered email-identities. The email is sent to the primary email address of the user.
 -spec request_reminder( map(), z:context() ) -> {ok, map()} | {error, email}.
 request_reminder(Payload, Context) ->
     case maps:find(<<"email">>, Payload) of
@@ -183,18 +184,18 @@ request_reminder(Payload, Context) ->
                         Ok when Ok =:= undefined; Ok =:= ok ->
                             case lookup_email_identities(EmailNorm, Context) of
                                 [] ->
-                                    case z_convert:to_bool(m_config:get_value(mod_authentication, email_reminder_if_nomatch, Context)) of
+                                    case m_config:get_boolean(mod_authentication, email_reminder_if_nomatch, Context) of
                                         true ->
                                             send_reminder(undefined, EmailNorm, Context);
                                         false ->
                                             nop
                                     end;
-                                Identities ->
+                                UserIds ->
                                     lists:foreach(
                                         fun(RscId) ->
                                             send_reminder(RscId, EmailNorm, Context)
                                         end,
-                                        Identities)
+                                        UserIds)
                             end,
                             {ok, #{ email => EmailNorm }};
                         {error, _Reason} = Error ->
@@ -207,8 +208,14 @@ request_reminder(Payload, Context) ->
             {error, email}
     end.
 
-%% @doc Find all users with a certain e-mail address or username
-lookup_email_identities(<<>>, _Context) -> [];
+%% @doc Find all users with a certain email address or username identity. The email
+%% address is already normalized.
+-spec lookup_email_identitities(EmailOrUsername, Context) -> UserIds when
+    EmailOrUsername :: binary(),
+    Context :: z:context(),
+    UserIds :: [ m_rsc:resource_id() ].
+lookup_email_identities(<<>>, _Context) ->
+    [];
 lookup_email_identities(EmailOrUsername, Context) ->
     Es = m_identity:lookup_by_type_and_key_multi(email, EmailOrUsername, Context),
     Us = m_identity:lookup_by_type_and_key_multi(username_pw, EmailOrUsername, Context),

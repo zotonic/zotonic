@@ -97,6 +97,8 @@
 -type type() :: atom() | binary().
 -type key() :: atom() | binary().
 
+-type identity() :: proplists:proplist().
+
 -export_type([
     type/0,
     key/0,
@@ -192,14 +194,17 @@ m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
-%% @doc Check if the resource has any credentials that will make him/her an user
+%% @doc Check if the resource has any credentials that will make them an user
 -spec is_user(m_rsc:resource(), z:context()) -> boolean().
 is_user(Id, Context) ->
-    case z_db:q1(
-        "select count(*) from identity where rsc_id = $1 and type in ('username_pw', 'openid')",
-        [m_rsc:rid(Id, Context)],
-        Context
-    ) of
+    case z_db:q1("
+        select count(*)
+        from identity
+        where rsc_id = $1
+          and type in ('username_pw', 'openid')",
+        [ m_rsc:rid(Id, Context) ],
+        Context)
+    of
         0 -> false;
         _ -> true
     end.
@@ -1462,83 +1467,90 @@ delete_by_type_and_keyprefix(Rsc, Type, Key, Context) ->
             ok
     end.
 
+-spec lookup_by_username(key(), z:context()) -> identity() | undefined.
 lookup_by_username(Key, Context) ->
     lookup_by_type_and_key(username_pw, z_string:to_lower(Key), Context).
 
+-spec lookup_by_type_and_key(type(), key(), z:context()) -> identity() | undefined.
 lookup_by_type_and_key(Type, Key, Context) ->
     Key1 = normalize_key(Type, Key),
     z_db:assoc_row("select * from identity where type = $1 and key = $2", [Type, Key1], Context).
 
+-spec lookup_by_type_and_key_multi(type(), key(), z:context()) -> list( identity() ).
 lookup_by_type_and_key_multi(Type, Key, Context) ->
     Key1 = normalize_key(Type, Key),
     z_db:assoc("select * from identity where type = $1 and key = $2", [Type, Key1], Context).
 
+-spec lookup_users_by_type_and_key(type(), key(), z:context()) -> list( identity() ).
 lookup_users_by_type_and_key(Type, Key, Context) ->
     Key1 = normalize_key(Type, Key),
     z_db:assoc(
         "select usr.*
          from identity tp, identity usr
          where tp.rsc_id = usr.rsc_id
-           and usr.type = 'username_pw'
+           and usr.type in ('username_pw', 'openid')
            and tp.type = $1
            and tp.key = $2",
         [Type, Key1],
         Context).
 
+-spec lookup_users_by_verified_type_and_key(type(), key(), z:context()) -> list( identity() ).
 lookup_users_by_verified_type_and_key(Type, Key, Context) ->
     Key1 = normalize_key(Type, Key),
     z_db:assoc(
         "select usr.*
          from identity tp, identity usr
          where tp.rsc_id = usr.rsc_id
-           and usr.type = 'username_pw'
+           and usr.type in ('username_pw', 'openid')
            and tp.type = $1
            and tp.key = $2
            and tp.is_verified",
         [Type, Key1],
         Context).
 
+-spec lookup_by_verify_key(key(), z:context()) -> identity() | undefined.
 lookup_by_verify_key(Key, Context) ->
     z_db:assoc_row("select * from identity where verify_key = $1", [Key], Context).
 
+
+-spec set_verify_key(IdnId, z:context()) -> {ok, VerifyKey} when
+    IdnId :: pos_integer(),
+    VerifyKey :: binary().
 set_verify_key(Id, Context) ->
-    N = binary_to_list(z_ids:id(10)),
-    case lookup_by_verify_key(N, Context) of
+    VerifyKey = z_ids:id(10),
+    case lookup_by_verify_key(VerifyKey, Context) of
         undefined ->
             z_db:q("update identity
                     set verify_key = $2,
                         modified = now()
                     where id = $1",
-                    [Id, N],
+                    [Id, VerifyKey],
                     Context),
-            {ok, N};
+            {ok, VerifyKey};
         _ ->
             set_verify_key(Id, Context)
     end.
 
 
 check_hash(RscId, Username, Password, Hash, Context) ->
-    N = #identity_password_match{
+    PwMatch = #identity_password_match{
         rsc_id = RscId,
         password = Password,
         hash = Hash
     },
-    case z_notifier:first(N, Context) of
+    case z_notifier:first(PwMatch, Context) of
         {ok, rehash} ->
             %% OK but module says it needs rehashing; do that using
             %% the current hashing mechanism
             ok = set_username_pw(RscId, Username, Password, z_acl:sudo(Context)),
-            check_hash_ok(RscId, Context);
+            {ok, RscId};
         ok ->
-            check_hash_ok(RscId, Context);
+            {ok, RscId};
         {error, Reason} ->
             {error, Reason};
         undefined ->
             {error, nouser}
     end.
-
-check_hash_ok(RscId, _Context) ->
-    {ok, RscId}.
 
 %% @doc Prevent insert of reserved usernames.
 %% See: http://tools.ietf.org/html/rfc2142
@@ -1569,7 +1581,7 @@ is_reserved_name_1(_) -> false.
 
 
 % Constant time comparison.
--spec is_equal(Extern :: binary(), Secret :: binary() ) -> boolean().
+-spec is_equal(Extern :: binary(), Secret :: binary()) -> boolean().
 is_equal(A, B) -> is_equal(A, B, true).
 
 is_equal(<<>>, <<>>, Eq) -> Eq;

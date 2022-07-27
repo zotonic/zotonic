@@ -658,6 +658,7 @@
     service_uid :: binary(),
     service_props = #{} :: map(),
     props = #{} :: m_rsc:props(),
+    identities = [] :: list( map() ),
     is_connect = false :: boolean(),
     is_signup_confirm = false :: boolean()
 }).
