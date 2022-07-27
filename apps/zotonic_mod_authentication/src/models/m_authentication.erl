@@ -210,7 +210,7 @@ request_reminder(Payload, Context) ->
 
 %% @doc Find all users with a certain email address or username identity. The email
 %% address is already normalized.
--spec lookup_email_identitities(EmailOrUsername, Context) -> UserIds when
+-spec lookup_email_identities(EmailOrUsername, Context) -> UserIds when
     EmailOrUsername :: binary(),
     Context :: z:context(),
     UserIds :: [ m_rsc:resource_id() ].
