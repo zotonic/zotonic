@@ -25,9 +25,7 @@ is_a({rsc_list, List}, Cat, Context) ->
 is_a(Arg, Cat, Context) ->
     case m_category:name_to_id(Cat, Context) of
         {ok, CatId} -> z_list_of_ids_filter:filter(Arg, fun(Id) -> m_rsc:is_a(Id, CatId, Context) end, Context);
-        {error, {unknown_category, _}} -> false;
-        {error, _Reason} when is_integer(Arg) -> false;
-        {error, _Reason} when is_list(Arg) -> []
+        {error, {unknown_category, _}} -> false
     end.
 
 is_a(List, Cat, N, Context) ->
