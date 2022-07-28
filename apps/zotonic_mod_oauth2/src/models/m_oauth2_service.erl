@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020-2021 Marc Worrell
+%% @copyright 2020-2022 Marc Worrell
 %% @doc OAuth2 model for authentication using remote OAuth2 services.
+%% @enddoc
 
-%% Copyright 2020-2021 Marc Worrell
+%% Copyright 2020-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -47,8 +48,8 @@ m_post([ <<"oauth-redirect">> ], #{ payload := Payload }, Context) ->
     case termit:decode_base64(StateData, Secret) of
         {ok, Expires} ->
             case termit:check_expired(Expires) of
-                {ok, {StateId, ServiceMod, ServiceData, Data}} when is_atom(ServiceMod) ->
-                    handle_redirect(StateId, ServiceMod, ServiceData, Data, QArgs, SId, Context);
+                {ok, {StateId, ServiceMod, ServiceData, InitialQArgs}} when is_atom(ServiceMod) ->
+                    handle_redirect(StateId, ServiceMod, ServiceData, InitialQArgs, QArgs, SId, Context);
                 {ok, _} ->
                     {error, state};
                 {error, _} = Error ->
@@ -65,13 +66,13 @@ redirect_url(Context) ->
         z_dispatcher:url_for(oauth2_service_redirect, Context1),
         Context1).
 
-handle_redirect(StateId, ServiceMod, ServiceData, Args, QArgs, SId, Context) ->
+handle_redirect(StateId, ServiceMod, ServiceData, InitialQArgs, QArgs, SId, Context) ->
     case ServiceMod:oauth_version() of
         1 ->
             access_token(
-                ServiceMod:fetch_access_token(<<>>, ServiceData, Args, QArgs, Context),
+                ServiceMod:fetch_access_token(<<>>, ServiceData, InitialQArgs, QArgs, Context),
                 ServiceMod,
-                Args,
+                InitialQArgs,
                 SId,
                 Context);
         2 ->
@@ -82,9 +83,9 @@ handle_redirect(StateId, ServiceMod, ServiceData, Args, QArgs, SId, Context) ->
                             case maps:get(<<"code">>, QArgs, undefined) of
                                 Code when is_binary(Code), Code =/= <<>> ->
                                     access_token(
-                                        ServiceMod:fetch_access_token(Code, ServiceData, Args, QArgs, Context),
+                                        ServiceMod:fetch_access_token(Code, ServiceData, InitialQArgs, QArgs, Context),
                                         ServiceMod,
-                                        Args,
+                                        InitialQArgs,
                                         SId,
                                         Context);
                                 _ ->
@@ -127,12 +128,13 @@ handle_redirect(StateId, ServiceMod, ServiceData, Args, QArgs, SId, Context) ->
             end
     end.
 
-access_token({ok, #{ <<"access_token">> := _ } = AccessData}, ServiceMod, Args, SId, Context) ->
+access_token({ok, #{ <<"access_token">> := _ } = AccessData}, ServiceMod, InitialQArgs, SId, Context) ->
     user_data(
-        ServiceMod:auth_validated(AccessData, Args, Context),
+        ServiceMod:auth_validated(AccessData, InitialQArgs, Context),
+        InitialQArgs,
         SId,
         Context);
-access_token({ok, #{} = AccessData}, ServiceMod, _Args, _SId, _Context) ->
+access_token({ok, #{} = AccessData}, ServiceMod, _InitialQArgs, _SId, _Context) ->
     ?LOG_WARNING(#{
         text => <<"OAuth2 access token with unknown return">>,
         in => zotonic_mod_oauth2,
@@ -142,13 +144,13 @@ access_token({ok, #{} = AccessData}, ServiceMod, _Args, _SId, _Context) ->
         access_data => AccessData
     }),
     {error, access_token};
-access_token({error, denied}, _ServiceMod, _Args, _SId, _Context) ->
+access_token({error, denied}, _ServiceMod, _InitialQArgs, _SId, _Context) ->
     {error, denied};
-access_token({error, _Reason}, _ServiceMod, _Args, _SId, _Context) ->
+access_token({error, _Reason}, _ServiceMod, _InitialQArgs, _SId, _Context) ->
     {error, access_token}.
 
 % Handle the #auth_validated{} record.
-user_data({ok, Auth}, SId, Context) ->
+user_data({ok, Auth}, InitialQArgs, SId, Context) ->
     case z_notifier:first(Auth, Context) of
         undefined ->
             % No handler for auth, signups, or signup not accepted
@@ -166,6 +168,7 @@ user_data({ok, Auth}, SId, Context) ->
                 {ok, Token} ->
                     {ok, #{
                         result => token,
+                        url => url(<<"p">>, InitialQArgs),
                         token => Token
                     }};
                 {error, Reason} = Err ->
@@ -180,13 +183,29 @@ user_data({ok, Auth}, SId, Context) ->
             end;
         {error, signup_confirm} ->
             % We need a confirmation from the user before we add a new account
-            % html_error(signup_confirm, {auth, Auth}, Context);
             Secret = z_context:state_cookie_secret(Context),
             Expires = termit:expiring(Auth, ?SESSION_AUTH_TTL),
             Encoded = termit:encode_base64(Expires, Secret),
             {ok, #{
                 result => confirm,
-                auth => Encoded
+                auth => Encoded,
+                url => url(<<"p">>, InitialQArgs)
+            }};
+        {error, {need_passcode, UserId}} ->
+            % There is an existing account with matching confirmed identities.
+            % The existing account is protected by 2FA, so we need a code
+            % before we can merge the accounts.
+            AuthUser = #{
+                auth => Auth,
+                user_id => UserId
+            },
+            Secret = z_context:state_cookie_secret(Context),
+            Expires = termit:expiring(AuthUser, ?SESSION_AUTH_TTL),
+            Encoded = termit:encode_base64(Expires, Secret),
+            {ok, #{
+                result => need_passcode,
+                authuser => Encoded,
+                url => url(<<"p">>, InitialQArgs)
             }};
         {error, duplicate} ->
             {error, duplicate};
@@ -209,6 +228,16 @@ user_data({ok, Auth}, SId, Context) ->
             }),
             {error, auth_user_error}
     end;
-user_data(_UserError, _SId, _Context) ->
+user_data(_UserError, _InitialQArgs, _SId, _Context) ->
     {error, service_user_data}.
+
+
+url(Arg, InitialQArgs) ->
+    case proplists:get_value(Arg, InitialQArgs) of
+        <<"/", _/binary>> = Url ->
+            z_sanitize:uri(Url);
+        _ ->
+            undefined
+    end.
+
 

@@ -305,6 +305,7 @@ upgrade(C, Database, Schema) ->
     ok = key_changes_v1_0(C, Database, Schema),
     ok = rsc_language(C, Database, Schema),
     ok = task_queue_error_count(C, Database, Schema),
+    ok = identity_expires(C, Database, Schema),
     ok.
 
 
@@ -861,3 +862,33 @@ task_error_ct(Props) when is_list(Props) ->
     proplists:get_value(error_ct, Props, 0);
 task_error_ct(_) ->
     0.
+
+
+identity_expires(C, Database, Schema) ->
+    case has_column(C, "identity", "expires", Database, Schema) of
+        true ->
+            ok;
+        false ->
+            ?LOG_NOTICE(#{
+                text => <<"Upgrade: adding expires column to identity">>,
+                in => zotonic_core,
+                database => Database,
+                schema => Schema,
+                table => identity
+            }),
+            {ok, [], []} = epgsql:squery(C,
+                                    "alter table identity "
+                                    "add column expires timestamp with time zone"),
+            {ok, [], []} = epgsql:squery(C,
+                                    "CREATE INDEX identity_expires_type_key ON identity (expires, type)"),
+
+            {ok, _} = epgsql:squery(C, "
+                            update identity
+                            set expires = created,
+                                prop1 = ''
+                            where prop1 = 'expired'
+                              and type = 'username_pw'
+                            "),
+            ok
+    end.
+

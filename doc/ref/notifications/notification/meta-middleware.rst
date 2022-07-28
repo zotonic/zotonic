@@ -3,15 +3,14 @@
 middleware
 ^^^^^^^^^^
 
-Delegates processing before the request, or when the request is welformed or handled.
-Handy, e.g., to include personal headers to the request.
+Delegates the request processing. 
 
 
-Type:
+Type: 
     :ref:`notification-foldl`
 
-Return:
-    ``z:context()``
+Return: 
+    updated ``z:context()``
 
 ``#middleware{}`` properties:
     - on: ``request|welformed|handled``

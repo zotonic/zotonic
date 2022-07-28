@@ -121,15 +121,16 @@ auth_validated(#{
                 microsoft_user_id => MSUserId,
                 user_props => UserProps
             }),
+            Email = case maps:get(<<"mail">>, UserProps, <<>>) of
+                <<>> -> maps:get(<<"email">>, JWTProps, undefined);
+                undefined -> maps:get(<<"email">>, JWTProps, undefined);
+                E -> E
+            end,
             PersonProps = #{
                 <<"title">> => maps:get(<<"displayName">>, UserProps, undefined),
                 <<"name_first">> => maps:get(<<"givenName">>, UserProps, undefined),
                 <<"name_surname">> => maps:get(<<"surname">>, UserProps, undefined),
-                <<"email">> => case maps:get(<<"mail">>, UserProps, <<>>) of
-                    <<>> -> maps:get(<<"email">>, JWTProps, undefined);
-                    undefined -> maps:get(<<"email">>, JWTProps, undefined);
-                    Email -> Email
-                end,
+                <<"email">> => Email,
                 <<"phone_mobile">> => maps:get(<<"mobilePhone">>, UserProps, undefined),
                 <<"phone">> => case maps:get(<<"businessPhones">>, UserProps, []) of
                     [ Phone | _ ] when is_binary(Phone) -> Phone;
@@ -142,6 +143,13 @@ auth_validated(#{
                 service_uid = MSUserId,
                 service_props = AccessData,
                 props = PersonProps,
+                identities = [
+                    #{
+                        type => <<"email">>,
+                        key => Email,
+                        is_verified => true
+                    }
+                ],
                 is_connect = z_convert:to_bool(proplists:get_value(<<"is_connect">>, Args))
             }};
         {error, _} = Error ->

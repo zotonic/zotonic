@@ -263,7 +263,7 @@ model.present = function(data) {
             }
             model.auth = data.auth_response;
             if (data.is_auth_error === false && data.auth_response.url) {
-                self.publish("model/location/post/redirect", {
+                self.publish("model/location/post/redirect-local", {
                     url: data.auth_response.url
                 });
             }

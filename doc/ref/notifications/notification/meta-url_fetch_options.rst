@@ -13,6 +13,7 @@ Return:
     ``z_url_fetch:options()``
 
 ``#url_fetch_options{}`` properties:
+    - method: ``get|post|put|delete``
     - host: ``binary``
     - url: ``binary``
     - options: ``z_url_fetch:options()``

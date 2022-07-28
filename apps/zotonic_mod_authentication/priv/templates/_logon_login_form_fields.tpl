@@ -75,7 +75,7 @@
         </div>
         <p class="clearfix">
             <b>{{ q.options.username|escape }}</b>
-            <a class="pull-right" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ Other username or email _}</a>
+            <a class="pull-right" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ Change _}</a>
         </p>
     {% else %}
         <div class="form-group">
@@ -104,7 +104,11 @@
             {_ You can log in using the following external service _}
         </p>
         {% for ext in q.options.user_external %}
-            {% if ext.url %}
+            {% if ext.template %}
+                <p class="clearfix">
+                    {% include ext.template ext=ext %}
+                </p>
+            {% elseif ext.url %}
                 <p class="clearfix">
                     <a href="{{ ext.url|escape }}" class="btn btn-default" style="display: block">
                         <span class="fal fa-globe"></span>

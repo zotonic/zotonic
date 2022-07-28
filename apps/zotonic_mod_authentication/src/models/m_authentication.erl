@@ -85,13 +85,33 @@ m_post([ <<"request-reminder">> ], #{ payload := Payload }, Context) when is_map
     request_reminder(Payload, Context);
 m_post([ <<"service-confirm">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
     case maps:get(<<"value">>, Payload, undefined) of
-        #{ <<"auth">> := AuthEncoded } ->
+        #{ <<"auth">> := AuthEncoded, <<"url">> := Url } ->
+            UrlSafe = z_sanitize:uri(Url),
             Secret = z_context:state_cookie_secret(Context),
             case termit:decode_base64(AuthEncoded, Secret) of
                 {ok, AuthExp} ->
                     case termit:check_expired(AuthExp) of
                         {ok, Auth} ->
-                            handle_auth_confirm(Auth, Context);
+                            handle_auth_confirm(Auth, UrlSafe, Context);
+                        {error, _} = Error ->
+                            Error
+                    end;
+                {error, _} ->
+                    {error, illegal_auth}
+            end;
+        _ ->
+            {error, missing_auth}
+    end;
+m_post([ <<"service-confirm-passcode">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
+    case maps:get(<<"value">>, Payload, undefined) of
+        #{ <<"authuser">> := AuthUserEncoded, <<"url">> := Url, <<"passcode">> := Passcode } ->
+            UrlSafe = z_sanitize:uri(Url),
+            Secret = z_context:state_cookie_secret(Context),
+            case termit:decode_base64(AuthUserEncoded, Secret) of
+                {ok, AuthExp} ->
+                    case termit:check_expired(AuthExp) of
+                        {ok, #{ auth := Auth, user_id := UserId }} ->
+                            handle_auth_confirm_passcode(UserId, Passcode, Auth, UrlSafe, Context);
                         {error, _} = Error ->
                             Error
                     end;
@@ -128,7 +148,7 @@ m_post(Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
-handle_auth_confirm(Auth, Context) ->
+handle_auth_confirm(Auth, Url, Context) ->
     Auth1 = Auth#auth_validated{ is_signup_confirm = true },
     case z_notifier:first(Auth1, Context) of
         undefined ->
@@ -145,7 +165,8 @@ handle_auth_confirm(Auth, Context) ->
                 {ok, Token} ->
                     {ok, #{
                         result => token,
-                        token => Token
+                        token => Token,
+                        url => Url
                     }};
                 {error, Reason} = Err ->
                     ?LOG_WARNING(#{
@@ -168,8 +189,41 @@ handle_auth_confirm(Auth, Context) ->
             {error, signup}
     end.
 
+%% @doc Check if the passcode is correct. Use auth_precheck and auth_checked to
+%% handle rate limiting.
+handle_auth_confirm_passcode(UserId, Passcode, Auth, Url, Context) ->
+    Username = z_convert:to_binary(m_identity:get_username(UserId, Context)),
+    case auth_precheck(Username, Context) of
+        ok ->
+            PostCheck = #auth_postcheck{
+                id = UserId,
+                query_args = #{ <<"passcode">> => Passcode }
+            },
+            case z_notifier:first(PostCheck, Context) of
+                undefined ->
+                    auth_checked(Username, true, Context),
+                    handle_auth_confirm(Auth, Url, Context);
+                {error, _} = Error ->
+                    auth_checked(Username, false, Context),
+                    Error
+            end;
+        {error, _} = Error ->
+            Error
+    end.
 
-%% @doc Send password reminders to everybody with the given email address
+auth_precheck(Username, Context) when is_binary(Username) ->
+    case z_notifier:first(#auth_precheck{ username = Username }, Context) of
+        undefined -> ok;
+        ok -> ok;
+        Error -> Error
+    end.
+
+auth_checked(Username, IsAccepted, Context) when is_binary(Username) ->
+    z_notifier:first(#auth_checked{ username = Username, is_accepted = IsAccepted }, Context).
+
+
+%% @doc Send password reminders to everybody with the given email address in one of their
+%% registered email-identities. The email is sent to the primary email address of the user.
 -spec request_reminder( map(), z:context() ) -> {ok, map()} | {error, email}.
 request_reminder(Payload, Context) ->
     case maps:find(<<"email">>, Payload) of
@@ -181,18 +235,18 @@ request_reminder(Payload, Context) ->
                         Ok when Ok =:= undefined; Ok =:= ok ->
                             case lookup_email_identities(EmailNorm, Context) of
                                 [] ->
-                                    case z_convert:to_bool(m_config:get_value(mod_authentication, email_reminder_if_nomatch, Context)) of
+                                    case m_config:get_boolean(mod_authentication, email_reminder_if_nomatch, Context) of
                                         true ->
                                             send_reminder(undefined, EmailNorm, Context);
                                         false ->
                                             nop
                                     end;
-                                Identities ->
+                                UserIds ->
                                     lists:foreach(
                                         fun(RscId) ->
                                             send_reminder(RscId, EmailNorm, Context)
                                         end,
-                                        Identities)
+                                        UserIds)
                             end,
                             {ok, #{ email => EmailNorm }};
                         {error, _Reason} = Error ->
@@ -205,8 +259,14 @@ request_reminder(Payload, Context) ->
             {error, email}
     end.
 
-%% @doc Find all users with a certain e-mail address or username
-lookup_email_identities(<<>>, _Context) -> [];
+%% @doc Find all users with a certain email address or username identity. The email
+%% address is already normalized.
+-spec lookup_email_identities(EmailOrUsername, Context) -> UserIds when
+    EmailOrUsername :: binary(),
+    Context :: z:context(),
+    UserIds :: [ m_rsc:resource_id() ].
+lookup_email_identities(<<>>, _Context) ->
+    [];
 lookup_email_identities(EmailOrUsername, Context) ->
     Es = m_identity:lookup_by_type_and_key_multi(email, EmailOrUsername, Context),
     Us = m_identity:lookup_by_type_and_key_multi(username_pw, EmailOrUsername, Context),

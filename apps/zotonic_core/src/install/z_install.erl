@@ -336,6 +336,7 @@ model_pgsql() ->
       created timestamp with time zone NOT NULL DEFAULT now(),
       modified timestamp with time zone NOT NULL DEFAULT now(),
       visited timestamp with time zone,
+      expires timestamp with time zone,
 
       CONSTRAINT auth_pkey PRIMARY KEY (id),
       CONSTRAINT pk_auth_rsc_id FOREIGN KEY (rsc_id)
@@ -347,6 +348,7 @@ model_pgsql() ->
     "CREATE INDEX fki_identity_rsc_id ON identity (rsc_id)",
     "CREATE INDEX identity_visited_key ON identity (visited)",
     "CREATE INDEX identity_created_key ON identity (created)",
+    "CREATE INDEX identity_expires_type_key ON identity (expires, type)",
     "CREATE UNIQUE INDEX identity_type_key_unique ON identity (type, key) WHERE (is_unique)",
     "CREATE INDEX identity_type_key_key ON identity using btree (type, key collate ucs_basic text_pattern_ops)",
 

@@ -33,34 +33,37 @@ jQuery( document ).ready(function() {
     });
 
     jQuery( this ).keydown(function(e) {
-        if ((e.keyCode === 40 || e.keyCode === 38 || e.which == 13) && $result.length) {
-            var $active = jQuery( '.search-view-results li.active' );
+        if ($result) {
+            if ((e.keyCode === 40 || e.keyCode === 38 || e.which == 13) && $result.length) {
+                var $active = jQuery( '.search-view-results li.active' );
 
-            if (e.keyCode === 40){ // pgdn
-                if (!$active.next().length) {
-                    $result.removeClass( 'active' );
-                    jQuery( '.search-view-results li:first' ).toggleClass( 'active' );
-                } else {
-                    $active.toggleClass( 'active' );
-                    $active.next().toggleClass( 'active' );
+                if (e.keyCode === 40){ // pgdn
+                    if (!$active.next().length) {
+                        $result.removeClass( 'active' );
+                        jQuery( '.search-view-results li:first' ).toggleClass( 'active' );
+                    } else {
+                        $active.toggleClass( 'active' );
+                        $active.next().toggleClass( 'active' );
+                    }
+                } else if (e.keyCode === 38) { // pgup
+                    if (!$active.prev().length) {
+                        $result.removeClass( 'active' );
+                        jQuery( '.search-view-results li:last' ).toggleClass( 'active' );
+                    } else {
+                        $active.toggleClass( 'active' );
+                        $active.prev().toggleClass( 'active' );
+                    }
                 }
-            } else if (e.keyCode === 38) { // pgup
-                if (!$active.prev().length) {
-                    $result.removeClass( 'active' );
-                    jQuery( '.search-view-results li:last' ).toggleClass( 'active' );
-                } else {
-                    $active.toggleClass( 'active' );
-                    $active.prev().toggleClass( 'active' );
-                }
+
+                $active = jQuery( '.search-view-results li.active' );
+
+                if ($active && $active.length) input.value = $active.find( 'span' ).text();
             }
-
-            $active = jQuery( '.search-view-results li.active' );
-
-            if ($active && $active.length) input.value = $active.find( 'span' ).text();
         }
     });
 
     jQuery( 'body' ).on('click', function() {
          if ($form && $form.length) jQuery( input ).next().remove();
+         $result = null;
     });
 });

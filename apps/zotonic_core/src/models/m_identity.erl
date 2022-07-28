@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
-%% @doc Manage identities of users.  An identity can be an username/password, openid, oauth credentials etc.
+%% @copyright 2009-2022 Marc Worrell
+%% @doc Manage identities of users. An identity can be an username/password, openid, oauth credentials etc.
+%% @enddoc
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -33,6 +34,7 @@
     set_username/3,
     set_username_pw/4,
     set_expired/3,
+    set_identity_expired/3,
     set_visited/2,
     ensure_username_pw/2,
     check_username_pw/3,
@@ -43,6 +45,7 @@
     get/2,
     get_rsc/2,
     get_rsc_by_type/3,
+    get_rsc_by_type_key/4,
     get_rsc_by_type_keyprefix/4,
     get_rsc/3,
 
@@ -93,8 +96,10 @@
 -type sha1_salted_hash() :: {hash, binary(), binary()}.
 -type hash() :: bcrypt_hash() | sha1_salted_hash().
 
--type type() :: atom() | binary().
--type key() :: atom() | binary().
+-type type() :: atom() | binary() | string().
+-type key() :: atom() | binary() | string().
+
+-type identity() :: proplists:proplist().
 
 -export_type([
     type/0,
@@ -191,14 +196,17 @@ m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
-%% @doc Check if the resource has any credentials that will make him/her an user
+%% @doc Check if the resource has any credentials that will make them an user
 -spec is_user(m_rsc:resource(), z:context()) -> boolean().
 is_user(Id, Context) ->
-    case z_db:q1(
-        "select count(*) from identity where rsc_id = $1 and type in ('username_pw', 'openid')",
-        [m_rsc:rid(Id, Context)],
-        Context
-    ) of
+    case z_db:q1("
+        select count(*)
+        from identity
+        where rsc_id = $1
+          and type in ('username_pw', 'openid')",
+        [ m_rsc:rid(Id, Context) ],
+        Context)
+    of
         0 -> false;
         _ -> true
     end.
@@ -238,7 +246,8 @@ get_user_info(Rsc, Context) ->
             empty_user_info(undefined);
         RscId ->
             Row = z_db:q_row("
-                     select key, visited, prop1, modified
+                     select key, visited, modified,
+                            coalesce(expires <= now(),false) as is_expired
                      from identity
                      where rsc_id = $1
                        and type = 'username_pw'",
@@ -247,13 +256,13 @@ get_user_info(Rsc, Context) ->
             case Row of
                 undefined ->
                     empty_user_info(RscId);
-                {Key, Visited, Prop1, Modified} ->
+                {Key, Visited, Modified, IsExpired} ->
                     #{
                         <<"user_id">> => RscId,
                         <<"username">> => Key,
                         <<"visited">> => Visited,
                         <<"modified">> => Modified,
-                        <<"is_expired">> => Prop1 =:= <<"expired">>
+                        <<"is_expired">> => IsExpired
                     }
             end
     end.
@@ -312,34 +321,111 @@ delete_username(Id, Context) ->
 
 %% @doc Mark the username_pw identity of an user as 'expired', this forces a prompt
 %%      for a password reset on the next authentication.
-set_expired(UserId, true, Context) ->
+-spec set_expired(UserId, DateTime, Context) -> ok | {error, enoent} when
+    UserId :: m_rsc:resource_id(),
+    DateTime :: undefined | boolean() | calendar:datetime(),
+    Context :: z:context().
+set_expired(undefined, _DateTime, _Context) ->
+    ok;
+set_expired(UserId, true, Context) when is_integer(UserId) ->
     case z_db:q("
-        update identity
-        set prop1 = 'expired'
-        where type = 'username_pw'
-          and rsc_id = $1",
-        [ UserId ],
-        Context)
+            update identity
+            set expires = now(),
+                modified = now()
+            where rsc_id = $1
+              and type = 'username_pw'",
+            [UserId],
+            Context)
     of
-        0 -> {error, enoent};
-        _ ->
+        1 ->
+            ok;
+        0 ->
             flush(UserId, Context),
-            ok
+            {error, enoent}
     end;
-set_expired(UserId, false, Context) ->
+set_expired(UserId, false, Context) when is_integer(UserId) ->
     case z_db:q("
-        update identity
-        set prop1 = 'expired'
-        where type = ''
-          and rsc_id = $1",
-        [ UserId ],
-        Context)
+            update identity
+            set expires = NULL
+            where rsc_id = $1
+              and type = 'username_pw'",
+            [UserId],
+            Context)
     of
-        0 -> {error, enoent};
-        _ ->
+        1 ->
+            ok;
+        0 ->
             flush(UserId, Context),
-            ok
+            {error, enoent}
+    end;
+set_expired(UserId, DateTime, Context) when is_integer(UserId) ->
+    case z_db:q("
+            update identity
+            set expires = $2
+            where rsc_id = $1
+              and type = 'username_pw'",
+            [UserId, DateTime],
+            Context)
+    of
+        1 ->
+            ok;
+        0 ->
+            flush(UserId, Context),
+            {error, enoent}
     end.
+
+%% @doc Mark the username_pw identity of an user as 'expired', this forces a prompt
+%%      for a password reset on the next authentication.
+-spec set_identity_expired(IdnId, DateTime, Context) -> ok | {error, enoent} when
+    IdnId :: pos_integer(),
+    DateTime :: undefined | boolean() | calendar:datetime(),
+    Context :: z:context().
+set_identity_expired(undefined, _DateTime, _Context) ->
+    ok;
+set_identity_expired(IdnId, true, Context) when is_integer(IdnId) ->
+    case z_db:q("
+            update identity
+            set expires = now(),
+                modified = now()
+            where id = $1",
+            [IdnId],
+            Context)
+    of
+        1 ->
+            ok;
+        0 ->
+            flush(IdnId, Context),
+            {error, enoent}
+    end;
+set_identity_expired(IdnId, false, Context) when is_integer(IdnId) ->
+    case z_db:q("
+            update identity
+            set expires = NULL
+            where id = $1",
+            [IdnId],
+            Context)
+    of
+        1 ->
+            ok;
+        0 ->
+            flush(IdnId, Context),
+            {error, enoent}
+    end;
+set_identity_expired(IdnId, DateTime, Context) when is_integer(IdnId) ->
+    case z_db:q("
+            update identity
+            set expires = $2
+            where id = $1",
+            [IdnId, DateTime],
+            Context)
+    of
+        1 ->
+            ok;
+        0 ->
+            flush(IdnId, Context),
+            {error, enoent}
+    end.
+
 
 %% @doc Change the username of the resource id, only possible if there is
 %% already an username/password set
@@ -350,6 +436,8 @@ set_username(1, _Username, Context) ->
     ?LOG_WARNING(#{
         text => <<"Trying to set admin username (1)">>,
         in => zotonic_core,
+        result => error,
+        reason => eacces,
         user_id => z_acl:user(Context)
     }),
     {error, eacces};
@@ -721,10 +809,14 @@ check_username_pw_1(<<"admin">>, Password, Context) ->
                     flush(1, Context),
                     {ok, 1};
                 false ->
-                    ?LOG_ERROR(
-                        "admin login with default password from non allowed ip address ~p",
-                        [m_req:get(peer, Context)]
-                    ),
+                    ?LOG_ERROR(#{
+                        text => <<"admin login with default password from non allowed ip address">>,
+                        in => zotonic_core,
+                        ip_address => m_req:get(peer, Context),
+                        username => <<"admin">>,
+                        result => error,
+                        reason => peer_not_allowed
+                    }),
                     {error, peer_not_allowed}
             end;
         AdminPassword ->
@@ -750,7 +842,7 @@ check_username_pw_1(Username, Password, Context) ->
             Error;
         undefined ->
             Row = z_db:q_row("
-                select rsc_id, propb, prop1
+                select rsc_id, propb, coalesce(expires <= now(),false) as is_expired
                 from identity
                 where type = 'username_pw'
                   and key = $1",
@@ -763,14 +855,14 @@ check_username_pw_1(Username, Password, Context) ->
                         true -> check_email_pw(Username1, Password, Context);
                         false -> {error, nouser}
                     end;
-                {RscId, Hash, <<"expired">>} ->
+                {RscId, Hash, true} ->
                     case check_hash(RscId, Username, Password, Hash, Context) of
                         {ok, UserId} ->
                             {error, {expired, UserId}};
                         {error, _} = Error ->
                             Error
                     end;
-                {RscId, Hash, _Prop1} ->
+                {RscId, Hash, false} ->
                     check_hash(RscId, Username, Password, Hash, Context)
             end
     end.
@@ -877,6 +969,19 @@ get_rsc_by_type_1(Id, Type, Context) ->
         [m_rsc:rid(Id, Context), Type],
         Context
     ).
+
+-spec get_rsc_by_type_key(m_rsc:resource_id(), type(), key(), z:context()) -> list().
+get_rsc_by_type_key(Id, Type, Key, Context) ->
+    z_db:assoc(
+        "select *
+         from identity
+         where rsc_id = $1
+           and type = $2
+           and key = $3
+         order by is_verified desc",
+        [m_rsc:rid(Id, Context), Type, Key],
+        Context).
+
 
 -spec get_rsc_by_type_keyprefix(m_rsc:resource_id(), type(), key(), z:context()) -> list().
 get_rsc_by_type_keyprefix(Id, Type, KeyPrefix, Context) ->
@@ -997,41 +1102,56 @@ insert(Rsc, Type, Key, Props, Context) ->
 
 insert_1(Rsc, Type, Key, Props, Context) ->
     RscId = m_rsc:rid(Rsc, Context),
+    TypeB = z_convert:to_binary(Type),
+    KeyB = z_convert:to_binary(Key),
     case z_db:q1("select id
                   from identity
                   where rsc_id = $1
                     and type = $2
                     and key = $3",
-        [RscId, Type, Key],
+        [RscId, TypeB, KeyB],
         Context)
     of
         undefined ->
-            Props1 = [{rsc_id, RscId}, {type, Type}, {key, Key} | Props],
+            Props1 = [
+                {rsc_id, RscId},
+                {type, TypeB},
+                {key, KeyB}
+                | Props
+            ],
             Result = z_db:insert(identity, Props1, Context),
             flush(RscId, Context),
             z_mqtt:publish(
-                [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
+                [ <<"model">>, <<"identity">>, <<"event">>, RscId, TypeB ],
                 #{
                     id => RscId,
-                    type => Type
+                    type => TypeB
                 },
                 z_acl:sudo(Context)),
             Result;
         IdnId ->
-            case proplists:get_value(is_verified, Props, false) of
+            Props1 = case proplists:get_value(is_verified, Props, false) of
                 true ->
-                    set_verified_trans(RscId, Type, Key, Context),
-                    flush(RscId, Context),
-                    z_mqtt:publish(
-                        [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
-                        #{
-                            id => RscId,
-                            type => Type
-                        },
-                        z_acl:sudo(Context));
+                    [
+                        {verify_key, undefined},
+                        {modified, calendar:universal_time()}
+                        | Props
+                    ];
                 false ->
-                    nop
+                    [
+                        {modified, calendar:universal_time()}
+                        | Props
+                    ]
             end,
+            _ = z_db:update(identity, IdnId, Props1, Context),
+            flush(RscId, Context),
+            z_mqtt:publish(
+                [ <<"model">>, <<"identity">>, <<"event">>, RscId, TypeB ],
+                #{
+                    id => RscId,
+                    type => TypeB
+                },
+                z_acl:sudo(Context)),
             {ok, IdnId}
     end.
 
@@ -1083,11 +1203,12 @@ set_visited(UserId, Context) when is_integer(UserId) ->
             ok
     end.
 
-
 %% @doc Set the verified flag on a record by identity id.
--spec set_verified(m_rsc:resource_id(), z:context()) -> ok | {error, notfound}.
-set_verified(Id, Context) ->
-    case z_db:q_row("select rsc_id, type from identity where id = $1", [Id], Context) of
+-spec set_verified(IdnId, Context) -> ok | {error, notfound} when
+    IdnId :: pos_integer(),
+    Context :: z:context().
+set_verified(IdnId, Context) ->
+    case z_db:q_row("select rsc_id, type from identity where id = $1", [IdnId], Context) of
         {RscId, Type} ->
             case z_db:q("
                     update identity
@@ -1095,7 +1216,7 @@ set_verified(Id, Context) ->
                         verify_key = null,
                         modified = now()
                     where id = $1",
-                    [Id],
+                    [IdnId],
                     Context)
             of
                 1 ->
@@ -1214,8 +1335,10 @@ delete(IdnId, Context) ->
                                 z_acl:sudo(Context)),
                             maybe_reset_email_property(RscId, Type, Key, Context),
                             {ok, 1};
-                        Other ->
-                            Other
+                        {ok, 0} ->
+                            {ok, 0};
+                        {error, _} = Error ->
+                            Error
                     end;
                 false ->
                     {error, eacces}
@@ -1361,83 +1484,90 @@ delete_by_type_and_keyprefix(Rsc, Type, Key, Context) ->
             ok
     end.
 
+-spec lookup_by_username(key(), z:context()) -> identity() | undefined.
 lookup_by_username(Key, Context) ->
     lookup_by_type_and_key(username_pw, z_string:to_lower(Key), Context).
 
+-spec lookup_by_type_and_key(type(), key(), z:context()) -> identity() | undefined.
 lookup_by_type_and_key(Type, Key, Context) ->
     Key1 = normalize_key(Type, Key),
     z_db:assoc_row("select * from identity where type = $1 and key = $2", [Type, Key1], Context).
 
+-spec lookup_by_type_and_key_multi(type(), key(), z:context()) -> list( identity() ).
 lookup_by_type_and_key_multi(Type, Key, Context) ->
     Key1 = normalize_key(Type, Key),
     z_db:assoc("select * from identity where type = $1 and key = $2", [Type, Key1], Context).
 
+-spec lookup_users_by_type_and_key(type(), key(), z:context()) -> list( identity() ).
 lookup_users_by_type_and_key(Type, Key, Context) ->
     Key1 = normalize_key(Type, Key),
     z_db:assoc(
         "select usr.*
          from identity tp, identity usr
          where tp.rsc_id = usr.rsc_id
-           and usr.type = 'username_pw'
+           and usr.type in ('username_pw', 'openid')
            and tp.type = $1
            and tp.key = $2",
         [Type, Key1],
         Context).
 
+-spec lookup_users_by_verified_type_and_key(type(), key(), z:context()) -> list( identity() ).
 lookup_users_by_verified_type_and_key(Type, Key, Context) ->
     Key1 = normalize_key(Type, Key),
     z_db:assoc(
         "select usr.*
          from identity tp, identity usr
          where tp.rsc_id = usr.rsc_id
-           and usr.type = 'username_pw'
+           and usr.type in ('username_pw', 'openid')
            and tp.type = $1
            and tp.key = $2
            and tp.is_verified",
         [Type, Key1],
         Context).
 
+-spec lookup_by_verify_key(key(), z:context()) -> identity() | undefined.
 lookup_by_verify_key(Key, Context) ->
     z_db:assoc_row("select * from identity where verify_key = $1", [Key], Context).
 
+
+-spec set_verify_key(IdnId, z:context()) -> {ok, VerifyKey} when
+    IdnId :: pos_integer(),
+    VerifyKey :: binary().
 set_verify_key(Id, Context) ->
-    N = binary_to_list(z_ids:id(10)),
-    case lookup_by_verify_key(N, Context) of
+    VerifyKey = z_ids:id(10),
+    case lookup_by_verify_key(VerifyKey, Context) of
         undefined ->
             z_db:q("update identity
                     set verify_key = $2,
                         modified = now()
                     where id = $1",
-                    [Id, N],
+                    [Id, VerifyKey],
                     Context),
-            {ok, N};
+            {ok, VerifyKey};
         _ ->
             set_verify_key(Id, Context)
     end.
 
 
 check_hash(RscId, Username, Password, Hash, Context) ->
-    N = #identity_password_match{
+    PwMatch = #identity_password_match{
         rsc_id = RscId,
         password = Password,
         hash = Hash
     },
-    case z_notifier:first(N, Context) of
+    case z_notifier:first(PwMatch, Context) of
         {ok, rehash} ->
             %% OK but module says it needs rehashing; do that using
             %% the current hashing mechanism
             ok = set_username_pw(RscId, Username, Password, z_acl:sudo(Context)),
-            check_hash_ok(RscId, Context);
+            {ok, RscId};
         ok ->
-            check_hash_ok(RscId, Context);
+            {ok, RscId};
         {error, Reason} ->
             {error, Reason};
         undefined ->
             {error, nouser}
     end.
-
-check_hash_ok(RscId, _Context) ->
-    {ok, RscId}.
 
 %% @doc Prevent insert of reserved usernames.
 %% See: http://tools.ietf.org/html/rfc2142
@@ -1468,7 +1598,7 @@ is_reserved_name_1(_) -> false.
 
 
 % Constant time comparison.
--spec is_equal(Extern :: binary(), Secret :: binary() ) -> boolean().
+-spec is_equal(Extern :: binary(), Secret :: binary()) -> boolean().
 is_equal(A, B) -> is_equal(A, B, true).
 
 is_equal(<<>>, <<>>, Eq) -> Eq;
