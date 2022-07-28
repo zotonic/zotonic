@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-07-28 16:59\n"
+"PO-Revision-Date: 2022-07-28 18:14\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -3834,7 +3834,7 @@ msgstr "Abaixo estão os detalhes da sua conta e um link para definir uma nova s
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
 msgid "Change"
-msgstr ""
+msgstr "Mudar"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:41
 msgid "Change password"
@@ -3866,7 +3866,7 @@ msgstr "Clique no link abaixo para inserir uma nova senha. Quando o clique não 
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:16
 msgid "Close this window and log on if you are already a user of {site}."
-msgstr ""
+msgstr "Feche esta janela e faça logon se você já for um usuário de {site}."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:32./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:74./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:112
 msgid "Close window"
@@ -3993,7 +3993,7 @@ msgstr "quero criar uma nova conta"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:9
 msgid "If you are already a user of {site} then <a href=\"{logon_url}\">log on</a>."
-msgstr ""
+msgstr "Se você já é um usuário de {site} então <a href=\"{logon_url}\">faça logon</a>."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:30
 msgid "If you didn't request a password reset, you can safely ignore this email. Maybe someone made an error typing his or her email address."
@@ -4113,7 +4113,7 @@ msgstr "Outra pessoa já está conectada a esta conta em"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:99
 msgid "Somebody with your email address already has an account on"
-msgstr ""
+msgstr "Alguém com seu endereço de e-mail já tem uma conta no"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tpl:3
 msgid "Something went wrong, please try again later."
@@ -4203,7 +4203,7 @@ msgstr "Você está prestes a criar uma nova conta."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:38
 msgid "You are about to log on."
-msgstr ""
+msgstr "Você está prestes a fazer logon."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
 msgid "You are now signed in."
@@ -4223,7 +4223,7 @@ msgstr "Você pode fazer login usando o seguinte serviço externo"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
 msgid "You have to share your email address to be able to log in."
-msgstr ""
+msgstr "Você precisa compartilhar seu endereço de e-mail para poder fazer login."
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:17
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:23
@@ -7140,7 +7140,7 @@ msgstr "Depurar ações de publicação e assinatura do MQTT no console Zotonic"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:58
 msgid "(“Authorization Code” grant flow)"
-msgstr ""
+msgstr "(fluxo de concessão do \"Código de Autorização\")"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:81./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:82
 msgid "Access Token URL"
@@ -7204,7 +7204,7 @@ msgstr "Autenticando..."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:47
 msgid "Authorization Code (default)"
-msgstr ""
+msgstr "Código de autorização (padrão)"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:11
 msgid "Authorize"
@@ -7220,7 +7220,7 @@ msgstr "Autorize o acesso à sua conta"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:65
 msgid "Automatically extend tokens obtained using “Client Credentials” before they expire"
-msgstr ""
+msgstr "Estenda automaticamente os tokens obtidos usando “Credenciais do cliente” antes que expirem"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:7
 msgid "Be careful, this access token gives full access to your account."
@@ -7228,7 +7228,7 @@ msgstr "Tenha cuidado, este token de acesso dá acesso total à sua conta."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:50
 msgid "Client Credentials"
-msgstr ""
+msgstr "Credenciais do cliente"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
 msgid "Connect with"
@@ -7240,7 +7240,7 @@ msgstr "Aplicativo do consumidor não encontrado ou sem permissão de visualiza�
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:188
 msgid "Could not fetch a new access token."
-msgstr ""
+msgstr "Não foi possível buscar um novo token de acesso."
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:105
 msgid "Could not generate the access token."
@@ -7312,19 +7312,19 @@ msgstr "Habilitado"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:82./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:95
 msgid "Fetch Token"
-msgstr ""
+msgstr "Buscar token"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:88
 msgid "Fetch your access token to this site?"
-msgstr ""
+msgstr "Buscar seu token de acesso a este site?"
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:171
 msgid "Fetched a new access token."
-msgstr ""
+msgstr "Obteve um novo token de acesso."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:92
 msgid "Fetching a token can take some time."
-msgstr ""
+msgstr "Buscar um token pode levar algum tempo."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:35./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:33
 msgid "For Zotonic sites this you can enter the domain name(s) of the website."
@@ -7360,7 +7360,7 @@ msgstr "Importe conteúdo do site remoto para este site."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:75
 msgid "Leave empty for grant flow “Client Credentials.”"
-msgstr ""
+msgstr "Deixe em branco para o fluxo de concessão \"Credenciais do cliente\"."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
@@ -7429,11 +7429,11 @@ msgstr "Sucesso"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:90
 msgid "The token will be registered with your account and only you (or routines acting on your behalf) will be able to use it."
-msgstr ""
+msgstr "O token será registrado em sua conta e somente você (ou rotinas atuando em seu nome) poderão usá-lo."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:54
 msgid "The “Authorization Code” flow redirects the user to the remote website to obtain an access token. “Client Credentials” allows an admin user to directly fetch a token from the remote website."
-msgstr ""
+msgstr "O fluxo “Código de Autorização” redireciona o usuário para o site remoto para obter um token de acesso. “Credenciais do cliente” permite que um usuário administrador busque diretamente um token do site remoto."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:9
 msgid "These applications are used by 3rd parties to:"
@@ -7457,7 +7457,7 @@ msgstr "Para usar um desses aplicativos, o ID do aplicativo e o segredo devem se
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:44
 msgid "Token grant flow"
-msgstr ""
+msgstr "Fluxo de concessão de token"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
@@ -7489,7 +7489,7 @@ msgstr "Com um token de consumidor, este site pode:"
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:195
 msgid "You are not allowed to fetch a consumer token."
-msgstr ""
+msgstr "Você não tem permissão para buscar um token de consumidor."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:26
 msgid "You will be able to:"
@@ -9044,7 +9044,7 @@ msgstr "Idioma substituto"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_list.tpl:8
 msgid "Find language by name or ISO"
-msgstr ""
+msgstr "Encontrar idioma por nome ou ISO"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:100
 msgid "Finnish"
