@@ -264,21 +264,26 @@ maybe_add_identity_logon(Auth, Context) ->
                 [] ->
                     maybe_signup(Auth, Context);
                 [1] ->
-                    % Never add an external identity to the admin
-                    % user during log on. The behavior is based on the
-                    % person controlling the email address being able to
-                    % reset the password, which can't be done with the admin.
+                    % Never add an external identity to the admin user during log on.
                     {error, duplicate};
-                [UserId] ->
+                [UserId] when Auth#auth_validated.is_signup_confirm ->
                     % Local user with an email address that was
                     % verified both here and at the external service.
                     % We can now assume this is the same user.
                     % Connect the service's identity to the user.
-                    %
-                    % TODO: If 2FA is enabled then check the 2FA code
-                    %       before connecting the service identity.
+                    % The optional 2FA has been checked at this point.
                     {ok, _} = insert_identity(UserId, Auth, Context),
                     {ok, UserId};
+                [UserId] when not Auth#auth_validated.is_signup_confirm ->
+                    % Local user with matching verified email identity.
+                    % Check if 2FA is enabled for local user.
+                    case z_notifier:first(#auth_postcheck{id = UserId, query_args = #{}}, Context) of
+                        {error, need_passcode} ->
+                            {error, {need_passcode, UserId}};
+                        undefined ->
+                            {ok, _} = insert_identity(UserId, Auth, Context),
+                            {ok, UserId}
+                    end;
                 [_|_] ->
                     % Ambiguous - multiple matching accounts
                     {error, duplicate}

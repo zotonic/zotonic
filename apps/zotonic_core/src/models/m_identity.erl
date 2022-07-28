@@ -1320,8 +1320,10 @@ delete(IdnId, Context) ->
                                 z_acl:sudo(Context)),
                             maybe_reset_email_property(RscId, Type, Key, Context),
                             {ok, 1};
-                        Other ->
-                            Other
+                        {ok, 0} ->
+                            {ok, 0};
+                        {error, _} = Error ->
+                            Error
                     end;
                 false ->
                     {error, eacces}

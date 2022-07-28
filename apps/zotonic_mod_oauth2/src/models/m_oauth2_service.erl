@@ -183,13 +183,28 @@ user_data({ok, Auth}, InitialQArgs, SId, Context) ->
             end;
         {error, signup_confirm} ->
             % We need a confirmation from the user before we add a new account
-            % html_error(signup_confirm, {auth, Auth}, Context);
             Secret = z_context:state_cookie_secret(Context),
             Expires = termit:expiring(Auth, ?SESSION_AUTH_TTL),
             Encoded = termit:encode_base64(Expires, Secret),
             {ok, #{
                 result => confirm,
                 auth => Encoded,
+                url => url(<<"p">>, InitialQArgs)
+            }};
+        {error, {need_passcode, UserId}} ->
+            % There is an existing account with matching confirmed identities.
+            % The existing account is protected by 2FA, so we need a code
+            % before we can merge the accounts.
+            AuthUser = #{
+                auth => Auth,
+                user_id => UserId
+            },
+            Secret = z_context:state_cookie_secret(Context),
+            Expires = termit:expiring(AuthUser, ?SESSION_AUTH_TTL),
+            Encoded = termit:encode_base64(Expires, Secret),
+            {ok, #{
+                result => need_passcode,
+                authuser => Encoded,
                 url => url(<<"p">>, InitialQArgs)
             }};
         {error, duplicate} ->

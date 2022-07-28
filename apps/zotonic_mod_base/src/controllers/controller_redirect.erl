@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Redirect to a defined other url.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ do_redirect(Context) ->
                             proplists:delete(A, Acc)
                         end,
                         Args1,
-                        [ is_permanent, url, dispatch, qargs, acl ]),
+                        [ is_permanent, url, dispatch, qargs, acl, csp_nonce ]),
                     QArgs = case z_context:get(qargs, Context) of
                                 undefined ->
                                     [];

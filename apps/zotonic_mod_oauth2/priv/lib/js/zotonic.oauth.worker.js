@@ -28,7 +28,8 @@ var model = {
     state_id: undefined,
     status: 'start',
     is_depends_provided: false,
-    cotonic_sid: undefined
+    cotonic_sid: undefined,
+    passcode_data: undefined
 };
 
 model.present = function(data) {
@@ -90,7 +91,6 @@ model.present = function(data) {
 
         if (model.oauth_step == "authorize") {
             model.status = "storing";
-            console.log("storing", model.state_data);
             self.call("model/localStorage/post/oauth-data",
                       { id: model.state_id, data: model.state_data })
                 .then( function() { actions.redirect(); } )
@@ -101,7 +101,7 @@ model.present = function(data) {
                         model.status = "fetching";
                         self.publish("model/sessionStorage/delete/oauth-reload-done");
                         self.call("model/localStorage/get/oauth-data")
-                            .then( function(msg) { console.log("fetching", msg); actions.oauth_data(msg); } )
+                            .then( function(msg) { actions.oauth_data(msg); } )
                     } else {
                         self.call("model/sessionStorage/post/oauth-reload-done", true)
                             .then(
@@ -121,7 +121,6 @@ model.present = function(data) {
     // Fetched the OAuth data from the session storage, which was stored before we redirected
     // to the external service. Start fetching the query args, passed by the remote service.
     if (state.fetching(model) && data.data) {
-        console.log("state-fetching-data", data);
         model.status = "location";
         model.state_data = data.data;
         model.state_id = data.id;
@@ -196,7 +195,37 @@ model.present = function(data) {
                         });
                     model.status = "confirming";
                     break;
+                case "need_passcode":
+                    // Auth ok, but matching account is protected by 2FA
+                    self.publish(
+                        "model/ui/render-template/oauth-status",
+                        {
+                            topic: "bridge/origin/model/template/get/render/_logon_service_error.tpl",
+                            dedup: true,
+                            data: {
+                                error: "need_passcode",
+                                authuser: data.payload.result.authuser,
+                                url: data.payload.result.url || undefined
+                            }
+                        });
+                    model.passcode_data = data.payload.result;
+                    model.status = "confirming";
+                    break;
             }
+        } else if (data.payload.message == 'passcode') {
+            // Auth ok, wrong 2FA passcode entered for matching account
+            self.publish(
+                "model/ui/render-template/oauth-status",
+                {
+                    topic: "bridge/origin/model/template/get/render/_logon_service_error.tpl",
+                    dedup: true,
+                    data: {
+                        error: "passcode",
+                        authuser: model.passcode_data.authuser,
+                        url: model.passcode_data.url || undefined
+                    }
+                });
+            model.status = "confirming";
         } else if (data.payload.message == 'denied') {
             // Auth failed, remote denied. Close the window or redirect.
             if (data.payload.url) {
