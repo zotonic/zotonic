@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-07-28 16:59\n"
+"PO-Revision-Date: 2022-07-28 18:14\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -3834,7 +3834,7 @@ msgstr "Aşağıda hesap detaylarınız ve yeni bir şifre ayarlamak için link 
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
 msgid "Change"
-msgstr ""
+msgstr "Değiştirmek"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:41
 msgid "Change password"
@@ -3866,7 +3866,7 @@ msgstr "Yeni bir şifre girmek için aşağıdaki bağlantıya tıklayın. Tıkl
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:16
 msgid "Close this window and log on if you are already a user of {site}."
-msgstr ""
+msgstr "Bu pencereyi kapatın ve zaten {site}kullanıcısıysanız oturum açın."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:32./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:74./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:112
 msgid "Close window"
@@ -3993,7 +3993,7 @@ msgstr "Yeni bir hesap oluşturmak istiyorum"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:9
 msgid "If you are already a user of {site} then <a href=\"{logon_url}\">log on</a>."
-msgstr ""
+msgstr "Zaten {site} kullanıcısıysanız, <a href=\"{logon_url}\">oturum açın</a>."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:30
 msgid "If you didn't request a password reset, you can safely ignore this email. Maybe someone made an error typing his or her email address."
@@ -4113,7 +4113,7 @@ msgstr "Bir başkası bu hesap ile zaten giriş yapmış"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:99
 msgid "Somebody with your email address already has an account on"
-msgstr ""
+msgstr "E-posta adresinize sahip birinin zaten bir hesabı var"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tpl:3
 msgid "Something went wrong, please try again later."
@@ -4203,7 +4203,7 @@ msgstr "Yeni bir hesap oluşturmak üzeresiniz."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:38
 msgid "You are about to log on."
-msgstr ""
+msgstr "Oturum açmak üzeresiniz."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
 msgid "You are now signed in."
@@ -4223,7 +4223,7 @@ msgstr "Aşağıdaki harici hizmeti kullanarak giriş yapabilirsiniz"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
 msgid "You have to share your email address to be able to log in."
-msgstr ""
+msgstr "Giriş yapabilmek için e-posta adresinizi paylaşmanız gerekmektedir."
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:17
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:23
@@ -7140,7 +7140,7 @@ msgstr "Zotonic konsolunda MQTT yayınlama ve abone olma işlemleri hata ayıkla
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:58
 msgid "(“Authorization Code” grant flow)"
-msgstr ""
+msgstr "(“Yetkilendirme Kodu” hibe akışı)"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:81./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:82
 msgid "Access Token URL"
@@ -7204,7 +7204,7 @@ msgstr "Kimlik doğrulanıyor ..."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:47
 msgid "Authorization Code (default)"
-msgstr ""
+msgstr "Yetkilendirme Kodu (varsayılan)"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:11
 msgid "Authorize"
@@ -7220,7 +7220,7 @@ msgstr "Hesabınıza erişim yetkisi verin"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:65
 msgid "Automatically extend tokens obtained using “Client Credentials” before they expire"
-msgstr ""
+msgstr "\"Müşteri Kimlik Bilgileri\" kullanılarak elde edilen jetonları süresi dolmadan otomatik olarak genişletin"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:7
 msgid "Be careful, this access token gives full access to your account."
@@ -7228,7 +7228,7 @@ msgstr "Dikkatli olun, bu erişim belirteci, hesabınıza tam erişim sağlar."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:50
 msgid "Client Credentials"
-msgstr ""
+msgstr "Müşteri Kimlik Bilgileri"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
 msgid "Connect with"
@@ -7240,7 +7240,7 @@ msgstr "Tüketici Uygulaması bulunamadı veya görüntüleme izni yok."
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:188
 msgid "Could not fetch a new access token."
-msgstr ""
+msgstr "Yeni bir erişim belirteci getirilemedi."
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:105
 msgid "Could not generate the access token."
@@ -7312,19 +7312,19 @@ msgstr "Etkin"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:82./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:95
 msgid "Fetch Token"
-msgstr ""
+msgstr "Jetonu Getir"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:88
 msgid "Fetch your access token to this site?"
-msgstr ""
+msgstr "Bu siteye erişim jetonunuzu getirsin mi?"
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:171
 msgid "Fetched a new access token."
-msgstr ""
+msgstr "Yeni bir erişim belirteci getirildi."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:92
 msgid "Fetching a token can take some time."
-msgstr ""
+msgstr "Bir jetonun getirilmesi biraz zaman alabilir."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:35./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:33
 msgid "For Zotonic sites this you can enter the domain name(s) of the website."
@@ -7360,7 +7360,7 @@ msgstr "Uzak web sitesinden bu web sitesine içerik aktarın."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:75
 msgid "Leave empty for grant flow “Client Credentials.”"
-msgstr ""
+msgstr "\"Müşteri Kimlik Bilgileri\" verme akışı için boş bırakın."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
@@ -7429,11 +7429,11 @@ msgstr "Başarı"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:90
 msgid "The token will be registered with your account and only you (or routines acting on your behalf) will be able to use it."
-msgstr ""
+msgstr "Belirteç hesabınıza kaydedilecek ve yalnızca siz (veya sizin adınıza hareket eden rutinler) onu kullanabileceksiniz."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:54
 msgid "The “Authorization Code” flow redirects the user to the remote website to obtain an access token. “Client Credentials” allows an admin user to directly fetch a token from the remote website."
-msgstr ""
+msgstr "\"Yetkilendirme Kodu\" akışı, bir erişim belirteci almak için kullanıcıyı uzak web sitesine yönlendirir. \"Müşteri Kimlik Bilgileri\", bir yönetici kullanıcının uzak web sitesinden doğrudan bir belirteç almasına olanak tanır."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:9
 msgid "These applications are used by 3rd parties to:"
@@ -7457,7 +7457,7 @@ msgstr "Bu uygulamalardan birini kullanmak için Uygulama Kimliği ve sırrı 3.
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:44
 msgid "Token grant flow"
-msgstr ""
+msgstr "Jeton verme akışı"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
@@ -7489,7 +7489,7 @@ msgstr "Bir tüketici belirteci ile bu web sitesi şunları yapabilir:"
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:195
 msgid "You are not allowed to fetch a consumer token."
-msgstr ""
+msgstr "Tüketici belirteci almanıza izin verilmiyor."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:26
 msgid "You will be able to:"
@@ -9044,7 +9044,7 @@ msgstr "Yedek dil"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_list.tpl:8
 msgid "Find language by name or ISO"
-msgstr ""
+msgstr "Ada veya ISO'ya göre dili bulun"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:100
 msgid "Finnish"
