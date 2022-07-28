@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-07-28 16:59\n"
+"PO-Revision-Date: 2022-07-28 18:14\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -3834,7 +3834,7 @@ msgstr "Нижче наведено дані вашого облікового �
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
 msgid "Change"
-msgstr ""
+msgstr "Зміна"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:41
 msgid "Change password"
@@ -3866,7 +3866,7 @@ msgstr "Натисніть на посилання нижче, щоб ввест
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:16
 msgid "Close this window and log on if you are already a user of {site}."
-msgstr ""
+msgstr "Закрийте це вікно та увійдіть, якщо ви вже є користувачем {site}."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:32./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:74./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:112
 msgid "Close window"
@@ -3993,7 +3993,7 @@ msgstr "Я хочу створити новий обліковий запис"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:9
 msgid "If you are already a user of {site} then <a href=\"{logon_url}\">log on</a>."
-msgstr ""
+msgstr "Якщо ви вже є користувачем {site} , тоді <a href=\"{logon_url}\">увійдіть</a>."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:30
 msgid "If you didn't request a password reset, you can safely ignore this email. Maybe someone made an error typing his or her email address."
@@ -4113,7 +4113,7 @@ msgstr "Хтось інший уже підключений до цього об
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:99
 msgid "Somebody with your email address already has an account on"
-msgstr ""
+msgstr "Хтось із вашою електронною адресою вже має обліковий запис"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tpl:3
 msgid "Something went wrong, please try again later."
@@ -4203,7 +4203,7 @@ msgstr "Ви збираєтеся створити новий обліковий
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:38
 msgid "You are about to log on."
-msgstr ""
+msgstr "Ви збираєтесь увійти."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
 msgid "You are now signed in."
@@ -4223,7 +4223,7 @@ msgstr "Ви можете увійти за допомогою наступно�
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
 msgid "You have to share your email address to be able to log in."
-msgstr ""
+msgstr "Ви повинні поділитися своєю електронною адресою, щоб мати можливість увійти."
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:17
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:23
@@ -7140,7 +7140,7 @@ msgstr "Налагодити дії публікації та підписки M
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:58
 msgid "(“Authorization Code” grant flow)"
-msgstr ""
+msgstr "(Потік надання коду авторизації)"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:81./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:82
 msgid "Access Token URL"
@@ -7204,7 +7204,7 @@ msgstr "Аутентифікація..."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:47
 msgid "Authorization Code (default)"
-msgstr ""
+msgstr "Код авторизації (за замовчуванням)"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:11
 msgid "Authorize"
@@ -7220,7 +7220,7 @@ msgstr "Авторизуйте доступ до свого облікового
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:65
 msgid "Automatically extend tokens obtained using “Client Credentials” before they expire"
-msgstr ""
+msgstr "Автоматично продовжувати токени, отримані за допомогою «Облікових даних клієнта», до закінчення терміну їх дії"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:7
 msgid "Be careful, this access token gives full access to your account."
@@ -7228,7 +7228,7 @@ msgstr "Будьте обережні, цей маркер доступу над
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:50
 msgid "Client Credentials"
-msgstr ""
+msgstr "Облікові дані клієнта"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
 msgid "Connect with"
@@ -7240,7 +7240,7 @@ msgstr "Споживчу програму не знайдено або нема�
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:188
 msgid "Could not fetch a new access token."
-msgstr ""
+msgstr "Не вдалося отримати новий маркер доступу."
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:105
 msgid "Could not generate the access token."
@@ -7312,19 +7312,19 @@ msgstr "Увімкнено"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:82./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:95
 msgid "Fetch Token"
-msgstr ""
+msgstr "Fetch Token"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:88
 msgid "Fetch your access token to this site?"
-msgstr ""
+msgstr "Отримати маркер доступу до цього сайту?"
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:171
 msgid "Fetched a new access token."
-msgstr ""
+msgstr "Отримано новий маркер доступу."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:92
 msgid "Fetching a token can take some time."
-msgstr ""
+msgstr "Отримання маркера може зайняти деякий час."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:35./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:33
 msgid "For Zotonic sites this you can enter the domain name(s) of the website."
@@ -7360,7 +7360,7 @@ msgstr "Імпортуйте вміст з віддаленого вебсайт
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:75
 msgid "Leave empty for grant flow “Client Credentials.”"
-msgstr ""
+msgstr "Залиште порожнім для потоку надання «Облікові дані клієнта»."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
@@ -7429,11 +7429,11 @@ msgstr "Успіх"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:90
 msgid "The token will be registered with your account and only you (or routines acting on your behalf) will be able to use it."
-msgstr ""
+msgstr "Маркер буде зареєстровано у вашому обліковому записі, і лише ви (або програми, що діють від вашого імені) зможете ним користуватися."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:54
 msgid "The “Authorization Code” flow redirects the user to the remote website to obtain an access token. “Client Credentials” allows an admin user to directly fetch a token from the remote website."
-msgstr ""
+msgstr "Потік «Код авторизації» перенаправляє користувача на віддалений веб-сайт для отримання маркера доступу. «Облікові дані клієнта» дозволяють користувачеві-адміністратору безпосередньо отримувати маркер із віддаленого веб-сайту."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:9
 msgid "These applications are used by 3rd parties to:"
@@ -7457,7 +7457,7 @@ msgstr "Щоб використовувати одну з цих програм,
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:44
 msgid "Token grant flow"
-msgstr ""
+msgstr "Потік надання токенів"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
@@ -7489,7 +7489,7 @@ msgstr "За допомогою споживчого токена цей веб�
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:195
 msgid "You are not allowed to fetch a consumer token."
-msgstr ""
+msgstr "Вам не дозволено отримати маркер споживача."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:26
 msgid "You will be able to:"
@@ -9044,7 +9044,7 @@ msgstr "Запасна мова"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_list.tpl:8
 msgid "Find language by name or ISO"
-msgstr ""
+msgstr "Знайти мову за назвою або ISO"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:100
 msgid "Finnish"
