@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2022 Marc Worrell
 %% @doc Manage identities of users. An identity can be an username/password, openid, oauth credentials etc.
+%% @enddoc
 
 %% Copyright 2009-2022 Marc Worrell
 %%
@@ -44,6 +45,7 @@
     get/2,
     get_rsc/2,
     get_rsc_by_type/3,
+    get_rsc_by_type_key/4,
     get_rsc_by_type_keyprefix/4,
     get_rsc/3,
 
@@ -967,6 +969,19 @@ get_rsc_by_type_1(Id, Type, Context) ->
         [m_rsc:rid(Id, Context), Type],
         Context
     ).
+
+-spec get_rsc_by_type_key(m_rsc:resource_id(), type(), key(), z:context()) -> list().
+get_rsc_by_type_key(Id, Type, Key, Context) ->
+    z_db:assoc(
+        "select *
+         from identity
+         where rsc_id = $1
+           and type = $2
+           and key = $3
+         order by is_verified desc",
+        [m_rsc:rid(Id, Context), Type, Key],
+        Context).
+
 
 -spec get_rsc_by_type_keyprefix(m_rsc:resource_id(), type(), key(), z:context()) -> list().
 get_rsc_by_type_keyprefix(Id, Type, KeyPrefix, Context) ->
