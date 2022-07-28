@@ -18,11 +18,11 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:168
+#: apps/zotonic_core/src/support/z_fetch.erl:176
 msgid "Could not fetch the remote resource URL."
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_fetch.erl:154
+#: apps/zotonic_core/src/support/z_fetch.erl:162
 msgid "Forbidden to access the remote resource URL."
 msgstr ""
 
@@ -30,31 +30,31 @@ msgstr ""
 msgid "Page Import"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_fetch.erl:162
+#: apps/zotonic_core/src/support/z_fetch.erl:170
 msgid "The remote server can not handle this URL."
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_fetch.erl:166
+#: apps/zotonic_core/src/support/z_fetch.erl:174
 msgid "The remote server for the URL is having problems."
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_fetch.erl:164
+#: apps/zotonic_core/src/support/z_fetch.erl:172
 msgid "The remote server for the URL is having temporary problems."
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_fetch.erl:156
+#: apps/zotonic_core/src/support/z_fetch.erl:164
 msgid "The resource at the URL can not be found."
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_fetch.erl:158
+#: apps/zotonic_core/src/support/z_fetch.erl:166
 msgid "The resource at the URL is gone."
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_fetch.erl:160
+#: apps/zotonic_core/src/support/z_fetch.erl:168
 msgid "Too many requests for the remote server, try again later."
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_fetch.erl:152
+#: apps/zotonic_core/src/support/z_fetch.erl:160
 msgid "Unauthorized to access the remote resource URL."
 msgstr ""
 
@@ -216,7 +216,7 @@ msgstr ""
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:100
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:117./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:37./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:117./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:30./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:72./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
@@ -3127,7 +3127,7 @@ msgid "Set username / password"
 msgstr ""
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:75
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:81./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:103
 msgid "Sorry"
 msgstr ""
 
@@ -3985,7 +3985,7 @@ msgstr ""
 msgid "Access denied"
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:63
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
 msgid "Already connected"
 msgstr ""
 
@@ -4010,6 +4010,10 @@ msgstr ""
 msgid "Below are your account details and a link to set a new password."
 msgstr ""
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
+msgid "Change"
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:41
 msgid "Change password"
 msgstr ""
@@ -4022,7 +4026,7 @@ msgstr ""
 msgid "Change your password"
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:58
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:86
 msgid "Change your permissions"
 msgstr ""
 
@@ -4044,7 +4048,7 @@ msgstr ""
 msgid "Close this window and log on if you are already a user of {site}."
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:39./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:84
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:32./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:74./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:112
 msgid "Close window"
 msgstr ""
 
@@ -4058,11 +4062,16 @@ msgstr ""
 msgid "Confirmation failure"
 msgstr ""
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:70
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:69./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:71./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:73
+msgid "Continue"
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:2
 msgid "Current password"
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:69
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:97
 msgid "Duplicate email"
 msgstr ""
 
@@ -4114,7 +4123,7 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:249
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:232
 msgid "External Services"
 msgstr ""
 
@@ -4124,7 +4133,7 @@ msgid ""
 "amount of time and can only be used once."
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:8./apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:5./apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:5
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:8./apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:8./apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:5
 msgid "Forgot your password?"
 msgstr ""
 
@@ -4169,7 +4178,7 @@ msgstr ""
 msgid "I forgot my password"
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:35
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28
 msgid "I want to create a new account"
 msgstr ""
 
@@ -4229,11 +4238,7 @@ msgstr ""
 msgid "One moment please"
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
-msgid "Other username or email"
-msgstr ""
-
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:142./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:142./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:59
 msgid "Passcode"
 msgstr ""
 
@@ -4249,7 +4254,7 @@ msgstr ""
 msgid "Please try again in"
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:46./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:79
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:107
 msgid "Please try again later."
 msgstr ""
 
@@ -4300,17 +4305,12 @@ msgstr ""
 msgid "Simply try again:"
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:65
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93
 msgid "Somebody else is already connected with this account on"
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:71
-msgid "Somebody with your email address has already an account on"
-msgstr ""
-
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:45
-#: apps/zotonic_mod_survey/priv/templates/_survey_error.tpl:1
-msgid "Something went wrong"
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:99
+msgid "Somebody with your email address already has an account on"
 msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tpl:3
@@ -4360,7 +4360,7 @@ msgstr ""
 msgid "The two-factor authentication passcode did not match. Please try again."
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:77
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:105
 msgid "There was a problem authenticating with"
 msgstr ""
 
@@ -4378,7 +4378,7 @@ msgstr ""
 msgid "Too many retries."
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:63
 msgid "Two-factor passcode"
 msgstr ""
 
@@ -4405,6 +4405,10 @@ msgstr ""
 msgid "You are about to create a new account."
 msgstr ""
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:38
+msgid "You are about to log on."
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
 msgid "You are now signed in."
 msgstr ""
@@ -4421,7 +4425,7 @@ msgstr ""
 msgid "You can log in using the following external service"
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:55
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
 msgid "You have to share your email address to be able to log in."
 msgstr ""
 
@@ -4508,7 +4512,7 @@ msgstr ""
 msgid "or you can enter the password that you have for"
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:65./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:77
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:105
 msgid "the service"
 msgstr ""
 
@@ -8678,10 +8682,6 @@ msgstr ""
 msgid "Choices"
 msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:69./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:71./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:73
-msgid "Continue"
-msgstr ""
-
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
 msgstr ""
@@ -9136,6 +9136,10 @@ msgstr ""
 msgid ""
 "Single answer possible: points are given for a correct answer. Default: 1 "
 "point for a correct answer."
+msgstr ""
+
+#: apps/zotonic_mod_survey/priv/templates/_survey_error.tpl:1
+msgid "Something went wrong"
 msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:14
