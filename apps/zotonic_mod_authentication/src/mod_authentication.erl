@@ -220,18 +220,8 @@ is_user_local(Handle, Context) when is_binary(Handle) ->
 
 is_user_local_email(Handle, Context) ->
     case binary:match(Handle, <<"@">>) of
-        nomatch ->
-            false;
-        _ ->
-            Rows = m_identity:lookup_users_by_type_and_key(email, Handle, Context),
-            lists:filtermap(
-                fun(Row) ->
-                    case proplists:get_value(rsc_id, Row) of
-                        1 -> false;
-                        RscId -> {true, RscId}
-                    end
-                end,
-                Rows)
+        nomatch -> false;
+        _ -> length(m_identity:lookup_users_by_type_and_key(email, Handle, Context)) > 0
     end.
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
