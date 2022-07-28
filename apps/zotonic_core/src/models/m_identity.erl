@@ -94,8 +94,8 @@
 -type sha1_salted_hash() :: {hash, binary(), binary()}.
 -type hash() :: bcrypt_hash() | sha1_salted_hash().
 
--type type() :: atom() | binary().
--type key() :: atom() | binary().
+-type type() :: atom() | binary() | string().
+-type key() :: atom() | binary() | string().
 
 -type identity() :: proplists:proplist().
 
