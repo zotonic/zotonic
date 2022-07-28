@@ -96,7 +96,7 @@
             <div class="container">
                 <h1>{_ Duplicate email _}</h1>
 
-                <p class="alert alert-warning">{_ Somebody with your email address has already an account on _} {{ m.site.title }}</p>
+                <p class="alert alert-warning">{_ Somebody with your email address already has an account on _} {{ m.site.title }}</p>
             </div>
         {% else %}
             <div class="container">

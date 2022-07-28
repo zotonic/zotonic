@@ -75,7 +75,7 @@
         </div>
         <p class="clearfix">
             <b>{{ q.options.username|escape }}</b>
-            <a class="pull-right" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ Other username or email _}</a>
+            <a class="pull-right" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ Change _}</a>
         </p>
     {% else %}
         <div class="form-group">
