@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-07-29 10:10\n"
+"PO-Revision-Date: 2022-07-29 11:56\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -4024,7 +4024,7 @@ msgstr "Minimum aantal tekens:"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:101
 msgid "Multiple accounts"
-msgstr ""
+msgstr "Meerdere accounts"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:191
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:89
@@ -4111,7 +4111,7 @@ msgstr "Probeer het opnieuw:"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:85
 msgid "Somebody else is already connected with this account on {service}."
-msgstr ""
+msgstr "Iemand anders is al verbonden met dit account op {service}."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tpl:3
 msgid "Something went wrong, please try again later."
@@ -4159,15 +4159,15 @@ msgstr "De toegangscode voor tweefactorauthenticatie kwam niet overeen. Probeer 
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
 msgid "There is already an account with your email address on {site}."
-msgstr ""
+msgstr "Er is al een account met uw e-mailadres op {site}."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:103
 msgid "There is more than one account with your email address on {site}."
-msgstr ""
+msgstr "Er is meer dan één account met uw e-mailadres op {site}."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:110
 msgid "There was a problem authenticating with {service}."
-msgstr ""
+msgstr "Er is een probleem opgetreden bij het verifiëren met {service}."
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:19
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:25
@@ -4197,7 +4197,7 @@ msgstr "Bevestig je account"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:104
 msgid "We cannot connect you to the right account. Contact support of {site} to help you merge the accounts and then try again."
-msgstr ""
+msgstr "We kunnen u niet aan het juiste account koppelen. Neem contact op met ondersteuning van {site} om u te helpen de accounts samen te voegen en probeer het opnieuw."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:113
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
@@ -4225,7 +4225,7 @@ msgstr "U bent aangemeld"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93
 msgid "You can connect the account on {site} with your account on {service} if both accounts have a verified email address but this is not the case. Check both sites and then try again."
-msgstr ""
+msgstr "U kunt het account op {site} koppelen aan uw account op {service} als beide accounts een geverifieerd e-mailadres hebben, maar dit is niet het geval. Controleer beide sites en probeer het opnieuw."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:3
 msgid "You can find the code in your authentication App."
@@ -7174,7 +7174,7 @@ msgstr "Importeren van inhoud van de externe website toestaan"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:64
 msgid "Allow users on the remote website to authenticate here (using “{code}”)"
-msgstr ""
+msgstr "Sta gebruikers op de externe website toe om zich hier te authenticeren (met \"{code}\")"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:16
 msgid "Allow users registered on the remote website to authenticate on this website."
@@ -7226,7 +7226,7 @@ msgstr "Toegang tot uw account toestaan"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:73
 msgid "Automatically extend tokens obtained using “{client}” before they expire"
-msgstr ""
+msgstr "Verleng automatisch tokens die zijn verkregen met \"{client}\" voordat ze verlopen"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:7
 msgid "Be careful, this access token gives full access to your account."
@@ -7362,7 +7362,7 @@ msgstr "Importeer inhoud van de externe website naar deze website."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:85
 msgid "Leave empty if you use “{client}.”"
-msgstr ""
+msgstr "Laat leeg als u “{client}” gebruikt."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
@@ -7435,7 +7435,7 @@ msgstr "Het token wordt geregistreerd bij uw account en alleen u (of routines di
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:55
 msgid "The “{code}” method redirects the user to the remote website to obtain an access token. “{client}” allows an admin user to directly fetch a token from the remote website."
-msgstr ""
+msgstr "De \"{code}\"-methode leidt de gebruiker om naar de externe website om een toegangstoken te verkrijgen. Met “{client}” kan een admin-gebruiker rechtstreeks een token ophalen van de externe website."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:9
 msgid "These applications are used by 3rd parties to:"
@@ -7459,7 +7459,7 @@ msgstr "Om een van deze applicaties te gebruiken, moeten de app-ID en het geheim
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:44
 msgid "Token grant method"
-msgstr ""
+msgstr "Token toekenningsmethode"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
