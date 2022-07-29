@@ -117,7 +117,7 @@
 m_get([ <<"lookup">>, Type, Key | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true ->
-            Idns = lookup_by_type_and_key_multi(Type, Key, Context),
+            Idns = filter_idns(lookup_by_type_and_key_multi(Type, Key, Context)),
             {ok, {Idns, Rest}};
         false ->
             {error, eacces}
@@ -128,23 +128,28 @@ m_get([ <<"generate_password">> | Rest ], _Msg, _Context) ->
 m_get([ <<"is_email_verified">> | Rest ], _Msg, Context) ->
     {ok, {is_email_verified(Context), Rest}};
 m_get([ Id, <<"is_user">> | Rest ], _Msg, Context) ->
-    IsUser = case z_acl:rsc_visible(Id, Context) of
-        true -> is_user(Id, Context);
-        false -> undefined
-    end,
-    {ok, {IsUser, Rest}};
+    case z_acl:rsc_visible(Id, Context) of
+        true ->
+            {ok, {is_user(Id, Context), Rest}};
+        false ->
+            {error, eacces}
+    end;
 m_get([ Id, <<"username">> | Rest ], _Msg, Context) ->
-    Username = case z_acl:rsc_editable(Id, Context) of
-        true -> get_username(Id, Context);
-        false -> undefined
-    end,
-    {ok, {Username, Rest}};
+    case z_acl:rsc_editable(Id, Context) of
+        true ->
+            Username = get_username(Id, Context),
+            {ok, {Username, Rest}};
+        false ->
+            {error, eacces}
+    end;
 m_get([ Id, <<"user_info">> | Rest ], _Msg, Context) ->
-    Info = case z_acl:rsc_editable(Id, Context) of
-        true -> get_user_info(Id, Context);
-        false -> undefined
-    end,
-    {ok, {Info, Rest}};
+    case z_acl:rsc_editable(Id, Context) of
+        true ->
+            Info = get_user_info(Id, Context),
+            {ok, {Info, Rest}};
+        false ->
+            {error, eacces}
+    end;
 m_get([ Id, <<"all_types">> | Rest ], _Msg, Context) ->
     Idns = case z_acl:rsc_editable(Id, Context) of
         true -> get_rsc_types(Id, Context);
@@ -152,28 +157,41 @@ m_get([ Id, <<"all_types">> | Rest ], _Msg, Context) ->
     end,
     {ok, {Idns, Rest}};
 m_get([ Id, <<"all">> ], _Msg, Context) ->
-    IdnRsc = case z_acl:rsc_editable(Id, Context) of
-        true -> get_rsc(Id, Context);
-        false -> []
-    end,
-    {ok, {IdnRsc, []}};
+    case z_acl:is_admin(Context) of
+        true ->
+            Idns = filter_idns(get_rsc(Id, Context)),
+            {ok, {Idns, []}};
+        false ->
+            {error, eacces}
+    end;
+m_get([ Id, <<"all">>, <<"email">> | Rest ], _Msg, Context) ->
+    case z_acl:rsc_editable(Id, Context) of
+        true ->
+            Idns = filter_idns(get_rsc_by_type(Id, <<"email">>, Context)),
+            {ok, {Idns, Rest}};
+        false ->
+            {error, eacces}
+    end;
 m_get([ Id, <<"all">>, Type | Rest ], _Msg, Context) ->
-    IdnRsc = case z_acl:rsc_editable(Id, Context) of
-        true -> get_rsc_by_type(Id, Type, Context);
-        false -> []
-    end,
-    {ok, {IdnRsc, Rest}};
+    case z_acl:is_admin(Context) of
+        true ->
+            Idns = filter_idns(get_rsc_by_type(Id, Type, Context)),
+            {ok, {filter_idns(Idns), Rest}};
+        false ->
+            {error, enoent}
+    end;
 m_get([ <<"get">>, IdnId | Rest ], _Msg, Context) ->
-    Idn1 = case get(IdnId, Context) of
-        undefined -> undefined;
-        Idn ->
-            RscId = proplists:get_value(rsc_id, Idn),
-            case z_acl:rsc_editable(RscId, Context) of
-                true -> Idn;
-                false -> undefined
-            end
-    end,
-    {ok, {Idn1, Rest}};
+    case z_acl:is_admin(Context) of
+        true ->
+            case get(IdnId, Context) of
+                undefined ->
+                    {error, enoent};
+                Idn ->
+                    {ok, {filter_idn(Idn), Rest}}
+            end;
+        false ->
+            {error, eacces}
+    end;
 m_get([ <<"verify">>, IdnId, VerifyKey | Rest ], _Msg, Context) ->
     Idn1 = case get(IdnId, Context) of
         Idn when is_list(Idn), is_binary(VerifyKey), VerifyKey =/= <<>> ->
@@ -187,13 +205,44 @@ m_get([ <<"verify">>, IdnId, VerifyKey | Rest ], _Msg, Context) ->
     end,
     {ok, {Idn1, Rest}};
 m_get([ Id, Type | Rest ], _Msg, Context) ->
-    Idn = case z_acl:rsc_editable(Id, Context) of
-        true -> get_rsc(Id, Type, Context);
-        false -> undefined
-    end,
-    {ok, {Idn, Rest}};
+    case z_acl:is_admin(Context) of
+        true ->
+            case get_rsc(Id, Type, Context) of
+                undefined ->
+                    {error, enoent};
+                Idn ->
+                    {ok, {Idn, Rest}}
+            end;
+        false ->
+            {error, eacces}
+    end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
+
+
+%% @doc Filter an identity record to prevent leaking the information
+%% in the propb and other prop fields.
+-spec filter_idn(undefined | proplists:proplist()) -> undefined | proplists:proplist().
+filter_idn(undefined) ->
+    undefined;
+filter_idn(Idn) ->
+    [
+        {id, proplists:get_value(id, Idn)},
+        {rsc_id, proplists:get_value(rsc_id, Idn)},
+        {type, proplists:get_value(type, Idn)},
+        {key, proplists:get_value(key, Idn)},
+        {is_verified, proplists:get_value(is_verified, Idn)},
+        {is_unique, proplists:get_value(is_unique, Idn)},
+        {modified, proplists:get_value(modified, Idn)},
+        {created, proplists:get_value(modified, Idn)},
+        {expires, proplists:get_value(expires, Idn)}
+    ].
+
+%% @doc Filter a list of identity records to prevent leaking the information
+%% in the propb and other prop fields.
+-spec filter_idns(list( proplists:proplist() )) -> list( proplists:proplist() ).
+filter_idns(Idns) ->
+    lists:map(fun filter_idn/1, Idns).
 
 
 %% @doc Check if the resource has any credentials that will make them an user
