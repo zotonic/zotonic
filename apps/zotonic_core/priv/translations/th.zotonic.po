@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-07-28 18:14\n"
+"PO-Revision-Date: 2022-07-29 10:10\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -210,7 +210,7 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:100
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:117./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:30./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:72./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:117./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:29./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:67./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:117./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
@@ -3015,7 +3015,7 @@ msgid "Set username / password"
 msgstr "ตั้งชื่อผู้ใช้ / รหัสผ่าน"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:81./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:103
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:108
 msgid "Sorry"
 msgstr "ขออภัย"
 
@@ -3807,7 +3807,7 @@ msgstr "คุณต้องได้รับอนุญาตให้แก
 msgid "Access denied"
 msgstr "ปฏิเสธการเข้าใช้"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
 msgid "Already connected"
 msgstr "เชื่อมต่อแล้ว"
 
@@ -3848,7 +3848,7 @@ msgstr "เปลี่ยนรหัสผ่านและลงชื่อ
 msgid "Change your password"
 msgstr "เปลี่ยนรหัสผ่านของคุณ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:86
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:78
 msgid "Change your permissions"
 msgstr "เปลี่ยนสิทธิ์ของคุณ"
 
@@ -3868,10 +3868,6 @@ msgstr "คลิกที่ลิงค์ด้านล่างเพื่
 msgid "Close this window and log on if you are already a user of {site}."
 msgstr "ปิดหน้าต่างนี้และเข้าสู่ระบบหากคุณเป็นผู้ใช้ {site}อยู่แล้ว"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:32./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:74./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:112
-msgid "Close window"
-msgstr "ปิดหน้าต่าง"
-
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:72./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
 #: apps/zotonic_mod_wires/src/actions/action_wires_confirm.erl:36
@@ -3882,7 +3878,7 @@ msgstr "ยืนยัน"
 msgid "Confirmation failure"
 msgstr "การยืนยันล้มเหลว"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:70
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:69./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:71./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:73
 msgid "Continue"
 msgstr "สานต่อ"
@@ -3891,7 +3887,7 @@ msgstr "สานต่อ"
 msgid "Current password"
 msgstr "รหัสผ่านปัจจุบัน"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:97
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:89
 msgid "Duplicate email"
 msgstr "อีเมลซ้ำ"
 
@@ -4024,6 +4020,10 @@ msgstr "เข้าสู่ระบบด้วย"
 msgid "Minimum characters:"
 msgstr "อักขระขั้นต่ำ:"
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:101
+msgid "Multiple accounts"
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:191
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:89
 msgid "Next"
@@ -4040,7 +4040,7 @@ msgstr "ไม่มีการเข้าถึง"
 msgid "One moment please"
 msgstr "กรุณารอซักครู่"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:142./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:59
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:142./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:55
 msgid "Passcode"
 msgstr "รหัสผ่าน"
 
@@ -4056,7 +4056,7 @@ msgstr "โปรดป้อนรหัสผ่านการรับรอ
 msgid "Please try again in"
 msgstr "โปรดลองอีกครั้งใน"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:107
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:112
 msgid "Please try again later."
 msgstr "กรุณาลองใหม่อีกครั้งในภายหลัง."
 
@@ -4107,13 +4107,9 @@ msgstr "ออกจากระบบ"
 msgid "Simply try again:"
 msgstr "ลองอีกครั้ง:"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93
-msgid "Somebody else is already connected with this account on"
-msgstr "มีคนอื่นเชื่อมต่อกับบัญชีนี้แล้วบน"
-
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:99
-msgid "Somebody with your email address already has an account on"
-msgstr "ผู้ที่มีที่อยู่อีเมลของคุณมีบัญชีอยู่แล้วใน"
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:85
+msgid "Somebody else is already connected with this account on {service}."
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tpl:3
 msgid "Something went wrong, please try again later."
@@ -4159,9 +4155,17 @@ msgstr "รหัสผ่านทั้งสองควรเท่ากั
 msgid "The two-factor authentication passcode did not match. Please try again."
 msgstr "รหัสผ่านการตรวจสอบสิทธิ์แบบสองปัจจัยไม่ตรงกัน กรุณาลองอีกครั้ง."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:105
-msgid "There was a problem authenticating with"
-msgstr "เกิดปัญหาในการตรวจสอบสิทธิ์กับ"
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
+msgid "There is already an account with your email address on {site}."
+msgstr ""
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:103
+msgid "There is more than one account with your email address on {site}."
+msgstr ""
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:110
+msgid "There was a problem authenticating with {service}."
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:19
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:25
@@ -4177,7 +4181,7 @@ msgstr "หากต้องการดูหน้านี้คุณต้
 msgid "Too many retries."
 msgstr "ลองซ้ำมากเกินไป"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:63
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:59
 msgid "Two-factor passcode"
 msgstr "รหัสผ่านสองปัจจัย"
 
@@ -4188,6 +4192,10 @@ msgstr "ใช้อักขระหรือตัวเลขที่ไม
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:97
 msgid "Verify your account"
 msgstr "ตรวจสอบบัญชีของคุณ"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:104
+msgid "We cannot connect you to the right account. Contact support of {site} to help you merge the accounts and then try again."
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:113
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
@@ -4201,7 +4209,7 @@ msgstr "เราได้ส่งอีเมลพร้อมลิงก์
 msgid "You are about to create a new account."
 msgstr "คุณกำลังจะสร้างบัญชีใหม่"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:38
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:34
 msgid "You are about to log on."
 msgstr "คุณกำลังจะเข้าสู่ระบบ"
 
@@ -4213,6 +4221,10 @@ msgstr "คุณลงชื่อเข้าใช้แล้ว"
 msgid "You are signed in"
 msgstr "คุณลงชื่อเข้าใช้"
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93
+msgid "You can connect the account on {site} with your account on {service} if both accounts have a verified email address but this is not the case. Check both sites and then try again."
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:3
 msgid "You can find the code in your authentication App."
 msgstr "คุณสามารถค้นหารหัสได้ในแอปรับรองความถูกต้องของคุณ"
@@ -4221,7 +4233,7 @@ msgstr "คุณสามารถค้นหารหัสได้ในแ
 msgid "You can log in using the following external service"
 msgstr "คุณสามารถเข้าสู่ระบบโดยใช้บริการภายนอกต่อไปนี้"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:75
 msgid "You have to share your email address to be able to log in."
 msgstr "คุณต้องแชร์ที่อยู่อีเมลของคุณจึงจะสามารถเข้าสู่ระบบได้"
 
@@ -4301,7 +4313,7 @@ msgstr "หรือ"
 msgid "or you can enter the password that you have for"
 msgstr "หรือคุณสามารถป้อนรหัสผ่านที่คุณมีสำหรับ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:105
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:85./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:95./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:110
 msgid "the service"
 msgstr "บริการ"
 
@@ -7138,11 +7150,7 @@ msgstr "คุณได้เชื่อมต่อกับ <strong>Microsoft
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
 msgstr "ดีบัก MQTT เผยแพร่และสมัครใช้งานการดำเนินการในคอนโซล Zotonic"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:58
-msgid "(“Authorization Code” grant flow)"
-msgstr "(ขั้นตอนการให้สิทธิ์ (“รหัสอนุญาต”)"
-
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:81./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:82
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:91./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:92
 msgid "Access Token URL"
 msgstr "เข้าถึงโทเค็น URL"
 
@@ -7158,13 +7166,13 @@ msgstr "เพิ่มโดย"
 msgid "Allow Access"
 msgstr "อนุญาตการเข้าถึง"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:61
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:69
 msgid "Allow import of content from the remote website"
 msgstr "อนุญาตให้นำเข้าเนื้อหาจากเว็บไซต์ระยะไกล"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:58
-msgid "Allow users on the remote website to authenticate here"
-msgstr "อนุญาตให้ผู้ใช้เว็บไซต์ระยะไกลตรวจสอบสิทธิ์ที่นี่"
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:64
+msgid "Allow users on the remote website to authenticate here (using “{code}”)"
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:16
 msgid "Allow users registered on the remote website to authenticate on this website."
@@ -7202,15 +7210,11 @@ msgstr "ขอข้อมูลรับรองจากผู้ใช้บ
 msgid "Authenticating..."
 msgstr "กำลังพิสูจน์ตัวตน ..."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:47
-msgid "Authorization Code (default)"
-msgstr "รหัสการให้สิทธิ์ (ค่าเริ่มต้น)"
-
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:11
 msgid "Authorize"
 msgstr "อนุญาต"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:73./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:74
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:83./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:84
 msgid "Authorize URL"
 msgstr "อนุญาต URL"
 
@@ -7218,17 +7222,13 @@ msgstr "อนุญาต URL"
 msgid "Authorize access to your account"
 msgstr "ให้สิทธิ์การเข้าถึงบัญชีของคุณ"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:65
-msgid "Automatically extend tokens obtained using “Client Credentials” before they expire"
-msgstr "ขยายโทเค็นที่ได้รับโดยอัตโนมัติโดยใช้ \"ข้อมูลรับรองไคลเอ็นต์\" ก่อนหมดอายุ"
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:73
+msgid "Automatically extend tokens obtained using “{client}” before they expire"
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:7
 msgid "Be careful, this access token gives full access to your account."
 msgstr "โปรดใช้ความระมัดระวัง โทเค็นเพื่อการเข้าถึงนี้ให้การเข้าถึงบัญชีของคุณโดยสมบูรณ์"
-
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:50
-msgid "Client Credentials"
-msgstr "ข้อมูลรับรองลูกค้า"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
 msgid "Connect with"
@@ -7346,7 +7346,7 @@ msgstr "ให้ URL เปลี่ยนเส้นทางที่ถู�
 msgid "Here is the new access token."
 msgstr "นี่คือโทเค็นการเข้าถึงใหม่"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:69
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:79
 msgid "If the remote website is a Zotonic website then you can leave the two URLs below empty."
 msgstr "หากเว็บไซต์ระยะไกลเป็นเว็บไซต์ Zotonic คุณสามารถปล่อย URL สองรายการด้านล่างว่างไว้ได้"
 
@@ -7358,9 +7358,9 @@ msgstr "หากคุณมีโทเค็นอยู่แล้ว โ�
 msgid "Import content from the remote website to this website."
 msgstr "นำเข้าเนื้อหาจากเว็บไซต์ระยะไกลไปยังเว็บไซต์นี้"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:75
-msgid "Leave empty for grant flow “Client Credentials.”"
-msgstr "เว้นว่างไว้สำหรับขั้นตอนการให้สิทธิ์ \"ข้อมูลรับรองไคลเอ็นต์\""
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:85
+msgid "Leave empty if you use “{client}.”"
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
@@ -7431,9 +7431,9 @@ msgstr "ประสบความสำเร็จ"
 msgid "The token will be registered with your account and only you (or routines acting on your behalf) will be able to use it."
 msgstr "โทเค็นจะถูกลงทะเบียนกับบัญชีของคุณ และมีเพียงคุณ (หรือกิจวัตรที่ดำเนินการในนามของคุณ) เท่านั้นที่จะสามารถใช้ได้"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:54
-msgid "The “Authorization Code” flow redirects the user to the remote website to obtain an access token. “Client Credentials” allows an admin user to directly fetch a token from the remote website."
-msgstr "ขั้นตอน \"รหัสการอนุญาต\" เปลี่ยนเส้นทางผู้ใช้ไปยังเว็บไซต์ระยะไกลเพื่อรับโทเค็นการเข้าถึง “Client Credentials” อนุญาตให้ผู้ดูแลระบบเรียกโทเค็นจากเว็บไซต์ระยะไกลได้โดยตรง"
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:55
+msgid "The “{code}” method redirects the user to the remote website to obtain an access token. “{client}” allows an admin user to directly fetch a token from the remote website."
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:9
 msgid "These applications are used by 3rd parties to:"
@@ -7456,8 +7456,8 @@ msgid "To use one of these applications, the App ID and secret must be registere
 msgstr "หากต้องการใช้หนึ่งในแอปพลิเคชันเหล่านี้ จะต้องลงทะเบียน ID แอปและข้อมูลลับกับบุคคลที่สาม"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:44
-msgid "Token grant flow"
-msgstr "โฟลว์การให้โทเค็น"
+msgid "Token grant method"
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
@@ -7498,6 +7498,11 @@ msgstr "คุณสามารถที่จะ:"
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:15
 msgid "You will not be able to see this token again, so copy it and save it in a secure place."
 msgstr "คุณจะไม่เห็นโทเค็นนี้อีก ดังนั้นให้คัดลอกและบันทึกไว้ในที่ที่ปลอดภัย"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:47
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
+msgid "default"
+msgstr "ค่าเริ่มต้น"
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "API Key can be found on"
@@ -7718,10 +7723,6 @@ msgstr "ทุกปี"
 #: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "You are not allowed to do this"
 msgstr "คุณไม่ได้รับอนุญาตให้ทำสิ่งนี้"
-
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
-msgid "default"
-msgstr "ค่าเริ่มต้น"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:13
 msgid "not in sitemap"
