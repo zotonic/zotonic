@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-07-29 10:10\n"
+"PO-Revision-Date: 2022-07-29 11:57\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -4022,7 +4022,7 @@ msgstr "อักขระขั้นต่ำ:"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:101
 msgid "Multiple accounts"
-msgstr ""
+msgstr "หลายบัญชี"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:191
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:89
@@ -4109,7 +4109,7 @@ msgstr "ลองอีกครั้ง:"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:85
 msgid "Somebody else is already connected with this account on {service}."
-msgstr ""
+msgstr "มีบุคคลอื่นเชื่อมต่อกับบัญชีนี้แล้วเมื่อวันที่ {service}"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tpl:3
 msgid "Something went wrong, please try again later."
@@ -4157,15 +4157,15 @@ msgstr "รหัสผ่านการตรวจสอบสิทธิ์
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
 msgid "There is already an account with your email address on {site}."
-msgstr ""
+msgstr "มีบัญชีที่ใช้ที่อยู่อีเมลของคุณเป็น {site}อยู่แล้ว"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:103
 msgid "There is more than one account with your email address on {site}."
-msgstr ""
+msgstr "มีบัญชีมากกว่าหนึ่งบัญชีที่มีที่อยู่อีเมลของคุณเป็น {site}"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:110
 msgid "There was a problem authenticating with {service}."
-msgstr ""
+msgstr "เกิดปัญหาในการตรวจสอบสิทธิ์กับ {service}"
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:19
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:25
@@ -4195,7 +4195,7 @@ msgstr "ตรวจสอบบัญชีของคุณ"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:104
 msgid "We cannot connect you to the right account. Contact support of {site} to help you merge the accounts and then try again."
-msgstr ""
+msgstr "เราไม่สามารถเชื่อมต่อคุณกับบัญชีที่ถูกต้อง ติดต่อฝ่ายสนับสนุนที่ {site} เพื่อช่วยคุณรวมบัญชีแล้วลองอีกครั้ง"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:113
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
@@ -4223,7 +4223,7 @@ msgstr "คุณลงชื่อเข้าใช้"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93
 msgid "You can connect the account on {site} with your account on {service} if both accounts have a verified email address but this is not the case. Check both sites and then try again."
-msgstr ""
+msgstr "คุณสามารถเชื่อมต่อบัญชีที่ {site} กับบัญชีของคุณในวันที่ {service} หากทั้งสองบัญชีมีที่อยู่อีเมลที่ยืนยันแล้ว แต่ไม่ใช่กรณีนี้ ตรวจสอบทั้งสองไซต์แล้วลองอีกครั้ง"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:3
 msgid "You can find the code in your authentication App."
@@ -7172,7 +7172,7 @@ msgstr "อนุญาตให้นำเข้าเนื้อหาจา
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:64
 msgid "Allow users on the remote website to authenticate here (using “{code}”)"
-msgstr ""
+msgstr "อนุญาตให้ผู้ใช้บนเว็บไซต์ระยะไกลตรวจสอบสิทธิ์ที่นี่ (โดยใช้ “{code}”)"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:16
 msgid "Allow users registered on the remote website to authenticate on this website."
@@ -7224,7 +7224,7 @@ msgstr "ให้สิทธิ์การเข้าถึงบัญชี
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:73
 msgid "Automatically extend tokens obtained using “{client}” before they expire"
-msgstr ""
+msgstr "ขยายโทเค็นที่ได้รับโดยอัตโนมัติโดยใช้ “{client}” ก่อนหมดอายุ"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:7
 msgid "Be careful, this access token gives full access to your account."
@@ -7360,7 +7360,7 @@ msgstr "นำเข้าเนื้อหาจากเว็บไซต์
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:85
 msgid "Leave empty if you use “{client}.”"
-msgstr ""
+msgstr "เว้นว่างไว้หากคุณใช้ “{client}”"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
@@ -7433,7 +7433,7 @@ msgstr "โทเค็นจะถูกลงทะเบียนกับบ
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:55
 msgid "The “{code}” method redirects the user to the remote website to obtain an access token. “{client}” allows an admin user to directly fetch a token from the remote website."
-msgstr ""
+msgstr "วิธีการ “{code}” เปลี่ยนเส้นทางผู้ใช้ไปยังเว็บไซต์ระยะไกลเพื่อรับโทเค็นการเข้าถึง “{client}” อนุญาตให้ผู้ดูแลระบบเรียกโทเค็นจากเว็บไซต์ระยะไกลได้โดยตรง"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:9
 msgid "These applications are used by 3rd parties to:"
@@ -7457,7 +7457,7 @@ msgstr "หากต้องการใช้หนึ่งในแอปพ
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:44
 msgid "Token grant method"
-msgstr ""
+msgstr "วิธีการให้โทเค็น"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
