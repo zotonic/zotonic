@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-07-28 18:14\n"
+"PO-Revision-Date: 2022-07-29 10:10\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -210,7 +210,7 @@ msgstr "Czy na pewno chcesz przywrócić wszystkie reguły ACL do ich obecnie op
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:100
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:117./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:30./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:72./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:117./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:29./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:67./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:117./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
@@ -3015,7 +3015,7 @@ msgid "Set username / password"
 msgstr "Zmień login lub hasło"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:81./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:103
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:108
 msgid "Sorry"
 msgstr "Przepraszamy"
 
@@ -3807,7 +3807,7 @@ msgstr "Musisz mieć pozwolenie na edycję konfiguracji systemu, aby wyświetli�
 msgid "Access denied"
 msgstr "Brak dostępu"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
 msgid "Already connected"
 msgstr "Już połączony"
 
@@ -3848,7 +3848,7 @@ msgstr "Zmień hasło i zaloguj się"
 msgid "Change your password"
 msgstr "Zmień swoje hasło"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:86
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:78
 msgid "Change your permissions"
 msgstr "Zmień swoje uprawnienia"
 
@@ -3868,10 +3868,6 @@ msgstr "Kliknij na poniższy link, aby wprowadzić nowe hasło. Jeśli kliknięc
 msgid "Close this window and log on if you are already a user of {site}."
 msgstr "Zamknij to okno i zaloguj się, jeśli jesteś już użytkownikiem {site}."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:32./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:74./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:112
-msgid "Close window"
-msgstr "Zamknij okno"
-
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:72./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
 #: apps/zotonic_mod_wires/src/actions/action_wires_confirm.erl:36
@@ -3882,7 +3878,7 @@ msgstr "Potwierdź"
 msgid "Confirmation failure"
 msgstr "Potwierdzenie nie powiodło się"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:70
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:69./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:71./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:73
 msgid "Continue"
 msgstr "continuar"
@@ -3891,7 +3887,7 @@ msgstr "continuar"
 msgid "Current password"
 msgstr "Aktualne hasło"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:97
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:89
 msgid "Duplicate email"
 msgstr "Zduplikowany e-mail"
 
@@ -4024,6 +4020,10 @@ msgstr "Zaloguj się za pomocą"
 msgid "Minimum characters:"
 msgstr "Minimalna liczba znaków:"
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:101
+msgid "Multiple accounts"
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:191
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:89
 msgid "Next"
@@ -4040,7 +4040,7 @@ msgstr "Brak dostępu"
 msgid "One moment please"
 msgstr "Proszę czekać"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:142./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:59
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:142./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:55
 msgid "Passcode"
 msgstr "Kod dostępu"
 
@@ -4056,7 +4056,7 @@ msgstr "Wprowadź hasło uwierzytelniania dwuskładnikowego."
 msgid "Please try again in"
 msgstr "Spróbuj ponownie za"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:107
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:112
 msgid "Please try again later."
 msgstr "Spróbuj ponownie później."
 
@@ -4107,13 +4107,9 @@ msgstr "Wyloguj się"
 msgid "Simply try again:"
 msgstr "Spróbuj ponownie:"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93
-msgid "Somebody else is already connected with this account on"
-msgstr "Ktoś inny jest już powiązany z tym kontem na"
-
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:99
-msgid "Somebody with your email address already has an account on"
-msgstr "Ktoś z Twoim adresem e-mail ma już konto na"
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:85
+msgid "Somebody else is already connected with this account on {service}."
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tpl:3
 msgid "Something went wrong, please try again later."
@@ -4159,9 +4155,17 @@ msgstr "Hasła nie są jednakowe. Wpisz je ponownie."
 msgid "The two-factor authentication passcode did not match. Please try again."
 msgstr "Hasło uwierzytelniania dwuskładnikowego nie pasuje. Proszę spróbuj ponownie."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:105
-msgid "There was a problem authenticating with"
-msgstr "Wystąpił problem z uwierzytelnianiem w"
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
+msgid "There is already an account with your email address on {site}."
+msgstr ""
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:103
+msgid "There is more than one account with your email address on {site}."
+msgstr ""
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:110
+msgid "There was a problem authenticating with {service}."
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:19
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:25
@@ -4177,7 +4181,7 @@ msgstr "Aby wyświetlić tę stronę, musisz mieć inne prawa dostępu."
 msgid "Too many retries."
 msgstr "Zbyt wiele ponownych prób."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:63
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:59
 msgid "Two-factor passcode"
 msgstr "Hasło dwuskładnikowe"
 
@@ -4188,6 +4192,10 @@ msgstr "Użyj niealfabetycznych znaków lub cyfr, aby utrudnić odgadnięcie."
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:97
 msgid "Verify your account"
 msgstr "Zweryfikuj swoje konto"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:104
+msgid "We cannot connect you to the right account. Contact support of {site} to help you merge the accounts and then try again."
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:113
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
@@ -4201,7 +4209,7 @@ msgstr "Wysłaliśmy wiadomość e-mail z linkiem do zresetowania hasła"
 msgid "You are about to create a new account."
 msgstr "Zakładasz nowe konto."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:38
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:34
 msgid "You are about to log on."
 msgstr "Zamierzasz się zalogować."
 
@@ -4213,6 +4221,10 @@ msgstr "Jesteś teraz zalogowany / zalogowana."
 msgid "You are signed in"
 msgstr "Jesteś zalogowany"
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93
+msgid "You can connect the account on {site} with your account on {service} if both accounts have a verified email address but this is not the case. Check both sites and then try again."
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:3
 msgid "You can find the code in your authentication App."
 msgstr "Kod znajdziesz w swojej aplikacji uwierzytelniającej."
@@ -4221,7 +4233,7 @@ msgstr "Kod znajdziesz w swojej aplikacji uwierzytelniającej."
 msgid "You can log in using the following external service"
 msgstr "Możesz zalogować się za pomocą następującej usługi zewnętrznej"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:75
 msgid "You have to share your email address to be able to log in."
 msgstr "Musisz udostępnić swój adres e-mail, aby móc się zalogować."
 
@@ -4301,7 +4313,7 @@ msgstr "lub"
 msgid "or you can enter the password that you have for"
 msgstr "lub możesz wprowadzić hasło, które masz dla"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:105
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:85./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:95./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:110
 msgid "the service"
 msgstr "usługa"
 
@@ -7138,11 +7150,7 @@ msgstr "Połączyłeś swoje <strong>konto Microsoft</strong>"
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
 msgstr "Debuguj akcje publikowania i subskrybowania MQTT w konsoli Zotonic"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:58
-msgid "(“Authorization Code” grant flow)"
-msgstr "(przepływ dotacji („Kod autoryzacji”))"
-
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:81./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:82
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:91./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:92
 msgid "Access Token URL"
 msgstr "Uzyskaj dostęp do adresu URL tokena"
 
@@ -7158,13 +7166,13 @@ msgstr "Dodane przez"
 msgid "Allow Access"
 msgstr "Umożliwić dostęp"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:61
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:69
 msgid "Allow import of content from the remote website"
 msgstr "Zezwalaj na import treści ze zdalnej strony internetowej"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:58
-msgid "Allow users on the remote website to authenticate here"
-msgstr "Zezwalaj użytkownikom na zdalnej stronie internetowej na uwierzytelnianie tutaj"
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:64
+msgid "Allow users on the remote website to authenticate here (using “{code}”)"
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:16
 msgid "Allow users registered on the remote website to authenticate on this website."
@@ -7202,15 +7210,11 @@ msgstr "Poproś użytkowników tej witryny o ich dane uwierzytelniające w celu 
 msgid "Authenticating..."
 msgstr "Uwierzytelniam..."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:47
-msgid "Authorization Code (default)"
-msgstr "Kod autoryzacji (domyślny)"
-
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:11
 msgid "Authorize"
 msgstr "Autoryzować"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:73./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:74
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:83./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:84
 msgid "Authorize URL"
 msgstr "Autoryzuj adres URL"
 
@@ -7218,17 +7222,13 @@ msgstr "Autoryzuj adres URL"
 msgid "Authorize access to your account"
 msgstr "Autoryzuj dostęp do swojego konta"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:65
-msgid "Automatically extend tokens obtained using “Client Credentials” before they expire"
-msgstr "Automatycznie przedłużaj tokeny uzyskane za pomocą „Poświadczeń klienta” przed ich wygaśnięciem"
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:73
+msgid "Automatically extend tokens obtained using “{client}” before they expire"
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:7
 msgid "Be careful, this access token gives full access to your account."
 msgstr "Uważaj, ten token dostępu daje pełny dostęp do Twojego konta."
-
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:50
-msgid "Client Credentials"
-msgstr "Poświadczenia klienta"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
 msgid "Connect with"
@@ -7346,7 +7346,7 @@ msgstr "Podaj adresy URL przekierowania, które są prawidłowe dla witryny wyko
 msgid "Here is the new access token."
 msgstr "Oto nowy token dostępu."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:69
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:79
 msgid "If the remote website is a Zotonic website then you can leave the two URLs below empty."
 msgstr "Jeśli zdalna witryna jest witryną Zotonic, możesz pozostawić dwa poniższe adresy URL puste."
 
@@ -7358,9 +7358,9 @@ msgstr "Jeśli masz już token, zostanie on zastąpiony nowym."
 msgid "Import content from the remote website to this website."
 msgstr "Zaimportuj zawartość ze zdalnego serwisu WWW do tego serwisu WWW."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:75
-msgid "Leave empty for grant flow “Client Credentials.”"
-msgstr "Pozostaw puste dla przepływu przyznawania „Poświadczenia klienta”."
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:85
+msgid "Leave empty if you use “{client}.”"
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
@@ -7431,9 +7431,9 @@ msgstr "Sukces"
 msgid "The token will be registered with your account and only you (or routines acting on your behalf) will be able to use it."
 msgstr "Token zostanie zarejestrowany na Twoim koncie i tylko Ty (lub procedury działające w Twoim imieniu) będziesz mógł z niego korzystać."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:54
-msgid "The “Authorization Code” flow redirects the user to the remote website to obtain an access token. “Client Credentials” allows an admin user to directly fetch a token from the remote website."
-msgstr "Przepływ „Kod autoryzacji” przekierowuje użytkownika do zdalnej witryny w celu uzyskania tokena dostępu. „Poświadczenia klienta” umożliwiają administratorowi bezpośrednie pobranie tokena ze zdalnej witryny internetowej."
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:55
+msgid "The “{code}” method redirects the user to the remote website to obtain an access token. “{client}” allows an admin user to directly fetch a token from the remote website."
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:9
 msgid "These applications are used by 3rd parties to:"
@@ -7456,8 +7456,8 @@ msgid "To use one of these applications, the App ID and secret must be registere
 msgstr "Aby korzystać z jednej z tych aplikacji, identyfikator aplikacji i klucz tajny muszą być zarejestrowane u strony trzeciej."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:44
-msgid "Token grant flow"
-msgstr "Przepływ przyznawania tokenów"
+msgid "Token grant method"
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
@@ -7498,6 +7498,11 @@ msgstr "Będziesz w stanie:"
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:15
 msgid "You will not be able to see this token again, so copy it and save it in a secure place."
 msgstr "Nie będziesz mógł ponownie zobaczyć tego tokena, więc skopiuj go i zapisz w bezpiecznym miejscu."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:47
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
+msgid "default"
+msgstr "Domyślnie"
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "API Key can be found on"
@@ -7718,10 +7723,6 @@ msgstr "Rocznie"
 #: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "You are not allowed to do this"
 msgstr "Nie możesz tego zrobić"
-
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
-msgid "default"
-msgstr "Domyślnie"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:13
 msgid "not in sitemap"
