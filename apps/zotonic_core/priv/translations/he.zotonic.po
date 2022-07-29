@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-07-29 10:11\n"
+"PO-Revision-Date: 2022-07-29 11:56\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -4022,7 +4022,7 @@ msgstr "מינימום תווים:"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:101
 msgid "Multiple accounts"
-msgstr ""
+msgstr "מספר חשבונות"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:191
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:89
@@ -4109,7 +4109,7 @@ msgstr "פשוט נסה שוב:"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:85
 msgid "Somebody else is already connected with this account on {service}."
-msgstr ""
+msgstr "מישהו אחר כבר מחובר לחשבון הזה ב {service}."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tpl:3
 msgid "Something went wrong, please try again later."
@@ -4157,15 +4157,15 @@ msgstr "קוד הגישה לאימות דו-גורמי לא תאם. בבקשה �
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
 msgid "There is already an account with your email address on {site}."
-msgstr ""
+msgstr "יש כבר חשבון עם כתובת האימייל שלך ב {site}."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:103
 msgid "There is more than one account with your email address on {site}."
-msgstr ""
+msgstr "יש יותר מחשבון אחד עם כתובת הדוא\"ל שלך ב {site}."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:110
 msgid "There was a problem authenticating with {service}."
-msgstr ""
+msgstr "הייתה בעיה באימות עם {service}."
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:19
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:25
@@ -4195,7 +4195,7 @@ msgstr "אמת את חשבונך"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:104
 msgid "We cannot connect you to the right account. Contact support of {site} to help you merge the accounts and then try again."
-msgstr ""
+msgstr "אנחנו לא יכולים לחבר אותך לחשבון הנכון. צור קשר עם התמיכה של {site} כדי לעזור לך למזג את החשבונות ולאחר מכן נסה שוב."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:113
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
@@ -4223,7 +4223,7 @@ msgstr "אתה מחובר"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93
 msgid "You can connect the account on {site} with your account on {service} if both accounts have a verified email address but this is not the case. Check both sites and then try again."
-msgstr ""
+msgstr "אתה יכול לחבר את החשבון ב {site} לחשבון שלך ב {service} אם לשני החשבונות יש כתובת דוא\"ל מאומתת, אבל זה לא המקרה. בדוק את שני האתרים ולאחר מכן נסה שוב."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:3
 msgid "You can find the code in your authentication App."
@@ -7172,7 +7172,7 @@ msgstr "אפשר ייבוא של תוכן מהאתר המרוחק"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:64
 msgid "Allow users on the remote website to authenticate here (using “{code}”)"
-msgstr ""
+msgstr "אפשר למשתמשים באתר המרוחק לאמת כאן (באמצעות \"{code}\")"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:16
 msgid "Allow users registered on the remote website to authenticate on this website."
@@ -7224,7 +7224,7 @@ msgstr "הרשאת גישה לחשבון שלך"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:73
 msgid "Automatically extend tokens obtained using “{client}” before they expire"
-msgstr ""
+msgstr "הארך אוטומטית אסימונים שהושגו באמצעות \"{client}\" לפני שהם יפוג"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:7
 msgid "Be careful, this access token gives full access to your account."
@@ -7360,7 +7360,7 @@ msgstr "ייבא תוכן מהאתר המרוחק לאתר זה."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:85
 msgid "Leave empty if you use “{client}.”"
-msgstr ""
+msgstr "השאר ריק אם אתה משתמש ב-\"{client}\"."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
@@ -7433,7 +7433,7 @@ msgstr "האסימון יירשם בחשבון שלך ורק אתה (או השג
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:55
 msgid "The “{code}” method redirects the user to the remote website to obtain an access token. “{client}” allows an admin user to directly fetch a token from the remote website."
-msgstr ""
+msgstr "שיטת \"{code}\" מפנה את המשתמש לאתר המרוחק כדי לקבל אסימון גישה. \"{client}\" מאפשר למשתמש אדמין להביא אסימון ישירות מהאתר המרוחק."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:9
 msgid "These applications are used by 3rd parties to:"
@@ -7457,7 +7457,7 @@ msgstr "כדי להשתמש באחד היישומים הללו, מזהה האפ�
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:44
 msgid "Token grant method"
-msgstr ""
+msgstr "שיטת הענקת אסימונים"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
