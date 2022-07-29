@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-07-28 18:14\n"
+"PO-Revision-Date: 2022-07-29 10:10\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -210,7 +210,7 @@ msgstr "你确定你要恢复所有的ACL规则到他们的最新发布版本"
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:100
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:117./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:30./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:72./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:117./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:29./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:67./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:117./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
@@ -3015,7 +3015,7 @@ msgid "Set username / password"
 msgstr "设置用户名/密码"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:81./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:103
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:108
 msgid "Sorry"
 msgstr "对不起"
 
@@ -3807,7 +3807,7 @@ msgstr "您需要被允许编辑系统配置来查看或更改双因素认证配
 msgid "Access denied"
 msgstr "拒绝进入"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
 msgid "Already connected"
 msgstr "已经连接"
 
@@ -3848,7 +3848,7 @@ msgstr "修改密码并登录"
 msgid "Change your password"
 msgstr "更改您的密码"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:86
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:78
 msgid "Change your permissions"
 msgstr "更改您的权限"
 
@@ -3868,10 +3868,6 @@ msgstr "点击下面的链接，输入新的密码。当点击不成功时，请
 msgid "Close this window and log on if you are already a user of {site}."
 msgstr "如果您已经是 {site}的用户，请关闭此窗口并登录。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:32./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:74./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:112
-msgid "Close window"
-msgstr "关闭窗口"
-
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:72./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
 #: apps/zotonic_mod_wires/src/actions/action_wires_confirm.erl:36
@@ -3882,7 +3878,7 @@ msgstr "确认"
 msgid "Confirmation failure"
 msgstr "验证失败"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:70
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:69./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:71./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:73
 msgid "Continue"
 msgstr "继续"
@@ -3891,7 +3887,7 @@ msgstr "继续"
 msgid "Current password"
 msgstr "当前密码"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:97
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:89
 msgid "Duplicate email"
 msgstr "电子邮件重复"
 
@@ -4024,6 +4020,10 @@ msgstr "使用登录"
 msgid "Minimum characters:"
 msgstr "最少字符："
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:101
+msgid "Multiple accounts"
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:191
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:89
 msgid "Next"
@@ -4040,7 +4040,7 @@ msgstr "无法访问"
 msgid "One moment please"
 msgstr "请等一下"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:142./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:59
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:142./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:55
 msgid "Passcode"
 msgstr "密码"
 
@@ -4056,7 +4056,7 @@ msgstr "请输入双因素验证密码。"
 msgid "Please try again in"
 msgstr "请再试一次"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:107
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:112
 msgid "Please try again later."
 msgstr "请稍后再试。"
 
@@ -4107,13 +4107,9 @@ msgstr "登出"
 msgid "Simply try again:"
 msgstr "只需再试一次。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93
-msgid "Somebody else is already connected with this account on"
-msgstr "有人已经和这个账号联系上了"
-
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:99
-msgid "Somebody with your email address already has an account on"
-msgstr "知道您的电子邮件地址的人已经有一个帐户"
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:85
+msgid "Somebody else is already connected with this account on {service}."
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tpl:3
 msgid "Something went wrong, please try again later."
@@ -4159,9 +4155,17 @@ msgstr "两个密码需要完全一致，请重新输入。"
 msgid "The two-factor authentication passcode did not match. Please try again."
 msgstr "两因素身份验证密码不匹配。请再试一遍。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:105
-msgid "There was a problem authenticating with"
-msgstr "有一个问题，认证与"
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
+msgid "There is already an account with your email address on {site}."
+msgstr ""
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:103
+msgid "There is more than one account with your email address on {site}."
+msgstr ""
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:110
+msgid "There was a problem authenticating with {service}."
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:19
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:25
@@ -4177,7 +4181,7 @@ msgstr "要查看本页面，您需要有其他访问权限。"
 msgid "Too many retries."
 msgstr "太多的重试。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:63
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:59
 msgid "Two-factor passcode"
 msgstr "双因素密码"
 
@@ -4188,6 +4192,10 @@ msgstr "请不要使用纯字母或者纯数字的密码。"
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:97
 msgid "Verify your account"
 msgstr "验证您的账户"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:104
+msgid "We cannot connect you to the right account. Contact support of {site} to help you merge the accounts and then try again."
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:113
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
@@ -4201,7 +4209,7 @@ msgstr "我们已经发送了一封电子邮件，其中有一个链接来重置
 msgid "You are about to create a new account."
 msgstr "您正准备创建一个新的账户。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:38
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:34
 msgid "You are about to log on."
 msgstr "您即将登录。"
 
@@ -4213,6 +4221,10 @@ msgstr "你现在已经登录了。"
 msgid "You are signed in"
 msgstr "您已登录"
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93
+msgid "You can connect the account on {site} with your account on {service} if both accounts have a verified email address but this is not the case. Check both sites and then try again."
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:3
 msgid "You can find the code in your authentication App."
 msgstr "您可以在您的身份验证应用中找到该代码。"
@@ -4221,7 +4233,7 @@ msgstr "您可以在您的身份验证应用中找到该代码。"
 msgid "You can log in using the following external service"
 msgstr "您可以使用以下外部服务登录"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:75
 msgid "You have to share your email address to be able to log in."
 msgstr "您必须共享您的电子邮件地址才能登录。"
 
@@ -4301,7 +4313,7 @@ msgstr "或"
 msgid "or you can enter the password that you have for"
 msgstr "或者您可以输入您拥有的密码"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:105
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:85./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:95./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:110
 msgid "the service"
 msgstr "该处"
 
@@ -7134,11 +7146,7 @@ msgstr "您已将您的 <strong>Microsoft</strong> 帐户配对。"
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
 msgstr "调试Zotonic控制台中的MQTT发布和订阅操作。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:58
-msgid "(“Authorization Code” grant flow)"
-msgstr "（“授权码”授权流程）"
-
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:81./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:82
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:91./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:92
 msgid "Access Token URL"
 msgstr "访问令牌 URL"
 
@@ -7154,13 +7162,13 @@ msgstr "添加者"
 msgid "Allow Access"
 msgstr "允许访问"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:61
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:69
 msgid "Allow import of content from the remote website"
 msgstr "允许从远程网站导入内容"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:58
-msgid "Allow users on the remote website to authenticate here"
-msgstr "允许远程网站上的用户在此处进行身份验证"
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:64
+msgid "Allow users on the remote website to authenticate here (using “{code}”)"
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:16
 msgid "Allow users registered on the remote website to authenticate on this website."
@@ -7198,15 +7206,11 @@ msgstr "要求此网站上的用户提供凭据，以在其网站或应用程序
 msgid "Authenticating..."
 msgstr "认证..."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:47
-msgid "Authorization Code (default)"
-msgstr "授权码（默认）"
-
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:11
 msgid "Authorize"
 msgstr "授权"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:73./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:74
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:83./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:84
 msgid "Authorize URL"
 msgstr "授权网址"
 
@@ -7214,17 +7218,13 @@ msgstr "授权网址"
 msgid "Authorize access to your account"
 msgstr "授权访问您的帐户"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:65
-msgid "Automatically extend tokens obtained using “Client Credentials” before they expire"
-msgstr "在过期之前自动扩展使用“客户端凭据”获得的令牌"
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:73
+msgid "Automatically extend tokens obtained using “{client}” before they expire"
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:7
 msgid "Be careful, this access token gives full access to your account."
 msgstr "请注意，此访问令牌可提供对您帐户的完全访问权限。"
-
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:50
-msgid "Client Credentials"
-msgstr "客户凭证"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
 msgid "Connect with"
@@ -7342,7 +7342,7 @@ msgstr "提供对执行 OAuth2 授权的网站有效的重定向 URL。"
 msgid "Here is the new access token."
 msgstr "这是新的访问令牌。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:69
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:79
 msgid "If the remote website is a Zotonic website then you can leave the two URLs below empty."
 msgstr "如果远程网站是 Zotonic 网站，那么您可以将下面的两个 URL 留空。"
 
@@ -7354,9 +7354,9 @@ msgstr "如果您已经有一个令牌，那么它将被新的令牌替换。"
 msgid "Import content from the remote website to this website."
 msgstr "将内容从远程网站导入到本网站。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:75
-msgid "Leave empty for grant flow “Client Credentials.”"
-msgstr "将授权流“客户凭证”留空。"
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:85
+msgid "Leave empty if you use “{client}.”"
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
@@ -7427,9 +7427,9 @@ msgstr "成功"
 msgid "The token will be registered with your account and only you (or routines acting on your behalf) will be able to use it."
 msgstr "令牌将在您的帐户中注册，并且只有您（或代表您的例程）才能使用它。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:54
-msgid "The “Authorization Code” flow redirects the user to the remote website to obtain an access token. “Client Credentials” allows an admin user to directly fetch a token from the remote website."
-msgstr "“授权码”流程将用户重定向到远程网站以获取访问令牌。 “客户端凭据”允许管理员用户直接从远程网站获取令牌。"
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:55
+msgid "The “{code}” method redirects the user to the remote website to obtain an access token. “{client}” allows an admin user to directly fetch a token from the remote website."
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:9
 msgid "These applications are used by 3rd parties to:"
@@ -7452,8 +7452,8 @@ msgid "To use one of these applications, the App ID and secret must be registere
 msgstr "要使用这些应用程序之一，必须向第 3 方注册应用程序 ID 和机密。"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:44
-msgid "Token grant flow"
-msgstr "令牌授予流程"
+msgid "Token grant method"
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
@@ -7494,6 +7494,11 @@ msgstr "你将能够："
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:15
 msgid "You will not be able to see this token again, so copy it and save it in a secure place."
 msgstr "您将无法再次看到此令牌，因此请复制它并将其保存在安全的地方。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:47
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
+msgid "default"
+msgstr "默认"
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "API Key can be found on"
@@ -7714,10 +7719,6 @@ msgstr "每年"
 #: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "You are not allowed to do this"
 msgstr "您不可以这样做"
-
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
-msgid "default"
-msgstr "默认"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:13
 msgid "not in sitemap"
