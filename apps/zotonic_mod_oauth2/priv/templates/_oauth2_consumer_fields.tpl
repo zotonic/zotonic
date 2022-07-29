@@ -41,28 +41,38 @@
         </div>
 
         <div class="form-group">
-            <label class="control-label" for="access_token_url">{_ Token grant flow _}</label>
+            <label class="control-label" for="access_token_url">{_ Token grant method _}</label>
             <select class="form-control" name="grant_type" style="max-width: 30ch">
                 <option value="authorization_code">
-                    {_ Authorization Code (default) _}
+                    Authorization Code ({_ default _})
                 </option>
                 <option value="client_credentials" {% if app.grant_type == 'client_credentials' %}selected{% endif %}>
-                    {_ Client Credentials _}
+                    Client Credentials
                 </option>
             </select>
         </div>
-        <p class="help-block">{_ The “Authorization Code” flow redirects the user to the remote website to obtain an access token. “Client Credentials” allows an admin user to directly fetch a token from the remote website. _}
+        <p class="help-block">
+            {% trans "The “{code}” method redirects the user to the remote website to obtain an access token. “{client}” allows an admin user to directly fetch a token from the remote website."
+                code="Authorization Code"
+                client="Client Credentials"
+            %}
+        </p>
 
         <div class="form-group">
             <label class="checkbox">
-                <input type="checkbox" name="is_use_auth" {% if app.is_use_auth %}checked{% endif %}> {_ Allow users on the remote website to authenticate here _} {_ (“Authorization Code” grant flow) _}
+                <input type="checkbox" name="is_use_auth" {% if app.is_use_auth %}checked{% endif %}>
+                {% trans "Allow users on the remote website to authenticate here (using “{code}”)"
+                        code="Authorization Code"
+                %}
             </label>
             <label class="checkbox">
                 <input type="checkbox" name="is_use_import" {% if app.is_use_import %}checked{% endif %}> {_ Allow import of content from the remote website _}
             </label>
             <label class="checkbox">
                 <input type="checkbox" value="1" name="is_extend_automatic" {% if app.is_extend_automatic %}checked{% endif %}>
-                {_ Automatically extend tokens obtained using “Client Credentials” before they expire _}
+                {% trans "Automatically extend tokens obtained using “{client}” before they expire"
+                        client="Client Credentials"
+                %}
             </label>
         </div>
 
@@ -72,7 +82,7 @@
             <div class="label-floating">
                 <input id="{{ #authorize_url }}" type="text" value="{{ app.authorize_url|escape }}" class="form-control" name="authorize_url" placeholder="{_ Authorize URL _}">
                 <label class="control-label" for="authorize_url">{_ Authorize URL _}</label>
-                <p class="help-block">{_ Leave empty for grant flow “Client Credentials.” _}</p>
+                <p class="help-block">{% trans "Leave empty if you use “{client}.”" client="Client Credentials" %}</p>
             </div>
         </div>
 

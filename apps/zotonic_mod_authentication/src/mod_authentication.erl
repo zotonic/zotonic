@@ -274,9 +274,9 @@ maybe_add_identity_logon(Auth, Context) ->
                             {ok, _} = insert_identity(UserId, Auth, Context),
                             {ok, UserId}
                     end;
-                [_|_] ->
+                [Email|_] ->
                     % Ambiguous - multiple matching accounts
-                    {error, duplicate}
+                    {error, {multiple_email, Email}}
             end;
         Ps when is_list(Ps) ->
             update_identity(Auth, Ps, Context)

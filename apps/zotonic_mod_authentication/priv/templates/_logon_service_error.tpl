@@ -26,11 +26,7 @@
                 <input type="hidden" name="auth" value="{{ q.auth|escape }}">
                 <input type="hidden" name="url" value="{{ q.url|escape }}">
                 <button class="btn btn-primary" type="submit">{_ I want to create a new account _}</button>
-                {% if q.url %}
-                    <a class="btn btn-default" href="/">{_ Cancel _}</a>
-                {% else %}
-                    <a class="btn btn-default" href="#" data-onclick-topic="model/window/post/close">{_ Close window _}</a>
-                {% endif %}
+                <a class="btn btn-default" href="/" data-onclick-topic="model/window/post/close" data-url="/">{_ Cancel _}</a>
             </form>
         </div>
     {% elseif qerror == "need_passcode" or qerror == "passcode" %}
@@ -68,11 +64,7 @@
                 {% endblock %}
 
                 <button class="btn btn-primary" type="submit">{_ Continue _}</button>
-                {% if q.url %}
-                    <a class="btn btn-default" href="/">{_ Cancel _}</a>
-                {% else %}
-                    <a class="btn btn-default" href="#" data-onclick-topic="model/window/post/close">{_ Close window _}</a>
-                {% endif %}
+                <a class="btn btn-default" href="/" data-onclick-topic="model/window/post/close" data-url="/">{_ Cancel _}</a>
             </form>
         </div>
     {% else %}
@@ -90,26 +82,39 @@
             <div class="container">
                 <h1>{_ Already connected _}</h1>
 
-                <p class="alert alert-warning">{_ Somebody else is already connected with this account on _} {{ service|escape|default:_"the service" }}</p>
+                <p class="alert alert-warning">{% trans "Somebody else is already connected with this account on {service}." service=service|escape|default:_"the service" %}</p>
             </div>
         {% elseif qerror == "duplicate_email" %}
             <div class="container">
                 <h1>{_ Duplicate email _}</h1>
 
-                <p class="alert alert-warning">{_ Somebody with your email address already has an account on _} {{ m.site.title }}</p>
+                <p class="alert alert-warning">{% trans "There is already an account with your email address on {site}." site=m.site.title %}</p>
+                <p>
+                    {% trans "You can connect the account on {site} with your account on {service} if both accounts have a verified email address but this is not the case. Check both sites and then try again."
+                                site=m.site.title
+                                service=service|escape|default:_"the service"
+                    %}
+                </p>
+            </div>
+        {% elseif qerror == "multiple_email" %}
+            <div class="container">
+                <h1>{_ Multiple accounts _}</h1>
+
+                <p class="alert alert-warning">{% trans "There is more than one account with your email address on {site}." site=m.site.title %}</p>
+                <p>{% trans "We cannot connect you to the right account. Contact support of {site} to help you merge the accounts and then try again." site=m.site.title %}</p>
             </div>
         {% else %}
             <div class="container">
                 <h1>{_ Sorry _}</h1>
 
-                <p class="alert alert-danger">{_ There was a problem authenticating with _} {{ service|escape|default:_"the service" }}</p>
+                <p class="alert alert-danger">{% trans "There was a problem authenticating with {service}." service=service|escape|default:_"the service" %}</p>
 
                 <p>{_ Please try again later. _}</p>
             </div>
         {% endif %}
 
         <p style="text-align: center">
-            <a class="btn btn-primary" href="#" data-onclick-topic="model/window/post/close">{_ Close window _}</a>
+            <a class="btn btn-default" href="/" data-onclick-topic="model/window/post/close" data-url="/">{_ Cancel _}</a>
         </p>
     {% endif %}
 

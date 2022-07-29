@@ -208,9 +208,15 @@ user_data({ok, Auth}, InitialQArgs, SId, Context) ->
                 url => url(<<"p">>, InitialQArgs)
             }};
         {error, duplicate} ->
+            ?LOG_INFO(#{
+                text => <<"User with external identity already exists">>,
+                in => zotonic_mod_oauth2,
+                result => error,
+                reason => duplicate
+            }),
             {error, duplicate};
         {error, {duplicate_email, Email}} ->
-            ?LOG_NOTICE(#{
+            ?LOG_INFO(#{
                 text => <<"User with email already exists">>,
                 in => zotonic_mod_oauth2,
                 email => Email,
@@ -218,6 +224,15 @@ user_data({ok, Auth}, InitialQArgs, SId, Context) ->
                 reason => duplicate_email
             }),
             {error, duplicate_email};
+        {error, {multiple_email, Email}} ->
+            ?LOG_INFO(#{
+                text => <<"Multiple users with email already exists">>,
+                in => zotonic_mod_oauth2,
+                email => Email,
+                result => error,
+                reason => multiple_email
+            }),
+            {error, multiple_email};
         {error, Reason} ->
             ?LOG_WARNING(#{
                 text => <<"Error return for user">>,
