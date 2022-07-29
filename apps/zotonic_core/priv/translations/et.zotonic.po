@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-07-28 18:14\n"
+"PO-Revision-Date: 2022-07-29 10:11\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -210,7 +210,7 @@ msgstr "Kas olete kindel, et soovite taastada kõik ACL-reeglid nende praegu ava
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:100
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:117./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:30./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:72./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:117./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:29./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:67./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:117./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
@@ -3015,7 +3015,7 @@ msgid "Set username / password"
 msgstr "Sisesta kasutajanimi / parool"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:81./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:103
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:108
 msgid "Sorry"
 msgstr "Vabandust"
 
@@ -3807,7 +3807,7 @@ msgstr "Kaheastmelise autentimise konfiguratsiooni kuvamiseks või muutmiseks pe
 msgid "Access denied"
 msgstr "Ligipääs keelatud"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
 msgid "Already connected"
 msgstr "Juba ühendatud"
 
@@ -3848,7 +3848,7 @@ msgstr "Muuda parool ja Logi sisse"
 msgid "Change your password"
 msgstr "Muutke oma parool"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:86
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:78
 msgid "Change your permissions"
 msgstr "Muutke oma õigusi"
 
@@ -3868,10 +3868,6 @@ msgstr "Uue parooli sisestamiseks klõpsake alloleval lingil. Kui klõpsamine ei
 msgid "Close this window and log on if you are already a user of {site}."
 msgstr "Sulgege see aken ja logige sisse, kui olete juba {site}kasutaja."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:32./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:74./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:112
-msgid "Close window"
-msgstr "Sulge aken"
-
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:72./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
 #: apps/zotonic_mod_wires/src/actions/action_wires_confirm.erl:36
@@ -3882,7 +3878,7 @@ msgstr "Kinnita"
 msgid "Confirmation failure"
 msgstr "Kinnitus ebaõnnstus"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:70
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:69./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:71./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:73
 msgid "Continue"
 msgstr "Jätka"
@@ -3891,7 +3887,7 @@ msgstr "Jätka"
 msgid "Current password"
 msgstr "Praegune salasõna"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:97
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:89
 msgid "Duplicate email"
 msgstr "E-posti koopia"
 
@@ -4024,6 +4020,10 @@ msgstr "Logige sisse"
 msgid "Minimum characters:"
 msgstr "Minimaalsed tähemärgid:"
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:101
+msgid "Multiple accounts"
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:191
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:89
 msgid "Next"
@@ -4040,7 +4040,7 @@ msgstr "Geen toegang"
 msgid "One moment please"
 msgstr "Üks hetk palun"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:142./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:59
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:142./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:55
 msgid "Passcode"
 msgstr "Pääsukood"
 
@@ -4056,7 +4056,7 @@ msgstr "Sisestage kaheastmeline autentimise pääsukood."
 msgid "Please try again in"
 msgstr "Proovige uuesti sisse"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:107
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:112
 msgid "Please try again later."
 msgstr "Palun proovi hiljem uuesti."
 
@@ -4107,13 +4107,9 @@ msgstr "Logi välja"
 msgid "Simply try again:"
 msgstr "Lihtsalt proovige uuesti:"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93
-msgid "Somebody else is already connected with this account on"
-msgstr "Keegi teine on juba selle kontoga seotud"
-
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:99
-msgid "Somebody with your email address already has an account on"
-msgstr "Kellelgi, kellel on teie e-posti aadress, on konto juba sisse lülitatud"
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:85
+msgid "Somebody else is already connected with this account on {service}."
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tpl:3
 msgid "Something went wrong, please try again later."
@@ -4159,9 +4155,17 @@ msgstr "Need kaks parooli peavad olema samad. Sisesta uuesti."
 msgid "The two-factor authentication passcode did not match. Please try again."
 msgstr "Kahefaktoriline autentimise pääsukood ei sobinud. Palun proovi uuesti."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:105
-msgid "There was a problem authenticating with"
-msgstr "Kasutaja autentimisel tekkis probleem"
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
+msgid "There is already an account with your email address on {site}."
+msgstr ""
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:103
+msgid "There is more than one account with your email address on {site}."
+msgstr ""
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:110
+msgid "There was a problem authenticating with {service}."
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:19
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:25
@@ -4177,7 +4181,7 @@ msgstr "Selle lehe vaatamiseks peavad teil olema muud juurdepääsuõigused."
 msgid "Too many retries."
 msgstr "Liiga palju kordusi."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:63
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:59
 msgid "Two-factor passcode"
 msgstr "Kahefaktoriline pääsukood"
 
@@ -4188,6 +4192,10 @@ msgstr "Kasutage mõnda tähestikulist tähemärki või numbrit, et seda oleks r
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:97
 msgid "Verify your account"
 msgstr "Kinnita oma kasutaja"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:104
+msgid "We cannot connect you to the right account. Contact support of {site} to help you merge the accounts and then try again."
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:113
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
@@ -4201,7 +4209,7 @@ msgstr "Saatsime e-kirja koos lingiga, kuhu saate oma parooli lähtestada"
 msgid "You are about to create a new account."
 msgstr "Olete loomas uut kontot."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:38
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:34
 msgid "You are about to log on."
 msgstr "Oled sisse logimas."
 
@@ -4213,6 +4221,10 @@ msgstr "Olete nüüd sisse logitud."
 msgid "You are signed in"
 msgstr "Olete sisse logitud"
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93
+msgid "You can connect the account on {site} with your account on {service} if both accounts have a verified email address but this is not the case. Check both sites and then try again."
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:3
 msgid "You can find the code in your authentication App."
 msgstr "Koodi leiate oma autentimisrakendusest."
@@ -4221,7 +4233,7 @@ msgstr "Koodi leiate oma autentimisrakendusest."
 msgid "You can log in using the following external service"
 msgstr "Võite sisse logida järgmise välise teenuse abil"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:75
 msgid "You have to share your email address to be able to log in."
 msgstr "Sisselogimiseks peate jagama oma e-posti aadressi."
 
@@ -4301,7 +4313,7 @@ msgstr "või"
 msgid "or you can enter the password that you have for"
 msgstr "või võite sisestada parooli, mille jaoks teil on olemas"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:105
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:85./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:95./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:110
 msgid "the service"
 msgstr "teenust"
 
@@ -7138,11 +7150,7 @@ msgstr "Olete sidunud oma <strong>Microsofti</strong> kontot."
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
 msgstr "Siluge MQTT-d, avaldage ja tellige toimingud Zotonicu konsoolis"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:58
-msgid "(“Authorization Code” grant flow)"
-msgstr "(\"Autoriseerimiskoodi\" andmise voog)"
-
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:81./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:82
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:91./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:92
 msgid "Access Token URL"
 msgstr "Juurdepääsu märgi URL -ile"
 
@@ -7158,13 +7166,13 @@ msgstr "Lisas"
 msgid "Allow Access"
 msgstr "Luba juurdepääs"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:61
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:69
 msgid "Allow import of content from the remote website"
 msgstr "Sisu importimine kaugveebisaidilt"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:58
-msgid "Allow users on the remote website to authenticate here"
-msgstr "Lubage kaugveebisaidi kasutajatel siin autentida"
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:64
+msgid "Allow users on the remote website to authenticate here (using “{code}”)"
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:16
 msgid "Allow users registered on the remote website to authenticate on this website."
@@ -7202,15 +7210,11 @@ msgstr "Küsige selle veebisaidi kasutajatelt nende mandaate oma veebisaidi või
 msgid "Authenticating..."
 msgstr "Autentimine ..."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:47
-msgid "Authorization Code (default)"
-msgstr "Autoriseerimiskood (vaikimisi)"
-
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:11
 msgid "Authorize"
 msgstr "Volita"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:73./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:74
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:83./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:84
 msgid "Authorize URL"
 msgstr "URL -i volitamine"
 
@@ -7218,17 +7222,13 @@ msgstr "URL -i volitamine"
 msgid "Authorize access to your account"
 msgstr "Luba juurdepääs oma kontole"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:65
-msgid "Automatically extend tokens obtained using “Client Credentials” before they expire"
-msgstr "Pikendage \"Client Credentials\" abil saadud žetoone enne nende aegumist automaatselt"
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:73
+msgid "Automatically extend tokens obtained using “{client}” before they expire"
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:7
 msgid "Be careful, this access token gives full access to your account."
 msgstr "Olge ettevaatlik, see juurdepääsumärk annab täieliku juurdepääsu teie kontole."
-
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:50
-msgid "Client Credentials"
-msgstr "Kliendi mandaadid"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
 msgid "Connect with"
@@ -7346,7 +7346,7 @@ msgstr "Andke ümbersuunamise URL -id, mis kehtivad OAuth2 volitust teostava vee
 msgid "Here is the new access token."
 msgstr "Siin on uus juurdepääsuluba."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:69
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:79
 msgid "If the remote website is a Zotonic website then you can leave the two URLs below empty."
 msgstr "Kui kaugveebisait on Zotonicu veebisait, võite jätta kaks alltoodud URL -i tühjaks."
 
@@ -7358,9 +7358,9 @@ msgstr "Kui teil on juba žetoon, asendatakse see uuega."
 msgid "Import content from the remote website to this website."
 msgstr "Sisu importimine kaugveebisaidilt sellele veebisaidile."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:75
-msgid "Leave empty for grant flow “Client Credentials.”"
-msgstr "Jätke toetusvoo „Kliendi volikirjad” jaoks tühjaks."
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:85
+msgid "Leave empty if you use “{client}.”"
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
@@ -7431,9 +7431,9 @@ msgstr "Edu"
 msgid "The token will be registered with your account and only you (or routines acting on your behalf) will be able to use it."
 msgstr "Token registreeritakse teie kontol ja ainult teie (või teie nimel tegutsevad rutiinid) saate seda kasutada."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:54
-msgid "The “Authorization Code” flow redirects the user to the remote website to obtain an access token. “Client Credentials” allows an admin user to directly fetch a token from the remote website."
-msgstr "Voog „Autoriseerimiskood” suunab kasutaja juurdepääsuluba hankimiseks kaugveebisaidile. „Kliendi mandaadid” võimaldavad administraatori kasutajal otse kaugveebisaidilt märgi tuua."
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:55
+msgid "The “{code}” method redirects the user to the remote website to obtain an access token. “{client}” allows an admin user to directly fetch a token from the remote website."
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:9
 msgid "These applications are used by 3rd parties to:"
@@ -7456,8 +7456,8 @@ msgid "To use one of these applications, the App ID and secret must be registere
 msgstr "Nende rakenduste kasutamiseks tuleb rakenduse ID ja saladus registreerida kolmanda osapoole juures."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:44
-msgid "Token grant flow"
-msgstr "Märgitoetuse voog"
+msgid "Token grant method"
+msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
@@ -7498,6 +7498,11 @@ msgstr "Sa oled võimeline:"
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:15
 msgid "You will not be able to see this token again, so copy it and save it in a secure place."
 msgstr "Te ei näe seda märki uuesti, nii et kopeerige see ja salvestage see turvalisse kohta."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:47
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
+msgid "default"
+msgstr "vaikimisi"
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "API Key can be found on"
@@ -7718,10 +7723,6 @@ msgstr "Iga-aastane"
 #: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
 msgid "You are not allowed to do this"
 msgstr "Teil pole lubatud seda teha"
-
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
-msgid "default"
-msgstr "vaikimisi"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:13
 msgid "not in sitemap"
