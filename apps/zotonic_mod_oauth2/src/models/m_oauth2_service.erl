@@ -243,6 +243,8 @@ user_data({ok, Auth}, InitialQArgs, SId, Context) ->
             }),
             {error, auth_user_error}
     end;
+user_data({error, unexpected_user}, _InitialQArgs, _SId, _Context) ->
+    {error, unexpected_user};
 user_data(_UserError, _InitialQArgs, _SId, _Context) ->
     {error, service_user_data}.
 

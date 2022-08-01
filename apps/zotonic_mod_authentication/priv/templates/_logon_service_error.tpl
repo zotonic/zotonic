@@ -103,6 +103,16 @@
                 <p class="alert alert-warning">{% trans "There is more than one account with your email address on {site}." site=m.site.title %}</p>
                 <p>{% trans "We cannot connect you to the right account. Contact support of {site} to help you merge the accounts and then try again." site=m.site.title %}</p>
             </div>
+        {% elseif qerror == "unexpected_user" %}
+            <div class="container">
+                <h1>{_ Expected another account _}</h1>
+
+                <p class="alert alert-warning">
+                    {% trans "You used another account on {service} than was expected."
+                             service=service|escape|default:_"the service"
+                    %}
+                </p>
+            </div>
         {% else %}
             <div class="container">
                 <h1>{_ Sorry _}</h1>
