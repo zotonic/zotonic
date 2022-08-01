@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-07-29 11:56\n"
+"PO-Revision-Date: 2022-08-01 10:59\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -210,7 +210,7 @@ msgstr "Kas olete kindel, et soovite taastada kõik ACL-reeglid nende praegu ava
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:100
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:117./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:29./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:67./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:117./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:117./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:29./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:67./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:127./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
@@ -3015,7 +3015,7 @@ msgid "Set username / password"
 msgstr "Sisesta kasutajanimi / parool"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:108
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:118
 msgid "Sorry"
 msgstr "Vabandust"
 
@@ -3934,6 +3934,10 @@ msgstr "Parooli lähtestamise juhiste saamiseks sisestage oma e-posti aadress."
 msgid "Error"
 msgstr "Viga"
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:108
+msgid "Expected another account"
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:232
 msgid "External Services"
 msgstr "Välisteenused"
@@ -4056,7 +4060,7 @@ msgstr "Sisestage kaheastmeline autentimise pääsukood."
 msgid "Please try again in"
 msgstr "Proovige uuesti sisse"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:112
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:122
 msgid "Please try again later."
 msgstr "Palun proovi hiljem uuesti."
 
@@ -4163,7 +4167,7 @@ msgstr "Teie e-posti aadressiga konto on juba olemas {site}."
 msgid "There is more than one account with your email address on {site}."
 msgstr "Teie e-posti aadressiga {site}on rohkem kui üks konto."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:110
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:120
 msgid "There was a problem authenticating with {service}."
 msgstr "{service}-ga autentimisel ilmnes probleem."
 
@@ -4250,6 +4254,10 @@ msgstr "Konfigureeritud rakendusklahvide kuvamiseks või muutmiseks peate lubama
 msgid "You received this email because you requested a password reset for your account by entering your username or email address. You will not receive any additional emails because of this request."
 msgstr "Saite selle meili, kuna taotlesite oma konto parooli lähtestamist, sisestades oma kasutajanime või e-posti aadressi. Selle taotluse tõttu ei saa te täiendavaid e-kirju."
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:111
+msgid "You used another account on {service} than was expected."
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:5
 msgid "You'll need to create a new one."
 msgstr "Peate looma uue."
@@ -4313,7 +4321,7 @@ msgstr "või"
 msgid "or you can enter the password that you have for"
 msgstr "või võite sisestada parooli, mille jaoks teil on olemas"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:85./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:95./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:110
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:85./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:95./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:112./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:120
 msgid "the service"
 msgstr "teenust"
 
