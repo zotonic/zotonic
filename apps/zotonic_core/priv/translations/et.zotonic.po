@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-08-01 10:59\n"
+"PO-Revision-Date: 2022-08-01 15:18\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -3936,7 +3936,7 @@ msgstr "Viga"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:108
 msgid "Expected another account"
-msgstr ""
+msgstr "Oodati teist kontot"
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:232
 msgid "External Services"
@@ -4256,7 +4256,7 @@ msgstr "Saite selle meili, kuna taotlesite oma konto parooli lähtestamist, sise
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:111
 msgid "You used another account on {service} than was expected."
-msgstr ""
+msgstr "Kasutasite oodatust teist kontot {service}."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:5
 msgid "You'll need to create a new one."
