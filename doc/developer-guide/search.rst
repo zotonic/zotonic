@@ -40,9 +40,19 @@ http://zotonic.com/feed/search?cat=documentation&text=filter
    ``mod_atom_feed`` automatically sorts on last-modified date,
    ``api/search`` doesn't.
 
-
 Query arguments
 ---------------
+
+.. note::
+
+    All the examples are for *templates*. If you use the queries in a
+    saved query, by editing the text field in the admin, then you have
+    to exclude the quotes. Also exclude the quotes if you use the query
+    terms as an argument for an URL (like with the search example above).
+
+    For example, the term ``sort='-rsc.modified'`` will become ``sort=-rsc.modified``.
+    (note that the quotes are removed).
+
 
 authoritative
 ^^^^^^^^^^^^^
