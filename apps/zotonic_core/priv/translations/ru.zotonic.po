@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-08-06 19:37\n"
+"PO-Revision-Date: 2022-08-06 22:24\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3464,7 +3464,7 @@ msgstr "Удалить все соединения"
 
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:79
 msgid "Delete is canceled, there are connections with this predicate."
-msgstr "Удаление отменяется, есть связи с этим предикатом."
+msgstr "Удаление прервано, есть связи с этим предикатом."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
 msgid "Do not find subjects using this predicate’s object titles."
@@ -3472,7 +3472,7 @@ msgstr "Не используйте названия объектов этого
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:1
 msgid "Enter the title of the new predicate:"
-msgstr "Пожалуйста, укажите название нового предиката."
+msgstr "Введите название нового предиката."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:26
 msgid "Filter on predicate"
