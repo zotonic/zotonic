@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-08-01 15:17\n"
+"PO-Revision-Date: 2022-08-06 19:37\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3335,7 +3335,7 @@ msgstr "Вы не имеете права редактировать побед�
 
 #: apps/zotonic_mod_admin_merge/src/mod_admin_merge.erl:93
 msgid "not implemented yet"
-msgstr "ещё не реализованный"
+msgstr "пока не реализовано"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:80
 msgid "Activate"
@@ -3343,7 +3343,7 @@ msgstr "Включить"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:71
 msgid "Configure"
-msgstr "Настройка"
+msgstr "Настроить"
 
 #: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:114
 msgid "Could not find the module."
@@ -3427,7 +3427,7 @@ msgstr "Zotonic - это модульный фреймворк для веб-р�
 msgid "A predicate denotes traits or aspects of a page and expresses a relationship between two pages.\n"
 "    The relation is always directed, from the subject to the object.<br/>Predicates are defined in ontologies like <a href=\"http://sioc-project.org/\">SIOC</a>.  On this page you can define the predicates known to Zotonic."
 msgstr "Предикат обозначает черты или аспекты страницы и выражает связь между двумя страницами.\n"
-"    Отношение всегда направлено, от субъекта к объекту.<br/>Предикаты определяются в таких онтологиях, как <a href=\"http://sioc-project.org/\">SIOC</a>.  На этой странице вы можете определить предикаты, известные Zotonic."
+"    Это отношение всегда направлено, от субъекта к объекту.<br/>Предикаты определяются в таких онтологиях, как <a href=\"http://sioc-project.org/\">SIOC</a>.  На этой странице вы можете определить предикаты, известные Zotonic."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:23
 msgid "All Predicates"
