@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-08-06 22:24\n"
+"PO-Revision-Date: 2022-08-17 15:58\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3572,7 +3572,7 @@ msgstr "Вы не имеете права создавать этот преди
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:6
 msgid "You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to. When you don't check anything then all categories are valid."
-msgstr "Вы можете определить, предикат для каких категорий отображается на странице редактирования.  Вы также можете определить, какие категории объектов будут найдены при поиске страницы для связывания. Если вы ничего не проверяете, то все категории являются действительными."
+msgstr "Вы можете определить, предикат для каких категорий отображается на странице редактирования.  Вы также можете определить, какие категории объектов будут найдены при поиске страницы для связывания. Если вы ничего не отметите, то все категории являются действительными."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 msgid "object"
@@ -3580,7 +3580,7 @@ msgstr "объект"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
 msgid "subject"
-msgstr "Субъект"
+msgstr "субъект"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/database.tpl:3
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:120
@@ -3663,7 +3663,7 @@ msgstr "Настройка 2FA изменена."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:62
 msgid "Check the user groups for which two-factor authentication should be forced."
-msgstr "Проверьте группы пользователей, для которых должна быть принудительная двухфакторная аутентификация."
+msgstr "Отметьте группы пользователей, для которых должна быть включена принудительная двухфакторная аутентификация."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:21
 msgid "Copied to clipboard"
