@@ -34,9 +34,9 @@
 embed_images(Parts, Context) ->
     case z_convert:to_bool(m_config:get_value(site, email_images_noembed, Context)) of
         true ->
-            [ embed_images_part(P, Context) || P <- Parts ];
+            Parts;
         false ->
-            Parts
+            [ embed_images_part(P, Context) || P <- Parts ]
     end.
 
 embed_images_part({<<"text">>, <<"html">>, Hs, Ps, Html} = HtmlPart, Context) ->
