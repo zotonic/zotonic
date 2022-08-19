@@ -1,8 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010-2014 Arjan Scherpenisse
+%% @copyright 2010-2022 Arjan Scherpenisse
 %% @doc Email image embedding
 
-%% Copyright 2010-2014 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% Copyright 2010-2022 Arjan Scherpenisse <arjan@scherpenisse.net>
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,10 +27,17 @@
 -include_lib("zotonic.hrl").
 -include_lib("zotonic_file.hrl").
 
+% Do not embed images > 1MB
+-define(MAX_EMBED_SIZE, 1024*1024).
+
 %% @doc Embed images mentioned in the HTML parts.
 embed_images(Parts, Context) ->
-    [ embed_images_part(P, Context) || P <- Parts ].
-
+    case z_convert:to_bool(m_config:get_value(site, email_images_noembed, Context)) of
+        true ->
+            [ embed_images_part(P, Context) || P <- Parts ];
+        false ->
+            Parts
+    end.
 
 embed_images_part({<<"text">>, <<"html">>, Hs, Ps, Html} = HtmlPart, Context) ->
     case embed_images_html(Html, Context) of
@@ -68,7 +75,7 @@ find_images(Html) ->
 
 embed_image([Path, LibImg, SubPath], {Parts, Html, Context} = Acc) ->
     case lookup(LibImg, SubPath, Context) of
-        {ok, #z_file_info{mime=Mime} = Info} ->
+        {ok, #z_file_info{ mime=Mime, size=Size } = Info} when is_integer(Size), Size < ?MAX_EMBED_SIZE ->
             try
                 Data = z_file_request:content_data(Info, identity),
                 {Part, Cid} = create_attachment(Data, Mime, filename:basename(SubPath)),
@@ -81,6 +88,8 @@ embed_image([Path, LibImg, SubPath], {Parts, Html, Context} = Acc) ->
                     lager:error("email embed_image error ~p on embedding ~p~n~p", [Error, Info, Stacktrace]),
                     Acc
             end;
+        {ok, _} ->
+            Acc;
         {error, _} ->
             Acc
     end.
