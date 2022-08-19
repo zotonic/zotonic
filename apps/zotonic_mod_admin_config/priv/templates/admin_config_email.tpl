@@ -126,6 +126,15 @@
                             </p>
                         </div>
 
+                        <div class="form-group">
+                            <label class="control-label">
+                                <input type="checkbox" name="site.email_images_noembed" value="1" {% if m.config.site.email_images_noembed.value %}checked{% endif %}> {_ Download images in emails after opening the message _}
+                            </label>
+                            <p class="help-block">
+                                {_ Per default images smaller than 1MB are embedded in email messages. Using a separate download for images results in a smaller message size but non-public images will not be visible. Leave this disabled if you are sending non-public images. _}
+                            </p>
+                        </div>
+
                         <div class="form-actions">
                             <button type="submit" class="btn btn-primary">{_ Save _}</button>
                         </div>
@@ -172,12 +181,6 @@
 
         {% all include "_admin_config_email_panel.tpl" %}
 
-        {#
-            TODO:
-
-            * send test email to email address
-            * find email in email_status
-        #}
     </div>
 </div>
 
