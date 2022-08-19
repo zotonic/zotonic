@@ -1,8 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010-2014 Arjan Scherpenisse
+%% @copyright 2010-2022 Arjan Scherpenisse
 %% @doc Email image embedding
 
-%% Copyright 2010-2014 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% Copyright 2010-2022 Arjan Scherpenisse <arjan@scherpenisse.net>
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,9 +27,17 @@
 -include_lib("zotonic.hrl").
 -include_lib("zotonic_file.hrl").
 
+% Do not embed images > 1MB
+-define(MAX_EMBED_SIZE, 1024*1024).
+
 %% @doc Embed images mentioned in the HTML parts.
 embed_images(Parts, Context) ->
-    [ embed_images_part(P, Context) || P <- Parts ].
+    case m_config:get_boolean(site, email_images_noembed, Context) of
+        true ->
+            Parts;
+        false ->
+            [ embed_images_part(P, Context) || P <- Parts ]
+    end.
 
 
 embed_images_part({<<"text">>, <<"html">>, Hs, Params, Html} = HtmlPart, Context) when is_map(Params) ->
@@ -69,11 +77,13 @@ find_images(Html) ->
 % [<<"'/lib/foo/bar.png'">>,<<"/lib/foo/bar.png">>,<<"lib">>, <<"png">>]
 embed_image([QuotedPath, Path, _LibImg, _Ext], {Parts, Html, Context}) ->
     case z_media_data:file_data(Path, Context) of
-        {ok, {Mime, Data}} ->
+        {ok, {Mime, Data}} when is_binary(Data), size(Data) < ?MAX_EMBED_SIZE ->
             {Part, Cid} = create_attachment(Data, Mime, filename:basename(Path)),
             NewPath = iolist_to_binary([$", "cid:", Cid, $"]),
             Html1 = re:replace(Html, QuotedPath, NewPath, [global, {return, binary}]),
             {[Part|Parts], Html1, Context};
+        {ok, _} ->
+            {Parts, Html, Context};
         {error, _} ->
             {Parts, Html, Context}
     end.
