@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-08-19 18:06\n"
+"PO-Revision-Date: 2022-08-19 19:07\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3801,7 +3801,7 @@ msgstr "Вы можете использовать приложения для �
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:11
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
-msgstr "Для просмотра или изменения конфигурации двухфакторной аутентификации необходимо иметь возможность редактировать конфигурацию системы."
+msgstr "Для просмотра или изменения конфигурации двухфакторной аутентификации необходимо иметь право редактировать конфигурацию системы."
 
 #: apps/zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:51./apps/zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:59
 msgid "Access denied"
@@ -3818,7 +3818,7 @@ msgstr "Аутентифицированный"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:9
 msgid "Authentication has been done with"
-msgstr "Аутентификация была проведена с"
+msgstr "Аутентификация была выполнена через"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:5
 msgid "Authorizing..."
@@ -3834,7 +3834,7 @@ msgstr "Ниже указаны реквизиты учетной записи �
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
 msgid "Change"
-msgstr "Изменять"
+msgstr "Изменить"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:41
 msgid "Change password"
