@@ -494,8 +494,7 @@ publish_check(Alias, #search_sql{extra=Extra}) ->
             [];
         false ->
             [
-                " and "
-                , Alias, ".is_published = true and "
+                  Alias, ".is_published = true and "
                 , Alias, ".publication_start <= now() and "
                 , Alias, ".publication_end >= now()"
             ]
