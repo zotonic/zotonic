@@ -182,7 +182,7 @@ search(Search, {Offset, Limit} = OffsetLimit, Context) ->
     case (Offset - 1) rem Limit of
         0 ->
             % On a page boundary, we can calculate the page number.
-            PageNr = (Offset - 1) div Limit,
+            PageNr = (Offset - 1) div Limit + 1,
             search_1(Search, PageNr, Limit, OffsetLimit, Context);
         _ ->
             % Not on a page boundary, give up on calculating the page number.
