@@ -14,7 +14,7 @@
     {% with m.seo.keywords as keywords %}
     {% with m.seo.description.value as description %}
         {% if id %}
-            {% if m.rsc[id].seo_noindex %}
+            {% if m.rsc[id].seo_noindex or m.rsc[id].category_id.is_seo_noindex_cat %}
                 <meta name="robots" content="noindex">
             {% else %}
                 {% with m.rsc[id].seo_keywords as seo_keywords %}
