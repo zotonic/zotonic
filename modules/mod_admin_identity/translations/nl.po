@@ -523,7 +523,7 @@ msgid "d M Y, H:i"
 msgstr "d M Y, H:i"
 
 #: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:20
-msgid "delete username"
+msgid 
 msgstr "Verwijder gebruikersnaam"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:74

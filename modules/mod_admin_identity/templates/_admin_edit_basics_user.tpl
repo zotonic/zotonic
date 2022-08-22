@@ -17,12 +17,12 @@
 
                 {% if id /= 1 %}
                     <div>
-                        {% button class="btn btn-default" text=_"delete username" action={dialog_delete_username id=id on_success={slide_fade_out target=#tr.id}} %}
-                </div>
-            {% endif %}
-        </div>
-	</div>
-{% endif %}
+                        {% button class="btn btn-default" text=_"Delete Username" action={dialog_delete_username id=id on_success={slide_fade_out target=#tr.id}} %}
+                    </div>
+                {% endif %}
+            </div>
+    	</div>
+    {% endif %}
 
     {% all include "_admin_edit_basics_user_extra.tpl" %}
 

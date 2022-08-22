@@ -487,7 +487,7 @@ msgid "d M, H:i"
 msgstr "M d, H:i"
 
 #: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:20
-msgid "delete username"
+msgid 
 msgstr "删除用户名"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:73
