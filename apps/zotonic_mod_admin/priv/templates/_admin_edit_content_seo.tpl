@@ -94,7 +94,9 @@
 
             {% if is_seo_noindex_cat %}
                 <p class="help-block">
-                    {_ SEO indexing of this page is disabled because it has category: _} {{ id.category_id.title }}
+                    {% trans "SEO indexing of this page is disabled because it is in the “{cat}” category."
+                            cat=id.category_id.title
+                    %}
                     &nbsp; <a href="{% url admin_edit_rsc id=id.category_id %}">{_ Edit _}</a>
                 </p>
             {% endif %}
@@ -105,19 +107,20 @@
     {% if id.is_a.category %}
         <fieldset>
             <legend>{_ All pages of this category _}</legend>
-            <div class="form-group row">
-                <div class="checkbox col-md-12">
-                    <label class="checkbox">
-                        <input id="is_seo_noindex_cat"
-                            type="checkbox"
-                            name="is_seo_noindex_cat"
-                            value="1"
-                            {% if not is_editable %}disabled{% endif %}
-                            {% if id.is_seo_noindex_cat %}checked="checked"{% endif %}
-                        >
-                        {% trans "Ask Google to not index any page of the category {cat}." cat=id.title %}
-                    </label>
-                </div>
+            <p class="help-block">
+                {_ Pages of this category can be excluded from search engines. This is useful if some categories should not be found on Google (et al). Common examples are categories and predicates. _}
+            </p>
+            <div class="form-group">
+                <label class="checkbox">
+                    <input id="is_seo_noindex_cat"
+                        type="checkbox"
+                        name="is_seo_noindex_cat"
+                        value="1"
+                        {% if not id.is_editable %}disabled{% endif %}
+                        {% if id.is_seo_noindex_cat %}checked="checked"{% endif %}
+                    >
+                    {% trans "Ask Google to exclude all “{cat}” pages." cat=id.title %}
+                </label>
             </div>
         </fieldset>
     {% endif %}
