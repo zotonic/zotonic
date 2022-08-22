@@ -8,77 +8,164 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2012-12-04 20:22+0100\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2022-08-22 17:56+0200\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
+"Language-Team: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.1.1\n"
 
-#: ./modules/mod_seo/templates/admin_seo.tpl:43 
-msgid ""
-"Add a noindex, nofollow element to all pages."
+#: modules/mod_seo/templates/admin_seo.tpl:52
+msgid "Add a noindex, nofollow element to all pages."
 msgstr "Voeg een noindex, nofollow element aan alle pagina's toe."
 
-#: ./modules/mod_seo/templates/admin_seo.tpl:35 
+#: modules/mod_seo/templates/admin_seo.tpl:107
+msgid "Bing Webmaster"
+msgstr "Bing Webmster"
+
+#: modules/mod_seo/templates/admin_seo.tpl:103
+msgid "Bing Webmaster validation id"
+msgstr "Bing Webmaster validatie-id"
+
+#: modules/mod_seo/templates/admin_seo.tpl:92
 msgid ""
-"Description to include on every page"
+"Copy the value of the content attribute in the meta tag provided by Google."
+msgstr ""
+"Kopieer de waarde van het content-attribuut in de meta tag verschaft door "
+"Google."
+
+#: modules/mod_seo/templates/admin_seo.tpl:32
+msgid "Description"
+msgstr "Omschrijving"
+
+#: modules/mod_seo/templates/admin_seo.tpl:36
+msgid "Description to include on every page"
 msgstr "Beschrijving op iedere pagina"
 
-#: ./modules/mod_seo/templates/admin_seo.tpl:45 
-msgid ""
-"Exclude this site from search engines"
+#: modules/mod_seo/templates/admin_seo.tpl:92
+#: modules/mod_seo/templates/admin_seo.tpl:107
+#: modules/mod_seo/templates/admin_seo.tpl:123
+msgid "Enter here the verification code for"
+msgstr "Voer hier de verificatiecode in voor"
+
+#: modules/mod_seo/templates/admin_seo.tpl:54
+msgid "Exclude this site from search engines"
 msgstr "Sluit deze site uit voor zoekmachines"
 
-#: ./modules/mod_seo/templates/admin_seo.tpl:24 
-msgid ""
-"General SEO Optimization"
+#: modules/mod_seo/templates/admin_seo.tpl:80
+msgid "GTM-......"
+msgstr "GTM-......"
+
+#: modules/mod_seo/templates/admin_seo.tpl:19
+msgid "General SEO Optimization"
 msgstr "Algemene SEO optimalizatie"
 
-#: ./modules/mod_seo/templates/admin_seo.tpl:14 
+#: modules/mod_seo/templates/admin_seo.tpl:67
+msgid "Google Analytics tracking id"
+msgstr "Google Analytics tracking code"
+
+#: modules/mod_seo/templates/admin_seo.tpl:88
+#: modules/mod_seo/templates/admin_seo.tpl:92
+msgid "Google Search Console"
+msgstr "Google Search Console"
+
+#: modules/mod_seo/templates/admin_seo.tpl:82
+msgid "Google Tag Manager account page"
+msgstr "Google Tag Manager-accountpagina"
+
+#: modules/mod_seo/templates/admin_seo.tpl:78
+#, fuzzy
+#| msgid "Google Analytics tracking id"
+msgid "Google Tag Manager id"
+msgstr "Google Analytics tracking code"
+
+#: modules/mod_seo/templates/admin_seo.tpl:9
 msgid ""
 "Here you find settings to optimize the indexing of your site by search "
 "engines."
-msgstr "Hier vind je instellingen om het indexeren van de site door zoekmachines te optimaliseren."
+msgstr ""
+"Hier vind je instellingen om het indexeren van de site door zoekmachines te "
+"optimaliseren."
 
-#: ./modules/mod_seo/templates/admin_seo.tpl:28 
-msgid ""
-"Keywords to include on every page. Separate keywords with a \",\""
+#: modules/mod_seo/templates/admin_seo.tpl:22
+#, fuzzy
+msgid "Keywords"
+msgstr "Trefwoorden"
+
+#: modules/mod_seo/templates/admin_seo.tpl:26
+msgid "Keywords to include on every page. Separate keywords with a \",\""
 msgstr "Trefwoorden voor op elke pagina. Scheid deze door een komma."
 
-#: ./modules/mod_seo/mod_seo.erl:42 
-msgid ""
-"SEO"
+#: modules/mod_seo/mod_seo.erl:42
+msgid "SEO"
 msgstr "SEO"
 
-#: ./modules/mod_seo/templates/admin_seo.tpl:17 
-msgid ""
-"Save SEO settings"
+#: modules/mod_seo/templates/admin_seo.tpl:137
+msgid "Save SEO settings"
 msgstr "Bewaar SEO instellingen"
 
-#: ./modules/mod_seo/templates/admin_seo.tpl:3 ./modules/mod_seo/templates/admin_seo.tpl:12 
-msgid ""
-"Search Engine Optimization"
+#: modules/mod_seo/templates/admin_seo.tpl:3
+#: modules/mod_seo/templates/admin_seo.tpl:8
+msgid "Search Engine Optimization"
 msgstr "Zoekmachineoptimalisatie"
 
 #: modules/mod_seo/templates/admin_seo.tpl:46
 msgid ""
 "The site configuration file allows this site to be indexed by search engines."
-msgstr "Deze site wordt geïndexeerd door zoekmachines overeenkomstig het site-configuratiebestand."
+msgstr ""
+"Deze site wordt geïndexeerd door zoekmachines overeenkomstig het site-"
+"configuratiebestand."
 
 #: modules/mod_seo/templates/admin_seo.tpl:44
 msgid "The site configuration file excludes this site from search engines."
-msgstr "Deze site is uitgesloten van indexatie door zoekmachines overeenkomstig het site-configuratiebestand."
-
-#: ./modules/mod_seo_google/templates/_admin_seo_config.tpl:6 
-msgid ""
-"Google Analytics tracking id"
-msgstr "Google Analytics tracking code"
-
-#: ./modules/mod_seo_google/templates/_admin_seo_config.tpl:17 
-msgid ""
-"Google Webmaster Tools"
 msgstr ""
+"Deze site is uitgesloten van indexatie door zoekmachines overeenkomstig het "
+"site-configuratiebestand."
 
+#: modules/mod_seo/templates/admin_seo.tpl:72
+#, fuzzy
+msgid "Where can I find my tracking script?"
+msgstr "Waar kan ik mijn tracking script vinden?"
+
+#: modules/mod_seo/templates/admin_seo.tpl:123
+#, fuzzy
+msgid "Yandex Webmaster"
+msgstr "Yandex Webmaster"
+
+#: modules/mod_seo/templates/admin_seo.tpl:119
+#, fuzzy
+msgid "Yandex Webmaster validation id"
+msgstr "Yandex Webmaster validatie-id"
+
+#: modules/mod_seo/templates/admin_seo.tpl:108
+#: modules/mod_seo/templates/admin_seo.tpl:124
+#, fuzzy
+msgid ""
+"You find this id in the content attribute of the meta tag, it has the format"
+msgstr ""
+"Je vindt dit id in het content-attribuut van de meta tag. Het heeft het "
+"formaat"
+
+#: modules/mod_seo/templates/admin_seo.tpl:71
+#, fuzzy
+msgid "You find this id in the tracking script, it has the format"
+msgstr "Je vindt dit id in het tracking script. Het heeft het formaat"
+
+#: modules/mod_seo/templates/admin_seo.tpl:82
+msgid "You find this on your"
+msgstr "Je vindt dit op je"
+
+#: modules/mod_seo/templates/admin_seo.tpl:82
+#, fuzzy
+msgid "it has the format"
+msgstr ""
+"Je vindt dit id in het content-attribuut van de meta tag. Het heeft het "
+"formaat"
+
+#: modules/mod_seo/templates/admin_seo.tpl:71
+msgid "or"
+msgstr "of"

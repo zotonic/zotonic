@@ -100,7 +100,7 @@
                                 {% if id.seo_noindex or is_seo_noindex_cat %}checked="checked"{% endif %}
                                 {% if is_seo_noindex_cat %}disabled{% endif %}
                             />
-                            {_ Ask google to not index this page _}
+                            {_ Ask Google to not index this page _}
                         </label>
 
                         {% if is_seo_noindex_cat %}
@@ -127,7 +127,7 @@
                                 {% if not is_editable %}disabled{% endif %}
                                 {% if id.is_seo_noindex_cat %}checked="checked"{% endif %}
                             />
-                            {_ Ask google to not index any page of this category _} ({{ id.title }})
+                            {_ Ask Google to not index any page of the category: _} {{ id.title }}
                         </label>
                     </div>
                 </div>

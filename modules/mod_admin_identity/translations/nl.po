@@ -10,16 +10,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2019-05-03 12:51+0200\n"
+"PO-Revision-Date: 2022-08-22 17:57+0200\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:65
+#: modules/mod_admin_identity/templates/admin_users.tpl:70
 msgid "(that's you)"
 msgstr "(dat ben jij)"
 
@@ -57,7 +57,7 @@ msgstr "Weet je zeker dat je dit wilt verwijderen?"
 
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:66
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:21
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:14
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -89,7 +89,6 @@ msgstr ""
 "Wanneer je niet kan klikken kopieer dan het volledige adres in je browser."
 
 #: modules/mod_admin_identity/templates/_identity_password.tpl:5
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:10
 msgid ""
 "Click “delete” to remove any existing username/password from the person; "
 "this person will no longer be a user."
@@ -105,15 +104,20 @@ msgstr "Bevestig verwijderen van gebruiker"
 msgid "Could not create the user. Sorry."
 msgstr "Kan de gebruiker niet maken."
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:52
+#: modules/mod_admin_identity/templates/admin_users.tpl:54
 msgid "Created on"
 msgstr "Gemaakt op"
 
-#: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:8
 #: modules/mod_admin_identity/templates/_identity_verify_table.tpl:26
 #: modules/mod_admin_identity/mod_admin_identity.erl:162
 msgid "Delete"
 msgstr "Verwijder"
+
+#: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:8
+#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:20
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:18
+msgid "Delete Username"
+msgstr "Verwijder gebruikersnaam"
 
 #: modules/mod_admin_identity/templates/_identity_verify_table.tpl:26
 msgid "Delete this e-mail address"
@@ -134,14 +138,6 @@ msgstr "E-mailadres"
 #: modules/mod_admin_identity/templates/_identity_verify_table.tpl:35
 msgid "Email Status"
 msgstr "E-mail status"
-
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:8
-msgid ""
-"Enter a (unique) username and password. Usernames and passwords are case "
-"sensitive, so be careful when entering them."
-msgstr ""
-"Voer een unieke gebruikersnaam in en een wachtwoord. Gebruikersnaam en "
-"wachtwoord zijn beiden hoofdlettergevoelig, let daar dus op bij het invoeren."
 
 #: modules/mod_admin_identity/templates/_identity_password.tpl:2
 msgid ""
@@ -202,6 +198,10 @@ msgstr ""
 msgid "Language"
 msgstr "Taal"
 
+#: modules/mod_admin_identity/templates/admin_users.tpl:53
+msgid "Last logon"
+msgstr "Laatste logon"
+
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:20
 #: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:14
 msgid "Log on as this user"
@@ -215,7 +215,7 @@ msgstr "Basis"
 msgid "Make a new user"
 msgstr "Nieuwe gebruiker maken"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:53
+#: modules/mod_admin_identity/templates/admin_users.tpl:55
 msgid "Modified on"
 msgstr "Bewerkt op"
 
@@ -235,7 +235,7 @@ msgstr "Naam en e-mailadres"
 msgid "Need more help?"
 msgstr "Meer hulp nodig?"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:82
+#: modules/mod_admin_identity/templates/admin_users.tpl:91
 msgid "No users found."
 msgstr "Geen gebruikers gevonden."
 
@@ -273,7 +273,7 @@ msgstr "Wachtwoord"
 msgid "Please verify your e-mail address"
 msgstr "Bevestig je e-mailadres"
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:22
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:15
 msgid "Save"
 msgstr "Opslaan"
 
@@ -371,11 +371,11 @@ msgstr "Dit is geen geldig e-mailadres."
 msgid "This password does not meet the security requirements"
 msgstr "Dit wachtwoord komt niet overeen met de veiligheidseisen"
 
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:55
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:59
 msgid "This person is also a user."
 msgstr "Deze persoon is een gebruiker."
 
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:57
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:61
 msgid "This person is not yet a user."
 msgstr "Deze persoon is nog geen gebruiker."
 
@@ -401,6 +401,7 @@ msgid "User actions"
 msgstr "Gebruikersacties"
 
 #: modules/mod_admin_identity/templates/_identity_password.tpl:16
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:56
 #: modules/mod_admin_identity/templates/admin_users.tpl:51
 #: modules/mod_admin_identity/templates/email_admin_new_user.tpl:19
 msgid "Username"
@@ -460,6 +461,16 @@ msgstr ""
 "uitvoeren op het Zotonic systeem.<br /><br />Wat een gebruiker precies kan "
 "doen hangt samen met de groepen waar de gebruiker lid van is."
 
+#: modules/mod_admin_identity/templates/admin_users.tpl:74
+#: modules/mod_admin_identity/templates/admin_users.tpl:75
+#: modules/mod_admin_identity/templates/admin_users.tpl:76
+msgid "Y-m-d"
+msgstr "Y-m-d"
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:57
+msgid "Y-m-d H:i"
+msgstr "Y-m-d H:i"
+
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:111
 msgid "You are not allowed to create the person page."
 msgstr "Je mag geen persoon-pagina maken."
@@ -517,16 +528,7 @@ msgstr "Je gebruikersgegevens voor"
 msgid "Your user details are:"
 msgstr "Je gebruikersgegevens zijn:"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:67
-#: modules/mod_admin_identity/templates/admin_users.tpl:69
-msgid "d M Y, H:i"
-msgstr "d M Y, H:i"
-
-#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:20
-msgid 
-msgstr "Verwijder gebruikersnaam"
-
-#: modules/mod_admin_identity/templates/admin_users.tpl:74
+#: modules/mod_admin_identity/templates/admin_users.tpl:82
 msgid "edit"
 msgstr "bewerk"
 
@@ -534,10 +536,25 @@ msgstr "bewerk"
 msgid "if you want to change the admin password."
 msgstr "als je het adminwachtwoord wilt wijzigen."
 
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:57
+msgid "last logon at"
+msgstr "laatste logon op"
+
 #: modules/mod_admin_identity/templates/admin_users.tpl:15
 msgid "matching"
 msgstr "die voldoen aan"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:72
+#: modules/mod_admin_identity/templates/admin_users.tpl:80
 msgid "set username / password"
 msgstr "gebruikersnaam / wachtwoord instellen"
+
+#~ msgid ""
+#~ "Enter a (unique) username and password. Usernames and passwords are case "
+#~ "sensitive, so be careful when entering them."
+#~ msgstr ""
+#~ "Voer een unieke gebruikersnaam in en een wachtwoord. Gebruikersnaam en "
+#~ "wachtwoord zijn beiden hoofdlettergevoelig, let daar dus op bij het "
+#~ "invoeren."
+
+#~ msgid "d M Y, H:i"
+#~ msgstr "d M Y, H:i"

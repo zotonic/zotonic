@@ -144,7 +144,7 @@ msgid "Aside"
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:34
-msgid "Ask google to not index this page"
+msgid "Ask Google to not index this page"
 msgstr "Avisarle a Google que no indexe esta página"
 
 #: modules/mod_admin/templates/_action_dialog_connect.tpl:45
