@@ -10,29 +10,30 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic - mod_admin_identity\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2012-12-12 15:47+0100\n"
-"Last-Translator: Piotr Meyer <aniou@smutek.pl>\n"
+"PO-Revision-Date: 2022-08-22 18:04+0200\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
-"Language: \n"
+"Language: pl_PL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2\n"
-"X-Poedit-Language: Polish\n"
-"X-Poedit-Country: POLAND\n"
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Poedit 3.1.1\n"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:65
+#: modules/mod_admin_identity/templates/admin_users.tpl:70
 msgid "(that's you)"
-msgstr ""
+msgstr "(to ty)"
 
 #: modules/mod_admin_identity/templates/_action_dialog_edit_basics.person.tpl:7
+#, fuzzy
 msgid "Access control"
-msgstr ""
+msgstr "Kontrola dostępu"
 
 #: modules/mod_admin_identity/templates/_admin_identity_email.tpl:11
+#, fuzzy
 msgid "Add"
-msgstr ""
+msgstr "Dodaj"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:44
 msgid "Add a new user"
@@ -42,7 +43,7 @@ msgstr "Dodaj użytkownika"
 msgid "Add e-mail address"
 msgstr ""
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:83
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:67
 msgid "Add user"
 msgstr "Dodaj użytkownika"
 
@@ -54,22 +55,28 @@ msgstr ""
 msgid "Are you sure you want to delete the username from"
 msgstr "Czy na pewno chcesz usunąć użytkownika"
 
-#: modules/mod_admin_identity/mod_admin_identity.erl:156
+#: modules/mod_admin_identity/mod_admin_identity.erl:161
+#, fuzzy
 msgid "Are you sure you want to delete this entry?"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć wpis?"
 
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:55
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:82
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:66
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:14
 msgid "Cancel"
 msgstr "Anuluj"
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:42
+#, fuzzy
+msgid "Category"
+msgstr "Kategoria"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:71
 msgid "Changed the username."
 msgstr "Zmieniono login."
 
-#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:14
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:20
+#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:14
 msgid ""
 "Click OK to log on as this user. You will be redirected to the home page if "
 "this user has no rights to access the admin system."
@@ -82,7 +89,7 @@ msgid ""
 "your browser."
 msgstr ""
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:10
+#: modules/mod_admin_identity/templates/_identity_password.tpl:5
 msgid ""
 "Click “delete” to remove any existing username/password from the person; "
 "this person will no longer be a user."
@@ -94,54 +101,57 @@ msgstr ""
 msgid "Confirm user deletion"
 msgstr "Podtwierdź usunięcie użytkownika"
 
-#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:110
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:114
 msgid "Could not create the user. Sorry."
 msgstr "Nie jestem w stanie stworzyć takiego użytkownika."
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:53
+#: modules/mod_admin_identity/templates/admin_users.tpl:54
 msgid "Created on"
 msgstr "Stworzony"
 
-#: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:8
-#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:25
-#: modules/mod_admin_identity/mod_admin_identity.erl:157
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:26
+#: modules/mod_admin_identity/mod_admin_identity.erl:162
 msgid "Delete"
 msgstr "Skasuj"
 
-#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:25
+#: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:8
+#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:20
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:18
+msgid "Delete Username"
+msgstr "Usuń nazwę użytkownika"
+
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:26
 msgid "Delete this e-mail address"
 msgstr ""
 
-#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:105
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:109
 msgid "Duplicate username, please choose another username."
 msgstr "Wybrany login już istnieje, wybierz inny."
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:35
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:34
+#, fuzzy
 msgid "E-mail"
-msgstr ""
+msgstr "E-mail"
 
 #: modules/mod_admin_identity/templates/_admin_identity_email.tpl:2
+#, fuzzy
 msgid "E-mail address"
-msgstr ""
+msgstr "Adres e-mail"
 
-#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:34
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:35
+#, fuzzy
 msgid "Email Status"
-msgstr ""
+msgstr "Status e-mail"
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:8
+#: modules/mod_admin_identity/templates/_identity_password.tpl:2
+#, fuzzy
 msgid ""
-"Enter a (unique) username and password. Usernames and passwords are case "
+"Enter a unique username and a password. Usernames and passwords are case "
 "sensitive, so be careful when entering them."
 msgstr ""
 "Podaj unikalne: login i hasło użytkownika.\n"
 "Wielkość liter ma znaczenie:\"a\" to nie to samo, co \"A\", dlatego dane "
 "wprowadzaj uważnie!"
-
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:46
-msgid ""
-"Enter a unique username and a password. Usernames and passwords are case "
-"sensitive, so be careful when entering them."
-msgstr ""
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:21
 msgid ""
@@ -163,21 +173,24 @@ msgstr ""
 "em> zostanie utworzona automatycznie."
 
 #: modules/mod_admin_identity/templates/email_identity_verify.tpl:6
+#, fuzzy
 msgid "Hello"
-msgstr ""
+msgstr "Cześć"
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:8
 msgid "Help about user credentials"
 msgstr "Dane uwierzytelniające - pomoc"
 
 #: modules/mod_admin_identity/templates/email_admin_new_user.tpl:8
+#, fuzzy
 msgid "Hi"
-msgstr ""
+msgstr "Witaj"
 
 #: modules/mod_admin_identity/templates/identity_verify.tpl:23
 #: modules/mod_admin_identity/templates/identity_verify.tpl:34
+#, fuzzy
 msgid "Home"
-msgstr ""
+msgstr "Start"
 
 #: modules/mod_admin_identity/templates/email_identity_verify.tpl:20
 msgid ""
@@ -186,23 +199,29 @@ msgid ""
 msgstr ""
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:28
+#, fuzzy
 msgid "Language"
+msgstr "Język"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:53
+msgid "Last logon"
 msgstr ""
 
-#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:14
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:20
+#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:14
 msgid "Log on as this user"
 msgstr ""
 
 #: modules/mod_admin_identity/templates/_action_dialog_edit_basics.person.tpl:5
+#, fuzzy
 msgid "Main"
-msgstr ""
+msgstr "Dane podstawowe"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:27
 msgid "Make a new user"
 msgstr "Stwórz nowego użytkownika"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:52
+#: modules/mod_admin_identity/templates/admin_users.tpl:55
 msgid "Modified on"
 msgstr "Zmodyfikowany"
 
@@ -222,20 +241,21 @@ msgstr "Użytkownik i adres e-mail"
 msgid "Need more help?"
 msgstr "Potrzebujesz podpowiedzi?"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:82
+#: modules/mod_admin_identity/templates/admin_users.tpl:91
 msgid "No users found."
 msgstr "Nie znaleziono żadnego użytkownika."
 
-#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:42
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:44
 msgid "No verified e-mail addresses. Please add one below."
 msgstr ""
 
 #: modules/mod_admin_identity/templates/identity_verify.tpl:14
+#, fuzzy
 msgid "One moment, please..."
-msgstr ""
+msgstr "Chwileczkę - trwa wylogowywanie…"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:46
-#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:114
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:118
 msgid "Only administrators can add users."
 msgstr "Tylko administratorzy mogą tworzyć użytkowników."
 
@@ -251,8 +271,7 @@ msgstr "Tylko administrator może usuwać użytkowników."
 msgid "Only an administrator or the user him/herself can set a password."
 msgstr "Tylko administrator lub sam użytkownik może zmienić hasło."
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:33
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:64
+#: modules/mod_admin_identity/templates/_identity_password.tpl:24
 msgid "Password"
 msgstr "Hasło"
 
@@ -260,7 +279,7 @@ msgstr "Hasło"
 msgid "Please verify your e-mail address"
 msgstr ""
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:57
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:15
 msgid "Save"
 msgstr "Zapisz"
 
@@ -268,52 +287,60 @@ msgstr "Zapisz"
 msgid "Search users"
 msgstr ""
 
-#: modules/mod_admin_identity/mod_admin_identity.erl:100
+#: modules/mod_admin_identity/mod_admin_identity.erl:105
+#, fuzzy
 msgid "Send"
-msgstr ""
+msgstr "Wyślij"
 
-#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:18
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:19
 msgid "Send verification e-mail"
 msgstr ""
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:48
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:75
+#: modules/mod_admin_identity/templates/_identity_password.tpl:39
 msgid "Send welcome e-mail"
 msgstr ""
 
-#: modules/mod_admin_identity/mod_admin_identity.erl:117
+#: modules/mod_admin_identity/mod_admin_identity.erl:122
 msgid "Sent verification e-mail."
 msgstr ""
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:55
-#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:9
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:18
+#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:9
 msgid "Set username / password"
 msgstr "Zmień login lub hasło"
 
 #: modules/mod_admin_identity/templates/identity_verify.tpl:29
 #: modules/mod_admin_identity/templates/identity_verify.tpl:41
+#, fuzzy
 msgid "Sorry"
-msgstr ""
+msgstr "Przepraszamy"
 
 #: modules/mod_admin_identity/validators/validator_admin_identity_username_unique.erl:48
+#, fuzzy
 msgid "Sorry, this username is already in use. Please try another one."
-msgstr ""
+msgstr "Niestety, ten login jest już zajęty. Wybierz inny."
 
-#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:33
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:34
+#, fuzzy
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:19
 msgid "Sur. prefix"
 msgstr "Przedrostek"
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:27
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:26
 msgid "Surname"
 msgstr "Nazwisko"
 
 #: modules/mod_admin_identity/templates/identity_verify.tpl:18
+#, fuzzy
 msgid "Thank you"
+msgstr "Dziękuję"
+
+#: modules/mod_admin_identity/mod_admin_identity.erl:208
+msgid "The address is invalid."
 msgstr ""
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:93
@@ -346,15 +373,20 @@ msgstr ""
 msgid "This e-mail address was added to your personal information on"
 msgstr ""
 
-#: modules/mod_admin_identity/mod_admin_identity.erl:143
+#: modules/mod_admin_identity/mod_admin_identity.erl:148
 msgid "This is not a valid e-mail address."
 msgstr ""
 
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:55
+#: modules/mod_admin_identity/templates/_identity_password.tpl:28
+#, fuzzy
+msgid "This password does not meet the security requirements"
+msgstr "To hasło nie spełnia wymogów bezpieczeństwa"
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:59
 msgid "This person is also a user."
 msgstr "Ta osoba jest też użytkownikiem."
 
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:57
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:61
 msgid "This person is not yet a user."
 msgstr "Ta osoba nie ma uprawnień użytkownika."
 
@@ -363,24 +395,26 @@ msgstr "Ta osoba nie ma uprawnień użytkownika."
 msgid "This verification key is unknown."
 msgstr ""
 
-#: modules/mod_admin_identity/mod_admin_identity.erl:97
+#: modules/mod_admin_identity/mod_admin_identity.erl:102
 msgid "This will send a verification e-mail to "
 msgstr ""
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:42
+#, fuzzy
 msgid "Timezone"
-msgstr ""
+msgstr "Strefa czasowa"
 
 #: modules/mod_admin_identity/templates/_action_dialog_edit_basics.person.tpl:6
+#, fuzzy
 msgid "User account"
-msgstr ""
+msgstr "Nie wolno usuwać tego konta użytkownika."
 
 #: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:7
 msgid "User actions"
 msgstr ""
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:25
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:56
+#: modules/mod_admin_identity/templates/_identity_password.tpl:16
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:56
 #: modules/mod_admin_identity/templates/admin_users.tpl:51
 #: modules/mod_admin_identity/templates/email_admin_new_user.tpl:19
 msgid "Username"
@@ -390,7 +424,7 @@ msgstr "Login"
 msgid "Username / password"
 msgstr "Login / hasło"
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:44
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:61
 msgid "Username and password"
 msgstr "Login i hasło"
 
@@ -400,31 +434,35 @@ msgstr "Login został skasowany."
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:3
 #: modules/mod_admin_identity/templates/admin_users.tpl:15
-#: modules/mod_admin_identity/mod_admin_identity.erl:81
+#: modules/mod_admin_identity/mod_admin_identity.erl:86
 msgid "Users"
 msgstr "Użytkownicy"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:17
+#, fuzzy
 msgid "Users Overview"
-msgstr ""
+msgstr "Przegląd użytkowników"
 
-#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:16
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:17
+#, fuzzy
 msgid "Verified"
-msgstr ""
+msgstr "Zweryfikowany"
 
-#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:18
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:19
+#, fuzzy
 msgid "Verify"
-msgstr ""
+msgstr "Zweryfikuj"
 
 #: modules/mod_admin_identity/templates/identity_verify.tpl:3
 msgid "Verify Address |"
 msgstr ""
 
 #: modules/mod_admin_identity/templates/identity_verify.tpl:12
+#, fuzzy
 msgid "Verifying..."
-msgstr ""
+msgstr "Sprawdzanie..."
 
-#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:33
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:34
 msgid "View email status"
 msgstr ""
 
@@ -440,19 +478,31 @@ msgstr ""
 "wykonywać operacje w tym systemie.<br/><br/>Zakres uprawnień użytkownika "
 "określają grupy, do których został przypisany."
 
-#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:107
+#: modules/mod_admin_identity/templates/admin_users.tpl:74
+#: modules/mod_admin_identity/templates/admin_users.tpl:75
+#: modules/mod_admin_identity/templates/admin_users.tpl:76
+msgid "Y-m-d"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:57
+#, fuzzy
+msgid "Y-m-d H:i"
+msgstr "Y-m-d H:i:s"
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:111
 msgid "You are not allowed to create the person page."
 msgstr "Nie masz uprawnień do tworzenia stron użytkownikow."
 
-#: modules/mod_admin_identity/mod_admin_identity.erl:150
-#: modules/mod_admin_identity/mod_admin_identity.erl:177
-#: modules/mod_admin_identity/mod_admin_identity.erl:206
+#: modules/mod_admin_identity/mod_admin_identity.erl:155
+#: modules/mod_admin_identity/mod_admin_identity.erl:182
+#: modules/mod_admin_identity/mod_admin_identity.erl:215
 msgid "You are not allowed to edit identities."
 msgstr ""
 
-#: modules/mod_admin_identity/mod_admin_identity.erl:223
+#: modules/mod_admin_identity/mod_admin_identity.erl:235
+#, fuzzy
 msgid "You are not allowed to switch users."
-msgstr ""
+msgstr "Nie wolno ci zmieniać użytkowników."
 
 #: modules/mod_admin_identity/templates/email_admin_new_user.tpl:10
 msgid "You can now login to the admin, on the following URL:"
@@ -474,8 +524,9 @@ msgid ""
 msgstr ""
 
 #: modules/mod_admin_identity/templates/email_identity_verify.tpl:12
+#, fuzzy
 msgid "Your account name is"
-msgstr ""
+msgstr "Twój login to"
 
 #: modules/mod_admin_identity/templates/identity_verify.tpl:20
 msgid "Your address is now verified."
@@ -493,16 +544,7 @@ msgstr ""
 msgid "Your user details are:"
 msgstr ""
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:67
-#: modules/mod_admin_identity/templates/admin_users.tpl:75
-msgid "d M, H:i"
-msgstr ""
-
-#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:20
-msgid 
-msgstr "skasuj login"
-
-#: modules/mod_admin_identity/templates/admin_users.tpl:73
+#: modules/mod_admin_identity/templates/admin_users.tpl:82
 msgid "edit"
 msgstr "edytuj"
 
@@ -510,13 +552,29 @@ msgstr "edytuj"
 msgid "if you want to change the admin password."
 msgstr "jeśli chcesz zmienić hasło administratora"
 
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:57
+msgid "last logon at"
+msgstr ""
+
 #: modules/mod_admin_identity/templates/admin_users.tpl:15
 msgid "matching"
 msgstr "pasujące"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:71
+#: modules/mod_admin_identity/templates/admin_users.tpl:80
+#, fuzzy
 msgid "set username / password"
-msgstr ""
+msgstr "Zmień login lub hasło"
+
+#~ msgid ""
+#~ "Enter a (unique) username and password. Usernames and passwords are case "
+#~ "sensitive, so be careful when entering them."
+#~ msgstr ""
+#~ "Podaj unikalne: login i hasło użytkownika.\n"
+#~ "Wielkość liter ma znaczenie:\"a\" to nie to samo, co \"A\", dlatego dane "
+#~ "wprowadzaj uważnie!"
+
+#~ msgid "d M, H:i"
+#~ msgstr "d M, H:i"
 
 #~ msgid "Email"
 #~ msgstr "e-mail"
