@@ -14,7 +14,7 @@
 	{% with m.config.seo.keywords.value as keywords %}
 	{% with m.config.seo.description.value as description %}
 		{% if id %}
-			{% if m.rsc[id].seo_noindex %}
+			{% if m.rsc[id].seo_noindex or m.rsc[id].category_id.is_seo_noindex_cat %}
 				{% if not m.config.seo.noindex.value %}<meta name="robots" content="noindex" />{% endif %}
 			{% else %}
 				{% with m.rsc[id].seo_keywords as seo_keywords %}

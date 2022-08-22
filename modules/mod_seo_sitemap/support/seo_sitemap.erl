@@ -83,7 +83,8 @@ categories(Context) ->
     Cats = z_db:q("select id from rsc where category_id = $1", [ CatCat ], Context),
     PIds = lists:filtermap(
         fun({Id}) ->
-            case z_acl:rsc_visible(Id, Context) of
+            IsSeoNoIndexCat = z_convert:to_bool(m_rsc:p_no_acl(Id, is_seo_noindex_cat, Context)),
+            case IsSeoNoIndexCat andalso z_acl:rsc_visible(Id, Context) of
                 true ->
                     Prio = case m_rsc:p(Id, seo_sitemap_priority, Context) of
                         undefined -> 0.5;

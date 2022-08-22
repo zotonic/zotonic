@@ -50,19 +50,22 @@ init(ConfigProps) ->
 
 %% @doc Initialize the context for the request. Optionally continue the user's session.
 service_available(ReqData, ConfigProps) ->
-    Context = z_context:set_noindex_header(
-                z_context:new_request(ReqData, ConfigProps, ?MODULE)),
+    Context = z_context:new_request(ReqData, ConfigProps, ?MODULE),
     Context1 = z_context:continue_session(z_context:ensure_qs(Context)),
     Context2 = z_context:set_cors_headers([{"Access-Control-Allow-Origin", "*"}], Context1),
     ReqData1 = z_context:get_reqdata(Context2),
     z_context:lager_md(Context2),
     case get_file_info(ConfigProps, Context2) of
         {ok, Info} ->
-            {true, ReqData1, {Info, Context2}};
+            IsNoIndex = is_noindex(Info, Context),
+            Context3 = z_context:set_noindex_header(IsNoIndex, Context2),
+            {true, ReqData1, {Info, Context3}};
         {error, enoent} = Error ->
-            {true, ReqData1, {Error, Context2}};
+            Context3 = z_context:set_noindex_header(Context2),
+            {true, ReqData1, {Error, Context3}};
         {error, _} = Error ->
-            {false, ReqData1, {Error, Context2}}
+            Context3 = z_context:set_noindex_header(Context2),
+            {false, ReqData1, {Error, Context3}}
     end.
 
 allowed_methods(ReqData, State) ->
@@ -135,6 +138,18 @@ provide_content(ReqData,  {Info,Context} = State) ->
 
 
 %%%%% -------------------------- Support functions ------------------------
+
+is_noindex(#z_file_info{acls=Acls}, Context) ->
+    lists:any(
+        fun
+            (Id) when is_integer(Id) ->
+                CatId = m_rsc:p_no_acl(Id, category_id, Context),
+                z_convert:to_bool(m_rsc:p_no_acl(Id, seo_noindex, Context))
+                orelse z_convert:to_bool(m_rsc:p_no_acl(CatId, is_seo_noindex_cat, Context));
+            (_) ->
+                false
+        end,
+        Acls).
 
 set_content_dispostion(inline, ReqData) ->
     wrq:set_resp_header("Content-Disposition", "inline", ReqData);
