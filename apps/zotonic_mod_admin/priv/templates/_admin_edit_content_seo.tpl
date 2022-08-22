@@ -119,7 +119,7 @@
                         {% if not id.is_editable %}disabled{% endif %}
                         {% if id.is_seo_noindex_cat %}checked="checked"{% endif %}
                     >
-                    {% trans "Ask Google to exclude all “{cat}” pages." cat=id.title %}
+                    {% trans "Ask Google to exclude all “{cat}” pages" cat=id.title %}
                 </label>
             </div>
         </fieldset>
