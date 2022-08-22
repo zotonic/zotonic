@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-08-19 19:07\n"
+"PO-Revision-Date: 2022-08-22 11:28\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3901,7 +3901,7 @@ msgstr "Электронная почта или имя пользователя
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:37
 msgid "Enable <em>mod_facebook</em> to see Facebook settings."
-msgstr "Включите <em>mod_facebook</em> , чтобы увидеть настройки Facebook."
+msgstr "Включите <em>mod_facebook</em> для просмотра настроек Facebook."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:40
 msgid "Enable <em>mod_twitter</em> to see Twitter settings."
