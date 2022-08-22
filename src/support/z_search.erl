@@ -50,7 +50,6 @@
 -define(MIN_LOOKAHEAD, 200).
 
 %% @doc Search items and handle the paging. Uses the default page length.
-%% @deprecated use search/5
 -spec search_pager(search_query(), Page :: pos_integer(), z:context()) -> #search_result{}.
 search_pager(Search, Page, Context) ->
     search_pager(Search, Page, ?SEARCH_PAGELEN, Context).
@@ -66,13 +65,11 @@ search_pager({Name, Args} = Search, Page, PageLen, Context) when is_atom(Name) -
 
 
 %% @doc Search with the question and return the results
-%% @deprecated use search/5
 -spec search({atom()|binary(), proplists:proplist()}, z:context()) -> #search_result{}.
 search(Search, Context) ->
     search(Search, ?OFFSET_LIMIT, Context).
 
 %% @doc Perform the named search and its arguments
-%% @deprecated use search/5
 -spec search(search_query(), search_offset() | undefined, z:context() ) -> #search_result{}.
 search(Search, undefined, Context) ->
     search_1(Search, 1, ?SEARCH_ALL_LIMIT, {1, ?SEARCH_ALL_LIMIT}, Context);
@@ -83,7 +80,7 @@ search(Search, {1, Limit} = OffsetLimit, Context) ->
 search(Search, {Offset, Limit} = OffsetLimit, Context) ->
     case (Offset - 1) rem Limit of
         0 ->
-            PageNr = (Offset - 1) div Limit,
+            PageNr = (Offset - 1) div Limit + 1,
             search_1(Search, PageNr, Limit, OffsetLimit, Context);
         _ ->
             search_1(Search, 1, ?SEARCH_ALL_LIMIT, OffsetLimit, Context)
