@@ -96,9 +96,8 @@
                                 type="checkbox"
                                 name="seo_noindex"
                                 value="1"
-                                {% if not is_editable %}disabled{% endif %}
+                                {% if not is_editable or is_seo_noindex_cat %}disabled{% endif %}
                                 {% if id.seo_noindex or is_seo_noindex_cat %}checked="checked"{% endif %}
-                                {% if is_seo_noindex_cat %}disabled{% endif %}
                             />
                             {_ Ask Google to not index this page _}
                         </label>

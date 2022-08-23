@@ -84,7 +84,7 @@ categories(Context) ->
     PIds = lists:filtermap(
         fun({Id}) ->
             IsSeoNoIndexCat = z_convert:to_bool(m_rsc:p_no_acl(Id, is_seo_noindex_cat, Context)),
-            case IsSeoNoIndexCat andalso z_acl:rsc_visible(Id, Context) of
+            case (not IsSeoNoIndexCat) andalso z_acl:rsc_visible(Id, Context) of
                 true ->
                     Prio = case m_rsc:p(Id, seo_sitemap_priority, Context) of
                         undefined -> 0.5;
