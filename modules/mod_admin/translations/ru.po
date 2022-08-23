@@ -144,7 +144,7 @@ msgid "Aside"
 msgstr "Примечание"
 
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:34
-msgid "Ask google to not index this page"
+msgid "Ask Google to not index this page"
 msgstr "Не индексировать эту страницу в поисковых системах"
 
 #: modules/mod_admin/templates/_action_dialog_connect.tpl:45

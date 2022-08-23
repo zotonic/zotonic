@@ -143,13 +143,17 @@ is_visible(_, _, _Context) ->
 maybe_add_category_attrs(#{ category_id := undefined } = Map, _Context) ->
     Map;
 maybe_add_category_attrs(#{ category_id := CatId } = Map, Context) ->
+    IsSeoNoIndexCat = z_convert:to_bool(m_rsc:p_no_acl(CatId, is_seo_noindex_cat, Context)),
     Map1 = case Map of
+        _ when IsSeoNoIndexCat ->
+            Map#{ priority => 0.0 };
         #{ priority := undefined } ->
             case m_rsc:p_no_acl(CatId, seo_sitemap_priority, Context) of
-                undefined -> Map#{ priority := 0.5 };
+                undefined ->
+                    Map#{ priority => 0.5 };
                 Prio ->
                     try
-                        Map#{ priority := z_convert:to_float(Prio) }
+                        Map#{ priority => z_convert:to_float(Prio) }
                     catch
                         _:_ -> Map
                     end
@@ -164,7 +168,7 @@ maybe_add_category_attrs(#{ category_id := CatId } = Map, Context) ->
                 undefined -> <<"weekly">>;
                 CF -> CF
             end,
-            Map1#{ changefreq := Freq };
+            Map1#{ changefreq => Freq };
         _ ->
             Map1
     end,

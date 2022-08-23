@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-07-12 11:12+0200\n"
+"PO-Revision-Date: 2022-08-22 17:55+0200\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -117,6 +117,10 @@ msgstr "Alle media"
 msgid "All pages"
 msgstr "Alle pagina's"
 
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:119
+msgid "All pages of this category"
+msgstr "Bekijk alle pagina's binnen deze categorie"
+
 #: modules/mod_admin/templates/_admin_system_status.tpl:12
 msgid "Allocated"
 msgstr "Toegewezen"
@@ -153,8 +157,12 @@ msgstr "Weet je zeker dat je de admin wilt verlaten?"
 msgid "Aside"
 msgstr "Zijkant"
 
-#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:101
-msgid "Ask google to not index this page"
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:130
+msgid "Ask Google to not index any page of the category:"
+msgstr "Laat Google deze pagina niet indexeren"
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:103
+msgid "Ask Google to not index this page"
 msgstr "Laat Google deze pagina niet indexeren"
 
 #: modules/mod_admin/templates/_action_dialog_connect.tpl:48
@@ -440,6 +448,7 @@ msgid "E-mail address"
 msgstr "E-mailadres"
 
 #: modules/mod_admin/templates/admin_edit.tpl:3
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:109
 #: modules/mod_admin/templates/_rsc_edge.tpl:20
 msgid "Edit"
 msgstr "Bewerk"
@@ -1003,6 +1012,12 @@ msgstr ""
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:6
 msgid "SEO Content"
 msgstr "SEO inhoud"
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:108
+msgid "SEO indexing of this page is disabled because it has category:"
+msgstr ""
+"SEO indexering van deze pagina is uitgeschakeld omdat het een categorie "
+"heeft:"
 
 #: modules/mod_admin/templates/_admin_status_alert.tpl:4
 msgid ""
