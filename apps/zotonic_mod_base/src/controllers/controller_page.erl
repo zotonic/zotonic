@@ -89,7 +89,10 @@ is_authorized(Context) ->
 %% @doc Show the page.  Add a noindex header when requested by the editor.
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Id = z_controller_helper:get_id(Context),
-    Context0 = z_context:set_noindex_header(m_rsc:p_no_acl(Id, seo_noindex, Context), Context),
+    CatId = m_rsc:p_no_acl(Id, category_id, Context),
+    IsSeoNoIndex = z_convert:to_bool(m_rsc:p_no_acl(Id, seo_noindex, Context))
+        orelse z_convert:to_bool(m_rsc:p_no_acl(CatId, is_seo_noindex_cat, Context)),
+    Context0 = z_context:set_noindex_header(IsSeoNoIndex, Context),
     Context1 = z_context:set_resource_headers(Id, Context0),
 
 	%% EXPERIMENTAL:

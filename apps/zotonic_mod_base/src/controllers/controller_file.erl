@@ -44,18 +44,21 @@
 
 
 %% @doc Initialize the context for the request. Optionally continue the user's session.
-service_available(Context0) ->
-    Context = z_context:set_noindex_header(Context0),
+service_available(Context) ->
     Context1 = z_context:ensure_qs(Context),
     Context2 = z_context:set_cors_headers([{<<"access-control-allow-origin">>, <<"*">>}], Context1),
     z_context:logger_md(Context2),
     case get_file_info(Context2) of
         {ok, Info} ->
-            {true, z_context:set(?MODULE, Info, Context2)};
+            IsNoIndex = is_noindex(Info, Context),
+            Context3 = z_context:set_noindex_header(IsNoIndex, Context2),
+            {true, z_context:set(?MODULE, Info, Context3)};
         {error, enoent} = Error ->
-            {true, z_context:set(?MODULE, Error, Context2)};
+            Context3 = z_context:set_noindex_header(Context2),
+            {true, z_context:set(?MODULE, Error, Context3)};
         {error, _} = Error ->
-            {false, z_context:set(?MODULE, Error, Context2)}
+            Context3 = z_context:set_noindex_header(Context2),
+            {false, z_context:set(?MODULE, Error, Context3)}
     end.
 
 allowed_methods(Context) ->
@@ -149,6 +152,17 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 
 %%%%% -------------------------- Support functions ------------------------
 
+is_noindex(#z_file_info{acls=Acls}, Context) ->
+    lists:any(
+        fun
+            (Id) when is_integer(Id) ->
+                CatId = m_rsc:p_no_acl(Id, category_id, Context),
+                z_convert:to_bool(m_rsc:p_no_acl(Id, seo_noindex, Context))
+                orelse z_convert:to_bool(m_rsc:p_no_acl(CatId, is_seo_noindex_cat, Context));
+            (_) ->
+                false
+        end,
+        Acls).
 
 get_id(Context) ->
     case maybe_id(Context) of

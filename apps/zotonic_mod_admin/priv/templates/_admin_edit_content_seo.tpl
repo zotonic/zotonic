@@ -62,34 +62,67 @@
 {% endblock %}
 
 {% block widget_content_nolang %}
-<fieldset>
-    <div class="form-group">
-        <label class="checkbox">
-            <input
-                id="custom-slug"
-                type="checkbox"
-                name="custom_slug"
-                {% if id.custom_slug %}checked="checked"{% endif %}
-                {% if not id.is_editable %}disabled{% endif %}
-                value="1"
-                onclick="$('#custom-slug:checked').val() ? $('.input-slug').removeAttr('disabled') : $('.input-slug').attr('disabled', 'disabled');"
-            />
-            {_ Customize page slug _}
-        </label>
-    </div>
+    {% with id.category_id.is_seo_noindex_cat as is_seo_noindex_cat %}
+    <fieldset>
+        <div class="form-group">
+            <label class="checkbox">
+                <input
+                    id="custom-slug"
+                    type="checkbox"
+                    name="custom_slug"
+                    {% if id.custom_slug %}checked="checked"{% endif %}
+                    {% if not id.is_editable %}disabled{% endif %}
+                    value="1"
+                    onclick="$('#custom-slug:checked').val() ? $('.input-slug').removeAttr('disabled') : $('.input-slug').attr('disabled', 'disabled');"
+                >
+                {_ Customize page slug _}
+            </label>
+        </div>
 
-    <div class="form-group">
-        <label class="checkbox">
-            <input id="seo_noindex"
-                type="checkbox"
-                name="seo_noindex"
-                value="1"
-                {% if not id.is_editable %}disabled{% endif %}
-                {% if id.seo_noindex %}checked="checked"{% endif %}
-            />
-            {_ Ask google to not index this page _}
-        </label>
-    </div>
+        <div class="form-group">
+            <label class="checkbox">
+                <input id="seo_noindex"
+                    type="checkbox"
+                    name="seo_noindex"
+                    value="1"
+                    {% if not id.is_editable or is_seo_noindex_cat %}disabled{% endif %}
+                    {% if id.seo_noindex or is_seo_noindex_cat %}checked="checked"{% endif %}
+                >
+                {_ Ask Google to not index this page _}
+            </label>
+
+            {% if is_seo_noindex_cat %}
+                <p class="help-block">
+                    {% trans "SEO indexing of this page is disabled because it is in the “{cat}” category."
+                            cat=id.category_id.title
+                    %}
+                    &nbsp; <a href="{% url admin_edit_rsc id=id.category_id %}">{_ Edit _}</a>
+                </p>
+            {% endif %}
+        </div>
+    </fieldset>
+    {% endwith %}
+
+    {% if id.is_a.category %}
+        <fieldset>
+            <legend>{_ All pages of this category _}</legend>
+            <p class="help-block">
+                {_ Pages of this category can be excluded from search engines. This is useful if some categories should not be found on Google (et al). Common examples are categories and predicates. _}
+            </p>
+            <div class="form-group">
+                <label class="checkbox">
+                    <input id="is_seo_noindex_cat"
+                        type="checkbox"
+                        name="is_seo_noindex_cat"
+                        value="1"
+                        {% if not id.is_editable %}disabled{% endif %}
+                        {% if id.is_seo_noindex_cat %}checked="checked"{% endif %}
+                    >
+                    {% trans "Ask Google to exclude all “{cat}” pages" cat=id.title %}
+                </label>
+            </div>
+        </fieldset>
+    {% endif %}
 
     {% all catinclude "_admin_edit_content_seo_extra.tpl" id %}
 </fieldset>
