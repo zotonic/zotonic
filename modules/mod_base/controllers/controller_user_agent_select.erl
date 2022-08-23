@@ -71,5 +71,5 @@ moved_temporarily(ReqData, Context) ->
             Page ->
                 Page
          end,
-    ?WM_REPLY({true, z_context:local_url(Loc, C1)}, C1).
+    ?WM_REPLY({true, z_context:site_url(Loc, C1)}, C1).
 

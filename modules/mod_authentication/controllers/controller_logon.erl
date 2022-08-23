@@ -91,7 +91,7 @@ previously_existed(ReqData, Context) ->
 %% the user was already logged on and we don't have a redirect page.
 moved_temporarily(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    Location = z_context:local_url(get_page(Context1), Context1),
+    Location = z_context:site_url(get_page(Context1), Context1),
     ?WM_REPLY({true, Location}, Context1).
 
 
@@ -126,7 +126,7 @@ safe_url("#" ++ _ = Url, _Context) -> Url;
 safe_url(<<"#", _/binary>> = Url, _Context) -> Url;
 safe_url("/" ++ _ = Url, _Context) -> Url;
 safe_url(<<"/", _/binary>> = Url, _Context) -> Url;
-safe_url(Url, Context) -> z_context:local_url(Url, Context).
+safe_url(Url, Context) -> z_context:site_url(Url, Context).
 
 reminder_secrets(undefined, _Username, Context) ->
     {[], Context};
@@ -280,7 +280,7 @@ event(#z_msg_v1{data=Data}, Context) when is_list(Data) ->
                 <<"#reload">> ->
                     [{reload, []}];
                 Location ->
-                    LocalUrl = z_context:local_url(Location, Context),
+                    LocalUrl = z_context:site_url(Location, Context),
                     [{redirect, [{location, LocalUrl}]}]
             end,
             z_render:wire(Action, Context);
@@ -844,7 +844,7 @@ get_post_logon_actions(WireArgs, Context) ->
                 <<"#reload">> ->
                     [{reload, []}];
                 Location ->
-                    LocalUrl = z_context:local_url(Location, Context),
+                    LocalUrl = z_context:site_url(Location, Context),
                     [{redirect, [{location, LocalUrl}]}]
             end;
         Actions ->

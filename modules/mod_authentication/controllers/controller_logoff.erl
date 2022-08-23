@@ -56,7 +56,7 @@ moved_temporarily(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_qs(Context1),
     Location = z_context:get_q("p", Context2, "/"),
-    ?WM_REPLY({true, z_context:local_url(Location, Context2)}, Context2).
+    ?WM_REPLY({true, z_context:site_url(Location, Context2)}, Context2).
 
 provide_content(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),

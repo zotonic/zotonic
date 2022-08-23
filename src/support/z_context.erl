@@ -46,7 +46,7 @@
     output/2,
 
     abs_url/2,
-    local_url/2,
+    site_url/2,
 
     pickle/1,
     depickle/1,
@@ -430,21 +430,21 @@ abs_url(Url, Context) ->
         false.
 
 %% @doc Ensure that the URL is for this host and that is sanitized.
--spec local_url(undefined|string()|binary(), z:context()) -> binary().
-local_url(None, Context) when
+-spec site_url(undefined|string()|binary(), z:context()) -> binary().
+site_url(None, Context) when
     None =:= undefined;
     None =:= "";
     None =:= <<>> ->
     z_context:abs_url(<<"/">>, Context);
-local_url("#" ++ _ = Frag, _Context) ->
+site_url("#" ++ _ = Frag, _Context) ->
     z_convert:to_binary(Frag);
-local_url(<<"#", _/binary>> = Frag, _Context) ->
+site_url(<<"#", _/binary>> = Frag, _Context) ->
     Frag;
-local_url("/" ++ _ = Path, Context) ->
+site_url("/" ++ _ = Path, Context) ->
     abs_url(Path, Context);
-local_url(<<"/", _/binary>> = Path, Context) ->
+site_url(<<"/", _/binary>> = Path, Context) ->
     abs_url(Path, Context);
-local_url(Url, Context) ->
+site_url(Url, Context) ->
     case z_convert:to_list(z_html:noscript(Url)) of
         "#" ++ _ = Url1 ->
             z_convert:to_binary(Url1);
