@@ -72,6 +72,9 @@ The following options can be given to the dispatch rule:
 +---------------------+--------------------------------------+------------------------+
 |nocache              |Prevent browser caching this page.    |nocache                 |
 +---------------------+--------------------------------------+------------------------+
+|http_status          |The HTTP status code to return. This  |{http_status, 418}      |
+|                     |defaults to 200.                      |                        |
++---------------------+--------------------------------------+------------------------+
 
 .. include:: acl_options.rst
 
