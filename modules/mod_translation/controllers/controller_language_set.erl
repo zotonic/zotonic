@@ -51,10 +51,10 @@ moved_temporarily(ReqData, Context0) ->
     Context = ?WM_REQ(ReqData, Context0),
     Context1 = mod_translation:set_user_language(z_context:get_q("code", Context), Context),
     Page = z_context:get_q("p", Context1),
-    Location = case z_utils:is_empty(Page) of
-                   true -> "/";
-                   false -> Page
-               end,
+    Location = case Page of
+        "/" ++ _ -> Page;
+        _ -> "/"
+    end,
     AbsUrl = z_context:abs_url(add_language(mod_translation:url_strip_language(Location), Context1), Context1),
     ?WM_REPLY({true, AbsUrl}, Context1).
 

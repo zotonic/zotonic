@@ -91,7 +91,7 @@ previously_existed(ReqData, Context) ->
 %% the user was already logged on and we don't have a redirect page.
 moved_temporarily(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    Location = z_context:abs_url(cleanup_url(get_page(Context1)), Context1),
+    Location = z_context:local_url(get_page(Context1), Context1),
     ?WM_REPLY({true, Location}, Context1).
 
 
@@ -101,7 +101,7 @@ provide_content(ReqData, Context) ->
     Vars = [
         {noindex, true},
         {notrack, true},
-        {page, get_page(Context2)}
+        {page, safe_url(get_page(Context2), Context2)}
         | z_context:get_all(Context2)
     ],
     Secret = z_context:get_q("secret", Context2),
@@ -119,6 +119,14 @@ provide_content(ReqData, Context) ->
     {Output, OutputContext} = z_context:output(Rendered, ContextVerify),
     ?WM_REPLY(Output, OutputContext).
 
+safe_url(undefined, _Context) -> undefined;
+safe_url("", _Context) -> "";
+safe_url(<<>>, _Context) -> "";
+safe_url("#" ++ _ = Url, _Context) -> Url;
+safe_url(<<"#", _/binary>> = Url, _Context) -> Url;
+safe_url("/" ++ _ = Url, _Context) -> Url;
+safe_url(<<"/", _/binary>> = Url, _Context) -> Url;
+safe_url(Url, Context) -> z_context:local_url(Url, Context).
 
 reminder_secrets(undefined, _Username, Context) ->
     {[], Context};
@@ -184,12 +192,12 @@ reset_vars(Context) ->
 %%      This location will be stored in the logon form ("page" on submit).
 get_page(Context) ->
     HasBackArg = z_convert:to_bool(z_context:get_q("back", Context)),
-    case z_context:get_q("p", Context, []) of
-        [] when HasBackArg ->
+    case z_context:get_q("p", Context, "") of
+        "" when HasBackArg ->
             RD = z_context:get_reqdata(Context),
             case wrq:get_req_header("referer", RD) of
-                undefined -> [];
-                Referrer -> z_html:noscript(Referrer)
+                undefined -> "";
+                Referrer -> Referrer
             end;
         Other ->
             Other
@@ -197,10 +205,10 @@ get_page(Context) ->
 
 %% @doc User logged on, fetch the location of the next page to show
 get_ready_page(Context) ->
-    get_ready_page(z_context:get_q("page", Context, []), Context).
+    get_ready_page(z_context:get_q("page", Context, ""), Context).
 
 get_ready_page(undefined, Context) ->
-    get_ready_page([], Context);
+    get_ready_page("", Context);
 get_ready_page(Page, Context) when is_binary(Page) ->
     get_ready_page(z_convert:to_list(Page), Context);
 get_ready_page(Page, Context) when is_list(Page) ->
@@ -208,11 +216,6 @@ get_ready_page(Page, Context) when is_list(Page) ->
         undefined -> Page;
         Url -> Url
     end.
-
-
-cleanup_url(undefined) -> "/";
-cleanup_url([]) -> "/";
-cleanup_url(Url) -> z_html:noscript(Url).
 
 
 %% @doc Handle the submit of the logon form, this will be handed over to the
@@ -271,8 +274,16 @@ event(#submit{message={logon_tos_agree, WireArgs}}, Context) ->
 event(#z_msg_v1{data=Data}, Context) when is_list(Data) ->
     case proplists:get_value(<<"msg">>, Data) of
         <<"logon_redirect">> ->
-            Location = get_ready_page(proplists:get_value(<<"page">>, Data, []), Context),
-            z_render:wire({redirect, [{location, cleanup_url(Location)}]}, Context);
+            Action = case get_ready_page(proplists:get_value(<<"page">>, Data, []), Context) of
+                "#reload" ->
+                    [{reload, []}];
+                <<"#reload">> ->
+                    [{reload, []}];
+                Location ->
+                    LocalUrl = z_context:local_url(Location, Context),
+                    [{redirect, [{location, LocalUrl}]}]
+            end,
+            z_render:wire(Action, Context);
         Msg ->
             lager:warning("controller_logon: unknown msg: ~p", [Msg]),
             Context
@@ -827,9 +838,14 @@ get_by_reminder_secret(Code, Context) ->
 get_post_logon_actions(WireArgs, Context) ->
     case z_notifier:foldl(#logon_actions{args=WireArgs}, [], Context) of
         [] ->
-            case cleanup_url(get_ready_page(Context)) of
-                "#reload" -> [{reload, []}];
-                Location -> [{redirect, [{location, Location}]}]
+            case get_ready_page(Context) of
+                "#reload" ->
+                    [{reload, []}];
+                <<"#reload">> ->
+                    [{reload, []}];
+                Location ->
+                    LocalUrl = z_context:local_url(Location, Context),
+                    [{redirect, [{location, LocalUrl}]}]
             end;
         Actions ->
             Actions
