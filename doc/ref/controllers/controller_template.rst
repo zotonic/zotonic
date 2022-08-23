@@ -68,6 +68,9 @@ The following options can be given to the dispatch rule:
 |                     |template. This overrules and id from  |                        |
 |                     |the query arguments.                  |                        |
 +---------------------+--------------------------------------+------------------------+
+|http_status          |The HTTP status code to return. This  |{http_status, 418}      |
+|                     |defaults to 200.                      |                        |
++---------------------+--------------------------------------+------------------------+
 
 
 .. include:: acl_options.rst
