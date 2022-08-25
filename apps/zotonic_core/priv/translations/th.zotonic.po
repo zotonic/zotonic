@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-08-01 10:59\n"
+"PO-Revision-Date: 2022-08-25 15:45\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -526,7 +526,7 @@ msgstr "กฎที่เปลี่ยนกลับ"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:130
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:124./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:30
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:101
@@ -854,6 +854,10 @@ msgstr "สื่อทั้งหมด"
 msgid "All pages"
 msgstr "ทุกหน้า"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:108
+msgid "All pages of this category"
+msgstr "หน้าทั้งหมดของหมวดหมู่นี้"
+
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:25
 msgid "All sites have been flushed."
 msgstr "ล้างไซต์ทั้งหมดแล้ว"
@@ -899,9 +903,13 @@ msgstr "แน่ใจไหมว่าต้องการออกจาก
 msgid "Aside"
 msgstr "นอกจากนี้"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:90
-msgid "Ask google to not index this page"
-msgstr "ขอให้ Google อย่าจัดทำดัชนีหน้านี้"
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:121
+msgid "Ask Google to exclude all “{cat}” pages"
+msgstr "ขอให้ Google ยกเว้นหน้า “{cat}” ทั้งหมด"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
+msgid "Ask Google to not index this page"
+msgstr "ขอให้ Google ไม่จัดทำดัชนีหน้านี้"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
@@ -1055,7 +1063,7 @@ msgstr "สร้างบน"
 msgid "Created:"
 msgstr "สร้าง:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:77
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
 msgid "Customize page slug"
 msgstr "ปรับแต่งเพจบุ้ง"
 
@@ -1158,7 +1166,7 @@ msgstr "ทำซ้ำหน้านี้"
 msgid "E-mail address"
 msgstr "ที่อยู่อีเมล"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:99./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:53./apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:50
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:39
@@ -1635,6 +1643,10 @@ msgstr "หน้า"
 msgid "Pages for"
 msgstr "เพจสำหรับ"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:110
+msgid "Pages of this category can be excluded from search engines. This is useful if some categories should not be found on Google (et al). Common examples are categories and predicates."
+msgstr "หน้าของหมวดหมู่นี้สามารถแยกออกจากเครื่องมือค้นหาได้ สิ่งนี้มีประโยชน์หากไม่ควรพบบางหมวดหมู่ใน Google (et al) ตัวอย่างทั่วไปคือหมวดหมู่และภาคแสดง"
+
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "Pages overview"
 msgstr "ภาพรวมของเพจ"
@@ -1796,6 +1808,10 @@ msgstr "รันคำสั่ง schema install จากโมดูลข�
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:6
 msgid "SEO Content"
 msgstr "เนื้อหา SEO"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:96
+msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
+msgstr "การจัดทำดัชนี SEO ของหน้านี้ถูกปิดใช้งานเนื่องจากอยู่ในหมวด “{cat}”"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:4
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
@@ -2553,6 +2569,10 @@ msgstr "ค่าเริ่มต้นเป็นชื่อโฮสต์
 msgid "Domain for all generated from- and envelop-addresses."
 msgstr "โดเมนสำหรับทั้งหมดที่สร้างจากที่อยู่และซองจดหมาย"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:131
+msgid "Download images in emails after opening the message"
+msgstr "ดาวน์โหลดภาพในอีเมลหลังจากเปิดข้อความ"
+
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:103./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:104
 msgid "E-mail override"
 msgstr "ลบล้างอีเมล"
@@ -2622,6 +2642,10 @@ msgstr "มีเพียงผู้ดูแลระบบเท่านั
 msgid "Password"
 msgstr "รหัสผ่าน"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:134
+msgid "Per default images smaller than 1MB are embedded in email messages. Using a separate download for images results in a smaller message size but non-public images will not be visible. Leave this disabled if you are sending non-public images."
+msgstr "ต่อรูปภาพเริ่มต้นที่มีขนาดเล็กกว่า 1MB จะถูกฝังในข้อความอีเมล การใช้การดาวน์โหลดรูปภาพแยกต่างหากจะทำให้ข้อความมีขนาดเล็กลง แต่รูปภาพที่ไม่ใช่แบบสาธารณะจะไม่ปรากฏให้เห็น ปล่อยให้สิ่งนี้ปิดการใช้งานหากคุณกำลังส่งรูปภาพที่ไม่เปิดเผยต่อสาธารณะ"
+
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:1
 msgid "Please fill in the module, key and value for the new configuration key."
 msgstr "โปรดกรอกโมดูลคีย์และค่าสำหรับคีย์การกำหนดค่าใหม่"
@@ -2646,7 +2670,7 @@ msgstr "ใบรับรอง SSL"
 msgid "Self signed certificate"
 msgstr "ใบรับรองที่ลงนามด้วยตนเอง"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:161
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:111
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:21./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:17
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:49
@@ -2654,11 +2678,11 @@ msgstr "ใบรับรองที่ลงนามด้วยตนเอ
 msgid "Send"
 msgstr "ส่ง"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:148
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:157
 msgid "Send a test email"
 msgstr "ส่งอีเมลทดสอบ"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:152
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:161
 msgid "Send a test email or check the status of an email address."
 msgstr "ส่งอีเมลทดสอบหรือตรวจสอบสถานะของที่อยู่อีเมล"
 
@@ -2742,12 +2766,12 @@ msgstr "ใช้ได้ถึง"
 msgid "Value"
 msgstr "มูลค่า"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:163./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:172./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr "ดูสถานะอีเมล"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:138
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:147
 msgid "You must be an administrator to view or change the email configuration."
 msgstr "คุณต้องเป็นผู้ดูแลระบบเพื่อดูหรือเปลี่ยนการกำหนดค่าอีเมล"
 
@@ -2755,7 +2779,7 @@ msgstr "คุณต้องเป็นผู้ดูแลระบบเพ
 msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
 msgstr "Zotonic ส่งอีเมลโดยใช้เซิร์ฟเวอร์อีเมลในตัว คุณสามารถส่งอีเมลผ่านรีเลย์ภายนอก"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:160
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:169
 msgid "test@example.com"
 msgstr "test@example.com"
 
@@ -7078,6 +7102,10 @@ msgstr "หมวดหมู่ที่ไม่รู้จัก"
 msgid "and all indented items below it?"
 msgstr "และรายการที่เยื้องด้านล่างทั้งหมด?"
 
+#: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
+msgid "Add these permissions under {perm}"
+msgstr "เพิ่มการอนุญาตเหล่านี้ภายใต้ {perm}"
+
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:14./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:15
 msgid "Application ID"
 msgstr "รหัสแอปพลิเคชัน"
@@ -7135,8 +7163,8 @@ msgid "Saved the Microsoft settings."
 msgstr "บันทึกการตั้งค่าของ Microsoft"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
-msgid "Space separated list of scopes that you want the user to consent to. Examples are: <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically."
-msgstr "รายการขอบเขตที่คั่นด้วยช่องว่างที่คุณต้องการให้ผู้ใช้ยินยอม ตัวอย่าง ได้แก่ : <tt>อีเมล</tt>, <tt>offline_access</tt> และ <tt>โปรไฟล์</tt>. <tt>openid</tt> จะถูกเพิ่มโดยอัตโนมัติเสมอ"
+msgid "Space separated list of scopes that you want the user to consent to. Examples are: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically."
+msgstr "รายการขอบเขตที่คั่นด้วยช่องว่างที่คุณต้องการให้ผู้ใช้ยินยอม ตัวอย่าง ได้แก่ <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> และ <tt>profile</tt>ขอบเขต <tt>openid</tt> จะถูกเพิ่มโดยอัตโนมัติเสมอ"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
 msgid "Tenant"
