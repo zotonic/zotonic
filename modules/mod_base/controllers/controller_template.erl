@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2013 Marc Worrell
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Generic template controller, serves the template mentioned in the dispatch configuration.
 
-%% Copyright 2009-2013 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -74,7 +74,14 @@ provide_content(ReqData, Context) ->
     ],
     Rendered = z_template:render(Template, Vars, Context4),
     {Output, OutputContext} = z_context:output(Rendered, Context4),
-    ?WM_REPLY(Output, OutputContext).
+    case z_context:get(http_status, OutputContext) of
+        Status when is_integer(Status) ->
+            {x, RD, ContextReply} = ?WM_REPLY(x, OutputContext),
+            RD1 = wrq:set_resp_body(Output, RD),
+            {{halt, Status}, RD1, ContextReply};
+        _ ->
+            ?WM_REPLY(Output, OutputContext)
+    end.
 
 set_optional_cache_header(Context) ->
     case z_context:get(maxage, Context) of
