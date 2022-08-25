@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-08-01 10:59\n"
+"PO-Revision-Date: 2022-08-25 15:44\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -526,7 +526,7 @@ msgstr "Повернені правила"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:130
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:124./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:30
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:101
@@ -854,6 +854,10 @@ msgstr "Всі медіа"
 msgid "All pages"
 msgstr "Всі сторінки"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:108
+msgid "All pages of this category"
+msgstr "Всі сторінки цієї категорії"
+
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:25
 msgid "All sites have been flushed."
 msgstr "Всі сайти очищено."
@@ -899,8 +903,12 @@ msgstr "Ви впевнені, що хочете вийти з інтерфей�
 msgid "Aside"
 msgstr "Осторонь"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:90
-msgid "Ask google to not index this page"
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:121
+msgid "Ask Google to exclude all “{cat}” pages"
+msgstr "Попросіть Google виключити всі сторінки «{cat}»."
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
+msgid "Ask Google to not index this page"
 msgstr "Попросіть Google не індексувати цю сторінку"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
@@ -1055,7 +1063,7 @@ msgstr "Створено на"
 msgid "Created:"
 msgstr "Створено:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:77
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
 msgid "Customize page slug"
 msgstr "Налаштування URL сторінки для читання людиною"
 
@@ -1158,7 +1166,7 @@ msgstr "Дублювати цю сторінку."
 msgid "E-mail address"
 msgstr "Адреса електронної пошти"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:99./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:53./apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:50
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:39
@@ -1635,6 +1643,10 @@ msgstr "Сторінки"
 msgid "Pages for"
 msgstr "Сторінки для"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:110
+msgid "Pages of this category can be excluded from search engines. This is useful if some categories should not be found on Google (et al). Common examples are categories and predicates."
+msgstr "Сторінки цієї категорії можуть бути виключені з пошукових систем. Це корисно, якщо деякі категорії не можна знайти в Google (та ін.). Типовими прикладами є категорії та предикати."
+
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "Pages overview"
 msgstr "Огляд сторінок"
@@ -1796,6 +1808,10 @@ msgstr "Знову запускає команду встановлення сх
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:6
 msgid "SEO Content"
 msgstr "SEO-контент"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:96
+msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
+msgstr "SEO-індексація цієї сторінки вимкнена, оскільки вона знаходиться в категорії «{cat}»."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:4
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
@@ -2553,6 +2569,10 @@ msgstr "За замовчуванням — ім’я хоста сайту."
 msgid "Domain for all generated from- and envelop-addresses."
 msgstr "Домен для всіх створених адрес із- та конвертів."
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:131
+msgid "Download images in emails after opening the message"
+msgstr "Завантажуйте зображення в електронних листах після відкриття повідомлення"
+
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:103./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:104
 msgid "E-mail override"
 msgstr "Перевизначення електронної пошти"
@@ -2622,6 +2642,10 @@ msgstr "Тільки адміністратор може додавати клю
 msgid "Password"
 msgstr "Пароль"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:134
+msgid "Per default images smaller than 1MB are embedded in email messages. Using a separate download for images results in a smaller message size but non-public images will not be visible. Leave this disabled if you are sending non-public images."
+msgstr "За замовчуванням зображення розміром менше 1 МБ вставляються в повідомлення електронної пошти. Використання окремого завантаження для зображень призводить до меншого розміру повідомлення, але закриті зображення не будуть видимі. Залиште це вимкненим, якщо ви надсилаєте закриті зображення."
+
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:1
 msgid "Please fill in the module, key and value for the new configuration key."
 msgstr "Будь ласка, заповніть модуль, ключ і значення для нового ключа конфігурації."
@@ -2646,7 +2670,7 @@ msgstr "Сертифікати SSL"
 msgid "Self signed certificate"
 msgstr "Самопідписаний сертифікат"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:161
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:111
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:21./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:17
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:49
@@ -2654,11 +2678,11 @@ msgstr "Самопідписаний сертифікат"
 msgid "Send"
 msgstr "Надіслати"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:148
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:157
 msgid "Send a test email"
 msgstr "Надіслати тестовий електронний лист"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:152
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:161
 msgid "Send a test email or check the status of an email address."
 msgstr "Надіслати тестовий електронний лист або перевірити статус електронної адреси."
 
@@ -2742,12 +2766,12 @@ msgstr "Дійсний до"
 msgid "Value"
 msgstr "Значення"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:163./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:172./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr "Переглянути статус електронної пошти"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:138
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:147
 msgid "You must be an administrator to view or change the email configuration."
 msgstr "Ви повинні бути адміністратором, щоб переглянути або змінити конфігурацію електронної пошти."
 
@@ -2755,7 +2779,7 @@ msgstr "Ви повинні бути адміністратором, щоб пе
 msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
 msgstr "Zotonic надсилає електронну пошту за допомогою вбудованого сервера електронної пошти. Ви можете надіслати електронний лист за допомогою зовнішнього реле."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:160
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:169
 msgid "test@example.com"
 msgstr "test@example.com"
 
@@ -7078,6 +7102,10 @@ msgstr "Невідома категорія"
 msgid "and all indented items below it?"
 msgstr "і всі елементи з відступом під ним?"
 
+#: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
+msgid "Add these permissions under {perm}"
+msgstr "Додайте ці дозволи під {perm}"
+
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:14./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:15
 msgid "Application ID"
 msgstr "Ідентифікатор додатку"
@@ -7135,8 +7163,8 @@ msgid "Saved the Microsoft settings."
 msgstr "Збережено налаштування Microsoft."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
-msgid "Space separated list of scopes that you want the user to consent to. Examples are: <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically."
-msgstr "Розділений пробілами список областей, на які ви хочете, щоб користувач погодився. Приклади: <tt>електронна пошта</tt>, <tt>offline_access</tt> і <tt>профіль</tt>. Область <tt>openid</tt> завжди додається автоматично."
+msgid "Space separated list of scopes that you want the user to consent to. Examples are: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically."
+msgstr "Відокремлений пробілами список областей, на які ви хочете, щоб користувач погодився. Приклади: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> і <tt>profile</tt>. Область <tt>openid</tt> завжди додається автоматично."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
 msgid "Tenant"
