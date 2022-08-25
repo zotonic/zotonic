@@ -111,6 +111,12 @@
 
 -define(IDN_CACHE_TIME, 3600*12).
 
+%% Default duration and random variance interval for password checks.
+%% This prevents a timing difference between checks for existing and
+%% non existing accounts.
+-define(DEFAULT_PW_CHECK_DURATION, 280).
+-define(DEFAULT_PW_CHECK_VARIANCE, 40).
+
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
@@ -780,19 +786,59 @@ nodash(S) ->
     end.
 
 %% @doc Return the rsc_id with the given username/password.
-%%      If succesful then updates the 'visited' timestamp of the entry.
--spec check_username_pw(binary() | string(), binary() | string(), z:context()) ->
-            {ok, m_rsc:resource_id()} | {error, term()}.
+%% If succesful then updates the 'visited' timestamp of the entry.
+-spec check_username_pw(Username, Password, Context) -> Result when
+    Username :: binary() | string(),
+    Password :: binary() | string(),
+    Context :: z:context(),
+    Result :: {ok, m_rsc:resource_id()} | {error, term()}.
 check_username_pw(Username, Password, Context) ->
     check_username_pw(Username, Password, [], Context).
 
 %% @doc Return the rsc_id with the given username/password.
-%%      If succesful then updates the 'visited' timestamp of the entry.
--spec check_username_pw(binary() | string(), binary() | string(), list() | map(), z:context()) ->
-            {ok, m_rsc:resource_id()} | {error, term()}.
-check_username_pw(Username, Password, QueryArgs, Context) when is_list(QueryArgs) ->
-    check_username_pw(Username, Password, maps:from_list(QueryArgs), Context);
-check_username_pw(Username, Password, QueryArgs, Context) when is_map(QueryArgs) ->
+%% If succesful then updates the 'visited' timestamp of the entry.
+%% Uses a timer to level the time difference between existing and non existing accounts.
+-spec check_username_pw(Username, Password, QueryArgs, Context) -> Result when
+    Username :: binary() | string(),
+    Password :: binary() | string(),
+    QueryArgs :: list() | map(),
+    Context :: z:context(),
+    Result :: {ok, m_rsc:resource_id()} | {error, term()}.
+check_username_pw(Username, Password, QueryArgs, Context) ->
+    Timeout = ?DEFAULT_PW_CHECK_DURATION + z_ids:number(?DEFAULT_PW_CHECK_VARIANCE),
+    Ref = erlang:make_ref(),
+    erlang:send_after(Timeout, self(), {pw_done, Ref}),
+    Result = check_username_pw_do(Username, Password, QueryArgs, Context),
+    wait_message(Ref),
+    Result.
+
+wait_message(Ref) ->
+    receive
+        {pw_done, Ref} ->
+            ok;
+        {pw_done, _} ->
+            wait_message(Ref)
+    after ?DEFAULT_PW_CHECK_DURATION + ?DEFAULT_PW_CHECK_DURATION ->
+        ?LOG_ERROR(#{
+            text => <<"Timeout waiting for pw_done message.">>,
+            in => zotonic_core,
+            result => error,
+            reason => timeout
+        }),
+        ok
+    end.
+
+%% @doc Return the rsc_id with the given username/password.
+%% If succesful then updates the 'visited' timestamp of the entry.
+-spec check_username_pw_do(Username, Password, QueryArgs, Context) -> Result when
+    Username :: binary() | string(),
+    Password :: binary() | string(),
+    QueryArgs :: list() | map(),
+    Context :: z:context(),
+    Result :: {ok, m_rsc:resource_id()} | {error, term()}.
+check_username_pw_do(Username, Password, QueryArgs, Context) when is_list(QueryArgs) ->
+    check_username_pw_do(Username, Password, maps:from_list(QueryArgs), Context);
+check_username_pw_do(Username, Password, QueryArgs, Context) when is_map(QueryArgs) ->
     NormalizedUsername = z_convert:to_binary( z_string:trim( z_string:to_lower(Username) ) ),
     case z_notifier:first(#auth_precheck{ username =  NormalizedUsername }, Context) of
         Ok when Ok =:= ok; Ok =:= undefined ->
