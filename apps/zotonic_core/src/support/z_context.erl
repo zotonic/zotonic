@@ -421,9 +421,9 @@ is_site_url_1(Url, Context) ->
 site_url(undefined, Context) ->
     abs_url(<<"/">>, Context);
 site_url("#" ++ _ = Frag, _Context) ->
-     z_convert:to_binary(Frag);
+     z_sanitize:uri(z_convert:to_binary(Frag));
 site_url(<<"#", _/binary>> = Frag, _Context) ->
-     Frag;
+     z_sanitize:uri(Frag);
 site_url(Url, Context) ->
     Url1 = z_sanitize:uri(Url),
     case is_site_url(Url1, Context) of
