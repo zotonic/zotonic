@@ -7470,6 +7470,10 @@ msgstr ""
 msgid "and all indented items below it?"
 msgstr ""
 
+#: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
+msgid "Add these permissions under {perm}"
+msgstr ""
+
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:14./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:15
 msgid "Application ID"
 msgstr ""
@@ -7531,7 +7535,7 @@ msgstr ""
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
 msgid ""
 "Space separated list of scopes that you want the user to consent to. "
-"Examples are: <tt>User.Read</tt>/, <tt>email</tt>, <tt>offline_access</tt> "
+"Examples are: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> "
 "and <tt>profile</tt>. The <tt>openid</tt> scope is always added "
 "automatically."
 msgstr ""
