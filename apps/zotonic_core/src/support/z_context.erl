@@ -45,6 +45,7 @@
     prune_for_scomp/1,
 
     is_site_url/2,
+    site_url/2,
     abs_url/2,
 
     pickle/1,
@@ -410,6 +411,27 @@ is_site_url_1(Url, Context) ->
             false
     end.
 
+%% @doc Ensure that an URL is an URL to the current site. If not then return
+%% the URL of the homepage. If the URL is not a fragment then the returned URL
+%% is always sanitized and absolute.
+-spec site_url(Url, Context) -> SiteUrl when
+    Url :: undefined | string() | binary(),
+    Context :: z:context(),
+    SiteUrl :: binary().
+site_url(undefined, Context) ->
+    abs_url(<<"/">>, Context);
+site_url("#" ++ _ = Frag, _Context) ->
+     z_convert:to_binary(Frag);
+site_url(<<"#", _/binary>> = Frag, _Context) ->
+     Frag;
+site_url(Url, Context) ->
+    Url1 = z_sanitize:uri(Url),
+    case is_site_url(Url1, Context) of
+        true ->
+            abs_url(Url1, Context);
+        false ->
+            abs_url(<<"/">>, Context)
+    end.
 
 %% @doc Make the url an absolute url by prepending the hostname.
 -spec abs_url(undefined | iodata(), z:context()) -> binary().
