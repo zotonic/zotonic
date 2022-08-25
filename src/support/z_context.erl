@@ -437,15 +437,15 @@ site_url(None, Context) when
     None =:= <<>> ->
     z_context:abs_url(<<"/">>, Context);
 site_url("#" ++ _ = Frag, _Context) ->
-    z_convert:to_binary(Frag);
+    z_sanitize:uri(z_convert:to_binary(Frag));
 site_url(<<"#", _/binary>> = Frag, _Context) ->
-    Frag;
+    z_sanitize:uri(Frag);
 site_url("/" ++ _ = Path, Context) ->
     abs_url(Path, Context);
 site_url(<<"/", _/binary>> = Path, Context) ->
     abs_url(Path, Context);
 site_url(Url, Context) ->
-    case z_convert:to_list(z_html:noscript(Url)) of
+    case z_convert:to_list(z_sanitize:uri(Url)) of
         "#" ++ _ = Url1 ->
             z_convert:to_binary(Url1);
         "/" ++ _ = Url1 ->
