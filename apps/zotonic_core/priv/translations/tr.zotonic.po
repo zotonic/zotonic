@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-08-01 10:59\n"
+"PO-Revision-Date: 2022-08-25 15:45\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -526,7 +526,7 @@ msgstr "Geri alının kurallar"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:130
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:124./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:30
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:101
@@ -854,6 +854,10 @@ msgstr "Tüm medya"
 msgid "All pages"
 msgstr "Tüm sayfalar"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:108
+msgid "All pages of this category"
+msgstr "Bu kategorinin tüm sayfaları"
+
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:25
 msgid "All sites have been flushed."
 msgstr "Tüm siteler temizlendi."
@@ -899,9 +903,13 @@ msgstr "Yönetici arayüzünden çıkmak istediğinizden emin misiniz?"
 msgid "Aside"
 msgstr "Yana"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:90
-msgid "Ask google to not index this page"
-msgstr "Google'a bu sayfayı indekslememesini söyleyin"
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:121
+msgid "Ask Google to exclude all “{cat}” pages"
+msgstr "Google'dan tüm “{cat}” sayfalarını hariç tutmasını isteyin"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
+msgid "Ask Google to not index this page"
+msgstr "Google'dan bu sayfayı dizine eklememesini isteyin"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
@@ -1055,7 +1063,7 @@ msgstr "Tarihinde oluşturuldu"
 msgid "Created:"
 msgstr "Oluşturuldu:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:77
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
 msgid "Customize page slug"
 msgstr "Sayfa slug'ını özelleştir"
 
@@ -1158,7 +1166,7 @@ msgstr "Bu sayfayı çoğalt."
 msgid "E-mail address"
 msgstr "E-posta adresi"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:99./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:53./apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:50
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:39
@@ -1635,6 +1643,10 @@ msgstr "Sayfalar"
 msgid "Pages for"
 msgstr "İçin sayfalar"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:110
+msgid "Pages of this category can be excluded from search engines. This is useful if some categories should not be found on Google (et al). Common examples are categories and predicates."
+msgstr "Bu kategorideki sayfalar arama motorlarından hariç tutulabilir. Bu, bazı kategorilerin Google'da bulunmaması gerekiyorsa yararlıdır (ve diğerleri). Yaygın örnekler kategoriler ve yüklemlerdir."
+
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "Pages overview"
 msgstr "Sayfalar genel bakışı"
@@ -1796,6 +1808,10 @@ msgstr "Şema yükleme komutunu sitenin modülünden yeniden çalıştırır."
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:6
 msgid "SEO Content"
 msgstr "SEO içeriği"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:96
+msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
+msgstr "Bu sayfanın SEO indekslemesi “{cat}” kategorisinde olduğu için devre dışı bırakıldı."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:4
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
@@ -2553,6 +2569,10 @@ msgstr "Sitenin ana bilgisayar adına varsayılan."
 msgid "Domain for all generated from- and envelop-addresses."
 msgstr "Tüm oluşturulan ve zarf adresleri için alan."
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:131
+msgid "Download images in emails after opening the message"
+msgstr "Mesajı açtıktan sonra e-postalardaki resimleri indirin"
+
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:103./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:104
 msgid "E-mail override"
 msgstr "E-posta geçersiz kılma"
@@ -2622,6 +2642,10 @@ msgstr "Sadece yöneticiler yapılandırma anahtarı ekleyebilir."
 msgid "Password"
 msgstr "Şifre"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:134
+msgid "Per default images smaller than 1MB are embedded in email messages. Using a separate download for images results in a smaller message size but non-public images will not be visible. Leave this disabled if you are sending non-public images."
+msgstr "Varsayılan olarak 1MB'den küçük resimler e-posta mesajlarına gömülür. Resimler için ayrı bir indirme kullanmak, daha küçük bir mesaj boyutuna neden olur, ancak genel olmayan resimler görünmez. Herkese açık olmayan resimler gönderiyorsanız bunu devre dışı bırakın."
+
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:1
 msgid "Please fill in the module, key and value for the new configuration key."
 msgstr "Yeni yapılandırma anahtarı için modül, anahtar ve değer alanlarını doldurun."
@@ -2646,7 +2670,7 @@ msgstr "SSL Sertifikaları"
 msgid "Self signed certificate"
 msgstr "Onaylı sertifika"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:161
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:111
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:21./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:17
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:49
@@ -2654,11 +2678,11 @@ msgstr "Onaylı sertifika"
 msgid "Send"
 msgstr "Gönder"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:148
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:157
 msgid "Send a test email"
 msgstr "Bir test e-postası gönderin"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:152
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:161
 msgid "Send a test email or check the status of an email address."
 msgstr "Bir test e-postası gönderin veya bir e-posta adresinin durumunu kontrol edin."
 
@@ -2742,12 +2766,12 @@ msgstr "Tarihine kadar geçerli"
 msgid "Value"
 msgstr "Değer"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:163./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:172./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr "E-posta durumunu görüntüle"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:138
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:147
 msgid "You must be an administrator to view or change the email configuration."
 msgstr "E-posta yapılandırmasını görüntülemek veya değiştirmek için yönetici olmanız gerekir."
 
@@ -2755,7 +2779,7 @@ msgstr "E-posta yapılandırmasını görüntülemek veya değiştirmek için y�
 msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
 msgstr "Zotonic, yerleşik bir e-posta sunucusu kullanarak e-posta gönderir. E-postayı harici bir aktarma yoluyla gönderebilirsiniz."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:160
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:169
 msgid "test@example.com"
 msgstr "test@example.com"
 
@@ -7078,6 +7102,10 @@ msgstr "Bilinmeyen kategori"
 msgid "and all indented items below it?"
 msgstr "ve altındaki tüm girintili öğeler?"
 
+#: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
+msgid "Add these permissions under {perm}"
+msgstr "Bu izinleri {perm}altına ekleyin"
+
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:14./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:15
 msgid "Application ID"
 msgstr "Uygulama Kimliği"
@@ -7135,8 +7163,8 @@ msgid "Saved the Microsoft settings."
 msgstr "Microsoft ayarlarını kaydetti."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
-msgid "Space separated list of scopes that you want the user to consent to. Examples are: <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically."
-msgstr "Kullanıcının onay vermesini istediğiniz kapsamların boşlukla ayrılmış listesi. Örnekler: <tt>e-posta</tt>, <tt>offline_access</tt> ve <tt>profil</tt>. <tt>openid</tt> kapsamı her zaman otomatik olarak eklenir."
+msgid "Space separated list of scopes that you want the user to consent to. Examples are: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically."
+msgstr "Kullanıcının izin vermesini istediğiniz kapsamların boşlukla ayrılmış listesi. Örnekler: <tt>Kullanıcı.Okuma</tt>, <tt>e-posta</tt>, <tt>offline_access</tt> ve <tt>profil</tt>. <tt>openid</tt> kapsamı her zaman otomatik olarak eklenir."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
 msgid "Tenant"
