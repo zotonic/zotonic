@@ -20,13 +20,17 @@
 -export([menu_is_visible/2]).
 
 menu_is_visible(Items, Context) when is_list(Items) ->
-	lists:filter(fun(Item) -> is_visible(Item, Context) end, Items);
+    lists:filter(fun(Item) -> is_visible(Item, Context) end, Items);
 menu_is_visible(_, _Context) ->
-	[].
+    [].
 
-is_visible(undefined, _Context) ->
-	false;
 is_visible({RscId, _Items}, Context) ->
-	z_acl:rsc_visible(RscId, Context);
+    is_visible(RscId, Context);
 is_visible(RscId, Context) ->
-	z_acl:rsc_visible(RscId, Context).
+    case m_rsc:rid(RscId, Context) of
+        undefined ->
+            false;
+        Id ->
+            z_acl:rsc_visible(Id, Context)
+            andalso m_rsc:exists(Id, Context)
+    end.
