@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-08-26 16:24\n"
+"PO-Revision-Date: 2022-08-26 19:28\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3960,7 +3960,7 @@ msgstr "Ошибка"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:108
 msgid "Expected another account"
-msgstr "Ожидал другой аккаунт"
+msgstr "Ожидался другой аккаунт"
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:232
 msgid "External Services"
