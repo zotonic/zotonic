@@ -1,5 +1,7 @@
 {% if is_connect and 'facebook'|member:identity_types %}
-	<a id="{{ #fbdis }}" href="#disconnect" class="btn z-btn-social" style="background-color: #3b5998"><span class="z-icon z-icon-facebook"></span> {_ Disconnect from Facebook _}</a>
+	<a id="{{ #fbdis }}" href="#disconnect" class="btn z-btn-social" style="background-color: #3b5998">
+      &times; <span class="z-icon z-icon-facebook"></span> {_ Disconnect from Facebook _}
+   </a>
 	{% wire id=#fbdis
 			action={confirm title=_"Disconnect from Facebook"
 							text=_"Do you want to disconnect your Facebook account?"
