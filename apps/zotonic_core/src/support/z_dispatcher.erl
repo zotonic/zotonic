@@ -71,7 +71,7 @@ dispatcher_args() ->
         is_permanent, dispatch, q, qargs,
         zotonic_dispatch, ssl, protocol, session_id, set_session_id,
         zotonic_dispatch_file, zotonic_dispatch_module,
-        auth_options, auth_expires
+        auth_options, auth_expires, csp_nonce
     ].
 
 %% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
