@@ -47,7 +47,13 @@
 %% @doc Convert the Infile to an outfile with a still image using the filters.
 -spec convert(file:filename_all(), file:filename_all(), list(), #context{}) -> ok | {error, term()}.
 convert(InFile, InFile, _, _Context) ->
-    ?LOG_ERROR("Image convert will overwrite input file ~p", [InFile]),
+    ?LOG_ERROR(#{
+        text => <<"Image convert will overwrite input file">>,
+        in => zotonic_core,
+        result => error,
+        reason => will_overwrite_infile,
+        file => InFile
+    }),
     {error, will_overwrite_infile};
 convert(InFile, OutFile, Filters, Context) ->
     convert(InFile, InFile, OutFile, Filters, Context).
@@ -64,14 +70,17 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
                         {error, Reason} = Error ->
                             ?LOG_WARNING(#{
                                 text => <<"Cannot expand mediaclass">>,
-                                filters => Filters,
-                                reason => Reason
+                                in => zotonic_core,
+                                result => error,
+                                reason => Reason,
+                                filters => Filters
                             }),
                             Error
                     end;
                 false ->
                     ?LOG_NOTICE(#{
                         text => <<"cannot convert mime type">>,
+                        in => zotonic_core,
                         mime => Mime,
                         file => unicode:characters_to_binary(InFile)
                     }),
@@ -85,7 +94,8 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
 
 convert_1(false, _InFile, _OutFile, _InMime, _FileProps, _Filters) ->
     ?LOG_ERROR(#{
-        text => <<"Install ImageMagick 'convert' to generate previews of images.">>
+        text => <<"Install ImageMagick 'convert' to generate previews of images.">>,
+        in => zotonic_core
     }),
     {error, convert_missing};
 convert_1(ConvertCmd, InFile, OutFile, InMime, FileProps, Filters) ->
@@ -123,6 +133,7 @@ convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps) ->
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 text => <<"convert cmd failed">>,
+                in => zotonic_core,
                 command => unicode:characters_to_binary(Cmd),
                 reason => Reason
             }),
@@ -150,6 +161,7 @@ once(Cmd, OutFile) ->
         {Pid, _} when Pid =:= self() ->
             ?LOG_DEBUG(#{
                 text => <<"Image convert">>,
+                in => zotonic_core,
                 command => unicode:characters_to_binary(Cmd)
             }),
             Result = os:cmd(Cmd),
@@ -160,6 +172,7 @@ once(Cmd, OutFile) ->
                 false ->
                     ?LOG_ERROR(#{
                         text => <<"convert cmd failed">>,
+                        in => zotonic_core,
                         command => unicode:characters_to_binary(Cmd),
                         result => unicode:characters_to_binary(Result)
                     }),
@@ -168,6 +181,7 @@ once(Cmd, OutFile) ->
         {_OtherPid, _} ->
             ?LOG_DEBUG(#{
                 text => "Waiting for parallel resizer",
+                in => zotonic_core,
                 command => unicode:characters_to_binary(Cmd)
             }),
             Ref = gproc:monitor(Key),

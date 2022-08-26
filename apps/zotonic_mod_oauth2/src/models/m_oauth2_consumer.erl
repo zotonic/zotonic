@@ -1,8 +1,9 @@
-%% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2021 Marc Worrell
+% @author Marc Worrell <marc@worrell.nl>
+%% @copyright 2021-2022 Marc Worrell
 %% @doc OAuth2 model managing consumers for access to remote sites.
+%% @enddoc
 
-%% Copyright 2021 Marc Worrell
+%% Copyright 2021-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -33,12 +34,20 @@
 
     get_consumer_oauth_service/2,
 
+    fetch_token/3,
     find_token/3,
     is_connected/2,
     is_connected/3,
 
+    name_to_id/2,
+
     manage_schema/2
 ]).
+
+-include_lib("zotonic_core/include/zotonic.hrl").
+
+-type consumer_id() :: binary() | pos_integer() | undefined.
+-export_type([consumer_id/0]).
 
 m_get([ <<"consumers">> ], _Msg, Context) ->
     case list_consumers(Context) of
@@ -86,6 +95,7 @@ list_consumers_auth(Context) ->
         select a.id, a.name, a.description, a.is_use_import, a.is_use_auth, a.domain
         from oauth2_consumer_app a
         where a.is_use_auth = true
+          and a.grant_type <> 'client_credentials'
         order by description",
         Context).
 
@@ -96,6 +106,7 @@ list_consumers_import(Context) ->
         select a.id, a.name, a.description, a.is_use_import, a.is_use_auth, a.domain
         from oauth2_consumer_app a
         where a.is_use_import = true
+          and a.grant_type <> 'client_credentials'
         order by description",
         Context).
 
@@ -103,10 +114,11 @@ list_consumers_import(Context) ->
 -spec list_consumers_all( z:context() ) -> {ok, list( map() )} | {error, eacces | term()}.
 list_consumers_all(Context) ->
     z_db:qmap("
-        select a.id, a.name, a.description, a.is_use_import, a.is_use_auth, a.domain
+        select a.id, a.name, a.description, a.is_use_import, a.is_use_auth, a.domain, a.grant_type
         from oauth2_consumer_app a
-        where a.is_use_auth = true
-           or a.is_use_import = true
+        where (   a.is_use_auth = true
+               or a.is_use_import = true)
+          and a.grant_type <> 'client_credentials'
         order by description",
         Context).
 
@@ -120,7 +132,7 @@ list_consumers(Context) ->
         true ->
             z_db:qmap("
                 select a.id, a.name, a.is_use_import, a.is_use_auth, a.user_id, a.domain,
-                       a.description, a.created, a.modified,
+                       a.grant_type, a.description, a.created, a.modified,
                        (select count(*) from identity t where t.type = 'mod_oauth2' and t.key like a.name || ':%') as token_count
                 from oauth2_consumer_app a
                 order by created desc",
@@ -130,7 +142,7 @@ list_consumers(Context) ->
     end.
 
 %% @doc Get a specific app, return also the token count for the app.
--spec get_consumer( ConsumerId :: integer(), z:context() ) -> {ok, map()} | {error, eacces | term()}.
+-spec get_consumer( ConsumerId :: consumer_id(), z:context() ) -> {ok, map()} | {error, eacces | term()}.
 get_consumer(ConsumerId, Context) ->
     case z_acl:is_admin(Context) of
         true ->
@@ -139,33 +151,33 @@ get_consumer(ConsumerId, Context) ->
                        (select count(*) from identity t where t.type = 'mod_oauth2' and t.key like a.name || ':%') as token_count
                 from oauth2_consumer_app a
                 where a.id = $1",
-                [ ConsumerId ],
+                [ name_to_id(ConsumerId, Context) ],
                 Context);
         false ->
             z_db:qmap_row("
                 select a.id, a.name, a.description, a.domain
                 from oauth2_consumer_app a
                 where a.id = $1",
-                [ ConsumerId ],
+                [ name_to_id(ConsumerId, Context) ],
                 Context)
     end.
 
 
 %% @doc Get basic consumer info for the oauth flow.
--spec get_consumer_oauth_service( ConsumerId :: integer(), z:context() ) -> {ok, map()} | {error, eacces | term()}.
+-spec get_consumer_oauth_service( ConsumerId :: consumer_id(), z:context() ) -> {ok, map()} | {error, eacces | term()}.
 get_consumer_oauth_service(ConsumerId, Context) ->
     z_db:qmap_row("
         select name, access_token_url, domain, app_code, app_secret
         from oauth2_consumer_app a
         where a.id = $1",
-        [ ConsumerId ],
+        [ name_to_id(ConsumerId, Context) ],
         Context).
 
 
 %% @doc Insert a new Consumer.
 -spec insert_consumer( ConsumerDetails :: map(), z:context() ) -> {ok, ConsumerId :: integer()} | {error, term()}.
 insert_consumer(Map, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_admin_editable(Context) of
         true ->
             Name = maps:get(<<"name">>, Map, <<>>),
             Consumer = #{
@@ -178,7 +190,8 @@ insert_consumer(Map, Context) ->
                 <<"app_code">> => maps:get(<<"app_code">>, Map, <<>>),
                 <<"app_secret">> => maps:get(<<"app_secret">>, Map, <<>>),
                 <<"authorize_url">> => maps:get(<<"authorize_url">>, Map, <<>>),
-                <<"access_token_url">> => maps:get(<<"access_token_url">>, Map, <<>>)
+                <<"access_token_url">> => maps:get(<<"access_token_url">>, Map, <<>>),
+                <<"grant_type">> => maps:get(<<"grant_type">>, Map, <<"authorization_code">>)
             },
             case z_db:q1("select count(*) from oauth2_consumer_app where name = $1", [ Name ], Context) of
                 0 ->
@@ -191,11 +204,11 @@ insert_consumer(Map, Context) ->
     end.
 
 %% @doc Delete an App. All associated tokens are deleted as well.
--spec delete_consumer( ConsumerId :: integer(), z:context() ) -> ok | {error, term()}.
+-spec delete_consumer( ConsumerId :: consumer_id(), z:context() ) -> ok | {error, term()}.
 delete_consumer(ConsumerId, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_admin_editable(Context) of
         true ->
-            case z_db:delete(oauth2_consumer_app, ConsumerId, Context) of
+            case z_db:delete(oauth2_consumer_app, name_to_id(ConsumerId, Context), Context) of
                 {ok, 1} -> ok;
                 {ok, 0} -> {error, enoent};
                 {error, _} = Error -> Error
@@ -205,15 +218,15 @@ delete_consumer(ConsumerId, Context) ->
     end.
 
 %% @doc Update an App's is_enabled flag and description.
--spec update_consumer( ConsumerId :: integer(), map(), z:context() ) -> ok | {error, term()}.
+-spec update_consumer( ConsumerId :: consumer_id(), map(), z:context() ) -> ok | {error, term()}.
 update_consumer(ConsumerId, Map, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_admin_editable(Context) of
         true ->
             Consumer = maps:without([<<"modified">>, <<"created">>, <<"use_id">>], Map),
             Consumer1 = Consumer#{
                 <<"modified">> => calendar:universal_time()
             },
-            case z_db:update(oauth2_consumer_app, ConsumerId, Consumer1, Context) of
+            case z_db:update(oauth2_consumer_app, name_to_id(ConsumerId, Context), Consumer1, Context) of
                 {ok, 1} -> ok;
                 {ok, 0} -> {error, enoent};
                 {error, _} = Error -> Error
@@ -221,6 +234,79 @@ update_consumer(ConsumerId, Map, Context) ->
         false ->
             {error, eacces}
     end.
+
+
+%% @doc Fetch a token from the remote server for the user. The grant_flow must be of the
+%% type 'Client Credentials'.  Any existing token is replaced. The current user must be
+%% authenticated as an admin.
+-spec fetch_token(ConsumerId :: consumer_id(), UserId :: m_rsc:resource_id(), z:context() ) ->
+    {ok, AccessToken :: binary()} | {error, term()}.
+fetch_token(ConsumerId, UserId, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            case z_db:qmap_row("
+                select name, domain, access_token_url, app_code, app_secret, grant_type
+                from oauth2_consumer_app
+                where id = $1
+                ",
+                [ name_to_id(ConsumerId, Context) ],
+                Context)
+            of
+                {ok, #{
+                    <<"name">> := AppName,
+                    <<"grant_type">> := <<"client_credentials">>,
+                    <<"domain">> := _Domain,
+                    <<"access_token_url">> := TokenUrl,
+                    <<"app_code">> := AppCode,
+                    <<"app_secret">> := AppSecret
+                }} ->
+                    Payload = #{
+                        <<"client_id">> => AppCode,
+                        <<"client_secret">> => AppSecret,
+                        <<"grant_type">> => <<"client_credentials">>
+                    },
+                    case z_fetch:fetch_json(post, TokenUrl, Payload, [], Context) of
+                        {ok, #{
+                            <<"access_token">> := AccessToken
+                            % <<"expires_in">> := ExpiresInSecs
+                            % <<"token_type">> := <<"Bearer">>
+                        } = Response} ->
+                            Type = <<"mod_oauth2">>,
+                            Key = <<AppName/binary, $:, AppCode/binary>>,
+                            Props = [
+                                {is_unique, true},
+                                {is_verified, true},
+                                {propb, {term, #{ <<"access_token">> => AccessToken }}},
+                                {expires, expires(Response)}
+                            ],
+                            m_identity:insert(UserId, Type, Key, Props, Context),
+                            {ok, AccessToken};
+                        {ok, _} ->
+                            {error, no_access_token};
+                        {error, _} = Error ->
+                            Error
+                    end;
+                {ok, _} ->
+                    {error, grant_type};
+                {error, _} = Error ->
+                    Error
+            end;
+        false ->
+            {error, eacces}
+    end.
+
+expires(#{ <<"expires_in">> := ExpiresInSecs }) when is_integer(ExpiresInSecs) ->
+    z_datetime:timestamp_to_datetime( z_datetime:timestamp() + ExpiresInSecs );
+expires(#{}) ->
+    undefined.
+
+%% @doc Fetch id of consumer with the given name.
+name_to_id(undefined, _Context) ->
+    undefined;
+name_to_id(Name, Context) when is_binary(Name) ->
+    z_db:q1("select id from oauth2_consumer_app where name = $1", [ Name ], Context);
+name_to_id(Id, _Context) when is_integer(Id) ->
+    Id.
 
 %% @doc Find an access token for the given user / host combination. The corresponding consumer
 %% app must be marked for import usage. The identity property must be map with an access_token
@@ -233,6 +319,9 @@ find_token(UserId, Host, Context) ->
         from identity idn,
              oauth2_consumer_app app
         where idn.rsc_id = $1
+          and idn.type = 'mod_oauth2'
+          and (   idn.expires is null
+               or idn.expires > now())
           and app.domain = $2
           and app.is_use_import
           and app.name = split_part(idn.key, ':', 1)
@@ -288,12 +377,14 @@ manage_schema(_Version,  Context) ->
                     name varchar(255) not null,
                     is_use_import boolean not null default false,
                     is_use_auth boolean not null default false,
-                    app_code varchar(32),
-                    app_secret varchar(32),
+                    app_code varchar(128),
+                    app_secret varchar(128),
                     domain varchar(255) not null,
                     authorize_url varchar(255) not null,
                     access_token_url varchar(255) not null,
                     description varchar(255),
+                    grant_type character varying (32) not null default 'authorization_code',
+                    is_extend_automatic boolean not null default false,
                     user_id int,
                     created timestamp with time zone not null default now(),
                     modified timestamp with time zone not null default now(),
@@ -313,8 +404,49 @@ manage_schema(_Version,  Context) ->
             [] = z_db:q(
                 "CREATE INDEX oauth2_consumer_app_domain_key ON oauth2_consumer_app (domain)",
                 Context),
-
+            [] = z_db:q(
+                "CREATE INDEX oauth2_consumer_app_grant_type_key ON oauth2_consumer_app (grant_type, is_extend_automatic)",
+                Context),
             z_db:flush(Context);
         true ->
-            ok
+            case z_db:column(oauth2_consumer_app, app_code, Context) of
+                {ok, #column_def{ length = 32 }} ->
+                    [] = z_db:q("
+                        alter table oauth2_consumer_app
+                        alter column app_code type character varying(128),
+                        alter column app_secret type character varying(128)",
+                        Context),
+                    z_db:flush(Context);
+                {ok, _} ->
+                    ok
+            end,
+            case z_db:column(oauth2_consumer_app, grant_type, Context) of
+                {ok, #column_def{ default = "'code'::" ++ _ }} ->
+                    [] = z_db:q("
+                        alter table oauth2_consumer_app
+                        alter column grant_type set default 'authorization_code'",
+                        Context),
+                    ok;
+                {ok, #column_def{}} ->
+                    ok;
+                {error, enoent} ->
+                    [] = z_db:q("
+                        alter table oauth2_consumer_app
+                        add column grant_type character varying (32) not null default 'authorization_code'",
+                        Context),
+                    z_db:flush(Context)
+            end,
+            case z_db:column_exists(oauth2_consumer_app, is_extend_automatic, Context) of
+                true ->
+                    ok;
+                false ->
+                    [] = z_db:q("
+                        alter table oauth2_consumer_app
+                        add column is_extend_automatic boolean not null default false",
+                        Context),
+                    [] = z_db:q(
+                        "CREATE INDEX oauth2_consumer_app_grant_type_key ON oauth2_consumer_app (grant_type, is_extend_automatic)",
+                        Context),
+                    z_db:flush(Context)
+            end
     end.

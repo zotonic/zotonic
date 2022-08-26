@@ -94,6 +94,7 @@ recv_connect_data(ConnectData, Socket, Transport, State) ->
         {error, expect_connect} ->
             ?LOG_INFO(#{
                 text => "MQTT: refusing connect with wrong packet type",
+                in => zotonic_listen_mqtt,
                 reason => expect_connect,
                 src => inet:ntoa(PeerIP),
                 protocol => mqtt
@@ -104,6 +105,7 @@ recv_connect_data(ConnectData, Socket, Transport, State) ->
             %% report the connection error, it is good to at least have a message in the log.
             ?LOG_INFO(#{
                 text => "MQTT: refusing connect with unknown host. Use \"example.com:localuser\" as username",
+                in => zotonic_listen_mqtt,
                 reason => unknown_host,
                 src => inet:ntoa(PeerIP),
                 protocol => mqtt
@@ -113,6 +115,7 @@ recv_connect_data(ConnectData, Socket, Transport, State) ->
             % Invalid packet or unkown host - just close the connection
             ?LOG_INFO(#{
                 text => "MQTT: refusing connect with invalid packet or unkown host",
+                in => zotonic_listen_mqtt,
                 reason => Reason,
                 src => inet:ntoa(PeerIP),
                 protocol => mqtt
@@ -138,6 +141,7 @@ loop_data(Data, Socket, Transport, #{ session_ref := SessionRef } = State) ->
             {ok, {PeerIP, _}} = Transport:peername(Socket),
             ?LOG_INFO(#{
                 text => "MQTT incoming_data/2 with unexpected data",
+                in => zotonic_listen_mqtt,
                 reason => Reason,
                 src => inet:ntoa(PeerIP),
                 protocol => mqtt

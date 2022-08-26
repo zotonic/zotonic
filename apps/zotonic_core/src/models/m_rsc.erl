@@ -138,8 +138,7 @@ m_get([ Id, Key | Rest ], _Msg, Context) ->
     {ok, {p(Id, Key, Context), Rest}};
 m_get([ Id ], _Msg, Context) ->
     {ok, {get(Id, Context), []}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_DEBUG("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 

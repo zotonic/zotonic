@@ -83,8 +83,7 @@ m_get([ Id | Rest ], _Msg, Context) ->
                 false -> {error, eacces}
             end
     end;
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
@@ -361,9 +360,14 @@ maybe_duplicate_preview(#{ <<"preview_filename">> := Filename, <<"is_deletable_p
                 <<"is_deletable_preview">> => true
             },
             {ok, Ms1};
-        {error, _} = Error ->
-            ?LOG_ERROR("Duplicate preview: error ~p for preview file \"~s\"",
-                [Error, Filename]),
+        {error, Reason} ->
+            ?LOG_ERROR(#{
+                text => <<"Error duplicating preview">>,
+                in => zotonic_core,
+                result => error,
+                reason => Reason,
+                filename => Filename
+            }),
             Ms1 = maps:remove(<<"preview_filename">>, Ms),
             Ms2 = maps:remove(<<"is_deletable_preview">>, Ms1),
             {ok, Ms2}
@@ -400,9 +404,15 @@ insert_file(#upload{ data = Data, tmpfile = undefined } = Upload, RscProps, Opti
             Result = insert_file(Upload#upload{ tmpfile = TmpFile }, RscProps, Options, Context),
             file:delete(TmpFile),
             Result;
-        {error, _} = Error ->
-            ?LOG_ERROR("Could not write temporary file of ~p bytes, error: ~p",
-                        [ iolist_size(Data), Error ]),
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                text => <<"Could not write temporary file">>,
+                in => zotonic_core,
+                result => error,
+                reason => Reason,
+                size => iolist_size(Data),
+                filename => TmpFile
+            }),
             file:delete(TmpFile),
             Error
     end;
@@ -1048,16 +1058,30 @@ save_preview_url(RscId, Url, Context) ->
                         z_depcache:flush({medium, RscId}, Context),
                         {ok, FileUnique}
                     catch
-                        _:Error ->
-                            ?LOG_WARNING("Error importing preview for ~p, url ~p, mediainfo ~p",
-                                [RscId, Url, MediaInfo]),
+                        Type:Error ->
+                            ?LOG_WARNING(#{
+                                text => <<"Error importing preview">>,
+                                in => zotonic_core,
+                                result => Type,
+                                reason => Error,
+                                rsc_id => RscId,
+                                url => Url,
+                                mediainfo => MediaInfo
+                            }),
                             file:delete(TmpFile),
                             {error, Error}
                     end;
                 {ok, MediaInfo} ->
                     Mime = maps:get(<<"mime">>, MediaInfo, undefined),
-                    ?LOG_WARNING("Error importing preview for ~p, url ~p, not an image ~p",
-                        [RscId, Url, Mime]),
+                    ?LOG_WARNING(#{
+                        text => <<"Error importing preview">>,
+                        in => zotonic_core,
+                        result => error,
+                        reason => no_image,
+                        rsc_id => RscId,
+                        url => Url,
+                        mime => Mime
+                    }),
                     {error, no_image};
                 {error, _} = Error ->
                     Error

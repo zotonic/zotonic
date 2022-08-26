@@ -179,6 +179,11 @@ error_message(av_external_links, Context) ->
     ?__("This file contains links to other files or locations.", Context);
 error_message(sizelimit, Context) ->
     ?__("This file is too large.", Context);
-error_message(_R, Context) ->
-    ?LOG_WARNING("Unknown upload error: ~p", [_R]),
+error_message(R, Context) ->
+    ?LOG_WARNING(#{
+        text => <<"Unknown file upload error">>,
+        in => zotonic_mod_admin,
+        result => error,
+        reason => R
+    }),
     ?__("Error uploading the file.", Context).

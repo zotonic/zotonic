@@ -62,7 +62,14 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Context2 = set_optional_cache_header(Context1),
     Template = z_context:get(template, Context2),
     Rendered = z_template:render(Template, Vars1, Context2),
-    z_context:output(Rendered, Context2).
+    {RespBody, ContextOut} = z_context:output(Rendered, Context2),
+    case z_context:get(http_status, ContextOut) of
+        Status when is_integer(Status) ->
+            ContextReply = cowmachine_req:set_resp_body(RespBody, ContextOut),
+            {{halt, Status}, ContextReply};
+        _ ->
+            {RespBody, ContextOut}
+    end.
 
 -spec maybe_configured_id(list(), z:context()) -> {list(), m_rsc:resource_id()|undefined}.
 maybe_configured_id(Vars, Context) ->

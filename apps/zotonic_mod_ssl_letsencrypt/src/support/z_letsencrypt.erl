@@ -173,7 +173,13 @@ make_cert(Domain, Opts) ->
 make_cert_bg(Domain, Opts=#{async := Async}) ->
     Ret = case gen_statem:call({global, ?MODULE}, {create, bin(Domain), Opts}, 15000) of
         {error, Err} ->
-            ?LOG_ERROR("LetsEncrypt error: ~p", [Err]),
+            ?LOG_ERROR(#{
+                text => <<"LetsEncrypt error making cert">>,
+                in => zotonic_mod_ssl_letsencrypt,
+                result => error,
+                reason => Err,
+                domain => Domain
+            }),
             {error, Err};
         ok ->
             case wait_valid(20) of
@@ -276,7 +282,14 @@ idle({call, From}, {create, Domain, CertOpts}, State=#state{directory=Dir, key=K
     },
     case Order2 of
         #{ <<"type">> := <<"urn:ietf:params:acme:error:", _/binary>> = Type } ->
-            ?LOG_ERROR("[letsencrypt] error for ~s: ~s", [ Domain, Type ]),
+            ?LOG_ERROR(#{
+                text => <<"LetsEncrypt] error for cert delivery">>,
+                in => zotonic_mod_ssl_letsencrypt,
+                result => error,
+                reason => invalid,
+                domain => Domain,
+                type => Type
+            }),
             {next_state, invalid, StateAuth, [ {reply, From, ok} ]};
         #{ <<"authorizations">> := AuthUris } ->
             {ok, Challenges, Nonce4} = authz(ChallengeType, AuthUris, StateAuth),
@@ -402,9 +415,23 @@ maybe_log_status(Status, #{
             } | _
         ]
     }) ->
-    ?LOG_ERROR("[letsencrypt] Status ~p for ~s in response ~s (~s)", [ Status, Hostname, Detail, Type ]);
+    ?LOG_ERROR(#{
+        text => <<"LetsEncrypt status error returned">>,
+        in => zotonic_mod_ssl_letsencrypt,
+        result => error,
+        status => Status,
+        hostname => Hostname,
+        detail => Detail,
+        type => Type
+    });
 maybe_log_status(Status, JSON) ->
-    ?LOG_ERROR("[letsencrypt] Status ~p in response ~p", [ Status, JSON ]).
+    ?LOG_ERROR(#{
+        text => <<"LetsEncrypt status error in response">>,
+        in => zotonic_mod_ssl_letsencrypt,
+        result => error,
+        status => Status,
+        fin_order => JSON
+    }).
 
 
 
@@ -490,7 +517,13 @@ finalize(cast, Msg, State) ->
 % Any other order status leads to exception.
 %
 finalize({call, From}, Status, State) ->
-    ?LOG_ERROR("[letsencrypt] unknown finalize status ~p~n", [Status]),
+    ?LOG_ERROR(#{
+        text => <<"LetsEncrypt unknown finalize status">>,
+        in => zotonic_mod_ssl_letsencrypt,
+        result => error,
+        reason => unknown_status,
+        status => Status
+    }),
     {keep_state, State, [ {reply, From, {error, Status}} ]}.
 
 %%%
@@ -566,7 +599,13 @@ getopts([{http_timeout, Timeout}|Args], State) ->
         State#state{opts = #{netopts => #{timeout => Timeout}}}
      );
 getopts([Unk|_], _) ->
-    ?LOG_WARNING("letsencrypt: unknow parameter: ~p~n", [Unk]),
+    ?LOG_WARNING(#{
+        text => <<"LetsEncrypt: unknown parameter">>,
+        in => zotonic_mod_ssl_letsencrypt,
+        result => error,
+        reason => badarg,
+        parameter => Unk
+    }),
     %throw({badarg, io_lib:format("unknown ~p parameter", [Unk])}).
     throw(badarg).
 

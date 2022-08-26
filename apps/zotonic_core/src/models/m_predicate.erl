@@ -71,8 +71,7 @@ m_get([ <<"is_valid_subbject_category">>, Predicate, Category | Rest ], _Msg, Co
     {ok, {IsValid, Rest}};
 m_get([ Key | Rest ], _Msg, Context) ->
     {ok, {get(Key, Context), Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 

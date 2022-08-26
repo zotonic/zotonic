@@ -387,7 +387,8 @@ maybe_update_config_list(I18NLanguageList, Context) ->
             ok;
         List when is_list(List) ->
             ?LOG_INFO(#{
-                text => <<"mod_translation: Converting 'i18n.language_list.list' config list from 0.x to 1.0.">>
+                text => <<"mod_translation: Converting 'i18n.language_list.list' config list from 0.x to 1.0.">>,
+                in => zotonic_core
             }),
             NewList = lists:foldr(
                 fun
@@ -403,14 +404,16 @@ maybe_update_config_list(I18NLanguageList, Context) ->
                                 end;
                             false ->
                                 ?LOG_WARNING(#{
-                                    text => <<"mod_translation: conversion error, language does not exist in z_language, skipping.">>,
+                                    text => <<"Conversion error, language does not exist in z_language, skipping.">>,
+                                    in => zotonic_core,
                                     language => Code
                                 }),
                                 Acc
                         end;
                     (Unknown, Acc) ->
                         ?LOG_WARNING(#{
-                            text => <<"mod_translation: conversion error, contains unknown record.">>,
+                            text => <<"Conversion error, contains unknown record.">>,
+                            in => zotonic_core,
                             record => Unknown
                         }),
                         Acc
@@ -421,7 +424,8 @@ maybe_update_config_list(I18NLanguageList, Context) ->
             m_config:delete(i18n, language_list, Context);
         _ ->
             ?LOG_WARNING(#{
-                text => <<"mod_translation: conversion error, 'i18n.language_list.list' is not a list. Resetting languages.">>
+                text => <<"Conversion error, 'i18n.language_list.list' is not a list. Resetting languages.">>,
+                in => zotonic_core
             }),
             m_config:delete(i18n, language_list, Context)
     end.

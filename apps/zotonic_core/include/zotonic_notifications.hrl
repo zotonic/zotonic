@@ -658,6 +658,7 @@
     service_uid :: binary(),
     service_props = #{} :: map(),
     props = #{} :: m_rsc:props(),
+    identities = [] :: list( map() ),
     is_connect = false :: boolean(),
     is_signup_confirm = false :: boolean()
 }).
@@ -1182,9 +1183,18 @@
 %% Type: first
 %% Return: ``z_url_fetch:options()``
 -record(url_fetch_options, {
+    method :: get | post | put | delete,
     host :: binary(),
     url :: binary(),
     options :: z_url_fetch:options()
+}).
+
+
+%% @doc Delegates the request processing.
+%% Type: foldl
+%% Return: updated ``z:context()``
+-record(middleware, {
+    on :: request | welformed | handled
 }).
 
 

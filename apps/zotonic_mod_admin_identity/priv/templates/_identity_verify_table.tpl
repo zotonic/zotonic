@@ -1,6 +1,6 @@
 {% if identities %}
 	<table id="{{ #listemail }}" class="table">
-	{% with id.email_raw as email_raw %}
+	{% with id.email_raw|normalize_email as email_raw %}
 	{% for idn in identities %}
 	{% with idn.id as idn_id %}
 		<tr>

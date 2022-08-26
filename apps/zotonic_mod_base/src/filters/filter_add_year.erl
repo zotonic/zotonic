@@ -21,11 +21,11 @@
 
 add_year(undefined, _Context) ->
 	undefined;
-add_year({{Y,M,D},Time}, _Context) ->
-	{{Y+1,M,D},Time}.
+add_year(Date, _Context) ->
+	z_datetime:next_year(Date).
 
 add_year(undefined, _N, _Context) ->
 	undefined;
-add_year({{Y,M,D},Time}, N, _Context) ->
-	{{Y+N,M,D},Time}.
+add_year(Date, N, _Context) ->
+	z_datetime:next_year(Date, N).
 

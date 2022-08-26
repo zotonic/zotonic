@@ -33,7 +33,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @doc Download a backup.
 %% @spec event(Event, Context1) -> Context2
 event(#postback{message={backup_start, IsFullBackup}}, Context) ->
-    case z_acl:is_allowed(use, mod_backup, Context) of
+    case not z_acl:is_read_only(Context) andalso z_acl:is_allowed(use, mod_backup, Context) of
         true ->
             case mod_backup:start_backup(IsFullBackup, Context) of
                 ok ->

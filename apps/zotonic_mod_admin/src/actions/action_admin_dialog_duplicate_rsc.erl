@@ -47,12 +47,8 @@ event(#postback{message={duplicate_rsc_dialog, Id}}, Context) ->
 
 event(#submit{message={duplicate_page, ActionProps}}, Context) ->
     Id = proplists:get_value(id, ActionProps),
-    Title   = z_context:get_q(<<"new_rsc_title">>, Context),
-    IsPublished = z_context:get_q(<<"is_published">>, Context),
-
     Props = #{
-        <<"title">> => Title,
-        <<"is_published">> => IsPublished
+        <<"is_published">> => false
     },
     {ok, NewId} = m_rsc:duplicate(Id, Props, Context),
 

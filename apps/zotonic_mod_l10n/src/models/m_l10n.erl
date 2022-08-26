@@ -48,8 +48,7 @@ m_get([ <<"default_timezone">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(mod_l10n, timezone, Context), Rest}};
 m_get([ <<"timezone_is_fixed">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_boolean(mod_l10n, timezone_is_fixed, Context), Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 

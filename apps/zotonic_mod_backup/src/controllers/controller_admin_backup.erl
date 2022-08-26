@@ -90,13 +90,18 @@ error_message(av_external_links, Context) ->
     ?__("This file contains links to other files or locations.", Context);
 error_message(sizelimit, Context) ->
     ?__("This file is too large.", Context);
-error_message(_R, Context) ->
-    ?LOG_WARNING("Unknown page creation or upload error: ~p", [_R]),
+error_message(R, Context) ->
+    ?LOG_WARNING(#{
+        text => <<"Unknown page creation or upload error">>,
+        in => zotonic_mod_backup,
+        result => error,
+        reason => R
+    }),
     ?__("Error creating the page.", Context).
 
 
 set_config(What, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_admin_editable(Context) of
         true ->
             m_config:set_value(mod_backup, What, z_context:get_q(<<"triggervalue">>, Context), Context),
             z_render:growl(?__("Changed configuration.", Context), Context);

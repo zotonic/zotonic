@@ -4,7 +4,7 @@
 
 %% @author Marc Worrell <marc@worrell.nl>
 %% @doc Mapping English country name to iso code
-%% @copyright 2012-2015 Marc Worrell
+%% @copyright 2012-2022 Marc Worrell
 
 -module(l10n_country2iso).
 
@@ -62,6 +62,7 @@ country2iso(<<"Syrian Arab Republic"/utf8>>) -> <<"sy">>;
 country2iso(<<"Tajikistan"/utf8>>) -> <<"tj">>;
 country2iso(<<"The former Yugoslav Republic of Macedonia"/utf8>>) -> <<"mk">>;
 country2iso(<<"Timor-Leste"/utf8>>) -> <<"tp">>;
+country2iso(<<"Turkey"/utf8>>) -> <<"tr">>;
 country2iso(<<"Great Britain"/utf8>>) -> <<"gb">>;
 country2iso(<<"United Republic of Tanzania"/utf8>>) -> <<"tz">>;
 country2iso(<<"Untied Arab Emirates"/utf8>>) -> <<"ae">>;

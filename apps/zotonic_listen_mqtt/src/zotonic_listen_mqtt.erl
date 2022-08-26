@@ -123,6 +123,7 @@ start_mqtt_listeners() ->
 start_mqtt_listeners_ip4(none, Port) ->
     ?LOG_WARNING(#{
         text => "MQTT server disabled: 'mqtt_listen_ip' is set to 'none'",
+        in => zotonic_listen_mqtt,
         ip => none,
         port => Port,
         protocol => mqtt
@@ -131,6 +132,7 @@ start_mqtt_listeners_ip4(none, Port) ->
 start_mqtt_listeners_ip4(WebIp, none) ->
     ?LOG_WARNING(#{
         text => "MQTT server disabled: 'mqtt_listen_port' is set to 'none'",
+        in => zotonic_listen_mqtt,
         ip => ip_to_string(WebIp),
         port => none,
         protocol => mqtt
@@ -139,6 +141,7 @@ start_mqtt_listeners_ip4(WebIp, none) ->
 start_mqtt_listeners_ip4(WebIp, WebPort) ->
     ?LOG_NOTICE(#{
         text => "MQTT server listening on IPv4",
+        in => zotonic_listen_mqtt,
         ip => ip_to_string(WebIp),
         port => WebPort,
         protocol => mqtt
@@ -172,6 +175,7 @@ start_mqtts_listeners_ip4(none, _SSLPort) -> ignore;
 start_mqtts_listeners_ip4(WebIp, none) ->
     ?LOG_WARNING(#{
         text => "MQTT ssl server disabled: 'mqtt_listen_ssl_port' is set to 'none'",
+        in => zotonic_listen_mqtt,
         ip => ip_to_string(WebIp),
         port => none,
         protocol => mqtt
@@ -180,6 +184,7 @@ start_mqtts_listeners_ip4(WebIp, none) ->
 start_mqtts_listeners_ip4(WebIp, SSLPort) ->
     ?LOG_NOTICE(#{
         text => "MQTT ssl server listening on IPv4",
+        in => zotonic_listen_mqtt,
         ip => ip_to_string(WebIp),
         port => SSLPort,
         protocol => mqtt
@@ -215,6 +220,7 @@ start_mqtt_listeners_ip6(_WebIp, none) -> ignore;
 start_mqtt_listeners_ip6(WebIp, WebPort) ->
     ?LOG_NOTICE(#{
         text => "MQTT server listening on IPv6",
+        in => zotonic_listen_mqtt,
         ip => ip_to_string(WebIp),
         port => WebPort,
         protocol => mqtt
@@ -246,6 +252,7 @@ start_mqtts_listeners_ip6(_WebIp, none) -> ignore;
 start_mqtts_listeners_ip6(WebIp, SSLPort) ->
     ?LOG_NOTICE(#{
         text => "MQTT ssl server listening on IPv6",
+        in => zotonic_listen_mqtt,
         ip => ip_to_string(WebIp),
         port => SSLPort,
         protocol => mqtt

@@ -285,14 +285,31 @@ decode_onetime_token(OnetimeToken, Context) ->
                             {error, user_secret}
                     end;
                 {ok, Unexpected} ->
-                    ?LOG_ERROR("authentication: token from sid ~p mismatch ~p", [ SId, Unexpected ]),
+                    ?LOG_ERROR(#{
+                        text => <<"authentication: token mismatch from sid">>,
+                        in => zotonic_mod_authentication,
+                        result => error,
+                        reason => token_mismatch,
+                        sid => SId,
+                        unexpected => Unexpected
+                    }),
                     {error, mismatch};
-                {error, _} = Error ->
-                    ?LOG_ERROR("authentication: token expired error ~p", [ Error ]),
+                {error, Reason} = Error ->
+                    ?LOG_ERROR(#{
+                        text => <<"authentication: token expired error">>,
+                        in => zotonic_mod_authentication,
+                        result => error,
+                        reason => Reason
+                    }),
                     Error
             end;
-        {error, _}  = Error ->
-            ?LOG_WARNING("authentication: token decode error ~p", [ Error ]),
+        {error, Reason}  = Error ->
+            ?LOG_WARNING(#{
+                text => <<"authentication: token decode error">>,
+                in => zotonic_mod_authentication,
+                result => error,
+                reason => Reason
+            }),
             Error
     end.
 

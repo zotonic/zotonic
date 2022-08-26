@@ -55,8 +55,6 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("zotonic_mod_survey/include/survey.hrl").
-
 
 
 %% @doc Fetch the value for the key from a model source
@@ -195,8 +193,7 @@ m_get([ <<"is_allowed_results_download">>, SurveyId | Rest ], _Msg, Context) ->
     {ok, {is_allowed_results_download(m_rsc:rid(SurveyId, Context), Context), Rest}};
 m_get([ <<"handlers">> | Rest ], _Msg, Context) ->
     {ok, {get_handlers(Context), Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 -spec persistent_id( z:context() ) -> {binary() | undefined, z:context()}.
@@ -270,7 +267,14 @@ replace_survey_submission(SurveyId, AnswerId, Answers, Context) when is_integer(
             publish(SurveyId, UserId, Persistent, Context),
             {ok, AnswerId};
         {error, Reason} ->
-            ?LOG_ERROR("update error: ~p", [Reason]),
+            ?LOG_ERROR(#{
+                text => <<"Error updating survey submission">>,
+                in => zotonic_mod_survey,
+                result => error,
+                reason => Reason,
+                rsc_id => SurveyId,
+                answer_id => AnswerId
+            }),
             {error, enoent}
     end.
 
@@ -409,8 +413,14 @@ prep_chart(_Type, _Block, undefined, _Context) ->
 prep_chart(Type, Block, Stats, Context) ->
     case mod_survey:module_name(Type) of
         undefined ->
-            ?LOG_WARNING("Not preparing chart for ~p because there is no known handler (~p)",
-                         [Type, Stats]),
+            ?LOG_WARNING(#{
+                text => <<"Not preparing chart because there is no known question handler">>,
+                in => zotonic_mod_survey,
+                result => error,
+                reason => handler,
+                type => Type,
+                stats => Stats
+            }),
             undefined;
         M ->
             M:prep_chart(Block, Stats, Context)
@@ -875,7 +885,6 @@ survey_totals(Id, Context) ->
                         M ->
                             Value = case proplists:get_value(prep_totals, erlang:get_module_info(M, exports)) of
                                         3 ->
-                                            % ?LOG_WARNING("Name: ~p", [Name]),
                                             Vals = proplists:get_value(Name, Stats),
                                             M:prep_totals(Block, Vals, Context);
                                         undefined ->

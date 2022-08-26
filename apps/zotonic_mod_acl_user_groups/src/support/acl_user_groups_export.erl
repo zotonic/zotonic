@@ -30,8 +30,11 @@
 import({acl_export, 1, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules}, Context) ->
     import({acl_export, 2, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules, [], []}, Context);
 import({acl_export, 2, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules, CollabRules, Configs}, Context) ->
-    ?LOG_NOTICE("ACL import by ~p: starting",
-                 [z_acl:user(Context)]),
+    ?LOG_NOTICE(#{
+        text => <<"ACL import starting">>,
+        in => zotonic_mod_acl_user_groups,
+        user_id => z_acl:user(Context)
+    }),
     import_all(content_group, CGs, [], Context),
     import_all(acl_user_group, UGs, [], Context),
     CGMenu1 = menu_from_names(CGMenu, Context),
@@ -48,7 +51,11 @@ import({acl_export, 2, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules, CollabRules
             m_config:set_value(mod_acl_user_groups, K, V, Context)
         end,
         Configs),
-    ?LOG_NOTICE("ACL import by ~p: done", [z_acl:user(Context)]),
+    ?LOG_NOTICE(#{
+        text => <<"ACL import done">>,
+        in => zotonic_mod_acl_user_groups,
+        user_id => z_acl:user(Context)
+    }),
     ok.
 
 
@@ -57,7 +64,11 @@ import({acl_export, 2, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules, CollabRules
 %% @todo Peform a dependency sort of all groups, so that content_group are inserted
 %%       in the correct order (ie the content groups of the content groups first)
 export(Context) ->
-    ?LOG_NOTICE("ACL export by ~p", [z_acl:user(Context)]),
+    ?LOG_NOTICE(#{
+        text => <<"ACL export">>,
+        in => zotonic_mod_acl_user_groups,
+        user_id => z_acl:user(Context)
+    }),
     ensure_name(content_group, Context),
     ensure_name(acl_user_group, Context),
     {acl_export, 2,
@@ -133,7 +144,12 @@ import_1(Cat, {rsc, IsA, CGName, RscProps}, IdsAcc, Context) ->
     },
     case m_rsc:rid(Name, Context) of
         undefined ->
-            ?LOG_INFO("ACL export, inserting ~p with name ~p", [Cat1, Name]),
+            ?LOG_INFO(#{
+                text => <<"ACL export, inserting named category">>,
+                in => zotonic_mod_acl_user_groups,
+                category_id => Cat1,
+                name => Name
+            }),
             case Name of
                 CGName ->
                     {ok, Id} = m_rsc:insert(RscPropsCat, Context),
@@ -158,8 +174,12 @@ import_1(Cat, {rsc, IsA, CGName, RscProps}, IdsAcc, Context) ->
                     },
                     case z_acl:rsc_editable(Id, Context) of
                         true ->
-                            ?LOG_INFO("ACL export, updating ~p with name ~p",
-                                       [Cat1, Name]),
+                            ?LOG_INFO(#{
+                                text => <<"ACL export, updating name of category">>,
+                                in => zotonic_mod_acl_user_groups,
+                                category_id => Cat1,
+                                name => Name
+                            }),
                             {ok, Id} = m_rsc:update(Id, Props1, Context);
                         false ->
                             ok
@@ -187,8 +207,11 @@ ensure_content_group(CGName, IdsAcc, Context) ->
                         <<"title">> => CGName,
                         <<"name">> => CGName
                     },
-                    ?LOG_INFO("ACL export, inserting content_group with name ~p",
-                               [CGName]),
+                    ?LOG_INFO(#{
+                        text => <<"ACL export, inserting named content_group">>,
+                        in => zotonic_mod_acl_user_groups,
+                        name => CGName
+                    }),
                     {ok, Id} = m_rsc:insert(Props, Context),
                     {Id, [{CGName,Id}|IdsAcc]};
                 Id ->

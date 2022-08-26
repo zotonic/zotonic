@@ -161,11 +161,24 @@ can_handle(OriginalFilename, DataFile, Context) ->
                         true ->
                             {ok, FD};
                         false ->
-                            ?LOG_WARNING("Invalid CSV file, missing 'name' and/or 'category' columns: ~p", [Cols]),
+                            ?LOG_WARNING(#{
+                                text => <<"Invalid CSV file, missing 'name' and/or 'category' columns">>,
+                                in => zotonic_mod_import_csv,
+                                result => error,
+                                reason => missing_columns,
+                                columns => Cols,
+                                file => DataFile
+                            }),
                             {error, invalid_csv_file}
                     end;
-                {error, _} = Error ->
-                    ?LOG_WARNING("Invalid CSV file, error during inspect: ~p", [Error]),
+                {error, Reason} = Error ->
+                    ?LOG_WARNING(#{
+                        text => <<"Invalid CSV file, error during inspect">>,
+                        in => zotonic_mod_import_csv,
+                        result => error,
+                        reason => Reason,
+                        file => DataFile
+                    }),
                     Error
             end
     end.

@@ -365,12 +365,19 @@ pg_dump(Name, Context) ->
                 timer:sleep(1000),
                 z_mqtt:publish(<<"model/backup/event/backup">>, #{ status => <<"sql_backup_started">> }, Context)
             end),
-    Result = case os:cmd(binary_to_list(iolist_to_binary(Command))) of
+    Command1 = binary_to_list(iolist_to_binary(Command)),
+    Result = case os:cmd(Command1) of
                  [] ->
                      ok;
                 Output ->
-                    ?LOG_WARNING("backup: pg_dump error for ~p: ~s",
-                                  [ z_context:site(Context), Output ]),
+                    ?LOG_WARNING(#{
+                        text => <<"backup: pg_dump error">>,
+                        in => zotonic_mod_backup,
+                        result => error,
+                        reason => pg_dump,
+                        output => Output,
+                        command => Command1
+                    }),
                     {error, database_archive}
              end,
     ok = file:delete(PgPass),
@@ -398,9 +405,15 @@ archive(Name, Context) ->
                 "" ->
                     ok;
                 Output ->
-                     ?LOG_WARNING("backup: tar error for ~p: ~s",
-                                   [ z_context:site(Context), Output ]),
-                     {error, files_archive}
+                     ?LOG_WARNING(#{
+                        text => <<"backup: tar error">>,
+                        in => zotonic_mod_backup,
+                        result => error,
+                        reason => tar,
+                        output => Output,
+                        command => Command
+                    }),
+                    {error, files_archive}
             end;
         false ->
             %% No files uploaded

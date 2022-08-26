@@ -45,7 +45,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 
 event(Event, Context) ->
-    case z_acl:is_allowed(use, mod_admin_modules, Context) of
+    case not z_acl:is_read_only(Context) andalso z_acl:is_allowed(use, mod_admin_modules, Context) of
         true ->
             event_1(Event, Context);
         false ->

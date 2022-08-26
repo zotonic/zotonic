@@ -602,7 +602,11 @@ props2url([{crop,[ X, Y ]}|Rest], Width, Height, Acc, Context) ->
 props2url([{mediaclass,Class}|Rest], Width, Height, Acc, Context) ->
     case z_mediaclass:get(Class, Context) of
         {ok, [], <<>>} ->
-            ?LOG_WARNING("unknown mediaclass ~p", [Class]),
+            ?LOG_WARNING(#{
+                text => <<"Ignoring unknown mediaclass">>,
+                in => zotonic_core,
+                mediaclass => Class
+            }),
             props2url(Rest, Width, Height, Acc, Context);
         {ok, _Props, Checksum} ->
             MC = [

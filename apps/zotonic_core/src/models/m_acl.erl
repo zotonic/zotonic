@@ -32,6 +32,7 @@
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
 m_get([ <<"user">> | Rest ], _Msg, Context) -> {ok, {z_acl:user(Context), Rest}};
 m_get([ <<"is_admin">> | Rest ], _Msg, Context) -> {ok, {z_acl:is_admin(Context), Rest}};
+m_get([ <<"is_admin_editable">> | Rest ], _Msg, Context) -> {ok, {z_acl:is_admin_editable(Context), Rest}};
 m_get([ <<"is_read_only">> | Rest ], _Msg, Context) -> {ok, {z_acl:is_read_only(Context), Rest}};
 
 % Check if current user is allowed to perform an action on some object
@@ -49,14 +50,7 @@ m_get([ Action, Object | Rest ], _Msg, Context) ->
     {ok, {is_allowed(Action, Object, Context), Rest}};
 
 % Error, unknown lookup.
-m_get(Vs, Msg, _Context) ->
-    ?LOG_DEBUG(#{
-        result => error,
-        reason => unknown_path,
-        path => Vs,
-        msg => Msg,
-        model => ?MODULE
-    }),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 is_allowed(Action, Object, Context) ->

@@ -73,6 +73,7 @@ process(<<"POST">>, _, Provided, Context) ->
                 {ok, Status} ->
                     ?LOG_DEBUG(#{
                         text => <<"Accepted block for fileuploader">>,
+                        in => zotonic_mod_fileuploader,
                         result => ok,
                         name => Name,
                         offset => Offset
@@ -84,6 +85,7 @@ process(<<"POST">>, _, Provided, Context) ->
                 {error, Reason} ->
                     ?LOG_ERROR(#{
                         text => <<"Error accepting block for fileuploader">>,
+                        in => zotonic_mod_fileuploader,
                         result => error,
                         reason => Reason,
                         name => Name,
@@ -98,6 +100,7 @@ process(<<"POST">>, _, Provided, Context) ->
         false ->
             ?LOG_ERROR(#{
                 text => <<"Error accepting block for fileuploader">>,
+                in => zotonic_mod_fileuploader,
                 result => error,
                 reason => illegal_offset,
                 name => Name,

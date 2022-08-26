@@ -125,7 +125,11 @@ handle_info({stdout, _Port, Data}, #state{} = State) ->
     {noreply, State};
 
 handle_info({'DOWN', _Port, process, Pid, Reason}, #state{pid = Pid} = State) ->
-    ?LOG_ERROR("[inotify] inotify port closed with ~p, restarting in 5 seconds.", [Reason]),
+    ?LOG_ERROR(#{
+        text => <<"[inotify] inotify port closed, restarting in 5 seconds.">>,
+        result => error,
+        reason => Reason
+    }),
     State1 = State#state{
         pid = undefined,
         port = undefined

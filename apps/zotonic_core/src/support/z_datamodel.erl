@@ -157,6 +157,7 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                             %% Resource exists but is not installed by us.
                             ?LOG_NOTICE(#{
                                 text => <<"Resource exists but is managed by another module.">>,
+                                in => zotonic_core,
                                 name => Name,
                                 rsc_id => Id,
                                 module => Module,
@@ -186,6 +187,7 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                              end,
                     ?LOG_NOTICE(#{
                         text => <<"Creating new managed resource.">>,
+                        in => zotonic_core,
                         module => Module,
                         category => Category,
                         name => Name
@@ -208,6 +210,7 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
         {error, _} ->
             ?LOG_WARNING(#{
                 text => <<"Managed resource could not be handled because the category does not exist.">>,
+                in => zotonic_core,
                 name => Name,
                 category => Category,
                 module => Module
@@ -262,6 +265,7 @@ maybe_force_update(K, V, Props, Module, Id, Options, _Context) ->
         true ->
             ?LOG_NOTICE(#{
                 text => <<"Managed resource property changed in database, updating.">>,
+                in => zotonic_core,
                 rsc_id => Id,
                 property => K,
                 module => Module
@@ -270,6 +274,7 @@ maybe_force_update(K, V, Props, Module, Id, Options, _Context) ->
         false ->
             ?LOG_DEBUG(#{
                 text => <<"Managed resource property changed in database, not updating.">>,
+                in => zotonic_core,
                 rsc_id => Id,
                 property => K,
                 module => Module

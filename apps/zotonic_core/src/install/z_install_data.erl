@@ -33,6 +33,7 @@
 install(Site, Context) ->
     ?LOG_NOTICE(#{
         text => <<"Site install start.">>,
+        in => zotonic_core,
         site => Site
     }),
     ok = install_category(Context),
@@ -42,13 +43,15 @@ install(Site, Context) ->
     z_db:equery("SELECT setval('rsc_id_seq', m) FROM (select 1 + max(id) as m from rsc) sub", Context),
     ?LOG_NOTICE(#{
         text => <<"Site install done.">>,
+        in => zotonic_core,
         site => Site
     }),
     ok.
 
 install_category(C) ->
     ?LOG_INFO(#{
-        text => <<"Site install: Inserting categories">>
+        text => <<"Site install: Inserting categories">>,
+        in => zotonic_core
     }),
     %% The egg has to lay a fk-checked chicken here, so the insertion order is sensitive.
 
@@ -132,7 +135,8 @@ install_category(C) ->
 %% @todo Add the hostname to the uri
 install_rsc(C) ->
     ?LOG_INFO(#{
-        text => <<"Site install: inserting base resources (admin, etc.)">>
+        text => <<"Site install: inserting base resources (admin, etc.)">>,
+        in => zotonic_core
     }),
     Rsc = [
         % id  vsfr  cat   protect name,         props
@@ -149,7 +153,8 @@ install_rsc(C) ->
 %% @doc Install the admin user as an user.  Uses the hard coded password "admin" when no password defined in the environment.
 install_identity(C) ->
     ?LOG_INFO(#{
-        text => <<"Site install: inserting username for the admin">>
+        text => <<"Site install: inserting username for the admin">>,
+        in => zotonic_core
     }),
     Hash = m_identity:hash([]),
     {ok, 1} = z_db:equery("
@@ -163,7 +168,8 @@ install_identity(C) ->
 %% @todo Extend and check this list.  Add allowed from/to categories.
 install_predicate(C) ->
     ?LOG_INFO(#{
-        text => <<"Site install: inserting predicates">>
+        text => <<"Site install: inserting predicates">>,
+        in => zotonic_core
     }),
     Preds = [
         % id   protect name       uri                                                  props

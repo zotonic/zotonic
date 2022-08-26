@@ -181,7 +181,8 @@ from_qs(Qs, Now) ->
 nested(Qs) ->
     Map = lists:foldl(
         fun({K, V}, Acc) ->
-            Parts = binary:split(K, <<".">>, [global]),
+            [ K1 | _ ] = binary:split(K, <<"~">>),
+            Parts = binary:split(K1, <<".">>, [global]),
             nested_assign(Parts, V, Acc)
         end,
         #{},
@@ -335,14 +336,25 @@ group_trans_parts(TransParts) ->
                         case z_language:to_language_atom(Lang) of
                             {ok, Code} ->
                                 add_trans(Name, Code, V, Acc);
-                            {error, _} ->
-                                ?LOG_NOTICE("Dropping trans part '~s', language code is unknown",
-                                           [ K ]),
+                            {error, Reason} ->
+                                ?LOG_NOTICE(#{
+                                    text => <<"Dropping trans part, language code is unknown">>,
+                                    in => zotonic_core,
+                                    result => error,
+                                    reason => Reason,
+                                    language => Lang,
+                                    part => K
+                                }),
                                 Acc
                         end;
                     _ ->
-                        ?LOG_NOTICE("Dropping unknown trans part '~s', should be like 'title$en'",
-                                   [ K ]),
+                        ?LOG_NOTICE(#{
+                            text => <<"Dropping unknown trans part, should be like 'title$en'">>,
+                            in => zotonic_core,
+                            result => error,
+                            reason => format,
+                            part => K
+                        }),
                         Acc
                 end
         end,
@@ -435,8 +447,13 @@ group_date_parts(DatePartsQs) ->
                     [ K ] ->
                         group_date_part(K, false, full, V, Acc);
                     _ ->
-                        ?LOG_INFO("Dropping unknown date part '~s', should be like 'dt:ymd:0:propname'",
-                                   [ K ]),
+                        ?LOG_INFO(#{
+                            text => <<"Dropping unknown date part, should be like 'dt:ymd:0:propname'">>,
+                            in => zotonic_core,
+                            result => error,
+                            reason => format,
+                            part => K
+                        }),
                         Acc
                 end
         end,

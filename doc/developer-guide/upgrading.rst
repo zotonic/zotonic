@@ -17,7 +17,7 @@ you are upgrading from before 0.12. See `the upgrade notes on 0.x <https://githu
 Erlang/OTP
 ^^^^^^^^^^
 
-Support for Erlang versions before 22 was dropped.
+Support for Erlang versions before 23 was dropped.
 
 Zotonic modules are now separately published as packages to `Hex.pm`_, which
 allows you to build your own Zotonic distribution and to have each of your

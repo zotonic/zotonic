@@ -45,7 +45,12 @@
 notify(undefined) ->
     ok;
 notify(Message) ->
-    gen_server:cast(?MODULE, {notify, z_string:trim(Message)}).
+    case z_config:get(filewatcher_terminal_notifier) of
+        true ->
+            gen_server:cast(?MODULE, {notify, z_string:trim(Message)});
+        false ->
+            ok
+    end.
 
 -spec start_link() -> {ok, pid()} | {error, term()}.
 start_link() ->

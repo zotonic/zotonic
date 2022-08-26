@@ -45,6 +45,7 @@
     prune_for_scomp/1,
 
     is_site_url/2,
+    site_url/2,
     abs_url/2,
 
     pickle/1,
@@ -410,6 +411,27 @@ is_site_url_1(Url, Context) ->
             false
     end.
 
+%% @doc Ensure that an URL is an URL to the current site. If not then return
+%% the URL of the homepage. If the URL is not a fragment then the returned URL
+%% is always sanitized and absolute.
+-spec site_url(Url, Context) -> SiteUrl when
+    Url :: undefined | string() | binary(),
+    Context :: z:context(),
+    SiteUrl :: binary().
+site_url(undefined, Context) ->
+    abs_url(<<"/">>, Context);
+site_url("#" ++ _ = Frag, _Context) ->
+     z_sanitize:uri(z_convert:to_binary(Frag));
+site_url(<<"#", _/binary>> = Frag, _Context) ->
+     z_sanitize:uri(Frag);
+site_url(Url, Context) ->
+    Url1 = z_sanitize:uri(Url),
+    case is_site_url(Url1, Context) of
+        true ->
+            abs_url(Url1, Context);
+        false ->
+            abs_url(<<"/">>, Context)
+    end.
 
 %% @doc Make the url an absolute url by prepending the hostname.
 -spec abs_url(undefined | iodata(), z:context()) -> binary().
@@ -1062,7 +1084,11 @@ set_tz(Tz, Context) when is_binary(Tz), Tz =/= <<>> ->
         true ->
             Context#context{ tz = Tz };
         false ->
-            ?LOG_INFO("Dropping unknown timezone: ~p", [ Tz ]),
+            ?LOG_INFO(#{
+                text => <<"Ignoring unknown timezone">>,
+                in => zotonic_core,
+                tz => Tz
+            }),
             Context
     end;
 set_tz(true, Context) ->
@@ -1072,7 +1098,11 @@ set_tz(1, Context) ->
 set_tz(0, Context) ->
     Context;
 set_tz(Tz, Context) ->
-    ?LOG_ERROR("Unknown timezone ~p", [Tz]),
+    ?LOG_ERROR(#{
+        text => <<"Ignoring unknown timezone">>,
+        in => zotonic_core,
+        tz => Tz
+    }),
     Context.
 
 
@@ -1092,7 +1122,10 @@ set_csp_nonce(Context) ->
 csp_nonce(Context) ->
     case get(csp_nonce, Context) of
         undefined ->
-            ?LOG_WARNING("csp_nonce requested but not set"),
+            ?LOG_WARNING(#{
+                text => <<"csp_nonce requested but not set">>,
+                in => zotonic_core
+            }),
             <<>>;
         Nonce when is_binary(Nonce) ->
             Nonce

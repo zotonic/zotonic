@@ -66,7 +66,14 @@ content_types_provided(Context) ->
             ContentTypes = export_encoder:content_types(Context),
             {ContentTypes, Context};
         {error, Reason} = Error ->
-            ?LOG_ERROR("mod_export error when fetching content type for ~p:~p: ~p", [Dispatch, Id, Reason]),
+            ?LOG_ERROR(#{
+                text => <<"mod_export error when fetching content type">>,
+                in => zotonic_mod_export,
+                dispatch => Dispatch,
+                rsc_id => Id,
+                result => error,
+                reason => Reason
+            }),
             throw(Error)
     end.
 

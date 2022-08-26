@@ -984,7 +984,12 @@ first_site_match(Sites, DispHost, OptReq, OptEnv) ->
                     undefined ->
                         no_host_match;
                     Unexpected ->
-                        ?LOG_ERROR("dispatch_host for ~p returned ~p on ~p", [Site, Unexpected, DispHost]),
+                        ?LOG_ERROR(#{
+                            text => <<"Dispatch_host for site returned unexpected value">>,
+                            site => Site,
+                            return => Unexpected,
+                            host => DispHost
+                        }),
                         no_host_match
                 end;
             (_Site, _Status, Found) ->

@@ -82,6 +82,7 @@ map_template({overrules, Template, Filename}, _Vars, Context) ->
         {error, enoent} ->
             ?LOG_WARNING(#{
                 text => <<"No template for overrules">>,
+                in => zotonic_core,
                 template => Template,
                 filename => Filename
             }),
@@ -331,6 +332,7 @@ find_value(Key, #search_result{} = S, _TplVars, _Context) ->
         result -> S#search_result.result;
         options -> S#search_result.options;
         total -> S#search_result.total;
+        is_total_estimated -> S#search_result.total;
         page -> S#search_result.page;
         pages -> S#search_result.pages;
         next -> S#search_result.next;
@@ -342,6 +344,7 @@ find_value(Key, #search_result{} = S, _TplVars, _Context) ->
         <<"result">> -> S#search_result.result;
         <<"options">> -> S#search_result.options;
         <<"total">> -> S#search_result.total;
+        <<"is_total_estimated">> -> S#search_result.is_total_estimated;
         <<"page">> -> S#search_result.page;
         <<"pages">> -> S#search_result.pages;
         <<"next">> -> S#search_result.next;
@@ -501,6 +504,7 @@ builtin_tag_1(media, Expr, Args, _Vars, Context) ->
 builtin_tag_1(Tag, _Expr, _Args, _Vars, _Context) ->
     ?LOG_WARNING(#{
         text => <<"Unknown template tag">>,
+        in => zotonic_core,
         tag => Tag
     }),
     <<>>.
@@ -691,6 +695,7 @@ trace_compile(Module, Filename, Options, Context) ->
         {File, Line, _Col} ->
             ?LOG_DEBUG(#{
                 text => <<"Template compile">>,
+                in => zotonic_core,
                 template => Filename,
                 at => File,
                 line => Line
@@ -698,6 +703,7 @@ trace_compile(Module, Filename, Options, Context) ->
         undefined ->
             ?LOG_DEBUG(#{
                 text => <<"Template compile">>,
+                in => zotonic_core,
                 template => Filename
             })
     end,
@@ -713,6 +719,7 @@ trace_render(Filename, Options, Context) ->
                 {File, Line, _Col} ->
                     ?LOG_NOTICE(#{
                         text => <<"Template include">>,
+                        in => zotonic_core,
                         template => Filename,
                         at => File,
                         line => Line
@@ -726,6 +733,7 @@ trace_render(Filename, Options, Context) ->
                 undefined ->
                     ?LOG_NOTICE(#{
                         text => <<"Template render">>,
+                        in => zotonic_core,
                         template => Filename
                     }),
                     {ok,
@@ -745,6 +753,7 @@ trace_block({File, Line, _Col}, Name, Module, Context) ->
         true ->
             ?LOG_NOTICE(#{
                 text => <<"Template call block">>,
+                in => zotonic_core,
                 block => Name,
                 template => Module:filename(),
                 at => File,

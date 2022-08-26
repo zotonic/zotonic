@@ -99,8 +99,15 @@ do_clam(Command, DataFun) ->
             Result = recv(Socket, <<>>),
             _ = gen_tcp:close(Socket),
             Result;
-        {error, _} = Error ->
-            ?LOG_WARNING("ClamAV: could not connect on ~p:~p ~p", [ ClamIP, ClamPort, Error ]),
+        {error, Reason} = Error ->
+            ?LOG_WARNING(#{
+                text => <<"ClamAV: could not connect">>,
+                in => zotonic_mod_clamav,
+                to => ClamIP,
+                port => ClamPort,
+                result => error,
+                reason => Reason
+            }),
             Error
     end.
 
@@ -112,7 +119,13 @@ handle_result({ok, <<"stream: OK", _/binary>>}) ->
 handle_result({ok, <<"stream: ", Msg/binary>>}) ->
     case binary:match(Msg, <<" FOUND">>) of
         nomatch ->
-            ?LOG_WARNING("ClamAV: daemon returned unknown message: ~p", [ Msg ]),
+            ?LOG_WARNING(#{
+                text => <<"ClamAV: daemon returned unknown message">>,
+                in => zotonic_mod_clamav,
+                result => error,
+                reason => unknown_message,
+                message => Msg
+            }),
             {error, unknown};
         {_, _} ->
             {error, infected}

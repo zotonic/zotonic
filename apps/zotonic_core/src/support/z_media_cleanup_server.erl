@@ -172,5 +172,10 @@ do_cleanup_file({_Id, Filename, Date}, Context) ->
     ArchiveStore = iolist_to_binary([filename:basename(ArchivePath), $/, Filename ]),
     z_notifier:first(#filestore{action=delete, path=PreviewStore}, Context),
     z_notifier:first(#filestore{action=delete, path=ArchiveStore}, Context),
-    ?LOG_DEBUG("Medium cleanup: ~p (from ~p)", [Filename, Date]),
+    ?LOG_DEBUG(#{
+        text => <<"Medium cleanup">>,
+        in => zotonic_core,
+        filename => Filename,
+        date => Date
+    }),
     ok.

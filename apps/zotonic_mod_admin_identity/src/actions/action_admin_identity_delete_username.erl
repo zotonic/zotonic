@@ -39,7 +39,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @doc Delete an username from an user.
 %% @spec event(Event, Context1) -> Context2
 event(#postback{message={delete_username, Id, OnSuccess}}, Context) ->
-    case z_acl:is_allowed(use, mod_admin_identity, Context) of
+    case not z_acl:is_read_only(Context) andalso z_acl:is_allowed(use, mod_admin_identity, Context) of
         true ->
             ok = m_identity:delete_username(Id, Context),
             z_render:wire([{growl, [{text, ?__("Username has been deleted.", Context)}]} | OnSuccess], Context);

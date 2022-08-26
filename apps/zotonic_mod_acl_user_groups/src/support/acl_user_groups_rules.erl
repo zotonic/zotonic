@@ -180,8 +180,14 @@ expand_rules(TreeA, Rules, TreeB, _Context) ->
                                 % acl_collaboration_groups are not part of the group hierarchy
                                 expand_rule([A], Pred, B1);
                             Other ->
-                                ?LOG_WARNING("Tree expand of {~p, ~p, ~p} returned ~p",
-                                              [A, Pred, B, Other]),
+                                ?LOG_WARNING(#{
+                                    text => <<"ACL tree expand returned unexpected value">>,
+                                    in => zotonic_mod_acl_user_groups,
+                                    actor => A,
+                                    predicate => Pred,
+                                    object => B,
+                                    result => Other
+                                }),
                                 []
                         end
                   end,

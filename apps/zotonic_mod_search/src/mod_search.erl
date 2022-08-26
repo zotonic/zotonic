@@ -57,8 +57,11 @@
 -define(TIMEOUT_GC, 1000).
 
 event(#postback{ message={facet_rebuild, _Args}}, Context) ->
-    case z_acl:is_admin(Context)
-        orelse z_acl:is_allowed(use, mod_search, Context)
+    case z_acl:is_admin_editable(Context)
+        orelse (
+            not z_acl:is_read_only(Context)
+            andalso z_acl:is_allowed(use, mod_search, Context)
+        )
     of
         true ->
             search_facet:pivot_all(Context),

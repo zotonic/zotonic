@@ -46,7 +46,7 @@ event(#postback{message={config_new_dialog, OnSuccess}}, Context) ->
 
 
 event(#submit{message={config_new, Args}}, Context) ->
-    case z_acl:is_allowed(use, mod_admin_config, Context) of
+    case z_acl:is_admin_editable(Context) of
         true ->
             Module = binary_to_atom(z_string:to_name(z_context:get_q_validated(<<"module">>, Context)), utf8),
             Key = binary_to_atom(z_string:to_name(z_context:get_q_validated(<<"key">>, Context)), utf8),

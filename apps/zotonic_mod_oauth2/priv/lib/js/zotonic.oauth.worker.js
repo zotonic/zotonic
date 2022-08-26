@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Marc Worrell <marc@worrell.nl>
+ * Copyright 2020-2022 Marc Worrell <marc@worrell.nl>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,8 @@ var model = {
     state_id: undefined,
     status: 'start',
     is_depends_provided: false,
-    cotonic_sid: undefined
+    cotonic_sid: undefined,
+    passcode_data: undefined
 };
 
 model.present = function(data) {
@@ -46,10 +47,13 @@ model.present = function(data) {
                 console.log("OAuth: unknown oauth_step, must be 'authorize' or 'redirect'");
                 break;
         }
+
         model.oauth_step = data.oauth_step;
         model.status = 'waiting';
     }
 
+    // After all dependencies are resolved, wait for the auth worker check
+    // with the server and stabilize.
     if (data.is_depends_provided && state.waiting(model)) {
         model.is_depends_provided = true;
         model.status = 'authsync';
@@ -68,6 +72,10 @@ model.present = function(data) {
             });
     }
 
+    // After the auth worker stabilizes, either:
+    // - redirect to the remote server (step 1 of OAuth dance); or
+    // - handle the response from the remote server (for this we first need
+    //   to reload the page, so we are sure all same-site cookies are passed).
     if (data.is_auth_stable && state.authsync(model)) {
         model.status = 'active';
 
@@ -83,7 +91,7 @@ model.present = function(data) {
 
         if (model.oauth_step == "authorize") {
             model.status = "storing";
-            self.call("model/sessionStorage/post/oauth-data",
+            self.call("model/localStorage/post/oauth-data",
                       { id: model.state_id, data: model.state_data })
                 .then( function() { actions.redirect(); } )
         } else {
@@ -91,7 +99,8 @@ model.present = function(data) {
                 .then( function(msg) {
                     if (msg.payload) {
                         model.status = "fetching";
-                        self.call("model/sessionStorage/get/oauth-data")
+                        self.publish("model/sessionStorage/delete/oauth-reload-done");
+                        self.call("model/localStorage/get/oauth-data")
                             .then( function(msg) { actions.oauth_data(msg); } )
                     } else {
                         self.call("model/sessionStorage/post/oauth-reload-done", true)
@@ -103,22 +112,29 @@ model.present = function(data) {
         }
     }
 
+    // Redirect to the external authentication service (step 1 of the OAuth dance).
     if (data.is_redirect) {
         self.publish("model/location/post/redirect", { url: model.authorize_url });
         model.status = "redirecting";
     }
 
+    // Fetched the OAuth data from the session storage, which was stored before we redirected
+    // to the external service. Start fetching the query args, passed by the remote service.
     if (state.fetching(model) && data.data) {
         model.status = "location";
         model.state_data = data.data;
         model.state_id = data.id;
-        self.publish("model/sessionStorage/delete/oauth-data");
+        self.publish("model/localStorage/delete/oauth-data");
         self.call("model/location/get/q")
             .then(function(msg) {
                 actions.qargs(msg);
             });
     }
 
+    // Return from the external service. The initial data and the query args are
+    // loaded. Prepare the UI placeholder for the OAuth status updates and pass
+    // the OAuth data and the query args to the oauth2_service model which will fetch
+    // an access token from the remote service.
     if (state.location(model) && data.is_qargs) {
         self.publish(
             "model/ui/insert/oauth-status",
@@ -140,23 +156,29 @@ model.present = function(data) {
             });
     }
 
-    if (state.authenticating(model) && data.is_auth_changed) {
-        setTimeout(
-            function() { self.publish("model/window/post/close"); },
-            200);
-    }
-
+    // After the access_token has been fetched. Either:
+    // - known users: log on with the onetime-token from the oauth2_service model
+    // - new users: request the user to confirm account creation
+    // - on 'denied' or 'cancel' status: silently close the window
+    // - on error: display an error message (template)
     if (data.is_auth_confirm) {
         if (data.payload.status == 'ok') {
             switch (data.payload.result.result) {
                 case "token":
                     // Authenticated - exchange the token for a z.auth cookie.
+                    // After the cookie has been set, the window will either be closed
+                    // or redirected to a new location.
                     self.publish("model/auth/post/onetime-token",
                                 {
                                     token: data.payload.result.token,
                                     url: data.payload.result.url || undefined
                                 });
-                    model.status = "authenticating";
+
+                    if (data.payload.result.url) {
+                        model.status = "redirect-success";
+                    } else {
+                        model.status = "authenticating";
+                    }
                     break;
                 case "confirm":
                     // Needs confirmation to create a new account.
@@ -167,17 +189,63 @@ model.present = function(data) {
                             dedup: true,
                             data: {
                                 error: "confirm",
-                                auth: data.payload.result.auth
+                                auth: data.payload.result.auth,
+                                url: data.payload.result.url || undefined
                             }
                         });
                     model.status = "confirming";
                     break;
+                case "need_passcode":
+                    // Auth ok, but matching account is protected by 2FA
+                    self.publish(
+                        "model/ui/render-template/oauth-status",
+                        {
+                            topic: "bridge/origin/model/template/get/render/_logon_service_error.tpl",
+                            dedup: true,
+                            data: {
+                                error: "need_passcode",
+                                authuser: data.payload.result.authuser,
+                                url: data.payload.result.url || undefined
+                            }
+                        });
+                    model.passcode_data = data.payload.result;
+                    model.status = "confirming";
+                    break;
             }
+        } else if (data.payload.message == 'passcode') {
+            // Auth ok, wrong 2FA passcode entered for matching account
+            self.publish(
+                "model/ui/render-template/oauth-status",
+                {
+                    topic: "bridge/origin/model/template/get/render/_logon_service_error.tpl",
+                    dedup: true,
+                    data: {
+                        error: "passcode",
+                        authuser: model.passcode_data.authuser,
+                        url: model.passcode_data.url || undefined
+                    }
+                });
+            model.status = "confirming";
         } else if (data.payload.message == 'denied') {
-            self.publish("model/window/post/close");
+            // Auth failed, remote denied. Close the window or redirect.
+            if (data.payload.url) {
+                self.publish("model/location/post/redirect", {
+                    url: data.payload.url
+                });
+            } else {
+                self.publish("model/window/post/close");
+            }
         } else if (data.payload.message == 'cancel') {
-            self.publish("model/window/post/close");
+            // Auth failed, user canceled. Close the window or redirect.
+            if (data.payload.url) {
+                self.publish("model/location/post/redirect", {
+                    url: data.payload.url
+                });
+            } else {
+                self.publish("model/window/post/close");
+            }
         } else {
+            // Some error or other state that needs feedback to the user.
             self.publish(
                 "model/ui/render-template/oauth-status",
                 {
@@ -189,6 +257,15 @@ model.present = function(data) {
                 });
             model.status = "error";
         }
+    }
+
+    // After succes return and request of auth cookie the auth is changed
+    // and the window is closed (with a small timeout to ensure proper cookies
+    // on some browsers).
+    if (state.authenticating(model) && data.is_auth_changed) {
+        setTimeout(
+            function() { self.publish("model/window/post/close"); },
+            200);
     }
 
     state.render(model) ;
@@ -345,7 +422,8 @@ self.on_init = function(args) {
 }
 
 self.connect({
-    depends: [ "bridge/origin", "model/auth", "model/sessionId", "model/location", "model/sessionStorage" ],
+    depends: [  "bridge/origin", "model/auth", "model/sessionId",
+                "model/location", "model/sessionStorage", "model/localStorage" ],
     provides: [ "model/oauth"]
 }).then(
     function() {

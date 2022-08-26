@@ -43,6 +43,11 @@ Site-specific configuration
 |          |                      |generated. See also the discussion about |
 |          |                      |``smtp_bounce_email_override`` below.    |
 +----------+----------------------+-----------------------------------------+
+|site      |email_images_noembed  |Images in emails are inlined if they are |
+|          |                      |smaller than 1MB. Setting this config    |
+|          |                      |disables the inlining of images, the html|
+|          |                      |image tags will be unchanged.            |
++----------+----------------------+-----------------------------------------+
 
 Zotonic-wide configuration
 --------------------------

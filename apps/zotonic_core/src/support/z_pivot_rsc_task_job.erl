@@ -52,6 +52,7 @@ task_job(
         Args1 = ensure_list(Args),
         ?LOG_DEBUG(#{
             text => <<"Pivot task starting">>,
+            in => zotonic_core,
             mfa => {Module, Function, length(Args1)+1}
         }),
         case call_function(Module, Function, Args1, Context) of
@@ -84,6 +85,7 @@ task_job(
         error:undef:Trace ->
             ?LOG_ERROR(#{
                 text => <<"Pivot task failed - undefined function, aborting">>,
+                in => zotonic_core,
                 task_id => TaskId,
                 mfa => {Module, Function, Args},
                 result => error,
@@ -104,6 +106,7 @@ maybe_schedule_retry(#{ task_id := TaskId, error_count := ErrCt, mfa := MFA }, E
     RetryDue = task_retry_due(ErrCt),
     ?LOG_ERROR(#{
         text => <<"Pivot task failed - will retry">>,
+        in => zotonic_core,
         task_id => TaskId,
         mfa => MFA,
         result => Error,
@@ -120,6 +123,7 @@ maybe_schedule_retry(#{ task_id := TaskId, error_count := ErrCt, mfa := MFA }, E
 maybe_schedule_retry(#{ task_id := TaskId, mfa := MFA }, Error, Reason, Trace, Context) ->
     ?LOG_ERROR(#{
         text => <<"Pivot task failed - aborting">>,
+        in => zotonic_core,
         task_id => TaskId,
         mfa => MFA,
         result => Error,

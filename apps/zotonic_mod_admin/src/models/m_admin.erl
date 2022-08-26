@@ -42,6 +42,5 @@ m_get([ <<"edge_list_max_length">> | Rest ], _Msg, Context) ->
     {ok, {Len, Rest}};
 m_get([ <<"connect_created_me">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_boolean(mod_admin, connect_created_me, Context), Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.

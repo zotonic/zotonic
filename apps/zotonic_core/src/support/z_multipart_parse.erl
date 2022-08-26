@@ -73,7 +73,8 @@ recv_parse(Context) ->
 parse_multipart_request(Context) ->
     case cowmachine_req:get_req_header(<<"content-length">>, Context) of
         undefined ->
-            ?LOG_NOTICE(z_context:logger_md(Context), "Could not decode multipart: content-length header undefined"),
+            z_context:logger_md(Context),
+            ?LOG_NOTICE("Could not decode multipart: content-length header undefined"),
             throw({stop_request, 400});
         ContentLength ->
             Length = binary_to_integer(ContentLength),
@@ -91,7 +92,13 @@ parse_multipart_request(Context) ->
                                          next_chunk = Next,
                                          context = Context1});
                 _ ->
-                    ?LOG_NOTICE(z_context:logger_md(Context), "Could not decode multipart (~p) chunk: ~p", [Boundary, Chunk]),
+                    z_context:logger_md(Context),
+                    ?LOG_NOTICE(#{
+                        text => <<"Could not decode multipart chunk">>,
+                        in => zotonic_core,
+                        boundary => Boundary,
+                        chunk => Chunk
+                    }),
                     throw({stop_request, 400})
             end
     end.
@@ -108,7 +115,11 @@ feed_mp(headers, #mp{buffer=Buffer, form=Form} = State) ->
                 {exact, N} ->
                     {S1, N};
                 _ ->
-                    ?LOG_NOTICE("Could not decode multipart: headers incomplete or too long: ~p", [S1#mp.buffer]),
+                    ?LOG_NOTICE(#{
+                        text => <<"Could not decode multipart: headers incomplete or too long">>,
+                        in => zotonic_core,
+                        buffer => S1#mp.buffer
+                    }),
                     throw({stop_request, 400})
             end
     end,
@@ -134,7 +145,11 @@ feed_mp(body, #mp{boundary=Prefix, buffer=Buffer, form=Form} = State) ->
             % Found a boundary, without an ending newline
             case read_more(State) of
                 State ->
-                    ?LOG_NOTICE("Could not decode multipart: incomplete end boundary at: ~p", [Buffer]),
+                    ?LOG_NOTICE(#{
+                        text => <<"Could not decode multipart: incomplete end boundary">>,
+                        in => zotonic_core,
+                        buffer => Buffer
+                    }),
                     throw({stop_request, 400});
                 S1 ->
                     feed_mp(body, S1)
@@ -241,7 +256,13 @@ handle_data({body, Data}, #multipart_form{filename=Filename, file=undefined} = F
             file:write(File, Data),
             Form#multipart_form{file=File};
         {error, Error} ->
-            ?LOG_ERROR("Couldn't open ~p for writing, error: ~p~n", [Form#multipart_form.tmpfile, Error]),
+            ?LOG_ERROR(#{
+                text => <<"Could not open file for writing">>,
+                in => zotonic_core,
+                result => error,
+                reason => Error,
+                file => Form#multipart_form.tmpfile
+            }),
             exit(could_not_open_file_for_writing)
     end;
 handle_data({body, Data}, #multipart_form{file=File} = Form) when File =/= undefined ->
@@ -286,7 +307,8 @@ handle_data(eof, Form) ->
 read_more(State=#mp{next_chunk=ok, content_length=ContentLength, length=Length} = State) when ContentLength =:= Length ->
     State;
 read_more(State=#mp{next_chunk=ok, context=Context} = State) ->
-    ?LOG_NOTICE(z_context:logger_md(Context), "Multipart post with wrong content length"),
+    z_context:logger_md(Context),
+    ?LOG_NOTICE("Multipart post with wrong content length"),
     throw({error, wrong_content_length});
 read_more(State=#mp{length=Length, content_length=ContentLength,
                 percentage=Percentage,

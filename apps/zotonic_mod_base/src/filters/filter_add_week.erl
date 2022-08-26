@@ -21,10 +21,11 @@
 
 add_week(undefined, _Context) ->
 	undefined;
-add_week(Date, Context) ->
-	filter_add_day:add_day(Date, 7, Context).
+add_week(Date, _Context) ->
+	z_datetime:next_week(Date).
+
 add_week(undefined, _N, _Context) ->
 	undefined;
-add_week(Date, N, Context) ->
-	filter_add_day:add_day(Date, 7*N, Context).
+add_week(Date, N, _Context) ->
+	z_datetime:next_week(Date, N).
 

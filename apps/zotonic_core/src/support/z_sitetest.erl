@@ -111,7 +111,13 @@ drop_schema(_Site, Connection, Schema) ->
         {error, #error{ codename = invalid_schema_name }} ->
             ok;
         {error, Reason} = Error ->
-            ?LOG_ERROR("z_sitetest: error while dropping schema ~p: ~p", [Schema, Reason]),
+            ?LOG_ERROR(#{
+                text => <<"z_sitetest: error while dropping schema">>,
+                in => zotonic_core,
+                schema => Schema,
+                result => error,
+                reason => Reason
+            }),
             Error
     end.
 

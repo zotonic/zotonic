@@ -153,7 +153,11 @@ sanitize_element_opts({comment, <<" z-media ", ZMedia/binary>>}, _Stack, _Opts) 
         {comment, <<" z-media ", Id1/binary, " ", Opts1/binary, " ">>}
     catch
         _:_ ->
-            ?LOG_NOTICE("Dropping illegal z-media tag: ~p", [ZMedia]),
+            ?LOG_NOTICE(#{
+                text => <<"Dropping illegal z-media tag">>,
+                in => zotonic_core,
+                zmedia => ZMedia
+            }),
             {comment, <<" ">>}
     end;
 sanitize_element_opts({Tag, Attrs, Inner}, _Stack, _Opts) ->
@@ -239,7 +243,11 @@ sanitize_script(Props, Context) ->
         {ok, Url} ->
             {<<"script">>, [{<<"src">>,Url} | proplists:delete(<<"src">>, Props)], []};
         false ->
-            ?LOG_NOTICE("Dropped script with url ~p", [Src]),
+            ?LOG_NOTICE(#{
+                text => <<"Dropped script with url">>,
+                in => zotonic_core,
+                url => Src
+            }),
             <<>>
     end.
 
@@ -253,7 +261,11 @@ sanitize_iframe(Props, Context) ->
                 | proplists:delete(<<"src">>,
                     proplists:delete(<<"sandbox">>, Props))], []};
         false ->
-            ?LOG_NOTICE("Dropped iframe url ~p", [Src]),
+            ?LOG_NOTICE(#{
+                text => <<"Dropped iframe url">>,
+                in => zotonic_core,
+                url => Src
+            }),
             <<>>
     end.
 
@@ -267,7 +279,11 @@ sanitize_object(Props, Context) ->
                 {ok, Url} ->
                     {<<"embed">>, [{<<"src">>,Url} | proplists:delete(<<"data">>, Props)], []};
                 false ->
-                    ?LOG_NOTICE("Dropped object url ~p", [Src]),
+                    ?LOG_NOTICE(#{
+                        text => <<"Dropped object url">>,
+                        in => zotonic_core,
+                        url => Src
+                    }),
                     <<>>
             end
     end.
@@ -282,7 +298,11 @@ sanitize_embed(Props, Context) ->
                 {ok, Url} ->
                     {<<"embed">>, [{<<"src">>,Url} | proplists:delete(<<"src">>, Props)], []};
                 false ->
-                    ?LOG_NOTICE("Dropped embed url ~p", [Src]),
+                    ?LOG_NOTICE(#{
+                        text => <<"Dropped embed url">>,
+                        in => zotonic_core,
+                        url => Src
+                    }),
                     <<>>
             end
     end.

@@ -21,10 +21,11 @@
 
 sub_hour(undefined, _Context) ->
 	undefined;
-sub_hour(Date, Context) ->
-	filter_add_hour:add_hour(Date, -1, Context).
+sub_hour(Date, _Context) ->
+	z_datetime:prev_hour(Date).
+
 sub_hour(undefined, _N, _Context) ->
 	undefined;
-sub_hour(Date, N, Context) ->
-	filter_add_hour:add_hour(Date, 0-N, Context).
+sub_hour(Date, N, _Context) ->
+	z_datetime:prev_hour(Date, N).
 

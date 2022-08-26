@@ -80,6 +80,7 @@ ld(Module) when is_atom(Module) ->
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 text => <<"Error loading module">>,
+                in => zotonic_core,
                 module => Module,
                 reason => Reason
             }),
@@ -165,6 +166,7 @@ do_all_task( OptPid ) ->
             ])
     end,
     ?LOG_DEBUG(#{
+        in => zotonic_core,
         text => <<"Compile all: start">>
     }),
     zotonic_filehandler:terminal_notifier("Compile all: start"),
@@ -177,6 +179,7 @@ do_all_task( OptPid ) ->
     end,
     ?LOG_DEBUG(#{
         text => <<"Compile all: ready">>,
+        in => zotonic_core,
         result => Result
     }),
     Result1 = cleanup_stdout(Result),
@@ -210,6 +213,7 @@ cleanup_stdout({error, Props} = E) ->
             lists:foreach(
                 fun(Line) ->
                     ?LOG_ERROR(#{
+                        in => zotonic_core,
                         text => z_string:trim(Line)
                     })
                 end,
@@ -249,9 +253,11 @@ run_cmd_task(Cmd, RunOpts, Opts) ->
                         ok;
                     StdErr ->
                         ?LOG_ERROR(#{
-                            text => <<"Unexpected result from run of command task">>,
+                            text => <<"Unexpected output from run of command task">>,
+                            in => zotonic_core,
                             command => Cmd,
-                            result => iolist_to_binary(StdErr)
+                            result => error,
+                            reason => iolist_to_binary(StdErr)
                         }),
                         ok
                 end;
@@ -262,6 +268,7 @@ run_cmd_task(Cmd, RunOpts, Opts) ->
                     {[], []} ->
                         ?LOG_ERROR(#{
                             text => <<"Unexpected error from run of command task">>,
+                            in => zotonic_core,
                             command => Cmd,
                             result => error,
                             reason => Args
@@ -269,6 +276,7 @@ run_cmd_task(Cmd, RunOpts, Opts) ->
                     {StdErr, _} when StdErr =/= [] ->
                         ?LOG_ERROR(#{
                             text => <<"Unexpected error from run of command task">>,
+                            in => zotonic_core,
                             command => Cmd,
                             result => Error,
                             reason => iolist_to_binary(StdErr)
@@ -276,6 +284,7 @@ run_cmd_task(Cmd, RunOpts, Opts) ->
                     {_, StdOut} ->
                         ?LOG_ERROR(#{
                             text => <<"Unexpected error from run of command task">>,
+                            in => zotonic_core,
                             command => Cmd,
                             result => error,
                             reason => iolist_to_binary(StdOut)
@@ -322,6 +331,7 @@ recompile_task(File) ->
         {ok, Options} ->
             ?LOG_DEBUG(#{
                 text => <<"Recompile of erlang file using make">>,
+                in => zotonic_core,
                 file => File
             }),
             zotonic_filehandler:terminal_notifier("Compiling: " ++ filename:basename(File)),
@@ -332,6 +342,7 @@ recompile_task(File) ->
                     Other ->
                         ?LOG_WARNING(#{
                             text => <<"Recompile of Erlang file unexpected result">>,
+                            in => zotonic_core,
                             result => error,
                             reason => Other,
                             file => File
@@ -341,6 +352,7 @@ recompile_task(File) ->
                 Type:Err:Stack ->
                     ?LOG_WARNING(#{
                         text => <<"Recompile of Erlang file exit">>,
+                        in => zotonic_core,
                         file => File,
                         result => Type,
                         reason => Err,
@@ -352,6 +364,7 @@ recompile_task(File) ->
             % should take care of this, we don't do anything now.
             ?LOG_WARNING(#{
                 text => <<"Could not find compile options, no recompile for Erlang file">>,
+                in => zotonic_core,
                 result => error,
                 reason => no_compile_options,
                 file => File

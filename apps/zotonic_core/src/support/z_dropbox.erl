@@ -180,7 +180,13 @@ do_scan(State) ->
     ToProcess1 = lists:foldl(   fun
                                     ({_, {ok, File}}, Acc) -> [File|Acc];
                                     ({F, {error, Reason}}, Acc) ->
-                                        ?LOG_WARNING("z_dropbox: Failed to move file: ~p to ~p: ~p", [F, ProcDir, Reason]),
+                                        ?LOG_WARNING(#{
+                                            text => <<"z_dropbox: Failed to move file">>,
+                                            filename => F,
+                                            to_dir => ProcDir,
+                                            result => error,
+                                            reason => Reason
+                                        }),
                                         Acc
                                 end,
                                 ToProcess,

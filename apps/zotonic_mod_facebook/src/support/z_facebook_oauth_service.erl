@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2020 Marc Worrell
+%% @copyright 2010-2022 Marc Worrell
 %% @doc Support routines for using Facebook as an external identity provider.
 %%
 %% See: http://developers.facebook.com/docs/authentication/
 
-%% Copyright 2010-2020 Marc Worrell
+%% Copyright 2010-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -76,7 +76,13 @@ fetch_access_token(Code, _AuthData, _Args, _QArgs, Context) ->
             } = z_json:decode(Payload),
             {ok, AccessData};
         Other ->
-            ?LOG_ERROR("[facebook] error fetching access token [code ~p] ~p", [Code, Other]),
+            ?LOG_ERROR(#{
+                text => <<"Facebook error fetching access token">>,
+                in => zotonic_mod_facebook,
+                code => Code,
+                result => error,
+                reason => Other
+            }),
             {error, {http_error, FacebookUrl, Other}}
     end.
 
@@ -85,13 +91,19 @@ auth_validated(#{ <<"access_token">> := AccessToken } = AccessData, Args, _Conte
     case fetch_user_data(AccessToken) of
         {ok, FBProps} ->
             FacebookUserId = maps:get(<<"id">>, FBProps),
-            ?LOG_DEBUG("[facebook] Authenticating ~p ~p", [FacebookUserId, FBProps]),
+            ?LOG_DEBUG(#{
+                text => <<"Facebook authenticating">>,
+                in => zotonic_mod_facebook,
+                facebook_user_id => FacebookUserId,
+                facebook_props => FBProps
+            }),
+            Email = maps:get(<<"email">>, FBProps, <<>>),
             PersonProps = #{
                 <<"title">> => maps:get(<<"name">>, FBProps, undefined),
                 <<"name_first">> => maps:get(<<"first_name">>, FBProps, undefined),
                 <<"name_surname">> => maps:get(<<"last_name">>, FBProps, undefined),
                 <<"website">> => maps:get(<<"link">>, FBProps, undefined),
-                <<"email">> => maps:get(<<"email">>, FBProps, <<>>),
+                <<"email">> => Email,
                 <<"depiction_url">> => depiction_url(FBProps)
             },
             {ok, #auth_validated{
@@ -99,6 +111,13 @@ auth_validated(#{ <<"access_token">> := AccessToken } = AccessData, Args, _Conte
                 service_uid = FacebookUserId,
                 service_props = AccessData,
                 props = PersonProps,
+                identities = [
+                    #{
+                        type => <<"email">>,
+                        key => Email,
+                        is_verified => true
+                    }
+                ],
                 is_connect = z_convert:to_bool(proplists:get_value(<<"is_connect">>, Args))
             }};
         {error, _} = Error ->
@@ -119,7 +138,13 @@ fetch_user_data(AccessToken) ->
             Props = z_json:decode(Payload),
             {ok, Props};
         Other ->
-            ?LOG_ERROR("[facebook] error fetching user data [token ~p] ~p", [AccessToken, Other]),
+            ?LOG_ERROR(#{
+                text => <<"Facebook error fetching user data">>,
+                in => zotonic_mod_facebook,
+                access_token => AccessToken,
+                result => error,
+                reason => Other
+            }),
             {error, {http_error, FacebookUrl, Other}}
     end.
 

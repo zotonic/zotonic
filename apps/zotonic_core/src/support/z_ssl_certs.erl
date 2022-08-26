@@ -175,13 +175,21 @@ ensure_self_signed(Hostname) ->
         {false, false} ->
             generate_self_signed(Hostname, Certs);
         {false, true} ->
-            ?LOG_ERROR("Missing cert file ~p, regenerating keys", [CertFile]),
+            ?LOG_ERROR(#{
+                text => <<"Missing cert file, regenerating keys">>,
+                in => zotonic_core,
+                file => CertFile
+            }),
             generate_self_signed(Hostname, Certs);
         {true, false} ->
-            ?LOG_ERROR("Missing pem file ~p, regenerating keys", [KeyFile]),
+            ?LOG_ERROR(#{
+                text => <<"Missing pem file, regenerating keys">>,
+                in => zotonic_core,
+                file => KeyFile
+            }),
             generate_self_signed(Hostname, Certs);
         {true, true} ->
-            case check_keyfile(KeyFile) of
+            case zotonic_ssl_certs:check_keyfile(KeyFile) of
                 ok -> {ok, Certs};
                 {error, _} = E -> E
             end
@@ -199,23 +207,14 @@ site_hostname(Context) ->
             ConfiguredHostname
     end.
 
-check_keyfile(Filename) ->
-    case file:read_file(Filename) of
-        {ok, <<"-----BEGIN PRIVATE KEY", _/binary>>} ->
-            {error, {need_rsa_private_key, Filename, "use: openssl rsa -in sitename.key -out sitename.pem"}};
-        {ok, Bin} ->
-            case public_key:pem_decode(Bin) of
-                [] -> {error, {no_private_keys_found, Filename}};
-                _ -> ok
-            end;
-        {error, _} = Error ->
-            {error, {cannot_read_pemfile, Filename, Error}}
-    end.
-
 -spec generate_self_signed( string(), proplists:proplist() ) -> {ok, list()} | {error, term()}.
 generate_self_signed(Hostname, Opts) ->
     {keyfile, PemFile} = proplists:lookup(keyfile, Opts),
-    ?LOG_INFO("Generating self-signed ssl keys in '~s'", [PemFile]),
+    ?LOG_INFO(#{
+        text => <<"Generating self-signed ssl keys">>,
+        in => zotonic_core,
+        file => PemFile
+    }),
     case z_filelib:ensure_dir(PemFile) of
         ok ->
             _ = file:change_mode(filename:dirname(PemFile), 8#00700),

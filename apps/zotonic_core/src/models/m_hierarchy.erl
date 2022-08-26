@@ -89,8 +89,7 @@ m_get([ Name, Id, <<"menu">> | Rest ], _Msg, Context) ->
         RId -> menu({sub, Name, RId}, Context)
     end,
     {ok, {V, Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
@@ -272,8 +271,14 @@ save(Name, Tree, Context) ->
                 {ok, CatId} ->
                     Name1 = m_rsc:p_no_acl(CatId, name, Context),
                     save_nocheck(Name1, Tree, Context);
-                {error, _} = Error ->
-                    ?LOG_WARNING("[m_hierarchy] Hierarchy save for unknown category ~p", [Name]),
+                {error, Reason} = Error ->
+                    ?LOG_WARNING(#{
+                        text => <<"[m_hierarchy] Hierarchy save for unknown category">>,
+                        in => zotonic_core,
+                        result => error,
+                        reason => Reason,
+                        name => Name
+                    }),
                     Error
             end;
         false ->

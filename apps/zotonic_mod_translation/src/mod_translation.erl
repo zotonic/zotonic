@@ -368,6 +368,7 @@ event(#postback{message={translation_generate, _Args}}, Context) ->
                             "Cannot generate translation files because gettext is not installed. "
                             "See http://docs.zotonic.com/en/latest/developer-guide/translation.html."
                             >>,
+                        in => zotonic_mod_translation,
                         result => error,
                         reason => gettext
                     }),
@@ -522,6 +523,7 @@ language_add(NewLanguageCode, IsEnabled, Context) when is_boolean(IsEnabled) ->
         false ->
             ?LOG_WARNING(#{
                 text => <<"mod_translation error. language_add: language does not exist">>,
+                in => zotonic_mod_translation,
                 result => error,
                 reason => not_a_language,
                 language => NewLanguageCode
@@ -637,6 +639,7 @@ generate_core() ->
     case zotonic_core:is_zotonic_project() of
         true ->
             ?LOG_NOTICE(#{
+                in => zotonic_mod_translation,
                 text => <<"Generating .pot files...">>
             }),
             translation_po:generate(translation_scan:scan(core_apps())),
@@ -664,6 +667,7 @@ consolidate_core() ->
         "zotonic_*", "priv", "translations", "template", "*.pot"
     ]),
     ?LOG_NOTICE(#{
+        in => zotonic_mod_translation,
         text => <<"Merging .pot files">>,
         path => ZotonicPot
     }),

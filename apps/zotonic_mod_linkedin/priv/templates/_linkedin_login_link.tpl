@@ -1,5 +1,7 @@
 {% if is_connect and 'linkedin'|member:identity_types %}
-    <a id="{{ #lnkddis }}" href="#disconnect" class="btn z-btn-social" style="background-color: #0077B5"><span class="z-icon z-icon-linkedin"></span> {_ Disconnect from LinkedIn _}</a>
+    <a id="{{ #lnkddis }}" href="#disconnect" class="btn z-btn-social" style="background-color: #0077B5">
+        &times; <span class="z-icon z-icon-linkedin"></span> {_ Disconnect from LinkedIn _}
+    </a>
     {% wire id=#lnkddis
             action={confirm title=_"Disconnect from LinkedIn"
                             text=_"Do you want to disconnect your LinkedIn account?"

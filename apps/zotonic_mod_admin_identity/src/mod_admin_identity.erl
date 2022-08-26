@@ -252,7 +252,12 @@ is_existing_key(RscId, Type, Key, Context) ->
 ensure(_RscId, _Type, undefined, _Context) -> ok;
 ensure(_RscId, _Type, <<>>, _Context) -> ok;
 ensure(RscId, Type, Key, Context) when is_binary(Key) ->
-    m_identity:insert(RscId, Type, Key, Context).
+    case m_identity:get_rsc_by_type_key(RscId, Type, Key, Context) of
+        [] ->
+            m_identity:insert(RscId, Type, Key, Context);
+        _ ->
+            ok
+    end.
 
 
 %%====================================================================

@@ -167,7 +167,10 @@ normalize(K, V)
         V1 -> V1
     end;
 normalize(K, _) ->
-    ?LOG_INFO("Dropping unknown image edit argument ~p", [ K ]),
+    ?LOG_INFO(#{
+        text => <<"Dropping unknown image edit argument">>,
+        key => K
+    }),
     undefined.
 
 

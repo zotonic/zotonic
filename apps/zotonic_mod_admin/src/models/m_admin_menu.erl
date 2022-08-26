@@ -41,8 +41,7 @@ m_get([], _Msg, Context) ->
     {ok, {menu(Context), []}};
 m_get([ <<"menu">> | Rest ], _Msg, Context) ->
     {ok, {menu(Context), Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 menu(Context) ->

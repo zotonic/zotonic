@@ -150,8 +150,15 @@ handle_call({upload, Offset, Data}, _From, State) ->
         },
         {reply, {ok, state_status(State1)}, State1, ?TIMEOUT}
     catch Type:Error ->
-        ?LOG_ERROR("fileuploader: error uploading ~p bytes to file ~p of ~p bytes: ~p:~p",
-                    [ size(Data), State#state.filename, State#state.size, Type, Error ]),
+        ?LOG_ERROR(#{
+            text => <<"fileuploader: error uploading to file">>,
+            in => zotonic_mod_fileuploader,
+            bytes => size(Data),
+            filename => State#state.filename,
+            size => State#state.size,
+            result => Type,
+            reason => Error
+        }),
         {reply, {error, fatal}, State, 0}
     end.
 

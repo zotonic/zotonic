@@ -151,7 +151,6 @@ event(#submit{message={mailing_testaddress, [{id, PageId}]}}, Context) ->
 
 %% @doc Combine lists
 event(#submit{message={mailinglist_combine,[{id,Id}]}}, Context) ->
-    ?LOG_WARNING("Id: ~p", [Id]),
     TargetId = z_convert:to_integer(z_context:get_q(<<"list_id">>, Context)),
     Operation = operation(z_context:get_q(<<"operation">>, Context)),
     case m_mailinglist:recipient_set_operation(Operation, Id, TargetId, Context) of

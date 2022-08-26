@@ -145,6 +145,7 @@ mnesia_data_dir() ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => <<"Could not create mnesia dir">>,
+                in => zotonic_core,
                 path => MnesiaDir,
                 result => error,
                 reason => Reason

@@ -60,6 +60,7 @@ parse_po_1(Fname, DropEmpty) ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => <<"Error reading po file">>,
+                in => zotonic_core,
                 path => Fname,
                 result => error,
                 reason => Reason

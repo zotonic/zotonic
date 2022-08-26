@@ -5,10 +5,10 @@
  {admin_logon,         ["admin", "logon"],                controller_logon,               [{template, "admin_logon.tpl"}, seo_noindex, ssl]},
  {admin_overview_rsc,  ["admin", "overview"],             controller_admin,               [{template, "admin_overview.tpl"}, {selected, "overview"}, seo_noindex]},
  {admin_media,         ["admin", "media"],                controller_admin,               [{template, "admin_media.tpl"}, {selected, "media"}, seo_noindex]},
- 
+
  {admin_edit_rsc,      ["admin", "edit", id],             controller_admin_edit,          [ seo_noindex ]},
  {admin_referrers,     ["admin", "referrer", id],         controller_admin_referrers,     [ seo_noindex ]},
  {admin_media_preview, ["admin", "media", "preview", id], controller_admin_media_preview, [ seo_noindex ]},
- 
+
  {admin_status,        ["admin", "status"],               controller_admin,               [{template, "admin_status.tpl"}, {selected, "status"}, seo_noindex]}
 ].

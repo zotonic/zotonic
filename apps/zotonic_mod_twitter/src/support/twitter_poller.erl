@@ -51,6 +51,7 @@ poll(Context) ->
                             maybe_poll_next(Sub, Result, Context),
                             ?LOG_DEBUG(#{
                                 text => <<"Imported tweets">>,
+                                in => zotonic_mod_twitter,
                                 result => ok,
                                 service => twitter,
                                 count => ImportCount
@@ -61,6 +62,7 @@ poll(Context) ->
                         {error, Reason} = Error ->
                             ?LOG_ERROR(#{
                                 text => <<"Twitter poller error">>,
+                                in => zotonic_mod_twitter,
                                 service => twitter,
                                 twitter_sub_id => proplists:get_value(id, Sub),
                                 twitter_sub_key => proplists:get_value(key, Sub),
@@ -81,6 +83,7 @@ poll(Context) ->
         Type:E:Trace ->
             ?LOG_ERROR(#{
                 text => <<"Twitter poller error">>,
+                in => zotonic_mod_twitter,
                 service => twitter,
                 result => Type,
                 reason => E,
@@ -112,6 +115,7 @@ poll_next(SubId, Next, Context) ->
                 Type:E:Trace ->
                     ?LOG_ERROR(#{
                         text => <<"Twitter (next) poller error">>,
+                        in => zotonic_mod_twitter,
                         service => twitter,
                         result => Type,
                         reason => E,
@@ -235,6 +239,7 @@ poll_feed(Sub, Context) ->
         false ->
             ?LOG_NOTICE(#{
                 text => <<"twitter_poller: disable subscription because not allowd to insert tweets">>,
+                in => zotonic_mod_twitter,
                 service => twitter,
                 twitter_sub_id => SubId,
                 sub => Sub

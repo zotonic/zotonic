@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2019 Marc Worrell
+%% @copyright 2010-2022 Marc Worrell
 %% @doc Authentication and identification of users.
 
-%% Copyright 2010-2019 Marc Worrell
+%% Copyright 2010-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -57,10 +57,22 @@ event(#submit{ message={signup_confirm, Props} }, Context) ->
     Auth1 = Auth#auth_validated{ is_signup_confirm = true },
     case z_notifier:first(Auth1, Context) of
         undefined ->
-            ?LOG_WARNING("mod_authentication: 'undefined' return for auth of ~p", [Auth]),
+            ?LOG_ERROR(#{
+                text => <<"mod_authentication: 'undefined' return for auth">>,
+                in => zotonic_mod_authentication,
+                result => error,
+                reason => no_auth,
+                auth => Auth
+            }),
             z_render:wire({show, [{target, "signup_error"}]}, Context);
-        {error, _} = Err ->
-            ?LOG_WARNING("mod_authentication: Error return of ~p for auth of ~p", [Err, Auth]),
+        {error, Reason} ->
+            ?LOG_WARNING(#{
+                text => <<"mod_authentication: Error return for auth">>,
+                in => zotonic_mod_authentication,
+                result => error,
+                reason => Reason,
+                auth => Auth
+            }),
             z_render:wire({show, [{target, "signup_error"}]}, Context);
         {ok, Context1} ->
             z_render:wire({script, [{script, "window.close()"}]}, Context1)
@@ -200,7 +212,7 @@ observe_auth_client_switch_user(#auth_client_switch_user{ user_id = UserId }, Co
 
 is_user_local(<<"admin">>, _Context) ->
     true;
-is_user_local(Handle, Context) ->
+is_user_local(Handle, Context) when is_binary(Handle) ->
     case m_identity:lookup_by_username(Handle, Context) of
         undefined -> false;
         _Row -> true
@@ -208,26 +220,9 @@ is_user_local(Handle, Context) ->
 
 is_user_local_email(Handle, Context) ->
     case binary:match(Handle, <<"@">>) of
-        nomatch ->
-            false;
-        _ ->
-            Rows = m_identity:lookup_by_type_and_key_multi(email, Handle, Context),
-            RscIds = lists:map(
-                fun(Row) ->
-                    proplists:get_value(rsc_id, Row)
-                end,
-                Rows),
-            lists:any(
-                fun (RscId) ->
-                    case m_identity:get_username(RscId, Context) of
-                        undefined -> false;
-                        <<"admin">> -> false;
-                        _ -> true
-                    end
-                end,
-                RscIds)
+        nomatch -> false;
+        _ -> length(m_identity:lookup_users_by_type_and_key(email, Handle, Context)) > 0
     end.
-
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
@@ -245,14 +240,49 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 %%      If unknown, add identity to current user or signup a new user
 observe_auth_validated(#auth_validated{} = Auth, Context) ->
     Context1 = z_context:set(auth_method, Auth#auth_validated.service, Context),
-    maybe_add_identity(z_acl:user(Context1), Auth, Context1).
+    case Auth#auth_validated.is_connect of
+        true ->
+            maybe_add_identity_connect(z_acl:user(Context1), Auth, Context1);
+        false ->
+            maybe_add_identity_logon(Auth, Context1)
+    end.
 
-maybe_add_identity(undefined, Auth, Context) ->
+maybe_add_identity_logon(Auth, Context) ->
     case auth_identity(Auth, Context) of
-        undefined -> maybe_signup(Auth, Context);
-        Ps when is_list(Ps) -> update_identity(Auth, Ps, Context)
-    end;
-maybe_add_identity(CurrUserId, Auth, Context) ->
+        undefined ->
+            case auth_match_verified_email(Auth, Context) of
+                [] ->
+                    maybe_signup(Auth, Context);
+                [1] ->
+                    % Never add an external identity to the admin user during log on.
+                    {error, duplicate};
+                [UserId] when Auth#auth_validated.is_signup_confirm ->
+                    % Local user with an email address that was
+                    % verified both here and at the external service.
+                    % We can now assume this is the same user.
+                    % Connect the service's identity to the user.
+                    % The optional 2FA has been checked at this point.
+                    {ok, _} = insert_identity(UserId, Auth, Context),
+                    {ok, UserId};
+                [UserId] when not Auth#auth_validated.is_signup_confirm ->
+                    % Local user with matching verified email identity.
+                    % Check if 2FA is enabled for local user.
+                    case z_notifier:first(#auth_postcheck{id = UserId, query_args = #{}}, Context) of
+                        {error, need_passcode} ->
+                            {error, {need_passcode, UserId}};
+                        undefined ->
+                            {ok, _} = insert_identity(UserId, Auth, Context),
+                            {ok, UserId}
+                    end;
+                [Email|_] ->
+                    % Ambiguous - multiple matching accounts
+                    {error, {multiple_email, Email}}
+            end;
+        Ps when is_list(Ps) ->
+            update_identity(Auth, Ps, Context)
+    end.
+
+maybe_add_identity_connect(CurrUserId, Auth, Context) ->
     case auth_identity(Auth, Context) of
         undefined ->
             % Unknown identity, add it to the current user
@@ -260,26 +290,15 @@ maybe_add_identity(CurrUserId, Auth, Context) ->
             {ok, Context};
         Ps ->
             {rsc_id, IdnRscId} = proplists:lookup(rsc_id, Ps),
-            case {IdnRscId, Auth#auth_validated.is_connect} of
-                {CurrUserId, _} ->
+            case IdnRscId of
+                CurrUserId ->
                     {ok, CurrUserId};
-                {_UserId, false} ->
-                    update_identity(Auth, Ps, Context);
-                {_UserId, true} ->
+                _UserId ->
                     {error, duplicate}
             end
     end.
 
-maybe_update_identity(Ps, Ps, _IdnPs, _Context) ->
-    ok;
-maybe_update_identity(_Ps1, _Ps2, [], _Context) ->
-    ok;
-maybe_update_identity(_Ps, NewProps, IdnPs, Context) ->
-    {key, Key} = proplists:lookup(key, IdnPs),
-    {type, Type} = proplists:lookup(type, IdnPs),
-    {rsc_id, UserId} = proplists:lookup(rsc_id, IdnPs),
-    m_identity:set_by_type(UserId, Type, Key, NewProps, Context).
-
+% @doc Update the props of the matched identity record.
 update_identity(Auth, IdnPs, Context) ->
     {propb, IdnPropb} = proplists:lookup(propb, IdnPs),
     {rsc_id, UserId} = proplists:lookup(rsc_id, IdnPs),
@@ -290,14 +309,74 @@ update_identity(Auth, IdnPs, Context) ->
         Context),
     {ok, UserId}.
 
+maybe_update_identity(Props, Props, _IdnPs, _Context) ->
+    % props unchanged
+    ok;
+maybe_update_identity(_OldProps, _NewProps, [], _Context) ->
+    % no identity
+    ok;
+maybe_update_identity(_OldProps, NewProps, IdnPs, Context) ->
+    {key, Key} = proplists:lookup(key, IdnPs),
+    {type, Type} = proplists:lookup(type, IdnPs),
+    {rsc_id, UserId} = proplists:lookup(rsc_id, IdnPs),
+    m_identity:set_by_type(UserId, Type, Key, NewProps, Context).
+
 maybe_signup(Auth, Context) ->
-    Email = maps:get(<<"email">>, Auth#auth_validated.props, undefined),
-    case not Auth#auth_validated.is_connect
-        andalso is_user_email_exists(Email, Context)
-    of
-        true -> {error, {duplicate_email, Email}};
-        false -> try_signup(Auth, Context)
+    case auth_match_primary_email(Auth, Context) of
+        [] ->
+            try_signup(Auth, Context);
+        [Email|_] ->
+            % External service uses an email address that is connected as
+            % a primary email address to an account here.
+            % Either the external service is not verified or our local
+            % email identity is not verified.
+            {error, {duplicate_email, Email}}
     end.
+
+-spec auth_match_verified_email(#auth_validated{}, z:context()) -> list( m_rsc:resource_id() ).
+auth_match_verified_email(#auth_validated{ identities = Identities }, Context) ->
+    VerifiedEmails = lists:filtermap(
+        fun
+            (#{ type := <<"email">>, key := E, is_verified := true }) ->
+                {true, m_identity:normalize_key(email, E)};
+            (_) ->
+                false
+        end,
+        Identities),
+    lists:usort(lists:flatten(lists:map(
+        fun(Email) ->
+            Idns = m_identity:lookup_users_by_verified_type_and_key(email, Email, Context),
+            lists:map(fun(Idn) -> proplists:get_value(rsc_id, Idn) end, Idns)
+        end,
+        VerifiedEmails))).
+
+
+-spec auth_match_primary_email(#auth_validated{}, z:context()) -> list( Email::binary() ).
+auth_match_primary_email(#auth_validated{ identities = Identities }, Context) ->
+    ExtEmails = lists:filtermap(
+        fun
+            (#{ type := <<"email">>, key := E }) ->
+                {true, m_identity:normalize_key(email, E)};
+            (_) ->
+                false
+        end,
+        Identities),
+    lists:usort(lists:flatten(lists:map(
+        fun(ExtEmail) ->
+            Idns = m_identity:lookup_users_by_type_and_key(email, ExtEmail, Context),
+            lists:filtermap(
+                fun(Idn) ->
+                    RscId = proplists:get_value(rsc_id, Idn),
+                    PrimaryEmail = m_identity:normalize_key(email, m_rsc:p_no_acl(RscId, email_raw, Context)),
+                    if
+                        ExtEmail =:= PrimaryEmail -> {true, ExtEmail};
+                        true -> false
+                    end
+                end,
+                Idns)
+        end,
+        ExtEmails))).
+
 
 try_signup(Auth, Context) ->
     case not Auth#auth_validated.is_signup_confirm
@@ -308,7 +387,7 @@ try_signup(Auth, Context) ->
         false ->
             Signup = #signup{
                 id = undefined,
-                signup_props = maybe_email_identity(Auth#auth_validated.props),
+                signup_props = email_identities(Auth#auth_validated.identities),
                 props = Auth#auth_validated.props,
                 request_confirm = false
             },
@@ -320,35 +399,32 @@ try_signup(Auth, Context) ->
                     end,
                     _ = m_identity:ensure_username_pw(NewUserId, z_acl:sudo(Context)),
                     {ok, NewUserId};
-                    % Context1 = z_acl:logon_prefs(NewUserId, Context),
-                    % z_authentication_tokens:set_auth_cookie(NewUserId, #{}, Context1);
                 {error, _Reason} = Error ->
                     Error;
                 undefined ->
                     % No signup accepted
-                    ?LOG_WARNING("Authentication not accepted because no signup handler defined for Auth ~p", [ Auth ]),
+                    ?LOG_WARNING(#{
+                        text => <<"Authentication not accepted because no signup handler defined for Auth">>,
+                        in => zotonic_mod_authentication,
+                        result => error,
+                        reason => no_auth_signup,
+                        auth => Auth
+                    }),
                     undefined
             end
     end.
 
-is_user_email_exists(undefined, _Context) ->
-    false;
-is_user_email_exists(Email, Context) ->
-    case m_identity:lookup_users_by_verified_type_and_key(email, Email, Context) of
-        [] -> false;
-        _ -> true
-    end.
-
-maybe_email_identity(Props) ->
-    case maps:get(<<"email">>, Props, undefined) of
-        undefined -> [];
-        Email ->
-            IsVerified = true,
-            IsUnique = false,
-            [
-                {identity, {email, Email, IsUnique, IsVerified}}
-            ]
-    end.
+email_identities(Identities) ->
+    lists:filtermap(
+        fun
+            (#{ type := <<"email">>, key := Email, is_verified := IsVerified }) ->
+                IsUnique = false,
+                Idn = {identity, {email, Email, IsUnique, IsVerified}},
+                {true, Idn};
+            (_) ->
+                false
+        end,
+        Identities).
 
 insert_identity(UserId, Auth, Context) ->
     Type = Auth#auth_validated.service,
