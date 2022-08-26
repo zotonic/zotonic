@@ -177,7 +177,7 @@ set_content_policy(#z_file_info{ mime = Mime } = Info, ReqData) ->
     case is_resource(Info) of
         true when Mime =:= <<"application/pdf">> ->
             RD1 = wrq:set_resp_header("Content-Security-Policy", "default-src 'none'; object-src 'self'; plugin-types application/pdf", ReqData),
-            wrq:set_resp_header("X-Content-Security-Policy", "default-src 'none'; plugin-types: application/pdf", RD1);
+            wrq:set_resp_header("X-Content-Security-Policy", "default-src 'none'; plugin-types application/pdf", RD1);
         true ->
             % Do not set the IE11 X-CSP with sandbox as that disables file downloading
             % https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/sandbox
