@@ -218,13 +218,17 @@ set_content_policy(#z_file_info{ mime = Mime } = Info, Context) ->
         true when Mime =:= <<"application/pdf">> ->
             z_context:set_resp_headers([
                     {<<"content-security-policy">>, <<"default-src 'none'; object-src 'self'; plugin-types application/pdf">>},
-                    {<<"x-content-security-policy">>,<<"default-src: 'none'; plugin-types: application/pdf">>}
+                    {<<"x-content-security-policy">>,<<"default-src 'none'; plugin-types application/pdf">>}
                 ],
                 Context);
         true ->
             % Do not set the IE11 X-CSP with sandbox as that disables file downloading
             % https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/sandbox
-            z_context:set_resp_header(<<"content-security-policy">>, <<"default-src 'none'; sandbox">>, Context);
+            z_context:set_resp_header([
+                    {<<"content-security-policy">>, <<"default-src 'none'; sandbox">>},
+                    {<<"x-content-security-policy">>,<<"default-src 'none'">>}
+                ],
+                Context);
         false ->
             Context
     end.
