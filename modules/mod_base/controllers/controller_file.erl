@@ -181,7 +181,7 @@ set_content_policy(#z_file_info{ mime = Mime } = Info, ReqData) ->
         true ->
             % Do not set the IE11 X-CSP with sandbox as that disables file downloading
             % https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/sandbox
-            RD1 = wrq:set_resp_header("Content-Security-Policy", "default-src: 'none'; sandbox", ReqData),
+            RD1 = wrq:set_resp_header("Content-Security-Policy", "default-src 'none'; sandbox", ReqData),
             wrq:set_resp_header("X-Content-Security-Policy", "default-src 'none'", RD1);
         false ->
             ReqData
