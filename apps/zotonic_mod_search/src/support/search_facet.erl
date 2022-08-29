@@ -60,6 +60,7 @@
                     | boolean
                     | datetime
                     | id
+                    | ids
                     | list.
 -type facet_def() :: #facet_def{}.
 
@@ -95,8 +96,48 @@ facet_values(Context) ->
         {ok, Facets} ->
             FVs = lists:foldl(
                 fun
-                    (#facet_def{ type = list }, Acc) ->
-                        Acc;
+                    (#facet_def{ type = list, name = Name }, Acc) ->
+                        Col = <<"f_", Name/binary>>,
+                        Q = <<"select distinct unnest(", Col/binary,") as colval, min(id) from search_facet ",
+                              "where ", Col/binary, " is not null ",
+                              "group by colval">>,
+                        Rs = lists:sort(z_db:q(Q, Context)),
+                        Rs1 = lists:map(
+                            fun({V,Id}) ->
+                                #{
+                                    <<"value">> => V,
+                                    <<"facet_id">> => Id
+                                }
+                            end,
+                            Rs),
+                        Rs2 = labels(name2facet(Name, Facets), Rs1, Context),
+                        Acc#{
+                            Name => #{
+                                <<"type">> => <<"value">>,
+                                <<"values">> => Rs2
+                            }
+                        };
+                    (#facet_def{ type = ids, name = Name }, Acc) ->
+                        Col = <<"f_", Name/binary>>,
+                        Q = <<"select distinct unnest(", Col/binary,") as colval, min(id) from search_facet ",
+                              "where ", Col/binary, " is not null ",
+                              "group by colval">>,
+                        Rs = lists:sort(z_db:q(Q, Context)),
+                        Rs1 = lists:map(
+                            fun({V,Id}) ->
+                                #{
+                                    <<"value">> => V,
+                                    <<"facet_id">> => Id
+                                }
+                            end,
+                            Rs),
+                        Rs2 = labels(name2facet(Name, Facets), Rs1, Context),
+                        Acc#{
+                            Name => #{
+                                <<"type">> => <<"value">>,
+                                <<"values">> => Rs2
+                            }
+                        };
                     (#facet_def{ name = Name, is_range = true }, Acc) ->
                         Col = <<"f_", Name/binary>>,
                         Q = <<"select min(", Col/binary,"), max(", Col/binary,
@@ -601,10 +642,16 @@ render_block(Block, Template, Vars, Context) ->
     {Output, _RenderState} = z_template:render_block_to_iolist(Block, Template, Vars, Context),
     z_string:trim(iolist_to_binary(Output)).
 
+convert_type(list, []) ->
+    undefined;
 convert_type(list, L) when is_list(L) ->
     L1 = lists:map(fun z_convert:to_binary/1, L),
     L2 = lists:map(fun z_string:trim/1, L1),
     lists:filter( fun(B) -> B =/= <<>> end, L2 );
+convert_type(ids, []) ->
+    undefined;
+convert_type(ids, L) when is_list(L) ->
+    lists:map(fun(V) -> convert_type(id, V) end, L);
 convert_type(Type, L) when is_list(L) ->
     L1 = lists:map(fun(V) -> convert_type(Type, V) end, L),
     lists:filter(fun(V) -> V =/= <<>> andalso V =/= undefined end, L1);
@@ -617,7 +664,11 @@ convert_type(datetime, V) -> z_datetime:to_datetime(V);
 convert_type(list, V) ->
     L = binary:split(V, <<",">>, [ global ]),
     L1 = lists:map(fun z_string:trim/1, L),
-    lists:filter( fun(B) -> B =/= <<>> end, L1 );
+    convert_type(list, lists:filter( fun(B) -> B =/= <<>> end, L1 ));
+convert_type(ids, V) ->
+    L = binary:split(V, <<",">>, [ global ]),
+    L1 = lists:map(fun z_string:trim/1, L),
+    convert_type(ids, lists:filter( fun(B) -> B =/= <<>> end, L1 ));
 convert_type(fulltext, V) ->
     z_string:truncatechars(z_convert:to_binary(V), ?TEXT_LENGTH);
 convert_type(text, V) ->
@@ -682,6 +733,8 @@ labels(Facet, Vs, Context) ->
             case Facet#facet_def.type of
                 id ->
                     ids_as_labels(Vs, Context);
+                ids ->
+                    ids_as_labels(Vs, Context);
                 _ ->
                     values_as_labels(Vs)
             end
@@ -716,7 +769,7 @@ ids_as_labels(Vs, Context) ->
                     m_rsc:p(Id, <<"title">>, Context)
             end,
             T1 = case z_utils:is_empty(T) of
-                true -> m_rsc:p_no_acl(Id, <<"short_title">>, Context);
+                true -> m_rsc:p(Id, <<"short_title">>, Context);
                 false -> T
             end,
             F#{ <<"label">> => z_trans:lookup_fallback(T1, Context) }
@@ -848,6 +901,20 @@ facet_to_column(#facet_def{
     };
 facet_to_column(#facet_def{
         name = Name,
+        type = ids
+    }) ->
+    #column_def{
+        name = binary_to_atom(<<"f_", Name/binary>>, utf8),
+        type = col_type(id),
+        length = col_length(id),
+        is_nullable = true,
+        is_array = true,
+        default = undefined,
+        primary_key = false,
+        unique = false
+    };
+facet_to_column(#facet_def{
+        name = Name,
         type = Type
     }) ->
     #column_def{
@@ -890,6 +957,12 @@ facet_to_index(#facet_def{
 facet_to_index(#facet_def{
         name = Name,
         type = list
+    }) ->
+    <<"CREATE INDEX search_facet_f_", Name/binary, "_key ",
+       "ON search_facet USING gin (f_", Name/binary, ")">>;
+facet_to_index(#facet_def{
+        name = Name,
+        type = ids
     }) ->
     <<"CREATE INDEX search_facet_f_", Name/binary, "_key ",
        "ON search_facet USING gin (f_", Name/binary, ")">>;
@@ -1007,6 +1080,9 @@ block_type(B) ->
 
         [ <<"list">> | Rs ] when length(Rs) >= 1 ->
             {list, n(Rs), false};
+
+        [ <<"ids">> | Rs ] when length(Rs) >= 1 ->
+            {ids, n(Rs), false};
 
         _ ->
             {text, B, false}
