@@ -27,8 +27,6 @@
     moved_permanently/1
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
 service_available(Context) ->
     Context1 = z_context:set_noindex_header(Context),
     Context2 = z_context:set_nocache_headers(Context1),
@@ -40,7 +38,7 @@ resource_exists(Context) ->
 previously_existed(Context) ->
     {true, Context}.
 
--spec moved_temporarily(z:context()) -> {{true, binary()}, z:context()}.
+-spec moved_temporarily(z:context()) -> {{true, URL::binary()}, z:context()}.
 moved_temporarily(Context) ->
     Context1 = mod_translation:set_user_language(z_context:get_q(<<"code">>, Context), Context),
     Page = z_context:get_q(<<"p">>, Context1),
@@ -52,8 +50,9 @@ moved_temporarily(Context) ->
         true -> Location;
         false -> <<"/">>
     end,
+    Location2 = z_sanitize:uri(Location1),
     AbsUrl = z_context:abs_url(
-                    add_language(mod_translation:url_strip_language(Location1), Context1),
+                    add_language(mod_translation:url_strip_language(Location2), Context1),
                     Context1),
     {{true, AbsUrl}, Context1}.
 
