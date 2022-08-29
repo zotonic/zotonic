@@ -55,7 +55,8 @@ moved_temporarily(ReqData, Context0) ->
         "/" ++ _ -> Page;
         _ -> "/"
     end,
-    AbsUrl = z_context:abs_url(add_language(mod_translation:url_strip_language(Location), Context1), Context1),
+    Location1 = z_sanitize:uri(Location),
+    AbsUrl = z_context:abs_url(add_language(mod_translation:url_strip_language(Location1), Context1), Context1),
     ?WM_REPLY({true, AbsUrl}, Context1).
 
 moved_permanently(ReqData, Context) ->
