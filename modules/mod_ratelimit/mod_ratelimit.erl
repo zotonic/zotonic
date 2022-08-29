@@ -71,17 +71,14 @@ observe_auth_precheck( #auth_precheck{ username = Username }, Context ) ->
                 Context),
             {error, ratelimit};
         false ->
+            m_ratelimit:insert_event(auth, Username, DeviceId, Context),
             undefined
     end.
 
 %% @doc Handle the result of the password authentication, register all failures
-observe_auth_checked( #auth_checked{ username = Username, is_accepted = false }, Context ) ->
-    DeviceId = case validate_device_cookie(Context) of
-        {ok, #rldid{ username = Username, device_id = DId }} -> DId;
-        {ok, _} -> undefined;
-        {error, _} -> undefined
-    end,
-    m_ratelimit:insert_event(auth, Username, DeviceId, Context);
+observe_auth_checked( #auth_checked{ username = _Username, is_accepted = false }, _Context ) ->
+    % We already registered a try at the precheck.
+    ok;
 observe_auth_checked( #auth_checked{ username = Username, is_accepted = true }, Context ) ->
     % Store the authenticated username for later retrieval in observe_auth_logon.
     z_context:set_session(ratelimit_event_username, Username, Context).
