@@ -71,7 +71,8 @@ observe_auth_precheck( #auth_precheck{ username = Username }, Context ) ->
                 Context),
             {error, ratelimit};
         false ->
-            m_ratelimit:insert_event(auth, Username, DeviceId, Context)
+            m_ratelimit:insert_event(auth, Username, DeviceId, Context),
+            undefined
     end.
 
 %% @doc Handle the result of the password authentication, register all failures
