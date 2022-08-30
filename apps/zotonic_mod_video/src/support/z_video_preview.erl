@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2020 Marc Worrell
+%% @copyright 2014-2022 Marc Worrell
 %% @doc Fetch a preview from a video file using ffmpeg.
 
-%% Copyright 2014-2020 Marc Worrell
+%% Copyright 2014-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -48,8 +48,8 @@ preview(MovieFile, Props) ->
     FfmpegCmd = z_convert:to_list(
         iolist_to_binary([
             case string:str(Cmdline, "-itsoffset") of
-                0 -> io_lib:format(Cmdline, [MovieFile]);
-                _ -> io_lib:format(Cmdline, [Start, MovieFile])
+                0 -> io_lib:format(Cmdline, [z_filelib:os_filename(MovieFile)]);
+                _ -> io_lib:format(Cmdline, [Start, z_filelib:os_filename(MovieFile)])
             end,
             " ",
             orientation_to_transpose(Orientation),
