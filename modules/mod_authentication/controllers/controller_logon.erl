@@ -122,10 +122,6 @@ provide_content(ReqData, Context) ->
 safe_url(undefined, _Context) -> undefined;
 safe_url("", _Context) -> "";
 safe_url(<<>>, _Context) -> "";
-safe_url("#" ++ _ = Url, _Context) -> Url;
-safe_url(<<"#", _/binary>> = Url, _Context) -> Url;
-safe_url("/" ++ _ = Url, _Context) -> Url;
-safe_url(<<"/", _/binary>> = Url, _Context) -> Url;
 safe_url(Url, Context) -> z_context:site_url(Url, Context).
 
 reminder_secrets(undefined, _Username, Context) ->
