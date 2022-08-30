@@ -46,6 +46,7 @@
     output/2,
 
     abs_url/2,
+    site_url/2,
 
     pickle/1,
     depickle/1,
@@ -400,7 +401,7 @@ prune_reqdata(ReqData) ->
 %% @spec abs_url(iolist(), Context) -> binary()
 abs_url(<<"http:", _/binary>> = Url, _Context) ->
     Url;
-abs_url(<<"https", _/binary>> = Url, _Context) ->
+abs_url(<<"https:", _/binary>> = Url, _Context) ->
     Url;
 abs_url(<<"//", _/binary>> = Url, Context) ->
     <<(site_protocol(Context))/binary, $:, Url/binary>>;
@@ -427,6 +428,41 @@ abs_url(Url, Context) ->
         true;
     has_url_protocol(_) ->
         false.
+
+%% @doc Ensure that the URL is for this host and that is sanitized.
+-spec site_url(undefined|string()|binary(), z:context()) -> binary().
+site_url(None, Context) when
+    None =:= undefined;
+    None =:= "";
+    None =:= <<>> ->
+    z_context:abs_url(<<"/">>, Context);
+site_url("#" ++ _ = Frag, _Context) ->
+    z_sanitize:uri(z_convert:to_binary(Frag));
+site_url(<<"#", _/binary>> = Frag, _Context) ->
+    z_sanitize:uri(Frag);
+site_url("/" ++ _ = Path, Context) ->
+    abs_url(Path, Context);
+site_url(<<"/", _/binary>> = Path, Context) ->
+    abs_url(Path, Context);
+site_url(Url, Context) ->
+    case z_convert:to_list(z_sanitize:uri(Url)) of
+        "#" ++ _ = Url1 ->
+            z_convert:to_binary(Url1);
+        "/" ++ _ = Url1 ->
+            abs_url(Url1, Context);
+        Url1 ->
+            Path1 = case mochiweb_util:urlsplit(Url1) of
+                {_Scheme, _Netloc, Path, "", ""} ->
+                    Path;
+                {_Scheme, _Netloc, Path, Query, ""} ->
+                    Path ++ "?" ++ Query;
+                {_Scheme, _Netloc, Path, "", Frag} ->
+                    Path ++ "#" ++ Frag;
+                {_Scheme, _Netloc, Path, Query, Frag} ->
+                    Path ++ "?" ++ Query ++ "#" ++ Frag
+            end,
+            abs_url(Path1, Context)
+    end.
 
 
 %% @doc Fetch the pid of the database worker pool for this site

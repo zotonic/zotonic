@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012 Marc Worrell <marc@worrell.nl>
+%% @copyright 2012-2022 Marc Worrell <marc@worrell.nl>
 %% @doc Change the selected user agent, by letting him choose from a form/links etc.
 
-%% Copyright 2012 Marc Worrell
+%% Copyright 2012-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -62,18 +62,14 @@ previously_existed(ReqData, Context) ->
 
 moved_temporarily(ReqData, Context) ->
     C1 = z_context:set_nocache_headers(?WM_REQ(ReqData, Context)),
-    Loc = case z_context:get_q("p", C1, []) of
-            [] ->
+    Loc = case z_context:get_q("p", C1, "") of
+            "" ->
                 case z_context:get_req_header("referer", C1) of
                     undefined -> "/";
-                    Referrer ->  z_html:noscript(Referrer)
+                    Referrer ->  Referrer
                 end;
-            [$/|_] = Page ->
-                z_html:noscript(Page);
             Page ->
-                z_html:noscript([$/|Page])
+                Page
          end,
-    ?WM_REPLY({true, z_context:abs_url(Loc, C1)}, C1).
-
-
+    ?WM_REPLY({true, z_context:site_url(Loc, C1)}, C1).
 
