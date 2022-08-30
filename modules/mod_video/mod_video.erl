@@ -356,8 +356,8 @@ video_preview(MovieFile, Props) ->
                   iolist_to_binary(
                     [
                      case string:str(Cmdline, "-itsoffset") of
-                        0 -> io_lib:format(Cmdline, [MovieFile]);
-                        _ -> io_lib:format(Cmdline, [Start, MovieFile])
+                        0 -> io_lib:format(Cmdline, [z_utils:os_filename(MovieFile)]);
+                        _ -> io_lib:format(Cmdline, [Start, z_utils:os_filename(MovieFile)])
                      end,
                      " ",
                      orientation_to_transpose(proplists:get_value(orientation, Props)),
