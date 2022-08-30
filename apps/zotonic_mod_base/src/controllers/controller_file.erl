@@ -214,11 +214,12 @@ is_public([Id|T], Context, _Answer) ->
 set_content_policy(#z_file_info{acls=[]}, Context) ->
     Context;
 set_content_policy(#z_file_info{ mime = Mime } = Info, Context) ->
+    IsPlayerNeeded = is_player_needed(Mime),
     case is_resource(Info) of
-        true when Mime =:= <<"application/pdf">> ->
+        true when IsPlayerNeeded ->
             z_context:set_resp_headers([
-                    {<<"content-security-policy">>, <<"default-src 'none'; object-src 'self'; plugin-types application/pdf">>},
-                    {<<"x-content-security-policy">>,<<"default-src 'none'; plugin-types application/pdf">>}
+                    {<<"content-security-policy">>, <<"default-src 'none'; media-src 'self'; object-src 'self'">>},
+                    {<<"x-content-security-policy">>, <<"default-src 'none'; media-src 'self'; object-src 'self'; plugin-types: application/pdf">>}
                 ],
                 Context);
         true ->
@@ -226,12 +227,17 @@ set_content_policy(#z_file_info{ mime = Mime } = Info, Context) ->
             % https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/sandbox
             z_context:set_resp_headers([
                     {<<"content-security-policy">>, <<"default-src 'none'; sandbox">>},
-                    {<<"x-content-security-policy">>,<<"default-src 'none'">>}
+                    {<<"x-content-security-policy">>, <<"default-src 'none'">>}
                 ],
                 Context);
         false ->
             Context
     end.
+
+is_player_needed(<<"application/pdf">>) -> true;
+is_player_needed(<<"video/", _/binary>>) -> true;
+is_player_needed(<<"audio/", _/binary>>) -> true;
+is_player_needed(_) -> false.
 
 %% @doc Check if the served file originated from an user-upload (ie. it is a resource)
 is_resource( #z_file_info{ acls = Acls }) ->
