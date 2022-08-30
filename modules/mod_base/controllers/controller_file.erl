@@ -174,10 +174,11 @@ is_public([Id|T], Context, _Answer) ->
 %% @doc Files that are uploaded get a strict content-security-policy.
 %%      Controlled files from the file system are not restricted.
 set_content_policy(#z_file_info{ mime = Mime } = Info, ReqData) ->
+    IsPlayerNeeded = is_player_needed(Mime),
     case is_resource(Info) of
-        true when Mime =:= <<"application/pdf">> ->
-            RD1 = wrq:set_resp_header("Content-Security-Policy", "default-src 'none'; object-src 'self'; plugin-types application/pdf", ReqData),
-            wrq:set_resp_header("X-Content-Security-Policy", "default-src 'none'; plugin-types application/pdf", RD1);
+        true when IsPlayerNeeded ->
+            RD1 = wrq:set_resp_header("Content-Security-Policy", "default-src 'none'; media-src 'self'; object-src 'self'", ReqData),
+            wrq:set_resp_header("X-Content-Security-Policy", "default-src 'none'; media-src 'self'; object-src 'self'; plugin-types: application/pdf", RD1);
         true ->
             % Do not set the IE11 X-CSP with sandbox as that disables file downloading
             % https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/sandbox
@@ -186,6 +187,11 @@ set_content_policy(#z_file_info{ mime = Mime } = Info, ReqData) ->
         false ->
             ReqData
     end.
+
+is_player_needed(<<"application/pdf">>) -> true;
+is_player_needed(<<"video/", _/binary>>) -> true;
+is_player_needed(<<"audio/", _/binary>>) -> true;
+is_player_needed(_) -> false.
 
 %% @doc Check if the served file originated from an user-upload (ie. it is a resource)
 is_resource( #z_file_info{ acls = Acls }) ->
