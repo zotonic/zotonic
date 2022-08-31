@@ -199,12 +199,8 @@ search_query_facets(Result, #search_sql{ search_sql_terms = Terms }, Context) ->
     % 4. Add facet where clauses to all facet unions.
     {Unions, Args2} = lists:foldl(
         fun(Def, {UnionAcc, ArgsAcc}) ->
-            case facet_union(Def, FacetTerms, ArgsAcc) of
-                {[], ArgsAcc1} ->
-                    {UnionAcc, ArgsAcc1};
-                {UnionTerm, ArgsAcc1} ->
-                    {[ UnionTerm | UnionAcc ], ArgsAcc1}
-            end
+            {UnionTerm, ArgsAcc1} = facet_union(Def, FacetTerms, ArgsAcc),
+            {[ UnionTerm | UnionAcc ], ArgsAcc1}
         end,
         {[], Args},
         Defs),
@@ -383,40 +379,36 @@ find_facets(Name, Fs) ->
         Fs).
 
 facet_union(#facet_def{ name = Name } = Def, FacetTerms, Args) ->
-    case facet_union(Def) of
-        [] ->
-            {[], Args};
-        Frag ->
-            % Append all facet clauses for facets other
-            % than the current facet def.
-            FacetTerms1 = lists:filter(
-                fun(#search_sql_term{ label = {facet, N} }) ->
-                    Name =/= N
-                end,
-                FacetTerms),
+    Frag = facet_union(Def),
+    % Append all facet clauses for facets other
+    % than the current facet def.
+    FacetTerms1 = lists:filter(
+        fun(#search_sql_term{ label = {facet, N} }) ->
+            Name =/= N
+        end,
+        FacetTerms),
 
-            % Update all arg placeholders in the where clause
-            {Ws, Args1} = lists:foldl(
-                fun(#search_sql_term{ where = TWhere, args = TArgs }, {WAcc, ArgsAcc}) ->
-                    {_, ArgsAcc1, Mapping} = z_search_terms:merge_args(TArgs, ArgsAcc),
-                    TWhere1 = z_search_terms:map(TWhere, Mapping),
-                    {[ TWhere1 | WAcc ], ArgsAcc1}
-                end,
-                {[], Args},
-                FacetTerms1),
-            Frag1 = case Ws of
-                [] ->
-                    Frag;
-                _ ->
-                    F1 = iolist_to_binary(Frag),
-                    Ws1 = iolist_to_binary([ " ", lists:join(<<" and ">>, Ws) ]),
-                    Ws2 = binary:replace(Ws1, <<" facet.">>, <<" ">>, [ global ]),
-                    Ws3 = binary:replace(Ws2, <<"(facet.">>, <<"(">>, [ global ]),
-                    Ws4 = <<" where ", Ws3/binary, " and ">>,
-                    binary:replace(F1, <<" where ">>, Ws4)
-            end,
-            {Frag1, Args1}
-    end.
+    % Update all arg placeholders in the where clause
+    {Ws, Args1} = lists:foldl(
+        fun(#search_sql_term{ where = TWhere, args = TArgs }, {WAcc, ArgsAcc}) ->
+            {_, ArgsAcc1, Mapping} = z_search_terms:merge_args(TArgs, ArgsAcc),
+            TWhere1 = z_search_terms:map(TWhere, Mapping),
+            {[ TWhere1 | WAcc ], ArgsAcc1}
+        end,
+        {[], Args},
+        FacetTerms1),
+    Frag1 = case Ws of
+        [] ->
+            Frag;
+        _ ->
+            F1 = iolist_to_binary(Frag),
+            Ws1 = iolist_to_binary([ " ", lists:join(<<" and ">>, Ws) ]),
+            Ws2 = binary:replace(Ws1, <<" facet.">>, <<" ">>, [ global ]),
+            Ws3 = binary:replace(Ws2, <<"(facet.">>, <<"(">>, [ global ]),
+            Ws4 = <<" where ", Ws3/binary, " and ">>,
+            binary:replace(F1, <<" where ">>, Ws4)
+    end,
+    {Frag1, Args1}.
 
 facet_union(#facet_def{ type = Type, name = Name }) when
         Type =:= list;
