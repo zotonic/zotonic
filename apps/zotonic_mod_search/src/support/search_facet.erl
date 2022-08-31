@@ -1,8 +1,8 @@
-%% @copyright 2021 Driebit BV
+%% @copyright 2021-2022 Driebit BV
 %% @doc Faceted search using a facet.tpl for definition and a
 %% postgresql table for searches.
 
-%% Copyright 2021 Driebit BV
+%% Copyright 2021-2022 Driebit BV
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -96,7 +96,9 @@ facet_values(Context) ->
         {ok, Facets} ->
             FVs = lists:foldl(
                 fun
-                    (#facet_def{ type = list, name = Name }, Acc) ->
+                    (#facet_def{ type = Type, name = Name } = Facet, Acc) when
+                            Type =:= list;
+                            Type =:= ids ->
                         Col = <<"f_", Name/binary>>,
                         Q = <<"select distinct unnest(", Col/binary,") as colval, min(id) from search_facet ",
                               "where ", Col/binary, " is not null ",
@@ -110,28 +112,7 @@ facet_values(Context) ->
                                 }
                             end,
                             Rs),
-                        Rs2 = labels(name2facet(Name, Facets), Rs1, Context),
-                        Acc#{
-                            Name => #{
-                                <<"type">> => <<"value">>,
-                                <<"values">> => Rs2
-                            }
-                        };
-                    (#facet_def{ type = ids, name = Name }, Acc) ->
-                        Col = <<"f_", Name/binary>>,
-                        Q = <<"select distinct unnest(", Col/binary,") as colval, min(id) from search_facet ",
-                              "where ", Col/binary, " is not null ",
-                              "group by colval">>,
-                        Rs = lists:sort(z_db:q(Q, Context)),
-                        Rs1 = lists:map(
-                            fun({V,Id}) ->
-                                #{
-                                    <<"value">> => V,
-                                    <<"facet_id">> => Id
-                                }
-                            end,
-                            Rs),
-                        Rs2 = labels(name2facet(Name, Facets), Rs1, Context),
+                        Rs2 = labels(Facet, Rs1, Context),
                         Acc#{
                             Name => #{
                                 <<"type">> => <<"value">>,
@@ -150,7 +131,7 @@ facet_values(Context) ->
                                 <<"max">> => Max
                             }
                         };
-                    (#facet_def{ name = Name }, Acc) ->
+                    (#facet_def{ name = Name } = Facet, Acc) ->
                         Col = <<"f_", Name/binary>>,
                         Q = <<"select ", Col/binary,", min(id) from search_facet ",
                               "where ", Col/binary, " is not null ",
@@ -164,7 +145,7 @@ facet_values(Context) ->
                                 }
                             end,
                             Rs),
-                        Rs2 = labels(name2facet(Name, Facets), Rs1, Context),
+                        Rs2 = labels(Facet, Rs1, Context),
                         Acc#{
                             Name => #{
                                 <<"type">> => <<"value">>,
@@ -234,7 +215,6 @@ search_query_facets(Result, #search_sql{ search_sql_terms = Terms }, Context) ->
     ],
     FinalSQL = iolist_to_binary(SQL3),
     {ok, Facets} = z_db:qmap(FinalSQL, Args2, Context),
-    % io:format("~n~s~n", [ FinalSQL ]),
     Fs = group_facets(Defs, Facets, Context),
     Result#search_result{
         facets = Fs
@@ -271,7 +251,6 @@ search_query_subfacets(Result, Query, Context) ->
     ],
     FinalSQL = iolist_to_binary(SQL3),
     {ok, Facets} = z_db:qmap(FinalSQL, Args, Context),
-    % io:format("~n~s~n", [ FinalSQL ]),
     Fs = group_facets(Defs, Facets, Context),
     NewTotal = facet_total(Fs, Result#search_result.total),
     PageLen = Result#search_result.pagelen,
@@ -324,6 +303,10 @@ move_unused_order_args_to_select(#search_sql{ where = Where, order = Order } = Q
 facet_total(Fs, Total) ->
     maps:fold(
         fun
+            (_, #{ <<"facet_type">> := <<"ids">> }, T) ->
+                T;
+            (_, #{ <<"facet_type">> := <<"list">> }, T) ->
+                T;
             (_, #{ <<"counts">> := [] }, T) ->
                 T;
             (_, #{ <<"type">> := <<"count">>, <<"counts">> := L }, T) when is_list(L) ->
@@ -344,16 +327,15 @@ group_facets(Defs, Facets, Context) ->
     ContextSudo = z_acl:sudo(Context),
     lists:foldl(
         fun
-            (#facet_def{ type = list }, Acc) ->
-                Acc;
             (#facet_def{ name = Name, is_range = true, type = Type }, Acc) ->
                 % value is min, count is max
                 [ #{ <<"value">> := Min, <<"count">> := Max } ] = find_facets(Name, Facets),
                 Acc#{
                     Name => #{
+                        <<"facet_type">> => z_convert:to_binary(Type),
                         <<"type">> => <<"range">>,
-                        <<"min">> => convert_type(Type, Min),
-                        <<"max">> => convert_type(Type, Max)
+                        <<"min">> => convert_single_type(Type, Min, Context),
+                        <<"max">> => convert_single_type(Type, Max, Context)
                     }
                 };
             (#facet_def{ name = Name, type = Type } = Facet, Acc) ->
@@ -365,16 +347,28 @@ group_facets(Defs, Facets, Context) ->
                     Fs),
                 Vs1 = lists:reverse( lists:sort(Vs) ),
                 Vs2 = lists:map(
-                    fun({Ct, V, F}) ->
-                        F#{
-                            <<"value">> => convert_type(Type, V),
-                            <<"count">> => Ct
-                        }
+                    fun
+                        ({Ct, V, F}) when Type =:= ids ->
+                            F#{
+                                <<"value">> => convert_single_type(id, V, Context),
+                                <<"count">> => Ct
+                            };
+                        ({Ct, V, F}) when Type =:= list ->
+                            F#{
+                                <<"value">> => V,
+                                <<"count">> => Ct
+                            };
+                        ({Ct, V, F}) ->
+                            F#{
+                                <<"value">> => convert_single_type(Type, V, Context),
+                                <<"count">> => Ct
+                            }
                     end,
                     Vs1),
                 Vs3 = labels(Facet, Vs2, ContextSudo),
                 Acc#{
                     Name => #{
+                        <<"facet_type">> => z_convert:to_binary(Type),
                         <<"type">> => <<"count">>,
                         <<"counts">> => Vs3
                     }
@@ -424,8 +418,19 @@ facet_union(#facet_def{ name = Name } = Def, FacetTerms, Args) ->
             {Frag1, Args1}
     end.
 
-facet_union(#facet_def{ type = list }) ->
-    [];
+facet_union(#facet_def{ type = Type, name = Name }) when
+        Type =:= list;
+        Type =:= ids ->
+    Col = <<"f_", Name/binary>>,
+    [
+        "select '", Name, "' as facet,
+            unnest(", Col, ")::character varying as value,
+            min(facet_id)::integer as facet_id,
+            count(*)::character varying as count
+         from result
+         where ", Col, " is not null
+         group by value"
+    ];
 facet_union(#facet_def{ name = Name, is_range = true }) ->
     Col = <<"f_", Name/binary>>,
     [
@@ -505,11 +510,7 @@ qterm_1(Field, Value, Query, Context) ->
     case facet_def(Field, Context) of
         {ok, Def} ->
             {Op, Value1} = extract_op(Value),
-            Value2 = try
-                convert_type(Def#facet_def.type, Value1)
-            catch _:_ ->
-                undefined
-            end,
+            Value2 = convert_type(Def#facet_def.type, Value1, Context),
             Final = case Def#facet_def.type of
                 fulltext when Op =:= "=" ->
                     NormV = z_string:normalize(Value2),
@@ -519,6 +520,15 @@ qterm_1(Field, Value, Query, Context) ->
                     ],
                     Query2#search_sql_term{
                         label = {facet_ft, Field},
+                        where = Query2#search_sql_term.where ++ [ W ]
+                    };
+                Array when Array =:= ids; Array =:= list ->
+                    {ArgN, Query2} = add_term_arg(Value2, Query),
+                    W = [
+                        <<"facet.f_">>, Field, "@>", ArgN
+                    ],
+                    Query2#search_sql_term{
+                        label = {facet, Field},
                         where = Query2#search_sql_term.where ++ [ W ]
                     };
                 _ ->
@@ -635,43 +645,76 @@ render_facet(Id, #facet_def{ name = Name, type = fulltext } = F, Context) ->
     end;
 render_facet(Id, #facet_def{ name = Name, type = Type } = F, Context) ->
     V = render_block(F#facet_def.block, {cat, <<"pivot/facet.tpl">>}, #{ <<"id">> => Id }, Context),
-    {<<"f_", Name/binary>>, convert_type(Type, V)}.
+    {<<"f_", Name/binary>>, convert_type(Type, V, Context)}.
 
 
 render_block(Block, Template, Vars, Context) ->
     {Output, _RenderState} = z_template:render_block_to_iolist(Block, Template, Vars, Context),
     z_string:trim(iolist_to_binary(Output)).
 
-convert_type(list, []) ->
+%% @doc Convert a value into a type ok for the search query args. Array values are not
+%% used here, only single valued types.
+convert_single_type(Type, L, Context) when
+        is_list(L),
+        (Type =:= list orelse Type =:= ids) ->
+    case convert_type(Type, L, Context) of
+        [V|_] -> V;
+        [] -> undefined
+    end;
+convert_single_type(ids, V, Context) ->
+    convert_type(id, V, Context);
+convert_single_type(list, V, Context) ->
+    convert_type(text, V, Context);
+convert_single_type(Type, V, Context) ->
+    convert_type(Type, V, Context).
+
+convert_type(Type, V, Context) ->
+    try
+        convert_type_1(Type, V, Context)
+    catch
+        T:E ->
+            ?LOG_INFO(#{
+                text => <<"Illegal facet search value for type">>,
+                result => T,
+                reason => E,
+                value => V,
+                type => Type,
+                in => mod_search
+            }),
+            undefined
+    end.
+
+convert_type_1(list, [], _Context) ->
     undefined;
-convert_type(list, L) when is_list(L) ->
+convert_type_1(list, L, _Context) when is_list(L) ->
     L1 = lists:map(fun z_convert:to_binary/1, L),
     L2 = lists:map(fun z_string:trim/1, L1),
     lists:filter( fun(B) -> B =/= <<>> end, L2 );
-convert_type(ids, []) ->
+convert_type_1(ids, [], _Context) ->
     undefined;
-convert_type(ids, L) when is_list(L) ->
-    lists:map(fun(V) -> convert_type(id, V) end, L);
-convert_type(Type, L) when is_list(L) ->
-    L1 = lists:map(fun(V) -> convert_type(Type, V) end, L),
+convert_type_1(ids, L, Context) when is_list(L) ->
+    lists:map(fun(V) -> convert_type_1(id, V, Context) end, L);
+convert_type_1(Type, L, Context) when is_list(L) ->
+    L1 = lists:map(fun(V) -> convert_type_1(Type, V, Context) end, L),
     lists:filter(fun(V) -> V =/= <<>> andalso V =/= undefined end, L1);
-convert_type(boolean, V) -> z_convert:to_bool(V);
-convert_type(_, <<>>) -> undefined;
-convert_type(id, V) -> z_convert:to_integer(V);
-convert_type(integer, V) -> z_convert:to_integer(V);
-convert_type(float, V) -> z_convert:to_float(V);
-convert_type(datetime, V) -> z_datetime:to_datetime(V);
-convert_type(list, V) ->
-    L = binary:split(V, <<",">>, [ global ]),
+convert_type_1(boolean, V, _Context) -> z_convert:to_bool(V);
+convert_type_1(_, <<>>, _Context) -> undefined;
+convert_type_1(_, undefined, _Context) -> undefined;
+convert_type_1(id, V, Context) -> m_rsc:rid(V, Context);
+convert_type_1(integer, V, _Context) -> z_convert:to_integer(V);
+convert_type_1(float, V, _Context) -> z_convert:to_float(V);
+convert_type_1(datetime, V, _Context) -> z_datetime:to_datetime(V);
+convert_type_1(list, V, Context) when is_binary(V) ->
+    L = binary:split(V, <<"||">>, [ global ]),
     L1 = lists:map(fun z_string:trim/1, L),
-    convert_type(list, lists:filter( fun(B) -> B =/= <<>> end, L1 ));
-convert_type(ids, V) ->
-    L = binary:split(V, <<",">>, [ global ]),
+    convert_type_1(list, lists:filter( fun(B) -> B =/= <<>> end, L1 ), Context);
+convert_type_1(ids, V, Context) when is_binary(V) ->
+    L = binary:split(V, <<"||">>, [ global ]),
     L1 = lists:map(fun z_string:trim/1, L),
-    convert_type(ids, lists:filter( fun(B) -> B =/= <<>> end, L1 ));
-convert_type(fulltext, V) ->
+    convert_type_1(ids, lists:filter( fun(B) -> B =/= <<>> end, L1 ), Context);
+convert_type_1(fulltext, V, _Context) ->
     z_string:truncatechars(z_convert:to_binary(V), ?TEXT_LENGTH);
-convert_type(text, V) ->
+convert_type_1(text, V, _Context) ->
     z_string:truncatechars(z_convert:to_binary(V), ?TEXT_LENGTH).
 
 
@@ -704,8 +747,8 @@ is_table_ok(Context) ->
     case facet_table(Context) of
         {ok, {TplCols, _}} when length(DbCols) =:= length(TplCols) ->
             lists:all(
-                fun(#column_def{ name = Name, type = Type }) ->
-                    is_type(DbCols, Name, Type)
+                fun(#column_def{ name = Name, type = Type, is_array = IsArray }) ->
+                    is_type(DbCols, Name, Type, IsArray)
                 end,
                 TplCols);
         {ok, _} ->
@@ -714,12 +757,12 @@ is_table_ok(Context) ->
             false
     end.
 
-is_type([], _Name, _Type) ->
+is_type([], _Name, _Type, _IsArray) ->
     false;
-is_type([ #column_def{ name = Name, type = T } | _ ], Name, Type) ->
+is_type([ #column_def{ name = Name, type = T, is_array = IsArray } | _ ], Name, Type, IsArray) ->
     z_convert:to_binary(T) =:= Type;
-is_type([ _ | Cols ], Name, Type) ->
-    is_type(Cols, Name, Type).
+is_type([ _ | Cols ], Name, Type, IsArray) ->
+    is_type(Cols, Name, Type, IsArray).
 
 
 %% @doc Add label values to the fetched facets for faceted search
@@ -891,7 +934,7 @@ facet_to_column(#facet_def{
     }) ->
     #column_def{
         name = binary_to_atom(<<"f_", Name/binary>>, utf8),
-        type = <<"text">>,
+        type = <<"character varying">>,
         length = undefined,
         is_nullable = true,
         is_array = true,
@@ -956,14 +999,9 @@ facet_to_index(#facet_def{
     ];
 facet_to_index(#facet_def{
         name = Name,
-        type = list
-    }) ->
-    <<"CREATE INDEX search_facet_f_", Name/binary, "_key ",
-       "ON search_facet USING gin (f_", Name/binary, ")">>;
-facet_to_index(#facet_def{
-        name = Name,
-        type = ids
-    }) ->
+        type = Type
+    }) when Type =:= ids;
+            Type =:= list ->
     <<"CREATE INDEX search_facet_f_", Name/binary, "_key ",
        "ON search_facet USING gin (f_", Name/binary, ")">>;
 facet_to_index(#facet_def{
@@ -989,11 +1027,6 @@ facet_def(F, Context) ->
         {error, _} = Error ->
             Error
     end.
-
-name2facet(Name, [#facet_def{ name = Name } = F | _]) ->
-    F;
-name2facet(Name, [_|Fs]) ->
-    name2facet(Name, Fs).
 
 %% @doc Fetch all facet definitions from the current facet template.
 -spec template_facets( z:context() ) -> {ok, [ facet_def() ]} | {error, term()}.
