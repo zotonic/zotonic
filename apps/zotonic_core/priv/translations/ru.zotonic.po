@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-08-26 19:28\n"
+"PO-Revision-Date: 2022-08-31 09:58\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4082,7 +4082,7 @@ msgstr "Пожалуйста, введите код двухфакторной �
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:9./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:16./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:3
 msgid "Please try again in"
-msgstr "Пожалуйста, попробуйте ещё раз"
+msgstr "Пожалуйста, попробуйте ещё раз через"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:122
 msgid "Please try again later."
