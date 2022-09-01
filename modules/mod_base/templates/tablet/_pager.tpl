@@ -10,7 +10,7 @@
             {% if url == `sep` %}
                 <li class="disabled"><a href="#">…</a></li>
             {% else %}
-                <li class="disabled"><a href="{{ url }}#content-pager">…</a></li>
+                <li><a href="{{ url }}#content-pager">…</a></li>
             {% endif %}
         {% endif %}
     {% endfor %}
