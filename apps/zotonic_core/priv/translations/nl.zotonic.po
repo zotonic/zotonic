@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-08-26 15:13\n"
+"PO-Revision-Date: 2022-09-01 11:42\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -912,7 +912,7 @@ msgstr "Vraag Google om alle \"{cat}\"-pagina's uit te sluiten"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
 msgid "Ask Google to not index this page"
-msgstr "Vraag Google deze pagina niet te indexeren"
+msgstr "Vraag Google om deze pagina niet te indexeren"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
@@ -2648,7 +2648,7 @@ msgstr "Wachtwoord"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:134
 msgid "Per default images smaller than 1MB are embedded in email messages. Using a separate download for images results in a smaller message size but non-public images will not be visible. Leave this disabled if you are sending non-public images."
-msgstr "Standaard worden afbeeldingen kleiner dan 1 MB ingesloten in e-mailberichten. Het gebruik van een aparte download voor afbeeldingen resulteert in een kleinere berichtgrootte, maar niet-openbare afbeeldingen zijn niet zichtbaar. Laat dit uitgeschakeld als u niet-openbare afbeeldingen verzendt."
+msgstr "Standaard worden afbeeldingen kleiner dan 1 MB ingesloten in e-mailberichten. Het gebruik van een aparte download voor afbeeldingen resulteert in een kleinere berichtgrootte, maar niet-openbare afbeeldingen zullen niet zichtbaar zijn. Laat dit uitgeschakeld als niet niet-openbare afbeeldingen verzendt."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:1
 msgid "Please fill in the module, key and value for the new configuration key."
@@ -3860,7 +3860,7 @@ msgstr "Hieronder staan je account details en een link om je wachtwoord te reset
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
 msgid "Change"
-msgstr "Wijziging"
+msgstr "Wijzigen"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:41
 msgid "Change password"
@@ -3892,7 +3892,7 @@ msgstr "Klik op de onderstaande link om een nieuw wachtwoord in te voeren. Als h
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:16
 msgid "Close this window and log on if you are already a user of {site}."
-msgstr "Sluit dit venster en meld u aan als u al een gebruiker bent van {site}."
+msgstr "Sluit dit venster en log in aan als je al een gebruiker bent van {site}."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:72./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
@@ -4019,7 +4019,7 @@ msgstr "Ik wil een nieuw account aanmaken"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:9
 msgid "If you are already a user of {site} then <a href=\"{logon_url}\">log on</a>."
-msgstr "Als u al een gebruiker van {site} bent, dan <a href=\"{logon_url}\">logt u in</a>."
+msgstr "<a href=\"{logon_url}\">Logt in</a> als je al een gebruiker van {site} bent."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:30
 msgid "If you didn't request a password reset, you can safely ignore this email. Maybe someone made an error typing his or her email address."
@@ -4187,11 +4187,11 @@ msgstr "De toegangscode voor tweefactorauthenticatie kwam niet overeen. Probeer 
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
 msgid "There is already an account with your email address on {site}."
-msgstr "Er is al een account met uw e-mailadres op {site}."
+msgstr "Er is al een account met jouw e-mailadres op {site}."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:103
 msgid "There is more than one account with your email address on {site}."
-msgstr "Er is meer dan één account met uw e-mailadres op {site}."
+msgstr "Er is meer dan één account met jouw e-mailadres op {site}."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:120
 msgid "There was a problem authenticating with {service}."
@@ -4225,7 +4225,7 @@ msgstr "Bevestig je account"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:104
 msgid "We cannot connect you to the right account. Contact support of {site} to help you merge the accounts and then try again."
-msgstr "We kunnen u niet aan het juiste account koppelen. Neem contact op met ondersteuning van {site} om u te helpen de accounts samen te voegen en probeer het opnieuw."
+msgstr "We kunnen je niet aan het juiste account koppelen. Neem contact op met support van {site} om je te helpen de accounts samen te voegen en probeer het opnieuw."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:113
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
@@ -4241,7 +4241,7 @@ msgstr "Je staat op het punt een nieuw account aan te maken."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:34
 msgid "You are about to log on."
-msgstr "U staat op het punt om in te loggen."
+msgstr "Je staat op het punt om in te loggen."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
 msgid "You are now signed in."
@@ -4253,7 +4253,7 @@ msgstr "U bent aangemeld"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93
 msgid "You can connect the account on {site} with your account on {service} if both accounts have a verified email address but this is not the case. Check both sites and then try again."
-msgstr "U kunt het account op {site} koppelen aan uw account op {service} als beide accounts een geverifieerd e-mailadres hebben, maar dit is niet het geval. Controleer beide sites en probeer het opnieuw."
+msgstr "Je kunt het account op {site} koppelen aan je account op {service} als beide accounts een geverifieerd e-mailadres hebben, maar dit is niet het geval. Controleer beide sites en probeer het opnieuw."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:3
 msgid "You can find the code in your authentication App."
@@ -4282,7 +4282,7 @@ msgstr "U hebt deze e-mail ontvangen omdat u een verzoek hebt ingediend om uw wa
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:111
 msgid "You used another account on {service} than was expected."
-msgstr "U heeft op {service} een ander account gebruikt dan verwacht."
+msgstr "Je hebt op {service} een ander account gebruikt dan verwacht."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:5
 msgid "You'll need to create a new one."
@@ -7166,7 +7166,7 @@ msgstr "Microsoft-instellingen opgeslagen."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
 msgid "Space separated list of scopes that you want the user to consent to. Examples are: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically."
-msgstr "Door spaties gescheiden lijst met bereiken waarvoor u de gebruiker toestemming wilt geven. Voorbeelden zijn: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> en <tt>profile</tt>. De <tt>openid</tt> scope wordt altijd automatisch toegevoegd."
+msgstr "Door spaties gescheiden lijst met 'scopes' waar de gebruiker toestemming voor moet geven. Voorbeelden zijn: <tt>User. Read</tt>, <tt>email</tt>, <tt>offline_access</tt> en <tt>profile</tt>. De <tt>openid</tt> scope wordt altijd automatisch toegevoegd."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
 msgid "Tenant"
@@ -7354,11 +7354,11 @@ msgstr "Token ophalen"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:88
 msgid "Fetch your access token to this site?"
-msgstr "Uw toegangstoken voor deze site ophalen?"
+msgstr "Wil je jouw toegangstoken voor deze site ophalen?"
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:171
 msgid "Fetched a new access token."
-msgstr "Er is een nieuw toegangstoken opgehaald."
+msgstr "Er is een nieuwe toegangstoken opgehaald."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:92
 msgid "Fetching a token can take some time."
@@ -7398,7 +7398,7 @@ msgstr "Importeer inhoud van de externe website naar deze website."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:85
 msgid "Leave empty if you use “{client}.”"
-msgstr "Laat leeg als u “{client}” gebruikt."
+msgstr "Laat leeg als je “{client}” gebruikt."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
@@ -7467,7 +7467,7 @@ msgstr "Succes"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:90
 msgid "The token will be registered with your account and only you (or routines acting on your behalf) will be able to use it."
-msgstr "Het token wordt geregistreerd bij uw account en alleen u (of routines die namens u optreden) kunnen het gebruiken."
+msgstr "Het token wordt geregistreerd bij jouw account en alleen jij (of acties die namens jou worden ondernomen) kunnen het gebruiken."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:55
 msgid "The “{code}” method redirects the user to the remote website to obtain an access token. “{client}” allows an admin user to directly fetch a token from the remote website."
@@ -7527,7 +7527,7 @@ msgstr "Met een consumententoken kan deze website:"
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:195
 msgid "You are not allowed to fetch a consumer token."
-msgstr "Het is niet toegestaan een consumententoken op te halen."
+msgstr "Het is niet toegestaan om een consumententoken op te halen."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:26
 msgid "You will be able to:"
@@ -9087,7 +9087,7 @@ msgstr "Terugvaltaal"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_list.tpl:8
 msgid "Find language by name or ISO"
-msgstr "Vind taal op naam of ISO"
+msgstr "Vind taal op naam of op ISO"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:100
 msgid "Finnish"
