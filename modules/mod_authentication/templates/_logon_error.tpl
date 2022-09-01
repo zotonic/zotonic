@@ -11,6 +11,10 @@
     {% wire action={focus target="passcode"} %}
 {% elseif reason == "passcode" %}
     {% wire action={focus target="passcode"} %}
+{% elseif reason == "set_passcode" %}
+    {# nothing #}
+{% elseif reason == "set_passcode_error" %}
+    {# nothing #}
 {% elseif reason == "ratelimit" %}
     {# nothing #}
 {% elseif reason == "reminder" %}

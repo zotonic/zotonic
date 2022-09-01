@@ -1,0 +1,1 @@
+{# Check if the 2FA passcode should be added when logging in via a reset token. #}

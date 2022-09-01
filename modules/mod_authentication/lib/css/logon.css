@@ -27,6 +27,9 @@ body.err403 .z-logon-box {
 .z-logon-box.z-logon-passcode .passcode {
   display: block;
 }
+.z-logon-box.z-logon-set-passcode .set-passcode {
+  display: block;
+}
 .z-logon-box ul {
   list-style-type: none;
   margin: 0;
