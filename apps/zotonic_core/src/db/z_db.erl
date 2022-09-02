@@ -1140,7 +1140,8 @@ columns(Schema, Table, Context) when is_list(Table) ->
         {ok, Cols} ->
             Cols;
         _ ->
-            Cols = q("  select column_name, data_type, character_maximum_length, is_nullable, column_default
+            Cols = q("  select column_name, data_type, character_maximum_length,
+                               is_nullable, column_default, udt_name
                         from information_schema.columns
                         where table_catalog = $1
                           and table_schema = $2
@@ -1152,7 +1153,7 @@ columns(Schema, Table, Context) when is_list(Table) ->
     end.
 
 
-columns1({<<"id">>, <<"integer">>, undefined, Nullable, <<"nextval(", _/binary>>}) ->
+columns1({<<"id">>, <<"integer">>, undefined, Nullable, <<"nextval(", _/binary>>, _UdtName}) ->
     #column_def{
         name = id,
         type = "serial",
@@ -1160,17 +1161,22 @@ columns1({<<"id">>, <<"integer">>, undefined, Nullable, <<"nextval(", _/binary>>
         is_nullable = z_convert:to_bool(Nullable),
         default = undefined
     };
-columns1({Name, <<"ARRAY">>, _MaxLength, Nullable, Default}) ->
+columns1({Name, <<"ARRAY">>, _MaxLength, Nullable, Default, UdtName}) ->
     % @todo derive the type of the array elements.
     #column_def{
         name = z_convert:to_atom(Name),
-        type = "text",
+        type = case UdtName of
+            <<"_text">> -> "text";
+            <<"_varchar">> -> "character varying";
+            <<"_int", _/binary>> -> "integer";
+            _ -> UdtName
+        end,
         length = undefined,
         is_array = true,
         is_nullable = z_convert:to_bool(Nullable),
         default = column_default(Default)
     };
-columns1({Name,Type,MaxLength,Nullable,Default}) ->
+columns1({Name,Type,MaxLength,Nullable,Default,_UdtName}) ->
     #column_def{
         name = z_convert:to_atom(Name),
         type = z_convert:to_list(Type),
