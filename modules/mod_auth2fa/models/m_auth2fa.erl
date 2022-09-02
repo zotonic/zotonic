@@ -110,7 +110,7 @@ is_totp_enabled(UserId, Context) ->
     end.
 
 %% @doc Check the totp mode for the current user: 0 = optional, 1 = ask, 2 = required, 3 = forced
--spec user_mode( z:context() ) -> 0 | 1 | 2.
+-spec user_mode( z:context() ) -> 0 | 1 | 2 | 3.
 user_mode(Context) ->
     case z_auth:is_auth(Context) of
         true ->
