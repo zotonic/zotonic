@@ -204,17 +204,11 @@ handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit,
 %% that we can display a pager. We don't need exact results, as we will use the query
 %% planner to give an estimated number of rows.
 offset_limit(1, PageLen) ->
-    % Take 5 pages + 1
-    {1, erlang:max(5 * PageLen + 1, ?MIN_LOOKAHEAD)};
-offset_limit(2, PageLen) ->
-    % Take 4 pages + 1
-    {PageLen + 1, erlang:max(4 * PageLen + 1, ?MIN_LOOKAHEAD - PageLen)};
-offset_limit(3, PageLen) ->
-    % Take 3 pages + 1
-    {2 * PageLen + 1, erlang:max(3 * PageLen + 1, ?MIN_LOOKAHEAD - 2 * PageLen)};
+    % Take 6 pages + 1
+    {1, erlang:max(6 * PageLen + 1, ?MIN_LOOKAHEAD)};
 offset_limit(N, PageLen) ->
-    % Take 2 pages + 1
-    {(N-1) * PageLen + 1, erlang:max(2 * PageLen + 1, ?MIN_LOOKAHEAD - N * PageLen)}.
+    % Take at least 5 pages + 1
+    {(N-1) * PageLen + 1, erlang:max(5 * PageLen + 1, ?MIN_LOOKAHEAD - N * PageLen)}.
 
 
 sublist(L, Offset, Limit) ->
