@@ -109,12 +109,13 @@ is_totp_enabled(UserId, Context) ->
         [_] -> true
     end.
 
-%% @doc Check the totp mode for the current user: 0 = optional, 1 = ask, 2 = required
+%% @doc Check the totp mode for the current user: 0 = optional, 1 = ask, 2 = required, 3 = forced
 -spec user_mode( z:context() ) -> 0 | 1 | 2.
 user_mode(Context) ->
     case z_auth:is_auth(Context) of
         true ->
             case z_convert:to_integer(m_config:get_value(mod_auth2fa, mode, Context)) of
+                3 -> 3;
                 2 -> 2;
                 1 -> erlang:max( user_group_mode(Context), 1 );
                 _ -> erlang:max( user_group_mode(Context), 0 )
