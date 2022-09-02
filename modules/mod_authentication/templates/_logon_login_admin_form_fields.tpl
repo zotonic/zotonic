@@ -8,7 +8,7 @@
         %}
     </div>
 
-    <div class="form-group username-password">
+    <div class="form-group">
         <label for="password" class="control-label">{_ Password _}</label>
         <input class="form-control" type="password" id="password" name="password" value="" autocomplete="off" />
         {% validate id="password"
