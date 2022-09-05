@@ -20,7 +20,7 @@
 %}
 <div class="form-group">
     <label class="control-label" for="password_reset1">{_ New password _}</label>
-    <input class="form-control" type="password" id="password_reset1" name="password_reset1" value="" autocomplete="new-password" placeholder="{_ New password _}" />
+    <input class="form-control {% if not is_password_change %}do_autofocus{% endif %}" type="password" id="password_reset1" name="password_reset1" value="" autocomplete="new-password" placeholder="{_ New password _}" />
     {% block validate_password_reset1 %}
         {% validate id="password_reset1"
             type={presence failure_message=_"Enter a password"}
@@ -51,6 +51,8 @@
         <label for="password" class="control-label">{_ Passcode _}</label>
         <input class="form-control" type="number" id="passcode" name="passcode" value="" autocomplete="one-time-code" placeholder="{_ Two-factor passcode _}" />
     </div>
+{% else %}
+    {% include "_logon_reset_set_passcode.tpl" %}
 {% endif %}
 
 {% if is_password_change %}

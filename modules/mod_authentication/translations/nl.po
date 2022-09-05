@@ -10,14 +10,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zotonic - authentication\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-07 10:20+0200\n"
+"PO-Revision-Date: 2022-09-01 17:48+0200\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: modules/mod_authentication/actions/action_authentication_auth_disconnect.erl:46
 msgid "Access denied"
@@ -57,7 +57,7 @@ msgstr "Automatisch ververst om de 10 seconden."
 #: modules/mod_authentication/templates/_logon_stage.tpl:24
 #: modules/mod_authentication/templates/_logon_stage.tpl:49
 #: modules/mod_authentication/templates/_logon_reminder_support.tpl:4
-#: modules/mod_authentication/templates/_logon_reset_support.tpl:3
+#: modules/mod_authentication/templates/_logon_reset_support.tpl:4
 msgid "Back to sign in"
 msgstr "Terug naar login"
 
@@ -79,7 +79,7 @@ msgstr "Browser"
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:59
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:61
 msgid "Change password"
 msgstr "Wijzig wachtwoord"
 
@@ -130,6 +130,7 @@ msgid "Current"
 msgstr "Huidig"
 
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:6
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:7
 msgid "Current password"
 msgstr "Huidig wachtwoord"
 
@@ -189,11 +190,11 @@ msgstr ""
 msgid "Enter your email address or username"
 msgstr "Vul je e-mailadres of gebruikersnaam in"
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:17
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:18
 msgid "Enter your password"
 msgstr "Vul je wachtwoord in"
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:6
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:7
 msgid "Enter your username"
 msgstr "Vul je gebruikersnaam in"
 
@@ -297,9 +298,9 @@ msgstr ""
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "In de e-mail staan instructies om je account te bevestigen."
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:32
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:67
-#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:28
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:37
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:69
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:33
 msgid "Keep me signed in"
 msgstr "Hou me ingelogd"
 
@@ -318,6 +319,7 @@ msgid "Need help signing in?"
 msgstr "Hulp nodig bij inloggen?"
 
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:22
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:23
 msgid "New password"
 msgstr "Nieuw wachtwoord"
 
@@ -343,16 +345,16 @@ msgstr "Een moment alsjeblieft, aan het uitloggen..."
 msgid "One moment, please..."
 msgstr "Een ogenblik geduld…"
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:24
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:26
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:51
-#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:20
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:22
 msgid "Passcode"
 msgstr "Code"
 
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:15
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:14
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:15
-#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:11
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:16
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:12
 msgid "Password"
 msgstr "Wachtwoord"
 
@@ -384,6 +386,7 @@ msgid "Refresh Now"
 msgstr "Nu verversen"
 
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:38
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:39
 msgid "Repeat password"
 msgstr "Herhaal wachtwoord"
 
@@ -391,7 +394,7 @@ msgstr "Herhaal wachtwoord"
 msgid "Repeat your password"
 msgstr "Herhaal je wachtwoord"
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:74
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:76
 msgid "Reset password and Sign in"
 msgstr "Verander wachtwoord en login"
 
@@ -431,9 +434,9 @@ msgid "Show Alert"
 msgstr "Toon bericht"
 
 #: modules/mod_authentication/templates/_logon_off.tpl:4
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:38
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:43
 #: modules/mod_authentication/templates/error.403.tpl:35
-#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:34
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:39
 msgid "Sign in"
 msgstr "Inloggen"
 
@@ -509,6 +512,10 @@ msgstr ""
 "Het nieuwe wachtwoord moet anders zijn dan het vorige. Controleer uw "
 "gegevens en probeer het opnieuw."
 
+#: modules/mod_authentication/templates/logon_error/message.set_passcode_error.tpl:2
+msgid "The passcode you gave was not correct, please try again."
+msgstr "Het wachtwoord dat je opgaf was niet correct, probeer het opnieuw."
+
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:21
 msgid ""
 "The signup module is enabled, users authenticating via the services below "
@@ -553,6 +560,10 @@ msgstr ""
 "Om verder te kunnen gaan moet u akkoord gaan met de bijgewerkte "
 "Servicevoorwaarden en het Privacybeleid."
 
+#: modules/mod_authentication/templates/logon_error/message.set_passcode.tpl:2
+msgid "To sign in you must have two-factor authentication enabled."
+msgstr "Om in te loggen moet twee-factor authenticatie ingeschakeld zijn."
+
 #: modules/mod_authentication/templates/logon_sessions.tpl:13
 msgid ""
 "To stop a session, click on ”Stop Session” or log out from the browser with "
@@ -577,9 +588,9 @@ msgstr "Sorry, te veel pogingen"
 msgid "Too many retries."
 msgstr "Sorry, te veel pogingen."
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:25
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:27
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:52
-#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:21
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:23
 msgid "Two-factor passcode"
 msgstr "Code voor authenticatie in twee stappen"
 
@@ -591,9 +602,9 @@ msgstr ""
 "Gebruik bijzondere symbolen of cijfers om het moeilijker te maken om te "
 "raden."
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:3
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:4
-#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:2
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:5
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:3
 msgid "Username"
 msgstr "Gebruikersnaam"
 
