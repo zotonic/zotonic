@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Show the pager for the search result
+%% @enddoc
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,8 +26,6 @@
 
 % Pages before/after the current page
 -define(DELTA, 2).
--define(SLIDE, (?DELTA + ?DELTA + 1)).
-
 
 vary(_Params, _Context) -> nocache.
 
