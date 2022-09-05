@@ -233,15 +233,30 @@ pages(Page, Pages) ->
 
 urls(Start, Slider, End, IsEstimated, Dispatch, DispatchArgs, Context) ->
     Start1 = [ {N, z_dispatcher:url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- Start ],
+    BeforeSlider =
+        case Slider of
+            [] ->
+                [];
+            [N1Slider|_] ->
+                [ {undefined, z_dispatcher:url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- [N1Slider-1] ]
+        end,
     Slider1 = [ {N, z_dispatcher:url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- Slider ],
+    AfterSlider =
+        case Slider of
+            [] ->
+                [];
+            [_|_] ->
+                [ {undefined, z_dispatcher:url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- [lists:last(Slider)+1] ]
+        end,
     End1 = [ {N, z_dispatcher:url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- End ],
+
     case {Start1, Slider1, End1} of
         {[], S, []} -> S;
-        {[], S, [_]} when IsEstimated -> S ++ [ {undefined, sep} ];
-        {[], S, E} -> S ++ [ {undefined, sep} | E ];
-        {B, S, []} -> B ++ [ {undefined, sep} | S ];
-        {B, S, [_]} when IsEstimated -> B ++ [ {undefined, sep} | S ] ++ [ {undefined, sep} ];
-        {B, S, E} -> B ++ [ {undefined, sep} | S ] ++ [ {undefined, sep} | E ]
+        {[], S, [_]} when IsEstimated -> S ++ AfterSlider;
+        {[], S, E} -> S ++ AfterSlider ++ E;
+        {B, S, []} -> B ++ BeforeSlider ++ S;
+        {B, S, [_]} when IsEstimated -> B ++ BeforeSlider ++ S ++ AfterSlider;
+        {B, S, E} -> B ++ BeforeSlider ++ S ++ AfterSlider ++ E
     end.
 
 seq(A,B) when B < A -> [];
