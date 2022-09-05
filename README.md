@@ -55,4 +55,6 @@ Thanks
 
 Thanks to the following services for supporting Open Source:
 
-<a href="https://browserstack.com/"><img rel="Thanks to BrowserStack" src="https://raw.githubusercontent.com/zotonic/zotonic/master/doc/img/browserstack-logo.png" height="64" /></a>
+<a href="https://browserstack.com/"><img rel="Thanks to BrowserStack" src="https://raw.githubusercontent.com/zotonic/zotonic/master/doc/img/browserstack-logo.png" height="64" /></a> <a href="https://crowdin.com/"><img src="https://user-images.githubusercontent.com/38268/188396792-7142a245-7805-4654-aead-9ae337f6d977.svg" height="64" /></a>
+
+
