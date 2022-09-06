@@ -963,7 +963,7 @@ closingdiv([], Acc)     -> {lists:flatten([{{punc, bra}, "<"},
                                      {{punc, fslash}, "/"}
                                      | lex(lists:reverse(Acc))]), []};
 closingdiv([$>| T], Acc) -> Acc2 = lists:flatten(lists:reverse(Acc)),
-                            Acc3 = z_string:lowercase(Acc2),
+                            Acc3 = string:lowercase(Acc2),
                             [Tag | _T] = string:lexemes(Acc3, " "),
                             {{{{tag, close}, Tag}, "</"
                               ++ Acc2 ++ ">"}, T};
