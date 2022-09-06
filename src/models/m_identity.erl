@@ -523,6 +523,8 @@ check_username_pw_do(Username, Password, QueryArgs, Context) ->
                     Error;
                 {error, set_passcode} = Error ->
                     Error;
+                {error, set_passcode_error} = Error ->
+                    Error;
                 Error ->
                     z_notifier:notify_sync(
                         #auth_checked{

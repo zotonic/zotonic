@@ -235,7 +235,7 @@ regenerate_user_secret(UserId, Context) ->
 
 set_user_secret(UserId, Passcode, Context) ->
     F = fun(Ctx) ->
-        totp_disable(UserId, Context),
+        totp_disable(UserId, Ctx),
         Props = [
             {propb, {term, Passcode}}
         ],

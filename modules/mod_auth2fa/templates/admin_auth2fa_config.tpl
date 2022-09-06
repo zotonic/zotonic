@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %}Two-factor Authentication Configuration{% endblock %}
+{% block title %}{_ Two-factor authentication configuration _}{% endblock %}
 
 {% block content %}
 <div class="admin-header">
