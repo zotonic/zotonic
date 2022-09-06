@@ -2,32 +2,34 @@
 
 {% if m.authentication.is_one_step_logon %}
     {# One step form. The field blocks are for backward compatibily with 0.x sites. #}
-    {% block field_username %}
-        <div class="form-group">
-            <label for="username" class="control-label">{_ Email or username _}</label>
-            <input class="form-control" type="text" id="username" name="username"
-                   value="{{ q.options.username|default:q.username|escape }}"
-                   {% if not is_show_passcode %}autofocus{% endif %}
-                   required
-                   inputmode="email"
-                   placeholder="{_ Email or username _}"
-                   autocomplete="username"
-                   autocapitalize="off"
-                   autocorrect="off">
-        </div>
-    {% endblock %}
+    <div id="username-password" {% if is_show_set_passcode %}style="display: none"{% endif %}>
+        {% block field_username %}
+            <div class="form-group">
+                <label for="username" class="control-label">{_ Email or username _}</label>
+                <input class="form-control" type="text" id="username" name="username"
+                       value="{{ q.options.username|default:q.username|escape }}"
+                       {% if not is_show_passcode %}autofocus{% endif %}
+                       required
+                       inputmode="email"
+                       placeholder="{_ Email or username _}"
+                       autocomplete="username"
+                       autocapitalize="off"
+                       autocorrect="off">
+            </div>
+        {% endblock %}
 
-    {% block field_password %}
-        <div class="form-group">
-            <label for="password" class="control-label">{_ Password _}</label>
-            <input class="form-control" type="password" id="password" name="password" value=""
-                   required
-                   placeholder="{_ Password _}"
-                   autocomplete="current-password"
-                   autocapitalize="off"
-                   autocorrect="off">
-        </div>
-    {% endblock %}
+        {% block field_password %}
+            <div class="form-group">
+                <label for="password" class="control-label">{_ Password _}</label>
+                <input class="form-control" type="password" id="password" name="password" value=""
+                       required
+                       placeholder="{_ Password _}"
+                       autocomplete="current-password"
+                       autocapitalize="off"
+                       autocorrect="off">
+            </div>
+        {% endblock %}
+    </div>
 
     {% if is_show_passcode %}
         {% block field_passcode %}
@@ -42,6 +44,12 @@
             </div>
         {% endblock %}
     {% endif %}
+
+    <div class="form-group set-passcode" id="set_passcode">
+        {% if is_show_set_passcode %}
+            {% include "_logon_logon_set_passcode.tpl" %}
+        {% endif %}
+    </div>
 
     {% if m.authentication.is_supported.rememberme %}
         <div class="form-group">
@@ -126,7 +134,7 @@
     {% endif %}
 
     {% if q.options.is_user_local %}
-        <div class="form-group">
+        <div class="form-group" {% if is_show_set_passcode %}style="display: none"{% endif %}>
             <label for="password" class="control-label">{_ Password _}</label>
             <input class="form-control" type="password" id="password" name="password" value="{{ q.password|escape }}"
                    required
@@ -148,6 +156,12 @@
                        autocorrect="off">
             </div>
         {% endif %}
+
+        <div class="form-group set-passcode" id="set_passcode">
+            {% if is_show_set_passcode %}
+                {% include "_logon_logon_set_passcode.tpl" %}
+            {% endif %}
+        </div>
     {% elseif not q.options.is_username_checked %}
         <div class="form-group hidden">
             <label for="password" class="control-label">{_ Password _}</label>
@@ -160,7 +174,7 @@
     {% endif %}
 
     {% if q.options.is_username_checked %}
-        {% if is_user_local or is_user_local|is_undefined %}
+        {% if q.options.is_user_local or q.options.is_user_local|is_undefined %}
             {% if m.authentication.is_supported.rememberme %}
                 <div class="form-group">
                     <div class="checkbox">
@@ -170,14 +184,6 @@
                             {_ Keep me signed in _}
                         </label>
                     </div>
-                </div>
-                {#
-                    {% javascript %}
-                        if (isStandalone) {
-                            $('#logon_form_form input[name=rememberme]').prop('checked', true);
-                        }
-                    {% endjavascript %}
-                #}
                 </div>
             {% endif %}
             <div class="form-group">

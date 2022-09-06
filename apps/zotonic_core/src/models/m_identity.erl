@@ -863,6 +863,10 @@ check_username_pw_do(Username, Password, QueryArgs, Context) when is_map(QueryAr
                     {error, {expired, RscId}};
                 {error, need_passcode} = Error ->
                     Error;
+                {error, set_passcode} = Error ->
+                    Error;
+                {error, set_passcode_error} = Error ->
+                    Error;
                 Error ->
                     z_notifier:notify_sync(
                         #auth_checked{

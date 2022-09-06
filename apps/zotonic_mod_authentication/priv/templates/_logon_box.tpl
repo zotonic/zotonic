@@ -4,6 +4,7 @@
 #}
 
 {% with q.error == 'passcode' or q.error == 'need_passcode' as is_show_passcode %}
+{% with q.error == 'set_passcode' or q.error == 'set_passcode_error' as is_show_set_passcode %}
 
 {% if q.logon_view == 'reminder' or (q.logon_view == 'change' and not m.acl.user) %}
 
@@ -132,5 +133,6 @@
 
 {% endif %}
 
+{% endwith %}
 {% endwith %}
 
