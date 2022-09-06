@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011 Marc Worrell
-
+%% @copyright 2011-2022 Marc Worrell
 %% @doc Convert markdown to/from html.
+%% @enddoc
 
-%% Copyright 2011 Marc Worrell
+%% Copyright 2011-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -33,8 +33,7 @@ to_markdown(Html, Options) ->
     z_html2markdown:convert(Html, Options).
 
 
+to_html(Markdown) when is_list(Markdown) ->
+    markdown:conv(unicode:characters_to_binary(Markdown, utf8));
 to_html(Markdown) when is_binary(Markdown) ->
-    markdown:conv(binary_to_list(Markdown));
-to_html(Markdown) ->
     markdown:conv(Markdown).
-
