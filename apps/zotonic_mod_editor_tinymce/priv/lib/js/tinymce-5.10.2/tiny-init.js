@@ -5,11 +5,11 @@ if (typeof tinyInit !== 'object')
     // mode: "none",
     // theme: "modern",
 
-    plugins: "advlist code paste table link zlink zmedia autosave directionality autoresize lists fullscreen searchreplace codesample",
+    plugins: "advlist code paste table link zanchor zlink zmedia autosave directionality autoresize lists fullscreen searchreplace codesample",
     menubar: "edit format table tools insert",
     toolbar: [
         "styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | ltr rtl | removeformat",
-        "link unlink | zlink zmedia | code | searchreplace | fullscreen"
+        "zanchor link unlink | zlink zmedia | code | searchreplace | fullscreen"
     ],
 
     contextmenu: "zlink zmedia link",
