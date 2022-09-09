@@ -116,5 +116,5 @@ if (typeof tinyInit !== 'object')
     wpeditimage_disable_captions: "",
     table_row_limit: 100,
     table_col_limit: 10,
-    autoresize_max_height: 400
+    max_height: Math.max($(window).height() - 300, 400)
 };
