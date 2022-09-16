@@ -197,7 +197,7 @@ add_options(Method, Url, Options, Context) ->
         true ->
             Options1
     end,
-    case uri_string:parse(Url) of
+    Options3 = case uri_string:parse(Url) of
         #{ host := Host } = Parts ->
             HostPort = case maps:find(port, Parts) of
                 {ok, Port} -> <<Host/binary, $:, (integer_to_binary(Port))/binary>>;
@@ -211,8 +211,24 @@ add_options(Method, Url, Options, Context) ->
                 }, Context)
             of
                 undefined -> Options1;
-                Options3 when is_list(Options3) -> Options3
+                ExtOptions when is_list(ExtOptions) -> ExtOptions
             end;
         _ ->
             Options2
-    end.
+    end,
+    cleanup_options(Options3).
+
+cleanup_options(Options) ->
+    lists:filter(
+        fun
+            ({authorization, None}) when
+                None =:= undefined;
+                None =:= none;
+                None =:= <<>>;
+                None =:= "" -> false;
+            (_) ->
+                true
+        end,
+        Options).
+
+

@@ -78,10 +78,10 @@
                         <td>{{ app.token_count }}</td>
                         <td>
                             {% if app.grant_type == 'client_credentials' %}
-                                <button class="btn btn-primary btn-xs" id="{{ #id.token }}">
+                                <button class="btn btn-primary btn-xs" id="{{ #token.id }}">
                                     {_ Fetch Token _}
                                 </button>
-                                {% wire id=#id.token
+                                {% wire id=#token.id
                                         action={confirm
                                             text=[
                                                 "<p>",

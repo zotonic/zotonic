@@ -63,7 +63,7 @@
         </div>
     </div>
 
-{% with blk|survey_prepare_thurstone as blk %}
+{% with blk|survey_prepare_thurstone:false as blk %}
 
     {% with r_language|default:m.rsc[id].language|default:[z_language] as r_language %}
     {% with edit_language|default:z_language as edit_language %}
