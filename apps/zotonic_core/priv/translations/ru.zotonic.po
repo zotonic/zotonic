@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-08-31 09:58\n"
+"PO-Revision-Date: 2022-09-18 23:29\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4149,7 +4149,7 @@ msgstr "Извините, не удалось отправить сообщен�
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:6./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:13
 msgid "Sorry, too many retries"
-msgstr "Простите, слишком много попыток"
+msgstr "Извините, слишком много попыток"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:25
 msgid "Sorry, your password reset code is unknown or expired"
@@ -4185,11 +4185,11 @@ msgstr "Код доступа двухфакторной аутентифика�
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
 msgid "There is already an account with your email address on {site}."
-msgstr "Уже существует учетная запись с вашим адресом электронной почты {site}."
+msgstr "Учетная запись с вашим адресом электронной почты уже существует на {site}."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:103
 msgid "There is more than one account with your email address on {site}."
-msgstr "Существует более одной учетной записи с вашим адресом электронной почты {site}."
+msgstr "С вашим адресом электронной почты существует более одной учетной записи на  {site}."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:120
 msgid "There was a problem authenticating with {service}."
