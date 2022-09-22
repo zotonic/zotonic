@@ -30,52 +30,56 @@
                     <div class="widget">
                         <h3 class="widget-header">{_ S3 Cloud Location and Credentials _}</h3>
                         <div class="widget-content">
-                            <div class="form-group row">
-                                <label class="control-label col-md-12" for="s3url">{_ Base URL _}</label>
-                                <div class="col-md-12">
-                                    <input type="text" id="s3url" name="s3url"
-                                        value="{{ m.config.mod_filestore.s3url.value|escape }}" class="form-control"
-                                        placeholder="https://mybucket.s3.amazonaws.com/mysite"
-                                    />
-                                    {% validate id="s3url" type={format pattern="^(https:|ftps:).*$"} %}
+                            <div class="form-group">
+                                <label class="control-label" for="s3url">{_ Base URL _}</label>
+                                <input type="text" id="s3url" name="s3url"
+                                    value="{{ m.config.mod_filestore.s3url.value|escape }}" class="form-control"
+                                    placeholder="https://mybucket.s3.amazonaws.com/mysite"
+                                />
+                                {% validate id="s3url" type={format pattern="^(https:|ftps:).*$"} %}
 
-                                    <p class="help-block">
-                                        {_ For S3 the URL must start with <b><tt>https:</tt></b> _}<br>
-                                        {_ For FTP the URL must start with <b><tt>ftps:</tt></b> _}
-                                    </p>
-
-                                </div>
+                                <p class="help-block">
+                                    {_ For S3 the URL must start with <b><tt>https:</tt></b> _}<br>
+                                    {_ For FTP the URL must start with <b><tt>ftps:</tt></b> _}
+                                </p>
                             </div>
 
-                            <div class="form-group row">
-                                <label class="control-label col-md-12" for="s3key">{_ API Key _}</label>
-                                <div class="col-md-12">
-                                    <input type="text" id="s3key" name="s3key" value="{{ m.config.mod_filestore.s3key.value|escape }}" class="form-control" />
-                                </div>
+                            <div class="form-group">
+                                <label class="control-label" for="s3key">{_ S3 API Key or FTP username_}</label>
+                                <input type="text" id="s3key" name="s3key" value="{{ m.config.mod_filestore.s3key.value|escape }}" class="form-control" />
                             </div>
 
-                            <div class="form-group row">
-                                <label class="control-label col-md-12" for="s3secret">{_ API Secret _}</label>
-                                <div class="col-md-12">
-                                    <input type="text" id="s3secret" name="s3secret" value="{{ m.config.mod_filestore.s3secret.value|escape }}" class="form-control" />
-                                </div>
+                            <div class="form-group">
+                                <label class="control-label" for="s3secret">{_ S3 API Secret or FTP password _}</label>
+                                <input type="text" id="s3secret" name="s3secret" value="{{ m.config.mod_filestore.s3secret.value|escape }}" class="form-control" />
                             </div>
 
-                            <div class="form-group row">
-                                <div class="col-md-12 form-inline">
+                            <div class="form-group">
+                                <div class="form-inline">
                                     <label class="checkbox">
                                         <input type="checkbox" class="checkbox" id="is_upload_enabled" name="is_upload_enabled"
-                                            {% if m.config.mod_filestore.is_upload_enabled.value == "true" %}checked{% endif %} />
+                                            {% if m.config.mod_filestore.is_upload_enabled.value %}checked{% endif %} />
                                         {_ Upload new media files to the cloud file store _}
                                     </label>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <div class="col-md-12 form-inline">
+                            <div class="form-group">
+                                <div class="form-inline">
+                                    <label class="checkbox">
+                                        <input type="checkbox" class="checkbox" id="is_local_keep" name="is_local_keep"
+                                            {% if m.config.mod_filestore.is_local_keep.value %}checked{% endif %} />
+                                        {_ Keep local files after upload to the cloud file store _}
+                                    </label>
+                                    <p class="help-block">{_ Enable this to let the filestore act as a backup of  your local media files. _}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-inline">
                                     <label class="checkbox">
                                         <input type="checkbox" id="is_create_bucket" name="is_create_bucket">
                                         {_ Try to create a private S3 bucket if the S3 bucket does not exist _}
                                     </label>
+                                    <p class="help-block">{_ With FTP the directories are always created automatically. _}</p>
                                 </div>
                             </div>
 

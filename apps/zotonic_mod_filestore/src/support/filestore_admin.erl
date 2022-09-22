@@ -37,6 +37,7 @@ event(#submit{message=admin_filestore}, Context) ->
             Service = url2service(S3Url),
             IsUploadEnabled = z_convert:to_bool(z_context:get_q(<<"is_upload_enabled">>, Context)),
             IsCreateBucket = z_convert:to_bool(z_context:get_q(<<"is_create_bucket">>, Context)),
+            IsLocalKeep = z_convert:to_bool(z_context:get_q(<<"is_local_keep">>, Context)),
             DeleteInterval = z_context:get_q(<<"delete_interval">>, Context),
             case testcred(Service, S3Url, S3Key, S3Secret, IsCreateBucket) of
                 ok ->
@@ -44,6 +45,7 @@ event(#submit{message=admin_filestore}, Context) ->
                     m_config:set_value(mod_filestore, s3url, S3Url, Context),
                     m_config:set_value(mod_filestore, s3key, S3Key, Context),
                     m_config:set_value(mod_filestore, s3secret, S3Secret, Context),
+                    m_config:set_value(mod_filestore, is_local_keep, IsLocalKeep, Context),
                     m_config:set_value(mod_filestore, is_upload_enabled, IsUploadEnabled, Context),
                     m_config:set_value(mod_filestore, delete_interval, DeleteInterval, Context),
                     z_render:wire([

@@ -21,6 +21,8 @@
 -export([
     m_get/3,
 
+    is_local_keep/1,
+
     queue/3,
     fetch_queue/1,
     dequeue/2,
@@ -73,6 +75,10 @@ m_get([ <<"stats">> | Rest ], _Msg, Context) ->
     end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
+
+-spec is_local_keep(z:context()) -> boolean().
+is_local_keep(Context) ->
+    m_config:get_boolean(mod_filestore, is_local_keep, Context).
 
 %% @doc Add a file/medium to the upload queue.
 -spec queue(binary(), z_media_identify:media_info(), z:context()) -> ok | {error, duplicate}.
