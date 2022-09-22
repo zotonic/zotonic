@@ -516,6 +516,14 @@ start_downloader(#{
             })
     end.
 
+download_stream(_Id, _Path, LocalPath, _Context, stream_start) ->
+    ?LOG_DEBUG(#{
+        text => <<"Download remote file stream started">>,
+        result => ok,
+        in => zotonic_mod_filestore,
+        local => LocalPath
+    }),
+    file:delete(temp_path(LocalPath));
 download_stream(_Id, _Path, LocalPath, _Context, {content_type, _}) ->
     ?LOG_DEBUG(#{
         text => <<"Download remote file stream started">>,
