@@ -210,7 +210,9 @@ handle_upload(Path, Cred, Context) ->
     end.
 
 do_upload(#filestore_credentials{service= <<"s3">>, location=Location, credentials=Cred}, Data) ->
-    s3filez:put(Cred, Location, Data).
+    s3filez:put(Cred, Location, Data);
+do_upload(#filestore_credentials{service= <<"ftp">>, location=Location, credentials=Cred}, Data) ->
+    ftpfilez:put(Cred, Location, Data).
 
 %% @doc Remember the new location in the m_filestore, move the file to the filezcache and delete the file
 finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, location=Location}, Context) ->

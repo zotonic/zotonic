@@ -8,11 +8,13 @@
 
         <p>{_ Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service. _}</p>
 
-        <p>{_ Currently Zotonic supports services that are compatible with the S3 file services API. These include: _}</p>
+        <p>{_ Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include: _}</p>
         <ul>
             <li><a target="_blank" href="http://aws.amazon.com/s3/">Amazon Simple Storage Service (S3)</a></li>
             <li><a target="_blank" href="https://developers.google.com/storage/">Google Cloud Storage</a></li>
         </ul>
+
+        <p>{_ If you use an FTP server then that server MUST support FTPS (secure ftp) _}</p>
     </div>
 
     {% if m.acl.is_allowed.use.mod_admin_config %}
@@ -35,7 +37,11 @@
                                         value="{{ m.config.mod_filestore.s3url.value|escape }}" class="form-control"
                                         placeholder="https://mybucket.s3.amazonaws.com/mysite"
                                     />
+                                    {% validate id="s3url" type={format pattern="^(https:|ftps:).*$"} %}
                                 </div>
+                                <p class="help-block">
+                                    {_ For S3 use a <tt>https:</tt> URL, for FTP use <tt>ftps:</tt> _}
+                                </p>
                             </div>
 
                             <div class="form-group row">
@@ -65,7 +71,7 @@
                                 <div class="col-md-12 form-inline">
                                     <label class="checkbox">
                                         <input type="checkbox" id="is_create_bucket" name="is_create_bucket">
-                                        {_ Try to create a private bucket if the bucket does not exist _}
+                                        {_ Try to create a private S3 bucket if the S3 bucket does not exist _}
                                     </label>
                                 </div>
                             </div>
@@ -102,7 +108,7 @@
             </div>
             <div class="col-md-6">
             <div class="widget">
-                <h3 class="widget-header">{_ S3 Cloud Utilities and Statistics _}</h3>
+                <h3 class="widget-header">{_ Cloud File Store Utilities and Statistics _}</h3>
                 <div class="widget-content">
                     {% with m.filestore.stats as stats %}
                         <table class="table table-striped">
@@ -164,7 +170,7 @@
                     <div class="form-group">
                         <div>
                             <button id="queue-all" name="queue-all" type="submit" class="btn btn-danger">
-                                {_ Move all local files to S3 _}
+                                {_ Move all local files to the remote storage _}
                             </button>
                             {% wire id="queue-all"
                                     action={confirm
@@ -179,14 +185,14 @@
                     </div>
 
                     <p class="help-block">
-                        {_ All cloud files can be moved back to the file system on the server. _} 
+                        {_ All cloud files can be moved back to the file system on the server. _}
                         {_ Ensure yourself there is enough disk space before starting this process. _}
                     </p>
 
                     <div class="form-group">
                         <div>
                             <button id="queue-local" name="queue-local" type="submit" class="btn btn-default">
-                                {_ Move all S3 files to local _}
+                                {_ Move all remote files to local _}
                             </button>
                             {% wire id="queue-local"
                                     action={confirm
