@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2020 Marc Worrell
+%% @copyright 2014-2022 Marc Worrell
 %% @doc Module managing the storage of files on remote servers.
 
-%% Copyright 2014-2020 Marc Worrell
+%% Copyright 2014-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 
 -author("Marc Worrell <marc@worrell.nl>").
 -mod_title("File Storage").
--mod_description("Store files on cloud storage services like Amazon S3 and Google Cloud Storage").
+-mod_description("Store files on cloud storage services using FTP and S3").
 -mod_prio(500).
 -mod_schema(1).
 -mod_provides([filestore]).
@@ -93,7 +93,7 @@ observe_filestore(#filestore{action=delete, path=Path}, Context) ->
 %% @doc Map the local path to the URL of the remotely stored file. This depends on the
 %% service configured in the filestore config.
 observe_filestore_credentials_lookup(#filestore_credentials_lookup{path=Path}, Context) ->
-    Service = m_config:get_value(?MODULE, service, Context, <<"s3">>),
+    Service = m_config:get_value(?MODULE, service, <<"s3">>, Context),
     S3Key = m_config:get_value(?MODULE, s3key, Context),
     S3Secret = m_config:get_value(?MODULE, s3secret, Context),
     S3Url = m_config:get_value(?MODULE, s3url, Context),
@@ -111,7 +111,7 @@ observe_filestore_credentials_lookup(#filestore_credentials_lookup{path=Path}, C
 
 %% @doc Given the service, find the credentials to do a lookup of the remote file.
 observe_filestore_credentials_revlookup(#filestore_credentials_revlookup{service=Service, location=Location}, Context) ->
-    ConfiguredService = m_config:get_value(?MODULE, service, Context, <<"s3">>),
+    ConfiguredService = m_config:get_value(?MODULE, service, <<"s3">>, Context),
     if
         Service =:= ConfiguredService ->
             S3Key = m_config:get_value(?MODULE, s3key, Context),

@@ -38,10 +38,13 @@
                                         placeholder="https://mybucket.s3.amazonaws.com/mysite"
                                     />
                                     {% validate id="s3url" type={format pattern="^(https:|ftps:).*$"} %}
+
+                                    <p class="help-block">
+                                        {_ For S3 the URL must start with <b><tt>https:</tt></b> _}<br>
+                                        {_ For FTP the URL must start with <b><tt>ftps:</tt></b> _}
+                                    </p>
+
                                 </div>
-                                <p class="help-block">
-                                    {_ For S3 use a <tt>https:</tt> URL, for FTP use <tt>ftps:</tt> _}
-                                </p>
                             </div>
 
                             <div class="form-group row">

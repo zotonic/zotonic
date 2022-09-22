@@ -178,7 +178,7 @@ noslash(B) ->
 
 
 queue_upload_all(Context) ->
-    Service = m_config:get_value(mod_filestore, service, Context, <<"s3">>),
+    Service = m_config:get_value(mod_filestore, service, <<"s3">>, Context),
     S3Url = m_config:get_value(mod_filestore, s3url, Context),
     S3Key = m_config:get_value(mod_filestore, s3key, Context),
     S3Secret = m_config:get_value(mod_filestore, s3secret, Context),
