@@ -21,6 +21,8 @@
 -export([
     m_get/3,
 
+    is_local_keep/1,
+
     queue/3,
     fetch_queue/1,
     dequeue/2,
@@ -38,9 +40,9 @@
     unmark_move_to_local/2,
 
     fetch_move_to_local/1,
-    purge_move_to_local/2,
+    purge_move_to_local/3,
 
-    store/5,
+    store/6,
     lookup/2,
 
     is_upload_ok/1,
@@ -71,8 +73,48 @@ m_get([ <<"stats">> | Rest ], _Msg, Context) ->
         true -> {ok, {stats(Context), Rest}};
         false -> {error, eacces}
     end;
+m_get([ <<"s3url">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {m_config:get_value(mod_filestore, s3url, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"s3key">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {m_config:get_value(mod_filestore, s3key, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"s3secret">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {m_config:get_value(mod_filestore, s3secret, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"is_upload_enabled">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {m_config:get_boolean(mod_filestore, is_upload_enabled, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"is_local_keep">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {m_config:get_boolean(mod_filestore, is_local_keep, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"delete_interval">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            Interval = case m_config:get_value(mod_filestore, delete_interval, Context) of
+                undefined -> <<"0">>;
+                <<>> -> <<"0">>;
+                Interv -> Interv
+            end,
+            {ok, {Interval, Rest}};
+        false -> {error, eacces}
+    end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
+
+-spec is_local_keep(z:context()) -> boolean().
+is_local_keep(Context) ->
+    m_config:get_boolean(mod_filestore, is_local_keep, Context).
 
 %% @doc Add a file/medium to the upload queue.
 -spec queue(binary(), z_media_identify:media_info(), z:context()) -> ok | {error, duplicate}.
@@ -90,16 +132,16 @@ queue(Path, MediaProps, Context) ->
                 1 ->
                     {error, duplicate}
             end
-        end, 
+        end,
         Context).
 
-%% @doc Fetch the next batch of queued uploads, at least 10 minutes old and max 200.
+%% @doc Fetch the next batch of queued uploads, at least 1 minute old and max 200.
 -spec fetch_queue( z:context() ) -> {ok, [ queue_entry() ]} | {error, term()}.
 fetch_queue(Context) ->
     case z_db:qmap("
                 select *
                 from filestore_queue
-                where created < now() - interval '10 min'
+                where created < now() - interval '1 min'
                 limit 200",
                 [],
                 [ {keys, atom} ],
@@ -132,10 +174,11 @@ dequeue(Id, Context) ->
         0 -> {error, enoent}
     end.
 
--spec store( binary(), integer(), atom() | binary(), binary(), z:context() ) -> {ok, integer()}.
-store(Path, Size, Service, Location, Context) when is_binary(Path), is_integer(Size), is_binary(Location) ->
+-spec store( binary(), integer(), atom() | binary(), binary(), boolean(), z:context() ) -> {ok, integer()}.
+store(Path, Size, Service, Location, IsLocal, Context)
+    when is_binary(Path), is_integer(Size), is_binary(Location) ->
     z_db:transaction(fun(Ctx) ->
-            case z_db:q1("select id from filestore where path=$1",
+            case z_db:q1("select id from filestore where path = $1",
                         [Path], Ctx)
             of
                 undefined ->
@@ -143,7 +186,8 @@ store(Path, Size, Service, Location, Context) when is_binary(Path), is_integer(S
                             <<"path">> => Path,
                             <<"service">> => Service,
                             <<"location">> => Location,
-                            <<"size">> => Size
+                            <<"size">> => Size,
+                            <<"is_local">> => IsLocal
                         }, Ctx);
                 Id ->
                     1 = z_db:q("
@@ -152,11 +196,12 @@ store(Path, Size, Service, Location, Context) when is_binary(Path), is_integer(S
                                 service = $2,
                                 size = $3,
                                 is_deleted = false,
+                                is_local = $5,
                                 is_move_to_local = false,
                                 error = null,
                                 modified = now()
                             where id = $4",
-                            [ Location, Service, Size, Id ],
+                            [ Location, Service, Size, Id, IsLocal ],
                             Ctx),
                     {ok, Id}
             end
@@ -314,11 +359,12 @@ purge_deleted(Id, Context) ->
     end.
 
 %% @doc Mark at most Limit entries to be moved from the remote service
-%% to the local service.
+%% to the local service. We mark all entries so that any missing files are
+%% recovered.
 -spec mark_move_to_local_limit( non_neg_integer(), z:context() ) -> {ok, non_neg_integer()}.
 mark_move_to_local_limit(Limit, Context) ->
     z_db:transaction(fun(Ctx) ->
-                        case z_db:q("
+                        N = z_db:q("
                                 update filestore f
                                 set is_move_to_local = true
                                 from (
@@ -332,16 +378,14 @@ mark_move_to_local_limit(Limit, Context) ->
                                 ) mv
                                 where mv.id = f.id",
                                 [Limit],
-                                Ctx)
-                        of
-                            N when is_integer(N) ->
-                                {ok, N}
-                        end
+                                Ctx),
+                        {ok, N}
                      end,
                      Context).
 
 %% @doc Mark all filestore entries to be moved from the remote service
-%% to the local service.
+%% to the local service. We mark all entries so that any missing files are
+%% recovered.
 -spec mark_move_to_local_all( z:context() ) -> non_neg_integer().
 mark_move_to_local_all(Context) ->
     z_db:q("update filestore
@@ -354,7 +398,8 @@ mark_move_to_local_all(Context) ->
 %% to the local service.
 -spec mark_move_to_local( integer(), z:context() ) -> ok | {error, enoent}.
 mark_move_to_local(Id, Context) ->
-    case z_db:q("update filestore
+    case z_db:q("
+            update filestore
             set is_move_to_local = true
             where id = $1", [Id], Context)
     of
@@ -424,8 +469,13 @@ fetch_move_to_local(Context) ->
 
 %% @doc Called after a file has been moved from the remote service to local.
 %% Marks the entry as deleted and removes the 'move to local' flag.
--spec purge_move_to_local( integer(), z:context() ) -> ok | {error, enoent}.
-purge_move_to_local(Id, Context) ->
+-spec purge_move_to_local( FileId::integer(), IsLocalKeep::boolean(), z:context() ) -> ok | {error, enoent}.
+purge_move_to_local(Id, true, Context) ->
+    z_db:q("update filestore
+            set is_move_to_local = false,
+                is_local = true
+            where id = $1", [Id], Context);
+purge_move_to_local(Id, false, Context) ->
     z_db:q("update filestore
             set is_move_to_local = false,
                 is_deleted = true,
@@ -444,17 +494,27 @@ stats(Context) ->
     Queued = z_db:q1("select count(*) from filestore_queue", Context),
     {Cloud, CloudSize, ToLocal, Deleted} = z_db:q_row("
                             select count(*),
-                                   sum(size),
-                                   sum(is_move_to_local::integer),
-                                   sum(is_deleted::integer)
-                            from filestore", Context),
+                                   coalesce(sum(size), 0),
+                                   coalesce(sum(is_move_to_local::integer), 0),
+                                   coalesce(sum(is_deleted::integer), 0)
+                            from filestore
+                            where is_local = false", Context),
+
+    {CloudLocal, CloudLocalSize, DeletedLocal} = z_db:q_row("
+                            select count(*),
+                                   coalesce(sum(size), 0),
+                                   coalesce(sum(is_deleted::integer), 0)
+                            from filestore
+                            where is_local = true", Context),
+
 
     % TODO: we need a separate index for this lookup
-    {InCloud, InCloudSize} = z_db:q_row("
+    {InCloudOnly, InCloudOnlySize} = z_db:q_row("
                             select count(*), coalesce(sum(m.size), 0)
                             from medium m
                                     join filestore f
                                     on f.path = 'archive/' || m.filename
+                                    and f.is_local = false
                             where filename is not null
                               and filename <> ''
                               and is_deletable_file = true",
@@ -464,18 +524,19 @@ stats(Context) ->
         archive_size => ArchiveSize,
         queued => Queued,
         queued_local => ToLocal,
-        queued_deleted => Deleted,
-        cloud => Cloud,
-        cloud_size => CloudSize,
-        local => Archived - InCloud,
-        local_size => ArchiveSize - InCloudSize
+        queued_deleted => Deleted + DeletedLocal,
+        cloud => Cloud + CloudLocal,
+        cloud_size => CloudSize + CloudLocalSize,
+        local => Archived - InCloudOnly,
+        local_size => ArchiveSize - InCloudOnlySize
     }.
 
 
 
-install(install, Context) ->
+install(_Version, Context) ->
     ok = install_filestore(Context),
     ok = ensure_column_deleted(Context),
+    ok = ensure_column_is_local(Context),
     ok = install_filequeue(Context).
 
 install_filestore(Context) ->
@@ -485,6 +546,7 @@ install_filestore(Context) ->
                 create table filestore (
                     id serial not null,
                     is_deleted boolean not null default false,
+                    is_local boolean not null default false,
                     is_move_to_local boolean not null default false,
                     error character varying(32),
                     path character varying(255) not null,
@@ -535,6 +597,18 @@ ensure_column_deleted(Context) ->
         false ->
             [] = z_db:q("alter table filestore add column deleted timestamp with time zone", Context),
             {ok, _, _} = z_db:equery("create index filestore_deleted on filestore(deleted)", Context),
+            z_db:flush(Context),
+            ok
+    end.
+
+ensure_column_is_local(Context) ->
+    Columns = z_db:column_names(filestore, Context),
+    case lists:member(is_local, Columns) of
+        true ->
+            ok;
+        false ->
+            [] = z_db:q("alter table filestore add column is_local boolean not null default false", Context),
+            {ok, _, _} = z_db:equery("create index filestore_is_local on filestore(is_local)", Context),
             z_db:flush(Context),
             ok
     end.

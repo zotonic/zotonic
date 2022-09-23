@@ -1,8 +1,8 @@
 {application, zotonic_mod_filestore, [
-    {description, "Store files on cloud storage services like Amazon S3 and GreenQloud"},
+    {description, "Store files on cloud storage services like FTP and S3"},
     {vsn, {file, "../../VERSION"}},
     {registered, []},
-    {applications, [kernel, stdlib, zotonic_core]},
+    {applications, [kernel, stdlib, s3filez, ftpfilez, zotonic_core]},
     {env, []},
     {modules, []},
     {doc, "doc"},
