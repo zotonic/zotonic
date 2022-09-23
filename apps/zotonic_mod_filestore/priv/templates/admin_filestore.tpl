@@ -36,11 +36,11 @@
                                     value="{{ m.config.mod_filestore.s3url.value|escape }}" class="form-control"
                                     placeholder="https://mybucket.s3.amazonaws.com/mysite"
                                 />
-                                {% validate id="s3url" type={format pattern="^(https:|ftps:).*$"} %}
+                                {% validate id="s3url" type={format pattern="^(https?:|ftps?:).*$"} %}
 
                                 <p class="help-block">
-                                    {_ For S3 the URL must start with <b><tt>https:</tt></b> _}<br>
-                                    {_ For FTP the URL must start with <b><tt>ftps:</tt></b> _}
+                                    {_ For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b> _}<br>
+                                    {_ For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftps:</tt></b> _}
                                 </p>
                             </div>
 
@@ -170,6 +170,10 @@
                         {_ There is a 10 minute wait before files are uploaded. _}
                     </p>
 
+                    <p class="help-block">
+                        {_ If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files. _}
+                    </p>
+
                     <p id="s3error-queue" class="alert alert-error" style="display:none">{_ Could not access the service, double check your settings and try again. _}</p>
                     <p id="s3ok-queue" class="alert alert-success" style="display:none">{_ All files will be queued, uploads will start in the background within 10 minutes. _}</p>
                     <p id="s3ok-queue-local" class="alert alert-success" style="display:none">{_ All cloud files will be queued for download. _}</p>
@@ -191,9 +195,15 @@
                         </div>
                     </div>
 
+                    <hr>
+
                     <p class="help-block">
                         {_ All cloud files can be moved back to the file system on the server. _}
                         {_ Ensure yourself there is enough disk space before starting this process. _}
+                    </p>
+
+                    <p class="help-block">
+                        {_ If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files. _}
                     </p>
 
                     <div class="form-group">

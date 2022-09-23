@@ -165,7 +165,7 @@ pid_observe_tick_1m(Pid, tick_1m, Context) ->
         <<"false">> ->
             nop;
         undefined ->
-            %% For BC, when the config option was not set.
+            %% For backwards compat, if the config option was not set.
             start_deleters(m_filestore:fetch_deleted(<<"0">>, Context), Context);
         Interval ->
             start_deleters(m_filestore:fetch_deleted(Interval, Context), Context)
