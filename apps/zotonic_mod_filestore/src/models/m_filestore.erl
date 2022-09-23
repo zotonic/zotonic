@@ -96,16 +96,16 @@ queue(Path, MediaProps, Context) ->
                 1 ->
                     {error, duplicate}
             end
-        end, 
+        end,
         Context).
 
-%% @doc Fetch the next batch of queued uploads, at least 10 minutes old and max 200.
+%% @doc Fetch the next batch of queued uploads, at least 1 minute old and max 200.
 -spec fetch_queue( z:context() ) -> {ok, [ queue_entry() ]} | {error, term()}.
 fetch_queue(Context) ->
     case z_db:qmap("
                 select *
                 from filestore_queue
-                where created < now() - interval '10 min'
+                where created < now() - interval '1 min'
                 limit 200",
                 [],
                 [ {keys, atom} ],

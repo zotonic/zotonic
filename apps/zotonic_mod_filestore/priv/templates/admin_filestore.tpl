@@ -167,7 +167,7 @@
                     <p class="help-block">
                         {_ All local uploaded and preview files can be moved to the cloud. _}<br/>
                         {_ This will queue the files for later asynchronous upload. _}
-                        {_ There is a 10 minute wait before files are uploaded. _}
+                        {_ There is a 1 minute wait before files are uploaded. _}
                     </p>
 
                     <p class="help-block">
