@@ -432,7 +432,7 @@ fetch_move_to_local(Context) ->
 %% Marks the entry as deleted and removes the 'move to local' flag.
 -spec purge_move_to_local( integer(), z:context() ) -> ok | {error, enoent}.
 purge_move_to_local(Id, Context) ->
-    case m_filestore:is_local_keep(Context) of
+    case is_local_keep(Context) of
         true ->
             z_db:q("update filestore
                     set is_move_to_local = false
