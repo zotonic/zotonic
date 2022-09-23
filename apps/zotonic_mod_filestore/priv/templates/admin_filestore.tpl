@@ -58,7 +58,7 @@
                                 <div class="form-inline">
                                     <label class="checkbox">
                                         <input type="checkbox" class="checkbox" id="is_upload_enabled" name="is_upload_enabled"
-                                            {% if m.config.mod_filestore.is_upload_enabled.value %}checked{% endif %} />
+                                            {% if m.config.mod_filestore.is_upload_enabled.value == "true" %}checked{% endif %} />
                                         {_ Upload new media files to the cloud file store _}
                                     </label>
                                 </div>
@@ -67,7 +67,7 @@
                                 <div class="form-inline">
                                     <label class="checkbox">
                                         <input type="checkbox" class="checkbox" id="is_local_keep" name="is_local_keep"
-                                            {% if m.config.mod_filestore.is_local_keep.value %}checked{% endif %} />
+                                            {% if m.config.mod_filestore.is_local_keep.value == "true" %}checked{% endif %} />
                                         {_ Keep local files after upload to the cloud file store _}
                                     </label>
                                     <p class="help-block">{_ Enable this to let the filestore act as a backup of  your local media files. _}</p>
