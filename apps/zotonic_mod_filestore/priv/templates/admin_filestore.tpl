@@ -33,7 +33,7 @@
                             <div class="form-group">
                                 <label class="control-label" for="s3url">{_ Base URL _}</label>
                                 <input type="text" id="s3url" name="s3url"
-                                    value="{{ m.config.mod_filestore.s3url.value|escape }}" class="form-control"
+                                    value="{{ m.filestore.s3url|escape }}" class="form-control"
                                     placeholder="https://mybucket.s3.amazonaws.com/mysite"
                                 />
                                 {% validate id="s3url" type={format pattern="^(https?:|ftps?:).*$"} %}
@@ -46,19 +46,19 @@
 
                             <div class="form-group">
                                 <label class="control-label" for="s3key">{_ S3 API Key or FTP username_}</label>
-                                <input type="text" id="s3key" name="s3key" value="{{ m.config.mod_filestore.s3key.value|escape }}" class="form-control" />
+                                <input type="text" id="s3key" name="s3key" value="{{ m.filestore.s3key|escape }}" class="form-control" />
                             </div>
 
                             <div class="form-group">
                                 <label class="control-label" for="s3secret">{_ S3 API Secret or FTP password _}</label>
-                                <input type="text" id="s3secret" name="s3secret" value="{{ m.config.mod_filestore.s3secret.value|escape }}" class="form-control" />
+                                <input type="text" id="s3secret" name="s3secret" value="{{ m.filestore.s3secret|escape }}" class="form-control" />
                             </div>
 
                             <div class="form-group">
                                 <div class="form-inline">
                                     <label class="checkbox">
                                         <input type="checkbox" class="checkbox" id="is_upload_enabled" name="is_upload_enabled"
-                                            {% if m.config.mod_filestore.is_upload_enabled.value == "true" %}checked{% endif %} />
+                                            {% if m.filestore.is_upload_enabled %}checked{% endif %} />
                                         {_ Upload new media files to the cloud file store _}
                                     </label>
                                 </div>
@@ -67,7 +67,7 @@
                                 <div class="form-inline">
                                     <label class="checkbox">
                                         <input type="checkbox" class="checkbox" id="is_local_keep" name="is_local_keep"
-                                            {% if m.config.mod_filestore.is_local_keep.value == "true" %}checked{% endif %} />
+                                            {% if m.filestore.is_local_keep %}checked{% endif %} />
                                         {_ Keep local files after upload to the cloud file store _}
                                     </label>
                                     <p class="help-block">{_ Enable this to let the filestore act as a backup of  your local media files. _}</p>
@@ -86,7 +86,7 @@
                             <div class="form-group">
                                 <div class="form-inline">
                                     <label for="delete_interval" class="control-label">{_ Delete files from the cloud file store _}&nbsp;</label>
-                                    {% with m.config.mod_filestore.delete_interval.value|if_undefined:"0" as value %}
+                                    {% with m.filestore.delete_interval as value %}
                                          <select class="form-control input-sm" id="delete_interval" name="delete_interval">
                                              <option value="0"{% if value == "0" %} selected{% endif %}>{_ Immediately _}</option>
                                              <option value="1 week"{% if value == "1 week" %} selected{% endif %}>{_ After 1 week _}</option>

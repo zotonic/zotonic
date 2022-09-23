@@ -73,6 +73,42 @@ m_get([ <<"stats">> | Rest ], _Msg, Context) ->
         true -> {ok, {stats(Context), Rest}};
         false -> {error, eacces}
     end;
+m_get([ <<"s3url">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {m_config:get_value(mod_filestore, s3url, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"s3key">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {m_config:get_value(mod_filestore, s3key, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"s3secret">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {m_config:get_value(mod_filestore, s3secret, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"is_upload_enabled">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {m_config:get_boolean(mod_filestore, is_upload_enabled, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"is_local_keep">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {m_config:get_boolean(mod_filestore, is_local_keep, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"delete_interval">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            Interval = case m_config:get_value(mod_filestore, delete_interval, Context) of
+                undefined -> <<"0">>;
+                <<>> -> <<"0">>;
+                Interv -> Interv
+            end,
+            {ok, {Interval, Rest}};
+        false -> {error, eacces}
+    end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
