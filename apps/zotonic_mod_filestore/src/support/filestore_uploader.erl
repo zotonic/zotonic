@@ -229,12 +229,14 @@ finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, l
         service => Service,
         result => ok
     }),
-    FzCache = start_empty_cache_entry(Location),
-    {ok, _} = m_filestore:store(Path, Size, Service, Location, Context),
-    case m_filestore:is_local_keep(Context) of
+    IsLocalKeep = m_filestore:is_local_keep(Context),
+    case IsLocalKeep of
         true ->
+            {ok, _} = m_filestore:store(Path, Size, Service, Location, IsLocalKeep, Context),
             ok;
         false ->
+            FzCache = start_empty_cache_entry(Location),
+            {ok, _} = m_filestore:store(Path, Size, Service, Location, IsLocalKeep, Context),
             % Make sure that the file entry is not serving the relocated file from the file system.
             pause_file_entry(Path, Context),
             AbsPathTmp = <<AbsPath/binary, "~">>,

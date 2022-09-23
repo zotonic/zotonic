@@ -213,8 +213,8 @@
                             </button>
                             {% wire id="queue-local"
                                     action={confirm
-                                        text=_"Are you sure you want to move all files to the server?"
-                                        ok=_"Move files to local"
+                                        text=_"Are you sure you want to move all files to the disk of the server?"
+                                        ok=_"Move files to server disk"
                                         is_danger
                                         postback={admin_filestore_queue is_to_local}
                                         delegate=`filestore_admin`

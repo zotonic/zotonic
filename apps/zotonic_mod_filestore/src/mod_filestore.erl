@@ -22,7 +22,7 @@
 -mod_title("File Storage").
 -mod_description("Store files on cloud storage services using FTP and S3").
 -mod_prio(500).
--mod_schema(1).
+-mod_schema(2).
 -mod_provides([filestore]).
 -mod_depends([cron]).
 
@@ -502,9 +502,21 @@ start_downloader(#{
                 local_path => LocalPath,
                 id => Id
             }),
-            ContextAsync = z_context:prune_for_async(Context),
-            Mod = filezmod(CredService),
-            _ = Mod:queue_stream_id({?MODULE, stream, Id}, Cred, Location1, {?MODULE, download_stream, [Id, Path, LocalPath, ContextAsync]});
+            case filelib:is_file(LocalPath) of
+                true ->
+                    % File is present - no download needed;
+                    ?LOG_DEBUG(#{
+                        text => <<"Download remote file skipped, file already downloaded">>,
+                        result => ok,
+                        in => zotonic_mod_filestore,
+                        local => LocalPath
+                    }),
+                    download_done(Id, Path, Context);
+                false ->
+                    ContextAsync = z_context:prune_for_async(Context),
+                    Mod = filezmod(CredService),
+                    _ = Mod:queue_stream_id({?MODULE, stream, Id}, Cred, Location1, {?MODULE, download_stream, [Id, Path, LocalPath, ContextAsync]})
+            end;
         undefined ->
             ?LOG_DEBUG(#{
                 text => <<"No credentials for downloader.">>,
@@ -542,9 +554,7 @@ download_stream(Id, Path, LocalPath, Context, eof) ->
         local => LocalPath
     }),
     ok = file:rename(temp_path(LocalPath), LocalPath),
-    m_filestore:purge_move_to_local(Id, Context),
-    filezcache:delete({z_context:site(Context), Path}),
-    filestore_uploader:stale_file_entry(Path, Context);
+    download_done(Id, Path, Context);
 download_stream(Id, Path, LocalPath, Context, {error, Reason}) ->
     ?LOG_WARNING(#{
         text => <<"Download error on file stream">>,
@@ -559,6 +569,11 @@ download_stream(Id, Path, LocalPath, Context, {error, Reason}) ->
     m_filestore:unmark_move_to_local(Id, Context);
 download_stream(_Id, _Path, _LocalPath, _Context, _Other) ->
     ok.
+
+download_done(Id, Path, Context) ->
+    m_filestore:purge_move_to_local(Id, m_filestore:is_local_keep(Context), Context),
+    filezcache:delete({z_context:site(Context), Path}),
+    filestore_uploader:stale_file_entry(Path, Context).
 
 temp_path(F) when is_list(F) ->
     F ++ ".downloading";
