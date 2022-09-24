@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-09-24 16:12\n"
+"PO-Revision-Date: 2022-09-24 17:29\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4215,7 +4215,7 @@ msgstr "Двухфакторный пароль"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
 msgid "Use some non alphabetical characters or digits to make it harder to guess."
-msgstr "Используйте некоторые не алфавитные символы или цифры, чтобы затруднить догадку."
+msgstr "Используйте какие-нибудь не алфавитные символы или цифры, чтобы его было труднее угадать."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:97
 msgid "Verify your account"
@@ -4223,7 +4223,7 @@ msgstr "Проверьте свой аккаунт"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:104
 msgid "We cannot connect you to the right account. Contact support of {site} to help you merge the accounts and then try again."
-msgstr "Мы не можем подключить вас к нужному аккаунту. Обратитесь в службу поддержки {site} , чтобы помочь вам объединить учетные записи, а затем повторите попытку."
+msgstr "Мы не можем подключить вас к нужному аккаунту. Обратитесь в службу поддержки {site} , за помощью в объединении учетных записей, а затем повторите попытку."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:113
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
