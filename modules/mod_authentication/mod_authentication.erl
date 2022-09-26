@@ -180,7 +180,7 @@ maybe_update_identity(_Ps, NewProps, IdnPs, Context) ->
     {key, Key} = proplists:lookup(key, IdnPs),
     {type, Type} = proplists:lookup(type, IdnPs),
     {rsc_id, RscId} = proplists:lookup(rsc_id, IdnPs),
-    m_identity:set_by_type(RscId, Key, Type, NewProps, Context).
+    m_identity:set_by_type(RscId, Type, Key, NewProps, Context).
 
 
 logon_identity(Auth, IdnPs, Context) ->
