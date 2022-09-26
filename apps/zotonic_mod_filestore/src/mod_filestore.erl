@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2014-2022 Marc Worrell
 %% @doc Module managing the storage of files on remote servers.
+%% @end
 
 %% Copyright 2014-2022 Marc Worrell
 %%
@@ -36,6 +37,7 @@
 
 -export([
     observe_filestore/2,
+    observe_filestore_request/2,
     observe_media_update_done/2,
     observe_filestore_credentials_lookup/2,
     observe_filestore_credentials_revlookup/2,
@@ -89,6 +91,26 @@ observe_filestore(#filestore{action=delete, path=Path}, Context) ->
         {error, enoent} ->
             ok
     end.
+
+observe_filestore_request(#filestore_request{
+            action = upload,
+            remote = RemoteFile,
+            local = LocalFile,
+            mime = Mime
+    }, Context) ->
+    filestore_request:upload(LocalFile, RemoteFile, Mime, Context);
+observe_filestore_request(#filestore_request{
+            action = download,
+            remote = RemoteFile,
+            local = LocalFile
+    }, Context) ->
+    filestore_request:download(LocalFile, RemoteFile, Context);
+observe_filestore_request(#filestore_request{
+            action = delete,
+            remote = RemoteFile
+    }, Context) ->
+    filestore_request:delete(RemoteFile, Context).
+
 
 %% @doc Map the local path to the URL of the remotely stored file. This depends on the
 %% service configured in the filestore config.
@@ -210,7 +232,7 @@ load_cache(#{
             }),
             Ctx = z_context:prune_for_async(Context),
             StreamFun = fun(CachePid) ->
-                Mod = filezmod(CredService),
+                Mod = filestore_request:filezmod(CredService),
                 Mod:stream(
                     Cred,
                     Location1,
@@ -265,9 +287,6 @@ queue_all(Context) ->
 queue_all_stop(Context) ->
     z_pivot_rsc:delete_task(?MODULE, task_queue_all, filestore_queue_all, Context).
 
-filezmod(<<"s3">>) -> s3filez;
-filezmod(<<"ftp">>) -> ftpfilez.
-
 task_queue_all(Offset, Max, Context) when Offset =< Max ->
     case z_db:qmap_props("
         select *
@@ -320,9 +339,9 @@ queue_medium(Medium, Context) ->
     maybe_queue_file(<<"archive/">>, Preview, PreviewDeletable, MediumPreview, Context).
 
 
-maybe_queue_file(_Prefix, undefined, _IsDeletable, _MediaInfo, _Context) ->
+maybe_queue_file(_Prefix, undefined, _IsStaticFile, _MediaInfo, _Context) ->
     nop;
-maybe_queue_file(_Prefix, <<>>, _IsDeletable, _MediaInfo, _Context) ->
+maybe_queue_file(_Prefix, <<>>, _IsStaticFile, _MediaInfo, _Context) ->
     nop;
 maybe_queue_file(_Prefix, _Path, false, _MediaInfo, _Context) ->
     nop;
@@ -410,7 +429,7 @@ start_deleter(#{
                 id => Id
             }),
             ContextAsync = z_context:prune_for_async(Context),
-            Mod = filezmod(CredService),
+            Mod = filestore_request:filezmod(CredService),
             _ = Mod:queue_delete_id({?MODULE, delete, Id}, Cred, Location1, {?MODULE, delete_ready, [Id, Path, ContextAsync]});
         {ok, _} ->
             ?LOG_DEBUG(#{
@@ -514,7 +533,7 @@ start_downloader(#{
                     download_done(Id, Path, Context);
                 false ->
                     ContextAsync = z_context:prune_for_async(Context),
-                    Mod = filezmod(CredService),
+                    Mod = filestore_request:filezmod(CredService),
                     _ = Mod:queue_stream_id({?MODULE, stream, Id}, Cred, Location1, {?MODULE, download_stream, [Id, Path, LocalPath, ContextAsync]})
             end;
         undefined ->

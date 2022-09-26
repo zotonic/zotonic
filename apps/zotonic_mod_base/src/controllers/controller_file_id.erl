@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2014-2022 Marc Worrell
 %% @doc Redirect the path associated with the media of a file.
-%% @enddoc
+%% @end
 
 %% Copyright 2014-2022 Marc Worrell
 %%

@@ -137,7 +137,8 @@ try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInf
             RscId = maps:get(<<"id">>, MInfo, undefined),
             case z_notifier:first(#filestore_credentials_lookup{id=RscId, path=Path}, Context) of
                 {ok, #filestore_credentials{} = Cred} ->
-                    case handle_upload(Path, Cred, Context) of
+                    Mime = maps:get(<<"mime">>, MInfo, undefined),
+                    case handle_upload(Path, Mime, Cred, Context) of
                         ok ->
                             m_filestore:dequeue(Id, Context),
                             {stop, normal, State};
@@ -159,6 +160,8 @@ try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInf
                     ?LOG_WARNING(#{
                         text => <<"Filestore no credentials, ignoring queued file">>,
                         in => zotonic_mod_filestore,
+                        result => error,
+                        reason => no_credentials,
                         src =>  Path
                     }),
                     m_filestore:dequeue(Id, Context),
@@ -182,7 +185,7 @@ try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInf
             {stop, normal, State}
     end.
 
-handle_upload(Path, Cred, Context) ->
+handle_upload(Path, Mime, Cred, Context) ->
     AbsPath = z_path:abspath(Path, Context),
     case file:read_file_info(AbsPath) of
         {ok, #file_info{type=regular, size=0}} ->
@@ -193,7 +196,7 @@ handle_upload(Path, Cred, Context) ->
             }),
             ok;
         {ok, #file_info{type=regular, size=Size}} ->
-            Result = do_upload(Cred, {filename, Size, AbsPath}),
+            Result = filestore_request:do_upload(Cred, {filename, Size, AbsPath}, Mime),
             finish_upload(Result, Path, AbsPath, Size, Cred, Context);
         {ok, #file_info{type=Type}} ->
             ?LOG_ERROR(#{
@@ -213,11 +216,6 @@ handle_upload(Path, Cred, Context) ->
             }),
             fatal
     end.
-
-do_upload(#filestore_credentials{service= <<"s3">>, location=Location, credentials=Cred}, Data) ->
-    s3filez:put(Cred, Location, Data);
-do_upload(#filestore_credentials{service= <<"ftp">>, location=Location, credentials=Cred}, Data) ->
-    ftpfilez:put(Cred, Location, Data).
 
 %% @doc Remember the new location in the m_filestore, move the file to the filezcache and delete the file
 finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, location=Location}, Context) ->

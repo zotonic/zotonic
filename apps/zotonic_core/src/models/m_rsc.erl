@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2022 Marc Worrell
 %% @doc Model for resource data. Interfaces between zotonic, templates and the database.
-%% @enddoc
+%% @end
 
 %% Copyright 2009-2022 Marc Worrell
 %%

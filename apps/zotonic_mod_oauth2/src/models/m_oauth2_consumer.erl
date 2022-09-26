@@ -1,7 +1,7 @@
 % @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021-2022 Marc Worrell
 %% @doc OAuth2 model managing consumers for access to remote sites.
-%% @enddoc
+%% @end
 
 %% Copyright 2021-2022 Marc Worrell
 %%

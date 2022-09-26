@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021-2022 Marc Worrell
 %% @doc Fetch data from URLs. Interfaces to z_url_fetch and z_url_metadata.
-%% @enddoc
+%% @end
 
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
