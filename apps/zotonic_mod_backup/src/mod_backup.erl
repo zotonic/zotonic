@@ -64,7 +64,7 @@
     upload_start :: undefined | calendar:date_time(),
     upload_pid :: undefined | pid(),
     upload_name :: undefined | binary(),
-    timer_ref :: reference()
+    timer_ref :: timer:tref()
 }).
 
 % Interval for checking for new and/or changed files.
@@ -223,7 +223,6 @@ init(Args) ->
     {ok, TimerRef} = timer:send_interval(?BCK_POLL_INTERVAL, periodic_backup),
     {ok, #state{
         context = z_acl:sudo(z_context:new(Context)),
-        backup_pid = undefined,
         timer_ref = TimerRef
     }}.
 

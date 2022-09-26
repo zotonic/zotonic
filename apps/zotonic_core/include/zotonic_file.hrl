@@ -44,7 +44,7 @@
 
 %%% @doc Notification to find the filestore credentials
 -record(filestore_credentials_lookup, {
-        id :: integer(),
+        id :: undefined | integer(),
         path :: binary()
     }).
 
