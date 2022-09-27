@@ -321,6 +321,10 @@ handle_info({'EXIT', Pid, Reason}, #state{ backup_pid = Pid } = State) ->
     {noreply, State1};
 
 handle_info({'EXIT', Pid, normal}, #state{ upload_pid = Pid } = State) ->
+    z_mqtt:publish(
+        <<"model/backup/event/backup">>,
+        #{ status => <<"uploaded">> },
+        State#state.context),
     State1 = State#state{
         upload_pid = undefined,
         upload_start = undefined,
@@ -329,6 +333,10 @@ handle_info({'EXIT', Pid, normal}, #state{ upload_pid = Pid } = State) ->
     {noreply, State1};
 
 handle_info({'EXIT', Pid, Reason}, #state{ upload_pid = Pid } = State) ->
+    z_mqtt:publish(
+        <<"model/backup/event/backup">>,
+        #{ status => <<"upload_error">> },
+        State#state.context),
     ?LOG_ERROR(#{
         text => <<"Backup uploader crashed">>,
         in => zotonic_mod_backup,

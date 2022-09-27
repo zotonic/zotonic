@@ -75,7 +75,7 @@ handle_upload(Cred, LocalFile, Mime) ->
             }),
             {error, empty};
         {ok, #file_info{type=regular, size=Size}} ->
-            do_upload(Cred, Mime, {filename, Size, LocalFile});
+            do_upload(Cred, {filename, Size, LocalFile}, Mime);
         {ok, #file_info{type=Type}} ->
             ?LOG_ERROR(#{
                 text => <<"Not uploading file because of file type">>,
@@ -97,20 +97,31 @@ handle_upload(Cred, LocalFile, Mime) ->
             {error, enoent}
     end.
 
-
-
-do_upload(#filestore_credentials{service=Service, location=Location, credentials=Cred}, Mime, Data) ->
+-spec do_upload(CredLoc, Data, Mime) -> Result when
+    CredLoc :: #filestore_credentials{},
+    Data :: ftpfilez:put_data(),
+    Mime :: binary(),
+    Result :: ftpfilez:sync_reply().
+do_upload(#filestore_credentials{service=Service, location=Location, credentials=Cred}, Data, Mime) ->
     Mod = filezmod(Service),
     Mod:put(Cred, Location, Data, [ {content_type, Mime} ]).
 
+-spec do_download(CredLoc, LocalFile) -> Result when
+    CredLoc :: #filestore_credentials{},
+    LocalFile :: file:filename_all(),
+    Result :: ok | {error, term()}.
 do_download(#filestore_credentials{service=Service, location=Location, credentials=Cred}, LocalFile) ->
     Mod = filezmod(Service),
     download_stream(Mod, Cred, Location, LocalFile).
 
+-spec do_delete(CredLoc) -> Result when
+    CredLoc :: #filestore_credentials{},
+    Result :: ftpfilez:sync_reply().
 do_delete(#filestore_credentials{service=Service, location=Location, credentials=Cred}) ->
     Mod = filezmod(Service),
     Mod:delete(Cred, Location).
 
+-spec filezmod(binary()) -> module().
 filezmod(<<"s3">>) -> s3filez;
 filezmod(<<"ftp">>) -> ftpfilez.
 
