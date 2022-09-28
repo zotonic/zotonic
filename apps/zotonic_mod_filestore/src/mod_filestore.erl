@@ -263,6 +263,8 @@ load_cache(#{
                                 id => Id
                             }),
                             exit(Error);
+                        (stream_start) ->
+                            nop;
                         (T) when is_tuple(T) ->
                             nop;
                         (B) when is_binary(B) ->
