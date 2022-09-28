@@ -123,7 +123,8 @@ do_delete(#filestore_credentials{service=Service, location=Location, credentials
 
 -spec filezmod(binary()) -> module().
 filezmod(<<"s3">>) -> s3filez;
-filezmod(<<"ftp">>) -> ftpfilez.
+filezmod(<<"ftp">>) -> ftpfilez;
+filezmod(<<"webdav">>) -> webdavfilez.
 
 download_stream(Mod, Cred, Location, LocalFile) ->
     try

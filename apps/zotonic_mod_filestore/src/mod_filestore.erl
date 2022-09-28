@@ -224,6 +224,7 @@ load_cache(#{
     of
         {ok, #filestore_credentials{ service=CredService, location=Location1, credentials=Cred }} when
             CredService =:= <<"s3">>;
+            CredService =:= <<"webdav">>;
             CredService =:= <<"ftp">> ->
             ?LOG_DEBUG(#{
                 text => <<"File store cache load">>,
@@ -419,7 +420,9 @@ start_deleter(#{
         }, Context) ->
     case z_notifier:first(#filestore_credentials_revlookup{service=Service, location=Location}, Context) of
         {ok, #filestore_credentials{service=CredService, location=Location1, credentials=Cred}}
-            when CredService =:= <<"s3">>; CredService =:= <<"ftp">> ->
+            when CredService =:= <<"s3">>;
+                 CredService =:= <<"webdav">>;
+                 CredService =:= <<"ftp">> ->
             ?LOG_DEBUG(#{
                 text => <<"Queue delete.">>,
                 in => zotonic_mod_filestore,
@@ -507,9 +510,10 @@ start_downloader(#{
             location := Location
         }, Context) ->
     case z_notifier:first(#filestore_credentials_revlookup{service=Service, location=Location}, Context) of
-        {ok, #filestore_credentials{service=CredService, location=Location1, credentials=Cred}} when
-            CredService =:= <<"s3">>;
-            CredService =:= <<"ftp">> ->
+        {ok, #filestore_credentials{service=CredService, location=Location1, credentials=Cred}}
+            when CredService =:= <<"s3">>;
+                 CredService =:= <<"webdav">>;
+                 CredService =:= <<"ftp">> ->
             LocalPath = z_path:files_subdir(Path, Context),
             ok = z_filelib:ensure_dir(LocalPath),
             ?LOG_DEBUG(#{

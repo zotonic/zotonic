@@ -83,10 +83,15 @@ event(#postback{message={admin_filestore_queue, [{is_to_cloud, true}]}}, Context
 url2service(<<"https:", _/binary>>) -> <<"s3">>;
 url2service(<<"http:", _/binary>>) -> <<"s3">>;
 url2service(<<"ftps:", _/binary>>) -> <<"ftp">>;
-url2service(<<"ftp:", _/binary>>) -> <<"ftp">>.
+url2service(<<"ftp:", _/binary>>) -> <<"ftp">>;
+url2service(<<"webdavs:", _/binary>>) -> <<"webdav">>;
+url2service(<<"webdav:", _/binary>>) -> <<"webdav">>;
+url2service(<<"davs:", _/binary>>) -> <<"webdav">>;
+url2service(<<"dav:", _/binary>>) -> <<"webdav">>.
 
 service2mod(<<"s3">>) -> s3filez;
-service2mod(<<"ftp">>) -> ftpfilez.
+service2mod(<<"ftp">>) -> ftpfilez;
+service2mod(<<"webdav">>) -> webdavfilez.
 
 % Try a put, get, and delete sequence
 testcred(Service, S3Url, S3Key, S3Secret, IsCreateBucket)
