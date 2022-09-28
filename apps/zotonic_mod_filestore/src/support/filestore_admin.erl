@@ -121,7 +121,9 @@ testcred(Service, S3Url, S3Key, S3Secret, IsCreateBucket)
     end.
 
 testcred_file(Service, S3Url, S3Key, S3Secret)
-    when is_binary(S3Url), is_binary(S3Key), is_binary(S3Secret) ->
+    when is_binary(S3Url),
+         is_binary(S3Key),
+         is_binary(S3Secret) ->
     Cred = {S3Key, S3Secret},
     Url = <<S3Url/binary, $/, "-zotonic-filestore-test-file-">>,
     Data = iolist_to_binary([?DATA, " ", z_ids:identifier()]),

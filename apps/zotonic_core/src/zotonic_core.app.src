@@ -13,7 +13,7 @@
                   depcache, zotonic_stdlib,
                   cowboy, cowmachine,
                   poolboy,
-                  filezcache, s3filez, ftpfilez,
+                  filezcache, s3filez,
                   template_compiler,
                   qdate, syslog,
                   bcrypt, erlpass,

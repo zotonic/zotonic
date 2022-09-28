@@ -38,11 +38,11 @@
                                     value="{{ m.filestore.s3url|escape }}" class="form-control"
                                     placeholder="https://mybucket.s3.amazonaws.com/mysite"
                                 />
-                                {% validate id="s3url" type={format pattern="^(https?:|ftps?:).*$"} %}
+                                {% validate id="s3url" type={format pattern="^(davs?:|webdavs?:|https?:|ftps?:).*$"} %}
 
                                 <p class="help-block">
                                     {_ For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b> _}<br>
-                                    {_ For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b> _}
+                                    {_ For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b> _}<br>
                                     {_ For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b> _}
                                 </p>
                             </div>

@@ -21,7 +21,7 @@
 
 -author("Marc Worrell <marc@worrell.nl>").
 -mod_title("File Storage").
--mod_description("Store files on cloud storage services using FTP and S3").
+-mod_description("Store files on cloud storage services using FTP, S3 and WebDAV").
 -mod_prio(500).
 -mod_schema(2).
 -mod_provides([filestore]).
