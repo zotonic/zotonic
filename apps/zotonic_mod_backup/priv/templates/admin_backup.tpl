@@ -22,7 +22,7 @@
             <div class="col-lg-8 col-md-6">
                 <div class="widget">
                     <div class="widget-content">
-                        {% live template="_admin_backup_list.tpl" topic="bridge/origin/model/backup/event/#" %}
+                        {% live template="_admin_backup_list.tpl" topic="bridge/origin/model/backup/event/#" is_filestore_enabled=is_filestore_enabled %}
                     </div>
                 </div>
             </div>
@@ -41,7 +41,12 @@
 
                             <div class="checkbox">
                                 <label>
-                                    <input id="backup_daily" name="backup_daily" type="checkbox" value="1" {% if m.backup.daily_dump %}checked="checked"{% endif %}/> {_ Make a daily backup of the database and uploaded files. _}
+                                    <input id="backup_daily" name="backup_daily" type="checkbox" value="1" {% if m.backup.daily_dump %}checked="checked"{% endif %}/>
+                                    {% if is_filestore_enabled %}
+                                        {_ Make a daily backup of the database. _}
+                                    {% else %}
+                                        {_ Make a daily backup of the database and uploaded files. _}
+                                    {% endif %}
                                 </label>
                             </div>
                             {% wire id="backup_daily" postback=`config_backup_daily` %}
@@ -53,35 +58,45 @@
                     <div class="widget-content">
                         <p>
                             {_ At any moment you can make a backup of your system. _}
-                            {_ The backup comprises two parts, the database and the uploaded files. _}<br/>
-                            {_ You can have 10 backups, older ones will be deleted automatically. _}
+                            {% if not is_filestore_enabled %}
+                                {_ The backup comprises two parts, the database and the uploaded files. _}
+                            {% endif %}<br/>
+                            {_ You can have one backup per day of the week, older ones will be overwritten. _}
                         </p>
 
                         {% if backup_config.ok and is_editable %}
                             <div class="form-group">
-                                {% button class="btn btn-primary" text=_"Start backup now" action={backup_start is_full_backup} %}
-                                {% button class="btn btn-primary" text=_"Start database-only backup now" action={backup_start is_full_backup=0} %}
+                                {% button class="btn btn-primary" text=_"Start backup now"
+                                          action={backup_start is_full_backup} %}
+                                {% if not is_filestore_enabled %}
+                                    {% button class="btn btn-primary" text=_"Start database-only backup now"
+                                              action={backup_start is_full_backup=false} %}
+                                {% endif %}
                             </div>
                         {% elseif not backup_config.ok %}
                             <div class="alert alert-danger">
-                                <strong>{_ Warning: _}</strong> {_ Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved: _}
+                                <p>
+                                    <strong>{_ Warning _}:</strong> {_ Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved: _}
+                                </p>
                                 <ul>
-                                    {% if not backup_config.db_dump %}<li>{_ The "pg_dump" command was not found in the path. Set the "pg_dump" config key to the path to pg_dump and return to this page. _}</li>{% endif %}
-                                    {% if not backup_config.archive %}<li>{_ The "tar" command was not found in the path. Set the "tar" config key to the path to tar and return to this page. _}</li>{% endif %}
+                                    {% if not backup_config.db_dump %}
+                                        <li>{_ The "pg_dump" command was not found in the path. Set in zotonic.config the "pg_dump" config key to the path to <tt>pg_dump</tt> and return to this page. _}</li>
+                                    {% endif %}
+                                    {% if not backup_config.archive %}
+                                        <li>{_ The "tar" command was not found in the path. Set in zotonic.config the "tar" config key to the path to <tt>tar</tt> and return to this page. _}</li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         {% endif %}
-                    </div>
 
-                    {% if `mod_filestore`|member:m.modules.enabled  %}
-                        {% if m.filestore.stats.cloud > 0 %}
+                        {% if is_filestore_enabled  %}
                             <div class="alert alert-warning">
-                                <strong>{_ Warning _}</strong>
+                                <strong>{_ Warning _}:</strong>
 
-                                {{ _"This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"|replace_args:[m.filestore.stats.cloud|to_binary] }}
+                                {_ Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup. _}
                             </div>
                         {% endif %}
-                    {% endif %}
+                    </div>
                 </div>
             </div>
         </div>

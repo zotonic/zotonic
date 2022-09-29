@@ -15,6 +15,8 @@
         </ul>
 
         <p>{_ If you use an FTP server then that server MUST support FTPS (secure ftp) _}</p>
+
+        <p>{_ With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https). _}</p>
     </div>
 
     {% if m.acl.is_allowed.use.mod_admin_config %}
@@ -36,21 +38,22 @@
                                     value="{{ m.filestore.s3url|escape }}" class="form-control"
                                     placeholder="https://mybucket.s3.amazonaws.com/mysite"
                                 />
-                                {% validate id="s3url" type={format pattern="^(https?:|ftps?:).*$"} %}
+                                {% validate id="s3url" type={format pattern="^(davs?:|webdavs?:|https?:|ftps?:).*$"} %}
 
                                 <p class="help-block">
                                     {_ For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b> _}<br>
-                                    {_ For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftps:</tt></b> _}
+                                    {_ For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b> _}<br>
+                                    {_ For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b> _}
                                 </p>
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label" for="s3key">{_ S3 API Key or FTP username_}</label>
+                                <label class="control-label" for="s3key">{_ S3 API Key or FTP/WebDAV username_}</label>
                                 <input type="text" id="s3key" name="s3key" value="{{ m.filestore.s3key|escape }}" class="form-control" />
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label" for="s3secret">{_ S3 API Secret or FTP password _}</label>
+                                <label class="control-label" for="s3secret">{_ S3 API Secret or FTP/WebDAV password _}</label>
                                 <input type="text" id="s3secret" name="s3secret" value="{{ m.filestore.s3secret|escape }}" class="form-control" />
                             </div>
 
@@ -79,7 +82,7 @@
                                         <input type="checkbox" id="is_create_bucket" name="is_create_bucket">
                                         {_ Try to create a private S3 bucket if the S3 bucket does not exist _}
                                     </label>
-                                    <p class="help-block">{_ With FTP the directories are always created automatically. _}</p>
+                                    <p class="help-block">{_ With FTP and WebDAV the directories are always created automatically. _}</p>
                                 </div>
                             </div>
 

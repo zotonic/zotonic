@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2011-2022 Marc Worrell
 %% @doc Convert markdown to/from html.
-%% @enddoc
+%% @end
 
 %% Copyright 2011-2022 Marc Worrell
 %%

@@ -7,20 +7,36 @@
         </thead>
 
         <tbody>
-            {% for id, date, is_full_backup, in_progress in m.backup.list_backups %}
-                <tr id="{{ #li.id }}">
+            {% for backup in m.backup.list_backups %}
+                <tr>
                     <td>
                         <div class="pull-right">
-                            {% if in_progress %}
+                            {% if backup.is_running %}
                                 <span class="label label-info">{_ this backup is in progress _}</span>
                             {% else %}
-                                <a class="btn btn-default btn-xs" href="{% url backup_download star=id++".sql" %}">{_ download database _}</a>
-                                {% if is_full_backup %}
-                                    <a class="btn btn-default btn-xs" href="{% url backup_download star=id++".tar.gz" %}">{_ download files _}</a>
+                                {% if backup.is_files_present %}
+                                    <a class="btn btn-default btn-xs" target="_blank" href="{% url backup_download star=backup.name++".tar.gz" %}">{_ download files _}</a>
+                                {% endif %}
+                                {% if backup.is_database_present %}
+                                    <a class="btn btn-default btn-xs" target="_blank" href="{% url backup_download star=backup.name++".sql.gz" %}">{_ download database _}</a>
                                 {% endif %}
                             {% endif %}
                         </div>
-                        {{ date|date:"M d Y, H:i" }}
+
+                        {{ backup.timestamp|date:_"Y-m-d H:i – l" }}
+
+                        {% if is_filestore_enabled %}
+                            <br>
+                            {% if backup.is_filestore_uploaded %}
+                                <span class="label label-success">
+                                    {_ Uploaded to filestore _}
+                                </span>
+                            {% else %}
+                                <span class="label label-warning">
+                                    {_ Not uploaded to filestore _}
+                                </span>
+                            {% endif %}
+                        {% endif %}
                     </td>
                 </tr>
             {% empty %}

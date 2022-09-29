@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2022 Marc Worrell
 %% @doc Event handling for the filestore admin functions
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -83,10 +83,15 @@ event(#postback{message={admin_filestore_queue, [{is_to_cloud, true}]}}, Context
 url2service(<<"https:", _/binary>>) -> <<"s3">>;
 url2service(<<"http:", _/binary>>) -> <<"s3">>;
 url2service(<<"ftps:", _/binary>>) -> <<"ftp">>;
-url2service(<<"ftp:", _/binary>>) -> <<"ftp">>.
+url2service(<<"ftp:", _/binary>>) -> <<"ftp">>;
+url2service(<<"webdavs:", _/binary>>) -> <<"webdav">>;
+url2service(<<"webdav:", _/binary>>) -> <<"webdav">>;
+url2service(<<"davs:", _/binary>>) -> <<"webdav">>;
+url2service(<<"dav:", _/binary>>) -> <<"webdav">>.
 
 service2mod(<<"s3">>) -> s3filez;
-service2mod(<<"ftp">>) -> ftpfilez.
+service2mod(<<"ftp">>) -> ftpfilez;
+service2mod(<<"webdav">>) -> webdavfilez.
 
 % Try a put, get, and delete sequence
 testcred(Service, S3Url, S3Key, S3Secret, IsCreateBucket)
@@ -116,7 +121,9 @@ testcred(Service, S3Url, S3Key, S3Secret, IsCreateBucket)
     end.
 
 testcred_file(Service, S3Url, S3Key, S3Secret)
-    when is_binary(S3Url), is_binary(S3Key), is_binary(S3Secret) ->
+    when is_binary(S3Url),
+         is_binary(S3Key),
+         is_binary(S3Secret) ->
     Cred = {S3Key, S3Secret},
     Url = <<S3Url/binary, $/, "-zotonic-filestore-test-file-">>,
     Data = iolist_to_binary([?DATA, " ", z_ids:identifier()]),

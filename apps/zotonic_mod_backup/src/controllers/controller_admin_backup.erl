@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010-2022 Marc Worrell
 %% @doc Overview of all backups.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -38,9 +38,18 @@ is_authorized(Context) ->
 
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
+    Config = case mod_backup:check_configuration() of
+        {ok, Cfg} ->
+            Cfg#{
+                ok => true
+            };
+        {error, _} ->
+            #{}
+    end,
     Vars = [
+        {is_filestore_enabled, mod_backup:is_filestore_enabled(Context)},
         {page_admin_backup, true},
-        {backup_config, mod_backup:check_configuration()},
+        {backup_config, Config},
         {backup_in_progress, mod_backup:backup_in_progress(Context)}
     ],
 	Html = z_template:render("admin_backup.tpl", Vars, Context),

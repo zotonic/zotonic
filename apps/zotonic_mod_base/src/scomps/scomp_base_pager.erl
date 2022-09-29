@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2022 Marc Worrell
 %% @doc Show the pager for the search result
-%% @enddoc
+%% @end
 
 %% Copyright 2009-2022 Marc Worrell
 %%
