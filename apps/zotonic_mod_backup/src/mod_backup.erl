@@ -381,7 +381,7 @@ maybe_daily_dump(State) ->
     case Time >= {3,0,0} of
         true ->
             Ts = lists:map(
-                fun(#{ <<"timestamp">> := T }) -> T end,
+                fun(#{ timestamp := T }) -> T end,
                 list_backup_files(Context)),
             DoStart = case Ts of
                 [] -> true;
