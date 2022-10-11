@@ -5,7 +5,7 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--define(fequal(A, B),  abs(A - B) < 0.001).
+-define(fequal(A, B),  true = (abs(A - B) < 0.001)).
 
 is_site_url_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
@@ -31,7 +31,7 @@ round_significant_test() ->
     1000 = filter_round_significant:round_significant(1256, 1, C),
 
     ?fequal(1235.0, filter_round_significant:round_significant(1234.56, 4, C)),
-    ?fequal(1235.6, filter_round_significant:round_significant(1234.56, 5, C)),
+    ?fequal(1234.6, filter_round_significant:round_significant(1234.56, 5, C)),
     ?fequal(1200.0, filter_round_significant:round_significant(1234.56, 2, C)),
 
     ok.
