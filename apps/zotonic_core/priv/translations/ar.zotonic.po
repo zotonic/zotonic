@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-10-11 13:31\n"
+"PO-Revision-Date: 2022-10-11 14:50\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -2345,7 +2345,7 @@ msgstr "الإصدار Zotonic"
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:159./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:116./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:96
 msgid "about {n} items found"
-msgstr ""
+msgstr "تم العثور على حوالي {n} عنصر"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
 msgid "add media item"
@@ -2457,7 +2457,7 @@ msgstr "تفضل بزيارة الموقع"
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:160./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:117./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:57
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
 msgid "{n} items found"
-msgstr ""
+msgstr "تم العثور على {n} عناصر"
 
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:1
 msgid "Are you sure you want to delete the following categories:"
@@ -4403,7 +4403,7 @@ msgstr "انقر فوق قائمة <b>واستعد إصدارًا سابقًا</
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
-msgstr ""
+msgstr "مخزن الملفات السحابي ممكّن. لن يتم نسخ الملفات المحلية احتياطيًا. تأكد من أن نظام تخزين الملفات السحابي الخاص بك يحتوي على نسخة احتياطية مناسبة."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
 msgid "Deleted"
@@ -4435,7 +4435,7 @@ msgstr "عمل نسخة احتياطية يومية من قاعدة البيان
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:46
 msgid "Make a daily backup of the database."
-msgstr ""
+msgstr "عمل نسخة احتياطية يومية من قاعدة البيانات."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:45
 msgid "No backups present."
@@ -4443,7 +4443,7 @@ msgstr "لا توجد نسخ احتياطية."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:36
 msgid "Not uploaded to filestore"
-msgstr ""
+msgstr "لم يتم تحميلها إلى مخزن الملفات"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:68
 msgid "Previous"
@@ -4507,11 +4507,11 @@ msgstr "ابدأ النسخ الاحتياطي لقاعدة البيانات ف�
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:83
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
-msgstr ""
+msgstr "لم يتم العثور على الأمر \"pg_dump\" في المسار. اضبط zotonic.config مفتاح التكوين \"pg_dump\" على المسار إلى <tt>pg_dump</tt> والعودة إلى هذه الصفحة."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:86
 msgid "The \"tar\" command was not found in the path. Set in zotonic.config the \"tar\" config key to the path to <tt>tar</tt> and return to this page."
-msgstr ""
+msgstr "لم يتم العثور على الأمر \"tar\" في المسار. اضبط zotonic.config مفتاح التكوين \"tar\" على المسار إلى <tt>tar</tt> والعودة إلى هذه الصفحة."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "The backup comprises two parts, the database and the uploaded files."
@@ -4527,7 +4527,7 @@ msgstr "سيؤدي هذا إلى استبدال صفحتك بمحتويات مل
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:32
 msgid "Uploaded to filestore"
-msgstr ""
+msgstr "تم الرفع إلى مخزن الملفات"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:94
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
@@ -4537,7 +4537,7 @@ msgstr "تحذير"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:26
 msgid "Y-m-d H:i – l"
-msgstr ""
+msgstr "Ymd H: أنا - ل"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:72./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:75./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:84
 msgid "You are not allowed to see the revisions"
@@ -4545,7 +4545,7 @@ msgstr "لا يسمح لك أن ترى المراجعات"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
 msgid "You can have one backup per day of the week, older ones will be overwritten."
-msgstr ""
+msgstr "يمكنك الحصول على نسخة احتياطية واحدة كل يوم من أيام الأسبوع ، وسيتم استبدال النسخ الاحتياطية القديمة."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
@@ -5626,7 +5626,7 @@ msgstr "هل أنت متأكد أنك تريد نقل جميع الملفات إ
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
 msgid "Are you sure you want to move all files to the disk of the server?"
-msgstr ""
+msgstr "هل أنت متأكد أنك تريد نقل جميع الملفات إلى قرص الخادم؟"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
 msgid "Base URL"
@@ -5646,7 +5646,7 @@ msgstr "تكوين Cloud File Store"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:121
 msgid "Cloud File Store Utilities and Statistics"
-msgstr ""
+msgstr "أدوات تخزين الملفات السحابية والإحصائيات"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:130
 msgid "Cloud Files"
@@ -5662,7 +5662,7 @@ msgstr "تعذر الوصول إلى الخدمة ، تحقق جيدًا من ا
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
 msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
-msgstr ""
+msgstr "تدعم Zotonic حاليًا FTP والخدمات المتوافقة مع واجهة برمجة تطبيقات خدمات الملفات S3. وتشمل هذه:"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:153
 msgid "Delete Queue"
@@ -5678,7 +5678,7 @@ msgstr "تنزيل قائمة الانتظار"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
 msgid "Enable this to let the filestore act as a backup of  your local media files."
-msgstr ""
+msgstr "قم بتمكين هذا للسماح لملف الملف بالعمل كنسخة احتياطية لملفات الوسائط المحلية الخاصة بك."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:205
 msgid "Ensure yourself there is enough disk space before starting this process."
@@ -5690,27 +5690,27 @@ msgstr "الملفات"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:45
 msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
-msgstr ""
+msgstr "بالنسبة إلى FTP ، يجب أن يبدأ عنوان URL بـ <b><tt>ftps:</tt></b> أو <b><tt>ftp:</tt></b>"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
 msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
-msgstr ""
+msgstr "بالنسبة إلى S3 ، يجب أن يبدأ عنوان URL بـ <b><tt>https:</tt></b> أو <b><tt>http:</tt></b>"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
-msgstr ""
+msgstr "بالنسبة إلى WebDAV ، يجب أن يبدأ عنوان URL بـ <b><tt>webdavs:</tt></b> أو <b><tt>webdav:</tt></b>"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
-msgstr ""
+msgstr "إذا قمت بتحديد \"الاحتفاظ بالملفات المحلية بعد التحميل إلى مخزن الملفات السحابي\" ، فلن يتم حذف الملفات المحلية ، حيث تعتبر الملفات البعيدة نسخة احتياطية من الملفات المحلية."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
-msgstr ""
+msgstr "إذا حددت \"الاحتفاظ بالملفات المحلية بعد التحميل إلى مخزن الملفات السحابي\" ، فلن يتم حذف الملفات البعيدة ، حيث تعتبر الملفات البعيدة نسخة احتياطية من الملفات المحلية."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:17
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
-msgstr ""
+msgstr "إذا كنت تستخدم خادم FTP ، فيجب أن يدعم هذا الخادم FTPS (بروتوكول نقل الملفات الآمن)"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:94
 msgid "Immediately"
@@ -5718,7 +5718,7 @@ msgstr "فورا"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:74
 msgid "Keep local files after upload to the cloud file store"
-msgstr ""
+msgstr "احتفظ بالملفات المحلية بعد تحميلها إلى مخزن الملفات السحابي"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:129
 msgid "Local Files"
@@ -5730,11 +5730,11 @@ msgstr "موارد وسائل الإعلام"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:187
 msgid "Move all local files to the remote storage"
-msgstr ""
+msgstr "انقل جميع الملفات المحلية إلى التخزين البعيد"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:215
 msgid "Move all remote files to local"
-msgstr ""
+msgstr "انقل جميع الملفات البعيدة إلى الملفات المحلية"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:192
 msgid "Move files to cloud"
@@ -5742,7 +5742,7 @@ msgstr "نقل الملفات إلى السحابة"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:220
 msgid "Move files to server disk"
-msgstr ""
+msgstr "نقل الملفات إلى قرص الخادم"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:40
@@ -5751,11 +5751,11 @@ msgstr "أبدا"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
 msgid "S3 API Key or FTP/WebDAV username"
-msgstr ""
+msgstr "مفتاح S3 API أو اسم مستخدم FTP / WebDAV"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:56
 msgid "S3 API Secret or FTP/WebDAV password"
-msgstr ""
+msgstr "S3 API Secret أو كلمة مرور FTP / WebDAV"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:33
 msgid "S3 Cloud Location and Credentials"
@@ -5775,7 +5775,7 @@ msgstr "تخزين"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:173
 msgid "There is a 1 minute wait before files are uploaded."
-msgstr ""
+msgstr "هناك دقيقة واحدة من الانتظار قبل أن يتم تحميل الملفات."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:172
 msgid "This will queue the files for later asynchronous upload."
@@ -5783,7 +5783,7 @@ msgstr "سيؤدي هذا إلى وضع الملفات في قائمة انتظ�
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
-msgstr ""
+msgstr "حاول إنشاء حاوية S3 خاصة إذا لم تكن حاوية S3 موجودة"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:151
 msgid "Upload Queue"
@@ -5795,11 +5795,11 @@ msgstr "قم بتحميل ملفات وسائط جديدة إلى مخزن ال�
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
 msgid "With FTP and WebDAV the directories are always created automatically."
-msgstr ""
+msgstr "باستخدام FTP و WebDAV ، يتم دائمًا إنشاء الدلائل تلقائيًا."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:19
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
-msgstr ""
+msgstr "باستخدام WebDAV ، يتم نقل اسم المستخدم وكلمة المرور بشكل واضح ، لذا تأكد من استخدام <tt>webdavs:</tt> URLs (التي تستخدم https)."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:235./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:63./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:70./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:77
 msgid "You are not allowed to change these settings."
