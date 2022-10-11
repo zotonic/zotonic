@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-10-11 13:31\n"
+"PO-Revision-Date: 2022-10-11 14:50\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -2345,7 +2345,7 @@ msgstr "Zotonic版本"
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:159./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:116./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:96
 msgid "about {n} items found"
-msgstr ""
+msgstr "找到约 {n} 件商品"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
 msgid "add media item"
@@ -2457,7 +2457,7 @@ msgstr "查看站点"
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:160./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:117./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:57
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
 msgid "{n} items found"
-msgstr ""
+msgstr "找到{n} 件商品"
 
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:1
 msgid "Are you sure you want to delete the following categories:"
@@ -4403,7 +4403,7 @@ msgstr "点击<b>列出并恢复到之前的版本</b>来预览本页面的之�
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
-msgstr ""
+msgstr "云文件存储已启用。不会备份本地文件。确保您的云文件存储系统具有正确的备份。"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
 msgid "Deleted"
@@ -4435,7 +4435,7 @@ msgstr "对数据库和上传文件每天做备份。"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:46
 msgid "Make a daily backup of the database."
-msgstr ""
+msgstr "每天对数据库进行备份。"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:45
 msgid "No backups present."
@@ -4443,7 +4443,7 @@ msgstr "没有提供备份。"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:36
 msgid "Not uploaded to filestore"
-msgstr ""
+msgstr "未上传到文件存储"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:68
 msgid "Previous"
@@ -4507,11 +4507,11 @@ msgstr "现在开始只备份数据库"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:83
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
-msgstr ""
+msgstr "在路径中找不到“pg_dump”命令。在 zotonic.config 中将“pg_dump”配置键设置为 <tt>pg_dump</tt> 的路径并返回此页面。"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:86
 msgid "The \"tar\" command was not found in the path. Set in zotonic.config the \"tar\" config key to the path to <tt>tar</tt> and return to this page."
-msgstr ""
+msgstr "在路径中找不到“tar”命令。在 zotonic.config 中将“tar”配置键设置为 <tt>tar</tt> 的路径并返回此页面。"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "The backup comprises two parts, the database and the uploaded files."
@@ -4527,7 +4527,7 @@ msgstr "这将会使用备份文件内容覆盖你的页面。"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:32
 msgid "Uploaded to filestore"
-msgstr ""
+msgstr "上传到文件存储"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:94
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
@@ -4537,7 +4537,7 @@ msgstr "警告"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:26
 msgid "Y-m-d H:i – l"
-msgstr ""
+msgstr "Ymd H:i - l"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:72./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:75./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:84
 msgid "You are not allowed to see the revisions"
@@ -4545,7 +4545,7 @@ msgstr "您不允许查看修改的内容"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
 msgid "You can have one backup per day of the week, older ones will be overwritten."
-msgstr ""
+msgstr "您可以在一周中的每一天进行一次备份，旧的将被覆盖。"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
@@ -5626,7 +5626,7 @@ msgstr "你确定要把所有文件都移到云端吗？"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
 msgid "Are you sure you want to move all files to the disk of the server?"
-msgstr ""
+msgstr "您确定要将所有文件移动到服务器的磁盘吗？"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
 msgid "Base URL"
@@ -5646,7 +5646,7 @@ msgstr "云文件存储配置"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:121
 msgid "Cloud File Store Utilities and Statistics"
-msgstr ""
+msgstr "云文件存储实用程序和统计信息"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:130
 msgid "Cloud Files"
@@ -5662,7 +5662,7 @@ msgstr "无法访问服务，请仔细检查您的设置并再次尝试。确保
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
 msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
-msgstr ""
+msgstr "目前 Zotonic 支持 FTP 和与 S3 文件服务 API 兼容的服务。这些包括："
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:153
 msgid "Delete Queue"
@@ -5678,7 +5678,7 @@ msgstr "下载队列"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
 msgid "Enable this to let the filestore act as a backup of  your local media files."
-msgstr ""
+msgstr "启用此选项可让文件存储充当本地媒体文件的备份。"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:205
 msgid "Ensure yourself there is enough disk space before starting this process."
@@ -5690,27 +5690,27 @@ msgstr "文件"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:45
 msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
-msgstr ""
+msgstr "对于 FTP，URL 必须以 <b><tt>ftps:</tt></b> 或 <b><tt>ftp:</tt></b>开头"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
 msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
-msgstr ""
+msgstr "对于 S3，URL 必须以 <b><tt>https:</tt></b> 或 <b><tt>http:</tt></b>开头"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
-msgstr ""
+msgstr "对于 WebDAV，URL 必须以 <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>开头"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
-msgstr ""
+msgstr "如果您选择了“上传到云文件存储后保留本地文件”，则不会删除本地文件，因为远程文件被视为本地文件的备份。"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
-msgstr ""
+msgstr "如果您选择了“上传到云文件存储后保留本地文件”，则不会删除远程文件，因为远程文件被视为本地文件的备份。"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:17
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
-msgstr ""
+msgstr "如果您使用 FTP 服务器，那么该服务器必须支持 FTPS（安全 ftp）"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:94
 msgid "Immediately"
@@ -5718,7 +5718,7 @@ msgstr "立即"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:74
 msgid "Keep local files after upload to the cloud file store"
-msgstr ""
+msgstr "上传到云文件存储后保留本地文件"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:129
 msgid "Local Files"
@@ -5730,11 +5730,11 @@ msgstr "媒体资源"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:187
 msgid "Move all local files to the remote storage"
-msgstr ""
+msgstr "将所有本地文件移动到远程存储"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:215
 msgid "Move all remote files to local"
-msgstr ""
+msgstr "将所有远程文件移动到本地"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:192
 msgid "Move files to cloud"
@@ -5742,7 +5742,7 @@ msgstr "移动文件到云端"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:220
 msgid "Move files to server disk"
-msgstr ""
+msgstr "将文件移动到服务器磁盘"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:40
@@ -5751,11 +5751,11 @@ msgstr "从不"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
 msgid "S3 API Key or FTP/WebDAV username"
-msgstr ""
+msgstr "S3 API 密钥或 FTP/WebDAV 用户名"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:56
 msgid "S3 API Secret or FTP/WebDAV password"
-msgstr ""
+msgstr "S3 API 密码或 FTP/WebDAV 密码"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:33
 msgid "S3 Cloud Location and Credentials"
@@ -5775,7 +5775,7 @@ msgstr "存储"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:173
 msgid "There is a 1 minute wait before files are uploaded."
-msgstr ""
+msgstr "上传文件前需要等待 1 分钟。"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:172
 msgid "This will queue the files for later asynchronous upload."
@@ -5783,7 +5783,7 @@ msgstr "这将为以后的异步上传文件排队。"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
-msgstr ""
+msgstr "如果 S3 存储桶不存在，请尝试创建私有 S3 存储桶"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:151
 msgid "Upload Queue"
@@ -5795,11 +5795,11 @@ msgstr "将新媒体文件上传到云文件存储中"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
 msgid "With FTP and WebDAV the directories are always created automatically."
-msgstr ""
+msgstr "使用 FTP 和 WebDAV，目录总是自动创建的。"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:19
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
-msgstr ""
+msgstr "使用 WebDAV，用户名和密码以明文形式传输，因此请确保您使用 <tt>个 webdav：</tt> URL（使用 https）。"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:235./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:63./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:70./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:77
 msgid "You are not allowed to change these settings."
