@@ -396,7 +396,7 @@ to_string(X, C = #{colored := IsColored, colored_text := CT}) when is_binary(X) 
         {_, _, _} -> % error or incomplete
             escape(format_str(C, X));
         List ->
-            case io_lib:printable_list(List) of
+            case io_lib:printable_unicode_list(List) of
                 true -> escape(List);
                 _ -> escape(format_str(C, X))
             end
