@@ -14,4 +14,5 @@ Numbers
    ../filter_minmax
    ../filter_rand
    ../filter_round
+   ../filter_round_significant
    ../filter_to_integer
