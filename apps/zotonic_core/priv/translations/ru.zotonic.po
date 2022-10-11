@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-10-11 13:31\n"
+"PO-Revision-Date: 2022-10-11 14:50\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2345,7 +2345,7 @@ msgstr "Версия Zotonic"
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:159./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:116./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:96
 msgid "about {n} items found"
-msgstr ""
+msgstr "около {n} предметов найдено"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
 msgid "add media item"
@@ -2457,7 +2457,7 @@ msgstr "перейти на сайт"
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:160./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:117./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:57
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
 msgid "{n} items found"
-msgstr ""
+msgstr "{n} элементов найдено"
 
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:1
 msgid "Are you sure you want to delete the following categories:"
@@ -4403,7 +4403,7 @@ msgstr "Нажмите на <b>Список и восстановите боле
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
-msgstr ""
+msgstr "Облачное хранилище файлов включено. Локальные файлы не будут скопированы. Убедитесь, что в вашей системе облачного хранилища файлов есть надлежащая резервная копия."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
 msgid "Deleted"
@@ -4435,7 +4435,7 @@ msgstr "Ежедневно делайте резервную копию базы
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:46
 msgid "Make a daily backup of the database."
-msgstr ""
+msgstr "Делайте ежедневное резервное копирование базы данных."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:45
 msgid "No backups present."
@@ -4443,7 +4443,7 @@ msgstr "Нет резервных копий."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:36
 msgid "Not uploaded to filestore"
-msgstr ""
+msgstr "Не загружается в файлообменник"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:68
 msgid "Previous"
@@ -4507,11 +4507,11 @@ msgstr "Начните резервное копирование только б
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:83
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
-msgstr ""
+msgstr "Команда \"pg_dump\" не найдена в пути. Установите в zotonic.config ключ конфигурации «pg_dump» на путь к <tt>pg_dump</tt> и вернитесь на эту страницу."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:86
 msgid "The \"tar\" command was not found in the path. Set in zotonic.config the \"tar\" config key to the path to <tt>tar</tt> and return to this page."
-msgstr ""
+msgstr "Команда «tar» не найдена в пути. Установите в zotonic.config ключ конфигурации «tar» на путь к <tt>tar</tt> и вернитесь на эту страницу."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "The backup comprises two parts, the database and the uploaded files."
@@ -4527,7 +4527,7 @@ msgstr "Это перезапишет вашу страницу содержим
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:32
 msgid "Uploaded to filestore"
-msgstr ""
+msgstr "Загружено в файлообменник"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:94
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
@@ -4537,7 +4537,7 @@ msgstr "Предупреждение"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:26
 msgid "Y-m-d H:i – l"
-msgstr ""
+msgstr "Ymd H: я - л"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:72./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:75./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:84
 msgid "You are not allowed to see the revisions"
@@ -4545,7 +4545,7 @@ msgstr "Вы не имеете права видеть ревизии"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
 msgid "You can have one backup per day of the week, older ones will be overwritten."
-msgstr ""
+msgstr "У вас может быть одна резервная копия в день недели, более старые будут перезаписаны."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
@@ -5626,7 +5626,7 @@ msgstr "Вы уверены, что хотите переместить все �
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
 msgid "Are you sure you want to move all files to the disk of the server?"
-msgstr ""
+msgstr "Вы уверены, что хотите переместить все файлы на диск сервера?"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
 msgid "Base URL"
@@ -5646,7 +5646,7 @@ msgstr "Настройка хранилища файлов в облаке"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:121
 msgid "Cloud File Store Utilities and Statistics"
-msgstr ""
+msgstr "Утилиты и статистика облачного хранилища файлов"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:130
 msgid "Cloud Files"
@@ -5662,7 +5662,7 @@ msgstr "Не удалось получить доступ к службе, дв�
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
 msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
-msgstr ""
+msgstr "В настоящее время Zotonic поддерживает FTP и службы, совместимые с API файловых служб S3. Это включает:"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:153
 msgid "Delete Queue"
@@ -5678,7 +5678,7 @@ msgstr "Очередь загрузки"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
 msgid "Enable this to let the filestore act as a backup of  your local media files."
-msgstr ""
+msgstr "Включите это, чтобы хранилище файлов действовало как резервная копия ваших локальных медиафайлов."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:205
 msgid "Ensure yourself there is enough disk space before starting this process."
@@ -5690,27 +5690,27 @@ msgstr "Файлы"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:45
 msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
-msgstr ""
+msgstr "Для FTP URL-адрес должен начинаться с <b><tt>ftps:</tt></b> или <b><tt>ftp:</tt></b>"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
 msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
-msgstr ""
+msgstr "Для S3 URL должен начинаться с <b><tt>https:</tt></b> или <b><tt>http:</tt></b>"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
-msgstr ""
+msgstr "Для WebDAV URL должен начинаться с <b><tt>webdavs:</tt></b> или <b><tt>webdav:</tt></b>"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
-msgstr ""
+msgstr "Если вы выбрали «Сохранить локальные файлы после загрузки в облачное хранилище файлов», то локальные файлы не удаляются, так как удаленные файлы считаются резервной копией локальных файлов."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
-msgstr ""
+msgstr "Если вы выбрали «Сохранить локальные файлы после загрузки в облачное хранилище файлов», то удаленные файлы не удаляются, так как удаленные файлы считаются резервной копией локальных файлов."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:17
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
-msgstr ""
+msgstr "Если вы используете FTP-сервер, то этот сервер ДОЛЖЕН поддерживать FTPS (защищенный ftp)."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:94
 msgid "Immediately"
@@ -5718,7 +5718,7 @@ msgstr "Немедленно"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:74
 msgid "Keep local files after upload to the cloud file store"
-msgstr ""
+msgstr "Сохраняйте локальные файлы после загрузки в облачное хранилище файлов"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:129
 msgid "Local Files"
@@ -5730,11 +5730,11 @@ msgstr "Медиа-ресурсы"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:187
 msgid "Move all local files to the remote storage"
-msgstr ""
+msgstr "Переместите все локальные файлы в удаленное хранилище"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:215
 msgid "Move all remote files to local"
-msgstr ""
+msgstr "Переместить все удаленные файлы в локальные"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:192
 msgid "Move files to cloud"
@@ -5742,7 +5742,7 @@ msgstr "Переместить файлы в облако"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:220
 msgid "Move files to server disk"
-msgstr ""
+msgstr "Переместить файлы на диск сервера"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:40
@@ -5751,11 +5751,11 @@ msgstr "Никогда"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
 msgid "S3 API Key or FTP/WebDAV username"
-msgstr ""
+msgstr "Ключ S3 API или имя пользователя FTP/WebDAV"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:56
 msgid "S3 API Secret or FTP/WebDAV password"
-msgstr ""
+msgstr "Секрет S3 API или пароль FTP/WebDAV"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:33
 msgid "S3 Cloud Location and Credentials"
@@ -5775,7 +5775,7 @@ msgstr "Хранение"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:173
 msgid "There is a 1 minute wait before files are uploaded."
-msgstr ""
+msgstr "Перед загрузкой файлов требуется 1 минута ожидания."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:172
 msgid "This will queue the files for later asynchronous upload."
@@ -5783,7 +5783,7 @@ msgstr "При этом файлы будут поставлены в очере
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
-msgstr ""
+msgstr "Попробуйте создать частную корзину S3, если корзина S3 не существует."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:151
 msgid "Upload Queue"
@@ -5795,11 +5795,11 @@ msgstr "Загрузка новых мультимедийных файлов в
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
 msgid "With FTP and WebDAV the directories are always created automatically."
-msgstr ""
+msgstr "При использовании FTP и WebDAV каталоги всегда создаются автоматически."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:19
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
-msgstr ""
+msgstr "При использовании WebDAV имя пользователя и пароль передаются в открытом виде, поэтому убедитесь, что вы используете URL-адреса <tt>webdavs:</tt> (которые используют https)."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:235./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:63./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:70./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:77
 msgid "You are not allowed to change these settings."
