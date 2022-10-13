@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-10-11 14:50\n"
+"PO-Revision-Date: 2022-10-13 17:06\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4223,7 +4223,7 @@ msgstr "Проверьте свой аккаунт"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:104
 msgid "We cannot connect you to the right account. Contact support of {site} to help you merge the accounts and then try again."
-msgstr "Мы не можем подключить вас к нужному аккаунту. Обратитесь в службу поддержки {site} , за помощью в объединении учетных записей, а затем повторите попытку."
+msgstr "Мы не можем подключить вас к нужному аккаунту. Обратитесь в службу поддержки {site} за помощью в объединении учетных записей, а затем повторите попытку."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:113
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
@@ -4243,7 +4243,7 @@ msgstr "Вы собираетесь войти в систему."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
 msgid "You are now signed in."
-msgstr "Теперь вы подписаны."
+msgstr "Теперь вы вошли в систему"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon.tpl:32
 msgid "You are signed in"
