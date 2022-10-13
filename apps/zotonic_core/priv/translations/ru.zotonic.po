@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-10-13 18:13\n"
+"PO-Revision-Date: 2022-10-13 20:07\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4280,15 +4280,15 @@ msgstr "Вы получили это письмо, потому что запр�
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:111
 msgid "You used another account on {service} than was expected."
-msgstr "Вы использовали другую учетную запись на {service} , чем ожидалось."
+msgstr "Вы использовали не ту учетную запись на {service} , которая ожидалась."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:5
 msgid "You'll need to create a new one."
-msgstr "Тебе нужно будет создать новую."
+msgstr "Вам нужно будет создать новый."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:98
 msgid "You're almost done! To make sure you are really you, we ask you to confirm your account from your email address."
-msgstr "Ты почти закончил! Чтобы удостовериться, что вы действительно вы, мы просим вас подтвердить вашу учетную запись с вашего адреса электронной почты."
+msgstr "Вы почти закончили! Чтобы удостовериться, что вы - это действительно вы, мы просим вас подтвердить вашу учетную запись с вашего адреса электронной почты."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:9./apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:17
 msgid "You've requested a new password for"
