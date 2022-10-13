@@ -8,7 +8,7 @@
 
 -module (z_tags).
 
--include("include/zotonic.hrl").
+-include("zotonic.hrl").
 
 -export([render_tag/2, render_tag/3, render_tag/4]).
 -export([optional_escape_property/1]).
