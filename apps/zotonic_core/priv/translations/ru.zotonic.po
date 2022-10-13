@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-10-13 17:06\n"
+"PO-Revision-Date: 2022-10-13 18:13\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4263,7 +4263,7 @@ msgstr "Вы можете войти в систему, используя сл�
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:75
 msgid "You have to share your email address to be able to log in."
-msgstr "Вы должны поделиться своим адресом электронной почты, чтобы иметь возможность войти в систему."
+msgstr "Вы должны сообщить свой адрес электронной почты, чтобы иметь возможность войти в систему."
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:17
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:23
@@ -4272,7 +4272,7 @@ msgstr "Вы можете попробовать войти в систему к
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:11
 msgid "You need to be allowed to edit the system configuration to view or change the configured App Keys."
-msgstr "Для просмотра или изменения настроенных Клавиш приложений необходимо иметь возможность редактировать конфигурацию системы."
+msgstr "Для просмотра или изменения настроенных Клавиш приложений необходимо иметь разрешение редактировать конфигурацию системы."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:36
 msgid "You received this email because you requested a password reset for your account by entering your username or email address. You will not receive any additional emails because of this request."
