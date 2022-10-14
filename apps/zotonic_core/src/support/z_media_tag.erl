@@ -90,7 +90,7 @@ scomp_data_url(IdOrName, Options, Context) ->
     when MediaReference :: undefined
                          | m_rsc:resource_id()
                          | #rsc_list{}
-                         | proplists:list()
+                         | proplists:proplist()
                          | file:filename_all().
 viewer(undefined, _Options, _Context) ->
     {ok, <<>>};

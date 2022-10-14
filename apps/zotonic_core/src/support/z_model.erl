@@ -40,7 +40,7 @@
 -type model_callback() :: m_get | m_post | m_delete.
 -type path_element() :: atom() | binary() | term().
 -type path() :: list( path_element() ).
--type opt_message() :: mqtt_packet_map:mqtt_message() | undefined.
+-type opt_message() :: mqtt_packet_map:mqtt_packet() | undefined.
 
 -export_type([
     model_name/0,

@@ -98,7 +98,7 @@ m_get(_Vs, _Msg, _Context) ->
 
 
 %% @doc Get the stats for the mailing. Number of recipients and list of scheduled resources.
--spec get_stats( m_rsc:resource_id(), z:contex() ) -> map().
+-spec get_stats( m_rsc:resource_id(), z:context() ) -> map().
 get_stats(ListId, Context) ->
     Counts = z_mailinglist_recipients:count_recipients(ListId, Context),
     Scheduled = z_db:q("

@@ -572,17 +572,17 @@ set_reqdata(Req, Context) when is_map(Req); Req =:= undefined ->
     Context#context{ cowreq = Req }.
 
 %% @doc Return the cowmachine request data of the context
--spec get_envdata(z:context()) -> cowmachine_middleware:env() | undefined.
+-spec get_envdata(z:context()) -> cowboy_middleware:env() | undefined.
 get_envdata(Context) ->
     Context#context.cowenv.
 
 %% @doc Set the cowmachine request data of the context
--spec set_envdata(cowmachine_middleware:env() | undefined, z:context()) -> z:context().
+-spec set_envdata(cowboy_middleware:env() | undefined, z:context()) -> z:context().
 set_envdata(Env, Context) when is_map(Env); Env =:= undefined ->
     Context#context{ cowenv = Env }.
 
 %% @doc Set the cowmachine request data of the context
--spec init_cowdata(cowboy_req:req(), cowmachine_middleware:env(), z:context()) -> z:context().
+-spec init_cowdata(cowboy_req:req(), cowboy_middleware:env(), z:context()) -> z:context().
 init_cowdata(Req, Env, Context) when is_map(Req); Req =:= undefined ->
     Context#context{
         cowreq = Req,
