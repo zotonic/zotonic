@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-10-14 00:55\n"
+"PO-Revision-Date: 2022-10-14 14:32\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4355,7 +4355,7 @@ msgstr "user@example.com"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:3
 msgid "Admin Backups"
-msgstr "Резервные копии администратора"
+msgstr "Администрирование бэкапа"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:28
 msgid "Are you sure you want to revert to this version?"
