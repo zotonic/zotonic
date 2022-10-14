@@ -3,10 +3,12 @@
 
 name: Publish
 
-# Start if a release is published
+# Start if a release is published or manually
 on:
   release:
     types: [published]
+
+  workflow_dispatch:
 
 # Publish a new version IFF the tests and xref are passing
 jobs:
