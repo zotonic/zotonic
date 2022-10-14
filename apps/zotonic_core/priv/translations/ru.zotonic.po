@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-10-14 00:55\n"
+"PO-Revision-Date: 2022-10-14 19:28\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4355,7 +4355,7 @@ msgstr "user@example.com"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:3
 msgid "Admin Backups"
-msgstr "Резервные копии администратора"
+msgstr "Администрирование бэкапа"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:28
 msgid "Are you sure you want to revert to this version?"
@@ -4379,7 +4379,7 @@ msgstr "Резервное копирование &amp; Восстановлен
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:12
 msgid "Backup and restore options for your content."
-msgstr "Функции резервного копирования и восстановления содержимого."
+msgstr "Параметры резервного копирования и восстановления содержимого."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:9
 msgid "Backups"
@@ -4387,7 +4387,7 @@ msgstr "Резервные копии"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:116
 msgid "Changed configuration."
-msgstr "Измененная конфигурация."
+msgstr "Конфигурация изменена."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:10
 msgid "Changes since"
@@ -4399,7 +4399,7 @@ msgstr "Проверьте и, возможно, восстановите бол
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:13
 msgid "Click on <b>List and restore an earlier version</b> to get an overview of earlier saved versions of this page.<br/>You can also save the complete contents of a page to a file. Later you can reload this file, replacing the current page contents. Note that the file does not contain your unsaved changes. Connections and media are not saved as well."
-msgstr "Нажмите на <b>Список и восстановите более раннюю версию</b> , чтобы получить обзор ранее сохраненных версий этой страницы.<br/>Вы также можете сохранить полное содержимое страницы в файл. Позже вы можете перезагрузить этот файл, заменив текущее содержимое страницы. Обратите внимание, что файл не содержит ваших несохраненных изменений. Подключения и носители также не сохраняются."
+msgstr "Нажмите на <b>Пролистать и восстановить более раннюю версию</b> , чтобы просмотреть ранее сохраненные версии этой страницы.<br/>Вы также можете сохранить полное содержимое страницы в файл. Позже вы можете заново загрузить этот файл, заменив текущее содержимое страницы. Обратите внимание, что файл не содержит ваших несохраненных изменений. Связи и медиаматериалы также не сохраняются."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
@@ -4427,7 +4427,7 @@ msgstr "Справка о резервном копировании &amp; вос
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:24
 msgid "List and restore an earlier version"
-msgstr "Составить список и восстановить более раннюю версию"
+msgstr "Пролистать и восстановить более раннюю версию"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
 msgid "Make a daily backup of the database and uploaded files."
