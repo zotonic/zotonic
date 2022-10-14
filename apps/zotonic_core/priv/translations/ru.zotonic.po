@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-10-14 14:32\n"
+"PO-Revision-Date: 2022-10-14 16:01\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4379,7 +4379,7 @@ msgstr "Резервное копирование &amp; Восстановлен
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:12
 msgid "Backup and restore options for your content."
-msgstr "Функции резервного копирования и восстановления содержимого."
+msgstr "Параметры резервного копирования и восстановления содержимого."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:9
 msgid "Backups"
@@ -4387,7 +4387,7 @@ msgstr "Резервные копии"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:116
 msgid "Changed configuration."
-msgstr "Измененная конфигурация."
+msgstr "Конфигурация изменена."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:10
 msgid "Changes since"
