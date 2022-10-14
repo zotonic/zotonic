@@ -34,7 +34,7 @@
 	delete/1
 ]).
 
--include_lib("include/zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Enable memoization for this process. You need to call set_userid/1 before memoization is effective.
 enable() ->
