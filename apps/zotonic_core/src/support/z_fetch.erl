@@ -127,7 +127,7 @@ metadata(Url, Options, Context) ->
 
 
 %% @doc Fetch data from an URL. Return the data as a data url.
--spec as_data_url( string() | binary() | undefined, z_url_fetch:options(), z:contex()) -> {ok, binary()} | {error, term()}.
+-spec as_data_url( string() | binary() | undefined, z_url_fetch:options(), z:context()) -> {ok, binary()} | {error, term()}.
 as_data_url(Url, Options, Context) ->
     case fetch(Url, Options, Context) of
         {ok, {_Final, Hs, _Size, Data}} ->

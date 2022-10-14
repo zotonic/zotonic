@@ -76,10 +76,8 @@
     busy_tracing = false :: boolean()
 }).
 
--type query_result() :: {ok, Columns :: list(), Rows :: list()}
-                      | {ok, Count :: non_neg_integer(), Columns :: list(), Rows :: list()}
-                      | {ok, Count :: non_neg_integer()}
-                      | {error, term()}.
+-type query_result() :: epgsql:reply(epgsql:equery_row())
+                      | epgsql:reply(epgsql:squery_row()).
 
 -export_type([ query_result/0 ]).
 
