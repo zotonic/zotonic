@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-10-15 00:19\n"
+"PO-Revision-Date: 2022-10-15 10:50\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4403,7 +4403,7 @@ msgstr "Нажмите на <b>Пролистать и восстановить 
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
-msgstr "Облачное хранилище файлов включено. Локальные файлы не будут скопированы. Убедитесь, что в вашей системе облачного хранилища файлов есть надлежащая резервная копия."
+msgstr "Облачное хранилище файлов включено. Локальные файлы резервироваться не будут. Обеспечьте  надлежащее резервное копирование вашей системы облачного хранилища."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
 msgid "Deleted"
