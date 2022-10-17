@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-10-14 19:28\n"
+"PO-Revision-Date: 2022-10-16 18:24\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4399,11 +4399,11 @@ msgstr "Проверьте и, возможно, восстановите бол
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:13
 msgid "Click on <b>List and restore an earlier version</b> to get an overview of earlier saved versions of this page.<br/>You can also save the complete contents of a page to a file. Later you can reload this file, replacing the current page contents. Note that the file does not contain your unsaved changes. Connections and media are not saved as well."
-msgstr "Нажмите на <b>Пролистать и восстановить более раннюю версию</b> , чтобы просмотреть ранее сохраненные версии этой страницы.<br/>Вы также можете сохранить полное содержимое страницы в файл. Позже вы можете заново загрузить этот файл, заменив текущее содержимое страницы. Обратите внимание, что файл не содержит ваших несохраненных изменений. Связи и медиаматериалы также не сохраняются."
+msgstr "Нажмите на <b>Пролистать и восстановить более раннюю версию</b> , чтобы просмотреть ранее сохраненные версии этой страницы.<br/>Вы также можете сохранить полное содержимое страницы в файл. Позже вы можете заново загрузить этот файл, заменив текущее содержимое страницы. Обратите внимание, что файл не содержит ваших несохранённых изменений. Связи и медиаматериалы также не сохраняются."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
-msgstr "Облачное хранилище файлов включено. Локальные файлы не будут скопированы. Убедитесь, что в вашей системе облачного хранилища файлов есть надлежащая резервная копия."
+msgstr "Облачное хранилище файлов включено. Локальные файлы резервироваться не будут. Обеспечьте  надлежащее резервное копирование вашей системы облачного хранилища."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
 msgid "Deleted"
@@ -4431,11 +4431,11 @@ msgstr "Пролистать и восстановить более раннюю
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
 msgid "Make a daily backup of the database and uploaded files."
-msgstr "Ежедневно делайте резервную копию базы данных и загруженных файлов."
+msgstr "Ежедневно создавать резервную копию базы данных и загруженных файлов."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:46
 msgid "Make a daily backup of the database."
-msgstr "Делайте ежедневное резервное копирование базы данных."
+msgstr "Ежедневно создавать резервную копию базы данных."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:45
 msgid "No backups present."
@@ -4443,7 +4443,7 @@ msgstr "Нет резервных копий."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:36
 msgid "Not uploaded to filestore"
-msgstr "Не загружается в файлообменник"
+msgstr "Не загружено в хранилище файлов"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:68
 msgid "Previous"
@@ -4451,7 +4451,7 @@ msgstr "Предыдущий"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:33./apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:36./apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:14
 msgid "Restore backup"
-msgstr "Восстановить резервное копирование"
+msgstr "Восстановить резервную копию"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
 msgid "Revert to this version…"
@@ -4527,7 +4527,7 @@ msgstr "Это перезапишет вашу страницу содержим
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:32
 msgid "Uploaded to filestore"
-msgstr "Загружено в файлообменник"
+msgstr "Загружено в хранилище файлов"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:94
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
