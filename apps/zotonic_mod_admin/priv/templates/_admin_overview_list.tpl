@@ -133,13 +133,16 @@ qcat
             <th width="15%">
                 {% catinclude "_admin_sort_header.tpl" m.category[qcat].is_a field=field|default:"category_id" type=type|default:"string" caption=_"Category" qsort=qsort %}
             </th>
-            <th width="15%" class="hidden-xs">
+            <th width="12%">
+                {% include "_admin_sort_header.tpl" field="publication_start" caption=_"Published on" type="date" qsort=qsort %}
+            </th>
+            <th width="12%" class="hidden-xs">
                 {% include "_admin_sort_header.tpl" field="created" caption=_"Created on" type="date" qsort=qsort %}
             </th>
-            <th width="15%">
+            <th width="12%">
                 {% include "_admin_sort_header.tpl" field="modified" caption=_"Modified on" type="date" qsort=qsort %}
             </th>
-            <th width="25%" class="hidden-xs">
+            <th width="20%" class="hidden-xs">
                 {% include "_admin_sort_header.tpl" field="modifier_id" caption=_"Modified by" type=type|default:"string" qsort=qsort %}
             </th>
         </tr>
@@ -167,6 +170,7 @@ qcat
                     {% include "_admin_overview_list_data.tpl" %}
                 {% endif %}
             </td>
+            <td class="hidden-xs">{{ id.publication_start|date:_"d M Y, H:i" }}</td>
             <td class="hidden-xs">{{ id.created|date:_"d M Y, H:i" }}</td>
             <td>{{ id.modified|date:_"d M Y, H:i" }}</td>
             <td>
