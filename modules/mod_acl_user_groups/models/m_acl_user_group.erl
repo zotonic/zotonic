@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2022 Marc Worrell
 %%
 %% @doc Model for user group memberships.
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,12 +29,15 @@
     m_value/2,
 
     is_used/2,
-    user_groups/1
+    user_groups/1,
+    user_groups/2
 ]).
 
 
 -include_lib("zotonic.hrl").
 
+m_find_value(has_user_groups, #m{value=undefined}, Context) ->
+    user_groups(Context);
 m_find_value(has_collaboration_groups, #m{value=undefined}, Context) ->
     acl_user_groups_checks:has_collab_groups(Context);
 m_find_value(is_used, #m{value=undefined} = M, _Context) ->
@@ -55,6 +58,15 @@ m_value(#m{value=undefined}, _Context) ->
 user_groups(Context) ->
     acl_user_groups_checks:user_groups(Context).
 
+user_groups(undefined, Context) ->
+    acl_user_groups_checks:has_user_groups(undefined, Context);
+user_groups(UserId, Context) when is_integer(UserId) ->
+    case z_acl:user(Context) of
+        UserId ->
+            user_groups(Context);
+        _ ->
+            acl_user_groups_checks:has_user_groups(UserId, Context)
+    end.
 
 %% @doc Check if a user group is actually in use.
 is_used(UserGroup, Context) ->

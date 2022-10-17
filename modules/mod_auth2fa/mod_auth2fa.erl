@@ -107,6 +107,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
 
      | Acc ].
 
+
 %% @doc Check the 2FA code, called after password check passed.
 observe_auth_postcheck(#auth_postcheck{ id = UserId, query_args = QueryArgs }, Context) ->
     case m_auth2fa:is_totp_enabled(UserId, Context) of
@@ -124,8 +125,8 @@ observe_auth_postcheck(#auth_postcheck{ id = UserId, query_args = QueryArgs }, C
             % Could also have a POST of the new passcode secret to be set.
             % In that case the passcode can be set for the user and 'undefined'
             % returned.
-            case m_config:get_value(mod_auth2fa, mode, Context) of
-                <<"3">> ->
+            case m_auth2fa:user_mode(UserId, Context) of
+                3 ->
                     case proplists:get_value("code-new", QueryArgs) of
                         NewCode when NewCode =/= "", NewCode =/= undefined ->
                             Secret = z_auth2fa_base32:decode(z_convert:to_binary(NewCode)),

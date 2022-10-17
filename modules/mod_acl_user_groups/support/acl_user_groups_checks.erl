@@ -30,6 +30,7 @@
         user_groups_all/1,
 
         has_collab_groups/1,
+        has_user_groups/2,
 
         acl_is_allowed/2,
         acl_logon/2,
@@ -79,7 +80,7 @@ max_upload_size_default() ->
     ?MAX_UPLOAD_SIZE_MB * 1024 * 1024.
 
 
-%% @doc Fetch the list if user groups the user is member of
+%% @doc Fetch the list of user groups the user is member of
 user_groups(#context{acl=#aclug{user_groups=Ids}}) ->
     Ids;
 user_groups(#context{user_id=UserId, acl=admin} = Context) ->
