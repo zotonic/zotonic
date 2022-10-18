@@ -27,6 +27,7 @@
     is_valid_totp_test/2,
 
     user_mode/1,
+    user_mode/2,
 
     totp_image_url/2,
     totp_disable/2,
@@ -96,6 +97,8 @@ m_find_value(is_totp_requested, #m{ value = undefined }, Context) ->
 
 m_find_value(user_mode, #m{ value = undefined }, Context) ->
     user_mode(Context);
+m_find_value(user_mode, #m{ value = UserId }, Context) when is_integer(UserId) ->
+    user_mode(UserId, Context);
 
 m_find_value(UserId, #m{ value = undefined } = M, _Context) when is_integer(UserId) ->
     M#m{ value = UserId }.
@@ -112,22 +115,22 @@ is_totp_enabled(UserId, Context) ->
 %% @doc Check the totp mode for the current user: 0 = optional, 1 = ask, 2 = required, 3 = forced
 -spec user_mode( z:context() ) -> 0 | 1 | 2 | 3.
 user_mode(Context) ->
-    case z_auth:is_auth(Context) of
-        true ->
-            case z_convert:to_integer(m_config:get_value(mod_auth2fa, mode, Context)) of
-                3 -> 3;
-                2 -> 2;
-                1 -> erlang:max( user_group_mode(Context), 1 );
-                _ -> erlang:max( user_group_mode(Context), 0 )
-            end;
-        false ->
-            0
+    user_mode(z_acl:user(Context), Context).
+
+user_mode(undefined, _Context) ->
+    0;
+user_mode(UserId, Context) ->
+    case z_convert:to_integer(m_config:get_value(mod_auth2fa, mode, Context)) of
+        3 -> 3;
+        2 -> erlang:max( user_group_mode(UserId, Context), 2 );
+        1 -> erlang:max( user_group_mode(UserId, Context), 1 );
+        _ -> erlang:max( user_group_mode(UserId, Context), 0 )
     end.
 
-user_group_mode(Context) ->
+user_group_mode(UserId, Context) ->
     case z_module_manager:active(mod_acl_user_groups, Context) of
         true ->
-            UGIds = m_acl_user_group:user_groups(Context),
+            UGIds = m_acl_user_group:user_groups(UserId, Context),
             Modes = lists:map(
                 fun(Id) ->
                     case m_rsc:p_no_acl(Id, acl_2fa, Context) of
@@ -141,6 +144,7 @@ user_group_mode(Context) ->
         false ->
             0
     end.
+
 
 %% @doc Remove the totp tokens and disable totp for the user
 -spec totp_disable( m_rsc:resource_id(), z:context() ) -> ok.
