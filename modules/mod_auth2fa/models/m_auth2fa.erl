@@ -122,7 +122,7 @@ user_mode(undefined, _Context) ->
 user_mode(UserId, Context) ->
     case z_convert:to_integer(m_config:get_value(mod_auth2fa, mode, Context)) of
         3 -> 3;
-        2 -> 2;
+        2 -> erlang:max( user_group_mode(UserId, Context), 2 );
         1 -> erlang:max( user_group_mode(UserId, Context), 1 );
         _ -> erlang:max( user_group_mode(UserId, Context), 0 )
     end.
