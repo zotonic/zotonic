@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-10-18 07:34\n"
+"PO-Revision-Date: 2022-10-18 09:04\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4499,19 +4499,19 @@ msgstr "Извините, у вас нет разрешения на измен�
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
 msgid "Start backup now"
-msgstr "Начните резервное копирование прямо сейчас"
+msgstr "Начать резервное копирование прямо сейчас"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:72
 msgid "Start database-only backup now"
-msgstr "Начните резервное копирование только базы данных"
+msgstr "Начать резервное копирование только базы данных"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:83
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
-msgstr "Команда \"pg_dump\" не найдена в пути. Установите в zotonic.config ключ конфигурации «pg_dump» на путь к <tt>pg_dump</tt> и вернитесь на эту страницу."
+msgstr "Команда \"pg_dump\" не найдена в каталогах \"path\". Укажите в zotonic.config местоположение <tt>pg_dump</tt> в параметре конфигурации \"pg_dump\" и вернитесь на эту страницу."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:86
 msgid "The \"tar\" command was not found in the path. Set in zotonic.config the \"tar\" config key to the path to <tt>tar</tt> and return to this page."
-msgstr "Команда «tar» не найдена в пути. Установите в zotonic.config ключ конфигурации «tar» на путь к <tt>tar</tt> и вернитесь на эту страницу."
+msgstr "Команда \"tar\" не найдена в каталогах \"path\". Укажите в zotonic.config местоположение <tt>tar</tt> в параметре конфигурации \"tar\" и вернитесь на эту страницу."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "The backup comprises two parts, the database and the uploaded files."
