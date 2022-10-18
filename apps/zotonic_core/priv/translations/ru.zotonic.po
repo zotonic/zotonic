@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-10-16 18:24\n"
+"PO-Revision-Date: 2022-10-18 07:34\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4467,7 +4467,7 @@ msgstr "Выберите файл резервной копии, который 
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:37
 msgid "Show import/export panel in the admin."
-msgstr "Показывать панель импорта/экспорта у администратора."
+msgstr "Показывать панель импорта/экспорта в интерфейсе администратора."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:75
 msgid "Sorry, there is no module that can import this."
