@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-10-18 09:04\n"
+"PO-Revision-Date: 2022-10-19 17:25\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4487,7 +4487,7 @@ msgstr "Извините, эта резервная копия недейств�
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:77
 msgid "Sorry, this is not a backup file or it is corrupted."
-msgstr "Извините, это не резервная копия или она повреждена."
+msgstr "Извините, файл не является резервной копией или повреждён."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:85
 msgid "Sorry, you don't have permission to change this page."
