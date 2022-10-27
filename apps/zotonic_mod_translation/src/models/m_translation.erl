@@ -53,6 +53,12 @@ m_get([ <<"language_list_editable">> | Rest ], _Msg, Context) ->
     {ok, {language_list_editable(Context), Rest}};
 m_get([ <<"default_language">> | Rest ], _Msg, Context) ->
     {ok, {default_language(Context), Rest}};
+m_get([ <<"x_default_language">> | Rest ], _Msg, Context) ->
+    Lang = case z_language:is_language_enabled(en, Context) of
+        true -> en;
+        false -> default_language(Context)
+    end,
+    {ok, {Lang, Rest}};
 m_get([ <<"main_languages">> | Rest ], _Msg, _Context) ->
     {ok, {main_languages(), Rest}};
 m_get([ <<"all_languages">> | Rest ], _Msg, _Context) ->
