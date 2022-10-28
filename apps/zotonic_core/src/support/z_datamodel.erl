@@ -83,18 +83,13 @@ manage_medium(Module, {Name, Filename, Props}, Options, Context) ->
         ok ->
             ok;
         {ok, Id} ->
-            case manage_resource(Module, {Name, media, Props}, Options, Context) of
-                ok ->
-                    ok;
-                {ok, Id} ->
-                    case is_http_url(Filename) of
-                        true ->
-                            z_media_import:update(Id, Filename, Context);
-                        false ->
-                            m_media:replace_file(path(Filename, Context), Id, Context)
-                    end,
-                    {ok, Id}
-            end
+            case is_http_url(Filename) of
+                true ->
+                    z_media_import:update(Id, Filename, Context);
+                false ->
+                    m_media:replace_file(path(Filename, Context), Id, Context)
+            end,
+            {ok, Id}
     end.
 
 manage_category(Module, {Name, ParentCategory, Props}, Options, Context) when is_list(Props) ->
