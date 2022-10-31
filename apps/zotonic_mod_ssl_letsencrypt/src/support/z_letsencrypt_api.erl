@@ -15,21 +15,28 @@
 -module(z_letsencrypt_api).
 -author("Guillaume Bour <guillaume@bour.cc>").
 
--export([directory/2, nonce/2, account/4, new_order/5, get_order/4, authorization/4, challenge/4,
-         finalize/5, certificate/4, status/1]).
+-export([
+    directory/1,
+    nonce/1,
+    account/3,
+    new_order/4,
+    get_order/3,
+    authorization/3,
+    challenge/3,
+    finalize/4,
+    certificate/3,
+    status/1
+]).
 
--import(z_letsencrypt_utils, [str/1]).
+% -import(z_letsencrypt_utils, [str/1]).
 
 -include_lib("kernel/include/logger.hrl").
 
 -type request_result() :: #{
-    status_code => integer(),
-    body => binary(),
-    headers => proplists:proplist(),
+    body := binary(),
     json => term(),
-    nonce => term(),
-    location => term(),
-    atom() => term()
+    nonce := binary() | undefined,
+    location := binary() | undefined
 }.
 
 -ifdef(TEST).
@@ -64,88 +71,33 @@ status(Status)       ->
 
 %% PRIVATE
 
-% tcpconn({Prototype, Hostname/IP, Port})
-%
-% returns: {ok, ConnID}
-%
-% Opened connections are stored in `conns` ets. If a connection to the given Host:Port
-% is already opened, returns it, either open a new connection.
-%
-% TODO: checks connection is still alive (ping ?)
--spec tcpconn({http|https, string(), integer()}) -> {ok, pid()}.
-tcpconn(Key={Proto, Host, Port}) ->
-    case ets:info(conns) of
-        % does not exists
-        undefined -> ets:new(conns, [set, named_table]);
-        _         -> ok
-    end,
+-define(TIMEOUT, 30000).
 
-    case ets:lookup(conns, Key) of
-        % not found
-        [] ->
-            %TODO: handle connection failures
-            {ok, Conn} = shotgun:open(Host, Port, Proto),
-            ets:insert(conns, {Key, Conn}),
-            {ok, Conn};
-        [{_, Conn}] ->
-            {ok, Conn}
-    end.
-
-% request(get|post, Uri, Headers, Content, Options)
-%
-% Query Uri (get or post) and return results.
-%
-% returns:
-%   {ok, #{status_coe, body, headers}}    :: query succeed
-%   {error, invalid_method}               :: Method MUST be either 'get' or 'post'
-%   {error, term()}                       :: query failed
-%
-% TODO: is 'application/jose+json' content type always required ?
-%       (check acme documentation)
--spec request(get|post, string()|binary(), map(), nil|binary(), map()) ->
-    {ok, request_result()} | {error, invalid_method | term()}.
-request(Method, Uri, Headers, Content, Opts=#{netopts := Netopts}) ->
-    Parsed = #{
-        scheme := Proto,
-        host := Host,
-        path := Path
-    } = uri_string:parse(Uri),
-
-    Port = case maps:get(port, Parsed, undefined) of
-        undefined ->
-            case Proto of
-                "http" -> 80;
-                "https" -> 443;
-                <<"http">> -> 80;
-                <<"https">> -> 443
-            end;
-        P ->
-            P
-    end,
-    Headers2 = Headers#{<<"content-type">> => <<"application/jose+json">>},
-
-    % we want to reuse connection if exists
-    {ok, Conn} = tcpconn({
-        z_convert:to_atom(Proto),
-        z_convert:to_list(Host),
-        Port}),
-
-    Result = case Method of
-        get  -> shotgun:get(Conn, Path, Headers2, Netopts);
-        post -> shotgun:post(Conn, Path, Headers2, Content, Netopts)
-    end,
-
-    ?debug("~p(~p) => ~p~n", [Method, Uri, Result]),
-    case Result of
-        {ok, Response = #{ headers := RHeaders} } ->
-            R = Response#{
-                  nonce    => proplists:get_value(<<"replay-nonce">>, RHeaders, nil),
-                  location => proplists:get_value(<<"location">>, RHeaders, nil)
+-spec fetch(Method, Uri, Content, Format) -> Result when
+    Method :: get | post,
+    Uri :: string() | binary(),
+    Content :: binary(),
+    Format :: body | json,
+    Result :: {ok, request_result()} | {error, term()}.
+fetch(Method, Uri, Content, Format) ->
+    Options = [
+        {timeout, ?TIMEOUT},
+        {content_type, "application/jose+json"}
+    ],
+    case z_url_fetch:fetch(Method, Uri, Content, Options) of
+        {ok, {_Final, Hs, _Length, Body}} ->
+            Response = #{
+                nonce => bin(proplists:get_value("replay-nonce", Hs)),
+                location => bin(proplists:get_value("location", Hs)),
+                body => Body
             },
-            decode(Opts, R);
+            decode(Format, Response);
         {error, _} = Error ->
             Error
     end.
+
+bin(undefined) -> undefined;
+bin(S) -> z_convert:to_binary(S).
 
 % decode(Option, Result)
 %
@@ -154,8 +106,8 @@ request(Method, Uri, Headers, Content, Opts=#{netopts := Netopts}) ->
 % returns:
 %   {ok, Result} with added json structure if required
 %
--spec decode(map(), request_result()) -> {ok, request_result()}.
-decode(#{json := true}, Response=#{body := Body}) ->
+-spec decode(json | body, request_result()) -> {ok, request_result()}.
+decode(json, Response=#{ body := Body }) ->
     Payload = jsx:decode(Body, [return_maps]),
     {ok, Response#{ json => Payload }};
 decode(_, Response) ->
@@ -173,15 +125,15 @@ decode(_, Response) ->
 % returns:
 %   {ok, Directory} where Directory is a map containing protocol urls
 %
--spec directory(default|staging, map()) -> {ok, map()}.
-directory(Env, Opts) ->
+-spec directory(default|staging) -> {ok, map()}.
+directory(Env) ->
     Uri = case Env of
         staging -> ?STAGING_API_URL;
         _       -> ?DEFAULT_API_URL
     end,
     ?debug("Getting directory at ~p~n", [Uri]),
 
-    {ok, #{json := Directory}} = request(get, Uri, #{}, nil, Opts#{json => true}),
+    {ok, #{ json := Directory }} = fetch(get, Uri, <<>>, json),
     {ok, Directory}.
 
 % nonce(Directory, Options)
@@ -192,9 +144,9 @@ directory(Env, Opts) ->
 % returns:
 %   {ok, Nonce}
 %
--spec nonce(map(), map()) -> {ok, binary()}.
-nonce(#{<<"newNonce">> := Uri}, Opts) ->
-    {ok, #{nonce := Nonce}} = request(get, Uri, #{}, nil, Opts),
+-spec nonce(map()) -> {ok, binary()}.
+nonce(#{<<"newNonce">> := Uri}) ->
+    {ok, #{ nonce := Nonce }} = fetch(get, Uri, <<>>, body),
     {ok, Nonce}.
 
 % account(Directory, Key, Jws, Opts)
@@ -211,8 +163,8 @@ nonce(#{<<"newNonce">> := Uri}, Opts) ->
 % NOTE: tos are automatically agreed, this should not be the case
 % TODO: checks 201 Created response
 %
--spec account(map(), z_letsencrypt:ssl_privatekey(), map(), map()) -> {ok, map(), binary(), binary()}.
-account(#{<<"newAccount">> := Uri}, Key, Jws, Opts) ->
+-spec account(map(), z_letsencrypt:ssl_privatekey(), map()) -> {ok, map(), binary(), binary()}.
+account(#{<<"newAccount">> := Uri}, Key, Jws) ->
     Payload = #{
         termsOfServiceAgreed => true,
         contact              => []
@@ -223,10 +175,10 @@ account(#{<<"newAccount">> := Uri}, Key, Jws, Opts) ->
        json     := Resp,
        location := Location,
        nonce    := Nonce
-    }} = request(post, Uri, #{}, Req, Opts#{json => true}),
+    }} = fetch(post, Uri, Req, json),
     {ok, Resp, Location, Nonce}.
 
-% new_order(Directory, Domain, Key, Jws, Opts)
+% new_order(Directory, Domain, Key, Jws)
 %
 % Request new order.
 % ref: https://www.rfc-editor.org/rfc/rfc8555.html#section-7.4
@@ -240,8 +192,8 @@ account(#{<<"newAccount">> := Uri}, Key, Jws, Opts) ->
 % TODO: support multiple domains
 %       checks 201 created
 %
--spec new_order(map(), [ binary() ], z_letsencrypt:ssl_privatekey(), map(), map()) -> {ok, map(), binary(), binary()}.
-new_order(#{<<"newOrder">> := Uri}, Domains, Key, Jws, Opts) ->
+-spec new_order(map(), [ binary() ], z_letsencrypt:ssl_privatekey(), map()) -> {ok, map(), binary(), binary()}.
+new_order(#{<<"newOrder">> := Uri}, Domains, Key, Jws) ->
     ?LOG_NOTICE(#{
         text => <<"LetsEncrypt requesting new certificate">>,
         in => zotonic_mod_ssl_letsencrypt,
@@ -265,14 +217,14 @@ new_order(#{<<"newOrder">> := Uri}, Domains, Key, Jws, Opts) ->
         json     := Resp,
         location := Location,
         nonce    := Nonce
-    }} = request(post, Uri, #{}, Req, Opts#{json => true}),
+    }} = fetch(post, Uri, Req, json),
     {ok, Resp, Location, Nonce}.
 
-% order(Uri, Key, Jws, Opts)
+% order(Uri, Key, Jws)
 %
 % Get order state.
 %
-get_order(Uri, Key, Jws, Opts) ->
+get_order(Uri, Key, Jws) ->
     % POST-as-GET = no payload
     Req = z_letsencrypt_jws:encode(Key, Jws#{url => Uri}, empty),
 
@@ -280,7 +232,7 @@ get_order(Uri, Key, Jws, Opts) ->
         json     := Resp,
         location := Location,
         nonce    := Nonce
-    }} = request(post, Uri, #{}, Req, Opts#{json=> true}),
+    }} = fetch(post, Uri, Req, json),
 
     {ok, Resp, Location, Nonce}.
 
@@ -296,8 +248,8 @@ get_order(Uri, Key, Jws, Opts) ->
 %       - Nonce is a new valid replay-nonce
 %
 %
--spec authorization(binary(), z_letsencrypt:ssl_privatekey(), map(), map()) -> {ok, map(), binary(), binary()}.
-authorization(Uri, Key, Jws, Opts) ->
+-spec authorization(binary(), z_letsencrypt:ssl_privatekey(), map()) -> {ok, map(), binary(), binary()}.
+authorization(Uri, Key, Jws) ->
     % POST-as-GET = no payload
     Req = z_letsencrypt_jws:encode(Key, Jws#{url => Uri}, empty),
 
@@ -305,10 +257,10 @@ authorization(Uri, Key, Jws, Opts) ->
         json     := Resp,
         location := Location,
         nonce    := Nonce
-    }} = request(post, Uri, #{}, Req, Opts#{json=> true}),
+    }} = fetch(post, Uri, Req, json),
     {ok, Resp, Location, Nonce}.
 
-% challenge(Challenge, Key, Jws, Opts)
+% challenge(Challenge, Key, Jws)
 %
 % Notifies acme server we are ready for challenge validation.
 % ref: https://www.rfc-editor.org/rfc/rfc8555.html#section-7.5.1
@@ -319,8 +271,8 @@ authorization(Uri, Key, Jws, Opts) ->
 %       - Location is create account url
 %       - Nonce is a new valid replay-nonce
 %
--spec challenge(map(), z_letsencrypt:ssl_privatekey(), map(), map()) -> {ok, map(), binary(), binary()}.
-challenge(#{<<"url">> := Uri}, Key, Jws, Opts) ->
+-spec challenge(map(), z_letsencrypt:ssl_privatekey(), map()) -> {ok, map(), binary(), binary()}.
+challenge(#{<<"url">> := Uri}, Key, Jws) ->
     % POST-as-GET = no payload
     Req = z_letsencrypt_jws:encode(Key, Jws#{url => Uri}, #{}),
 
@@ -328,10 +280,10 @@ challenge(#{<<"url">> := Uri}, Key, Jws, Opts) ->
        json     := Resp,
        location := Location,
        nonce    := Nonce
-    }} = request(post, Uri, #{}, Req, Opts#{json => true}),
+    }} = fetch(post, Uri, Req, json),
     {ok, Resp, Location, Nonce}.
 
-% finalize(Order, Csr, Key, Jws, Opts)
+% finalize(Order, Csr, Key, Jws)
 %
 % Finalize order once a challenge has been validated.
 % ref: https://www.rfc-editor.org/rfc/rfc8555.html#section-7.4
@@ -339,8 +291,8 @@ challenge(#{<<"url">> := Uri}, Key, Jws, Opts) ->
 % returns:
 %
 % finalize order
--spec finalize(map(), binary(), z_letsencrypt:ssl_privatekey(), map(), map()) -> {ok, map(), binary(), binary()}.
-finalize(#{<<"finalize">> := Uri}, Csr, Key, Jws, Opts) ->
+-spec finalize(map(), binary(), z_letsencrypt:ssl_privatekey(), map()) -> {ok, map(), binary(), binary()}.
+finalize(#{<<"finalize">> := Uri}, Csr, Key, Jws) ->
     Payload = #{
         csr => Csr
     },
@@ -351,10 +303,10 @@ finalize(#{<<"finalize">> := Uri}, Csr, Key, Jws, Opts) ->
        json     := Resp,
        location := Location,
        nonce    := Nonce
-    }} = request(post, Uri, #{}, Req, Opts#{json => true}),
+    }} = fetch(post, Uri, Req, json),
     {ok, Resp, Location, Nonce}.
 
-% certificate(Order, Key, Jws, Opts)
+% certificate(Order, Key, Jws)
 %
 % Download certificate (for finalized order.
 % ref: https://www.rfc-editor.org/rfc/rfc8555.html#section-7.4.2
@@ -362,13 +314,13 @@ finalize(#{<<"finalize">> := Uri}, Csr, Key, Jws, Opts) ->
 % returns:
 %   {ok, Cert}
 %
--spec certificate(map(), z_letsencrypt:ssl_privatekey(), map(), map()) -> {ok, binary()}.
-certificate(#{<<"certificate">> := Uri}, Key, Jws, Opts) ->
+-spec certificate(map(), z_letsencrypt:ssl_privatekey(), map()) -> {ok, binary()}.
+certificate(#{<<"certificate">> := Uri}, Key, Jws) ->
     % POST-as-GET = no payload
     Req = z_letsencrypt_jws:encode(Key, Jws#{url => Uri}, empty),
 
     {ok, #{
        body := Cert
-    }} = request(post, Uri, #{}, Req, Opts),
+    }} = fetch(post, Uri, Req, body),
     {ok, Cert}.
 
