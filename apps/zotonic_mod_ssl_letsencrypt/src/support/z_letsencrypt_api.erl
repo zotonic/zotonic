@@ -76,9 +76,9 @@ status(Status)       ->
 -spec fetch(Method, Uri, Content, Format) -> Result when
     Method :: get | post,
     Uri :: string() | binary(),
-    Content :: map(),
+    Content :: binary(),
     Format :: body | json,
-    Result :: {ok, map()} | {error, term()}.
+    Result :: {ok, request_result()} | {error, term()}.
 fetch(Method, Uri, Content, Format) ->
     Options = [
         {timeout, ?TIMEOUT},
