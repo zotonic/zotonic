@@ -10,9 +10,12 @@
 {% elseif id and id.language and m.modules.active.mod_translation and not z_language|member:id.language %}
     {# Take one of the alternative urls, provided by mod_translation #}
     <meta name="robots" content="noindex">
+{% elseif q.page and q.page > 1 %}
+    {# Do not index beyond the first page of search results, but do follow links #}
+    <meta name="robots" content="noindex">
 {% else %}
     {% with m.seo.keywords as keywords %}
-    {% with m.seo.description.value as description %}
+    {% with m.seo.description as description %}
         {% if id %}
             {% if m.rsc[id].seo_noindex or m.rsc[id].category_id.is_seo_noindex_cat %}
                 <meta name="robots" content="noindex">
@@ -20,10 +23,10 @@
                 {% with m.rsc[id].seo_keywords as seo_keywords %}
                     {% if seo_keywords %}
                         <meta name="keywords" content="{{ seo_keywords }}, {{ keywords|escape }}">
-                    {% else %}
-                        <meta name="keywords" content="{% for oid in id.o.subject %}{{ oid.title }}, {% endfor %}{{ keywords|escape }}">
+                    {% elseif id.o.subject as subjects %}
+                        <meta name="keywords" content="{% for oid in subjects %}{{ oid.title }}, {% endfor %}{{ keywords|escape }}">
                     {% endif %}
-                    <meta name="description" content="{{ id.seo_desc|default:(id|summary)|default:(description|escape)|truncate:150 }}">
+                    <meta name="description" content="{{ id.seo_desc|default:(id|summary)|default:(description|escape)|truncate:400 }}">
                 {% endwith %}
             {% endif %}
         {% else %}
@@ -31,7 +34,7 @@
                 <meta name="keywords" content="{{ keywords|escape }}">
             {% endif %}
             {% if description %}
-                <meta name="description" content="{{ description|escape|truncate:150 }}">
+                <meta name="description" content="{{ description|escape|truncate:400 }}">
             {% endif %}
         {% endif %}
     {% endwith %}
