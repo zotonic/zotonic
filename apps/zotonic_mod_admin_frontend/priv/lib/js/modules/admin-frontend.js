@@ -26,16 +26,27 @@ $(function() {
 	});
 
 	z_event_register("admin-menu-edit", function(args) {
+		let id = "";
+		let tab = "";
+
 		for (var i in args) {
-			if (args[i]["name"] == "id") {
-				confirm_unsaved("#edit_id="+args[i].value);
-				break;
+			switch (args[i]["name"]) {
+				case "id":
+					id = args[i].value;
+					break;
+				case "tab":
+					tab = args[i].value;
+					break;
+				default:
+					break;
 			}
+		}
+		if (id) {
+			confirm_unsaved("#edit_id="+encodeURIComponent(id) + "&tab=" + encodeURIComponent(tab));
 		}
 	});
 
-	function hashchange( id )
-	{
+	function hashchange( id ) {
 		if (window.location.hash) {
 			z_dialog_close();
 			$('#rscform').mask();
@@ -54,6 +65,7 @@ $(function() {
 			if (args["edit_id"]) {
 				z_notify("admin-menu-edit", {
 							id: args["edit_id"],
+							tab: args["tab"],
 							tree_id: $('#menu-editor').data('rsc-id'),
 							z_delegate: "mod_admin_frontend"
 				});

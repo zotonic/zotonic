@@ -45,6 +45,7 @@ maybe_load_edit_panel(Args, Context) ->
         Id ->
             Vars = [
                 {id, Id},
+                {tab, z_context:get_q(<<"tab">>, Context)},
                 {tree_id, m_rsc:rid(z_context:get_q(<<"tree_id">>, Context), Context)}
             ],
             Context1 = z_render:update("editcol", #render{template={cat, "_admin_frontend_edit.tpl"}, vars=Vars}, Context),
@@ -59,6 +60,7 @@ maybe_load_edit_cat(Args, Context) ->
             Vars = [
                 {id, undefined},
                 {cat, CatId},
+                {tab, z_context:get_q(<<"tab">>, Context)},
                 {tree_id, m_rsc:rid(z_context:get_q(<<"tree_id">>, Context), Context)}
             ],
             Context1 = z_render:update("editcol", #render{template={cat, "_admin_frontend_edit.tpl", m_category:is_a(CatId, Context)}, vars=Vars}, Context),

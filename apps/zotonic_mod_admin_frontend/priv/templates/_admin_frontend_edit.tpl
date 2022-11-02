@@ -15,7 +15,6 @@
 {% endblock %}
 
 {% block rscform %}
-
 {% if id.exists %}
 	{% with id.is_editable as is_editable %}
 	{% with id.is_a|default:(m.category[cat].is_a) as cats %}
@@ -151,6 +150,9 @@
 					setTimeout( () => z_editor.init(), 1 );
 				}
 			});
+			{% if tab %}
+				$("li a[href='#{{ tab|escape }}'").tab("show");
+			{% endif %}
 		}, 10);
 	{% endjavascript %}
 {% else %}
