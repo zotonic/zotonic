@@ -59,7 +59,8 @@ manage(Module, Datamodel, Context) ->
     Context :: z:context().
 manage(Module, Datamodel, Options, Context) ->
     ?LOG_INFO(#{
-        text => <<"Installing datamodel">>,
+        text => <<"Installing datamodel for module">>,
+        in => zotonic_core,
         module => Module
     }),
     AdminContext = z_acl:sudo(Context),
