@@ -719,7 +719,8 @@ is_module(Module) ->
 start_child(ManagerPid, Module, ModuleSup, Spec, Exports, Context) ->
     StartPid = spawn_link(
                  fun() ->
-                         Result = case catch manage_schema(Module, Exports, Context) of
+                        z_context:lager_md(Context),
+                        Result = case catch manage_schema(Module, Exports, Context) of
                                       ok ->
                                                 % Try to start it
                                           z_supervisor:start_child(ModuleSup, Spec#child_spec.name, ?MODULE_START_TIMEOUT);

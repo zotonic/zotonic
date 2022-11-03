@@ -61,6 +61,7 @@ manage(Module, Datamodel, Context) ->
 %% @doc Install / update a set of named, predefined resources, categories, predicates, media and edges.
 -spec manage(atom(), #datamodel{}, datamodel_options(), #context{}) -> ok.
 manage(Module, Datamodel, Options, Context) ->
+    lager:info("~p: installing datamodel for ~p", [ z_context:site(Context), Module ]),
     F = fun(Ctx) ->
 		[manage_category(Module, Cat, Options, Ctx) || Cat <- Datamodel#datamodel.categories],
 		[manage_predicate(Module, Pred, Options, Ctx) || Pred <- Datamodel#datamodel.predicates],
@@ -228,7 +229,7 @@ update_new_props(Module, Id, NewProps, Options, Context) ->
     end.
 
 
-maybe_force_update(K, V, Props, Module, Id, Options, Context) ->
+maybe_force_update(K, V, Props, Module, Id, Options, _Context) ->
     case lists:member(force_update, Options) of
         true ->
             lager:info("~p: ~p of ~p changed in database, forced update.", [Module, K, Id]),

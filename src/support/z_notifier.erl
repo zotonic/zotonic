@@ -181,8 +181,10 @@ notify(Msg, #context{dbc = undefined} = Context) ->
     case get_observers(Msg, Context) of
         [] -> ok;
         Observers ->
+            MD = lager:md(),
             F = fun() ->
-                    lists:foreach(fun(Obs) -> notify_observer(Msg, Obs, false, Context) end, Observers)
+                lager:md(MD),
+                lists:foreach(fun(Obs) -> notify_observer(Msg, Obs, false, Context) end, Observers)
             end,
             spawn(F),
             ok
@@ -204,7 +206,11 @@ notify1(Msg, #context{dbc = undefined} = Context) ->
     case get_observers(Msg, Context) of
         [] -> ok;
         [Obs|_] ->
-            F = fun() -> notify_observer(Msg, Obs, false, Context) end,
+            MD = lager:md(),
+            F = fun() ->
+                lager:md(MD),
+                notify_observer(Msg, Obs, false, Context)
+            end,
             spawn(F)
     end;
 notify1(Msg, _Context) ->
@@ -416,6 +422,7 @@ handle_info({tick, Msg}, #state{host=Host} = State) ->
     case catch z_context:new(Host) of
         #context{} = Context ->
             spawn(fun() ->
+                    z_context:lager_md(Context),
                     ?MODULE:notify(Msg, Context)
                   end);
         _ ->

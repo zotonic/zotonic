@@ -213,6 +213,10 @@ with_connection(F, none, _Context) ->
 with_connection(F, Connection, Context) when is_pid(Connection) ->
     exometer:update([zotonic, z_context:site(Context), db, requests], 1),
     try
+        case lager:md() of
+            [] -> z_context:lager_md(Context);
+            _ -> ok
+        end,
         {Time, Result} = timer:tc(F, [Connection]),
         exometer:update([zotonic, z_context:site(Context), db, duration], Time),
         Result
