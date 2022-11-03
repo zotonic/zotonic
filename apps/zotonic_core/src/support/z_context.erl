@@ -91,6 +91,7 @@
 
     logger_md/1,
     logger_md/2,
+    ensure_logger_md/1,
 
     client_id/1,
     client_topic/1,
@@ -862,12 +863,14 @@ q_upload_keepalive(false, Context) ->
 %% Set logger metadata for the current process
 %% ------------------------------------------------------------------------------------
 
+%% @doc Set the logger metadata for the current site or context.
 -spec logger_md( z:context() | atom() ) -> ok.
 logger_md(Site) when is_atom(Site) ->
     logger_md(z_context:new(Site));
 logger_md(Context) ->
     logger_md(#{}, Context).
 
+%% @doc Set the logger metadata, add the current site or context
 -spec logger_md( map() | list(), z:context() ) -> ok.
 logger_md(MetaData, #context{} = Context) when is_list(MetaData) ->
     logger_md(maps:from_list(MetaData), Context);
@@ -893,6 +896,15 @@ logger_md(MetaData, #context{} = Context) when is_map(MetaData) ->
         correlation_id => m_req:get(req_id, Context),
         node => node()
     }).
+
+
+%% @doc Ensure that the logger metadata for this site and process is set.
+-spec ensure_logger_md( z:context() | atom() ) -> ok.
+ensure_logger_md(Context) ->
+    case logger:get_process_metadata() of
+        #{ site := _ } -> ok;
+        _ -> z_context:logger_md(Context)
+    end.
 
 %% ------------------------------------------------------------------------------------
 %% Set/get/modify state properties
