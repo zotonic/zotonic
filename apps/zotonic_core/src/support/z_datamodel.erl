@@ -37,17 +37,31 @@
 
 
 %% @doc Reset the state of an imported datamodel, causing all deleted resources to be reimported
+-spec reset_deleted(Module, Context) -> ok when
+    Module :: atom(),
+    Context :: z:context().
 reset_deleted(Module, Context) ->
     m_config:delete(Module, datamodel, Context).
 
 %% @doc Install / update a set of named, predefined resources, categories, predicates, media and edges.
--spec manage(atom(), #datamodel{}, #context{}) -> ok.
+-spec manage(Module, Datamodel, Context) -> ok when
+    Module :: atom(),
+    Datamodel :: #datamodel{},
+    Context :: z:context().
 manage(Module, Datamodel, Context) ->
     manage(Module, Datamodel, [], Context).
 
 %% @doc Install / update a set of named, predefined resources, categories, predicates, media and edges.
--spec manage(atom(), #datamodel{}, datamodel_options(), #context{}) -> ok.
+-spec manage(Module, Datamodel, Options, Context) -> ok when
+    Module :: atom(),
+    Datamodel :: #datamodel{},
+    Options :: datamodel_options(),
+    Context :: z:context().
 manage(Module, Datamodel, Options, Context) ->
+    ?LOG_INFO(#{
+        text => <<"Installing datamodel">>,
+        module => Module
+    }),
     AdminContext = z_acl:sudo(Context),
     jobs:run(manage_module_jobs, fun() ->
         [ manage_category(Module, Cat, Options, AdminContext)   || Cat    <- Datamodel#datamodel.categories ],

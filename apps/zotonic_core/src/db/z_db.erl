@@ -374,6 +374,7 @@ with_connection(_F, {error, _} = Error, _Context) ->
 with_connection(F, {ok, Connection}, Context) when is_pid(Connection) ->
     z_stats:record_event(db, requests, Context),
     try
+        z_context:ensure_logger_md(Context),
         {Time, Result} = timer:tc(F, [Connection]),
         z_stats:record_duration(db, request, Time, Context),
         Result

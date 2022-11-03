@@ -154,8 +154,10 @@ notify_async(Notifier, Event, Msg, ContextArg) ->
                         end,
                         Observers);
                 false ->
+                    MD = logger:get_process_metadata(),
                     erlang:spawn(
                         fun() ->
+                            logger:set_process_metadata(MD),
                             lists:foreach(
                                 fun(Obs) ->
                                     notify_observer(Msg, Obs, false, ContextArg)
@@ -173,8 +175,10 @@ notify1(Notifier, Event, Msg, ContextArg) ->
         [ {_, Pid, _} = Obs | _ ] when is_pid(Pid) ->
             notify_observer(Msg, Obs, false, ContextArg);
         [ Obs | _ ] ->
+            MD = logger:get_process_metadata(),
             erlang:spawn(
                 fun() ->
+                    logger:set_process_metadata(MD),
                     notify_observer(Msg, Obs, false, ContextArg)
                 end)
     end.
