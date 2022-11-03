@@ -177,6 +177,10 @@ lookup(RequestPath, Context) when is_binary(RequestPath) ->
 %%% ------------------------------------------------------------------------------------
 
 init([InitialState, RequestPath, Root, OptFilterProps, Minify, Site]) ->
+    lager:md([
+        {site, Site},
+        {module, ?MODULE}
+    ]),
     State = #state{
         site=Site,
         request_path=RequestPath,

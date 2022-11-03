@@ -182,7 +182,8 @@ notify(Msg, #context{dbc = undefined} = Context) ->
         [] -> ok;
         Observers ->
             F = fun() ->
-                    lists:foreach(fun(Obs) -> notify_observer(Msg, Obs, false, Context) end, Observers)
+                z_context:lager_md(Context),
+                lists:foreach(fun(Obs) -> notify_observer(Msg, Obs, false, Context) end, Observers)
             end,
             spawn(F),
             ok
@@ -204,7 +205,10 @@ notify1(Msg, #context{dbc = undefined} = Context) ->
     case get_observers(Msg, Context) of
         [] -> ok;
         [Obs|_] ->
-            F = fun() -> notify_observer(Msg, Obs, false, Context) end,
+            F = fun() ->
+                z_context:lager_md(Context),
+                notify_observer(Msg, Obs, false, Context)
+            end,
             spawn(F)
     end;
 notify1(Msg, _Context) ->
