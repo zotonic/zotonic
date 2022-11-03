@@ -157,7 +157,7 @@ notify_async(Notifier, Event, Msg, ContextArg) ->
                     MD = logger:get_process_metadata(),
                     erlang:spawn(
                         fun() ->
-                            logger:set_process_metadata(MD),
+                            set_process_metadata(MD),
                             lists:foreach(
                                 fun(Obs) ->
                                     notify_observer(Msg, Obs, false, ContextArg)
@@ -178,10 +178,13 @@ notify1(Notifier, Event, Msg, ContextArg) ->
             MD = logger:get_process_metadata(),
             erlang:spawn(
                 fun() ->
-                    logger:set_process_metadata(MD),
+                    set_process_metadata(MD),
                     notify_observer(Msg, Obs, false, ContextArg)
                 end)
     end.
+
+set_process_metadata(undefined) -> ok;
+set_process_metadata(MD) -> logger:set_process_metadata(MD).
 
 %% @doc Call all observers till one returns something else than undefined.
 %% The prototype of the observer is: f(Msg, Context)
