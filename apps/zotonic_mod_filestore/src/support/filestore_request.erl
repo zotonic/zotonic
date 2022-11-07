@@ -102,6 +102,9 @@ handle_upload(Cred, LocalFile, Mime) ->
     Data :: ftpfilez:put_data(),
     Mime :: binary(),
     Result :: ftpfilez:sync_reply().
+do_upload(#filestore_credentials{service=Service, location=Location, credentials=Cred}, Data, undefined) ->
+    Mod = filezmod(Service),
+    Mod:put(Cred, Location, Data, []);
 do_upload(#filestore_credentials{service=Service, location=Location, credentials=Cred}, Data, Mime) ->
     Mod = filezmod(Service),
     Mod:put(Cred, Location, Data, [ {content_type, Mime} ]).
