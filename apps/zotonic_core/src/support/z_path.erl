@@ -57,9 +57,22 @@ site_source_dir(Site) when is_atom(Site) ->
     ],
     case lists:dropwhile(fun(D) -> not filelib:is_dir(D) end, Dirs) of
         [] ->
-            {error, bad_name};
+            case code:lib_dir(Site) of
+                {error, bad_name} = E -> E;
+                Dir -> maybe_follow_link(Dir)
+            end;
         [D|_] ->
             D
+    end.
+
+maybe_follow_link(Dir) ->
+    case file:read_link(filename:join(Dir, "src")) of
+        {ok, "../" ++ _ = LinkDir} ->
+            filename:join([Dir, LinkDir, ".."]);
+        {ok, "/" ++ _ = LinkDir} ->
+            filename:join([LinkDir, ".."]);
+        {error, _} ->
+            Dir
     end.
 
 %% @doc Return the path to the given module in the given context.
