@@ -45,19 +45,29 @@
     search_offset/0
     ]).
 
--define(OFFSET_LIMIT, {1,?SEARCH_PAGELEN}).
 -define(SEARCH_ALL_LIMIT, 30000).
 -define(MIN_LOOKAHEAD, 200).
 
 %% @doc Search items and handle the paging. Uses the default page length.
--spec search_pager(search_query(), Page :: pos_integer(), z:context()) -> #search_result{}.
+-spec search_pager(Query, Page, Context) -> Result when
+    Query :: search_query(),
+    Page :: pos_integer() | undefined,
+    Context :: z:context(),
+    Result :: #search_result{}.
 search_pager(Search, Page, Context) ->
-    search_pager(Search, Page, ?SEARCH_PAGELEN, Context).
+    search_pager(Search, Page, default_pagelen(Context), Context).
 
 %% @doc Search items and handle the paging
--spec search_pager(search_query(), Page :: pos_integer(), PageLen :: pos_integer(), z:context()) -> #search_result{}.
+-spec search_pager(Query, Page, PageLen, Context) -> Result when
+    Query :: search_query(),
+    Page :: pos_integer() | undefined,
+    PageLen :: pos_integer() | undefined,
+    Context :: z:context(),
+    Result :: #search_result{}.
 search_pager(Search, undefined, PageLen, Context) ->
     search_pager(Search, 1, PageLen, Context);
+search_pager(Search, Page, undefined, Context) ->
+    search_pager(Search, Page, default_pagelen(Context), Context);
 search_pager({Name, Args} = Search, Page, PageLen, Context) when is_atom(Name) ->
     OffsetLimit = offset_limit(Page, PageLen),
     SearchResult = search_1(Search, Page, PageLen, OffsetLimit, Context),
@@ -67,7 +77,7 @@ search_pager({Name, Args} = Search, Page, PageLen, Context) when is_atom(Name) -
 %% @doc Search with the question and return the results
 -spec search({atom()|binary(), proplists:proplist()}, z:context()) -> #search_result{}.
 search(Search, Context) ->
-    search(Search, ?OFFSET_LIMIT, Context).
+    search(Search, default_offset_limit(Context), Context).
 
 %% @doc Perform the named search and its arguments
 -spec search(search_query(), search_offset() | undefined, z:context() ) -> #search_result{}.
@@ -86,6 +96,17 @@ search(Search, {Offset, Limit} = OffsetLimit, Context) ->
             search_1(Search, 1, ?SEARCH_ALL_LIMIT, OffsetLimit, Context)
     end.
 
+-spec default_pagelen( z:context() ) -> pos_integer().
+default_pagelen(Context) ->
+    case m_config:get_value(site, pagelen, Context) of
+        undefined -> ?SEARCH_PAGELEN;
+        <<>> -> ?SEARCH_PAGELEN;
+        Len -> z_convert:to_integer(Len)
+    end.
+
+-spec default_offset_limit( z:context() ) -> search_offset().
+default_offset_limit(Context) ->
+    {1, default_pagelen(Context)}.
 
 %% @doc Handle a return value from a search function.  This can be an intermediate SQL statement
 %% that still needs to be augmented with extra ACL checks.
