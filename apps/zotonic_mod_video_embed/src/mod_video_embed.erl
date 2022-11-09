@@ -253,7 +253,7 @@ media_import_1(Service, Descr, MD, MI, Context) ->
             undefined
     end.
 
-media_import_retry(youtube, Descr, MD, MI, Context) ->
+media_import_retry(<<"youtube">>, Descr, MD, MI, Context) ->
     case z_url_metadata:p(final_url, MD) of
         <<"https://www.youtube.com/embed/", Code/binary>> ->
             URL = case z_url_metadata:p(canonical_url, MD) of
@@ -264,7 +264,7 @@ media_import_retry(youtube, Descr, MD, MI, Context) ->
             end,
             case z_url_metadata:fetch(URL) of
                 {ok, MD1} ->
-                    media_import_1(youtube, Descr, MD1, MI, Context);
+                    media_import_1(<<"youtube">>, Descr, MD1, MI, Context);
                 {error, _} ->
                     undefined
             end;
