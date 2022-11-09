@@ -49,12 +49,21 @@
 -define(MIN_LOOKAHEAD, 200).
 
 %% @doc Search items and handle the paging. Uses the default page length.
--spec search_pager(search_query(), Page :: pos_integer(), z:context()) -> #search_result{}.
+-spec search_pager(Query, Page, Context) -> Result when
+    Query :: search_query(),
+    Page :: pos_integer() | undefined,
+    Context :: z:context(),
+    Result :: #search_result{}.
 search_pager(Search, Page, Context) ->
     search_pager(Search, Page, default_pagelen(Context), Context).
 
 %% @doc Search items and handle the paging
--spec search_pager(search_query(), Page :: pos_integer(), PageLen :: pos_integer() | undefined, z:context()) -> #search_result{}.
+-spec search_pager(Query, Page, PageLen, Context) -> Result when
+    Query :: search_query(),
+    Page :: pos_integer() | undefined,
+    PageLen :: pos_integer() | undefined,
+    Context :: z:context(),
+    Result :: #search_result{}.
 search_pager(Search, undefined, PageLen, Context) ->
     search_pager(Search, 1, PageLen, Context);
 search_pager(Search, Page, undefined, Context) ->
