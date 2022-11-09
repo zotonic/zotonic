@@ -230,6 +230,14 @@ observe_media_import(#media_import{}, _Context) ->
     undefined.
 
 media_import(Service, Descr, MD, MI, Context) ->
+    case media_import_1(Service, Descr, MD, MI, Context) of
+        undefined ->
+            media_import_retry(Service, Descr, MD, MI, Context);
+        Imports ->
+            Imports
+    end.
+
+media_import_1(Service, Descr, MD, MI, Context) ->
     H = z_convert:to_integer(z_url_metadata:p([<<"og:video:height">>, <<"twitter:player:height">>], MD)),
     W = z_convert:to_integer(z_url_metadata:p([<<"og:video:width">>, <<"twitter:player:width">>], MD)),
     VideoId = fetch_videoid_from_url(Service, MI#media_import.url),
@@ -244,6 +252,27 @@ media_import(Service, Descr, MD, MI, Context) ->
         false ->
             undefined
     end.
+
+media_import_retry(youtube, Descr, MD, MI, Context) ->
+    case z_url_metadata:p(final_url, MD) of
+        <<"https://www.youtube.com/embed/", Code/binary>> ->
+            URL = case z_url_metadata:p(canonical_url, MD) of
+                undefined ->
+                    <<"https://www.youtube.com/watch?v=", Code/binary>>;
+                CanonicalUrl ->
+                    CanonicalUrl
+            end,
+            case z_url_metadata:fetch(URL) of
+                {ok, MD1} ->
+                    media_import_1(youtube, Descr, MD1, MI, Context);
+                {error, _} ->
+                    undefined
+            end;
+        _ ->
+            undefined
+    end;
+media_import_retry(_Service, _Descr, _MD, _MI, _Context) ->
+    undefined.
 
 media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl, Context) ->
     VideoIdBin = z_convert:to_binary(VideoId),
