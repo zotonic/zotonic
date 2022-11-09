@@ -68,7 +68,7 @@ search_pager({Name, Args} = Search, Page, PageLen, Context) when is_atom(Name) -
 %% @doc Search with the question and return the results
 -spec search({atom()|binary(), proplists:proplist()}, z:context()) -> #search_result{}.
 search(Search, Context) ->
-    search(Search, default_offfset_limit(Context), Context).
+    search(Search, default_offset_limit(Context), Context).
 
 %% @doc Perform the named search and its arguments
 -spec search(search_query(), search_offset() | undefined, z:context() ) -> #search_result{}.
@@ -87,6 +87,7 @@ search(Search, {Offset, Limit} = OffsetLimit, Context) ->
             search_1(Search, 1, ?SEARCH_ALL_LIMIT, OffsetLimit, Context)
     end.
 
+-spec default_pagelen( z:context() ) -> pos_integer().
 default_pagelen(Context) ->
     case m_config:get_value(site, pagelen, Context) of
         undefined -> ?SEARCH_PAGELEN;
@@ -94,7 +95,8 @@ default_pagelen(Context) ->
         Len -> z_convert:to_integer(Len)
     end.
 
-default_offfset_limit(Context) ->
+-spec default_offset_limit( z:context() ) -> search_offset().
+default_offset_limit(Context) ->
     {1, default_pagelen(Context)}.
 
 %% @doc Handle a return value from a search function.  This can be an intermediate SQL statement
