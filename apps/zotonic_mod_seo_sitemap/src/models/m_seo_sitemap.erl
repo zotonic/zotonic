@@ -312,6 +312,7 @@ update_rsc(Id, Context) ->
     case m_rsc:exists(Id, AnonContext)
         andalso m_rsc:is_visible(Id, AnonContext)
         andalso not z_convert:to_bool( m_rsc:p_no_acl(Id, seo_noindex, AnonContext) )
+        andalso not is_redirect(Id, Context)
     of
         true ->
             Langs = case m_rsc:p_no_acl(Id, language, Context) of
@@ -406,6 +407,15 @@ update_rsc(Id, Context) ->
             maybe_insert_update_task(Id, Context)
     end.
 
+is_redirect(Id, Context) ->
+    case m_rsc:p_no_acl(Id, website, Context) of
+        undefined ->
+            false;
+        <<>> ->
+            false;
+        _ ->
+            z_convert:to_bool(m_rsc:p_no_acl(Id, is_website_redirect, Context))
+    end.
 
 %% @doc Insert an update task for if the resource is not visible now but has a
 %% publication date in the future. The resource sitemap entries will be updated
