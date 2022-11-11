@@ -356,14 +356,18 @@ hmac(Type, Key, Data) ->
 
 
 %%% CHECKSUM %%%
+-spec checksum(Data, Context) -> Checksum when
+    Data :: iodata(),
+    Context :: z:context(),
+    Checksum :: binary().
 checksum(Data, Context) ->
     Sign = z_ids:sign_key_simple(Context),
-    z_utils:hex_encode(erlang:md5([Sign,Data])).
+    hex_encode(erlang:md5([Sign,Data])).
 
 checksum_assert(Data, Checksum, Context) ->
     Sign = z_ids:sign_key_simple(Context),
     try
-        assert(list_to_binary(z_utils:hex_decode(Checksum)) == erlang:md5([Sign,Data]), checksum_invalid)
+        assert(hex_decode(Checksum) =:= erlang:md5([Sign,Data]), checksum_invalid)
     catch
         error:badarg ->
             erlang:error(checksum_invalid);
