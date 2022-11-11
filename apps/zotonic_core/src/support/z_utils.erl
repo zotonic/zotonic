@@ -364,7 +364,11 @@ checksum(Data, Context) ->
     Sign = z_ids:sign_key_simple(Context),
     hex_encode(erlang:md5([Sign,Data])).
 
-checksum_assert(Data, Checksum, Context) ->
+-spec checksum_assert(Data, Checksum, Context) -> ok when
+    Data :: iodata(),
+    Checksum :: binary() | string(),
+    Context :: z:context().
+checksum_assert(Data, Checksum, Context) when is_binary(Checksum )->
     Sign = z_ids:sign_key_simple(Context),
     try
         assert(hex_decode(Checksum) =:= erlang:md5([Sign,Data]), checksum_invalid)
@@ -374,7 +378,9 @@ checksum_assert(Data, Checksum, Context) ->
         error:{case_clause, _} ->
             % Odd length checksum
             erlang:error(checksum_invalid)
-    end.
+    end;
+checksum_assert(Data, Checksum, Context) ->
+    checksum_assert(Data, z_convert:to_binary(Checksum), Context).
 
 
 %%% PICKLE / UNPICKLE %%%
