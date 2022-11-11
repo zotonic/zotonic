@@ -168,7 +168,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 
 
 make_url(S3Url, Path) ->
-    make_url_1(S3Url, shorten_filename(Path)).
+    make_url_1(S3Url, z_url:url_path_encode(shorten_filename(Path))).
 
 make_url_1(S3Url, <<$/, _/binary>> = Path) ->
     <<S3Url/binary, Path/binary>>;
@@ -204,7 +204,6 @@ shorten_1(Root) ->
     Truncated = z_string:truncatechars(Root, 32),
     Hash = z_utils:hex_sha(Root),
     <<Truncated/binary, $-, Hash/binary>>.
-
 
 is_defined(undefined) -> false;
 is_defined(<<>>) -> false;

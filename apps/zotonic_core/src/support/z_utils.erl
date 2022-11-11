@@ -401,7 +401,10 @@ depickle(Data, Context) ->
 
 
 %%% HEX ENCODE and HEX DECODE
+-spec hex_encode(iodata()) -> binary().
 hex_encode(Value) -> z_url:hex_encode(Value).
+
+-spec hex_decode(iodata()) -> binary().
 hex_decode(Value) -> z_url:hex_decode(Value).
 
 %% @doc Hash data and encode into a hex string safe for filenames and texts.
@@ -409,7 +412,7 @@ hex_decode(Value) -> z_url:hex_decode(Value).
     Value :: iodata(),
     Hash :: binary().
 hex_sha(Value) ->
-    z_string:to_lower(iolist_to_binary(z_utils:hex_encode(crypto:hash(sha, Value)))).
+    z_url:hex_encode_lc(crypto:hash(sha, Value)).
 
 %% @doc Simple escape function for filenames as commandline arguments.
 %% foo/"bar.jpg -> "foo/\"bar.jpg"; on windows "foo\\\"bar.jpg" (both including quotes!)
