@@ -333,16 +333,9 @@ make_iframe(Url, Props, Context) ->
             {<<"allowfullscreen">>, proplists:get_value(<<"allowfullscreen">>, Props, <<"1">>)},
             {<<"frameborder">>, <<"0">>},
             {<<"sandbox">>, default_sandbox_attr(Context)},
-            {<<"src">>, maybe_append_flashvars(Url, proplists:get_value(<<"flashvars">>, Props) )}
+            {<<"src">>, Url}
         ],
         []}}.
-
-maybe_append_flashvars(Url, undefined) ->
-    Url;
-maybe_append_flashvars(Url, <<>>) ->
-    Url;
-maybe_append_flashvars(Url, FlashVars) ->
-    iolist_to_binary([ Url, $?, z_convert:to_binary(z_url:url_path_encode(FlashVars)) ]).
 
 to_allowed(undefined, _Context) ->
     false;

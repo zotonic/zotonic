@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2020 Marc Worrell
+%% @copyright 2014-2022 Marc Worrell
 %% @doc Models for file-storage administration
+%% @end
 
-%% Copyright 2014-2020 Marc Worrell
+%% Copyright 2014-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -555,6 +556,7 @@ install_filestore(Context) ->
                     size int not null default 0,
                     modified timestamp with time zone not null default now(),
                     created timestamp with time zone not null default now(),
+                    deleted timestamp with time zone,
 
                     constraint filestore_pkey primary key (id),
                     constraint filestore_path_key unique (path),
@@ -563,6 +565,8 @@ install_filestore(Context) ->
                 ", Context),
             {ok, _, _} = z_db:equery("create index filestore_is_deleted_key on filestore(is_deleted) where is_deleted", Context),
             {ok, _, _} = z_db:equery("create index filestore_is_move_to_local_key on filestore(is_move_to_local) where is_move_to_local", Context),
+            {ok, _, _} = z_db:equery("create index filestore_deleted on filestore(deleted)", Context),
+            {ok, _, _} = z_db:equery("create index filestore_is_local on filestore(is_local)", Context),
             z_db:flush(Context),
             ok;
         true ->
