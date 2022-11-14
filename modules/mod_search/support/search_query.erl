@@ -200,7 +200,7 @@ parse_query([{content_group, ContentGroup}|Rest], Context, Result0) ->
                             true ->
                                 List = m_hierarchy:contains(<<"content_group">>, ContentGroup, Context),
                                 {Arg, Result1} = add_arg(List, Result),
-                                add_where("rsc.content_group_id IN (SELECT(unnest("++Arg++"::int[])))", Result1);
+                                add_where("rsc.content_group_id = any("++Arg++"::int[])", Result1);
                             false ->
                                 {Arg, Result1} = add_arg(ContentGroupId, Result),
                                 add_where("rsc.content_group_id = "++Arg, Result1)
