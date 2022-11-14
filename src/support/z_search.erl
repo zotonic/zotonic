@@ -612,7 +612,7 @@ add_cat_exact_check([], _Alias, WAcc, As, _Context) ->
 add_cat_exact_check(CatsExact, Alias, WAcc, As, Context) ->
     CatIds = [ m_rsc:rid(CId, Context) || CId <- CatsExact ],
     {WAcc ++ [
-        [Alias, [ ".category_id in (SELECT(unnest($", (integer_to_list(length(As)+1)), "::int[])))"] ]
+        [Alias, [ ".category_id = any($", (integer_to_list(length(As)+1)), "::int[])"] ]
      ],
      As ++ [CatIds]}.
 
