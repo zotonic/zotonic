@@ -352,17 +352,22 @@ fetch_videoid_from_url(<<"youtube">>, Url) ->
             z_convert:to_binary(proplists:get_value("v", Qs1))
     end;
 fetch_videoid_from_url(<<"vimeo">>, Url) ->
-    {_Protocol, _Host, Path, _Qs, _Hash} = mochiweb_util:urlsplit(z_convert:to_list(Url)),
-    P1 = lists:last(string:tokens(Path, "/")),
-    case z_utils:only_digits(P1) of
-        true -> z_convert:to_binary(P1);
-        false -> <<>>
+    case uri_string:parse(Url) of
+        #{ path := Path } ->
+            case lists:reverse(binary:split(Path, <<"/">>, [global])) of
+                [P1|_] ->
+                    case z_utils:only_digits(P1) of
+                        true -> z_convert:to_binary(P1);
+                        false -> <<>>
+                    end;
+                [] ->
+                    <<>>
+            end;
+        _ ->
+            <<>>
     end;
 fetch_videoid_from_url(_Service, _Url) ->
     <<>>.
-
-
-
 
 url_to_service(<<"https://", Url/binary>>) -> url_to_service(Url);
 url_to_service(<<"http://", Url/binary>>) -> url_to_service(Url);
