@@ -605,7 +605,7 @@ acl_add_sql_check(#acl_add_sql_check{alias=Alias, args=Args, search_sql=SearchSq
                     % User can see some content groups
                     Clause = lists:flatten([
                                 " (",Alias,".content_group_id is null or ",
-                                     Alias,".content_group_id in (SELECT(unnest($",integer_to_list(length(Args)+1),"::int[]))))",
+                                     Alias,".content_group_id = any($",integer_to_list(length(Args)+1),"::int[]))",
                                 publish_check(" and ", Alias, SearchSql, Context)]),
                     {Clause, Args ++ [Ids]}
             end

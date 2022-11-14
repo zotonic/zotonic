@@ -113,7 +113,7 @@ pred_move(EdgeIds, ToPredId, Ct, N, Context) ->
     {UpdIds, RestIds} = take(EdgeIds, 100),
     z_db:q("update edge
             set predicate_id = $1
-            where id in (SELECT(unnest($2::int[])))",
+            where id = any($2::int[])",
            [ToPredId, UpdIds],
            Context,
            120000),
