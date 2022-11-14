@@ -274,8 +274,8 @@ qterm({content_group, ContentGroup}, Context) ->
                         <<"default_content_group">> ->
                             Q#search_sql_term{
                                 where = [
-                                    <<"(rsc.content_group_id IN (SELECT(unnest(">>, '$1',
-                                    <<"::int[]))) or rsc.content_group_id is null)">>
+                                    <<"(rsc.content_group_id = any(">>, '$1',
+                                    <<"::int[]) or rsc.content_group_id is null)">>
                                 ],
                                 args = [
                                     List
@@ -284,8 +284,8 @@ qterm({content_group, ContentGroup}, Context) ->
                         _ ->
                             Q#search_sql_term{
                                 where = [
-                                    <<"rsc.content_group_id IN (SELECT(unnest(">>, '$1',
-                                    <<"::int[])))">>
+                                    <<"rsc.content_group_id = any(">>, '$1',
+                                    <<"::int[])">>
                                 ],
                                 args = [
                                     List
@@ -316,7 +316,7 @@ qterm({id_exclude, Ids}, Context) when is_list(Ids) ->
         Ids),
     #search_sql_term{
         where = [
-            <<"rsc.id NOT IN (SELECT(unnest(">>, '$1', <<"::int[])))">>
+            <<"rsc.id <> any(">>, '$1', <<"::int[])">>
         ],
         args = [ RscIds ]
     };
@@ -343,7 +343,7 @@ qterm({id, Ids}, Context) when is_list(Ids) ->
         Ids),
     #search_sql_term{
         where = [
-            <<"rsc.id IN (SELECT(unnest(">>, '$1', <<"::int[])))">>
+            <<"rsc.id = any(">>, '$1', <<"::int[])">>
         ],
         args = [ RscIds ]
     };
