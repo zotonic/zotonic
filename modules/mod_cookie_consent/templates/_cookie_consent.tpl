@@ -4,13 +4,16 @@
     <form id="cookie-consent__form" action="#">
         <div class="cookie-consent__upper">
             <h2 class="cookie-consent__title">
-                {{ m.rsc.cookie_consent.title|default:_"This website used cookies" }}
+                {{ m.rsc.cookie_consent.title|default:_"This website uses cookies" }}
             </h2>
             <p class="cookie-consent__explanation">
                 {{ id.summary }}
             </p>
             <div class="cookie-consent__upper__controls">
                 <div class="cookie-consent__upper__text">
+                    {% if id.o.relation[1] as rel_id %}
+                        <a href="{{ rel_id.page_url }}" target="_blank" class="cookie-consent-privacy">{{ rel_id.title }}</a>
+                    {% endif %}
                     <button class="cookie-consent-toggle">
                         {_ Change settings _}
                         <img class="anchor-down" alt="" src="/lib/images/arrow-right-thick.svg">
