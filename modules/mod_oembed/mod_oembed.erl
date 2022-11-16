@@ -147,24 +147,37 @@ observe_media_viewer(#media_viewer{id=Id, props=Props, filename=Filename, option
                 {filename, Filename},
                 {is_ssl, is_ssl(Context)}
             ],
-            Html = case proplists:lookup(oembed, Props) of
-                       {oembed, OEmbed} ->
-                           case proplists:lookup(provider_name, OEmbed) of
-                               {provider_name, N} ->
-                                   Tpl = iolist_to_binary(["_oembed_embeddable_",z_string:to_name(N),".tpl"]),
-                                   case z_template:find_template(Tpl, Context) of
-                                       {ok, _} ->
-                                           z_template:render(Tpl, TplOpts, Context);
-                                       {error, _} ->
-                                           media_viewer_fallback(OEmbed, TplOpts, Context)
-                                   end;
-                               none ->
+            case proplists:lookup(oembed, Props) of
+                {oembed, OEmbed} ->
+                    EmbedCode = case proplists:lookup(provider_name, OEmbed) of
+                        {provider_name, N} ->
+                            Tpl = iolist_to_binary(["_oembed_embeddable_",z_string:to_name(N),".tpl"]),
+                            case z_template:find_template(Tpl, Context) of
+                                {ok, _} ->
+                                   {TplHtml, _} = z_template:render_to_iolist(Tpl, TplOpts, Context),
+                                   TplHtml;
+                                {error, _} ->
                                    media_viewer_fallback(OEmbed, TplOpts, Context)
-                           end;
-                       none ->
-                           "<!-- No oembed code found -->"
-                   end,
-            {ok, Html};
+                            end;
+                        none ->
+                            media_viewer_fallback(OEmbed, TplOpts, Context)
+                    end,
+                    case z_notifier:first(#media_viewer_consent{
+                        id = Id,
+                        consent = all,
+                        html = EmbedCode,
+                        viewer_props = Props,
+                        viewer_options = Options
+                    }, Context)
+                    of
+                        undefined ->
+                            {ok, EmbedCode};
+                        {ok, _} = ConsentHtml ->
+                            ConsentHtml
+                    end;
+               none ->
+                   {ok, <<"<!-- No oembed code found -->">>}
+            end;
         _ ->
             undefined
     end.
@@ -177,7 +190,8 @@ media_viewer_fallback(OEmbed, TplOpts, Context) ->
                 false -> Html
             end;
         none ->
-            z_template:render("_oembed_embeddable.tpl", TplOpts, Context)
+            {TplHtml, _} = z_template:render_to_iolist("_oembed_embeddable.tpl", TplOpts, Context),
+            TplHtml
     end.
 
 %% @doc Map http:// urls to https:// if viewed on a secure connection

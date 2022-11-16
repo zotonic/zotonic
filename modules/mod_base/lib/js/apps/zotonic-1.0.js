@@ -324,6 +324,11 @@ function z_event_register(name, func)
     z_registered_events[name] = func;
 }
 
+function z_event_remove(name)
+{
+    delete z_registered_events[name];
+}
+
 function z_event(name, extraParams)
 {
     if (z_registered_events[name])
@@ -2197,6 +2202,142 @@ function z_update_iframe(name, doc)
         iframe_doc.open();
         iframe_doc.write(doc);
         iframe_doc.close();
+    }
+}
+
+
+// Store the current cookie consent status
+function z_cookie_consent_store( status )
+{
+    if (status !== 'all') {
+        z_cookie_remove_all();
+    }
+    switch (status) {
+        case "functional":
+        case "stats":
+        case "all":
+            const prev = z_cookie_consent_cache;
+            window.z_cookie_consent_cache = status;
+            try {
+                // Use stringify to be compatible with model.localStorage
+                localStorage.setItem('z_cookie_consent', JSON.stringify(status));
+            } catch (e) {
+            }
+            const ev = new CustomEvent("zotonic:cookie-consent", {
+                detail: {
+                    cookie_consent: status
+                }
+            });
+            if (prev != status) {
+                window.dispatchEvent(ev);
+            }
+            break;
+        default:
+            console.error("Cookie consent status must be one of 'all', 'stats' or 'functional'", status);
+            break;
+    }
+}
+
+// Trigger on consent changes in other windows/tabs
+window.addEventListener("storage", function(ev) {
+    if (ev.key == 'z_cookie_consent') {
+        if (ev.newValue === null) {
+            window.z_cookie_consent_cache = 'functional';
+        } else if (ev.oldValue != ev.newValue) {
+            z_cookie_consent_store(ev.newValue);
+        }
+    }
+}, false);
+
+
+// Fetch the current cookie consent status - default to 'functional'
+function z_cookie_consent_fetch()
+{
+    if (window.z_cookie_consent_cache) {
+        return window.z_cookie_consent_cache;
+    } else {
+        let status;
+
+        try {
+            status = localStorage.getItem('z_cookie_consent');
+        } catch (e) {
+            status = null;
+        }
+
+        if (status !== null) {
+            status = JSON.parse(status);
+        } else {
+            status = 'functional';
+        }
+        window.z_cookie_consent_cache = status
+        return status;
+    }
+}
+
+// Check is the user consented to some cookies
+function z_cookie_consent_given()
+{
+    try {
+        return typeof (localStorage.getItem('z_cookie_consent')) === 'string';
+    } catch (e) {
+        return false;
+    }
+}
+
+
+// Check if something is allowed according to the stored consent status
+function z_cookie_consented( wanted )
+{
+    const consent = z_cookie_consent_fetch();
+
+    switch (wanted) {
+        case 'functional':
+            return true;
+        case 'stats':
+            return consent === 'all' || consent === 'stats';
+        case 'all':
+            return consent === 'all';
+        default:
+            return false;
+    }
+}
+
+// Remove all non-functional cookies from the current document domain
+function z_cookie_remove_all()
+{
+    for ( const cookie of document.cookie.split(';') ){
+        const cookieName = cookie.split('=')[0].trim();
+
+        switch (cookieName) {
+            case "z_sid":
+            case "z_rldid":
+            case "z_ua":
+            case "z.sid":
+            case "z.lang":
+            case "z.auth":
+            case "z.autologon":
+                // Functional - keep the cookie
+                break;
+            default:
+                // Non-functional - remove the cookie
+                let domains = window.location.hostname.split('.');
+                while ( domains.length > 0 ) {
+                    const domain = domains.join('.');
+                    const cookieReset = encodeURIComponent(cookieName) + '=; expires=Thu, 01-Jan-1970 00:00:01 GMT';
+
+                    document.cookie = cookieReset;
+                    document.cookie = cookieReset + '; domain=' + domain + ' ;path=/';
+
+                    let pathSegments = location.pathname.split('/');
+                    while ( pathSegments.length > 0 ){
+                        const path = pathSegments.join('/');
+                        document.cookie = cookieReset + '; domain=' + domain + ' ;path=' + path;
+                        pathSegments.pop();
+                    }
+                    domains.shift();
+                }
+                break;
+        }
     }
 }
 

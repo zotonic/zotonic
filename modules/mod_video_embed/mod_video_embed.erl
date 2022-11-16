@@ -141,12 +141,28 @@ observe_rsc_update(#rsc_update{action=update, id=Id}, {Changed, Props}, Context)
 
 %% @doc Return the media viewer for the embedded video (that is, when it is an embedded media).
 %% @spec observe_media_viewer(Notification, Context) -> undefined | {ok, Html}
-observe_media_viewer(#media_viewer{props=Props}, _Context) ->
+observe_media_viewer(#media_viewer{ id = Id, props = Props, options = Options }, Context) ->
     case proplists:get_value(mime, Props) of
         ?EMBED_MIME ->
             case proplists:get_value(video_embed_code, Props) of
-                undefined -> undefined;
-                EmbedCode -> {ok, EmbedCode}
+                undefined ->
+                    undefined;
+                <<>> ->
+                    {ok, <<>>};
+                EmbedCode ->
+                    case z_notifier:first(#media_viewer_consent{
+                            id = Id,
+                            consent = all,
+                            html = EmbedCode,
+                            viewer_props = Props,
+                            viewer_options = Options
+                        }, Context)
+                    of
+                        undefined ->
+                            {ok, EmbedCode};
+                        {ok, _} = ConsentHtml ->
+                            ConsentHtml
+                    end
             end;
         _ ->
             undefined
