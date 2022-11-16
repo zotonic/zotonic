@@ -5,12 +5,12 @@
     width: 100%;
     height: auto;
     cursor: pointer; }
-  .cookie-consent-preview p {
+  .cookie-consent-preview figcaption {
     cursor: pointer;
     opacity: 0.8;
     text-align: right;
     text-overflow: ellipsis; }
-  .cookie-consent-preview img ~ p {
+  .cookie-consent-preview img ~ figcaption {
     position: absolute;
     bottom: 0px;
     right: 0px;
@@ -18,7 +18,7 @@
     color: white;
     padding: 4px 10px;
     margin: 0; }
-    .cookie-consent-preview img ~ p a {
+    .cookie-consent-preview img ~ figcaption a {
       font-weight: bold;
       padding: 10px; }
 

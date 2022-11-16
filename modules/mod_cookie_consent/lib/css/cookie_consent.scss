@@ -8,14 +8,14 @@
         cursor: pointer;
     }
 
-    p {
+    figcaption {
         cursor: pointer;
         opacity: 0.8;
         text-align: right;
         text-overflow: ellipsis;
     }
 
-    img ~ p {
+    img ~ figcaption {
         position: absolute;
         bottom: 0px;
         right: 0px;

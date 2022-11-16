@@ -12,6 +12,11 @@ The consent is one of:
 
 For elements this defaults to `all`. This means that they are only rendered if all consent is given.
 
+How to use
+----------
+
+Ensure that your base template has an all-include of `_html_head.tpl` and `_html_body.tpl`.
+
 HTML
 ----
 
@@ -19,15 +24,15 @@ Media embedded via mod_oembed or  mod_video_embed are automatically wrapped acco
 to this method.
 
 <pre>
-<div class="cookie-consent-preview do_cookie_consent mediaclass-..." data-cookie-consent="all">
+<figure class="cookie-consent-preview do_cookie_consent mediaclass-..." data-cookie-consent="all">
     <img src="..." alt="Media preview">
-    <p>Please consent to cookies to display external content.</p>
+    <figcaption>Please consent to cookies to display external content.</figcaption>
     <script type="text/x-cookie-consented">
         {% filter escape %}
         <iframe width="560" height="315" src="https://www.youtube.com/embed/IdIb5RPabjw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         {% endfilter %}
     </script>
-</div>
+</figure>
 </pre>
 
 
@@ -60,4 +65,3 @@ Use the special `type="text/x-cookie-consent"` and optionally the `data-cookie-c
 <pre>
 <link type="text/x-cookie-consent" data-cookie-consent="stats" href="https://..."></script>
 </pre>
-

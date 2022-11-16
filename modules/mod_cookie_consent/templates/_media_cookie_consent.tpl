@@ -8,10 +8,10 @@
              alt=_"Media preview"
              title=_"Click to change cookie settings"
     %}
-    <p>
+    <figcaption>
         {_ Please consent to cookies to display external content. _}
         <a href="#consent" id="{{ #consent }}" class="cookie-consent-change">{_ Change cookie settings _}</a>
-    </p>
+    </figcaption>
     <script type="text/x-cookie-consented">
         {{ html|escape }}
     </script>
