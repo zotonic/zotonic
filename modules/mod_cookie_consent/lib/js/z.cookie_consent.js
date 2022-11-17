@@ -45,7 +45,11 @@
                 // Replace with stored content
                 const $consented = $elt.find('script[type="text/x-cookie-consented"]');
                 if ($consented.length > 0) {
-                    $elt.replaceWith(html_unescape($consented.text()));
+                    let $replace = $(html_unescape($consented.text()));
+                    $elt.replaceWith($replace);
+                    if (typeof($.widgetManager) != 'undefined') {
+                        $replace.widgetManager();
+                    }
                 }
                 break;
         }
