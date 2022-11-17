@@ -59,7 +59,7 @@ observe_media_viewer_consent(#media_viewer_consent{
 manage_schema(_Version, Context) ->
     Datamodel = #datamodel{
         resources = [
-            {cookie_consent, uncategorized, [
+            {cookie_consent, other, [
                 {title,
                     {trans,
                         [{nl, <<"Deze website maakt gebruik van cookies">>},
