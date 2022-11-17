@@ -12,5 +12,5 @@ pkgs.mkShell {
     gettext
     libiconv
     (if stdenv.isDarwin then fswatch else inotify-tools)
-  ];
+  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) libcap;
 }
