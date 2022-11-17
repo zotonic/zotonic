@@ -154,10 +154,12 @@
     });
 
     // Initialize all elements on the page.
-    syncConsent();
+    $(function() {
+        syncConsent()
 
-    // Trigger on further consent changes.
-    window.addEventListener("zotonic:cookie-consent", function(ev) {
-        syncConsent();
+        // Trigger on further consent changes.
+        window.addEventListener("zotonic:cookie-consent", function(ev) {
+            syncConsent();
+        });
     });
 })();

@@ -27,8 +27,7 @@ limitations under the License.
     {
         widgetManager: function(context)
         {
-            context		= context || document.body;
-            let stack	= [];
+            let stack	= [context || document.body];
             let nodes   = [];
 
             // 1. Collect nodes

@@ -4,7 +4,7 @@
     <form id="cookie-consent__form" action="#">
         <div class="cookie-consent__upper">
             <h2 class="cookie-consent__title">
-                {{ m.rsc.cookie_consent.title|default:_"This website uses cookies" }}
+                {{ id.title|default:_"This website uses cookies" }}
             </h2>
             <p class="cookie-consent__explanation">
                 {{ id.summary }}

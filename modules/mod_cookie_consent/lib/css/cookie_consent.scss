@@ -124,6 +124,10 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+
+        .cookie-consent__upper__text {
+            flex-grow: 1;
+        }
     }
 
     .cookie-consent-toggle {
