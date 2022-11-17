@@ -87,7 +87,7 @@ event(#postback{message={survey_start, Args}}, Context) ->
                 {answer_user_id, z_acl:user(Context)}
                 | proplists:delete(answer_user_id, Args)
             ],
-            render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args, Context), Args, Context)
+            render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context), Args1, Context)
     end;
 
 event(#submit{message={survey_next, Args}}, Context) ->
