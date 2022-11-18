@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-11-16 16:56+0100\n"
+"PO-Revision-Date: 2022-11-18 14:57+0100\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -20,26 +20,16 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.2\n"
 
-#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:21
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:26
 msgid "Accept alll"
 msgstr "Accepteer alles"
 
-#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:74
-#, fuzzy
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:79
 msgid "Accept selection"
 msgstr "Selectie accepteren"
 
-#: modules/mod_cookie_consent/templates/_admin_edit_sidebar_parts.cookie_consent.tpl:6
-#, fuzzy
-msgid ""
-"Add a relation to a detail page about cookies. A link to this  page will "
-"show up in the cookie banner"
-msgstr ""
-"Voeg een relatie toe naar een detailpagina over cookies. Een link naar deze "
-"pagina zal verschijnen in de cookiebanner"
-
-#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:45
-#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:65
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:50
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:70
 msgid "All cookies"
 msgstr "Alle koekjes"
 
@@ -47,7 +37,7 @@ msgstr "Alle koekjes"
 msgid "Change cookie settings"
 msgstr "Cookie-instellingen wijzigen"
 
-#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:15
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:20
 msgid "Change settings"
 msgstr "Instellingen wijzigen"
 
@@ -56,27 +46,28 @@ msgstr "Instellingen wijzigen"
 msgid "Click to change cookie settings"
 msgstr "Klik om de cookie-instellingen te wijzigen"
 
-#: modules/mod_cookie_consent/templates/_admin_edit_basics_form.cookie_consent.tpl:16
+#: modules/mod_cookie_consent/templates/_admin_edit_content.name.cookie_consent.tpl:6
 #, fuzzy
-msgid "Cookie explanation"
-msgstr "Cookie uitleg"
+#| msgid "Change cookie settings"
+msgid "Cookie consent settings"
+msgstr "Cookie-instellingen wijzigen"
 
-#: modules/mod_cookie_consent/templates/_admin_edit_basics_form.cookie_consent.tpl:24
+#: modules/mod_cookie_consent/templates/_admin_edit_content.name.cookie_consent.tpl:16
 #, fuzzy
 msgid ""
 "Detailed explanation of cookie types. Leave a field empty if you don't want "
-"to this type of cookie"
+"to show this type of cookie"
 msgstr ""
 "Gedetailleerde uitleg van cookietypes. Laat een veld leeg als u dit type "
 "cookie niet wilt"
 
-#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:32
-#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:52
-#: modules/mod_cookie_consent/templates/_admin_edit_basics_form.cookie_consent.tpl:27
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:37
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:57
+#: modules/mod_cookie_consent/templates/_admin_edit_content.name.cookie_consent.tpl:19
 msgid "Functional"
 msgstr "Functioneel"
 
-#: modules/mod_cookie_consent/templates/_admin_edit_basics_form.cookie_consent.tpl:48
+#: modules/mod_cookie_consent/templates/_admin_edit_content.name.cookie_consent.tpl:33
 msgid "Marketing"
 msgstr "Marketing"
 
@@ -84,18 +75,18 @@ msgstr "Marketing"
 msgid "Media preview"
 msgstr "Mediavoorbeeld"
 
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:17
+msgid "More information about cookies"
+msgstr "Meer informatie over cookies"
+
 #: modules/mod_cookie_consent/templates/_media_cookie_consent.tpl:12
 #, fuzzy
 msgid "Please consent to cookies to display external content."
 msgstr "Geef toestemming voor cookies om externe inhoud weer te geven."
 
-#: modules/mod_cookie_consent/templates/_admin_edit_basics_form.cookie_consent.tpl:34
-msgid "Preference"
-msgstr "Voorkeur"
-
-#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:38
-#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:58
-#: modules/mod_cookie_consent/templates/_admin_edit_basics_form.cookie_consent.tpl:41
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:43
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:63
+#: modules/mod_cookie_consent/templates/_admin_edit_content.name.cookie_consent.tpl:26
 msgid "Statistics"
 msgstr "Statistieken"
 
@@ -103,6 +94,29 @@ msgstr "Statistieken"
 msgid "This website uses cookies"
 msgstr "Deze website gebruikt cookies"
 
-#: modules/mod_cookie_consent/templates/_admin_edit_basics_form.cookie_consent.tpl:5
-msgid "Title"
-msgstr "Titel"
+#: modules/mod_cookie_consent/templates/_admin_edit_content.name.cookie_consent.tpl:40
+msgid ""
+"To add more information about the use of cookies, either use the content "
+"field below or add a 'relation' in the page connections."
+msgstr ""
+"Om meer informatie over het gebruik van cookies toe te voegen, gebruikt u "
+"het onderstaande Content-veld of voegt u een 'relatie' toe in de "
+"paginaverbindingen."
+
+#, fuzzy
+#~ msgid ""
+#~ "Add a relation to a detail page about cookies. A link to this  page will "
+#~ "show up in the cookie banner"
+#~ msgstr ""
+#~ "Voeg een relatie toe naar een detailpagina over cookies. Een link naar "
+#~ "deze pagina zal verschijnen in de cookiebanner"
+
+#, fuzzy
+#~ msgid "Cookie explanation"
+#~ msgstr "Cookie uitleg"
+
+#~ msgid "Preference"
+#~ msgstr "Voorkeur"
+
+#~ msgid "Title"
+#~ msgstr "Titel"
