@@ -81,7 +81,7 @@ manage_schema(_Version, Context) ->
                 {cookies_stats,
                     {trans,
                         [{nl, <<"Statistische of analytische cookies helpen ons te begrijpen hoe bezoekers de website gebruiken, door anoniem gegevens te verzamelen en te rapporteren.">>},
-                        {en, <<"Statistic cookies help us to understand how visitors interact with the website by collecting and reporting information anonymously.">>}]
+                        {en, <<"Statistics cookies help us to understand how visitors interact with the website by collecting and reporting information anonymously.">>}]
                     }
                 },
                 {cookies_marketing,

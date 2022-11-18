@@ -50,6 +50,8 @@
                     if (typeof($.widgetManager) != 'undefined') {
                         $replace.widgetManager();
                     }
+                } else {
+                    window.location.reload(true);
                 }
                 break;
         }
@@ -145,9 +147,10 @@
     $.ui.cookie_consent.defaults = {
     };
 
-    // Link to change cookie settings on media item placeholders
-    $('body').on('click', '.cookie-consent-change,.cookie-consent-preview', function(ev) {
+    // Links to change cookie settings on media item placeholders
+    $('body').on('click', '.cookie-consent-change,.cookie-consent-preview,a[href="#cookie-consent"]', function(ev) {
         ev.stopImmediatePropagation();
+        ev.preventDefault();
         if ($('#cookie-consent').length == 0) {
             z_event("cookie-consent", {});
         }

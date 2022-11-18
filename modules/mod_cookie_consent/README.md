@@ -37,6 +37,8 @@ to this method.
 </figure>
 </pre>
 
+If there is no script tag then the page is reloaded after cookies are accepted.
+
 
 IFRAME
 ------

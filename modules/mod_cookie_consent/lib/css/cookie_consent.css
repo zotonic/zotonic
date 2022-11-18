@@ -5,22 +5,19 @@
     width: 100%;
     height: auto;
     cursor: pointer; }
-  .cookie-consent-preview figcaption {
+  .cookie-consent-preview p {
     cursor: pointer;
-    opacity: 0.8;
-    text-align: right;
-    text-overflow: ellipsis; }
-  .cookie-consent-preview img ~ figcaption {
+    text-align: center; }
+  .cookie-consent-preview img ~ p {
     position: absolute;
-    bottom: 0px;
-    right: 0px;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
+    top: 40%;
+    right: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #333;
     padding: 4px 10px;
-    margin: 0; }
-    .cookie-consent-preview img ~ figcaption a {
-      font-weight: bold;
-      padding: 10px; }
+    margin: 0;
+    text-overflow: ellipsis; }
 
 /* Overrule this color in your site */
 .cookie-consent__accept {

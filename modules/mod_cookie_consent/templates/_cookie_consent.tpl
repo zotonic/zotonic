@@ -13,6 +13,8 @@
                 <div class="cookie-consent__upper__text">
                     {% if id.o.relation[1] as rel_id %}
                         <a href="{{ rel_id.page_url }}" target="_blank" class="cookie-consent-privacy">{{ rel_id.title }}</a>
+                    {% elseif id.body %}
+                        <a href="{{ id.page_url }}" target="_blank" class="cookie-consent-privacy">{_ More information about cookies _}</a>
                     {% endif %}
                     <button class="cookie-consent-toggle">
                         {_ Change settings _}

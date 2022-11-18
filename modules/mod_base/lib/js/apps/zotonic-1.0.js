@@ -1113,6 +1113,14 @@ function z_translate(text)
     return text;
 }
 
+function z_translation_set(text, trans)
+{
+    if (typeof z_translations == "undefined") {
+        z_translations = {};
+    }
+    z_translations[text] = trans;
+}
+
 
 /* Render text as html nodes
 ---------------------------------------------------------- */
