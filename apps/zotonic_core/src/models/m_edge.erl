@@ -372,7 +372,7 @@ delete_multiple(SubjectId, Preds, ObjectId, Context) ->
                         from edge
                         where subject_id = $1
                           and object_id = $2
-                          and predicate_id in (SELECT(unnest($3::int[])))",
+                          and predicate_id = any($3::int[])",
                     [SubjectId, ObjectId, PredIds], Ctx)
             end,
 

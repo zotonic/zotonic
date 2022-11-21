@@ -507,11 +507,11 @@ is_update_medium_allowed(_RscId, #{ <<"mime">> := Mime }, _RscProps, Context) ->
 insert_url(Url, Context) ->
     insert_url(Url, #{}, [], Context).
 
--spec insert_url(media_url(), z_props:props_all(), z:context()) -> {ok, pos_integer()} | {error, term()}.
+-spec insert_url(media_url(), m_rsc:props_all(), z:context()) -> {ok, pos_integer()} | {error, term()}.
 insert_url(Url, RscProps, Context) ->
     insert_url(Url, RscProps, [], Context).
 
--spec insert_url(media_url(), z_props:props_all(), list(), z:context()) -> {ok, pos_integer()} | {error, term()}.
+-spec insert_url(media_url(), m_rsc:props_all(), list(), z:context()) -> {ok, pos_integer()} | {error, term()}.
 insert_url(Url, RscProps, Options, Context) when is_list(RscProps) ->
     {ok, PropsMap} = z_props:from_list(RscProps),
     insert_url(Url, PropsMap, Options, Context);

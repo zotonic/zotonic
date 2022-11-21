@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015 Marc Worrell
-%% @doc Model for SQL and archive backups
+%% @copyright 2015-2022 Marc Worrell
+%% @doc Model for database and files backups
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,9 +23,6 @@
 -export([
     m_get/3
 ]).
-
--include_lib("kernel/include/logger.hrl").
-
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().

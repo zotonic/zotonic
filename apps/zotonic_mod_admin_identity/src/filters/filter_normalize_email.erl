@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2022 Marc Worrell
 %% @doc Normalize an email address, as used for the keys in the identity table.
-%% @enddoc
+%% @end
 
 %% Copyright 2022 Marc Worrell
 %%

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-08-25 15:44\n"
+"PO-Revision-Date: 2022-10-31 18:52\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -772,7 +772,7 @@ msgstr "+ 添加"
 msgid "+ add block"
 msgstr "+ 添加块"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:46./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:161./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:113./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:32./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:46./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:164./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:113./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:32./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
 msgid "<em>Untitled</em>"
 msgstr "<em>無標題</em>"
 
@@ -1053,7 +1053,7 @@ msgstr "创建者"
 msgid "Created by me"
 msgstr "由我创建"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:24./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:82./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:137./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:24./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:82./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:140./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:51./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:53
 msgid "Created on"
@@ -1117,9 +1117,9 @@ msgstr "依赖性"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:26./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:28./apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:32
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
-#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:6
-#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:8
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:8
+#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:8
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:17
 #: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:8
 msgid "Disconnect"
@@ -1236,7 +1236,7 @@ msgid "Error checking the website."
 msgstr "检查网站时出错。"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:179
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:100
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:109
 msgid "Error creating the page."
 msgstr "创建页面时出错。"
 
@@ -1273,7 +1273,7 @@ msgid "Existing pages"
 msgstr "现有网页"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:175./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:153
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:86
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
 msgid "Failed to download the file."
 msgstr "下载文件失敗。"
 
@@ -1524,11 +1524,11 @@ msgstr "手机版"
 msgid "Modified"
 msgstr "修改时间"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:84./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:143./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:84./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:146./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
 msgid "Modified by"
 msgstr "修改者"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:27./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:140./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:27./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:143./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:53
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:50
 msgid "Modified on"
@@ -1596,7 +1596,7 @@ msgstr "没有找到媒体。"
 msgid "No other pages found"
 msgstr "未发现其他页面"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:16./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:183./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:16./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:187./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find_results_loop.tpl:10
 msgid "No pages found."
 msgstr "没有找到页面。"
@@ -1719,6 +1719,10 @@ msgstr "发布本页面"
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:46
 msgid "Published"
 msgstr "发布"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:137
+msgid "Published on"
+msgstr "發表於"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:21
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:28
@@ -2047,7 +2051,7 @@ msgid "There are no tasks in the task queue."
 msgstr "任務隊列中沒有任務。"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:159
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:80
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:89
 msgid "There is already a page with this name."
 msgstr "已经有一个页面用这个名字。"
 
@@ -2060,7 +2064,7 @@ msgid "This connection already exists."
 msgstr "这个连接已经存在。"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:179./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:157
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:90
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:99
 msgid "This file contains links to other files or locations."
 msgstr "本文件包含其他文件或位置的链接。"
 
@@ -2077,16 +2081,16 @@ msgid "This file has not been scanned for viruses."
 msgstr "这个文件没有经过病毒扫描。"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:177./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:155
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:88
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:97
 msgid "This file is infected with a virus."
 msgstr "这个文件被病毒感染了。"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:181./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:159
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:92
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:101
 msgid "This file is too large."
 msgstr "这个文件太大。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:38./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:153./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:38./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:156./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
 msgid "This is system content."
 msgstr "这是系统内容。"
 
@@ -2312,7 +2316,7 @@ msgid "You don't have permission to change this media item."
 msgstr "没有权限更改这个媒体条目。"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:161
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:82
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:91
 msgid "You don't have permission to create this page."
 msgstr "你没有权限创建这个页面。"
 
@@ -2322,7 +2326,7 @@ msgid "You don't have permission to edit this page."
 msgstr "您無權編輯此頁面。"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:173./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:93
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "没有上传这个文件类型的权限。"
 
@@ -2342,6 +2346,11 @@ msgstr "您的搜索查詢無效。保存前請更正。"
 msgid "Zotonic Version"
 msgstr "Zotonic版本"
 
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:159./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:116./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:96
+msgid "about {n} items found"
+msgstr "找到約 {n} 件商品"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
 msgid "add media item"
 msgstr "添加媒体条目"
@@ -2356,7 +2365,7 @@ msgstr "块"
 msgid "by"
 msgstr "由"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:55./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:102./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:103./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:170./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:171./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:124./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:127./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:55./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:102./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:103./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:173./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:174./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:175./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:124./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:127./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:55
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:70./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:71./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:73
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
@@ -2377,7 +2386,7 @@ msgstr "删除"
 msgid "e.g. might change"
 msgstr "如：可能改变"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:176./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:142./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:180./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:142./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:81
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:21./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:16
@@ -2387,11 +2396,6 @@ msgstr "修改编辑"
 #: apps/zotonic_mod_admin/priv/templates/_edit_button.tpl:7
 msgid "edit this page"
 msgstr "修改编辑本页面"
-
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:158./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:115./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:55
-#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:95
-msgid "estimated"
-msgstr "估計的"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "excluding"
@@ -2428,7 +2432,7 @@ msgstr "像素"
 msgid "show all"
 msgstr "显示所有"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:154
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:157
 msgid "system content"
 msgstr "系统内容"
 
@@ -2444,7 +2448,7 @@ msgstr "未命名"
 msgid "uploaded on"
 msgstr "上传时间"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:60./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:107./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:175./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:60./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:107./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:179./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:36
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:17./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:12
 msgid "view"
@@ -2454,10 +2458,10 @@ msgstr "查看"
 msgid "visit site"
 msgstr "流覽網站"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:158./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:115./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:55
-#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:95
-msgid "{total} items found"
-msgstr "找到{total} 件商品"
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:160./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:117./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:57
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
+msgid "{n} items found"
+msgstr "找到{n} 件商品"
 
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:1
 msgid "Are you sure you want to delete the following categories:"
@@ -3804,12 +3808,12 @@ msgid "Two-factor authentication configuration"
 msgstr "双因素认证配置"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:2
-msgid "Two-factor authentication is enabled for this user."
-msgstr "该用户启用了双因素认证。"
+msgid "Two-factor authentication is enabled for this account."
+msgstr "為此帳戶啟用了雙重身份驗證。"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:31
-msgid "Two-factor authentication is not enabled for this user."
-msgstr "该用户未启用双因素认证。"
+msgid "Two-factor authentication is not enabled for this account."
+msgstr "此帳戶未啟用雙重身份驗證。"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:59
 msgid "User group configuration"
@@ -4361,7 +4365,7 @@ msgstr "管理备份"
 msgid "Are you sure you want to revert to this version?"
 msgstr "确认恢复到这个版本？"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:55
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:60
 msgid "At any moment you can make a backup of your system."
 msgstr "任何时候你都可以创建系统的备份。"
 
@@ -4369,7 +4373,7 @@ msgstr "任何时候你都可以创建系统的备份。"
 msgid "Back to the edit page"
 msgstr "回到编辑页面"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:68
+#: apps/zotonic_mod_backup/src/mod_backup.erl:81
 msgid "Backup"
 msgstr "备份"
 
@@ -4385,7 +4389,7 @@ msgstr "站点内容的备份和恢复选项。"
 msgid "Backups"
 msgstr "备份"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:107
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:116
 msgid "Changed configuration."
 msgstr "改变了配置。"
 
@@ -4400,6 +4404,10 @@ msgstr "检查并恢复到页面的先前版本。"
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:13
 msgid "Click on <b>List and restore an earlier version</b> to get an overview of earlier saved versions of this page.<br/>You can also save the complete contents of a page to a file. Later you can reload this file, replacing the current page contents. Note that the file does not contain your unsaved changes. Connections and media are not saved as well."
 msgstr "点击<b>列出并恢复到之前的版本</b>来预览本页面的之前保存版本。<br />你也可以把页面的完整内容保存到文件。随后重加载这个文件，替换当前页面内容。注意文件不会包含你未保存的改动。链接和媒体不会一同保存"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
+msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
+msgstr "雲文件存儲已啟用。不會備份本地文件。確保您的雲文件存儲系統具有正確的備份。"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
 msgid "Deleted"
@@ -4425,13 +4433,21 @@ msgstr "备份 &amp; 恢复帮助。"
 msgid "List and restore an earlier version"
 msgstr "列出并恢复到之前的版本"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:44
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "对数据库和上传文件每天做备份。"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:29
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:46
+msgid "Make a daily backup of the database."
+msgstr "每天對數據庫進行備份。"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:45
 msgid "No backups present."
 msgstr "没有提供备份。"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:36
+msgid "Not uploaded to filestore"
+msgstr "未上傳到文件存儲"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:68
 msgid "Previous"
@@ -4457,11 +4473,11 @@ msgstr "選擇您要上傳的備份文件。該文件必須是.bert文件。"
 msgid "Show import/export panel in the admin."
 msgstr "在控制台显示导入/导出面板。"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:66
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:75
 msgid "Sorry, there is no module that can import this."
 msgstr "抱歉，沒有可以導入的模塊。"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:73./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:98
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:82./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:98
 msgid "Sorry, there was an error replacing your page."
 msgstr "对不起，您的页面更换时出现了错误。"
 
@@ -4473,35 +4489,35 @@ msgstr "对不起，这个备份已经被删除了。"
 msgid "Sorry, this backup is not valid."
 msgstr "对不起，这个备份无效。"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:68
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:77
 msgid "Sorry, this is not a backup file or it is corrupted."
 msgstr "对不起，这不是备份文件，或者是损坏了。"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:76
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:85
 msgid "Sorry, you don't have permission to change this page."
 msgstr "对不起，你没有权限改变这个页面。"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:109
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:118
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "对不起，你没有权限更改配置。"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
 msgid "Start backup now"
 msgstr "现在备份"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:72
 msgid "Start database-only backup now"
 msgstr "现在开始只备份数据库"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
-msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
-msgstr "PATH 中找不到 \"pg_dump\" 命令。请设置 \"pg_dump\" 配置 key 为 pg_dump 的路径然后回到本页面。"
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:83
+msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
+msgstr "在路徑中找不到“pg_dump”命令。在 zotonic.config 中將“pg_dump”配置鍵設置為 <tt>pg_dump</tt> 的路徑並返回此頁面。"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:70
-msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
-msgstr "命令 \"tar\" 没有在搜索路径中找到。请设置 \"tar\" 的配置项然后返回本页面。"
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:86
+msgid "The \"tar\" command was not found in the path. Set in zotonic.config the \"tar\" config key to the path to <tt>tar</tt> and return to this page."
+msgstr "在路徑中找不到“tar”命令。在 zotonic.config 中將“tar”配置鍵設置為 <tt>tar</tt> 的路徑並返回此頁面。"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "备份包括两部分，数据库和上传文件。"
 
@@ -4509,41 +4525,41 @@ msgstr "备份包括两部分，数据库和上传文件。"
 msgid "This is the version saved on"
 msgstr "这是保存在"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:81
-msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
-msgstr "该站点已启用云文件存储，并且此系统上有 <strong>$ 1</strong> 媒体文件仅存储在云中，而不存储在此计算机上。这些文件将不会备份！"
-
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "这将会使用备份文件内容覆盖你的页面。"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:32
+msgid "Uploaded to filestore"
+msgstr "上傳到文件存儲"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:94
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "警告"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
-msgid "Warning:"
-msgstr "警告："
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:26
+msgid "Y-m-d H:i – l"
+msgstr "Ymd H:i - l"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:72./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:75./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:84
 msgid "You are not allowed to see the revisions"
 msgstr "您不允许查看修改的内容"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
-msgid "You can have 10 backups, older ones will be deleted automatically."
-msgstr "你可以拥有 10 个备份，旧的备份将会被自动删除。"
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+msgid "You can have one backup per day of the week, older ones will be overwritten."
+msgstr "您可以在一周中的每一天進行一次備份，舊的將被覆蓋。"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "备份没有被正确配置。backup 模块需要你先解决如下问题："
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:17
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:21
 msgid "download database"
 msgstr "下载数据库"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:19
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:18
 msgid "download files"
 msgstr "下载文件"
 
@@ -4981,7 +4997,7 @@ msgid "This page is part of the group:"
 msgstr "本页属于组。"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:152
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:168
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:17
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
@@ -5527,19 +5543,19 @@ msgstr "應用程式 Secret"
 msgid "Application keys can be found in"
 msgstr "应用钥匙可以在"
 
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:17
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:19
 msgid "Connect with Facebook"
 msgstr "与Facebook连接"
 
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:2./apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:4
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:3./apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
 msgid "Disconnect from Facebook"
 msgstr "断开与Facebook的连接"
 
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:5
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:7
 msgid "Do you want to disconnect your Facebook account?"
 msgstr "你想断开你的Facebook账户吗？"
 
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:18
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:20
 msgid "Log in with Facebook"
 msgstr "用Facebook登录"
 
@@ -5580,61 +5596,51 @@ msgstr "您已将您的 <strong>Facebook</strong> 账户绑定。"
 msgid "Your Facebook Developer Dashboard"
 msgstr "您的Facebook开发者仪表板"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:42
-#: apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:14./apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:15
-#: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:13./apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:14
-msgid "API Key"
-msgstr "API密钥"
-
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:49
-msgid "API Secret"
-msgstr "API秘密"
-
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:80
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:96
 msgid "After 1 month"
 msgstr "1个月后"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:79
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:95
 msgid "After 1 week"
 msgstr "1周后"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:81
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
 msgid "After 3 months"
 msgstr "3个月后"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:204
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "所有的云文件都可以移回服务器上的文件系统。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
 msgid "All cloud files will be queued for download."
 msgstr "所有的云文件都会排队下载。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:161
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:181
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "所有的文件将被排队，上传将在10分钟内开始在后台。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:155
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "所有本地上传和预览的文件都可以移动到云端。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:191
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "你确定要把所有文件都移到云端吗？"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:193
-msgid "Are you sure you want to move all files to the server?"
-msgstr "你确定要把所有文件都移到服务器上吗？"
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
+msgid "Are you sure you want to move all files to the disk of the server?"
+msgstr "您確定要將所有文件移動到服務器的磁盤嗎？"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:32
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
 msgid "Base URL"
 msgstr "基础URL"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:88
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:104
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "在保存设置之前，将通过上传（和删除）一个小文件进行检查。"
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:127
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:159
 msgid "Cloud File Store"
 msgstr "云端文件存储"
 
@@ -5642,116 +5648,164 @@ msgstr "云端文件存储"
 msgid "Cloud File Store Configuration"
 msgstr "云文件存储配置"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:114
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:121
+msgid "Cloud File Store Utilities and Statistics"
+msgstr "雲文件存儲實用程序和統計信息"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:130
 msgid "Cloud Files"
 msgstr "云文件"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:180
 msgid "Could not access the service, double check your settings and try again."
 msgstr "无法访问服务，请仔细检查您的设置并再次尝试。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:91
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:107
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "无法访问服务，请仔细检查您的设置并再次尝试。确保API密钥具有创建和删除（临时） <code>-zotonic-filetore-test-file-</code> 文件的访问权限。"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
-msgid "Currently Zotonic supports services that are compatible with the S3 file services API. These include:"
-msgstr "目前Zotonic支持与S3文件服务API兼容的服务。这些服务包括："
+msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
+msgstr "目前 Zotonic 支持 FTP 和與 S3 文件服務 API 兼容的服務。這些包括："
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:137
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:153
 msgid "Delete Queue"
 msgstr "删除队列"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:75
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:91
 msgid "Delete files from the cloud file store"
 msgstr "从云文件存储中删除文件"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:136
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:152
 msgid "Download Queue"
 msgstr "下载队列"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:183
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
+msgid "Enable this to let the filestore act as a backup of  your local media files."
+msgstr "啟用此選項可讓文件存儲充當本地媒體文件的備份。"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:205
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "确保自己有足够的磁盘空间才开始这个过程。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:119./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:142
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
 msgid "Files"
 msgstr "文件"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:78
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:45
+msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
+msgstr "對於 FTP，URL 必須以 <b><tt>ftps:</tt></b> 或 <b><tt>ftp:</tt></b>開頭"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
+msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
+msgstr "對於 S3，URL 必須以 <b><tt>https:</tt></b> 或 <b><tt>http:</tt></b>開頭"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
+msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
+msgstr "對於 WebDAV，URL 必須以 <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>開頭"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
+msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
+msgstr "如果您選擇了“上傳到雲文件存儲後保留本地文件”，則不會刪除本地文件，因為遠程文件被視為本地文件的備份。"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
+msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
+msgstr "如果您選擇了“上傳到雲文件存儲後保留本地文件”，則不會刪除遠程文件，因為遠程文件被視為本地文件的備份。"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:17
+msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
+msgstr "如果您使用 FTP 服務器，那麼該服務器必須支持 FTPS（安全 ftp）"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:94
 msgid "Immediately"
 msgstr "立即"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:113
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:74
+msgid "Keep local files after upload to the cloud file store"
+msgstr "上傳到雲文件存儲後保留本地文件"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:129
 msgid "Local Files"
 msgstr "本地文件"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:112
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:128
 msgid "Media Resources"
 msgstr "媒体资源"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
-msgid "Move all S3 files to local"
-msgstr "将所有S3文件移动到本地"
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:187
+msgid "Move all local files to the remote storage"
+msgstr "將所有本地文件移動到遠程存儲"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:167
-msgid "Move all local files to S3"
-msgstr "将所有本地文件移动到S3"
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:215
+msgid "Move all remote files to local"
+msgstr "將所有遠程文件移動到本地"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:172
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:192
 msgid "Move files to cloud"
 msgstr "移动文件到云端"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:194
-msgid "Move files to local"
-msgstr "移动文件到本地"
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:220
+msgid "Move files to server disk"
+msgstr "將文件移動到服務器磁盤"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:82
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:40
 msgid "Never"
 msgstr "絶不"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:29
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
+msgid "S3 API Key or FTP/WebDAV username"
+msgstr "S3 API 密鑰或 FTP/WebDAV 用戶名"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:56
+msgid "S3 API Secret or FTP/WebDAV password"
+msgstr "S3 API 密碼或 FTP/WebDAV 密碼"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:33
 msgid "S3 Cloud Location and Credentials"
 msgstr "S3云的位置和证书"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:105
-msgid "S3 Cloud Utilities and Statistics"
-msgstr "S3云实用程序和统计"
-
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:95
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:111
 msgid "Save Settings"
 msgstr "保存设置"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:90
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
 msgid "Settings are working fine and are saved."
 msgstr "设置工作正常并保存。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:125
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:141
 msgid "Storage"
 msgstr "存储"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:157
-msgid "There is a 10 minute wait before files are uploaded."
-msgstr "文件上传前需要等待10分钟。"
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:173
+msgid "There is a 1 minute wait before files are uploaded."
+msgstr "上傳文件前需要等待 1 分鐘。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:156
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:172
 msgid "This will queue the files for later asynchronous upload."
 msgstr "这将为以后的异步上传文件排队。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:68
-msgid "Try to create a private bucket if the bucket does not exist"
-msgstr "如果 bucket 不存在，请尝试创建一个私有 bucket。"
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
+msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
+msgstr "如果 S3 存儲桶不存在，請嘗試創建私有 S3 存儲桶"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:151
 msgid "Upload Queue"
 msgstr "上传队列"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:60
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:65
 msgid "Upload new media files to the cloud file store"
 msgstr "将新媒体文件上传到云文件存储中"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:59./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:66./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:73
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+msgid "With FTP and WebDAV the directories are always created automatically."
+msgstr "使用 FTP 和 WebDAV，目錄總是自動創建的。"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:19
+msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
+msgstr "使用 WebDAV，用戶名和密碼以明文形式傳輸，因此請確保您使用 <tt>個 webdav：</tt> URL（使用 https）。"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:235./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:63./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:70./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:77
 msgid "You are not allowed to change these settings."
 msgstr "您不允许更改这些设置。"
 
@@ -6082,19 +6136,24 @@ msgstr "午夜"
 msgid "noon"
 msgstr "正午"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:17
+#: apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:14./apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:15
+#: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:13./apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:14
+msgid "API Key"
+msgstr "API密钥"
+
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:19
 msgid "Connect with LinkedIn"
 msgstr "与LinkedIn联系"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:2./apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:4
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:3./apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:6
 msgid "Disconnect from LinkedIn"
 msgstr "断开与LinkedIn的联系"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:5
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:7
 msgid "Do you want to disconnect your LinkedIn account?"
 msgstr "你想断开LinkedIn账户的连接吗？"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:18
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:20
 msgid "Log in with LinkedIn"
 msgstr "用LinkedIn登录"
 
@@ -7114,7 +7173,7 @@ msgstr "Azure門戶應用程序註冊"
 msgid "Client Secret"
 msgstr "客戶機密"
 
-#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:17
+#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:19
 msgid "Connect with Microsoft"
 msgstr "與微軟聯繫"
 
@@ -7122,15 +7181,15 @@ msgstr "與微軟聯繫"
 msgid "Control who can sign in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
 msgstr "控制誰可以登錄允許的值是： <tt>常見</tt>， <tt>組織</tt>， <tt>消費者</tt>，和租戶標識符。"
 
-#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:2./apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:4
+#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:3./apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
 msgid "Disconnect from Microsoft"
 msgstr "與Microsoft斷開連接"
 
-#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:5
+#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:7
 msgid "Do you want to disconnect your Microsoft account?"
 msgstr "您要斷開您的Microsoft帳戶嗎？"
 
-#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:18
+#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:20
 msgid "Log in with Microsoft"
 msgstr "使用Microsoft登錄"
 

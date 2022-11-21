@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-08-25 15:45\n"
+"PO-Revision-Date: 2022-10-31 18:52\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -772,7 +772,7 @@ msgstr "+ voeg toe"
 msgid "+ add block"
 msgstr "+ nieuw blok"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:46./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:161./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:113./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:32./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:46./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:164./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:113./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:32./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
 msgid "<em>Untitled</em>"
 msgstr "<em>Zonder titel</em>"
 
@@ -912,7 +912,7 @@ msgstr "Vraag Google om alle \"{cat}\"-pagina's uit te sluiten"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
 msgid "Ask Google to not index this page"
-msgstr "Vraag Google deze pagina niet te indexeren"
+msgstr "Vraag Google om deze pagina niet te indexeren"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
@@ -1056,7 +1056,7 @@ msgstr "Gemaakt door"
 msgid "Created by me"
 msgstr "Gemaakt door mij"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:24./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:82./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:137./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:24./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:82./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:140./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:51./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:53
 msgid "Created on"
@@ -1120,9 +1120,9 @@ msgstr "Afhankelijk"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:26./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:28./apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:32
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
-#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:6
-#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:8
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:8
+#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:8
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:17
 #: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:8
 msgid "Disconnect"
@@ -1239,7 +1239,7 @@ msgid "Error checking the website."
 msgstr "Fout bij controleren van de website."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:179
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:100
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:109
 msgid "Error creating the page."
 msgstr "Fout bij het maken van de pagina."
 
@@ -1276,7 +1276,7 @@ msgid "Existing pages"
 msgstr "Bestaande pagina's"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:175./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:153
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:86
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
 msgid "Failed to download the file."
 msgstr "Downloaden van het bestand is mislukt."
 
@@ -1527,11 +1527,11 @@ msgstr "Mobiele telefoon"
 msgid "Modified"
 msgstr "Bewerkt"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:84./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:143./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:84./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:146./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
 msgid "Modified by"
 msgstr "Bewerkt door"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:27./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:140./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:27./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:143./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:53
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:50
 msgid "Modified on"
@@ -1599,7 +1599,7 @@ msgstr "Geen media gevonden."
 msgid "No other pages found"
 msgstr "Geen andere pagina's gevonden"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:16./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:183./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:16./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:187./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find_results_loop.tpl:10
 msgid "No pages found."
 msgstr "Geen pagina's gevonden."
@@ -1722,6 +1722,10 @@ msgstr "Publiceer deze pagina"
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:46
 msgid "Published"
 msgstr "Gepubliceerd"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:137
+msgid "Published on"
+msgstr "gepubliceerd op"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:21
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:28
@@ -2051,7 +2055,7 @@ msgid "There are no tasks in the task queue."
 msgstr "Er staan geen taken in de takenwachtrij."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:159
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:80
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:89
 msgid "There is already a page with this name."
 msgstr "Er is al een pagina met deze naam."
 
@@ -2064,7 +2068,7 @@ msgid "This connection already exists."
 msgstr "Deze connectie bestaat al"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:179./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:157
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:90
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:99
 msgid "This file contains links to other files or locations."
 msgstr "Dit bestand bevat links naar andere bestanden of locaties."
 
@@ -2081,16 +2085,16 @@ msgid "This file has not been scanned for viruses."
 msgstr "Dit bestand is niet gescand op virussen."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:177./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:155
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:88
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:97
 msgid "This file is infected with a virus."
 msgstr "Dit bestand is geïnfecteerd met een virus."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:181./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:159
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:92
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:101
 msgid "This file is too large."
 msgstr "Dit bestand is te groot."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:38./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:153./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:38./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:156./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
 msgid "This is system content."
 msgstr "Dit is systeeminhoud."
 
@@ -2316,7 +2320,7 @@ msgid "You don't have permission to change this media item."
 msgstr "Je hebt geen toestemming om dit media-item te bewerken."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:161
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:82
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:91
 msgid "You don't have permission to create this page."
 msgstr "Je hebt geen toestemming om deze pagina te maken."
 
@@ -2326,7 +2330,7 @@ msgid "You don't have permission to edit this page."
 msgstr "Je hebt geen toestemming om deze pagina te bewerken."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:173./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:93
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Je hebt niet de juiste permissies om dit type bestand te uploaden."
 
@@ -2346,6 +2350,11 @@ msgstr "Je zoekopdracht is ongeldig. Corrigeer het voordat je opslaat."
 msgid "Zotonic Version"
 msgstr "Zotonic versie"
 
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:159./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:116./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:96
+msgid "about {n} items found"
+msgstr "ongeveer {n} items gevonden"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
 msgid "add media item"
 msgstr "Media-item toevoegen"
@@ -2360,7 +2369,7 @@ msgstr "blok"
 msgid "by"
 msgstr "door"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:55./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:102./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:103./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:170./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:171./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:124./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:127./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:55./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:102./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:103./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:173./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:174./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:175./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:124./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:127./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:55
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:70./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:71./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:73
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
@@ -2381,7 +2390,7 @@ msgstr "verwijder"
 msgid "e.g. might change"
 msgstr "bv. kan nog veranderen"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:176./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:142./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:180./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:142./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:81
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:21./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:16
@@ -2391,11 +2400,6 @@ msgstr "bewerk"
 #: apps/zotonic_mod_admin/priv/templates/_edit_button.tpl:7
 msgid "edit this page"
 msgstr "bewerk deze pagina"
-
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:158./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:115./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:55
-#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:95
-msgid "estimated"
-msgstr "geschat"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "excluding"
@@ -2432,7 +2436,7 @@ msgstr "pixels"
 msgid "show all"
 msgstr "toon alles"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:154
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:157
 msgid "system content"
 msgstr "systeeminhoud"
 
@@ -2448,7 +2452,7 @@ msgstr "zonder titel"
 msgid "uploaded on"
 msgstr "geüpload op"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:60./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:107./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:175./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:60./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:107./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:179./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:36
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:17./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:12
 msgid "view"
@@ -2458,10 +2462,10 @@ msgstr "bekijk"
 msgid "visit site"
 msgstr "bezoek site"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:158./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:115./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:55
-#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:95
-msgid "{total} items found"
-msgstr "{total} items gevonden"
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:160./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:117./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:57
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
+msgid "{n} items found"
+msgstr "{n} items gevonden"
 
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:1
 msgid "Are you sure you want to delete the following categories:"
@@ -2648,7 +2652,7 @@ msgstr "Wachtwoord"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:134
 msgid "Per default images smaller than 1MB are embedded in email messages. Using a separate download for images results in a smaller message size but non-public images will not be visible. Leave this disabled if you are sending non-public images."
-msgstr "Standaard worden afbeeldingen kleiner dan 1 MB ingesloten in e-mailberichten. Het gebruik van een aparte download voor afbeeldingen resulteert in een kleinere berichtgrootte, maar niet-openbare afbeeldingen zijn niet zichtbaar. Laat dit uitgeschakeld als u niet-openbare afbeeldingen verzendt."
+msgstr "Standaard worden afbeeldingen kleiner dan 1 MB ingesloten in e-mailberichten. Het gebruik van een aparte download voor afbeeldingen resulteert in een kleinere berichtgrootte, maar niet-openbare afbeeldingen zullen niet zichtbaar zijn. Laat dit uitgeschakeld als niet niet-openbare afbeeldingen verzendt."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:1
 msgid "Please fill in the module, key and value for the new configuration key."
@@ -3806,12 +3810,12 @@ msgid "Two-factor authentication configuration"
 msgstr "Twee-factor-authenticatieconfiguratie"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:2
-msgid "Two-factor authentication is enabled for this user."
-msgstr "Voor deze gebruiker is de twee-factor-authenticatie ingeschakeld."
+msgid "Two-factor authentication is enabled for this account."
+msgstr "Twee-factor-authenticatie is ingeschakeld voor dit account."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:31
-msgid "Two-factor authentication is not enabled for this user."
-msgstr "Twee-factor-authenticatie is voor deze gebruiker niet ingeschakeld."
+msgid "Two-factor authentication is not enabled for this account."
+msgstr "Twee-factor-authenticatie is niet ingeschakeld voor dit account."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:59
 msgid "User group configuration"
@@ -3860,7 +3864,7 @@ msgstr "Hieronder staan je account details en een link om je wachtwoord te reset
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
 msgid "Change"
-msgstr "Wijziging"
+msgstr "Wijzigen"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:41
 msgid "Change password"
@@ -3892,7 +3896,7 @@ msgstr "Klik op de onderstaande link om een nieuw wachtwoord in te voeren. Als h
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:16
 msgid "Close this window and log on if you are already a user of {site}."
-msgstr "Sluit dit venster en meld u aan als u al een gebruiker bent van {site}."
+msgstr "Sluit dit venster en log in aan als je al een gebruiker bent van {site}."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:72./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
@@ -4019,7 +4023,7 @@ msgstr "Ik wil een nieuw account aanmaken"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:9
 msgid "If you are already a user of {site} then <a href=\"{logon_url}\">log on</a>."
-msgstr "Als u al een gebruiker van {site} bent, dan <a href=\"{logon_url}\">logt u in</a>."
+msgstr "<a href=\"{logon_url}\">Logt in</a> als je al een gebruiker van {site} bent."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:30
 msgid "If you didn't request a password reset, you can safely ignore this email. Maybe someone made an error typing his or her email address."
@@ -4187,11 +4191,11 @@ msgstr "De toegangscode voor tweefactorauthenticatie kwam niet overeen. Probeer 
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
 msgid "There is already an account with your email address on {site}."
-msgstr "Er is al een account met uw e-mailadres op {site}."
+msgstr "Er is al een account met jouw e-mailadres op {site}."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:103
 msgid "There is more than one account with your email address on {site}."
-msgstr "Er is meer dan één account met uw e-mailadres op {site}."
+msgstr "Er is meer dan één account met jouw e-mailadres op {site}."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:120
 msgid "There was a problem authenticating with {service}."
@@ -4225,7 +4229,7 @@ msgstr "Bevestig je account"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:104
 msgid "We cannot connect you to the right account. Contact support of {site} to help you merge the accounts and then try again."
-msgstr "We kunnen u niet aan het juiste account koppelen. Neem contact op met ondersteuning van {site} om u te helpen de accounts samen te voegen en probeer het opnieuw."
+msgstr "We kunnen je niet aan het juiste account koppelen. Neem contact op met support van {site} om je te helpen de accounts samen te voegen en probeer het opnieuw."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:113
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
@@ -4241,7 +4245,7 @@ msgstr "Je staat op het punt een nieuw account aan te maken."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:34
 msgid "You are about to log on."
-msgstr "U staat op het punt om in te loggen."
+msgstr "Je staat op het punt om in te loggen."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
 msgid "You are now signed in."
@@ -4253,7 +4257,7 @@ msgstr "U bent aangemeld"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93
 msgid "You can connect the account on {site} with your account on {service} if both accounts have a verified email address but this is not the case. Check both sites and then try again."
-msgstr "U kunt het account op {site} koppelen aan uw account op {service} als beide accounts een geverifieerd e-mailadres hebben, maar dit is niet het geval. Controleer beide sites en probeer het opnieuw."
+msgstr "Je kunt het account op {site} koppelen aan je account op {service} als beide accounts een geverifieerd e-mailadres hebben, maar dit is niet het geval. Controleer beide sites en probeer het opnieuw."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:3
 msgid "You can find the code in your authentication App."
@@ -4282,7 +4286,7 @@ msgstr "U hebt deze e-mail ontvangen omdat u een verzoek hebt ingediend om uw wa
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:111
 msgid "You used another account on {service} than was expected."
-msgstr "U heeft op {service} een ander account gebruikt dan verwacht."
+msgstr "Je hebt op {service} een ander account gebruikt dan verwacht."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:5
 msgid "You'll need to create a new one."
@@ -4363,7 +4367,7 @@ msgstr "Beheerdersback-ups"
 msgid "Are you sure you want to revert to this version?"
 msgstr "Weet je zeker dat je deze versie wilt terugzetten?"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:55
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:60
 msgid "At any moment you can make a backup of your system."
 msgstr "Op elk moment kan je een backup van je systeem maken."
 
@@ -4371,7 +4375,7 @@ msgstr "Op elk moment kan je een backup van je systeem maken."
 msgid "Back to the edit page"
 msgstr "Terug naar de edit pagina."
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:68
+#: apps/zotonic_mod_backup/src/mod_backup.erl:81
 msgid "Backup"
 msgstr "Back-up"
 
@@ -4387,7 +4391,7 @@ msgstr "Backup- en terugzetopties voor je gegevens"
 msgid "Backups"
 msgstr "Back-ups"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:107
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:116
 msgid "Changed configuration."
 msgstr "Configuratie veranderd."
 
@@ -4402,6 +4406,10 @@ msgstr "Controleer en optioneel herstel een eerdere versie van je pagina."
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:13
 msgid "Click on <b>List and restore an earlier version</b> to get an overview of earlier saved versions of this page.<br/>You can also save the complete contents of a page to a file. Later you can reload this file, replacing the current page contents. Note that the file does not contain your unsaved changes. Connections and media are not saved as well."
 msgstr "Klik op <b>Bekijk en herstel een eerdere versie</b> voor een overzicht van eerdere versies van deze pagina.<br/>Je kan ook de volledige inhoud van je pagina in een bestand bewaren. Later kan je dat bestand inladen, wat de huidige paginainhoud vervangt. Let op dat dit bestand alleen je bewaarde veranderingen bevat. Pagina connecties en media worden niet bewaard."
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
+msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
+msgstr "Bestandsopslag in de cloud is ingeschakeld. Er wordt geen back-up gemaakt van de lokale bestanden. Zorg ervoor dat uw cloud-bestandsopslagsysteem een goede back-up heeft."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
 msgid "Deleted"
@@ -4427,13 +4435,21 @@ msgstr "Hulp over backup &amp; herstel"
 msgid "List and restore an earlier version"
 msgstr "Bekijk en herstel een eerdere versie."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:44
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Maak een dagelijkse backup van de database en alle geüploade bestanden."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:29
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:46
+msgid "Make a daily backup of the database."
+msgstr "Maak dagelijks een back-up van de database."
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:45
 msgid "No backups present."
 msgstr "Er zijn geen backups."
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:36
+msgid "Not uploaded to filestore"
+msgstr "Niet geüpload naar bestandsopslag"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:68
 msgid "Previous"
@@ -4459,11 +4475,11 @@ msgstr "Selecteer de backup die je wilt terugzetten. Het bestand moet extensie .
 msgid "Show import/export panel in the admin."
 msgstr "Toon import/export paneel in de admin"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:66
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:75
 msgid "Sorry, there is no module that can import this."
 msgstr "Sorry, er is geen module die dit kan importeren."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:73./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:98
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:82./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:98
 msgid "Sorry, there was an error replacing your page."
 msgstr "Sorry, er was een fout bij het vervangen van je pagina."
 
@@ -4475,35 +4491,35 @@ msgstr "Sorry, deze back-up is verwijderd."
 msgid "Sorry, this backup is not valid."
 msgstr "Sorry, deze back-up is niet geldig."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:68
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:77
 msgid "Sorry, this is not a backup file or it is corrupted."
 msgstr "Sorry, dit is geen back-upbestand of het is beschadigd."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:76
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:85
 msgid "Sorry, you don't have permission to change this page."
 msgstr "Sorry, je hebt geen toestemming om deze pagina te veranderen."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:109
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:118
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Sorry, je hebt geen toestemming om de configuratie te wijzigen."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
 msgid "Start backup now"
 msgstr "Start nu met de back-up"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:72
 msgid "Start database-only backup now"
 msgstr "Backup alleen de database"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
-msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
-msgstr "Het \"pg_dump\" commando werd niet gevonden in het pad. Stel de \"pg_dump\" configuratieregel in op het pad naar pg_dump en keer terug naar deze pagina."
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:83
+msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
+msgstr "Het programma \"pg_dump\" kan niet gevonden worden in het pad. Stel in zotonic.config de configuratiesleutel \"pg_dump\" in op het pad naar <tt>pg_dump</tt> en keer terug naar deze pagina."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:70
-msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
-msgstr "Het \"tar\"-commando werd niet in het pad gevonden. Stel de \"tar\"-configuratieregel in op het pad naar tar en keer terug naar deze pagina."
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:86
+msgid "The \"tar\" command was not found in the path. Set in zotonic.config the \"tar\" config key to the path to <tt>tar</tt> and return to this page."
+msgstr "Het programma \"tar\" kan niet gevonden worden in het pad. Stel in zotonic.config de configuratiesleutel \"tar\" in op het pad naar <tt>tar</tt> en keer terug naar deze pagina."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "Een backup bestaat uit twee delen, de database en alle geüploade bestanden."
 
@@ -4511,41 +4527,41 @@ msgstr "Een backup bestaat uit twee delen, de database en alle geüploade bestan
 msgid "This is the version saved on"
 msgstr "Deze versie is bewaard op"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:81
-msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
-msgstr "Deze site heeft cloud file store ingeschakeld, en er zijn <strong>$1</strong> mediabestanden op dit systeem die alleen in de cloud zijn opgeslagen en niet op deze machine. Van deze bestanden wordt geen back-up gemaakt!"
-
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "Dit vervangt je pagina met de inhoud van het backup bestand."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:32
+msgid "Uploaded to filestore"
+msgstr "Geüpload naar bestandsopslag"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:94
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "Waarschuwing"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
-msgid "Warning:"
-msgstr "Waarschuwing:"
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:26
+msgid "Y-m-d H:i – l"
+msgstr "Y-m-d H:i - l"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:72./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:75./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:84
 msgid "You are not allowed to see the revisions"
 msgstr "Je mag de revisies niet zien"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
-msgid "You can have 10 backups, older ones will be deleted automatically."
-msgstr "Je kan 10 backups bewaren. Oudere worden automatisch verwijderd."
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+msgid "You can have one backup per day of the week, older ones will be overwritten."
+msgstr "U kunt één back-up per dag van de week hebben, oudere worden overschreven."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Uw back-up is niet correct geconfigureerd. De back-upmodule zal niet werken totdat het probleem (of problemen) hieronder zijn opgelost:"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:17
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:21
 msgid "download database"
 msgstr "download database"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:19
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:18
 msgid "download files"
 msgstr "download bestanden"
 
@@ -4983,7 +4999,7 @@ msgid "This page is part of the group:"
 msgstr "Deze pagina maakt deel uit van de groep:"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:152
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:168
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:17
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
@@ -5529,19 +5545,19 @@ msgstr "App Geheim"
 msgid "Application keys can be found in"
 msgstr "Applicatiesleutels kun je vinden in"
 
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:17
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:19
 msgid "Connect with Facebook"
 msgstr "Verbinden met Facebook"
 
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:2./apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:4
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:3./apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
 msgid "Disconnect from Facebook"
 msgstr "Ontkoppelen van Facebook"
 
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:5
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:7
 msgid "Do you want to disconnect your Facebook account?"
 msgstr "Wil je ontkoppelen van je Facebook-account?"
 
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:18
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:20
 msgid "Log in with Facebook"
 msgstr "Log in met Facebook"
 
@@ -5582,61 +5598,51 @@ msgstr "Je hebt je <strong>Facebook</strong>-account gekoppeld."
 msgid "Your Facebook Developer Dashboard"
 msgstr "Je Facebook Developer Dashboard"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:42
-#: apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:14./apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:15
-#: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:13./apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:14
-msgid "API Key"
-msgstr "API-sleutel"
-
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:49
-msgid "API Secret"
-msgstr "API-geheim"
-
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:80
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:96
 msgid "After 1 month"
 msgstr "Na 1 maand"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:79
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:95
 msgid "After 1 week"
 msgstr "Na 1 week"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:81
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
 msgid "After 3 months"
 msgstr "Na 3 maanden"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:204
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Alle cloud-bestanden kunnen worden verplaatst naar het bestandssysteem op de server."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
 msgid "All cloud files will be queued for download."
 msgstr "Alle cloud bestanden worden in een download-wachtrij geplaatst."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:161
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:181
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "Alle bestanden worden in een wachtrij geplaatst, uploads starten over 10 minuten op de achtergrond."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:155
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Alle geüploade en voorbeeldbestanden kunnen naar de Cloud worden verplaatst."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:191
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Weet u zeker dat u alle bestanden naar de cloud wilt verplaatsen?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:193
-msgid "Are you sure you want to move all files to the server?"
-msgstr "Weet u zeker dat u alle bestanden naar de server wilt verplaatsen?"
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
+msgid "Are you sure you want to move all files to the disk of the server?"
+msgstr "Weet u zeker dat u alle bestanden naar de schijf van de server wilt verplaatsen?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:32
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
 msgid "Base URL"
 msgstr "Basis URL"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:88
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:104
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Voordat de instellingen worden opgeslagen, worden ze gecontroleerd door een klein bestand te uploaden (en te verwijderen)."
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:127
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:159
 msgid "Cloud File Store"
 msgstr "Cloud File Store"
 
@@ -5644,116 +5650,164 @@ msgstr "Cloud File Store"
 msgid "Cloud File Store Configuration"
 msgstr "Cloud File Opslag Configuratie"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:114
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:121
+msgid "Cloud File Store Utilities and Statistics"
+msgstr "Hulpprogramma's en statistieken voor Cloud File Store"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:130
 msgid "Cloud Files"
 msgstr "Cloud Bestanden"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:180
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Kon geen toegang krijgen tot de service, controleer de instellingen en probeer het opnieuw."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:91
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:107
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "Kon geen toegang krijgen tot de service, controleer de instellingen en probeer het opnieuw. Zorg ervoor dat de API-key toegangsrechten heeft om een (tijdelijk) <code>-zotonic-filestore-test-file-</code> bestand aan te maken en te verwijderen."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
-msgid "Currently Zotonic supports services that are compatible with the S3 file services API. These include:"
-msgstr "Momenteel ondersteunt Zotonic diensten die compatibel zijn met de S3 file services API. Deze omvatten:"
+msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
+msgstr "Momenteel ondersteunt Zotonic FTP en services die compatibel zijn met de S3-bestandsservices-API. Waaronder:"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:137
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:153
 msgid "Delete Queue"
 msgstr "Verwijder wachtrij"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:75
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:91
 msgid "Delete files from the cloud file store"
 msgstr "Verwijder bestanden uit de cloud"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:136
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:152
 msgid "Download Queue"
 msgstr "Download wachtrij"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:183
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
+msgid "Enable this to let the filestore act as a backup of  your local media files."
+msgstr "Schakel dit in om de bestandsopslag te laten fungeren als een back-up van uw lokale mediabestanden."
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:205
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Zorg er zelf voor dat er voldoende schijfruimte is voordat je met dit proces begint."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:119./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:142
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
 msgid "Files"
 msgstr "Bestanden"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:78
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:45
+msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
+msgstr "Voor FTP moet de URL beginnen met <b><tt>ftps:</tt></b> of <b><tt>ftp:</tt></b>"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
+msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
+msgstr "Voor S3 moet de URL beginnen met <b><tt>https:</tt></b> of <b><tt>http:</tt></b>"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
+msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
+msgstr "Voor WebDAV moet de URL beginnen met <b><tt>webdavs:</tt></b> of <b><tt>webdav:</tt></b>"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
+msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
+msgstr "Als u \"Lokale bestanden behouden na uploaden naar de cloud-bestandsopslag\" hebt geselecteerd, worden de lokale bestanden niet verwijderd, omdat de externe bestanden worden beschouwd als een back-up van de lokale bestanden."
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
+msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
+msgstr "Als u \"Lokale bestanden behouden na uploaden naar de cloud-bestandsopslag\" hebt geselecteerd, worden de externe bestanden niet verwijderd, omdat de externe bestanden worden beschouwd als een back-up van de lokale bestanden."
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:17
+msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
+msgstr "Als u een FTP-server gebruikt, MOET die server FTPS (secure ftp) ondersteunen"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:94
 msgid "Immediately"
 msgstr "Meteen"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:113
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:74
+msgid "Keep local files after upload to the cloud file store"
+msgstr "Lokale bestanden bewaren na uploaden naar de cloud-bestandsopslag"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:129
 msgid "Local Files"
 msgstr "Lokale bestanden"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:112
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:128
 msgid "Media Resources"
 msgstr "Media"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
-msgid "Move all S3 files to local"
-msgstr "Verplaats alle S3 bestanden naar de webserver"
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:187
+msgid "Move all local files to the remote storage"
+msgstr "Verplaats alle lokale bestanden naar de externe opslag"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:167
-msgid "Move all local files to S3"
-msgstr "Verplaats alle bestanden naar S3"
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:215
+msgid "Move all remote files to local"
+msgstr "Verplaats alle externe bestanden naar de webserver"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:172
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:192
 msgid "Move files to cloud"
 msgstr "Bestanden naar de cloud verplaatsen"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:194
-msgid "Move files to local"
-msgstr "Verplaats bestanden naar de webserver"
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:220
+msgid "Move files to server disk"
+msgstr "Bestanden verplaatsen naar de serverschijf"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:82
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:40
 msgid "Never"
 msgstr "Nooit"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:29
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
+msgid "S3 API Key or FTP/WebDAV username"
+msgstr "S3 API-sleutel of FTP/WebDAV-gebruikersnaam"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:56
+msgid "S3 API Secret or FTP/WebDAV password"
+msgstr "S3 API Geheim of FTP/WebDAV-wachtwoord"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:33
 msgid "S3 Cloud Location and Credentials"
 msgstr "S3 Cloud locatie en toegangssleutels"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:105
-msgid "S3 Cloud Utilities and Statistics"
-msgstr "S3 Cloud utilities en statistieken"
-
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:95
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:111
 msgid "Save Settings"
 msgstr "Bewaar instellingen"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:90
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
 msgid "Settings are working fine and are saved."
 msgstr "De instellingen werken goed en zijn bewaard."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:125
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:141
 msgid "Storage"
 msgstr "Opslag"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:157
-msgid "There is a 10 minute wait before files are uploaded."
-msgstr "Er is een wachttijd van 10 minuten voordat de bestanden worden geüpload."
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:173
+msgid "There is a 1 minute wait before files are uploaded."
+msgstr "Er is een wachttijd van 1 minuut voordat bestanden worden geüpload."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:156
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:172
 msgid "This will queue the files for later asynchronous upload."
 msgstr "Dit plaatst alle bestanden in een wachtrij voor latere asynchrone upload."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:68
-msgid "Try to create a private bucket if the bucket does not exist"
-msgstr "Probeer een eigen bucket te maken als de bucket niet bestaat."
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
+msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
+msgstr "Probeer een privé S3-bucket te maken als de S3-bucket niet bestaat"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:151
 msgid "Upload Queue"
 msgstr "Upload wachtrij"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:60
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:65
 msgid "Upload new media files to the cloud file store"
 msgstr "Upload nieuwe mediabestanden naar de cloud"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:59./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:66./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:73
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+msgid "With FTP and WebDAV the directories are always created automatically."
+msgstr "Bij FTP en WebDAV worden de mappen altijd automatisch aangemaakt."
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:19
+msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
+msgstr "Met WebDAV worden de gebruikersnaam en het wachtwoord onversleuteld overgedragen, dus zorg ervoor dat u <tt>webdavs:</tt> URL's gebruikt (die gebruik maakt van https)."
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:235./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:63./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:70./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:77
 msgid "You are not allowed to change these settings."
 msgstr "Je hebt geen rechten om de instellingen te veranderen."
 
@@ -6084,19 +6138,24 @@ msgstr "middernacht"
 msgid "noon"
 msgstr "middag"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:17
+#: apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:14./apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:15
+#: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:13./apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:14
+msgid "API Key"
+msgstr "API-sleutel"
+
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:19
 msgid "Connect with LinkedIn"
 msgstr "Verbinden met LinkedIn"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:2./apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:4
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:3./apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:6
 msgid "Disconnect from LinkedIn"
 msgstr "Verbreek de verbinding met LinkedIn"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:5
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:7
 msgid "Do you want to disconnect your LinkedIn account?"
 msgstr "Wil je je LinkedIn-account ontkoppelen?"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:18
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:20
 msgid "Log in with LinkedIn"
 msgstr "Log in met LinkedIn"
 
@@ -7120,7 +7179,7 @@ msgstr "Registraties van Azure Portal-app"
 msgid "Client Secret"
 msgstr "Cliëntgeheim"
 
-#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:17
+#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:19
 msgid "Connect with Microsoft"
 msgstr "Verbinden met Microsoft"
 
@@ -7128,15 +7187,15 @@ msgstr "Verbinden met Microsoft"
 msgid "Control who can sign in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
 msgstr "Bepaal wie zich kan aanmelden. Toegestane waarden zijn: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>en tenant-ID's."
 
-#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:2./apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:4
+#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:3./apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
 msgid "Disconnect from Microsoft"
 msgstr "Ontkoppelen van Microsoft"
 
-#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:5
+#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:7
 msgid "Do you want to disconnect your Microsoft account?"
 msgstr "Wilt je je Microsoft-account loskoppelen?"
 
-#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:18
+#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:20
 msgid "Log in with Microsoft"
 msgstr "Log in met Microsoft"
 
@@ -7166,7 +7225,7 @@ msgstr "Microsoft-instellingen opgeslagen."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
 msgid "Space separated list of scopes that you want the user to consent to. Examples are: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically."
-msgstr "Door spaties gescheiden lijst met bereiken waarvoor u de gebruiker toestemming wilt geven. Voorbeelden zijn: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> en <tt>profile</tt>. De <tt>openid</tt> scope wordt altijd automatisch toegevoegd."
+msgstr "Door spaties gescheiden lijst met 'scopes' waar de gebruiker toestemming voor moet geven. Voorbeelden zijn: <tt>User. Read</tt>, <tt>email</tt>, <tt>offline_access</tt> en <tt>profile</tt>. De <tt>openid</tt> scope wordt altijd automatisch toegevoegd."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
 msgid "Tenant"
@@ -7354,11 +7413,11 @@ msgstr "Token ophalen"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:88
 msgid "Fetch your access token to this site?"
-msgstr "Uw toegangstoken voor deze site ophalen?"
+msgstr "Wil je jouw toegangstoken voor deze site ophalen?"
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:171
 msgid "Fetched a new access token."
-msgstr "Er is een nieuw toegangstoken opgehaald."
+msgstr "Er is een nieuwe toegangstoken opgehaald."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:92
 msgid "Fetching a token can take some time."
@@ -7398,7 +7457,7 @@ msgstr "Importeer inhoud van de externe website naar deze website."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:85
 msgid "Leave empty if you use “{client}.”"
-msgstr "Laat leeg als u “{client}” gebruikt."
+msgstr "Laat leeg als je “{client}” gebruikt."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
@@ -7467,7 +7526,7 @@ msgstr "Succes"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:90
 msgid "The token will be registered with your account and only you (or routines acting on your behalf) will be able to use it."
-msgstr "Het token wordt geregistreerd bij uw account en alleen u (of routines die namens u optreden) kunnen het gebruiken."
+msgstr "Het token wordt geregistreerd bij jouw account en alleen jij (of acties die namens jou worden ondernomen) kunnen het gebruiken."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:55
 msgid "The “{code}” method redirects the user to the remote website to obtain an access token. “{client}” allows an admin user to directly fetch a token from the remote website."
@@ -7527,7 +7586,7 @@ msgstr "Met een consumententoken kan deze website:"
 
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:195
 msgid "You are not allowed to fetch a consumer token."
-msgstr "Het is niet toegestaan een consumententoken op te halen."
+msgstr "Het is niet toegestaan om een consumententoken op te halen."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:26
 msgid "You will be able to:"
@@ -9087,7 +9146,7 @@ msgstr "Terugvaltaal"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_list.tpl:8
 msgid "Find language by name or ISO"
-msgstr "Vind taal op naam of ISO"
+msgstr "Vind taal op naam of op ISO"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:100
 msgid "Finnish"

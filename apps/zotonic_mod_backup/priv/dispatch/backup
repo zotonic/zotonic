@@ -2,6 +2,7 @@
 [
  {admin_backup,    		 [ "admin", "backup" ], controller_admin_backup, [ seo_noindex ]},
  {admin_backup_revision, [ "admin", "backup", id ], controller_admin_backup_revision, [ seo_noindex ]},
- 
- {backup_download, [ "backup", '*' ], controller_file, [ {root, [{module,mod_backup}]}, {content_disposition,attachment}, seo_noindex ]}
+
+ {backup_download, [ "backup", "download", '*' ], controller_file,
+        [ {root, [{module,mod_backup}]}, {content_disposition,attachment}, seo_noindex ]}
 ].

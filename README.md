@@ -15,14 +15,12 @@ It is flexible, extensible and designed from the ground up to support dynamic, i
 
 Zotonic is incredibly fast and wonderfully stable – suited for anything from basic websites to complex distributed applications. It offers an elegant backend for managing content with the flexibility that developers need to build truly amazing applications.
 
-Start getting to know Zotonic on the [feature page](http://zotonic.com/features), have a look at our [introduction video](http://zotonic.com/page/750/video-introduction-to-zotonic) and check out the [gallery page](http://www.zotonic.com/gallery/735/screen-shot-gallery).
-
 Installation
 ------------
 
-* Download Zotonic from the [**official website**](http://zotonic.com/download)
-  or start Zotonic from a [**Docker image**](https://docs.zotonic.com/en/latest/developer-guide/docker.html).
-* Read the [**Installation chapter**](https://docs.zotonic.com/en/latest/developer-guide/getting-started.html#installation)
+* Download Zotonic from the [**official website**](https://zotonic.com/download)
+  or start Zotonic from a [**Docker image**](https://zotonic.com/docs/1411/docker).
+* Read the [**Installation chapter**](https://zotonic.com/docs/1526/getting-started#installation)
   in the documentation.
 
 Documentation
@@ -30,14 +28,14 @@ Documentation
 
 You can find out more about Zotonic on http://zotonic.com, including:
 
-* [**Official documentation**](http://docs.zotonic.com).
-* [**Release notes**](https://docs.zotonic.com/en/latest/developer-guide/releasenotes/index.html).
+* [**Official documentation**](https://zotonic.com/developer-guide).
+* [**Release notes**](https://zotonic.com/docs/1643/release-notes).
 
 Contributing
 ------------
 
 Zotonic is an open source project, made possible by the community. If you’d like to contribute,
-please read the [Contributing chapter](https://docs.zotonic.com/en/latest/developer-guide/contributing.html)
+please read the [Contributing chapter](https://zotonic.com/docs/1642/contributing-to-zotonic)
 in the documentation.
 
 If you encounter any issues, please report them in our
@@ -55,4 +53,6 @@ Thanks
 
 Thanks to the following services for supporting Open Source:
 
-<a href="https://browserstack.com/"><img rel="Thanks to BrowserStack" src="https://raw.githubusercontent.com/zotonic/zotonic/master/doc/img/browserstack-logo.png" height="64" /></a>
+<a href="https://browserstack.com/"><img rel="Thanks to BrowserStack" src="https://raw.githubusercontent.com/zotonic/zotonic/master/doc/img/browserstack-logo.png" height="64" /></a> <a href="https://crowdin.com/"><img src="https://user-images.githubusercontent.com/38268/188396792-7142a245-7805-4654-aead-9ae337f6d977.svg" height="64" /></a>
+
+

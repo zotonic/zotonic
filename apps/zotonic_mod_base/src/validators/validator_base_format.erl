@@ -21,7 +21,7 @@
 -export([render_validator/5, validate/5]).
 
 render_validator(format, TriggerId, _TargetId, Args, _Context)  ->
-    Pattern  = proplists:get_value(pattern, Args),
+    Pattern  = proplists:get_value(pattern, Args, <<>>),
     Negate   = proplists:get_value(negate, Args, false),
     JsObject = z_utils:js_object(z_validation:rename_args(Args)),
     Script   = [<<"z_add_validator(\"">>,TriggerId,<<"\", \"format\", ">>, JsObject, <<");\n">>],

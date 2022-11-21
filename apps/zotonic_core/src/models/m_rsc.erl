@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2020 Marc Worrell
-%%
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Model for resource data. Interfaces between zotonic, templates and the database.
+%% @end
 
-%% Copyright 2009-2020 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@
     page_path_to_id/2,
 
     get/2,
+    get_export/2,
     get_raw/2,
     get_raw_lock/2,
     get_acl_props/2,
@@ -137,7 +138,12 @@ m_get([ Id, <<"is_a">> ], _Msg, Context) ->
 m_get([ Id, Key | Rest ], _Msg, Context) ->
     {ok, {p(Id, Key, Context), Rest}};
 m_get([ Id ], _Msg, Context) ->
-    {ok, {get(Id, Context), []}};
+    case get_export(Id, Context) of
+        {ok, Rsc} ->
+            {ok, {Rsc, []}};
+        {error, _} = Error ->
+            Error
+    end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
@@ -221,6 +227,58 @@ page_path_to_id(Path, Context) ->
 is_utf8(<<>>) -> true;
 is_utf8(<<_/utf8, S/binary>>) -> is_utf8(S);
 is_utf8(_) -> false.
+
+
+%% @doc Get all properties of a resource for export. This adds the
+%% page urls for all languages and the language neutral uri to the
+%% resource properties. Note that normally the page_url is a single
+%% property without translation, as it is generated using the current
+%% language context. As this export is used for UIs, all language
+%% variants are added.
+-spec get_export(Id, Context) -> {ok, Rsc} | {error, Reason} when
+    Id :: resource(),
+    Context :: z:context(),
+    Rsc :: props(),
+    Reason :: eacces | enoent.
+get_export(Id, Context) ->
+    RscId = m_rsc:rid(Id, Context),
+    case get(RscId, Context) of
+        undefined ->
+            case m_rsc:exists(RscId, Context) of
+                true ->
+                    {error, eacces};
+                false ->
+                    {error, enoent}
+            end;
+        Rsc ->
+            Rsc1 = add_export_props(RscId, Rsc, Context),
+            {ok, Rsc1}
+    end.
+
+-spec add_export_props( Id, Rsc, Context ) -> Rsc1 when
+    Id :: m_rsc:resource_id(),
+    Rsc :: m_rsc:props(),
+    Rsc1 :: m_rsc:props(),
+    Context :: z:context().
+add_export_props(Id, Rsc, Context) ->
+    Languages = [ 'x-default' | z_language:enabled_language_codes(Context) ],
+    PageUrl = page_url(Id, Context),
+    PageUrlAbs = z_context:abs_url(PageUrl, Context),
+    PageUrls = lists:map(
+        fun(Lang) -> {Lang, page_url(Id, z_context:set_language(Lang, Context))} end,
+        Languages),
+    PageUrlsAbs = lists:map(
+        fun({Lang, Url}) -> {Lang, z_context:abs_url(Url, Context)} end,
+        PageUrls),
+    ShortUrl = z_dispatcher:url_for(id, [ {id, Id}, {absolute_url, true} ], Context),
+    Rsc#{
+        <<"uri">> => uri(Id, z_context:set_language('x-default', Context)),
+        <<"short_url">> => ShortUrl,
+        <<"page_url">> => PageUrl,
+        <<"page_url_abs">> => PageUrlAbs,       % canonical url
+        <<"alternate_page_url">> => #trans{ tr = PageUrls },
+        <<"alternate_page_url_abs">> => #trans{ tr = PageUrlsAbs }
+    }.
 
 %% @doc Read a whole resource. Return 'undefined' if the resource was
 %%      not found, crash on database errors. The properties are filtered

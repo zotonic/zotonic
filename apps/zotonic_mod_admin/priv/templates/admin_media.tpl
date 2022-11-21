@@ -155,7 +155,11 @@
                         </tbody>
                     </table>
                     {% pager result=result dispatch="admin_media" qargs hide_single_page %}
-                    <div class="text-muted clear-left">{% trans "{total} items found" total=result.total %}{% if result.is_total_estimated %} ({_ estimated _}){% endif %}</div>
+                    <div class="text-muted clear-left">
+                        {% if result.is_total_estimated %}{% trans "about {n} items found" n=result.total|round_significant:2 %}
+                        {% else %}{% trans "{n} items found" n=result.total %}
+                        {% endif %}
+                    </div>
                 {% endwith %}
             {% endwith %}
 

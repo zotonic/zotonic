@@ -46,6 +46,7 @@
     group_proplists/2,
     hex_decode/1,
     hex_encode/1,
+    hex_sha/1,
     index_proplist/2,
     nested_proplist/1,
     nested_proplist/2,
@@ -355,21 +356,31 @@ hmac(Type, Key, Data) ->
 
 
 %%% CHECKSUM %%%
+-spec checksum(Data, Context) -> Checksum when
+    Data :: iodata(),
+    Context :: z:context(),
+    Checksum :: binary().
 checksum(Data, Context) ->
     Sign = z_ids:sign_key_simple(Context),
-    z_utils:hex_encode(erlang:md5([Sign,Data])).
+    hex_encode(erlang:md5([Sign,Data])).
 
-checksum_assert(Data, Checksum, Context) ->
+-spec checksum_assert(Data, Checksum, Context) -> ok when
+    Data :: iodata(),
+    Checksum :: binary() | string(),
+    Context :: z:context().
+checksum_assert(Data, Checksum, Context) when is_binary(Checksum )->
     Sign = z_ids:sign_key_simple(Context),
     try
-        assert(list_to_binary(z_utils:hex_decode(Checksum)) == erlang:md5([Sign,Data]), checksum_invalid)
+        assert(hex_decode(Checksum) =:= erlang:md5([Sign,Data]), checksum_invalid)
     catch
         error:badarg ->
             erlang:error(checksum_invalid);
         error:{case_clause, _} ->
             % Odd length checksum
             erlang:error(checksum_invalid)
-    end.
+    end;
+checksum_assert(Data, Checksum, Context) ->
+    checksum_assert(Data, z_convert:to_binary(Checksum), Context).
 
 
 %%% PICKLE / UNPICKLE %%%
@@ -400,9 +411,18 @@ depickle(Data, Context) ->
 
 
 %%% HEX ENCODE and HEX DECODE
+-spec hex_encode(iodata()) -> binary().
 hex_encode(Value) -> z_url:hex_encode(Value).
+
+-spec hex_decode(iodata()) -> binary().
 hex_decode(Value) -> z_url:hex_decode(Value).
 
+%% @doc Hash data and encode into a hex string safe for filenames and texts.
+-spec hex_sha(Value) -> Hash when
+    Value :: iodata(),
+    Hash :: binary().
+hex_sha(Value) ->
+    z_url:hex_encode_lc(crypto:hash(sha, Value)).
 
 %% @doc Simple escape function for filenames as commandline arguments.
 %% foo/"bar.jpg -> "foo/\"bar.jpg"; on windows "foo\\\"bar.jpg" (both including quotes!)

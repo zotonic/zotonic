@@ -274,8 +274,8 @@ qterm({content_group, ContentGroup}, Context) ->
                         <<"default_content_group">> ->
                             Q#search_sql_term{
                                 where = [
-                                    <<"(rsc.content_group_id IN (SELECT(unnest(">>, '$1',
-                                    <<"::int[]))) or rsc.content_group_id is null)">>
+                                    <<"(rsc.content_group_id = any(">>, '$1',
+                                    <<"::int[]) or rsc.content_group_id is null)">>
                                 ],
                                 args = [
                                     List
@@ -284,8 +284,8 @@ qterm({content_group, ContentGroup}, Context) ->
                         _ ->
                             Q#search_sql_term{
                                 where = [
-                                    <<"rsc.content_group_id IN (SELECT(unnest(">>, '$1',
-                                    <<"::int[])))">>
+                                    <<"rsc.content_group_id = any(">>, '$1',
+                                    <<"::int[])">>
                                 ],
                                 args = [
                                     List
@@ -316,7 +316,7 @@ qterm({id_exclude, Ids}, Context) when is_list(Ids) ->
         Ids),
     #search_sql_term{
         where = [
-            <<"rsc.id NOT IN (SELECT(unnest(">>, '$1', <<"::int[])))">>
+            <<"rsc.id <> any(">>, '$1', <<"::int[])">>
         ],
         args = [ RscIds ]
     };
@@ -343,7 +343,7 @@ qterm({id, Ids}, Context) when is_list(Ids) ->
         Ids),
     #search_sql_term{
         where = [
-            <<"rsc.id IN (SELECT(unnest(">>, '$1', <<"::int[])))">>
+            <<"rsc.id = any(">>, '$1', <<"::int[])">>
         ],
         args = [ RscIds ]
     };
@@ -653,12 +653,29 @@ qterm({language, []}, _Context) ->
     %% language=<iso-code>
     %% Filter on the presence of a translation
     [];
-qterm({language, [ Lang | _ ] = Langs}, Context) when not is_integer(Lang) ->
+qterm({language, [ Lang | _ ] = Langs}, Context) when is_list(Lang) ->
     lists:map(
         fun(Code) ->
             qterm({language, Code}, Context)
         end,
         Langs);
+qterm({language, [ Lang | _ ] = Langs}, _Context) when is_atom(Lang); is_binary(Lang) ->
+    Langs1 = lists:map(
+        fun(Lng) ->
+            case z_language:to_language_atom(Lng) of
+                {ok, Code} ->
+                    z_convert:to_binary(Code);
+                {error, _} ->
+                    <<"x-none">>
+            end
+        end,
+        Langs),
+    #search_sql_term{
+        where = [
+            <<"rsc.language && ">>, '$1'
+        ],
+        args = [ Langs1 ]
+    };
 qterm({language, Lang}, _Context) ->
     case z_language:to_language_atom(Lang) of
         {ok, Code} ->
@@ -713,7 +730,7 @@ qterm({text, Text}, Context) ->
         <<"id:", S/binary>> ->
             #search_sql_term{
                 where = [
-                    <<"rsc.id = $1">>
+                    <<"rsc.id">>, '$1'
                 ],
                 args = [
                     m_rsc:rid(S, Context)

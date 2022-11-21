@@ -1,10 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2014 Arjan Scherpenisse
-%% Date: 2014-04-29
-%%
+%% @copyright 2014-2022 Arjan Scherpenisse
 %% @doc Database pool worker behaviour definition
+%% @end
 
-%% Copyright 2014 Arjan Scherpenisse
+%% Copyright 2014-2022 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,12 +23,12 @@
       WorkerArgs :: proplists:proplist(),
       Reason     :: term().
 
--callback squery(Worker, Sql, Timeout) -> epgsql:ok_reply(epgsql:squery_row()) | {error, epgsql:query_error()} when
+-callback squery(Worker, Sql, Timeout) -> epgsql:reply(epgsql:squery_row()) when
       Worker :: pid(),
       Sql :: string(),
       Timeout :: non_neg_integer().
 
--callback equery(Worker, Sql, Parameters, Timeout) -> epgsql:ok_reply(epgsql:equery_row()) | {error, epgsql:query_error()} when
+-callback equery(Worker, Sql, Parameters, Timeout) -> epgsql:reply(epgsql:equery_row()) when
       Worker :: pid(),
       Sql :: string(),
       Parameters :: [epgsql:bind_param()],

@@ -89,8 +89,9 @@ scomp_data_url(IdOrName, Options, Context) ->
 -spec viewer(MediaReference, z_media_identify:media_info(), z:context()) -> {ok, iodata()}
     when MediaReference :: undefined
                          | m_rsc:resource_id()
+                         | z_media_identify:media_info()
                          | #rsc_list{}
-                         | proplists:list()
+                         | proplists:proplist()
                          | file:filename_all().
 viewer(undefined, _Options, _Context) ->
     {ok, <<>>};
@@ -115,7 +116,7 @@ viewer(Id, Options, Context) when is_integer(Id) ->
 viewer(Props, Options, Context) when is_map(Props) ->
     Id = maps:get(<<"id">>, Props, undefined),
     case maps:get(<<"filename">>, Props, undefined) of
-        None when None =:= <<>>; None =:= undefined; None =:= <<>> ->
+        None when None =:= <<>>; None =:= undefined ->
             viewer1(Id, Props, undefined, Options, Context);
         Filename ->
             FilePath = filename_to_filepath(Filename, Context),

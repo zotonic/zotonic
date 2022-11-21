@@ -1,26 +1,29 @@
 <html>
     <head>
         <title>Test Initial Postback</title>
+        {% include "_html_head_cotonic.tpl" %}
     </head>
 
     <body>
 
         {% with 100 as till %}
-
             <h1>Counter should reach {{ till }}</h1>
 
             <div id="update">
                 {% with q.n|default:0|to_integer as n %}
                     <p>Requesting: {{ n+1 }}</p>
-                    {% wire action={update target="update" template="tests/_initial_postback_test.tpl" n=n+1 till=till} %}
+                    {% wire action={update
+                                        target="update"
+                                        template="tests/_initial_postback_test.tpl"
+                                        n=n+1
+                                        till=till
+                                } %}
                 {% endwith %}
 
                 <p>
-                    <a href="/tests/initial_postback_test">Restart</a>
+                    <a href="/test/initial_postback_test">Restart</a>
                 </p>
             </div>
-
-
         {% endwith %}
 
         {% include "_js_include_jquery.tpl" %}
@@ -42,7 +45,6 @@
 
         {% script %}
 
-        {% comment %}{% worker name="auth" src="js/zotonic.auth.worker.js" args=%{  auth: m.authentication.status  } %}{% endcomment %}
-
+        {% worker name="auth" src="js/zotonic.auth.worker.js" args=%{  auth: m.authentication.status  } %}
     </body>
 </html>

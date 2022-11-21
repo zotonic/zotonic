@@ -1,7 +1,7 @@
 % @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021-2022 Marc Worrell
 %% @doc OAuth2 model managing consumers for access to remote sites.
-%% @enddoc
+%% @end
 
 %% Copyright 2021-2022 Marc Worrell
 %%
@@ -255,7 +255,7 @@ fetch_token(ConsumerId, UserId, Context) ->
                 {ok, #{
                     <<"name">> := AppName,
                     <<"grant_type">> := <<"client_credentials">>,
-                    <<"domain">> := _Domain,
+                    <<"domain">> := Domain,
                     <<"access_token_url">> := TokenUrl,
                     <<"app_code">> := AppCode,
                     <<"app_secret">> := AppSecret
@@ -265,25 +265,73 @@ fetch_token(ConsumerId, UserId, Context) ->
                         <<"client_secret">> => AppSecret,
                         <<"grant_type">> => <<"client_credentials">>
                     },
-                    case z_fetch:fetch_json(post, TokenUrl, Payload, [], Context) of
+                    Options = [
+                        {authorization, none}
+                    ],
+                    Type = <<"mod_oauth2">>,
+                    Key = <<AppName/binary, $:, AppCode/binary>>,
+                    case z_fetch:fetch_json(post, TokenUrl, Payload, Options, Context) of
                         {ok, #{
                             <<"access_token">> := AccessToken
                             % <<"expires_in">> := ExpiresInSecs
                             % <<"token_type">> := <<"Bearer">>
+                            % <<"refresh_token">> := _
                         } = Response} ->
-                            Type = <<"mod_oauth2">>,
-                            Key = <<AppName/binary, $:, AppCode/binary>>,
+                            Expires = expires(Response),
                             Props = [
                                 {is_unique, true},
                                 {is_verified, true},
                                 {propb, {term, #{ <<"access_token">> => AccessToken }}},
-                                {expires, expires(Response)}
+                                {expires, Expires}
                             ],
-                            m_identity:insert(UserId, Type, Key, Props, Context),
+                            {ok, IdnId} = m_identity:insert(UserId, Type, Key, Props, Context),
+                            ?LOG_INFO(#{
+                                text => <<"OAuth2 fetched new client_credentials token">>,
+                                in => zotonic_mod_oauth2,
+                                result => ok,
+                                user_id => UserId,
+                                name => AppName,
+                                consumer_id => ConsumerId,
+                                domain => Domain,
+                                idn_id => IdnId,
+                                idn_type => Type,
+                                idn_key => Key,
+                                expires => Expires
+                            }),
                             {ok, AccessToken};
-                        {ok, _} ->
+                        {ok, Ret} ->
+                            m_identity:delete_by_type_and_key(UserId, Type, Key, Context),
+                            ?LOG_ERROR(#{
+                                text => <<"OAuth2 could not fetch client_credentials token">>,
+                                in => zotonic_mod_oauth2,
+                                result => error,
+                                reason => no_access_token,
+                                user_id => UserId,
+                                name => AppName,
+                                consumer_id => ConsumerId,
+                                client_id => AppCode,
+                                domain => Domain,
+                                payload => Ret
+                            }),
                             {error, no_access_token};
-                        {error, _} = Error ->
+                        {error, Reason} = Error ->
+                            case is_permanent_error(Reason) of
+                                true ->
+                                    m_identity:delete_by_type_and_key(UserId, Type, Key, Context);
+                                false ->
+                                    ok
+                            end,
+                            ?LOG_ERROR(#{
+                                text => <<"OAuth2 could not fetch client_credentials token">>,
+                                in => zotonic_mod_oauth2,
+                                result => error,
+                                reason => Reason,
+                                user_id => UserId,
+                                name => AppName,
+                                consumer_id => ConsumerId,
+                                client_id => AppCode,
+                                domain => Domain
+                            }),
                             Error
                     end;
                 {ok, _} ->
@@ -300,6 +348,14 @@ expires(#{ <<"expires_in">> := ExpiresInSecs }) when is_integer(ExpiresInSecs) -
 expires(#{}) ->
     undefined.
 
+is_permanent_error({Code, _FinalUrl, _Hs, _Size, _Body})
+    when Code =:= 400;
+         Code =:= 401;
+         Code =:= 403 ->
+    true;
+is_permanent_error({_Code, _FinalUrl, _Hs, _Size, _Body}) ->
+    false.
+
 %% @doc Fetch id of consumer with the given name.
 name_to_id(undefined, _Context) ->
     undefined;
@@ -314,29 +370,37 @@ name_to_id(Id, _Context) when is_integer(Id) ->
 -spec find_token( UserId :: m_rsc:resource_id(), Host :: binary(), z:context() ) ->
     {ok, binary()} | {error, term()}.
 find_token(UserId, Host, Context) ->
-    case z_db:q1("
-        select idn.propb
+    Now = z_datetime:prev_second(calendar:universal_time(), 10),
+    case find_token1(UserId, Host, Context) of
+        {_AppId, #{ <<"access_token">> := AccesToken }, Expires, _, _} when
+            Expires =:= undefined;
+            Expires >= Now
+        ->
+            {ok, AccesToken};
+        {AppId, #{ <<"access_token">> := _ }, Expires, <<"client_credentials">>, true} when
+            Expires < Now
+        ->
+            % Try to fetch a new token.
+            fetch_token(AppId, UserId, z_acl:sudo(Context));
+        _ ->
+            {error, enoent}
+    end.
+
+find_token1(UserId, Host, Context) ->
+    z_db:q_row("
+        select app.id, idn.propb, idn.expires,
+               app.grant_type, app.is_extend_automatic
         from identity idn,
              oauth2_consumer_app app
         where idn.rsc_id = $1
           and idn.type = 'mod_oauth2'
-          and (   idn.expires is null
-               or idn.expires > now())
           and app.domain = $2
           and app.is_use_import
           and app.name = split_part(idn.key, ':', 1)
         limit 1
         ",
         [ UserId, Host ],
-        Context)
-    of
-        #{
-            <<"access_token">> := AccesToken
-        } ->
-            {ok, AccesToken};
-        _ ->
-            {error, enoent}
-    end.
+        Context).
 
 %% @doc Check if the current user is connected to the OAuth2 service with the given name.
 %% This only checks the presence of the correct identity key, it does not check if the

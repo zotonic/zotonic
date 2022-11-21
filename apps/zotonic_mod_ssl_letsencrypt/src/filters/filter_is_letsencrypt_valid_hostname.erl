@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016 Marc Worrell
+%% @copyright 2016-2022 Marc Worrell
 %% @doc Check if a hostname can be used for a letsencrypt certificate.
 
-%% Copyright 2016 Marc Worrell
+%% Copyright 2016-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -54,14 +54,37 @@ is_non_local(Hostname) ->
 is_this_site(Hostname, Context) ->
     Url = z_dispatcher:url_for(letsencrypt_ping, Context),
     Url1 = "http://" ++ z_convert:to_list(Hostname) ++ z_convert:to_list(Url),
-    case httpc:request(get,
-                  {Url1, []},
-                  [ {autoredirect, true}, {relaxed, true}, {timeout, 2000}, {connect_timeout, 2000} ],
-                  [ {body_format, binary} ])
-    of
-        {ok, {{_Http, 200, _Ok}, _Hs, Body}} ->
-            mod_ssl_letsencrypt:is_self_ping(Body, Context);
-        _ ->
+    case z_fetch:fetch(Url1, [ insecure ], Context) of
+        {ok, {_FinalUrl, _Hs, _Len, Body}} ->
+            case mod_ssl_letsencrypt:is_self_ping(Body, Context) of
+                false ->
+                    ?LOG_INFO(#{
+                        text => <<"The configured hostname is not mapped to this site">>,
+                        in => zotonic_mod_ssl_letsencrypt,
+                        result => error,
+                        reason => self_ping,
+                        hostname => z_convert:to_binary(Hostname),
+                        url => z_convert:to_binary(Url1)
+                    }),
+                    false;
+                true ->
+                    ?LOG_DEBUG(#{
+                        text => <<"The configured hostname is mapped to this site">>,
+                        in => zotonic_mod_ssl_letsencrypt,
+                        result => ok,
+                        hostname => z_convert:to_binary(Hostname),
+                        url => z_convert:to_binary(Url1)
+                    }),
+                    true
+            end;
+        {error, Reason} ->
+            ?LOG_INFO(#{
+                text => <<"The configured hostname could not be checked">>,
+                in => zotonic_mod_ssl_letsencrypt,
+                result => error,
+                reason => Reason,
+                hostname => z_convert:to_binary(Hostname),
+                url => z_convert:to_binary(Url1)
+            }),
             false
     end.
-

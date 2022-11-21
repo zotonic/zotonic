@@ -78,7 +78,7 @@
     cert_key_file = undefined,
 
     % api options
-    opts = #{netopts => #{timeout => 30000}} :: map()
+    opts = #{} :: map()
 
 }).
 
@@ -130,10 +130,10 @@ init(Args) ->
     Jws = z_letsencrypt_jws:init(Key),
 
     % request directory
-    {ok, Directory} = z_letsencrypt_api:directory(State#state.env, State#state.opts),
+    {ok, Directory} = z_letsencrypt_api:directory(State#state.env),
 
     % get first nonce
-    {ok, Nonce} = z_letsencrypt_api:nonce(Directory, State#state.opts),
+    {ok, Nonce} = z_letsencrypt_api:nonce(Directory),
 
     {ok, idle, State#state{directory=Directory, key=Key, jws=Jws, nonce=Nonce}}.
 
@@ -259,7 +259,7 @@ idle({call, From}, {create, Domain, CertOpts}, State=#state{directory=Dir, key=K
         fun(D) -> bin(D) end,
         maps:get(san, CertOpts, [])),
 
-    {ok, Accnt, Location, Nonce2} = z_letsencrypt_api:account(Dir, Key, Jws#{nonce => Nonce}, Opts),
+    {ok, Accnt, Location, Nonce2} = z_letsencrypt_api:account(Dir, Key, Jws#{nonce => Nonce}),
     AccntKey = maps:get(<<"key">>, Accnt),
 
     Jws2 = #{
@@ -269,7 +269,7 @@ idle({call, From}, {create, Domain, CertOpts}, State=#state{directory=Dir, key=K
     },
     %TODO: checks order is ok
     Domains = [ bin(Domain) | SANs ],
-    {ok, Order, OrderLocation, Nonce3} = z_letsencrypt_api:new_order(Dir, Domains, Key, Jws2, Opts),
+    {ok, Order, OrderLocation, Nonce3} = z_letsencrypt_api:new_order(Dir, Domains, Key, Jws2),
 
     % we need to keep trace of order location
     Order2 = Order#{ <<"location">> => OrderLocation },
@@ -340,10 +340,10 @@ pending({call, From}, get_challenge, State=#state{account_key=AccntKey, challeng
 %TODO: handle other states explicitely (allowed values are 'invalid', 'deactivated',
 %      'expired' and 'revoked'
 %
-pending({call, From}, _Action, State=#state{order=#{<<"authorizations">> := Authzs}, nonce=Nonce, key=Key, jws=Jws, opts=Opts}) ->
+pending({call, From}, _Action, State=#state{order=#{<<"authorizations">> := Authzs}, nonce=Nonce, key=Key, jws=Jws}) ->
     % checking status for each authorization
     {StateName, Nonce2} = lists:foldl(fun(AuthzUri, {Status, InNonce}) ->
-        {ok, Authz, _, OutNonce} = z_letsencrypt_api:authorization(AuthzUri, Key, Jws#{nonce => InNonce}, Opts),
+        {ok, Authz, _, OutNonce} = z_letsencrypt_api:authorization(AuthzUri, Key, Jws#{nonce => InNonce}),
         Ret = case {Status, maps:get(<<"status">>, Authz)} of
             {valid, <<"valid">>} -> valid;
             {pending, _} -> pending;
@@ -378,14 +378,14 @@ pending(cast, Msg, State) ->
 % transition:
 %   state 'finalize'
 valid({call, From}, _, State=#state{domain=Domain, sans=SANs, cert_path=CertPath,
-                         order=Order, key=Key, jws=Jws, nonce=Nonce, opts=Opts}) ->
+                         order=Order, key=Key, jws=Jws, nonce=Nonce}) ->
 
     %NOTE: keyfile is required for csr generation
     #{file := KeyFile} = z_letsencrypt_ssl:private_key({new, str(Domain) ++ ".key"}, CertPath),
 
     Csr = z_letsencrypt_ssl:cert_request(Domain, CertPath, SANs),
     {ok, FinOrder, _, Nonce2} = z_letsencrypt_api:finalize(Order, Csr, Key,
-                                                         Jws#{nonce => Nonce}, Opts),
+                                                         Jws#{nonce => Nonce}),
 
     State1 = State#state{
         order = FinOrder#{ <<"location">> => maps:get(<<"location">>, Order) },
@@ -473,10 +473,10 @@ revoked(cast, Msg, State) ->
 % transition:
 %   state 'processing' : still ongoing
 %   state 'valid'      : certificate is ready
-finalize({call, From}, processing, State=#state{order=Order, key=Key, jws=Jws, nonce=Nonce, opts=Opts}) ->
+finalize({call, From}, processing, State=#state{order=Order, key=Key, jws=Jws, nonce=Nonce}) ->
     {ok, Order2, _, Nonce2} = z_letsencrypt_api:get_order(
         maps:get(<<"location">>, Order, nil),
-        Key, Jws#{nonce => Nonce}, Opts),
+        Key, Jws#{nonce => Nonce}),
     State1 = State#state{
         order = Order2,
         nonce = Nonce2
@@ -497,10 +497,9 @@ finalize({call, From}, processing, State=#state{order=Order, key=Key, jws=Jws, n
 % transition:
 %   state 'idle' : fsm complete, going back to initial state
 finalize({call, From}, valid, State=#state{order=Order, domain=Domain, cert_key_file=KeyFile,
-                                cert_path=CertPath, key=Key, jws=Jws, nonce=Nonce,
-                                opts=Opts}) ->
+                                cert_path=CertPath, key=Key, jws=Jws, nonce=Nonce}) ->
     % download certificate
-    {ok, Cert} = z_letsencrypt_api:certificate(Order, Key, Jws#{nonce => Nonce}, Opts),
+    {ok, Cert} = z_letsencrypt_api:certificate(Order, Key, Jws#{nonce => Nonce}),
     CertFile   = z_letsencrypt_ssl:certificate(Domain, Cert, CertPath),
 
     State1 = State#state{ nonce = undefined },
@@ -558,9 +557,6 @@ code_change(_, StateName, State, _) ->
 %   - staging        : runs in staging environment (running on production either)
 %   - key_file       : reuse an existing ssl key
 %   - cert_path      : path to read/save ssl certificate, key and csr request
-%   - connect_timeout: timeout for acme api requests (seconds)
-%                      THIS OPTION IS DEPRECATED, REPLACED BY http_timeout
-%   - http_timeout   : timeout for acme api requests (seconds)
 %
 % returns:
 %   - State (type record 'state') filled with options values
@@ -586,18 +582,6 @@ getopts([{cert_path, Path}|Args], State) ->
         Args,
         State#state{cert_path = Path}
     );
-% for compatibility. Will be removed in future release
-getopts([{connect_timeout, Timeout}|Args], State) ->
-    % io:format("'connect_timeout' option is deprecated. Please use 'http_timeout' instead~n", []),
-    getopts(
-        Args,
-        State#state{opts = #{netopts => #{timeout => Timeout}}}
-     );
-getopts([{http_timeout, Timeout}|Args], State) ->
-    getopts(
-        Args,
-        State#state{opts = #{netopts => #{timeout => Timeout}}}
-     );
 getopts([Unk|_], _) ->
     ?LOG_WARNING(#{
         text => <<"LetsEncrypt: unknown parameter">>,
@@ -698,8 +682,8 @@ authz(ChallengeType, AuthzUris, State) ->
 -spec authz_step1(list(binary()), challenge_type(), state(), map()) -> {ok, map(), nonce()}.
 authz_step1([], _, #state{nonce=Nonce}, Challenges) ->
     {ok, Challenges, Nonce};
-authz_step1([Uri|T], ChallengeType, State=#state{nonce=Nonce, key=Key, jws=Jws, opts=Opts}, Challenges) ->
-    {ok, Authz, _, Nonce2} = z_letsencrypt_api:authorization(Uri, Key, Jws#{nonce => Nonce}, Opts),
+authz_step1([Uri|T], ChallengeType, State=#state{nonce=Nonce, key=Key, jws=Jws}, Challenges) ->
+    {ok, Authz, _, Nonce2} = z_letsencrypt_api:authorization(Uri, Key, Jws#{nonce => Nonce}),
     % get challenge
     % map(
     %   type,
@@ -721,7 +705,7 @@ authz_step1([Uri|T], ChallengeType, State=#state{nonce=Nonce, key=Key, jws=Jws, 
 -spec authz_step2(list(binary()), state()) -> {ok, nonce()}.
 authz_step2([], #state{nonce=Nonce}) ->
     {ok, Nonce};
-authz_step2([{_Uri, Challenge}|T], State=#state{nonce=Nonce, key=Key, jws=Jws, opts=Opts}) ->
-    {ok, _, _, Nonce2 } = z_letsencrypt_api:challenge(Challenge, Key, Jws#{nonce => Nonce}, Opts),
+authz_step2([{_Uri, Challenge}|T], State=#state{nonce=Nonce, key=Key, jws=Jws}) ->
+    {ok, _, _, Nonce2 } = z_letsencrypt_api:challenge(Challenge, Key, Jws#{nonce => Nonce}),
     authz_step2(T, State#state{nonce=Nonce2}).
 

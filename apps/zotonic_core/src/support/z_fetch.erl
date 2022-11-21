@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021-2022 Marc Worrell
 %% @doc Fetch data from URLs. Interfaces to z_url_fetch and z_url_metadata.
-%% @enddoc
+%% @end
 
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -127,7 +127,7 @@ metadata(Url, Options, Context) ->
 
 
 %% @doc Fetch data from an URL. Return the data as a data url.
--spec as_data_url( string() | binary() | undefined, z_url_fetch:options(), z:contex()) -> {ok, binary()} | {error, term()}.
+-spec as_data_url( string() | binary() | undefined, z_url_fetch:options(), z:context()) -> {ok, binary()} | {error, term()}.
 as_data_url(Url, Options, Context) ->
     case fetch(Url, Options, Context) of
         {ok, {_Final, Hs, _Size, Data}} ->
@@ -197,7 +197,7 @@ add_options(Method, Url, Options, Context) ->
         true ->
             Options1
     end,
-    case uri_string:parse(Url) of
+    Options3 = case uri_string:parse(Url) of
         #{ host := Host } = Parts ->
             HostPort = case maps:find(port, Parts) of
                 {ok, Port} -> <<Host/binary, $:, (integer_to_binary(Port))/binary>>;
@@ -211,8 +211,24 @@ add_options(Method, Url, Options, Context) ->
                 }, Context)
             of
                 undefined -> Options1;
-                Options3 when is_list(Options3) -> Options3
+                ExtOptions when is_list(ExtOptions) -> ExtOptions
             end;
         _ ->
             Options2
-    end.
+    end,
+    cleanup_options(Options3).
+
+cleanup_options(Options) ->
+    lists:filter(
+        fun
+            ({authorization, None}) when
+                None =:= undefined;
+                None =:= none;
+                None =:= <<>>;
+                None =:= "" -> false;
+            (_) ->
+                true
+        end,
+        Options).
+
+

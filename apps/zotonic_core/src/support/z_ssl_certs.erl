@@ -40,7 +40,7 @@
 
 %% @doc Return the options to use for non-sni ssl
 %% @todo should we use the hostname as configured in the OS for the certs?
--spec ssl_listener_options() -> list(ssl:ssl_option()).
+-spec ssl_listener_options() -> list(ssl:tls_option()).
 ssl_listener_options() ->
     {ok, Hostname} = inet:gethostname(),
     {ok, CertOptions} = ensure_self_signed(Hostname),
@@ -53,7 +53,7 @@ ssl_listener_options() ->
     ++ z_ssl_dhfile:dh_options().
 
 %% @doc Callback for SSL SNI, match the hostname to a set of keys
--spec sni_fun(string()) -> [ ssl:ssl_option() ] | undefined.
+-spec sni_fun(string()) -> [ ssl:tls_option() ] | undefined.
 sni_fun(Hostname) ->
     NormalizedHostname = normalize_hostname(Hostname),
     NormalizedHostnameBin = z_convert:to_binary(NormalizedHostname),
@@ -66,7 +66,7 @@ sni_fun(Hostname) ->
             sni_self_signed(LocalHostname)
     end.
 
--spec sni_self_signed( string() | binary() ) -> list( ssl:ssl_option() ) | undefined.
+-spec sni_self_signed( string() | binary() ) -> list( ssl:tls_option() ) | undefined.
 sni_self_signed(Hostname) ->
     HostnameS = z_convert:to_list(Hostname),
     case get_self_signed_files(HostnameS) of
@@ -116,13 +116,13 @@ get_site_for_hostname(Hostname) ->
     end.
 
 %% @doc Fetch the ssi options for the site context.
--spec get_ssl_options( z:context() | undefined ) -> list( ssl:ssl_option() ) | undefined.
+-spec get_ssl_options( z:context() | undefined ) -> list( ssl:tls_option() ) | undefined.
 get_ssl_options(Context) ->
     get_ssl_options(site_hostname(Context), Context).
 
 %% @doc Fetch the ssl options for the given hostname and site context. If there is
 %%      is no module observing ssl_options, then return the self signed certificates.
--spec get_ssl_options( binary(), z:context() ) -> list( ssl:ssl_option() ) | undefined.
+-spec get_ssl_options( binary(), z:context() ) -> list( ssl:tls_option() ) | undefined.
 get_ssl_options(Hostname, Context) when is_binary(Hostname) ->
     case z_notifier:first(#ssl_options{ server_name=Hostname }, Context) of
         {ok, SSLOptions} ->
@@ -132,7 +132,7 @@ get_ssl_options(Hostname, Context) when is_binary(Hostname) ->
     end.
 
 
--spec get_self_signed_files( string() ) -> {ok, list( ssl:ssl_option() )} | {error, no_security_dir}.
+-spec get_self_signed_files( string() ) -> {ok, list( ssl:tls_option() )} | {error, no_security_dir}.
 get_self_signed_files(Hostname) ->
     case z_config_files:security_dir() of
         {ok, SecurityDir} ->
@@ -143,7 +143,7 @@ get_self_signed_files(Hostname) ->
     end.
 
 %% @doc Fetch the paths of all self-signed certificates
--spec get_self_signed_files( string(), file:filename_all() ) -> {ok, list( ssl:ssl_option() )}.
+-spec get_self_signed_files( string(), file:filename_all() ) -> {ok, list( ssl:tls_option() )}.
 get_self_signed_files( Hostname, SSLDir ) ->
     Options = [
         {certfile, filename:join(SSLDir, Hostname ++ "-self-signed" ++ ?BITS ++ ".crt")},
@@ -166,7 +166,7 @@ is_valid_hostname_char(_) -> false.
 
 
 %% @doc Check if all certificates are available in the site's ssl directory
--spec ensure_self_signed( string() ) ->  {ok, list( ssl:ssl_option() )} | {error, term()}.
+-spec ensure_self_signed( string() ) ->  {ok, list( ssl:tls_option() )} | {error, term()}.
 ensure_self_signed(Hostname) ->
     {ok, Certs} = get_self_signed_files(Hostname),
     CertFile = proplists:get_value(certfile, Certs),

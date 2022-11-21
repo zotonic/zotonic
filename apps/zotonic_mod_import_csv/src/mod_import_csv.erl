@@ -34,7 +34,7 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("include/import_csv.hrl").
+-include_lib("zotonic_mod_import_csv/include/import_csv.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
 

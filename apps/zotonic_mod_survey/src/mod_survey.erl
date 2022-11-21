@@ -61,9 +61,9 @@ event(#postback{message={survey_start, Args}}, Context) ->
     AnswerId = z_convert:to_integer(proplists:get_value(answer_id, Args)),
     case is_integer(AnswerId) andalso z_acl:rsc_editable(SurveyId, Context) of
         true ->
-            {Answers, UserId} = case m_survey:single_result(SurveyId, AnswerId, Context) of
-                None when None =:= undefined; None =:= [] ->
-                    [];
+            {Answers, ResultUserId} = case m_survey:single_result(SurveyId, AnswerId, Context) of
+                [] ->
+                    {[], undefined};
                 Result ->
                     As = proplists:get_value(answers, Result, []),
                     As1 = lists:map(
@@ -75,12 +75,19 @@ event(#postback{message={survey_start, Args}}, Context) ->
                     {As1, proplists:get_value(user_id, Result)}
             end,
             Editing = {editing, AnswerId, undefined},
-            Args1 = [ {answer_user_id, UserId} | Args ],
+            Args1 = [
+                {answer_user_id, ResultUserId}
+                | proplists:delete(answer_user_id, Args)
+            ],
             render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context), Args1, Context);
         false ->
             Answers = normalize_answers(proplists:get_value(answers, Args)),
             Editing = proplists:get_value(editing, Args),
-            render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args, Context), Args, Context)
+            Args1 = [
+                {answer_user_id, z_acl:user(Context)}
+                | proplists:delete(answer_user_id, Args)
+            ],
+            render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context), Args1, Context)
     end;
 
 event(#submit{message={survey_next, Args}}, Context) ->

@@ -233,7 +233,7 @@ model.present = function(data) {
                     url: data.payload.url
                 });
             } else {
-                self.publish("model/window/post/close");
+                self.publish("model/window/post/close", { url: "/" });
             }
         } else if (data.payload.message == 'cancel') {
             // Auth failed, user canceled. Close the window or redirect.
@@ -242,7 +242,7 @@ model.present = function(data) {
                     url: data.payload.url
                 });
             } else {
-                self.publish("model/window/post/close");
+                self.publish("model/window/post/close", { url: "/" });
             }
         } else {
             // Some error or other state that needs feedback to the user.
@@ -264,7 +264,7 @@ model.present = function(data) {
     // on some browsers).
     if (state.authenticating(model) && data.is_auth_changed) {
         setTimeout(
-            function() { self.publish("model/window/post/close"); },
+            function() { self.publish("model/window/post/close", { url: "/" }); },
             200);
     }
 

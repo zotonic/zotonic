@@ -91,6 +91,7 @@
 
     logger_md/1,
     logger_md/2,
+    ensure_logger_md/1,
 
     client_id/1,
     client_topic/1,
@@ -572,17 +573,17 @@ set_reqdata(Req, Context) when is_map(Req); Req =:= undefined ->
     Context#context{ cowreq = Req }.
 
 %% @doc Return the cowmachine request data of the context
--spec get_envdata(z:context()) -> cowmachine_middleware:env() | undefined.
+-spec get_envdata(z:context()) -> cowboy_middleware:env() | undefined.
 get_envdata(Context) ->
     Context#context.cowenv.
 
 %% @doc Set the cowmachine request data of the context
--spec set_envdata(cowmachine_middleware:env() | undefined, z:context()) -> z:context().
+-spec set_envdata(cowboy_middleware:env() | undefined, z:context()) -> z:context().
 set_envdata(Env, Context) when is_map(Env); Env =:= undefined ->
     Context#context{ cowenv = Env }.
 
 %% @doc Set the cowmachine request data of the context
--spec init_cowdata(cowboy_req:req(), cowmachine_middleware:env(), z:context()) -> z:context().
+-spec init_cowdata(cowboy_req:req(), cowboy_middleware:env(), z:context()) -> z:context().
 init_cowdata(Req, Env, Context) when is_map(Req); Req =:= undefined ->
     Context#context{
         cowreq = Req,
@@ -862,12 +863,14 @@ q_upload_keepalive(false, Context) ->
 %% Set logger metadata for the current process
 %% ------------------------------------------------------------------------------------
 
+%% @doc Set the logger metadata for the current site or context.
 -spec logger_md( z:context() | atom() ) -> ok.
 logger_md(Site) when is_atom(Site) ->
     logger_md(z_context:new(Site));
 logger_md(Context) ->
     logger_md(#{}, Context).
 
+%% @doc Set the logger metadata, add the current site or context
 -spec logger_md( map() | list(), z:context() ) -> ok.
 logger_md(MetaData, #context{} = Context) when is_list(MetaData) ->
     logger_md(maps:from_list(MetaData), Context);
@@ -893,6 +896,15 @@ logger_md(MetaData, #context{} = Context) when is_map(MetaData) ->
         correlation_id => m_req:get(req_id, Context),
         node => node()
     }).
+
+
+%% @doc Ensure that the logger metadata for this site and process is set.
+-spec ensure_logger_md( z:context() | atom() ) -> ok.
+ensure_logger_md(Context) ->
+    case logger:get_process_metadata() of
+        #{ site := _ } -> ok;
+        _ -> z_context:logger_md(Context)
+    end.
 
 %% ------------------------------------------------------------------------------------
 %% Set/get/modify state properties

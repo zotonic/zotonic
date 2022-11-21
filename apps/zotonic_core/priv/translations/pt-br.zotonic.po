@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-08-25 15:45\n"
+"PO-Revision-Date: 2022-10-31 18:52\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -772,7 +772,7 @@ msgstr "+ adicionar"
 msgid "+ add block"
 msgstr "+ adicionar bloco"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:46./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:161./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:113./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:32./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:46./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:164./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:113./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:32./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
 msgid "<em>Untitled</em>"
 msgstr "<em>Sem título</em>"
 
@@ -1053,7 +1053,7 @@ msgstr "Criado por"
 msgid "Created by me"
 msgstr "Criado por mim"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:24./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:82./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:137./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:24./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:82./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:140./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:51./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:53
 msgid "Created on"
@@ -1117,9 +1117,9 @@ msgstr "Dependente"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:26./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:28./apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:32
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
-#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:6
-#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:8
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:8
+#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:8
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:17
 #: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:8
 msgid "Disconnect"
@@ -1236,7 +1236,7 @@ msgid "Error checking the website."
 msgstr "Erro ao verificar o site."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:179
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:100
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:109
 msgid "Error creating the page."
 msgstr "Erro ao criar a página."
 
@@ -1273,7 +1273,7 @@ msgid "Existing pages"
 msgstr "Páginas existentes"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:175./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:153
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:86
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
 msgid "Failed to download the file."
 msgstr "Falha ao baixar o arquivo."
 
@@ -1524,11 +1524,11 @@ msgstr "Móvel"
 msgid "Modified"
 msgstr "Modificado"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:84./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:143./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:84./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:146./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
 msgid "Modified by"
 msgstr "Modificado por"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:27./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:140./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:27./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:143./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:53
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:50
 msgid "Modified on"
@@ -1596,7 +1596,7 @@ msgstr "Nenhuma mídia encontrada."
 msgid "No other pages found"
 msgstr "Nenhuma outra página encontrada"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:16./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:183./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:16./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:187./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find_results_loop.tpl:10
 msgid "No pages found."
 msgstr "Nenhuma página encontrada."
@@ -1719,6 +1719,10 @@ msgstr "Publicar esta página"
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:46
 msgid "Published"
 msgstr "Publicados"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:137
+msgid "Published on"
+msgstr "publicado em"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:21
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:28
@@ -2047,7 +2051,7 @@ msgid "There are no tasks in the task queue."
 msgstr "Não há tarefas na fila de tarefas."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:159
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:80
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:89
 msgid "There is already a page with this name."
 msgstr "Já existe uma página com este nome."
 
@@ -2060,7 +2064,7 @@ msgid "This connection already exists."
 msgstr "Esta conexão já existe."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:179./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:157
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:90
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:99
 msgid "This file contains links to other files or locations."
 msgstr "Este arquivo contém links para outros arquivos ou locais."
 
@@ -2077,16 +2081,16 @@ msgid "This file has not been scanned for viruses."
 msgstr "Este arquivo não foi verificado quanto a vírus."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:177./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:155
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:88
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:97
 msgid "This file is infected with a virus."
 msgstr "Este arquivo está infectado com um vírus."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:181./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:159
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:92
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:101
 msgid "This file is too large."
 msgstr "Este arquivo é muito grande."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:38./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:153./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:38./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:156./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
 msgid "This is system content."
 msgstr "Este é o conteúdo do sistema."
 
@@ -2312,7 +2316,7 @@ msgid "You don't have permission to change this media item."
 msgstr "Você não tem permissão para alterar este item de mídia."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:161
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:82
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:91
 msgid "You don't have permission to create this page."
 msgstr "Você não tem permissão para criar esta página."
 
@@ -2322,7 +2326,7 @@ msgid "You don't have permission to edit this page."
 msgstr "Você não tem permissão para editar esta página."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:173./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:93
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Você não tem as permissões adequadas para fazer upload desse tipo de arquivo."
 
@@ -2342,6 +2346,11 @@ msgstr "Sua consulta de pesquisa é inválida. Corrija-o antes de salvar."
 msgid "Zotonic Version"
 msgstr "Versão Zotônica"
 
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:159./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:116./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:96
+msgid "about {n} items found"
+msgstr "cerca de {n} itens encontrados"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
 msgid "add media item"
 msgstr "adicionar item de mídia"
@@ -2356,7 +2365,7 @@ msgstr "quadra"
 msgid "by"
 msgstr "de"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:55./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:102./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:103./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:170./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:171./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:124./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:127./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:55./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:102./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:103./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:173./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:174./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:175./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:124./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:127./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:55
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:70./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:71./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:73
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
@@ -2377,7 +2386,7 @@ msgstr "excluir"
 msgid "e.g. might change"
 msgstr "por exemplo, pode mudar"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:176./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:142./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:180./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:142./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:81
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:21./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:16
@@ -2387,11 +2396,6 @@ msgstr "editar"
 #: apps/zotonic_mod_admin/priv/templates/_edit_button.tpl:7
 msgid "edit this page"
 msgstr "Edite essa página"
-
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:158./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:115./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:55
-#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:95
-msgid "estimated"
-msgstr "estimado"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "excluding"
@@ -2428,7 +2432,7 @@ msgstr "píxeis"
 msgid "show all"
 msgstr "mostre tudo"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:154
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:157
 msgid "system content"
 msgstr "conteúdo do sistema"
 
@@ -2444,7 +2448,7 @@ msgstr "sem título"
 msgid "uploaded on"
 msgstr "carregado em"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:60./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:107./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:175./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:60./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:107./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:179./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:36
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:17./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:12
 msgid "view"
@@ -2454,10 +2458,10 @@ msgstr "visualizar"
 msgid "visit site"
 msgstr "visite o site"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:158./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:115./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:55
-#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:95
-msgid "{total} items found"
-msgstr "{total} itens encontrados"
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:160./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:117./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:57
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
+msgid "{n} items found"
+msgstr "{n} itens encontrados"
 
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:1
 msgid "Are you sure you want to delete the following categories:"
@@ -3804,12 +3808,12 @@ msgid "Two-factor authentication configuration"
 msgstr "Configuração de autenticação de dois fatores"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:2
-msgid "Two-factor authentication is enabled for this user."
-msgstr "A autenticação de dois fatores está habilitada para este usuário."
+msgid "Two-factor authentication is enabled for this account."
+msgstr "A autenticação de dois fatores está habilitada para esta conta."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:31
-msgid "Two-factor authentication is not enabled for this user."
-msgstr "A autenticação de dois fatores não está habilitada para este usuário."
+msgid "Two-factor authentication is not enabled for this account."
+msgstr "A autenticação de dois fatores não está habilitada para esta conta."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:59
 msgid "User group configuration"
@@ -4361,7 +4365,7 @@ msgstr "Cópias de segurança do administrador"
 msgid "Are you sure you want to revert to this version?"
 msgstr "Tem certeza de que deseja reverter para esta versão?"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:55
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:60
 msgid "At any moment you can make a backup of your system."
 msgstr "A qualquer momento você pode fazer um backup do seu sistema."
 
@@ -4369,7 +4373,7 @@ msgstr "A qualquer momento você pode fazer um backup do seu sistema."
 msgid "Back to the edit page"
 msgstr "Voltar para a página de edição"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:68
+#: apps/zotonic_mod_backup/src/mod_backup.erl:81
 msgid "Backup"
 msgstr "Cópia de segurança"
 
@@ -4385,7 +4389,7 @@ msgstr "Opções de backup e restauração para seu conteúdo."
 msgid "Backups"
 msgstr "Backups"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:107
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:116
 msgid "Changed configuration."
 msgstr "Configuração alterada."
 
@@ -4400,6 +4404,10 @@ msgstr "Verifique e possivelmente restaure uma versão anterior da sua página."
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:13
 msgid "Click on <b>List and restore an earlier version</b> to get an overview of earlier saved versions of this page.<br/>You can also save the complete contents of a page to a file. Later you can reload this file, replacing the current page contents. Note that the file does not contain your unsaved changes. Connections and media are not saved as well."
 msgstr "Clique em <b>List e restaure uma versão anterior</b> para obter uma visão geral das versões anteriores salvas desta página.<br/>Você também pode salvar o conteúdo completo de uma página em um arquivo. Mais tarde você pode recarregar este arquivo, substituindo o conteúdo da página atual. Observe que o arquivo não contém suas alterações não salvas. As conexões e a mídia também não são salvas."
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
+msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
+msgstr "O armazenamento de arquivos na nuvem está ativado. Os arquivos locais não serão submetidos a backup. Certifique-se de que seu sistema de armazenamento de arquivos na nuvem tenha um backup adequado."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
 msgid "Deleted"
@@ -4425,13 +4433,21 @@ msgstr "Ajuda sobre a restauração do backup &amp;"
 msgid "List and restore an earlier version"
 msgstr "Listar e restaurar uma versão anterior"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:44
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Faça um backup diário do banco de dados e dos arquivos carregados."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:29
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:46
+msgid "Make a daily backup of the database."
+msgstr "Faça um backup diário do banco de dados."
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:45
 msgid "No backups present."
 msgstr "Nenhum backup presente."
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:36
+msgid "Not uploaded to filestore"
+msgstr "Não foi enviado para o armazenamento de arquivos"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:68
 msgid "Previous"
@@ -4457,11 +4473,11 @@ msgstr "Selecione o arquivo de backup que você deseja carregar. O arquivo deve 
 msgid "Show import/export panel in the admin."
 msgstr "Mostrar painel de importação/exportação no admin."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:66
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:75
 msgid "Sorry, there is no module that can import this."
 msgstr "Desculpe, não há módulo que possa importar isso."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:73./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:98
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:82./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:98
 msgid "Sorry, there was an error replacing your page."
 msgstr "Desculpe, ocorreu um erro ao substituir sua página."
 
@@ -4473,35 +4489,35 @@ msgstr "Desculpe, este backup foi excluído."
 msgid "Sorry, this backup is not valid."
 msgstr "Desculpe, este backup não é válido."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:68
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:77
 msgid "Sorry, this is not a backup file or it is corrupted."
 msgstr "Desculpe, este não é um arquivo de backup ou está corrompido."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:76
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:85
 msgid "Sorry, you don't have permission to change this page."
 msgstr "Desculpe, você não tem permissão para alterar esta página."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:109
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:118
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Desculpe, você não tem permissão para alterar a configuração."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
 msgid "Start backup now"
 msgstr "Iniciar backup agora"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:72
 msgid "Start database-only backup now"
 msgstr "Inicie o backup somente do banco de dados agora"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
-msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
-msgstr "O comando \"pg_dump\" não foi encontrado no caminho. Defina a chave de configuração \"pg_dump\" para o caminho para pg_dump e retorne a esta página."
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:83
+msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
+msgstr "O comando \"pg_dump\" não foi encontrado no caminho. Defina em zotonic.config a chave de configuração \"pg_dump\" para o caminho para <tt>pg_dump</tt> e retorne a esta página."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:70
-msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
-msgstr "O comando \"tar\" não foi encontrado no caminho. Defina a chave de configuração \"tar\" para o caminho para tar e retorne a esta página."
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:86
+msgid "The \"tar\" command was not found in the path. Set in zotonic.config the \"tar\" config key to the path to <tt>tar</tt> and return to this page."
+msgstr "O comando \"tar\" não foi encontrado no caminho. Defina em zotonic.config a chave de configuração \"tar\" para o caminho para <tt>tar</tt> e retorne a esta página."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "O backup compreende duas partes, o banco de dados e os arquivos carregados."
 
@@ -4509,41 +4525,41 @@ msgstr "O backup compreende duas partes, o banco de dados e os arquivos carregad
 msgid "This is the version saved on"
 msgstr "Esta é a versão salva em"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:81
-msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
-msgstr "Este site tem o armazenamento de arquivos na nuvem ativado e há <strong>$1</strong> arquivos de mídia neste sistema que são armazenados apenas na nuvem e não nesta máquina. Esses arquivos não serão copiados!"
-
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "Isso substituirá sua página pelo conteúdo do arquivo de backup."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:32
+msgid "Uploaded to filestore"
+msgstr "Carregado para o armazenamento de arquivos"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:94
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "Aviso"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
-msgid "Warning:"
-msgstr "Aviso:"
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:26
+msgid "Y-m-d H:i – l"
+msgstr "Ymd H:i – l"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:72./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:75./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:84
 msgid "You are not allowed to see the revisions"
 msgstr "Você não tem permissão para ver as revisões"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
-msgid "You can have 10 backups, older ones will be deleted automatically."
-msgstr "Você pode ter 10 backups, os mais antigos serão excluídos automaticamente."
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+msgid "You can have one backup per day of the week, older ones will be overwritten."
+msgstr "Você pode ter um backup por dia da semana, os mais antigos serão substituídos."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:67
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Seu backup não está configurado corretamente. O módulo de backup não funcionará até que os problemas abaixo sejam resolvidos:"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:17
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:21
 msgid "download database"
 msgstr "baixar banco de dados"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:19
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:18
 msgid "download files"
 msgstr "baixar arquivos"
 
@@ -4981,7 +4997,7 @@ msgid "This page is part of the group:"
 msgstr "Esta página faz parte do grupo:"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:152
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:168
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:17
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
@@ -5527,19 +5543,19 @@ msgstr "Segredo do aplicativo"
 msgid "Application keys can be found in"
 msgstr "As chaves do aplicativo podem ser encontradas em"
 
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:17
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:19
 msgid "Connect with Facebook"
 msgstr "Conectar com o Facebook"
 
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:2./apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:4
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:3./apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
 msgid "Disconnect from Facebook"
 msgstr "Desconectar do Facebook"
 
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:5
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:7
 msgid "Do you want to disconnect your Facebook account?"
 msgstr "Deseja desconectar sua conta do Facebook?"
 
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:18
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:20
 msgid "Log in with Facebook"
 msgstr "Entrar com o Facebook"
 
@@ -5580,61 +5596,51 @@ msgstr "Você acoplou sua conta <strong>Facebook</strong>."
 msgid "Your Facebook Developer Dashboard"
 msgstr "Seu painel de desenvolvedor do Facebook"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:42
-#: apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:14./apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:15
-#: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:13./apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:14
-msgid "API Key"
-msgstr "Chave API"
-
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:49
-msgid "API Secret"
-msgstr "Segredo da API"
-
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:80
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:96
 msgid "After 1 month"
 msgstr "Após 1 mês"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:79
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:95
 msgid "After 1 week"
 msgstr "Depois de 1 semana"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:81
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
 msgid "After 3 months"
 msgstr "Após 3 meses"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:204
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Todos os arquivos na nuvem podem ser movidos de volta para o sistema de arquivos no servidor."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
 msgid "All cloud files will be queued for download."
 msgstr "Todos os arquivos na nuvem serão enfileirados para download."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:161
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:181
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "Todos os arquivos serão enfileirados, os uploads começarão em segundo plano em 10 minutos."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:155
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Todos os arquivos locais carregados e de visualização podem ser movidos para a nuvem."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:191
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Tem certeza de que deseja mover todos os arquivos para a nuvem?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:193
-msgid "Are you sure you want to move all files to the server?"
-msgstr "Tem certeza de que deseja mover todos os arquivos para o servidor?"
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
+msgid "Are you sure you want to move all files to the disk of the server?"
+msgstr "Tem certeza de que deseja mover todos os arquivos para o disco do servidor?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:32
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
 msgid "Base URL"
 msgstr "URL base"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:88
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:104
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Antes que as configurações sejam salvas, elas serão verificadas carregando (e removendo) um pequeno arquivo."
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:127
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:159
 msgid "Cloud File Store"
 msgstr "Armazenamento de arquivos na nuvem"
 
@@ -5642,116 +5648,164 @@ msgstr "Armazenamento de arquivos na nuvem"
 msgid "Cloud File Store Configuration"
 msgstr "Configuração do armazenamento de arquivos na nuvem"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:114
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:121
+msgid "Cloud File Store Utilities and Statistics"
+msgstr "Utilitários e estatísticas do armazenamento de arquivos na nuvem"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:130
 msgid "Cloud Files"
 msgstr "Arquivos de nuvem"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:180
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Não foi possível acessar o serviço, verifique suas configurações e tente novamente."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:91
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:107
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "Não foi possível acessar o serviço, verifique suas configurações e tente novamente. Certifique-se de que a chave de API tenha direitos de acesso para criar e remover um arquivo (temporário) <code>-zotonic-filestore-test-file-</code>."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
-msgid "Currently Zotonic supports services that are compatible with the S3 file services API. These include:"
-msgstr "Atualmente Zotonic suporta serviços que são compatíveis com a API de serviços de arquivo S3. Esses incluem:"
+msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
+msgstr "Atualmente Zotonic suporta FTP e serviços que são compatíveis com a API de serviços de arquivo S3. Esses incluem:"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:137
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:153
 msgid "Delete Queue"
 msgstr "Excluir fila"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:75
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:91
 msgid "Delete files from the cloud file store"
 msgstr "Excluir arquivos do armazenamento de arquivos na nuvem"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:136
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:152
 msgid "Download Queue"
 msgstr "Fila de download"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:183
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
+msgid "Enable this to let the filestore act as a backup of  your local media files."
+msgstr "Habilite isso para permitir que o armazenamento de arquivos atue como um backup de seus arquivos de mídia local."
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:205
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Certifique-se de que há espaço em disco suficiente antes de iniciar este processo."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:119./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:142
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
 msgid "Files"
 msgstr "arquivos"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:78
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:45
+msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
+msgstr "Para FTP, a URL deve começar com <b><tt>ftps:</tt></b> ou <b><tt>ftp:</tt></b>"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
+msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
+msgstr "Para S3, o URL deve começar com <b><tt>https:</tt></b> ou <b><tt>http:</tt></b>"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
+msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
+msgstr "Para WebDAV, a URL deve começar com <b><tt>webdavs:</tt></b> ou <b><tt>webdav:</tt></b>"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
+msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
+msgstr "Se você selecionou \"Manter arquivos locais após o upload para o armazenamento de arquivos na nuvem\", os arquivos locais não são excluídos, pois os arquivos remotos são considerados um backup dos arquivos locais."
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
+msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
+msgstr "Se você selecionou \"Manter arquivos locais após o upload para o armazenamento de arquivos na nuvem\", os arquivos remotos não são excluídos, pois os arquivos remotos são considerados um backup dos arquivos locais."
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:17
+msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
+msgstr "Se você usa um servidor FTP, esse servidor DEVE suportar FTPS (ftp seguro)"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:94
 msgid "Immediately"
 msgstr "Imediatamente"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:113
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:74
+msgid "Keep local files after upload to the cloud file store"
+msgstr "Mantenha os arquivos locais após o upload para o armazenamento de arquivos na nuvem"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:129
 msgid "Local Files"
 msgstr "Ficheiros locais"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:112
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:128
 msgid "Media Resources"
 msgstr "Recursos de mídia"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
-msgid "Move all S3 files to local"
-msgstr "Mova todos os arquivos S3 para local"
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:187
+msgid "Move all local files to the remote storage"
+msgstr "Mova todos os arquivos locais para o armazenamento remoto"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:167
-msgid "Move all local files to S3"
-msgstr "Mova todos os arquivos locais para o S3"
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:215
+msgid "Move all remote files to local"
+msgstr "Mova todos os arquivos remotos para local"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:172
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:192
 msgid "Move files to cloud"
 msgstr "Mover arquivos para a nuvem"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:194
-msgid "Move files to local"
-msgstr "Mover arquivos para local"
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:220
+msgid "Move files to server disk"
+msgstr "Mover arquivos para o disco do servidor"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:82
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:40
 msgid "Never"
 msgstr "Nunca"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:29
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
+msgid "S3 API Key or FTP/WebDAV username"
+msgstr "Chave de API do S3 ou nome de usuário FTP/WebDAV"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:56
+msgid "S3 API Secret or FTP/WebDAV password"
+msgstr "Segredo da API S3 ou senha FTP/WebDAV"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:33
 msgid "S3 Cloud Location and Credentials"
 msgstr "Localização e credenciais do S3 Cloud"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:105
-msgid "S3 Cloud Utilities and Statistics"
-msgstr "Utilitários e estatísticas do S3 Cloud"
-
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:95
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:111
 msgid "Save Settings"
 msgstr "Salvar configurações"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:90
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
 msgid "Settings are working fine and are saved."
 msgstr "As configurações estão funcionando bem e são salvas."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:125
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:141
 msgid "Storage"
 msgstr "Armazenar"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:157
-msgid "There is a 10 minute wait before files are uploaded."
-msgstr "Há uma espera de 10 minutos antes que os arquivos sejam carregados."
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:173
+msgid "There is a 1 minute wait before files are uploaded."
+msgstr "Há uma espera de 1 minuto antes que os arquivos sejam carregados."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:156
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:172
 msgid "This will queue the files for later asynchronous upload."
 msgstr "Isso enfileirará os arquivos para upload assíncrono posterior."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:68
-msgid "Try to create a private bucket if the bucket does not exist"
-msgstr "Tente criar um bucket privado se o bucket não existir"
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
+msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
+msgstr "Tente criar um bucket S3 privado se o bucket S3 não existir"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:151
 msgid "Upload Queue"
 msgstr "Fila de upload"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:60
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:65
 msgid "Upload new media files to the cloud file store"
 msgstr "Carregar novos arquivos de mídia para o armazenamento de arquivos na nuvem"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:59./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:66./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:73
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+msgid "With FTP and WebDAV the directories are always created automatically."
+msgstr "Com FTP e WebDAV os diretórios são sempre criados automaticamente."
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:19
+msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
+msgstr "Com o WebDAV, o nome de usuário e a senha são transferidos claramente, portanto, certifique-se de usar <tt>webdavs:</tt> URLs (que faz uso de https)."
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:235./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:63./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:70./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:77
 msgid "You are not allowed to change these settings."
 msgstr "Você não tem permissão para alterar essas configurações."
 
@@ -6082,19 +6136,24 @@ msgstr "meia-noite"
 msgid "noon"
 msgstr "meio-dia"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:17
+#: apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:14./apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:15
+#: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:13./apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:14
+msgid "API Key"
+msgstr "Chave API"
+
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:19
 msgid "Connect with LinkedIn"
 msgstr "Conecte-se com o LinkedIn"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:2./apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:4
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:3./apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:6
 msgid "Disconnect from LinkedIn"
 msgstr "Desconectar do LinkedIn"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:5
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:7
 msgid "Do you want to disconnect your LinkedIn account?"
 msgstr "Deseja desconectar sua conta do LinkedIn?"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:18
+#: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:20
 msgid "Log in with LinkedIn"
 msgstr "Entrar com o LinkedIn"
 
@@ -7118,7 +7177,7 @@ msgstr "Registros de aplicativo do Portal do Azure"
 msgid "Client Secret"
 msgstr "Segredo do cliente"
 
-#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:17
+#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:19
 msgid "Connect with Microsoft"
 msgstr "Conecte-se com a Microsoft"
 
@@ -7126,15 +7185,15 @@ msgstr "Conecte-se com a Microsoft"
 msgid "Control who can sign in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
 msgstr "Controle quem pode entrar. Os valores permitidos são: <tt>comum</tt>, <tt>organizações</tt>, <tt>consumidores</tt>e identificadores de locatário."
 
-#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:2./apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:4
+#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:3./apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
 msgid "Disconnect from Microsoft"
 msgstr "Desconecte-se da Microsoft"
 
-#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:5
+#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:7
 msgid "Do you want to disconnect your Microsoft account?"
 msgstr "Deseja desconectar sua conta da Microsoft?"
 
-#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:18
+#: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:20
 msgid "Log in with Microsoft"
 msgstr "Faça login com a Microsoft"
 

@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2020-2022 Marc Worrell
 %% @doc OAuth2 model for authentication using remote OAuth2 services.
-%% @enddoc
+%% @end
 
 %% Copyright 2020-2022 Marc Worrell
 %%

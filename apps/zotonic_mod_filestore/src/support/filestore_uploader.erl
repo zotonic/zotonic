@@ -137,7 +137,8 @@ try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInf
             RscId = maps:get(<<"id">>, MInfo, undefined),
             case z_notifier:first(#filestore_credentials_lookup{id=RscId, path=Path}, Context) of
                 {ok, #filestore_credentials{} = Cred} ->
-                    case handle_upload(Path, Cred, Context) of
+                    Mime = maps:get(<<"mime">>, MInfo, undefined),
+                    case handle_upload(Path, Mime, Cred, Context) of
                         ok ->
                             m_filestore:dequeue(Id, Context),
                             {stop, normal, State};
@@ -159,6 +160,8 @@ try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInf
                     ?LOG_WARNING(#{
                         text => <<"Filestore no credentials, ignoring queued file">>,
                         in => zotonic_mod_filestore,
+                        result => error,
+                        reason => no_credentials,
                         src =>  Path
                     }),
                     m_filestore:dequeue(Id, Context),
@@ -168,8 +171,13 @@ try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInf
             case m_filestore:is_download_ok(MaybeEntry) of
                 true ->
                     % Already uploaded - we can safely delete the file.
-                    AbsPath = z_path:abspath(Path, Context),
-                    file:delete(AbsPath);
+                    case m_filestore:is_local_keep(Context) of
+                        true ->
+                            ok;
+                        false ->
+                            AbsPath = z_path:abspath(Path, Context),
+                            file:delete(AbsPath)
+                    end;
                 false ->
                     ok
             end,
@@ -177,7 +185,7 @@ try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInf
             {stop, normal, State}
     end.
 
-handle_upload(Path, Cred, Context) ->
+handle_upload(Path, Mime, Cred, Context) ->
     AbsPath = z_path:abspath(Path, Context),
     case file:read_file_info(AbsPath) of
         {ok, #file_info{type=regular, size=0}} ->
@@ -188,7 +196,7 @@ handle_upload(Path, Cred, Context) ->
             }),
             ok;
         {ok, #file_info{type=regular, size=Size}} ->
-            Result = do_upload(Cred, {filename, Size, AbsPath}),
+            Result = filestore_request:do_upload(Cred, {filename, Size, AbsPath}, Mime),
             finish_upload(Result, Path, AbsPath, Size, Cred, Context);
         {ok, #file_info{type=Type}} ->
             ?LOG_ERROR(#{
@@ -209,9 +217,6 @@ handle_upload(Path, Cred, Context) ->
             fatal
     end.
 
-do_upload(#filestore_credentials{service= <<"s3">>, location=Location, credentials=Cred}, Data) ->
-    s3filez:put(Cred, Location, Data).
-
 %% @doc Remember the new location in the m_filestore, move the file to the filezcache and delete the file
 finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, location=Location}, Context) ->
     ?LOG_INFO(#{
@@ -222,30 +227,37 @@ finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, l
         service => Service,
         result => ok
     }),
-    FzCache = start_empty_cache_entry(Location),
-    {ok, _} = m_filestore:store(Path, Size, Service, Location, Context),
-    % Make sure that the file entry is not serving the relocated file from the file system.
-    pause_file_entry(Path, Context),
-    AbsPathTmp = <<AbsPath/binary, "~">>,
-    _ = file:rename(AbsPath, AbsPathTmp),
-    % After the file entry is marked stale it will do a new lookup, and will find
-    % the file stored in the filecache.
-    stale_file_entry(Path, Context),
-    % The file entries are waiting for the cache process, which is monitoring the current process
-    case FzCache of
-        {ok, Pid} ->
-            ok = filezcache_entry:store(Pid, {tmpfile, AbsPathTmp});
-        {error, Reason} ->
-            ?LOG_WARNING(#{
-                text => <<"Filestore error moving to cache entry">>,
-                in => zotonic_mod_filestore,
-                result => error,
-                reason => Reason,
-                location => Location,
-                src => Path
-            }),
-            file:delete(AbsPathTmp),
-            ok
+    IsLocalKeep = m_filestore:is_local_keep(Context),
+    case IsLocalKeep of
+        true ->
+            {ok, _} = m_filestore:store(Path, Size, Service, Location, IsLocalKeep, Context),
+            ok;
+        false ->
+            FzCache = start_empty_cache_entry(Location),
+            {ok, _} = m_filestore:store(Path, Size, Service, Location, IsLocalKeep, Context),
+            % Make sure that the file entry is not serving the relocated file from the file system.
+            pause_file_entry(Path, Context),
+            AbsPathTmp = <<AbsPath/binary, "~">>,
+            _ = file:rename(AbsPath, AbsPathTmp),
+            % After the file entry is marked stale it will do a new lookup, and will find
+            % the file stored in the filecache.
+            stale_file_entry(Path, Context),
+            % The file entries are waiting for the cache process, which is monitoring the current process
+            case FzCache of
+                {ok, Pid} ->
+                    ok = filezcache_entry:store(Pid, {tmpfile, AbsPathTmp});
+                {error, Reason} ->
+                    ?LOG_WARNING(#{
+                        text => <<"Filestore error moving to cache entry">>,
+                        in => zotonic_mod_filestore,
+                        result => error,
+                        reason => Reason,
+                        location => Location,
+                        src => Path
+                    }),
+                    file:delete(AbsPathTmp),
+                    ok
+            end
     end;
 finish_upload({error, Reason}, Path, _AbsPath, _Size, #filestore_credentials{service=Service, location=Location}, _Context) ->
     ?LOG_ERROR(#{

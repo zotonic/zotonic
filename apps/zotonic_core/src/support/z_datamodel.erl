@@ -37,17 +37,32 @@
 
 
 %% @doc Reset the state of an imported datamodel, causing all deleted resources to be reimported
+-spec reset_deleted(Module, Context) -> ok when
+    Module :: atom(),
+    Context :: z:context().
 reset_deleted(Module, Context) ->
     m_config:delete(Module, datamodel, Context).
 
 %% @doc Install / update a set of named, predefined resources, categories, predicates, media and edges.
--spec manage(atom(), #datamodel{}, #context{}) -> ok.
+-spec manage(Module, Datamodel, Context) -> ok when
+    Module :: atom(),
+    Datamodel :: #datamodel{},
+    Context :: z:context().
 manage(Module, Datamodel, Context) ->
     manage(Module, Datamodel, [], Context).
 
 %% @doc Install / update a set of named, predefined resources, categories, predicates, media and edges.
--spec manage(atom(), #datamodel{}, datamodel_options(), #context{}) -> ok.
+-spec manage(Module, Datamodel, Options, Context) -> ok when
+    Module :: atom(),
+    Datamodel :: #datamodel{},
+    Options :: datamodel_options(),
+    Context :: z:context().
 manage(Module, Datamodel, Options, Context) ->
+    ?LOG_INFO(#{
+        text => <<"Installing datamodel for module">>,
+        in => zotonic_core,
+        module => Module
+    }),
     AdminContext = z_acl:sudo(Context),
     jobs:run(manage_module_jobs, fun() ->
         [ manage_category(Module, Cat, Options, AdminContext)   || Cat    <- Datamodel#datamodel.categories ],
@@ -83,18 +98,13 @@ manage_medium(Module, {Name, Filename, Props}, Options, Context) ->
         ok ->
             ok;
         {ok, Id} ->
-            case manage_resource(Module, {Name, media, Props}, Options, Context) of
-                ok ->
-                    ok;
-                {ok, Id} ->
-                    case is_http_url(Filename) of
-                        true ->
-                            z_media_import:update(Id, Filename, Context);
-                        false ->
-                            m_media:replace_file(path(Filename, Context), Id, Context)
-                    end,
-                    {ok, Id}
-            end
+            case is_http_url(Filename) of
+                true ->
+                    z_media_import:update(Id, Filename, Context);
+                false ->
+                    m_media:replace_file(path(Filename, Context), Id, Context)
+            end,
+            {ok, Id}
     end.
 
 manage_category(Module, {Name, ParentCategory, Props}, Options, Context) when is_list(Props) ->

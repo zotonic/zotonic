@@ -8,11 +8,15 @@
 
         <p>{_ Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service. _}</p>
 
-        <p>{_ Currently Zotonic supports services that are compatible with the S3 file services API. These include: _}</p>
+        <p>{_ Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include: _}</p>
         <ul>
             <li><a target="_blank" href="http://aws.amazon.com/s3/">Amazon Simple Storage Service (S3)</a></li>
             <li><a target="_blank" href="https://developers.google.com/storage/">Google Cloud Storage</a></li>
         </ul>
+
+        <p>{_ If you use an FTP server then that server MUST support FTPS (secure ftp) _}</p>
+
+        <p>{_ With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https). _}</p>
     </div>
 
     {% if m.acl.is_allowed.use.mod_admin_config %}
@@ -28,52 +32,64 @@
                     <div class="widget">
                         <h3 class="widget-header">{_ S3 Cloud Location and Credentials _}</h3>
                         <div class="widget-content">
-                            <div class="form-group row">
-                                <label class="control-label col-md-12" for="s3url">{_ Base URL _}</label>
-                                <div class="col-md-12">
-                                    <input type="text" id="s3url" name="s3url"
-                                        value="{{ m.config.mod_filestore.s3url.value|escape }}" class="form-control"
-                                        placeholder="https://mybucket.s3.amazonaws.com/mysite"
-                                    />
-                                </div>
+                            <div class="form-group">
+                                <label class="control-label" for="s3url">{_ Base URL _}</label>
+                                <input type="text" id="s3url" name="s3url"
+                                    value="{{ m.filestore.s3url|escape }}" class="form-control"
+                                    placeholder="https://mybucket.s3.amazonaws.com/mysite"
+                                />
+                                {% validate id="s3url" type={format pattern="^(davs?:|webdavs?:|https?:|ftps?:).*$"} %}
+
+                                <p class="help-block">
+                                    {_ For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b> _}<br>
+                                    {_ For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b> _}<br>
+                                    {_ For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b> _}
+                                </p>
                             </div>
 
-                            <div class="form-group row">
-                                <label class="control-label col-md-12" for="s3key">{_ API Key _}</label>
-                                <div class="col-md-12">
-                                    <input type="text" id="s3key" name="s3key" value="{{ m.config.mod_filestore.s3key.value|escape }}" class="form-control" />
-                                </div>
+                            <div class="form-group">
+                                <label class="control-label" for="s3key">{_ S3 API Key or FTP/WebDAV username_}</label>
+                                <input type="text" id="s3key" name="s3key" value="{{ m.filestore.s3key|escape }}" class="form-control" />
                             </div>
 
-                            <div class="form-group row">
-                                <label class="control-label col-md-12" for="s3secret">{_ API Secret _}</label>
-                                <div class="col-md-12">
-                                    <input type="text" id="s3secret" name="s3secret" value="{{ m.config.mod_filestore.s3secret.value|escape }}" class="form-control" />
-                                </div>
+                            <div class="form-group">
+                                <label class="control-label" for="s3secret">{_ S3 API Secret or FTP/WebDAV password _}</label>
+                                <input type="text" id="s3secret" name="s3secret" value="{{ m.filestore.s3secret|escape }}" class="form-control" />
                             </div>
 
-                            <div class="form-group row">
-                                <div class="col-md-12 form-inline">
+                            <div class="form-group">
+                                <div class="form-inline">
                                     <label class="checkbox">
                                         <input type="checkbox" class="checkbox" id="is_upload_enabled" name="is_upload_enabled"
-                                            {% if m.config.mod_filestore.is_upload_enabled.value == "true" %}checked{% endif %} />
+                                            {% if m.filestore.is_upload_enabled %}checked{% endif %} />
                                         {_ Upload new media files to the cloud file store _}
                                     </label>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <div class="col-md-12 form-inline">
+                            <div class="form-group">
+                                <div class="form-inline">
+                                    <label class="checkbox">
+                                        <input type="checkbox" class="checkbox" id="is_local_keep" name="is_local_keep"
+                                            {% if m.filestore.is_local_keep %}checked{% endif %} />
+                                        {_ Keep local files after upload to the cloud file store _}
+                                    </label>
+                                    <p class="help-block">{_ Enable this to let the filestore act as a backup of  your local media files. _}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-inline">
                                     <label class="checkbox">
                                         <input type="checkbox" id="is_create_bucket" name="is_create_bucket">
-                                        {_ Try to create a private bucket if the bucket does not exist _}
+                                        {_ Try to create a private S3 bucket if the S3 bucket does not exist _}
                                     </label>
+                                    <p class="help-block">{_ With FTP and WebDAV the directories are always created automatically. _}</p>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="form-inline">
                                     <label for="delete_interval" class="control-label">{_ Delete files from the cloud file store _}&nbsp;</label>
-                                    {% with m.config.mod_filestore.delete_interval.value|if_undefined:"0" as value %}
+                                    {% with m.filestore.delete_interval as value %}
                                          <select class="form-control input-sm" id="delete_interval" name="delete_interval">
                                              <option value="0"{% if value == "0" %} selected{% endif %}>{_ Immediately _}</option>
                                              <option value="1 week"{% if value == "1 week" %} selected{% endif %}>{_ After 1 week _}</option>
@@ -102,7 +118,7 @@
             </div>
             <div class="col-md-6">
             <div class="widget">
-                <h3 class="widget-header">{_ S3 Cloud Utilities and Statistics _}</h3>
+                <h3 class="widget-header">{_ Cloud File Store Utilities and Statistics _}</h3>
                 <div class="widget-content">
                     {% with m.filestore.stats as stats %}
                         <table class="table table-striped">
@@ -154,7 +170,11 @@
                     <p class="help-block">
                         {_ All local uploaded and preview files can be moved to the cloud. _}<br/>
                         {_ This will queue the files for later asynchronous upload. _}
-                        {_ There is a 10 minute wait before files are uploaded. _}
+                        {_ There is a 1 minute wait before files are uploaded. _}
+                    </p>
+
+                    <p class="help-block">
+                        {_ If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files. _}
                     </p>
 
                     <p id="s3error-queue" class="alert alert-error" style="display:none">{_ Could not access the service, double check your settings and try again. _}</p>
@@ -164,7 +184,7 @@
                     <div class="form-group">
                         <div>
                             <button id="queue-all" name="queue-all" type="submit" class="btn btn-danger">
-                                {_ Move all local files to S3 _}
+                                {_ Move all local files to the remote storage _}
                             </button>
                             {% wire id="queue-all"
                                     action={confirm
@@ -178,20 +198,26 @@
                         </div>
                     </div>
 
+                    <hr>
+
                     <p class="help-block">
-                        {_ All cloud files can be moved back to the file system on the server. _} 
+                        {_ All cloud files can be moved back to the file system on the server. _}
                         {_ Ensure yourself there is enough disk space before starting this process. _}
+                    </p>
+
+                    <p class="help-block">
+                        {_ If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files. _}
                     </p>
 
                     <div class="form-group">
                         <div>
                             <button id="queue-local" name="queue-local" type="submit" class="btn btn-default">
-                                {_ Move all S3 files to local _}
+                                {_ Move all remote files to local _}
                             </button>
                             {% wire id="queue-local"
                                     action={confirm
-                                        text=_"Are you sure you want to move all files to the server?"
-                                        ok=_"Move files to local"
+                                        text=_"Are you sure you want to move all files to the disk of the server?"
+                                        ok=_"Move files to server disk"
                                         is_danger
                                         postback={admin_filestore_queue is_to_local}
                                         delegate=`filestore_admin`

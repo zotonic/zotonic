@@ -147,7 +147,7 @@ set_connect_context_options(Options, Context) ->
     end,
     z_acl:logon_refresh(Context5).
 
--spec connect( mqtt_packet_map:mqtt_packet(), boolean(), mqtt_session:msg_options(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.
+-spec connect( mqtt_packet_map:mqtt_packet(), boolean(), mqtt_sessions:msg_options(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.
 connect(#{ type := connect, username := U, password := P, properties := Props }, false,
         #{ context_prefs := #{ user_id := UserId } = Prefs } = Options,
         Context) when ?none(U), ?none(P) ->

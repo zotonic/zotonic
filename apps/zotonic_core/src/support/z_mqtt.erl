@@ -49,7 +49,7 @@
     whereis_client/1
 ]).
 
--type topic() :: mqtt_session:topic().
+-type topic() :: mqtt_sessions:topic().
 -type topic_any() :: mqtt_sessions:topic()
                    | m_rsc:resource_id()
                    | {object, list()}

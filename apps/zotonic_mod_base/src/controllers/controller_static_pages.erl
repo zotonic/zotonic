@@ -1,9 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%%
-%% @doc Serve static pages relative to a defined root.  This resource is useful to add a complete static html subsite to an existing site.
+%% @copyright 2010-2022 Marc Worrell
+%% @doc Serve static pages relative to a defined root.  This resource is useful
+%% to add a complete static html subsite to an existing site.
+%% @end
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -47,13 +48,21 @@
 
 
 service_available(Context) ->
-    case bin(z_context:get(root, Context)) of
+    case z_context:get(root, Context) of
+        undefined ->
+            {false, Context};
+        "" ->
+            {false, Context};
+        "/" ->
+            {false, Context};
         <<>> ->
             {false, Context};
         <<"/">> ->
             {false, Context};
+        {files, SubDir} ->
+            {true, z_context:set(root, {files, bin(SubDir)}, Context)};
         Root ->
-            {true, z_context:set(root, Root, Context)}
+            {true, z_context:set(root, bin(Root), Context)}
     end.
 
 allowed_methods(Context) ->
