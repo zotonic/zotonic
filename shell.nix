@@ -4,10 +4,10 @@ in
 pkgs.mkShell {
   buildInputs = with pkgs; [
     erlangR22
-    fswatch
     imagemagick
     ffmpeg
     postgresql
     gettext
+    (if stdenv.isDarwin then fswatch else inotify-tools)
   ];
 }
