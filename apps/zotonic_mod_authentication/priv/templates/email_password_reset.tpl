@@ -8,13 +8,14 @@
 
     <p>{_ You've requested a new password for _} <a href="https://{{ m.site.hostname }}/">{{ m.site.hostname }}</a>.</p>
 
-    <p>{_ However this email address does not belong to one of our registered users so you will not be able to change the password. _}</p>
+    <p>{_ However this email address does not belong to one of our registered users so you will not be able to change the password. _}</p><br/>
+    <p> {_ Are you sure you have created an account? If not, you can create one here: _} https://{{ m.site.hostname }}/signup</p><br/>
 
     <p>{_ If you think you have an account and were expecting this email, please try again using the email address you gave when signing up. _}</p>
 {% else %}
     <p>{_ Hello _} {{ m.rsc[id].name_first|default:m.rsc[id].title }},</p>
 
-    <p>{_ You've requested a new password for _} <a href="https://{{ m.site.hostname }}/">{{ m.site.hostname }}</a>. {_ Below are your account details and a link to set a new password. _}</p>
+    <p>{_ You've requested a new password for _} <a href="https://{{ m.site.hostname }}/">{{ m.site.hostname }}</a>.</p>
 
     {% with m.identity[id].username as username %}
         <p>{_ Your account name is _} “<strong>{{ username|escape }}</strong>”.{% if username != email|default:(m.rsc[id].email_raw) %} {_ The email address associated with your account is _} “<strong>{{ email|default:(m.rsc[id].email_raw)|escape }}</strong>”.{% endif %}</p>
