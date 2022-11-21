@@ -8,5 +8,6 @@ pkgs.mkShell {
     imagemagick
     ffmpeg
     postgresql
+    gettext
   ];
 }
