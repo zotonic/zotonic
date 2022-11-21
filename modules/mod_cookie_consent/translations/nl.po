@@ -1,0 +1,122 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2022-11-18 14:57+0100\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
+"Language-Team: \n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2\n"
+
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:26
+msgid "Accept alll"
+msgstr "Accepteer alles"
+
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:79
+msgid "Accept selection"
+msgstr "Selectie accepteren"
+
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:50
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:70
+msgid "All cookies"
+msgstr "Alle koekjes"
+
+#: modules/mod_cookie_consent/templates/_media_cookie_consent.tpl:13
+msgid "Change cookie settings"
+msgstr "Cookie-instellingen wijzigen"
+
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:20
+msgid "Change settings"
+msgstr "Instellingen wijzigen"
+
+#: modules/mod_cookie_consent/templates/_media_cookie_consent.tpl:9
+#, fuzzy
+msgid "Click to change cookie settings"
+msgstr "Klik om de cookie-instellingen te wijzigen"
+
+#: modules/mod_cookie_consent/templates/_admin_edit_content.name.cookie_consent.tpl:6
+#, fuzzy
+#| msgid "Change cookie settings"
+msgid "Cookie consent settings"
+msgstr "Cookie-instellingen wijzigen"
+
+#: modules/mod_cookie_consent/templates/_admin_edit_content.name.cookie_consent.tpl:16
+#, fuzzy
+msgid ""
+"Detailed explanation of cookie types. Leave a field empty if you don't want "
+"to show this type of cookie"
+msgstr ""
+"Gedetailleerde uitleg van cookietypes. Laat een veld leeg als u dit type "
+"cookie niet wilt"
+
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:37
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:57
+#: modules/mod_cookie_consent/templates/_admin_edit_content.name.cookie_consent.tpl:19
+msgid "Functional"
+msgstr "Functioneel"
+
+#: modules/mod_cookie_consent/templates/_admin_edit_content.name.cookie_consent.tpl:33
+msgid "Marketing"
+msgstr "Marketing"
+
+#: modules/mod_cookie_consent/templates/_media_cookie_consent.tpl:8
+msgid "Media preview"
+msgstr "Mediavoorbeeld"
+
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:17
+msgid "More information about cookies"
+msgstr "Meer informatie over cookies"
+
+#: modules/mod_cookie_consent/templates/_media_cookie_consent.tpl:12
+#, fuzzy
+msgid "Please consent to cookies to display external content."
+msgstr "Geef toestemming voor cookies om externe inhoud weer te geven."
+
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:43
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:63
+#: modules/mod_cookie_consent/templates/_admin_edit_content.name.cookie_consent.tpl:26
+msgid "Statistics"
+msgstr "Statistieken"
+
+#: modules/mod_cookie_consent/templates/_cookie_consent.tpl:7
+msgid "This website uses cookies"
+msgstr "Deze website gebruikt cookies"
+
+#: modules/mod_cookie_consent/templates/_admin_edit_content.name.cookie_consent.tpl:40
+msgid ""
+"To add more information about the use of cookies, either use the content "
+"field below or add a 'relation' in the page connections."
+msgstr ""
+"Om meer informatie over het gebruik van cookies toe te voegen, gebruikt u "
+"het onderstaande Content-veld of voegt u een 'relatie' toe in de "
+"paginaverbindingen."
+
+#, fuzzy
+#~ msgid ""
+#~ "Add a relation to a detail page about cookies. A link to this  page will "
+#~ "show up in the cookie banner"
+#~ msgstr ""
+#~ "Voeg een relatie toe naar een detailpagina over cookies. Een link naar "
+#~ "deze pagina zal verschijnen in de cookiebanner"
+
+#, fuzzy
+#~ msgid "Cookie explanation"
+#~ msgstr "Cookie uitleg"
+
+#~ msgid "Preference"
+#~ msgstr "Voorkeur"
+
+#~ msgid "Title"
+#~ msgstr "Titel"

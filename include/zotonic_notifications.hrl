@@ -576,6 +576,19 @@
 %% Return {ok, ResourceId} or undefined
 -record(media_stillimage, {id, props=[]}).
 
+%% @doc Optionally wrap HTML with external content so that it adheres to the cookie/privacy
+%% settings of the current site visitor. Typically called with a 'first' by the code that
+%% generated the media viewer HTML, as that code has the knowledge if viewing the generated code
+%% has any privacy or cookie implications.
+%% Return {ok, HTML} or undefined
+-record(media_viewer_consent, {
+                id :: m_rsc:resource_id() | undefined,
+                consent = all :: functional | stats | all,
+                html :: iodata(),
+                viewer_props = [] :: list(),
+                viewer_options = [] :: list()
+        }).
+
 
 %% @doc Fetch lisy of handlers. (foldr)
 -record(survey_get_handlers, {}).
