@@ -10,6 +10,7 @@ pkgs.mkShell {
     ffmpeg
     postgresql
     gettext
+    libiconv
     (if stdenv.isDarwin then fswatch else inotify-tools)
   ];
 }
