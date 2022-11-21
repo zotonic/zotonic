@@ -4,6 +4,8 @@ in
 pkgs.mkShell {
   buildInputs = with pkgs; [
     erlangR22
+    rebar3
+    erlfmt
     imagemagick
     ffmpeg
     postgresql
