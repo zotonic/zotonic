@@ -12,7 +12,7 @@ Main changes are:
  * New module ``mod_cookie_consent``
  * Better estimates for the number of found rows in searches
 
-Commits since 0.70.0
+Commits since 0.71.0
 --------------------
 
 Marc Worrell (5):
