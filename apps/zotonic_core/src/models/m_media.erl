@@ -581,14 +581,16 @@ replace_file(#upload{filename = OriginalFilename, tmpfile = TmpFile}, RscId, Rsc
         false ->
             {error, upload_not_tempfile}
     end;
-replace_file(File, RscId, RscProps, MInfo, Opts, Context) ->
+replace_file(File, RscId, RscProps, MInfo, Opts, Context) when is_list(File) ->
     File1 = unicode:characters_to_binary(File),
-    OriginalFilename = maps:get(<<"original_filename">>, RscProps, File1),
+    replace_file(File1, RscId, RscProps, MInfo, Opts, Context);
+replace_file(File, RscId, RscProps, MInfo, Opts, Context) ->
+    OriginalFilename = maps:get(<<"original_filename">>, RscProps, File),
     MInfo1 = MInfo#{
         <<"original_filename">> => OriginalFilename
     },
-    MediaProps = add_medium_info(File1, OriginalFilename, MInfo1, Context),
-    replace_file_mime_check(File1, RscId, RscProps, MediaProps, Opts, Context).
+    MediaProps = add_medium_info(File, OriginalFilename, MInfo1, Context),
+    replace_file_mime_check(File, RscId, RscProps, MediaProps, Opts, Context).
 
 replace_file_mime_check(File, RscId, RscProps, MediaProps, Opts, Context) ->
     Mime = maps:get(<<"mime">>, MediaProps, undefined),
