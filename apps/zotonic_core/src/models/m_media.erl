@@ -581,6 +581,9 @@ replace_file(#upload{filename = OriginalFilename, tmpfile = TmpFile}, RscId, Rsc
         false ->
             {error, upload_not_tempfile}
     end;
+replace_file(File, RscId, RscProps, MInfo, Opts, Context) when is_list(File) ->
+    File1 = unicode:characters_to_binary(File),
+    replace_file(File1, RscId, RscProps, MInfo, Opts, Context);
 replace_file(File, RscId, RscProps, MInfo, Opts, Context) ->
     OriginalFilename = maps:get(<<"original_filename">>, RscProps, File),
     MInfo1 = MInfo#{
