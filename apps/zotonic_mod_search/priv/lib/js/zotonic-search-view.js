@@ -3,7 +3,7 @@ jQuery( document ).ready(function() {
     let search_view_busy = false;
     let last_search = '';
 
-    jQuery( '[name="qs"]' ).on('input', function() {
+    jQuery( '[data-search-view="true"]' ).on('input', function() {
         if (!search_view_busy && this.value != last_search) {
             last_search = this.value;
             search_view_busy = true;
