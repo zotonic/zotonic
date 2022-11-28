@@ -4,7 +4,7 @@ Filters all empty translations from a property.
 
 This is used if it is important to show a text, but not all translations are filled in.
 
-The filter takes as input a resource or other variable and as argumnent the property to be shown.
+The filter takes as input a resource or other variable and as argument the property to be shown.
 
 Example usage:
 
