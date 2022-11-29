@@ -16,24 +16,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ---------------------------------------------------------- */
 .search-view-results {
-  position: absolute;
-  z-index: 5;
-  padding-right: 2rem;
-  width: 100%;
-  max-width: 500px;
+  width: 90vw;
+  max-width: 50rem;
   max-height: calc(100vh - 100px);
-  overflow-y: scroll;
-  background-color: rgba(255, 255, 255, 0.95);
-  color: #222;
-  font-size: 1.6rem;
   margin: 0;
   padding: 0;
-  list-style-type: none;
-  border-bottom: 1px solid #eee;
+  position: absolute;
+  right: 1rem;
+  top: 5rem;
+  overflow-y: scroll;
+  background-color: rgba(255, 255, 255, 0.95);
+  list-style: none;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-}
-.search-view-results .list-item {
-  margin: 0;
+  border-bottom: 1px solid #eee;
+  font-size: 1.6rem;
 }
 .search-view-results li {
   border: 1px solid #e8e8e8;
@@ -42,17 +38,19 @@ limitations under the License.
 }
 .search-view-results li .list-item {
   display: grid;
-  grid-template-columns: 38px 1fr minmax(20px, auto);
+  grid-template-columns: 3.8rem 1fr minmax(2rem, auto);
   grid-template-rows: auto auto;
-  padding: 5px 4px;
+  padding: 0.5rem;
   margin: 0;
-  color: #222;
 }
 .search-view-results li .list-item .list-item__title {
-  grid-row: 1;
-  grid-column: 2;
   padding: 0;
   margin: 0;
+  grid-row: 1;
+  grid-column: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .search-view-results li .list-item .list-item__meta {
   grid-row: 2;
@@ -82,10 +80,6 @@ limitations under the License.
   width: 32px;
   text-align: center;
 }
-.search-view-results li:hover .glyphicon,
-.search-view-results li.active .glyphicon {
-  color: white;
-}
 .search-view-results li.active {
-  background: #ccc;
+  background: #eee;
 }
