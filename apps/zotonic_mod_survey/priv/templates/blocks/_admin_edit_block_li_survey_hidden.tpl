@@ -15,11 +15,11 @@
     </p>
     {% if id.is_editable %}
         <div class="form-group view-expanded">
-            <input class="form-control" type="text" id="block-{{name}}-value{{ lang_code_for_id }}" name="blocks[].value{{ lang_code_with_dollar }}" value="{{ blk.value[lang_code]  }}"
+            <input class="form-control" type="text" id="block-{{name}}-value{{ lang_code_for_id }}" name="blocks[].value{{ lang_code_with_dollar }}" value="{{ blk.value|translation:lang_code  }}"
                    placeholder="{_ Input value _} ({{ lang_code }})" />
         </div>
     {% else %}
-        <p>{{ blk.value[lang_code] }}</p>
+        <p>{{ blk.value|translation:lang_code }}</p>
     {% endif %}
 {% endblock %}
 

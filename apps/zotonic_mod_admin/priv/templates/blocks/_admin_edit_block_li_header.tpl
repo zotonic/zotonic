@@ -17,11 +17,11 @@
                type="text"
                id="block-{{name}}-header{{ lang_code_for_id }}"
                name="blocks[].header{{ lang_code_with_dollar }}"
-               value="{{ blk.header[lang_code] }}"
+               value="{{ blk.header|translation:lang_code }}"
                placeholder="{_ Header _} ({{ lang_code }})">
         <label>{_ Header _} ({{ lang_code }})</label>
     {% else %}
-        <h3>{{ blk.header[lang_code]  }}</h3>
+        <h3>{{ blk.header|translation:lang_code }}</h3>
     {% endif %}
     </div>
 </fieldset>

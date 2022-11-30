@@ -12,17 +12,17 @@
 {% block widget_content %}
     {% if id.is_editable %}
     <div class="form-group">
-        <input class="form-control" type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="blocks[].prompt{{ lang_code_with_dollar }}" value="{{ blk.prompt[lang_code]  }}"
+        <input class="form-control" type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="blocks[].prompt{{ lang_code_with_dollar }}" value="{{ blk.prompt|translation:lang_code  }}"
                placeholder="{_ Please make a choice. _} ({{ lang_code }})" />
     </div>
 
     <div class="form-group view-expanded">
         <textarea class="form-control" id="block-{{name}}-explanation{{ lang_code_for_id }}" name="blocks[].explanation{{ lang_code_with_dollar }}" rows="2"
-               placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
+               placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation|translation:lang_code  }}</textarea>
     </div>
 
     {% else %}
-        <p>{{ blk.prompt[lang_code]  }}</p>
+        <p>{{ blk.prompt|translation:lang_code  }}</p>
     {% endif %}
 {% endblock %}
 

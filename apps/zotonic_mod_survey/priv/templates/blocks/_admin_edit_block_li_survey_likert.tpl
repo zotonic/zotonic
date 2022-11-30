@@ -12,7 +12,7 @@
 {% block widget_content %}
     {% if id.is_editable %}
     <div class="form-group">
-        <input class="form-control" type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="blocks[].prompt{{ lang_code_with_dollar }}" value="{{ blk.prompt[lang_code]  }}"
+        <input class="form-control" type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="blocks[].prompt{{ lang_code_with_dollar }}" value="{{ blk.prompt|translation:lang_code  }}"
                placeholder="{_ Question with a 5-point scale _} ({{ lang_code }})" />
     </div>
 
@@ -22,14 +22,14 @@
                  name="blocks[].explanation{{ lang_code_with_dollar }}"
                  rows="2"
                  placeholder="{_ Explanation _} ({{ lang_code }})"
-        >{{ blk.explanation[lang_code]  }}</textarea>
+        >{{ blk.explanation|translation:lang_code  }}</textarea>
     </div>
 
     <div class="form-group view-expanded">
         <div class="row">
             <div class="col-md-4">
                 <input type="text" id="block-{{name}}-disagree{{ lang_code_for_id }}" name="blocks[].disagree{{ lang_code_with_dollar }}"
-                      class="form-control" value="{{ blk.disagree[lang_code]  }}"
+                      class="form-control" value="{{ blk.disagree|translation:lang_code  }}"
                       placeholder="{_ Strongly Disagree _}">
             </div>
             <div class="col-md-4">
@@ -39,14 +39,14 @@
             </div>
             <div class="col-md-4">
                 <input type="text" id="block-{{name}}-agree{{ lang_code_for_id }}" name="blocks[].agree{{ lang_code_with_dollar }}"
-                      class="form-control" value="{{ blk.agree[lang_code]  }}"
+                      class="form-control" value="{{ blk.agree|translation:lang_code  }}"
                       placeholder="{_ Strongly Agree _}">
             </div>
         </div>
     </div>
 
     {% else %}
-        <p>{{ blk.prompt[lang_code]  }}</p>
+        <p>{{ blk.prompt|translation:lang_code  }}</p>
     {% endif %}
 {% endblock %}
 

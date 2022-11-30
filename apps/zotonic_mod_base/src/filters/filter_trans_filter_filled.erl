@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015 Marc Worrell
-%% @doc Filter a {trans, [...]} record, only pass the filled fields.
+%% @copyright 2015-2022 Marc Worrell
+%% @doc Filter a #trans{} record, only pass the filled fields.
+%% @end
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,13 +24,15 @@
     trans_filter_filled/3
 ]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 trans_filter_filled(Var, _Context) ->
     filled_in(Var).
 
 trans_filter_filled(Var, Key, Context) ->
     filled_in(z_template_compiler_runtime:find_value(Key, Var, #{}, Context)).
 
-filled_in({trans, Tr}) ->
+filled_in(#trans{ tr = Tr}) ->
     Tr1 = lists:filter(fun({_,T}) -> is_filled_in(T) end, Tr),
     {trans, Tr1};
 filled_in(A) ->
