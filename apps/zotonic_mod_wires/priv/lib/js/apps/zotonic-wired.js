@@ -893,13 +893,9 @@ function z_typeselect(ElementId, postbackInfo)
 
     z_input_updater = setTimeout(function()
     {
-        var obj = $('#'+ElementId);
-
-        if(obj.val().length >= 2)
-        {
-            obj.addClass('loading');
-            z_queue_postback(ElementId, postbackInfo);
-        }
+        const obj = $('#'+ElementId);
+        obj.addClass('loading');
+        z_queue_postback(ElementId, postbackInfo);
     }, 400);
 }
 
