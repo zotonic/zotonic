@@ -1038,16 +1038,15 @@ add_order(<<C, "edge.", Column/binary>>, Search) when C =:= $-; C =:= $+ ->
 add_order(<<C, "pivot.", Pivot/binary>>, Search)  when C =:= $-; C =:= $+ ->
     case binary:split(Pivot, <<".">>) of
         [ PivotTable, Column ] ->
-            Tab1 = sql_safe(PivotTable),
-            Col1 = <<"pivot_", Column/binary>>,
-            Col2 = sql_safe(Col1),
+            Tab1 = sql_safe(<<"pivot_", PivotTable/binary>>),
+            Col1 = sql_safe(Column),
             Join = Search#search_sql_term.join_inner,
             Search#search_sql_term{
                 join_inner = Join#{
                     Tab1 => {Tab1, <<Tab1/binary, ".id = rsc.id">>}
                 },
                 sort = Search#search_sql_term.sort
-                        ++ [ {Tab1, C, Col2} ]
+                        ++ [ {Tab1, C, Col1} ]
             };
         [ Column ] ->
             Col1 = <<"pivot_", Column/binary>>,
