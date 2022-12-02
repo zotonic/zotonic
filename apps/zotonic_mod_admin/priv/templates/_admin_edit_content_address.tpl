@@ -115,7 +115,7 @@
     </div>
 
 	<div class="form-group label-floating">
-		<input class="form-control" id="mail_email" type="text" name="mail_email" value="{{ id.mail_email }}" placeholder="{_ Email address _}" placeholder="{_ Email address for public display _}">
+		<input class="form-control" id="mail_email" type="text" name="mail_email" value="{{ id.mail_email }}" placeholder="{_ Email address for public display _}">
 		{% validate id="mail_email" type={email} %}
 		<label class="control-label" for="mail_email">{_ Email address for public display _}</label>
 	</div>
