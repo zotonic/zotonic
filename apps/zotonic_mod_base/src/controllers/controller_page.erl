@@ -175,7 +175,7 @@ do_temporary_redirect(Location, Context) ->
 current_path(Context) ->
     case z_context:get_q(<<"zotonic_dispatch_path">>, Context, []) of
         [] -> <<"/">>;
-        DP -> z_convert:to_binary([[ $/, P ] || P <- DP ])
+        DP -> z_convert:to_binary([[ $/, z_url:url_path_encode(P) ] || P <- DP ])
     end.
 
 is_canonical(Id, Context) ->
