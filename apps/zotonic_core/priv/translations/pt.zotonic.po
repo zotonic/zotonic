@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-05 15:10\n"
+"PO-Revision-Date: 2022-12-05 15:23\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -1259,7 +1259,7 @@ msgstr "Erro, uri duplicado. Por favor, altere o uri."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:8
 msgid "Every page can have a date range. For example if the page is an event or description of someone's life."
-msgstr ""
+msgstr "Cada página pode ter um intervalo de datas. Por exemplo, se a página for um evento ou descrição da vida de alguém."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:12
 msgid "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
@@ -2125,7 +2125,7 @@ msgstr "Até"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:47
 msgid "Time zone: {tz}."
-msgstr ""
+msgstr "Fuso horário: {tz}."
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:147
 msgid "Timeout while trying to fetch data from the website."
@@ -3842,7 +3842,7 @@ msgstr "Já conectado"
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:12
 msgid "Are you sure you have created an account? If not, you can create one here:"
-msgstr ""
+msgstr "Tem certeza de que criou uma conta? Se não, você pode criar um aqui:"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:259
@@ -5993,7 +5993,7 @@ msgstr "CE"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:32
 msgid "Changing the time zone does not affect the entered dates."
-msgstr ""
+msgstr "Alterar o fuso horário não afeta as datas inseridas."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:65
 msgid "Dec"
@@ -6119,7 +6119,7 @@ msgstr "Isto força o fuso horário para o fuso horário configurado. Independen
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:8
 msgid "This is the time zone in which the publication period and date range is entered. It defaults to your time zone. If you change the time zone then you will need to correct the publication period and date range manually."
-msgstr ""
+msgstr "Este é o fuso horário no qual o período de publicação e o intervalo de datas são inseridos. O padrão é o seu fuso horário. Se você alterar o fuso horário, precisará corrigir manualmente o período de publicação e o intervalo de datas."
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:13
 msgid "This sets the default timezone. This timezone is used for the initial request by an user-agent or when the timezone is not known."
@@ -6131,11 +6131,11 @@ msgstr "Quinta-feira"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:6./apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:8
 msgid "Time zone"
-msgstr ""
+msgstr "Fuso horário"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:18
 msgid "Time zone for publication period and date range"
-msgstr ""
+msgstr "Fuso horário para período de publicação e intervalo de datas"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:30
 msgid "Tuesday"
