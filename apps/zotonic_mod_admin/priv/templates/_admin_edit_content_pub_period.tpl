@@ -19,7 +19,7 @@
             <div class="form-group">
                 <label class="control-label">{_ Visible from _}</label>
                 <div>
-                    {% include "_edit_date.tpl" date=id.publication_start name="publication_start" is_end=0 is_editable=id.is_editable %}
+                    {% include "_edit_date.tpl" date=id.publication_start name="publication_start" is_end=0 is_editable=id.is_editable timezone=id.tz %}
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@
             <div class="form-group">
                 <label class="control-label">{_ Visible till _}</label>
                 <div>
-                    {% include "_edit_date.tpl" date=id.publication_end name="publication_end" is_end=1 is_editable=id.is_editable %}
+                    {% include "_edit_date.tpl" date=id.publication_end name="publication_end" is_end=1 is_editable=id.is_editable timezone=id.tz %}
                 </div>
             </div>
         </div>
@@ -36,8 +36,15 @@
     <div class="form-group">
         <label class="control-label">{_ Publication date of original article _}</label>
         <div>
-            {% include "_edit_date.tpl" date=id.org_pubdate name="org_pubdate" is_end=0 is_editable=id.is_editable %}
+            {% include "_edit_date.tpl" date=id.org_pubdate name="org_pubdate" is_end=0 is_editable=id.is_editable timezone=id.tz %}
         </div>
     </div>
 </fieldset>
+
+{% if id.tz and id.tz != m.req.timezone %}
+    <p class="help-block">
+        <i class="fa fa-exclamation-triangle"></i>
+        {% trans "Time zone: {tz}." tz=id.tz %}
+    </p>
+{% endif %}
 {% endblock %}
