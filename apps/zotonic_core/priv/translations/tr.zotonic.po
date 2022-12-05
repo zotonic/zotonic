@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-10-31 18:52\n"
+"PO-Revision-Date: 2022-12-05 15:10\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -142,7 +142,7 @@ msgstr "ACL kullanıcı grubu"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:69./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:106
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:68./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:105
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
 msgid "Access control"
 msgstr "Erişim kontrolü"
@@ -229,7 +229,7 @@ msgstr "İptal Et"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:192./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:81./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:134./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
-#: apps/zotonic_mod_survey/src/mod_survey.erl:163
+#: apps/zotonic_mod_survey/src/mod_survey.erl:170
 msgid "Category"
 msgstr "Kategori"
 
@@ -278,7 +278,7 @@ msgstr "İşbirliği grupları tüm içeriğin kullanıcılara ait olduğu kulla
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:19
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:95
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:64
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:63
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:108
 msgid "Content"
 msgstr "İçerik"
@@ -318,7 +318,7 @@ msgstr "Bu sayfayı kimin görebileceğini ve düzenleyebileceğini tanımlayın
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:34
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:114
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:121
 msgid "Delete"
 msgstr "Sil"
 
@@ -457,6 +457,7 @@ msgstr "Başka bir yere taşı"
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:8
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:13
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:6
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:8
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:11
 msgid "Need more help?"
 msgstr "Daha fazla yardım mı lazım?"
@@ -527,7 +528,7 @@ msgstr "Geri alının kurallar"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:124./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:123./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:30
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:101
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:100
@@ -1185,10 +1186,6 @@ msgstr "Düzenle:"
 msgid "Email"
 msgstr "E-posta"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:115
-msgid "Email address"
-msgstr "E-posta adresi"
-
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:115./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:117
 msgid "Email address for public display"
 msgstr "Herkese açık e-posta adresi"
@@ -1248,21 +1245,21 @@ msgstr "Uzak sunucudan sayfa içe aktarılırken hata oluştu."
 msgid "Error uploading the file."
 msgstr "Dosyayı yükleme hatası."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:148
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:149
 msgid "Error, duplicate name. Please change the name."
 msgstr "Hata, yinelenen ad. Lütfen adı değiştirin."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:146
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:147
 msgid "Error, duplicate page path. Please change the uri."
 msgstr "Hata, yinelenen sayfa yolu. Lütfen uri'yi değiştirin."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:144
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:145
 msgid "Error, duplicate uri. Please change the uri."
 msgstr "Hata, yinelenen uri. Lütfen uri'yi değiştirin."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:8
-msgid "Every page can have a date range. For example if the page is an event or description of someone’s life."
-msgstr "Her sayfanın tarih aralığı vardır. Örnek olarak eğer sayfa bir etkinlik ya da birinin hayatının açıklaması ise."
+msgid "Every page can have a date range. For example if the page is an event or description of someone's life."
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:12
 msgid "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
@@ -1466,7 +1463,7 @@ msgid "Make a new page or media"
 msgstr "Yeni bir sayfa veya medya oluştur"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: apps/zotonic_mod_survey/src/mod_survey.erl:164
+#: apps/zotonic_mod_survey/src/mod_survey.erl:171
 msgid "Matching"
 msgstr "Eşleşen"
 
@@ -1716,7 +1713,7 @@ msgid "Publish this page"
 msgstr "Sayfayı yayınla"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:52./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:61./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:244./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:102
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:46
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:45
 msgid "Published"
 msgstr "Yayınlandı"
 
@@ -1826,12 +1823,12 @@ msgid "Save and View"
 msgstr "Kaydet ve Görüntüle"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:23./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:127./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:81
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:126./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:81
 msgid "Save and view the page."
 msgstr "Kaydet ve sayfayı gör"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:124./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:123./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
 msgid "Save this page."
 msgstr "Sayfayı kaydet"
 
@@ -2126,6 +2123,10 @@ msgstr "Bu kaynak modül tarafından oluşturuldu"
 msgid "Till"
 msgstr "Kadar"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:47
+msgid "Time zone: {tz}."
+msgstr ""
+
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:147
 msgid "Timeout while trying to fetch data from the website."
 msgstr "Web sitesinden veri almaya çalışırken zaman aşımı oluştu."
@@ -2219,7 +2220,7 @@ msgid "Valid for:"
 msgstr "Geçerli:"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:46
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:129
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:128
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
 msgid "View"
@@ -2242,7 +2243,7 @@ msgid "View status"
 msgstr "Durumu göster"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:129
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:128
 msgid "View this page."
 msgstr "Bu sayfayı görüntüle."
 
@@ -2320,7 +2321,7 @@ msgstr "Bu medya öğesini değiştirme yetkiniz yok."
 msgid "You don't have permission to create this page."
 msgstr "Bu sayfayı oluşturma izniniz yok."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:150
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:151
 #: apps/zotonic_mod_image_edit/src/mod_image_edit.erl:51
 msgid "You don't have permission to edit this page."
 msgstr "Bu sayfayı düzenleme izniniz yok."
@@ -2338,7 +2339,7 @@ msgstr "Bu eylemi gerçekleştirme yetkiniz yok."
 msgid "You have to specify a description of the file to make it easier to find and share."
 msgstr "Dosyayı bulmayı ve paylaşmayı kolaylaştırmak için dosyanın bir açıklaması belirtmeniz gerekir."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:152
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:153
 msgid "Your search query is invalid. Please correct it before saving."
 msgstr "Arama sorgunuz geçersiz. Lütfen kaydetmeden önce düzeltin."
 
@@ -2791,7 +2792,7 @@ msgstr "test@example.com"
 msgid "Add pages or click on a page in the menu."
 msgstr "Menüden sayfalar ekleyin ya da bir sayfaya tıklayın."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:67./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:96
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:66./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:95
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:22
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:56
 #: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:56./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:28
@@ -2802,15 +2803,15 @@ msgstr "Dil"
 msgid "Loading ..."
 msgstr "Yükleniyor ..."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:157
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:159
 msgid "No page"
 msgstr "Sayfa yok"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:127./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:81
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:126./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:81
 msgid "Save &amp; view"
 msgstr "&amp; görüntüyü kaydet"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:159
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:161
 msgid "The page might have been deleted."
 msgstr "Sayfa silinmiş olabilir."
 
@@ -2826,7 +2827,7 @@ msgstr "Bu sayfa"
 msgid "Yes, discard changes"
 msgstr "Evet, değişiklikleri sil"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:51
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:50
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:11
 msgid "till"
 msgstr "kadar"
@@ -2936,7 +2937,7 @@ msgid "Give the name and the e-mail address of the new user. A <em>person</em> p
 msgstr "Yeni bir kullanıcının ismini ve e-posta adresi verin. Bu kullanıcı için bir <em>kişi</em> sayfası oluşturulacak."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:6
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:7./apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:15
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:7./apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:16
 msgid "Hello"
 msgstr "Merhaba"
 
@@ -3217,7 +3218,7 @@ msgid "You received this email because you verified your email address. You will
 msgstr "Bu e-postayı, e-posta adresinizi doğruladığınız için aldınız. Bu istek nedeniyle başka e-posta almayacaksınız."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:12
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:20
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:21
 msgid "Your account name is"
 msgstr "Hesap isminiz"
 
@@ -3839,6 +3840,10 @@ msgstr "Erişim reddedildi"
 msgid "Already connected"
 msgstr "Zaten bağlı"
 
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:12
+msgid "Are you sure you have created an account? If not, you can create one here:"
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:259
 msgid "Authenticated"
@@ -3855,10 +3860,6 @@ msgstr "Kimlik Doğrulanıyor..."
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:115./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
 msgid "Back to sign in"
 msgstr "Giriş yapmaya geri dön"
-
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:17
-msgid "Below are your account details and a link to set a new password."
-msgstr "Aşağıda hesap detaylarınız ve yeni bir şifre ayarlamak için link bulunuyor."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
 msgid "Change"
@@ -3888,7 +3889,7 @@ msgstr "E-postanızı kontrol edin"
 msgid "Checking the reset code…"
 msgstr "Sıfırlama kodunu kontrol etme…"
 
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:24
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:25
 msgid "Click on the link below to enter a new password. When clicking doesn't work, please copy and paste the whole link."
 msgstr "Yeni bir şifre girmek için aşağıdaki bağlantıya tıklayın. Tıklama çalışmazsa, lütfen tüm bağlantıyı kopyalayıp yapıştırın."
 
@@ -4023,7 +4024,7 @@ msgstr "Yeni bir hesap oluşturmak istiyorum"
 msgid "If you are already a user of {site} then <a href=\"{logon_url}\">log on</a>."
 msgstr "Zaten {site} kullanıcısıysanız, <a href=\"{logon_url}\">oturum açın</a>."
 
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:30
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:31
 msgid "If you didn't request a password reset, you can safely ignore this email. Maybe someone made an error typing his or her email address."
 msgstr "Parola sıfırlama talebinde bulunmadıysanız, bu e-postayı güvenle göz ardı edebilirsiniz. Belki birisi e-posta adresini yazarken bir hata yaptı."
 
@@ -4031,7 +4032,7 @@ msgstr "Parola sıfırlama talebinde bulunmadıysanız, bu e-postayı güvenle g
 msgid "If you do not receive the email within a few minutes, please check your spam folder."
 msgstr "Eğer bir kaç dakika içinde e-posta almazsanız, lütfen spam klasörünüzü kontrol edin."
 
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:13
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:14
 msgid "If you think you have an account and were expecting this email, please try again using the email address you gave when signing up."
 msgstr "Bir hesabınız olduğunu düşünüyorsanız ve bu e-postayı bekliyorsanız, lütfen kaydolurken verdiğiniz e-posta adresini kullanarak tekrar deneyin."
 
@@ -4163,7 +4164,7 @@ msgstr "Üzgünüz, şifre sıfırlama kodunuz yanlış ya da süresi dolmuş"
 msgid "Stay logged on unless I log off."
 msgstr "Oturumu kapatmadığım sürece oturumunuz açık kalsın."
 
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:20
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:21
 msgid "The email address associated with your account is"
 msgstr "Hesabınıza bağlı e-posta adresi"
 
@@ -4278,7 +4279,7 @@ msgstr "Farklı bir kullanıcı olarak giriş yapmayı deneyebilirsiniz."
 msgid "You need to be allowed to edit the system configuration to view or change the configured App Keys."
 msgstr "Uygulama anahtarını görüntülemek yada değiştirmek için sistem ayarlarını yapılandırma yetkisine sahip olmanız gerekir."
 
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:36
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:37
 msgid "You received this email because you requested a password reset for your account by entering your username or email address. You will not receive any additional emails because of this request."
 msgstr "Bu e-postayı, kullanıcı adınızı veya e-posta adresinizi girerek hesabınız için bir şifre sıfırlama talep ettiğiniz için aldınız. Bu istek nedeniyle başka e-posta almayacaksınız."
 
@@ -4294,7 +4295,7 @@ msgstr "Yeni bir tane oluşturmanız gerekecek."
 msgid "You're almost done! To make sure you are really you, we ask you to confirm your account from your email address."
 msgstr "Neredeyse hazırsınız! Sizin gerçekten siz olduğunuzu anlamak için, hesabınızı e-posta adresinden onaylamanızı istiyoruz."
 
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:9./apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:17
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:9./apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:18
 msgid "You've requested a new password for"
 msgstr "Yeni bir şifre isteğinde bulundunuz"
 
@@ -5640,7 +5641,7 @@ msgstr "Temel URL"
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Ayarlar kaydedilmeden önce küçük bir dosya yüklenerek (ve silinerek) kontrol edilecektir."
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:159
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:163
 msgid "Cloud File Store"
 msgstr "Bulut Dosya Deposu"
 
@@ -5990,6 +5991,10 @@ msgstr "BCE"
 msgid "CE"
 msgstr "CE"
 
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:32
+msgid "Changing the time zone does not affect the entered dates."
+msgstr ""
+
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:65
 msgid "Dec"
 msgstr "Ark"
@@ -6112,6 +6117,10 @@ msgstr "Pazar"
 msgid "This forces the timezone to the configured timezone. Irrespective of the timezone selected by the user or user-agent."
 msgstr "Bu saat dilimini yapılandırmaya zorlar. Kullanıcı veya aracısı tarafından seçilen zaman diliminden bağımsız olarak."
 
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:8
+msgid "This is the time zone in which the publication period and date range is entered. It defaults to your time zone. If you change the time zone then you will need to correct the publication period and date range manually."
+msgstr ""
+
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:13
 msgid "This sets the default timezone. This timezone is used for the initial request by an user-agent or when the timezone is not known."
 msgstr "Bu varsayılan saat dilimini ayarlar. Bu zaman dilimi, bir kullanıcı aracısı tarafından ilk istek için yada saat dilimi bilinmediğinde kullanılır."
@@ -6119,6 +6128,14 @@ msgstr "Bu varsayılan saat dilimini ayarlar. Bu zaman dilimi, bir kullanıcı a
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:32
 msgid "Thursday"
 msgstr "Perşembe"
+
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:6./apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:8
+msgid "Time zone"
+msgstr ""
+
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:18
+msgid "Time zone for publication period and date range"
+msgstr ""
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:30
 msgid "Tuesday"
@@ -8297,7 +8314,7 @@ msgstr "Bu <br/> sayfayı silmek istediğinize emin misiniz? Bu <br/> ayrıca sa
 msgid "Are you sure you want to delete this question?"
 msgstr "Bu soruyu silmek istediğinize emin misiniz?"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:113
+#: apps/zotonic_mod_survey/src/mod_survey.erl:120
 msgid "Are you sure you want to delete this result?"
 msgstr "Bu sonucu silmek istediğinize emin misiniz?"
 
@@ -8305,7 +8322,7 @@ msgstr "Bu sonucu silmek istediğinize emin misiniz?"
 msgid "Are you sure you want to stop without saving?"
 msgstr "Kaydetmeden durdurmak istediğinizden emin misiniz?"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:169
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:176
 msgid "Button"
 msgstr "Buton"
 
@@ -8345,7 +8362,7 @@ msgstr "Seçimler"
 msgid "Correct"
 msgstr "Doğru"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:168
+#: apps/zotonic_mod_survey/src/mod_survey.erl:175
 msgid "Country select"
 msgstr "Ülke seçin"
 
@@ -8394,7 +8411,7 @@ msgstr "İndirme işlemi arka planda başlayacaktır. Lütfen indirme pencereniz
 msgid "Drop-down menu"
 msgstr "Aşağıya açılan menü"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:144
+#: apps/zotonic_mod_survey/src/mod_survey.erl:151
 msgid "E-mail addresses"
 msgstr "E-posta adresleri"
 
@@ -8430,7 +8447,7 @@ msgstr "Geri bildirim doğruysa"
 msgid "Feedback if wrong"
 msgstr "Geri bildirim yanlış ise"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:172
+#: apps/zotonic_mod_survey/src/mod_survey.erl:179
 msgid "File upload"
 msgstr "Dosya yükleme"
 
@@ -8530,11 +8547,11 @@ msgstr "Sonraki sayfadaki soruya atlayın."
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "Bu soru etiketine atla (aşağıda başka bir sayfada olmalıdır)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:161
+#: apps/zotonic_mod_survey/src/mod_survey.erl:168
 msgid "Likert"
 msgstr "Likert"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:167
+#: apps/zotonic_mod_survey/src/mod_survey.erl:174
 msgid "Long answer"
 msgstr "Uzun cevap"
 
@@ -8566,7 +8583,7 @@ msgstr "Birden fazla cevap mümkündür"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "Birden fazla cevap mümkündür: doğru cevap <i>için puan verilir ve yanlış cevap seçimi</i> değil <i>için</i> puan verilir. Varsayılan: Doğru cevap için 1 puan, yanlış cevap seçmemek için 1 puan."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:173
+#: apps/zotonic_mod_survey/src/mod_survey.erl:180
 msgid "Multiple choice"
 msgstr "Çoktan seçmeli"
 
@@ -8582,7 +8599,7 @@ msgstr "Çoklu sayfa sonu bloklar birleştirilir."
 msgid "Multiple times per user/browser (each time with new results)"
 msgstr "Kullanıcı/tarayıcı başına birden çok kez (her seferinde yeni sonuçlarla)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:165
+#: apps/zotonic_mod_survey/src/mod_survey.erl:172
 msgid "Narrative"
 msgstr "Öykü"
 
@@ -8614,7 +8631,7 @@ msgstr "Yalnızca resimleri kabul et."
 msgid "Options from a page category"
 msgstr "Sayfa kategorisinden seçenekler"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:170
+#: apps/zotonic_mod_survey/src/mod_survey.erl:177
 msgid "Page break"
 msgstr "Sayfa sonu"
 
@@ -8750,7 +8767,7 @@ msgstr "Yanıtlayana bir onay gönderin. E-posta adresi bilinmelidir (giriş yap
 msgid "Separate multiple email addresses with a comma."
 msgstr "Birden fazla e-posta adresini virgülle ayırın."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:166
+#: apps/zotonic_mod_survey/src/mod_survey.erl:173
 msgid "Short answer"
 msgstr "Kısa cevap"
 
@@ -8790,7 +8807,7 @@ msgstr "Bir şey yanlış gitti"
 msgid "Start"
 msgstr "Başla"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:171
+#: apps/zotonic_mod_survey/src/mod_survey.erl:178
 msgid "Stop"
 msgstr "Bitir"
 
@@ -8826,7 +8843,7 @@ msgstr "Bir seçeneği tıklayarak gönder"
 msgid "Subtract points for wrong answers (total never less than 0)"
 msgstr "Yanlış cevaplar için puanları çıkar (toplam asla 0'dan az olmaz)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:158
+#: apps/zotonic_mod_survey/src/mod_survey.erl:165
 msgid "Survey Questions"
 msgstr "Anket Soruları"
 
@@ -8838,7 +8855,7 @@ msgstr "Anket Sonuçları Editörü"
 msgid "Survey editor"
 msgstr "Anket editörü"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:131
+#: apps/zotonic_mod_survey/src/mod_survey.erl:138
 msgid "Survey result deleted."
 msgstr "Anket sonuçları silindi."
 
@@ -8906,7 +8923,7 @@ msgstr "Bu metin ankete giriş olarak gösterilmiştir."
 msgid "This text is shown below the start button."
 msgstr "Bu metin, başlat düğmesinin altında gösterilir."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:162
+#: apps/zotonic_mod_survey/src/mod_survey.erl:169
 msgid "Thurstone"
 msgstr "Thurstone"
 
@@ -8930,7 +8947,7 @@ msgstr "Gerçek"
 msgid "True or false question"
 msgstr "Doğru veya yanlış soru"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:159
+#: apps/zotonic_mod_survey/src/mod_survey.erl:166
 msgid "True/False"
 msgstr "Doğru/Yanlış"
 
@@ -8962,7 +8979,7 @@ msgstr "Yanlış"
 msgid "Yes or no question"
 msgstr "evet mi hayır mı soru"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:160
+#: apps/zotonic_mod_survey/src/mod_survey.erl:167
 msgid "Yes/No"
 msgstr "Evet/Hayır"
 
@@ -8974,7 +8991,7 @@ msgstr "Burayı önceden doldurdun, fakat önceki cevaplarınızı değiştirebi
 msgid "You already filled this in."
 msgstr "Burayı önceden doldurdun."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:120./apps/zotonic_mod_survey/src/mod_survey.erl:135./apps/zotonic_mod_survey/src/mod_survey.erl:750
+#: apps/zotonic_mod_survey/src/mod_survey.erl:127./apps/zotonic_mod_survey/src/mod_survey.erl:142./apps/zotonic_mod_survey/src/mod_survey.erl:757
 msgid "You are not allowed to change these results."
 msgstr "Bu sonuçları değiştirmeye izin verilmiyor."
 
@@ -9474,11 +9491,11 @@ msgstr "Twitter Uygulama Yönetimi sayfanız"
 msgid "Converting"
 msgstr "Dönüştürülüyor"
 
-#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:228
+#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:229
 msgid "Vimeo Video"
 msgstr "Vimeo Video"
 
-#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:226
+#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:227
 msgid "Youtube Video"
 msgstr "Youtube Video"
 
