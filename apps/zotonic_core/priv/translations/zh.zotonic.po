@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-05 15:10\n"
+"PO-Revision-Date: 2022-12-05 15:23\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -1259,7 +1259,7 @@ msgstr "错误，重复的 uri。请更改uri。"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:8
 msgid "Every page can have a date range. For example if the page is an event or description of someone's life."
-msgstr ""
+msgstr "每个页面都可以有一个日期范围。例如，如果该页面是一个事件或某人生活的描述。"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:12
 msgid "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
@@ -2125,7 +2125,7 @@ msgstr "终止"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:47
 msgid "Time zone: {tz}."
-msgstr ""
+msgstr "时区： {tz}。"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:147
 msgid "Timeout while trying to fetch data from the website."
@@ -3842,7 +3842,7 @@ msgstr "已经连接"
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:12
 msgid "Are you sure you have created an account? If not, you can create one here:"
-msgstr ""
+msgstr "你确定你已经创建了一个帐户吗？如果没有，您可以在这里创建一个："
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:259
@@ -5993,7 +5993,7 @@ msgstr "CE"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:32
 msgid "Changing the time zone does not affect the entered dates."
-msgstr ""
+msgstr "更改时区不会影响输入的日期。"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:65
 msgid "Dec"
@@ -6119,7 +6119,7 @@ msgstr "这将强制将时区改为配置的时区。无论用户或用户代理
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:8
 msgid "This is the time zone in which the publication period and date range is entered. It defaults to your time zone. If you change the time zone then you will need to correct the publication period and date range manually."
-msgstr ""
+msgstr "这是输入发布期和日期范围的时区。它默认为您的时区。如果更改时区，则需要手动更正发布期和日期范围。"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:13
 msgid "This sets the default timezone. This timezone is used for the initial request by an user-agent or when the timezone is not known."
@@ -6131,11 +6131,11 @@ msgstr "星期四"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:6./apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:8
 msgid "Time zone"
-msgstr ""
+msgstr "时区"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:18
 msgid "Time zone for publication period and date range"
-msgstr ""
+msgstr "出版期和日期范围的时区"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:30
 msgid "Tuesday"
