@@ -135,6 +135,11 @@
         font-weight: 500;
         background: none;
         border: none;
+        white-space: nowrap;
+
+        img {
+            transform: rotate(90deg);
+        }
     }
 
     .cookie-consent-toggle:hover {
