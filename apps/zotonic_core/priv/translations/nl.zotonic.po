@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-05 15:10\n"
+"PO-Revision-Date: 2022-12-05 15:23\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1262,7 +1262,7 @@ msgstr "Fout, dubbele uri. Gelieve de uri te veranderen."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:8
 msgid "Every page can have a date range. For example if the page is an event or description of someone's life."
-msgstr ""
+msgstr "Elke pagina kan een datumbereik hebben. Bijvoorbeeld als de pagina een gebeurtenis is of een beschrijving van iemands leven."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:12
 msgid "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
@@ -2129,7 +2129,7 @@ msgstr "Tot"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:47
 msgid "Time zone: {tz}."
-msgstr ""
+msgstr "Tijdzone: {tz}."
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:147
 msgid "Timeout while trying to fetch data from the website."
@@ -3844,7 +3844,7 @@ msgstr "Al verbonden"
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:12
 msgid "Are you sure you have created an account? If not, you can create one here:"
-msgstr ""
+msgstr "Weet je zeker dat je een account hebt aangemaakt? Zo niet, dan kun je er hier een aanmaken:"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:259
@@ -5995,7 +5995,7 @@ msgstr "n.Chr."
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:32
 msgid "Changing the time zone does not affect the entered dates."
-msgstr ""
+msgstr "Het wijzigen van de tijdzone heeft geen invloed op de ingevoerde datums."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:65
 msgid "Dec"
@@ -6121,7 +6121,7 @@ msgstr "Dit forceert de tijdzone naar de geconfigureerde tijdzone, onafhankelijk
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:8
 msgid "This is the time zone in which the publication period and date range is entered. It defaults to your time zone. If you change the time zone then you will need to correct the publication period and date range manually."
-msgstr ""
+msgstr "Dit is de tijdzone waarin de publicatieperiode en het datumbereik worden ingevoerd. Het is standaard ingesteld op uw tijdzone. Als u de tijdzone wijzigt, moet u de publicatieperiode en het datumbereik handmatig corrigeren."
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:13
 msgid "This sets the default timezone. This timezone is used for the initial request by an user-agent or when the timezone is not known."
@@ -6133,11 +6133,11 @@ msgstr "donderdag"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:6./apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:8
 msgid "Time zone"
-msgstr ""
+msgstr "Tijdzone"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:18
 msgid "Time zone for publication period and date range"
-msgstr ""
+msgstr "Tijdzone voor publicatieperiode en datumbereik"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:30
 msgid "Tuesday"
