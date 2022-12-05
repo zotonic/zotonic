@@ -12,6 +12,7 @@
     {% if not id.is_a.meta %}
         {% include "_admin_edit_content_pub_period.tpl" %}
         {% include "_admin_edit_content_date_range.tpl" show_header %}
+        {% optional include "_admin_edit_content_timezone.tpl" %}
     {% endif %}
 
     {% all catinclude "_admin_edit_sidebar.tpl" id languages=languages %}
