@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-05 15:10\n"
+"PO-Revision-Date: 2022-12-05 15:23\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -1259,7 +1259,7 @@ msgstr "Kesalahan, duplikat uri. Tolong ubah urinya."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:8
 msgid "Every page can have a date range. For example if the page is an event or description of someone's life."
-msgstr ""
+msgstr "Setiap halaman dapat memiliki rentang tanggal. Misalnya jika halaman tersebut adalah peristiwa atau gambaran tentang kehidupan seseorang."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:12
 msgid "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
@@ -2125,7 +2125,7 @@ msgstr "Sampai"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:47
 msgid "Time zone: {tz}."
-msgstr ""
+msgstr "Zona waktu: {tz}."
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:147
 msgid "Timeout while trying to fetch data from the website."
@@ -3841,7 +3841,7 @@ msgstr "Sudah terhubung"
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:12
 msgid "Are you sure you have created an account? If not, you can create one here:"
-msgstr ""
+msgstr "Apakah Anda yakin telah membuat akun? Jika tidak, Anda dapat membuatnya di sini:"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:259
@@ -5992,7 +5992,7 @@ msgstr "CE"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:32
 msgid "Changing the time zone does not affect the entered dates."
-msgstr ""
+msgstr "Mengubah zona waktu tidak memengaruhi tanggal yang dimasukkan."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:65
 msgid "Dec"
@@ -6118,7 +6118,7 @@ msgstr "Hal ini akan memaksa zona waktu untuk mengkonfigurasi zona waktu. Terlep
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:8
 msgid "This is the time zone in which the publication period and date range is entered. It defaults to your time zone. If you change the time zone then you will need to correct the publication period and date range manually."
-msgstr ""
+msgstr "Ini adalah zona waktu di mana periode publikasi dan rentang tanggal dimasukkan. Ini default ke zona waktu Anda. Jika Anda mengubah zona waktu maka Anda harus memperbaiki periode publikasi dan rentang tanggal secara manual."
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:13
 msgid "This sets the default timezone. This timezone is used for the initial request by an user-agent or when the timezone is not known."
@@ -6130,11 +6130,11 @@ msgstr "Kamis"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:6./apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:8
 msgid "Time zone"
-msgstr ""
+msgstr "Zona waktu"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:18
 msgid "Time zone for publication period and date range"
-msgstr ""
+msgstr "Zona waktu untuk periode publikasi dan rentang tanggal"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:30
 msgid "Tuesday"
