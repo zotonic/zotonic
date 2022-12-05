@@ -95,7 +95,10 @@
     transition: opacity 0.2s;
     font-weight: 500;
     background: none;
-    border: none; }
+    border: none;
+    white-space: nowrap; }
+    .cookie-consent .cookie-consent-toggle img {
+      transform: rotate(90deg); }
   .cookie-consent .cookie-consent-toggle:hover {
     opacity: 0.8; }
   .cookie-consent .cookie-consent-toggle:hover.anchor-down {
