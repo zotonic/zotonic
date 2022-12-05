@@ -158,8 +158,11 @@ maybe_redirect_page_path(PagePath, Id, Context) ->
             %% Check if we need to be at a different URL. If the page_path
             %% of a resource is set, we need to redirect there if the
             %% current request's path is not equal to the resource's path.
+            %% All parts of the 'zotonic_dispatch_path' are url-decoded, so we
+            %% have to compare with the url-decoded page path.
+            PagePathDecoded = z_url:url_decode(PagePath),
             case current_path(Context) of
-                PagePath ->
+                PagePathDecoded ->
                     maybe_exists(Id, Context);
                 _ ->
                     AbsUrl = m_rsc:p(Id, page_url_abs, Context),

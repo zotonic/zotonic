@@ -12,7 +12,7 @@
 
 {% block widget_content %}
     <div class="form-group label-floating">
-        <input class="form-control" type="text" id="field-page-path" name="page_path" value="{{ id.page_path }}"
+        <input class="form-control" type="text" id="field-page-path" name="page_path" value="{{ id.page_path|urldecode|escape }}"
             {% if not id.is_editable %}disabled="disabled"{% endif %}
             {% include "_language_attrs.tpl" language=`en` %}
             placeholder="{_ Page path _} &mdash; {{ id.default_page_url|escape }}"

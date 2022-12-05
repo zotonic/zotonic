@@ -1,6 +1,6 @@
 .. highlight:: django
 .. include:: meta-urlencode.rst
-.. seealso:: :ref:`filter-sanitize_url`, :ref:`filter-is_site_url`, :ref:`filter-url_abs`, :ref:`filter-url`, :ref:`filter-urlencode`
+.. seealso:: :ref:`filter-sanitize_url`, :ref:`filter-is_site_url`, :ref:`filter-url_abs`, :ref:`filter-url`, :ref:`filter-urldecode`
 
 Make a text safe for URLs.
 
