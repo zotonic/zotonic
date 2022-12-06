@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-05 15:23\n"
+"PO-Revision-Date: 2022-12-05 21:53\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1722,7 +1722,7 @@ msgstr "Gepubliceerd"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:137
 msgid "Published on"
-msgstr "gepubliceerd op"
+msgstr "Gepubliceerd op"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:21
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:28
@@ -3844,7 +3844,7 @@ msgstr "Al verbonden"
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:12
 msgid "Are you sure you have created an account? If not, you can create one here:"
-msgstr "Weet je zeker dat je een account hebt aangemaakt? Zo niet, dan kun je er hier een aanmaken:"
+msgstr "Weet je zeker dat je een account hebt aangemaakt? Zo niet, dan kun je er hier één aanmaken:"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:259
@@ -6121,7 +6121,7 @@ msgstr "Dit forceert de tijdzone naar de geconfigureerde tijdzone, onafhankelijk
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:8
 msgid "This is the time zone in which the publication period and date range is entered. It defaults to your time zone. If you change the time zone then you will need to correct the publication period and date range manually."
-msgstr "Dit is de tijdzone waarin de publicatieperiode en het datumbereik worden ingevoerd. Het is standaard ingesteld op uw tijdzone. Als u de tijdzone wijzigt, moet u de publicatieperiode en het datumbereik handmatig corrigeren."
+msgstr "Dit is de tijdzone waarin de publicatieperiode en het datumbereik worden ingevoerd. Het is standaard ingesteld op jouw tijdzone. Als je de tijdzone wijzigt, moet je de publicatieperiode en het datumbereik handmatig corrigeren."
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:13
 msgid "This sets the default timezone. This timezone is used for the initial request by an user-agent or when the timezone is not known."
