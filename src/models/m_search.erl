@@ -50,19 +50,13 @@
 %% @spec m_find_value(Key, Source, Context) -> term()
 m_find_value(paged, #m{value=undefined} = M, _Context) ->
     M#m{value=paged};
-m_find_value(SearchProps, #m{value=paged} = M, Context) ->
-    M#m{value=search_pager(SearchProps, Context)};
-m_find_value(SearchProps, #m{value=undefined} = M, Context) ->
-    M#m{value=search(SearchProps, Context)};
-m_find_value(Key, #m{value=#m_search_result{}} = M, Context) ->
-    get_result(Key, M#m.value, Context).
+m_find_value(SearchProps, #m{value=paged}, Context) ->
+    search_pager(SearchProps, Context);
+m_find_value(SearchProps, #m{value=undefined}, Context) ->
+    search(SearchProps, Context).
 
 %% @doc Transform a model value to a list, used for template loops
 %% @spec m_to_list(Source, Context) -> List
-m_to_list(#m{value=#m_search_result{result=undefined}}, _Context) ->
-    [];
-m_to_list(#m{value=#m_search_result{result=Result}}, _Context) ->
-    Result#search_result.result;
 m_to_list(#m{}, _Context) ->
     [].
 
@@ -84,7 +78,17 @@ search({SearchName, Props}, Context) ->
             undefined -> length(Result#search_result.result);
             Total -> Total
         end,
-        #m_search_result{result=Result, total=Total1, search_name=SearchName, search_props=Props}
+        #m_search_result{
+            result=Result,
+            total=Total1,
+            prev=Result#search_result.prev,
+            next=Result#search_result.next,
+            page=Result#search_result.page,
+            pages=Result#search_result.pages,
+            pagelen=Result#search_result.pagelen,
+            search_name=SearchName,
+            search_props=Props
+        }
     catch
         throw:Error ->
             lager:error("Error in m.search[~p] error: ~p",
@@ -105,7 +109,17 @@ search_pager({SearchName, Props}, Context) ->
             undefined -> length(Result#search_result.result);
             Total -> Total
         end,
-        #m_search_result{result=Result, total=Total1, search_name=SearchName, search_props=Props1}
+        #m_search_result{
+            result=Result,
+            total=Total1,
+            prev=Result#search_result.prev,
+            next=Result#search_result.next,
+            page=Result#search_result.page,
+            pages=Result#search_result.pages,
+            pagelen=Result#search_result.pagelen,
+            search_name=SearchName,
+            search_props=Props1
+        }
     catch
         throw:Error ->
             lager:error("Error in m.search[~p] error: ~p",
@@ -121,10 +135,18 @@ empty_result(SearchName, Props, PageLen) ->
             result=[],
             page=1,
             pagelen=PageLen,
+            next=false,
+            prev=false,
+            is_total_estimated=false,
             total=0,
             pages=1
         },
         total=0,
+        next=false,
+        prev=false,
+        page=1,
+        pages=0,
+        pagelen=PageLen,
         search_name=SearchName,
         search_props=Props
     }.
@@ -150,18 +172,20 @@ get_result(is_total_estimated, Result, _Context) ->
         undefined -> false
     end;
 get_result(facets, Result, _Context) ->
-    #search_result{facets = Facets} = Result#m_search_result.result,
-    Facets;
+    case Result#m_search_result.result of
+        #search_result{facets = Facets} -> Facets;
+        undefined -> []
+    end;
 get_result(pages, Result, _Context) ->
-    case Result#m_search_result.result of
-        #search_result{pages=Pages} -> Pages;
-        undefined -> Result#m_search_result.pages
-    end;
+    Result#m_search_result.pages;
 get_result(page, Result, _Context) ->
-    case Result#m_search_result.result of
-        #search_result{page=Page} -> Page;
-        undefined -> Result#m_search_result.page
-    end;
+    Result#m_search_result.page;
+get_result(pagelen, Result, _Context) ->
+    Result#m_search_result.pagelen;
+get_result(next, Result, _Context) ->
+    Result#m_search_result.next;
+get_result(prev, Result, _Context) ->
+    Result#m_search_result.prev;
 get_result(_Key, _Result, _Context) ->
     undefined.
 
