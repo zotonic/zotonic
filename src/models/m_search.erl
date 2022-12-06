@@ -177,15 +177,15 @@ get_result(facets, Result, _Context) ->
         undefined -> []
     end;
 get_result(pages, Result, _Context) ->
-    Result#search_result.pages;
+    Result#m_search_result.pages;
 get_result(page, Result, _Context) ->
-    Result#search_result.page;
+    Result#m_search_result.page;
 get_result(pagelen, Result, _Context) ->
-    Result#search_result.pagelen;
+    Result#m_search_result.pagelen;
 get_result(next, Result, _Context) ->
-    Result#search_result.next;
+    Result#m_search_result.next;
 get_result(prev, Result, _Context) ->
-    Result#search_result.prev;
+    Result#m_search_result.prev;
 get_result(_Key, _Result, _Context) ->
     undefined.
 
