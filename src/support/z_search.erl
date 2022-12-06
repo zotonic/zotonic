@@ -241,7 +241,12 @@ sublist(L, Offset, Limit) ->
     end.
 
 
-search_1({SearchName, Props}, Page, PageLen, {Offset, Limit} = OffsetLimit, Context) when is_atom(SearchName), is_list(Props) ->
+search_1({SearchName, Props}, Page, PageLen, {Offset, Limit}, Context) when is_atom(SearchName), is_list(Props) ->
+    Limit1 = if
+        PageLen < Limit -> Limit;
+        true -> Limit + 1
+    end,
+    OffsetLimit1 = {Offset, Limit1},
     Props1 = case proplists:get_all_values(cat, Props) of
         [] -> Props;
         [[]] -> Props;
@@ -253,19 +258,19 @@ search_1({SearchName, Props}, Page, PageLen, {Offset, Limit} = OffsetLimit, Cont
         CatsX -> [{cat_exclude, CatsX} | proplists:delete(cat_exclude, Props1)]
     end,
     PropsSorted = lists:keysort(1, Props2),
-    Q = #search_query{search={SearchName, PropsSorted}, offsetlimit=OffsetLimit},
+    Q = #search_query{search={SearchName, PropsSorted}, offsetlimit=OffsetLimit1},
     PageRest = (Offset - 1) rem PageLen,
     case z_notifier:first(Q, Context) of
         undefined ->
             lager:info("[~p] Unknown search query ~p with ~p", [z_context:site(Context), SearchName, Props]),
             #search_result{};
         Result when Page =/= undefined ->
-            handle_search_result(Result, Page, PageLen, OffsetLimit, SearchName, PropsSorted, Context);
+            handle_search_result(Result, Page, PageLen, OffsetLimit1, SearchName, PropsSorted, Context);
         Result when PageRest =:= 0 ->
             PageNr = (Offset - 1) div Limit + 1,
-            handle_search_result(Result, PageNr, Limit, OffsetLimit, SearchName, PropsSorted, Context);
+            handle_search_result(Result, PageNr, Limit, OffsetLimit1, SearchName, PropsSorted, Context);
         Result ->
-            S = search_result(Result, OffsetLimit, Context),
+            S = search_result(Result, OffsetLimit1, Context),
             S#search_result{
                 search_name = SearchName,
                 search_args = PropsSorted
