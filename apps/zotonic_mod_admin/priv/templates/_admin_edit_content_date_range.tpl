@@ -27,6 +27,11 @@
 {% endblock %}
 
 {% block widget_content_nolang_before %}
+<p class="help-block" {% if not id.tz or id.tz == m.req.timezone %}style="display:none"{% endif %}>
+    <i class="fa fa-exclamation-triangle"></i>
+    {_ Showing dates in _}: <b class="rsc-timezone">{{ id.tz|escape }}</b>
+</p>
+
 <div class="date-range">
     <fieldset>
         <div class="checkbox">
@@ -60,12 +65,4 @@
         </div>
     </fieldset>
 </div>
-
-{% if id.tz and id.tz != m.req.timezone %}
-    <p class="help-block">
-        <i class="fa fa-exclamation-triangle"></i>
-        {% trans "Time zone: {tz}." tz=id.tz %}
-    </p>
-{% endif %}
-
 {% endblock %}

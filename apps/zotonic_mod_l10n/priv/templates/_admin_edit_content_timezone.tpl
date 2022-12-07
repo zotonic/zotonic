@@ -13,6 +13,11 @@
 {% block widget_id %}sidebar-timezone{% endblock %}
 
 {% block widget_content %}
+    <p class="help-block">
+        <i class="fa fa-info-circle"></i>
+        {_ Changing the time zone will in effect change the publication period and date range. _}
+        {_ All dates are stored in UTC. _}
+    </p>
     <fieldset>
         <div class="form-group">
             <label class="control-label">{_ Time zone for publication period and date range _}</label>
@@ -27,9 +32,13 @@
             </div>
         </div>
     </fieldset>
-
-    <p class="help-block">
-        {_ Changing the time zone does not affect the entered dates. _}
-    </p>
-
+    <p class="help-block">{_ Your time zone is _}: {{ m.req.timezone|escape }}</p>
+    {% javascript %}
+        $('#rsc-tz').on('change', function() {
+            let tz = $(this).val();
+            $(".rsc-timezone")
+                .text(tz)
+                .closest('p').show();
+        });
+    {% endjavascript %}
 {% endblock %}

@@ -13,6 +13,10 @@
 {% block widget_id %}sidebar-pub-period{% endblock %}
 
 {% block widget_content %}
+<p class="help-block" {% if not id.tz or id.tz == m.req.timezone %}style="display:none"{% endif %}>
+    <i class="fa fa-exclamation-triangle"></i>
+    {_ Showing dates in _}: <b class="rsc-timezone">{{ id.tz|escape }}</b>
+</p>
 <fieldset>
     <div class="row">
         <div class="col-sm-6">
@@ -40,11 +44,4 @@
         </div>
     </div>
 </fieldset>
-
-{% if id.tz and id.tz != m.req.timezone %}
-    <p class="help-block">
-        <i class="fa fa-exclamation-triangle"></i>
-        {% trans "Time zone: {tz}." tz=id.tz %}
-    </p>
-{% endif %}
 {% endblock %}
