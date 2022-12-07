@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-05 15:23\n"
+"PO-Revision-Date: 2022-12-07 18:41\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -841,7 +841,7 @@ msgstr "Pärast dubleerimist saate uut lehte redigeerida. Uue lehe avaldamine t�
 msgid "All Content"
 msgstr "Kogu sisu"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:39
 msgid "All day"
 msgstr "Terve päev"
 
@@ -1332,7 +1332,7 @@ msgstr "T√ºhjendas√ºsteemne vahem√§lu"
 msgid "Follow connections and import all (deep copy)."
 msgstr "Järgige ühendusi ja importige kõik (sügav koopia)."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:49
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:54
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
 msgid "From"
 msgstr "Kellelt"
@@ -1696,7 +1696,7 @@ msgstr "Kaitse"
 msgid "Protect from deletion"
 msgstr "Kaitse kustutamise eest"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:37
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:41
 msgid "Publication date of original article"
 msgstr "Algartikli avaldamise kuupäev"
 
@@ -1892,6 +1892,10 @@ msgstr "Kuva nimega"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:30
 msgid "Show page on multiple paths"
 msgstr "Kuva leht mitmel rajal"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:18
+msgid "Showing dates in"
+msgstr "Kuupäevade kuvamine"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:36
 msgid "Site Files Directory"
@@ -2119,13 +2123,9 @@ msgstr "See leht pärineb teiselt veebisaidilt. Originaali leiab aadressilt"
 msgid "This resource was created by the module"
 msgstr "See ressurs on loodu selle mooduli poolt"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:55
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:60
 msgid "Till"
 msgstr "Kuni"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:47
-msgid "Time zone: {tz}."
-msgstr "Ajavöönd: {tz}."
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:147
 msgid "Timeout while trying to fetch data from the website."
@@ -2247,11 +2247,11 @@ msgstr "Kuva olek"
 msgid "View this page."
 msgstr "Vaata sedea lehte."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:20
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:24
 msgid "Visible from"
 msgstr "N√§htav alates"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:32
 msgid "Visible till"
 msgstr "N√§htav kuni"
 
@@ -5965,6 +5965,10 @@ msgstr "WXR-fail"
 msgid "WordPress import"
 msgstr "WordPressi import"
 
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:19
+msgid "All dates are stored in UTC."
+msgstr "Kõik kuupäevad on salvestatud UTC."
+
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:57
 msgid "Apr"
 msgstr "Apr"
@@ -5991,9 +5995,9 @@ msgstr "E.m.a."
 msgid "CE"
 msgstr "CE"
 
-#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:32
-msgid "Changing the time zone does not affect the entered dates."
-msgstr "Ajavööndi muutmine ei mõjuta sisestatud kuupäevi."
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:18
+msgid "Changing the time zone will in effect change the publication period and date range."
+msgstr "Ajavööndi muutmine muudab avaldamise perioodi ja kuupäevavahemikku."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:65
 msgid "Dec"
@@ -6133,7 +6137,7 @@ msgstr "Neljapäev"
 msgid "Time zone"
 msgstr "Ajavöönd"
 
-#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:18
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:23
 msgid "Time zone for publication period and date range"
 msgstr "Ajavöönd avaldamisperioodi ja kuupäevavahemiku jaoks"
 
@@ -6144,6 +6148,10 @@ msgstr "Teisipäev"
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:31
 msgid "Wednesday"
 msgstr "Kolmapäev"
+
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:35
+msgid "Your time zone is"
+msgstr "Teie ajavöönd on"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:20
 msgid "midnight"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-05 15:23\n"
+"PO-Revision-Date: 2022-12-07 18:40\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -841,7 +841,7 @@ msgstr "Dopo la duplicazione è possibile modificare la nuova pagina. La nuova p
 msgid "All Content"
 msgstr "Tutti i contenuti"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:39
 msgid "All day"
 msgstr "Tutto il giorno"
 
@@ -1332,7 +1332,7 @@ msgstr "Sciacquare le cache di sistema"
 msgid "Follow connections and import all (deep copy)."
 msgstr "Segui le connessioni e importa tutto (copia completa)."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:49
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:54
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
 msgid "From"
 msgstr "Da"
@@ -1696,7 +1696,7 @@ msgstr "Protetto"
 msgid "Protect from deletion"
 msgstr "Proteggere dalla cancellazione"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:37
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:41
 msgid "Publication date of original article"
 msgstr "Data di pubblicazione dell'articolo originale"
 
@@ -1892,6 +1892,10 @@ msgstr "Mostra come"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:30
 msgid "Show page on multiple paths"
 msgstr "Mostra la pagina su più percorsi"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:18
+msgid "Showing dates in"
+msgstr "Visualizzazione delle date in"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:36
 msgid "Site Files Directory"
@@ -2119,13 +2123,9 @@ msgstr "Questa pagina proviene da un altro sito web. L'originale si trova su"
 msgid "This resource was created by the module"
 msgstr "Questa risorsa è stata creata dal modulo"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:55
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:60
 msgid "Till"
 msgstr "Fino a"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:47
-msgid "Time zone: {tz}."
-msgstr "Fuso orario: {tz}."
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:147
 msgid "Timeout while trying to fetch data from the website."
@@ -2247,11 +2247,11 @@ msgstr "Visualizza lo stato"
 msgid "View this page."
 msgstr "Visualizza questa pagina."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:20
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:24
 msgid "Visible from"
 msgstr "Visibile da"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:32
 msgid "Visible till"
 msgstr "Visibile fino a"
 
@@ -5965,6 +5965,10 @@ msgstr "File WXR"
 msgid "WordPress import"
 msgstr "Importazione di WordPress"
 
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:19
+msgid "All dates are stored in UTC."
+msgstr "Tutte le date sono memorizzate in UTC."
+
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:57
 msgid "Apr"
 msgstr "Apr"
@@ -5991,9 +5995,9 @@ msgstr "BCE"
 msgid "CE"
 msgstr "CE"
 
-#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:32
-msgid "Changing the time zone does not affect the entered dates."
-msgstr "La modifica del fuso orario non influisce sulle date immesse."
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:18
+msgid "Changing the time zone will in effect change the publication period and date range."
+msgstr "La modifica del fuso orario modificherà in effetti il periodo di pubblicazione e l'intervallo di date."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:65
 msgid "Dec"
@@ -6133,7 +6137,7 @@ msgstr "Giovedì"
 msgid "Time zone"
 msgstr "Fuso orario"
 
-#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:18
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:23
 msgid "Time zone for publication period and date range"
 msgstr "Fuso orario per il periodo di pubblicazione e l'intervallo di date"
 
@@ -6144,6 +6148,10 @@ msgstr "Martedì"
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:31
 msgid "Wednesday"
 msgstr "Mercoledì"
+
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:35
+msgid "Your time zone is"
+msgstr "Il tuo fuso orario è"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:20
 msgid "midnight"

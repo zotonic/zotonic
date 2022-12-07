@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-05 21:53\n"
+"PO-Revision-Date: 2022-12-07 18:40\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -844,7 +844,7 @@ msgstr "Na het dupliceren kan je de nieuwe pagina bewerken. De nieuwe pagina zal
 msgid "All Content"
 msgstr "Alle inhoud"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:39
 msgid "All day"
 msgstr "Gehele dag"
 
@@ -1335,7 +1335,7 @@ msgstr "Flush systeemcaches"
 msgid "Follow connections and import all (deep copy)."
 msgstr "Volg verbindingen en importeer alles (diepe kopie)."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:49
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:54
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
 msgid "From"
 msgstr "Van"
@@ -1699,7 +1699,7 @@ msgstr "Bescherm"
 msgid "Protect from deletion"
 msgstr "Bescherm tegen verwijderen"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:37
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:41
 msgid "Publication date of original article"
 msgstr "Publicatiedatum van het oorspronkelijke artikel"
 
@@ -1896,6 +1896,10 @@ msgstr "Toon als"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:30
 msgid "Show page on multiple paths"
 msgstr "Toon pagina op meerdere paginapaden"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:18
+msgid "Showing dates in"
+msgstr "Datums weergeven in"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:36
 msgid "Site Files Directory"
@@ -2123,13 +2127,9 @@ msgstr "Deze pagina is van een andere website. Het origineel is te vinden op"
 msgid "This resource was created by the module"
 msgstr "Deze pagina was aangemaakt door de module"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:55
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:60
 msgid "Till"
 msgstr "Tot"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:47
-msgid "Time zone: {tz}."
-msgstr "Tijdzone: {tz}."
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:147
 msgid "Timeout while trying to fetch data from the website."
@@ -2251,11 +2251,11 @@ msgstr "Status bekijken"
 msgid "View this page."
 msgstr "Bekijk deze pagina."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:20
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:24
 msgid "Visible from"
 msgstr "Zichtbaar vanaf"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:32
 msgid "Visible till"
 msgstr "Zichtbaar tot"
 
@@ -5967,6 +5967,10 @@ msgstr "WXR bestand"
 msgid "WordPress import"
 msgstr "WordPress importeren"
 
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:19
+msgid "All dates are stored in UTC."
+msgstr "Alle datums worden opgeslagen in UTC."
+
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:57
 msgid "Apr"
 msgstr "apr"
@@ -5993,9 +5997,9 @@ msgstr "v.Chr."
 msgid "CE"
 msgstr "n.Chr."
 
-#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:32
-msgid "Changing the time zone does not affect the entered dates."
-msgstr "Het wijzigen van de tijdzone heeft geen invloed op de ingevoerde datums."
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:18
+msgid "Changing the time zone will in effect change the publication period and date range."
+msgstr "Het wijzigen van de tijdzone verandert in feite de publicatieperiode en het datumbereik."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:65
 msgid "Dec"
@@ -6135,7 +6139,7 @@ msgstr "donderdag"
 msgid "Time zone"
 msgstr "Tijdzone"
 
-#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:18
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:23
 msgid "Time zone for publication period and date range"
 msgstr "Tijdzone voor publicatieperiode en datumbereik"
 
@@ -6146,6 +6150,10 @@ msgstr "dinsdag"
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:31
 msgid "Wednesday"
 msgstr "woensdag"
+
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:35
+msgid "Your time zone is"
+msgstr "Je tijdzone is"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:20
 msgid "midnight"
