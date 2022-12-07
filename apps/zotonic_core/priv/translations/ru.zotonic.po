@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-05 15:23\n"
+"PO-Revision-Date: 2022-12-07 18:41\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -841,7 +841,7 @@ msgstr "После дублирования вы можете редактиро
 msgid "All Content"
 msgstr "Все содержимое"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:39
 msgid "All day"
 msgstr "Весь день"
 
@@ -1332,7 +1332,7 @@ msgstr "Очистить системный кэш"
 msgid "Follow connections and import all (deep copy)."
 msgstr "Проследовать по связям и импортировать всё (глубокая копия)."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:49
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:54
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
 msgid "From"
 msgstr "От"
@@ -1696,7 +1696,7 @@ msgstr "Защита"
 msgid "Protect from deletion"
 msgstr "Защита от удаления"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:37
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:41
 msgid "Publication date of original article"
 msgstr "Дата публикации исходной статьи"
 
@@ -1892,6 +1892,10 @@ msgstr "Показать как"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:30
 msgid "Show page on multiple paths"
 msgstr "Показать страницу на нескольких путях"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:18
+msgid "Showing dates in"
+msgstr "Отображение дат в"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:36
 msgid "Site Files Directory"
@@ -2119,13 +2123,9 @@ msgstr "Эта страница с другого веб-сайта. Ориги�
 msgid "This resource was created by the module"
 msgstr "Этот ресурс был создан модулем"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:55
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:60
 msgid "Till"
 msgstr "До"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:47
-msgid "Time zone: {tz}."
-msgstr "Часовой пояс: {tz}."
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:147
 msgid "Timeout while trying to fetch data from the website."
@@ -2247,11 +2247,11 @@ msgstr "Посмотреть статус"
 msgid "View this page."
 msgstr "Просмотреть эту страницу."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:20
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:24
 msgid "Visible from"
 msgstr "Видимо с"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:32
 msgid "Visible till"
 msgstr "Видимо до"
 
@@ -5965,6 +5965,10 @@ msgstr "файл WXR"
 msgid "WordPress import"
 msgstr "Импорт WordPress"
 
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:19
+msgid "All dates are stored in UTC."
+msgstr "Все даты хранятся в формате UTC."
+
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:57
 msgid "Apr"
 msgstr "Апр"
@@ -5991,9 +5995,9 @@ msgstr "BCE"
 msgid "CE"
 msgstr "CE"
 
-#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:32
-msgid "Changing the time zone does not affect the entered dates."
-msgstr "Изменение часового пояса не влияет на введенные даты."
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:18
+msgid "Changing the time zone will in effect change the publication period and date range."
+msgstr "Изменение часового пояса изменит период публикации и диапазон дат."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:65
 msgid "Dec"
@@ -6133,7 +6137,7 @@ msgstr "Четверг"
 msgid "Time zone"
 msgstr "Часовой пояс"
 
-#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:18
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:23
 msgid "Time zone for publication period and date range"
 msgstr "Часовой пояс для периода публикации и диапазона дат"
 
@@ -6144,6 +6148,10 @@ msgstr "Вторник"
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:31
 msgid "Wednesday"
 msgstr "Среда"
+
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:35
+msgid "Your time zone is"
+msgstr "Ваш часовой пояс"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:20
 msgid "midnight"
