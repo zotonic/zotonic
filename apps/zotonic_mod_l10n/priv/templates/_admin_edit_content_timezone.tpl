@@ -36,7 +36,9 @@
     {% javascript %}
         $('#rsc-tz').on('change', function() {
             let tz = $(this).val();
-            $(".rsc-timezone").text(tz);
+            $(".rsc-timezone")
+                .text(tz)
+                .closest('p').show();
         });
     {% endjavascript %}
 {% endblock %}
