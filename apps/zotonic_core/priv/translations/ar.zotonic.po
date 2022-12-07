@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-05 15:22\n"
+"PO-Revision-Date: 2022-12-07 18:40\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -841,7 +841,7 @@ msgstr "بعد التكرار يمكنك تحرير الصفحة الجديدة.
 msgid "All Content"
 msgstr "كافة المحتويات"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:39
 msgid "All day"
 msgstr "طيلة اليوم"
 
@@ -1332,7 +1332,7 @@ msgstr "إعادة تحديث ذاكرة النظام"
 msgid "Follow connections and import all (deep copy)."
 msgstr "اتبع الاتصالات واستيراد الكل (نسخة عميقة)."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:49
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:54
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
 msgid "From"
 msgstr "من"
@@ -1696,7 +1696,7 @@ msgstr "يحمي"
 msgid "Protect from deletion"
 msgstr "حماية من الحذف"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:37
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:41
 msgid "Publication date of original article"
 msgstr "تاريخ نشر المقال الأصلي"
 
@@ -1892,6 +1892,10 @@ msgstr "كما تظهر"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:30
 msgid "Show page on multiple paths"
 msgstr "عرض الصفحة على مسارات متعددة"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:18
+msgid "Showing dates in"
+msgstr "عرض التواريخ في"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:36
 msgid "Site Files Directory"
@@ -2119,13 +2123,9 @@ msgstr "هذه الصفحة من موقع آخر. يمكن العثور على �
 msgid "This resource was created by the module"
 msgstr "لقد تم إنشاء هذا المورد بواسطة الوحدة"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:55
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:60
 msgid "Till"
 msgstr "حتى"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:47
-msgid "Time zone: {tz}."
-msgstr "المنطقة الزمنية: {tz}."
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:147
 msgid "Timeout while trying to fetch data from the website."
@@ -2247,11 +2247,11 @@ msgstr "عرض الحالة"
 msgid "View this page."
 msgstr "اعرض هذه الصفحة."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:20
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:24
 msgid "Visible from"
 msgstr "مرئي من"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:32
 msgid "Visible till"
 msgstr "مرئي حتى"
 
@@ -5965,6 +5965,10 @@ msgstr "ملف WXR"
 msgid "WordPress import"
 msgstr "استيراد ووردبريس"
 
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:19
+msgid "All dates are stored in UTC."
+msgstr "يتم تخزين جميع التواريخ في التوقيت العالمي المنسق (UTC)."
+
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:57
 msgid "Apr"
 msgstr "أبريل"
@@ -5991,9 +5995,9 @@ msgstr "قبل الميلاد"
 msgid "CE"
 msgstr "م"
 
-#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:32
-msgid "Changing the time zone does not affect the entered dates."
-msgstr "لا يؤثر تغيير المنطقة الزمنية على التواريخ التي تم إدخالها."
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:18
+msgid "Changing the time zone will in effect change the publication period and date range."
+msgstr "سيؤدي تغيير المنطقة الزمنية إلى تغيير فترة النشر ونطاق التاريخ."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:65
 msgid "Dec"
@@ -6133,7 +6137,7 @@ msgstr "الخميس"
 msgid "Time zone"
 msgstr "وحدة زمنية"
 
-#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:18
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:23
 msgid "Time zone for publication period and date range"
 msgstr "المنطقة الزمنية لفترة النشر ونطاق التاريخ"
 
@@ -6144,6 +6148,10 @@ msgstr "الثلاثاء"
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:31
 msgid "Wednesday"
 msgstr "الأربعاء"
+
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:35
+msgid "Your time zone is"
+msgstr "منطقتك الزمنية هي"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:20
 msgid "midnight"
