@@ -531,13 +531,13 @@ handle_info(poll, #state{backoff_counter = Ct} = State) when Ct > 0 ->
     timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
     {noreply, State#state{ backoff_counter = Ct - 1 }};
 handle_info(poll, #state{ pivot_pid = Pid } = State) when is_pid(Pid) ->
-    ?LOG_INFO(#{
+    ?LOG_DEBUG(#{
         text => <<"Pivot job still running, delaying next poll">>,
         in => zotonic_core,
         pivot_pid => Pid,
         reason => busy
     }),
-    timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
+    timer:send_after(?PIVOT_POLL_INTERVAL_FAST*1000, poll),
     {noreply, State};
 handle_info(poll, #state{ site = Site } = State) ->
     case z_sites_manager:get_site_status(Site) of
