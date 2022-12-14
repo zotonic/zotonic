@@ -268,6 +268,7 @@ handle_cast(update_dispatchinfo, State) ->
     do_update_hosts(FallbackSite),
     NewRules = collect_dispatchrules(),
     do_compile_modified(State#state.rules, NewRules),
+    erlang:garbage_collect(),
     {noreply, State#state{
                 rules=NewRules,
                 fallback_site=FallbackSite
@@ -277,6 +278,7 @@ handle_cast(update_dispatchinfo, State) ->
 handle_cast(update_hosts, State) ->
     FallbackSite = z_sites_manager:get_fallback_site(),
     do_update_hosts(FallbackSite),
+    erlang:garbage_collect(),
     {noreply, State#state{fallback_site=FallbackSite}};
 
 %% @doc Trap unknown casts

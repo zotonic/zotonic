@@ -254,7 +254,9 @@ handle_call(Message, _From, State) ->
 %%                                  {stop, Reason, State}
 %% @doc Sync known sites with loaded sites
 handle_cast(upgrade, State) ->
-    {noreply, handle_upgrade(State)};
+    State1 = handle_upgrade(State),
+    erlang:garbage_collect(),
+    {noreply, State1};
 
 %% @doc Stop a site, assume it is a known site.
 handle_cast({stop, Site}, State) ->

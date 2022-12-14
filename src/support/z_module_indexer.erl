@@ -56,6 +56,7 @@
 -include("zotonic.hrl").
 
 -define(TIMEOUT, infinity).
+-define(GC_TIMEOUT, 1000).
 
 %%====================================================================
 %% API
@@ -169,20 +170,20 @@ init(SiteProps) ->
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
 handle_call({find_all, scomp, Name, _Class}, _From, State) ->
-    {reply, lookup_all(Name, State#state.scomps), State};
+    {reply, lookup_all(Name, State#state.scomps), State, ?GC_TIMEOUT};
 handle_call({find_all, action, Name, _Class}, _From, State) ->
-    {reply, lookup_all(Name, State#state.actions), State};
+    {reply, lookup_all(Name, State#state.actions), State, ?GC_TIMEOUT};
 handle_call({find_all, validator, Name, _Class}, _From, State) ->
-    {reply, lookup_all(Name, State#state.validators), State};
+    {reply, lookup_all(Name, State#state.validators), State, ?GC_TIMEOUT};
 handle_call({find_all, model, Name, _Class}, _From, State) ->
-    {reply, lookup_all(Name, State#state.models), State};
+    {reply, lookup_all(Name, State#state.models), State, ?GC_TIMEOUT};
 handle_call({find_all, service, Name, _Class}, _From, State) ->
-    {reply, lookup_all(Name, State#state.services), State};
+    {reply, lookup_all(Name, State#state.services), State, ?GC_TIMEOUT};
 
 handle_call({find_all, lib, File, _Class}, _From, State) ->
-    {reply, lookup_class_all(generic, File, State#state.lib), State};
+    {reply, lookup_class_all(generic, File, State#state.lib), State, ?GC_TIMEOUT};
 handle_call({find_all, template, File, Class}, _From, State) ->
-    {reply, lookup_class_all(Class, File, State#state.templates), State};
+    {reply, lookup_class_all(Class, File, State#state.templates), State, ?GC_TIMEOUT};
 
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
@@ -205,7 +206,7 @@ handle_cast({module_ready, _NotifyContext}, #state{scanner_pid=undefined}=State)
             gen_server:cast(Self, {scanned_items, Scanned})
         end),
 
-    {noreply, State#state{scanner_pid=Pid}};
+    {noreply, State#state{scanner_pid=Pid}, ?GC_TIMEOUT};
 
 handle_cast({module_ready, _NotifyContext}, #state{scanner_pid=Pid}=State) when is_pid(Pid) ->
     %% The scanner is still busy, just let it continue.
@@ -233,9 +234,9 @@ handle_cast({scanned_items, Scanned}, State) ->
             z_depcache:set(module_index_ref, erlang:make_ref(), NewState#state.context),
             z_notifier:notify(module_reindexed, NewState#state.context),
             z_depcache:flush(module_index, NewState#state.context),
-            {noreply, NewState};
+            {noreply, NewState, ?GC_TIMEOUT};
         false ->
-            {noreply, State1}
+            {noreply, State1, ?GC_TIMEOUT}
     end;
 
 %% @doc Trap unknown casts
@@ -247,8 +248,11 @@ handle_cast(Message, State) ->
 %%                                       {noreply, State, Timeout} |
 %%                                       {stop, Reason, State}
 %% @doc Handling all non call/cast messages
+handle_info(timeout, State) ->
+    erlang:garbage_collect(),
+    {noreply, State};
 handle_info(_Info, State) ->
-    {noreply, State}.
+    {noreply, State, ?GC_TIMEOUT}.
 
 
 %% @spec terminate(Reason, State) -> void()

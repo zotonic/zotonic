@@ -80,6 +80,9 @@
 %% Max number of task retries
 -define(TASK_MAX_RETRY, 10).
 
+%% Forced garbages collect after 5 secs of inactivity
+-define(GC_TIMEOUT, 5000).
+
 
 -record(state, {
     site,
@@ -305,11 +308,11 @@ handle_cast(poll, #state{is_initial_delay=true} = State) ->
 handle_cast(poll, State) ->
     try
         do_poll(z_context:new(State#state.site)),
-        {noreply, State}
+        {noreply, State, ?GC_TIMEOUT}
     catch
         ?WITH_STACKTRACE(Type, Err, Stack)
             lager:error("Poll error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
-            {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
+            {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }, ?GC_TIMEOUT}
     end;
 
 %% @doc Insert an id into the queue.
@@ -321,17 +324,17 @@ handle_cast({insert_queue, Ids}, State) when is_list(Ids) ->
 %% @doc Requests for immediate pivot of a resource
 handle_cast({pivot, Id}, #state{ is_initial_delay = true } = State) ->
     do_insert_queue([Id], z_context:new(State#state.site)),
-    {noreply, State};
+    {noreply, State, ?GC_TIMEOUT};
 handle_cast({pivot, Id}, #state{ backoff_counter = Ct } = State) when Ct > 0 ->
     do_insert_queue([Id], z_context:new(State#state.site)),
-    {noreply, State};
+    {noreply, State, ?GC_TIMEOUT};
 handle_cast({pivot, Id}, State) ->
     do_pivot(Id, z_context:new(State#state.site)),
-    {noreply, State};
+    {noreply, State, ?GC_TIMEOUT};
 
 %% @doc Delay the next pivot, useful when performing big updates
 handle_cast(pivot_delay, State) ->
-    {noreply, State#state{is_pivot_delay=true}};
+    {noreply, State#state{is_pivot_delay=true}, ?GC_TIMEOUT};
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
@@ -353,16 +356,20 @@ handle_info(poll, State) ->
             true ->  timer:send_after(?PIVOT_POLL_INTERVAL_FAST*1000, poll);
             false -> timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll)
         end,
-        {noreply, State#state{ is_initial_delay = false }}
+        {noreply, State#state{ is_initial_delay = false }, ?GC_TIMEOUT}
     catch
         ?WITH_STACKTRACE(Type, Err, Stack)
             lager:error("Pivot error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
             timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
-            {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
+            {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }, ?GC_TIMEOUT}
     end;
 
+handle_info(timeout, State) ->
+    erlang:garbage_collect(),
+    {noreply, State};
+
 handle_info(_Info, State) ->
-    {noreply, State}.
+    {noreply, State, ?GC_TIMEOUT}.
 
 %% @spec terminate(Reason, State) -> void()
 %% @doc This function is called by a gen_server when it is about to
