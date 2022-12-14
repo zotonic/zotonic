@@ -43,10 +43,6 @@
     z-index: 999999;
     color: white;
 
-    .cookie-consent__explanation {
-        max-width: 70%;
-    }
-
     .cookie-consent__upper,
     .cookie-consent__lower {
         padding-top: 50px;
@@ -165,12 +161,13 @@
         display: flex;
         flex-direction: column;
         list-style: none;
-        margin-bottom: 24px;
+        margin-bottom: 16px;
     }
 
     .cookie-option {
         width: auto;
         margin-left: 0;
+        margin-bottom: 8px;
     }
 
     .cookie-option__label {
@@ -198,7 +195,7 @@
         display: inline-block;
         flex-shrink: 0;
         position: relative;
-        top: 2px;
+        top: 0;
         border: 2px solid white;
         transition: all 0.3s;
     }
@@ -243,6 +240,10 @@
     }
 
     @media only screen and (min-width: 600px) {
+        .cookie-consent__explanation {
+            max-width: 70%;
+        }
+
         .cookie-consent__lower__accept {
             margin: 1em 0 0;
         }

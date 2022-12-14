@@ -34,8 +34,6 @@
   overflow: auto;
   z-index: 999999;
   color: white; }
-  .cookie-consent .cookie-consent__explanation {
-    max-width: 70%; }
   .cookie-consent .cookie-consent__upper,
   .cookie-consent .cookie-consent__lower {
     padding-top: 50px;
@@ -114,10 +112,11 @@
     display: flex;
     flex-direction: column;
     list-style: none;
-    margin-bottom: 24px; }
+    margin-bottom: 16px; }
   .cookie-consent .cookie-option {
     width: auto;
-    margin-left: 0; }
+    margin-left: 0;
+    margin-bottom: 8px; }
   .cookie-consent .cookie-option__label {
     width: 100%;
     margin: 0;
@@ -137,7 +136,7 @@
     display: inline-block;
     flex-shrink: 0;
     position: relative;
-    top: 2px;
+    top: 0;
     border: 2px solid white;
     transition: all 0.3s; }
   .cookie-consent .cookie-option__label:after {
@@ -166,6 +165,8 @@
   .cookie-consent .anchor-down {
     margin-left: 8px; }
   @media only screen and (min-width: 600px) {
+    .cookie-consent .cookie-consent__explanation {
+      max-width: 70%; }
     .cookie-consent .cookie-consent__lower__accept {
       margin: 1em 0 0; }
     .cookie-consent .cookie-consent__upper__controls {
