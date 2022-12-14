@@ -230,7 +230,7 @@ get_paging_props(#{ <<"qargs">> := true } = Args, Context) ->
                 end;
             P -> P
         end,
-        PageLen = case z_convert:to_integer(z_context:get_q(<<"page">>, Context)) of
+        PageLen = case z_convert:to_integer(z_context:get_q(<<"pagelen">>, Context)) of
             undefined ->
                 case maps:get(<<"pagelen">>, Args, ?SEARCH_PAGELEN) of
                     undefined -> ?SEARCH_PAGELEN;
