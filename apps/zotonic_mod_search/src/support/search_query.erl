@@ -172,6 +172,8 @@ request_arg(<<"is_authoritative">>)    -> is_authoritative;
 request_arg(<<"is_featured">>)         -> is_featured;
 request_arg(<<"is_published">>)        -> is_published;
 request_arg(<<"is_public">>)           -> is_public;
+request_arg(<<"is_findable">>)         -> is_findable;
+request_arg(<<"is_unfindable">>)       -> is_unfindable;
 request_arg(<<"date_start_after">>)    -> date_start_after;
 request_arg(<<"date_start_before">>)   -> date_start_before;
 request_arg(<<"date_start_year">>)     -> date_start_year;
@@ -204,15 +206,16 @@ request_arg(<<"pagelen">>)             -> undefined;
 request_arg(<<"options">>)             -> undefined;
 % Complain about all else
 request_arg(<<"custompivot">>)         ->
-    ?LOG_ERROR("The query term 'custompivot' has been removed. Use filters with 'pivot.pivotname.field' instead."),
+    ?LOG_ERROR(#{
+        in => zotonic_mod_search,
+        text => <<"The query term 'custompivot' has been removed. Use filters with 'pivot.pivotname.field' instead.">>,
+        result => error,
+        reason => unknown_query_term,
+        term => <<"custompivot">>
+    }),
     throw({error, {unknown_query_term, custompivot}});
 request_arg(Term) ->
-    ?LOG_ERROR(#{
-        text => <<"Skipping unknown query term">>,
-        in => zotonic_mod_search,
-        term => Term
-    }),
-    undefined.
+    {custom, Term}.
 
 
 %% Private methods start here
@@ -491,6 +494,28 @@ qterm({is_public, Boolean}, _Context) ->
                     }
           end
     end;
+qterm({is_findable, Boolean}, _Context) ->
+    %% is_findable or is_findable={false,true}
+    %% Filter on whether an item is findable or not.
+    #search_sql_term{
+        where = [
+            <<"rsc.is_unfindable = ">>, '$1'
+        ],
+        args = [
+            not z_convert:to_bool(Boolean)
+        ]
+    };
+qterm({is_unfindable, Boolean}, _Context) ->
+    %% is_unfindable or is_unfindable={false,true}
+    %% Filter on whether an item is unfindable or not.
+    #search_sql_term{
+        where = [
+            <<"rsc.is_unfindable = ">>, '$1'
+        ],
+        args = [
+            z_convert:to_bool(Boolean)
+        ]
+    };
 qterm({upcoming, Boolean}, _Context) ->
     %% upcoming
     %% Filter on items whose start date lies in the future
@@ -897,6 +922,21 @@ qterm({publication_before, Date}, Context) ->
             z_datetime:to_datetime(Date, Context)
         ]
     };
+qterm({{custom, Term}, Arg}, Context) ->
+    case z_notifier:first(#search_query_term{ term = Term, arg = Arg }, Context) of
+        undefined ->
+            ?LOG_WARNING(#{
+                in => zotonic_mod_search,
+                text => <<"Ignored unknown query search term">>,
+                term => Term,
+                arg => Arg,
+                result => error,
+                reason => unknown_query_term
+            }),
+            [];
+        #search_sql_term{} = SQL ->
+            SQL
+    end;
 qterm(Term, _Context) ->
     %% No match found
     throw({error, {unknown_query_term, Term}}).
