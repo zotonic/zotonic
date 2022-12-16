@@ -758,7 +758,7 @@
 
 %% @doc Map a custom search term to a ``#search_sql_term{}`` record.
 %% Type: first
-%% Return: ``#search_sql_term{}`` or ``undefined``
+%% Return: ``#search_sql_term{}``, ``[]``, or ``undefined``
 -record(search_query_term, {
     term :: binary(),
     arg :: any()

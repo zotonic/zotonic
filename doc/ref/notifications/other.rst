@@ -39,6 +39,7 @@ Other notifications
    notification/sanitize_embed_url
    notification/scomp_script_render
    notification/search_query
+   notification/search_query_term
    notification/security_headers
    notification/service_authorize
    notification/ssl_options

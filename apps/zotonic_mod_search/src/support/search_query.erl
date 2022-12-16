@@ -934,6 +934,8 @@ qterm({{custom, Term}, Arg}, Context) ->
                 reason => unknown_query_term
             }),
             [];
+        [] ->
+            [];
         #search_sql_term{} = SQL ->
             SQL
     end;

@@ -10,7 +10,7 @@ Type:
     :ref:`notification-first`
 
 Return: 
-    ``#search_sql_term{}`` or ``undefined``
+    ``#search_sql_term{}``, ``[]``, or ``undefined``
 
 ``#search_query{}`` properties:
     - name: ``union``
