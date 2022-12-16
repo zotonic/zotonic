@@ -255,7 +255,7 @@ This checks the rescource’s ``is_unfindable`` flag. To be findable in
 searches the flag must be set to ``false``, which is the default.
 
 is_unfindable
-^^^^^^^^^^^
+^^^^^^^^^^^^^
 
 A boolean option that specifies if a page should not be findable::
 
