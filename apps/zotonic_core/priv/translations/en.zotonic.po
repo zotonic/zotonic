@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-07 18:41\n"
+"PO-Revision-Date: 2022-12-16 17:42\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -1355,6 +1355,10 @@ msgstr "Header"
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr ""
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
+msgid "Hide page from searches (depends on the search query)"
+msgstr ""
+
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Home Directory"
 msgstr ""
@@ -2095,7 +2099,7 @@ msgstr ""
 msgid "This is system content."
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:52
 msgid "This name is in use by another page."
 msgstr "This name is in use by another page."
 
@@ -2119,7 +2123,7 @@ msgstr "This page is able to connect to others. For example you can connect it t
 msgid "This page is from another website. The original can be found at"
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "This resource was created by the module"
 msgstr "This resource was created by the module"
 
@@ -2155,11 +2159,11 @@ msgstr ""
 msgid "Type text to search"
 msgstr "Type text to search"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:38./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:40
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:51
 msgid "Unique name"
 msgstr "Unique name"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:55./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:56
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:66./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:67
 msgid "Unique uri"
 msgstr "Unique uri"
 
