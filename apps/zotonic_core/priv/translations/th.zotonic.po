@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-07 18:41\n"
+"PO-Revision-Date: 2022-12-16 17:43\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -1355,6 +1355,10 @@ msgstr "หัวข้อ"
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "คุณสามารถแก้ไขอาร์กิวเมนต์ของคำค้นหาได้ที่นี่ ทุกอาร์กิวเมนต์ดำเนินไปในแนวของตัวเอง สำหรับข้อมูลเพิ่มเติม โปรดดูเอกสารประกอบ <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">เกี่ยวกับอาร์กิวเมนต์แบบสอบถาม</a> บนเว็บไซต์ Zotonic"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
+msgid "Hide page from searches (depends on the search query)"
+msgstr "ซ่อนหน้าจากการค้นหา (ขึ้นอยู่กับคำค้นหา)"
+
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:54
 msgid "Home Directory"
 msgstr "โฮมไดเร็กทอรี"
@@ -2095,7 +2099,7 @@ msgstr "ไฟล์นี้มีขนาดใหญ่เกินไป"
 msgid "This is system content."
 msgstr "นี่คือเนื้อหาของระบบ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:52
 msgid "This name is in use by another page."
 msgstr "ชื่อนี้ถูกใช้โดยเพจอื่น"
 
@@ -2119,7 +2123,7 @@ msgstr "เพจนี้สามารถเชื่อมต่อกับ
 msgid "This page is from another website. The original can be found at"
 msgstr "หน้านี้มาจากเว็บไซต์อื่น สามารถติดตามต้นฉบับได้ที่"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "This resource was created by the module"
 msgstr "ทรัพยากรนี้สร้างขึ้นโดยโมดูล"
 
@@ -2155,11 +2159,11 @@ msgstr "การเชื่อมต่อมากเกินไประบ
 msgid "Type text to search"
 msgstr "พิมพ์ข้อความเพื่อค้นหา"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:38./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:40
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:51
 msgid "Unique name"
 msgstr "ชื่อเฉพาะ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:55./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:56
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:66./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:67
 msgid "Unique uri"
 msgstr "ยูริที่ไม่เหมือนใคร"
 
