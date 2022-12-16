@@ -244,6 +244,25 @@ values are true, false or all::
 
     is_published='all'
 
+is_findable
+^^^^^^^^^^^
+
+A boolean option that specifies if a page should be findable or not::
+
+    is_findable
+
+This checks the rescource’s ``is_unfindable`` flag. To be findable in
+searches the flag must be set to ``false``, which is the default.
+
+is_unfindable
+^^^^^^^^^^^^^
+
+A boolean option that specifies if a page should not be findable::
+
+    is_unfindable
+
+This checks the rescource’s ``is_unfindable`` flag.
+
 upcoming
 ^^^^^^^^
 

@@ -296,7 +296,7 @@ handle_info(timeout, State) ->
     erlang:garbage_collect(),
     {noreply, State};
 handle_info(_Info, State) ->
-    {noreply, State}.
+    {noreply, State, ?GC_TIMEOUT}.
 
 
 %% @spec terminate(Reason, State) -> void()

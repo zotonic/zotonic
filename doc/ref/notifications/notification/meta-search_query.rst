@@ -3,16 +3,14 @@
 search_query
 ^^^^^^^^^^^^
 
-An edge has been inserted. 
-Note that the Context for this notification does not have the user who 
-created the edge. 
+Map a custom search term to a ``#search_sql_term{}`` record. 
 
 
 Type: 
-    :ref:`notification-notify`
+    :ref:`notification-first`
 
 Return: 
-    return value is ignored
+    ``#search_sql_term{}``, ``[]``, or ``undefined``
 
 ``#search_query{}`` properties:
     - name: ``union``

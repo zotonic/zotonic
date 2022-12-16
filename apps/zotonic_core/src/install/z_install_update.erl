@@ -306,6 +306,7 @@ upgrade(C, Database, Schema) ->
     ok = rsc_language(C, Database, Schema),
     ok = task_queue_error_count(C, Database, Schema),
     ok = identity_expires(C, Database, Schema),
+    ok = rsc_unfindable(C, Database, Schema),
     ok.
 
 
@@ -892,3 +893,23 @@ identity_expires(C, Database, Schema) ->
             ok
     end.
 
+
+rsc_unfindable(C, Database, Schema) ->
+    case has_column(C, "rsc", "is_unfindable", Database, Schema) of
+        true ->
+            ok;
+        false ->
+            ?LOG_NOTICE(#{
+                text => <<"Upgrade: adding is_unfindable column to rsc">>,
+                in => zotonic_core,
+                database => Database,
+                schema => Schema,
+                table => rsc
+            }),
+            {ok, [], []} = epgsql:squery(C,
+                                    "alter table rsc "
+                                    "add column is_unfindable boolean not null default false"),
+            {ok, [], []} = epgsql:squery(C,
+                                    "CREATE INDEX rsc_is_unfindable_key ON rsc (is_unfindable)"),
+            ok
+    end.

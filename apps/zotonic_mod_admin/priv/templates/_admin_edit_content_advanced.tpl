@@ -31,6 +31,17 @@
         </label>
     </div>
 
+    <div class="form-group">
+        <label class="control-label">
+            <input type="checkbox" id="field-is-unfindable"
+                name="is_unfindable" value="1"
+                {% if id.is_unfindable %}checked{% endif %}
+                {% if not id.is_editable %}disabled="disabled"{% endif %}
+            />
+            {_ Hide page from searches (depends on the search query) _}
+        </label>
+    </div>
+
     <div class="form-group label-floating">
         {% if m.acl.use.mod_admin %}
             <input class="form-control" type="text" id="name" name="name" value="{{ id.name }}" {% if not id.is_editable or id == 1 %}disabled="disabled"{% endif %}
