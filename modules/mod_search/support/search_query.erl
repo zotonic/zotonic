@@ -836,7 +836,6 @@ add_filters([Column, Operator, Value], Result) ->
     add_where(Expr, Result1).
 
 add_filters_or(Filters, Result) ->
-    ?DEBUG(Filters),
     {Exprs, Result1} = lists:foldr(
                          fun
                             ([C,O,V], {Es, R}) ->
