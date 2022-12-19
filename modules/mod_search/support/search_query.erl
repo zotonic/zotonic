@@ -275,12 +275,12 @@ parse_query([{is_published, Boolean}|Rest], Context, Result) ->
         _ ->
             Result2 = case z_convert:to_bool(Boolean) of
                           true ->
-                              add_where("rsc.is_published and "
+                              add_where("rsc.is_published = true and "
                                         "rsc.publication_start <= now() and "
                                         "rsc.publication_end >= now()",
                                         Result1);
                           false ->
-                              add_where("(not rsc.is_published or "
+                              add_where("(rsc.is_published = false or "
                                         "rsc.publication_start > now() or "
                                         "rsc.publication_end < now())",
                                         Result1)
@@ -836,6 +836,7 @@ add_filters([Column, Operator, Value], Result) ->
     add_where(Expr, Result1).
 
 add_filters_or(Filters, Result) ->
+    ?DEBUG(Filters),
     {Exprs, Result1} = lists:foldr(
                          fun
                             ([C,O,V], {Es, R}) ->
