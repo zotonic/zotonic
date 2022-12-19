@@ -403,7 +403,7 @@ acl_add_sql_check(#acl_add_sql_check{alias=Alias, args=Args, search_sql=SearchSq
                     % User can see some content groups
                     Clause = lists:flatten([
                                 " (",Alias,".content_group_id is null or ",
-                                     Alias,".content_group_id in (SELECT(unnest($",integer_to_list(length(Args)+1),"::int[]))))",
+                                     Alias,".content_group_id = any($",integer_to_list(length(Args)+1),"::int[]))",
                                 publish_check(" and ", Alias, SearchSql, Context)]),
                     {Clause, Args ++ [Ids]}
             end
@@ -415,7 +415,7 @@ publish_check(MaybeAnd, Alias, #search_sql{extra=Extra}, Context) ->
             "";
         false ->
             [MaybeAnd,
-             Alias,".is_published and ",
+             Alias,".is_published = true and ",
              Alias,".publication_start <= now() and ",
              Alias,".publication_end >= now()"]
     end.
