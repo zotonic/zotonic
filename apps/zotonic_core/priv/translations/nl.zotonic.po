@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-16 17:42\n"
+"PO-Revision-Date: 2022-12-20 22:17\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -6003,7 +6003,7 @@ msgstr "n.Chr."
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:18
 msgid "Changing the time zone will in effect change the publication period and date range."
-msgstr "Het wijzigen van de tijdzone verandert in feite de publicatieperiode en het datumbereik."
+msgstr "Als je de tijdzone wijzigt, verandert de publicatieperiode en het datumbereik."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:65
 msgid "Dec"
