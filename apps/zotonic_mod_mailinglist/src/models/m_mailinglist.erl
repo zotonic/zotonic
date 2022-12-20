@@ -279,6 +279,14 @@ insert_recipient(ListId, Email, WelcomeMessageType, Context) ->
     insert_recipient(ListId, Email, [], WelcomeMessageType, Context).
 
 insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) ->
+    case m_rsc:rid(ListId, Context) of
+        undefined ->
+            {error, enoent};
+        RscId ->
+            insert_recipient_1(RscId, Email, Props, WelcomeMessageType, Context)
+    end.
+
+insert_recipient_1(ListId, Email, Props, WelcomeMessageType, Context) ->
     case z_acl:rsc_visible(ListId, Context) of
         false ->
             {error, eacces};
@@ -358,6 +366,14 @@ insert_recipients(ListId, Bin, IsTruncate, Context) when is_binary(Bin) ->
     Rcpts = lines_to_recipients(Lines),
     insert_recipients(ListId, Rcpts, IsTruncate, Context);
 insert_recipients(ListId, Recipients, IsTruncate, Context) ->
+    case m_rsc:rid(ListId, Context) of
+        undefined ->
+            {error, enoent};
+        RscId ->
+            insert_recipients_1(RscId, Recipients, IsTruncate, Context)
+    end.
+
+insert_recipients_1(ListId, Recipients, IsTruncate, Context) ->
     case z_acl:rsc_editable(ListId, Context) of
         true ->
             ok = z_db:transaction(
@@ -369,19 +385,19 @@ insert_recipients(ListId, Recipients, IsTruncate, Context) ->
             {error, eacces}
     end.
 
-    insert_recipients1(ListId, Recipients, Context) ->
-        Now = erlang:universaltime(),
-        [ replace_recipient(ListId, R, Now, Context) || R <- Recipients ],
-        {ok, Now}.
+insert_recipients1(ListId, Recipients, Context) ->
+    Now = erlang:universaltime(),
+    [ replace_recipient(ListId, R, Now, Context) || R <- Recipients ],
+    {ok, Now}.
 
-    optional_truncate(_, false, _, _) ->
-        ok;
-    optional_truncate(ListId, true, Now, Context) ->
-        z_db:q("
-            delete from mailinglist_recipient
-            where mailinglist_id = $1
-              and timestamp < $2", [ListId, Now], Context),
-        ok.
+optional_truncate(_, false, _, _) ->
+    ok;
+optional_truncate(ListId, true, Now, Context) ->
+    z_db:q("
+        delete from mailinglist_recipient
+        where mailinglist_id = $1
+          and timestamp < $2", [ListId, Now], Context),
+    ok.
 
 replace_recipient(ListId, Recipient, Now, Context) when is_binary(Recipient) ->
     replace_recipient(ListId, Recipient, [], Now, Context);
@@ -390,6 +406,14 @@ replace_recipient(ListId, Recipient, Now, Context) ->
 
 
 replace_recipient(ListId, Email, Props, Now, Context) ->
+    case m_rsc:rid(ListId, Context) of
+        undefined ->
+            {error, enoent};
+        RscId ->
+            replace_recipient_1(RscId, Email, Props, Now, Context)
+    end.
+
+replace_recipient_1(ListId, Email, Props, Now, Context) ->
     case normalize_email(Email) of
         <<>> ->
             skip;
