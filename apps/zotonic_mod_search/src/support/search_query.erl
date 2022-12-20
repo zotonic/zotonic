@@ -1336,7 +1336,16 @@ add_filters([Column, Operator, Value], Q, Context) ->
         {ok, V1} ->
             {Expr, Q2} = create_filter(Tab, Col, Operator, V1, Q1),
             add_filter_where(Expr, Q2);
-        {error, _} ->
+        {error, Reason} ->
+            ?LOG_INFO(#{
+                text => <<"Search query filter could not be added">>,
+                result => error,
+                reason => Reason,
+                filter_column => Column,
+                table => Tab,
+                column => Col,
+                value => Value
+            }),
             Q
     end.
 
@@ -1392,11 +1401,11 @@ map_filter_column(<<"pivot.", P/binary>>, #search_sql_term{ join_inner = Join } 
 map_filter_column(<<"facet.", P/binary>>, #search_sql_term{ join_inner = Join } = Q) ->
     Q1 = Q#search_sql_term{
         join_inner = Join#{
-            <<"facet">> => {<<"facet">>, <<"facet.id = rsc.id">>}
+            <<"search_facet">> => {<<"facet">>, <<"facet.id = rsc.id">>}
         }
     },
     Field = sql_safe(P),
-    {<<"facet">>, <<"f_", Field/binary>>, Q1};
+    {<<"search_facet">>, <<"f_", Field/binary>>, Q1};
 map_filter_column(Column, Q) ->
     Field = sql_safe(Column),
     {<<"rsc">>, Field, Q}.
