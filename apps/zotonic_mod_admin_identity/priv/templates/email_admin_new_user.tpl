@@ -5,17 +5,19 @@
 {% endblock %}
 
 {% block body %}
-    <p>{_ Hi _}, {{ id.title }}!</p>
+    <p>{_ Hi _} {% include "_name.tpl" id=id %},</p>
 
-    <p>{_ You have been granted access to _} {{ m.site.title|default:m.site.hostname }}. {_ You can now login to the admin, on the following URL: _}</p>
+    {% if is_allowed_use_mod_admin %}
+        <p>{_ You have been granted access to _} {{ m.site.title|default:m.site.hostname }}.
+        {_ You can now login to the admin, on the following URL: _}</p>
+        <p><a href="{% url admin absolute_url %}">{% url admin absolute_url %}</a></p>
+    {% else %}
+        <p>{_ You have been granted access to _} {{ m.site.title|default:m.site.hostname }}.
+        {_ You can now login on the following URL: _}</p>
+        <p><a href="{% url logon absolute_url %}">{% url logon absolute_url %}</a></p>
+    {% endif %}
 
-    <p><a href="{% url admin absolute_url %}">{% url admin absolute_url %}</a></p>
+    <p>{_ Your username is: _} <tt>{{ username }}</tt></p>
 
-    <p>
-        {_ Your user details are: _}
-    </p>
-
-    <p>
-        {_ Username _}: <tt>{{ username }}</tt>
-    </p>
+    <p>{_ If you don’t know your password, click on <i>Forgot your password?</i> at the login. _}</p>
 {% endblock %}
