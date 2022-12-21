@@ -118,7 +118,6 @@ delete_rsc(Id, Context) ->
                     ok;
                 false ->
                     {error, eacces}
-
             end
     end.
 
