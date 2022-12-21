@@ -1378,7 +1378,7 @@ create_filter(Tab, Alias, Col, Operator, null, Q) ->
 create_filter(_Tab, Alias, Col, Operator, undefined, Q) ->
     Operator1 = map_filter_operator(Operator),
     {create_filter_null(Alias, Col, Operator1), Q};
-create_filter(Tab, Alias, Col, Operator, Value, Q) ->
+create_filter(_Tab, Alias, Col, Operator, Value, Q) ->
     {Arg, Q1} = add_filter_arg(Value, Q),
     Operator1 = map_filter_operator(Operator),
     {[Alias, $., Col, <<" ">>, Operator1, <<" ">>, Arg], Q1}.
