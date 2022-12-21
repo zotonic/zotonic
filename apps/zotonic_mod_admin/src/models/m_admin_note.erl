@@ -57,7 +57,7 @@ get_rsc(Id, Context) when is_integer(Id) ->
                 true ->
                     z_db:qmap_row("
                         select *
-                        from admin_rsc_note
+                        from admin_note_rsc
                         where rsc_id = $1
                         ",
                         [ m_rsc:rid(RId, Context) ],
@@ -81,7 +81,7 @@ update_rsc(Id, Note, Context) ->
             case is_allowed(RId, Context) of
                 true ->
                     1 = z_db:q("
-                        insert into admin_rsc_note
+                        insert into admin_note_rsc
                             (rsc_id, note, modifier_id, modified)
                         values
                             ($1, $2, $3, now())
@@ -112,7 +112,7 @@ delete_rsc(Id, Context) ->
             case is_allowed(RId, Context) of
                 true ->
                     z_db:q(
-                        "delete from admin_rsc_note where rsc_id = $1",
+                        "delete from admin_note_rsc where rsc_id = $1",
                         [ RId ],
                         Context),
                     ok;
@@ -126,26 +126,26 @@ is_allowed(Id, Context) ->
     andalso z_acl:is_allowed(use, mod_admin, Context).
 
 install(Context) ->
-    case z_db:table_exists(admin_rsc_note, Context) of
+    case z_db:table_exists(admin_note_rsc, Context) of
         true ->
             ok;
         false ->
             [] = z_db:q("
-                create table admin_rsc_note (
+                create table admin_note_rsc (
                     rsc_id int not null,
                     note text not null default '',
                     modifier_id int,
                     modified timestamp with time zone NOT NULL DEFAULT now(),
 
                     PRIMARY KEY (rsc_id),
-                    CONSTRAINT fk_admin_rsc_note_rsc_id FOREIGN KEY (rsc_id)
+                    CONSTRAINT fk_admin_note_rsc_rsc_id FOREIGN KEY (rsc_id)
                         REFERENCES rsc (id)
                         ON UPDATE CASCADE ON DELETE CASCADE,
-                    CONSTRAINT fk_admin_rsc_note_modifier_id FOREIGN KEY (modifier_id)
+                    CONSTRAINT fk_admin_note_rsc_modifier_id FOREIGN KEY (modifier_id)
                         REFERENCES rsc (id)
                         ON UPDATE CASCADE ON DELETE SET NULL
                 )
                 ", Context),
-            [] = z_db:q("CREATE INDEX fki_admin_rsc_note_modifier_id ON admin_rsc_note (modifier_id)", Context),
+            [] = z_db:q("CREATE INDEX fki_admin_note_rsc_modifier_id ON admin_note_rsc (modifier_id)", Context),
             z_db:flush(Context)
     end.
