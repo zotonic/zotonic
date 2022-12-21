@@ -9,7 +9,6 @@
 {% block widget_id %}sidebar-mailinglist{% endblock %}
 
 {% block widget_content %}
-
     <div class="form-group">
         <a class="btn btn-default btn-sm" title="{_ Send this page to a mailinglist and view mailinglist statistics. _}" href="{% url admin_mailing_status id=id %}">
             <i class="glyphicon glyphicon-envelope"></i>

@@ -363,6 +363,40 @@ event(#postback{message = {admin_rsc_redirect, Args}}, Context) ->
     end,
     z_render:wire({redirect, [ {dispatch, Dispatch}, {id, SelectId} ]}, Context);
 
+event(#submit{ message={admin_note_update_rsc, [{id, Id}]} }, Context) ->
+    Note = z_context:get_q(<<"note">>, Context),
+    case m_admin_note:update_rsc(Id, Note, Context) of
+        ok ->
+            Context1 = z_render:dialog_close(Context),
+            z_render:update(
+                "admin-rsc-note",
+                #render{
+                    template = "_admin_edit_content_note_inner.tpl",
+                    vars = [ {id, Id} ]
+                },
+                Context1);
+        {error, enoent} ->
+            z_render:growl_error(?__("Sorry, that page is unknown.", Context), Context);
+        {error, eacces} ->
+            z_render:growl_error(?__("Sorry, you are not allowed to edit notes.", Context), Context)
+    end;
+event(#postback{ message={admin_note_delete_rsc, [{id, Id}]} }, Context) ->
+    case m_admin_note:delete_rsc(Id, Context) of
+        ok ->
+            Context1 = z_render:dialog_close(Context),
+            z_render:update(
+                "admin-rsc-note",
+                #render{
+                    template = "_admin_edit_content_note_inner.tpl",
+                    vars = [ {id, Id} ]
+                },
+                Context1);
+        {error, enoent} ->
+            z_render:growl_error(?__("Sorry, that page is unknown.", Context), Context);
+        {error, eacces} ->
+            z_render:growl_error(?__("Sorry, you are not allowed to edit notes.", Context), Context)
+    end;
+
 event(_E, Context) ->
     ?DEBUG(_E),
     Context.
@@ -531,7 +565,8 @@ context_language(Context) ->
     end.
 
 
-manage_schema(_Version, _Context) ->
+manage_schema(_Version, Context) ->
+    m_admin_note:install(Context),
     #datamodel{
         categories=[
             {admin_content_query,
