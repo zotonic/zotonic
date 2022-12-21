@@ -103,7 +103,7 @@ update_rsc(Id, Note, Context) ->
 -spec delete_rsc(Id, Context) -> Result when
     Id :: m_rsc:resource() | undefined,
     Context :: z:context(),
-    Result :: {ok, map()} | {error, term()}.
+    Result :: ok | {error, term()}.
 delete_rsc(Id, Context) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
