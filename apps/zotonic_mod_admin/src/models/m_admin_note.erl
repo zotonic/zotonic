@@ -55,7 +55,7 @@ get_rsc(Id, Context) when is_integer(Id) ->
         RId ->
             case is_allowed(RId, Context) of
                 true ->
-                    z_db:qmap("
+                    z_db:qmap_row("
                         select *
                         from admin_rsc_note
                         where rsc_id = $1
