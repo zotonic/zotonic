@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2020 Marc Worrell
+%% @copyright 2010-2022 Marc Worrell
 %% @doc Show a form to subscribe to a mailinglist. Prefill the form with the account details
 %% of the current user (if any).
 
-%% Copyright 2010-2020 Marc Worrell
+%% Copyright 2010-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -62,15 +62,15 @@ event(#submit{message={recipient_add, Props}}, Context) ->
         									{dialog_close, []},
         									{reload, []}], Context);
         				false ->
-					        z_render:wire([ {slide_fade_in, [{target, "mailinglist_subscribe_done"}]},
-					                        {slide_fade_out, [{target, "mailinglist_subscribe_form"}]}], Context)
+					        z_render:wire([ {slide_fade_in, [{target, "mailinglist_subscribe_done-" ++ integer_to_list(ListId)}]},
+					                        {slide_fade_out, [{target, "mailinglist_subscribe_form-" ++ integer_to_list(ListId)}]}], Context)
         			end;
 				{error, _Reason} ->
 				    case InAdmin of
 				        true ->
 					        z_render:growl_error(?__("Could not add the recipient.", Context), Context);
 					    false ->
-					        z_render:wire([ {slide_fade_in, [{target, "mailinglist_subscribe_error"}]}], Context)
+					        z_render:wire([ {slide_fade_in, [{target, "mailinglist_subscribe_error-" ++ integer_to_list(ListId)}]}], Context)
 					end
 			end;
 		false ->
@@ -78,7 +78,7 @@ event(#submit{message={recipient_add, Props}}, Context) ->
 		        true ->
 			        z_render:growl_error(?__("You are not allowed to add or enable recipients.", Context), Context);
 			    false ->
-			        z_render:wire([ {slide_fade_in, [{target, "mailinglist_subscribe_error"}]}], Context)
+			        z_render:wire([ {slide_fade_in, [{target, "mailinglist_subscribe_error-" ++ integer_to_list(ListId)}]}], Context)
 			end
 	end;
 
@@ -106,7 +106,7 @@ event(#submit{message={recipient_edit, Props}}, Context) ->
 		        true ->
 			        z_render:growl_error(?__("You are not allowed to edit recipients.", Context), Context);
 			    false ->
-			        z_render:wire([ {slide_down, [{target, "mailinglist_subscribe_error"}]}], Context)
+			        z_render:wire([ {slide_down, [{target, "mailinglist_subscribe_error-" ++ integer_to_list(ListId)}]}], Context)
 			end
 	end.
 
