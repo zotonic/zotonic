@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-16 17:42\n"
+"PO-Revision-Date: 2022-12-21 14:30\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -2760,7 +2760,7 @@ msgid "Use relay to send email"
 msgstr "Використовуйте реле для надсилання електронної пошти"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:60./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:61./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:87./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:88
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:3./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:50./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:19
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:3./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:50
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:81
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:15
 msgid "Username"
@@ -2899,7 +2899,7 @@ msgstr "Натисніть «Видалити», щоб видалити буд�
 msgid "Confirm user deletion"
 msgstr "Підтвердьте видалення користувача"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:106
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:105
 msgid "Could not create the user. Sorry."
 msgstr "Не вдалося створити користувача. Вибачте."
 
@@ -2961,6 +2961,10 @@ msgstr "Додому"
 msgid "If you don't know this site, please ignore this email. Maybe someone made an error."
 msgstr "Якщо Ви не знаєте цього сайту, проігноруйте цей лист. Можливо хтось зробив помилку."
 
+#: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:22
+msgid "If you don’t know your password, click on <i>Forgot your password?</i> at the login."
+msgstr "Якщо ви не знаєте свій пароль, натисніть <i>Забули пароль?</i> при вході."
+
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51
 msgid "Last logon"
 msgstr "Останній вхід"
@@ -3003,7 +3007,7 @@ msgstr "Немає підтверджених адрес електронної 
 msgid "One moment, please..."
 msgstr "Будь ласка, хвилиночку..."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:46./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:110
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:46./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:108
 msgid "Only administrators can add users."
 msgstr "Лише адміністратори можуть додавати користувачів."
 
@@ -3205,11 +3209,15 @@ msgstr "Вам не дозволено редагувати ідентифіка
 msgid "You are not allowed to switch users."
 msgstr "Вам заборонено змінювати користувачів."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:10
+#: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:16
+msgid "You can now login on the following URL:"
+msgstr "Тепер ви можете увійти за такою URL-адресою:"
+
+#: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:12
 msgid "You can now login to the admin, on the following URL:"
 msgstr "Тепер Ви можете увійти до адміністратора за такою URL-адресою:"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:10
+#: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:11./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:15
 msgid "You have been granted access to"
 msgstr "Вам надано доступ до"
 
@@ -3238,9 +3246,9 @@ msgstr "Вашу адресу електронної пошти тепер пі�
 msgid "Your login details for"
 msgstr "Ваші дані для входу для"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:15
-msgid "Your user details are:"
-msgstr "Ваші дані користувача:"
+#: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:20
+msgid "Your username is:"
+msgstr "Ваше ім'я користувача:"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:19
 msgid "delete username"

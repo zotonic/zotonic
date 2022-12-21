@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-16 17:42\n"
+"PO-Revision-Date: 2022-12-21 14:30\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -2760,7 +2760,7 @@ msgid "Use relay to send email"
 msgstr "Usar retransmissão para enviar e-mail"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:60./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:61./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:87./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:88
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:3./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:50./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:19
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:3./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:50
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:81
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:15
 msgid "Username"
@@ -2899,7 +2899,7 @@ msgstr "Clique em “excluir” para remover qualquer nome de usuário/senha exi
 msgid "Confirm user deletion"
 msgstr "Confirmar exclusão do usuário"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:106
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:105
 msgid "Could not create the user. Sorry."
 msgstr "Não foi possível criar o usuário. Desculpe."
 
@@ -2961,6 +2961,10 @@ msgstr "Casa"
 msgid "If you don't know this site, please ignore this email. Maybe someone made an error."
 msgstr "Se você não conhece este site, ignore este e-mail. Talvez alguém tenha cometido um erro."
 
+#: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:22
+msgid "If you don’t know your password, click on <i>Forgot your password?</i> at the login."
+msgstr "Caso não saiba sua senha, clique em <i>Esqueceu sua senha?</i> no login."
+
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51
 msgid "Last logon"
 msgstr "Último logon"
@@ -3003,7 +3007,7 @@ msgstr "Nenhum endereço de e-mail verificado. Adicione um abaixo."
 msgid "One moment, please..."
 msgstr "Um momento por favor..."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:46./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:110
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:46./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:108
 msgid "Only administrators can add users."
 msgstr "Somente administradores podem adicionar usuários."
 
@@ -3205,11 +3209,15 @@ msgstr "Você não tem permissão para editar identidades."
 msgid "You are not allowed to switch users."
 msgstr "Você não tem permissão para trocar de usuário."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:10
+#: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:16
+msgid "You can now login on the following URL:"
+msgstr "Agora você pode fazer login no seguinte URL:"
+
+#: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:12
 msgid "You can now login to the admin, on the following URL:"
 msgstr "Agora você pode fazer login no administrador, no seguinte URL:"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:10
+#: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:11./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:15
 msgid "You have been granted access to"
 msgstr "Você recebeu acesso a"
 
@@ -3238,9 +3246,9 @@ msgstr "Seu endereço de e-mail foi verificado."
 msgid "Your login details for"
 msgstr "Seus dados de login para"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:15
-msgid "Your user details are:"
-msgstr "Seus dados de usuário são:"
+#: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:20
+msgid "Your username is:"
+msgstr "Seu nome de usuário é:"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:19
 msgid "delete username"
