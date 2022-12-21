@@ -72,7 +72,7 @@ get_rsc(Id, Context) when is_integer(Id) ->
     Id :: m_rsc:resource() | undefined,
     Note :: binary() | undefined,
     Context :: z:context(),
-    Result :: {ok, map()} | {error, term()}.
+    Result :: ok | {error, term()}.
 update_rsc(Id, Note, Context) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
