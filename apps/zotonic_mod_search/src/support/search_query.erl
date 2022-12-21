@@ -1401,7 +1401,7 @@ map_filter_column(<<"pivot.", P/binary>>, #search_sql_term{ join_inner = Join } 
 map_filter_column(<<"facet.", P/binary>>, #search_sql_term{ join_inner = Join } = Q) ->
     Q1 = Q#search_sql_term{
         join_inner = Join#{
-            <<"search_facet">> => {<<"facet">>, <<"facet.id = rsc.id">>}
+            <<"facet">> => {<<"search_facet">>, <<"facet.id = rsc.id">>}
         }
     },
     Field = sql_safe(P),
