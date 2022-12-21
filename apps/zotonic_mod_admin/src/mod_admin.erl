@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2012 Marc Worrell
-%% Date: 2009-06-09
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Administrative interface.  Aka backend.
+%% @enddoc
 
-%% Copyright 2009-2012 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
 -mod_description("Provides administrative interface for editing pages, media, users etc.").
 -mod_depends([ base, authentication, mod_search, mod_mqtt, mod_wires ]).
 -mod_provides([ admin ]).
--mod_schema(1).
+-mod_schema(2).
 -mod_prio(1000).
 
 -export([
