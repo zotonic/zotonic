@@ -594,6 +594,16 @@
 %% Return: ``[ m_rsc:resource_id() ]`` or ``undefined``
 -record(acl_user_groups, {}).
 
+%% @doc Modify the list of user groups of an user. Called internally
+%% by the ACL modules when fetching the list of user groups an user
+%% is member of.
+%% Type: foldl
+%% Return: ``[ m_rsc:resource_id() ]``
+-record(acl_user_groups_modify, {
+    id :: m_rsc:resource_id() | undefined,
+    groups :: list( m_rsc:resource_id() )
+}).
+
 %% @doc Confirm a user id.
 %% Type: foldl
 %% Return: ``z:context()``

@@ -660,13 +660,24 @@ session_state(Context) ->
     end.
 
 
-% Fetch all usergroups the user is member of.
-% Anonymous user are member of `acl_user_group_anonymous`.
-% Users are member of `acl_user_group_members`, unless they have hasusergroup connections to other groups.
--spec has_user_groups(m_rsc:resource_id()|undefined, #context{}) -> list(m_rsc:resource_id()).
-has_user_groups(undefined, Context) ->
+%% @doc Fetch all usergroups the user is member of.
+%% Anonymous user are member of `acl_user_group_anonymous`.
+%% Users are member of `acl_user_group_members`, unless they have hasusergroup connections to other groups.
+-spec has_user_groups(UserId, Context) -> Groups when
+    UserId :: m_rsc:resource_id() | undefined,
+    Context :: z:context(),
+    Groups :: list(m_rsc:resource_id()).
+has_user_groups(UserId, Context) ->
+    Groups = has_user_groups_1(UserId, Context),
+    z_notifier:foldl(
+        #acl_user_groups_modify{
+            id = UserId,
+            groups = Groups
+        }, Groups, Context).
+
+has_user_groups_1(undefined, Context) ->
     [ m_rsc:rid(acl_user_group_anonymous, Context) ];
-has_user_groups(1, Context) ->
+has_user_groups_1(1, Context) ->
     MgrId = m_rsc:rid(acl_user_group_managers, Context),
     Groups = m_edge:objects(1, hasusergroup, Context),
     case {MgrId, lists:member(MgrId, Groups)} of
@@ -674,7 +685,7 @@ has_user_groups(1, Context) ->
         {_, true} -> Groups;
         {_, false} -> Groups ++ [MgrId]
     end;
-has_user_groups(UserId, Context) ->
+has_user_groups_1(UserId, Context) ->
     case m_edge:objects(UserId, hasusergroup, Context) of
         [] ->
             [ m_rsc:rid(acl_user_group_members, Context) ];
