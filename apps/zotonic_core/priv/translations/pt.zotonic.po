@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-21 14:30\n"
+"PO-Revision-Date: 2022-12-22 09:27\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -202,7 +202,7 @@ msgid "Are you sure you want to restore all ACL rules to their currently publish
 msgstr "Você tem certeza de que quer restaurar todas as regras do LCA à sua versão publicada atualmente?"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:150./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:78
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:68./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:251./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:68./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:251./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:21
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:86./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
@@ -307,7 +307,7 @@ msgid "Define who can see or edit this page."
 msgstr "Definir quem pode visualizar ou editar esta página."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:158
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:58./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:67
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:58./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:67./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:52
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:8./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:25./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:30./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53./apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:168
@@ -526,7 +526,7 @@ msgid "Reverted rules"
 msgstr "Regras revertidas"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:123./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:30
@@ -757,11 +757,11 @@ msgstr "visão (ação acl)"
 msgid "&lt; Prev"
 msgstr "&lt; Prev"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:61
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:68
 msgid "(private)"
 msgstr "(privado)"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:34./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:111
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:34./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:118
 msgid "(public)"
 msgstr "(público)"
 
@@ -805,6 +805,10 @@ msgstr "Adicionar um novo arquivo de mídia"
 msgid "Add a new media item"
 msgstr "Adicionar um novo item de mídia"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:32
+msgid "Add a note about this page."
+msgstr "Adicione uma nota sobre esta página."
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:110
 msgid "Add media content"
 msgstr "Adicionar conteúdo de mídia"
@@ -813,7 +817,11 @@ msgstr "Adicionar conteúdo de mídia"
 msgid "Add media to body"
 msgstr "Adicionar mídia ao corpo"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:481./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:35./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:39
+msgid "Add note"
+msgstr "Adicionar nota"
+
+#: apps/zotonic_mod_admin/src/mod_admin.erl:505./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
 msgid "Added the connection to"
 msgstr "Acrescente a ligação a"
 
@@ -896,6 +904,10 @@ msgstr "Tem certeza de que deseja excluir a mídia desta página?"
 msgid "Are you sure you want to delete the page"
 msgstr "Tem a certeza que quer excluir a página"
 
+#: apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:19
+msgid "Are you sure you want to delete this note?"
+msgstr "Tem certeza de que deseja excluir esta anotação?"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:72
 msgid "Are you sure you want to exit the admin interface?"
 msgstr "Tem certeza de que deseja sair da interface de administração?"
@@ -968,7 +980,7 @@ msgstr "Alterar a categoria desta página"
 msgid "Choose a media item from this page to insert in the body text."
 msgstr "Escolha um item de mídia desta página para inserir no corpo do texto."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:92./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:93./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:151./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:152
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:99./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:100./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:158./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:159
 msgid "City"
 msgstr "Cidade"
 
@@ -1037,7 +1049,7 @@ msgstr "Não foi possível conectar-se ao site."
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "Não foi possível detectar nada para importar nesse URL ou código de incorporação."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:80./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106
 msgid "Country"
 msgstr "País"
@@ -1138,6 +1150,10 @@ msgstr "Discos"
 msgid "Do not import connections."
 msgstr "Não importe conexões."
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:61
+msgid "Do not sent mailings (opt out)"
+msgstr "Não envie correspondências (opt out)"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
 msgid "Do you want to remove this block?"
 msgstr "Quer remover este bloco?"
@@ -1176,6 +1192,10 @@ msgstr "Endereço de e-mail"
 msgid "Edit"
 msgstr "Editar"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:16
+msgid "Edit note"
+msgstr "Editar nota"
+
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:73
 msgid "Edit:"
 msgstr "Editar:"
@@ -1186,7 +1206,7 @@ msgstr "Editar:"
 msgid "Email"
 msgstr "Email"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:115./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:117
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:122./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:124
 msgid "Email address for public display"
 msgstr "Endereço de e-mail para exibição pública"
 
@@ -1440,7 +1460,7 @@ msgstr "Sair da sessão"
 msgid "Log on to"
 msgstr "Iniciar Sessão em"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:111
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:118
 msgid "Mailing address"
 msgstr "Endereço para correspondência"
 
@@ -1666,7 +1686,7 @@ msgstr "Nome pessoal"
 msgid "Pivot queue count size:"
 msgstr "Tamanho da fila pivotante:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:97./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:98./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:156./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:157
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:104./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:105./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:163./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:164
 msgid "Postcode"
 msgstr "Código postal"
 
@@ -1782,7 +1802,7 @@ msgstr "Observações"
 msgid "Remove"
 msgstr "Remover"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:485
+#: apps/zotonic_mod_admin/src/mod_admin.erl:509
 msgid "Removed the connection to"
 msgstr "Removido a conexão com"
 
@@ -1923,15 +1943,23 @@ msgstr "Algumas tarefas estão tentando novamente.<br>Total de erros: {total}<br
 msgid "Something went wrong. Sorry."
 msgstr "Alguma coisa correu mal. Desculpe."
 
+#: apps/zotonic_mod_admin/src/mod_admin.erl:374./apps/zotonic_mod_admin/src/mod_admin.erl:385
+msgid "Sorry, that page is unknown."
+msgstr "Desculpe, essa página é desconhecida."
+
+#: apps/zotonic_mod_admin/src/mod_admin.erl:376./apps/zotonic_mod_admin/src/mod_admin.erl:387
+msgid "Sorry, you are not allowed to edit notes."
+msgstr "Desculpe, você não tem permissão para editar notas."
+
 #: apps/zotonic_mod_admin/src/actions/action_admin_link.erl:86
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Desculpe, não tem permissão para adicionar a ligação."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:467
+#: apps/zotonic_mod_admin/src/mod_admin.erl:491
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Desculpe, não tem permissão para adicionar a ligação."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:469
+#: apps/zotonic_mod_admin/src/mod_admin.erl:493
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Desculpe, não tem permissão para apagar a ligação."
 
@@ -1943,7 +1971,7 @@ msgstr "Padrão"
 msgid "Starts"
 msgstr "Início"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:104./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:105./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:163./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:164
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:111./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:112./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:170./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:171
 msgid "State"
 msgstr "Estado"
 
@@ -1955,11 +1983,11 @@ msgstr "Estado"
 msgid "Status"
 msgstr "Estado"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:81./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:82./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:140./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:141
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:88./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:89./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:147./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:148
 msgid "Street Line 1"
 msgstr "Linha de rua 1"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:86./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:87./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:145./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:146
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:93./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:94./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:152./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:153
 msgid "Street Line 2"
 msgstr "Linha de rua 2"
 
@@ -2103,6 +2131,10 @@ msgstr "Este é o conteúdo do sistema."
 msgid "This name is in use by another page."
 msgstr "Este nome está em uso por outra página."
 
+#: apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:13
+msgid "This note is only visible for people who can edit the page and have access to the admin."
+msgstr "Esta nota é visível apenas para pessoas que podem editar a página e ter acesso ao administrador."
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "Esta página pode ser conectada a partir de outras páginas. Por exemplo, pode ser o autor de um artigo."
@@ -2167,7 +2199,7 @@ msgstr "Nome único"
 msgid "Unique uri"
 msgstr "Unique uri"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:475./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
+#: apps/zotonic_mod_admin/src/mod_admin.erl:499./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 msgid "Untitled"
@@ -2263,7 +2295,7 @@ msgstr "Visível até"
 msgid "Visit full edit page"
 msgstr "Visite a página de edição completa"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:61
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:68
 msgid "Visiting address"
 msgstr "Endereço para visitas"
 
@@ -2364,7 +2396,7 @@ msgstr "adicionar item de mídia"
 msgid "block"
 msgstr "bloco"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:15
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:15
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:48
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:6./apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:16
 msgid "by"
@@ -6569,7 +6601,7 @@ msgstr "A partir de agora, você receberá correspondência da nossa lista de co
 msgid "Give your e-mail address to subscribe to"
 msgstr "Dê o seu endereço de e-mail para se inscrever"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:16
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:15
 msgid "Go to mailinglist page"
 msgstr "Ir para a página da lista de correio"
 
@@ -6605,7 +6637,7 @@ msgstr "Parece que você já enviou\n"
 msgid "Keep mailing"
 msgstr "Continue enviando"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:26
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:25
 msgid "Mail"
 msgstr "Correio"
 
@@ -6706,7 +6738,7 @@ msgstr "Por favor, anule a sua inscrição"
 msgid "Prefix"
 msgstr "Prefixo"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:21./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:15
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:20./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:15
 msgid "Preview mailing"
 msgstr "Pré-visualização do mailing"
 
@@ -6754,7 +6786,7 @@ msgstr "Enviar correio"
 msgid "Send test mailing"
 msgstr "Enviar correio de teste"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:17./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:17
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:17./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:17
 msgid "Send test to address"
 msgstr "Enviar teste para o endereço"
 
@@ -6770,11 +6802,11 @@ msgstr "Envie o e-mail imediatamente após a caixa de seleção \"publicado\" te
 msgid "Send the mailing right now, but do not include a link back to the website."
 msgstr "Envie o mailing agora mesmo, mas não inclua um link de volta para o site."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:14
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:13
 msgid "Send this page to a mailinglist and view mailinglist statistics."
 msgstr "Envie esta página para uma mailinglist e veja as estatísticas da mailinglist."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:24./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:17
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:23./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:17
 msgid "Send this page to a single address"
 msgstr "Enviar esta página para um único endereço"
 
@@ -6946,7 +6978,7 @@ msgstr "Faça o upload de um arquivo com os destinatários. O arquivo deve conte
 msgid "Upload a list of recipients."
 msgstr "Faça o upload de uma lista de destinatários."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:19
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:18
 msgid "View this page as mailing."
 msgstr "Veja esta página como um mailing."
 
