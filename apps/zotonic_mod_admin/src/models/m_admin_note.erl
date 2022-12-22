@@ -93,6 +93,7 @@ update_rsc(Id, Note, Context) ->
                         ",
                         [ RId, Note, z_acl:user(Context) ],
                         Context),
+                    publish_update(Id, <<"update">>, Context),
                     ok;
                 false ->
                     {error, eacces}
@@ -115,11 +116,24 @@ delete_rsc(Id, Context) ->
                         "delete from admin_note_rsc where rsc_id = $1",
                         [ RId ],
                         Context),
+                    publish_update(Id, <<"delete">>, Context),
                     ok;
                 false ->
                     {error, eacces}
             end
     end.
+
+
+publish_update(Id, Event, Context) ->
+    Topic = [ <<"model">>, <<"admin_note">>, <<"event">>, <<"rsc">>, Id ],
+    z_mqtt:publish(
+        Topic,
+        #{
+            id => Id,
+            event => Event
+        },
+        Context).
+
 
 is_allowed(Id, Context) ->
     z_acl:rsc_editable(Id, Context)

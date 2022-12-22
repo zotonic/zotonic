@@ -1,7 +1,7 @@
 {% if id.is_editable and m.acl.is_allowed.use.mod_admin %}
     {% wire id=#form
             type="submit"
-            postback={admin_note_update_rsc id=id}
+            postback={admin_note_update_rsc id=id on_success={dialog_close}}
             delegate=`mod_admin`
     %}
     <form id="{{ #form }}" method="POST" action="postback" class="form">
