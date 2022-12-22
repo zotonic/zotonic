@@ -661,8 +661,8 @@ session_state(Context) ->
 
 
 %% @doc Fetch all usergroups the user is member of.
-%% Anonymous user are member of `acl_user_group_anonymous`.
-%% Users are member of `acl_user_group_members`, unless they have hasusergroup connections to other groups.
+%% Anonymous user are member of 'acl_user_group_anonymous'.
+%% Users are member of 'acl_user_group_members', unless they have hasusergroup connections to other groups.
 -spec has_user_groups(UserId, Context) -> Groups when
     UserId :: m_rsc:resource_id() | undefined,
     Context :: z:context(),
