@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-21 14:30\n"
+"PO-Revision-Date: 2022-12-22 09:27\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -202,7 +202,7 @@ msgid "Are you sure you want to restore all ACL rules to their currently publish
 msgstr "Are you sure you want to restore all ACL rules to their currently published version?"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:150./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:78
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:68./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:251./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:68./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:251./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:21
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:86./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
@@ -307,7 +307,7 @@ msgid "Define who can see or edit this page."
 msgstr "Ange vem som kan se eller redigera den här sidan."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:158
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:58./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:67
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:58./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:67./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:52
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:8./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:25./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:30./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53./apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:168
@@ -526,7 +526,7 @@ msgid "Reverted rules"
 msgstr "Återställda regler"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:123./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:30
@@ -757,11 +757,11 @@ msgstr "visa (acl-åtgärd)"
 msgid "&lt; Prev"
 msgstr "&lt; Föregående"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:61
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:68
 msgid "(private)"
 msgstr "(privat)"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:34./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:111
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:34./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:118
 msgid "(public)"
 msgstr "(offentlig)"
 
@@ -805,6 +805,10 @@ msgstr "Lägg till en ny mediefil"
 msgid "Add a new media item"
 msgstr "Lägg till ett nytt medieobjekt"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:32
+msgid "Add a note about this page."
+msgstr "Lägg till en anteckning om den här sidan."
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:110
 msgid "Add media content"
 msgstr "Lägg till mediainnehåll"
@@ -813,7 +817,11 @@ msgstr "Lägg till mediainnehåll"
 msgid "Add media to body"
 msgstr "Lägg till media till brödtexten"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:481./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:35./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:39
+msgid "Add note"
+msgstr "Lägg till anteckning"
+
+#: apps/zotonic_mod_admin/src/mod_admin.erl:505./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
 msgid "Added the connection to"
 msgstr "Lade till anslutningen till"
 
@@ -896,6 +904,10 @@ msgstr "Är du säker på att du vill ta bort media från den här sidan?"
 msgid "Are you sure you want to delete the page"
 msgstr "Är du säker på att du vill ta bort sidan"
 
+#: apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:19
+msgid "Are you sure you want to delete this note?"
+msgstr "Är du säker på att du vill ta bort den här anteckningen?"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:72
 msgid "Are you sure you want to exit the admin interface?"
 msgstr "Är du säker på att du vill avsluta admin-gränssnittet?"
@@ -968,7 +980,7 @@ msgstr "Ändra kategori på denna sida"
 msgid "Choose a media item from this page to insert in the body text."
 msgstr "Välj ett media artikel från den här sidan om du vill infoga i texten."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:92./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:93./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:151./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:152
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:99./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:100./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:158./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:159
 msgid "City"
 msgstr "Stad"
 
@@ -1037,7 +1049,7 @@ msgstr "Kunde inte ansluta till webbplatsen."
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "Kunde inte upptäcka någonting att import på den URL: en eller bädda in kod."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:80./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106
 msgid "Country"
 msgstr "Land"
@@ -1138,6 +1150,10 @@ msgstr "Skivor"
 msgid "Do not import connections."
 msgstr "Importera inte anslutningar."
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:61
+msgid "Do not sent mailings (opt out)"
+msgstr "Skicka inte utskick (välj bort)"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
 msgid "Do you want to remove this block?"
 msgstr "Vill du ta bort detta block?"
@@ -1176,6 +1192,10 @@ msgstr "E-postadress"
 msgid "Edit"
 msgstr "Redigera"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:16
+msgid "Edit note"
+msgstr "Redigera anteckning"
+
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:73
 msgid "Edit:"
 msgstr "Redigera:"
@@ -1186,7 +1206,7 @@ msgstr "Redigera:"
 msgid "Email"
 msgstr "E-post"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:115./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:117
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:122./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:124
 msgid "Email address for public display"
 msgstr "E-postadress för offentlig visning"
 
@@ -1440,7 +1460,7 @@ msgstr "Logga ut"
 msgid "Log on to"
 msgstr "Logga in"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:111
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:118
 msgid "Mailing address"
 msgstr "Postadress"
 
@@ -1666,7 +1686,7 @@ msgstr "Personnamn"
 msgid "Pivot queue count size:"
 msgstr "Pivot kö räkna storlek:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:97./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:98./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:156./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:157
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:104./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:105./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:163./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:164
 msgid "Postcode"
 msgstr "Postnummer"
 
@@ -1782,7 +1802,7 @@ msgstr "Anmärkningar"
 msgid "Remove"
 msgstr "Avlägsna"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:485
+#: apps/zotonic_mod_admin/src/mod_admin.erl:509
 msgid "Removed the connection to"
 msgstr "Bort anslutningen till"
 
@@ -1923,15 +1943,23 @@ msgstr "Vissa uppgifter försöker igen.<br>Totalt antal fel: {total}<br>Högst 
 msgid "Something went wrong. Sorry."
 msgstr "Något gick fel. Förlåt."
 
+#: apps/zotonic_mod_admin/src/mod_admin.erl:374./apps/zotonic_mod_admin/src/mod_admin.erl:385
+msgid "Sorry, that page is unknown."
+msgstr "Tyvärr, den sidan är okänd."
+
+#: apps/zotonic_mod_admin/src/mod_admin.erl:376./apps/zotonic_mod_admin/src/mod_admin.erl:387
+msgid "Sorry, you are not allowed to edit notes."
+msgstr "Tyvärr, du får inte redigera anteckningar."
+
 #: apps/zotonic_mod_admin/src/actions/action_admin_link.erl:86
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Tyvärr, du har inte behörighet att lägga till anslutningen."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:467
+#: apps/zotonic_mod_admin/src/mod_admin.erl:491
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Tyvärr, du har inte behörighet att lägga till anslutningen."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:469
+#: apps/zotonic_mod_admin/src/mod_admin.erl:493
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Tyvärr, du har inte behörighet att ta bort anslutningen."
 
@@ -1943,7 +1971,7 @@ msgstr "Standard"
 msgid "Starts"
 msgstr "Börjar"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:104./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:105./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:163./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:164
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:111./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:112./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:170./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:171
 msgid "State"
 msgstr "stat"
 
@@ -1955,11 +1983,11 @@ msgstr "stat"
 msgid "Status"
 msgstr "Status"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:81./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:82./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:140./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:141
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:88./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:89./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:147./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:148
 msgid "Street Line 1"
 msgstr "Gatlinje 1"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:86./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:87./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:145./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:146
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:93./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:94./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:152./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:153
 msgid "Street Line 2"
 msgstr "Gatlinje 2"
 
@@ -2103,6 +2131,10 @@ msgstr "Detta är systeminnehåll."
 msgid "This name is in use by another page."
 msgstr "Detta namn används av en annan sida."
 
+#: apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:13
+msgid "This note is only visible for people who can edit the page and have access to the admin."
+msgstr "Den här anteckningen är endast synlig för personer som kan redigera sidan och har tillgång till admin."
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "Denna sida kan anslutas från andra sidor. Det kan till exempel vara författare till en artikel."
@@ -2167,7 +2199,7 @@ msgstr "Unikt namn"
 msgid "Unique uri"
 msgstr "Unik uri"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:475./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
+#: apps/zotonic_mod_admin/src/mod_admin.erl:499./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 msgid "Untitled"
@@ -2263,7 +2295,7 @@ msgstr "Synlig till"
 msgid "Visit full edit page"
 msgstr "Besök hela redigeringssidan"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:61
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:68
 msgid "Visiting address"
 msgstr "Besöksadress"
 
@@ -2364,7 +2396,7 @@ msgstr "lägg till medieobjekt"
 msgid "block"
 msgstr "blockera"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:15
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:15
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:48
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:6./apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:16
 msgid "by"
@@ -6569,7 +6601,7 @@ msgstr "Från och med nu får du e-post från vår e-postlista."
 msgid "Give your e-mail address to subscribe to"
 msgstr "Ange din e-postadress att prenumerera på"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:16
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:15
 msgid "Go to mailinglist page"
 msgstr "Gå till e-postlistans sida"
 
@@ -6605,7 +6637,7 @@ msgstr "Det verkar som om du redan har skickat\n"
 msgid "Keep mailing"
 msgstr "Fortsätt maila"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:26
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:25
 msgid "Mail"
 msgstr "Post"
 
@@ -6706,7 +6738,7 @@ msgstr "Avsluta prenumerationen"
 msgid "Prefix"
 msgstr "Prefix"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:21./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:15
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:20./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:15
 msgid "Preview mailing"
 msgstr "Förhandsgranska utskick"
 
@@ -6754,7 +6786,7 @@ msgstr "Skicka utskick"
 msgid "Send test mailing"
 msgstr "Skicka testutskick"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:17./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:17
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:17./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:17
 msgid "Send test to address"
 msgstr "Skicka test till adress"
 
@@ -6770,11 +6802,11 @@ msgstr "Skicka utskicket direkt efter att kryssrutan \"publicerad\" har markerat
 msgid "Send the mailing right now, but do not include a link back to the website."
 msgstr "Skicka utskicket direkt, men ta inte med en länk tillbaka till webbplatsen."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:14
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:13
 msgid "Send this page to a mailinglist and view mailinglist statistics."
 msgstr "Skicka den här sidan till en adresslista och se statistik för adresslistan."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:24./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:17
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:23./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:17
 msgid "Send this page to a single address"
 msgstr "Skicka den här sidan till en enda adress"
 
@@ -6946,7 +6978,7 @@ msgstr "Ladda upp en fil med mottagarna. Filen måste innehålla en e-postadress
 msgid "Upload a list of recipients."
 msgstr "Ladda upp en lista med mottagare."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:19
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:18
 msgid "View this page as mailing."
 msgstr "Visa den här sidan som utskick."
 
