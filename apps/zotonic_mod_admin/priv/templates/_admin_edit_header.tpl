@@ -7,12 +7,12 @@ id
         <span class='admin-edit-dates'>
             {_ Created: _} {{ id.created|date:"Y-m-d H:i" }}
             {% if id.creator_id %}
-                {_ by _} <a href="{% url admin_edit_rsc id=id.creator_id %}">{{ id.creator_id.title }}</a>
+                {_ by _} <a href="{% url admin_edit_rsc id=id.creator_id %}">{% include "_name.tpl" id=id.creator_id %}</a>
             {% endif %}
             &middot;
             {_ Modified: _} {{ id.modified|date:"Y-m-d H:i" }}
             {% if id.modifier_id %}
-                {_ by _} <a href="{% url admin_edit_rsc id=id.modifier_id %}">{{ id.modifier_id.title }}</a>
+                {_ by _} <a href="{% url admin_edit_rsc id=id.modifier_id %}">{% include "_name.tpl" id=id.modifier_id %}</a>
             {% endif %}
         </span>
     </div>

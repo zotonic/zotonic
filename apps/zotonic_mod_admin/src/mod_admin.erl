@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2012 Marc Worrell
-%% Date: 2009-06-09
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Administrative interface.  Aka backend.
+%% @enddoc
 
-%% Copyright 2009-2012 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
 -mod_description("Provides administrative interface for editing pages, media, users etc.").
 -mod_depends([ base, authentication, mod_search, mod_mqtt, mod_wires ]).
 -mod_provides([ admin ]).
--mod_schema(1).
+-mod_schema(2).
 -mod_prio(1000).
 
 -export([
@@ -363,6 +363,30 @@ event(#postback{message = {admin_rsc_redirect, Args}}, Context) ->
     end,
     z_render:wire({redirect, [ {dispatch, Dispatch}, {id, SelectId} ]}, Context);
 
+event(#submit{ message={admin_note_update_rsc, Args} }, Context) ->
+    {id, Id} = proplists:lookup(id, Args),
+    Note = z_context:get_q(<<"note">>, Context),
+    case m_admin_note:update_rsc(Id, Note, Context) of
+        ok ->
+            OnSuccess = proplists:get_all_values(on_success, Args),
+            z_render:wire(OnSuccess, Context);
+        {error, enoent} ->
+            z_render:growl_error(?__("Sorry, that page is unknown.", Context), Context);
+        {error, eacces} ->
+            z_render:growl_error(?__("Sorry, you are not allowed to edit notes.", Context), Context)
+    end;
+event(#postback{ message={admin_note_delete_rsc, Args} }, Context) ->
+    {id, Id} = proplists:lookup(id, Args),
+    case m_admin_note:delete_rsc(Id, Context) of
+        ok ->
+            OnSuccess = proplists:get_all_values(on_success, Args),
+            z_render:wire(OnSuccess, Context);
+        {error, enoent} ->
+            z_render:growl_error(?__("Sorry, that page is unknown.", Context), Context);
+        {error, eacces} ->
+            z_render:growl_error(?__("Sorry, you are not allowed to edit notes.", Context), Context)
+    end;
+
 event(_E, Context) ->
     ?DEBUG(_E),
     Context.
@@ -531,7 +555,8 @@ context_language(Context) ->
     end.
 
 
-manage_schema(_Version, _Context) ->
+manage_schema(_Version, Context) ->
+    m_admin_note:install(Context),
     #datamodel{
         categories=[
             {admin_content_query,

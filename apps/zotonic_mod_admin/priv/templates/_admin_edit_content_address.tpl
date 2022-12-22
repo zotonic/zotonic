@@ -54,6 +54,13 @@
 	        </div>
 
 			{% catinclude "_admin_edit_content_address_email.tpl" id %}
+
+		    <div class="form-group">
+		        <label class="checkbox">
+		            <input type="checkbox" value="1" name="is_mailing_opt_out" {% if id.is_mailing_opt_out %}checked{% endif %}>
+		            {_ Do not sent mailings (opt out) _}
+		        </label>
+		    </div>
 		</div>
 	</div>
 

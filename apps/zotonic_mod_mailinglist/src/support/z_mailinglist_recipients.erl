@@ -78,6 +78,7 @@ list_recipients(List, Context) ->
         fun(Id, Acc) ->
             case z_acl:rsc_visible(Id, Context)
                 andalso m_rsc:p(Id, is_published_date, Context)
+                andalso not z_convert:to_bool( m_rsc:p_no_acl(Id, is_mailing_opt_out, Context) )
             of
                 true ->
                     Email = m_rsc:p_no_acl(Id, email_raw, Context),
