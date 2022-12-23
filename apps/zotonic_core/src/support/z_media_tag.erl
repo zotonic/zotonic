@@ -495,6 +495,7 @@ url2(Filename, Options, Context) ->
             % Map all ImageOpts to an opt string
             MimeFile = z_media_identify:guess_mime(Filename),
             {_Mime, Extension} = z_media_preview:out_mime(MimeFile, ImageOpts, Context),
+
             case props2url(ImageOpts, Context) of
                 {no_checksum, UrlProps} ->
                     PropsQuoted = z_url:url_encode(UrlProps),
@@ -713,6 +714,7 @@ url2props(Url, Context) ->
 is_valid_resize_mime(<<"image/jpeg">>) -> true;
 is_valid_resize_mime(<<"image/gif">>) -> true;
 is_valid_resize_mime(<<"image/png">>) -> true;
+is_valid_resize_mime(<<"image/webp">>) -> true;
 is_valid_resize_mime(_) -> false.
 
 map_mime_props(Props) ->
