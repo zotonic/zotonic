@@ -350,6 +350,7 @@ privacy_check(_Privacy, _IsPerson, _Id, _Context) ->
 
 
 is_private_property(<<"email">>) -> true;
+is_private_property(<<"email_raw">>) -> true;
 is_private_property(<<"phone">>) -> true;
 is_private_property(<<"phone_mobile">>) -> true;
 is_private_property(<<"phone_alt">>) -> true;
