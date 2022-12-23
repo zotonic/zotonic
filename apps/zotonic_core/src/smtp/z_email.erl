@@ -82,18 +82,27 @@ bounce_domain(Context) ->
 
 %% @doc Return the email address to be used in emails for the
 %% given id. The address will be formatted using the recipient's name.
--spec format_recipient(m_rsc:resource(), z:context()) -> {ok, binary()} | {error, term()}.
+-spec format_recipient(RecipientId, Context) -> {ok, EmailAddress} | {error, Reason} when
+    RecipientId :: m_rsc:resource(),
+    Context :: z:context(),
+    EmailAddress :: binary(),
+    Reason :: enoent | no_email | eacces.
 format_recipient(Id, Context) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
             {error, enoent};
         RscId ->
-            case m_rsc:p(Id, email_raw, Context) of
-                undefined ->
-                    {error, no_email};
-                Email ->
-                    {Name, _NameCtx} = z_template:render_to_iolist("_name.tpl", [{id, RscId}], Context),
-                    {ok, combine_name_email(iolist_to_binary(Name), Email)}
+            case z_acl:rsc_visible(RscId, Context) of
+                true ->
+                    case m_rsc:p_no_acl(Id, email_raw, Context) of
+                        undefined ->
+                            {error, no_email};
+                        Email ->
+                            {Name, _NameCtx} = z_template:render_to_iolist("_name.tpl", [{id, RscId}], Context),
+                            {ok, combine_name_email(iolist_to_binary(Name), Email)}
+                    end;
+                false ->
+                    {error, eacces}
             end
     end.
 
