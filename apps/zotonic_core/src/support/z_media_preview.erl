@@ -323,6 +323,7 @@ cmd_args(_, _Filters, _OutMime) ->
 
 default_background(<<"image/gif">>) -> [coalesce];
 default_background(<<"image/png">>) -> [coalesce];
+default_background(<<"image/webp">>) -> [coalesce];
 default_background(_) -> [{background,"white"}, {layers,"flatten"}].
 
 %% @doc Check if there is a blurring filter that prevents us from sharpening the resulting image
