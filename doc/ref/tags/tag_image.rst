@@ -323,7 +323,7 @@ format
 Use ``webp`` to produce an image in WEBP format. This reduces the size
 of images about about 30%. When used with ``lossless`` set to ``auto``
 it uses lossless compresson when the input image is in gif or or png format.
-Note: ``webp`` is currently the only option possible.
+Note: ``webp`` is currently the only possible option.
 Example::
 
     format=`webp`
