@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2019 Marc Worrell
-%% Date: 2009-04-09
-%%
-%% Copyright 2009-2019 Marc Worrell
+%% @copyright 2009-2022 Marc Worrell
+%% @doc Model for accessing and manipulating edges between resources.
+%% @enddoc
+
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -151,7 +152,12 @@ get_triple(Id, Context) ->
     end.
 
 %% @doc Get the edge id of a subject/pred/object combination
--spec get_id(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), #context{}) -> pos_integer() | undefined.
+-spec get_id(Subject, Predicate, Object, Context) -> EdgeId | undefined when
+    Subject :: m_rsc:resource(),
+    Predicate :: m_rsc:resource(),
+    Object :: m_rsc:resource(),
+    Context :: z:context(),
+    EdgeId :: pos_integer().
 get_id(SubjectId, PredId, ObjectId, Context)
     when is_integer(SubjectId), is_integer(PredId), is_integer(ObjectId) ->
     z_db:q1(
@@ -173,12 +179,18 @@ get_id(SubjectId, Pred, Object, Context) when not is_integer(Object) ->
     get_id(SubjectId, Pred, m_rsc:rid(Object, Context), Context).
 
 %% @doc Return the full description of all edges from a subject, grouped by predicate
-get_edges(SubjectId, Context) ->
-    case m_rsc:rid(SubjectId, Context) of
+-spec get_edges(Subject, Context) -> PredicateEdges when
+    Subject :: m_rsc:resource(),
+    Context :: z:context(),
+    PredicateEdges :: list( {Predicate, Edges}),
+    Predicate :: atom(),
+    Edges :: proplists:proplist().
+get_edges(Subject, Context) ->
+    case m_rsc:rid(Subject, Context) of
         undefined ->
             [];
-        SubjectId1 ->
-            case z_depcache:get({edges, SubjectId1}, Context) of
+        SubjectId ->
+            case z_depcache:get({edges, SubjectId}, Context) of
                 {ok, Edges} ->
                     Edges;
                 undefined ->
@@ -187,10 +199,10 @@ get_edges(SubjectId, Context) ->
                                e.seq, e.created, e.creator_id
                         from edge e join rsc p on p.id = e.predicate_id
                         where e.subject_id = $1
-                        order by e.predicate_id, e.seq, e.id", [SubjectId1], Context),
+                        order by e.predicate_id, e.seq, e.id", [SubjectId], Context),
                     Edges1 = z_utils:group_proplists(name, Edges),
                     Edges2 = [ {z_convert:to_atom(Pred), Es} || {Pred, Es} <- Edges1 ],
-                    z_depcache:set({edges, SubjectId1}, Edges2, ?DAY, [SubjectId1], Context),
+                    z_depcache:set({edges, SubjectId}, Edges2, ?DAY, [SubjectId], Context),
                     Edges2
             end
     end.
