@@ -387,7 +387,7 @@ end.
 %% Query - return proplists
 %% ----------------------------------------------------------------
 
--spec assoc_row(sql(), z:context()) -> proplists:proplist().
+-spec assoc_row(sql(), z:context()) -> proplists:proplist() | undefined.
 assoc_row(Sql, Context) ->
     assoc_row(Sql, [], Context).
 
