@@ -22,7 +22,7 @@
     </thead>
 
     <tbody>
-    {% for title, mid in m.search[{all_bytitle cat="mailinglist"}] %}
+    {% for title, mid in m.search[{all_bytitle cat="mailinglist" pagelen=1000}] %}
     {% with m.mailinglist.stats[mid] as stats %}
 	<tr id="mailinglist-{{ mid }}">
 	    <td>
