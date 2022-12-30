@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2019 Marc Worrell
-%% Date: 2009-04-09
-%%
-%% Copyright 2009-2019 Marc Worrell
+%% @copyright 2009-2022 Marc Worrell
+%% @doc Model for accessing and manipulating edges between resources.
+%% @enddoc
+
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -125,20 +126,38 @@ m_get(_Vs, _Msg, _Context) ->
 
 
 %% @doc Get the complete edge with the id
+-spec get(EdgeId, Context) -> proplists:proplist() | undefined when
+    EdgeId :: integer(),
+    Context :: z:context().
 get(Id, Context) ->
     z_db:assoc_row("select * from edge where id = $1", [Id], Context).
 
 %% @doc Get the edge as a triple {subject_id, predicate, object_id}
--spec get_triple(pos_integer(), #context{}) -> {m_rsc:resource_id(), atom(), m_rsc:resource_id()}.
+-spec get_triple(EdgeId, Context) -> {SubjectId, Predicate, ObjectId} | undefined when
+    EdgeId :: integer(),
+    Context :: z:context(),
+    SubjectId :: m_rsc:resource_id(),
+    Predicate :: atom(),
+    ObjectId :: m_rsc:resource_id().
 get_triple(Id, Context) ->
-    {SubjectId, Predicate, ObjectId} = z_db:q_row("
+    case z_db:q_row("
             select e.subject_id, r.name, e.object_id
             from edge e join rsc r on e.predicate_id = r.id
-            where e.id = $1", [Id], Context),
-    {SubjectId, z_convert:to_atom(Predicate), ObjectId}.
+            where e.id = $1", [Id], Context)
+    of
+        {SubjectId, Predicate, ObjectId} ->
+            {SubjectId, z_convert:to_atom(Predicate), ObjectId};
+        undefined ->
+            undefined
+    end.
 
 %% @doc Get the edge id of a subject/pred/object combination
--spec get_id(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), #context{}) -> pos_integer() | undefined.
+-spec get_id(Subject, Predicate, Object, Context) -> EdgeId | undefined when
+    Subject :: m_rsc:resource(),
+    Predicate :: m_rsc:resource(),
+    Object :: m_rsc:resource(),
+    Context :: z:context(),
+    EdgeId :: pos_integer().
 get_id(SubjectId, PredId, ObjectId, Context)
     when is_integer(SubjectId), is_integer(PredId), is_integer(ObjectId) ->
     z_db:q1(
@@ -160,12 +179,18 @@ get_id(SubjectId, Pred, Object, Context) when not is_integer(Object) ->
     get_id(SubjectId, Pred, m_rsc:rid(Object, Context), Context).
 
 %% @doc Return the full description of all edges from a subject, grouped by predicate
-get_edges(SubjectId, Context) ->
-    case m_rsc:rid(SubjectId, Context) of
+-spec get_edges(Subject, Context) -> PredicateEdges when
+    Subject :: m_rsc:resource(),
+    Context :: z:context(),
+    PredicateEdges :: list( {Predicate, Edges}),
+    Predicate :: atom(),
+    Edges :: proplists:proplist().
+get_edges(Subject, Context) ->
+    case m_rsc:rid(Subject, Context) of
         undefined ->
             [];
-        SubjectId1 ->
-            case z_depcache:get({edges, SubjectId1}, Context) of
+        SubjectId ->
+            case z_depcache:get({edges, SubjectId}, Context) of
                 {ok, Edges} ->
                     Edges;
                 undefined ->
@@ -174,17 +199,23 @@ get_edges(SubjectId, Context) ->
                                e.seq, e.created, e.creator_id
                         from edge e join rsc p on p.id = e.predicate_id
                         where e.subject_id = $1
-                        order by e.predicate_id, e.seq, e.id", [SubjectId1], Context),
+                        order by e.predicate_id, e.seq, e.id", [SubjectId], Context),
                     Edges1 = z_utils:group_proplists(name, Edges),
                     Edges2 = [ {z_convert:to_atom(Pred), Es} || {Pred, Es} <- Edges1 ],
-                    z_depcache:set({edges, SubjectId1}, Edges2, ?DAY, [SubjectId1], Context),
+                    z_depcache:set({edges, SubjectId}, Edges2, ?DAY, [SubjectId], Context),
                     Edges2
             end
     end.
 
-%% @doc Insert a new edge
--spec insert(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), z:context()) ->
-    {ok, EdgeId :: pos_integer()} | {error, term()}.
+%% @doc Insert a new edge. If the edge exists then the edge-id of te existing edge
+%% is returned.
+-spec insert(SubjectId, Predicate, ObjectId, Context) -> {ok, EdgeId} | {error, Reason} when
+    SubjectId :: m_rsc:resource(),
+    Predicate :: m_rsc:resource(),
+    ObjectId :: m_rsc:resource(),
+    Context :: z:context(),
+    EdgeId :: pos_integer(),
+    Reason :: {unknown_predicate, m_rsc:resource()} | object | subject | eacces.
 insert(Subject, Pred, Object, Context) ->
     insert(Subject, Pred, Object, [], Context).
 
@@ -248,8 +279,8 @@ insert1(SubjectId, PredId, ObjectId, Opts, Context) ->
                     {ok, EdgeId} = z_db:transaction(F, Context),
                     z_edge_log_server:check(Context),
                     {ok, EdgeId};
-                AclError ->
-                    {error, {acl, AclError}}
+                false ->
+                    {error, eacces}
             end;
         EdgeId ->
             % Edge exists - skip
@@ -281,7 +312,11 @@ maybe_seq_opt(Opts, SubjectId, PredId, Context) ->
             end
     end.
 
-%% @doc Delete an edge by Id
+%% @doc Delete an edge by Id. If the edge doesn't exist then 'ok' is returned.
+-spec delete(EdgeId, Context) -> ok | {error, Reason} when
+    EdgeId :: integer(),
+    Context :: z:context(),
+    Reason :: eacces.
 delete(Id, Context) ->
     {SubjectId, PredName, ObjectId} = get_triple(Id, Context),
     case z_acl:is_allowed(
@@ -301,13 +336,27 @@ delete(Id, Context) ->
             {error, eacces}
     end.
 
-%% @doc Delete an edge by subject, object and predicate id
--spec delete(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), z:context()) -> ok | {error, atom()}.
-delete(SubjectId, Pred, ObjectId, Context) ->
-    delete(SubjectId, Pred, ObjectId, [], Context).
+%% @doc Delete an edge by subject, object and predicate id. Returns ok
+%% if the edge is deleted or didn't exist.
+-spec delete(Subject, Predicate, Object, Context) -> ok | {error, Reason} when
+    Subject :: m_rsc:resource(),
+    Predicate :: m_rsc:resource(),
+    Object :: m_rsc:resource(),
+    Context :: z:context(),
+    Reason :: eacces | object | subject | predicate.
+delete(Subject, Predicate, Object, Context) ->
+    delete(Subject, Predicate, Object, [], Context).
 
--spec delete(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), list(), z:context()) -> ok | {error, atom()}.
-delete(SubjectId, Pred, ObjectId, _Options, Context) ->
+%% @doc Delete an edge by subject, object and predicate id. Options are ignored. Returns ok
+%% if the edge is deleted or didn't exist.
+-spec delete(Subject, Predicate, Object, Options, Context) -> ok | {error, Reason} when
+    Subject :: m_rsc:resource(),
+    Predicate :: m_rsc:resource(),
+    Object :: m_rsc:resource(),
+    Options :: list(),
+    Context :: z:context(),
+    Reason :: eacces | object | subject | predicate.
+delete(SubjectId, Pred, ObjectId, _Options, Context) when is_integer(SubjectId), is_integer(ObjectId) ->
     case to_predicate(Pred, Context) of
         {ok, PredId} ->
             {ok, PredName} = m_predicate:id_to_name(PredId, Context),
@@ -317,15 +366,14 @@ delete(SubjectId, Pred, ObjectId, _Options, Context) ->
                 Context
             ) of
                 true ->
-                    F = fun(Ctx) ->
-                        z_db:q(
-                            "delete from edge where subject_id = $1 and object_id = $2 and predicate_id = $3",
-                            [SubjectId, ObjectId, PredId],
-                            Ctx
-                        )
-                    end,
-
-                    z_db:transaction(F, Context),
+                    _ = z_db:q("
+                        delete from edge
+                        where subject_id = $1
+                          and object_id = $2
+                          and predicate_id = $3
+                        ",
+                        [SubjectId, ObjectId, PredId],
+                        Context),
                     z_edge_log_server:check(Context),
                     ok;
                 false ->
@@ -333,12 +381,22 @@ delete(SubjectId, Pred, ObjectId, _Options, Context) ->
             end;
         {error, _} = Error ->
             Error
+    end;
+delete(SubjectId, Pred, Object, Options, Context) when not is_integer(Object) ->
+    case m_rsc:rid(Object, Context) of
+        undefined -> {error, object};
+        Id -> delete(SubjectId, Pred, Id, Options, Context)
+    end;
+delete(Subject, Pred, Object, Options, Context) ->
+    case m_rsc:rid(Subject, Context) of
+        undefined -> {error, subject};
+        Id -> delete(Id, Pred, Object, Options, Context)
     end.
 
 to_predicate(Id, Context) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
-            {error, enoent};
+            {error, predicate};
         RId ->
             case m_rsc:is_a(RId, predicate, Context) of
                 true ->
@@ -350,80 +408,113 @@ to_predicate(Id, Context) ->
 
 
 
-%% @doc Delete multiple edges between the subject and the object
-delete_multiple(SubjectId, Preds, ObjectId, Context) ->
+%% @doc Delete multiple edges between the subject and the object. Invalid predicates are
+%% ignored.
+-spec delete_multiple(Subject, Predicates, Object, Context) -> ok | {error, Reason} when
+    Subject :: m_rsc:resource(),
+    Predicates :: [ m_rsc:resource() ],
+    Object :: m_rsc:resource(),
+    Context :: z:context(),
+    Reason :: eacces | subject | object.
+delete_multiple(SubjectId, Predicates, ObjectId, Context) when is_integer(SubjectId), is_integer(ObjectId) ->
     PredIds = lists:map(
         fun(Predicate) ->
             {ok, Id} = m_predicate:name_to_id(Predicate, Context),
             Id
         end,
-        Preds
-    ),
-    PredNames = [m_predicate:id_to_name(PredId, Context) || PredId <- PredIds],
-    Allowed = [z_acl:is_allowed(
-        delete,
-        #acl_edge{subject_id = SubjectId, predicate = PredName, object_id = ObjectId},
-        Context
-    ) || {ok, PredName} <- PredNames],
-    case is_allowed(Allowed) of
+        Predicates),
+    PredNames = [ m_predicate:id_to_name(PredId, Context) || PredId <- PredIds ],
+    IsAllowed = lists:all(
+        fun
+            ({ok, PredName}) ->
+                z_acl:is_allowed(
+                    delete,
+                    #acl_edge{subject_id = SubjectId, predicate = PredName, object_id = ObjectId},
+                    Context);
+            ({error, _}) ->
+                true
+        end,
+        PredNames),
+    case IsAllowed of
         true ->
-            F = fun(Ctx) ->
-                z_db:q("delete
-                        from edge
-                        where subject_id = $1
-                          and object_id = $2
-                          and predicate_id = any($3::int[])",
-                    [SubjectId, ObjectId, PredIds], Ctx)
-            end,
+            Count = z_db:q("delete
+                    from edge
+                    where subject_id = $1
+                      and object_id = $2
+                      and predicate_id = any($3::int[])",
+                [SubjectId, ObjectId, PredIds], Context),
 
-            case z_db:transaction(F, Context) of
+            case Count of
                 0 ->
                     ok;
                 N when is_integer(N) ->
                     z_edge_log_server:check(Context),
-                    ok;
-                Error ->
-                    Error
+                    ok
             end;
-        AclError ->
-            {error, {acl, AclError}}
+        false ->
+            {error, eacces}
+    end;
+delete_multiple(SubjectId, Pred, Object, Context) when is_integer(SubjectId) ->
+    case m_rsc:rid(Object, Context) of
+        undefined -> {error, object};
+        Id -> delete_multiple(SubjectId, Pred, Id, Context)
+    end;
+delete_multiple(Subject, Pred, Object, Context) ->
+    case m_rsc:rid(Subject, Context) of
+        undefined -> {error, subject};
+        Id -> delete_multiple(Id, Pred, Object, Context)
     end.
-
-is_allowed([]) -> true;
-is_allowed([true | Rest]) -> is_allowed(Rest);
-is_allowed([Error | _]) -> Error.
 
 
 %% @doc Replace the objects with the new list
 -spec replace(m_rsc:resource(), m_rsc:resource(), [ m_rsc:resource() ], z:context()) -> ok | {error, atom()}.
-replace(SubjectId, PredId, NewObjects, Context) when is_integer(PredId) ->
+replace(SubjectId, PredId, NewObjects, Context) when is_integer(PredId), is_integer(SubjectId) ->
     case m_predicate:is_predicate(PredId, Context) of
         true -> replace1(SubjectId, PredId, NewObjects, Context);
         false -> {error, {unknown_predicate, PredId}}
     end;
-replace(SubjectId, Pred, NewObjects, Context) ->
-    {ok, PredId} = m_predicate:name_to_id(Pred, Context),
-    replace1(SubjectId, PredId, NewObjects, Context).
+replace(SubjectId, Predicate, NewObjects, Context) when not is_integer(Predicate) ->
+    {ok, PredId} = m_predicate:name_to_id(Predicate, Context),
+    replace1(SubjectId, PredId, NewObjects, Context);
+replace(Subject, Predicate, NewObjects, Context) ->
+    case m_rsc:rid(Subject, Context) of
+        undefined -> {error, subject};
+        Id -> replace(Id, Predicate, NewObjects, Context)
+    end.
 
-
-replace1(SubjectId, PredId, NewObjects, Context) ->
+replace1(SubjectId, PredId, NewObjects0, Context) ->
+    NewObjects = lists:sort(lists:filtermap(
+        fun(Obj) ->
+            case m_rsc:rid(Obj, Context) of
+                undefined -> false;
+                OId -> {true, OId}
+            end
+        end,
+        NewObjects0)),
     {ok, PredName} = m_predicate:id_to_name(PredId, Context),
-    case objects(SubjectId, PredId, Context) of
+    case lists:sort(objects(SubjectId, PredId, Context)) of
         NewObjects ->
             ok;
 
         CurrObjects ->
-            % Check the ACL
-            Allowed1 = [z_acl:is_allowed(delete,
-                #acl_edge{subject_id = SubjectId, predicate = PredName, object_id = ObjectId},
-                Context)
-                || ObjectId <- CurrObjects -- NewObjects],
-            Allowed2 = [z_acl:is_allowed(insert,
-                #acl_edge{subject_id = SubjectId, predicate = PredName, object_id = ObjectId},
-                Context)
-                || ObjectId <- NewObjects -- CurrObjects],
+            % Check the ACL for insertion and deletion
+            IsAllowed1 = lists:all(
+                fun(ObjectId) ->
+                    z_acl:is_allowed(
+                        delete,
+                        #acl_edge{subject_id = SubjectId, predicate = PredName, object_id = ObjectId},
+                        Context)
+                end,
+                CurrObjects -- NewObjects),
+            IsAllowed2 = lists:all(
+                fun(ObjectId) ->
+                    z_acl:is_allowed(insert,
+                        #acl_edge{subject_id = SubjectId, predicate = PredName, object_id = ObjectId},
+                        Context)
+                end,
+                NewObjects -- CurrObjects),
 
-            case is_allowed(Allowed1) andalso is_allowed(Allowed2) of
+            case IsAllowed1 andalso IsAllowed2 of
                 true ->
                     Result = set_sequence(SubjectId, PredId, NewObjects, Context),
                     z_edge_log_server:check(Context),
@@ -433,12 +524,15 @@ replace1(SubjectId, PredId, NewObjects, Context) ->
             end
     end.
 
-%% @doc Duplicate all edges from one id to another id. Skip all edges that give
-%% ACL errors.
--spec duplicate(m_rsc:resource(), m_rsc:resource(), #context{}) ->
-    ok | {error, {atom(), m_rsc:resource_id()}}.
-duplicate(Id, ToId, Context) ->
-    case z_acl:rsc_editable(Id, Context) andalso z_acl:rsc_editable(ToId, Context) of
+%% @doc Duplicate all edges from one subject to another subject. Skip all edges that give
+%% ACL errors. Return eacces if the source or target subject is not editable.
+-spec duplicate(FromId, ToId, Context) -> ok | {error, Reason} when
+    FromId :: m_rsc:resource(),
+    ToId :: m_rsc:resource(),
+    Context :: z:context(),
+    Reason :: eacces.
+duplicate(FromId, ToId, Context) ->
+    case z_acl:rsc_editable(FromId, Context) andalso z_acl:rsc_editable(ToId, Context) of
         true ->
             F = fun(Ctx) ->
                 FromEdges = z_db:q("
@@ -446,7 +540,7 @@ duplicate(Id, ToId, Context) ->
                                 from edge
                                 where subject_id = $1
                                 order by seq, id",
-                    [m_rsc:rid(Id, Context)],
+                    [m_rsc:rid(FromId, Context)],
                     Ctx),
                 ToEdges = z_db:q(
                     "select predicate_id, object_id from edge where subject_id = $1",
@@ -486,7 +580,7 @@ duplicate(Id, ToId, Context) ->
             z_edge_log_server:check(Context),
             ok;
         false ->
-            {error, {eacces, Id}}
+            {error, eacces}
     end.
 
 %% @doc Move all edges from one id to another id, part of m_rsc:merge_delete/3
@@ -578,9 +672,15 @@ merge(WinnerId, LoserId, Context) ->
 
 %% @doc Update the nth edge of a subject.  Set a new object, keep the predicate.
 %% If there are not enough edges then an error is returned. The first edge is nr 1.
--spec update_nth( m_rsc:resource_id(), m_rsc:resource(), m_rsc:resource_id(), integer(), z:context() )
-    -> {ok, pos_integer()} | {error, eacces|enoent}.
-update_nth(SubjectId, Predicate, Nth, ObjectId, Context) ->
+-spec update_nth(SubjectId, Predicate, Nth, ObjectId, Context) -> {ok, EdgeId} | {error, Reason} when
+    SubjectId :: m_rsc:resource_id(),
+    Predicate :: m_rsc:resource(),
+    Nth :: integer(),
+    ObjectId :: m_rsc:resource_id(),
+    EdgeId :: pos_integer(),
+    Context :: z:context(),
+    Reason :: eacces | enoent | term().
+update_nth(SubjectId, Predicate, Nth, ObjectId, Context) when is_integer(SubjectId), is_integer(ObjectId) ->
     {ok, PredId} = m_predicate:name_to_id(Predicate, Context),
     {ok, PredName} = m_predicate:id_to_name(PredId, Context),
     F = fun(Ctx) ->
@@ -628,6 +728,16 @@ update_nth(SubjectId, Predicate, Nth, ObjectId, Context) ->
             end;
         false ->
             {error, eacces}
+    end;
+update_nth(Subject, Predicate, Nth, ObjectId, Context) when not is_integer(Subject) ->
+    case m_rsc:rid(Subject, Context) of
+        undefined -> {error, subject};
+        Id -> update_nth(Id, Predicate, Nth, ObjectId, Context)
+    end;
+update_nth(SubjectId, Predicate, Nth, Object, Context) ->
+    case m_rsc:rid(Object, Context) of
+        undefined -> {error, object};
+        Id -> update_nth(SubjectId, Predicate, Nth, Id, Context)
     end.
 
 
