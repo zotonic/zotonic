@@ -242,11 +242,14 @@ pivot_resource_1(Id, Lang, Context) ->
                     update_changed(Id, KVs1, RscProps, Context),
                     pivot_resource_custom(Id, Context),
 
+                    Now = calendar:universal_time(),
                     case to_datetime(render_block(date_repivot, Template, Vars, Context)) of
                         undefined ->
                             ok;
-                        DateRepivot ->
-                            z_pivot_rsc:insert_queue(Id, DateRepivot, Context)
+                        DateRepivot when DateRepivot > Now ->
+                            z_pivot_rsc:insert_queue(Id, DateRepivot, Context);
+                        _DateRepivot ->
+                            ok
                     end,
                     ok;
                 {error, enoent} ->
