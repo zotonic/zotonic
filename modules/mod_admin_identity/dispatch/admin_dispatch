@@ -1,6 +1,6 @@
 %% -*- mode: erlang -*-
 [
- {admin_user, ["admin", "users"], controller_admin, [{template, "admin_users.tpl"}, {selected, "users"}, seo_noindex, ssl]},
+ {admin_user, ["admin", "users"], controller_admin, [{acl_module, mod_admin_identity}, {template, "admin_users.tpl"}, {selected, "users"}, seo_noindex, ssl]},
 
  {identity_verify, ["identity", "verify", idn_id, verify_key], controller_template, [{template, "identity_verify.tpl"}, seo_noindex, ssl]}
 ].
