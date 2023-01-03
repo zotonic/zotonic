@@ -102,7 +102,7 @@ safe_to_atom(L) when is_list(L) ->
 %% @doc Return the list of modules
 all(Context) ->
     All = lists:sort(z_module_manager:all(Context)),
-    [ {Name, z_module_manager:title(Name)} || Name <- All ].
+    [ {Name, z_module_manager:mod_title(Name)} || Name <- All ].
 
 enabled(Context) ->
     case z_memo:get('m.enabled') of
