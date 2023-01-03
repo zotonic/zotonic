@@ -20,10 +20,13 @@ function queueCountInfo(feedbackSelector, invokeSelector) {
         resetUI,
         initUI;
 
-    setFeedback = function (message, count) {
+    setFeedback = function (message, backlog, total) {
         var msg = message;
-        if (count !== undefined) {
-            msg += " " + count;
+        if (backlog !== undefined) {
+            msg += " " + backlog;
+        }
+        if (total !== undefined && total > 0) {
+            msg += " (" + total + ")";
         }
         $feedback.text(msg);
     };
@@ -37,14 +40,15 @@ function queueCountInfo(feedbackSelector, invokeSelector) {
             });
     };
 
-    updateFeedback = function (count) {
-        var queueCount = parseInt(count, 10);
+    updateFeedback = function (result) {
+        let queueCount = parseInt(result.backlog, 10);
+        let queueTotal = parseInt(result.total, 10);
         if (queueCount > 0) {
             isUpdating = true;
-            setFeedback(COUNT_SIZE_MSG, queueCount);
+            setFeedback(COUNT_SIZE_MSG, queueCount, queueTotal);
             setTimeout(requestUpdate, UPDATE_REPEAT_MS);
         } else {
-            setFeedback(COUNT_SIZE_MSG, 0);
+            setFeedback(COUNT_SIZE_MSG, 0, queueTotal);
             clearInterval(retryIvalId);
             retryIvalId = undefined;
             if (isUpdating) {

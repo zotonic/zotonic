@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2021 Marc Worrell
+%% @copyright 2017-2022 Marc Worrell
 %% @doc Model for mod_admin
 
-%% Copyright 2017-2021 Marc Worrell
+%% Copyright 2017-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,8 +25,14 @@
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"pivot_queue_count">> | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_admin, Context) of
-        true -> {ok, {z_pivot_rsc:queue_count(Context), Rest}};
-        false -> {error, eacces}
+        true ->
+            Res = #{
+                <<"backlog">> => z_pivot_rsc:queue_count_backlog(Context),
+                <<"total">> => z_pivot_rsc:queue_count(Context)
+            },
+            {ok, {Res, Rest}};
+        false ->
+            {error, eacces}
     end;
 m_get([ <<"rsc_dialog_is_published">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_boolean(mod_admin, rsc_dialog_is_published, Context), Rest}};

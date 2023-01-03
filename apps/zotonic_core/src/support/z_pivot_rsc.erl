@@ -33,6 +33,7 @@
     pivot_resource_update/4,
     queue_all/1,
     queue_count/1,
+    queue_count_backlog/1,
     insert_queue/2,
 
     get_pivot_title/1,
@@ -156,6 +157,14 @@ queue_all(FromId, Context) ->
 -spec queue_count(z:context()) -> integer().
 queue_count(Context) ->
     z_db:q1("SELECT COUNT(*) FROM rsc_pivot_queue", Context).
+
+%% @doc Return the number of pivot queue items scheduled for direct pivot.
+-spec queue_count_backlog(z:context()) -> integer().
+queue_count_backlog(Context) ->
+    z_db:q1("
+        select count(*)
+        from rsc_pivot_queue
+        where (due is null or due < current_timestamp)", Context).
 
 %% @doc Insert a rsc_id in the pivot queue
 -spec insert_queue(m_rsc:resource_id() | list(m_rsc:resource_id()), z:context()) -> ok | {error, eexist}.
