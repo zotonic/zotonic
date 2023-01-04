@@ -752,7 +752,7 @@ mod_title(Module) ->
     Mod = module_to_mod(Module),
     try
         Title = proplists:get_value(mod_title, Mod:module_info(attributes), <<>>),
-        unicode:characters_to_binary(Title)
+        bin(Title)
     catch
         _M:_E -> undefined
     end.
@@ -765,7 +765,7 @@ mod_description(Module) ->
     Mod = module_to_mod(Module),
     try
         Desc = proplists:get_value(mod_description, Mod:module_info(attributes), <<>>),
-        unicode:characters_to_binary(Desc)
+        bin(Desc)
     catch
         _M:_E -> undefined
     end.
@@ -778,7 +778,7 @@ mod_author(Module) ->
     Mod = module_to_mod(Module),
     try
         Author = proplists:get_value(author, Mod:module_info(attributes), <<>>),
-        z_convert:to_binary(Author)
+        bin(Author)
     catch
         _M:_E -> undefined
     end.
@@ -804,6 +804,12 @@ set_db_schema_version(M, V, Context) ->
     ok.
 
 
+bin(A) when is_atom(A) ->
+    atom_to_binary(A, utf8);
+bin(A) when is_list(A) ->
+    unicode:characters_to_binary(A);
+bin(A) when is_binary(A) ->
+    A.
 
 %%====================================================================
 %% gen_server callbacks
