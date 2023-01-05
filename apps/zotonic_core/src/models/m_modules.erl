@@ -45,14 +45,18 @@ m_get([ <<"active">>, Module | Rest ], _Msg, Context) ->
     IsActive = lists:member(safe_to_atom(Module), active(Context)),
     {ok, {IsActive, Rest}};
 m_get([ <<"info">>, Module | Rest ], _Msg, Context) ->
-    M = safe_to_atom(Module),
-    Info = [
-        {enabled, lists:member(M, enabled(Context))},
-        {active, z_module_manager:active(M, Context)},
-        {title, z_module_manager:title(M)},
-        {prio, z_module_manager:prio(M)}
-    ],
-    {ok, {Info, Rest}};
+    case is_allowed(Context) of
+        true ->
+            M = safe_to_atom(Module),
+            Info = z_module_manager:mod_info(Module),
+            Info1 = Info#{
+                is_enabled => lists:member(M, enabled(Context)),
+                is_active => z_module_manager:active(M, Context)
+            },
+            {ok, {Info1, Rest}};
+        false ->
+            {error, eacces}
+    end;
 m_get([ <<"provided">>, Service | Rest ], _Msg, Context) ->
     M = safe_to_atom(Service),
     IsProvided = z_module_manager:is_provided(M, Context),
@@ -61,14 +65,14 @@ m_get([ <<"provided">> ], _Msg, Context) ->
     Provided = z_module_manager:get_provided(Context),
     {ok, {Provided, []}};
 m_get([ <<"get_provided">> | Rest ], _Msg, Context) ->
-    case z_acl:is_admin(Context) of
+    case is_allowed(Context) of
         true ->
             {ok, {z_module_manager:scan_provided(Context), Rest}};
         false ->
             {error, eacces}
     end;
 m_get([ <<"get_depending">> | Rest ], _Msg, Context) ->
-    case z_acl:is_admin(Context) of
+    case is_allowed(Context) of
         true ->
             {ok, {z_module_manager:scan_depending(Context), Rest}};
         false ->
@@ -76,6 +80,9 @@ m_get([ <<"get_depending">> | Rest ], _Msg, Context) ->
     end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
+
+is_allowed(Context) ->
+    z_acl:is_admin(Context) orelse z_acl:is_allowed(use, mod_admin_modules, Context).
 
 safe_to_atom(M) when is_atom(M) ->
     M;
@@ -95,7 +102,7 @@ safe_to_atom(L) when is_list(L) ->
 %% @doc Return the list of modules
 all(Context) ->
     All = lists:sort(z_module_manager:all(Context)),
-    [ {Name, z_module_manager:title(Name)} || Name <- All ].
+    [ {Name, z_module_manager:mod_title(Name)} || Name <- All ].
 
 enabled(Context) ->
     case z_memo:get('m.enabled') of

@@ -25,17 +25,19 @@
         {% with m.modules.get_provided as provided %}
         {% with m.modules.get_depending as depending %}
             {% for sort, prio, module, props in modules %}
+                {% with m.modules.info[module] as info %}
                 {% with configurable[module] as config_template %}
                     {% if config_template %}
-                        {% wire name="dialog-"|append:module action={dialog_open template=config_template title=props.mod_title|default:props.title module=module props=props} %}
+                        {% wire name="dialog-"|append:module action={dialog_open template=config_template title=info.title|default:props.title module=module props=props} %}
                     {% endif %}
                     <tr class="{% if not props.is_active %}unpublished{% endif %} clickable" {% if config_template %}data-event="dialog-{{ module }}"{% endif %}>
                         <td>
                             {% include "_icon_status.tpl" status_title=status[module] status=status[module] status_id=#status.module %}
                         </td>
                         <td>
-                            <strong>{{ props.mod_title|default:props.title }}</strong><br>
-                            {{ props.mod_description|default:"-" }}<br>
+                            <strong>{{ info.title|default:props.title|escape }}</strong>
+                            <small class="text-muted">&nbsp; {{ info.version|escape }}</small>
+                            <br>{{ info.description|escape }}
                         </td>
                         <td>
                             {% for d in props.mod_depends %}
@@ -86,6 +88,7 @@
                             </div>
                         </td>
                     </tr>
+                {% endwith %}
                 {% endwith %}
             {% empty %}
                 <tr>
