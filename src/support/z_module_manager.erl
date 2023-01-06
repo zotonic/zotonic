@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2015 Marc Worrell
-
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Module supervisor. Uses a z_supervisor.  Starts/restarts module processes.
 
-%% Copyright 2009-2015 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -51,11 +50,13 @@
          dependencies/1,
          startable/2,
          module_exists/1,
+         mod_info/1,
          title/1,
          reinstall/2
         ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("zotonic_release.hrl").
 
 %% The default module priority
 -define(MOD_PRIO, 500).
@@ -395,6 +396,103 @@ title(M) ->
         _M:_E -> undefined
     end.
 
+%% @doc Fetch information about a module or site.
+-spec mod_info(Module) -> Info when
+    Module :: atom(),
+    Info :: #{
+        prio := integer(),
+        version := binary() | undefined,
+        schema := integer() | undefined,
+        title := binary() | undefined,
+        author := binary() | undefined,
+        description := binary() | undefined,
+        app_dir := filename:filename_all() | undefined
+    }.
+mod_info(Module) when is_atom(Module) ->
+    LibDir = case srcdir(Module) of
+        undefined -> undefined;
+        Dir -> unicode:characters_to_binary(Dir)
+    end,
+    #{
+        prio => prio(Module),
+        version => find_version(LibDir),
+        schema => mod_schema(Module),
+        title => title(Module),
+        description => mod_description(Module),
+        author => mod_author(Module),
+        app_dir => LibDir
+    }.
+
+srcdir(M) ->
+    case module_exists(M) of
+        true ->
+            try
+                {source, Filename} = proplists:lookup(source, M:module_info(compile)),
+                filename:dirname(Filename)
+            catch
+                _:_ -> undefined
+            end;
+        false ->
+            undefined
+    end.
+
+find_version(undefined) ->
+    undefined;
+find_version(LibDir) ->
+    case maybe_git_version(LibDir) of
+        undefined ->
+            % Could be module in a site or zotonic:
+            % * mysite/modules/mod_foobar
+            % * zotonic/modules/mod_admin
+            case filename:basename(filename:dirname(LibDir)) of
+                <<"modules">> ->
+                    LibDir1 = filename:dirname(filename:dirname(LibDir)),
+                    Version = case filelib:is_file(filename:join([LibDir1, <<"src">>, <<"zotonic.erl">>])) of
+                        true ->
+                            bin(?ZOTONIC_VERSION);
+                        false ->
+                            case filelib:is_file(filename:join([LibDir1, <<"VERSION">>])) of
+                                true ->
+                                    {ok, B} = file:read_file(filename:join([LibDir1, <<"VERSION">>])),
+                                    B;
+                                false ->
+                                    undefined
+                            end
+                    end,
+                    case maybe_git_version(LibDir1) of
+                        undefined ->
+                            Version;
+                        GitVersion when Version =:= undefined ->
+                            GitVersion;
+                        GitVersion when is_binary(Version) ->
+                            <<Version/binary, "-", GitVersion/binary>>
+                    end;
+                _ ->
+                    undefined
+            end;
+        Version ->
+            Version
+    end.
+
+maybe_git_version(undefined) ->
+    undefined;
+maybe_git_version(LibDir) ->
+    GitDir = filename:join(LibDir, ".git"),
+    case filelib:is_dir(GitDir) of
+        true ->
+            git_version(LibDir);
+        false ->
+            undefined
+    end.
+
+git_version(LibDir) ->
+    Cmd = "(cd " ++ z_utils:os_filename(LibDir)
+         ++ "; git rev-parse --short HEAD)",
+    Res = os:cmd(Cmd),
+    iolist_to_binary([
+        z_string:trim(unicode:characters_to_binary(Res))
+    ]).
+
 
 %% @doc Get the schema version of a module.
 mod_schema(M) ->
@@ -405,6 +503,32 @@ mod_schema(M) ->
         _M:_E -> undefined
     end.
 
+%% @doc Get the description of a module.
+-spec mod_description(Module) -> Desc when
+    Module :: atom(),
+    Desc :: binary() | undefined.
+mod_description(Module) ->
+    try
+        Desc = proplists:get_value(mod_description, Module:module_info(attributes), <<>>),
+        bin(Desc)
+    catch
+        _M:_E -> undefined
+    end.
+
+%% @doc Get the author of a module.
+-spec mod_author(Module) -> Author when
+    Module :: atom(),
+    Author :: binary() | undefined.
+mod_author(Module) ->
+    try
+        Author = proplists:get_value(author, Module:module_info(attributes), <<>>),
+        bin(Author)
+    catch
+        _M:_E -> undefined
+    end.
+
+
+
 db_schema_version(M, Context) ->
     z_db:q1("SELECT schema_version FROM module WHERE name = $1", [M], Context).
 
@@ -412,6 +536,12 @@ set_db_schema_version(M, V, Context) ->
     1 = z_db:q("UPDATE module SET schema_version = $1 WHERE name = $2", [V, M], Context),
     ok.
 
+bin(A) when is_atom(A) ->
+    atom_to_binary(A, utf8);
+bin(A) when is_list(A) ->
+    unicode:characters_to_binary(A);
+bin(A) when is_binary(A) ->
+    A.
 
 
 %%====================================================================

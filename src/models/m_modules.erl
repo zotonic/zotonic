@@ -1,10 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% Date: 2010-05-05
-%%
+%% @copyright 2010-2023 Marc Worrell
 %% @doc Model for the zotonic modules. List all modules, enabled or disabled.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -49,11 +47,11 @@ m_find_value(info, #m{value=undefined} = M, _Context) ->
     M#m{value=info};
 m_find_value(Module, #m{value=info}, Context) ->
     M = z_convert:to_atom(Module),
-    [{enabled, lists:member(M, enabled(Context))},
-     {active, z_module_manager:active(M, Context)},
-     {title, z_module_manager:title(M)},
-     {prio, z_module_manager:prio(M)}].
-
+    Info = z_module_manager:mod_info(M),
+    Info#{
+        is_enabled => lists:member(M, enabled(Context)),
+        is_active => z_module_manager:active(M, Context)
+    }.
 
 %% @doc Transform a m_config value to a list, used for template loops
 %% @spec m_to_list(Source, Context) -> List
