@@ -48,6 +48,12 @@ search(Query, Context) ->
                     A -> {true, {A, V}}
                 end;
             ({K, _} = KV) when is_atom(K) ->
+                {true, KV};
+            ({{filter, _}, _} = KV) ->
+                {true, KV};
+            ({{facet, _}, _} = KV) ->
+                {true, KV};
+            ({{custom, _}, _} = KV) ->
                 {true, KV}
         end,
         Query1),
@@ -630,14 +636,15 @@ qterm({query_id, Id}, Context) ->
     QArgs = try
         parse_query_text(z_html:unescape(m_rsc:p(Id, 'query', Context)))
     catch
-        throw:{error,{unknown_query_term,Term}} ->
+        throw:{error,{unknown_query_term,Term}}:S ->
             ?LOG_ERROR(#{
                 text => <<"Unknown query term in search query">>,
                 in => zotonic_mod_search,
                 result => error,
                 reason => unknown_query_term,
                 query_id => Id,
-                term => Term
+                term => Term,
+                stack => S
             }),
             []
     end,
