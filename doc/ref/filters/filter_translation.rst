@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-translation.rst
 
+.. seealso:: :ref:`filter-translate`
+
 Lookup a specific translation in a translated text. If the text is not translated then
 the text is returned as-is.
 
@@ -8,7 +10,7 @@ The filter takes as input a value or other variable and as argument the language
 
 Example usage::
 
-    {{ text|translation:`en` }}
+    {{ text|translation:"en" }}
 
 If the variable ``text`` has the value::
 

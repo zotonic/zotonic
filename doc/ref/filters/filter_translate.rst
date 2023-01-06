@@ -1,6 +1,8 @@
 .. highlight:: django
 .. include:: meta-translate.rst
 
+.. seealso:: :ref:`filter-translation`
+
 Translates a (English) value to the current language or the given language.
 
 If the input is a ``#trans{}`` record then it is extended with the translations
