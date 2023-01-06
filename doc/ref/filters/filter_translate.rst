@@ -15,6 +15,6 @@ If the current language is ``de`` then the output is: ``"Abbrechen"``.
 
 An example with a specific language::
 
-  {{ "Cancel"|translate:`nl` }}
+  {{ "Cancel"|translate:"nl" }}
 
 The output would be ``"Annuleer"``.
