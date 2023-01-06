@@ -28,7 +28,7 @@
                 {% with m.modules.info[module] as info %}
                 {% with configurable[module] as config_template %}
                     {% if config_template %}
-                        {% wire name="dialog-"|append:module action={dialog_open template=config_template title=info.title|default:props.title module=module props=props} %}
+                        {% wire name="dialog-"|append:module action={dialog_open template=config_template title=info.title|default:props.title|escape module=module props=props} %}
                     {% endif %}
                     <tr class="{% if not props.is_active %}unpublished{% endif %} clickable" {% if config_template %}data-event="dialog-{{ module }}"{% endif %}>
                         <td>
