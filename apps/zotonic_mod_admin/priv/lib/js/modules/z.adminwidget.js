@@ -115,6 +115,11 @@ $.widget("z.adminwidget",
         }
         self.element.addClass("widget-expanded");
         self.showing = true;
+
+        if (typeof z_editor !== 'undefined') {
+            z_editor.init();
+        }
+
     },
     
     itemIsEmpty: function(el) {
