@@ -97,16 +97,19 @@ search(Name, Args, Context) when is_binary(Name), is_map(Args) ->
     try
         {ok, z_search:search(Name, Args2, Page, PageLen, Options, Context)}
     catch
-        throw:Error ->
+        Result:Reason ->
             ?LOG_ERROR(#{
                 text => <<"Error in m.search">>,
                 in => zotonic_core,
-                result => error,
-                reason => Error,
+                result => case Result of
+                    throw -> error;
+                    _ -> Result
+                end,
+                reason => Reason,
                 search_name => Name,
                 search_args => Args
             }),
-            {error, Error}
+            {error, Reason}
     end.
 
 %% @deprecated Use m_search:search/3

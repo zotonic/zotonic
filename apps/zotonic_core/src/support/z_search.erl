@@ -525,38 +525,39 @@ props_to_map(Props) when is_map(Props) ->
         #{},
         Props);
 props_to_map(Props) ->
-    {Map, _} = lists:foldr(
-        fun({K, V}, {Acc, Counts}) ->
-            K1 = z_convert:to_binary(K),
-            case maps:get(K1, Counts, 0) of
-                0 ->
-                    Acc1 = Acc#{ K1 => V },
-                    Counts1 = Counts#{ K1 => 1 },
-                    {Acc1, Counts1};
-                1 ->
-                    V1 = #{
-                        <<"all">> => [
-                            V,
-                            maps:get(K1, Acc)
-                        ]
-                    },
-                    Acc1 = Acc#{ K1 => V1 },
-                    Counts1 = Counts#{ K1 => 2 },
-                    {Acc1, Counts1};
-                N ->
-                    #{ <<"all">> := Vs } = maps:get(K1, Acc),
-                    V1 = #{
-                        <<"all">> => [ V | Vs ]
-                    },
-                    Acc1 = Acc#{ K1 => V1 },
-                    Counts1 = Counts#{ K1 => N + 1 },
-                    {Acc1, Counts1}
-            end
-        end,
-        {#{}, #{}},
-        Props),
+    {Map, _} = lists:foldr(fun props_to_map_fun/2, {#{}, #{}}, Props),
     Map.
 
+props_to_map_fun({K, V}, Acc) when is_atom(K); is_list(K) ->
+    props_to_map_fun_1({z_convert:to_binary(K), V}, Acc);
+props_to_map_fun({K, V}, Acc) ->
+    props_to_map_fun_1({K, V}, Acc).
+
+props_to_map_fun_1({K, V}, {Acc, Counts}) ->
+    case maps:get(K, Counts, 0) of
+        0 ->
+            Acc1 = Acc#{ K => V },
+            Counts1 = Counts#{ K => 1 },
+            {Acc1, Counts1};
+        1 ->
+            V1 = #{
+                <<"all">> => [
+                    V,
+                    maps:get(K, Acc)
+                ]
+            },
+            Acc1 = Acc#{ K => V1 },
+            Counts1 = Counts#{ K => 2 },
+            {Acc1, Counts1};
+        N ->
+            #{ <<"all">> := Vs } = maps:get(K, Acc),
+            V1 = #{
+                <<"all">> => [ V | Vs ]
+            },
+            Acc1 = Acc#{ K => V1 },
+            Counts1 = Counts#{ K => N + 1 },
+            {Acc1, Counts1}
+    end.
 
 %% @doc Given a query as proplist or map, return all results.
 -spec query_( proplists:proplist() | map(), z:context() ) -> list( m_rsc:resource_id() ).

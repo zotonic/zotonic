@@ -272,7 +272,7 @@ add_or_append(Key, Value, PropList) ->
     end,
     case proplists:get_value(Key, PropList) of
         undefined ->
-            [{Key, V} | PropList];
+            [{Key, [V]} | PropList];
         Val when is_list(Val) ->
             [{Key, [V | Val]} | proplists:delete(Key, PropList)];
         Val ->
