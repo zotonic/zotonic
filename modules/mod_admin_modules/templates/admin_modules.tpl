@@ -14,28 +14,37 @@
             <thead>
                 <tr>
                     <th width="1%"></th>
-                    <th width="19%">{_ Title _}</th>
-                    <th width="45%">{_ Description _}</th>
+                    <th width="17%">{_ Title _}</th>
+                    <th width="40%">{_ Description _}</th>
+                    <th width="12%">{_ Version _}</th>
                     <th width="5%">{_ Prio _}</th>
-                    <th width="30%">{_ Author _}</th>
+                    <th width="25%">{_ Author _}</th>
                 </tr>
             </thead>
 
             <tbody>
                 {% for sort, prio, module, props in modules %}
+                    {% with m.modules.info[module] as info %}
                     {% with configurable[module] as config_template %}
                         {% if config_template %}
-                            {% wire name="dialog-"|append:module action={dialog_open template=config_template title=props.mod_title|default:props.title module=module props=props} %}
+                            {% wire name="dialog-"|append:module action={dialog_open template=config_template title=info.title|default:props.title|escape module=module props=props} %}
                         {% endif %}
                         <tr id="{{ #li.module }}" class="{% if not props.is_active %}unpublished{% endif %}" {% if config_template %}data-event="dialog-{{ module }}"{% endif %}>
                             <td>
                                 {% include "_icon_status.tpl" status_title=status[module] status=status[module] status_id=#status.module %}
                             </td>
                             <td>
-                                <strong>{{ props.mod_title|default:props.title }}</strong><br />
-                                <span class="text-muted">{{ module }}</span>
+                                <strong>{{ info.title|default:props.title|escape }}</strong><br>
+                                <span class="text-muted">
+                                    {{ module }}
+                                </span>
                             </td>
-                            <td>{{ props.mod_description|default:"-" }}</td>
+                            <td>{{ info.description|default:props.mod_description|escape|default:"-" }}</td>
+                            <td>
+                                {% if info.version %}
+                                    <small>{{ info.version|escape }}</small>
+                                {% endif %}
+                            </td>
                             <td>{{ prio }}</td>
                             <td>
                                 <div class="pull-right buttons">
@@ -60,6 +69,7 @@
                                 {{ props.author|escape|default:"-" }}
                             </td>
                         </tr>
+                    {% endwith %}
                     {% endwith %}
                 {% empty %}
                     <tr>
