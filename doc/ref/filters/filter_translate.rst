@@ -7,7 +7,7 @@ If the input is a ``#trans{}`` record then it is extended with the translations
 from the .po files before the language lookup is done.  For this the ``#trans{}``
 record *must* have the English translation.
 
-Example with the default language lookup (accessible via the template variable ``z_language``):
+Example with the default language lookup (accessible via the template variable ``z_language``)::
 
   {{ "Cancel"|translate }}
 
@@ -18,4 +18,3 @@ An example with a specific language::
   {{ "Cancel"|translate:`nl` }}
 
 The output would be ``"Annuleer"``.
-
