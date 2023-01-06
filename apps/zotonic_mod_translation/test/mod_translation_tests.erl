@@ -19,3 +19,9 @@ test_url_strip_language2() ->
     Result = mod_translation:url_strip_language(Location),
     Expected = <<"/admin/translation">>,
     ?assertEqual(Expected, Result).
+
+% TODO: translations are not loaded for nl, make this work
+% filter_translate_test() ->
+%     Context = z:c(testsandbox),
+%     ?assertEqual(<<"Frans">>, filter_translate:translate(<<"French">>, nl, Context)),
+%     ?assertEqual(<<"Frans">>, filter_translate:translate(#trans{ tr = [{en, <<"French">>}] }, nl, Context)).

@@ -28,6 +28,7 @@ Strings
    ../filter_to_name
    ../filter_toc
    ../filter_tokens
+   ../filter_translate
    ../filter_trim
    ../filter_truncate
    ../filter_upper
