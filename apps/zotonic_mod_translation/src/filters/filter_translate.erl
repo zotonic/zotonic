@@ -26,11 +26,20 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-
+%% @doc Translate a value in the current language.
+-spec translate(Value, Context) -> Translated when
+    Value :: term(),
+    Context :: z:context(),
+    Translated :: term().
 translate(Value, Context) ->
     translate(Value, z_context:language(Context), Context).
 
 %% @doc Translate a value in a language.
+-spec translate(Value, Language, Context) -> Translated when
+    Value :: term(),
+    Language :: atom() | binary() | string(),
+    Context :: z:context(),
+    Translated :: term().
 translate(undefined, _Lang, _Context) ->
     undefined;
 translate(V, Lang, Context) when is_atom(Lang) ->
