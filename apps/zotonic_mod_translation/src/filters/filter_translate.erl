@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2023 Marc Worrell
 %% @doc Translate a string to the current or given language.
+%% @enddoc
 
 %% Copyright 2023 Marc Worrell
 %%
