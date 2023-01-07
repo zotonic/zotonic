@@ -649,7 +649,7 @@ connect_1(Args, RetryCt, MRef) ->
     Schema = get_arg(dbschema, Args),
     try
         case epgsql:connect(Hostname, Username, Password,
-                           [{database, Database}, {port, Port}]) of
+                           [{database, Database}, {port, Port}, {tcp_opts, [inet6]}]) of
             {ok, Conn} ->
                 set_schema(Conn, Schema);
             {error, #error{ codename = too_many_connections }} ->
