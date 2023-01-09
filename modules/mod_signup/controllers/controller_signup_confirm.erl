@@ -94,16 +94,19 @@ confirm_location(UserId, ContextUser) ->
             key = integer_to_binary(UserId)
         },
         ContextUser),
-    case is_empty(ReadyPage) of
+    ReadyPage1 = case is_empty(ReadyPage) of
         true ->
-            case z_notifier:first(#signup_confirm_redirect{id=UserId}, ContextUser) of
-                undefined ->
-                    m_rsc:p(UserId, page_url, ContextUser);
-                Loc ->
-                    Loc
-            end;
+            undefined;
         false ->
             z_convert:to_list(ReadyPage)
+    end,
+    case z_notifier:first(#signup_confirm_redirect{ id = UserId, request_page = ReadyPage1 }, ContextUser) of
+        undefined when ReadyPage1 =:= undefined ->
+            m_rsc:p(UserId, page_url, ContextUser);
+        undefined ->
+            ReadyPage1;
+        Loc ->
+            Loc
     end.
 
 is_empty(undefined) -> true;
