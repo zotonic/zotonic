@@ -6,6 +6,9 @@
 
 {% if page|default:q.p == '#reload' %}
     {% javascript %}
-        $('#signup_form input[name="page"]').val(window.location.pathname + window.location.search);
+        const path = window.location.pathname + window.location.search;
+        if (!path.match('^/([a-z][a-z]/)?$')) {
+            $('#signup_form input[name="page"]').val(path);
+        }
     {% endjavascript %}
 {% endif %}
