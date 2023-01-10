@@ -45,6 +45,7 @@ Make sure that these CSS files are loaded:
         update_template=update_template
         style_boxed=style_boxed
         style_width=style_width
+        page=page
     %}
 {% elseif logon_state == `reminder` %}
     {% if logon_context == 'admin_logon' %}

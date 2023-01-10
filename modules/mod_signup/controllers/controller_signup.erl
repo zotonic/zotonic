@@ -138,9 +138,11 @@ has_email_identity(Email, [_|Rest]) -> has_email_identity(Email, Rest).
 signup(Props, SignupProps, RequestConfirm, Context) ->
     UserId = proplists:get_value(user_id, SignupProps),
     SignupProps1 = proplists:delete(user_id, SignupProps),
-    case mod_signup:signup_existing(UserId, Props, SignupProps1, RequestConfirm, Context) of
+    ReadyPage = get_redirect_page(SignupProps1, Context),
+    SignupProps2 = [ {ready_page, ReadyPage} | proplists:delete(ready_page, SignupProps1) ],
+    case mod_signup:signup_existing(UserId, Props, SignupProps2, RequestConfirm, Context) of
         {ok, NewUserId} ->
-            handle_confirm(NewUserId, SignupProps1, RequestConfirm, Context);
+            handle_confirm(NewUserId, ReadyPage, RequestConfirm, Context);
         {error, {identity_in_use, username}} ->
             show_errors([error_duplicate_username], Context);
         {error, {identity_in_use, _}} ->
@@ -153,13 +155,13 @@ signup(Props, SignupProps, RequestConfirm, Context) ->
 
 
 %% Handle sending a confirm, or redirect to the 'ready_page' location
-handle_confirm(UserId, SignupProps, RequestConfirm, Context) ->
+handle_confirm(UserId, ReadyPage, RequestConfirm, Context) ->
     case not RequestConfirm orelse m_identity:is_verified(UserId, Context) of
         true ->
             ensure_published(UserId, z_acl:sudo(Context)),
             {ok, ContextUser} = z_auth:logon(UserId, Context),
-            Location = case get_redirect_page(SignupProps) of
-                [] ->
+            Location = case ReadyPage of
+                "" ->
                     case z_notifier:first(#signup_confirm_redirect{id=UserId}, ContextUser) of
                         undefined -> m_rsc:p(UserId, page_url, ContextUser);
                         Loc -> Loc
@@ -169,6 +171,20 @@ handle_confirm(UserId, SignupProps, RequestConfirm, Context) ->
             end,
             z_render:wire({redirect, [{location, Location}]}, ContextUser);
         false ->
+            % Store ready page for later redirect after verification
+            case z_notifier:first(
+                #tkvstore_put{
+                    type = <<"signup_ready_page">>,
+                    key = integer_to_binary(UserId),
+                    value = ReadyPage
+                },
+                Context)
+            of
+                undefined when ReadyPage =/= "", ReadyPage =/= undefined ->
+                    lager:info("Signup ready page not stored, as mod_tkvstore is not running.");
+                _ ->
+                    ok
+            end,
             % User is not yet verified, send a verification message to the user's external identities
             case mod_signup:request_verification(UserId, Context) of
                 {error, no_verifiable_identities} ->
@@ -181,8 +197,20 @@ handle_confirm(UserId, SignupProps, RequestConfirm, Context) ->
             end
     end.
 
-get_redirect_page(SignupProps) ->
-    z_convert:to_list(proplists:get_value(ready_page, SignupProps, [])).
+get_redirect_page(SignupProps, Context) ->
+    ReadyPage = proplists:get_value(ready_page, SignupProps),
+    case z_utils:is_empty(ReadyPage) of
+        true ->
+            Page = z_context:get_q("page", Context),
+            case z_utils:is_empty(Page) of
+                true ->
+                    "";
+                false ->
+                    z_context:site_url(Page, Context)
+            end;
+        false ->
+            z_context:site_url(z_convert:to_list(ReadyPage))
+    end.
 
 
 ensure_published(UserId, Context) ->

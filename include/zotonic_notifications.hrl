@@ -62,7 +62,7 @@
 -record(content_types_dispatch, {id}).
 
 % @doc Check where to go after a user logs on. Return an URL or undefined (first)
--record(logon_ready_page, {request_page=[]}).
+-record(logon_ready_page, {request_page=""}).
 
 %% @doc Determine post-logon actions; args are the arguments passed to the logon
 %% submit wire
@@ -113,7 +113,10 @@
 
 %% @doc Fetch the page an user is redirected to after signing up with a confirmed identity (first)
 %% Return either undefined or a Url
--record(signup_confirm_redirect, {id}).
+-record(signup_confirm_redirect, {
+        id :: m_rsc:resource_id(),
+        request_page = undefined :: undefined | string()
+    }).
 
 
 %% @doc Handle a javascript notification from the postback handler. The 'message' is the z_msg argument of

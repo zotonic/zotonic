@@ -55,10 +55,11 @@ event(#submit{}, Context) ->
         {ok, UserId} ->
             {ok, ContextUser} = z_auth:logon(UserId, Context),
             Location = confirm_location(UserId, ContextUser),
+            Location1 = z_context:site_url(Location, Context),
             z_render:wire([
                     {hide, [{target, "confirm_form"}]},
                     {show, [{target, "confirm_ok"}]},
-                    {redirect, [{location, Location}]}
+                    {redirect, [{location, Location1}]}
                 ], ContextUser);
         {error, _Reason} ->
             z_render:wire([
@@ -79,8 +80,38 @@ confirm(Key, Context) ->
             {ok, UserId}
     end.
 
-confirm_location(UserId, Context) ->
-    case z_notifier:first(#signup_confirm_redirect{id=UserId}, Context) of
-        undefined -> m_rsc:p(UserId, page_url, Context);
-        Loc -> Loc
+confirm_location(UserId, ContextUser) ->
+    % Fetch ready page, stored at signup
+    ReadyPage = z_notifier:first(
+            #tkvstore_get{
+                type = <<"signup_ready_page">>,
+                key = integer_to_binary(UserId)
+            },
+            ContextUser),
+    z_notifier:first(
+        #tkvstore_delete{
+            type = <<"signup_ready_page">>,
+            key = integer_to_binary(UserId)
+        },
+        ContextUser),
+    ReadyPage1 = case is_empty(ReadyPage) of
+        true ->
+            undefined;
+        false ->
+            z_convert:to_list(ReadyPage)
+    end,
+    case z_notifier:first(#signup_confirm_redirect{ id = UserId, request_page = ReadyPage1 }, ContextUser) of
+        undefined when ReadyPage1 =:= undefined ->
+            m_rsc:p(UserId, page_url, ContextUser);
+        undefined ->
+            ReadyPage1;
+        Loc ->
+            Loc
     end.
+
+is_empty(undefined) -> true;
+is_empty("") -> true;
+is_empty("#reload") -> true;
+is_empty(<<>>) -> true;
+is_empty(<<"#reload">>) -> true;
+is_empty(_) -> false.
