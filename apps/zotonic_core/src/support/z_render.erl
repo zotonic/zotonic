@@ -609,17 +609,27 @@ render_html(Html, Context) when is_binary(Html) ->
     {Html, Context};
 render_html(Html, Context) ->
     {Html1, Context1} = render_to_iolist(Html, Context),
-    {iolist_to_binary(Html1), Context1}.
+    {sanitize_utf8(iolist_to_binary(Html1)), Context1}.
 
 
 render_html_opt_all(false, Template, Vars, Context) ->
     MixedHtml = z_template:render(Template, Vars, Context),
     {Html, Context1} = render_to_iolist(MixedHtml, Context),
-    {iolist_to_binary(Html), Context1};
+    {sanitize_utf8(iolist_to_binary(Html)), Context1};
 render_html_opt_all(true, Template, Vars, Context) ->
     Templates = z_module_indexer:find_all(template, Template, Context),
     Html = [ z_template:render(Tpl, Vars, Context) || Tpl <- Templates ],
     render_html(Html, Context).
+
+sanitize_utf8(B) ->
+    case is_utf8(B) of
+        true -> B;
+        false -> z_string:sanitize_utf8(B)
+    end.
+
+is_utf8(<<>>) -> true;
+is_utf8(<<_/utf8, S/binary>>) -> is_utf8(S);
+is_utf8(_) -> false.
 
 
 %%% SIMPLE FUNCTION TO SHOW DIALOG OR GROWL (uses the dialog and growl actions) %%%
