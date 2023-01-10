@@ -3,8 +3,6 @@
 {% block title %}{_ Revisions for _} {{ id.title }}{% endblock %}
 
 {% block head_extra %}
-	{% lib "js/wdiff.js" "js/modules/z.make_diff.js" %}
-
 	<style type="text/css">
 		#revisions label {
 			display: inline-block;
@@ -145,4 +143,9 @@ z_notify("rev-diff", {
 {% endif %}
 
 {% endblock %}
+
+{% block js_extra %}
+	{% lib "js/wdiff.js" "js/modules/z.make_diff.js" %}
+{% endblock %}
+
 
