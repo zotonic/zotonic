@@ -188,7 +188,7 @@ mark_imported(RscId, Status, Context) ->
 %% @doc Find or create a placeholder resource for later import of referred ids.
 -spec maybe_create_empty( map(), map(), options(), z:context() ) -> {ok, {m_rsc:rescource_id(), map()}} | {error, term()}.
 maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
-    case is_imported_resource(Rsc, ImportedAcc, Options, Context) of
+    case is_known_resource(Rsc, ImportedAcc, Options, Context) of
         false ->
             Uri = maps:get(<<"uri">>, Rsc),
             case find_allowed_category(Rsc, #{}, Options, Context) of
@@ -237,7 +237,7 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                             },
                             {ok, {LocalId, ImportedAcc1}};
                         {error, duplicate_page_path} ->
-                            PagePath = unique_page_path( maps:get(<<"page_path">>, Rsc), Context ),
+                            PagePath = unique_page_path(undefined, maps:get(<<"page_path">>, Rsc), Context ),
                             ?LOG_WARNING(#{
                                 text => <<"Import of duplicate page_path">>,
                                 in => zotonic_core,
@@ -249,7 +249,7 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                             Rsc1 = Rsc#{ <<"page_path">> => PagePath },
                             maybe_create_empty(Rsc1, ImportedAcc, Options, Context);
                         {error, duplicate_name} ->
-                            Name = unique_name( maps:get(<<"name">>, Rsc), Context ),
+                            Name = unique_name(undefined, maps:get(<<"name">>, Rsc), Context ),
                             ?LOG_WARNING(#{
                                 text => <<"Import of duplicate name">>,
                                 in => zotonic_core,
@@ -288,7 +288,7 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
             {ok, {RscId, ImportedAcc}}
     end.
 
-is_imported_resource(Rsc, ImportedAcc, Options, Context) ->
+is_known_resource(Rsc, ImportedAcc, Options, Context) ->
     Uri = uri(Rsc),
     case maps:find(Uri, ImportedAcc) of
         {ok, LocalId} ->
@@ -300,11 +300,15 @@ is_imported_resource(Rsc, ImportedAcc, Options, Context) ->
                 RId ->
                     case proplists:get_value(is_authoritative, Options, false) of
                         true ->
-                            % A local copy was requested but the one present is
-                            % not authoritative.
                             case m_rsc:p_no_acl(RId, is_authoritative, Context) of
-                                true -> {true, RId};
-                                false -> false
+                                true ->
+                                    {true, RId};
+                                false ->
+                                    % A local authoritative copy was requested but the one
+                                    % present is not authoritative - in this case we will
+                                    % force a new copy that is authoritative without changing
+                                    % the current non-authoritative resource.
+                                    false
                             end;
                         false ->
                             {true, RId}
@@ -747,7 +751,6 @@ import(OptLocalId, #{
     }),
     RemoteRId = #{
         <<"uri">> => Uri,
-        <<"name">> => maps:get(<<"name">>, JSON, undefined),
         <<"is_a">> => maps:get(<<"is_a">>, JSON, [])
     },
     case is_local_site(Uri, Context) of
@@ -832,7 +835,7 @@ update_rsc(OptLocalId, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
             OK;
         {error, duplicate_page_path} ->
             OldPath = maps:get(<<"page_path">>, Rsc),
-            PagePath = unique_page_path(OldPath, Context),
+            PagePath = unique_page_path(OptLocalId, OldPath, Context),
             ?LOG_WARNING(#{
                 text => <<"Import of duplicate page_path">>,
                 in => zotonic_core,
@@ -848,7 +851,7 @@ update_rsc(OptLocalId, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
             update_rsc(OptLocalId, RemoteRId, Rsc1, ImportedAcc, Options, Context);
         {error, duplicate_name} ->
             OldName = maps:get(<<"name">>, Rsc),
-            Name = unique_name(OldName, Context),
+            Name = unique_name(OptLocalId, OldName, Context),
             ?LOG_WARNING(#{
                 text => <<"Import of duplicate name">>,
                 in => zotonic_core,
@@ -874,7 +877,7 @@ update_rsc_1(undefined, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
     ],
     Uri = maps:get(<<"uri">>, RscLang),
     IsImportDeleted = proplists:get_value(is_import_deleted, Options, false),
-    case is_imported_resource(RemoteRId, ImportedAcc, Options, Context) of
+    case is_known_resource(RemoteRId, ImportedAcc, Options, Context) of
         false when IsImportDeleted ->
             m_rsc:insert(Rsc, UpdateOptions, Context);
         false when not IsImportDeleted ->
@@ -885,13 +888,11 @@ update_rsc_1(undefined, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
                     m_rsc:insert(RscLang, UpdateOptions, Context)
             end;
         {true, LocalId} ->
-            case not is_imported(LocalId, Context)
-                or not m_rsc:p_no_acl(LocalId, is_authoritative, Context)
-            of
+            case m_rsc:p_no_acl(LocalId, is_authoritative, Context) of
                 true ->
-                    m_rsc:update(LocalId, RscLang, UpdateOptions, Context);
+                    {error, authoritative};
                 false ->
-                    {error, authoritative}
+                    m_rsc:update(LocalId, RscLang, UpdateOptions, Context)
             end
     end;
 update_rsc_1(LocalId, _RemoteRId, Rsc, _ImportedAcc, _Options, Context) when is_integer(LocalId) ->
@@ -1331,7 +1332,7 @@ replace_edges(LocalId, PredId, Os, ImportedAcc, Options, Context) ->
     {ObjectIds, ImportedAcc1} = lists:foldr(
         fun(Edge, {Acc, ImpAcc}) ->
             Object = maps:get(<<"object_id">>, Edge),
-            case is_imported_resource(Object, ImpAcc, Options, Context) of
+            case is_known_resource(Object, ImpAcc, Options, Context) of
                 false ->
                     case maybe_create_empty(Object, ImpAcc, Options, Context) of
                         {ok, {ObjectId, ImpAcc1}} ->
@@ -1522,16 +1523,22 @@ is_local_site(Uri, Context ) ->
     end.
 
 %% @doc Generate a new page path by appending a number.
--spec unique_page_path(binary(), z:context()) -> binary() | undefined.
-unique_page_path(Path, Context) ->
-    unique_page_path(Path, 1, Context).
+-spec unique_page_path(OptRscId, Path, Context) -> NewPath | undefined when
+    OptRscId :: m_rsc:resource_id() | undefined,
+    Path :: binary(),
+    Context :: z:context(),
+    NewPath :: binary().
+unique_page_path(OptRscId, Path, Context) ->
+    unique_page_path(OptRscId, Path, 1, Context).
 
-unique_page_path(Path, N, Context) ->
+unique_page_path(OptRscId, Path, N, Context) ->
     B = integer_to_binary(N),
     Path1 = <<Path/binary, $-, B/binary>>,
     case m_rsc:page_path_to_id(Path1, Context) of
+        {ok, OptRscId} ->
+            Path1;
         {ok, _} ->
-            unique_page_path(Path, N+1, Context);
+            unique_page_path(OptRscId, Path, N+1, Context);
         {redirect, _} ->
             Path1;
         {error, {unknown_page_path, _}} ->
@@ -1541,16 +1548,22 @@ unique_page_path(Path, N, Context) ->
     end.
 
 %% @doc Generate a new name by appending a number.
--spec unique_name(binary(), z:context()) -> binary() | undefined.
-unique_name(Name, Context) ->
-    unique_name(Name, 1, Context).
+-spec unique_name(OptRscId, Name, Context) -> NewName | undefined when
+    OptRscId :: m_rsc:resource_id() | undefined,
+    Name :: binary(),
+    Context :: z:context(),
+    NewName :: binary().
+unique_name(OptRscId, Name, Context) ->
+    unique_name(OptRscId, Name, 1, Context).
 
-unique_name(Name, N, Context) ->
+unique_name(OptRscId, Name, N, Context) ->
     B = integer_to_binary(N),
     Name1 = <<Name/binary, $_, B/binary>>,
     case m_rsc:name_to_id(Name1, Context) of
+        {ok, OptRscId} ->
+            Name1;
         {ok, _} ->
-            unique_page_path(Name, N+1, Context);
+            unique_page_path(OptRscId, Name, N+1, Context);
         {error, _} ->
             Name1
     end.
