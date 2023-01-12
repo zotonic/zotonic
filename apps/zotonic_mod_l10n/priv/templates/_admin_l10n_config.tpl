@@ -10,7 +10,7 @@
         %}
 
         <p class="help-block">
-            {_ This sets the default timezone. This timezone is used for the initial request by an user-agent or when the timezone is not known. _}
+            {_ This sets the default timezone. This timezone is used for the initial request by a user-agent or when the timezone is not known. _}
         </p>
     </div>
 </div>
