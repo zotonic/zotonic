@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-01-12 17:35\n"
+"PO-Revision-Date: 2023-01-12 18:38\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3223,7 +3223,7 @@ msgstr "Проверяю..."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:10
 msgid "When you add credentials to a person then the person becomes a user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What a user can do depends on the groups the user is member of."
-msgstr ""
+msgstr "Когда вы добавляете учетные данные человеку, этот человек становится пользователем. Человек или компьютер может войти в систему с этими учетными данными и выполнять действия в вашей системе Zotonic.<br/><br/>То, что может делать пользователь, зависит от групп, в которые он входит."
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:103
 msgid "You are not allowed to create the person page."
@@ -6171,7 +6171,7 @@ msgstr "Это часовой пояс, в котором вводятся пе�
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:13
 msgid "This sets the default timezone. This timezone is used for the initial request by a user-agent or when the timezone is not known."
-msgstr ""
+msgstr "Это устанавливает часовой пояс по умолчанию. Этот часовой пояс используется для первоначального запроса агентом пользователя или когда часовой пояс неизвестен."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:32
 msgid "Thursday"
