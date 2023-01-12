@@ -64,7 +64,7 @@ m_find_value(usage, #m{value=memory}, _Context) ->
     recon_alloc:memory(usage);
 
 % modules
-m_find_value(modules, #m{value=undefined} = M, Context) ->
+m_find_value(modules, #m{value=undefined} = M, _Context) ->
     M#m{value=modules};
 m_find_value(down, #m{value=modules}, Context) ->
     Status = z_module_manager:get_modules_status(Context),
