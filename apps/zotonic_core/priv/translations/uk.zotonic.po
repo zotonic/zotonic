@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-22 09:27\n"
+"PO-Revision-Date: 2023-01-12 18:38\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -1822,7 +1822,7 @@ msgstr "Замінити поточне середовище"
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
 msgstr "Ресурси в категорії <i>meta</i> можуть мати «функції»: певні властивості ресурсу, які вирішують, що показувати чи приховувати на певних сторінках в адміністраторі. Якщо це поле пусте, для цього мета-ресурсу не ввімкнено жодні функції."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:87
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:91
 msgid "Retrieving status..."
 msgstr "Отримання статусу..."
 
@@ -1856,7 +1856,7 @@ msgstr "Збережіть і перегляньте сторінку."
 msgid "Save this page."
 msgstr "Збережіть цю сторінку."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:52
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:56
 msgid "Search indices rebuilt."
 msgstr "Пошукові індекси перебудовані."
 
@@ -2318,7 +2318,7 @@ msgstr "Робочий довідник"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:52
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:73
 msgid "Y-m-d H:i"
 msgstr "Y-m-d H:i"
 
@@ -2344,7 +2344,7 @@ msgstr "Вам не дозволено видалити цю сторінку."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:16
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:143
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:141
 msgid "You are not allowed to edit this page."
 msgstr "Вам не дозволено редагувати цю сторінку."
 
@@ -3098,7 +3098,7 @@ msgid "Sorry, you can not remove your own username."
 msgstr "На жаль, Ви не можете видалити власне ім’я користувача."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:16
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:20
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:5
 msgid "Thank you"
 msgstr "Дякую Вам"
@@ -3222,8 +3222,8 @@ msgid "Verifying..."
 msgstr "Перевірка..."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:10
-msgid "When you add credentials to a person then the person becomes an user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What an user can do depends on the groups the user is member of."
-msgstr "Коли Ви додаєте облікові дані до особи, вона стає користувачем. Людина або машина можуть увійти з цими обліковими даними та виконувати дії у Вашій системі Zotonic.<br/><br/>Те, що може зробити користувач, залежить від груп, до яких він входить."
+msgid "When you add credentials to a person then the person becomes a user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What a user can do depends on the groups the user is member of."
+msgstr "Коли ви додаєте облікові дані людині, вона стає користувачем. Людина чи машина можуть увійти в систему за допомогою цих облікових даних і виконувати дії у вашій системі Zotonic.<br/><br/>Те, що може робити користувач, залежить від груп, членом яких він є."
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:103
 msgid "You are not allowed to create the person page."
@@ -3410,11 +3410,11 @@ msgstr "Ви не маєте дозволу редагувати перемож�
 msgid "not implemented yet"
 msgstr "ще не реалізовано"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:80
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:82
 msgid "Activate"
 msgstr "Активувати"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:71
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:73
 msgid "Configure"
 msgstr "Налаштувати"
 
@@ -3426,7 +3426,7 @@ msgstr "Не вдалося знайти модуль."
 msgid "Cyclic dependencies"
 msgstr "Циклічні залежності"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:75
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:77
 msgid "Deactivate"
 msgstr "Деактивувати"
 
@@ -3458,7 +3458,7 @@ msgstr "Залежності модулів"
 msgid "Modules are missing dependencies"
 msgstr "У модулях відсутні залежності"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:92
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:95
 msgid "No modules found"
 msgstr "Модулі не знайдені"
 
@@ -4414,7 +4414,7 @@ msgstr "Ви впевнені, що хочете повернутися до ц�
 msgid "At any moment you can make a backup of your system."
 msgstr "У будь-який момент Ви можете зробити резервну копію своєї системи."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:44
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:42
 msgid "Back to the edit page"
 msgstr "Повернутися до сторінки редагування"
 
@@ -4442,7 +4442,7 @@ msgstr "Змінена конфігурація."
 msgid "Changes since"
 msgstr "Зміни з того часу"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:42
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:40
 msgid "Check and possibly restore an earlier version of your page."
 msgstr "Перевірте та, можливо, відновіть попередню версію вашої сторінки."
 
@@ -4454,7 +4454,7 @@ msgstr "Натисніть на Список <b>і відновіть попер
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "Хмарне сховище файлів увімкнено. Локальні файли не будуть створені резервні копії. Переконайтеся, що ваша система хмарного сховища файлів має належну резервну копію."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36
 msgid "Deleted"
 msgstr "Видалено"
 
@@ -4494,7 +4494,7 @@ msgstr "Немає резервних копій."
 msgid "Not uploaded to filestore"
 msgstr "Не завантажено в сховище файлів"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:68
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:66
 msgid "Previous"
 msgstr "Попередній"
 
@@ -4506,7 +4506,7 @@ msgstr "Відновити резервну копію"
 msgid "Revert to this version…"
 msgstr "Поверніться до цієї версії…"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:34./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36
 msgid "Revisions for"
 msgstr "Перегляди для"
 
@@ -6170,8 +6170,8 @@ msgid "This is the time zone in which the publication period and date range is e
 msgstr "Це часовий пояс, у якому введено період публікації та діапазон дат. За замовчуванням використовується ваш часовий пояс. Якщо ви зміните часовий пояс, вам потрібно буде вручну виправити період публікації та діапазон дат."
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:13
-msgid "This sets the default timezone. This timezone is used for the initial request by an user-agent or when the timezone is not known."
-msgstr "Це встановлює часовий пояс за замовчуванням. Цей часовий пояс використовується для початкового запиту користувальницького агента або коли часовий пояс невідомий."
+msgid "This sets the default timezone. This timezone is used for the initial request by a user-agent or when the timezone is not known."
+msgstr "Це встановлює часовий пояс за умовчанням. Цей часовий пояс використовується для початкового запиту агентом користувача або коли часовий пояс невідомий."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:32
 msgid "Thursday"
@@ -6597,7 +6597,7 @@ msgstr "Ім'я"
 msgid "From now on you will receive mail from our mailing list."
 msgstr "Відтепер Ви отримуватимете листи з нашого списку розсилки."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:6
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:8
 msgid "Give your e-mail address to subscribe to"
 msgstr "Вкажіть свою адресу електронної пошти, щоб підписатися"
 
@@ -6846,7 +6846,7 @@ msgstr "Надіслано"
 msgid "Show all recipients &raquo;"
 msgstr "Показати всіх одержувачів &raquo;"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:27
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:29
 msgid "Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address."
 msgstr "На жаль, я не можу підписатися на Вас на список розсилки. Будь ласка, спробуйте пізніше або з іншою адресою електронної пошти."
 
@@ -6870,7 +6870,7 @@ msgstr "Вибачте, щось пішло не так. Будь ласка, с
 msgid "Subscribe"
 msgstr "Підписатися"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:3./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
 msgid "Subscribe to"
 msgstr "Підпишіться на"
 
@@ -7050,7 +7050,7 @@ msgstr "Ви отримали цей лист, тому що хтось хоті
 msgid "You received this mail because you are subscribed to the mailing list"
 msgstr "Ви отримали це повідомлення, оскільки підписані на список розсилки"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:7
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:9
 msgid "You will receive a confirmation in your e-mail."
 msgstr "Ви отримаєте підтвердження на свою електронну пошту."
 
@@ -7058,7 +7058,7 @@ msgstr "Ви отримаєте підтвердження на свою еле�
 msgid "You, or someone else, added your e-mail address to our mailing list"
 msgstr "Ви або хтось інший додали свою адресу електронної пошти до нашого списку розсилки"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:24
 msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. When you don’t receive it, then please check your spam folder."
 msgstr "Вашу адресу електронної пошти додано до списку розсилки. На Вашу адресу електронної пошти буде надіслано лист з підтвердженням, який надійде незабаром. Якщо Ви не отримаєте його, перевірте папку зі спамом."
 

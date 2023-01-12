@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-22 09:27\n"
+"PO-Revision-Date: 2023-01-12 18:38\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -1822,7 +1822,7 @@ msgstr "Zastąp obecny nośnik"
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
 msgstr "Zasoby w kategorii <i>meta</i> mogą mieć \"funkcje\": określone właściwości zasobów, które decydują o tym, co pokazać lub ukryć na określonych stronach w panelu administracyjnym. Jeśli to pole jest puste, żadne funkcje nie są włączone dla tego zasobu meta."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:87
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:91
 msgid "Retrieving status..."
 msgstr "Pobieram stan ..."
 
@@ -1856,7 +1856,7 @@ msgstr "Zapisz i wyświetl stronę."
 msgid "Save this page."
 msgstr "Zapisz tę stronę."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:52
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:56
 msgid "Search indices rebuilt."
 msgstr "Indeksy wyszukiwania odbudowane."
 
@@ -2318,7 +2318,7 @@ msgstr "Katalog roboczy"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:52
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:73
 msgid "Y-m-d H:i"
 msgstr "Y-m-d H:i"
 
@@ -2344,7 +2344,7 @@ msgstr "Nie masz uprawnień do usunięcia tej strony."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:16
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:143
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:141
 msgid "You are not allowed to edit this page."
 msgstr "Nie możesz edytować tej strony."
 
@@ -3098,7 +3098,7 @@ msgid "Sorry, you can not remove your own username."
 msgstr "Przepraszamy, nie możesz usunąć własnej nazwy użytkownika."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:16
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:20
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:5
 msgid "Thank you"
 msgstr "Dziękujemy"
@@ -3222,8 +3222,8 @@ msgid "Verifying..."
 msgstr "Weryfikuję ..."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:10
-msgid "When you add credentials to a person then the person becomes an user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What an user can do depends on the groups the user is member of."
-msgstr "Po dodaniu danych logowania do osoby, osoba ta staje się użytkownikiem. Osoba lub maszyna może zalogować się przy użyciu tych danych logowania i wykonywać działania w systemie Zotonic.<br/><br/>To, co może zrobić użytkownik, zależy od grup do których należy."
+msgid "When you add credentials to a person then the person becomes a user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What a user can do depends on the groups the user is member of."
+msgstr "Po dodaniu poświadczeń do osoby osoba ta staje się użytkownikiem. Osoba lub maszyna może zalogować się przy użyciu tych poświadczeń i wykonywać działania w systemie Zotonic.<br/><br/>To, co użytkownik może zrobić, zależy od grup, do których należy."
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:103
 msgid "You are not allowed to create the person page."
@@ -3410,11 +3410,11 @@ msgstr "Nie masz uprawnień aby edytować zwycięzcę."
 msgid "not implemented yet"
 msgstr "jeszcze niezaimplementowane"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:80
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:82
 msgid "Activate"
 msgstr "Aktywuj"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:71
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:73
 msgid "Configure"
 msgstr "Skonfiguruj"
 
@@ -3426,7 +3426,7 @@ msgstr "Nie udało się znaleźć modułu."
 msgid "Cyclic dependencies"
 msgstr "Zależności cykliczne"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:75
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:77
 msgid "Deactivate"
 msgstr "Wyłącz"
 
@@ -3458,7 +3458,7 @@ msgstr "Zależności modułów"
 msgid "Modules are missing dependencies"
 msgstr "W modułach brakuje zależności"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:92
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:95
 msgid "No modules found"
 msgstr "Nie znaleziono modułów"
 
@@ -4414,7 +4414,7 @@ msgstr "Czy na pewno chcesz wrócić do tej wersji?"
 msgid "At any moment you can make a backup of your system."
 msgstr "W każdej chwili możesz wykonać kopię zapasową swojego systemu."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:44
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:42
 msgid "Back to the edit page"
 msgstr "Powrót do strony edycji"
 
@@ -4442,7 +4442,7 @@ msgstr "Zmieniona konfiguracja."
 msgid "Changes since"
 msgstr "Zmiany od czasu"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:42
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:40
 msgid "Check and possibly restore an earlier version of your page."
 msgstr "Sprawdź i ewentualnie przywróć wcześniejszą wersję swojej strony."
 
@@ -4454,7 +4454,7 @@ msgstr "Kliknij na <b>Lista i przywróć wcześniejszą wersję</b> , aby uzyska
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "Magazyn plików w chmurze jest włączony. Pliki lokalne nie zostaną zarchiwizowane. Upewnij się, że system przechowywania plików w chmurze ma odpowiednią kopię zapasową."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36
 msgid "Deleted"
 msgstr "Usunięto"
 
@@ -4494,7 +4494,7 @@ msgstr "Brak kopii zapasowych."
 msgid "Not uploaded to filestore"
 msgstr "Nie przesłano do magazynu plików"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:68
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:66
 msgid "Previous"
 msgstr "Poprzedni"
 
@@ -4506,7 +4506,7 @@ msgstr "Przywrócenie kopii zapasowej"
 msgid "Revert to this version…"
 msgstr "Wróć do tej wersji…"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:34./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36
 msgid "Revisions for"
 msgstr "Zmiany dla"
 
@@ -6170,8 +6170,8 @@ msgid "This is the time zone in which the publication period and date range is e
 msgstr "Jest to strefa czasowa, w której wprowadza się okres publikacji i zakres dat. Domyślnie jest to Twoja strefa czasowa. Jeśli zmienisz strefę czasową, będziesz musiał ręcznie poprawić okres publikacji i zakres dat."
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:13
-msgid "This sets the default timezone. This timezone is used for the initial request by an user-agent or when the timezone is not known."
-msgstr "Ustawia domyślną strefę czasową. Ta strefa czasowa jest używana do początkowego żądania przez klienta użytkownika lub gdy strefa czasowa nie jest znana."
+msgid "This sets the default timezone. This timezone is used for the initial request by a user-agent or when the timezone is not known."
+msgstr "Spowoduje to ustawienie domyślnej strefy czasowej. Ta strefa czasowa jest używana do początkowego żądania klienta użytkownika lub gdy strefa czasowa nie jest znana."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:32
 msgid "Thursday"
@@ -6597,7 +6597,7 @@ msgstr "Imię"
 msgid "From now on you will receive mail from our mailing list."
 msgstr "Od teraz będziesz otrzymywać pocztę z naszej listy mailingowej."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:6
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:8
 msgid "Give your e-mail address to subscribe to"
 msgstr "Podaj swój adres e-mail, aby zapisać się na"
 
@@ -6846,7 +6846,7 @@ msgstr "Wysłano"
 msgid "Show all recipients &raquo;"
 msgstr "Pokaż wszystkich odbiorców &raquo;"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:27
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:29
 msgid "Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address."
 msgstr "Przepraszamy, nie mogliśmy zapisać Cię na listę mailingową. Spróbuj ponownie później lub z innym adresem e-mail."
 
@@ -6870,7 +6870,7 @@ msgstr "Przepraszamy, coś poszło nie tak. Prosimy spróbować ponownie się za
 msgid "Subscribe"
 msgstr "Subskrybuj"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:3./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
 msgid "Subscribe to"
 msgstr "Subskrybuj"
 
@@ -7050,7 +7050,7 @@ msgstr "Otrzymałeś tę wiadomość, ponieważ ktoś chciał Ci wysłać te inf
 msgid "You received this mail because you are subscribed to the mailing list"
 msgstr "Otrzymałeś/aś tę wiadomość, ponieważ zapisałeś/aś się na listę mailingową"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:7
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:9
 msgid "You will receive a confirmation in your e-mail."
 msgstr "Otrzymasz potwierdzenie w e-mailu."
 
@@ -7058,7 +7058,7 @@ msgstr "Otrzymasz potwierdzenie w e-mailu."
 msgid "You, or someone else, added your e-mail address to our mailing list"
 msgstr "Ty lub ktoś inny dodałeś/aś swój adres e-mail do naszej listy mailingowej"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:24
 msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. When you don’t receive it, then please check your spam folder."
 msgstr "Twój adres e-mail został dodany do listy mailingowej. Wiadomość potwierdzająca zostanie wysłana na Twój adres e-mail i niedługo dotrze. Jeśli jej nie otrzymasz, sprawdź folder spamu."
 

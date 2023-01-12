@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-22 09:27\n"
+"PO-Revision-Date: 2023-01-12 18:38\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -1822,7 +1822,7 @@ msgstr "แทนที่สื่อปัจจุบัน"
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
 msgstr "ทรัพยากรในหมวด <i>meta</i> สามารถมี 'คุณสมบัติ': คุณสมบัติของทรัพยากรบางอย่างที่กำหนดว่าจะแสดงหรือซ่อนอะไรในบางเพจในผู้ดูแลระบบ หากช่องนี้ว่างเปล่าจะไม่มีการเปิดใช้งานคุณลักษณะสำหรับทรัพยากรเมตานี้"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:87
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:91
 msgid "Retrieving status..."
 msgstr "กำลังเรียกข้อมูลสถานะ ..."
 
@@ -1856,7 +1856,7 @@ msgstr "บันทึกและดูหน้า"
 msgid "Save this page."
 msgstr "บันทึกหน้านี้"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:52
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:56
 msgid "Search indices rebuilt."
 msgstr "ดัชนีการค้นหาสร้างขึ้นใหม่"
 
@@ -2318,7 +2318,7 @@ msgstr "Work Directory"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:52
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:73
 msgid "Y-m-d H:i"
 msgstr "Y-m-d H:i"
 
@@ -2344,7 +2344,7 @@ msgstr "คุณไม่ได้รับอนุญาตให้ลบเ
 
 #: apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:16
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:143
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:141
 msgid "You are not allowed to edit this page."
 msgstr "คุณไม่ได้รับอนุญาตให้แก้ไขหน้านี้"
 
@@ -3098,7 +3098,7 @@ msgid "Sorry, you can not remove your own username."
 msgstr "ขออภัยคุณไม่สามารถลบชื่อผู้ใช้ของคุณเองได้"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:16
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:20
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:5
 msgid "Thank you"
 msgstr "ขอขอบคุณ"
@@ -3222,8 +3222,8 @@ msgid "Verifying..."
 msgstr "กำลังตรวจสอบ ..."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:10
-msgid "When you add credentials to a person then the person becomes an user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What an user can do depends on the groups the user is member of."
-msgstr "เมื่อคุณเพิ่มข้อมูลรับรองให้กับบุคคลบุคคลนั้นจะกลายเป็นผู้ใช้ บุคคลหรือเครื่องจักรสามารถเข้าสู่ระบบด้วยข้อมูลประจำตัวเหล่านั้นและดำเนินการกับระบบ Zotonic ของคุณ<br/><br/>สิ่งที่ผู้ใช้สามารถทำได้ขึ้นอยู่กับกลุ่มที่ผู้ใช้เป็นสมาชิก"
+msgid "When you add credentials to a person then the person becomes a user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What a user can do depends on the groups the user is member of."
+msgstr "เมื่อคุณเพิ่มข้อมูลประจำตัวให้กับบุคคล บุคคลนั้นจะกลายเป็นผู้ใช้ บุคคลหรือเครื่องจักรสามารถเข้าสู่ระบบด้วยข้อมูลประจำตัวเหล่านั้นและดำเนินการกับระบบ Zotonic ของคุณได้<br/><br/>สิ่งที่ผู้ใช้สามารถทำได้ขึ้นอยู่กับกลุ่มที่ผู้ใช้เป็นสมาชิกอยู่"
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:103
 msgid "You are not allowed to create the person page."
@@ -3410,11 +3410,11 @@ msgstr "คุณไม่มีสิทธิ์แก้ไขผู้ชน
 msgid "not implemented yet"
 msgstr "ยังไม่ได้ใช้งาน"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:80
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:82
 msgid "Activate"
 msgstr "เปิดใช้งาน"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:71
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:73
 msgid "Configure"
 msgstr "กำหนดค่า"
 
@@ -3426,7 +3426,7 @@ msgstr "ไม่พบโมดูล"
 msgid "Cyclic dependencies"
 msgstr "การอ้างอิงวงจร"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:75
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:77
 msgid "Deactivate"
 msgstr "ปิดใช้งาน"
 
@@ -3458,7 +3458,7 @@ msgstr "การขึ้นต่อกันของโมดูล"
 msgid "Modules are missing dependencies"
 msgstr "โมดูลไม่มีการอ้างอิง"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:92
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:95
 msgid "No modules found"
 msgstr "ไม่พบโมดูล"
 
@@ -4414,7 +4414,7 @@ msgstr "แน่ใจไหมว่าต้องการเปลี่ย
 msgid "At any moment you can make a backup of your system."
 msgstr "คุณสามารถสำรองข้อมูลระบบของคุณได้ตลอดเวลา"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:44
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:42
 msgid "Back to the edit page"
 msgstr "กลับไปที่หน้าแก้ไข"
 
@@ -4442,7 +4442,7 @@ msgstr "เปลี่ยนการกำหนดค่า"
 msgid "Changes since"
 msgstr "การเปลี่ยนแปลงตั้งแต่"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:42
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:40
 msgid "Check and possibly restore an earlier version of your page."
 msgstr "ตรวจสอบและอาจกู้คืนเวอร์ชันก่อนหน้าของเพจของคุณ"
 
@@ -4454,7 +4454,7 @@ msgstr "คลิกที่ <b>รายการและกู้คืน�
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "เปิดใช้งานที่เก็บไฟล์บนคลาวด์ ไฟล์ในเครื่องจะไม่ถูกสำรอง ตรวจสอบให้แน่ใจว่าระบบจัดเก็บไฟล์บนคลาวด์ของคุณมีการสำรองข้อมูลที่เหมาะสม"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36
 msgid "Deleted"
 msgstr "ลบแล้ว"
 
@@ -4494,7 +4494,7 @@ msgstr "ไม่มีการสำรองข้อมูล"
 msgid "Not uploaded to filestore"
 msgstr "ไม่ได้อัปโหลดไปยัง filestore"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:68
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:66
 msgid "Previous"
 msgstr "ก่อนหน้า"
 
@@ -4506,7 +4506,7 @@ msgstr "กู้คืนข้อมูลสำรอง"
 msgid "Revert to this version…"
 msgstr "เปลี่ยนกลับเป็นเวอร์ชัน…"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:34./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36
 msgid "Revisions for"
 msgstr "การแก้ไขสำหรับ"
 
@@ -6170,8 +6170,8 @@ msgid "This is the time zone in which the publication period and date range is e
 msgstr "นี่คือเขตเวลาที่ป้อนช่วงเวลาเผยแพร่และช่วงวันที่ ค่าเริ่มต้นเป็นเขตเวลาของคุณ หากคุณเปลี่ยนเขตเวลา คุณจะต้องแก้ไขช่วงเวลาเผยแพร่และช่วงวันที่ด้วยตนเอง"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:13
-msgid "This sets the default timezone. This timezone is used for the initial request by an user-agent or when the timezone is not known."
-msgstr "ตั้งค่าเขตเวลาเริ่มต้น เขตเวลานี้ใช้สำหรับคำร้องขอเริ่มต้นโดยตัวแทนผู้ใช้หรือเมื่อไม่ทราบเขตเวลา"
+msgid "This sets the default timezone. This timezone is used for the initial request by a user-agent or when the timezone is not known."
+msgstr "นี่เป็นการตั้งค่าเขตเวลาเริ่มต้น เขตเวลานี้ใช้สำหรับคำขอเริ่มต้นโดยตัวแทนผู้ใช้ หรือเมื่อไม่ทราบเขตเวลา"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:32
 msgid "Thursday"
@@ -6597,7 +6597,7 @@ msgstr "ชื่อจริง"
 msgid "From now on you will receive mail from our mailing list."
 msgstr "จากนี้ไปคุณจะได้รับอีเมลจากรายชื่ออีเมลของเรา"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:6
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:8
 msgid "Give your e-mail address to subscribe to"
 msgstr "ให้ที่อยู่อีเมลของคุณเพื่อสมัครสมาชิก"
 
@@ -6846,7 +6846,7 @@ msgstr "ส่งเมื่อ"
 msgid "Show all recipients &raquo;"
 msgstr "แสดงผู้รับทั้งหมด &raquo;"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:27
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:29
 msgid "Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address."
 msgstr "ขออภัยฉันสมัครรายชื่ออีเมลให้คุณไม่ได้ โปรดลองอีกครั้งในภายหลังหรือใช้ที่อยู่อีเมลอื่น"
 
@@ -6870,7 +6870,7 @@ msgstr "ขอโทษมีบางอย่างผิดพลาด. โ�
 msgid "Subscribe"
 msgstr "ติดตาม"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:3./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
 msgid "Subscribe to"
 msgstr "ติดตาม"
 
@@ -7050,7 +7050,7 @@ msgstr "คุณได้รับอีเมลนี้เนื่องจ
 msgid "You received this mail because you are subscribed to the mailing list"
 msgstr "คุณได้รับอีเมลนี้เนื่องจากคุณสมัครรับรายชื่ออีเมล"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:7
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:9
 msgid "You will receive a confirmation in your e-mail."
 msgstr "คุณจะได้รับการยืนยันทางอีเมลของคุณ"
 
@@ -7058,7 +7058,7 @@ msgstr "คุณจะได้รับการยืนยันทางอ
 msgid "You, or someone else, added your e-mail address to our mailing list"
 msgstr "คุณหรือบุคคลอื่นได้เพิ่มที่อยู่อีเมลของคุณในรายชื่ออีเมลของเรา"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:24
 msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. When you don’t receive it, then please check your spam folder."
 msgstr "ที่อยู่อีเมลของคุณจะถูกเพิ่มลงในรายชื่อผู้รับจดหมาย อีเมลยืนยันจะถูกส่งไปยังที่อยู่อีเมลของคุณและจะมาถึงในไม่ช้า เมื่อคุณไม่ได้รับโปรดตรวจสอบโฟลเดอร์สแปมของคุณ"
 

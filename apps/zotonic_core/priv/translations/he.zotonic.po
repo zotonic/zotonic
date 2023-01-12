@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-22 09:27\n"
+"PO-Revision-Date: 2023-01-12 18:38\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -1822,7 +1822,7 @@ msgstr "החלף את המדיום הנוכחי"
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
 msgstr "למשאבים בקטגוריית <i>מטא</i> יכולות להיות 'תכונות': מאפייני משאבים מסוימים המחליטים מה להציג או להסתיר בדפים מסוימים במנהל. אם תיבה זו ריקה, לא מופעלות תכונות למטא-משאב זה."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:87
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:91
 msgid "Retrieving status..."
 msgstr "מאחזר סטטוס ..."
 
@@ -1856,7 +1856,7 @@ msgstr "שמור והצג את הדף."
 msgid "Save this page."
 msgstr "שמור דף זה."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:52
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:56
 msgid "Search indices rebuilt."
 msgstr "מדדי חיפוש שנבנו מחדש."
 
@@ -2318,7 +2318,7 @@ msgstr "מדריך עבודה"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:52
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:73
 msgid "Y-m-d H:i"
 msgstr "Y-m-d H:i"
 
@@ -2344,7 +2344,7 @@ msgstr "אינך רשאי למחוק דף זה."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:16
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:143
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:141
 msgid "You are not allowed to edit this page."
 msgstr "אינך רשאי לערוך דף זה."
 
@@ -3098,7 +3098,7 @@ msgid "Sorry, you can not remove your own username."
 msgstr "מצטערים, אינך יכול להסיר את שם המשתמש שלך."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:16
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:20
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:5
 msgid "Thank you"
 msgstr "תודה"
@@ -3222,8 +3222,8 @@ msgid "Verifying..."
 msgstr "מאמת ..."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:10
-msgid "When you add credentials to a person then the person becomes an user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What an user can do depends on the groups the user is member of."
-msgstr "כשמוסיפים אישורים לאדם אז האדם הופך למשתמש. אדם או מכונה יכולים להתחבר עם האישורים האלה ולבצע פעולות במערכת הזוטונית שלך.<br/><br/>מה שמשתמש יכול לעשות תלוי בקבוצות שהמשתמש חבר בהן."
+msgid "When you add credentials to a person then the person becomes a user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What a user can do depends on the groups the user is member of."
+msgstr "כאשר אתה מוסיף אישורים לאדם אז האדם הופך למשתמש. אדם או מכונה יכולים להיכנס עם האישורים הללו ולבצע פעולות במערכת Zotonic שלך.<br/><br/>מה שמשתמש יכול לעשות תלוי בקבוצות בהן הוא חבר."
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:103
 msgid "You are not allowed to create the person page."
@@ -3410,11 +3410,11 @@ msgstr "אין לך הרשאה לערוך את הזוכה."
 msgid "not implemented yet"
 msgstr "עדיין לא מיושם"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:80
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:82
 msgid "Activate"
 msgstr "לְהַפְעִיל"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:71
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:73
 msgid "Configure"
 msgstr "הגדר"
 
@@ -3426,7 +3426,7 @@ msgstr "לא נמצא את המודול."
 msgid "Cyclic dependencies"
 msgstr "תלות מחזורית"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:75
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:77
 msgid "Deactivate"
 msgstr "השבת"
 
@@ -3458,7 +3458,7 @@ msgstr "תלות במודול"
 msgid "Modules are missing dependencies"
 msgstr "במודולים חסרים תלות"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:92
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:95
 msgid "No modules found"
 msgstr "לא נמצאו מודולים"
 
@@ -4414,7 +4414,7 @@ msgstr "האם אתה בטוח שברצונך לחזור לגרסה זו?"
 msgid "At any moment you can make a backup of your system."
 msgstr "בכל רגע תוכלו לבצע גיבוי של המערכת שלכם."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:44
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:42
 msgid "Back to the edit page"
 msgstr "חזרה לדף העריכה"
 
@@ -4442,7 +4442,7 @@ msgstr "תצורה שונתה."
 msgid "Changes since"
 msgstr "שינויים מאז"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:42
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:40
 msgid "Check and possibly restore an earlier version of your page."
 msgstr "בדוק ואפשר לשחזר גרסה קודמת של הדף שלך."
 
@@ -4454,7 +4454,7 @@ msgstr "לחץ על רשימת <b>ושחזר גרסה קודמת</b> כדי לק
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "חנות קבצים בענן מופעלת. הקבצים המקומיים לא יגובו. ודא שלמערכת חנות הקבצים בענן שלך יש גיבוי מתאים."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36
 msgid "Deleted"
 msgstr "נמחק"
 
@@ -4494,7 +4494,7 @@ msgstr "אין גיבויים."
 msgid "Not uploaded to filestore"
 msgstr "לא הועלה לחנות הקבצים"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:68
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:66
 msgid "Previous"
 msgstr "קודם"
 
@@ -4506,7 +4506,7 @@ msgstr "שחזור גיבוי"
 msgid "Revert to this version…"
 msgstr "חזור לגרסה זו…"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:34./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36
 msgid "Revisions for"
 msgstr "עדכונים עבור"
 
@@ -6170,7 +6170,7 @@ msgid "This is the time zone in which the publication period and date range is e
 msgstr "זהו אזור הזמן שבו מוזנים תקופת הפרסום וטווח התאריכים. ברירת המחדל היא לאזור הזמן שלך. אם תשנה את אזור הזמן, תצטרך לתקן את תקופת הפרסום וטווח התאריכים באופן ידני."
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:13
-msgid "This sets the default timezone. This timezone is used for the initial request by an user-agent or when the timezone is not known."
+msgid "This sets the default timezone. This timezone is used for the initial request by a user-agent or when the timezone is not known."
 msgstr "זה מגדיר את אזור הזמן המוגדר כברירת מחדל. אזור זמן זה משמש לבקשה הראשונית על ידי סוכן משתמש או כאשר אזור הזמן אינו ידוע."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:32
@@ -6597,7 +6597,7 @@ msgstr "שם פרטי"
 msgid "From now on you will receive mail from our mailing list."
 msgstr "מעתה ואילך תקבל דואר מרשימת התפוצה שלנו."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:6
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:8
 msgid "Give your e-mail address to subscribe to"
 msgstr "תן את כתובת הדואר האלקטרוני שלך להירשם"
 
@@ -6846,7 +6846,7 @@ msgstr "נשלח ב"
 msgid "Show all recipients &raquo;"
 msgstr "הצג את כל הנמענים &raquo;"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:27
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:29
 msgid "Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address."
 msgstr "מצטער, לא יכולתי להירשם כמנוי לרשימת התפוצה. נסה שוב מאוחר יותר או עם כתובת דואר אלקטרוני אחרת."
 
@@ -6870,7 +6870,7 @@ msgstr "מצטערים, משהו השתבש. נסה להירשם כמנוי מח
 msgid "Subscribe"
 msgstr "הירשם כמנוי"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:3./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
 msgid "Subscribe to"
 msgstr "הרשם ל"
 
@@ -7050,7 +7050,7 @@ msgstr "קיבלת את הדואר הזה כי מישהו רצה לשלוח לך
 msgid "You received this mail because you are subscribed to the mailing list"
 msgstr "קיבלת דואר זה מכיוון שאתה מנוי לרשימת התפוצה"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:7
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:9
 msgid "You will receive a confirmation in your e-mail."
 msgstr "תקבל אישור בדואר האלקטרוני שלך."
 
@@ -7058,7 +7058,7 @@ msgstr "תקבל אישור בדואר האלקטרוני שלך."
 msgid "You, or someone else, added your e-mail address to our mailing list"
 msgstr "אתה, או מישהו אחר, הוספת את כתובת הדואר האלקטרוני שלך לרשימת התפוצה שלנו"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:24
 msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. When you don’t receive it, then please check your spam folder."
 msgstr "כתובת הדואר האלקטרוני שלך מתווספת לרשימת התפוצה. דואר אישור נשלח לכתובת הדואר האלקטרוני שלך ויגיע בקרוב. כשאתה לא מקבל את זה, אנא בדוק את תיקיית הספאם שלך."
 
