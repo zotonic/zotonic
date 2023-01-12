@@ -8,7 +8,7 @@
                 {% endfor %}
             </p>
             <p>
-                <a class="btn btn-primary" href="{% url modules %}">{_ Modules _}</a>
+                <a class="btn btn-primary" href="{% url admin_modules %}">{_ Modules _}</a>
             </p>
         </div>
     {% endif %}
