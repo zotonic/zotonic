@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-22 09:27\n"
+"PO-Revision-Date: 2023-01-12 17:36\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -1822,7 +1822,7 @@ msgstr "替换这个媒体条目"
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
 msgstr "<i>元</i> 类别中的资源可以有 \"功能\"：某些资源属性决定了在管理员的某些页面上显示或隐藏什么。如果该框为空，则该元资源没有启用任何功能。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:87
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:91
 msgid "Retrieving status..."
 msgstr "检索状态..."
 
@@ -1856,7 +1856,7 @@ msgstr "保存并查看本页面。"
 msgid "Save this page."
 msgstr "保存本页面。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:52
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:56
 msgid "Search indices rebuilt."
 msgstr "搜索指数重建。"
 
@@ -2318,7 +2318,7 @@ msgstr "工作目录"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:52
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:73
 msgid "Y-m-d H:i"
 msgstr "Y-m-d H:i"
 
@@ -2344,7 +2344,7 @@ msgstr "没有权限删除这个页面。 "
 
 #: apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:16
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:143
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:141
 msgid "You are not allowed to edit this page."
 msgstr "您不能编辑本页面。"
 
@@ -3098,7 +3098,7 @@ msgid "Sorry, you can not remove your own username."
 msgstr "对不起，你不能删除自己的用户名。"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:16
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:20
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:5
 msgid "Thank you"
 msgstr "谢谢"
@@ -3222,8 +3222,8 @@ msgid "Verifying..."
 msgstr "核实..."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:10
-msgid "When you add credentials to a person then the person becomes an user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What an user can do depends on the groups the user is member of."
-msgstr "当一个人员被添加认证信息后，他就成为一个用户。这样自然人或者机器就可以通过这些认证信息来登录你的 Zotonic 系统执行操作。<br /></br />用户可执行的操作依赖于他所在的用户组。"
+msgid "When you add credentials to a person then the person becomes a user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What a user can do depends on the groups the user is member of."
+msgstr ""
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:103
 msgid "You are not allowed to create the person page."
@@ -3410,11 +3410,11 @@ msgstr "您没有编辑获奖者的权限。"
 msgid "not implemented yet"
 msgstr "未实施"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:80
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:82
 msgid "Activate"
 msgstr "启用"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:71
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:73
 msgid "Configure"
 msgstr "配置"
 
@@ -3426,7 +3426,7 @@ msgstr "找不到模块。"
 msgid "Cyclic dependencies"
 msgstr "循环依赖性"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:75
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:77
 msgid "Deactivate"
 msgstr "停用"
 
@@ -3458,7 +3458,7 @@ msgstr "模块依赖性"
 msgid "Modules are missing dependencies"
 msgstr "模块缺少依赖性"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:92
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:95
 msgid "No modules found"
 msgstr "没有找到模块"
 
@@ -4414,7 +4414,7 @@ msgstr "确认恢复到这个版本？"
 msgid "At any moment you can make a backup of your system."
 msgstr "任何时候你都可以创建系统的备份。"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:44
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:42
 msgid "Back to the edit page"
 msgstr "回到编辑页面"
 
@@ -4442,7 +4442,7 @@ msgstr "改变了配置。"
 msgid "Changes since"
 msgstr "变化自"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:42
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:40
 msgid "Check and possibly restore an earlier version of your page."
 msgstr "检查并恢复到页面的先前版本。"
 
@@ -4454,7 +4454,7 @@ msgstr "点击<b>列出并恢复到之前的版本</b>来预览本页面的之�
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "云文件存储已启用。不会备份本地文件。确保您的云文件存储系统具有正确的备份。"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36
 msgid "Deleted"
 msgstr "已删除"
 
@@ -4494,7 +4494,7 @@ msgstr "没有提供备份。"
 msgid "Not uploaded to filestore"
 msgstr "未上传到文件存储"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:68
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:66
 msgid "Previous"
 msgstr "前一页"
 
@@ -4506,7 +4506,7 @@ msgstr "从备份恢复"
 msgid "Revert to this version…"
 msgstr "恢复到此版本…。"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:34./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36
 msgid "Revisions for"
 msgstr "订正"
 
@@ -6170,8 +6170,8 @@ msgid "This is the time zone in which the publication period and date range is e
 msgstr "这是输入发布期和日期范围的时区。它默认为您的时区。如果更改时区，则需要手动更正发布期和日期范围。"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:13
-msgid "This sets the default timezone. This timezone is used for the initial request by an user-agent or when the timezone is not known."
-msgstr "这将设置默认时区。这个时区用于用户代理的初始请求，或者当时区不明时，使用这个时区。"
+msgid "This sets the default timezone. This timezone is used for the initial request by a user-agent or when the timezone is not known."
+msgstr ""
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:32
 msgid "Thursday"
@@ -6597,7 +6597,7 @@ msgstr "名字"
 msgid "From now on you will receive mail from our mailing list."
 msgstr "从现在开始你将会收到来自我们邮件列表的邮件。"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:6
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:8
 msgid "Give your e-mail address to subscribe to"
 msgstr "请输入你的 e-mail 地址来订阅"
 
@@ -6842,7 +6842,7 @@ msgstr "发送时间"
 msgid "Show all recipients &raquo;"
 msgstr "显示所有收件人 &raquo;"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:27
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:29
 msgid "Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address."
 msgstr "对不起，无法完成您的订阅。请稍后重试或使用其他 e-mail 地址。"
 
@@ -6866,7 +6866,7 @@ msgstr "对不起，出了点问题。请尝试重新订阅。"
 msgid "Subscribe"
 msgstr "订阅"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:3./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
 msgid "Subscribe to"
 msgstr "订阅到"
 
@@ -7046,7 +7046,7 @@ msgstr "你收到本邮件是因为有人给你发送了本信息。我们不会
 msgid "You received this mail because you are subscribed to the mailing list"
 msgstr "你收到本邮件是因为你订阅了邮件列表"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:7
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:9
 msgid "You will receive a confirmation in your e-mail."
 msgstr "你将收到一封确认邮件。"
 
@@ -7054,7 +7054,7 @@ msgstr "你将收到一封确认邮件。"
 msgid "You, or someone else, added your e-mail address to our mailing list"
 msgstr "你或者是其他人，将你的 e-mail 地址加入到了我们的邮件列表中"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:24
 msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. When you don’t receive it, then please check your spam folder."
 msgstr "你的 e-mail 地址已经被加入了邮件列表。我们已经给您的地址发送了一封确认邮件，如果没有收到，请检查垃圾邮件过滤。"
 
