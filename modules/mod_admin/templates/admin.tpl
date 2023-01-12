@@ -7,6 +7,8 @@
     <div class="admin-header">
         <h2>{_ Dashboard _}</h2>
     </div>
+
+    {% include "_admin_modules_down_warning.tpl" %}
     {% include "_admin_dashboard_buttons.tpl" %}
     {% include "_admin_dashboard.tpl" %}
 {% endblock %}

@@ -63,6 +63,22 @@ m_find_value(unused, #m{value=memory}, _Context) ->
 m_find_value(usage, #m{value=memory}, _Context) ->
     recon_alloc:memory(usage);
 
+% modules
+m_find_value(modules, #m{value=undefined} = M, Context) ->
+    M#m{value=modules};
+m_find_value(down, #m{value=modules}, Context) ->
+    Status = z_module_manager:get_modules_status(Context),
+    lists:flatten([
+        [ Module || {Module, _, _Pid, _Date} <- Specs ]
+        || {State, Specs} <- Status, State =/= running
+    ]);
+m_find_value(up, #m{value=modules}, Context) ->
+    Status = z_module_manager:get_modules_status(Context),
+    lists:flatten([
+        [ Module || {Module, _, _Pid, _Date} <- Specs ]
+        || {running, Specs} <- Status
+    ]);
+
 % init_arguments
 m_find_value(init_arguments, #m{value=undefined} = M, _Context) ->
     Args = init:get_arguments(),
