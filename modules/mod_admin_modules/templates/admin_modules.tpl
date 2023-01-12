@@ -9,6 +9,17 @@
             while others are externally developed. This page shows an overview of all modules which are currently known to this Zotonic installation. _}</p>
     </div>
 
+    {% if down %}
+        <div class="alert alert-warning">
+            <p>
+                <b><span class="glyphicon glyphicon-warning-sign"></span> {_ The following modules are not running: _}<br></b>
+                {% for mod in down %}
+                    {{ mod|escape }}{% if not forloop.last %},{% endif %}
+                {% endfor %}
+            </p>
+        </div>
+    {% endif %}
+
     <div {% include "_language_attrs.tpl" language=`en` %}>
         <table class="table table-striped do_adminLinkedTable">
             <thead>
