@@ -855,6 +855,7 @@ start_child(ManagerPid, Module, ModuleSup, Spec, Exports, Context) ->
                                                 % Try to start it
                                           z_supervisor:start_child(ModuleSup, Spec#child_spec.name, ?MODULE_START_TIMEOUT);
                                       Error ->
+                                          z:flush(Context),
                                           lager:error("Error starting module ~p, Schema initialization error:~n~p~n",
                                                       [Module, Error]),
                                           {error, {schema_init, Error}}
