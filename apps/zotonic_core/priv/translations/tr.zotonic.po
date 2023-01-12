@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-22 09:27\n"
+"PO-Revision-Date: 2023-01-12 17:36\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -1822,7 +1822,7 @@ msgstr "Geçerli ortamı değiştir"
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
 msgstr "<I>meta</i> kategorisindeki kaynaklar 'özellikler' içerebilir: yöneticinin belirli sayfalarında nelerin gösterileceğine veya gizleneceğine karar veren belirli kaynak özellikleri . Bu kutu boşsa, bu meta-kaynak için herhangi bir özellik etkin değildir."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:87
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:91
 msgid "Retrieving status..."
 msgstr "Durum alınıyor..."
 
@@ -1856,7 +1856,7 @@ msgstr "Kaydet ve sayfayı gör"
 msgid "Save this page."
 msgstr "Sayfayı kaydet"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:52
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:56
 msgid "Search indices rebuilt."
 msgstr "Arama indeksleri yeniden oluşturma."
 
@@ -2318,7 +2318,7 @@ msgstr "İş Rehberi"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:52
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:73
 msgid "Y-m-d H:i"
 msgstr "Y-m-d H:i"
 
@@ -2344,7 +2344,7 @@ msgstr "Bu sayfayı silmeye yetkiniz yok."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:16
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:143
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:141
 msgid "You are not allowed to edit this page."
 msgstr "Bu sayfayı düzenleme yetkiniz yok."
 
@@ -3098,7 +3098,7 @@ msgid "Sorry, you can not remove your own username."
 msgstr "Üzgünüz, kendi kullanıcı adınızı kaldıramazsınız."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:16
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:20
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:5
 msgid "Thank you"
 msgstr "Teşekkürler"
@@ -3222,8 +3222,8 @@ msgid "Verifying..."
 msgstr "Doğrulanıyor..."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:10
-msgid "When you add credentials to a person then the person becomes an user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What an user can do depends on the groups the user is member of."
-msgstr "Bir kişiye kullanıcı bilgileri eklerseniz o kişi bir kullanıcı olur. Bir kişi yada makine o kimlik bilgileri ile giriş yapabilir ve Zotonic sisteminizde eylemler gerçekleştirebilir.<br/><br/>Bir kullanıcının gerçekleştirebileceği eylemler dahil olduğu gruplara bağlıdır."
+msgid "When you add credentials to a person then the person becomes a user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What a user can do depends on the groups the user is member of."
+msgstr ""
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:103
 msgid "You are not allowed to create the person page."
@@ -3410,11 +3410,11 @@ msgstr "Kazananı düzenleme izniniz yok."
 msgid "not implemented yet"
 msgstr "henüz uygulanmadı"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:80
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:82
 msgid "Activate"
 msgstr "Etkinleştir"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:71
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:73
 msgid "Configure"
 msgstr "Yapılandır"
 
@@ -3426,7 +3426,7 @@ msgstr "Modül bulunamadı."
 msgid "Cyclic dependencies"
 msgstr "Döngüsel bağımlılıklar"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:75
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:77
 msgid "Deactivate"
 msgstr "Devre dışı bırak"
 
@@ -3458,7 +3458,7 @@ msgstr "Modül bağımlılıkları"
 msgid "Modules are missing dependencies"
 msgstr "Modüllerin bağımlılıkları eksik"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:92
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:95
 msgid "No modules found"
 msgstr "Modül bulunamadı"
 
@@ -4414,7 +4414,7 @@ msgstr "Bu sürüme geri dönmek istediğinizden emin misini?"
 msgid "At any moment you can make a backup of your system."
 msgstr "Herhangi bir anda sisteminizin yedeğini oluşturabilirsiniz."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:44
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:42
 msgid "Back to the edit page"
 msgstr "Düzenleme sayfasına geri dön"
 
@@ -4442,7 +4442,7 @@ msgstr "Değiştirilmiş yapılandırma."
 msgid "Changes since"
 msgstr "Tarihinden itibaren yapılan değişiklikler"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:42
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:40
 msgid "Check and possibly restore an earlier version of your page."
 msgstr "Sayfanızın daha önce tarihli bir sürümünü kontrol edin ve muhtemelen geri yükleyin."
 
@@ -4454,7 +4454,7 @@ msgstr "Bu sayfanın daha önce kaydedilmiş sürümlerine genel bir bakış iç
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "Bulut dosya deposu etkinleştirildi. Yerel dosyalar yedeklenmeyecektir. Bulut dosya deposu sisteminizin uygun bir yedeğe sahip olduğundan emin olun."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36
 msgid "Deleted"
 msgstr "Silindi"
 
@@ -4494,7 +4494,7 @@ msgstr "Yedek mevcut değil."
 msgid "Not uploaded to filestore"
 msgstr "Dosya deposuna yüklenmedi"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:68
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:66
 msgid "Previous"
 msgstr "Önceki"
 
@@ -4506,7 +4506,7 @@ msgstr "Yedeği geri yükle"
 msgid "Revert to this version…"
 msgstr "Bu sürüme geri dön…"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:34./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36
 msgid "Revisions for"
 msgstr "Şunun için düzeltmeler"
 
@@ -6170,8 +6170,8 @@ msgid "This is the time zone in which the publication period and date range is e
 msgstr "Yayın dönemi ve tarih aralığının girildiği saat dilimidir. Varsayılan olarak sizin saat diliminize göredir. Saat dilimini değiştirirseniz, yayın dönemini ve tarih aralığını manuel olarak düzeltmeniz gerekecektir."
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:13
-msgid "This sets the default timezone. This timezone is used for the initial request by an user-agent or when the timezone is not known."
-msgstr "Bu varsayılan saat dilimini ayarlar. Bu zaman dilimi, bir kullanıcı aracısı tarafından ilk istek için yada saat dilimi bilinmediğinde kullanılır."
+msgid "This sets the default timezone. This timezone is used for the initial request by a user-agent or when the timezone is not known."
+msgstr ""
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:32
 msgid "Thursday"
@@ -6597,7 +6597,7 @@ msgstr "İsim"
 msgid "From now on you will receive mail from our mailing list."
 msgstr "Artık posta listemizden posta alacaksınız."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:6
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:8
 msgid "Give your e-mail address to subscribe to"
 msgstr "Abone olmak için e-posta adresinizi verin"
 
@@ -6846,7 +6846,7 @@ msgstr "Tarihinde gönderildi"
 msgid "Show all recipients &raquo;"
 msgstr "Tüm alıcıları göster &raquo;"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:27
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:29
 msgid "Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address."
 msgstr "Üzgünüm, sizi posta listesine abone yapamadım. Lütfen daha sonra tekrar deneyin yada başka bir e-posta adresi ile."
 
@@ -6870,7 +6870,7 @@ msgstr "Maalesef bir şeyler ters gitti. Lütfen yeniden abone olmayı deneyin."
 msgid "Subscribe"
 msgstr "Abone ol"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:3./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
 msgid "Subscribe to"
 msgstr "Abone ol"
 
@@ -7050,7 +7050,7 @@ msgstr "Alıcılar listesini görüntülemenize veya düzenlemenize izin verilmi
 msgid "You received this mail because you are subscribed to the mailing list"
 msgstr "Posta listesine abone olduğunuz için bu postayı aldınız"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:7
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:9
 msgid "You will receive a confirmation in your e-mail."
 msgstr "E-postanızda bir onay mesajı alacaksınız."
 
@@ -7058,7 +7058,7 @@ msgstr "E-postanızda bir onay mesajı alacaksınız."
 msgid "You, or someone else, added your e-mail address to our mailing list"
 msgstr "Siz veya bir başkası e-posta adresinizi e-posta listemize ekledi"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:24
 msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. When you don’t receive it, then please check your spam folder."
 msgstr "E-posta adresiniz posta listesine eklendi. E-posta adresinize bir onay maili gönderildi ve kısa süre içerisinde size ulaşıcak. Onu almadıysanız, lütfen spam klasörünüzü kontrol edin."
 
