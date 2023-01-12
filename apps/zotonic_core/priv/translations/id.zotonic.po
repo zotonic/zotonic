@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-12-22 09:27\n"
+"PO-Revision-Date: 2023-01-12 17:36\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -1822,7 +1822,7 @@ msgstr "Ganti media saat ini"
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
 msgstr "Sumber daya dalam <i>meta</i> kategori dapat memiliki 'fitur': sumber daya yang tertentu yang sifat-sifat yang memutuskan apa untuk menyembunyikan atau menampilkan pada halaman tertentu di admin. Jika kotak ini kosong, tidak ada fitur yang diaktifkan untuk meta-sumber daya."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:87
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:91
 msgid "Retrieving status..."
 msgstr "Mengambil status..."
 
@@ -1856,7 +1856,7 @@ msgstr "Simpan dan lihat halamannya."
 msgid "Save this page."
 msgstr "Simpan halaman ini."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:52
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:56
 msgid "Search indices rebuilt."
 msgstr "Pencarian indeks dibangun kembali."
 
@@ -2318,7 +2318,7 @@ msgstr "Direktori Kerja"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:52
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:73
 msgid "Y-m-d H:i"
 msgstr "Y-m-d H:i"
 
@@ -2344,7 +2344,7 @@ msgstr "Anda tidak diizinkan untuk menghapus halaman ini."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:16
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:143
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:141
 msgid "You are not allowed to edit this page."
 msgstr "Anda tidak diizinkan untuk menyunting halaman ini."
 
@@ -3098,7 +3098,7 @@ msgid "Sorry, you can not remove your own username."
 msgstr "Maaf, Anda tidak dapat menghapus nama pengguna Anda sendiri."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:16
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:20
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:5
 msgid "Thank you"
 msgstr "Terima kasih"
@@ -3222,8 +3222,8 @@ msgid "Verifying..."
 msgstr "Memverifikasi..."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:10
-msgid "When you add credentials to a person then the person becomes an user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What an user can do depends on the groups the user is member of."
-msgstr "Ketika anda menambahkan kepercayaan kepada seseorang maka seseorang akan menjadi pengguna. Orang atau mesin dapat masuk dengan kredensial tersebut dan melakukan tindakan pada sistem Zotonic.<br/><br/>Apa yang pengguna dapat lakukan tergantung pada kelompok pengguna adalah anggota dari."
+msgid "When you add credentials to a person then the person becomes a user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What a user can do depends on the groups the user is member of."
+msgstr ""
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:103
 msgid "You are not allowed to create the person page."
@@ -3410,11 +3410,11 @@ msgstr "Anda tidak memiliki izin untuk menyunting pemenang."
 msgid "not implemented yet"
 msgstr "belum diimplementasikan"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:80
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:82
 msgid "Activate"
 msgstr "Aktifasi"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:71
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:73
 msgid "Configure"
 msgstr "Mengkonfigurasi"
 
@@ -3426,7 +3426,7 @@ msgstr "Tidak dapat menemukan modul."
 msgid "Cyclic dependencies"
 msgstr "Dependensi siklik"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:75
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:77
 msgid "Deactivate"
 msgstr "Menonaktifkan"
 
@@ -3458,7 +3458,7 @@ msgstr "Ketergantungan modul"
 msgid "Modules are missing dependencies"
 msgstr "Modul tidak memiliki dependensi"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:92
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:95
 msgid "No modules found"
 msgstr "Tidak ada modul yang ditemukan"
 
@@ -4413,7 +4413,7 @@ msgstr "Apakah anda yakin anda ingin kembali kedalam versi ini?"
 msgid "At any moment you can make a backup of your system."
 msgstr "Setiap saat anda bisa membuat cadangan sistem anda."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:44
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:42
 msgid "Back to the edit page"
 msgstr "Kembali ke halaman edit"
 
@@ -4441,7 +4441,7 @@ msgstr "Konfigurasi berubah."
 msgid "Changes since"
 msgstr "Perubahan sejak"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:42
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:40
 msgid "Check and possibly restore an earlier version of your page."
 msgstr "Memeriksa dan mungkin mengembalikan versi sebelumnya dari halaman anda."
 
@@ -4453,7 +4453,7 @@ msgstr "Klik pada <b>Daftar dan memulihkan pada versi sebelumnya</b> untuk menda
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "Penyimpanan file cloud diaktifkan. File lokal tidak akan dicadangkan. Pastikan sistem penyimpanan file cloud Anda memiliki cadangan yang tepat."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36
 msgid "Deleted"
 msgstr "Menghapus"
 
@@ -4493,7 +4493,7 @@ msgstr "Tidak ada backup yang hadir."
 msgid "Not uploaded to filestore"
 msgstr "Tidak diunggah ke filestore"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:68
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:66
 msgid "Previous"
 msgstr "Sebelumnya"
 
@@ -4505,7 +4505,7 @@ msgstr "Kembalikan cadangan"
 msgid "Revert to this version…"
 msgstr "Kembali ke versi ini…"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:34./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36
 msgid "Revisions for"
 msgstr "Revisi untuk"
 
@@ -6169,8 +6169,8 @@ msgid "This is the time zone in which the publication period and date range is e
 msgstr "Ini adalah zona waktu di mana periode publikasi dan rentang tanggal dimasukkan. Ini default ke zona waktu Anda. Jika Anda mengubah zona waktu maka Anda harus memperbaiki periode publikasi dan rentang tanggal secara manual."
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:13
-msgid "This sets the default timezone. This timezone is used for the initial request by an user-agent or when the timezone is not known."
-msgstr "Ini mengatur zona waktu standar. Ini zona waktu yang digunakan untuk permintaan awal oleh pengguna agent atau ketika zona waktu ini tidak diketahui."
+msgid "This sets the default timezone. This timezone is used for the initial request by a user-agent or when the timezone is not known."
+msgstr ""
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:32
 msgid "Thursday"
@@ -6596,7 +6596,7 @@ msgstr "Nama depan"
 msgid "From now on you will receive mail from our mailing list."
 msgstr "Mulai sekarang anda akan menerima e-mail dari daftar surat kami."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:6
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:8
 msgid "Give your e-mail address to subscribe to"
 msgstr "Berikan alamat e-mail Anda untuk berlangganan"
 
@@ -6845,7 +6845,7 @@ msgstr "Dikirim pada"
 msgid "Show all recipients &raquo;"
 msgstr "Tampilkan semua penerima &raquo;"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:27
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:29
 msgid "Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address."
 msgstr "Maaf, saya tidak bisa berlangganan kedalam daftar surat. Silakan coba lagi nanti atau dengan alamat e-mail lain."
 
@@ -6869,7 +6869,7 @@ msgstr "Maaf, terjadi kesalahan. Silakan coba untuk berlangganan kembali."
 msgid "Subscribe"
 msgstr "Berlangganan"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:3./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
 msgid "Subscribe to"
 msgstr "Berlangganan"
 
@@ -7049,7 +7049,7 @@ msgstr "Anda menerima email ini karena ada seseorang yang ingin mengirimkan info
 msgid "You received this mail because you are subscribed to the mailing list"
 msgstr "Anda menerima email ini karena anda berlangganan ke daftar mailing"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:7
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:9
 msgid "You will receive a confirmation in your e-mail."
 msgstr "Anda akan menerima konfirmasi di e-mail."
 
@@ -7057,7 +7057,7 @@ msgstr "Anda akan menerima konfirmasi di e-mail."
 msgid "You, or someone else, added your e-mail address to our mailing list"
 msgstr "Anda, atau orang lain, menambahkan alamat e-mail anda ke daftar mailing kami"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:24
 msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. When you don’t receive it, then please check your spam folder."
 msgstr "E-mail ini ditambahkan ke dalam daftar mailing. Sebuah email konfirmasi akan dikirim ke alamat e-mail anda dan akan segera tiba. Bila anda tidak menerima hal ini, maka silakan periksa folder spam anda."
 
