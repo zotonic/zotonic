@@ -11,7 +11,13 @@
 {% block metadata %}
     {% if m.config.seo.noindex.value or noindex %}
     	<meta name="robots" content="noindex,nofollow" />
-    {% elseif id and id.language and m.modules.active.mod_translation and not z_language|member:id.language %}
+    {% elseif zotonic_dispatch != `home`
+            and id
+            and id.page_path != '/'
+            and id.language
+            and m.modules.active.mod_translation
+            and not z_language|member:id.language
+    %}
     	{# Take one of the alternative urls, provided by mod_translation #}
     	<meta name="robots" content="noindex" />
     {% else %}
