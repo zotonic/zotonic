@@ -64,31 +64,32 @@ manage_schema(_Version, _Context) ->
                 <<"seo_noindex">> => true,
                 <<"title">> => #trans{
                     tr = [
-                        {nl, <<"Deze website maakt gebruik van cookies">>},
-                        {en, <<"This website uses cookies">>}                    ]
+                        {nl, <<"Deze website maakt gebruik van cookies"/utf8>>},
+                        {en, <<"This website uses cookies"/utf8>>}
+                    ]
                 },
                 <<"summary">> => #trans{
                     tr = [
-                        {nl, <<"Cookies zorgen ervoor dat de website goed kan fuctioneren, dat de website informatie kan onthouden die van invloed is op de werking of uitstraling ervan en om anoniem gegevens te verzamelen over hoe onze bezoekers door de site navigeren.">>},
-                        {en, <<"Cookies help make a website usable, enable a website to remember information that changes the way the website behaves or looks and to understand how visitors interact with the website by collecting and reporting information anonymously.">>}
+                        {nl, <<"Cookies zorgen ervoor dat de website goed kan fuctioneren, dat de website informatie kan onthouden die van invloed is op de werking of uitstraling ervan en om anoniem gegevens te verzamelen over hoe onze bezoekers door de site navigeren."/utf8>>},
+                        {en, <<"Cookies help make a website usable, enable a website to remember information that changes the way the website behaves or looks and to understand how visitors interact with the website by collecting and reporting information anonymously."/utf8>>}
                     ]
                 },
                 <<"cookies_functional">> => #trans{
                     tr = [
-                        {nl, <<"Functionele cookies zorgen ervoor dat de website goed kan functioneren, door basisfuncties als paginanavigatie en toegang tot beveiligde gedeelten van de website mogelijk te maken. Zonder deze cookies kan de website niet naar behoren werken.">>},
-                        {en, <<"Necessary cookies help make a website usable by enabling basic functions like page navigation and access to secure areas of the website. The website cannot function properly without these cookies.">>}
+                        {nl, <<"Functionele cookies zorgen ervoor dat de website goed kan functioneren, door basisfuncties als paginanavigatie en toegang tot beveiligde gedeelten van de website mogelijk te maken. Zonder deze cookies kan de website niet naar behoren werken."/utf8>>},
+                        {en, <<"Necessary cookies help make a website usable by enabling basic functions like page navigation and access to secure areas of the website. The website cannot function properly without these cookies."/utf8>>}
                     ]
                 },
                 <<"cookies_stats">> => #trans{
                     tr = [
-                        {nl, <<"Statistische of analytische cookies helpen ons te begrijpen hoe bezoekers de website gebruiken, door anoniem gegevens te verzamelen en te rapporteren.">>},
-                        {en, <<"Statistics cookies help us to understand how visitors interact with the website by collecting and reporting information anonymously.">>}
+                        {nl, <<"Statistische of analytische cookies helpen ons te begrijpen hoe bezoekers de website gebruiken, door anoniem gegevens te verzamelen en te rapporteren."/utf8>>},
+                        {en, <<"Statistics cookies help us to understand how visitors interact with the website by collecting and reporting information anonymously."/utf8>>}
                     ]
                 },
                 <<"cookies_marketing">> => #trans{
                     tr = [
-                        {nl, <<"Marketingcookies worden gebruikt om bezoekers te volgen wanneer ze verschillende websites bezoeken. Hun doel is advertenties weergeven die zijn toegesneden op en relevant zijn voor de individuele gebruiker. Deze advertenties worden zo waardevoller voor uitgevers en externe adverteerders.">>},
-                        {en, <<"Marketing cookies are used to track visitors across websites. The intention is to display ads that are relevant and engaging for the individual user and thereby more valuable for publishers and third party advertisers.">>}
+                        {nl, <<"Marketingcookies worden gebruikt om bezoekers te volgen wanneer ze verschillende websites bezoeken. Hun doel is advertenties weergeven die zijn toegesneden op en relevant zijn voor de individuele gebruiker. Deze advertenties worden zo waardevoller voor uitgevers en externe adverteerders."/utf8>>},
+                        {en, <<"Marketing cookies are used to track visitors across websites. The intention is to display ads that are relevant and engaging for the individual user and thereby more valuable for publishers and third party advertisers."/utf8>>}
                     ]
                 }
             }}
