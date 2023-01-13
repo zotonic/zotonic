@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2022 Marc Worrell
+%% @copyright 2014-2023 Marc Worrell
 %% @doc Fetch a preview from a video file using ffmpeg.
 
-%% Copyright 2014-2022 Marc Worrell
+%% Copyright 2014-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,11 +28,10 @@
 -define(PREVIEW_CMDLINE, "ffmpeg -itsoffset -~p -i ~s -vcodec png -vframes 1 -an -f rawvideo -loglevel error -y").
 
 -spec preview(file:filename_all(), map()) -> {ok, file:filename_all()} | {error, string()}.
-preview(MovieFile, Props) ->
-    #{
+preview(MovieFile, #{
         <<"duration">> := Duration,
         <<"orientation">> := Orientation
-    } = Props,
+    }) ->
     Start = case Duration of
         N when N =< 1 -> 0;
         N when N =< 30 -> 1;
@@ -84,7 +83,15 @@ preview(MovieFile, Props) ->
                     }),
                    {error, Other}
             end
-        end).
+        end);
+preview(MovieFile, _Props) ->
+   ?LOG_WARNING(#{
+        text => <<"Video preview skipped for non video">>,
+        result => error,
+        reason => novideo,
+        movie_file => MovieFile
+    }),
+    {error, novideo}.
 
 orientation_to_transpose(8) -> " -vf 'transpose=2' ";
 orientation_to_transpose(3) -> " -vf 'transpose=2,transpose=2' ";
