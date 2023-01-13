@@ -3,6 +3,7 @@ let
 in
 pkgs.mkShell {
   buildInputs = with pkgs; [
+    bashInteractive
     erlang
     rebar3
     erlfmt
