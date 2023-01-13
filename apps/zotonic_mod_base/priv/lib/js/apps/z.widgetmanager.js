@@ -27,12 +27,14 @@ limitations under the License.
     {
         widgetManager: function(context)
         {
-            context		= context || document.body;
-            var stack	= [context];
+            let stack    = [context || document.body];
+            let nodes   = [];
 
             while (stack.length > 0)
             {
-                var defaults, element = stack.pop();
+                var defaults;
+                var element = stack.pop();
+
                 if (typeof element.className == "string")
                 {
                     var objectClass = element.className.match(/do_[a-zA-Z0-9_]+/g);
@@ -44,7 +46,9 @@ limitations under the License.
                             var functionName = objectClass[i].substring(3);
                             var defaultsName = functionName;
 
-                            if ('dialog' == functionName) functionName = 'show_dialog'; // work around to prevent ui.dialog redefinition
+                            if ('dialog' == functionName) {
+                                functionName = 'show_dialog'; // work around to prevent ui.dialog redefinition
+                            }
 
                             if (typeof $(element)[functionName] == "function")
                             {
@@ -56,7 +60,12 @@ limitations under the License.
                                 {
                                     defaults = {}
                                 }
-                                $(element)[functionName]( $.extend({}, defaults, $(element).metadata(defaultsName)) );
+                                nodes.push({
+                                    element: element,
+                                    functionName: functionName,
+                                    defaults: defaults,
+                                    defaultsName: defaultsName
+                                });
                             }
                         }
                     }
@@ -72,6 +81,12 @@ limitations under the License.
                         }
                     }
                 }
+            }
+
+            while (nodes.length > 0)
+            {
+                let n = nodes.pop();
+                $(n.element)[n.functionName]( $.extend({}, n.defaults, $(n.element).metadata(n.defaultsName)) );
             }
         },
 
@@ -157,18 +172,23 @@ limitations under the License.
         var elem = this[0];
         var data_name = 'widget-'+functionName;
         var data = $(elem).data(data_name);
-        if(typeof data === "undefined")
+
+        if (typeof data === "undefined")
         {
             data = elem.getAttribute("data-"+functionName);
-            if (data) {
-                if (data.substr(0,1) == "{") {
+            if (data)
+            {
+                if (data.substr(0,1) == "{")
+                {
                     try {
                         data = JSON.parse(data);
                     } catch (e) {
                         console.error("Error parsing JSON in widget data attribute:", data);
                         data = {};
                     }
-                } else {
+                }
+                else
+                {
                     try {
                         data = eval("({" + data.replace(/[\n\r]/g,' ') + "})");
                     } catch (e) {
@@ -176,7 +196,9 @@ limitations under the License.
                         data = {};
                     }
                 }
-            } else {
+            }
+            else
+            {
                 data = {};
             }
             $(elem).data(data_name, data);

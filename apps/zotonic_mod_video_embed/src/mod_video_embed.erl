@@ -141,7 +141,11 @@ observe_rsc_update(#rsc_update{}, {error, _} = Error, _Context) ->
 
 %% @doc Return the media viewer for the embedded video (that is, when it is an embedded media).
 -spec observe_media_viewer(#media_viewer{}, z:context()) -> undefined | {ok, template_compiler:render_result()}.
-observe_media_viewer(#media_viewer{props= #{ <<"mime">> := ?EMBED_MIME } = Props}, Context) ->
+observe_media_viewer(#media_viewer{
+        id = Id,
+        props = #{ <<"mime">> := ?EMBED_MIME } = Props,
+        options = Options
+    }, Context) ->
     case maps:get(<<"video_embed_code">>, Props, undefined) of
         EmbedCode when is_binary(EmbedCode) ->
             EmbedCode1 = binary:replace(EmbedCode, <<"http://">>, <<"https://">>, [global]),
@@ -151,8 +155,20 @@ observe_media_viewer(#media_viewer{props= #{ <<"mime">> := ?EMBED_MIME } = Props
                 {is_iframe, IsIframe},
                 {medium, Props}
             ],
-            Html = z_template:render("_video_embed.tpl", Vars, Context),
-            {ok, Html};
+            {Html, _} = z_template:render_to_iolist("_video_embed.tpl", Vars, Context),
+            case z_notifier:first(#media_viewer_consent{
+                    id = Id,
+                    consent = all,
+                    html = Html,
+                    viewer_props = Props,
+                    viewer_options = Options
+                }, Context)
+            of
+                undefined ->
+                    {ok, Html};
+                {ok, _} = ConsentHtml ->
+                    ConsentHtml
+            end;
         _ ->
             undefined
     end;

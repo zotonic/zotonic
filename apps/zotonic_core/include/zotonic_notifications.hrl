@@ -1029,6 +1029,18 @@
     props :: z_media_identify:media_info()
 }).
 
+%% @doc Optionally wrap HTML with external content so that it adheres to the cookie/privacy
+%% settings of the current site visitor. Typically called with a 'first' by the code that
+%% generated the media viewer HTML, as that code has the knowledge if viewing the generated code
+%% has any privacy or cookie implications.
+%% Return {ok, HTML} or undefined
+-record(media_viewer_consent, {
+    id :: m_rsc:resource_id() | undefined,
+    consent = all :: functional | stats | all,
+    html :: iodata(),
+    viewer_props :: z_media_identify:media_info(),
+    viewer_options = [] :: list()
+}).
 
 %% @doc Fetch list of handlers for survey submits.
 %% Type: foldr
