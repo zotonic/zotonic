@@ -1,13 +1,20 @@
+{% with m.rsc[id].id as id %}
 {% if id and id.is_a.query and q.page %}
-    <link rel="canonical" href="{% block canonical %}{{ m.rsc[id].page_url_abs }}{% endblock %}?page={{ q.page|escape }}" />
+    <link rel="canonical" href="{% block canonical %}{{ id.page_url_abs }}{% endblock %}?page={{ q.page|escape }}" />
     <link rel="shortlink" href="{% block shortlink %}{% url id id=id absolute_url %}{% endblock %}" />
 {% elseif id %}
-	<link rel="canonical" href="{% block canonical %}{{ m.rsc[id].page_url_abs }}{% endblock %}" />
+	<link rel="canonical" href="{% block canonical %}{{ id.page_url_abs }}{% endblock %}" />
     <link rel="shortlink" href="{% block shortlink %}{% url id id=id absolute_url %}{% endblock %}" />
 {% endif %}
 {% if m.seo.noindex or noindex %}
     <meta name="robots" content="noindex,nofollow">
-{% elseif id and id.language and m.modules.active.mod_translation and not z_language|member:id.language %}
+{% elseif zotonic_dispatch != `home`
+        and id
+        and id.page_path != '/'
+        and id.language
+        and not z_language|member:id.language
+        and m.modules.active.mod_translation
+%}
     {# Take one of the alternative urls, provided by mod_translation #}
     <meta name="robots" content="noindex">
 {% elseif q.page and q.page > 1 %}
@@ -17,10 +24,10 @@
     {% with m.seo.keywords as keywords %}
     {% with m.seo.description as description %}
         {% if id %}
-            {% if m.rsc[id].seo_noindex or m.rsc[id].category_id.is_seo_noindex_cat %}
+            {% if id.seo_noindex or id.category_id.is_seo_noindex_cat %}
                 <meta name="robots" content="noindex">
             {% else %}
-                {% with m.rsc[id].seo_keywords as seo_keywords %}
+                {% with id.seo_keywords as seo_keywords %}
                     {% if seo_keywords %}
                         <meta name="keywords" content="{{ seo_keywords }}, {{ keywords|escape }}">
                     {% elseif id.o.subject as subjects %}
@@ -92,3 +99,4 @@
         </script>
     {% endif %}
 {% endif %}
+{% endwith %}

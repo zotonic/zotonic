@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013-2020 Marc Worrell
-%%
-%% @doc Model for access to language lists etc
+%% @copyright 2013-2023 Marc Worrell
+%% @doc Model for access to request language, language lists and language configuration.
+%% @end
 
-%% Copyright 2013-2020 Marc Worrell
+%% Copyright 2013-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -32,6 +32,8 @@
     main_languages/0,
     all_languages/0,
 
+    query_language/1,
+
     sort_codes/1,
     sort/1
 ]).
@@ -53,6 +55,8 @@ m_get([ <<"language_list_editable">> | Rest ], _Msg, Context) ->
     {ok, {language_list_editable(Context), Rest}};
 m_get([ <<"default_language">> | Rest ], _Msg, Context) ->
     {ok, {default_language(Context), Rest}};
+m_get([ <<"query_language">> | Rest ], _Msg, Context) ->
+    {ok, {query_language(Context), Rest}};
 m_get([ <<"x_default_language">> | Rest ], _Msg, Context) ->
     Lang = case z_language:is_language_enabled(en, Context) of
         true -> en;
@@ -126,6 +130,20 @@ main_languages() ->
 
 all_languages() ->
     sort(z_language:all_languages()).
+
+%% @doc Return the specific language as requested in the current HTTP query (URL).
+%% Return 'x-default' if there isn't a HTTP request or no language was
+%% specified in the current request.
+-spec query_language(Context) -> Language when
+    Context :: z:context(),
+    Language :: atom().
+query_language(Context) ->
+    case mod_translation:get_q_language(Context) of
+        undefined ->
+            'x-default';
+        Language ->
+            Language
+    end.
 
 sort_codes(Codes) when is_list(Codes) ->
     List = lists:map(
