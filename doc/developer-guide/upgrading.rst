@@ -268,6 +268,8 @@ Removed older TinyMCE versions 3.5.0 and 4.2.4.
 
 ``z_utils:combine_defined/2`` is renamed to ``z_utils:join_defined/2``.
 
+Removed the ``notify`` action, use the MQTT topics instead.
+
 Module schema and data initialization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
