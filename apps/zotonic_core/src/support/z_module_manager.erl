@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2023 Marc Worrell
 %% @doc Module manager, starts/restarts a site's modules.
+%% @end
 
 %% Copyright 2009-2023 Marc Worrell
 %%
@@ -1431,6 +1432,7 @@ start_child(ManagerPid, Module, App, ChildSpec, Site) ->
                         result => error,
                         reason => Reason
                     }),
+                    z:flush(Context),
                     {error, {schema_init, Reason}}
             end,
             gen_server:cast(ManagerPid, {start_child_result, Module, Result})
