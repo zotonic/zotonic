@@ -225,7 +225,7 @@ media_viewer_fallback(OEmbed, TplOpts, Context) ->
         error ->
             TplOpts
     end,
-    {ok, EmbedHtml} = z_template:render_to_iolist("_oembed_embeddable.tpl", Vars, Context),
+    {EmbedHtml, _} = z_template:render_to_iolist("_oembed_embeddable.tpl", Vars, Context),
     EmbedHtml.
 
 
