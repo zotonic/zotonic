@@ -3,8 +3,8 @@
 Getting Started
 ===============
 
-You have three options for running Zotonic: to get started quickly, start our
-Zotonic container. You can also use Nix or manually install the dependencies.
+You have two options for running Zotonic: to get started quickly, start our
+Zotonic container. Or you can install Zotonic on your computer.
 
 Docker
 ------
@@ -77,25 +77,15 @@ The server can be stopped and started using the command line::
     Waiting for zotonic: . OK
 
 
-Nix
-------------
 
-Download the Zotonic source code using Git or from the `GitHub releases page`_.
-The repo includes a `shell.nix` file that defines a development shell with all
-dependencies in scope.
-You can enter the shell with `nix-shell`.
-There you should run `make` to compile Zotonic.
-You can then start Zotonic with `bin/zotonic debug`.
-
-
-Manual installation
+Installation
 ------------
 
 .. seealso::
     a more extensive discussion of
     :ref:`all requirements <installation-preinstall>`
 
-If you don’t like Docker or Nix, or you like to do things yourself, you can always
+If you don’t like Docker, or you like to do things yourself, you can always
 install Zotonic on your computer yourself.
 
 Preparation
