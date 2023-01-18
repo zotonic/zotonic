@@ -1,6 +1,4 @@
-let
-  pkgs = import ./nix/nixpkgs.nix;
-in
+{ pkgs ? import ./nix/nixpkgs.nix }:
 pkgs.mkShell {
   buildInputs = with pkgs; [
     bashInteractive
