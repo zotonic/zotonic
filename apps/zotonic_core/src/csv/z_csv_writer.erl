@@ -91,11 +91,7 @@ field(<<$', _/binary>> = D) -> D;
 field(<<WS, _/binary>> = D) when WS =< 32 -> <<$', D/binary>>;
 field(<<$=, _/binary>> = D) -> <<$', D/binary>>;
 field(<<$@, _/binary>> = D) -> <<$', D/binary>>;
-field(<<C, _/binary>> = D)
-    when       C =:= $-
-        orelse C =:= $+
-        orelse (C >= $0 andalso C =< $9)
-    ->
+field(<<C, _/binary>> = D) when C =:= $-; C =:= $+ ->
     case is_valid_number(D) of
         true -> D;
         false -> <<$', D/binary>>
