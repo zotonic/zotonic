@@ -40,6 +40,7 @@
     is_answer_user/2,
     is_answer_user/3,
     answer_user/2,
+    set_answer_user/4,
 
     list_results/2,
     single_result/3,
@@ -751,6 +752,25 @@ answer_user(AnsId, Context) ->
         where id = $1",
         [AnsId],
         Context).
+
+-spec set_answer_user(SurveyId, AnswerId, UserId, Context) -> ok | {error, enoent} when
+    SurveyId :: m_rsc:resource_id(),
+    AnswerId :: integer(),
+    UserId :: m_rsc:resource_id() | undefined,
+    Context :: z:context().
+set_answer_user(SurveyId, AnswerId, UserId, Context) ->
+    case z_db:q1("
+        update survey_answers
+        set user_id = $1
+        where id = $2
+          and survey_id = $3",
+        [UserId, AnswerId, SurveyId],
+        Context)
+    of
+        1 -> ok;
+        0 -> {error, enoent}
+    end.
+
 
 -spec list_results(m_rsc:resource_id(), z:context()) -> list().
 list_results(SurveyId, Context) when is_integer(SurveyId) ->
