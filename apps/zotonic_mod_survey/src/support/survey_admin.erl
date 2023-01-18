@@ -97,21 +97,9 @@ event(#submit{ message={link_person_new, Args} }, Context) ->
                 Context)
     end.
 
-person_from_answer(undefined, Context) ->
-    #{
-        <<"category_id">> => cat_person(Context),
-        <<"is_published">> => true,
-        <<"content_group_id">> => cg_person(Context)
-    };
 person_from_answer(Answer, Context) ->
     case proplists:get_value(answers, Answer) of
         undefined ->
-            #{
-                <<"category_id">> => cat_person(Context),
-                <<"is_published">> => true,
-                <<"content_group_id">> => cg_person(Context)
-            };
-        [] ->
             #{
                 <<"category_id">> => cat_person(Context),
                 <<"is_published">> => true,
