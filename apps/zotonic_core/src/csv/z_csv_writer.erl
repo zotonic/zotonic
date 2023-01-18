@@ -27,7 +27,7 @@
     encode_line/2
     ]).
 
--spec sanitize( file:filename_all(), file:filename() ) -> ok.
+-spec sanitize( file:filename_all(), file:filename_all() ) -> ok.
 sanitize(InFile, OutFile) ->
     {ok, _Hs, Sep} = z_csv_parser:inspect_file(InFile),
     Lines = z_csv_parser:scan_lines(InFile, Sep),
