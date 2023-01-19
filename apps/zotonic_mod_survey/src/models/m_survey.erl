@@ -355,6 +355,7 @@ insert_survey_submission_1(SurveyId, undefined, PersistentId, Answers, Context) 
             <<"user_id">> => undefined,
             <<"persistent">> => PersistentId,
             <<"is_anonymous">> => z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
+            <<"language">> => z_context:language(Context),
             <<"points">> => Points,
             <<"answers">> => AnswersPoints
         },
@@ -370,6 +371,7 @@ insert_survey_submission_1(SurveyId, UserId, _PersistentId, Answers, Context) ->
             <<"user_id">> => UserId,
             <<"persistent">> => undefined,
             <<"is_anonymous">> => z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
+            <<"language">> => z_context:language(Context),
             <<"points">> => Points,
             <<"answers">> => AnswersPoints
         },

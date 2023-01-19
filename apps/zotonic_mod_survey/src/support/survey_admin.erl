@@ -67,12 +67,23 @@ event(#submit{ message={link_person_new, Args} }, Context) ->
     {answer_id, AnswerId} = proplists:lookup(answer_id, Args),
     case z_acl:rsc_editable(SurveyId, Context) of
         true ->
+            Answer = m_survey:single_result(SurveyId, AnswerId, Context),
+            Language = case proplists:get_value(language, Answer) of
+                undefined ->
+                    z_context:language(Context);
+                Lang ->
+                    {ok, IsoCode} = z_language:to_language_atom(Lang),
+                    IsoCode
+            end,
             QArgs = z_context:get_q_all_noz(Context),
             {ok, Props} = z_props:from_qs(QArgs),
             Props1 = Props#{
-                <<"category_id">> => cat_person(Context),
                 <<"is_published">> => true,
-                <<"content_group_id">> => cg_person(Context)
+                <<"category_id">> => cat_person(Context),
+                <<"content_group_id">> => cg_person(Context),
+                <<"title">> => person_title(Props),
+                <<"pref_language">> => Language,
+                <<"language">> => [ Language ]
             },
             case m_rsc:insert(Props1, Context) of
                 {ok, PersonId} ->
@@ -96,6 +107,13 @@ event(#submit{ message={link_person_new, Args} }, Context) ->
                 ?__("Sorry, you are not allowed to do this.", Context),
                 Context)
     end.
+
+person_title(Props) ->
+    iolist_to_binary(z_utils:join_defined(<<" ">>, [
+        maps:get(<<"name_first">>, Props, undefined),
+        maps:get(<<"name_surname_prefix">>, Props, undefined),
+        maps:get(<<"name_surname">>, Props, undefined)
+    ])).
 
 person_from_answer(Answer, Context) ->
     case proplists:get_value(answers, Answer) of
