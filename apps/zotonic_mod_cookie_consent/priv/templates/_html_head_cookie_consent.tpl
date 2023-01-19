@@ -1,1 +1,1 @@
-{% lib "css/cookie_consent.css" %}
+{% lib "css/cookie-consent.css" %}

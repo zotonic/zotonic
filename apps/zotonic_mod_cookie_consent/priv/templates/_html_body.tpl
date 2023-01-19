@@ -8,7 +8,7 @@
         "}
 %}
 {% wire name="cookie-consent-banner"
-        action={insert_bottom target=" body" template="_cookie_consent.tpl"}
+        action={insert_top target=" body" template="_cookie_consent.tpl"}
 %}
 
 {% lib "js/z.cookie_consent.js" %}

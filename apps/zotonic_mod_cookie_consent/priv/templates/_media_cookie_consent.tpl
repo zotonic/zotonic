@@ -10,8 +10,17 @@
     %}
     <p>
         {_ Please consent to cookies to display external content. _}
-        <a href="#consent" id="{{ #consent }}" class="cookie-consent-change">{_ Change cookie settings _}</a>
+        <a href="#cookie-consent" id="{{ #consent }}" class="cookie-consent-change">{_ Change cookie settings _}</a>
     </p>
+
+    
+    {% javascript %}
+    alert("bliep");
+        document.getElementById("{{ #consent }}").addEventListener("click", () => {
+            document.getElementById("cookie-consent").focus();
+        });
+    {% endjavascript %}
+
     <script type="text/x-cookie-consented">
         {{ html|escape }}
     </script>

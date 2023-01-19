@@ -1,81 +1,63 @@
 {% with m.rsc.cookie_consent.id as id %}
-<div id="cookie-consent" class="cookie-consent">
-
+<div id="cookie-consent" class="cookie-consent" role="dialog" tabindex="-1" aria-label="Privacy">
     <form id="cookie-consent__form" action="#">
         <div class="cookie-consent__upper">
-            <h2 class="cookie-consent__title">
-                {{ id.title|default:_"This website uses cookies" }}
-            </h2>
-            <p class="cookie-consent__explanation">
-                {{ id.summary }}
-            </p>
+            <h2 class="cookie-consent__title">{{ id.title|default:_"This website uses cookies" }}</h2>
+            <p>{{ id.summary }}</p>
+            {% if id.o.relation as rel_id %}
+                <a href="{{ rel_id.page_url }}" target="_blank" class="cookie-consent-privacy">{{ rel_id.title }}</a>
+            {% elseif id.body %}
+                <a href="{{ id.page_url }}" target="_blank" class="cookie-consent-privacy">{_ More information about cookies _}</a>
+            {% endif %}
             <div class="cookie-consent__upper__controls">
-                <div class="cookie-consent__upper__text">
-                    {% if id.o.relation[1] as rel_id %}
-                        <a href="{{ rel_id.page_url }}" target="_blank" class="cookie-consent-privacy">{{ rel_id.title }}</a>
-                    {% elseif id.body %}
-                        <a href="{{ id.page_url }}" target="_blank" class="cookie-consent-privacy">{_ More information about cookies _}</a>
-                    {% endif %}
-                    <button class="cookie-consent-toggle">
-                        {_ Change settings _}
-                        <img class="anchor-down" alt="" src="/lib/images/arrow-right-thick.svg">
-                    </button>
-                </div>
-                <div class="cookie-consent__upper__buttons">
-                    <button class="cookie-consent__accept" type="submit" id="cookie-consent__accept-all">
-                        {_ Accept alll _}
-                    </button>
-                </div>
+                <button class="cookie-consent-toggle">
+                    {_ Change settings _}
+                </button>
+                <button class="btn btn-primary" type="submit" id="cookie-consent__accept-all">
+                    {_ Accept all _}
+                </button>
             </div>
         </div>
 
         <div class="cookie-consent__lower" style="display: none">
-            <ul class="cookie-consent__lower__options">
-                <li class="cookie-option">
-                    <input class="cookie-option__checkbox" id="cookie_consent_functional" name="cookie_consent_functional" type="checkbox" disabled="" checked>
-                    <label for="cookie_consent_functional" class="cookie-option__label cookie-option__label cookie-option__label--disabled">
-                        {_ Functional _}
-                    </label>
+            <ul class="cookie-options">
+                <li>
+                    <input id="cookie_consent_functional" name="cookie_consent_functional" type="checkbox" disabled="" checked>
+                    <label for="cookie_consent_functional">{_ Functional _}</label>
                 </li>
-                <li class="cookie-option">
-                    <input class="cookie-option__checkbox" id="cookie_consent_statistics" name="cookie_consent_statistics" type="checkbox">
-                    <label for="cookie_consent_statistics" class="cookie-option__label">
-                        {_ Statistics _}
-                    </label>
-                </li>
+                {% if id.cookies_statistics %}
+                    <li>
+                        <input id="cookie_consent_statistics" name="cookie_consent_statistics" type="checkbox">
+                        <label for="cookie_consent_statistics">{_ Statistics _}</label>
+                    </li>
+                {% endif %}
                 {% if id.cookies_marketing %}
-                    <li class="cookie-option">
-                        <input class="cookie-option__checkbox" id="cookie_consent_all" name="cookie_consent_all" type="checkbox">
-                        <label for="cookie_consent_all" class="cookie-option__label">
-                            {_ All cookies _}
-                        </label>
+                    <li>
+                        <input id="cookie_consent_all" name="cookie_consent_all" type="checkbox">
+                        <label for="cookie_consent_all">{_ All cookies _}</label>
                     </li>
                 {% endif %}
             </ul>
-            <ul class="cookie-consent__lower__explanations">
-                <li class="cookie-explanation">
-                    <h4 class="cookie-explanation__title">{_ Functional _}</h4>
-                    <p class="cookie-explanation__description">
-                        {{ id.cookies_functional }}
-                    </p>
+            <ul class="cookie-options-explanations">
+                <li>
+                    <h3>{_ Functional _}</h3>
+                    <p>{{ id.cookies_functional }}</p>
                 </li>
-                <li class="cookie-explanation">
-                    <h4 class="cookie-explanation__title">{_ Statistics _}</h4>
-                    <p class="cookie-explanation__description">
-                        {{ id.cookies_statistics }}
-                    </p>
-                </li>
+                {% if id.cookies_statistics %}
+                    <li>
+                        <h3>{_ Statistics _}</h3>
+                        <p>{{ id.cookies_statistics }}</p>
+                    </li>
+                {% endif %}
                 {% if id.cookies_marketing %}
-                    <li class="cookie-explanation">
-                        <h4 class="cookie-explanation__title">{_ All cookies _}</h4>
-                        <p class="cookie-explanation__description">
-                            {{ id.cookies_marketing }}
-                        </p>
+                    <li>
+                        <h3>{_ All cookies _}</h3>
+                        <p>{{ id.cookies_marketing }}</p>
                     </li>
                 {% endif %}
             </ul>
-            <div class="cookie-consent__lower__accept">
-                <button class="cookie-consent__accept" id="cookie-consent__accept-selection" type="submit">
+            <div class="cookie-options-accept">
+                <button class="btn btn-default" id="cookie-consent__accept-selection" type="submit">
                     {_ Accept selection _}
                 </button>
             </div>
