@@ -91,7 +91,7 @@
             action=action
             actions=actions
             autoclose=autoclose
-            is_connect_toggle
+            is_connect_toggle=not is_zmedia
         }
     }
 %}
