@@ -1944,11 +1944,28 @@ function z_transport_form(qmsg)
             setTimeout(function() { timedOut = true; cb(); }, opts.timeout);
         }
 
-        zmsgInput = $('<input />')
-                        .attr('type', 'hidden')
-                        .attr('name', 'z_msg')
-                        .attr('value', ubf.encode(qmsg.msg))
-                     .prependTo(form)[0];
+        let extraInputs = [];
+
+        extraInputs.push(
+            $('<input />')
+                .attr('type', 'hidden')
+                .attr('name', 'z_msg')
+                .attr('value', ubf.encode(qmsg.msg))
+             .prependTo(form)[0]);
+
+        // Prepend all unchecked checkboxes as empty hidden input values
+        $(form).find('input[type="checkbox"]:not(:checked):not(.nosubmit)').each(
+            function() {
+                const name = $(this).attr('name');
+                if (name) {
+                    extraInputs.push(
+                        $('<input />')
+                            .attr('type', 'hidden')
+                            .attr('name', name)
+                            .attr('value', '')
+                         .prependTo(form)[0]);
+                }
+            });
 
         try {
             // add iframe to doc and submit the form
@@ -1968,7 +1985,9 @@ function z_transport_form(qmsg)
             } else {
                 $form.removeAttr('target');
             }
-            $(zmsgInput).remove();
+            for (let n in extraInputs) {
+                $(n).remove();
+            }
         }
     }, 10);
 
