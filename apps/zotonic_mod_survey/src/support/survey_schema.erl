@@ -31,14 +31,6 @@
 
 
 %% @doc Install tables used for storing survey results
-manage_schema(install, Context) ->
-    install_schema_v2(Context),
-    #datamodel{
-        categories=[
-            {survey, undefined, [{title, <<"Survey">>}]},
-            {poll, survey, [{title, <<"Poll">>}]}
-        ]};
-
 manage_schema({upgrade, 2}, Context) ->
     % Replace all survey properties with blocks
     {Low, High} = m_category:get_range_by_name(survey, Context),
@@ -47,11 +39,9 @@ manage_schema({upgrade, 2}, Context) ->
         survey_to_blocks(Id, Context) || {Id} <- Ids
     ],
     manage_schema({upgrade, 3}, Context);
-
 manage_schema({upgrade, 3}, Context) ->
     [] = z_db:q("alter table survey_answer add column is_anonymous boolean not null default false", Context),
     manage_schema({upgrade, 4}, Context);
-
 manage_schema({upgrade, 4}, Context) ->
     install_schema_v2(Context),
     ContextAsync = z_context:prune_for_spawn(Context),
@@ -61,7 +51,15 @@ manage_schema({upgrade, 4}, Context) ->
             % z_db:q("drop table survey_answer", ContextAsync)
             ok
         end),
-    ok.
+    ok;
+manage_schema(_Version, Context) ->
+    install_schema_v2(Context),
+    #datamodel{
+        categories=[
+            {survey, undefined, [{title, <<"Survey">>}]},
+            {poll, survey, [{title, <<"Poll">>}]}
+    ]}.
+
 
 install_schema_v2(Context) ->
     case z_db:table_exists(survey_answers, Context) of
@@ -73,6 +71,7 @@ install_schema_v2(Context) ->
                     user_id int,
                     persistent character varying(32),
                     is_anonymous bool not null default false,
+                    language character varying(16),
                     points int not null default 0,
                     props bytea,
                     created timestamp with time zone not null default current_timestamp,
@@ -97,6 +96,16 @@ install_schema_v2(Context) ->
             z_db:flush(Context),
             ok;
         true ->
+            case z_db:column_exists(survey_answers, language, Context) of
+                false ->
+                    z_db:q("
+                        alter table survey_answers
+                        add column language character varying(16)
+                        ", Context),
+                    z_db:flush(Context);
+                true ->
+                    ok
+            end,
             ok
     end.
 
