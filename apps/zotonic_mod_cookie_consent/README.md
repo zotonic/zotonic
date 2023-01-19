@@ -18,6 +18,8 @@ How to use
 
 Ensure that your base template has an all-include of `_html_head.tpl` and `_html_body.tpl`.
 
+This javascript must be loaded after jquery has been loaded, which is not yet the case when the `_html_body.tpl` is included.
+
 Also, if you are using IFRAMEs, JS or CSS that sets non-functional cookies, check the changes below.
 
 HTML

@@ -32,7 +32,7 @@
 -mod_title("Cookie Consent").
 -mod_description("Handle cookie consent for stats and embedded content").
 -mod_prio(400).
--mod_schema(2).
+-mod_schema(3).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -80,7 +80,7 @@ manage_schema(_Version, _Context) ->
                         {en, <<"Necessary cookies help make a website usable by enabling basic functions like page navigation and access to secure areas of the website. The website cannot function properly without these cookies."/utf8>>}
                     ]
                 },
-                <<"cookies_stats">> => #trans{
+                <<"cookies_statistics">> => #trans{
                     tr = [
                         {nl, <<"Statistische of analytische cookies helpen ons te begrijpen hoe bezoekers de website gebruiken, door anoniem gegevens te verzamelen en te rapporteren."/utf8>>},
                         {en, <<"Statistics cookies help us to understand how visitors interact with the website by collecting and reporting information anonymously."/utf8>>}

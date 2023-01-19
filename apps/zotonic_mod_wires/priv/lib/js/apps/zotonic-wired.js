@@ -23,6 +23,8 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 
 ---------------------------------------------------------- */
 
+var zotonic                 = zotonic || {};
+
 // Client state
 var z_language              = "en";
 // var z_userid;
@@ -1931,4 +1933,8 @@ function z_jquery_init() {
     });
 }
 
+// Signal start the base Zotonic wired functions are loaded.
+if (typeof zotonic.wiresLoadedResolve == "function") {
+    zotonic.wiresLoadedResolve();
+}
 

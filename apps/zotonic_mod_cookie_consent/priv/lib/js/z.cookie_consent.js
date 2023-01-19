@@ -115,54 +115,62 @@
         setTrackingEvents(consent);
     }
 
-    // do_cookie_consent widget
-    $.widget("ui.cookie_consent",
-    {
-        _init: function() {
-            const $elt = $(this.element);
-            let consent_needed = 'all';
+    function init() {
+        // do_cookie_consent widget
+        $.widget("ui.cookie_consent",
+        {
+            _init: function() {
+                const $elt = $(this.element);
+                let consent_needed = 'all';
 
-            switch ($elt.attr('data-cookie-consent')) {
-                case 'functional':
-                    consent_needed = 'functional';
-                    break;
-                case 'stats':
-                    consent_needed = 'stats';
-                    break;
-                case 'all':
-                default:
-                    consent_needed = 'all';
-                    break;
+                switch ($elt.attr('data-cookie-consent')) {
+                    case 'functional':
+                        consent_needed = 'functional';
+                        break;
+                    case 'stats':
+                        consent_needed = 'stats';
+                        break;
+                    case 'all':
+                    default:
+                        consent_needed = 'all';
+                        break;
+                }
+
+                if (z_cookie_consented(consent_needed)) {
+                    // Replace the element with its wrapped HTML content.
+                    enableElement($elt);
+                } else {
+                    maybe_trigger_cookie_consent();
+                }
             }
-
-            if (z_cookie_consented(consent_needed)) {
-                // Replace the element with its wrapped HTML content.
-                enableElement($elt);
-            } else {
-                maybe_trigger_cookie_consent();
-            }
-        }
-    });
-
-    $.ui.cookie_consent.defaults = {
-    };
-
-    // Links to change cookie settings on media item placeholders
-    $('body').on('click', '.cookie-consent-change,.cookie-consent-preview,a[href="#cookie-consent"]', function(ev) {
-        ev.stopImmediatePropagation();
-        ev.preventDefault();
-        if ($('#cookie-consent').length == 0) {
-            z_event("cookie-consent", {});
-        }
-    });
-
-    // Initialize all elements on the page.
-    $(function() {
-        syncConsent()
-
-        // Trigger on further consent changes.
-        window.addEventListener("zotonic:cookie-consent", function(ev) {
-            syncConsent();
         });
-    });
+
+        $.ui.cookie_consent.defaults = {
+        };
+
+        // Links to change cookie settings on media item placeholders
+        $('body').on('click', '.cookie-consent-change,.cookie-consent-preview,a[href="#cookie-consent"]', function(ev) {
+            ev.stopImmediatePropagation();
+            ev.preventDefault();
+            if ($('#cookie-consent').length == 0) {
+                z_event("cookie-consent", {});
+            }
+        });
+
+        // Initialize all elements on the page.
+        $(function() {
+            syncConsent()
+
+            // Trigger on further consent changes.
+            window.addEventListener("zotonic:cookie-consent", function(ev) {
+                syncConsent();
+            });
+        });
+    }
+
+    if (typeof zotonic == "object" && typeof zotonic.wiresLoaded == "object") {
+        zotonic.wiresLoaded.then( () => init() );
+    } else {
+        init();
+    }
 })();
