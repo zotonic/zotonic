@@ -91,6 +91,7 @@
             action=action
             actions=actions
             autoclose=autoclose
+            is_connect_toggle
         }
     }
 %}

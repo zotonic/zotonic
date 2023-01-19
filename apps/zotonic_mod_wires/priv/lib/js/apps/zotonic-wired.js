@@ -1222,29 +1222,49 @@ function z_transport_form(qmsg)
             setTimeout(function() { timedOut = true; cb(); }, opts.timeout);
         }
 
-        zmsgInput = $('<input />')
-                        .attr('type', 'hidden')
-                        .attr('name', 'z_postback')
-                        .attr('value', JSON.stringify(qmsg.postback))
-                     .prependTo(form)[0];
+        let extraInputs = [];
 
-        zmsgReplyTopic = $('<input />')
-                        .attr('type', 'hidden')
-                        .attr('name', 'zotonic_topic_reply')
-                        .attr('value', qmsg.reply_topic)
-                     .prependTo(form)[0];
+        extraInputs.push(
+            $('<input />')
+                .attr('type', 'hidden')
+                .attr('name', 'z_postback')
+                .attr('value', JSON.stringify(qmsg.postback))
+             .prependTo(form)[0]);
 
-        zmsgProgressTopic = $('<input />')
-                        .attr('type', 'hidden')
-                        .attr('name', 'zotonic_topic_progress')
-                        .attr('value', qmsg.progress_topic)
-                     .prependTo(form)[0];
+        extraInputs.push(
+            $('<input />')
+                .attr('type', 'hidden')
+                .attr('name', 'zotonic_topic_reply')
+                .attr('value', qmsg.reply_topic)
+             .prependTo(form)[0]);
 
-        zmsgTriggerId = $('<input />')
-                        .attr('type', 'hidden')
-                        .attr('name', 'z_trigger_id')
-                        .attr('value', $form.attr('id') || "")
-                     .prependTo(form)[0];
+        extraInputs.push(
+            $('<input />')
+                .attr('type', 'hidden')
+                .attr('name', 'zotonic_topic_progress')
+                .attr('value', qmsg.progress_topic)
+             .prependTo(form)[0]);
+
+        extraInputs.push(
+            $('<input />')
+                .attr('type', 'hidden')
+                .attr('name', 'z_trigger_id')
+                .attr('value', $form.attr('id') || "")
+             .prependTo(form)[0]);
+
+        // Prepend all unchecked checkboxes as empty hidden input values
+        $(form).find('input[type="checkbox"]:not(:checked):not(.nosubmit)').each(
+            function() {
+                const name = $(this).attr('name');
+                if (name) {
+                    extraInputs.push(
+                        $('<input />')
+                            .attr('type', 'hidden')
+                            .attr('name', name)
+                            .attr('value', '')
+                         .prependTo(form)[0]);
+                }
+            });
 
         try {
             // add iframe to doc and submit the form
@@ -1264,10 +1284,9 @@ function z_transport_form(qmsg)
             } else {
                 $form.removeAttr('target');
             }
-            $(zmsgInput).remove();
-            $(zmsgReplyTopic).remove();
-            $(zmsgProgressTopic).remove();
-            $(zmsgTriggerId).remove();
+            for (let n in extraInputs) {
+                $(n).remove();
+            }
         }
     }, 10);
 
