@@ -72,16 +72,14 @@ m_get([ {Name, Props} = SearchProps | Rest ], _Msg, Context) when is_list(Props)
             {ok, {Result, Rest}}
     end;
 m_get([ <<"paged">> ], Msg, Context) ->
-    Args = search_args(Msg),
-    case search(<<"query">>, Args#{ <<"qargs">> => true }, Context) of
+    case search(<<"query">>, search_args(Msg), Context) of
         {error, _} = Error ->
             Error;
         {ok, Result} ->
             {ok, {Result, []}}
     end;
 m_get([], Msg, Context) ->
-    Args = search_args(Msg),
-    case search(<<"query">>, Args#{ <<"qargs">> => true }, Context) of
+    case search(<<"query">>, search_args(Msg), Context) of
         {error, _} = Error ->
             Error;
         {ok, Result} ->
@@ -154,7 +152,7 @@ search_pager(Search, Context) ->
 search_args(#{ payload := Args }) when is_map(Args) ->
     Args;
 search_args(_) ->
-    #{}.
+    #{ <<"qargs">> => true }.
 
 
 % Deprecated interface.

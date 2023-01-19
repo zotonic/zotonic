@@ -27,18 +27,18 @@
     encode_line/2
     ]).
 
--spec sanitize( file:filename(), file:filename() ) -> ok.
+-spec sanitize( file:filename_all(), file:filename_all() ) -> ok.
 sanitize(InFile, OutFile) ->
     {ok, _Hs, Sep} = z_csv_parser:inspect_file(InFile),
     Lines = z_csv_parser:scan_lines(InFile, Sep),
     ok = z_csv_writer:write_file(OutFile, Lines, Sep).
 
 
--spec write_file( file:filename(), z_csv_parser:lines() ) -> ok | {error, term()}.
+-spec write_file( file:filename_all(), z_csv_parser:lines() ) -> ok | {error, term()}.
 write_file(Filename, Data) ->
     write_file(Filename, Data, $,).
 
--spec write_file( file:filename(), z_csv_parser:lines(), z_csv_parser:sep() ) -> ok | {error, term()}.
+-spec write_file( file:filename_all(), z_csv_parser:lines(), z_csv_parser:sep() ) -> ok | {error, term()}.
 write_file(Filename, Data, Sep) when is_list(Data) ->
     case file:open(Filename, [write, binary]) of
         {ok, Device} ->
@@ -91,11 +91,7 @@ field(<<$', _/binary>> = D) -> D;
 field(<<WS, _/binary>> = D) when WS =< 32 -> <<$', D/binary>>;
 field(<<$=, _/binary>> = D) -> <<$', D/binary>>;
 field(<<$@, _/binary>> = D) -> <<$', D/binary>>;
-field(<<C, _/binary>> = D)
-    when       C =:= $-
-        orelse C =:= $+
-        orelse (C >= $0 andalso C =< $9)
-    ->
+field(<<C, _/binary>> = D) when C =:= $-; C =:= $+ ->
     case is_valid_number(D) of
         true -> D;
         false -> <<$', D/binary>>
