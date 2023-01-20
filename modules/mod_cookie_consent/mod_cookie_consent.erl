@@ -78,7 +78,7 @@ manage_schema(_Version, Context) ->
                         {en, <<"Necessary cookies help make a website usable by enabling basic functions like page navigation and access to secure areas of the website. The website cannot function properly without these cookies.">>}]
                     }
                 },
-                {cookies_stats,
+                {cookies_statistics,
                     {trans,
                         [{nl, <<"Statistische of analytische cookies helpen ons te begrijpen hoe bezoekers de website gebruiken, door anoniem gegevens te verzamelen en te rapporteren.">>},
                         {en, <<"Statistics cookies help us to understand how visitors interact with the website by collecting and reporting information anonymously.">>}]
