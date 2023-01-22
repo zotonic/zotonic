@@ -68,6 +68,8 @@
 {% endwith %}
 
 {% javascript %}
+    document.getElementById('cookie-consent__form').focus();
+
     switch (z_cookie_consent_fetch()) {
         case 'all':
             $('#cookie_consent_all').prop('checked', true);

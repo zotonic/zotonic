@@ -11,9 +11,8 @@
     action={
             insert_top 
             target=" body" 
-            template="_cookie_consent.tpl"}
-    action={script 
-            script="window.setTimeout(() => document.getElementById('cookie-consent').focus(), 300);"}
+            template="_cookie_consent.tpl"
+    }
 %}
 
 {% lib "js/z.cookie_consent.js" %}
