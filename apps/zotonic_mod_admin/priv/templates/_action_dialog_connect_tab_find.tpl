@@ -42,7 +42,7 @@
             {% with m.acl.user.s.hascollabmember as cmbr %}
                 <select class="form-control" name="find_cg">
                     <option value="">{_ Anybody’s _}</option>
-                    <option value="me"  {% if cid == 'me' %}selected{% endif %}>{_ Mine _}</option>
+                    <option value="me" {% if content_group == 'me' %}selected{% endif %}>{_ Mine _}</option>
                     {% if cmgr or cmbr %}
                         <optgroup label="{_ Collaboration groups _}">
                             {% for cid in cmgr ++ (cmbr -- cmgr) %}
@@ -91,6 +91,7 @@
             action=action
             actions=actions
             autoclose=autoclose
+            is_connect_toggle=not is_zmedia
         }
     }
 %}
