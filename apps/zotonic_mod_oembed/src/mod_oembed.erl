@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2011-2021 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% @copyright 2011-2023 Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc Enables embedding media from their URL.
+%% @end
 
-%% Copyright 2011-2021 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% Copyright 2011-2023 Arjan Scherpenisse <arjan@scherpenisse.net>
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -162,24 +163,37 @@ observe_media_viewer(#media_viewer{
         {options, Options},
         {filename, Filename}
     ],
-    Html = case maps:find(<<"oembed">>, Props) of
+    case maps:find(<<"oembed">>, Props) of
        {ok, OEmbed} ->
-            case lookup(<<"provider_name">>, provider_name, OEmbed) of
+            EmbedCode = case lookup(<<"provider_name">>, provider_name, OEmbed) of
                 {ok, N} ->
                     Tpl = iolist_to_binary(["_oembed_embeddable_",z_string:to_name(N),".tpl"]),
                     case z_module_indexer:find(template, Tpl, Context) of
                         {ok, Found} ->
-                            z_template:render(Found, TplOpts, Context);
+                            {TplHtml, _} = z_template:render_to_iolist(Found, TplOpts, Context),
+                            TplHtml;
                         {error, _} ->
                             media_viewer_fallback(OEmbed, TplOpts, Context)
                     end;
                 error ->
                     media_viewer_fallback(OEmbed, TplOpts, Context)
-            end;
+            end,
+            case z_notifier:first(#media_viewer_consent{
+                    id = Id,
+                    consent = all,
+                    html = EmbedCode,
+                    viewer_props = Props,
+                    viewer_options = Options
+                 }, Context)
+             of
+                undefined ->
+                    {ok, EmbedCode};
+                {ok, _} = ConsentHtml ->
+                    ConsentHtml
+             end;
         error ->
-            <<"<!-- No oembed code found -->">>
-    end,
-    {ok, Html};
+            {ok, <<"<!-- No oembed code found -->">>}
+    end;
 observe_media_viewer(#media_viewer{}, _Context) ->
     undefined.
 
@@ -199,19 +213,20 @@ lookup(K1, K2, OEmbed) when is_map(OEmbed) ->
     end.
 
 media_viewer_fallback(OEmbed, TplOpts, Context) ->
-    case lookup(<<"html">>, html, OEmbed) of
+    Vars = case lookup(<<"html">>, html, OEmbed) of
         {ok, Html} ->
             Html1 = binary:replace(Html, <<"http://">>, <<"https://">>, [global]),
             IsIframe = binary:match(Html1, <<"<iframe">>) =/= nomatch,
-            TplOpts1 = [
+            [
                 {html, Html1},
                 {is_iframe, IsIframe}
                 | TplOpts
-            ],
-            z_template:render("_oembed_embeddable.tpl", TplOpts1, Context);
+            ];
         error ->
-            z_template:render("_oembed_embeddable.tpl", TplOpts, Context)
-    end.
+            TplOpts
+    end,
+    {EmbedHtml, _} = z_template:render_to_iolist("_oembed_embeddable.tpl", Vars, Context),
+    EmbedHtml.
 
 
 % @doc Recognize youtube and vimeo URLs, generate the correct embed code
