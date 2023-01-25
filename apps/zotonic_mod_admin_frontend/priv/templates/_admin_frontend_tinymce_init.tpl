@@ -1,7 +1,7 @@
-{% javascript %}
+{% javascript %}	
 	window.tinyInit = {
 		selector: "textarea",
-		plugins: "advlist code paste table link zlink zmedia autosave directionality autoresize lists searchreplace fullscreen",
+		plugins: "code paste table link zlink zmedia autosave directionality autoresize lists searchreplace fullscreen",
 		menubar: "edit format table tools insert",
 		toolbar: [
 			"styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | ltr rtl | removeformat",

@@ -10,6 +10,7 @@
 			"css/admin-bootstrap3.css"
 			"css/admin-frontend.css"
             "font-awesome/css/font-awesome.css"
+            "css/image-edit.css"
 	%}
 {% endblock %}
 
