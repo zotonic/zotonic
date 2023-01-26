@@ -145,6 +145,7 @@ find params:
                     is_active=(tab == "find")
                     title=""
                     cat=cat
+                    nocatselect=nocatselect
                     content_group=content_group
                 %}
             {% endif %}

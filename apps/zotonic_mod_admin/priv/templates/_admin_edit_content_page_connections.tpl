@@ -31,6 +31,7 @@
                     dialog_title_add=dialog_title_add
                     callback=callback
                     action=action
+                    nocatselect=nocatselect
                     unlink_action=unlink_action
                     undo_message_id="unlink-undo-message"
                     list_id=list_id
