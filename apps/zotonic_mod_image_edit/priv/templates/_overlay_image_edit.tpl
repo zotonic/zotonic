@@ -1,154 +1,155 @@
 {% with m.image_edit.settings[id] as settings %}
-<div class="image-edit-container">
-    <div class="image-edit__original">
+<div class="image-edit">
+    <div class="image-edit-container">
+        <div class="image-edit__original">
 
-        {# Would be more logical to place these in the image wrapper, but Safari has a bug
-         # where the crop divs are partially hidden if the image has transforms.
-         # This works around that problem (strangely enough)
-         #}
-        <div class="image-edit-crop__wrapper">
-            <div class="image-edit-crop image-edit-crop-left"></div>
-            <div class="image-edit-crop image-edit-crop-right"></div>
-            <div class="image-edit-crop image-edit-crop-top"></div>
-            <div class="image-edit-crop image-edit-crop-bottom"></div>
-            <div id="image-edit-crop-center" class="image-edit-crop-center" title="{_ Cropping center, click to remove _}"><span class="glyphicon glyphicon-record"></span></div>
+            {# Would be more logical to place these in the image wrapper, but Safari has a bug
+             # where the crop divs are partially hidden if the image has transforms.
+             # This works around that problem (strangely enough)
+             #}
+            <div class="image-edit-crop__wrapper">
+                <div class="image-edit-crop image-edit-crop-left"></div>
+                <div class="image-edit-crop image-edit-crop-right"></div>
+                <div class="image-edit-crop image-edit-crop-top"></div>
+                <div class="image-edit-crop image-edit-crop-bottom"></div>
+                <div id="image-edit-crop-center" class="image-edit-crop-center" title="{_ Cropping center, click to remove _}"><span class="glyphicon glyphicon-record"></span></div>
+            </div>
+
+            <div class="image-edit__original__wrapper">
+                {% image id original mediaclass="image-edit" %}
+            </div>
         </div>
 
-        <div class="image-edit__original__wrapper">
-            {% image id original mediaclass="image-edit" %}
+        <div id="image-edit-settings" class="image-edit__settings">
+            {% wire id="image-edit-form"
+                    type="submit"
+                    postback={edit_form id=id on_success={overlay_close}}
+                    delegate=`mod_image_edit`
+            %}
+            <form id="image-edit-form" action="postback">
+
+                <p class="help-block"><span class="glyphicon glyphicon-info-sign"></span> {_ The original image stays unaltered, all edits can be changed at any time. _}</p>
+
+                <div class="form-group">
+                    <p>
+                        <a href="#" id="image-edit-orientation-btn" class="btn btn-default">
+                            <i class="fa fa-undo"></i> {_ Rotate _}
+                        </a>
+                    </p>
+
+                    <input type="hidden" id="image-edit-orientation" name="rotate" value="{{ settings.rotate|default:'0' }}">
+                    <input type="hidden" id="image-crop-center-x" name="crop_center_x" value="{{ settings.crop_center_x|default:'-1' }}">
+                    <input type="hidden" id="image-crop-center-y" name="crop_center_y" value="{{ settings.crop_center_y|default:'-1' }}">
+
+                    {% comment %}
+                        <input type="hidden" name="crop_center" id="crop_center" value="{{ id.crop_center }}">
+                    {% endcomment %}
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" value="1" name="is_lossless" {% if settings.is_lossless %}checked{% endif %}>
+                        {_ Lossless resize _}
+                    </label>
+                    <p class="help-block"><small>{_ Keep logos and clip art sharp. _}</small></p>
+                </div>
+
+                <a class="collapse-toggle" role="button" data-toggle="collapse" href="#image-edit-crop" aria-expanded="false" aria-controls="collapseExample">{_ Crop image _}</a>
+                <div class="collapse" id="image-edit-crop">
+                    <div class="form-group">
+                        <label>{_ Crop top _}: <span></span>%</label>
+                        <input class="form-control" id="image-edit-crop-top" type="range" name="crop_top" min="0" max="100" value="{{ settings.crop_top|default:'0' }}" step="0.1" list="image-edit-percentage">
+                    </div>
+                    <div class="form-group">
+                        <label>{_ Crop left _}: <span></span>%</label>
+                        <input class="form-control" id="image-edit-crop-left" type="range" name="crop_left" min="0" max="100" value="{{ settings.crop_left|default:'0' }}" step="0.1" list="image-edit-percentage">
+                    </div>
+                    <div class="form-group">
+                        <label>{_ Crop right _}: <span></span>%</label>
+                        <input class="form-control" id="image-edit-crop-right" type="range" name="crop_right" min="0" max="100" value="{{ settings.crop_right|default:'0' }}" step="0.1" list="image-edit-percentage">
+                    </div>
+                    <div class="form-group">
+                        <label>{_ Crop bottom _}: <span></span>%</label>
+                        <input class="form-control" id="image-edit-crop-bottom" type="range" name="crop_bottom" min="0" max="100" value="{{ settings.crop_bottom|default:'0' }}" step="0.1" list="image-edit-percentage">
+                    </div>
+                </div>
+                <p class="help-block">{_ Click the image to set the cropping center. _}</p>
+
+                <a class="collapse-toggle" role="button" data-toggle="collapse" href="#image-edit-conbri" aria-expanded="false" aria-controls="collapseExample">{_ Contrast &amp; Brightness _}</a>
+                <div class="collapse" id="image-edit-conbri">
+                    <div class="form-group">
+                        <label>{_ Contrast _}: <span></span>%</label>
+                        <input class="form-control" id="image-edit-contrast" name="contrast" type="range" min="-100" max="100" value="{{ settings.contrast|default:'0' }}" list="image-edit-range">
+                    </div>
+                    <div class="form-group">
+                        <label>{_ Brightness _}: <span></span>%</label>
+                        <input class="form-control" id="image-edit-brightness" name="brightness" type="range" min="-100" max="100" value="{{ settings.brightness|default:'0' }}" list="image-edit-range">
+                    </div>
+                </div>
+
+                <a class="collapse-toggle" role="button" data-toggle="collapse" href="#image-edit-tilpan" aria-expanded="false" aria-controls="collapseExample">{_ Roll, Tilt &amp; Pan _}</a>
+                <div class="collapse" id="image-edit-tilpan">
+                    <div class="form-group">
+                        <label>{_ Roll _}: <span></span>˚</label>
+                        <input class="form-control" id="image-edit-roll" type="range" name="roll" min="-45" max="45" value="{{ settings.roll|default:'0' }}" list="image-edit-rotate-roll">
+                    </div>
+                    <div class="form-group">
+                        <label>{_ Tilt _}: <span></span>˚</label>
+                        <input class="form-control" id="image-edit-tilt" type="range" name="tilt" min="-180" max="180" value="{{ settings.tilt|default:'0' }}" list="image-edit-angles">
+                    </div>
+                    <div class="form-group">
+                        <label>{_ Pan _}: <span></span>˚</label>
+                        <input class="form-control" id="image-edit-pan" type="range" name="pan" min="-180" max="180" value="{{ settings.pan|default:'0' }}" list="image-edit-angles">
+                    </div>
+                </div>
+
+                {# <div class="form-actions">
+                    <a class="btn btn-default" id="image-edit-cancel">{_ Cancel _}</a>
+                    <a class="btn btn-default" id="image-edit-reset">{_ Reset _}</a>
+                    <button class="btn btn-primary">{_ Save _}</button>
+
+                    {% wire id="image-edit-cancel" action={overlay_close} %}
+                </div> #}
+            </form>
+
+            <datalist id="image-edit-percentage" style="display:none">
+                <option value="0" label="0%"></option>
+                <option value="50" label="25%"></option>
+                <option value="50" label="50%"></option>
+                <option value="75" label="75%"></option>
+                <option value="100" label="100%"></option>
+            </datalist>
+
+            <datalist id="image-edit-range" style="display:none">
+                <option value="-100" label="-100"></option>
+                <option value="-50" label="-50"></option>
+                <option value="0" label="0"></option>
+                <option value="50" label="50"></option>
+                <option value="100" label="100"></option>
+            </datalist>
+
+            <datalist id="image-edit-angles" style="display:none">
+                <option value="-180" label="-180˚"></option>
+                <option value="-135"></option>
+                <option value="-90" label="-90˚"></option>
+                <option value="-45"></option>
+                <option value="0" label="0"></option>
+                <option value="45"></option>
+                <option value="90" label="+90˚"></option>
+                <option value="135"></option>
+                <option value="180" label="+190˚"></option>
+            </datalist>
+
+            <datalist id="image-edit-rotate-roll" style="display:none">
+                <option value="-45" label="-45˚"></option>
+                <option value="-30" label="-30˚"></option>
+                <option value="-15" label="-15˚"></option>
+                <option value="0" label="0"></option>
+                <option value="15" label="+15˚"></option>
+                <option value="30" label="+30˚"></option>
+                <option value="45" label="+45˚"></option>
+            </datalist>
         </div>
-    </div>
-
-    <div class="image-edit__settings">
-        {% wire id="image-edit-form"
-                type="submit"
-                postback={edit_form id=id on_success={overlay_close}}
-                delegate=`mod_image_edit`
-        %}
-        <form id="image-edit-form" action="postback">
-
-            <p class="help-block"><span class="glyphicon glyphicon-info-sign"></span> {_ The original image stays unaltered, all edits can be changed at any time. _}
-
-            <div class="form-group">
-                <p>
-                    <a href="#" id="image-edit-orientation-btn" class="btn btn-default">
-                        <i class="fa fa-undo"></i> {_ Rotate _}
-                    </a>
-                </p>
-
-                <input type="hidden" id="image-edit-orientation" name="rotate" value="{{ settings.rotate|default:'0' }}">
-
-                <input type="hidden" id="image-crop-center-x" name="crop_center_x" value="{{ settings.crop_center_x|default:'-1' }}">
-                <input type="hidden" id="image-crop-center-y" name="crop_center_y" value="{{ settings.crop_center_y|default:'-1' }}">
-
-                {% comment %}
-                    <input type="hidden" name="crop_center" id="crop_center" value="{{ id.crop_center }}">
-                {% endcomment %}
-            </div>
-
-            <div class="form-group">
-                <label>
-                    <input type="checkbox" value="1" name="is_lossless" {% if settings.is_lossless %}checked{% endif %}>
-                    {_ Lossless resize _}
-                </label>
-                <p class="help-block">{_ Keep logos and clip art sharp. _}</p>
-            </div>
-
-            <a class="collapse-toggle" role="button" data-toggle="collapse" href="#image-edit-crop" aria-expanded="false" aria-controls="collapseExample">{_ Crop image _}</a>
-            <div class="collapse" id="image-edit-crop">
-                <div class="form-group">
-                    <label>{_ Crop top _}: <span></span>%</label>
-                    <input class="form-control" id="image-edit-crop-top" type="range" name="crop_top" min="0" max="100" value="{{ settings.crop_top|default:'0' }}" step="0.1" list="image-edit-percentage">
-                </div>
-                <div class="form-group">
-                    <label>{_ Crop left _}: <span></span>%</label>
-                    <input class="form-control" id="image-edit-crop-left" type="range" name="crop_left" min="0" max="100" value="{{ settings.crop_left|default:'0' }}" step="0.1" list="image-edit-percentage">
-                </div>
-                <div class="form-group">
-                    <label>{_ Crop right _}: <span></span>%</label>
-                    <input class="form-control" id="image-edit-crop-right" type="range" name="crop_right" min="0" max="100" value="{{ settings.crop_right|default:'0' }}" step="0.1" list="image-edit-percentage">
-                </div>
-                <div class="form-group">
-                    <label>{_ Crop bottom _}: <span></span>%</label>
-                    <input class="form-control" id="image-edit-crop-bottom" type="range" name="crop_bottom" min="0" max="100" value="{{ settings.crop_bottom|default:'0' }}" step="0.1" list="image-edit-percentage">
-                </div>
-            </div>
-            <p class="help-block">{_ Click the image to set the cropping center. _}</p>
-
-            <a class="collapse-toggle" role="button" data-toggle="collapse" href="#image-edit-conbri" aria-expanded="false" aria-controls="collapseExample">{_ Contrast &amp; Brightness _}</a>
-            <div class="collapse" id="image-edit-conbri">
-                <div class="form-group">
-                    <label>{_ Contrast _}: <span></span>%</label>
-                    <input class="form-control" id="image-edit-contrast" name="contrast" type="range" min="-100" max="100" value="{{ settings.contrast|default:'0' }}" list="image-edit-range">
-                </div>
-                <div class="form-group">
-                    <label>{_ Brightness _}: <span></span>%</label>
-                    <input class="form-control" id="image-edit-brightness" name="brightness" type="range" min="-100" max="100" value="{{ settings.brightness|default:'0' }}" list="image-edit-range">
-                </div>
-            </div>
-
-            <a class="collapse-toggle" role="button" data-toggle="collapse" href="#image-edit-tilpan" aria-expanded="false" aria-controls="collapseExample">{_ Roll, Tilt &amp; Pan _}</a>
-            <div class="collapse" id="image-edit-tilpan">
-                <div class="form-group">
-                    <label>{_ Roll _}: <span></span>˚</label>
-                    <input class="form-control" id="image-edit-roll" type="range" name="roll" min="-45" max="45" value="{{ settings.roll|default:'0' }}" list="image-edit-rotate-roll">
-                </div>
-                <div class="form-group">
-                    <label>{_ Tilt _}: <span></span>˚</label>
-                    <input class="form-control" id="image-edit-tilt" type="range" name="tilt" min="-180" max="180" value="{{ settings.tilt|default:'0' }}" list="image-edit-angles">
-                </div>
-                <div class="form-group">
-                    <label>{_ Pan _}: <span></span>˚</label>
-                    <input class="form-control" id="image-edit-pan" type="range" name="pan" min="-180" max="180" value="{{ settings.pan|default:'0' }}" list="image-edit-angles">
-                </div>
-            </div>
-
-            <div class="form-actions">
-                <a class="btn btn-default" id="image-edit-cancel">{_ Cancel _}</a>
-                <a class="btn btn-default" id="image-edit-reset">{_ Reset _}</a>
-                <button class="btn btn-primary">{_ Save _}</button>
-
-                {% wire id="image-edit-cancel" action={overlay_close} %}
-            </div>
-        </form>
-
-        <datalist id="image-edit-percentage" style="display:none">
-            <option value="0" label="0%"></option>
-            <option value="50" label="25%"></option>
-            <option value="50" label="50%"></option>
-            <option value="75" label="75%"></option>
-            <option value="100" label="100%"></option>
-        </datalist>
-
-        <datalist id="image-edit-range" style="display:none">
-            <option value="-100" label="-100"></option>
-            <option value="-50" label="-50"></option>
-            <option value="0" label="0"></option>
-            <option value="50" label="50"></option>
-            <option value="100" label="100"></option>
-        </datalist>
-
-        <datalist id="image-edit-angles" style="display:none">
-            <option value="-180" label="-180˚"></option>
-            <option value="-135"></option>
-            <option value="-90" label="-90˚"></option>
-            <option value="-45"></option>
-            <option value="0" label="0"></option>
-            <option value="45"></option>
-            <option value="90" label="+90˚"></option>
-            <option value="135"></option>
-            <option value="180" label="+190˚"></option>
-        </datalist>
-
-        <datalist id="image-edit-rotate-roll" style="display:none">
-            <option value="-45" label="-45˚"></option>
-            <option value="-30" label="-30˚"></option>
-            <option value="-15" label="-15˚"></option>
-            <option value="0" label="0"></option>
-            <option value="15" label="+15˚"></option>
-            <option value="30" label="+30˚"></option>
-            <option value="45" label="+45˚"></option>
-        </datalist>
     </div>
 </div>
 {% endwith %}
@@ -274,7 +275,6 @@
             "transform": "rotateZ(" + orientation + "deg)"
         });
 
-
         let cropLeft1 = cropLeft;
         let cropRight1 = cropRight;
         let cropBottom1 = cropBottom;
@@ -371,10 +371,10 @@
             });
         }
     }
-
+    
     image_edit_apply_css();
-
-    $('#image-edit-form').on('input change', function() {
+    
+    $('#image-edit-settings').on('input change', function() {
         image_edit_apply_css();
     });
 
@@ -455,7 +455,4 @@
         }
         window.addEventListener("resize", window.image_edit_onresize);
     }
-
-
-
 {% endjavascript %}

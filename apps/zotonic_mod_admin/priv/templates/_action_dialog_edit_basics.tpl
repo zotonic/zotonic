@@ -15,16 +15,16 @@
     <div class="tabbable">
         {% block tabbar %}
             <ul class="nav nav-pills">
-                <li class="active"><a data-toggle="tab" data-tab="main" href="#{{ #main }}">{_ Main _}</a></li>
+                <li><a data-toggle="tab" data-tab="main" href="#{{ #main }}">{_ Main _}</a></li>
                 <li><a data-toggle="tab" data-tab="acl" href="#{{ #acl }}">{_ Access control _}</a></li>
-                <li><a data-toggle="tab" data-tab="media" href="#{{ #media }}">{_ Edit image _}</a></li>
+                <li class="active"><a data-toggle="tab" data-tab="media" href="#{{ #media }}">{_ Edit image _}</a></li>
                 {% block tabbar_extra %}
                 {% endblock %}
                 </ul>
         {% endblock %}
         <div class="tab-content">
             {% block tab_content %}
-                <div class="tab-pane active" id="{{ #main }}">
+                <div class="tab-pane" id="{{ #main }}">
                     {% catinclude "_admin_edit_basics.tpl" id in_dialog show_header %}
 
                     {% if id.is_a.meta %}
@@ -62,7 +62,7 @@
             {% endblock %}
 
             {% block edit_media %}
-                <div class="tab-pane" id="{{ #media }}">
+                <div class="tab-pane active" id="{{ #media }}">
                     {% include "_overlay_image_edit.tpl" id=id %}
                 </div>
             {% endblock %}
