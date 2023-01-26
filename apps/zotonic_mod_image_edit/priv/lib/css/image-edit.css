@@ -15,8 +15,8 @@
 }
 
 .image-edit-container {
-  height: 100%;
   width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -33,19 +33,21 @@
   min-width: 0;
   position: relative;
 }
-.image-edit__original .image-edit__original__wrapper {
+
+.image-edit__original__wrapper {
   overflow: hidden;
   position: relative;
 }
-.image-edit__original .image-edit__original__wrapper img {
+.image-edit__original__wrapper img {
   display: block;
 }
-.image-edit__original .image-edit-crop__wrapper {
+
+.image-edit-crop__wrapper {
   position: absolute;
   z-index: 1400;
   cursor: crosshair;
 }
-.image-edit__original .image-edit-crop__wrapper .image-edit-crop {
+.image-edit-crop__wrapper .image-edit-crop {
   display: none;
   position: absolute;
   box-sizing: border-box;
@@ -56,19 +58,19 @@
   bottom: 0;
   background-color: rgba(51, 51, 51, 0.5);
 }
-.image-edit__original .image-edit-crop__wrapper .image-edit-crop-bottom {
+.image-edit-crop__wrapper .image-edit-crop-bottom {
   border-top: 1px solid white;
 }
-.image-edit__original .image-edit-crop__wrapper .image-edit-crop-top {
+.image-edit-crop__wrapper .image-edit-crop-top {
   border-bottom: 1px solid white;
 }
-.image-edit__original .image-edit-crop__wrapper .image-edit-crop-left {
+.image-edit-crop__wrapper .image-edit-crop-left {
   border-right: 1px solid white;
 }
-.image-edit__original .image-edit-crop__wrapper .image-edit-crop-right {
+.image-edit-crop__wrapper .image-edit-crop-right {
   border-left: 1px solid white;
 }
-.image-edit__original .image-edit-crop__wrapper .image-edit-crop-center {
+.image-edit-crop__wrapper .image-edit-crop-center {
   display: none;
   cursor: pointer;
   position: absolute;
