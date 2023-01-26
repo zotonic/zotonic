@@ -85,6 +85,10 @@ search(Search, undefined, Context) ->
     search_1(Search, 1, ?SEARCH_ALL_LIMIT, {1, ?SEARCH_ALL_LIMIT}, Context);
 search(Search, MaxRows, Context) when is_integer(MaxRows) ->
     search_1(Search, 1, MaxRows, {1, MaxRows}, Context);
+search(Search, {1, undefined}, Context) ->
+    search(Search, {1, default_pagelen(Context)}, Context);
+search(Search, {undefined, Limit}, Context) ->
+    search(Search, {1, Limit}, Context);
 search(Search, {1, Limit} = OffsetLimit, Context) ->
     search_1(Search, 1, Limit, OffsetLimit, Context);
 search(Search, {Offset, Limit} = OffsetLimit, Context) ->
