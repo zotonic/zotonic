@@ -573,6 +573,18 @@ Find all resources with a German translation::
     language=de
 
 
+visible_for
+^^^^^^^^^^^
+
+Filters on the ``visible_for`` resource property. This is used by some access control
+modules to filter the visibility of resources. The filtered value is an integer or a
+list of integers::
+
+    visible_for=[5,6]
+
+Note that the default :ref:`mod_acl_user_groups` does not use this property.
+
+
 Filter behaviour
 ----------------
 
