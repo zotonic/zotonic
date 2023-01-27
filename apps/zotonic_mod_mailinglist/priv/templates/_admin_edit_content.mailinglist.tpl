@@ -8,8 +8,7 @@
 <div class="widget-header-tools"></div>
 {% endblock %}
 
-{% block widget_show_minimized %}false{% endblock %}
-
+{% block widget_show_minimized %}{% if id.query %}false{% else %}true{% endif %}{% endblock %}
 
 {% block widget_content %}
 <fieldset>
@@ -41,7 +40,11 @@
     <h4>{_ Query preview _}</h4>
 
     <div class="query-results" id="{{ #querypreview }}">
-        {% include "_admin_query_preview.tpl" result=m.search[{query query_id=id pagelen=20}] %}
+        {% if id.query %}
+            {% include "_admin_query_preview.tpl" result=m.search[{query query_id=id pagelen=20}] %}
+        {% else %}
+            <p class="text-muted">{_ No results. _}</p>
+        {% endif %}
     </div>
 </fieldset>
 {% endblock %}

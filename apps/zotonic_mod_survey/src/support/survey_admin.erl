@@ -106,7 +106,227 @@ event(#submit{ message={link_person_new, Args} }, Context) ->
             z_render:growl(
                 ?__("Sorry, you are not allowed to do this.", Context),
                 Context)
+    end;
+event(#postback{message={admin_show_emails, Args}}, Context) ->
+    {id, SurveyId} = proplists:lookup(id, Args),
+    case m_survey:is_allowed_results_download(SurveyId, Context) of
+        true ->
+            [ Headers | Data ] = m_survey:survey_results(SurveyId, true, Context),
+            All = [lists:zip(Headers, Row) || {_Id,Row} <- Data],
+            z_render:dialog(?__("E-mail addresses", Context),
+                            "_dialog_survey_email_addresses.tpl",
+                            [{id, SurveyId}, {all, All}],
+                            Context);
+        false ->
+            Context
+    end;
+event(#submit{message={mailinglist_add, Args}}, Context) ->
+    {id, SurveyId} = proplists:lookup(id, Args),
+    MailingId = m_rsc:rid(z_context:get_q(<<"mailinglist_id">>, Context), Context),
+    case mailinglist_recipients_add(SurveyId, MailingId, Context) of
+        {ok, Count} ->
+            Msg = iolist_to_binary([
+                ?__("Number of recipients added to mailinglist:", Context),
+                " ",
+                integer_to_binary(Count)
+            ]),
+            Context1 = z_render:dialog_close(Context),
+            z_render:growl(Msg, Context1);
+        {error, Reason} ->
+            ?LOG_ERROR(#{
+                in => mod_mailinglist,
+                text => <<"Could not add recipients to mailinglist">>,
+                result => error,
+                reason => Reason,
+                survey_id => SurveyId,
+                mailinglist_id => MailingId
+            }),
+            z_render:growl_error(?__("Could not add the recipients.", Context), Context)
+    end;
+event(#submit{message={mailinglist_new, Args}}, Context) ->
+    {id, SurveyId} = proplists:lookup(id, Args),
+    case m_survey:is_allowed_results_download(SurveyId, Context)
+        andalso z_acl:is_allowed(use, mod_mailinglist, Context)
+    of
+        true ->
+            Props = #{
+                <<"is_published">> => z_convert:to_bool(z_context:get_q(<<"is_published">>, Context)),
+                <<"language">> => [ z_context:language(Context) ],
+                <<"category_id">> => mailinglist,
+                <<"content_group_id">> => m_rsc:rid(z_context:get_q(<<"content_group_id">>, Context), Context),
+                <<"title">> => z_context:get_q(<<"title">>, Context)
+            },
+            case m_rsc:insert(Props, Context) of
+                {ok, MailingId} ->
+                    ?LOG_INFO(#{
+                        in => mod_mailinglist,
+                        text => <<"Mailinglist created for survey email addresses">>,
+                        result => ok,
+                        category_id => mailinglist,
+                        content_group_id => maps:get(<<"content_group_id">>, Props),
+                        mailinglist_id => MailingId,
+                        survey_id => SurveyId
+                    }),
+                    case mailinglist_recipients_add(SurveyId, MailingId, Context) of
+                        {ok, Count} ->
+                            Msg = iolist_to_binary([
+                                ?__("Number of recipients added to mailinglist:", Context),
+                                " ",
+                                integer_to_binary(Count)
+                            ]),
+                            Context1 = z_render:dialog_close(Context),
+                            z_render:growl(Msg, Context1);
+                        {error, Reason} ->
+                            ?LOG_ERROR(#{
+                                in => mod_mailinglist,
+                                text => <<"Could not add recipients to mailinglist">>,
+                                result => error,
+                                reason => Reason,
+                                survey_id => SurveyId,
+                                mailinglist_id => MailingId
+                            }),
+                            z_render:growl_error(?__("Could not add the recipients.", Context), Context)
+                    end;
+                {error, Reason} ->
+                    ?LOG_ERROR(#{
+                        in => mod_mailinglist,
+                        text => <<"Mailinglist for email addresses could not be created">>,
+                        result => error,
+                        reason => Reason,
+                        category_id => mailinglist,
+                        content_group_id => maps:get(<<"content_group_id">>, Props)
+                    }),
+                    z_render:growl_error(?__("Could not create the mailinglist.", Context), Context)
+            end;
+        false ->
+            z_render:growl_error(?__("Sorry, you are not allowed to do this.", Context), Context)
     end.
+
+-spec mailinglist_recipients_add(SurveyId, MailingId, Context) -> {ok, CountAdded} | {error, Reason} when
+    SurveyId :: m_rsc:resource_id(),
+    MailingId :: m_rsc:resource_id(),
+    Context :: z:context(),
+    CountAdded :: non_neg_integer(),
+    Reason :: eacces.
+mailinglist_recipients_add(SurveyId, MailingId, Context) ->
+    case m_survey:is_allowed_results_download(SurveyId, Context)
+        andalso z_acl:is_allowed(use, mod_mailinglist, Context)
+        andalso z_acl:rsc_editable(MailingId, Context)
+    of
+        true ->
+            ContextSudo = z_acl:sudo(Context),
+            Results = m_survey:list_results(SurveyId, ContextSudo),
+            Res = lists:map(
+                fun(R) ->
+                    mailinglist_recipient_add(MailingId, R, ContextSudo)
+                end,
+                Results),
+            {ok, lists:sum(Res)};
+        false ->
+            {error, eacces}
+    end.
+
+mailinglist_recipient_add(MailingId, R, Context) ->
+    Email = normalize_email(answer_email_address(R)),
+    case proplists:get_value(user_id, R) of
+        undefined ->
+            % No user - add email address directly
+            mailinglist_recipient_add_email(MailingId, Email, R, Context);
+        UserId ->
+            % User - if email is not the same the also add email to mailinglist
+            RscAdded = case m_edge:get_id(UserId, subscriberof, MailingId, Context) of
+                undefined ->
+                    case m_mailinglist:insert_recipient_rsc(MailingId, UserId, Context) of
+                        {error, exsubscriberof} ->
+                            exsubscriberof;
+                        {error, _} ->
+                            error;
+                        ok ->
+                            ok
+                    end;
+                _ ->
+                    false
+            end,
+            case m_rsc:p_no_acl(UserId, email_raw, Context) of
+                Email when RscAdded =:= ok ->
+                    1;
+                Email when RscAdded =:= exsubscriberof ->
+                    0;
+                E when E =/= Email, Email =/= <<>>, is_binary(Email) ->
+                    % Different Email address or no permission to subscribe user
+                    case mailinglist_recipient_add_email(MailingId, Email, R, Context) of
+                        1 -> 1;
+                        0 when RscAdded =:= ok -> 1;
+                        0 -> 0
+                    end;
+                _ when RscAdded =:= ok ->
+                    1;
+                _ ->
+                    0
+            end
+    end.
+
+mailinglist_recipient_add_email(_MailingId, undefined, _R, _Context) ->
+    0;
+mailinglist_recipient_add_email(_MailingId, <<>>, _R, _Context) ->
+    0;
+mailinglist_recipient_add_email(MailingId, Email, R, Context) ->
+    case m_mailinglist:recipient_status(MailingId, Email, Context) of
+        subscribed ->
+            0;
+        unsubscribed ->
+            0;
+        enoent ->
+            Props = [
+                {name_first, answer(<<"name_first">>, R)},
+                {name_surname_prefix, answer(<<"name_surname_prefix">>, R)},
+                {name_surname, answer(<<"name_surname">>, R)},
+                {pref_language, proplists:get_value(pref_language, R)}
+            ],
+            Props1 = drop_undefined(Props),
+            case m_mailinglist:insert_recipient(MailingId, Email, Props1, silent, Context) of
+                ok ->
+                    1;
+                {error, _} ->
+                    0
+            end
+    end.
+
+normalize_email(undefined) ->
+    undefined;
+normalize_email(Email) ->
+    m_identity:normalize_key(<<"email">>, Email).
+
+answer_email_address(R) ->
+    case answer(<<"email">>, R) of
+        undefined ->
+            case answer(<<"Email">>, R) of
+                undefined ->
+                    answer(<<"e-mail">>, R);
+                V -> V
+            end;
+        V -> V
+    end.
+
+answer(Prop, R) ->
+    case proplists:get_value(props, R) of
+        #{ <<"answers">> := As } ->
+            case proplists:get_value(Prop, As) of
+                undefined ->
+                    undefined;
+                A when is_list(A) ->
+                    case proplists:get_value(answer, A) of
+                        V when is_binary(V); is_number(V); is_atom(V) -> V;
+                        _ -> undefined
+                    end
+            end;
+        _ ->
+            undefined
+    end.
+
+drop_undefined(L) ->
+    lists:filter(fun({_K,V}) -> V =/= undefined end, L).
+
 
 person_title(Props) ->
     iolist_to_binary(z_utils:join_defined(<<" ">>, [

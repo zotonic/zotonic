@@ -1,3 +1,9 @@
+<p class="help-block">
+    {_ Click on “Edit” to see and change the entered data. _}
+    {_ The result can be coupled to a known person or to a newly created person. _}<br>
+    {_ The email address is shown if there is a question “email” or if a person with an email address is coupled. _}
+</p>
+
 {% with m.rsc[q.id].id|default:id as id %}
 {% if id.is_editable %}
     {% with m.survey.list_results[id] as rs %}
@@ -40,7 +46,12 @@
                                     }
                             %}
                         {% else %}
-                            <a id="{{ #link.r_id }}" class="btn btn-default">{_ Link with person _}</a>
+                            <span>
+                                {{ answers['name_first'].answer|escape }}
+                                {{ answers['name_surname_prefix'].answer|escape }}
+                                {{ answers['name_surname'].answer|escape }}
+                            </span>
+                            <a id="{{ #link.r_id }}" class="btn btn-default btn-xs">{_ Link with person _}</a>
                             {% wire id=#link.r_id
                                     action={dialog_open
                                         template="_dialog_survey_link_person.tpl"

@@ -180,10 +180,20 @@ event(#sort{items=Sorted, drop={dragdrop, {object_sorter, Props}, _, _}}, Contex
 %% Previewing the results of a query in the admin edit
 event(#postback{message={query_preview, Opts}}, Context) ->
     DivId = proplists:get_value(div_id, Opts),
+    RscId = proplists:get_value(rsc_id, Opts),
     try
-        Q = search_query:parse_query_text(z_context:get_q(<<"triggervalue">>, Context)),
-        S = z_search:search(<<"query">>, Q, 1, 10, Context),
-        {Html, Context1} = z_template:render_to_iolist("_admin_query_preview.tpl", [{result,S}], Context),
+        IsCollection = m_rsc:is_a(RscId, collection, Context),
+        S = case search_query:parse_query_text(z_context:get_q(<<"triggervalue">>, Context)) of
+            [] when not IsCollection ->
+                [];
+            Q ->
+                z_search:search(<<"query">>, Q, 1, 20, Context)
+        end,
+        Vars = [
+            {id, RscId},
+            {result, S}
+        ],
+        {Html, Context1} = z_template:render_to_iolist("_admin_query_preview.tpl", Vars, Context),
         z_render:update(DivId, Html, Context1)
     catch
         _: {error, {Kind, Arg}} ->
