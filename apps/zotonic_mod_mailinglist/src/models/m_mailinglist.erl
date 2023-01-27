@@ -285,7 +285,7 @@ get_confirm_key(ConfirmKey, Context) ->
     ListId :: m_rsc:resource(),
     Email :: binary() | string() | undefined,
     Context :: z:context(),
-    Status :: subcribed | enoent | unsubscribed.
+    Status :: subscribed | enoent | unsubscribed.
 recipient_status(ListId, Email, Context) ->
     Email1 = normalize_email(Email),
     case z_db:q1("
