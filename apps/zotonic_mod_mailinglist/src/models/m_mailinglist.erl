@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2020 Marc Worrell
-%%
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Mailinglist model.
 
-%% Copyright 2009-2020 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -30,9 +29,14 @@
     get_enabled_recipients/2,
     list_recipients/2,
     count_recipients/2,
+
+    recipient_status/3,
+
     insert_recipients/4,
     insert_recipient/4,
     insert_recipient/5,
+
+    insert_recipient_rsc/3,
 
     update_recipient/3,
 
@@ -63,6 +67,8 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+-type welcome_message_type() :: send_confirm | send_welcome | silent.
+-export_type([ welcome_message_type/0 ]).
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
@@ -274,10 +280,71 @@ get_confirm_key(ConfirmKey, Context) ->
     z_db:assoc_row("select id, mailinglist_id, email, confirm_key from mailinglist_recipient where confirm_key = $1", [ConfirmKey], Context).
 
 
+%% @doc Check if the email address is on the mailinglist, returns true for enabled and disabled entries.
+-spec recipient_status(ListId, Email, Context) -> Status when
+    ListId :: m_rsc:resource(),
+    Email :: binary() | string() | undefined,
+    Context :: z:context(),
+    Status :: subscribed | enoent | unsubscribed.
+recipient_status(ListId, Email, Context) ->
+    Email1 = normalize_email(Email),
+    case z_db:q1("
+        select is_enabled
+        from mailinglist_recipient
+        where email = $1
+          and mailinglist_id = $2",
+        [ normalize_email(Email), m_rsc:rid(ListId, Context) ],
+        Context)
+    of
+        undefined -> enoent;
+        true -> subscribed;
+        false -> unsubscribed
+    end.
+
+
+%% @doc Insert a recipient in the mailing list, send a message to the recipient when needed. The
+%% current user must have link permission on the recipient to add the subscriberof edge.
+-spec insert_recipient_rsc(ListId, UserId, Context) -> ok | {error, Reason} when
+    ListId :: m_rsc:resource(),
+    UserId :: m_rsc:resource(),
+    Context :: z:context(),
+    Reason :: exsubscriberof | enoent | eacces | term().
+insert_recipient_rsc(ListId, UserId, Context) ->
+    case z_acl:rsc_visible(ListId, Context) of
+        false ->
+            {error, eacces};
+        true ->
+            case m_edge:get_id(UserId, exsubscriberof, ListId, Context) of
+                undefined ->
+                    case m_edge:insert(UserId, subscriberof, ListId, Context) of
+                        {ok, _} ->
+                            ok;
+                        {error, _} = Error ->
+                            Error
+                    end;
+                _EdgeId ->
+                    {error, exsubscriberof}
+            end
+    end.
+
+
 %% @doc Insert a recipient in the mailing list, send a message to the recipient when needed.
+-spec insert_recipient(ListId, Email, WelcomeMessageType, Context) -> ok | {error, Reason} when
+    ListId :: m_rsc:resource(),
+    Email :: binary() | string(),
+    WelcomeMessageType :: welcome_message_type(),
+    Context :: z:context(),
+    Reason :: enoent | eacces.
 insert_recipient(ListId, Email, WelcomeMessageType, Context) ->
     insert_recipient(ListId, Email, [], WelcomeMessageType, Context).
 
+-spec insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) -> ok | {error, Reason} when
+    ListId :: m_rsc:resource(),
+    Email :: binary() | string(),
+    Props :: proplists:proplist(),
+    WelcomeMessageType :: welcome_message_type(),
+    Context :: z:context(),
+    Reason :: enoent | eacces.
 insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) ->
     case m_rsc:rid(ListId, Context) of
         undefined ->
@@ -340,7 +407,8 @@ insert_recipient_1(ListId, Email, Props, WelcomeMessageType, Context) ->
                     {RcptId, WelcomeMessageType}
             end,
             case WelcomeMessageType1 of
-                none -> nop;
+                silent ->
+                    nop;
                 _ -> z_notifier:notify(
                         #mailinglist_message{
                             what = WelcomeMessageType1,
@@ -586,9 +654,10 @@ get_email_set(ListId, Context) ->
         Es),
     sets:from_list(Normalized).
 
+normalize_email(undefined) ->
+    undefined;
 normalize_email(Email) ->
-    z_convert:to_binary( z_string:trim( z_string:to_lower( Email ) ) ).
-
+    m_identity:normalize_key(<<"email">>, Email).
 
 
 %% @doc Periodically remove bouncing and disabled addresses from the mailinglist
