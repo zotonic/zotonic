@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-01-23 16:26\n"
+"PO-Revision-Date: 2023-01-30 18:15\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -202,10 +202,10 @@ msgid "Are you sure you want to restore all ACL rules to their currently publish
 msgstr "Ви впевнені, що хочете відновити всі правила ACL до їх поточної опублікованої версії?"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:150./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:78
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:68./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:251./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:98./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:68./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:251./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:21
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:86./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:92
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:7./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:29./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:69
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:100
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
@@ -216,11 +216,11 @@ msgstr "Ви впевнені, що хочете відновити всі пр�
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:102
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:101
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:107
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:112
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:51./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:149
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:158./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:85./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:77./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:158./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:85./apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:77./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:189
 msgid "Cancel"
@@ -229,7 +229,7 @@ msgstr "Скасувати"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:192./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:81./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:134./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
-#: apps/zotonic_mod_survey/src/mod_survey.erl:170
+#: apps/zotonic_mod_survey/src/mod_survey.erl:155
 msgid "Category"
 msgstr "Категорія"
 
@@ -242,8 +242,8 @@ msgid "Change category and/or content group..."
 msgstr "Змінити категорію та/або групу вмісту..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:22
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:65./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:98
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:69
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:31./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:46
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
 #: apps/zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
@@ -318,7 +318,7 @@ msgstr "Визначте, хто може переглядати або реда
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:34
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:84./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:121
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:95./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:121
 msgid "Delete"
 msgstr "Видалити"
 
@@ -526,13 +526,13 @@ msgid "Reverted rules"
 msgstr "Повернені правила"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:123./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:123./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:30
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:101
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:100
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:109
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:114
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:81
 msgid "Save"
 msgstr "Зберегти"
@@ -765,7 +765,7 @@ msgstr "(приватний)"
 msgid "(public)"
 msgstr "(публічний)"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:45
 msgid "+ add"
 msgstr "+ додати"
 
@@ -773,7 +773,7 @@ msgstr "+ додати"
 msgid "+ add block"
 msgstr "+ додати блок"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:46./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:164./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:113./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:32./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:46./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:164./apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:5./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:113./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:32./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
 msgid "<em>Untitled</em>"
 msgstr "<em>Без назви</em>"
 
@@ -793,7 +793,7 @@ msgstr "Локальна копія, відключена від віддале�
 msgid "About categories"
 msgstr "Про категорії"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:51./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:24
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:52./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:24
 msgid "Add a connection:"
 msgstr "Додайте підключення:"
 
@@ -1097,7 +1097,7 @@ msgstr "Версія бази даних"
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:16
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:20./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:111./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:9./apps/zotonic_mod_survey/src/models/m_survey.erl:546./apps/zotonic_mod_survey/src/models/m_survey.erl:549
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:15./apps/zotonic_mod_survey/src/models/m_survey.erl:546./apps/zotonic_mod_survey/src/models/m_survey.erl:549
 msgid "Date"
 msgstr "Дата"
 
@@ -1160,6 +1160,7 @@ msgid "Do you want to remove this block?"
 msgstr "Ви хочете видалити цей блок?"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:47
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:32
 msgid "Download"
 msgstr "Завантажити"
 
@@ -1189,9 +1190,14 @@ msgstr "Адреса електронної пошти"
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:39
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40./apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:81
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:92
 msgid "Edit"
 msgstr "Редагувати"
+
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:72
+#: apps/zotonic_mod_image_edit/priv/templates/_admin_edit_media_button.tpl:3
+msgid "Edit image"
+msgstr "Редагувати зображення"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:16
 msgid "Edit note"
@@ -1204,7 +1210,7 @@ msgstr "Редагувати:"
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:69
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:11./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:29./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:30
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:29./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:30
 msgid "Email"
 msgstr "Електронна пошта"
 
@@ -1374,7 +1380,7 @@ msgid "Header"
 msgstr "Заголовок"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:17
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:24
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:23
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "Тут ви можете редагувати аргументи пошукового запиту. Кожен аргумент має свою лінію. Для отримання додаткової інформації дивіться документацію <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">щодо аргументів запиту</a> на веб-сайті Zotonic."
 
@@ -1490,7 +1496,7 @@ msgid "Make a new page or media"
 msgstr "Створіть нову сторінку або медіа"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: apps/zotonic_mod_survey/src/mod_survey.erl:171
+#: apps/zotonic_mod_survey/src/mod_survey.erl:156
 msgid "Matching"
 msgstr "Збіг"
 
@@ -1625,6 +1631,11 @@ msgstr "Інших сторінок не знайдено"
 msgid "No pages found."
 msgstr "Сторінок не знайдено."
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:13
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:46
+msgid "No results."
+msgstr "Немає результатів."
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:12
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:20
 msgid "Page"
@@ -1740,8 +1751,9 @@ msgstr "Період публікації"
 msgid "Publish this page"
 msgstr "Опублікувати цю сторінку"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:52./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:61./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:244./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:102
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:51./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:61./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:244./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:102
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:45
+#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:44
 msgid "Published"
 msgstr "Опубліковано"
 
@@ -1750,12 +1762,12 @@ msgid "Published on"
 msgstr "Опубліковано на"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:21
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:28
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:27
 msgid "Query"
 msgstr "Запит"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:41
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:41
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:40
 msgid "Query preview"
 msgstr "Попередній перегляд запиту"
 
@@ -1851,12 +1863,12 @@ msgid "Save and View"
 msgstr "Зберегти та переглянути"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:23./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:126./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:81
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:126./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
 msgid "Save and view the page."
 msgstr "Збережіть і перегляньте сторінку."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:123./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:123./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 msgid "Save this page."
 msgstr "Збережіть цю сторінку."
 
@@ -2058,7 +2070,7 @@ msgid "Templates will be recompiled."
 msgstr "Шаблони будуть перекомпільовані."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:30
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:37
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:36
 msgid "Test query"
 msgstr "Тестовий запит"
 
@@ -2202,7 +2214,7 @@ msgstr "Забагато з’єднань, відображаються лиш�
 msgid "Type text to search"
 msgstr "Введіть текст для пошуку"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:31./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:51
 msgid "Unique name"
 msgstr "Унікальна назва"
 
@@ -2269,11 +2281,12 @@ msgstr "Дійсний для:"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:46
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:128
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:19
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
 msgid "View"
 msgstr "Переглянути"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:48./apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:49./apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
 msgstr "Переглянути всі підключення"
 
@@ -2302,7 +2315,7 @@ msgstr "Видимий з"
 msgid "Visible till"
 msgstr "Видимий до"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:73./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:38
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:75./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:38
 msgid "Visit full edit page"
 msgstr "Відвідайте повну сторінку редагування"
 
@@ -2330,7 +2343,7 @@ msgstr "Робочий довідник"
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:52
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:73
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:25
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:31
 msgid "Y-m-d H:i"
 msgstr "Y-m-d H:i"
 
@@ -2847,7 +2860,7 @@ msgstr "Додайте сторінки або натисніть сторінк
 msgid "Language"
 msgstr "Мова"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:30./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:38
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:32./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:40
 msgid "Loading ..."
 msgstr "Завантаження..."
 
@@ -2855,7 +2868,7 @@ msgstr "Завантаження..."
 msgid "No page"
 msgstr "Немає сторінки"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:126./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:81
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:126./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
 msgid "Save &amp; view"
 msgstr "Зберегти &amp; переглядів"
 
@@ -2863,15 +2876,15 @@ msgstr "Зберегти &amp; переглядів"
 msgid "The page might have been deleted."
 msgstr "Можливо, сторінка була видалена."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:128
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:131
 msgid "There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr "Є незбережені зміни. Ви впевнені, що хочете вийти, не зберігаючи?"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:75
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
 msgid "This page"
 msgstr "Ця сторінка"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:126
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:129
 msgid "Yes, discard changes"
 msgstr "Так, відхилити зміни"
 
@@ -3919,7 +3932,7 @@ msgid "Back to sign in"
 msgstr "Поверніться, щоб увійти"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:32
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:38
 msgid "Change"
 msgstr "Зміна"
 
@@ -5399,7 +5412,7 @@ msgstr "повідомлення, перевірка першого поверн
 msgid "redirects"
 msgstr "перенаправляє"
 
-#: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:31
+#: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:38
 msgid "Add link"
 msgstr "Додати посилання"
 
@@ -5428,7 +5441,7 @@ msgid "Crop"
 msgstr "Урожай"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:49
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:57
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:63
 msgid "Crop image"
 msgstr "Обрізати зображення"
 
@@ -5440,7 +5453,7 @@ msgstr "За замовчуванням використовується рез�
 msgid "Editor version"
 msgstr "Версія редактора"
 
-#: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:13
+#: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:19
 msgid "Insert media"
 msgstr "Вставте носій"
 
@@ -5610,7 +5623,7 @@ msgid "Calendar"
 msgstr "Календар"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:19./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:31./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:39
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:34
 msgid "Download CSV"
 msgstr "Завантажити CSV"
 
@@ -5619,7 +5632,7 @@ msgid "Download Event"
 msgstr "Завантажити подію"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:20./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:32./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:40
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:24
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:39
 msgid "Download Excel"
 msgstr "Завантажте Excel"
 
@@ -5936,19 +5949,19 @@ msgstr "Zotonic може зберігати завантажені та змін
 msgid "Could not upload"
 msgstr "Не вдалося завантажити"
 
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:85
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:90
 msgid "Brightness"
 msgstr "Яскравість"
 
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:76
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:38
 msgid "Click the image to set the cropping center."
 msgstr "Натисніть на зображення, щоб встановити центр обрізки."
 
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:81
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:86
 msgid "Contrast"
 msgstr "Контраст"
 
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:78
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:83
 msgid "Contrast &amp; Brightness"
 msgstr "Контрастність &amp; Яскравість"
 
@@ -5956,19 +5969,19 @@ msgstr "Контрастність &amp; Яскравість"
 msgid "Could not save the image settings."
 msgstr "Не вдалося зберегти налаштування зображення."
 
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:72
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:78
 msgid "Crop bottom"
 msgstr "Обрізане дно"
 
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:64
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:70
 msgid "Crop left"
 msgstr "Обрізати зліва"
 
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:68
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:74
 msgid "Crop right"
 msgstr "Обрізати правильно"
 
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:60
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:66
 msgid "Crop top"
 msgstr "Обрізати зверху"
 
@@ -5976,35 +5989,31 @@ msgstr "Обрізати зверху"
 msgid "Cropping center, click to remove"
 msgstr "Центральна обрізка, натисніть, щоб видалити"
 
-#: apps/zotonic_mod_image_edit/priv/templates/_admin_edit_media_button.tpl:3
-msgid "Edit image"
-msgstr "Редагувати зображення"
-
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:54
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:60
 msgid "Keep logos and clip art sharp."
 msgstr "Підтримуйте чіткість логотипів та кліпів."
 
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:52
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:58
 msgid "Lossless resize"
 msgstr "Зміна розміру без втрат"
 
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:101
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:106
 msgid "Pan"
 msgstr "Сковорода"
 
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:108
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:113
 msgid "Reset"
 msgstr "Скинути"
 
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:93
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:98
 msgid "Roll"
 msgstr "Рулет"
 
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:90
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:95
 msgid "Roll, Tilt &amp; Pan"
 msgstr "Рулон, Нахил &amp; Панорамування"
 
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:35
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:42
 msgid "Rotate"
 msgstr "Поворот"
 
@@ -6012,11 +6021,11 @@ msgstr "Поворот"
 msgid "Saved the image settings."
 msgstr "Збережено налаштування зображення."
 
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:30
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:37
 msgid "The original image stays unaltered, all edits can be changed at any time."
 msgstr "Оригінальне зображення залишається незмінним, усі редагування можна змінити в будь-який час."
 
-#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:97
+#: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:102
 msgid "Tilt"
 msgstr "Нахил"
 
@@ -6354,7 +6363,7 @@ msgid "Email status"
 msgstr "Статус електронної пошти"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:75./apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:12./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:36
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:86./apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:12./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:36
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:17
 msgid "Failed"
 msgstr "Не вдалося"
@@ -6731,7 +6740,7 @@ msgstr "Списки розсилки"
 msgid "Mailing status"
 msgstr "Статус розсилки"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:16
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:15
 msgid "Mailings are sent to:"
 msgstr "Листи надсилаються на адресу:"
 
@@ -6763,11 +6772,11 @@ msgstr "Операція"
 msgid "Our excuses for the inconvenience."
 msgstr "Ми вибачаємося за незручності."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:19
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:18
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
 msgstr "Сторінки, які мають межу \"підписки\" до списку розсилки."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:20
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:19
 msgid "Pages that match the query below."
 msgstr "Сторінки, які відповідають запиту нижче."
 
@@ -6952,7 +6961,7 @@ msgstr "Підпишіться на"
 msgid "Subscriber Edges"
 msgstr "Краї передплатників"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:18
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:17
 msgid "Subscribers, added via the subscription form."
 msgstr "Передплатники, додані через форму підписки."
 
@@ -7795,7 +7804,7 @@ msgid "Rebuilding the faceted search table."
 msgstr "Відновлення таблиці фасетного пошуку."
 
 #: apps/zotonic_mod_search/src/mod_search.erl:70
-#: apps/zotonic_mod_survey/src/support/survey_admin.erl:40./apps/zotonic_mod_survey/src/support/survey_admin.erl:62./apps/zotonic_mod_survey/src/support/survey_admin.erl:107
+#: apps/zotonic_mod_survey/src/support/survey_admin.erl:40./apps/zotonic_mod_survey/src/support/survey_admin.erl:62./apps/zotonic_mod_survey/src/support/survey_admin.erl:107./apps/zotonic_mod_survey/src/support/survey_admin.erl:202
 msgid "Sorry, you are not allowed to do this."
 msgstr "На жаль, Вам заборонено це робити."
 
@@ -8353,6 +8362,10 @@ msgstr "недоступний або локальний IP"
 msgid "Add a question or block"
 msgstr "Додайте запитання або заблокуйте"
 
+#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:1
+msgid "Add all email addresses to a mailinglist. Users are subscribed by connecting them to the mailinglist."
+msgstr "Додайте всі електронні адреси до списку розсилки. Користувачі підписуються шляхом підключення їх до списку розсилки."
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:123
 msgid "Add an introduction or explanation including uploaded or embedded images or video's. Add full width blocks or set a percentage to combine blocks."
 msgstr "Додайте вступ або пояснення, включаючи завантажені чи вставлені зображення чи відео. Додайте блоки повної ширини або встановіть відсоток для об’єднання блоків."
@@ -8364,6 +8377,10 @@ msgstr "Додайте відповідь"
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
 msgid "Add answer options here. Each stored value must be unique."
 msgstr "Додайте тут варіанти відповідей. Кожне збережене значення має бути унікальним."
+
+#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:21
+msgid "Add email addresses"
+msgstr "Додайте електронні адреси"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:16
 msgid "Add page"
@@ -8392,6 +8409,14 @@ msgstr "Додати питання після"
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:8
 msgid "Add questions by adding blocks with the menu."
 msgstr "Додати запитання, додавши блоки з меню."
+
+#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:4
+msgid "Add to existing mailinglist"
+msgstr "Додати до існуючого списку розсилки"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:55./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:57
+msgid "Add to mailinglist"
+msgstr "Додати до списку розсилки"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
 msgid "Aggregated results from all respondents"
@@ -8449,7 +8474,7 @@ msgstr "Ви впевнені, що хочете видалити цей рез�
 msgid "Are you sure you want to stop without saving?"
 msgstr "Ви впевнені, що хочете зупинитися, не зберігаючи?"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:176
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:161
 msgid "Button"
 msgstr "Кнопка"
 
@@ -8485,11 +8510,23 @@ msgstr "Перевірте правильні відповіді та дайте
 msgid "Choices"
 msgstr "Вибір"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:2
+msgid "Click on “Edit” to see and change the entered data."
+msgstr "Натисніть «Редагувати», щоб переглянути та змінити введені дані."
+
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
 msgstr "Правильно"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:175
+#: apps/zotonic_mod_survey/src/support/survey_admin.erl:144./apps/zotonic_mod_survey/src/support/survey_admin.erl:188
+msgid "Could not add the recipients."
+msgstr "Не вдалося додати одержувачів."
+
+#: apps/zotonic_mod_survey/src/support/survey_admin.erl:199
+msgid "Could not create the mailinglist."
+msgstr "Не вдалося створити список розсилки."
+
+#: apps/zotonic_mod_survey/src/mod_survey.erl:160
 msgid "Country select"
 msgstr "Виберіть країну"
 
@@ -8504,6 +8541,14 @@ msgstr "Створити та зв’язати"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111
 msgid "Create jumps to other questions or blocks."
 msgstr "Створюйте стрибки до інших питань або блоків."
+
+#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:50
+msgid "Create mailinglist"
+msgstr "Створити список розсилки"
+
+#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:28
+msgid "Create new mailinglist"
+msgstr "Створити новий список розсилки"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:114
 msgid "Create new person"
@@ -8542,7 +8587,11 @@ msgstr "Видалити запитання"
 msgid "Disagree"
 msgstr "Не згоден"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:22./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:26
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:44
+msgid "Download a spreadsheet with all answers."
+msgstr "Завантажте таблицю з усіма відповідями."
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:36./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:41
 msgid "Download will start in the background. Please check your download window."
 msgstr "Завантаження розпочнеться у фоновому режимі. Перевірте вікно завантаження."
 
@@ -8550,11 +8599,11 @@ msgstr "Завантаження розпочнеться у фоновому р
 msgid "Drop-down menu"
 msgstr "Розкривне меню"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:151
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:49./apps/zotonic_mod_survey/src/support/survey_admin.erl:116
 msgid "E-mail addresses"
 msgstr "Адреси електронної пошти"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:82
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:93
 msgid "Edit survey result"
 msgstr "Редагувати результат опитування"
 
@@ -8586,7 +8635,7 @@ msgstr "Відгук, якщо коректно"
 msgid "Feedback if wrong"
 msgstr "Відгук, якщо неправильно"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:179
+#: apps/zotonic_mod_survey/src/mod_survey.erl:164
 msgid "File upload"
 msgstr "Завантаження файлу"
 
@@ -8690,21 +8739,29 @@ msgstr "Перейдіть до запитання на наступній ст�
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "Перейти до цієї мітки запитання (повинен бути на іншій сторінці нижче)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:168
+#: apps/zotonic_mod_survey/src/mod_survey.erl:153
 msgid "Likert"
 msgstr "Лайкерт"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:43./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:50./apps/zotonic_mod_survey/src/support/survey_admin.erl:56
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:45./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:54./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:61./apps/zotonic_mod_survey/src/support/survey_admin.erl:56
 msgid "Link with person"
 msgstr "Посилання на людину"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:174
+#: apps/zotonic_mod_survey/src/mod_survey.erl:159
 msgid "Long answer"
 msgstr "Довга відповідь"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:141./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:142
 msgid "Mail results to"
 msgstr "Надішліть результати на адресу"
+
+#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:36
+msgid "Mailinglist"
+msgstr "Список адресатів"
+
+#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:36./apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:37
+msgid "Mailinglist title"
+msgstr "Назва списку розсилки"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:17
 msgid "Matching email address"
@@ -8738,7 +8795,7 @@ msgstr "Можливі декілька відповідей"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "Можливі декілька відповідей: за правильну відповідь нараховуються бали <i>і</i> бал за а, <i>не</i> за неправильну відповідь. За замовчуванням: 1 бал за правильну відповідь, 1 бал за неправильну відповідь."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:180
+#: apps/zotonic_mod_survey/src/mod_survey.erl:165
 msgid "Multiple choice"
 msgstr "Широкий вибір"
 
@@ -8754,7 +8811,7 @@ msgstr "Кілька блоків розриву сторінок об’єдн�
 msgid "Multiple times per user/browser (each time with new results)"
 msgstr "Кілька разів на користувача/браузер (кожен раз з новими результатами)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:172
+#: apps/zotonic_mod_survey/src/mod_survey.erl:157
 msgid "Narrative"
 msgstr "Розповідь"
 
@@ -8770,9 +8827,13 @@ msgstr "Новий результат:"
 msgid "Next page in category"
 msgstr "Наступна сторінка в категорії"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:96
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:107
 msgid "No results yet."
 msgstr "Результатів ще немає."
+
+#: apps/zotonic_mod_survey/src/support/survey_admin.erl:129./apps/zotonic_mod_survey/src/support/survey_admin.erl:173
+msgid "Number of recipients added to mailinglist:"
+msgstr "Кількість одержувачів, доданих до списку розсилки:"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:46
 msgid "Numeric input, show totals for this field in the survey results."
@@ -8790,7 +8851,7 @@ msgstr "Приймайте лише зображення."
 msgid "Options from a page category"
 msgstr "Параметри з категорії сторінки"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:177
+#: apps/zotonic_mod_survey/src/mod_survey.erl:162
 msgid "Page break"
 msgstr "Розрив сторінки"
 
@@ -8798,11 +8859,11 @@ msgstr "Розрив сторінки"
 msgid "Page jump condition"
 msgstr "Умова переходу сторінки"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:15
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:21
 msgid "Pass?"
 msgstr "Пас?"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:73./apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:557
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:84./apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:557
 msgid "Passed"
 msgstr "Пройшов"
 
@@ -8814,7 +8875,7 @@ msgstr "Прохідний бал"
 msgid "Percent"
 msgstr "Відсоток"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:10
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:16
 msgid "Person"
 msgstr "особа"
 
@@ -8834,7 +8895,7 @@ msgstr "Будь ласка, завантажте свій файл."
 msgid "Please upload your image."
 msgstr "Будь ласка, завантажте своє зображення."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:14./apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:18./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:80
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:20./apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:18./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:80
 msgid "Points"
 msgstr "Точки"
 
@@ -8842,7 +8903,7 @@ msgstr "Точки"
 msgid "Primary"
 msgstr "Первинний"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:33
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:23
 msgid "Printable list"
 msgstr "Список для друку"
 
@@ -8878,6 +8939,10 @@ msgstr "Питання з короткою відповіддю"
 msgid "Questions"
 msgstr "Запитання"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:63
+msgid "Questions with the name “email” can be exported."
+msgstr "Питання з назвою «електронна пошта» можна експортувати."
+
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:57
 msgid "Quiz or test question"
 msgstr "Тестове або тестове запитання"
@@ -8898,7 +8963,7 @@ msgstr "Обов’язково, на це запитання потрібно �
 msgid "Results"
 msgstr "Результати"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:34
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:21
 msgid "Results editor"
 msgstr "Редактор результатів"
 
@@ -8910,7 +8975,7 @@ msgstr "Результати респондента"
 msgid "Saved"
 msgstr "Збережено"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:13./apps/zotonic_mod_survey/src/models/m_survey.erl:558
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:19./apps/zotonic_mod_survey/src/models/m_survey.erl:558
 msgid "Score"
 msgstr "Оцінка"
 
@@ -8921,6 +8986,10 @@ msgstr "Друга сторінка в категорії"
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_country.tpl:26
 msgid "Select country"
 msgstr "Виберіть країну"
+
+#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:12
+msgid "Select mailinglist"
+msgstr "Виберіть список розсилки"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:103./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:13
 msgid "Select your country"
@@ -8934,11 +9003,15 @@ msgstr "Надіслати респонденту підтвердження. А
 msgid "Separate multiple email addresses with a comma."
 msgstr "Розділіть кілька адрес електронної пошти комою."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:173
+#: apps/zotonic_mod_survey/src/mod_survey.erl:158
 msgid "Short answer"
 msgstr "Коротка відповідь"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:31
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:25
+msgid "Show charts"
+msgstr "Показати діаграми"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:51
 msgid "Show email addresses"
 msgstr "Показати електронні адреси"
 
@@ -8949,10 +9022,6 @@ msgstr "Показати індикатор виконання"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:100
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Показати інформацію про прогрес як «<em>Питання 3/10</em>»"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:30
-msgid "Show results"
-msgstr "Показати результати"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:60
 msgid "Show results (admin only)"
@@ -8978,7 +9047,7 @@ msgstr "На жаль, не вдалося вставити нову особу.
 msgid "Start"
 msgstr "Почати"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:178
+#: apps/zotonic_mod_survey/src/mod_survey.erl:163
 msgid "Stop"
 msgstr "Зупинити"
 
@@ -9014,7 +9083,7 @@ msgstr "Надішліть, натиснувши параметр"
 msgid "Subtract points for wrong answers (total never less than 0)"
 msgstr "Віднімайте бали за неправильні відповіді (усього не менше 0)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:165
+#: apps/zotonic_mod_survey/src/mod_survey.erl:150
 msgid "Survey Questions"
 msgstr "Питання опитування"
 
@@ -9050,9 +9119,21 @@ msgstr "Лише текст подяки"
 msgid "Thank you text."
 msgstr "Текст подяки."
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_charts.tpl:14./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:27
+msgid "The charts show aggregated results from closed questions like thurstone and yes/no."
+msgstr "Діаграми показують зведені результати закритих запитань, як-от Thurstone і так/ні."
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
+msgid "The email address is shown if there is a question “email” or if a person with an email address is coupled."
+msgstr "Адреса електронної пошти відображається, якщо є запитання «електронна пошта» або якщо особа з електронною адресою пов’язана."
+
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
 msgid "The following has been filled in:"
 msgstr "Заповнено:"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:3
+msgid "The result can be coupled to a known person or to a newly created person."
+msgstr "Результат може бути пов’язаний з відомою особою або з новоствореною особою."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:3
 msgid "The results have been saved."
@@ -9094,7 +9175,7 @@ msgstr "Цей текст показаний як вступ до опитува
 msgid "This text is shown below the start button."
 msgstr "Цей текст показано під кнопкою «Пуск»."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:169
+#: apps/zotonic_mod_survey/src/mod_survey.erl:154
 msgid "Thurstone"
 msgstr "Терстоун"
 
@@ -9118,7 +9199,7 @@ msgstr "Правда"
 msgid "True or false question"
 msgstr "Правдиве чи хибне запитання"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:166
+#: apps/zotonic_mod_survey/src/mod_survey.erl:151
 msgid "True/False"
 msgstr "Правда/Неправда"
 
@@ -9129,6 +9210,10 @@ msgstr "Використовуйте «{submit}», щоб створити кн�
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:36
 msgid "Validation"
 msgstr "Перевірка"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:27
+msgid "View all results, optionally edit them."
+msgstr "Переглянути всі результати, за бажанням відредагувати їх."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:60
 msgid "When finished show"
@@ -9154,7 +9239,7 @@ msgstr "Ymd"
 msgid "Yes or no question"
 msgstr "Так чи ні питання"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:167
+#: apps/zotonic_mod_survey/src/mod_survey.erl:152
 msgid "Yes/No"
 msgstr "Так/Ні"
 
@@ -9166,7 +9251,7 @@ msgstr "Ви вже заповнили це, але можете змінити 
 msgid "You already filled this in."
 msgstr "Ви вже заповнили це."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:127./apps/zotonic_mod_survey/src/mod_survey.erl:142./apps/zotonic_mod_survey/src/mod_survey.erl:757
+#: apps/zotonic_mod_survey/src/mod_survey.erl:127./apps/zotonic_mod_survey/src/mod_survey.erl:142./apps/zotonic_mod_survey/src/mod_survey.erl:742
 msgid "You are not allowed to change these results."
 msgstr "Вам не дозволено змінювати ці результати."
 
