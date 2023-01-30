@@ -10,6 +10,7 @@ pkgs.mkShell {
     postgresql
     gettext
     libiconv
+    ps
     (if stdenv.isDarwin then fswatch else inotify-tools)
   ];
 }
