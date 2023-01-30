@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-01-30 16:37\n"
+"PO-Revision-Date: 2023-01-30 18:15\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -1634,7 +1634,7 @@ msgstr "没有找到页面。"
 #: apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:13
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:46
 msgid "No results."
-msgstr ""
+msgstr "没结果。"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:12
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:20
@@ -8360,7 +8360,7 @@ msgstr "添加一个问题或阻止"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:1
 msgid "Add all email addresses to a mailinglist. Users are subscribed by connecting them to the mailinglist."
-msgstr ""
+msgstr "将所有电子邮件地址添加到邮件列表。用户通过将他们连接到邮件列表进行订阅。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:123
 msgid "Add an introduction or explanation including uploaded or embedded images or video's. Add full width blocks or set a percentage to combine blocks."
@@ -8376,7 +8376,7 @@ msgstr "在此处添加答案选项。每个存储的值必须是唯一的。"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:21
 msgid "Add email addresses"
-msgstr ""
+msgstr "添加电子邮件地址"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:16
 msgid "Add page"
@@ -8408,11 +8408,11 @@ msgstr "通过用菜单添加块来添加问题。"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:4
 msgid "Add to existing mailinglist"
-msgstr ""
+msgstr "添加到现有邮件列表"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:55./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:57
 msgid "Add to mailinglist"
-msgstr ""
+msgstr "添加到邮件列表"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
 msgid "Aggregated results from all respondents"
@@ -8508,7 +8508,7 @@ msgstr "选择"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:2
 msgid "Click on “Edit” to see and change the entered data."
-msgstr ""
+msgstr "单击“编辑”以查看和更改输入的数据。"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
@@ -8516,11 +8516,11 @@ msgstr "正确的"
 
 #: apps/zotonic_mod_survey/src/support/survey_admin.erl:144./apps/zotonic_mod_survey/src/support/survey_admin.erl:188
 msgid "Could not add the recipients."
-msgstr ""
+msgstr "无法添加收件人。"
 
 #: apps/zotonic_mod_survey/src/support/survey_admin.erl:199
 msgid "Could not create the mailinglist."
-msgstr ""
+msgstr "无法创建邮件列表。"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:160
 msgid "Country select"
@@ -8540,11 +8540,11 @@ msgstr "创建跳转到其他问题或块。"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:50
 msgid "Create mailinglist"
-msgstr ""
+msgstr "创建邮件列表"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:28
 msgid "Create new mailinglist"
-msgstr ""
+msgstr "创建新的邮件列表"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:114
 msgid "Create new person"
@@ -8585,7 +8585,7 @@ msgstr "不同意"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:44
 msgid "Download a spreadsheet with all answers."
-msgstr ""
+msgstr "下载包含所有答案的电子表格。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:36./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:41
 msgid "Download will start in the background. Please check your download window."
@@ -8753,11 +8753,11 @@ msgstr "将结果邮寄给"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:36
 msgid "Mailinglist"
-msgstr ""
+msgstr "邮件列表"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:36./apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:37
 msgid "Mailinglist title"
-msgstr ""
+msgstr "邮件列表标题"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:17
 msgid "Matching email address"
@@ -8829,7 +8829,7 @@ msgstr "还没有结果。"
 
 #: apps/zotonic_mod_survey/src/support/survey_admin.erl:129./apps/zotonic_mod_survey/src/support/survey_admin.erl:173
 msgid "Number of recipients added to mailinglist:"
-msgstr ""
+msgstr "添加到邮件列表的收件人数量："
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:46
 msgid "Numeric input, show totals for this field in the survey results."
@@ -8937,7 +8937,7 @@ msgstr "疑问"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:63
 msgid "Questions with the name “email” can be exported."
-msgstr ""
+msgstr "可以导出名称为“email”的问题。"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:57
 msgid "Quiz or test question"
@@ -8985,7 +8985,7 @@ msgstr "选择国家"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:12
 msgid "Select mailinglist"
-msgstr ""
+msgstr "选择邮件列表"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:103./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:13
 msgid "Select your country"
@@ -9005,7 +9005,7 @@ msgstr "短答案"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:25
 msgid "Show charts"
-msgstr ""
+msgstr "显示图表"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:51
 msgid "Show email addresses"
@@ -9117,11 +9117,11 @@ msgstr "谢谢你的短信。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_charts.tpl:14./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:27
 msgid "The charts show aggregated results from closed questions like thurstone and yes/no."
-msgstr ""
+msgstr "图表显示了诸如瑟斯通和是/否等封闭式问题的汇总结果。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
 msgid "The email address is shown if there is a question “email” or if a person with an email address is coupled."
-msgstr ""
+msgstr "如果有一个问题“电子邮件”，或者如果有电子邮件地址的人有联系，则会显示电子邮件地址。"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
 msgid "The following has been filled in:"
@@ -9129,7 +9129,7 @@ msgstr "以下是已填写的内容："
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:3
 msgid "The result can be coupled to a known person or to a newly created person."
-msgstr ""
+msgstr "结果可以与已知人或新创建的人相关联。"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:3
 msgid "The results have been saved."
@@ -9209,7 +9209,7 @@ msgstr "验证"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:27
 msgid "View all results, optionally edit them."
-msgstr ""
+msgstr "查看所有结果，可选择编辑它们。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:60
 msgid "When finished show"
