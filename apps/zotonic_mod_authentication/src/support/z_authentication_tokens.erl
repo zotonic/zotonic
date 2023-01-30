@@ -55,7 +55,7 @@
 
 -define(AUTOLOGON_COOKIE, <<"z.autologon">>).
 -define(AUTOLOGON_SECRET_LENGTH, 32).
--define(AUTOLOGON_EXPIRE, 3600*8*180).          % autologon is 180 days valid
+-define(AUTOLOGON_EXPIRE, 3600*24*180).         % autologon is 180 days valid
 
 -define(ONETIME_TOKEN_EXPIRE, 30).              % onetime tokens are valid for 30 secs
 
