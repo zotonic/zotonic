@@ -88,6 +88,9 @@ Sites have the following default config settings:
 |                           | user has not been active.                       |                   |
 |                           | Default: 14400 (4 hours)                        |                   |
 +---------------------------+-------------------------------------------------+-------------------+
+| autologon_expire          | Auto logon cookie timeout setting.              | 31536000          |
+|                           | Default: 15552000 (3 months)                    | (365 days)        | 
++---------------------------+-------------------------------------------------+-------------------+
 | site                      | The name of the site, an atom.                  | wwwzotonic.       |
 +---------------------------+-------------------------------------------------+-------------------+
 | hsts                      | Indicate if the site should use Strict          | true              |
