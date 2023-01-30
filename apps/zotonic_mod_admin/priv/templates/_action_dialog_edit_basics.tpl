@@ -4,19 +4,19 @@
         id=id
         edge_id=edge_id
         update_element=update_element
-		template=template
-		actions=actions
-		callback=callback
-		is_update=is_update
-	}
+        template=template
+        actions=actions
+        callback=callback
+        is_update=is_update
+    }
     delegate=delegate
 %}
 <form id="{{ #form }}" method="POST" action="postback" class="form">
     <div class="tabbable">
         {% block tabbar %}
             <ul class="nav nav-pills">
-                <li class="active"><a data-toggle="tab" href="#{{ #main }}">{_ Main _}</a></li>
-                <li><a data-toggle="tab" href="#{{ #acl }}">{_ Access control _}</a></li>
+                <li class="active"><a data-toggle="tab" data-tab="main" href="#{{ #main }}">{_ Main _}</a></li>
+                <li><a data-toggle="tab" data-tab="acl" href="#{{ #acl }}">{_ Access control _}</a></li>
                 {% block tabbar_extra %}
                 {% endblock %}
                 </ul>
@@ -24,7 +24,6 @@
         <div class="tab-content">
             {% block tab_content %}
                 <div class="tab-pane active" id="{{ #main }}">
-
                     {% catinclude "_admin_edit_basics.tpl" id in_dialog show_header %}
 
                     {% if id.is_a.meta %}
@@ -69,7 +68,10 @@
     {% block modal_footer %}
         <div class="modal-footer">
             {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
-            {% if m.acl.use.mod_admin or m.acl.use.mod_admin_frontend %}
+            {% if (m.acl.use.mod_admin or m.acl.use.mod_admin_frontend) and id.is_a.image %}
+                {% button class="btn btn-default" action={dialog_open id=id template="_overlay_image_edit.tpl" title="Edit Image" modal} text=_"Edit image" %}
+            {% endif %}
+            {% if m.acl.use.mod_admin %}
                 <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default">{_ Visit full edit page _}</a>
             {% endif %}
             {% button class="btn btn-primary" type="submit" text=_"Save" %}

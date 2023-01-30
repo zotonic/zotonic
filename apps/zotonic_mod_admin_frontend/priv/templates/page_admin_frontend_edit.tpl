@@ -7,9 +7,11 @@
 			"css/zp-menuedit.css"
 			"css/z.icons.css"
 			"css/zotonic-admin.css"
+			"css/z.modal.css"
 			"css/admin-bootstrap3.css"
 			"css/admin-frontend.css"
             "font-awesome/css/font-awesome.css"
+            "css/image-edit.css"
 	%}
 {% endblock %}
 
@@ -112,12 +114,13 @@
 
 	    "js/apps/admin-common.js"
 	    "js/modules/admin-frontend.js"
+	    ""
 	%}
 	{% lib
 	    "js/jquery.ui.nestedSortable.js"
 	%}
 	{% all include "_admin_lib_js.tpl" %}
-	{% include "_editor.tpl" is_editor_include %}
+	{% include "_admin_frontend_editor.tpl" is_editor_include %}
 
 	{% optional include "_fileuploader_worker.tpl" %}
 
