@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Mailinglist implementation. Enables to send pages to a list of recipients.
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@
 %% interface functions
 -export([
          manage_schema/2,
+         observe_acl_is_allowed/2,
          observe_search_query/2,
          observe_mailinglist_message/2,
          observe_tick_24h/2,
@@ -47,10 +48,33 @@
 
 -record(state, {context}).
 
+
 %% @doc Install the tables needed for the mailinglist and return the rsc datamodel.
 -spec manage_schema(install | {upgrade, pos_integer()}, z:context()) -> #datamodel{}.
 manage_schema(Version, Context) ->
     z_mailinglist_schema:manage_schema(Version, Context).
+
+
+%% @doc Allow mailinglist admin to add or remove subscribers to mailinglists.
+-spec observe_acl_is_allowed(#acl_is_allowed{}, z:context()) -> true | undefined.
+observe_acl_is_allowed(#acl_is_allowed{
+        object = #acl_edge{
+            subject_id = SubjectId,
+            predicate = Pred,
+            object_id = ListId
+        }
+    }, Context) when
+    Pred =:= subscriberof;
+    Pred =:= exsubscriberof ->
+    case        z_acl:is_allowed(SubjectId, view, Context)
+        andalso z_acl:is_allowed(ListId, update, Context)
+        andalso z_acl:is_allowed(use, mod_mailinglist, Context)
+    of
+        true -> true;
+        false -> undefined
+    end;
+observe_acl_is_allowed(#acl_is_allowed{}, _Context) ->
+    undefined.
 
 
 observe_search_query(#search_query{ search = {mailinglist_recipients, [{id,Id}] } }, _Context) ->
