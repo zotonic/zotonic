@@ -31,7 +31,7 @@
     {% if q.zotonic_dispatch == 'logon' and m.acl.user %}
         <h1>{_ You are signed in _}</h1>
 
-        <p>{_ Your username is _} <b>{{ m.identity[m.acl.user].username|escape }}</b></h1>
+        <p>{_ Your username is _} <b>{{ m.identity[m.acl.user].username|escape }}</b></p>
         <ul class="list-unstyled">
             <li>
                 <a href="{% url logoff %}">{_ Sign out _}</a>

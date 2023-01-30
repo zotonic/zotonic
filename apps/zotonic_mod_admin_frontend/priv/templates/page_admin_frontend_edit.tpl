@@ -7,6 +7,7 @@
 			"css/zp-menuedit.css"
 			"css/z.icons.css"
 			"css/zotonic-admin.css"
+			"css/z.modal.css"
 			"css/admin-bootstrap3.css"
 			"css/admin-frontend.css"
             "font-awesome/css/font-awesome.css"
@@ -113,6 +114,7 @@
 
 	    "js/apps/admin-common.js"
 	    "js/modules/admin-frontend.js"
+	    ""
 	%}
 	{% lib
 	    "js/jquery.ui.nestedSortable.js"

@@ -1,4 +1,4 @@
-{% overrules %}
+{% extends "_editor.tpl" %}
 
 {#
 This template maintains the newest tinymce version.
@@ -12,7 +12,7 @@ params:
 #}
 
 {% block _editor %}
-    {% with zlink_tabs_disabled|default:["new"] as zlink_tabs_disabled
+    {% with zlink_tabs_disabled|default:["new"] as zlink_tabs_disabled %}
         {% inherit %}
     {% endwith %}
 {% endblock %}
