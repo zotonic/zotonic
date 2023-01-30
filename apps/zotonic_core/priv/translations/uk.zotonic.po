@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-01-30 16:37\n"
+"PO-Revision-Date: 2023-01-30 18:15\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -1634,7 +1634,7 @@ msgstr "Сторінок не знайдено."
 #: apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:13
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:46
 msgid "No results."
-msgstr ""
+msgstr "Немає результатів."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:12
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:20
@@ -8364,7 +8364,7 @@ msgstr "Додайте запитання або заблокуйте"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:1
 msgid "Add all email addresses to a mailinglist. Users are subscribed by connecting them to the mailinglist."
-msgstr ""
+msgstr "Додайте всі електронні адреси до списку розсилки. Користувачі підписуються шляхом підключення їх до списку розсилки."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:123
 msgid "Add an introduction or explanation including uploaded or embedded images or video's. Add full width blocks or set a percentage to combine blocks."
@@ -8380,7 +8380,7 @@ msgstr "Додайте тут варіанти відповідей. Кожне 
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:21
 msgid "Add email addresses"
-msgstr ""
+msgstr "Додайте електронні адреси"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:16
 msgid "Add page"
@@ -8412,11 +8412,11 @@ msgstr "Додати запитання, додавши блоки з меню."
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:4
 msgid "Add to existing mailinglist"
-msgstr ""
+msgstr "Додати до існуючого списку розсилки"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:55./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:57
 msgid "Add to mailinglist"
-msgstr ""
+msgstr "Додати до списку розсилки"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
 msgid "Aggregated results from all respondents"
@@ -8512,7 +8512,7 @@ msgstr "Вибір"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:2
 msgid "Click on “Edit” to see and change the entered data."
-msgstr ""
+msgstr "Натисніть «Редагувати», щоб переглянути та змінити введені дані."
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
@@ -8520,11 +8520,11 @@ msgstr "Правильно"
 
 #: apps/zotonic_mod_survey/src/support/survey_admin.erl:144./apps/zotonic_mod_survey/src/support/survey_admin.erl:188
 msgid "Could not add the recipients."
-msgstr ""
+msgstr "Не вдалося додати одержувачів."
 
 #: apps/zotonic_mod_survey/src/support/survey_admin.erl:199
 msgid "Could not create the mailinglist."
-msgstr ""
+msgstr "Не вдалося створити список розсилки."
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:160
 msgid "Country select"
@@ -8544,11 +8544,11 @@ msgstr "Створюйте стрибки до інших питань або б
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:50
 msgid "Create mailinglist"
-msgstr ""
+msgstr "Створити список розсилки"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:28
 msgid "Create new mailinglist"
-msgstr ""
+msgstr "Створити новий список розсилки"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:114
 msgid "Create new person"
@@ -8589,7 +8589,7 @@ msgstr "Не згоден"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:44
 msgid "Download a spreadsheet with all answers."
-msgstr ""
+msgstr "Завантажте таблицю з усіма відповідями."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:36./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:41
 msgid "Download will start in the background. Please check your download window."
@@ -8757,11 +8757,11 @@ msgstr "Надішліть результати на адресу"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:36
 msgid "Mailinglist"
-msgstr ""
+msgstr "Список адресатів"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:36./apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:37
 msgid "Mailinglist title"
-msgstr ""
+msgstr "Назва списку розсилки"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:17
 msgid "Matching email address"
@@ -8833,7 +8833,7 @@ msgstr "Результатів ще немає."
 
 #: apps/zotonic_mod_survey/src/support/survey_admin.erl:129./apps/zotonic_mod_survey/src/support/survey_admin.erl:173
 msgid "Number of recipients added to mailinglist:"
-msgstr ""
+msgstr "Кількість одержувачів, доданих до списку розсилки:"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:46
 msgid "Numeric input, show totals for this field in the survey results."
@@ -8941,7 +8941,7 @@ msgstr "Запитання"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:63
 msgid "Questions with the name “email” can be exported."
-msgstr ""
+msgstr "Питання з назвою «електронна пошта» можна експортувати."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:57
 msgid "Quiz or test question"
@@ -8989,7 +8989,7 @@ msgstr "Виберіть країну"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:12
 msgid "Select mailinglist"
-msgstr ""
+msgstr "Виберіть список розсилки"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:103./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:13
 msgid "Select your country"
@@ -9009,7 +9009,7 @@ msgstr "Коротка відповідь"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:25
 msgid "Show charts"
-msgstr ""
+msgstr "Показати діаграми"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:51
 msgid "Show email addresses"
@@ -9121,11 +9121,11 @@ msgstr "Текст подяки."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_charts.tpl:14./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:27
 msgid "The charts show aggregated results from closed questions like thurstone and yes/no."
-msgstr ""
+msgstr "Діаграми показують зведені результати закритих запитань, як-от Thurstone і так/ні."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
 msgid "The email address is shown if there is a question “email” or if a person with an email address is coupled."
-msgstr ""
+msgstr "Адреса електронної пошти відображається, якщо є запитання «електронна пошта» або якщо особа з електронною адресою пов’язана."
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
 msgid "The following has been filled in:"
@@ -9133,7 +9133,7 @@ msgstr "Заповнено:"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:3
 msgid "The result can be coupled to a known person or to a newly created person."
-msgstr ""
+msgstr "Результат може бути пов’язаний з відомою особою або з новоствореною особою."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:3
 msgid "The results have been saved."
@@ -9213,7 +9213,7 @@ msgstr "Перевірка"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:27
 msgid "View all results, optionally edit them."
-msgstr ""
+msgstr "Переглянути всі результати, за бажанням відредагувати їх."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:60
 msgid "When finished show"
