@@ -1,62 +1,18 @@
+{% overrules %}
+
 {#
 This template maintains the newest tinymce version.
 
 params:
-overrides_tpl: (optional) template location that contains JavaScript overrides for tinymce init
+- overrides_tpl:          (optional) template location that contains JavaScript overrides for tinymce init
+- zmedia_tabs_enabled:    Tabs enabled in the link dialog for the zmedia action
+- zmedia_tabs_disabled:   Tabs disabled in the link dialog for the zmedia action (defaults to ["new"])
+- zlink_tabs_enabled:     Tabs enabled in the link dialog for the zlink action
+- zlink_tabs_disabled:    Tabs disabled in the link dialog for the zlink action (defaults to ["new"])
 #}
 
-{% wire name="zmedia"
-    action={
-        dialog_open
-        intent="connect"
-        template="_action_dialog_connect.tpl"
-        title=_"Insert media"
-        width="large"
-        subject_id=id
-        predicate=`depiction`
-        is_zmedia
-        tab="depiction"
-        tabs_disabled="new"
-        callback="window.zAdminMediaDone"
-        center=0
-        autoclose
-    }
-%}
-
-{% wire name="zlink"
-    action={
-        dialog_open
-        intent="select"
-        template="_action_dialog_connect.tpl"
-        title=_"Add link"
-        width="large"
-        subject_id=id
-        is_zlink
-        tab="find"
-        callback="window.zAdminLinkDone"
-        center=0
-        autoclose
-        tabs_enabled=["find", "upload"]
-    }
-%}
-
-{% with
-    "5.10.2",
-    m.editor_tinymce.version
-    as
-    newest,
-    config
-%}
-{% with
-    (config == "newest" or config|is_undefined)|if:newest:config
-    as
-    version
-%}
-{% include
-    "tinymce-" ++ version ++ "/_editor.tpl"
-    overrides_tpl=overrides_tpl|default:"_admin_tinymce_overrides_js.tpl"
-    is_editor_include=is_editor_include
-    id=id
-%}
-{% endwith %}
-{% endwith %}
+{% block _editor %}
+    {% with zlink_tabs_disabled|default:["new"] as zlink_tabs_disabled
+        {% inherit %}
+    {% endwith %}
+{% endblock %}
