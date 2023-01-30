@@ -38,20 +38,20 @@ m_get([ <<"version_current">> | Rest ], _Msg, Context) ->
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
-%% @doc Return the configured tinyMCE version. Either the tinyMCE version or 'latest'.
+%% @doc Return the configured tinyMCE version. Either the tinyMCE version or 'newest'.
 -spec version(z:context()) -> binary().
 version(Context) ->
     case m_config:get_value(mod_editor_tinymce, version, Context) of
-        <<>> -> <<"latest">>;
-        undefined -> <<"latest">>;
+        <<>> -> <<"newest">>;
+        undefined -> <<"newest">>;
         Version -> Version
     end.
 
-%% @doc Return the configured tinyMCE version. 'latest' is mapped to the actual version.
+%% @doc Return the configured tinyMCE version. 'newest' is mapped to the actual version.
 -spec version_current(z:context()) -> binary().
 version_current(Context) ->
     case version(Context) of
-        <<"latest">> ->
+        <<"newest">> ->
             z_convert:to_binary(?TINYMCE_VERSION);
         Version ->
             Version
