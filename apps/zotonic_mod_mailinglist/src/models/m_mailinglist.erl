@@ -293,7 +293,7 @@ recipient_status(ListId, Email, Context) ->
         from mailinglist_recipient
         where email = $1
           and mailinglist_id = $2",
-        [ normalize_email(Email), m_rsc:rid(ListId, Context) ],
+        [ normalize_email(Email1), m_rsc:rid(ListId, Context) ],
         Context)
     of
         undefined -> enoent;
