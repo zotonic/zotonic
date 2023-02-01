@@ -437,7 +437,10 @@ do_link_unlink(_IsUnlink, SubjectId, Predicate, ObjectId, Callback, Context)
             {object_id, ObjectId},
             {url_language, m_rsc:page_url(ObjectId, ContextP)},
             {title_language, z_trans:lookup_fallback(Title, ContextP)},
-            {title, z_trans:lookup_fallback(Title, Context)}
+            {title, z_trans:lookup_fallback(Title, Context)},
+            {is_media, m_rsc:is_a(ObjectId, media, Context)},
+            {is_document, m_rsc:is_a(ObjectId, document, Context)},
+            {is_image, m_rsc:is_a(ObjectId, image, Context)}
            ],
     case Callback of
         undefined -> {ok, Context};

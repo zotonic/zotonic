@@ -62,7 +62,7 @@ find params:
                     <a data-toggle="tab" href="#{{ #tab }}-new">{_ Create _}</a>
                 </li>
             {% else %}
-                {% if has_depiction_tab %}
+                {% if has_depiction_tab and subject_id %}
                     <li {% if tab == "depiction" %}class="active"{% endif %}>
                         <a data-toggle="tab" href="#{{ #tab }}-depiction">{_ Attached media _}</a>
                     </li>

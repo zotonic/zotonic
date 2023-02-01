@@ -120,7 +120,7 @@ window.zAdminLinkDone = function(v) {
 };
 
 window.zAdminMediaDone = function(v) {
-    window.z_choose_zmedia(v.object_id);
+    window.z_choose_zmedia(v.object_id, v);
 };
 
 window.zEditLanguage = function() {
