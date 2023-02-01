@@ -287,13 +287,12 @@ get_confirm_key(ConfirmKey, Context) ->
     Context :: z:context(),
     Status :: subscribed | enoent | unsubscribed.
 recipient_status(ListId, Email, Context) ->
-    Email1 = normalize_email(Email),
     case z_db:q1("
         select is_enabled
         from mailinglist_recipient
         where email = $1
           and mailinglist_id = $2",
-        [ normalize_email(Email1), m_rsc:rid(ListId, Context) ],
+        [ normalize_email(Email), m_rsc:rid(ListId, Context) ],
         Context)
     of
         undefined -> enoent;
