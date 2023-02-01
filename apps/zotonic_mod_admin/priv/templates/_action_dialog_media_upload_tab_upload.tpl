@@ -38,7 +38,7 @@
             </div>
 
             {% if intent != 'update' %}
-                {% if subject_id %}
+                {% if subject_id or is_zmedia or is_zlink %}
                     {% if m.admin.rsc_dialog_hide_dependent and not m.acl.is_admin %}
                         <input type="hidden" name="is_dependent" value="{% if dependent %}1{% endif %}">
                     {% else %}
