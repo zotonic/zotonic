@@ -71,7 +71,7 @@
             {% if (m.acl.use.mod_admin or m.acl.use.mod_admin_frontend) and id.is_a.image %}
                 {% button class="btn btn-default" action={dialog_open id=id template="_overlay_image_edit.tpl" title="Edit Image" modal} text=_"Edit image" %}
             {% endif %}
-            {% if m.acl.use.mod_admin %}
+            {% if id.is_editable and (m.acl.use.mod_admin_frontend or m.acl.use.mod_admin) %}
                 <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default">{_ Visit full edit page _}</a>
             {% endif %}
             {% button class="btn btn-primary" type="submit" text=_"Save" %}
