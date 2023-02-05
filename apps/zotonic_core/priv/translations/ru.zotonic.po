@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-01-30 18:14\n"
+"PO-Revision-Date: 2023-02-05 23:00\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4693,7 +4693,7 @@ msgstr "Тест подключения"
 
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:25
 msgid "Excel Workbook"
-msgstr "рабочая тетрадь Excel"
+msgstr "Книга Excel"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:81
 msgid "File"
