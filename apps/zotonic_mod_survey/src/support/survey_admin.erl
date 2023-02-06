@@ -214,11 +214,10 @@ mailinglist_recipients_add(SurveyId, MailingId, Context) ->
         andalso z_acl:rsc_editable(MailingId, Context)
     of
         true ->
-            ContextSudo = z_acl:sudo(Context),
-            Results = m_survey:list_results(SurveyId, ContextSudo),
+            Results = m_survey:list_results(SurveyId, Context),
             Res = lists:map(
                 fun(R) ->
-                    mailinglist_recipient_add(MailingId, R, ContextSudo)
+                    mailinglist_recipient_add(MailingId, R, Context)
                 end,
                 Results),
             {ok, lists:sum(Res)};
@@ -238,8 +237,24 @@ mailinglist_recipient_add(MailingId, R, Context) ->
                 undefined ->
                     case m_mailinglist:insert_recipient_rsc(MailingId, UserId, Context) of
                         {error, exsubscriberof} ->
+                            ?LOG_DEBUG(#{
+                                in => zotonic_mod_survey,
+                                text => <<"Survey could not add mailinglist recipient">>,
+                                result => error,
+                                reason => exsubscriberof,
+                                mailing_id => MailingId,
+                                recipient_id => UserId
+                            }),
                             exsubscriberof;
-                        {error, _} ->
+                        {error, Reason} ->
+                            ?LOG_WARNING(#{
+                                in => zotonic_mod_survey,
+                                text => <<"Survey could not add mailinglist recipient">>,
+                                result => error,
+                                reason => Reason,
+                                mailing_id => MailingId,
+                                recipient_id => UserId
+                            }),
                             error;
                         ok ->
                             ok
