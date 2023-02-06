@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-02-05 23:00\n"
+"PO-Revision-Date: 2023-02-06 01:45\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4721,7 +4721,7 @@ msgstr "Удалено"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:47
 msgid "If the authentication with the server works."
-msgstr "Если аутентификация с сервером работает."
+msgstr "Работает ли аутентификация с сервером."
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:4./apps/zotonic_mod_base/priv/templates/directory_index.tpl:8
 msgid "Index of"
@@ -4764,19 +4764,19 @@ msgstr "На этой странице вы можете проверить по
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 msgid "Page Id"
-msgstr "Page Id"
+msgstr "Id страницы"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:115
 msgid "Pong Count"
-msgstr "Понг Граф"
+msgstr "Число ответов"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:121
 msgid "Pong Errors"
-msgstr "Ошибки понга"
+msgstr "Ошибки пинга"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:118
 msgid "Pong Latency"
-msgstr "Pong латентность"
+msgstr "Задержка ответа"
 
 #: apps/zotonic_mod_base/priv/templates/_powered_by_zotonic.tpl:1
 msgid "Powered by Zotonic"
