@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-02-06 10:02\n"
+"PO-Revision-Date: 2023-02-06 11:49\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4784,7 +4784,7 @@ msgstr "Работает на Zotonic"
 
 #: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
-msgstr "Прочтите эту страницу в сети"
+msgstr "Прочитать эту страницу в сети"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:14
 msgid "Return to the homepage"
@@ -4792,7 +4792,7 @@ msgstr "Вернуться на главную страницу"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
 msgid "Service Worker?"
-msgstr "Сервисный работник?"
+msgstr "Служебный рабочий процесс?"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:2
 msgid "Session Id"
@@ -4808,7 +4808,7 @@ msgstr "Извините, эта страница удалена."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:8
 msgid "Sorry, you don’t have access to this page."
-msgstr "Извините, у вас нет прав доступа к этой странице."
+msgstr "Извините, у вас нет доступа к этой странице."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:23
 msgid "Stack trace"
@@ -4832,7 +4832,7 @@ msgstr "Этой страницы не существует"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:102
 msgid "The <em>Pong Count</em> should increase every second, without any errors."
-msgstr "<em>Pong Count</em> должен увеличиваться каждую секунду без каких-либо ошибок."
+msgstr "<em>Число ответов</em> должно увеличиваться каждую секунду без каких-либо ошибок."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:136
 msgid "The authentication should show <em>Authenticated</em> or <em>Anonymous</em>."
