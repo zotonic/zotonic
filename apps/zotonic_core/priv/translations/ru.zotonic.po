@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-01-30 18:14\n"
+"PO-Revision-Date: 2023-02-06 11:49\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4693,7 +4693,7 @@ msgstr "Тест подключения"
 
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:25
 msgid "Excel Workbook"
-msgstr "рабочая тетрадь Excel"
+msgstr "Книга Excel"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:81
 msgid "File"
@@ -4721,7 +4721,7 @@ msgstr "Удалено"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:47
 msgid "If the authentication with the server works."
-msgstr "Если аутентификация с сервером работает."
+msgstr "Работает ли аутентификация с сервером."
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:4./apps/zotonic_mod_base/priv/templates/directory_index.tpl:8
 msgid "Index of"
@@ -4764,27 +4764,27 @@ msgstr "На этой странице вы можете проверить по
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 msgid "Page Id"
-msgstr "Page Id"
+msgstr "Id страницы"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:115
 msgid "Pong Count"
-msgstr "Понг Граф"
+msgstr "Число ответов"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:121
 msgid "Pong Errors"
-msgstr "Ошибки понга"
+msgstr "Ошибки пинга"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:118
 msgid "Pong Latency"
-msgstr "Pong латентность"
+msgstr "Задержка ответа"
 
 #: apps/zotonic_mod_base/priv/templates/_powered_by_zotonic.tpl:1
 msgid "Powered by Zotonic"
-msgstr "Создано Зотоник"
+msgstr "Работает на Zotonic"
 
 #: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
-msgstr "Прочтите эту страницу в сети"
+msgstr "Прочитать эту страницу в сети"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:14
 msgid "Return to the homepage"
@@ -4792,7 +4792,7 @@ msgstr "Вернуться на главную страницу"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
 msgid "Service Worker?"
-msgstr "Сервисный работник?"
+msgstr "Служебный рабочий процесс?"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:2
 msgid "Session Id"
@@ -4808,7 +4808,7 @@ msgstr "Извините, эта страница удалена."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:8
 msgid "Sorry, you don’t have access to this page."
-msgstr "Извините, у вас нет прав доступа к этой странице."
+msgstr "Извините, у вас нет доступа к этой странице."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:23
 msgid "Stack trace"
@@ -4832,7 +4832,7 @@ msgstr "Этой страницы не существует"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:102
 msgid "The <em>Pong Count</em> should increase every second, without any errors."
-msgstr "<em>Pong Count</em> должен увеличиваться каждую секунду без каких-либо ошибок."
+msgstr "<em>Число ответов</em> должно увеличиваться каждую секунду без каких-либо ошибок."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:136
 msgid "The authentication should show <em>Authenticated</em> or <em>Anonymous</em>."
