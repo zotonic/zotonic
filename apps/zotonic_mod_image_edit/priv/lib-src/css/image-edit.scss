@@ -22,8 +22,6 @@
 }
 
 .image-edit-container {
-    width: 100%;
-    height: 100%;
     overflow: hidden;
 }
 
@@ -45,9 +43,16 @@
 .image-edit__original__wrapper {
     overflow: hidden;
     position: relative;
+    transform-origin: center center;
 
     img {
         display: block;
+    }
+
+    .-modal & {
+        img {
+            max-height: 40rem;
+        }
     }
 }
 
@@ -55,6 +60,7 @@
     position: absolute;
     z-index: 1400;
     cursor: crosshair;
+    transform-origin: center center;
 
     .image-edit-crop {
         display: none;
@@ -124,7 +130,9 @@
         padding: 10px 0;
         font-size: 1.2em;
 
-        &:hover {
+        &:hover,
+        &:active,
+        &:focus {
             text-decoration: none;
         }
 
@@ -135,6 +143,18 @@
 
         &[aria-expanded='true']:before {
             content: "\25BC";
+        }
+    }
+}
+
+.image-edit.-modal {
+    .image-edit-group {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-between;
+
+        .form-group {
+            width: 48%;
         }
     }
 }
