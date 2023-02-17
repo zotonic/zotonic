@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Show the pager for the search result
 %% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -231,23 +231,23 @@ pages(Page, Pages) ->
     {Start1, Slider3, End}.
 
 urls(Start, Slider, End, IsEstimated, Dispatch, DispatchArgs, Context) ->
-    Start1 = [ {N, z_dispatcher:url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- Start ],
+    Start1 = [ {N, url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- Start ],
     BeforeSlider =
         case Slider of
             [] ->
                 [];
             [N1Slider|_] ->
-                [ {undefined, z_dispatcher:url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- [N1Slider-1] ]
+                [ {undefined, url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- [N1Slider-1] ]
         end,
-    Slider1 = [ {N, z_dispatcher:url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- Slider ],
+    Slider1 = [ {N, url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- Slider ],
     AfterSlider =
         case Slider of
             [] ->
                 [];
             [_|_] ->
-                [ {undefined, z_dispatcher:url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- [lists:last(Slider)+1] ]
+                [ {undefined, url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- [lists:last(Slider)+1] ]
         end,
-    End1 = [ {N, z_dispatcher:url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- End ],
+    End1 = [ {N, url_for(Dispatch, [{page,N}|DispatchArgs], Context)} || N <- End ],
 
     case {Start1, Slider1, End1} of
         {[], S, []} -> S;
