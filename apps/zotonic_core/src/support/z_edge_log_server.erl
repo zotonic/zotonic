@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2023 Marc Worrell
 %% @doc Check for changed edges, trigger notifications.
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -162,11 +162,20 @@ do_check_1(Rs, Context) ->
                     z_depcache:flush(RscId, Context)
                   end,
                   RscIds),
-    lists:foreach(fun({_Id,Op,SubjectId,Predicate,ObjectId,EdgeId}) ->
-                    PredName = z_convert:to_atom(Predicate),
-                    z_depcache:flush({predicate, m_rsc:rid(PredName, Context)}, Context),
-                    do_edge_notify(Op, SubjectId, PredName, ObjectId, EdgeId, Context)
-                  end, Rs),
+    Ns = lists:foldl(
+        fun({_Id,Op,SubjectId,Predicate,ObjectId,EdgeId}, Acc) ->
+            PredName = z_convert:to_atom(Predicate),
+            z_depcache:flush({predicate, m_rsc:rid(PredName, Context)}, Context),
+            do_edge_notify(Op, SubjectId, PredName, ObjectId, EdgeId, Acc, Context)
+        end,
+        #{},
+        Rs),
+    maps:fold(
+        fun(Topic, Events, ok) ->
+            z_mqtt:publish(Topic, lists:reverse(Events), Context)
+        end,
+        ok,
+        Ns),
     Ranges = z_utils:ranges([ element(1,R) || R <- Rs ]),
     z_db:transaction(
             fun(Ctx) ->
@@ -186,40 +195,34 @@ fetch_ids([], Acc) ->
 fetch_ids([{_Id,_Op,SubjectId,_Pred,ObjectId,_EdgeId}|Rs], Acc) ->
     fetch_ids(Rs, [SubjectId,ObjectId|Acc]).
 
-do_edge_notify(<<"DELETE">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
+do_edge_notify(<<"DELETE">>, SubjectId, PredName, ObjectId, EdgeId, Acc, Context) ->
     Edge = #edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId},
     z_notifier:notify_sync(Edge, Context),
-    z_mqtt:publish(
-            [ <<"model">>, <<"edge">>, <<"event">>, SubjectId, <<"o">>, z_convert:to_binary(PredName) ],
-            Edge,
-            Context),
-    z_mqtt:publish(
-            [ <<"model">>, <<"edge">>, <<"event">>, ObjectId, <<"s">>, z_convert:to_binary(PredName) ],
-            Edge,
-            Context),
-    maybe_delete_dependent(ObjectId, Context);
-do_edge_notify(<<"UPDATE">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
+    maybe_delete_dependent(ObjectId, Context),
+    T1 = [ <<"model">>, <<"edge">>, <<"event">>, SubjectId, <<"o">>, z_convert:to_binary(PredName) ],
+    T2 = [ <<"model">>, <<"edge">>, <<"event">>, ObjectId, <<"s">>, z_convert:to_binary(PredName) ],
+    Acc#{
+        T1 => [ Edge | maps:get(T1, Acc, []) ],
+        T2 => [ Edge | maps:get(T2, Acc, []) ]
+    };
+do_edge_notify(<<"UPDATE">>, SubjectId, PredName, ObjectId, EdgeId, Acc, Context) ->
     Edge = #edge_update{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId},
     z_notifier:notify_sync(Edge, Context),
-    z_mqtt:publish(
-            [ <<"model">>, <<"edge">>, <<"event">>, SubjectId, <<"o">>, z_convert:to_binary(PredName) ],
-            Edge,
-            Context),
-    z_mqtt:publish(
-            [ <<"model">>, <<"edge">>, <<"event">>, ObjectId, <<"s">>, z_convert:to_binary(PredName) ],
-            Edge,
-            Context);
-do_edge_notify(<<"INSERT">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
+    T1 = [ <<"model">>, <<"edge">>, <<"event">>, SubjectId, <<"o">>, z_convert:to_binary(PredName) ],
+    T2 = [ <<"model">>, <<"edge">>, <<"event">>, ObjectId, <<"s">>, z_convert:to_binary(PredName) ],
+    Acc#{
+        T1 => [ Edge | maps:get(T1, Acc, []) ],
+        T2 => [ Edge | maps:get(T2, Acc, []) ]
+    };
+do_edge_notify(<<"INSERT">>, SubjectId, PredName, ObjectId, EdgeId, Acc, Context) ->
     Edge = #edge_insert{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId},
     z_notifier:notify_sync(Edge, Context),
-    z_mqtt:publish(
-            [ <<"model">>, <<"edge">>, <<"event">>, SubjectId, <<"o">>, z_convert:to_binary(PredName) ],
-            Edge,
-            Context),
-    z_mqtt:publish(
-            [ <<"model">>, <<"edge">>, <<"event">>, ObjectId, <<"s">>, z_convert:to_binary(PredName) ],
-            Edge,
-            Context).
+    T1 = [ <<"model">>, <<"edge">>, <<"event">>, SubjectId, <<"o">>, z_convert:to_binary(PredName) ],
+    T2 = [ <<"model">>, <<"edge">>, <<"event">>, ObjectId, <<"s">>, z_convert:to_binary(PredName) ],
+    Acc#{
+        T1 => [ Edge | maps:get(T1, Acc, []) ],
+        T2 => [ Edge | maps:get(T2, Acc, []) ]
+    }.
 
 maybe_delete_dependent(Id, Context) ->
     case m_rsc:p_no_acl(Id, is_dependent, Context) of
