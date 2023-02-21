@@ -68,8 +68,8 @@
     {% block modal_footer %}
         <div class="modal-footer">
             {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
-            {% if (m.acl.use.mod_admin or m.acl.use.mod_admin_frontend) and id.is_a.image %}
-                {% button class="btn btn-default" action={dialog_open id=id template="_overlay_image_edit.tpl" title="Edit Image" modal} text=_"Edit image" %}
+            {% if id.is_a.image %}
+                {% button class="btn btn-default" action={dialog_close} action={overlay_open id=id template="_overlay_image_edit.tpl" title="Edit Image" class="dark image-edit-overlay"} text=_"Edit image" %}
             {% endif %}
             {% if id.is_editable and (m.acl.use.mod_admin_frontend or m.acl.use.mod_admin) %}
                 <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default">{_ Visit full edit page _}</a>

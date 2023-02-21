@@ -32,6 +32,7 @@
                     callback=callback
                     action=action
                     nocatselect=nocatselect
+                    content_group=content_group
                     unlink_action=unlink_action
                     undo_message_id="unlink-undo-message"
                     list_id=list_id
