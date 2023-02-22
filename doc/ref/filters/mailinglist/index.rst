@@ -7,3 +7,4 @@ Mailing list
    :glob:
 
    ../filter_inject_recipientdetails
+   ../filter_mailinglist_recipient_key_decode
