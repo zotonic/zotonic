@@ -1,17 +1,19 @@
 %% -*- mode: erlang -*-
 [
  {admin_mailinglist,            ["admin", "mailinglists"],                    controller_admin_mailinglist,            [seo_noindex]},
- 
+
  {admin_mailing_preview,        ["admin", "mailing", "preview", id],          controller_admin_mailing_preview,        [seo_noindex]},
  {admin_mailing_status,         ["admin", "mailing", id],                     controller_admin_mailing_status,         [seo_noindex]},
- 
+
  {admin_mailinglist_recipients, ["admin", "mailinglists", "recipients", id ], controller_admin_mailinglist_recipients, [seo_noindex]},
- 
+
  {mailinglist_confirm,          ["mailinglist", "confirm", confirm_key],      controller_template,                     [{template, "mailinglist_confirm.tpl"}]},
  {mailinglist_unsubscribe,      ["mailinglist", "unsubscribe", confirm_key],  controller_template,                     [{template, "mailinglist_unsubscribe.tpl"}]},
- 
+ {mailinglist_subscriptions,    ["mailinglist", "subscriptions" ],            controller_template,                     [{template, "mailinglist_subscriptions.tpl"}]},
+ {mailinglist_subscriptions,    ["mailinglist", "subscriptions", key],        controller_template,                     [{template, "mailinglist_subscriptions.tpl"}]},
+
  {mailinglist_export,           ["mailinglist", "export", id],                controller_mailinglist_export,           []},
- 
+
  %% Normal page to show a resource.
  {mailinglist,                  ["mailinglist", id],                          controller_page,                         [ {template, {cat, "mailinglist.tpl"}} ]},
  {mailinglist,                  ["mailinglist", id, slug],                    controller_page,                         [ {template, {cat, "mailinglist.tpl"}} ]}
