@@ -38,6 +38,8 @@
                 | {minify, boolean()}
                 | async
                 | {async, boolean()}
+                | defer
+                | {defer, boolean()}
                 | absolute_url
                 | {absolute_url, boolean()}
                 | {media, binary()}
@@ -170,13 +172,17 @@ script_element(JsFiles, Args, Context) ->
         lib(Args, Context),
         url_for_args(JsFiles, <<".js">>, Args, Context),
         Context),
-    AsyncAttr = case z_convert:to_bool( proplists:get_value(async, Args, false)) of
-        true -> <<" async ">>;
-        false -> <<>>
+    AsyncDeferAttr = case z_convert:to_bool( proplists:get_value(async, Args, false)) of
+        true -> <<" async defer ">>;
+        false ->
+            case z_convert:to_bool( proplists:get_value(defer, Args, false)) of
+                true -> <<" defer ">>;
+                false -> <<>>
+            end
     end,
     iolist_to_binary([
             <<"<script src=\"">>, JsUrl, <<"\"">>,
-                AsyncAttr,
+                AsyncDeferAttr,
                 <<" type=\"text/javascript\"">>,
             <<">">>,
             <<"</script>">>
