@@ -1,5 +1,5 @@
 {% with m.image_edit.settings[id] as settings %}
-<div class="image-edit">
+<div class="image-edit {% if modal %}-modal{% endif %}">
     <div class="image-edit-container">
         <div class="image-edit__original">
             {# Would be more logical to place these in the image wrapper, but Safari has a bug
@@ -34,16 +34,6 @@
                 %}
             {% endif %}
             <form id="image-edit-form" action="postback">
-<<<<<<< Updated upstream
-                <p class="help-block"><span class="glyphicon glyphicon-info-sign"></span> {_ The original image stays unaltered, all edits can be changed at any time. _}</p>
-                <p class="help-block"><span class="glyphicon glyphicon-info-sign"></span> {_ Click the image to set the cropping center. _}</p>
-                <div class="form-group">
-                    <p>
-                        <a href="#" id="image-edit-orientation-btn" class="btn btn-default">
-                            <i class="fa fa-undo"></i> {_ Rotate _}
-                        </a>
-                    </p>
-=======
                 {% block helper_texts %}
                     <p class="help-block"><span class="glyphicon glyphicon-info-sign"></span> {_ The original image stays unaltered, all edits can be changed at any time. _}</p>
                     <p class="help-block"><span class="glyphicon glyphicon-info-sign"></span> {_ Click the image to set the cropping center. _}</p>
@@ -56,7 +46,6 @@
                                 <i class="fa fa-undo"></i> {_ Rotate _}
                             </a>
                         </p>
->>>>>>> Stashed changes
 
                         <input type="hidden" id="image-edit-orientation" class="-is-reset" name="rotate" value="{{ settings.rotate|default:'0' }}">
                         <input type="hidden" id="image-crop-center-x" class="-is-reset" name="crop_center_x" value="{{ settings.crop_center_x|default:'-1' }}">
@@ -68,33 +57,6 @@
                     </div>
                 {% endblock %}
 
-<<<<<<< Updated upstream
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" value="1" name="is_lossless" {% if settings.is_lossless %}checked{% endif %}>
-                        {_ Lossless resize _}
-                    </label>
-                    <p class="help-block"><small>{_ Keep logos and clip art sharp. _}</small></p>
-                </div>
-
-                <a class="collapse-toggle" role="button" data-toggle="collapse" href="#image-edit-crop" aria-expanded="false" aria-controls="collapseExample">{_ Crop image _}</a>
-                <div class="collapse" id="image-edit-crop">
-                    <div class="form-group">
-                        <label>{_ Crop top _}: <span></span>%</label>
-                        <input id="image-edit-crop-top" class="form-control -is-reset" type="range" name="crop_top" min="0" max="100" value="{{ settings.crop_top|default:'0' }}" step="0.1" list="image-edit-percentage">
-                    </div>
-                    <div class="form-group">
-                        <label>{_ Crop left _}: <span></span>%</label>
-                        <input id="image-edit-crop-left" class="form-control -is-reset" type="range" name="crop_left" min="0" max="100" value="{{ settings.crop_left|default:'0' }}" step="0.1" list="image-edit-percentage">
-                    </div>
-                    <div class="form-group">
-                        <label>{_ Crop right _}: <span></span>%</label>
-                        <input id="image-edit-crop-right" class="form-control -is-reset" type="range" name="crop_right" min="0" max="100" value="{{ settings.crop_right|default:'0' }}" step="0.1" list="image-edit-percentage">
-                    </div>
-                    <div class="form-group">
-                        <label>{_ Crop bottom _}: <span></span>%</label>
-                        <input id="image-edit-crop-bottom" class="form-control -is-reset" type="range" name="crop_bottom" min="0" max="100" value="{{ settings.crop_bottom|default:'0' }}" step="0.1" list="image-edit-percentage">
-=======
                 {% block image_edit_crop %}
                     <a class="collapse-toggle" role="button" data-toggle="collapse" href="#image-edit-crop" aria-expanded="false" aria-controls="collapseExample">{_ Crop image _}</a>
                     <div class="collapse" id="image-edit-crop">
@@ -116,21 +78,9 @@
                                 <input id="image-edit-crop-bottom" class="form-control -is-reset" type="range" name="crop_bottom" min="0" max="100" value="{{ settings.crop_bottom|default:'0' }}" step="0.1" list="image-edit-percentage">
                             </div>
                         </div>
->>>>>>> Stashed changes
                     </div>
                 {% endblock %}
 
-<<<<<<< Updated upstream
-                <a class="collapse-toggle" role="button" data-toggle="collapse" href="#image-edit-conbri" aria-expanded="false" aria-controls="collapseExample">{_ Contrast &amp; Brightness _}</a>
-                <div class="collapse" id="image-edit-conbri">
-                    <div class="form-group">
-                        <label>{_ Contrast _}: <span></span>%</label>
-                        <input id="image-edit-contrast" class="form-control -is-reset" name="contrast" type="range" min="-100" max="100" value="{{ settings.contrast|default:'0' }}" list="image-edit-range">
-                    </div>
-                    <div class="form-group">
-                        <label>{_ Brightness _}: <span></span>%</label>
-                        <input id="image-edit-brightness" class="form-control -is-reset" name="brightness" type="range" min="-100" max="100" value="{{ settings.brightness|default:'0' }}" list="image-edit-range">
-=======
                 {% block image_edit_contrast %}
                     <a class="collapse-toggle" role="button" data-toggle="collapse" href="#image-edit-conbri" aria-expanded="false" aria-controls="collapseExample">{_ Contrast &amp; Brightness _}</a>
                     <div class="collapse" id="image-edit-conbri">
@@ -144,25 +94,9 @@
                                 <input id="image-edit-brightness" class="form-control -is-reset" name="brightness" type="range" min="-100" max="100" value="{{ settings.brightness|default:'0' }}" list="image-edit-range">
                             </div>
                         </div>
->>>>>>> Stashed changes
                     </div>
                 {% endblock %}
 
-<<<<<<< Updated upstream
-                <a class="collapse-toggle" role="button" data-toggle="collapse" href="#image-edit-tilpan" aria-expanded="false" aria-controls="collapseExample">{_ Roll, Tilt &amp; Pan _}</a>
-                <div class="collapse" id="image-edit-tilpan">
-                    <div class="form-group">
-                        <label>{_ Roll _}: <span></span>˚</label>
-                        <input id="image-edit-roll" class="form-control -is-reset" type="range" name="roll" min="-45" max="45" value="{{ settings.roll|default:'0' }}" list="image-edit-rotate-roll">
-                    </div>
-                    <div class="form-group">
-                        <label>{_ Tilt _}: <span></span>˚</label>
-                        <input id="image-edit-tilt" class="form-control -is-reset" type="range" name="tilt" min="-180" max="180" value="{{ settings.tilt|default:'0' }}" list="image-edit-angles">
-                    </div>
-                    <div class="form-group">
-                        <label>{_ Pan _}: <span></span>˚</label>
-                        <input id="image-edit-pan" class="form-control -is-reset" type="range" name="pan" min="-180" max="180" value="{{ settings.pan|default:'0' }}" list="image-edit-angles">
-=======
                 {% block image_edit_rtp %}
                     <a class="collapse-toggle" role="button" data-toggle="collapse" href="#image-edit-tilpan" aria-expanded="false" aria-controls="collapseExample">{_ Roll, Tilt &amp; Pan _}</a>
                     <div class="collapse" id="image-edit-tilpan">
@@ -193,7 +127,6 @@
                             </label>
                             <p class="help-block"><small>{_ Keep logos and clip art sharp. _}</small></p>
                         </div>
->>>>>>> Stashed changes
                     </div>
                 {% endblock %}
 
@@ -301,7 +234,7 @@
         }
 
         let w = $(".image-edit__original").width();
-        let h = $(".image-edit-container").height();
+        let h = $(".image-edit__original").height();
 
         let iw = parseInt($img.attr('width'));
         let ih = parseInt($img.attr('height'));
@@ -324,6 +257,11 @@
                 "margin-left": ((w - img_w) / 2) + "px",
                 "margin-top": ((img_w - img_h) / 2) + "px"
             });
+
+            $img.css ({
+                "max-height": "none"
+            });
+
             $crop_wrapper.css({
                 "width": img_w + "px",
                 "height": img_h + "px",
