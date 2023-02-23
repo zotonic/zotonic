@@ -389,7 +389,7 @@ decode_token(Token, Context) ->
         {Type, UserId, Timestamp} = decode_payload(Payload),
         SiteSecret = site_auth_key(Context),
         UserSecret = user_auth_key(UserId, Context),
-        HashCheck = z_utils:hmac(sha256, <<SiteSecret/binary, UserSecret/binary>>, Payload),
+        HashCheck = crypto:mac(hmac, sha256, <<SiteSecret/binary, UserSecret/binary>>, Payload),
         true = equal(Hash, HashCheck),
         {ok, {Type, UserId, Timestamp}}
     catch
@@ -463,6 +463,6 @@ auth_token(UserId, UserSecret, Context) when is_integer(UserId) ->
 %%      For example: encrypt( [ hash(payload, UserSecret), payload ], server-secret )
 encode_payload_v1(Payload, UserSecret, Context) ->
     SiteSecret = site_auth_key(Context),
-    Hash = z_utils:hmac(sha256, <<SiteSecret/binary, UserSecret/binary>>, Payload),
+    Hash = crypto:mac(hmac, sha256, <<SiteSecret/binary, UserSecret/binary>>, Payload),
     FinalPayload = <<1, Hash:32/binary, Payload/binary>>,
     base64:encode(FinalPayload).
