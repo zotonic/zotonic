@@ -31,21 +31,35 @@
 count_recipients(ListId, Context) ->
     Count = m_mailinglist:count_recipients(ListId, Context),
     SubIds = m_edge:subjects(ListId, subscriberof, Context),
-    QueryIds = case m_rsc:p(ListId, 'query', Context) of
-        undefined -> [];
-        <<>> -> [];
+    QueryTotal = case m_rsc:p(ListId, 'query', Context) of
+        undefined -> 0;
+        <<>> -> 0;
         _ ->
             Q = #{
                 <<"query_id">> => ListId
             },
-            #search_result{ result = Result } = z_search:search(<<"query">>, Q, 1, ?MAX_ROWS, Context),
-            Result
+            try
+                #search_result{ total = QTotal } = z_search:search(<<"query">>, Q, 1, ?MAX_ROWS, Context),
+                QTotal
+            catch
+                Error:Reason:Stack ->
+                    ?LOG_ERROR(#{
+                        in => zotonic_mod_mailinglist,
+                        text => <<"Error performing query for mailinglist recipients">>,
+                        rsc_id => ListId,
+                        query => Q,
+                        result => Error,
+                        reason => Reason,
+                        stack => Stack
+                    }),
+                    0
+            end
     end,
     #{
-        total => Count + length(SubIds) + length(QueryIds),
+        total => Count + length(SubIds) + QueryTotal,
         recipients => Count,
         subscriberof => length(SubIds),
-        query_text => length(QueryIds)
+        query_text => QueryTotal
     }.
 
 %% @doc Fetch all (enabled) recipients of a mailinglist.
@@ -70,8 +84,22 @@ list_recipients(List, Context) ->
             Q = #{
                 <<"query_id">> => ListId
             },
-            #search_result{ result = Result } = z_search:search(<<"query">>, Q, 1, ?MAX_ROWS, Context),
-            Result
+            try
+                #search_result{ result = Result } = z_search:search(<<"query">>, Q, 1, ?MAX_ROWS, Context),
+                Result
+            catch
+                Error:Reason:Stack ->
+                    ?LOG_ERROR(#{
+                        in => zotonic_mod_mailinglist,
+                        text => <<"Error performing query for mailinglist recipients">>,
+                        rsc_id => ListId,
+                        query => Q,
+                        result => Error,
+                        reason => Reason,
+                        stack => Stack
+                    }),
+                    []
+            end
     end,
     AllIds = lists:usort(SubIds ++ QueryIds),
     lists:foldl(
