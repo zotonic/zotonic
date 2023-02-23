@@ -269,7 +269,7 @@ pivot_resource_1(Id, Lang, Context) ->
 
 render_block(Block, Template, Vars, Context) ->
     {Output, _RenderState} = z_template:render_block_to_iolist(Block, Template, Vars, Context),
-    iolist_to_binary(Output).
+    z_string:trim(iolist_to_binary(Output)).
 
 %% @doc Check which pivot fields are changed, update only those
 update_changed(Id, KVs, RscProps, Context) ->

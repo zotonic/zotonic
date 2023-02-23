@@ -1,8 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2012 Arjan Scherpenisse <arjan@scherpenisse.net>
-%% Date: 2012-04-26
-
 %% @doc Add details of the mailinglist recipient to the URL.
+%% @end
 
 %% Copyright 2012 Arjan Scherpenisse
 %%
@@ -22,8 +21,6 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([inject_recipientdetails/3]).
-
--include_lib("zotonic_core/include/zotonic.hrl").
 
 inject_recipientdetails(Body, undefined, _Context) ->
     Body;

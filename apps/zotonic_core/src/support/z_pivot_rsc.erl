@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell, Maas-Maarten Zeeman
+%% @copyright 2009-2023 Marc Worrell, Maas-Maarten Zeeman
 %% @doc Pivoting server for the rsc table. Takes care of full text indices. Polls the pivot queue for any changed resources.
 
-%% Copyright 2009-2022 Marc Worrell, Maas-Maarten Zeeman
+%% Copyright 2009-2023 Marc Worrell, Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

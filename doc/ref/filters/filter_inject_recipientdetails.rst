@@ -10,7 +10,7 @@ is sent to, encoded as query string arguments.
 Each occurrence of ``##`` will be transformed to recipient details in
 the following form::
 
-  ?email=foo@bar.com&name_first=John&name_last=Doe
+  ?email=foo@bar.com&name_first=John&name_surname=Doe
 
 Its use case is when sending a mailing with a link in it which arrives
 at a webpage where the user has to enter his e-mail address and name

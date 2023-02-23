@@ -95,7 +95,16 @@ observe_mailinglist_message(#mailinglist_message{what=silent}, _Context) ->
     ok;
 observe_mailinglist_message(#mailinglist_message{what=send_goodbye, list_id=ListId, recipient=Props}, Context) ->
     Email = proplists:get_value(email, Props),
-    z_email:send_render(Email, "email_mailinglist_goodbye.tpl", [{list_id, ListId}, {email, Email}, {recipient, Props}], Context),
+    Vars = [
+        {list_id, ListId},
+        {email, Email},
+        {recipient, Props}
+    ],
+    Context1 = case proplists:get_value(pref_language, Props) of
+        undefined -> Props;
+        Lang -> z_context:set_language(Lang, Context)
+    end,
+    z_email:send_render(Email, "email_mailinglist_goodbye.tpl", Vars, Context1),
     ok;
 observe_mailinglist_message(#mailinglist_message{what=Message, list_id=ListId, recipient=RecipientId}, Context) ->
     Template = case Message of
@@ -103,7 +112,17 @@ observe_mailinglist_message(#mailinglist_message{what=Message, list_id=ListId, r
         send_confirm -> "email_mailinglist_confirm.tpl"
     end,
     Props = m_mailinglist:recipient_get(RecipientId, Context),
-    z_email:send_render(proplists:get_value(email, Props), Template, [{list_id, ListId}, {recipient, Props}], Context),
+    Email = proplists:get_value(email, Props),
+    Vars = [
+        {list_id, ListId},
+        {email, Email},
+        {recipient, Props}
+    ],
+    Context1 = case proplists:get_value(pref_language, Props) of
+        undefined -> Props;
+        Lang -> z_context:set_language(Lang, Context)
+    end,
+    z_email:send_render(Email, Template, Vars, Context1),
     ok.
 
 %% @doc Every 24h cleanup the mailinglists recipients.
@@ -182,6 +201,63 @@ event(#submit{message={mailinglist_combine,[{id,Id}]}}, Context) ->
             z_render:wire([{dialog_close, []}, {reload, []}], Context);
         {error, Msg} ->
             z_render:growl(Msg, "error", true, Context)
+    end;
+
+event(#postback{ message = {mailinglist_unsubscribe, Args} }, Context) ->
+    {mailinglist_id, MailingId} = proplists:lookup(mailinglist_id, Args),
+    OnSuccess = proplists:get_all_values(on_success, Args),
+    OnError = proplists:get_all_values(on_error, Args),
+    case m_rsc:is_a(MailingId, mailinglist, Context) of
+        true ->
+            case proplists:get_value(rsc_id, Args) of
+                undefined ->
+                    ok;
+                RscId when is_integer(RscId) ->
+                    case m_edge:delete(RscId, subscriberof, MailingId, z_acl:sudo(Context)) of
+                        ok ->
+                            m_edge:insert(RscId, exsubscriberof, MailingId, z_acl:sudo(Context)),
+                            RecipientProps = [
+                                {email, m_rsc:p_no_acl(RscId, <<"email_raw">>, Context)},
+                                {pref_language, m_rsc:p_no_acl(RscId, <<"pref_language">>, Context)}
+                            ],
+                            z_notifier:notify1(
+                                #mailinglist_message{
+                                    what = send_goodbye,
+                                    list_id = MailingId,
+                                    recipient = RecipientProps
+                                }, Context);
+                        {error, _} ->
+                            ok
+                    end
+            end,
+            case proplists:get_value(recipient_id, Args) of
+                undefined ->
+                    z_render:wire(OnSuccess, Context);
+                RecipientId when is_integer(RecipientId) ->
+                    case m_mailinglist:recipient_delete(RecipientId, Context) of
+                        ok ->
+                            z_render:wire(OnSuccess, Context);
+                        {error, _Reason} ->
+                            z_render:wire(OnError, Context)
+                    end
+            end;
+        false ->
+            z_render:wire(OnError, Context)
+    end;
+
+event(#submit{ message = {mailinglist_optout, Args} }, Context) ->
+    {id, Id} = proplists:lookup(id, Args),
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            Context;
+        RscId ->
+            IsOptOut = z_convert:to_bool(z_context:get_q(<<"is_mailing_opt_out">>, Context)),
+            case m_rsc:update(RscId, #{ <<"is_mailing_opt_out">> => IsOptOut }, [ {is_acl_check, false} ], Context) of
+                {ok, _} ->
+                    z_render:growl(?__("Saved the opt-out preference.", Context), Context);
+                {error, _} ->
+                    z_render:growl_error(?__("Could not save the opt-out preference.", Context), Context)
+            end
     end.
 
 operation(<<"union">>) -> union;
@@ -229,29 +305,33 @@ init(Args) ->
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
 %% @doc Handle a dropbox file with recipients.
-handle_call({{dropbox_file, File}, _SenderContext}, _From, State) ->
+handle_call({{dropbox_file, File}, _SenderContext}, _From, State = #state{ context = Context }) ->
     GetFiles = fun() ->
-        C = z_acl:sudo(State#state.context),
+        C = z_acl:sudo(Context),
         #search_result{result=Ids} = z_search:search(
             <<"query">>, #{ <<"cat">> => mailinglist },
             1, 1000,
             C),
-        [ {m_rsc:p(Id, mailinglist_dropbox_filename, C), Id} || Id <- Ids ]
+        [ {m_rsc:p(Id, <<"mailinglist_dropbox_filename">>, C), Id} || Id <- Ids ]
     end,
-    Files = z_depcache:memo(GetFiles, mailinglist_dropbox_filenames, ?WEEK, [mailinglist], State#state.context),
+    Files = z_depcache:memo(GetFiles, mailinglist_dropbox_filenames, ?WEEK, [mailinglist], Context),
     case proplists:get_value(list_to_binary(filename:basename(File)), Files) of
         undefined ->
             {reply, undefined, State};
         ListId ->
             HandleF = fun() ->
-                C = z_acl:sudo(State#state.context),
+                C = z_acl:sudo(Context),
                 case import_file(File, true, ListId, C) of
                     ok ->
+                        Title = case z_trans:lookup_fallback(m_rsc:p(ListId, <<"title">>, C), C) of
+                            undefined -> integer_to_binary(ListId);
+                            T -> T
+                        end,
                         z_email:send_admin(
                           "mod_mailinglist: Import from dropbox",
-                          ["Replaced all recipients of ", m_rsc:p(ListId, title, C), " with the contents of ", File, "."], State#state.context);
+                          ["Replaced all recipients of ", Title, " with the contents of ", File, "."], Context);
                     {error, Msg} ->
-                        z_email:send_admin("mod_mailinglist: Import from dropbox FAILED", Msg, State#state.context)
+                        z_email:send_admin("mod_mailinglist: Import from dropbox FAILED", Msg, Context)
                 end
             end,
             spawn(HandleF),
@@ -367,27 +447,35 @@ send_mailing_process(ListId, Recipients, PageId, Context) when is_map(Recipients
         ok,
         Recipients).
 
+send(_Email, RecipientId, From, Options, Context) when is_integer(RecipientId) ->
+    case m_rsc:p_no_acl(RecipientId, <<"email_raw">>, Context) of
+        undefined ->
+            skip;
+        Email ->
+            PageId = proplists:get_value(id, Options),
+            Attachments = m_edge:objects(PageId, hasdocument, Context),
+            {ok, RecipientKey} = z_mailinglist_recipients:recipient_key_encode(RecipientId, Context),
+            z_email:send(
+                #email{
+                    to = Email,
+                    from = From,
+                    html_tpl = {cat, "mailing_page.tpl"},
+                    vars = [
+                        {recipient_id, RecipientId},
+                        {recipient_key, RecipientKey},
+                        {email, Email}
+                        | Options
+                    ],
+                    attachments = Attachments
+                },
+                Context)
+    end;
+send(Email, #{ <<"rsc_id">> := RscId }, From, Options, Context) when is_integer(RscId) ->
+    send(Email, RscId, From, Options, Context);
 send(undefined, _R, _From, _Options, _Context) ->
     skip;
 send(<<>>, _R, _From, _Options, _Context) ->
     skip;
-send(_Email, RecipientId, From, Options, Context) when is_integer(RecipientId) ->
-    Email = m_rsc:p(RecipientId, email_raw, Context),
-    PageId = proplists:get_value(id, Options),
-    Attachments = m_edge:objects(PageId, hasdocument, Context),
-    z_email:send(
-        #email{
-            to = Email,
-            from = From,
-            html_tpl = {cat, "mailing_page.tpl"},
-            vars = [
-                {recipient_id, RecipientId},
-                {email, Email}
-                | Options
-            ],
-            attachments = Attachments
-        },
-        Context);
 send(Email, Recipient, From, Options, Context) when is_map(Recipient) ->
     Context1 = case maps:get(<<"pref_language">>, Recipient, undefined) of
         undefined ->
@@ -397,12 +485,15 @@ send(Email, Recipient, From, Options, Context) when is_map(Recipient) ->
     end,
     PageId = proplists:get_value(id, Options),
     Attachments = m_edge:objects(PageId, hasdocument, Context),
+    {ok, RecipientKey} = z_mailinglist_recipients:recipient_key_encode(Email, Context),
     z_email:send(
         #email{
             to = Email,
             from = From,
             html_tpl = {cat, "mailing_page.tpl"},
             vars = [
+                {recipient_id, undefined},
+                {recipient_key, RecipientKey},
                 {email, Email}
                 | Options
             ],
