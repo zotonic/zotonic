@@ -16,17 +16,22 @@
     <input type="hidden" name="list_id" value="{{ list_id }}" />
 
     {% if not m.rsc[id].is_published or m.rsc[id].publication_start|in_future %}
-    <p>{_ The page you are trying to e-mail is not yet published. What do you want to do? _}</p>
+        <p>{_ The page you are trying to e-mail is not yet published. What do you want to do? _}</p>
 
-    <p><input type="radio" name="mail_when" value="now" checked="checked" /> {_ Send the mailing right now, but do not include a link back to the website. _}<br />
-        <input type="radio" name="mail_when" value="scheduled" />
-        {% if not m.rsc[id].is_published %}
-        {_ Send the mailing immediately after the "published" checkbox has been checked in the edit page. _}
-        {% else %}
-        {_ Send the mailing automatically after the publication start date of _} {{ m.rsc[id].publication_start|date:_"d M Y, H:i" }}.
-        {% endif %}
-    </p>
-        {% endif %}
+        <p>
+            <label class="radio">
+                <input type="radio" name="mail_when" value="now" checked="checked"> {_ Send the mailing right now, but do not include a link back to the website. _}
+            </label>
+            <label class="radio">
+                <input type="radio" name="mail_when" value="scheduled">
+                {% if not m.rsc[id].is_published %}
+                    {_ Send the mailing immediately after the "published" checkbox has been checked in the edit page. _}
+                {% else %}
+                    {_ Send the mailing automatically after the publication start date of _} {{ m.rsc[id].publication_start|date:_"d M Y, H:i" }}.
+                {% endif %}
+            </label>
+        </p>
+    {% endif %}
 
     <div class="modal-footer">
             {% button class="btn btn-default" text=_"Cancel" action={dialog_close} tag="a" %}

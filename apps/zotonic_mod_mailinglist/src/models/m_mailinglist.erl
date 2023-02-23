@@ -49,6 +49,9 @@
     recipient_is_enabled_toggle/2,
     recipients_clear/2,
 
+    list_subscriptions_by_email/2,
+    list_subscriptions_by_rsc_id/2,
+
     insert_scheduled/3,
     delete_scheduled/3,
     get_scheduled/2,
@@ -98,6 +101,42 @@ m_get([ <<"subscription">>, ListId, Email | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_mailinglist, Context) of
         true -> {ok, {recipient_get(ListId, Email, Context), Rest}};
         false -> {error, eacces}
+    end;
+m_get([ <<"subscriptions">> ], _Msg, Context) ->
+    {ok, L} = list_subscriptions_by_rsc_id(z_acl:user(Context), Context),
+    {ok, {L, []}};
+m_get([ <<"subscriptions">>, <<"key">>, undefined | Rest ], _Msg, Context) ->
+    {ok, L} = list_subscriptions_by_rsc_id(z_acl:user(Context), Context),
+    {ok, {L, Rest}};
+m_get([ <<"subscriptions">>, <<"key">>, Key | Rest ], _Msg, Context) when is_binary(Key) ->
+    case z_mailinglist_recipients:recipient_key_decode(Key, Context) of
+        {ok, Email} when is_binary(Email) ->
+            {ok, L} = list_subscriptions_by_email(Key, Context),
+            {ok, {L, Rest}};
+        {ok, RscId} when is_integer(RscId) ->
+            {ok, L} = list_subscriptions_by_rsc_id(RscId, Context),
+            {ok, {L, Rest}};
+        {error, _} = Error ->
+            Error
+    end;
+m_get([ <<"subscriptions">>, RscId | Rest ], _Msg, Context) when is_integer(RscId) ->
+    case z_acl:is_allowed(use, mod_mailinglist, Context)
+        orelse z_acl:user(Context) =:= RscId
+        orelse z_acl:rsc_editable(RscId, Context)
+    of
+        true ->
+            {ok, List} = list_subscriptions_by_rsc_id(RscId, Context),
+            {ok, {List, Rest}};
+        false ->
+            {error, eacces}
+    end;
+m_get([ <<"subscriptions">>, Email | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(use, mod_mailinglist, Context) of
+        true ->
+            {ok, List} = list_subscriptions_by_email(Email, Context),
+            {ok, {List, Rest}};
+        false ->
+            {error, eacces}
     end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
@@ -219,7 +258,7 @@ recipient_get(ListId, Email, Context) ->
         select * from mailinglist_recipient
         where mailinglist_id = $1
           and email = $2",
-        [ z_convert:to_integer(ListId), z_convert:to_binary(Email1) ], Context).
+        [ m_rsc:rid(ListId, Context), Email1 ], Context).
 
 
 %% @doc Delete a recipient without sending the recipient a goodbye e-mail.
@@ -535,6 +574,145 @@ line_to_recipient([ Email, NameFirst, NameLast, NamePrefix | _ ]) ->
         {name_surname, NameLast},
         {name_surname_prefix, NamePrefix}
     ].
+
+
+
+%% @doc Get all mailingslists for this resource, checking both the recipients and the
+%% subscriberof edges. The found subscriptions must have the email address as the resource's primary email address.
+-spec list_subscriptions_by_rsc_id( RscId, Context ) -> {ok, Subscriptions} | {error, Reason} when
+    RscId :: m_rsc:resource(),
+    Context :: z:context(),
+    Subscriptions :: [ map() ],
+    Reason :: enoent.
+list_subscriptions_by_rsc_id(RscId0, Context) ->
+    case m_rsc:rid(RscId0, Context) of
+        undefined ->
+            {error, enoent};
+        RscId ->
+            MIds = m_edge:objects(RscId, subscriberof, Context),
+            ViaRsc = lists:map(
+                fun(MId) ->
+                    Email1 = normalize_email(m_rsc:p_no_acl(RscId, <<"email_raw">>, Context)),
+                    #{
+                        <<"title">> => m_rsc:p_no_acl(MId, <<"title">>, Context),
+                        <<"summary">> => m_rsc:p_no_acl(MId, <<"summary">>, Context),
+                        <<"rsc_id">> => RscId,
+                        <<"mailinglist_id">> => MId,
+                        <<"recipient_id">> => undefined,
+                        <<"email">> => Email1,
+                        <<"pref_language">> => m_rsc:p_no_acl(RscId, <<"pref_language">>, Context),
+                        <<"is_mailinglist_private">> => z_convert:to_bool(m_rsc:p_no_acl(MId, <<"mailinglist_private">>, Context))
+                    }
+                end,
+                MIds),
+            % Fetch all verified email addresses of this user
+            Idns = m_identity:get_rsc_by_type(RscId, email, Context),
+            Emails = lists:filtermap(
+                fun(Idn) ->
+                    case proplists:get_value(is_verified, Idn) of
+                        true ->
+                            proplists:get_value(key, Idn);
+                        false ->
+                            false
+                    end
+                end,
+                Idns),
+            ViaEmail = lists:flatten(lists:map(fun(E) -> subscriptions_by_email_1(E, Context) end, Emails)),
+            {ok, subs_merge_sort(ViaEmail ++ ViaRsc)}
+    end.
+
+
+%% @doc Get all mailingslists with this email address, checking both the recipients and the
+%% subscriberof edges. The found resources must have the email address as their primary email address.
+-spec list_subscriptions_by_email( Email, Context ) -> {ok, Subscriptions} when
+    Email :: binary() | string(),
+    Context :: z:context(),
+    Subscriptions :: [ map() ].
+list_subscriptions_by_email(Email, Context) ->
+    Email1 = normalize_email(Email),
+    SubscriberOf = m_rsc:rid(subscriberof, Context),
+    Pairs = z_db:q("
+        select e.subject_id, e.object_id
+        from edge e
+            join identity idn
+                on idn.type = 'email'
+                and idn.key = $1
+                and e.subject_id = idn.rsc_id
+        where e.predicate_id = $2",
+        [ Email1, SubscriberOf ],
+        Context),
+    ViaRsc = lists:filtermap(
+        fun({RscId, MId}) ->
+            case m_rsc:p_no_acl(RscId, <<"is_published_date">>, Context) of
+                true ->
+                    E = m_rsc:p_no_acl(RscId, <<"email_raw">>, Context),
+                    case normalize_email(E) of
+                        Email1 ->
+                            Recipient = #{
+                                <<"title">> => m_rsc:p_no_acl(MId, <<"title">>, Context),
+                                <<"summary">> => m_rsc:p_no_acl(MId, <<"summary">>, Context),
+                                <<"rsc_id">> => RscId,
+                                <<"mailinglist_id">> => MId,
+                                <<"email">> => Email1,
+                                <<"pref_language">> => m_rsc:p_no_acl(RscId, <<"pref_language">>, Context),
+                                <<"is_mailinglist_private">> => z_convert:to_bool(m_rsc:p_no_acl(MId, <<"mailinglist_private">>, Context))
+                            },
+                            {true, Recipient};
+                        _ ->
+                            false
+                    end;
+                false ->
+                    false
+            end
+        end,
+        Pairs),
+    ViaMailings = subscriptions_by_email_1(Email1, Context),
+    {ok, subs_merge_sort(ViaMailings ++ ViaRsc)}.
+
+subs_merge_sort(L) ->
+    M = lists:foldl(
+        fun(#{ <<"mailinglist_id">> := MId } = Sub, Acc) ->
+            case Acc of
+                #{ MId := AccSub } ->
+                    Acc#{
+                        MId => maps:merge(Sub, AccSub)
+                    };
+                _ ->
+                    Acc#{
+                        MId => Sub
+                    }
+            end
+        end,
+        #{},
+        L),
+    lists:sort(fun cmp_title/2, maps:values(M)).
+
+subscriptions_by_email_1(NormalizedEmail, Context) ->
+    {ok, ViaMailings} = z_db:qmap_props("
+        select *
+        from mailinglist_recipient
+        where email = $1
+          and is_enabled",
+        [ NormalizedEmail ],
+        Context),
+    lists:map(
+        fun(R) ->
+            MId = maps:get(<<"mailinglist_id">>, R),
+            #{
+                <<"title">> => m_rsc:p_no_acl(MId, <<"title">>, Context),
+                <<"summary">> => m_rsc:p_no_acl(MId, <<"summary">>, Context),
+                <<"mailinglist_id">> => MId,
+                <<"recipient_id">> => maps:get(<<"id">>, R),
+                <<"email">> => NormalizedEmail,
+                <<"pref_language">> => maps:get(<<"pref_language">>, R, undefined),
+                <<"is_mailinglist_private">> => z_convert:to_bool(m_rsc:p_no_acl(MId, <<"mailinglist_private">>, Context))
+            }
+        end,
+        ViaMailings).
+
+cmp_title(A, B) ->
+    maps:get(<<"title">>, A) =< maps:get(<<"title">>, B).
+
 
 %% @doc Insert a mailing to be send when the page becomes visible
 insert_scheduled(ListId, PageId, Context) ->

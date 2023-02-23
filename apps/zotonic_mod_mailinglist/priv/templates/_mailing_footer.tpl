@@ -5,7 +5,10 @@
 		{_ You received this mail because you are subscribed to the mailing list _}
 		<a href="{{ list_id.page_url_abs }}" style="color: #dddddd; text-decoration: underline;">{{ list_id.title }}</a>.
 
-		{% if m.mailinglist.subscription[list_id][email] as sub %}
+		{% if recipient_key %}
+			<br><br>
+			<a style="color: #dddddd; text-decoration: underline;" href="{% url mailinglist_subscriptions key=recipient_key absolute_url %}">{_ Please unsubscribe _}</a> {_ if you don't want to receive any further mail from this list. _}
+		{% elseif m.mailinglist.subscription[list_id][email] as sub %}
 			<br><br>
 			<a style="color: #dddddd; text-decoration: underline;" href="{% url mailinglist_unsubscribe confirm_key=sub.confirm_key absolute_url %}">{_ Please unsubscribe _}</a> {_ if you don't want to receive any further mail from this list. _}
 		{% endif %}

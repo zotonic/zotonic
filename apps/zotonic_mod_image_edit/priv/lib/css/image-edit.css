@@ -9,24 +9,29 @@
   color: #fff;
 }
 
-.modal-overlay > div.image-edit {
-  background-color: #222;
+.modal-overlay.dark.image-edit-overlay {
+  padding: 2vw;
+  background: rgba(0, 0, 0, 0.9);
 }
 
 .image-edit {
+  height: 100%;
+  max-height: 100%;
   container-type: inline-size;
   container-name: image-edit;
 }
 
 .image-edit-container {
   overflow: hidden;
+  max-height: 100%;
 }
 
 @container image-edit (min-width: 900px) {
   .image-edit-container {
     display: grid;
     grid-template-columns: 1fr 30%;
-    grid-template-rows: 1fr;
+    grid-template-rows: minmax(0, 1fr);
+    gap: 3rem;
   }
 }
 .image-edit__original {
@@ -43,9 +48,6 @@
 }
 .image-edit__original__wrapper img {
   display: block;
-}
-.-modal .image-edit__original__wrapper img {
-  max-height: 40rem;
 }
 
 .image-edit-crop__wrapper {
@@ -95,8 +97,10 @@
   grid-row: 1;
   grid-column: 2;
   min-width: 0;
-  padding: 10px;
+  padding: 2rem 2rem 3rem;
   overflow-y: scroll;
+  background: #222;
+  border-radius: 4px;
 }
 .image-edit__settings label {
   font-weight: normal;
@@ -124,13 +128,4 @@
 }
 .image-edit__settings .collapse-toggle[aria-expanded=true]:before {
   content: "▼";
-}
-
-.image-edit.-modal .image-edit-group {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-}
-.image-edit.-modal .image-edit-group .form-group {
-  width: 48%;
 }

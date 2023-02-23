@@ -62,8 +62,10 @@
 	{% endfor %}
 	{% endwith%}
 	</table>
+{% elseif id.is_editable %}
+	<p class="help-block">{_ No verified e-mail addresses. Please add one below. _}</p>
 {% else %}
-<p class="help-block">{_ No verified e-mail addresses. Please add one below. _}</p>
+	<p class="help-block">{_ No verified e-mail addresses. _}</p>
 {% endif %}
 
 {% wire name="verify-preferred-email"
