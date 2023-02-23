@@ -8,6 +8,7 @@ Params:
 - tabs_enabled (optional) (list of strings), f.i. ["new", "find"]; default: undefined
 - callback (optional) (string) JavaScript function to be called after connecting
 - nocatselect (optional - defaults to false)
+- content_group (optional - defaults to anybody's)
 - action (optional) action to be called after succesful connecting
 - unlink_action (optional) action to be called after succesful disconnecting
 - undo_message_id (opional) id of the div for the unlink message, defaults to "unlink-undo-message"
@@ -55,6 +56,7 @@ Config key:
           tabs_enabled=tabs_enabled
           callback=callback
           nocatselect=nocatselect
+          content_group=content_group
           action=action
           unlink_action=unlink_action
           undo_message_id=undo_message_id|default:"unlink-undo-message"
