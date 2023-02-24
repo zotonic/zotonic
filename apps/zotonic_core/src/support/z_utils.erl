@@ -1,11 +1,10 @@
 %% @author Marc Worrell
-%% @copyright 2009-2012 Marc Worrell
-%%
-%% Parts are from wf_utils.erl which is Copyright (c) 2008-2009 Rusty Klophaus
-%%
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Misc utility functions for zotonic
+%% Parts are from wf_utils.erl which is Copyright (c) 2008-2009 Rusty Klophaus
+%% @end
 
-%% Copyright 2009-2012 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -324,93 +323,91 @@ erase_process_dict() ->
     ok.
 
 
-%% Encode value securely, for use in cookies.
+%% @doc Encode value to a binary with a checksum, for use in cookies.
+%% @deprecated Use z_crypto:encode_value/2 instead.
+encode_value(Value, ContextOrSecret) ->
+    z_crypto:encode_value(Value, ContextOrSecret).
 
-encode_value(Value, #context{} = Context) ->
-    encode_value(Value, z_ids:sign_key(Context));
-encode_value(Value, Secret) when is_list(Secret); is_binary(Secret) ->
-    Salt = z_ids:rand_bytes(4),
-    BinVal = erlang:term_to_binary(Value),
-    Hash = hmac(sha, Secret, [ BinVal, Salt ]),
-    base64:encode(iolist_to_binary([ 1, Salt, Hash, BinVal ])).
+%% @doc Decode a value. Crash if the checksum is invalid.
+%% @deprecated Use z_crypto:decode_value/2 instead.
+decode_value(Data, ContextOrSecret) ->
+    z_crypto:decode_value(Data, ContextOrSecret).
 
-decode_value(Data, #context{} = Context) ->
-    decode_value(Data, z_ids:sign_key(Context));
-decode_value(Data, Secret) when is_list(Secret); is_binary(Secret) ->
-    <<1, Salt:4/binary, Hash:20/binary, BinVal/binary>> = base64:decode(Data),
-    Hash = hmac(sha, Secret, [ BinVal, Salt ]),
-    erlang:binary_to_term(BinVal).
-
+%% @doc Encode a value using a checksum, add a date to check for expiration.
+%% @deprecated Use z_crypto:encode_value_expire/3 instead.
+-spec encode_value_expire(Value, Date, Context) -> Encoded when
+    Value :: term(),
+    Date :: calendar:datetime(),
+    Context :: z:context(),
+    Encoded :: binary().
 encode_value_expire(Value, Date, Context) ->
-    encode_value({Value, Date}, Context).
+    z_crypto:encode_value_expire(Value, Date, Context).
 
+%% @doc Decode a value using a checksum, check date to check for expiration. Crashes
+%% if the checksum is invalid.
+%% @deprecated Use z_crypto:decode_value_expire/3 instead.
+-spec decode_value_expire(Encoded, Context) -> {ok, Value} | {error, expired} when
+    Encoded :: binary(),
+    Value :: term(),
+    Context :: z:context().
 decode_value_expire(Data, Context) ->
-    {Value, Expire} = decode_value(Data, Context),
-    case Expire >= calendar:universal_time() of
-        false -> {error, expired};
-        true -> {ok, Value}
-    end.
+    z_crypto:decode_value_expire(Data, Context).
 
+%% @deprecated Use crypto:mac/4 instead.
 hmac(Type, Key, Data) ->
     crypto:mac(hmac, Type, Key, Data).
 
-
 %%% CHECKSUM %%%
+
+%% @doc Calculate a checksum for the given data using the sign_key_simple of the site.
+%% @deprecated Use z_crypto:checksum/2 instead.
 -spec checksum(Data, Context) -> Checksum when
     Data :: iodata(),
     Context :: z:context(),
     Checksum :: binary().
 checksum(Data, Context) ->
-    Sign = z_ids:sign_key_simple(Context),
-    hex_encode(erlang:md5([Sign,Data])).
+    z_crypto:checksum(Data, Context).
 
--spec checksum_assert(Data, Checksum, Context) -> ok when
+%% @doc Assert that the checksum is correct. Throws an exception of class error with
+%% reason checksum_invalid if the checksum is not valid. The sign_key_simple if used
+%% for the checksum calculation.
+%% @deprecated Use z_crypto:checksum_assert/3 instead.
+-spec checksum_assert(Data, Checksum, Context) -> ok | no_return() when
     Data :: iodata(),
     Checksum :: binary() | string(),
     Context :: z:context().
 checksum_assert(Data, Checksum, Context) when is_binary(Checksum )->
-    Sign = z_ids:sign_key_simple(Context),
-    try
-        assert(hex_decode(Checksum) =:= erlang:md5([Sign,Data]), checksum_invalid)
-    catch
-        error:badarg ->
-            erlang:error(checksum_invalid);
-        error:{case_clause, _} ->
-            % Odd length checksum
-            erlang:error(checksum_invalid)
-    end;
-checksum_assert(Data, Checksum, Context) ->
-    checksum_assert(Data, z_convert:to_binary(Checksum), Context).
-
+    z_crypto:checksum_assert(Data, Checksum, Context).
 
 %%% PICKLE / UNPICKLE %%%
-pickle(Data, Context) ->
-    BData = erlang:term_to_binary(Data),
-    Nonce = z_ids:rand_bytes(4),
-    Sign  = z_ids:sign_key(Context),
-    SData = <<BData/binary, Nonce:4/binary>>,
-    <<Mac:16/binary>> = hmac(md5, Sign, SData),
-    base64url:encode(<<Mac:16/binary, Nonce:4/binary, BData/binary>>).
 
+%% @doc Encode an arbitrary to a binary. A checksum is added to prevent
+%% decoding erlang terms not originating from this server. An Nonce is
+%% added so that identical terms vary in their checksum. The encoded value
+%% is safe to use in URLs (base64url). The site's sign_key is used as the
+%% secret.
+%% @deprecated Use z_crypto:pickle/2 instead.
+-spec pickle(Term, Context) -> Data when
+    Term :: term(),
+    Context :: z:context(),
+    Data :: binary().
+pickle(Data, Context) ->
+    z_crypto:pickle(Data, Context).
+
+%% @doc Decode pickled base64url data. If the data checksum is invalid then an exception
+%% of class error with reason {checksum_invalid, Data} is thrown. The site's sign_key is
+%% used as the secret.
+%% @deprecated Use z_crypto:depickle/2 instead.
+-spec depickle(Data, Context) -> Term | no_return() when
+    Data :: binary(),
+    Context :: z:context(),
+    Term :: term().
 depickle(Data, Context) ->
-    try
-        <<Mac:16/binary, Nonce:4/binary, BData/binary>> = base64url:decode(Data),
-        Sign  = z_ids:sign_key(Context),
-        SData = <<BData/binary, Nonce:4/binary>>,
-        <<Mac:16/binary>> = hmac(md5, Sign, SData),
-        erlang:binary_to_term(BData)
-    catch
-        _M:_E ->
-            ?LOG_ERROR(#{
-                text => <<"Postback data invalid, could not depickle">>,
-                in => zotonic_core,
-                data => Data
-            }),
-            erlang:throw({checksum_invalid, Data})
-    end.
+    z_crypto:depickle(Data, Context).
 
 
 %%% HEX ENCODE and HEX DECODE
+
 -spec hex_encode(iodata()) -> binary().
 hex_encode(Value) -> z_url:hex_encode(Value).
 

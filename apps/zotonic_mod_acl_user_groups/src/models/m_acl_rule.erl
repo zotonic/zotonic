@@ -109,14 +109,14 @@ to_atom(A) -> erlang:binary_to_existing_atom(A, utf8).
 generate_code(Context) ->
     case z_acl:is_allowed(use, mod_acl_user_groups, Context) of
         true ->
-            z_utils:pickle({acl_test, calendar:universal_time()}, Context);
+            z_crypto:pickle({acl_test, calendar:universal_time()}, Context);
         false ->
             undefined
     end.
 
 is_valid_code(Code, Context) ->
     try
-        {acl_test, DT} = z_utils:depickle(Code, Context),
+        {acl_test, DT} = z_crypto:depickle(Code, Context),
         calendar:universal_time() < z_datetime:next_day(DT)
     catch
         _:_ ->

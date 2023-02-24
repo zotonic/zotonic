@@ -503,7 +503,7 @@ url2(Filename, Options, Context) ->
                           TagOpts,
                           ImageOpts};
                 {checksum, UrlProps} ->
-                    Checksum = z_utils:checksum([Filename,UrlProps,Extension], Context),
+                    Checksum = z_crypto:checksum([Filename,UrlProps,Extension], Context),
                     PropCheck = z_url:url_encode(iolist_to_binary([UrlProps,$(,Checksum,$)])),
                     {url, filename_to_urlpath(iolist_to_binary([Filename,PropCheck,Extension]), Context),
                           TagOpts,
@@ -675,7 +675,7 @@ url2props(Url, Context) ->
                                 _ ->
                                     % multiple args, also needs a checksum
                                     try
-                                        z_utils:checksum_assert([Filepath,Props,Extension], Check1, Context),
+                                        z_crypto:checksum_assert([Filepath,Props,Extension], Check1, Context),
                                         PropList1 = case PropList of
                                             [] ->
                                                 [];

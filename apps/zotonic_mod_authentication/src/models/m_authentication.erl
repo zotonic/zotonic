@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2020 Marc Worrell
+%% @copyright 2017-2023 Marc Worrell
 %% @doc Model for mod_authentication
+%% @end
 
-%% Copyright 2017-2020 Marc Worrell
+%% Copyright 2017-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -124,7 +125,7 @@ m_post([ <<"service-confirm-passcode">> ], #{ payload := Payload }, Context) whe
 m_post([ <<"send-verification-message">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
     case Payload of
         #{ <<"token">> := Token } ->
-            case catch z_utils:depickle(Token, Context) of
+            case catch z_crypto:depickle(Token, Context) of
                 #{ timestamp := {{_,_,_}, {_,_,_}}=Ts,
                    user_id := UserId } ->
                     case z_datetime:next_hour(Ts) > calendar:universal_time() of
@@ -389,7 +390,7 @@ decode_token(Token, Context) ->
         {Type, UserId, Timestamp} = decode_payload(Payload),
         SiteSecret = site_auth_key(Context),
         UserSecret = user_auth_key(UserId, Context),
-        HashCheck = z_utils:hmac(sha256, <<SiteSecret/binary, UserSecret/binary>>, Payload),
+        HashCheck = z_crypto:auth_hash(SiteSecret, UserSecret, Payload),
         true = equal(Hash, HashCheck),
         {ok, {Type, UserId, Timestamp}}
     catch
@@ -463,6 +464,6 @@ auth_token(UserId, UserSecret, Context) when is_integer(UserId) ->
 %%      For example: encrypt( [ hash(payload, UserSecret), payload ], server-secret )
 encode_payload_v1(Payload, UserSecret, Context) ->
     SiteSecret = site_auth_key(Context),
-    Hash = z_utils:hmac(sha256, <<SiteSecret/binary, UserSecret/binary>>, Payload),
+    Hash = z_crypto:auth_hash(SiteSecret, UserSecret, Payload),
     FinalPayload = <<1, Hash:32/binary, Payload/binary>>,
     base64:encode(FinalPayload).

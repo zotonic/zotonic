@@ -138,7 +138,7 @@ logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
             case m_rsc:p_no_acl(UserId, is_verified_account, Context) of
                 false ->
                     % The account is awaiting verification
-                    Token = z_utils:pickle( #{ user_id => UserId, timestamp => calendar:universal_time() }, Context),
+                    Token = z_crypto:pickle( #{ user_id => UserId, timestamp => calendar:universal_time() }, Context),
                     { Reply#{ error => verification_pending, token => Token }, Context };
                 V when V == true orelse V == undefined ->
                     % The account has been disabled after verification, or
