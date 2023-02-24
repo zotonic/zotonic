@@ -46,7 +46,7 @@ reply(JavaScript, Context) ->
 -spec transport( binary() | undefined, payload(), z:context()) -> ok | {error, term()}.
 transport(<<"postback">>, #postback_event{ postback = Postback } = Event, Context) ->
     % submit or postback events
-    {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Postback, Context),
+    {EventType, TriggerId, TargetId, Tag, Module} = z_crypto:depickle(Postback, Context),
     TriggerId1 = case TriggerId of
                     undefined -> Event#postback_event.trigger;
                     _         -> TriggerId

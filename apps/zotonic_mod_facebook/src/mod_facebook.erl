@@ -89,7 +89,7 @@ is_setting(_) -> false.
 
 % %% @doc Redirect to facebook, keep extra arguments in query arg
 % event(#postback{message={logon_redirect, Args}}, Context) ->
-%     Pickled = z_utils:pickle(Args, Context),
+%     Pickled = z_crypto:pickle(Args, Context),
 %     z_render:wire([
 %             {alert, [
 %                     {title, ?__("One moment please", Context)},

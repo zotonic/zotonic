@@ -46,7 +46,7 @@ render(Params, _Vars, Context) ->
        undefined ->
            {error, "sortable scomp, please give the id of the sortable element"};
        _ ->
-        	PickledTag  = z_utils:pickle({Tag,Delegate1,Id}, Context),
+        	PickledTag  = z_crypto:pickle({Tag,Delegate1,Id}, Context),
         	Script      = io_lib:format("z_sortable($('#~s'), '~s');", [Id, PickledTag]),
 
             Actions = [

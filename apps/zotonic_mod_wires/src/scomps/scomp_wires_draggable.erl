@@ -53,7 +53,7 @@ render(Params, _Vars, Context) ->
 	                undefined -> z_context:get_controller_module(Context);
 	                _ -> z_convert:to_atom(Delegate)
 	               end,
-	PickledTag   = z_utils:pickle({Tag,Delegate1,Id}, Context),
+	PickledTag   = z_crypto:pickle({Tag,Delegate1,Id}, Context),
 	GroupClasses = groups_to_classes(Groups1),
 
 	Helper       =  case z_utils:is_true(Clone) orelse ConnectToSortable /= undefined of

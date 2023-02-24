@@ -419,7 +419,7 @@ render_validator(TriggerId, TargetId, Args, Context) ->
         [] ->
             [VldScript|Append];
         _ ->
-            Pickled  = z_utils:pickle({Trigger,Name,Postback}, Context),
+            Pickled  = z_crypto:pickle({Trigger,Name,Postback}, Context),
             PbScript = [<<"z_set_validator_postback('">>,Trigger,<<"', '">>, Pickled, <<"');\n">>],
             [PbScript,VldScript|Append]
     end.
@@ -714,7 +714,7 @@ make_postback_info(Tag, EventType, TriggerId, TargetId, Delegate, Context) ->
                     _         -> z_convert:to_atom(Delegate)
                 end,
     PostbackInfo = {EventType, TriggerId, TargetId, Tag, Delegate1},
-    z_utils:pickle(PostbackInfo, Context).
+    z_crypto:pickle(PostbackInfo, Context).
 
 
 %% @doc Make a javascript to call the postback, posting an encoded string containing callback information.
@@ -763,7 +763,7 @@ make_postback_zevtargs(QArgs) when is_list(QArgs) ->
 make_validation_postback(Validator, Context) ->
     make_validation_postback(Validator, {}, Context).
 make_validation_postback(Validator, Args, Context) ->
-    z_utils:pickle({Validator, Args}, Context).
+    z_crypto:pickle({Validator, Args}, Context).
 
 
 %%% ACTION WIRING %%%
