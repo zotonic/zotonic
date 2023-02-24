@@ -1,11 +1,10 @@
 %% @author Marc Worrell
-%% @copyright 2009-2012 Marc Worrell
-%%
-%% Parts are from wf_utils.erl which is Copyright (c) 2008-2009 Rusty Klophaus
-%%
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Misc utility functions for zotonic
+%% Parts are from wf_utils.erl which is Copyright (c) 2008-2009 Rusty Klophaus
+%% @end
 
-%% Copyright 2009-2012 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -367,11 +366,14 @@ decode_value_expire(Data, Context) ->
         true -> {ok, Value}
     end.
 
+%% @deprecated
 hmac(Type, Key, Data) ->
     crypto:mac(hmac, Type, Key, Data).
 
 
 %%% CHECKSUM %%%
+
+%% @doc Calculate a checksum for the given data using the sign_key_simple of the site.
 -spec checksum(Data, Context) -> Checksum when
     Data :: iodata(),
     Context :: z:context(),
@@ -381,16 +383,19 @@ checksum(Data, Context) ->
     Checksum = crypto:mac(hmac, ?HASH_ALGORITHM, Key, Data),
     base64url:encode(Checksum).
 
--spec checksum_assert(Data, Checksum, Context) -> ok when
+%% @doc Assert that the checksum is correct. Throws an exception of class error with
+%% reason checksum_invalid if the checksum is not valid. The sign_key_simple if used
+%% for the checksum calculation.
+-spec checksum_assert(Data, Checksum, Context) -> ok | no_return() when
     Data :: iodata(),
     Checksum :: binary() | string(),
     Context :: z:context().
 checksum_assert(Data, Checksum, Context) when is_binary(Checksum )->
-    Key = z_ids:sign_key_simple(Context),
     try
+        Key = z_ids:sign_key_simple(Context),
         Decoded = base64url:decode(Checksum),
-        Calculated = crypto:mac(hmac, ?HASH_ALGORITHM, Key, Data),
-        assert(Decoded =:= Calculated, checksum_invalid)
+        Decoded = crypto:mac(hmac, ?HASH_ALGORITHM, Key, Data),
+        ok
     catch
         error:_ ->
             erlang:error(checksum_invalid)
@@ -404,7 +409,8 @@ checksum_assert(Data, Checksum, Context) ->
 %% @doc Encode an arbitrary to a binary. A checksum is added to prevent
 %% decoding erlang terms not originating from this server. An Nonce is
 %% added so that identical terms vary in their checksum. The encoded value
-%% is safe to use in URLs (base64url).
+%% is safe to use in URLs (base64url). The site's sign_key is used as the
+%% secret.
 -spec pickle(Term, Context) -> Data when
     Term :: term(),
     Context :: z:context(),
@@ -417,9 +423,10 @@ pickle(Data, Context) ->
     Hash = crypto:mac(hmac, ?HASH_ALGORITHM, Key, SignedData),
     base64url:encode(<<Hash:?HASH_BYTES/binary, SignedData/binary>>).
 
-%% @doc Decode pickled base64url data. If the data checksum is invalid then an error
-%% is thrown.
--spec depickle(Data, Context) -> Term when
+%% @doc Decode pickled base64url data. If the data checksum is invalid then an exception
+%% of class error with reason {checksum_invalid, Data} is thrown. The site's sign_key is
+%% used as the secret.
+-spec depickle(Data, Context) -> Term | no_return() when
     Data :: binary(),
     Context :: z:context(),
     Term :: term().
@@ -439,7 +446,7 @@ depickle(Data, Context) ->
                 reason => R,
                 data => Data
             }),
-            erlang:throw({checksum_invalid, Data})
+            erlang:error({checksum_invalid, Data})
     end.
 
 
