@@ -43,7 +43,7 @@
                 break;
             default:
                 // Replace with stored content
-                const $consented = $elt.find('script[type="text/x-cookie-consented"]');
+                const $consented = $elt.find('[type="text/x-cookie-consented"]');
                 if ($consented.length > 0) {
                     let $replace = $(html_unescape($consented.text()));
                     $elt.replaceWith($replace);
