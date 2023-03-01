@@ -82,12 +82,17 @@ fetch_partial(Url, Options, Context) ->
     Context :: z:context(),
     Result :: z_url_fetch:fetch_result().
 fetch(Method, Url, Args, Options, Context) ->
-    Payload = payload(Args),
     Url1 = z_convert:to_binary(Url),
-    Options1 = [
-        {content_type, "application/x-www-form-urlencoded"}
-        | Options
-    ],
+    Options1 = case proplists:is_defined(content_type, Options) of
+        true ->
+            Options;
+        false ->
+            [
+                {content_type, <<"application/x-www-form-urlencoded">>}
+                | Options
+            ]
+    end,
+    Payload = payload(Args, unicode:characters_to_list(proplists:get_value(content_type, Options1))),
     Options2 = add_options(post, Url1, Options1, Context),
     z_url_fetch:fetch(Method, Url1, Payload, Options2).
 
@@ -114,9 +119,10 @@ fetch_json(Method, Url, Args, Options, Context) ->
             Error
     end.
 
-payload(B) when is_binary(B) -> B;
-payload(M) when is_map(M) -> cow_qs:qs(maps:to_list(M));
-payload(L) when is_list(L) -> cow_qs:qs(L).
+payload(B, _CT) when is_binary(B) -> B;
+payload(M, "application/x-www-form-urlencoded") when is_map(M) -> cow_qs:qs(maps:to_list(M));
+payload(L, "application/x-www-form-urlencoded") when is_list(L) -> cow_qs:qs(L);
+payload(Data, "application/json") -> jsxrecord:encode(Data).
 
 
 %% @doc Fetch the metadata from an URL. Let modules change the fetch options.
