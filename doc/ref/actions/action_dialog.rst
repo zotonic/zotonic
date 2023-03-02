@@ -13,7 +13,7 @@ This opens a dialog with the title "Wisdom".  The dialog is empty except for the
 Normally, instead of this action, the action :ref:`action-dialog_open` is used. The action :ref:`action-dialog_open` shows a dialog that is rendered on the server.
 
 ========  ========  ==================================================
-Argument  Required  Description                              
+Argument  Required  Description
 ========  ========  ==================================================
 title     required  Dialog header title
 text      required  Dialog body text
@@ -25,5 +25,7 @@ backdrop  optional  boolean (0, 1), or the string ``"static"`` for a
                     default 1
 center    optional  boolean (0, 1) default 1; set to 0 to align the
                     dialog at the top
+keyboard  optional  boolean (true, false) default: true; if true,
+                    closes when escape keys is pressed
 ========  ========  ==================================================
 
