@@ -75,7 +75,7 @@ fetch_partial(Url, Options, Context) ->
 
 %% @doc Perform a request and data from an URL. Let modules change the fetch options.
 -spec fetch(Method, Url, Payload, Options, Context) -> Result when
-    Method :: get | post | delete | put,
+    Method :: get | post | delete | put | patch,
     Url :: string() | binary(),
     Payload :: list() | binary() | map(),
     Options :: z_url_fetch:options(),
@@ -99,7 +99,7 @@ fetch(Method, Url, Args, Options, Context) ->
 %% @doc Perform a request and fetch JSON data from an URL. Let modules change the fetch options. On success, the
 %% returned body is parsed with jsxrecord and returned.
 -spec fetch_json(Method, Url, Payload, Options, Context) -> Result when
-    Method :: get | post | delete | put,
+    Method :: get | post | delete | put | patch,
     Url :: string() | binary(),
     Payload :: list() | binary() | map(),
     Options :: z_url_fetch:options(),
