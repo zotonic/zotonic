@@ -101,7 +101,7 @@
               .appendTo($('body'));
 
             $dialog
-              .modal({backdrop: options.backdrop})
+              .modal({backdrop: options.backdrop, keyboard: options.keyboard ?? true})
               .css({'overflow-x': 'hidden', 'overflow-y': 'auto'});
 
             if (options.center) {
