@@ -305,7 +305,7 @@ init(Args) ->
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
 %% @doc Handle a dropbox file with recipients.
-handle_call({{dropbox_file, File}, _SenderContext}, _From, State = #state{ context = Context }) ->
+handle_call({#dropbox_file{ filename = File }, _SenderContext}, _From, State = #state{ context = Context }) ->
     GetFiles = fun() ->
         C = z_acl:sudo(Context),
         #search_result{result=Ids} = z_search:search(
@@ -315,7 +315,8 @@ handle_call({{dropbox_file, File}, _SenderContext}, _From, State = #state{ conte
         [ {m_rsc:p(Id, <<"mailinglist_dropbox_filename">>, C), Id} || Id <- Ids ]
     end,
     Files = z_depcache:memo(GetFiles, mailinglist_dropbox_filenames, ?WEEK, [mailinglist], Context),
-    case proplists:get_value(list_to_binary(filename:basename(File)), Files) of
+    Basename = filename:basename(unicode:characters_to_binary(File)),
+    case proplists:get_value(Basename, Files) of
         undefined ->
             {reply, undefined, State};
         ListId ->

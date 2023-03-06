@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Administrative interface.  Aka backend.
 %% @enddoc
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -395,9 +395,93 @@ event(#postback{ message={admin_note_delete_rsc, Args} }, Context) ->
             z_render:growl_error(?__("Sorry, you are not allowed to edit notes.", Context), Context)
     end;
 
+event(#submit{ message = {dropbox_upload, _Args} }, Context) ->
+    case z_acl:is_admin(Context) orelse z_acl:is_allowed(use, mod_mailinglist, Context) of
+        true ->
+            #upload{
+                tmpfile = TmpFile,
+                filename = Filename
+            } = z_context:get_q(<<"file">>, Context),
+            case sanitize_filename(Filename, <<>>) of
+                <<>> ->
+                    z_render:growl_error(?__("Sorry, could not handle this filename.", Context), Context);
+                Filename1 ->
+                    Size = filelib:file_size(TmpFile),
+                    Path = z_path:files_subdir_ensure("dropbox", Context),
+                    Filepath = filename:join(Path, Filename1),
+                    Result = case file:rename(TmpFile, Filepath) of
+                        ok ->
+                            ok;
+                        {error, exdev} ->
+                            case file:copy(TmpFile, Filepath) of
+                                {ok, _} -> ok;
+                                {error, _} = Error -> Error
+                            end;
+                        {error, _} = Error ->
+                            Error
+                    end,
+                    case Result of
+                        ok ->
+                            ?LOG_INFO(#{
+                                in => zotonic_mod_admin,
+                                text => <<"Dropbox file upload accepted">>,
+                                result => ok,
+                                filename => Filename,
+                                dropbox_filename => Filename1,
+                                path => Filepath,
+                                size => Size
+                            }),
+                            z_render:growl(?__("File uploaded to the dropbox, will be handled shortly.", Context), Context);
+                        {error, Reason} ->
+                            ?LOG_INFO(#{
+                                in => zotonic_mod_admin,
+                                text => <<"Dropbox file upload error">>,
+                                result => error,
+                                reason => Reason,
+                                filename => Filename,
+                                dropbox_filename => Filename1,
+                                path => Filepath,
+                                size => Size
+                            }),
+                            z_render:growl_error(?__("Sorry, could not move the file to the dropbox.", Context), Context)
+                    end
+            end;
+        false ->
+            z_render:growl_error(?__("Sorry, you are not allowed to upload dropbox files.", Context), Context)
+    end;
+
 event(_E, Context) ->
     ?DEBUG(_E),
     Context.
+
+
+sanitize_filename(<<>>, Acc) ->
+    Acc;
+sanitize_filename(<<C/utf8, Rest/binary>>, Acc) ->
+    case filechar_ok(C) of
+        true -> sanitize_filename(Rest, <<Acc/binary, C/utf8>>);
+        false -> sanitize_filename(Rest, <<Acc/binary, $->>)
+    end.
+
+filechar_ok($.) -> true;
+filechar_ok($-) -> true;
+filechar_ok($+) -> true;
+filechar_ok($_) -> true;
+filechar_ok($=) -> true;
+filechar_ok($() -> true;
+filechar_ok($)) -> true;
+filechar_ok($#) -> true;
+filechar_ok($@) -> true;
+filechar_ok($<) -> true;
+filechar_ok($>) -> true;
+filechar_ok($|) -> true;
+filechar_ok($^) -> true;
+filechar_ok($\ ) -> true;
+filechar_ok(C) when C >= $0, C =< $9 -> true;
+filechar_ok(C) when C >= $a, C =< $z -> true;
+filechar_ok(C) when C >= $A, C =< $Z -> true;
+filechar_ok(C) when C > 128 -> true;
+filechar_ok(_) -> false.
 
 
 feedback_categories(SubjectId, Predicate, _ObjectId, Context) when is_integer(SubjectId) ->
