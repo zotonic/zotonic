@@ -77,8 +77,9 @@ String.prototype.score = function(abbreviation, offset) {
 
 jQuery.fn.listfilter = function(options)
 {
-  var list = jQuery(options.list);
-  var sortlist = options.sort || false;
+  let list = jQuery(options.list);
+  let sortlist = options.sort || false;
+  let hideEmpty = options.hideEmpty || false;
 
   if(list.length)
   {
@@ -103,12 +104,16 @@ jQuery.fn.listfilter = function(options)
     var term = jQuery.trim(jQuery(this).val().toLowerCase()), scores = [];
 
     if (!term) {
-      if (sortlist) {
-        jQuery.each(rows, function() {
-          list.append(rows[ this[1] ]);
-        });
+      if (hideEmpty) {
+        rows.hide();
+      } else {
+        if (sortlist) {
+          jQuery.each(rows, function() {
+            list.append(rows[ this[1] ]);
+          });
+        }
+        rows.show();
       }
-      rows.show();
     } else {
       rows.hide();
 
