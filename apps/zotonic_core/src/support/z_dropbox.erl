@@ -40,9 +40,9 @@
 -include_lib("zotonic.hrl").
 
 -record(state, {
-    dropbox_dir :: file:filename_all(),
-    processing_dir :: file:filename_all(),
-    unhandled_dir :: file:filename_all(),
+    dropbox_dir :: binary(),
+    processing_dir :: binary(),
+    unhandled_dir :: binary(),
     min_age :: integer(),
     max_age :: integer(),
     site :: atom(),
@@ -238,7 +238,8 @@ do_scan(State) ->
 
 %% @doc Scan a directory, return list of files not changed in the last 10 seconds.
 scan_directory(Dir) ->
-    filelib:fold_files(Dir, "", true, fun(F,Acc) -> append_file(F, Acc) end, []).
+    Fs = filelib:fold_files(unicode:characters_to_list(Dir), "", true, fun(F,Acc) -> append_file(F, Acc) end, []),
+    [ unicode:characters_to_binary(F) || F <- Fs ].
 
 
 %% @doc Check if this is a file we are interested in, should not be part of a .svn or other directory
