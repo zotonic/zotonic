@@ -1,14 +1,13 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2020 Marc Worrell
-%%
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Simple dropbox handler, monitors a directory and signals new files.
-%% @todo Make this into a module
 %%
 %% Flow:
-%% 1. An user uploads/moves a file to the dropbox
+%% 1. An user uploads/moves a file to the dropbox directory
 %% 2. Dropbox handler sees the file, moves it so a safe place, and notifies the file handler of it existance.
+%% @end
 
-%% Copyright 2009-2020 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -40,7 +39,20 @@
 
 -include_lib("zotonic.hrl").
 
--record(state, {dropbox_dir, processing_dir, unhandled_dir, min_age, max_age, site, context}).
+-record(state, {
+    dropbox_dir :: binary(),
+    processing_dir :: binary(),
+    unhandled_dir :: binary(),
+    min_age :: integer(),
+    max_age :: integer(),
+    site :: atom(),
+    context :: z:context()
+}).
+
+-define(FILE_MIN_AGE, 2).
+-define(FILE_MAX_AGE, 3600).
+-define(SCAN_INTERVAL, 10000).
+
 
 %%====================================================================
 %% API
@@ -52,8 +64,10 @@ start_link(Site) ->
     gen_server:start_link({local, Name}, ?MODULE, Site, []).
 
 
-%% @spec scan(context()) -> void()
-%% @doc Perform a scan of the dropbox, periodically called by a timer.
+%% @doc Perform a scan of the dropbox, periodically called by a timer and by mod_admin after
+%% a file has been uploaded to the dropbox.
+-spec scan(Context) -> ok when
+    Context :: z:context().
 scan(Context) ->
     gen_server:cast(Context#context.dropbox_server, scan).
 
@@ -72,22 +86,22 @@ init(Site) ->
         module => ?MODULE
     }),
     Context = z_context:new(Site),
-	DefaultDropBoxDir = z_path:files_subdir_ensure("dropbox", Context),
-	DefaultProcessingDir = z_path:files_subdir_ensure("processing", Context),
-	DefaultUnhandledDir = z_path:files_subdir_ensure("unhandled", Context),
+	DefaultDropBoxDir = z_path:files_subdir_ensure(<<"dropbox">>, Context),
+	DefaultProcessingDir = z_path:files_subdir_ensure(<<"processing">>, Context),
+	DefaultUnhandledDir = z_path:files_subdir_ensure(<<"unhandled">>, Context),
     DropBox  = z_string:trim_right(config(dropbox_dir,            Context, DefaultDropBoxDir),    $/),
     ProcDir  = z_string:trim_right(config(dropbox_processing_dir, Context, DefaultProcessingDir), $/),
     UnDir    = z_string:trim_right(config(dropbox_unhandled_dir,  Context, DefaultUnhandledDir),  $/),
     State    = #state{
-                    dropbox_dir=DropBox,
-                    processing_dir=ProcDir,
-                    unhandled_dir=UnDir,
-                    min_age = z_convert:to_integer(config(dropbox_min_age, Context, 10)),
-                    max_age = z_convert:to_integer(config(dropbox_max_age, Context, 3600)),
-                    site=Site,
-                    context=Context
-                },
-    Interval = z_convert:to_integer(config(dropbox_interval, Context, 10000)),
+        dropbox_dir = DropBox,
+        processing_dir = ProcDir,
+        unhandled_dir = UnDir,
+        min_age = z_convert:to_integer(config(dropbox_min_age, Context, ?FILE_MIN_AGE)),
+        max_age = z_convert:to_integer(config(dropbox_max_age, Context, ?FILE_MAX_AGE)),
+        site = Site,
+        context = Context
+    },
+    Interval = z_convert:to_integer(config(dropbox_interval, Context, ?SCAN_INTERVAL)),
     timer:apply_interval(Interval, ?MODULE, scan, [Context]),
     gen_server:cast(self(), cleanup),
     {ok, State}.
@@ -105,7 +119,7 @@ handle_call(Message, _From, State) ->
 
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
+%%                                  {stop, eason, State}
 %% @doc Scan the dropbox, broadcast found files.
 handle_cast(scan, State) ->
     do_scan(State),
@@ -113,7 +127,7 @@ handle_cast(scan, State) ->
     {noreply, State};
 
 % Move all files in the processing directory to the unhandled directory
-handle_cast(cleanup, #state{processing_dir=ProcDir, unhandled_dir=UnDir} = State) ->
+handle_cast(cleanup, #state{ processing_dir = ProcDir, unhandled_dir = UnDir } = State) ->
     lists:foreach(fun(F) ->
                        move_file(ProcDir, F, true, UnDir)
                   end,
@@ -143,7 +157,6 @@ terminate(_Reason, _State) ->
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
 %% @doc Convert process state when code is changed
-
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
@@ -152,17 +165,22 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-
 config(Key, Context, Default) ->
     case m_site:get(Key, Context) of
         undefined -> Default;
         V -> V
     end.
 
-%% @spec do_scan(State) -> void()
 %% @doc Perform a scan of the dropbox, broadcast all to be processed files.
+-spec do_scan( #state{} ) -> ok.
 do_scan(State) ->
-    #state{processing_dir=ProcDir, dropbox_dir=DropDir, unhandled_dir=UnhandledDir, min_age=MinAge, max_age=MaxAge} = State,
+    #state{
+        processing_dir = ProcDir,
+        dropbox_dir = DropDir,
+        unhandled_dir = UnhandledDir,
+        min_age = MinAge,
+        max_age = MaxAge
+    } = State,
 
     % Move all old files in the processing directory to the unhandled directory
     ProcFiles = scan_directory(ProcDir),
@@ -178,7 +196,8 @@ do_scan(State) ->
                                 AllDropFiles),
     Moved      = lists:map(fun(F) -> {F,move_file(DropDir, F, false, ProcDir)} end, SafeDropFiles),
     ToProcess1 = lists:foldl(   fun
-                                    ({_, {ok, File}}, Acc) -> [File|Acc];
+                                    ({_, {ok, File}}, Acc) ->
+                                        [File|Acc];
                                     ({F, {error, Reason}}, Acc) ->
                                         ?LOG_WARNING(#{
                                             text => <<"z_dropbox: Failed to move file">>,
@@ -191,12 +210,36 @@ do_scan(State) ->
                                 end,
                                 ToProcess,
                                 Moved),
-    lists:foreach(fun(F) -> z_notifier:first(#dropbox_file{filename=F}, State#state.context) end, ToProcess1).
+    lists:foreach(
+        fun(File) ->
+            File1 = unicode:characters_to_binary(File),
+            Basename = unicode:characters_to_binary(filename:basename(File)),
+            case z_notifier:first(#dropbox_file{
+                    filename = File1,
+                    basename = Basename
+                }, State#state.context)
+            of
+                undefined ->
+                    ?LOG_WARNING(#{
+                        in => zotonic_core,
+                        text => <<"Dropbox file was not handled by modules, moved to unhandled">>,
+                        result => error,
+                        reason => no_handler,
+                        file => File1,
+                        basename => Basename
+                    }),
+                    move_file(ProcDir, File1, true, UnhandledDir);
+                _ ->
+                    ok
+            end
+        end,
+        ToProcess1).
 
 
 %% @doc Scan a directory, return list of files not changed in the last 10 seconds.
 scan_directory(Dir) ->
-    filelib:fold_files(Dir, "", true, fun(F,Acc) -> append_file(F, Acc) end, []).
+    Fs = filelib:fold_files(unicode:characters_to_list(Dir), "", true, fun(F,Acc) -> append_file(F, Acc) end, []),
+    [ unicode:characters_to_binary(F) || F <- Fs ].
 
 
 %% @doc Check if this is a file we are interested in, should not be part of a .svn or other directory
@@ -266,7 +309,11 @@ move_file(BaseDir, File, DeleteTarget, ToDir) ->
 
 %% @doc Return the relative path of the file to a BaseDir
 rel_file(BaseDir, File) ->
-    case lists:prefix(BaseDir, File) of
-        true -> lists:nthtail(length(BaseDir)+1, File);
-        false -> filename:basename(File)
+    Size = size(BaseDir),
+    case binary:longest_common_prefix([ BaseDir, File ]) of
+        Size ->
+            <<_:Size/binary, _Sep, Rest/binary>> = File,
+            Rest;
+        _ ->
+            filename:basename(File)
     end.

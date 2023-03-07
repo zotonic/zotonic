@@ -116,6 +116,28 @@
                 </div>
             </div>
 
+            {% if m.acl.is_admin or m.acl.use.mod_mailinglist %}
+                <div class="widget">
+                    <div class="widget-header">{_ Upload dropbox file _}</div>
+                    <div class="widget-content">
+                        <p class="help-block">
+                            {_ Upload a file to the dropbox. This file will be handled in the background by the mailinglists for recipient import and other modules. _}
+                        </p>
+
+                        {% wire id="dropupload"
+                                type="submit"
+                                postback={dropbox_upload}
+                                delegate=`mod_admin`
+                        %}
+                        <form id="dropupload" class="form form-inline" action="postback">
+                            <input class="form-control" type="file" name="file">
+                            <button class="btn btn-primary" type="submit">{_ Upload _}</button>
+                        </form>
+                        <p><br></p>
+                    </div>
+                </div>
+            {% endif %}
+
             <div class="widget">
                 <div class="widget-header">{_ Task queue _}</div>
                 <div class="widget-content">

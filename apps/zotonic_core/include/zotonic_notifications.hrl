@@ -992,7 +992,10 @@
 %% @doc Handle a new file received in the 'files/dropbox' folder of a site.
 %% Unhandled files are deleted after a hour.
 %% Type: first
--record(dropbox_file, {filename}).
+-record(dropbox_file, {
+    filename :: file:filename_all(),
+    basename :: binary()
+}).
 
 %% @doc Try to identify a file, returning a map with file properties.
 %% Type: first
