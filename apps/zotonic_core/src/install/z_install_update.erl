@@ -23,6 +23,7 @@
 
 -behaviour(gen_server).
 
+
 %% gen_server exports
 -export([
     start_link/1, init/1,
@@ -307,6 +308,7 @@ upgrade(C, Database, Schema) ->
     ok = task_queue_error_count(C, Database, Schema),
     ok = identity_expires(C, Database, Schema),
     ok = rsc_unfindable(C, Database, Schema),
+    ok = identity_rsc_id_type_key_constraint(C, Database, Schema),
     ok.
 
 
@@ -913,3 +915,27 @@ rsc_unfindable(C, Database, Schema) ->
                                     "CREATE INDEX rsc_is_unfindable_key ON rsc (is_unfindable)"),
             ok
     end.
+
+identity_rsc_id_type_key_constraint(C, Database, Schema) ->
+    case has_constraint(C, "identity", "identity_rsc_id_type_key_unique", Database, Schema) of
+        true ->
+            ok;
+        false ->
+            ?LOG_NOTICE(#{
+                text => <<"Upgrade: adding rsc_id, type and key unique constraint">>,
+                in => zotonic_core,
+                database => Database,
+                schema => Schema,
+                table => identity
+            }),
+            {ok, _} = epgsql:squery(C, "DELETE FROM identity i1 USING identity i2
+                                            WHERE i1.id < i2.id
+                                                  AND i1.rsc_id = i2.rsc_id
+                                                  AND i1.type = i2.type
+                                                  AND i1.key = i2.key;"),
+            {ok, [], []} = epgsql:squery(C, "ALTER TABLE identity
+                                             ADD CONSTRAINT identity_rsc_id_type_key_unique
+                                             UNIQUE (rsc_id, type, key)"),
+            ok
+    end.
+
