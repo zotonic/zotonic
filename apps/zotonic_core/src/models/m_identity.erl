@@ -1193,16 +1193,14 @@ insert(Rsc, Type, Key, Props, Context) ->
     case is_valid_key(Type, KeyNorm, Context) of
         true ->
             F = fun(Ctx) ->
-                        insert_1(Rsc, Type, KeyNorm, Props, 0, Ctx)
+                        insert_1(Rsc, Type, KeyNorm, Props, Ctx)
                 end,
             z_db:transaction(F, Context);
         false ->
             {error, invalid_key}
     end.
 
-insert_1(_Rsc, _Type, _Key, _Props, Tries, _Context) when Tries > 3 ->
-    {error, too_many_retries};
-insert_1(Rsc, Type, Key, Props, Tries, Context) ->
+insert_1(Rsc, Type, Key, Props, Context) ->
     RscId = m_rsc:rid(Rsc, Context),
     TypeB = z_convert:to_binary(Type),
     KeyB = z_convert:to_binary(Key),
