@@ -965,7 +965,7 @@ facet_to_column(#facet_def{
 
 col_type(text) -> <<"character varying">>;
 col_type(integer) -> <<"integer">>;
-col_type(float) -> <<"float">>;
+col_type(float) -> <<"double precision">>;
 col_type(boolean) -> <<"boolean">>;
 col_type(datetime) -> <<"timestamp with time zone">>;
 col_type(id) -> <<"integer">>.
