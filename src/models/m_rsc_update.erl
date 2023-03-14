@@ -450,6 +450,9 @@ update_result({ok, NewId, OldProps, NewProps, OldCatList, IsCatInsert}, #rscupd{
 
     % Return the updated or inserted id
     {ok, NewId};
+update_result({error, {expected, version, _}} = Error, #rscupd{ id = Id }, _Context) ->
+    lager:error("Error updating resource ~p: ~p", [ Id, Error ]),
+    Error;
 update_result({rollback, {_Why, _} = Er}, _RscUpd, _Context) ->
     lager:error("Rolling back update: ~p", [ Er ]),
     throw(Er);
