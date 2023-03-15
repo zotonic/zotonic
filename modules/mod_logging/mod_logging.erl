@@ -209,25 +209,19 @@ code_change(_OldVsn, State, _Extra) ->
 %% @private Check the health of the db pool. When usage is to high a warning will be %% put in the log.
 check_db_pool_health(Context) ->
     Site = z_context:site(Context),
-    Advice = "please increase the pool size.",
-
     case exometer:get_value([zotonic, Site, db, pool_full], one) of
         {ok, [{one, FullCounts}]} when FullCounts > 0 ->
-            z:error("Database pool is exhausted, ~s",
-                    [Advice],
-                    [{module, ?MODULE}, {line, ?LINE}],
-                    Context);
+            lager:warning("[~p] Database pool is busy, all connections used [~p times]",
+                          [Site, FullCounts]);
         {ok, _} ->
             ok;
         {error, not_found} ->
             ok
     end,
-
     case exometer:get_value([zotonic, Site, db, pool_high_usage], one) of
         {ok, [{one, HighCounts}]} when HighCounts > 0 ->
-            z:info("Database pool usage is close to exhaustion, ~s", [Advice],
-                   [{module, ?MODULE}, {line, ?LINE}],
-                   Context);
+            lager:debug("[~p] Database pool usage is high [~p times]",
+                        [Site, HighCounts]);
         {ok, _} ->
             ok;
         {error, not_found} ->
