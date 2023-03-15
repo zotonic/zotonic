@@ -1,4 +1,4 @@
-\%% @author Marc Worrell <marc@worrell.nl>
+%% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021-2022 Marc Worrell
 %% @doc Fetch data from URLs. Interfaces to z_url_fetch and z_url_metadata.
 %% @end
