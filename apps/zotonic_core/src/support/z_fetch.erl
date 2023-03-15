@@ -1,4 +1,4 @@
-%% @author Marc Worrell <marc@worrell.nl>
+\%% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021-2022 Marc Worrell
 %% @doc Fetch data from URLs. Interfaces to z_url_fetch and z_url_metadata.
 %% @end
@@ -106,7 +106,7 @@ fetch(Method, Url, Args, Options, Context) ->
         Method =:= get; Method =:= delete ->
             case binary:match(Url1, <<"?">>) of
                 nomatch -> <<Url1/binary, $?, Payload/binary>>;
-                {match, _} -> <<Url1/binary, $&, Payload/binary>>
+                {_, _} -> <<Url1/binary, $&, Payload/binary>>
             end;
         true ->
             Url1
