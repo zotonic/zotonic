@@ -221,16 +221,20 @@ code_change(_OldVsn, State, _Extra) ->
 %% @private Check the health of the db pool. When usage is to high a warning will be
 %% put in the log. The warning is deduplicated every hour.
 check_db_pool_health(Dedup, Site) ->
-    Context = z_context:new(Site),
     Dedup1 = case exometer:get_value([site, Site, db, pool_full], one) of
         {ok, [{one, FullCounts}]} when FullCounts > 0 ->
             case is_dup(pool_full, Dedup) of
                 {true, D1} ->
                     D1;
                 {false, D1} ->
-                    ?zError("Database pool is exhausted, increase db_max_connections (last minute count ~p)",
-                            [FullCounts],
-                            Context),
+                    ?LOG_WARNING(#{
+                        in => zotonic_core,
+                        text => <<"Database pool is busy, all connections used. Increase site.db_max_connections">>,
+                        result => error,
+                        reason => database_pool,
+                        count => FullCounts,
+                        site => Site
+                    }),
                     D1
             end;
         {ok, _} ->
@@ -244,9 +248,14 @@ check_db_pool_health(Dedup, Site) ->
                 {true, D2} ->
                     D2;
                 {false, D2} ->
-                    ?zInfo("Database pool usage is high, increase db_max_connections (last minute count ~p)",
-                           [HighCounts],
-                           Context),
+                    ?LOG_INFO(#{
+                        in => zotonic_core,
+                        text => <<"Database pool usage is high. Increase site.db_max_connections">>,
+                        result => warning,
+                        reason => database_pool,
+                        count => HighCounts,
+                        site => Site
+                    }),
                     D2
             end;
         {ok, _} ->
