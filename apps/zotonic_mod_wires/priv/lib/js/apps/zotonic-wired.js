@@ -624,67 +624,81 @@ function z_reload(args)
         parts;
 
     if (page.length > 0 && page.val() !== "" && page.val() !== '#reload') {
-        window.location.href = window.location.protocol
+        window.location.href = `${ window.location.protocol }//${ window.location.host }${ page.val() }`;
+        return;
+    } 
+
+    if (typeof args === "undefined") {
+        window.location.reload(true);
+        return;
+    }
+
+    newLanguage = args.z_language;
+
+    if (typeof newLanguage === "string") {
+        // Change the language cookie when it is set. 
+        for (const cookie of document.cookie.split(';') ){
+            const kv = cookie.trim().split("=");
+            if(kv[0] === "z.lang" && kv[1] !== newLanguage) {
+                const expirationDate = new Date();
+                expirationDate.setTime(expirationDate.getTime() + (365 * 24 * 60 * 60 * 1000));
+                const expires = "expires=" + expirationDate.toUTCString();
+                document.cookie = `z.lang=${ newLanguage };${ expires };path=/`;
+            }
+        }
+
+        // Add or remove language from URL:
+        pathname = window.location.pathname.substring(1);
+        if (z_language) {
+            // Remove current language
+            re = new RegExp("^" + z_language);
+            pathname = pathname.replace(re, "");
+        }
+
+        // Get path parts
+        parts = pathname.split("/")
+            .filter(function(p) {
+                return p !== "";
+            });
+
+        rewriteUrl = Boolean(args["z_rewrite_url"]);
+        if (rewriteUrl) {
+            // Add language to start
+            parts.unshift(newLanguage);
+        }
+
+        href = window.location.protocol
             + "//"
             + window.location.host
-            + page.val();
+            + "/"
+            + parts.join("/")
+            + ((rewriteUrl && (pathname === "" || pathname === "/")) ? "/" : "")
     } else {
-        if (typeof args === "undefined") {
-            window.location.reload(true);
-            return;
-        }
-        newLanguage = args.z_language;
-        if (typeof newLanguage === "string") {
-            rewriteUrl = Boolean(args["z_rewrite_url"]);
-            // Add or remove language from URL:
-            pathname = window.location.pathname.substring(1);
-            if (z_language) {
-                // Remove current language
-                re = new RegExp("^" + z_language);
-                pathname = pathname.replace(re, "");
-            }
-            // Get path parts
-            parts = pathname.split("/")
-                .filter(function(p) {
-                    return p !== "";
-                });
-            if (rewriteUrl) {
-                // Add language to start
-                parts.unshift(newLanguage);
-            }
-            href = window.location.protocol
-                + "//"
-                + window.location.host
-                + "/"
-                + parts.join("/")
-                + ((rewriteUrl && (pathname === "" || pathname === "/")) ? "/" : "")
-        } else {
-            href = window.location.protocol
-                + "//"
-                + window.location.host
-                + window.location.pathname;
-        }
-        if (window.location.search == "") {
-            window.location.href = href;
-        } else {
-            // remove z_language and z_rewrite_url, keep other query params
-            var kvs;
-            kvs = window.location.search.substring(1)
-                .split(/[&;]/)
-                .map(function(kv) {
-                    return (kv.match("^z_language") || kv.match("^z_rewrite_url"))
-                        ? ""
-                        : kv;
-                })
-                .filter(function(kv) {
-                    return kv !== "";
-                });
-            if (kvs === "") {
-                window.location.href = href;
-            } else {
-                window.location.href = href + "?" + kvs.join("&");
-            }
-        }
+        href = `${ window.location.protocol }//${ window.location.host }${ window.location.pathname }`;
+    }
+
+    if (window.location.search == "") {
+        window.location.href = href;
+        return;
+    } 
+
+    // remove z_language and z_rewrite_url, keep other query params
+    var kvs;
+    kvs = window.location.search.substring(1)
+        .split(/[&;]/)
+        .map(function(kv) {
+            return (kv.match("^z_language") || kv.match("^z_rewrite_url"))
+                ? ""
+                : kv;
+        })
+        .filter(function(kv) {
+            return kv !== "";
+        });
+
+    if (kvs === "") {
+        window.location.href = href;
+    } else {
+        window.location.href = `${ href }?${ kvs.join("&") }`;
     }
 }
 
