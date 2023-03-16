@@ -32,7 +32,7 @@
                 <p class="help-block">
                     {_ Give the redirect URLs that are valid for the website performing the OAuth2 authorization. _}
                     {_ These must be complete URLs, but without the query (?..) or hash (#...) parts. _}<br>
-                    {_ For Zotonic sites this you can enter the domain name(s) of the website. _}
+                    {_ For Zotonic sites you can enter the domain name(s) of the website that wants to access the data. _}
                 </p>
             </div>
         </div>
@@ -48,7 +48,7 @@
                         <button id="{{ #generate }}" class="btn btn-default">{_ Generate my access token _}</button>
                         {% wire id=#generate
                                 action={confirm
-                                    text=_"If you have already a token then it will be replaces with the new one."
+                                    text=_"If you have already a token then the new token will replace the current token."
                                     ok=_"Generate access token"
                                     postback={oauth2_app_token_generate app_id=app.id}
                                     delegate=`mod_oauth2`
