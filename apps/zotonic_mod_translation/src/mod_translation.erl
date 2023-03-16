@@ -570,10 +570,7 @@ set_language_url_rewrite(Value, Context) ->
 -spec reload_page(z:context()) -> z:context().
 reload_page(Context) ->
    RewriteUrl = z_convert:to_bool(m_config:get_value(?MODULE, rewrite_url, true, Context)),
-   Language = case RewriteUrl of
-        true -> z_context:language(Context);
-        false -> <<>>
-   end,
+   Language = z_context:language(Context),
    z_render:wire({reload, [{z_language, Language}, {z_rewrite_url, RewriteUrl}]}, Context).
 
 %% @doc Reloads the table with translations.
