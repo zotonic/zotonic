@@ -282,6 +282,22 @@ LiveValidation.prototype = {
             return LiveValidation.TEXT;
         if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'HIDDEN')
             return LiveValidation.TEXT;
+        if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'COLOR')
+            return LiveValidation.TEXT;
+        if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'DATE')
+            return LiveValidation.TEXT;
+        if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'DATETIME-LOCAL')
+            return LiveValidation.TEXT;
+        if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'MONTH')
+            return LiveValidation.TEXT;
+        if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'WEEK')
+            return LiveValidation.TEXT;
+        if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'TIME')
+            return LiveValidation.TEXT;
+        if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'RANGE')
+            return LiveValidation.TEXT;
+        if (nodeName == 'INPUT' && this.element.type.toUpperCase() == 'SEARCH')
+            return LiveValidation.TEXT;
         if (nodeName == 'SELECT')
             return LiveValidation.SELECT;
         if (nodeName == 'FORM')
