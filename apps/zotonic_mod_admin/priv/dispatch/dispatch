@@ -2,7 +2,6 @@
 %% Admin dispatch rules
 [
  {admin,               ["admin"],                         controller_admin,               [ seo_noindex ]},
- {admin_logon,         ["admin", "logon"],                controller_logon,               [{template, "admin_logon.tpl"}, seo_noindex, ssl]},
  {admin_overview_rsc,  ["admin", "overview"],             controller_admin,               [{template, "admin_overview.tpl"}, {selected, "overview"}, seo_noindex]},
  {admin_media,         ["admin", "media"],                controller_admin,               [{template, "admin_media.tpl"}, {selected, "media"}, seo_noindex]},
 
