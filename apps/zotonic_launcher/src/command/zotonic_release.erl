@@ -22,7 +22,6 @@
 %% API
 -export([run/0]).
 
--include_lib("zotonic_core/include/zotonic_release.hrl").
-
 run() ->
-    io:format("Zotonic ~s~n", [?ZOTONIC_VERSION]).
+    io:format("~s [Erlang/OTP ~s]~n", [m_admin_status:zotonic_version(),
+                                       m_admin_status:otp_version()]).

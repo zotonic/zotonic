@@ -30,6 +30,7 @@
     m_get/3,
 
     otp_version/0,
+    zotonic_version/0,
     database_version/1,
     tcp_connection_count/0,
     group_sockets/0,
@@ -39,8 +40,11 @@
 ]).
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
-m_get([ <<"zotonic_version">> | Rest ], _Msg, _Context) ->
-    {ok, {z_convert:to_binary(?ZOTONIC_VERSION), Rest}};
+m_get([ <<"zotonic_version">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {zotonic_version(), Rest}};
+        false -> {error, eacces}
+    end;
 m_get(Path, Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> m_get_1(Path, Msg, Context);
@@ -146,6 +150,13 @@ otp_version() ->
     ]),
     {ok, Version} = file:read_file(OtpVersionFile),
     z_string:trim(Version).
+
+
+%% @doc Return the zotonic version.
+-spec zotonic_version() -> binary().
+zotonic_version() ->
+    z_convert:to_binary(?ZOTONIC_VERSION).
+
 
 %% @doc Return the version string of the used database.
 -spec database_version( z:context() ) -> binary().
