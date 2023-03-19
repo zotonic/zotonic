@@ -60,6 +60,7 @@
 ]).
 
 -include("zotonic.hrl").
+-include_lib("epgsql/include/epgsql.hrl").
 
 % Interval (in seconds) to check if there are any items to be pivoted.
 -define(PIVOT_POLL_INTERVAL_FAST, 2).
@@ -176,33 +177,48 @@ insert_task(Module, Function, UniqueKey, Args, Context) ->
 
 %% @doc Insert a slow running pivot task with unique key and arguments that should start after Seconds seconds.
 insert_task_after(SecondsOrDate, Module, Function, UniqueKey, Args, Context) ->
-    z_db:transaction(fun(Ctx) -> insert_transaction(SecondsOrDate, Module, Function, UniqueKey, Args, Ctx) end, Context).
+    UniqueKeyBin = z_convert:to_binary(UniqueKey),
+    Result = z_db:transaction(fun(Ctx) -> insert_transaction(SecondsOrDate, Module, Function, UniqueKeyBin, Args, Ctx) end, Context),
+    case Result of
+        {ok, _} = Ok ->
+            Ok;
+        {error, #error{ codename = unique_violation }} ->
+            Id = z_db:q1("
+                    select id
+                    from pivot_task_queue
+                    where module = $1 and function = $2 and key = $3",
+                 [Module, Function, UniqueKeyBin],
+                 Context),
+            {ok, Id};
+        {error, _} = Error ->
+            Error
+    end.
 
-    insert_transaction(SecondsOrDate, Module, Function, UniqueKey, Args, Context) ->
-        Due = to_utc_date(SecondsOrDate),
-        UniqueKeyBin = z_convert:to_binary(UniqueKey),
-        Fields = [
-            {module, Module},
-            {function, Function},
-            {key, UniqueKeyBin},
-            {args, Args},
-            {due, Due}
-        ],
-        case z_db:q1("select id
-                      from pivot_task_queue
-                      where module = $1 and function = $2 and key = $3",
-                     [Module, Function, UniqueKeyBin],
-                     Context)
-        of
-            undefined ->
-                z_db:insert(pivot_task_queue, Fields, Context);
-            Id when is_integer(Id) ->
-                case Due of
-                    undefined -> nop;
-                    _ -> z_db:update(pivot_task_queue, Id, Fields, Context)
-                end,
-                {ok, Id}
-        end.
+insert_transaction(SecondsOrDate, Module, Function, UniqueKeyBin, Args, Context) ->
+    Due = to_utc_date(SecondsOrDate),
+    Fields = [
+        {module, Module},
+        {function, Function},
+        {key, UniqueKeyBin},
+        {args, Args},
+        {due, Due}
+    ],
+    case z_db:q1("select id
+                  from pivot_task_queue
+                  where module = $1 and function = $2 and key = $3
+                  for update",
+                 [Module, Function, UniqueKeyBin],
+                 Context)
+    of
+        undefined ->
+            z_db:insert(pivot_task_queue, Fields, Context);
+        Id when is_integer(Id) ->
+            case Due of
+                undefined -> nop;
+                _ -> z_db:update(pivot_task_queue, Id, Fields, Context)
+            end,
+            {ok, Id}
+    end.
 
 
 get_task(Context) ->
