@@ -426,10 +426,15 @@ insert(Table, Props, Context) ->
     F = fun(C) ->
          DbDriver = z_context:db_driver(Context),
          case equery1(DbDriver, C, FinalSql, Parameters) of
-             {ok, Id} -> {ok, Id};
-             {error, noresult} -> {ok, undefined};
+             {ok, Id} ->
+                {ok, Id};
+             {error, noresult} ->
+                {ok, undefined};
+             {error, #error{ codename = unique_violation } = Reason} = Error ->
+                lager:notice("z_db error ~p in insert into ~p with ~p", [Reason, Table, Parameters]),
+                Error;
              {error, Reason} = Error ->
-                lager:error("z_db error ~p in query ~s with ~p", [Reason, FinalSql, Parameters]),
+                lager:error("z_db error ~p in insert into ~p with ~p", [Reason, Table, Parameters]),
                 Error
          end
     end,
