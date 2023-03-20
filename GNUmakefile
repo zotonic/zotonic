@@ -19,7 +19,7 @@ endif
 
 # Default target - update sources and call all compile rules in succession
 all: compile
-	bin/zotonic completion
+	@echo "Zotonic" `bin/zotonic -v` "was successfully compiled"
 
 $(REBAR): $(REBAR_ETAG)
 	$(ERL) -noshell -s inets -s ssl \
