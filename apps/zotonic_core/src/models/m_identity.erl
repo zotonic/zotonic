@@ -656,6 +656,7 @@ set_username_pw_trans(Id, Username, Hash, Context) ->
                 set key = $2,
                     propb = $3,
                     prop1 = '',
+                    expires = null,
                     is_verified = true,
                     modified = now()
                 where type = 'username_pw'
