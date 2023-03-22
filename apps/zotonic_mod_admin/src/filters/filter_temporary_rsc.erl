@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2023 Marc Worrell
 %% @doc Creates a temporary resource. If not modified then it will be deleted.
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@
 
 %% Check every hour if the page can be deleted.
 -define(INACTIVE_CHECK_DELAY, 3600).
--define(DELETE_TIMEOUT, ?INACTIVE_CHECK_DELAY*1000).
 
 -include_lib("kernel/include/logger.hrl").
 
@@ -62,7 +61,15 @@ task_delete_inactive(RscId, Key, SessionId, Context) ->
                     ok
             end;
         false ->
-            ok
+            % Remove temporary flag
+            case m_rsc:p_no_acl(RscId, <<"is_temporary">>, Context) of
+                true ->
+                    m_rsc:update(RscId, #{ <<"is_temporary">> => undefined },
+                                 [ no_touch, {is_acl_check, false} ], Context),
+                    ok;
+                _ ->
+                    ok
+            end
     end.
 
 
@@ -93,7 +100,8 @@ make_temporary_rsc({ok, _SessionId}, Props, Context) ->
 make_rsc({ok, RscId}, _CatId, _Props, _Context) ->
     RscId;
 make_rsc({error, not_found}, CatId, Props, Context) ->
-    case m_rsc:insert(Props, Context) of
+    Props1 = [ {is_temporary, true} | Props ],
+    case m_rsc:insert(Props1, Context) of
         {ok, RscId} ->
             Key = {temporary_rsc, CatId},
             {ok, SessionId} = z_context:session_id(Context),
@@ -115,7 +123,7 @@ make_rsc({error, not_found}, CatId, Props, Context) ->
                 result => error,
                 reason => Reason,
                 category_id => CatId,
-                props => Props
+                props => Props1
             }),
             undefined
     end.

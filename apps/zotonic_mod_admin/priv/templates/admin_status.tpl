@@ -116,7 +116,7 @@
                 </div>
             </div>
 
-            {% if m.acl.is_admin or m.acl.use.mod_mailinglist %}
+            {% if m.acl.is_admin or m.acl.use.mod_mailinglist or m.acl.use.mod_import %}
                 <div class="widget">
                     <div class="widget-header">{_ Upload dropbox file _}</div>
                     <div class="widget-content">

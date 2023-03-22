@@ -51,6 +51,12 @@
 
     <div class="form-group">
         <label class="checkbox-inline">
+            <input id="field-reversed" type="checkbox" name="is_insert_before" {% if r.is_insert_before %}checked="checked"{% endif %} value="1" />{_ Insert new connections before existing connections. _}
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label class="checkbox-inline">
             <input id="field-reversed" type="checkbox" name="reversed" {% if id.reversed %}checked="checked"{% endif %} value="1" />{_ The direction (from/to) of this predicate is reversed from the normal definition. _}
         </label>
     </div>
