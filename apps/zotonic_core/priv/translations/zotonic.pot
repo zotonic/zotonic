@@ -781,7 +781,7 @@ msgstr ""
 msgid "&lt; Prev"
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:68
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:68./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:178
 msgid "(private)"
 msgstr ""
 
@@ -860,10 +860,6 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/admin_base.tpl:5
 msgid "Admin"
-msgstr ""
-
-#: apps/zotonic_mod_admin/priv/templates/admin_logon.tpl:4
-msgid "Admin log on"
 msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:6
@@ -973,6 +969,10 @@ msgstr ""
 msgid "Basic"
 msgstr ""
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:178
+msgid "Billing address"
+msgstr ""
+
 #: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:4./apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_text.tpl:4
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:6
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_hidden.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:4
@@ -1011,7 +1011,7 @@ msgstr ""
 msgid "Choose a media item from this page to insert in the body text."
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:99./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:100./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:158./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:159
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:99./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:100./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:158./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:159./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:225./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:226
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:66./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:67
 msgid "City"
 msgstr ""
@@ -1082,7 +1082,7 @@ msgstr ""
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:80./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:80./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:195./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:45./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:47
 msgid "Country"
 msgstr ""
@@ -1243,6 +1243,10 @@ msgstr ""
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:69
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:29./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:30
 msgid "Email"
+msgstr ""
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:188./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:190
+msgid "Email address for invoices"
 msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:122./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:124
@@ -1518,10 +1522,6 @@ msgstr ""
 msgid "Log Off"
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/admin_logon.tpl:19
-msgid "Log on to"
-msgstr ""
-
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:118
 msgid "Mailing address"
 msgstr ""
@@ -1641,6 +1641,10 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:184./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:185
+msgid "Name for invoices"
+msgstr ""
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:62
 msgid "Network Connections"
 msgstr ""
@@ -1758,7 +1762,7 @@ msgstr ""
 msgid "Pivot queue count size:"
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:104./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:105./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:163./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:164
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:104./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:105./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:163./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:164./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:230./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:231
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:71./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:72
 msgid "Postcode"
 msgstr ""
@@ -2072,7 +2076,7 @@ msgstr ""
 msgid "Starts"
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:111./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:112./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:170./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:171
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:111./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:112./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:170./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:171./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:237./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:238
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:78./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:79
 msgid "State"
 msgstr ""
@@ -2085,12 +2089,12 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:88./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:89./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:147./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:148
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:88./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:89./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:147./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:148./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:214./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:215
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:55./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:56
 msgid "Street Line 1"
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:93./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:94./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:152./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:153
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:93./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:94./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:152./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:153./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:219./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:220
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:60./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:61
 msgid "Street Line 2"
 msgstr ""
@@ -2160,6 +2164,10 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:175
 msgid "Text"
+msgstr ""
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:180
+msgid "The billing address is only visible for people who can edit this page."
 msgstr ""
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:59
@@ -2622,7 +2630,7 @@ msgstr ""
 msgid "view"
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_navbar_brand.tpl:1./apps/zotonic_mod_admin/priv/templates/admin_logon.tpl:12
+#: apps/zotonic_mod_admin/priv/templates/_admin_navbar_brand.tpl:1
 msgid "visit site"
 msgstr ""
 
@@ -3739,7 +3747,7 @@ msgstr ""
 msgid "Delete is canceled, there are connections with this predicate."
 msgstr ""
 
-#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:66
 msgid "Do not find subjects using this predicate’s object titles."
 msgstr ""
 
@@ -3757,6 +3765,10 @@ msgstr ""
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:6
 msgid "Help about predicates"
+msgstr ""
+
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:54
+msgid "Insert new connections before existing connections."
 msgstr ""
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19./apps/zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:47
@@ -3813,7 +3825,7 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
-#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:54
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
 msgid ""
 "The direction (from/to) of this predicate is reversed from the normal "
 "definition."
@@ -8080,9 +8092,7 @@ msgid "Fetching a token can take some time."
 msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:35./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:33
-msgid ""
-"For Zotonic sites you can enter the domain name(s) of the website that wants "
-"to access the data."
+msgid "For Zotonic sites this you can enter the domain name(s) of the website."
 msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:52
@@ -10248,7 +10258,7 @@ msgstr ""
 msgid "Translate this page in other languages."
 msgstr ""
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:691
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:688
 msgid "Translation"
 msgstr ""
 
