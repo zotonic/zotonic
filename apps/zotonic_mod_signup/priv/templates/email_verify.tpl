@@ -3,7 +3,7 @@
 {% block title %}{_ Please confirm your account _}{% endblock %}
 
 {% block body %}
-<p>{_ Dear _} {{ m.rsc[user_id].title|default:m.rsc[user_id].name_first }},</p>
+<p>{_ Dear _} {% include "_name.tpl" id=user_id %},</p>
 
 <p>{_ Thank you for registering at our site. We request you to confirm your account before you can use it. _}</p>
 
