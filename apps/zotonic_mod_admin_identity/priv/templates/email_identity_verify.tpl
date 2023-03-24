@@ -3,7 +3,7 @@
 {% block title %}{_ Please verify your email address _} [{{ m.site.title|default:m.site.hostname }}]{% endblock %}
 
 {% block body %}
-<p>{_ Hello _} {{ m.rsc[id].name_first|default:m.rsc[id].title }},</p>
+<p>{_ Hello _} {% include "_name.tpl" id=id %},</p>
 
 <p>{_ This email address was added to your personal information on _} {{ m.site.title|default:m.site.hostname }}: {{ idn.key|escape }}.</p>
 

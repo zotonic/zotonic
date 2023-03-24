@@ -80,6 +80,7 @@
     set_verified/2,
     set_verified/4,
     is_verified/2,
+    verify_primary_email/2,
 
     delete/2,
     merge/3,
@@ -689,7 +690,7 @@ set_username_pw_trans(Id, Username, Hash, Context) ->
                             ),
                             {ok, new};
                         _Other ->
-                            {rollback, {error, eexist}}
+                            {error, eexist}
                     end
             end;
         1 ->
@@ -1383,6 +1384,51 @@ is_verified(RscId, Context) ->
         undefined -> false;
         _ -> true
     end.
+
+
+%% @doc Send an email to the primary email address to verify the email address.
+-spec verify_primary_email(RscId, Context) -> {ok, Status} | {error, Reason} when
+    RscId :: m_rsc:resource(),
+    Context :: z:context(),
+    Status :: sent | verified,
+    Reason :: term().
+verify_primary_email(RscId, Context0) ->
+    Context = z_acl:sudo(Context0),
+    case m_rsc:rid(RscId, Context) of
+        undefined ->
+            {error, enoent};
+        Id ->
+            Email = normalize_key(email, m_rsc:p_no_acl(Id, <<"email_raw">>, Context)),
+            Idns = get_rsc_by_type(Id, <<"email">>, Context),
+            case email_find_verified(Email, Idns) of
+                {true, _Idn} ->
+                    {ok, verified};
+                {false, Idn} ->
+                    % Send the verfication e-mail
+                    IdnId = proplists:get_value(id, Idn),
+                    {ok, VerifyKey} = set_verify_key(IdnId, Context),
+                    Vars = [
+                        {idn, Idn},
+                        {id, RscId},
+                        {verify_key, VerifyKey}
+                    ],
+                    z_email:send_render(Email, "email_identity_verify.tpl", Vars, Context),
+                    {ok, sent};
+                none ->
+                    {error, identity}
+            end
+    end.
+
+email_find_verified(_Email, []) ->
+    none;
+email_find_verified(Email, [Idn|Idns]) ->
+    case proplists:get_value(key, Idn) of
+        Email ->
+            {proplists:get_value(is_verified, Idn), Idn};
+        _ ->
+            email_find_verified(Email, Idns)
+    end.
+
 
 -spec set_by_type(m_rsc:resource_id(), type(), key(), z:context()) -> ok.
 set_by_type(RscId, Type, Key, Context) ->
