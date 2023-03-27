@@ -604,6 +604,16 @@
     groups :: list( m_rsc:resource_id() )
 }).
 
+%% @doc Modify the list of collaboration groups of an user. Called internally
+%% by the ACL modules when fetching the list of collaboration groups an user
+%% is member of.
+%% Type: foldl
+%% Return: ``[ m_rsc:resource_id() ]``
+-record(acl_collab_groups_modify, {
+    id :: m_rsc:resource_id() | undefined,
+    groups :: list( m_rsc:resource_id() )
+}).
+
 %% @doc Confirm a user id.
 %% Type: foldl
 %% Return: ``z:context()``
