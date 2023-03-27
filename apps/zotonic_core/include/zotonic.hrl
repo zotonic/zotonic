@@ -366,5 +366,6 @@
 
 -include("zotonic_notifications.hrl").
 -include("zotonic_log.hrl").
+-include("zotonic_wired.hrl").
 -include("zotonic_deprecated.hrl").
 
