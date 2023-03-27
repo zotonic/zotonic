@@ -1,9 +1,10 @@
 %% @doc Deprecated defintions.
 %%      These will be removed in a future update
 
-
 %% Record used for transporting data between the user-agent and the server.
 %% This was part of the transport system, before the Cotonic/MQTT integration.
+%% It is still possible to use in combination with the `z_transport` javascript
+%% function.
 -record(z_msg_v1, {
     qos = 0 :: 0 | 1 | 2,
     dup = false :: boolean(),
@@ -21,33 +22,3 @@
     % Payload data
     data :: any()
 }).
-
-%% @doc Postback event received from browser.
-%%
--record(postback, {message, trigger, target}).
-
-%% @doc Submit event received from browser.
-%%
--record(submit, {message, form, target}).
-
-%% The record of the postback_notify event is defined in zotonic_notifications.hrl
-
-%% Drag and drop events. They are received in a normal postback event by scomp_base_droppable.
-%% The are emitted as separate event.
-%%
-
-%% [Deprecated] Drag and drop event message -- used by scomps draggable and droppable
--record(dragdrop, {tag, delegate, id}).
-
-%% @doc Drag event.
--record(drag, {drag, drop}).
-
-%% @doc Drop event.
--record(drop, {drag, drop}).
-
-%% Sort event. It is received in a normal postback event by scomp_base_sorter.
-%%
-
-%% @doc Sort event.
--record(sort, {items, drop}).
-

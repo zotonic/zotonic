@@ -1,5 +1,5 @@
 %% @author Bob Ippolito, Marc Worrell
-%% @copyright 2007 Mochi Media, Inc; 2009-2020 Marc Worrell
+%% @copyright 2007 Mochi Media, Inc; 2009-2023 Marc Worrell
 %% @doc Parse multipart/form-data request bodies. Uses a callback function to receive the next parts, can call
 %% a progress function to report back the progress on receiving the data.
 %%
@@ -8,7 +8,7 @@
 %% This is the MIT license.
 %%
 %% Copyright (c) 2007 Mochi Media, Inc.
-%% Copyright (c) 2009-2020 Marc Worrell
+%% Copyright (c) 2009-2023 Marc Worrell
 %%
 %% Permission is hereby granted, free of charge, to any person obtaining a copy
 %% of this software and associated documentation files (the "Software"), to deal
@@ -50,7 +50,6 @@
         buffer :: binary(),
         next_chunk :: more | ok,
         form = #multipart_form{},
-        % z_msg = undefined :: #z_msg_v1{},
         context :: #context{}
     }).
 
@@ -174,21 +173,6 @@ feed_maybe_eof(#mp{} = State) ->
     feed_mp(body, State).
 
 
-% maybe_z_msg_context(#mp{
-%             z_msg=undefined,
-%             form=#multipart_form{args=[{<<"z_msg">>,Data}|RestArgs]} = Form,
-%             context=#context{page_pid=undefined} = Context
-%         } = State) ->
-%     {ok, #z_msg_v1{} = ZMsg, _Rest} = z_transport:data_decode(Data),
-%     #z_msg_v1{page_id=PageId, session_id=SessionId} = ZMsg,
-%     Context1 = z_transport:maybe_logon(
-%                     z_transport:maybe_set_sessions(SessionId, PageId, Context)),
-%     Form1 = Form#multipart_form{args=[{<<"z_msg">>, ZMsg}|RestArgs]},
-%     State#mp{z_msg=ZMsg, form=Form1, context=Context1};
-% maybe_z_msg_context(#mp{} = State) ->
-%     State.
-
-
 %% @doc Report progress back to the page.
 progress(0, _ContentLength, _Form, _Context) ->
     ok;
@@ -208,10 +192,6 @@ progress(Percentage, ContentLength, Form, Context) when ContentLength > ?CHUNKSI
     end;
 progress(_Percentage, _ContentLength, _Form, _Context) ->
     ok.
-
-% is_push_attached(Context) ->
-%     z_session_page:get_attach_state(Context) =:= attached.
-
 
 
 %% @doc Callback function collecting all data found in the multipart/form-data body
