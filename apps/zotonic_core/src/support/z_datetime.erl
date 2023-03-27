@@ -135,7 +135,9 @@ format_opts(Date, Tz, Context) ->
     ].
 
 %% @doc Convert a time to the local context time using the current timezone.
--spec to_local(calendar:datetime()|undefined|time_not_exists, string()|binary()|z:context()) -> calendar:datetime() | undefined.
+-spec to_local(DateTime, TimeZone) -> calendar:datetime() | undefined when
+    DateTime :: calendar:datetime() | undefined | time_not_exists,
+    TimeZone :: string() | binary() | z:context().
 to_local(undefined, _Tz) ->
     undefined;
 to_local(time_not_exists, _Tz) ->
@@ -179,7 +181,9 @@ to_local(DT, Tz) ->
     end.
 
 %% @doc Convert a time to the local context time using the current timezone.
--spec to_utc(calendar:datetime()|undefined|time_not_exists, string()|binary()|z:context()) -> calendar:datetime() | undefined.
+-spec to_utc(DateTime, TimeZone) -> calendar:datetime() | undefined when
+    DateTime :: calendar:datetime() | undefined | time_not_exists,
+    TimeZone :: string() | binary() | z:context().
 to_utc(undefined, _Tz) ->
     undefined;
 to_utc(time_not_exists, _Tz) ->
@@ -227,13 +231,13 @@ to_utc(DT, Tz) ->
 %% to_time/1.  When the input is a string, it is expected to be in iso
 %% 8601 format, although it can also handle timestamps without time
 %% zones. The time component of the datetime is optional.
--spec to_datetime( Input ) -> calendar:datetime()
-    when Input :: undefined
-                | binary()
-                | string()
-                | integer()
-                | calendar:datetime()
-                | {Y::integer(), M::pos_integer(), D::pos_integer()}.
+-spec to_datetime( Input ) -> calendar:datetime() | undefined when
+    Input :: undefined
+            | binary()
+            | string()
+            | integer()
+            | calendar:datetime()
+            | {Y::integer(), M::pos_integer(), D::pos_integer()}.
 to_datetime(undefined) ->
     undefined;
 to_datetime(N) when is_integer(N) ->
