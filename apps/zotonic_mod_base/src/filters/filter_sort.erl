@@ -81,6 +81,8 @@ fetch_prop(A, P, Context) when is_integer(A); is_atom(A); is_binary(A) ->
     end;
 fetch_prop(L, P, _Context) when is_list(L) ->
     proplists:get_value(P, L);
+fetch_prop(M, P, _Context) when is_map(M) ->
+    maps:get(P, M, undefined);
 fetch_prop(_, _, _Context) ->
     undefined.
 
