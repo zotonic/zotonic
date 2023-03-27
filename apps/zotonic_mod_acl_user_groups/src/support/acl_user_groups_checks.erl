@@ -702,10 +702,21 @@ has_collab_groups(_Context) ->
     [].
 
 % Fetch all collaboration groups the user is member of.
--spec has_collab_groups(m_rsc:resource_id()|undefined, #context{}) -> list(m_rsc:resource_id()).
-has_collab_groups(undefined, _Context) ->
-    [];
+-spec has_collab_groups(UserId, Context) -> CollabGroups when
+    UserId :: m_rsc:resource_id() | undefined,
+    Context :: z:context(),
+    CollabGroups :: [ m_rsc:resource_id() ].
 has_collab_groups(UserId, Context) ->
+    CollabGroups = has_collab_groups_1(UserId, Context),
+    z_notifier:foldl(
+        #acl_collab_groups_modify{
+            id = UserId,
+            groups = CollabGroups
+        }, CollabGroups, Context).
+
+has_collab_groups_1(undefined, _Context) ->
+    [];
+has_collab_groups_1(UserId, Context) ->
     m_edge:subjects(UserId, hascollabmanager, Context)
     ++ m_edge:subjects(UserId, hascollabmember, Context).
 
