@@ -25,7 +25,7 @@ jobs:
       image: erlang:${{ matrix.otp_version }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Download Elvis
         run: wget https://github.com/inaka/elvis/releases/download/0.2.12/elvis && chmod +x elvis
       - name: Run Elvis

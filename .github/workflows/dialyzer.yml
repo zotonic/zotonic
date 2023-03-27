@@ -25,6 +25,6 @@ jobs:
       image: erlang:${{ matrix.otp_version }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Dialyzer
         run: make dialyzer
