@@ -1288,8 +1288,16 @@ props_filter(P, DT, Acc, _Context)
     when P =:= <<"created">>;           P =:= <<"modified">>;
          P =:= <<"date_start">>;        P =:= <<"date_end">>;
          P =:= <<"publication_start">>; P =:= <<"publication_end">>  ->
+    DateTime = case z_datetime:to_datetime(DT) of
+        undefined when P =:= <<"publication_end">> ->
+            ?ST_JUTTEMIS;
+        undefined when P =:= <<"publication_start">> ->
+            {{1970,1,1}, {0,0,0}};
+        DT1 ->
+            DT1
+    end,
     Acc#{
-        P => z_datetime:to_datetime(DT)
+        P => DateTime
     };
 props_filter(P, Id, Acc, Context)
     when P =:= <<"creator_id">>;
