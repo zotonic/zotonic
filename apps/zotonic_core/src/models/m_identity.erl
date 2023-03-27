@@ -1216,9 +1216,16 @@ insert_1(Rsc, Type, Key, Props, Context) ->
                                 z_acl:sudo(Context))
                       end,
 
-    case z_db:q1("select id from identity where rsc_id = $1 and type = $2 and key = $3",
-                 [RscId, TypeB, KeyB],
-                 Context) of
+    case z_db:q1("
+            select id
+            from identity
+            where rsc_id = $1
+              and type = $2
+              and key = $3
+            for update",
+            [RscId, TypeB, KeyB],
+            Context)
+    of
         undefined ->
             Props1 = [
                 {rsc_id, RscId},
