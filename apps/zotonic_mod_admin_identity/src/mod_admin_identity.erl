@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2013 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Identity administration.  Adds overview of users to the admin and enables to add passwords on the edit page.
 
-%% Copyright 2009-2013 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -118,14 +118,32 @@ event(#postback{message={identity_verify_confirm, Args}}, Context) ->
     end;
 event(#postback{message={identity_verify, Args}}, Context) ->
     {id, RscId} = proplists:lookup(id, Args),
-    {idn_id, IdnId} = proplists:lookup(idn_id, Args),
-    case send_verification(RscId, IdnId, Context) of
-        {error, notfound} ->
-            z_render:growl_error("Sorry, can not find this identity.", Context);
-        {error, unsupported} ->
-            z_render:growl_error("Sorry, can not verify this identity.", Context);
-        ok ->
-            z_render:growl(?__("Sent verification e-mail.", Context), Context)
+    case proplists:lookup(idn_id, Args) of
+        {idn_id, IdnId} ->
+            case send_verification(RscId, IdnId, Context) of
+                ok ->
+                    z_render:growl(?__("Sent verification e-mail.", Context), Context);
+                {error, enoent} ->
+                    z_render:growl_error("Sorry, can not find this identity.", Context);
+                {error, unsupported} ->
+                    z_render:growl_error("Sorry, can not verify this identity.", Context)
+            end;
+        none ->
+            case z_acl:user(Context) =:= RscId orelse z_acl:rsc_editable(RscId, Context) of
+                true ->
+                    case m_identity:verify_primary_email(RscId, Context) of
+                        {ok, sent} ->
+                            z_render:growl(?__("Sent verification e-mail.", Context), Context);
+                        {ok, verified} ->
+                            z_render:growl(?__("The e-mail address has been verified.", Context), Context);
+                        {error, enoent} ->
+                            z_render:growl_error("Sorry, can not find this identity.", Context);
+                        {error, _} ->
+                            z_render:growl_error("Sorry, can not verify this identity.", Context)
+                    end;
+                false ->
+                    z_render:growl_error(?__("Sorry, you are not allowed to verify this email address.", Context), Context)
+            end
     end;
 event(#postback{message={identity_verify_check, Args}}, Context) ->
     {idn_id, IdnId} = proplists:lookup(idn_id, Args),
@@ -281,7 +299,7 @@ is_email_identity_category(IsA) when is_list(IsA) ->
 send_verification(RscId, IdnId, Context) ->
     case m_identity:get(IdnId, Context) of
         undefined ->
-            {error, notfound};
+            {error, enoent};
         Idn ->
             {rsc_id, RscId} = proplists:lookup(rsc_id, Idn),
             case proplists:get_value(type, Idn) of
@@ -310,7 +328,7 @@ verify(IdnId, VerifyKey, Context) ->
                 N when is_integer(N) ->
                     case m_identity:get(N, Context) of
                         undefined ->
-                            {error, notfound};
+                            {error, enoent};
                         Idn ->
                             case z_convert:to_bool(proplists:get_value(is_verified, Idn)) of
                                 true -> ok;
@@ -318,7 +336,7 @@ verify(IdnId, VerifyKey, Context) ->
                             end
                     end;
                 _ ->
-                    {error, notfound}
+                    {error, enoent}
             end;
         Idn ->
             % Set the identity to verified
