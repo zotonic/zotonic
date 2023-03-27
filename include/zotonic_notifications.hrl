@@ -375,6 +375,26 @@
 %% Either return an updated #context or undefined
 -record(acl_logoff, {}).
 
+%% @doc Modify the list of user groups of an user. Called internally
+%% by the ACL modules when fetching the list of user groups an user
+%% is member of.
+%% Type: foldl
+%% Return: ``[ m_rsc:resource_id() ]``
+-record(acl_user_groups_modify, {
+    id :: m_rsc:resource_id() | undefined,
+    groups :: list( m_rsc:resource_id() )
+}).
+
+%% @doc Modify the list of collaboration groups of an user. Called internally
+%% by the ACL modules when fetching the list of collaboration groups an user
+%% is member of.
+%% Type: foldl
+%% Return: ``[ m_rsc:resource_id() ]``
+-record(acl_collab_groups_modify, {
+    id :: m_rsc:resource_id() | undefined,
+    groups :: list( m_rsc:resource_id() )
+}).
+
 
 % Handle the confirm of an user.
 % 'auth_confirm' - foldl over the #context
