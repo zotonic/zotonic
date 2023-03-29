@@ -424,6 +424,7 @@ update_result({ok, NewId, OldProps, NewProps, OldCatList, IsCatInsert}, #rscupd{
         undefined -> nop;
         Uri -> z_depcache:flush({rsc_uri, z_convert:to_list(Uri)}, Context)
     end,
+    z_acl:flush(Id),
 
     % Flush category caches if a category is inserted.
     case IsCatInsert of
