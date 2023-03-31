@@ -16,7 +16,7 @@
 	    <div class="form-group row">
 		    <label class="control-label col-md-3" for="field-page-path">{_ Page path _}</label>
             <div class="col-md-9">
-		        <input class="form-control" type="text" id="field-page-path" name="page_path" value="{{ r.page_path }}" {% if not is_editable %}disabled="disabled"{% endif %}  {% include "_language_attrs.tpl" language=`en` %} placeholder="{{ r.default_page_url|escape }}" />
+		        <input class="form-control" type="text" id="field-page-path" name="page_path" value="{{ r.page_path|urldecode|escape }}" {% if not is_editable %}disabled="disabled"{% endif %}  {% include "_language_attrs.tpl" language=`en` %} placeholder="{{ r.default_page_url|escape }}" />
             </div>
 	    </div>
 

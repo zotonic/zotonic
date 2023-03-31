@@ -113,9 +113,10 @@ event(#submit{message={rscform, Args}}, Context) ->
                 case m_rsc:p(Id, category_id, Context) of
                     CatBefore ->
                         % Update some automatically generated or adapted fields
+                        PagePath = filter_urldecode:urldecode(m_rsc:p(Id, page_path, Context), Context),
                         Context1 = z_render:set_value("field-name", m_rsc:p(Id, name, Context), Context),
                         Context2 = z_render:set_value("field-uri",  m_rsc:p(Id, uri, Context), Context1),
-                        Context3 = z_render:set_value("field-page-path",  m_rsc:p(Id, page_path, Context), Context2),
+                        Context3 = z_render:set_value("field-page-path", PagePath, Context2),
                         Context4 = z_render:set_value("website",  m_rsc:p(Id, website, Context), Context3),
                         Context4a = set_value_slug(m_rsc:p(Id, title_slug, Context), Context4),
                         Context4b= z_render:set_value("visible_for", integer_to_list(m_rsc:p(Id, visible_for, Context)), Context4a),

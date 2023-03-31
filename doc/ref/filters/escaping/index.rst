@@ -19,3 +19,4 @@ Character escaping
    ../filter_slugify
    ../filter_unescape
    ../filter_urlencode
+   ../filter_urldecode
