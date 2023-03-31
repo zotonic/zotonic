@@ -48,7 +48,9 @@
          wm_is_authorized/2,
          wm_is_authorized/3,
          wm_is_authorized/4,
-         wm_is_authorized/5
+         wm_is_authorized/5,
+
+         flush/1
         ]).
 
 -export_type([acl/0]).
@@ -397,3 +399,6 @@ wm_is_allowed([{Action,Object}|ACLs], Context) ->
                 _ -> false
             end
     end.
+
+flush(Id) ->
+    z_memo:delete({rsc_visible, Id}).
