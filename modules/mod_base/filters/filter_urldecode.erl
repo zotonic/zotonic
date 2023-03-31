@@ -26,7 +26,7 @@ urldecode(undefined, _Context) ->
 urldecode({trans, _} = Tr, Context) ->
     urldecode(z_trans:lookup_fallback(Tr, Context), Context);
 urldecode(Input, _Context) when is_binary(Input) ->
-    z_url:url_decode(Input);
+    list_to_binary(z_url:url_decode(binary_to_list(Input)));
 urldecode(Input, _Context) when is_list(Input) ->
     z_url:url_decode(iolist_to_binary(Input));
 urldecode(_Input, _Context) ->
