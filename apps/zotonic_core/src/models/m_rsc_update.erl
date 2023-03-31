@@ -586,6 +586,7 @@ update_transaction(RscUpd, Func, Context) ->
     update_result(Result, RscUpd, Context).
 
 update_result({ok, NewId, notchanged}, _RscUpd, _Context) ->
+    z_acl:flush(NewId),
     {ok, NewId};
 update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}}, #rscupd{id = Id}, Context) ->
     % Flush some low level caches
@@ -597,6 +598,8 @@ update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}}, #rscup
         undefined -> nop;
         Uri -> z_depcache:flush({rsc_uri, z_convert:to_binary(Uri)}, Context)
     end,
+    z_acl:flush(NewId),
+    z_acl:flush(Id),
 
     % Flush category caches if a category is inserted.
     case IsCatInsert of

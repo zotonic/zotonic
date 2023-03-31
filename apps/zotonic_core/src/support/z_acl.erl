@@ -49,7 +49,9 @@
          logon_prefs/2,
          logon_prefs/3,
          logon_refresh/1,
-         logoff/1
+         logoff/1,
+
+         flush/1
         ]).
 
 -include_lib("zotonic.hrl").
@@ -380,4 +382,12 @@ logoff(Context) ->
         undefined -> Context#context{ user_id = undefined, acl = undefined};
         #context{} = NewContext -> NewContext
     end.
+
+
+%% @doc Flush the memo cache of ACL lookups for the given resource id.
+-spec flush(Id) -> ok when
+    Id :: m_rsc:resource_id().
+flush(Id) ->
+     z_memo:delete({rsc_visible, Id}),
+     ok.
 
