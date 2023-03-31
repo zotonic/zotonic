@@ -28,8 +28,8 @@
                     rows="3"
                     class="form-control"
                     name="blocks[].answers[].option${{ code }}"
-                       placeholder="{_ Answer _} ({{ code }})"
-                       value="">{{ ans.option[code ]}}</textarea>
+                    placeholder="{_ Answer _} ({{ code }})"
+                >{{ ans.option[code]}}</textarea>
 
                 <div class="test-controls" {% if not blk.is_test %}style="display: none"{% endif %}>
                     <input class="form-control widget-content-lang-{{ code }}"
