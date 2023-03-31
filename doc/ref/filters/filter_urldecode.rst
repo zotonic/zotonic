@@ -1,6 +1,6 @@
 .. highlight:: django
 .. include:: meta-urldecode.rst
-.. seealso:: :ref:`filter-sanitize_url`, :ref:`filter-is_site_url`, :ref:`filter-url_abs`, :ref:`filter-url`, :ref:`filter-urlencode`
+.. seealso:: :ref:`filter-urlencode`
 
 Decode a text where characters are encoded as URL-safe characters.
 
