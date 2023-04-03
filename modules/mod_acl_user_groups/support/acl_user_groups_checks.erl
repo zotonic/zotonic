@@ -587,7 +587,27 @@ can_rsc_for_collab(Id, Action, CGId, CatId, UGs, Context) ->
     andalso (
         can_rsc_for_collab_ugs(Id, Action, CGId, CatId, UGs, Context)
         orelse can_rsc_collab_group_content(Action, CGId, UGs, Context)
+        orelse has_unrestricted_collab_content_user_groups(Context)
     ).
+
+has_unrestricted_collab_content_user_groups(Context) ->
+    AllUGs = sets:from_list(user_groups_all(Context)),
+    UnrestrictedUGs = sets:from_list(
+        lists:map(fun (UG) -> m_rsc:rid(UG, Context) end,
+        unrestricted_collab_content_user_groups())
+    ),
+    not sets:is_disjoint(AllUGs, UnrestrictedUGs).
+
+% todo: find a better solution than completely excluding some specific user groups from ACL on collab groups
+% The issue is that we want to be able to deny access to some collab groups for some users (anonymous, members etc)
+% with a deny rule, but a deny rule on anonnymous also blocks access on higher user groups
+% We might be able to come up with a more general condition (like being able to delete collab groups)
+% or we should change deny rules to only work for the collab group they are on, or in the opposite direction of inheritance (so a deny rule blocks access for lower user groups but not higher ones)
+unrestricted_collab_content_user_groups() ->
+    [
+        <<"acl_user_group_managers">>,
+        <<"acl_user_group_editors">>
+    ].
 
 
 % User is member of collab group CGId, check ACL rules for collaboration groups
