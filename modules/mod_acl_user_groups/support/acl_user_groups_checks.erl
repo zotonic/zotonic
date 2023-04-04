@@ -585,9 +585,29 @@ can_rsc_1(Id, Action, CGId, CatId, UGs, Context) ->
 can_rsc_for_collab(Id, Action, CGId, CatId, UGs, Context) ->
     m_rsc:is_a(CGId, acl_collaboration_group, Context)
     andalso (
-        can_rsc_for_all_collab(Id, Action, CatId, UGs, Context)
+        can_rsc_for_collab_ugs(Id, Action, CGId, CatId, UGs, Context)
         orelse can_rsc_collab_group_content(Action, CGId, UGs, Context)
+        orelse has_unrestricted_collab_content_user_groups(Context)
     ).
+
+has_unrestricted_collab_content_user_groups(Context) ->
+    AllUGs = sets:from_list(user_groups_all(Context)),
+    UnrestrictedUGs = sets:from_list(
+        lists:map(fun (UG) -> m_rsc:rid(UG, Context) end,
+        unrestricted_collab_content_user_groups())
+    ),
+    not sets:is_disjoint(AllUGs, UnrestrictedUGs).
+
+% todo: find a better solution than completely excluding some specific user groups from ACL on collab groups
+% The issue is that we want to be able to deny access to some collab groups for some users (anonymous, members etc)
+% with a deny rule, but a deny rule on anonnymous also blocks access on higher user groups
+% We might be able to come up with a more general condition (like being able to delete collab groups)
+% or we should change deny rules to only work for the collab group they are on, or in the opposite direction of inheritance (so a deny rule blocks access for lower user groups but not higher ones)
+unrestricted_collab_content_user_groups() ->
+    [
+        <<"acl_user_group_managers">>,
+        <<"acl_user_group_editors">>
+    ].
 
 
 % User is member of collab group CGId, check ACL rules for collaboration groups
@@ -637,13 +657,43 @@ is_collab_group_member_action_allowed(_CGId, _Action, _Context) ->
 
 % If the content-group is a collab group then check if the user has permission to perform
 % the action on all collaboration groups.
-can_rsc_for_all_collab(Id, Action, CatId, UGs, Context) ->
-    CollabId = m_rsc:rid(acl_collaboration_group, Context),
-    can_rsc_non_collab_rules(Id, Action, CollabId, CatId, UGs, Context).
+can_rsc_for_collab_ugs(Id, Action, CollabId, CatId, UGs, Context) ->
+    AllCollabId = m_rsc:rid(acl_collaboration_group, Context),
+    lists:any(
+        fun (GId) ->
+            case {
+                can_rsc_for_collab_ug(Id, Action, CollabId, CatId, GId, Context),
+                can_rsc_for_collab_ug(Id, Action, AllCollabId, CatId, GId, Context)
+            } of
+                {false, _AllCollabPermission} -> false;
+                {_CollabPermission, false} -> false;
+                {true, _AllCollabPermission} -> true;
+                {undefined, undefined} -> false;
+                {undefined, AllCollabPermission} -> AllCollabPermission
+            end
+        end,
+        UGs
+    ).
+
+can_rsc_for_collab_ug(Id, Action, CollabId, CatId, GId, Context) ->
+    case {
+        mod_acl_user_groups:await_lookup({CollabId, {CatId, Action, false}, GId}, Context),
+        is_owner(Id, Context),
+        mod_acl_user_groups:await_lookup({CollabId, {CatId, Action, true}, GId}, Context)
+    } of
+        {Permission, false, _} -> Permission;
+        {undefined, true, undefined} -> undefined;
+        {undefined, true, OwnerPermission} -> OwnerPermission;
+        {Permission, true, undefined} -> Permission;
+        {Permission, true, OwnerPermission} -> Permission orelse OwnerPermission
+    end.
 
 % If the user can update/link/delete a collaboration group then the user is
 % considered to be a manager of the content group and can update/link/delete
 % all content in the collaboration group.
+% View permission on the collaboration group do not grant view rights on the
+% collaboration group contents because it should be possible to have public
+% collaboration groups with private content.
 can_rsc_collab_group_content(view, _CGId, _UGs, _Context) ->
     false;
 can_rsc_collab_group_content(Action, CGId, UGs, Context) ->
@@ -675,7 +725,7 @@ is_owner(insert_rsc, _Context) ->
     true;
 is_owner(Id, #context{user_id=UserId} = Context) ->
     case z_notifier:first(#acl_is_owner{
-            id=Id, 
+            id=Id,
             creator_id=m_rsc:p_no_acl(Id, creator_id, Context),
             user_id=UserId
         },
