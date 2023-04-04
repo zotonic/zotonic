@@ -273,7 +273,7 @@ map_prop({content_group_id, Id}, Context) ->
     {content_group_id, m_rsc:rid(Id, Context)};
 map_prop({category_id, Id}, Context) ->
     {category_id, m_rsc:rid(Id, Context)};
-map_prop({actions, Actions}, _Context) ->
+map_prop({actions, Actions}, _Context) when is_list(Actions) ->
     Joined = string:join(
         [z_convert:to_list(Action) || Action <- Actions],
         ","
