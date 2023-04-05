@@ -136,7 +136,7 @@
             });
         });
 
-        $('#{{ #answer_tpl }}').find('input').prop('disabled', true);
+        $('#{{ #answer_tpl }}').find('input,textarea').prop('disabled', true);
 
         $('#{{ #answers_add }}').click(function(e) {
             e.preventDefault();
@@ -147,9 +147,7 @@
                 .attr("placeholder", "" + nth);
             $('#{{ #answers }}')
                 .append( $('#{{ #answer_tpl }}').html() )
-                .find('input').prop('disabled', false);
-            console.log($('#{{ #answer_tpl }}')
-                .find('input[name="blocks[].answers[].value"]'));
+                .find('input,textarea').prop('disabled', false);
         });
     {% endjavascript %}
 

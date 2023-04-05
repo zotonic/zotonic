@@ -24,18 +24,18 @@
     <td>
         {% for code,_lang in m.translation.language_list_editable %}
             <div class="widget-content-lang-{{ code }}" {% if code != edit_language %}style="display:none"{% endif %}>
-                <textarea 
+                <textarea
                     rows="3"
                     class="form-control"
                     name="blocks[].answers[].option${{ code }}"
                     placeholder="{_ Answer _} ({{ code }})"
-                >{{ ans.option[code]}}</textarea>
+                >{{ ans.option[code] }}</textarea>
 
                 <div class="test-controls" {% if not blk.is_test %}style="display: none"{% endif %}>
                     <input class="form-control widget-content-lang-{{ code }}"
                            name="blocks[].answers[].feedback${{ code }}"
                            placeholder="{_ Feedback _} ({{ code }})"
-                           value="{{ ans.feedback[code ]}}">
+                           value="{{ ans.feedback[code] }}">
                 </div>
             </div>
         {% endfor %}
