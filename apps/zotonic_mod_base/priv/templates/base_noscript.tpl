@@ -3,10 +3,11 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>{% block title %}Zotonic{% endblock %}</title>
+    <title>{% block title %}{{ m.site.title|default:"Zotonic" }}{% endblock %}</title>
 
-    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="{% url favicon %}" type="image/x-icon" />
+    <link rel="shortcut icon" href="{% url favicon %}" type="image/x-icon" />
+    <link rel="manifest" href="{% url manifest_json %}" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 

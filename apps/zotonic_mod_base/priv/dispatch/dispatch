@@ -28,6 +28,9 @@
     %% Serves the favicon.ico from "lib/images/favicon.ico" in the modules.
     {favicon, ["favicon.ico"], controller_file, [ {path, "images/favicon.ico"}, {root,[lib]}, {content_disposition, inline}]},
 
+    %% Provide information about the site. Needed to install site on home-screens
+    {manifest_json, [ "manifest.json" ], controller_file, [ {root, [lib]}, {max_age, 1}, {path, "misc/manifest.json"} ]},
+
     %% Log client side javascript event. This is ignored by default `mod_logging` overrides this when enabled.
     {jslog, ["log-client-event"], controller_nocontent, []},
 
