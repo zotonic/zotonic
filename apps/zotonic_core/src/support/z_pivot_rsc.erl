@@ -402,6 +402,7 @@ handle_call({task_done, _TaskPid, TaskId}, _From, #state{ task_id = TaskId } = S
         task_id = undefined,
         task_pid = undefined
     },
+    self() ! poll, % Request another poll, there could be more due tasks on the queue.
     {reply, ok, State1};
 handle_call({task_done, _TaskPid, TaskId}, _From, State) ->
     ?LOG_ERROR(#{
@@ -534,12 +535,15 @@ handle_cast(Message, State) ->
 
 %% @doc Handling all non call/cast messages
 handle_info(poll, #state{ is_pivot_delay = true } = State) ->
+    z_utils:flush_message(poll),
     timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
     {noreply, State#state{ is_pivot_delay = false}};
 handle_info(poll, #state{backoff_counter = Ct} = State) when Ct > 0 ->
+    z_utils:flush_message(poll),
     timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
     {noreply, State#state{ backoff_counter = Ct - 1 }};
 handle_info(poll, #state{ pivot_pid = Pid } = State) when is_pid(Pid) ->
+    z_utils:flush_message(poll),
     ?LOG_DEBUG(#{
         text => <<"Pivot job still running, delaying next poll">>,
         in => zotonic_core,
@@ -549,6 +553,7 @@ handle_info(poll, #state{ pivot_pid = Pid } = State) when is_pid(Pid) ->
     timer:send_after(?PIVOT_POLL_INTERVAL_FAST*1000, poll),
     {noreply, State};
 handle_info(poll, #state{ site = Site } = State) ->
+    z_utils:flush_message(poll),
     case z_sites_manager:get_site_status(Site) of
         {ok, running} ->
             ?LOG_DEBUG(#{
