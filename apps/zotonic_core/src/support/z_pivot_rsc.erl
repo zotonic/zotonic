@@ -98,6 +98,8 @@
     is_pivot_delay = false :: boolean(),
     backoff_counter = 0 :: integer(),
 
+    poll_timer :: timer:tref(),
+
     task_pid :: undefined | pid(),
     task_id :: undefined | integer(),
     task_progress :: undefined | 0..100,
@@ -389,9 +391,10 @@ init(Site) ->
         module => ?MODULE
     }),
     timer:send_interval(?JOB_CHECK_INTERVAL*1000, job_check),
-    timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
+    {ok, TRefPoll} = timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
     {ok, #state{
         site = Site,
+        poll_timer = TRefPoll,
         is_initial_delay = true,
         is_pivot_delay = false
     }}.
@@ -402,6 +405,7 @@ handle_call({task_done, _TaskPid, TaskId}, _From, #state{ task_id = TaskId } = S
         task_id = undefined,
         task_pid = undefined
     },
+    self() ! poll, % Request another poll, there could be more due tasks on the queue.
     {reply, ok, State1};
 handle_call({task_done, _TaskPid, TaskId}, _From, State) ->
     ?LOG_ERROR(#{
@@ -428,7 +432,13 @@ handle_call({pivot_done, PivotPid}, _From, State) ->
 handle_call({insert_task_after, SecondsOrDate, Module, Function, UniqueKey, ArgsFun}, _From, State) ->
     Context = z_context:new(State#state.site),
     Result = do_insert_task_after(SecondsOrDate, Module, Function, UniqueKey, ArgsFun, Context),
-    {reply, Result, State};
+    State1 = if
+        SecondsOrDate =:= undefined ->
+            next_poll(State, 0);
+        true ->
+            State
+    end,
+    {reply, Result, State1};
 
 handle_call(status, _From, State) ->
     Status = #{
@@ -448,11 +458,11 @@ handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
 
-handle_cast(poll, #state{is_initial_delay=true} = State) ->
-    % Starting up - wait
+handle_cast(poll, #state{ is_initial_delay = true } = State) ->
+    % Manual poll of the pivot queue, but starting up - wait
     {noreply, State};
 handle_cast(poll, State) ->
-    % Poll the pivot queue
+    % Manual poll of the pivot queue
     try
         State1 = do_poll(State),
         {noreply, State1}
@@ -534,11 +544,10 @@ handle_cast(Message, State) ->
 
 %% @doc Handling all non call/cast messages
 handle_info(poll, #state{ is_pivot_delay = true } = State) ->
-    timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
-    {noreply, State#state{ is_pivot_delay = false}};
+    {noreply, next_poll(State, ?PIVOT_POLL_INTERVAL_SLOW)};
 handle_info(poll, #state{backoff_counter = Ct} = State) when Ct > 0 ->
-    timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
-    {noreply, State#state{ backoff_counter = Ct - 1 }};
+    State1 = State#state{ backoff_counter = Ct - 1 },
+    {noreply, next_poll(State1, ?PIVOT_POLL_INTERVAL_SLOW)};
 handle_info(poll, #state{ pivot_pid = Pid } = State) when is_pid(Pid) ->
     ?LOG_DEBUG(#{
         text => <<"Pivot job still running, delaying next poll">>,
@@ -546,8 +555,7 @@ handle_info(poll, #state{ pivot_pid = Pid } = State) when is_pid(Pid) ->
         pivot_pid => Pid,
         reason => busy
     }),
-    timer:send_after(?PIVOT_POLL_INTERVAL_FAST*1000, poll),
-    {noreply, State};
+    {noreply, next_poll(State, ?PIVOT_POLL_INTERVAL_FAST)};
 handle_info(poll, #state{ site = Site } = State) ->
     case z_sites_manager:get_site_status(Site) of
         {ok, running} ->
@@ -559,11 +567,12 @@ handle_info(poll, #state{ site = Site } = State) ->
                 State1 = do_poll(State),
                 IsPivoting = is_pid(State1#state.pivot_pid)
                         orelse is_pid(State1#state.task_pid),
-                case IsPivoting of
-                    true ->  timer:send_after(?PIVOT_POLL_INTERVAL_FAST*1000, poll);
-                    false -> timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll)
+                Interval = case IsPivoting of
+                    true ->  ?PIVOT_POLL_INTERVAL_FAST;
+                    false -> ?PIVOT_POLL_INTERVAL_SLOW
                 end,
-                {noreply, State1#state{ is_initial_delay = false }}
+                State2 = State1#state{ is_initial_delay = false },
+                {noreply, next_poll(State2, Interval)}
             catch
                 Type:Err:Stack ->
                     ?LOG_ERROR(#{
@@ -573,12 +582,12 @@ handle_info(poll, #state{ site = Site } = State) ->
                         reason => Err,
                         stack => Stack
                     }),
-                    timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
-                    {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
+                    StateBackoff = State#state{ backoff_counter = ?BACKOFF_POLL_ERROR },
+                    {noreply, next_poll(StateBackoff, ?PIVOT_POLL_INTERVAL_SLOW)}
             end;
         _ ->
-            timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
-            {noreply, State#state{ is_initial_delay = true }}
+            State1 = State#state{ is_initial_delay = true },
+            {noreply, next_poll(State1, ?PIVOT_POLL_INTERVAL_SLOW)}
     end;
 
 handle_info({'DOWN', _MRef, process, _Pid, _Reason}, #state{ pivot_pid = undefined, task_pid = undefined } = State) ->
@@ -635,6 +644,14 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+
+next_poll(State = #state{ poll_timer = TRef }, Interval) ->
+    timer:cancel(TRef),
+    z_utils:flush_message(poll),
+    {ok, TRefNew} = timer:send_after(Interval*1000, poll),
+    State#state{ poll_timer = TRefNew }.
+
 
 check_pivot_job(#state{ pivot_pid = undefined }) ->
     ok;
