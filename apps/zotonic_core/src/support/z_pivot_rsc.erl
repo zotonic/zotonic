@@ -391,7 +391,7 @@ init(Site) ->
         module => ?MODULE
     }),
     timer:send_interval(?JOB_CHECK_INTERVAL*1000, job_check),
-    TRefPoll = timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
+    {ok, TRefPoll} = timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
     {ok, #state{
         site = Site,
         poll_timer = TRefPoll,
@@ -649,7 +649,7 @@ code_change(_OldVsn, State, _Extra) ->
 next_poll(State = #state{ poll_timer = TRef }, Interval) ->
     timer:cancel(TRef),
     z_utils:flush_message(poll),
-    TRefNew = timer:send_after(Interval*1000, poll),
+    {ok, TRefNew} = timer:send_after(Interval*1000, poll),
     State#state{ poll_timer = TRefNew }.
 
 
