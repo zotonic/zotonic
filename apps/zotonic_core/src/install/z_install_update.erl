@@ -66,7 +66,13 @@ handle_info(install_check, State) ->
         ok ->
             ok = z_site_sup:install_done(State#state.site),
             {noreply, State, hibernate};
-        {error, _} ->
+        {error, Reason} ->
+            ?LOG_EMERGENCY(#{
+                in => zotonic_core,
+                text => <<"Site install check failed">>,
+                result => error,
+                reason => Reason
+            }),
             {stop, installfail, State}
     end.
 
