@@ -468,7 +468,7 @@ handle_info({'DOWN', _Ref, process, BusyPid, Reason}, #state{
     % the connection and let the database clean up.
     Database = get_arg(dbdatabase, State#state.conn_args),
     Schema = get_arg(dbschema, State#state.conn_args),
-    ?LOG_NOTICE(#{
+    ?LOG_DEBUG(#{
         text => <<"SQL caller down during query">>,
         in => zotonic_core,
         result => error,

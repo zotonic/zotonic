@@ -43,6 +43,9 @@
     get_page/3,
 
     do_submit/4,
+
+    save_submit/2,
+
     collect_answers/3,
     render_next_page/8,
     go_button_target/4,
@@ -329,7 +332,8 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                         rsc_id => Id,
                         page_name => Name
                     }),
-                    z_render:growl_error("Error in survey, could not find page "++z_convert:to_list(Name), Context);
+                    NameSafe = z_html:escape(Name),
+                    z_render:growl_error(<<"Error in survey, could not find page ", NameSafe/binary>>, Context);
 
                 {error, Reason} ->
                     ?LOG_ERROR(#{
@@ -347,7 +351,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
 
                 submit ->
                     %% That was the last page. Show a thank you and save the result.
-                    case do_submit(Id, Questions, Answers2, Editing, Context) of
+                    case do_submit(Id, Questions, Answers2, Editing, Args, Context) of
                         ok ->
                             IsShowResults = z_convert:to_bool(m_rsc:p(Id, survey_show_results, Context)),
                             render_result_page(Id, Editing, IsShowResults, History, As, Viewer, Args, Context);
@@ -674,7 +678,8 @@ is_page_end(#{ <<"type">> := <<"survey_stop">> }) -> true;
 is_page_end(_) -> false.
 
 
-%% @doc Collect all answers per question, save to the database.
+%% @doc Collect all answers per question, save to the database. External entry point
+%% in use by some websites. Keep this for backwards compatibility.
 -spec do_submit(m_rsc:resource_id(), Questions, Answers, z:context()) ->
           ok
         | {ok, z:context()}
@@ -682,19 +687,23 @@ is_page_end(_) -> false.
         when Questions :: list(map()),
              Answers :: list().
 do_submit(SurveyId, Questions, Answers, Context) ->
-    do_submit(SurveyId, Questions, Answers, undefined, Context).
+    do_submit(SurveyId, Questions, Answers, undefined, [], Context).
+
 
 %% @todo Check if we are missing any answers
--spec do_submit(m_rsc:resource_id(), Questions, Answers, Editing, z:context()) ->
+-spec do_submit(m_rsc:resource_id(), Questions, Answers, Editing, SubmitArgs, Context) ->
           ok
-        | {ok, z:context()}
+        | {ok, ContextOrRender}
         | {error, term()}
     when Questions :: list(map()),
          Answers :: list(),
          Editing :: undefined | {editing, AnswerId, Actions},
          AnswerId :: integer(),
-         Actions :: list() | tuple() | undefined.
-do_submit(SurveyId, Questions, Answers, undefined, Context) ->
+         Actions :: list() | tuple() | undefined,
+         SubmitArgs :: proplists:proplist(),
+         Context :: z:context(),
+         ContextOrRender :: z:context() | #render{}.
+do_submit(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
     {FoundAnswers, Missing} = collect_answers(Questions, Answers, Context),
     case z_notifier:first(
         #survey_submit{
@@ -702,25 +711,27 @@ do_submit(SurveyId, Questions, Answers, undefined, Context) ->
             handler = m_rsc:p_no_acl(SurveyId, survey_handler, Context),
             answers = FoundAnswers,
             missing = Missing,
-            answers_raw = Answers
+            answers_raw = Answers,
+            submit_args = SubmitArgs
         },
         Context)
     of
         undefined ->
-            StorageAnswers = survey_answers_to_storage(FoundAnswers),
-            {ok, ResultId} = insert_survey_submission(SurveyId, StorageAnswers, Context),
-            maybe_mail(SurveyId, Answers, ResultId, false, Context),
+            save_submit(SurveyId, FoundAnswers, Answers, Context),
             ok;
         ok ->
             maybe_mail(SurveyId, Answers, undefined, false, Context),
             ok;
-        {ok, _Context1} = Handled ->
+        {save, ContextOrRender} ->
+            save_submit(SurveyId, FoundAnswers, Answers, Context),
+            {ok, ContextOrRender};
+        {ok, _ContextOrRender} = Handled ->
             maybe_mail(SurveyId, Answers, undefined, false, Context),
             Handled;
         {error, _Reason} = Error ->
             Error
     end;
-do_submit(SurveyId, Questions, Answers, {editing, AnswerId, _Actions}, Context) ->
+do_submit(SurveyId, Questions, Answers, {editing, AnswerId, _Actions}, _SubmitArgs, Context) ->
     % Save the modified survey results
     case z_acl:rsc_editable(SurveyId, Context)
         orelse (
@@ -741,6 +752,33 @@ do_submit(SurveyId, Questions, Answers, {editing, AnswerId, _Actions}, Context) 
         false ->
             {ok, z_render:growl(?__("You are not allowed to change these results.", Context), Context)}
     end.
+
+
+%% @doc Save the form in the submit. Can be called from survey_submit observers if they
+%% need the answer id.
+-spec save_submit(SurveySubmit, Context) -> {ok, AnswerId} when
+    SurveySubmit :: #survey_submit{},
+    Context :: z:context(),
+    AnswerId :: integer().
+save_submit(#survey_submit{
+        id = SurveyId,
+        answers = FoundAnswers,
+        answers_raw = Answers
+    }, Context) ->
+    save_submit(SurveyId, FoundAnswers, Answers, Context).
+
+-spec save_submit(SurveyId, FoundAnswers, Answers, Context) -> {ok, AnswerId} when
+    SurveyId :: m_rsc:resource_id(),
+    FoundAnswers :: list(),
+    Answers :: list(),
+    Context :: z:context(),
+    AnswerId :: integer().
+save_submit(SurveyId, FoundAnswers, Answers, Context) ->
+    StorageAnswers = survey_answers_to_storage(FoundAnswers),
+    {ok, ResultId} = insert_survey_submission(SurveyId, StorageAnswers, Context),
+    maybe_mail(SurveyId, Answers, ResultId, false, Context),
+    {ok, ResultId}.
+
 
 insert_survey_submission(SurveyId, StorageAnswers, Context) ->
     {UserId, PersistentId, Context1} = case z_acl:user(Context) of
