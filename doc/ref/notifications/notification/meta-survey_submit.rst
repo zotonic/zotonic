@@ -10,11 +10,12 @@ Type:
     :ref:`notification-first`
 
 Return: 
-    
+    ``undefined``, ``ok``, ``{ok, Context | #render{}}``, ``{save, Context | #render{}`` or ``{error, term()}``
 
 ``#survey_submit{}`` properties:
-    - id: ``unknown``
-    - handler: ``unknown``
-    - answers: ``unknown``
-    - missing: ``unknown``
-    - answers_raw: ``unknown``
+    - id: ``m_rsc:resource_id()``
+    - handler: ``binary|undefined``
+    - answers: ``list``
+    - missing: ``list``
+    - answers_raw: ``list``
+    - submit_args: ``proplists:proplist()``
