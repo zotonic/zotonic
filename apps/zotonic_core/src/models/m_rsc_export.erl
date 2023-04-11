@@ -123,6 +123,7 @@ full(Id, Context) when is_integer(Id) ->
                 <<"is_a">> => [ z_convert:to_binary(A) || A <- m_rsc:is_a(Id, Context) ],
                 <<"uri">> => m_rsc:uri(Id, ContextNoLang),
                 <<"uri_template">> => BaseUri,
+                <<"page_url">> => m_rsc:p(Id, page_url_abs, Context),
 
                 %% Parts
                 <<"resource">> => maps:without([<<"id">>], Rsc),
