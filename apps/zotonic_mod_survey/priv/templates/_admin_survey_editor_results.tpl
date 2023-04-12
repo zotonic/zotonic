@@ -81,7 +81,7 @@
                             <a href="mailto:{{ r.user_id.email }}">{{ r.user_id.email }}</a>
                         {% endif %}
                     </td>
-                    {% with id|survey_result_column_values:r:columns:"editor" as vs %}
+                    {% with id|survey_result_column_values:r:columns:"html" as vs %}
                         {% for col,_ in columns %}
                             <td>
                                 {{ vs[col] }}
