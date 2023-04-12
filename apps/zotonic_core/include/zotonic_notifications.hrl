@@ -1086,31 +1086,30 @@
     block = #{} :: map()
 }).
 
-%% @doc Modify header column for export. The values are the names of the answers and
-%% the text displayed above the column. The ``export`` view is for a complete export, the
-%% ``summary`` view is for the limited result overview.
+%% @doc Add header columns for export. The values are the names of the answers and
+%% the text displayed above the column. The ``text`` format is for a complete export, the
+%% ``html`` format is for the limited result overview of the Survey Results Editor.
 %% Type: foldl
-%% Return: ``list( {binary(), binary() | #trans{} )``
--record(survey_result_header, {
+%% Return: ``list( {binary(), binary() | #trans{}} )``
+-record(survey_result_columns, {
     id :: m_rsc:resource_id(),
     handler :: binary() | undefined,
-    view :: export | summary
+    format :: html | text
 }).
 
 %% @doc Modify row with answers for export. The header columns are given and the
 %% values that are known are set in the folded value. The user_id is the user who
 %% filled in the answers for this row.
 %% Type: foldl
-%% Return: ``#{ binary() => term() }``
--record(survey_result_row, {
+%% Return: ``#{ binary() => iodata() }``
+-record(survey_result_column_values, {
     id :: m_rsc:resource_id(),
     handler :: binary() | undefined,
-    view :: export | result_view,
+    format :: html | text,
     user_id :: m_rsc:resource_id(),
-    columns :: list( binary() )
+    answer :: proplists:proplist(),
+    columns :: list( {binary(), binary() | #trans{}} )
 }).
-
-
 
 %% @doc Put a value into the typed key/value store
 %% Type: notify

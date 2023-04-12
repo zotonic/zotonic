@@ -6,6 +6,7 @@
 
 {% with m.rsc[q.id].id|default:id as id %}
 {% if id.is_editable %}
+    {% with m.survey.result_columns[id].html as columns %}
     {% with m.survey.list_results[id] as rs %}
     {% with id|survey_test_max_points as max_points %}
     {% if rs %}
@@ -15,6 +16,9 @@
                 <th>{_ Date _}</th>
                 <th>{_ Person _}</th>
                 <th>{_ Email _}</th>
+                {% for col, colname in columns %}
+                    <th>{{ colname }}</th>
+                {% endfor %}
                 {% if id.survey_test_percentage %}
                     <th style="text-align: right; width: 10%; min-width: 30px;">{_ Score _}</th>
                     <th style="text-align: right; width: 10%; min-width: 30px;">{_ Points _}</th>
@@ -76,6 +80,13 @@
                             <a href="mailto:{{ r.user_id.email }}">{{ r.user_id.email }}</a>
                         {% endif %}
                     </td>
+                    {% with id|survey_result_column_values:r:columns:"html" as vs %}
+                        {% for col,_ in columns %}
+                            <td>
+                                {{ vs[col] }}
+                            </td>
+                        {% endfor %}
+                    {% endwith %}
                     {% if id.survey_test_percentage %}
                         <td style="text-align: right">{{ (r.points / max_points * 100)|round }}%</td>
                         <td style="text-align: right">{{ r.points }} / {{ max_points }}</td>
@@ -106,6 +117,7 @@
     {% else %}
         <p>{_ No results yet. _}</p>
     {% endif %}
+    {% endwith %}
     {% endwith %}
     {% endwith %}
 {% endif %}

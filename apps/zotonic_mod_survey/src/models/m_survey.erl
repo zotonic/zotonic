@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2020 Marc Worrell
+%% @copyright 2010-2023 Marc Worrell
 %%
 %% @doc Model for accessing survey information.
 
-%% Copyright 2010-2020 Marc Worrell
+%% Copyright 2010-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@
 %% interface functions
 -export([
     m_get/3,
+
+    result_columns/3,
 
     is_allowed_results_download/2,
     get_handlers/1,
@@ -194,8 +196,58 @@ m_get([ <<"is_allowed_results_download">>, SurveyId | Rest ], _Msg, Context) ->
     {ok, {is_allowed_results_download(m_rsc:rid(SurveyId, Context), Context), Rest}};
 m_get([ <<"handlers">> | Rest ], _Msg, Context) ->
     {ok, {get_handlers(Context), Rest}};
+m_get([ <<"result_columns">>, SurveyId, Format | Rest ], _Msg, Context) ->
+    case result_columns(SurveyId, Format, Context) of
+        {ok, Cols} ->
+            {ok, {Cols, Rest}};
+        {error, _} = Error ->
+            Error
+    end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
+
+
+%% @doc Return the extra columns for the view.
+-spec result_columns(SurveyId, Format, Context) -> {ok, Columns} | {error, Reason} when
+    SurveyId :: m_rsc:resource(),
+    Format :: binary() | text | html,
+    Context :: z:context(),
+    Columns :: [ {Property, Title} ],
+    Property :: binary(),
+    Title :: binary() | #trans{},
+    Reason :: term().
+result_columns(SurveyId, Format, Context) when is_atom(Format) ->
+    case m_rsc:rid(SurveyId, Context) of
+        undefined ->
+            {error, enoent};
+        Id ->
+            case is_allowed_results_download(Id, Context) of
+                true ->
+                    Msg = #survey_result_columns{
+                        id = Id,
+                        handler = m_rsc:p_no_acl(Id, <<"survey_handler">>, Context),
+                        format = Format
+                    },
+                    {ok, z_notifier:foldl(Msg, [], Context)};
+                false ->
+                    {error, eacces}
+            end
+    end;
+result_columns(SurveyId, <<"text">>, Context) ->
+    result_columns(SurveyId, text, Context);
+result_columns(SurveyId, <<"html">>, Context) ->
+    result_columns(SurveyId, html, Context);
+result_columns(SurveyId, Format, _Context) ->
+    ?LOG_INFO(#{
+        in => zotonic_mod_survey,
+        text => <<"Unknown format for survey result columns">>,
+        result => error,
+        reason => unknown_format,
+        format => Format,
+        survey_id => SurveyId
+    }),
+    {error, unknown_format}.
+
 
 -spec persistent_id( z:context() ) -> {binary() | undefined, z:context()}.
 persistent_id(Context) ->
@@ -531,6 +583,7 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
             NQs = drop_hidden_results(NQs0),
             {MaxPoints, PassPercent} = test_pass_values(SurveyId, Context),
             IsAnonymous = IsForceAnonymous orelse z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
+            {ok, ExtraColumns} = result_columns(SurveyId, text, Context),
             Rows = z_db:assoc_props("
                         select *
                         from survey_answers
@@ -538,7 +591,7 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
                         order by created asc",
                         [SurveyId],
                         Context),
-            Answers = [ user_answer_row(Row, NQs, MaxPoints, PassPercent, IsAnonymous, Context) || Row <- Rows ],
+            Answers = [ user_answer_row(SurveyId, Row, NQs, MaxPoints, PassPercent, IsAnonymous, ExtraColumns, Context) || Row <- Rows ],
             Hs = [ {B, answer_header(B, MaxPoints, Context)} || {_,B} <- NQs ],
             Prompts = [ {B, z_trans:lookup_fallback(answer_prompt(B), Context)} || {_,B} <- NQs ],
             Hs1 = lists:flatten([
@@ -559,7 +612,8 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
                             ?__(<<"Percent">>, Context)
                         ]
                 end,
-                [ H || {_,H} <- Hs ]
+                [ H || {_,H} <- Hs ],
+                [ H || {_,H} <- ExtraColumns ]
             ]),
             Prompts1 = lists:flatten([
                 case IsAnonymous of
@@ -581,7 +635,8 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
                                 [ P, repeat(<<>>, maybe_length(BHs)-1) ]
                         end
                     end,
-                    Prompts)
+                    Prompts),
+                [ <<>> || _ <- ExtraColumns ]
             ]),
             {Hs1, Prompts1, Answers};
         undefined ->
@@ -611,13 +666,14 @@ test_pass_values(SurveyId, Context) ->
             {survey_test_results:max_points(SurveyId, Context), z_convert:to_integer(Percentage)}
     end.
 
-user_answer_row(Row, Questions, MaxPoints, PassPercent, IsAnonymous, Context) ->
+user_answer_row(SurveyId, Row, Questions, MaxPoints, PassPercent, IsAnonymous, ExtraColumns, Context) ->
     Points = proplists:get_value(points, Row),
     Answers = proplists:get_value(answers, Row),
     ByBlock = [
         {proplists:get_value(block, Ans), {Name, Ans}}
         || {Name, Ans} <- Answers
     ],
+    ColumnValues = filter_survey_result_column_values:survey_result_column_values(SurveyId, Row, ExtraColumns, text, Context),
     {proplists:get_value(id, Row),
      lists:flatten([
         opt_userinfo(IsAnonymous, Row, Context),
@@ -628,6 +684,10 @@ user_answer_row(Row, Questions, MaxPoints, PassPercent, IsAnonymous, Context) ->
                                 MaxPoints > 0,
                                 Context)
             || {QId, Question} <- Questions
+        ],
+        [
+            z_convert:to_binary(maps:get(ExtraCol, ColumnValues, <<>>))
+            || {ExtraCol, _} <- ExtraColumns
         ]
      ])}.
 
