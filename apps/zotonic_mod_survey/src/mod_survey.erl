@@ -216,9 +216,9 @@ observe_export_resource_filename(#export_resource_filename{}, _Context) ->
 observe_export_resource_header(#export_resource_header{dispatch=survey_results_download, id=Id}, Context) ->
     case m_survey:is_allowed_results_download(Id, Context) of
         true ->
-            {Hs, Promps, Data} = m_survey:survey_results_prompts(Id, false, Context),
+            {Hs, Prompts, Data} = m_survey:survey_results_prompts(Id, false, Context),
             Data1 = [ Row || {_Id, Row} <- Data ],
-            {ok, Hs, [ Promps | Data1 ]};
+            {ok, Hs, [ Prompts | Data1 ]};
         false ->
             throw({stop_request, 403})
     end;
@@ -708,7 +708,7 @@ do_submit(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
     case z_notifier:first(
         #survey_submit{
             id = SurveyId,
-            handler = m_rsc:p_no_acl(SurveyId, survey_handler, Context),
+            handler = m_rsc:p_no_acl(SurveyId, <<"survey_handler">>, Context),
             answers = FoundAnswers,
             missing = Missing,
             answers_raw = Answers,

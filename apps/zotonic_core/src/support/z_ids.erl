@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2012 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Server supplying random strings and unique ids
 
-%% Copyright 2009-2012 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@
     id/1,
     identifier/0,
     identifier/1,
+    password/0,
     random_id/2,
     optid/1,
     sign_key/1,
@@ -79,6 +80,12 @@ identifier() ->
 identifier(Len) ->
     random_id('az', Len).
 
+-spec password() -> binary().
+%% @doc Generate a password that matches most criteria of complexity and
+%% is still (kind of) readable.
+password() ->
+    iolist_to_binary([ id(5), $-, id(5), $-, id(5) ]).
+
 -spec random_id(charset(), Length::integer()) -> binary().
 %% @doc Get a random identifier of the specified length, consisting of
 %% characters from the specified set:
@@ -93,6 +100,7 @@ random_id('azAZ09', Len) ->
     make_any_char_id(Len).
 
 -spec optid(undefined | false | binary()) -> binary().
+%% @doc Generate an identifier if the identifier was not defined.
 optid(undefined) ->
     identifier(?OPTID_LENGTH);
 optid(false) ->
