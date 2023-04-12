@@ -4,10 +4,9 @@
     {_ The email address is shown if there is a question “email” or if a person with an email address is coupled. _}
 </p>
 
-
 {% with m.rsc[q.id].id|default:id as id %}
 {% if id.is_editable %}
-    {% with m.survey.result_columns[id].editor as columns %}
+    {% with m.survey.result_columns[id].html as columns %}
     {% with m.survey.list_results[id] as rs %}
     {% with id|survey_test_max_points as max_points %}
     {% if rs %}
