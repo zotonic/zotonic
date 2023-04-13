@@ -47,16 +47,18 @@
     last = []
 }).
 
+-type checksum() :: binary().
+
 %% Index record for the mediaclass ets table.
 -record(mediaclass_index_key, {
     site :: atom(),
     mediaclass :: binary()
 }).
 -record(mediaclass_index, {
-    key :: #mediaclass_index_key{},
+    key :: #mediaclass_index_key{} | checksum(),
     props = [] :: proplists:proplist(),
     module :: module(),
-    checksum :: binary(),
+    checksum :: checksum(),
     tag :: reference()
 }).
 
