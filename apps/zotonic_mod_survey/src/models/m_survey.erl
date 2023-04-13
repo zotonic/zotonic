@@ -541,6 +541,14 @@ make_list(V) -> [V].
 
 
 %% @doc Get survey results, sorted by the given sort column.
+-spec survey_results_sorted(SurveyId, SortColumn, Context) -> [ Headers | Data ] when
+    SurveyId :: m_rsc:resource_id() | undefined,
+    SortColumn :: binary(),
+    Context :: z:context(),
+    Headers :: [ binary() ],
+    Data :: [ {AnswerId, [ RowValue ]} ],
+    AnswerId :: integer(),
+    RowValue :: binary() | number() | boolean() | calendar:datetime() | #trans{} | undefined.
 survey_results_sorted(SurveyId, SortColumn, Context) ->
     [ Headers | Data ] = survey_results(SurveyId, true, Context),
     case indexof(Headers, SortColumn, 1) of
@@ -570,11 +578,28 @@ get_questions(SurveyId, Context) ->
     end.
 
 %% @doc Return all results of a survey
+-spec survey_results(SurveyId, IsForceAnonymous, Context) -> [ Headers | Data ] when
+    SurveyId :: m_rsc:resource_id() | undefined,
+    IsForceAnonymous :: boolean(),
+    Context :: z:context(),
+    Headers :: [ binary() ],
+    Data :: [ {AnswerId, [ RowValue ]} ],
+    AnswerId :: integer(),
+    RowValue :: binary() | number() | boolean() | calendar:datetime() | #trans{} | undefined.
 survey_results(SurveyId, IsAnonymous, Context) ->
     {Hs, _Prompts, Data} = survey_results_prompts(SurveyId, IsAnonymous, Context),
     [ Hs | Data ].
 
 %% @doc Return all results of a survey with separate names, prompts and data
+-spec survey_results_prompts(SurveyId, IsForceAnonymous, Context) -> {Headers, Prompts, Data} when
+    SurveyId :: m_rsc:resource_id() | undefined,
+    IsForceAnonymous :: boolean(),
+    Context :: z:context(),
+    Headers :: [ binary() ],
+    Prompts :: [ binary() ],
+    Data :: [ {AnswerId, [ RowValue ]} ],
+    AnswerId :: integer(),
+    RowValue :: binary() | number() | boolean() | calendar:datetime() | #trans{} | undefined.
 survey_results_prompts(undefined, _IsForceAnonymous, _Context) ->
     {[], [], []};
 survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(SurveyId) ->
