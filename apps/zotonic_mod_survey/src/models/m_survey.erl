@@ -83,7 +83,8 @@ m_get([ <<"all_results">>, [Id, SortColumn] | Rest ], _Msg, Context) ->
         RId ->
             case z_acl:rsc_editable(RId, Context) of
                 true ->
-                    {ok, {survey_results_sorted(RId, SortColumn, Context), Rest}};
+                    {Hs, Data} = survey_results_sorted(RId, SortColumn, Context),
+                    {ok, {[Hs|Data], Rest}};
                 false ->
                     {error, eacces}
             end
@@ -95,7 +96,8 @@ m_get([ <<"all_results">>, Id | Rest ], _Msg, Context) ->
         RId ->
             case z_acl:rsc_editable(RId, Context) of
                 true ->
-                    {ok, {survey_results(RId, true, Context), Rest}};
+                    {Hs, Data} = survey_results(RId, true, Context),
+                    {ok, {[Hs|Data], Rest}};
                 false ->
                     {error, eacces}
             end
@@ -541,17 +543,25 @@ make_list(V) -> [V].
 
 
 %% @doc Get survey results, sorted by the given sort column.
+-spec survey_results_sorted(SurveyId, SortColumn, Context) -> {Headers, Data} when
+    SurveyId :: m_rsc:resource() | undefined,
+    SortColumn :: binary(),
+    Context :: z:context(),
+    Headers :: [ binary() ],
+    Data :: [ {AnswerId, [ RowValue ]} ],
+    AnswerId :: integer(),
+    RowValue :: binary() | number() | boolean() | calendar:datetime() | #trans{} | undefined.
 survey_results_sorted(SurveyId, SortColumn, Context) ->
-    [ Headers | Data ] = survey_results(SurveyId, true, Context),
+    {Headers, Data} = survey_results(SurveyId, true, Context),
     case indexof(Headers, SortColumn, 1) of
         0 ->
             %% column not found, do not sort
-            [Headers|Data];
+            {Headers, Data};
         N ->
             %% Sort on nth row
-            Data1 = [{z_string:to_lower(z_convert:to_list(lists:nth(N, Row))), Row} || Row <- Data],
+            Data1 = [{z_string:to_lower(z_convert:to_binary(lists:nth(N, Vs))), Row} || {_, Vs} = Row <- Data],
             Data2 = [Row1 || {_, Row1} <- lists:sort(Data1)],
-            [Headers|Data2]
+            {Headers, Data2}
     end.
 
 indexof([], _Col, _N) -> 0;
@@ -570,11 +580,28 @@ get_questions(SurveyId, Context) ->
     end.
 
 %% @doc Return all results of a survey
+-spec survey_results(SurveyId, IsForceAnonymous, Context) -> {Headers, Data} when
+    SurveyId :: m_rsc:resource() | undefined,
+    IsForceAnonymous :: boolean(),
+    Context :: z:context(),
+    Headers :: [ binary() ],
+    Data :: [ {AnswerId, [ RowValue ]} ],
+    AnswerId :: integer(),
+    RowValue :: binary() | number() | boolean() | calendar:datetime() | #trans{} | undefined.
 survey_results(SurveyId, IsAnonymous, Context) ->
     {Hs, _Prompts, Data} = survey_results_prompts(SurveyId, IsAnonymous, Context),
-    [ Hs | Data ].
+    {Hs, Data}.
 
 %% @doc Return all results of a survey with separate names, prompts and data
+-spec survey_results_prompts(SurveyId, IsForceAnonymous, Context) -> {Headers, Prompts, Data} when
+    SurveyId :: m_rsc:resource() | undefined,
+    IsForceAnonymous :: boolean(),
+    Context :: z:context(),
+    Headers :: [ binary() ],
+    Prompts :: [ binary() ],
+    Data :: [ {AnswerId, [ RowValue ]} ],
+    AnswerId :: integer(),
+    RowValue :: binary() | number() | boolean() | calendar:datetime() | #trans{} | undefined.
 survey_results_prompts(undefined, _IsForceAnonymous, _Context) ->
     {[], [], []};
 survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(SurveyId) ->
