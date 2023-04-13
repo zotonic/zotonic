@@ -1,5 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell, David de Boer
+%% @copyright 2009-2023 Marc Worrell, David de Boer
 %% @doc Generate media urls and html for viewing media, based on the filename, size and optional filters.
 %% Does not generate media previews itself, this is done when fetching the image.
 %%
@@ -7,8 +7,9 @@
 %% /image/2007/03/31/wedding.jpg(300x300)(crop-center)(a3ab6605e5c8ce801ac77eb76289ac12).jpg
 %% /media/inline/2007/03/31/wedding.jpg
 %% /media/attachment/2007/03/31/wedding.jpg
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell, David de Boer
+%% Copyright 2009-2023 Marc Worrell, David de Boer
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,6 +35,7 @@
 
     viewer/3,
     tag/3,
+    attributes/3,
     url/3,
     url2props/2,
 
@@ -42,6 +44,25 @@
 ]).
 
 -include_lib("zotonic.hrl").
+
+-type mediaref() :: undefined
+                  | m_rsc:resource_id()
+                  | z_media_identify:media_info()
+                  | #rsc_list{}
+                  | proplists:proplist()
+                  | file:filename_all().
+
+-type fileref() :: file:filename_all()
+                 | {filepath, file:filename_all(), file:filename_all()}.
+
+-type viewer_options() :: proplists:proplist().
+
+-export_type([
+    mediaref/0,
+    fileref/0,
+    viewer_options/0
+    ]).
+
 
 %% @doc Called from template, render the media viewer for some resource/medium
 scomp_viewer(undefined, _Options, _Context) ->
@@ -86,13 +107,11 @@ scomp_data_url(IdOrName, Options, Context) ->
 
 
 %% @doc Generate a html fragment for displaying a medium.  This can generate audio or video player html.
--spec viewer(MediaReference, z_media_identify:media_info(), z:context()) -> {ok, iodata()}
-    when MediaReference :: undefined
-                         | m_rsc:resource_id()
-                         | z_media_identify:media_info()
-                         | #rsc_list{}
-                         | proplists:proplist()
-                         | file:filename_all().
+-spec viewer(MediaReference, Options, Context) -> {ok, HTML} when
+    MediaReference :: mediaref(),
+    Options :: viewer_options(),
+    Context :: z:context(),
+    HTML :: iodata().
 viewer(undefined, _Options, _Context) ->
     {ok, <<>>};
 viewer([], _Options, _Context) ->
@@ -153,12 +172,11 @@ viewer1(Id, Props, FilePath, Options, Context) ->
 
 %% @doc Generate a HTML image tag for the image with the filename and options. The medium _must_ be in
 %% a format for which we can generate a preview.  Note that this will never generate video or audio.
--spec tag(MediaReference, Options :: list(), z:context()) -> {ok, iodata()}
-    when MediaReference :: undefined
-                         | m_rsc:resource_id()
-                         | #rsc_list{}
-                         | proplists:list()
-                         | file:filename_all().
+-spec tag(MediaReference, Options, Context) -> {ok, ImgTag} when
+    MediaReference :: mediaref(),
+    Options :: viewer_options(),
+    Context :: z:context(),
+    ImgTag :: binary().
 tag(undefined, _Options, _Context) ->
     {ok, <<>>};
 tag([], _Options, _Context) ->
@@ -194,14 +212,67 @@ tag({filepath, Filename, FilePath}, Options, Context) ->
     tag1(FilePath, Filename, Options, Context).
 
 
--spec tag1( file:filename_all() | map(),
-            file:filename_all() | {filepath, file:filename_all(), file:filename_all()},
-            proplists:proplist(),
-            z:context() )
-        -> {ok, binary()}.
-tag1(_MediaRef, {filepath, Filename, FilePath}, Options, Context) ->
-    tag1(FilePath, Filename, Options, Context);
 tag1(MediaRef, Filename, Options, Context) ->
+    {ok, {Attrs, TagOpts}} = attributes1(MediaRef, Filename, Options, Context),
+    case proplists:get_value(link, TagOpts) of
+        None when None =:= []; None =:= <<>>; None =:= undefined ->
+            {ok, iolist_to_binary(z_tags:render_tag("img", Attrs))};
+        Link ->
+            HRef = iolist_to_binary(get_link(MediaRef, Link, Context)),
+            Tag = z_tags:render_tag("img", Attrs),
+            {ok, iolist_to_binary(z_tags:render_tag("a", [{href,HRef}], Tag))}
+    end.
+
+
+%% @doc Generate a HTML image tag attributes for the image with the filename and options. The medium _must_ be in
+%% a format for which we can generate a preview.  Note that this will never generate video or audio.
+-spec attributes(MediaReference, Options, Context) -> {ok, Attrs} | {error, Reason} when
+    MediaReference :: mediaref(),
+    Options :: viewer_options(),
+    Context :: z:context(),
+    Attrs :: list( {atom(), iodata()} ),
+    Reason :: enoent.
+attributes(undefined, _Options, _Context) ->
+    {error, enoent};
+attributes([], _Options, _Context) ->
+    {error, enoent};
+attributes([ Id | _ ], Options, Context) when is_integer(Id) ->
+    attributes(Id, Options, Context);
+attributes(#rsc_list{list=[]}, _Options, _Context) ->
+    {error, enoent};
+attributes(#rsc_list{list=[Id|_]}, Options, Context) ->
+    attributes(Id, Options, Context);
+attributes(Name, Options, Context) when is_atom(Name) ->
+    case m_rsc:name_to_id(Name, Context) of
+        {ok, Id} -> attributes(Id, Options, Context);
+        _ -> {error, enoent}
+    end;
+attributes(Id, Options, Context) when is_integer(Id) ->
+    attributes(m_media:depiction(Id, Context), Options, Context);
+attributes(Props, Options, Context) when is_map(Props) ->
+    Id = maps:get(<<"id">>, Props, undefined),
+    case mediaprops_filename(Id, Props, Context) of
+        None when None =:= []; None =:= <<>>; None =:= undefined ->
+            {error, enoent};
+        Filename ->
+            Options1 = extra_image_options(Id, Props, Options, Context),
+            {ok, {Attrs, _}} = attributes1(Props, Filename, Options1, Context),
+            {ok, Attrs}
+    end;
+attributes(<<"/", Filename/binary>>, Options, Context) ->
+    attributes(Filename, Options, Context);
+attributes(Filename, Options, Context) when is_binary(Filename) ->
+    FilePath = filename_to_filepath(Filename, Context),
+    {ok, {Attrs, _}} = attributes1(FilePath, Filename, Options, Context),
+    {ok, Attrs};
+attributes({filepath, Filename, FilePath}, Options, Context) ->
+    {ok, {Attrs, _}} = attributes1(FilePath, Filename, Options, Context),
+    {ok, Attrs}.
+
+
+attributes1(_MediaRef, {filepath, Filename, FilePath}, Options, Context) ->
+    attributes1(FilePath, Filename, Options, Context);
+attributes1(MediaRef, Filename, Options, Context) ->
     Options1 = drop_undefined(Options),
     {url, Url, TagOpts, _ImageOpts} = url1(Filename, Options1, Context),
     % Expand the mediaclass for the correct size options
@@ -264,14 +335,8 @@ tag1(MediaRef, Filename, Options, Context) ->
     % Add the optional srcset
     TagOpts5 = with_srcset(TagOpts4, Filename, Options, Context),
     % Filter some opts
-    case proplists:get_value(link, TagOpts) of
-        None when None =:= []; None =:= <<>>; None =:= undefined ->
-            {ok, iolist_to_binary(z_tags:render_tag("img", [{src,Url}|TagOpts5]))};
-        Link ->
-            HRef = iolist_to_binary(get_link(MediaRef, Link, Context)),
-            Tag = z_tags:render_tag("img", [{src,Url}|proplists:delete(link, TagOpts5)]),
-            {ok, iolist_to_binary(z_tags:render_tag("a", [{href,HRef}], Tag))}
-    end.
+    TagOpts6 = proplists:delete(link, TagOpts5),
+    {ok, {[{src,Url}|TagOpts6], TagOpts}}.
 
 with_srcset(TagOptions, Filename, Options, Context) ->
     case proplists:get_value(mediaclass, Options) of
