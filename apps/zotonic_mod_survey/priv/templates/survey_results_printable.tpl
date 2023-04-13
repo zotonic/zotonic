@@ -55,7 +55,7 @@
         <tr id="survey-result-{{ ans_id }}">
             <td style="text-align: right">{{ forloop.counter }}.</td>
             {% for value in ans %}
-                <td {% if value|match:"[0-9]+(\\.[0-9]*)?" %}style="text-align: right"{% endif %}>{{ value|escape }}</td>
+                <td {% if value|match:"^[0-9]+(\\.[0-9]*)?$" %}style="text-align: right"{% endif %}>{{ value|escape }}</td>
             {% endfor %}
         </tr>
         {% endfor %}
