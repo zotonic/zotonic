@@ -611,7 +611,7 @@ list_subscriptions_by_rsc_id(RscId0, Context) ->
                 fun(Idn) ->
                     case proplists:get_value(is_verified, Idn) of
                         true ->
-                            proplists:get_value(key, Idn);
+                            {true, proplists:get_value(key, Idn)};
                         false ->
                             false
                     end
