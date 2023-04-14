@@ -19,7 +19,7 @@
 -module(z_mailinglist_recipients).
 
 -export([
-    recipient_key_encode/2,
+    recipient_key_encode/3,
     recipient_key_decode/2,
 
     count_recipients/2,
@@ -32,29 +32,44 @@
 -define(RECIPIENT_SECRET_LENGTH, 32).
 
 %% @doc Encode a recipient to a key used for the manage subscriptions page.
--spec recipient_key_encode(Recipient, Context) -> {ok, Key} when
+-spec recipient_key_encode(Recipient, ListId, Context) -> {ok, Key} when
     Recipient :: Email | RscId,
     RscId :: m_rsc:resource_id(),
     Email :: binary(),
+    ListId :: m_rsc:resource_id() | undefined,
     Context :: z:context(),
     Key :: binary().
-recipient_key_encode(Recipient, Context) ->
-    Term = {r0, Recipient, z_datetime:timestamp()},
+recipient_key_encode(Recipient, ListId, Context) ->
+    Term = {r1, Recipient, ListId, z_datetime:timestamp()},
     {ok, termit:encode_base64(Term, recipient_secret(Context))}.
 
 %% @doc Decode a recipient to a key used for the manage subscriptions page.
--spec recipient_key_decode(Key, Context) -> {ok, Recipient} | {error, Reason} when
+-spec recipient_key_decode(Key, Context) -> {ok, Decoded} | {error, Reason} when
     Key :: binary(),
     Context :: z:context(),
-    Recipient :: Email | RscId,
+    Decoded :: #{
+        recipient => Recipient,
+        list_id => MailinglistId
+    },
+    Recipient :: RscId | Email,
     RscId :: m_rsc:resource_id(),
     Email :: binary(),
+    MailinglistId :: m_rsc:resource_id() | undefined,
     Reason :: expired | term().
 recipient_key_decode(Key, Context) ->
     case termit:decode_base64(Key, recipient_secret(Context)) of
         {ok, {r0, Recipient, Timestamp}} when is_integer(Timestamp) ->
             % TODO: check timestamp
-            {ok, Recipient};
+            {ok, #{
+                recipient => Recipient,
+                list_id => undefined
+            }};
+        {ok, {r1, Recipient, ListId, Timestamp}} when is_integer(Timestamp) ->
+            % TODO: check timestamp
+            {ok, #{
+                recipient => Recipient,
+                list_id => ListId
+            }};
         {ok, Decoded} ->
             ?LOG_ERROR(#{
                 in => mod_mailinglist,

@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2020 Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2023 Marc Worrell, Arjan Scherpenisse
 %% @doc Update routines for resources.  For use by the m_rsc module.
 
-%% Copyright 2009-2020 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2023 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -975,7 +975,9 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
 
     % 7. Perform optional update, check diff
     IsInsert = (RscUpd#rscupd.id =:= insert_rsc),
-    case is_update_allowed(IsInsert, Id, NewPropsLangPruned, Context) of
+    case RscUpd#rscupd.is_acl_check =:= false
+        orelse is_update_allowed(IsInsert, Id, NewPropsLangPruned, Context)
+    of
         true ->
             case (IsInsert orelse is_changed(Raw, NewPropsDiffTz)) of
                 true ->
