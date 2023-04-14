@@ -101,10 +101,10 @@ observe_mailinglist_message(#mailinglist_message{what=send_goodbye, list_id=List
         {recipient, Props}
     ],
     Context1 = case proplists:get_value(pref_language, Props) of
-        undefined -> Props;
+        undefined -> Context;
         Lang -> z_context:set_language(Lang, Context)
     end,
-    z_email:send_render(Email, "email_mailinglist_goodbye.tpl", Vars, Context1),
+    z_email:send_render(Email, "email_mailinglist_goodbye.tpl", Vars, z_acl:sudo(Context1)),
     ok;
 observe_mailinglist_message(#mailinglist_message{what=Message, list_id=ListId, recipient=RecipientId}, Context) ->
     Template = case Message of
@@ -119,10 +119,10 @@ observe_mailinglist_message(#mailinglist_message{what=Message, list_id=ListId, r
         {recipient, Props}
     ],
     Context1 = case proplists:get_value(pref_language, Props) of
-        undefined -> Props;
+        undefined -> Context;
         Lang -> z_context:set_language(Lang, Context)
     end,
-    z_email:send_render(Email, Template, Vars, Context1),
+    z_email:send_render(Email, Template, Vars, z_acl:sudo(Context1)),
     ok.
 
 %% @doc Every 24h cleanup the mailinglists recipients.
@@ -213,22 +213,21 @@ event(#postback{ message = {mailinglist_unsubscribe, Args} }, Context) ->
                 undefined ->
                     ok;
                 RscId when is_integer(RscId) ->
-                    case m_edge:delete(RscId, subscriberof, MailingId, z_acl:sudo(Context)) of
-                        ok ->
-                            m_edge:insert(RscId, exsubscriberof, MailingId, z_acl:sudo(Context)),
-                            RecipientProps = [
-                                {email, m_rsc:p_no_acl(RscId, <<"email_raw">>, Context)},
-                                {pref_language, m_rsc:p_no_acl(RscId, <<"pref_language">>, Context)}
-                            ],
-                            z_notifier:notify1(
-                                #mailinglist_message{
-                                    what = send_goodbye,
-                                    list_id = MailingId,
-                                    recipient = RecipientProps
-                                }, Context);
-                        {error, _} ->
-                            ok
-                    end
+                    % Even if not subscribed, register as ex-subscriber to prevent
+                    % receiving email in the future. This enables unsubscribing from
+                    % mailinglists that find recipients with queries.
+                    m_edge:delete(RscId, subscriberof, MailingId, z_acl:sudo(Context)),
+                    m_edge:insert(RscId, exsubscriberof, MailingId, z_acl:sudo(Context)),
+                    RecipientProps = [
+                        {email, m_rsc:p_no_acl(RscId, <<"email_raw">>, Context)},
+                        {pref_language, m_rsc:p_no_acl(RscId, <<"pref_language">>, Context)}
+                    ],
+                    z_notifier:notify1(
+                        #mailinglist_message{
+                            what = send_goodbye,
+                            list_id = MailingId,
+                            recipient = RecipientProps
+                        }, Context)
             end,
             case proplists:get_value(recipient_id, Args) of
                 undefined ->
@@ -454,8 +453,9 @@ send(_Email, RecipientId, From, Options, Context) when is_integer(RecipientId) -
             skip;
         Email ->
             PageId = proplists:get_value(id, Options),
+            ListId = proplists:get_value(list_id, Options),
             Attachments = m_edge:objects(PageId, hasdocument, Context),
-            {ok, RecipientKey} = z_mailinglist_recipients:recipient_key_encode(RecipientId, Context),
+            {ok, RecipientKey} = z_mailinglist_recipients:recipient_key_encode(RecipientId, ListId, Context),
             z_email:send(
                 #email{
                     to = Email,
@@ -485,8 +485,9 @@ send(Email, Recipient, From, Options, Context) when is_map(Recipient) ->
             z_context:set_language(PrefLanguage, Context)
     end,
     PageId = proplists:get_value(id, Options),
+    ListId = proplists:get_value(list_id, Options),
     Attachments = m_edge:objects(PageId, hasdocument, Context),
-    {ok, RecipientKey} = z_mailinglist_recipients:recipient_key_encode(Email, Context),
+    {ok, RecipientKey} = z_mailinglist_recipients:recipient_key_encode(Email, ListId, Context),
     z_email:send(
         #email{
             to = Email,

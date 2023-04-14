@@ -5,5 +5,9 @@
 {% block body %}
 {% include "_email_mailinglist_hello.tpl" %}
 
-<p>{_ You are now unsubscribed from the mailing list _} <a href="{{ m.rsc[list_id].page_url_abs }}">{{ m.rsc[list_id].title }}</a>. {_ Hope to see you again. _}</p>
+<p>
+    {% trans "You are now unsubscribed from the mailing list <b>{title}</b>. Hope to see you again."
+            title=m.rsc[list_id].title
+    %}
+</p>
 {% endblock %}
