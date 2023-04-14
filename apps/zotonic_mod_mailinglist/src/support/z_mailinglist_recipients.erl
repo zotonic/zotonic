@@ -44,12 +44,17 @@ recipient_key_encode(Recipient, ListId, Context) ->
     {ok, termit:encode_base64(Term, recipient_secret(Context))}.
 
 %% @doc Decode a recipient to a key used for the manage subscriptions page.
--spec recipient_key_decode(Key, Context) -> {ok, Recipient} | {error, Reason} when
+-spec recipient_key_decode(Key, Context) -> {ok, Decoded} | {error, Reason} when
     Key :: binary(),
     Context :: z:context(),
-    Recipient :: Email | RscId,
+    Decoded :: #{
+        recipient => Recipient,
+        list_id => MailinglistId
+    },
+    Recipient :: RscId | Email,
     RscId :: m_rsc:resource_id(),
     Email :: binary(),
+    MailinglistId :: m_rsc:resource_id() | undefined,
     Reason :: expired | term().
 recipient_key_decode(Key, Context) ->
     case termit:decode_base64(Key, recipient_secret(Context)) of
