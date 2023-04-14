@@ -325,7 +325,7 @@ msgstr ""
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:34
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:95./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:124
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:124
 msgid "Delete"
 msgstr ""
 
@@ -548,7 +548,7 @@ msgstr ""
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:101
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:100
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:136
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:81./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:84
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:81./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:54
 msgid "Save"
 msgstr ""
 
@@ -1129,7 +1129,7 @@ msgstr ""
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:16
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:20./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:111./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:15./apps/zotonic_mod_survey/src/models/m_survey.erl:546./apps/zotonic_mod_survey/src/models/m_survey.erl:549
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:16./apps/zotonic_mod_survey/src/models/m_survey.erl:626./apps/zotonic_mod_survey/src/models/m_survey.erl:629
 msgid "Date"
 msgstr ""
 
@@ -1221,7 +1221,7 @@ msgstr ""
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:39
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40./apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:92
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:103
 msgid "Edit"
 msgstr ""
 
@@ -1241,7 +1241,7 @@ msgstr ""
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:69
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:29./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:30
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:18./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:29./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:30
 msgid "Email"
 msgstr ""
 
@@ -1637,7 +1637,7 @@ msgstr ""
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:11./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:10
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:47
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:551
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:631
 msgid "Name"
 msgstr ""
 
@@ -2455,7 +2455,7 @@ msgstr ""
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:52
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:73
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:31
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:35
 msgid "Y-m-d H:i"
 msgstr ""
 
@@ -4172,7 +4172,7 @@ msgid "Back to sign in"
 msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:38
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:42
 msgid "Change"
 msgstr ""
 
@@ -6749,7 +6749,7 @@ msgid "Email status"
 msgstr ""
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:86./apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:12./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:36
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:97./apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:12./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:36
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:17
 msgid "Failed"
 msgstr ""
@@ -6869,7 +6869,7 @@ msgid "User"
 msgstr ""
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:42./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:550
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:630
 msgid "User Id"
 msgstr ""
 
@@ -6879,6 +6879,10 @@ msgstr ""
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:62
 msgid "email verified"
+msgstr ""
+
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:84
+msgid "<b>Thank you.</b> You are now unsubscribed."
 msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:14
@@ -6963,6 +6967,10 @@ msgstr ""
 msgid "Cancel mailing"
 msgstr ""
 
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:21
+msgid "Change subscriptions connected to your account."
+msgstr ""
+
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:76
 msgid "Check to activate the e-mail address."
 msgstr ""
@@ -7013,7 +7021,7 @@ msgstr ""
 msgid "Could not delete the mailing list."
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:259
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:258
 msgid "Could not save the opt-out preference."
 msgstr ""
 
@@ -7116,16 +7124,16 @@ msgstr ""
 msgid "Help about the mailing page"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:11
-msgid "Here you can change subscriptions connected to your account."
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:24
+msgid ""
+"Here you can change subscriptions connected to your email address <b>{email}"
+"</b>."
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:13
-msgid "Here you can change subscriptions connected to your email address."
-msgstr ""
-
-#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_goodbye.tpl:8
-msgid "Hope to see you again."
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:44
+msgid ""
+"If you opt-out then it is still possible to subscribe to mailing lists using "
+"an e-mail address (instead of your account)."
 msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:6
@@ -7153,7 +7161,7 @@ msgstr ""
 msgid "Mailing list"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:510
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:511
 msgid "Mailing lists"
 msgstr ""
 
@@ -7181,16 +7189,6 @@ msgstr ""
 msgid "No items found"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:62
-msgid "No subscriptions found."
-msgstr ""
-
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:75
-msgid ""
-"Note that it is still possible to subscribe by email-address to mailing "
-"lists."
-msgstr ""
-
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:33
 msgid "Number of recipients on this list:"
 msgstr ""
@@ -7203,15 +7201,15 @@ msgstr ""
 msgid "Operation"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:71
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:38
 msgid "Opt-out"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:80
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:50
 msgid "Opt-out of all mailing lists coupled to my account"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:60./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:24
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
 msgstr ""
 
@@ -7294,7 +7292,7 @@ msgstr ""
 msgid "Remove this recipient. No undo possible."
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:257
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:256
 msgid "Saved the opt-out preference."
 msgstr ""
 
@@ -7391,15 +7389,11 @@ msgstr ""
 msgid "Sorry, can’t confirm your subscription"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:22
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:21
 msgid "Sorry, can’t find your subscription"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:58
-msgid "Sorry, can’t find your subscription."
-msgstr ""
-
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:45./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:17
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:87./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:17
 msgid "Sorry, something went wrong. Please try again later."
 msgstr ""
 
@@ -7415,7 +7409,7 @@ msgstr ""
 msgid "Subscribe to"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:51
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:93
 msgid "Subscribed with"
 msgstr ""
 
@@ -7435,7 +7429,7 @@ msgstr ""
 msgid "Thank you. You are now subscribed."
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:42./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:16
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:16
 msgid "Thank you. You are now unsubscribed."
 msgstr ""
 
@@ -7449,7 +7443,7 @@ msgstr ""
 msgid "The e-mails are being sent..."
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:59./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:22
 msgid ""
 "The key in your link does not match any subscription. Either you already "
 "unsubscribed, or the mailing list has been deleted."
@@ -7519,7 +7513,7 @@ msgid ""
 "message."
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:33./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:13
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:75./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:13
 msgid "Unsubscribe"
 msgstr ""
 
@@ -7545,7 +7539,7 @@ msgstr ""
 msgid "Upload a list of recipients."
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:17
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:19
 msgid "Use the link in your email to manage your subscriptions."
 msgstr ""
 
@@ -7600,6 +7594,10 @@ msgid ""
 "edit permission on the mailing list to change and view the recipients."
 msgstr ""
 
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:102
+msgid "You are not subscribed to any mailing lists."
+msgstr ""
+
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
 msgid "You are now subscribed to our mailing list"
 msgstr ""
@@ -7608,11 +7606,17 @@ msgstr ""
 msgid "You are now unsubscribed from"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_goodbye.tpl:8
-msgid "You are now unsubscribed from the mailing list"
+#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_goodbye.tpl:9
+msgid ""
+"You are now unsubscribed from the mailing list <b>{title}</b>. Hope to see "
+"you again."
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:74
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:63
+msgid "You are subscribed to the following mailing lists."
+msgstr ""
+
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:41
 msgid ""
 "You can opt-out of all current and future mailings using your account on "
 "this website."
@@ -7649,11 +7653,11 @@ msgid ""
 "it, then please check your spam folder."
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:8
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:16
 msgid "Your mailing list subscriptions"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:20
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:61./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:101
 msgid "Your subscriptions"
 msgstr ""
 
@@ -9153,7 +9157,7 @@ msgstr ""
 msgid "Create new person"
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:888
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:975
 msgid "Created"
 msgstr ""
 
@@ -9205,7 +9209,7 @@ msgstr ""
 msgid "E-mail addresses"
 msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:93
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:104
 msgid "Edit survey result"
 msgstr ""
 
@@ -9351,7 +9355,7 @@ msgstr ""
 msgid "Likert"
 msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:45./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:54./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:61./apps/zotonic_mod_survey/src/support/survey_admin.erl:56
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:49./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:58./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:65./apps/zotonic_mod_survey/src/support/survey_admin.erl:56
 msgid "Link with person"
 msgstr ""
 
@@ -9438,7 +9442,7 @@ msgstr ""
 msgid "Next page in category"
 msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:107
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
 msgid "No results yet."
 msgstr ""
 
@@ -9470,11 +9474,11 @@ msgstr ""
 msgid "Page jump condition"
 msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:21
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:25
 msgid "Pass?"
 msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:84./apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:557
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:95./apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:637
 msgid "Passed"
 msgstr ""
 
@@ -9482,11 +9486,11 @@ msgstr ""
 msgid "Passing score"
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:559
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:639
 msgid "Percent"
 msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17
 msgid "Person"
 msgstr ""
 
@@ -9506,7 +9510,7 @@ msgstr ""
 msgid "Please upload your image."
 msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:20./apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:18./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:80
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:24./apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:18./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:80
 msgid "Points"
 msgstr ""
 
@@ -9586,7 +9590,7 @@ msgstr ""
 msgid "Saved"
 msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:19./apps/zotonic_mod_survey/src/models/m_survey.erl:558
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:23./apps/zotonic_mod_survey/src/models/m_survey.erl:638
 msgid "Score"
 msgstr ""
 
