@@ -5,8 +5,8 @@
 	</div>
 
     {% if id.is_editable %}
-        <div id="{{ #email_add_group }}" class="input-group">
-            <input id="{{ #email }}" type="email" name="idn-key" value="{% if not idns %}{{ id.email }}{% endif %}" placeholder="{_ Add e-mail address _}" class="nosubmit form-control" />
+        <div id="{{ #email_add_group }}" class="input-group" style="max-width: 40em;">
+            <input id="{{ #email }}" type="email" name="idn-key" value="{% if not idns %}{{ id.email }}{% endif %}" placeholder="{_ Add e-mail address _}" class="nosubmit form-control">
             <span class="input-group-btn">
                 <button id="{{ #email_add }}" class="btn btn-default" type="button">{_ Add _}</button>
             </span>
