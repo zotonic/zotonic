@@ -38,6 +38,7 @@
 
     is_request/1,
     is_session/1,
+    is_hostname_redirect_configured/1,
 
     prune_for_spawn/1,
     prune_for_async/1,
@@ -326,6 +327,15 @@ is_session(#context{ client_topic = undefined }) ->
 is_session(#context{ client_topic = ClientTopic }) ->
     is_list(ClientTopic).
 
+%% @doc Return true if redirect to the preferred hostname is configured
+%%      for the current site.
+-spec is_hostname_redirect_configured( z:context() ) -> boolean().
+is_hostname_redirect_configured(Context) ->
+    case m_site:get(redirect, Context) of
+        undefined -> true;
+        R -> z_convert:to_bool(R)
+    end.
+
 %% @doc Minimal prune, for ensuring that the context can safely used in two processes
 -spec prune_for_spawn( z:context() ) -> z:context().
 prune_for_spawn(#context{} = Context) ->
@@ -447,7 +457,10 @@ abs_url(<<"//", _/binary>> = Url, Context) ->
 abs_url(<<$/, _/binary>> = Url, Context) ->
     case z_notifier:first(#url_abs{ url = Url }, Context) of
         undefined ->
-            Hostname = hostname(Context),
+            Hostname = case not is_hostname_redirect_configured(Context) andalso is_request(Context) of
+                           true -> cowmachine_req:host(Context);
+                           false -> hostname(Context)
+                       end,
             case z_config:get(ssl_port) of
                 443 -> <<"https://", Hostname/binary, Url/binary>>;
                 Port -> <<"https://", Hostname/binary, $:, (integer_to_binary(Port))/binary, Url/binary>>
