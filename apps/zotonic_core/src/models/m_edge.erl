@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Model for accessing and manipulating edges between resources.
-%% @enddoc
+%% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@
 %% interface functions
 -export([
     m_get/3,
+    m_post/3,
+    m_delete/3,
 
     get/2,
     get_triple/2,
@@ -123,6 +125,27 @@ m_get([Id], _Msg, Context) ->
     end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
+
+
+%% @doc API to update or insert edges.
+-spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | ok | {error, term()}.
+m_post([ <<"o">>, Subject, Predicate, Object ], _Msg, Context) ->
+    insert(Subject, Object, Predicate, Context);
+m_post([ <<"s">>, Object, Predicate, Subject ], _Msg, Context) ->
+    insert(Subject, Object, Predicate, Context).
+
+
+%% @doc API to delete edges
+-spec m_delete( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | ok | {error, term()}.
+m_delete([ <<"o">>, Subject, Predicate, Object ], _Msg, Context) ->
+    delete(Subject, Predicate, Object, Context);
+m_delete([ <<"s">>, Object, Predicate, Subject ], _Msg, Context) ->
+    delete(Subject, Predicate, Object, Context);
+m_delete([ <<"edge">>, Edge ], _Msg, Context) ->
+    case z_convert:to_integer(Edge) of
+        undefined -> {error, enoent};
+        EdgeId -> delete(EdgeId, Context)
+    end.
 
 
 %% @doc Get the complete edge with the id
