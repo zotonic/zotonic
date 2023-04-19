@@ -275,10 +275,7 @@ init(Site) ->
         end,
         HostAlias),
     process_flag(trap_exit, true),
-    IsRedirect = case m_site:get(redirect, Context) of
-        undefined -> true;
-        R -> z_convert:to_bool(R)
-    end,
+    IsRedirect = z_context:is_hostname_redirect_configured(Context),
     State  = #state{
                 dispatchlist = [],
                 lookup = dict:new(),
