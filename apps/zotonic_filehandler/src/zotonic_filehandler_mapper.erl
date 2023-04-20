@@ -170,7 +170,11 @@ src_file(F) ->
         nomatch ->
             false;
         {match, [AppVsn, Path]} ->
-            {AppVsn, {src, Path}}
+            case src_file(Path) of
+                false ->
+                    {AppVsn, {src, Path}};
+                Match -> Match
+            end
     end.
 
 test_file(F) ->
@@ -178,7 +182,11 @@ test_file(F) ->
         nomatch ->
             false;
         {match, [AppVsn, Path]} ->
-            {AppVsn, {test, Path}}
+            case test_file(Path) of
+                false ->
+                    {AppVsn, {src, Path}};
+                Match -> Match
+            end
     end.
 
 include_file(F) ->
@@ -186,7 +194,11 @@ include_file(F) ->
         nomatch ->
             false;
         {match, [AppVsn, Path]} ->
-            {AppVsn, {src, Path}}
+            case include_file(Path) of
+                false ->
+                    {AppVsn, {src, Path}};
+                Match -> Match
+            end
     end.
 
 app_file(F) ->
