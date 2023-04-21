@@ -6247,7 +6247,7 @@ msgid "Move files to server disk"
 msgstr ""
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:40
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr ""
 
@@ -8300,7 +8300,7 @@ msgid ""
 msgstr ""
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:47
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:18
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:27
 msgid "default"
 msgstr ""
 
@@ -8477,27 +8477,35 @@ msgstr ""
 msgid "it has the format"
 msgstr ""
 
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:34
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:52
 msgid "Always"
 msgstr ""
 
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:30
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:48
+msgid "Change frequency defined for category"
+msgstr ""
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:43
 msgid "Change frequency for sitemap"
 msgstr ""
 
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:36
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:54
 msgid "Daily"
 msgstr ""
 
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:35
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:53
 msgid "Hourly"
 msgstr ""
 
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:38
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:60
 msgid "Monthly"
 msgstr ""
 
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:9
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:19
+msgid "Priority defined for category"
+msgstr ""
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:14
 msgid "Priority in sitemap"
 msgstr ""
 
@@ -8513,21 +8521,37 @@ msgstr ""
 msgid "Rebuilding the sitemap in the background."
 msgstr ""
 
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:2
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:7
 msgid "Sitemap settings"
 msgstr ""
 
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:4
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:4
+msgid "Sitemap settings for all pages of this category"
+msgstr ""
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:38
+msgid "The home page defaults to 1.0, pages with a page path default to 0.8."
+msgstr ""
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:5
 msgid ""
 "These settings apply to all pages of this category. They define hints for "
 "search engines indexing the site."
 msgstr ""
 
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:37
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:8
+msgid "These settings define hints for search engines indexing the site."
+msgstr ""
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:58
+msgid "Weekly"
+msgstr ""
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:56
 msgid "Weekly (default)"
 msgstr ""
 
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:39
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:61
 msgid "Yearly"
 msgstr ""
 
@@ -8535,7 +8559,7 @@ msgstr ""
 msgid "You are not allowed to do this"
 msgstr ""
 
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:13
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:21
 msgid "not in sitemap"
 msgstr ""
 
