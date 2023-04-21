@@ -18,7 +18,15 @@
 {% endblock %}
 
 {% block below_body %}
-    {% if id.is_a.survey and not id.survey_is_disabled %}
+
+    {% if id.survey_is_disabled %}
+        <p><em>{_ Sorry this survey is momentarily closed. _}</em></p>
+        {% if id.is_editable %}
+            <p><b>{_ Because you can edit the survey, you can proceed for testing. _}</b></p>
+        {% endif %}
+    {% endif %}
+
+    {% if id.is_a.survey and (not id.survey_is_disabled or id.is_editable) %}
     	{% lazy template="_survey_start.tpl"
                 id=id
                 answers=answers

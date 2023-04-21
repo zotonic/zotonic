@@ -5,6 +5,10 @@
 		{% endblock %}
 	{% endif %}
 
+    {% if id.survey_is_disabled and id.is_editable %}
+		<p class="alert alert-info">{_ This survey is disabled. Because you can edit the survey, you can proceed for testing. _}</p>
+    {% endif %}
+
 	{% wire id=#q type="submit"
 		postback={survey_next
 			id=id
