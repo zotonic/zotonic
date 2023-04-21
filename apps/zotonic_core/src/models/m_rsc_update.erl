@@ -960,7 +960,7 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
     NewPropsLangPruned = z_props:prune_languages(NewPropsLang, maps:get(<<"language">>, NewPropsLang)),
 
     % 5. Diff the update
-    NewPropsLangPruned1 = clear_empty(NewPropsLangPruned, Context),
+    NewPropsLangPruned1 = set_forced_props(Id, clear_empty(NewPropsLangPruned, Context)),
     NewPropsDiff = diff(NewPropsLangPruned1, Raw),
 
     % 6. Ensure that there is a Timezone set in the saved resource
@@ -992,6 +992,14 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
         false ->
             {error, eacces}
     end.
+
+%% @doc Some forced props, depending on the resource being updated.
+set_forced_props(1, Props) ->
+    Props#{
+        <<"is_protected">> => true
+    };
+set_forced_props(_Id, Props) ->
+    Props.
 
 %% Set all non-column fields with empty values to 'undefined'.
 %% This makes the props blob smaller by removing all empty address (etc) fields.
