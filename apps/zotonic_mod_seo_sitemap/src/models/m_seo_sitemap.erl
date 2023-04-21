@@ -364,20 +364,38 @@ update_rsc(Id, Context) ->
                     LastMod = m_rsc:p_no_acl(Id, modified, Context),
                     CatId = m_rsc:p_no_acl(Id, category_id, Context),
                     PubEnd = m_rsc:p_no_acl(Id, publication_end, Context),
-                    Prio = case m_rsc:p_no_acl(Id, page_path, Context) of
-                        <<"/">> -> 1.0;
-                        undefined -> undefined;
-                        <<>> -> undefined;
-                        _ -> 0.8
+                    IsCategory = m_rsc:is_a(Id, category, Context),
+                    Prio = case m_rsc:p_no_acl(Id, seo_sitemap_priority, Context) of
+                        undefined ->
+                            case m_rsc:p_no_acl(Id, page_path, Context) of
+                                <<"/">> -> 1.0;
+                                undefined -> undefined;
+                                <<>> -> undefined;
+                                _ -> 0.8
+                            end;
+                        SeoPrio when not IsCategory ->
+                            z_convert:to_float(SeoPrio);
+                        _ ->
+                            undefined
+                    end,
+                    Freq = if
+                        IsCategory -> undefined;
+                        true -> m_rsc:p_no_acl(Id, seo_sitemap_changefreq, Context)
                     end,
                     lists:foreach(
                         fun({Lang, Loc}) ->
                             z_db:q(
                                 "insert into seo_sitemap
-                                    (source, rsc_id, category_id, loc, lastmod, priority, publication_end, language)
+                                    (source, rsc_id, category_id, loc,
+                                     lastmod, priority, changefreq,
+                                     publication_end, language)
                                 values
-                                    ('rsc', $1, $2, $3, $4, $5, $6, $7)",
-                                [ Id, CatId, Loc, LastMod, Prio, PubEnd, Lang ],
+                                    ('rsc', $1, $2, $3, $4, $5, $6, $7, $8)",
+                                [
+                                  Id, CatId, Loc,
+                                  LastMod, Prio, Freq,
+                                  PubEnd, Lang
+                                ],
                                 Ctx)
                         end,
                         New),
@@ -389,14 +407,18 @@ update_rsc(Id, Context) ->
                                 update seo_sitemap
                                 set category_id = $1,
                                     lastmod = $2,
-                                    publication_end = $3,
+                                    priority = $3,
+                                    changefreq = $4,
+                                    publication_end = $5,
                                     modified = now()
-                                where rsc_id = $4
+                                where rsc_id = $6
                                   and source = 'rsc'
                                   and (   category_id <> $1
                                        or lastmod <> $2
-                                       or publication_end <> $3)",
-                                [ CatId, LastMod, PubEnd, Id ],
+                                       or COALESCE(priority, 2.0) <> COALESCE($3, 2.0)
+                                       or COALESCE(changefreq, 'x') <> COALESCE($4, 'x')
+                                       or publication_end <> $5)",
+                                [ CatId, LastMod, Prio, Freq, PubEnd, Id ],
                                 Ctx)
                     end,
                     ok
