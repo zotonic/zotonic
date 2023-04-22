@@ -87,7 +87,7 @@ search_all_test() ->
     C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
 
     {ok, ObjId} = m_rsc:insert([{category, article},
-                             {title, <<"A test article">>}], C),
+                                {title, <<"A test article">>}], C),
 
     Q = {query,[
         {cat,text},
@@ -104,6 +104,7 @@ search_all_test() ->
 
     {ok, SubjId} = m_rsc:insert([{category, article},
                              {title, <<"A test article">>}], C),
+
     m_edge:insert(SubjId, author, ObjId, C),
     #search_result{ result = [] } = m_search:search(Q, C),
     #search_result{ result = [SubjId] } = m_search:search(Q1, C),
@@ -125,10 +126,20 @@ search_all_test() ->
     #search_result{ result = [ObjId] } = m_search:search(Q2, C),
     #search_result{ result = [ObjId] } = m_search:search(Q3, C),
 
+    Q4 = {query, [{hasobjectpredicate, relation}]},
+    #search_result{ result = R1 } = m_search:search(Q4, C),
+    true = lists:member(SubjId, R1),
+    R1 = uniq(R1), % The result should not contain duplicates
+
+    Q5 = {query, [{hassubjectpredicate, author}]},
+    #search_result{ result = R2 } = m_search:search(Q5, C),
+    true = lists:member(ObjId, R2),
+    R2 = uniq(R2), % The result should not contain duplicates
+
     m_rsc:delete(ObjId, C),
     m_rsc:delete(SubjId, C),
-    ok.
 
+    ok.
 
 language_search_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
@@ -180,3 +191,20 @@ properties_search_test() ->
     } = z_search:search(<<"query">>, #{}, 1, 20, #{}, C),
     true = is_integer(R2),
     ok.
+
+uniq([]) ->
+  [];
+uniq(List) when is_list(List) ->
+  uniq(List, []).
+
+uniq([], Acc) ->
+  lists:reverse(Acc);
+uniq([H | Tail], Acc) ->
+  case lists:member(H, Acc) of
+    true ->
+      uniq(Tail, Acc);
+    false ->
+      uniq(Tail, [H | Acc])
+  end.
+
+

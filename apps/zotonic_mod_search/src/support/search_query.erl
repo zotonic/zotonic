@@ -1013,8 +1013,7 @@ parse_edges(hassubject, [[Id, Predicate, JoinAlias]], Context) ->
         where = [
             <<"EXISTS (SELECT id FROM edge WHERE edge.object_id = ">>, JoinAlias1, <<".id">>,
                              <<" AND edge.subject_id = ">>, '$1',
-                             <<" AND edge.predicate_id = ">>, '$2',
-            <<")">>
+                             <<" AND edge.predicate_id = ">>, '$2', <<")">>
         ],
         args = [
             m_rsc:rid(Id, Context),
@@ -1036,8 +1035,7 @@ parse_edges(hasobject, [[Id, Predicate, JoinAlias]], Context) ->
         where = [
             <<"EXISTS (SELECT id FROM edge WHERE edge.subject_id = ">>, JoinAlias1, <<".id">>,
                              <<" AND edge.object_id = ">>, '$1',
-                             <<" AND edge.predicate_id = ">>, '$2',
-            <<")">>
+                             <<" AND edge.predicate_id = ">>, '$2', <<")">>
         ],
         args = [
             m_rsc:rid(Id, Context),
