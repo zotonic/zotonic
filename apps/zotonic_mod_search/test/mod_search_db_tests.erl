@@ -136,6 +136,9 @@ search_all_test() ->
     true = lists:member(ObjId, R2),
     R2 = uniq(R2), % The result should not contain duplicates
 
+    Q6 = {query, [{hasanyobject, [ObjId]}]},
+    #search_result{ result = [SubjId] } = m_search:search(Q6, C),
+
     m_rsc:delete(ObjId, C),
     m_rsc:delete(SubjId, C),
 
