@@ -453,6 +453,7 @@ qterm({hasanyobject, ObjPreds}, Context) ->
 qterm({hasobjectpredicate, Predicate}, Context) ->
     %% hasobjectpredicate=predicate
     %% Give all things which have any outgoing edge with given predicate
+    ?DEBUG({hasobjectpredicate, Predicate}),
     Alias = edge_alias(),
     #search_sql_term{
         tables = #{
@@ -462,11 +463,13 @@ qterm({hasobjectpredicate, Predicate}, Context) ->
             Alias, <<".subject_id = rsc.id ">>,
             <<" and ">>, Alias, <<".predicate_id = ">>, '$1'
         ],
+
         args = [
             predicate_to_id(Predicate, Context)
         ]
     };
 qterm({hassubjectpredicate, Predicate}, Context) ->
+    ?DEBUG({hassubjectpredicate, Predicate}),
     %% hassubjectpredicate=predicate
     %% Give all things which have any incoming edge with given predicate
     Alias = edge_alias(),
@@ -1005,14 +1008,12 @@ qterm(Term, _Context) ->
 parse_edges(Term, [[Id, Predicate]], Context) ->
     parse_edges(Term, [[Id, Predicate, "rsc"]], Context);
 parse_edges(hassubject, [[Id, Predicate, JoinAlias]], Context) ->
-    Alias = edge_alias(),
     JoinAlias1 = sql_safe(JoinAlias),
     #search_sql_term{
         where = [
-            <<"EXISTS (SELECT ">>, Alias, <<".id FROM edge ">>, Alias,
-                         <<" WHERE ">>, Alias, <<".object_id = ">>, JoinAlias, <<".id">>,
-                             <<" AND ">>, Alias, <<".subject_id = ">>, '$1',
-                             <<" AND ">>, Alias, <<".predicate_id = ">>, '$2',
+            <<"EXISTS (SELECT id FROM edge WHERE edge.object_id = ">>, JoinAlias1, <<".id">>,
+                             <<" AND edge.subject_id = ">>, '$1',
+                             <<" AND edge.predicate_id = ">>, '$2',
             <<")">>
         ],
         args = [
@@ -1021,26 +1022,21 @@ parse_edges(hassubject, [[Id, Predicate, JoinAlias]], Context) ->
         ]
     };
 parse_edges(hassubject, [Id], Context) ->
-    Alias = edge_alias(),
     #search_sql_term{
         where = [
-            <<"EXISTS (SELECT ">>, Alias, <<".id FROM edge ">>, Alias,
-                         <<" WHERE ">>, Alias, <<".object_id = rsc.id AND ">>, Alias, <<".subject_id = ">>, '$1',
-            <<")">>
+            <<"EXISTS (SELECT id FROM edge WHERE edge.object_id = rsc.id AND edge.subject_id = ">>, '$1', <<")">>
         ],
         args = [
             m_rsc:rid(Id, Context)
         ]
     };
 parse_edges(hasobject, [[Id, Predicate, JoinAlias]], Context) ->
-    Alias = edge_alias(),
     JoinAlias1 = sql_safe(JoinAlias),
     #search_sql_term{
         where = [
-            <<"EXISTS (SELECT ">>, Alias, <<".id FROM edge ">>, Alias,
-                         <<" WHERE ">>, Alias, <<".subject_id = ">>, JoinAlias, <<".id">>,
-                             <<" AND ">>, Alias, <<".object_id = ">>, '$1',
-                             <<" AND ">>, Alias, <<".predicate_id = ">>, '$2',
+            <<"EXISTS (SELECT id FROM edge WHERE edge.subject_id = ">>, JoinAlias1, <<".id">>,
+                             <<" AND edge.object_id = ">>, '$1',
+                             <<" AND edge.predicate_id = ">>, '$2',
             <<")">>
         ],
         args = [
@@ -1049,11 +1045,9 @@ parse_edges(hasobject, [[Id, Predicate, JoinAlias]], Context) ->
         ]
     };
 parse_edges(hasobject, [Id], Context) ->
-    Alias = edge_alias(),
     #search_sql_term{
         where = [
-            <<"EXISTS (SELECT ">>, Alias, <<".id FROM edge ">>, Alias,
-            <<" WHERE ">>, Alias, <<".subject_id = rsc.id AND ">>, Alias, <<".object_id = ">>, '$1', <<")">>
+            <<"EXISTS (SELECT id FROM edge WHERE edge.subject_id = rsc.id AND edge.object_id = ">>, '$1', <<")">>
         ],
         args = [
             m_rsc:rid(Id, Context)
