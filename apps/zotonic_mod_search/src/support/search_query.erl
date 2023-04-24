@@ -441,11 +441,10 @@ qterm({hasanyobject, ObjPreds}, Context) ->
     %% Give all things which have an outgoing edge to Id with any of the given object/predicate combinations
     OPs = expand_object_predicates(ObjPreds, Context),
     % rsc.id in (select subject_id from edge where (object_id = ... and predicate_id = ... ) or (...) or ...)
-    Alias = edge_alias(),
-    OPClauses = [ object_predicate_clause(Alias, Obj, Pred) || {Obj, Pred} <- OPs ],
+    OPClauses = [ object_predicate_clause(Obj, Pred) || {Obj, Pred} <- OPs ],
     #search_sql_term{
         where = [
-            "rsc.id in (select ", Alias ,".subject_id from edge ",Alias," where (",
+            "rsc.id in (select subject_id from edge where (",
                 lists:join(") or (", OPClauses),
             "))"
         ]
@@ -453,14 +452,9 @@ qterm({hasanyobject, ObjPreds}, Context) ->
 qterm({hasobjectpredicate, Predicate}, Context) ->
     %% hasobjectpredicate=predicate
     %% Give all things which have any outgoing edge with given predicate
-    Alias = edge_alias(),
     #search_sql_term{
-        tables = #{
-            Alias => <<"edge">>
-        },
         where = [
-            Alias, <<".subject_id = rsc.id ">>,
-            <<" and ">>, Alias, <<".predicate_id = ">>, '$1'
+            <<"EXISTS (SELECT id FROM edge WHERE edge.subject_id = rsc.id AND edge.predicate_id = ">>, '$1', <<")">>
         ],
         args = [
             predicate_to_id(Predicate, Context)
@@ -469,14 +463,9 @@ qterm({hasobjectpredicate, Predicate}, Context) ->
 qterm({hassubjectpredicate, Predicate}, Context) ->
     %% hassubjectpredicate=predicate
     %% Give all things which have any incoming edge with given predicate
-    Alias = edge_alias(),
     #search_sql_term{
-        tables = #{
-            Alias => <<"edge">>
-        },
         where = [
-            Alias, <<".object_id = rsc.id ">>,
-            <<" and ">>, Alias, <<".predicate_id = ">>, '$1'
+            <<"EXISTS (SELECT id FROM edge WHERE edge.object_id = rsc.id AND edge.predicate_id = ">>, '$1', <<")">>
         ],
         args = [
             predicate_to_id(Predicate, Context)
@@ -1005,16 +994,12 @@ qterm(Term, _Context) ->
 parse_edges(Term, [[Id, Predicate]], Context) ->
     parse_edges(Term, [[Id, Predicate, "rsc"]], Context);
 parse_edges(hassubject, [[Id, Predicate, JoinAlias]], Context) ->
-    Alias = edge_alias(),
     JoinAlias1 = sql_safe(JoinAlias),
     #search_sql_term{
-        tables = #{
-            Alias => <<"edge">>
-        },
         where = [
-            Alias, <<".object_id = ">>, JoinAlias1, <<".id">>,
-            <<" and ">>, Alias, <<".subject_id = ">>, '$1',
-            <<" and ">>, Alias, <<".predicate_id = ">>, '$2'
+            <<"EXISTS (SELECT id FROM edge WHERE edge.object_id = ">>, JoinAlias1, <<".id">>,
+                             <<" AND edge.subject_id = ">>, '$1',
+                             <<" AND edge.predicate_id = ">>, '$2', <<")">>
         ],
         args = [
             m_rsc:rid(Id, Context),
@@ -1022,31 +1007,21 @@ parse_edges(hassubject, [[Id, Predicate, JoinAlias]], Context) ->
         ]
     };
 parse_edges(hassubject, [Id], Context) ->
-    Alias = edge_alias(),
     #search_sql_term{
-        tables = #{
-            Alias => <<"edge">>
-        },
         where = [
-            Alias, <<".object_id = rsc.id">>,
-            <<" and ">>, Alias, <<".subject_id = ">>,
-            '$1'
+            <<"EXISTS (SELECT id FROM edge WHERE edge.object_id = rsc.id AND edge.subject_id = ">>, '$1', <<")">>
         ],
         args = [
             m_rsc:rid(Id, Context)
         ]
     };
 parse_edges(hasobject, [[Id, Predicate, JoinAlias]], Context) ->
-    Alias = edge_alias(),
     JoinAlias1 = sql_safe(JoinAlias),
     #search_sql_term{
-        tables = #{
-            Alias => <<"edge">>
-        },
         where = [
-            Alias, <<".subject_id = ">>, JoinAlias1, <<".id">>,
-            <<" and ">>, Alias, <<".object_id = ">>, '$1',
-            <<" and ">>, Alias, <<".predicate_id = ">>, '$2'
+            <<"EXISTS (SELECT id FROM edge WHERE edge.subject_id = ">>, JoinAlias1, <<".id">>,
+                             <<" AND edge.object_id = ">>, '$1',
+                             <<" AND edge.predicate_id = ">>, '$2', <<")">>
         ],
         args = [
             m_rsc:rid(Id, Context),
@@ -1054,25 +1029,14 @@ parse_edges(hasobject, [[Id, Predicate, JoinAlias]], Context) ->
         ]
     };
 parse_edges(hasobject, [Id], Context) ->
-    Alias = edge_alias(),
     #search_sql_term{
-        tables = #{
-            Alias => <<"edge">>
-        },
         where = [
-            Alias, <<".subject_id = rsc.id">>,
-            <<" and ">>, Alias, <<".object_id = ">>,
-            '$1'
+            <<"EXISTS (SELECT id FROM edge WHERE edge.subject_id = rsc.id AND edge.object_id = ">>, '$1', <<")">>
         ],
         args = [
             m_rsc:rid(Id, Context)
         ]
     }.
-
-edge_alias() ->
-    Nr = z_ids:identifier(6),
-    <<"edge_", Nr/binary>>.
-
 
 %% Add a join on the hierarchy table.
 % add_hierarchy_join(HierarchyName, Lft, Rght, Search) ->
@@ -1598,18 +1562,18 @@ predicate_to_id_1(Pred, Context) ->
     end.
 
 %% Support routine for "hasanyobject"
-object_predicate_clause(_Alias, undefined, undefined) ->
+object_predicate_clause(undefined, undefined) ->
     "false";
-object_predicate_clause(_Alias, _Object, undefined) ->
+object_predicate_clause(_Object, undefined) ->
     "false";
-object_predicate_clause(_Alias, undefined, _Predicate) ->
+object_predicate_clause(undefined, _Predicate) ->
     "false";
-object_predicate_clause(Alias, any, any) ->
-    [Alias, ".subject_id = rsc.id"];
-object_predicate_clause(Alias, any, PredicateId) when is_integer(PredicateId) ->
-    [Alias, ".predicate_id = ", integer_to_list(PredicateId)];
-object_predicate_clause(Alias, ObjectId, any) when is_integer(ObjectId) ->
-    [Alias, ".object_id = ", integer_to_list(ObjectId)];
-object_predicate_clause(Alias, ObjectId, PredicateId) when is_integer(PredicateId), is_integer(ObjectId) ->
-    [Alias, ".object_id=", integer_to_list(ObjectId),
-     " and ", Alias, ".predicate_id=", integer_to_list(PredicateId)].
+object_predicate_clause(any, any) ->
+    ["edge.subject_id = rsc.id"];
+object_predicate_clause(any, PredicateId) when is_integer(PredicateId) ->
+    ["edge.predicate_id = ", integer_to_list(PredicateId)];
+object_predicate_clause(ObjectId, any) when is_integer(ObjectId) ->
+    ["edge.object_id = ", integer_to_list(ObjectId)];
+object_predicate_clause(ObjectId, PredicateId) when is_integer(PredicateId), is_integer(ObjectId) ->
+    ["edge.object_id=", integer_to_list(ObjectId),
+     " and ", "edge.predicate_id=", integer_to_list(PredicateId)].
