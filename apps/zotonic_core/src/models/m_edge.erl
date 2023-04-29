@@ -148,9 +148,7 @@ m_delete(Path, #{ payload := Payload }, Context) ->
     Subject = get_subject(Path, Payload, Context),
     Predicate = get_predicate(Path, Payload, Context),
     Object = get_object(Path, Payload, Context),
-    delete(Subject, Predicate, Object, Context);
-m_delete(_Vs, _Msg, _Context) ->
-    {error, unknown_path}.
+    delete(Subject, Predicate, Object, Context).
 
 %% @doc Get the complete edge with the id
 -spec get(EdgeId, Context) -> proplists:proplist() | undefined when
@@ -1274,9 +1272,14 @@ get_object(_Path, Payload, Context) ->
     get_q(<<"object">>, Payload, Context).
 
 get_q(Name, Payload, Context) ->
-    case maps:get(<<"data-edge-", Name/binary>>,maps:get(<<"message">>, Payload, #{}), undefined) of
+    case maps:get(Name, Payload, undefined) of
         undefined ->
-            z_context:get_q(Name, Context);
+            case maps:get(<<"data-edge-", Name/binary>>, maps:get(<<"message">>, Payload, #{}), undefined) of
+                undefined ->
+                    z_context:get_q(Name, Context);
+                Value ->
+                    Value
+            end;
         Value ->
             Value
     end.
