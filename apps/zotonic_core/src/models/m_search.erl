@@ -95,7 +95,7 @@ search(Name, Args, Context) when is_binary(Name), is_map(Args) ->
     try
         {ok, z_search:search(Name, Args2, Page, PageLen, Options, Context)}
     catch
-        Result:Reason ->
+        Result:Reason:Stack ->
             ?LOG_ERROR(#{
                 text => <<"Error in m.search">>,
                 in => zotonic_core,
@@ -105,7 +105,8 @@ search(Name, Args, Context) when is_binary(Name), is_map(Args) ->
                 end,
                 reason => Reason,
                 search_name => Name,
-                search_args => Args
+                search_args => Args,
+                stack => Stack
             }),
             {error, Reason}
     end.

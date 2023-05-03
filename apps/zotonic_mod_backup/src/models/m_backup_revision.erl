@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012 Marc Worrell
+%% @copyright 2012-2023 Marc Worrell
 %% @doc Manage a resource's revisions.
 
-%% Copyright 2012 Marc Worrell
+%% Copyright 2012-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@
 
 -export([
     m_get/3,
+
+    list_deleted/2,
 
     save_revision/3,
     get_revision/2,
@@ -47,6 +49,68 @@ m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
+-spec list_deleted(OffsetLimit, Context) -> Result when
+    OffsetLimit :: {non_neg_integer(), non_neg_integer()},
+    Context :: z:context(),
+    Result :: #search_result{}.
+list_deleted({Offset, Limit}, Context) ->
+    {ok, Rs} = z_db:qmap("
+        with last_revision as (
+            select *
+            from backup_revision
+            where id in (
+                select max(id)
+                from backup_revision
+                where type = $3
+                group by rsc_id
+            )
+        )
+        select rsc_gone.*,
+               last_revision.*
+        from rsc_gone
+        join last_revision
+            on rsc_gone.id = last_revision.rsc_id
+        order by rsc_gone.created desc, rsc_gone.id desc
+        offset $1
+        limit $2
+        ",
+        [ Offset-1, Limit, ?BACKUP_TYPE_PROPS ],
+        Context),
+    Total = z_db:q1("
+        with last_revision as (
+            select *
+            from backup_revision
+            where id in (
+                select max(id)
+                from backup_revision
+                where type = $1
+                group by rsc_id
+            )
+        )
+        select count(*)
+        from rsc_gone
+        join last_revision
+            on rsc_gone.id = last_revision.rsc_id
+        ", [ ?BACKUP_TYPE_PROPS ], Context),
+    Rs1 = lists:map(fun expand/1, Rs),
+    #search_result{
+        result = Rs1,
+        total = Total,
+        is_total_estimated = false
+    }.
+
+expand(#{
+        <<"data_type">> := <<"erlang">>,
+        <<"data">> := Data
+    } = R) ->
+    R#{
+        <<"data_type">> => <<"term">>,
+        <<"data">> => erlang:binary_to_term(Data)
+    };
+expand(R) ->
+    R.
+
+
 save_revision(Id, #{ <<"version">> := Version } = Props, Context) when is_integer(Id), is_map(Props) ->
     LastVersion = z_db:q1("select version from backup_revision where rsc_id = $1 order by created desc limit 1", [Id], Context),
     case Version of
@@ -68,7 +132,7 @@ save_revision(Id, #{ <<"version">> := Version } = Props, Context) when is_intege
                             m_rsc:p_no_acl(UserId, title, Context),
                             Context),
                         60),
-                    "erlang",
+                    <<"erlang">>,
                     erlang:term_to_binary(Props, [compressed])
                 ],
                 Context),
