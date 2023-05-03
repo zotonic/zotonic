@@ -4,7 +4,7 @@
             <ul class="search-view-results">
                 {% with m.search.paged.query::%{
                             text: q.qs,
-                            cat: [ "text", "media" ],
+                            cat_exclude: [ "meta" ],
                             page: q.page,
                             pagelen: 20
                         }
