@@ -77,7 +77,9 @@ event(#postback_notify{message= <<"rev-diff">>}, Context) ->
 event(#postback{message={revert, Args}}, Context) ->
     RscId = proplists:get_value(rsc_id, Args),
     RevId = proplists:get_value(rev_id, Args),
-    case z_acl:rsc_editable(RscId, Context) of
+    case z_acl:is_allowed(use, mod_backup, Context)
+        orelse (m_rsc:exists(RscId, Context) andalso z_acl:rsc_editable(RscId, Context))
+    of
         true ->
             do_revert(RscId, RevId, Context);
         false ->
@@ -90,9 +92,16 @@ do_revert(Id, RevId, Context) ->
         {ok, Rev} ->
             case proplists:get_value(rsc_id, Rev) of
                 Id ->
+                    Exists = m_rsc:exists(Id, Context),
                     Props = proplists:get_value(data, Rev),
                     case m_rsc_update:update(Id, Props, [is_import], Context) of
                         {ok, NewId} ->
+                            case Exists of
+                                true ->
+                                    ok;
+                                false ->
+                                    m_rsc_gone:delete(NewId, Context)
+                            end,
                             z_render:wire([{redirect, [{dispatch, admin_edit_rsc}, {id,NewId}]}], Context);
                         _Other ->
                             z_render:growl_error(?__("Sorry, there was an error replacing your page.", Context), Context)

@@ -9,7 +9,8 @@
     <h2>{_ Deleted pages _}</h2>
 
     <p>
-        {_ List of recently deleted pages and recover options via the resource revisions log. _}
+        {_ List of recently deleted pages and recover options via the resource revisions log. _}<br>
+        {_ Only the texts and other properties of pages are backed up. _} {_ Connections and media items are not backed up and can’t be recovered. _}
     </p>
 </div>
 
@@ -49,6 +50,15 @@
                             {% else %}
                                 {{ r.rsc_id }}
                             {% endif %}
+
+                            {% if r.new_id %}
+                                <br>
+                                {% if r.new_id.exists %}
+                                    &rarr; <a href="{% url admin_edit_rsc id=r.new_id %}">{{ r.new_id.title|default:_"Untitled" }} <span class="text-muted">({{ r.new_id }})</span></a>
+                                {% else %}
+                                    &rarr; ({_ Deleted _}) <span class="text-muted">({{ r.new_id }})
+                                {% endif %}
+                            {% endif %}
                         </td>
                         <td>
                             {{ m.rsc[r.data.category_id].title|default:_"<i>Unknown</i>" }}
@@ -70,7 +80,7 @@
                             {% include "_name.tpl" id=r.data.creator_id %}
                         </td>
                         <td>
-                            <a href="{% url admin_backup_revision id=r.rsc_id %}" class="btn btn-xs btn-default">{_ Revision _}</a>
+                            <a href="{% url admin_backup_revision id=r.rsc_id %}" class="btn btn-xs btn-default">{_ Recover _}</a>
                         </td>
                     </tr>
                 {% endfor %}

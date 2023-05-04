@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012 Marc Worrell
-%%
+%% @copyright 2012-2023 Marc Worrell
 %% @doc Model for administration of deleted resources and their possible new location.
+%% @end
 
-%% Copyright 2012 Marc Worrell
+%% Copyright 2012-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@
     is_gone_uri/2,
     gone/2,
     gone/3,
+
+    delete/2,
 
     install/1
 ]).
@@ -169,7 +171,15 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
             end
     end.
 
-
+%% @doc Delete a gone entry for a resource, used after recovery of a resource.
+-spec delete(Id, Context) -> ok | {error, enoent} when
+    Id :: m_rsc:resource_id(),
+    Context :: z:context().
+delete(Id, Context) ->
+    case z_db:q("delete from rsc_gone where id = $1", [ Id ], Context) of
+        1 -> ok;
+        0 -> {error, enoent}
+    end.
 
 %% @doc Install or upgrade the rsc_gone table.
 -spec install( z:context() ) -> ok.
