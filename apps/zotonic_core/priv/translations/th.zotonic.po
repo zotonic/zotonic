@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-04 09:09\n"
+"PO-Revision-Date: 2023-05-04 10:37\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -4483,7 +4483,7 @@ msgstr "user@example.com"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:64
 msgid "<i>Unknown</i>"
-msgstr ""
+msgstr "<i>ไม่ทราบ</i>"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:3
 msgid "Admin Backups"
@@ -4539,7 +4539,7 @@ msgstr "เปิดใช้งานที่เก็บไฟล์บนค
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
 msgid "Connections and media items are not backed up and can’t be recovered."
-msgstr ""
+msgstr "รายการการเชื่อมต่อและสื่อจะไม่ถูกสำรองข้อมูลและไม่สามารถกู้คืนได้"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:59./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:48
 msgid "Deleted"
@@ -4547,15 +4547,15 @@ msgstr "ลบแล้ว"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:35
 msgid "Deleted by"
-msgstr ""
+msgstr "ลบโดย"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:29
 msgid "Deleted on"
-msgstr ""
+msgstr "ลบเมื่อ"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:94
 msgid "Deleted pages"
-msgstr ""
+msgstr "หน้าที่ถูกลบ"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
 msgid "Directory"
@@ -4579,7 +4579,7 @@ msgstr "แสดงรายการและกู้คืนเวอร์
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:12
 msgid "List of recently deleted pages and recover options via the resource revisions log."
-msgstr ""
+msgstr "รายการหน้าที่ถูกลบล่าสุดและตัวเลือกการกู้คืนผ่านบันทึกการแก้ไขทรัพยากร"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
 msgid "Make a daily backup of the database and uploaded files."
@@ -4599,7 +4599,7 @@ msgstr "ไม่ได้อัปโหลดไปยัง filestore"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
 msgid "Only the texts and other properties of pages are backed up."
-msgstr ""
+msgstr "สำรองข้อมูลเฉพาะข้อความและคุณสมบัติอื่นๆ ของเพจเท่านั้น"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:76
 msgid "Previous"
@@ -4607,7 +4607,7 @@ msgstr "ก่อนหน้า"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:83
 msgid "Recover"
-msgstr ""
+msgstr "ฟื้นตัว"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:33./apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:36./apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:14
 msgid "Restore backup"
@@ -4701,7 +4701,7 @@ msgstr "Ymd H:i – l"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:39
 msgid "You are not allowed to recover this page."
-msgstr ""
+msgstr "คุณไม่ได้รับอนุญาตให้กู้คืนหน้านี้"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:72./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:75./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:86
 msgid "You are not allowed to see the revisions"
@@ -4713,7 +4713,7 @@ msgstr "คุณสามารถสำรองข้อมูลได้ห
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:93
 msgid "You need to have access rights to the backup module."
-msgstr ""
+msgstr "คุณต้องมีสิทธิ์ในการเข้าถึงโมดูลสำรองข้อมูล"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-04 09:08\n"
+"PO-Revision-Date: 2023-05-04 10:37\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -4483,7 +4483,7 @@ msgstr "user@example.com"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:64
 msgid "<i>Unknown</i>"
-msgstr ""
+msgstr "<i>unbekannt</i>"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:3
 msgid "Admin Backups"
@@ -4539,7 +4539,7 @@ msgstr "Cloud-Dateispeicher ist aktiviert. Die lokalen Dateien werden nicht gesi
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
 msgid "Connections and media items are not backed up and can’t be recovered."
-msgstr ""
+msgstr "Verbindungen und Medienelemente werden nicht gesichert und können nicht wiederhergestellt werden."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:59./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:48
 msgid "Deleted"
@@ -4547,15 +4547,15 @@ msgstr "Gelöscht"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:35
 msgid "Deleted by"
-msgstr ""
+msgstr "Gelöscht von"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:29
 msgid "Deleted on"
-msgstr ""
+msgstr "Gelöscht am"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:94
 msgid "Deleted pages"
-msgstr ""
+msgstr "Gelöschte Seiten"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
 msgid "Directory"
@@ -4579,7 +4579,7 @@ msgstr "Auflisten und Wiederherstellen einer früheren Version"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:12
 msgid "List of recently deleted pages and recover options via the resource revisions log."
-msgstr ""
+msgstr "Liste der kürzlich gelöschten Seiten und Wiederherstellungsoptionen über das Ressourcenrevisionsprotokoll."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
 msgid "Make a daily backup of the database and uploaded files."
@@ -4599,7 +4599,7 @@ msgstr "Nicht in den Dateispeicher hochgeladen"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
 msgid "Only the texts and other properties of pages are backed up."
-msgstr ""
+msgstr "Nur die Texte und andere Eigenschaften von Seiten werden gesichert."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:76
 msgid "Previous"
@@ -4607,7 +4607,7 @@ msgstr "Vorherige"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:83
 msgid "Recover"
-msgstr ""
+msgstr "Genesen"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:33./apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:36./apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:14
 msgid "Restore backup"
@@ -4701,7 +4701,7 @@ msgstr "Ymd H:i – l"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:39
 msgid "You are not allowed to recover this page."
-msgstr ""
+msgstr "Sie sind nicht berechtigt, diese Seite wiederherzustellen."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:72./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:75./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:86
 msgid "You are not allowed to see the revisions"
@@ -4713,7 +4713,7 @@ msgstr "Sie können pro Wochentag ein Backup erstellen, ältere werden überschr
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:93
 msgid "You need to have access rights to the backup module."
-msgstr ""
+msgstr "Sie benötigen Zugriffsrechte auf das Backup-Modul."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
