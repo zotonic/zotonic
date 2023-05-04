@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2012-2023 Marc Worrell
 %% @doc Manage a resource's revisions.
+%% @end
 
 %% Copyright 2012-2023 Marc Worrell
 %%
@@ -77,20 +78,11 @@ list_deleted({Offset, Limit}, Context) ->
         [ Offset-1, Limit, ?BACKUP_TYPE_PROPS ],
         Context),
     Total = z_db:q1("
-        with last_revision as (
-            select *
-            from backup_revision
-            where id in (
-                select max(id)
-                from backup_revision
-                where type = $1
-                group by rsc_id
-            )
-        )
-        select count(*)
-        from rsc_gone
-        join last_revision
-            on rsc_gone.id = last_revision.rsc_id
+        select count(distinct r.id)
+        from rsc_gone r
+        join backup_revision b
+            on r.id = b.rsc_id
+            and b.type = $1
         ", [ ?BACKUP_TYPE_PROPS ], Context),
     Rs1 = lists:map(fun expand/1, Rs),
     #search_result{
