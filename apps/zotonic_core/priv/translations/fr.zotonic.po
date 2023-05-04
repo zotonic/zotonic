@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-04-21 15:01\n"
+"PO-Revision-Date: 2023-05-04 09:08\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -229,6 +229,7 @@ msgstr "Annuler"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:192./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:81./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:134./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:26
 #: apps/zotonic_mod_survey/src/mod_survey.erl:158
 msgid "Category"
 msgstr "Categorie"
@@ -1060,6 +1061,7 @@ msgid "Create"
 msgstr "Créer"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:3
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:38
 msgid "Created by"
 msgstr "Créé par"
 
@@ -1563,6 +1565,7 @@ msgstr "Modifié par"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:27./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:143./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:53
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:32
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:50
 msgid "Modified on"
 msgstr "Modifié le"
@@ -2215,6 +2218,7 @@ msgstr "Temps limite atteint lors de la récupération des données du site web.
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:131./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:99./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:23
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
 msgid "Title"
 msgstr "Titre"
@@ -2247,6 +2251,7 @@ msgstr "Unique uri"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:594./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:57
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 msgid "Untitled"
 msgstr "Sans titre"
@@ -2373,7 +2378,7 @@ msgstr "Répertoire de travail"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:52
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:73
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:87
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:35
 msgid "Y-m-d H:i"
 msgstr "Y-m-d H:i"
@@ -2400,7 +2405,7 @@ msgstr "Vous n'êtes pas autorisé à supprimer cette page."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:16
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:141
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:34
 msgid "You are not allowed to edit this page."
 msgstr "Vous n’êtes pas autorisé à éditer cette page."
 
@@ -4476,6 +4481,10 @@ msgstr "le service"
 msgid "user@example.com"
 msgstr "utilisateur@exemple.com"
 
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:64
+msgid "<i>Unknown</i>"
+msgstr ""
+
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:3
 msgid "Admin Backups"
 msgstr "Sauvegardes Admin"
@@ -4488,11 +4497,11 @@ msgstr "Êtes vous sûr de vouloir revenir à cette version? "
 msgid "At any moment you can make a backup of your system."
 msgstr "A tout moment vous pouvez créer une sauvegarde de votre système."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:42
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:54
 msgid "Back to the edit page"
 msgstr "Retour à la page d'édition"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:81
+#: apps/zotonic_mod_backup/src/mod_backup.erl:83
 msgid "Backup"
 msgstr "Sauvegarde"
 
@@ -4516,7 +4525,7 @@ msgstr "Configuration changée."
 msgid "Changes since"
 msgstr "Changements depuis"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:40
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:52
 msgid "Check and possibly restore an earlier version of your page."
 msgstr "Vérifier et rétablir éventuellement une version antérieure de votre page."
 
@@ -4528,9 +4537,25 @@ msgstr "Cliquez sur <b>Lister et rétablir une version antérieure</b> pour obte
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "Le magasin de fichiers cloud est activé. Les fichiers locaux ne seront pas sauvegardés. Assurez-vous que votre système de stockage de fichiers cloud dispose d'une sauvegarde appropriée."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
+msgid "Connections and media items are not backed up and can’t be recovered."
+msgstr ""
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:59./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:48
 msgid "Deleted"
 msgstr "Effacé"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:35
+msgid "Deleted by"
+msgstr ""
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:29
+msgid "Deleted on"
+msgstr ""
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:94
+msgid "Deleted pages"
+msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
 msgid "Directory"
@@ -4552,6 +4577,10 @@ msgstr "Aide à propos de sauvegarder &amp; restaurer"
 msgid "List and restore an earlier version"
 msgstr "Lister et restaurer une version antérieure"
 
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:12
+msgid "List of recently deleted pages and recover options via the resource revisions log."
+msgstr ""
+
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Faire une sauvegarde journalière de la base de donnée et des fichiers téléversés."
@@ -4568,9 +4597,17 @@ msgstr "Aucune sauvegarde présente."
 msgid "Not uploaded to filestore"
 msgstr "Non téléchargé dans le magasin de fichiers"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:66
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
+msgid "Only the texts and other properties of pages are backed up."
+msgstr ""
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:76
 msgid "Previous"
 msgstr "Précédente"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:83
+msgid "Recover"
+msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:33./apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:36./apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:14
 msgid "Restore backup"
@@ -4580,7 +4617,7 @@ msgstr "Restaurer sauvegarde"
 msgid "Revert to this version…"
 msgstr "Retourner à cette version…"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:34./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:36
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:46./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:48
 msgid "Revisions for"
 msgstr "Révisions pour"
 
@@ -4596,15 +4633,15 @@ msgstr "Afficher le panneau import/export dans admin."
 msgid "Sorry, there is no module that can import this."
 msgstr "Désolé, aucun module ne peut importer ceci."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:82./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:98
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:82./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:107
 msgid "Sorry, there was an error replacing your page."
 msgstr "Désolé, une erreur a empêchée le remplacement de votre page."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:104
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:113
 msgid "Sorry, this backup has been deleted."
 msgstr "Désolé, cette sauvegarde a été détruite."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:101
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:110
 msgid "Sorry, this backup is not valid."
 msgstr "Désolé, cette sauvegarde est invalide."
 
@@ -4662,13 +4699,21 @@ msgstr "Attention"
 msgid "Y-m-d H:i – l"
 msgstr "Ymd H:i – l"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:72./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:75./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:84
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:39
+msgid "You are not allowed to recover this page."
+msgstr ""
+
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:72./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:75./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:86
 msgid "You are not allowed to see the revisions"
 msgstr "Vous n'êtes pas autorisé à voir les révisions."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "Vous pouvez avoir une sauvegarde par jour de la semaine, les plus anciennes seront écrasées."
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:93
+msgid "You need to have access rights to the backup module."
+msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
