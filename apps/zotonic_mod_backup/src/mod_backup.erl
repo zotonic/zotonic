@@ -35,7 +35,7 @@
 %% interface functions
 -export([
     observe_admin_menu/3,
-    observe_rsc_update/3,
+    observe_rsc_update_done/2,
     observe_rsc_upload/2,
     observe_search_query/2,
     start_backup/1,
@@ -77,6 +77,7 @@ observe_rsc_upload(#rsc_upload{} = Upload, Context) ->
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
+        % Menu to access all backups and settings
         #menu_item{
             id=admin_backup,
             parent=admin_modules,
@@ -84,6 +85,8 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
             url={admin_backup},
             visiblecheck={acl, use, mod_backup}
         },
+
+        % Menu to view and recover deleted pages
         #menu_separator{
             parent = admin_content,
             visiblecheck = {acl, use, mod_backup},
@@ -99,14 +102,14 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
         | Acc
     ].
 
+observe_rsc_update_done(#rsc_update_done{ action = insert, id = Id, post_props = Props }, Context) ->
+    m_backup_revision:save_revision(Id, Props, Context);
+observe_rsc_update_done(#rsc_update_done{ action = update, id = Id, post_props = Props }, Context) ->
+    m_backup_revision:save_revision(Id, Props, Context);
+observe_rsc_update_done(#rsc_update_done{}, _Context) ->
+    ok.
 
-observe_rsc_update(#rsc_update{action=update, id=Id, props=Props}, Acc, Context) ->
-    m_backup_revision:save_revision(Id, Props, Context),
-    Acc;
-observe_rsc_update(_, Acc, _Context) ->
-    Acc.
-
-observe_search_query(#search_query{ name = <<"backup_deleted">>, args = _Args, offsetlimit = OffsetLimit }, Context) ->
+observe_search_query(#search_query{ name = <<"backup_deleted">>, offsetlimit = OffsetLimit }, Context) ->
     case z_acl:is_allowed(use, mod_backup, Context) of
         true ->
             m_backup_revision:list_deleted(OffsetLimit, Context);
