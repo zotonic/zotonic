@@ -154,25 +154,17 @@ find_providers(Url, [Provider=#oembed_provider{}|Rest], Acc) ->
     end.
 
 oembed_request(RequestUrl) ->
-    HttpOptions = [
-        {autoredirect, true},
-        {timeout, ?HTTP_GET_TIMEOUT},
-        {relaxed, true}
-    ],
-    case httpc:request(get, {RequestUrl, []}, HttpOptions, []) of
-        {ok, {{_, Code, _}, Headers, Body}} ->
-            case Code of
-                200 ->
-                    {ok, z_convert:convert_json(mochijson2:decode(Body))};
-                404 ->
-                    {error, {http, 404, <<>>}};
-                NoAccess when NoAccess =:= 401; NoAccess =:= 403 ->
-                    lager:warning("OEmbed HTTP Request returned ~p for '~p' (~p ~p)", [Code, RequestUrl, Headers, Body]),
-                    {error, {http, Code, Body}};
-                _Other ->
-                    lager:info("OEmbed HTTP Request returned ~p for '~p' (~p ~p)", [Code, RequestUrl, Headers, Body]),
-                    {error, {http, Code, Body}}
-            end;
+    case z_url_fetch:fetch(RequestUrl, []) of
+        {ok, {_FinalUrl, _Hs, _Size, Body}} ->
+            {ok, z_convert:convert_json(mochijson2:decode(Body))};
+        {error, {404, _FinalUrl, _Hs, _Sz, _Body}} ->
+            {error, {http, 404, <<>>}};
+        {error, {NoAccess, _FinalUrl, Hs, _Sz, Body}} when NoAccess =:= 401; NoAccess =:= 403 ->
+            lager:warning("OEmbed HTTP Request returned ~p for '~p' (~p ~p)", [NoAccess, RequestUrl, Hs, Body]),
+            {error, {http, NoAccess, Body}};
+        {error, {Code, _FinalUrl, Hs, _Sz, Body}} ->
+            lager:info("OEmbed HTTP Request returned ~p for '~p' (~p ~p)", [Code, RequestUrl, Hs, Body]),
+            {error, {http, Code, Body}};
         {error, _} = Error ->
             Error
     end.

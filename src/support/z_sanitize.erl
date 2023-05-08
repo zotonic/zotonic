@@ -343,6 +343,7 @@ wl(<<"player.vimeo.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"vimeo.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"www.slideshare.net/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"embed.spotify.com/",  _/binary>> = Url) -> {ok, Url};
+wl(<<"open.spotify.com/embed/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"api.soundcloud.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"w.soundcloud.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"cdn.knightlab.com/",  _/binary>> = Url) -> {ok, Url};

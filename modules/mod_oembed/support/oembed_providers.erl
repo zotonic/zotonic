@@ -138,5 +138,11 @@ list() ->
        url_re="^https?://(www\\.)?soundcloud\\.com/.+/.+",
        endpoint_url="https://soundcloud.com/oembed",
        title="Soundcloud"
+     },
+
+     #oembed_provider{
+       url_re="^https?://open\\.spotify\\.com/.+/.+",
+       endpoint_url="https://open.spotify.com/oembed",
+       title="Spotify"
      }
     ].
