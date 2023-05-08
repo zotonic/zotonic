@@ -144,6 +144,12 @@ list() ->
      },
 
      #oembed_provider{
+       url_re="^https?://open\\.spotify\\.com/.+/.+",
+       endpoint_url="https://open.spotify.com/oembed",
+       title="Spotify"
+     },
+
+     #oembed_provider{
        url_re="^https?://(.+\\.)?prezi\\.com/v/.+",
        endpoint_url="https://prezi.com/v/oembed/",
        title="Prezi"
