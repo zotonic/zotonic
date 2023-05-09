@@ -13,4 +13,4 @@ the correct hostname, port and protocol.
 Note that it is possible to get an alternative language version of a resource's page by providing
 a ``z_language`` argument::
 
-    {{ id.page_url_abs with z_language = `de` }}
+    {{ id.page_url_abs with z_language = 'de' }}
