@@ -58,9 +58,11 @@ m_get([ <<"default_language">> | Rest ], _Msg, Context) ->
 m_get([ <<"query_language">> | Rest ], _Msg, Context) ->
     {ok, {query_language(Context), Rest}};
 m_get([ <<"x_default_language">> | Rest ], _Msg, Context) ->
-    Lang = case z_language:is_language_enabled(en, Context) of
-        true -> en;
-        false -> default_language(Context)
+    Lang = case m_config:get_boolean(mod_translation, force_default, false, Context) of
+        true ->
+            default_language(Context);
+        false ->
+            'x-default'
     end,
     {ok, {Lang, Rest}};
 m_get([ <<"main_languages">> | Rest ], _Msg, _Context) ->

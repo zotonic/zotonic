@@ -29,6 +29,13 @@ set_url_language(Url, Context) ->
 
 set_url_language(undefined, _Lang, _Context) ->
     undefined;
+set_url_language(Url, 'x-default', Context) ->
+    Location = z_sanitize:uri(Url),
+    z_context:abs_url(
+            mod_translation:url_strip_language(Location),
+            Context);
+set_url_language(Url, <<"x-default">>, Context) ->
+    set_url_language(Url, 'x-default', Context);
 set_url_language(Url, Lang, Context) ->
     Location = z_sanitize:uri(Url),
     case z_language:is_valid(Lang) of

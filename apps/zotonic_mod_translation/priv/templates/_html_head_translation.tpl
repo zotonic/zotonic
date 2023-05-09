@@ -1,6 +1,6 @@
 {% if m.translation.rewrite_url %}
 {% with m.translation.default_language as default_language %}
-{% with default_language|default:`x-default` as x_default %}
+{% with m.translation.x_default_language as x_default %}
 {% if id %}
     {% if id.is_a.query %}
         {% for code in m.translation.enabled_language_codes %}
