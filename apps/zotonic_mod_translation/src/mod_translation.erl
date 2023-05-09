@@ -156,7 +156,7 @@ maybe_user(Context) ->
     end.
 
 maybe_configuration(Context) ->
-    case z_convert:to_bool(m_config:get_value(?MODULE, force_default, Context)) of
+    case m_config:get_boolean(?MODULE, force_default, Context) of
         true ->
             case m_config:get_value(i18n, language, Context) of
                 undefined -> maybe_accept_header(Context);
@@ -168,14 +168,15 @@ maybe_configuration(Context) ->
     end.
 
 maybe_accept_header(Context) ->
-    case z_context:get_req_header(<<"accept-language">>, Context) of
+    Context1 = z_context:set_resp_header(<<"vary">>, <<"accept-language">>, Context),
+    case z_context:get_req_header(<<"accept-language">>, Context1) of
         undefined ->
             Context;
         AcceptHeader ->
-            Acceptable = z_language:acceptable_languages(Context),
+            Acceptable = z_language:acceptable_languages(Context1),
             case cowmachine_accept_language:accept_header(Acceptable, AcceptHeader) of
-                {ok, Lang} -> accept_language(Lang, Context);
-                {error, _} -> Context
+                {ok, Lang} -> accept_language(Lang, Context1);
+                {error, _} -> Context1
             end
     end.
 
@@ -222,7 +223,7 @@ observe_url_rewrite(#url_rewrite{args=Args}, Url, Context) ->
         Language ->
             case lists:keyfind(z_language, 1, Args) of
                 false ->
-                    RewriteUrl = z_convert:to_bool(m_config:get_value(?MODULE, rewrite_url, true, Context)),
+                    RewriteUrl = m_config:get_boolean(?MODULE, rewrite_url, true, Context),
                     case RewriteUrl andalso is_multiple_languages_config(Context) of
                         true ->
                             % Insert the current language in front of the url

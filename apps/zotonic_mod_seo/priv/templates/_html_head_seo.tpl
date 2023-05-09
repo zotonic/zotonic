@@ -19,6 +19,8 @@
             and id.language
             and not z_language|member:id.language
             and m.modules.active.mod_translation
+            and z_language != m.translation.default_language
+            and not id.is_a.collection
     %}
         {# Take one of the alternative urls, provided by mod_translation #}
         <meta name="robots" content="noindex">

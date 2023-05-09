@@ -96,7 +96,7 @@ redirect(Location, Context) ->
     {{true, Location}, Context}.
 
 
-%% @doc Show the page.  Add a noindex header when requested by the editor.
+%% @doc Show the page. Add a noindex header when requested by the editor.
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Id = z_controller_helper:get_id(Context),
     CatId = m_rsc:p_no_acl(Id, category_id, Context),
@@ -118,11 +118,11 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 	end,
 
 	MaxAge = z_context:get(cache_anonymous_max_age, Context1),
-	Html = case not z_auth:is_auth(Context1) of
-		true when is_integer(MaxAge), MaxAge > 0 ->
+	Html = case z_auth:is_auth(Context1) of
+		false when is_integer(MaxAge), MaxAge > 0 ->
 			QueryArgs = z_context:get_q_all(Context1),
 		    z_depcache:memo(RenderFunc, {page_template_anonymous, RenderArgs, QueryArgs}, MaxAge, [Id], Context1);
-		true when is_integer(MaxAge), MaxAge == 0 ->
+		false when is_integer(MaxAge), MaxAge =:= 0 ->
 			QueryArgs = z_context:get_q_all(Context1),
 		    z_depcache:memo(RenderFunc, {page_template_anonymous, RenderArgs, QueryArgs}, 0, [], Context1);
 		_ ->

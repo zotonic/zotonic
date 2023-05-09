@@ -1159,6 +1159,18 @@ csp_nonce(Context) ->
 
 %% @doc Set a response header for the request in the context.
 -spec set_resp_header(binary(), binary(), z:context()) -> z:context().
+set_resp_header(<<"vary">>, <<"*">>, #context{cowreq=Req} = Context) when is_map(Req) ->
+    cowmachine_req:set_resp_header(<<"vary">>, <<"*">>, Context);
+set_resp_header(<<"vary">>, Value, #context{cowreq=Req} = Context) when is_map(Req) ->
+    case cowmachine_req:get_resp_header(<<"vary">>, Context) of
+        undefined ->
+            cowmachine_req:set_resp_header(<<"vary">>, Value, Context);
+        <<"*">> ->
+            Context;
+        Curr ->
+            Value1 = <<Curr/binary, ", ", Value/binary>>,
+            cowmachine_req:set_resp_header(<<"vary">>, Value1, Context)
+    end;
 set_resp_header(Header, Value, #context{cowreq=Req} = Context) when is_map(Req) ->
     cowmachine_req:set_resp_header(Header, Value, Context).
 

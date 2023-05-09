@@ -1,9 +1,9 @@
 %% @author Marc Worrell
-%% @copyright 2014-2022 Marc Worrell
-%%
+%% @copyright 2014-2023 Marc Worrell
 %% @doc Helper functions commonly used in controllers.
+%% @end
 
-%% Copyright 2014-2022 Marc Worrell
+%% Copyright 2014-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@
     is_authorized/2,
     is_authorized/3,
     is_authorized_action/3,
+    is_redirect_language/1,
     get_id/1,
     get_configured_id/1,
     decode_request/2,
@@ -113,6 +114,32 @@ append_acl(OptRscId, Acl, Context) when is_list(Acl) ->
 
 get_acl_action(OptRscId, Context) ->
     {z_context:get(acl_action, Context, view), OptRscId}.
+
+
+%% @doc Check if we are on the correct path for the selected language version.
+-spec is_redirect_language(Context) -> boolean() when
+    Context :: z:context().
+is_redirect_language(Context) ->
+    case z_context:get_q(<<"z_language">>, Context) of
+        undefined ->
+            case is_language_in_url(Context) of
+                true ->
+                    % Redirect to the current location, but now with the language added.
+                    true;
+                false ->
+                    false
+            end;
+        _ ->
+            false
+    end.
+
+is_language_in_url(Context) ->
+    m_config:get_boolean(mod_translation, rewrite_url, true, Context)
+    andalso z_module_manager:active(mod_translation, Context)
+    andalso is_multiple_languages_config(Context).
+
+is_multiple_languages_config(Context) ->
+    length(z_language:enabled_languages(Context)) > 1.
 
 
 %% @doc Fetch the id from the request or the dispatch configuration.
