@@ -24,8 +24,6 @@
     set_url_language/3
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
 set_url_language(Url, Context) ->
     set_url_language(Url, z_context:language(Context), Context).
 
