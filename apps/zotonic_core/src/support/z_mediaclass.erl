@@ -144,7 +144,12 @@ expand_mediaclass_checksum(Props) ->
         undefined ->
             {ok, Props};
         {MC, Checksum} when Checksum =/= undefined ->
-            expand_mediaclass_checksum_1(MC, Checksum, Props);
+            case is_valid_mediaclass_name(MC) of
+                true ->
+                    expand_mediaclass_checksum_1(MC, Checksum, Props);
+                false ->
+                    {error, invalid_mediaclass_name}
+            end;
         Checksum ->
             expand_mediaclass_checksum_1(undefined, z_convert:to_binary(Checksum), Props)
     end.
@@ -201,6 +206,32 @@ expand_mediaclass_2(Props, ClassProps) ->
 
     key({K,_}) -> K;
     key(K) -> K.
+
+
+%% @doc Check if a mediaclass name is valid. Should be a-z, 0-9, or - or _
+-spec is_valid_mediaclass_name(MediaClass) -> boolean() when
+    MediaClass :: binary() | string().
+is_valid_mediaclass_name([]) -> false;
+is_valid_mediaclass_name(<<>>) -> false;
+is_valid_mediaclass_name(Name) -> is_valid_name(Name).
+
+-define(is_valid_mediaclass_char(C),
+        (C >= $a andalso C =< $z) orelse
+        (C >= $0 andalso C =< $9) orelse
+        C =:= $- orelse
+        C =:= $_).
+
+is_valid_name([C|Rest]) when ?is_valid_mediaclass_char(C) ->
+    is_valid_name(Rest);
+is_valid_name(<<C/utf8, Rest/binary>>) when ?is_valid_mediaclass_char(C) ->
+    is_valid_name(Rest);
+is_valid_name([]) ->
+    true;
+is_valid_name(<<>>) ->
+    true;
+is_valid_name(_) ->
+    false.
+
 
 %% @doc Call this to force a re-index and parse of all moduleclass definitions.
 -spec reset(#context{}) -> ok.
@@ -365,24 +396,37 @@ insert_defs(Defs, Tag, Site) ->
 
 % Insert the mediaclass definition by lookup key and checksum
 insert_def({MC, Ps, Module, Checksum}, Tag, Site) ->
-    K = #mediaclass_index_key{site=Site, mediaclass=MC},
-    ets:insert(?MEDIACLASS_INDEX,
-                #mediaclass_index{
-                    key=K,
-                    props=Ps,
-                    module=Module,
-                    checksum=Checksum,
-                    tag=Tag
-                }),
-    ets:insert(?MEDIACLASS_INDEX,
-                #mediaclass_index{
-                    key=Checksum,
-                    props=Ps,
-                    module=Module,
-                    checksum=Checksum,
-                    tag=Tag
-                }).
-
+    case is_valid_mediaclass_name(MC) of
+        true ->
+            K = #mediaclass_index_key{site=Site, mediaclass=MC},
+            ets:insert(?MEDIACLASS_INDEX,
+                        #mediaclass_index{
+                            key=K,
+                            props=Ps,
+                            module=Module,
+                            checksum=Checksum,
+                            tag=Tag
+                        }),
+            ets:insert(?MEDIACLASS_INDEX,
+                        #mediaclass_index{
+                            key=Checksum,
+                            props=Ps,
+                            module=Module,
+                            checksum=Checksum,
+                            tag=Tag
+                        });
+        false ->
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"Invalid mediaclass name in mediaclass.config file">>,
+                result => error,
+                reason => invalid_mediaclass_name,
+                module => Module,
+                mediaclass => MC,
+                checksum => Checksum,
+                site => Site
+            })
+    end.
 
 expand_file({Module, Path}) ->
     {Module, lists:flatten(consult_file(Path))}.
