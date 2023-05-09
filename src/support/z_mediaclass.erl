@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012-2013 Marc Worrell
+%% @copyright 2012-2023 Marc Worrell
 %% @doc Manage, compile and find mediaclass definitions per context/site.
+%% @end
 
-%% Copyright 2012-2013 Marc Worrell
+%% Copyright 2012-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,6 +35,8 @@
     expand_mediaclass_checksum/1,
     expand_mediaclass_checksum/2,
     expand_mediaclass/2,
+
+    is_valid_mediaclass_name/1,
 
     reset/1,
     module_reindexed/2
@@ -86,7 +89,12 @@ expand_mediaclass_checksum(Props) ->
         undefined ->
             {ok, Props};
         {MC, Checksum} when Checksum =/= undefined ->
-            expand_mediaclass_checksum_1(MC, Checksum, Props);
+            case is_valid_mediaclass_name(MC) of
+                true ->
+                    expand_mediaclass_checksum_1(MC, Checksum, Props);
+                false ->
+                    {error, invalid_mediaclass_name}
+            end;
         Checksum ->
             expand_mediaclass_checksum_1(undefined, z_convert:to_binary(Checksum), Props)
     end.
@@ -153,6 +161,32 @@ reset(Context) ->
 -spec module_reindexed(module_reindexed, #context{}) -> ok.
 module_reindexed(module_reindexed, Context) ->
     reset(Context).
+
+
+%% @doc Check if a mediaclass name is valid. Should be a-z, 0-9, or - or _
+-spec is_valid_mediaclass_name(MediaClass) -> boolean() when
+    MediaClass :: binary() | string().
+is_valid_mediaclass_name([]) -> false;
+is_valid_mediaclass_name(<<>>) -> false;
+is_valid_mediaclass_name(Name) -> is_valid_name(Name).
+
+-define(is_valid_mediaclass_char(C),
+        (C >= $a andalso C =< $z) orelse
+        (C >= $0 andalso C =< $9) orelse
+        C =:= $- orelse
+        C =:= $_).
+
+is_valid_name([C|Rest]) when ?is_valid_mediaclass_char(C) ->
+    is_valid_name(Rest);
+is_valid_name(<<C/utf8, Rest/binary>>) when ?is_valid_mediaclass_char(C) ->
+    is_valid_name(Rest);
+is_valid_name([]) ->
+    true;
+is_valid_name(<<>>) ->
+    true;
+is_valid_name(_) ->
+    false.
+
 
 %%====================================================================
 %% gen_server callbacks
@@ -297,21 +331,26 @@ insert_ua_defs(UA, Defs, Tag, Site) ->
 
 % Insert the mediaclass definition by lookup key and checksum
 insert_ua_def(UAClass, {MC, Ps, Checksum}, Tag, Site) ->
-    K = #mediaclass_index_key{site=Site, ua_class=UAClass, mediaclass=MC},
-    ets:insert(?MEDIACLASS_INDEX,
-                #mediaclass_index{
-                    key=K,
-                    props=Ps,
-                    checksum=Checksum,
-                    tag=Tag
-                }),
-    ets:insert(?MEDIACLASS_INDEX,
-                #mediaclass_index{
-                    key=Checksum,
-                    props=Ps,
-                    checksum=Checksum,
-                    tag=Tag
-                }).
+    case is_valid_mediaclass_name(MC) of
+        true ->
+            K = #mediaclass_index_key{site=Site, ua_class=UAClass, mediaclass=MC},
+            ets:insert(?MEDIACLASS_INDEX,
+                        #mediaclass_index{
+                            key=K,
+                            props=Ps,
+                            checksum=Checksum,
+                            tag=Tag
+                        }),
+            ets:insert(?MEDIACLASS_INDEX,
+                        #mediaclass_index{
+                            key=Checksum,
+                            props=Ps,
+                            checksum=Checksum,
+                            tag=Tag
+                        });
+        false ->
+            lager:error("[~p] Invalid mediaclass name ~p", [Site, MC])
+    end.
 
 
 expand_file({Module, UAClass, Path}) ->
@@ -343,5 +382,3 @@ cleanup_ets(Tag, Site) ->
         end;
     cleanup_ets_1(K, Tag, Site, Acc) ->
         cleanup_ets_1(ets:next(?MEDIACLASS_INDEX, K), Tag, Site, Acc).
-
-
