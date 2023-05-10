@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-10 14:51\n"
+"PO-Revision-Date: 2023-05-10 15:59\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -816,7 +816,7 @@ msgstr "Nieuw media-item"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:32
 msgid "Add a note about this page."
-msgstr "Voeg een opmerking over deze pagina toe."
+msgstr "Voeg een notitie over deze pagina toe."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:110
 msgid "Add media content"
@@ -4617,7 +4617,7 @@ msgstr "Herstel vanaf backup"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
 msgid "Revert to this version..."
-msgstr ""
+msgstr "Keer terug naar deze versie..."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:46./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:48
 msgid "Revisions for"
@@ -5204,7 +5204,7 @@ msgstr "Marketing"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_media_cookie_consent.tpl:9
 msgid "Media preview"
-msgstr "Mediavoorbeeld"
+msgstr "Media-voorbeeld"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:10
 msgid "More information about cookies"
@@ -5609,7 +5609,7 @@ msgstr "Teruggestuurd"
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:120
 msgid "Clear error for this email address."
-msgstr "Wis de fout voor dit e-mailadres."
+msgstr "Wis de foutmelding voor dit e-mailadres."
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:173
 msgid "Errors since last clear"
@@ -6093,7 +6093,7 @@ msgstr "Houd logo's en illustraties scherp."
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:121
 msgid "Lossless"
-msgstr "Verliesloos"
+msgstr "Zonder compressie"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:126
 msgid "Lossless resize"
@@ -6663,7 +6663,7 @@ msgstr "Annuleer mailing"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:21
 msgid "Change subscriptions connected to your account."
-msgstr "Wijzig abonnementen die aan uw account zijn gekoppeld."
+msgstr "Wijzig abonnementen die aan je account zijn gekoppeld."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:76
 msgid "Check to activate the e-mail address."
@@ -6715,7 +6715,7 @@ msgstr "Kon de mailinglijst niet verwijderen."
 
 #: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:258
 msgid "Could not save the opt-out preference."
-msgstr "Kan de afmeldingsvoorkeur niet opslaan."
+msgstr "De afmeldings-voorkeur kon niet worden opgeslagen."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_email_mailinglist_hello.tpl:4
 #: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:6
@@ -6888,7 +6888,7 @@ msgstr "Bewaar alleen ontvangers op deze lijst die op beide lijsten <em>staan</e
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46
 msgid "Only the enabled email addresses are used, the subscriber connections are not used and are not affected."
-msgstr ""
+msgstr "Alleen de ingeschakelde e-mailadressen worden gebruikt, de abonneeverbindingen worden niet gebruikt en worden niet beïnvloed."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:9
 msgid "Operation"

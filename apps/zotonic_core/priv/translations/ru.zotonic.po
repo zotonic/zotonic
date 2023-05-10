@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-10 14:51\n"
+"PO-Revision-Date: 2023-05-10 15:59\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4615,7 +4615,7 @@ msgstr "Восстановить резервную копию"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
 msgid "Revert to this version..."
-msgstr ""
+msgstr "Вернуться к этой версии..."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:46./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:48
 msgid "Revisions for"
@@ -6886,7 +6886,7 @@ msgstr "Держите получателей только в этом спис�
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46
 msgid "Only the enabled email addresses are used, the subscriber connections are not used and are not affected."
-msgstr ""
+msgstr "Используются только разрешенные адреса электронной почты, подключения абонентов не используются и не затрагиваются."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:9
 msgid "Operation"
