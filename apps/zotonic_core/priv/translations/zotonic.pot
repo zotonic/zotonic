@@ -4854,7 +4854,7 @@ msgid "Restore backup"
 msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
-msgid "Revert to this version…"
+msgid "Revert to this version..."
 msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:46./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:48
