@@ -93,8 +93,8 @@
                 {% include "_admin_edges_list.tpl" result=result qsort=qsort qcat=qcat %}
                 {% pager result=result dispatch="admin_edges" qargs hide_single_page %}
                 <div class="text-muted clear-left">
-                    {% if result.is_total_estimated %}{% trans "about {n} items found" n=result.total|round_significant:2 %}
-                    {% else %}{% trans "{n} items found" n=result.total %}
+                    {% if result.is_total_estimated %}{% trans "About {n} items found." n=result.total|round_significant:2 %}
+                    {% else %}{% trans "{n} items found." n=result.total %}
                     {% endif %}
                 </div>
             {% endwith %}
