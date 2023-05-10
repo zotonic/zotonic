@@ -67,7 +67,7 @@
 						delegate=`mod_email_status`
 				%}
 				<p class="alert alert-success" id="{{ #didreset }}" style="display:none">
-					{_ The email address has been cleared, new emails will be sent. _}
+					{_ The error message has been cleared and emails are being sent. _}
 				</p>
 			{% endif %}
 		{% endif %}
@@ -107,7 +107,7 @@
 				<strong>
 					{_ There are problems with this email address. _}
 					{% if not status.error_is_final or status.recent_error_ct < 5  %}
-						{_ We are retrying email delivery. _}
+						{_ We are retrying email delivery. _} {_ If you are sure this email address is correct, the problem was probably temporary so you can clear the error message. _}
 					{% else %}
 						{_ We stopped email delivery. _}
 					{% endif %}
@@ -117,7 +117,7 @@
 			{% if (id and id.is_editable) or m.acl.use.mod_email_status %}
 				<p>
 					<a href="#" class="btn btn-success" id="{{ #doclear }}">
-						{_ Clear error flag for this email address. _}
+						{_ Clear error for this email address. _}
 					</a>
 				</p>
 				{% if panel_id %}
@@ -141,7 +141,7 @@
 							delegate=`mod_email_status`
 					%}
 					<p class="alert alert-success" id="{{ #didclear }}" style="display:none">
-						{_ The email address has been cleared, new emails will be sent. _}
+						{_ The error message has been cleared and emails are being sent. _}
 					</p>
 				{% endif %}
 			{% endif %}
