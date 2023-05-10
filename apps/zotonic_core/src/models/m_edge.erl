@@ -127,28 +127,35 @@ m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 -spec m_post( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
-m_post([<<"insert">> | Path ], #{ payload := Payload }, Context) ->
-    Subject = get_subject(Path, Payload, Context),
-    Predicate = get_predicate(Path, Payload, Context),
-    Object = get_object(Path, Payload, Context),
-    case insert(Subject, Predicate, Object, Context) of
-        {ok, Id} ->
-            {ok, #{ id => Id }};
-        {error, _}=Error ->
-            Error
-    end;
-m_post(_Vs, _Msg, _Context) ->
-    {error, unknown_path}.
+m_post([<<"o">> | Path ], #{ payload := Payload }, Context) ->
+    Subject = get_from_path_or_payload(1, <<"subject">>, Path, Payload, Context),
+    Predicate = get_from_path_or_payload(2, <<"predicate">>, Path, Payload, Context),
+    Object = get_from_path_or_payload(3, <<"object">>, Path, Payload, Context),
+    do_post_insert(Subject, Predicate, Object, Context);
+m_post([<<"s">> | Path ], #{ payload := Payload }, Context) ->
+    Object = get_from_path_or_payload(1, <<"object">>, Path, Payload, Context),
+    Predicate = get_from_path_or_payload(2, <<"predicate">>, Path, Payload, Context),
+    Subject = get_from_path_or_payload(3, <<"subject">>, Path, Payload, Context),
+    do_post_insert(Subject, Predicate, Object, Context).
 
 -spec m_delete( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
-m_delete([Edge], _Msg, Context) ->
-    EdgeId = z_convert:to_integer(Edge),
-    delete(EdgeId, Context);
-m_delete(Path, #{ payload := Payload }, Context) ->
-    Subject = get_subject(Path, Payload, Context),
-    Predicate = get_predicate(Path, Payload, Context),
-    Object = get_object(Path, Payload, Context),
-    delete(Subject, Predicate, Object, Context).
+m_delete([<<"o">> | Path], #{payload := Payload}, Context) ->
+    Subject = get_from_path_or_payload(1, <<"subject">>, Path, Payload, Context),
+    Predicate = get_from_path_or_payload(2, <<"predicate">>, Path, Payload, Context),
+    Object = get_from_path_or_payload(3, <<"object">>, Path, Payload, Context),
+    delete(Subject, Predicate, Object, Context);
+m_delete([<<"s">> | Path], #{payload := Payload}, Context) ->
+    Object = get_from_path_or_payload(1, <<"object">>, Path, Payload, Context),
+    Predicate = get_from_path_or_payload(2, <<"predicate">>, Path, Payload, Context),
+    Subject = get_from_path_or_payload(3, <<"subject">>, Path, Payload, Context),
+    delete(Subject, Predicate, Object, Context);
+m_delete([<<"edge">>, Edge], _Msg, Context) ->
+    case z_convert:to_integer(Edge) of
+        undefined ->
+            {error, enoent};
+        EdgeId ->
+            delete(EdgeId, Context)
+    end.
 
 %% @doc Get the complete edge with the id
 -spec get(EdgeId, Context) -> proplists:proplist() | undefined when
@@ -1256,20 +1263,19 @@ subject_predicate_ids(Id, Context) when is_integer(Id) ->
 %% Helpers
 %%
 
-get_subject([Subject | _Rest ], _Payload, _Context) when Subject =/= <<"?">> ->
-    Subject;
-get_subject(_Path, Payload, Context) ->
-    get_q(<<"subject">>, Payload, Context).
+do_post_insert(Subject, Predicate, Object, Context) ->
+    case insert(Subject, Predicate, Object, Context) of
+        {ok, Id} ->
+            {ok, #{ id => Id }};
+        {error, _}=Error ->
+            Error
+    end.
 
-get_predicate([_Subject, Predicate | _Rest ], _Payload, _Context) when Predicate =/= <<"?">> ->
-    Predicate;
-get_predicate(_Path, Payload, Context) ->
-    get_q(<<"predicate">>, Payload, Context).
-
-get_object([_Subject, _Predicate, Object | _Rest ], _Payload, _Context) when Object =/= <<"?">> ->
-    Object;
-get_object(_Path, Payload, Context) ->
-    get_q(<<"object">>, Payload, Context).
+get_from_path_or_payload(1, _What, [Thing | _Rest ], _Payload, _Context) when Thing =/= <<"?">> -> Thing;
+get_from_path_or_payload(2, _What, [_, Thing | _Rest ], _Payload, _Context) when Thing =/= <<"?">> -> Thing;
+get_from_path_or_payload(3, _What, [_, _, Thing | _Rest ], _Payload, _Context) when Thing =/= <<"?">> -> Thing;
+get_from_path_or_payload(_, What, _Path, Payload, Context) ->
+    get_q(What, Payload, Context).
 
 get_q(Name, Payload, Context) ->
     case maps:get(Name, Payload, undefined) of
