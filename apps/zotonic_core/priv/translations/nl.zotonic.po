@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-11 10:56\n"
+"PO-Revision-Date: 2023-05-11 11:52\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -4581,7 +4581,7 @@ msgstr "Bekijk en herstel een eerdere versie."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:12
 msgid "List of recently deleted pages and recover options via the resource revisions log."
-msgstr "Lijst met onlangs verwijderde pagina's en herstelopties via het logboek met bronrevisies."
+msgstr "Lijst met onlangs verwijderde pagina's en herstelopties via het logboek van revisies."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
 msgid "Make a daily backup of the database and uploaded files."
@@ -4601,7 +4601,7 @@ msgstr "Niet geüpload naar bestandsopslag"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
 msgid "Only the texts and other properties of pages are backed up."
-msgstr "Alleen de teksten en andere eigenschappen van pagina's worden geback-upt."
+msgstr "Er wordt alleen een back-up gemaakt van de teksten en andere eigenschappen van pagina's."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:76
 msgid "Previous"
@@ -8132,11 +8132,11 @@ msgstr "Sitemap-instellingen"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:4
 msgid "Sitemap settings for all pages of this category"
-msgstr "Sitemapinstellingen voor alle pagina's van deze categorie"
+msgstr "Sitemap-instellingen voor alle pagina's van deze categorie"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:38
 msgid "The home page defaults to 1.0, pages with a page path default to 0.8."
-msgstr "De startpagina is standaard ingesteld op 1.0, pagina's met een paginapad zijn standaard ingesteld op 0.8."
+msgstr "De startpagina is standaard ingesteld op 1.0, pagina's met een pagina-pad zijn standaard ingesteld op 0.8."
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:5
 msgid "These settings apply to all pages of this category. They define hints for search engines indexing the site."
@@ -8667,7 +8667,7 @@ msgstr "Weet je zeker dat je wilt stoppen zonder op te slaan?"
 
 #: apps/zotonic_mod_survey/priv/templates/survey.tpl:25
 msgid "Because you can edit the survey, you can proceed for testing."
-msgstr "Omdat u de enquête kunt bewerken, kunt u doorgaan met testen."
+msgstr "Omdat je kunt bewerken, kan je doorgaan om te testen."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:164
 msgid "Button"
@@ -8715,11 +8715,11 @@ msgstr "Correct"
 
 #: apps/zotonic_mod_survey/src/support/survey_admin.erl:144./apps/zotonic_mod_survey/src/support/survey_admin.erl:188
 msgid "Could not add the recipients."
-msgstr "Kan de ontvangers niet toevoegen."
+msgstr "De ontvangers konden niet toegevoegd worden."
 
 #: apps/zotonic_mod_survey/src/support/survey_admin.erl:199
 msgid "Could not create the mailinglist."
-msgstr "Kan de mailinglijst niet maken."
+msgstr "De mailinglijst kon niet worden gemaakt."
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:163
 msgid "Country select"
@@ -8731,7 +8731,7 @@ msgstr "Maak een nieuwe persoon aan om het antwoord aan te koppelen."
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:87
 msgid "Create and link"
-msgstr "Maken en koppelen"
+msgstr "Maken en koppel"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111
 msgid "Create jumps to other questions or blocks."
@@ -8852,7 +8852,7 @@ msgstr "Vul de ontbrekende delen in"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:3
 msgid "Find a person to link the answer to. If you do not find a person then you can create a new person."
-msgstr "Zoek een persoon om het antwoord aan te linken. Als u een persoon niet kunt vinden, kunt u een nieuwe persoon maken."
+msgstr "Zoek een persoon om het antwoord aan te koppelen. Als je een persoon niet kunt vinden, kan je een nieuwe persoon maken."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:137
 msgid "First page in category"
@@ -8944,7 +8944,7 @@ msgstr "Likert"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:49./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:58./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:65./apps/zotonic_mod_survey/src/support/survey_admin.erl:56
 msgid "Link with person"
-msgstr "Link met persoon"
+msgstr "Koppel aan persoon"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:162
 msgid "Long answer"
@@ -8960,11 +8960,11 @@ msgstr "Mailinglijst"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:36./apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:37
 msgid "Mailinglist title"
-msgstr "Titel mailinglijst"
+msgstr "Mailinglist titel"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:17
 msgid "Matching email address"
-msgstr "Bijpassend e-mailadres"
+msgstr "Overeenkomend e-mailadres"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:84./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
 msgid "Matching question"
@@ -8972,7 +8972,7 @@ msgstr "Matching-vraag"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:59
 msgid "Matching text"
-msgstr "Bijpassende tekst"
+msgstr "Overeenkomende tekst"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
 msgid "Milk"
@@ -9443,7 +9443,7 @@ msgstr "Fout"
 
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:32./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:88
 msgid "Y-m-d"
-msgstr "Ymd"
+msgstr "Y-m-d"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
 msgid "Yes or no question"
