@@ -66,28 +66,37 @@ embed_images_html(Html, IsEmbed, Context) ->
             embed_image(Img, IsEmbed, Acc, Context)
         end,
         {[], Html},
-        find_images(Html)),
+        find_images(Html, Context)),
     {Parts, Html1}.
 
-find_images(Html) ->
-    Re = <<"src=([\"'](/(lib|image)/[^\"']*\\.(jpg|gif|png))[\"'])">>,
+find_images(Html, Context) ->
+    BaseUrl = z_context:abs_url(<<>>, Context),
+    Re = <<"src=([\"']((", BaseUrl/binary, "|/)?((lib|image)/[^\"']*\\.(jpg|gif|png)))[\"'])">>,
     case re:run(Html, Re, [{capture, all_but_first, binary}, global]) of
         nomatch ->
             [];
         {match, Matches} ->
-            sets:to_list(sets:from_list(Matches))
+            lists:usort(Matches)
     end.
 
-% [<<"'/lib/foo/bar.png'">>,<<"/lib/foo/bar.png">>,<<"lib">>, <<"png">>]
-embed_image([QuotedPath, Path, _LibImg, _Ext], IsEmbed, {Parts, Html}, Context) ->
+% [
+% <<"'https://example.com/lib/foo/bar.png'">>,
+% <<"https://example.com/lib/foo/bar.png">>,
+% <<"https://example.com/">>,
+% <<"lib/foo/bar.png">>,
+% <<"lib">>,
+% <<"png">>
+% ]
+embed_image([QuotedSrc, _Src, _BaseUrl, Path0, _LibImg, _Ext], IsEmbed, {Parts, Html}, Context) ->
     ContextAnon = z_acl:anondo(Context),
+    Path = <<"/", Path0/binary>>,
     case IsEmbed orelse not z_media_data:is_file_data_visible(Path, ContextAnon) of
         true ->
             case z_media_data:file_data(Path, Context) of
                 {ok, {Mime, Data}} when is_binary(Data), size(Data) < ?MAX_EMBED_SIZE ->
                     {Part, Cid} = create_attachment(Data, Mime, filename:basename(Path)),
                     NewPath = iolist_to_binary([$", "cid:", Cid, $"]),
-                    Html1 = re:replace(Html, QuotedPath, NewPath, [global, {return, binary}]),
+                    Html1 = binary:replace(Html, QuotedSrc, NewPath, [global]),
                     {[Part|Parts], Html1};
                 {ok, _} ->
                     {Parts, Html};
