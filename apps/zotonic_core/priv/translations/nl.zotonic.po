@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-10 16:54\n"
+"PO-Revision-Date: 2023-05-11 08:33\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1981,7 +1981,7 @@ msgstr "Er ging iets mis, onze excuses."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:407
 msgid "Sorry, could not handle this filename."
-msgstr "Sorry, kon deze bestandsnaam niet verwerken."
+msgstr "Deze bestandsnaam kon niet worden verwerkt."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:446
 msgid "Sorry, could not move the file to the dropbox."
@@ -1989,15 +1989,15 @@ msgstr "Sorry, kan het bestand niet naar de dropbox verplaatsen."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:382./apps/zotonic_mod_admin/src/mod_admin.erl:393
 msgid "Sorry, that page is unknown."
-msgstr "Sorry, die pagina is onbekend."
+msgstr "Deze pagina is onbekend."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:384./apps/zotonic_mod_admin/src/mod_admin.erl:395
 msgid "Sorry, you are not allowed to edit notes."
-msgstr "Sorry, je mag geen notities bewerken."
+msgstr "Je mag geen notities bewerken."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:450
 msgid "Sorry, you are not allowed to upload dropbox files."
-msgstr "Sorry, je mag geen dropbox-bestanden uploaden."
+msgstr "Je mag geen Dropbox-bestanden uploaden."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_link.erl:86
 msgid "Sorry, you don't have permission to add the connection."
@@ -2191,7 +2191,7 @@ msgstr "Deze naam wordt door een andere pagina gebruikt."
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:13
 msgid "This note is only visible for people who can edit the page and have access to the admin."
-msgstr "Deze opmerking is alleen zichtbaar voor mensen die de pagina kunnen bewerken en toegang hebben tot de beheerder."
+msgstr "Deze notitie is alleen zichtbaar voor mensen die de pagina kunnen bewerken."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
 msgid "This page can be connected from other pages. For example it could be an author of an article."
@@ -2283,7 +2283,7 @@ msgstr "Upload een bestand van je computer"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:124
 msgid "Upload a file to the dropbox. This file will be handled in the background by the mailinglists for recipient import and other modules."
-msgstr "Upload een bestand naar de dropbox. Dit bestand wordt op de achtergrond behandeld door de mailinglijsten voor het importeren van ontvangers en andere modules."
+msgstr "Upload een bestand naar Dropbox. Dit bestand wordt op de achtergrond verwerkt door de mailinglijsten voor het importeren van ontvangers en andere modules."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:121
 msgid "Upload dropbox file"
@@ -3164,7 +3164,7 @@ msgstr "Sorry, deze gebruikersnaam is al in gebruik. Probeer een andere."
 
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:145
 msgid "Sorry, you are not allowed to verify this email address."
-msgstr "Sorry, u mag dit e-mailadres niet verifiëren."
+msgstr "Je mag dit e-mailadres niet verifiëren."
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:59
 msgid "Sorry, you can not remove your own username."
@@ -4617,7 +4617,7 @@ msgstr "Herstel vanaf backup"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
 msgid "Revert to this version..."
-msgstr "Keer terug naar deze versie..."
+msgstr "Terugkeren naar deze versie..."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:46./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:48
 msgid "Revisions for"
@@ -5220,7 +5220,7 @@ msgstr "Deze website maakt gebruik van cookies"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:40
 msgid "To add more information about the use of cookies, either use the content field below or add a 'relation' in the page connections."
-msgstr "Om meer informatie over het gebruik van cookies toe te voegen, kunt u het inhoudsveld hieronder gebruiken of een 'relatie' toevoegen in de paginaverbindingen."
+msgstr "Om meer informatie over het gebruik van cookies toe te voegen, kan je het inhoudsveld hieronder gebruiken of een 'relatie' toevoegen in de pagina-verbindingen."
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:168
@@ -5617,7 +5617,7 @@ msgstr "Fouten sinds de laatste reset"
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:110
 msgid "If you are sure this email address is correct, the problem was probably temporary so you can clear the error message."
-msgstr "Als u zeker weet dat dit e-mailadres correct is, was het probleem waarschijnlijk tijdelijk en kunt u de foutmelding wissen."
+msgstr "Als je zeker weet dat dit e-mailadres correct is, was het probleem waarschijnlijk tijdelijk en kan je de foutmelding wissen."
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:77
 msgid "Information about"
@@ -9208,7 +9208,7 @@ msgstr "Kort antwoord"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:25
 msgid "Show charts"
-msgstr "Toon grafieken"
+msgstr "Grafieken weergeven"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:51
 msgid "Show email addresses"
