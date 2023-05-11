@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-11 09:41\n"
+"PO-Revision-Date: 2023-05-11 10:56\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1337,7 +1337,7 @@ msgstr "Bestand / mediainhoud"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:434
 msgid "File uploaded to the dropbox, will be handled shortly."
-msgstr "Bestand is geüpload naar Dropbox en wordt binnenkort verwerkt."
+msgstr "Het bestand is geüpload naar de dropbox en wordt binnenkort verwerkt."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:50./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:47
 msgid "Filter on category"
@@ -1985,7 +1985,7 @@ msgstr "Deze bestandsnaam kon niet worden verwerkt."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:446
 msgid "Sorry, could not move the file to the dropbox."
-msgstr "Sorry, kan het bestand niet naar de dropbox verplaatsen."
+msgstr "Het bestand kon niet naar de dropbox worden verplaatst."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:382./apps/zotonic_mod_admin/src/mod_admin.erl:393
 msgid "Sorry, that page is unknown."
@@ -6820,7 +6820,7 @@ msgstr "Je kunt hier de abonnementen wijzigen die gekoppeld zijn aan het e-maila
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:44
 msgid "If you opt-out then it is still possible to subscribe to mailing lists using an e-mail address (instead of your account)."
-msgstr "Als u zich afmeldt, is het nog steeds mogelijk om u aan te melden voor mailinglijsten met een e-mailadres (in plaats van uw account)."
+msgstr "Als je je afmeldt, is het nog steeds mogelijk om je aan te melden voor mailinglijsten met een e-mailadres (in plaats van met je account)."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:6
 msgid "It appears you have sent\n"
@@ -6864,7 +6864,7 @@ msgstr "Mailings worden verstuurd naar:"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:3
 msgid "Manage your mailing list subscriptions"
-msgstr "Beheer uw mailinglijstabonnementen"
+msgstr "Beheer jouw abonnementen op mailinglijsten"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:38
 msgid "Matched via Query"
@@ -6888,7 +6888,7 @@ msgstr "Bewaar alleen ontvangers op deze lijst die op beide lijsten <em>staan</e
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46
 msgid "Only the enabled email addresses are used, the subscriber connections are not used and are not affected."
-msgstr "Alleen de ingeschakelde e-mailadressen worden gebruikt, de abonneeverbindingen worden niet gebruikt en worden niet beïnvloed."
+msgstr "Alleen de ingeschakelde e-mailadressen worden gebruikt, de abonnee-verbindingen worden niet gebruikt en worden niet beïnvloed."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:9
 msgid "Operation"
@@ -7205,7 +7205,7 @@ msgstr "Upload een lijst van ontvangers."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:19
 msgid "Use the link in your email to manage your subscriptions."
-msgstr "Gebruik de link in uw e-mail om uw abonnementen te beheren."
+msgstr "Gebruik de link in de e-mail om je abonnementen te beheren."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:18
 msgid "View this page as mailing."
@@ -7257,7 +7257,7 @@ msgstr "Je mag de ontvangerslijst niet bekijken of bewerken. Je moet toestemming
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:102
 msgid "You are not subscribed to any mailing lists."
-msgstr "U bent niet geabonneerd op mailinglijsten."
+msgstr "Je bent niet geabonneerd een mailinglijst."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
 msgid "You are now subscribed to our mailing list"
@@ -7273,11 +7273,11 @@ msgstr "U bent nu afgemeld van de mailinglijst <b>{title}</b>. Hoop je weer te z
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:63
 msgid "You are subscribed to the following mailing lists."
-msgstr "U bent geabonneerd op de volgende mailinglijsten."
+msgstr "Je bent geabonneerd op de volgende mailinglijsten."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:41
 msgid "You can opt-out of all current and future mailings using your account on this website."
-msgstr "U kunt zich via uw account op deze website afmelden voor alle huidige en toekomstige mailings."
+msgstr "Je kunt zich via je account op deze website afmelden voor alle huidige en toekomstige mailings."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:29
 msgid "You can try to re-subscribe to one of our mailing lists in the side column."
@@ -9240,7 +9240,7 @@ msgstr "Er ging iets mis"
 
 #: apps/zotonic_mod_survey/priv/templates/survey.tpl:23
 msgid "Sorry this survey is momentarily closed."
-msgstr "Sorry, deze enquête is tijdelijk gesloten."
+msgstr "Tijdelijk gesloten."
 
 #: apps/zotonic_mod_survey/src/support/survey_admin.erl:102
 msgid "Sorry, could not insert the new person."
