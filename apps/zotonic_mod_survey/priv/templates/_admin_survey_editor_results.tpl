@@ -1,7 +1,7 @@
 <p class="help-block">
     {_ Click on “Edit” to see and change the entered data. _}
-    {_ The result can be coupled to a known person or to a newly created person. _}<br>
-    {_ The email address is shown if there is a question “email” or if a person with an email address is coupled. _}
+    {_ The result can be linked to an existing person or to a newly created person. _}<br>
+    {_ The email address is shown if there is a question “email” or if there is a person with an email address that has been linked. _}
 </p>
 
 {% with m.rsc[q.id].id|default:id as id %}
