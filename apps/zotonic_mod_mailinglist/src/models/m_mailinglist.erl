@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2023 Marc Worrell
 %% @doc Mailinglist model.
+%% @end
 
 %% Copyright 2009-2023 Marc Worrell
 %%
@@ -901,9 +902,10 @@ get_email_set(ListId, Context) ->
     Es = z_db:q("
         SELECT email
         FROM mailinglist_recipient
-        WHERE mailinglist_id = $1", [ListId], Context),
+        WHERE mailinglist_id = $1
+          AND is_enabled", [ListId], Context),
     Normalized = lists:map(
-        fun(E) -> normalize_email(E) end,
+        fun({E}) -> normalize_email(E) end,
         Es),
     sets:from_list(Normalized).
 
