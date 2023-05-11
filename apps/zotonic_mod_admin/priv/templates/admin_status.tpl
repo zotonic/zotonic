@@ -118,10 +118,10 @@
 
             {% if m.acl.is_admin or m.acl.use.mod_mailinglist or m.acl.use.mod_import %}
                 <div class="widget">
-                    <div class="widget-header">{_ Upload dropbox file _}</div>
+                    <div class="widget-header">{_ Upload file _}</div>
                     <div class="widget-content">
                         <p class="help-block">
-                            {_ Upload a file to the dropbox. This file will be handled in the background by the mailinglists for recipient import and other modules. _}
+                            {_ Upload a file to the drop folder. This file will be handled in the background by the mailinglists for recipient import and other modules. _}
                         </p>
 
                         {% wire id="dropupload"

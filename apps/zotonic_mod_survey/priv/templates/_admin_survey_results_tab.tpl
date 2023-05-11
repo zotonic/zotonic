@@ -24,7 +24,7 @@
 
             <a class="btn btn-default" href="{% url survey_results id=id %}" target="_blank">{_ Show charts _} <i class="fa fa-external-link"></i></a>
         </div>
-        <p class="help-block">{_ View all results, optionally edit them. _} {_ The charts show aggregated results from closed questions like thurstone and yes/no. _}</p>
+        <p class="help-block">{_ View and edit results. _} {_ The charts show aggregated results from closed questions like thurstone or multiple choice and yes/no. _}</p>
     </fieldset>
 
     {% if m.survey.is_allowed_results_download[id] and m.modules.active.mod_export %}

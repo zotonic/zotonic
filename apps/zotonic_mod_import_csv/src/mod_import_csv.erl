@@ -38,7 +38,7 @@
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
 
-%% @doc Handle a dropbox file when it is a tsv/csv file we know.
+%% @doc Handle a drop folder file when it is a tsv/csv file we know.
 observe_dropbox_file(#dropbox_file{ filename = F }, Context) ->
     case is_csv( filename:extension(F) ) of
         true ->

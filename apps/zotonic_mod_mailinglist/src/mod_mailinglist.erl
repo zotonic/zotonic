@@ -303,7 +303,7 @@ init(Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% @doc Handle a dropbox file with recipients.
+%% @doc Handle a drop folder file with recipients.
 handle_call({#dropbox_file{ filename = File }, _SenderContext}, _From, State = #state{ context = Context }) ->
     GetFiles = fun() ->
         C = z_acl:sudo(Context),
@@ -328,10 +328,10 @@ handle_call({#dropbox_file{ filename = File }, _SenderContext}, _From, State = #
                             T -> T
                         end,
                         z_email:send_admin(
-                          "mod_mailinglist: Import from dropbox",
+                          "mod_mailinglist: Import from drop folder",
                           ["Replaced all recipients of ", Title, " with the contents of ", File, "."], Context);
                     {error, Msg} ->
-                        z_email:send_admin("mod_mailinglist: Import from dropbox FAILED", Msg, Context)
+                        z_email:send_admin("mod_mailinglist: Import from drop folder FAILED", Msg, Context)
                 end
             end,
             spawn(HandleF),

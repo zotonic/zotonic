@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2023 Marc Worrell
-%% @doc Simple dropbox handler, monitors a directory and signals new files.
+%% @doc Simple drop folder handler, monitors a directory and signals new files.
 %%
 %% Flow:
-%% 1. An user uploads/moves a file to the dropbox directory
-%% 2. Dropbox handler sees the file, moves it so a safe place, and notifies the file handler of it existance.
+%% 1. An user uploads/moves a file to the drop folder directory
+%% 2. Drop folder handler sees the file, moves it so a safe place, and notifies the file handler of it existance.
 %% @end
 
 %% Copyright 2009-2023 Marc Worrell
@@ -58,13 +58,13 @@
 %% API
 %%====================================================================
 %% @spec start_link(SiteArgs) -> {ok,Pid} | ignore | {error,Error}
-%% @doc Starts the dropbox server
+%% @doc Starts the drop folder server
 start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
     gen_server:start_link({local, Name}, ?MODULE, Site, []).
 
 
-%% @doc Perform a scan of the dropbox, periodically called by a timer and by mod_admin after
+%% @doc Perform a scan of the drop folder, periodically called by a timer and by mod_admin after
 %% a file has been uploaded to the dropbox.
 -spec scan(Context) -> ok when
     Context :: z:context().
@@ -120,7 +120,7 @@ handle_call(Message, _From, State) ->
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, eason, State}
-%% @doc Scan the dropbox, broadcast found files.
+%% @doc Scan the drop folder, broadcast found files.
 handle_cast(scan, State) ->
     do_scan(State),
     z_utils:flush_message({'$gen_cast', scan}),
@@ -171,7 +171,7 @@ config(Key, Context, Default) ->
         V -> V
     end.
 
-%% @doc Perform a scan of the dropbox, broadcast all to be processed files.
+%% @doc Perform a scan of the drop folder, broadcast all to be processed files.
 -spec do_scan( #state{} ) -> ok.
 do_scan(State) ->
     #state{
@@ -189,7 +189,7 @@ do_scan(State) ->
                                        ProcFiles),
     lists:foreach(fun(F) -> move_file(ProcDir, F, true, UnhandledDir) end, ToRemove),
 
-    % Move all new dropbox files to the processing directory
+    % Move all new drop folder files to the processing directory
     AllDropFiles  = scan_directory(DropDir),
     SafeDropFiles = lists:foldl(fun(F, Acc)-> min_age_check(F, MinAge, Acc) end,
                                 [],
@@ -222,7 +222,7 @@ do_scan(State) ->
                 undefined ->
                     ?LOG_WARNING(#{
                         in => zotonic_core,
-                        text => <<"Dropbox file was not handled by modules, moved to unhandled">>,
+                        text => <<"Drop folder file was not handled by modules, moved to unhandled">>,
                         result => error,
                         reason => no_handler,
                         file => File1,

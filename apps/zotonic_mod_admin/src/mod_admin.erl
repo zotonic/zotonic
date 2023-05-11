@@ -424,18 +424,18 @@ event(#submit{ message = {dropbox_upload, _Args} }, Context) ->
                         ok ->
                             ?LOG_INFO(#{
                                 in => zotonic_mod_admin,
-                                text => <<"Dropbox file upload accepted">>,
+                                text => <<"DFile upload accepted">>,
                                 result => ok,
                                 filename => Filename,
                                 dropbox_filename => Filename1,
                                 path => Filepath,
                                 size => Size
                             }),
-                            z_render:growl(?__("File uploaded to the dropbox, will be handled shortly.", Context), Context);
+                            z_render:growl(?__("File uploaded to the drop folder, will be handled shortly.", Context), Context);
                         {error, Reason} ->
                             ?LOG_INFO(#{
                                 in => zotonic_mod_admin,
-                                text => <<"Dropbox file upload error">>,
+                                text => <<"File upload error">>,
                                 result => error,
                                 reason => Reason,
                                 filename => Filename,
@@ -443,11 +443,11 @@ event(#submit{ message = {dropbox_upload, _Args} }, Context) ->
                                 path => Filepath,
                                 size => Size
                             }),
-                            z_render:growl_error(?__("Sorry, could not move the file to the dropbox.", Context), Context)
+                            z_render:growl_error(?__("Sorry, could not move the file to the drop folder.", Context), Context)
                     end
             end;
         false ->
-            z_render:growl_error(?__("Sorry, you are not allowed to upload dropbox files.", Context), Context)
+            z_render:growl_error(?__("Sorry, you are not allowed to upload drop folder files.", Context), Context)
     end;
 
 event(_E, Context) ->
