@@ -39,7 +39,7 @@
 <body>
     <h1>{{ m.rsc[id].title }}</h1>
 
-    <p>{_ All survey entries up until _} <strong>{{ now|date:"Y-m-d H:i" }}</strong> ({{ results|length }} {_ Results _})</p>
+    <p>{_ All entries until _} <strong>{{ now|date:"Y-m-d H:i" }}</strong> ({{ results|length }} {_ Results _})</p>
 
     <table>
         {% with m.survey.captions[id] as captions %}

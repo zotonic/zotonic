@@ -1,6 +1,7 @@
 {% extends "admin_edit_widget_std.tpl" %}
 
-{# Admin controls for the survey #}
+{# Admin controls for the survey (form) #}
+
 
 {% block widget_title %}
 {_ Results _}
@@ -60,6 +61,6 @@
                 %}
             {% endif %}
         </div>
-        <p class="help-block">{_ Questions with the name “email” can be exported. _}</p>
+        <p class="help-block">{_ Questions with the question label “email” can be exported. _}</p>
     </fieldset>
 {% endblock %}

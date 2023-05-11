@@ -20,9 +20,9 @@
 {% block below_body %}
 
     {% if id.survey_is_disabled %}
-        <p><em>{_ Sorry this survey is momentarily closed. _}</em></p>
+        <p><em>{_ Closed _}</em></p>
         {% if id.is_editable %}
-            <p><b>{_ Because you can edit the survey, you can proceed for testing. _}</b></p>
+            <p><b>{_ Because you can edit, you can proceed for testing. _}</b></p>
         {% endif %}
     {% endif %}
 

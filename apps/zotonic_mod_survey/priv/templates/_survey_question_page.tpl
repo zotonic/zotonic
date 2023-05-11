@@ -6,7 +6,7 @@
 	{% endif %}
 
     {% if id.survey_is_disabled and id.is_editable %}
-		<p class="alert alert-info">{_ This survey is disabled. Because you can edit the survey, you can proceed for testing. _}</p>
+		<p class="alert alert-info">{_ This form is disabled. Because you can edit, you can proceed for testing. _}</p>
     {% endif %}
 
 	{% wire id=#q type="submit"

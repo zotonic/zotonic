@@ -43,7 +43,7 @@
         <div class="checkbox">
             <label>
                 <input type="checkbox" id="block-{{name}}-is_numeric" name="blocks[].is_numeric" value="1" {% if blk.is_numeric %}checked="checked"{% endif %} />
-                {_ Numeric input, show totals for this field in the survey results. _}
+                {_ Numeric input, show totals for this field in the results. _}
             </label>
         </div>
 

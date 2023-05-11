@@ -138,7 +138,7 @@ event(#postback{message={survey_remove_result, Args}}, Context) ->
             m_survey:delete_result(SurveyId, AnswerId, Context),
             Target = "survey-result-"++z_convert:to_list(AnswerId),
             z_render:wire([
-                    {growl, [{text, ?__("Survey result deleted.", Context)}]},
+                    {growl, [{text, ?__("Result deleted.", Context)}]},
                     {slide_fade_out, [{target, Target}]}
                 ], Context);
         false ->
@@ -150,7 +150,7 @@ observe_admin_edit_blocks(#admin_edit_blocks{id=Id}, Menu, Context) ->
     case m_rsc:is_a(Id, survey, Context) of
         true ->
             [
-                {100, ?__("Survey Questions", Context), [
+                {100, ?__("Questions", Context), [
                     {survey_truefalse, ?__("True/False", Context)},
                     {survey_yesno, ?__("Yes/No", Context)},
                     {survey_likert, ?__("Likert", Context)},

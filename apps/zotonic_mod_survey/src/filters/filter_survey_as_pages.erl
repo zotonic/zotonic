@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2013 Marc Worrell
-%% @doc Split the page blocks into pages, prepare them for easy display in the survey question editor.
+%% @doc Split the page blocks into pages, prepare them for easy display in the survey (form) question editor.
 
 %% Copyright 2013 Marc Worrell
 %%
