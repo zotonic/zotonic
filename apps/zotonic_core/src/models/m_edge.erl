@@ -128,26 +128,18 @@ m_get(_Vs, _Msg, _Context) ->
 
 -spec m_post( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
 m_post([<<"o">> | Path ], #{ payload := Payload }, Context) ->
-    Subject = get_from_path_or_payload(1, <<"subject">>, Path, Payload, Context),
-    Predicate = get_from_path_or_payload(2, <<"predicate">>, Path, Payload, Context),
-    Object = get_from_path_or_payload(3, <<"object">>, Path, Payload, Context),
+    {Subject, Predicate, Object} = get_spo_o(Path, Payload, Context),
     do_post_insert(Subject, Predicate, Object, Context);
 m_post([<<"s">> | Path ], #{ payload := Payload }, Context) ->
-    Object = get_from_path_or_payload(1, <<"object">>, Path, Payload, Context),
-    Predicate = get_from_path_or_payload(2, <<"predicate">>, Path, Payload, Context),
-    Subject = get_from_path_or_payload(3, <<"subject">>, Path, Payload, Context),
+    {Subject, Predicate, Object} = get_spo_s(Path, Payload, Context),
     do_post_insert(Subject, Predicate, Object, Context).
 
 -spec m_delete( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
 m_delete([<<"o">> | Path], #{payload := Payload}, Context) ->
-    Subject = get_from_path_or_payload(1, <<"subject">>, Path, Payload, Context),
-    Predicate = get_from_path_or_payload(2, <<"predicate">>, Path, Payload, Context),
-    Object = get_from_path_or_payload(3, <<"object">>, Path, Payload, Context),
+    {Subject, Predicate, Object} = get_spo_o(Path, Payload, Context),
     delete(Subject, Predicate, Object, Context);
 m_delete([<<"s">> | Path], #{payload := Payload}, Context) ->
-    Object = get_from_path_or_payload(1, <<"object">>, Path, Payload, Context),
-    Predicate = get_from_path_or_payload(2, <<"predicate">>, Path, Payload, Context),
-    Subject = get_from_path_or_payload(3, <<"subject">>, Path, Payload, Context),
+    {Subject, Predicate, Object} = get_spo_s(Path, Payload, Context),
     delete(Subject, Predicate, Object, Context);
 m_delete([<<"edge">>, Edge], _Msg, Context) ->
     case z_convert:to_integer(Edge) of
@@ -1270,6 +1262,18 @@ do_post_insert(Subject, Predicate, Object, Context) ->
         {error, _}=Error ->
             Error
     end.
+
+get_spo_o(Path, Payload, Context) ->
+    Subject = get_from_path_or_payload(1, <<"subject">>, Path, Payload, Context),
+    Predicate = get_from_path_or_payload(2, <<"predicate">>, Path, Payload, Context),
+    Object = get_from_path_or_payload(3, <<"object">>, Path, Payload, Context),
+    {Subject, Predicate, Object}.
+
+get_spo_s(Path, Payload, Context) ->
+    Object = get_from_path_or_payload(1, <<"object">>, Path, Payload, Context),
+    Predicate = get_from_path_or_payload(2, <<"predicate">>, Path, Payload, Context),
+    Subject = get_from_path_or_payload(3, <<"subject">>, Path, Payload, Context),
+    {Subject, Predicate, Object}.
 
 get_from_path_or_payload(1, _What, [Thing | _Rest ], _Payload, _Context) when Thing =/= <<"?">> -> Thing;
 get_from_path_or_payload(2, _What, [_, Thing | _Rest ], _Payload, _Context) when Thing =/= <<"?">> -> Thing;
