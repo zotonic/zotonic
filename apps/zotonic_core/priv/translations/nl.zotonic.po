@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-11 08:33\n"
+"PO-Revision-Date: 2023-05-11 09:41\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -2283,7 +2283,7 @@ msgstr "Upload een bestand van je computer"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:124
 msgid "Upload a file to the dropbox. This file will be handled in the background by the mailinglists for recipient import and other modules."
-msgstr "Upload een bestand naar Dropbox. Dit bestand wordt op de achtergrond verwerkt door de mailinglijsten voor het importeren van ontvangers en andere modules."
+msgstr "Upload een bestand naar de dropbox. Dit bestand wordt op de achtergrond verwerkt door de mailinglijsten voor het importeren van ontvangers en andere modules."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:121
 msgid "Upload dropbox file"
@@ -4703,7 +4703,7 @@ msgstr "Y-m-d H:i - l"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:39
 msgid "You are not allowed to recover this page."
-msgstr "U mag deze pagina niet herstellen."
+msgstr "Je hebt geen rechten om deze pagina te herstellen."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:72./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:75./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:86
 msgid "You are not allowed to see the revisions"
@@ -4715,7 +4715,7 @@ msgstr "U kunt één back-up per dag van de week hebben, oudere worden overschre
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:93
 msgid "You need to have access rights to the backup module."
-msgstr "U moet toegangsrechten hebben tot de back-upmodule."
+msgstr "Je hebt toegangsrechten nodig voor de back-up module."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
@@ -6816,7 +6816,7 @@ msgstr "Hulp over mailing pagina"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:24
 msgid "Here you can change subscriptions connected to your email address <b>{email}</b>."
-msgstr "Hier kunt u abonnementen wijzigen die gekoppeld zijn aan uw e-mailadres <b>{email}</b>."
+msgstr "Je kunt hier de abonnementen wijzigen die gekoppeld zijn aan het e-mailadres <b>{email}</b>."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:44
 msgid "If you opt-out then it is still possible to subscribe to mailing lists using an e-mail address (instead of your account)."
@@ -6900,7 +6900,7 @@ msgstr "Afmelden"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:50
 msgid "Opt-out of all mailing lists coupled to my account"
-msgstr "Opt-out van alle mailinglijsten gekoppeld aan mijn account"
+msgstr "Afmelden van alle mailinglijsten die gekoppeld zijn aan mijn account"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
@@ -6985,7 +6985,7 @@ msgstr "Verwijder ontvanger. Herstel is niet mogelijk."
 
 #: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:256
 msgid "Saved the opt-out preference."
-msgstr "De opt-out voorkeur opgeslagen."
+msgstr "De opt-out voorkeur zijn opgeslagen."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:23
 msgid "Scheduled"
@@ -9060,7 +9060,7 @@ msgstr "Paginasprong voorwaarde"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:25
 msgid "Pass?"
-msgstr "Doorgang?"
+msgstr "Geslaagd?"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:95./apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:637
 msgid "Passed"
@@ -9244,7 +9244,7 @@ msgstr "Sorry, deze enquête is tijdelijk gesloten."
 
 #: apps/zotonic_mod_survey/src/support/survey_admin.erl:102
 msgid "Sorry, could not insert the new person."
-msgstr "Sorry, kon de nieuwe persoon niet invoegen."
+msgstr "De nieuwe persoon kon niet worden toegevoegd."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:14
 msgid "Start"
