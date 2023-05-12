@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015-2019 Marc Worrell
+%% @copyright 2015-2023 Marc Worrell
 %% @doc Controller for http errors. Called for 4xx errors and serving some expected content.
+%% @end
 
-%% Copyright 2015-2019 Marc Worrell
+%% Copyright 2015-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -168,14 +169,21 @@ map_extension(Context) ->
     end.
 
 process(_Method, _AcceptedCT, {<<"text">>, <<"html">>, _}, Context) -> do_html(Context);
+process(_Method, _AcceptedCT, {<<"text">>, <<"xml">>, _}, Context) -> do_c_comment(Context);
+process(_Method, _AcceptedCT, {<<"text">>, <<"css">>, _}, Context) -> do_c_comment(Context);
+process(_Method, _AcceptedCT, {<<"text">>, _, _}, Context) -> do_text(Context);
 process(_Method, _AcceptedCT, {<<"application">>, <<"json">>, _}, Context) -> do_json(Context);
 process(_Method, _AcceptedCT, {<<"application">>, <<"x-json">>, _}, Context) -> do_json(Context);
 process(_Method, _AcceptedCT, {<<"application">>, <<"javascript">>, _}, Context) -> do_c_comment(Context);
 process(_Method, _AcceptedCT, {<<"application">>, <<"x-javascript">>, _}, Context) -> do_c_comment(Context);
-process(_Method, _AcceptedCT, {<<"text">>, <<"css">>, _}, Context) -> do_c_comment(Context);
 process(_Method, _AcceptedCT, {<<"application">>, <<"atom+xml">>, _}, Context) -> do_c_comment(Context);
+process(_Method, _AcceptedCT, {<<"application">>, Sub, _}, Context) ->
+    case binary:split(Sub, <<"+">>) of
+        [ _, <<"json">> ] -> do_json(Context);
+        [ _, <<"xml">> ] -> do_c_comment(Context);
+        _ -> do_empty(Context)
+    end;
 process(_Method, _AcceptedCT, {<<"image">>, _, _}, Context) -> do_image(Context);
-process(_Method, _AcceptedCT, {<<"text">>, _, _}, Context) -> do_text(Context);
 process(_Method, _AcceptedCT, _CT, Context) -> do_empty(Context).
 
 do_html(Context0) ->
@@ -226,22 +234,21 @@ do_text(Context0) ->
 do_json(Context0) ->
     Context = set_headers(Context0),
     StatusCode = cowmachine_req:get_metadata(http_status_code, Context),
-    JSON = iolist_to_binary([
-            <<"{ \"code\":">>, z_convert:to_binary(StatusCode),
-            <<", \"status\":\"">>, httpd_util:reason_phrase(StatusCode),
-            <<"\" }">>
-        ]),
-    {JSON, Context}.
+    JSON = #{
+        <<"code">> => StatusCode,
+        <<"status">> => httpd_util:reason_phrase(StatusCode)
+    },
+    {z_json:encode(JSON), Context}.
 
 do_c_comment(Context0) ->
     Context = set_headers(Context0),
     StatusCode = cowmachine_req:get_metadata(http_status_code, Context),
-    JSON = iolist_to_binary([
+    Text = iolist_to_binary([
             <<"/* ">>, z_convert:to_binary(StatusCode),
             <<" ">>, httpd_util:reason_phrase(StatusCode),
             <<" */">>
         ]),
-    {JSON, Context}.
+    {Text, Context}.
 
 do_empty(Context0) ->
     Context = set_headers(Context0),

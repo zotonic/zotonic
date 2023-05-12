@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010 Arjan Scherpenisse
+%% @copyright 2010-2023 Arjan Scherpenisse
 %% @doc 'show_media' filter, show the media inserted with the html editor.
+%% @end
 
-%% Copyright 2010 Arjan Scherpenisse
+%% Copyright 2010-2023 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,7 +30,7 @@ show_media(undefined, _Template, _Context) ->
 show_media(Input, Template, Context) when is_binary(Input) ->
     Context1 = z_context:set(show_media_template, Template, Context),
     show_media1(Input, 0, Context1);
-show_media({trans, _} = Tr, Template, Context) ->
+show_media(#trans{} = Tr, Template, Context) ->
     Text = z_trans:lookup_fallback(Tr, Context),
     show_media(Text, Template, Context);
 show_media(Input, _Template, _Context) ->

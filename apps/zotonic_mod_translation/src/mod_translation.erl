@@ -1,11 +1,10 @@
 %% -*- coding: utf-8 -*-
 
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2023 Marc Worrell, Arthur Clemens
+%% @copyright 2010-2023 Arthur Clemens, Marc Worrell
 %% @doc Translation support. Handle the language list and manage translations.
 
-%% Copyright 2010-2023 Marc Worrell
-%% Copyright 2016 Arthur Clemens
+%% Copyright 2010-2023 Arthur Clemens, Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,9 +35,6 @@
 -mod_provides([translation]).
 
 -export([
-    % observe_session_init_fold/3,
-    % observe_session_context/3,
-    % observe_auth_logon/3,
     observe_request_context/3,
     observe_user_context/3,
     observe_set_user_language/3,
