@@ -5,13 +5,28 @@
 
 var z_editor = (function ($) {
 
-    var CLASS_EDITOR = 'z_editor',
-        CLASS_EDITOR_INSTALLED = 'z_editor-installed',
-        initEditors,
+    const CLASS_EDITOR = 'z_editor',
+          CLASS_EDITOR_INSTALLED = 'z_editor-installed';
+
+    var initEditors,
         instances,
         initEditor,
         addEditor,
         removeEditor;
+
+    function selectEditorConfig($el) {
+        const data = $el.metadata('zeditor');         // From z.widgetmanager.js
+        let config = data.config || $el.attr('name');
+        if (config) {
+            // Map names like 'body$en' to 'body'
+            config = config.split("$")[0];
+        }
+        if (typeof window.zEditorConfig !== 'undefined' && typeof window.zEditorConfig[config] !== 'undefined') {
+            return window.zEditorConfig[config];
+        } else {
+            return tinyInit || {}
+        }
+    };
 
     initEditors = function(className) {
         $('.' + className + ':visible').each(function () {
@@ -37,7 +52,7 @@ var z_editor = (function ($) {
             id = "tiny-" + Math.random().toString(16).slice(2) + "-" + (new Date()).getTime();
             $el.attr('id', id);
         }
-        options = $.extend({}, tinyInit || {});
+        options = $.extend({}, selectEditorConfig($el));
         options.selector = '#' + id;
         options.branding = false;
         if ($el.attr('dir')) {

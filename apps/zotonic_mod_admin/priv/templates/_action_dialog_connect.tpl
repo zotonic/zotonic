@@ -17,6 +17,7 @@ params:
 - accept (optional) - string with comma separated mime types acceptable for file uploads
 
 find params:
+- rsc_id (optional) the resource for any connections
 - predicate (optional) (atom)
 - delegate (optional) (atom)
 - category (optional) (string/id) preselect the category dropdown
@@ -38,7 +39,8 @@ find params:
     actions|default:[],
     tab|default:q.tab|default:(tabs_enabled|first)|default:"find",
     m.rsc[q.category|default:category].id|default:(m.predicate.object_category[predicate]|first|element:1),
-    dependent|if_undefined:m.admin.rsc_dialog_is_dependent
+    dependent|if_undefined:m.admin.rsc_dialog_is_dependent,
+    m.rsc[q.rsc_id].id|default:subject_id
 
     as
 
@@ -47,7 +49,8 @@ find params:
     actions,
     tab,
     cat,
-    dependent
+    dependent,
+    subject_id
 %}
 
 {% with stay or callback or subject_id as stay %}

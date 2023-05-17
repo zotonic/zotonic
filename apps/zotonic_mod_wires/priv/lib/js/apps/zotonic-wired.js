@@ -132,9 +132,9 @@ function z_dialog_open(options)
     $.dialogAdd(options);
 }
 
-function z_dialog_close()
+function z_dialog_close(options)
 {
-    $.dialogClose();
+    $.dialogClose(options);
 }
 
 function z_dialog_confirm(options)

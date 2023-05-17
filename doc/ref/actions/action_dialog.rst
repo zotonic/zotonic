@@ -12,6 +12,10 @@ This opens a dialog with the title "Wisdom".  The dialog is empty except for the
 
 Normally, instead of this action, the action :ref:`action-dialog_open` is used. The action :ref:`action-dialog_open` shows a dialog that is rendered on the server.
 
+There can be many levels of dialogs open, they are designated by a *level*, the default
+dialog opens at level 0. Higher levels are displayed above lower levels. There is a special level ``"top"``
+which ensures that a dialog is always opened above any other open dialog.
+
 ========  ========  ==================================================
 Argument  Required  Description
 ========  ========  ==================================================
@@ -27,5 +31,8 @@ center    optional  boolean (0, 1) default 1; set to 0 to align the
                     dialog at the top
 keyboard  optional  boolean (true, false) default: true; if true,
                     closes when escape keys is pressed
+level     optional  Nesting of the dialog. Non negative integer, higher
+                    numbered levels are displayed above lower levels.
+                    Special level ``"top"`` to force display on top.
 ========  ========  ==================================================
 
