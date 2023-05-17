@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-17 15:58\n"
+"PO-Revision-Date: 2023-05-17 16:54\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -8750,6 +8750,10 @@ msgstr "Dibuat"
 msgid "Danger"
 msgstr "Bahaya"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:31
+msgid "Deactivated"
+msgstr "Dinonaktifkan"
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:36
 msgid "Dead end. Remove Next button. No questions will be submitted unless you add a button jump to a next page."
 msgstr "Jalan buntu. Hapus tombol Berikutnya. Tidak ada pertanyaan yang akan diajukan kecuali Anda menambahkan tombol lompat ke halaman berikutnya."
@@ -8770,10 +8774,6 @@ msgstr "Hapus lompatan laman"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:41
 msgid "Delete question"
 msgstr "Hapus pertanyaan"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:31
-msgid "Disabled"
-msgstr "Dengan disabilitas"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:66
 msgid "Disagree"
