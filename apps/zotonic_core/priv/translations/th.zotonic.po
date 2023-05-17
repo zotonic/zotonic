@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-10 15:59\n"
+"PO-Revision-Date: 2023-05-17 15:38\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -1167,7 +1167,7 @@ msgid "Do you want to remove this block?"
 msgstr "คุณต้องการลบบล็อกนี้หรือไม่"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:47
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:32
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:33
 msgid "Download"
 msgstr "ดาวน์โหลด"
 
@@ -1333,8 +1333,8 @@ msgid "File / media content"
 msgstr "ไฟล์ / เนื้อหาสื่อ"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:434
-msgid "File uploaded to the dropbox, will be handled shortly."
-msgstr "ไฟล์ที่อัปโหลดไปยังดรอปบ็อกซ์จะได้รับการจัดการในไม่ช้า"
+msgid "File uploaded to the drop folder, will be handled shortly."
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:50./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:47
 msgid "Filter on category"
@@ -1980,8 +1980,8 @@ msgid "Sorry, could not handle this filename."
 msgstr "ขออภัย ไม่สามารถจัดการชื่อไฟล์นี้ได้"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:446
-msgid "Sorry, could not move the file to the dropbox."
-msgstr "ขออภัย ไม่สามารถย้ายไฟล์ไปที่ดรอปบ็อกซ์"
+msgid "Sorry, could not move the file to the drop folder."
+msgstr ""
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:382./apps/zotonic_mod_admin/src/mod_admin.erl:393
 msgid "Sorry, that page is unknown."
@@ -1992,8 +1992,8 @@ msgid "Sorry, you are not allowed to edit notes."
 msgstr "ขออภัย คุณไม่ได้รับอนุญาตให้แก้ไขบันทึก"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:450
-msgid "Sorry, you are not allowed to upload dropbox files."
-msgstr "ขออภัย คุณไม่ได้รับอนุญาตให้อัปโหลดไฟล์ดรอปบ็อกซ์"
+msgid "Sorry, you are not allowed to upload drop folder files."
+msgstr ""
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_link.erl:86
 msgid "Sorry, you don't have permission to add the connection."
@@ -2186,8 +2186,8 @@ msgid "This name is in use by another page."
 msgstr "ชื่อนี้ถูกใช้โดยเพจอื่น"
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:13
-msgid "This note is only visible for people who can edit the page and have access to the admin."
-msgstr "หมายเหตุนี้จะปรากฏเฉพาะสำหรับผู้ที่สามารถแก้ไขเพจและมีสิทธิ์เข้าถึงผู้ดูแลระบบ"
+msgid "This note is only visible for people who can edit the page."
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
 msgid "This page can be connected from other pages. For example it could be an author of an article."
@@ -2278,14 +2278,10 @@ msgid "Upload a file from your computer."
 msgstr "อัปโหลดไฟล์จากคอมพิวเตอร์ของคุณ"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:124
-msgid "Upload a file to the dropbox. This file will be handled in the background by the mailinglists for recipient import and other modules."
-msgstr "อัปโหลดไฟล์ไปยังดรอปบ็อกซ์ ไฟล์นี้จะถูกจัดการในเบื้องหลังโดยรายชื่อผู้รับจดหมายสำหรับการนำเข้าของผู้รับและโมดูลอื่นๆ"
+msgid "Upload a file to the drop folder. This file will be handled in the background by the mailinglists for recipient import and other modules."
+msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:121
-msgid "Upload dropbox file"
-msgstr "อัปโหลดไฟล์ดรอปบ็อกซ์"
-
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:69
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:69./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:121
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
 msgid "Upload file"
 msgstr "อัปโหลดไฟล์"
@@ -2322,7 +2318,7 @@ msgstr "ใช้ได้สำหรับ:"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:46
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:130
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:19
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
 msgid "View"
 msgstr "ดู"
@@ -5068,7 +5064,7 @@ msgstr "บันทึกการตั้งค่าแบบฟอร์ม
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:13./apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:12
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:14
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:4./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:6
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:4./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:7
 msgid "Settings"
 msgstr "การตั้งค่า"
 
@@ -5719,7 +5715,7 @@ msgid "Calendar"
 msgstr "ปฏิทิน"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:19./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:31./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:39
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:34
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:35
 msgid "Download CSV"
 msgstr "ดาวน์โหลด CSV"
 
@@ -5728,7 +5724,7 @@ msgid "Download Event"
 msgstr "ดาวน์โหลดกิจกรรม"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:20./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:32./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:40
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:39
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:40
 msgid "Download Excel"
 msgstr "ดาวน์โหลด Excel"
 
@@ -6608,8 +6604,8 @@ msgid "<em>Remove</em> all recipients from this list that are on the target list
 msgstr "<em>ลบ</em> ออกจากรายชื่อที่อยู่ในรายชื่อเป้าหมาย"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6
-msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
-msgstr "<h3>ผู้รับ</h3><p>ในการเพิ่มลบหรือดูรายชื่อผู้รับจดหมายคลิกที่ลิงค์ \"แสดงผู้รับทั้งหมด\"</p><h3>ชื่อผู้ส่งและที่อยู่อีเมล</h3><p>กำหนดชื่อผู้ส่งและที่อยู่อีเมลได้ตามรายชื่อผู้รับจดหมาย ค่านี้เป็นค่าเริ่มต้นของคีย์การกำหนดค่า <tt>site.email_from</tt>อีเมลที่ส่ง <i>จาก</i> ฉบับจะถูกกำหนดเป็นชื่อผู้ส่งและที่อยู่</p><h3>อัปโหลดรายชื่อผู้รับอัตโนมัติ</h3><p>ชื่อไฟล์ดรอปบ็อกซ์ใช้สำหรับการอัปโหลดรายชื่อผู้รับทั้งหมดโดยอัตโนมัติ ชื่อไฟล์ต้องตรงกับชื่อไฟล์ของรายชื่อผู้รับที่อัปโหลด รายชื่อผู้รับทั้งหมดจะถูกแทนที่ด้วยผู้รับในไฟล์ดรอปบ็อกซ์</p><h3>การควบคุมการเข้าถึง</h3><p>ทุกคนที่สามารถแก้ไขรายชื่ออีเมลได้รับอนุญาตให้ส่งหน้าไปยังรายชื่ออีเมล ทุกคนที่สามารถดูรายชื่อส่งเมลได้รับอนุญาตให้เพิ่มที่อยู่อีเมลในรายชื่ออีเมล</p>"
+msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The drop folder filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the drop folder file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
+msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:68
 msgid "Act"
@@ -6752,8 +6748,8 @@ msgid "Downloading active recipients list. Check your download window."
 msgstr "กำลังดาวน์โหลดรายชื่อผู้รับที่ใช้งานอยู่ ตรวจสอบหน้าต่างดาวน์โหลดของคุณ"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:36
-msgid "Dropbox filename (optional)"
-msgstr "ชื่อไฟล์ Dropbox (ไม่บังคับ)"
+msgid "Drop folder filename (optional)"
+msgstr ""
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:69
 msgid "E-mail address updated"
@@ -8602,11 +8598,11 @@ msgstr "เพิ่มคำถามโดยเพิ่มบล็อคด
 msgid "Add to existing mailinglist"
 msgstr "เพิ่มไปยังรายชื่อผู้รับจดหมายที่มีอยู่"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:55./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:57
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:56./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:58
 msgid "Add to mailinglist"
 msgstr "เพิ่มไปยังรายชื่อผู้รับจดหมาย"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:76
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:77
 msgid "Aggregated results from all respondents"
 msgstr "ผลรวมจากผู้ตอบแบบสอบถามทั้งหมด"
 
@@ -8615,8 +8611,8 @@ msgid "Agree"
 msgstr "ตกลง"
 
 #: apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
-msgid "All survey entries up until"
-msgstr "รายการสำรวจทั้งหมดจนถึง"
+msgid "All entries until"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150
 msgid "Another page, video or image."
@@ -8626,7 +8622,7 @@ msgstr "หน้าวิดีโอหรือรูปภาพอื่น
 msgid "Answer"
 msgstr "ตอบ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:19
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:20
 msgid "Answering"
 msgstr "กำลังตอบ"
 
@@ -8663,8 +8659,8 @@ msgid "Are you sure you want to stop without saving?"
 msgstr "คุณแน่ใจหรือไม่ว่าต้องการหยุดโดยไม่บันทึก"
 
 #: apps/zotonic_mod_survey/priv/templates/survey.tpl:25
-msgid "Because you can edit the survey, you can proceed for testing."
-msgstr "เนื่องจากคุณสามารถแก้ไขแบบสำรวจได้ คุณจึงสามารถดำเนินการทดสอบต่อไปได้"
+msgid "Because you can edit, you can proceed for testing."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:164
 msgid "Button"
@@ -8705,6 +8701,10 @@ msgstr "ทางเลือก"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:2
 msgid "Click on “Edit” to see and change the entered data."
 msgstr "คลิกที่ “แก้ไข” เพื่อดูและเปลี่ยนแปลงข้อมูลที่ป้อน"
+
+#: apps/zotonic_mod_survey/priv/templates/survey.tpl:23
+msgid "Closed"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
@@ -8775,19 +8775,19 @@ msgstr "ลบหน้ากระโดด"
 msgid "Delete question"
 msgstr "ลบคำถาม"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:30
-msgid "Disabled, hide the survey form"
-msgstr "ปิดใช้งาน ซ่อนแบบสำรวจ"
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:31
+msgid "Disabled"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:66
 msgid "Disagree"
 msgstr "ไม่เห็นด้วย"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:44
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:45
 msgid "Download a spreadsheet with all answers."
 msgstr "ดาวน์โหลดสเปรดชีตพร้อมคำตอบทั้งหมด"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:36./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:41
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:37./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:42
 msgid "Download will start in the background. Please check your download window."
 msgstr "การดาวน์โหลดจะเริ่มในพื้นหลัง โปรดตรวจสอบหน้าต่างดาวน์โหลดของคุณ"
 
@@ -8795,7 +8795,7 @@ msgstr "การดาวน์โหลดจะเริ่มในพื้
 msgid "Drop-down menu"
 msgstr "เมนูแบบเลื่อนลง"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:49./apps/zotonic_mod_survey/src/support/survey_admin.erl:116
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:50./apps/zotonic_mod_survey/src/support/survey_admin.erl:116
 msgid "E-mail addresses"
 msgstr "ที่อยู่อีเมล"
 
@@ -8806,6 +8806,10 @@ msgstr "แก้ไขผลการสำรวจ"
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:20
 msgid "End of questions"
 msgstr "สิ้นสุดคำถาม"
+
+#: apps/zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
+msgid "Every question needs a question label"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
 msgid "Example:"
@@ -8835,11 +8839,11 @@ msgstr "ข้อเสนอแนะหากผิด"
 msgid "File upload"
 msgstr "อัปโหลดไฟล์"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:42
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:43
 msgid "Fill in"
 msgstr "กรอก"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:54
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:55
 msgid "Fill in and edit later after saving (one set of results)"
 msgstr "กรอกและแก้ไขภายหลังบันทึก (ชุดผลลัพธ์)"
 
@@ -8859,11 +8863,11 @@ msgstr "หน้าแรกในหมวดหมู่"
 msgid "Go to question"
 msgstr "ไปที่คำถาม"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:163
-msgid "Handle this survey with"
-msgstr "จัดการแบบสำรวจนี้ด้วย"
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:164
+msgid "Handle this form with"
+msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:142
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:143
 msgid "Handling"
 msgstr "การจัดการ"
 
@@ -8872,18 +8876,18 @@ msgid "Hidden input"
 msgstr "อินพุตที่ซ่อนอยู่"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_hidden.tpl:14
-msgid "Hidden value, saved with the survey but not shown to the person filling in the form."
-msgstr "ค่าที่ซ่อนอยู่ บันทึกด้วยแบบสำรวจแต่ไม่แสดงให้บุคคลที่กรอกแบบฟอร์มเห็น"
+msgid "Hidden value, saved with the form but not shown to the person filling in the form."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:47./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:174./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:64
 msgid "Hide from results"
 msgstr "ซ่อนจากผลลัพธ์"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:98
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
 msgid "Hide progress information"
 msgstr "ซ่อนข้อมูลความคืบหน้า"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:26
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:27
 msgid "Hide the user’s id or browser-id from result exports"
 msgstr "ซ่อนรหัสของผู้ใช้หรือรหัสเบราว์เซอร์จากการส่งออกผลลัพธ์"
 
@@ -8895,7 +8899,7 @@ msgstr "ฉัน"
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
 msgstr "ฉันอายุ [age] ฉันชอบไอศกรีม [icecream=vanilla|strawberry|chocolate|other] และสีที่ฉันชอบคือ [color]"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:23
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
 msgid "Immediately start with the questions, no “Start” button"
 msgstr "เริ่มต้นด้วยคำถามทันทีไม่มีปุ่ม \"เริ่ม\""
 
@@ -8947,7 +8951,7 @@ msgstr "เชื่อมโยงกับบุคคล"
 msgid "Long answer"
 msgstr "คำตอบยาว"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:145./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:146
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:146./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:147
 msgid "Mail results to"
 msgstr "ส่งผลลัพธ์ไปที่"
 
@@ -9003,7 +9007,7 @@ msgstr "ปรนัยหรือคำถามแบบทดสอบ"
 msgid "Multiple page break blocks are merged into one."
 msgstr "บล็อกแบ่งหน้าหลายบล็อกรวมเป็นหนึ่งเดียว"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:50
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:51
 msgid "Multiple times per user/browser (each time with new results)"
 msgstr "หลายครั้งต่อผู้ใช้/เบราว์เซอร์ (ทุกครั้งที่มีผลลัพธ์ใหม่)"
 
@@ -9032,10 +9036,10 @@ msgid "Number of recipients added to mailinglist:"
 msgstr "จำนวนผู้รับที่เพิ่มในรายชื่อผู้รับจดหมาย:"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:46
-msgid "Numeric input, show totals for this field in the survey results."
-msgstr "ป้อนตัวเลขแสดงผลรวมสำหรับฟิลด์นี้ในผลการสำรวจ"
+msgid "Numeric input, show totals for this field in the results."
+msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:46
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:47
 msgid "Once only per user/browser"
 msgstr "หนึ่งครั้งต่อผู้ใช้ / เบราว์เซอร์เท่านั้น"
 
@@ -9063,7 +9067,7 @@ msgstr "ผ่าน?"
 msgid "Passed"
 msgstr "ผ่านไป"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:126
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:127
 msgid "Passing score"
 msgstr "คะแนนผ่าน"
 
@@ -9099,11 +9103,11 @@ msgstr "คะแนน"
 msgid "Primary"
 msgstr "หลัก"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:23
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:24
 msgid "Printable list"
 msgstr "รายการที่พิมพ์ได้"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:93
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:94
 msgid "Progress"
 msgstr "ความคืบหน้า"
 
@@ -9131,13 +9135,13 @@ msgstr "คำถามที่มีคำตอบยาวๆ"
 msgid "Question with a short answer"
 msgstr "คำถามพร้อมคำตอบสั้นๆ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8./apps/zotonic_mod_survey/src/mod_survey.erl:153
 msgid "Questions"
 msgstr "คำถาม"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:63
-msgid "Questions with the name “email” can be exported."
-msgstr "คำถามที่มีชื่อ \"อีเมล\" สามารถส่งออกได้"
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:64
+msgid "Questions with the question label “email” can be exported."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:57
 msgid "Quiz or test question"
@@ -9155,15 +9159,19 @@ msgstr "แดง"
 msgid "Required, this question must be answered."
 msgstr "จำเป็นต้องตอบคำถามนี้"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:6./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:6./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:6./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
+#: apps/zotonic_mod_survey/src/mod_survey.erl:141
+msgid "Result deleted."
+msgstr ""
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:6./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:6./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results"
 msgstr "ผล"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:21
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:22./apps/zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:15
 msgid "Results editor"
 msgstr "ตัวแก้ไขผลลัพธ์"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:73
 msgid "Results from the respondent"
 msgstr "ผลลัพธ์จากผู้ตอบ"
 
@@ -9191,11 +9199,11 @@ msgstr "เลือกรายชื่อผู้รับจดหมาย
 msgid "Select your country"
 msgstr "เลือกประเทศของคุณ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:156
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:157
 msgid "Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to \"must be an email address\"."
 msgstr "ส่งการยืนยันไปยังผู้ตอบ ต้องระบุที่อยู่อีเมล (ผู้ตอบเข้าสู่ระบบ) หรือคุณสามารถเพิ่มช่องข้อความสั้นที่มีป้ายกำกับว่า \"อีเมล\" และตั้งค่าการตรวจสอบเป็น \"ต้องเป็นที่อยู่อีเมล\""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:148
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
 msgid "Separate multiple email addresses with a comma."
 msgstr "แยกที่อยู่อีเมลหลายรายการด้วยลูกน้ำ"
 
@@ -9203,19 +9211,19 @@ msgstr "แยกที่อยู่อีเมลหลายรายกา
 msgid "Short answer"
 msgstr "คำตอบสั้น ๆ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:25
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:26
 msgid "Show charts"
 msgstr "แสดงแผนภูมิ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:51
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:52
 msgid "Show email addresses"
 msgstr "แสดงที่อยู่อีเมล"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:110
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:111
 msgid "Show progress bar"
 msgstr "แสดงแถบความคืบหน้า"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:104
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:105
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "แสดงข้อมูลความคืบหน้าเป็น“<em>คำถาม 3/10</em>”"
 
@@ -9234,10 +9242,6 @@ msgstr "คำตอบเดียวที่เป็นไปได้: ใ�
 #: apps/zotonic_mod_survey/priv/templates/_survey_error.tpl:1
 msgid "Something went wrong"
 msgstr "อะไรบางอย่างผิดปกติ"
-
-#: apps/zotonic_mod_survey/priv/templates/survey.tpl:23
-msgid "Sorry this survey is momentarily closed."
-msgstr "ขออภัย แบบสำรวจนี้ปิดชั่วขณะ"
 
 #: apps/zotonic_mod_survey/src/support/survey_admin.erl:102
 msgid "Sorry, could not insert the new person."
@@ -9283,23 +9287,11 @@ msgstr "ส่งเมื่อคลิกตัวเลือก"
 msgid "Subtract points for wrong answers (total never less than 0)"
 msgstr "ลบคะแนนสำหรับคำตอบที่ผิด (รวมไม่น้อยกว่า 0)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:153
-msgid "Survey Questions"
-msgstr "คำถามแบบสำรวจ"
-
-#: apps/zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:15
-msgid "Survey Results Editor"
-msgstr "ผู้แก้ไขผลการสำรวจ"
-
 #: apps/zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:9
 msgid "Survey editor"
 msgstr "ตัวแก้ไขแบบสำรวจ"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:141
-msgid "Survey result deleted."
-msgstr "ลบผลการสำรวจแล้ว"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:121
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:122
 msgid "Test pass percentage"
 msgstr "เปอร์เซ็นต์การผ่านการทดสอบ"
 
@@ -9311,7 +9303,7 @@ msgstr "ข้อความ รูปภาพ วิดีโอ"
 msgid "Thank you for filling in our survey."
 msgstr "ขอขอบคุณที่ตอบแบบสำรวจของเรา"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:68
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:69
 msgid "Thank you text only"
 msgstr "ข้อความขอบคุณเท่านั้น"
 
@@ -9319,21 +9311,25 @@ msgstr "ข้อความขอบคุณเท่านั้น"
 msgid "Thank you text."
 msgstr "ขอบคุณข้อความ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_charts.tpl:14./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:27
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_charts.tpl:14
 msgid "The charts show aggregated results from closed questions like thurstone and yes/no."
 msgstr "แผนภูมิแสดงผลลัพธ์รวมจากคำถามที่ปิด เช่น thurstone และใช่/ไม่ใช่"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:28
+msgid "The charts show aggregated results from closed questions like thurstone or multiple choice and yes/no."
+msgstr ""
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
-msgid "The email address is shown if there is a question “email” or if a person with an email address is coupled."
-msgstr "ที่อยู่อีเมลจะแสดงขึ้นหากมีคำถาม \"อีเมล\" หรือหากบุคคลที่มีที่อยู่อีเมลเชื่อมโยงกัน"
+msgid "The email address is shown if there is a question “email” or if there is a person with an email address that has been linked."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
 msgid "The following has been filled in:"
 msgstr "มีการกรอกข้อมูลต่อไปนี้:"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:3
-msgid "The result can be coupled to a known person or to a newly created person."
-msgstr "ผลลัพธ์สามารถจับคู่กับบุคคลที่รู้จักหรือกับบุคคลที่สร้างขึ้นใหม่"
+msgid "The result can be linked to an existing person or to a newly created person."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:3
 msgid "The results have been saved."
@@ -9348,28 +9344,28 @@ msgid "There was an error while handling your answers. We are terribly sorry abo
 msgstr "เกิดข้อผิดพลาดขณะจัดการคำตอบของคุณ เราเสียใจอย่างมากเกี่ยวกับเรื่องนี้"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:14
-msgid "This block show a file upload field. This can only be used as the last question of a survey. The default survey routines can’t handle file upload, you will need to add your own survey handler to your site or module."
-msgstr "บล็อกนี้แสดงฟิลด์อัปโหลดไฟล์ สามารถใช้เป็นคำถามสุดท้ายของแบบสำรวจเท่านั้น กิจวัตรแบบสำรวจเริ่มต้นไม่สามารถรองรับการอัปโหลดไฟล์ได้คุณจะต้องเพิ่มตัวจัดการแบบสำรวจของคุณเองในไซต์หรือโมดูลของคุณ"
+msgid "This block show a file upload field. This can only be used as the last question of a survey. The default form routines can’t handle file upload, you will need to add your own survey handler to your site or module."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_stop.tpl:9
 msgid "This block signals a stop in the flow. The user can't continue further and it is counted as a page break."
 msgstr "บล็อกนี้ส่งสัญญาณให้หยุดการไหล ผู้ใช้ไม่สามารถดำเนินการต่อได้อีกและจะนับเป็นการแบ่งหน้า"
 
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:9
+msgid "This form is disabled. Because you can edit, you can proceed for testing."
+msgstr ""
+
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:8
 msgid "This is a result for:"
 msgstr "นี่เป็นผลลัพธ์สำหรับ:"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:133
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:134
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "นี่คือเปอร์เซ็นต์ที่จำเป็นในการผ่านแบบทดสอบหรือแบบทดสอบ ใช้เฉพาะเมื่อคุณได้เพิ่มแบบทดสอบหรือคำถามทดสอบ"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:9
-msgid "This survey is disabled. Because you can edit the survey, you can proceed for testing."
-msgstr "แบบสำรวจนี้ถูกปิดใช้งาน เนื่องจากคุณสามารถแก้ไขแบบสำรวจได้ คุณจึงสามารถดำเนินการทดสอบต่อไปได้"
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
-msgid "This text is shown after the survey has been submitted."
-msgstr "ข้อความนี้จะแสดงหลังจากส่งแบบสำรวจแล้ว"
+msgid "This text is shown after the form has been submitted."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:13./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:16
 msgid "This text is shown as an introduction to the survey."
@@ -9415,11 +9411,11 @@ msgstr "ใช้ “{submit}” เพื่อสร้างปุ่มส�
 msgid "Validation"
 msgstr "การตรวจสอบ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:27
-msgid "View all results, optionally edit them."
-msgstr "ดูผลลัพธ์ทั้งหมด เลือกที่จะแก้ไขได้"
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:28
+msgid "View and edit results."
+msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:64
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
 msgid "When finished show"
 msgstr "เมื่อเสร็จสิ้นการแสดง"
 
@@ -9460,16 +9456,12 @@ msgid "You are not allowed to change these results."
 msgstr "คุณไม่ได้รับอนุญาตให้เปลี่ยนแปลงผลลัพธ์เหล่านี้"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:45
-msgid "You are not allowed to see the results of this survey."
-msgstr "คุณไม่ได้รับอนุญาตให้ดูผลการสำรวจนี้"
+msgid "You are not allowed to see the results."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:23
-msgid "You must have edit permission on the survey to edit its results."
-msgstr "คุณต้องมีสิทธิ์แก้ไขแบบสำรวจเพื่อแก้ไขผลลัพธ์"
-
-#: apps/zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
-msgid "You need to give a name to every question."
-msgstr "คุณต้องตั้งชื่อให้กับทุกคำถาม"
+msgid "You must be allowed to edit the form, to edit its results."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
 msgid "Your result"
