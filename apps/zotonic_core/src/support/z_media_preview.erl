@@ -310,12 +310,18 @@ cmd_args(#{ <<"mime">> := Mime, <<"width">> := ImageWidth, <<"height">> := Image
     Filters6 = add_optional_quality(Filters5, is_lossless(OutMime), ResizeWidth, ResizeHeight),
     Filters7 = add_optional_interlace(Filters6, OutMime),
     Filters8 = move_pre_post_filters(Filters7),
+    Filters9 = case lists:member(coalesce, Filters8) of
+        true ->
+            Filters8 ++ [deconstruct];
+        false ->
+            Filters8
+    end,
     {EndWidth,EndHeight,Args} = lists:foldl(fun (Filter, {W,H,Acc}) ->
                                                 {NewW,NewH,Arg} = filter2arg(Filter, W, H, Filters7),
                                                 {NewW,NewH,[Arg|Acc]}
                                             end,
                                             {ImageWidth,ImageHeight,[]},
-                                            Filters8),
+                                            Filters9),
     {ok, {EndWidth, EndHeight, ["-strip" | lists:reverse(Args) ]}};
 cmd_args(_, _Filters, _OutMime) ->
     {error, no_size}.
@@ -423,6 +429,8 @@ filter2arg({make_image, <<"application/pdf">>}, Width, Height, _AllFilters) ->
     {Width, Height, RArg};
 filter2arg(coalesce, Width, Height, _AllFilters) ->
     {Width, Height, "-coalesce"};
+filter2arg(deconstruct, Width, Height, _AllFilters) ->
+    {Width, Height, "-deconstruct"};
 filter2arg({make_image, Mime}, Width, Height, _AllFilters) when is_binary(Mime) ->
     {Width, Height, []};
 filter2arg({correct_orientation, Orientation}, Width, Height, _AllFilters) ->

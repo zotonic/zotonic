@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Model for resource data. Interfaces between zotonic, templates and the database.
 %% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
 
 -export([
     m_get/3,
-    % m_post/3,
+    m_post/3,
     m_delete/3,
 
     name_to_id/2,
@@ -127,6 +127,33 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"-">>, <<"lookup">>, <<"page_path">> | Path ], _Msg, Context) ->
+    Path1 = iolist_to_binary(lists:join($/, Path)),
+    case page_path_to_id(Path1, Context) of
+        {ok, Id} ->
+            {#{
+                <<"id">> => Id,
+                <<"is_redirect">> => false
+            }, []};
+        {redirect, Id} ->
+            {#{
+                <<"id">> => Id,
+                <<"is_redirect">> => true,
+                <<"page_url">> => m_rsc:p(Id, <<"page_url">>, Context)
+            }, []};
+        {error, _} = Error ->
+            Error
+    end;
+m_get([ <<"-">>, <<"lookup">>, <<"rid">>, Id | Rest ], _Msg, Context) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, enoent};
+        RscId ->
+            {ok, {RscId, Rest}}
+    end;
+m_get([ <<"-">>, <<"lookup">>, <<"name">>, Name | Rest ], _Msg, Context) ->
+    Result = m_rsc:name_to_id(Name, Context),
+    {ok, {Result, Rest}};
 m_get([ Id, <<"is_cat">>, Key | Rest ], _Msg, Context) ->
     {ok, {is_cat(Id, Key, Context), Rest}};
 m_get([ Id, <<"is_a">>, Cat | Rest ], _Msg, Context) ->
@@ -147,7 +174,15 @@ m_get([ Id ], _Msg, Context) ->
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
+%% @doc API to update or insert resources.
+-spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | ok | {error, term()}.
+m_post([ Id ], #{ payload := Payload }, Context) when is_map(Payload) ->
+    m_rsc:update(Id, Payload, Context);
+m_post([], #{ payload := Payload }, Context) when is_map(Payload) ->
+    m_rsc:insert(Payload, Context).
 
+%% @doc API to delete a resource
+-spec m_delete( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | ok | {error, term()}.
 m_delete([ Id ], _Msg, Context) ->
     delete(Id, Context).
 
