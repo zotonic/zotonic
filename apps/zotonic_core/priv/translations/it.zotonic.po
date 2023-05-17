@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-17 15:58\n"
+"PO-Revision-Date: 2023-05-17 16:54\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -8750,6 +8750,10 @@ msgstr "Creato"
 msgid "Danger"
 msgstr "Pericolo"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:31
+msgid "Deactivated"
+msgstr "Disattivato"
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:36
 msgid "Dead end. Remove Next button. No questions will be submitted unless you add a button jump to a next page."
 msgstr "Senza uscita. Rimuovi il pulsante Avanti. Nessuna domanda verrà inviata a meno che non si aggiunga un pulsante per passare alla pagina successiva."
@@ -8770,10 +8774,6 @@ msgstr "Cancellare il salto di pagina"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:41
 msgid "Delete question"
 msgstr "Cancellare la domanda"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:31
-msgid "Disabled"
-msgstr "Disabilitato"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:66
 msgid "Disagree"
