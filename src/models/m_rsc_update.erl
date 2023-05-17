@@ -307,6 +307,7 @@ flush(Id, Context) ->
 flush(Id, CatList, Context) ->
     z_depcache:flush(m_rsc:rid(Id, Context), Context),
     [ z_depcache:flush(Cat, Context) || Cat <- CatList ],
+    z_acl:flush(Id),
     ok.
 
 
@@ -424,7 +425,7 @@ update_result({ok, NewId, OldProps, NewProps, OldCatList, IsCatInsert}, #rscupd{
         undefined -> nop;
         Uri -> z_depcache:flush({rsc_uri, z_convert:to_list(Uri)}, Context)
     end,
-    z_acl:flush(Id),
+    z_acl:flush(NewId),
 
     % Flush category caches if a category is inserted.
     case IsCatInsert of
@@ -499,7 +500,6 @@ update_transaction_fun_insert(#rscupd{id=insert_rsc} = RscUpd, Props, _Raw, Upda
      % Allow the initial insertion props to be modified.
     CategoryId = z_convert:to_integer(proplists:get_value(category_id, Props)),
     InsProps = z_notifier:foldr(#rsc_insert{}, [{category_id, CategoryId}, {version, 0}], Context),
-
     % Check if the user is allowed to create the resource
     InsertId = case proplists:get_value(creator_id, UpdateProps) of
                     self ->
