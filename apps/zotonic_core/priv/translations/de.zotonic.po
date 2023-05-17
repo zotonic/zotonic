@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-17 15:38\n"
+"PO-Revision-Date: 2023-05-17 16:54\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -1334,7 +1334,7 @@ msgstr "Datei/Medieninhalt"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:434
 msgid "File uploaded to the drop folder, will be handled shortly."
-msgstr ""
+msgstr "Die in den Drop-Ordner hochgeladene Datei wird in Kürze bearbeitet."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:50./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:47
 msgid "Filter on category"
@@ -1981,7 +1981,7 @@ msgstr "Dieser Dateiname konnte leider nicht verarbeitet werden."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:446
 msgid "Sorry, could not move the file to the drop folder."
-msgstr ""
+msgstr "Leider konnte die Datei nicht in den Drop-Ordner verschoben werden."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:382./apps/zotonic_mod_admin/src/mod_admin.erl:393
 msgid "Sorry, that page is unknown."
@@ -1993,7 +1993,7 @@ msgstr "Tut mir leid, Sie sind nicht berechtigt, Notizen zu bearbeiten."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:450
 msgid "Sorry, you are not allowed to upload drop folder files."
-msgstr ""
+msgstr "Leider ist es Ihnen nicht gestattet, Drop-Folder-Dateien hochzuladen."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_link.erl:86
 msgid "Sorry, you don't have permission to add the connection."
@@ -2187,7 +2187,7 @@ msgstr "Dieser Name wird bereits von einer anderen Seite verwendet."
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:13
 msgid "This note is only visible for people who can edit the page."
-msgstr ""
+msgstr "Dieser Hinweis ist nur für Personen sichtbar, die die Seite bearbeiten können."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
 msgid "This page can be connected from other pages. For example it could be an author of an article."
@@ -2279,7 +2279,7 @@ msgstr "Eine Datei von Ihrem Computer hochladen."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:124
 msgid "Upload a file to the drop folder. This file will be handled in the background by the mailinglists for recipient import and other modules."
-msgstr ""
+msgstr "Laden Sie eine Datei in den Drop-Ordner hoch. Diese Datei wird im Hintergrund von den Mailinglisten für den Empfängerimport und anderen Modulen verarbeitet."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:69./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:121
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
@@ -6605,7 +6605,7 @@ msgstr "<em>Entfernen Sie</em> alle Empfänger aus dieser Liste, die sich in der
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The drop folder filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the drop folder file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
-msgstr ""
+msgstr "<h3>Empfänger</h3><p>Um die Empfänger der Mailingliste hinzuzufügen, zu entfernen oder anzuzeigen, klicken Sie auf den Link „Alle Empfänger anzeigen“.</p><h3>Absendername und E-Mail-Adresse</h3><p>Der Absendername und die E-Mail-Adresse können pro Mailingliste festgelegt werden. Dies ist standardmäßig der Konfigurationsschlüssel <tt>site.email_from</tt>. Die <i>von</i> der versendeten E-Mails werden auf den Absendernamen und die Adresse gesetzt.</p><h3>Automatisches Hochladen von Empfängerlisten</h3><p>Der Dateiname des Ablageordners wird für das automatische Hochladen der vollständigen Empfängerliste verwendet. Der Dateiname muss mit dem Dateinamen der hochgeladenen Empfängerliste übereinstimmen. Die vollständige Empfängerliste wird durch die Empfänger in der Drop-Ordner-Datei ersetzt.</p><h3>Zugriffskontrolle</h3><p>Jeder, der eine Mailingliste bearbeiten kann, darf auch eine Seite an die Mailingliste senden. Jeder, der die Mailingliste einsehen kann, ist berechtigt, eine E-Mail-Adresse zur Mailingliste hinzuzufügen.</p>"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:68
 msgid "Act"
@@ -6749,7 +6749,7 @@ msgstr "Download der aktiven Empfängerliste. Prüfen Sie Ihr Download-Fenster."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:36
 msgid "Drop folder filename (optional)"
-msgstr ""
+msgstr "Dateiname des Drop-Ordners (optional)"
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:69
 msgid "E-mail address updated"
@@ -8610,10 +8610,6 @@ msgstr "Aggregierte Ergebnisse aller Befragten"
 msgid "Agree"
 msgstr "Zustimmen"
 
-#: apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
-msgid "All entries until"
-msgstr ""
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150
 msgid "Another page, video or image."
 msgstr "Eine andere Seite, ein Video oder ein Bild."
@@ -8660,7 +8656,7 @@ msgstr "Möchten Sie wirklich aufhören, ohne zu speichern?"
 
 #: apps/zotonic_mod_survey/priv/templates/survey.tpl:25
 msgid "Because you can edit, you can proceed for testing."
-msgstr ""
+msgstr "Da Sie bearbeiten können, können Sie mit dem Testen fortfahren."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:164
 msgid "Button"
@@ -8704,7 +8700,7 @@ msgstr "Klicken Sie auf „Bearbeiten“, um die eingegebenen Daten anzuzeigen u
 
 #: apps/zotonic_mod_survey/priv/templates/survey.tpl:23
 msgid "Closed"
-msgstr ""
+msgstr "Geschlossen"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
@@ -8754,6 +8750,10 @@ msgstr "Erstellt"
 msgid "Danger"
 msgstr "Gefahr"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:31
+msgid "Deactivated"
+msgstr "Deaktiviert"
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:36
 msgid "Dead end. Remove Next button. No questions will be submitted unless you add a button jump to a next page."
 msgstr "Sackgasse. Entfernen Sie die Schaltfläche Weiter. Es werden keine Fragen gesendet, es sei denn, Sie fügen einen Schaltflächensprung zur nächsten Seite hinzu."
@@ -8774,10 +8774,6 @@ msgstr "Den Sprung zur Seite löschen"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:41
 msgid "Delete question"
 msgstr "Frage löschen"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:31
-msgid "Disabled"
-msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:66
 msgid "Disagree"
@@ -8809,7 +8805,7 @@ msgstr "Ende der Fragen"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
 msgid "Every question needs a question label"
-msgstr ""
+msgstr "Jede Frage benötigt eine Fragebeschriftung"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
 msgid "Example:"
@@ -8865,7 +8861,7 @@ msgstr "Weiter zur Frage"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:164
 msgid "Handle this form with"
-msgstr ""
+msgstr "Behandeln Sie dieses Formular mit"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:143
 msgid "Handling"
@@ -8877,7 +8873,7 @@ msgstr "Versteckte Eingabe"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_hidden.tpl:14
 msgid "Hidden value, saved with the form but not shown to the person filling in the form."
-msgstr ""
+msgstr "Versteckter Wert, der mit dem Formular gespeichert, aber der Person, die das Formular ausfüllt, nicht angezeigt wird."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:47./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:174./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:64
 msgid "Hide from results"
@@ -9037,7 +9033,7 @@ msgstr "Anzahl der zur Mailingliste hinzugefügten Empfänger:"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:46
 msgid "Numeric input, show totals for this field in the results."
-msgstr ""
+msgstr "Numerische Eingabe, Gesamtsummen für dieses Feld in den Ergebnissen anzeigen."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:47
 msgid "Once only per user/browser"
@@ -9141,7 +9137,7 @@ msgstr "Fragen"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:64
 msgid "Questions with the question label “email” can be exported."
-msgstr ""
+msgstr "Fragen mit dem Fragelabel „E-Mail“ können exportiert werden."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:57
 msgid "Quiz or test question"
@@ -9161,9 +9157,9 @@ msgstr "Erforderlich, diese Frage muss beantwortet werden."
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:141
 msgid "Result deleted."
-msgstr ""
+msgstr "Ergebnis gelöscht."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:6./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:6./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:6./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:6
 msgid "Results"
 msgstr "Ergebnisse"
 
@@ -9174,6 +9170,10 @@ msgstr "Ergebniseditor"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:73
 msgid "Results from the respondent"
 msgstr "Ergebnisse des Befragten"
+
+#: apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
+msgid "Results until"
+msgstr "Ergebnisse bis"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
 msgid "Saved"
@@ -9317,11 +9317,11 @@ msgstr "Die Diagramme zeigen aggregierte Ergebnisse aus geschlossenen Fragen wie
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:28
 msgid "The charts show aggregated results from closed questions like thurstone or multiple choice and yes/no."
-msgstr ""
+msgstr "Die Diagramme zeigen aggregierte Ergebnisse aus geschlossenen Fragen wie Thurstone oder Multiple Choice und Ja/Nein."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
 msgid "The email address is shown if there is a question “email” or if there is a person with an email address that has been linked."
-msgstr ""
+msgstr "Die E-Mail-Adresse wird angezeigt, wenn eine Frage „E-Mail“ vorliegt oder wenn eine Person mit einer E-Mail-Adresse verknüpft wurde."
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
 msgid "The following has been filled in:"
@@ -9329,7 +9329,7 @@ msgstr "Das Folgende wurde ausgefüllt:"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:3
 msgid "The result can be linked to an existing person or to a newly created person."
-msgstr ""
+msgstr "Das Ergebnis kann mit einer bestehenden Person oder einer neu erstellten Person verknüpft werden."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:3
 msgid "The results have been saved."
@@ -9345,7 +9345,7 @@ msgstr "Es ist ein Fehler bei der Bearbeitung Ihrer Antworten aufgetreten. Dies 
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:14
 msgid "This block show a file upload field. This can only be used as the last question of a survey. The default form routines can’t handle file upload, you will need to add your own survey handler to your site or module."
-msgstr ""
+msgstr "Dieser Block zeigt ein Datei-Upload-Feld. Dies kann nur als letzte Frage einer Umfrage verwendet werden. Die Standardformularroutinen können das Hochladen von Dateien nicht verarbeiten. Sie müssen Ihrer Website oder Ihrem Modul einen eigenen Umfrage-Handler hinzufügen."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_stop.tpl:9
 msgid "This block signals a stop in the flow. The user can't continue further and it is counted as a page break."
@@ -9353,7 +9353,7 @@ msgstr "Dieser Block signalisiert einen Stopp im Ablauf. Der Benutzer kann nicht
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:9
 msgid "This form is disabled. Because you can edit, you can proceed for testing."
-msgstr ""
+msgstr "Dieses Formular ist deaktiviert. Da Sie bearbeiten können, können Sie mit dem Testen fortfahren."
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:8
 msgid "This is a result for:"
@@ -9365,7 +9365,7 @@ msgstr "Dies ist der Prozentsatz, der benötigt wird, um ein Quiz oder einen Tes
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the form has been submitted."
-msgstr ""
+msgstr "Dieser Text wird nach dem Absenden des Formulars angezeigt."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:13./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:16
 msgid "This text is shown as an introduction to the survey."
@@ -9413,7 +9413,7 @@ msgstr "Validierung"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:28
 msgid "View and edit results."
-msgstr ""
+msgstr "Ergebnisse anzeigen und bearbeiten."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
 msgid "When finished show"
@@ -9457,11 +9457,11 @@ msgstr "Sie dürfen diese Ergebnisse nicht verändern."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:45
 msgid "You are not allowed to see the results."
-msgstr ""
+msgstr "Sie dürfen die Ergebnisse nicht sehen."
 
 #: apps/zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:23
 msgid "You must be allowed to edit the form, to edit its results."
-msgstr ""
+msgstr "Sie müssen berechtigt sein, das Formular und seine Ergebnisse zu bearbeiten."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
 msgid "Your result"

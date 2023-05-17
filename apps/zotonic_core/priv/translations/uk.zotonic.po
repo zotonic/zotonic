@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-17 15:38\n"
+"PO-Revision-Date: 2023-05-17 16:54\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -1334,7 +1334,7 @@ msgstr "Файловий / медіаконтент"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:434
 msgid "File uploaded to the drop folder, will be handled shortly."
-msgstr ""
+msgstr "Файл, завантажений у розвантажувальну папку, незабаром буде оброблено."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:50./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:47
 msgid "Filter on category"
@@ -1981,7 +1981,7 @@ msgstr "На жаль, не вдалося обробити цю назву фа
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:446
 msgid "Sorry, could not move the file to the drop folder."
-msgstr ""
+msgstr "На жаль, не вдалося перемістити файл у папку для розвантаження."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:382./apps/zotonic_mod_admin/src/mod_admin.erl:393
 msgid "Sorry, that page is unknown."
@@ -1993,7 +1993,7 @@ msgstr "Вибачте, вам не дозволено редагувати но
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:450
 msgid "Sorry, you are not allowed to upload drop folder files."
-msgstr ""
+msgstr "Вибачте, вам не дозволено завантажувати файли папки."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_link.erl:86
 msgid "Sorry, you don't have permission to add the connection."
@@ -2187,7 +2187,7 @@ msgstr "Це ім’я використовується іншою сторін�
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:13
 msgid "This note is only visible for people who can edit the page."
-msgstr ""
+msgstr "Цю примітку бачать лише люди, які можуть редагувати сторінку."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
 msgid "This page can be connected from other pages. For example it could be an author of an article."
@@ -2279,7 +2279,7 @@ msgstr "Завантажте файл зі свого комп’ютера."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:124
 msgid "Upload a file to the drop folder. This file will be handled in the background by the mailinglists for recipient import and other modules."
-msgstr ""
+msgstr "Завантажте файл у розвантажувальну папку. Цей файл оброблятиметься у фоновому режимі списками розсилки для імпорту одержувачів та іншими модулями."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:69./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:121
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
@@ -6605,7 +6605,7 @@ msgstr "<em>Видалити</em> всіх одержувачів із цьог�
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The drop folder filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the drop folder file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
-msgstr ""
+msgstr "<h3>Одержувачі</h3><p>Щоб додати, видалити або переглянути одержувачів списку розсилки, натисніть посилання «показати всіх одержувачів».</p><h3>Ім’я відправника та адреса електронної пошти</h3><p>Ім’я відправника та адресу електронної пошти можна встановити для кожного списку розсилки. За замовчуванням це ключ конфігурації <tt>site.email_from</tt>. Для <i>із</i> надісланих електронних листів буде встановлено ім’я та адресу відправника.</p><h3>Автоматичне завантаження списків одержувачів</h3><p>Ім’я файлу папки для розвантаження використовується для автоматичного завантаження повного списку одержувачів. Ім’я файлу має відповідати імені файлу завантаженого списку одержувачів. Повний список одержувачів буде замінено на одержувачів у файлі папки витягування.</p><h3>Контроль доступу</h3><p>Кожен, хто може редагувати список розсилки, також може надсилати сторінку до списку розсилки. Кожен, хто може переглядати список розсилки, може додати адресу електронної пошти до списку розсилки.</p>"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:68
 msgid "Act"
@@ -6749,7 +6749,7 @@ msgstr "Завантаження списку активних одержува�
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:36
 msgid "Drop folder filename (optional)"
-msgstr ""
+msgstr "Назва файлу папки (необов’язково)"
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:69
 msgid "E-mail address updated"
@@ -8610,10 +8610,6 @@ msgstr "Зведені результати від усіх респондент
 msgid "Agree"
 msgstr "Згоден"
 
-#: apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
-msgid "All entries until"
-msgstr ""
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150
 msgid "Another page, video or image."
 msgstr "Інша сторінка, відео чи зображення."
@@ -8660,7 +8656,7 @@ msgstr "Ви впевнені, що хочете зупинитися, не зб
 
 #: apps/zotonic_mod_survey/priv/templates/survey.tpl:25
 msgid "Because you can edit, you can proceed for testing."
-msgstr ""
+msgstr "Оскільки ви можете редагувати, ви можете переходити до тестування."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:164
 msgid "Button"
@@ -8704,7 +8700,7 @@ msgstr "Натисніть «Редагувати», щоб переглянут
 
 #: apps/zotonic_mod_survey/priv/templates/survey.tpl:23
 msgid "Closed"
-msgstr ""
+msgstr "ЗАЧИНЕНО"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
@@ -8754,6 +8750,10 @@ msgstr "Створено"
 msgid "Danger"
 msgstr "Небезпека"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:31
+msgid "Deactivated"
+msgstr "Деактивовано"
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:36
 msgid "Dead end. Remove Next button. No questions will be submitted unless you add a button jump to a next page."
 msgstr "Мертвий кінець. Видалити кнопку «Далі». Жодні запитання не надсилатимуться, якщо Ви не додасте кнопку переходу на наступну сторінку."
@@ -8774,10 +8774,6 @@ msgstr "Видалити перехід сторінки"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:41
 msgid "Delete question"
 msgstr "Видалити запитання"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:31
-msgid "Disabled"
-msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:66
 msgid "Disagree"
@@ -8809,7 +8805,7 @@ msgstr "Кінець запитань"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
 msgid "Every question needs a question label"
-msgstr ""
+msgstr "Кожне запитання потребує мітки питання"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
 msgid "Example:"
@@ -8865,7 +8861,7 @@ msgstr "Перейти до питання"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:164
 msgid "Handle this form with"
-msgstr ""
+msgstr "Обробити цю форму за допомогою"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:143
 msgid "Handling"
@@ -8877,7 +8873,7 @@ msgstr "Прихований вхід"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_hidden.tpl:14
 msgid "Hidden value, saved with the form but not shown to the person filling in the form."
-msgstr ""
+msgstr "Приховане значення, збережене разом із формою, але не показано особі, яка заповнює форму."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:47./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:174./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:64
 msgid "Hide from results"
@@ -9037,7 +9033,7 @@ msgstr "Кількість одержувачів, доданих до спис�
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:46
 msgid "Numeric input, show totals for this field in the results."
-msgstr ""
+msgstr "Числове введення, відображення підсумків для цього поля в результатах."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:47
 msgid "Once only per user/browser"
@@ -9141,7 +9137,7 @@ msgstr "Запитання"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:64
 msgid "Questions with the question label “email” can be exported."
-msgstr ""
+msgstr "Запитання з позначкою «електронна пошта» можна експортувати."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:57
 msgid "Quiz or test question"
@@ -9161,9 +9157,9 @@ msgstr "Обов’язково, на це запитання потрібно �
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:141
 msgid "Result deleted."
-msgstr ""
+msgstr "Результат видалено."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:6./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:6./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:6./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:6
 msgid "Results"
 msgstr "Результати"
 
@@ -9174,6 +9170,10 @@ msgstr "Редактор результатів"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:73
 msgid "Results from the respondent"
 msgstr "Результати респондента"
+
+#: apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
+msgid "Results until"
+msgstr "Результати до"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
 msgid "Saved"
@@ -9317,11 +9317,11 @@ msgstr "Діаграми показують зведені результати 
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:28
 msgid "The charts show aggregated results from closed questions like thurstone or multiple choice and yes/no."
-msgstr ""
+msgstr "Діаграми показують зведені результати закритих запитань, як-от thurstone або множинний вибір і так/ні."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
 msgid "The email address is shown if there is a question “email” or if there is a person with an email address that has been linked."
-msgstr ""
+msgstr "Адреса електронної пошти відображається, якщо є запитання «електронна пошта» або якщо є особа з електронною адресою, яку було пов’язано."
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
 msgid "The following has been filled in:"
@@ -9329,7 +9329,7 @@ msgstr "Заповнено:"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:3
 msgid "The result can be linked to an existing person or to a newly created person."
-msgstr ""
+msgstr "Результат можна пов’язати з наявною особою або з новоствореною особою."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:3
 msgid "The results have been saved."
@@ -9345,7 +9345,7 @@ msgstr "Під час обробки ваших відповідей стала�
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:14
 msgid "This block show a file upload field. This can only be used as the last question of a survey. The default form routines can’t handle file upload, you will need to add your own survey handler to your site or module."
-msgstr ""
+msgstr "Цей блок показує поле завантаження файлу. Це можна використовувати лише як останнє запитання опитування. Підпрограми форм за замовчуванням не можуть обробляти завантаження файлів, вам потрібно буде додати власний обробник опитування на свій сайт або модуль."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_stop.tpl:9
 msgid "This block signals a stop in the flow. The user can't continue further and it is counted as a page break."
@@ -9353,7 +9353,7 @@ msgstr "Цей блок сигналізує про зупинку потоку.
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:9
 msgid "This form is disabled. Because you can edit, you can proceed for testing."
-msgstr ""
+msgstr "Ця форма вимкнена. Оскільки ви можете редагувати, ви можете переходити до тестування."
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:8
 msgid "This is a result for:"
@@ -9365,7 +9365,7 @@ msgstr "Це відсоток, необхідний для проходженн�
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the form has been submitted."
-msgstr ""
+msgstr "Цей текст відображається після надсилання форми."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:13./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:16
 msgid "This text is shown as an introduction to the survey."
@@ -9413,7 +9413,7 @@ msgstr "Перевірка"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:28
 msgid "View and edit results."
-msgstr ""
+msgstr "Перегляд і редагування результатів."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
 msgid "When finished show"
@@ -9457,11 +9457,11 @@ msgstr "Вам не дозволено змінювати ці результа�
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:45
 msgid "You are not allowed to see the results."
-msgstr ""
+msgstr "Ви не маєте права переглядати результати."
 
 #: apps/zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:23
 msgid "You must be allowed to edit the form, to edit its results."
-msgstr ""
+msgstr "Вам необхідно дозволити редагувати форму, редагувати її результати."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
 msgid "Your result"

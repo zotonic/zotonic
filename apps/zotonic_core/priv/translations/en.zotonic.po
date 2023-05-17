@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-17 15:38\n"
+"PO-Revision-Date: 2023-05-17 16:54\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -8604,10 +8604,6 @@ msgstr ""
 msgid "Agree"
 msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
-msgid "All entries until"
-msgstr ""
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150
 msgid "Another page, video or image."
 msgstr ""
@@ -8748,6 +8744,10 @@ msgstr ""
 msgid "Danger"
 msgstr ""
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:31
+msgid "Deactivated"
+msgstr ""
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:36
 msgid "Dead end. Remove Next button. No questions will be submitted unless you add a button jump to a next page."
 msgstr ""
@@ -8767,10 +8767,6 @@ msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:41
 msgid "Delete question"
-msgstr ""
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:31
-msgid "Disabled"
 msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:66
@@ -9157,7 +9153,7 @@ msgstr ""
 msgid "Result deleted."
 msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:6./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:6./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:6./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:6
 msgid "Results"
 msgstr ""
 
@@ -9167,6 +9163,10 @@ msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:73
 msgid "Results from the respondent"
+msgstr ""
+
+#: apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
+msgid "Results until"
 msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1

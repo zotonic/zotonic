@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-17 15:38\n"
+"PO-Revision-Date: 2023-05-17 16:54\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -1334,7 +1334,7 @@ msgstr "文件/媒体内容"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:434
 msgid "File uploaded to the drop folder, will be handled shortly."
-msgstr ""
+msgstr "上传到拖放文件夹的文件将很快处理。"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:50./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:47
 msgid "Filter on category"
@@ -1981,7 +1981,7 @@ msgstr "抱歉，无法处理此文件名。"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:446
 msgid "Sorry, could not move the file to the drop folder."
-msgstr ""
+msgstr "抱歉，无法将文件移动到放置文件夹。"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:382./apps/zotonic_mod_admin/src/mod_admin.erl:393
 msgid "Sorry, that page is unknown."
@@ -1993,7 +1993,7 @@ msgstr "抱歉，您不能编辑笔记。"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:450
 msgid "Sorry, you are not allowed to upload drop folder files."
-msgstr ""
+msgstr "抱歉，您不能上传放置文件夹文件。"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_link.erl:86
 msgid "Sorry, you don't have permission to add the connection."
@@ -2187,7 +2187,7 @@ msgstr "这个名字被另一个页面使用。"
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:13
 msgid "This note is only visible for people who can edit the page."
-msgstr ""
+msgstr "此注释仅对可以编辑页面的人可见。"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
 msgid "This page can be connected from other pages. For example it could be an author of an article."
@@ -2279,7 +2279,7 @@ msgstr "从电脑上传一个文件。"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:124
 msgid "Upload a file to the drop folder. This file will be handled in the background by the mailinglists for recipient import and other modules."
-msgstr ""
+msgstr "将文件上传到拖放文件夹。该文件将由收件人导入和其他模块的邮件列表在后台处理。"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:69./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:121
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
@@ -6605,7 +6605,7 @@ msgstr "<em>从此列表中删除</em> 所有目标列表中的收件人"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The drop folder filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the drop folder file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
-msgstr ""
+msgstr "<h3>收件人</h3><p>要添加、删除或查看邮件列表收件人，请单击“显示所有收件人”链接。</p><h3>发件人姓名和电子邮件地址</h3><p>可以为每个邮件列表设置发件人姓名和电子邮件地址。这默认为配置键 <tt>site.email_from</tt>。 <i>From</i> 发送的电子邮件将设置为发件人姓名和地址。</p><h3>自动上传收件人列表</h3><p>下拉文件夹文件名用于自动上传完整的收件人列表。文件名必须与上传的收件人列表的文件名相匹配。完整的收件人列表将替换为放置文件夹文件中的收件人。</p><h3>访问控制</h3><p>每个可以编辑邮件列表的人都可以向邮件列表发送页面。每个可以查看邮件列表的人都可以将电子邮件地址添加到邮件列表中。</p>"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:68
 msgid "Act"
@@ -6749,7 +6749,7 @@ msgstr "下载活动收件人列表。请检查下载窗口。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:36
 msgid "Drop folder filename (optional)"
-msgstr ""
+msgstr "放置文件夹文件名（可选）"
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:69
 msgid "E-mail address updated"
@@ -8606,10 +8606,6 @@ msgstr "所有受访者的汇总结果"
 msgid "Agree"
 msgstr "同意"
 
-#: apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
-msgid "All entries until"
-msgstr ""
-
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150
 msgid "Another page, video or image."
 msgstr "另一个页面、视频或图像。"
@@ -8656,7 +8652,7 @@ msgstr "您确定要停止而不保存吗？"
 
 #: apps/zotonic_mod_survey/priv/templates/survey.tpl:25
 msgid "Because you can edit, you can proceed for testing."
-msgstr ""
+msgstr "因为您可以编辑，所以您可以继续进行测试。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:164
 msgid "Button"
@@ -8700,7 +8696,7 @@ msgstr "单击“编辑”以查看和更改输入的数据。"
 
 #: apps/zotonic_mod_survey/priv/templates/survey.tpl:23
 msgid "Closed"
-msgstr ""
+msgstr "关闭"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
@@ -8750,6 +8746,10 @@ msgstr "创建"
 msgid "Danger"
 msgstr "危险"
 
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:31
+msgid "Deactivated"
+msgstr "停用"
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:36
 msgid "Dead end. Remove Next button. No questions will be submitted unless you add a button jump to a next page."
 msgstr "死路。删除下一步按钮。除非您添加跳至下一页的按钮，否则不会提交任何问题。"
@@ -8770,10 +8770,6 @@ msgstr "删除页面跳转"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:41
 msgid "Delete question"
 msgstr "删除问题"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:31
-msgid "Disabled"
-msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:66
 msgid "Disagree"
@@ -8805,7 +8801,7 @@ msgstr "问题结束"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
 msgid "Every question needs a question label"
-msgstr ""
+msgstr "每个问题都需要一个问题标签"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
 msgid "Example:"
@@ -8861,7 +8857,7 @@ msgstr "进入问题"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:164
 msgid "Handle this form with"
-msgstr ""
+msgstr "处理此表单"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:143
 msgid "Handling"
@@ -8873,7 +8869,7 @@ msgstr "隐藏输入"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_hidden.tpl:14
 msgid "Hidden value, saved with the form but not shown to the person filling in the form."
-msgstr ""
+msgstr "隐藏值，与表单一起保存但不显示给填写表单的人。"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:47./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:174./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:64
 msgid "Hide from results"
@@ -9033,7 +9029,7 @@ msgstr "添加到邮件列表的收件人数量："
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:46
 msgid "Numeric input, show totals for this field in the results."
-msgstr ""
+msgstr "数字输入，在结果中显示该字段的总计。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:47
 msgid "Once only per user/browser"
@@ -9137,7 +9133,7 @@ msgstr "疑问"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:64
 msgid "Questions with the question label “email” can be exported."
-msgstr ""
+msgstr "可以导出带有问题标签“电子邮件”的问题。"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:57
 msgid "Quiz or test question"
@@ -9157,9 +9153,9 @@ msgstr "必须填写"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:141
 msgid "Result deleted."
-msgstr ""
+msgstr "结果删了。"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:6./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:6./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:6./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:6
 msgid "Results"
 msgstr "查看结果"
 
@@ -9170,6 +9166,10 @@ msgstr "结果编辑器"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:73
 msgid "Results from the respondent"
 msgstr "答辩人的结果"
+
+#: apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
+msgid "Results until"
+msgstr "结果直到"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
 msgid "Saved"
@@ -9313,11 +9313,11 @@ msgstr "图表显示了诸如瑟斯通和是/否等封闭式问题的汇总结�
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:28
 msgid "The charts show aggregated results from closed questions like thurstone or multiple choice and yes/no."
-msgstr ""
+msgstr "图表显示了诸如瑟斯通或多项选择以及是/否等封闭式问题的汇总结果。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
 msgid "The email address is shown if there is a question “email” or if there is a person with an email address that has been linked."
-msgstr ""
+msgstr "如果存在“电子邮件”问题或有人拥有已链接的电子邮件地址，则会显示电子邮件地址。"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
 msgid "The following has been filled in:"
@@ -9325,7 +9325,7 @@ msgstr "以下是已填写的内容："
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:3
 msgid "The result can be linked to an existing person or to a newly created person."
-msgstr ""
+msgstr "结果可以链接到现有人员或新创建的人员。"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:3
 msgid "The results have been saved."
@@ -9341,7 +9341,7 @@ msgstr "处理回答时出错。我们对此感到万分抱歉。"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:14
 msgid "This block show a file upload field. This can only be used as the last question of a survey. The default form routines can’t handle file upload, you will need to add your own survey handler to your site or module."
-msgstr ""
+msgstr "此块显示文件上传字段。这只能用作调查的最后一个问题。默认表单例程无法处理文件上传，您需要将自己的调查处理程序添加到您的站点或模块。"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_stop.tpl:9
 msgid "This block signals a stop in the flow. The user can't continue further and it is counted as a page break."
@@ -9349,7 +9349,7 @@ msgstr "这个块表示流程暂停，用户只有"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:9
 msgid "This form is disabled. Because you can edit, you can proceed for testing."
-msgstr ""
+msgstr "此表单已禁用。因为您可以编辑，所以您可以继续进行测试。"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:8
 msgid "This is a result for:"
@@ -9361,7 +9361,7 @@ msgstr "这是通过测验或测试所需的百分比。仅在您添加了测验
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the form has been submitted."
-msgstr ""
+msgstr "此文本在提交表单后显示。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:13./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:16
 msgid "This text is shown as an introduction to the survey."
@@ -9409,7 +9409,7 @@ msgstr "验证"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:28
 msgid "View and edit results."
-msgstr ""
+msgstr "查看和编辑结果。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
 msgid "When finished show"
@@ -9453,11 +9453,11 @@ msgstr "你不允许改变这些结果。"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:45
 msgid "You are not allowed to see the results."
-msgstr ""
+msgstr "您无权查看结果。"
 
 #: apps/zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:23
 msgid "You must be allowed to edit the form, to edit its results."
-msgstr ""
+msgstr "您必须被允许编辑表格，才能编辑其结果。"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
 msgid "Your result"
