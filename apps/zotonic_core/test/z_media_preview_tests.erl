@@ -45,7 +45,7 @@ cmd_args_gif_test() ->
         "-strip "
         "-coalesce    -colorspace \"sRGB\" -gravity NorthWest "
         "-crop 80x80+21+0 -extent 80x80 +repage -set units PixelsPerInch"
-        " -density 72  ", CmdArgs).
+        " -density 72   -deconstruct", CmdArgs).
 
 media_data_url_test() ->
     Context = z_context:new(zotonic_site_testsandbox),
