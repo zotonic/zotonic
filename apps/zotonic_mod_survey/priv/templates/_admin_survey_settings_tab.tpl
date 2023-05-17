@@ -28,7 +28,7 @@
 			</label>
         	<label class="checkbox">
                 <input type="checkbox" name="survey_is_disabled" id="survey_is_disabled" value="1" {% if id.survey_is_disabled %}checked="checked"{% endif %} />
-                {_ Disabled _}
+                {_ Deactivated _}
             </label>
 		</div>
 
