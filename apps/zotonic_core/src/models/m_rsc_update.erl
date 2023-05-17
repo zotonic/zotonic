@@ -342,12 +342,15 @@ merge_block_single(W, L, Context) ->
 
 %% Flush all cached entries depending on this entry, one of its subjects or its categories.
 flush(Id, Context) ->
-    CatList = m_rsc:is_a(Id, Context),
-    flush(Id, CatList, Context).
+    RscId = m_rsc:rid(Id, Context),
+    CatList = m_rsc:is_a(RscId, Context),
+    flush(RscId, CatList, Context).
 
 flush(Id, CatList, Context) ->
-    z_depcache:flush(m_rsc:rid(Id, Context), Context),
+    RscId = m_rsc:rid(Id, Context),
+    z_depcache:flush(RscId, Context),
     [z_depcache:flush(Cat, Context) || Cat <- CatList],
+    z_acl:flush(RscId),
     ok.
 
 
