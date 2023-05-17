@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-17 15:46\n"
+"PO-Revision-Date: 2023-05-17 15:57\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -9173,7 +9173,7 @@ msgstr "Ergebnisse des Befragten"
 
 #: apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results until"
-msgstr ""
+msgstr "Ergebnisse bis"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
 msgid "Saved"
