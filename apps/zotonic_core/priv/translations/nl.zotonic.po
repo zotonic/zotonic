@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-17 15:46\n"
+"PO-Revision-Date: 2023-05-17 15:58\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -9176,7 +9176,7 @@ msgstr "Resultaten van de respondent"
 
 #: apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results until"
-msgstr ""
+msgstr "Resultaten tot en met"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
 msgid "Saved"
@@ -9320,7 +9320,7 @@ msgstr "De grafieken tonen geaggregeerde resultaten van gesloten vragen zoals th
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:28
 msgid "The charts show aggregated results from closed questions like thurstone or multiple choice and yes/no."
-msgstr "De grafieken tonen geaggregeerde resultaten van gesloten vragen zoals thurstone of multiple choice en ja/nee."
+msgstr "De grafieken tonen gecombineerde resultaten van gesloten vragen zoals multiple choice (thurstone) of ja/nee."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
 msgid "The email address is shown if there is a question “email” or if there is a person with an email address that has been linked."
@@ -9332,7 +9332,7 @@ msgstr "Het volgende is ingevuld:"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:3
 msgid "The result can be linked to an existing person or to a newly created person."
-msgstr "Het resultaat kan worden gekoppeld aan een bestaand persoon of aan een nieuw aangemaakt persoon."
+msgstr "Het resultaat kan worden gekoppeld aan een bestaand persoon of aan een nieuw persoon."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:3
 msgid "The results have been saved."
@@ -9356,7 +9356,7 @@ msgstr "Dit blok geeft aan dat de survey ten einde is. De gebruiker kan niet ver
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:9
 msgid "This form is disabled. Because you can edit, you can proceed for testing."
-msgstr "Dit formulier is uitgeschakeld. Omdat u kunt bewerken, kunt u doorgaan met testen."
+msgstr "Dit formulier is uitgeschakeld. Omdat je het kunt bewerken, kan je doorgaan met testen."
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:8
 msgid "This is a result for:"
@@ -9368,7 +9368,7 @@ msgstr "Dit is het percentage dat nodig is om te slagen voor een een quiz of toe
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the form has been submitted."
-msgstr "Deze tekst wordt getoond nadat het formulier is verzonden."
+msgstr "Deze tekst wordt weergegeven nadat het formulier is ingediend."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:13./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:16
 msgid "This text is shown as an introduction to the survey."
@@ -9464,7 +9464,7 @@ msgstr "Je hebt geen toestemming om de resultaten te zien."
 
 #: apps/zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:23
 msgid "You must be allowed to edit the form, to edit its results."
-msgstr "U moet toestemming hebben om het formulier te bewerken, om de resultaten ervan te bewerken."
+msgstr "Je hebt toestemming nodig om het formulier te bewerken, om de resultaten ervan te bewerken."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
 msgid "Your result"
