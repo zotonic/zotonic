@@ -572,6 +572,14 @@ Find all resources with a German translation::
 
     language=de
 
+Use the special language ``z_language`` to search in the current request language::
+
+    language=z_language
+
+Example, search in English or the current request language::
+
+    language=[en,z_language]
+
 
 visible_for
 ^^^^^^^^^^^
