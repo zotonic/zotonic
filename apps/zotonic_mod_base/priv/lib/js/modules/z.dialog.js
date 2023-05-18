@@ -43,6 +43,21 @@
         return maxLevel;
     }
 
+    function topDialog() {
+        let maxLevel = 0;
+        let dialog = undefined;
+        $(".modal").each(function() {
+            if ($(this).is(":visible")) {
+                const lev = dialogLevel($(this));
+                if (lev >= maxLevel) {
+                    maxLevel = lev;
+                    dialog = $(this);
+                }
+            }
+        });
+        return dialog;
+    }
+
     $.extend({
         dialogAdd: function(options) {
             var width,
@@ -192,8 +207,11 @@
         },
 
         dialogScrollTo: function(position) {
+            const $dialog = topDialog();
             position = position || 0;
-            $("#zmodal")[0].scrollTop = position
+            if ($dialog) {
+                $dialog[0].scrollTop = position;
+            }
         }
     });
 

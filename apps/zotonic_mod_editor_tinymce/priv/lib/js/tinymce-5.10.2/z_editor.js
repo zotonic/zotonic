@@ -21,10 +21,10 @@ var z_editor = (function ($) {
             // Map names like 'body$en' to 'body'
             config = config.split("$")[0];
         }
-        if (typeof window.zEditorConfig !== 'undefined' && typeof window.zEditorConfig[config] !== 'undefined') {
-            return window.zEditorConfig[config];
+        if (typeof window.z_editor_config !== 'undefined' && typeof window.z_editor_config[config] !== 'undefined') {
+            return window.z_editor_config[config];
         } else {
-            return tinyInit || {}
+            return window.tinyInit ?? {}
         }
     };
 

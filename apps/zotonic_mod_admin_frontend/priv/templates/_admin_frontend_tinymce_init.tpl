@@ -1,6 +1,6 @@
 {% javascript %}
-	window.zEditorConfig = window.zEditorConfig || {};
-	window.zEditorConfig.admin_frontend = window.zEditorConfig.admin_frontend || {
+	window.z_editor_config = window.z_editor_config || {};
+	window.z_editor_config.admin_frontend = window.z_editor_config.admin_frontend || {
 		selector: "textarea",
 		plugins: "code paste table link zlink zmedia autosave directionality autoresize lists searchreplace fullscreen",
 		menubar: "edit format table tools insert",
@@ -68,7 +68,7 @@
 		table_col_limit: 10
 	};
 
-	window.tinyInit = window.zEditorConfig.admin_frontend;
+	window.tinyInit = window.z_editor_config.admin_frontend;
 {% endjavascript %}
 
 {% block tinymce_init_extra %}
