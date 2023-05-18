@@ -2,33 +2,38 @@ ERL       ?= erl
 ERLC      ?= $(ERL)c
 APP       := zotonic
 
-# Erlang Rebar downloading
-# see: https://groups.google.com/forum/?fromgroups=#!topic/erlang-programming/U0JJ3SeUv5Y
-REBAR := ./rebar3
+# Use the local or installed rebar3 if available, if not found then download to ./rebar3
+REBAR := $(shell which rebar3)
+ifneq ("$(wildcard ./rebar3)","")
+	REBAR := ./rebar3
+else ifeq ($(REBAR),"")
+	REBAR := ./rebar3
+endif
+
 REBAR_URL := https://s3.amazonaws.com/rebar3/rebar3
 REBAR_ETAG := rebar_etag
 REBAR_OPTS ?=
 
 ifneq (${https_proxy},)
-PROXY_HOSTNAME=$(shell echo ${https_proxy} | awk -F ":" '{print $$2}' | cut -c 3-)
-PROXY_PORT=$(shell echo ${https_proxy} | awk -F ":" '{print $$3}')
-SET_HTTPS_PROXY=ok = httpc:set_options([{https_proxy, {{"${PROXY_HOSTNAME}", ${PROXY_PORT}}, []}}]),
+	PROXY_HOSTNAME=$(shell echo ${https_proxy} | awk -F ":" '{print $$2}' | cut -c 3-)
+	PROXY_PORT=$(shell echo ${https_proxy} | awk -F ":" '{print $$3}')
+	SET_HTTPS_PROXY=ok = httpc:set_options([{https_proxy, {{"${PROXY_HOSTNAME}", ${PROXY_PORT}}, []}}]),
 endif
 
-.PHONY: all upgrade-deps compile dev test update-cotonic update
+.PHONY: all
 
 # Default target - update sources and call all compile rules in succession
 all: compile
 	@echo "Zotonic" `bin/zotonic -v` "was successfully compiled"
 
-$(REBAR): $(REBAR_ETAG)
+./rebar3: $(REBAR_ETAG)
 	$(ERL) -noshell -s inets -s ssl \
-	  -eval 'file:delete("$(REBAR)"), $(SET_HTTPS_PROXY) {ok, saved_to_file} = httpc:request(get, {"$(REBAR_URL)", []}, [{ssl, [ {verify, verify_none} ]}], [{stream, "$(REBAR)"}])' \
+	  -eval 'file:delete("./rebar3"), $(SET_HTTPS_PROXY) {ok, saved_to_file} = httpc:request(get, {"$(REBAR_URL)", []}, [{ssl, [ {verify, verify_none} ]}], [{stream, "./rebar3"}])' \
 	  -s init stop
-	chmod +x $(REBAR)
+	chmod +x ./rebar3
 
 # Use Rebar to get, update and compile dependencies
-.PHONY: upgrade-deps compile-zotonic compile test
+.PHONY: upgrade-deps compile dev test update update-cotonic
 
 upgrade-deps: $(REBAR)
 	$(REBAR) $(REBAR_OPTS) upgrade --all
@@ -53,10 +58,10 @@ update-cotonic:
 .PHONY: xref dialyzer
 
 xref: $(REBAR)
-	./rebar3 xref
+	$(REBAR) xref
 
 dialyzer: $(REBAR)
-	./rebar3 dialyzer
+	$(REBAR) dialyzer
 
 # Generate documentation
 .PHONY: docs edocs
