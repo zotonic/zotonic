@@ -886,12 +886,18 @@ find_email_respondent([_Ans|As], Default) ->
 
 
 %% @doc Collect all answers, report any missing answers.
-%% @spec collect_answers(list(), proplist(), Context) -> {AnswerList, MissingNames}
+-spec collect_answers(SurveyId, Qs, Answers, Context) -> {AnswerList, MissingNames} when
+    SurveyId :: m_rsc:resource_id(),
+    Qs :: [ map() ],
+    Answers :: list(),
+    Context :: z:context(),
+    AnswerList :: list(),
+    MissingNames :: [ binary() ].
 collect_answers(SurveyId, Qs, Answers, Context) ->
     collect_answers(SurveyId, Qs, Answers, [], [], Context).
 
 
-collect_answers(SurveyId, [], _Answers, FoundAnswers, Missing, _Context) ->
+collect_answers(_SurveyId, [], _Answers, FoundAnswers, Missing, _Context) ->
     {FoundAnswers, Missing};
 collect_answers(SurveyId, [Q|Qs], Answers, FoundAnswers, Missing, Context) ->
     case maps:get(<<"type">>, Q, undefined) of
