@@ -1,9 +1,9 @@
 %% @author Arthur Clemens <arthurclemens@gmail.com>
-%% @copyright 2014 Arthur Clemens
-%% Date: 2014-05-11
+%% @copyright 2014-2023 Arthur Clemens
 %% @doc TinyMCE Editor module
+%% @end
 
-%% Copyright 2014 Arthur Clemens
+%% Copyright 2014-2023 Arthur Clemens
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ handle_cmd(<<"zmedia-props">>, Data, Context) ->
         "_tinymce_dialog_zmedia_props.tpl",
         [
             {id, m_rsc:rid(Id, Context)},
-            {options, Options}
+            {options, Options},
+            {level, 5}
         ],
         Context).

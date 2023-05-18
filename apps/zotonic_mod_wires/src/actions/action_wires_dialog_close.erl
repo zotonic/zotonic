@@ -1,9 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-04-27
-%% @doc Close the dialog
+%% @copyright 2009-2023 Marc Worrell
+%% @doc Close the dialog, optionally pass the level of the dialog to be closed.
+%% If level 0 is passed then all dialogs are closed.  If no level is passed then
+%% the top-most dialog is closed.
+%% @end.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,7 +27,10 @@
     render_action/4
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
-render_action(_TriggerId, _TargetId, _Args, Context) ->
-	{<<"z_dialog_close();">>, Context}.
+render_action(_TriggerId, _TargetId, Args, Context) ->
+	Level = case proplists:get_value(level, Args) of
+		undefined -> 0;
+		<<"top">> -> <<"top">>;
+		Lvl -> z_convert:to_integer(Lvl)
+	end,
+	{<<"z_dialog_close({level:", (integer_to_binary(Level))/binary ,"});">>, Context}.

@@ -1,14 +1,14 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @author Rusty Klophaus
-%% @copyright 2009-2021 Marc Worrell
-%%
+%% @copyright 2008-2009 Rusty Klophaus, 2009-2023 Marc Worrell
 %% @doc Render routines using wires and actions.
 %%      Based on Nitrogen, which is copyright (c) 2008-2009 Rusty Klophaus
+%% @end
 
 %% This is the MIT license.
 %%
 %% Copyright (c) 2008-2009 Rusty Klophaus
-%% Copyright (c) 2009-2021 Marc Worrell
+%% Copyright (c) 2009-2023 Marc Worrell
 %%
 %% Permission is hereby granted, free of charge, to any person obtaining a copy
 %% of this software and associated documentation files (the "Software"), to deal
@@ -98,6 +98,7 @@
 
     dialog/4,
     dialog_close/1,
+    dialog_close/2,
 
     overlay/3,
     overlay_close/1,
@@ -670,7 +671,11 @@ dialog(Title, Template, Vars, Context) ->
                 undefined -> Args3;
                 Center -> [{center, Center} | Args3]
             end,
-    wire({dialog, Args4}, Context1).
+    Args5 = case get_value(level, Vars) of
+                undefined -> Args4;
+                Level -> [{level, Level} | Args4]
+            end,
+    wire({dialog, Args5}, Context1).
 
 get_value(K, Map) when is_map(Map) ->
     maps:get(K, Map, undefined);
@@ -679,6 +684,9 @@ get_value(K, List) when is_list(List) ->
 
 dialog_close(Context) ->
     wire({dialog_close, []}, Context).
+
+dialog_close(Level, Context) ->
+    wire({dialog_close, [{level, Level}]}, Context).
 
 overlay(Template, Vars, Context) ->
     MixedHtml = z_template:render(Template, Vars, Context),

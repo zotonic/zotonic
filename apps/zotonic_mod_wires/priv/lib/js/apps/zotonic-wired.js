@@ -132,9 +132,9 @@ function z_dialog_open(options)
     $.dialogAdd(options);
 }
 
-function z_dialog_close()
+function z_dialog_close(options)
 {
-    $.dialogClose();
+    $.dialogClose(options);
 }
 
 function z_dialog_confirm(options)
@@ -164,7 +164,8 @@ function z_dialog_confirm(options)
         title: (options.title||z_translate('Confirm')),
         text: html,
         width: (options.width),
-        backdrop: backdrop
+        backdrop: backdrop,
+        level: options.level ?? 0
     });
     $(".z-dialog-cancel-button").click(function() {
         z_dialog_close();

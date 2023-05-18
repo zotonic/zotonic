@@ -395,7 +395,7 @@ fieldset[disabled] .btn-primary.active {
 .dashboard .table th {
   display: none;
 }
-#zmodal #dialog-new-rsc-tab {
+.modal #dialog-new-rsc-tab {
   margin: -15px;
 }
 #dialog-new-rsc-tab .modal-footer {

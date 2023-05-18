@@ -1,5 +1,6 @@
-if (typeof tinyInit !== 'object')
-  tinyInit = {
+
+window.z_editorConfig = window.z_editorConfig || {};
+window.z_editorConfig.default = window.z_editorConfig.default || {
     selector: "textarea",
 
     // mode: "none",
@@ -118,3 +119,7 @@ if (typeof tinyInit !== 'object')
     table_col_limit: 10,
     max_height: Math.max($(window).height() - 300, 400)
 };
+
+if (typeof window.tinyInit !== 'object') {
+    window.tinyInit = window.z_editorConfig.default;
+}

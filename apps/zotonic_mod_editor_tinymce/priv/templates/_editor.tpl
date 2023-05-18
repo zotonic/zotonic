@@ -24,6 +24,7 @@ params:
         tab="depiction"
         callback="window.zAdminMediaDone"
         center=0
+        level=5
         autoclose
         tabs_enabled=zmedia_tabs_enabled
         tabs_disabled=zmedia_tabs_disabled|default:["new"]
@@ -42,6 +43,7 @@ params:
         tab="find"
         callback="window.zAdminLinkDone"
         center=0
+        level=5
         autoclose
         tabs_enabled=zlink_tabs_enabled
         tabs_disabled=zlink_tabs_disabled|default:["new"]
