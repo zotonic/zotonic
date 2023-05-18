@@ -18,7 +18,8 @@ jobs:
 
     strategy:
       matrix:
-        otp_version: [23, 24, 25]
+        # 26 can be added if a new epgsql package has been released
+        otp_version: [24, 25]
         os: [ubuntu-latest]
 
     container:
