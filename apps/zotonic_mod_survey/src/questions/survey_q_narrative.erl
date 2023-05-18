@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011 Marc Worrell
+%% @copyright 2011-2023 Marc Worrell
 
-%% Copyright 2011 Marc Worrell
+%% Copyright 2011-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 -module(survey_q_narrative).
 
 -export([
-    answer/3,
+    answer/4,
     prep_chart/3,
     prep_answer_header/2,
     prep_answer/3,
@@ -26,7 +26,6 @@
     to_block/1
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_survey/include/survey.hrl").
 
 to_block(Q) ->
@@ -38,7 +37,7 @@ to_block(Q) ->
     }.
 
 
-answer(Block, Answers, Context) ->
+answer(_SurveyId, Block, Answers, Context) ->
     Narrative = z_trans:lookup_fallback(
                     maps:get(<<"narrative">>, Block, <<>>),
                     Context),
