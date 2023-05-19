@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-19 06:46\n"
+"PO-Revision-Date: 2023-05-19 07:45\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -230,7 +230,7 @@ msgstr "ألغي"
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:192./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:81./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:134./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:26
-#: apps/zotonic_mod_survey/src/mod_survey.erl:158
+#: apps/zotonic_mod_survey/src/mod_survey.erl:159
 msgid "Category"
 msgstr "فئة"
 
@@ -319,7 +319,7 @@ msgstr "حدد من يمكنه رؤية أو التعديل على هذه الص
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:34
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:124
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:125
 msgid "Delete"
 msgstr "احذف"
 
@@ -1506,7 +1506,7 @@ msgid "Make a new page or media"
 msgstr "أنشئ صفحة جديدة أو عنصر وسائط جديد"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: apps/zotonic_mod_survey/src/mod_survey.erl:159
+#: apps/zotonic_mod_survey/src/mod_survey.erl:160
 msgid "Matching"
 msgstr "مطابقة"
 
@@ -8646,7 +8646,7 @@ msgstr "هل أنت متأكد أنك تريد حذف هذه الصفحة؟<br/>
 msgid "Are you sure you want to delete this question?"
 msgstr "هل أنت متأكد أنك تريد حذف هذا السؤال؟"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:123
+#: apps/zotonic_mod_survey/src/mod_survey.erl:124
 msgid "Are you sure you want to delete this result?"
 msgstr "هل أنت متأكد أنك تريد حذف هذه النتيجة؟"
 
@@ -8658,7 +8658,7 @@ msgstr "هل أنت متأكد أنك تريد التوقف دون حفظ؟"
 msgid "Because you can edit, you can proceed for testing."
 msgstr "نظرًا لأنه يمكنك التعديل ، يمكنك المتابعة للاختبار."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:164
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:165
 msgid "Button"
 msgstr "زر"
 
@@ -8714,7 +8714,7 @@ msgstr "تعذرت إضافة المستلمين."
 msgid "Could not create the mailinglist."
 msgstr "تعذر إنشاء القائمة البريدية."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:163
+#: apps/zotonic_mod_survey/src/mod_survey.erl:164
 msgid "Country select"
 msgstr "اختر البلد"
 
@@ -8831,7 +8831,7 @@ msgstr "ردود الفعل إذا كانت صحيحة"
 msgid "Feedback if wrong"
 msgstr "ردود الفعل إذا كانت خاطئة"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:167
+#: apps/zotonic_mod_survey/src/mod_survey.erl:168
 msgid "File upload"
 msgstr "تحميل الملف"
 
@@ -8935,7 +8935,7 @@ msgstr "القفز إلى سؤال في الصفحة التالية."
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "انتقل إلى تسمية السؤال هذه (يجب أن تكون في صفحة أخرى أدناه)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:156
+#: apps/zotonic_mod_survey/src/mod_survey.erl:157
 msgid "Likert"
 msgstr "ليكرت"
 
@@ -8943,7 +8943,7 @@ msgstr "ليكرت"
 msgid "Link with person"
 msgstr "ربط مع شخص"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:162
+#: apps/zotonic_mod_survey/src/mod_survey.erl:163
 msgid "Long answer"
 msgstr "اجابة طويلة"
 
@@ -8991,7 +8991,7 @@ msgstr "إجابات متعددة ممكنة"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "إجابات متعددة ممكنة: يتم إعطاء نقاط للإجابة الصحيحة <i>وتعطى نقطة</i> مقابل <i>وليس</i> لاختيار الإجابة الخاطئة. الافتراضي: نقطة واحدة للإجابة الصحيحة ، ونقطة واحدة لعدم اختيار إجابة خاطئة."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:168
+#: apps/zotonic_mod_survey/src/mod_survey.erl:169
 msgid "Multiple choice"
 msgstr "متعدد الخيارات"
 
@@ -9007,7 +9007,7 @@ msgstr "يتم دمج كتل فواصل الصفحات المتعددة في و�
 msgid "Multiple times per user/browser (each time with new results)"
 msgstr "عدة مرات لكل مستخدم / متصفح (في كل مرة تظهر فيها نتائج جديدة)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:160
+#: apps/zotonic_mod_survey/src/mod_survey.erl:161
 msgid "Narrative"
 msgstr "سرد"
 
@@ -9047,7 +9047,7 @@ msgstr "قبول الصور فقط."
 msgid "Options from a page category"
 msgstr "خيارات من فئة الصفحة"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:165
+#: apps/zotonic_mod_survey/src/mod_survey.erl:166
 msgid "Page break"
 msgstr "فاصل صفحة"
 
@@ -9131,7 +9131,7 @@ msgstr "سؤال مع إجابة طويلة"
 msgid "Question with a short answer"
 msgstr "سؤال مع إجابة قصيرة"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8./apps/zotonic_mod_survey/src/mod_survey.erl:153
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8./apps/zotonic_mod_survey/src/mod_survey.erl:154
 msgid "Questions"
 msgstr "أسئلة"
 
@@ -9155,7 +9155,7 @@ msgstr "أحمر"
 msgid "Required, this question must be answered."
 msgstr "مطلوب ، يجب الإجابة على هذا السؤال."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:141
+#: apps/zotonic_mod_survey/src/mod_survey.erl:142
 msgid "Result deleted."
 msgstr "تم حذف النتيجة."
 
@@ -9207,7 +9207,7 @@ msgstr "أرسل تأكيدًا إلى المستفتى. يجب أن يكون ع
 msgid "Separate multiple email addresses with a comma."
 msgstr "افصل بين عناوين البريد الإلكتروني المتعددة بفاصلة."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:161
+#: apps/zotonic_mod_survey/src/mod_survey.erl:162
 msgid "Short answer"
 msgstr "اجابة قصيرة"
 
@@ -9251,7 +9251,7 @@ msgstr "عذرا ، لا يمكن إدراج الشخص الجديد."
 msgid "Start"
 msgstr "إبدأ/ي"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:166
+#: apps/zotonic_mod_survey/src/mod_survey.erl:167
 msgid "Stop"
 msgstr "توقف"
 
@@ -9321,7 +9321,7 @@ msgstr "تعرض المخططات النتائج المجمعة من الأسئ�
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
 msgid "The email address is shown if there is a question with label “email” or if there is a person with an email address that has been linked."
-msgstr ""
+msgstr "يظهر عنوان البريد الإلكتروني إذا كان هناك سؤال بالتسمية \"بريد إلكتروني\" أو إذا كان هناك شخص لديه عنوان بريد إلكتروني تم ربطه."
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
 msgid "The following has been filled in:"
@@ -9345,7 +9345,7 @@ msgstr "كان هناك خطأ أثناء التعامل مع إجاباتك. ن
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:14
 msgid "This block show a file upload field. This can only be used as the last question of a form. The default form routines can’t handle file upload, you will need to add your own form handler to your site or module."
-msgstr ""
+msgstr "تعرض هذه الكتلة حقل تحميل ملف. لا يمكن استخدام هذا إلا باعتباره السؤال الأخير في النموذج. لا تستطيع إجراءات النموذج الافتراضية معالجة تحميل الملف ، ستحتاج إلى إضافة معالج النموذج الخاص بك إلى موقعك أو الوحدة النمطية الخاصة بك."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_stop.tpl:9
 msgid "This block signals a stop in the flow. The user can't continue further and it is counted as a page break."
@@ -9375,7 +9375,7 @@ msgstr "يتم عرض هذا النص كمقدمة للمسح."
 msgid "This text is shown below the start button."
 msgstr "يظهر هذا النص أسفل زر البداية."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:157
+#: apps/zotonic_mod_survey/src/mod_survey.erl:158
 msgid "Thurstone"
 msgstr "ثورستون"
 
@@ -9399,7 +9399,7 @@ msgstr "صحيح"
 msgid "True or false question"
 msgstr "سؤال صحيح أم خطأ"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:154
+#: apps/zotonic_mod_survey/src/mod_survey.erl:155
 msgid "True/False"
 msgstr "خطأ صحيح"
 
@@ -9439,7 +9439,7 @@ msgstr "يمد"
 msgid "Yes or no question"
 msgstr "نعم أو لا سؤال"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:155
+#: apps/zotonic_mod_survey/src/mod_survey.erl:156
 msgid "Yes/No"
 msgstr "نعم / لا"
 
@@ -9451,7 +9451,7 @@ msgstr "لقد ملأت هذا بالفعل ، لكن يمكنك تغيير إج
 msgid "You already filled this in."
 msgstr "لقد ملأت هذا بالفعل."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:130./apps/zotonic_mod_survey/src/mod_survey.erl:145./apps/zotonic_mod_survey/src/mod_survey.erl:753
+#: apps/zotonic_mod_survey/src/mod_survey.erl:131./apps/zotonic_mod_survey/src/mod_survey.erl:146./apps/zotonic_mod_survey/src/mod_survey.erl:754
 msgid "You are not allowed to change these results."
 msgstr "لا يسمح لك بتغيير هذه النتائج."
 
