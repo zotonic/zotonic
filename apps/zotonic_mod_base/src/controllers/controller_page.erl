@@ -173,7 +173,7 @@ maybe_redirect_canonical(Id, Context) ->
 redirect(IsPermanent, Url, Context) ->
     Context1 = cowmachine_req:set_resp_headers([
             {<<"location">>, Url},
-            {<<"cache-control">>, <<"max-age=60">>}
+            {<<"cache-control">>, <<"no-store, no-cache, must-revalidate, private, post-check=0, pre-check=0">>}
         ],
         Context),
     Context2 = case cowmachine_req:get_resp_header(<<"vary">>, Context1) of
