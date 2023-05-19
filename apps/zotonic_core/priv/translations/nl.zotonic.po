@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-17 16:54\n"
+"PO-Revision-Date: 2023-05-19 06:46\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -929,7 +929,7 @@ msgstr "Vraag Google om alle \"{cat}\"-pagina's uit te sluiten"
 msgid "Ask Google to not index this page"
 msgstr "Vraag Google om deze pagina niet te indexeren"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:70./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
 msgstr "Gekoppelde media"
 
@@ -1064,7 +1064,7 @@ msgstr "Kon niets detecteren om te importeren van die URL of insluitcode."
 msgid "Country"
 msgstr "Land"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:112
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:65./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:112
 msgid "Create"
 msgstr "Maak"
 
@@ -1347,11 +1347,11 @@ msgstr "Filter op categorie"
 msgid "Filter on content group"
 msgstr "Filter op contentgroep"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:73
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:76
 msgid "Find Media"
 msgstr "Zoek media"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:77
 msgid "Find Page"
 msgstr "Zoek pagina"
 
@@ -1608,7 +1608,7 @@ msgstr "Naam voor facturen"
 msgid "Network Connections"
 msgstr "Netwerkverbindingen"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:81./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:84./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
 msgid "New Page"
 msgstr "Nieuwe pagina"
 
@@ -2269,7 +2269,7 @@ msgstr "Zonder titel"
 msgid "Unused"
 msgstr "Ongebruikt"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:86./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:134
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:89./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:134
 msgid "Upload"
 msgstr "Upload"
 
@@ -2373,7 +2373,7 @@ msgstr "Waarschuwing!"
 msgid "Website for clicks on image"
 msgstr "Website voor klikken op de afbeelding"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:91./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:94./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
 msgid "Website or Embed"
 msgstr "Website of Insluiten"
 
@@ -4020,7 +4020,7 @@ msgstr "Sluit dit venster en log in aan als je al een gebruiker bent van {site}.
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:72./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
-#: apps/zotonic_mod_wires/src/actions/action_wires_confirm.erl:36
+#: apps/zotonic_mod_wires/src/actions/action_wires_confirm.erl:38
 msgid "Confirm"
 msgstr "Bevestig"
 
@@ -5502,7 +5502,7 @@ msgstr "notificatie, controleer eerste resultaat"
 msgid "redirects"
 msgstr "doorverwijzingen"
 
-#: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:38
+#: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:39
 msgid "Add link"
 msgstr "Voeg link toe"
 
@@ -9323,8 +9323,8 @@ msgid "The charts show aggregated results from closed questions like thurstone o
 msgstr "De grafieken tonen gecombineerde resultaten van gesloten vragen zoals multiple choice (thurstone) of ja/nee."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
-msgid "The email address is shown if there is a question “email” or if there is a person with an email address that has been linked."
-msgstr "Het e-mailadres wordt getoond als er een vraag “e-mail” is of als er een persoon is met een e-mailadres dat is gekoppeld."
+msgid "The email address is shown if there is a question with label “email” or if there is a person with an email address that has been linked."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
 msgid "The following has been filled in:"
@@ -9347,8 +9347,8 @@ msgid "There was an error while handling your answers. We are terribly sorry abo
 msgstr "Er is een fout opgetreden tijdens het afhandelen van de antwoorden. Dit spijt ons ten zeerste."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:14
-msgid "This block show a file upload field. This can only be used as the last question of a survey. The default form routines can’t handle file upload, you will need to add your own survey handler to your site or module."
-msgstr "Dit blok toont een veld voor het uploaden van bestanden. Dit kan alleen gebruikt worden als laatste vraag van een enquête. De standaard formulierroutines kunnen het uploaden van bestanden niet aan. U moet uw eigen enquêtehandler toevoegen aan uw site of module."
+msgid "This block show a file upload field. This can only be used as the last question of a form. The default form routines can’t handle file upload, you will need to add your own form handler to your site or module."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_stop.tpl:9
 msgid "This block signals a stop in the flow. The user can't continue further and it is counted as a page break."
