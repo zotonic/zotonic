@@ -236,7 +236,7 @@ msgstr ""
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:192./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:81./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:134./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:26
-#: apps/zotonic_mod_survey/src/mod_survey.erl:158
+#: apps/zotonic_mod_survey/src/mod_survey.erl:159
 msgid "Category"
 msgstr ""
 
@@ -326,7 +326,7 @@ msgstr ""
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:34
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:124
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:125
 msgid "Delete"
 msgstr ""
 
@@ -1556,7 +1556,7 @@ msgid "Make a new page or media"
 msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: apps/zotonic_mod_survey/src/mod_survey.erl:159
+#: apps/zotonic_mod_survey/src/mod_survey.erl:160
 msgid "Matching"
 msgstr ""
 
@@ -9142,7 +9142,7 @@ msgstr ""
 msgid "Are you sure you want to delete this question?"
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:123
+#: apps/zotonic_mod_survey/src/mod_survey.erl:124
 msgid "Are you sure you want to delete this result?"
 msgstr ""
 
@@ -9154,7 +9154,7 @@ msgstr ""
 msgid "Because you can edit, you can proceed for testing."
 msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:164
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:165
 msgid "Button"
 msgstr ""
 
@@ -9210,7 +9210,7 @@ msgstr ""
 msgid "Could not create the mailinglist."
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:163
+#: apps/zotonic_mod_survey/src/mod_survey.erl:164
 msgid "Country select"
 msgstr ""
 
@@ -9330,7 +9330,7 @@ msgstr ""
 msgid "Feedback if wrong"
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:167
+#: apps/zotonic_mod_survey/src/mod_survey.erl:168
 msgid "File upload"
 msgstr ""
 
@@ -9440,7 +9440,7 @@ msgstr ""
 msgid "Jump to this question label (must be on an other page below)"
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:156
+#: apps/zotonic_mod_survey/src/mod_survey.erl:157
 msgid "Likert"
 msgstr ""
 
@@ -9448,7 +9448,7 @@ msgstr ""
 msgid "Link with person"
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:162
+#: apps/zotonic_mod_survey/src/mod_survey.erl:163
 msgid "Long answer"
 msgstr ""
 
@@ -9499,7 +9499,7 @@ msgid ""
 "point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:168
+#: apps/zotonic_mod_survey/src/mod_survey.erl:169
 msgid "Multiple choice"
 msgstr ""
 
@@ -9515,7 +9515,7 @@ msgstr ""
 msgid "Multiple times per user/browser (each time with new results)"
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:160
+#: apps/zotonic_mod_survey/src/mod_survey.erl:161
 msgid "Narrative"
 msgstr ""
 
@@ -9555,7 +9555,7 @@ msgstr ""
 msgid "Options from a page category"
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:165
+#: apps/zotonic_mod_survey/src/mod_survey.erl:166
 msgid "Page break"
 msgstr ""
 
@@ -9639,7 +9639,7 @@ msgstr ""
 msgid "Question with a short answer"
 msgstr ""
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8./apps/zotonic_mod_survey/src/mod_survey.erl:153
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8./apps/zotonic_mod_survey/src/mod_survey.erl:154
 msgid "Questions"
 msgstr ""
 
@@ -9663,7 +9663,7 @@ msgstr ""
 msgid "Required, this question must be answered."
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:141
+#: apps/zotonic_mod_survey/src/mod_survey.erl:142
 msgid "Result deleted."
 msgstr ""
 
@@ -9718,7 +9718,7 @@ msgstr ""
 msgid "Separate multiple email addresses with a comma."
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:161
+#: apps/zotonic_mod_survey/src/mod_survey.erl:162
 msgid "Short answer"
 msgstr ""
 
@@ -9764,7 +9764,7 @@ msgstr ""
 msgid "Start"
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:166
+#: apps/zotonic_mod_survey/src/mod_survey.erl:167
 msgid "Stop"
 msgstr ""
 
@@ -9905,7 +9905,7 @@ msgstr ""
 msgid "This text is shown below the start button."
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:157
+#: apps/zotonic_mod_survey/src/mod_survey.erl:158
 msgid "Thurstone"
 msgstr ""
 
@@ -9929,7 +9929,7 @@ msgstr ""
 msgid "True or false question"
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:154
+#: apps/zotonic_mod_survey/src/mod_survey.erl:155
 msgid "True/False"
 msgstr ""
 
@@ -9973,7 +9973,7 @@ msgstr ""
 msgid "Yes or no question"
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:155
+#: apps/zotonic_mod_survey/src/mod_survey.erl:156
 msgid "Yes/No"
 msgstr ""
 
@@ -9985,7 +9985,7 @@ msgstr ""
 msgid "You already filled this in."
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:130./apps/zotonic_mod_survey/src/mod_survey.erl:145./apps/zotonic_mod_survey/src/mod_survey.erl:753
+#: apps/zotonic_mod_survey/src/mod_survey.erl:131./apps/zotonic_mod_survey/src/mod_survey.erl:146./apps/zotonic_mod_survey/src/mod_survey.erl:754
 msgid "You are not allowed to change these results."
 msgstr ""
 
