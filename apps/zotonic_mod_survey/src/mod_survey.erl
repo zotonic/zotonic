@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2022 Marc Worrell
-%% @doc Survey module. Define surveys and let people fill them in.
+%% @copyright 2010-2023 Marc Worrell
+%% @doc Survey module. Define surveys and generic forms and let people fill them in.
+%% @end
 
-%% Copyright 2010-2022 Marc Worrell
+%% Copyright 2010-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -46,7 +47,7 @@
 
     save_submit/2,
 
-    collect_answers/3,
+    collect_answers/4,
     render_next_page/8,
     go_button_target/4,
     module_name/1
@@ -704,7 +705,7 @@ do_submit(SurveyId, Questions, Answers, Context) ->
          Context :: z:context(),
          ContextOrRender :: z:context() | #render{}.
 do_submit(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
-    {FoundAnswers, Missing} = collect_answers(Questions, Answers, Context),
+    {FoundAnswers, Missing} = collect_answers(SurveyId, Questions, Answers, Context),
     case z_notifier:first(
         #survey_submit{
             id = SurveyId,
@@ -739,7 +740,7 @@ do_submit(SurveyId, Questions, Answers, {editing, AnswerId, _Actions}, _SubmitAr
             andalso is_answer_user(AnswerId, Context))
     of
         true ->
-            {FoundAnswers, _Missing} = collect_answers(Questions, Answers, Context),
+            {FoundAnswers, _Missing} = collect_answers(SurveyId, Questions, Answers, Context),
             StorageAnswers = survey_answers_to_storage(FoundAnswers),
             m_survey:replace_survey_submission(SurveyId, AnswerId, StorageAnswers, Context),
             case z_context:get_q(<<"submit-email">>, Context) of
@@ -885,33 +886,39 @@ find_email_respondent([_Ans|As], Default) ->
 
 
 %% @doc Collect all answers, report any missing answers.
-%% @spec collect_answers(list(), proplist(), Context) -> {AnswerList, MissingNames}
-collect_answers(Qs, Answers, Context) ->
-    collect_answers(Qs, Answers, [], [], Context).
+-spec collect_answers(SurveyId, Qs, Answers, Context) -> {AnswerList, MissingNames} when
+    SurveyId :: m_rsc:resource_id(),
+    Qs :: [ map() ],
+    Answers :: list(),
+    Context :: z:context(),
+    AnswerList :: list(),
+    MissingNames :: [ binary() ].
+collect_answers(SurveyId, Qs, Answers, Context) ->
+    collect_answers(SurveyId, Qs, Answers, [], [], Context).
 
 
-collect_answers([], _Answers, FoundAnswers, Missing, _Context) ->
+collect_answers(_SurveyId, [], _Answers, FoundAnswers, Missing, _Context) ->
     {FoundAnswers, Missing};
-collect_answers([Q|Qs], Answers, FoundAnswers, Missing, Context) ->
+collect_answers(SurveyId, [Q|Qs], Answers, FoundAnswers, Missing, Context) ->
     case maps:get(<<"type">>, Q, undefined) of
         <<"survey_", _/binary>> = Type ->
             Module = module_name(Type),
             QName = maps:get(<<"name">>, Q, undefined),
-            case Module:answer(Q, Answers, Context) of
+            case Module:answer(SurveyId, Q, Answers, Context) of
                 {ok, none} ->
-                    collect_answers(Qs, Answers, FoundAnswers, Missing, Context);
+                    collect_answers(SurveyId, Qs, Answers, FoundAnswers, Missing, Context);
                 {ok, AnswerList} ->
-                    collect_answers(Qs, Answers, [{QName, AnswerList}|FoundAnswers], Missing, Context);
+                    collect_answers(SurveyId, Qs, Answers, [{QName, AnswerList}|FoundAnswers], Missing, Context);
                 {error, missing} ->
                     case z_convert:to_bool(maps:get(<<"is_required">>, Q, false)) of
                         true ->
-                            collect_answers(Qs, Answers, FoundAnswers, [QName|Missing], Context);
+                            collect_answers(SurveyId, Qs, Answers, FoundAnswers, [QName|Missing], Context);
                         false ->
-                            collect_answers(Qs, Answers, FoundAnswers, Missing, Context)
+                            collect_answers(SurveyId, Qs, Answers, FoundAnswers, Missing, Context)
                     end
             end;
         _ ->
-            collect_answers(Qs, Answers, FoundAnswers, Missing, Context)
+            collect_answers(SurveyId, Qs, Answers, FoundAnswers, Missing, Context)
     end.
 
 is_answer_user({user, UserId}, Context) when is_integer(UserId) ->

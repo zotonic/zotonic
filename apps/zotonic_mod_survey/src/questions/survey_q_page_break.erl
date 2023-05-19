@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2012 Marc Worrell
+%% @copyright 2011-2023 Marc Worrell
 
-%% Copyright 2011-2012 Marc Worrell
+%% Copyright 2011-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 -module(survey_q_page_break).
 
 -export([
-    answer/3,
+    answer/4,
     prep_chart/3,
     prep_answer_header/2,
     prep_answer/3,
@@ -28,7 +28,6 @@
 ]).
 
 -include_lib("zotonic_mod_survey/include/survey.hrl").
--include_lib("zotonic_core/include/zotonic.hrl").
 
 to_block(Q) ->
     #{
@@ -39,7 +38,7 @@ to_block(Q) ->
     }.
 
 
-answer(_Block, _Answers, _Context) ->
+answer(_SurveyId, _Block, _Answers, _Context) ->
     {ok, none}.
 
 prep_chart(_Block, _Ans, _Context) ->

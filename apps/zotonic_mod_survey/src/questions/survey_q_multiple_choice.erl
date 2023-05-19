@@ -1,7 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@miraclethings.nl>
-%% @copyright 2013 Arjan Scherpenisse
+%% @copyright 2013-2023 Arjan Scherpenisse
 
-%% Copyright 2013 Arjan Scherpenisse
+%% Copyright 2013-2023 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 -module(survey_q_multiple_choice).
 
 -export([
-    answer/3,
+    answer/4,
     prep_chart/3,
     prep_answer_header/2,
     prep_answer/3,
@@ -27,10 +27,9 @@
     to_block/1
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_survey/include/survey.hrl").
 
-answer(Block, Answers, _Context) ->
+answer(_SurveyId, Block, Answers, _Context) ->
     Name = maps:get(<<"name">>, Block, undefined),
     case proplists:get_value(Name, Answers) of
         undefined -> {error, missing};
