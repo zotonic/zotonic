@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-17 16:54\n"
+"PO-Revision-Date: 2023-05-19 06:46\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -926,7 +926,7 @@ msgstr "اطلب من Google استبعاد جميع الصفحات \"{cat}\""
 msgid "Ask Google to not index this page"
 msgstr "اطلب من Google عدم فهرسة هذه الصفحة"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:70./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
 msgstr "الوسائط المرفقة"
 
@@ -1061,7 +1061,7 @@ msgstr "لم يستطيع الكشف عن أي شئ للاستيراد من عن
 msgid "Country"
 msgstr "البلد"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:112
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:65./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:112
 msgid "Create"
 msgstr "خلق"
 
@@ -1344,11 +1344,11 @@ msgstr "تصفية حسب الفئة"
 msgid "Filter on content group"
 msgstr "تصفية حسب مجموعة المحتوى"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:73
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:76
 msgid "Find Media"
 msgstr "البحث عن وسائل الإعلام"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:77
 msgid "Find Page"
 msgstr "البحث عن الصفحة"
 
@@ -1605,7 +1605,7 @@ msgstr "اسم الفواتير"
 msgid "Network Connections"
 msgstr "اتصالات الشبكة"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:81./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:84./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
 msgid "New Page"
 msgstr "صفحة جديدة"
 
@@ -2265,7 +2265,7 @@ msgstr "بدون عنوان"
 msgid "Unused"
 msgstr "غير مستعمل"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:86./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:134
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:89./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:134
 msgid "Upload"
 msgstr "تحميل"
 
@@ -2369,7 +2369,7 @@ msgstr "تحذير!"
 msgid "Website for clicks on image"
 msgstr "موقع للنقرات على الصورة"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:91./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:94./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
 msgid "Website or Embed"
 msgstr "موقع أو تضمين"
 
@@ -4018,7 +4018,7 @@ msgstr "أغلق هذه النافذة وقم بتسجيل الدخول إذا �
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:72./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
-#: apps/zotonic_mod_wires/src/actions/action_wires_confirm.erl:36
+#: apps/zotonic_mod_wires/src/actions/action_wires_confirm.erl:38
 msgid "Confirm"
 msgstr "قم بتأكيد"
 
@@ -5500,7 +5500,7 @@ msgstr "الإخطار ، فحص أول عودة"
 msgid "redirects"
 msgstr "يعيد التوجيه"
 
-#: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:38
+#: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:39
 msgid "Add link"
 msgstr "إضافة رابط"
 
@@ -9320,8 +9320,8 @@ msgid "The charts show aggregated results from closed questions like thurstone o
 msgstr "تعرض المخططات النتائج المجمعة من الأسئلة المغلقة مثل Thurstone أو الاختيار من متعدد ونعم / لا."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
-msgid "The email address is shown if there is a question “email” or if there is a person with an email address that has been linked."
-msgstr "يظهر عنوان البريد الإلكتروني إذا كان هناك سؤال \"بريد إلكتروني\" أو إذا كان هناك شخص لديه عنوان بريد إلكتروني تم ربطه."
+msgid "The email address is shown if there is a question with label “email” or if there is a person with an email address that has been linked."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
 msgid "The following has been filled in:"
@@ -9344,8 +9344,8 @@ msgid "There was an error while handling your answers. We are terribly sorry abo
 msgstr "كان هناك خطأ أثناء التعامل مع إجاباتك. نحن نأسف بشدة على هذا."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:14
-msgid "This block show a file upload field. This can only be used as the last question of a survey. The default form routines can’t handle file upload, you will need to add your own survey handler to your site or module."
-msgstr "تعرض هذه الكتلة حقل تحميل ملف. لا يمكن استخدام هذا إلا كآخر سؤال في الاستبيان. لا تستطيع إجراءات النموذج الافتراضية معالجة تحميل الملف ، ستحتاج إلى إضافة معالج الاستطلاع الخاص بك إلى موقعك أو الوحدة النمطية الخاصة بك."
+msgid "This block show a file upload field. This can only be used as the last question of a form. The default form routines can’t handle file upload, you will need to add your own form handler to your site or module."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_stop.tpl:9
 msgid "This block signals a stop in the flow. The user can't continue further and it is counted as a page break."
