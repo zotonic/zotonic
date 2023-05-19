@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-19 06:46\n"
+"PO-Revision-Date: 2023-05-19 07:45\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -230,7 +230,7 @@ msgstr "Annuleer"
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:192./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:81./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:134./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:26
-#: apps/zotonic_mod_survey/src/mod_survey.erl:158
+#: apps/zotonic_mod_survey/src/mod_survey.erl:159
 msgid "Category"
 msgstr "Categorie"
 
@@ -319,7 +319,7 @@ msgstr "Bepaal wie deze pagina mag bekijken en bewerken."
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:34
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:124
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:125
 msgid "Delete"
 msgstr "Verwijder"
 
@@ -1509,7 +1509,7 @@ msgid "Make a new page or media"
 msgstr "Maak een nieuwe pagina of media-item"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: apps/zotonic_mod_survey/src/mod_survey.erl:159
+#: apps/zotonic_mod_survey/src/mod_survey.erl:160
 msgid "Matching"
 msgstr "Voldoet aan"
 
@@ -8649,7 +8649,7 @@ msgstr "Weet je zeker dat je deze pagina wilt verwijderen?<br/>Alle vragen op de
 msgid "Are you sure you want to delete this question?"
 msgstr "Weet je zeker dat je deze vraag wilt verwijderen?"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:123
+#: apps/zotonic_mod_survey/src/mod_survey.erl:124
 msgid "Are you sure you want to delete this result?"
 msgstr "Weet je zeker dat je dit resultaat wilt verwijderen?"
 
@@ -8661,7 +8661,7 @@ msgstr "Weet je zeker dat je wilt stoppen zonder op te slaan?"
 msgid "Because you can edit, you can proceed for testing."
 msgstr "Omdat je kunt bewerken, kan je doorgaan met testen."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:164
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:165
 msgid "Button"
 msgstr "Knop"
 
@@ -8717,7 +8717,7 @@ msgstr "De ontvangers konden niet toegevoegd worden."
 msgid "Could not create the mailinglist."
 msgstr "De mailinglijst kon niet worden gemaakt."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:163
+#: apps/zotonic_mod_survey/src/mod_survey.erl:164
 msgid "Country select"
 msgstr "Landenselectie"
 
@@ -8834,7 +8834,7 @@ msgstr "Feedback indien correct"
 msgid "Feedback if wrong"
 msgstr "Feedback indien foutief"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:167
+#: apps/zotonic_mod_survey/src/mod_survey.erl:168
 msgid "File upload"
 msgstr "Bestandsupload"
 
@@ -8938,7 +8938,7 @@ msgstr "Spring naar een vraag op een volgende pagina."
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "Ga naar dit vraaglabel (moet op een andere pagina hieronder staan)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:156
+#: apps/zotonic_mod_survey/src/mod_survey.erl:157
 msgid "Likert"
 msgstr "Likert"
 
@@ -8946,7 +8946,7 @@ msgstr "Likert"
 msgid "Link with person"
 msgstr "Koppel aan persoon"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:162
+#: apps/zotonic_mod_survey/src/mod_survey.erl:163
 msgid "Long answer"
 msgstr "Lang antwoord"
 
@@ -8994,7 +8994,7 @@ msgstr "Meerdere antwoorden mogelijk"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "Meerdere antwoorden mogelijk: punten worden gegeven voor het juiste antwoord <i>en</i> punten worden gegeven voor het <i>niet</i> kiezen van het verkeerde antwoord. Standaard: 1 punt voor een correct antwoord, 1 punt voor het niet kiezen van een fout antwoord."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:168
+#: apps/zotonic_mod_survey/src/mod_survey.erl:169
 msgid "Multiple choice"
 msgstr "Meerkeuze"
 
@@ -9010,7 +9010,7 @@ msgstr "Meerdere pagina-onderbrekingen worden samengevoegd tot één."
 msgid "Multiple times per user/browser (each time with new results)"
 msgstr "Meerdere keren per gebruiker/browser (telkens met nieuwe resultaten)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:160
+#: apps/zotonic_mod_survey/src/mod_survey.erl:161
 msgid "Narrative"
 msgstr "Verhalend"
 
@@ -9050,7 +9050,7 @@ msgstr "Sta alleen afbeeldingen toe."
 msgid "Options from a page category"
 msgstr "Opties van een pagina categorie"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:165
+#: apps/zotonic_mod_survey/src/mod_survey.erl:166
 msgid "Page break"
 msgstr "Pagina-onderbreking"
 
@@ -9134,7 +9134,7 @@ msgstr "Vraag met een lang antwoord"
 msgid "Question with a short answer"
 msgstr "Vraag met een kort antwoord"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8./apps/zotonic_mod_survey/src/mod_survey.erl:153
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8./apps/zotonic_mod_survey/src/mod_survey.erl:154
 msgid "Questions"
 msgstr "Vragen"
 
@@ -9158,7 +9158,7 @@ msgstr "Rood"
 msgid "Required, this question must be answered."
 msgstr "Verplicht, deze vraag moet beantwoord worden."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:141
+#: apps/zotonic_mod_survey/src/mod_survey.erl:142
 msgid "Result deleted."
 msgstr "Resultaat verwijderd."
 
@@ -9210,7 +9210,7 @@ msgstr "Stuur een bevestiging naar de respondent. Het e-mailadres moet bekend zi
 msgid "Separate multiple email addresses with a comma."
 msgstr "Scheid meerdere e-mailadressen met een komma."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:161
+#: apps/zotonic_mod_survey/src/mod_survey.erl:162
 msgid "Short answer"
 msgstr "Kort antwoord"
 
@@ -9254,7 +9254,7 @@ msgstr "De nieuwe persoon kon niet worden toegevoegd."
 msgid "Start"
 msgstr "Begin"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:166
+#: apps/zotonic_mod_survey/src/mod_survey.erl:167
 msgid "Stop"
 msgstr "Stop"
 
@@ -9324,7 +9324,7 @@ msgstr "De grafieken tonen gecombineerde resultaten van gesloten vragen zoals mu
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
 msgid "The email address is shown if there is a question with label “email” or if there is a person with an email address that has been linked."
-msgstr ""
+msgstr "Het e-mailadres wordt getoond als er een vraag is met het label \"e-mail\" of als er een persoon is met een e-mailadres dat is gekoppeld."
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
 msgid "The following has been filled in:"
@@ -9348,7 +9348,7 @@ msgstr "Er is een fout opgetreden tijdens het afhandelen van de antwoorden. Dit 
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:14
 msgid "This block show a file upload field. This can only be used as the last question of a form. The default form routines can’t handle file upload, you will need to add your own form handler to your site or module."
-msgstr ""
+msgstr "Dit blok toont een veld voor het uploaden van bestanden. Dit kan alleen gebruikt worden als laatste vraag van een formulier. De standaard formulierroutines kunnen het uploaden van bestanden niet aan, u zult uw eigen formulierhandler aan uw site of module moeten toevoegen."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_stop.tpl:9
 msgid "This block signals a stop in the flow. The user can't continue further and it is counted as a page break."
@@ -9378,7 +9378,7 @@ msgstr "Deze tekst wordt getoond als introductie."
 msgid "This text is shown below the start button."
 msgstr "Deze tekst staat onder de startknop."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:157
+#: apps/zotonic_mod_survey/src/mod_survey.erl:158
 msgid "Thurstone"
 msgstr "Vragen met puntenschaal"
 
@@ -9402,7 +9402,7 @@ msgstr "Waar"
 msgid "True or false question"
 msgstr "Waar of onwaar vraag"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:154
+#: apps/zotonic_mod_survey/src/mod_survey.erl:155
 msgid "True/False"
 msgstr "Waar/Onwaar"
 
@@ -9442,7 +9442,7 @@ msgstr "Y-m-d"
 msgid "Yes or no question"
 msgstr "Ja/nee-vraag"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:155
+#: apps/zotonic_mod_survey/src/mod_survey.erl:156
 msgid "Yes/No"
 msgstr "Ja/Nee"
 
@@ -9454,7 +9454,7 @@ msgstr "Je hebt dit al ingevuld, maar je kan je vorige antwoorden wijzigen."
 msgid "You already filled this in."
 msgstr "Je hebt dit al ingevuld."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:130./apps/zotonic_mod_survey/src/mod_survey.erl:145./apps/zotonic_mod_survey/src/mod_survey.erl:753
+#: apps/zotonic_mod_survey/src/mod_survey.erl:131./apps/zotonic_mod_survey/src/mod_survey.erl:146./apps/zotonic_mod_survey/src/mod_survey.erl:754
 msgid "You are not allowed to change these results."
 msgstr "Je hebt geen rechten om de resultaten te veranderen."
 
