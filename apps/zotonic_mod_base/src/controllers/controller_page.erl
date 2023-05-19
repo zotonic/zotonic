@@ -1,6 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2023 Marc Worrell
-%% @doc Basic page
+%% @doc Standard controller for HTML representation of resources. Redirects
+%% to the canonical page_url and handles "gone" resources that are merged
+%% into other resources.
+%% @end
 
 %% Copyright 2009-2023 Marc Worrell
 %%
