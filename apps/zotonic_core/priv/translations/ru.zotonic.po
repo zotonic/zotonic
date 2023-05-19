@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-19 06:46\n"
+"PO-Revision-Date: 2023-05-19 07:45\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -230,7 +230,7 @@ msgstr "Отмена"
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:192./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:81./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:134./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:26
-#: apps/zotonic_mod_survey/src/mod_survey.erl:158
+#: apps/zotonic_mod_survey/src/mod_survey.erl:159
 msgid "Category"
 msgstr "Категория"
 
@@ -319,7 +319,7 @@ msgstr "Определить, кто сможет просматривать и�
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:34
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:124
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:125
 msgid "Delete"
 msgstr "Удалить"
 
@@ -1506,7 +1506,7 @@ msgid "Make a new page or media"
 msgstr "Создать страницу или материал"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: apps/zotonic_mod_survey/src/mod_survey.erl:159
+#: apps/zotonic_mod_survey/src/mod_survey.erl:160
 msgid "Matching"
 msgstr "Сопоставление"
 
@@ -8646,7 +8646,7 @@ msgstr "Вы уверены, что хотите удалить эту стра�
 msgid "Are you sure you want to delete this question?"
 msgstr "Вы уверены, что хотите удалить этот вопрос?"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:123
+#: apps/zotonic_mod_survey/src/mod_survey.erl:124
 msgid "Are you sure you want to delete this result?"
 msgstr "Вы уверены, что хотите удалить этот результат?"
 
@@ -8658,7 +8658,7 @@ msgstr "Вы уверены, что хотите остановиться без
 msgid "Because you can edit, you can proceed for testing."
 msgstr "Поскольку вы можете редактировать, вы можете приступить к тестированию."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:164
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:165
 msgid "Button"
 msgstr "Кнопка"
 
@@ -8714,7 +8714,7 @@ msgstr "Не удалось добавить получателей."
 msgid "Could not create the mailinglist."
 msgstr "Не удалось создать список рассылки."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:163
+#: apps/zotonic_mod_survey/src/mod_survey.erl:164
 msgid "Country select"
 msgstr "Выбор страны"
 
@@ -8831,7 +8831,7 @@ msgstr "Обратная связь, если она верна"
 msgid "Feedback if wrong"
 msgstr "Обратная связь в случае ошибки"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:167
+#: apps/zotonic_mod_survey/src/mod_survey.erl:168
 msgid "File upload"
 msgstr "Загрузка файла"
 
@@ -8935,7 +8935,7 @@ msgstr "Перейти к вопросу на следующей страниц�
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "Перейти к этому ярлыку вопроса (должен быть на другой странице ниже)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:156
+#: apps/zotonic_mod_survey/src/mod_survey.erl:157
 msgid "Likert"
 msgstr "Шкала Лайкерта"
 
@@ -8943,7 +8943,7 @@ msgstr "Шкала Лайкерта"
 msgid "Link with person"
 msgstr "Связь с человеком"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:162
+#: apps/zotonic_mod_survey/src/mod_survey.erl:163
 msgid "Long answer"
 msgstr "Длинный ответ"
 
@@ -8991,7 +8991,7 @@ msgstr "Возможно несколько ответов"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "Возможны несколько ответов: баллы даются за правильный ответ <i>и</i> балл дается за <i>, а не</i> выбора неправильного ответа. По умолчанию: 1 балл за правильный ответ, 1 балл за неправильный ответ."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:168
+#: apps/zotonic_mod_survey/src/mod_survey.erl:169
 msgid "Multiple choice"
 msgstr "Многократный выбор"
 
@@ -9007,7 +9007,7 @@ msgstr "Идущие подряд разрывы страницы объедин
 msgid "Multiple times per user/browser (each time with new results)"
 msgstr "Несколько раз для каждого пользователя / браузера (каждый раз с новыми результатами)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:160
+#: apps/zotonic_mod_survey/src/mod_survey.erl:161
 msgid "Narrative"
 msgstr "Изложение"
 
@@ -9047,7 +9047,7 @@ msgstr "Принимать только изображения."
 msgid "Options from a page category"
 msgstr "Параметры из категории страницы"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:165
+#: apps/zotonic_mod_survey/src/mod_survey.erl:166
 msgid "Page break"
 msgstr "Разрыв страницы"
 
@@ -9131,7 +9131,7 @@ msgstr "Вопрос с длинным ответом"
 msgid "Question with a short answer"
 msgstr "Вопрос с кратким ответом"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8./apps/zotonic_mod_survey/src/mod_survey.erl:153
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8./apps/zotonic_mod_survey/src/mod_survey.erl:154
 msgid "Questions"
 msgstr "Вопросы"
 
@@ -9155,7 +9155,7 @@ msgstr "Красный"
 msgid "Required, this question must be answered."
 msgstr "Ответ на вопрос обязателен."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:141
+#: apps/zotonic_mod_survey/src/mod_survey.erl:142
 msgid "Result deleted."
 msgstr "Результат удален."
 
@@ -9207,7 +9207,7 @@ msgstr "Отправьте подтверждение респонденту. А
 msgid "Separate multiple email addresses with a comma."
 msgstr "Разделите несколько адресов электронной почты запятой."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:161
+#: apps/zotonic_mod_survey/src/mod_survey.erl:162
 msgid "Short answer"
 msgstr "Короткий ответ"
 
@@ -9251,7 +9251,7 @@ msgstr "Извините, не удалось вставить нового че
 msgid "Start"
 msgstr "Начать"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:166
+#: apps/zotonic_mod_survey/src/mod_survey.erl:167
 msgid "Stop"
 msgstr "Остановить"
 
@@ -9321,7 +9321,7 @@ msgstr "На диаграммах показаны сводные результ
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
 msgid "The email address is shown if there is a question with label “email” or if there is a person with an email address that has been linked."
-msgstr ""
+msgstr "Адрес электронной почты отображается, если есть вопрос с меткой «электронная почта» или если есть человек с адресом электронной почты, который был связан."
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
 msgid "The following has been filled in:"
@@ -9345,7 +9345,7 @@ msgstr "Произошла ошибка при обработке ваших р�
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:14
 msgid "This block show a file upload field. This can only be used as the last question of a form. The default form routines can’t handle file upload, you will need to add your own form handler to your site or module."
-msgstr ""
+msgstr "Этот блок показывает поле загрузки файла. Это можно использовать только как последний вопрос формы. Подпрограммы форм по умолчанию не могут обрабатывать загрузку файлов, вам нужно будет добавить свой собственный обработчик форм на свой сайт или модуль."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_stop.tpl:9
 msgid "This block signals a stop in the flow. The user can't continue further and it is counted as a page break."
@@ -9375,7 +9375,7 @@ msgstr "Этот текст отображается как введение в 
 msgid "This text is shown below the start button."
 msgstr "Этот текст отображается под кнопкой запуска."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:157
+#: apps/zotonic_mod_survey/src/mod_survey.erl:158
 msgid "Thurstone"
 msgstr "Шкала Терстоуна"
 
@@ -9399,7 +9399,7 @@ msgstr "Истина"
 msgid "True or false question"
 msgstr "Правдивый или ложный вопрос"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:154
+#: apps/zotonic_mod_survey/src/mod_survey.erl:155
 msgid "True/False"
 msgstr "Истина/Ложь"
 
@@ -9439,7 +9439,7 @@ msgstr "Ymd"
 msgid "Yes or no question"
 msgstr "Да или нет вопрос"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:155
+#: apps/zotonic_mod_survey/src/mod_survey.erl:156
 msgid "Yes/No"
 msgstr "Да/Нет"
 
@@ -9451,7 +9451,7 @@ msgstr "Вы уже заполнили эту форму, но можете из
 msgid "You already filled this in."
 msgstr "Ты уже заполнил это."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:130./apps/zotonic_mod_survey/src/mod_survey.erl:145./apps/zotonic_mod_survey/src/mod_survey.erl:753
+#: apps/zotonic_mod_survey/src/mod_survey.erl:131./apps/zotonic_mod_survey/src/mod_survey.erl:146./apps/zotonic_mod_survey/src/mod_survey.erl:754
 msgid "You are not allowed to change these results."
 msgstr "Вы не имеете права изменять эти результаты."
 
