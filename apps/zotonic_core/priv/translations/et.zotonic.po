@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-17 16:54\n"
+"PO-Revision-Date: 2023-05-19 07:46\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -230,7 +230,7 @@ msgstr "Katkesta"
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:192./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:81./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:134./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:26
-#: apps/zotonic_mod_survey/src/mod_survey.erl:158
+#: apps/zotonic_mod_survey/src/mod_survey.erl:159
 msgid "Category"
 msgstr "Kategooria"
 
@@ -319,7 +319,7 @@ msgstr "Kes saab lehte n√§ha v√µi muuta."
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:34
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:124
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:125
 msgid "Delete"
 msgstr "Kustuta"
 
@@ -926,7 +926,7 @@ msgstr "Paluge Google'il välistada kõik „{cat}” lehed"
 msgid "Ask Google to not index this page"
 msgstr "Paluge Google'il seda lehte mitte indekseerida"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:70./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
 msgstr "Lisatud meediafail"
 
@@ -1061,7 +1061,7 @@ msgstr "Sellel URL-il ei õnnestunud midagi importida ega manustada koodi."
 msgid "Country"
 msgstr "Riik"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:112
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:65./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:112
 msgid "Create"
 msgstr "Loo"
 
@@ -1344,11 +1344,11 @@ msgstr "Filtreeri kategooria järgi"
 msgid "Filter on content group"
 msgstr "Filtreeri sisurühma järgi"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:73
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:76
 msgid "Find Media"
 msgstr "Leidke meedia"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:77
 msgid "Find Page"
 msgstr "Leidke leht"
 
@@ -1506,7 +1506,7 @@ msgid "Make a new page or media"
 msgstr "Tehke uus leht või meedium"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: apps/zotonic_mod_survey/src/mod_survey.erl:159
+#: apps/zotonic_mod_survey/src/mod_survey.erl:160
 msgid "Matching"
 msgstr "Sobitamine"
 
@@ -1605,7 +1605,7 @@ msgstr "Arvete nimi"
 msgid "Network Connections"
 msgstr "Võrguühendused"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:81./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:84./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
 msgid "New Page"
 msgstr "Uus leht"
 
@@ -2265,7 +2265,7 @@ msgstr "Pealkirjata"
 msgid "Unused"
 msgstr "Kasutamata"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:86./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:134
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:89./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:134
 msgid "Upload"
 msgstr "Laadi üles"
 
@@ -2369,7 +2369,7 @@ msgstr "Hoiatus!"
 msgid "Website for clicks on image"
 msgstr "Veebileht pildil klikkimiseks"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:91./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:94./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
 msgid "Website or Embed"
 msgstr "Veebisait või Embed"
 
@@ -4018,7 +4018,7 @@ msgstr "Sulgege see aken ja logige sisse, kui olete juba {site}kasutaja."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:72./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
-#: apps/zotonic_mod_wires/src/actions/action_wires_confirm.erl:36
+#: apps/zotonic_mod_wires/src/actions/action_wires_confirm.erl:38
 msgid "Confirm"
 msgstr "Kinnita"
 
@@ -5500,7 +5500,7 @@ msgstr "teatamine, esimese tagastamise kontrollimine"
 msgid "redirects"
 msgstr "suunab"
 
-#: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:38
+#: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:39
 msgid "Add link"
 msgstr "Lisa link"
 
@@ -8646,7 +8646,7 @@ msgstr "Kas soovite kindlasti selle lehe kustutada?<br/>See kustutab ka kõik se
 msgid "Are you sure you want to delete this question?"
 msgstr "Kas soovite selle küsimuse kindlasti kustutada?"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:123
+#: apps/zotonic_mod_survey/src/mod_survey.erl:124
 msgid "Are you sure you want to delete this result?"
 msgstr "Kas soovite selle tulemuse kindlasti kustutada?"
 
@@ -8658,7 +8658,7 @@ msgstr "Kas olete kindel, et soovite lõpetada ilma salvestamata?"
 msgid "Because you can edit, you can proceed for testing."
 msgstr "Kuna saate redigeerida, võite jätkata testimist."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:164
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:165
 msgid "Button"
 msgstr "Nupp"
 
@@ -8714,7 +8714,7 @@ msgstr "Saajaid ei saanud lisada."
 msgid "Could not create the mailinglist."
 msgstr "Meililisti ei saanud luua."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:163
+#: apps/zotonic_mod_survey/src/mod_survey.erl:164
 msgid "Country select"
 msgstr "Valige riik"
 
@@ -8831,7 +8831,7 @@ msgstr "Tagasiside, kui see on õige"
 msgid "Feedback if wrong"
 msgstr "Tagasiside vale korral"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:167
+#: apps/zotonic_mod_survey/src/mod_survey.erl:168
 msgid "File upload"
 msgstr "Faili üleslaadimine"
 
@@ -8935,7 +8935,7 @@ msgstr "Hüppa järgmise lehe küsimuse juurde."
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "Liikuge sellele küsimusesildile (peab asuma teisel alloleval lehel)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:156
+#: apps/zotonic_mod_survey/src/mod_survey.erl:157
 msgid "Likert"
 msgstr "Likert"
 
@@ -8943,7 +8943,7 @@ msgstr "Likert"
 msgid "Link with person"
 msgstr "Seos inimesega"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:162
+#: apps/zotonic_mod_survey/src/mod_survey.erl:163
 msgid "Long answer"
 msgstr "Pikk vastus"
 
@@ -8991,7 +8991,7 @@ msgstr "Võimalik on mitu vastust"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "Võimalikud mitmed vastused: õige vastuse eest antakse punkte <i>ja</i> punkti <i>, mitte</i> vale vastuse eest. Vaikimisi: 1 punkt õige vastuse eest, 1 punkt vale vastuse mittevalimise eest."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:168
+#: apps/zotonic_mod_survey/src/mod_survey.erl:169
 msgid "Multiple choice"
 msgstr "Valikvastustega"
 
@@ -9007,7 +9007,7 @@ msgstr "Mitu lehelõike plokki ühendatakse üheks."
 msgid "Multiple times per user/browser (each time with new results)"
 msgstr "Mitu korda kasutaja/brauseri kohta (iga kord uute tulemustega)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:160
+#: apps/zotonic_mod_survey/src/mod_survey.erl:161
 msgid "Narrative"
 msgstr "Jutustav"
 
@@ -9047,7 +9047,7 @@ msgstr "Aktsepteerige ainult pilte."
 msgid "Options from a page category"
 msgstr "Valikud lehekategooriast"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:165
+#: apps/zotonic_mod_survey/src/mod_survey.erl:166
 msgid "Page break"
 msgstr "Leheküljevahe"
 
@@ -9131,7 +9131,7 @@ msgstr "Pika vastusega küsimus"
 msgid "Question with a short answer"
 msgstr "Lühikese vastusega küsimus"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8./apps/zotonic_mod_survey/src/mod_survey.erl:153
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8./apps/zotonic_mod_survey/src/mod_survey.erl:154
 msgid "Questions"
 msgstr "Küsimused"
 
@@ -9155,7 +9155,7 @@ msgstr "Punane"
 msgid "Required, this question must be answered."
 msgstr "Vajalik, sellele küsimusele tuleb vastata."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:141
+#: apps/zotonic_mod_survey/src/mod_survey.erl:142
 msgid "Result deleted."
 msgstr "Tulemus kustutatud."
 
@@ -9207,7 +9207,7 @@ msgstr "Saatke vastajale kinnitus. E-posti aadress peab olema teada (sisselogitu
 msgid "Separate multiple email addresses with a comma."
 msgstr "Eraldage mitu e-posti aadressi komaga."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:161
+#: apps/zotonic_mod_survey/src/mod_survey.erl:162
 msgid "Short answer"
 msgstr "Lühike vastus"
 
@@ -9251,7 +9251,7 @@ msgstr "Kahjuks ei saanud uut inimest sisestada."
 msgid "Start"
 msgstr "Alusta"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:166
+#: apps/zotonic_mod_survey/src/mod_survey.erl:167
 msgid "Stop"
 msgstr "Lõpeta"
 
@@ -9320,8 +9320,8 @@ msgid "The charts show aggregated results from closed questions like thurstone o
 msgstr "Diagrammid näitavad suletud küsimuste koondtulemusi, nagu Thurstone või valikvastustega ja jah/ei."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
-msgid "The email address is shown if there is a question “email” or if there is a person with an email address that has been linked."
-msgstr "E-posti aadressi näidatakse, kui on küsimus \"e-post\" või kui on isik, kellel on lingitud e-posti aadress."
+msgid "The email address is shown if there is a question with label “email” or if there is a person with an email address that has been linked."
+msgstr "E-posti aadressi näidatakse, kui on küsimus sildiga \"e-post\" või kui on lingitud e-posti aadressiga inimene."
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
 msgid "The following has been filled in:"
@@ -9344,8 +9344,8 @@ msgid "There was an error while handling your answers. We are terribly sorry abo
 msgstr "Teie vastuste käsitlemisel ilmnes viga. Meil on selle pärast kohutavalt kahju."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:14
-msgid "This block show a file upload field. This can only be used as the last question of a survey. The default form routines can’t handle file upload, you will need to add your own survey handler to your site or module."
-msgstr "See plokk näitab faili üleslaadimise välja. Seda saab kasutada ainult küsitluse viimase küsimusena. Vaikimisi vormirutiinid ei saa failide üleslaadimisega hakkama, peate oma saidile või moodulile lisama oma küsitluste töötleja."
+msgid "This block show a file upload field. This can only be used as the last question of a form. The default form routines can’t handle file upload, you will need to add your own form handler to your site or module."
+msgstr "See plokk näitab faili üleslaadimise välja. Seda saab kasutada ainult vormi viimase küsimusena. Vaikimisi vormirutiinid ei saa failide üleslaadimisega hakkama, peate oma saidile või moodulile lisama oma vormitöötleja."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_stop.tpl:9
 msgid "This block signals a stop in the flow. The user can't continue further and it is counted as a page break."
@@ -9375,7 +9375,7 @@ msgstr "Seda teksti näidatakse uuringu sissejuhatuseks."
 msgid "This text is shown below the start button."
 msgstr "See tekst on näidatud käivitusnupu all."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:157
+#: apps/zotonic_mod_survey/src/mod_survey.erl:158
 msgid "Thurstone"
 msgstr "Thurstone"
 
@@ -9399,7 +9399,7 @@ msgstr "Tõsi"
 msgid "True or false question"
 msgstr "Õige või vale küsimus"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:154
+#: apps/zotonic_mod_survey/src/mod_survey.erl:155
 msgid "True/False"
 msgstr "Õige Vale"
 
@@ -9439,7 +9439,7 @@ msgstr "Ymd"
 msgid "Yes or no question"
 msgstr "Jah või ei"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:155
+#: apps/zotonic_mod_survey/src/mod_survey.erl:156
 msgid "Yes/No"
 msgstr "Jah ei"
 
@@ -9451,7 +9451,7 @@ msgstr "Selle olete juba täitnud, kuid saate oma varasemaid vastuseid muuta."
 msgid "You already filled this in."
 msgstr "Selle olete juba täitnud."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:130./apps/zotonic_mod_survey/src/mod_survey.erl:145./apps/zotonic_mod_survey/src/mod_survey.erl:753
+#: apps/zotonic_mod_survey/src/mod_survey.erl:131./apps/zotonic_mod_survey/src/mod_survey.erl:146./apps/zotonic_mod_survey/src/mod_survey.erl:754
 msgid "You are not allowed to change these results."
 msgstr "Teil pole lubatud neid tulemusi muuta."
 
