@@ -5504,7 +5504,7 @@ msgstr "doorverwijzingen"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:39
 msgid "Add link"
-msgstr "Voeg link toe"
+msgstr "Link invoegen"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:32
 msgid "Aligned left"
