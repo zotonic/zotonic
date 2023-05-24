@@ -13,6 +13,10 @@ texts of the given page::
         {% media media_id width=315 extent %}
     {% endfor %}
 
+Note that all translations of the texts are checked. This makes it possible
+to add language-dependent media (with a text, or video) without them
+showing up as extra depictions with other translations.
+
 There is an optional (boolean) argument to only fetch media ids
 from the ``body`` and ``body_extra`` properties::
 
