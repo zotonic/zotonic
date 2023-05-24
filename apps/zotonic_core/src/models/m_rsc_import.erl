@@ -428,6 +428,8 @@ reimport_1(Id, ImportedAcc, IsForceImport, Context) ->
             of
                 true ->
                     case fetch_json(Uri, Context) of
+                        {ok, {RscId, ImportMap}} when is_integer(RscId) ->
+                            {ok, {RscId, maps:merge(ImportMap, ImportedAcc)}};
                         {ok, JSON} ->
                             import_data(Id, Uri, JSON, ImportedAcc, Options, Context);
                         {error, _} = Error ->
@@ -450,6 +452,8 @@ reimport_nonauth(Id, ImportedAcc, Context) ->
                     {error, uri};
                 Uri ->
                     case fetch_json(Uri, Context) of
+                        {ok, {RscId, ImportMap}} when is_integer(RscId) ->
+                            {ok, {RscId, maps:merge(ImportMap, ImportedAcc)}};
                         {ok, JSON} ->
                             import_data(Id, Uri, JSON, ImportedAcc, [], Context);
                         {error, _} = Error ->
@@ -477,6 +481,8 @@ reimport(Id, RefIds, Options, Context) ->
             m_rsc:p(Id, uri_raw, Context)
     end,
     case fetch_json(Uri, Context) of
+        {ok, {RscId, ImportMap}} when is_integer(RscId) ->
+            {ok, {RscId, maps:merge(ImportMap, RefIds)}};
         {ok, JSON} ->
             import_data(Id, Uri, JSON, RefIds, Options1, Context);
         {error, _} = Error ->
@@ -489,6 +495,8 @@ update_medium_uri(LocalId, Uri, Options, Context) ->
     case z_acl:rsc_editable(LocalId, Context) of
         true ->
             case fetch_json(Uri, Context) of
+                {ok, {RscId, ImportMap}} when is_integer(RscId) ->
+                    {ok, {RscId, ImportMap}};
                 {ok, JSON} ->
                     maybe_import_medium(LocalId, JSON, Options, Context);
                 {error, _} = Error ->
@@ -517,7 +525,11 @@ fetch_json(Uri, Context) ->
                         <<"status">> => <<"ok">>,
                         <<"result">> => Data
                     }};
-                {ok, Data} ->
+                {ok, RscId} when is_integer(RscId) ->
+                    {ok, {RscId, #{ Uri => RscId }}};
+                {ok, {RscId, ImportMap}} when is_integer(RscId) ->
+                    {ok, {RscId, ImportMap#{ Uri => RscId }}};
+                {ok, Data} when is_map(Data); is_list(Data) ->
                     {ok, Data};
                 {error, Reason} = Error ->
                     ?LOG_WARNING(#{
