@@ -49,8 +49,11 @@ render(Params, _Vars, Context) ->
         #search_result{page=Page, pages=undefined, prev=Prev, next=Next} ->
             Html = build_prevnext(Template, Page, Prev, Next, Dispatch, DispatchArgs, Context),
             {ok, Html};
-        #search_result{page=Page, pages=Pages, is_total_estimated=IsEstimated} ->
+        #search_result{page=Page, pages=Pages, is_total_estimated=IsEstimated} when Page =< Pages ->
             Html = build_html(Template, Page, Pages, IsEstimated, HideSinglePage, Dispatch, DispatchArgs, Context),
+            {ok, Html};
+        #search_result{page=Page, pages=Pages} when Page > Pages ->
+            Html = build_html(Template, 2, 1, false, false, Dispatch, DispatchArgs, Context),
             {ok, Html};
         [ Chunk | _ ] = List when is_list(Chunk) ->
             % Paginated list with page chunks

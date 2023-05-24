@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Search the database, interfaces to specific search routines.
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -171,6 +171,17 @@ search_pager(Search, Page, undefined, Context) ->
     search_pager(Search, Page, default_pagelen(Context), Context);
 search_pager({Name, Args}, Page, PageLen, Context) when is_binary(Name) ->
     search(Name, Args, Page, PageLen, Context);
+search_pager({Name, Args}, _Page, PageLen, _Context) when PageLen < 1 ->
+    #search_result{
+        search_name = Name,
+        search_args = Args,
+        result = [],
+        page = 1,
+        pagelen = PageLen,
+        pages = 0,
+        prev = 1,
+        next = false
+    };
 search_pager({Name, Args} = Search, Page, PageLen, Context) when is_atom(Name) ->
     OffsetLimit = offset_limit(Page, PageLen),
     SearchResult = search_1(Search, Page, PageLen, OffsetLimit, Context),
@@ -307,14 +318,21 @@ handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit,
             RowCount = length(Rows),
             FoundTotal = (Page-1) * PageLen + RowCount,
             {Total, IsEstimate} = if
-                Limit > RowCount ->
+                Limit > RowCount andalso RowCount > 0 ->
                     % Didn't return all rows, assume we are at the end of the result set.
                     {FoundTotal, false};
                 true ->
-                    % The number of requested rows was returned, assume there is more.
+                    % No rows or the number of requested rows was returned.
                     {SqlNoLimit, ArgsNoLimit} = concat_sql_query(Q1, undefined),
                     {ok, EstimatedTotal} = z_db:estimate_rows(SqlNoLimit, ArgsNoLimit, Context),
-                    {erlang:max(FoundTotal, EstimatedTotal), true}
+                    if
+                        RowCount > 0 ->
+                            % Max rows returned, the total is more
+                            {erlang:max(FoundTotal, EstimatedTotal), true};
+                        RowCount =:= 0 ->
+                            % We are beyond the number of available rows
+                            {erlang:min(FoundTotal, EstimatedTotal), true}
+                    end
             end,
             Pages = (Total + PageLen - 1) div PageLen,
             Next = if
