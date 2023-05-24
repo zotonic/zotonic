@@ -10,10 +10,17 @@
             <span class="input-group-btn">
                 <button id="{{ #email_add }}" class="btn btn-default" type="button">{_ Add _}</button>
             </span>
+            {% validate id=#email name="idn-key" type={email} %}
         </div>
         {% wire id=#email_add
             action={mask target=#email_idns}
-            postback={identity_add id=id type=`email` input=#email error_target=#email_add_group}
+            postback={identity_add
+                id=id
+                type=`email`
+                input=#email
+                on_submit={unmask target=#email_idns}
+                error_target=#email_add_group
+            }
             delegate=`mod_admin_identity`
             qarg=#email
         %}

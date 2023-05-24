@@ -207,8 +207,9 @@ event(#postback{message={identity_delete, Args}}, Context) ->
     end;
 
 % Add an identity
-event(#postback{message={identity_add, Args}}, Context) ->
+event(#postback{message={identity_add, Args}}, Context0) ->
     {id, RscId} = proplists:lookup(id, Args),
+    Context = z_render:wire(proplists:get_all_values(on_submit, Args), Context0),
     case m_rsc:is_editable(RscId, Context) of
         true ->
             Type = z_convert:to_atom(proplists:get_value(type, Args, email)),
