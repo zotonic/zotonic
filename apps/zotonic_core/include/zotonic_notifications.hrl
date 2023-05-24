@@ -836,9 +836,11 @@
 
 
 %% @doc Fetch the data for an import of a resource. Returns data in the format
-%% used by m_rsc_export and m_rsc_import.
+%% used by m_rsc_export and m_rsc_import. Either returns the JSON data, the
+%% imported resource id, or the resource id and a map with a mapping from URIs to
+%% resource ids.
 %% Type: first
-%% Return: {ok, map()} | {error, term()} | undefined
+%% Return: {ok, map()} | {ok, m_rsc:resource_id()} | {ok, {m_rsc:resource_id(), map()}} | {error, term()} | undefined
 -record(rsc_import_fetch, {
     uri :: binary()
 }).
