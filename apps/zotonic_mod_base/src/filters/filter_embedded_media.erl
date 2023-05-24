@@ -39,9 +39,9 @@ embedded_media(Id, IsCheckBlocks0, Context) ->
         undefined -> [];
         RscId ->
             IsCheckBlocks = z_convert:to_bool(IsCheckBlocks0),
-            MediaIds = embedded_media_1(m_rsc:p(RscId, body, Context), Context)
-                ++ embedded_media_1(m_rsc:p(RscId, body_extra, Context), Context)
-                ++ embedded_media_blocks_1(IsCheckBlocks, m_rsc:p(RscId, blocks, Context), Context),
+            MediaIds = embedded_media_1(m_rsc:p(RscId, <<"body">>, Context), Context)
+                ++ embedded_media_1(m_rsc:p(RscId, <<"body_extra">>, Context), Context)
+                ++ embedded_media_blocks_1(IsCheckBlocks, m_rsc:p(RscId, <<"blocks">>, Context), Context),
             unique(MediaIds)
     end.
 
@@ -65,6 +65,8 @@ embedded_media_blocks_1(true, Blocks, Context) when is_list(Blocks) ->
             fun
                 (#{ <<"body">> := BlockBody }) ->
                     embedded_media_1(BlockBody, Context);
+                (#{ <<"body_extra">> := BlockBody }) ->
+                    embedded_media_1(BlockBody, Context);
                 (_) ->
                     []
             end,
@@ -74,8 +76,15 @@ embedded_media_blocks_1(true, _Blocks, _Context) ->
 
 embedded_media_1(undefined, _Context) ->
     [];
-embedded_media_1(#trans{} = Tr, Context) ->
-    embedded_media_1(z_trans:lookup_fallback(Tr, Context), Context);
+embedded_media_1(<<>>, _Context) ->
+    [];
+embedded_media_1(#trans{ tr = Tr }, Context) ->
+    Found = lists:map(
+        fun({_, Text}) ->
+            embedded_media_1(Text, Context)
+        end,
+        Tr),
+    lists:flatten(Found);
 embedded_media_1(Text, _Context) when is_binary(Text) ->
     case re:run(Text, "\\<\\!-- z-media ([0-9]+) ", [global, {capture, all_but_first, binary}]) of
         nomatch -> [];
