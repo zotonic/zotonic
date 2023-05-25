@@ -161,6 +161,7 @@ request_arg(<<"cat_exact">>)           -> cat_exact;
 request_arg(<<"cat_exclude">>)         -> cat_exclude;
 request_arg(<<"creator_id">>)          -> creator_id;
 request_arg(<<"modifier_id">>)         -> modifier_id;
+request_arg(<<"facet">>)               -> facet;
 request_arg(<<"facet.", F/binary>>)    -> {facet, F};
 request_arg(<<"filter">>)              -> filter;
 request_arg(<<"filter.facet.", F/binary>>)-> {facet, F};
@@ -769,6 +770,14 @@ qterm({asort, Sort}, _Context) ->
     asort_term(Sort);
 qterm({zsort, Sort}, _Context) ->
     zsort_term(Sort);
+qterm({facet, Facets}, Context) when is_map(Facets) ->
+    maps:fold(
+        fun(Facet, Value, Acc) ->
+            Terms = qterm({{facet, Facet}, Value}, Context),
+            [ Terms | Acc ]
+        end,
+        [],
+        Facets);
 qterm({{facet, Field}, <<"[", _>> = V}, Context) ->
     %% facet.foo=value
     %% Add a join with the search_facet table.
