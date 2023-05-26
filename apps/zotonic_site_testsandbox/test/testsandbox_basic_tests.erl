@@ -18,9 +18,10 @@ default_modules_test() ->
 %% Test if the webserver is running, by looking at the home tpl.
 testsandbox_site_up_test() ->
     C = z_context:new(zotonic_site_testsandbox),
-    X = httpc:request(get, {"http://" ++ z_convert:to_list(z_context:hostname_port(C)) ++ "/", []}, [], []),
-    ?assertMatch({ok,{{"HTTP/1.1",200,"OK"}, _, _}}, X),
-    {ok,{_, _, Body}} = X,
+    Url = z_context:abs_url(<<>>, C),
+    X = z_fetch:fetch(Url, [insecure], C),
+    ?assertMatch({ok,{_Url, _Hs, _Length, _Data}}, X),
+    {ok, {_, _, _, Body}} = X,
     ?assertMatch({match, _}, re:run(Body, "<title>Zotonic test sandbox</title>")),
     ok.
 
