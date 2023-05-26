@@ -66,7 +66,8 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
                 true ->
                     case z_mediaclass:expand_mediaclass_checksum(Filters) of
                         {ok, FiltersExpanded} ->
-                            convert_1(os:find_executable("convert"), InFile, OutFile, Mime, FileProps, FiltersExpanded);
+                            SiteDir = z_path:site_dir(Context),
+                            convert_1(os:find_executable("convert"), InFile, OutFile, Mime, FileProps, FiltersExpanded, SiteDir);
                         {error, Reason} = Error ->
                             ?LOG_WARNING(#{
                                 text => <<"Cannot expand mediaclass">>,
@@ -92,27 +93,28 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
             {error, Reason}
     end.
 
-convert_1(false, _InFile, _OutFile, _InMime, _FileProps, _Filters) ->
+convert_1(false, _InFile, _OutFile, _InMime, _FileProps, _Filters, _SiteDir) ->
     ?LOG_ERROR(#{
         text => <<"Install ImageMagick 'convert' to generate previews of images.">>,
         in => zotonic_core
     }),
     {error, convert_missing};
-convert_1(ConvertCmd, InFile, OutFile, InMime, FileProps, Filters) ->
+convert_1(ConvertCmd, InFile, OutFile, InMime, FileProps, Filters, SiteDir) ->
     OutMime = z_media_identify:guess_mime(OutFile),
     case cmd_args(FileProps, Filters, OutMime) of
         {ok, {EndWidth, EndHeight, _CmdArgs}} when EndWidth > ?MAX_PIXSIZE; EndHeight > ?MAX_PIXSIZE ->
             {error, image_too_big};
         {ok, {_, _, CmdArgs}} ->
-            convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps);
+            convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps, SiteDir);
         {error, _} = Error ->
             Error
     end.
 
-convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps) ->
+convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps, SiteDir) ->
     file:delete(OutFile),
     ok = z_filelib:ensure_dir(OutFile),
     Cmd = lists:flatten([
+        "cd ", z_filelib:os_filename(SiteDir), "; ",
         z_filelib:os_filename(ConvertCmd), " ",
         opt_density(FileProps),
         z_filelib:os_filename( unicode:characters_to_list(InFile) ++ infile_suffix(InMime) ), " ",
