@@ -20,7 +20,9 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -record(state, {
-    id
+    id,
+    header_template,
+    row_template
 }).
 
 -export([
@@ -40,30 +42,32 @@ extension() ->
 mime() ->
     [ {<<"text">>, <<"calendar">>, []} ].
 
-init(Options, _Context) ->
+init(Options, Context) ->
     {ok, #state{
-        id = proplists:get_value(id, Options)
+        id = proplists:get_value(id, Options),
+        header_template = z_context:get(header_template, Context, "_vcalendar_header.tpl"),
+        row_template = z_context:get(row_template, Context, "_vevent.tpl")
     }}.
 
-header(Header, #state{id=Id} = State, Context) ->
+header(Header, #state{id=Id, header_template=Template} = State, Context) ->
     Vars = [
         {id, Id},
         {title, Header}
     ],
-    {Bin, _Context} = z_template:render_to_iolist("_vcalendar_header.tpl", Vars, Context),
+    {Bin, _Context} = z_template:render_to_iolist(Template, Vars, Context),
     {ok, iolist_to_binary(Bin), State}.
 
-row(Row, #state{} = State, Context) when is_integer(Row) ->
+row(Row, #state{row_template=Template} = State, Context) when is_integer(Row) ->
     Vars = [
         {id, Row}
     ],
-    {Bin, _Context} = z_template:render_to_iolist({cat, "_vevent.tpl"}, Vars, Context),
+    {Bin, _Context} = z_template:render_to_iolist({cat, Template}, Vars, Context),
     {ok, iolist_to_binary(Bin), State};
-row(Row, #state{} = State, Context) ->
+row(Row, #state{row_template=Template} = State, Context) ->
     Vars = [
         {id, Row}
     ],
-    {Bin, _Context} = z_template:render_to_iolist("_vevent.tpl", Vars, Context),
+    {Bin, _Context} = z_template:render_to_iolist(Template, Vars, Context),
     {ok, iolist_to_binary(Bin), State}.
 
 footer(_Data, #state{}, _Context) ->
