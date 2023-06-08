@@ -72,7 +72,7 @@ m_get([ <<"pagelen">> | Rest ], _Msg, Context) ->
 m_get([ Key | Rest ], _Msg, Context) when is_binary(Key) ->
     try
         KeyAtom = erlang:binary_to_existing_atom(Key, utf8),
-        case z_acl:is_admin(Context) of
+        case m_config:is_public_config_key(Key) orelse z_acl:is_admin(Context) of
             true -> {ok, {get(KeyAtom, Context), Rest}};
             false -> {ok, {undefined, []}}
         end
@@ -186,4 +186,3 @@ put(Module, Key, Value, Context) ->
             [ {Key, Value} | proplists:delete(Key, L) ]
     end,
     application:set_env(z_context:site(Context), Module, L1).
-
