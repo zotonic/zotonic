@@ -77,14 +77,6 @@ Sites have the following default config settings:
 |                           | to undefined, which will equal the domain of    |                   |
 |                           | the current request.                            |                   |
 +---------------------------+-------------------------------------------------+-------------------+
-| session_expire_1          | The initial timemout after setting up a process | 10                |
-|                           | and waiting for the first ping from the page.   |                   |
-|                           | Default: 40 (seconds)                           |                   |
-+---------------------------+-------------------------------------------------+-------------------+
-| session_expire_n          | Session inactivity timeout after receicing some | 120 (2 minutes)   |
-|                           | communication from the page.                    |                   |
-|                           | Default: 3600 (1 hour)                          |                   |
-+---------------------------+-------------------------------------------------+-------------------+
 | session_expire_inactive   | User inactivity timeout after seeing that the   | 3600 (1 hour)     |
 |                           | user has not been active.                       |                   |
 |                           | Default: 14400 (4 hours)                        |                   |
