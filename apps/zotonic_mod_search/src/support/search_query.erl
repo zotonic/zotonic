@@ -175,6 +175,7 @@ request_arg(<<"hasobjectpredicate">>)  -> hasobjectpredicate;
 request_arg(<<"hassubject">>)          -> hassubject;
 request_arg(<<"hassubjectpredicate">>) -> hassubjectpredicate;
 request_arg(<<"hasanyobject">>)        -> hasanyobject;
+request_arg(<<"hasanysubject">>)       -> hasanysubject;
 request_arg(<<"hasmedium">>)           -> hasmedium;
 request_arg(<<"is_authoritative">>)    -> is_authoritative;
 request_arg(<<"is_featured">>)         -> is_featured;
@@ -446,6 +447,18 @@ qterm({hasanyobject, ObjPreds}, Context) ->
     #search_sql_term{
         where = [
             "rsc.id in (select subject_id from edge where (",
+                lists:join(") or (", OPClauses),
+            "))"
+        ]
+    };
+qterm({hasanysubject, ObjPreds}, Context) ->
+    %% hasanysubbject=[[id,predicate]|id, ...]
+    %% Give all things which have an incoming edge to Id with any of the given subject/predicate combinations
+    OPs = expand_object_predicates(ObjPreds, Context),
+    OPClauses = [ subject_predicate_clause(Obj, Pred) || {Obj, Pred} <- OPs ],
+    #search_sql_term{
+        where = [
+            "rsc.id in (select object_id from edge where (",
                 lists:join(") or (", OPClauses),
             "))"
         ]
@@ -1594,4 +1607,21 @@ object_predicate_clause(ObjectId, any) when is_integer(ObjectId) ->
     ["edge.object_id = ", integer_to_list(ObjectId)];
 object_predicate_clause(ObjectId, PredicateId) when is_integer(PredicateId), is_integer(ObjectId) ->
     ["edge.object_id=", integer_to_list(ObjectId),
+     " and ", "edge.predicate_id=", integer_to_list(PredicateId)].
+
+%% Support routine for "hasanysubject"
+subject_predicate_clause(undefined, undefined) ->
+    "false";
+subject_predicate_clause(_Subject, undefined) ->
+    "false";
+subject_predicate_clause(undefined, _Predicate) ->
+    "false";
+subject_predicate_clause(any, any) ->
+    ["edge.object_id = rsc.id"];
+subject_predicate_clause(any, PredicateId) when is_integer(PredicateId) ->
+    ["edge.predicate_id = ", integer_to_list(PredicateId)];
+subject_predicate_clause(SubjectId, any) when is_integer(SubjectId) ->
+    ["edge.subject_id = ", integer_to_list(SubjectId)];
+subject_predicate_clause(SubjectId, PredicateId) when is_integer(PredicateId), is_integer(SubjectId) ->
+    ["edge.subject_id=", integer_to_list(SubjectId),
      " and ", "edge.predicate_id=", integer_to_list(PredicateId)].
