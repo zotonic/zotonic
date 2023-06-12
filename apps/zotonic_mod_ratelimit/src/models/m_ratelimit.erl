@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Driebit BV
+%% @copyright 2019-2023 Driebit BV
 %% @doc Rate limiting of authentication tries and other types of requests
 
-%% Copyright 2019 Driebit BV
+%% Copyright 2019-2023 Driebit BV
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,10 +29,10 @@
     is_event_limited/4,
     list_event/3,
     delete_event/3,
+    delete_event/4,
     prune/1
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("stdlib/include/qlc.hrl").
 
 -type device_id() :: binary() | undefined.
@@ -104,6 +104,29 @@ delete_event(Type, Key, Context) ->
     {atomic, _} = mnesia:transaction(
         fun() ->
             mnesia:delete({ event_table(Context), {Type, Key}})
+        end),
+    ok.
+
+%% @doc Delete all entries for an event with a matching device id.
+-spec delete_event( Type, Key, Device, Context ) -> ok when
+    Type :: atom(),
+    Key :: binary(),
+    Device :: device_id(),
+    Context :: z:context().
+delete_event(Type, Key, Device, Context) ->
+    List = mnesia:dirty_read( event_table(Context), {Type, Key} ),
+    Filtered = lists:filter(
+        fun(R) ->
+            R#ratelimit_event.device =:= Device
+        end,
+        List),
+    {atomic, _} = mnesia:transaction(
+        fun() ->
+            lists:foreach(
+                fun(Obj) ->
+                    mnesia:delete_object(event_table(Context), Obj, write)
+                end,
+                Filtered)
         end),
     ok.
 

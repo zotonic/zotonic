@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Driebit BV
+%% @copyright 2019-2023 Driebit BV
 %% @doc Rate limiting of authentication tries and other types of requests
-%%      This follows https://www.owasp.org/index.php/Slow_Down_Online_Guessing_Attacks_with_Device_Cookies
+%% This follows https://www.owasp.org/index.php/Slow_Down_Online_Guessing_Attacks_with_Device_Cookies
 
-%% Copyright 2019 Driebit BV
+%% Copyright 2019-2023 Driebit BV
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -58,11 +58,7 @@ init(Context) ->
 
 %% @doc Check if rate limiting applies to this authentication request
 observe_auth_precheck( #auth_precheck{ username = Username }, Context ) ->
-    DeviceId = case validate_device_cookie(Context) of
-        {ok, #rldid{ username = Username, device_id = DId }} -> DId;
-        {ok, _} -> undefined;
-        {error, _} -> undefined
-    end,
+    DeviceId = device_id(Username, Context),
     case m_ratelimit:is_event_limited(auth, Username, DeviceId, Context) of
         true ->
             z:warning(
@@ -80,8 +76,10 @@ observe_auth_precheck( #auth_precheck{ username = Username }, Context ) ->
 observe_auth_checked( #auth_checked{ username = _Username, is_accepted = false }, _Context ) ->
     % We already registered a try at the precheck.
     ok;
-observe_auth_checked( #auth_checked{ username = Username, is_accepted = true }, _Context ) ->
+observe_auth_checked( #auth_checked{ username = Username, is_accepted = true }, Context ) ->
     % Store the authenticated username for later retrieval in observe_auth_logon.
+    DeviceId = device_id(Username, Context),
+    m_ratelimit:delete_event(auth, Username, DeviceId, Context),
     erlang:put(ratelimit_event_username, Username).
 
 
@@ -132,6 +130,19 @@ observe_tick_6h(tick_6h, Context) ->
     m_ratelimit:prune(Context).
 
 
+%% @doc Return the device id cookie of the current requestor.
+-spec device_id(Username, Context) -> DeviceId | undefined when
+    Username :: binary(),
+    DeviceId :: binary(),
+    Context :: z:context().
+device_id(Username, Context) ->
+    case validate_device_cookie(Context) of
+        {ok, #rldid{ username = Username, device_id = DId }} -> DId;
+        {ok, _} -> undefined;
+        {error, _} -> undefined
+    end.
+
+
 %% @doc Validate if the request has a device cookie and if it is valid return the decoded term.
 -spec validate_device_cookie( z:context() ) -> {ok, term()} | {error, none|badarg|forged|expired}.
 validate_device_cookie(Context) ->
@@ -150,17 +161,22 @@ validate_device_cookie(Context) ->
 %% @doc Set a device cookie with the given identity/term.
 -spec set_device_cookie( term(), z:context() ) -> z:context().
 set_device_cookie(Term, Context) ->
-    Secret = device_secret(Context),
-    ExpTerm = termit:expiring(Term, ?DEVICE_MAX_AGE),
-    Cookie = termit:encode_base64(ExpTerm, Secret),
-    Options = [
-        {max_age, ?DEVICE_MAX_AGE},
-        {path, "/"},
-        {same_site, strict},
-        {http_only, true},
-        {secure, true}
-    ],
-    z_context:set_cookie(?DEVICE_COOKIE, Cookie, Options, Context).
+    case z_context:is_request(Context) of
+        true ->
+            Secret = device_secret(Context),
+            ExpTerm = termit:expiring(Term, ?DEVICE_MAX_AGE),
+            Cookie = termit:encode_base64(ExpTerm, Secret),
+            Options = [
+                {max_age, ?DEVICE_MAX_AGE},
+                {path, "/"},
+                {same_site, strict},
+                {http_only, true},
+                {secure, true}
+            ],
+            z_context:set_cookie(?DEVICE_COOKIE, Cookie, Options, Context);
+        false ->
+            Context
+    end.
 
 -spec device_secret( z:context() ) -> binary().
 device_secret(Context) ->

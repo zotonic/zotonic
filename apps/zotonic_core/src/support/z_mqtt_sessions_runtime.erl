@@ -227,17 +227,42 @@ connect(#{ type := connect, username := U, password := P, properties := Props },
                         undefined -> Context1;
                         Sid when Sid =/= <<>> -> z_context:set_session_id(Sid, Context1)
                     end,
-                    Context3 = z_acl:logon(UserId, Context2),
-                    ConnAck = #{
-                        type => connack,
-                        reason_code => ?MQTT_RC_SUCCESS,
-                        properties => #{
-                            % TODO: also return a token that can be exchanged for a cookie
-                            % ... token ...
-                        }
-                    },
-                    {ok, ConnAck, Context3};
+                    case z_auth:logon(UserId, Context2) of
+                        {ok, ContextAuth} ->
+                            ConnAck = #{
+                                type => connack,
+                                reason_code => ?MQTT_RC_SUCCESS,
+                                properties => #{
+                                    % TODO: also return a token that can be exchanged for a cookie
+                                    % ... token ...
+                                }
+                            },
+                            {ok, ConnAck, ContextAuth};
+                        {error, user_not_enabled} ->
+                            ?LOG_INFO(#{
+                                in => zotonic_core,
+                                text => <<"Logon attempt of disabled user">>,
+                                user_id => UserId,
+                                result => error,
+                                reason => user_not_enabled,
+                                protocol => mqtt
+                            }),
+                            ConnAck = #{
+                                type => connack,
+                                reason_code => ?MQTT_RC_NOT_AUTHORIZED
+                            },
+                            {ok, ConnAck, Context}
+                    end;
                 false ->
+                    ?LOG_INFO(#{
+                        in => zotonic_core,
+                        text => <<"Logon attempt of different user for existing in session">>,
+                        user_id => UserId,
+                        session_user_id => z_acl:user(Context),
+                        result => error,
+                        reason => user_mismatch,
+                        protocol => mqtt
+                    }),
                     ConnAck = #{
                         type => connack,
                         reason_code => ?MQTT_RC_NOT_AUTHORIZED
@@ -251,7 +276,11 @@ connect(#{ type := connect, username := U, password := P, properties := Props },
             },
             {ok, ConnAck, Context};
         undefined ->
-            ?LOG_WARNING("Auth module error: #logon_submit{} returned undefined."),
+            ?LOG_WARNING(#{
+                in => zotonic_core,
+                text => <<"Auth module error: #logon_submit{} returned undefined.">>,
+                protocol => mqtt
+            }),
             ConnAck = #{
                 type => connack,
                 reason_code => ?MQTT_RC_ERROR
