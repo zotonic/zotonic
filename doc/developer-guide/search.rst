@@ -179,6 +179,13 @@ author or a connection (with any predicate) to resource 2 or 3::
     hasanyobject[['*', 'author'], 2, 3]
 
 
+hasanysubject
+^^^^^^^^^^^^^
+
+Like ``hasanyobject`` but then searching for subjects (resources referring to) of
+the found resource id.
+
+
 hasmedium
 ^^^^^^^^^
 
