@@ -120,7 +120,6 @@ delete_event(Type, Key, Device, Context) ->
             R#ratelimit_event.device =:= Device
         end,
         List),
-?DEBUG(Filtered),
     {atomic, _} = mnesia:transaction(
         fun() ->
             lists:foreach(
