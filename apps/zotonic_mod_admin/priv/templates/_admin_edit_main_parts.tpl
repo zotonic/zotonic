@@ -24,5 +24,7 @@
 {% catinclude "_admin_edit_blocks.tpl" id %}
 {% catinclude "_admin_edit_depiction.tpl" id %}
 
+{% all catinclude "_admin_edit_content_extra.tpl" id %}
+
 {% include "_admin_edit_content_advanced.tpl" %}
 {% include "_admin_edit_content_seo.tpl" show_header %}
