@@ -1219,15 +1219,17 @@ is_cat(Id, Cat, Context) ->
             false
     end.
 
-%% @doc Return the categories and the inherited categories of the resource. Returns a list with category atoms
+%% @doc Return the categories and the inherited categories of the resource. Returns a list with category atoms.
+%% The first atom is the most generic category, the last is the most specific. Example:
+%% [text, article, news, local_news]
 -spec is_a(resource(), z:context()) -> list(atom()).
 is_a(Id, Context) ->
     RscCatId = p(Id, category_id, Context),
     m_category:is_a(RscCatId, Context).
 
 %% @doc Return the categories and the inherited categories of the resource. Returns a list with
-%% category ids
--spec is_a_id(resource(), z:context()) -> list(pos_integer()).
+%% category ids. The first id is the most generic category, the last is the most specific.
+-spec is_a_id(resource(), z:context()) -> list(m_rsc:resource_id()).
 is_a_id(Id, Context) ->
     RscCatId = p(Id, <<"category_id">>, Context),
     [RscCatId | m_category:get_path(RscCatId, Context)].

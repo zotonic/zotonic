@@ -506,7 +506,8 @@ get_path(Id, Context) ->
     end.
 
 %% @doc Return the categories (as atoms) the category is part of, including the
-%% category itself (as last member).
+%% category itself. The first atom is the most generic category, the last is the
+%% most specific.
 -spec is_a(m_rsc:resource(), z:context()) -> list(atom()).
 is_a(Id, Context) ->
     case get(Id, Context) of
