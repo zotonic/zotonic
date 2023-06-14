@@ -1,4 +1,4 @@
-{% if m.acl.use.mod_mailinglist %}
+{% if m.acl.use.mod_mailinglist or id.is_editable or id == m.acl.user %}
     {% if m.mailinglist.subscriptions[id] as subs %}
     <div id="rsc-mailinglist-subs" class="widget do_adminwidget" data-adminwidget="minifiedOnInit:true, minifier:true">
         <div class="widget-header">{_ Mailinglist subscriptions _}<div class="widget-header-tools"></div></div>
