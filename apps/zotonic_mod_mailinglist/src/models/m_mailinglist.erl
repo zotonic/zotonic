@@ -142,14 +142,35 @@ m_get([ <<"subscriptions">>, RscId | Rest ], _Msg, Context) when is_integer(RscI
         false ->
             {error, eacces}
     end;
-m_get([ <<"subscriptions">>, Email | Rest ], _Msg, Context) ->
-    case z_acl:is_allowed(use, mod_mailinglist, Context) of
-        true ->
-            {ok, List} = list_subscriptions_by_email(Email, Context),
-            {ok, {List, Rest}};
-        false ->
-            {error, eacces}
+m_get([ <<"subscriptions">>, Key | Rest ], _Msg, Context) when is_binary(Key) ->
+    case binary:match(Key, <<"@">>) of
+        {_, _} ->
+            case z_acl:is_allowed(use, mod_mailinglist, Context) of
+                true ->
+                    {ok, List} = list_subscriptions_by_email(Key, Context),
+                    {ok, {List, Rest}};
+                false ->
+                    {error, eacces}
+            end;
+        nomatch ->
+            case m_rsc:rid(Key, Context) of
+                undefined ->
+                    {ok, {[], Rest}};
+                RscId ->
+                    case z_acl:is_allowed(use, mod_mailinglist, Context)
+                        orelse z_acl:user(Context) =:= RscId
+                        orelse z_acl:rsc_editable(RscId, Context)
+                    of
+                        true ->
+                            {ok, List} = list_subscriptions_by_rsc_id(RscId, Context),
+                            {ok, {List, Rest}};
+                        false ->
+                            {error, eacces}
+                    end
+            end
     end;
+m_get([ <<"subscriptions">>, _Key | Rest ], _Msg, _Context) ->
+    {ok, {[], Rest}};
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 

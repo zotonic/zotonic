@@ -329,6 +329,8 @@ handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit,
                         RowCount > 0 ->
                             % Max rows returned, the total is more
                             {erlang:max(FoundTotal, EstimatedTotal), true};
+                        RowCount =:= 0 andalso Page =:= 1 ->
+                            {0, false};
                         RowCount =:= 0 ->
                             % We are beyond the number of available rows
                             {erlang:min(FoundTotal, EstimatedTotal), true}
