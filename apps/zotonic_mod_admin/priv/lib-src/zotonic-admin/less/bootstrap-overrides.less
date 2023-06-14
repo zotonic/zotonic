@@ -65,21 +65,17 @@
     @_padding: 15px;
     @_button_margin: 4px;
 
-    background-color: @backgroundColorLightest;
-    padding: @_padding;
     #3L > .box-shadow(none);
-    
-    &.z-button-row {
-        padding: @_padding @_padding (@_padding - @_button_margin) @_padding;
-        background-color: white;
-        border: 0;
-        border-radius: @radiusWidget;
 
-        > .btn,
-        > a[href],
-        .btn + .btn {
-            margin: 0 @_button_margin @_button_margin 0;
-        }
+    padding: @_padding @_padding (@_padding - @_button_margin) @_padding;
+    background-color: white;
+    border: 0;
+    border-radius: @radiusWidget;
+
+    > .btn,
+    > a[href],
+    .btn + .btn {
+        margin: 0 @_button_margin @_button_margin 0;
     }
 }
 .alert {

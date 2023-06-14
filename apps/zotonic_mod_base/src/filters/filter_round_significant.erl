@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2022 Marc Worrell
+%% @copyright 2022-2023 Marc Worrell
 %% @doc Round a value to the give significant digits. If you need to
 %% round to a number of digits after the decimal point then use the
 %% "round" filter.
 
-%% Copyright 2022 Marc Worrell
+%% Copyright 2022-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@
     round_significant/3
     ]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 round_significant(Value, Context) ->
     round_significant(Value, 2, Context).
 
@@ -42,20 +44,26 @@ round_significant(N, Significance, _Context) when is_integer(N) ->
     end;
 round_significant(N, Significance, _Context) ->
     try
-        F = z_convert:to_float(N),
-        Digits = digits(N),
-        Delta = abs(Digits - Significance),
-        Divider = math:pow(10, Delta),
-        if
-            Digits =< Significance ->
-                erlang:round(F * Divider) / Divider;
-            true ->
-                erlang:round(F / Divider) * Divider
+        case z_convert:to_float(N) of
+            undefined ->
+                undefined;
+            F ->
+                Digits = digits(N),
+                Delta = abs(Digits - Significance),
+                Divider = math:pow(10, Delta),
+                if
+                    Digits =< Significance ->
+                        erlang:round(F * Divider) / Divider;
+                    true ->
+                        erlang:round(F / Divider) * Divider
+                end
         end
     catch
         _:_ -> undefined
     end.
 
+digits(0) ->
+    1;
 digits(N) ->
     1 + erlang:trunc(math:log10(N)).
 
