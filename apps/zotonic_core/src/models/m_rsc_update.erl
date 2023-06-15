@@ -679,12 +679,11 @@ update_transaction_filter_props(#rscupd{id = Id} = RscUpd, UpdateProps, Raw, Con
     EditableProps = props_filter_protected( props_filter( props_trim(UpdateProps1), Context), RscUpd),
     SafeProps = escape_props(RscUpd#rscupd.is_escape_texts, EditableProps, Context),
     SafeSlugProps = generate_slug(Id, SafeProps, Context),
-    DefaultProps = props_defaults(Id, SafeSlugProps, Context),
-    case preflight_check(Id, DefaultProps, Context) of
+    case preflight_check(Id, SafeSlugProps, Context) of
         ok ->
             try
-                throw_if_category_not_allowed(Id, DefaultProps, RscUpd#rscupd.is_acl_check, Context),
-                Result = update_transaction_fun_insert(RscUpd, DefaultProps, Raw, UpdateProps, Context),
+                throw_if_category_not_allowed(Id, SafeSlugProps, RscUpd#rscupd.is_acl_check, Context),
+                Result = update_transaction_fun_insert(RscUpd, SafeSlugProps, Raw, UpdateProps, Context),
                 insert_edges(Result, Edges, Context)
             catch
                 throw:{error, _} = Error -> {rollback, Error}
@@ -790,7 +789,9 @@ update_transaction_fun_insert(#rscupd{id = insert_rsc} = RscUpd, Props, _Raw, Up
     InitProps = #{
         <<"version">> => 0,
         <<"category_id">> => CategoryId,
-        <<"content_group_id">> => maps:get(<<"content_group_id">>, Props, undefined)
+        <<"content_group_id">> => maps:get(<<"content_group_id">>, Props, undefined),
+        <<"is_published">> => false,
+        <<"publication_start">> => undefined
     },
     InsProps = z_notifier:foldr(#rsc_insert{ props = Props }, InitProps, Context),
 
@@ -841,6 +842,8 @@ update_transaction_fun_insert(#rscupd{id = insert_rsc} = RscUpd, Props, _Raw, Up
         fun
             (<<"version">>, _V, Acc) -> Acc;
             (<<"creator_id">>, _V, Acc) -> Acc;
+            (<<"is_published">>, _V, Acc) -> Acc;
+            (<<"publication_start">>, _V, Acc) -> Acc;
             (P, V, Acc) when is_binary(P) ->
                 Acc#{ P => V }
         end,
@@ -976,17 +979,34 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
             NewPropsDiff
     end,
 
-    % 7. Perform optional update, check diff
+    % 7. Ensure that the publication_start is set if the is_published flag is set
+    NewPropsDiffPub = case NewPropsDiffTz of
+        #{ <<"is_published">> := true, <<"publication_start">> := {_, _} } ->
+            NewPropsDiffTz;
+        #{ <<"is_published">> := true } ->
+            case maps:get(<<"publication_start">>, Raw, undefined) of
+                undefined ->
+                    NewPropsDiffTz#{
+                        <<"publication_start">> => calendar:universal_time()
+                    };
+                _ ->
+                    NewPropsDiffTz
+            end;
+        #{} ->
+            NewPropsDiffTz
+    end,
+
+    % 8. Perform optional update, check diff
     IsInsert = (RscUpd#rscupd.id =:= insert_rsc),
     case RscUpd#rscupd.is_acl_check =:= false
         orelse is_update_allowed(IsInsert, Id, NewPropsLangPruned, Context)
     of
         true ->
-            case (IsInsert orelse is_changed(Raw, NewPropsDiffTz)) of
+            case (IsInsert orelse is_changed(Raw, NewPropsDiffPub)) of
                 true ->
-                    UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, NewPropsDiffTz, Raw, Context),
+                    UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, NewPropsDiffPub, Raw, Context),
                     {ok, 1} = z_db:update(rsc, Id, UpdatePropsPrePivoted, Context),
-                    ok = update_page_path_log(Id, Raw, NewPropsDiffTz, Context),
+                    ok = update_page_path_log(Id, Raw, NewPropsDiffPub, Context),
                     NewPropsFinal = maps:merge(NewPropsLangPruned, UpdatePropsPrePivoted),
                     {ok, Id, {Raw, NewPropsFinal, IsABefore, IsCatInsert}};
                 false ->
@@ -1312,8 +1332,6 @@ props_filter(P, DT, Acc, _Context)
     DateTime = case z_datetime:to_datetime(DT) of
         undefined when P =:= <<"publication_end">> ->
             ?ST_JUTTEMIS;
-        undefined when P =:= <<"publication_start">> ->
-            {{1970,1,1}, {0,0,0}};
         DT1 ->
             DT1
     end,
@@ -1478,28 +1496,6 @@ props_defaults(Props, Context) ->
         undefined -> Props1#{ <<"is_authoritative">> => true };
         _ -> Props
     end.
-
-%% @doc Set default properties on resource insert and update.
--spec props_defaults(m_rsc:resource(), m_rsc:properties(), z:context()) -> m_rsc:properties().
-props_defaults(_Id, Props, Context) ->
-    lists:foldl(
-        fun(Key, Acc) ->
-            prop_default(Key, maps:get(Key, Props, undefined), Acc, Context)
-        end,
-        Props,
-        [ <<"publication_start">> ]
-    ).
-
--spec prop_default(binary(), any(), m_rsc:properties(), z:context()) -> m_rsc:properties().
-prop_default(<<"publication_start">>, undefined, Props, _Context) ->
-    case maps:get(<<"is_published">>, Props, false) of
-        true ->
-            Props#{ <<"publication_start">> => erlang:universaltime() };
-        _ ->
-            Props
-    end;
-prop_default(_Key, _Value, Props, _Context) ->
-    Props.
 
 props_filter_protected(Props, RscUpd) ->
     IsNormalUpdate = is_normal_update(RscUpd),
