@@ -34,6 +34,9 @@
 
 -define(none(A), (A =:= undefined orelse A =:= <<>>)).
 
+-define(COLON, <<":">>).
+-define(AT, <<"@">>).
+
 -include_lib("mqtt_packet_map/include/mqtt_packet_map.hrl").
 -include_lib("../../include/zotonic.hrl").
 
@@ -206,10 +209,10 @@ connect(#{ type := connect, username := U, password := P }, _IsSessionPresent, O
 connect(#{ type := connect, username := U, password := P, properties := Props }, IsSessionPresent, Options, Context) when not ?none(U), not ?none(P) ->
     % User login, and no user from the MQTT controller
     % The username might be something like: "example.com:localuser"
-    Username = case binary:split(U, <<":">>) of
-        [ _VHost, U1 ] -> U1;
-        _ -> U
-    end,
+    Username = case split_vhost_username(U) of
+                   [ _VHost, U1 ] -> U1;
+                   _ -> U
+               end,
     LogonArgs = #{
         <<"username">> => Username,
         <<"password">> => P
@@ -456,3 +459,20 @@ is_valid_message(_Msg, #{ auth_user_id := UserId }, Context) ->
 is_valid_message(_Msg, _Options, _Context) ->
     true.
 
+split_vhost_username(Username) ->
+    Delimetr = [<<X>> || <<X>> <= Username, <<X>> == ?COLON orelse <<X>> == ?AT],
+    match(Delimetr, Username).
+
+match([?COLON], Username) ->
+    match_colon(Username);
+match([?AT], Username) ->
+    match_at(Username);
+match([], _) ->
+    undefined.
+
+match_colon(Username) ->
+    binary:split(Username, ?COLON).
+
+match_at(Username) ->
+    [LocalUsername, VHost] = binary:split(Username, ?AT),
+    [VHost, LocalUsername].
