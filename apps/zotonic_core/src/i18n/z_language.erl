@@ -86,12 +86,14 @@ initialize_config(Context) ->
             case m_config:get(i18n, languages, Context) of
                 undefined ->
                     init_config_languages(Context);
+                [] ->
+                    Default = [ {default_language(Context), true} ],
+                    m_config:set_value(i18n, language, Default, Context);
                 Config ->
-                    % Check if the default language is the first enabled language
-                    Default = first_enabled(Config),
-                    DefaultB = z_convert:to_binary(Default),
-                    case m_config:get_value(i18n, language, Context) of
-                        DefaultB ->
+                    % Ensure that the default language is the first enabled language
+                    Default = default_language(Context),
+                    case first_enabled(Config) of
+                        Default ->
                             ok;
                         _ ->
                             Default1 = [ {Default, true} | proplists:delete(Default, Config) ],
@@ -116,12 +118,8 @@ init_config_languages(Context) ->
 default_languages(Context) ->
     Codes = available_translations(Context),
     List = [ {C, editable} || C <- Codes ],
-    EnabledLang = case m_config:get_value(i18n, language, Context) of
-        undefined -> ?DEFAULT_LANGUAGE;
-        <<>> -> ?DEFAULT_LANGUAGE;
-        Code -> z_convert:to_atom(Code)
-    end,
-    [ {EnabledLang, true} | proplists:delete(EnabledLang, List) ].
+    DefaultLang = default_language(Context),
+    [ {DefaultLang, true} | proplists:delete(DefaultLang, List) ].
 
 
 %% @doc Fetch the available translations by checking for all .po files in zotonic_core
@@ -238,7 +236,12 @@ first_enabled([_|Cs]) ->
 default_language(undefined) ->
     ?DEFAULT_LANGUAGE;
 default_language(Context) ->
-    z_convert:to_atom(m_config:get_value(i18n, language, ?DEFAULT_LANGUAGE, Context)).
+    case m_config:get_value(i18n, language, Context) of
+        undefined -> ?DEFAULT_LANGUAGE;
+        <<>> -> ?DEFAULT_LANGUAGE;
+        "" -> ?DEFAULT_LANGUAGE;
+        Lang -> z_convert:to_atom(Lang)
+    end.
 
 %% @doc Check if the language code code is a valid language.
 -spec is_valid( language() ) -> boolean().

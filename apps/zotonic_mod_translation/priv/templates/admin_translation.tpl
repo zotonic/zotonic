@@ -22,7 +22,7 @@
         <p class="help-block">
             {_ Drag languages to define the preferred order, the first 'view' language will be the default language. _}<br>
             {_ If a language is set to 'view' or 'editable' then texts for that language are editable in the admin. _}<br>
-            {_ If a language is set to 'off' then edited texts will loose their translation in that lanuage. _}
+            {_ If a language is set to 'off' then edited texts will loose their translation in that language. _}
         </p>
 
         {% wire id="translation-language-form"
