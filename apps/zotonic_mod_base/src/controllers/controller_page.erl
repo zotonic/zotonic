@@ -1,8 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
-%% @doc Basic page
+%% @copyright 2009-2023 Marc Worrell
+%% @doc Standard controller for HTML representation of resources. Redirects
+%% to the canonical page_url and handles "gone" resources that are merged
+%% into other resources.
+%% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,7 +27,7 @@
     content_types_provided/1,
     resource_exists/1,
     previously_existed/1,
-    moved_temporarily/1,
+    moved_permanently/1,
     is_authorized/1,
     process/4
 ]).
@@ -48,32 +51,6 @@ content_types_provided(Context) ->
     end,
     {CTs, Context}.
 
-%% @doc Check if the id in the request (or dispatch conf) exists.
-resource_exists(Context) ->
-    ContextQs = z_context:ensure_qs(Context),
-    try
-        Id = z_controller_helper:get_id(ContextQs),
-        maybe_redirect(Id, ContextQs)
-    catch
-        _:_ ->
-            {false, ContextQs}
-    end.
-
-%% @doc Check if the resource used to exist
-previously_existed(Context) ->
-    Id = z_controller_helper:get_id(Context),
-    {m_rsc_gone:is_gone(Id, Context), Context}.
-
-moved_temporarily(Context) ->
-    Id = z_controller_helper:get_id(Context),
-    redirect(m_rsc_gone:get_new_location(Id, Context), Context).
-
-redirect(undefined, Context) ->
-    {false, Context};
-redirect(Location, Context) ->
-    {{true, Location}, Context}.
-
-
 %% @doc Check if the current user is allowed to view the resource.
 is_authorized(Context) ->
     z_context:logger_md(Context),
@@ -84,6 +61,39 @@ is_authorized(Context) ->
             Id = z_controller_helper:get_id(Context),
             z_controller_helper:is_authorized(Id, Context)
     end.
+
+%% @doc Check if the id in the request (or dispatch conf) exists.
+resource_exists(Context) ->
+    ContextQs = z_context:ensure_qs(Context),
+    try
+        Id = z_controller_helper:get_id(ContextQs),
+        case exists(Id, ContextQs) of
+            true ->
+                maybe_redirect(Id, ContextQs);
+            false ->
+                {false, ContextQs}
+        end
+    catch
+        _:_ ->
+            {false, ContextQs}
+    end.
+
+%% @doc Check if the resource used to exist. If so then check if the
+%% resource moved to a new location, if not then return a 404.
+previously_existed(Context) ->
+    Id = z_controller_helper:get_id(Context),
+    {m_rsc_gone:is_gone(Id, Context), Context}.
+
+%% @doc If the resource previously existed, then permanently redirect to the
+%% new location. If no new location, then 410 gone is returned.
+moved_permanently(Context) ->
+    Id = z_controller_helper:get_id(Context),
+    redirect(m_rsc_gone:get_new_location(Id, Context), Context).
+
+redirect(undefined, Context) ->
+    {false, Context};
+redirect(Location, Context) ->
+    {{true, Location}, Context}.
 
 
 %% @doc Show the page.  Add a noindex header when requested by the editor.
@@ -125,64 +135,65 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 
 maybe_redirect(Id, Context) ->
     maybe_redirect_website(
-          m_rsc:p_no_acl(Id, website, Context),
-          m_rsc:p_no_acl(Id, is_website_redirect, Context),
+          m_rsc:p_no_acl(Id, <<"website">>, Context),
+          m_rsc:p_no_acl(Id, <<"is_website_redirect">>, Context),
           Id, Context).
 
 maybe_redirect_website(undefined, _IsRedirect, Id, Context) ->
     maybe_redirect_canonical(Id, Context);
 maybe_redirect_website(<<>>, _IsRedirect, Id, Context) ->
     maybe_redirect_canonical(Id, Context);
-maybe_redirect_website(Website, true, Id, Context) ->
-    AbsUrl = z_context:abs_url(Website, Context),
-    CurrAbsUrl = z_context:abs_url(current_path(Context), Context),
-    case AbsUrl of
-        CurrAbsUrl -> maybe_redirect_canonical(Id, Context);
-        _ -> do_temporary_redirect(AbsUrl, Context)
+maybe_redirect_website(Website, true, _Id, Context) ->
+    WebsiteUrl = z_context:abs_url(Website, Context),
+    RequestUrl = z_context:abs_url(cowmachine_req:raw_path(Context), Context),
+    if
+        WebsiteUrl == RequestUrl ->
+            % Redirect requested to itself - no further redirects
+            {true, Context};
+        true ->
+            redirect(false, WebsiteUrl, Context)
     end;
 maybe_redirect_website(_Website, _False, Id, Context) ->
     maybe_redirect_canonical(Id, Context).
 
 maybe_redirect_canonical(Id, Context) ->
-    maybe_redirect_page_path(m_rsc:p_no_acl(Id, page_path, Context), Id, Context).
-
-maybe_redirect_page_path(undefined, Id, Context) ->
-    maybe_exists(Id, Context);
-maybe_redirect_page_path(<<>>, Id, Context) ->
-    maybe_exists(Id, Context);
-maybe_redirect_page_path(PagePath, Id, Context) ->
     case is_canonical(Id, Context) of
         false ->
-            maybe_exists(Id, Context);
+            {true, Context};
         true ->
-            %% Check if we need to be at a different URL. If the page_path
-            %% of a resource is set, we need to redirect there if the
-            %% current request's path is not equal to the resource's path.
-            %% All parts of the 'zotonic_dispatch_path' are url-decoded, so we
-            %% have to compare with the url-decoded page path.
-            PagePathDecoded = z_url:url_decode(PagePath),
-            case current_path(Context) of
-                PagePathDecoded ->
-                    maybe_exists(Id, Context);
-                _ ->
-                    AbsUrl = m_rsc:p(Id, page_url_abs, Context),
+            ReqPath = cowmachine_req:raw_path(Context),
+            PageUrl = m_rsc:p(Id, <<"page_url">>, Context),
+            if
+                ReqPath == PageUrl ->
+                    {true, Context};
+                true ->
+                    AbsUrl = z_context:abs_url(PageUrl, Context),
                     AbsUrlQs = append_qs(AbsUrl, cowmachine_req:req_qs(Context)),
-                    do_temporary_redirect(AbsUrlQs, Context)
+                    redirect(true, AbsUrlQs, Context)
             end
     end.
 
-do_temporary_redirect(Location, Context) ->
-    ContextRedirect = z_context:set_resp_header(<<"location">>, Location, Context),
-    {{halt, 302}, ContextRedirect}.
+redirect(IsPermanent, Url, Context) ->
+    Context1 = cowmachine_req:set_resp_headers([
+            {<<"location">>, Url},
+            {<<"cache-control">>, <<"no-store, no-cache, must-revalidate, private, post-check=0, pre-check=0">>}
+        ],
+        Context),
+    Context2 = case cowmachine_req:get_resp_header(<<"vary">>, Context1) of
+        undefined ->
+            cowmachine_req:set_resp_header(<<"vary">>, <<"accept-language">>, Context1);
+        _ ->
+            Context1
+    end,
+    Code = case IsPermanent of
+        true -> 308;
+        false -> 307
+    end,
+    {{halt, Code}, Context2}.
 
-current_path(Context) ->
-    case z_context:get_q(<<"zotonic_dispatch_path">>, Context, []) of
-        [] -> <<"/">>;
-        DP -> z_convert:to_binary([[ $/, P ] || P <- DP ])
-    end.
-
+%% @doc Return true if the page should only be shown on the canonical url.
 is_canonical(Id, Context) ->
-    case m_rsc:p_no_acl(Id, is_page_path_multiple, Context) of
+    case m_rsc:p_no_acl(Id, <<"is_page_path_multiple">>, Context) of
         true -> false;
         _False -> z_context:get(is_canonical, Context, true)
     end.
@@ -192,13 +203,13 @@ append_qs(AbsUrl, []) ->
 append_qs(AbsUrl, Qs) ->
     iolist_to_binary([AbsUrl, $?, cow_qs:urlencode(Qs)]).
 
-maybe_exists(Id, Context) ->
+exists(Id, Context) ->
     case {m_rsc:exists(Id, Context), z_context:get(cat, Context)} of
         {Exists, undefined} ->
-            {Exists, Context};
+            Exists;
         {true, Cat} ->
-            {m_rsc:is_a(Id, Cat, Context), Context};
+            m_rsc:is_a(Id, Cat, Context);
         {false, _} ->
-            {false, Context}
+            false
     end.
 
