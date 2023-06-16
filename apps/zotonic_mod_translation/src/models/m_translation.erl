@@ -34,6 +34,7 @@
 
     query_language/1,
 
+    add_properties/1,
     sort_codes/1,
     sort/1
 ]).
@@ -119,13 +120,13 @@ language_list_configured(Context) ->
             Props = z_language:properties(Default),
             [ {Default, Props#{ is_enabled => true, is_editable => true, is_default => true } } | List ]
     end,
-    sort(List1).
+    List1.
 
 language_list_enabled(Context) ->
-	sort_codes(z_language:enabled_languages(Context)).
+	add_properties(z_language:enabled_languages(Context)).
 
 language_list_editable(Context) ->
-    sort_codes(z_language:editable_languages(Context)).
+    add_properties(z_language:editable_languages(Context)).
 
 main_languages() ->
     sort(z_language:main_languages()).
@@ -147,13 +148,15 @@ query_language(Context) ->
             Language
     end.
 
-sort_codes(Codes) when is_list(Codes) ->
-    List = lists:map(
+add_properties(Codes) ->
+    lists:map(
         fun(Code) ->
             {Code, z_language:properties(Code)}
         end,
-        Codes),
-    sort(List).
+        Codes).
+
+sort_codes(Codes) when is_list(Codes) ->
+    sort(add_properties(Codes)).
 
 sort(Map) when is_map(Map) ->
     List = maps:fold(

@@ -10,8 +10,12 @@ languages
     selected
 %}
 <div class="list-group-item">
-    {% wire id=#form.code type="submit" postback={language_add code=code} delegate="mod_translation" %}
-    <form id="{{ #form.code }}" method="POST" action="postback" class="form-horizontal">
+    {% wire id=#form.code
+            type="submit"
+            postback={language_add code=code}
+            delegate="mod_translation"
+    %}
+    <form id="{{ #form.code }}" action="postback" class="form-horizontal">
         {# Get values from form fields, in case this needs to be editable in the future. #}
         <input type="hidden" name="code" value="{{ code }}" />
         <input type="hidden" name="is_enabled" value="1" />

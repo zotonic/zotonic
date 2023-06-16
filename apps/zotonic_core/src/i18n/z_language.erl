@@ -66,8 +66,9 @@
 
 -type language_code() :: atom().
 -type language() :: language_code() | binary() | string().
+-type language_status() :: true | editable | false.
 
--export_type([ language/0, language_code/0 ]).
+-export_type([ language/0, language_code/0, language_status/0 ]).
 
 
 
@@ -85,7 +86,17 @@ initialize_config(Context) ->
             case m_config:get(i18n, languages, Context) of
                 undefined ->
                     init_config_languages(Context);
-                _Existing ->
+                Config ->
+                    % Check if the default language is the first enabled language
+                    Default = first_enabled(Config),
+                    DefaultB = z_convert:to_binary(Default),
+                    case m_config:get_value(i18n, language, Context) of
+                        DefaultB ->
+                            ok;
+                        _ ->
+                            Default1 = [ {Default, true} | proplists:delete(Default, Config) ],
+                            m_config:set_value(i18n, language, Default1, Context)
+                    end,
                     ok
             end;
         false ->
@@ -106,12 +117,11 @@ default_languages(Context) ->
     Codes = available_translations(Context),
     List = [ {C, editable} || C <- Codes ],
     EnabledLang = case m_config:get_value(i18n, language, Context) of
-        undefined -> en;
-        <<>> -> en;
+        undefined -> ?DEFAULT_LANGUAGE;
+        <<>> -> ?DEFAULT_LANGUAGE;
         Code -> z_convert:to_atom(Code)
     end,
-    List1 = proplists:delete(EnabledLang, List),
-    lists:sort( [ {EnabledLang, true} | List1 ]).
+    [ {EnabledLang, true} | proplists:delete(EnabledLang, List) ].
 
 
 %% @doc Fetch the available translations by checking for all .po files in zotonic_core
@@ -196,16 +206,31 @@ language_config(Context) ->
 
 %% @doc Save a new language config list
 -spec set_language_config( list(), z:context() ) -> ok.
+set_language_config([], Context) ->
+    set_language_config([ {?DEFAULT_LANGUAGE, true} ], Context);
 set_language_config(NewConfig, Context) ->
     case language_config(Context) of
         NewConfig -> ok;
-        _ ->
-            SortedConfig = lists:sort(NewConfig),
-            m_config:set_prop(i18n, languages, list, SortedConfig, Context)
+        _ -> m_config:set_prop(i18n, languages, list, NewConfig, Context)
+    end,
+    % Store the first enabled language as the default language
+    Default = first_enabled(NewConfig),
+    DefaultB = z_convert:to_binary(Default),
+    case m_config:get_value(i18n, language, Context) of
+        DefaultB -> ok;
+        _ -> m_config:set_value(i18n, language, Default, Context)
     end,
     z_memo:delete('z_language$enabled_languages'),
     z_memo:delete('z_language$editable_languages'),
     ok.
+
+first_enabled([]) ->
+    ?DEFAULT_LANGUAGE;
+first_enabled([{Code, true}|_]) ->
+    Code;
+first_enabled([_|Cs]) ->
+    first_enabled(Cs).
+
 
 %% @doc Returns the configured default language for this server; if not set, 'en'
 %%      (English).
@@ -326,14 +351,14 @@ main_languages() ->
     z_language_data:languages_map_main().
 
 %% @doc Return the currently configured list of languages
--spec language_list(z:context()) -> list( {language_code(), list()} ).
+-spec language_list(z:context()) -> list( {language_code(), language_status()} ).
 language_list(Context) ->
     case m_config:get(i18n, languages, Context) of
         undefined ->
-            [ {default_language(Context), []} ];
+            [ {default_language(Context), true} ];
         Cfg ->
             case proplists:get_value(list, Cfg, []) of
-                [] -> [ {default_language(Context), []} ];
+                [] -> [ {default_language(Context), true} ];
                 L when is_list(L) -> L
             end
     end.
@@ -420,7 +445,10 @@ maybe_update_config_list(I18NLanguageList, Context) ->
                 end,
                 [],
                 List),
-            m_config:set_prop(i18n, languages, list, NewList, Context),
+            % Ensure the default language is the first enabled language
+            Default = default_language(Context),
+            NewList1 = [ {Default, true} | proplists:delete(Default, NewList) ],
+            m_config:set_prop(i18n, languages, list, NewList1, Context),
             m_config:delete(i18n, language_list, Context);
         _ ->
             ?LOG_WARNING(#{

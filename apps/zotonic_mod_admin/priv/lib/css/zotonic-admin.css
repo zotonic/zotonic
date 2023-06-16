@@ -65,6 +65,12 @@ video {
   max-width: 100%;
   height: auto;
 }
+.drag-handle {
+  cursor: move;
+  background: repeat-y url("/lib/images/grippy2.png") 3px 0;
+  padding: 15px;
+  cursor: drag;
+}
 .unpublished,
 .unpublished a:not(.btn),
 .unpublished .text-muted,
@@ -613,10 +619,7 @@ ul.blocks.ui-sortable > li > .widget > .drag-handle {
   grid-column: 1;
   grid-row-start: 1;
   grid-row-end: 3;
-  cursor: move;
-  background: repeat-y url("/lib/images/grippy2.png") 3px 0;
   padding: 10px;
-  cursor: drag;
 }
 ul.blocks.ui-sortable > li > .widget > .widget-header {
   -ms-grid-column: 2;

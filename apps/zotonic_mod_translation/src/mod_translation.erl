@@ -279,6 +279,34 @@ event(#postback{message={set_language, Args}}, Context) ->
         RscId -> z_render:wire({redirect, [ {id, RscId} ]}, Context1)
     end;
 
+%% @doc Save the language list, as edited in the admin.
+event(#submit{ message={language_list, _Args} }, Context) ->
+    case z_acl:is_allowed(use, ?MODULE, Context) of
+        true ->
+            LanguageList = lists:filtermap(
+                fun
+                    ({<<"status-", Code/binary>>, Status}) ->
+                        case z_language:to_language_atom(Code) of
+                            {ok, CodeAtom} ->
+                                StatusAtom = case Status of
+                                    <<"editable">> -> editable;
+                                    <<"disabled">> -> false;
+                                    <<"enabled">> -> true
+                                end,
+                                {true, {CodeAtom, StatusAtom}};
+                            {error, _} ->
+                                false
+                        end;
+                    (_) ->
+                        false
+                end,
+                z_context:get_q_all_noz(Context)),
+            z_language:set_language_config(LanguageList, Context),
+            reload_table(Context);
+        false ->
+            z_render:growl_error(?__(<<"Sorry, you don't have permission to change the language list.">>, Context), Context)
+    end;
+
 %% @doc Set the default language. Reloads the page to reflect the new setting.
 event(#postback{message={language_default, Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
@@ -530,8 +558,19 @@ language_add(NewLanguageCode, IsEnabled, Context) when is_boolean(IsEnabled) ->
         true ->
             NewCode = z_convert:to_atom(NewLanguageCode),
             ConfigLanguages = z_language:language_config(Context),
-            ConfigLanguages1 = lists:usort([ {NewCode, IsEnabled} | proplists:delete(NewCode, ConfigLanguages) ]),
-            z_language:set_language_config(ConfigLanguages1, Context),
+            ConfigLanguages1 = lists:map(
+                fun
+                    ({Code, _}) when Code =:= NewCode -> {Code, IsEnabled};
+                    (Other) -> Other
+                end,
+                ConfigLanguages),
+            ConfigLanguages2 = case lists:keymember(NewCode, 1, ConfigLanguages1) of
+                true ->
+                    ConfigLanguages1;
+                false ->
+                    ConfigLanguages1 ++ [ {NewCode, IsEnabled} ]
+            end,
+            z_language:set_language_config(ConfigLanguages2, Context),
             ok
     end.
 
