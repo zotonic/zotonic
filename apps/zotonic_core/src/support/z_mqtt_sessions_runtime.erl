@@ -463,9 +463,9 @@ split_vhost_username(Username) ->
     Delimetr = [<<X>> || <<X>> <= Username, <<X>> == ?COLON orelse <<X>> == ?AT],
     match(Delimetr, Username).
 
-match([?COLON], Username) ->
+match([?COLON |_], Username) ->
     match_colon(Username);
-match([?AT], Username) ->
+match([?AT |_], Username) ->
     match_at(Username);
 match([], _) ->
     undefined.
