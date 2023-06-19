@@ -287,7 +287,7 @@ maybe_add_identity_connect(CurrUserId, Auth, Context) ->
         undefined ->
             % Unknown identity, add it to the current user
             {ok, _} = insert_identity(CurrUserId, Auth, Context),
-            {ok, Context};
+            {ok, CurrUserId};
         Ps ->
             {rsc_id, IdnRscId} = proplists:lookup(rsc_id, Ps),
             case IdnRscId of

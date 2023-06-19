@@ -65,7 +65,10 @@ render(Params, _Vars, Context) ->
             render_list(Template, List, Params, HideSinglePage, Dispatch, DispatchArgs, Context);
         #rsc_list{list=Ids} ->
             render_list(Template, Ids, Params, HideSinglePage, Dispatch, DispatchArgs, Context);
+        undefined ->
+            render_list(Template, [], Params, HideSinglePage, Dispatch, DispatchArgs, Context);
         _ ->
+            ?DEBUG(Result),
             {error, <<"scomp_pager: search result is not a #search_result{} or list">>}
     end.
 
