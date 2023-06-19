@@ -822,7 +822,7 @@ qterm({text, Text}, Context) ->
         <<"id:", S/binary>> ->
             #search_sql_term{
                 where = [
-                    <<"rsc.id">>, '$1'
+                    <<"rsc.id = ">>, '$1'
                 ],
                 args = [
                     m_rsc:rid(S, Context)
