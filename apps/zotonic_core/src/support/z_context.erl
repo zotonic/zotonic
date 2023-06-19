@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022  Marc Worrell
+%% @copyright 2009-2023  Marc Worrell
 %% @doc Request context for Zotonic request evaluation.
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -108,7 +108,7 @@
     get_all/1,
 
     language/1,
-    fallback_language/1,
+    languages/1,
     set_language/2,
 
     tz/1,
@@ -182,32 +182,26 @@ new(Site) when is_atom(Site) ->
         set_server_names(#context{ site = Site })).
 
 %% @doc Create a new context record for a site with a certain language
--spec new( Site :: atom(), Language :: atom() ) -> z:context().
-new(Site, Lang) when is_atom(Site), is_atom(Lang) ->
-    Context = set_server_names(#context{ site = Site }),
-    Context#context{
-        language = [ Lang ],
-        tz = tz_config(Context)
-    }.
+-spec new( Site :: atom(), Language :: atom() | [ atom() ] ) -> z:context().
+new(Site, Lang) when is_atom(Site) ->
+    Context = new(Site),
+    set_language(Lang, Context).
 
--spec new( Site :: atom(), Language :: atom(), Timezone :: binary() ) -> z:context().
-new(Site, Lang, Timezone) when is_atom(Site), is_atom(Lang), is_binary(Timezone) ->
-    Context = set_server_names(#context{ site = Site }),
-    Context#context{
-        language = [ Lang ],
-        tz = Timezone
-    }.
+-spec new( Site :: atom(), Language :: atom() | [ atom() ], Timezone :: binary() ) -> z:context().
+new(Site, Lang, Timezone) when is_atom(Site), is_binary(Timezone) ->
+    Context = new(Site, Lang),
+    Context#context{ tz = Timezone }.
 
 
 -spec set_default_language_tz(z:context()) -> z:context().
 set_default_language_tz(Context) ->
     try
         F = fun() ->
-            {z_language:default_language(Context), tz_config(Context)}
+            {z_language:enabled_languages(Context), tz_config(Context)}
         end,
-        {DefaultLang, TzConfig} = z_depcache:memo(F, default_language_tz, ?DAY, [config], Context),
+        {DefaultLangs, TzConfig} = z_depcache:memo(F, default_language_tz, ?DAY, [config], Context),
         Context#context{
-            language = [DefaultLang],
+            language = DefaultLangs,
             tz = TzConfig
         }
     catch
@@ -225,7 +219,7 @@ new_tests() ->
     Context = z_trans_server:set_context_table(
             #context{
                 site = test,
-                language = [en],
+                language = [ en ],
                 tz = <<"UTC">>
             }),
     case ets:info(Context#context.translation_table) of
@@ -527,14 +521,13 @@ pickle(Context) ->
 %% @doc Depickle a context for restoring from a database
 -spec depickle( tuple() ) -> z:context().
 depickle({pickled_context, Site, UserId, Language, _VisitorId}) ->
-    Context = set_server_names(#context{ site = Site, language = Language }),
-    ContextTz = Context#context{ tz = tz_config(Context) },
+    Context = new(Site, Language),
     case UserId of
-        undefined -> ContextTz;
-        _ -> z_acl:logon(UserId, ContextTz)
+        undefined -> Context;
+        _ -> z_acl:logon(UserId, Context)
     end;
 depickle({pickled_context, Site, UserId, Language, Tz, _VisitorId}) ->
-    Context = set_server_names(#context{ site = Site, language = Language, tz = Tz }),
+    Context = new(Site, Language, Tz),
     case UserId of
         undefined -> Context;
         _ -> z_acl:logon(UserId, Context)
@@ -1066,15 +1059,18 @@ language(Context) ->
         Language -> Language
     end.
 
-%% @doc Return the first fallback language of the Context
--spec fallback_language(Context) -> Language when
+%% @doc Return the language preference list.
+-spec languages(Context) -> Languages when
     Context :: z:context(),
-    Language :: z_language:language_code().
-fallback_language(Context) ->
-    % Take the second item of the list, if it exists
+    Languages :: [ z_language:language_code() ].
+languages(Context) ->
+    % A check on atom must exist because the language setting may be stored in mnesia and
+    % passed to the context when the site starts
     case Context#context.language of
-        [_, Fallback|_] -> Fallback;
-        _ -> undefined
+        undefined -> z_language:enabled_languages(Context);
+        [] -> z_language:enabled_languages(Context);
+        Languages when is_list(Languages) -> Languages;
+        Language when is_atom(Language) -> [ Language | lists:delete(Language, z_language:enabled_languages(Context)) ]
     end.
 
 %% @doc Set the language of the context, either an atom (language) or a list (language and fallback languages)
@@ -1085,10 +1081,11 @@ fallback_language(Context) ->
 set_language(undefined, Context) ->
     Context;
 set_language('x-default', Context) ->
-    Lang = z_language:default_language(Context),
-    Context#context{language=[Lang,'x-default']};
+    [Lang|Langs] = z_language:enabled_languages(Context),
+    Languages1 = [ Lang, 'x-default' | Langs ],
+    Context#context{language=Languages1};
 set_language(Lang, Context) when is_atom(Lang) ->
-    Context#context{language=[Lang]};
+    Context#context{language=[Lang|lists:delete(Lang, languages(Context))]};
 set_language(Langs, Context) when is_list(Langs) ->
     Langs1 = lists:filtermap(
         fun(Lang) ->
@@ -1097,7 +1094,7 @@ set_language(Langs, Context) when is_list(Langs) ->
                 {error, _} -> false
             end
         end, Langs),
-    Context#context{language=Langs1};
+    Context#context{language= Langs1 ++ (Context#context.language -- Langs1)};
 set_language(Lang, Context) when is_binary(Lang) ->
     case z_language:to_language_atom(Lang) of
         {ok, Code} -> set_language(Code, Context);

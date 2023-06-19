@@ -75,7 +75,7 @@ init(Context) ->
 %% @doc Set the language of the context. Sets to the given language if the language exists
 %%      in the config language and is enabled; otherwise tries the language's fallback language;
 %%      if this fails too, sets language to the site's default language.
--spec set_language(atom() | binary() | string(), z:context()) -> z:context().
+-spec set_language(atom() | binary() | list( atom() ), z:context()) -> z:context().
 set_language('x-default', Context) ->
     z_context:set_language('x-default', Context);
 set_language(Code0, Context) when is_atom(Code0) ->
@@ -91,12 +91,26 @@ set_language(Code0, Context) when is_atom(Code0) ->
                     z_context:set_language(Fallback, Context)
             end
     end;
-set_language(Code, Context) when is_binary(Code); is_list(Code) ->
+set_language(Code, Context) when is_binary(Code) ->
     case z_language:is_valid(Code) of
         true ->
             set_language(z_convert:to_atom(Code), Context);
         false ->
             Context
+    end;
+set_language([Code|_] = Langs, Context) when is_atom(Code) ->
+    ContextLangs = z_context:languages(Context),
+    if
+        Langs =:= ContextLangs ->
+            Context;
+        true ->
+            Enabled = z_language:enabled_languages(Context),
+            Langs1 = lists:filter(
+                fun(Lang) ->
+                    lists:member(Lang, Enabled)
+                end,
+                Langs),
+            z_context:set_language(Langs1, Context)
     end.
 
 %% @doc Check if the user has a preferred language (in the user's config). If not
@@ -115,14 +129,17 @@ observe_request_context(#request_context{}, Context, _Context) ->
     Context.
 
 maybe_set_cookie(Context) ->
-    Lang = atom_to_binary(z_context:language(Context), utf8),
-    case z_context:get_cookie(?LANGUAGE_COOKIE, Context) of
-        Lang ->
+    CookieLangs = unpack_lang_cookie(z_context:get_cookie(?LANGUAGE_COOKIE, Context)),
+    ContextLangs = z_context:languages(Context),
+    if
+        CookieLangs =:= ContextLangs ->
             Context;
-        _ ->
+        true ->
+            Langs1 = [ z_convert:to_binary(Lang) || Lang <- ContextLangs ],
+            Langs2 = iolist_to_binary(lists:join($:, Langs1)),
             z_context:set_cookie(
                 ?LANGUAGE_COOKIE,
-                Lang,
+                Langs2,
                 [
                     {max_age, ?LANGUAGE_COOKIE_MAX_AGE},
                     {path, <<"/">>},
@@ -131,13 +148,12 @@ maybe_set_cookie(Context) ->
                 Context)
     end.
 
-
 maybe_cookie(Context) ->
-    case z_context:get_cookie(?LANGUAGE_COOKIE, Context) of
-        undefined ->
+    case unpack_lang_cookie(z_context:get_cookie(?LANGUAGE_COOKIE, Context)) of
+        [] ->
             maybe_user(Context);
-        Language ->
-            set_language(Language, Context)
+        Languages ->
+            set_language(Languages, Context)
     end.
 
 maybe_user(Context) ->
@@ -169,6 +185,8 @@ maybe_accept_header(Context) ->
         undefined ->
             Context;
         AcceptHeader ->
+            % Reorder the acceptable languages according to the accept-language
+            % header order.
             Acceptable = z_language:acceptable_languages(Context1),
             case cowmachine_accept_language:accept_header(Acceptable, AcceptHeader) of
                 {ok, Lang} -> accept_language(Lang, Context1);
@@ -179,6 +197,18 @@ maybe_accept_header(Context) ->
 accept_language(Code, Context) ->
     set_language(maps:get(code_atom, z_language:properties(Code)), Context).
 
+unpack_lang_cookie(undefined) ->
+    [];
+unpack_lang_cookie(Value) ->
+    Split = binary:split(Value, <<":">>, [global, trim_all]),
+    lists:filtermap(
+        fun(Lang) ->
+            case z_language:to_language_atom(Lang) of
+                {ok, Code} -> {true, Code};
+                {error, _} -> false
+            end
+        end,
+        Split).
 
 -spec get_q_language( z:context() ) -> atom().
 get_q_language(Context) ->

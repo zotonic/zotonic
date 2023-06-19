@@ -138,23 +138,22 @@ acceptable_languages(Context) ->
     z_depcache:memo(
         fun() ->
             Enabled = enabled_languages(Context),
-            lists:foldl(
-                fun(Code, Acc) ->
+            List = lists:map(
+                fun(Code) ->
                     LangProps = z_language:properties(Code),
                     Lang = atom_to_binary(Code, utf8),
                     Fs = z_language:fallback_language(Code),
                     FsAsBin = [ z_convert:to_binary(F) || F <- Fs ],
-                    Acc1 = [ {Lang, FsAsBin} | Acc ],
-                    lists:foldl(
-                        fun(Alias, AliasAcc) ->
+                    Alias = lists:map(
+                        fun(Alias) ->
                             AliasBin = z_convert:to_binary(Alias),
-                            [ {AliasBin, FsAsBin} | AliasAcc ]
+                            {AliasBin, FsAsBin}
                         end,
-                        Acc1,
-                        maps:get(alias, LangProps, []))
+                        maps:get(alias, LangProps, [])),
+                    [ {Lang, FsAsBin} | Alias ]
                 end,
-                [],
-                Enabled)
+                Enabled),
+            lists:flatten(List)
         end,
         acceptable_languages,
         3600,
