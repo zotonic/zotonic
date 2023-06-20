@@ -166,10 +166,9 @@ process_done(ok, ProvidedCT, Context) ->
     {Body, Context};
 process_done({ok, #{
         <<"status">> := <<"error">>,
-        <<"error">> := _
+        <<"error">> := Reason
     } = Resp}, ProvidedCT, Context) ->
-    Body = z_controller_helper:encode_response(ProvidedCT, Resp),
-    {Body, Context};
+    error_response({error, Reason}, ProvidedCT, Context);
 process_done({ok, Resp}, ProvidedCT, Context) ->
     % z_mqtt:call response
     Body = z_controller_helper:encode_response(ProvidedCT, Resp),
@@ -180,7 +179,7 @@ process_done({error, _} = Error, ProvidedCT, Context) ->
 
 -spec error_response({error, term()}, cowmachine_req:media_type(), z:context()) ->
     {{halt, HttpCode :: pos_integer()}, z:context()}.
-error_response({error, payload}, CT, Context) ->
+error_response({error, Reason}, CT, Context) when Reason =:= payload; Reason =:= <<"payload">> ->
     RespBody = z_controller_helper:encode_response(CT, #{
             <<"status">> => <<"error">>,
             <<"error">> => <<"payload">>,
@@ -188,7 +187,7 @@ error_response({error, payload}, CT, Context) ->
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 400}, Context1};
-error_response({error, eacces}, CT, Context) ->
+error_response({error, Reason}, CT, Context) when Reason =:= eacces; Reason =:= <<"eacces">> ->
     RespBody = z_controller_helper:encode_response(CT, #{
             <<"status">> => <<"error">>,
             <<"error">> => <<"eacces">>,
@@ -196,7 +195,7 @@ error_response({error, eacces}, CT, Context) ->
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 403}, Context1};
-error_response({error, enoent}, CT, Context) ->
+error_response({error, Reason}, CT, Context) when Reason =:= enoent; Reason =:= <<"enoent">> ->
     RespBody = z_controller_helper:encode_response(CT, #{
             <<"status">> => <<"error">>,
             <<"error">> => <<"enoent">>,
@@ -204,7 +203,7 @@ error_response({error, enoent}, CT, Context) ->
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 404}, Context1};
-error_response({error, unknown_path}, CT, Context) ->
+error_response({error, Reason}, CT, Context) when Reason =:= unknown_path; Reason =:= <<"unknown_path">> ->
     RespBody = z_controller_helper:encode_response(CT, #{
             <<"status">> => <<"error">>,
             <<"error">> => <<"unknown_path">>,
