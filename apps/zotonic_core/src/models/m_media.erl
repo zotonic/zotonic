@@ -24,6 +24,8 @@
 %% interface functions
 -export([
     m_get/3,
+    m_post/3,
+    m_delete/3,
 
     identify/2,
     get/2,
@@ -85,6 +87,44 @@ m_get([ Id | Rest ], _Msg, Context) ->
     end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
+
+%% @doc API to update or insert resources.
+-spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | ok | {error, term()}.
+m_post([ Id ], #{ payload := Payload }, Context) when is_map(Payload) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, enoent};
+        RscId ->
+            RscProps = maps:get(<<"rsc">>, Payload, #{}),
+            case Payload of
+                #{ <<"url">> := Url } ->
+                    replace_url(Url, RscId, RscProps, Context);
+                #{ <<"file">> := #upload{ tmpmonitor = Pid } = File } when is_pid(Pid) ->
+                    replace_file(File, RscId, RscProps, Context);
+                _ ->
+                    {error, unacceptable}
+            end
+    end;
+m_post([], #{ payload := Payload }, Context) when is_map(Payload) ->
+    RscProps = maps:get(<<"rsc">>, Payload, #{}),
+    case Payload of
+        #{ <<"url">> := Url } ->
+            insert_url(Url, RscProps, Context);
+        #{ <<"file">> := #upload{ tmpmonitor = Pid } = File } when is_pid(Pid) ->
+            insert_file(File, RscProps, Context);
+        _ ->
+            {error, unacceptable}
+    end.
+
+%% @doc API to delete the medium of a resource
+-spec m_delete( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | ok | {error, term()}.
+m_delete([ Id ], _Msg, Context) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, enoent};
+        RscId ->
+            delete(RscId, Context)
+    end.
 
 
 %% @doc Return the identification of a medium. Used by z_media_identify:identify()
