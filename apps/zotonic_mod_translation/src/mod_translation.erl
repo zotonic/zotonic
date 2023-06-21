@@ -3,6 +3,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010-2023 Arthur Clemens, Marc Worrell
 %% @doc Translation support. Handle the language list and manage translations.
+%% @end
 
 %% Copyright 2010-2023 Arthur Clemens, Marc Worrell
 %%
@@ -294,7 +295,14 @@ observe_dispatch_rewrite(#dispatch_rewrite{is_dir=IsDir}, {Parts, Args} = Dispat
 
 observe_scomp_script_render(#scomp_script_render{}, Context) ->
     Language = z_convert:to_binary(z_context:language(Context)),
-    [<<"z_language=\"", Language/binary, "\"">>, $; ].
+    Languages = [
+        [ $", z_convert:to_binary(Lang), $" ] || Lang <- z_context:languages(Context)
+    ],
+    Languages1 = lists:join($,, Languages),
+    [
+        <<"z_language=\"", Language/binary, "\"">>, $;,
+        <<"z_languages=[">>, Languages1, <<"];">>
+    ].
 
 
 %% @doc Set the current session (and user) language, reload the user agent's page. Called from language switch. Reloads the page to reflect the new setting.

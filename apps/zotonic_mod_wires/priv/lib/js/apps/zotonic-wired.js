@@ -5,7 +5,7 @@
 @Author:    Tim Benniks <tim@timbenniks.nl>
 @Author:    Marc Worrell <marc@worrell.nl>
 
-Copyright 2009-2021 Tim Benniks, Marc Worrell
+Copyright 2009-2023 Tim Benniks, Marc Worrell
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ var zotonic                 = zotonic || {};
 
 // Client state
 var z_language              = "en";
+var z_languages             = ["en"];
 // var z_userid;
 var z_editor;
 var z_default_form_postback;

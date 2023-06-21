@@ -1,37 +1,55 @@
-%% @doc Mandatory background read on language tags: [1].
+%% @doc Language code handling functions.
 %%
-%%      Some quotes from [1]:
+%% Mandatory background read on language tags: [1].
 %%
-%%          The golden rule when creating language tags is to keep the tag as short as
-%%          possible. Avoid region, script or other subtags except where they add useful
-%%          distinguishing information. For instance, use 'ja' for Japanese and not
-%%          'ja-JP', unless there is a particular reason that you need to say that this is
-%%          Japanese as spoken in Japan, rather than elsewhere.
+%% Some quotes from [1]:
 %%
-%%          The entries in the registry follow certain conventions with regard to upper
-%%          and lower letter-casing. For example, language tags are lower case, alphabetic
-%%          region subtags are upper case, and script tags begin with an initial capital.
-%%          This is only a convention!
+%%      The golden rule when creating language tags is to keep the tag as short as
+%%      possible. Avoid region, script or other subtags except where they add useful
+%%      distinguishing information. For instance, use 'ja' for Japanese and not
+%%      'ja-JP', unless there is a particular reason that you need to say that this is
+%%      Japanese as spoken in Japan, rather than elsewhere.
 %%
-%%      Note that we use lower case subtags in subtag identifiers and URLs.
+%%      The entries in the registry follow certain conventions with regard to upper
+%%      and lower letter-casing. For example, language tags are lower case, alphabetic
+%%      region subtags are upper case, and script tags begin with an initial capital.
+%%      This is only a convention!
 %%
-%%          Language+extlang combinations are provided to accommodate legacy language tag
-%%          forms, however, there is a single language subtag available for every
-%%          language+extlang combination. That language subtag should be used rather than
-%%          the language+extlang combination, where possible. For example, use 'yue'
-%%          rather than 'zh-yue' for Cantonese, and 'afb' rather than 'ar-afb' for Gulf
-%%          Arabic, if you can.
+%% Note that we use lower case subtags in subtag identifiers and URLs.
+%%
+%%      Language+extlang combinations are provided to accommodate legacy language tag
+%%      forms, however, there is a single language subtag available for every
+%%      language+extlang combination. That language subtag should be used rather than
+%%      the language+extlang combination, where possible. For example, use 'yue'
+%%      rather than 'zh-yue' for Cantonese, and 'afb' rather than 'ar-afb' for Gulf
+%%      Arabic, if you can.
+%%
+%%  Language identifiers can have the following forms:
+%%  - language;
+%%  - language-extlang;
+%%  - language-region;
+%%  - language-script;
+%%  It is discouraged to use language-script-region, but it is possible if
+%%  required.
+%%  For a list of language, region and script codes, see [2].
+%%  [1] http://www.w3.org/International/articles/language-tags/
+%%  [2] http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
+%% @end
 
-%%      Language identifiers can have the following forms:
-%%      - language;
-%%      - language-extlang;
-%%      - language-region;
-%%      - language-script;
-%%      It is discouraged to use language-script-region, but it is possible if
-%%      required.
-%%      For a list of language, region and script codes, see [2].
-%%      [1] http://www.w3.org/International/articles/language-tags/
-%%      [2] http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
+%% Copyright 2016-2023 Arthur Clemens
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
 -module(z_language).
 
 -export([
