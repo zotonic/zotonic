@@ -514,6 +514,7 @@ return_status(Payload, Context) ->
         username => m_identity:get_username(Context1),
         preferences => #{
             language => z_context:language(Context1),
+            languages => z_context:languages(Context1),
             timezone => z_context:tz(Context1)
         },
         options => z_context:get(auth_options, Context1, #{}),

@@ -1070,10 +1070,12 @@ languages(#context{ language = Languages }) when is_list(Languages) ->
     LangContext :: z:context().
 set_language(undefined, Context) ->
     Context;
-set_language('x-default', Context) ->
-    [Lang|Langs] = z_language:enabled_languages(Context),
-    Languages1 = [ Lang, 'x-default' | Langs ],
-    Context#context{language=Languages1};
+set_language([], Context) ->
+    Context;
+% set_language('x-default', Context) ->
+%     [Lang|Langs] = z_language:enabled_languages(Context),
+%     Languages1 = [ Lang, 'x-default' | Langs ],
+%     Context#context{language=Languages1};
 set_language(Lang, Context) when is_atom(Lang) ->
     Context#context{language=[Lang|lists:delete(Lang, languages(Context))]};
 set_language(Langs, Context) when is_list(Langs) ->

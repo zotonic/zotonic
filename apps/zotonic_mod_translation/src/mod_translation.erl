@@ -117,20 +117,25 @@ set_language([Code|_] = Langs, Context) when is_atom(Code) ->
 %% @doc Check if the user has a preferred language (in the user's config). If not
 %%      then check the accept-language header (if any) against the available languages.
 observe_request_context(#request_context{ phase = init }, Context, _Context) ->
+    CookieLangs = unpack_lang_cookie(z_context:get_cookie(?LANGUAGE_COOKIE, Context)),
     maybe_set_cookie(
+        CookieLangs,
         case get_q_language(Context) of
+            undefined when CookieLangs =:= [] ->
+                maybe_user(Context);
             undefined ->
-                maybe_cookie(Context);
+                set_language(CookieLangs, Context);
             QsLang ->
-                set_language(QsLang, Context)
+                % Take cookie languages, move request language to front
+                Context1 = z_context:set_language(CookieLangs, Context),
+                set_language(QsLang, Context1)
         end);
 observe_request_context(#request_context{ phase = auth_status, document = #{ <<"language">> := _LangData } }, Context, _Context) ->
     Context;
 observe_request_context(#request_context{}, Context, _Context) ->
     Context.
 
-maybe_set_cookie(Context) ->
-    CookieLangs = unpack_lang_cookie(z_context:get_cookie(?LANGUAGE_COOKIE, Context)),
+maybe_set_cookie(CookieLangs, Context) ->
     ContextLangs = z_context:languages(Context),
     if
         CookieLangs =:= ContextLangs ->
@@ -147,14 +152,6 @@ maybe_set_cookie(Context) ->
                     {secure, true}
                 ],
                 Context)
-    end.
-
-maybe_cookie(Context) ->
-    case unpack_lang_cookie(z_context:get_cookie(?LANGUAGE_COOKIE, Context)) of
-        [] ->
-            maybe_user(Context);
-        Languages ->
-            set_language(Languages, Context)
     end.
 
 maybe_user(Context) ->
@@ -305,7 +302,8 @@ observe_scomp_script_render(#scomp_script_render{}, Context) ->
     ].
 
 
-%% @doc Set the current session (and user) language, reload the user agent's page. Called from language switch. Reloads the page to reflect the new setting.
+%% @doc Set the current session (and user) language, reload the user agent's page. Called from
+%% language switch. Reloads the page to reflect the new setting.
 event(#postback{message={set_language, Args}}, Context) ->
     LanguageCode = case proplists:get_value(code, Args) of
                undefined -> z_context:get_q(<<"triggervalue">>, Context);
