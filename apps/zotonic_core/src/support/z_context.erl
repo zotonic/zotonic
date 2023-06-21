@@ -1049,29 +1049,19 @@ get_all(Context) ->
 -spec language(Context) -> Language when
     Context :: z:context(),
     Language :: z_language:language_code().
-language(Context) ->
-    % A check on atom must exist because the language setting may be stored in mnesia and
-    % passed to the context when the site starts
-    case Context#context.language of
-        [Language|_] -> Language;
-        [] -> z_language:default_language(Context);
-        undefined -> z_language:default_language(Context);
-        Language -> Language
-    end.
+language(#context{ language = [] } = Context) ->
+    z_language:default_language(Context);
+language(#context{ language = [Lang|_] }) ->
+    Lang.
 
 %% @doc Return the language preference list.
 -spec languages(Context) -> Languages when
     Context :: z:context(),
     Languages :: [ z_language:language_code() ].
-languages(Context) ->
-    % A check on atom must exist because the language setting may be stored in mnesia and
-    % passed to the context when the site starts
-    case Context#context.language of
-        undefined -> z_language:enabled_languages(Context);
-        [] -> z_language:enabled_languages(Context);
-        Languages when is_list(Languages) -> Languages;
-        Language when is_atom(Language) -> [ Language | lists:delete(Language, z_language:enabled_languages(Context)) ]
-    end.
+languages(#context{ language = [] } = Context) ->
+    z_language:enabled_languages(Context);
+languages(#context{ language = Languages }) when is_list(Languages) ->
+    Languages.
 
 %% @doc Set the language of the context, either an atom (language) or a list (language and fallback languages)
 -spec set_language(Language, Context) -> LangContext when

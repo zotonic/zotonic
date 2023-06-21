@@ -106,7 +106,7 @@ initialize_config(Context) ->
                     init_config_languages(Context);
                 [] ->
                     Default = [ {default_language(Context), true} ],
-                    m_config:set_value(i18n, language, Default, Context);
+                    m_config:set_prop(i18n, languages, list, Default, Context);
                 Config ->
                     % Ensure that the default language is the first enabled language
                     Default = default_language(Context),
@@ -115,7 +115,7 @@ initialize_config(Context) ->
                             ok;
                         _ ->
                             Default1 = [ {Default, true} | proplists:delete(Default, Config) ],
-                            m_config:set_value(i18n, language, Default1, Context)
+                            m_config:set_prop(i18n, languages, list, Default1, Context)
                     end,
                     ok
             end;
