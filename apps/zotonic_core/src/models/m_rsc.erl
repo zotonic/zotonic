@@ -877,7 +877,7 @@ uri_dispatch(Id, Context) ->
         {true, Name} -> Name;
         false -> Id
     end,
-    case z_dispatcher:url_for(id, [{id, DispatchId}], z_context:set_language(undefined, Context)) of
+    case z_dispatcher:url_for(id, [{id, DispatchId}], z_context:set_language('x-default', Context)) of
         undefined ->
             iolist_to_binary(z_context:abs_url(<<"/id/", (z_convert:to_binary(DispatchId))/binary>>, Context));
         Url ->

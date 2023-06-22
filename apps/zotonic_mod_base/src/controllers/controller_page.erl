@@ -104,19 +104,34 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
         orelse z_convert:to_bool(m_rsc:p_no_acl(CatId, is_seo_noindex_cat, Context)),
     Context0 = z_context:set_noindex_header(IsSeoNoIndex, Context),
     Context1 = z_context:set_resource_headers(Id, Context0),
-
-	%% EXPERIMENTAL:
-	%%
-	%% When the 'cache_anonymous_max_age' flag is set then we enable simple page caching.
-	%% This does not take into account any query args and vary headers.
-	%% @todo Add the 'vary' headers to the cache key
-	RenderArgs = [ {id, Id} | z_context:get_all(Context1) ],
-    RenderArgs1 = z_notifier:foldl(template_vars, RenderArgs, Context),
+    IsCollection = m_rsc:is_a(Id, collection, Context),
+    IsHome = m_rsc:p_no_acl(Id, page_path, Context) =:= <<"/">>,
+    ContentLanguage = if
+        IsCollection orelse IsHome ->
+            z_context:language(Context1);
+        true ->
+            Translations = case m_rsc:p_no_acl(Id, language, Context1) of
+                undefined -> [];
+                Lngs -> Lngs
+            end,
+            z_trans:lookup_fallback_languages(Translations, Context1)
+    end,
+	RenderArgs = [
+        {id, Id},
+        {z_content_language, ContentLanguage}
+        | z_context:get_all(Context1)
+    ],
+    RenderArgs1 = z_notifier:foldl(template_vars, RenderArgs, Context1),
 	RenderFunc = fun() ->
 		Template = z_context:get(template, Context1, {cat, <<"page.tpl">>}),
 	    z_template:render(Template, RenderArgs1, Context1)
 	end,
 
+    %% EXPERIMENTAL:
+    %%
+    %% When the 'cache_anonymous_max_age' flag is set then we enable simple page caching.
+    %% This does not take into account any query args and vary headers.
+    %% @todo Add the 'vary' headers to the cache key
 	MaxAge = z_context:get(cache_anonymous_max_age, Context1),
 	Html = case z_auth:is_auth(Context1) of
 		false when is_integer(MaxAge), MaxAge > 0 ->

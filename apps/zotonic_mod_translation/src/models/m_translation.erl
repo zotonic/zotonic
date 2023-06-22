@@ -55,13 +55,13 @@ m_get([ <<"language_list_enabled">> | Rest ], _Msg, Context) ->
 m_get([ <<"language_list_editable">> | Rest ], _Msg, Context) ->
     {ok, {language_list_editable(Context), Rest}};
 m_get([ <<"default_language">> | Rest ], _Msg, Context) ->
-    {ok, {default_language(Context), Rest}};
+    {ok, {z_language:default_language(Context), Rest}};
 m_get([ <<"query_language">> | Rest ], _Msg, Context) ->
     {ok, {query_language(Context), Rest}};
 m_get([ <<"x_default_language">> | Rest ], _Msg, Context) ->
     Lang = case m_config:get_boolean(mod_translation, force_default, false, Context) of
         true ->
-            default_language(Context);
+            z_language:default_language(Context);
         false ->
             'x-default'
     end,
@@ -76,8 +76,8 @@ m_get([ <<"language_list">> | Rest ], _Msg, Context) ->
     {ok, {z_language:language_list(Context), Rest}};
 m_get([ <<"language_stemmer">> | Rest ], _Msg, Context) ->
     Stemmer = case m_config:get_value(i18n, language_stemmer, Context) of
-        undefined -> default_language(Context);
-        <<>> -> default_language(Context);
+        undefined -> z_language:default_language(Context);
+        <<>> -> z_language:default_language(Context);
         St -> St
     end,
     {ok, {Stemmer, Rest}};
@@ -90,11 +90,8 @@ m_get([ <<"properties">>, Code | Rest ], _Msg, _Context) ->
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
-default_language(Context) ->
-    z_language:default_language(Context).
-
 language_list_configured(Context) ->
-    Default = default_language(Context),
+    Default = z_language:default_language(Context),
     Config = z_language:language_config(Context),
     List = lists:map(
         fun

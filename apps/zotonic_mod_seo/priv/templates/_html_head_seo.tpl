@@ -1,33 +1,25 @@
 {% with m.rsc[id].id as id %}
+{% with z_content_language|default:z_language as z_seo_language %}
 
 {% block links %}
     {% if id and id.is_a.query and q.page %}
-        <link rel="canonical" href="{% block canonical %}{{ id.page_url_abs }}{% endblock %}?page={{ q.page|escape }}" />
-        <link rel="shortlink" href="{% block shortlink %}{% url id id=id absolute_url %}{% endblock %}" />
+        <link rel="canonical" href="{% block canonical %}{{ id.page_url_abs }}{% endblock %}?page={{ q.page|escape }}">
     {% elseif id %}
-    	<link rel="canonical" href="{% block canonical %}{{ id.page_url_abs }}{% endblock %}" />
-        <link rel="shortlink" href="{% block shortlink %}{% url id id=id absolute_url %}{% endblock %}" />
+        {% with z_seo_language as z_language %}
+    	<link rel="canonical" href="{% block canonical %}{{ id.page_url_abs }}{% endblock %}">
+        <link rel="shortlink" href="{% block shortlink %}{% url id id=id absolute_url %}{% endblock %}">
+        {% endwith %}
     {% endif %}
 {% endblock %}
 
 {% block metadata %}
     {% if m.seo.noindex or noindex %}
         <meta name="robots" content="noindex,nofollow">
-    {% elseif zotonic_dispatch != `home`
-            and id
-            and id.page_path != '/'
-            and id.language
-            and not z_language|member:id.language
-            and m.modules.active.mod_translation
-            and z_language != m.translation.default_language
-            and not id.is_a.collection
-    %}
-        {# Take one of the alternative urls, provided by mod_translation #}
-        <meta name="robots" content="noindex">
     {% elseif q.page and q.page > 1 %}
         {# Do not index beyond the first page of search results, but do follow links #}
         <meta name="robots" content="noindex">
     {% else %}
+        {% with z_seo_language as z_language %}
         {% with m.seo.keywords as keywords %}
         {% with m.seo.description as description %}
             {% if id %}
@@ -51,6 +43,7 @@
                     <meta name="description" content="{{ description|escape|truncate:400 }}">
                 {% endif %}
             {% endif %}
+        {% endwith %}
         {% endwith %}
         {% endwith %}
     {% endif %}
@@ -116,4 +109,5 @@
     {% endwith %}
 {% endblock %}
 
+{% endwith %}
 {% endwith %}

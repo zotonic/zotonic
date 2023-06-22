@@ -6,11 +6,11 @@
         {% for code in m.translation.enabled_language_codes %}
            <link rel="alternate" hreflang="{{ code }}" href="{{ m.req.raw_path|set_url_language:code }}">{% endfor %}
         <link rel="alternate" hreflang="x-default" href="{{ m.req.raw_path|set_url_language:x_default }}">
-    {% elseif zotonic_dispatch == `home` or id.is_a.collection %}
+    {% elseif not z_content_language or zotonic_dispatch == `home` or id.is_a.collection %}
         {% for code in m.translation.enabled_language_codes %}
            <link rel="alternate" hreflang="{{ code }}" href="{{ m.rsc[id].page_url_abs with z_language = code }}">{% endfor %}
         <link rel="alternate" hreflang="x-default" href="{{ m.rsc[id].page_url_abs with z_language = x_default }}">
-    {% elseif id.language %}
+    {% elseif id.language and z_content_language %}
         <link rel="alternate" hreflang="{{ default_language }}" href="{{ m.rsc[id].page_url_abs with z_language = default_language }}">
         {% for code in id.language %}{% if code /= default_language %}
     	   <link rel="alternate" hreflang="{{ code }}" href="{{ m.rsc[id].page_url_abs with z_language = code }}">{% endif %}{% endfor %}

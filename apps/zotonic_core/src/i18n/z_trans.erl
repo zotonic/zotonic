@@ -29,6 +29,7 @@
     lookup/3,
     lookup_fallback/2,
     lookup_fallback/3,
+    lookup_fallback_languages/2,
     lookup_fallback_language/2,
     lookup_fallback_language/3
 ]).
@@ -183,6 +184,35 @@ take_english_or_first(Tr) ->
         {_, Text} ->
             Text
     end.
+
+
+%% @doc Return the language that would be selected, given the context languages.
+-spec lookup_fallback_languages(Available, Context) -> Language when
+    Available :: [ atom() ],
+    Context :: z:context(),
+    Language :: atom().
+lookup_fallback_languages([], Context) ->
+    z_context:language(Context);
+lookup_fallback_languages(Available, Context) ->
+    Enabled = z_context:languages(Context),
+    case lookup_fallback_languages_1(Enabled, Available) of
+        undefined ->
+            case lists:member(en, Available) of
+                true -> en;
+                false -> hd(Available)
+            end;
+        Lang ->
+            Lang
+    end.
+
+lookup_fallback_languages_1([], _Available) ->
+    undefined;
+lookup_fallback_languages_1([Lang|Enabled], Available) ->
+    case lists:member(Lang, Available) of
+        true -> Lang;
+        false -> lookup_fallback_languages_1(Enabled, Available)
+    end.
+
 
 -spec lookup_fallback_language([atom()], z:context()) -> atom().
 lookup_fallback_language(Langs, Context) ->
