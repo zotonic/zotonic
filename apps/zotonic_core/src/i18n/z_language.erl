@@ -107,7 +107,14 @@ initialize_config(Context) ->
                         FirstCode =:= Default ->
                             ok;
                         true ->
-                            Default1 = [ {Default, true} | proplists:delete(Default, Config) ],
+                            {Enabled, Disabled} = lists:partition(
+                                fun({_,Status}) -> Status =:= true end,
+                                Config),
+                            {Editable, Off} = lists:partition(
+                                fun({_,Status}) -> Status =:= editable end,
+                                Disabled),
+                            Config1 = Enabled ++ Editable ++ Off,
+                            Default1 = [ {Default, true} | proplists:delete(Default, Config1) ],
                             m_config:set_prop(i18n, languages, list, Default1, Context)
                     end,
                     ok
