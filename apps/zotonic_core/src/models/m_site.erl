@@ -69,6 +69,10 @@ m_get([ <<"pagelen">> | Rest ], _Msg, Context) ->
         V -> z_convert:to_integer(V)
     end,
     {ok, {PageLen, Rest}};
+m_get([ <<"language">> | Rest ], _Msg, Context) ->
+    {ok, {z_context:language(Context), Rest}};
+m_get([ <<"default_language">> | Rest ], _Msg, Context) ->
+    {ok, {z_language:default_language(Context), Rest}};
 m_get([ Key | Rest ], _Msg, Context) when is_binary(Key) ->
     try
         KeyAtom = erlang:binary_to_existing_atom(Key, utf8),

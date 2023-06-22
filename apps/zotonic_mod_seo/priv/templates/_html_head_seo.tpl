@@ -1,3 +1,7 @@
+{# The variable z_content_language is set by controller_page.
+ # The z_content_language is set to the current z_language if the page is the home page or a
+ # collection.
+ #}
 {% with m.rsc[id].id as id %}
 {% with z_content_language|default:z_language as z_seo_language %}
 
@@ -17,6 +21,14 @@
         <meta name="robots" content="noindex,nofollow">
     {% elseif q.page and q.page > 1 %}
         {# Do not index beyond the first page of search results, but do follow links #}
+        <meta name="robots" content="noindex">
+    {% elseif   z_content_language
+            and z_language /= z_content_language
+            and z_language /= m.config.default_language
+    %}
+        {# Set the noindex for a page if the current language is not in the resource's languages AND
+         # the current language is not the default language AND the current page is not a collection (or query)
+         #}
         <meta name="robots" content="noindex">
     {% else %}
         {% with z_seo_language as z_language %}

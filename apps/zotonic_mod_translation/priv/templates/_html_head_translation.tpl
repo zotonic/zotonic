@@ -1,3 +1,7 @@
+{# The variable z_content_language is set by controller_page.
+ # The z_content_language is set to the current z_language if the page is the home page or a
+ # collection.
+ #}
 {% if m.translation.rewrite_url %}
 {% with m.translation.default_language as default_language %}
 {% with m.translation.x_default_language as x_default %}
