@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Generic template controller, serves the template mentioned in the dispatch configuration.
+%% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@
     is_authorized/1,
     process/4
 ]).
+
 
 service_available(Context) ->
     Context1 = case z_convert:to_bool(z_context:get(nocache, Context)) of
@@ -54,7 +56,24 @@ is_authorized(Context) ->
             z_controller_helper:is_authorized(Id, Context)
     end.
 
-process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
+process(_Method, _AcceptedCT, ProvidedCT, Context) ->
+    case ProvidedCT of
+        {<<"text">>, <<"html">>, _} ->
+            case z_controller_helper:is_redirect_language(Context) of
+                true ->
+                    Path = cowmachine_req:raw_path(Context),
+                    Path1 = iolist_to_binary([ $/, z_convert:to_binary(z_context:language(Context)), Path ]),
+                    Location = z_context:abs_url(Path1, Context),
+                    Context1 = z_context:set_resp_header(<<"location">>, Location, Context),
+                    {{halt, 303}, Context1};
+                false ->
+                    process_1(Context)
+            end;
+        _ ->
+            process_1(Context)
+    end.
+
+process_1(Context) ->
     Vars = z_context:get_all(Context),
     {Vars1, OptRscId} = maybe_configured_id(Vars, Context),
     Context0 = z_context:set_noindex_header(m_rsc:p_no_acl(OptRscId, seo_noindex, Context), Context),

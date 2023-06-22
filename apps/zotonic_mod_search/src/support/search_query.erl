@@ -747,7 +747,7 @@ qterm({language, [ Lang | _ ] = Langs}, Context) when is_atom(Lang); is_binary(L
                 {ok, Code} ->
                     z_convert:to_binary(Code);
                 {error, _} ->
-                    <<"x-none">>
+                    <<"x-default">>
             end
         end,
         Langs),

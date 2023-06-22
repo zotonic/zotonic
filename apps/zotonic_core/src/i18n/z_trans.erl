@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2020 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Translate english sentences into other languages, following
 %% the GNU gettext principle.
 
-%% Copyright 2009-2020 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@
     lookup/3,
     lookup_fallback/2,
     lookup_fallback/3,
+    lookup_fallback_languages/2,
     lookup_fallback_language/2,
     lookup_fallback_language/3
 ]).
@@ -110,48 +111,52 @@ add_labels(Lang, [{Label,Trans}|Rest], Acc) when is_binary(Trans), is_binary(Lab
     end.
 
 %% @doc Strict translation lookup of a language version
--spec lookup(z:trans()|binary()|string(), #context{}) -> binary() | string() | undefined.
+-spec lookup(z:trans()|binary()|string(), z:context()) -> binary() | string() | undefined.
 lookup(Trans, Context) ->
-    lookup(Trans, z_context:language(Context), Context).
+    lookup(Trans, z_context:languages(Context), Context).
 
--spec lookup(z:trans()|binary()|string(), atom(), #context{}) -> binary() | string() | undefined.
-lookup(#trans{ tr = Tr }, Lang, _Context) ->
+-spec lookup(z:trans()|binary()|string(), atom() | [atom()], z:context()) -> binary() | string() | undefined.
+lookup(#trans{ tr = Tr }, Lang, _Context) when is_atom(Lang) ->
     proplists:get_value(Lang, Tr);
-lookup(Text, Lang, Context) ->
-    case z_context:language(Context) of
+lookup(Text, Lang, Context) when is_atom(Lang) ->
+     case z_context:language(Context) of
         Lang -> Text;
         _ -> undefined
+    end;
+lookup(Text, Lang, Context) when is_atom(Lang) ->
+    lookup(Text, [Lang], Context);
+lookup(#trans{ tr = Tr }, Langs, _Context) ->
+    find_first(Langs, Tr);
+lookup(Text, Langs, Context) ->
+    ContextLangs = z_context:languages(Context),
+    case lists:any(fun(Iso) -> lists:member(Iso, ContextLangs) end, Langs) of
+        true -> Text;
+        false -> undefined
     end.
 
 %% @doc Non strict translation lookup of a language version.
-%%      In order check: requested language, default configured language, english, any
+%%      In order check: requested languages, default configured language, english, any
 -spec lookup_fallback(z:trans()|binary()|string()|undefined, z:context()|undefined) -> binary() | string() | undefined.
 lookup_fallback(undefined, _Context) ->
     undefined;
 lookup_fallback(Trans, undefined) ->
-    lookup_fallback(Trans, en, undefined);
+    lookup_fallback(Trans, [en], undefined);
 lookup_fallback(Trans, Context) ->
-    lookup_fallback(Trans, z_context:language(Context), Context).
+    lookup_fallback(Trans, z_context:languages(Context), Context).
 
-lookup_fallback(#trans{ tr = Tr }, Lang, Context) ->
-    case proplists:get_value(Lang, Tr) of
+lookup_fallback(Text, Lang, Context) when is_atom(Lang) ->
+    lookup_fallback(Text, [Lang], Context);
+lookup_fallback(#trans{ tr = Tr }, Langs, Context) when is_list(Langs) ->
+    case find_first(Langs, Tr) of
         undefined ->
-            FallbackLang = case Context of
-                undefined -> en;
-                _ -> z_context:fallback_language(Context)
-            end,
-            case proplists:get_value(FallbackLang, Tr) of
+            case z_language:default_language(Context) of
                 undefined ->
-                    case z_language:default_language(Context) of
-                        undefined -> take_english_or_first(Tr);
-                        CfgLang ->
-                            case proplists:get_value(z_convert:to_atom(CfgLang), Tr) of
-                                undefined -> take_english_or_first(Tr);
-                                Text -> Text
-                            end
-                    end;
-                Text ->
-                    Text
+                    take_english_or_first(Tr);
+                CfgLang ->
+                    case lists:keyfind(CfgLang, 1, Tr) of
+                        false -> take_english_or_first(Tr);
+                        {_, Text} -> Text
+                    end
             end;
         Text ->
             Text
@@ -159,16 +164,55 @@ lookup_fallback(#trans{ tr = Tr }, Lang, Context) ->
 lookup_fallback(Text, _Lang, _Context) ->
     Text.
 
+find_first(_Langs, []) ->
+    undefined;
+find_first([], _Tr) ->
+    undefined;
+find_first([Lang|Langs], Tr) ->
+    case lists:keyfind(Lang, 1, Tr) of
+        false -> find_first(Langs, Tr);
+        {_, Text} -> Text
+    end.
+
 take_english_or_first(Tr) ->
-    case proplists:get_value(en, Tr) of
-        undefined ->
+    case lists:keyfind(en, 1, Tr) of
+        false ->
             case Tr of
                 [{_,Text}|_] -> Text;
                 _ -> undefined
             end;
-        EnglishText ->
-            EnglishText
+        {_, Text} ->
+            Text
     end.
+
+
+%% @doc Return the language that would be selected, given the context languages.
+-spec lookup_fallback_languages(Available, Context) -> Language when
+    Available :: [ atom() ],
+    Context :: z:context(),
+    Language :: atom().
+lookup_fallback_languages([], Context) ->
+    z_context:language(Context);
+lookup_fallback_languages(Available, Context) ->
+    Enabled = z_context:languages(Context),
+    case lookup_fallback_languages_1(Enabled, Available) of
+        undefined ->
+            case lists:member(en, Available) of
+                true -> en;
+                false -> hd(Available)
+            end;
+        Lang ->
+            Lang
+    end.
+
+lookup_fallback_languages_1([], _Available) ->
+    undefined;
+lookup_fallback_languages_1([Lang|Enabled], Available) ->
+    case lists:member(Lang, Available) of
+        true -> Lang;
+        false -> lookup_fallback_languages_1(Enabled, Available)
+    end.
+
 
 -spec lookup_fallback_language([atom()], z:context()) -> atom().
 lookup_fallback_language(Langs, Context) ->

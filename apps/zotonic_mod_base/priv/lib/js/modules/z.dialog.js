@@ -200,6 +200,7 @@
         },
 
         dialogCenter: function($modalDialog) {
+            $modalDialog = $modalDialog || $("#zmodal");
             let newMarginTop = Math.max(0, ($(window).height() - $modalDialog.height()) / 2);
             newMarginTop *= 0.96; // visual coherence
             newMarginTop = Math.max(newMarginTop, 30);

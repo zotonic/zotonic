@@ -37,6 +37,7 @@
     set_default_value/4,
     set_value/4,
     set_prop/5,
+    get_prop/4,
 
     delete/3,
     get_id/3,
@@ -361,6 +362,20 @@ set_prop(Module, Key, Prop, PropValue, Context) ->
             Error
     end.
 
+%% @doc Get a "complex" config value.
+-spec get_prop(Module, Key, Prop, Context) -> Value | undefined when
+    Module :: atom() | binary(),
+    Key :: atom() | binary(),
+    Prop :: atom() | binary(),
+    Context :: z:context(),
+    Value :: term().
+get_prop(Module, Key, Prop, Context) ->
+    case m_config:get(Module, Key, Context) of
+        undefined ->
+            undefined;
+        Config when is_list(Config) ->
+            proplists:get_value(z_convert:to_atom(Prop), Config)
+    end.
 
 %% @doc Delete the specified module/key combination
 -spec delete( atom()|binary(), atom()|binary(), z:context() ) -> ok.

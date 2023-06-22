@@ -34,6 +34,7 @@
 
     query_language/1,
 
+    add_properties/1,
     sort_codes/1,
     sort/1
 ]).
@@ -54,13 +55,15 @@ m_get([ <<"language_list_enabled">> | Rest ], _Msg, Context) ->
 m_get([ <<"language_list_editable">> | Rest ], _Msg, Context) ->
     {ok, {language_list_editable(Context), Rest}};
 m_get([ <<"default_language">> | Rest ], _Msg, Context) ->
-    {ok, {default_language(Context), Rest}};
+    {ok, {z_language:default_language(Context), Rest}};
 m_get([ <<"query_language">> | Rest ], _Msg, Context) ->
     {ok, {query_language(Context), Rest}};
 m_get([ <<"x_default_language">> | Rest ], _Msg, Context) ->
-    Lang = case z_language:is_language_enabled(en, Context) of
-        true -> en;
-        false -> default_language(Context)
+    Lang = case m_config:get_boolean(mod_translation, force_default, false, Context) of
+        true ->
+            z_language:default_language(Context);
+        false ->
+            'x-default'
     end,
     {ok, {Lang, Rest}};
 m_get([ <<"main_languages">> | Rest ], _Msg, _Context) ->
@@ -73,8 +76,8 @@ m_get([ <<"language_list">> | Rest ], _Msg, Context) ->
     {ok, {z_language:language_list(Context), Rest}};
 m_get([ <<"language_stemmer">> | Rest ], _Msg, Context) ->
     Stemmer = case m_config:get_value(i18n, language_stemmer, Context) of
-        undefined -> default_language(Context);
-        <<>> -> default_language(Context);
+        undefined -> z_language:default_language(Context);
+        <<>> -> z_language:default_language(Context);
         St -> St
     end,
     {ok, {Stemmer, Rest}};
@@ -87,11 +90,8 @@ m_get([ <<"properties">>, Code | Rest ], _Msg, _Context) ->
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
-default_language(Context) ->
-    z_language:default_language(Context).
-
 language_list_configured(Context) ->
-    Default = default_language(Context),
+    Default = z_language:default_language(Context),
     Config = z_language:language_config(Context),
     List = lists:map(
         fun
@@ -117,13 +117,13 @@ language_list_configured(Context) ->
             Props = z_language:properties(Default),
             [ {Default, Props#{ is_enabled => true, is_editable => true, is_default => true } } | List ]
     end,
-    sort(List1).
+    List1.
 
 language_list_enabled(Context) ->
-	sort_codes(z_language:enabled_languages(Context)).
+	add_properties(z_language:enabled_languages(Context)).
 
 language_list_editable(Context) ->
-    sort_codes(z_language:editable_languages(Context)).
+    add_properties(z_language:editable_languages(Context)).
 
 main_languages() ->
     sort(z_language:main_languages()).
@@ -145,13 +145,15 @@ query_language(Context) ->
             Language
     end.
 
-sort_codes(Codes) when is_list(Codes) ->
-    List = lists:map(
+add_properties(Codes) ->
+    lists:map(
         fun(Code) ->
             {Code, z_language:properties(Code)}
         end,
-        Codes),
-    sort(List).
+        Codes).
+
+sort_codes(Codes) when is_list(Codes) ->
+    sort(add_properties(Codes)).
 
 sort(Map) when is_map(Map) ->
     List = maps:fold(
