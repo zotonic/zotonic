@@ -17,13 +17,6 @@
 %%
 %% Note that we use lower case subtags in subtag identifiers and URLs.
 %%
-%%      Language+extlang combinations are provided to accommodate legacy language tag
-%%      forms, however, there is a single language subtag available for every
-%%      language+extlang combination. That language subtag should be used rather than
-%%      the language+extlang combination, where possible. For example, use 'yue'
-%%      rather than 'zh-yue' for Cantonese, and 'afb' rather than 'ar-afb' for Gulf
-%%      Arabic, if you can.
-%%
 %%  Language identifiers can have the following forms:
 %%  - language;
 %%  - language-extlang;
@@ -58,7 +51,7 @@
     default_language/1,
     enabled_languages/1,
     editable_languages/1,
-    acceptable_languages/1,
+    acceptable_languages_map/1,
     language_config/1,
     set_language_config/2,
     is_valid/1,
@@ -149,39 +142,55 @@ available_translations(Context) ->
         fun z_language:is_valid/1, lists:usort([ C || {C, _File} <- PoFiles ])
     ).
 
-% Fetch the list of acceptable languages and their fallback languages.
-% Store this in the depcache (and memo) for quick(er) lookups.
--spec acceptable_languages( z:context() ) -> list( {binary(), [ binary() ]} ).
-acceptable_languages(Context) ->
+
+% Fetch the map of acceptable languages and their fallback languages.
+% Store this in the depcache for quick(er) lookups.
+-spec acceptable_languages_map( z:context() ) -> #{ binary() => binary() }.
+acceptable_languages_map(Context) ->
     z_depcache:memo(
-        fun() ->
-            Enabled = enabled_languages(Context),
-            List = lists:map(
-                fun(Code) ->
-                    LangProps = z_language:properties(Code),
-                    Lang = atom_to_binary(Code, utf8),
-                    Fs = z_language:fallback_language(Code),
-                    FsAsBin = [ z_convert:to_binary(F) || F <- Fs ],
-                    Alias = lists:map(
-                        fun(Alias) ->
-                            AliasBin = z_convert:to_binary(Alias),
-                            {AliasBin, FsAsBin}
-                        end,
-                        maps:get(alias, LangProps, [])),
-                    [ {Lang, FsAsBin} | Alias ]
-                end,
-                Enabled),
-            lists:flatten(List)
-        end,
-        acceptable_languages,
+        fun() -> acceptable_languages_map_1(Context) end,
+        acceptable_languages_map,
         3600,
         [config],
         Context).
 
+acceptable_languages_map_1(Context) ->
+    lists:foldl(
+        fun(Code, Acc) ->
+            Props = #{
+                code_bin := CodeBin,
+                fallback := FallbackList
+            } = z_language:properties(Code),
+            AliasList = maps:get(alias, Props, []),
+            Acc1 = Acc#{ CodeBin => CodeBin },
+            Acc2 = lists:foldl(
+                fun(Alias, FAcc) ->
+                    maybe_set(Alias, CodeBin, FAcc)
+                end,
+                Acc1,
+                AliasList),
+            lists:foldl(
+                fun(Fallback, FAcc) ->
+                    maybe_set(atom_to_binary(Fallback), CodeBin, FAcc)
+                end,
+                Acc2,
+                FallbackList)
+        end,
+        #{},
+        enabled_languages(Context)).
+
+maybe_set(K, V, Map) ->
+    case maps:find(K, Map) of
+        error -> Map#{ K => V };
+        _ -> Map
+    end.
+
+
 %% @doc Get the list of configured languages that are enabled.
 -spec enabled_languages(z:context()) -> list( atom() ).
 enabled_languages(Context) ->
-    case z_memo:get('z_language$enabled_languages') of
+    MemoKey = {'z_language$enabled_languages', z_context:site(Context)},
+    case z_memo:get(MemoKey) of
         V when is_list(V) ->
             V;
         _ ->
@@ -191,13 +200,14 @@ enabled_languages(Context) ->
                     ({_, _}) -> false
                 end,
                 language_config(Context)),
-            z_memo:set('z_language$enabled_languages', ConfigLanguages)
+            z_memo:set(MemoKey, ConfigLanguages)
     end.
 
 %% @doc Get the list of configured languages that are editable.
 -spec editable_languages(z:context()) -> list( atom() ).
 editable_languages(Context) ->
-    case z_memo:get('z_language$editable_languages') of
+    MemoKey = {'z_language$editable_languages', z_context:site(Context)},
+    case z_memo:get(MemoKey) of
         V when is_list(V) ->
             V;
         _ ->
@@ -208,7 +218,7 @@ editable_languages(Context) ->
                     ({_, _}) -> false
                 end,
                 language_config(Context)),
-            z_memo:set('z_language$editable_languages', ConfigLanguages)
+            z_memo:set(MemoKey, ConfigLanguages)
     end.
 
 %% @doc Get the list of configured languages.
@@ -235,8 +245,8 @@ set_language_config(NewConfig, Context) ->
         DefaultB -> ok;
         _ -> m_config:set_value(i18n, language, Default, Context)
     end,
-    z_memo:delete('z_language$enabled_languages'),
-    z_memo:delete('z_language$editable_languages'),
+    z_memo:delete({'z_language$enabled_languages', z_context:site(Context)}),
+    z_memo:delete({'z_language$editable_languages', z_context:site(Context)}),
     ok.
 
 first_enabled([]) ->

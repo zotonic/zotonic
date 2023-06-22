@@ -55,6 +55,8 @@
     valid_config_language/2,
     get_q_language/1,
 
+    match_accept_header/2,
+
     init/1,
     event/2,
     generate/1,
@@ -183,17 +185,43 @@ maybe_accept_header(Context) ->
         undefined ->
             Context;
         AcceptHeader ->
-            % Reorder the acceptable languages according to the accept-language
-            % header order.
-            Acceptable = z_language:acceptable_languages(Context1),
-            case cowmachine_accept_language:accept_header(Acceptable, AcceptHeader) of
-                {ok, Lang} -> accept_language(Lang, Context1);
-                {error, _} -> Context1
-            end
+            Accepted = match_accept_header(AcceptHeader, Context),
+            z_context:set_language(Accepted, Context)
     end.
 
-accept_language(Code, Context) ->
-    set_language(maps:get(code_atom, z_language:properties(Code)), Context).
+%% @doc Reorder the acceptable languages according to the accept-language
+%% header order.
+-spec match_accept_header(AcceptHeader, Context) -> Accepted when
+    AcceptHeader :: binary(),
+    Context :: z:context(),
+    Accepted :: [ binary() ].
+match_accept_header(AcceptHeader, Context) ->
+    % 1. Parse the accept header
+    case cowmachine_accept_language:parse_header(AcceptHeader) of
+        {ok, AcceptList} ->
+            % 2. Have a lookup of <[alt-]lang> => <lang>
+            Map = z_language:acceptable_languages_map(Context),
+            % 3. Map parsed header to list of acceptable languages in accept-language order
+            Accepted = lists:foldl(
+                fun(Lang, Acc) ->
+                    case maps:find(Lang, Map) of
+                        {ok, Mapped} ->
+                            case lists:member(Mapped, Acc) of
+                                true ->
+                                    Acc;
+                                false ->
+                                    [ Mapped | Acc ]
+                            end;
+                        error ->
+                            Acc
+                    end
+                end,
+                [],
+                AcceptList),
+            lists:reverse(Accepted);
+        {error, _} ->
+            []
+    end.
 
 unpack_lang_cookie(undefined) ->
     [];
@@ -208,17 +236,46 @@ unpack_lang_cookie(Value) ->
         end,
         Split).
 
--spec get_q_language( z:context() ) -> atom().
+-spec get_q_language(Context) -> Language | undefined when
+    Context :: z:context(),
+    Language :: atom().
 get_q_language(Context) ->
     case z_context:get_q_all(<<"z_language">>, Context) of
         [] ->
             undefined;
         L ->
-            Enabled = z_language:acceptable_languages(Context),
-            case cowmachine_accept_language:accept_list(Enabled, [lists:last(L)]) of
-                {ok, Lang} -> binary_to_atom(Lang, utf8);
-                {error, _} -> undefined
+            Lang = lists:last(L),
+            case z_language:to_language_atom(Lang) of
+                {ok, Code} ->
+                    case z_language:is_language_enabled(Code, Context) of
+                        true -> Code;
+                        false -> get_q_language_1(Lang, Context)
+                    end;
+                {error, _} ->
+                    get_q_language_1(Lang, Context)
             end
+    end.
+
+get_q_language_1(<<A, B, $-, _/binary>> = Lang, Context) ->
+    Acceptable = z_language:acceptable_languages_map(Context),
+    case maps:get(Lang, Acceptable, undefined) of
+        undefined ->
+            case maps:get(<<A,B>>, Acceptable, undefined) of
+                undefined ->
+                    undefined;
+                Code ->
+                    binary_to_atom(Code, utf8)
+            end;
+        Code ->
+            binary_to_atom(Code, utf8)
+    end;
+get_q_language_1(Lang, Context) ->
+    Acceptable = z_language:acceptable_languages_map(Context),
+    case maps:get(Lang, Acceptable, undefined) of
+        undefined ->
+            undefined;
+        Code ->
+            binary_to_atom(Code, utf8)
     end.
 
 observe_user_context(#user_context{ id = UserId }, Context, _Context) ->
