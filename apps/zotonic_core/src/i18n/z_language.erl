@@ -94,19 +94,19 @@ initialize_config(Context) ->
                 _ -> ok
             end,
             % Set list of enabled languages
-            case m_config:get(i18n, languages, Context) of
+            case m_config:get_prop(i18n, languages, list, Context) of
                 undefined ->
                     init_config_languages(Context);
                 [] ->
                     Default = [ {default_language(Context), true} ],
                     m_config:set_prop(i18n, languages, list, Default, Context);
-                Config ->
+                [{FirstCode, _} | _ ] = Config ->
                     % Ensure that the default language is the first enabled language
                     Default = default_language(Context),
-                    case first_enabled(Config) of
-                        Default ->
+                    if
+                        FirstCode =:= Default ->
                             ok;
-                        _ ->
+                        true ->
                             Default1 = [ {Default, true} | proplists:delete(Default, Config) ],
                             m_config:set_prop(i18n, languages, list, Default1, Context)
                     end,
