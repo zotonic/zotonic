@@ -70,6 +70,8 @@ collection_trail(Ids, Trail, Acc, Context) ->
         Acc,
         Ids).
 
+visible(undefined, _Context) ->
+    [];
 visible(Ids, Context) ->
     lists:filter(fun(Id) -> z_acl:rsc_visible(Id, Context) end, Ids).
 

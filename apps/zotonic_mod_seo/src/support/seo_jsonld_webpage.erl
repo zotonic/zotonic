@@ -79,8 +79,8 @@ generate_1(Id, Context) ->
         <<"schema:publisher">> => #{
             <<"@type">> => <<"schema:Organization">>,
             <<"schema:url">> => z_context:abs_url(<<"/">>, Context),
-            <<"name">> => z_html:unescape(m_site:get(title, Context)),
-            <<"description">> => z_html:unescape(SiteDescription)
+            <<"schema:name">> => z_html:unescape(m_site:get(title, Context)),
+            <<"schema:description">> => z_html:unescape(SiteDescription)
         }
     },
     JSONDoc1 = case z_media_tag:attributes(
@@ -215,9 +215,15 @@ title(Id, Context) ->
 
 description(Id, Context) ->
     SeoDesc = z_trans:lookup_fallback(m_rsc:p(Id, <<"seo_desc">>, Context), Context),
-    case z_utils:is_empty(SeoDesc) of
+    Desc = case z_utils:is_empty(SeoDesc) of
         true ->
             z_trans:lookup_fallback(filter_summary:summary(Id, Context), Context);
         false ->
             SeoDesc
+    end,
+    case Desc of
+        undefined -> undefined;
+        <<>> -> <<>>;
+        _ -> filter_brlinebreaks:brlinebreaks(Desc, Context)
     end.
+

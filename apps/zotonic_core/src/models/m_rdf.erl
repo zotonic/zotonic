@@ -61,7 +61,7 @@ summary(Id, Context) ->
 
 summary_1(Id, Context) ->
     Type = base_type(Id, Context),
-    Summary = filter_summary:summary(Id, Context),
+    Summary = filter_brlinebreaks:brlinebreaks(filter_summary:summary(Id, Context), Context),
     Doc = #{
         <<"@context">> => zotonic_rdf:namespaces(),
         <<"@id">> => m_rsc:uri(Id, Context),
