@@ -1406,6 +1406,7 @@ function z_add_validator(id, type, args)
                 case 'length':          v.add(Validate.Length, args);       break;
                 case 'format':          v.add(Validate.Format, args);       break;
                 case 'numericality':    v.add(Validate.Numericality, args); break;
+                case 'json':            v.add(Validate.Json, args);         break;
                 case 'custom':          v.add(Validate.Custom, args);       break;
                 case 'postback':
                     args['z_id'] = id;

@@ -24,7 +24,6 @@
     generate/2
     ]).
 
-
 %% @doc Generate the JSON-LD map for webpage view of the given resource.
 -spec generate(Id, Context) -> {ok, JSON} | {error, Reason} when
     Id :: m_rsc:resource(),
@@ -127,16 +126,50 @@ generate_1(Id, Context) ->
                 <<"schema:isPartOf">> => IsPartOfItems
             }
     end,
+    JSONDoc5 = case z_trans:lookup_fallback(m_rsc:p(Id, <<"seo_ld_json">>, Context), Context) of
+        undefined ->
+            JSONDoc4;
+        <<>> ->
+            JSONDoc4;
+        SeoJSON ->
+            try
+                case jsxrecord:decode(z_html:unescape(SeoJSON)) of
+                    SeoJSONParsed when is_map(SeoJSONParsed) ->
+                        SeoJSONParsed1 = ensure_schema(SeoJSONParsed),
+                        maps:merge(JSONDoc4, SeoJSONParsed1);
+                    _ ->
+                        JSONDoc4
+                end
+            catch
+                _:_ -> JSONDoc4
+            end
+    end,
     JSON = #{
         <<"@context">> => maps:get(<<"@context">>, RscDoc),
         <<"@graph">> => [
-            JSONDoc4
+            JSONDoc5
         ]
     },
     {ok, JSON}.
 
 visible(Ids, Context) ->
     lists:filter(fun(Id) -> z_acl:rsc_visible(Id, Context) end, Ids).
+
+ensure_schema(Map) when is_map(Map) ->
+    maps:fold(
+        fun(K, V, Acc) ->
+            V1 = ensure_schema(V),
+            case binary:match(K, <<":">>) of
+                nomatch ->
+                    Acc#{ <<"schema:", K/binary>> => V1 };
+                _ ->
+                    Acc#{ K => V1 }
+            end
+        end,
+        #{},
+        Map);
+ensure_schema(V) ->
+    V.
 
 make_breadcrumbs(Breadcrumbs, Context) ->
     lists:map(

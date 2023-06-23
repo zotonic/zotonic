@@ -27,4 +27,4 @@
 {% all catinclude "_admin_edit_content_extra.tpl" id %}
 
 {% include "_admin_edit_content_advanced.tpl" %}
-{% include "_admin_edit_content_seo.tpl" show_header %}
+{% optional include "_admin_edit_content_seo.tpl" show_header %}
