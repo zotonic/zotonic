@@ -59,6 +59,12 @@
         {% endwith %}
         {% endwith %}
     {% endif %}
+
+    {% with z_seo_language as z_language %}
+    {% if m.seo.jsonld[id] as json %}
+        <script type="application/ld+json">{{ json }}</script>
+    {% endif %}
+    {% endwith %}
 {% endblock %}
 
 {% block verification %}

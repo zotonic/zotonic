@@ -54,10 +54,16 @@ m_get([ <<"protocol">> | Rest ], _Msg, Context) ->
 m_get([ <<"is_ssl">> | Rest ], _Msg, Context) ->
     {ok, {z_context:is_ssl_site(Context), Rest}};
 m_get([ <<"title">> | Rest ], _Msg, Context) ->
-    Title = m_config:get_value(site, title, Context),
+    Title = case m_config:get_value(site, title, Context) of
+        undefined -> <<>>;
+        T -> unicode:characters_to_binary(T)
+    end,
     {ok, {Title, Rest}};
 m_get([ <<"subtitle">> | Rest ], _Msg, Context) ->
-    SubTitle = m_config:get_value(site, subtitle, Context),
+    SubTitle = case m_config:get_value(site, subtitle, Context) of
+        undefined -> <<>>;
+        T -> unicode:characters_to_binary(T)
+    end,
     {ok, {SubTitle, Rest}};
 m_get([ <<"email_from">> | Rest ], _Msg, Context) ->
     EmailFrom = z_email:get_email_from(Context),
