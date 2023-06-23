@@ -37,7 +37,7 @@
     					lang_code_with_brackets,
     					lang_code_for_id
     			%}
-        			<div id="{{ #prefix }}-{{ lang_code }}" class="tab-pane {% if lang_code == edit_language %}active{% endif %} language-{{ lang_code }} {% block widget_i18n_tab_class %}{% endblock %}">
+        			<div id="{{ #prefix }}-{{ lang_code }}" class="tab-pane {% if lang_code == edit_language %}active{% endif %} edit-language-{{ lang_code }} {% block widget_i18n_tab_class %}{% endblock %}">
         				{% block widget_content %}{% endblock %}
         			</div>
     			{% endwith %}

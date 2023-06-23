@@ -35,6 +35,7 @@
     "js/modules/jquery.loadmask.js"
     "js/modules/jquery.timepicker.min.js"
 
+    "js/prism.js"
     "js/zotonic-search-view.js"
 
     minify
