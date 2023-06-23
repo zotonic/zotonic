@@ -106,7 +106,7 @@ generate_1(Id, Context) ->
             JSONDoc1;
         {ok, Breadcrumbs} ->
             JSONDoc1#{
-                <<"breadcrumb">> => make_breadcrumbs(Breadcrumbs, Context)
+                <<"schema:breadcrumb">> => make_breadcrumbs(Breadcrumbs, Context)
             }
     end,
     JSONDoc3 = case visible(m_edge:subjects(Id, about, Context), Context) of
