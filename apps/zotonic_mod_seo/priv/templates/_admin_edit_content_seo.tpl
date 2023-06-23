@@ -69,7 +69,7 @@
         >{{ is_i18n|if : id.translation[lang_code].seo_ld_json : id.seo_ld_json }}</textarea>
         <label class="control-label col-md-3">{_ Custom JSON-LD _} {{ lang_code_with_brackets }}</label>
         <p class="help-block">
-            {_ Add your custom JSON-LD for structured metadata. This overlays the generated JSON-LD. _}
+            {_ Add your custom JSON-LD for structured metadata. This replaces the matching parts of the automatically generated JSON-LD. _}
             <a href="https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data" target="_blank" rel="noreferrer noopener">{_ More information [Google] _}</a>
         </p>
         {% validate id="seo_ld_json"++lang_code_for_id
@@ -79,10 +79,8 @@
     </div>
 
     <details>
-        <summary>{_ Show current JSON-LD _} {{ lang_code_with_brackets }}</summary>
-        {% with lang_code as z_language %}
-            <div class="panel panel-info" style="word-break: break-all; font-family: monospace; padding: 10px;">{{ m.seo.jsonld[id] }}</div>
-        {% endwith %}
+        <summary>{_ Show current JSON-LD (updates after save) _} {{ lang_code_with_brackets }}</summary>
+        {% live template="_seo_admin_preview_json_ld.tpl" topic=id id=id lang_code=lang_code %}
     </details>
 </fieldset>
 {% endblock %}
