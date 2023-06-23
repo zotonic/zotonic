@@ -23,6 +23,8 @@
     find/2
 ]).
 
+-define(MAX_HASPART, 3).
+
 %% @doc Find a list of all paths to this resource. Checks the main menu path
 %% and the haspart subject edges.
 -spec find(Id, Context) -> {ok, BreadcrumbList} when
@@ -33,18 +35,20 @@
 find(Id, Context) ->
     MenuTrail = menu_trail(Id, Context),
     IsPartOf = visible(m_edge:subjects(Id, haspart, Context), Context),
-    CollectionTrails = collection_trail(IsPartOf, [Id], [], Context),
+    IsPartOf1 = lists:sublist(IsPartOf, ?MAX_HASPART),
+    CollectionTrails = collection_trail(IsPartOf1, [Id], [], Context),
     CollectionTrails1 = lists:filter(
         fun
             ([_]) -> false;
             ([_|_]) -> true
         end,
         CollectionTrails),
+    CollectionTrails2 = lists:sublist(CollectionTrails1, ?MAX_HASPART),
     case MenuTrail of
         [] ->
-            {ok, CollectionTrails1};
+            {ok, CollectionTrails2};
         _ ->
-            {ok, [ MenuTrail | CollectionTrails1 ]}
+            {ok, [ MenuTrail | CollectionTrails2 ]}
     end.
 
 menu_trail(Id, Context) ->
@@ -64,7 +68,8 @@ collection_trail(Ids, Trail, Acc, Context) ->
                     TAcc;
                 false ->
                     IsPartOf = visible(m_edge:subjects(Id, haspart, Context), Context),
-                    collection_trail(IsPartOf, [Id|Trail], TAcc, Context)
+                    IsPartOf1 = lists:sublist(IsPartOf, ?MAX_HASPART),
+                    collection_trail(IsPartOf1, [Id|Trail], TAcc, Context)
             end
         end,
         Acc,

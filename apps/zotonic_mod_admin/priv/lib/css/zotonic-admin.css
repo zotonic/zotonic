@@ -65,6 +65,9 @@ video {
   max-width: 100%;
   height: auto;
 }
+details summary {
+  cursor: pointer;
+}
 .drag-handle {
   cursor: move;
   background: repeat-y url("/lib/images/grippy2.png") 3px 0;
