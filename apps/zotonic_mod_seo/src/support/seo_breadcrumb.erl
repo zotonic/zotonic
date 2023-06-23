@@ -49,7 +49,6 @@ find(Id, Context) ->
 
 menu_trail(Id, Context) ->
     case visible(filter_menu_trail:menu_trail(Id, Context), Context) of
-        undefined -> [];
         [] -> [];
         Trail -> [ page_home | Trail ]
     end.

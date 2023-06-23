@@ -235,7 +235,7 @@ trans(Id, Prop, F, Context) ->
 
 
 trans_1(undefined, _F) -> undefined;
-trans_1(V, F) when is_binary(F) -> F(V);
+trans_1(V, F) when is_binary(V) -> F(V);
 trans_1(#trans{ tr = [{_,V}] }, F) -> F(V);
 trans_1(#trans{ tr = Tr }, F) ->
             lists:map(
