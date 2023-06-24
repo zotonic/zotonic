@@ -50,7 +50,7 @@
 
     <div class="form-group label-floating">
         <textarea rows="5"
-            id="seo_desc{{ lang_code_for_id }}{{ lang_code_for_id }}"
+            id="seo_desc{{ lang_code_for_id }}"
             name="seo_desc{{ lang_code_with_dollar }}"
             {% if not id.is_editable %}disabled{% endif %}
             {% include "_language_attrs.tpl" language=lang_code class="seo-desc form-control field-collapse" %}
@@ -58,6 +58,30 @@
         >{{ is_i18n|if : id.translation[lang_code].seo_desc : id.seo_desc }}</textarea>
         <label class="control-label col-md-3">{_ Page description _} {{ lang_code_with_brackets }}</label>
     </div>
+
+    <div class="form-group label-floating">
+        <textarea rows="10"
+            id="seo_ld_json{{ lang_code_for_id }}"
+            name="seo_ld_json{{ lang_code_with_dollar }}"
+            {% if not id.is_editable %}disabled{% endif %}
+            {% include "_language_attrs.tpl" language=lang_code class="form-control field-collapse" %}
+            placeholder="{_ Custom JSON-LD _} {{ lang_code_with_brackets }}"
+        >{{ is_i18n|if : id.translation[lang_code].seo_ld_json : id.seo_ld_json }}</textarea>
+        <label class="control-label col-md-3">{_ Custom JSON-LD _} {{ lang_code_with_brackets }}</label>
+        <p class="help-block">
+            {_ Add your custom JSON-LD for structured metadata. This replaces the matching parts of the automatically generated JSON-LD. _}
+            <a href="https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data" target="_blank" rel="noreferrer noopener">{_ More information [Google] _}</a>
+        </p>
+        {% validate id="seo_ld_json"++lang_code_for_id
+                    name="seo_ld_json"++lang_code_with_dollar
+                    type={json}
+        %}
+    </div>
+
+    <details>
+        <summary>{_ Show current JSON-LD (updates after save) _} {{ lang_code_with_brackets }}</summary>
+        {% live template="_seo_admin_preview_json_ld.tpl" topic=id id=id lang_code=lang_code %}
+    </details>
 </fieldset>
 {% endblock %}
 

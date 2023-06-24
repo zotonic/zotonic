@@ -1045,6 +1045,29 @@ var Validate = {
       return true;
     },
 
+    /**
+     *  validates that the field contains a valid JSON
+     *
+     *  @var value {mixed} - value to be checked
+     *  @var paramsObj {Object} - parameters for this particular validation, see below for details
+     *
+     *  paramsObj properties:
+     *              failureMessage {String} - the message to show when the field fails validation
+     *                            (DEFAULT: "Must be a number!" or "Must be an integer!")
+     */
+    Json: function(value, paramsObj){
+      paramsObj = paramsObj || {};
+      var message = paramsObj.failureMessage || "";
+      value = $.trim(value);
+
+      try {
+          JSON.parse(value);
+          return true
+      } catch (error) {
+          Validate.fail(message);
+      }
+    },
+
     /*
      *  validates that the field contains a valid date
      *

@@ -33,7 +33,7 @@
         {% catinclude "_admin_edit_depiction.tpl" id %}
 
         {% include "_admin_edit_content_advanced.tpl" %}
-        {% include "_admin_edit_content_seo.tpl" show_header %}
+        {% optional include "_admin_edit_content_seo.tpl" show_header %}
      </div>
 
      <div class="tab-pane" id="survey-settings">

@@ -25,10 +25,11 @@
             "css/jquery.loadmask.css"
             "css/zotonic-admin.css"
             "css/zotonic-search-view-admin.css"
+            "css/prism.css"
             minify
         %}
 
-        {% all include "_html_head.tpl" %}
+        {% all include "_html_head.tpl" no_prism %}
         {% all include "_html_head_admin.tpl" %}
 
         {% block head_extra %}
