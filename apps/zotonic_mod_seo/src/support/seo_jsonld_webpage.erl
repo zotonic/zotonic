@@ -49,6 +49,30 @@ generate(Id, Context) ->
     end.
 
 generate_1(Id, Context) ->
+    CustomJSON = case z_trans:lookup_fallback(m_rsc:p(Id, <<"seo_ld_json">>, Context), Context) of
+        undefined ->
+            #{};
+        <<>> ->
+            #{};
+        SeoJSON ->
+            try
+                case jsxrecord:decode(z_html:unescape(SeoJSON)) of
+                    #{ <<"@context">> := _ } = SeoJSONParsed ->
+                        SeoJSONParsed;
+                    SeoJSONParsed when is_map(SeoJSONParsed) ->
+                        ensure_schema(SeoJSONParsed);
+                    _ ->
+                        #{}
+                end
+            catch
+                _:_ -> #{}
+            end
+    end,
+    generate_2(Id, CustomJSON, Context).
+
+generate_2(_Id, #{ <<"@context">> := _ } = CustomJSON, _Context) ->
+    {ok, CustomJSON};
+generate_2(Id, CustomJSON, Context) ->
     PageUrl = m_rsc:p(Id, <<"page_url_abs">>, Context),
     Title = title(Id, Context),
     Description = description(Id, Context),
@@ -126,24 +150,7 @@ generate_1(Id, Context) ->
                 <<"schema:isPartOf">> => IsPartOfItems
             }
     end,
-    JSONDoc5 = case z_trans:lookup_fallback(m_rsc:p(Id, <<"seo_ld_json">>, Context), Context) of
-        undefined ->
-            JSONDoc4;
-        <<>> ->
-            JSONDoc4;
-        SeoJSON ->
-            try
-                case jsxrecord:decode(z_html:unescape(SeoJSON)) of
-                    SeoJSONParsed when is_map(SeoJSONParsed) ->
-                        SeoJSONParsed1 = ensure_schema(SeoJSONParsed),
-                        maps:merge(JSONDoc4, SeoJSONParsed1);
-                    _ ->
-                        JSONDoc4
-                end
-            catch
-                _:_ -> JSONDoc4
-            end
-    end,
+    JSONDoc5 = maps:merge(JSONDoc4, CustomJSON),
     JSON = #{
         <<"@context">> => maps:get(<<"@context">>, RscDoc),
         <<"@graph">> => [
@@ -157,14 +164,17 @@ visible(Ids, Context) ->
 
 ensure_schema(Map) when is_map(Map) ->
     maps:fold(
-        fun(K, V, Acc) ->
-            V1 = ensure_schema(V),
-            case binary:match(K, <<":">>) of
-                nomatch ->
-                    Acc#{ <<"schema:", K/binary>> => V1 };
-                _ ->
-                    Acc#{ K => V1 }
-            end
+        fun
+            (<<"@", _/binary>> = K, V, Acc) ->
+                Acc#{ K => ensure_schema(V) };
+            (K, V, Acc) ->
+                V1 = ensure_schema(V),
+                case binary:match(K, <<":">>) of
+                    nomatch ->
+                        Acc#{ <<"schema:", K/binary>> => V1 };
+                    _ ->
+                        Acc#{ K => V1 }
+                end
         end,
         #{},
         Map);
