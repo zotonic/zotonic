@@ -167,7 +167,7 @@ process_done(ok, ProvidedCT, Context) ->
 process_done({ok, #{
         <<"status">> := <<"error">>,
         <<"error">> := Reason
-    } = Resp}, ProvidedCT, Context) ->
+    }}, ProvidedCT, Context) ->
     error_response({error, Reason}, ProvidedCT, Context);
 process_done({ok, Resp}, ProvidedCT, Context) ->
     % z_mqtt:call response
