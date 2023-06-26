@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-06-14 09:54\n"
+"PO-Revision-Date: 2023-06-26 09:08\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -567,7 +567,7 @@ msgstr "Tunjukkan grup pengguna ACL ini terlebih dahulu:"
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:52./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:68
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:61./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:76
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:56./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:72
-#: apps/zotonic_mod_menu/src/mod_menu.erl:172
+#: apps/zotonic_mod_menu/src/mod_menu.erl:193
 msgid "Sorry, you are not allowed to delete this."
 msgstr "Maaf, anda tidak diizinkan untuk menghapus ini."
 
@@ -865,10 +865,6 @@ msgstr "Semua media"
 msgid "All pages"
 msgstr "Semua Halaman"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:108
-msgid "All pages of this category"
-msgstr "Semua halaman dari kategori ini"
-
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:25
 msgid "All sites have been flushed."
 msgstr "Semua situs telah dibilas."
@@ -917,14 +913,6 @@ msgstr "Apakah anda yakin ingin keluar dari antarmuka admin?"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:11
 msgid "Aside"
 msgstr "Selain"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:121
-msgid "Ask Google to exclude all “{cat}” pages"
-msgstr "Minta Google untuk mengecualikan semua halaman “{cat}”"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
-msgid "Ask Google to not index this page"
-msgstr "Minta Google untuk tidak mengindeks halaman ini"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:70./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
@@ -1084,10 +1072,6 @@ msgstr "Dibuat pada"
 msgid "Created:"
 msgstr "Dibuat:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
-msgid "Customize page slug"
-msgstr "Sesuaikan halaman slug"
-
 #: apps/zotonic_mod_admin/priv/templates/admin.tpl:4./apps/zotonic_mod_admin/priv/templates/admin.tpl:8./apps/zotonic_mod_admin/src/mod_admin.erl:90
 msgid "Dashboard"
 msgstr "Dasbor"
@@ -1191,11 +1175,12 @@ msgstr "Gandakan halaman ini."
 msgid "E-mail address"
 msgstr "Alamat surel"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:99./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:53./apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:50
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:39
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40./apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:123
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:103
 msgid "Edit"
 msgstr "Sunting"
@@ -1651,14 +1636,6 @@ msgstr "Halaman"
 msgid "Page connections"
 msgstr "Halaman koneksi"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:57./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:59
-msgid "Page description"
-msgstr "Deskripsi halaman"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:46./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:48
-msgid "Page keywords"
-msgstr "Kata kunci halaman"
-
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:20
 msgid "Page path"
 msgstr "Halaman path"
@@ -1667,14 +1644,6 @@ msgstr "Halaman path"
 msgid "Page referrers"
 msgstr "Perujuk halaman"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:24
-msgid "Page slug"
-msgstr "Halaman slug"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:34./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:36
-msgid "Page title"
-msgstr "Judul halaman"
-
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:3./apps/zotonic_mod_admin/src/mod_admin.erl:99
 msgid "Pages"
 msgstr "Halaman"
@@ -1682,10 +1651,6 @@ msgstr "Halaman"
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:4./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:9
 msgid "Pages for"
 msgstr "Halaman untuk"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:110
-msgid "Pages of this category can be excluded from search engines. This is useful if some categories should not be found on Google (et al). Common examples are categories and predicates."
-msgstr "Halaman dari kategori ini dapat dikecualikan dari mesin pencari. Ini berguna jika beberapa kategori tidak dapat ditemukan di Google (et al). Contoh umum adalah kategori dan predikat."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "Pages overview"
@@ -1781,7 +1746,7 @@ msgid "Rebuild all search-indices by putting all pages and data from the databas
 msgstr "Membangun kembali semua pencarian-indeks dengan menempatkan semua halaman dan data dari database di pengindeks antrian. Ini dapat mengambil waktu yang lama!"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:84
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:122
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:151
 msgid "Rebuild search indices"
 msgstr "Membangun kembali indeks pencarian"
 
@@ -1819,7 +1784,7 @@ msgstr "Menandai ulang"
 
 #: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:16
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:44
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:34
 msgid "Remove"
 msgstr "Hapus"
 
@@ -1850,14 +1815,6 @@ msgstr "Mengambil status..."
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:104
 msgid "Runs the schema install command from the site's module again."
 msgstr "Menjalankan skema menginstal perintah dari situs ini modul lagi."
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:6
-msgid "SEO Content"
-msgstr "Konten SEO"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:96
-msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
-msgstr "Pengindeksan SEO halaman ini dinonaktifkan karena berada dalam kategori “{cat}”."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:4
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
@@ -2309,7 +2266,7 @@ msgstr "Berlaku untuk:"
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:131
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:38
 msgid "View"
 msgstr "Tampilan"
 
@@ -2646,7 +2603,7 @@ msgid "Config"
 msgstr "Konfigurasi"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:3./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:50
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:79
 msgid "Configuration"
 msgstr "Konfigurasi"
 
@@ -2879,7 +2836,7 @@ msgstr "Tambahkan halaman atau klik pada sebuah halaman di menu."
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:69./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:98
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:22
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:56
-#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:56./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:28
+#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:41
 msgid "Language"
 msgstr "Bahasa"
 
@@ -2926,7 +2883,7 @@ msgstr "Kata sandi aman sudah diisi sebelumnya, ganti jika perlu."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_identity_email.tpl:11
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:26
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:21
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:25
 msgid "Add"
 msgstr "Tambah"
 
@@ -6736,7 +6693,7 @@ msgstr "Menghapus milis."
 msgid "Description"
 msgstr "Deskripsi"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:21
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:20./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:21
 msgid "Do you want to remove this subscription?"
 msgstr "Apakah Anda ingin menghapus langganan ini?"
 
@@ -6857,7 +6814,7 @@ msgstr "Daftar surat"
 msgid "Mailing status"
 msgstr "Status surat"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:4
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:4./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:4
 msgid "Mailinglist subscriptions"
 msgstr "Langganan milis"
 
@@ -6986,7 +6943,7 @@ msgstr "Penerima untuk"
 msgid "Remove this recipient. No undo possible."
 msgstr "Menghapus penerima. Tidak mungkin ada yang melepaskan."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:31
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:30./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:31
 msgid "Removed subscription."
 msgstr "Langganan dihapus."
 
@@ -7086,7 +7043,7 @@ msgstr "Maaf, langganan Anda tidak dapat dikonfirmasi"
 msgid "Sorry, can’t find your subscription"
 msgstr "Maaf, langganan anda tidak dapat ditemukan"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:34./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:87./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:17
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:33./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:34./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:87./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:17
 msgid "Sorry, something went wrong. Please try again later."
 msgstr "Maaf, terjadi kesalahan. Silakan coba lagi nanti."
 
@@ -7102,7 +7059,7 @@ msgstr "Berlangganan"
 msgid "Subscribe to"
 msgstr "Berlangganan"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:93
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:41./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:93
 msgid "Subscribed with"
 msgstr "Berlangganan dengan"
 
@@ -7186,7 +7143,7 @@ msgstr "Halaman ini dapat dikirim ke berbagai daftar surat."
 msgid "Tick the checkbox if you want the recipient to receive a welcome e-mail message."
 msgstr "Centang kotak centang jika anda ingin penerima untuk menerima sebuah pesan e-mail selamat datang."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:22./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:75./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:13
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:17./apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:21./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:22./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:75./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:13
 msgid "Unsubscribe"
 msgstr "Berhenti berlangganan"
 
@@ -7430,7 +7387,7 @@ msgstr "Tambahkan atas"
 msgid "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages."
 msgstr "Klik pada <strong>Tambahkan menu pokok</strong> atau <strong>Menu pokok</strong> untuk menambahkan halaman."
 
-#: apps/zotonic_mod_menu/src/mod_menu.erl:180
+#: apps/zotonic_mod_menu/src/mod_menu.erl:201
 msgid "Copy of:"
 msgstr "Salinan dari:"
 
@@ -7462,11 +7419,11 @@ msgstr "Hierarki dapat didefinisikan untuk kategori yang ada."
 msgid "Hierarchy for"
 msgstr "Hirarki untuk"
 
-#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:3./apps/zotonic_mod_menu/src/mod_menu.erl:93
+#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:3./apps/zotonic_mod_menu/src/mod_menu.erl:95
 msgid "Menu"
 msgstr "Menu"
 
-#: apps/zotonic_mod_menu/src/mod_menu.erl:145
+#: apps/zotonic_mod_menu/src/mod_menu.erl:166
 msgid "Sorry, can’t copy that page."
 msgstr "Maaf, tidak dapat menyalin halaman tersebut."
 
@@ -7986,6 +7943,22 @@ msgstr "Maaf, Anda tidak diizinkan melakukan ini."
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "Tambahkan noindex, elemen untuk semua halaman nofollow."
 
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:72
+msgid "Add your custom JSON-LD for structured metadata. This replaces the matching parts of the automatically generated JSON-LD."
+msgstr ""
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:132
+msgid "All pages of this category"
+msgstr "Semua halaman dari kategori ini"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:145
+msgid "Ask Google to exclude all “{cat}” pages"
+msgstr "Minta Google untuk mengecualikan semua halaman “{cat}”"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:115
+msgid "Ask Google to not index this page"
+msgstr "Minta Google untuk tidak mengindeks halaman ini"
+
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96
 msgid "Bing Webmaster"
 msgstr "Bing Webmaster"
@@ -7997,6 +7970,14 @@ msgstr "Bing Webmaster validasi id"
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "Salin nilai dari atribut isi dalam meta tag yang diberikan oleh Google."
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:68./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:70
+msgid "Custom JSON-LD"
+msgstr ""
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:102
+msgid "Customize page slug"
+msgstr "Sesuaikan halaman slug"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:33
 msgid "Description to include on every page"
@@ -8042,9 +8023,41 @@ msgstr "Kata kunci"
 msgid "Keywords to include on every page. Separate keywords with a \",\""
 msgstr "Kata kunci untuk disertakan di setiap halaman. Pisahkan kata kunci dengan \",\""
 
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:73
+msgid "More information [Google]"
+msgstr ""
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:57./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:59
+msgid "Page description"
+msgstr "Deskripsi halaman"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:46./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:48
+msgid "Page keywords"
+msgstr "Kata kunci halaman"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:22./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:24
+msgid "Page slug"
+msgstr "Halaman slug"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:34./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:36
+msgid "Page title"
+msgstr "Judul halaman"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:134
+msgid "Pages of this category can be excluded from search engines. This is useful if some categories should not be found on Google (et al). Common examples are categories and predicates."
+msgstr "Halaman dari kategori ini dapat dikecualikan dari mesin pencari. Ini berguna jika beberapa kategori tidak dapat ditemukan di Google (et al). Contoh umum adalah kategori dan predikat."
+
 #: apps/zotonic_mod_seo/src/mod_seo.erl:42
 msgid "SEO"
 msgstr "SEO"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:6
+msgid "SEO Content"
+msgstr "Konten SEO"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:120
+msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
+msgstr "Pengindeksan SEO halaman ini dinonaktifkan karena berada dalam kategori “{cat}”."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:123
 msgid "Save SEO settings"
@@ -8053,6 +8066,10 @@ msgstr "Simpan pengaturan SEO"
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:3./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:8
 msgid "Search Engine Optimization"
 msgstr "Optimisasi Mesin Pencari"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:82
+msgid "Show current JSON-LD (updates after save)"
+msgstr ""
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:42
 msgid "The site configuration file allows this site to be indexed by search engines."
@@ -8773,7 +8790,6 @@ msgid "Dead end. Remove Next button. No questions will be submitted unless you a
 msgstr "Jalan buntu. Hapus tombol Berikutnya. Tidak ada pertanyaan yang akan diajukan kecuali Anda menambahkan tombol lompat ke halaman berikutnya."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:37
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:24
 msgid "Default"
 msgstr "Standar"
 
@@ -8833,15 +8849,15 @@ msgstr "Penjelasan"
 msgid "False"
 msgstr "Salah"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_thurstone_answer.tpl:37
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_thurstone_answer.tpl:39
 msgid "Feedback"
 msgstr "Masukan"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:6
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:3./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:4
 msgid "Feedback if correct"
 msgstr "Umpan balik jika benar"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:12./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:13
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:8./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:9
 msgid "Feedback if wrong"
 msgstr "Umpan balik jika salah"
 
@@ -9565,7 +9581,7 @@ msgstr "tahun. saya suka"
 msgid "Add language"
 msgstr "Tambah bahasa"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:24
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:28
 msgid "Added"
 msgstr "Menambahkan"
 
@@ -9577,15 +9593,15 @@ msgstr "Semua bahasa"
 msgid "Are you sure you want to remove this language?"
 msgstr "Apakah anda yakin anda ingin menghapus bahasa ini?"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:76
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:80
 msgid "Available sub-languages"
 msgstr "Tersedia sub-bahasa"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:378
+#: apps/zotonic_mod_translation/src/mod_translation.erl:498
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Tidak dapat membuat file terjemahan karena <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\"> gettext tidak terpasang </a>."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:29
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:42
 msgid "Code"
 msgstr "Kode"
 
@@ -9597,7 +9613,7 @@ msgstr "Copy teks dari suatu bahasa ke bahasa yang dipilih saat ini."
 msgid "Copy translation"
 msgstr "Salin terjemahan"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:97
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:126
 msgid "Danish"
 msgstr "Denmark"
 
@@ -9605,7 +9621,7 @@ msgstr "Denmark"
 msgid "Deciding on a main language or sub-language"
 msgstr "Memutuskan bahasa utama atau sub bahasa"
 
-#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:53
+#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
 msgid "Details"
 msgstr "Rincian"
 
@@ -9613,19 +9629,23 @@ msgstr "Rincian"
 msgid "Developer Documentation"
 msgstr "Dokumentasi pengembang"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:99
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:23
+msgid "Drag languages to define the preferred order, the first 'view' language will be the default language."
+msgstr ""
+
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:128
 msgid "Dutch"
 msgstr "Belanda"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:26
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:39
 msgid "Editable"
 msgstr "Dapat diedit"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:98
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:127
 msgid "English"
 msgstr "Inggris"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:51
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:55
 msgid "Fallback language"
 msgstr "Bahasa Fallback"
 
@@ -9633,27 +9653,27 @@ msgstr "Bahasa Fallback"
 msgid "Find language by name or ISO"
 msgstr "Temukan bahasa berdasarkan nama atau ISO"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:100
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:129
 msgid "Finnish"
 msgstr "Finlandia"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:137
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:166
 msgid "For Developers"
 msgstr "Untuk pengembang"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:77
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:106
 msgid "For new visitors, set the language to the default language"
 msgstr "Bagi pengunjung baru, mengatur bahasa untuk bahasa default"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:101
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:130
 msgid "French"
 msgstr "Perancis"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:143
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:172
 msgid "Generate .pot files"
 msgstr "Menghasilkan berkas .pot"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:102
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:131
 msgid "German"
 msgstr "Jerman"
 
@@ -9665,31 +9685,31 @@ msgstr "Kepala ke atas! Menghapus bahasa ini akan <strong>tidak</strong> menghap
 msgid "Help about translations"
 msgstr "Bantuan tentang terjemahan"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:103
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:132
 msgid "Hungarian"
 msgstr "Bahasa Hungaria"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:43
-msgid "If a language is set to 'off' then edited texts will loose their translation in that lanuage."
-msgstr "Jika suatu bahasa disetel ke 'mati' maka teks yang diedit akan kehilangan terjemahannya dalam bahasa itu."
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
+msgid "If a language is set to 'off' then edited texts will loose their translation in that language."
+msgstr ""
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:42
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:24
 msgid "If a language is set to 'view' or 'editable' then texts for that language are editable in the admin."
 msgstr "Jika suatu bahasa disetel ke 'view' atau 'editable' maka teks untuk bahasa itu dapat diedit di admin."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:118
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:147
 msgid "If you change the stemmer language then you will need to reindex all data."
 msgstr "Jika anda mengubah stemmer bahasa maka anda akan perlu untuk reindex semua data."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:104
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:133
 msgid "Italian"
 msgstr "Italia"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:71
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:75
 msgid "Language in URL"
 msgstr "Bahasa dalam URL"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:88
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:117
 msgid "Language used for stemming of the search indices"
 msgstr "Bahasa yang digunakan untuk yang berasal dari indeks pencarian"
 
@@ -9701,19 +9721,19 @@ msgstr "Ikhtisar bahasa"
 msgid "More than one language must be active."
 msgstr "Lebih dari satu bahasa harus aktif."
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:29
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:33
 msgid "Name in menu"
 msgstr "Nama dalam menu"
 
-#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:67
+#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:57
 msgid "No languages configured."
 msgstr "Tidak ada bahasa yang dikonfigurasi."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:105
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:134
 msgid "Norwegian"
 msgstr "Norwegia"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:27
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:40
 msgid "Off"
 msgstr "Mati"
 
@@ -9721,39 +9741,39 @@ msgstr "Mati"
 msgid "Part of"
 msgstr "Bagian dari"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:34./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:30
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:38./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:43
 msgid "Region"
 msgstr "Wilayah"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:152
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:181
 msgid "Reload Translations"
 msgstr "Memuat Ulang Terjemahan"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:154
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:183
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "Reload semua terjemahan dari modul dan situs. Semua template yang akan dikompilasi ulang."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:393
+#: apps/zotonic_mod_translation/src/mod_translation.erl:513
 msgid "Reloading all .po files in the background."
 msgstr "Muat ulang semua file .po di latar belakang."
 
-#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:47
+#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:37
 msgid "Remove language"
 msgstr "Hapus bahasa"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:106
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:135
 msgid "Romanian"
 msgstr "Romania"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:107
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:136
 msgid "Russian"
 msgstr "Rusia"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:145
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:174
 msgid "Scan all templates for translation tags and generate .pot files that can be used for translating the templates. The <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext package must be installed</a>."
 msgstr "Memindai semua template untuk tag terjemahan dan hasilkan .file pot yang dapat digunakan untuk menerjemahkan template. <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext paket yang harus diinstal</a>."
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:40./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:31
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:44./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:44
 msgid "Script"
 msgstr "Script"
 
@@ -9773,39 +9793,39 @@ msgstr "Pilih bahasa untuk menyalin dari:"
 msgid "Select your preferred language."
 msgstr "Pilih bahasa yang anda inginkan."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:64
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:93
 msgid "Show the language in the URL"
 msgstr "Menunjukkan bahasa di URL"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:295./apps/zotonic_mod_translation/src/mod_translation.erl:343
+#: apps/zotonic_mod_translation/src/mod_translation.erl:415./apps/zotonic_mod_translation/src/mod_translation.erl:463
 msgid "Sorry, could not change the language."
 msgstr "Maaf, tidak bisa mengubah bahasa."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:311./apps/zotonic_mod_translation/src/mod_translation.erl:323./apps/zotonic_mod_translation/src/mod_translation.erl:346
+#: apps/zotonic_mod_translation/src/mod_translation.erl:402./apps/zotonic_mod_translation/src/mod_translation.erl:431./apps/zotonic_mod_translation/src/mod_translation.erl:443./apps/zotonic_mod_translation/src/mod_translation.erl:466
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "Show per module how many templates are translated."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:395
+#: apps/zotonic_mod_translation/src/mod_translation.erl:515
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "Maaf, anda tidak memiliki izin untuk reload terjemahan."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:385
+#: apps/zotonic_mod_translation/src/mod_translation.erl:505
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Maaf, anda tidak memiliki izin untuk scan untuk terjemahan."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:298./apps/zotonic_mod_translation/src/mod_translation.erl:464
+#: apps/zotonic_mod_translation/src/mod_translation.erl:418./apps/zotonic_mod_translation/src/mod_translation.erl:584
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Maaf, anda tidak memiliki izin untuk mengatur bahasa default."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:108
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:137
 msgid "Spanish"
 msgstr "Spanyol"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:365
+#: apps/zotonic_mod_translation/src/mod_translation.erl:485
 msgid "Started building the .pot files. This may take a while..."
 msgstr "Mulai membangun .file pot. Ini mungkin mengambil beberapa saat..."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:109
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:138
 msgid "Swedish"
 msgstr "Swedia"
 
@@ -9821,7 +9841,7 @@ msgstr "Judul, tubuh, dan teks-teks lain dapat diterjemahkan dalam berbagai baha
 msgid "Translate this page in other languages."
 msgstr "Terjemahkan halaman ini dalam bahasa lain."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:688
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:819
 msgid "Translation"
 msgstr "Terjemahan"
 
@@ -9829,11 +9849,11 @@ msgstr "Terjemahan"
 msgid "Translations"
 msgstr "Terjemahan"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:110
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:139
 msgid "Turkish"
 msgstr "Turki"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:56./apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:63
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:60./apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:67
 msgid "not enabled"
 msgstr "tidak diaktifkan"
 
