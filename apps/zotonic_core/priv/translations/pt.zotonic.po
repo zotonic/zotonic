@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-06-14 09:53\n"
+"PO-Revision-Date: 2023-06-26 09:08\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -567,7 +567,7 @@ msgstr "Mostre este grupo de usuários LCA primeiro:"
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:52./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:68
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:61./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:76
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:56./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:72
-#: apps/zotonic_mod_menu/src/mod_menu.erl:172
+#: apps/zotonic_mod_menu/src/mod_menu.erl:193
 msgid "Sorry, you are not allowed to delete this."
 msgstr "Desculpe, você não tem permissão para excxluir isto."
 
@@ -865,10 +865,6 @@ msgstr "Todas as mídias"
 msgid "All pages"
 msgstr "Todas as páginas"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:108
-msgid "All pages of this category"
-msgstr "Todas as páginas desta categoria"
-
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:25
 msgid "All sites have been flushed."
 msgstr "Todos os sites foram liberados."
@@ -917,14 +913,6 @@ msgstr "Tem certeza de que deseja sair da interface de administração?"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:11
 msgid "Aside"
 msgstr "Ao lado"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:121
-msgid "Ask Google to exclude all “{cat}” pages"
-msgstr "Peça ao Google para excluir todas as páginas “{cat}”"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
-msgid "Ask Google to not index this page"
-msgstr "Peça ao Google para não indexar esta página"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:70./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
@@ -1084,10 +1072,6 @@ msgstr "Criado em"
 msgid "Created:"
 msgstr "Criado:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
-msgid "Customize page slug"
-msgstr "Personalizar a lesma da página"
-
 #: apps/zotonic_mod_admin/priv/templates/admin.tpl:4./apps/zotonic_mod_admin/priv/templates/admin.tpl:8./apps/zotonic_mod_admin/src/mod_admin.erl:90
 msgid "Dashboard"
 msgstr "Painel de instrumentos"
@@ -1191,11 +1175,12 @@ msgstr "Duplicar esta página."
 msgid "E-mail address"
 msgstr "Endereço de e-mail"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:99./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:53./apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:50
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:39
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40./apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:123
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:103
 msgid "Edit"
 msgstr "Editar"
@@ -1651,14 +1636,6 @@ msgstr "Página"
 msgid "Page connections"
 msgstr "Ligações de página"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:57./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:59
-msgid "Page description"
-msgstr "Descrição da página"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:46./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:48
-msgid "Page keywords"
-msgstr "Palavras-chave da página"
-
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:20
 msgid "Page path"
 msgstr "Caminho da página"
@@ -1667,14 +1644,6 @@ msgstr "Caminho da página"
 msgid "Page referrers"
 msgstr "Referenciadores de página"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:24
-msgid "Page slug"
-msgstr "Lixo de página"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:34./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:36
-msgid "Page title"
-msgstr "Título da página"
-
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:3./apps/zotonic_mod_admin/src/mod_admin.erl:99
 msgid "Pages"
 msgstr "Páginas"
@@ -1682,10 +1651,6 @@ msgstr "Páginas"
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:4./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:9
 msgid "Pages for"
 msgstr "Páginas para"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:110
-msgid "Pages of this category can be excluded from search engines. This is useful if some categories should not be found on Google (et al). Common examples are categories and predicates."
-msgstr "As páginas desta categoria podem ser excluídas dos motores de busca. Isso é útil se algumas categorias não forem encontradas no Google (et al). Exemplos comuns são categorias e predicados."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "Pages overview"
@@ -1781,7 +1746,7 @@ msgid "Rebuild all search-indices by putting all pages and data from the databas
 msgstr "Reconstruir todos os índices de pesquisa colocando todas as páginas e dados da base de dados na fila do indexador. Isto pode demorar muito tempo!"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:84
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:122
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:151
 msgid "Rebuild search indices"
 msgstr "Reconstruir índices de pesquisa"
 
@@ -1819,7 +1784,7 @@ msgstr "Observações"
 
 #: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:16
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:44
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:34
 msgid "Remove"
 msgstr "Remover"
 
@@ -1850,14 +1815,6 @@ msgstr "A recuperar o estado..."
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:104
 msgid "Runs the schema install command from the site's module again."
 msgstr "Executa novamente o comando de instalação do esquema a partir do módulo do site."
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:6
-msgid "SEO Content"
-msgstr "Conteúdo SEO"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:96
-msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
-msgstr "A indexação SEO desta página está desabilitada porque está na categoria “{cat}”."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:4
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
@@ -2309,7 +2266,7 @@ msgstr "Válido para:"
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:131
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:38
 msgid "View"
 msgstr "Ver"
 
@@ -2646,7 +2603,7 @@ msgid "Config"
 msgstr "Config"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:3./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:50
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:79
 msgid "Configuration"
 msgstr "Configuração"
 
@@ -2879,7 +2836,7 @@ msgstr "Adicione páginas ou clique em uma página do menu."
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:69./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:98
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:22
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:56
-#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:56./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:28
+#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:41
 msgid "Language"
 msgstr "Idioma"
 
@@ -2926,7 +2883,7 @@ msgstr "Uma senha segura é pré-preenchida, substitua se necessário."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_identity_email.tpl:11
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:26
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:21
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:25
 msgid "Add"
 msgstr "Adicione"
 
@@ -6737,7 +6694,7 @@ msgstr "Eliminada a lista de correio."
 msgid "Description"
 msgstr "Descrição"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:21
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:20./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:21
 msgid "Do you want to remove this subscription?"
 msgstr "Deseja remover esta assinatura?"
 
@@ -6858,7 +6815,7 @@ msgstr "Listas de correio"
 msgid "Mailing status"
 msgstr "Status do correio"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:4
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:4./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:4
 msgid "Mailinglist subscriptions"
 msgstr "Assinaturas de lista de discussão"
 
@@ -6987,7 +6944,7 @@ msgstr "Recipientes para"
 msgid "Remove this recipient. No undo possible."
 msgstr "Retire este destinatário. Não é possível desfazer."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:31
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:30./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:31
 msgid "Removed subscription."
 msgstr "Assinatura removida."
 
@@ -7087,7 +7044,7 @@ msgstr "Desculpe, não podemos aprovar a sua assinatura"
 msgid "Sorry, can’t find your subscription"
 msgstr "Desculpe, não podemos encontrar sua assinatura"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:34./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:87./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:17
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:33./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:34./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:87./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:17
 msgid "Sorry, something went wrong. Please try again later."
 msgstr "Desculpa, algo correu mal. Por favor, tente novamente mais tarde."
 
@@ -7103,7 +7060,7 @@ msgstr "Assine"
 msgid "Subscribe to"
 msgstr "Inscreva-se em"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:93
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:41./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:93
 msgid "Subscribed with"
 msgstr "Assinado com"
 
@@ -7187,7 +7144,7 @@ msgstr "Esta página pode ser enviada para diferentes listas de correio."
 msgid "Tick the checkbox if you want the recipient to receive a welcome e-mail message."
 msgstr "Marque a caixa de seleção se você quiser que o destinatário receba uma mensagem de boas-vindas por e-mail."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:22./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:75./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:13
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:17./apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:21./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:22./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:75./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:13
 msgid "Unsubscribe"
 msgstr "Anular a inscrição"
 
@@ -7431,7 +7388,7 @@ msgstr "Adicionar topo"
 msgid "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages."
 msgstr "Clique em <strong>Adicionar item de menu</strong> ou <strong>Item de menu</strong> para adicionar páginas."
 
-#: apps/zotonic_mod_menu/src/mod_menu.erl:180
+#: apps/zotonic_mod_menu/src/mod_menu.erl:201
 msgid "Copy of:"
 msgstr "Cópia de:"
 
@@ -7463,11 +7420,11 @@ msgstr "Hierarquias podem ser definidas para qualquer categoria existente."
 msgid "Hierarchy for"
 msgstr "Hierarquia para"
 
-#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:3./apps/zotonic_mod_menu/src/mod_menu.erl:93
+#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:3./apps/zotonic_mod_menu/src/mod_menu.erl:95
 msgid "Menu"
 msgstr "Menu"
 
-#: apps/zotonic_mod_menu/src/mod_menu.erl:145
+#: apps/zotonic_mod_menu/src/mod_menu.erl:166
 msgid "Sorry, can’t copy that page."
 msgstr "Desculpa, não posso copiar essa página."
 
@@ -7986,6 +7943,22 @@ msgstr "Desculpe, você não tem permissão para fazer isso."
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "Adicione um elemento noindex, nofollow a todas as páginas."
 
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:72
+msgid "Add your custom JSON-LD for structured metadata. This replaces the matching parts of the automatically generated JSON-LD."
+msgstr ""
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:132
+msgid "All pages of this category"
+msgstr "Todas as páginas desta categoria"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:145
+msgid "Ask Google to exclude all “{cat}” pages"
+msgstr "Peça ao Google para excluir todas as páginas “{cat}”"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:115
+msgid "Ask Google to not index this page"
+msgstr "Peça ao Google para não indexar esta página"
+
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96
 msgid "Bing Webmaster"
 msgstr "Bing Webmaster"
@@ -7997,6 +7970,14 @@ msgstr "Bing Webmaster validação id"
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "Copie o valor do atributo de conteúdo na meta tag fornecida pelo Google."
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:68./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:70
+msgid "Custom JSON-LD"
+msgstr ""
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:102
+msgid "Customize page slug"
+msgstr "Personalizar a lesma da página"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:33
 msgid "Description to include on every page"
@@ -8042,9 +8023,41 @@ msgstr "Palavras-chave"
 msgid "Keywords to include on every page. Separate keywords with a \",\""
 msgstr "Palavras-chave a incluir em todas as páginas. Separe as palavras-chave com um \",\""
 
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:73
+msgid "More information [Google]"
+msgstr ""
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:57./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:59
+msgid "Page description"
+msgstr "Descrição da página"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:46./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:48
+msgid "Page keywords"
+msgstr "Palavras-chave da página"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:22./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:24
+msgid "Page slug"
+msgstr "Lixo de página"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:34./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:36
+msgid "Page title"
+msgstr "Título da página"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:134
+msgid "Pages of this category can be excluded from search engines. This is useful if some categories should not be found on Google (et al). Common examples are categories and predicates."
+msgstr "As páginas desta categoria podem ser excluídas dos motores de busca. Isso é útil se algumas categorias não forem encontradas no Google (et al). Exemplos comuns são categorias e predicados."
+
 #: apps/zotonic_mod_seo/src/mod_seo.erl:42
 msgid "SEO"
 msgstr "SEO"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:6
+msgid "SEO Content"
+msgstr "Conteúdo SEO"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:120
+msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
+msgstr "A indexação SEO desta página está desabilitada porque está na categoria “{cat}”."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:123
 msgid "Save SEO settings"
@@ -8053,6 +8066,10 @@ msgstr "Salvar configurações SEO"
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:3./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:8
 msgid "Search Engine Optimization"
 msgstr "Otimização para motores de busca"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:82
+msgid "Show current JSON-LD (updates after save)"
+msgstr ""
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:42
 msgid "The site configuration file allows this site to be indexed by search engines."
@@ -8773,7 +8790,6 @@ msgid "Dead end. Remove Next button. No questions will be submitted unless you a
 msgstr "Fim da linha. Botão Remover Próximo. Nenhuma pergunta será enviada, a menos que você adicione um botão para pular para a próxima página."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:37
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:24
 msgid "Default"
 msgstr "Predefinição"
 
@@ -8833,15 +8849,15 @@ msgstr "Explicação"
 msgid "False"
 msgstr "Falso"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_thurstone_answer.tpl:37
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_thurstone_answer.tpl:39
 msgid "Feedback"
 msgstr "Comentários"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:6
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:3./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:4
 msgid "Feedback if correct"
 msgstr "Feedback se correto"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:12./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:13
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:8./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:9
 msgid "Feedback if wrong"
 msgstr "Feedback em caso de erro"
 
@@ -9565,7 +9581,7 @@ msgstr "...anos de idade. Eu gosto..."
 msgid "Add language"
 msgstr "Adicionar idioma"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:24
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:28
 msgid "Added"
 msgstr "Adicionado"
 
@@ -9577,15 +9593,15 @@ msgstr "Todos os idiomas"
 msgid "Are you sure you want to remove this language?"
 msgstr "Tem a certeza que quer remover esta linguagem?"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:76
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:80
 msgid "Available sub-languages"
 msgstr "Sub-línguas disponíveis"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:378
+#: apps/zotonic_mod_translation/src/mod_translation.erl:498
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Não é possível gerar arquivos de tradução porque <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext não está instalado</a>."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:29
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:42
 msgid "Code"
 msgstr "Código"
 
@@ -9597,7 +9613,7 @@ msgstr "Copiar textos de um idioma para o idioma atualmente selecionado."
 msgid "Copy translation"
 msgstr "Tradução da cópia"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:97
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:126
 msgid "Danish"
 msgstr "Dinamarquês"
 
@@ -9605,7 +9621,7 @@ msgstr "Dinamarquês"
 msgid "Deciding on a main language or sub-language"
 msgstr "Decidir sobre uma língua ou sub-língua principal"
 
-#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:53
+#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
 msgid "Details"
 msgstr "Detalhes"
 
@@ -9613,19 +9629,23 @@ msgstr "Detalhes"
 msgid "Developer Documentation"
 msgstr "Documentação do Desenvolvedor"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:99
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:23
+msgid "Drag languages to define the preferred order, the first 'view' language will be the default language."
+msgstr ""
+
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:128
 msgid "Dutch"
 msgstr "Holandês"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:26
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:39
 msgid "Editable"
 msgstr "Editável"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:98
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:127
 msgid "English"
 msgstr "Inglês"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:51
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:55
 msgid "Fallback language"
 msgstr "Fallback language"
 
@@ -9633,27 +9653,27 @@ msgstr "Fallback language"
 msgid "Find language by name or ISO"
 msgstr "Encontrar idioma por nome ou ISO"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:100
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:129
 msgid "Finnish"
 msgstr "Finlandês"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:137
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:166
 msgid "For Developers"
 msgstr "Para Desenvolvedores"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:77
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:106
 msgid "For new visitors, set the language to the default language"
 msgstr "Para novos visitantes, defina o idioma para o idioma padrão"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:101
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:130
 msgid "French"
 msgstr "Francês"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:143
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:172
 msgid "Generate .pot files"
 msgstr "Gerar arquivos .pot"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:102
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:131
 msgid "German"
 msgstr "Alemão"
 
@@ -9665,31 +9685,31 @@ msgstr "Atenção! A remoção desta linguagem irá <strong>não</strong> apagar
 msgid "Help about translations"
 msgstr "Ajuda sobre traduções"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:103
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:132
 msgid "Hungarian"
 msgstr "Húngaro"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:43
-msgid "If a language is set to 'off' then edited texts will loose their translation in that lanuage."
-msgstr "Se uma língua estiver definida para 'off', então os textos editados perderão sua tradução nessa lanuage."
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
+msgid "If a language is set to 'off' then edited texts will loose their translation in that language."
+msgstr ""
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:42
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:24
 msgid "If a language is set to 'view' or 'editable' then texts for that language are editable in the admin."
 msgstr "Se uma língua estiver definida para 'ver' ou 'editável', os textos para essa língua são editáveis no administrador."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:118
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:147
 msgid "If you change the stemmer language then you will need to reindex all data."
 msgstr "Se você mudar a linguagem do stemmer, então você precisará reindexar todos os dados."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:104
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:133
 msgid "Italian"
 msgstr "Italiano"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:71
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:75
 msgid "Language in URL"
 msgstr "Idioma no URL"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:88
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:117
 msgid "Language used for stemming of the search indices"
 msgstr "Idioma utilizado para o cálculo dos índices de pesquisa"
 
@@ -9701,19 +9721,19 @@ msgstr "Visão geral dos idiomas"
 msgid "More than one language must be active."
 msgstr "Mais de um idioma deve estar ativo."
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:29
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:33
 msgid "Name in menu"
 msgstr "Nome no menu"
 
-#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:67
+#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:57
 msgid "No languages configured."
 msgstr "Nenhum idioma configurado."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:105
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:134
 msgid "Norwegian"
 msgstr "Norueguês"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:27
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:40
 msgid "Off"
 msgstr "Fora"
 
@@ -9721,39 +9741,39 @@ msgstr "Fora"
 msgid "Part of"
 msgstr "Parte de"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:34./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:30
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:38./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:43
 msgid "Region"
 msgstr "Região"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:152
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:181
 msgid "Reload Translations"
 msgstr "Recarregar Traduções"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:154
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:183
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "Recarregar todas as traduções dos módulos e do site. Todos os templates serão recompilados."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:393
+#: apps/zotonic_mod_translation/src/mod_translation.erl:513
 msgid "Reloading all .po files in the background."
 msgstr "Recarregando todos os arquivos .po em segundo plano."
 
-#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:47
+#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:37
 msgid "Remove language"
 msgstr "Remover idioma"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:106
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:135
 msgid "Romanian"
 msgstr "Romeno"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:107
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:136
 msgid "Russian"
 msgstr "Russo"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:145
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:174
 msgid "Scan all templates for translation tags and generate .pot files that can be used for translating the templates. The <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext package must be installed</a>."
 msgstr "Digitalize todos os templates em busca de tags de tradução e gere arquivos .pot que podem ser usados para traduzir os templates. O pacote <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext deve ser instalado</a>."
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:40./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:31
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:44./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:44
 msgid "Script"
 msgstr "Roteiro"
 
@@ -9773,39 +9793,39 @@ msgstr "Seleccione o idioma a partir do qual pretende copiar:"
 msgid "Select your preferred language."
 msgstr "Seleccione o seu idioma preferido."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:64
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:93
 msgid "Show the language in the URL"
 msgstr "Mostrar o idioma no URL"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:295./apps/zotonic_mod_translation/src/mod_translation.erl:343
+#: apps/zotonic_mod_translation/src/mod_translation.erl:415./apps/zotonic_mod_translation/src/mod_translation.erl:463
 msgid "Sorry, could not change the language."
 msgstr "Desculpa, não consegui mudar a língua."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:311./apps/zotonic_mod_translation/src/mod_translation.erl:323./apps/zotonic_mod_translation/src/mod_translation.erl:346
+#: apps/zotonic_mod_translation/src/mod_translation.erl:402./apps/zotonic_mod_translation/src/mod_translation.erl:431./apps/zotonic_mod_translation/src/mod_translation.erl:443./apps/zotonic_mod_translation/src/mod_translation.erl:466
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "Desculpe, você não tem permissão para mudar a lista de idiomas."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:395
+#: apps/zotonic_mod_translation/src/mod_translation.erl:515
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "Desculpe, não tem permissão para recarregar traduções."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:385
+#: apps/zotonic_mod_translation/src/mod_translation.erl:505
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Desculpe, não tem permissão para procurar traduções."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:298./apps/zotonic_mod_translation/src/mod_translation.erl:464
+#: apps/zotonic_mod_translation/src/mod_translation.erl:418./apps/zotonic_mod_translation/src/mod_translation.erl:584
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Desculpe, você não tem permissão para definir a língua padrão."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:108
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:137
 msgid "Spanish"
 msgstr "Espanhol"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:365
+#: apps/zotonic_mod_translation/src/mod_translation.erl:485
 msgid "Started building the .pot files. This may take a while..."
 msgstr "Comecei a construir os arquivos .pot. Isto pode demorar um pouco..."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:109
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:138
 msgid "Swedish"
 msgstr "Sueco"
 
@@ -9821,7 +9841,7 @@ msgstr "O título, o corpo e outros textos podem ser traduzidos em diferentes l�
 msgid "Translate this page in other languages."
 msgstr "Traduza esta página em outros idiomas."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:688
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:819
 msgid "Translation"
 msgstr "Tradução"
 
@@ -9829,11 +9849,11 @@ msgstr "Tradução"
 msgid "Translations"
 msgstr "Traduções"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:110
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:139
 msgid "Turkish"
 msgstr "Turco"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:56./apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:63
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:60./apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:67
 msgid "not enabled"
 msgstr "não ativadas"
 
