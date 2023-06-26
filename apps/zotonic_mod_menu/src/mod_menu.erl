@@ -21,13 +21,14 @@
 
 -mod_title("Menus").
 -mod_description("Menus in Zotonic, adds admin interface to define menus and other hierarchical lists.").
--mod_schema(2).
+-mod_schema(3).
 -mod_depends([]).
 -mod_provides([menu]).
 
 %% interface functions
 -export([
     manage_schema/2,
+    manage_data/2,
 
     event/2,
 
@@ -36,6 +37,7 @@
     observe_rsc_get/3,
     observe_admin_menu/3,
     observe_rsc_update/3,
+    observe_rsc_pivot_done/2,
 
     get_menu/1,
     get_menu/2,
@@ -119,6 +121,25 @@ observe_rsc_update(#rsc_update{ action = Action }, {ok, #{ <<"menu">> := Menu } 
     {ok, R#{ <<"menu">> => Menu1 }};
 observe_rsc_update(#rsc_update{}, Result, _Context) ->
     Result.
+
+%% @doc Set the 'hasmenupart' edges to keep track which resourcees are used in a menu.
+%% This is needed for the automatic cleanup of 'dependent' resources and the
+%% breadcrumb paths of mod_seo.
+observe_rsc_pivot_done(#rsc_pivot_done{id = Id, is_a = IsA}, Context) ->
+    case lists:member(menu, IsA) of
+        true ->
+            ContextSudo = z_acl:sudo(Context),
+            NewMenuIds = filter_menu_ids:menu_ids(Id, ContextSudo),
+            OldMenuIds = m_edge:objects(Id, hasmenupart, ContextSudo),
+            New = NewMenuIds -- OldMenuIds,
+            Del = OldMenuIds -- NewMenuIds,
+            NewExists = lists:filter(fun(ObjId) -> m_rsc:exists(ObjId, ContextSudo) end, New),
+            [ m_edge:insert(Id, hasmenupart, ObjId, [no_touch], ContextSudo) || ObjId <- NewExists ],
+            [ m_edge:delete(Id, hasmenupart, ObjId, [no_touch], ContextSudo) || ObjId <- Del ],
+            ok;
+        false ->
+            ok
+    end.
 
 
 % Event handler command handling.
@@ -456,10 +477,23 @@ menu_subtree_1([_|Rest], BelowId, AddSiblings, CurrMenu, Context) ->
     menu_subtree_1(Rest, BelowId, AddSiblings, CurrMenu, Context).
 
 
+%% @doc Return datamodel for the menu routines.
+manage_schema(_Version, Context) ->
+    datamodel(Context).
 
+%% @doc Modify the menu data on module upgrade.
+manage_data({upgrade, 3}, Context) ->
+    % Pivot all menu's to add the 'hasmenupart' edges
+    m_category:foreach(
+        menu,
+        fun(Id, Context1) ->
+            z_pivot_rsc:insert_queue(Id, Context1)
+        end,
+        Context);
+manage_data(_Version, _Context) ->
+    ok.
 
-%% @doc The datamodel for the menu routines.
-manage_schema(install, Context) ->
+datamodel(Context) ->
     #datamodel{
         categories = [
               {menu, categorization,
@@ -467,6 +501,19 @@ manage_schema(install, Context) ->
                         <<"title">> => <<"Page Menu">>
                     }
               }
+        ],
+        predicates = [
+            {hasmenu, #{
+                <<"title">> => <<"Has Menu">>,
+                <<"summary">> => <<"Automatically updated after menu changes.">>
+            }, [
+                {undefined, menu}
+            ]},
+            {hasmenupart, #{
+                <<"title">> => <<"Menu Contains">>
+            }, [
+                {menu, undefined}
+            ]}
         ],
         resources = [
             {main_menu,
@@ -477,10 +524,7 @@ manage_schema(install, Context) ->
                 }
             }
         ]
-    };
-manage_schema(_Version, _Context) ->
-    ok.
-
+    }.
 
 default_menu(Context) ->
     case m_site:get(install_menu, Context) of

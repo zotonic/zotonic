@@ -7,6 +7,7 @@ Menu
    :glob:
 
    ../filter_menu_flat
+   ../filter_menu_ids
    ../filter_menu_is_visible
    ../filter_menu_expand
    ../filter_menu_rsc
