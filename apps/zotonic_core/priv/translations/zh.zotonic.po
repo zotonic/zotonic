@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-06-14 09:53\n"
+"PO-Revision-Date: 2023-06-26 09:08\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -567,7 +567,7 @@ msgstr "先显示这个ACL用户组。"
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:52./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:68
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:61./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:76
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:56./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:72
-#: apps/zotonic_mod_menu/src/mod_menu.erl:172
+#: apps/zotonic_mod_menu/src/mod_menu.erl:193
 msgid "Sorry, you are not allowed to delete this."
 msgstr "对不起，你不能删除这个。"
 
@@ -865,10 +865,6 @@ msgstr "所有媒体"
 msgid "All pages"
 msgstr "所有页面"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:108
-msgid "All pages of this category"
-msgstr "此类别的所有页面"
-
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:25
 msgid "All sites have been flushed."
 msgstr "所有场地都已冲洗完毕。"
@@ -917,14 +913,6 @@ msgstr "确认是否需要退出管理界面？"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:11
 msgid "Aside"
 msgstr "旁边"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:121
-msgid "Ask Google to exclude all “{cat}” pages"
-msgstr "要求 Google 排除所有“{cat}”页面"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
-msgid "Ask Google to not index this page"
-msgstr "要求 Google 不将此页面编入索引"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:70./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
@@ -1084,10 +1072,6 @@ msgstr "创建时间"
 msgid "Created:"
 msgstr "创建："
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
-msgid "Customize page slug"
-msgstr "自定义页面 slug"
-
 #: apps/zotonic_mod_admin/priv/templates/admin.tpl:4./apps/zotonic_mod_admin/priv/templates/admin.tpl:8./apps/zotonic_mod_admin/src/mod_admin.erl:90
 msgid "Dashboard"
 msgstr "控制台"
@@ -1191,11 +1175,12 @@ msgstr "复制这个页面。"
 msgid "E-mail address"
 msgstr "电子邮件地址"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:99./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:53./apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:50
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:39
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40./apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:123
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:103
 msgid "Edit"
 msgstr "编辑"
@@ -1651,14 +1636,6 @@ msgstr "页面"
 msgid "Page connections"
 msgstr "页面连接"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:57./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:59
-msgid "Page description"
-msgstr "页面描述"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:46./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:48
-msgid "Page keywords"
-msgstr "页面关键字"
-
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:20
 msgid "Page path"
 msgstr "页面路径"
@@ -1667,14 +1644,6 @@ msgstr "页面路径"
 msgid "Page referrers"
 msgstr "页面引荐来源"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:24
-msgid "Page slug"
-msgstr "页面 slug"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:34./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:36
-msgid "Page title"
-msgstr "页面标题"
-
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:3./apps/zotonic_mod_admin/src/mod_admin.erl:99
 msgid "Pages"
 msgstr "页面"
@@ -1682,10 +1651,6 @@ msgstr "页面"
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:4./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:9
 msgid "Pages for"
 msgstr "网页"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:110
-msgid "Pages of this category can be excluded from search engines. This is useful if some categories should not be found on Google (et al). Common examples are categories and predicates."
-msgstr "此类别的页面可以从搜索引擎中排除。如果在 Google（等）上找不到某些类别，这很有用。常见的例子是类别和谓词。"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "Pages overview"
@@ -1781,7 +1746,7 @@ msgid "Rebuild all search-indices by putting all pages and data from the databas
 msgstr "将所有数据库中的页面和数据重新放入索引队列中，重建所有检索索引。这可能会耗费相当长的时间。"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:84
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:122
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:151
 msgid "Rebuild search indices"
 msgstr "重建检索索引"
 
@@ -1819,7 +1784,7 @@ msgstr "附注"
 
 #: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:16
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:44
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:34
 msgid "Remove"
 msgstr "删除"
 
@@ -1850,14 +1815,6 @@ msgstr "检索状态..."
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:104
 msgid "Runs the schema install command from the site's module again."
 msgstr "再次运行网站模块中的schema安装命令。"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:6
-msgid "SEO Content"
-msgstr "SEO 内容"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:96
-msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
-msgstr "此页面的 SEO 索引已禁用，因为它属于“{cat}”类别。"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:4
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
@@ -2309,7 +2266,7 @@ msgstr "有效期为："
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:131
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:38
 msgid "View"
 msgstr "查看"
 
@@ -2646,7 +2603,7 @@ msgid "Config"
 msgstr "配置"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:3./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:50
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:79
 msgid "Configuration"
 msgstr "配置"
 
@@ -2879,7 +2836,7 @@ msgstr "添加页面或点击菜单中的页面。"
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:69./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:98
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:22
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:56
-#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:56./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:28
+#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:41
 msgid "Language"
 msgstr "语言"
 
@@ -2926,7 +2883,7 @@ msgstr "预先填好安全密码，需要时更换。"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_identity_email.tpl:11
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:26
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:21
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:25
 msgid "Add"
 msgstr "添加"
 
@@ -6737,7 +6694,7 @@ msgstr "删除了邮件列表。"
 msgid "Description"
 msgstr "描述"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:21
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:20./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:21
 msgid "Do you want to remove this subscription?"
 msgstr "您要删除此订阅吗？"
 
@@ -6854,7 +6811,7 @@ msgstr "邮件列表"
 msgid "Mailing status"
 msgstr "邮寄状态"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:4
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:4./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:4
 msgid "Mailinglist subscriptions"
 msgstr "邮件列表订阅"
 
@@ -6983,7 +6940,7 @@ msgstr "收件人位于"
 msgid "Remove this recipient. No undo possible."
 msgstr "删除这个收件人，无法撤销。"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:31
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:30./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:31
 msgid "Removed subscription."
 msgstr "已删除订阅。"
 
@@ -7083,7 +7040,7 @@ msgstr "对不起，无法确认您的订阅"
 msgid "Sorry, can’t find your subscription"
 msgstr "对不起，找不到您的订阅"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:34./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:87./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:17
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:33./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:34./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:87./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:17
 msgid "Sorry, something went wrong. Please try again later."
 msgstr "对不起，出了点问题。请稍后再试。"
 
@@ -7099,7 +7056,7 @@ msgstr "订阅"
 msgid "Subscribe to"
 msgstr "订阅到"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:93
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:41./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:93
 msgid "Subscribed with"
 msgstr "订阅了"
 
@@ -7183,7 +7140,7 @@ msgstr "页面可以被发送给不同的邮件列表。"
 msgid "Tick the checkbox if you want the recipient to receive a welcome e-mail message."
 msgstr "如果你需要收到欢迎消息，请选取。"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:22./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:75./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:13
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:17./apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:21./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:22./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:75./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:13
 msgid "Unsubscribe"
 msgstr "取消订阅"
 
@@ -7427,7 +7384,7 @@ msgstr "添加到顶端"
 msgid "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages."
 msgstr "点击 <strong>添加菜单条目</strong> 或 <strong>菜单条目</strong> 来添加页面。"
 
-#: apps/zotonic_mod_menu/src/mod_menu.erl:180
+#: apps/zotonic_mod_menu/src/mod_menu.erl:201
 msgid "Copy of:"
 msgstr "备份："
 
@@ -7459,11 +7416,11 @@ msgstr "可以为任何现有的类别定义层次结构。"
 msgid "Hierarchy for"
 msgstr "层次结构"
 
-#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:3./apps/zotonic_mod_menu/src/mod_menu.erl:93
+#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:3./apps/zotonic_mod_menu/src/mod_menu.erl:95
 msgid "Menu"
 msgstr "菜单"
 
-#: apps/zotonic_mod_menu/src/mod_menu.erl:145
+#: apps/zotonic_mod_menu/src/mod_menu.erl:166
 msgid "Sorry, can’t copy that page."
 msgstr "对不起，不能复制那一页。"
 
@@ -7982,6 +7939,22 @@ msgstr "抱歉，您无权执行此操作。"
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "为所有页面加入 noindex，nofollow 元素。"
 
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:72
+msgid "Add your custom JSON-LD for structured metadata. This replaces the matching parts of the automatically generated JSON-LD."
+msgstr ""
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:132
+msgid "All pages of this category"
+msgstr "此类别的所有页面"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:145
+msgid "Ask Google to exclude all “{cat}” pages"
+msgstr "要求 Google 排除所有“{cat}”页面"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:115
+msgid "Ask Google to not index this page"
+msgstr "要求 Google 不将此页面编入索引"
+
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96
 msgid "Bing Webmaster"
 msgstr "必应网站管理员"
@@ -7993,6 +7966,14 @@ msgstr "Bing网站管理员验证ID"
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "复制谷歌提供的元标签中的内容属性值。"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:68./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:70
+msgid "Custom JSON-LD"
+msgstr ""
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:102
+msgid "Customize page slug"
+msgstr "自定义页面 slug"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:33
 msgid "Description to include on every page"
@@ -8038,9 +8019,41 @@ msgstr "关键词"
 msgid "Keywords to include on every page. Separate keywords with a \",\""
 msgstr "每个页面都会包含的关键字。使用半角逗号 \",\" 分割。"
 
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:73
+msgid "More information [Google]"
+msgstr ""
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:57./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:59
+msgid "Page description"
+msgstr "页面描述"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:46./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:48
+msgid "Page keywords"
+msgstr "页面关键字"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:22./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:24
+msgid "Page slug"
+msgstr "页面 slug"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:34./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:36
+msgid "Page title"
+msgstr "页面标题"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:134
+msgid "Pages of this category can be excluded from search engines. This is useful if some categories should not be found on Google (et al). Common examples are categories and predicates."
+msgstr "此类别的页面可以从搜索引擎中排除。如果在 Google（等）上找不到某些类别，这很有用。常见的例子是类别和谓词。"
+
 #: apps/zotonic_mod_seo/src/mod_seo.erl:42
 msgid "SEO"
 msgstr "搜索引擎优化"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:6
+msgid "SEO Content"
+msgstr "SEO 内容"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:120
+msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
+msgstr "此页面的 SEO 索引已禁用，因为它属于“{cat}”类别。"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:123
 msgid "Save SEO settings"
@@ -8049,6 +8062,10 @@ msgstr "保存 SEO 设置"
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:3./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:8
 msgid "Search Engine Optimization"
 msgstr "搜索引擎优化"
+
+#: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:82
+msgid "Show current JSON-LD (updates after save)"
+msgstr ""
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:42
 msgid "The site configuration file allows this site to be indexed by search engines."
@@ -8769,7 +8786,6 @@ msgid "Dead end. Remove Next button. No questions will be submitted unless you a
 msgstr "死路。删除下一步按钮。除非您添加跳至下一页的按钮，否则不会提交任何问题。"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:37
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:24
 msgid "Default"
 msgstr "默认"
 
@@ -8829,15 +8845,15 @@ msgstr "解释说明"
 msgid "False"
 msgstr "否"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_thurstone_answer.tpl:37
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_thurstone_answer.tpl:39
 msgid "Feedback"
 msgstr "回馈"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:6
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:3./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:4
 msgid "Feedback if correct"
 msgstr "如果正确，请反馈"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:12./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:13
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:8./apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:9
 msgid "Feedback if wrong"
 msgstr "如有错误，请反馈"
 
@@ -9561,7 +9577,7 @@ msgstr "岁。我喜欢"
 msgid "Add language"
 msgstr "添加语言"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:24
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:28
 msgid "Added"
 msgstr "新增"
 
@@ -9573,15 +9589,15 @@ msgstr "所有语言"
 msgid "Are you sure you want to remove this language?"
 msgstr "你确定要删除这句话吗？"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:76
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:80
 msgid "Available sub-languages"
 msgstr "可用的子语言"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:378
+#: apps/zotonic_mod_translation/src/mod_translation.erl:498
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "无法生成翻译文件，因为 <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext没有安装</a>。"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:29
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:42
 msgid "Code"
 msgstr "编码"
 
@@ -9593,7 +9609,7 @@ msgstr "从其他语言拷贝文本到当前选择语言。"
 msgid "Copy translation"
 msgstr "复制翻译"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:97
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:126
 msgid "Danish"
 msgstr "丹麦语"
 
@@ -9601,7 +9617,7 @@ msgstr "丹麦语"
 msgid "Deciding on a main language or sub-language"
 msgstr "决定主语言或副语言"
 
-#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:53
+#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
 msgid "Details"
 msgstr "细节"
 
@@ -9609,19 +9625,23 @@ msgstr "细节"
 msgid "Developer Documentation"
 msgstr "开发者文档"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:99
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:23
+msgid "Drag languages to define the preferred order, the first 'view' language will be the default language."
+msgstr ""
+
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:128
 msgid "Dutch"
 msgstr "荷兰语"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:26
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:39
 msgid "Editable"
 msgstr "可编辑"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:98
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:127
 msgid "English"
 msgstr "英文"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:51
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:55
 msgid "Fallback language"
 msgstr "后备语言"
 
@@ -9629,27 +9649,27 @@ msgstr "后备语言"
 msgid "Find language by name or ISO"
 msgstr "按名称或 ISO 查找语言"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:100
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:129
 msgid "Finnish"
 msgstr "芬兰"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:137
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:166
 msgid "For Developers"
 msgstr "对于开发者"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:77
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:106
 msgid "For new visitors, set the language to the default language"
 msgstr "对于新访客，将语言设置为默认语言"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:101
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:130
 msgid "French"
 msgstr "法国人"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:143
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:172
 msgid "Generate .pot files"
 msgstr "生成 .pot 文件"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:102
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:131
 msgid "German"
 msgstr "德国"
 
@@ -9661,31 +9681,31 @@ msgstr "注意!删除该语言将 <strong>而不是</strong> 删除任何现有�
 msgid "Help about translations"
 msgstr "翻译帮助"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:103
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:132
 msgid "Hungarian"
 msgstr "匈牙利语"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:43
-msgid "If a language is set to 'off' then edited texts will loose their translation in that lanuage."
-msgstr "如果语言被设置为 \"关闭\"，那么编辑后的文本将失去该语言的翻译。"
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
+msgid "If a language is set to 'off' then edited texts will loose their translation in that language."
+msgstr ""
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:42
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:24
 msgid "If a language is set to 'view' or 'editable' then texts for that language are editable in the admin."
 msgstr "如果语言被设置为 \"查看 \"或 \"可编辑\"，那么该语言的文本在管理员中是可以编辑的。"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:118
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:147
 msgid "If you change the stemmer language then you will need to reindex all data."
 msgstr "如果你改变了干线语言，那么你将需要重新索引所有数据。"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:104
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:133
 msgid "Italian"
 msgstr "意大利"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:71
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:75
 msgid "Language in URL"
 msgstr "URL中的语言"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:88
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:117
 msgid "Language used for stemming of the search indices"
 msgstr "检索索引的题干使用的语言。"
 
@@ -9697,19 +9717,19 @@ msgstr "语言概览"
 msgid "More than one language must be active."
 msgstr "必须有一种以上的语言是活跃的。"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:29
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:33
 msgid "Name in menu"
 msgstr "菜单中的名称"
 
-#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:67
+#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:57
 msgid "No languages configured."
 msgstr "没有配置语言。"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:105
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:134
 msgid "Norwegian"
 msgstr "挪威人"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:27
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:40
 msgid "Off"
 msgstr "关"
 
@@ -9717,39 +9737,39 @@ msgstr "关"
 msgid "Part of"
 msgstr "部分"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:34./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:30
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:38./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:43
 msgid "Region"
 msgstr "地区"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:152
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:181
 msgid "Reload Translations"
 msgstr "重新加载翻译"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:154
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:183
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "重新加载模块和站点的所有翻页。所有模版将被重新编译。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:393
+#: apps/zotonic_mod_translation/src/mod_translation.erl:513
 msgid "Reloading all .po files in the background."
 msgstr "在后台重新加载所有.po文件。"
 
-#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:47
+#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:37
 msgid "Remove language"
 msgstr "删除语言"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:106
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:135
 msgid "Romanian"
 msgstr "罗马尼亚语"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:107
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:136
 msgid "Russian"
 msgstr "俄语"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:145
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:174
 msgid "Scan all templates for translation tags and generate .pot files that can be used for translating the templates. The <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext package must be installed</a>."
 msgstr "扫描所有模板的翻译标签并生成可用于翻译模板的.pot文件。必须安装 <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext 包</a>。"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:40./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:31
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:44./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:44
 msgid "Script"
 msgstr "脚本"
 
@@ -9769,39 +9789,39 @@ msgstr "选择拷贝源语言："
 msgid "Select your preferred language."
 msgstr "选择首选语言。"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:64
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:93
 msgid "Show the language in the URL"
 msgstr "在URL中显示语言"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:295./apps/zotonic_mod_translation/src/mod_translation.erl:343
+#: apps/zotonic_mod_translation/src/mod_translation.erl:415./apps/zotonic_mod_translation/src/mod_translation.erl:463
 msgid "Sorry, could not change the language."
 msgstr "抱歉，无法更改语言。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:311./apps/zotonic_mod_translation/src/mod_translation.erl:323./apps/zotonic_mod_translation/src/mod_translation.erl:346
+#: apps/zotonic_mod_translation/src/mod_translation.erl:402./apps/zotonic_mod_translation/src/mod_translation.erl:431./apps/zotonic_mod_translation/src/mod_translation.erl:443./apps/zotonic_mod_translation/src/mod_translation.erl:466
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "对不起，你没有权限更改语言列表。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:395
+#: apps/zotonic_mod_translation/src/mod_translation.erl:515
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "对不起，你没有权限重装翻译。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:385
+#: apps/zotonic_mod_translation/src/mod_translation.erl:505
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "对不起，你没有扫描翻译的权限。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:298./apps/zotonic_mod_translation/src/mod_translation.erl:464
+#: apps/zotonic_mod_translation/src/mod_translation.erl:418./apps/zotonic_mod_translation/src/mod_translation.erl:584
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "对不起，你没有设置默认语言的权限。"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:108
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:137
 msgid "Spanish"
 msgstr "西班牙语"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:365
+#: apps/zotonic_mod_translation/src/mod_translation.erl:485
 msgid "Started building the .pot files. This may take a while..."
 msgstr "开始建立.pot文件。这可能需要一段时间..."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:109
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:138
 msgid "Swedish"
 msgstr "瑞典语"
 
@@ -9817,7 +9837,7 @@ msgstr "标题，正文以及其他文本都可以被翻译为多种语言。这
 msgid "Translate this page in other languages."
 msgstr "翻译本页面到其他语言"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:688
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:819
 msgid "Translation"
 msgstr "翻译"
 
@@ -9825,11 +9845,11 @@ msgstr "翻译"
 msgid "Translations"
 msgstr "翻译"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:110
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:139
 msgid "Turkish"
 msgstr "土耳其人"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:56./apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:63
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:60./apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:67
 msgid "not enabled"
 msgstr "未启用"
 
