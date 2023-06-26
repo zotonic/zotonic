@@ -29,8 +29,15 @@
     RscIds :: [ m_rsc:resource_id() ].
 menu_ids(undefined, _Context) ->
     [];
+menu_ids([#rsc_tree{}|_] = Menu, Context) ->
+    menu_ids_1(Menu, Context);
+menu_ids([{_,_}|_] = Menu, Context) ->
+    menu_ids_1(Menu, Context);
 menu_ids(Id, Context) ->
-    Ids = menu_list_ids(m_rsc:p(Id, <<"menu">>, Context), []),
+    menu_ids(m_rsc:p(Id, <<"menu">>, Context), Context).
+
+menu_ids_1(Menu, Context) ->
+    Ids = menu_list_ids(Menu, []),
     lists:filtermap(
         fun(RId) ->
             case m_rsc:rid(RId, Context) of
