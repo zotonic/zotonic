@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-06-26 09:08\n"
+"PO-Revision-Date: 2023-06-26 10:06\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -7945,7 +7945,7 @@ msgstr "เพิ่ม noindex องค์ประกอบ nofollow ใน�
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:72
 msgid "Add your custom JSON-LD for structured metadata. This replaces the matching parts of the automatically generated JSON-LD."
-msgstr ""
+msgstr "เพิ่ม JSON-LD ที่กำหนดเองสำหรับข้อมูลเมตาที่มีโครงสร้าง ซึ่งจะแทนที่ส่วนที่ตรงกันของ JSON-LD ที่สร้างขึ้นโดยอัตโนมัติ"
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:132
 msgid "All pages of this category"
@@ -7973,7 +7973,7 @@ msgstr "คัดลอกค่าของแอตทริบิวต์เ
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:68./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:70
 msgid "Custom JSON-LD"
-msgstr ""
+msgstr "JSON-LD ที่กำหนดเอง"
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:102
 msgid "Customize page slug"
@@ -8025,7 +8025,7 @@ msgstr "คำหลักที่จะรวมไว้ในทุกหน
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:73
 msgid "More information [Google]"
-msgstr ""
+msgstr "ข้อมูลเพิ่มเติม [Google]"
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:57./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:59
 msgid "Page description"
@@ -8069,7 +8069,7 @@ msgstr "Search Engine Optimization"
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:82
 msgid "Show current JSON-LD (updates after save)"
-msgstr ""
+msgstr "แสดง JSON-LD ปัจจุบัน (อัปเดตหลังจากบันทึก)"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:42
 msgid "The site configuration file allows this site to be indexed by search engines."
@@ -9631,7 +9631,7 @@ msgstr "เอกสารสำหรับนักพัฒนา"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:23
 msgid "Drag languages to define the preferred order, the first 'view' language will be the default language."
-msgstr ""
+msgstr "ลากภาษาเพื่อกำหนดลำดับที่ต้องการ ภาษา 'ดู' ภาษาแรกจะเป็นภาษาเริ่มต้น"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:128
 msgid "Dutch"
@@ -9691,7 +9691,7 @@ msgstr "ฮังการี"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
 msgid "If a language is set to 'off' then edited texts will loose their translation in that language."
-msgstr ""
+msgstr "หากตั้งค่าภาษาเป็น 'ปิด' ข้อความที่แก้ไขจะทำให้คำแปลในภาษานั้นหายไป"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:24
 msgid "If a language is set to 'view' or 'editable' then texts for that language are editable in the admin."
