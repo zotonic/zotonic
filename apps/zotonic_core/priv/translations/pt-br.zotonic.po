@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-06-26 09:08\n"
+"PO-Revision-Date: 2023-06-26 10:06\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -7945,7 +7945,7 @@ msgstr "Adicione um elemento noindex, nofollow a todas as páginas."
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:72
 msgid "Add your custom JSON-LD for structured metadata. This replaces the matching parts of the automatically generated JSON-LD."
-msgstr ""
+msgstr "Adicione seu JSON-LD personalizado para metadados estruturados. Isso substitui as partes correspondentes do JSON-LD gerado automaticamente."
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:132
 msgid "All pages of this category"
@@ -7973,7 +7973,7 @@ msgstr "Copie o valor do atributo content na metatag fornecida pelo Google."
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:68./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:70
 msgid "Custom JSON-LD"
-msgstr ""
+msgstr "JSON-LD personalizado"
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:102
 msgid "Customize page slug"
@@ -8025,7 +8025,7 @@ msgstr "Palavras-chave para incluir em cada página. Separe as palavras-chave co
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:73
 msgid "More information [Google]"
-msgstr ""
+msgstr "Mais informações [Google]"
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:57./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:59
 msgid "Page description"
@@ -8069,7 +8069,7 @@ msgstr "Motor de Otimização de Busca"
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:82
 msgid "Show current JSON-LD (updates after save)"
-msgstr ""
+msgstr "Mostrar JSON-LD atual (atualizações após salvar)"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:42
 msgid "The site configuration file allows this site to be indexed by search engines."
@@ -9631,7 +9631,7 @@ msgstr "Documentação do desenvolvedor"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:23
 msgid "Drag languages to define the preferred order, the first 'view' language will be the default language."
-msgstr ""
+msgstr "Arraste os idiomas para definir a ordem preferida, o primeiro idioma de 'visualização' será o idioma padrão."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:128
 msgid "Dutch"
@@ -9691,7 +9691,7 @@ msgstr "húngaro"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
 msgid "If a language is set to 'off' then edited texts will loose their translation in that language."
-msgstr ""
+msgstr "Se um idioma estiver definido como 'off', os textos editados perderão a tradução nesse idioma."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:24
 msgid "If a language is set to 'view' or 'editable' then texts for that language are editable in the admin."
