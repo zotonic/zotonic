@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-06-26 09:08\n"
+"PO-Revision-Date: 2023-06-26 10:06\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -7945,7 +7945,7 @@ msgstr "Tambahkan noindex, elemen untuk semua halaman nofollow."
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:72
 msgid "Add your custom JSON-LD for structured metadata. This replaces the matching parts of the automatically generated JSON-LD."
-msgstr ""
+msgstr "Tambahkan JSON-LD khusus Anda untuk metadata terstruktur. Ini menggantikan bagian yang cocok dari JSON-LD yang dibuat secara otomatis."
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:132
 msgid "All pages of this category"
@@ -7973,7 +7973,7 @@ msgstr "Salin nilai dari atribut isi dalam meta tag yang diberikan oleh Google."
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:68./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:70
 msgid "Custom JSON-LD"
-msgstr ""
+msgstr "JSON-LD khusus"
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:102
 msgid "Customize page slug"
@@ -8025,7 +8025,7 @@ msgstr "Kata kunci untuk disertakan di setiap halaman. Pisahkan kata kunci denga
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:73
 msgid "More information [Google]"
-msgstr ""
+msgstr "Informasi lebih lanjut [Google]"
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:57./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:59
 msgid "Page description"
@@ -8069,7 +8069,7 @@ msgstr "Optimisasi Mesin Pencari"
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:82
 msgid "Show current JSON-LD (updates after save)"
-msgstr ""
+msgstr "Tampilkan JSON-LD saat ini (pembaruan setelah penyimpanan)"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:42
 msgid "The site configuration file allows this site to be indexed by search engines."
@@ -9631,7 +9631,7 @@ msgstr "Dokumentasi pengembang"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:23
 msgid "Drag languages to define the preferred order, the first 'view' language will be the default language."
-msgstr ""
+msgstr "Seret bahasa untuk menentukan urutan pilihan, bahasa 'tampilan' pertama akan menjadi bahasa default."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:128
 msgid "Dutch"
@@ -9691,7 +9691,7 @@ msgstr "Bahasa Hungaria"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
 msgid "If a language is set to 'off' then edited texts will loose their translation in that language."
-msgstr ""
+msgstr "Jika suatu bahasa disetel ke 'nonaktif' maka teks yang diedit akan kehilangan terjemahannya dalam bahasa itu."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:24
 msgid "If a language is set to 'view' or 'editable' then texts for that language are editable in the admin."
