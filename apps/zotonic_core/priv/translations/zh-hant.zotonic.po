@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-06-26 09:08\n"
+"PO-Revision-Date: 2023-06-26 10:06\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -7941,7 +7941,7 @@ msgstr "为所有页面加入 noindex，nofollow 元素。"
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:72
 msgid "Add your custom JSON-LD for structured metadata. This replaces the matching parts of the automatically generated JSON-LD."
-msgstr ""
+msgstr "為結構化元數據添加自定義 JSON-LD。這會替換自動生成的 JSON-LD 的匹配部分。"
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:132
 msgid "All pages of this category"
@@ -7969,7 +7969,7 @@ msgstr "复制谷歌提供的元标签中的内容属性值。"
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:68./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:70
 msgid "Custom JSON-LD"
-msgstr ""
+msgstr "自定義 JSON-LD"
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:102
 msgid "Customize page slug"
@@ -8021,7 +8021,7 @@ msgstr "每个页面都会包含的关键字。使用半角逗号 \",\" 分割�
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:73
 msgid "More information [Google]"
-msgstr ""
+msgstr "更多信息 [Google]"
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:57./apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:59
 msgid "Page description"
@@ -8065,7 +8065,7 @@ msgstr "搜索引擎优化"
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:82
 msgid "Show current JSON-LD (updates after save)"
-msgstr ""
+msgstr "顯示當前 JSON-LD（保存後更新）"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:42
 msgid "The site configuration file allows this site to be indexed by search engines."
@@ -9627,7 +9627,7 @@ msgstr "开发者文档"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:23
 msgid "Drag languages to define the preferred order, the first 'view' language will be the default language."
-msgstr ""
+msgstr "拖動語言來定義首選順序，第一個“查看”語言將是默認語言。"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:128
 msgid "Dutch"
@@ -9687,7 +9687,7 @@ msgstr "匈牙利语"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
 msgid "If a language is set to 'off' then edited texts will loose their translation in that language."
-msgstr ""
+msgstr "如果某種語言設置為“關閉”，則編輯後的文本將失去該語言的翻譯。"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:24
 msgid "If a language is set to 'view' or 'editable' then texts for that language are editable in the admin."
