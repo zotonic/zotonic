@@ -30,6 +30,7 @@
     m_value/2,
 
     environment/1,
+    security/1,
     all/1,
     get/2,
     get/3
@@ -47,6 +48,8 @@ m_find_value(protocol, #m{value=undefined}, Context) ->
     z_context:site_protocol(Context);
 m_find_value(environment, _M, Context) ->
     environment(Context);
+m_find_value(security, _M, Context) ->
+    security(Context);
 m_find_value(Key, #m{value=undefined}, Context) ->
     get(Key, Context).
 
@@ -135,4 +138,88 @@ get(Module, Key, Context) when is_atom(Key) ->
     case get(Module, Context) of
         undefined -> undefined;
         L when is_list(L) -> proplists:get_value(Key, L)
+    end.
+
+
+
+%% @doc Return the security.txt configuration. See also https://securitytxt.org
+-spec security(Context) -> SecurityConfig when
+    Context :: z:context(),
+    SecurityConfig :: proplists:proplist().
+security(Context) ->
+    ContactEmail = security_contact_email(Context),
+    Contact1 = if
+        ContactEmail =:= undefined -> [];
+        true -> [ {email, ContactEmail} ]
+    end,
+    ContactUrl = security_contact_url(Context),
+    Contact2 = if
+        ContactUrl =:= undefined -> Contact1;
+        true -> [ {url, ContactUrl} | Contact1 ]
+    end,
+    Sec = [ {contact, Contact2} ],
+    PolicyUrl = security_policy(Context),
+    Sec1 = if
+        PolicyUrl =:= undefined -> Sec;
+        true -> [ {policy, PolicyUrl} | Sec ]
+    end,
+    HiringUrl = security_hiring(Context),
+    Sec2 = if
+        HiringUrl =:= undefined -> Sec1;
+        true -> [ {hiring, HiringUrl} | Sec1 ]
+    end,
+    [ {expires, security_expires(Context)} | Sec2 ].
+
+security_expires(Context) ->
+    Expires = case m_config:get_value(site, security_expires, Context) of
+        None when None =:= undefined; None =:= <<>> ->
+            z_datetime:next_month(erlang:universaltime());
+        Exp ->
+            z_datetime:to_datetime(Exp)
+    end,
+    erlydtl_dateformat:format_utc(Expires, "c", Context).
+
+
+security_contact_email(Context) ->
+    case m_config:get_value(site, security_email, Context) of
+        None when None =:= undefined; None =:= <<>> ->
+            case z_config:get(security_email) of
+                undefined -> m_rsc:p(1, email_raw, Context);
+                E -> E
+            end;
+        E ->
+            E
+    end.
+
+security_contact_url(Context) ->
+    case m_config:get_value(site, security_url, Context) of
+        None1 when None1 =:= undefined; None1 =:= <<>> ->
+            case m_rsc:p(<<"page_security_contact">>, page_url_abs, Context) of
+                undefined -> z_config:get(security_url);
+                P -> P
+            end;
+        P ->
+            P
+    end.
+
+security_policy(Context) ->
+    case m_config:get_value(site, security_policy_url, Context) of
+        None when None =:= undefined; None =:= <<>> ->
+            case m_rsc:p(<<"page_security_policy">>, page_url_abs, Context) of
+                undefined -> z_config:get(security_policy_url);
+                P -> P
+            end;
+        P ->
+            P
+    end.
+
+security_hiring(Context) ->
+    case m_config:get_value(site, security_hiring_url, Context) of
+        None when None =:= undefined; None =:= <<>> ->
+            case m_rsc:p(<<"page_security_hiring">>, page_url_abs, Context) of
+                undefined -> z_config:get(security_hiring_url);
+                P -> P
+            end;
+        P ->
+            P
     end.
