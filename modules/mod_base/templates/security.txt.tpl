@@ -1,7 +1,7 @@
 {% with m.site.security as security %}
 # Our security address
-{% for _, c in security.contact %}
-Contact: {{ c }}
+{% for k, c in security.contact %}
+Contact: {% if k == 'email' %}mailto:{% endif %}{{ c }}
 {% empty %}
 # Please contact the site administrator as no contact details are configured for security issues specifically.
 {% endfor %}
