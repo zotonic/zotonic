@@ -40,7 +40,14 @@
     {jslog, ["log-client-event"], controller_nocontent, []},
 
     %% robots.txt - simple allow all file
-    {robots_txt, ["robots.txt"], controller_file, [ {path, "misc/robots.txt"}, {root,[lib]}, {content_disposition, inline} ]},
+    {robots_txt, ["robots.txt"], controller_file, [
+            {path, "misc/robots.txt"}, {root,[lib]}, {content_disposition, inline}
+        ]},
+
+    %% security.txt - serve a template with the security settings - https://securitytxt.org
+    {security_txt, [".well-known", "security.txt"], controller_template, [
+            {template, "security.txt.tpl"}, {content_type, "text/plain"}, {anonymous, true}
+        ]},
 
     %% Ping/pong
     {zotonic_ping, [".zotonic", "ping"], controller_ping, []}

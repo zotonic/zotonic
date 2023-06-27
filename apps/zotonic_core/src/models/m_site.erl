@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Model for the zotonic site configuration
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@
 -export([
     m_get/3,
     environment/1,
+    security/1,
     load_config/1,
     load_config/2,
     all/1,
@@ -79,6 +80,8 @@ m_get([ <<"language">> | Rest ], _Msg, Context) ->
     {ok, {z_context:language(Context), Rest}};
 m_get([ <<"default_language">> | Rest ], _Msg, Context) ->
     {ok, {z_language:default_language(Context), Rest}};
+m_get([ <<"security">> | Rest ], _Msg, Context) ->
+    {ok, {security(Context), Rest}};
 m_get([ Key | Rest ], _Msg, Context) when is_binary(Key) ->
     try
         KeyAtom = erlang:binary_to_existing_atom(Key, utf8),
@@ -196,3 +199,92 @@ put(Module, Key, Value, Context) ->
             [ {Key, Value} | proplists:delete(Key, L) ]
     end,
     application:set_env(z_context:site(Context), Module, L1).
+
+
+
+%% @doc Return the security.txt configuration. See also https://securitytxt.org
+-spec security(Context) -> SecurityConfig when
+    Context :: z:context(),
+    SecurityConfig :: #{ binary() => Value },
+    Value :: binary() | #{ binary() => binary() }.
+security(Context) ->
+    ContactEmail = security_contact_email(Context),
+    Contact1 = if
+        ContactEmail =:= undefined -> #{};
+        true -> #{ <<"email">> => ContactEmail }
+    end,
+    ContactUrl = security_contact_url(Context),
+    Contact2 = if
+        ContactUrl =:= undefined -> Contact1;
+        true -> Contact1#{ <<"url">> => ContactUrl }
+    end,
+    Sec = #{
+        <<"contact">> => Contact2
+    },
+    PolicyUrl = security_policy(Context),
+    Sec1 = if
+        PolicyUrl =:= undefined -> Sec;
+        true -> Sec#{ <<"policy">> => PolicyUrl }
+    end,
+    HiringUrl = security_hiring(Context),
+    Sec2 = if
+        HiringUrl =:= undefined -> Sec1;
+        true -> Sec1#{ <<"hiring">> => HiringUrl }
+    end,
+    Sec2#{
+        <<"expires">> => security_expires(Context)
+    }.
+
+security_expires(Context) ->
+    Expires = case m_config:get_value(site, security_expires, Context) of
+        None when None =:= undefined; None =:= <<>> ->
+            z_datetime:next_month(erlang:universaltime());
+        Exp ->
+            z_datetime:to_datetime(Exp)
+    end,
+    z_datetime:format_utc(Expires, "c", Context).
+
+
+security_contact_email(Context) ->
+    case m_config:get_value(site, security_email, Context) of
+        None when None =:= undefined; None =:= <<>> ->
+            case z_config:get(security_email) of
+                undefined -> m_rsc:p(1, <<"email_raw">>, Context);
+                E -> E
+            end;
+        E ->
+            E
+    end.
+
+security_contact_url(Context) ->
+    case m_config:get_value(site, security_url, Context) of
+        None1 when None1 =:= undefined; None1 =:= <<>> ->
+            case m_rsc:p(<<"page_security_contact">>, <<"page_url_abs">>, Context) of
+                undefined -> z_config:get(security_url);
+                P -> P
+            end;
+        P ->
+            P
+    end.
+
+security_policy(Context) ->
+    case m_config:get_value(site, security_policy_url, Context) of
+        None when None =:= undefined; None =:= <<>> ->
+            case m_rsc:p(<<"page_security_policy">>, <<"page_url_abs">>, Context) of
+                undefined -> z_config:get(security_policy_url);
+                P -> P
+            end;
+        P ->
+            P
+    end.
+
+security_hiring(Context) ->
+    case m_config:get_value(site, security_hiring_url, Context) of
+        None when None =:= undefined; None =:= <<>> ->
+            case m_rsc:p(<<"page_security_hiring">>, <<"page_url_abs">>, Context) of
+                undefined -> z_config:get(security_hiring_url);
+                P -> P
+            end;
+        P ->
+            P
+    end.
