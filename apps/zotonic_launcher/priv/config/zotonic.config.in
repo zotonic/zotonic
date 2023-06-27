@@ -25,6 +25,12 @@
 %%% Default timezone (for example: <<"Europe/Berlin">>)
    %% {timezone, <<"UTC">>},
 
+%%% Global security.txt settings
+   %% {security_email, <<"security@example.com">>},
+   %% {security_url, <<"https://example.com/security">>},
+   %% {security_policy_url, <<"https://example.com/security-policy">>},
+   %% {security_hiring_url, <<"https://example.com/security-hiring">>},
+
 %%% PostgreSQL database defaults.
 %%% These are the defaults for the equally named options in your site's config file.
    %% {dbdatabase, "zotonic"},
