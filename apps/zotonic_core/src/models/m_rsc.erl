@@ -177,7 +177,10 @@ m_get(_Vs, _Msg, _Context) ->
 %% @doc API to update or insert resources.
 -spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | ok | {error, term()}.
 m_post([ Id ], #{ payload := Payload }, Context) when is_map(Payload) ->
-    m_rsc:update(Id, Payload, Context);
+    case m_rsc:rid(Id, Context) of
+        undefined -> {error, enoent};
+        RId -> m_rsc:update(RId, Payload, Context)
+    end;
 m_post([], #{ payload := Payload }, Context) when is_map(Payload) ->
     m_rsc:insert(Payload, Context).
 
