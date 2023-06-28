@@ -249,7 +249,7 @@ security_contact_email(Context) ->
     case m_config:get_value(site, security_email, Context) of
         None when None =:= undefined; None =:= <<>> ->
             case z_config:get(security_email) of
-                undefined -> m_rsc:p(1, <<"email_raw">>, Context);
+                undefined -> z_html:unescape(m_rsc:p(1, <<"mail_email">>, Context));
                 E -> E
             end;
         E ->
