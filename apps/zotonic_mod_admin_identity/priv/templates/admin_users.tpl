@@ -72,7 +72,7 @@
                             <td>
                                 {{ id.modified|date:_"d M Y, H:i" }}
                                 <div class="pull-right buttons">
-                                    {% if is_users_editable %}
+                                    {% if is_users_editable and id != 1 %}
                                         {% button class="btn btn-default btn-xs"
                                                   action={dialog_set_username_password id=id on_delete={slide_fade_out target=#tr.id}}
                                                   text=_"set username / password"
