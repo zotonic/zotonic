@@ -41,7 +41,7 @@ m_get([ <<"google">>, <<"gtm">> | Rest ], _Msg, Context) ->
 m_get([ <<"yandex">>, <<"webmaster_verify">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(seo_yandex, webmaster_verify, Context), Rest}};
 m_get([ <<"jsonld">>, Id | Rest ], _Msg, Context) ->
-    case seo_jsonld_webpage:generate(Id, Context) of
+    case seo_jsonld_webpage:generate(Id, z_acl:anondo(Context)) of
         {ok, JSON} ->
             {ok, {z_json:encode(JSON), Rest}};
         {error, _} = Error ->

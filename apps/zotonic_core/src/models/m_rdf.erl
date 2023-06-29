@@ -70,7 +70,7 @@ summary_1(Id, Context) ->
         <<"schema:description">> => trans_1(Summary, fun z_html:unescape/1)
     },
     Doc1 = remove_undef(maps:merge(Doc, type_props(Type, Id, Context))),
-    % TODO: notification
+    % TODO: notification to let modules add extra information.
     Doc1.
 
 base_type(Id, Context) ->
@@ -96,8 +96,8 @@ base_type(_) -> <<"schema:Thing">>.
 
 type_props(<<"schema:Person">>, Id, Context) ->
     #{
-        <<"schema:birthDate">> => unesc(m_rsc:p(Id, <<"date_start">>, Context)),
-        <<"schema:deathDate">> => unesc(m_rsc:p(Id, <<"date_end">>, Context)),
+        <<"schema:birthDate">> => m_rsc:p(Id, <<"date_start">>, Context),
+        <<"schema:deathDate">> => m_rsc:p(Id, <<"date_end">>, Context),
         <<"schema:givenName">> => unesc(m_rsc:p(Id, <<"name_first">>, Context)),
         <<"schema:familyName">> => unesc(family_name(Id, Context)),
         <<"schema:email">> => email(Id, Context),
@@ -182,6 +182,7 @@ image(Id, Context) ->
             end
     end.
 
+%% @doc Email of a resource is preferred to be the public mail_email property, and then the mail property.
 email(Id, Context) ->
     E = case m_rsc:p(Id, <<"mail_email">>, Context) of
         undefined -> m_rsc:p(Id, <<"mail">>, Context);
@@ -189,6 +190,7 @@ email(Id, Context) ->
     end,
     unesc(E).
 
+%% @doc Address of a resource is preferred to be the public mailing address, and then the normal address.
 location(Id, Context) ->
     Doc = case m_rsc:p(Id, <<"mail_country">>, Context) of
         undefined ->
@@ -228,7 +230,10 @@ remove_undef(M) when is_map(M) ->
         #{},
         M).
 
-unesc(V) -> z_html:unescape(V).
+unesc(#trans{} = V) -> z_html:unescape(V);
+unesc(V) when is_binary(V) -> z_html:unescape(V);
+unesc(V) -> V.
+
 
 trans(Id, Prop, F, Context) ->
     trans_1(m_rsc:p(Id, Prop, Context), F).
