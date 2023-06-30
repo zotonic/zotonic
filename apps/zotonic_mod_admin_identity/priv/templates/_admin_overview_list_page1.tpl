@@ -3,7 +3,7 @@
         {% if m.identity.lookup.email[q.qs] as idns %}
             <h2>{_ Identities with this email address _}</h2>
 
-            <table class="table table-striped admin-table">
+            <table class="table table-striped admin-table do_adminLinkedTable">
                 <thead>
                     <tr>
                         <th width="26%">{_ Name _}</th>
