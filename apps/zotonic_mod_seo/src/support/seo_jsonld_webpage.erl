@@ -197,18 +197,17 @@ make_breadcrumb(Ids, Context) ->
                 Elt = #{
                     <<"@type">> => <<"schema:ListItem">>,
                     <<"schema:position">> => Pos,
-                    <<"schema:item">> => #{
-                        <<"@type">> => <<"schema:WebPage">>,
-                        <<"@id">> => AbsUrl,
-                        <<"schema:name">> => z_html:unescape(m_site:get(title, Context))
-                    }
-                },
+                    <<"schema:item">> => AbsUrl,
+                    <<"schema:name">> => z_html:unescape(m_site:get(title, Context))
+                 },
                 {Pos+1, [Elt|Acc]};
             (Id, {Pos, Acc}) ->
+                AbsUrl = m_rsc:p(Id, page_url_abs, Context),
                 Elt = #{
                     <<"@type">> => <<"schema:ListItem">>,
                     <<"schema:position">> => Pos,
-                    <<"schema:item">> => make_item(Id, Context)
+                    <<"schema:item">> => AbsUrl,
+                    <<"schema:name">> => z_html:unescape(title(Id, Context))
                 },
                 {Pos+1, [Elt|Acc]}
         end,
