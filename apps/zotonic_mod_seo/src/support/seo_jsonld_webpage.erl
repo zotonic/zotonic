@@ -197,8 +197,11 @@ make_breadcrumb(Ids, Context) ->
                 Elt = #{
                     <<"@type">> => <<"schema:ListItem">>,
                     <<"schema:position">> => Pos,
-                    <<"schema:item">> => AbsUrl,
-                    <<"schema:name">> => z_html:unescape(m_site:get(title, Context))
+                    <<"schema:item">> => #{
+                        <<"@type">> => <<"schema:WebPage">>,
+                        <<"@id">> => AbsUrl
+                    },
+                    <<"schema:name">> => m_site:get(title, Context)
                  },
                 {Pos+1, [Elt|Acc]};
             (Id, {Pos, Acc}) ->
@@ -206,7 +209,10 @@ make_breadcrumb(Ids, Context) ->
                 Elt = #{
                     <<"@type">> => <<"schema:ListItem">>,
                     <<"schema:position">> => Pos,
-                    <<"schema:item">> => AbsUrl,
+                    <<"schema:item">> => #{
+                        <<"@type">> => <<"schema:WebPage">>,
+                        <<"@id">> => AbsUrl
+                    },
                     <<"schema:name">> => z_html:unescape(title(Id, Context))
                 },
                 {Pos+1, [Elt|Acc]}
