@@ -74,13 +74,17 @@ summary_1(Id, Context) ->
     Doc1.
 
 base_type(Id, Context) ->
-    lists:foldr(
+    Type = lists:foldr(
         fun
             (Cat, undefined) -> base_type(Cat);
             (_, Type) -> Type
         end,
         undefined,
-        m_rsc:is_a(Id, Context)).
+        m_rsc:is_a(Id, Context)),
+    if
+        Type =:= undefined -> <<"schema:Thing">>;
+        true -> Type
+    end.
 
 base_type(person) -> <<"schema:Person">>;
 base_type(institution) -> <<"schema:Organization">>;
@@ -92,7 +96,7 @@ base_type(artifact) -> <<"schema:CreativeWork">>;
 base_type(media) -> <<"schema:MediaObject">>;
 base_type(event) -> <<"schema:Event">>;
 base_type(location) -> <<"schema:PostalAddress">>;
-base_type(_) -> <<"schema:Thing">>.
+base_type(_) -> undefined.
 
 type_props(<<"schema:Person">>, Id, Context) ->
     #{
