@@ -24,7 +24,7 @@
         <meta name="robots" content="noindex">
     {% elseif   z_content_language
             and z_language /= z_content_language
-            and z_language /= m.config.default_language
+            and z_language /= m.translation.default_language
     %}
         {# Set the noindex for a page if the current language is not in the resource's languages AND
          # the current language is not the default language AND the current page is not a collection (or query)
