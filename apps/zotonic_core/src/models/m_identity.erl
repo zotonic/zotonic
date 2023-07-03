@@ -355,7 +355,7 @@ is_allowed_set_username(Id, Context) when is_integer(Id) ->
 -spec delete_username(m_rsc:resource() | undefined, z:context()) -> ok | {error, eacces | enoent}.
 delete_username(undefined, _Context) ->
     {error, enoent};
-delete_username(1, Context) ->
+delete_username(?ACL_ADMIN_USER_ID, Context) ->
     ?LOG_WARNING(#{
         text => <<"Trying to delete admin username (1)">>,
         in => zotonic_core,
@@ -394,6 +394,8 @@ delete_username(Id, Context) ->
     Context :: z:context().
 set_expired(undefined, _DateTime, _Context) ->
     ok;
+set_expired(?ACL_ADMIN_USER_ID, _DateTime, _Context) ->
+    {error, enoent};
 set_expired(UserId, true, Context) when is_integer(UserId) ->
     case z_db:q("
             update identity
@@ -499,7 +501,7 @@ set_identity_expired(IdnId, DateTime, Context) when is_integer(IdnId) ->
 -spec set_username( m_rsc:resource() | undefined, binary() | string(), z:context()) -> ok | {error, eacces | enoent | eexist}.
 set_username(undefined, _Username, _Context) ->
     {error, enoent};
-set_username(1, _Username, Context) ->
+set_username(?ACL_ADMIN_USER_ID, _Username, Context) ->
     ?LOG_WARNING(#{
         text => <<"Trying to set admin username (1)">>,
         in => zotonic_core,
@@ -579,7 +581,8 @@ set_username(Id, Username, Context) ->
 -spec set_username_pw(m_rsc:resource() | undefined, binary()|string(), binary()|string(), z:context()) -> ok | {error, Reason :: term()}.
 set_username_pw(undefined, _, _, _) ->
     {error, enoent};
-set_username_pw(1, _, _, Context) ->
+set_username_pw(?ACL_ADMIN_USER_ID, _, _, Context) ->
+    % The password of the admin is set in the priv/zotonic_site.config file.
     ?LOG_WARNING(#{
         text => <<"Trying to set admin username (1)">>,
         in => zotonic_core,
@@ -714,7 +717,8 @@ flush(Id, Context) ->
 
 %% @doc Ensure that the user has an associated username and password
 -spec ensure_username_pw(m_rsc:resource(), z:context()) -> ok | {error, term()}.
-ensure_username_pw(1, _Context) ->
+ensure_username_pw(?ACL_ADMIN_USER_ID, _Context) ->
+    % The password of the admin is set in the priv/zotonic_site.config file.
     {error, admin_password_cannot_be_set};
 ensure_username_pw(Id, Context) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:user(Context) == Id of
@@ -914,7 +918,7 @@ check_username_pw_1(<<"admin">>, Password, Context) ->
                         update identity
                         set visited = now()
                         where id = 1", Context),
-                    flush(1, Context),
+                    flush(?ACL_ADMIN_USER_ID, Context),
                     {ok, 1};
                 false ->
                     ?LOG_ERROR(#{
@@ -934,7 +938,7 @@ check_username_pw_1(<<"admin">>, Password, Context) ->
                         update identity
                         set visited = now()
                         where id = 1", Context),
-                    flush(1, Context),
+                    flush(?ACL_ADMIN_USER_ID, Context),
                     {ok, 1};
                 false ->
                     {error, password}
@@ -963,6 +967,8 @@ check_username_pw_1(Username, Password, Context) ->
                         true -> check_email_pw(Username1, Password, Context);
                         false -> {error, nouser}
                     end;
+                {1, _Hash, _IsExpired} ->
+                    {error, password};
                 {RscId, Hash, true} ->
                     case check_hash(RscId, Username, Password, Hash, Context) of
                         {ok, UserId} ->
@@ -1007,6 +1013,8 @@ check_email_pw1([Idn | Rest], Email, Password, Context) ->
     ),
     case Row of
         undefined ->
+            check_email_pw1(Rest, Email, Password, Context);
+        {1, _Username, _Hash} ->
             check_email_pw1(Rest, Email, Password, Context);
         {RscId, Username, Hash} ->
             case check_hash(RscId, Username, Password, Hash, Context) of
