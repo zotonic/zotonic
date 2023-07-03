@@ -102,7 +102,7 @@ generate_2(Id, CustomJSON, Context) ->
         <<"schema:publisher">> => #{
             <<"@type">> => <<"schema:Organization">>,
             <<"schema:url">> => z_context:abs_url(<<"/">>, Context),
-            <<"schema:name">> => z_html:unescape(m_site:get(title, Context)),
+            <<"schema:name">> => m_config:get_value(site, title, Context),
             <<"schema:description">> => z_html:unescape(SiteDescription)
         }
     },
@@ -201,7 +201,7 @@ make_breadcrumb(Ids, Context) ->
                         <<"@type">> => <<"schema:WebPage">>,
                         <<"@id">> => AbsUrl
                     },
-                    <<"schema:name">> => m_site:get(title, Context)
+                    <<"schema:name">> => m_config:get_value(site, title, Context)
                  },
                 {Pos+1, [Elt|Acc]};
             (Id, {Pos, Acc}) ->
