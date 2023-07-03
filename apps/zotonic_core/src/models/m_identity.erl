@@ -582,6 +582,7 @@ set_username(Id, Username, Context) ->
 set_username_pw(undefined, _, _, _) ->
     {error, enoent};
 set_username_pw(?ACL_ADMIN_USER_ID, _, _, Context) ->
+    % The password of the admin is set in the priv/zotonic_site.config file.
     ?LOG_WARNING(#{
         text => <<"Trying to set admin username (1)">>,
         in => zotonic_core,
@@ -717,6 +718,7 @@ flush(Id, Context) ->
 %% @doc Ensure that the user has an associated username and password
 -spec ensure_username_pw(m_rsc:resource(), z:context()) -> ok | {error, term()}.
 ensure_username_pw(?ACL_ADMIN_USER_ID, _Context) ->
+    % The password of the admin is set in the priv/zotonic_site.config file.
     {error, admin_password_cannot_be_set};
 ensure_username_pw(Id, Context) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:user(Context) == Id of
