@@ -32,6 +32,7 @@
     process/4
 ]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 service_available(Context) ->
     Context1 = case z_convert:to_bool(z_context:get(nocache, Context)) of
@@ -74,7 +75,14 @@ resource_exists(Context) ->
                 {false, ContextQs}
         end
     catch
-        _:_ ->
+        _:Reason:S ->
+            ?LOG_ERROR(#{
+                in => zotonc_core,
+                text => <<"Error checking resource_exists">>,
+                result => error,
+                reason => Reason,
+                stack => S
+            }),
             {false, ContextQs}
     end.
 
@@ -177,9 +185,12 @@ maybe_redirect_canonical(Id, Context) ->
             {true, Context};
         true ->
             ReqPath = cowmachine_req:raw_path(Context),
+            [ReqPath1|_] = binary:split(ReqPath, <<"?">>),
             PageUrl = m_rsc:p(Id, <<"page_url">>, Context),
             if
                 ReqPath == PageUrl ->
+                    {true, Context};
+                ReqPath1 == PageUrl ->
                     {true, Context};
                 true ->
                     AbsUrl = z_context:abs_url(PageUrl, Context),
@@ -216,7 +227,7 @@ is_canonical(Id, Context) ->
 append_qs(AbsUrl, []) ->
     AbsUrl;
 append_qs(AbsUrl, Qs) ->
-    iolist_to_binary([AbsUrl, $?, cow_qs:urlencode(Qs)]).
+    iolist_to_binary([AbsUrl, $?, cow_qs:qs(Qs)]).
 
 exists(Id, Context) ->
     case {m_rsc:exists(Id, Context), z_context:get(cat, Context)} of
