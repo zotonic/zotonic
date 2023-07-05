@@ -97,6 +97,7 @@ make_rsc({error, notfound}, SessionId, CatId, Props, Context) ->
         case m_rsc:insert(Props, Context) of
             {ok, RscId} ->
                 z_session:set({temporary_rsc, CatId}, RscId, Context),
+                z_session:set({temporary_rsc_id, RscId}, CatId, Context),
                 spawn_session_monitor(RscId, SessionId, Context),
                 Args = [
                     RscId,
@@ -151,8 +152,22 @@ find_existing(_PageId, _SessionId, CatId, Context) ->
     case z_session:get({temporary_rsc, CatId}, Context) of
         RscId when is_integer(RscId) ->
             case is_unmodified_rsc(RscId, Context) of
-                true -> {ok, RscId};
-                false -> {error, notfound}
+                true ->
+                    UserId = z_acl:user(Context),
+                    CreatorId = m_rsc:p_no_acl(RscId, creator_id, Context),
+                    if
+                        UserId =:= CreatorId ->
+                            {ok, RscId};
+                        true ->
+                            z_session:set({temporary_rsc, CatId}, undefined, Context),
+                            z_session:set({temporary_rsc_id, RscId}, undefined, Context),
+                            m_rsc:delete(RscId, z_acl:sudo(Context)),
+                            {error, notfound}
+                    end;
+                false ->
+                    z_session:set({temporary_rsc, CatId}, undefined, Context),
+                    z_session:set({temporary_rsc_id, RscId}, undefined, Context),
+                    {error, notfound}
             end;
         undefined ->
             {error, notfound}
