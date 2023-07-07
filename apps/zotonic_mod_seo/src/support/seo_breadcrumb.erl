@@ -33,14 +33,20 @@
     BreadcrumbList :: [ Breadcrumb ],
     Breadcrumb :: [ m_rsc:resource_id() ].
 find(Id, Context) ->
-    {MTrails, PTrails} = trails(Id, [], [], Context),
-    PTrails1 = lists:filter(
-        fun
-            ([MId]) when MId =:= Id -> false;
-            (_) -> true
-        end,
-        PTrails),
-    {ok, MTrails ++ lists:sublist(PTrails1, ?MAX_HASPART)}.
+    case m_rsc:p_no_acl(Id, <<"page_path">>, Context) of
+        <<"/">> ->
+            % The home page has a single trail with itself.
+            {ok, [[Id]]};
+        _ ->
+            {MTrails, PTrails} = trails(Id, [], [], Context),
+            PTrails1 = lists:filter(
+                fun
+                    ([MId]) when MId =:= Id -> false;
+                    (_) -> true
+                end,
+                PTrails),
+            {ok, MTrails ++ lists:sublist(PTrails1, ?MAX_HASPART)}
+    end.
 
 %% @doc Collect the menu trails of an id. Preference to trails that are part of a menu.
 %% The 'haspart' edges are followed till a cycle or the top of the collection tree has
