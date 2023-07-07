@@ -42,7 +42,7 @@ find(Id, Context) ->
             PTrails1 = lists:filter(
                 fun
                     ([MId]) when MId =:= Id -> false;
-                    (_) -> true
+                    (PTrail) -> not lists:member(PTrail, MTrails)
                 end,
                 PTrails),
             {ok, MTrails ++ lists:sublist(PTrails1, ?MAX_HASPART)}
