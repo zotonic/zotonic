@@ -325,7 +325,7 @@ pivot_resource_custom(Id, Context) ->
                 ({_Module, _Columns} = Res) ->
                     update_custom_pivot(Id, Res, Context)
             end,
-            CustomPivots),
+            lists:flatten(CustomPivots)),
     ok.
 
 update_custom_pivot(Id, {Module, Columns}, Context) ->
@@ -333,8 +333,10 @@ update_custom_pivot(Id, {Module, Columns}, Context) ->
     Result = case z_db:select(TableName, Id, Context) of
         {ok, _Row}  ->
             z_db:update(TableName, Id, Columns, Context);
-        {error, enoent} ->
-            z_db:insert(TableName, [ {id, Id} | Columns ], Context)
+        {error, enoent} when is_list(Columns) ->
+            z_db:insert(TableName, [ {id, Id} | Columns ], Context);
+        {error, enoent} when is_map(Columns) ->
+            z_db:insert(TableName, Columns#{ <<"id">> => Id }, Context)
     end,
     case Result of
         {ok, _} ->
