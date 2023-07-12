@@ -76,11 +76,17 @@ process(_Method, _AcceptedCT, ProvidedCT, Context) ->
 process_1(Context) ->
     Vars = z_context:get_all(Context),
     {Vars1, OptRscId} = maybe_configured_id(Vars, Context),
-    Context0 = z_context:set_noindex_header(m_rsc:p_no_acl(OptRscId, seo_noindex, Context), Context),
+    IsSeoNoIndex = z_convert:to_bool(m_rsc:p_no_acl(OptRscId, seo_noindex, Context))
+        orelse z_convert:to_bool(z_context:get(seo_noindex, Context, false)),
+    Context0 = z_context:set_noindex_header(IsSeoNoIndex, Context),
     Context1 = z_context:set_resource_headers(OptRscId, Context0),
     Context2 = set_optional_cache_header(Context1),
     Template = z_context:get(template, Context2),
-    Rendered = z_template:render(Template, Vars1, Context2),
+    Vars2 = [
+        {seo_noindex, IsSeoNoIndex}
+        | proplists:delete(seo_noindex, Vars1)
+    ],
+    Rendered = z_template:render(Template, Vars2, Context2),
     {RespBody, ContextOut} = z_context:output(Rendered, Context2),
     case z_context:get(http_status, ContextOut) of
         Status when is_integer(Status) ->

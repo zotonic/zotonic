@@ -16,8 +16,8 @@
     {% endif %}
 {% endblock %}
 
-{% block metadata %}
-    {% if m.seo.noindex or noindex %}
+{% block noindex %}
+    {% if m.seo.noindex or seo_noindex or noindex %}
         <meta name="robots" content="noindex,nofollow">
     {% elseif q.page and q.page > 1 %}
         {# Do not index beyond the first page of search results, but do follow links #}
@@ -30,23 +30,26 @@
          # the current language is not the default language AND the current page is not a collection (or query)
          #}
         <meta name="robots" content="noindex">
-    {% else %}
+    {% elseif id.seo_noindex or id.category_id.is_seo_noindex_cat %}
+        <meta name="robots" content="noindex">
+    {% endif %}
+{% endblock %}
+
+{% block metadata %}
+    {# All metadata tags, used by bots and when sharing links on social media. #}
+    {% with m.seo.keywords as keywords %}
+    {% with m.seo.description|escape|default:m.rsc.page_home.seo_desc as description %}
+    {% with id.depiction|default:m.rsc.page_home.depiction as depiction %}
         {% with z_seo_language as z_language %}
-        {% with m.seo.keywords as keywords %}
-        {% with m.seo.description as description %}
             {% if id %}
-                {% if id.seo_noindex or id.category_id.is_seo_noindex_cat %}
-                    <meta name="robots" content="noindex">
-                {% else %}
-                    {% with id.seo_keywords as seo_keywords %}
-                        {% if seo_keywords %}
-                            <meta name="keywords" content="{{ seo_keywords }}, {{ keywords|escape }}">
-                        {% elseif id.o.subject as subjects %}
-                            <meta name="keywords" content="{% for oid in subjects %}{{ oid.title }}, {% endfor %}{{ keywords|escape }}">
-                        {% endif %}
-                        <meta name="description" content="{{ id.seo_desc|default:(id|summary)|default:(description|escape)|truncate:400 }}">
-                    {% endwith %}
-                {% endif %}
+                {% with id.seo_keywords as seo_keywords %}
+                    {% if seo_keywords %}
+                        <meta name="keywords" content="{{ seo_keywords }}, {{ keywords|escape }}">
+                    {% elseif id.o.subject as subjects %}
+                        <meta name="keywords" content="{% for oid in subjects %}{{ oid.title }}, {% endfor %}{{ keywords|escape }}">
+                    {% endif %}
+                    <meta name="description" content="{{ id.seo_desc|default:(id|summary)|default:description|truncate:400 }}">
+                {% endwith %}
             {% else %}
                 {% if keywords %}
                     <meta name="keywords" content="{{ keywords|escape }}">
@@ -56,14 +59,26 @@
                 {% endif %}
             {% endif %}
         {% endwith %}
-        {% endwith %}
-        {% endwith %}
-    {% endif %}
 
-    {% with z_seo_language as z_language %}
-    {% if m.seo.jsonld[id] as json %}
-        <script type="application/ld+json">{{ json }}</script>
-    {% endif %}
+        {% if m.seo.jsonld[id] as json %}
+            <script type="application/ld+json">{{ json }}</script>
+        {% endif %}
+
+        {% if m.site.title %}
+            <meta property="og:site_name" content="{{ m.site.title }}">
+        {% endif %}
+        {% if id %}
+            <meta property="og:title" content="{{ id.title }}">
+            <meta property="og:description" content="{{ id|summary:400|default:description }}">
+            <meta property="og:url" content="{{ id.page_url_abs }}">
+        {% elseif description %}
+            <meta name="og:description" content="{{ description }}">
+        {% endif %}
+        {% if depiction %}
+            <meta property="og:image" content="{% image_url depiction mediaclass='meta-tag-image' absolute_url %}">
+        {% endif %}
+    {% endwith %}
+    {% endwith %}
     {% endwith %}
 {% endblock %}
 
@@ -80,6 +95,9 @@
 {% endblock %}
 
 {% block trackers %}
+    {# Inherit this block with 'notrack' set to disable all trackers.      #}
+    {# Set 'script_type' to something like "text/x-cookie-consent" to      #}
+    {# disable loading of tracker scripts but keep the tags.               #}
     {% with script_type|default:"text/javascript" as script_type %}
     {% if not m.acl.is_admin and not notrack %}
         {% if m.seo.google.analytics as ga %}
