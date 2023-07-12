@@ -3,7 +3,9 @@
 {% block title %}{_ Select language _}{% endblock %}
 
 {% block html_head_extra %}
-    <meta name="robots" value="noindex">
+    {# Pages are found using the sitemap and hreflang tags, do not let bots follow #}
+    {# the links on this page as they lead to non-indexable pages.                 #}
+    <meta name="robots" value="noindex,nofollow">
 {% endblock %}
 
 {% block content %}

@@ -17,7 +17,7 @@
 {% endblock %}
 
 {% block metadata %}
-    {% if m.seo.noindex or noindex %}
+    {% if m.seo.noindex or seo_noindex or noindex %}
         <meta name="robots" content="noindex,nofollow">
     {% elseif q.page and q.page > 1 %}
         {# Do not index beyond the first page of search results, but do follow links #}

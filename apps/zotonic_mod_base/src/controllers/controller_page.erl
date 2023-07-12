@@ -109,7 +109,8 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Id = z_controller_helper:get_id(Context),
     CatId = m_rsc:p_no_acl(Id, category_id, Context),
     IsSeoNoIndex = z_convert:to_bool(m_rsc:p_no_acl(Id, seo_noindex, Context))
-        orelse z_convert:to_bool(m_rsc:p_no_acl(CatId, is_seo_noindex_cat, Context)),
+        orelse z_convert:to_bool(m_rsc:p_no_acl(CatId, is_seo_noindex_cat, Context))
+        orelse z_convert:to_bool(z_context:get(seo_noindex, Context, false)),
     Context0 = z_context:set_noindex_header(IsSeoNoIndex, Context),
     Context1 = z_context:set_resource_headers(Id, Context0),
     IsCollection = m_rsc:is_a(Id, collection, Context),
@@ -126,8 +127,9 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     end,
 	RenderArgs = [
         {id, Id},
-        {z_content_language, ContentLanguage}
-        | z_context:get_all(Context1)
+        {z_content_language, ContentLanguage},
+        {seo_noindex, IsSeoNoIndex}
+        | proplists:delete(seo_noindex, z_context:get_all(Context1))
     ],
     RenderArgs1 = z_notifier:foldl(template_vars, RenderArgs, Context1),
 	RenderFunc = fun() ->

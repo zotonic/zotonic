@@ -1357,12 +1357,14 @@ set_noindex_header(Context) ->
 %% @doc Set the noindex header if the config is set, the webmachine resource opt is set or Force is set.
 -spec set_noindex_header(Force::term(), z:context()) -> z:context().
 set_noindex_header(Force, Context) ->
-    case z_convert:to_bool(m_config:get_value(seo, noindex, Context))
+    case m_config:get_boolean(seo, noindex, Context)
          orelse get(seo_noindex, Context, false)
          orelse z_convert:to_bool(Force)
     of
-       true -> set_resp_header(<<"x-robots-tag">>, <<"noindex">>, Context);
-       _ -> Context
+       true ->
+            set_resp_header(<<"x-robots-tag">>, <<"noindex,nofollow">>, Context);
+       _ ->
+            Context
     end.
 
 %% @doc Set resource specific headers. Examples are the non-informational resource uri and WebSub headers.
