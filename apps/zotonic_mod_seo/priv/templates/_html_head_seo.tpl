@@ -30,23 +30,22 @@
          # the current language is not the default language AND the current page is not a collection (or query)
          #}
         <meta name="robots" content="noindex">
-    {% else %}
-        {% with z_seo_language as z_language %}
+    {% elseif id.seo_noindex or id.category_id.is_seo_noindex_cat %}
+        <meta name="robots" content="noindex">
+    {% endif %}
+
+    {% with z_seo_language as z_language %}
         {% with m.seo.keywords as keywords %}
         {% with m.seo.description as description %}
             {% if id %}
-                {% if id.seo_noindex or id.category_id.is_seo_noindex_cat %}
-                    <meta name="robots" content="noindex">
-                {% else %}
-                    {% with id.seo_keywords as seo_keywords %}
-                        {% if seo_keywords %}
-                            <meta name="keywords" content="{{ seo_keywords }}, {{ keywords|escape }}">
-                        {% elseif id.o.subject as subjects %}
-                            <meta name="keywords" content="{% for oid in subjects %}{{ oid.title }}, {% endfor %}{{ keywords|escape }}">
-                        {% endif %}
-                        <meta name="description" content="{{ id.seo_desc|default:(id|summary)|default:(description|escape)|truncate:400 }}">
-                    {% endwith %}
-                {% endif %}
+                {% with id.seo_keywords as seo_keywords %}
+                    {% if seo_keywords %}
+                        <meta name="keywords" content="{{ seo_keywords }}, {{ keywords|escape }}">
+                    {% elseif id.o.subject as subjects %}
+                        <meta name="keywords" content="{% for oid in subjects %}{{ oid.title }}, {% endfor %}{{ keywords|escape }}">
+                    {% endif %}
+                    <meta name="description" content="{{ id.seo_desc|default:(id|summary)|default:(description|escape)|truncate:400 }}">
+                {% endwith %}
             {% else %}
                 {% if keywords %}
                     <meta name="keywords" content="{{ keywords|escape }}">
@@ -57,13 +56,10 @@
             {% endif %}
         {% endwith %}
         {% endwith %}
-        {% endwith %}
-    {% endif %}
 
-    {% with z_seo_language as z_language %}
-    {% if m.seo.jsonld[id] as json %}
-        <script type="application/ld+json">{{ json }}</script>
-    {% endif %}
+        {% if m.seo.jsonld[id] as json %}
+            <script type="application/ld+json">{{ json }}</script>
+        {% endif %}
     {% endwith %}
 {% endblock %}
 
