@@ -36,9 +36,11 @@
 {% endblock %}
 
 {% block metadata %}
-    {% with z_seo_language as z_language %}
-        {% with m.seo.keywords as keywords %}
-        {% with m.seo.description as description %}
+    {# All metadata tags, used by bots and when sharing links on social media. #}
+    {% with m.seo.keywords as keywords %}
+    {% with m.seo.description|escape|default:m.rsc.page_home.seo_desc as description %}
+    {% with id.depiction|default:m.rsc.page_home.depiction as depiction %}
+        {% with z_seo_language as z_language %}
             {% if id %}
                 {% with id.seo_keywords as seo_keywords %}
                     {% if seo_keywords %}
@@ -46,7 +48,7 @@
                     {% elseif id.o.subject as subjects %}
                         <meta name="keywords" content="{% for oid in subjects %}{{ oid.title }}, {% endfor %}{{ keywords|escape }}">
                     {% endif %}
-                    <meta name="description" content="{{ id.seo_desc|default:(id|summary)|default:(description|escape)|truncate:400 }}">
+                    <meta name="description" content="{{ id.seo_desc|default:(id|summary)|default:description|truncate:400 }}">
                 {% endwith %}
             {% else %}
                 {% if keywords %}
@@ -57,24 +59,27 @@
                 {% endif %}
             {% endif %}
         {% endwith %}
-        {% endwith %}
 
         {% if m.seo.jsonld[id] as json %}
             <script type="application/ld+json">{{ json }}</script>
         {% endif %}
-    {% endwith %}
 
-    {% if m.site.title %}
-        <meta property="og:site_name" content="{{ m.site.title }}">
-    {% endif %}
-    {% if id %}
-        <meta property="og:title" content="{{ id.title }}">
-        <meta property="og:description" content="{{ id|summary:400 }}">
-        <meta property="og:url" content="{{ id.page_url_abs }}">
-        {% if id.depiction %}
-        <meta property="og:image" content="{% image_url id.depiction mediaclass='meta-tag-image' absolute_url %}">
+        {% if m.site.title %}
+            <meta property="og:site_name" content="{{ m.site.title }}">
         {% endif %}
-    {% endif %}
+        {% if id %}
+            <meta property="og:title" content="{{ id.title }}">
+            <meta property="og:description" content="{{ id|summary:400|default:description }}">
+            <meta property="og:url" content="{{ id.page_url_abs }}">
+        {% elseif description %}
+            <meta name="og:description" content="{{ description }}">
+        {% endif %}
+        {% if depiction %}
+            <meta property="og:image" content="{% image_url depiction mediaclass='meta-tag-image' absolute_url %}">
+        {% endif %}
+    {% endwith %}
+    {% endwith %}
+    {% endwith %}
 {% endblock %}
 
 {% block verification %}
@@ -90,6 +95,9 @@
 {% endblock %}
 
 {% block trackers %}
+    {# Inherit this block with 'notrack' set to disable all trackers.      #}
+    {# Set 'script_type' to something like "text/x-cookie-consent" to      #}
+    {# disable loading of tracker scripts but keep the tags.               #}
     {% with script_type|default:"text/javascript" as script_type %}
     {% if not m.acl.is_admin and not notrack %}
         {% if m.seo.google.analytics as ga %}
