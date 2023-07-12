@@ -16,7 +16,7 @@
     {% endif %}
 {% endblock %}
 
-{% block metadata %}
+{% block noindex %}
     {% if m.seo.noindex or seo_noindex or noindex %}
         <meta name="robots" content="noindex,nofollow">
     {% elseif q.page and q.page > 1 %}
@@ -33,7 +33,9 @@
     {% elseif id.seo_noindex or id.category_id.is_seo_noindex_cat %}
         <meta name="robots" content="noindex">
     {% endif %}
+{% endblock %}
 
+{% block metadata %}
     {% with z_seo_language as z_language %}
         {% with m.seo.keywords as keywords %}
         {% with m.seo.description as description %}
@@ -61,6 +63,18 @@
             <script type="application/ld+json">{{ json }}</script>
         {% endif %}
     {% endwith %}
+
+    {% if m.site.title %}
+        <meta property="og:site_name" content="{{ m.site.title }}">
+    {% endif %}
+    {% if id %}
+        <meta property="og:title" content="{{ id.title }}">
+        <meta property="og:description" content="{{ id|summary:400 }}">
+        <meta property="og:url" content="{{ id.page_url_abs }}">
+        {% if id.depiction %}
+        <meta property="og:image" content="{% image_url id.depiction mediaclass='meta-tag-image' absolute_url %}">
+        {% endif %}
+    {% endif %}
 {% endblock %}
 
 {% block verification %}
