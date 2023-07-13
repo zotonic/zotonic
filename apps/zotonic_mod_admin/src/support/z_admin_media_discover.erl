@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2021 Marc Worrell <marc@worrell.nl>
+%% @copyright 2014-2023 Marc Worrell <marc@worrell.nl>
 %% @doc Enables embedding media from their URL.
 
-%% Copyright 2014-2021 Marc Worrell <marc@worrell.nl>
+%% Copyright 2014-2023 Marc Worrell <marc@worrell.nl>
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,7 +20,9 @@
 
 -export([
     event/2,
-    try_embed/2
+    try_embed/2,
+
+    try_url_http/2
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -237,6 +239,12 @@ try_url({ok, <<"email:", _/binary>>}, _Context) ->
 try_url(_, _Context) ->
     {error, unknown}.
 
+-spec try_url_http(Url, Context) -> {ok, MediaImports} | {error, Reason} when
+    Url :: binary(),
+    Context :: z:context(),
+    MediaImports :: [ MediaImport ],
+    MediaImport :: #media_import_props{},
+    Reason :: term().
 try_url_http(Url, Context) ->
     case z_fetch:metadata(normalize_url(Url), [], Context) of
         {ok, MD} ->
