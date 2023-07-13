@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-06-26 10:06\n"
+"PO-Revision-Date: 2023-07-13 11:10\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -9279,7 +9279,7 @@ msgstr "Przepraszamy, nie można wstawić nowej osoby."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:14
 msgid "Start"
-msgstr "começar"
+msgstr "Początek"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:167
 msgid "Stop"
