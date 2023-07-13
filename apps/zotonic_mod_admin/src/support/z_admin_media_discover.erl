@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2021 Marc Worrell <marc@worrell.nl>
+%% @copyright 2014-2023 Marc Worrell <marc@worrell.nl>
 %% @doc Enables embedding media from their URL.
 
-%% Copyright 2014-2021 Marc Worrell <marc@worrell.nl>
+%% Copyright 2014-2023 Marc Worrell <marc@worrell.nl>
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,14 +20,16 @@
 
 -export([
     event/2,
-    try_embed/2
+    try_embed/2,
+
+    try_url_http/2
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 event(#submit{message={media_url_embed, Args}, form=Form}, Context) ->
     {discover_elt, DiscoverElt} = proplists:lookup(discover_elt, Args),
-    UrlData = z_convert:to_binary(z_string:trim(z_context:get_q(url, Context))),
+    UrlData = z_string:trim(z_context:get_q(<<"url">>, Context)),
     Vars = case try_embed(UrlData, Context) of
                 {ok, List} ->
                     ListAsProps = [ as_proplist(MI, Context) || MI <- List ],
@@ -237,8 +239,14 @@ try_url({ok, <<"email:", _/binary>>}, _Context) ->
 try_url(_, _Context) ->
     {error, unknown}.
 
+-spec try_url_http(Url, Context) -> {ok, MediaImports} | {error, Reason} when
+    Url :: binary(),
+    Context :: z:context(),
+    MediaImports :: [ MediaImport ],
+    MediaImport :: #media_import_props{},
+    Reason :: term().
 try_url_http(Url, Context) ->
-    case z_fetch:metadata(Url, [], Context) of
+    case z_fetch:metadata(normalize_url(Url), [], Context) of
         {ok, MD} ->
             case z_media_import:url_import_props(MD, Context) of
                 {ok, List} ->
@@ -249,6 +257,23 @@ try_url_http(Url, Context) ->
         {error, _} = Error ->
             Error
     end.
+
+%% @doc Ensure that some characters are escaped, URLs copied from the browser can contain
+%% UTF-8 characters that need to be percent-encoded befor further processing is possible.
+-spec normalize_url(Url) -> EncodedUrl when
+    Url :: binary(),
+    EncodedUrl :: binary().
+normalize_url(Url) ->
+    normalize_url(Url, <<>>).
+
+normalize_url(<<>>, Acc) ->
+    Acc;
+normalize_url(<<C/utf8, R/binary>>, Acc) when C >= 127; C =< 32 ->
+    C1 = z_url:hex_encode(<<C/utf8>>),
+    normalize_url(R, <<Acc/binary, C1/binary>>);
+normalize_url(<<C/utf8, R/binary>>, Acc) ->
+    normalize_url(R, <<Acc/binary, C/utf8>>).
+
 
 url(<<"www.", _/binary>> = Url) -> {ok, <<"http://", Url/binary>>};
 url(<<"//", _/binary>> = Url) -> {ok, <<"http:", Url/binary>>};
