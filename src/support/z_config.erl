@@ -110,6 +110,18 @@ get(ssl_listen_port) ->
         false -> ?MODULE:get(ssl_listen_port, default(ssl_listen_port));
         Port -> z_convert:to_integer(Port)
     end;
+get(dbhost) ->
+    case os:getenv("ZOTONIC_DBHOST") of
+        false -> ?MODULE:get(dbhost, default(dbhost));
+        "" -> ?MODULE:get(dbhost, default(dbhost));
+        DBHost -> DBHost
+    end;
+get(dbport) ->
+    case os:getenv("ZOTONIC_DBPORT") of
+        false -> ?MODULE:get(dbport, default(dbport));
+        "" -> ?MODULE:get(dbport, default(dbport));
+        DBPort -> list_to_integer(DBPort)
+    end;
 get(Key) ->
     ?MODULE:get(Key, default(Key)).
 
