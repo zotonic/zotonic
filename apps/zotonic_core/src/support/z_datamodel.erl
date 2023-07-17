@@ -124,7 +124,9 @@ manage_category(Module, {Name, ParentCategory, Props}, Options, Context) ->
                         _ ->
                             throw({error, {nonexisting_parent_category, ParentCategory}})
                     end
-            end
+            end;
+        {error, _} = Error ->
+            Error
     end.
 
 manage_predicate(Module, {Name, Uri, Props, ValidFor}, Options, Context) when is_list(Props) ->
@@ -141,7 +143,9 @@ manage_predicate(Module, {Name, Props, ValidFor}, Options, Context) ->
             ok;
         {ok, Id} ->
             ok = manage_predicate_validfor(Id, ValidFor, Options, Context),
-            {ok, Id}
+            {ok, Id};
+        {error, _} = Error ->
+            Error
     end.
 
 
@@ -202,20 +206,34 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                         category => Category,
                         name => Name
                     }),
-                    {ok, Id} = m_rsc_update:update(insert_rsc, Props5, [{is_import, true}], Context),
-                    case maps:get(<<"media_url">>, Props5, undefined) of
-                        undefined -> nop;
-                        <<>> -> nop;
-                        Url ->
-                            m_media:replace_url(Url, Id, [], Context)
-                    end,
-                    case maps:get(<<"media_file">>, Props5, undefined) of
-                        undefined -> nop;
-                        <<>> -> nop;
-                        File ->
-                            m_media:replace_file(path(File, Context), Id, Context)
-                    end,
-                    {ok, Id}
+                    case m_rsc_update:update(insert_rsc, Props5, [{is_import, true}], Context) of
+                        {ok, Id} ->
+                            case maps:get(<<"media_url">>, Props5, undefined) of
+                                undefined -> nop;
+                                <<>> -> nop;
+                                Url ->
+                                    m_media:replace_url(Url, Id, [], Context)
+                            end,
+                            case maps:get(<<"media_file">>, Props5, undefined) of
+                                undefined -> nop;
+                                <<>> -> nop;
+                                File ->
+                                    m_media:replace_file(path(File, Context), Id, Context)
+                            end,
+                            {ok, Id};
+                        {error, Reason} = Error ->
+                            ?LOG_ERROR(#{
+                                in => zotonic_core,
+                                text => <<"Error creating new managed resource. Not installing.">>,
+                                result => error,
+                                reason => Reason,
+                                module => Module,
+                                category => Category,
+                                name => Name,
+                                page_path => maps:get(<<"page_path">>, Props5, undefined)
+                            }),
+                            Error
+                    end
             end;
         {error, _} ->
             ?LOG_WARNING(#{
