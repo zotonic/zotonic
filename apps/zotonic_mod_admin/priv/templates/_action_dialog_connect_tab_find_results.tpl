@@ -7,6 +7,21 @@
         as result
     %}
         <div id="dialog_connect_loop_results" class="thumbnails">
+            {% if m.rsc[text].id as id %}
+                {% if id.is_visible %}
+                    <h4>{_ Pages _}</h4>
+                    <div class="row">
+                        {% catinclude "_action_dialog_connect_tab_find_results_item.tpl" id
+                            predicate=predicate
+                            subject_id=subject_id
+                            object_id=object_id
+                        %}
+                    </div>
+                    <hr>
+                    <h4>{_ Search results _}</h4>
+                {% endif %}
+            {% endif %}
+
             {% include "_action_dialog_connect_tab_find_results_loop.tpl"
                 id
                 result=result
