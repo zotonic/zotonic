@@ -81,9 +81,12 @@ base_type(Id, Context) ->
         end,
         undefined,
         m_rsc:is_a(Id, Context)),
-    if
-        Type =:= <<"schema:CreativeWork">> -> Type;
-        true -> [ Type, <<"schema:CreativeWork">> ]
+    case Type of
+        undefind -> <<"schema:CreativeWork">>;
+        <<"schema:CreativeWork">> -> Type;
+        <<"schema:Article">> -> Type;
+        <<"schema:MediaObject">> -> Type;
+        _ -> [ Type, <<"schema:CreativeWork">> ]
     end.
 
 base_type(person) -> <<"schema:Person">>;
@@ -96,8 +99,16 @@ base_type(artifact) -> <<"schema:CreativeWork">>;
 base_type(media) -> <<"schema:MediaObject">>;
 base_type(event) -> <<"schema:Event">>;
 base_type(location) -> <<"schema:PostalAddress">>;
-base_type(_) -> <<"schema:CreativeWork">>.
+base_type(_) -> undefined.
 
+type_props(Types, Id, Context) when is_list(Types) ->
+    lists:foldl(
+        fun(T, Acc) ->
+            Ps = type_props(T, Id, Context),
+            maps:merge(Acc, Ps)
+        end,
+        #{},
+        Types);
 type_props(<<"schema:Person">>, Id, Context) ->
     #{
         <<"schema:birthDate">> => m_rsc:p(Id, <<"date_start">>, Context),
