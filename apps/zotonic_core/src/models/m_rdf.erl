@@ -82,8 +82,8 @@ base_type(Id, Context) ->
         undefined,
         m_rsc:is_a(Id, Context)),
     if
-        Type =:= undefined -> <<"schema:Thing">>;
-        true -> Type
+        Type =:= <<"schema:CreativeWork">> -> Type;
+        true -> [ Type, <<"schema:CreativeWork">> ]
     end.
 
 base_type(person) -> <<"schema:Person">>;
@@ -96,7 +96,7 @@ base_type(artifact) -> <<"schema:CreativeWork">>;
 base_type(media) -> <<"schema:MediaObject">>;
 base_type(event) -> <<"schema:Event">>;
 base_type(location) -> <<"schema:PostalAddress">>;
-base_type(_) -> undefined.
+base_type(_) -> <<"schema:CreativeWork">>.
 
 type_props(<<"schema:Person">>, Id, Context) ->
     #{
@@ -227,6 +227,8 @@ remove_undef(M) when is_map(M) ->
     maps:fold(
         fun
             (_K, undefined, Acc) ->
+                Acc;
+            (_K, null, Acc) ->
                 Acc;
             (K, V, Acc) ->
                 Acc#{ K => V }
