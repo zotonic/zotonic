@@ -177,7 +177,13 @@ await_response( Topic, Timeout, Context ) ->
 
 
 
--spec map_topic( mqtt_sessions:topic(), z:context() ) -> {ok, mqtt_sessions:topic()} | {error, no_client | term()}.
+-spec map_topic(Topic, Context) -> {ok, mqtt_sessions:topic()} | {error, no_client | term()} when
+    Topic :: mqtt_sessions:topic() | undefined | atom() | m_rsc:resource_id(),
+    Context :: z:contxt().
+map_topic(undefined, _Context) ->
+    {error, no_topic};
+map_topic(<<>>, _Context) ->
+    {error, no_topic};
 map_topic(Topic, Context) when is_binary(Topic) ->
     map_topic(binary:split(Topic, <<"/">>, [global]), Context);
 map_topic([ <<"~client">> | _ ], #context{ client_topic = undefined }) ->
@@ -190,12 +196,17 @@ map_topic([ <<"~user">> | T ], #context{ user_id = undefined }) ->
     {ok, [ <<"user">>, <<"anonymous">> | T ]};
 map_topic(Topic, Context) when is_tuple(Topic); is_integer(Topic) ->
     map_topic_filter(Topic, Context);
+map_topic(Topic, Context) when is_atom(Topic) ->
+    % Assume this is the unique name of a resource
+    map_topic(m_rsc:rid(Topic, Context), Context);
 map_topic(Topic, _Context) ->
     {ok, Topic}.
 
 
 %% @doc Map subscription topic to a topic filter.
--spec map_topic_filter( topic_any(), z:context() ) -> {ok, topic()} | {error, no_topic | term()}.
+-spec map_topic_filter(TopicAny, Context) -> {ok, topic()} | {error, no_topic | term()} when
+    TopicAny ::  topic_any() | undefined,
+    Context :: z:context().
 map_topic_filter(undefined, _Context) ->
     {error, no_topic};
 map_topic_filter([], _Context) ->
