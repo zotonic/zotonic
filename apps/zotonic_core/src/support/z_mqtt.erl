@@ -204,7 +204,9 @@ map_topic(Topic, _Context) ->
 
 
 %% @doc Map subscription topic to a topic filter.
--spec map_topic_filter( topic_any(), z:context() ) -> {ok, topic()} | {error, no_topic | term()}.
+-spec map_topic_filter(TopicAny, Context) -> {ok, topic()} | {error, no_topic | term()} when
+    TopicAny ::  topic_any() | undefined,
+    Context :: z:context().
 map_topic_filter(undefined, _Context) ->
     {error, no_topic};
 map_topic_filter([], _Context) ->
