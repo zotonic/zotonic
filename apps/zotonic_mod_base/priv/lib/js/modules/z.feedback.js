@@ -71,24 +71,37 @@ $.widget("ui.feedback",
 					self.last_args = $.param(args);
 					clearInterval(self.input_updater);
 
-					// Form changed, post it to the server
 					var notify_args = {};
 					for (var i=0; i<args.length; i++) {
 						notify_args[args[i].name] = args[i].value;
 					}
-					notify_args.z_trigger_id = self.options.trigger;
-					notify_args.z_target_id = $(self.element).attr('id');
-					notify_args.z_delegate = self.options.delegate;
-					for (var k in self.options) {
-						if (k != "delegate" && k != "timeout" && k != "delegate") {
-							notify_args[k] = self.options[k];
-						}
-					}
 
-					if (typeof self.previous_feedback == 'undefined' || !is_equal(self.previous_feedback, notify_args)) {
+					// Form changed, post it to the server
+					if (typeof self.options.template == 'string') {
 						self.element.addClass('loading');
 						self.previous_feedback = notify_args;
-						z_notify("feedback", notify_args);
+			            cotonic.broker.call(
+			            	"bridge/origin/model/template/get/render/" + self.options.template,
+			            	notify_args)
+		                .then(function( resp ) {
+		                    self.element.html( resp.payload.result );
+							self.element.removeClass('loading');
+			            });
+					} else {
+						notify_args.z_trigger_id = self.options.trigger;
+						notify_args.z_target_id = $(self.element).attr('id');
+						notify_args.z_delegate = self.options.delegate;
+						for (var k in self.options) {
+							if (k != "delegate" && k != "timeout" && k != "delegate") {
+								notify_args[k] = self.options[k];
+							}
+						}
+
+						if (typeof self.previous_feedback == 'undefined' || !is_equal(self.previous_feedback, notify_args)) {
+							self.element.addClass('loading');
+							self.previous_feedback = notify_args;
+							z_notify("feedback", notify_args);
+						}
 					}
 				}
 			}
@@ -99,5 +112,6 @@ $.widget("ui.feedback",
 $.ui.feedback.defaults = {
 	delegate: undefined,
 	trigger: undefined,
+	template: undefined,
 	timeout: 600
 }
