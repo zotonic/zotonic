@@ -16,4 +16,3 @@ This will add a ‘Log in with LinkedIn button to the logon form on your site.
 .. seealso::
 
     * :ref:`mod_facebook`
-    * :ref:`mod_twitter`

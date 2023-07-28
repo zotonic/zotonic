@@ -1,12 +1,11 @@
 .. include:: meta-identity.rst
 
-.. seealso:: :ref:`guide-auth`, :ref:`mod_authentication`,
-             :ref:`mod_twitter` or :ref:`mod_facebook`.
+.. seealso:: :ref:`guide-auth`, :ref:`mod_authentication` or :ref:`mod_facebook`.
 
 The m_identity model manages usernames and other user
 identities. :ref:`mod_authentication` uses it to store and check
 salted passwords, but also provides a safe storage for user tokens of
-any kind, as used by :ref:`mod_facebook` and :ref:`mod_twitter`.
+any kind, as used by :ref:`mod_facebook`.
 
 Note that a `user` does not have to be of the `person` category per
 se, in Zotonic anything can have identities attached to it.
