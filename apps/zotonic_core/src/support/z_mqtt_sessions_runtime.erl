@@ -460,19 +460,25 @@ is_valid_message(_Msg, _Options, _Context) ->
     true.
 
 split_vhost_username(Username) ->
-    Delimetr = [<<X>> || <<X>> <= Username, <<X>> == ?COLON orelse <<X>> == ?AT],
-    match(Delimetr, Username).
+    case z_config:get(mqtt_username_format_0x, false) of
+        true ->
+            % "example.com:localuser"  (Zotonic 1.x format)
+            % "localuser@examplesite"  (Zotonic 0.x format)
+            split_vhost_username(Username, Username).
+        false ->
+            % "example.com:localuser"  (Zotonic 1.x format)
+            binary:split(Username, <<":">>)
+    end.
 
-match([?COLON |_], Username) ->
-    match_colon(Username);
-match([?AT |_], Username) ->
-    match_at(Username);
-match([], _) ->
-    undefined.
-
-match_colon(Username) ->
-    binary:split(Username, ?COLON).
-
-match_at(Username) ->
-    [LocalUsername, VHost] = binary:split(Username, ?AT),
-    [VHost, LocalUsername].
+split_vhost_username(<<>>, Username) ->
+    % Username without designation
+    [Username];
+split_vhost_username(<<":", _/binary>>, Username) ->
+    % "example.com:localuser"  (Zotonic 1.x format)
+    binary:split(Username, <<":">>).
+split_vhost_username(<<"@", _/binary>>, Username) ->
+    % "localuser@examplesite"  (Zotonic 0.x format)
+    [Username, VHost] = binary:split(Username, <<"@">>),
+    [VHost, Username];
+split_vhost_username(<<_/utf8, R/binary>>, Username) ->
+    split_vhost_username(R, Username).
