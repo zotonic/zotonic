@@ -34,9 +34,6 @@
 
 -define(none(A), (A =:= undefined orelse A =:= <<>>)).
 
--define(COLON, <<":">>).
--define(AT, <<"@">>).
-
 -include_lib("mqtt_packet_map/include/mqtt_packet_map.hrl").
 -include_lib("../../include/zotonic.hrl").
 
