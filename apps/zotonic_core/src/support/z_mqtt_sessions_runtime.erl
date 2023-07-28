@@ -461,7 +461,7 @@ split_vhost_username(Username) ->
         true ->
             % "example.com:localuser"  (Zotonic 1.x format)
             % "localuser@examplesite"  (Zotonic 0.x format)
-            split_vhost_username(Username, Username).
+            split_vhost_username(Username, Username);
         false ->
             % "example.com:localuser"  (Zotonic 1.x format)
             binary:split(Username, <<":">>)
@@ -472,7 +472,7 @@ split_vhost_username(<<>>, Username) ->
     [Username];
 split_vhost_username(<<":", _/binary>>, Username) ->
     % "example.com:localuser"  (Zotonic 1.x format)
-    binary:split(Username, <<":">>).
+    binary:split(Username, <<":">>);
 split_vhost_username(<<"@", _/binary>>, Username) ->
     % "localuser@examplesite"  (Zotonic 0.x format)
     [Username, VHost] = binary:split(Username, <<"@">>),
