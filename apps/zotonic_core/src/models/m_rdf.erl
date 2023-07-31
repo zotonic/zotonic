@@ -82,7 +82,7 @@ base_type(Id, Context) ->
         undefined,
         m_rsc:is_a(Id, Context)),
     case Type of
-        undefind -> <<"schema:CreativeWork">>;
+        undefined -> <<"schema:CreativeWork">>;
         <<"schema:CreativeWork">> -> Type;
         <<"schema:Article">> -> Type;
         <<"schema:MediaObject">> -> Type;
