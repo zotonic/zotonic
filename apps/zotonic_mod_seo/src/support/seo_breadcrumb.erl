@@ -103,7 +103,7 @@ menu_trail(Id, MId, Trail, Context) ->
                 <<"main_menu">> ->
                     % Main menu, used by the home page.
                     case homepage(Context) of
-                        undefined -> MenuTrail ++ Trail;
+                        undefined -> [ MenuTrail ++ Trail ];
                         HomeId -> [ [ HomeId | MenuTrail ] ++ Trail ]
                     end;
                 _ ->
