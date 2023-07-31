@@ -13,19 +13,21 @@
     {% if id.is_editable %}
     <div class="form-group">
         <input class="form-control" type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="blocks[].prompt{{ lang_code_with_dollar }}" value="{{ blk.prompt|translation:lang_code  }}"
-               placeholder="{_ True or false question _} ({{ lang_code }})" />
+               placeholder="{_ True or false question _} ({{ lang_code }})">
     </div>
     <div class="form-group view-expanded">
         <div>
-            <label class="radio-inline"><input type="radio" name="{{ name }}" class="nosubmit" />
+            <label class="radio-inline">
+                <input type="radio" name="{{ name }}" class="nosubmit">
                 <input type="text" id="block-{{name}}-yes{{ lang_code_for_id }}" name="blocks[].yes{{ lang_code_with_dollar }}"
                       class="col-md-6 form-control" value="{{ blk.yes|translation:lang_code  }}"
-                      placeholder="{_ True _}" />
+                      placeholder="{_ True _}">
             </label>
-            <label class="radio-inline"><input type="radio" name="{{ name }}" class="nosubmit" />
+            <label class="radio-inline">
+                <input type="radio" name="{{ name }}" class="nosubmit">
                 <input type="text" id="block-{{name}}-no{{ lang_code_for_id }}" name="blocks[].no{{ lang_code_with_dollar }}"
                       class="col-md-6 form-control" value="{{ blk.no|translation:lang_code  }}"
-                      placeholder="{_ False _}" />
+                      placeholder="{_ False _}">
             </label>
         </div>
     </div>
@@ -42,21 +44,21 @@
     <div class="form-group view-expanded question-options">
         <div class="checkbox">
             <label>
-                <input type="checkbox" id="block-{{name}}-input_type" name="blocks[].input_type" value="submit" {% if blk.input_type == 'submit' %}checked="checked"{% endif %} />
+                <input type="checkbox" id="block-{{name}}-input_type" name="blocks[].input_type" value="submit" {% if blk.input_type == 'submit' %}checked="checked"{% endif %}>
                 {_ Submit on clicking an option _}
             </label>
         </div>
 
         <div class="checkbox">
             <label>
-                <input type="checkbox" id="block-{{name}}-is_required" name="blocks[].is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />
+                <input type="checkbox" id="block-{{name}}-is_required" name="blocks[].is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %}>
                 {_ Required, this question must be answered. _}
             </label>
         </div>
 
         <div class="checkbox">
             <label>
-                <input type="checkbox" id="block-{{name}}-is_hide_result" name="blocks[].is_hide_result" value="1" {% if blk.is_hide_result %}checked="checked"{% endif %} />
+                <input type="checkbox" id="block-{{name}}-is_hide_result" name="blocks[].is_hide_result" value="1" {% if blk.is_hide_result %}checked="checked"{% endif %}>
                 {_ Hide from results _}
             </label>
         </div>
