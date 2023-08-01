@@ -804,16 +804,39 @@ insert(Table, Parameters, Context) ->
                         {ok, Id};
                      {error, noresult} ->
                         {ok, undefined};
-                     {error, #error{ codename = unique_violation }} = Error ->
-                        ?LOG_NOTICE(#{ text => "z_db unique_violation in insert",
-                                       table => Table,
-                                       parameters => Parameters}),
+                     {error, #error{ codename = unique_violation, message = Message }} = Error ->
+                        ?LOG_NOTICE(#{
+                            in => zotonic_core,
+                            text => <<"z_db unique_violation in insert">>,
+                            result => error,
+                            reason => unique_violation,
+                            message => Message,
+                            table => Table,
+                            parameters => Parameters
+                        }),
+                        Error;
+                     {error, #error{ codename = ErrCode, message = Message }} = Error ->
+                        ?LOG_ERROR(#{
+                            in => zotonic_core,
+                            text => <<"z_db error in insert">>,
+                            result => error,
+                            reason => ErrCode,
+                            message => Message,
+                            table => Table,
+                            query => FinalSql,
+                            parameters => Parameters
+                        }),
                         Error;
                      {error, Reason} = Error ->
-                        ?LOG_ERROR(#{ text => "z_db error in query",
-                                      reason => Reason,
-                                      query => FinalSql, 
-                                      parameters => ColParams }),
+                        ?LOG_ERROR(#{
+                            in => zotonic_core,
+                            text => <<"z_db error in query">>,
+                            result => error,
+                            reason => Reason,
+                            table => Table,
+                            query => FinalSql,
+                            parameters => ColParams
+                        }),
                         Error
                  end
             end,
@@ -848,15 +871,42 @@ update(Table, Id, Parameters, Context) when is_map(Parameters) ->
                     lists:join(", ", ColAssigns),
                     " where id = $1"
                 ]),
-                case equery1(DbDriver, C, Sql, [Id | Params]) of
-                    {ok, _RowsUpdated} = Ok -> Ok;
+                SqlParams = [ Id | Params ],
+                case equery1(DbDriver, C, Sql, SqlParams) of
+                    {ok, _RowsUpdated} = Ok ->
+                        Ok;
+                    {error, #error{ codename = unique_violation, message = Message }} = Error ->
+                        ?LOG_NOTICE(#{
+                            in => zotonic_core,
+                            text => <<"z_db unique_violation in update">>,
+                            message => Message,
+                            result => error,
+                            reason => unique_violation,
+                            table => Table,
+                            parameters => SqlParams
+                        }),
+                        Error;
+                    {error, #error{ codename = ErrCode, message = Message }} = Error ->
+                        ?LOG_ERROR(#{
+                            in => zotonic_core,
+                            text => <<"z_db error in update">>,
+                            result => error,
+                            reason => ErrCode,
+                            message => Message,
+                            table => Table,
+                            query => Sql,
+                            parameters => SqlParams
+                        }),
+                        Error;
                     {error, Reason} = Error ->
                         ?LOG_ERROR(#{
+                            in => zotonic_core,
                             text => <<"z_db error in query">>,
                             result => error,
                             reason => Reason,
+                            table => Table,
                             query => Sql,
-                            args => [Id | Params]
+                            parameters => SqlParams
                         }),
                         Error
                 end
@@ -970,7 +1020,6 @@ update_merge_props(DbDriver, Connection, Table, Cols, Id, #{ <<"props_json">> :=
             _ ->
                 UpdateProps#{<<"props_json">> => ?DB_PROPS_JSON( drop_undefined(NewProps) )}
         end,
-
     %% Clear the existing props column
     case lists:member(<<"props">>, Cols) of
         true -> P#{ <<"props">> => null };
