@@ -1016,6 +1016,8 @@ qterm(Term, _Context) ->
 
 to_language_atom(<<"z_language">>, Context) ->
     {ok, z_context:language(Context)};
+to_language_atom(z_language, Context) ->
+    {ok, z_context:language(Context)};
 to_language_atom(Code, _Context) ->
     z_language:to_language_atom(Code).
 

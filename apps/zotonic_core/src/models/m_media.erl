@@ -355,14 +355,15 @@ duplicate(FromId, ToId, Context) ->
     ToId1 = m_rsc:rid(ToId, Context),
     case z_db:qmap_props_row("select * from medium where id = $1", [FromId1], Context) of
         {ok, Ms} ->
-            {ok, Ms1} = maybe_duplicate_file(Ms, Context),
-            {ok, Ms2} = maybe_duplicate_preview(Ms1, Context),
-            Ms3 = Ms2#{
-                <<"id">> => ToId1
-            },
-            case medium_insert(ToId1, Ms3, Context) of
-                {ok, _} -> ok;
-                {error, _} = Error -> Error
+            case maybe_duplicate_file(Ms, Context) of
+                {ok, Ms1} ->
+                    {ok, Ms2} = maybe_duplicate_preview(Ms1, Context),
+                    case medium_insert(ToId1, Ms2, Context) of
+                        {ok, _} -> ok;
+                        {error, _} = Error -> Error
+                    end;
+                {error, _} = Error ->
+                    Error
             end;
         {error, _} = Error ->
             Error
@@ -375,16 +376,27 @@ maybe_duplicate_file(#{ <<"filename">> := undefined } = Ms, _Context) ->
 maybe_duplicate_file(#{ <<"filename">> := _, <<"is_deletable_file">> := false } = Ms, _Context) ->
     {ok, Ms};
 maybe_duplicate_file(#{ <<"filename">> := Filename, <<"is_deletable_file">> := true } = Ms, Context) ->
-    {ok, NewFile} = duplicate_file(archive, Filename, Context),
-    RootName = z_string:truncatechars(
-        filename:rootname(filename:basename(NewFile)),
-        ?MEDIA_MAX_ROOTNAME_LENGTH),
-    Ms2 = Ms#{
-        <<"filename">> => NewFile,
-        <<"rootname">> => RootName,
-        <<"is_deletable_file">> => true
-    },
-    {ok, Ms2}.
+    case duplicate_file(archive, Filename, Context) of
+        {ok, NewFile} ->
+            RootName = z_string:truncatechars(
+                filename:rootname(filename:basename(NewFile)),
+                ?MEDIA_MAX_ROOTNAME_LENGTH),
+            Ms2 = Ms#{
+                <<"filename">> => NewFile,
+                <<"rootname">> => RootName,
+                <<"is_deletable_file">> => true
+            },
+            {ok, Ms2};
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"Error duplicating medium archive file">>,
+                filename => Filename,
+                result => error,
+                reason => Reason
+            }),
+            Error
+    end.
 
 maybe_duplicate_preview(#{ <<"preview_filename">> := <<>> } = Ms, _Context) ->
     {ok, Ms};
@@ -1191,7 +1203,7 @@ is_unique_file(Filename, Context) ->
 medium_insert(Id, Props, Context) ->
     IsA = m_rsc:is_a(Id, Context),
     Props1 = check_medium_props(Props),
-    case z_db:insert(medium, Props1, Context) of
+    case z_db:insert(medium, Props1#{ <<"id">> => Id }, Context) of
         {ok, _} = OK ->
             z_notifier:notify(#media_update_done{action=insert, id=Id, post_is_a=IsA, pre_is_a=[], pre_props=#{}, post_props=Props1}, Context),
             OK;

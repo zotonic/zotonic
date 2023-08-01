@@ -1235,7 +1235,7 @@ is_a(Id, Context) ->
 -spec is_a_id(resource(), z:context()) -> list(m_rsc:resource_id()).
 is_a_id(Id, Context) ->
     RscCatId = p(Id, <<"category_id">>, Context),
-    [RscCatId | m_category:get_path(RscCatId, Context)].
+    m_category:get_path(RscCatId, Context) ++ [RscCatId].
 
 %% @doc Check if the resource is in a category.
 -spec is_a(resource(), m_category:category(), z:context()) -> boolean().
@@ -1337,19 +1337,8 @@ ensure_name_maxlength(<<Name:70/binary, _/binary>>) -> Name;
 ensure_name_maxlength(Name) -> Name.
 
 english_title(Id, Context) ->
-    case p_no_acl(Id, <<"title">>, Context) of
-        Title when is_binary(Title) -> Title;
-        #trans{ tr=[] } -> <<>>;
-        undefined -> <<>>;
-        #trans{ tr=Tr } ->
-            case proplists:get_value(en, Tr) of
-                undefined ->
-                    {_, T} = hd(Tr),
-                    T;
-                T ->
-                    T
-            end
-    end.
+    Text = p_no_acl(Id, <<"title">>, Context),
+    z_convert:to_binary(z_trans:lookup_fallback(Text, [en, 'en-us', 'en-gb'], Context)).
 
 ensure_name_unique(BaseName, N, Context) ->
     Name = iolist_to_binary([BaseName, postfix(N)]),
