@@ -1,10 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Make still previews of media, using image manipulation functions.  Resize, crop, grey, etc.
 %% This uses the command line imagemagick tools for all image manipulation.
 %% This code is adapted from PHP GD2 code, so the resize/crop could've been done more efficiently, but it works :-)
+%% @end
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,6 +38,10 @@
     calc_size/7
 ]).
 
+%% Default resize timeout is 5 minutes (300_000 msec)
+-define(CONVERT_TIMEOUT, 300000).
+
+%% Max width and height in pixels of input image, to prevent memory blow up.
 -define(MAX_PIXSIZE,  20000).
 
 % Low and max image size (in total pixels) for quality 99 and 55.
@@ -140,7 +145,7 @@ once(Cmd, OutFile) ->
     case gproc:reg_or_locate(Key) of
         {MyPid, _} ->
             lager:debug("Convert: ~p", [Cmd]),
-            Result = os:cmd(Cmd),
+            Result = z_exec:run(Cmd, #{ timeout => ?CONVERT_TIMEOUT }),
             gproc:unreg(Key),
             case filelib:is_regular(OutFile) of
                 true ->
