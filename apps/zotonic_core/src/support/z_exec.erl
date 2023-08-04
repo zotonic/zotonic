@@ -77,7 +77,9 @@ run(Commmand, Options) ->
             Error
     end.
 
-receive_data(OsPid, MaxSize, Acc) when MaxSize =:= infinity; size(Acc) < MaxSize ->
+receive_data(OsPid, MaxSize, Acc) when
+        MaxSize =:= infinity;
+        size(Acc) =< MaxSize ->
     receive
         {'DOWN', OsPid, process, _, normal} ->
             {ok, Acc};
