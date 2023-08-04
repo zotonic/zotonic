@@ -1,5 +1,5 @@
 {% with lang_code as z_language %}
-    <pre><code id="{{ #jsonld }}" class="language-json">{{ m.seo.jsonld[id] }}</code></pre>
+    <pre><code id="{{ #jsonld }}" class="language-json">{{ m.seo.jsonld[id]|escape }}</code></pre>
     {% javascript %}
     {
         let jsonld = $('#{{ #jsonld }}').text();
