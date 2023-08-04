@@ -36,6 +36,8 @@
 % Default maximum stdout size for commands - 1GB
 -define(MAX_SIZE, 1073741824).
 
+% Timeout to kill a command after stop has been signaled
+-define(KILL_TIMEOUT_SECS, 10).
 
 %% Executes the given command in the default shell for the operating system. Run with
 % a default timeout of 15 minutes and a default maximum returned size of 1GB.
@@ -60,7 +62,12 @@ run(Command) ->
 run(Commmand, Options) ->
     Timeout = maps:get(timeout, Options, ?TIMEOUT),
     MaxSize = maps:get(max_size, Options, ?MAX_SIZE),
-    case exec:run(Commmand, [ stdout, monitor ]) of
+    ExecOptions = [
+        stdout,
+        monitor,
+        {kill_timeout, ?KILL_TIMEOUT_SECS}
+    ],
+    case exec:run(Commmand, ExecOptions) of
         {ok, _Pid, OsPid} ->
             Timer = timer:send_after(Timeout, {timeout, OsPid}),
             Result = receive_data(OsPid, MaxSize, <<>>),
@@ -77,7 +84,11 @@ receive_data(OsPid, MaxSize, Acc) when MaxSize =:= infinity; size(Acc) < MaxSize
         {'DOWN', OsPid, process, _, Reason} ->
             {error, Reason};
         {timeout, OsPid} ->
-            {error, timeout};
+            exec:stop(OsPid),
+            receive
+                {'DOWN', OsPid, process, _, _Reason} ->
+                    {error, timeout}
+            end;
         {stdout, OsPid, Data} ->
             receive_data(OsPid, MaxSize, <<Acc/binary, Data/binary>>)
     end;
