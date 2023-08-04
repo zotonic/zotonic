@@ -1,4 +1,4 @@
-%% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
+%% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2023 Marc Worrell
 %% @doc Execute OS commands with timeouts.
 %% @end
