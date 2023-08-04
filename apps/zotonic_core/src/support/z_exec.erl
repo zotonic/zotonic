@@ -71,7 +71,14 @@ run(Commmand, Options) ->
         {ok, _Pid, OsPid} ->
             {ok, Timer} = timer:send_after(Timeout, {timeout, OsPid}),
             Result = receive_data(OsPid, MaxSize, <<>>),
+            % Cancel timeout timer and clear optional late timeout message
             timer:cancel(Timer),
+            receive
+                {timeout, OsPid} ->
+                    ok
+                after 0 ->
+                    ok
+            end,
             Result;
         {error, _} = Error ->
             Error
