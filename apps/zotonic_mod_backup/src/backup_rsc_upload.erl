@@ -34,7 +34,21 @@ rsc_upload(#rsc_upload{id=Id, format=bert, data=Data}, Context) ->
             rsc_upload(Id, Props, Context);
         _ ->
             {error, badarg}
+    end;
+rsc_upload(#rsc_upload{id=Id, format=json, data=Data}, Context) ->
+    JSON = maybe_json_decode(Data),
+    case m_rsc_import:import(Id, JSON, [ is_authoritative ], Context) of
+        {ok, {Id, _Mapping}} ->
+            {ok, Id};
+        {error, _} = Error ->
+            Error
     end.
+
+maybe_json_decode(Data) when is_binary(Data) ->
+    z_json:decode(Data);
+maybe_json_decode(Data) ->
+    Data.
+
 
 rsc_upload(undefined, Props, Context) ->
     m_rsc_update:insert(update_props(Props, Context), [{is_escape_texts, false}, is_import], Context);

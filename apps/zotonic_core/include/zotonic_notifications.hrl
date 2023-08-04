@@ -482,8 +482,13 @@
 }).
 
 %% @doc Upload and replace the resource with the given data. The data is in the given format.
-%% Return {ok, Id} or {error, Reason}, return {error, badarg} when the data is corrupt.
--record(rsc_upload, {id, format :: json|bert, data}).
+%% Type: first
+%% Return: {ok, Id} or {error, Reason}, return {error, badarg} when the data is corrupt.
+-record(rsc_upload, {
+    id :: m_rsc:resource() | undefined,
+    format :: json | bert,
+    data :: binary() | map()
+}).
 
 %% @doc Add custom pivot fields to a resource's search index (map)
 %% Result is a single tuple or list of tuples ``{pivotname, props}``, where "pivotname"

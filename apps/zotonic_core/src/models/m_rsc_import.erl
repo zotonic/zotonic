@@ -35,6 +35,7 @@
 
     import/2,
     import/3,
+    import/4,
     import_uri/2,
     import_uri/3,
     import_uri_recursive/3,
@@ -750,6 +751,15 @@ import(JSON, Context) ->
 import(JSON, Options, Context) ->
     import(undefined, JSON, #{}, Options, Context).
 
+%% @doc Import a resource. Overwrites the given resource.
+-spec import( OptLocalId, JSON, options(), z:context() ) -> import_result() when
+    OptLocalId :: m_rsc:resource() | undefined,
+    JSON :: map().
+import(OptLocalId, JSON, Options, Context) ->
+    import(OptLocalId, JSON, #{}, Options, Context).
+
+import(OptLocalId, #{ <<"status">> := <<"ok">>, <<"result">> := JSON }, ImportedAcc, Options, Context) ->
+    import(OptLocalId, JSON, ImportedAcc, Options, Context);
 import(OptLocalId, #{
         <<"resource">> := Rsc,
         <<"uri">> := Uri
