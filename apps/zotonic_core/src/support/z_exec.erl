@@ -39,8 +39,8 @@
 % Timeout to kill a command after stop has been signaled
 -define(KILL_TIMEOUT_SECS, 10).
 
-%% Executes the given command in the default shell for the operating system. Run with
-% a default timeout of 15 minutes and a default maximum returned size of 1GB.
+%% @doc Executes the given command in the default shell for the operating system. Run with
+%% a default timeout of 15 minutes and a default maximum returned size of 1GB.
 -spec run(Command) -> {ok, Data} | {error, Reason} when
       Command :: os_command(),
       Data :: binary(),
@@ -49,11 +49,11 @@ run(Command) ->
     run(Command, #{}).
 
 
-%% Executes the given command in the default shell for the operating system.
+%% @doc Executes the given command in the default shell for the operating system.
 %% The option max_data will terminate the program after more data than the given number
 %% of bytes is received. Use 'infinity' to not restrict the output size.
 %% The option timeout will terminate the program if more time than the given milliseconds
-%% has passed and {error, timeout} is returned.
+%% have passed, in that case {error, timeout} is returned.
 -spec run(Command, Options) -> {ok, Data} | {error, Reason} when
       Command :: os_command(),
       Options :: os_command_opts(),
