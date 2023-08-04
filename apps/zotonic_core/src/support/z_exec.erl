@@ -69,7 +69,7 @@ run(Commmand, Options) ->
     ],
     case exec:run(Commmand, ExecOptions) of
         {ok, _Pid, OsPid} ->
-            Timer = timer:send_after(Timeout, {timeout, OsPid}),
+            {ok, Timer} = timer:send_after(Timeout, {timeout, OsPid}),
             Result = receive_data(OsPid, MaxSize, <<>>),
             timer:cancel(Timer),
             Result;
