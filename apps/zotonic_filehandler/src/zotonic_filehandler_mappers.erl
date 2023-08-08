@@ -424,7 +424,7 @@ find_build(LibSrcDir, Dir) ->
         false ->
             Dirname = filename:join([LibSrcDir] ++ Dir),
             Makefile = filename:join(Dirname, <<"Makefile">>),
-            Taskfile = filename:join(Dirname, <<"Taskfile">>),
+            Taskfile = filename:join(Dirname, <<"Taskfile.yml">>),
             IsMakefile = filelib:is_file(Makefile),
             IsTaskfile = filelib:is_file(Taskfile),
             if
