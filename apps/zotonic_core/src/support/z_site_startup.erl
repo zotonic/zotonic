@@ -94,10 +94,9 @@ do_install_modules(false, _Context) ->
     ok.
 
 install_module(M, Context) when is_atom(M); is_binary(M); is_list(M) ->
-    case z_db:equery("update module set is_active = true where name = $1", [M], Context) of
-        {ok, 1} = R ->
-            R;
-        {ok, 0} ->
-            {ok, 1} = z_db:equery("insert into module (name, is_active) values ($1, true)", [M], Context)
-    end.
-
+    {ok, 1} = z_db:equery("
+        insert into module (name, is_active)
+        values ($1, true)
+        on conflict (name) do update
+        set is_active = true
+        ", [M], Context).
