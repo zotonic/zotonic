@@ -355,7 +355,7 @@ search(<<"match_objects">>, #{
             #search_sql{
                 select="r.id, ts_rank(pivot_rtsv, query) AS rank",
                 from="rsc r, to_tsquery($1) query",
-                where=" r.content_group_id = $3 and query @@ pivot_rtsv and id <> $2",
+                where=" r.content_group_id = $3 and query @@ pivot_rtsv and r.id <> $2",
                 order="rank desc, r.publication_start desc",
                 args=[TsQuery, z_convert:to_integer(ExcludeId), CGId],
                 tables=[{rsc,"r"}]
@@ -385,7 +385,7 @@ search(<<"match_objects">>, #{
             #search_sql{
                 select="r.id, ts_rank(pivot_rtsv, query) AS rank",
                 from="rsc r, to_tsquery($1) query",
-                where=" query @@ pivot_rtsv and id <> $2",
+                where=" query @@ pivot_rtsv and r.id <> $2",
                 order="rank desc, r.publication_start desc",
                 args=[TsQuery, z_convert:to_integer(ExcludeId)],
                 tables=[{rsc,"r"}]
