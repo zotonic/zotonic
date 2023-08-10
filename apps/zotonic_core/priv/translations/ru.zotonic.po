@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-08-10 19:08\n"
+"PO-Revision-Date: 2023-08-10 20:34\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -905,7 +905,7 @@ msgstr "Вы уверены, что желаете удалить страниц
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_selected_delete.tpl:2
 msgid "Are you sure you want to delete these {n} pages?"
-msgstr ""
+msgstr "Вы уверены, что хотите удалить эти {n} страниц?"
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:19
 msgid "Are you sure you want to delete this note?"
@@ -977,11 +977,11 @@ msgstr "Изменить категорию этой страницы"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:41
 msgid "Check the pages you want to delete."
-msgstr ""
+msgstr "Проверьте страницы, которые вы хотите удалить."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:53
 msgid "Check the pages you want to update."
-msgstr ""
+msgstr "Проверьте страницы, которые вы хотите обновить."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:10
 msgid "Choose a media item from this page to insert in the body text."
@@ -1123,7 +1123,7 @@ msgstr "Удалить, если больше не подключен"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:7
 msgid "Delete selected pages"
-msgstr ""
+msgstr "Удалить выбранные страницы"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:72
 msgid "Delete this page."
@@ -1415,7 +1415,7 @@ msgstr "Импортировать только прямые соединени�
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_selected_update.tpl:78
 msgid "Indexed by search engines"
-msgstr ""
+msgstr "Индексируется поисковыми системами"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:111
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:20
@@ -1644,7 +1644,7 @@ msgstr "Страницы не найдены."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:52
 msgid "No pages selected"
-msgstr ""
+msgstr "Страницы не выбраны"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:21
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:46
@@ -1653,15 +1653,15 @@ msgstr "Нет результатов."
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_selected_update.tpl:68
 msgid "Not dependent"
-msgstr ""
+msgstr "Не зависит"
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_selected_update.tpl:79
 msgid "Not indexed by search engines"
-msgstr ""
+msgstr "Не индексируется поисковыми системами"
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_selected_update.tpl:57
 msgid "Not protected"
-msgstr ""
+msgstr "Не защищен"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:12
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:20
@@ -1744,7 +1744,7 @@ msgstr "Защита от удаления"
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_selected_update.tpl:52./apps/zotonic_mod_admin/priv/templates/_dialog_selected_update.tpl:56
 msgid "Protected"
-msgstr ""
+msgstr "Защищено"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:41
 msgid "Publication date of original article"
@@ -1920,7 +1920,7 @@ msgstr "Выбрать связанное изображение"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:93
 msgid "Selected"
-msgstr ""
+msgstr "Выбрано"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:45./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:42
 msgid "Selected Categories"
@@ -2253,7 +2253,7 @@ msgstr "Уникальный идентификатор ресурса"
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_selected_update.tpl:22
 msgid "Unpublished"
-msgstr ""
+msgstr "Неопубликовано"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:655./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
@@ -2273,11 +2273,11 @@ msgstr "Обновить"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:17
 msgid "Update selected pages"
-msgstr ""
+msgstr "Обновить выбранные страницы"
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_selected_update.tpl:2
 msgid "Update {n} pages with the following properties:"
-msgstr ""
+msgstr "Обновите {n} страниц со следующими свойствами:"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:89./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:134
 msgid "Upload"
@@ -3098,7 +3098,7 @@ msgstr "Создать нового пользователя."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_search_view.tpl:7
 msgid "Matching e-mail"
-msgstr ""
+msgstr "Соответствующий адрес электронной почты"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:22
 msgid "My page"
