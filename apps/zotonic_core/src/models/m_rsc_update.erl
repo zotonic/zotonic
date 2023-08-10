@@ -511,8 +511,11 @@ update(Name, PropsOrFun, Options, Context) ->
     case m_rsc:name_to_id(Name, Context) of
         {ok, Id} ->
             update(Id, PropsOrFun, Options, Context);
-        {error, _} = Error ->
-            Error
+        {error, _} ->
+            case m_rsc:rid(Name, Context) of
+                undefined -> {error, enoent};
+                Id -> update(Id, PropsOrFun, Options, Context)
+            end
     end.
 
 update_imported_check(#rscupd{is_import = true, id = Id} = RscUpd, PropsOrFun, Context) when is_integer(Id) ->

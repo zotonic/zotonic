@@ -76,9 +76,19 @@ qcat
 
 <h2>{_ Search results _}</h2>
 
+<p>
+    <span id="sel-count">0</span> <span class="text-muted">{_ Selected _}</span>
+
+    <button class="btn btn-default btn-xs" id="csel-update">{_ Update _}...</button>
+    <button class="btn btn-default btn-xs" id="csel-delete">{_ Delete _}...</button>
+</p>
+
 <table class="table table-striped do_adminLinkedTable">
     <thead>
         <tr>
+            <th>
+                <input id="check-all" type="checkbox" value="1">
+            </th>
             <th width="30%">
                 {% include "_admin_sort_header.tpl" field="pivot.title" caption=_"Title" type=type|default:"string" %}
             </th>
@@ -103,6 +113,9 @@ qcat
     <tbody>
     {% for id in result|is_visible %}
         <tr class="{% if not id.is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
+            <td class="not-clickable">
+                <input type="checkbox" value="{{ id }}" name="csel">
+            </td>
             <td>
                 {% if id == 1 or id.is_a.meta or id.content_group_id.name == 'system_content_group' %}
                     <span class="label label-warning pull-right" title="{_ This is system content. _}">
@@ -142,3 +155,84 @@ qcat
     {% endfor %}
     </tbody>
 </table>
+
+{% wire name="csel-delete"
+        action={dialog_open
+            title=_"Delete selected pages"
+            template="_dialog_selected_delete.tpl"
+            on_success=[
+                {reload}
+            ]
+        }
+%}
+
+{% wire name="csel-update"
+        action={dialog_open
+            title=_"Update selected pages"
+            template="_dialog_selected_update.tpl"
+            on_success=[
+                {reload}
+            ]
+        }
+%}
+
+{% javascript %}
+    function collect_ids()
+    {
+        let selected = [];
+
+        $('tbody input:checked:visible').each(function() {
+            selected.push($(this).val());
+        });
+        return selected;
+    }
+
+    $('#csel-delete').on('click', function() {
+        const ids = collect_ids();
+        if (ids.length == 0) {
+            z_dialog_alert({
+                title: "{_ No pages selected _}",
+                text: "<p>{_ Check the pages you want to delete. _}</p>"
+            });
+        } else {
+            z_event("csel-delete", { ids: ids });
+        }
+    });
+
+    $('#csel-update').on('click', function() {
+        const ids = collect_ids();
+        if (ids.length == 0) {
+            z_dialog_alert({
+                title: "{_ No pages selected _}",
+                text: "<p>{_ Check the pages you want to update. _}</p>"
+            });
+        } else {
+            z_event("csel-update", { ids: ids });
+        }
+    });
+
+    $('#check-all').on('click', function() {
+        const tab = $(this).closest('table');
+        const csels = $(tab).find('input[name=csel]');
+        if ($(this).is(":checked")) {
+            csels.prop("checked", true);
+            $('#sel-count').text(csels.length);
+        } else {
+            csels.prop("checked", false);
+            $('#sel-count').text('0');
+        }
+    });
+
+    $('input[name=csel]').on('click', function() {
+        const tab = $(this).closest('table');
+        const csels = $(tab).find('input[name=csel]');
+        if (csels.not(':checked').length > 0) {
+            $('#check-all').prop("checked", false);
+        } else {
+            $('#check-all').prop("checked", true);
+        }
+        $('#sel-count').text(csels.filter(":checked").length);
+    });
+{% endjavascript %}
+
+
