@@ -456,6 +456,8 @@ event(#submit{ message = {delete_all, Args}}, Context) ->
             lists:foreach(
                 fun(Id) ->
                     case m_rsc:delete(Id, Context) of
+                        ok ->
+                            ok;
                         {error, Reason} ->
                             ?LOG_WARNING(#{
                                 in => zotonic_mod_admin,
@@ -463,9 +465,7 @@ event(#submit{ message = {delete_all, Args}}, Context) ->
                                 id => Id,
                                 result => error,
                                 reason => Reason
-                            });
-                        {ok, _} ->
-                            ok
+                            })
                     end
                 end,
                 Ids),
@@ -492,6 +492,8 @@ event(#submit{ message = {update_all, Args}}, Context) ->
             lists:foreach(
                 fun(Id) ->
                     case m_rsc:update(Id, Update, Context) of
+                        {ok, _} ->
+                            ok;
                         {error, Reason} ->
                             ?LOG_WARNING(#{
                                 in => zotonic_mod_admin,
@@ -500,9 +502,7 @@ event(#submit{ message = {update_all, Args}}, Context) ->
                                 update => Update,
                                 result => error,
                                 reason => Reason
-                            });
-                        {ok, _} ->
-                            ok
+                            })
                     end
                 end,
                 Ids),
