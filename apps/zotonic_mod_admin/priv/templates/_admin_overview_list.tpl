@@ -76,9 +76,19 @@ qcat
 
 <h2>{_ Search results _}</h2>
 
+<p>
+    <span id="sel-count">0</span> <span class="text-muted">{_ Selected _}</span>
+
+    <button class="btn btn-default btn-xs" id="csel-update">{_ Update _}...</button>
+    <button class="btn btn-default btn-xs" id="csel-delete">{_ Delete _}...</button>
+</p>
+
 <table class="table table-striped do_adminLinkedTable">
     <thead>
         <tr>
+            <th>
+                <input id="check-all" type="checkbox" value="1">
+            </th>
             <th width="30%">
                 {% include "_admin_sort_header.tpl" field="pivot.title" caption=_"Title" type=type|default:"string" %}
             </th>
@@ -103,6 +113,9 @@ qcat
     <tbody>
     {% for id in result|is_visible %}
         <tr class="{% if not id.is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
+            <td class="not-clickable">
+                <input type="checkbox" value="{{ id }}" name="csel">
+            </td>
             <td>
                 {% if id == 1 or id.is_a.meta or id.content_group_id.name == 'system_content_group' %}
                     <span class="label label-warning pull-right" title="{_ This is system content. _}">
@@ -142,3 +155,6 @@ qcat
     {% endfor %}
     </tbody>
 </table>
+
+{% include "_admin_overview_bulk_actions.tpl" %}
+

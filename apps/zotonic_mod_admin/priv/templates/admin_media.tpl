@@ -89,12 +89,23 @@
                 {% all include "_admin_extra_buttons.tpl" %}
             </div>
 
+            <p>
+                <span id="sel-count">0</span> <span class="text-muted">{_ Selected _}</span>
+
+                <button class="btn btn-default btn-xs" id="csel-update">{_ Update _}...</button>
+                <button class="btn btn-default btn-xs" id="csel-delete">{_ Delete _}...</button>
+            </p>
+
+
             {% with q.qsort|default:"-medium.created" as qsort %}
                 {% with m.search.paged[{query hasmedium qargs is_published="all" page=q.page sort=qsort pagelen=qpagelen zsort=qsort }] as result %}
 
                     <table class="table table-striped do_adminLinkedTable">
                         <thead>
                             <tr>
+                                <th>
+                                    <input id="check-all" type="checkbox" value="1">
+                                </th>
                                 <th width="10%">{_ Preview _}</th>
                                 <th width="35%">{% include "_admin_sort_header.tpl" field="pivot_title" caption=_"Title" qsort=qsort %}</th>
                                 <th width="15%">{% include "_admin_sort_header.tpl" field="medium.size" caption=_"Info" qsort=qsort %}</th>
@@ -108,6 +119,9 @@
                                 {% if id.is_visible %}
                                     {% with id.medium as medium %}
                                         <tr id="{{ #li.id }}" {% if not id.is_published %}class="unpublished" {% endif %} data-href="{% url admin_edit_rsc id=id %}">
+                                            <td class="not-clickable">
+                                                <input type="checkbox" value="{{ id }}" name="csel">
+                                            </td>
                                             <td>{% image medium mediaclass="admin-list-overview" class="thumb" %}</td>
                                             <td>
                                                 <strong>{{ id.title|striptags|default:_"<em>Untitled</em>" }}</strong><br />
@@ -165,5 +179,7 @@
 
         {% endwith %}
     {% endwith %}
+
+    {% include "_admin_overview_bulk_actions.tpl" %}
 
 {% endblock %}

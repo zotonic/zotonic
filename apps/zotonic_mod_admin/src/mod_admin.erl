@@ -450,6 +450,67 @@ event(#submit{ message = {dropbox_upload, _Args} }, Context) ->
             z_render:growl_error(?__("Sorry, you are not allowed to upload drop folder files.", Context), Context)
     end;
 
+event(#submit{ message = {delete_all, Args}}, Context) ->
+    case proplists:get_value(ids, Args) of
+        Ids when is_list(Ids) ->
+            lists:foreach(
+                fun(Id) ->
+                    case m_rsc:delete(Id, Context) of
+                        ok ->
+                            ok;
+                        {error, Reason} ->
+                            ?LOG_WARNING(#{
+                                in => zotonic_mod_admin,
+                                text => <<"Error during bulk delete of resources">>,
+                                id => Id,
+                                result => error,
+                                reason => Reason
+                            })
+                    end
+                end,
+                Ids),
+            z_render:wire(proplists:get_all_values(on_success, Args), Context);
+        _ ->
+            Context
+    end;
+
+event(#submit{ message = {update_all, Args}}, Context) ->
+    case proplists:get_value(ids, Args) of
+        Ids when is_list(Ids) ->
+            Props = z_context:get_q_all_noz(Context),
+            Update = lists:foldl(
+                fun
+                    ({_P, <<>>}, Acc) ->
+                        Acc;
+                    ({P, V}, Acc) ->
+                        Acc#{
+                            P => V
+                        }
+                end,
+                #{},
+                Props),
+            lists:foreach(
+                fun(Id) ->
+                    case m_rsc:update(Id, Update, Context) of
+                        {ok, _} ->
+                            ok;
+                        {error, Reason} ->
+                            ?LOG_WARNING(#{
+                                in => zotonic_mod_admin,
+                                text => <<"Error during bulk update of resources">>,
+                                id => Id,
+                                update => Update,
+                                result => error,
+                                reason => Reason
+                            })
+                    end
+                end,
+                Ids),
+            z_render:wire(proplists:get_all_values(on_success, Args), Context);
+        _ ->
+            Context
+    end;
+
 event(_E, Context) ->
     ?DEBUG(_E),
     Context.
