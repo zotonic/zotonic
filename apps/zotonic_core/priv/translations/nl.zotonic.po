@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-08-10 19:08\n"
+"PO-Revision-Date: 2023-08-10 20:34\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -908,7 +908,7 @@ msgstr "Weet je zeker dat je de pagina wilt verwijderen"
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_selected_delete.tpl:2
 msgid "Are you sure you want to delete these {n} pages?"
-msgstr ""
+msgstr "Weet je zeker dat je deze {n} pagina's wilt verwijderen?"
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:19
 msgid "Are you sure you want to delete this note?"
@@ -980,11 +980,11 @@ msgstr "Verander de categorie van deze pagina"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:41
 msgid "Check the pages you want to delete."
-msgstr ""
+msgstr "Vink de pagina's aan die u wilt verwijderen."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:53
 msgid "Check the pages you want to update."
-msgstr ""
+msgstr "Controleer de pagina's die u wilt bijwerken."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:10
 msgid "Choose a media item from this page to insert in the body text."
@@ -1126,7 +1126,7 @@ msgstr "Verwijder indien niet meer verbonden"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:7
 msgid "Delete selected pages"
-msgstr ""
+msgstr "Verwijder geselecteerde pagina's"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:72
 msgid "Delete this page."
@@ -1418,7 +1418,7 @@ msgstr "Importeer alleen directe verbindingen (ondiepe kopie)."
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_selected_update.tpl:78
 msgid "Indexed by search engines"
-msgstr ""
+msgstr "Geïndexeerd door zoekmachines"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:111
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:20
@@ -1647,7 +1647,7 @@ msgstr "Geen pagina's gevonden."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:52
 msgid "No pages selected"
-msgstr ""
+msgstr "Geen pagina's geselecteerd"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:21
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:46
@@ -1656,15 +1656,15 @@ msgstr "Geen resultaten."
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_selected_update.tpl:68
 msgid "Not dependent"
-msgstr ""
+msgstr "Niet afhankelijk"
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_selected_update.tpl:79
 msgid "Not indexed by search engines"
-msgstr ""
+msgstr "Niet geïndexeerd door zoekmachines"
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_selected_update.tpl:57
 msgid "Not protected"
-msgstr ""
+msgstr "Niet beschermd"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:12
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:20
@@ -1747,7 +1747,7 @@ msgstr "Bescherm tegen verwijderen"
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_selected_update.tpl:52./apps/zotonic_mod_admin/priv/templates/_dialog_selected_update.tpl:56
 msgid "Protected"
-msgstr ""
+msgstr "Beschermd"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:41
 msgid "Publication date of original article"
@@ -1924,7 +1924,7 @@ msgstr "Selecteer een gekoppelde afbeelding"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:93
 msgid "Selected"
-msgstr ""
+msgstr "Geselecteerd"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:45./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:42
 msgid "Selected Categories"
@@ -2257,7 +2257,7 @@ msgstr "Unieke URI"
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_selected_update.tpl:22
 msgid "Unpublished"
-msgstr ""
+msgstr "Ongepubliceerd"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:655./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
@@ -2277,11 +2277,11 @@ msgstr "Bijwerken"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:17
 msgid "Update selected pages"
-msgstr ""
+msgstr "Update geselecteerde pagina's"
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_selected_update.tpl:2
 msgid "Update {n} pages with the following properties:"
-msgstr ""
+msgstr "Update {n} pagina's met de volgende eigenschappen:"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:89./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:134
 msgid "Upload"
@@ -3102,7 +3102,7 @@ msgstr "Nieuwe gebruiker maken"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_search_view.tpl:7
 msgid "Matching e-mail"
-msgstr ""
+msgstr "Bijpassende e-mail"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:22
 msgid "My page"
