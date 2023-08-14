@@ -176,6 +176,14 @@ find_value(Key, F, Context) when is_function(F, 2) ->
 find_value(Key, F, _Context) when is_function(F, 1) ->
 	F(Key);
 
+%% Special indices in binaries
+find_value("@value", B, _Context) when is_binary(B) ->
+    B;
+find_value(1, B, _Context) when is_binary(B) ->
+    B;
+find_value(_Key, B, _Context) when is_binary(B) ->
+    undefined;
+
 %% Any subvalue of a non-existant value is undefined
 find_value(_Key, undefined, _Context) ->
     undefined.
