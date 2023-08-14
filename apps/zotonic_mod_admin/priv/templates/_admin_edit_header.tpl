@@ -42,6 +42,10 @@ id
                         cat_id=cat_id
                     }
                 %}
+
+                <a class="btn btn-default btn-xs" href="{% url admin_overview_rsc qcat=cat_id %}">
+                    {% trans "Show all {title} pages" title=cat_id.title %}
+                </a>
             </div>
         {% endwith %}
     {% endwith %}

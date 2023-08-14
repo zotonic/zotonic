@@ -2110,6 +2110,10 @@ msgstr ""
 msgid "Show address on edit page"
 msgstr ""
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:47
+msgid "Show all {title} pages"
+msgstr ""
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:3
 msgid "Show as"
 msgstr ""
