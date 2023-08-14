@@ -219,6 +219,7 @@ function z_dialog_overlay_open(options)
     }
 
     let $overlay = $('#'+overlay_id);
+
     if ($overlay.length > 0) {
         $overlay
             .html('<a href="#close" class="modal-overlay-close" onclick="return z_dialog_overlay_close(this)">&times;</a>' + options.html)
@@ -230,15 +231,27 @@ function z_dialog_overlay_open(options)
                      options.html +
                      '</div>';
         $('body').append(html);
+
+        $('.survey-overlay-close').focus();
         $overlay = $('#'+overlay_id);
     }
+    
     if (options.class) {
         $overlay.addClass(options.class);
     }
+
+    $(document).keyup(function(e) {
+         if (e.key === "Escape") { // escape key maps to keycode `27`
+            z_dialog_overlay_close();
+        }
+    });
+    
     $('body').addClass('overlay-open');
+    
     if (typeof($.widgetManager) != 'undefined') {
         $overlay.widgetManager();
     }
+
     z_editor_add($overlay);
 }
 
@@ -251,10 +264,13 @@ function z_dialog_overlay_close( closeButton )
     } else {
         $overlay = $('.modal-overlay');
     }
+
     $overlay.remove();
+    
     if ($('.modal-overlay').length == 0) {
         $('body').removeClass('overlay-open');
     }
+
     return false;
 }
 
