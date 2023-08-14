@@ -91,7 +91,7 @@
             if (options.backdrop !== 'static') {
               $title = $('<div>')
                 .addClass('modal-header')
-                .append($('<a>')
+                .append($('<a href="#">')
                 .addClass('close')
                 .attr('data-dismiss', 'modal')
                 .html('<span>&times;</span>'))
@@ -166,7 +166,18 @@
             if (typeof($.widgetManager) != 'undefined') {
                 $dialog.widgetManager();
             }
+
             z_editor_add($dialog);
+
+            setTimeout(function() {
+                $('a.close').focus();
+            }, 0);
+
+            $(document).keyup(function(e) {
+                 if (e.key === "Escape") { // escape key maps to keycode `27`
+                    $.dialogRemove($dialog)
+                }
+            });
 
             $dialog.on('hidden.bs.modal', () => $.dialogRemove($dialog));
         },
