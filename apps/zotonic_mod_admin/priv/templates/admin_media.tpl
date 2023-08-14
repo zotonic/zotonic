@@ -18,7 +18,20 @@
                 <form id="{{ #form }}" method="GET" action="{% url admin_media %}" class="form-inline">
                     <input type="hidden" name="qs" value="{{ q.qs|escape }}" />
                     <input type="hidden" name="qquery_id" value="{{ q.qquery_id|escape }}" />
+
                     <div class="btn-group pull-right">
+                        <button class="btn btn-default" id="btn-filter">
+                            <i class="glyphicon glyphicon-filter"></i> {_ Filter _}...
+                        </button>
+                        {% wire id="btn-filter"
+                                action={dialog_open
+                                    title=_"Filter pages"
+                                    template="_dialog_admin_overview_filter.tpl"
+                                    qargs=q.qargs
+                                    dispatch=zotonic_dispatch
+                                }
+                        %}
+
                         {% if `mod_content_groups`|member:m.modules.enabled %}
                             {% if m.search[{query cat=`content_group`}]|length %}
                                 <div class="btn-group">

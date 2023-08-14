@@ -105,6 +105,7 @@ qargs(Context) ->
     lists:filtermap(
                 fun
                     ({<<"qargs">>, _}) -> false;
+                    ({<<"q", _Term/binary>>, <<>>}) -> false;
                     ({<<"qs">>, V}) -> {true, {<<"text">>, V}};
                     ({<<"q", Term/binary>>, V}) -> {true, {Term, V}};
                     (_) -> false
@@ -183,6 +184,8 @@ request_arg(<<"is_published">>)        -> is_published;
 request_arg(<<"is_public">>)           -> is_public;
 request_arg(<<"is_findable">>)         -> is_findable;
 request_arg(<<"is_unfindable">>)       -> is_unfindable;
+request_arg(<<"is_protected">>)        -> is_protected;
+request_arg(<<"is_dependent">>)        -> is_dependent;
 request_arg(<<"date_start_after">>)    -> date_start_after;
 request_arg(<<"date_start_before">>)   -> date_start_before;
 request_arg(<<"date_start_year">>)     -> date_start_year;
@@ -198,6 +201,7 @@ request_arg(<<"query_id">>)            -> query_id;
 request_arg(<<"rsc_id">>)              -> rsc_id;
 request_arg(<<"name">>)                -> name;
 request_arg(<<"language">>)            -> language;
+request_arg(<<"notlanguage">>)         -> notlanguage;
 request_arg(<<"sort">>)                -> sort;
 request_arg(<<"asort">>)               -> asort;
 request_arg(<<"zsort">>)               -> zsort;
@@ -571,6 +575,29 @@ qterm({is_unfindable, Boolean}, _Context) ->
             z_convert:to_bool(Boolean)
         ]
     };
+qterm({is_protected, Boolean}, _Context) ->
+    %% is_protected or is_protected={false,true}
+    %% Filter on whether an item is protected or not.
+    #search_sql_term{
+        where = [
+            <<"rsc.is_protected = ">>, '$1'
+        ],
+        args = [
+            z_convert:to_bool(Boolean)
+        ]
+    };
+qterm({is_dependent, Boolean}, _Context) ->
+    %% is_dependent or is_dependent={false,true}
+    %% Filter on whether an item is dependent or not.
+    ?DEBUG(Boolean),
+    #search_sql_term{
+        where = [
+            <<"rsc.is_dependent = ">>, '$1'
+        ],
+        args = [
+            z_convert:to_bool(Boolean)
+        ]
+    };
 qterm({upcoming, Boolean}, _Context) ->
     %% upcoming
     %% Filter on items whose start date lies in the future
@@ -582,7 +609,11 @@ qterm({upcoming, Boolean}, _Context) ->
                 ]
             };
         false ->
-            []
+            #search_sql_term{
+                where = [
+                    <<"rsc.pivot_date_start < current_timestamp">>
+                ]
+            }
     end;
 qterm({ongoing, Boolean}, _Context) ->
     %% ongoing
@@ -596,7 +627,12 @@ qterm({ongoing, Boolean}, _Context) ->
                 ]
             };
         false ->
-            []
+            #search_sql_term{
+                where = [
+                    <<"rsc.pivot_date_start > current_timestamp ",
+                      "or rsc.pivot_date_end < current_timestamp">>
+                ]
+            }
     end;
 qterm({finished, Boolean}, _Context) ->
     %% finished
@@ -609,7 +645,11 @@ qterm({finished, Boolean}, _Context) ->
                 ]
             };
         false ->
-            []
+            #search_sql_term{
+                where = [
+                    <<"rsc.pivot_date_end >= current_timestamp">>
+                ]
+            }
     end;
 qterm({unfinished, Boolean}, _Context) ->
     %% Filter on items whose start date lies in the future
@@ -621,7 +661,11 @@ qterm({unfinished, Boolean}, _Context) ->
                 ]
             };
         false ->
-            []
+            #search_sql_term{
+                where = [
+                    <<"rsc.pivot_date_end < current_timestamp">>
+                ]
+            }
     end;
 qterm({unfinished_or_nodate, Boolean}, _Context) ->
     %% Filter on items whose start date lies in the future or don't have an end_date
@@ -634,7 +678,12 @@ qterm({unfinished_or_nodate, Boolean}, _Context) ->
                 ]
             };
         false ->
-            []
+            #search_sql_term{
+                where = [
+                    <<"(rsc.pivot_date_end < current_date "
+                      "and rsc.pivot_date_start is not null)">>
+                ]
+            }
     end;
 qterm({is_authoritative, Boolean}, _Context) ->
     %% authoritative={true|false}
@@ -766,6 +815,51 @@ qterm({language, Lang}, Context) ->
             #search_sql_term{
                 where = [
                     <<"rsc.language @> ">>, '$1'
+                ],
+                args = [
+                    [ z_convert:to_binary(Code) ]
+                ]
+            };
+        {error, _} ->
+            % Unknown iso code, ignore
+            []
+    end;
+qterm({notlanguage, []}, _Context) ->
+    %% notlanguage=<iso-code>
+    %% Filter on the presence of a translation
+    [];
+qterm({notlanguage, [ Lang | _ ] = Langs}, Context) when is_list(Lang) ->
+    lists:map(
+        fun(Code) ->
+            qterm({notlanguage, Code}, Context)
+        end,
+        Langs);
+qterm({notlanguage, [ Lang | _ ] = Langs}, Context) when is_atom(Lang); is_binary(Lang) ->
+    Langs1 = lists:map(
+        fun(Lng) ->
+            case to_language_atom(Lng, Context) of
+                {ok, Code} ->
+                    z_convert:to_binary(Code);
+                {error, _} ->
+                    <<"x-default">>
+            end
+        end,
+        Langs),
+    #search_sql_term{
+        where = [
+            <<"not (rsc.language && ">>, '$1', <<")">>
+        ],
+        args = [ lists:usort(Langs1) ]
+    };
+qterm({notlanguage, <<"[", _/binary>> = Langs}, Context) ->
+    Langs1 = maybe_split_list(Langs),
+    qterm({notlanguage, Langs1}, Context);
+qterm({notlanguage, Lang}, Context) ->
+    case to_language_atom(Lang, Context) of
+        {ok, Code} ->
+            #search_sql_term{
+                where = [
+                    <<"not (rsc.language @> ">>, '$1', <<")">>
                 ],
                 args = [
                     [ z_convert:to_binary(Code) ]
@@ -1585,13 +1679,17 @@ predicate_to_id_1(Pred, Context) ->
         {ok, Id} ->
             Id;
         {error, _} ->
-            ?LOG_NOTICE(#{
-                text => <<"Query: unknown predicate">>,
-                in => zotonic_mod_search,
-                predicate => Pred
-            }),
-            % display_error([ ?__("Unknown predicate", Context), 32, $", z_html:escape(z_convert:to_binary(Pred)), $" ], Context),
-            0
+            case m_rsc:rid(Pred, Context) of
+                undefined ->
+                    ?LOG_NOTICE(#{
+                        text => <<"Query: unknown predicate">>,
+                        in => zotonic_mod_search,
+                        predicate => Pred
+                    }),
+                    0;
+                RId ->
+                    RId
+            end
     end.
 
 %% Support routine for "hasanyobject"
