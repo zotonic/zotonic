@@ -14,7 +14,7 @@
 <form id="{{ #update_all }}" action="postback" class="form-horizontal">
 
     <div class="form-group">
-        <label class="col-sm-4 control-label">{_ Published _}</label>
+        <label class="col-sm-3 control-label">{_ Published _}</label>
         <div class="col-sm-4">
             <select name="is_published" class="form-control col-md-8">
                 <option value=""></option>
@@ -26,8 +26,8 @@
 
     {% block category %}
         <div class="form-group">
-            <label class="col-sm-4 control-label">{_ Category _}</label>
-            <div class="col-sm-8">
+            <label class="col-sm-3 control-label">{_ Category _}</label>
+            <div class="col-sm-9">
                 <select id="category_id" name="category_id" class="col-lg-4 col-md-4 form-control">
                     <option value=""></option>
                     {% for c in m.category.tree_flat %}
@@ -49,7 +49,7 @@
     {% endblock %}
 
     <div class="form-group">
-        <label class="col-sm-4 control-label">{_ Protected _}</label>
+        <label class="col-sm-3 control-label">{_ Protected _}</label>
         <div class="col-sm-4">
             <select name="is_protected" class="form-control col-md-8">
                 <option value=""></option>
@@ -60,7 +60,7 @@
     </div>
 
     <div class="form-group">
-        <label class="col-sm-4 control-label">{_ Dependent _}</label>
+        <label class="col-sm-3 control-label">{_ Dependent _}</label>
         <div class="col-sm-4">
             <select name="is_dependent" class="form-control col-md-8">
                 <option value=""></option>
@@ -71,7 +71,7 @@
     </div>
 
     <div class="form-group">
-        <label class="col-sm-4 control-label">{_ SEO _}</label>
+        <label class="col-sm-3 control-label">{_ SEO _}</label>
         <div class="col-sm-4">
             <select name="seo_noindex" class="form-control col-md-8">
                 <option value=""></option>

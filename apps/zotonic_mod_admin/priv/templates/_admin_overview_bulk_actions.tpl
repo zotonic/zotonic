@@ -5,7 +5,7 @@
 {% wire name="csel-delete"
         action={dialog_open
             title=_"Delete selected pages"
-            template="_dialog_selected_delete.tpl"
+            template="_dialog_admin_bulk_delete.tpl"
             on_success=[
                 {reload}
             ]
@@ -15,7 +15,7 @@
 {% wire name="csel-update"
         action={dialog_open
             title=_"Update selected pages"
-            template="_dialog_selected_update.tpl"
+            template="_dialog_admin_bulk_update.tpl"
             on_success=[
                 {reload}
             ]
