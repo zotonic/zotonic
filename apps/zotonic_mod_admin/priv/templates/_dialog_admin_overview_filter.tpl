@@ -127,7 +127,7 @@
     {% endwith %}
 
     <div class="form-group">
-        <div class="col-sm-3"></div>
+        <label class="col-sm-3 control-label">{_ Date start/end _}</label>
         <div class="col-sm-4">
             <label class="checkbox">
                 <input type="checkbox" name="qupcoming" value="1" {% if q.qupcoming %}checked{% endif %}>
