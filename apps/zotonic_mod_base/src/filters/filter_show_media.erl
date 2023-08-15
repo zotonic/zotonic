@@ -165,9 +165,9 @@ filter_args([{link, Link}|Args], Acc) when Link =:= true; Link =:= <<"link">> ->
 filter_args([{link, _}|Args], Acc) ->
     filter_args(Args, Acc);
 filter_args([{caption, Caption}|Args], Acc) ->
-    filter_args(Args, [{caption,z_html:escape(Caption)}|Acc]);
+    filter_args(Args, [{caption,z_html:escape_check(Caption)}|Acc]);
 filter_args([{link_url, LinkUrl}|Args], Acc) ->
-    filter_args(Args, [{link_url,z_html:escape(LinkUrl)}|Acc]);
+    filter_args(Args, [{link_url,z_html:escape_check(LinkUrl)}|Acc]);
 filter_args([{K, V}|Args], Acc) when is_binary(V) ->
     % Escape unknown arguments
     filter_args(Args, [{K,z_html:escape_check(V)}|Acc]);

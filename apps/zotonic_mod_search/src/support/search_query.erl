@@ -589,7 +589,6 @@ qterm({is_protected, Boolean}, _Context) ->
 qterm({is_dependent, Boolean}, _Context) ->
     %% is_dependent or is_dependent={false,true}
     %% Filter on whether an item is dependent or not.
-    ?DEBUG(Boolean),
     #search_sql_term{
         where = [
             <<"rsc.is_dependent = ">>, '$1'

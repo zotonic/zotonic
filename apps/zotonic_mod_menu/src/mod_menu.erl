@@ -505,12 +505,13 @@ datamodel(Context) ->
         predicates = [
             {hasmenu, #{
                 <<"title">> => <<"Has Menu">>,
-                <<"summary">> => <<"Automatically updated after menu changes.">>
+                <<"summary">> => <<"Define preferred menu context for page, used in SEO.">>
             }, [
                 {undefined, menu}
             ]},
             {hasmenupart, #{
-                <<"title">> => <<"Menu Contains">>
+                <<"title">> => <<"Menu Contains">>,
+                <<"summary">> => <<"Automatically updated after menu changes.">>
             }, [
                 {menu, undefined}
             ]}
