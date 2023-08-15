@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2014-2023 Marc Worrell
 %% @doc Fetch a preview from a video file using ffmpeg.
+%% @end
 
 %% Copyright 2014-2023 Marc Worrell
 %%
@@ -25,6 +26,9 @@
 
 -include_lib("kernel/include/logger.hrl").
 
+% Default timeout for video previews - 10 minutes
+-define(FFMPEG_TIMEOUT, 10*60*1000).
+
 -define(PREVIEW_CMDLINE, "ffmpeg -itsoffset -~p -i ~s -vcodec png -vframes 1 -an -f rawvideo -loglevel error -y").
 
 -spec preview(file:filename_all(), map()) -> {ok, file:filename_all()} | {error, string()}.
@@ -44,8 +48,7 @@ preview(MovieFile, #{
         CmdlineCfg -> z_convert:to_list(CmdlineCfg)
     end,
     TmpFile = z_tempfile:new(),
-    FfmpegCmd = z_convert:to_list(
-        iolist_to_binary([
+    FfmpegCmd = unicode:characters_to_binary([
             case string:str(Cmdline, "-itsoffset") of
                 0 -> io_lib:format(Cmdline, [z_filelib:os_filename(MovieFile)]);
                 _ -> io_lib:format(Cmdline, [Start, z_filelib:os_filename(MovieFile)])
@@ -53,7 +56,7 @@ preview(MovieFile, #{
             " ",
             orientation_to_transpose(Orientation),
             z_filelib:os_filename(TmpFile)
-        ])),
+        ]),
     jobs:run(media_preview_jobs,
         fun() ->
             ?LOG_DEBUG(#{
@@ -62,26 +65,27 @@ preview(MovieFile, #{
                 tmp_file => TmpFile,
                 command => FfmpegCmd
             }),
-            case os:cmd(FfmpegCmd) of
-                [] ->
+            case z_exec:run(FfmpegCmd, #{ timeout => ?FFMPEG_TIMEOUT }) of
+                {ok, Stdout} ->
                    ?LOG_DEBUG(#{
-                        text => <<"Preview ok">>,
+                        text => <<"FFMPEG video preview ok">>,
                         result => ok,
                         command => FfmpegCmd,
                         movie_file => MovieFile,
-                        tmp_file => TmpFile
+                        tmp_file => TmpFile,
+                        stdout => Stdout
                     }),
-                   {ok, TmpFile};
-                Other ->
+                    {ok, TmpFile};
+                {error, Reason} ->
                    ?LOG_WARNING(#{
-                        text => <<"Video preview error">>,
+                        text => <<"FFMPEG video preview error">>,
                         result => error,
-                        reason => Other,
+                        reason => Reason,
                         movie_file => MovieFile,
                         tmp_file => TmpFile,
                         command => FfmpegCmd
                     }),
-                   {error, Other}
+                   {error, Reason}
             end
         end);
 preview(MovieFile, _Props) ->

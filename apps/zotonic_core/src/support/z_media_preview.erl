@@ -1,10 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Make still previews of media, using image manipulation functions.  Resize, crop, grey, etc.
 %% This uses the command line imagemagick tools for all image manipulation.
 %% This code is adapted from PHP GD2 code, so the resize/crop could've been done more efficiently, but it works :-)
+%% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -159,24 +160,39 @@ run_cmd(Cmd, OutFile) ->
 
 once(Cmd, OutFile) ->
     Key = {n,l,Cmd},
+    CmdBin = unicode:characters_to_binary(Cmd),
     case gproc:reg_or_locate(Key) of
         {Pid, _} when Pid =:= self() ->
             ?LOG_DEBUG(#{
-                text => <<"Image convert">>,
                 in => zotonic_core,
-                command => unicode:characters_to_binary(Cmd)
+                text => <<"ImageMagick convert command started">>,
+                command => CmdBin
             }),
-            Result = os:cmd(Cmd),
+            Result = z_exec:run(CmdBin),
             gproc:unreg(Key),
-            case filelib:is_regular(OutFile) of
-                true ->
-                    ok;
-                false ->
+            case Result of
+                {ok, StdOut} ->
+                    case filelib:is_regular(OutFile) of
+                        true ->
+                            ok;
+                        false ->
+                            ?LOG_ERROR(#{
+                                in => zotonic_core,
+                                text => <<"ImageMagick convert command failed - no output file">>,
+                                result => error,
+                                reason => enoent,
+                                command => CmdBin,
+                                stdout => StdOut
+                            }),
+                            {error, convert_error}
+                    end;
+                {error, Reason} ->
                     ?LOG_ERROR(#{
-                        text => <<"convert cmd failed">>,
                         in => zotonic_core,
-                        command => unicode:characters_to_binary(Cmd),
-                        result => unicode:characters_to_binary(Result)
+                        text => <<"ImageMagick convert command failed">>,
+                        result => error,
+                        reason => Reason,
+                        command => CmdBin
                     }),
                     {error, convert_error}
             end;
@@ -184,7 +200,7 @@ once(Cmd, OutFile) ->
             ?LOG_DEBUG(#{
                 text => "Waiting for parallel resizer",
                 in => zotonic_core,
-                command => unicode:characters_to_binary(Cmd)
+                command => CmdBin
             }),
             Ref = gproc:monitor(Key),
             receive
@@ -192,7 +208,6 @@ once(Cmd, OutFile) ->
                     ok
             end
     end.
-
 
 
 %% Return the ImageMagick input-file suffix.

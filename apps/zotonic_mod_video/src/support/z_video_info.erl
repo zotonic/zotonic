@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2020 Marc Worrell
+%% @copyright 2014-2023 Marc Worrell
 %% @doc Fetch information about a video file using ffmpeg.
+%% @end
 
-%% Copyright 2014-2020 Marc Worrell
+%% Copyright 2014-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,6 +25,9 @@
 
 -include_lib("kernel/include/logger.hrl").
 
+% Default timeout for video info - 10 minutes
+-define(FFMPEG_TIMEOUT, 10*60*1000).
+
 -define(FFPROBE_CMDLINE, "ffprobe -loglevel quiet -show_format -show_streams -print_format json ").
 
 -spec info( file:filename_all() ) -> map().
@@ -32,43 +36,54 @@ info(Path) ->
         undefined -> ?FFPROBE_CMDLINE;
         <<>> -> ?FFPROBE_CMDLINE;
         "" -> ?FFPROBE_CMDLINE;
-        CmdlineCfg -> z_convert:to_list(CmdlineCfg)
+        CmdlineCfg -> CmdlineCfg
     end,
-    FfprobeCmd = lists:flatten([
+    FfprobeCmd = unicode:characters_to_binary([
            Cmdline, " ", z_filelib:os_filename(Path)
        ]),
     ?LOG_DEBUG(#{
-        text => <<"Video info">>,
         in => zotonic_mod_video,
+        text => <<"Video info">>,
         command => FfprobeCmd
     }),
-    JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
-    try
-        Ps = decode_json(JSONText),
-        {Width, Height, Orientation} = fetch_size(Ps),
-        Info = #{
-            <<"duration">> => fetch_duration(Ps),
-            <<"bit_rate">> => fetch_bit_rate(Ps),
-            <<"tags">> => fetch_tags(Ps),
-            <<"width">> => Width,
-            <<"height">> => Height,
-            <<"orientation">> => Orientation,
-            <<"size">> => fetch_datasize(Ps),
-            <<"audio_codec">> => fetch_codec(Ps, <<"audio">>),
-            <<"video_codec">> => fetch_codec(Ps, <<"video">>)
-        },
-        maps:filter(
-            fun(_K, V) -> V =/= undefined end,
-            Info)
-    catch
-        error:E ->
+    case z_exec:run(FfprobeCmd, #{ timeout => ?FFMPEG_TIMEOUT }) of
+        {ok, JSONText} ->
+            try
+                Ps = decode_json(JSONText),
+                {Width, Height, Orientation} = fetch_size(Ps),
+                Info = #{
+                    <<"duration">> => fetch_duration(Ps),
+                    <<"bit_rate">> => fetch_bit_rate(Ps),
+                    <<"tags">> => fetch_tags(Ps),
+                    <<"width">> => Width,
+                    <<"height">> => Height,
+                    <<"orientation">> => Orientation,
+                    <<"size">> => fetch_datasize(Ps),
+                    <<"audio_codec">> => fetch_codec(Ps, <<"audio">>),
+                    <<"video_codec">> => fetch_codec(Ps, <<"video">>)
+                },
+                maps:filter(
+                    fun(_K, V) -> V =/= undefined end,
+                    Info)
+            catch
+                error:E ->
+                    ?LOG_WARNING(#{
+                        in => zotonic_mod_video,
+                        text => <<"Unexpected ffprobe return">>,
+                        command => FfprobeCmd,
+                        result => error,
+                        reason => E,
+                        probe_output => JSONText
+                    }),
+                    #{}
+            end;
+        {error, Reason} ->
             ?LOG_WARNING(#{
-                text => <<"Unexpected ffprobe return">>,
                 in => zotonic_mod_video,
+                text => <<"Unexpected ffprobe command error">>,
                 command => FfprobeCmd,
-                reason => error,
-                result => E,
-                probe_output => JSONText
+                result => error,
+                reason => Reason
             }),
             #{}
     end.
