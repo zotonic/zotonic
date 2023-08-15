@@ -19,14 +19,7 @@
                         <button class="btn btn-default" id="btn-filter">
                             <i class="glyphicon glyphicon-filter"></i> {_ Filter _}...
                         </button>
-                        {% wire id="btn-filter"
-                                action={dialog_open
-                                    title=_"Filter pages"
-                                    template="_dialog_admin_overview_filter.tpl"
-                                    qargs=q.qargs
-                                    dispatch=zotonic_dispatch
-                                }
-                        %}
+                        {% wire id="btn-filter" action={slide_toggle target="filter-panel"} %}
 
                         {% if `mod_content_groups`|member:m.modules.enabled %}
                             {% if m.search[{query cat=`content_group`}]|length %}
@@ -76,6 +69,7 @@
                     </div>
                 </form>
             {% endwith %}
+
             <div class="admin-header">
                 <h2>
                     {% if not q.qcat %}{{ m.rsc[q.qquery_id].title|default:_"Pages overview" }}{% else %}{_ Pages overview _}{% endif %}{% if q.qcat == '*' %}: {_ All Categories _}{% elseif q.qcat %}: {{ m.rsc[q.qcat].title }}{% endif %}{% if q.qcat_exclude %}, {_ excluding _}: {{ m.rsc[q.qcat_exclude].title }}{% endif %}{% if q.qs %}, {_ matching _} “{{ q.qs|escape }}”{% endif %}
@@ -89,6 +83,7 @@
                     <p>{{ m.rsc[q.qquery_id].summary }}</p>
                 {% endif %}
             </div>
+
             <div class="well z-button-row">
                 <a name="content-pager"></a>
 
@@ -107,6 +102,14 @@
                 <a class="btn btn-default{% if not q.qcat and not q.qquery_id %} disabled{% endif %}" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
                 <a class="btn btn-default" href="{% url admin_media %}">{_ All media _}</a>
                 {% all include "_admin_extra_buttons.tpl" %}
+            </div>
+
+            <div id="filter-panel" class="well" style="display:none">
+                {% include "_admin_overview_filter_panel.tpl"
+                           on_cancel={slide_toggle target="filter-panel"}
+                           qargs=q.qargs
+                           dispatch=zotonic_dispatch
+                %}
             </div>
 
             {% if q.qquery_id and m.rsc[q.qquery_id].is_visible %}

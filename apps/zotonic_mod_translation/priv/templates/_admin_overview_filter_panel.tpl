@@ -3,7 +3,7 @@
 {% block properties %}
     <div class="form-group">
         <label class="col-sm-3 control-label">{_ With language _}</label>
-        <div class="col-sm-4">
+        <div class="col-sm-9">
             <select name="qlanguage" class="form-control">
                 <option value=""></option>
                 {% for code, lang in m.translation.language_list_editable %}
@@ -17,7 +17,7 @@
 
     <div class="form-group">
         <label class="col-sm-3 control-label">{_ Without language _}</label>
-        <div class="col-sm-4">
+        <div class="col-sm-9">
             <select name="qnotlanguage" class="form-control">
                 <option value=""></option>
                 {% for code, lang in m.translation.language_list_editable %}
