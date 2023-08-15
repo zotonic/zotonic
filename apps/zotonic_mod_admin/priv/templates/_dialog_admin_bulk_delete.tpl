@@ -14,7 +14,7 @@
 <form id="{{ #delete_all }}" action="postback">
 
     <div class="modal-footer">
-        {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
+        {% button class="btn btn-default" action={dialog_close} text=_"Cancel" %}
         {% button class="btn btn-danger" type="submit" text=_"Delete" %}
     </div>
 
