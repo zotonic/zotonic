@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-08-14 17:08\n"
+"PO-Revision-Date: 2023-08-16 09:43\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -5397,11 +5397,11 @@ msgstr "Перенаправить на"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:8
 msgid "Redirect unknown domains and paths to known pages or locations."
-msgstr "Перенаправление неизвестных доменов и путей к известным страницам или местам."
+msgstr "Перенаправлять неизвестные домены и пути на известные страницы или местоположения."
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:9
 msgid "The new location can be a local path or a complete URL. Leave the host empty for redirects within this site."
-msgstr "Новое местоположение может быть локальным путем или полным URL-адресом. Оставьте хост пустым для переадресации внутри этого сайта."
+msgstr "Новое местоположение может быть локальным путем или полным URL. Оставьте имя хоста пустым для переадресации внутри этого сайта."
 
 #: apps/zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:73
 msgid "You are not allowed to change this."
@@ -5433,7 +5433,7 @@ msgstr "Контроллер"
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:45
 msgid "Could not fetch tracer output, please try again."
-msgstr "Не удалось получить выходные данные трассировщика, попробуйте еще раз."
+msgstr "Не удалось получить вывод трассировщика, попробуйте еще раз."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:333
 msgid "Development"
@@ -5457,7 +5457,7 @@ msgstr "Отладка правил диспетчеризации"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:41
 msgid "Download CSS and JavaScript files as separate files. Don’t combine them in one URL."
-msgstr "Скачать CSS и JavaScript файлы как отдельные файлы. Не объединяйте их в один URL."
+msgstr "Скачивать файлы CSS и JavaScript как отдельные файлы. Не объединять их в один URL."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:18
 msgid "Empty log"
@@ -5469,7 +5469,7 @@ msgstr "Включите <tt>mod_server_storage</tt> для использова
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:58
 msgid "Enable API to recompile and build Zotonic"
-msgstr "Включите API для перекомпиляции и построения Zotonic"
+msgstr "Включите API для перекомпиляции и сборки Zotonic"
 
 #: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:36
 msgid "Enabled database query tracing"
