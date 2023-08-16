@@ -9,7 +9,7 @@
         <div id="dialog_connect_loop_results" class="thumbnails">
             {% if m.rsc[text].id as id %}
                 {% if id.is_visible %}
-                    <h4>{_ Pages _}</h4>
+                    <h4>{_ Unique page _}</h4>
                     <div class="row">
                         {% catinclude "_action_dialog_connect_tab_find_results_item.tpl" id
                             predicate=predicate
