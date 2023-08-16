@@ -1694,24 +1694,28 @@ window.onerror = function(message, file, line, col, error) {
 
 function z_log_error ( message, file, line, col, error ) {
     if (!z_page_unloading) {
-        let payload = {
-            type: 'error',
-            message: message,
-            file: file,
-            line: line,
-            col: col,
-            stack: error ? error.stack : null,
-            user_agent: navigator.userAgent,
-            url: window.location.href
-        };
+        // Some code (plugin?) on Safari assumes that a JSON-LD context is always a string.
+        // As it can also be an object that code will throw an error, ignore this error here.
+        if (message.indexOf('r["@context"].toLowerCase') == -1) {
+            let payload = {
+                type: 'error',
+                message: message,
+                file: file,
+                line: line,
+                col: col,
+                stack: error ? error.stack : null,
+                user_agent: navigator.userAgent,
+                url: window.location.href
+            };
 
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', '/log-client-event', true);
-        xhr.send(JSON.stringify(payload));
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/log-client-event', true);
+            xhr.send(JSON.stringify(payload));
 
-        if ($("form.masked").length > 0 || (payload.stack && payload.stack.match(/(submitFunction|doValidations)/))) {
-            alert("Sorry, something went wrong.\n\n(" + message + ")");
-            try { $("form.masked").unmask(); } catch (e) {}
+            if ($("form.masked").length > 0 || (payload.stack && payload.stack.match(/(submitFunction|doValidations)/))) {
+                alert("Sorry, something went wrong.\n\n(" + message + ")");
+                try { $("form.masked").unmask(); } catch (e) {}
+            }
         }
     }
 }
