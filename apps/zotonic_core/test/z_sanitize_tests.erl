@@ -7,7 +7,7 @@ youtube_test() ->
     In  = <<"<iframe width=\"560\" height=\"315\" src=\"//www.youtube.com/embed/2RXp3r2gb3A\" frameborder=\"0\" allowfullscreen></iframe>">>,
     Out = <<
         "<iframe src=\"https://www.youtube.com/embed/2RXp3r2gb3A\" "
-        "sandbox=\"allow-popups allow-scripts allow-same-origin\" "
+        "sandbox=\"allow-popups allow-scripts allow-same-origin allow-presentation\" "
         "width=\"560\" height=\"315\" "
         "frameborder=\"0\" allowfullscreen=\"allowfullscreen\">"
         "</iframe>">>,
@@ -18,7 +18,7 @@ youtube_object_test() ->
     In  = <<"<object data=\"http://www.youtube.com/embed/dQw4w9WgXcQ\" width=\"560\" height=\"315\"></object>">>,
     Out = <<
         "<iframe width=\"560\" height=\"315\" allowfullscreen=\"1\" frameborder=\"0\" "
-        "sandbox=\"allow-popups allow-scripts allow-same-origin\" "
+        "sandbox=\"allow-popups allow-scripts allow-same-origin allow-presentation\" "
         "src=\"https://www.youtube.com/embed/dQw4w9WgXcQ\">"
         "</iframe>">>,
     ?assertEqual(Out, z_sanitize:html(In, Context)).

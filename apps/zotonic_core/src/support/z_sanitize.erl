@@ -37,9 +37,9 @@
 -include_lib("zotonic.hrl").
 
 
-% Youtube needs at least: allow-popups allow-same-origin allow-scripts
+% Youtube needs at least: allow-popups allow-same-origin allow-scripts allow-presentation
 % See: https://csplite.com/csp/test186/
--define(IFRAME_SANDBOX, <<"allow-popups allow-scripts allow-same-origin">>).
+-define(IFRAME_SANDBOX, <<"allow-popups allow-scripts allow-same-origin allow-presentation">>).
 
 
 uri(Uri) ->
