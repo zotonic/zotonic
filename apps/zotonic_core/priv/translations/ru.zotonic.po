@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-08-19 10:45\n"
+"PO-Revision-Date: 2023-08-19 11:46\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -5509,7 +5509,7 @@ msgstr "Включённые шаблоны"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:156
 msgid "Introspection"
-msgstr "Введение"
+msgstr "Интроспекция"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:50
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
