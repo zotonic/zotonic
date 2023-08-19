@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-08-16 09:43\n"
+"PO-Revision-Date: 2023-08-19 10:45\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -5505,7 +5505,7 @@ msgstr "Найдено подходящее правило диспетчери�
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:8./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:12
 msgid "Included templates"
-msgstr "Входящие в комплект шаблоны"
+msgstr "Включённые шаблоны"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:156
 msgid "Introspection"
