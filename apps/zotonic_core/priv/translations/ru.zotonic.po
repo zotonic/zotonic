@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-08-19 11:46\n"
+"PO-Revision-Date: 2023-08-23 18:32\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -5513,7 +5513,7 @@ msgstr "Интроспекция"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:50
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
-msgstr "Перезагрузка измененных CSS-файлов в реальном времени. Перезагрузка страницы по изменению шаблонов или JavaScript."
+msgstr "Живая перезагрузка измененных CSS-файлов. Перезагрузка страницы при изменении шаблонов или JavaScript."
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:69./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:75
 msgid "Location"
@@ -5545,7 +5545,7 @@ msgstr "Наблюдатели"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:101
 msgid "Optional category for catinclude"
-msgstr "Дополнительная категория для котинусов"
+msgstr "Дополнительная категория для catinclude"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
 msgid "Options"
