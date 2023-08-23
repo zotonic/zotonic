@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-08-23 18:32\n"
+"PO-Revision-Date: 2023-08-23 19:37\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -5561,15 +5561,15 @@ msgstr "Пересобрать шаблоны"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:74
 msgid "Redirect"
-msgstr "Перенаправить"
+msgstr "Перенаправление"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:162
 msgid "Show an overview of all observers."
-msgstr "Покажите обзор всех наблюдателей."
+msgstr "Показать обзор всех наблюдателей."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:33
 msgid "Show defined blocks in generated templates"
-msgstr "Показывать определенные блоки в сгенерированных шаблонах"
+msgstr "Показывать определения блоков в сгенерированных шаблонах"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:159
 msgid "Show internals of Zotonic and the modules"
