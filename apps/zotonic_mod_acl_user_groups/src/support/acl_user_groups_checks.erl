@@ -725,7 +725,9 @@ is_collab_group_manager(_GroupId, #context{ acl = #aclug{ collab_groups = [] }})
     false;
 is_collab_group_manager(GroupId, #context{ user_id = UserId, acl = #aclug{ collab_groups = CollabGroups}} = Context) ->
     lists:member(GroupId, CollabGroups)
-    andalso lists:member(GroupId, m_edge:subjects(UserId, hascollabmanager, Context)).
+    andalso lists:member(GroupId, m_edge:subjects(UserId, hascollabmanager, Context));
+is_collab_group_manager(_GroupId, _Context) ->
+    false.
 
 %% @doc Check if the user is a member of the collaboration group
 is_collab_group_member(CGId, #context{ acl = #aclug{ collab_groups = CollabGroups }}) ->
