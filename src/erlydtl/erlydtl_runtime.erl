@@ -8,6 +8,8 @@
 -include_lib("zotonic.hrl").
 
 
+-define(is_value(V), (is_binary(V) orelse is_number(V) orelse is_atom(V))).
+
 % Find the value of a model value
 find_value(<<>>, #m{}, _Context) ->
     undefined;
@@ -178,7 +180,22 @@ find_value(Key, F, _Context) when is_function(F, 1) ->
 
 %% Any subvalue of a non-existant value is undefined
 find_value(_Key, undefined, _Context) ->
+    undefined;
+
+%% Special indices in values
+find_value("@value", V, _Context) when ?is_value(V) ->
+    V;
+find_value(<<"@value">>, V, _Context) when ?is_value(V) ->
+    V;
+find_value(1, V, _Context) when ?is_value(V) ->
+    V;
+find_value(_Key, V, _Context) when ?is_value(V) ->
+    undefined;
+
+find_value(Key, V, _Context) ->
+    lager:debug("Unknown value lookup: key ~p in value ~p", [ Key, V ]),
     undefined.
+
 
 find_map_value(Key, Map) when is_atom(Key) ->
     case maps:find(Key, Map) of
