@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-08-16 09:43\n"
+"PO-Revision-Date: 2023-08-23 19:37\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -5505,15 +5505,15 @@ msgstr "Найдено подходящее правило диспетчери�
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:8./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:12
 msgid "Included templates"
-msgstr "Входящие в комплект шаблоны"
+msgstr "Включённые шаблоны"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:156
 msgid "Introspection"
-msgstr "Введение"
+msgstr "Интроспекция"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:50
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
-msgstr "Перезагрузка измененных CSS-файлов в реальном времени. Перезагрузка страницы по изменению шаблонов или JavaScript."
+msgstr "Живая перезагрузка измененных CSS-файлов. Перезагрузка страницы при изменении шаблонов или JavaScript."
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:69./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:75
 msgid "Location"
@@ -5545,7 +5545,7 @@ msgstr "Наблюдатели"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:101
 msgid "Optional category for catinclude"
-msgstr "Дополнительная категория для котинусов"
+msgstr "Дополнительная категория для catinclude"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
 msgid "Options"
@@ -5561,15 +5561,15 @@ msgstr "Пересобрать шаблоны"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:74
 msgid "Redirect"
-msgstr "Перенаправить"
+msgstr "Перенаправление"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:162
 msgid "Show an overview of all observers."
-msgstr "Покажите обзор всех наблюдателей."
+msgstr "Показать обзор всех наблюдателей."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:33
 msgid "Show defined blocks in generated templates"
-msgstr "Показывать определенные блоки в сгенерированных шаблонах"
+msgstr "Показывать определения блоков в сгенерированных шаблонах"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:159
 msgid "Show internals of Zotonic and the modules"
