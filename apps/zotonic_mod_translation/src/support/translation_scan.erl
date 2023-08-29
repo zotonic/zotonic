@@ -139,8 +139,9 @@ parse_erl_form_part({match, _, X, Y}, File, Acc) ->
     parse_erl_form_part(X, File, []) ++ parse_erl_form_part(Y, File, []) ++ Acc;
 parse_erl_form_part({cons, _, X, Y}, File, Acc) ->
     parse_erl_form_part(X, File, []) ++ parse_erl_form_part(Y, File, []) ++ Acc;
-parse_erl_form_part({op, _, '++', X, Y}, File, Acc) ->
-    parse_erl_form_part(X, File, []) ++ parse_erl_form_part(Y, File, []) ++ Acc;
+parse_erl_form_part({op, _, _Op, X, Y}, File, Acc) ->
+    Acc1 = parse_erl_form_part(X, File, Acc),
+    parse_erl_form_part(Y, File, Acc1);
 parse_erl_form_part({'case', _, Expr, Exprs}, File, Acc) ->
     parse_erl_form_part(Expr, File, []) ++
         lists:foldl(fun(Part,A) -> parse_erl_form_part(Part, File, A) end, Acc, Exprs);
@@ -158,5 +159,19 @@ parse_erl_form_part({record, _, _, Fields}, File, Acc) ->
     lists:foldl(fun({record_field, _, _, Part}, A) ->
             parse_erl_form_part(Part, File, A)
     end, Acc, Fields);
+parse_erl_form_part({'if', _, Clauses}, File, Acc) ->
+    lists:foldl(fun(Clause,A) -> parse_erl_form_part(Clause, File, A) end, Acc, Clauses);
+parse_erl_form_part({'fun', _, {clauses, Clauses}}, File, Acc) ->
+    lists:foldl(fun(Clause,A) -> parse_erl_form_part(Clause, File, A) end, Acc, Clauses);
+parse_erl_form_part({var, _, _Name}, _File, Acc) ->
+    Acc;
+parse_erl_form_part({atom, _, _Name}, _File, Acc) ->
+    Acc;
+parse_erl_form_part({string, _, _Name}, _File, Acc) ->
+    Acc;
+parse_erl_form_part({bin, _, _Name}, _File, Acc) ->
+    Acc;
+parse_erl_form_part({nil, _}, _File, Acc) ->
+    Acc;
 parse_erl_form_part(_Part, _File, Acc) ->
     Acc. %% ignore

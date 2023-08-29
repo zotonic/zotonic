@@ -116,6 +116,8 @@ lookup(Trans, Context) ->
     lookup(Trans, z_context:languages(Context), Context).
 
 -spec lookup(z:trans()|binary()|string(), atom() | [atom()], z:context()) -> binary() | string() | undefined.
+lookup(Text, Lang, Context) when is_list(Lang) ->
+    lookup(unicode:characters_to_binary(Text), [Lang], Context);
 lookup(#trans{ tr = Tr }, Lang, _Context) when is_atom(Lang) ->
     proplists:get_value(Lang, Tr);
 lookup(Text, Lang, Context) when is_atom(Lang) ->
@@ -259,10 +261,12 @@ lookup_fallback_language(Langs, Lang, Context) ->
 
 %% @doc translate a string or trans record into another language
 -spec trans(z:trans() | binary() | string(), z:context() | atom()) -> binary() | undefined.
+trans(Text, Lang) when is_list(Text) ->
+    trans(unicode:characters_to_binary(Text), Lang);
 trans(#trans{ tr = Tr }, Lang) when is_atom(Lang) ->
     proplists:get_value(Lang, Tr);
 trans(Text, Lang) when is_atom(Lang) ->
-    z_convert:to_binary(Text);
+    Text;
 trans(Text, Context) ->
     trans(Text, z_context:language(Context), Context).
 
