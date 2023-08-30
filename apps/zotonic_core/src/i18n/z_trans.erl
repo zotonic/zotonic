@@ -2,6 +2,7 @@
 %% @copyright 2009-2023 Marc Worrell
 %% @doc Translate english sentences into other languages, following
 %% the GNU gettext principle.
+%% @enddoc
 
 %% Copyright 2009-2023 Marc Worrell
 %%
@@ -39,11 +40,15 @@
 %% @doc Fetch all translations for the given string.
 -spec translations(z:trans() | binary() | string(), z:context()) -> z:trans() | binary().
 translations(#trans{ tr = Tr0 } = Trans0, Context) ->
-    {en, From} = proplists:lookup(en, Tr0),
-    case translations(From, Context) of
-        #trans{ tr = Tr1 } ->
-            #trans{ tr = merge_trs(Tr0, lists:reverse(Tr1)) };
-        _ -> Trans0
+    case proplists:lookup(en, Tr0) of
+        {en, From} ->
+            case translations(From, Context) of
+                #trans{ tr = Tr1 } ->
+                    #trans{ tr = merge_trs(Tr0, lists:reverse(Tr1)) };
+                _ -> Trans0
+            end;
+        none ->
+            Trans0
     end;
 translations(From, Context) when is_binary(From) ->
     try
@@ -116,6 +121,8 @@ lookup(Trans, Context) ->
     lookup(Trans, z_context:languages(Context), Context).
 
 -spec lookup(z:trans()|binary()|string(), atom() | [atom()], z:context()) -> binary() | string() | undefined.
+lookup(Text, Lang, Context) when is_list(Text) ->
+    lookup(unicode:characters_to_binary(Text), [Lang], Context);
 lookup(#trans{ tr = Tr }, Lang, _Context) when is_atom(Lang) ->
     proplists:get_value(Lang, Tr);
 lookup(Text, Lang, Context) when is_atom(Lang) ->
@@ -259,10 +266,12 @@ lookup_fallback_language(Langs, Lang, Context) ->
 
 %% @doc translate a string or trans record into another language
 -spec trans(z:trans() | binary() | string(), z:context() | atom()) -> binary() | undefined.
+trans(Text, Lang) when is_list(Text) ->
+    trans(unicode:characters_to_binary(Text), Lang);
 trans(#trans{ tr = Tr }, Lang) when is_atom(Lang) ->
     proplists:get_value(Lang, Tr);
 trans(Text, Lang) when is_atom(Lang) ->
-    z_convert:to_binary(Text);
+    Text;
 trans(Text, Context) ->
     trans(Text, z_context:language(Context), Context).
 
