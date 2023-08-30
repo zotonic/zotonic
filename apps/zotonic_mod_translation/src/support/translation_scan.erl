@@ -153,6 +153,13 @@ parse_erl_form_part({call, _, {remote, _, {atom, _, z_trans}, {atom, _, trans}},
                      [{bin, _, [{bin_element, _, {string, Line, S}, _, _}|_]}|_]}, File, Acc) ->
     [{unicode:characters_to_binary(S), [], {File,Line}}|Acc];
 
+parse_erl_form_part({call, _, {remote, _, {atom, _, z_trans}, {atom, _, translations}},
+                     [{string, Line, S}, _]}, File, Acc) ->
+    [{unicode:characters_to_binary(S), [], {File,Line}}|Acc];
+parse_erl_form_part({call, _, {remote, _, {atom, _, z_trans}, {atom, _, translations}},
+                     [{bin, _, [{bin_element, _, {string, Line, S}, _, _}|_]}|_]}, File, Acc) ->
+    [{unicode:characters_to_binary(S), [], {File,Line}}|Acc];
+
 parse_erl_form_part({call, _, _, Expressions}, File, Acc) ->
     lists:foldl(fun(Part,A) -> parse_erl_form_part(Part, File, A) end, Acc, Expressions);
 parse_erl_form_part({record, _, _, Fields}, File, Acc) ->
