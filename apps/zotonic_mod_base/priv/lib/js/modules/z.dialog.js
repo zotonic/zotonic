@@ -170,8 +170,13 @@
             z_editor_add($dialog);
 
             setTimeout(function() {
-                $('a.close').focus();
-            }, 0);
+                // If there already is an input field with focus, do nothing
+                let alreadyFocus = $dialog.find("input:focus");
+
+                if (alreadyFocus.length < 1) {
+                    $('a.close').focus();
+                }
+            }, 50);
 
             $(document).keyup(function(e) {
                  if (e.key === "Escape") { // escape key maps to keycode `27`
