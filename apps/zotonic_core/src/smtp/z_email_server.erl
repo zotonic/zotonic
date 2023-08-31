@@ -964,7 +964,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                                 props=LogEmail#log_email{
                                                         severity = ?LOG_LEVEL_ERROR,
                                                         mailer_status = bounce,
-                                                        mailer_message = z_convert:to_binary(Message),
+                                                        mailer_message = message(Message),
                                                         mailer_host = Host
                                                     }
                                               }, Context),
@@ -1110,10 +1110,21 @@ send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts) ->
             Error
     end.
 
-is_retry_possible(_Reason, _FailureType, auth_failed) -> true;  % proxy - could be temporary
-is_retry_possible(retries_exceeded, _FailureType, _Message) -> true;
-is_retry_possible(_Reason, permanent_failure, _Message) -> false;
-is_retry_possible(_Reason, __FailureType, _Message) -> true.
+is_retry_possible(_Reason, _FailureType, auth_failed) ->
+    true;  % proxy - could be temporary
+is_retry_possible(retries_exceeded, _FailureType, _Message) ->
+    true;
+is_retry_possible(_Reason, permanent_failure, Message) when is_binary(Message) ->
+    % Check for issue with proxy (https://github.com/zotonic/zotonic/issues/3508):
+    % 554 5.7.0 Your message could not be sent. The limit on the number of allowed outgoing messages was exceeded. Try again later.
+    case binary:match(Message, <<"Try again later.">>) of
+        {_, _} -> true;
+        nomatch -> false
+    end;
+is_retry_possible(_Reason, permanent_failure, _Message) ->
+    false;
+is_retry_possible(_Reason, __FailureType, _Message) ->
+    true.
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
     z_convert:to_binary(Raw);

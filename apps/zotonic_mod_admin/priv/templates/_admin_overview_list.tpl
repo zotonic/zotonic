@@ -9,7 +9,7 @@ qcat
     {# Try exact match on id #}
     {% if m.rsc[q.qs].id as id %}
         {% if id.is_visible %}
-            <h2>{_ Page _}</h2>
+            <h2>{_ Unique Page _}</h2>
 
             <table class="table table-striped do_adminLinkedTable">
                 <thead>

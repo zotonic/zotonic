@@ -7,7 +7,7 @@
                <div class="form-group">
                     <label class="control-label">{_ Caption _}</label>
                     <div class="controls">
-                         <textarea class="form-control" name="caption" id="a-caption">{{ options.caption|escape }}</textarea>
+                         <textarea class="form-control" name="caption" id="a-caption">{{ options.caption|escape_check }}</textarea>
                          <p class="help-block">
                               {_ Defaults to the summary of the media. Enter a single “-” to not display a caption. _}
                          </p>
@@ -88,7 +88,7 @@
                                    </label>
                               </div>
                               <div class="checkbox">
-                                   <input type="text" class="form-control" name="link_url" id="a-link_url" placeholder="{_ Website. Leave empty for media link _}" value="{{ options.link_url|escape }}">
+                                   <input type="text" class="form-control" name="link_url" id="a-link_url" placeholder="{_ Website. Leave empty for media link _}" value="{{ options.link_url|escape_check }}">
                               </div>
                          </div>
                     </div>
@@ -96,9 +96,14 @@
           </div>
      </div>
      <div class="modal-footer">
-          <button class="btn btn-danger pull-left" name="delete">{_ Delete _}</button>
+          <button class="btn btn-default pull-left" type="button" name="delete">{_ Remove from text _}</button>
+
+          {% block button_edit %}
+               <a class="btn btn-default pull-left" href="{% url admin_edit_rsc id=id %}" style="margin-left:5px">{% trans "Edit {cat}" cat=id.category_id.title|lower %}</a>
+          {% endblock %}
+
           <button class="btn btn-primary" type="submit">{_ Save _}</button>
-          <button class="btn btn-default" id="{{ #cancel }}">{_ Cancel _}</button>
+          <button class="btn btn-default" type="button" id="{{ #cancel }}">{_ Cancel _}</button>
      </div>
 </form>
 

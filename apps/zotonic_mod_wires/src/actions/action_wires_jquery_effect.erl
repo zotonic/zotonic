@@ -39,7 +39,6 @@ render_action(_TriggerId, TargetId, Args, Context) ->
                 true -> [<<"fadeOut(">>, map_speed_default(Speed), <<",function() { $(this).remove(); });">>];
                 _ -> <<"remove();">>
             end;
-        'slide_toggle'  -> [<<"slideToggle(">>, map_speed(Speed), $), $;];
         'toggle'        -> <<"toggle();">>;
         'set_class'     -> [<<"attr('class','">>, Class, $', $), $;];
         'add_class'     -> [<<"addClass('">>, Class, $', $), $;];
@@ -49,6 +48,7 @@ render_action(_TriggerId, TargetId, Args, Context) ->
         'fade_out'      -> [<<"fadeOut(">>, map_speed(Speed), $), $;];
         'slide_down'    -> [<<"slideDown(">>, map_speed(Speed), $), $;];
         'slide_up'      -> [<<"slideUp(">>, map_speed(Speed), $), $;];
+        'slide_toggle'  -> [<<"slideToggle(">>, map_speed(Speed), $), $;];
         'slide_fade_out'-> [<<"animate({opacity: 'hide', height: 'hide'}, ">>, map_speed_default(Speed), $), $;];
         'slide_fade_in' -> [<<"animate({opacity: 'show', height: 'show'}, ">>, map_speed_default(Speed), $), $;];
         'disable'       -> "attr('disabled', true).addClass('disabled');";
