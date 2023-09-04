@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-08-30 11:07\n"
+"PO-Revision-Date: 2023-09-04 21:09\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -5595,7 +5595,7 @@ msgstr "Начать сопоставление правил диспетчер�
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:19
 msgid "Subscribers"
-msgstr "Абоненты"
+msgstr "Подписчики"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:39
 msgid "Switch protocol to"
@@ -5607,7 +5607,7 @@ msgstr "Отладка шаблона"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:4
 msgid "Template path"
-msgstr "Шаблонная дорожка"
+msgstr "Путь к шаблону"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:56
 msgid "This resource is unknown or does not have a URI"
@@ -5615,7 +5615,7 @@ msgstr "Этот ресурс неизвестен или не имеет URI"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:9
 msgid "Tools and settings that are useful for site development."
-msgstr "Инструменты и настройки, полезные для разработки."
+msgstr "Инструменты и настройки, полезные для разработки сайта."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:76
 msgid "Trace all database queries for the current session"
