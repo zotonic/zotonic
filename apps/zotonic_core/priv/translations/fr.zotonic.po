@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-08-30 11:06\n"
+"PO-Revision-Date: 2023-09-05 08:24\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -5679,12 +5679,12 @@ msgstr "Légende"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:44
 msgid "Crop"
-msgstr "Détourer"
+msgstr "Recadrer"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:49
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:61
 msgid "Crop image"
-msgstr "Détourer image"
+msgstr "Recadrer l'image"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:12
 msgid "Defaults to the summary of the media. Enter a single “-” to not display a caption."
@@ -6224,11 +6224,11 @@ msgstr "Impossible d'enregistrer les paramètres de l'image."
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:77
 msgid "Crop bottom"
-msgstr "Bas court"
+msgstr "Recadrer à bas"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:69
 msgid "Crop left"
-msgstr "Rogner à gauche"
+msgstr "Recadrer à gauche"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:73
 msgid "Crop right"
@@ -6236,7 +6236,7 @@ msgstr "Recadrer à droite"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:65
 msgid "Crop top"
-msgstr "Haut court"
+msgstr "Recadrer à haut"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:14
 msgid "Cropping center, click to remove"
