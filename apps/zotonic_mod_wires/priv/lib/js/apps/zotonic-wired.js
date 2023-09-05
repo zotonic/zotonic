@@ -219,6 +219,7 @@ function z_dialog_overlay_open(options)
     }
 
     let $overlay = $('#'+overlay_id);
+
     if ($overlay.length > 0) {
         $overlay
             .html('<a href="#close" class="modal-overlay-close" onclick="return z_dialog_overlay_close(this)">&times;</a>' + options.html)
@@ -231,14 +232,31 @@ function z_dialog_overlay_open(options)
                      '</div>';
         $('body').append(html);
         $overlay = $('#'+overlay_id);
+
+        setTimeout(function() {
+            // If there already is an input field with focus, do nothing
+            if ($overlay.find("input:focus").length == 0) {
+                $overlay.find('.survey-overlay-close').focus();
+            }
+        }, 50);
     }
+    
     if (options.class) {
         $overlay.addClass(options.class);
     }
+
+    $(document).keyup(function(e) {
+         if (e.key === "Escape") { // escape key maps to keycode `27`
+            z_dialog_overlay_close();
+        }
+    });
+    
     $('body').addClass('overlay-open');
+    
     if (typeof($.widgetManager) != 'undefined') {
         $overlay.widgetManager();
     }
+
     z_editor_add($overlay);
 }
 
@@ -251,10 +269,13 @@ function z_dialog_overlay_close( closeButton )
     } else {
         $overlay = $('.modal-overlay');
     }
+
     $overlay.remove();
+    
     if ($('.modal-overlay').length == 0) {
         $('body').removeClass('overlay-open');
     }
+
     return false;
 }
 
