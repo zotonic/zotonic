@@ -171,10 +171,8 @@
 
             setTimeout(function() {
                 // If there already is an input field with focus, do nothing
-                let alreadyFocus = $dialog.find("input:focus");
-
-                if (alreadyFocus.length < 1) {
-                    $('a.close').focus();
+                if ($dialog.find("input:focus").length == 0) {
+                    $dialog.find('a.close').focus();
                 }
             }, 50);
 

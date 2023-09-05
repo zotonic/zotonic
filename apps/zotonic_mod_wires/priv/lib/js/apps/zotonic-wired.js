@@ -231,18 +231,14 @@ function z_dialog_overlay_open(options)
                      options.html +
                      '</div>';
         $('body').append(html);
+        $overlay = $('#'+overlay_id);
 
         setTimeout(function() {
             // If there already is an input field with focus, do nothing
-            
-            let alreadyFocus = $overlay.find("input:focus");
-
-            if (alreadyFocus.length < 1) {
-                $('.survey-overlay-close').focus();
+            if ($overlay.find("input:focus").length == 0) {
+                $overlay.find('.survey-overlay-close').focus();
             }
         }, 50);
-            
-        $overlay = $('#'+overlay_id);
     }
     
     if (options.class) {
