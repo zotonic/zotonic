@@ -230,14 +230,14 @@ error_code(Context) ->
 do_text(Context0) ->
     Context = set_headers(Context0),
     Text = httpd_util:reason_phrase(cowmachine_req:get_metadata(http_status_code, Context)),
-    {Text, Context}.
+    {z_convert:to_binary(Text), Context}.
 
 do_json(Context0) ->
     Context = set_headers(Context0),
     StatusCode = cowmachine_req:get_metadata(http_status_code, Context),
     JSON = #{
         <<"code">> => StatusCode,
-        <<"status">> => httpd_util:reason_phrase(StatusCode)
+        <<"status">> => z_convert:to_binary(httpd_util:reason_phrase(StatusCode))
     },
     {z_json:encode(JSON), Context}.
 
