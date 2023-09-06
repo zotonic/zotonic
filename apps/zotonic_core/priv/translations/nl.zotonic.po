@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-05 08:24\n"
+"PO-Revision-Date: 2023-09-05 10:02\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -2085,7 +2085,7 @@ msgstr "Deze bestandsnaam kon niet worden verwerkt."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:446
 msgid "Sorry, could not move the file to the drop folder."
-msgstr "Sorry, kon het bestand niet verplaatsen naar de dropfolder."
+msgstr "Sorry, kon het bestand niet verplaatsen naar de drop-map."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:382./apps/zotonic_mod_admin/src/mod_admin.erl:393
 msgid "Sorry, that page is unknown."
@@ -2097,7 +2097,7 @@ msgstr "Je mag geen notities bewerken."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:450
 msgid "Sorry, you are not allowed to upload drop folder files."
-msgstr "Sorry, het is niet toegestaan om dropfolderbestanden te uploaden."
+msgstr "Sorry, het is niet toegestaan om drop-mapbestanden te uploaden."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_link.erl:86
 msgid "Sorry, you don't have permission to add the connection."
@@ -3221,7 +3221,7 @@ msgstr "Nieuwe gebruiker maken"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_search_view.tpl:7
 msgid "Matching e-mail"
-msgstr "Bijpassende e-mail"
+msgstr "Overeenkomende e-mail"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:22
 msgid "My page"
@@ -6912,7 +6912,7 @@ msgstr "De download start op de achtergrond, controleer je downloadvenster."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:36
 msgid "Drop folder filename (optional)"
-msgstr "Drop folder bestandsnaam (optioneel)"
+msgstr "Drop-map bestandsnaam (optioneel)"
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:69
 msgid "E-mail address updated"
@@ -8571,7 +8571,7 @@ msgstr "Updates ophalen ..."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:102
 msgid "Finished rebuilding Zotonic."
-msgstr "De wederopbouw van Zotonic is voltooid."
+msgstr "Klaar met het herbouwen van Zotonic."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 #: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:4
@@ -8985,7 +8985,7 @@ msgstr "Pas op"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:31
 msgid "Deactivated"
-msgstr "gedeactiveerd"
+msgstr "Gedeactiveerd"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:36
 msgid "Dead end. Remove Next button. No questions will be submitted unless you add a button jump to a next page."
