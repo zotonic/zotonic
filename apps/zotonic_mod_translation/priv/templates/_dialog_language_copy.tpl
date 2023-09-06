@@ -16,7 +16,7 @@
 </div>
 
 {% javascript %}
-var active = $('#edit-basics .language-tabs li.active').attr('lang');
+const active = $('#edit-basics .language-tabs li.active').attr('lang');
 $('#admin-translation-checkboxes input[type=checkbox]:checked').each(function() {
 	var code = $(this).attr('value');
 	if (code !== active) {
@@ -24,7 +24,7 @@ $('#admin-translation-checkboxes input[type=checkbox]:checked').each(function() 
 		$('<option>', { value: code }).text(name).appendTo('#{{ #langs }}');
 	}
 });
-var count = $("#{{ #langs }}").find("option").length;
+const count = $("#{{ #langs }}").find("option").length;
 if (count == 0) {
     $(".hide-when-empty").hide();
     $(".show-when-empty").show();
@@ -32,14 +32,14 @@ if (count == 0) {
 }
 
 $('#{{ #copy }}').click(function(e) {
-    var selected = $('#{{ #langs }} option:selected');
+    const selected = $('#{{ #langs }} option:selected');
     if (selected.length > 0) {
-        var from = selected.attr('value');
+        const from = selected.attr('value');
 
         z_editor_save($('body'));
 
         // Copy language to the active language
-        $('.tab-pane.language-'+active).each(function() {
+        $('.tab-pane.edit-language-'+active).each(function() {
             var $form = $(this).closest("form");
             $("input,textarea", this).each(function() {
                 if ($.trim($(this).val()) == '') {
