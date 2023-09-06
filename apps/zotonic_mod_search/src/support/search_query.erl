@@ -226,7 +226,7 @@ request_arg(<<"custompivot">>)         ->
         reason => unknown_query_term,
         term => <<"custompivot">>
     }),
-    throw({error, {unknown_query_term, custompivot}});
+    undefined;
 request_arg(Term) ->
     {custom, Term}.
 
