@@ -544,7 +544,8 @@ handle_cast(Message, State) ->
 
 %% @doc Handling all non call/cast messages
 handle_info(poll, #state{ is_pivot_delay = true } = State) ->
-    {noreply, next_poll(State, ?PIVOT_POLL_INTERVAL_SLOW)};
+    State1 = State#state{ is_pivot_delay = false },
+    {noreply, next_poll(State1, ?PIVOT_POLL_INTERVAL_SLOW)};
 handle_info(poll, #state{backoff_counter = Ct} = State) when Ct > 0 ->
     State1 = State#state{ backoff_counter = Ct - 1 },
     {noreply, next_poll(State1, ?PIVOT_POLL_INTERVAL_SLOW)};
