@@ -128,7 +128,7 @@
 					            {% optional include "blocks/_block_view_survey_narrative.tpl" blk=blk is_survey_answer_view result=answers %}
 				            {% else %}
 	                            {% for ans in ans.answers %}
-	                                {{ ans.text }}{% if blk.is_test %}{% if ans.is_correct|is_defined %}{% if ans.is_correct %} <span style="color:green;font-weight:bold">√ {_ Correct _}</span>{% else %} <span style="color:red;font-weight:bold">X {_ Wrong _}</span>{% endif %}{% endif %}{% endif %}{% if not forloop.last %}<br>{% endif %}
+	                                {{ ans.text|escape }}{% if blk.is_test %}{% if ans.is_correct|is_defined %}{% if ans.is_correct %} <span style="color:green;font-weight:bold">√ {_ Correct _}</span>{% else %} <span style="color:red;font-weight:bold">X {_ Wrong _}</span>{% endif %}{% endif %}{% endif %}{% if not forloop.last %}<br>{% endif %}
 	                            {% endfor %}
 							{% endif %}
 						</td>
