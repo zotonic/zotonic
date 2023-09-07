@@ -330,7 +330,7 @@ search_action(Context) ->
                 <<"@type">> => <<"schema:SearchAction">>,
                 <<"schema:target">> => #{
                     <<"@type">> => <<"schema:EntryPoint">>,
-                    <<"schame:urlTemplate">> => z_context:abs_url(Url, Context)
+                    <<"schema:urlTemplate">> => z_context:abs_url(Url, Context)
                 },
                 <<"schema:query-input">> => <<"required name=text">>
             }
