@@ -323,7 +323,7 @@ node_id(Id, Hash, Context) ->
 
 search_action(Context) ->
     case search_url(Context) of
-        undefined ->
+        <<>> ->
             [];
         Url ->
             #{
@@ -340,7 +340,7 @@ search_url(Context) ->
     case z_convert:to_binary(m_config:get_value(seo, search_action_url, Context)) of
         <<>> ->
             % Can't inject {text} immediately as it would be URL encoded.
-            Url = z_dispatcher:url_for(search, [ {qs, <<"TEXT">>} ], Context),
+            Url = z_convert:to_binary(z_dispatcher:url_for(search, [ {qs, <<"TEXT">>} ], Context)),
             binary:replace(Url, <<"TEXT">>, <<"{text}">>);
         Url ->
             Url
