@@ -337,7 +337,7 @@ search_action(Context) ->
     end.
 
 search_url(Context) ->
-    case z_convert:to_binary(m_config:get_value(mod_seo, search_action_url, Context)) of
+    case z_convert:to_binary(m_config:get_value(seo, search_action_url, Context)) of
         <<>> ->
             % Can't inject {text} immediately as it would be URL encoded.
             Url = z_dispatcher:url_for(search, [ {qs, <<"TEXT">>} ], Context),

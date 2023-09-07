@@ -34,6 +34,15 @@
                             </p>
                         </div>
 
+                        <div class="form-group label-floating">
+                            <input type="url" id="seo-search_action_url" name="seo-search_action_url" value="{{ m.config.seo.search_action_url.value|escape }}" class="form-control" placeholder="{_ Site search _}">
+                            <label class="control-label" for="seo-search_action_url">{_ Site search _}</label>
+                            <p class="help-block">
+                                {_ Url for the search action on the site. Defaults to: _}
+                                <tt>{% url search qs="TEXT" absolute_url z_language=undefined %}</tt>
+                            </p>
+                        </div>
+
                         {% if m.site.seo.noindex|is_defined %}
                             <p class="alert alert-info">
                                 {% if m.site.seo.noindex %}
