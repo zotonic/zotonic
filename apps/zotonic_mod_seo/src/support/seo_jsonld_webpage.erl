@@ -76,8 +76,40 @@ generate_2(Id, CustomJSON, Context) ->
     PageUrl = m_rsc:p(Id, <<"page_url_abs">>, Context),
     Title = title(Id, Context),
     Description = description(Id, Context),
+    SiteTitle = z_convert:to_binary(m_config:get_value(site, title, Context)),
     SiteDescription = first([site_organization, page_about, page_home, home], fun description/2, Context),
+    HomeUrl = z_context:abs_url(<<"/">>, Context),
+    OrgUrl = first([site_organization, page_home, home], fun url_nolang/2, Context),
+    OrgId = case OrgUrl of
+        HomeUrl ->
+            <<HomeUrl/binary, "#organization">>;
+        _ ->
+            OrgUrl
+    end,
+    OrgTitle = case title(site_organization, Context) of
+        undefined -> SiteTitle;
+        <<>> -> SiteTitle;
+        OrgT -> OrgT
+    end,
     {ok, RscDoc} = m_rdf:summary(Id, Context),
+    JSONPublisher = #{
+        <<"@type">> => <<"schema:Organization">>,
+        <<"@id">> => OrgId,
+        <<"schema:url">> => OrgUrl,
+        <<"schema:name">> => OrgTitle,
+        <<"schema:description">> => z_html:unescape(SiteDescription)
+    },
+    JSONWebsite = #{
+        <<"@type">> => <<"schema:WebSite">>,
+        <<"@id">> => HomeUrl,
+        <<"schema:url">> => HomeUrl,
+        <<"schema:name">> => z_convert:to_binary(m_config:get_value(site, title, Context)),
+        <<"schema:description">> => z_html:unescape(SiteDescription),
+        <<"schema:publisher">> => OrgId,
+        <<"schema:potentialAction">> => lists:flatten([
+            search_action(Context)
+        ])
+    },
     JSONDoc =  #{
         <<"@type">> => <<"schema:WebPage">>,
         <<"@id">> => PageUrl,
@@ -85,40 +117,41 @@ generate_2(Id, CustomJSON, Context) ->
         <<"schema:name">> => z_html:unescape(Title),
         <<"schema:description">> => z_html:unescape(Description),
         <<"schema:inLanguage">> => z_context:language(Context),
-        % <<"schema:potentialAction">> => #{
-        %     <<"@type">> => <<"schema:ReadAction">>,
-        %     <<"schema:target">> => #{
-        %         <<"@type">> => <<"schema:EntryPoint">>,
-        %         <<"schema:urlTemplate">> => PageUrl
-        %     }
-        % },
+        <<"schema:publisher">> => OrgId,
         <<"schema:datePublished">> => case m_rsc:p(Id, <<"org_pubdate">>, Context) of
             undefined -> m_rsc:p_no_acl(Id, <<"publication_start">>, Context);
             OrgPubDate -> OrgPubDate
         end,
         <<"schema:dateCreated">> => m_rsc:p_no_acl(Id, <<"created">>, Context),
         <<"schema:dateModified">> => m_rsc:p_no_acl(Id, <<"modified">>, Context),
-        <<"schema:about">> => maps:remove(<<"@context">>, RscDoc),
-        <<"schema:publisher">> => #{
-            <<"@type">> => <<"schema:Organization">>,
-            <<"schema:url">> => z_context:abs_url(<<"/">>, Context),
-            <<"schema:name">> => z_convert:to_binary(m_config:get_value(site, title, Context)),
-            <<"schema:description">> => z_html:unescape(SiteDescription)
-        }
+        <<"schema:about">> => maps:remove(<<"@context">>, RscDoc)
     },
+    Depiction = m_media:depiction(Id, Context),
     JSONDoc1 = case z_media_tag:attributes(
-        m_media:depiction(Id, Context),
+        Depiction,
         [{mediaclass, <<"schema-org-image">>}],
         Context)
     of
         {ok, Attrs} ->
+            ImgSrcId = maps:get(<<"id">>, Depiction, undefined),
+            ImgSrcUrl = z_context:abs_url(proplists:get_value(src, Attrs), Context),
+            ImgNodeId = node_id(Id, <<"#primaryImageOfPage">>, Context),
+            ImgTitle = title(ImgSrcId, Context),
+            ImgCaption = case proplists:get_value(alt, Attrs) of
+                undefined -> ImgTitle;
+                <<>> -> ImgTitle;
+                ImgC -> ImgC
+            end,
             JSONDoc#{
                 <<"schema:primaryImageOfPage">> => #{
                     <<"@type">> => <<"schema:ImageObject">>,
-                    <<"schema:url">> => z_context:abs_url(proplists:get_value(src, Attrs), Context),
+                    <<"@id">> => ImgNodeId,
+                    <<"schema:contentUrl">> => ImgSrcUrl,
+                    <<"schema:url">> => ImgSrcUrl,
                     <<"schema:width">> => proplists:get_value(width, Attrs),
                     <<"schema:height">> => proplists:get_value(height, Attrs),
-                    <<"schema:caption">> => proplists:get_value(alt, Attrs)
+                    <<"schema:caption">> => ImgCaption,
+                    <<"schema:name">> => ImgTitle
                 }
             };
         {error, _} ->
@@ -154,6 +187,8 @@ generate_2(Id, CustomJSON, Context) ->
     JSON = #{
         <<"@context">> => maps:get(<<"@context">>, RscDoc),
         <<"@graph">> => [
+            JSONPublisher,
+            JSONWebsite,
             JSONDoc5
         ]
     },
@@ -252,6 +287,10 @@ first([Id|Ids], Fun, Context) ->
             end
     end.
 
+url_nolang(Id, Context) ->
+    m_rsc:p(Id, page_url_abs, z_context:set_language('x-default', Context)).
+
+
 title(Id, Context) ->
     SeoTitle = z_trans:lookup_fallback(m_rsc:p(Id, <<"seo_title">>, Context), Context),
     case z_utils:is_empty(SeoTitle) of
@@ -275,3 +314,34 @@ description(Id, Context) ->
         _ -> filter_brlinebreaks:brlinebreaks(Desc, Context)
     end.
 
+node_id(Id, Hash, Context) ->
+    Url = z_dispatcher:url_for(id, [ {id, Id} ], Context),
+    iolist_to_binary([
+        z_context:abs_url(Url, Context),
+        Hash
+    ]).
+
+search_action(Context) ->
+    case search_url(Context) of
+        <<>> ->
+            [];
+        Url ->
+            #{
+                <<"@type">> => <<"schema:SearchAction">>,
+                <<"schema:target">> => #{
+                    <<"@type">> => <<"schema:EntryPoint">>,
+                    <<"schame:urlTemplate">> => z_context:abs_url(Url, Context)
+                },
+                <<"schema:query-input">> => <<"required name=text">>
+            }
+    end.
+
+search_url(Context) ->
+    case z_convert:to_binary(m_config:get_value(seo, search_action_url, Context)) of
+        <<>> ->
+            % Can't inject {text} immediately as it would be URL encoded.
+            Url = z_convert:to_binary(z_dispatcher:url_for(search, [ {qs, <<"TEXT">>} ], Context)),
+            binary:replace(Url, <<"TEXT">>, <<"{text}">>);
+        Url ->
+            Url
+    end.
