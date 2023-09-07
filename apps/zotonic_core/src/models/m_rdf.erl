@@ -111,7 +111,7 @@ type_props(Types, Id, Context) when is_list(Types) ->
         Types);
 type_props(<<"schema:Article">>, Id, Context) ->
     Doc = #{
-        <<"schema:headline">> => m_rsc:p(Id, <<"title">>, Context),
+        <<"schema:headline">> => trans(Id, <<"title">>, fun z_html:unescape/1, Context),
         <<"schema:image">> => image(Id, Context)
     },
     maps:merge(creative_work(Id, Context), Doc);
