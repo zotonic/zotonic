@@ -1203,8 +1203,7 @@ set_nocache_headers(Context = #context{ wm_reqdata = ReqData }) ->
 %%      'security_headers' notification.
 -spec set_security_headers( z:context() ) -> z:context().
 set_security_headers(Context = #context{ wm_reqdata = ReqData }) ->
-    Default = [ {"X-Xss-Protection", "1"},
-                {"X-Content-Type-Options", "nosniff"},
+    Default = [ {"X-Content-Type-Options", "nosniff"},
                 {"X-Permitted-Cross-Domain-Policies", "none"},
                 {"Referrer-Policy", "origin-when-cross-origin"} ],
     Default1 = case z_context:get(allow_frame, Context, false) of
