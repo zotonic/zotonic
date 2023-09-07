@@ -109,6 +109,12 @@ type_props(Types, Id, Context) when is_list(Types) ->
         end,
         #{},
         Types);
+type_props(<<"schema:Article">>, Id, Context) ->
+    Doc = #{
+        <<"schema:headline">> => m_rsc:p(Id, <<"title">>, Context),
+        <<"schema:image">> => image(Id, Context)
+    },
+    maps:merge(creative_work(Id, Context), Doc);
 type_props(<<"schema:Person">>, Id, Context) ->
     #{
         <<"schema:birthDate">> => m_rsc:p(Id, <<"date_start">>, Context),
@@ -185,9 +191,11 @@ image(Id, Context) ->
         Depict ->
             case z_media_tag:attributes(Depict, [ {mediaclass, <<"schema-org-image">>} ], Context) of
                 {ok, Attrs} ->
+                    SrcUrl = z_context:abs_url(proplists:get_value(src, Attrs), Context),
                     #{
                         <<"@type">> => <<"schema:ImageObject">>,
-                        <<"schema:contentUrl">> => z_context:abs_url(proplists:get_value(src, Attrs), Context),
+                        <<"schema:url">> => SrcUrl,
+                        <<"schema:contentUrl">> => SrcUrl,
                         <<"schema:width">> => proplists:get_value(width, Attrs),
                         <<"schema:height">> => proplists:get_value(height, Attrs),
                         <<"schema:caption">> => proplists:get_value(alt, Attrs)
