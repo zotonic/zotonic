@@ -91,7 +91,7 @@ generate_2(Id, CustomJSON, Context) ->
         <<>> -> SiteTitle;
         OrgT -> OrgT
     end,
-    {ok, RscDoc} = m_rdf:summary(Id, Context),
+    {ok, RscDoc} = m_rdf:summary_trans(Id, Context),
     JSONPublisher = #{
         <<"@type">> => <<"schema:Organization">>,
         <<"@id">> => OrgId,

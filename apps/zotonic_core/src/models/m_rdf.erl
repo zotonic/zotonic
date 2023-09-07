@@ -25,7 +25,8 @@
 -export([
     m_get/3,
 
-    summary/2
+    summary/2,
+    summary_trans/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -34,6 +35,13 @@
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"rsc-summary">>, Id | Rest ], _Msg, Context) ->
     case summary(Id, Context) of
+        {ok, Doc} ->
+            {ok, {Doc, Rest}};
+        {error, _} = Error ->
+            Error
+    end;
+m_get([ <<"rsc-summary-trans">>, Id | Rest ], _Msg, Context) ->
+    case summary_trans(Id, Context) of
         {ok, Doc} ->
             {ok, {Doc, Rest}};
         {error, _} = Error ->
@@ -54,22 +62,43 @@ summary(Id, Context) ->
             {error, enoent};
         RscId ->
             case z_acl:rsc_visible(RscId, Context) of
-                true -> {ok, summary_1(RscId, Context)};
+                true -> {ok, summary_1(RscId, false, Context)};
                 false -> {error, eacces}
             end
     end.
 
-summary_1(Id, Context) ->
+-spec summary_trans(Id, Context) -> {ok, Document} | {error, Reason} when
+    Id :: m_rsc:resource(),
+    Context :: z:context(),
+    Document :: map(),
+    Reason :: term().
+summary_trans(Id, Context) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, enoent};
+        RscId ->
+            case z_acl:rsc_visible(RscId, Context) of
+                true -> {ok, summary_1(RscId, true, Context)};
+                false -> {error, eacces}
+            end
+    end.
+
+
+summary_1(Id, IsTransFallback, Context) ->
     Type = base_type(Id, Context),
     Summary = filter_brlinebreaks:brlinebreaks(filter_summary:summary(Id, Context), Context),
+    DocId = case IsTransFallback of
+        true -> z_context:abs_url(z_dispatcher:url_for(id, [ {id, Id} ], Context), Context);
+        false -> m_rsc:uri(Id, Context)
+    end,
     Doc = #{
         <<"@context">> => zotonic_rdf:namespaces(),
-        <<"@id">> => m_rsc:uri(Id, Context),
+        <<"@id">> => DocId,
         <<"@type">> => Type,
-        <<"schema:name">> => trans(Id, <<"title">>, fun z_html:unescape/1, Context),
-        <<"schema:description">> => trans_1(Summary, fun z_html:unescape/1)
+        <<"schema:name">> => trans(Id, <<"title">>, fun z_html:unescape/1, IsTransFallback, Context),
+        <<"schema:description">> => trans_1(Summary, fun z_html:unescape/1, IsTransFallback, Context)
     },
-    Doc1 = remove_undef(maps:merge(Doc, type_props(Type, Id, Context))),
+    Doc1 = remove_undef(maps:merge(Doc, type_props(Type, Id, IsTransFallback, Context))),
     % TODO: notification to let modules add extra information.
     Doc1.
 
@@ -101,21 +130,21 @@ base_type(event) -> <<"schema:Event">>;
 base_type(location) -> <<"schema:PostalAddress">>;
 base_type(_) -> undefined.
 
-type_props(Types, Id, Context) when is_list(Types) ->
+type_props(Types, Id, IsTransFallback, Context) when is_list(Types) ->
     lists:foldl(
         fun(T, Acc) ->
-            Ps = type_props(T, Id, Context),
+            Ps = type_props(T, Id, IsTransFallback, Context),
             maps:merge(Acc, Ps)
         end,
         #{},
         Types);
-type_props(<<"schema:Article">>, Id, Context) ->
+type_props(<<"schema:Article">>, Id, IsTransFallback, Context) ->
     Doc = #{
-        <<"schema:headline">> => trans(Id, <<"title">>, fun z_html:unescape/1, Context),
+        <<"schema:headline">> => trans(Id, <<"title">>, fun z_html:unescape/1, IsTransFallback, Context),
         <<"schema:image">> => image(Id, Context)
     },
-    maps:merge(creative_work(Id, Context), Doc);
-type_props(<<"schema:Person">>, Id, Context) ->
+    maps:merge(creative_work(Id, IsTransFallback, Context), Doc);
+type_props(<<"schema:Person">>, Id, _IsTransFallback, Context) ->
     #{
         <<"schema:birthDate">> => m_rsc:p(Id, <<"date_start">>, Context),
         <<"schema:deathDate">> => m_rsc:p(Id, <<"date_end">>, Context),
@@ -126,14 +155,14 @@ type_props(<<"schema:Person">>, Id, Context) ->
         <<"schema:address">> => location(Id, Context),
         <<"schema:image">> => image(Id, Context)
     };
-type_props(<<"schema:Organization">>, Id, Context) ->
+type_props(<<"schema:Organization">>, Id, _IsTransFallback, Context) ->
     #{
         <<"schema:email">> => email(Id, Context),
         <<"schema:telephone">> => unesc(m_rsc:p(Id, <<"phone">>, Context)),
         <<"schema:address">> => location(Id, Context),
         <<"schema:image">> => image(Id, Context)
     };
-type_props(<<"schema:Event">>, Id, Context) ->
+type_props(<<"schema:Event">>, Id, _IsTransFallback, Context) ->
     #{
         <<"schema:email">> => email(Id, Context),
         <<"schema:telephone">> => m_rsc:p(Id, <<"phone">>, Context),
@@ -142,35 +171,43 @@ type_props(<<"schema:Event">>, Id, Context) ->
         <<"schema:startDate">> => m_rsc:p(Id, <<"date_start">>, Context),
         <<"schema:endDate">> => m_rsc:p(Id, <<"date_end">>, Context)
     };
-type_props(<<"schema:PostalAddress">>, Id, Context) ->
+type_props(<<"schema:PostalAddress">>, Id, _IsTransFallback, Context) ->
     Doc = location(Id, Context),
     Doc#{
         <<"schema:email">> => email(Id, Context),
         <<"schema:telephone">> => unesc(m_rsc:p(Id, <<"phone">>, Context)),
         <<"schema:image">> => image(Id, Context)
     };
-type_props(<<"schema:MediaObject">>, Id, Context) ->
+type_props(<<"schema:MediaObject">>, Id, IsTransFallback, Context) ->
     Doc = case image(Id, Context) of
         undefined -> #{};
         Img -> Img
     end,
-    maps:merge(creative_work(Id, Context), Doc);
-type_props(_, Id, Context) ->
+    maps:merge(creative_work(Id, IsTransFallback, Context), Doc);
+type_props(_, Id, IsTransFallback, Context) ->
     Doc = #{
         <<"schema:image">> => image(Id, Context)
     },
-    maps:merge(creative_work(Id, Context), Doc).
+    maps:merge(creative_work(Id, IsTransFallback, Context), Doc).
 
-creative_work(Id, Context) ->
+creative_work(Id, IsTransFallback, Context) ->
     % TODO: Add: o.author, o.keywords
-    #{
+    Doc = #{
         <<"schema:datePublished">> => case m_rsc:p(Id, <<"org_pubdate">>, Context) of
             undefined -> m_rsc:p_no_acl(Id, <<"publication_start">>, Context);
             OrgPubDate -> OrgPubDate
         end,
         <<"schema:dateCreated">> => m_rsc:p_no_acl(Id, <<"created">>, Context),
         <<"schema:dateModified">> => m_rsc:p_no_acl(Id, <<"modified">>, Context)
-    }.
+    },
+    case IsTransFallback of
+        true ->
+            Doc#{
+                <<"schema:inLanguage">> => z_context:language(Context)
+            };
+        false ->
+            Doc
+    end.
 
 family_name(Id, Context) ->
     case m_rsc:p(Id, <<"name_surname_prefix">>, Context) of
@@ -260,14 +297,20 @@ unesc(V) when is_binary(V) -> z_html:unescape(V);
 unesc(V) -> V.
 
 
-trans(Id, Prop, F, Context) ->
-    trans_1(m_rsc:p(Id, Prop, Context), F).
+trans(Id, Prop, F, IsTransFallback, Context) ->
+    trans_1(m_rsc:p(Id, Prop, Context), F, IsTransFallback, Context).
 
 
-trans_1(undefined, _F) -> undefined;
-trans_1(V, F) when is_binary(V) -> F(V);
-trans_1(#trans{ tr = [{_,V}] }, F) -> F(V);
-trans_1(#trans{ tr = Tr }, F) ->
+trans_1(undefined, _F, _IsTransFallback, _Context) ->
+    undefined;
+trans_1(V, F, _IsTransFallback, _Context) when is_binary(V) ->
+    F(V);
+trans_1(#trans{ tr = [{_,V}] }, F, _IsTransFallback, _Context) ->
+    F(V);
+trans_1(#trans{ tr = _ } = Trans, F, true, Context) ->
+    V = z_trans:lookup_fallback(Trans, Context),
+    F(V);
+trans_1(#trans{ tr = Tr }, F, false, _Context) ->
             lists:map(
                 fun({Code, V}) ->
                     #{
@@ -276,4 +319,5 @@ trans_1(#trans{ tr = Tr }, F) ->
                     }
                 end,
                 Tr);
-trans_1(V, _F) -> V.
+trans_1(V, _F, _IsTransFallback, _Context) ->
+    V.
