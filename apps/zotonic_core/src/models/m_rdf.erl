@@ -73,33 +73,33 @@ summary(Id, Context) ->
     Document :: map(),
     Reason :: term().
 summary_trans(Id, Context) ->
-    case m_rsc:rid(Id, Context) of
+    ContextLang = z_context:set_language(content_language(Id, Context), Context),
+    case m_rsc:rid(Id, ContextLang) of
         undefined ->
             {error, enoent};
         RscId ->
-            case z_acl:rsc_visible(RscId, Context) of
-                true -> {ok, summary_1(RscId, true, Context)};
+            case z_acl:rsc_visible(RscId, ContextLang) of
+                true -> {ok, summary_1(RscId, true, ContextLang)};
                 false -> {error, eacces}
             end
     end.
 
 
 summary_1(Id, IsTransFallback, Context) ->
-    ContextLang = z_context:set_language(content_language(Id, Context), Context),
-    Type = base_type(Id, ContextLang),
-    Summary = filter_brlinebreaks:brlinebreaks(filter_summary:summary(Id, ContextLang), ContextLang),
+    Type = base_type(Id, Context),
+    Summary = filter_brlinebreaks:brlinebreaks(filter_summary:summary(Id, Context), Context),
     DocId = case IsTransFallback of
-        true -> z_context:abs_url(z_dispatcher:url_for(id, [ {id, Id} ], ContextLang), ContextLang);
-        false -> m_rsc:uri(Id, ContextLang)
+        true -> z_context:abs_url(z_dispatcher:url_for(id, [ {id, Id} ], Context), Context);
+        false -> m_rsc:uri(Id, Context)
     end,
     Doc = #{
         <<"@context">> => zotonic_rdf:namespaces(),
         <<"@id">> => DocId,
         <<"@type">> => Type,
-        <<"schema:name">> => trans(Id, <<"title">>, fun z_html:unescape/1, IsTransFallback, ContextLang),
-        <<"schema:description">> => trans_1(Summary, fun z_html:unescape/1, IsTransFallback, ContextLang)
+        <<"schema:name">> => trans(Id, <<"title">>, fun z_html:unescape/1, IsTransFallback, Context),
+        <<"schema:description">> => trans_1(Summary, fun z_html:unescape/1, IsTransFallback, Context)
     },
-    Doc1 = remove_undef(maps:merge(Doc, type_props(Type, Id, IsTransFallback, ContextLang))),
+    Doc1 = remove_undef(maps:merge(Doc, type_props(Type, Id, IsTransFallback, Context))),
     % TODO: notification to let modules add extra information.
     Doc1.
 
