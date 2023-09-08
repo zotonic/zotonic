@@ -188,7 +188,7 @@ type_props(<<"schema:Event">>, Id, IsTransFallback, _IsTopDoc, Context) ->
     };
 type_props(<<"schema:Place">>, Id, _IsTransFallback, _IsTopDoc, Context) ->
     #{
-        <<"schema:location">> => address(Id, Context),
+        <<"schema:address">> => address(Id, Context),
         <<"schema:telephone">> => unesc(m_rsc:p(Id, <<"phone">>, Context)),
         <<"schema:image">> => images(Id, Context)
     };
