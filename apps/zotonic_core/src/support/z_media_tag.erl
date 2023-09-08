@@ -467,8 +467,13 @@ filename_to_urlpath(Filename, Context) ->
     z_dispatcher:url_for(image, [{star, Filename}], z_context:set_language(undefined, Context)).
 
 
-%% @spec url(MediaRef, Options, Context) -> {ok, Url::binary()} | {error, Reason}
 %% @doc Generate the url for the image with the filename and options
+-spec url(MediaRef, Options, Context) -> {ok, Url} | {error, Reason} when
+    MediaRef :: mediaref(),
+    Options :: viewer_options(),
+    Context :: z:context(),
+    Url :: binary(),
+    Reason :: enoent.
 url(undefined, _Options, _Context) ->
     {error, enoent};
 url(Name, Options, Context) when is_atom(Name) ->
@@ -496,11 +501,17 @@ url(Filename, Options, Context) when is_binary(Filename) ->
     {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options, Context),
     {ok, Url}.
 
-
-%% @spec url1(Filename, Options, Context) -> {url, Url::binary(), TagOptions, ImageOpts} | {error, Reason}
-%% @doc Creates an url for the given filename and filters.  This does not check the filename or if it is convertible.
-url1(File, Options, Context) ->
-    UrlAndOpts = url2(File, Options, Context),
+%% @doc Creates an url for the given filename and filters. This does not check the filename
+%% or if it is convertible.
+-spec url1(Filename, Options, Context) -> {url, Url, TagOptions, ImageOptions} when
+    Filename :: binary() | string(),
+    Options :: viewer_options(),
+    Context :: z:context(),
+    Url :: binary(),
+    TagOptions :: proplists:proplist(),
+    ImageOptions :: proplists:proplist().
+url1(Filename, Options, Context) ->
+    UrlAndOpts = url2(Filename, Options, Context),
     case use_absolute_url(Options, Context) of
         true ->
             {url, Url, TagOpts, ImageOpts} = UrlAndOpts,

@@ -62,7 +62,7 @@ summary(Id, Context) ->
             {error, enoent};
         RscId ->
             case z_acl:rsc_visible(RscId, Context) of
-                true -> {ok, summary_1(RscId, false, Context)};
+                true -> {ok, summary_1(RscId, false, true, Context)};
                 false -> {error, eacces}
             end
     end.
@@ -79,13 +79,13 @@ summary_trans(Id, Context) ->
             {error, enoent};
         RscId ->
             case z_acl:rsc_visible(RscId, ContextLang) of
-                true -> {ok, summary_1(RscId, true, ContextLang)};
+                true -> {ok, summary_1(RscId, true, true, ContextLang)};
                 false -> {error, eacces}
             end
     end.
 
 
-summary_1(Id, IsTransFallback, Context) ->
+summary_1(Id, IsTransFallback, IsTopDoc, Context) ->
     Type = base_type(Id, Context),
     Summary = filter_brlinebreaks:brlinebreaks(filter_summary:summary(Id, Context), Context),
     DocId = case IsTransFallback of
@@ -99,7 +99,7 @@ summary_1(Id, IsTransFallback, Context) ->
         <<"schema:name">> => trans(Id, <<"title">>, fun z_html:unescape/1, IsTransFallback, Context),
         <<"schema:description">> => trans_1(Summary, fun z_html:unescape/1, IsTransFallback, Context)
     },
-    Doc1 = remove_undef(maps:merge(Doc, type_props(Type, Id, IsTransFallback, Context))),
+    Doc1 = remove_undef(maps:merge(Doc, type_props(Type, Id, IsTransFallback, IsTopDoc, Context))),
     % TODO: notification to let modules add extra information.
     Doc1.
 
@@ -131,22 +131,25 @@ base_type(event) -> <<"schema:Event">>;
 base_type(location) -> <<"schema:PostalAddress">>;
 base_type(_) -> undefined.
 
-type_props(Types, Id, IsTransFallback, Context) when is_list(Types) ->
+type_props(Types, Id, IsTransFallback, IsTopDoc, Context) when is_list(Types) ->
     lists:foldl(
         fun(T, Acc) ->
-            Ps = type_props(T, Id, IsTransFallback, Context),
+            Ps = type_props(T, Id, IsTransFallback, IsTopDoc, Context),
             maps:merge(Acc, Ps)
         end,
         #{},
         Types);
-type_props(<<"schema:Article">>, Id, IsTransFallback, Context) ->
+type_props(<<"schema:Article">>, Id, IsTransFallback, IsTopDoc, Context) ->
+    % https://developers.google.com/search/docs/appearance/structured-data/article
     Doc = #{
         <<"schema:headline">> => trans(Id, <<"title">>, fun z_html:unescape/1, IsTransFallback, Context),
-        <<"schema:image">> => image(Id, Context)
+        <<"schema:image">> => images(Id, Context)
     },
-    maps:merge(creative_work(Id, IsTransFallback, Context), Doc);
-type_props(<<"schema:Person">>, Id, _IsTransFallback, Context) ->
+    maps:merge(creative_work(Id, IsTransFallback, IsTopDoc, Context), Doc);
+type_props(<<"schema:Person">>, Id, _IsTransFallback, _IsTopDoc, Context) ->
+    {Name, _} = z_template:render_to_iolist("_name.tpl", [ {id, Id} ], Context),
     #{
+        <<"schema:name">> => unesc(iolist_to_binary(Name)),
         <<"schema:birthDate">> => m_rsc:p(Id, <<"date_start">>, Context),
         <<"schema:deathDate">> => m_rsc:p(Id, <<"date_end">>, Context),
         <<"schema:givenName">> => unesc(m_rsc:p(Id, <<"name_first">>, Context)),
@@ -154,45 +157,45 @@ type_props(<<"schema:Person">>, Id, _IsTransFallback, Context) ->
         <<"schema:email">> => email(Id, Context),
         <<"schema:telephone">> => unesc(m_rsc:p(Id, <<"phone">>, Context)),
         <<"schema:address">> => location(Id, Context),
-        <<"schema:image">> => image(Id, Context)
+        <<"schema:image">> => images(Id, Context)
     };
-type_props(<<"schema:Organization">>, Id, _IsTransFallback, Context) ->
+type_props(<<"schema:Organization">>, Id, _IsTransFallback, _IsTopDoc, Context) ->
     #{
         <<"schema:email">> => email(Id, Context),
         <<"schema:telephone">> => unesc(m_rsc:p(Id, <<"phone">>, Context)),
         <<"schema:address">> => location(Id, Context),
-        <<"schema:image">> => image(Id, Context)
+        <<"schema:image">> => images(Id, Context)
     };
-type_props(<<"schema:Event">>, Id, _IsTransFallback, Context) ->
+type_props(<<"schema:Event">>, Id, _IsTransFallback, _IsTopDoc, Context) ->
     #{
         <<"schema:email">> => email(Id, Context),
         <<"schema:telephone">> => m_rsc:p(Id, <<"phone">>, Context),
         <<"schema:location">> => location(Id, Context),
-        <<"schema:image">> => image(Id, Context),
+        <<"schema:image">> => images(Id, Context),
         <<"schema:startDate">> => m_rsc:p(Id, <<"date_start">>, Context),
         <<"schema:endDate">> => m_rsc:p(Id, <<"date_end">>, Context)
     };
-type_props(<<"schema:PostalAddress">>, Id, _IsTransFallback, Context) ->
+type_props(<<"schema:PostalAddress">>, Id, _IsTransFallback, _IsTopDoc, Context) ->
     Doc = location(Id, Context),
     Doc#{
         <<"schema:email">> => email(Id, Context),
         <<"schema:telephone">> => unesc(m_rsc:p(Id, <<"phone">>, Context)),
-        <<"schema:image">> => image(Id, Context)
+        <<"schema:image">> => images(Id, Context)
     };
-type_props(<<"schema:MediaObject">>, Id, IsTransFallback, Context) ->
-    Doc = case image(Id, Context) of
+type_props(<<"schema:MediaObject">>, Id, IsTransFallback, IsTopDoc, Context) ->
+    Doc = case media_object(Id, Context) of
         undefined -> #{};
         Img -> Img
     end,
-    maps:merge(creative_work(Id, IsTransFallback, Context), Doc);
-type_props(_, Id, IsTransFallback, Context) ->
+    maps:merge(creative_work(Id, IsTransFallback, IsTopDoc, Context), Doc);
+type_props(_, Id, IsTransFallback, IsTopDoc, Context) ->
     Doc = #{
-        <<"schema:image">> => image(Id, Context)
+        <<"schema:image">> => images(Id, Context)
     },
-    maps:merge(creative_work(Id, IsTransFallback, Context), Doc).
+    maps:merge(creative_work(Id, IsTransFallback, IsTopDoc, Context), Doc).
 
-creative_work(Id, IsTransFallback, Context) ->
-    % TODO: Add: o.author, o.keywords
+creative_work(Id, IsTransFallback, IsTopDoc, Context) ->
+    % TODO: Add: o.keywords
     Doc = #{
         <<"schema:datePublished">> => case m_rsc:p(Id, <<"org_pubdate">>, Context) of
             undefined -> m_rsc:p_no_acl(Id, <<"publication_start">>, Context);
@@ -201,13 +204,21 @@ creative_work(Id, IsTransFallback, Context) ->
         <<"schema:dateCreated">> => m_rsc:p_no_acl(Id, <<"created">>, Context),
         <<"schema:dateModified">> => m_rsc:p_no_acl(Id, <<"modified">>, Context)
     },
-    case IsTransFallback of
+    Doc1 = case IsTopDoc of
         true ->
             Doc#{
-                <<"schema:inLanguage">> => z_context:language(Context)
+                <<"schema:author">> => authors(Id, IsTransFallback, Context)
             };
         false ->
             Doc
+    end,
+    case IsTransFallback of
+        true ->
+            Doc1#{
+                <<"schema:inLanguage">> => z_context:language(Context)
+            };
+        false ->
+            Doc1
     end.
 
 content_language(Id, Context) ->
@@ -229,7 +240,15 @@ family_name(Id, Context) ->
             ])
     end.
 
-image(Id, Context) ->
+
+% TODO: add attribution.
+% - creator; or
+% - creditText; or
+% - license; or
+% - copyrightNotice
+% https://developers.google.com/search/docs/appearance/structured-data/image-license-metadata#structured-data-type-definitions
+% If these are added, then the image is accepted by Google for search results.
+media_object(Id, Context) ->
     Depiction = m_media:depiction(Id, Context),
     case z_media_tag:attributes(
         Depiction,
@@ -246,22 +265,64 @@ image(Id, Context) ->
                 ImgC -> ImgC
             end,
             #{
-                <<"@type">> => <<"schema:ImageObject">>,
-                <<"@id">> => ImgSrcUrl,
                 <<"schema:contentUrl">> => ImgSrcUrl,
                 <<"schema:url">> => ImgSrcUrl,
                 <<"schema:width">> => proplists:get_value(width, Attrs),
                 <<"schema:height">> => proplists:get_value(height, Attrs),
                 <<"schema:caption">> => ImgCaption,
-                <<"schema:name">> => ImgTitle
+                <<"schema:name">> => ImgTitle,
+                <<"schema:description">> => ImgTitle,
+                <<"schema:inLanguage">> => z_context:language(Context)
             };
         {error, _} ->
             undefined
     end.
 
+%% Provide links to multiple image formats.
+%% https://developers.google.com/search/docs/appearance/structured-data/article#article-types
+images(Id, Context) ->
+    case m_media:depiction(Id, Context) of
+        undefined ->
+            undefined;
+        Depiction ->
+            case lists:filtermap(
+                fun(MediaClass) ->
+                    Opts = [
+                        {mediaclass, MediaClass}
+                    ],
+                    case z_media_tag:url(Depiction, Opts, Context) of
+                        {ok, Url} ->
+                            {true, z_context:abs_url(Url, Context)};
+                        {error, _} ->
+                            false
+                    end
+                end,
+                [
+                    <<"schema-org-image-1x1">>,
+                    <<"schema-org-image-4x3">>,
+                    <<"schema-org-image-16x9">>
+                ])
+            of
+                [] -> undefined;
+                Imgs -> Imgs
+            end
+    end.
+
+
 title(Id, Context) ->
     z_trans:lookup_fallback(m_rsc:p(Id, <<"title">>, Context), Context).
 
+authors(Id, IsTransFallback, Context) ->
+    lists:filtermap(
+        fun(AuthorId) ->
+            case z_acl:rsc_visible(AuthorId, Context) of
+                true ->
+                    summary_1(AuthorId, IsTransFallback, false, Context);
+                false ->
+                    false
+            end
+        end,
+        m_edge:objects(Id, author, Context)).
 
 %% @doc Email of a resource is preferred to be the public mail_email property, and then the mail property.
 email(Id, Context) ->

@@ -124,9 +124,10 @@ generate_2(Id, CustomJSON, Context) ->
         end,
         <<"schema:dateCreated">> => m_rsc:p_no_acl(Id, <<"created">>, Context),
         <<"schema:dateModified">> => m_rsc:p_no_acl(Id, <<"modified">>, Context),
-        <<"schema:about">> => maps:remove(<<"@context">>, RscDoc)
+        <<"schema:about">> => maps:remove(<<"@context">>, RscDoc),
+        <<"schema:image">> => maps:get(<<"schema:image">>, RscDoc, undefined)
     },
-    JSONDoc1 = add_depiction(Id, JSONDoc, Context),
+    JSONDoc1 = primary_image(Id, JSONDoc, Context),
     JSONDoc2 = case seo_breadcrumb:find(Id, Context) of
         {ok, []} ->
             JSONDoc1;
@@ -154,14 +155,12 @@ generate_2(Id, CustomJSON, Context) ->
             }
     end,
     JSONDoc5 = maps:merge(JSONDoc4, CustomJSON),
-    {ImageDocs, JSONDoc6} = extract_images(JSONDoc5),
     JSON = #{
         <<"@context">> => maps:get(<<"@context">>, RscDoc),
         <<"@graph">> => [
             JSONPublisher,
             JSONWebsite,
-            JSONDoc6
-            | ImageDocs
+            JSONDoc5
         ]
     },
     {ok, JSON}.
@@ -286,38 +285,7 @@ description(Id, Context) ->
         _ -> filter_brlinebreaks:brlinebreaks(Desc, Context)
     end.
 
-extract_images(#{
-        <<"schema:about">> := #{
-            <<"schema:image">> := #{
-                <<"@id">> := ImgId
-            } = Image
-        } = About
-    } = JSONDoc) ->
-    About1 = About#{
-        <<"schema:image">> => #{
-            <<"@id">> => ImgId
-        }
-    },
-    JSONDoc1 = JSONDoc#{
-        <<"schema:about">> => About1
-    },
-    {[ Image ], JSONDoc1};
-extract_images(JSONDoc) ->
-    {[], JSONDoc}.
-
-add_depiction(_Id, #{
-        <<"schema:about">> := #{
-            <<"schema:image">> := #{
-                <<"@id">> := ImgId
-            }
-        }
-    } = JSONDoc, _Context) ->
-    JSONDoc#{
-        <<"schema:primaryImageOfPage">> => #{
-            <<"@id">> => ImgId
-        }
-    };
-add_depiction(Id, JSONDoc, Context) ->
+primary_image(Id, JSONDoc, Context) ->
     Depiction = m_media:depiction(Id, Context),
     case z_media_tag:attributes(
         Depiction,
@@ -343,7 +311,8 @@ add_depiction(Id, JSONDoc, Context) ->
                     <<"schema:width">> => proplists:get_value(width, Attrs),
                     <<"schema:height">> => proplists:get_value(height, Attrs),
                     <<"schema:caption">> => ImgCaption,
-                    <<"schema:name">> => ImgTitle
+                    <<"schema:name">> => ImgTitle,
+                    <<"schema:description">> => ImgTitle
                 }
             };
         {error, _} ->
