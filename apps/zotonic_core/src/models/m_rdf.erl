@@ -202,8 +202,13 @@ creative_work(Id, IsTransFallback, Context) ->
     },
     case IsTransFallback of
         true ->
+            Translations = case m_rsc:p_no_acl(Id, language, Context) of
+                undefined -> [];
+                Lngs -> Lngs
+            end,
+            InLanguage = z_trans:lookup_fallback_languages(Translations, Context),
             Doc#{
-                <<"schema:inLanguage">> => z_context:language(Context)
+                <<"schema:inLanguage">> => InLanguage
             };
         false ->
             Doc
@@ -222,25 +227,38 @@ family_name(Id, Context) ->
     end.
 
 image(Id, Context) ->
-    case m_media:depiction(Id, Context) of
-        undefined ->
-            undefined;
-        Depict ->
-            case z_media_tag:attributes(Depict, [ {mediaclass, <<"schema-org-image">>} ], Context) of
-                {ok, Attrs} ->
-                    SrcUrl = z_context:abs_url(proplists:get_value(src, Attrs), Context),
-                    #{
-                        <<"@type">> => <<"schema:ImageObject">>,
-                        <<"schema:url">> => SrcUrl,
-                        <<"schema:contentUrl">> => SrcUrl,
-                        <<"schema:width">> => proplists:get_value(width, Attrs),
-                        <<"schema:height">> => proplists:get_value(height, Attrs),
-                        <<"schema:caption">> => proplists:get_value(alt, Attrs)
-                    };
-                {error, _} ->
-                    undefined
-            end
+    Depiction = m_media:depiction(Id, Context),
+    case z_media_tag:attributes(
+        Depiction,
+        [{mediaclass, <<"schema-org-image">>}],
+        Context)
+    of
+        {ok, Attrs} ->
+            ImgSrcId = maps:get(<<"id">>, Depiction, undefined),
+            ImgSrcUrl = z_context:abs_url(proplists:get_value(src, Attrs), Context),
+            ImgTitle = title(ImgSrcId, Context),
+            ImgCaption = case proplists:get_value(alt, Attrs) of
+                undefined -> ImgTitle;
+                <<>> -> ImgTitle;
+                ImgC -> ImgC
+            end,
+            #{
+                <<"@type">> => <<"schema:ImageObject">>,
+                <<"@id">> => ImgSrcUrl,
+                <<"schema:contentUrl">> => ImgSrcUrl,
+                <<"schema:url">> => ImgSrcUrl,
+                <<"schema:width">> => proplists:get_value(width, Attrs),
+                <<"schema:height">> => proplists:get_value(height, Attrs),
+                <<"schema:caption">> => ImgCaption,
+                <<"schema:name">> => ImgTitle
+            };
+        {error, _} ->
+            undefined
     end.
+
+title(Id, Context) ->
+    z_trans:lookup_fallback(m_rsc:p(Id, <<"title">>, Context), Context).
+
 
 %% @doc Email of a resource is preferred to be the public mail_email property, and then the mail property.
 email(Id, Context) ->

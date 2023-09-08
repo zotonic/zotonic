@@ -126,37 +126,7 @@ generate_2(Id, CustomJSON, Context) ->
         <<"schema:dateModified">> => m_rsc:p_no_acl(Id, <<"modified">>, Context),
         <<"schema:about">> => maps:remove(<<"@context">>, RscDoc)
     },
-    Depiction = m_media:depiction(Id, Context),
-    JSONDoc1 = case z_media_tag:attributes(
-        Depiction,
-        [{mediaclass, <<"schema-org-image">>}],
-        Context)
-    of
-        {ok, Attrs} ->
-            ImgSrcId = maps:get(<<"id">>, Depiction, undefined),
-            ImgSrcUrl = z_context:abs_url(proplists:get_value(src, Attrs), Context),
-            ImgNodeId = node_id(Id, <<"#primaryImageOfPage">>, Context),
-            ImgTitle = title(ImgSrcId, Context),
-            ImgCaption = case proplists:get_value(alt, Attrs) of
-                undefined -> ImgTitle;
-                <<>> -> ImgTitle;
-                ImgC -> ImgC
-            end,
-            JSONDoc#{
-                <<"schema:primaryImageOfPage">> => #{
-                    <<"@type">> => <<"schema:ImageObject">>,
-                    <<"@id">> => ImgNodeId,
-                    <<"schema:contentUrl">> => ImgSrcUrl,
-                    <<"schema:url">> => ImgSrcUrl,
-                    <<"schema:width">> => proplists:get_value(width, Attrs),
-                    <<"schema:height">> => proplists:get_value(height, Attrs),
-                    <<"schema:caption">> => ImgCaption,
-                    <<"schema:name">> => ImgTitle
-                }
-            };
-        {error, _} ->
-            JSONDoc
-    end,
+    JSONDoc1 = add_depiction(Id, JSONDoc, Context),
     JSONDoc2 = case seo_breadcrumb:find(Id, Context) of
         {ok, []} ->
             JSONDoc1;
@@ -312,6 +282,49 @@ description(Id, Context) ->
         undefined -> undefined;
         <<>> -> <<>>;
         _ -> filter_brlinebreaks:brlinebreaks(Desc, Context)
+    end.
+
+add_depiction(_Id, #{
+        <<"schema:about">> := #{
+            <<"schema:image">> := #{
+                <<"@id">> := ImgId
+            }
+        }
+    } = JSONDoc, _Context) ->
+    JSONDoc#{
+        <<"schema:primaryImageOfPage">> => ImgId
+    };
+add_depiction(Id, JSONDoc, Context) ->
+    Depiction = m_media:depiction(Id, Context),
+    case z_media_tag:attributes(
+        Depiction,
+        [{mediaclass, <<"schema-org-image">>}],
+        Context)
+    of
+        {ok, Attrs} ->
+            ImgSrcId = maps:get(<<"id">>, Depiction, undefined),
+            ImgSrcUrl = z_context:abs_url(proplists:get_value(src, Attrs), Context),
+            ImgNodeId = node_id(Id, <<"#primaryImageOfPage">>, Context),
+            ImgTitle = title(ImgSrcId, Context),
+            ImgCaption = case proplists:get_value(alt, Attrs) of
+                undefined -> ImgTitle;
+                <<>> -> ImgTitle;
+                ImgC -> ImgC
+            end,
+            JSONDoc#{
+                <<"schema:primaryImageOfPage">> => #{
+                    <<"@type">> => <<"schema:ImageObject">>,
+                    <<"@id">> => ImgNodeId,
+                    <<"schema:contentUrl">> => ImgSrcUrl,
+                    <<"schema:url">> => ImgSrcUrl,
+                    <<"schema:width">> => proplists:get_value(width, Attrs),
+                    <<"schema:height">> => proplists:get_value(height, Attrs),
+                    <<"schema:caption">> => ImgCaption,
+                    <<"schema:name">> => ImgTitle
+                }
+            };
+        {error, _} ->
+            JSONDoc
     end.
 
 node_id(Id, Hash, Context) ->
