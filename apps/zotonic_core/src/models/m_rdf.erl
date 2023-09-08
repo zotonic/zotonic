@@ -84,6 +84,9 @@ summary_trans(Id, Context) ->
             end
     end.
 
+sub_summary(Id, IsTransFallback, Context) ->
+    Doc = summary_1(Id, IsTransFallback, false, Context),
+    maps:remove(<<"@context">>, Doc).
 
 summary_1(Id, IsTransFallback, IsTopDoc, Context) ->
     Type = base_type(Id, Context),
@@ -115,6 +118,7 @@ base_type(Id, Context) ->
         undefined -> <<"schema:CreativeWork">>;
         <<"schema:CreativeWork">> -> Type;
         <<"schema:Article">> -> Type;
+        <<"schema:NewsArticle">> -> Type;
         <<"schema:MediaObject">> -> Type;
         _ -> [ Type, <<"schema:CreativeWork">> ]
     end.
@@ -125,6 +129,7 @@ base_type(institute) -> <<"schema:Organization">>;
 base_type(organization) -> <<"schema:Organization">>;
 base_type(article) -> <<"schema:Article">>;
 base_type(text) -> <<"schema:Article">>;
+base_type(news) -> <<"schema:NewsArticle">>;
 base_type(artifact) -> <<"schema:CreativeWork">>;
 base_type(media) -> <<"schema:MediaObject">>;
 base_type(event) -> <<"schema:Event">>;
@@ -146,6 +151,10 @@ type_props(<<"schema:Article">>, Id, IsTransFallback, IsTopDoc, Context) ->
         <<"schema:image">> => images(Id, Context)
     },
     maps:merge(creative_work(Id, IsTransFallback, IsTopDoc, Context), Doc);
+type_props(<<"schema:NewsArticle">>, Id, IsTransFallback, IsTopDoc, Context) ->
+    % https://schema.org/NewsArticle
+    Doc = type_props(<<"schema:Article">>, Id, IsTransFallback, IsTopDoc, Context),
+    Doc;
 type_props(<<"schema:Person">>, Id, _IsTransFallback, _IsTopDoc, Context) ->
     {Name, _} = z_template:render_to_iolist("_name.tpl", [ {id, Id} ], Context),
     #{
@@ -298,9 +307,9 @@ images(Id, Context) ->
                     end
                 end,
                 [
-                    <<"schema-org-image-1x1">>,
-                    <<"schema-org-image-4x3">>,
-                    <<"schema-org-image-16x9">>
+                    <<"schema-org-1x1">>,
+                    <<"schema-org-4x3">>,
+                    <<"schema-org-16x9">>
                 ])
             of
                 [] -> undefined;
@@ -317,7 +326,7 @@ authors(Id, IsTransFallback, Context) ->
         fun(AuthorId) ->
             case z_acl:rsc_visible(AuthorId, Context) of
                 true ->
-                    summary_1(AuthorId, IsTransFallback, false, Context);
+                    {true, sub_summary(AuthorId, IsTransFallback, Context)};
                 false ->
                     false
             end
