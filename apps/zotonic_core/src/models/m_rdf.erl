@@ -134,7 +134,7 @@ base_type(news) -> <<"schema:NewsArticle">>;
 base_type(artifact) -> <<"schema:CreativeWork">>;
 base_type(media) -> <<"schema:MediaObject">>;
 base_type(event) -> <<"schema:Event">>;
-base_type(location) -> <<"schema:PostalAddress">>;
+base_type(location) -> <<"schema:Place">>;
 base_type(_) -> undefined.
 
 type_props(Types, Id, IsTransFallback, IsTopDoc, Context) when is_list(Types) ->
@@ -166,29 +166,29 @@ type_props(<<"schema:Person">>, Id, _IsTransFallback, _IsTopDoc, Context) ->
         <<"schema:familyName">> => unesc(family_name(Id, Context)),
         <<"schema:email">> => email(Id, Context),
         <<"schema:telephone">> => unesc(m_rsc:p(Id, <<"phone">>, Context)),
-        <<"schema:address">> => location(Id, Context),
+        <<"schema:address">> => address(Id, Context),
         <<"schema:image">> => images(Id, Context)
     };
 type_props(<<"schema:Organization">>, Id, _IsTransFallback, _IsTopDoc, Context) ->
     #{
         <<"schema:email">> => email(Id, Context),
         <<"schema:telephone">> => unesc(m_rsc:p(Id, <<"phone">>, Context)),
-        <<"schema:address">> => location(Id, Context),
+        <<"schema:address">> => address(Id, Context),
         <<"schema:image">> => images(Id, Context)
     };
-type_props(<<"schema:Event">>, Id, _IsTransFallback, _IsTopDoc, Context) ->
+type_props(<<"schema:Event">>, Id, IsTransFallback, _IsTopDoc, Context) ->
+    Location = place(Id, IsTransFallback, Context),
     #{
         <<"schema:email">> => email(Id, Context),
         <<"schema:telephone">> => m_rsc:p(Id, <<"phone">>, Context),
-        <<"schema:location">> => location(Id, Context),
+        <<"schema:location">> => Location,
         <<"schema:image">> => images(Id, Context),
         <<"schema:startDate">> => m_rsc:p(Id, <<"date_start">>, Context),
         <<"schema:endDate">> => m_rsc:p(Id, <<"date_end">>, Context)
     };
-type_props(<<"schema:PostalAddress">>, Id, _IsTransFallback, _IsTopDoc, Context) ->
-    Doc = location(Id, Context),
-    Doc#{
-        <<"schema:email">> => email(Id, Context),
+type_props(<<"schema:Place">>, Id, _IsTransFallback, _IsTopDoc, Context) ->
+    #{
+        <<"schema:location">> => address(Id, Context),
         <<"schema:telephone">> => unesc(m_rsc:p(Id, <<"phone">>, Context)),
         <<"schema:image">> => images(Id, Context)
     };
@@ -342,8 +342,31 @@ email(Id, Context) ->
     end,
     unesc(E).
 
+
+place(Id, IsTransFallback, Context) ->
+    case m_edge:objects(Id, haslocation, Context) of
+        [] ->
+            #{
+                <<"@type">> => <<"schema:Place">>,
+                <<"schema:location">> => address(Id, Context),
+                <<"schema:telephone">> => unesc(m_rsc:p(Id, <<"phone">>, Context))
+            };
+        Locs ->
+            lists:filtermap(
+                fun(LocId) ->
+                    case z_acl:rsc_visible(LocId, Context) of
+                        true ->
+                            Doc = sub_summary(LocId, IsTransFallback, Context),
+                            {true, Doc};
+                        false ->
+                            false
+                    end
+                end,
+                Locs)
+    end.
+
 %% @doc Address of a resource is preferred to be the public mailing address, and then the normal address.
-location(Id, Context) ->
+address(Id, Context) ->
     Doc = case m_rsc:p(Id, <<"mail_country">>, Context) of
         undefined ->
             case m_rsc:p(Id, <<"address_country">>, Context) of
@@ -356,7 +379,8 @@ location(Id, Context) ->
                         <<"schema:postalCode">> => unesc(m_rsc:p(Id, <<"address_postcode">>, Context)),
                         <<"schema:streetAddress">> => unesc(m_rsc:p(Id, <<"address_street_1">>, Context)),
                         <<"schema:addressLocality">> => unesc(m_rsc:p(Id, <<"address_city">>, Context)),
-                        <<"schema:addressRegion">> => unesc(m_rsc:p(Id, <<"address_state">>, Context))
+                        <<"schema:addressRegion">> => unesc(m_rsc:p(Id, <<"address_state">>, Context)),
+                        <<"schema:email">> => email(Id, Context)
                     }
             end;
         Country ->
@@ -366,7 +390,8 @@ location(Id, Context) ->
                 <<"schema:postalCode">> => unesc(m_rsc:p(Id, <<"mail_postcode">>, Context)),
                 <<"schema:streetAddress">> => unesc(m_rsc:p(Id, <<"mail_street_1">>, Context)),
                 <<"schema:addressLocality">> => unesc(m_rsc:p(Id, <<"mail_city">>, Context)),
-                <<"schema:addressRegion">> => unesc(m_rsc:p(Id, <<"mail_state">>, Context))
+                <<"schema:addressRegion">> => unesc(m_rsc:p(Id, <<"mail_state">>, Context)),
+                <<"schema:email">> => email(Id, Context)
             }
     end,
     remove_undef(Doc).
