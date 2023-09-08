@@ -33,15 +33,15 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ <<"rsc-summary">>, Id | Rest ], _Msg, Context) ->
-    case summary(Id, Context) of
+m_get([ <<"rsc">>, <<"summary">>, <<"trans">>, Id | Rest ], _Msg, Context) ->
+    case summary_trans(Id, Context) of
         {ok, Doc} ->
             {ok, {Doc, Rest}};
         {error, _} = Error ->
             Error
     end;
-m_get([ <<"rsc-summary-trans">>, Id | Rest ], _Msg, Context) ->
-    case summary_trans(Id, Context) of
+m_get([ <<"rsc">>, <<"summary">>, Id | Rest ], _Msg, Context) ->
+    case summary(Id, Context) of
         {ok, Doc} ->
             {ok, {Doc, Rest}};
         {error, _} = Error ->
@@ -73,12 +73,13 @@ summary(Id, Context) ->
     Document :: map(),
     Reason :: term().
 summary_trans(Id, Context) ->
-    case m_rsc:rid(Id, Context) of
+    ContextLang = z_context:set_language(content_language(Id, Context), Context),
+    case m_rsc:rid(Id, ContextLang) of
         undefined ->
             {error, enoent};
         RscId ->
-            case z_acl:rsc_visible(RscId, Context) of
-                true -> {ok, summary_1(RscId, true, Context)};
+            case z_acl:rsc_visible(RscId, ContextLang) of
+                true -> {ok, summary_1(RscId, true, ContextLang)};
                 false -> {error, eacces}
             end
     end.
@@ -209,6 +210,13 @@ creative_work(Id, IsTransFallback, Context) ->
             Doc
     end.
 
+content_language(Id, Context) ->
+    Translations = case m_rsc:p_no_acl(Id, language, Context) of
+        undefined -> [];
+        Lngs -> Lngs
+    end,
+    z_trans:lookup_fallback_languages(Translations, Context).
+
 family_name(Id, Context) ->
     case m_rsc:p(Id, <<"name_surname_prefix">>, Context) of
         undefined ->
@@ -222,25 +230,38 @@ family_name(Id, Context) ->
     end.
 
 image(Id, Context) ->
-    case m_media:depiction(Id, Context) of
-        undefined ->
-            undefined;
-        Depict ->
-            case z_media_tag:attributes(Depict, [ {mediaclass, <<"schema-org-image">>} ], Context) of
-                {ok, Attrs} ->
-                    SrcUrl = z_context:abs_url(proplists:get_value(src, Attrs), Context),
-                    #{
-                        <<"@type">> => <<"schema:ImageObject">>,
-                        <<"schema:url">> => SrcUrl,
-                        <<"schema:contentUrl">> => SrcUrl,
-                        <<"schema:width">> => proplists:get_value(width, Attrs),
-                        <<"schema:height">> => proplists:get_value(height, Attrs),
-                        <<"schema:caption">> => proplists:get_value(alt, Attrs)
-                    };
-                {error, _} ->
-                    undefined
-            end
+    Depiction = m_media:depiction(Id, Context),
+    case z_media_tag:attributes(
+        Depiction,
+        [{mediaclass, <<"schema-org-image">>}],
+        Context)
+    of
+        {ok, Attrs} ->
+            ImgSrcId = maps:get(<<"id">>, Depiction, undefined),
+            ImgSrcUrl = z_context:abs_url(proplists:get_value(src, Attrs), Context),
+            ImgTitle = title(ImgSrcId, Context),
+            ImgCaption = case proplists:get_value(alt, Attrs) of
+                undefined -> ImgTitle;
+                <<>> -> ImgTitle;
+                ImgC -> ImgC
+            end,
+            #{
+                <<"@type">> => <<"schema:ImageObject">>,
+                <<"@id">> => ImgSrcUrl,
+                <<"schema:contentUrl">> => ImgSrcUrl,
+                <<"schema:url">> => ImgSrcUrl,
+                <<"schema:width">> => proplists:get_value(width, Attrs),
+                <<"schema:height">> => proplists:get_value(height, Attrs),
+                <<"schema:caption">> => ImgCaption,
+                <<"schema:name">> => ImgTitle
+            };
+        {error, _} ->
+            undefined
     end.
+
+title(Id, Context) ->
+    z_trans:lookup_fallback(m_rsc:p(Id, <<"title">>, Context), Context).
+
 
 %% @doc Email of a resource is preferred to be the public mail_email property, and then the mail property.
 email(Id, Context) ->
