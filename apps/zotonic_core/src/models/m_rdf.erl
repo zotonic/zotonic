@@ -33,15 +33,15 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ <<"rsc-summary">>, Id | Rest ], _Msg, Context) ->
-    case summary(Id, Context) of
+m_get([ <<"rsc">>, <<"summary">>, <<"trans">>, Id | Rest ], _Msg, Context) ->
+    case summary_trans(Id, Context) of
         {ok, Doc} ->
             {ok, {Doc, Rest}};
         {error, _} = Error ->
             Error
     end;
-m_get([ <<"rsc-summary-trans">>, Id | Rest ], _Msg, Context) ->
-    case summary_trans(Id, Context) of
+m_get([ <<"rsc">>, <<"summary">>, Id | Rest ], _Msg, Context) ->
+    case summary(Id, Context) of
         {ok, Doc} ->
             {ok, {Doc, Rest}};
         {error, _} = Error ->
