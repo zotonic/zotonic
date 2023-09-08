@@ -154,12 +154,14 @@ generate_2(Id, CustomJSON, Context) ->
             }
     end,
     JSONDoc5 = maps:merge(JSONDoc4, CustomJSON),
+    {ImageDocs, JSONDoc6} = extract_images(JSONDoc5),
     JSON = #{
         <<"@context">> => maps:get(<<"@context">>, RscDoc),
         <<"@graph">> => [
             JSONPublisher,
             JSONWebsite,
-            JSONDoc5
+            JSONDoc6
+            | ImageDocs
         ]
     },
     {ok, JSON}.
@@ -283,6 +285,23 @@ description(Id, Context) ->
         <<>> -> <<>>;
         _ -> filter_brlinebreaks:brlinebreaks(Desc, Context)
     end.
+
+extract_images(#{
+        <<"schema:about">> := #{
+            <<"schema:image">> := #{
+                <<"@id">> := ImgId
+            } = Image
+        } = About
+    } = JSONDoc) ->
+    About1 = About#{
+        <<"schema:image">> => ImgId
+    },
+    JSONDoc1 = JSONDoc#{
+        <<"schema:about">> => About1
+    },
+    {[ Image ], JSONDoc1};
+extract_images(JSONDoc) ->
+    {[], JSONDoc}.
 
 add_depiction(_Id, #{
         <<"schema:about">> := #{
