@@ -85,20 +85,21 @@ summary_trans(Id, Context) ->
 
 
 summary_1(Id, IsTransFallback, Context) ->
-    Type = base_type(Id, Context),
-    Summary = filter_brlinebreaks:brlinebreaks(filter_summary:summary(Id, Context), Context),
+    ContextLang = z_context:set_language(content_language(Id, Context), Context),
+    Type = base_type(Id, ContextLang),
+    Summary = filter_brlinebreaks:brlinebreaks(filter_summary:summary(Id, ContextLang), ContextLang),
     DocId = case IsTransFallback of
-        true -> z_context:abs_url(z_dispatcher:url_for(id, [ {id, Id} ], Context), Context);
-        false -> m_rsc:uri(Id, Context)
+        true -> z_context:abs_url(z_dispatcher:url_for(id, [ {id, Id} ], ContextLang), ContextLang);
+        false -> m_rsc:uri(Id, ContextLang)
     end,
     Doc = #{
         <<"@context">> => zotonic_rdf:namespaces(),
         <<"@id">> => DocId,
         <<"@type">> => Type,
-        <<"schema:name">> => trans(Id, <<"title">>, fun z_html:unescape/1, IsTransFallback, Context),
-        <<"schema:description">> => trans_1(Summary, fun z_html:unescape/1, IsTransFallback, Context)
+        <<"schema:name">> => trans(Id, <<"title">>, fun z_html:unescape/1, IsTransFallback, ContextLang),
+        <<"schema:description">> => trans_1(Summary, fun z_html:unescape/1, IsTransFallback, ContextLang)
     },
-    Doc1 = remove_undef(maps:merge(Doc, type_props(Type, Id, IsTransFallback, Context))),
+    Doc1 = remove_undef(maps:merge(Doc, type_props(Type, Id, IsTransFallback, ContextLang))),
     % TODO: notification to let modules add extra information.
     Doc1.
 
@@ -202,17 +203,19 @@ creative_work(Id, IsTransFallback, Context) ->
     },
     case IsTransFallback of
         true ->
-            Translations = case m_rsc:p_no_acl(Id, language, Context) of
-                undefined -> [];
-                Lngs -> Lngs
-            end,
-            InLanguage = z_trans:lookup_fallback_languages(Translations, Context),
             Doc#{
-                <<"schema:inLanguage">> => InLanguage
+                <<"schema:inLanguage">> => z_context:language(Context)
             };
         false ->
             Doc
     end.
+
+content_language(Id, Context) ->
+    Translations = case m_rsc:p_no_acl(Id, language, Context) of
+        undefined -> [];
+        Lngs -> Lngs
+    end,
+    z_trans:lookup_fallback_languages(Translations, Context).
 
 family_name(Id, Context) ->
     case m_rsc:p(Id, <<"name_surname_prefix">>, Context) of
