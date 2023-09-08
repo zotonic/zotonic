@@ -294,7 +294,9 @@ extract_images(#{
         } = About
     } = JSONDoc) ->
     About1 = About#{
-        <<"schema:image">> => ImgId
+        <<"schema:image">> => #{
+            <<"@id">> => ImgId
+        }
     },
     JSONDoc1 = JSONDoc#{
         <<"schema:about">> => About1
@@ -311,7 +313,9 @@ add_depiction(_Id, #{
         }
     } = JSONDoc, _Context) ->
     JSONDoc#{
-        <<"schema:primaryImageOfPage">> => ImgId
+        <<"schema:primaryImageOfPage">> => #{
+            <<"@id">> => ImgId
+        }
     };
 add_depiction(Id, JSONDoc, Context) ->
     Depiction = m_media:depiction(Id, Context),
