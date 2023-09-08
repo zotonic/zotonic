@@ -348,7 +348,7 @@ place(Id, IsTransFallback, Context) ->
         [] ->
             #{
                 <<"@type">> => <<"schema:Place">>,
-                <<"schema:location">> => address(Id, Context),
+                <<"schema:address">> => address(Id, Context),
                 <<"schema:telephone">> => unesc(m_rsc:p(Id, <<"phone">>, Context))
             };
         Locs ->
