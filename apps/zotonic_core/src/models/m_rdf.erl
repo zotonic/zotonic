@@ -100,7 +100,8 @@ summary_1(Id, IsTransFallback, IsTopDoc, Context) ->
         <<"@id">> => DocId,
         <<"@type">> => Type,
         <<"schema:name">> => trans(Id, <<"title">>, fun z_html:unescape/1, IsTransFallback, Context),
-        <<"schema:description">> => trans_1(Summary, fun z_html:unescape/1, IsTransFallback, Context)
+        <<"schema:description">> => trans_1(Summary, fun z_html:unescape/1, IsTransFallback, Context),
+        <<"schema:url">> => m_rsc:p(Id, <<"page_url_abs">>, Context)
     },
     Doc1 = remove_undef(maps:merge(Doc, type_props(Type, Id, IsTransFallback, IsTopDoc, Context))),
     % TODO: notification to let modules add extra information.
