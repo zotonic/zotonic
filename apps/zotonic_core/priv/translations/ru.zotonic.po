@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-09 10:10\n"
+"PO-Revision-Date: 2023-09-09 12:32\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -5688,7 +5688,7 @@ msgstr "Обрезать изображение"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:12
 msgid "Defaults to the summary of the media. Enter a single “-” to not display a caption."
-msgstr "По умолчанию - сводка средств массовой информации. Введите единственное \"-\", чтобы не отображать подписи."
+msgstr "По умолчанию - краткое описание материала. Чтобы не отображать заголовок, введите единственный минус (\"-\")."
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:102
 msgid "Edit {cat}"
