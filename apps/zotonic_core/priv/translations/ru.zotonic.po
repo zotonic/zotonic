@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-04 21:09\n"
+"PO-Revision-Date: 2023-09-09 10:10\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -5643,7 +5643,7 @@ msgstr "идентификатор найденного ресурса"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:47
 msgid "notification"
-msgstr "сообщение"
+msgstr "уведомление"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:50
 msgid "notification, checking first return"
@@ -5659,15 +5659,15 @@ msgstr "Добавить ссылку"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:32
 msgid "Aligned left"
-msgstr "Выровненный влево"
+msgstr "Выровнено влево"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:38
 msgid "Aligned right"
-msgstr "Выровненное право"
+msgstr "Выровнено вправо"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:21
 msgid "Alignment"
-msgstr "Согласование"
+msgstr "Выравнивание"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:26
 msgid "Between text"
@@ -5679,12 +5679,12 @@ msgstr "Заголовок"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:44
 msgid "Crop"
-msgstr "Обрезок"
+msgstr "Обрезать"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:49
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:61
 msgid "Crop image"
-msgstr "Обрезное изображение"
+msgstr "Обрезать изображение"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:12
 msgid "Defaults to the summary of the media. Enter a single “-” to not display a caption."
