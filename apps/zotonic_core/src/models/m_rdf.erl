@@ -349,7 +349,8 @@ place(Id, IsTransFallback, Context) ->
             #{
                 <<"@type">> => <<"schema:Place">>,
                 <<"schema:address">> => address(Id, Context),
-                <<"schema:telephone">> => unesc(m_rsc:p(Id, <<"phone">>, Context))
+                <<"schema:telephone">> => unesc(m_rsc:p(Id, <<"phone">>, Context)),
+                <<"schema:name">> => <<>>
             };
         Locs ->
             lists:filtermap(
