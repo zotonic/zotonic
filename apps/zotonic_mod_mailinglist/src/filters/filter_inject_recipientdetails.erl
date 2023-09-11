@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2012 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% @copyright 2012-2023 Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc Add details of the mailinglist recipient to the URL.
 %% @end
 
-%% Copyright 2012 Arjan Scherpenisse
+%% Copyright 2012-2023 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

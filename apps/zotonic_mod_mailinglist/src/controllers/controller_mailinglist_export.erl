@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-12-01
-%% @doc Export the list of active recipients of a mailinglist.
+%% @copyright 2009-2023 Marc Worrell
+%% @doc Export the list of all active recipients of a mailinglist.
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@
 	process/4
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
 
 service_available(Context) ->
     Context1 = z_context:set_noindex_header(Context),
@@ -51,25 +50,70 @@ content_types_provided(Context) ->
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 	Id = m_rsc:rid(z_context:get_q(<<"id">>, Context), Context),
 	%% Fetch all exported email addresses
-	{ok, Recipients} = m_mailinglist:list_recipients(Id, Context),
-    Export = lists:filtermap(
+	Recipients = z_mailinglist_recipients:list_recipients(Id, Context),
+    Lines = maps:fold(
         fun
-            (#{<<"is_enabled">> := true } = R) ->
-                Line = z_csv_writer:encode_line([
-                        maps:get(<<"email">>, R),
-                        maps:get(<<"name_first">>, R, <<>>),
-                        maps:get(<<"name_surname">>, R, <<>>),
-                        maps:get(<<"name_surname_prefix">>, R, <<>>)
-                    ], 9),
-                {true, Line};
-            (_) ->
-                false
+            (_Email, RcptId, Acc) when is_integer(Id) ->
+                case recipient_line(RcptId, Context) of
+                    {true, Line} ->
+                        [ Line | Acc ];
+                    false ->
+                        Acc
+                end;
+            (Email, #{ <<"is_enabled">> := true } = R, Acc) ->
+                Line = [
+                    Email,
+                    maps:get(<<"name_first">>, R, <<>>),
+                    maps:get(<<"name_surname">>, R, <<>>),
+                    maps:get(<<"name_surname_prefix">>, R, <<>>),
+                    undefined
+                ],
+                [ Line | Acc ];
+            (_Email, _R, Acc) ->
+                Acc
         end,
+        [],
         Recipients),
-	%% Set the content disposition filename
-	Filename = <<"mailinglist-", (z_string:to_slug(m_rsc:p(Id, title, Context)))/binary, ".csv">>,
+    % Add header, encode lines and sort on email address
+    Lines1 = [
+        [
+            <<"Email">>,
+            <<"First">>,
+            <<"Surname">>,
+            <<"Prefix">>,
+            <<"Id">>
+        ]
+        | Lines
+    ],
+    Export = lists:sort([ z_csv_writer:encode_line(Line, 9) || Line <- Lines1 ]),
+	% Set the content disposition filename
+	Filename = <<"mailinglist-", (z_string:to_slug(m_rsc:p(Id, <<"title">>, Context)))/binary, ".csv">>,
 	Context1 = z_context:set_resp_header(
                 <<"content-disposition">>,
                 <<"attachment; filename=", Filename/binary>>,
                 Context),
 	{Export, Context1}.
+
+
+recipient_line(Id, Context) ->
+    case m_rsc:p(Id, <<"email_raw">>, Context) of
+        undefined ->
+            false;
+        <<>> ->
+            false;
+        Email when is_binary(Email) ->
+            {true, [
+                Email,
+                unesc(m_rsc:p(Id, <<"name_first">>, Context)),
+                unesc(m_rsc:p(Id, <<"name_surname">>, Context)),
+                unesc(m_rsc:p(Id, <<"name_surname_prefix">>, Context)),
+                integer_to_binary(Id)
+            ]};
+        _ ->
+            false
+    end.
+
+unesc(undefined) ->
+    <<>>;
+unesc(V) ->
+    z_html:unescape(z_convert:to_binary(V)).
