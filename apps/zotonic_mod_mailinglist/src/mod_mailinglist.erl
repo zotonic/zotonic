@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2023 Marc Worrell
 %% @doc Mailinglist implementation. Enables to send pages to a list of recipients.
+%% @end
 
 %% Copyright 2009-2023 Marc Worrell
 %%
@@ -64,8 +65,8 @@ observe_acl_is_allowed(#acl_is_allowed{
             object_id = ListId
         }
     }, Context) when
-    Pred =:= subscriberof;
-    Pred =:= exsubscriberof ->
+        Pred =:= subscriberof;
+        Pred =:= exsubscriberof ->
     case        z_acl:is_allowed(SubjectId, view, Context)
         andalso z_acl:is_allowed(ListId, update, Context)
         andalso z_acl:is_allowed(use, mod_mailinglist, Context)

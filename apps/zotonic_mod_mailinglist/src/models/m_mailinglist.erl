@@ -434,7 +434,7 @@ insert_recipient_1(ListId, Email, Props, WelcomeMessageType, Context) ->
                               from mailinglist_recipient
                               where mailinglist_id = $1
                                 and email = $2", [ListId, Email1], Context),
-            ConfirmKey = binary_to_list(z_ids:id(20)),
+            ConfirmKey = z_ids:id(20),
             {RecipientId, WelcomeMessageType1} = case Rec of
                 {RcptId, true, _OldConfirmKey} ->
                     %% Present and enabled
@@ -498,8 +498,13 @@ update_recipient(RcptId, Props, Context) ->
 
 
 %% @doc Replace all recipients of the mailinglist. Do not send welcome messages to the recipients.
--spec insert_recipients(ListId::m_rsc:resource_id(), Recipients::list( binary()|string() ) | binary(), IsTruncate::boolean(), z:context()) ->
-    ok | {error, term()}.
+-spec insert_recipients(ListId, Recipients, IsTruncate, Context) -> ok | {error, Reason} when
+    ListId :: m_rsc:resource_id(),
+    Recipients :: list( binary() | string() )
+                | binary(),
+    IsTruncate::boolean(),
+    Context :: z:context(),
+    Reason :: enoent | eacces | term().
 insert_recipients(ListId, Bin, IsTruncate, Context) when is_binary(Bin) ->
     Lines = z_string:split_lines(Bin),
     Rcpts = lines_to_recipients(Lines),
@@ -517,14 +522,14 @@ insert_recipients_1(ListId, Recipients, IsTruncate, Context) ->
         true ->
             ok = z_db:transaction(
                             fun(Ctx) ->
-                                {ok, Now} = insert_recipients1(ListId, Recipients, Ctx),
+                                {ok, Now} = insert_recipients_2(ListId, Recipients, Ctx),
                                 optional_truncate(ListId, IsTruncate, Now, Ctx)
                             end, Context);
         false ->
             {error, eacces}
     end.
 
-insert_recipients1(ListId, Recipients, Context) ->
+insert_recipients_2(ListId, Recipients, Context) ->
     Now = erlang:universaltime(),
     [ replace_recipient(ListId, R, Now, Context) || R <- Recipients ],
     {ok, Now}.
@@ -575,7 +580,9 @@ replace_recipient_1(ListId, Email, Props, Now, Context) ->
 
 lines_to_recipients(Lines) ->
     lines_to_recipients(Lines, []).
-lines_to_recipients([], Acc) -> Acc;
+
+lines_to_recipients([], Acc) ->
+    Acc;
 lines_to_recipients([Line|Lines], Acc) ->
     %% Split every line on tab
     Trimmed = z_string:trim( z_convert:to_binary(Line) ),
@@ -588,7 +595,9 @@ lines_to_recipients([Line|Lines], Acc) ->
     end.
 
 line_to_recipient([ Email ]) ->
-    [ {email, Email} ];
+    [
+        {email, Email}
+    ];
 line_to_recipient([ Email, NameFirst ]) ->
     [
         {email, Email},
@@ -889,16 +898,16 @@ reset_log_email(ListId, PageId, Context) ->
 
 %% @doc Get the "from" address used for this mailing list. Looks first in the mailinglist rsc for a ' mailinglist_reply_to' field; falls back to site.email_from config variable.
 get_email_from(ListId, Context) ->
-    FromEmail = case m_rsc:p(ListId, mailinglist_reply_to, Context) of
+    FromEmail = case m_rsc:p(ListId, <<"mailinglist_reply_to">>, Context) of
                     Empty when Empty =:= undefined; Empty =:= <<>> ->
-                        z_convert:to_list(m_config:get_value(site, email_from, Context));
+                        z_convert:to_binary(m_config:get_value(site, email_from, Context));
                     RT ->
-                        z_convert:to_list(RT)
+                        z_convert:to_binary(RT)
                 end,
-    FromName = case m_rsc:p(ListId, mailinglist_sender_name, Context) of
-                  undefined -> [];
-                  <<>> -> [];
-                  SenderName -> z_convert:to_list(SenderName)
+    FromName = case m_rsc:p(ListId, <<"mailinglist_sender_name">>, Context) of
+                  undefined -> <<>>;
+                  <<>> -> <<>>;
+                  SenderName -> z_convert:to_binary(SenderName)
                end,
     z_email:combine_name_email(FromName, FromEmail).
 
@@ -912,7 +921,10 @@ get_recipients_by_email(Email, Context) ->
 
 %% @doc Perform a set operation on two lists. The result of the
 %% operation gets stored in the first list.
-recipient_set_operation(Op, IdA, IdB, Context) when Op =:= union; Op =:= subtract; Op =:= intersection ->
+recipient_set_operation(Op, IdA, IdB, Context) when
+        Op =:= union;
+        Op =:= subtract;
+        Op =:= intersection ->
     A = get_email_set(IdA, Context),
     B = get_email_set(IdB, Context),
     Emails = sets:to_list(sets:Op(A, B)),
@@ -933,8 +945,11 @@ get_email_set(ListId, Context) ->
 normalize_email(undefined) ->
     undefined;
 normalize_email(Email) ->
-    m_identity:normalize_key(<<"email">>, Email).
-
+    Email1 = m_identity:normalize_key(<<"email">>, Email),
+    case z_email_utils:is_email(Email1) of
+        true -> Email1;
+        false -> undefined
+    end.
 
 %% @doc Periodically remove bouncing and disabled addresses from the mailinglist
 -spec periodic_cleanup(z:context()) -> ok.

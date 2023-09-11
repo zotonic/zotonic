@@ -109,7 +109,7 @@ generate_recipient_secret(Context) ->
 count_recipients(ListId, Context) ->
     Count = m_mailinglist:count_recipients(ListId, Context),
     SubIds = m_edge:subjects(ListId, subscriberof, Context),
-    QueryTotal = case m_rsc:p(ListId, 'query', Context) of
+    QueryTotal = case m_rsc:p(ListId, <<"query">>, Context) of
         undefined -> 0;
         <<>> -> 0;
         _ ->
@@ -155,7 +155,7 @@ list_recipients(List, Context) ->
         #{},
         Recipients),
     SubIds = m_edge:subjects(ListId, subscriberof, Context),
-    QueryIds = case m_rsc:p(ListId, 'query', Context) of
+    QueryIds = case m_rsc:p(ListId, <<"query">>, Context) of
         undefined -> [];
         <<>> -> [];
         _ ->
@@ -183,7 +183,7 @@ list_recipients(List, Context) ->
     lists:foldl(
         fun(Id, Acc) ->
             case z_acl:rsc_visible(Id, Context)
-                andalso m_rsc:p(Id, is_published_date, Context)
+                andalso m_rsc:p(Id, <<"is_published_date">>, Context)
                 andalso not z_convert:to_bool( m_rsc:p_no_acl(Id, <<"is_mailing_opt_out">>, Context) )
             of
                 true ->
