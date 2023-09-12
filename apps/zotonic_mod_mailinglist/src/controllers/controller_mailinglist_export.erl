@@ -96,24 +96,27 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 
 
 recipient_line(Id, Context) ->
-    case m_rsc:p(Id, <<"email_raw">>, Context) of
-        undefined ->
-            false;
-        <<>> ->
-            false;
-        Email when is_binary(Email) ->
-            {true, [
-                Email,
-                unesc(m_rsc:p(Id, <<"name_first">>, Context)),
-                unesc(m_rsc:p(Id, <<"name_surname">>, Context)),
-                unesc(m_rsc:p(Id, <<"name_surname_prefix">>, Context)),
-                integer_to_binary(Id)
-            ]};
-        _ ->
+    case m_rsc:p(Id, <<"is_published_date">>, Context) of
+        true ->
+            case m_rsc:p(Id, <<"email_raw">>, Context) of
+                undefined ->
+                    false;
+                <<>> ->
+                    false;
+                Email when is_binary(Email) ->
+                    {true, [
+                        Email,
+                        unesc(m_rsc:p(Id, <<"name_first">>, Context)),
+                        unesc(m_rsc:p(Id, <<"name_surname">>, Context)),
+                        unesc(m_rsc:p(Id, <<"name_surname_prefix">>, Context)),
+                        integer_to_binary(Id)
+                    ]};
+                _ ->
+                    false
+            end;
+        false ->
             false
     end.
 
-unesc(undefined) ->
-    <<>>;
 unesc(V) ->
     z_html:unescape(z_convert:to_binary(V)).
