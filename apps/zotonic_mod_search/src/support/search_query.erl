@@ -1,7 +1,10 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009-2023 Arjan Scherpenisse
 %% @doc Handler for m.search[{query, Args..}]
+%% @end
 
+%% Copyright 2009-2023 Arjan Scherpenisse
+%%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
@@ -925,7 +928,7 @@ qterm({text, Text}, Context) ->
             TsQuery = mod_search:to_tsquery(Text, Context),
             #search_sql_term{
                 where = [
-                    '$1', <<"@@ rsc.pivot_tsv">>
+                    '$1', <<" @@ rsc.pivot_tsv">>
                 ],
                 sort = [
                     [

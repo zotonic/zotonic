@@ -1,10 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Defines PostgreSQL queries for basic content searches in Zotonic.
-%% This module needs to be split in specific PostgreSQL queries and standard SQL queries when you want to
-%% support other databases (like MySQL).
+%% This module needs to be split in specific PostgreSQL queries and standard SQL queries
+%% when you want to support other databases (like MySQL).
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -55,6 +56,27 @@
 -record(state, {context, query_watches=[]}).
 
 -define(TIMEOUT_GC, 1000).
+
+% For the ranking defined below, check:
+% https://www.postgresql.org/docs/14/textsearch-controls.html
+
+% Default weights for ranking texts in D, C, B and A blocks.
+% PostgreSQL default is {0.1, 0.2, 0.4, 1.0}
+% The max weight is 1.0
+-define(RANK_WEIGHT, <<"'{0.01, 0.02, 0.2, 1.0}'">>).
+
+% Default rank behaviour for psql text searches:
+%
+% 0 (the default) ignores the document length
+% 1 divides the rank by 1 + the logarithm of the document length
+% 2 divides the rank by the document length
+% 4 divides the rank by the mean harmonic distance between extents (this is implemented only by ts_rank_cd)
+% 8 divides the rank by the number of unique words in document
+% 16 divides the rank by 1 + the logarithm of the number of unique words in document
+% 32 divides the rank by itself + 1
+%
+-define(RANK_BEHAVIOUR, 1 bor 4).
+
 
 event(#postback{ message={facet_rebuild, _Args}}, Context) ->
     case z_acl:is_admin_editable(Context)
@@ -802,21 +824,46 @@ find_by_id(S, Rank, Context) ->
     }.
 
 %% @doc The ranking behaviour for scoring words in a full text search
-%% See also: http://www.postgresql.org/docs/9.3/static/textsearch-controls.html
--spec rank_behaviour(#context{}) -> integer().
+%% See also: https://www.postgresql.org/docs/14/textsearch-controls.html
+-spec rank_behaviour(Context) -> Behaviour when
+    Context :: z:context(),
+    Behaviour :: non_neg_integer().
 rank_behaviour(Context) ->
     case m_config:get_value(mod_search, rank_behaviour, Context) of
-        Empty when Empty =:= undefined; Empty =:= <<>> -> 1 bor 4 bor 32;
+        Empty when Empty =:= undefined; Empty =:= <<>> -> ?RANK_BEHAVIOUR;
         Rank -> z_convert:to_integer(Rank)
     end.
 
 %% @doc The weights for the ranking of the ABCD indexing categories.
-%% See also: http://www.postgresql.org/docs/9.3/static/textsearch-controls.html
--spec rank_weight(#context{}) -> string().
+%% See also: https://www.postgresql.org/docs/14/textsearch-controls.html
+-spec rank_weight(Context) -> Weights when
+    Context :: z:context(),
+    Weights :: binary().
 rank_weight(Context) ->
     case m_config:get_value(mod_search, rank_weight, Context) of
         Empty when Empty =:= undefined; Empty =:= <<>> ->
-            "'{0.05, 0.25, 0.5, 1.0}'";
-        Weight ->
-            lists:flatten(io_lib:format("\'~s\'", [Weight]))
+            ?RANK_WEIGHT;
+        W ->
+            % Extract the four weights
+            case re:run(W, "([0-9]+(\\.[0-9]+)?)", [ {capture, all_but_first, binary}, global ]) of
+                nomatch ->
+                    ?RANK_WEIGHT;
+                {match, Ms} ->
+                    Ws1 = [ hd(M) || M <- Ms ],
+                    [D, C, B, A] = append_weights(Ws1),
+                    <<
+                        "{",
+                        D/binary, ", ",
+                        C/binary, ", ",
+                        B/binary, ", ",
+                        A/binary,
+                        "}"
+                    >>
+            end
     end.
+
+% Ensure we have four weights.
+append_weights([ D ]) -> [ D, D, D, D ];
+append_weights([ D, C ]) -> [ D, C, C, C ];
+append_weights([ D, C, B ]) -> [ D, C, B, B ];
+append_weights([ D, C, B, A | _ ]) -> [ D, C, B, A ].
