@@ -567,7 +567,7 @@ search(<<"autocomplete">>, #{ <<"text">> := QueryText } = Args, _OffsetLimit, Co
                 _ ->
                     Cat = maps:get(<<"cat">> , Args, []),
                     #search_sql{
-                        select="r.id, ts_rank_cd("++rank_weight(Context)++", pivot_tsv, $1, $2) AS rank",
+                        select=["r.id, ts_rank_cd(", rank_weight(Context), ", pivot_tsv, $1, $2) AS rank"],
                         from="rsc r",
                         where=" $1 @@ r.pivot_tsv",
                         order="rank desc",
@@ -596,7 +596,7 @@ search(<<"fulltext">>, #{ <<"cat">> := Cat, <<"text">> := QueryText }, _OffsetLi
         _ ->
             TsQuery = to_tsquery(QueryText, Context),
             #search_sql{
-                select="r.id, ts_rank_cd("++rank_weight(Context)++", pivot_tsv, $1, $2) AS rank",
+                select=["r.id, ts_rank_cd(", rank_weight(Context), ", pivot_tsv, $1, $2) AS rank"],
                 from="rsc r",
                 where=" $1 @@ pivot_tsv",
                 order="rank desc",
@@ -620,7 +620,7 @@ search(<<"fulltext">>, #{ <<"text">> := QueryText }, _OffsetLimit, Context) ->
         _ ->
             TsQuery = to_tsquery(QueryText, Context),
             #search_sql{
-                select="r.id, ts_rank_cd("++rank_weight(Context)++", pivot_tsv, $1, $2) AS rank",
+                select=["r.id, ts_rank_cd(", rank_weight(Context), ", pivot_tsv, $1, $2) AS rank"],
                 from="rsc r",
                 where=" $1 @@ r.pivot_tsv",
                 order="rank desc",
