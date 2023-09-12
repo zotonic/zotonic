@@ -38,8 +38,12 @@ resource_exists(Context) ->
 previously_existed(Context) ->
     {true, Context}.
 
--spec moved_temporarily(z:context()) -> {{true, URL::binary()}, z:context()}.
+-spec moved_temporarily(z:context()) -> {false, z:context()}.
 moved_temporarily(Context) ->
+    {false, Context}.
+
+-spec moved_permanently(z:context()) -> {{true, URL::binary()}, z:context()}.
+moved_permanently(Context) ->
     Context1 = mod_translation:set_user_language(z_context:get_q(<<"code">>, Context), Context),
     Page = z_context:get_q(<<"p">>, Context1),
     Location = case z_utils:is_empty(Page) of
@@ -55,10 +59,6 @@ moved_temporarily(Context) ->
                     add_language(mod_translation:url_strip_language(Location2), Context1),
                     Context1),
     {{true, AbsUrl}, Context1}.
-
--spec moved_permanently(z:context()) -> {false, z:context()}.
-moved_permanently(Context) ->
-    {false, Context}.
 
 
 -spec add_language(iodata(), z:context()) -> binary().
