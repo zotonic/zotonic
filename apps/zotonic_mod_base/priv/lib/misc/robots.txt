@@ -1,2 +1,16 @@
 User-agent: *
+
+# Base admin URLs (with and without language prefix)
+Disallow: /admin$
+Disallow: /*/admin$
+Disallow: /admin/
+Disallow: /*/admin/
+
+# Language select URLs (with and without language prefix)
+Disallow: /language/switch
+Disallow: /language/select
+Disallow: /*/language/switch
+Disallow: /*/language/select
+
+# Allow all other URLs
 Allow: /
