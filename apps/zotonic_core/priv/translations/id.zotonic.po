@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-14 08:29\n"
+"PO-Revision-Date: 2023-09-14 10:04\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -8268,7 +8268,7 @@ msgstr "Tampilkan JSON-LD saat ini (pembaruan setelah penyimpanan)"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:38./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:39
 msgid "Site search"
-msgstr ""
+msgstr "Mencari situs"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:51
 msgid "The site configuration file allows this site to be indexed by search engines."
@@ -8280,7 +8280,7 @@ msgstr "File konfigurasi situs mengecualikan situs ini dari mesin pencari."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:41
 msgid "Url for the search action on the site. Defaults to:"
-msgstr ""
+msgstr "Url untuk tindakan pencarian di situs. Defaultnya adalah:"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:76
 msgid "Where can I find my tracking script?"
