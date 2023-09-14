@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-14 08:29\n"
+"PO-Revision-Date: 2023-09-14 10:04\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -8264,7 +8264,7 @@ msgstr "显示当前 JSON-LD（保存后更新）"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:38./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:39
 msgid "Site search"
-msgstr ""
+msgstr "站内搜索"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:51
 msgid "The site configuration file allows this site to be indexed by search engines."
@@ -8276,7 +8276,7 @@ msgstr "网站配置文件将本网站排除在搜索引擎之外。"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:41
 msgid "Url for the search action on the site. Defaults to:"
-msgstr ""
+msgstr "网站上搜索操作的 URL。默认为："
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:76
 msgid "Where can I find my tracking script?"
