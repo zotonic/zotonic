@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-08-30 11:07\n"
+"PO-Revision-Date: 2023-09-14 10:04\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -4609,7 +4609,7 @@ msgid "external service"
 msgstr "บริการภายนอก"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:66
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
 msgid "or"
 msgstr "หรือ"
@@ -6772,11 +6772,11 @@ msgstr "พระราชบัญญัติ"
 msgid "Add a new recipient."
 msgstr "เพิ่มผู้รับใหม่"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:51
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:52
 msgid "Add recipient"
 msgstr "เพิ่มผู้รับ"
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:61
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:62
 msgid "Added the recipient."
 msgstr "เพิ่มผู้รับแล้ว"
 
@@ -6844,7 +6844,7 @@ msgstr "รวมรายชื่ออีเมล"
 msgid "Combine…"
 msgstr "รวม…"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:139
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:140
 msgid "Confirm mailing cancelation."
 msgstr "ยืนยันการยกเลิกการส่งไปรษณีย์"
 
@@ -6856,15 +6856,15 @@ msgstr "ยืนยันการส่งไปยังรายชื่อ
 msgid "Confirm subscription"
 msgstr "ยืนยันการสมัครสมาชิก"
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:71
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:72
 msgid "Could not add the recipient."
 msgstr "ไม่สามารถเพิ่มผู้รับ"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:63
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:64
 msgid "Could not delete the mailing list."
 msgstr "ไม่สามารถลบรายชื่ออีเมล"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:258
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:259
 msgid "Could not save the opt-out preference."
 msgstr "ไม่สามารถบันทึกการตั้งค่าการเลือกไม่ใช้"
 
@@ -6881,7 +6881,7 @@ msgstr "ลบผู้รับปัจจุบันทั้งหมดก
 msgid "Delete all recipients from this list?"
 msgstr "ลบผู้รับทั้งหมดจากรายการนี้ไหม"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:56
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:57
 msgid "Deleted the mailing list."
 msgstr "ลบรายชื่อผู้รับจดหมาย"
 
@@ -6912,7 +6912,7 @@ msgstr "กำลังดาวน์โหลดรายชื่อผู้
 msgid "Drop folder filename (optional)"
 msgstr "วางชื่อไฟล์โฟลเดอร์ (ไม่บังคับ)"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:69
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:70
 msgid "E-mail address updated"
 msgstr "อัปเดตที่อยู่อีเมลแล้ว"
 
@@ -6924,7 +6924,7 @@ msgstr "หน้าอีเมล"
 msgid "E-mail this page"
 msgstr "ส่งอีเมลหน้านี้"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:77./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:58
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:77./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:59
 msgid "Edit recipient"
 msgstr "แก้ไขผู้รับ"
 
@@ -7005,7 +7005,7 @@ msgstr "รายชื่ออีเมล"
 msgid "Mailing list"
 msgstr "รายชื่อผู้รับจดหมาย"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:511
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:512
 msgid "Mailing lists"
 msgstr "รายชื่ออีเมล"
 
@@ -7122,7 +7122,7 @@ msgstr "ดูตัวอย่างการส่งจดหมาย"
 msgid "Read more on the web"
 msgstr "อ่านเพิ่มเติมได้ที่เว็บ"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:73
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:74
 msgid "Recipient deleted."
 msgstr "ลบผู้รับแล้ว"
 
@@ -7146,7 +7146,7 @@ msgstr "ลบผู้รับนี้ ไม่สามารถยกเ�
 msgid "Removed subscription."
 msgstr "ลบการสมัครรับข้อมูลแล้ว"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:256
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:257
 msgid "Saved the opt-out preference."
 msgstr "บันทึกการตั้งค่าการเลือกไม่ใช้"
 
@@ -7214,7 +7214,7 @@ msgstr "ชื่อผู้ส่งอีเมล (ไม่บังคั�
 msgid "Sending the e-mail..."
 msgstr "การส่งอีเมล ..."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:189
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:190
 msgid "Sending the page to"
 msgstr "กำลังส่งเพจไปที่"
 
@@ -7294,7 +7294,7 @@ msgstr "กำลังส่งอีเมล ..."
 msgid "The key in your link does not match any subscription. Either you already unsubscribed, or the mailing list has been deleted."
 msgstr "คีย์ในลิงค์ของคุณไม่ตรงกับการสมัครสมาชิกใด ๆ ไม่ว่าคุณจะยกเลิกการสมัครแล้วหรือรายชื่ออีเมลถูกลบไปแล้ว"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:152
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:153
 msgid "The mailing has been canceled."
 msgstr "ยกเลิกการส่งไปรษณีย์แล้ว"
 
@@ -7310,7 +7310,7 @@ msgstr "หน้าที่คุณพยายามส่งอีเมล
 msgid "The recipients list of the mailing list will be deleted as well."
 msgstr "รายชื่อผู้รับของรายชื่อผู้รับจดหมายจะถูกลบเช่นกัน"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:162
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:163
 msgid "The statistics have been cleared."
 msgstr "สถิติถูกล้างแล้ว"
 
@@ -7354,7 +7354,7 @@ msgstr "ยกเลิกการสมัครสมาชิกจาก"
 msgid "Unsubscribe from mailing list"
 msgstr "ยกเลิกการสมัครรับข้อมูลจากรายชื่ออีเมล"
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:101
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:102
 msgid "Updated the recipient."
 msgstr "อัปเดตผู้รับ"
 
@@ -7386,23 +7386,23 @@ msgstr "เมื่อคุณไม่ต้องการรับจดห
 msgid "When you don’t want to receive any more mail then"
 msgstr "เมื่อคุณไม่ต้องการรับจดหมายอีกแล้ว"
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:79
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:80
 msgid "You are not allowed to add or enable recipients."
 msgstr "คุณไม่ได้รับอนุญาตให้เพิ่มหรือเปิดใช้งานผู้รับ"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:144./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:154
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:145./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:155
 msgid "You are not allowed to cancel this mailing."
 msgstr "คุณไม่ได้รับอนุญาตให้ยกเลิกการส่งจดหมายนี้"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:60
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:61
 msgid "You are not allowed to delete the mailing list."
 msgstr "คุณไม่ได้รับอนุญาตให้ลบรายชื่อผู้รับจดหมาย"
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:107
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:108
 msgid "You are not allowed to edit recipients."
 msgstr "คุณไม่ได้รับอนุญาตให้แก้ไขผู้รับ"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:164./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:180
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:165./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:181
 msgid "You are not allowed to reset this mailing."
 msgstr "คุณไม่ได้รับอนุญาตให้รีเซ็ตการส่งจดหมายนี้"
 
@@ -7410,7 +7410,7 @@ msgstr "คุณไม่ได้รับอนุญาตให้รีเ
 msgid "You are not allowed to send mail to the test mailing list."
 msgstr "คุณไม่ได้รับอนุญาตให้ส่งเมลไปยังรายชื่อผู้รับจดหมายทดสอบ"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:192
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:193
 msgid "You are not allowed to send this page."
 msgstr "คุณไม่ได้รับอนุญาตให้ส่งหน้านี้"
 
@@ -8138,7 +8138,7 @@ msgstr "การสร้างตารางการค้นหาแบบ
 msgid "Sorry, you are not allowed to do this."
 msgstr "ขออภัย คุณไม่ได้รับอนุญาตให้ทำเช่นนี้"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:61
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "เพิ่ม noindex องค์ประกอบ nofollow ในทุกหน้า"
 
@@ -8158,15 +8158,15 @@ msgstr "ขอให้ Google ยกเว้นหน้า “{cat}” ทั
 msgid "Ask Google to not index this page"
 msgstr "ขอให้ Google ไม่จัดทำดัชนีหน้านี้"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:105
 msgid "Bing Webmaster"
 msgstr "Bing Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:93./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:103
 msgid "Bing Webmaster validation id"
 msgstr "รหัสการตรวจสอบผู้ดูแลเว็บ Bing"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "คัดลอกค่าของแอตทริบิวต์เนื้อหาในเมตาแท็กที่ Google มีให้"
 
@@ -8182,11 +8182,11 @@ msgstr "ปรับแต่งเพจบุ้ง"
 msgid "Description to include on every page"
 msgstr "คำอธิบายที่จะรวมไว้ในทุกหน้า"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:110
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:105./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119
 msgid "Enter here the verification code for"
 msgstr "ป้อนรหัสยืนยันที่นี่สำหรับ"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:58
 msgid "Exclude this site from search engines"
 msgstr "ยกเว้นไซต์นี้จากเครื่องมือค้นหา"
 
@@ -8194,19 +8194,19 @@ msgstr "ยกเว้นไซต์นี้จากเครื่องม
 msgid "General SEO Optimization"
 msgstr "การเพิ่มประสิทธิภาพ SEO ทั่วไป"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:63./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:64
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73
 msgid "Google Analytics tracking id"
 msgstr "รหัสติดตามของ Google Analytics"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:80./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:89./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:90./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "Google Search Console"
 msgstr "Google Search Console"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
 msgid "Google Tag Manager account page"
 msgstr "หน้าบัญชี Google Tag Manager"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:82
 msgid "Google Tag Manager id"
 msgstr "รหัส Google Tag Manager"
 
@@ -8254,7 +8254,7 @@ msgstr "เนื้อหา SEO"
 msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
 msgstr "การจัดทำดัชนี SEO ของหน้านี้ถูกปิดใช้งานเนื่องจากอยู่ในหมวด “{cat}”"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:123
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:132
 msgid "Save SEO settings"
 msgstr "บันทึกการตั้งค่า SEO"
 
@@ -8266,39 +8266,47 @@ msgstr "Search Engine Optimization"
 msgid "Show current JSON-LD (updates after save)"
 msgstr "แสดง JSON-LD ปัจจุบัน (อัปเดตหลังจากบันทึก)"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:42
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:38./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:39
+msgid "Site search"
+msgstr "ค้นหาไซต์"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:51
 msgid "The site configuration file allows this site to be indexed by search engines."
 msgstr "ไฟล์การกำหนดค่าไซต์อนุญาตให้เครื่องมือค้นหาสร้างดัชนีไซต์นี้"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:40
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
 msgid "The site configuration file excludes this site from search engines."
 msgstr "ไฟล์การกำหนดค่าไซต์ไม่รวมไซต์นี้จากเครื่องมือค้นหา"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:67
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:41
+msgid "Url for the search action on the site. Defaults to:"
+msgstr "URL สำหรับการดำเนินการค้นหาบนไซต์ ค่าเริ่มต้นเป็น:"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:76
 msgid "Where can I find my tracking script?"
 msgstr "ฉันจะหาสคริปต์ติดตามของฉันได้ที่ไหน"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:110
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119
 msgid "Yandex Webmaster"
 msgstr "Yandex Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:107./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:108
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:116./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:117
 msgid "Yandex Webmaster validation id"
 msgstr "รหัสการตรวจสอบผู้ดูแลเว็บ Yandex"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:97./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:111
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:106./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:120
 msgid "You find this id in the content attribute of the meta tag, it has the format"
 msgstr "คุณพบรหัสนี้ในแอตทริบิวต์เนื้อหาของเมตาแท็กซึ่งมีรูปแบบ"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:66
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
 msgid "You find this id in the tracking script, it has the format"
 msgstr "คุณพบรหัสนี้ในสคริปต์ติดตามซึ่งมีรูปแบบ"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
 msgid "You find this on your"
 msgstr "คุณพบสิ่งนี้ในไฟล์"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
 msgid "it has the format"
 msgstr "มันมีรูปแบบ"
 
@@ -8844,7 +8852,7 @@ msgstr "ตกลง"
 msgid "Another page, video or image."
 msgstr "หน้าวิดีโอหรือรูปภาพอื่น"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_thurstone_answer.tpl:31./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:78./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:79./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:80./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:67./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:86
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_thurstone_answer.tpl:31./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:78./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:79./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:80./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:68./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:86
 msgid "Answer"
 msgstr "ตอบ"
 
@@ -8932,7 +8940,7 @@ msgstr "คลิกที่ “แก้ไข” เพื่อดูแล�
 msgid "Closed"
 msgstr "ปิด"
 
-#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
+#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:98./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:132./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
 msgstr "ถูกต้อง"
 
@@ -9336,7 +9344,7 @@ msgstr "ความคืบหน้า"
 msgid "Prompt"
 msgstr "พร้อมท์"
 
-#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:66
+#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:67
 msgid "Question"
 msgstr "คำถาม"
 
@@ -9612,7 +9620,7 @@ msgstr "คำถาม"
 msgid "Toggle outline view"
 msgstr "สลับมุมมองเค้าร่าง"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:30./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:66
+#: apps/zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:30./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:67
 msgid "Totals"
 msgstr "ผลรวม"
 
@@ -9652,7 +9660,7 @@ msgstr "เมื่อไม่มีเงื่อนไขใดเป็น
 msgid "White"
 msgstr "สีขาว"
 
-#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131
+#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:98./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:132
 msgid "Wrong"
 msgstr "ผิด"
 

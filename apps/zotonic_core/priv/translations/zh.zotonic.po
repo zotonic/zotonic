@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-08-30 11:07\n"
+"PO-Revision-Date: 2023-09-14 10:04\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -4609,7 +4609,7 @@ msgid "external service"
 msgstr "外部服务"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:66
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
 msgid "or"
 msgstr "或"
@@ -6772,11 +6772,11 @@ msgstr "启用"
 msgid "Add a new recipient."
 msgstr "添加新收件人"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:51
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:52
 msgid "Add recipient"
 msgstr "添加收件人"
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:61
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:62
 msgid "Added the recipient."
 msgstr "收件人已添加。"
 
@@ -6844,7 +6844,7 @@ msgstr "合并邮件列表"
 msgid "Combine…"
 msgstr "合并…。"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:139
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:140
 msgid "Confirm mailing cancelation."
 msgstr "确认邮件取消。"
 
@@ -6856,15 +6856,15 @@ msgstr "确认发送给邮件列表"
 msgid "Confirm subscription"
 msgstr "确认订阅"
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:71
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:72
 msgid "Could not add the recipient."
 msgstr "无法添加收件人。"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:63
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:64
 msgid "Could not delete the mailing list."
 msgstr "无法删除邮件列表。"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:258
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:259
 msgid "Could not save the opt-out preference."
 msgstr "无法保存选择退出首选项。"
 
@@ -6881,7 +6881,7 @@ msgstr "添加文件前删除所有当前收件人。"
 msgid "Delete all recipients from this list?"
 msgstr "从列表中删除所有收件人？"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:56
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:57
 msgid "Deleted the mailing list."
 msgstr "删除了邮件列表。"
 
@@ -6912,7 +6912,7 @@ msgstr "下载活动收件人列表。请检查下载窗口。"
 msgid "Drop folder filename (optional)"
 msgstr "放置文件夹文件名（可选）"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:69
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:70
 msgid "E-mail address updated"
 msgstr "电子邮件地址更新"
 
@@ -6924,7 +6924,7 @@ msgstr "电子邮件页面"
 msgid "E-mail this page"
 msgstr "通过电子邮件发送此页面"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:77./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:58
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:77./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:59
 msgid "Edit recipient"
 msgstr "编辑接收人"
 
@@ -7001,7 +7001,7 @@ msgstr "邮件列表"
 msgid "Mailing list"
 msgstr "邮件列表"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:511
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:512
 msgid "Mailing lists"
 msgstr "邮件列表"
 
@@ -7118,7 +7118,7 @@ msgstr "预览邮件"
 msgid "Read more on the web"
 msgstr "在网络上阅读更多内容"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:73
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:74
 msgid "Recipient deleted."
 msgstr "收件人被删除。"
 
@@ -7142,7 +7142,7 @@ msgstr "删除这个收件人，无法撤销。"
 msgid "Removed subscription."
 msgstr "已删除订阅。"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:256
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:257
 msgid "Saved the opt-out preference."
 msgstr "保存退出偏好。"
 
@@ -7210,7 +7210,7 @@ msgstr "E-mail 的发送者名字（可选）"
 msgid "Sending the e-mail..."
 msgstr "发送 e-mail ..."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:189
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:190
 msgid "Sending the page to"
 msgstr "发送页面到"
 
@@ -7290,7 +7290,7 @@ msgstr "E-mail 正在被发送..."
 msgid "The key in your link does not match any subscription. Either you already unsubscribed, or the mailing list has been deleted."
 msgstr "您链接中的 key 不匹配任何订阅。可能是您已经取消订阅，或者是邮件列表已被删除。"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:152
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:153
 msgid "The mailing has been canceled."
 msgstr "该邮件已被取消。"
 
@@ -7306,7 +7306,7 @@ msgstr "你需要发送的页面还没有被发布。请选择发布方式。"
 msgid "The recipients list of the mailing list will be deleted as well."
 msgstr "邮件列表中的收件人也会被一同删除。"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:162
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:163
 msgid "The statistics have been cleared."
 msgstr "统计数据已被清除。"
 
@@ -7350,7 +7350,7 @@ msgstr "取消订阅自"
 msgid "Unsubscribe from mailing list"
 msgstr "取消邮件列表订阅"
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:101
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:102
 msgid "Updated the recipient."
 msgstr "更新收件人。"
 
@@ -7382,23 +7382,23 @@ msgstr "当你不想收到任何邮件，请忽略本消息。"
 msgid "When you don’t want to receive any more mail then"
 msgstr "如果你不想再收到邮件，那么"
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:79
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:80
 msgid "You are not allowed to add or enable recipients."
 msgstr "不允许添加或启用收件人。"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:144./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:154
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:145./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:155
 msgid "You are not allowed to cancel this mailing."
 msgstr "您不能取消此邮件。"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:60
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:61
 msgid "You are not allowed to delete the mailing list."
 msgstr "您不能删除邮件列表。"
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:107
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:108
 msgid "You are not allowed to edit recipients."
 msgstr "不允许编辑收件人。"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:164./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:180
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:165./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:181
 msgid "You are not allowed to reset this mailing."
 msgstr "您不允许重新设置此邮件。"
 
@@ -7406,7 +7406,7 @@ msgstr "您不允许重新设置此邮件。"
 msgid "You are not allowed to send mail to the test mailing list."
 msgstr "不允许发送邮件给测试邮件地址。"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:192
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:193
 msgid "You are not allowed to send this page."
 msgstr "您不允许发送此页面。"
 
@@ -8134,7 +8134,7 @@ msgstr "重建分面搜索表。"
 msgid "Sorry, you are not allowed to do this."
 msgstr "抱歉，您无权执行此操作。"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:61
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "为所有页面加入 noindex，nofollow 元素。"
 
@@ -8154,15 +8154,15 @@ msgstr "要求 Google 排除所有“{cat}”页面"
 msgid "Ask Google to not index this page"
 msgstr "要求 Google 不将此页面编入索引"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:105
 msgid "Bing Webmaster"
 msgstr "必应网站管理员"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:93./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:103
 msgid "Bing Webmaster validation id"
 msgstr "Bing网站管理员验证ID"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "复制谷歌提供的元标签中的内容属性值。"
 
@@ -8178,11 +8178,11 @@ msgstr "自定义页面 slug"
 msgid "Description to include on every page"
 msgstr "每一个页面都会包含的描述"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:110
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:105./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119
 msgid "Enter here the verification code for"
 msgstr "请在此输入验证码"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:58
 msgid "Exclude this site from search engines"
 msgstr "从搜索引擎里排除本站点"
 
@@ -8190,19 +8190,19 @@ msgstr "从搜索引擎里排除本站点"
 msgid "General SEO Optimization"
 msgstr "通用 SEO 优化"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:63./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:64
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73
 msgid "Google Analytics tracking id"
 msgstr "Google Analytics 跟踪 id"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:80./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:89./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:90./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "Google Search Console"
 msgstr "Google Search Console"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
 msgid "Google Tag Manager account page"
 msgstr "Google跟踪代码管理器帐户页面"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:82
 msgid "Google Tag Manager id"
 msgstr "Google跟踪代码管理器ID"
 
@@ -8250,7 +8250,7 @@ msgstr "SEO 内容"
 msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
 msgstr "此页面的 SEO 索引已禁用，因为它属于“{cat}”类别。"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:123
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:132
 msgid "Save SEO settings"
 msgstr "保存 SEO 设置"
 
@@ -8262,39 +8262,47 @@ msgstr "搜索引擎优化"
 msgid "Show current JSON-LD (updates after save)"
 msgstr "显示当前 JSON-LD（保存后更新）"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:42
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:38./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:39
+msgid "Site search"
+msgstr "站内搜索"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:51
 msgid "The site configuration file allows this site to be indexed by search engines."
 msgstr "网站配置文件可以让这个网站被搜索引擎收录。"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:40
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
 msgid "The site configuration file excludes this site from search engines."
 msgstr "网站配置文件将本网站排除在搜索引擎之外。"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:67
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:41
+msgid "Url for the search action on the site. Defaults to:"
+msgstr "网站上搜索操作的 URL。默认为："
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:76
 msgid "Where can I find my tracking script?"
 msgstr "我在哪里可以找到我的跟踪脚本？"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:110
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119
 msgid "Yandex Webmaster"
 msgstr "Yandex网站管理员"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:107./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:108
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:116./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:117
 msgid "Yandex Webmaster validation id"
 msgstr "Yandex网站管理员验证id"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:97./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:111
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:106./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:120
 msgid "You find this id in the content attribute of the meta tag, it has the format"
 msgstr "你可以在元标签的内容属性中找到这个id，它的格式为"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:66
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
 msgid "You find this id in the tracking script, it has the format"
 msgstr "你可以在跟踪脚本中找到这个ID，它的格式是"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
 msgid "You find this on your"
 msgstr "你在你的身上找到这个"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
 msgid "it has the format"
 msgstr "它具有格式"
 
@@ -8840,7 +8848,7 @@ msgstr "同意"
 msgid "Another page, video or image."
 msgstr "另一个页面、视频或图像。"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_thurstone_answer.tpl:31./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:78./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:79./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:80./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:67./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:86
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_thurstone_answer.tpl:31./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:78./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:79./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:80./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:68./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:86
 msgid "Answer"
 msgstr "回答"
 
@@ -8928,7 +8936,7 @@ msgstr "单击“编辑”以查看和更改输入的数据。"
 msgid "Closed"
 msgstr "关闭"
 
-#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
+#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:98./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:132./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
 msgstr "正确的"
 
@@ -9332,7 +9340,7 @@ msgstr "进展情况"
 msgid "Prompt"
 msgstr "提示"
 
-#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:66
+#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:67
 msgid "Question"
 msgstr "问题"
 
@@ -9608,7 +9616,7 @@ msgstr "跳转到问题"
 msgid "Toggle outline view"
 msgstr "切换大纲视图"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:30./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:66
+#: apps/zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:30./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:67
 msgid "Totals"
 msgstr "总数"
 
@@ -9648,7 +9656,7 @@ msgstr "当没有条件成立时，所有此中断后面的问题将成为下个
 msgid "White"
 msgstr "白色的"
 
-#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131
+#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:98./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:132
 msgid "Wrong"
 msgstr "错误的"
 
