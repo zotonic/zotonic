@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-08-30 11:07\n"
+"PO-Revision-Date: 2023-09-14 08:28\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -4609,7 +4609,7 @@ msgid "external service"
 msgstr "خدمة خارجية"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:66
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
 msgid "or"
 msgstr "أو"
@@ -6772,11 +6772,11 @@ msgstr "فعل"
 msgid "Add a new recipient."
 msgstr "أضف مستلمًا جديدًا."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:51
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:52
 msgid "Add recipient"
 msgstr "أضف المستلم"
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:61
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:62
 msgid "Added the recipient."
 msgstr "تمت إضافة المستلم."
 
@@ -6844,7 +6844,7 @@ msgstr "الجمع بين القائمة البريدية"
 msgid "Combine…"
 msgstr "اجمع…"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:139
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:140
 msgid "Confirm mailing cancelation."
 msgstr "تأكيد إلغاء البريد."
 
@@ -6856,15 +6856,15 @@ msgstr "أكد الإرسال إلى القائمة البريدية"
 msgid "Confirm subscription"
 msgstr "تأكيد الاشتراك"
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:71
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:72
 msgid "Could not add the recipient."
 msgstr "تعذرت إضافة المستلم."
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:63
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:64
 msgid "Could not delete the mailing list."
 msgstr "تعذر حذف القائمة البريدية."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:258
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:259
 msgid "Could not save the opt-out preference."
 msgstr "تعذر حفظ تفضيل إلغاء الاشتراك."
 
@@ -6881,7 +6881,7 @@ msgstr "احذف جميع المستلمين الحاليين قبل إضافة 
 msgid "Delete all recipients from this list?"
 msgstr "حذف كافة المستلمين من هذه القائمة؟"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:56
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:57
 msgid "Deleted the mailing list."
 msgstr "حذف القائمة البريدية."
 
@@ -6912,7 +6912,7 @@ msgstr "تنزيل قائمة المستلمين النشطين. تحقق من �
 msgid "Drop folder filename (optional)"
 msgstr "إفلات اسم ملف المجلد (اختياري)"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:69
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:70
 msgid "E-mail address updated"
 msgstr "تم تحديث عنوان البريد الإلكتروني"
 
@@ -6924,7 +6924,7 @@ msgstr "صفحة البريد الإلكتروني"
 msgid "E-mail this page"
 msgstr "إرسال هذه الصفحة بالبريد الإلكتروني"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:77./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:58
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:77./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:59
 msgid "Edit recipient"
 msgstr "تحرير المستلم"
 
@@ -7005,7 +7005,7 @@ msgstr "القوائم البريدية"
 msgid "Mailing list"
 msgstr "القائمة البريدية"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:511
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:512
 msgid "Mailing lists"
 msgstr "القوائم البريدية"
 
@@ -7122,7 +7122,7 @@ msgstr "معاينة البريد"
 msgid "Read more on the web"
 msgstr "اقرأ المزيد على الويب"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:73
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:74
 msgid "Recipient deleted."
 msgstr "تم حذف المستلم."
 
@@ -7146,7 +7146,7 @@ msgstr "قم بإزالة هذا المستلم. لا يمكن التراجع."
 msgid "Removed subscription."
 msgstr "تمت إزالة الاشتراك."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:256
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:257
 msgid "Saved the opt-out preference."
 msgstr "تم حفظ تفضيل إلغاء الاشتراك."
 
@@ -7214,7 +7214,7 @@ msgstr "اسم المرسل لرسائل البريد الإلكتروني (اخ
 msgid "Sending the e-mail..."
 msgstr "إرسال البريد الإلكتروني ..."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:189
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:190
 msgid "Sending the page to"
 msgstr "إرسال الصفحة إلى"
 
@@ -7294,7 +7294,7 @@ msgstr "يتم إرسال رسائل البريد الإلكتروني ..."
 msgid "The key in your link does not match any subscription. Either you already unsubscribed, or the mailing list has been deleted."
 msgstr "المفتاح الموجود في الارتباط الخاص بك لا يتطابق مع أي اشتراك. إما أنك ألغيت اشتراكك بالفعل ، أو تم حذف القائمة البريدية."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:152
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:153
 msgid "The mailing has been canceled."
 msgstr "تم إلغاء البريد."
 
@@ -7310,7 +7310,7 @@ msgstr "لم يتم نشر الصفحة التي تحاول إرسالها با�
 msgid "The recipients list of the mailing list will be deleted as well."
 msgstr "كما سيتم حذف قائمة المستلمين من القائمة البريدية."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:162
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:163
 msgid "The statistics have been cleared."
 msgstr "تم مسح الإحصائيات."
 
@@ -7354,7 +7354,7 @@ msgstr "إلغاء الاشتراك من"
 msgid "Unsubscribe from mailing list"
 msgstr "إلغاء الاشتراك من القائمة البريدية"
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:101
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:102
 msgid "Updated the recipient."
 msgstr "تم تحديث المستلم."
 
@@ -7386,23 +7386,23 @@ msgstr "عندما لا ترغب في تلقي أي بريد ، يرجى تجا�
 msgid "When you don’t want to receive any more mail then"
 msgstr "عندما لا ترغب في تلقي المزيد من البريد بعد ذلك"
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:79
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:80
 msgid "You are not allowed to add or enable recipients."
 msgstr "غير مسموح لك بإضافة أو تمكين المستلمين."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:144./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:154
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:145./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:155
 msgid "You are not allowed to cancel this mailing."
 msgstr "لا يسمح لك بإلغاء هذه المراسلات."
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:60
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:61
 msgid "You are not allowed to delete the mailing list."
 msgstr "لا يسمح لك بحذف القائمة البريدية."
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:107
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:108
 msgid "You are not allowed to edit recipients."
 msgstr "لا يسمح لك لتحرير المستلمين."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:164./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:180
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:165./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:181
 msgid "You are not allowed to reset this mailing."
 msgstr "لا يسمح لك بإعادة تعيين هذا البريد."
 
@@ -7410,7 +7410,7 @@ msgstr "لا يسمح لك بإعادة تعيين هذا البريد."
 msgid "You are not allowed to send mail to the test mailing list."
 msgstr "غير مسموح لك بإرسال بريد إلى القائمة البريدية التجريبية."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:192
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:193
 msgid "You are not allowed to send this page."
 msgstr "لا يسمح لك بإرسال هذه الصفحة."
 
@@ -8138,7 +8138,7 @@ msgstr "إعادة بناء جدول البحث ذو الأوجه."
 msgid "Sorry, you are not allowed to do this."
 msgstr "عذرا ، لا يسمح لك القيام بذلك."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:61
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "أضف عنصر noindex ، nofollow إلى جميع الصفحات."
 
@@ -8158,15 +8158,15 @@ msgstr "اطلب من Google استبعاد جميع الصفحات \"{cat}\""
 msgid "Ask Google to not index this page"
 msgstr "اطلب من Google عدم فهرسة هذه الصفحة"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:105
 msgid "Bing Webmaster"
 msgstr "Bing Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:93./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:103
 msgid "Bing Webmaster validation id"
 msgstr "معرف التحقق من Bing Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "انسخ قيمة سمة المحتوى في العلامة الوصفية المقدمة من Google."
 
@@ -8182,11 +8182,11 @@ msgstr "تخصيص slug الصفحة"
 msgid "Description to include on every page"
 msgstr "وصف لتضمينه في كل صفحة"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:110
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:105./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119
 msgid "Enter here the verification code for"
 msgstr "أدخل هنا رمز التحقق الخاص بـ"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:58
 msgid "Exclude this site from search engines"
 msgstr "استبعاد هذا الموقع من محركات البحث"
 
@@ -8194,19 +8194,19 @@ msgstr "استبعاد هذا الموقع من محركات البحث"
 msgid "General SEO Optimization"
 msgstr "تحسين SEO العام"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:63./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:64
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73
 msgid "Google Analytics tracking id"
 msgstr "معرف تتبع Google Analytics"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:80./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:89./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:90./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "Google Search Console"
 msgstr "جوجل Search Console"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
 msgid "Google Tag Manager account page"
 msgstr "صفحة حساب Google Tag Manager"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:82
 msgid "Google Tag Manager id"
 msgstr "معرف Google Tag Manager"
 
@@ -8254,7 +8254,7 @@ msgstr "محتوى SEO"
 msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
 msgstr "تم تعطيل فهرسة SEO لهذه الصفحة لأنها في فئة \"{cat}\"."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:123
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:132
 msgid "Save SEO settings"
 msgstr "حفظ إعدادات تحسين محركات البحث"
 
@@ -8266,39 +8266,47 @@ msgstr "محرك البحث الأمثل"
 msgid "Show current JSON-LD (updates after save)"
 msgstr "إظهار JSON-LD الحالي (التحديثات بعد الحفظ)"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:42
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:38./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:39
+msgid "Site search"
+msgstr ""
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:51
 msgid "The site configuration file allows this site to be indexed by search engines."
 msgstr "يتيح ملف تكوين الموقع إمكانية فهرسة هذا الموقع بواسطة محركات البحث."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:40
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
 msgid "The site configuration file excludes this site from search engines."
 msgstr "يستثني ملف تكوين الموقع هذا الموقع من محركات البحث."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:67
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:41
+msgid "Url for the search action on the site. Defaults to:"
+msgstr ""
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:76
 msgid "Where can I find my tracking script?"
 msgstr "أين يمكنني العثور على نص التتبع الخاص بي؟"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:110
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119
 msgid "Yandex Webmaster"
 msgstr "Yandex Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:107./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:108
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:116./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:117
 msgid "Yandex Webmaster validation id"
 msgstr "معرف التحقق من Yandex Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:97./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:111
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:106./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:120
 msgid "You find this id in the content attribute of the meta tag, it has the format"
 msgstr "تجد هذا المعرف في سمة المحتوى للعلامة الوصفية ، فهو يحتوي على التنسيق"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:66
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
 msgid "You find this id in the tracking script, it has the format"
 msgstr "تجد هذا المعرف في البرنامج النصي للتتبع ، وله التنسيق"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
 msgid "You find this on your"
 msgstr "تجد هذا على الخاص بك"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
 msgid "it has the format"
 msgstr "لها الشكل"
 
@@ -8844,7 +8852,7 @@ msgstr "يوافق على"
 msgid "Another page, video or image."
 msgstr "صفحة أو مقطع فيديو أو صورة أخرى."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_block_thurstone_answer.tpl:31./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:78./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:79./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:80./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:67./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:86
+#: apps/zotonic_mod_survey/priv/templates/_admin_block_thurstone_answer.tpl:31./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:78./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:79./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:80./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:68./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:86
 msgid "Answer"
 msgstr "إجابة"
 
@@ -8932,7 +8940,7 @@ msgstr "انقر فوق \"تحرير\" لرؤية وتغيير البيانات 
 msgid "Closed"
 msgstr "مغلق"
 
-#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
+#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:98./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:132./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
 msgstr "صيح"
 
@@ -9336,7 +9344,7 @@ msgstr "التقدم"
 msgid "Prompt"
 msgstr "مستعجل"
 
-#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:66
+#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:67
 msgid "Question"
 msgstr "سؤال"
 
@@ -9612,7 +9620,7 @@ msgstr "يسأل"
 msgid "Toggle outline view"
 msgstr "تبديل عرض المخطط التفصيلي"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:30./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:66
+#: apps/zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:30./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:67
 msgid "Totals"
 msgstr "المجاميع"
 
@@ -9652,7 +9660,7 @@ msgstr "عندما لا يكون هناك شرط صحيح ، فإن السؤال
 msgid "White"
 msgstr "أبيض"
 
-#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:97./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:131
+#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:98./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:132
 msgid "Wrong"
 msgstr "خاطئ"
 
