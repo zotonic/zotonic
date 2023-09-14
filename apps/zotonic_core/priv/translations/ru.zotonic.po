@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-14 08:28\n"
+"PO-Revision-Date: 2023-09-14 10:03\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -8268,7 +8268,7 @@ msgstr "Показать текущий JSON-LD (обновления после
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:38./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:39
 msgid "Site search"
-msgstr ""
+msgstr "Поиск по сайту"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:51
 msgid "The site configuration file allows this site to be indexed by search engines."
@@ -8280,7 +8280,7 @@ msgstr "Файл конфигурации сайта исключает этот
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:41
 msgid "Url for the search action on the site. Defaults to:"
-msgstr ""
+msgstr "URL-адрес действия поиска на сайте. По умолчанию:"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:76
 msgid "Where can I find my tracking script?"
