@@ -99,17 +99,22 @@ generate_2(Id, CustomJSON, Context) ->
         <<"schema:name">> => OrgTitle,
         <<"schema:description">> => z_html:unescape(SiteDescription)
     },
-    JSONWebsite = #{
+    JSONWebsite0 = #{
         <<"@type">> => <<"schema:WebSite">>,
         <<"@id">> => HomeUrl,
         <<"schema:url">> => HomeUrl,
         <<"schema:name">> => z_convert:to_binary(m_config:get_value(site, title, Context)),
         <<"schema:description">> => z_html:unescape(SiteDescription),
-        <<"schema:publisher">> => OrgId,
-        <<"schema:potentialAction">> => lists:flatten([
-            search_action(Context)
-        ])
+        <<"schema:publisher">> => OrgId
     },
+    JSONWebsite = case search_action(Context) of
+        [] ->
+            JSONWebsite0;
+        Action ->
+            JSONWebsite0#{
+                <<"schema:potentialAction">> => lists:flatten([Action])
+            }
+    end,
     JSONDoc =  #{
         <<"@type">> => <<"schema:WebPage">>,
         <<"@id">> => PageUrl,
@@ -342,11 +347,17 @@ search_action(Context) ->
     end.
 
 search_url(Context) ->
-    case z_convert:to_binary(m_config:get_value(seo, search_action_url, Context)) of
-        <<>> ->
-            % Can't inject {text} immediately as it would be URL encoded.
-            Url = z_convert:to_binary(z_dispatcher:url_for(search, [ {qs, <<"TEXT">>} ], Context)),
-            binary:replace(Url, <<"TEXT">>, <<"{text}">>);
-        Url ->
-            Url
+    case m_config:get_boolean(seo, search_action_hide, Context) of
+        true ->
+            <<>>;
+        false ->
+            case z_convert:to_binary(m_config:get_value(seo, search_action_url, Context)) of
+                <<>> ->
+                    % Can't inject {text} immediately as it would be URL encoded.
+                    Url = z_convert:to_binary(z_dispatcher:url_for(search, [ {qs, <<"TEXT">>} ], Context)),
+                    binary:replace(Url, <<"TEXT">>, <<"{text}">>);
+                Url ->
+                    Url
+            end
     end.
+
