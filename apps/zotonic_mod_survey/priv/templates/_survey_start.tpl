@@ -24,6 +24,7 @@
                         id=id
                         answers=answers|default:m.survey.did_survey_answers[id]
                         viewer=viewer
+                        is_autostart=is_autostart
                         element_id=element_id|default:"survey-question"
             %}
          {% elseif not did_survey or id.survey_multiple == 1 %}
@@ -31,6 +32,7 @@
                         id=id
                         answers=answers
                         viewer=viewer
+                        is_autostart=is_autostart
                         element_id=element_id|default:"survey-question"
             %}
         {% else %}
