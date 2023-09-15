@@ -30,6 +30,7 @@
     	{% lazy template="_survey_start.tpl"
                 id=id
                 answers=answers
+                is_autostart=(q.autostart or id.survey_is_autostart)
                 element_id=element_id|default:"survey-question"
         %}
     {% endif %}
