@@ -16,10 +16,22 @@
     function maybe_trigger_cookie_consent() {
         if (!is_consent_requested && !z_cookie_consent_given()) {
             is_consent_requested = true;
-            setTimeout(function() {
-                z_event("cookie-consent", {});
-            }, 100);
+            trigger_cookie_consent();
         }
+    }
+
+    function trigger_cookie_consent() {
+        setTimeout(
+            () => {
+                if (z_registered_events["cookie-consent"]) {
+                    z_event("cookie-consent", {});
+                } else {
+                    // Race condition, event not yet registered,
+                    // try again in 100msec
+                    trigger_cookie_consent();
+                }
+            },
+            100);
     }
 
     function enableElement($elt) {
