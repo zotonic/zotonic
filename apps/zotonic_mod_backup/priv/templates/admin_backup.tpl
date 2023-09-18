@@ -65,7 +65,7 @@
                                 </div>
                                 <p class="help-block">
                                     <i class="fa fa-info-circle"></i>
-                                    {_ Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are stored in the cloud and not backed up locally. _}
+                                    {_ Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally. _}
                                 </p>
                             {% else %}
                                 <div class="radio">
