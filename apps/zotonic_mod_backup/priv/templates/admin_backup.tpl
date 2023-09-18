@@ -31,25 +31,61 @@
                 {% if is_editable %}
                     <div class="widget">
                         <div class="widget-content">
-                            {# TODO: make this a mod_admin_config scomp/include #}
+                            <p>
+                                {_ With the import/export panel you can download a page as a file, see page revisions and restore a previous version. _}
+                            </p>
                             <div class="checkbox">
                                 <label>
-                                    <input id="backup_panel" name="backup_panel" type="checkbox" value="1" {% if m.backup.admin_panel %}checked="checked"{% endif %} /> {_ Show import/export panel in the admin. _}
+                                    <input id="backup_panel" name="backup_panel" type="checkbox" value="1" {% if m.backup.admin_panel %}checked="checked"{% endif %} /> {_ Show import/export panel on the edit pages in the admin. _}
                                 </label>
+                                {% wire id="backup_panel" postback=`config_backup_panel` %}
                             </div>
-                            {% wire id="backup_panel" postback=`config_backup_panel` %}
+                        </div>
+                    </div>
 
-                            <div class="checkbox">
-                                <label>
-                                    <input id="backup_daily" name="backup_daily" type="checkbox" value="1" {% if m.backup.daily_dump %}checked="checked"{% endif %}/>
-                                    {% if is_filestore_enabled %}
-                                        {_ Make a daily backup of the database. _}
-                                    {% else %}
-                                        {_ Make a daily backup of the database and uploaded files. _}
-                                    {% endif %}
-                                </label>
-                            </div>
-                            {% wire id="backup_daily" postback=`config_backup_daily` %}
+                    <div class="widget">
+                        <div class="widget-content">
+                            <p>{_ Automatic daily backups of the database and uploaded files can be enabled. This is done at night and the last 7 backups are kept. _}</p>
+                            {% if is_filestore_enabled %}
+                                <div class="radio">
+                                    <label>
+                                        <input id="backup_daily0" name="backup_daily" type="radio" value="0" {% if not m.backup.daily_dump %}checked="checked"{% endif %}>
+                                            {_ Do not make a daily backup. _}
+                                    </label>
+                                    <label>
+                                        <input id="backup_daily2" name="backup_daily" type="radio" value="2" {% if m.backup.daily_dump %}checked="checked"{% endif %}>
+                                            {_ Make a daily backup of the database. _}
+                                    </label>
+                                    <label class="text-muted">
+                                        <input id="backup_daily1" name="backup_daily" type="radio" value="1" disabled>
+                                            {_ Make a daily backup of the database and uploaded files. _}
+                                    </label>
+                                    {% wire id="backup_daily0" postback=`config_backup_daily` %}
+                                    {% wire id="backup_daily2" postback=`config_backup_daily` %}
+                                </div>
+                                <p class="help-block">
+                                    <i class="fa fa-info-circle"></i>
+                                    {_ Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are stored in the cloud and not backed up locally. _}
+                                </p>
+                            {% else %}
+                                <div class="radio">
+                                    <label>
+                                        <input id="backup_daily0" name="backup_daily" type="radio" value="0" {% if not m.backup.daily_dump %}checked="checked"{% endif %}>
+                                            {_ Do not make a daily backup. _}
+                                    </label>
+                                    <label>
+                                        <input id="backup_daily2" name="backup_daily" type="radio" value="2" {% if m.backup.daily_dump == '2' %}checked="checked"{% endif %}>
+                                            {_ Make a daily backup of the database. _}
+                                    </label>
+                                    <label>
+                                        <input id="backup_daily1" name="backup_daily" type="radio" value="1" {% if m.backup.daily_dump == '1' %}checked="checked"{% endif %}>
+                                            {_ Make a daily backup of the database and uploaded files. _}
+                                    </label>
+                                    {% wire id="backup_daily0" postback=`config_backup_daily` %}
+                                    {% wire id="backup_daily2" postback=`config_backup_daily` %}
+                                    {% wire id="backup_daily1" postback=`config_backup_daily` %}
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 {% endif %}
@@ -90,11 +126,11 @@
                         {% endif %}
 
                         {% if is_filestore_enabled  %}
-                            <div class="alert alert-warning">
-                                <strong>{_ Warning _}:</strong>
+                            <p class="help-block">
+                                <i class="fa fa-info-circle"></i>
 
                                 {_ Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup. _}
-                            </div>
+                            </p>
                         {% endif %}
                     </div>
                 </div>
