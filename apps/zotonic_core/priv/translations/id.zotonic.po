@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-19 09:13\n"
+"PO-Revision-Date: 2023-09-19 10:45\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -4643,7 +4643,7 @@ msgstr "Setiap saat anda bisa membuat cadangan sistem anda."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
 msgid "Automatic daily backups of the database and uploaded files can be enabled. This is done at night and the last 7 backups are kept."
-msgstr ""
+msgstr "Pencadangan harian otomatis atas database dan file yang diunggah dapat diaktifkan. Ini dilakukan pada malam hari dan 7 cadangan terakhir disimpan."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:54
 msgid "Back to the edit page"
@@ -4683,7 +4683,7 @@ msgstr "Klik pada <b>Daftar dan memulihkan pada versi sebelumnya</b> untuk menda
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:68
 msgid "Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally."
-msgstr ""
+msgstr "Penyimpanan file cloud diaktifkan. Cadangan database diunggah ke penyimpanan file cloud. File lokal disalin ke cloud dan tidak dicadangkan secara lokal."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:132
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
@@ -4715,7 +4715,7 @@ msgstr "Direktori"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:53./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:74
 msgid "Do not make a daily backup."
-msgstr ""
+msgstr "Jangan membuat cadangan harian."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
@@ -4783,7 +4783,7 @@ msgstr "Pilih file cadangan yang ingin Anda unggah. File tersebut harus berupa f
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:39
 msgid "Show import/export panel on the edit pages in the admin."
-msgstr ""
+msgstr "Tampilkan panel impor/ekspor pada halaman edit di admin."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:79
 msgid "Sorry, there is no module that can import this."
@@ -4853,7 +4853,7 @@ msgstr "Peringatan"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:35
 msgid "With the import/export panel you can download a page as a file, see page revisions and restore a previous version."
-msgstr ""
+msgstr "Dengan panel impor/ekspor Anda dapat mengunduh halaman sebagai file, melihat revisi halaman, dan memulihkan versi sebelumnya."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:26
 msgid "Y-m-d H:i – l"
@@ -8200,7 +8200,7 @@ msgstr "Deskripsi untuk memasukkan pada setiap halaman"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
 msgid "Do not show site search action"
-msgstr ""
+msgstr "Jangan tampilkan tindakan pencarian situs"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:115./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:129
 msgid "Enter here the verification code for"
@@ -8236,7 +8236,7 @@ msgstr "Di sini anda dapat menemukan pengaturan untuk mengoptimalkan mengindeks 
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
 msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
-msgstr ""
+msgstr "Jika situs Anda tidak memiliki halaman pencarian, centang kotak ini untuk mencegah ditampilkannya kotak pencarian di Google dkk."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:22./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:23
 msgid "Keywords"
