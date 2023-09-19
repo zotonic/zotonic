@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-19 09:13\n"
+"PO-Revision-Date: 2023-09-19 10:45\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -4644,7 +4644,7 @@ msgstr "W każdej chwili możesz wykonać kopię zapasową swojego systemu."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
 msgid "Automatic daily backups of the database and uploaded files can be enabled. This is done at night and the last 7 backups are kept."
-msgstr ""
+msgstr "Można włączyć automatyczne codzienne tworzenie kopii zapasowych bazy danych i przesłanych plików. Odbywa się to w nocy i zachowywanych jest ostatnich 7 kopii zapasowych."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:54
 msgid "Back to the edit page"
@@ -4684,7 +4684,7 @@ msgstr "Kliknij na <b>Lista i przywróć wcześniejszą wersję</b> , aby uzyska
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:68
 msgid "Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally."
-msgstr ""
+msgstr "Magazyn plików w chmurze jest włączony. Kopie zapasowe bazy danych są przesyłane do magazynu plików w chmurze. Pliki lokalne są kopiowane do chmury i nie są tworzone lokalnie ich kopie zapasowe."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:132
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
@@ -4716,7 +4716,7 @@ msgstr "Informator"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:53./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:74
 msgid "Do not make a daily backup."
-msgstr ""
+msgstr "Nie rób codziennej kopii zapasowej."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
@@ -4784,7 +4784,7 @@ msgstr "Wybierz plik kopii zapasowej, który chcesz przesłać. Plik musi być p
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:39
 msgid "Show import/export panel on the edit pages in the admin."
-msgstr ""
+msgstr "Pokaż panel importu/eksportu na stronach edycji w panelu administracyjnym."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:79
 msgid "Sorry, there is no module that can import this."
@@ -4854,7 +4854,7 @@ msgstr "Uwaga"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:35
 msgid "With the import/export panel you can download a page as a file, see page revisions and restore a previous version."
-msgstr ""
+msgstr "Za pomocą panelu importu/eksportu możesz pobrać stronę w postaci pliku, zobaczyć wersje strony i przywrócić poprzednią wersję."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:26
 msgid "Y-m-d H:i – l"
@@ -8200,7 +8200,7 @@ msgstr "Opis do umieszczenia na każdej stronie"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
 msgid "Do not show site search action"
-msgstr ""
+msgstr "Nie pokazuj akcji wyszukiwania w witrynie"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:115./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:129
 msgid "Enter here the verification code for"
@@ -8236,7 +8236,7 @@ msgstr "Tutaj znajdziesz ustawienia optymalizujące indeksowanie Twojej strony p
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
 msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
-msgstr ""
+msgstr "Jeśli Twoja witryna nie ma strony wyszukiwania, zaznacz to pole, aby zapobiec wyświetlaniu pola wyszukiwania w Google i in."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:22./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:23
 msgid "Keywords"
