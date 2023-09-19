@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Manage identities of users. An identity can be an username/password, openid, oauth credentials etc.
 %% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@
     set_identity_expired/3,
     set_visited/2,
     ensure_username_pw/2,
+    ensure_username_pw/3,
     check_username_pw/3,
     check_username_pw/4,
     hash/1,
@@ -716,23 +717,42 @@ flush(Id, Context) ->
     z_depcache:flush({idn, Id}, Context).
 
 %% @doc Ensure that the user has an associated username and password
--spec ensure_username_pw(m_rsc:resource(), z:context()) -> ok | {error, term()}.
-ensure_username_pw(?ACL_ADMIN_USER_ID, _Context) ->
-    % The password of the admin is set in the priv/zotonic_site.config file.
-    {error, admin_password_cannot_be_set};
+-spec ensure_username_pw(Id, Context) -> ok | {error, term()} when
+    Id :: m_rsc:resource(),
+    Context :: z:context().
 ensure_username_pw(Id, Context) ->
-    case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:user(Context) == Id of
+    ensure_username_pw(Id, undefined, Context).
+
+-spec ensure_username_pw(Id, Username, Context) -> ok | {error, term()} when
+    Id :: m_rsc:resource(),
+    Username :: binary() | undefined,
+    Context :: z:context().
+ensure_username_pw(Id, Username, Context) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, enoent};
+        ?ACL_ADMIN_USER_ID ->
+            % The password of the admin is set in the priv/zotonic_site.config file.
+            {error, admin_password_cannot_be_set};
+        RId ->
+            ensure_username_pw_1(RId, Username, Context)
+    end.
+
+ensure_username_pw_1(Id, Username, Context) ->
+    case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:user(Context) =:= Id of
         true ->
-            RscId = m_rsc:rid(Id, Context),
             case z_db:q1(
                 "select count(*) from identity where type = 'username_pw' and rsc_id = $1",
-                [RscId],
+                [Id],
                 Context
             ) of
                 0 ->
-                    Username = generate_username(RscId, Context),
-                    Password = binary_to_list(z_ids:id()),
-                    set_username_pw(RscId, Username, Password, Context);
+                    Username1 = if
+                        Username =:= undefined ->generate_username(Id, Context);
+                        true -> Username
+                    end,
+                    Password = z_ids:id(),
+                    set_username_pw(Id, Username1, Password, Context);
                 _N ->
                     ok
             end;
