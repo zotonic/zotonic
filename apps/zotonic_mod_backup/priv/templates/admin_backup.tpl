@@ -51,11 +51,11 @@
                                     <label>
                                         <input id="backup_daily0" name="backup_daily" type="radio" value="0" {% if not m.backup.daily_dump %}checked="checked"{% endif %}>
                                             {_ Do not make a daily backup. _}
-                                    </label>
+                                    </label><br>
                                     <label>
                                         <input id="backup_daily2" name="backup_daily" type="radio" value="2" {% if m.backup.daily_dump %}checked="checked"{% endif %}>
                                             {_ Make a daily backup of the database. _}
-                                    </label>
+                                    </label><br>
                                     <label class="text-muted">
                                         <input id="backup_daily1" name="backup_daily" type="radio" value="1" disabled>
                                             {_ Make a daily backup of the database and uploaded files. _}
@@ -72,11 +72,11 @@
                                     <label>
                                         <input id="backup_daily0" name="backup_daily" type="radio" value="0" {% if not m.backup.daily_dump %}checked="checked"{% endif %}>
                                             {_ Do not make a daily backup. _}
-                                    </label>
+                                    </label><br>
                                     <label>
                                         <input id="backup_daily2" name="backup_daily" type="radio" value="2" {% if m.backup.daily_dump == '2' %}checked="checked"{% endif %}>
                                             {_ Make a daily backup of the database. _}
-                                    </label>
+                                    </label><br>
                                     <label>
                                         <input id="backup_daily1" name="backup_daily" type="radio" value="1" {% if m.backup.daily_dump == '1' %}checked="checked"{% endif %}>
                                             {_ Make a daily backup of the database and uploaded files. _}
