@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-14 10:04\n"
+"PO-Revision-Date: 2023-09-19 09:13\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -252,7 +252,7 @@ msgstr "เปลี่ยนหมวดหมู่และ / หรือก
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:16
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:24
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:26
-#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:13./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:20./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:54./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:59./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:43./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:48./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:32./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:37
+#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:13./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:20./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:54./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:59./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:45./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:50./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:32./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:37
 msgid "Close"
 msgstr "ปิด"
 
@@ -4609,7 +4609,7 @@ msgid "external service"
 msgstr "บริการภายนอก"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:85
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
 msgid "or"
 msgstr "หรือ"
@@ -4638,15 +4638,19 @@ msgstr "การสำรองข้อมูลของผู้ดูแล
 msgid "Are you sure you want to revert to this version?"
 msgstr "แน่ใจไหมว่าต้องการเปลี่ยนกลับเป็นเวอร์ชันนี้"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:60
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
 msgid "At any moment you can make a backup of your system."
 msgstr "คุณสามารถสำรองข้อมูลระบบของคุณได้ตลอดเวลา"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
+msgid "Automatic daily backups of the database and uploaded files can be enabled. This is done at night and the last 7 backups are kept."
+msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:54
 msgid "Back to the edit page"
 msgstr "กลับไปที่หน้าแก้ไข"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:84
+#: apps/zotonic_mod_backup/src/mod_backup.erl:89
 msgid "Backup"
 msgstr "การสำรองข้อมูล"
 
@@ -4678,7 +4682,11 @@ msgstr "ตรวจสอบและอาจกู้คืนเวอร์
 msgid "Click on <b>List and restore an earlier version</b> to get an overview of earlier saved versions of this page.<br/>You can also save the complete contents of a page to a file. Later you can reload this file, replacing the current page contents. Note that the file does not contain your unsaved changes. Connections and media are not saved as well."
 msgstr "คลิกที่ <b>รายการและกู้คืนเวอร์ชัน</b> ก่อนหน้าเพื่อดูภาพรวมของเวอร์ชันที่บันทึกไว้ก่อนหน้านี้ของเพจนี้<br/>คุณยังสามารถบันทึกเนื้อหาทั้งหมดของเพจลงในไฟล์ ในภายหลังคุณสามารถโหลดไฟล์นี้ซ้ำโดยแทนที่เนื้อหาของหน้าปัจจุบัน โปรดทราบว่าไฟล์ไม่มีการเปลี่ยนแปลงที่คุณไม่ได้บันทึกไว้ การเชื่อมต่อและสื่อจะไม่ถูกบันทึกด้วย"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:68
+msgid "Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally."
+msgstr ""
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:132
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "เปิดใช้งานที่เก็บไฟล์บนคลาวด์ ไฟล์ในเครื่องจะไม่ถูกสำรอง ตรวจสอบให้แน่ใจว่าระบบจัดเก็บไฟล์บนคลาวด์ของคุณมีการสำรองข้อมูลที่เหมาะสม"
 
@@ -4698,13 +4706,17 @@ msgstr "ลบโดย"
 msgid "Deleted on"
 msgstr "ลบเมื่อ"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:97
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:102
 msgid "Deleted pages"
 msgstr "หน้าที่ถูกลบ"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
 msgid "Directory"
 msgstr "ไดเรกทอรี"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:53./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:74
+msgid "Do not make a daily backup."
+msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
@@ -4726,11 +4738,11 @@ msgstr "แสดงรายการและกู้คืนเวอร์
 msgid "List of recently deleted pages and recover options via the resource revisions log."
 msgstr "รายการหน้าที่ถูกลบล่าสุดและตัวเลือกการกู้คืนผ่านบันทึกการแก้ไขทรัพยากร"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:82
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "ทำการสำรองฐานข้อมูลและไฟล์ที่อัปโหลดทุกวัน"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:46
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:78
 msgid "Make a daily backup of the database."
 msgstr "ทำการสำรองข้อมูลรายวันของฐานข้อมูล"
 
@@ -4770,9 +4782,9 @@ msgstr "การแก้ไขสำหรับ"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "เลือกไฟล์สำรองที่คุณต้องการอัปโหลด ไฟล์นั้นต้องเป็นไฟล์ .bert"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:37
-msgid "Show import/export panel in the admin."
-msgstr "แสดงแผงการนำเข้า / ส่งออกในผู้ดูแลระบบ"
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:39
+msgid "Show import/export panel on the edit pages in the admin."
+msgstr ""
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:79
 msgid "Sorry, there is no module that can import this."
@@ -4802,23 +4814,23 @@ msgstr "ขออภัยคุณไม่ได้รับอนุญาต
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้เปลี่ยนการกำหนดค่า"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:105
 msgid "Start backup now"
 msgstr "เริ่มการสำรองข้อมูลทันที"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:72
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:108
 msgid "Start database-only backup now"
 msgstr "เริ่มการสำรองฐานข้อมูลอย่างเดียวตอนนี้"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:83
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:119
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
 msgstr "ไม่พบคำสั่ง \"pg_dump\" ในเส้นทาง ตั้งค่าใน zotonic.config คีย์การกำหนดค่า \"pg_dump\" ไปยังพาธไปยัง <tt>pg_dump</tt> และกลับมาที่หน้านี้"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:86
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:122
 msgid "The \"tar\" command was not found in the path. Set in zotonic.config the \"tar\" config key to the path to <tt>tar</tt> and return to this page."
 msgstr "ไม่พบคำสั่ง \"tar\" ในเส้นทาง ตั้งค่าใน zotonic.config คีย์การกำหนดค่า \"tar\" ไปยังเส้นทางไปยัง <tt>tar</tt> และกลับมาที่หน้านี้"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:98
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "การสำรองข้อมูลประกอบด้วยสองส่วนฐานข้อมูลและไฟล์ที่อัปโหลด"
 
@@ -4834,11 +4846,15 @@ msgstr "สิ่งนี้จะเขียนทับหน้าของ
 msgid "Uploaded to filestore"
 msgstr "อัพโหลดไปยัง filestore"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:94
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:115
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "คำเตือน"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:35
+msgid "With the import/export panel you can download a page as a file, see page revisions and restore a previous version."
+msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:26
 msgid "Y-m-d H:i – l"
@@ -4852,7 +4868,7 @@ msgstr "คุณไม่ได้รับอนุญาตให้กู้
 msgid "You are not allowed to see the revisions"
 msgstr "คุณไม่ได้รับอนุญาตให้ดูการแก้ไข"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:100
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "คุณสามารถสำรองข้อมูลได้หนึ่งรายการต่อวันในสัปดาห์ ข้อมูลสำรองที่เก่ากว่าจะถูกเขียนทับ"
 
@@ -4860,7 +4876,7 @@ msgstr "คุณสามารถสำรองข้อมูลได้ห
 msgid "You need to have access rights to the backup module."
 msgstr "คุณต้องมีสิทธิ์ในการเข้าถึงโมดูลสำรองข้อมูล"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:115
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "การสำรองข้อมูลของคุณไม่ได้กำหนดค่าอย่างถูกต้อง โมดูลสำรองจะไม่ทำงานจนกว่าปัญหาด้านล่างจะได้รับการแก้ไข:"
 
@@ -5137,11 +5153,11 @@ msgstr "ข้อผิดพลาด"
 msgid "iCalendar"
 msgstr "iCalendar"
 
-#: apps/zotonic_mod_base/src/filters/filter_yesno.erl:27
+#: apps/zotonic_mod_base/src/filters/filter_yesno.erl:28
 msgid "no"
 msgstr "ไม่"
 
-#: apps/zotonic_mod_base/src/filters/filter_yesno.erl:26
+#: apps/zotonic_mod_base/src/filters/filter_yesno.erl:27
 msgid "yes"
 msgstr "ใช่"
 
@@ -8138,7 +8154,7 @@ msgstr "การสร้างตารางการค้นหาแบบ
 msgid "Sorry, you are not allowed to do this."
 msgstr "ขออภัย คุณไม่ได้รับอนุญาตให้ทำเช่นนี้"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:61
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:71
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "เพิ่ม noindex องค์ประกอบ nofollow ในทุกหน้า"
 
@@ -8158,15 +8174,15 @@ msgstr "ขอให้ Google ยกเว้นหน้า “{cat}” ทั
 msgid "Ask Google to not index this page"
 msgstr "ขอให้ Google ไม่จัดทำดัชนีหน้านี้"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:105
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:115
 msgid "Bing Webmaster"
 msgstr "Bing Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:103
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:112./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:113
 msgid "Bing Webmaster validation id"
 msgstr "รหัสการตรวจสอบผู้ดูแลเว็บ Bing"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "คัดลอกค่าของแอตทริบิวต์เนื้อหาในเมตาแท็กที่ Google มีให้"
 
@@ -8182,11 +8198,15 @@ msgstr "ปรับแต่งเพจบุ้ง"
 msgid "Description to include on every page"
 msgstr "คำอธิบายที่จะรวมไว้ในทุกหน้า"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:105./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
+msgid "Do not show site search action"
+msgstr ""
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:115./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:129
 msgid "Enter here the verification code for"
 msgstr "ป้อนรหัสยืนยันที่นี่สำหรับ"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:58
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:68
 msgid "Exclude this site from search engines"
 msgstr "ยกเว้นไซต์นี้จากเครื่องมือค้นหา"
 
@@ -8194,25 +8214,29 @@ msgstr "ยกเว้นไซต์นี้จากเครื่องม
 msgid "General SEO Optimization"
 msgstr "การเพิ่มประสิทธิภาพ SEO ทั่วไป"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:82./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "Google Analytics tracking id"
 msgstr "รหัสติดตามของ Google Analytics"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:89./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:90./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:99./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:100./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102
 msgid "Google Search Console"
 msgstr "Google Search Console"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
 msgid "Google Tag Manager account page"
 msgstr "หน้าบัญชี Google Tag Manager"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:82
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:91./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "Google Tag Manager id"
 msgstr "รหัส Google Tag Manager"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:9
 msgid "Here you find settings to optimize the indexing of your site by search engines."
 msgstr "ที่นี่คุณจะพบการตั้งค่าเพื่อเพิ่มประสิทธิภาพการจัดทำดัชนีเว็บไซต์ของคุณโดยเครื่องมือค้นหา"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
+msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
+msgstr ""
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:22./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:23
 msgid "Keywords"
@@ -8254,7 +8278,7 @@ msgstr "เนื้อหา SEO"
 msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
 msgstr "การจัดทำดัชนี SEO ของหน้านี้ถูกปิดใช้งานเนื่องจากอยู่ในหมวด “{cat}”"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:132
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:142
 msgid "Save SEO settings"
 msgstr "บันทึกการตั้งค่า SEO"
 
@@ -8270,11 +8294,11 @@ msgstr "แสดง JSON-LD ปัจจุบัน (อัปเดตหล�
 msgid "Site search"
 msgstr "ค้นหาไซต์"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:51
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:61
 msgid "The site configuration file allows this site to be indexed by search engines."
 msgstr "ไฟล์การกำหนดค่าไซต์อนุญาตให้เครื่องมือค้นหาสร้างดัชนีไซต์นี้"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:59
 msgid "The site configuration file excludes this site from search engines."
 msgstr "ไฟล์การกำหนดค่าไซต์ไม่รวมไซต์นี้จากเครื่องมือค้นหา"
 
@@ -8282,31 +8306,31 @@ msgstr "ไฟล์การกำหนดค่าไซต์ไม่รว
 msgid "Url for the search action on the site. Defaults to:"
 msgstr "URL สำหรับการดำเนินการค้นหาบนไซต์ ค่าเริ่มต้นเป็น:"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:76
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:86
 msgid "Where can I find my tracking script?"
 msgstr "ฉันจะหาสคริปต์ติดตามของฉันได้ที่ไหน"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:129
 msgid "Yandex Webmaster"
 msgstr "Yandex Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:116./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:117
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:126./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:127
 msgid "Yandex Webmaster validation id"
 msgstr "รหัสการตรวจสอบผู้ดูแลเว็บ Yandex"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:106./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:120
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:116./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:130
 msgid "You find this id in the content attribute of the meta tag, it has the format"
 msgstr "คุณพบรหัสนี้ในแอตทริบิวต์เนื้อหาของเมตาแท็กซึ่งมีรูปแบบ"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:85
 msgid "You find this id in the tracking script, it has the format"
 msgstr "คุณพบรหัสนี้ในสคริปต์ติดตามซึ่งมีรูปแบบ"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
 msgid "You find this on your"
 msgstr "คุณพบสิ่งนี้ในไฟล์"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
 msgid "it has the format"
 msgstr "มันมีรูปแบบ"
 
@@ -9460,7 +9484,7 @@ msgstr "แสดงแถบความคืบหน้า"
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "แสดงข้อมูลความคืบหน้าเป็น“<em>คำถาม 3/10</em>”"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:60
+#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:62
 msgid "Show results (admin only)"
 msgstr "แสดงผลลัพธ์ (ผู้ดูแลระบบเท่านั้น)"
 
@@ -9680,7 +9704,7 @@ msgstr "ใช่ไม่ใช่"
 msgid "You already filled this in, but you can change your previous answers."
 msgstr "คุณกรอกข้อมูลนี้แล้ว แต่คุณสามารถเปลี่ยนคำตอบก่อนหน้านี้ได้"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:39
+#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:41
 msgid "You already filled this in."
 msgstr "คุณกรอกข้อมูลนี้แล้ว"
 
