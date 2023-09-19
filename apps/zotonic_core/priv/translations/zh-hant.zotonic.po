@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-14 10:04\n"
+"PO-Revision-Date: 2023-09-19 09:13\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -252,7 +252,7 @@ msgstr "改變分類 以及/或 内容組..."
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:16
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:24
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:26
-#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:13./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:20./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:54./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:59./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:43./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:48./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:32./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:37
+#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:13./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:20./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:54./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:59./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:45./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:50./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:32./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:37
 msgid "Close"
 msgstr "關閉"
 
@@ -4609,7 +4609,7 @@ msgid "external service"
 msgstr "外部服务"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:85
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
 msgid "or"
 msgstr "或"
@@ -4638,15 +4638,19 @@ msgstr "管理备份"
 msgid "Are you sure you want to revert to this version?"
 msgstr "确认恢复到这个版本？"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:60
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
 msgid "At any moment you can make a backup of your system."
 msgstr "任何时候你都可以创建系统的备份。"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
+msgid "Automatic daily backups of the database and uploaded files can be enabled. This is done at night and the last 7 backups are kept."
+msgstr "可以啟用資料庫和上傳檔案的每日自動備份。這是在晚上完成的，並保留最後 7 個備份。"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:54
 msgid "Back to the edit page"
 msgstr "回到编辑页面"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:84
+#: apps/zotonic_mod_backup/src/mod_backup.erl:89
 msgid "Backup"
 msgstr "备份"
 
@@ -4678,7 +4682,11 @@ msgstr "检查并恢复到页面的先前版本。"
 msgid "Click on <b>List and restore an earlier version</b> to get an overview of earlier saved versions of this page.<br/>You can also save the complete contents of a page to a file. Later you can reload this file, replacing the current page contents. Note that the file does not contain your unsaved changes. Connections and media are not saved as well."
 msgstr "点击<b>列出并恢复到之前的版本</b>来预览本页面的之前保存版本。<br />你也可以把页面的完整内容保存到文件。随后重加载这个文件，替换当前页面内容。注意文件不会包含你未保存的改动。链接和媒体不会一同保存"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:68
+msgid "Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally."
+msgstr "雲端文件儲存已啟用。資料庫的備份上傳到雲端文件儲存。本機檔案複製到雲端，不在本機進行備份。"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:132
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "雲文件存儲已啟用。不會備份本地文件。確保您的雲文件存儲系統具有正確的備份。"
 
@@ -4698,13 +4706,17 @@ msgstr "刪除者"
 msgid "Deleted on"
 msgstr "刪除於"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:97
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:102
 msgid "Deleted pages"
 msgstr "刪除的頁面"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
 msgid "Directory"
 msgstr "目錄"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:53./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:74
+msgid "Do not make a daily backup."
+msgstr "不要進行每日備份。"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
@@ -4726,11 +4738,11 @@ msgstr "列出并恢复到之前的版本"
 msgid "List of recently deleted pages and recover options via the resource revisions log."
 msgstr "最近刪除的頁面列表和通過資源修訂日誌恢復選項。"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:82
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "对数据库和上传文件每天做备份。"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:46
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:78
 msgid "Make a daily backup of the database."
 msgstr "每天對數據庫進行備份。"
 
@@ -4770,9 +4782,9 @@ msgstr "订正"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "選擇您要上傳的備份文件。該文件必須是.bert文件。"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:37
-msgid "Show import/export panel in the admin."
-msgstr "在控制台显示导入/导出面板。"
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:39
+msgid "Show import/export panel on the edit pages in the admin."
+msgstr "在管理中的編輯頁面上顯示匯入/匯出面板。"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:79
 msgid "Sorry, there is no module that can import this."
@@ -4802,23 +4814,23 @@ msgstr "对不起，你没有权限改变这个页面。"
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "对不起，你没有权限更改配置。"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:105
 msgid "Start backup now"
 msgstr "现在备份"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:72
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:108
 msgid "Start database-only backup now"
 msgstr "现在开始只备份数据库"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:83
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:119
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
 msgstr "在路徑中找不到“pg_dump”命令。在 zotonic.config 中將“pg_dump”配置鍵設置為 <tt>pg_dump</tt> 的路徑並返回此頁面。"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:86
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:122
 msgid "The \"tar\" command was not found in the path. Set in zotonic.config the \"tar\" config key to the path to <tt>tar</tt> and return to this page."
 msgstr "在路徑中找不到“tar”命令。在 zotonic.config 中將“tar”配置鍵設置為 <tt>tar</tt> 的路徑並返回此頁面。"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:98
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "备份包括两部分，数据库和上传文件。"
 
@@ -4834,11 +4846,15 @@ msgstr "这将会使用备份文件内容覆盖你的页面。"
 msgid "Uploaded to filestore"
 msgstr "上傳到文件存儲"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:94
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:115
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "警告"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:35
+msgid "With the import/export panel you can download a page as a file, see page revisions and restore a previous version."
+msgstr "使用匯入/匯出面板，您可以將頁面下載為檔案、查看頁面修訂並還原先前的版本。"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:26
 msgid "Y-m-d H:i – l"
@@ -4852,7 +4868,7 @@ msgstr "您不能恢復此頁面。"
 msgid "You are not allowed to see the revisions"
 msgstr "您不允许查看修改的内容"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:100
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "您可以在一周中的每一天進行一次備份，舊的將被覆蓋。"
 
@@ -4860,7 +4876,7 @@ msgstr "您可以在一周中的每一天進行一次備份，舊的將被覆蓋
 msgid "You need to have access rights to the backup module."
 msgstr "您需要擁有備份模塊的訪問權限。"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:115
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "备份没有被正确配置。backup 模块需要你先解决如下问题："
 
@@ -5137,11 +5153,11 @@ msgstr "错误"
 msgid "iCalendar"
 msgstr "iCalendar 日曆"
 
-#: apps/zotonic_mod_base/src/filters/filter_yesno.erl:27
+#: apps/zotonic_mod_base/src/filters/filter_yesno.erl:28
 msgid "no"
 msgstr "没有"
 
-#: apps/zotonic_mod_base/src/filters/filter_yesno.erl:26
+#: apps/zotonic_mod_base/src/filters/filter_yesno.erl:27
 msgid "yes"
 msgstr "是的"
 
@@ -8134,7 +8150,7 @@ msgstr "重建分面搜索表。"
 msgid "Sorry, you are not allowed to do this."
 msgstr "抱歉，您無權執行此操作。"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:61
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:71
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "为所有页面加入 noindex，nofollow 元素。"
 
@@ -8154,15 +8170,15 @@ msgstr "要求 Google 排除所有“{cat}”頁面"
 msgid "Ask Google to not index this page"
 msgstr "要求 Google 不將此頁面編入索引"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:105
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:115
 msgid "Bing Webmaster"
 msgstr "必应网站管理员"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:103
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:112./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:113
 msgid "Bing Webmaster validation id"
 msgstr "Bing网站管理员验证ID"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "复制谷歌提供的元标签中的内容属性值。"
 
@@ -8178,11 +8194,15 @@ msgstr "制定页面 slug"
 msgid "Description to include on every page"
 msgstr "每一个页面都会包含的描述"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:105./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
+msgid "Do not show site search action"
+msgstr "不顯示站點搜尋操作"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:115./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:129
 msgid "Enter here the verification code for"
 msgstr "请在此输入验证码"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:58
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:68
 msgid "Exclude this site from search engines"
 msgstr "从搜索引擎里排除本站点"
 
@@ -8190,25 +8210,29 @@ msgstr "从搜索引擎里排除本站点"
 msgid "General SEO Optimization"
 msgstr "通用 SEO 优化"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:82./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "Google Analytics tracking id"
 msgstr "Google Analytics 跟踪 id"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:89./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:90./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:99./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:100./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102
 msgid "Google Search Console"
 msgstr "Google Search Console"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
 msgid "Google Tag Manager account page"
 msgstr "Google跟踪代碼管理器帳戶頁面"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:82
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:91./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "Google Tag Manager id"
 msgstr "Google跟踪代碼管理器ID"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:9
 msgid "Here you find settings to optimize the indexing of your site by search engines."
 msgstr "这里可以设置优化站点被搜索引擎收录相关内容。"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
+msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
+msgstr "如果您的網站沒有搜尋頁面，請勾選此方塊以防止在 Google 等上顯示搜尋方塊。"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:22./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:23
 msgid "Keywords"
@@ -8250,7 +8274,7 @@ msgstr "SEO 内容"
 msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
 msgstr "此頁面的 SEO 索引已禁用，因為它屬於“{cat}”類別。"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:132
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:142
 msgid "Save SEO settings"
 msgstr "保存 SEO 设置"
 
@@ -8266,11 +8290,11 @@ msgstr "顯示當前 JSON-LD（保存後更新）"
 msgid "Site search"
 msgstr "站內搜索"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:51
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:61
 msgid "The site configuration file allows this site to be indexed by search engines."
 msgstr "网站配置文件可以让这个网站被搜索引擎收录。"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:59
 msgid "The site configuration file excludes this site from search engines."
 msgstr "网站配置文件将本网站排除在搜索引擎之外。"
 
@@ -8278,31 +8302,31 @@ msgstr "网站配置文件将本网站排除在搜索引擎之外。"
 msgid "Url for the search action on the site. Defaults to:"
 msgstr "網站上搜索操作的 URL。默認為："
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:76
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:86
 msgid "Where can I find my tracking script?"
 msgstr "我在哪里可以找到我的跟踪脚本？"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:129
 msgid "Yandex Webmaster"
 msgstr "Yandex网站管理员"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:116./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:117
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:126./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:127
 msgid "Yandex Webmaster validation id"
 msgstr "Yandex网站管理员验证id"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:106./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:120
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:116./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:130
 msgid "You find this id in the content attribute of the meta tag, it has the format"
 msgstr "你可以在元标签的内容属性中找到这个id，它的格式为"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:85
 msgid "You find this id in the tracking script, it has the format"
 msgstr "你可以在跟踪脚本中找到这个ID，它的格式是"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
 msgid "You find this on your"
 msgstr "你在你的身上找到這個"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
 msgid "it has the format"
 msgstr "它具有格式"
 
@@ -9456,7 +9480,7 @@ msgstr "显示进度条"
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "显示进度信息，如“<em>问题 3/10</em>”"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:60
+#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:62
 msgid "Show results (admin only)"
 msgstr "显示结果（仅限管理员"
 
@@ -9676,7 +9700,7 @@ msgstr "是/否"
 msgid "You already filled this in, but you can change your previous answers."
 msgstr "你已经填好了，但你可以改变你之前的答案。"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:39
+#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:41
 msgid "You already filled this in."
 msgstr "你已经填好了"
 
