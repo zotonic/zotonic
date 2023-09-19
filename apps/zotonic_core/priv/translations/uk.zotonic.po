@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-19 09:13\n"
+"PO-Revision-Date: 2023-09-19 10:45\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -4644,7 +4644,7 @@ msgstr "У будь-який момент Ви можете зробити ре�
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
 msgid "Automatic daily backups of the database and uploaded files can be enabled. This is done at night and the last 7 backups are kept."
-msgstr ""
+msgstr "Можна ввімкнути автоматичне щоденне резервне копіювання бази даних і завантажених файлів. Це робиться вночі, і зберігаються останні 7 резервних копій."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:54
 msgid "Back to the edit page"
@@ -4684,7 +4684,7 @@ msgstr "Натисніть на Список <b>і відновіть попер
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:68
 msgid "Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally."
-msgstr ""
+msgstr "Хмарне сховище файлів увімкнено. Резервні копії бази даних завантажуються в хмарне сховище файлів. Локальні файли копіюються в хмару і не створюються локальні резервні копії."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:132
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
@@ -4716,7 +4716,7 @@ msgstr "Довідник"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:53./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:74
 msgid "Do not make a daily backup."
-msgstr ""
+msgstr "Не робіть щоденну резервну копію."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
@@ -4784,7 +4784,7 @@ msgstr "Виберіть файл резервної копії, який пот
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:39
 msgid "Show import/export panel on the edit pages in the admin."
-msgstr ""
+msgstr "Показати панель імпорту/експорту на сторінках редагування в адмінці."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:79
 msgid "Sorry, there is no module that can import this."
@@ -4854,7 +4854,7 @@ msgstr "Увага"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:35
 msgid "With the import/export panel you can download a page as a file, see page revisions and restore a previous version."
-msgstr ""
+msgstr "За допомогою панелі імпорту/експорту ви можете завантажити сторінку як файл, переглянути версії сторінки та відновити попередню версію."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:26
 msgid "Y-m-d H:i – l"
@@ -8200,7 +8200,7 @@ msgstr "Опис для розміщення на кожній сторінці"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
 msgid "Do not show site search action"
-msgstr ""
+msgstr "Не показувати дію пошуку на сайті"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:115./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:129
 msgid "Enter here the verification code for"
@@ -8236,7 +8236,7 @@ msgstr "Тут Ви знайдете налаштування для оптим�
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
 msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
-msgstr ""
+msgstr "Якщо на вашому сайті немає сторінки пошуку, установіть цей прапорець, щоб запобігти відображенню вікна пошуку в Google тощо."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:22./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:23
 msgid "Keywords"
