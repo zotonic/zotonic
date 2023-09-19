@@ -71,6 +71,11 @@
 % Interval for checking for new and/or changed files.
 -define(BCK_POLL_INTERVAL, 3600 * 1000).
 
+% Config values for daily backup
+-define(BACKUP_NONE, 0).
+-define(BACKUP_DB, 2).
+-define(BACKUP_ALL, 1).
+
 
 observe_rsc_upload(#rsc_upload{} = Upload, Context) ->
     backup_rsc_upload:rsc_upload(Upload, Context).
@@ -302,11 +307,10 @@ handle_info(periodic_backup, #state{ backup_pid = Pid } = State) when is_pid(Pid
 handle_info(periodic_backup, #state{ upload_pid = Pid } = State) when is_pid(Pid) ->
     {noreply, State};
 handle_info(periodic_backup, State) ->
-    State1 = case m_config:get_boolean(mod_backup, daily_dump, State#state.context) of
-        true ->
-            maybe_daily_dump(State);
-        false ->
-            State
+    State1 = case daily_dump_config(State#state.context) of
+        ?BACKUP_NONE -> State;
+        ?BACKUP_ALL -> maybe_daily_dump(true, State);
+        ?BACKUP_DB -> maybe_daily_dump(false, State)
     end,
     State2 = case State1#state.backup_pid of
         undefined ->
@@ -402,7 +406,20 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-maybe_daily_dump(State) ->
+daily_dump_config(Context) ->
+    case m_config:get_value(mod_backup, daily_dump, Context) of
+        <<"1">> ->
+            case is_filestore_enabled(Context) of
+                true -> ?BACKUP_DB;
+                false -> ?BACKUP_ALL
+            end;
+        <<"2">> ->
+            ?BACKUP_DB;
+        _ ->
+            ?BACKUP_NONE
+    end.
+
+maybe_daily_dump(IsFullBackup, State) ->
     Context = State#state.context,
     Now = {Date, Time} = calendar:universal_time(),
     case Time >= {3,0,0} of
@@ -416,7 +433,7 @@ maybe_daily_dump(State) ->
             end,
             case DoStart of
                 true ->
-                    Pid = do_backup(Now, name(Context), true, Context),
+                    Pid = do_backup(Now, name(Context), IsFullBackup, Context),
                     State#state{
                         backup_pid = Pid,
                         backup_start = Now
@@ -428,8 +445,7 @@ maybe_daily_dump(State) ->
             State
     end.
 
-maybe_filestore_upload(State) ->
-    Context = State#state.context,
+maybe_filestore_upload(#state{ context = Context } = State) ->
     case is_filestore_enabled(Context) of
         true ->
             % Check the backup.json if any files are not yet uploaded
