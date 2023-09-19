@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-14 10:04\n"
+"PO-Revision-Date: 2023-09-19 09:13\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -252,7 +252,7 @@ msgstr "Changer de catégorie et/ou de groupe de contenu"
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:16
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:24
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:26
-#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:13./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:20./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:54./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:59./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:43./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:48./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:32./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:37
+#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:13./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:20./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:54./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:59./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:45./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:50./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:32./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:37
 msgid "Close"
 msgstr "Fermer"
 
@@ -4609,7 +4609,7 @@ msgid "external service"
 msgstr "service externe"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:85
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
 msgid "or"
 msgstr "ou"
@@ -4638,15 +4638,19 @@ msgstr "Sauvegardes Admin"
 msgid "Are you sure you want to revert to this version?"
 msgstr "Êtes vous sûr de vouloir revenir à cette version? "
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:60
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
 msgid "At any moment you can make a backup of your system."
 msgstr "A tout moment vous pouvez créer une sauvegarde de votre système."
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
+msgid "Automatic daily backups of the database and uploaded files can be enabled. This is done at night and the last 7 backups are kept."
+msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:54
 msgid "Back to the edit page"
 msgstr "Retour à la page d'édition"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:84
+#: apps/zotonic_mod_backup/src/mod_backup.erl:89
 msgid "Backup"
 msgstr "Sauvegarde"
 
@@ -4678,7 +4682,11 @@ msgstr "Vérifier et rétablir éventuellement une version antérieure de votre 
 msgid "Click on <b>List and restore an earlier version</b> to get an overview of earlier saved versions of this page.<br/>You can also save the complete contents of a page to a file. Later you can reload this file, replacing the current page contents. Note that the file does not contain your unsaved changes. Connections and media are not saved as well."
 msgstr "Cliquez sur <b>Lister et rétablir une version antérieure</b> pour obtenir une vue d'ensemble des versions précédentes de cette page. <br/> Vous pouvez également enregistrer le contenu complet d'une page dans un fichier. Plus tard, vous pouvez recharger ce fichier, en remplaçant le contenu actuel de la page. Notez que le fichier ne contient pas les modifications non sauvegardées. Les connexions et les médias, également, ne sont pas enregistrés."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:68
+msgid "Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally."
+msgstr ""
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:132
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "Le magasin de fichiers cloud est activé. Les fichiers locaux ne seront pas sauvegardés. Assurez-vous que votre système de stockage de fichiers cloud dispose d'une sauvegarde appropriée."
 
@@ -4698,13 +4706,17 @@ msgstr "Supprimé par"
 msgid "Deleted on"
 msgstr "Supprimé le"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:97
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:102
 msgid "Deleted pages"
 msgstr "Pages supprimées"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
 msgid "Directory"
 msgstr "Annuaire"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:53./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:74
+msgid "Do not make a daily backup."
+msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
@@ -4726,11 +4738,11 @@ msgstr "Lister et restaurer une version antérieure"
 msgid "List of recently deleted pages and recover options via the resource revisions log."
 msgstr "Liste des pages récemment supprimées et options de récupération via le journal des révisions des ressources."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:82
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Faire une sauvegarde journalière de la base de donnée et des fichiers téléversés."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:46
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:78
 msgid "Make a daily backup of the database."
 msgstr "Faites une sauvegarde quotidienne de la base de données."
 
@@ -4770,9 +4782,9 @@ msgstr "Révisions pour"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "Sélectionnez le fichier de sauvegarde que vous souhaitez télécharger. Le fichier doit être un fichier .bert."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:37
-msgid "Show import/export panel in the admin."
-msgstr "Afficher le panneau import/export dans admin."
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:39
+msgid "Show import/export panel on the edit pages in the admin."
+msgstr ""
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:79
 msgid "Sorry, there is no module that can import this."
@@ -4802,23 +4814,23 @@ msgstr "Désolé, vous n'avez pas la permission de changer cette page."
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Désolé, vous n'avez pas la permission de changer la configuration."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:105
 msgid "Start backup now"
 msgstr "Démarrer la sauvegarde maintenant"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:72
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:108
 msgid "Start database-only backup now"
 msgstr "Démarrer le sauvegarde de base de donnée uniquement maintenant"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:83
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:119
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
 msgstr "La commande \"pg_dump\" n'a pas été trouvée dans le chemin. Définissez dans zotonic.config la clé de configuration \"pg_dump\" sur le chemin vers <tt>pg_dump</tt> et revenez à cette page."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:86
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:122
 msgid "The \"tar\" command was not found in the path. Set in zotonic.config the \"tar\" config key to the path to <tt>tar</tt> and return to this page."
 msgstr "La commande \"tar\" n'a pas été trouvée dans le chemin. Définissez dans zotonic.config la clé de configuration \"tar\" sur le chemin vers <tt>tar</tt> et revenez à cette page."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:98
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "La sauvegarde comprend deux parties, la base de donnée et les fichiers téléversés."
 
@@ -4834,11 +4846,15 @@ msgstr "Cela remplacera votre page par le contenu du fichier de sauvegarde."
 msgid "Uploaded to filestore"
 msgstr "Téléchargé dans le magasin de fichiers"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:94
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:115
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "Attention"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:35
+msgid "With the import/export panel you can download a page as a file, see page revisions and restore a previous version."
+msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:26
 msgid "Y-m-d H:i – l"
@@ -4852,7 +4868,7 @@ msgstr "Vous n'êtes pas autorisé à récupérer cette page."
 msgid "You are not allowed to see the revisions"
 msgstr "Vous n'êtes pas autorisé à voir les révisions."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:100
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "Vous pouvez avoir une sauvegarde par jour de la semaine, les plus anciennes seront écrasées."
 
@@ -4860,7 +4876,7 @@ msgstr "Vous pouvez avoir une sauvegarde par jour de la semaine, les plus ancien
 msgid "You need to have access rights to the backup module."
 msgstr "Vous devez avoir les droits d'accès au module de sauvegarde."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:115
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Votre sauvegarde n'est pas correctement configurée. Le module de sauvegarde ne fonctionnera pas tant que le(s) problème(s) ci-dessous n'a pas été résolu:"
 
@@ -5137,11 +5153,11 @@ msgstr "erreur"
 msgid "iCalendar"
 msgstr "iCalendar"
 
-#: apps/zotonic_mod_base/src/filters/filter_yesno.erl:27
+#: apps/zotonic_mod_base/src/filters/filter_yesno.erl:28
 msgid "no"
 msgstr "non"
 
-#: apps/zotonic_mod_base/src/filters/filter_yesno.erl:26
+#: apps/zotonic_mod_base/src/filters/filter_yesno.erl:27
 msgid "yes"
 msgstr "oui"
 
@@ -8138,7 +8154,7 @@ msgstr "Reconstruire la table de recherche à facettes."
 msgid "Sorry, you are not allowed to do this."
 msgstr "Désolé, vous n'êtes pas autorisé à le faire."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:61
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:71
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "Ajouter \"noindex\" et \"nofollow\" à toutes les pages."
 
@@ -8158,15 +8174,15 @@ msgstr "Demander à Google d'exclure toutes les pages «{cat}»"
 msgid "Ask Google to not index this page"
 msgstr "Demander à Google de ne pas indexer cette page"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:105
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:115
 msgid "Bing Webmaster"
 msgstr "Webmestre de Bing"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:103
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:112./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:113
 msgid "Bing Webmaster validation id"
 msgstr "ID de validation de Bing Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "Copiez la valeur de l'attribut de contenu dans le meta-tag fourni par Google."
 
@@ -8182,11 +8198,15 @@ msgstr "Personaliser le slug"
 msgid "Description to include on every page"
 msgstr "Description à inclure sur toutes les pages"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:105./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
+msgid "Do not show site search action"
+msgstr ""
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:115./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:129
 msgid "Enter here the verification code for"
 msgstr "Entrez ici le code de vérification pour"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:58
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:68
 msgid "Exclude this site from search engines"
 msgstr "Exclure ce site des moteurs de recherche"
 
@@ -8194,25 +8214,29 @@ msgstr "Exclure ce site des moteurs de recherche"
 msgid "General SEO Optimization"
 msgstr "Optimisation globale du SEO"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:82./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "Google Analytics tracking id"
 msgstr "Identifiant de suivi Google Analytics"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:89./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:90./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:99./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:100./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102
 msgid "Google Search Console"
 msgstr "Google Search Console"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
 msgid "Google Tag Manager account page"
 msgstr "Page de compte Google Tag Manager"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:82
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:91./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "Google Tag Manager id"
 msgstr "Identifiant Google Tag Manager"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:9
 msgid "Here you find settings to optimize the indexing of your site by search engines."
 msgstr "Vous trouverez ici des réglages pour optimiser l'indexation de votre site par les moteurs de recherche."
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
+msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
+msgstr ""
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:22./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:23
 msgid "Keywords"
@@ -8254,7 +8278,7 @@ msgstr "Contenu SEO"
 msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
 msgstr "L'indexation SEO de cette page est désactivée car elle est dans la catégorie \"{cat}\"."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:132
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:142
 msgid "Save SEO settings"
 msgstr "Sauvegarder les réglages SEO"
 
@@ -8270,11 +8294,11 @@ msgstr "Afficher le JSON-LD actuel (mises à jour après l'enregistrement)"
 msgid "Site search"
 msgstr "Recherche du site"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:51
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:61
 msgid "The site configuration file allows this site to be indexed by search engines."
 msgstr "Le fichier de configuration du site permet à ce site d'être indexé par les moteurs de recherche."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:59
 msgid "The site configuration file excludes this site from search engines."
 msgstr "Le fichier de configuration du site exclut ce site des moteurs de recherche."
 
@@ -8282,31 +8306,31 @@ msgstr "Le fichier de configuration du site exclut ce site des moteurs de recher
 msgid "Url for the search action on the site. Defaults to:"
 msgstr "URL de l'action de recherche sur le site. La valeur par défaut est :"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:76
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:86
 msgid "Where can I find my tracking script?"
 msgstr "Où puis-je trouver mon script de suivi?"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:129
 msgid "Yandex Webmaster"
 msgstr "Webmaster de Yandex"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:116./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:117
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:126./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:127
 msgid "Yandex Webmaster validation id"
 msgstr "ID de validation du webmaster de Yandex"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:106./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:120
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:116./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:130
 msgid "You find this id in the content attribute of the meta tag, it has the format"
 msgstr "Vous trouvez cet identifiant dans l'attribut de contenu de la balise méta, il a le format"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:85
 msgid "You find this id in the tracking script, it has the format"
 msgstr "Vous trouvez cet identifiant dans le script de suivi, il possède le format"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
 msgid "You find this on your"
 msgstr "Vous trouvez cela sur votre"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
 msgid "it has the format"
 msgstr "il a le format"
 
@@ -9460,7 +9484,7 @@ msgstr "Afficher la barre de progression"
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Afficher la progression façon “<em>Question 3/10</em>”"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:60
+#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:62
 msgid "Show results (admin only)"
 msgstr "Montrer les résultats (admin seulement)"
 
@@ -9680,7 +9704,7 @@ msgstr "Oui/Non"
 msgid "You already filled this in, but you can change your previous answers."
 msgstr "Vous l'avez déjà rempli, mais vous pouvez modifier vos réponses précédentes."
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:39
+#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:41
 msgid "You already filled this in."
 msgstr "Vous l'avez déjà rempli."
 
