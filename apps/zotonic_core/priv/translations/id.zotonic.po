@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-14 10:04\n"
+"PO-Revision-Date: 2023-09-19 09:13\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -252,7 +252,7 @@ msgstr "Ubah kategori dan/atau konten kelompok..."
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:16
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:24
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:26
-#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:13./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:20./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:54./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:59./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:43./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:48./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:32./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:37
+#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:13./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:20./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:54./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:59./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:45./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:50./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:32./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:37
 msgid "Close"
 msgstr "Tutup"
 
@@ -4608,7 +4608,7 @@ msgid "external service"
 msgstr "layanan eksternal"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:85
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
 msgid "or"
 msgstr "atau"
@@ -4637,15 +4637,19 @@ msgstr "Admin cadangan"
 msgid "Are you sure you want to revert to this version?"
 msgstr "Apakah anda yakin anda ingin kembali kedalam versi ini?"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:60
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
 msgid "At any moment you can make a backup of your system."
 msgstr "Setiap saat anda bisa membuat cadangan sistem anda."
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
+msgid "Automatic daily backups of the database and uploaded files can be enabled. This is done at night and the last 7 backups are kept."
+msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:54
 msgid "Back to the edit page"
 msgstr "Kembali ke halaman edit"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:84
+#: apps/zotonic_mod_backup/src/mod_backup.erl:89
 msgid "Backup"
 msgstr "Cadangkan"
 
@@ -4677,7 +4681,11 @@ msgstr "Memeriksa dan mungkin mengembalikan versi sebelumnya dari halaman anda."
 msgid "Click on <b>List and restore an earlier version</b> to get an overview of earlier saved versions of this page.<br/>You can also save the complete contents of a page to a file. Later you can reload this file, replacing the current page contents. Note that the file does not contain your unsaved changes. Connections and media are not saved as well."
 msgstr "Klik pada <b>Daftar dan memulihkan pada versi sebelumnya</b> untuk mendapatkan gambaran yang telah disimpan sebelumnya versi dari halaman ini.<br/>Anda juga bisa menyimpan isi lengkap dari halaman ke file. Kemudian anda dapat menyegarkan file ini, menggantikan saat ini halaman isi. Perhatikan bahwa file tidak berisi perubahan yang belum disimpan. Koneksi dan media tidak diselamatkan juga."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:68
+msgid "Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally."
+msgstr ""
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:132
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "Penyimpanan file cloud diaktifkan. File lokal tidak akan dicadangkan. Pastikan sistem penyimpanan file cloud Anda memiliki cadangan yang tepat."
 
@@ -4697,13 +4705,17 @@ msgstr "Dihapus oleh"
 msgid "Deleted on"
 msgstr "Dihapus pada"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:97
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:102
 msgid "Deleted pages"
 msgstr "Halaman yang dihapus"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:14
 msgid "Directory"
 msgstr "Direktori"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:53./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:74
+msgid "Do not make a daily backup."
+msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
@@ -4725,11 +4737,11 @@ msgstr "Daftar dan kembalikan versi sebelumnya"
 msgid "List of recently deleted pages and recover options via the resource revisions log."
 msgstr "Daftar halaman yang baru dihapus dan opsi pemulihan melalui log revisi sumber daya."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:82
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Membuat daily backup database dan mengunggah file."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:46
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:78
 msgid "Make a daily backup of the database."
 msgstr "Membuat cadangan harian database."
 
@@ -4769,9 +4781,9 @@ msgstr "Revisi untuk"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "Pilih file cadangan yang ingin Anda unggah. File tersebut harus berupa file .bert."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:37
-msgid "Show import/export panel in the admin."
-msgstr "Tampilkan impor/ekspor pada panel admin."
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:39
+msgid "Show import/export panel on the edit pages in the admin."
+msgstr ""
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:79
 msgid "Sorry, there is no module that can import this."
@@ -4801,23 +4813,23 @@ msgstr "Maaf, Anda tidak memiliki izin untuk mengubah halaman ini."
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Maaf, Anda tidak memiliki izin untuk mengubah konfigurasi."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:69
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:105
 msgid "Start backup now"
 msgstr "Mulai backup sekarang"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:72
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:108
 msgid "Start database-only backup now"
 msgstr "Mulai backup database saja sekarang"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:83
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:119
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
 msgstr "Perintah \"pg_dump\" tidak ditemukan di jalur. Setel di zotonic.config kunci konfigurasi \"pg_dump\" ke jalur ke <tt>pg_dump</tt> dan kembali ke halaman ini."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:86
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:122
 msgid "The \"tar\" command was not found in the path. Set in zotonic.config the \"tar\" config key to the path to <tt>tar</tt> and return to this page."
 msgstr "Perintah \"tar\" tidak ditemukan di jalur. Setel di zotonic.config kunci konfigurasi \"tar\" ke jalur ke <tt>tar</tt> dan kembali ke halaman ini."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:62
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:98
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "Cadangan terdiri dari dua bagian, database dan file upload."
 
@@ -4833,11 +4845,15 @@ msgstr "Ini akan menimpa anda pada halaman dengan isi dari file cadangan."
 msgid "Uploaded to filestore"
 msgstr "Diunggah ke filestore"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:94
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:115
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "Peringatan"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:35
+msgid "With the import/export panel you can download a page as a file, see page revisions and restore a previous version."
+msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:26
 msgid "Y-m-d H:i – l"
@@ -4851,7 +4867,7 @@ msgstr "Anda tidak diizinkan memulihkan halaman ini."
 msgid "You are not allowed to see the revisions"
 msgstr "Anda tidak diizinkan untuk melihat revisi"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:100
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "Anda dapat memiliki satu cadangan per hari dalam seminggu, yang lebih lama akan ditimpa."
 
@@ -4859,7 +4875,7 @@ msgstr "Anda dapat memiliki satu cadangan per hari dalam seminggu, yang lebih la
 msgid "You need to have access rights to the backup module."
 msgstr "Anda harus memiliki hak akses ke modul pencadangan."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:79
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:115
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Cadangan Anda tidak dikonfigurasi dengan benar Modul cadangan tidak akan berfungsi sampai masalah (s) di bawah ini telah diselesaikan:"
 
@@ -5136,11 +5152,11 @@ msgstr "kesalahan"
 msgid "iCalendar"
 msgstr "ikelender"
 
-#: apps/zotonic_mod_base/src/filters/filter_yesno.erl:27
+#: apps/zotonic_mod_base/src/filters/filter_yesno.erl:28
 msgid "no"
 msgstr "tidak"
 
-#: apps/zotonic_mod_base/src/filters/filter_yesno.erl:26
+#: apps/zotonic_mod_base/src/filters/filter_yesno.erl:27
 msgid "yes"
 msgstr "ya"
 
@@ -8138,7 +8154,7 @@ msgstr "Membangun kembali tabel pencarian segi."
 msgid "Sorry, you are not allowed to do this."
 msgstr "Maaf, Anda tidak diizinkan melakukan ini."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:61
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:71
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "Tambahkan noindex, elemen untuk semua halaman nofollow."
 
@@ -8158,15 +8174,15 @@ msgstr "Minta Google untuk mengecualikan semua halaman “{cat}”"
 msgid "Ask Google to not index this page"
 msgstr "Minta Google untuk tidak mengindeks halaman ini"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:105
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:115
 msgid "Bing Webmaster"
 msgstr "Bing Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:103
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:112./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:113
 msgid "Bing Webmaster validation id"
 msgstr "Bing Webmaster validasi id"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "Salin nilai dari atribut isi dalam meta tag yang diberikan oleh Google."
 
@@ -8182,11 +8198,15 @@ msgstr "Sesuaikan halaman slug"
 msgid "Description to include on every page"
 msgstr "Deskripsi untuk memasukkan pada setiap halaman"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:105./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
+msgid "Do not show site search action"
+msgstr ""
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:115./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:129
 msgid "Enter here the verification code for"
 msgstr "Masukkan di sini kode verifikasi untuk"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:58
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:68
 msgid "Exclude this site from search engines"
 msgstr "Mengecualikan situs ini dari search engine"
 
@@ -8194,25 +8214,29 @@ msgstr "Mengecualikan situs ini dari search engine"
 msgid "General SEO Optimization"
 msgstr "Optimasi SEO Umum"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:82./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "Google Analytics tracking id"
 msgstr "Id pelacakan Google Analytics"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:89./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:90./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:99./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:100./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102
 msgid "Google Search Console"
 msgstr "Google Search Console"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
 msgid "Google Tag Manager account page"
 msgstr "Halaman akun Google Tag Manager"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:82
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:91./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "Google Tag Manager id"
 msgstr "ID Google Tag Manager"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:9
 msgid "Here you find settings to optimize the indexing of your site by search engines."
 msgstr "Di sini anda dapat menemukan pengaturan untuk mengoptimalkan mengindeks situs anda dengan mesin pencari."
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
+msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
+msgstr ""
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:22./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:23
 msgid "Keywords"
@@ -8254,7 +8278,7 @@ msgstr "Konten SEO"
 msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
 msgstr "Pengindeksan SEO halaman ini dinonaktifkan karena berada dalam kategori “{cat}”."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:132
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:142
 msgid "Save SEO settings"
 msgstr "Simpan pengaturan SEO"
 
@@ -8270,11 +8294,11 @@ msgstr "Tampilkan JSON-LD saat ini (pembaruan setelah penyimpanan)"
 msgid "Site search"
 msgstr "Mencari situs"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:51
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:61
 msgid "The site configuration file allows this site to be indexed by search engines."
 msgstr "File konfigurasi situs memungkinkan situs ini diindeks oleh mesin pencari."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:59
 msgid "The site configuration file excludes this site from search engines."
 msgstr "File konfigurasi situs mengecualikan situs ini dari mesin pencari."
 
@@ -8282,31 +8306,31 @@ msgstr "File konfigurasi situs mengecualikan situs ini dari mesin pencari."
 msgid "Url for the search action on the site. Defaults to:"
 msgstr "Url untuk tindakan pencarian di situs. Defaultnya adalah:"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:76
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:86
 msgid "Where can I find my tracking script?"
 msgstr "Di mana saya dapat menemukan tracking script?"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:129
 msgid "Yandex Webmaster"
 msgstr "Yandex Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:116./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:117
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:126./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:127
 msgid "Yandex Webmaster validation id"
 msgstr "ID validasi Webmaster Yandex"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:106./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:120
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:116./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:130
 msgid "You find this id in the content attribute of the meta tag, it has the format"
 msgstr "Anda menemukan id ini di isi atribut dari tag meta, memiliki format"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:85
 msgid "You find this id in the tracking script, it has the format"
 msgstr "Anda menemukan id ini dalam skrip pelacakan, memiliki format"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
 msgid "You find this on your"
 msgstr "Anda menemukan ini pada Anda"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
 msgid "it has the format"
 msgstr "itu memiliki format"
 
@@ -9460,7 +9484,7 @@ msgstr "Tampilkan kemajuan bar"
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Menunjukkan informasi kemajuan seperti \"<em>Pertanyaan 3/10</em>\""
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:60
+#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:62
 msgid "Show results (admin only)"
 msgstr "Tampilkan hasil (hanya admin)"
 
@@ -9680,7 +9704,7 @@ msgstr "Ya/Tidak"
 msgid "You already filled this in, but you can change your previous answers."
 msgstr "Anda sudah diisi ini, tetapi anda dapat mengubah jawaban sebelumnya."
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:39
+#: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:41
 msgid "You already filled this in."
 msgstr "Anda sudah mengisi ini."
 
