@@ -31,4 +31,5 @@ Strings
    ../filter_translate
    ../filter_trim
    ../filter_truncate
+   ../filter_truncatechars
    ../filter_upper
