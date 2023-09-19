@@ -1,8 +1,9 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
-%% @copyright 2010 Maas-Maarten Zeeman
+%% @copyright 2010-2023 Maas-Maarten Zeeman
 %% @doc 'urlize' filter, find urls and make them clickable.
+%% @end
 
-%% Copyright 2010 Maas-Maarten Zeeman
+%% Copyright 2010-2023 Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,9 +21,11 @@
 
 -export([urlize/2]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 urlize(undefined, _Context) ->
     undefined;
-urlize({trans, _} = Tr, Context) ->
+urlize(#trans{} = Tr, Context) ->
     urlize(z_trans:lookup_fallback(Tr, Context), Context);
 urlize(Input, _Context) when is_list(Input) or is_binary(Input) ->
     do_urlize(Input);

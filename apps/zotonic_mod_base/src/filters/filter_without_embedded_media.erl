@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010-2017 Arjan Scherpenisse
+%% @copyright 2010-2023 Arjan Scherpenisse
 %% @doc 'without_embedded_media' filter, remove media ids embedded in texts.
+%% @end
 
-%% Copyright 2010-2017 Arjan Scherpenisse
+%% Copyright 2010-2023 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,9 +22,6 @@
     without_embedded_media/3,
     without_embedded_media/4
     ]).
-
--include_lib("zotonic_core/include/zotonic.hrl").
-
 
 without_embedded_media(Input, Id, Context) ->
     without_embedded_media(Input, Id, true, Context).

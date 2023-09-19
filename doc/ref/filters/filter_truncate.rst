@@ -1,12 +1,13 @@
 .. highlight:: django
 .. include:: meta-truncate.rst
-.. seealso:: :ref:`filter-truncate_html`
+.. seealso:: :ref:`filter-truncatechars`, :ref:`filter-truncate_html`
 
 Truncate a text to a maximum length.
 
 The text is truncated to the maximum length specified with the
-argument. The text is always truncated at a word boundary. If the
-truncation is not after punctuation then the unicode ellipsis `…` 
+argument. The text is always truncated at a word boundary, to truncate
+at a character boundary use :ref:`filter-truncatechars`. If the
+truncation is not after punctuation then the unicode ellipsis `…`
 character is appended.
 
 For example::

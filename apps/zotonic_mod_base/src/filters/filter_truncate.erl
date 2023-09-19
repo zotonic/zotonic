@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010-2023 Marc Worrell
 %% @doc 'truncate' filter, truncate a string on a certain length, taking word boundaries into account.
+%% @end
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,17 +20,19 @@
 -module(filter_truncate).
 -export([truncate/2, truncate/3, truncate/4]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 truncate(In, Context) ->
     truncate(In, 20, Context).
 
 truncate(In, N, Context) ->
-    truncate(In, N, <<226,128,166>>, Context).
+    truncate(In, N, <<"…"/utf8>>, Context).
 
 truncate(undefined, _N, _Append, _Context) ->
     undefined;
 truncate(S, N, Append, Context) when not is_integer(N) ->
     truncate(S, z_convert:to_integer(N), Append, Context);
-truncate({trans, _} = Tr, N, Append, Context) ->
+truncate(#trans{} = Tr, N, Append, Context) ->
     truncate(z_trans:lookup_fallback(Tr, Context), N, Append, Context);
 truncate(In, N, Append, _Context) when is_binary(In) ->
     z_string:truncate(In, N, z_convert:to_binary(Append));

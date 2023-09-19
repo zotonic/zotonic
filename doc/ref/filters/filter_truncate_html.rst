@@ -1,6 +1,6 @@
 .. highlight:: django
 .. include:: meta-truncate_html.rst
-.. seealso:: :ref:`filter-truncate`
+.. seealso:: :ref:`filter-truncate`, :ref:`filter-truncatechars`
 
 Truncate a HTML text to a maximum length.
 

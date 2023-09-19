@@ -35,3 +35,16 @@ round_significant_test() ->
     ?fequal(1200.0, filter_round_significant:round_significant(1234.56, 2, C)),
 
     ok.
+
+truncatechars_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_context:new(zotonic_site_testsandbox),
+    <<"abcxyz">> = filter_truncatechars:truncatechars(<<"abcd">>, 3, <<"xyz">>, C),
+    <<"abcxyz">> = filter_truncatechars:truncatechars("abcd", 3, "xyz", C),
+    <<"abc…"/utf8>> = filter_truncatechars:truncatechars(<<"abcd">>, 3, C),
+    <<"abcd"/utf8>> = filter_truncatechars:truncatechars(<<"abcd">>, 4, C),
+    <<"abcd"/utf8>> = filter_truncatechars:truncatechars(<<"abcd">>, 5, C),
+    <<"a&amp;c…"/utf8>> = filter_truncatechars:truncatechars(<<"a&amp;cd">>, 3, C),
+    <<"a&#39;c…"/utf8>> = filter_truncatechars:truncatechars(<<"a&#39;cd">>, 3, C),
+    ok.
+
