@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-19 09:13\n"
+"PO-Revision-Date: 2023-09-19 10:45\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -4644,7 +4644,7 @@ msgstr "A tout moment vous pouvez créer une sauvegarde de votre système."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
 msgid "Automatic daily backups of the database and uploaded files can be enabled. This is done at night and the last 7 backups are kept."
-msgstr ""
+msgstr "Des sauvegardes quotidiennes automatiques de la base de données et des fichiers téléchargés peuvent être activées. Cela se fait la nuit et les 7 dernières sauvegardes sont conservées."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:54
 msgid "Back to the edit page"
@@ -4684,7 +4684,7 @@ msgstr "Cliquez sur <b>Lister et rétablir une version antérieure</b> pour obte
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:68
 msgid "Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally."
-msgstr ""
+msgstr "Le magasin de fichiers cloud est activé. Les sauvegardes de la base de données sont téléchargées sur le magasin de fichiers cloud. Les fichiers locaux sont copiés sur le cloud et non sauvegardés localement."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:132
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
@@ -4716,7 +4716,7 @@ msgstr "Annuaire"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:53./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:74
 msgid "Do not make a daily backup."
-msgstr ""
+msgstr "Ne faites pas de sauvegarde quotidienne."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:30
 msgid "Download backup file"
@@ -4784,7 +4784,7 @@ msgstr "Sélectionnez le fichier de sauvegarde que vous souhaitez télécharger.
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:39
 msgid "Show import/export panel on the edit pages in the admin."
-msgstr ""
+msgstr "Afficher le panneau d'importation/exportation sur les pages d'édition dans l'administration."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:79
 msgid "Sorry, there is no module that can import this."
@@ -4854,7 +4854,7 @@ msgstr "Attention"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:35
 msgid "With the import/export panel you can download a page as a file, see page revisions and restore a previous version."
-msgstr ""
+msgstr "Avec le panneau d'importation/exportation, vous pouvez télécharger une page sous forme de fichier, voir les révisions de page et restaurer une version précédente."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:26
 msgid "Y-m-d H:i – l"
@@ -8200,7 +8200,7 @@ msgstr "Description à inclure sur toutes les pages"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
 msgid "Do not show site search action"
-msgstr ""
+msgstr "Ne pas afficher l'action de recherche sur le site"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:115./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:129
 msgid "Enter here the verification code for"
@@ -8236,7 +8236,7 @@ msgstr "Vous trouverez ici des réglages pour optimiser l'indexation de votre si
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
 msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
-msgstr ""
+msgstr "Si votre site ne dispose pas de page de recherche, cochez cette case pour éviter l'affichage d'un champ de recherche sur Google et al."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:22./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:23
 msgid "Keywords"
