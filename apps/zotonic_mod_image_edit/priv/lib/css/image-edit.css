@@ -98,7 +98,7 @@
   grid-column: 2;
   min-width: 0;
   padding: 2rem 2rem 3rem;
-  overflow-y: scroll;
+  overflow-y: auto;
   background: #222;
   border-radius: 4px;
 }
