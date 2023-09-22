@@ -3,32 +3,44 @@
     {# Keywords shown as list with checkboxes #}
     {% with m.rsc[subject_id].o[predicate] as oids %}
     <div class="tab-pane {% if is_active %}active{% endif %}" id="{{ tab }}-find">
-        {% for category in m.category.tree_flat %}
-            {% with category.id as cat %}
-                {% if cat|member:ocats %}
-                    {% if m.search.query::%{
-                            cat: cat,
-                            cat_exclude: ocats -- [ cat ]
-                        }|is_visible as ids
-                    %}
-                        {% if ocats|length > 1 %}
-                            <h4>{{ cat.title }}</h4>
-                        {% endif %}
 
-                        <div class="row">
-                        {% for id in ids|sort:`title` %}
-                            <div class="col-md-3 col-sm-4">
-                                <label class="checkbox">
-                                    <input type="checkbox" value="{{ id }}" {% if id|member:oids %}checked{% endif %}>
-                                    {{ id.title }}
-                                </label>
+        <form class="">
+            <input type="text"
+                   autofocus
+                   class="form-control do_listfilter"
+                   placeholder="{_ Type to filter the list below. _}"
+                   data-listfilter="method: 'words', list: '#find-connect-objects .connect-object'"
+            >
+        </form>
+
+        <div id="find-connect-objects">
+            {% for category in m.category.tree_flat %}
+                {% with category.id as cat %}
+                    {% if cat|member:ocats %}
+                        {% if m.search.query::%{
+                                cat: cat,
+                                cat_exclude: ocats -- [ cat ]
+                            }|is_visible as ids
+                        %}
+                            {% if ocats|length > 1 %}
+                                <h4>{{ cat.title }}</h4>
+                            {% endif %}
+
+                            <div class="row">
+                            {% for id in ids|sort:`title` %}
+                                <div class="connect-object col-md-3 col-sm-4">
+                                    <label class="checkbox">
+                                        <input type="checkbox" value="{{ id }}" {% if id|member:oids %}checked{% endif %}>
+                                        {{ id.title }}
+                                    </label>
+                                </div>
+                            {% endfor %}
                             </div>
-                        {% endfor %}
-                        </div>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
-            {% endwith %}
-        {% endfor %}
+                {% endwith %}
+            {% endfor %}
+        </div>
 
         {% wire name="dialog_connect_find"
             action={postback

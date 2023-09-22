@@ -77,59 +77,56 @@ String.prototype.score = function(abbreviation, offset) {
 
 jQuery.fn.listfilter = function(options)
 {
-  let list = jQuery(options.list);
-  let sortlist = options.sort || false;
-  let hideEmpty = options.hideEmpty || false;
+    var method = "words";
 
-  if(list.length)
-  {
-    var rows = list.children()
-    var cache = rows.map(function() {
-        if (typeof options.text == 'string') {
-          return $(options.text, this).text().toLowerCase();
-        } else {
-          return $(this).text().toLowerCase();
-        }
-    });
-
-    this.keyup(filter).keyup().parents('form').submit(function() {
-      return false;
-    });
-  }
-
-  return this;
-
-  function filter()
-  {
-    var term = jQuery.trim(jQuery(this).val().toLowerCase()), scores = [];
-
-    if (!term) {
-      if (hideEmpty) {
-        rows.hide();
-      } else {
-        if (sortlist) {
-          jQuery.each(rows, function() {
-            list.append(rows[ this[1] ]);
-          });
-        }
-        rows.show();
-      }
-    } else {
-      rows.hide();
-
-      cache.each(function(i) {
-        var score = this.score(term);
-        if(score > 0) {
-          scores.push([score, i]);
-        }
-      });
-
-      jQuery.each(scores.sort(function(a, b){return a[0] - b[0];}), function() {
-          if (sortlist) {
-            list.prepend(rows[ this[1] ]);
-          }
-          jQuery(rows[ this[1] ]).show();
-      });
+    if (typeof options.method == "string") {
+        method = options.method;
     }
-  }
+    this.keyup(filter)
+          .keyup()
+          .parents('form')
+          .submit(function() { return false; });
+    return this;
+
+    function filter()
+    {
+        const rows = $(options.list);
+        const term = $.trim($(this).val().toLowerCase());
+        const words = term.match(/\b(\w+)\b/g);
+        let scores = [];
+
+        if(!term) {
+            rows.removeClass('hide');
+        } else {
+            rows.addClass('hide');
+            rows.each(function(i) {
+                let text;
+
+                if (typeof options.text == 'string') {
+                    text = $(options.text, this).text().toLowerCase();
+                } else {
+                    text = $(this).text().toLowerCase();
+                }
+                switch (method) {
+                    case 'score':
+                        const score = text.score(term);
+                        if(score > 0) {
+                            $(this).removeClass('hide');
+                        }
+                        break;
+                    default:
+                        // words
+                        let is_match = true;
+                        words.forEach((w) => {
+                            is_match = is_match && (text.indexOf(w) >= 0);
+                        });
+                        if (is_match) {
+                            $(this).removeClass('hide');
+                        }
+                        break;
+                }
+            });
+        }
+        jQuery(this).trigger("z.listfilter:done");
+    }
 };
