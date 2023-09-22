@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-22 14:50\n"
+"PO-Revision-Date: 2023-09-22 16:20\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -2356,7 +2356,7 @@ msgstr "输入文本进行检索"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:11
 msgid "Type to filter the list below."
-msgstr ""
+msgstr "鍵入以過濾下面的清單。"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:12
 msgid "Unique Page"
@@ -3791,7 +3791,7 @@ msgstr "在現有連接之前插入新連接。"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:63
 msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
-msgstr ""
+msgstr "這將顯示上面選取的 <i>到</i> 類別中的所有頁面的列表，而不是搜尋框。必須至少檢查一個類別。"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19./apps/zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:47
 msgid "Make a new predicate"
@@ -3823,7 +3823,7 @@ msgstr "只显示与的联系。"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:93
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
-msgstr ""
+msgstr "本體為一組已定義的主題和客體類別定義謂詞。有時，將謂詞的連接方向與正式定義相反更實際。匯出和匯入功能可以使用此選項在匯出或匯入資料時交換主客體關係。"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:55
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
@@ -3868,11 +3868,11 @@ msgstr "已经有了这个名字的谓词。"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:83
 msgid "This directs the indexers to not include the titles of connected pages with this predicate. Normally titles of connected pages are included, making it possible to eg. find articles by their author’s name."
-msgstr ""
+msgstr "這指示索引器不包含具有此謂詞的連接頁面的標題。通常包括連接頁面的標題，使得例如可以。按作者姓名找文章。"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:17
 msgid "This is used to filter the predicates in the <i>Page connections</i> panel and the pages in the connect dialogs."
-msgstr ""
+msgstr "這用於過濾 <i>頁面連接</i> 面板中的謂詞以及連接對話框中的頁面。"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:16
 msgid "This predicate can be used between two pages of the following categories."
@@ -3888,11 +3888,11 @@ msgstr "通用资源识别号"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
 msgid "Use a list of checkboxes with titles when adding page connections."
-msgstr ""
+msgstr "新增頁面連線時，使用帶有標題的複選框清單。"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:73
 msgid "Usually new connections are inserted after existing connections. Check this to insert new connections before existing connections."
-msgstr ""
+msgstr "通常，新連線會插入到現有連線之後。選取此項目可在現有連線之前插入新連線。"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:4
 msgid "Valid between"
