@@ -175,13 +175,13 @@ install_predicate(C) ->
     }),
     Preds = [
         % id   protect name       uri                                                  props
-        [ 300, true,   "about",    "http://www.w3.org/1999/02/22-rdf-syntax-ns#about",  ?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,"About"},    {nl,"Over"}]}}])],
-        [ 301, true,   "author",   "http://purl.org/dc/terms/creator",                  ?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,"Author"},   {nl,"Auteur"}]}}])],
-        [ 303, true,   "relation", "http://purl.org/dc/terms/relation",                 ?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,"Relation"}, {nl,"Relatie"}]}}])],
-        [ 304, true,   "depiction","http://xmlns.com/foaf/0.1/depiction",               ?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,"Depiction"},{nl,"Afbeelding"}]}}])],
-        [ 308, true,   "subject",  "http://purl.org/dc/elements/1.1/subject",           ?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,"Keyword"},  {nl,"Trefwoord"}]}}, {is_connect_checkbox, true}])],
-        [ 309, true,   "hasdocument", "http://zotonic.net/predicate/hasDocument",       ?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,"Document"}, {nl,"Document"}]}}])],
-		[ 310, true,   "haspart",  "http://purl.org/dc/terms/hasPart",					?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,"Contains"}, {nl,"Bevat"}]}}])]
+        [ 300, true,   "about",    "http://www.w3.org/1999/02/22-rdf-syntax-ns#about",  ?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,<<"About">>},    {nl,<<"Over">>}]}}])],
+        [ 301, true,   "author",   "http://purl.org/dc/terms/creator",                  ?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,<<"Author">>},   {nl,<<"Auteur">>}]}}])],
+        [ 303, true,   "relation", "http://purl.org/dc/terms/relation",                 ?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,<<"Relation">>}, {nl,<<"Relatie">>}]}}])],
+        [ 304, true,   "depiction","http://xmlns.com/foaf/0.1/depiction",               ?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,<<"Depiction">>},{nl,<<"Afbeelding">>}]}}])],
+        [ 308, true,   "subject",  "http://purl.org/dc/elements/1.1/subject",           ?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,<<"Keyword">>},  {nl,<<"Trefwoord">>}]}}, {is_connect_checkbox, true}])],
+        [ 309, true,   "hasdocument", "http://zotonic.net/predicate/hasDocument",       ?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,<<"Document">>}, {nl,<<"Document">>}]}}])],
+		[ 310, true,   "haspart",  "http://purl.org/dc/terms/hasPart",					?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,<<"Contains">>}, {nl,<<"Bevat">>}]}}])]
     ],
 
     CatId   = z_db:q1("select id from rsc where name = 'predicate'", C),

@@ -102,7 +102,7 @@ is_used(Predicate, Context) ->
 is_valid_object_category(Predicate, Category, IsSubcats, Context) ->
     CatId = m_rsc:rid(Category, Context),
     ValidCats = object_category(Predicate, Context),
-    case lists:member({CatId}, ValidCats) of
+    case lists:member(CatId, ValidCats) of
         true ->
             true;
         false when ValidCats =:= [] ->
@@ -122,7 +122,7 @@ is_valid_object_category(Predicate, Category, IsSubcats, Context) ->
 is_valid_subject_category(Predicate, Category, IsSubcats, Context) ->
     CatId = m_rsc:rid(Category, Context),
     ValidCats = subject_category(Predicate, Context),
-    case lists:member({CatId}, ValidCats) of
+    case lists:member(CatId, ValidCats) of
         true ->
             true;
         false when ValidCats =:= [] ->
@@ -132,7 +132,7 @@ is_valid_subject_category(Predicate, Category, IsSubcats, Context) ->
             case lists:any(
                 fun(IsACat) ->
                     IsACatId = m_rsc:rid(IsACat, Context),
-                    lists:member({IsACatId}, ValidCats)
+                    lists:member(IsACatId, ValidCats)
                 end,
                 IsA)
             of
