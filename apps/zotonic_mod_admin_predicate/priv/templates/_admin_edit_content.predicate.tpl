@@ -12,7 +12,10 @@
 {% block widget_content %}
 {% with m.predicate[id] as p %}
 <fieldset>
-    <p>{_ This predicate can be used between two pages of the following categories. _}</p>
+    <p>
+        {_ This predicate can be used between two pages of the following categories. _}
+        {_ This is used to filter the predicates in the <i>Page connections</i> panel and the pages in the connect dialogs. _}
+    </p>
 
     <div class="row">
 
@@ -49,22 +52,46 @@
 
     <hr />
 
+    <h4>{_ Options _}</h4>
+
     <div class="form-group">
         <label class="checkbox-inline">
-            <input id="field-reversed" type="checkbox" name="is_insert_before" {% if r.is_insert_before %}checked="checked"{% endif %} value="1" />{_ Insert new connections before existing connections. _}
+            <input type="checkbox" name="is_connect_checkbox" {% if id.is_connect_checkbox %}checked="checked"{% endif %} value="1">
+            {_ Use a list of checkboxes with titles when adding page connections. _}
         </label>
+        <div class="help-block">
+            {_ Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked. _}
+        </div>
     </div>
 
     <div class="form-group">
         <label class="checkbox-inline">
-            <input id="field-reversed" type="checkbox" name="reversed" {% if id.reversed %}checked="checked"{% endif %} value="1" />{_ The direction (from/to) of this predicate is reversed from the normal definition. _}
+            <input type="checkbox" name="is_insert_before" {% if r.is_insert_before %}checked="checked"{% endif %} value="1">
+            {_ Insert new connections before existing connections. _}
         </label>
+        <div class="help-block">
+            {_ Usually new connections are inserted after existing connections. Check this to insert new connections before existing connections. _}
+        </div>
     </div>
 
     <div class="form-group">
         <label class="checkbox-inline">
-            <input id="field-reversed" type="checkbox" name="is_object_noindex" {% if id.is_object_noindex %}checked="checked"{% endif %} value="1" />{_ Do not find subjects using this predicate’s object titles. _}
+            <input type="checkbox" name="is_object_noindex" {% if id.is_object_noindex %}checked="checked"{% endif %} value="1">
+            {_ Do not find subjects using this predicate’s object titles. _}
         </label>
+        <div class="help-block">
+            {_ This directs the indexers to not include the titles of connected pages with this predicate. Normally titles of connected pages are included, making it possible to eg. find articles by their author’s name. _}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="checkbox-inline">
+            <input type="checkbox" name="reversed" {% if id.reversed %}checked="checked"{% endif %} value="1">
+            {_ The direction (from/to) of this predicate is reversed from the normal definition. _}
+        </label>
+        <div class="help-block">
+            {_ Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data. _}
+        </div>
     </div>
 </fieldset>
 {% endwith %}
