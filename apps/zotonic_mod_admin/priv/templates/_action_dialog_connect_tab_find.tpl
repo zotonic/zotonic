@@ -72,8 +72,6 @@
 {% else %}
     {# Search box and list items #}
     <div class="tab-pane {% if is_active %}active{% endif %}" id="{{ tab }}-find">
-        {% print m.rsc[predicate].name %}
-        {% print ocats %}
     	<form id="dialog-connect-find" class="row form form-horizontal">
     		<input type="hidden" name="subject_id" value="{{ subject_id }}" />
             <input type="hidden" name="object_id" value="{{ object_id }}" />
