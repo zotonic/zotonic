@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-22 14:50\n"
+"PO-Revision-Date: 2023-09-22 16:20\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -2356,7 +2356,7 @@ msgstr "Ketik teks untuk pencarian"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:11
 msgid "Type to filter the list below."
-msgstr ""
+msgstr "Ketik untuk memfilter daftar di bawah."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:12
 msgid "Unique Page"
@@ -3790,7 +3790,7 @@ msgstr "Sisipkan koneksi baru sebelum koneksi yang ada."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:63
 msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
-msgstr ""
+msgstr "Alih-alih kotak pencarian, ini akan menampilkan daftar semua halaman dalam kategori <i>Ke</i> yang dicentang di atas. Setidaknya satu kategori harus diperiksa."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19./apps/zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:47
 msgid "Make a new predicate"
@@ -3822,7 +3822,7 @@ msgstr "Hanya menampilkan koneksi dengan:"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:93
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
-msgstr ""
+msgstr "Ontologi mendefinisikan predikat untuk sekumpulan kategori subjek dan objek yang ditentukan. Terkadang lebih praktis jika arah hubungan predikat dibalik dari definisi formal. Fungsi ekspor dan impor dapat menggunakan opsi ini untuk menukar relasi subjek/objek saat mengekspor atau mengimpor data."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:55
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
@@ -3867,11 +3867,11 @@ msgstr "Sudah ada predikat dengan nama ini."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:83
 msgid "This directs the indexers to not include the titles of connected pages with this predicate. Normally titles of connected pages are included, making it possible to eg. find articles by their author’s name."
-msgstr ""
+msgstr "Hal ini mengarahkan pengindeks untuk tidak mencantumkan judul halaman yang terhubung dengan predikat tersebut. Biasanya judul halaman yang terhubung disertakan, sehingga memungkinkan untuk misalnya. temukan artikel berdasarkan nama penulisnya."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:17
 msgid "This is used to filter the predicates in the <i>Page connections</i> panel and the pages in the connect dialogs."
-msgstr ""
+msgstr "Ini digunakan untuk memfilter predikat di panel <i>Koneksi halaman</i> dan halaman di dialog koneksi."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:16
 msgid "This predicate can be used between two pages of the following categories."
@@ -3887,11 +3887,11 @@ msgstr "URl"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
 msgid "Use a list of checkboxes with titles when adding page connections."
-msgstr ""
+msgstr "Gunakan daftar kotak centang dengan judul saat menambahkan koneksi halaman."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:73
 msgid "Usually new connections are inserted after existing connections. Check this to insert new connections before existing connections."
-msgstr ""
+msgstr "Biasanya koneksi baru disisipkan setelah koneksi yang sudah ada. Centang ini untuk memasukkan koneksi baru sebelum koneksi yang ada."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:4
 msgid "Valid between"
