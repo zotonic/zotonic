@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-22 14:50\n"
+"PO-Revision-Date: 2023-09-22 16:19\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -2356,7 +2356,7 @@ msgstr "Tipo de texto que se va a buscar"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:11
 msgid "Type to filter the list below."
-msgstr ""
+msgstr "Escriba para filtrar la lista a continuación."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:12
 msgid "Unique Page"
@@ -3791,7 +3791,7 @@ msgstr "Inserte nuevas conexiones antes de las conexiones existentes."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:63
 msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
-msgstr ""
+msgstr "En lugar de un cuadro de búsqueda, se mostrará una lista de todas las páginas en las categorías <i>a</i> marcadas anteriormente. Se debe marcar al menos una categoría."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19./apps/zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:47
 msgid "Make a new predicate"
@@ -3823,7 +3823,7 @@ msgstr "Sólo mostrando conexiones con:"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:93
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
-msgstr ""
+msgstr "Las ontologías definen predicados para un conjunto definido de categorías de sujeto y objeto. A veces es más práctico invertir la dirección de conexión del predicado con respecto a la definición formal. Las funciones de exportación e importación pueden utilizar esta opción para intercambiar la relación sujeto/objeto al exportar o importar datos."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:55
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
@@ -3868,11 +3868,11 @@ msgstr "Ya hay un predicado con este nombre."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:83
 msgid "This directs the indexers to not include the titles of connected pages with this predicate. Normally titles of connected pages are included, making it possible to eg. find articles by their author’s name."
-msgstr ""
+msgstr "Esto indica a los indexadores que no incluyan los títulos de las páginas conectadas con este predicado. Normalmente se incluyen títulos de páginas conectadas, lo que permite, por ejemplo. buscar artículos por el nombre de su autor."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:17
 msgid "This is used to filter the predicates in the <i>Page connections</i> panel and the pages in the connect dialogs."
-msgstr ""
+msgstr "Esto se utiliza para filtrar los predicados en el panel <i>Conexiones de página</i> y las páginas en los cuadros de diálogo de conexión."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:16
 msgid "This predicate can be used between two pages of the following categories."
@@ -3888,11 +3888,11 @@ msgstr "URI"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
 msgid "Use a list of checkboxes with titles when adding page connections."
-msgstr ""
+msgstr "Utilice una lista de casillas de verificación con títulos al agregar conexiones de página."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:73
 msgid "Usually new connections are inserted after existing connections. Check this to insert new connections before existing connections."
-msgstr ""
+msgstr "Normalmente las nuevas conexiones se insertan después de las conexiones existentes. Marque esto para insertar nuevas conexiones antes de las conexiones existentes."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:4
 msgid "Valid between"
