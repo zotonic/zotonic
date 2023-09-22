@@ -7,7 +7,7 @@
         <form>
             <input type="text"
                    autofocus
-                   class="form-control do_listfilter"
+                   class="form-control do_listfilter do_autofocus"
                    placeholder="{_ Type to filter the list below. _}"
                    data-listfilter="method: 'words', list: '#find-connect-objects .connect-object'"
             >
