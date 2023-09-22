@@ -27,6 +27,7 @@
     "js/modules/z.feedback.js"
     "js/modules/z.formreplace.js"
     "js/modules/z.datepicker.js"
+    "js/modules/z.listfilter.js"
     "js/modules/z.menuedit.js"
     "js/modules/z.cropcenter.js"
     "js/modules/z.popupwindow.js"
