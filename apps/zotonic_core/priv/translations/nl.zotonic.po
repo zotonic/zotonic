@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-22 14:50\n"
+"PO-Revision-Date: 2023-09-22 16:19\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1065,7 +1065,7 @@ msgstr "Kon niets detecteren om te importeren van die URL of insluitcode."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:149
 msgid "Count"
-msgstr "Tel"
+msgstr "Aantal"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:80./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:195./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:45./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:47
@@ -2360,7 +2360,7 @@ msgstr "Typ een tekst om te zoeken"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:11
 msgid "Type to filter the list below."
-msgstr ""
+msgstr "Typ om de onderstaande lijst te filteren."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:12
 msgid "Unique Page"
@@ -3793,7 +3793,7 @@ msgstr "Voeg nieuwe verbindingen in vóór bestaande verbindingen."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:63
 msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
-msgstr ""
+msgstr "In plaats van een zoekvak wordt hier een lijst weergegeven met alle pagina's in de hierboven aangevinkte <i>tot</i> categorieën. Er moet minimaal één categorie worden aangevinkt."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19./apps/zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:47
 msgid "Make a new predicate"
@@ -3825,7 +3825,7 @@ msgstr "Toont alleen connecties met:"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:93
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
-msgstr ""
+msgstr "Ontologieën definiëren predikaten voor een gedefinieerde reeks subject- en objectcategorieën. Soms is het praktischer om de verbindingsrichting van het predikaat om te draaien ten opzichte van de formele definitie. Export- en importfuncties kunnen deze optie gebruiken om de onderwerp-/objectrelatie om te wisselen bij het exporteren of importeren van gegevens."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:55
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
@@ -3870,11 +3870,11 @@ msgstr "Er bestaat al een predicaat met deze naam."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:83
 msgid "This directs the indexers to not include the titles of connected pages with this predicate. Normally titles of connected pages are included, making it possible to eg. find articles by their author’s name."
-msgstr ""
+msgstr "Dit geeft de indexeerders de opdracht om de titels van verbonden pagina's met dit predikaat niet op te nemen. Normaal gesproken worden titels van gekoppelde pagina's opgenomen, waardoor het mogelijk is om bijv. artikelen zoeken op naam van de auteur."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:17
 msgid "This is used to filter the predicates in the <i>Page connections</i> panel and the pages in the connect dialogs."
-msgstr ""
+msgstr "Dit wordt gebruikt om de predikaten in het paneel <i>Paginaverbindingen</i> en de pagina's in de verbindingsdialoogvensters te filteren."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:16
 msgid "This predicate can be used between two pages of the following categories."
@@ -3890,11 +3890,11 @@ msgstr "URI"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
 msgid "Use a list of checkboxes with titles when adding page connections."
-msgstr ""
+msgstr "Gebruik een lijst met selectievakjes met titels bij het toevoegen van paginaverbindingen."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:73
 msgid "Usually new connections are inserted after existing connections. Check this to insert new connections before existing connections."
-msgstr ""
+msgstr "Meestal worden nieuwe verbindingen na bestaande verbindingen ingevoegd. Vink dit aan om nieuwe verbindingen vóór bestaande verbindingen in te voegen."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:4
 msgid "Valid between"
