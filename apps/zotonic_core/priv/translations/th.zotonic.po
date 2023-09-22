@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-22 14:50\n"
+"PO-Revision-Date: 2023-09-22 16:20\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -2356,7 +2356,7 @@ msgstr "พิมพ์ข้อความเพื่อค้นหา"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:11
 msgid "Type to filter the list below."
-msgstr ""
+msgstr "พิมพ์เพื่อกรองรายการด้านล่าง"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:12
 msgid "Unique Page"
@@ -3791,7 +3791,7 @@ msgstr "ใส่การเชื่อมต่อใหม่ก่อนก
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:63
 msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
-msgstr ""
+msgstr "แทนที่จะใช้ช่องค้นหา ระบบจะแสดงรายการหน้าทั้งหมดในหมวดหมู่ <i>ถึง</i> ที่เลือกไว้ด้านบน ต้องตรวจสอบอย่างน้อยหนึ่งหมวดหมู่"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19./apps/zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:47
 msgid "Make a new predicate"
@@ -3823,7 +3823,7 @@ msgstr "แสดงเฉพาะการเชื่อมต่อกับ
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:93
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
-msgstr ""
+msgstr "Ontology กำหนดเพรดิเคตสำหรับชุดที่กำหนดของหมวดหมู่หัวเรื่องและวัตถุ บางครั้งก็เป็นประโยชน์มากกว่าที่จะกลับทิศทางการเชื่อมต่อของภาคแสดงจากคำจำกัดความที่เป็นทางการ ฟังก์ชันการส่งออกและนำเข้าสามารถใช้ตัวเลือกนี้เพื่อสลับความสัมพันธ์ของหัวเรื่อง/วัตถุเมื่อส่งออกหรือนำเข้าข้อมูล"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:55
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
@@ -3868,11 +3868,11 @@ msgstr "มีเพรดิเคตที่มีชื่อนี้อย
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:83
 msgid "This directs the indexers to not include the titles of connected pages with this predicate. Normally titles of connected pages are included, making it possible to eg. find articles by their author’s name."
-msgstr ""
+msgstr "สิ่งนี้จะทำให้ผู้ทำดัชนีไม่รวมชื่อเรื่องของเพจที่เชื่อมต่อด้วยเพรดิเคตนี้ โดยปกติแล้วชื่อเรื่องของหน้าที่เชื่อมต่อจะรวมอยู่ด้วย ทำให้สามารถเช่น ค้นหาบทความตามชื่อผู้แต่ง"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:17
 msgid "This is used to filter the predicates in the <i>Page connections</i> panel and the pages in the connect dialogs."
-msgstr ""
+msgstr "ใช้เพื่อกรองเพรดิเคตในพาเนล <i>การเชื่อมต่อเพจ</i> และเพจในไดอะล็อกการเชื่อมต่อ"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:16
 msgid "This predicate can be used between two pages of the following categories."
@@ -3888,11 +3888,11 @@ msgstr "URI"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
 msgid "Use a list of checkboxes with titles when adding page connections."
-msgstr ""
+msgstr "ใช้รายการช่องทำเครื่องหมายพร้อมชื่อเรื่องเมื่อเพิ่มการเชื่อมต่อหน้า"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:73
 msgid "Usually new connections are inserted after existing connections. Check this to insert new connections before existing connections."
-msgstr ""
+msgstr "โดยปกติแล้วการเชื่อมต่อใหม่จะถูกแทรกหลังจากการเชื่อมต่อที่มีอยู่ เลือกตัวเลือกนี้เพื่อแทรกการเชื่อมต่อใหม่ก่อนการเชื่อมต่อที่มีอยู่"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:4
 msgid "Valid between"
