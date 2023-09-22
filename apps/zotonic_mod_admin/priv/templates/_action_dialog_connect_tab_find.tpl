@@ -4,7 +4,7 @@
     {% with m.rsc[subject_id].o[predicate] as oids %}
     <div class="tab-pane {% if is_active %}active{% endif %}" id="{{ tab }}-find">
 
-        <form class="">
+        <form>
             <input type="text"
                    autofocus
                    class="form-control do_listfilter"
