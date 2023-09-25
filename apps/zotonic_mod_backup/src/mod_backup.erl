@@ -1,9 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2022 Marc Worrell
+%% @copyright 2010-2023 Marc Worrell
 %% @doc Backup module. Creates backup of the database and files.  Allows downloading of the backup.
 %% Support creation of periodic backups.
+%% @end
 
-%% Copyright 2010-2022 Marc Worrell
+%% Copyright 2010-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -38,6 +39,8 @@
     observe_rsc_update_done/2,
     observe_rsc_upload/2,
     observe_search_query/2,
+    observe_tick_24h/2,
+
     start_backup/1,
     start_backup/2,
     list_backups/1,
@@ -124,9 +127,16 @@ observe_search_query(#search_query{ name = <<"backup_deleted">>, offsetlimit = O
 observe_search_query(#search_query{}, _Context) ->
     undefined.
 
+observe_tick_24h(tick_24h, Context) ->
+    m_backup_revision:periodic_cleanup(Context).
+
+
 %% @doc Callback for controller_file. Check if the file exists and return
 %% the path to the file on disk.
--spec file_exists( File :: binary(), z:context() ) -> {true, file:filename_all()} | false.
+-spec file_exists(File, Context) -> {true, FilePath} | false when
+    File :: file:filename_all(),
+    Context :: z:context(),
+    FilePath :: file:filename_all().
 file_exists(File, Context) ->
     Root = filename:rootname(filename:rootname(File)),
     Admin = read_admin_file(Context),
@@ -170,7 +180,10 @@ file_exists(File, Context) ->
     end.
 
 %% @doc Callback for controller_file. Check if access is allowed.
--spec file_forbidden( File :: binary(), z:context() ) -> boolean().
+-spec file_forbidden(File, Context) -> IsForbidden when
+    File :: file:filename_all(),
+    Context :: z:context(),
+    IsForbidden :: boolean().
 file_forbidden(_File, Context) ->
     IsAllowed = (z_acl:is_admin(Context) orelse z_acl:is_allowed(use, mod_backup, Context)),
     not IsAllowed.
