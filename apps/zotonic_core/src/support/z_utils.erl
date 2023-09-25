@@ -613,7 +613,7 @@ is_true(yes) -> true;
 is_true(on) -> true;
 
 is_true(N) when is_integer(N) andalso N =/= 0 -> true;
-is_true(N) when is_float(N) andalso N =/= 0.0 -> true;
+is_true(N) when is_float(N) andalso N /= 0.0 -> true;
 
 is_true(_) -> false.
 
