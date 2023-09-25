@@ -107,14 +107,12 @@
 	    "js/modules/z.formreplace.js"
 	    "js/modules/z.datepicker.js"
 	    "js/modules/z.menuedit.js"
-	    "js/modules/z.cropcenter.js"
 	    "js/modules/z.formdirty.js"
 	    "js/modules/jquery.shorten.js"
 	    "js/modules/jquery.timepicker.min.js"
 
 	    "js/apps/admin-common.js"
 	    "js/modules/admin-frontend.js"
-	    ""
 	%}
 	{% lib
 	    "js/jquery.ui.nestedSortable.js"
