@@ -196,7 +196,7 @@ revision_retention_period(Context) ->
         undefined ->
             ?BACKUP_REVISION_RETENTION_PERIOD;
         N ->
-            lists:max(N, 1)
+            max(N, 1)
     end.
 
 %% @doc Install the revisions table.
