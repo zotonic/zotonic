@@ -9,7 +9,7 @@
     <div class="bottom clearfix">
         <div class="caption">
             {% with m.rsc[object_id].title|striptags|default:_"untitled" as title %}
-                <a href="#" id="{{ #edit }}" title="{{ object_id.title }}">{{ object_id.cropcenter }} {{ title }}</a>
+                <a href="#" id="{{ #edit }}" title="{{ object_id.title }}">{{ title }}</a>
             {% endwith %}
 	    </div>
     </div>
