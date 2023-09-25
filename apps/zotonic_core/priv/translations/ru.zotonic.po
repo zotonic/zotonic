@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-19 10:45\n"
+"PO-Revision-Date: 2023-09-22 16:19\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -202,7 +202,7 @@ msgid "Are you sure you want to restore all ACL rules to their currently publish
 msgstr "Вы уверены, что хотите восстановить все правила ACL до их версии, опубикованной на данный момент?"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:150./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:78
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:98./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:68./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:251./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:282./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:171./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:68./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:251./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:282./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:21
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:92
@@ -243,7 +243,7 @@ msgid "Change category and/or content group..."
 msgstr "Изменить категорию и/или группу контента..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:22
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:98
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:171
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:69
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:31./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:46
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
@@ -265,7 +265,7 @@ msgid "Collaboration group members"
 msgstr "Члены группы сотрудничества"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:540
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:47
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:120
 msgid "Collaboration groups"
 msgstr "Группы сотрудничества"
 
@@ -290,7 +290,7 @@ msgid "Content group"
 msgstr "Группа контента"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:16
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:55
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:128
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:197
 msgid "Content groups"
 msgstr "Группы контента"
@@ -877,7 +877,7 @@ msgstr "Распределенный сайт"
 msgid "Alternative telephone"
 msgstr "Дополнительный телефон"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:72./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:149
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:72
 msgid "Amount"
 msgstr "Количество"
 
@@ -885,12 +885,12 @@ msgstr "Количество"
 msgid "And media can also be viewed on their own page."
 msgstr "Также материалы могут быть просмотрены на собственной странице."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:20
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:93
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:14
 msgid "Any category"
 msgstr "Любая категория"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:44
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:117
 msgid "Anybody’s"
 msgstr "чей угодно"
 
@@ -1059,6 +1059,10 @@ msgstr "Невозможно подключиться к сайту."
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:11
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "Не смог обнаружить ничего, что можно было бы импортировать по этому URL или вставить код."
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:149
+msgid "Count"
+msgstr "Счёт"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:80./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:195./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:45./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:47
@@ -1606,7 +1610,7 @@ msgstr "Память"
 msgid "Middle"
 msgstr "Отчество"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:45
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:118
 msgid "Mine"
 msgstr "Мой"
 
@@ -2345,10 +2349,14 @@ msgstr "Показать/скрыть навигацию"
 msgid "Too many connections, only the first and last are shown."
 msgstr "Слишком много соединений, отображаются только первое и последнее."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:81
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
 msgid "Type text to search"
 msgstr "Введите текст для поиска"
+
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:11
+msgid "Type to filter the list below."
+msgstr "Введите, чтобы отфильтровать список ниже."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:12
 msgid "Unique Page"
@@ -2444,7 +2452,7 @@ msgstr "Используемый"
 msgid "User page"
 msgstr "Страница пользователя"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:18
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:91
 msgid "Valid for:"
 msgstr "Действителен для:"
 
@@ -3757,7 +3765,7 @@ msgstr "Удалить все соединения"
 msgid "Delete is canceled, there are connections with this predicate."
 msgstr "Удаление прервано, есть связи с этим предикатом."
 
-#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:66
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:80
 msgid "Do not find subjects using this predicate’s object titles."
 msgstr "Не используйте названия объектов этого предиката для поиска субъектов."
 
@@ -3769,7 +3777,7 @@ msgstr "Введите название нового предиката."
 msgid "Filter on predicate"
 msgstr "Фильтр по предикату"
 
-#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:20
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:23
 msgid "From category"
 msgstr "От категории"
 
@@ -3777,9 +3785,13 @@ msgstr "От категории"
 msgid "Help about predicates"
 msgstr "Справка о предикатах"
 
-#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:54
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:70
 msgid "Insert new connections before existing connections."
 msgstr "Вставьте новые соединения перед существующими соединениями."
+
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:63
+msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
+msgstr "Вместо окна поиска будет отображаться список всех страниц в категориях от <i>до</i> , отмеченных выше. Должна быть отмечена хотя бы одна категория."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19./apps/zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:47
 msgid "Make a new predicate"
@@ -3809,6 +3821,15 @@ msgstr "Объект"
 msgid "Only showing connections with:"
 msgstr "Показываю только связи с:"
 
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:93
+msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
+msgstr "Онтологии определяют предикаты для определенного набора категорий субъектов и объектов. Иногда более практично изменить направление соединения предиката по сравнению с формальным определением. Функции экспорта и импорта могут использовать эту опцию для замены отношений субъект/объект при экспорте или импорте данных."
+
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:55
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
+msgid "Options"
+msgstr "Опции"
+
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:25
 msgid "Or click <strong>Delete All Connections</strong> to delete all connections with this predicate."
 msgstr "Или нажмите <strong>Удалить все соединения</strong> , чтобы удалить все соединения с этим предикатом."
@@ -3833,7 +3854,7 @@ msgstr "Извините, вам не разрешено вставлять со
 msgid "Subject"
 msgstr "Субъект"
 
-#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:90
 msgid "The direction (from/to) of this predicate is reversed from the normal definition."
 msgstr "Направление (от/к) этого предиката обратно относительно нормального определения."
 
@@ -3845,17 +3866,33 @@ msgstr "Нет связей страниц с этим предикатом."
 msgid "There is already a predicate with this name."
 msgstr "Уже есть предикат с этим именем."
 
-#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:15
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:83
+msgid "This directs the indexers to not include the titles of connected pages with this predicate. Normally titles of connected pages are included, making it possible to eg. find articles by their author’s name."
+msgstr "Это предписывает индексаторам не включать заголовки связанных страниц с этим предикатом. Обычно включаются заголовки связанных страниц, что позволяет, например, найти статьи по имени автора."
+
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:17
+msgid "This is used to filter the predicates in the <i>Page connections</i> panel and the pages in the connect dialogs."
+msgstr "Это используется для фильтрации предикатов на панели <i>Подключения страниц</i> и страницах в диалоговых окнах подключения."
+
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:16
 msgid "This predicate can be used between two pages of the following categories."
 msgstr "Этот предикат можно использовать между двумя страницами следующих категорий."
 
-#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:35
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:38
 msgid "To category"
 msgstr "К категории"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:28
 msgid "URI"
 msgstr "URI"
+
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
+msgid "Use a list of checkboxes with titles when adding page connections."
+msgstr "Используйте список флажков с заголовками при добавлении соединений страниц."
+
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:73
+msgid "Usually new connections are inserted after existing connections. Check this to insert new connections before existing connections."
+msgstr "Обычно новые соединения вставляются после существующих. Установите этот флажок, чтобы вставлять новые соединения перед существующими."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:4
 msgid "Valid between"
@@ -5564,10 +5601,6 @@ msgstr "Наблюдатели"
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:101
 msgid "Optional category for catinclude"
 msgstr "Дополнительная категория для catinclude"
-
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
-msgid "Options"
-msgstr "Опции"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:71./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:77
 msgid "Permanent redirect"
@@ -8145,11 +8178,11 @@ msgstr "Соответствующий текст"
 msgid "Rebuild search facets"
 msgstr "Восстановить фасеты поиска"
 
-#: apps/zotonic_mod_search/src/mod_search.erl:68
+#: apps/zotonic_mod_search/src/mod_search.erl:90
 msgid "Rebuilding the faceted search table."
 msgstr "Восстановление таблицы фасетного поиска."
 
-#: apps/zotonic_mod_search/src/mod_search.erl:70
+#: apps/zotonic_mod_search/src/mod_search.erl:92
 #: apps/zotonic_mod_survey/src/support/survey_admin.erl:40./apps/zotonic_mod_survey/src/support/survey_admin.erl:62./apps/zotonic_mod_survey/src/support/survey_admin.erl:107./apps/zotonic_mod_survey/src/support/survey_admin.erl:202
 msgid "Sorry, you are not allowed to do this."
 msgstr "Извините, вам не разрешено это делать."
