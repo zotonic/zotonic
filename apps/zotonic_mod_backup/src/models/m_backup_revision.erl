@@ -178,7 +178,7 @@ list_revisions_assoc(Id, Context) ->
     Context :: z:context().
 periodic_cleanup(Context) ->
     Months = revision_retention_period(Context),
-    Threshold = z_datetime:prev_month(Months, calendar:universal_time()),
+    Threshold = z_datetime:prev_month(calendar:universal_time(), Months),
     z_db:q("
         delete from backup_revision
         where created < $1",
