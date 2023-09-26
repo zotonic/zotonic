@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2018  Marc Worrell
-%% @doc Deprecated transport handling.
+%% @copyright 2014-2023  Marc Worrell
+%% @doc Transport handling for wired postbacks.
+%% @end
 
-%% Copyright 2014-2018 Marc Worrell
+%% Copyright 2014-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -81,8 +82,19 @@ transport(Delegate, #postback_notify{ data = Data } = Notify, Context) ->
     % Notify for delegate
     case maybe_set_q(Data, Context) of
         {ok, Context1} ->
-            {ok, Module} = z_utils:ensure_existing_module(Delegate),
-            incoming_context_result(Module:event(Notify, Context1));
+            case z_utils:ensure_existing_module(Delegate) of
+                {ok, Module} ->
+                    incoming_context_result(Module:event(Notify, Context1));
+                {error, Reason} ->
+                    ?LOG_ERROR(#{
+                        in => zotonc_core,
+                        text => <<"Unknown delegate for postback_notify">>,
+                        result => error,
+                        reason => Reason,
+                        delegate => Delegate
+                    }),
+                    incoming_context_result(Context)
+            end;
         {error, ContextValidation} ->
             incoming_context_result(ContextValidation)
     end;
@@ -101,7 +113,8 @@ transport(Delegate, Payload, Context) ->
             },
             incoming_context_result(Module:event(Msg, Context));
         {error, Reason} ->
-            ?LOG_WARNING(#{
+            ?LOG_ERROR(#{
+                in => zotonic_core,
                 text => <<"Unknown delegate for payload">>,
                 result => error,
                 reason => Reason,
