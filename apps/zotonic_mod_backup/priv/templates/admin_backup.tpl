@@ -40,6 +40,10 @@
                                 </label>
                                 {% wire id="backup_panel" postback=`config_backup_panel` %}
                             </div>
+
+                            <p class="help-block">
+                                <i class="fa fa-info-circle"></i> {% trans "Revisions are kept for {n} months." n=m.backup_revision.retention_months %}
+                            </p>
                         </div>
                     </div>
 

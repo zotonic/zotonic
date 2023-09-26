@@ -32,6 +32,7 @@
     list_revisions_assoc/2,
 
     periodic_cleanup/1,
+    retention_months/1,
 
     install/1
 ]).
@@ -41,7 +42,7 @@
 -define(BACKUP_TYPE_PROPS, $P).
 
 % Number of months we keep revisions
--define(BACKUP_REVISION_RETENTION_PERIOD, 18).
+-define(BACKUP_REVISION_RETENTION_MONTHS, 18).
 
 
 %% @doc Fetch the value for the key from a model source
@@ -53,6 +54,8 @@ m_get([ <<"list">>, Id | Rest ], _Msg, Context) ->
         false -> []
     end,
     {ok, {Revs, Rest}};
+m_get([ <<"retention_months">> | Rest ], _Msg, Context) ->
+    {ok, {retention_months(Context), Rest}};
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
@@ -172,12 +175,12 @@ list_revisions_assoc(Id, Context) ->
     list_revisions_assoc(m_rsc:rid(Id, Context), Context).
 
 
-%% @doc Delete revisions older than mod_backup.revision_retention_period months, which
+%% @doc Delete revisions older than mod_backup.revision_retention_months, which
 %% defaults to 18 months.
 -spec periodic_cleanup(Context) -> ok when
     Context :: z:context().
 periodic_cleanup(Context) ->
-    Months = revision_retention_period(Context),
+    Months = retention_months(Context),
     Threshold = z_datetime:prev_month(calendar:universal_time(), Months),
     z_db:q("
         delete from backup_revision
@@ -187,14 +190,14 @@ periodic_cleanup(Context) ->
     ok.
 
 %% @doc Return the number of months we keep revisions. Defaults to 18 months. Uses
-%% the configuration mod_backup.revision_retention_period
--spec revision_retention_period(Context) -> Months when
+%% the configuration mod_backup.revision_retention_months
+-spec retention_months(Context) -> Months when
     Context :: z:context(),
     Months :: pos_integer().
-revision_retention_period(Context) ->
-    case z_convert:to_integer(m_config:get_value(mod_backup, revision_retention_period, Context)) of
+retention_months(Context) ->
+    case z_convert:to_integer(m_config:get_value(mod_backup, revision_retention_months, Context)) of
         undefined ->
-            ?BACKUP_REVISION_RETENTION_PERIOD;
+            ?BACKUP_REVISION_RETENTION_MONTHS;
         N ->
             max(N, 1)
     end.
