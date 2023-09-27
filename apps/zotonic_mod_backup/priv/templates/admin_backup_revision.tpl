@@ -48,11 +48,14 @@
 		        <h2>{_ Revisions for _} <em>{_ Deleted _}</em></h2>
 		    {% endif %}
 
+	    	{% if id.exists %}
+			    <p>
+		    		<a class="btn btn-default" href="{% url admin_edit_rsc id=id %}">{_ Back to the edit page _}</a>
+			    </p>
+	    	{% endif %}
 		    <p>
 		    	{_ Check and possibly restore an earlier version of your page. _}
-		    	{% if id.exists %}
-		    		<a href="{% url admin_edit_rsc id=id %}">{_ Back to the edit page _}</a>
-		    	{% endif %}
+		    	{% trans "Revisions are kept for {n} months." n=m.backup_revision.retention_months %}
 		    </p>
 		</div>
 
