@@ -42,12 +42,6 @@
 
 {{ id.seo_desc }}
 
-{% for z_language in id.language|default:[z_language] %}
-    {% for b in id.blocks %}
-        {{ b.body }} {{ b.header }} {{ b.prompt }}
-    {% endfor %}
-{% endfor %}
-
 {% if not id.is_a.person %}
     {{ id.date_start }}
     {{ id.date_end }}
