@@ -852,12 +852,12 @@ rank_weight(Context) ->
                     Ws1 = [ hd(M) || M <- Ms ],
                     [D, C, B, A] = append_weights(Ws1),
                     <<
-                        "{",
+                        "'{",
                         D/binary, ", ",
                         C/binary, ", ",
                         B/binary, ", ",
                         A/binary,
-                        "}"
+                        "}'"
                     >>
             end
     end.
