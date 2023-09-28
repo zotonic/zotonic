@@ -44,9 +44,14 @@ m_get([ Cfg | Rest ], _Msg, Context)
          Cfg =:= <<"nocache">> ->
     {ok, {m_config:get_boolean(mod_development, Cfg, Context), Rest}};
 m_get([ <<"list_observers">> | Rest ], _Msg, Context) ->
-    Observers = z_notifier:get_observers(Context),
-    List = [ {atom_to_binary(Event, utf8), readable(Os)} || {Event, Os} <- Observers ],
-    {ok, {List, Rest}};
+    case z_acl:is_allowed(use, mod_development, Context) of
+        true ->
+            Observers = z_notifier:get_observers(Context),
+            List = [ {atom_to_binary(Event, utf8), readable(Os)} || {Event, Os} <- Observers ],
+            {ok, {List, Rest}};
+        false ->
+            {error, eacces}
+    end;
 m_get([ <<"record_info">>, Record | Rest ], _Msg, _Context) ->
     RecInfo = case to_atom(Record) of
         {ok, Rec} ->

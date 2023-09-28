@@ -118,6 +118,11 @@
 
         <hr/>
 
+        <p><a href="{% url admin_development_templates_xref %}">{_ Check included templates _}</a></p>
+        <p class="help-block">{_ Compile all templates. The compiled templates are checked for missing includes or missing extends/overrules template referenceds. _}</p>
+
+        <hr/>
+
         <p><a href="{% url admin_development_templates %}">{_ Show which files are included in a template compilation _}</a></p>
         <p class="help-block">{_ At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template. _}</p>
 

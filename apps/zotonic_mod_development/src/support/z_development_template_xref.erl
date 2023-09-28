@@ -47,7 +47,7 @@ check(Context) ->
                     {Acc1, ErrAcc};
                 {error, Reason} ->
                     ErrAcc1 = ErrAcc#{
-                        Filename => Reason
+                        Filename => reason(Reason)
                     },
                     {Acc, ErrAcc1}
             end
@@ -105,9 +105,29 @@ check(Context) ->
     {ok, #{
         missing => drop_empty(Miss),
         optional => drop_empty(Opts),
-        errors => Errors,
+        errors => drop_empty(Errors),
         extend_errors => drop_empty(ExtendErrors)
     }}.
+
+reason(Reason) when is_map(Reason) ->
+    Reason;
+reason(Reason) when is_atom(Reason) ->
+    #{
+        text => atom_to_binary(Reason, utf8)
+    };
+reason(Reason) when is_binary(Reason) ->
+    #{
+        text => Reason
+    };
+reason(Reason) when is_list(Reason) ->
+    #{
+        text => unicode:characters_to_binary(Reason, utf8)
+    };
+reason(Reason) ->
+    S = io_lib:format("~tp", [ Reason ]),
+    #{
+        text => unicode:characters_to_binary(S, utf8)
+    }.
 
 find_overrules(#module_index{ key = Key, filepath = Filename }, Context) ->
     #module_index_key{ name = TplName } = Key,
