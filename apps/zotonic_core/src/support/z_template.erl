@@ -1,8 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2016 Marc Worrell
-%% @doc Template handling, compiles and renders django compatible templates using the template_compiler
+%% @copyright 2009-2023 Marc Worrell
+%% @doc Template handling, compiles and renders django compatible templates using the
+%% template_compiler.
+%% @end
 
-%% Copyright 2009-2016 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,7 +38,8 @@
     is_template_module/1,
     template_module/3,
     blocks/3,
-    includes/3
+    includes/3,
+    extends/3
 ]).
 
 -include_lib("template_compiler/include/template_compiler.hrl").
@@ -233,6 +236,20 @@ includes(Template, Vars, Context) ->
     case template_module(Template, Vars, Context) of
         {ok, Module} ->
             {ok, Module:includes()};
+        {error, _} = Error ->
+            Error
+    end.
+
+%% @doc Return the template that the given template extends or overrules.
+-spec extends(Template, Vars, Context) -> {ok, Extends} | {error, term()} when
+    Template :: template_compiler:template() | #module_index{},
+    Vars :: list() | map(),
+    Context :: z:context(),
+    Extends :: undefined | binary() | overrules.
+extends(Template, Vars, Context) ->
+    case template_module(Template, Vars, Context) of
+        {ok, Module} ->
+            {ok, Module:extends()};
         {error, _} = Error ->
             Error
     end.

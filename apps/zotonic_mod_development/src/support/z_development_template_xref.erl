@@ -28,7 +28,12 @@
 
 -spec check(Context) -> {ok, XRef} when
     Context :: z:context(),
-    XRef :: #{ missing := map(), optional := map(), errors := map() }.
+    XRef :: #{
+        missing := map(),
+        optional := map(),
+        errors := map(),
+        extend_errors := map()
+    }.
 check(Context) ->
     All = z_module_indexer:all(template, Context),
     {Includes, Errors} = lists:foldl(
@@ -67,11 +72,52 @@ check(Context) ->
         end,
         {#{}, #{}},
         Includes),
+    ExtendErrors = lists:foldl(
+        fun(Template, Acc) ->
+            #module_index{ filepath = Filename } = Template,
+            case z_template:extends(Template, #{}, Context) of
+                {ok, undefined} ->
+                    Acc;
+                {ok, Extends} when is_binary(Extends) ->
+                    case z_module_indexer:find(template, Extends, Context) of
+                        {ok, _} ->
+                            Acc;
+                        {error, enoent} ->
+                            Acc#{
+                                Filename => Extends
+                            }
+                    end;
+                {ok, overrules} ->
+                    case find_overrules(Template, Context) of
+                        ok ->
+                            Acc;
+                        error ->
+                            Acc#{
+                                Filename => overrules
+                            }
+                    end;
+                {error, _} ->
+                    Acc
+            end
+        end,
+        #{},
+        All),
     {ok, #{
         missing => drop_empty(Miss),
         optional => drop_empty(Opts),
-        errors => Errors
+        errors => Errors,
+        extend_errors => drop_empty(ExtendErrors)
     }}.
+
+find_overrules(#module_index{ key = Key, filepath = Filename }, Context) ->
+    #module_index_key{ name = TplName } = Key,
+    Tpl = {overrules, TplName, Filename},
+    case z_template_compiler_runtime:map_template(Tpl, #{}, Context) of
+        {ok, _File} ->
+            ok;
+        {error, _} ->
+            error
+    end.
 
 drop_empty(Errs) ->
     BuildDir = <<(build_dir())/binary, "/">>,
