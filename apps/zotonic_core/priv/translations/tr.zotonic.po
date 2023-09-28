@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-27 13:19\n"
+"PO-Revision-Date: 2023-09-28 14:51\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -432,7 +432,7 @@ msgstr "Aynı kullanıcı grubunun üyeleri"
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
 #: apps/zotonic_mod_base/priv/templates/error.tpl:78
-#: apps/zotonic_mod_development/priv/templates/_development_template.tpl:3
+#: apps/zotonic_mod_development/priv/templates/_development_template.tpl:3./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:10./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:58./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:116./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:171
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:24
 msgid "Module"
 msgstr "Modül"
@@ -2520,7 +2520,7 @@ msgstr "İş Rehberi"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:54
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:87
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:90
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:35
 msgid "Y-m-d H:i"
 msgstr "Y-m-d H:i"
@@ -4263,6 +4263,7 @@ msgid "Enter your email address to receive instructions on how to reset your pas
 msgstr "Parolanızı nasıl sıfırlayacağınızla ilgili talimatları almak için e-posta adresinizi girin."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:14
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:118
 #: apps/zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
 msgid "Error"
@@ -4675,19 +4676,19 @@ msgstr "Yönetici Yedeklemeleri"
 msgid "Are you sure you want to revert to this version?"
 msgstr "Bu sürüme geri dönmek istediğinizden emin misini?"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:100
 msgid "At any moment you can make a backup of your system."
 msgstr "Herhangi bir anda sisteminizin yedeğini oluşturabilirsiniz."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:52
 msgid "Automatic daily backups of the database and uploaded files can be enabled. This is done at night and the last 7 backups are kept."
 msgstr "Veritabanının ve yüklenen dosyaların otomatik günlük yedeklemeleri etkinleştirilebilir. Bu işlem gece yapılır ve son 7 yedek tutulur."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:54
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:53
 msgid "Back to the edit page"
 msgstr "Düzenleme sayfasına geri dön"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:89
+#: apps/zotonic_mod_backup/src/mod_backup.erl:92
 msgid "Backup"
 msgstr "Yedekle"
 
@@ -4711,7 +4712,7 @@ msgstr "Değiştirilmiş yapılandırma."
 msgid "Changes since"
 msgstr "Tarihinden itibaren yapılan değişiklikler"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:52
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:57
 msgid "Check and possibly restore an earlier version of your page."
 msgstr "Sayfanızın daha önce tarihli bir sürümünü kontrol edin ve muhtemelen geri yükleyin."
 
@@ -4719,11 +4720,11 @@ msgstr "Sayfanızın daha önce tarihli bir sürümünü kontrol edin ve muhteme
 msgid "Click on <b>List and restore an earlier version</b> to get an overview of earlier saved versions of this page.<br/>You can also save the complete contents of a page to a file. Later you can reload this file, replacing the current page contents. Note that the file does not contain your unsaved changes. Connections and media are not saved as well."
 msgstr "Bu sayfanın daha önce kaydedilmiş sürümlerine genel bir bakış için <b> Bir önceki sürümü listele ve geri yükle </b> düğmesini tıklayın. <br/> Ayrıca bir sayfanın tüm içeriğini bir dosyaya da kaydedebilirsiniz. Daha sonra, mevcut sayfanın içeriğini değiştirerek bu dosyayı yeniden yükleyebilirsiniz. Dosyanın kaydedilmemiş değişikliklerinizi içermediğini unutmayın. Bağlantılar ve medya da kaydedilmez."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:68
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:72
 msgid "Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally."
 msgstr "Bulut dosya deposu etkinleştirildi. Veritabanının yedekleri bulut dosya deposuna yüklenir. Yerel dosyalar buluta kopyalanır ve yerel olarak yedeklenmez."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:132
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:136
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "Bulut dosya deposu etkinleştirildi. Yerel dosyalar yedeklenmeyecektir. Bulut dosya deposu sisteminizin uygun bir yedeğe sahip olduğundan emin olun."
 
@@ -4743,7 +4744,7 @@ msgstr "tarafından silindi"
 msgid "Deleted on"
 msgstr "tarihinde silindi"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:102
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:105
 msgid "Deleted pages"
 msgstr "Silinen sayfalar"
 
@@ -4751,7 +4752,7 @@ msgstr "Silinen sayfalar"
 msgid "Directory"
 msgstr "dizin"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:53./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:74
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:78
 msgid "Do not make a daily backup."
 msgstr "Günlük yedekleme yapmayın."
 
@@ -4775,11 +4776,11 @@ msgstr "Önceki sürümü listele ve geri yükle"
 msgid "List of recently deleted pages and recover options via the resource revisions log."
 msgstr "Yakın zamanda silinen sayfaların listesi ve kaynak revizyonları günlüğü aracılığıyla kurtarma seçenekleri."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:82
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:65./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:86
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Veritabanı ve yüklenen dosyalar için günlük yedekleme oluşturun."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:78
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:82
 msgid "Make a daily backup of the database."
 msgstr "Veritabanının günlük yedeğini alın."
 
@@ -4795,7 +4796,7 @@ msgstr "Dosya deposuna yüklenmedi"
 msgid "Only the texts and other properties of pages are backed up."
 msgstr "Yalnızca sayfaların metinleri ve diğer özellikleri yedeklenir."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:76
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:79
 msgid "Previous"
 msgstr "Önceki"
 
@@ -4810,6 +4811,10 @@ msgstr "Yedeği geri yükle"
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
 msgid "Revert to this version..."
 msgstr "Bu sürüme geri dön..."
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:45./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:58
+msgid "Revisions are kept for {n} months."
+msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:46./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:48
 msgid "Revisions for"
@@ -4851,23 +4856,23 @@ msgstr "Üzgünüz, bu sayfayı değiştirmek için izne sahip değilsiniz."
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Üzgünüz, bu yapılandırmayı değiştirmek için izne sahip değilsiniz."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:105
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:109
 msgid "Start backup now"
 msgstr "Yedeklemeye şimdi başla"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:108
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:112
 msgid "Start database-only backup now"
 msgstr "Sadece veritabanı yedeklemesini şimdi başlat"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:119
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:123
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
 msgstr "\"pg_dump\" komutu yolda bulunamadı. zotonic.config'de \"pg_dump\" yapılandırma anahtarını <tt>pg_dump</tt> yoluna ayarlayın ve bu sayfaya geri dönün."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:122
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:126
 msgid "The \"tar\" command was not found in the path. Set in zotonic.config the \"tar\" config key to the path to <tt>tar</tt> and return to this page."
 msgstr "\"tar\" komutu yolda bulunamadı. Zotonic.config'de \"tar\" yapılandırma anahtarını <tt>tar</tt> yoluna ayarlayın ve bu sayfaya geri dönün."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:98
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:102
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "Yedek iki bölümden oluşur veritabanı ve yüklenen dosyalar."
 
@@ -4883,7 +4888,7 @@ msgstr "Bu yedek dosyasındaki içeriği sayfanızın üstüne yazacaktır."
 msgid "Uploaded to filestore"
 msgstr "Dosya deposuna yüklendi"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:115
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:119
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
@@ -4905,7 +4910,7 @@ msgstr "Bu sayfayı kurtarmanıza izin verilmiyor."
 msgid "You are not allowed to see the revisions"
 msgstr "Bu revizyonu görmeye yetkiniz yok"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:100
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:104
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "Haftanın her günü bir yedeğiniz olabilir, eskilerin üzerine yazılacaktır."
 
@@ -4913,7 +4918,7 @@ msgstr "Haftanın her günü bir yedeğiniz olabilir, eskilerin üzerine yazıla
 msgid "You need to have access rights to the backup module."
 msgstr "Yedekleme modülüne erişim haklarına sahip olmanız gerekir."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:115
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:119
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Yedeğiniz doğru olarak yapılandırılmamış. Yedek modülü problem(ler) giderilene kadar çalışmayacaktır:"
 
@@ -5466,7 +5471,23 @@ msgstr "Bunu değiştirmenize izin yok."
 msgid "Action"
 msgstr "Eylem"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:99
+msgid "All non-optional includes reference existing templates."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:156
+msgid "All optional includes reference existing templates."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:195
+msgid "All template extends and overrules are valid."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:42
+msgid "All templates are compiling."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:124
 msgid "At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template."
 msgstr "Bazen bir şablon derlemesi sırasında gerçekte hangi şablonların kullanıldığı kafa karıştırıcı olabilir. Burada bir şablon derlerken hangi dosyaların dahil edildiğini görebilirsiniz."
 
@@ -5482,15 +5503,35 @@ msgstr "Aşağıda gerçek zamanlı olarak derlenen ve eklenen temaları görüy
 msgid "Bindings"
 msgstr "Bağlar"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:118
+msgid "Check included templates"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:34./apps/zotonic_mod_development/src/mod_development.erl:77
+msgid "Checking all templates..."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:13
+msgid "Column"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
+msgid "Compile all templates. The compiled templates are checked for missing includes or missing extends/overrules template referenceds."
+msgstr ""
+
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "Controller"
 msgstr "Kontrolcü"
 
-#: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:45
+#: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:46
 msgid "Could not fetch tracer output, please try again."
 msgstr "İzleme çıktısı alınamadı, lütfen tekrar deneyin."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:333
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:12
+msgid "Cross reference check of all templates"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:366
 msgid "Development"
 msgstr "Geliştirme"
 
@@ -5502,11 +5543,11 @@ msgstr "Geliştirme - Gözlemciler"
 msgid "Disable caching by the <tt>{% cache %}</tt> tag."
 msgstr "<tt>{% cache %}</tt> etiketiyle önbelleğe almayı devre dışı bırakın."
 
-#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:38
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:39
 msgid "Disabled database query tracing"
 msgstr "Devre dışı bırakılan veritabanı sorgu izleme"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:126
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:131
 msgid "Dispatch rule debugging"
 msgstr "Gönderim kuralları hata ayıklama"
 
@@ -5526,7 +5567,7 @@ msgstr "Veritabanı sorgu izlemesini kullanmak için <tt>mod_server_storage</tt>
 msgid "Enable API to recompile and build Zotonic"
 msgstr "Zotonic'i yeniden derlemek ve oluşturmak için API'yı etkinleştirin"
 
-#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:36
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:37
 msgid "Enabled database query tracing"
 msgstr "Etkin veritabanı sorgu izleme"
 
@@ -5534,9 +5575,13 @@ msgstr "Etkin veritabanı sorgu izleme"
 msgid "Event"
 msgstr "Etkinlik"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:145
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:150
 msgid "Explain"
 msgstr "Açıkla"
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:173
+msgid "Extends"
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
 msgid "Final dispatch"
@@ -5558,13 +5603,21 @@ msgstr "Protokolü şuna zorla"
 msgid "Found matching dispatch rule"
 msgstr "Eşleşen gönderim kuralı bulundu"
 
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:61./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:119
+msgid "Included template"
+msgstr ""
+
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:8./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:12
 msgid "Included templates"
 msgstr "Dahili şablonlar"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:156
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:161
 msgid "Introspection"
 msgstr "İçgözlem"
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:12./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:60./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:118
+msgid "Line"
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:50
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
@@ -5574,9 +5627,21 @@ msgstr "Değiştirilen CSS dosyalarının canlı olarak yeniden yüklenmesi. Şa
 msgid "Location"
 msgstr "Konum"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:129
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:134
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "Bir istek URL'sini eşleştirin, eşleşen gönderim kuralı görüntüleyin."
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:163
+msgid "Missing extends or overrules"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:50
+msgid "Missing includes"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:108
+msgid "Missing optional includes"
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:40./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
 msgid "New host"
@@ -5589,6 +5654,10 @@ msgstr "Yeni yol"
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:45
 msgid "No matching dispatch rule found"
 msgstr "Eşleşen gönderme kuralı bulunamadı"
+
+#: apps/zotonic_mod_development/src/mod_development.erl:82
+msgid "No permission to use mod_development."
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:12
 msgid "Not found"
@@ -5614,7 +5683,11 @@ msgstr "Şablonları yeniden derle"
 msgid "Redirect"
 msgstr "Yönlendir"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:162
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:17
+msgid "Rerun XRef"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:167
 msgid "Show an overview of all observers."
 msgstr "Tüm gözlemcilerin bir özetini gösterin."
 
@@ -5622,7 +5695,7 @@ msgstr "Tüm gözlemcilerin bir özetini gösterin."
 msgid "Show defined blocks in generated templates"
 msgstr "Tanımlanmış blokları oluşturulan şablon üzerinde göster"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:159
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:164
 msgid "Show internals of Zotonic and the modules"
 msgstr "Zotonic ve modüllerin iç kısımlarını göster"
 
@@ -5630,11 +5703,11 @@ msgstr "Zotonic ve modüllerin iç kısımlarını göster"
 msgid "Show paths to included template files in generated templates"
 msgstr "Oluşturulan şablon içinde dahili şablonlara olan yolları göster"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:118
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:123
 msgid "Show which files are included in a template compilation"
 msgstr "Bir şablon derlemesine hangi dosyaların dahil edildiğini göster"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:7
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
 msgid "Site Development"
 msgstr "Site Geliştirme"
 
@@ -5650,6 +5723,19 @@ msgstr "Aboneler"
 msgid "Switch protocol to"
 msgstr "Protokolü şuna değiştir"
 
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:2
+msgid "Syntax errors"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:11./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:59./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:117./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:172
+#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:110
+msgid "Template"
+msgstr "Şablon"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:29
+msgid "Template check results"
+msgstr ""
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:89
 msgid "Template debugging"
 msgstr "Şablon hata ayıklama"
@@ -5657,6 +5743,30 @@ msgstr "Şablon hata ayıklama"
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:4
 msgid "Template path"
 msgstr "Şablon yolu"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8
+msgid "Templates XRef check"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:165
+msgid "These templates have <tt>extends</tt> or <tt>overrules</tt> of a missing template."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:52
+msgid "These templates have non optional includes that reference missing templates."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:110
+msgid "These templates have optional includes that reference missing templates."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:4
+msgid "These templates have syntax errors and could not be checked for included files."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:13
+msgid "This checks all templates to see if included of extended templates are available."
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:56
 msgid "This resource is unknown or does not have a URI"
@@ -5670,11 +5780,15 @@ msgstr "Site geliştirmede kullanışlı araçlar ve ayarlar."
 msgid "Trace all database queries for the current session"
 msgstr "Geçerli oturum için tüm veritabanı sorgularını izleyin"
 
-#: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:48
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:62./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:120
+msgid "Type of include"
+msgstr ""
+
+#: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:49
 msgid "You are not allowed to use the dispatch debugging."
 msgstr "Gönderme hata ayıklamayı kullanma yetkiniz yok."
 
-#: apps/zotonic_mod_development/src/support/z_development_template.erl:43
+#: apps/zotonic_mod_development/src/support/z_development_template.erl:44
 msgid "You are not allowed to use the template debugging."
 msgstr "Şablon hata ayıklamayı kullanmanıza izinli değilsiniz."
 
@@ -6765,10 +6879,6 @@ msgstr "Site Yöneticisi"
 #: apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:24
 msgid "Stack"
 msgstr "Yığın"
-
-#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:110
-msgid "Template"
-msgstr "Şablon"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:106
 msgid "To"
