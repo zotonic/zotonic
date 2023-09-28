@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-28 14:52\n"
+"PO-Revision-Date: 2023-09-28 15:52\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -4814,7 +4814,7 @@ msgstr "Selle versiooni naasmine..."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:45./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:58
 msgid "Revisions are kept for {n} months."
-msgstr ""
+msgstr "Redaktsioone säilitatakse {n} kuud."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:46./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:48
 msgid "Revisions for"
@@ -5473,19 +5473,19 @@ msgstr "Tegevus"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:99
 msgid "All non-optional includes reference existing templates."
-msgstr ""
+msgstr "Kõik mittevalikulised sisaldavad viiteid olemasolevatele mallidele."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:156
 msgid "All optional includes reference existing templates."
-msgstr ""
+msgstr "Kõik valikulised sisaldavad viiteid olemasolevatele mallidele."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:195
 msgid "All template extends and overrules are valid."
-msgstr ""
+msgstr "Kõik malli laiendused ja tühistamised kehtivad."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:42
 msgid "All templates are compiling."
-msgstr ""
+msgstr "Kõik mallid on koostamisel."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:124
 msgid "At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template."
@@ -5505,19 +5505,19 @@ msgstr "Köited"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:118
 msgid "Check included templates"
-msgstr ""
+msgstr "Kontrollige kaasasolevaid malle"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:34./apps/zotonic_mod_development/src/mod_development.erl:77
 msgid "Checking all templates..."
-msgstr ""
+msgstr "Kõigi mallide kontrollimine..."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:13
 msgid "Column"
-msgstr ""
+msgstr "Veerg"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
 msgid "Compile all templates. The compiled templates are checked for missing includes or missing extends/overrules template referenceds."
-msgstr ""
+msgstr "Koostage kõik mallid. Koostatud mallidel kontrollitakse puuduvate lisade või puuduvate laienduste/ülereeglite malli viidete suhtes."
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "Controller"
@@ -5529,7 +5529,7 @@ msgstr "Jälgija väljundit ei õnnestunud tuua, proovige uuesti."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:12
 msgid "Cross reference check of all templates"
-msgstr ""
+msgstr "Kõigi mallide ristviide"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:366
 msgid "Development"
@@ -5581,7 +5581,7 @@ msgstr "Seletama"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:173
 msgid "Extends"
-msgstr ""
+msgstr "Pikendab"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
 msgid "Final dispatch"
@@ -5605,7 +5605,7 @@ msgstr "Leiti vastav saatmisreegel"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:61./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:119
 msgid "Included template"
-msgstr ""
+msgstr "Kaasas mall"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:8./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:12
 msgid "Included templates"
@@ -5617,7 +5617,7 @@ msgstr "Enesevaatlus"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:12./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:60./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:118
 msgid "Line"
-msgstr ""
+msgstr "Liin"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:50
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
@@ -5633,15 +5633,15 @@ msgstr "Sobitage päringu URL, kuvage sobitatud saatmisreegel."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:163
 msgid "Missing extends or overrules"
-msgstr ""
+msgstr "Puuduvad laiendused või tühistamised"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:50
 msgid "Missing includes"
-msgstr ""
+msgstr "Puuduvad sisaldavad"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:108
 msgid "Missing optional includes"
-msgstr ""
+msgstr "Puuduvad valikulised lisad"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:40./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
 msgid "New host"
@@ -5657,7 +5657,7 @@ msgstr "Sobivat saatmisreeglit ei leitud"
 
 #: apps/zotonic_mod_development/src/mod_development.erl:82
 msgid "No permission to use mod_development."
-msgstr ""
+msgstr "Mod_developmenti kasutamiseks pole luba."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:12
 msgid "Not found"
@@ -5685,7 +5685,7 @@ msgstr "Suunamine"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:17
 msgid "Rerun XRef"
-msgstr ""
+msgstr "Käivita XRef uuesti"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:167
 msgid "Show an overview of all observers."
@@ -5725,7 +5725,7 @@ msgstr "Lülitage protokoll asendisse"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:2
 msgid "Syntax errors"
-msgstr ""
+msgstr "Süntaksivead"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:11./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:59./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:117./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:172
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:110
@@ -5734,7 +5734,7 @@ msgstr "Mall"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:29
 msgid "Template check results"
-msgstr ""
+msgstr "Mallide kontrollimise tulemused"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:89
 msgid "Template debugging"
@@ -5746,27 +5746,27 @@ msgstr "Mallitee"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8
 msgid "Templates XRef check"
-msgstr ""
+msgstr "Mallide XRef kontroll"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:165
 msgid "These templates have <tt>extends</tt> or <tt>overrules</tt> of a missing template."
-msgstr ""
+msgstr "Nendel mallidel on puuduva malli <tt>laiendust</tt> või <tt>alistamist</tt>."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:52
 msgid "These templates have non optional includes that reference missing templates."
-msgstr ""
+msgstr "Nendel mallidel on mittevalikulised lisad, mis viitavad puuduvatele mallidele."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:110
 msgid "These templates have optional includes that reference missing templates."
-msgstr ""
+msgstr "Nendel mallidel on valikulised lisad, mis viitavad puuduvatele mallidele."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:4
 msgid "These templates have syntax errors and could not be checked for included files."
-msgstr ""
+msgstr "Nendel mallidel on süntaksivigu ja neid ei saanud kontrollida kaasatud failide suhtes."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:13
 msgid "This checks all templates to see if included of extended templates are available."
-msgstr ""
+msgstr "See kontrollib kõiki malle, et näha, kas kaasatud laiendatud mallid on saadaval."
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:56
 msgid "This resource is unknown or does not have a URI"
@@ -5782,7 +5782,7 @@ msgstr "Jälgige kõiki praeguse seansi andmebaasipäringuid"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:62./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:120
 msgid "Type of include"
-msgstr ""
+msgstr "Kaasamise tüüp"
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:49
 msgid "You are not allowed to use the dispatch debugging."
