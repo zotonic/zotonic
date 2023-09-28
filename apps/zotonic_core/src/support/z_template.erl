@@ -1,8 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2016 Marc Worrell
-%% @doc Template handling, compiles and renders django compatible templates using the template_compiler
+%% @copyright 2009-2023 Marc Worrell
+%% @doc Template handling, compiles and renders django compatible templates using the
+%% template_compiler.
+%% @end
 
-%% Copyright 2009-2016 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,8 +36,10 @@
     render_block_to_iolist/4,
 
     is_template_module/1,
-
-    blocks/3
+    template_module/3,
+    blocks/3,
+    includes/3,
+    extends/3
 ]).
 
 -include_lib("template_compiler/include/template_compiler.hrl").
@@ -171,15 +175,20 @@ is_template_module(Module) ->
     template_compiler:is_template_module(Module).
 
 
-%% @doc Return a list of all block names in a template.
--spec blocks(template_compiler:template()|#module_index{}, map(), z:context() ) -> {ok, [ atom() ]} | {error, term()}.
-blocks(#module_index{filepath=Filename, key=Key}, Vars, Context) ->
+%% @doc Return the module of a compiled template. This will compile the template if it was not
+%% yet compiled. Vars is needed for catinclude expands.
+-spec template_module(Template, Vars, Context) -> {ok, Module} | {error, term()} when
+    Template :: template_compiler:template() | #module_index{},
+    Vars :: list() | map(),
+    Context :: z:context(),
+    Module :: module().
+template_module(#module_index{filepath=Filename, key=Key}, Vars, Context) ->
     Template = #template_file{
         filename=Filename,
         template=Key#module_index_key.name
     },
-    blocks(Template, Vars, Context);
-blocks(#template_file{ filename = Filename }, Vars, Context) when is_map(Vars) ->
+    template_module(Template, Vars, Context);
+template_module(#template_file{ filename = Filename }, Vars, Context) when is_map(Vars) ->
     Opts =  [
         {runtime, z_template_compiler_runtime},
         {context_name, z_context:site(Context)},
@@ -190,16 +199,58 @@ blocks(#template_file{ filename = Filename }, Vars, Context) when is_map(Vars) -
             <<"extra_args">>
         ]}
     ],
-    case template_compiler:lookup(Filename, Opts, Context) of
+    template_compiler:lookup(Filename, Opts, Context);
+template_module(Template, Vars, Context) ->
+    case z_template_compiler_runtime:map_template(Template, Vars, Context) of
+        {ok, MappedTemplate} ->
+            template_module(MappedTemplate, Vars, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+
+%% @doc Return the list of all block names in a template. This only returns the list
+%% in the current template and not in the extended or overruled templates.  Vars is
+%% needed for catinclude expands.
+-spec blocks(Template, Vars, Context) -> {ok, Blocks} | {error, term()} when
+    Template :: template_compiler:template() | #module_index{},
+    Vars :: list() | map(),
+    Context :: z:context(),
+    Blocks :: list( atom() ).
+blocks(Template, Vars, Context) ->
+    case template_module(Template, Vars, Context) of
         {ok, Module} ->
             {ok, Module:blocks()};
         {error, _} = Error ->
             Error
-    end;
-blocks(Template, Vars, Context) ->
-    case z_template_compiler_runtime:map_template(Template, Vars, Context) of
-        {ok, MappedTemplate} ->
-            blocks(MappedTemplate, Vars, Context);
+    end.
+
+%% @doc Return the list of all includes with a fixed template string in a template.
+%% Vars is needed for catinclude expands.
+-spec includes(Template, Vars, Context) -> {ok, Includes} | {error, term()} when
+    Template :: template_compiler:template() | #module_index{},
+    Vars :: list() | map(),
+    Context :: z:context(),
+    Includes :: list( map() ).
+includes(Template, Vars, Context) ->
+    case template_module(Template, Vars, Context) of
+        {ok, Module} ->
+            {ok, Module:includes()};
         {error, _} = Error ->
             Error
     end.
+
+%% @doc Return the template that the given template extends or overrules.
+-spec extends(Template, Vars, Context) -> {ok, Extends} | {error, term()} when
+    Template :: template_compiler:template() | #module_index{},
+    Vars :: list() | map(),
+    Context :: z:context(),
+    Extends :: undefined | binary() | overrules.
+extends(Template, Vars, Context) ->
+    case template_module(Template, Vars, Context) of
+        {ok, Module} ->
+            {ok, Module:extends()};
+        {error, _} = Error ->
+            Error
+    end.
+

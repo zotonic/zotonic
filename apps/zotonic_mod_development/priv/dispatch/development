@@ -1,9 +1,9 @@
 %% -*- mode: erlang -*-
 [
  {admin_development, ["admin", "development"], controller_admin, [{template, "admin_development.tpl"}, {selected, "development"}]},
- 
+
  {admin_development_templates, ["admin", "development", "templates"], controller_admin, [{template, "admin_development_templates.tpl"}, {selected, "development"}]},
+ {admin_development_templates_xref, ["admin", "development", "xref"], controller_admin, [{template, "admin_development_templates_xref.tpl"}, {selected, "development"}]},
 
  {admin_development_observers, ["admin", "development", "observers"], controller_admin, [{template, "admin_development_observers.tpl"}, {selected, "development"}]}
- 
 ].
