@@ -153,7 +153,11 @@ find_all(What, Name, Context) when is_atom(Name) ->
     gen_server:call(Context#context.module_indexer, {find_all, What, Name}, ?TIMEOUT).
 
 %% @doc Return a list of all templates, scomps etc per module
-all(What, #context{} = Context) ->
+-spec all(Type, Context) -> ModuleIndexList when
+    Type :: key_type(),
+    Context :: z:context(),
+    ModuleIndexList :: [ #module_index{} ].
+all(Type, #context{} = Context) ->
     ActiveApps = z_module_manager:active(Context),
     [
         #module_index{
@@ -162,14 +166,20 @@ all(What, #context{} = Context) ->
             filepath = F#mfile.filepath,
             erlang_module = F#mfile.erlang_module
         }
-        || F <- scan_apps(What, ActiveApps)
+        || F <- scan_apps(Type, ActiveApps)
     ].
 
+%% @doc Return all indexed files in a module (erlang app). The module does not have
+%% to be enabled but must be compiled.
+-spec all_files(Type, Module) -> ModuleIndexList when
+    Type :: key_type(),
+    Module :: module(),
+    ModuleIndexList :: [ #module_index{} ].
 all_files(erlang, Module) ->
     Filename = <<(z_convert:to_binary(Module))/binary, ".erl">>,
     [
         #module_index{
-            key = #module_index_key{name = Filename},
+            key = #module_index_key{ name = Filename },
             module = Module,
             erlang_module = Module
         }
@@ -181,7 +191,7 @@ all_files(Type, Module) ->
 all_files1(Type, Module) ->
     [
         #module_index{
-            key = #module_index_key{name = F#mfile.name},
+            key = #module_index_key{ name = F#mfile.name },
             module = F#mfile.module,
             filepath = F#mfile.filepath,
             erlang_module = F#mfile.erlang_module

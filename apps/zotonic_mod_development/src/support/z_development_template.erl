@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2023 Marc Worrell
 %% @doc Explain template selection.
+%% @end
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
