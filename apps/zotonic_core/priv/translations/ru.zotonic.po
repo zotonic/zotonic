@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-27 13:19\n"
+"PO-Revision-Date: 2023-09-28 14:51\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -432,7 +432,7 @@ msgstr "Членам той же группы пользователей"
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
 #: apps/zotonic_mod_base/priv/templates/error.tpl:78
-#: apps/zotonic_mod_development/priv/templates/_development_template.tpl:3
+#: apps/zotonic_mod_development/priv/templates/_development_template.tpl:3./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:10./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:58./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:116./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:171
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:24
 msgid "Module"
 msgstr "Модуль"
@@ -2520,7 +2520,7 @@ msgstr "Рабочий каталог"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:54
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:87
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:90
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:35
 msgid "Y-m-d H:i"
 msgstr "Y-m-d H:i"
@@ -4263,6 +4263,7 @@ msgid "Enter your email address to receive instructions on how to reset your pas
 msgstr "Введите свой адрес электронной почты, чтобы получить инструкции по изменению пароля."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:14
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:118
 #: apps/zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
 msgid "Error"
@@ -4675,19 +4676,19 @@ msgstr "Администрирование бэкапа"
 msgid "Are you sure you want to revert to this version?"
 msgstr "Вы уверены, что хотите вернуться к этой версии?"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:96
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:100
 msgid "At any moment you can make a backup of your system."
 msgstr "В любой момент вы можете сделать резервную копию вашей системы."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:48
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:52
 msgid "Automatic daily backups of the database and uploaded files can be enabled. This is done at night and the last 7 backups are kept."
 msgstr "Можно включить автоматическое ежедневное резервное копирование базы данных и загруженных файлов. Это делается ночью и сохраняются последние 7 резервных копий."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:54
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:53
 msgid "Back to the edit page"
 msgstr "Назад на страницу редактирования"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:89
+#: apps/zotonic_mod_backup/src/mod_backup.erl:92
 msgid "Backup"
 msgstr "Резервное копирование"
 
@@ -4711,7 +4712,7 @@ msgstr "Конфигурация изменена."
 msgid "Changes since"
 msgstr "Изменения после"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:52
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:57
 msgid "Check and possibly restore an earlier version of your page."
 msgstr "Проверьте и, возможно, восстановите более раннюю версию вашей страницы."
 
@@ -4719,11 +4720,11 @@ msgstr "Проверьте и, возможно, восстановите бол
 msgid "Click on <b>List and restore an earlier version</b> to get an overview of earlier saved versions of this page.<br/>You can also save the complete contents of a page to a file. Later you can reload this file, replacing the current page contents. Note that the file does not contain your unsaved changes. Connections and media are not saved as well."
 msgstr "Нажмите на <b>Пролистать и восстановить более раннюю версию</b> , чтобы просмотреть ранее сохраненные версии этой страницы.<br/>Вы также можете сохранить полное содержимое страницы в файл. Позже вы можете заново загрузить этот файл, заменив текущее содержимое страницы. Обратите внимание, что файл не содержит ваших несохранённых изменений. Связи и медиаматериалы также не сохраняются."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:68
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:72
 msgid "Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally."
 msgstr "Облачное хранилище файлов включено. Резервные копии базы данных загружаются в облачное файловое хранилище. Локальные файлы копируются в облако, а не резервные копии локально."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:132
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:136
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "Облачное хранилище файлов включено. Локальные файлы резервироваться не будут. Обеспечьте  надлежащее резервное копирование вашей системы облачного хранилища."
 
@@ -4743,7 +4744,7 @@ msgstr "Удалено"
 msgid "Deleted on"
 msgstr "Удалено"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:102
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:105
 msgid "Deleted pages"
 msgstr "Удаленные страницы"
 
@@ -4751,7 +4752,7 @@ msgstr "Удаленные страницы"
 msgid "Directory"
 msgstr "Каталог"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:53./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:74
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:78
 msgid "Do not make a daily backup."
 msgstr "Не делайте ежедневное резервное копирование."
 
@@ -4775,11 +4776,11 @@ msgstr "Пролистать и восстановить более раннюю
 msgid "List of recently deleted pages and recover options via the resource revisions log."
 msgstr "Список недавно удаленных страниц и варианты восстановления через журнал ревизий ресурсов."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:82
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:65./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:86
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Ежедневно создавать резервную копию базы данных и загруженных файлов."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:78
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:82
 msgid "Make a daily backup of the database."
 msgstr "Ежедневно создавать резервную копию базы данных."
 
@@ -4795,7 +4796,7 @@ msgstr "Не загружено в хранилище файлов"
 msgid "Only the texts and other properties of pages are backed up."
 msgstr "Резервируются только тексты и другие свойства страниц."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:76
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:79
 msgid "Previous"
 msgstr "Предыдущий"
 
@@ -4810,6 +4811,10 @@ msgstr "Восстановить резервную копию"
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
 msgid "Revert to this version..."
 msgstr "Вернуться к этой версии..."
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:45./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:58
+msgid "Revisions are kept for {n} months."
+msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:46./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:48
 msgid "Revisions for"
@@ -4851,23 +4856,23 @@ msgstr "Извините, у вас нет разрешения менять э�
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Извините, у вас нет разрешения на изменение конфигурации."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:105
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:109
 msgid "Start backup now"
 msgstr "Начать резервное копирование прямо сейчас"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:108
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:112
 msgid "Start database-only backup now"
 msgstr "Начать резервное копирование только базы данных"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:119
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:123
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
 msgstr "Команда \"pg_dump\" не найдена в каталогах \"path\". Укажите в zotonic.config местоположение <tt>pg_dump</tt> в параметре конфигурации \"pg_dump\" и вернитесь на эту страницу."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:122
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:126
 msgid "The \"tar\" command was not found in the path. Set in zotonic.config the \"tar\" config key to the path to <tt>tar</tt> and return to this page."
 msgstr "Команда \"tar\" не найдена в каталогах \"path\". Укажите в zotonic.config местоположение <tt>tar</tt> в параметре конфигурации \"tar\" и вернитесь на эту страницу."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:98
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:102
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "Резервная копия состоит из двух частей - базы данных и загруженных файлов."
 
@@ -4883,7 +4888,7 @@ msgstr "Ваша страница будет перезаписана содер
 msgid "Uploaded to filestore"
 msgstr "Загружено в хранилище файлов"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:115
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:119
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
@@ -4905,7 +4910,7 @@ msgstr "Вы не можете восстановить эту страницу.
 msgid "You are not allowed to see the revisions"
 msgstr "Вы не имеете права просматривать ревизии"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:100
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:104
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "У вас может быть одна резервная копия в день недели, более старые будут перезаписаны."
 
@@ -4913,7 +4918,7 @@ msgstr "У вас может быть одна резервная копия в 
 msgid "You need to have access rights to the backup module."
 msgstr "Вам необходимо иметь права доступа к модулю резервного копирования."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:115
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:119
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Ваше резервное копирование настроено неправильно. Модуль резервного копирования не будет работать до тех пор, пока не будет решена проблема(ы), указанная(ые) ниже:"
 
@@ -5466,7 +5471,23 @@ msgstr "Вы не имеете права это менять."
 msgid "Action"
 msgstr "Действие"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:99
+msgid "All non-optional includes reference existing templates."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:156
+msgid "All optional includes reference existing templates."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:195
+msgid "All template extends and overrules are valid."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:42
+msgid "All templates are compiling."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:124
 msgid "At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template."
 msgstr "Иногда может возникнуть путаница, какие шаблоны фактически используются во время компиляции шаблона. Здесь вы можете увидеть, какие файлы включены при компиляции шаблона."
 
@@ -5482,15 +5503,35 @@ msgstr "Здесь в режиме реального времени отобр�
 msgid "Bindings"
 msgstr "Связи"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:118
+msgid "Check included templates"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:34./apps/zotonic_mod_development/src/mod_development.erl:77
+msgid "Checking all templates..."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:13
+msgid "Column"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
+msgid "Compile all templates. The compiled templates are checked for missing includes or missing extends/overrules template referenceds."
+msgstr ""
+
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "Controller"
 msgstr "Контроллер"
 
-#: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:45
+#: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:46
 msgid "Could not fetch tracer output, please try again."
 msgstr "Не удалось получить вывод трассировщика, попробуйте еще раз."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:333
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:12
+msgid "Cross reference check of all templates"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:366
 msgid "Development"
 msgstr "Разработка"
 
@@ -5502,11 +5543,11 @@ msgstr "Развитие - Наблюдатели"
 msgid "Disable caching by the <tt>{% cache %}</tt> tag."
 msgstr "Отключите кэширование тегом <tt>{% cache %}</tt> ."
 
-#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:38
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:39
 msgid "Disabled database query tracing"
 msgstr "Отключена трассировка запросов к базе данных"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:126
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:131
 msgid "Dispatch rule debugging"
 msgstr "Отладка правил диспетчеризации"
 
@@ -5526,7 +5567,7 @@ msgstr "Включите <tt>mod_server_storage</tt> для использова
 msgid "Enable API to recompile and build Zotonic"
 msgstr "Включите API для перекомпиляции и сборки Zotonic"
 
-#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:36
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:37
 msgid "Enabled database query tracing"
 msgstr "Включена трассировка запросов к базе данных"
 
@@ -5534,9 +5575,13 @@ msgstr "Включена трассировка запросов к базе д�
 msgid "Event"
 msgstr "Событие"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:145
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:150
 msgid "Explain"
 msgstr "Объяснить"
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:173
+msgid "Extends"
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
 msgid "Final dispatch"
@@ -5558,13 +5603,21 @@ msgstr "Принудительное переключение протокола
 msgid "Found matching dispatch rule"
 msgstr "Найдено подходящее правило диспетчеризации"
 
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:61./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:119
+msgid "Included template"
+msgstr ""
+
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:8./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:12
 msgid "Included templates"
 msgstr "Включённые шаблоны"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:156
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:161
 msgid "Introspection"
 msgstr "Интроспекция"
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:12./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:60./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:118
+msgid "Line"
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:50
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
@@ -5574,9 +5627,21 @@ msgstr "Живая перезагрузка измененных CSS-файло�
 msgid "Location"
 msgstr "Местоположение"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:129
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:134
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "Сопоставить URL из запроса, показать подходящее правило диспетчеризации."
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:163
+msgid "Missing extends or overrules"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:50
+msgid "Missing includes"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:108
+msgid "Missing optional includes"
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:40./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
 msgid "New host"
@@ -5589,6 +5654,10 @@ msgstr "Новый путь"
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:45
 msgid "No matching dispatch rule found"
 msgstr "Не найдено подходящего правила диспетчеризации"
+
+#: apps/zotonic_mod_development/src/mod_development.erl:82
+msgid "No permission to use mod_development."
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:12
 msgid "Not found"
@@ -5614,7 +5683,11 @@ msgstr "Пересобрать шаблоны"
 msgid "Redirect"
 msgstr "Перенаправление"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:162
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:17
+msgid "Rerun XRef"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:167
 msgid "Show an overview of all observers."
 msgstr "Показать обзор всех наблюдателей."
 
@@ -5622,7 +5695,7 @@ msgstr "Показать обзор всех наблюдателей."
 msgid "Show defined blocks in generated templates"
 msgstr "Показывать определения блоков в сгенерированных шаблонах"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:159
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:164
 msgid "Show internals of Zotonic and the modules"
 msgstr "Показать внутреннюю часть Zotonic и модули"
 
@@ -5630,11 +5703,11 @@ msgstr "Показать внутреннюю часть Zotonic и модули
 msgid "Show paths to included template files in generated templates"
 msgstr "Показывать пути к включенным шаблонным файлам в сгенерированных шаблонах"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:118
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:123
 msgid "Show which files are included in a template compilation"
 msgstr "Показать, какие файлы включены в компиляцию шаблона"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:7
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
 msgid "Site Development"
 msgstr "Разработка сайта"
 
@@ -5650,6 +5723,19 @@ msgstr "Подписчики"
 msgid "Switch protocol to"
 msgstr "Переключить протокол на"
 
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:2
+msgid "Syntax errors"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:11./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:59./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:117./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:172
+#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:110
+msgid "Template"
+msgstr "Шаблон"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:29
+msgid "Template check results"
+msgstr ""
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:89
 msgid "Template debugging"
 msgstr "Отладка шаблона"
@@ -5657,6 +5743,30 @@ msgstr "Отладка шаблона"
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:4
 msgid "Template path"
 msgstr "Путь к шаблону"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8
+msgid "Templates XRef check"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:165
+msgid "These templates have <tt>extends</tt> or <tt>overrules</tt> of a missing template."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:52
+msgid "These templates have non optional includes that reference missing templates."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:110
+msgid "These templates have optional includes that reference missing templates."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:4
+msgid "These templates have syntax errors and could not be checked for included files."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:13
+msgid "This checks all templates to see if included of extended templates are available."
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:56
 msgid "This resource is unknown or does not have a URI"
@@ -5670,11 +5780,15 @@ msgstr "Инструменты и настройки, полезные для р
 msgid "Trace all database queries for the current session"
 msgstr "Отслеживать все запросы к БД для текущей сессии."
 
-#: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:48
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:62./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:120
+msgid "Type of include"
+msgstr ""
+
+#: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:49
 msgid "You are not allowed to use the dispatch debugging."
 msgstr "Вы не имеете права использовать отладку диспетчерской службы."
 
-#: apps/zotonic_mod_development/src/support/z_development_template.erl:43
+#: apps/zotonic_mod_development/src/support/z_development_template.erl:44
 msgid "You are not allowed to use the template debugging."
 msgstr "Вы не имеете права использовать отладку шаблонов."
 
@@ -6765,10 +6879,6 @@ msgstr "Администратор сайта"
 #: apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:24
 msgid "Stack"
 msgstr "Стек"
-
-#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:110
-msgid "Template"
-msgstr "Шаблон"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:106
 msgid "To"
