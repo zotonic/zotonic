@@ -21,15 +21,15 @@
 -module(z_development_template_xref).
 
 -export([
-    xref/1
+    check/1
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--spec xref(Context) -> {ok, XRef} when
+-spec check(Context) -> {ok, XRef} when
     Context :: z:context(),
-    XRef :: #{ missing := map(), optional := map(), error := map() }.
-xref(Context) ->
+    XRef :: #{ missing := map(), optional := map(), errors := map() }.
+check(Context) ->
     All = z_module_indexer:all(template, Context),
     {Includes, Errors} = lists:foldl(
         fun(Template, {Acc, ErrAcc}) ->
@@ -87,7 +87,7 @@ drop_empty(Errs) ->
         Errs).
 
 build_dir() ->
-    unicode:characters_to_binary(filename:dirname(code:lib_dir(zotonic_mod_development))).
+    unicode:characters_to_binary(z_path:build_lib_dir()).
 
 missing_includes(Includes, Context) ->
     Errs = lists:filter(
