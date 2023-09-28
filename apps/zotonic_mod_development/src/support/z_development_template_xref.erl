@@ -28,7 +28,7 @@
 
 -spec xref(Context) -> {ok, XRef} when
     Context :: z:context(),
-    XRef :: #{ missing => map(), optional => map(), error => map() }.
+    XRef :: #{ missing := map(), optional := map(), error := map() }.
 xref(Context) ->
     All = z_module_indexer:all(template, Context),
     {Includes, Errors} = lists:foldl(
@@ -52,7 +52,7 @@ xref(Context) ->
     % Now check if all included files exist
     {Miss, Opts} = maps:fold(
         fun(Filename, Tpls, {MissAcc, OptAcc} = Acc) ->
-            case check_includes(Tpls, Context) of
+            case missing_includes(Tpls, Context) of
                 {ok, {[], []}} ->
                     Acc;
                 {ok, {Missing, Opt}} ->
@@ -74,17 +74,22 @@ xref(Context) ->
     }}.
 
 drop_empty(Errs) ->
+    BuildDir = <<(build_dir())/binary, "/">>,
     maps:fold(
         fun
             (_K, [], Acc) ->
                 Acc;
             (K, Vs, Acc) ->
-                Acc#{ K => Vs }
+                K1 = binary:replace(K, BuildDir, <<>>),
+                Acc#{ K1 => Vs }
         end,
         #{},
         Errs).
 
-check_includes(Includes, Context) ->
+build_dir() ->
+    unicode:characters_to_binary(filename:dirname(code:lib_dir(zotonic_mod_development))).
+
+missing_includes(Includes, Context) ->
     Errs = lists:filter(
         fun
             (#{ template := Template, method := normal }) ->
