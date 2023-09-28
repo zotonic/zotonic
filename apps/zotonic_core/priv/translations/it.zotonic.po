@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-28 14:51\n"
+"PO-Revision-Date: 2023-09-28 15:51\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -4814,7 +4814,7 @@ msgstr "Torna a questa versione..."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:45./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:58
 msgid "Revisions are kept for {n} months."
-msgstr ""
+msgstr "Le revisioni vengono conservate per {n} mesi."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:46./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:48
 msgid "Revisions for"
@@ -5473,19 +5473,19 @@ msgstr "Azione"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:99
 msgid "All non-optional includes reference existing templates."
-msgstr ""
+msgstr "Tutto ciò che non è facoltativo include modelli di riferimento esistenti."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:156
 msgid "All optional includes reference existing templates."
-msgstr ""
+msgstr "Tutti gli optional includono modelli di riferimento esistenti."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:195
 msgid "All template extends and overrules are valid."
-msgstr ""
+msgstr "Tutte le estensioni e le regole del modello sono valide."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:42
 msgid "All templates are compiling."
-msgstr ""
+msgstr "Tutti i modelli sono in fase di compilazione."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:124
 msgid "At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template."
@@ -5505,19 +5505,19 @@ msgstr "Attacchi"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:118
 msgid "Check included templates"
-msgstr ""
+msgstr "Controlla i modelli inclusi"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:34./apps/zotonic_mod_development/src/mod_development.erl:77
 msgid "Checking all templates..."
-msgstr ""
+msgstr "Controllo di tutti i modelli..."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:13
 msgid "Column"
-msgstr ""
+msgstr "Colonna"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
 msgid "Compile all templates. The compiled templates are checked for missing includes or missing extends/overrules template referenceds."
-msgstr ""
+msgstr "Compila tutti i modelli. I modelli compilati vengono controllati per eventuali inclusioni mancanti o riferimenti mancanti al modello di estensione/sostituzione."
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "Controller"
@@ -5529,7 +5529,7 @@ msgstr "Impossibile recuperare l'output del tracciante, si prega di riprovare."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:12
 msgid "Cross reference check of all templates"
-msgstr ""
+msgstr "Controllo dei riferimenti incrociati di tutti i modelli"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:366
 msgid "Development"
@@ -5581,7 +5581,7 @@ msgstr "Spiegare"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:173
 msgid "Extends"
-msgstr ""
+msgstr "Si estende"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
 msgid "Final dispatch"
@@ -5605,7 +5605,7 @@ msgstr "Trovata regola di spedizione corrispondente"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:61./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:119
 msgid "Included template"
-msgstr ""
+msgstr "Modello incluso"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:8./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:12
 msgid "Included templates"
@@ -5617,7 +5617,7 @@ msgstr "Introspezione"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:12./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:60./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:118
 msgid "Line"
-msgstr ""
+msgstr "Linea"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:50
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
@@ -5633,15 +5633,15 @@ msgstr "Abbina un URL di richiesta, visualizza la regola di spedizione abbinata.
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:163
 msgid "Missing extends or overrules"
-msgstr ""
+msgstr "Estensioni o overrule mancanti"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:50
 msgid "Missing includes"
-msgstr ""
+msgstr "Include mancanti"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:108
 msgid "Missing optional includes"
-msgstr ""
+msgstr "Include optional mancanti"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:40./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
 msgid "New host"
@@ -5657,7 +5657,7 @@ msgstr "Nessuna regola di spedizione corrispondente trovata"
 
 #: apps/zotonic_mod_development/src/mod_development.erl:82
 msgid "No permission to use mod_development."
-msgstr ""
+msgstr "Nessuna autorizzazione per utilizzare mod_development."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:12
 msgid "Not found"
@@ -5685,7 +5685,7 @@ msgstr "Reindirizzare"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:17
 msgid "Rerun XRef"
-msgstr ""
+msgstr "Rieseguire XRef"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:167
 msgid "Show an overview of all observers."
@@ -5725,7 +5725,7 @@ msgstr "Passare il protocollo a"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:2
 msgid "Syntax errors"
-msgstr ""
+msgstr "Errori di sintassi"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:11./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:59./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:117./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:172
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:110
@@ -5734,7 +5734,7 @@ msgstr "Template"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:29
 msgid "Template check results"
-msgstr ""
+msgstr "Risultati del controllo del modello"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:89
 msgid "Template debugging"
@@ -5746,27 +5746,27 @@ msgstr "Percorso del template"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8
 msgid "Templates XRef check"
-msgstr ""
+msgstr "Controllo XRef dei modelli"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:165
 msgid "These templates have <tt>extends</tt> or <tt>overrules</tt> of a missing template."
-msgstr ""
+msgstr "Questi modelli hanno <tt>estensioni</tt> o <tt>che prevalgono su</tt> di un modello mancante."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:52
 msgid "These templates have non optional includes that reference missing templates."
-msgstr ""
+msgstr "Questi modelli hanno inclusioni non facoltative che fanno riferimento ai modelli mancanti."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:110
 msgid "These templates have optional includes that reference missing templates."
-msgstr ""
+msgstr "Questi modelli hanno inclusioni facoltative che fanno riferimento ai modelli mancanti."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:4
 msgid "These templates have syntax errors and could not be checked for included files."
-msgstr ""
+msgstr "Questi modelli presentano errori di sintassi e non è stato possibile verificare la presenza di file inclusi."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:13
 msgid "This checks all templates to see if included of extended templates are available."
-msgstr ""
+msgstr "Questo controlla tutti i modelli per vedere se sono disponibili inclusi modelli estesi."
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:56
 msgid "This resource is unknown or does not have a URI"
@@ -5782,7 +5782,7 @@ msgstr "Traccia tutte le query del database per la sessione corrente"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:62./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:120
 msgid "Type of include"
-msgstr ""
+msgstr "Tipo di inclusione"
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:49
 msgid "You are not allowed to use the dispatch debugging."
