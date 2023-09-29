@@ -33,9 +33,9 @@
     }.
 
 -type template_edge() :: #{
-        id := binary(),
-        template := binary(),
-        module := binary()
+        from := binary(),
+        to := binary(),
+        is_extend => boolean()
     }.
 
 -export_type([
@@ -48,27 +48,12 @@
     DotFile :: binary().
 dot(Context) ->
     {ok, G} = graph(Context),
-    % G = #{
-    %     nodes => [
-    %         #{ id => <<"a">>, template => <<"A">>, module => <<"mod_foo">> },
-    %         #{ id => <<"b">>, template => <<"A1">>, module => <<"mod_foo">> },
-    %         #{ id => <<"c">>, template => <<"Ac2">>, module => <<"mod_foo">> },
-    %         #{ id => <<"d">>, template => <<"Ad3">>, module => <<"mod_foo">> }
-    %     ],
-    %     edges => [
-    %         #{ from => <<"a">>, to => <<"b">>, color => <<"red">> },
-    %         #{ from => <<"b">>, to => <<"a">>, color => <<"blue">> },
-    %         #{ from => <<"a">>, to => <<"c">>, color => <<"black">> },
-    %         #{ from => <<"c">>, to => <<"d">>, color => <<"black">> }
-    %     ]
-    % },
     Nodes = lists:map(
-        fun(N) ->
-            Mod = maps:get(module, N),
+        fun(#{ module := Mod, id := Id, template := Tpl }) ->
             [
-                maps:get(id, N),
+                Id,
                 " [",
-                    "label=\"", maps:get(template, N), "\\n", Mod, "\"",
+                    "label=\"", Tpl, "\\n", Mod, "\"",
                     " color=", color(Mod),
                     case Mod of
                         <<"mod_", _/binary>> -> <<>>;
@@ -79,17 +64,14 @@ dot(Context) ->
         end,
         maps:get(nodes, G, [])),
     Edges = lists:map(
-        fun(E) ->
+        fun(#{ from := From, to := To, module := Mod } = E) ->
             [
-                maps:get(from, E),
-                " -> ",
-                maps:get(to, E),
-
+                From, " -> ", To,
                 case maps:get(is_extend, E, false) of
                     true ->
-                        " [style=dotted,dir=\"back\"]";
+                        [ " [style=dotted dir=\"back\" color=", color(Mod),"] " ];
                     false ->
-                        ""
+                        [ " [color=", color(Mod), "] " ]
                 end,
                 ";"
             ]
@@ -160,7 +142,7 @@ graph(Context) ->
     Nodes1 = maps:values(Nodes),
     Edges = lists:flatten(
         lists:map(
-            fun(#{ index := Template, id := FromId  }) ->
+            fun(#{ index := Template, id := FromId, module := Mod  }) ->
                 case z_template:includes(Template, #{}, Context) of
                     {ok, Includes} ->
                         % TODO: expand catinclude and all include
@@ -177,6 +159,7 @@ graph(Context) ->
                                         {true, #{
                                             from => FromId,
                                             to => ToId,
+                                            module => Mod,
                                             is_extend => false
                                         }};
                                     undefined ->
@@ -191,7 +174,7 @@ graph(Context) ->
             Nodes1)
         ),
     Extends = lists:filtermap(
-        fun(#{ index := Template, id := FromId  }) ->
+        fun(#{ index := Template, id := FromId, module := Mod  }) ->
             case z_template:extends(Template, #{}, Context) of
                 {ok, Extends} when is_binary(Extends) ->
                     case maps:get(Extends, Nodes, undefined) of
@@ -201,6 +184,7 @@ graph(Context) ->
                             {true, #{
                                 from => ToId,
                                 to => FromId,
+                                module => Mod,
                                 is_extend => true
                             }};
                         undefined ->
