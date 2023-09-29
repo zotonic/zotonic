@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-29 09:00\n"
+"PO-Revision-Date: 2023-09-29 10:49\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -432,7 +432,7 @@ msgstr "Члени однієї групи користувачів"
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
 #: apps/zotonic_mod_base/priv/templates/error.tpl:78
-#: apps/zotonic_mod_development/priv/templates/_development_template.tpl:3./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:10./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:60./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:120./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:183
+#: apps/zotonic_mod_development/priv/templates/_development_template.tpl:3./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:10./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:60./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:122./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:189
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:24
 msgid "Module"
 msgstr "Модуль"
@@ -5471,17 +5471,17 @@ msgstr "Вам не дозволено змінити це."
 msgid "Action"
 msgstr "Дія"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:207
-msgid "All <tt>{extends}</tt> and <tt>{overrules}</tt> references are valid."
-msgstr ""
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:213
+msgid "All <tt>{extends}</tt> and <tt>{overrules}</tt> statements are referring to existing templates."
+msgstr "Усі твердження <tt>{extends}</tt> і <tt>{overrules}</tt> посилаються на існуючі шаблони."
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:163
+msgid "All <tt>{optional}</tt> statements are referring to existing templates."
+msgstr "Усі твердження <tt>{optional}</tt> посилаються на існуючі шаблони."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:101
-msgid "All non-optional includes reference existing templates."
-msgstr "Усі необов’язкові містять посилання на існуючі шаблони."
-
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:160
-msgid "All optional includes reference existing templates."
-msgstr "Усе необов’язкове включає посилання на наявні шаблони."
+msgid "All non-optional <tt>{include}</tt> statements are referring to existing templates."
+msgstr "Усі необов’язкові оператори <tt>{include}</tt> посилаються на існуючі шаблони."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:42
 msgid "All templates are compiling."
@@ -5579,7 +5579,7 @@ msgstr "Подія"
 msgid "Explain"
 msgstr "Поясніть"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:185
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:191
 msgid "Extends"
 msgstr "Розширюється"
 
@@ -5603,7 +5603,7 @@ msgstr "Примусове переключення протоколу на"
 msgid "Found matching dispatch rule"
 msgstr "Знайдено відповідне правило відправки"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:63./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:123
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:63./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
 msgid "Included template"
 msgstr "Включений шаблон"
 
@@ -5615,7 +5615,7 @@ msgstr "Включені шаблони"
 msgid "Introspection"
 msgstr "Інтроспекція"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:12./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:62./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:122
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:12./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:62./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:124
 msgid "Line"
 msgstr "лінія"
 
@@ -5635,13 +5635,13 @@ msgstr "Відповідність URL-адресі запиту, відобра
 msgid "Missing includes"
 msgstr "Відсутні включають"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:110
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:112
 msgid "Missing optional includes"
 msgstr "Відсутні додаткові включення"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:168
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:174
 msgid "Missing {extends} or {overrules}"
-msgstr ""
+msgstr "Відсутній {extends} або {overrules}"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:40./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
 msgid "New host"
@@ -5727,7 +5727,7 @@ msgstr "Переключити протокол на"
 msgid "Syntax errors"
 msgstr "Синтаксичні помилки"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:11./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:61./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:121./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:184
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:11./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:61./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:123./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:190
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:110
 msgid "Template"
 msgstr "Шаблон"
@@ -5748,17 +5748,17 @@ msgstr "Шлях до шаблону"
 msgid "Templates XRef check"
 msgstr "Перевірка XRef шаблонів"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:174
-msgid "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements referring a missing template."
-msgstr ""
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:180
+msgid "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements that are referring to a missing template."
+msgstr "Ці шаблони містять <tt>{extends}</tt> або <tt>{overrules}</tt> твердження, які посилаються на відсутній шаблон."
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:112
-msgid "These templates have <tt>{optional}</tt> statements referencing missing templates."
-msgstr ""
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:114
+msgid "These templates have <tt>{optional}</tt> statements that are referring to missing templates."
+msgstr "Ці шаблони мають <tt>{optional}</tt> заяви, які посилаються на відсутні шаблони."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:52
-msgid "These templates have non optional <tt>{include}</tt> statements referencing missing templates."
-msgstr ""
+msgid "These templates have non optional <tt>{include}</tt> statements that are referring to missing templates."
+msgstr "Ці шаблони мають необов’язкові оператори <tt>{include}</tt> , які посилаються на відсутні шаблони."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:4
 msgid "These templates have syntax errors and could not be checked for included files."
@@ -5780,7 +5780,7 @@ msgstr "Інструменти та налаштування, корисні д�
 msgid "Trace all database queries for the current session"
 msgstr "Відстежте всі запити до бази даних для поточного сеансу"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:124
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
 msgid "Type of include"
 msgstr "Тип включення"
 
