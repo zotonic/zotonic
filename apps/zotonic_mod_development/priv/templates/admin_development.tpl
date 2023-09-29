@@ -119,7 +119,16 @@
         <hr/>
 
         <p><a href="{% url admin_development_templates_xref %}">{_ Check included templates _}</a></p>
-        <p class="help-block">{_ Compile all templates. The compiled templates are checked for missing includes or missing extends/overrules template referenceds. _}</p>
+        <p class="help-block">
+            {% trans "Compile all templates. The compiled templates are checked for missing includes or missing <tt>{ext}</tt> template references."
+                ext="extends/overrules"
+            %}
+        </p>
+
+        <hr/>
+
+        <p><a href="{% url admin_development_templates_graph %}">{_ Template dependency graph _}</a></p>
+        <p class="help-block">{_ Compile all templates. Calculate and visualize a dependency graph of all templates. _}</p>
 
         <hr/>
 
