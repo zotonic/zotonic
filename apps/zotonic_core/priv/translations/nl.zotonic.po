@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-29 08:59\n"
+"PO-Revision-Date: 2023-09-29 10:49\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -432,7 +432,7 @@ msgstr "Leden van dezelfde groep"
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
 #: apps/zotonic_mod_base/priv/templates/error.tpl:78
-#: apps/zotonic_mod_development/priv/templates/_development_template.tpl:3./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:10./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:60./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:120./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:183
+#: apps/zotonic_mod_development/priv/templates/_development_template.tpl:3./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:10./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:60./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:122./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:189
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:24
 msgid "Module"
 msgstr "Module"
@@ -5473,17 +5473,17 @@ msgstr "Je mag dit niet veranderen."
 msgid "Action"
 msgstr "Actie"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:207
-msgid "All <tt>{extends}</tt> and <tt>{overrules}</tt> references are valid."
-msgstr ""
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:213
+msgid "All <tt>{extends}</tt> and <tt>{overrules}</tt> statements are referring to existing templates."
+msgstr "Alle <tt>{extends}</tt> en <tt>{overrules}</tt> uitspraken verwijzen naar bestaande sjablonen."
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:163
+msgid "All <tt>{optional}</tt> statements are referring to existing templates."
+msgstr "Alle <tt>{optional}</tt> uitspraken verwijzen naar bestaande sjablonen."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:101
-msgid "All non-optional includes reference existing templates."
-msgstr "Alle niet-optioneel bevat verwijzingen naar bestaande sjablonen."
-
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:160
-msgid "All optional includes reference existing templates."
-msgstr "Alle optionele opties bevatten verwijzingen naar bestaande sjablonen."
+msgid "All non-optional <tt>{include}</tt> statements are referring to existing templates."
+msgstr "Alle niet-optionele <tt>{include}</tt> uitspraken verwijzen naar bestaande sjablonen."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:42
 msgid "All templates are compiling."
@@ -5581,7 +5581,7 @@ msgstr "Evenement"
 msgid "Explain"
 msgstr "Leg uit"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:185
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:191
 msgid "Extends"
 msgstr "Verlengt"
 
@@ -5605,7 +5605,7 @@ msgstr "Geforceerde wissel naar protocol"
 msgid "Found matching dispatch rule"
 msgstr "Overeenkomende dispatchregel gevonden"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:63./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:123
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:63./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
 msgid "Included template"
 msgstr "Inclusief sjabloon"
 
@@ -5617,7 +5617,7 @@ msgstr "Ingevoegde templates"
 msgid "Introspection"
 msgstr "Introspectie"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:12./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:62./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:122
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:12./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:62./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:124
 msgid "Line"
 msgstr "Lijn"
 
@@ -5637,13 +5637,13 @@ msgstr "Match een request URL, toon overeenkomstige dispatchregel"
 msgid "Missing includes"
 msgstr "Ontbrekende omvat"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:110
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:112
 msgid "Missing optional includes"
 msgstr "Ontbrekende optionele omvat"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:168
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:174
 msgid "Missing {extends} or {overrules}"
-msgstr ""
+msgstr "Ontbrekende {extends} of {overrules}"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:40./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
 msgid "New host"
@@ -5729,7 +5729,7 @@ msgstr "Protocol veranderen naar"
 msgid "Syntax errors"
 msgstr "Syntaxisfouten"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:11./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:61./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:121./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:184
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:11./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:61./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:123./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:190
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:110
 msgid "Template"
 msgstr "Template"
@@ -5750,17 +5750,17 @@ msgstr "Templatepad"
 msgid "Templates XRef check"
 msgstr "Sjablonen XRef-controle"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:174
-msgid "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements referring a missing template."
-msgstr ""
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:180
+msgid "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements that are referring to a missing template."
+msgstr "Deze sjablonen hebben <tt>{extends}</tt> of <tt>{overrules}</tt> uitspraken die verwijzen naar een ontbrekend sjabloon."
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:112
-msgid "These templates have <tt>{optional}</tt> statements referencing missing templates."
-msgstr ""
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:114
+msgid "These templates have <tt>{optional}</tt> statements that are referring to missing templates."
+msgstr "Deze sjablonen bevatten <tt>{optional}</tt> uitspraken die verwijzen naar ontbrekende sjablonen."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:52
-msgid "These templates have non optional <tt>{include}</tt> statements referencing missing templates."
-msgstr ""
+msgid "These templates have non optional <tt>{include}</tt> statements that are referring to missing templates."
+msgstr "Deze sjablonen bevatten niet-optionele <tt>{include}</tt> -verklaringen die verwijzen naar ontbrekende sjablonen."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:4
 msgid "These templates have syntax errors and could not be checked for included files."
@@ -5782,7 +5782,7 @@ msgstr "Gereedschappen en instellingen die nuttig zijn voor siteontwikkeling."
 msgid "Trace all database queries for the current session"
 msgstr "Traceer alle database queries voor de huidige sessie"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:124
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
 msgid "Type of include"
 msgstr "Soort opnemen"
 
