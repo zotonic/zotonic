@@ -115,7 +115,7 @@
 
 	{% if page_nr == 1 and id.survey_is_autostart %}
 		{% block autostart_footer %}
-			{% include "_survey_autostart_footer.tpl" %}
+			{% optional include "_survey_autostart_footer.tpl" %}
 		{% endblock %}
 	{% endif %}
 {% endblock %}
