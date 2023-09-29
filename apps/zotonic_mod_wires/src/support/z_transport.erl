@@ -21,7 +21,9 @@
 
 -export([
     transport/3,
-    reply/2
+    reply/2,
+    reply_actions/1,
+    reply_actions/2
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -30,18 +32,45 @@
                  | #postback_event{}
                  | #postback_notify{}.
 
-%% @doc Send JS to the client, client will evaluate the JS.
--spec reply(iodata(), z:context()) -> ok | {error, term()}.
-reply(JavaScript, #context{ client_id = ClientId } = Context) when is_binary(ClientId) ->
-    Topic = [ <<"bridge">>, ClientId, <<"zotonic-transport">>, <<"eval">> ],
-    z_mqtt:publish(Topic, iolist_to_binary(JavaScript), #{ qos => 1 }, Context);
-reply(JavaScript, Context) ->
-    case z_context:get_q(<<"zotonic_topic_reply">>, Context) of
-        undefined ->
-            {error, no_route};
+%% @doc Send JS to the client, client will evaluate the JS. There must be either a valid
+%% client_id in the context or a 'zotonic_topic_reply' query argument. The zotonic_topic_reply
+%% is preferred over the client_id. Usually the zotonic_topic_reply is
+%% "~client/zotonic-transport/eval". The script is transported using qos 1.
+-spec reply(Javascript, Context) -> ok | {error, Reason} when
+    Javascript :: iodata(),
+    Context :: z:context(),
+    Reason :: no_client | term().
+reply(JavaScript, #context{ client_id = ClientId } = Context) ->
+    Payload = iolist_to_binary(JavaScript),
+    case z_convert:to_binary(z_context:get_q(<<"zotonic_topic_reply">>, Context)) of
+        <<>> when is_binary(ClientId) ->
+            Topic = [ <<"bridge">>, ClientId, <<"zotonic-transport">>, <<"eval">> ],
+            z_mqtt:publish(Topic, Payload, #{ qos => 1 }, Context);
+        <<>> ->
+            {error, no_client};
         Topic ->
-            z_mqtt:publish(Topic, iolist_to_binary(JavaScript), #{ qos => 1 }, Context)
+            z_mqtt:publish(Topic, Payload, #{ qos => 1 }, Context)
     end.
+
+%% @doc Render the actions in the Context and send the rendered script to the user-agent
+%% or to the topic in the query argument zotonic_topic_reply.
+-spec reply_actions(Context) -> ok | {error, Reason} when
+    Context :: z:context(),
+    Reason :: no_client | term().
+reply_actions(Context) ->
+    Script = z_render:get_script(Context),
+    reply(Script, Context).
+
+-spec reply_actions(Actions, Context) -> ok | {error, Reason} when
+    Actions :: z_render:action() | [ z_render:action() ],
+    Context :: z:context(),
+    Reason :: no_client | term().
+reply_actions(Actions, Context) ->
+    Context1 = z_context:new(Context),
+    Context2 = z_render:wire(Actions, Context1),
+    Script = z_render:get_script(Context2),
+    reply(Script, Context).
+
 
 %% @doc Handle incoming transport messages, call event handlers of delegates.
 -spec transport( binary() | undefined, payload(), z:context()) -> ok | {error, term()}.

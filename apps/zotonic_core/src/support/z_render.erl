@@ -147,14 +147,14 @@
 -type html_element_id() :: binary() | string() | undefined.
 -type render_state() :: #render_state{}.
 -type ctx_rs() :: render_state() | z:context().
+-type action() :: {atom(), proplists:proplist()}.
 
 -export_type([
     render_state/0,
     html_element_id/0,
-    ctx_rs/0
+    ctx_rs/0,
+    action/0
 ]).
-
-
 
 
 %% @doc Replace the placeholders with their rendered content and collect all scripts from the mixed html and context.
@@ -778,7 +778,7 @@ make_validation_postback(Validator, Args, Context) ->
 
 %% Add to the queue of wired actions. These will be rendered in get_script().
 
--spec wire(tuple() | [tuple()], ctx_rs()) -> ctx_rs().
+-spec wire(action() | [action()], ctx_rs()) -> ctx_rs().
 wire(Actions, Context) ->
     wire(<<>>, <<>>, Actions, Context).
 

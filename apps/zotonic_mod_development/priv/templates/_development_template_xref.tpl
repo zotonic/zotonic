@@ -49,7 +49,7 @@
 
 <h3>{_ Missing includes _}</h3>
 <p class="help-block">
-    {% trans "These templates have non optional <tt>{include}</tt> statements referencing missing templates."
+    {% trans "These templates have non optional <tt>{include}</tt> statements that are referring to missing templates."
         include="include"
     %}
 </p>
@@ -98,7 +98,9 @@
             <tr>
                 <td colspan="5">
                     <span class="text-muted">
-                        {_ All non-optional includes reference existing templates. _}
+                        {% trans "All non-optional <tt>{include}</tt> statements are referring to existing templates."
+                            include="include"
+                        %}
                     </span>
                 </td>
             </tr>
@@ -109,7 +111,7 @@
 
 <h3>{_ Missing optional includes _}</h3>
 <p class="help-block">
-    {% trans "These templates have <tt>{optional}</tt> statements referencing missing templates."
+    {% trans "These templates have <tt>{optional}</tt> statements that are referring to missing templates."
         optional="optional include"
     %}
 </p>
@@ -157,7 +159,11 @@
         {% empty %}
             <tr>
                 <td colspan="5">
-                    <span class="text-muted">{_ All optional includes reference existing templates. _}</span>
+                    <span class="text-muted">
+                        {% trans "All <tt>{optional}</tt> statements are referring to existing templates."
+                            optional="optional include"
+                        %}
+                    </span>
                 </td>
             </tr>
         {% endfor %}
@@ -171,7 +177,7 @@
     %}
 </h3>
 <p class="help-block">
-    {% trans "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements referring a missing template."
+    {% trans "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements that are referring to a missing template."
          extends="extends"
          overrules="overrules"
     %}
@@ -204,7 +210,7 @@
             <tr>
                 <td colspan="3">
                     <span class="text-muted">
-                        {% trans "All <tt>{extends}</tt> and <tt>{overrules}</tt> references are valid."
+                        {% trans "All <tt>{extends}</tt> and <tt>{overrules}</tt> statements are referring to existing templates."
                              extends="extends"
                              overrules="overrules"
                         %}
