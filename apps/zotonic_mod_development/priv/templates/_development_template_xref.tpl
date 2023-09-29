@@ -49,7 +49,9 @@
 
 <h3>{_ Missing includes _}</h3>
 <p class="help-block">
-    {_ These templates have non optional includes that reference missing templates. _}
+    {% trans "These templates have non optional <tt>{include}</tt> statements referencing missing templates."
+        include="include"
+    %}
 </p>
 
 <table class="table table-bordered">
@@ -107,7 +109,9 @@
 
 <h3>{_ Missing optional includes _}</h3>
 <p class="help-block">
-    {_ These templates have optional includes that reference missing templates. _}
+    {% trans "These templates have <tt>{optional}</tt> statements referencing missing templates."
+        optional="optional include"
+    %}
 </p>
 
 <table class="table table-bordered">
@@ -160,9 +164,17 @@
     </tbody>
 </table>
 
-<h3>{_ Missing extends or overrules _}</h3>
+<h3>
+    {% trans "Missing {extends} or {overrules}"
+         extends="extends"
+         overrules="overrules"
+    %}
+</h3>
 <p class="help-block">
-    {_ These templates have <tt>extends</tt> or <tt>overrules</tt> of a missing template. _}
+    {% trans "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements referring a missing template."
+         extends="extends"
+         overrules="overrules"
+    %}
 </p>
 
 <table class="table table-bordered">
@@ -192,7 +204,10 @@
             <tr>
                 <td colspan="3">
                     <span class="text-muted">
-                        {_ All template extends and overrules are valid. _}
+                        {% trans "All <tt>{extends}</tt> and <tt>{overrules}</tt> references are valid."
+                             extends="extends"
+                             overrules="overrules"
+                        %}
                     </span>
                 </td>
             </tr>

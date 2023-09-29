@@ -30,8 +30,9 @@
     </div>
     <div class="widget-content" id="xref-results">
         <p class="text-muted">
-            <img src="/lib/images/spinner.gif" height="16" width="16">
-            {_ Checking all templates... _}
+            {# Some minimal height for the loading mask to show #}
+            <br>
+            <br>
         </p>
     </div>
 </div>
