@@ -114,6 +114,7 @@ graph(Context) ->
         end,
         #{},
         All),
+    % Todo: determine 'overrules' templates/nodes (index is full path)
     Ts1 = maps:values(Ts),
     Ts2 = lists:zip(Ts1, lists:seq(1, length(Ts1))),
     BuildDir = <<(build_dir())/binary, "/">>,
@@ -131,7 +132,8 @@ graph(Context) ->
                 id => <<"n", (integer_to_binary(N))/binary>>,
                 module => Mod1,
                 template => Tpl,
-                index => Template
+                index => Template,
+                basename => basename(Tpl)
             },
             Acc#{
                 TplName => Node
@@ -147,24 +149,46 @@ graph(Context) ->
                     {ok, Includes} ->
                         % TODO: expand catinclude and all include
                         lists:filtermap(
-                            fun(#{
+                            fun
+                                (#{
                                     template := IncFile,
                                     method := Method,   % optional | all | normal
-                                    is_catinclude := IsCatinclude
+                                    is_catinclude := true
                                 }) ->
-                                case maps:get(IncFile, Nodes, undefined) of
-                                    #{
-                                        id := ToId
-                                    } ->
-                                        {true, #{
-                                            from => FromId,
-                                            to => ToId,
-                                            module => Mod,
-                                            is_extend => false
-                                        }};
-                                    undefined ->
-                                        false
-                                end
+                                    Included = find_all_catinclude(IncFile, Nodes1),
+                                    Es = lists:map(
+                                        fun
+                                            (#{ id := ToId }) ->
+                                                #{
+                                                    from => FromId,
+                                                    to => ToId,
+                                                    module => Mod,
+                                                    is_extend => false
+                                                }
+                                        end,
+                                        Included),
+                                    {true, Es};
+                                (#{
+                                    template := IncFile,
+                                    method := Method,   % optional | all | normal
+                                    is_catinclude := false
+                                }) ->
+                                    % TODO: if 'all' then look for like-named
+                                    % templates in the complete template list,
+                                    % these should also be added to the nodes.
+                                    case maps:get(IncFile, Nodes, undefined) of
+                                        #{
+                                            id := ToId
+                                        } ->
+                                            {true, #{
+                                                from => FromId,
+                                                to => ToId,
+                                                module => Mod,
+                                                is_extend => false
+                                            }};
+                                        undefined ->
+                                            false
+                                    end
                             end,
                             Includes);
                     {error, _} ->
@@ -205,10 +229,25 @@ graph(Context) ->
         edges => Extends ++ Edges
     },
     {ok, G}.
-    % G = #{
 
-    % },
-    % {ok, G}.
+find_all_catinclude(Template, Nodes) ->
+    lists:filter(
+        fun(#{ basename := B }) -> B =:= Template end,
+        Nodes).
+
+% Determine the base name of a template, as used with catinclude.
+basename(Tpl) ->
+    Parts = binary:split(Tpl, <<"/">>, [ global ]),
+    [Filename|RevDir] = lists:reverse(Parts),
+    Filename1 = case binary:split(Filename, <<".">>, [ global ]) of
+        [ F, <<"name">>, _, <<"tpl">> ] ->
+            <<F/binary, ".tpl">>;
+        [ F, _, <<"tpl">> ] ->
+            <<F/binary, ".tpl">>;
+        _ ->
+            Filename
+    end,
+    iolist_to_binary(lists:join($/, lists:reverse([Filename1 | RevDir]))).
 
 build_dir() ->
     unicode:characters_to_binary(z_path:build_lib_dir()).
