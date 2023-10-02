@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-29 10:49\n"
+"PO-Revision-Date: 2023-10-02 10:50\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -5487,7 +5487,7 @@ msgstr "Todas as instruções <tt>{include}</tt> não opcionais referem-se a mod
 msgid "All templates are compiling."
 msgstr "Todos os modelos estão compilando."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:124
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:133
 msgid "At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template."
 msgstr "Às vezes, pode ser confuso quais modelos são realmente usados durante uma compilação de modelos. Aqui você pode ver quais arquivos são incluídos durante a compilação de um modelo."
 
@@ -5507,7 +5507,7 @@ msgstr "Encadernações"
 msgid "Check included templates"
 msgstr "Verifique os modelos incluídos"
 
-#: apps/zotonic_mod_development/src/mod_development.erl:78
+#: apps/zotonic_mod_development/src/mod_development.erl:79./apps/zotonic_mod_development/src/mod_development.erl:96
 msgid "Checking all templates..."
 msgstr "Verificando todos os modelos..."
 
@@ -5515,13 +5515,29 @@ msgstr "Verificando todos os modelos..."
 msgid "Column"
 msgstr "Coluna"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
-msgid "Compile all templates. The compiled templates are checked for missing includes or missing extends/overrules template referenceds."
-msgstr "Compile todos os modelos. Os modelos compilados são verificados quanto a inclusões ausentes ou referências de modelo de extensão/anulação ausentes."
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:128
+msgid "Compile all templates. Calculate and visualize a dependency graph of all templates."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:120
+msgid "Compile all templates. The compiled templates are checked for missing includes or missing <tt>{ext}</tt> template references."
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "Controller"
 msgstr "Controlador"
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:24
+msgid "Copied dot file to the clipboard."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:1
+msgid "Copy GraphViz dot data"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:27
+msgid "Could not copy dot file to the clipboard."
+msgstr ""
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:46
 msgid "Could not fetch tracer output, please try again."
@@ -5531,7 +5547,16 @@ msgstr "Não foi possível buscar a saída do rastreador. Tente novamente."
 msgid "Cross reference check of all templates"
 msgstr "Verificação de referência cruzada de todos os modelos"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:367
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:12
+msgid "Dependency graph of all templates"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
+msgid "Dependency graph of all templates. Only includes using a direct string value for the template are shown.<br>\n"
+"    Includes using variable names or expressions are not shown.<br> <tt>{extends}</tt> are shown with a striped line, <tt>{overrules}</tt> are shown with a dotted line."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:403
 msgid "Development"
 msgstr "Desenvolvimento"
 
@@ -5547,7 +5572,7 @@ msgstr "Desative o cache pela tag <tt>{% cache %}</tt>."
 msgid "Disabled database query tracing"
 msgstr "Rastreamento de consulta de banco de dados desativado"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:131
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:140
 msgid "Dispatch rule debugging"
 msgstr "Depuração de regras de despacho"
 
@@ -5575,7 +5600,7 @@ msgstr "Rastreamento de consulta de banco de dados ativado"
 msgid "Event"
 msgstr "Evento"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:150
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:159
 msgid "Explain"
 msgstr "Explique"
 
@@ -5611,7 +5636,7 @@ msgstr "Modelo incluído"
 msgid "Included templates"
 msgstr "Modelos incluídos"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:161
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:170
 msgid "Introspection"
 msgstr "Introspecção"
 
@@ -5627,7 +5652,7 @@ msgstr "Recarregamento ao vivo de arquivos CSS alterados. Recarregue a página n
 msgid "Location"
 msgstr "Localização"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:134
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:143
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "Corresponder a um URL de solicitação, exibir a regra de envio correspondente."
 
@@ -5655,7 +5680,7 @@ msgstr "Novo rumo"
 msgid "No matching dispatch rule found"
 msgstr "Nenhuma regra de expedição correspondente encontrada"
 
-#: apps/zotonic_mod_development/src/mod_development.erl:83
+#: apps/zotonic_mod_development/src/mod_development.erl:84./apps/zotonic_mod_development/src/mod_development.erl:101
 msgid "No permission to use mod_development."
 msgstr "Sem permissão para usar mod_development."
 
@@ -5687,7 +5712,11 @@ msgstr "Redirecionar"
 msgid "Rerun XRef"
 msgstr "Executar novamente XRef"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:167
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:17
+msgid "Rerun graph"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:176
 msgid "Show an overview of all observers."
 msgstr "Mostrar uma visão geral de todos os observadores."
 
@@ -5695,7 +5724,7 @@ msgstr "Mostrar uma visão geral de todos os observadores."
 msgid "Show defined blocks in generated templates"
 msgstr "Mostrar blocos definidos em modelos gerados"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:164
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:173
 msgid "Show internals of Zotonic and the modules"
 msgstr "Mostrar o interior do Zotonic e os módulos"
 
@@ -5703,11 +5732,11 @@ msgstr "Mostrar o interior do Zotonic e os módulos"
 msgid "Show paths to included template files in generated templates"
 msgstr "Mostrar caminhos para arquivos de modelo incluídos em modelos gerados"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:123
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:132
 msgid "Show which files are included in a template compilation"
 msgstr "Mostrar quais arquivos estão incluídos em uma compilação de modelo"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
 msgid "Site Development"
 msgstr "Desenvolvimento de site"
 
@@ -5740,6 +5769,10 @@ msgstr "Resultados da verificação de modelo"
 msgid "Template debugging"
 msgstr "Depuração de modelo"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:127./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:29
+msgid "Template dependency graph"
+msgstr ""
+
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:4
 msgid "Template path"
 msgstr "Caminho do modelo"
@@ -5747,6 +5780,10 @@ msgstr "Caminho do modelo"
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8
 msgid "Templates XRef check"
 msgstr "Verificação XRef de modelos"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:8
+msgid "Templates dependendy graph"
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:180
 msgid "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements that are referring to a missing template."
@@ -5763,6 +5800,10 @@ msgstr "Esses modelos possuem instruções <tt>{include}</tt> não opcionais que
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:4
 msgid "These templates have syntax errors and could not be checked for included files."
 msgstr "Esses modelos apresentam erros de sintaxe e não foi possível verificar os arquivos incluídos."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:13
+msgid "This calculates and visualizes the dependency graph of all templates."
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:13
 msgid "This checks all templates to see if included of extended templates are available."
