@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-02 10:50\n"
+"PO-Revision-Date: 2023-10-02 12:06\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -5517,11 +5517,11 @@ msgstr "عمود"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:128
 msgid "Compile all templates. Calculate and visualize a dependency graph of all templates."
-msgstr ""
+msgstr "تجميع كافة القوالب. حساب وتصور الرسم البياني للتبعية لجميع القوالب."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:120
 msgid "Compile all templates. The compiled templates are checked for missing includes or missing <tt>{ext}</tt> template references."
-msgstr ""
+msgstr "تجميع كافة القوالب. يتم التحقق من القوالب المجمعة للتأكد من عدم وجود تضمينات أو مراجع قالب مفقودة <tt>{ext}</tt>."
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "Controller"
@@ -5529,15 +5529,15 @@ msgstr "مراقب"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:24
 msgid "Copied dot file to the clipboard."
-msgstr ""
+msgstr "نسخ ملف النقطة إلى الحافظة."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:1
 msgid "Copy GraphViz dot data"
-msgstr ""
+msgstr "انسخ بيانات نقطة GraphViz"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:27
 msgid "Could not copy dot file to the clipboard."
-msgstr ""
+msgstr "تعذر نسخ ملف النقطة إلى الحافظة."
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:46
 msgid "Could not fetch tracer output, please try again."
@@ -5549,12 +5549,13 @@ msgstr "التحقق من الإسناد الترافقي لجميع القوا�
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:12
 msgid "Dependency graph of all templates"
-msgstr ""
+msgstr "الرسم البياني للتبعية لجميع القوالب"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
 msgid "Dependency graph of all templates. Only includes using a direct string value for the template are shown.<br>\n"
 "    Includes using variable names or expressions are not shown.<br> <tt>{extends}</tt> are shown with a striped line, <tt>{overrules}</tt> are shown with a dotted line."
-msgstr ""
+msgstr "الرسم البياني للتبعية لجميع القوالب. يتضمن فقط استخدام قيمة سلسلة مباشرة للقالب المعروض.<br>\n"
+"    يتضمن استخدام أسماء المتغيرات أو التعبيرات غير معروضة. يتم عرض<br> <tt>{extends}</tt> بخط مخطط، ويتم عرض <tt>{overrules}</tt> بخط منقط."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:403
 msgid "Development"
@@ -5714,7 +5715,7 @@ msgstr "أعد تشغيل XRef"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:17
 msgid "Rerun graph"
-msgstr ""
+msgstr "إعادة تشغيل الرسم البياني"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:176
 msgid "Show an overview of all observers."
@@ -5771,7 +5772,7 @@ msgstr "تصحيح النموذج"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:127./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:29
 msgid "Template dependency graph"
-msgstr ""
+msgstr "الرسم البياني لتبعية القالب"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:4
 msgid "Template path"
@@ -5783,7 +5784,7 @@ msgstr "التحقق من قوالب XRef"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:8
 msgid "Templates dependendy graph"
-msgstr ""
+msgstr "قوالب الرسم البياني التبعية"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:180
 msgid "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements that are referring to a missing template."
@@ -5803,7 +5804,7 @@ msgstr "تحتوي هذه القوالب على أخطاء في بناء الج�
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:13
 msgid "This calculates and visualizes the dependency graph of all templates."
-msgstr ""
+msgstr "يؤدي هذا إلى حساب وتصور الرسم البياني للتبعية لجميع القوالب."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:13
 msgid "This checks all templates to see if included of extended templates are available."
