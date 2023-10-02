@@ -35,7 +35,7 @@
 -type template_edge() :: #{
         from := binary(),
         to := binary(),
-        is_extend => boolean()
+        type => extends | overrules | include
     }.
 
 -export_type([
@@ -51,7 +51,7 @@ dot(Context) ->
     Nodes = lists:map(
         fun(#{ module := Mod, id := Id, template := Tpl }) ->
             [
-                Id,
+                "    ", Id,
                 " [",
                     "label=\"", Tpl, "\\n", Mod, "\"",
                     " color=", color(Mod),
@@ -66,23 +66,26 @@ dot(Context) ->
     Edges = lists:map(
         fun(#{ from := From, to := To, module := Mod } = E) ->
             [
-                From, " -> ", To,
-                case maps:get(is_extend, E, false) of
-                    true ->
+                "    ", From, " -> ", To,
+                case maps:get(type, E, false) of
+                    extends ->
+                        [ " [style=dashed dir=back color=", color(Mod),"] " ];
+                    overrules ->
                         [ " [style=dotted dir=\"back\" color=", color(Mod),"] " ];
-                    false ->
+                    _ ->
                         [ " [color=", color(Mod), "] " ]
                 end,
-                ";"
+                ";\n"
             ]
         end,
         maps:get(edges, G, [])),
     Dot = iolist_to_binary([
         <<"digraph G {\n">>,
-            "rankdir=LR;\n",
-            "node [ fontsize=11 shape=box color=cadetblue ];\n",
+            "    rankdir=LR;\n",
+            "    node [ fontsize=11 shape=box color=cadetblue ];\n",
             "\n",
             Nodes,
+            "\n",
             lists:usort(Edges),
         <<"}\n">>
     ]),
@@ -98,27 +101,12 @@ graph(Context) ->
     % lookup, skip templates hidden by like-named templates in
     % modules of higher priority.
     All = z_module_indexer:all(template, Context),
-    Ts = lists:foldl(
-        fun(Template, Acc) ->
-            #module_index{ key = Key } = Template,
-            #module_index_key{ name = TplName } = Key,
-            case maps:get(TplName, Acc, undefined) of
-                undefined ->
-                    {ok, T} = z_module_indexer:find(template, TplName, Context),
-                    Acc#{
-                        TplName => T
-                    };
-                _ ->
-                    Acc
-            end
-        end,
-        #{},
-        All),
-    % Todo: determine 'overrules' templates/nodes (index is full path)
-    Ts1 = maps:values(Ts),
-    Ts2 = lists:zip(Ts1, lists:seq(1, length(Ts1))),
+    Ts = collect_nodes(All, Context),
+    TsWithHidden = collect_hidden(Ts, Context),
+    TsWithHiddenList = maps:values(TsWithHidden),
+    TsWithHiddenN = lists:zip(TsWithHiddenList, lists:seq(1, length(TsWithHiddenList))),
     BuildDir = <<(build_dir())/binary, "/">>,
-    Nodes = lists:foldl(
+    NodeMap = lists:foldl(
         fun({Template, N}, Acc) ->
             #module_index{ key = Key, filepath = Path } = Template,
             #module_index_key{ name = TplName } = Key,
@@ -135,27 +123,250 @@ graph(Context) ->
                 index => Template,
                 basename => basename(Tpl)
             },
-            Acc#{
-                TplName => Node
-            }
+            case maps:is_key(Path, Ts) of
+                true ->
+                    % "Top" level templates use their short-hand template
+                    % name for the index. This is used for finding includes
+                    % and extends.
+                    Acc#{
+                        TplName => Node
+                    };
+                false ->
+                   % Templates that are hidden by other (higher prio) templates
+                    % but are used for overrules or all-include are indexed by
+                    % their full path.
+                    Acc#{
+                        Path => Node
+                    }
+            end
         end,
         #{},
-        Ts2),
-    Nodes1 = maps:values(Nodes),
-    Edges = lists:flatten(
+        TsWithHiddenN),
+    Nodes = maps:values(NodeMap),
+    Edges = edges(Nodes, NodeMap, Context),
+    Extends = extend_edges(Nodes, NodeMap, Context),
+    G = #{
+        nodes => Nodes,
+        edges => Extends ++ Edges
+    },
+    {ok, G}.
+
+collect_nodes(All, Context) ->
+    {Ns, _} = lists:foldl(
+        fun(Template, {Acc, Dedup}) ->
+            #module_index{ key = Key } = Template,
+            #module_index_key{ name = TplName } = Key,
+            case maps:get(TplName, Dedup, undefined) of
+                undefined ->
+                    {ok, T} = z_module_indexer:find(template, TplName, Context),
+                    #module_index{ filepath = Path } = T,
+                    Dedup1 = Dedup#{
+                        TplName => true
+                    },
+                    Acc1 = Acc#{
+                        Path => T
+                    },
+                    {Acc1, Dedup1};
+                _ ->
+                    {Acc, Dedup}
+            end
+        end,
+        {#{}, #{}},
+        All),
+    Ns.
+
+%% @doc Collect overrules and 'all include' templates that are normally hidden
+%% by the like-named template in the module with highest priority.
+collect_hidden(TplMap, Context) ->
+    Tpls = maps:values(TplMap),
+    TplMap1 = collect_overrules(Tpls, TplMap, Context),
+    Tpls1 = maps:values(TplMap1),
+    collect_all_includes(Tpls1, TplMap1, Context).
+
+
+collect_all_includes([], Map, _Context) ->
+    Map;
+collect_all_includes([Template|Ts], Map, Context) ->
+    case z_template:includes(Template, #{}, Context) of
+        {ok, Includes} ->
+            {Extra, Map1} = lists:foldl(
+                fun
+                    (#{
+                        template := IncFile,
+                        method := all   % optional | all | normal
+                    }, Acc) ->
+                        All = z_module_indexer:find_all(template, IncFile, Context),
+                        lists:foldl(
+                            fun(Tpl, {ExtraAcc, MapAcc}) ->
+                                #module_index{ key = Key, filepath = Path } = Tpl,
+                                #module_index_key{ name = TplName } = Key,
+                                case maps:get(TplName, Map, undefined) of
+                                    Tpl ->
+                                        {ExtraAcc, MapAcc};
+                                    _ ->
+                                        case maps:get(Path, Map, undefined) of
+                                            undefined ->
+                                                MapAcc1 = MapAcc#{
+                                                    Path => Tpl
+                                                },
+                                                {[Tpl|ExtraAcc], MapAcc1};
+                                            _ ->
+                                                {ExtraAcc, MapAcc}
+                                        end
+                                end
+                            end,
+                            Acc,
+                            All);
+                    (_, Acc) ->
+                        Acc
+                end,
+                {[], Map},
+                Includes),
+            collect_all_includes(Extra ++ Ts, Map1, Context);
+        {error, _} ->
+            collect_all_includes(Ts, Map, Context)
+    end.
+
+
+
+collect_overrules([], Map, _Context) ->
+    Map;
+collect_overrules([Template|Ts], Map, Context) ->
+    case z_template:extends(Template, #{}, Context) of
+        {ok, overrules} ->
+            case find_overrules(Template, Context) of
+                {ok, Next} ->
+                    #module_index{ key = Key, filepath = Path } = Next,
+                    #module_index_key{ name = TplName } = Key,
+                    case maps:get(TplName, Map, undefined) of
+                        Next ->
+                            collect_overrules(Ts, Map, Context);
+                        _ ->
+                            case maps:get(Path, Map, undefined) of
+                                undefined ->
+                                    Map1 = Map#{
+                                        Path => Next
+                                    },
+                                    collect_overrules([Next|Ts], Map1, Context);
+                                _ ->
+                                    collect_overrules(Ts, Map, Context)
+                            end
+                    end;
+                {error, _} ->
+                    collect_overrules(Ts, Map, Context)
+            end;
+        _ ->
+            collect_overrules(Ts, Map, Context)
+    end.
+
+find_overrules(#module_index{ key = Key, filepath = Filename }, Context) ->
+    #module_index_key{ name = TplName } = Key,
+    Templates = z_module_indexer:find_all(template, TplName, Context),
+    case find_next_template(Filename, Templates) of
+        {ok, _} = Ok ->
+            Ok;
+        {error, enoent} ->
+            {error, enoent}
+    end.
+
+find_next_template(_Filename, []) ->
+    {error, enoent};
+find_next_template(Filename, [#module_index{filepath=Filename},Next|_]) ->
+    {ok, Next};
+find_next_template(Filename, [_|Rest]) ->
+    find_next_template(Filename, Rest).
+
+
+extend_edges(Nodes, NodeMap, Context) ->
+    lists:filtermap(
+        fun(#{ index := Template, id := FromId, module := Mod  }) ->
+            case z_template:extends(Template, #{}, Context) of
+                {ok, Extends} when is_binary(Extends) ->
+                    case maps:get(Extends, NodeMap, undefined) of
+                        #{
+                            id := ToId
+                        } ->
+                            {true, #{
+                                from => ToId,
+                                to => FromId,
+                                module => Mod,
+                                type => extends
+                            }};
+                        undefined ->
+                            false
+                    end;
+                {ok, overrules} ->
+                    case find_overrules(Template, Context) of
+                        {ok, Next} ->
+                            #module_index{ filepath = Path } = Next,
+                            case maps:get(Path, NodeMap, undefined) of
+                                undefined ->
+                                    false;
+                                #{ id := ToId } ->
+                                    {true, #{
+                                        from => ToId,
+                                        to => FromId,
+                                        module => Mod,
+                                        type => overrules
+                                    }}
+                            end;
+                        {error, _} ->
+                            false
+                    end;
+                {ok, undefined} ->
+                    false;
+                {error, _} ->
+                    false
+            end
+        end,
+        Nodes).
+
+edges(Nodes, NodeMap, Context) ->
+    lists:flatten(
         lists:map(
             fun(#{ index := Template, id := FromId, module := Mod  }) ->
                 case z_template:includes(Template, #{}, Context) of
-                    {ok, Includes} ->
-                        % TODO: expand catinclude and all include
+                    {ok, Includes} when is_list(Includes) ->
                         lists:filtermap(
                             fun
                                 (#{
                                     template := IncFile,
-                                    method := Method,   % optional | all | normal
+                                    method := all,       % optional | all | normal
+                                    is_catinclude := _
+                                }) ->
+                                    All = z_module_indexer:find_all(template, IncFile, Context),
+                                    L = lists:filtermap(
+                                        fun(Tpl) ->
+                                            #module_index{ filepath = Path } = Tpl,
+                                            case maps:get(IncFile, NodeMap, undefined) of
+                                                #{ index := #module_index{ filepath = Path }, id := ToId } ->
+                                                    {true, #{
+                                                        from => FromId,
+                                                        to => ToId,
+                                                        module => Mod,
+                                                        type => include
+                                                    }};
+                                                _ ->
+                                                    case maps:get(Path, NodeMap, undefined) of
+                                                        #{ id := ToId } ->
+                                                            {true, #{
+                                                                from => FromId,
+                                                                to => ToId,
+                                                                module => Mod,
+                                                                type => include
+                                                            }};
+                                                        _ ->
+                                                            false
+                                                    end
+                                            end
+                                        end,
+                                        All),
+                                    {true, L};
+                                (#{
+                                    template := IncFile,
                                     is_catinclude := true
                                 }) ->
-                                    Included = find_all_catinclude(IncFile, Nodes1),
+                                    Included = find_all_catinclude(IncFile, Nodes),
                                     Es = lists:map(
                                         fun
                                             (#{ id := ToId }) ->
@@ -163,20 +374,16 @@ graph(Context) ->
                                                     from => FromId,
                                                     to => ToId,
                                                     module => Mod,
-                                                    is_extend => false
+                                                    type => include
                                                 }
                                         end,
                                         Included),
                                     {true, Es};
                                 (#{
                                     template := IncFile,
-                                    method := Method,   % optional | all | normal
                                     is_catinclude := false
                                 }) ->
-                                    % TODO: if 'all' then look for like-named
-                                    % templates in the complete template list,
-                                    % these should also be added to the nodes.
-                                    case maps:get(IncFile, Nodes, undefined) of
+                                    case maps:get(IncFile, NodeMap, undefined) of
                                         #{
                                             id := ToId
                                         } ->
@@ -184,7 +391,7 @@ graph(Context) ->
                                                 from => FromId,
                                                 to => ToId,
                                                 module => Mod,
-                                                is_extend => false
+                                                type => include
                                             }};
                                         undefined ->
                                             false
@@ -195,40 +402,10 @@ graph(Context) ->
                         []
                 end
             end,
-            Nodes1)
-        ),
-    Extends = lists:filtermap(
-        fun(#{ index := Template, id := FromId, module := Mod  }) ->
-            case z_template:extends(Template, #{}, Context) of
-                {ok, Extends} when is_binary(Extends) ->
-                    case maps:get(Extends, Nodes, undefined) of
-                        #{
-                            id := ToId
-                        } ->
-                            {true, #{
-                                from => ToId,
-                                to => FromId,
-                                module => Mod,
-                                is_extend => true
-                            }};
-                        undefined ->
-                            false
-                    end;
-                {ok, overrules} ->
-                    % TODO
-                    false;
-                {ok, undefined} ->
-                    false;
-                {error, _} ->
-                    false
-            end
-        end,
-        Nodes1),
-    G = #{
-        nodes => Nodes1,
-        edges => Extends ++ Edges
-    },
-    {ok, G}.
+            Nodes)
+        ).
+
+
 
 find_all_catinclude(Template, Nodes) ->
     lists:filter(
