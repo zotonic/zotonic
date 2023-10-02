@@ -9,7 +9,7 @@
 
 <div id="graphviz_svg" style="max-width: 100%; overflow: auto;"></div>
 
-<div style="display: hidden">
+<div style="display: none">
     <textarea class="form-control" id="graphviz_data" disabled>{{ dot|escape }}</textarea>
 </div>
 
