@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-29 10:49\n"
+"PO-Revision-Date: 2023-10-02 12:07\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -5486,7 +5486,7 @@ msgstr "Semua pernyataan <tt>{include}</tt> non-opsional mengacu pada templat ya
 msgid "All templates are compiling."
 msgstr "Semua templat sedang dikompilasi."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:124
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:133
 msgid "At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template."
 msgstr "Kadang-kadang dapat membingungkan template mana yang sebenarnya digunakan selama kompilasi template. Di sini Anda dapat melihat file mana yang disertakan saat menyusun template."
 
@@ -5506,7 +5506,7 @@ msgstr "Binding"
 msgid "Check included templates"
 msgstr "Periksa templat yang disertakan"
 
-#: apps/zotonic_mod_development/src/mod_development.erl:78
+#: apps/zotonic_mod_development/src/mod_development.erl:79./apps/zotonic_mod_development/src/mod_development.erl:96
 msgid "Checking all templates..."
 msgstr "Memeriksa semua templat..."
 
@@ -5514,13 +5514,29 @@ msgstr "Memeriksa semua templat..."
 msgid "Column"
 msgstr "Kolom"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
-msgid "Compile all templates. The compiled templates are checked for missing includes or missing extends/overrules template referenceds."
-msgstr "Kompilasi semua templat. Templat yang dikompilasi diperiksa apakah ada penyertaan yang hilang atau referensi templat perluasan/pengaturan yang hilang."
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:128
+msgid "Compile all templates. Calculate and visualize a dependency graph of all templates."
+msgstr "Kompilasi semua template. Hitung dan visualisasikan grafik ketergantungan semua templat."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:120
+msgid "Compile all templates. The compiled templates are checked for missing includes or missing <tt>{ext}</tt> template references."
+msgstr "Kompilasi semua templat. Templat yang dikompilasi diperiksa apakah ada penyertaan yang hilang atau referensi templat <tt>{ext}</tt> yang hilang."
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "Controller"
 msgstr "Pengontrol"
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:24
+msgid "Copied dot file to the clipboard."
+msgstr "File titik disalin ke clipboard."
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:1
+msgid "Copy GraphViz dot data"
+msgstr "Salin data titik GraphViz"
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:27
+msgid "Could not copy dot file to the clipboard."
+msgstr "Tidak dapat menyalin file titik ke papan klip."
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:46
 msgid "Could not fetch tracer output, please try again."
@@ -5530,7 +5546,17 @@ msgstr "Tidak dapat mengambil keluaran pelacak, harap coba lagi."
 msgid "Cross reference check of all templates"
 msgstr "Pemeriksaan referensi silang dari semua templat"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:367
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:12
+msgid "Dependency graph of all templates"
+msgstr "Grafik ketergantungan semua templat"
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
+msgid "Dependency graph of all templates. Only includes using a direct string value for the template are shown.<br>\n"
+"    Includes using variable names or expressions are not shown.<br> <tt>{extends}</tt> are shown with a striped line, <tt>{overrules}</tt> are shown with a dotted line."
+msgstr "Grafik ketergantungan semua templat. Hanya menyertakan penggunaan nilai string langsung untuk templat yang ditampilkan.<br>\n"
+"    Penyertaan penggunaan nama variabel atau ekspresi tidak ditampilkan.<br> <tt>{extends}</tt> ditunjukkan dengan garis bergaris, <tt>{overrules}</tt> ditunjukkan dengan garis putus-putus."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:403
 msgid "Development"
 msgstr "Pengembangan"
 
@@ -5546,7 +5572,7 @@ msgstr "Nonaktifkan caching dengan tag <tt>{% cache %}</tt>."
 msgid "Disabled database query tracing"
 msgstr "Pelacakan kueri database dinonaktifkan"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:131
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:140
 msgid "Dispatch rule debugging"
 msgstr "Pengiriman aturan debugging"
 
@@ -5574,7 +5600,7 @@ msgstr "Pelacakan kueri database yang diaktifkan"
 msgid "Event"
 msgstr "Peristiwa"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:150
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:159
 msgid "Explain"
 msgstr "Menjelaskan"
 
@@ -5610,7 +5636,7 @@ msgstr "Templat disertakan"
 msgid "Included templates"
 msgstr "Template yang disertakan"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:161
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:170
 msgid "Introspection"
 msgstr "Introspeksi"
 
@@ -5626,7 +5652,7 @@ msgstr "Reload langsung dari file CSS yang diubah. Muat ulang halaman saat mengg
 msgid "Location"
 msgstr "Lokasi"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:134
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:143
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "Sesuai permintaan URL, tampilan sesuai aturan pengiriman."
 
@@ -5654,7 +5680,7 @@ msgstr "Jalur baru"
 msgid "No matching dispatch rule found"
 msgstr "Tidak ada aturan pengiriman yang sesuai"
 
-#: apps/zotonic_mod_development/src/mod_development.erl:83
+#: apps/zotonic_mod_development/src/mod_development.erl:84./apps/zotonic_mod_development/src/mod_development.erl:101
 msgid "No permission to use mod_development."
 msgstr "Tidak ada izin untuk menggunakan mod_development."
 
@@ -5686,7 +5712,11 @@ msgstr "Pengalihan"
 msgid "Rerun XRef"
 msgstr "Jalankan kembali XRef"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:167
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:17
+msgid "Rerun graph"
+msgstr "Jalankan kembali grafik"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:176
 msgid "Show an overview of all observers."
 msgstr "Tunjukkan gambaran umum dari semua pengamat."
 
@@ -5694,7 +5724,7 @@ msgstr "Tunjukkan gambaran umum dari semua pengamat."
 msgid "Show defined blocks in generated templates"
 msgstr "Tampilkan didefinisikan blok dihasilkan template"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:164
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:173
 msgid "Show internals of Zotonic and the modules"
 msgstr "Tunjukkan internal Zotonic dan modulnya"
 
@@ -5702,11 +5732,11 @@ msgstr "Tunjukkan internal Zotonic dan modulnya"
 msgid "Show paths to included template files in generated templates"
 msgstr "Menunjukkan jalan untuk menyertakan file template pada template yang dihasilkan"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:123
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:132
 msgid "Show which files are included in a template compilation"
 msgstr "Tunjukkan file mana yang disertakan dalam kompilasi template"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
 msgid "Site Development"
 msgstr "Pengembangan situs"
 
@@ -5739,6 +5769,10 @@ msgstr "Hasil pemeriksaan templat"
 msgid "Template debugging"
 msgstr "Template debugging"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:127./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:29
+msgid "Template dependency graph"
+msgstr "Grafik ketergantungan templat"
+
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:4
 msgid "Template path"
 msgstr "Template path"
@@ -5746,6 +5780,10 @@ msgstr "Template path"
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8
 msgid "Templates XRef check"
 msgstr "Templat XRef diperiksa"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:8
+msgid "Templates dependendy graph"
+msgstr "Grafik ketergantungan templat"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:180
 msgid "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements that are referring to a missing template."
@@ -5762,6 +5800,10 @@ msgstr "Templat ini memiliki pernyataan non-opsional <tt>{include}</tt> yang men
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:4
 msgid "These templates have syntax errors and could not be checked for included files."
 msgstr "Templat ini memiliki kesalahan sintaksis dan tidak dapat diperiksa untuk mengetahui file yang disertakan."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:13
+msgid "This calculates and visualizes the dependency graph of all templates."
+msgstr "Ini menghitung dan memvisualisasikan grafik ketergantungan semua templat."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:13
 msgid "This checks all templates to see if included of extended templates are available."

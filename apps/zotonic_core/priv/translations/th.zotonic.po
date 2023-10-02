@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-09-29 10:49\n"
+"PO-Revision-Date: 2023-10-02 12:07\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -5487,7 +5487,7 @@ msgstr "คำสั่ง <tt>{include}</tt> ที่ไม่เป็นท�
 msgid "All templates are compiling."
 msgstr "เทมเพลตทั้งหมดกำลังรวบรวม"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:124
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:133
 msgid "At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template."
 msgstr "ในบางครั้ง อาจทำให้สับสนได้ว่าจะใช้เทมเพลตใดในระหว่างการรวบรวมเทมเพลต ที่นี่คุณสามารถดูไฟล์ที่รวมอยู่ขณะรวบรวมเทมเพลต"
 
@@ -5507,7 +5507,7 @@ msgstr "การผูก"
 msgid "Check included templates"
 msgstr "ตรวจสอบเทมเพลตที่รวมอยู่"
 
-#: apps/zotonic_mod_development/src/mod_development.erl:78
+#: apps/zotonic_mod_development/src/mod_development.erl:79./apps/zotonic_mod_development/src/mod_development.erl:96
 msgid "Checking all templates..."
 msgstr "กำลังตรวจสอบเทมเพลตทั้งหมด..."
 
@@ -5515,13 +5515,29 @@ msgstr "กำลังตรวจสอบเทมเพลตทั้งห
 msgid "Column"
 msgstr "คอลัมน์"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
-msgid "Compile all templates. The compiled templates are checked for missing includes or missing extends/overrules template referenceds."
-msgstr "รวบรวมเทมเพลตทั้งหมด เทมเพลตที่คอมไพล์แล้วจะถูกตรวจสอบว่าไม่มีการรวมหรือส่วนขยาย/แทนที่เทมเพลตที่อ้างอิงหายไป"
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:128
+msgid "Compile all templates. Calculate and visualize a dependency graph of all templates."
+msgstr "รวบรวมเทมเพลตทั้งหมด คำนวณและแสดงภาพกราฟการขึ้นต่อกันของเทมเพลตทั้งหมด"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:120
+msgid "Compile all templates. The compiled templates are checked for missing includes or missing <tt>{ext}</tt> template references."
+msgstr "รวบรวมเทมเพลตทั้งหมด เทมเพลตที่คอมไพล์แล้วจะถูกตรวจสอบว่าไม่มีการรวมหรือการอ้างอิงเทมเพลต <tt>{ext}</tt> ที่ขาดหายไป"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "Controller"
 msgstr "ตัวควบคุม"
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:24
+msgid "Copied dot file to the clipboard."
+msgstr "คัดลอกไฟล์ dot ไปยังคลิปบอร์ดแล้ว"
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:1
+msgid "Copy GraphViz dot data"
+msgstr "คัดลอกข้อมูลจุด GraphViz"
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:27
+msgid "Could not copy dot file to the clipboard."
+msgstr "ไม่สามารถคัดลอกไฟล์ dot ไปยังคลิปบอร์ดได้"
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:46
 msgid "Could not fetch tracer output, please try again."
@@ -5531,7 +5547,17 @@ msgstr "ไม่สามารถดึงเอาต์พุตตัวต
 msgid "Cross reference check of all templates"
 msgstr "การตรวจสอบการอ้างอิงโยงของเทมเพลตทั้งหมด"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:367
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:12
+msgid "Dependency graph of all templates"
+msgstr "กราฟการขึ้นต่อกันของเทมเพลตทั้งหมด"
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
+msgid "Dependency graph of all templates. Only includes using a direct string value for the template are shown.<br>\n"
+"    Includes using variable names or expressions are not shown.<br> <tt>{extends}</tt> are shown with a striped line, <tt>{overrules}</tt> are shown with a dotted line."
+msgstr "กราฟการขึ้นต่อกันของเทมเพลตทั้งหมด จะแสดงเฉพาะการใช้ค่าสตริงโดยตรงสำหรับเทมเพลตเท่านั้น<br>\n"
+"    รวมถึงการใช้ชื่อตัวแปรหรือนิพจน์จะไม่แสดง<br> <tt>{extends}</tt> แสดงด้วยเส้นลาย <tt>{overrules}</tt> แสดงด้วยเส้นประ"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:403
 msgid "Development"
 msgstr "การพัฒนา"
 
@@ -5547,7 +5573,7 @@ msgstr "ปิดใช้งานการแคชโดยแท็ก <tt>{
 msgid "Disabled database query tracing"
 msgstr "ปิดใช้งานการติดตามการสืบค้นฐานข้อมูล"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:131
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:140
 msgid "Dispatch rule debugging"
 msgstr "ส่งการแก้ไขข้อบกพร่องของกฎ"
 
@@ -5575,7 +5601,7 @@ msgstr "เปิดใช้งานการติดตามการสื
 msgid "Event"
 msgstr "เหตุการณ์"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:150
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:159
 msgid "Explain"
 msgstr "อธิบาย"
 
@@ -5611,7 +5637,7 @@ msgstr "รวมเทมเพลตแล้ว"
 msgid "Included templates"
 msgstr "รวมเทมเพลต"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:161
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:170
 msgid "Introspection"
 msgstr "วิปัสสนา"
 
@@ -5627,7 +5653,7 @@ msgstr "โหลดไฟล์ CSS ที่เปลี่ยนแปลง�
 msgid "Location"
 msgstr "สถานที่"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:134
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:143
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "จับคู่ URL คำขอแสดงกฎการจัดส่งที่ตรงกัน"
 
@@ -5655,7 +5681,7 @@ msgstr "เส้นทางใหม่"
 msgid "No matching dispatch rule found"
 msgstr "ไม่พบกฎการจัดส่งที่ตรงกัน"
 
-#: apps/zotonic_mod_development/src/mod_development.erl:83
+#: apps/zotonic_mod_development/src/mod_development.erl:84./apps/zotonic_mod_development/src/mod_development.erl:101
 msgid "No permission to use mod_development."
 msgstr "ไม่ได้รับอนุญาตให้ใช้ mod_development"
 
@@ -5687,7 +5713,11 @@ msgstr "เปลี่ยนเส้นทาง"
 msgid "Rerun XRef"
 msgstr "รัน XRef อีกครั้ง"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:167
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:17
+msgid "Rerun graph"
+msgstr "รีรันกราฟ"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:176
 msgid "Show an overview of all observers."
 msgstr "แสดงภาพรวมของผู้สังเกตการณ์ทั้งหมด"
 
@@ -5695,7 +5725,7 @@ msgstr "แสดงภาพรวมของผู้สังเกตกา
 msgid "Show defined blocks in generated templates"
 msgstr "แสดงบล็อกที่กำหนดไว้ในเทมเพลตที่สร้างขึ้น"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:164
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:173
 msgid "Show internals of Zotonic and the modules"
 msgstr "แสดงภายในของ Zotonic และโมดูล"
 
@@ -5703,11 +5733,11 @@ msgstr "แสดงภายในของ Zotonic และโมดูล"
 msgid "Show paths to included template files in generated templates"
 msgstr "แสดงเส้นทางไปยังไฟล์เทมเพลตที่รวมอยู่ในเทมเพลตที่สร้างขึ้น"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:123
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:132
 msgid "Show which files are included in a template compilation"
 msgstr "แสดงว่าไฟล์ใดบ้างที่รวมอยู่ในการรวบรวมเทมเพลต"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
 msgid "Site Development"
 msgstr "การพัฒนาเว็บไซต์"
 
@@ -5740,6 +5770,10 @@ msgstr "ผลการตรวจสอบเทมเพลต"
 msgid "Template debugging"
 msgstr "การดีบักเทมเพลต"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:127./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:29
+msgid "Template dependency graph"
+msgstr "กราฟการพึ่งพาเทมเพลต"
+
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:4
 msgid "Template path"
 msgstr "เส้นทางเทมเพลต"
@@ -5747,6 +5781,10 @@ msgstr "เส้นทางเทมเพลต"
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8
 msgid "Templates XRef check"
 msgstr "ตรวจสอบเทมเพลต XRef"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:8
+msgid "Templates dependendy graph"
+msgstr "กราฟอ้างอิงเทมเพลต"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:180
 msgid "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements that are referring to a missing template."
@@ -5763,6 +5801,10 @@ msgstr "เทมเพลตเหล่านี้มีคำสั่ง <t
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:4
 msgid "These templates have syntax errors and could not be checked for included files."
 msgstr "เทมเพลตเหล่านี้มีข้อผิดพลาดทางไวยากรณ์และไม่สามารถตรวจสอบไฟล์ที่รวมอยู่ได้"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:13
+msgid "This calculates and visualizes the dependency graph of all templates."
+msgstr "วิธีนี้จะคำนวณและแสดงภาพกราฟการขึ้นต่อกันของเทมเพลตทั้งหมด"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:13
 msgid "This checks all templates to see if included of extended templates are available."
