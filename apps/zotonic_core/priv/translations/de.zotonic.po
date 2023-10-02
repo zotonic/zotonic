@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-02 10:50\n"
+"PO-Revision-Date: 2023-10-02 12:06\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -5517,11 +5517,11 @@ msgstr "Spalte"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:128
 msgid "Compile all templates. Calculate and visualize a dependency graph of all templates."
-msgstr ""
+msgstr "Kompilieren Sie alle Vorlagen. Berechnen und visualisieren Sie ein Abhängigkeitsdiagramm aller Vorlagen."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:120
 msgid "Compile all templates. The compiled templates are checked for missing includes or missing <tt>{ext}</tt> template references."
-msgstr ""
+msgstr "Kompilieren Sie alle Vorlagen. Die kompilierten Vorlagen werden auf fehlende Includes oder fehlende <tt>{ext}</tt> Vorlagenverweise überprüft."
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "Controller"
@@ -5529,15 +5529,15 @@ msgstr "Controller"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:24
 msgid "Copied dot file to the clipboard."
-msgstr ""
+msgstr "Dot-Datei in die Zwischenablage kopiert."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:1
 msgid "Copy GraphViz dot data"
-msgstr ""
+msgstr "GraphViz-Punktdaten kopieren"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:27
 msgid "Could not copy dot file to the clipboard."
-msgstr ""
+msgstr "Die Dot-Datei konnte nicht in die Zwischenablage kopiert werden."
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:46
 msgid "Could not fetch tracer output, please try again."
@@ -5549,12 +5549,13 @@ msgstr "Querverweisprüfung aller Vorlagen"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:12
 msgid "Dependency graph of all templates"
-msgstr ""
+msgstr "Abhängigkeitsdiagramm aller Vorlagen"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
 msgid "Dependency graph of all templates. Only includes using a direct string value for the template are shown.<br>\n"
 "    Includes using variable names or expressions are not shown.<br> <tt>{extends}</tt> are shown with a striped line, <tt>{overrules}</tt> are shown with a dotted line."
-msgstr ""
+msgstr "Abhängigkeitsdiagramm aller Vorlagen. Es werden nur Includes angezeigt, die einen direkten Zeichenfolgenwert für die Vorlage verwenden.<br>\n"
+"    Einschließt, die Variablennamen oder Ausdrücke verwenden, werden nicht angezeigt.<br> <tt>{extends}</tt> sind mit einer gestreiften Linie dargestellt, <tt>{overrules}</tt> sind mit einer gepunkteten Linie dargestellt."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:403
 msgid "Development"
@@ -5714,7 +5715,7 @@ msgstr "Führen Sie XRef erneut aus"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:17
 msgid "Rerun graph"
-msgstr ""
+msgstr "Diagramm erneut ausführen"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:176
 msgid "Show an overview of all observers."
@@ -5771,7 +5772,7 @@ msgstr "Debuggen von Vorlagen"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:127./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:29
 msgid "Template dependency graph"
-msgstr ""
+msgstr "Vorlagenabhängigkeitsdiagramm"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:4
 msgid "Template path"
@@ -5783,7 +5784,7 @@ msgstr "Vorlagen-XRef-Prüfung"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:8
 msgid "Templates dependendy graph"
-msgstr ""
+msgstr "Vorlagenabhängiges Diagramm"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:180
 msgid "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements that are referring to a missing template."
@@ -5803,7 +5804,7 @@ msgstr "Diese Vorlagen weisen Syntaxfehler auf und konnten nicht auf enthaltene 
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:13
 msgid "This calculates and visualizes the dependency graph of all templates."
-msgstr ""
+msgstr "Dadurch wird der Abhängigkeitsgraph aller Vorlagen berechnet und visualisiert."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:13
 msgid "This checks all templates to see if included of extended templates are available."
