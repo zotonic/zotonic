@@ -434,6 +434,7 @@ color(Name) ->
     lists:nth(Nr+1, colors()).
 
 % https://graphviz.org/doc/info/colors.html#svg
+% commented out colors too light for a white background
 colors() ->
     [
         <<"aliceblue">>,
@@ -492,17 +493,17 @@ colors() ->
         <<"gray">>,
         <<"grey">>,
         <<"green">>,
-        <<"greenyellow">>,
-        <<"honeydew">>,
+        % <<"greenyellow">>,
+        % <<"honeydew">>,
         <<"hotpink">>,
         <<"indianred">>,
         <<"indigo">>,
         % <<"ivory">>,
         <<"khaki">>,
         <<"lavender">>,
-        <<"lavenderblush">>,
+        % <<"lavenderblush">>,
         <<"lawngreen">>,
-        <<"lemonchiffon">>,
+        % <<"lemonchiffon">>,
         <<"lightblue">>,
         <<"lightcoral">>,
         % <<"lightcyan">>,
@@ -538,7 +539,7 @@ colors() ->
         <<"moccasin">>,
         <<"navajowhite">>,
         <<"navy">>,
-        <<"oldlace">>,
+        % <<"oldlace">>,
         <<"olive">>,
         <<"olivedrab">>,
         <<"orange">>,
