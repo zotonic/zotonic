@@ -437,8 +437,8 @@ color(Name) ->
 % commented out colors too light for a white background
 colors() ->
     [
-        <<"aliceblue">>,
-        <<"antiquewhite">>,
+        % <<"aliceblue">>,
+        % <<"antiquewhite">>,
         <<"aqua">>,
         <<"aquamarine">>,
         % <<"azure">>,
