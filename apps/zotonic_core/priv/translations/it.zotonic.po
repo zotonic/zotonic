@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-02 10:50\n"
+"PO-Revision-Date: 2023-10-02 12:06\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -5517,11 +5517,11 @@ msgstr "Colonna"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:128
 msgid "Compile all templates. Calculate and visualize a dependency graph of all templates."
-msgstr ""
+msgstr "Compila tutti i modelli. Calcola e visualizza un grafico delle dipendenze di tutti i modelli."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:120
 msgid "Compile all templates. The compiled templates are checked for missing includes or missing <tt>{ext}</tt> template references."
-msgstr ""
+msgstr "Compila tutti i modelli. I modelli compilati vengono controllati per eventuali inclusioni mancanti o riferimenti al modello <tt>{ext}</tt> mancanti."
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "Controller"
@@ -5529,15 +5529,15 @@ msgstr "Controller"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:24
 msgid "Copied dot file to the clipboard."
-msgstr ""
+msgstr "File punto copiato negli appunti."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:1
 msgid "Copy GraphViz dot data"
-msgstr ""
+msgstr "Copia i dati dei punti GraphViz"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:27
 msgid "Could not copy dot file to the clipboard."
-msgstr ""
+msgstr "Impossibile copiare il file punto negli appunti."
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:46
 msgid "Could not fetch tracer output, please try again."
@@ -5549,12 +5549,13 @@ msgstr "Controllo dei riferimenti incrociati di tutti i modelli"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:12
 msgid "Dependency graph of all templates"
-msgstr ""
+msgstr "Grafico delle dipendenze di tutti i modelli"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
 msgid "Dependency graph of all templates. Only includes using a direct string value for the template are shown.<br>\n"
 "    Includes using variable names or expressions are not shown.<br> <tt>{extends}</tt> are shown with a striped line, <tt>{overrules}</tt> are shown with a dotted line."
-msgstr ""
+msgstr "Grafico delle dipendenze di tutti i modelli. Vengono visualizzati solo gli oggetti che utilizzano un valore stringa diretto per il modello.<br>\n"
+"    Include l'uso di nomi di variabili o espressioni non mostrate.<br> <tt>{extends}</tt> sono rappresentati con una linea a strisce, <tt>{overrules}</tt> sono rappresentati con una linea tratteggiata."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:403
 msgid "Development"
@@ -5714,7 +5715,7 @@ msgstr "Rieseguire XRef"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:17
 msgid "Rerun graph"
-msgstr ""
+msgstr "Rieseguire il grafico"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:176
 msgid "Show an overview of all observers."
@@ -5771,7 +5772,7 @@ msgstr "Debug dei template"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:127./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:29
 msgid "Template dependency graph"
-msgstr ""
+msgstr "Grafico delle dipendenze del modello"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:4
 msgid "Template path"
@@ -5783,7 +5784,7 @@ msgstr "Controllo XRef dei modelli"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:8
 msgid "Templates dependendy graph"
-msgstr ""
+msgstr "Grafico dipendente dai modelli"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:180
 msgid "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements that are referring to a missing template."
@@ -5803,7 +5804,7 @@ msgstr "Questi modelli presentano errori di sintassi e non è stato possibile ve
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:13
 msgid "This calculates and visualizes the dependency graph of all templates."
-msgstr ""
+msgstr "Questo calcola e visualizza il grafico delle dipendenze di tutti i modelli."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:13
 msgid "This checks all templates to see if included of extended templates are available."
