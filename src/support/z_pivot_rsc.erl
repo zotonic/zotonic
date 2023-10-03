@@ -604,7 +604,8 @@ delete_queue(Id, Serial, Context) ->
 %% @todo Also add the property tag/values
 %% @spec pivot_resource(Id, Context) -> void()
 pivot_resource(Id, Context) ->
-    pivot_resource_1(Id, get_pivot_rsc(Id, Context), Context).
+    Context1 = z_acl:sudo(Context),
+    pivot_resource_1(Id, get_pivot_rsc(Id, Context1), Context1).
 
 pivot_resource_1(_Id, {error, enoent}, _Context) ->
     ok;
