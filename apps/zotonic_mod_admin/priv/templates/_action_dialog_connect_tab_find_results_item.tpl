@@ -19,7 +19,7 @@
             %}
             <div class="z-thumbnail-text">
                 <h6>{{ id.category_id.title }}</h6>
-                <h5>{{ id.title }}</h5>
+                <h5>{{ id.title|default:id.short_title }}</h5>
                 <p>{{ id|summary:50 }}</p>
             </div>
         </a>

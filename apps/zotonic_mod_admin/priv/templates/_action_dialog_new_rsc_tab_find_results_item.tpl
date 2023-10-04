@@ -19,7 +19,7 @@
         <div class="z-item-text">
             {% block item_text %}
                 <h6>{{ id.category_id.title }}</h6>
-                <h5>{{ id.title }}</h5>
+                <h5>{{ id.title|default:id.short_title }}</h5>
                 <p>{{ id|summary:80 }}</p>
             {% endblock %}
             {% block item_actions %}

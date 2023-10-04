@@ -31,7 +31,7 @@
                                 <div class="connect-object col-md-3 col-sm-4">
                                     <label class="checkbox">
                                         <input type="checkbox" value="{{ id }}" {% if id|member:oids %}checked{% endif %}>
-                                        {{ id.title }}
+                                        {{ id.title|default:id.short_title }}
                                     </label>
                                 </div>
                             {% endfor %}

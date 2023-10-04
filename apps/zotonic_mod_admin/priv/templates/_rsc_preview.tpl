@@ -12,7 +12,7 @@
         <b>{{ id.content_group_id.title }}</b>
     {% endif %}
 </p>
-<h1>{{ id.title }}</h1>
+<h1>{{ id.title|default:id.short_title }}</h1>
 
 {% if id.summary %}
     <p class="summary">
@@ -38,7 +38,7 @@
         {% for id in haspart %}
             {% if id.is_visible %}
                 <li>
-                    {{ id.title }}
+                    {{ id.title|default:id.short_title }}
                 </li>
             {% endif %}
         {% endfor %}

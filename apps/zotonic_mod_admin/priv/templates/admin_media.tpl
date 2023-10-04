@@ -138,7 +138,7 @@
                                             </td>
                                             <td>{% image medium mediaclass="admin-list-overview" class="thumb" %}</td>
                                             <td>
-                                                <strong>{{ id.title|striptags|default:_"<em>Untitled</em>" }}</strong><br />
+                                                <strong>{{ id.title|default:id.short_title|default:_"<em>Untitled</em>" }}</strong><br />
                                                 <span class="text-muted">{{ medium.filename|default:"-" }}</span>
                                             </td>
                                             <td>
