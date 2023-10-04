@@ -68,7 +68,7 @@
             <meta property="og:site_name" content="{{ m.site.title }}">
         {% endif %}
         {% if id %}
-            <meta property="og:title" content="{{ id.title|default:id.title_short }}">
+            <meta property="og:title" content="{{ id.title|default:id.short_title }}">
             <meta property="og:description" content="{{ id|summary:400|default:description }}">
             <meta property="og:url" content="{{ id.page_url_abs }}">
             <meta property="og:updated_time" content="{{ id.modified|date:"c" }}">
