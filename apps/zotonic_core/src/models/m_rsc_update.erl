@@ -1565,7 +1565,7 @@ is_protected(_, _IsNormal) -> false.
 
 is_trimmable(_, V) when not is_binary(V) -> false;
 is_trimmable(<<"title">>, _) -> true;
-is_trimmable(<<"title_short">>, _) -> true;
+is_trimmable(<<"short_title">>, _) -> true;
 is_trimmable(<<"summary">>, _) -> true;
 is_trimmable(<<"chapeau">>, _) -> true;
 is_trimmable(<<"subtitle">>, _) -> true;

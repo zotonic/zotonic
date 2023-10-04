@@ -68,15 +68,18 @@
             <meta property="og:site_name" content="{{ m.site.title }}">
         {% endif %}
         {% if id %}
-            <meta property="og:title" content="{{ id.title }}">
+            <meta property="og:title" content="{{ id.title|default:id.short_title }}">
             <meta property="og:description" content="{{ id|summary:400|default:description }}">
             <meta property="og:url" content="{{ id.page_url_abs }}">
+            <meta property="og:updated_time" content="{{ id.modified|date:"c" }}">
+            <meta property="og:type" content="{% if id.is_a.text %}article{% else %}website{% endif %}">
         {% elseif description %}
             <meta name="og:description" content="{{ description }}">
         {% endif %}
         {% if depiction %}
             <meta property="og:image" content="{% image_url depiction mediaclass='meta-tag-image' absolute_url %}">
         {% endif %}
+        <meta property="og:locale" content="{{ z_seo_language }}">
     {% endwith %}
     {% endwith %}
     {% endwith %}
