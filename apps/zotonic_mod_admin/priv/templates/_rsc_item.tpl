@@ -7,7 +7,7 @@
 	{% endif %}
 	<strong>
         <a id="{{ #edit }}" href="{% url admin_edit_rsc id=id %}">
-            {% block title %}{{ id.title|default:("<em>" ++ _"untitled" ++ "</em>") }}{% endblock %}
+            {% block title %}{{ id.title|default:id.short_title|default:("<em>" ++ _"untitled" ++ "</em>") }}{% endblock %}
         </a>
     </strong><br />
     {% block meta %}

@@ -8,7 +8,7 @@
     <a id="{{ #unlink.object_id }}" class="z-btn-remove" title="{_ Disconnect _} {{ object_id.title }}"></a>
     <div class="bottom clearfix">
         <div class="caption">
-            {% with m.rsc[object_id].title|striptags|default:_"untitled" as title %}
+            {% with object_id.title|default:object_id.short_title|default:_"untitled" as title %}
                 <a href="#" id="{{ #edit }}" title="{{ object_id.title }}">{{ title }}</a>
             {% endwith %}
 	    </div>

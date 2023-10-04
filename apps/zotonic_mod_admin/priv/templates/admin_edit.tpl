@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %}{_ Edit _} “{{ id.title }}”{% endblock %}
+{% block title %}{_ Edit _} “{{ id.title|default:id.short_title }}”{% endblock %}
 
 {% block bodyclass %}edit-page cg-{{ id.content_group_id.name }} {% for cat,_ in id.is_a %}cat-{{ cat }} {% endfor %} name-{{ id.name }}{% endblock %}
 
