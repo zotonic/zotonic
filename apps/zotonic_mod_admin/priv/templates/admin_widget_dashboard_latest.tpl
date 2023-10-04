@@ -44,13 +44,13 @@
                 <tbody>
                     {% for id in latest %}
                         {% if m.rsc[id].is_visible %}
-                            <tr class="{% if not m.rsc[id].is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
+                            <tr class="{% if not id.is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
                                 <td>
                                     {% if media %}
                                         <div class="admin-list-thumb">
                                         {% image id mediaclass="admin-list-dashboard" class="thumb" %}
                                     {% endif %}
-                                    <span>{{ (m.rsc[id].title|striptags|truncate:50)|default:_"<em>Untitled</em>" }}</span>
+                                    <span>{{ (id.title|default:id.short_title|striptags|truncate:50)|default:_"<em>Untitled</em>" }}</span>
                                     {% if media %}
                                         </div>
                                     {% endif %}
