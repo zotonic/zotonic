@@ -2,6 +2,27 @@
 
 {% block title %} Development {% endblock %}
 
+{% block head_extra %}
+    {% inherit %}
+    <style>
+        #trace-status span {
+            display: none;
+        }
+        #trace-status.trace-stopped span.trace-stopped {
+            display: inline-block;
+        }
+        #trace-status.trace-session span.trace-session {
+            display: inline-block;
+        }
+        #trace-status.trace-all span.trace-all {
+            display: inline-block;
+        }
+        #trace-status.trace-other span.trace-other {
+            display: inline-block;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
 <ul class="breadcrumb">
     <li><a href="{% url admin_development %}">{_ Site Development _}</a></li>
@@ -27,6 +48,21 @@
               postback={template_trace_stop}
               delegate=`mod_development`
     %}
+
+    <span id="trace-status" class="">
+        <span class="text-muted trace-session">
+            <img src="/lib/images/spinner.gif" height="16" width="16"> {_ Tracing this session... _}
+        </span>
+        <span class="text-muted trace-other">
+            <img src="/lib/images/spinner.gif" height="16" width="16"> {_ Tracing other session... _}
+        </span>
+        <span class="text-muted trace-all">
+            <img src="/lib/images/spinner.gif" height="16" width="16"> {_ Tracing all sessions... _}
+        </span>
+        <span class="text-muted trace-stopped">
+            {_ Stopped. _}
+        </span>
+    </span>
 </div>
 
 <div class="widget">
@@ -56,7 +92,7 @@
         </div>
 
         {% wire name="update-dot"
-                postback={template_trace_fetch textarea="graphviz_data"}
+                postback={template_trace_fetch textarea="graphviz_data" status="trace-status"}
                 delegate=`mod_development`
         %}
 
@@ -69,7 +105,7 @@
                         var svg = Viz(vizData, "svg");
                         $('#graphviz_svg').html(svg);
                         $('#graphviz_svg title').remove();
-                        $('#graphviz_data_prev').val(VizDataPrev);
+                        $('#graphviz_data_prev').val(vizData);
                     }
                 } else {
                     $('#graphviz_svg').html('<p class="text-muted">{_ No data. _}</p>');

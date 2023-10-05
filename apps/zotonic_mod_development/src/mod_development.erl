@@ -136,11 +136,24 @@ event(#postback{ message = {template_trace_fetch, Args} }, Context) ->
     {textarea, EltId} = proplists:lookup(textarea, Args),
     case z_acl:is_allowed(use, mod_development, Context) of
         true ->
-            {ok, #{ graph := G }} = template_trace_fetch(Context),
-            {ok, Dot} = z_development_template_graph:dot_from_graph(G),
-            z_render:wire([
-                {set_value, [ {target, EltId}, {value, Dot}, {trigger_event, <<"change">>}]}
-            ], Context);
+            Sid = session_id(Context),
+            {ok, #{ session_id := TraceSid, graph := G }} = template_trace_fetch(Context),
+            Status = case TraceSid of
+                undefined -> <<"trace-stopped">>;
+                all -> <<"trace-all">>;
+                Sid -> <<"trace-session">>;
+                _ -> <<"trace-other">>
+            end,
+            Context1 = z_render:wire({set_class, [{target, <<"trace-status">>}, {class, Status}]}, Context),
+            case Status of
+                <<"trace-stopped">> ->
+                    Context1;
+                _ ->
+                    {ok, Dot} = z_development_template_graph:dot_from_graph(G),
+                    z_render:wire([
+                        {set_value, [ {target, EltId}, {value, Dot}, {trigger_event, <<"change">>}]}
+                    ], Context1)
+            end;
         false ->
             z_render:update(
                 EltId,
