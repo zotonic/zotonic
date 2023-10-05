@@ -64,7 +64,7 @@
         site :: atom(),
         template_trace_sid :: undefined | binary() | all,
         template_trace :: map(),
-        template_trace_timer :: undefined
+        template_trace_timer :: undefined | timer:tref()
     }).
 
 % After 10 minutes with no fetches we automatically stop with tracing templates.
