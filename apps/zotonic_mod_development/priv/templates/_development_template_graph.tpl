@@ -1,4 +1,4 @@
-<button id="graphviz_copy" class="btn btn-default pull-right">{_ Copy GraphViz dot data _}</button>
+<button id="graphviz_copy" class="btn btn-default pull-right">{_ Copy GraphViz data _}</button>
 <p class="help-block">
     {_ Dependency graph of all templates. Only includes using a direct string value for the template are shown. _}<br>
     {_ Includes using variable names or expressions are not shown. _}<br>

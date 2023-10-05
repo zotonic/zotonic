@@ -118,7 +118,9 @@
 
         <hr/>
 
-        <p><a href="{% url admin_development_templates_xref %}">{_ Cross-reference check of template inclusions _} &gt;</a></p>
+        <p>
+            <a href="{% url admin_development_templates_xref %}">{_ Cross-reference check of templates _} &gt;</a>
+        </p>
         <p class="help-block">
             {% trans "All templates are checked for missing includes or missing <tt>{ext}</tt> template references."
                 ext="extends/overrules"
@@ -128,12 +130,16 @@
 
         <hr/>
 
-        <p><a href="{% url admin_development_templates_trace %}">{_ View live dependency graph of all rendered templates _} &gt;</a></p>
-        <p class="help-block">{_ Traces all includes for the current session-id and renders them as a graph. _}</p>
+        <p>
+            <a href="{% url admin_development_templates_trace %}">{_ Live dependency graph of templates _} &gt;</a>
+        </p>
+        <p class="help-block">{_ Traces all templates for the current session-id, or all sessions, and renders them as a graph. _}</p>
 
         <hr/>
 
-        <p><a href="{% url admin_development_templates_graph %}">{_ View dependency graph of all available templates _} &gt;</a></p>
+        <p>
+            <a href="{% url admin_development_templates_graph %}">{_ Dependency graph of all available templates _} &gt;</a>
+        </p>
         <p class="help-block">{_ Calculate and visualize a dependency graph of all templates. _}
         {_ All templates will be compiled. _}</p>
 

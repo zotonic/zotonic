@@ -29,12 +29,12 @@
 {% block content %}
 <ul class="breadcrumb">
     <li><a href="{% url admin_development %}">{_ Site Development _}</a></li>
-    <li class="active">{_ Live trace of template rendering _}</li>
+    <li class="active">{_ Live traces of template rendering _}</li>
 </ul>
 
 <div class="admin-header">
-    <h2>{_ Live trace of template rendering _}</h2>
-    <p>{_ Here you can enable a trace of all template renderings. Only templates renders for your current session-id are traced. _}<br>{_ A graph of which templates are included by which other templates is generated and automatically updated. _}</p>
+    <h2>{_ Live traces of template rendering _}</h2>
+    <p>{_ Enable tracing of all template renderings. _}<br>{_ A graph of all templates, and by whom they are included, is generated and automatically updated. _}</p>
     <p>{_ Traces automatically stop if this page is not visited during more than 10 minutes. _}</p>
 </div>
 
@@ -73,9 +73,9 @@
         {_ Graph of all template dependencies _}
     </div>
     <div class="widget-content" id="xref-results">
-        <button id="graphviz_copy" class="btn btn-default pull-right">{_ Copy GraphViz dot data _}</button>
+        <button id="graphviz_copy" class="btn btn-default pull-right">{_ Copy GraphViz data _}</button>
         <p class="help-block">
-            {_ Dependency graph of all rendered templates. All includes are shown. _}<br>
+            {_ Dependency graph of all traced templates. All includes are shown. _}<br>
             {% trans "<tt>{extends}</tt> are shown with a striped line, <tt>{overrules}</tt> are shown with a dotted line."
                 extends="{% extends \"...\" %}"
                 overrules="{% overrules %}"
