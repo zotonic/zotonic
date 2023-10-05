@@ -400,7 +400,7 @@ handle_cast({template_trace_start, Sid}, #state{ template_trace_timer = PrevTime
     }};
 handle_cast({template_render, {render, Template, SrcPos}, Sid},
            #state{ template_trace_sid = TraceSid, template_trace = Trace } = State)
-    when Sid =:= TraceSid; TraceSid =:= all ->
+    when is_binary(Sid) andalso Sid =:= TraceSid; TraceSid =:= all ->
     Trace1 = do_template_trace(Template, SrcPos, Trace),
     {noreply, State#state{ template_trace = Trace1 }};
 handle_cast({template_render, _Src, _Sid}, #state{} = State) ->
@@ -442,6 +442,8 @@ do_template_trace_stop(#state{ template_trace_timer = Timer } = State) ->
     timer:cancel(Timer),
     do_template_trace_stop(State#state{ template_trace_timer = undefined }).
 
+do_template_trace([Template], SrcPos, Trace) ->
+    do_template_trace(Template, SrcPos, Trace);
 do_template_trace(Template, undefined, Trace) ->
     % Root template from controller or render call
     {_FromId, Trace1, _FromNode} = add_template_node(Template, Trace),
