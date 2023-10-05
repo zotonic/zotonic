@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
-%%
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Simple implementation of an observer/notifier. Relays events to observers of that event.
 %% Also implements map and fold operations over the observers.
+%% @end
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -42,6 +42,11 @@
     await_exact/2,
     await_exact/3
 ]).
+
+-type notification() :: atom()
+                     | tuple().
+
+-export_type([notification/0]).
 
 -include("../../include/zotonic.hrl").
 
@@ -113,43 +118,84 @@ get_observers(Event, Context) ->
 %% possibly large contexts for small notifications.
 %%====================================================================
 
-%% @doc Async cast the event to all observers. The prototype of the observer is: f(Msg, Context) -> void
+%% @doc Async cast the event to all observers. A process is forked in which all observers are
+%% called. If there is a database transaction then the notification is delayed till the end of
+%% the transaction. The prototype of the observer is: f(Msg, Context) -> void
+-spec notify(Msg, Context) -> ok | {error, Reason} when
+    Msg :: notification(),
+    Context :: z:context(),
+    Reason :: term().
 notify(Msg, #context{dbc = undefined} = Context) ->
     zotonic_notifier:notify({z_context:site(Context), msg_event(Msg)}, Msg, Context);
 notify(Msg, _Context) ->
     delay_notification({notify, Msg}).
 
-%% @doc Sync cast the event to all observers. The prototype of the observer is: f(Msg, Context) -> void
+%% @doc Sync cast the event to all observers. All observers are called in the current process.
+%% This is ideal for frequent notifications or notifications that need to be handled before
+%% processing can continue. The prototype of the observer is: f(Msg, Context) -> void
+-spec notify_sync(Msg, Context) -> ok | {error, Reason} when
+    Msg :: notification(),
+    Context :: z:context(),
+    Reason :: term().
 notify_sync(Msg, Context) ->
     zotonic_notifier:notify_sync({z_context:site(Context), msg_event(Msg)}, Msg, Context).
 
-%% @doc Async cast the event to the first observer. The prototype of the observer is: f(Msg, Context) -> void
+%% @doc Async cast the event to the first observer. A process is forked in which the observer is
+%% called. If there is a database transaction then the notification is delayed till the end of
+%% the transaction. The prototype of the observer is: f(Msg, Context) -> void
+-spec notify1(Msg, Context) -> ok | {error, Reason} when
+    Msg :: notification(),
+    Context :: z:context(),
+    Reason :: term().
 notify1(Msg, #context{dbc = undefined} = Context) ->
     zotonic_notifier:notify1({z_context:site(Context), msg_event(Msg)}, Msg, Context);
 notify1(Msg, _Context) ->
     delay_notification({notify1, Msg}).
 
-%% @doc Call all observers till one returns something else than undefined.
+%% @doc Call all observers till one returns something else than undefined. If there are no
+%% observers then undefined is returned.
 %% The prototype of the observer is: f(Msg, Context)
+-spec first(Msg, Context) -> Result when
+    Msg :: notification(),
+    Context :: z:context(),
+    Result :: undefined | term().
 first(Msg, Context) ->
     zotonic_notifier:first({z_context:site(Context), msg_event(Msg)}, Msg, Context).
 
 %% @doc Call all observers, return the list of answers. The prototype of the
 %% observer is: f(Msg, Context)
+-spec map(Msg, Context) -> Result when
+    Msg :: notification(),
+    Context :: z:context(),
+    Result :: list( term() ).
 map(Msg, Context) ->
     zotonic_notifier:map({z_context:site(Context), msg_event(Msg)}, Msg, Context).
 
 
 %% @doc Do a fold over all observers, prio 1 observers first. The prototype of
 %% the observer is: f(Msg, Acc, Context)
+-spec foldl(Msg, Acc, Context) -> Result when
+    Msg :: notification(),
+    Context :: z:context(),
+    Acc :: term(),
+    Result :: term().
 foldl(Msg, Acc0, Context) ->
     zotonic_notifier:foldl({z_context:site(Context), msg_event(Msg)}, Msg, Acc0, Context).
 
-%% @doc Do a fold over all observers, prio 1 observers last
+%% @doc Do a fold over all observers, prio 1 observers last. The prototype of
+%% the observer is: f(Msg, Acc, Context)
+-spec foldr(Msg, Acc, Context) -> Result when
+    Msg :: notification(),
+    Context :: z:context(),
+    Acc :: term(),
+    Result :: term().
 foldr(Msg, Acc0, Context) ->
     zotonic_notifier:foldr({z_context:site(Context), msg_event(Msg)}, Msg, Acc0, Context).
 
-%% @doc Notify delayed notifications.
+%% @doc Send all delayed notify or notify1 notifications. This is used to delay notifications
+%% during a database transaction. When the transaction finishes all notifications are sent.
+-spec notify_queue(Context) -> ok | {eror, transaction} when
+    Context :: z:context().
 notify_queue(#context{dbc = undefined} = Context) ->
     case erlang:get(notify_queue) of
         undefined ->
@@ -166,25 +212,41 @@ notify_queue(#context{dbc = undefined} = Context) ->
             )
     end,
     erlang:erase(notify_queue),
-    ok.
+    ok;
+notify_queue(#context{dbc = _}) ->
+    {error, transaction}.
 
-%% @doc Erase queued notifications
+%% @doc Erase queued notifications. Useful if delayed notifications should not be sent, for
+%% example if the current database transaction rolled back. The queue is only flushed if there
+%% isn't a database transaction.
+-spec notify_queue_flush(Context) -> ok | {eror, transaction} when
+    Context :: z:context().
 notify_queue_flush(#context{dbc = undefined}) ->
     erlang:erase(notify_queue),
-    ok.
+    ok;
+notify_queue_flush(#context{dbc = _}) ->
+    {error, transaction}.
 
 %% @doc Subscribe once to a notification, detach after receiving the notification.
--spec await(tuple()|atom(), z:context()) ->
-        {ok, tuple()|atom()} |
-        {ok, {pid(), reference()}, tuple()|atom()} |
-        {error, timeout}.
+%% After 5 seconds an error 'timeout' is returned.
+-spec await(Notification, Context) -> {ok, Result} | {error, Reason} when
+    Notification :: notification(),
+    Context :: z:context(),
+    Result :: notification()
+            | {pid(), reference(), notification()},
+    Reason :: timeout.
 await(Msg, Context) ->
     await(Msg, 5000, Context).
 
--spec await(tuple()|atom(), pos_integer(), z:context()) ->
-        {ok, tuple()|atom()} |
-        {ok, {pid(), reference()}, tuple()|atom()} |
-        {error, timeout}.
+%% @doc Subscribe once to a notification, detach after receiving the notification.
+%% After the timeout (in msec) an error 'timeout' is returned.
+-spec await(Notification, Timeout, Context) -> {ok, Result} | {error, Reason} when
+    Notification :: notification(),
+    Timeout :: pos_integer(),
+    Context :: z:context(),
+    Result :: notification()
+            | {pid(), reference(), notification()},
+    Reason :: timeout.
 await(Msg, Timeout, Context) ->
     zotonic_notifier:await({z_context:site(Context), msg_event(Msg)}, Msg, Timeout).
 

@@ -118,23 +118,38 @@
 
         <hr/>
 
-        <p><a href="{% url admin_development_templates_xref %}">{_ Check included templates _}</a></p>
+        <p><a href="{% url admin_development_templates_xref %}">{_ Cross-reference check of template inclusions _} &gt;</a></p>
         <p class="help-block">
-            {% trans "Compile all templates. The compiled templates are checked for missing includes or missing <tt>{ext}</tt> template references."
+            {% trans "All templates are checked for missing includes or missing <tt>{ext}</tt> template references."
                 ext="extends/overrules"
             %}
+            {_ All templates will be compiled. _}
         </p>
 
         <hr/>
 
-        <p><a href="{% url admin_development_templates_graph %}">{_ Template dependency graph _}</a></p>
-        <p class="help-block">{_ Compile all templates. Calculate and visualize a dependency graph of all templates. _}</p>
+        <p><a href="{% url admin_development_templates_trace %}">{_ View live dependency graph of all rendered templates _} &gt;</a></p>
+        <p class="help-block">{_ Traces all includes for the current session-id and renders them as a graph. _}</p>
 
         <hr/>
 
-        <p><a href="{% url admin_development_templates %}">{_ Show which files are included in a template compilation _}</a></p>
-        <p class="help-block">{_ At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template. _}</p>
+        <p><a href="{% url admin_development_templates_graph %}">{_ View dependency graph of all available templates _} &gt;</a></p>
+        <p class="help-block">{_ Calculate and visualize a dependency graph of all templates. _}
+        {_ All templates will be compiled. _}</p>
 
+        <hr/>
+
+        <p>
+            {% button class="btn btn-primary" text=_"Recompile templates"
+                      action={admin_tasks task="templates_reset"}
+            %}
+            {% button class="btn btn-default" text=_"Rescan modules"
+                      action={module_rescan}
+            %}
+        </p>
+        <p class="help-block">{_ Force a recompilation of all templates. This fixes any issues where
+        the compiled templates might be out of sync with the template index. _}</p>
+        </p>
     </div>
 </div>
 
@@ -176,7 +191,7 @@
         <p>{_ Show internals of Zotonic and the modules _}</p>
 
         <p>
-            <a href="{% url admin_development_observers %}">{_ Show an overview of all observers. _}</a>
+            <a href="{% url admin_development_observers %}">{_ Show an overview of all observers _} &gt;</a>
         </p>
     </div>
 </div>
