@@ -11,6 +11,7 @@
 <div class="admin-header">
     <h2>{_ Live trace of template rendering _}</h2>
     <p>{_ Here you can enable a trace of all template renderings. Only templates renders for your current session-id are traced. _}<br>{_ A graph of which templates are included by which other templates is generated and automatically updated. _}</p>
+    <p>{_ Traces automatically stop if this page is not visited during more than 10 minutes. _}</p>
 </div>
 
 <div class="well">

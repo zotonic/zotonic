@@ -63,8 +63,12 @@
 -record(state, {
         site :: atom(),
         template_trace_sid :: undefined | binary() | all,
-        template_trace :: map()
+        template_trace :: map(),
+        template_trace_timer :: undefined
     }).
+
+% After 10 minutes with no fetches we automatically stop with tracing templates.
+-define(TEMPLATE_TRACE_AUTOSTOP, 600_000).
 
 
 %%====================================================================
@@ -190,7 +194,7 @@ make(Context) ->
     z_notifier:notify(development_make, Context).
 
 template_trace_start(Context) ->
-    gen_server:cast(name(Context), {template_trace_start, z_context:session_id(Context)}).
+    gen_server:cast(name(Context), {template_trace_start, session_id(Context)}).
 
 template_trace_start(Sid, Context) ->
     gen_server:cast(name(Context), {template_trace_start, Sid}).
@@ -225,7 +229,7 @@ observe_request_context(#request_context{ phase = _ }, Context, _Context) ->
 %% @doc Trace all template includes, used to generate a runtime view of all template
 %% inclusions and dependencies.
 pid_observe_debug(Pid, #debug{ what = template, arg = {render, _Filename, _SrcPos} = Arg }, Context) ->
-    gen_server:cast(Pid, {template_render, Arg, z_context:session_id(Context)}),
+    gen_server:cast(Pid, {template_render, Arg, session_id(Context)}),
     ok;
 pid_observe_debug(_Pid, #debug{}, _Context) ->
     ok.
@@ -329,7 +333,11 @@ init(Args) ->
     }}.
 
 
-handle_call(template_trace_fetch, _From, #state{ template_trace = Trace, template_trace_sid = Sid } = State) ->
+handle_call(template_trace_fetch, _From, #state{
+        template_trace = Trace,
+        template_trace_sid = Sid,
+        template_trace_timer = PrevTimer
+    } = State) ->
     #{ edges := Edges, nodes := Nodes  } = Trace,
     EdgesList = maps:values(Edges),
     NodesList = maps:values(Nodes),
@@ -340,7 +348,12 @@ handle_call(template_trace_fetch, _From, #state{ template_trace = Trace, templat
             edges => EdgesList
         }
     },
-    {reply, {ok, Result}, State};
+    case PrevTimer of
+        undefined -> ok;
+        _ -> timer:cancel(PrevTimer)
+    end,
+    {ok, Timer} = timer:send_after(?TEMPLATE_TRACE_AUTOSTOP, template_trace_stop),
+    {reply, {ok, Result}, State#state{ template_trace_timer = Timer }};
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
@@ -351,18 +364,31 @@ handle_cast(development_reload, State) ->
 handle_cast(development_make, State) ->
     zotonic_filewatcher_beam_reloader:make(),
     {noreply, State};
-handle_cast({template_trace_start, Sid}, State) ->
+handle_cast({template_trace_start, undefined}, State) ->
+    {noreply, do_template_trace_stop(State)};
+handle_cast({template_trace_start, Sid}, #state{ template_trace_timer = PrevTimer } = State) ->
+    ?LOG_INFO(#{
+        in => mod_development,
+        text => <<"Template trace started.">>,
+        sid => Sid
+    }),
+    {ok, Timer} = timer:send_after(?TEMPLATE_TRACE_AUTOSTOP, template_trace_stop),
+    case PrevTimer of
+        undefined -> ok;
+        _ -> timer:cancel(PrevTimer)
+    end,
     {noreply, State#state{
         template_trace_sid = Sid,
         template_trace = #{
             nodes => #{},
             edges => #{}
-        }
+        },
+        template_trace_timer = Timer
     }};
 handle_cast({template_render, {render, Template, SrcPos}, Sid},
            #state{ template_trace_sid = TraceSid, template_trace = Trace } = State)
     when Sid =:= TraceSid; TraceSid =:= all ->
-    Trace1 = template_trace(Template, SrcPos, Trace),
+    Trace1 = do_template_trace(Template, SrcPos, Trace),
     {noreply, State#state{ template_trace = Trace1 }};
 handle_cast({template_render, _Src, _Sid}, #state{} = State) ->
     {noreply, State};
@@ -371,6 +397,8 @@ handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
 
+handle_info(template_trace_stop, State) ->
+    {noreply, do_template_trace_stop(State)};
 handle_info(_Info, State) ->
     {noreply, State}.
 
@@ -385,11 +413,27 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-template_trace(Template, undefined, Trace) ->
+do_template_trace_stop(#state{ template_trace_timer = undefined } = State) ->
+    ?LOG_INFO(#{
+        in => mod_development,
+        text => <<"Template trace stopped.">>
+    }),
+    State#state{
+        template_trace_sid = undefined,
+        template_trace = #{
+            nodes => #{},
+            edges => #{}
+        }
+    };
+do_template_trace_stop(#state{ template_trace_timer = Timer } = State) ->
+    timer:cancel(Timer),
+    do_template_trace_stop(State#state{ template_trace_timer = undefined }).
+
+do_template_trace(Template, undefined, Trace) ->
     % Root template from controller or render call
     {_FromId, Trace1, _FromNode} = add_template_node(Template, Trace),
     Trace1;
-template_trace(Template, {From, 0, _Col}, Trace) ->
+do_template_trace(Template, {From, 0, _Col}, Trace) ->
     % Extends or overrules
     {FromId, Trace1, FromNode} = add_template_node(From, Trace),
     {ToId, Trace2, ToNode} = add_template_node(Template, Trace1),
@@ -406,7 +450,7 @@ template_trace(Template, {From, 0, _Col}, Trace) ->
         type => Type
     },
     add_edge(Edge, Trace2);
-template_trace(Template, {From, _Line, _Col}, Trace) ->
+do_template_trace(Template, {From, _Line, _Col}, Trace) ->
     % Include
     {FromId, Trace1, FromNode} = add_template_node(From, Trace),
     {ToId, Trace2, _} = add_template_node(Template, Trace1),
@@ -535,3 +579,10 @@ do_exec_browser(Command) ->
 
 name(Context) ->
     z_utils:name_for_site(?MODULE, Context).
+
+session_id(Context) ->
+    case z_context:session_id(Context) of
+        {ok, Sid} -> Sid;
+        {error, _} -> undefined
+    end.
+

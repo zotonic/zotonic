@@ -31,6 +31,11 @@ render_action(_TriggerId, TargetId, Args, Context) ->
    Script1 = case proplists:get_value(trigger_event, Args) of
       undefined ->
          Script;
+      true ->
+         [
+            Script,
+            <<".trigger(\"changed\")">>
+         ];
       Event ->
          [
             Script,
