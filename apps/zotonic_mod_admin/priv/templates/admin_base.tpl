@@ -10,6 +10,7 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
+        <meta name="robots" content="noindex,nofollow">
 
         {% lib
             "css/admin-bootstrap3.css"
@@ -29,8 +30,7 @@
             minify
         %}
 
-        {% all include "_html_head.tpl" no_prism %}
-        {% all include "_html_head_admin.tpl" %}
+        {% all include "_html_head_admin.tpl" no_prism %}
 
         {% block head_extra %}
         {% endblock %}
