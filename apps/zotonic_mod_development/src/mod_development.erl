@@ -144,7 +144,7 @@ event(#postback{ message = {template_trace_fetch, Args} }, Context) ->
                 Sid -> <<"trace-session">>;
                 _ -> <<"trace-other">>
             end,
-            Context1 = z_render:wire({set_class, [{target, <<"trace-status">>}, {class, Status}]}, Context),
+            Context1 = z_render:wire({set_class, [{target, <<"body">>}, {class, Status}]}, Context),
             case Status of
                 <<"trace-stopped">> ->
                     Context1;
@@ -459,8 +459,8 @@ do_template_trace(Template, {From, 0, _Col}, Trace) ->
         true -> extends
     end,
     Edge = #{
-        from => FromId,
-        to => ToId,
+        from => ToId,
+        to => FromId,
         module => maps:get(module, FromNode),
         type => Type
     },
