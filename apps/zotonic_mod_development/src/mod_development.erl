@@ -459,8 +459,8 @@ do_template_trace(Template, {From, 0, _Col}, Trace) ->
         true -> extends
     end,
     Edge = #{
-        from => FromId,
-        to => ToId,
+        from => ToId,
+        to => FromId,
         module => maps:get(module, FromNode),
         type => Type
     },
