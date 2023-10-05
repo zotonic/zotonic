@@ -5,7 +5,7 @@
 {% block content %}
 <ul class="breadcrumb">
     <li><a href="{% url admin_development %}">{_ Site Development _}</a></li>
-    <li class="active">{_ Templates dependendy graph _}</li>
+    <li class="active">{_ Dependendy graph of all templates _}</li>
 </ul>
 
 <div class="admin-header">
@@ -26,7 +26,7 @@
 
 <div class="widget">
     <div class="widget-header">
-        {_ Template dependency graph _}
+        {_ Dependency graph _}
     </div>
     <div class="widget-content" id="graph-results">
         <p class="text-muted">

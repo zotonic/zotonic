@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2021 Marc Worrell
-%% @doc Simple runtime for the compiled templates. Needs to be
-%%      copied and adapted for different environments.
+%% @copyright 2016-2023 Marc Worrell
+%% @doc Runtime for the compiled templates with Zotonic specific interfaces.
+%% @end
 
-%% Copyright 2016-2021 Marc Worrell
+%% Copyright 2016-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -688,8 +688,8 @@ trace_compile(Module, Filename, Options, Context) ->
     SrcPos = proplists:get_value(trace_position, Options),
     z_notifier:notify(
         #debug{
-            what=template,
-            arg={compile, Filename, SrcPos, Module}
+            what = template,
+            arg = {compile, Filename, SrcPos, Module}
         }, Context),
     case SrcPos of
         {File, Line, _Col} ->
@@ -709,13 +709,37 @@ trace_compile(Module, Filename, Options, Context) ->
     end,
     ok.
 
-%% @doc Called when a template is rendered (could be from an include)
--spec trace_render(binary(), template_compiler:options(), z:context()) -> ok | {ok, iodata(), iodata()}.
+%% @doc Called when a template is rendered (could be from an include). Optionally inserts
+%% text before and after the text inclusion into the output stream.
+-spec trace_render(TemplateFilename, Options, Context) -> ok | {ok, Before, After} when
+    TemplateFilename :: binary(),
+    Options :: template_compiler:options(),
+    Context :: z:context(),
+    Before :: iodata(),
+    After :: iodata().
 trace_render(Filename, Options, Context) ->
     SrcPos = proplists:get_value(trace_position, Options),
-    case z_convert:to_bool(m_config:get_value(mod_development, debug_includes, Context)) of
+    z_notifier:notify_sync(
+        #debug{
+            what = template,
+            arg = {render, Filename, SrcPos}
+        }, Context),
+    case m_config:get_boolean(mod_development, debug_includes, Context) of
         true ->
             case SrcPos of
+                {File, 0, _Col} ->
+                    ?LOG_NOTICE(#{
+                        text => <<"Template extends/overrules">>,
+                        in => zotonic_core,
+                        template => Filename,
+                        at => File
+                    }),
+                    {ok,
+                        [ <<"\n<!-- START ">>, relpath(Filename),
+                          <<" by ">>, relpath(File),
+                          <<" -->\n">> ],
+                        [ <<"\n<!-- END ">>, relpath(Filename),  <<" -->\n">> ]
+                    };
                 {File, Line, _Col} ->
                     ?LOG_NOTICE(#{
                         text => <<"Template include">>,

@@ -21,7 +21,10 @@
 
 -export([
     dot/1,
-    graph/1
+    dot_from_graph/1,
+    graph/1,
+
+    filename_to_node/2
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -29,12 +32,15 @@
 -type template_node() :: #{
         id := binary(),
         template := binary(),
-        module := binary()
+        module := binary(),
+        basename := binary(),
+        index => #module_index{}
     }.
 
 -type template_edge() :: #{
         from := binary(),
         to := binary(),
+        module := binary(),
         type => extends | overrules | include
     }.
 
@@ -48,6 +54,14 @@
     DotFile :: binary().
 dot(Context) ->
     {ok, G} = graph(Context),
+    dot_from_graph(G).
+
+-spec dot_from_graph(G) -> {ok, DotFile} when
+    G :: #{ nodes => Nodes, edges => Edges },
+    Nodes :: [ template_node() ],
+    Edges :: [ template_edge() ],
+    DotFile :: binary().
+dot_from_graph(G) ->
     Nodes = lists:map(
         fun(#{ module := Mod, id := Id, template := Tpl }) ->
             [
@@ -91,6 +105,32 @@ dot(Context) ->
     ]),
     {ok, Dot}.
 
+
+-spec filename_to_node(NodeId, Path) -> template_node() when
+    NodeId :: binary(),
+    Path :: binary().
+filename_to_node(NodeId, Path) ->
+    BuildDir = <<(build_dir())/binary, "/">>,
+    filename_to_node(NodeId, Path, BuildDir).
+
+filename_to_node(NodeId, Path, BuildDir) ->
+    Path1 = binary:replace(Path, BuildDir, <<>>),
+    {Mod, Tpl} = case binary:split(Path1, <<"/priv/templates/">>) of
+        [M,T] -> {M, T};
+        T -> {<<>>, T}
+    end,
+    #{
+        id => NodeId,
+        module => app_to_module_name(Mod),
+        template => Tpl,
+        basename => basename(Tpl)
+    }.
+
+app_to_module_name(<<"/", M/binary>>) -> app_to_module_name(M);
+app_to_module_name(<<"zotonic_mod_", M/binary>>) -> <<"mod_", M/binary>>;
+app_to_module_name(M) -> M.
+
+
 -spec graph(Context) -> {ok, Graph} when
     Context :: z:context(),
     Graph :: #{ nodes => Nodes, edges => Edges },
@@ -110,18 +150,10 @@ graph(Context) ->
         fun({Template, N}, Acc) ->
             #module_index{ key = Key, filepath = Path } = Template,
             #module_index_key{ name = TplName } = Key,
-            Path1 = binary:replace(Path, BuildDir, <<>>),
-            {Mod, Tpl} = case binary:split(Path1, <<"/priv/templates/">>) of
-                [M,T] -> {M, T};
-                T -> {<<>>, T}
-            end,
-            Mod1 = binary:replace(Mod, <<"zotonic_mod_">>, <<"mod_">>),
-            Node = #{
-                id => <<"n", (integer_to_binary(N))/binary>>,
-                module => Mod1,
-                template => Tpl,
-                index => Template,
-                basename => basename(Tpl)
+            NodeId = <<"n", (integer_to_binary(N))/binary>>,
+            Node0 = filename_to_node(NodeId, Path, BuildDir),
+            Node = Node0#{
+                index => Template
             },
             case maps:is_key(Path, Ts) of
                 true ->
@@ -518,7 +550,7 @@ colors() ->
         <<"lightslategray">>,
         <<"lightslategrey">>,
         <<"lightsteelblue">>,
-        <<"lightyellow">>,
+        % <<"lightyellow">>,
         <<"lime">>,
         <<"limegreen">>,
         % <<"linen">>,
