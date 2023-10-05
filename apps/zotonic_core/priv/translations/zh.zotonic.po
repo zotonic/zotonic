@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-05 14:22\n"
+"PO-Revision-Date: 2023-10-05 15:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -3697,7 +3697,7 @@ msgid "Provides"
 msgstr "提供"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:3
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:143
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:149
 msgid "Rescan modules"
 msgstr "重新扫描模块"
 
@@ -5468,13 +5468,13 @@ msgstr "新的位置可以是一个本地路径或一个完整的URL。对于本
 msgid "You are not allowed to change this."
 msgstr "你不允许改变这个。"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:5./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:5./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:79
 msgid "<tt>{extends}</tt> are shown with a striped line, <tt>{overrules}</tt> are shown with a dotted line."
 msgstr "<tt>{extends}</tt> 用条纹线示出， <tt>{overrules}</tt> 用虚线示出。"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:34
-msgid "A graph of which templates are included by which other templates is generated and automatically updated."
-msgstr "生成并自动更新其他模板的图表，其中包含哪些模板。"
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:37
+msgid "A graph of all templates, and by whom they are included, is generated and automatically updated."
+msgstr "生成并自动更新所有模板及其包含者的图表。"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:5
 msgid "Action"
@@ -5492,7 +5492,7 @@ msgstr "所有 <tt>{optional}</tt> 语句均引用现有模板。"
 msgid "All non-optional <tt>{include}</tt> statements are referring to existing templates."
 msgstr "所有非可选 <tt>{include}</tt> 语句均引用现有模板。"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:120
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:122
 msgid "All templates are checked for missing includes or missing <tt>{ext}</tt> template references."
 msgstr "检查所有模板是否缺少包含或缺少 <tt>{ext}</tt> 模板引用。"
 
@@ -5500,7 +5500,7 @@ msgstr "检查所有模板是否缺少包含或缺少 <tt>{ext}</tt> 模板引�
 msgid "All templates are compiling."
 msgstr "所有模板正在编译。"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:123./apps/zotonic_mod_development/priv/templates/admin_development.tpl:135
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:125./apps/zotonic_mod_development/priv/templates/admin_development.tpl:141
 msgid "All templates will be compiled."
 msgstr "所有模板都将被编译。"
 
@@ -5512,7 +5512,7 @@ msgstr "以下是所有通知和已安装的观察员的列表。"
 msgid "Bindings"
 msgstr "装订"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:134
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:140
 msgid "Calculate and visualize a dependency graph of all templates."
 msgstr "计算并可视化所有模板的依赖图。"
 
@@ -5520,11 +5520,11 @@ msgstr "计算并可视化所有模板的依赖图。"
 msgid "Checking all templates..."
 msgstr "检查所有模板..."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:39
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:42
 msgid "Clear data and start"
 msgstr "清除数据并启动"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:43
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:46
 msgid "Clear data and trace all"
 msgstr "清除数据并全部追踪"
 
@@ -5536,15 +5536,15 @@ msgstr "柱子"
 msgid "Controller"
 msgstr "控制器"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:26./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:119
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:26./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:122
 msgid "Copied dot file to the clipboard."
 msgstr "将点文件复制到剪贴板。"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:1./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:73
-msgid "Copy GraphViz dot data"
-msgstr "复制 GraphViz 点数据"
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:1./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
+msgid "Copy GraphViz data"
+msgstr "复制 GraphViz 数据"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:29./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:122
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:29./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:125
 msgid "Could not copy dot file to the clipboard."
 msgstr "无法将点文件复制到剪贴板。"
 
@@ -5556,9 +5556,9 @@ msgstr "无法获取跟踪器输出，请重试。"
 msgid "Cross-reference check of all templates"
 msgstr "所有模板的交叉引用检查"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:118
-msgid "Cross-reference check of template inclusions"
-msgstr "模板包含的交叉引用检查"
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
+msgid "Cross-reference check of templates"
+msgstr "模板交叉引用检查"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:29
 msgid "Cross-reference check results"
@@ -5568,9 +5568,9 @@ msgstr "交叉引用检查结果"
 msgid "Dependency graph"
 msgstr "依赖图"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:75
-msgid "Dependency graph of all rendered templates. All includes are shown."
-msgstr "所有呈现模板的依赖关系图。显示所有包含内容。"
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:138
+msgid "Dependency graph of all available templates"
+msgstr "所有可用模板的依赖关系图"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:12
 msgid "Dependency graph of all templates"
@@ -5580,11 +5580,15 @@ msgstr "所有模板的依赖关系图"
 msgid "Dependency graph of all templates. Only includes using a direct string value for the template are shown."
 msgstr "所有模板的依赖关系图。仅显示包含使用模板的直接字符串值的内容。"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:78
+msgid "Dependency graph of all traced templates. All includes are shown."
+msgstr "所有跟踪模板的依赖关系图。显示所有包含内容。"
+
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:8
 msgid "Dependendy graph of all templates"
 msgstr "所有模板的依赖图"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:556
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:558
 msgid "Development"
 msgstr "开发"
 
@@ -5600,7 +5604,7 @@ msgstr "通过 <tt>{% cache %}</tt> 标签禁用缓存。"
 msgid "Disabled database query tracing"
 msgstr "禁用数据库查询跟踪"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:154
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:160
 msgid "Dispatch rule debugging"
 msgstr "调度规则调试"
 
@@ -5616,6 +5620,10 @@ msgstr "启用 <tt>mod_server_storage</tt> 来使用数据库查询跟踪。"
 msgid "Enable API to recompile and build Zotonic"
 msgstr "启用API来重新编译和构建Zotonic。"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:37
+msgid "Enable tracing of all template renderings."
+msgstr "启用所有模板渲染的跟踪。"
+
 #: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:37
 msgid "Enabled database query tracing"
 msgstr "启用数据库查询跟踪"
@@ -5624,7 +5632,7 @@ msgstr "启用数据库查询跟踪"
 msgid "Event"
 msgstr "事件"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:173
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:179
 msgid "Explain"
 msgstr "解释"
 
@@ -5644,7 +5652,7 @@ msgstr "寻找"
 msgid "Find a template, check which template will be selected"
 msgstr "寻找模板，检查将选择哪个模板。"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:147
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:153
 msgid "Force a recompilation of all templates. This fixes any issues where\n"
 "     the compiled templates might be out of sync with the template index."
 msgstr "强制重新编译所有模板。这修复了\n"
@@ -5658,13 +5666,9 @@ msgstr "强制将协议切换到"
 msgid "Found matching dispatch rule"
 msgstr "找到匹配的调度规则"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:70
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:73
 msgid "Graph of all template dependencies"
 msgstr "所有模板依赖关系图"
-
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:34
-msgid "Here you can enable a trace of all template renderings. Only templates renders for your current session-id are traced."
-msgstr "在这里您可以启用所有模板渲染的跟踪。仅跟踪为当前会话 ID 呈现的模板。"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:63./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
 msgid "Included template"
@@ -5674,7 +5678,7 @@ msgstr "包含模板"
 msgid "Includes using variable names or expressions are not shown."
 msgstr "包括使用变量名称或表达式未显示。"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:184
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:190
 msgid "Introspection"
 msgstr "自省"
 
@@ -5682,15 +5686,19 @@ msgstr "自省"
 msgid "Line"
 msgstr "线"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:131
+msgid "Live dependency graph of templates"
+msgstr "模板的实时依赖图"
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:50
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
 msgstr "实时重载更改后的CSS文件。更改模板或JavaScript时重新加载页面。"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:29./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:33
-msgid "Live trace of template rendering"
-msgstr "模板渲染的实时跟踪"
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:32./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:36
+msgid "Live traces of template rendering"
+msgstr "模板渲染的实时痕迹"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:85
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:88
 msgid "Loading..."
 msgstr "加载中..."
 
@@ -5698,7 +5706,7 @@ msgstr "加载中..."
 msgid "Location"
 msgstr "场地"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:157
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:163
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "匹配请求URL，显示匹配的调度规则。"
 
@@ -5722,7 +5730,7 @@ msgstr "新主机"
 msgid "New path"
 msgstr "新路"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:111
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:114
 msgid "No data."
 msgstr "没有数据。"
 
@@ -5750,7 +5758,7 @@ msgstr "猫的可选类别"
 msgid "Permanent redirect"
 msgstr "永久重定向"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:140
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:146
 msgid "Recompile templates"
 msgstr "重新编译模板"
 
@@ -5766,7 +5774,7 @@ msgstr "刷新"
 msgid "Rerun graph"
 msgstr "重新运行图表"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:190
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:196
 msgid "Show an overview of all observers"
 msgstr "显示所有观察者的概览"
 
@@ -5774,7 +5782,7 @@ msgstr "显示所有观察者的概览"
 msgid "Show defined blocks in generated templates"
 msgstr "在生成的模板中显示定义的块"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:187
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:193
 msgid "Show internals of Zotonic and the modules"
 msgstr "显示Zotonic和模块的内部结构。"
 
@@ -5782,7 +5790,7 @@ msgstr "显示Zotonic和模块的内部结构。"
 msgid "Show paths to included template files in generated templates"
 msgstr "在生成的模板中显示包含的模板文件的路径。"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:28./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:31./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
 msgid "Site Development"
 msgstr "站点开发"
 
@@ -5798,7 +5806,7 @@ msgstr "开始追踪所有模板包含物。"
 msgid "Started tracing template inclusions for your session."
 msgstr "开始跟踪您的会话的模板包含内容。"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:47
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:50
 #: apps/zotonic_mod_survey/src/mod_survey.erl:167
 msgid "Stop"
 msgstr "中止"
@@ -5807,7 +5815,7 @@ msgstr "中止"
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "停止跟踪所有会话的模板包含内容。"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:63
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:66
 msgid "Stopped."
 msgstr "停了。"
 
@@ -5872,37 +5880,29 @@ msgstr "站点开发中使用的工具和设置。"
 msgid "Trace all database queries for the current session"
 msgstr "跟踪当前会话的所有数据库查询"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:129
-msgid "Traces all includes for the current session-id and renders them as a graph."
-msgstr "跟踪当前会话 ID 的所有包含内容并将它们呈现为图表。"
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:133
+msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
+msgstr "跟踪当前会话 ID 或所有会话的所有模板，并将它们呈现为图表。"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:35
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:38
 msgid "Traces automatically stop if this page is not visited during more than 10 minutes."
 msgstr "如果超过 10 分钟没有访问此页面，跟踪将自动停止。"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:60
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:63
 msgid "Tracing all sessions..."
 msgstr "跟踪所有会话..."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:57
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:60
 msgid "Tracing other session..."
 msgstr "正在跟踪其他会话..."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:54
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:57
 msgid "Tracing this session..."
 msgstr "跟踪本次会话..."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
 msgid "Type of include"
 msgstr "包含类型"
-
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:133
-msgid "View dependency graph of all available templates"
-msgstr "查看所有可用模板的依赖关系图"
-
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:128
-msgid "View live dependency graph of all rendered templates"
-msgstr "查看所有渲染模板的实时依赖关系图"
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:49
 msgid "You are not allowed to use the dispatch debugging."
