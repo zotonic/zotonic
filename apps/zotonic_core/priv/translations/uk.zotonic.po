@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-05 15:30\n"
+"PO-Revision-Date: 2023-10-05 16:33\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -5474,7 +5474,7 @@ msgstr "<tt>{extends}</tt> показано смугастою лінією, <tt
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:37
 msgid "A graph of all templates, and by whom they are included, is generated and automatically updated."
-msgstr ""
+msgstr "Створюється та автоматично оновлюється графік усіх шаблонів і тих, хто їх включив."
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:5
 msgid "Action"
@@ -5542,7 +5542,7 @@ msgstr "Файл dot скопійовано в буфер обміну."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:1./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
 msgid "Copy GraphViz data"
-msgstr ""
+msgstr "Скопіюйте дані GraphViz"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:29./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:125
 msgid "Could not copy dot file to the clipboard."
@@ -5558,7 +5558,7 @@ msgstr "Перевірка всіх шаблонів за посиланнями
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
 msgid "Cross-reference check of templates"
-msgstr ""
+msgstr "Перевірка шаблонів за посиланнями"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:29
 msgid "Cross-reference check results"
@@ -5570,7 +5570,7 @@ msgstr "Графік залежності"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:138
 msgid "Dependency graph of all available templates"
-msgstr ""
+msgstr "Граф залежностей усіх доступних шаблонів"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:12
 msgid "Dependency graph of all templates"
@@ -5582,7 +5582,7 @@ msgstr "Граф залежностей усіх шаблонів. Показа�
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:78
 msgid "Dependency graph of all traced templates. All includes are shown."
-msgstr ""
+msgstr "Графік залежностей усіх трасованих шаблонів. Показано всі включені."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:8
 msgid "Dependendy graph of all templates"
@@ -5622,7 +5622,7 @@ msgstr "Увімкніть API для перекомпіляції та скла
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:37
 msgid "Enable tracing of all template renderings."
-msgstr ""
+msgstr "Увімкнути трасування всіх візуалізацій шаблонів."
 
 #: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:37
 msgid "Enabled database query tracing"
@@ -5688,7 +5688,7 @@ msgstr "лінія"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:131
 msgid "Live dependency graph of templates"
-msgstr ""
+msgstr "Живий графік залежностей шаблонів"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:50
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
@@ -5696,7 +5696,7 @@ msgstr "Живе перезавантаження змінених файлів 
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:32./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:36
 msgid "Live traces of template rendering"
-msgstr ""
+msgstr "Живі сліди візуалізації шаблону"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:88
 msgid "Loading..."
@@ -5882,7 +5882,7 @@ msgstr "Відстежте всі запити до бази даних для �
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:133
 msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
-msgstr ""
+msgstr "Відстежує всі шаблони для поточного ідентифікатора сеансу або всіх сеансів і відображає їх у вигляді графіка."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:38
 msgid "Traces automatically stop if this page is not visited during more than 10 minutes."
