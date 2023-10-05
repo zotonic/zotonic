@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-05 14:22\n"
+"PO-Revision-Date: 2023-10-05 15:29\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -3697,7 +3697,7 @@ msgid "Provides"
 msgstr "يوفر"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:3
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:143
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:149
 msgid "Rescan modules"
 msgstr "إعادة تفحص الوحدات"
 
@@ -5468,13 +5468,13 @@ msgstr "يمكن أن يكون الموقع الجديد مسارًا محليً
 msgid "You are not allowed to change this."
 msgstr "لا يسمح لك بتغيير هذا."
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:5./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:5./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:79
 msgid "<tt>{extends}</tt> are shown with a striped line, <tt>{overrules}</tt> are shown with a dotted line."
 msgstr "يتم عرض <tt>{extends}</tt> بخط مخطط، ويتم عرض <tt>{overrules}</tt> بخط منقط."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:34
-msgid "A graph of which templates are included by which other templates is generated and automatically updated."
-msgstr "رسم بياني للقوالب المضمنة والتي يتم من خلالها إنشاء قوالب أخرى وتحديثها تلقائيًا."
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:37
+msgid "A graph of all templates, and by whom they are included, is generated and automatically updated."
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:5
 msgid "Action"
@@ -5492,7 +5492,7 @@ msgstr "تشير كافة البيانات <tt>{optional}</tt> إلى القوا
 msgid "All non-optional <tt>{include}</tt> statements are referring to existing templates."
 msgstr "تشير كافة العبارات غير الاختيارية <tt>{include}</tt> إلى القوالب الموجودة."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:120
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:122
 msgid "All templates are checked for missing includes or missing <tt>{ext}</tt> template references."
 msgstr "يتم فحص جميع القوالب للتأكد من عدم وجود تضمينات أو مراجع قالب مفقودة <tt>{ext}</tt>."
 
@@ -5500,7 +5500,7 @@ msgstr "يتم فحص جميع القوالب للتأكد من عدم وجود 
 msgid "All templates are compiling."
 msgstr "يتم تجميع جميع القوالب."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:123./apps/zotonic_mod_development/priv/templates/admin_development.tpl:135
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:125./apps/zotonic_mod_development/priv/templates/admin_development.tpl:141
 msgid "All templates will be compiled."
 msgstr "سيتم تجميع كافة القوالب."
 
@@ -5512,7 +5512,7 @@ msgstr "فيما يلي قائمة بجميع الإخطارات والمراق�
 msgid "Bindings"
 msgstr "الارتباطات"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:134
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:140
 msgid "Calculate and visualize a dependency graph of all templates."
 msgstr "حساب وتصور الرسم البياني التبعية لجميع القوالب."
 
@@ -5520,11 +5520,11 @@ msgstr "حساب وتصور الرسم البياني التبعية لجميع 
 msgid "Checking all templates..."
 msgstr "جارٍ التحقق من جميع النماذج..."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:39
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:42
 msgid "Clear data and start"
 msgstr "امسح البيانات وابدأ"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:43
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:46
 msgid "Clear data and trace all"
 msgstr "مسح البيانات وتتبع الكل"
 
@@ -5536,15 +5536,15 @@ msgstr "عمود"
 msgid "Controller"
 msgstr "مراقب"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:26./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:119
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:26./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:122
 msgid "Copied dot file to the clipboard."
 msgstr "نسخ ملف النقطة إلى الحافظة."
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:1./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:73
-msgid "Copy GraphViz dot data"
-msgstr "انسخ بيانات نقطة GraphViz"
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:1./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
+msgid "Copy GraphViz data"
+msgstr ""
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:29./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:122
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:29./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:125
 msgid "Could not copy dot file to the clipboard."
 msgstr "تعذر نسخ ملف النقطة إلى الحافظة."
 
@@ -5556,9 +5556,9 @@ msgstr "تعذر جلب إخراج التتبع ، يرجى المحاولة م�
 msgid "Cross-reference check of all templates"
 msgstr "التحقق من الإسناد الترافقي لجميع القوالب"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:118
-msgid "Cross-reference check of template inclusions"
-msgstr "التحقق من الإسناد الترافقي لإدراج القالب"
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
+msgid "Cross-reference check of templates"
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:29
 msgid "Cross-reference check results"
@@ -5568,9 +5568,9 @@ msgstr "نتائج التحقق من الإسناد الترافقي"
 msgid "Dependency graph"
 msgstr "الرسم البياني للتبعية"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:75
-msgid "Dependency graph of all rendered templates. All includes are shown."
-msgstr "الرسم البياني للتبعية لجميع القوالب المقدمة. يتم عرض كافة المتضمنة."
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:138
+msgid "Dependency graph of all available templates"
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:12
 msgid "Dependency graph of all templates"
@@ -5580,11 +5580,15 @@ msgstr "الرسم البياني للتبعية لجميع القوالب"
 msgid "Dependency graph of all templates. Only includes using a direct string value for the template are shown."
 msgstr "الرسم البياني للتبعية لجميع القوالب. يتضمن فقط استخدام قيمة سلسلة مباشرة للقالب المعروض."
 
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:78
+msgid "Dependency graph of all traced templates. All includes are shown."
+msgstr ""
+
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:8
 msgid "Dependendy graph of all templates"
 msgstr "الرسم البياني التبعي لجميع القوالب"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:556
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:558
 msgid "Development"
 msgstr "تطوير"
 
@@ -5600,7 +5604,7 @@ msgstr "تعطيل التخزين المؤقت بواسطة علامة <tt>{% ca
 msgid "Disabled database query tracing"
 msgstr "تعطيل تتبع استعلام قاعدة البيانات"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:154
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:160
 msgid "Dispatch rule debugging"
 msgstr "تصحيح أخطاء قاعدة الإرسال"
 
@@ -5616,6 +5620,10 @@ msgstr "قم بتمكين <tt>mod_server_storage</tt> لاستخدام تتبع 
 msgid "Enable API to recompile and build Zotonic"
 msgstr "تمكين API لإعادة ترجمة وبناء Zotonic"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:37
+msgid "Enable tracing of all template renderings."
+msgstr ""
+
 #: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:37
 msgid "Enabled database query tracing"
 msgstr "تمكين تتبع استعلام قاعدة البيانات"
@@ -5624,7 +5632,7 @@ msgstr "تمكين تتبع استعلام قاعدة البيانات"
 msgid "Event"
 msgstr "حدث"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:173
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:179
 msgid "Explain"
 msgstr "يشرح"
 
@@ -5644,7 +5652,7 @@ msgstr "تجد"
 msgid "Find a template, check which template will be selected"
 msgstr "ابحث عن قالب ، تحقق من النموذج الذي سيتم تحديده"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:147
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:153
 msgid "Force a recompilation of all templates. This fixes any issues where\n"
 "     the compiled templates might be out of sync with the template index."
 msgstr "فرض إعادة تجميع كافة القوالب. يؤدي هذا إلى إصلاح أية مشكلات حيث قد تكون\n"
@@ -5658,13 +5666,9 @@ msgstr "التبديل القسري للبروتوكول إلى"
 msgid "Found matching dispatch rule"
 msgstr "تم العثور على قاعدة إرسال مطابقة"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:70
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:73
 msgid "Graph of all template dependencies"
 msgstr "رسم بياني لجميع تبعيات القالب"
-
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:34
-msgid "Here you can enable a trace of all template renderings. Only templates renders for your current session-id are traced."
-msgstr "هنا يمكنك تمكين تتبع جميع عروض القالب. يتم فقط تتبع القوالب التي يتم عرضها لمعرف الجلسة الحالي الخاص بك."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:63./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
 msgid "Included template"
@@ -5674,7 +5678,7 @@ msgstr "قالب متضمن"
 msgid "Includes using variable names or expressions are not shown."
 msgstr "يتضمن استخدام أسماء المتغيرات أو التعبيرات غير معروضة."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:184
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:190
 msgid "Introspection"
 msgstr "استبطان - سبر غور"
 
@@ -5682,15 +5686,19 @@ msgstr "استبطان - سبر غور"
 msgid "Line"
 msgstr "خط"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:131
+msgid "Live dependency graph of templates"
+msgstr ""
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:50
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
 msgstr "إعادة تحميل مباشر لملفات CSS المتغيرة. أعد تحميل الصفحة عند تغيير القوالب أو JavaScript."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:29./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:33
-msgid "Live trace of template rendering"
-msgstr "تتبع مباشر لعرض القالب"
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:32./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:36
+msgid "Live traces of template rendering"
+msgstr ""
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:85
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:88
 msgid "Loading..."
 msgstr "تحميل..."
 
@@ -5698,7 +5706,7 @@ msgstr "تحميل..."
 msgid "Location"
 msgstr "موقعك"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:157
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:163
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "تطابق عنوان URL للطلب ، اعرض قاعدة الإرسال المتطابقة."
 
@@ -5722,7 +5730,7 @@ msgstr "مضيف جديد"
 msgid "New path"
 msgstr "مسار جديد"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:111
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:114
 msgid "No data."
 msgstr "لايوجد بيانات."
 
@@ -5750,7 +5758,7 @@ msgstr "فئة اختيارية لـ catinclude"
 msgid "Permanent redirect"
 msgstr "إعادة توجيه دائمة"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:140
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:146
 msgid "Recompile templates"
 msgstr "إعادة ترجمة القوالب"
 
@@ -5766,7 +5774,7 @@ msgstr "ينعش"
 msgid "Rerun graph"
 msgstr "إعادة تشغيل الرسم البياني"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:190
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:196
 msgid "Show an overview of all observers"
 msgstr "عرض لمحة عامة عن جميع المراقبين"
 
@@ -5774,7 +5782,7 @@ msgstr "عرض لمحة عامة عن جميع المراقبين"
 msgid "Show defined blocks in generated templates"
 msgstr "إظهار كتل محددة في القوالب التي تم إنشاؤها"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:187
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:193
 msgid "Show internals of Zotonic and the modules"
 msgstr "عرض الأجزاء الداخلية من Zotonic والوحدات النمطية"
 
@@ -5782,7 +5790,7 @@ msgstr "عرض الأجزاء الداخلية من Zotonic والوحدات ا�
 msgid "Show paths to included template files in generated templates"
 msgstr "إظهار المسارات لملفات القوالب المضمنة في القوالب التي تم إنشاؤها"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:28./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:31./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
 msgid "Site Development"
 msgstr "تطوير موقع"
 
@@ -5798,7 +5806,7 @@ msgstr "بدأ تتبع جميع تضمينات القالب."
 msgid "Started tracing template inclusions for your session."
 msgstr "تم بدء تتبع تضمينات القالب لجلستك."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:47
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:50
 #: apps/zotonic_mod_survey/src/mod_survey.erl:167
 msgid "Stop"
 msgstr "توقف"
@@ -5807,7 +5815,7 @@ msgstr "توقف"
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "تم إيقاف تضمينات قالب التتبع لجميع الجلسات."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:63
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:66
 msgid "Stopped."
 msgstr "توقفت."
 
@@ -5872,37 +5880,29 @@ msgstr "أدوات وإعدادات مفيدة لتطوير الموقع."
 msgid "Trace all database queries for the current session"
 msgstr "تتبع جميع استعلامات قاعدة البيانات للدورة الحالية"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:129
-msgid "Traces all includes for the current session-id and renders them as a graph."
-msgstr "يتتبع كل ما يتضمنه معرف الجلسة الحالي ويعرضها كرسم بياني."
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:133
+msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
+msgstr ""
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:35
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:38
 msgid "Traces automatically stop if this page is not visited during more than 10 minutes."
 msgstr "تتوقف التتبعات تلقائيًا إذا لم تتم زيارة هذه الصفحة خلال أكثر من 10 دقائق."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:60
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:63
 msgid "Tracing all sessions..."
 msgstr "متابعة جميع الجلسات..."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:57
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:60
 msgid "Tracing other session..."
 msgstr "تتبع الجلسة الأخرى..."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:54
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:57
 msgid "Tracing this session..."
 msgstr "تتبع هذه الجلسة..."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
 msgid "Type of include"
 msgstr "نوع التضمين"
-
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:133
-msgid "View dependency graph of all available templates"
-msgstr "عرض الرسم البياني للتبعية لجميع القوالب المتاحة"
-
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:128
-msgid "View live dependency graph of all rendered templates"
-msgstr "عرض الرسم البياني المباشر للتبعية لجميع القوالب المقدمة"
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:49
 msgid "You are not allowed to use the dispatch debugging."
