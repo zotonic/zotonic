@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-05 15:29\n"
+"PO-Revision-Date: 2023-10-05 16:33\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -5474,7 +5474,7 @@ msgstr "<tt>{extends}</tt> sont représentés par une ligne rayée, <tt>{overrul
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:37
 msgid "A graph of all templates, and by whom they are included, is generated and automatically updated."
-msgstr ""
+msgstr "Un graphique de tous les modèles, et par qui ils sont inclus, est généré et automatiquement mis à jour."
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:5
 msgid "Action"
@@ -5542,7 +5542,7 @@ msgstr "Fichier de points copié dans le presse-papiers."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:1./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
 msgid "Copy GraphViz data"
-msgstr ""
+msgstr "Copier les données GraphViz"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:29./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:125
 msgid "Could not copy dot file to the clipboard."
@@ -5558,7 +5558,7 @@ msgstr "Vérification des références croisées de tous les modèles"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
 msgid "Cross-reference check of templates"
-msgstr ""
+msgstr "Vérification des références croisées des modèles"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:29
 msgid "Cross-reference check results"
@@ -5570,7 +5570,7 @@ msgstr "Graphique de dépendance"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:138
 msgid "Dependency graph of all available templates"
-msgstr ""
+msgstr "Graphique de dépendance de tous les modèles disponibles"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:12
 msgid "Dependency graph of all templates"
@@ -5582,7 +5582,7 @@ msgstr "Graphique de dépendance de tous les modèles. Seules les inclusions uti
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:78
 msgid "Dependency graph of all traced templates. All includes are shown."
-msgstr ""
+msgstr "Graphique de dépendance de tous les modèles tracés. Tous les éléments inclus sont affichés."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:8
 msgid "Dependendy graph of all templates"
@@ -5622,7 +5622,7 @@ msgstr "Activer l'API pour recompiler et construire Zotonic"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:37
 msgid "Enable tracing of all template renderings."
-msgstr ""
+msgstr "Activez le traçage de tous les rendus de modèles."
 
 #: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:37
 msgid "Enabled database query tracing"
@@ -5688,7 +5688,7 @@ msgstr "Doubler"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:131
 msgid "Live dependency graph of templates"
-msgstr ""
+msgstr "Graphique de dépendance en direct des modèles"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:50
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
@@ -5696,7 +5696,7 @@ msgstr "Rechargement en ligne des fichiers CSS changés. Recharge la page si cha
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:32./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:36
 msgid "Live traces of template rendering"
-msgstr ""
+msgstr "Traces en direct du rendu du modèle"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:88
 msgid "Loading..."
@@ -5882,7 +5882,7 @@ msgstr "Tracer toutes les requêtes base de données pour la session courante"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:133
 msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
-msgstr ""
+msgstr "Trace tous les modèles pour l'ID de session actuel ou toutes les sessions et les restitue sous forme de graphique."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:38
 msgid "Traces automatically stop if this page is not visited during more than 10 minutes."
