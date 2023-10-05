@@ -30,9 +30,11 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -type template_node() :: #{
-        id => binary(),
+        id := binary(),
         template := binary(),
-        module := binary()
+        module := binary(),
+        basename := binary(),
+        index => #module_index{}
     }.
 
 -type template_edge() :: #{
