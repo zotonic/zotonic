@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-05 15:30\n"
+"PO-Revision-Date: 2023-10-05 16:34\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -5473,7 +5473,7 @@ msgstr "<tt>{extends}</tt> ditunjukkan dengan garis bergaris, <tt>{overrules}</t
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:37
 msgid "A graph of all templates, and by whom they are included, is generated and automatically updated."
-msgstr ""
+msgstr "Grafik semua templat, dan siapa yang menyertakannya, dibuat dan diperbarui secara otomatis."
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:5
 msgid "Action"
@@ -5541,7 +5541,7 @@ msgstr "File titik disalin ke clipboard."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:1./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
 msgid "Copy GraphViz data"
-msgstr ""
+msgstr "Salin data GraphViz"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:29./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:125
 msgid "Could not copy dot file to the clipboard."
@@ -5557,7 +5557,7 @@ msgstr "Pemeriksaan referensi silang semua templat"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
 msgid "Cross-reference check of templates"
-msgstr ""
+msgstr "Pemeriksaan referensi silang terhadap templat"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:29
 msgid "Cross-reference check results"
@@ -5569,7 +5569,7 @@ msgstr "Grafik ketergantungan"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:138
 msgid "Dependency graph of all available templates"
-msgstr ""
+msgstr "Grafik ketergantungan semua templat yang tersedia"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:12
 msgid "Dependency graph of all templates"
@@ -5581,7 +5581,7 @@ msgstr "Grafik ketergantungan semua templat. Hanya menyertakan penggunaan nilai 
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:78
 msgid "Dependency graph of all traced templates. All includes are shown."
-msgstr ""
+msgstr "Grafik ketergantungan semua templat yang dilacak. Semua termasuk ditampilkan."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:8
 msgid "Dependendy graph of all templates"
@@ -5621,7 +5621,7 @@ msgstr "Aktifkan API untuk mengkompilasi ulang dan membangun Zotonic"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:37
 msgid "Enable tracing of all template renderings."
-msgstr ""
+msgstr "Aktifkan penelusuran semua rendering template."
 
 #: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:37
 msgid "Enabled database query tracing"
@@ -5687,7 +5687,7 @@ msgstr "Garis"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:131
 msgid "Live dependency graph of templates"
-msgstr ""
+msgstr "Grafik ketergantungan langsung dari templat"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:50
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
@@ -5695,7 +5695,7 @@ msgstr "Reload langsung dari file CSS yang diubah. Muat ulang halaman saat mengg
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:32./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:36
 msgid "Live traces of template rendering"
-msgstr ""
+msgstr "Jejak langsung rendering template"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:88
 msgid "Loading..."
@@ -5881,7 +5881,7 @@ msgstr "Lacak semua kueri database untuk sesi saat ini"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:133
 msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
-msgstr ""
+msgstr "Melacak semua templat untuk id sesi saat ini, atau semua sesi, dan merendernya sebagai grafik."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:38
 msgid "Traces automatically stop if this page is not visited during more than 10 minutes."
