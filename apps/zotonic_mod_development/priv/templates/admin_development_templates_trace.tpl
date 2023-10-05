@@ -8,16 +8,19 @@
         #trace-status span {
             display: none;
         }
-        #trace-status.trace-stopped span.trace-stopped {
+        .trace-stopped #trace-status span.trace-stopped {
             display: inline-block;
         }
-        #trace-status.trace-session span.trace-session {
+        .trace-stopped .trace-loading {
+            visibility: hidden;
+        }
+        .trace-session #trace-status span.trace-session {
             display: inline-block;
         }
-        #trace-status.trace-all span.trace-all {
+        .trace-all #trace-status span.trace-all {
             display: inline-block;
         }
-        #trace-status.trace-other span.trace-other {
+        .trace-other #trace-status span.trace-other {
             display: inline-block;
         }
     </style>
@@ -80,7 +83,7 @@
         </p>
 
         <div id="graphviz_svg" style="max-width: 100%; overflow: auto;">
-            <p style="text-muted">
+            <p style="text-muted" class="trace-loading">
                 <img src="/lib/images/spinner.gif" height="16" width="16">
                 {_ Loading... _}
             </p>
