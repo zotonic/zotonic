@@ -63,7 +63,8 @@ dot(Context) ->
     DotFile :: binary().
 dot_from_graph(G) ->
     Nodes = lists:map(
-        fun(#{ module := Mod, id := Id, template := Tpl }) ->
+        fun(#{ module := Mod, id := Id, template := Tpl } = Node) ->
+            Type = maps:get(type, Node, normal),
             [
                 "    ", Id,
                 " [",
@@ -72,6 +73,10 @@ dot_from_graph(G) ->
                     case Mod of
                         <<"mod_", _/binary>> -> <<>>;
                         _ -> " fillcolor=powderblue style=filled "
+                    end,
+                    case Type of
+                        root -> <<" shape=hexagon">>;
+                        _ -> <<>>
                     end,
                 "];\n"
             ]
