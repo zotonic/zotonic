@@ -32,6 +32,8 @@
     restart/0,
     restart/1,
 
+    open/1,
+
     ld/0,
     ld/1,
 
@@ -148,6 +150,10 @@ restart() ->
 %% @doc Restart a site
 restart(Site) ->
     z_sites_manager:restart(Site).
+
+%% @doc Open a site in Chrome
+open(Site) ->
+    z_exec_browser:chrome(Site, [], #{ secure => true }).
 
 %% @doc Reload all changed Erlang modules
 ld() ->

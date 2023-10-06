@@ -1,8 +1,9 @@
 %% @author William Fank Thomé <williamthome@hotmail.com>
-%% @copyright 2022 William Fank Thomé
+%% @copyright 2022-2023 William Fank Thomé
 %% @doc Chrome CLI command
+%% @end
 
-%% Copyright 2022 Marc Worrell
+%% Copyright 2022-2023 William Fank Thomé
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -76,7 +77,7 @@ run_parse_args(Browser, Args) ->
         }} ->
             SiteName = list_to_atom(Site),
             Res = zotonic_command:rpc(
-                mod_development, exec_browser, [ Browser, SiteName, ParsedArgs, Options ]
+                z_exec_browser, exec_browser, [ Browser, SiteName, ParsedArgs, Options ]
             ),
             io:format("~p~n", [ Res ]);
         {error, _} = ZError ->
