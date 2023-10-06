@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-02 12:07\n"
+"PO-Revision-Date: 2023-10-05 15:30\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -1156,7 +1156,7 @@ msgstr "Kustutatud."
 msgid "Dependent"
 msgstr "Sõltuv"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:26./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:26./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:22./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:28./apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:32
 #: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:8
 #: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:8
@@ -1211,7 +1211,7 @@ msgstr "Kopeeri see leht."
 msgid "E-mail address"
 msgstr "E-posti aadress"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:19./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:53./apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:50
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:39
@@ -3697,6 +3697,7 @@ msgid "Provides"
 msgstr "Annab"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:3
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:149
 msgid "Rescan modules"
 msgstr "Skaneeri moodulid uuesti"
 
@@ -5467,6 +5468,14 @@ msgstr "Uus asukoht võib olla kohalik tee või täielik URL. Jätke host selle 
 msgid "You are not allowed to change this."
 msgstr "Teil pole lubatud seda muuta."
 
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:5./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:79
+msgid "<tt>{extends}</tt> are shown with a striped line, <tt>{overrules}</tt> are shown with a dotted line."
+msgstr "<tt>{extends}</tt> on näidatud triibulise joonega, <tt>{overrules}</tt> on näidatud punktiirjoonega."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:37
+msgid "A graph of all templates, and by whom they are included, is generated and automatically updated."
+msgstr "Kõigi mallide ja nende kaasamise kohta koostatakse graafik, mida värskendatakse automaatselt."
+
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:5
 msgid "Action"
 msgstr "Tegevus"
@@ -5483,59 +5492,59 @@ msgstr "Kõik <tt>{optional}</tt> avaldused viitavad olemasolevatele mallidele."
 msgid "All non-optional <tt>{include}</tt> statements are referring to existing templates."
 msgstr "Kõik mittekohustuslikud <tt>{include}</tt> avaldused viitavad olemasolevatele mallidele."
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:122
+msgid "All templates are checked for missing includes or missing <tt>{ext}</tt> template references."
+msgstr "Kõiki malle kontrollitakse, kas puuduvad või puuduvad <tt>{ext}</tt> malliviited."
+
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:42
 msgid "All templates are compiling."
 msgstr "Kõik mallid on koostamisel."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:133
-msgid "At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template."
-msgstr "Mõnikord võib segadusse ajada, milliseid malle malli koostamisel tegelikult kasutatakse. Siin näete, millised failid on malli koostamisel kaasatud."
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:125./apps/zotonic_mod_development/priv/templates/admin_development.tpl:141
+msgid "All templates will be compiled."
+msgstr "Kõik mallid koostatakse."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:13
 msgid "Below is the list of all notifications and the installed observers."
 msgstr "Allpool on kõigi teadete ja installitud vaatlejate loend."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:13
-msgid "Below you see in real time which templates are compiled and included."
-msgstr "Allpool näete reaalajas, millised mallid koostatakse ja kaasatakse."
-
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:6
 msgid "Bindings"
 msgstr "Köited"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:118
-msgid "Check included templates"
-msgstr "Kontrollige kaasasolevaid malle"
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:140
+msgid "Calculate and visualize a dependency graph of all templates."
+msgstr "Arvutage ja visualiseerige kõigi mallide sõltuvusgraafik."
 
-#: apps/zotonic_mod_development/src/mod_development.erl:79./apps/zotonic_mod_development/src/mod_development.erl:96
+#: apps/zotonic_mod_development/src/mod_development.erl:88./apps/zotonic_mod_development/src/mod_development.erl:105
 msgid "Checking all templates..."
 msgstr "Kõigi mallide kontrollimine..."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:42
+msgid "Clear data and start"
+msgstr "Kustutage andmed ja alustage"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:46
+msgid "Clear data and trace all"
+msgstr "Kustutage andmed ja jälgige kõike"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:13
 msgid "Column"
 msgstr "Veerg"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:128
-msgid "Compile all templates. Calculate and visualize a dependency graph of all templates."
-msgstr "Koostage kõik mallid. Arvutage ja visualiseerige kõigi mallide sõltuvusgraafik."
-
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:120
-msgid "Compile all templates. The compiled templates are checked for missing includes or missing <tt>{ext}</tt> template references."
-msgstr "Koostage kõik mallid. Koostatud mallidel kontrollitakse, kas puuduvad või puuduvad <tt>{ext}</tt> malliviited."
-
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "Controller"
 msgstr "Kontroller"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:24
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:26./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:122
 msgid "Copied dot file to the clipboard."
 msgstr "Punktfail kopeeriti lõikelauale."
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:1
-msgid "Copy GraphViz dot data"
-msgstr "Kopeerige GraphVizi punktiandmed"
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:1./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
+msgid "Copy GraphViz data"
+msgstr "Kopeerige GraphVizi andmed"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:27
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:29./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:125
 msgid "Could not copy dot file to the clipboard."
 msgstr "Punktifaili ei saanud lõikelauale kopeerida."
 
@@ -5543,21 +5552,43 @@ msgstr "Punktifaili ei saanud lõikelauale kopeerida."
 msgid "Could not fetch tracer output, please try again."
 msgstr "Jälgija väljundit ei õnnestunud tuua, proovige uuesti."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:12
-msgid "Cross reference check of all templates"
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:12
+msgid "Cross-reference check of all templates"
 msgstr "Kõigi mallide ristviide"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
+msgid "Cross-reference check of templates"
+msgstr "Mallide ristviide"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:29
+msgid "Cross-reference check results"
+msgstr "Ristviidete kontrolli tulemused"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:29
+msgid "Dependency graph"
+msgstr "Sõltuvuste graafik"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:138
+msgid "Dependency graph of all available templates"
+msgstr "Kõigi saadaolevate mallide sõltuvusgraafik"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:12
 msgid "Dependency graph of all templates"
 msgstr "Kõigi mallide sõltuvusgraafik"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
-msgid "Dependency graph of all templates. Only includes using a direct string value for the template are shown.<br>\n"
-"    Includes using variable names or expressions are not shown.<br> <tt>{extends}</tt> are shown with a striped line, <tt>{overrules}</tt> are shown with a dotted line."
-msgstr "Kõigi mallide sõltuvusgraafik. Kuvatakse ainult malli jaoks otsese stringi väärtuse kasutamine.<br>\n"
-"    Sisaldab muutujate nimede või avaldiste kasutamist ei kuvata.<br> <tt>{extends}</tt> on näidatud triibulise joonega, <tt>{overrules}</tt> on näidatud punktiirjoonega."
+msgid "Dependency graph of all templates. Only includes using a direct string value for the template are shown."
+msgstr "Kõigi mallide sõltuvusgraafik. Kuvatakse ainult malli jaoks otsese stringi väärtuse kasutamine."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:403
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:78
+msgid "Dependency graph of all traced templates. All includes are shown."
+msgstr "Kõigi jälgitavate mallide sõltuvusgraafik. Kõik hinnad on näidatud."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:8
+msgid "Dependendy graph of all templates"
+msgstr "Kõigi mallide sõltuvusgraafik"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:558
 msgid "Development"
 msgstr "Areng"
 
@@ -5573,17 +5604,13 @@ msgstr "Keela vahemällu salvestamine märgendi <tt>{% cache %}</tt>."
 msgid "Disabled database query tracing"
 msgstr "Andmebaasi päringute jälgimine on keelatud"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:140
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:160
 msgid "Dispatch rule debugging"
 msgstr "Lähetusreegli silumine"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:41
 msgid "Download CSS and JavaScript files as separate files. Don’t combine them in one URL."
 msgstr "CSS- ja JavaScripti failide allalaadimine eraldi failidena. Ärge ühendage neid ühes URL-is."
-
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:18
-msgid "Empty log"
-msgstr "Tühi logi"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:81
 msgid "Enable <tt>mod_server_storage</tt> to use database query tracing."
@@ -5593,6 +5620,10 @@ msgstr "Andmebaasi päringute jälgimise kasutamiseks lubage <tt>mod_server_stor
 msgid "Enable API to recompile and build Zotonic"
 msgstr "Zotonicu uuesti kompileerimiseks ja ülesehitamiseks lubage API"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:37
+msgid "Enable tracing of all template renderings."
+msgstr "Lubage kõigi mallide renderdamiste jälgimine."
+
 #: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:37
 msgid "Enabled database query tracing"
 msgstr "Andmebaasi päringute jälgimine on lubatud"
@@ -5601,7 +5632,7 @@ msgstr "Andmebaasi päringute jälgimine on lubatud"
 msgid "Event"
 msgstr "Sündmus"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:159
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:179
 msgid "Explain"
 msgstr "Seletama"
 
@@ -5621,6 +5652,12 @@ msgstr "Leidke"
 msgid "Find a template, check which template will be selected"
 msgstr "Leidke mall, kontrollige, milline mall valitakse"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:153
+msgid "Force a recompilation of all templates. This fixes any issues where\n"
+"     the compiled templates might be out of sync with the template index."
+msgstr "Sunnige kõik mallid uuesti kompileerima. See lahendab kõik probleemid, mille puhul\n"
+"     võivad kompileeritud mallid olla malliindeksiga sünkroonist väljas."
+
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
 msgid "Forced switch of protocol to"
 msgstr "Protokolli sunnitud üleminek"
@@ -5629,15 +5666,19 @@ msgstr "Protokolli sunnitud üleminek"
 msgid "Found matching dispatch rule"
 msgstr "Leiti vastav saatmisreegel"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:73
+msgid "Graph of all template dependencies"
+msgstr "Kõigi mallide sõltuvuste graafik"
+
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:63./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
 msgid "Included template"
 msgstr "Kaasas mall"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:8./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:12
-msgid "Included templates"
-msgstr "Kaasatud mallid"
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:4
+msgid "Includes using variable names or expressions are not shown."
+msgstr "Muutujate nimede või väljendite kasutamist ei kuvata."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:170
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:190
 msgid "Introspection"
 msgstr "Enesevaatlus"
 
@@ -5645,15 +5686,27 @@ msgstr "Enesevaatlus"
 msgid "Line"
 msgstr "Liin"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:131
+msgid "Live dependency graph of templates"
+msgstr "Mallide reaalajas sõltuvuse graafik"
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:50
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
 msgstr "Muudetud CSS-failide reaalajas laadimine. Mallide või JavaScripti muutmisel laadige leht uuesti."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:32./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:36
+msgid "Live traces of template rendering"
+msgstr "Malli renderdamise reaalajas jäljed"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:88
+msgid "Loading..."
+msgstr "Laadimine..."
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:69./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:75
 msgid "Location"
 msgstr "Asukoht"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:143
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:163
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "Sobitage päringu URL, kuvage sobitatud saatmisreegel."
 
@@ -5677,11 +5730,15 @@ msgstr "Uus host"
 msgid "New path"
 msgstr "Uus tee"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:114
+msgid "No data."
+msgstr "Andmed puuduvad."
+
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:45
 msgid "No matching dispatch rule found"
 msgstr "Sobivat saatmisreeglit ei leitud"
 
-#: apps/zotonic_mod_development/src/mod_development.erl:84./apps/zotonic_mod_development/src/mod_development.erl:101
+#: apps/zotonic_mod_development/src/mod_development.erl:93./apps/zotonic_mod_development/src/mod_development.erl:110./apps/zotonic_mod_development/src/mod_development.erl:125./apps/zotonic_mod_development/src/mod_development.erl:133./apps/zotonic_mod_development/src/mod_development.erl:160
 msgid "No permission to use mod_development."
 msgstr "Mod_developmenti kasutamiseks pole luba."
 
@@ -5701,8 +5758,8 @@ msgstr "Valikukategooria kasside kaasamiseks"
 msgid "Permanent redirect"
 msgstr "Püsiv ümbersuunamine"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:17
-msgid "Recompile Templates"
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:146
+msgid "Recompile templates"
 msgstr "Mallide uuesti kompileerimine"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:74
@@ -5710,22 +5767,22 @@ msgid "Redirect"
 msgstr "Suunamine"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:17
-msgid "Rerun XRef"
-msgstr "Käivita XRef uuesti"
+msgid "Refresh"
+msgstr "Värskenda"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:17
 msgid "Rerun graph"
 msgstr "Käivita graafik uuesti"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:176
-msgid "Show an overview of all observers."
-msgstr "Näita ülevaadet kõigist vaatlejatest."
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:196
+msgid "Show an overview of all observers"
+msgstr "Kuvage ülevaade kõigist vaatlejatest"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:33
 msgid "Show defined blocks in generated templates"
 msgstr "Määratud plokkide kuvamine loodud mallides"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:173
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:193
 msgid "Show internals of Zotonic and the modules"
 msgstr "Kuva Zotonicu sisemised osad ja moodulid"
 
@@ -5733,17 +5790,34 @@ msgstr "Kuva Zotonicu sisemised osad ja moodulid"
 msgid "Show paths to included template files in generated templates"
 msgstr "Näita loodud mallides olevate mallifailide teid"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:132
-msgid "Show which files are included in a template compilation"
-msgstr "Näidake, millised failid on mallide kogumisse kaasatud"
-
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:31./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
 msgid "Site Development"
 msgstr "Saidi arendamine"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:21
 msgid "Start matching dispatch rules"
 msgstr "Alustage saatmisreeglite sobitamist"
+
+#: apps/zotonic_mod_development/src/mod_development.erl:122
+msgid "Started tracing all template inclusions."
+msgstr "Alustas kõigi malli lisamiste jälgimist."
+
+#: apps/zotonic_mod_development/src/mod_development.erl:119
+msgid "Started tracing template inclusions for your session."
+msgstr "Alustati teie seansi malli lisamiste jälgimist."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:50
+#: apps/zotonic_mod_survey/src/mod_survey.erl:167
+msgid "Stop"
+msgstr "Lõpeta"
+
+#: apps/zotonic_mod_development/src/mod_development.erl:131
+msgid "Stopped tracing template inclusions for all sessions."
+msgstr "Kõigi seansside jälgimismalli kaasamine on peatatud."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:66
+msgid "Stopped."
+msgstr "Peatatud."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:19
 msgid "Subscribers"
@@ -5762,29 +5836,13 @@ msgstr "Süntaksivead"
 msgid "Template"
 msgstr "Mall"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:29
-msgid "Template check results"
-msgstr "Mallide kontrollimise tulemused"
-
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:89
 msgid "Template debugging"
 msgstr "Mallide silumine"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:127./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:29
-msgid "Template dependency graph"
-msgstr "Malli sõltuvuse graafik"
-
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:4
 msgid "Template path"
 msgstr "Mallitee"
-
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8
-msgid "Templates XRef check"
-msgstr "Mallide XRef kontroll"
-
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:8
-msgid "Templates dependendy graph"
-msgstr "Mallidest sõltuv graafik"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:180
 msgid "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements that are referring to a missing template."
@@ -5821,6 +5879,26 @@ msgstr "Tööriistad ja seaded, mis on saidi arendamiseks kasulikud."
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:76
 msgid "Trace all database queries for the current session"
 msgstr "Jälgige kõiki praeguse seansi andmebaasipäringuid"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:133
+msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
+msgstr "Jälgib kõiki praeguse seansi ID malle või kõiki seansse ja renderdab need graafikuna."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:38
+msgid "Traces automatically stop if this page is not visited during more than 10 minutes."
+msgstr "Jäljed peatuvad automaatselt, kui seda lehte ei külastata rohkem kui 10 minuti jooksul."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:63
+msgid "Tracing all sessions..."
+msgstr "Kõigi seansside jälgimine..."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:60
+msgid "Tracing other session..."
+msgstr "Teise seansi jälgimine..."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:57
+msgid "Tracing this session..."
+msgstr "Selle seansi jälgimine..."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
 msgid "Type of include"
@@ -9692,10 +9770,6 @@ msgstr "Kahjuks ei saanud uut inimest sisestada."
 #: apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:14
 msgid "Start"
 msgstr "Alusta"
-
-#: apps/zotonic_mod_survey/src/mod_survey.erl:167
-msgid "Stop"
-msgstr "Lõpeta"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:71./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:73./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:75./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:77
 msgid "Stop without saving"

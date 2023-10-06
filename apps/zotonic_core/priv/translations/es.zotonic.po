@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-02 12:06\n"
+"PO-Revision-Date: 2023-10-05 16:33\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -1156,7 +1156,7 @@ msgstr "Eliminar."
 msgid "Dependent"
 msgstr "Dependiente"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:26./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:26./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:22./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:28./apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:32
 #: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:8
 #: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:8
@@ -1211,7 +1211,7 @@ msgstr "Duplicar esta página."
 msgid "E-mail address"
 msgstr "Dirección de correo electrónico"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:19./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:53./apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:50
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:39
@@ -3697,6 +3697,7 @@ msgid "Provides"
 msgstr "Proporciona"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:3
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:149
 msgid "Rescan modules"
 msgstr "Reexaminar módulos"
 
@@ -5467,6 +5468,14 @@ msgstr "La nueva ubicación puede ser una ruta local o un URL completo. Dejar el
 msgid "You are not allowed to change this."
 msgstr "No tiene permitido cambiar esto."
 
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:5./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:79
+msgid "<tt>{extends}</tt> are shown with a striped line, <tt>{overrules}</tt> are shown with a dotted line."
+msgstr "<tt>{extends}</tt> se muestran con una línea rayada, <tt>{overrules}</tt> se muestran con una línea de puntos."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:37
+msgid "A graph of all templates, and by whom they are included, is generated and automatically updated."
+msgstr "Se genera y actualiza automáticamente un gráfico de todas las plantillas y de quién las incluye."
+
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:5
 msgid "Action"
 msgstr "Acción"
@@ -5483,59 +5492,59 @@ msgstr "Todas las declaraciones <tt>{optional}</tt> se refieren a plantillas exi
 msgid "All non-optional <tt>{include}</tt> statements are referring to existing templates."
 msgstr "Todas las declaraciones <tt>{include}</tt> no opcionales se refieren a plantillas existentes."
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:122
+msgid "All templates are checked for missing includes or missing <tt>{ext}</tt> template references."
+msgstr "Todas las plantillas se verifican para ver si faltan inclusiones o <tt>{ext}</tt> referencias de plantilla."
+
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:42
 msgid "All templates are compiling."
 msgstr "Todas las plantillas se están compilando."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:133
-msgid "At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template."
-msgstr "A veces puede resultar confuso qué plantillas se utilizan realmente durante la compilación de una plantilla. Aquí puede ver qué archivos se incluyen al compilar una plantilla."
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:125./apps/zotonic_mod_development/priv/templates/admin_development.tpl:141
+msgid "All templates will be compiled."
+msgstr "Se compilarán todas las plantillas."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:13
 msgid "Below is the list of all notifications and the installed observers."
 msgstr "A continuación figura la lista de todas las notificaciones y los observadores instalados."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:13
-msgid "Below you see in real time which templates are compiled and included."
-msgstr "A continuación verá el tiempo real en el cual las plantillas compiladas e incluidas."
-
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:6
 msgid "Bindings"
 msgstr "Enlaces"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:118
-msgid "Check included templates"
-msgstr "Consulta las plantillas incluidas"
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:140
+msgid "Calculate and visualize a dependency graph of all templates."
+msgstr "Calcule y visualice un gráfico de dependencia de todas las plantillas."
 
-#: apps/zotonic_mod_development/src/mod_development.erl:79./apps/zotonic_mod_development/src/mod_development.erl:96
+#: apps/zotonic_mod_development/src/mod_development.erl:88./apps/zotonic_mod_development/src/mod_development.erl:105
 msgid "Checking all templates..."
 msgstr "Comprobando todas las plantillas..."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:42
+msgid "Clear data and start"
+msgstr "Borrar datos y empezar"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:46
+msgid "Clear data and trace all"
+msgstr "Borrar datos y rastrear todo"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:13
 msgid "Column"
 msgstr "Columna"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:128
-msgid "Compile all templates. Calculate and visualize a dependency graph of all templates."
-msgstr "Compile todas las plantillas. Calcule y visualice un gráfico de dependencia de todas las plantillas."
-
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:120
-msgid "Compile all templates. The compiled templates are checked for missing includes or missing <tt>{ext}</tt> template references."
-msgstr "Compile todas las plantillas. Las plantillas compiladas se verifican para ver si faltan inclusiones o <tt>{ext}</tt> referencias de plantilla."
-
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "Controller"
 msgstr "Controlador"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:24
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:26./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:122
 msgid "Copied dot file to the clipboard."
 msgstr "Archivo de puntos copiado al portapapeles."
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:1
-msgid "Copy GraphViz dot data"
-msgstr "Copiar datos de puntos de GraphViz"
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:1./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
+msgid "Copy GraphViz data"
+msgstr "Copiar datos de GraphViz"
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:27
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:29./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:125
 msgid "Could not copy dot file to the clipboard."
 msgstr "No se pudo copiar el archivo de puntos al portapapeles."
 
@@ -5543,21 +5552,43 @@ msgstr "No se pudo copiar el archivo de puntos al portapapeles."
 msgid "Could not fetch tracer output, please try again."
 msgstr "No se pudo obtener el resultado del rastreador. Vuelva a intentarlo."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:12
-msgid "Cross reference check of all templates"
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:12
+msgid "Cross-reference check of all templates"
 msgstr "Verificación de referencias cruzadas de todas las plantillas."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
+msgid "Cross-reference check of templates"
+msgstr "Verificación cruzada de plantillas."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:29
+msgid "Cross-reference check results"
+msgstr "Resultados de la verificación de referencias cruzadas"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:29
+msgid "Dependency graph"
+msgstr "Gráfico de dependencia"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:138
+msgid "Dependency graph of all available templates"
+msgstr "Gráfico de dependencia de todas las plantillas disponibles."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:12
 msgid "Dependency graph of all templates"
 msgstr "Gráfico de dependencia de todas las plantillas."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
-msgid "Dependency graph of all templates. Only includes using a direct string value for the template are shown.<br>\n"
-"    Includes using variable names or expressions are not shown.<br> <tt>{extends}</tt> are shown with a striped line, <tt>{overrules}</tt> are shown with a dotted line."
-msgstr "Gráfico de dependencia de todas las plantillas. Solo se muestra el uso de un valor de cadena directo para la plantilla.<br>\n"
-"    Incluye el uso de nombres de variables o no se muestran expresiones.<br> <tt>{extends}</tt> se muestran con una línea rayada, <tt>{overrules}</tt> se muestran con una línea punteada."
+msgid "Dependency graph of all templates. Only includes using a direct string value for the template are shown."
+msgstr "Gráfico de dependencia de todas las plantillas. Solo se muestra el uso de un valor de cadena directo para la plantilla."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:403
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:78
+msgid "Dependency graph of all traced templates. All includes are shown."
+msgstr "Gráfico de dependencia de todas las plantillas rastreadas. Se muestran todos los incluidos."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:8
+msgid "Dependendy graph of all templates"
+msgstr "Gráfico dependiente de todas las plantillas."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:558
 msgid "Development"
 msgstr "Desarrollo"
 
@@ -5573,17 +5604,13 @@ msgstr "Deshabilitar el cacheo por la etiqueta <tt>{% cache %}</tt> ."
 msgid "Disabled database query tracing"
 msgstr "Seguimiento de consultas de base de datos deshabilitado"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:140
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:160
 msgid "Dispatch rule debugging"
 msgstr "Depuración de las reglas de envió"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:41
 msgid "Download CSS and JavaScript files as separate files. Don’t combine them in one URL."
 msgstr "Descargar los archivos CSS y JavaScript como archivos separados. No los combine en un solo URL."
-
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:18
-msgid "Empty log"
-msgstr "Registro vacío"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:81
 msgid "Enable <tt>mod_server_storage</tt> to use database query tracing."
@@ -5593,6 +5620,10 @@ msgstr "Habilitar <tt>mod_server_storage</tt> para usar el rastreo de consultas 
 msgid "Enable API to recompile and build Zotonic"
 msgstr "Habilitar la API para volver a compilar y generar Zotonic"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:37
+msgid "Enable tracing of all template renderings."
+msgstr "Habilite el seguimiento de todas las representaciones de plantillas."
+
 #: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:37
 msgid "Enabled database query tracing"
 msgstr "Seguimiento de consultas de base de datos habilitado"
@@ -5601,7 +5632,7 @@ msgstr "Seguimiento de consultas de base de datos habilitado"
 msgid "Event"
 msgstr "Evento"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:159
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:179
 msgid "Explain"
 msgstr "Explicar"
 
@@ -5621,6 +5652,12 @@ msgstr "Encontrar"
 msgid "Find a template, check which template will be selected"
 msgstr "Encontrar una plantilla. Comprobar cual plantilla será seleccionada"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:153
+msgid "Force a recompilation of all templates. This fixes any issues where\n"
+"     the compiled templates might be out of sync with the template index."
+msgstr "Fuerce una recompilación de todas las plantillas. Esto soluciona cualquier problema por el cual\n"
+"     plantillas compiladas puedan no estar sincronizadas con el índice de la plantilla."
+
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
 msgid "Forced switch of protocol to"
 msgstr "Cambio forzado de protocolo a"
@@ -5629,15 +5666,19 @@ msgstr "Cambio forzado de protocolo a"
 msgid "Found matching dispatch rule"
 msgstr "Se encontró una regla de despacho que coincide con la regla"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:73
+msgid "Graph of all template dependencies"
+msgstr "Gráfico de todas las dependencias de plantillas."
+
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:63./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
 msgid "Included template"
 msgstr "Plantilla incluida"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:8./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:12
-msgid "Included templates"
-msgstr "Plantillas incluidas"
+#: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:4
+msgid "Includes using variable names or expressions are not shown."
+msgstr "Incluye el uso de nombres de variables o expresiones que no se muestran."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:170
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:190
 msgid "Introspection"
 msgstr "Introspección"
 
@@ -5645,15 +5686,27 @@ msgstr "Introspección"
 msgid "Line"
 msgstr "Línea"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:131
+msgid "Live dependency graph of templates"
+msgstr "Gráfico de dependencia en vivo de plantillas"
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:50
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
 msgstr "Recarga en vivo de los archivos CSS cambiados. Recarga de la página de cambio de plantillas o JavaScript."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:32./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:36
+msgid "Live traces of template rendering"
+msgstr "Rastros en vivo de renderizado de plantillas"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:88
+msgid "Loading..."
+msgstr "Cargando..."
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:69./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:75
 msgid "Location"
 msgstr "Ubicación"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:143
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:163
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "Relacione a una petición de URL, mostrar la relaciones de las reglas de envió."
 
@@ -5677,11 +5730,15 @@ msgstr "Nuevo servidor"
 msgid "New path"
 msgstr "Nueva ruta"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:114
+msgid "No data."
+msgstr "Sin datos."
+
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:45
 msgid "No matching dispatch rule found"
 msgstr "No se encuentra ninguna relación a las reglas de envió"
 
-#: apps/zotonic_mod_development/src/mod_development.erl:84./apps/zotonic_mod_development/src/mod_development.erl:101
+#: apps/zotonic_mod_development/src/mod_development.erl:93./apps/zotonic_mod_development/src/mod_development.erl:110./apps/zotonic_mod_development/src/mod_development.erl:125./apps/zotonic_mod_development/src/mod_development.erl:133./apps/zotonic_mod_development/src/mod_development.erl:160
 msgid "No permission to use mod_development."
 msgstr "No hay permiso para usar mod_development."
 
@@ -5701,31 +5758,31 @@ msgstr "Categoría opcional para catinclude"
 msgid "Permanent redirect"
 msgstr "Redirección permanente"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:17
-msgid "Recompile Templates"
-msgstr "Volver a compilar plantillas"
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:146
+msgid "Recompile templates"
+msgstr "Recompilar plantillas"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:74
 msgid "Redirect"
 msgstr "Redireccionar"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:17
-msgid "Rerun XRef"
-msgstr "Volver a ejecutar XRef"
+msgid "Refresh"
+msgstr "Actualizar"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:17
 msgid "Rerun graph"
 msgstr "Volver a ejecutar el gráfico"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:176
-msgid "Show an overview of all observers."
-msgstr "Mostrar una visión general de todos los observadores."
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:196
+msgid "Show an overview of all observers"
+msgstr "Mostrar una descripción general de todos los observadores."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:33
 msgid "Show defined blocks in generated templates"
 msgstr "Mostrar bloques definidos en plantillas generadas"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:173
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:193
 msgid "Show internals of Zotonic and the modules"
 msgstr "Mostrar los interiores de Zotonic y los módulos"
 
@@ -5733,17 +5790,34 @@ msgstr "Mostrar los interiores de Zotonic y los módulos"
 msgid "Show paths to included template files in generated templates"
 msgstr "Mostrar rutas a archivos de plantilla incluidos en las plantillas generadas"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:132
-msgid "Show which files are included in a template compilation"
-msgstr "Mostrar qué archivos se incluyen en una compilación de plantilla"
-
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:31./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
 msgid "Site Development"
 msgstr "Desarrollo del sitio"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:21
 msgid "Start matching dispatch rules"
 msgstr "Empieza a emparejar las reglas de envío"
+
+#: apps/zotonic_mod_development/src/mod_development.erl:122
+msgid "Started tracing all template inclusions."
+msgstr "Comenzó a rastrear todas las inclusiones de plantillas."
+
+#: apps/zotonic_mod_development/src/mod_development.erl:119
+msgid "Started tracing template inclusions for your session."
+msgstr "Comenzó a rastrear las inclusiones de plantillas para su sesión."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:50
+#: apps/zotonic_mod_survey/src/mod_survey.erl:167
+msgid "Stop"
+msgstr "Alto"
+
+#: apps/zotonic_mod_development/src/mod_development.erl:131
+msgid "Stopped tracing template inclusions for all sessions."
+msgstr "Se detuvieron las inclusiones de plantillas de seguimiento para todas las sesiones."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:66
+msgid "Stopped."
+msgstr "Interrumpido."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:19
 msgid "Subscribers"
@@ -5762,29 +5836,13 @@ msgstr "Errores de sintaxis"
 msgid "Template"
 msgstr "Modelo"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:29
-msgid "Template check results"
-msgstr "Resultados de la verificación de la plantilla"
-
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:89
 msgid "Template debugging"
 msgstr "Depuración de plantilla"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:127./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:29
-msgid "Template dependency graph"
-msgstr "Gráfico de dependencia de plantilla"
-
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:4
 msgid "Template path"
 msgstr "Ruta de plantilla"
-
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8
-msgid "Templates XRef check"
-msgstr "Verificación de plantillas XRef"
-
-#: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:8
-msgid "Templates dependendy graph"
-msgstr "Gráfico dependiente de plantillas"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:180
 msgid "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements that are referring to a missing template."
@@ -5821,6 +5879,26 @@ msgstr "Las herramientas y opciones que son útiles para el desarrollo del sitio
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:76
 msgid "Trace all database queries for the current session"
 msgstr "Rastrear todas las consultas a la base de datos del actual período de sesiones"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:133
+msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
+msgstr "Rastrea todas las plantillas para el ID de sesión actual, o todas las sesiones, y las representa como un gráfico."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:38
+msgid "Traces automatically stop if this page is not visited during more than 10 minutes."
+msgstr "Los rastreos se detienen automáticamente si esta página no se visita durante más de 10 minutos."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:63
+msgid "Tracing all sessions..."
+msgstr "Seguimiento de todas las sesiones..."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:60
+msgid "Tracing other session..."
+msgstr "Rastreando otra sesión..."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:57
+msgid "Tracing this session..."
+msgstr "Seguimiento de esta sesión..."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
 msgid "Type of include"
@@ -9692,10 +9770,6 @@ msgstr "Lo sentimos, no se pudo insertar la nueva persona."
 #: apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:14
 msgid "Start"
 msgstr "Inicio"
-
-#: apps/zotonic_mod_survey/src/mod_survey.erl:167
-msgid "Stop"
-msgstr "Alto"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:71./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:73./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:75./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:77
 msgid "Stop without saving"
