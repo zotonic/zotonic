@@ -569,7 +569,7 @@ search(<<"autocomplete">>, #{ <<"text">> := QueryText } = Args, _OffsetLimit, Co
                     #search_sql{
                         select=["r.id, ts_rank_cd(", rank_weight(Context), ", pivot_tsv, $1, $2) AS rank"],
                         from="rsc r",
-                        where=" $1 @@ r.pivot_tsv",
+                        where=" $1 @@ r.pivot_tsv and not r.is_unfindable",
                         order="rank desc",
                         args=[TsQuery, rank_behaviour(Context)],
                         cats=[{"r", Cat}],
