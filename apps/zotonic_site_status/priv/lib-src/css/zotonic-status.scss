@@ -6,10 +6,12 @@
 @Changed:	2012-05-03
 @Changed:	2014-12-19
 @Changed:   2021-01-27  Removed include of mod_admin vars
+@Changed:   2023-10-11  Refactor to scss
 
 Copyright 2009 Tim Benniks
 Copyright 2012 Arjan Scherpenisse
 Copyright 2014 Arthur Clemens
+Copyright 2023 Dorien Drees
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,54 +29,53 @@ limitations under the License.
 
 
 // Lots of Love for LESS: http://mateuszkocz.github.io/3l/
-#3L {@import "3L/3L";}
 
-@gray_base:              #000;
-@gray_darker:            lighten(@gray_base, 13.5%); // #222
-@gray_dark:              lighten(@gray_base, 20%);   // #333
-@gray:                   lighten(@gray_base, 33.5%); // #555
-@gray_light:             lighten(@gray_base, 46.7%); // #777
-@gray_lighter:           lighten(@gray_base, 93.5%); // #eee
+$gray_base:              #000;
+$gray_darker:            lighten($gray_base, 13.5%); // #222
+$gray_dark:              lighten($gray_base, 20%);   // #333
+$gray:                   lighten($gray_base, 33.5%); // #555
+$gray_light:             lighten($gray_base, 46.7%); // #777
+$gray_lighter:           lighten($gray_base, 93.5%); // #eee
 
-@brand_primary:         #0fa2db; // darken(#428bca, 6.5%); // #337ab7
-@brand_success:         #5cb85c;
-@brand_info:            #5bc0de;
-@brand_warning:         #f0ad4e;
-@brand_danger:          #d9534f;
+$brand_primary:         #0fa2db; // darken(#428bca, 6.5%); // #337ab7
+$brand_success:         #5cb85c;
+$brand_info:            #5bc0de;
+$brand_warning:         #f0ad4e;
+$brand_danger:          #d9534f;
 
-@main_color: @brand_primary;
-@main_color_hover: darken(@main_color, 5%);
-@color_palette_dark: rgba(0,0,0,0.87);
-@color_running: #4CAF50;
-@color_running_background: #E8F5E9;
-@color_retrying: #EF6C00;
-@color_retrying_background: #FFF3E0;
-@color_stopped: #BDBDBD;
-@color_stopped_background: #fff;
-@color_waiting: #00BCD4;
-@color_waiting_background: #fff;
-@color_failed: #D84315;
-@color_failed_background: #FBE9E7;
-@color_info_background: #343434;
-@color_info_text: #fff;
-@textColorError: #D84315;
-@block_border_radius: 4px;
-@info_block_border_radius: 2px;
+$main_color:                $brand_primary;
+$main_color_hover:          darken($main_color, 5%);
+$color_palette_dark:        $gray_base;
+$color_running:             #4CAF50;
+$color_running_background:  #E8F5E9;
+$color_retrying:            #EF6C00;
+$color_retrying_background: #FFF3E0;
+$color_stopped:             #BDBDBD;
+$color_stopped_background:  #fff;
+$color_waiting:             #00BCD4;
+$color_waiting_background:  #fff;
+$color_failed:              #D84315;
+$color_failed_background:   #FBE9E7;
+$color_info_background:     #343434;
+$color_info_text:           #fff;
+$textColorError:            #D84315;
+$block_border_radius:       4px;
+$info_block_border_radius:  2px;
 
-@textColorMuted: @gray_light;
-@textColorMedium: @gray;
+$textColorMuted:            $gray_light;
+$textColorMedium:           $gray;
 
 body {
     background: #eee;
-    color: @color_palette_dark;
+    color: $color_palette_dark;
 }
 
 // MAIN SECTIONS
 
 .navbar {
-    #3L > .border-radius(0);
+    border-radius: 0;
     margin-bottom: 0;
-    background-color: @main_color;
+    background-color: $main_color;
     border: none;
     
     > a,
@@ -84,7 +85,7 @@ body {
             color: #fff;
         }
         &:hover {
-            background-color: @main_color_hover;
+            background-color: $main_color_hover;
         }
     }
     .navbar-brand {
@@ -112,20 +113,20 @@ body {
     text-align: left;
     
     .zotonic-logo {
-        color: @textColorMuted;
+        color: $textColorMuted;
     }
 }
 
 // LOGIN FORM
 
 .jumbotron {
-    @_size: 42px;
+    $_size: 42px;
     
     h1 {
-        font-size: @_size;
+        font-size: $_size;
     }
     .zotonic-logo {
-        height: @_size;
+        height: $_size;
     }
 }
 
@@ -142,10 +143,10 @@ form {
         }
     }
     .has-error .help-block {
-        color: @textColorMedium;
+        color: $textColorMedium;
     }
     .has-error .help-block-error {
-        color: @textColorError;
+        color: $textColorError;
     }
 }
 
@@ -155,7 +156,7 @@ form {
     margin-bottom: 0;
     
     a {
-        color: @color_palette_dark;
+        color: $color_palette_dark;
     }
     > tbody {
         > tr {
@@ -172,25 +173,25 @@ form {
     
     > tbody > tr {
         &.running > td {
-            background-color: @color_running_background;
+            background-color: $color_running_background;
         }
         &.retrying > td {
-            background-color: @color_retrying_background;
+            background-color: $color_retrying_background;
         }
         &.stopped > td {
-            background-color: @color_stopped_background;
+            background-color: $color_stopped_background;
         }
         &.waiting > td {
-            background-color: @color_waiting_background;
+            background-color: $color_waiting_background;
         }
         &.failed > td {
-            background-color: @color_failed_background;
+            background-color: $color_failed_background;
         }
     }
     
     span.status {
         display: none;
-        #3L > .border-radius(0);
+        border-radius: 0;
     }
     .running button.start {
         display: none;
@@ -203,24 +204,24 @@ form {
         display: inline-block;
     }
     .stopped a {
-        color: @color_stopped;
-        background: @color_stopped_background;
+        color: $color_stopped;
+        background: $color_stopped_background;
     }
     span.running {
         color: #fff;
-        background: @color_running;
+        background: $color_running;
     }
     span.retrying {
         color: #fff;
-        background: @color_retrying;
+        background: $color_retrying;
     }
     span.waiting {
         color: #fff;
-        background: @color_waiting;
+        background: $color_waiting;
     }
     span.failed {
         color: #fff;
-        background: @color_failed;
+        background: $color_failed;
     }
     span.stopped {
         color: #fff;
@@ -268,23 +269,23 @@ form {
 }
 
 .alert {
-    #3L > .border-radius(@info_block_border_radius);
+    border-radius: $info_block_border_radius;
     margin-bottom: 10px;
     
     &.alert-info {
-        background-color: @color_info_background;
-        border-color: @color_info_background;
-        color: @color_info_text;
+        background-color: $color_info_background;
+        border-color: $color_info_background;
+        color: $color_info_text;
     }
     .close {
         opacity: 1;
         text-shadow: none;
-        color: @color_info_text;
+        color: $color_info_text;
     }
 }
 
 .text-muted {
-    color: @textColorMuted;
+    color: $textColorMuted;
 }
 
 // Synchronize sizes
@@ -299,7 +300,7 @@ form {
 .list-group,
 .container .jumbotron,
 .panel {
-    #3L > .border-radius(@block_border_radius);
+    border-radius: $block_border_radius;
 }
 
 .btn,
@@ -307,16 +308,16 @@ a.list-group-item {
     &:hover {
         &, * {
             cursor: pointer;
-            background-color: @main_color;
+            background-color: $main_color;
             color: #fff;
-            border-color: @main_color;
+            border-color: $main_color;
         }
     }
 }
 
 .container {
     .jumbotron {
-        background-color: @main_color;
+        background-color: $main_color;
         padding: 40px;
         color: #fff;
         
