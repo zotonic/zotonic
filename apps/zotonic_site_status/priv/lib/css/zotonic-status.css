@@ -6,17 +6,19 @@
 @Changed:	2012-05-03
 @Changed:	2014-12-19
 @Changed:   2021-01-27  Removed include of mod_admin vars
+@Changed:   2023-10-11  Refactor to scss
 
 Copyright 2009 Tim Benniks
 Copyright 2012 Arjan Scherpenisse
 Copyright 2014 Arthur Clemens
+Copyright 2023 Dorien Drees
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
- 
+
 http://www.apache.org/licenses/LICENSE-2.0
- 
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,21 +28,19 @@ limitations under the License.
 ---------------------------------------------------------- */
 body {
   background: #eee;
-  color: rgba(0, 0, 0, 0.87);
+  color: #000;
 }
+
 .navbar {
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
   border-radius: 0;
   margin-bottom: 0;
   background-color: #0fa2db;
   border: none;
 }
-.navbar > a,
+.navbar > a, .navbar > a:hover,
 .navbar .navbar-brand,
-.navbar .navbar-nav > li > a,
-.navbar > a:hover,
 .navbar .navbar-brand:hover,
+.navbar .navbar-nav > li > a,
 .navbar .navbar-nav > li > a:hover {
   color: #fff;
 }
@@ -57,14 +57,16 @@ body {
 .navbar .zotonic-logo {
   height: 15px;
   width: 87px;
-  margin-right: .4em;
+  margin-right: 0.4em;
 }
 .navbar .navbar-nav > li > a {
   font-size: 16px;
 }
+
 .content {
   padding: 50px 0;
 }
+
 .footer {
   padding: 20px 0;
   border-top: 1px solid #d7d7d7;
@@ -73,12 +75,14 @@ body {
 .footer .zotonic-logo {
   color: #777777;
 }
+
 .jumbotron h1 {
   font-size: 42px;
 }
 .jumbotron .zotonic-logo {
   height: 42px;
 }
+
 form #error-pw {
   display: none;
 }
@@ -95,11 +99,12 @@ form .has-error .help-block {
 form .has-error .help-block-error {
   color: #D84315;
 }
+
 .table.sites-overview {
   margin-bottom: 0;
 }
 .table.sites-overview a {
-  color: rgba(0, 0, 0, 0.87);
+  color: #000;
 }
 .table.sites-overview > tbody > tr > td {
   border-color: #fff;
@@ -124,8 +129,6 @@ form .has-error .help-block-error {
 }
 .table.sites-overview span.status {
   display: none;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
   border-radius: 0;
 }
 .table.sites-overview .running button.start {
@@ -174,25 +177,28 @@ form .has-error .help-block-error {
 .table.sites-overview .stopped button.flush {
   display: none;
 }
+
 .control-label {
   font-weight: normal;
 }
+
 .panel-title,
 .list-group-item-heading {
   font-size: 16px;
 }
+
 .panel .panel-body > :last-child {
   margin-bottom: 0;
 }
+
 .list-group a {
   cursor: pointer;
 }
 .list-group .list-group-item-text {
   font-size: 13px;
 }
+
 .alert {
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
   border-radius: 2px;
   margin-bottom: 10px;
 }
@@ -206,31 +212,33 @@ form .has-error .help-block-error {
   text-shadow: none;
   color: #fff;
 }
+
 .text-muted {
   color: #777777;
 }
+
 .alert,
 .list-group-item,
 .table > tbody > tr > td,
 .table > tbody > tr > th {
   padding: 10px 15px;
 }
+
 .list-group,
 .container .jumbotron,
 .panel {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
   border-radius: 4px;
 }
-.btn:hover,
+
+.btn:hover, .btn:hover *,
 a.list-group-item:hover,
-.btn:hover *,
 a.list-group-item:hover * {
   cursor: pointer;
   background-color: #0fa2db;
   color: #fff;
   border-color: #0fa2db;
 }
+
 .container .jumbotron {
   background-color: #0fa2db;
   padding: 40px;
@@ -241,11 +249,12 @@ a.list-group-item:hover * {
 }
 .container .jumbotron h1 {
   font-size: 42px;
-  margin: 0 0 .5em 0;
+  margin: 0 0 0.5em 0;
 }
 .container .jumbotron p {
   font-size: 19px;
 }
+
 .panel-default > .panel-heading {
   background-color: #fff;
   padding: 15px;
