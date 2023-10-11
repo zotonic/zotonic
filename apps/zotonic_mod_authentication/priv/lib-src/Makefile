@@ -1,2 +1,7 @@
-../lib/css/logon.css: logon.less
-	lessc logon.less ../lib/css/logon.css
+.PHONY: style
+
+all: style
+
+# Main style for the website
+style:
+	sass --no-source-map --update logon.scss:../lib/css/logon.css
