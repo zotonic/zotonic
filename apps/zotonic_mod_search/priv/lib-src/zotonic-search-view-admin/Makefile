@@ -1,2 +1,6 @@
-../lib/css/zotonic-search-view-admin.css: less/zotonic-search-view-admin.less
-	lessc less/zotonic-search-view-admin.less ../../lib/css/zotonic-search-view-admin.css
+.PHONY: style
+
+all: style
+
+style:
+	sass --no-source-map --update zotonic-search-view-admin.scss:../lib/css/zotonic-search-view-admin.css
