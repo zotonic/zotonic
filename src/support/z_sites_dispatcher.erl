@@ -458,7 +458,7 @@ handle_dispatch_result({Match, MatchedHost}, _DispReq, ReqData) when is_tuple(Ma
 handle_dispatch_result({redirect, MatchedHost}, DispReq, ReqDataUA) when is_atom(MatchedHost) ->
     % Redirect to other host, same path
     RawPath = wrq:raw_path(ReqDataUA),
-    Uri = z_context:abs_url(RawPath, z_context:new(MatchedHost)),
+    Uri = safe_abs_url(RawPath, z_context:new(MatchedHost)),
     trace(DispReq#dispatch.tracer_pid, undefined, redirect, [{location, Uri},{permanent,true}]),
     {handled, redirect(true, z_convert:to_list(Uri), ReqDataUA)};
 handle_dispatch_result({redirect, MatchedHost, NewPathOrURI, IsPermanent}, DispReq, ReqDataUA) when is_atom(MatchedHost) ->
@@ -634,6 +634,13 @@ fetch_dispatchinfo(Site) ->
             Error
     end.
 
+safe_abs_url(Path, Context) when is_list(Path) ->
+    AbsRoot = z_dispatcher:abs_url(<<"/">>, Context),
+    Path1 = case Path of
+        "/" ++ P -> P;
+        P -> P
+    end,
+    iolist_to_binary([AbsRoot, Path1]).
 
 %% @doc Redirect to another host name.
 redirect(IsPermanent, ProtocolAsString, Hostname, ReqData) ->
