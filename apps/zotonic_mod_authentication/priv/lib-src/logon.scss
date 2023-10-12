@@ -1,15 +1,15 @@
-@_logon_box_width: 400px;
-@_horizontal_spacing: 20px;
-@_button_spacing: 10px;
-@_vertical_element_spacing: 15px; // Bootstrap default
-@_border_color: #ddd;
-@_background_color: #fff;
-@_box_background_color: #f2f2f2;
-@_error_color: #C21C3D;
-@_error403_background_color: #e8e8e8;
+$logon_box_width: 400px;
+$horizontal_spacing: 20px;
+$button_spacing: 10px;
+$vertical_element_spacing: 15px; // Bootstrap default
+$border_color: #ddd;
+$background_color: #fff;
+$box_background_color: #f2f2f2;
+$error_color: #C21C3D;
+$error403_background_color: #e8e8e8;
 
 body.err403 {
-    background-color: @_error403_background_color;
+    background-color: $error403_background_color;
 
     .z-logon-box {
         background-color: white;
@@ -19,7 +19,7 @@ body.err403 {
 
 .z-logon-prompt {
     text-align: center;
-    max-width: @_logon_box_width;
+    max-width: $logon_box_width;
     margin: 40px auto;
 }
 
@@ -30,9 +30,9 @@ body.err403 {
 
 .z-logon-box {
     float: none;
-    margin: @_vertical_element_spacing auto;
+    margin: $vertical_element_spacing auto;
 
-    width: @_logon_box_width;
+    width: $logon_box_width;
     max-width: 100%;
 
     img.loading {
@@ -49,7 +49,7 @@ body.err403 {
     }
 
     p {
-        margin-bottom: @_button_spacing;
+        margin-bottom: $button_spacing;
     }
 
     // full width submit button
@@ -66,13 +66,13 @@ body.err403 {
     }
 
     .z-logon-form {
-        margin: @_vertical_element_spacing auto 0 auto;
+        margin: $vertical_element_spacing auto 0 auto;
     }
 
     /* Extra login options */
     .z-logon-extra {
         li {
-            margin: 0 0 @_button_spacing 0 ;
+            margin: 0 0 $button_spacing 0 ;
         }
 
         .z-btn-social {
@@ -82,39 +82,40 @@ body.err403 {
         }
 
         .z-logon-extra-separator {
-            @_line_height: 16px;
+            $line_height: 16px;
 
             position: relative;
             z-index: 1;
             text-align: center;
-            line-height: @_line_height;
-            margin: @_vertical_element_spacing 0;
+            line-height: $line_height;
+            margin: $vertical_element_spacing 0;
 
             &:before {
                 // background behind "or"
-                @_label_width: 40px;
-                @_label_height: @_line_height;
+                $label_width: 40px;
+                $label_height: $line_height;
 
                 position: absolute;
                 left: 50%;
                 top: 50%;
-                height: @_label_height;
-                top: @_line_height/2;
-                width: @_label_width;
-                background-color: @_background_color;
+                height: $label_height;
+                top: calc($line_height / 2);
+                width: $label_width;
+                background-color: $background_color;
                 content: "";
-                margin: -@_label_height/2 0 0 -@_label_width/2;
+                margin: calc(-#{$label_height} / 2) 0 0 calc(-#{$label_height} / 2);
                 z-index: -1;
+                
             }
 
             &:after {
                 // horizontal line
                 position: absolute;
                 left: 0;
-                top: @_line_height/2;
+                top: calc($line_height / 2);
                 content: " ";
                 width: 100%;
-                border-bottom: 1px solid @_border_color;
+                border-bottom: 1px solid $border_color;
                 z-index: -2;
             }
         }
@@ -125,8 +126,8 @@ body.err403 {
 
     /* Supporting options */
     .z-logon-support {
-        margin: @_vertical_element_spacing 0 0 0;
-        padding: @_vertical_element_spacing 0 0 0;
+        margin: $vertical_element_spacing 0 0 0;
+        padding: $vertical_element_spacing 0 0 0;
 
         &:empty {
             display: none;
@@ -146,31 +147,31 @@ body.err403 {
 
     // Overrides when the box is shown in a background-colored box
     &.z-logon-box-boxed {
-        @_background_color: @_box_background_color;
+        $background_color: $box_background_color;
 
         .z-logon-form {
-            margin: @_vertical_element_spacing 0;
-            padding: @_vertical_element_spacing @_horizontal_spacing;
-            background-color: @_background_color;
+            margin: $vertical_element_spacing 0;
+            padding: $vertical_element_spacing $horizontal_spacing;
+            background-color: $background_color;
         }
 
         .z-logon-extra {
             .z-logon-extra-separator {
-                margin-left: -@_horizontal_spacing;
-                margin-right: -@_horizontal_spacing;
+                margin-left: -$horizontal_spacing;
+                margin-right: -$horizontal_spacing;
 
                 &:before {
-                    background-color: @_background_color;
+                    background-color: $background_color;
                 }
             }
         }
 
         .z-logon-support {
-            margin-left: -@_horizontal_spacing;
-            margin-right: -@_horizontal_spacing;
-            padding-left: @_horizontal_spacing;
-            padding-right: @_horizontal_spacing;
-            border-top: 1px solid @_border_color;
+            margin-left: -$horizontal_spacing;
+            margin-right: -$horizontal_spacing;
+            padding-left: $horizontal_spacing;
+            padding-right: $horizontal_spacing;
+            border-top: 1px solid $border_color;
 
             p:last-child {
                 margin-bottom: 0;
