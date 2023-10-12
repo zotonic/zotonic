@@ -1,2 +1,6 @@
-../lib/css/zotonic-search-view.css: less/zotonic-search-view.less
-	lessc less/zotonic-search-view.less ../../lib/css/zotonic-search-view.css
+.PHONY: style
+
+all: style
+
+style:
+	sass --no-source-map --update zotonic-search-view.scss:../lib/css/zotonic-search-view.css
