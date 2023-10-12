@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell <marc@worrell.nl>
-%% Date: 2009-04-28
+%% @copyright 2009-2023 Marc Worrell <marc@worrell.nl>
 %% @doc Redirect to resources depening on the content type requested.
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
 -export([
     resource_exists/1,
     previously_existed/1,
-    moved_temporarily/1,
+    moved_permanently/1,
     content_types_provided/1,
     process/4,
     get_rsc_content_types/2
@@ -40,7 +40,7 @@ previously_existed(Context) ->
     {Id, Context2} = get_id(Context),
     {m_rsc_gone:is_gone(Id, Context2), Context2}.
 
-moved_temporarily(Context) ->
+moved_permanently(Context) ->
     {Id, Context2} = get_id(Context),
     redirect(m_rsc_gone:get_new_location(Id, Context2), Context2).
 
