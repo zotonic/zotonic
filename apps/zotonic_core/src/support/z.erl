@@ -155,7 +155,7 @@ restart(Site) ->
 
 %% @doc Open a site in Chrome
 open(Site) ->
-    z_exec_browser:chrome(Site).
+    z_exec_browser:open(Site).
 
 %% @doc Open a site in a new fresh Chrome
 open_secure(Site) ->
