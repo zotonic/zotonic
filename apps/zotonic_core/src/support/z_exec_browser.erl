@@ -67,7 +67,7 @@ open(Site) when is_atom(Site) ->
 %%   --purge-memory-button  Add purge memory button to Chrome
 %%   --multi-profiles       Enable multiple profiles in Chrome
 %% e.g.
-%% ``` mod_development:chrome(foo, ["--incognito", "--start-maximized"]). '''
+%% ``` z_exec_browser:chrome(foo, ["--incognito", "--start-maximized"]). '''
 chrome(SiteOrContext) ->
     chrome(SiteOrContext, []).
 
@@ -85,7 +85,7 @@ chrome(SiteOrContext, ExtraArgs, Options) ->
 %%   --purge-memory-button  Add purge memory button to Chromium
 %%   --multi-profiles       Enable multiple profiles in Chromium
 %% e.g.
-%% ``` mod_development:chromium(foo, ["--incognito", "--start-maximized"]). '''
+%% ``` z_exec_browser:chromium(foo, ["--incognito", "--start-maximized"]). '''
 chromium(SiteOrContext) ->
     chromium(SiteOrContext, []).
 
