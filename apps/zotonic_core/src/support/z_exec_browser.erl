@@ -39,7 +39,7 @@
 -spec open(SiteOrContext) -> RetType
     when
         SiteOrContext :: atom() | z:context(),
-        RetType       :: {ok, term()} | {error, term()}.
+        RetType       :: ok | {error, term()}.
 open(#context{} = Context) ->
     case os:type() of
         {unix, darwin} ->
@@ -106,7 +106,7 @@ chromium(SiteOrContext, ExtraArgs, Options) ->
         SiteOrContext :: atom() | z:context(),
         ExtraArgs     :: [string()],
         Options       :: map(),
-        RetType       :: {ok, term()} | {error, term()}.
+        RetType       :: ok | {error, term()}.
 exec_browser(Browser, #context{} = Context, ExtraArgs, Options) ->
     OS = os:type(),
     SiteUrl = z_context:abs_url(<<"/">>, Context),
@@ -170,7 +170,7 @@ do_exec_chrome(Executable, SiteUrl, Args, _Options) ->
 do_exec_browser(Command) ->
     case catch open_port({spawn, Command}, [in, hide]) of
         Port when is_port(Port) ->
-            {ok, Port};
+            ok;
         Error ->
             {error, Error}
     end.
