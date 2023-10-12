@@ -34,7 +34,7 @@ info() ->
     info("Chrome").
 
 info(Browser) ->
-    "Opens " ++ Browser ++ " in the site URL with secure certificate flags".
+    "Opens " ++ Browser ++ " with the site URL and optional secure certificate flags".
 
 usage() ->
     usage("chrome").

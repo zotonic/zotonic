@@ -5894,7 +5894,7 @@ msgstr ""
 msgid "Dependendy graph of all templates"
 msgstr ""
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:558
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:537
 msgid "Development"
 msgstr ""
 
