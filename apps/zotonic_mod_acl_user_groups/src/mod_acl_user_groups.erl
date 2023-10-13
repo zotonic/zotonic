@@ -129,10 +129,27 @@ event(#postback{message={delete_all, Args}}, Context) ->
         false ->
             z_render:wire(
                 {alert, [
-                    {message, ?__("Delete is canceled, there are users in the user groups.", Context)}
+                    {text, ?__("Delete is canceled, there are users in the user groups.", Context)}
                 ]},
                 Context
             )
+    end;
+event(#postback{message={set_config, [{key, Key}]}}, Context) when is_atom(Key) ->
+    case z_acl:is_admin(Context) orelse z_acl:is_allowed(use, mod_acl_user_groups, Context) of
+        true ->
+            Value = z_convert:to_bool(z_context:get_q(<<"triggervalue">>, Context)),
+            m_config:set_value(?MODULE, Key, Value, Context),
+            z_render:wire(
+                {growl, [
+                    {text, ?__("Changed configuration.", Context)}
+                ]},
+                Context);
+        false ->
+            z_render:wire(
+                {growl, [
+                    {text, ?__("Not allowed to change ACL options.", Context)}
+                ]},
+                Context)
     end.
 
 %% @todo let the client subscribe to the resources to reflect the deletions
@@ -150,7 +167,7 @@ ug_delete(Ids, Context) ->
         {error, _} ->
             Actions = [
                 {unmask, []},
-                {alert, [{message, ?__("Not all user groups could be deleted.", Context)}]}
+                {alert, [{text, ?__("Not all user groups could be deleted.", Context)}]}
             ],
             page_actions(Actions, Context)
     end.
@@ -235,9 +252,21 @@ deletable(Ids, Context) ->
 
 
 % @doc Per default users own their person record and creators own the created content.
-observe_acl_is_owner(#acl_is_owner{id=Id, user_id=Id}, _Context) -> true;
-observe_acl_is_owner(#acl_is_owner{user_id=UserId, creator_id=UserId}, _Context) -> true;
-observe_acl_is_owner(#acl_is_owner{}, _Context) -> undefined.
+observe_acl_is_owner(#acl_is_owner{id=Id, user_id=Id}, _Context) ->
+    true;
+observe_acl_is_owner(#acl_is_owner{user_id=UserId, creator_id=UserId}, _Context) ->
+    true;
+observe_acl_is_owner(#acl_is_owner{id=Id, user_id=UserId}, Context) ->
+    case m_config:get_boolean(?MODULE, author_is_owner, Context) of
+        true ->
+            As = m_edge:objects(Id, author, Context),
+            case lists:member(UserId, As) of
+                true -> true;
+                false -> undefined
+            end;
+        false ->
+            undefined
+    end.
 
 observe_acl_is_allowed(AclIsAllowed, Context) ->
     acl_user_groups_checks:acl_is_allowed(AclIsAllowed, Context).

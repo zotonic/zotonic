@@ -1,10 +1,9 @@
 %% @author Arjan Scherpenisse <marc@worrell.nl>
-%% @copyright 2015 Arjan Scherpenisse
-%% Date: 2015-03-09
-%%
-%% @doc Access to the ACL rules
+%% @copyright 2015-2023 Arjan Scherpenisse
+%% @doc Access to the ACL rules and configurations.
+%% @end
 
-%% Copyright 2015 Arjan Scherpenisse
+%% Copyright 2015-2023 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -67,6 +66,9 @@ m_get([ <<"default_mime_allowed">> | Rest ], _Msg, Context) ->
     {ok, {acl_user_group_mime_check:mime_allowed_default(Context), Rest}};
 m_get([ <<"upload_size">> | Rest ], _Msg, Context) ->
     {ok, {acl_user_groups_checks:max_upload_size(Context), Rest}};
+
+m_get([ <<"author_is_owner">> | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_boolean(mod_acl_user_groups, author_is_owner, Context), Rest}};
 
 m_get([ <<"can_insert">>, <<"none">>, CategoryId | Rest ], _Msg, Context) ->
     {ok, {acl_user_groups_checks:can_insert_category(CategoryId, Context), Rest}};
