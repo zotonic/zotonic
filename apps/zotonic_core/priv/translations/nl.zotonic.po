@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-05 16:33\n"
+"PO-Revision-Date: 2023-10-13 10:07\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -5590,7 +5590,7 @@ msgstr "Afhankelijkheidsgrafiek van alle getraceerde sjablonen. Alle omvat worde
 msgid "Dependendy graph of all templates"
 msgstr "Afhankelijke grafiek van alle sjablonen"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:558
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:537
 msgid "Development"
 msgstr "Ontwikkeling"
 
