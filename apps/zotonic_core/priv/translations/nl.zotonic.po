@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-13 17:26\n"
+"PO-Revision-Date: 2023-10-13 18:43\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -284,7 +284,7 @@ msgstr "Samenwerkingsgroepen zijn gebruikersgroepen waarvan alle inhoud toebehoo
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:12
 msgid "Consider resource authors to be owner."
-msgstr ""
+msgstr "Beschouw de auteurs van bronnen als eigenaar."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:19
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:95
@@ -353,7 +353,7 @@ msgstr "Verwijderen..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 msgid "Deny"
-msgstr ""
+msgstr "Ontkennen"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:43
 msgid "Edit &amp; link rights on the collaboration groups"
@@ -373,7 +373,7 @@ msgstr "Voer extensies in (zoals <tt>.png</tt>), mime-types (zoals <tt>image/png
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:106
 msgid "Exactly this category, no sub-categories"
-msgstr ""
+msgstr "Precies deze categorie, geen subcategorieën"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
@@ -409,7 +409,7 @@ msgstr "Groepsleden en -beheerders mogen koppelen"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:19
 msgid "If checked then users connected with an <em>author</em> predicate are considered resource owners for the ACL rule evaluation. This ensures that ACL rules marked as <em>manage own</em> are applicable to authors."
-msgstr ""
+msgstr "Indien aangevinkt, worden gebruikers die verbonden zijn met een predikaat <em>auteur</em> beschouwd als broneigenaren voor de evaluatie van de ACL-regel. Dit zorgt ervoor dat ACL-regels gemarkeerd als <em>manage own</em> van toepassing zijn op auteurs."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:51
@@ -434,7 +434,7 @@ msgstr "Behoud"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:137
 msgid "Manage own"
-msgstr ""
+msgstr "Beheer eigen"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:6
 msgid "Maximum file upload size per user group. This restricts file uploads for users."
@@ -498,7 +498,7 @@ msgstr "Niet alle gebruikersgroepen konden worden verwijderd."
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:150
 msgid "Not allowed to change ACL options."
-msgstr ""
+msgstr "Het is niet toegestaan om ACL-opties te wijzigen."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:50
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:87./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:116
@@ -514,7 +514,7 @@ msgstr "Opties"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:5
 msgid "Options for the ACL module."
-msgstr ""
+msgstr "Opties voor de ACL-module."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:31
 msgid "Or click <strong>Delete all user groups</strong> to disconnect all users and delete the user groups."
