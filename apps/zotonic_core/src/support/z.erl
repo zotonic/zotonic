@@ -153,9 +153,9 @@ restart() ->
 restart(Site) ->
     z_sites_manager:restart(Site).
 
-%% @doc Open a site in Chrome
+%% @doc Open a site in Chrome or the default browser(macOS)
 open(Site) ->
-    z_exec_browser:chrome(Site).
+    z_exec_browser:open(Site).
 
 %% @doc Open a site in a new fresh Chrome
 open_secure(Site) ->

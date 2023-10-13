@@ -20,6 +20,7 @@
 -module(z_exec_browser).
 
 -export([
+    open/1,
     chrome/1,
     chrome/2,
     chrome/3,
@@ -32,6 +33,32 @@
 
 -include("../../include/zotonic.hrl").
 
+
+%% @doc Open a site on macOS in the default browser, on other platforms open
+%% in Chrome.
+-spec open(SiteOrContext) -> RetType
+    when
+        SiteOrContext :: atom() | z:context(),
+        RetType       :: ok | {error, term()}.
+open(#context{} = Context) ->
+    case os:type() of
+        {unix, darwin} ->
+            SiteUrl = z_context:abs_url(<<"/">>, Context),
+            Cmd = "open " ++ z_utils:os_filename(SiteUrl),
+            do_exec_browser(Cmd);
+        _ ->
+            chrome(Context)
+    end;
+open(Site) when is_atom(Site) ->
+    case z_sites_manager:get_site_status(Site) of
+        {ok, running} ->
+            open(z_context:new(Site));
+        {ok, Status} ->
+            {error, Status};
+        {error, _} = Error ->
+            Error
+    end.
+
 %% @doc Runs Chrome opening it in the site URL.
 %% Ignore certificate errors and defines the site as secure, helpful to run Web Workers.
 %% For extra args @see https://peter.sh/experiments/chromium-command-line-switches/
@@ -40,7 +67,7 @@
 %%   --purge-memory-button  Add purge memory button to Chrome
 %%   --multi-profiles       Enable multiple profiles in Chrome
 %% e.g.
-%% ``` mod_development:chrome(foo, ["--incognito", "--start-maximized"]). '''
+%% ``` z_exec_browser:chrome(foo, ["--incognito", "--start-maximized"]). '''
 chrome(SiteOrContext) ->
     chrome(SiteOrContext, []).
 
@@ -58,7 +85,7 @@ chrome(SiteOrContext, ExtraArgs, Options) ->
 %%   --purge-memory-button  Add purge memory button to Chromium
 %%   --multi-profiles       Enable multiple profiles in Chromium
 %% e.g.
-%% ``` mod_development:chromium(foo, ["--incognito", "--start-maximized"]). '''
+%% ``` z_exec_browser:chromium(foo, ["--incognito", "--start-maximized"]). '''
 chromium(SiteOrContext) ->
     chromium(SiteOrContext, []).
 
@@ -79,7 +106,7 @@ chromium(SiteOrContext, ExtraArgs, Options) ->
         SiteOrContext :: atom() | z:context(),
         ExtraArgs     :: [string()],
         Options       :: map(),
-        RetType       :: {ok, term()} | {error, term()}.
+        RetType       :: ok | {error, term()}.
 exec_browser(Browser, #context{} = Context, ExtraArgs, Options) ->
     OS = os:type(),
     SiteUrl = z_context:abs_url(<<"/">>, Context),
@@ -87,7 +114,7 @@ exec_browser(Browser, #context{} = Context, ExtraArgs, Options) ->
 exec_browser(Browser, Site, ExtraArgs, Options) when is_atom(Site) ->
     case z_sites_manager:get_site_status(Site) of
         {ok, running} ->
-            exec_browser(Browser, z:c(Site), ExtraArgs, Options);
+            exec_browser(Browser, z_context:new(Site), ExtraArgs, Options);
         {ok, Status} ->
             {error, Status};
         {error, _} = Error ->
@@ -143,7 +170,7 @@ do_exec_chrome(Executable, SiteUrl, Args, _Options) ->
 do_exec_browser(Command) ->
     case catch open_port({spawn, Command}, [in, hide]) of
         Port when is_port(Port) ->
-            {ok, Port};
+            ok;
         Error ->
             {error, Error}
     end.
