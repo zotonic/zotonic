@@ -296,6 +296,8 @@ map_prop(<<"actions">>, Actions, _Context) when is_list(Actions) ->
         fun(A) -> z_convert:to_binary(A) end,
         Actions),
     iolist_to_binary(lists:join(",", Actions1));
+map_prop(<<"is_", _/binary>>, V, _Context) ->
+    z_convert:to_bool(V);
 map_prop(_K, V, _Context) ->
     V.
 
@@ -395,7 +397,8 @@ publish(Kind, Context) ->
 manage_schema(_Version, Context) ->
     ensure_acl_rule_rsc(Context),
     ensure_acl_rule_module(Context),
-    ensure_acl_rule_collab(Context).
+    ensure_acl_rule_collab(Context),
+    ok.
 
 ensure_acl_rule_rsc(Context) ->
     case z_db:table_exists(acl_rule_rsc, Context) of
@@ -403,6 +406,7 @@ ensure_acl_rule_rsc(Context) ->
             Columns = shared_table_columns() ++ [
                 #column_def{name=acl_user_group_id, type="integer", is_nullable=false},
                 #column_def{name=is_owner, type="boolean", is_nullable=false, default="false"},
+                #column_def{name=is_category_exact, type="boolean", is_nullable=false, default="false"},
                 #column_def{name=category_id, type="integer", is_nullable=true},
                 #column_def{name=content_group_id, type="integer", is_nullable=true}
             ],
@@ -411,14 +415,12 @@ ensure_acl_rule_rsc(Context) ->
             fk_setnull("acl_rule_rsc", "modifier_id", Context),
             fk_cascade("acl_rule_rsc", "acl_user_group_id", Context),
             fk_cascade("acl_rule_rsc", "content_group_id", Context),
-            fk_cascade("acl_rule_rsc", "category_id", Context),
-            ok;
-
+            fk_cascade("acl_rule_rsc", "category_id", Context);
         true ->
+            ensure_column_is_category_exact(acl_rule_rsc, Context),
             ensure_column_is_block(acl_rule_rsc, Context),
             ensure_column_managed_by(acl_rule_rsc, Context),
-            ensure_fix_nullable(acl_rule_rsc, Context),
-            ok
+            ensure_fix_nullable(acl_rule_rsc, Context)
     end.
 
 ensure_acl_rule_module(Context) ->
@@ -431,34 +433,44 @@ ensure_acl_rule_module(Context) ->
             z_db:create_table(acl_rule_module, Columns, Context),
             fk_setnull("acl_rule_module", "creator_id", Context),
             fk_setnull("acl_rule_module", "modifier_id", Context),
-            fk_cascade("acl_rule_module", "acl_user_group_id", Context),
-            ok;
+            fk_cascade("acl_rule_module", "acl_user_group_id", Context);
         true ->
             ensure_column_is_block(acl_rule_module, Context),
             ensure_column_managed_by(acl_rule_module, Context),
-            ensure_fix_nullable(acl_rule_module, Context),
-            ok
-    end,
-    ok.
+            ensure_fix_nullable(acl_rule_module, Context)
+    end.
 
 ensure_acl_rule_collab(Context) ->
     case z_db:table_exists(acl_rule_collab, Context) of
         false ->
             Columns = shared_table_columns() ++ [
                 #column_def{name=is_owner, type="boolean", is_nullable=false, default="false"},
-                #column_def{name=category_id, type="integer", is_nullable=true}
+                #column_def{name=category_id, type="integer", is_nullable=true},
+                #column_def{name=is_category_exact, type="boolean", is_nullable=false, default="false"}
             ],
             z_db:create_table(acl_rule_collab, Columns, Context),
             fk_setnull("acl_rule_collab", "creator_id", Context),
             fk_setnull("acl_rule_collab", "modifier_id", Context),
-            fk_cascade("acl_rule_collab", "category_id", Context),
-            ok;
+            fk_cascade("acl_rule_collab", "category_id", Context);
         true ->
+            ensure_column_is_category_exact(acl_rule_collab, Context),
             ensure_column_is_block(acl_rule_module, Context),
-            ensure_column_managed_by(acl_rule_module, Context),
-            ok
-    end,
-    ok.
+            ensure_column_managed_by(acl_rule_module, Context)
+    end.
+
+ensure_column_is_category_exact(Table, Context) ->
+    Columns = z_db:column_names(Table, Context),
+    case lists:member(is_category_exact, Columns) of
+        true ->
+            ok;
+        false ->
+            [] = z_db:q(lists:flatten([
+                    "alter table ", atom_to_list(Table),
+                    " add column is_category_exact boolean not null default false"
+                ]),
+                Context),
+            z_db:flush(Context)
+    end.
 
 ensure_column_is_block(Table, Context) ->
     Columns = z_db:column_names(Table, Context),
@@ -466,7 +478,10 @@ ensure_column_is_block(Table, Context) ->
         true ->
             ok;
         false ->
-            [] = z_db:q("alter table "++atom_to_list(Table)++" add column is_block boolean not null default false", Context),
+            [] = z_db:q(lists:flatten([
+                    "alter table ", atom_to_list(Table),
+                    " add column is_block boolean not null default false"
+                ]), Context),
             z_db:flush(Context)
     end.
 
@@ -476,7 +491,10 @@ ensure_column_managed_by(Table, Context) ->
         true ->
             ok;
         false ->
-            [] = z_db:q("alter table "++atom_to_list(Table)++" add column managed_by character varying(255)", Context),
+            [] = z_db:q(lists:flatten([
+                    "alter table ", atom_to_list(Table),
+                    " add column managed_by character varying(255)"
+                ]), Context),
             z_db:flush(Context)
     end.
 

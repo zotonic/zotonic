@@ -1675,7 +1675,7 @@ call_manage_schema(Module, Current, Target, _Context)
     when is_integer(Current), is_integer(Target), Target < Current ->
     % Downgrade
     ?LOG_ERROR(#{
-        text => <<"Module downgrades not supported">>,
+        text => <<"Module downgrades not supported - continuing without schema modifications">>,
         in => zotonic_core,
         module => Module,
         result => error,
@@ -1683,7 +1683,7 @@ call_manage_schema(Module, Current, Target, _Context)
         version_current => Current,
         version_target => Target
     }),
-    {error, {version_downgrade, Module}};
+    ok;
 call_manage_schema(Module, undefined, Target, Context) ->
     % New install
     SchemaRet = z_db:transaction(
