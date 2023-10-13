@@ -196,7 +196,7 @@ function z_dialog_alert(options)
          + '</div>';
     $.dialogAdd({
         title: (options.title||z_translate('Alert')),
-        title_icon: "glyphicon glyphicon-warning-sign",
+        title_icon: "glyphicon glyphicon-exclamation-sign",
         text: html,
         width: (options.width),
         backdrop: backdrop
