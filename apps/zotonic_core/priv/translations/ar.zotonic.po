@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-13 17:26\n"
+"PO-Revision-Date: 2023-10-13 18:43\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -284,7 +284,7 @@ msgstr "مجموعات التعاون هي مجموعات مستخدمين حي�
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:12
 msgid "Consider resource authors to be owner."
-msgstr ""
+msgstr "اعتبر مؤلفي الموارد مالكين."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:19
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:95
@@ -353,7 +353,7 @@ msgstr "جاري الحذف..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 msgid "Deny"
-msgstr ""
+msgstr "ينكر"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:43
 msgid "Edit &amp; link rights on the collaboration groups"
@@ -373,7 +373,7 @@ msgstr "أدخل الامتدادات (مثل <tt>.png</tt>) أو أنواع mim
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:106
 msgid "Exactly this category, no sub-categories"
-msgstr ""
+msgstr "بالضبط هذه الفئة، لا توجد فئات فرعية"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
@@ -409,7 +409,7 @@ msgstr "أعضاء و مديري المجموعة يمكنهم الربط"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:19
 msgid "If checked then users connected with an <em>author</em> predicate are considered resource owners for the ACL rule evaluation. This ensures that ACL rules marked as <em>manage own</em> are applicable to authors."
-msgstr ""
+msgstr "إذا تم تحديده، فسيتم اعتبار المستخدمين المتصلين بمسند <em>مؤلف</em> مالكي الموارد لتقييم قاعدة ACL. وهذا يضمن أن قواعد ACL المميزة بـ <em>تدير</em> الخاصة تنطبق على المؤلفين."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:51
@@ -434,7 +434,7 @@ msgstr "حافظ على"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:137
 msgid "Manage own"
-msgstr ""
+msgstr "إدارة الخاصة"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:6
 msgid "Maximum file upload size per user group. This restricts file uploads for users."
@@ -498,7 +498,7 @@ msgstr "لا يمكن حذف جميع مجموعات المستخدمين."
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:150
 msgid "Not allowed to change ACL options."
-msgstr ""
+msgstr "غير مسموح بتغيير خيارات ACL."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:50
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:87./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:116
@@ -514,7 +514,7 @@ msgstr "خيارات"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:5
 msgid "Options for the ACL module."
-msgstr ""
+msgstr "خيارات لوحدة ACL."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:31
 msgid "Or click <strong>Delete all user groups</strong> to disconnect all users and delete the user groups."
