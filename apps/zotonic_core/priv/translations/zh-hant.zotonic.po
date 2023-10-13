@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-13 17:27\n"
+"PO-Revision-Date: 2023-10-13 18:44\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -284,7 +284,7 @@ msgstr "合作夥伴群如同用戶群，所有的内容屬於這個群體"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:12
 msgid "Consider resource authors to be owner."
-msgstr ""
+msgstr "將資源作者視為所有者。"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:19
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:95
@@ -353,7 +353,7 @@ msgstr "删除中..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 msgid "Deny"
-msgstr ""
+msgstr "否定"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:43
 msgid "Edit &amp; link rights on the collaboration groups"
@@ -373,7 +373,7 @@ msgstr "輸入擴展名單 (例如 <tt>.png</tt>), mime types (例如 <tt>image/
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:106
 msgid "Exactly this category, no sub-categories"
-msgstr ""
+msgstr "就是這個類別，沒有子類別"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
@@ -409,7 +409,7 @@ msgstr "群組用戶以及經理允許加聯結"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:19
 msgid "If checked then users connected with an <em>author</em> predicate are considered resource owners for the ACL rule evaluation. This ensures that ACL rules marked as <em>manage own</em> are applicable to authors."
-msgstr ""
+msgstr "如果選中，則與 <em>作者</em> 謂詞連接的使用者將被視為 ACL 規則評估的資源擁有者。這可確保標記為 <em>管理自己的</em> ACL 規則適用於作者。"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:51
@@ -434,7 +434,7 @@ msgstr "留存"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:137
 msgid "Manage own"
-msgstr ""
+msgstr "管理自己的"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:6
 msgid "Maximum file upload size per user group. This restricts file uploads for users."
@@ -498,7 +498,7 @@ msgstr "並非所有的用戶組都可以被刪除."
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:150
 msgid "Not allowed to change ACL options."
-msgstr ""
+msgstr "不允許更改 ACL 選項。"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:50
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:87./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:116
@@ -514,7 +514,7 @@ msgstr "选项"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:5
 msgid "Options for the ACL module."
-msgstr ""
+msgstr "ACL 模組的選項。"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:31
 msgid "Or click <strong>Delete all user groups</strong> to disconnect all users and delete the user groups."
