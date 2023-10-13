@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-05 15:30\n"
+"PO-Revision-Date: 2023-10-13 10:07\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -5588,7 +5588,7 @@ msgstr "Kõigi jälgitavate mallide sõltuvusgraafik. Kõik hinnad on näidatud.
 msgid "Dependendy graph of all templates"
 msgstr "Kõigi mallide sõltuvusgraafik"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:558
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:537
 msgid "Development"
 msgstr "Areng"
 
