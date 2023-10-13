@@ -895,9 +895,9 @@ is_owner(insert_rsc, _Context) ->
     true;
 is_owner(Id, #context{ user_id = UserId } = Context) ->
     case z_notifier:first(#acl_is_owner{
-            id=Id,
-            creator_id=m_rsc:p_no_acl(Id, creator_id, Context),
-            user_id=UserId
+            id = Id,
+            creator_id = m_rsc:p_no_acl(Id, creator_id, Context),
+            user_id = UserId
         },
         Context)
     of
