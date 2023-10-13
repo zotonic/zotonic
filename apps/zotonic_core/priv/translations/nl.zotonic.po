@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-13 18:43\n"
+"PO-Revision-Date: 2023-10-13 23:36\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -284,7 +284,7 @@ msgstr "Samenwerkingsgroepen zijn gebruikersgroepen waarvan alle inhoud toebehoo
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:12
 msgid "Consider resource authors to be owner."
-msgstr "Beschouw de auteurs van bronnen als eigenaar."
+msgstr "Beschouw de auteurs van resources als eigenaar."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:19
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:95
@@ -353,7 +353,7 @@ msgstr "Verwijderen..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 msgid "Deny"
-msgstr "Ontkennen"
+msgstr "Blokkeer"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:43
 msgid "Edit &amp; link rights on the collaboration groups"
@@ -434,7 +434,7 @@ msgstr "Behoud"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:137
 msgid "Manage own"
-msgstr "Beheer eigen"
+msgstr "Alleen eigen pagina’s"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:6
 msgid "Maximum file upload size per user group. This restricts file uploads for users."
@@ -3829,7 +3829,7 @@ msgstr "Voeg nieuwe verbindingen in vóór bestaande verbindingen."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:63
 msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
-msgstr "In plaats van een zoekvak wordt hier een lijst weergegeven met alle pagina's in de hierboven aangevinkte <i>tot</i> categorieën. Er moet minimaal één categorie worden aangevinkt."
+msgstr "In plaats van een zoekvak wordt hier een lijst weergegeven met alle pagina's in de hierboven aangevinkte <i>naar</i> categorieën. Er moet minimaal één categorie worden aangevinkt."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19./apps/zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:47
 msgid "Make a new predicate"
@@ -3861,7 +3861,7 @@ msgstr "Toont alleen connecties met:"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:93
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
-msgstr "Ontologieën definiëren predikaten voor een gedefinieerde reeks subject- en objectcategorieën. Soms is het praktischer om de verbindingsrichting van het predikaat om te draaien ten opzichte van de formele definitie. Export- en importfuncties kunnen deze optie gebruiken om de onderwerp-/objectrelatie om te wisselen bij het exporteren of importeren van gegevens."
+msgstr "Ontologieën definiëren predikaten voor een gedefinieerde reeks subject- en objectcategorieën. Soms is het praktischer om de verbindingsrichting van het predikaat om te draaien ten opzichte van de formele definitie. Export- en importfuncties kunnen deze optie gebruiken om de subject-/objectrelatie om te wisselen bij het exporteren of importeren van gegevens."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:25
 msgid "Or click <strong>Delete All Connections</strong> to delete all connections with this predicate."
@@ -3901,11 +3901,11 @@ msgstr "Er bestaat al een predicaat met deze naam."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:83
 msgid "This directs the indexers to not include the titles of connected pages with this predicate. Normally titles of connected pages are included, making it possible to eg. find articles by their author’s name."
-msgstr "Dit geeft de indexeerders de opdracht om de titels van verbonden pagina's met dit predikaat niet op te nemen. Normaal gesproken worden titels van gekoppelde pagina's opgenomen, waardoor het mogelijk is om bijv. artikelen zoeken op naam van de auteur."
+msgstr "Dit zorgt ervoor dat de indexeerders de titels van verbonden pagina's niet meerekenen met dit predikaat. Normaal gesproken worden titels van verbonden pagina's wel meegenomen, waardoor het mogelijk is om bijvoorbeeld artikelen te vinden op de naam van de auteur."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:17
 msgid "This is used to filter the predicates in the <i>Page connections</i> panel and the pages in the connect dialogs."
-msgstr "Dit wordt gebruikt om de predikaten in het paneel <i>Paginaverbindingen</i> en de pagina's in de verbindingsdialoogvensters te filteren."
+msgstr "Dit wordt gebruikt om de predikaten te filteren in het paneel <i>Paginaverbindingen</i> en de pagina's in de verbindingsdialogen."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:16
 msgid "This predicate can be used between two pages of the following categories."
@@ -4855,7 +4855,7 @@ msgstr "Selecteer de backup die je wilt terugzetten. Het bestand moet extensie .
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:39
 msgid "Show import/export panel on the edit pages in the admin."
-msgstr "Toon het import-/exportpaneel op de bewerkingspagina's in de beheerder."
+msgstr "Toon import/export paneel op de bewerk pagina's in de admin."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:79
 msgid "Sorry, there is no module that can import this."
@@ -4925,7 +4925,7 @@ msgstr "Waarschuwing"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:35
 msgid "With the import/export panel you can download a page as a file, see page revisions and restore a previous version."
-msgstr "Met het import-/exportpaneel kunt u een pagina als bestand downloaden, paginarevisies bekijken en een eerdere versie herstellen."
+msgstr "Met het importeren/exporteren paneel kun je een pagina downloaden als bestand, pagina revisies bekijken en een vorige versie herstellen."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:26
 msgid "Y-m-d H:i – l"
@@ -5526,11 +5526,11 @@ msgstr "Alle sjablonen worden gecontroleerd op ontbrekende bevat of ontbrekende 
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:42
 msgid "All templates are compiling."
-msgstr "Alle sjablonen worden gecompileerd."
+msgstr "Alle sjablonen kunnen worden gecompileerd."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:125./apps/zotonic_mod_development/priv/templates/admin_development.tpl:141
 msgid "All templates will be compiled."
-msgstr "Alle sjablonen worden samengesteld."
+msgstr "Alle sjablonen zullen worden gecompileerd."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:13
 msgid "Below is the list of all notifications and the installed observers."
@@ -5550,11 +5550,11 @@ msgstr "Alle sjablonen controleren..."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:42
 msgid "Clear data and start"
-msgstr "Gegevens wissen en beginnen"
+msgstr "Gegevens wissen en starten"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:46
 msgid "Clear data and trace all"
-msgstr "Wis gegevens en traceer alles"
+msgstr "Gegevens wissen en alles traceren"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:13
 msgid "Column"
@@ -5700,7 +5700,7 @@ msgstr "Grafiek van alle sjabloonafhankelijkheden"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:63./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
 msgid "Included template"
-msgstr "Inclusief sjabloon"
+msgstr "Inbegrepen sjabloon"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:4
 msgid "Includes using variable names or expressions are not shown."
@@ -5857,7 +5857,7 @@ msgstr "Protocol veranderen naar"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:2
 msgid "Syntax errors"
-msgstr "Syntaxisfouten"
+msgstr "Syntaxfouten"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:11./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:61./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:123./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:190
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:110
@@ -7069,7 +7069,7 @@ msgstr "<em>Verwijder</em> alle ontvangers die op de doellijst staan"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The drop folder filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the drop folder file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
-msgstr "<h3>Ontvangers</h3><p>Om de ontvangers van de mailinglijst toe te voegen, te verwijderen of te bekijken, klikt u op de link \"alle ontvangers weergeven\".</p><h3>Naam afzender en e-mailadres</h3><p>De naam afzender en het e-mailadres kunnen per mailinglijst worden ingesteld. Dit is standaard de configuratiesleutel <tt>site.email_from</tt>. De <i>Van</i> van de verzonden e-mails worden ingesteld op de naam en het adres van de afzender.</p><h3>Automatisch uploaden van ontvangerslijsten</h3><p>De dropfolder bestandsnaam wordt gebruikt voor het automatisch uploaden van de volledige ontvangerslijst. De bestandsnaam moet overeenkomen met de bestandsnaam van de geüploade ontvangerslijst. De volledige lijst met ontvangers wordt vervangen door de ontvangers in het dropfolderbestand.</p><h3>Toegangscontrole</h3><p>Iedereen die een mailinglijst kan bewerken mag ook een pagina naar de mailinglijst sturen. Iedereen die de mailinglijst kan bekijken mag een e-mailadres toevoegen aan de mailinglijst.</p>"
+msgstr "<h3>Ontvangers</h3><p>Om de ontvangers van de mailinglijst toe te voegen, te verwijderen of te bekijken, klik je op de \"toon alle ontvangers\" link.</p><h3>Afzendernaam en e-mailadres</h3><p>De afzendernaam en het e-mailadres kunnen per mailinglijst worden ingesteld. Dit is standaard de configuratiesleutel <tt>site.email_from</tt>.  De <i>Van</i> van de verzonden e-mails wordt ingesteld op de naam en het adres van de afzender.</p><h3>Automatisch uploaden van ontvangerslijsten</h3><p>De bestandsnaam van de dropmap wordt gebruikt voor het automatisch uploaden van volledige ontvangerslijsten. De bestandsnaam moet overeenkomen met de bestandsnaam van de geüploade ontvangerslijst. De volledige lijst met ontvangers wordt vervangen door de ontvangers in het dropmapbestand.</p><h3>Toegangscontrole</h3><p>Iedereen die een mailinglijst kan bewerken, mag ook een pagina naar de mailinglijst sturen. Iedereen die de mailinglijst kan bekijken, mag een e-mailadres aan de mailinglijst toevoegen.</p>"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:68
 msgid "Act"
@@ -8451,7 +8451,7 @@ msgstr "Voeg een noindex, nofollow element aan alle pagina's toe."
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:72
 msgid "Add your custom JSON-LD for structured metadata. This replaces the matching parts of the automatically generated JSON-LD."
-msgstr "Voeg uw aangepaste JSON-LD toe voor gestructureerde metadata. Dit vervangt de overeenkomende delen van de automatisch gegenereerde JSON-LD."
+msgstr "Voeg je eigen JSON-LD toe voor gestructureerde metagegevens. Dit vervangt de overeenkomende delen van de automatisch gegenereerde JSON-LD."
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:132
 msgid "All pages of this category"
@@ -8527,7 +8527,7 @@ msgstr "Hier vind je instellingen om te optimaliseren hoe zoekmachines je websit
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
 msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
-msgstr "Als uw site geen zoekpagina heeft, vinkt u dit vakje aan om te voorkomen dat er een zoekvak wordt weergegeven op Google et al."
+msgstr "Als je site geen zoekpagina heeft, vink je dit vakje aan om te voorkomen dat er een zoekvak wordt weergegeven op Google et al."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:22./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:23
 msgid "Keywords"
@@ -8579,11 +8579,11 @@ msgstr "Zoekmachine optimalisatie"
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:82
 msgid "Show current JSON-LD (updates after save)"
-msgstr "Toon huidige JSON-LD (updates na opslaan)"
+msgstr "Toon huidige JSON-LD (wordt bijgewerkt na opslaan)"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:38./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:39
 msgid "Site search"
-msgstr "Site zoeken"
+msgstr "Site zoekactie"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:61
 msgid "The site configuration file allows this site to be indexed by search engines."
@@ -9866,7 +9866,7 @@ msgstr "De grafieken tonen gecombineerde resultaten van gesloten vragen zoals mu
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
 msgid "The email address is shown if there is a question with label “email” or if there is a person with an email address that has been linked."
-msgstr "Het e-mailadres wordt getoond als er een vraag is met het label \"e-mail\" of als er een persoon is met een e-mailadres dat is gekoppeld."
+msgstr "Het e-mailadres wordt getoond als er een vraag is met het label \"email\" of als er een persoon is met een e-mailadres dat is gekoppeld."
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
 msgid "The following has been filled in:"
@@ -9890,7 +9890,7 @@ msgstr "Er is een fout opgetreden tijdens het afhandelen van de antwoorden. Dit 
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:14
 msgid "This block show a file upload field. This can only be used as the last question of a form. The default form routines can’t handle file upload, you will need to add your own form handler to your site or module."
-msgstr "Dit blok toont een veld voor het uploaden van bestanden. Dit kan alleen gebruikt worden als laatste vraag van een formulier. De standaard formulierroutines kunnen het uploaden van bestanden niet aan, u zult uw eigen formulierhandler aan uw site of module moeten toevoegen."
+msgstr "Dit blok toont een veld voor het uploaden van bestanden. Dit kan alleen gebruikt worden als laatste vraag van een formulier. De standaard formulierroutines kunnen het uploaden van bestanden niet afhandelen. Je zult je eigen formulierhandler aan je site of module moeten toevoegen."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_stop.tpl:9
 msgid "This block signals a stop in the flow. The user can't continue further and it is counted as a page break."
@@ -10146,7 +10146,7 @@ msgstr "Documentatie voor ontwikkelaars"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:23
 msgid "Drag languages to define the preferred order, the first 'view' language will be the default language."
-msgstr "Versleep talen om de voorkeursvolgorde te definiëren, de eerste 'view'-taal is de standaardtaal."
+msgstr "Sleep talen om de voorkeursvolgorde te bepalen. De eerste 'weergavetaal' zal de standaardtaal zijn."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:128
 msgid "Dutch"
@@ -10566,7 +10566,7 @@ msgstr "Kon geen verbinding maken met de 'postgres' database of de database aanm
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:274
 msgid "Could not create the directory"
-msgstr "Kan de map niet maken"
+msgstr "Kon de map niet maken"
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:568
 msgid "Could not create the file:"
