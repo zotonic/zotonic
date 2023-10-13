@@ -16,7 +16,7 @@
                     delegate=`mod_acl_user_groups`
             %}
             <p class="help-block">
-                {_ If checked then users connected with an <em>author</em> predicate are considered resource owners for the ACL rule evaluation. _}
+                {_ If checked then users connected with an <em>author</em> predicate are considered resource owners for the ACL rule evaluation. This ensures that ACL rules marked as <em>manage own</em> are applicable to authors. _}
             </p>
         </div>
     </div>
