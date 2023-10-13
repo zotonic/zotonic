@@ -103,7 +103,7 @@
                 <div class="col-sm-7 checkbox">
                     <label>
                         <input type="checkbox" name="is_category_exact" value="1" {% if rule.is_category_exact %}checked{% endif %}>
-                        {_ Exact this category, no sub-categories _}
+                        {_ Exactly this category, no sub-categories _}
                     </label>
                 </div>
             </div>
